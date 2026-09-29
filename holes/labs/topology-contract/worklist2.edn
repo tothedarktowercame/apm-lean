@@ -51621,49 +51621,36 @@
   {:consumer :t95A04,
    :evidence
    {:probe
-    {:outcome :revise,
+    {:outcome :go,
      :seat "topo-8",
      :fixture
-     {:path "/tmp/rp_sphere_projection_lift_branch_at_base.lean",
+     {:path
+      "/tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
       :sha256
-      "3e6fb31f1596adec460b03a1addcd9168e059f5c21e12d3e846e390b1cb22ba5"},
+      "883aac9990abd2d1203ece3453e7f22d430dbb7526e3a3c6169e2f7b30e71b8d"},
      :commands
      [{:cmd
-       "lake env lean /tmp/rp_sphere_projection_lift_branch_at_base.lean",
+       "sha256sum /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
        :exit 0}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_projection_lift_branch_at_base.lean || true)\"",
+       "lake env lean /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
        :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
       {:cmd
-       "sha256sum /tmp/rp_sphere_projection_lift_branch_at_base.lean",
-       :exit 0}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/rp_sphere_projection_lift_branch_at_base.lean",
-       :exit 1,
-       :finding
-       "A dependent rewrite changed the local-homeomorph center inside F; replacing it with an explicit congrArg calculation preserved the fixed chart center."}],
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+     :warnings
+     ["Lean emitted only the style suggestion `Try this: intro F p` at line 255; compilation succeeded."],
+     :implementation
+     {:scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"]},
+     :acceptance
+     {:implementation
+      "Append sphereProjectionQuotientCoordinateLocalNormalForm exactly as compiled in the fixture. Compile ConstructionTargets/RealProjectiveSmoothTarget.lean, verify it contains no placeholders, run the statement registry check, and print axioms for sphereProjectionQuotientCoordinateLocalNormalForm and quotientCoordinateLocalNormalForm_gives_contDiffAt."},
      :residual
-     "The eventual identity-or-antipodal inverse-branch law is banked. The compiled prerequisite evaluates it at the chart center, identifies the chosen lift as p or its antipode, and produces the exact ordinary or antipodal sphere-chart domain witness. After it is banked, the parent normal form only needs to pull the eventual branch equality back along extChartAt symm and simplify the quotient extChartAt formula.",
-     :prerequisite
-     {:consumer :t95A04,
-      :phase :probe,
-      :state :open,
-      :scope [],
-      :dag-node "TOPOLOGY-ROUTES.md",
-      :acceptance
-      {:probe
-       "Compile the placeholder-free fixture /tmp/rp_sphere_projection_lift_branch_at_base.lean. Prove sphereProjection_lift_eq_or_antipodal by evaluating sphereProjectionInverseBranchLocalAlternative at p and identifying inverseBranch at the chart center with F.lift. Then prove sphereProjection_coordinate_branch_domains, returning exactly the ordinary transition-source membership or the antipodal target/source membership at u = extChartAt (real model 2) p p. This supplies the domain half of SphereProjectionQuotientCoordinateLocalNormalForm for t95A04 and t96A07."},
-      :id
-      :routes-2026-09-29-rp-sphere-projection-lift-branch-domains-topo2-r1,
-      :kind :reusable-theorem,
-      :depends-on
-      [:routes-2026-09-29-rp-sphere-projection-inverse-branch-local-alternative-topo2-r1],
-      :other-consumers [:t96A07]}}},
-   :phase :probe,
+     "The exact forward quotient-coordinate normal form is complete, including eventual ordinary-or-antipodal coordinate equality and the corresponding chart-domain witness. The next consumer step is SphereProjectionQuotientCoordinateContDiffAt, obtained by the already compiled quotientCoordinateLocalNormalForm_gives_contDiffAt reduction."}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
    {:probe
