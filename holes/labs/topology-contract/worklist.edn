@@ -81087,38 +81087,22 @@
    :evidence
    {:placeholder-delta 0,
     :residual
-    "At 5ff2b733 the adapter is again in repair, attempt 3 remains unsuperseded, and its dependency edge remains. Leave the row in repair. The existing receipt transitions cannot perform the required atomic supersede-plus-deletion mutation, and another ordinary STOP would only repeat the rejected state change.",
+    "Fresh verification at c925463f confirms the graph and writer are unchanged. Cease redispatching this implementation row. It requires an owner-authorized structural commit that atomically supersedes attempt 3 and deletes only its adapter edge; until then the adapter remains unresolved.",
     :outcome :stop,
     :warnings
-    [{:kind :repeat-loop,
+    [{:kind :terminal-structural-boundary,
       :message
-      "The ordinary STOP transition has already been applied and rejected repeatedly because it cannot mutate the offending graph fields."}
-     {:kind :structural-authority,
-      :message
-      "Only an owner-authorized writer enhancement or one reviewed atomic ledger mutation can resolve this row."}],
+      "No ordinary receipt outcome can perform the required atomic graph mutation; repeated STOP/PASS applications are invalid churn."}],
     :disposition :stop,
     :author "topo-2",
-    :reason :rejected-transition-cannot-repair-machine-graph,
+    :reason :ordinary-transition-churn-must-cease,
     :commands
-    [{:cmd "git rev-parse --short HEAD", :exit 0, :finding "5ff2b733"}
-     {:cmd
-      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+    [{:cmd
+      "git rev-parse --short HEAD && git log -1 --format=%h -- holes/labs/topology-contract/build_step.bb && bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
       :exit 0,
       :finding
-      "topology-worklist: 675 items OK; {:done 651, :superseded 14, :needs-owner 1, :repair 1, :open 5, :blocked 3}"}
-     {:cmd
-      "sed -n '81130,81158p' holes/labs/topology-contract/worklist.edn | rg -n ':state|:id|:depends-on|local-smooth-submersion-lift'",
-      :exit 0,
-      :finding
-      "The active adapter is back in repair and still depends on attempts 1, 2, and rejected attempt 3."}
-     {:cmd "git status --short", :exit 0, :finding "Worktree clean."}],
+      "HEAD c925463f; writer 8e9127f2; topology-worklist: 675 items OK; {:done 651, :superseded 14, :needs-owner 1, :repair 1, :open 5, :blocked 3}"}],
     :diagnostic-history [],
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1790647641986-27181-cff182d8",
-     :finding
-     "Deterministic structural defect persists at recorded commit ff6ea2f1: attempt 3 remains :done, the adapter remains :done-unreviewed and still depends on attempt 3, superseded count remains 14, and build_step.bb remains at 8e9127f2 without dependency deletion support. Only diagnostic evidence/reason text changed; the machine graph did not. Exact repair requires owner-authorized atomic supersession of attempt 3 plus deletion of only its adapter edge, retaining the refill dependency and reviewed attempts 1-2 and recording those two attempts as the hold basis. Further ordinary STOP transitions are invalid churn and must cease; keep the row needs-owner until the structural mutation is committed. Fresh execution validated the recorded 675-item snapshot, inspected exact states and edges, confirmed the unchanged writer, and reproduced fixture SHA-256 cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d."},
     :required-transition
     {:atomic true,
      :supersede
@@ -81137,7 +81121,7 @@
     :changed-paths [],
     :seat "topo-2"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t98A06/part-a",
    :acceptance
