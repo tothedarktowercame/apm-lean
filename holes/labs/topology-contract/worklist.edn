@@ -81087,41 +81087,31 @@
    :evidence
    {:placeholder-delta 0,
     :residual
-    "The deterministic blocker is unchanged. The current receipt applier cannot atomically supersede attempt 3 and delete only its edge from this adapter, while direct ledger editing is forbidden. Leave the row unresolved for an owner structural writer repair; do not mark it done and do not replace the rejected edge with another dependency.",
+    "At commit 8fcbceac the required structural repair is still absent: superseded count remains 14 and the adapter still names rejected attempt 3. Leave this row unresolved until an owner-authorized atomic writer operation or reviewed structural commit performs exactly the requested supersede and edge deletion.",
     :outcome :stop,
     :warnings
-    [{:kind :leave-unresolved,
+    [{:kind :no-authority,
       :message
-      "Do not apply this as an ordinary completion transition; the adapter must remain unresolved until the structural graph repair is committed."}
-     {:kind :machine-graph,
+      "This implementation row has empty scope and explicitly forbids direct ledger editing; no owner structural commit or deletion-capable writer is present."}
+     {:kind :do-not-complete,
       :message
-      "Passing the row would preserve attempt 3 as done and preserve its dependency edge."}],
+      "An ordinary STOP/PASS transition would preserve the graph defect and must not mark the adapter complete."}],
     :disposition :stop,
     :author "topo-2",
-    :reason :atomic-ledger-graph-repair-unavailable,
+    :reason :owner-authorized-atomic-graph-repair-not-present,
     :commands
-    [{:cmd
+    [{:cmd "git rev-parse --short HEAD", :exit 0, :finding "8fcbceac"}
+     {:cmd
       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
       :exit 0,
       :finding
       "topology-worklist: 675 items OK; {:done 651, :superseded 14, :needs-owner 1, :repair 1, :open 5, :blocked 3}"}
      {:cmd
-      "rg -n -A8 -B3 ':id :routes-2026-09-29-t98a06-local-smooth-submersion-lift-3|:id :routes-2026-09-29-t98a06-part-a-adapter-1' holes/labs/topology-contract/worklist.edn",
+      "sed -n '81070,81180p' holes/labs/topology-contract/worklist.edn | rg -n ':state|:id|:depends-on|local-smooth-submersion-lift-[123]'",
       :exit 0,
       :finding
-      "The active attempt 3 remains done and the active repair-state adapter still depends on attempts 1, 2, and 3."}
-     {:cmd
-      "rg -n ':stop \\(replace-item|defn repair-dependencies' holes/labs/topology-contract/build_step.bb",
-      :exit 0,
-      :finding
-      "No new atomic supersede-plus-edge-deletion writer operation exists."}],
+      "The adapter remains repair-state and its active dependency vector still includes attempts 1, 2, and rejected attempt 3."}],
     :diagnostic-history [],
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1790647072278-27148-293cca15",
-     :finding
-     "Deterministic machine-graph defect remains at recorded commit d9136926: attempt 3 is still :done, the part-a adapter still depends on attempt 3, the superseded count remains 14, and no atomic supersede-plus-edge-deletion writer operation exists. The row evidence now correctly labels this atomic-ledger-graph-repair-unavailable, but an ordinary PASS/STOP transition cannot resolve it and must not mark the adapter complete. Exact repair requires owner-authorized structural work: extend the ledger writer to atomically set attempt 3 to :superseded and delete only its adapter dependency edge, or apply those two graph mutations directly in one reviewed structural commit; retain the refill dependency and attempts 1-2, and base the hold solely on reviewed attempts 1-2. Fresh verification read commit d9136926 and reran the 675-item validator, reproducing 651 done, 14 superseded, one done-unreviewed, and the offending edge."},
     :required-transition
     {:atomic true,
      :supersede
@@ -81140,7 +81130,7 @@
     :changed-paths [],
     :seat "topo-2"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t98A06/part-a",
    :acceptance
