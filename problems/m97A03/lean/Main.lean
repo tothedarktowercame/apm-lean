@@ -124,9 +124,196 @@ lemma apm_m97A03_integral_integrand_sub_bound
     _ = 4 * B := by rw [integral_mul_const, integral_const_mul,
       apm_m97A03_integral_rpow_neg_half]; ring
 
+lemma apm_m97A03_integrand_bound {t s z : ℝ}
+    (ht : t ∈ Icc (0 : ℝ) 1) (hs : 0 < s) :
+    |Real.sqrt ((t + 3) / s) * Real.sin (t * z)| ≤
+      2 * s ^ (-1 / 2 : ℝ) := by
+  rw [abs_mul, abs_of_nonneg (Real.sqrt_nonneg _)]
+  have hsqrt : Real.sqrt (t + 3) ≤ 2 := by
+    apply Real.sqrt_le_iff.mpr
+    constructor <;> nlinarith [ht.1, ht.2]
+  have hpow := Real.rpow_nonneg hs.le (-1 / 2 : ℝ)
+  rw [apm_m97A03_sqrt_div_factor (by linarith [ht.1]) hs]
+  calc
+    Real.sqrt (t + 3) * s ^ (-1 / 2 : ℝ) * |Real.sin (t * z)| ≤
+        Real.sqrt (t + 3) * s ^ (-1 / 2 : ℝ) := by
+      have hsin := Real.abs_sin_le_one (t * z)
+      simpa only [mul_one] using mul_le_mul_of_nonneg_left hsin
+        (mul_nonneg (Real.sqrt_nonneg (t + 3)) hpow)
+    _ ≤ 2 * s ^ (-1 / 2 : ℝ) :=
+      mul_le_mul_of_nonneg_right hsqrt hpow
+
+lemma apm_m97A03_integral_continuousOn (u : ℝ → ℝ)
+    (hu : ContinuousOn u (Icc 0 1)) :
+    ContinuousOn (fun t ↦ ∫ s in Icc (0 : ℝ) 1,
+      Real.sqrt ((t + 3) / s) * Real.sin (t * u s)) (Icc 0 1) := by
+  let F : ℝ → ℝ → ℝ := fun t s ↦
+    Real.sqrt ((t + 3) / s) * Real.sin (t * u s)
+  have hboundInt : IntervalIntegrable (fun s : ℝ ↦ 2 * s ^ (-1 / 2 : ℝ))
+      volume 0 1 := by
+    apply IntegrableOn.intervalIntegrable
+    simpa [Set.uIcc_of_le (by norm_num : (0 : ℝ) ≤ 1)] using
+      (apm_m97A03_integrableOn_rpow_neg_half.const_mul 2)
+  have hinterval : ContinuousOn (fun t ↦ ∫ s in (0 : ℝ)..1, F t s)
+      (Icc 0 1) := by
+    intro t ht
+    apply intervalIntegral.continuousWithinAt_of_dominated_interval
+      (bound := fun s : ℝ ↦ 2 * s ^ (-1 / 2 : ℝ))
+    · filter_upwards [self_mem_nhdsWithin] with t' ht'
+      have hc : ContinuousOn (F t') (Set.Ioc (0 : ℝ) 1) := by
+        intro s hs
+        dsimp [F]
+        have hus := hu s ⟨hs.1.le, hs.2⟩
+        have hs0 : s ≠ 0 := ne_of_gt hs.1
+        have hdiv : ContinuousWithinAt (fun r : ℝ ↦ (t' + 3) / r)
+            (Set.Ioc 0 1) s := continuousWithinAt_const.div continuousWithinAt_id hs0
+        have hsqrt : ContinuousWithinAt (fun r : ℝ ↦ Real.sqrt ((t' + 3) / r))
+            (Set.Ioc 0 1) s :=
+          Real.continuous_sqrt.continuousAt.comp_continuousWithinAt hdiv
+        have harg : ContinuousWithinAt (fun r : ℝ ↦ t' * u r)
+            (Set.Ioc 0 1) s :=
+          continuousWithinAt_const.mul (hus.mono Set.Ioc_subset_Icc_self)
+        exact hsqrt.mul
+          (Real.continuous_sin.continuousAt.comp_continuousWithinAt harg)
+      simpa [Set.uIoc_of_le (by norm_num : (0 : ℝ) ≤ 1)] using
+        (hc.aestronglyMeasurable measurableSet_Ioc :
+          AEStronglyMeasurable (F t') (volume.restrict (Set.Ioc 0 1)))
+    · filter_upwards [self_mem_nhdsWithin] with t' ht'
+      filter_upwards [] with s hs
+      exact apm_m97A03_integrand_bound
+        ht' (by
+          rw [Set.uIoc_of_le (by norm_num : (0 : ℝ) ≤ 1)] at hs
+          exact hs.1)
+    · exact hboundInt
+    · filter_upwards [] with s hs
+      rw [Set.uIoc_of_le (by norm_num : (0 : ℝ) ≤ 1)] at hs
+      dsimp [F]
+      fun_prop
+  simpa [F, MeasureTheory.integral_Icc_eq_integral_Ioc,
+    ← intervalIntegral.integral_of_le (by norm_num : (0 : ℝ) ≤ 1)] using hinterval
+
+abbrev apm_m97A03_C := C(Icc (0 : ℝ) 1, ℝ)
+
+def apm_m97A03_extend (u : apm_m97A03_C) (x : ℝ) : ℝ :=
+  u (Set.projIcc 0 1 (by norm_num) x)
+
+lemma apm_m97A03_extend_continuous (u : apm_m97A03_C) :
+    Continuous (apm_m97A03_extend u) := by
+  exact u.continuous.comp continuous_projIcc
+
+lemma apm_m97A03_extend_of_mem (u : apm_m97A03_C) {x : ℝ}
+    (hx : x ∈ Icc (0 : ℝ) 1) : apm_m97A03_extend u x = u ⟨x, hx⟩ := by
+  simp [apm_m97A03_extend, Set.projIcc_of_mem (by norm_num) hx]
+
+lemma apm_m97A03_extend_zero :
+    apm_m97A03_extend (0 : apm_m97A03_C) = fun _ ↦ 0 := by
+  funext x
+  simp [apm_m97A03_extend]
+
+noncomputable def apm_m97A03_operator (lam : ℝ) (u : apm_m97A03_C) :
+    apm_m97A03_C :=
+  ⟨fun t ↦ Real.exp (t : ℝ) + lam * (∫ s in Icc (0 : ℝ) 1,
+      Real.sqrt (((t : ℝ) + 3) / s) * Real.sin ((t : ℝ) * apm_m97A03_extend u s)), by
+    have hcont := Real.continuous_exp.continuousOn.add
+      ((apm_m97A03_integral_continuousOn (apm_m97A03_extend u)
+        (apm_m97A03_extend_continuous u).continuousOn).const_mul lam)
+    exact hcont.comp_continuous continuous_subtype_val (fun t ↦ t.property)⟩
+
+lemma apm_m97A03_operator_apply (lam : ℝ) (u : apm_m97A03_C)
+    (t : Icc (0 : ℝ) 1) :
+    apm_m97A03_operator lam u t = Real.exp (t : ℝ) + lam *
+      (∫ s in Icc (0 : ℝ) 1, Real.sqrt (((t : ℝ) + 3) / s) *
+        Real.sin ((t : ℝ) * apm_m97A03_extend u s)) := rfl
+
+lemma apm_m97A03_operator_zero_load (u : apm_m97A03_C)
+    (t : Icc (0 : ℝ) 1) :
+    apm_m97A03_operator 0 u t = Real.exp (t : ℝ) := by
+  simp [apm_m97A03_operator_apply]
+
+lemma apm_m97A03_integrable_integrand (u : apm_m97A03_C)
+    (t : Icc (0 : ℝ) 1) :
+    IntegrableOn (fun s : ℝ ↦ Real.sqrt (((t : ℝ) + 3) / s) *
+      Real.sin ((t : ℝ) * apm_m97A03_extend u s)) (Icc 0 1) := by
+  have hg : IntegrableOn (fun s : ℝ ↦ 2 * s ^ (-1 / 2 : ℝ)) (Icc 0 1) :=
+    apm_m97A03_integrableOn_rpow_neg_half.const_mul 2
+  apply Integrable.mono' hg
+  · apply AEStronglyMeasurable.restrict
+    have hmdiv : Measurable (fun s : ℝ ↦ ((t : ℝ) + 3) / s) :=
+      measurable_const.div measurable_id
+    have hmsqrt : Measurable (fun s : ℝ ↦ Real.sqrt (((t : ℝ) + 3) / s)) :=
+      Real.continuous_sqrt.measurable.comp hmdiv
+    have hmarg : Measurable (fun s : ℝ ↦ (t : ℝ) * apm_m97A03_extend u s) :=
+      measurable_const.mul (apm_m97A03_extend_continuous u).measurable
+    exact (hmsqrt.mul (Real.continuous_sin.measurable.comp hmarg)).aestronglyMeasurable
+  · filter_upwards [ae_restrict_mem measurableSet_Icc] with s hs
+    by_cases hs0 : s = 0
+    · simp [hs0]
+    · simpa only [Real.norm_eq_abs] using
+        apm_m97A03_integrand_bound t.property
+          (lt_of_le_of_ne hs.1 (Ne.symm hs0))
+
+lemma apm_m97A03_operator_pointwise_dist_le (lam : ℝ)
+    (u v : apm_m97A03_C) (t : Icc (0 : ℝ) 1) :
+    dist (apm_m97A03_operator lam u t) (apm_m97A03_operator lam v t) ≤
+      (4 * |lam|) * ‖u - v‖ := by
+  let fu : ℝ → ℝ := fun s ↦ Real.sqrt (((t : ℝ) + 3) / s) *
+    Real.sin ((t : ℝ) * apm_m97A03_extend u s)
+  let fv : ℝ → ℝ := fun s ↦ Real.sqrt (((t : ℝ) + 3) / s) *
+    Real.sin ((t : ℝ) * apm_m97A03_extend v s)
+  have hsub : (∫ s in Icc (0 : ℝ) 1, fu s) - ∫ s in Icc (0 : ℝ) 1, fv s =
+      ∫ s in Icc (0 : ℝ) 1, Real.sqrt (((t : ℝ) + 3) / s) *
+        (Real.sin ((t : ℝ) * apm_m97A03_extend u s) -
+          Real.sin ((t : ℝ) * apm_m97A03_extend v s)) := by
+    rw [← integral_sub (apm_m97A03_integrable_integrand u t)
+      (apm_m97A03_integrable_integrand v t)]
+    apply integral_congr_ae
+    filter_upwards [] with s
+    ring
+  have hB := apm_m97A03_integral_integrand_sub_bound t.property
+    (apm_m97A03_extend u) (apm_m97A03_extend v) (B := ‖u - v‖) (by
+      intro s hs
+      simpa [apm_m97A03_extend_of_mem u hs, apm_m97A03_extend_of_mem v hs,
+        Real.norm_eq_abs] using ContinuousMap.norm_coe_le_norm (u - v) ⟨s, hs⟩)
+  rw [apm_m97A03_operator_apply, apm_m97A03_operator_apply, Real.dist_eq]
+  rw [show Real.exp (t : ℝ) + lam * (∫ s in Icc (0 : ℝ) 1, fu s) -
+      (Real.exp (t : ℝ) + lam * (∫ s in Icc (0 : ℝ) 1, fv s)) =
+      lam * ((∫ s in Icc (0 : ℝ) 1, fu s) - ∫ s in Icc (0 : ℝ) 1, fv s) by ring,
+    abs_mul, hsub]
+  nlinarith [abs_nonneg lam, norm_nonneg (u - v)]
+
+lemma apm_m97A03_operator_dist_le (lam : ℝ) (u v : apm_m97A03_C) :
+    dist (apm_m97A03_operator lam u) (apm_m97A03_operator lam v) ≤
+      (4 * |lam|) * dist u v := by
+  apply (ContinuousMap.dist_le (mul_nonneg (mul_nonneg (by norm_num) (abs_nonneg lam))
+    (dist_nonneg))).2
+  intro t
+  simpa [dist_eq_norm] using apm_m97A03_operator_pointwise_dist_le lam u v t
+
+lemma apm_m97A03_operator_contracting (lam : ℝ) (hlam : |lam| < (1 / 4 : ℝ)) :
+    ContractingWith ⟨4 * |lam|, mul_nonneg (by norm_num) (abs_nonneg lam)⟩
+      (apm_m97A03_operator lam) := by
+  constructor
+  · norm_num
+    linarith
+  · apply LipschitzWith.of_dist_le_mul
+    intro u v
+    exact apm_m97A03_operator_dist_le lam u v
+
 theorem apm_m97a03
     (lam : ℝ) (hlam : |lam| < (1 / 4 : ℝ)) :
     ∃ u : ℝ → ℝ, apm_m97A03_isSolution lam u := by
+  let K : NNReal := ⟨4 * |lam|, mul_nonneg (by norm_num) (abs_nonneg lam)⟩
+  have hc : ContractingWith K (apm_m97A03_operator lam) :=
+    apm_m97A03_operator_contracting lam hlam
+  let w : apm_m97A03_C := ContractingWith.fixedPoint (apm_m97A03_operator lam) hc
+  have hw : apm_m97A03_operator lam w = w := hc.fixedPoint_isFixedPt
+  refine ⟨apm_m97A03_extend w, (apm_m97A03_extend_continuous w).continuousOn, ?_⟩
+  intro t ht
+  have hpoint := congrArg (fun g : apm_m97A03_C ↦ g ⟨t, ht⟩) hw
+  change apm_m97A03_operator lam w ⟨t, ht⟩ = w ⟨t, ht⟩ at hpoint
+  rw [apm_m97A03_operator_apply] at hpoint
+  rw [apm_m97A03_extend_of_mem w ht]
+  linarith
   /-
   PARTIAL boundary (codex).  The intended Banach fixed-point route is viable:
   sibling `t91A04` proves the abstract `ContractingWith.fixedPoint` wrapper,
@@ -207,4 +394,3 @@ theorem apm_m97a03
   integral. Once available, the continuous self-map is definable and the
   compiled `4*B` bound supplies its contraction constant `4*|lam|`.
   -/
-  sorry
