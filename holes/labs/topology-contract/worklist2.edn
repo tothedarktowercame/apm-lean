@@ -50723,21 +50723,15 @@
    "single-consumer exact projective affine-chart construction",
    :consumer :t94A08,
    :review-finding
-   "Deterministic row-state and contract defect persists: the current evidence for routes-2026-09-28-t94a08-affine-chart-homeomorph-topo2-r1 is {:outcome :stop, :disposition :stop} and records no implementation commit, explicitly because continuous_coordinates, coordinates_chartInverse, and chartInverse_coordinates are absent; nevertheless the row is marked :done-unreviewed. Its scope and implementation acceptance still target ConstructionTargets/RealProjectiveSmoothTarget.lean and rpSmoothAtlas_exists, while its id, kind, dependencies, and representation require AffineChartConstruction 2 with explicit complex-projective patch-to-affine OpenPartialHomeomorphs. Fresh Lean compilation of the normalization bank passes, fresh search confirms the three required affine results remain absent, registry is 130/130, ledger validation mechanically passes with this sole done-unreviewed row, scoped banks contain no placeholders, and frozen t94A08 still has one sorry. Repair the ledger state to :repair/open and replace the unrelated scope/acceptance with a genuine affine-chart implementation task supplying quotient-patch coordinate continuity and both mutual-inverse identities; only then record and review a commit constructing AffineChartConstruction 2.",
+   "Deterministic row-state and scope-contract defect: routes-2026-09-28-t94a08-affine-chart-homeomorph-topo2-r1 is marked :done-unreviewed, but its current implementation evidence is {:outcome :stop, :disposition :stop} and records no commit. The evidence correctly reports that the complete AffineChartConstruction 2 representation now exists placeholder-free in the reviewed prerequisite ConstructionTargets/T94A08AffineChartHomeomorph.lean, yet this parent row still scopes only ConstructionTargets/RealProjectiveSmoothTarget.lean and requests the unrelated rpSmoothAtlas_exists theorem. Its id, kind, dependencies, and representation still require complex-projective nonvanishing-patch-to-affine OpenPartialHomeomorphs. Fresh compilation of the canonical affine module passes, continuous_coordinates and affineChartConstruction are present, registry is 130/130, the 353-row ledger mechanically validates with this sole done-unreviewed row, both scoped banks have 0/0/0 sorry/admit/axiom counts, and frozen t94A08 retains one sorry. Repair by either superseding this parent row with the completed routes-2026-09-29-t94a08-affine-chart-quotient-compatibility-topo2-r1 prerequisite or changing its scope/acceptance to ConstructionTargets/T94A08AffineChartHomeomorph.lean and recording an actual in-scope affine commit; it cannot pass review while carrying stop evidence and the unrelated real-projective contract.",
    :evidence
-   {:outcome :stop,
+   {:residual
+    "No mathematical or representation residual remains. Only the parent ledger row's stale RealProjectiveSmoothTarget scope and rpSmoothAtlas acceptance prevent a valid implementation transition for the already banked AffineChartConstruction 2.",
+    :outcome :stop,
     :disposition :stop,
-    :seat "topo-6",
     :author "topo-6",
     :reason
     "Deterministic ledger-contract boundary: the declared representation is now completely implemented and compiled in ConstructionTargets/T94A08AffineChartHomeomorph.lean, with continuous_coordinates, coordinates_chartInverse, chartInverse_coordinates, and affineChartConstruction available through the reviewed prerequisite. This parent row nevertheless authorizes only ConstructionTargets/RealProjectiveSmoothTarget.lean and its acceptance still requests rpSmoothAtlas_exists, an unrelated real-projective theorem already handled by another route. The implementation rule permits edits only within :scope, so recording the existing affine commit would fail exact-scope validation, while copying the affine representation into RealProjectiveSmoothTarget would violate module ownership and repeat the reviewed contract defect. Repair this parent row's scope to ConstructionTargets/T94A08AffineChartHomeomorph.lean and acceptance to consume affineChartConstruction, or supersede it with the completed prerequisite; no mathematical obligation remains.",
-    :representation
-    {:source
-     "The nonvanishing-coordinate open subtypes of complex projective two-space with the frozen topology coinduced from quotientMap on nonzero vectors",
-     :target
-     "The affine coordinate spaces indexed by the two coordinates other than i",
-     :direction
-     "Explicit OpenPartialHomeomorphs from each projective nonvanishing-coordinate source subtype to its affine coordinate target, with forward map coordinates, inverse chartInverse, exact mutual-inverse equalities, and coordinateLine normalization"},
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/T94A08AffineChartHomeomorph.lean",
@@ -50760,10 +50754,22 @@
       :output
       "topology-worklist: 353 items OK; {:done 324, :superseded 23, :open 2, :blocked 4}"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
-    :residual
-    "No mathematical or representation residual remains. Only the parent ledger row's stale RealProjectiveSmoothTarget scope and rpSmoothAtlas acceptance prevent a valid implementation transition for the already banked AffineChartConstruction 2."},
+    :representation
+    {:source
+     "The nonvanishing-coordinate open subtypes of complex projective two-space with the frozen topology coinduced from quotientMap on nonzero vectors",
+     :target
+     "The affine coordinate spaces indexed by the two coordinates other than i",
+     :direction
+     "Explicit OpenPartialHomeomorphs from each projective nonvanishing-coordinate source subtype to its affine coordinate target, with forward map coordinates, inverse chartInverse, exact mutual-inverse equalities, and coordinateLine normalization"},
+    :review
+    {:outcome :fail,
+     :seat "codex-7",
+     :job "invoke-1790656168854-27711-d575687f",
+     :finding
+     "Deterministic row-state and scope-contract defect: routes-2026-09-28-t94a08-affine-chart-homeomorph-topo2-r1 is marked :done-unreviewed, but its current implementation evidence is {:outcome :stop, :disposition :stop} and records no commit. The evidence correctly reports that the complete AffineChartConstruction 2 representation now exists placeholder-free in the reviewed prerequisite ConstructionTargets/T94A08AffineChartHomeomorph.lean, yet this parent row still scopes only ConstructionTargets/RealProjectiveSmoothTarget.lean and requests the unrelated rpSmoothAtlas_exists theorem. Its id, kind, dependencies, and representation still require complex-projective nonvanishing-patch-to-affine OpenPartialHomeomorphs. Fresh compilation of the canonical affine module passes, continuous_coordinates and affineChartConstruction are present, registry is 130/130, the 353-row ledger mechanically validates with this sole done-unreviewed row, both scoped banks have 0/0/0 sorry/admit/axiom counts, and frozen t94A08 retains one sorry. Repair by either superseding this parent row with the completed routes-2026-09-29-t94a08-affine-chart-quotient-compatibility-topo2-r1 prerequisite or changing its scope/acceptance to ConstructionTargets/T94A08AffineChartHomeomorph.lean and recording an actual in-scope affine commit; it cannot pass review while carrying stop evidence and the unrelated real-projective contract."},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
