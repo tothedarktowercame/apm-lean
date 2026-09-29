@@ -80982,8 +80982,63 @@
    "The same exact local smooth right-inverse theorem remains absent from the source; convexity and partition-of-unity assembly are already compiled.",
    :other-consumers []}
   {:consumer :t98A06,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "The exact boundary is now narrower: Mathlib has contDiffAt_map_inverse for an invertible family in one fixed ContinuousLinearMap space, but no banked theorem trivializes the source and target tangent bundles near x0 and proves that the restricted varying mfderiv is ContDiff into that fixed operator space. The complement at x0 must then be transported into those coordinates, invertibility kept on a neighborhood, the smooth inverse applied to the coordinate form of v, and the result transported back with a ContMDiffOn total-space certificate. The available pointwise rightInverse cannot supply this smooth dependence. The consumer remains unchanged at one placeholder.",
+    :outcome :stop,
+    :warnings
+    [{:kind :inherited-placeholder,
+      :message
+      "The consumer compiles with its single registered theorem placeholder."}
+     {:kind :fixture-prerequisite,
+      :message
+      "The compiled fixture assumes apm_t98A06_bridge_local_smooth_submersion_lift and validates only its downstream use."}],
+    :statement-hashes
+    {:t98A06
+     "cd9f181f88b216bb58c5fa68c3a85f32117f74dd089f7591d9827b0eb5b8b8f5",
+     :registry-file
+     "ea373b6df8489acf2636af8b4e03ac3acc7baaeef97a366e4f28a70f3d1cd1a0"},
+    :disposition :stop,
+    :axioms
+    ["propext"
+     "Classical.choice"
+     "Quot.sound"
+     "T98A06Probe.apm_t98A06_bridge_local_smooth_submersion_lift"],
+    :author "topo-2",
+    :reason :missing-mfderiv-fixed-coordinate-smooth-family,
+    :commands
+    [{:cmd
+      "test \"$(readlink -f .lake/packages)\" = \"/home/joe/code/apm-lean/.lake/packages\" && test -d .lake/packages",
+      :exit 0}
+     {:cmd "sha256sum /tmp/t98a06-part-a-probe.lean", :exit 0}
+     {:cmd "lake env lean problems/t98A06/lean/Main.lean", :exit 0}
+     {:cmd "lake env lean /tmp/t98a06-part-a-probe.lean",
+      :exit 0,
+      :finding "part_a still assumes the requested bridge"}
+     {:cmd
+      "rg -n 'contDiff.*inverse|ContDiff.*inverse|isOpen.*invert|inverse.*ContinuousLinear|ContinuousLinearEquiv.*contDiff|contDiff.*ContinuousLinearEquiv' .lake/packages/mathlib/Mathlib/Analysis .lake/packages/mathlib/Mathlib/Geometry/Manifold ConstructionTargets | head -100",
+      :exit 0,
+      :finding
+      "Smooth inversion exists for fixed-coordinate invertible operator families, but no result produces the required smooth fixed-coordinate restricted-mfderiv family from manifold tangent fibers."}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "130 registered statements match, 0 do not"}
+     {:cmd
+      "python3 comment-stripped placeholder census problems/t98A06/lean/Main.lean",
+      :exit 0,
+      :finding "1"}
+     {:cmd "git diff --exit-code -- problems/t98A06/lean/Main.lean",
+      :exit 0}],
+    :diagnostic-history [],
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/t98a06-part-a-probe.lean",
+     :sha256
+     "cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d"},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["problems/t98A06/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t98A06/local-smooth-submersion-lift",
    :acceptance
