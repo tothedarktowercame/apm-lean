@@ -80587,8 +80587,190 @@
      :review-outcomes]},
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+   :evidence
+   {:outcome :replan,
+    :seat "topo-4",
+    :commands
+    [{:cmd "reread TOPOLOGY-ROUTES.md and routes files", :exit 0}
+     {:cmd "comment-stripped census of eight refill problems",
+      :exit 0,
+      :finding "one each; eight total"}
+     {:cmd "rg shared projective and polygon infrastructure",
+      :exit 0,
+      :finding "definitions only; implementations absent"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "130 match, 0 mismatch"}],
+    :finding
+    {:placeholder-delta {:baseline 8, :current 8, :delta 0},
+     :typed-residual-change
+     "Original twelve remain closed, stopped, or held; eight registered one-placeholder HEAVY routes are newly active.",
+     :infrastructure-packets 0,
+     :review-outcomes
+     {:original-twelve :preserved, :refill-eight :new-open},
+     :routes
+     {:t98A06
+      ["part-a smooth submersion lift" "part-b smooth complete flow"],
+      :t98J01
+      ["part-b circle degree obstruction"
+       "part-a rational homology and trace"],
+      :t98J02
+      ["conjuncts 2-3 explicit covers"
+       "conjunct 1 collar and monodromy"],
+      :t94J09 ["polygon Hausdorff/cut-paste" "cellular homology"],
+      :tunk01 ["polygon Hausdorff/cut-paste" "N6 normalization"],
+      :t91A02
+      ["disk-cover trivialization"
+       "polygon descent"
+       "Euler characteristic"],
+      :t96A06 ["projective descent" "RP3 homology" "degree four"],
+      :t99J05
+      ["projective charts/homotopy" "CPn homology" "Lefschetz"]},
+     :deferred
+     ["surface-curve collar"
+      "smooth flow dependence"
+      "rational projective homology"]},
+    :replacement-items
+    [{:consumer :t98A06,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md/t98A06/part-a",
+      :acceptance
+      {:probe
+       "Compile a placeholder-free exact frozen part-(a) fixture: prove affine-fibre convexity, a local smooth lift using a kernel complement and smooth inversion, then apply exists_contMDiffSection_forall_mem_convex_of_local. Defer part (b).",
+       :placeholder "the single sorry in apm_t98a06",
+       :route-step "part (a), steps 1-3",
+       :gates
+       ["canonical packages"
+        "fixture compiles"
+        "zero fixture sorry"
+        "registry check"]},
+      :id :routes-2026-09-29-t98a06-part-a-adapter-1,
+      :kind :final-adapter,
+      :depends-on [:routes-2026-09-29-topo1-refill-heavy-1],
+      :current-residual
+      "Smooth lift first; complete-flow work remains.",
+      :other-consumers []}
+     {:consumer :t98J01,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md/t98J01/part-b",
+      :acceptance
+      {:probe
+       "Compile a placeholder-free exact frozen part-(b) fixture: identify S1 with Circle, project a hypothetical homotopy to the reflected factor, and distinguish identity from z -> -conj z using the banked covering or integral H1 degree. Defer the Lefschetz conjunct.",
+       :placeholder "the single sorry in apm_t98j01",
+       :route-step "part (b), steps 1-5",
+       :gates
+       ["canonical packages"
+        "fixture compiles"
+        "zero fixture sorry"
+        "registry check"]},
+      :id :routes-2026-09-29-t98j01-part-b-adapter-1,
+      :kind :final-adapter,
+      :depends-on [:routes-2026-09-29-topo1-refill-heavy-1],
+      :current-residual
+      "Non-homotopy first; rational homology and trace remain.",
+      :other-consumers []}
+     {:consumer :t98J02,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md/t98J02/counterexamples",
+      :acceptance
+      {:probe
+       "Compile a placeholder-free fixture for frozen conjuncts 2-3: build the disconnected trivial torus cover and connected free-involution torus quotient cover, with charts, sheet counts, embedded lifts, and complement claims. Defer conjunct 1.",
+       :placeholder "the single sorry in apm_t98j02",
+       :route-step "conjuncts 2-3, steps 1-7",
+       :gates
+       ["canonical packages"
+        "fixture compiles"
+        "zero fixture sorry"
+        "registry check"]},
+      :id :routes-2026-09-29-t98j02-counterexamples-adapter-1,
+      :kind :final-adapter,
+      :depends-on [:routes-2026-09-29-topo1-refill-heavy-1],
+      :current-residual
+      "Explicit counterexamples first; collar and monodromy remain.",
+      :other-consumers []}
+     {:consumer :t99J05,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/shared/projective-quotient-descent",
+      :acceptance
+      {:probe
+       "Compile a shared placeholder-free fixture at the exact RP3 and CPn generalities: quotient openness, product-with-interval quotient openness, and descent of homogeneous maps and homotopies, demonstrated on the t96A06 quadratic map and t99J05 diagonal homotopy.",
+       :placeholder "the single sorries in apm_t96a06 and apm_t99j05",
+       :route-step "t96A06 step 1; t99J05 steps 1-2",
+       :gates
+       ["canonical packages"
+        "fixture compiles"
+        "zero fixture sorry"
+        "registry check"]},
+      :id :routes-2026-09-29-projective-quotient-descent-shared-1,
+      :kind :reusable-theorem,
+      :depends-on [:routes-2026-09-29-topo1-refill-heavy-1],
+      :current-residual
+      "Common quotient API before charts and homology.",
+      :other-consumers [:t96A06]}
+     {:consumer :t94J09,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md/shared/polygon-quotient-hausdorff",
+      :acceptance
+      {:probe
+       "Compile polygonQuotient_t2 at the exact finite disk edge-pairing generality of t94J09 and tunk01, also covering t91A02 complexes. Prove the relation closed and use the open-quotient Hausdorff criterion; defer cut-and-paste and homology.",
+       :placeholder
+       "the single sorries in apm_t94j09, apm_tunk01, and apm_t91a02",
+       :route-step "shared polygon-quotient Hausdorff step",
+       :gates
+       ["canonical packages"
+        "fixture compiles"
+        "zero fixture sorry"
+        "registry check"]},
+      :id :routes-2026-09-29-polygon-quotient-hausdorff-shared-1,
+      :kind :reusable-theorem,
+      :depends-on [:routes-2026-09-29-topo1-refill-heavy-1],
+      :current-residual
+      "Hausdorffness before cut-and-paste and cellular homology.",
+      :other-consumers [:tunk01 :t91A02]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 5,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only when every active topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:strategy
+       "Measure all five rows, preserve original holds and STOPs, recount eight placeholders, and refill from the complete active portfolio."},
+      :id :routes-2026-09-29-checkpoint-topo1-refill-five-1,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:routes-2026-09-29-t98a06-part-a-adapter-1
+       :routes-2026-09-29-t98j01-part-b-adapter-1
+       :routes-2026-09-29-t98j02-counterexamples-adapter-1
+       :routes-2026-09-29-projective-quotient-descent-shared-1
+       :routes-2026-09-29-polygon-quotient-hausdorff-shared-1],
+      :current-residual
+      "Review three adapters and two shared foundations, then refill.",
+      :other-consumers []}],
+    :author "topo-4",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -80599,6 +80781,150 @@
    :depends-on [:routes-2026-09-29-checkpoint-topo1-after-t99j04-1],
    :current-residual
    "Joe 2026-09-29: the original twelve topo1 problems have reached their stop condition; topo1 now takes eight HEAVY problems (TOPOLOGY-ROUTES.md, topo1 refill): t98A06, t98J01, t98J02 (each has an ADAPTER part), t94J09, tunk01, t91A02 (shared polygon-quotient / cut-and-paste tags), t96A06, t99J05 (projective charts and rational homology, shared with topo2 RP infrastructure). All eight statements are registered; each has one sorry.",
+   :other-consumers []}
+  {:consumer :t98A06,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md/t98A06/part-a",
+   :acceptance
+   {:probe
+    "Compile a placeholder-free exact frozen part-(a) fixture: prove affine-fibre convexity, a local smooth lift using a kernel complement and smooth inversion, then apply exists_contMDiffSection_forall_mem_convex_of_local. Defer part (b).",
+    :placeholder "the single sorry in apm_t98a06",
+    :route-step "part (a), steps 1-3",
+    :gates
+    ["canonical packages"
+     "fixture compiles"
+     "zero fixture sorry"
+     "registry check"]},
+   :id :routes-2026-09-29-t98a06-part-a-adapter-1,
+   :kind :final-adapter,
+   :depends-on
+   [:routes-2026-09-29-topo1-refill-heavy-1
+    :routes-2026-09-29-topo1-refill-heavy-1],
+   :current-residual "Smooth lift first; complete-flow work remains.",
+   :other-consumers []}
+  {:consumer :t98J01,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md/t98J01/part-b",
+   :acceptance
+   {:probe
+    "Compile a placeholder-free exact frozen part-(b) fixture: identify S1 with Circle, project a hypothetical homotopy to the reflected factor, and distinguish identity from z -> -conj z using the banked covering or integral H1 degree. Defer the Lefschetz conjunct.",
+    :placeholder "the single sorry in apm_t98j01",
+    :route-step "part (b), steps 1-5",
+    :gates
+    ["canonical packages"
+     "fixture compiles"
+     "zero fixture sorry"
+     "registry check"]},
+   :id :routes-2026-09-29-t98j01-part-b-adapter-1,
+   :kind :final-adapter,
+   :depends-on
+   [:routes-2026-09-29-topo1-refill-heavy-1
+    :routes-2026-09-29-topo1-refill-heavy-1],
+   :current-residual
+   "Non-homotopy first; rational homology and trace remain.",
+   :other-consumers []}
+  {:consumer :t98J02,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md/t98J02/counterexamples",
+   :acceptance
+   {:probe
+    "Compile a placeholder-free fixture for frozen conjuncts 2-3: build the disconnected trivial torus cover and connected free-involution torus quotient cover, with charts, sheet counts, embedded lifts, and complement claims. Defer conjunct 1.",
+    :placeholder "the single sorry in apm_t98j02",
+    :route-step "conjuncts 2-3, steps 1-7",
+    :gates
+    ["canonical packages"
+     "fixture compiles"
+     "zero fixture sorry"
+     "registry check"]},
+   :id :routes-2026-09-29-t98j02-counterexamples-adapter-1,
+   :kind :final-adapter,
+   :depends-on
+   [:routes-2026-09-29-topo1-refill-heavy-1
+    :routes-2026-09-29-topo1-refill-heavy-1],
+   :current-residual
+   "Explicit counterexamples first; collar and monodromy remain.",
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md/shared/projective-quotient-descent",
+   :acceptance
+   {:probe
+    "Compile a shared placeholder-free fixture at the exact RP3 and CPn generalities: quotient openness, product-with-interval quotient openness, and descent of homogeneous maps and homotopies, demonstrated on the t96A06 quadratic map and t99J05 diagonal homotopy.",
+    :placeholder "the single sorries in apm_t96a06 and apm_t99j05",
+    :route-step "t96A06 step 1; t99J05 steps 1-2",
+    :gates
+    ["canonical packages"
+     "fixture compiles"
+     "zero fixture sorry"
+     "registry check"]},
+   :id :routes-2026-09-29-projective-quotient-descent-shared-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-09-29-topo1-refill-heavy-1
+    :routes-2026-09-29-topo1-refill-heavy-1],
+   :current-residual "Common quotient API before charts and homology.",
+   :other-consumers [:t96A06]}
+  {:consumer :t94J09,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md/shared/polygon-quotient-hausdorff",
+   :acceptance
+   {:probe
+    "Compile polygonQuotient_t2 at the exact finite disk edge-pairing generality of t94J09 and tunk01, also covering t91A02 complexes. Prove the relation closed and use the open-quotient Hausdorff criterion; defer cut-and-paste and homology.",
+    :placeholder
+    "the single sorries in apm_t94j09, apm_tunk01, and apm_t91a02",
+    :route-step "shared polygon-quotient Hausdorff step",
+    :gates
+    ["canonical packages"
+     "fixture compiles"
+     "zero fixture sorry"
+     "registry check"]},
+   :id :routes-2026-09-29-polygon-quotient-hausdorff-shared-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-09-29-topo1-refill-heavy-1
+    :routes-2026-09-29-topo1-refill-heavy-1],
+   :current-residual
+   "Hausdorffness before cut-and-paste and cellular homology.",
+   :other-consumers [:tunk01 :t91A02]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 5,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only when every active topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:strategy
+    "Measure all five rows, preserve original holds and STOPs, recount eight placeholders, and refill from the complete active portfolio."},
+   :id :routes-2026-09-29-checkpoint-topo1-refill-five-1,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:routes-2026-09-29-t98a06-part-a-adapter-1
+    :routes-2026-09-29-t98j01-part-b-adapter-1
+    :routes-2026-09-29-t98j02-counterexamples-adapter-1
+    :routes-2026-09-29-projective-quotient-descent-shared-1
+    :routes-2026-09-29-polygon-quotient-hausdorff-shared-1
+    :routes-2026-09-29-topo1-refill-heavy-1],
+   :current-residual
+   "Review three adapters and two shared foundations, then refill.",
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
