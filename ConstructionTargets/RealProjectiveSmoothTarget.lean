@@ -1113,6 +1113,80 @@ theorem projectionAndLocalInversesSmooth_iff :
       sphereProjectionQuotientAtlasCompatibility F
     exact ⟨hforward F, hinverse F⟩
 
+def SphereProjectionArbitraryInverseBranchLocalAlternative : Prop :=
+  ∀ (F : SphereProjectionLocalInverseFamily)
+    (e : OpenPartialHomeomorph (Sphere 2)
+      (ProjectiveSpaceTopology.Space ℝ 2))
+    (_he : sphereProjection 2 = e) (x : ProjectiveSpaceTopology.Space ℝ 2),
+    x ∈ e.target →
+    e.symm =ᶠ[𝓝 x] F.inverseBranch x ∨
+      e.symm =ᶠ[𝓝 x] sphereAntipodalN 2 ∘ F.inverseBranch x
+
+theorem sphereProjectionArbitraryInverseBranchLocalAlternative :
+    SphereProjectionArbitraryInverseBranchLocalAlternative := by
+  intro F e he x hx
+  have hFx : x ∈ (F.localHomeomorph x).target := by
+    have hm := (F.localHomeomorph x).map_source (F.lift_mem_source x)
+    simpa [← F.localHomeomorph_eq x, F.project_lift x] using hm
+  have hce : ContinuousAt e.symm x := e.continuousAt_symm hx
+  have hcF : ContinuousAt (F.inverseBranch x) x :=
+    (F.localHomeomorph x).continuousAt_symm hFx
+  have hinner : ContinuousAt
+      (fun t => inner ℝ (F.inverseBranch x t).1 (e.symm t).1) x := by
+    fun_prop
+  have hte : e.target ∈ 𝓝 x := e.open_target.mem_nhds hx
+  have htF : (F.localHomeomorph x).target ∈ 𝓝 x :=
+    (F.localHomeomorph x).open_target.mem_nhds hFx
+  have hpoint : ∀ t, t ∈ e.target → t ∈ (F.localHomeomorph x).target →
+      e.symm t = F.inverseBranch x t ∨
+        e.symm t = sphereAntipodalN 2 (F.inverseBranch x t) := by
+    intro t het hFt
+    apply (sphereProjectionTwoSheetedLocalModel.2 _ _).mp
+    calc
+      sphereProjection 2 (F.inverseBranch x t) = t :=
+        F.project_inverseBranch x t hFt
+      _ = e (e.symm t) := (e.right_inv het).symm
+      _ = sphereProjection 2 (e.symm t) := (congrFun he (e.symm t)).symm
+  rcases hpoint x hx hFx with hsame | hanti
+  · left
+    have hself : 0 < inner ℝ (F.inverseBranch x x).1 (e.symm x).1 := by
+      rw [hsame, real_inner_self_pos]
+      intro hzero
+      have hn : ‖(F.inverseBranch x x).1‖ = 1 := by
+        simpa only [Metric.mem_sphere, dist_zero_right] using
+          (F.inverseBranch x x).2
+      rw [hzero] at hn
+      norm_num at hn
+    have hpos := continuousAt_const.eventually_lt hinner hself
+    filter_upwards [hte, htF, hpos] with t het hFt hpt
+    rcases hpoint t het hFt with h | h
+    · exact h
+    · exfalso
+      rw [h] at hpt
+      change 0 < inner ℝ (F.inverseBranch x t).1
+        (-(F.inverseBranch x t).1) at hpt
+      rw [inner_neg_right] at hpt
+      exact (not_lt_of_ge (neg_nonpos.mpr real_inner_self_nonneg)) hpt
+  · right
+    have hneg : inner ℝ (F.inverseBranch x x).1 (e.symm x).1 < 0 := by
+      rw [hanti]
+      change inner ℝ (F.inverseBranch x x).1 (-(F.inverseBranch x x).1) < 0
+      rw [inner_neg_right, neg_lt_zero]
+      exact real_inner_self_pos.mpr (by
+        intro hzero
+        have hn : ‖(F.inverseBranch x x).1‖ = 1 := by
+          simpa only [Metric.mem_sphere, dist_zero_right] using
+            (F.inverseBranch x x).2
+        rw [hzero] at hn
+        norm_num at hn)
+    have hminus := hinner.eventually_lt continuousAt_const hneg
+    filter_upwards [hte, htF, hminus] with t het hFt hmt
+    rcases hpoint t het hFt with h | h
+    · exfalso
+      rw [h] at hmt
+      exact (not_lt_of_ge real_inner_self_nonneg) hmt
+    · simpa only [Function.comp_apply] using h
+
 theorem coordinateContDiffAt_reaches_contMDiff :
     SphereProjectionQuotientContMDiff :=
   quotientContMDiffAt_gives_quotientContMDiff
