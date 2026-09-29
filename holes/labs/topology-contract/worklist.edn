@@ -80934,6 +80934,21 @@
       :exit 0,
       :finding "130 registered statements match, 0 do not"}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1790645565404-27066-bc576a98",
+     :commands
+     ["git show/diff-tree recorded commit 025955ee"
+      "bb worklist_check on recorded worklist"
+      "sha256sum and lake env lean exact part-a fixture"
+      "lake env lean t98A06 source"
+      "statement-registry check and fingerprint t98A06"
+      "nested-comment-aware parent/commit/fixture placeholder census"
+      "compare attempt-2 residual and representation boundary with reviewed attempt 1"
+      "git diff --check and verify source unchanged"],
+     :finding
+     "PASS: reviewer codex-3 is distinct from evidence author topo-2. Commit 025955ee changes only the worklist; t98A06 source is unchanged from its parent and retains exactly 1 placeholder. The recorded 674-item snapshot validates, the canonical package authority is correct, and the exact fixture again reproduces SHA-256 cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d. Source and fixture compile; the fixture has zero textual placeholders and depends on the standard three axioms plus exactly T98A06Probe.apm_t98A06_bridge_local_smooth_submersion_lift. Registry check is 130/130 and frozen t98A06 hash cd9f181f88b216bb58c5fa68c3a85f32117f74dd089f7591d9827b0eb5b8b8f5 reproduces. The orientation remains exact: construct a smooth tangent-bundle section w with mfderiv f x (w x) = v(f x). The fixture still proves only the valid downstream convex-fiber and partition-of-unity assembly. Attempt 2 finds the same unresolved representation boundary as reviewed attempt 1: pointwise finite-dimensional right inverses do not supply a smooth family across varying tangent fibers; fixed tangent-chart coordinates, neighborhoodwise invertibility, smooth inversion, and transport back are still absent. No declaration, source edit, placeholder reduction, or new infrastructure was claimed. This is therefore a valid second STOP at the same deterministic boundary and supplies stop-after-two evidence rather than a closure claim; part (b) remains separate."},
     :changed-paths [],
     :fixture
     {:path "/tmp/t98a06-part-a-probe.lean",
@@ -80941,7 +80956,7 @@
      "cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["problems/t98A06/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t98A06/local-smooth-submersion-lift",
    :acceptance
@@ -81030,7 +81045,7 @@
      :residual
      "Part (a) cannot advance because the elected local smooth submersion lift was not banked. This is an implementation absence, not a mathematical refutation."}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t98A06/part-a",
    :acceptance
