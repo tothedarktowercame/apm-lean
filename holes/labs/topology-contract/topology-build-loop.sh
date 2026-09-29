@@ -159,6 +159,32 @@ wait_job() {
         jq -r '.job.result // ""' <<<"$body" > "$LAST_RESULT"
         log "$label done job=$job result=$LAST_RESULT"; return 0 ;;
       failed|error|cancelled)
+        # Failures in the Agency's own bookkeeping, not the seat's work
+        # (2026-09-29: futon1b queue waits of 120-145 s gave `store-busy` and
+        # `activity-decision-failed`, and each cost a supervisor repair):
+        # 1. The seat finished and wrote its receipt, and only the post-turn
+        #    record failed. The receipt is in the last text event (the job's
+        #    `result` is empty). Use it; the extractor still checks its nonce.
+        # 2. The seat never executed anything. Whatever the code, this is a
+        #    refusal before work began: resend after backoff, never repair.
+        if [ "$state" = failed ]; then
+          local last_text executed
+          last_text="$(jq -r '[.job.events[]? | select(.type=="text") | .text] | last // ""' <<<"$body" 2>/dev/null)"
+          executed="$(jq -r '.job.execution.executed // false' <<<"$body" 2>/dev/null)"
+          if grep -q 'TOPOLOGY_RECEIPT_EDN' <<<"$last_text"; then
+            LAST_JOB="$job"; mkdir -p "$RUNS/jobs"
+            LAST_RESULT="$RUNS/jobs/$job.result.txt"
+            printf '%s\n' "$last_text" > "$LAST_RESULT"
+            log "$label job=$job failed after the seat finished ($(jq -r '.job."terminal-code" // "?"' <<<"$body")); using its receipt result=$LAST_RESULT"
+            return 0
+          fi
+          if [ "$executed" != true ]; then
+            bb "$HERE/inflight.bb" clear "$INFLIGHT" \
+              || log "could not clear in-flight pointer for terminal job $job"
+            log "$label job=$job failed before the seat executed anything ($(jq -r '.job."terminal-code" // "?"' <<<"$body")); resending"
+            return 75
+          fi
+        fi
         # A terminal job is IMMUTABLE -- it will never become `done`. Retaining
         # its in-flight pointer makes every supervisor restart reclaim the same
         # dead job and die on it again: three identical reclaim stops inside 90

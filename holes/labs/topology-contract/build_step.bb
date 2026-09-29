@@ -11,7 +11,8 @@
 (def here (.getParent (.getAbsoluteFile (java.io.File. *file*))))
 (def cmd (first *command-line-args*))
 (def path (or (second *command-line-args*) (str here "/worklist.edn")))
-(def data (edn/read-string (slurp path)))
+(def original-text (slurp path))
+(def data (edn/read-string original-text))
 (def items (:items data))
 (def ids (map :id items))
 (def by-id (into {} (map (juxt :id identity) items)))
@@ -55,8 +56,30 @@
       (recur (conj done (:id i)) (next xs))))
   (println "replay: CLOSED" (name (:campaign data))
            (str (:baseline-placeholders data) "->" (:final-placeholders data))))
-(defn write-ledger! [x]
-  (let [tmp (io/file (str path ".tmp"))]
+(defn rebase-onto
+  "Apply this step's row changes (x relative to the ledger as read at startup)
+  onto the ledger text now on disk. Another writer (a person adding a row, the
+  other half of a split) may have changed the file while this step ran; a plain
+  write of x would silently drop their rows (2026-09-29: a hand-added t99J04 row
+  vanished under ffa2a465)."
+  [x current-text]
+  (if (= current-text original-text)
+    x
+    (let [cur (edn/read-string current-text)
+          new-idx (into {} (map (juxt :id identity) (:items x)))
+          changed (into {} (keep (fn [[id row]] (when (not= row (by-id id)) [id row])) new-idx))
+          removed (set (remove new-idx ids))
+          cur-ids (set (map :id (:items cur)))
+          kept (->> (:items cur)
+                    (remove #(removed (:id %)))
+                    (mapv #(get changed (:id %) %)))
+          added (->> (:items x) (filter #(and (changed (:id %)) (not (cur-ids (:id %))))))]
+      (assoc x :items (into kept added)))))
+(defn write-ledger! [x0]
+  (loop [attempt 1]
+  (let [seen (slurp path)
+        x (rebase-onto x0 seen)
+        tmp (io/file (str path ".tmp"))]
     (spit tmp (with-out-str (pprint/pprint x)))
     ;; Validate BEFORE the atomic move, so no receipt can ever write a ledger
     ;; that worklist_check refuses.
@@ -83,10 +106,13 @@
         (throw (ex-info (str "receipt would invalidate the ledger: "
                              (str/trim (str/replace (str err out) #"^topology-worklist:\s*" "")))
                         {}))))
-    (java.nio.file.Files/move (.toPath tmp) (.toPath (io/file path))
-      (into-array java.nio.file.CopyOption
-                  [java.nio.file.StandardCopyOption/REPLACE_EXISTING
-                   java.nio.file.StandardCopyOption/ATOMIC_MOVE]))))
+    ;; Validation takes seconds; if the file changed meanwhile, rebase again.
+    (if (and (not= seen (slurp path)) (< attempt 5))
+      (do (.delete tmp) (recur (inc attempt)))
+      (java.nio.file.Files/move (.toPath tmp) (.toPath (io/file path))
+        (into-array java.nio.file.CopyOption
+                    [java.nio.file.StandardCopyOption/REPLACE_EXISTING
+                     java.nio.file.StandardCopyOption/ATOMIC_MOVE]))))))
 (defn replace-item [xs id f]
   (mapv #(if (= id (:id %)) (f %) %) xs))
 (defn normalize-prerequisite [asking-row prerequisite]
