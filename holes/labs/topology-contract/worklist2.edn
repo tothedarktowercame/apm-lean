@@ -52270,6 +52270,21 @@
       :output
       "Both puncturedTorus_H2_isZero and H2map_eq_zero_of_factor depend on [propext, Classical.choice, Quot.sound]."}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1790642623927-26899-f5840fed",
+     :commands
+     ["git show 510b0d7e -- ConstructionTargets/T01A02PuncturedTorusH2.lean"
+      "sha256sum /tmp/t01A02_punctured_torus_h2.lean"
+      "lake env lean ConstructionTargets/T01A02PuncturedTorusH2.lean"
+      "lake build ConstructionTargets.T01A02PuncturedTorusH2"
+      "lake env lean /tmp/t01A02_punctured_torus_h2_axioms.lean"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "comment-stripped placeholder counts from git show 510b0d7e"],
+     :finding
+     "PASS: reviewer codex-7 verified commit 510b0d7e. Its sole changed path exactly matches scope, is the path latest commit, and both fixture and committed source hash to 81f113321f3e9859e7d76cfb6ad6c47afef8f3113aae37c005a5926e26c259af. Direct elaboration, Lake build, both axiom audits, 130 frozen statements, and the 342-item ledger pass. puncturedTorus_H2_isZero correctly places zero H2(U) biprod H2(V) before H2(X) and zero H1(U intersection V) after it in the production Mayer-Vietoris exact segment, converting between integral ModuleCat and group homology only at the established adapters. H2map_eq_zero_of_factor preserves covariant composition order H2(g) then H2(i) and kills the map through zero H2(W). The module has zero placeholders; frozen t01A02 remains at three."},
     :commit "510b0d7e1c7348372f233a92480b2576c850488f",
     :changed-paths ["ConstructionTargets/T01A02PuncturedTorusH2.lean"],
     :fixture
@@ -52278,7 +52293,7 @@
      "81f113321f3e9859e7d76cfb6ad6c47afef8f3113aae37c005a5926e26c259af"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T01A02PuncturedTorusH2.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
