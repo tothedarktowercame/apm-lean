@@ -52094,13 +52094,48 @@
     :routes-2026-09-29-rp-sphere-projection-contmdiff-at-topo2-r1],
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path
+      "/tmp/rp_sphere_projection_local_inverse_restrictions_contmdiff.lean",
+      :sha256
+      "b3f04864a31dbb74914d16126ffbd974103cc9f5b861bec0ce5fb46b7fe42e07"},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/rp_sphere_projection_local_inverse_restrictions_contmdiff.lean",
+       :exit 0}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_projection_local_inverse_restrictions_contmdiff.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "130 registered statements match, 0 do not"}
+      {:cmd
+       "sha256sum /tmp/rp_sphere_projection_local_inverse_restrictions_contmdiff.lean",
+       :exit 0}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/rp_sphere_projection_local_inverse_restrictions_contmdiff.lean",
+       :exit 1,
+       :finding
+       "The first fibre-law application supplied the projection equality in the opposite orientation from sphereProjectionTwoSheetedLocalModel. Reversing the equality chain to run from the chosen inverse branch to e.symm matched the theorem and compiled."}],
+     :implementation
+     {:scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
+      :acceptance
+      {:implementation
+       "Add SphereProjectionArbitraryInverseBranchLocalAlternative and sphereProjectionArbitraryInverseBranchLocalAlternative to ConstructionTargets/RealProjectiveSmoothTarget.lean exactly as compiled. Preserve the universal quantification over arbitrary e, the target hypothesis, and the eventual identity-or-antipodal conclusion. Run the module compile, placeholder scan, and statement-registry check."}},
+     :residual
+     "Bank this arbitrary inverse-branch comparison, then the parent coordinate-normal-form row can transport the chosen quotient-chart inverse smoothness across the eventual equality and apply the ordinary or antipodal sphere transition theorem."}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
-   {:probe
-    "Compile a placeholder-free proof of SphereProjectionArbitraryInverseBranchLocalAlternative in /tmp/rp_sphere_projection_local_inverse_restrictions_contmdiff.lean. For every inverse family F, every OpenPartialHomeomorph e with sphereProjection 2 = e, every x in e.target, prove that e.symm is eventually equal near x either to F.inverseBranch x or to sphereAntipodalN 2 composed with F.inverseBranch x. Use openness of both inverse targets, continuity of e.symm and F.inverseBranch x, the two-sheeted fibre law, and inner-product sign separation. Retain SphereProjectionArbitraryInverseCoordinateLocalNormalForm and its reductions. This supplies exactly the arbitrary-branch comparison for t95A04 and t96A07."},
+   {:implementation
+    "Add SphereProjectionArbitraryInverseBranchLocalAlternative and sphereProjectionArbitraryInverseBranchLocalAlternative to ConstructionTargets/RealProjectiveSmoothTarget.lean exactly as compiled. Preserve the universal quantification over arbitrary e, the target hypothesis, and the eventual identity-or-antipodal conclusion. Run the module compile, placeholder scan, and statement-registry check."},
    :id
    :routes-2026-09-29-rp-sphere-arbitrary-inverse-branch-local-alternative-topo2-r1,
    :kind :reusable-theorem,
