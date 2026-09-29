@@ -52179,47 +52179,61 @@
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path
-      "/tmp/rp_sphere_projection_local_inverse_restrictions_contmdiff.lean",
-      :sha256
-      "6226c03eb263c2944f99f73455a470d04160d0b96800f17137ec1ae59d53489c"},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/rp_sphere_projection_local_inverse_restrictions_contmdiff.lean",
-       :exit 0}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_projection_local_inverse_restrictions_contmdiff.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "130 registered statements match, 0 do not"}
-      {:cmd
-       "sha256sum /tmp/rp_sphere_projection_local_inverse_restrictions_contmdiff.lean",
-       :exit 0}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/rp_sphere_projection_local_inverse_restrictions_contmdiff.lean",
-       :exit 1,
-       :finding
-       "After the prerequisite was banked, the fixture still redeclared it. Removing those duplicate declarations exposed two coordinate details: membership in the standard sphere chart target had to be proved by expanding quotientChart_apply, and the eventual equality needed Function.comp unfolded."}
-      {:cmd
-       "lake env lean /tmp/rp_sphere_projection_local_inverse_restrictions_contmdiff.lean",
-       :exit 1,
-       :finding
-       "The chart left-inverse equation had the reverse orientation from the eventual-equality goal; taking its symmetry completed the chosen inverse-branch coordinate identity."}],
-     :implementation
-     {:scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
-      :acceptance
-      {:implementation
-       "Add chosenInverseBranch_contMDiffAt, SphereProjectionArbitraryInverseCoordinateLocalNormalForm, sphereProjectionArbitraryInverseCoordinateLocalNormalForm, arbitraryInverseCoordinateLocalNormalForm_gives_restrictionsContMDiff, and localInverseRestrictions_gives_projectionAndLocalInversesSmooth exactly as compiled in the fixture. Use the quotient chart at x and standard sphere chart at F.lift x for the chosen branch, then transport across sphereProjectionArbitraryInverseBranchLocalAlternative and the smooth antipodal map. Run the module compile, placeholder scan, and statement-registry check."}},
-     :residual
-     "The arbitrary inverse coordinate theorem now compiles. It proves the chosen inverse branch smooth from the quotient-chart construction, then transports that result across the banked eventual identity-or-antipodal alternative. The parent inverse-restrictions row reduces immediately to this theorem."}},
+   {:placeholder-delta 0,
+    :residual
+    "The chosen quotient-chart inverse branch is smooth, arbitrary inverse branches inherit smoothness through the eventual identity-or-antipodal alternative, and the reductions to inverse-restrictions and SphereProjectionAndLocalInversesSmooth are banked. The next route step can package the completed forward and inverse smoothness witnesses into the quotient local-diffeomorphism/smooth-descent contract and close the t95A04/t96A07 adapters.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:registry "130 registered statements match, 0 do not",
+     :scoped-source-sha256
+     "b5d23ccd70a0ef227042b8b1614944c16b1fe1bc8e19365f028493a7103d06fc"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/rp_sphere_projection_local_inverse_restrictions_contmdiff.lean",
+      :exit 0,
+      :output
+      "6226c03eb263c2944f99f73455a470d04160d0b96800f17137ec1ae59d53489c  /tmp/rp_sphere_projection_local_inverse_restrictions_contmdiff.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/RealProjectiveSmoothTarget.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.RealProjectiveSmoothTarget",
+      :exit 0,
+      :output "Build completed successfully (8241 jobs)."}
+     {:cmd
+      "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/RealProjectiveSmoothTarget.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "130 registered statements match, 0 do not"}
+     {:cmd
+      "lake env lean /dev/stdin axiom audit for chosenInverseBranch_contMDiffAt, sphereProjectionArbitraryInverseCoordinateLocalNormalForm, and localInverseRestrictions_gives_projectionAndLocalInversesSmooth",
+      :exit 0,
+      :output
+      "All three declarations depend on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 348 items OK; {:done 310, :superseded 23, :open 3, :blocked 12}"}
+     {:cmd "git show --format='%H%n%an <%ae>' --name-only HEAD",
+      :exit 0,
+      :output
+      "07a6ccae63eb223c51c2291b5edcb1d9a06293ab\nJoe Corneli <holtzermann17@gmail.com>\n\nConstructionTargets/RealProjectiveSmoothTarget.lean"}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "07a6ccae63eb223c51c2291b5edcb1d9a06293ab",
+    :changed-paths
+    ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
+    :fixture
+    {:path "ConstructionTargets/RealProjectiveSmoothTarget.lean",
+     :sha256
+     "b5d23ccd70a0ef227042b8b1614944c16b1fe1bc8e19365f028493a7103d06fc"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
