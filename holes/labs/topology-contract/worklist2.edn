@@ -52440,13 +52440,13 @@
   {:consumer :t95A04,
    :evidence
    {:probe
-    {:outcome :revise,
+    {:outcome :go,
      :seat "topo-8",
      :fixture
      {:path
       "/tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
       :sha256
-      "aafc4aff86b3be0ea7917bc3e47fb89810993a29d26b74abff617acc68005fd4"},
+      "b9ff4463402ea2522c1e1bdcf8faf449e787e338cf8281d5685ae768def90262"},
      :commands
      [{:cmd
        "lake env lean /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
@@ -52454,38 +52454,32 @@
       {:cmd
        "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean || true)\"",
        :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "130 registered statements match, 0 do not"}
+      {:cmd
+       "sha256sum /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
+       :exit 0}],
      :diagnostic-history
      [{:cmd
        "lake env lean /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
        :exit 1,
        :finding
-       "The first congruence proof supplied sphereProjection x = e x, while ContMDiffOn.congr required e x = sphereProjection x; reversing the banked function equality corrected the reduction."}],
-     :residual
-     "The requested branch theorem still repeats the same forward smoothness proof for every local restriction. The compiled prerequisite removes that redundancy: prove ContMDiff sphereProjection 2 once for the installed quotient atlas, and prove only ContMDiffOn e.symm on e.target for each local-homeomorphism restriction e. The compiled reduction restricts the global forward proof by congruence, obtains SphereProjectionLocalHomeomorphRestrictionsSmooth, and then the existing reductions produce smooth branches and the local diffeomorphism.",
-     :prerequisite
-     {:consumer :t95A04,
-      :phase :probe,
-      :state :open,
-      :scope [],
-      :dag-node "TOPOLOGY-ROUTES.md",
+       "The first PartialDiffeomorph construction used command-style where syntax after a typed let, so Lean parsed the fields outside the local definition. Rewriting it as an explicit structure literal assigned with := compiled all inherited PartialEquiv and smoothness fields."}],
+     :implementation
+     {:scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
       :acceptance
-      {:probe
-       "Compile a placeholder-free inhabitant of SphereProjectionAndLocalInversesSmooth in /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean. For every inverse family F with exactly F.quotientChartedSpace and sphereProjectionQuotientAtlasCompatibility F installed, prove ContMDiff (real model 2) (real model 2) infinity (sphereProjection 2) once. Also prove that every OpenPartialHomeomorph e agreeing with sphereProjection 2 has ContMDiffOn e.symm on e.target. Establish both claims in standard sphere and quotientChart coordinates using the banked ordinary-or-antipodal transition theorems. Retain projectionAndLocalInversesSmooth_gives_restrictionsSmooth and all reductions through SphereProjectionQuotientLocalDiffeomorph. This supplies the nonredundant smoothness input for t95A04 and t96A07."},
-      :id
-      :routes-2026-09-29-rp-sphere-projection-and-local-inverses-smooth-topo2-r1,
-      :kind :reusable-theorem,
-      :depends-on
-      [:routes-2026-09-28-rp-sphere-quotient-atlas-compatibility-topo2-r1
-       :routes-2026-09-28-rp-sphere-quotient-chart-transition-topo2-r1],
-      :other-consumers [:t96A07]}}},
-   :phase :probe,
+      {:implementation
+       "Add sphereProjectionLocalHomeomorphRestrictionsSmooth, localHomeomorphRestrictionsSmooth_gives_smoothBranches, and smoothLocalHomeomorphBranches_gives_localDiffeomorph exactly as compiled. For each point use sphereProjection_isLocalHomeomorph, attach the restriction smoothness pair, construct the corresponding PartialDiffeomorph, and witness IsLocalDiffeomorphAt. Run the module compile, placeholder scan, and statement-registry check."}},
+     :residual
+     "The restriction-smoothness inhabitant and both requested reductions compile. After banking them, SphereProjectionQuotientLocalDiffeomorph follows directly; the remaining consumer work is the adapter from this local diffeomorphism to the frozen t95A04 and t96A07 statements."}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
-   {:probe
-    "Compile a placeholder-free inhabitant of SphereProjectionLocalHomeomorphRestrictionsSmooth in /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean. For every inverse family F, install exactly F.quotientChartedSpace and sphereProjectionQuotientAtlasCompatibility F. Then for every OpenPartialHomeomorph e from Sphere 2 to the frozen projective Space satisfying sphereProjection 2 = e, prove ContMDiffOn e on e.source and ContMDiffOn e.symm on e.target. Prove the forward statement in standard sphere and quotientChart coordinates and the inverse statement from the banked local identity-or-antipodal transition laws. Retain localHomeomorphRestrictionsSmooth_gives_smoothBranches and smoothLocalHomeomorphBranches_gives_localDiffeomorph. This supplies the branch smoothness required by t95A04 and t96A07 without adding branch-choice data."},
+   {:implementation
+    "Add sphereProjectionLocalHomeomorphRestrictionsSmooth, localHomeomorphRestrictionsSmooth_gives_smoothBranches, and smoothLocalHomeomorphBranches_gives_localDiffeomorph exactly as compiled. For each point use sphereProjection_isLocalHomeomorph, attach the restriction smoothness pair, construct the corresponding PartialDiffeomorph, and witness IsLocalDiffeomorphAt. Run the module compile, placeholder scan, and statement-registry check."},
    :id
    :routes-2026-09-29-rp-sphere-local-homeomorph-restrictions-smooth-topo2-r1,
    :kind :reusable-theorem,
