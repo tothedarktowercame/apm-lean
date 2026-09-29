@@ -81087,15 +81087,15 @@
    :evidence
    {:placeholder-delta 0,
     :residual
-    "The mathematical hold is established by reviewed attempts 1 and 2, but the required machine-readable correction cannot be applied through the current receipt transitions. Reopen only after the ledger writer can atomically supersede attempt 3 and delete its adapter dependency edge; do not apply another ordinary STOP because that preserves the stop-after-two violation.",
+    "The consumer is held after the two independently reviewed zero-progress STOPs 1 and 2. Attempt 3 must be superseded and removed from this adapter's dependency vector. The current writer cannot express dependency deletion, so an owner structural repair of the writer/ledger transition is required; the adapter must not be marked done or redirected to a substitute dependency.",
     :outcome :stop,
     :warnings
-    [{:kind :unsafe-transition,
+    [{:kind :do-not-apply-ordinary-stop,
       :message
-      "Applying another ordinary STOP would mark the adapter done-unreviewed while leaving attempt 3 done and its dependency edge intact, reproducing the reviewed defect."}
-     {:kind :required-writer-change,
+      "An ordinary STOP would mark this adapter done-unreviewed without correcting attempt 3 or its dependency edge."}
+     {:kind :structural-repair,
       :message
-      "The ledger writer needs an atomic transition that supersedes an identified row and removes an identified dependency edge, or a deletion-capable dependency-repair operation. Direct ledger editing is forbidden."}],
+      "Keep this adapter in repair until the ledger writer atomically performs the requested graph mutation."}],
     :statement-hashes
     {:t98A06
      "cd9f181f88b216bb58c5fa68c3a85f32117f74dd089f7591d9827b0eb5b8b8f5",
@@ -81103,37 +81103,31 @@
      "ea373b6df8489acf2636af8b4e03ac3acc7baaeef97a366e4f28a70f3d1cd1a0"},
     :disposition :stop,
     :author "topo-2",
-    :reason :ledger-writer-cannot-apply-required-stop-after-two-repair,
+    :reason :owner-structural-ledger-writer-repair-required,
     :commands
     [{:cmd
-      "sed -n '500,535p' holes/labs/topology-contract/build_step.bb",
-      :exit 0,
-      :finding
-      "The :stop transition replaces only the current row state/evidence and ignores :supersede and dependency-repair fields; :replan can supersede rows but does not edit the current row's dependencies."}
-     {:cmd
-      "sed -n '595,640p' holes/labs/topology-contract/build_step.bb",
-      :exit 0,
-      :finding
-      "repair-dependencies! requires OLD NEW pairs, requires NEW to be an existing row, and maps rather than removes dependencies."}
-     {:cmd
       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
       :exit 0,
       :finding
       "topology-worklist: 675 items OK; {:done 651, :superseded 14, :needs-owner 1, :repair 1, :open 5, :blocked 3}"}
      {:cmd
-      "rg -n 'routes-2026-09-29-t98a06-local-smooth-submersion-lift-[123]|t98a06-part-a-adapter' holes/labs/topology-contract/worklist.edn",
+      "sed -n '510,530p' holes/labs/topology-contract/build_step.bb",
       :exit 0,
       :finding
-      "Attempt 3 remains done and the repair-state adapter still names attempt 3 in :depends-on."}],
+      "Ordinary :stop ignores supersede/dependency repair; :replan can supersede but cannot delete the current adapter's dependency edge."}
+     {:cmd
+      "sed -n '600,625p' holes/labs/topology-contract/build_step.bb",
+      :exit 0,
+      :finding
+      "repair-dependencies! only maps OLD to an existing NEW dependency and has no deletion operation."}
+     {:cmd "sha256sum /tmp/t98a06-part-a-probe.lean", :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "130 registered statements match, 0 do not"}],
     :diagnostic-history [],
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1790646710325-27123-51edfa6a",
-     :finding
-     "Deterministic unresolved machine-graph defect: the new adapter evidence correctly diagnoses that the standard :stop transition cannot apply its required repair, but the recorded ledger still has attempt 3 in :done state and still includes attempt 3 in the part-a adapter depends-on vector. Passing this row would run the same ordinary transition and preserve the stop-after-two violation. The exact repair is an atomic ledger-writer operation that sets routes-2026-09-29-t98a06-local-smooth-submersion-lift-3 to :superseded, deletes only that ID from routes-2026-09-29-t98a06-part-a-adapter-1 :depends-on, retains the refill row and attempts 1-2, and records the hold basis as reviewed attempts 1-2. If the writer cannot express deletion, stop and require an owner structural repair; do not mark this adapter done and do not map the rejected edge to another row. Fresh verification reproduced the 675-item current validation, superseded count 14, unchanged offending edge, fixture SHA-256 cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d, and 130/130 registry check."},
     :required-transition
-    {:supersede
+    {:atomic true,
+     :supersede
      [:routes-2026-09-29-t98a06-local-smooth-submersion-lift-3],
      :dependency-repair
      {:row :routes-2026-09-29-t98a06-part-a-adapter-1,
@@ -81147,9 +81141,13 @@
      [:routes-2026-09-29-t98a06-local-smooth-submersion-lift-1
       :routes-2026-09-29-t98a06-local-smooth-submersion-lift-2]},
     :changed-paths [],
+    :fixture
+    {:path "/tmp/t98a06-part-a-probe.lean",
+     :sha256
+     "cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t98A06/part-a",
    :acceptance
