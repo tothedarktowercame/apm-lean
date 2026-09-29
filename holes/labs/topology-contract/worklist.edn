@@ -80448,8 +80448,11 @@
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :evidence
-   {:outcome :stop,
-    :seat "topo-4",
+   {:residual
+    "The topo1 portfolio has reached its recorded stop condition. The final active boundary is t99J04's absent finite-dimensional boundaryless manifold inverse-function assembly; Mathlib explicitly records this implication as TODO. No replacement tail is admissible without a new reviewer reroute or an external theorem/API change.",
+    :outcome :stop,
+    :disposition :stop,
+    :author "topo-4",
     :reason :topo1-stop-condition-satisfied,
     :commands
     [{:cmd
@@ -80470,6 +80473,21 @@
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "130 registered statements match, 0 do not"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1790641392233-26857-7cbbd729",
+     :commands
+     ["git show/diff-tree recorded commit bcad4bdb"
+      "bb worklist_check on recorded worklist"
+      "statement-registry check --rev bcad4bdb and sha256sum registry"
+      "nested-comment-aware placeholder census for twelve topo1 sources at commit and parent"
+      "verify canonical .lake/packages; lake env lean t99J04"
+      "statement-registry fingerprint t99J04 --rev bcad4bdb"
+      "inspect reviewed route classifications and terminal eligibility"
+      "git diff --check bcad4bdb^ bcad4bdb"],
+     :finding
+     "PASS: reviewer codex-3 is distinct from evidence author topo-4. Commit bcad4bdb changes only the worklist, matching the strategy row empty scope; its recorded 660-item snapshot validates with no open or blocked row after this sole done-unreviewed checkpoint. A nested-Lean-comment-aware census reproduces 22 placeholders unchanged from the parent: t01A01=2, t02A05=2, t91J06=3, t92J08=3, t93J06=0, t94A07=1, t94A09=0, t94A10=3, t95J02=3, t97A07=1, t99J04=3, t99J06=1. Registry check is 130/130 with hash ea373b6df8489acf2636af8b4e03ac3acc7baaeef97a366e4f28a70f3d1cd1a0; frozen t99J04 hash f212fd5b83bec0f7fb083dcf9ed6e9e175394fdf3f3a3cd3d9f284709c6eea3c reproduces, and t99J04 compiles with its three declared placeholders. The classifications match reviewed evidence: t93J06 and t94A09 closed; t91J06, t95J02, and t99J04 held after two zero-progress attempts at their same representation boundaries; t94A07, t97A07, and t99J06 retain reviewed holds; the other four retain reviewed STOPs. The t99J04 direction remains ContMDiffAt plus bijective mfderiv to IsLocalDiffeomorphAt before coordinate-map differentiation and compact-connected surjectivity assembly. No fixture hash applies to this strategy-only checkpoint, and no eligible topo1 work row remains under the recorded preservation and stop-after-two rules."},
     :finding
     {:placeholder-delta {:t99J04 0, :topo1-total 0},
      :typed-residual-change
@@ -80542,12 +80560,9 @@
       :t94A09 {:placeholders 0, :status :closed}},
      :terminal
      "No topo1 work row remains eligible: both DIRECT consumers are closed; t91J06, t95J02, and t99J04 are held by stop-after-two; the three one-placeholder routes retain reviewed holds; and every other adapter retains its reviewed STOP. Electing another row would violate either stop-after-two or preservation of reviewed holds/STOPs."},
-    :residual
-    "The topo1 portfolio has reached its recorded stop condition. The final active boundary is t99J04's absent finite-dimensional boundaryless manifold inverse-function assembly; Mathlib explicitly records this implication as TODO. No replacement tail is admissible without a new reviewer reroute or an external theorem/API change.",
-    :author "topo-4",
-    :disposition :stop},
+    :seat "topo-4"},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :needs-owner,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
