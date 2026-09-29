@@ -1,0 +1,28 @@
+import Mathlib
+
+open scoped Manifold
+open Manifold Set
+
+noncomputable section
+
+theorem coordinate_contDiffAt_and_deriv
+    {E E' X Y : Type}
+    [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup E'] [NormedSpace ℝ E']
+    [TopologicalSpace X] [ChartedSpace E X]
+    [TopologicalSpace Y] [ChartedSpace E' Y]
+    (f : X → Y) (x : X)
+    (hf : ContMDiffAt (𝓘(ℝ, E)) (𝓘(ℝ, E')) (⊤ : ℕ∞) f x) :
+    ContDiffAt ℝ (⊤ : ℕ∞)
+        (writtenInExtChartAt (𝓘(ℝ, E)) (𝓘(ℝ, E')) x f)
+        (extChartAt (𝓘(ℝ, E)) x x) ∧
+      HasFDerivAt
+        (writtenInExtChartAt (𝓘(ℝ, E)) (𝓘(ℝ, E')) x f)
+        (mfderiv (𝓘(ℝ, E)) (𝓘(ℝ, E')) f x)
+        (extChartAt (𝓘(ℝ, E)) x x) := by
+  constructor
+  · rw [← contDiffWithinAt_univ]
+    simpa only [modelWithCornersSelf_coe, range_id] using (contMDiffAt_iff.mp hf).2
+  · rw [← hasFDerivWithinAt_univ]
+    simpa only [modelWithCornersSelf_coe, range_id] using
+      (hf.mdifferentiableAt (by simp)).hasMFDerivAt.2
