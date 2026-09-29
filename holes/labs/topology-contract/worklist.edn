@@ -81311,8 +81311,55 @@
    "Stop-after-two hold lifted by a Codex re-route (topo-9, 2026-09-29; holes/labs/topology-routes/reroute-t91J06.md). Three sorries remain.",
    :other-consumers []}
   {:consumer :t95J02,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "The first exact missing prerequisite is a compiled homeomorphism AddCircle 1 ≃ₜ t95J02CircleB. Its forward map must quotient-lift y ↦ ⟨t95J02QuotientPoint (0,y), y, rfl⟩; its inverse must restrict the descended separating map to the unit circle after destructing the stored CircleB witness; continuity and both inverse laws must be proved through AddCircle.homeomorphCircle. The probe supplies only the ambient separating map on a recreated quotient. The subsequent AddCircle glide homotopy and singular-H1 reflection calculation are also absent, so the consumer remains unchanged with three placeholders.",
+    :outcome :stop,
+    :warnings
+    [{:kind :partial-reroute,
+      :message
+      "The new artifact compiles and removes the EqvGen normal-form requirement, but it covers only reroute step 1, not the elected steps 1-4."}],
+    :statement-hashes
+    {:t95J02
+     "45c5bf77c662ed659a09a33b11a5b90a091a4ede4403a302fe3d550f60a45456",
+     :registry-file
+     "ea373b6df8489acf2636af8b4e03ac3acc7baaeef97a366e4f28a70f3d1cd1a0"},
+    :disposition :stop,
+    :axioms [],
+    :author "topo-2",
+    :reason :reroute-still-missing-addcircle-circleB-homeomorphism,
+    :commands
+    [{:cmd "test canonical .lake/packages authority", :exit 0}
+     {:cmd
+      "sha256sum /tmp/reroute-t95J02/Probe.lean holes/labs/topology-routes/reroute-t95J02-Probe.lean.txt",
+      :exit 0,
+      :finding
+      "matching 6716c5a81e6d054ee67481ba689331017dc7e48a8ea6ad3ffd7ad36ba05d26cf"}
+     {:cmd "lake env lean /tmp/reroute-t95J02/Probe.lean", :exit 0}
+     {:cmd "lake env lean problems/t95J02/lean/Main.lean", :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "python3 comment-stripped placeholder census problems/t95J02/lean/Main.lean",
+      :exit 0,
+      :finding "3"}
+     {:cmd
+      "rg AddCircle-CircleB homeomorphism, separating-map uptake, and glide homotopy implementations",
+      :exit 0,
+      :finding
+      "Only the standalone separating-map probe exists. No frozen-quotient uptake, AddCircle-to-CircleB homeomorphism, glide homotopy, or H1 calculation is implemented."}
+     {:cmd "git diff -- problems/t95J02/lean/Main.lean",
+      :exit 0,
+      :finding "empty"}],
+    :diagnostic-history [],
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/reroute-t95J02/Probe.lean",
+     :sha256
+     "6716c5a81e6d054ee67481ba689331017dc7e48a8ea6ad3ffd7ad36ba05d26cf"},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["problems/t95J02/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t95J02/reroute-separating-map",
    :acceptance
