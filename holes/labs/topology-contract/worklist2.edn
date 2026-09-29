@@ -50507,49 +50507,67 @@
    "single-consumer affine coordinate quotient-compatibility packet",
    :consumer :t94A08,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/t94A08_affine_chart_contract.lean",
-      :sha256
-      "da62cfcdbf6a175a329b375cf50fade2d056917d9f0c96c0c60573e4ee5eacb5"},
-     :commands
-     [{:cmd "lake env lean /tmp/t94A08_affine_chart_contract.lean",
-       :exit 0}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t94A08_affine_chart_contract.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "130 registered statements match, 0 do not"}
-      {:cmd "sha256sum /tmp/t94A08_affine_chart_contract.lean",
-       :exit 0}],
-     :warnings
-     ["The imported patch-topology lemma coordinates_quotientMap_eq_vectorRatio retains an unused hv parameter."
-      "Lean suggests simp instead of simpa in chartInverse_mem_affineSource; this is stylistic only."],
-     :implementation
-     {:scope
-      ["ConstructionTargets/T94A08AffineCoordinateQuotientCompatibility.lean"],
-      :declarations
-      ["ConstructionTargets.T94A08ProjectiveConic.AffineCoordinateQuotientCompatibility"
-       "ConstructionTargets.T94A08ProjectiveConic.chartInverse_mem_affineSource"
-       "ConstructionTargets.T94A08ProjectiveConic.coordinates_chartInverse"
-       "ConstructionTargets.T94A08ProjectiveConic.chartInverse_coordinates"
-       "ConstructionTargets.T94A08ProjectiveConic.affineCoordinateQuotientCompatibility"
-       "ConstructionTargets.T94A08ProjectiveConic.affineChartConstruction_of_quotientCompatibility"],
-      :acceptance
-      {:compile
-       "lake env lean ConstructionTargets/T94A08AffineCoordinateQuotientCompatibility.lean",
-       :no-placeholders true,
-       :statement-registry true,
-       :axioms :standard-only,
-       :requirements
-       "Combine affineCoordinatePatchTopology with chartInverse source membership and the two exact inverse identities. Prove chartInverse_coordinates with Projectivization.mk_eq_mk_iff and inverse unit scaling; prove coordinates_chartInverse with coordinates_quotientMap_eq_vectorRatio. Retain the exact OpenPartialHomeomorph constructor and all coordinateLine normalization fields."}},
-     :residual
-     "AffineCoordinateQuotientCompatibility and its conversion to AffineChartConstruction 2 are fully compiled. The next representation-comparison row only needs to promote this packet under its declared affine-chart homeomorphism scope; no quotient-topological or representative-algebra obligation remains."}},
+   {:placeholder-delta 0,
+    :residual
+    "AffineCoordinateQuotientCompatibility and its conversion to AffineChartConstruction 2 are banked with exact source, target, inverse, continuity, and coordinateLine normalization fields. The parent representation-comparison row can now promote this packet under its declared affine-chart homeomorphism scope; no quotient-topological or representative-algebra obligation remains.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["The imported patch-topology lemma coordinates_quotientMap_eq_vectorRatio retains an unused hv parameter."
+     "Lean suggests simp instead of simpa in chartInverse_mem_affineSource; this is stylistic only."],
+    :statement-hashes
+    {:registry "130 registered statements match, 0 do not",
+     :scoped-source-sha256
+     "ff067853447ef994ce2fa0d2e2c000da9a6c1327fe8d6b8419c450080a2aafed"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "sha256sum /tmp/t94A08_affine_chart_contract.lean",
+      :exit 0,
+      :output
+      "da62cfcdbf6a175a329b375cf50fade2d056917d9f0c96c0c60573e4ee5eacb5  /tmp/t94A08_affine_chart_contract.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/T94A08AffineCoordinateQuotientCompatibility.lean",
+      :exit 0,
+      :output
+      "warning: try simp instead of simpa in chartInverse_mem_affineSource"}
+     {:cmd
+      "lake build ConstructionTargets.T94A08AffineCoordinateQuotientCompatibility",
+      :exit 0,
+      :output
+      "Build completed successfully (8247 jobs); warnings: inherited unused hv and stylistic simp suggestion."}
+     {:cmd
+      "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T94A08AffineCoordinateQuotientCompatibility.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "130 registered statements match, 0 do not"}
+     {:cmd
+      "lake env lean /dev/stdin with import and #print axioms for all six declared constants",
+      :exit 0,
+      :output
+      "All six declarations depend on axioms: [propext, Classical.choice, Quot.sound]."}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 353 items OK; {:done 322, :superseded 23, :open 2, :blocked 6}"}
+     {:cmd "git show --format='%H%n%an <%ae>' --name-only HEAD",
+      :exit 0,
+      :output
+      "447c724c9000d8ad7651bd214c7138512788c66c\nJoe Corneli <holtzermann17@gmail.com>\n\nConstructionTargets/T94A08AffineCoordinateQuotientCompatibility.lean"}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "447c724c9000d8ad7651bd214c7138512788c66c",
+    :changed-paths
+    ["ConstructionTargets/T94A08AffineCoordinateQuotientCompatibility.lean"],
+    :fixture
+    {:path
+     "ConstructionTargets/T94A08AffineCoordinateQuotientCompatibility.lean",
+     :sha256
+     "ff067853447ef994ce2fa0d2e2c000da9a6c1327fe8d6b8419c450080a2aafed"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/T94A08AffineCoordinateQuotientCompatibility.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
