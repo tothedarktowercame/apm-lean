@@ -1317,6 +1317,16 @@ theorem smoothLocalHomeomorphBranches_gives_localDiffeomorph
   intro q hq
   exact congrFun he q
 
+theorem sphereProjectionSmoothLocalHomeomorphBranches :
+    SphereProjectionSmoothLocalHomeomorphBranches :=
+  localHomeomorphRestrictionsSmooth_gives_smoothBranches
+    sphereProjectionLocalHomeomorphRestrictionsSmooth
+
+theorem sphereProjectionQuotientLocalDiffeomorph :
+    SphereProjectionQuotientLocalDiffeomorph :=
+  smoothLocalHomeomorphBranches_gives_localDiffeomorph
+    sphereProjectionSmoothLocalHomeomorphBranches
+
 theorem coordinateContDiffAt_reaches_contMDiff :
     SphereProjectionQuotientContMDiff :=
   quotientContMDiffAt_gives_quotientContMDiff
