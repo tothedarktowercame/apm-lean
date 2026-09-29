@@ -50557,6 +50557,21 @@
       :output
       "447c724c9000d8ad7651bd214c7138512788c66c\nJoe Corneli <holtzermann17@gmail.com>\n\nConstructionTargets/T94A08AffineCoordinateQuotientCompatibility.lean"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1790655553484-27666-a06edfe5",
+     :commands
+     ["git show/diff-tree 447c724c9000d8ad7651bd214c7138512788c66c"
+      "sha256sum committed/current source and frozen fixture"
+      "lake env lean ConstructionTargets/T94A08AffineCoordinateQuotientCompatibility.lean"
+      "lake build ConstructionTargets.T94A08AffineCoordinateQuotientCompatibility"
+      "#print axioms for all six declarations and #check the constructor reduction"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "comment-stripped placeholder recount at recorded commit"],
+     :finding
+     "PASS: reviewer codex-7 verified recorded commit 447c724c9000d8ad7651bd214c7138512788c66c, authored by topo-6/Joe, creates only ConstructionTargets/T94A08AffineCoordinateQuotientCompatibility.lean and exports all six declared interfaces. Committed/current source SHA-256 is ff067853447ef994ce2fa0d2e2c000da9a6c1327fe8d6b8419c450080a2aafed; frozen fixture SHA-256 is da62cfcdbf6a175a329b375cf50fade2d056917d9f0c96c0c60573e4ee5eacb5. Lean compile and 8247-job build pass with only the recorded inherited unused-hv and unnecessary-simpa warnings; all declarations use only propext, Classical.choice, Quot.sound; registry is 130/130 and the 353-row worklist validates. Patch openness and coordinates continuity come from the reviewed patch topology. chartInverse_mem_affineSource proves inverse values remain in the exact representative-nonvanishing source. coordinates_chartInverse proves coordinates after chartInverse equals the affine input via the vector-ratio lemma; chartInverse_coordinates proves chartInverse after coordinates equals the projective input on the patch via mk_eq_mk_iff and inverse unit scaling. The OpenPartialHomeomorph constructor assigns those equations to the correct right/left inverse fields, uses the exact source and univ target, reuses continuous_chartInverse, and preserves all coordinateLine normalization fields without redefining coordinates, chartInverse, representatives, or topology. Comment-stripped sorry/admit/axiom counts are 0/0/0 in scope and 1/0/0 in the frozen t94A08 consumer."},
     :commit "447c724c9000d8ad7651bd214c7138512788c66c",
     :changed-paths
     ["ConstructionTargets/T94A08AffineCoordinateQuotientCompatibility.lean"],
@@ -50567,7 +50582,7 @@
      "ff067853447ef994ce2fa0d2e2c000da9a6c1327fe8d6b8419c450080a2aafed"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/T94A08AffineCoordinateQuotientCompatibility.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
@@ -50644,7 +50659,7 @@
       [:routes-2026-09-28-t94a08-projective-quotient-open-topo2-r1
        :routes-2026-09-29-t94a08-affine-chart-inverse-normalization-topo2-r1]}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T94A08AffineChartHomeomorph.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
