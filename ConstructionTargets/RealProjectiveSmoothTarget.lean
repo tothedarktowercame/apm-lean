@@ -755,4 +755,64 @@ theorem sphereProjectionInverseBranchLocalAlternative :
       exact (not_lt_of_ge real_inner_self_nonneg) hqneg
     · exact h
 
+/-- At the center of a quotient chart, its chosen lift is the given sphere
+point or its antipode. This is the pointwise domain witness underlying the
+forward coordinate normal form. -/
+theorem sphereProjection_lift_eq_or_antipodal (F : SphereProjectionLocalInverseFamily)
+    (p : Sphere 2) :
+    F.lift (sphereProjection 2 p) = p ∨
+      F.lift (sphereProjection 2 p) = sphereAntipodalN 2 p := by
+  let y := sphereProjection 2 p
+  have heq : (F.localHomeomorph y) (F.lift y) = y := by
+    rw [← F.localHomeomorph_eq y]
+    exact F.project_lift y
+  have hy : y ∈ (F.localHomeomorph y).target := by
+    have h := (F.localHomeomorph y).map_source (F.lift_mem_source y)
+    simpa only [heq] using h
+  have hinv : F.inverseBranch y y = F.lift y := by
+    calc
+      (F.localHomeomorph y).symm y =
+          (F.localHomeomorph y).symm ((F.localHomeomorph y) (F.lift y)) :=
+        congrArg (F.localHomeomorph y).symm heq.symm
+      _ = F.lift y :=
+        (F.localHomeomorph y).left_inv (F.lift_mem_source y)
+  rcases sphereProjectionInverseBranchLocalAlternative F p with h | h
+  · left
+    have hp := h.self_of_nhds
+    change F.inverseBranch y (sphereProjection 2 p) = p at hp
+    simpa only [show sphereProjection 2 p = y from rfl, hinv] using hp
+  · right
+    have hp := h.self_of_nhds
+    change F.inverseBranch y (sphereProjection 2 p) = sphereAntipodalN 2 p at hp
+    simpa only [show sphereProjection 2 p = y from rfl, hinv] using hp
+
+/-- The chosen lift alternative supplies exactly the chart-domain witness
+used by the two forward coordinate representatives. -/
+theorem sphereProjection_coordinate_branch_domains
+    (F : SphereProjectionLocalInverseFamily) (p : Sphere 2) :
+    let y := sphereProjection 2 p
+    let u := extChartAt (𝓡 2) p p
+    (𝓡 2).symm u ∈ ((chartAt (E 2) p).symm ≫ₕ
+      chartAt (E 2) (F.lift y)).source ∨
+    ((𝓡 2).symm u ∈ (chartAt (E 2) p).target ∧
+      sphereAntipodalN 2
+        ((chartAt (E 2) p).symm ((𝓡 2).symm u)) ∈
+          (chartAt (E 2) (F.lift y)).source) := by
+  let y := sphereProjection 2 p
+  let u := extChartAt (𝓡 2) p p
+  have hu : (𝓡 2).symm u = chartAt (E 2) p p := by
+    simp [u, extChartAt_coe]
+  rcases sphereProjection_lift_eq_or_antipodal F p with hlift | hlift
+  · left
+    change (𝓡 2).symm u ∈ (chartAt (E 2) p).target ∧
+      (chartAt (E 2) p).symm ((𝓡 2).symm u) ∈
+        (chartAt (E 2) (F.lift y)).source
+    rw [hu, (chartAt (E 2) p).left_inv (ChartedSpace.mem_chart_source p), hlift]
+    exact ⟨(chartAt (E 2) p).map_source (ChartedSpace.mem_chart_source p),
+      ChartedSpace.mem_chart_source p⟩
+  · right
+    rw [hu, (chartAt (E 2) p).left_inv (ChartedSpace.mem_chart_source p), hlift]
+    exact ⟨(chartAt (E 2) p).map_source (ChartedSpace.mem_chart_source p),
+      ChartedSpace.mem_chart_source (sphereAntipodalN 2 p)⟩
+
 end ConstructionTargets.RealProjectiveSmoothTarget
