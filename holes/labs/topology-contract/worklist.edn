@@ -81223,8 +81223,58 @@
    "Review three adapters and two shared foundations, then refill.",
    :other-consumers []}
   {:consumer :t91J06,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "The first exact missing prerequisite is transition_ordered: for each n, construct the unique transition t : I → I satisfying f (n+1) (t x) = f n x, prove continuity through the stage-(n+1) embedding homeomorphism, prove injectivity, classify it as strictly monotone or strictly antitone, identify its image as the endpoint interval, and derive that both endpoints lie strictly inside (0,1) from hnested. The compiled clamp-and-ramp artifact begins only after this data exists. Strict monotonicity/range packaging of clampRamp and the Nat.rec family are also absent, so the consumer remains unchanged with three placeholders.",
+    :outcome :stop,
+    :warnings
+    [{:kind :partial-reroute,
+      :message
+      "The new artifact compiles and removes piecewise continuity, but it covers only reroute step 2, not the elected steps 1-4."}
+     {:kind :downstream-specification-defect,
+      :message
+      "The existing glue helper remains false because it omits hf; it was not touched or invoked."}],
+    :statement-hashes
+    {:t91J06
+     "c1a73551b731d282c660c5b3c11feb7bf57c91b4cb7e7e1488030072f0390910",
+     :registry-file
+     "ea373b6df8489acf2636af8b4e03ac3acc7baaeef97a366e4f28a70f3d1cd1a0"},
+    :disposition :stop,
+    :axioms [],
+    :author "topo-2",
+    :reason :reroute-still-missing-transition-ordering,
+    :commands
+    [{:cmd "test canonical .lake/packages authority", :exit 0}
+     {:cmd
+      "sha256sum /tmp/reroute-t91J06/ClampRamp.lean holes/labs/topology-routes/reroute-t91J06-ClampRamp.lean.txt",
+      :exit 0,
+      :finding
+      "matching a094a62ebc6d8fcfb5a8424ea572ba27e2c4afc5ba05915c15e42014ce5b5cd9"}
+     {:cmd "lake env lean /tmp/reroute-t91J06/ClampRamp.lean", :exit 0}
+     {:cmd "lake env lean problems/t91J06/lean/Main.lean", :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "python3 comment-stripped placeholder census problems/t91J06/lean/Main.lean",
+      :exit 0,
+      :finding "3"}
+     {:cmd
+      "rg transition_ordered and clampRamp_strictMonoOn implementations",
+      :exit 0,
+      :finding
+      "Only the clampRamp definition, continuity, and inner-restriction lemmas exist. No transition_ordered, strict-monotonicity/range, homeomorphism packaging, or recursive coordinate construction is implemented."}
+     {:cmd "git diff -- problems/t91J06/lean/Main.lean",
+      :exit 0,
+      :finding "empty"}],
+    :diagnostic-history [],
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/reroute-t91J06/ClampRamp.lean",
+     :sha256
+     "a094a62ebc6d8fcfb5a8424ea572ba27e2c4afc5ba05915c15e42014ce5b5cd9"},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["problems/t91J06/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t91J06/reroute-clamp-ramp",
    :acceptance
