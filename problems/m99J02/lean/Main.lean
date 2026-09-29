@@ -85,6 +85,173 @@ lemma apm_m99j02_integrable_mul_test
   apply (hu.mul hφ.1.continuous).integrable_of_hasCompactSupport
   simpa only [Pi.mul_apply] using hφ.2.mul_left (f := u)
 
+/-- Integration by parts on a left half-line against a test function.  Compact
+support supplies the boundary value at `-∞`. -/
+lemma apm_m99j02_integral_Iic_mul_deriv
+    (u φ : ℝ → ℝ) (hu : ContDiff ℝ 1 u)
+    (hφ : apm_m99j02_IsTestFunction φ) (y : ℝ) :
+    (∫ x in Set.Iic y, u x * deriv φ x) =
+      u y * φ y - ∫ x in Set.Iic y, deriv u x * φ x := by
+  have hat : Filter.atBot ≤ Filter.cocompact ℝ := by
+    exact _root_.atBot_le_cocompact
+  have h := MeasureTheory.integral_Iic_mul_deriv_eq_deriv_mul
+      (a := y) (a' := u y * φ y) (b' := 0)
+      (u := u) (v := φ) (u' := deriv u) (v' := deriv φ)
+      (by
+        intro x _
+        exact (hu.differentiable (by norm_num) x).hasDerivAt)
+      (by
+        intro x _
+        exact (hφ.1.differentiable (by simp) x).hasDerivAt)
+      (by exact (apm_m99j02_integrable_mul_test u (deriv φ)
+        hu.continuous ⟨(hφ.1.deriv' : ContDiff ℝ (⊤ : ℕ∞) (deriv φ)), hφ.2.deriv⟩).integrableOn)
+      (by exact (apm_m99j02_integrable_mul_test (deriv u) φ
+        hu.continuous_deriv_one hφ).integrableOn)
+      (by exact (hu.continuous.mul hφ.1.continuous).continuousAt.continuousWithinAt)
+      (by
+        have hz := (hφ.2.mul_left (f := u)).is_zero_at_infty
+        exact hz.mono_left hat)
+  simpa only [Pi.mul_apply, sub_zero] using h
+
+/-- The corresponding right-half-line integration-by-parts formula. -/
+lemma apm_m99j02_integral_Ioi_mul_deriv
+    (u φ : ℝ → ℝ) (hu : ContDiff ℝ 1 u)
+    (hφ : apm_m99j02_IsTestFunction φ) (y : ℝ) :
+    (∫ x in Set.Ioi y, u x * deriv φ x) =
+      -(u y * φ y) - ∫ x in Set.Ioi y, deriv u x * φ x := by
+  have hat : Filter.atTop ≤ Filter.cocompact ℝ := by
+    exact _root_.atTop_le_cocompact
+  have h := MeasureTheory.integral_Ioi_mul_deriv_eq_deriv_mul
+      (a := y) (a' := u y * φ y) (b' := 0)
+      (u := u) (v := φ) (u' := deriv u) (v' := deriv φ)
+      (by
+        intro x _
+        exact (hu.differentiable (by norm_num) x).hasDerivAt)
+      (by
+        intro x _
+        exact (hφ.1.differentiable (by simp) x).hasDerivAt)
+      (by exact (apm_m99j02_integrable_mul_test u (deriv φ)
+        hu.continuous ⟨(hφ.1.deriv' : ContDiff ℝ (⊤ : ℕ∞) (deriv φ)), hφ.2.deriv⟩).integrableOn)
+      (by exact (apm_m99j02_integrable_mul_test (deriv u) φ
+        hu.continuous_deriv_one hφ).integrableOn)
+      (by exact (hu.continuous.mul hφ.1.continuous).continuousAt.continuousWithinAt)
+      (by
+        have hz := (hφ.2.mul_left (f := u)).is_zero_at_infty
+        exact hz.mono_left hat)
+  simpa only [Pi.mul_apply, zero_sub] using h
+
+lemma apm_m99j02_integral_Iic_mul_secondDeriv
+    (u φ : ℝ → ℝ) (hu : ContDiff ℝ 2 u)
+    (hφ : apm_m99j02_IsTestFunction φ) (y : ℝ) :
+    (∫ x in Set.Iic y, u x * deriv (deriv φ) x) =
+      u y * deriv φ y - deriv u y * φ y +
+        ∫ x in Set.Iic y, deriv (deriv u) x * φ x := by
+  have hφ' : apm_m99j02_IsTestFunction (deriv φ) :=
+    ⟨(hφ.1.deriv' : ContDiff ℝ (⊤ : ℕ∞) (deriv φ)), hφ.2.deriv⟩
+  rw [apm_m99j02_integral_Iic_mul_deriv u (deriv φ)
+      (hu.of_le (by norm_num)) hφ' y,
+    apm_m99j02_integral_Iic_mul_deriv (deriv u) φ
+      (hu.deriv' : ContDiff ℝ 1 (deriv u)) hφ y]
+  ring
+
+lemma apm_m99j02_integral_Ioi_mul_secondDeriv
+    (u φ : ℝ → ℝ) (hu : ContDiff ℝ 2 u)
+    (hφ : apm_m99j02_IsTestFunction φ) (y : ℝ) :
+    (∫ x in Set.Ioi y, u x * deriv (deriv φ) x) =
+      -(u y * deriv φ y) + deriv u y * φ y +
+        ∫ x in Set.Ioi y, deriv (deriv u) x * φ x := by
+  have hφ' : apm_m99j02_IsTestFunction (deriv φ) :=
+    ⟨(hφ.1.deriv' : ContDiff ℝ (⊤ : ℕ∞) (deriv φ)), hφ.2.deriv⟩
+  rw [apm_m99j02_integral_Ioi_mul_deriv u (deriv φ)
+      (hu.of_le (by norm_num)) hφ' y,
+    apm_m99j02_integral_Ioi_mul_deriv (deriv u) φ
+      (hu.deriv' : ContDiff ℝ 1 (deriv u)) hφ y]
+  ring
+
+lemma apm_m99j02_distributional_secondDerivative
+    (u₁ u₂ : ℝ → ℝ) (hu₁ : ContDiff ℝ 2 u₁) (hu₂ : ContDiff ℝ 2 u₂)
+    (y : ℝ) (φ : ℝ → ℝ) (hφ : apm_m99j02_IsTestFunction φ) :
+    (∫ x : ℝ, apm_m99j02_g u₁ u₂ y x * deriv (deriv φ) x) =
+      (∫ x : ℝ, apm_m99j02_regularSecondDerivative u₁ u₂ y x * φ x) +
+        apm_m99j02_Wronskian u₁ u₂ y * φ y := by
+  have hφ'' : apm_m99j02_IsTestFunction (deriv (deriv φ)) :=
+    ⟨((hφ.1.deriv' : ContDiff ℝ (⊤ : ℕ∞) (deriv φ)).deriv' :
+      ContDiff ℝ (⊤ : ℕ∞) (deriv (deriv φ))), hφ.2.deriv.deriv⟩
+  have hwhole := apm_m99j02_integrable_mul_test (apm_m99j02_g u₁ u₂ y)
+    (deriv (deriv φ))
+    (apm_m99j02_g_continuous u₁ u₂ hu₁.continuous hu₂.continuous y) hφ''
+  rw [← intervalIntegral.integral_Iic_add_Ioi hwhole.integrableOn hwhole.integrableOn]
+  have hleft : (∫ x in Set.Iic y,
+      apm_m99j02_g u₁ u₂ y x * deriv (deriv φ) x) =
+      u₂ y * (∫ x in Set.Iic y, u₁ x * deriv (deriv φ) x) := by
+    rw [← MeasureTheory.integral_const_mul]
+    apply MeasureTheory.setIntegral_congr_fun measurableSet_Iic
+    intro x hx
+    change x ≤ y at hx
+    simp only [apm_m99j02_g, if_pos hx]
+    ring
+  have hright : (∫ x in Set.Ioi y,
+      apm_m99j02_g u₁ u₂ y x * deriv (deriv φ) x) =
+      u₁ y * (∫ x in Set.Ioi y, u₂ x * deriv (deriv φ) x) := by
+    rw [← MeasureTheory.integral_const_mul]
+    apply MeasureTheory.setIntegral_congr_fun measurableSet_Ioi
+    intro x hx
+    change y < x at hx
+    simp only [apm_m99j02_g, if_neg (not_le.mpr hx)]
+    ring
+  rw [hleft, hright,
+    apm_m99j02_integral_Iic_mul_secondDeriv u₁ φ hu₁ hφ y,
+    apm_m99j02_integral_Ioi_mul_secondDeriv u₂ φ hu₂ hφ y]
+  have hL0 : MeasureTheory.IntegrableOn
+      (fun x ↦ deriv (deriv u₁) x * u₂ y * φ x) (Set.Iio y) :=
+    (apm_m99j02_integrable_mul_test
+      (fun x ↦ deriv (deriv u₁) x * u₂ y) φ
+      ((hu₁.iterate_deriv' 0 2).continuous.mul continuous_const) hφ).integrableOn
+  have hR0 : MeasureTheory.IntegrableOn
+      (fun x ↦ deriv (deriv u₂) x * u₁ y * φ x) (Set.Ici y) :=
+    (apm_m99j02_integrable_mul_test
+      (fun x ↦ deriv (deriv u₂) x * u₁ y) φ
+      ((hu₂.iterate_deriv' 0 2).continuous.mul continuous_const) hφ).integrableOn
+  have hL : MeasureTheory.IntegrableOn
+      (fun x ↦ apm_m99j02_regularSecondDerivative u₁ u₂ y x * φ x)
+      (Set.Iio y) := by
+    apply hL0.congr_fun
+    · intro x hx
+      change x < y at hx
+      simp only [apm_m99j02_regularSecondDerivative, if_pos hx]
+    · exact measurableSet_Iio
+  have hR : MeasureTheory.IntegrableOn
+      (fun x ↦ apm_m99j02_regularSecondDerivative u₁ u₂ y x * φ x)
+      (Set.Ici y) := by
+    apply hR0.congr_fun
+    · intro x hx
+      change y ≤ x at hx
+      simp only [apm_m99j02_regularSecondDerivative, if_neg (not_lt.mpr hx)]
+    · exact measurableSet_Ici
+  rw [← intervalIntegral.integral_Iio_add_Ici hL hR]
+  rw [MeasureTheory.integral_Iic_eq_integral_Iio,
+    ← MeasureTheory.integral_Ici_eq_integral_Ioi]
+  have hli : (∫ x in Set.Iio y,
+      apm_m99j02_regularSecondDerivative u₁ u₂ y x * φ x) =
+      u₂ y * ∫ x in Set.Iio y, deriv (deriv u₁) x * φ x := by
+    rw [← MeasureTheory.integral_const_mul]
+    apply MeasureTheory.setIntegral_congr_fun measurableSet_Iio
+    intro x hx
+    change x < y at hx
+    simp only [apm_m99j02_regularSecondDerivative, if_pos hx]
+    ring
+  have hri : (∫ x in Set.Ici y,
+      apm_m99j02_regularSecondDerivative u₁ u₂ y x * φ x) =
+      u₁ y * ∫ x in Set.Ici y, deriv (deriv u₂) x * φ x := by
+    rw [← MeasureTheory.integral_const_mul]
+    apply MeasureTheory.setIntegral_congr_fun measurableSet_Ici
+    intro x hx
+    change y ≤ x at hx
+    simp only [apm_m99j02_regularSecondDerivative, if_neg (not_lt.mpr hx)]
+    ring
+  rw [hli, hri, apm_m99j02_Wronskian]
+  ring
+
 lemma apm_m99j02_wronskian_eq_zero
     (u₁ u₂ q : ℝ → ℝ) (hu₁ : ContDiff ℝ 2 u₁) (hu₂ : ContDiff ℝ 2 u₂)
     (hq₁ : ∀ x : ℝ, deriv (deriv u₁) x + q x * u₁ x = 0)
@@ -141,35 +308,56 @@ theorem apm_m99j02
       rw [show deriv (deriv u₂) x = -(q x * u₂ x) from
         eq_neg_of_add_eq_zero_left (hq₂ x)]
       ring
-  /-
-  Boundary (closer hop 2): the regular part of the Green-function equation is proved above
-  to vanish away from the gluing point. Completing the frozen statement still
-  requires two integrations by parts on the half-lines. Abel's identity for
-  the raw-`deriv` Wronskian is proved above. Closer hop 1 proves
-  `apm_m99j02_g_continuous`, formally certifying that the two branches agree
-  at the gluing point and hence that no delta-prime boundary term occurs.
-  This hop proves the precise one-sided derivative statements
-  `apm_m99j02_g_hasDerivWithinAt_Iic` and
-  `apm_m99j02_g_hasDerivWithinAt_Ioi`, then verifies in
-  `apm_m99j02_g_derivative_jump` that right minus left is exactly the frozen
-  Wronskian. Thus the local jump coefficient is closed. I
-  searched the whole-line
-  `MeasureTheory.integral_mul_deriv_eq_deriv_mul`, interval integration-by-parts,
-  compact-support, and piecewise differentiability APIs, but did not find a
-  route that packages the compact-support boundary limits and applies the two
-  half-line integrations by parts using these local derivative facts.
-
-  Closer hop 3 finds a route around those boundary limits.  Mathlib's
-  `MeasureTheory.integral_mul_deriv_eq_deriv_mul_of_integrable` proves
-  whole-line integration by parts once the three products are integrable.
-  The new helper `apm_m99j02_integrable_mul_test` compiles the recurring
-  integrability argument: a continuous coefficient times a smooth compactly
-  supported test function is continuous, compactly supported, and integrable.
-  Searches of `LEMMA-INDEX.md`, closed artifacts, half-line improper-integral
-  APIs, construction libraries, and git history found no packaged theorem for
-  applying the whole-line result to a coefficient with exactly one derivative
-  jump.  The remaining assembly is therefore splitting or encoding the two
-  smooth branches so the whole-line integration-by-parts theorem can be
-  applied twice, then inserting the already compiled jump coefficient.
-  -/
-  sorry
+  constructor
+  · intro y φ hφ
+    exact apm_m99j02_distributional_secondDerivative u₁ u₂ hu₁ hu₂ y φ hφ
+  · intro q hq hq₁ hq₂ y φ hφ
+    have hgcont := apm_m99j02_g_continuous u₁ u₂ hu₁.continuous hu₂.continuous y
+    have hφ'' : apm_m99j02_IsTestFunction (deriv (deriv φ)) :=
+      ⟨((hφ.1.deriv' : ContDiff ℝ (⊤ : ℕ∞) (deriv φ)).deriv' :
+        ContDiff ℝ (⊤ : ℕ∞) (deriv (deriv φ))), hφ.2.deriv.deriv⟩
+    have hsecond := apm_m99j02_integrable_mul_test
+      (apm_m99j02_g u₁ u₂ y) (deriv (deriv φ)) hgcont hφ''
+    have hqterm := apm_m99j02_integrable_mul_test
+      (fun x ↦ apm_m99j02_g u₁ u₂ y x * q x) φ (hgcont.mul hq) hφ
+    rw [show (∫ x : ℝ, apm_m99j02_g u₁ u₂ y x *
+        (deriv (deriv φ) x + q x * φ x)) =
+        (∫ x : ℝ, apm_m99j02_g u₁ u₂ y x * deriv (deriv φ) x) +
+          ∫ x : ℝ, (apm_m99j02_g u₁ u₂ y x * q x) * φ x by
+      rw [← MeasureTheory.integral_add hsecond hqterm]
+      congr 1
+      funext x
+      ring]
+    rw [apm_m99j02_distributional_secondDerivative u₁ u₂ hu₁ hu₂ y φ hφ]
+    have hne : ∀ᵐ x : ℝ ∂MeasureTheory.volume, x ≠ y := by
+      rw [MeasureTheory.ae_iff]
+      simp
+    have hae : (fun x ↦ apm_m99j02_regularSecondDerivative u₁ u₂ y x * φ x) =ᵐ[
+        MeasureTheory.volume]
+        (fun x ↦ -((apm_m99j02_g u₁ u₂ y x * q x) * φ x)) := by
+      filter_upwards [hne] with x hx
+      have hc := hregular_cancel q hq₁ hq₂ y x hx
+      calc
+        apm_m99j02_regularSecondDerivative u₁ u₂ y x * φ x =
+            (apm_m99j02_regularSecondDerivative u₁ u₂ y x +
+              q x * apm_m99j02_g u₁ u₂ y x) * φ x -
+              (apm_m99j02_g u₁ u₂ y x * q x) * φ x := by ring
+        _ = -((apm_m99j02_g u₁ u₂ y x * q x) * φ x) := by rw [hc]; ring
+    have hreg : MeasureTheory.Integrable
+        (fun x ↦ apm_m99j02_regularSecondDerivative u₁ u₂ y x * φ x) :=
+      hqterm.neg.congr hae.symm
+    have hcancel : (∫ x : ℝ,
+        apm_m99j02_regularSecondDerivative u₁ u₂ y x * φ x) +
+        ∫ x : ℝ, (apm_m99j02_g u₁ u₂ y x * q x) * φ x = 0 := by
+      rw [← MeasureTheory.integral_add hreg hqterm]
+      apply MeasureTheory.integral_eq_zero_of_ae
+      filter_upwards [hne] with x hx
+      have hc := hregular_cancel q hq₁ hq₂ y x hx
+      calc
+        apm_m99j02_regularSecondDerivative u₁ u₂ y x * φ x +
+            apm_m99j02_g u₁ u₂ y x * q x * φ x =
+          (apm_m99j02_regularSecondDerivative u₁ u₂ y x +
+            q x * apm_m99j02_g u₁ u₂ y x) * φ x := by ring
+        _ = 0 := by rw [hc, zero_mul]
+    rw [← apm_m99j02_wronskian_eq_zero u₁ u₂ q hu₁ hu₂ hq₁ hq₂ y]
+    linarith
