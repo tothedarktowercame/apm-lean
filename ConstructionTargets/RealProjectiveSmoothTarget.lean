@@ -1187,6 +1187,79 @@ theorem sphereProjectionArbitraryInverseBranchLocalAlternative :
       exact (not_lt_of_ge real_inner_self_nonneg) hmt
     · simpa only [Function.comp_apply] using h
 
+theorem chosenInverseBranch_contMDiffAt
+    (F : SphereProjectionLocalInverseFamily)
+    (x : ProjectiveSpaceTopology.Space ℝ 2) :
+    letI := F.quotientChartedSpace
+    letI : IsManifold (𝓡 2) ∞ (ProjectiveSpaceTopology.Space ℝ 2) :=
+      sphereProjectionQuotientAtlasCompatibility F
+    ContMDiffAt (𝓡 2) (𝓡 2) ∞ (F.inverseBranch x) x := by
+  letI := F.quotientChartedSpace
+  letI : IsManifold (𝓡 2) ∞ (ProjectiveSpaceTopology.Space ℝ 2) :=
+    sphereProjectionQuotientAtlasCompatibility F
+  have hx : x ∈ (F.quotientChart x).source :=
+    ChartedSpace.mem_chart_source x
+  have hq : ContMDiffAt (𝓡 2) (𝓡 2) ∞ (F.quotientChart x) x :=
+    contMDiffAt_of_mem_maximalAtlas
+      (IsManifold.chart_mem_maximalAtlas (I := 𝓡 2)
+        (n := (∞ : WithTop ℕ∞)) x) hx
+  have hs : ContMDiffAt (𝓡 2) (𝓡 2) ∞
+      (chartAt (E 2) (F.lift x)).symm (F.quotientChart x x) := by
+    apply contMDiffAt_symm_of_mem_maximalAtlas
+      (IsManifold.chart_mem_maximalAtlas (I := 𝓡 2)
+        (n := (∞ : WithTop ℕ∞)) (F.lift x))
+    rw [F.quotientChart_apply x x hx]
+    exact (chartAt (E 2) (F.lift x)).map_source hx.2
+  have hc := hs.comp x hq
+  apply hc.congr_of_eventuallyEq
+  filter_upwards [(F.quotientChart x).open_source.mem_nhds hx] with t ht
+  change F.inverseBranch x t =
+    (chartAt (E 2) (F.lift x)).symm (F.quotientChart x t)
+  rw [F.quotientChart_apply x t ht]
+  exact (chartAt (E 2) (F.lift x)).left_inv ht.2 |>.symm
+
+def SphereProjectionArbitraryInverseCoordinateLocalNormalForm : Prop :=
+  ∀ F : SphereProjectionLocalInverseFamily,
+    letI := F.quotientChartedSpace
+    letI : IsManifold (𝓡 2) ∞ (ProjectiveSpaceTopology.Space ℝ 2) :=
+      sphereProjectionQuotientAtlasCompatibility F
+    ∀ (e : OpenPartialHomeomorph (Sphere 2)
+        (ProjectiveSpaceTopology.Space ℝ 2))
+      (_he : sphereProjection 2 = e) (x : ProjectiveSpaceTopology.Space ℝ 2),
+      x ∈ e.target →
+      ContMDiffAt (𝓡 2) (𝓡 2) ∞ e.symm x
+
+theorem sphereProjectionArbitraryInverseCoordinateLocalNormalForm :
+    SphereProjectionArbitraryInverseCoordinateLocalNormalForm := by
+  intro F
+  letI := F.quotientChartedSpace
+  letI : IsManifold (𝓡 2) ∞ (ProjectiveSpaceTopology.Space ℝ 2) :=
+    sphereProjectionQuotientAtlasCompatibility F
+  intro e he x hx
+  have hchosen := chosenInverseBranch_contMDiffAt F x
+  rcases sphereProjectionArbitraryInverseBranchLocalAlternative F e he x hx with
+    hsame | hanti
+  · exact hchosen.congr_of_eventuallyEq hsame
+  · have hsmooth :=
+      sphereAntipodalN_contMDiff_for_alternatives.contMDiffAt.comp x hchosen
+    exact hsmooth.congr_of_eventuallyEq hanti
+
+theorem arbitraryInverseCoordinateLocalNormalForm_gives_restrictionsContMDiff
+    (h : SphereProjectionArbitraryInverseCoordinateLocalNormalForm) :
+    SphereProjectionLocalInverseRestrictionsContMDiff := by
+  intro F
+  letI := F.quotientChartedSpace
+  letI : IsManifold (𝓡 2) ∞ (ProjectiveSpaceTopology.Space ℝ 2) :=
+    sphereProjectionQuotientAtlasCompatibility F
+  intro e he x hx
+  exact (h F e he x hx).contMDiffWithinAt
+
+theorem localInverseRestrictions_gives_projectionAndLocalInversesSmooth
+    (h : SphereProjectionLocalInverseRestrictionsContMDiff) :
+    SphereProjectionAndLocalInversesSmooth :=
+  projectionAndLocalInversesSmooth_iff.mpr
+    ⟨sphereProjectionQuotientContMDiff, h⟩
+
 theorem coordinateContDiffAt_reaches_contMDiff :
     SphereProjectionQuotientContMDiff :=
   quotientContMDiffAt_gives_quotientContMDiff
