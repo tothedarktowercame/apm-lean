@@ -81083,7 +81083,7 @@
    :other-consumers []}
   {:consumer :t98A06,
    :review-finding
-   "Deterministic blocker remains unchanged at recorded commit ceccfc55: attempt 3 is :done, the adapter is :done-unreviewed and still depends on attempt 3, superseded count is still 14, and build_step.bb is still at 8e9127f2 with no deletion-capable repair transition. The row itself records external-structural-state-unchanged; repeated ordinary transitions cannot make it reviewable. Exact repair requires an owner structural commit or enhanced writer that atomically supersedes attempt 3 and deletes only its adapter edge, retaining the refill dependency and reviewed attempts 1-2 and recording those as the hold basis. Do not redispatch until that state changes. Fresh execution this invocation read commit ceccfc55, reran the 675-item validator, inspected the exact states/dependencies, and confirmed the unchanged writer.",
+   "Terminal external-state blocker confirmed at recorded commit 34b958ad: attempt 3 remains :done, the adapter remains :done-unreviewed with the rejected attempt-3 dependency, superseded count remains 14, and build_step.bb remains unchanged at 8e9127f2. The row cannot pass through ordinary receipt handling. Exact repair requires owner-authorized atomic graph mutation: supersede attempt 3, delete only its adapter edge, retain the refill dependency and reviewed attempts 1-2, and record attempts 1-2 as the stop-after-two hold basis. Stop redispatching until that structural state changes. Fresh verification this invocation read commit 34b958ad, reran the recorded 675-item validator, inspected exact states/dependencies, confirmed the unchanged writer, and verified the commit changes only the worklist.",
    :evidence
    {:placeholder-delta 0,
     :residual
@@ -81106,6 +81106,12 @@
       "test \"$(git log -1 --format=%h -- holes/labs/topology-contract/build_step.bb)\" = \"8e9127f2\"",
       :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1790648192735-27210-b6ab1982",
+     :finding
+     "Terminal external-state blocker confirmed at recorded commit 34b958ad: attempt 3 remains :done, the adapter remains :done-unreviewed with the rejected attempt-3 dependency, superseded count remains 14, and build_step.bb remains unchanged at 8e9127f2. The row cannot pass through ordinary receipt handling. Exact repair requires owner-authorized atomic graph mutation: supersede attempt 3, delete only its adapter edge, retain the refill dependency and reviewed attempts 1-2, and record attempts 1-2 as the stop-after-two hold basis. Stop redispatching until that structural state changes. Fresh verification this invocation read commit 34b958ad, reran the recorded 675-item validator, inspected exact states/dependencies, confirmed the unchanged writer, and verified the commit changes only the worklist."},
     :required-transition
     {:atomic true,
      :supersede
@@ -81124,7 +81130,7 @@
     :changed-paths [],
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t98A06/part-a",
    :acceptance
