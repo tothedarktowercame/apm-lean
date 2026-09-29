@@ -201,6 +201,15 @@ wait_job() {
           log "$label job=$job refused by transient clock-store contention"
           return 75
         fi
+        # The activity decision can also fail after the agent has emitted text
+        # but before Agency records a job result.  Such a job has no immutable
+        # result for extract-receipt.sh to consume, so retry it through the
+        # normal fresh-job/fresh-nonce path instead of stopping the loop or
+        # reconstructing a receipt from event text.
+        if [ "$fail_code" = "activity-decision-failed" ]; then
+          log "$label job=$job lost its result to transient activity-decision failure"
+          return 75
+        fi
         die "$label terminal state=$state job=$job${fail_code:+ code=$fail_code}${term_reason:+ :: $term_reason}" ;;
       queued|delivering|running|accepted|"") ;;
       *) die "$label unknown state=$state job=$job" ;;
