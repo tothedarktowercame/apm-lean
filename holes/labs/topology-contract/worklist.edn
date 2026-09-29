@@ -81087,23 +81087,17 @@
    :evidence
    {:placeholder-delta 0,
     :residual
-    "At 1a69d29b the superseded count is still 14 and the structural repair remains absent. Do not apply this through ordinary receipt handling and do not redispatch until the owner atomically supersedes attempt 3 and removes its adapter edge.",
+    "The structural state remains unchanged at 8033e4c0. Stop redispatching this row. Only the owner-authorized atomic supersession of attempt 3 and deletion of its adapter edge can resume work.",
     :outcome :stop,
     :disposition :stop,
     :author "topo-2",
-    :reason :external-state-still-unchanged,
+    :reason :owner-graph-repair-absent,
     :commands
     [{:cmd
       "git rev-parse --short HEAD && bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
       :exit 0,
       :finding
-      "HEAD 1a69d29b; 675 items OK; 651 done; 14 superseded; 1 repair."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1790648751950-27239-580834ff",
-     :finding
-     "Deterministic graph defect persists in recorded commit 6a68b53c. The commit changes only worklist diagnostics; attempt 3 remains :done, the adapter remains :done-unreviewed and still depends on attempt 3, the validator remains at 14 superseded items, and build_step.bb remains unchanged at 8e9127f2. Exact repair requires an owner structural commit or enhanced writer that atomically marks attempt 3 :superseded and removes only its adapter edge, retaining the refill edge and reviewed attempts 1-2 as the stop-after-two basis. Fresh verification against the recorded snapshot reproduced the 675-item validator and fixture SHA-256 cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d. Rewriting the terminal-block diagnostic is not the required graph mutation; do not redispatch until external state changes."},
+      "HEAD 8033e4c0; 675 items OK; 651 done; 14 superseded; 1 repair."}],
     :required-transition
     {:supersede
      :routes-2026-09-29-t98a06-local-smooth-submersion-lift-3,
@@ -81117,7 +81111,7 @@
     :changed-paths [],
     :seat "topo-2"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t98A06/part-a",
    :acceptance
