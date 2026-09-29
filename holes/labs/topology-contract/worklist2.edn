@@ -50612,53 +50612,71 @@
    "single-consumer exact affine-chart quotient compatibility and homeomorphism packet",
    :consumer :t94A08,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/T94A08AffineChartHomeomorph.lean",
-      :sha256
-      "5d2fb331996b326d78c245ecd893c22956fd7c41230ca8f8447004380e0aa812"},
-     :commands
-     [{:cmd "lake env lean /tmp/T94A08AffineChartHomeomorph.lean",
-       :exit 0}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/T94A08AffineChartHomeomorph.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "130 registered statements match, 0 do not"}
-      {:cmd "sha256sum /tmp/T94A08AffineChartHomeomorph.lean",
-       :exit 0}],
-     :diagnostic-history
-     [{:cmd "lake env lean /tmp/T94A08AffineChartHomeomorph.lean",
-       :exit 1,
-       :finding
-       "The first public continuous_coordinates alias selected the tail of the nested conjunction; selecting .2.1 retrieves the exact ContinuousOn field."}],
-     :representation
-     {:source
-      "The nonvanishing-coordinate open subtypes of complex projective two-space with the frozen topology coinduced from quotientMap on nonzero vectors",
-      :target
-      "The affine coordinate spaces indexed by the two coordinates other than i",
-      :direction
-      "Explicit OpenPartialHomeomorphs from each projective nonvanishing-coordinate source subtype to its affine coordinate target, with forward map coordinates, inverse chartInverse, exact mutual-inverse equalities, and coordinateLine normalization"},
-     :implementation
-     {:scope ["ConstructionTargets/T94A08AffineChartHomeomorph.lean"],
-      :declarations
-      ["ConstructionTargets.T94A08ProjectiveConic.continuous_coordinates"
-       "ConstructionTargets.T94A08ProjectiveConic.affineChartConstruction"],
-      :acceptance
-      {:compile
-       "lake env lean ConstructionTargets/T94A08AffineChartHomeomorph.lean",
-       :no-placeholders true,
-       :statement-registry true,
-       :axioms :standard-only,
-       :requirements
-       "Import the banked affine coordinate quotient compatibility, expose continuous_coordinates on the frozen nonvanishing patch, retain coordinates_chartInverse and chartInverse_coordinates, and prove affineChartConstruction : AffineChartConstruction 2 via affineChartConstruction_of_quotientCompatibility."}},
-     :residual
-     "The exact projective affine-chart representation is compiled at the declared scope. The parent affine-chart-homeomorph row can consume affineChartConstruction directly; all topology, continuity, inverse, source/target, and coordinateLine normalization obligations are discharged."}},
+   {:placeholder-delta 0,
+    :residual
+    "The exact projective affine-chart representation is banked at its declared scope. The parent affine-chart-homeomorph row can consume affineChartConstruction directly; all topology, continuity, inverse, source/target, and coordinateLine normalization obligations are discharged.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["The build replays the upstream unused hv warning from coordinates_quotientMap_eq_vectorRatio."
+     "The build replays the upstream stylistic simp suggestion from chartInverse_mem_affineSource."],
+    :statement-hashes
+    {:registry "130 registered statements match, 0 do not",
+     :scoped-source-sha256
+     "5d2fb331996b326d78c245ecd893c22956fd7c41230ca8f8447004380e0aa812"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "sha256sum /tmp/T94A08AffineChartHomeomorph.lean",
+      :exit 0,
+      :output
+      "5d2fb331996b326d78c245ecd893c22956fd7c41230ca8f8447004380e0aa812  /tmp/T94A08AffineChartHomeomorph.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/T94A08AffineChartHomeomorph.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.T94A08AffineChartHomeomorph",
+      :exit 0,
+      :output
+      "Build completed successfully (8248 jobs); replayed the two recorded upstream warnings."}
+     {:cmd
+      "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T94A08AffineChartHomeomorph.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "130 registered statements match, 0 do not"}
+     {:cmd
+      "lake env lean /dev/stdin with import and #print axioms for continuous_coordinates and affineChartConstruction",
+      :exit 0,
+      :output
+      "Both declarations depend on axioms: [propext, Classical.choice, Quot.sound]."}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 353 items OK; {:done 323, :superseded 23, :open 2, :blocked 5}"}
+     {:cmd "git show --format='%H%n%an <%ae>' --name-only HEAD",
+      :exit 0,
+      :output
+      "f197fad73f26e4db68a67b08b0bfa96b8184d52c\nJoe Corneli <holtzermann17@gmail.com>\n\nConstructionTargets/T94A08AffineChartHomeomorph.lean"}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :representation
+    {:source
+     "The nonvanishing-coordinate open subtypes of complex projective two-space with the frozen topology coinduced from quotientMap on nonzero vectors",
+     :target
+     "The affine coordinate spaces indexed by the two coordinates other than i",
+     :direction
+     "Explicit OpenPartialHomeomorphs from each projective nonvanishing-coordinate source subtype to its affine coordinate target, with forward map coordinates, inverse chartInverse, exact mutual-inverse equalities, and coordinateLine normalization"},
+    :commit "f197fad73f26e4db68a67b08b0bfa96b8184d52c",
+    :changed-paths
+    ["ConstructionTargets/T94A08AffineChartHomeomorph.lean"],
+    :fixture
+    {:path "ConstructionTargets/T94A08AffineChartHomeomorph.lean",
+     :sha256
+     "5d2fb331996b326d78c245ecd893c22956fd7c41230ca8f8447004380e0aa812"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T94A08AffineChartHomeomorph.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
