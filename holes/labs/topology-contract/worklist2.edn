@@ -51665,6 +51665,21 @@
       :exit 1,
       :finding
       "The generated fixture-prefix splice inserted one literal plus sign and stopped before the final two helper proof branches. Removing the stray token and restoring the two exact fixture branches produced the successful acceptance compile."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1790645380322-27059-e4b46d59",
+     :commands
+     ["git show aa4c85cb -- ConstructionTargets/RealProjectiveSmoothTarget.lean"
+      "sha256sum /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean"
+      "lake env lean ConstructionTargets/RealProjectiveSmoothTarget.lean"
+      "lake build ConstructionTargets.RealProjectiveSmoothTarget"
+      "lake env lean /tmp/rp_sphere_projection_coordinate_local_normal_form_axioms.lean"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "comment-stripped placeholder counts from git show aa4c85cb"],
+     :finding
+     "PASS: reviewer codex-7 verified commit aa4c85cb. Its sole changed path exactly matches scope, is the path latest commit, the fixture hashes to 883aac9990abd2d1203ece3453e7f22d430dbb7526e3a3c6169e2f7b30e71b8d, and committed scoped source hashes to the recorded f7db6c9c5174251c7bf22a2a0ab38767e333969f6355b9a65e942ba4eaf546cb. Direct elaboration, Lake build, both axiom audits, 130 frozen statements, and the 345-item ledger pass. The proof pulls each reviewed inverse-branch equality through extChartAt.symm, restricts to the quotient-chart source before using quotientChart_apply, and preserves the ordinary versus antipodal coordinate representatives with their exact branch-specific domains. The reduction applies the matching SphereChartTransitionAlternativesSmooth branch and transports ContDiffAt in the same eventual-equality orientation. The module has zero placeholders; frozen t95A04 and t96A07 remain at one each."},
     :commit "aa4c85cb8eb9a8e0ed812aa0e59c56295d523b6c",
     :changed-paths
     ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
@@ -51674,7 +51689,7 @@
      "883aac9990abd2d1203ece3453e7f22d430dbb7526e3a3c6169e2f7b30e71b8d"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -51736,7 +51751,7 @@
        :routes-2026-09-28-rp-sphere-transition-alternatives-topo2-r1],
       :other-consumers [:t96A07]}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
