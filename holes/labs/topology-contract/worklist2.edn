@@ -50174,6 +50174,21 @@
       :output
       "03793fa56589303eb36ccdb6faf69dac0350c953\nJoe Corneli <holtzermann17@gmail.com>\n\nConstructionTargets/T94A08AffineChartInverseNormalization.lean"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1790652446151-27482-84407a53",
+     :commands
+     ["git show/diff-tree 03793fa56589303eb36ccdb6faf69dac0350c953"
+      "sha256sum committed source, scoped source, and frozen fixture"
+      "lake env lean ConstructionTargets/T94A08AffineChartInverseNormalization.lean"
+      "lake build ConstructionTargets.T94A08AffineChartInverseNormalization"
+      "#print axioms for four declarations and #check boundary types"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "comment-stripped placeholder recount at recorded commit"],
+     :finding
+     "PASS: reviewer codex-7 verified recorded commit 03793fa56589303eb36ccdb6faf69dac0350c953, authored by topo-6/Joe, creates only ConstructionTargets/T94A08AffineChartInverseNormalization.lean. Committed source, current source, and frozen fixture SHA-256 all equal 97f02574edee037b02e79995169dcb82e653ea9b34fc52a17dbc8b8cfe414ac5. Lean compile and 8243-job build pass; all four declarations use only propext, Classical.choice, Quot.sound; registry is 130/130 and the 348-row worklist validates. continuous_chartInverse has the required direction Continuous (chartInverse i), obtained by composing the existing continuous quotientMap with the explicit normalized vector section. coordinateLine_mem_affineSource proves the existing Projectivization.rep coordinate is nonzero; coordinates_coordinateLine proves the existing rep-ratio coordinates equal zero; chartInverse_zero proves the existing inverse sends zero to the frozen coordinateLine. The proofs use the existing chartInverse, coordinates, coordinateLine, quotientMap, and projective topology without redefining or crossing representation boundaries unsafely. Comment-stripped sorry/admit/axiom counts are 0/0/0 in scope and 1/0/0 in the frozen t94A08 consumer."},
     :commit "03793fa56589303eb36ccdb6faf69dac0350c953",
     :changed-paths
     ["ConstructionTargets/T94A08AffineChartInverseNormalization.lean"],
@@ -50184,7 +50199,7 @@
      "97f02574edee037b02e79995169dcb82e653ea9b34fc52a17dbc8b8cfe414ac5"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/T94A08AffineChartInverseNormalization.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
@@ -50244,7 +50259,7 @@
       :depends-on
       [:routes-2026-09-28-t94a08-projective-quotient-open-topo2-r1]}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
