@@ -80312,6 +80312,20 @@
       :exit 0,
       :finding "empty"}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1790640898499-26834-fa9f6ff8",
+     :commands
+     ["git show/diff-tree recorded commit d22ebea4"
+      "bb worklist_check on recorded worklist"
+      "lake env lean source and exact fixture"
+      "sha256sum fixture and STATEMENTS.json"
+      "statement-registry check and fingerprint t99J04"
+      "comment-stripped parent/commit placeholder census"
+      "rg/sed Mathlib inverse-function and manifold APIs"],
+     :finding
+     "PASS: independent review of topo-2 STOP. Commit d22ebea4 changes only the worklist; t99J04 source is unchanged from its parent and retains exactly 3 placeholders. The canonical package link is correct, the 660-item recorded worklist validates, source and exact fixture compile, fixture SHA-256 is 42816741b4cc4bdb68359d47b85a4b5d64ac1b1698d9b08f20e2c1019b7c82c6, and its sorryAx is inherited through the targeted bridge. Registry check is 130/130; frozen t99J04 and registry hashes reproduce. The theorem direction is exactly ContMDiffAt plus bijective mfderiv to IsLocalDiffeomorphAt; Mathlib explicitly records that implication as TODO, while its Euclidean local inverse API stops before chart PartialDiffeomorph packaging, conjugation, and writtenInExtChartAt fderiv/mfderiv transport. Coordinate-map differentiation and final assembly remain separate downstream work."},
     :changed-paths [],
     :fixture
     {:path "/tmp/t99j04-local-ift-consumer.lean",
@@ -80319,7 +80333,7 @@
      "42816741b4cc4bdb68359d47b85a4b5d64ac1b1698d9b08f20e2c1019b7c82c6"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["problems/t99J04/lean/Main.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J04/manifold-local-inverse-function",
@@ -80422,7 +80436,7 @@
       "42816741b4cc4bdb68359d47b85a4b5d64ac1b1698d9b08f20e2c1019b7c82c6"},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t99J04",
    :acceptance
