@@ -1260,6 +1260,16 @@ theorem localInverseRestrictions_gives_projectionAndLocalInversesSmooth
   projectionAndLocalInversesSmooth_iff.mpr
     ⟨sphereProjectionQuotientContMDiff, h⟩
 
+theorem sphereProjectionLocalInverseRestrictionsContMDiff :
+    SphereProjectionLocalInverseRestrictionsContMDiff :=
+  arbitraryInverseCoordinateLocalNormalForm_gives_restrictionsContMDiff
+    sphereProjectionArbitraryInverseCoordinateLocalNormalForm
+
+theorem sphereProjectionAndLocalInversesSmooth :
+    SphereProjectionAndLocalInversesSmooth :=
+  localInverseRestrictions_gives_projectionAndLocalInversesSmooth
+    sphereProjectionLocalInverseRestrictionsContMDiff
+
 theorem coordinateContDiffAt_reaches_contMDiff :
     SphereProjectionQuotientContMDiff :=
   quotientContMDiffAt_gives_quotientContMDiff
