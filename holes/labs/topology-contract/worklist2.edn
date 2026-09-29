@@ -50212,10 +50212,69 @@
    :depends-on
    [:routes-2026-09-28-t94a08-projective-quotient-open-topo2-r1]}
   {:bounded-exception
-   "single-consumer restricted affine-patch quotient map",
+   "single-consumer affine coordinate patch preimage identification",
    :consumer :t94A08,
    :phase :probe,
    :state :open,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:probe
+    "Compile the placeholder-free fixture /tmp/t94A08_restricted_quotient_preimage.lean. For every i : Fin 3 and v : NonzeroVectors ℂ 2 prove quotientMap_rep_coord_ne_zero_iff: Projectivization.rep (quotientMap ℂ 2 v) i != 0 iff v.1 i != 0, using Projectivization.mk_rep and Projectivization.mk_eq_mk_iff without changing the frozen topology or representatives. Retain this theorem as the exact subtype/preimage identification used with projectiveQuotientOpenAuthority and Topology.IsQuotientMap.restrictPreimage_isOpen to construct AffineCoordinatePatchRestrictedQuotient for t94A08."},
+   :id
+   :routes-2026-09-29-t94a08-affine-coordinate-patch-preimage-identification-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-09-28-t94a08-projective-quotient-open-topo2-r1]}
+  {:bounded-exception
+   "single-consumer restricted affine-patch quotient map",
+   :consumer :t94A08,
+   :evidence
+   {:probe
+    {:outcome :revise,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/t94A08_restricted_quotient_preimage.lean",
+      :sha256
+      "fb6d2732952e49e65583d3f2fdcbdc0f1b8c1478c17370804f78b407238627d7"},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/t94A08_restricted_quotient_preimage.lean",
+       :exit 0}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t94A08_restricted_quotient_preimage.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "130 registered statements match, 0 do not"}
+      {:cmd "sha256sum /tmp/t94A08_restricted_quotient_preimage.lean",
+       :exit 0}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/t94A08_restricted_quotient_preimage.lean",
+       :exit 1,
+       :finding
+       "The first scale-invariance proof used the Projectivization.mk_eq_mk_iff scalar equation in the reverse orientation; reading the compiled equation a • v = rep(quotientMap v) and reversing the two zero-coordinate arguments corrected it."}],
+     :residual
+     "Mathlib supplies IsQuotientMap.restrictPreimage_isOpen, so restriction itself is available once its domain is identified. The compiled prerequisite proves the exact saturated-preimage identity pointwise: the i-th coordinate of rep (quotientMap v) is nonzero iff v i is nonzero. With that identification, projectiveQuotientOpenAuthority makes the target patch open and restrictPreimage_isOpen yields the requested quotient map between the two subtypes.",
+     :prerequisite
+     {:bounded-exception
+      "single-consumer affine coordinate patch preimage identification",
+      :consumer :t94A08,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:probe
+       "Compile the placeholder-free fixture /tmp/t94A08_restricted_quotient_preimage.lean. For every i : Fin 3 and v : NonzeroVectors ℂ 2 prove quotientMap_rep_coord_ne_zero_iff: Projectivization.rep (quotientMap ℂ 2 v) i != 0 iff v.1 i != 0, using Projectivization.mk_rep and Projectivization.mk_eq_mk_iff without changing the frozen topology or representatives. Retain this theorem as the exact subtype/preimage identification used with projectiveQuotientOpenAuthority and Topology.IsQuotientMap.restrictPreimage_isOpen to construct AffineCoordinatePatchRestrictedQuotient for t94A08."},
+      :id
+      :routes-2026-09-29-t94a08-affine-coordinate-patch-preimage-identification-topo2-r1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:routes-2026-09-28-t94a08-projective-quotient-open-topo2-r1]}}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -50225,7 +50284,8 @@
    :routes-2026-09-29-t94a08-affine-coordinate-patch-restricted-quotient-topo2-r1,
    :kind :reusable-theorem,
    :depends-on
-   [:routes-2026-09-28-t94a08-projective-quotient-open-topo2-r1]}
+   [:routes-2026-09-28-t94a08-projective-quotient-open-topo2-r1
+    :routes-2026-09-29-t94a08-affine-coordinate-patch-preimage-identification-topo2-r1]}
   {:bounded-exception
    "single-consumer frozen quotient-patch ratio continuity theorem",
    :consumer :t94A08,
