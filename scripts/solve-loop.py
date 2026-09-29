@@ -193,6 +193,8 @@ def conclusion(header: str) -> str:
 
 
 def squash(t: str) -> str:
+    # `Type*` and an explicit `Type u` name the same statement; compare modulo universes.
+    t = re.sub(r"\b(Type|Sort)(\*|\s+[a-zA-Z_]\w*|\s+_)", r"\1", t)
     return re.sub(r"\s+", " ", t).strip()
 
 
