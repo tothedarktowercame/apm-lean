@@ -51982,9 +51982,14 @@
     :routes-2026-09-29-rp-sphere-projection-coordinate-contdiffwithin-topo2-r1],
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
+   :review-finding
+   "Deterministic stale-boundary defect in ledger transition commit 82ad1b3c: its STOP reason says the reviewed pointwise-ContMDiffAt prerequisite pins /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean at e0a963b1, but before this transition that prerequisite was reviewed against immutable fixture ConstructionTargets/RealProjectiveSmoothTarget.lean at sha256 b1cf777ce1ecf310c6d3e406e722699835bb943bab6a728cee59523688bbcf70. The alleged shared-path conflict no longer exists. Fresh verification hashes the descendant fixture to the claimed 550216ec0173a20f01c9eec92ecd13f5bf4f9cd3f71d99bfac7b09752d5e3d0f and compiles it placeholder-free. sphereProjectionQuotientContMDiff applies the banked pointwise-to-global reduction in the correct direction, and projectionAndLocalInversesSmooth_iff exactly separates global forward smoothness from branch-dependent inverse smoothness under the prescribed quotient instances. All 130 frozen statements and the 345-item ledger pass; frozen t95A04 and t96A07 remain at one placeholder each. Repair by replacing the stale STOP with an implementation transition, committing the global inhabitant, inverse-restrictions contract, and exact decomposition theorem to RealProjectiveSmoothTarget, and recording the committed module as the immutable fixture.",
    :evidence
-   {:outcome :stop,
-    :seat "topo-8",
+   {:residual
+    "The global forward-smoothness half is complete: quotientContMDiffAt_gives_quotientContMDiff applied to the banked pointwise theorem proves SphereProjectionQuotientContMDiff. The parent now reduces exactly to SphereProjectionLocalInverseRestrictionsContMDiff; only fixture identity prevents a ledger-valid GO.",
+    :outcome :stop,
+    :disposition :stop,
+    :author "topo-8",
     :reason
     "Fixture-identity boundary: the prerequisite pins /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean at sha256 e0a963b10e523957a7007c4325ff647e57a4152062cdc1326e919e525a08d281, while this row requires adding SphereProjectionQuotientContMDiff and the parent decomposition to that same pathname. The requested theorem and projectionAndLocalInversesSmooth_iff compile placeholder-free at sha256 550216ec0173a20f01c9eec92ecd13f5bf4f9cd3f71d99bfac7b09752d5e3d0f. A single mutable file cannot preserve the prerequisite hash and contain the descendant theorem; use immutable per-row fixture paths or archived dependency artifacts.",
     :commands
@@ -52013,12 +52018,15 @@
       :exit 1,
       :finding
       "Installing instances alone could not resolve an undeclared contract; restoring its exact nonredundant definition corrected the decomposition."}],
-    :residual
-    "The global forward-smoothness half is complete: quotientContMDiffAt_gives_quotientContMDiff applied to the banked pointwise theorem proves SphereProjectionQuotientContMDiff. The parent now reduces exactly to SphereProjectionLocalInverseRestrictionsContMDiff; only fixture identity prevents a ledger-valid GO.",
-    :author "topo-8",
-    :disposition :stop},
-   :phase :probe,
-   :state :done-unreviewed,
+    :review
+    {:outcome :fail,
+     :seat "codex-7",
+     :job "invoke-1790647878138-27194-9d1b3ee4",
+     :finding
+     "Deterministic stale-boundary defect in ledger transition commit 82ad1b3c: its STOP reason says the reviewed pointwise-ContMDiffAt prerequisite pins /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean at e0a963b1, but before this transition that prerequisite was reviewed against immutable fixture ConstructionTargets/RealProjectiveSmoothTarget.lean at sha256 b1cf777ce1ecf310c6d3e406e722699835bb943bab6a728cee59523688bbcf70. The alleged shared-path conflict no longer exists. Fresh verification hashes the descendant fixture to the claimed 550216ec0173a20f01c9eec92ecd13f5bf4f9cd3f71d99bfac7b09752d5e3d0f and compiles it placeholder-free. sphereProjectionQuotientContMDiff applies the banked pointwise-to-global reduction in the correct direction, and projectionAndLocalInversesSmooth_iff exactly separates global forward smoothness from branch-dependent inverse smoothness under the prescribed quotient instances. All 130 frozen statements and the 345-item ledger pass; frozen t95A04 and t96A07 remain at one placeholder each. Repair by replacing the stale STOP with an implementation transition, committing the global inhabitant, inverse-restrictions contract, and exact decomposition theorem to RealProjectiveSmoothTarget, and recording the committed module as the immutable fixture."},
+    :seat "topo-8"},
+   :phase :implementation,
+   :state :repair,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
