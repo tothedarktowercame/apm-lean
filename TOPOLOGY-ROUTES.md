@@ -10,6 +10,17 @@ doubts) are in `holes/labs/topology-routes/routes-{1,2,3}.md`, written by read-o
 reviewers who compiled probes where they could. Seventeen problems they found closable were
 landed directly on 2026-09-28.
 
+## Newer Mathlib, for searching (2026-09-29)
+
+The project pins Mathlib 5ee50502 (2026-03-29, Lean v4.29.0-rc8). A shallow clone of current
+Mathlib (3f6737d, 2026-09-28, Lean v4.35.0-rc3) is at `/home/joe/code/mathlib4-latest`,
+for SEARCHING only: before building a missing notion, grep it there. If it exists, port the
+needed declarations into `ConstructionTargets/` at the pinned version, citing the upstream
+file. Do not change the project's pin. New since the pin, and relevant here: singular homology
+homotopy invariance (`AlgebraicTopology/SingularHomology/HomotopyInvariance*.lean`,
+`HomologyZero.lean`), submersions and immersions of manifolds (`Geometry/Manifold/Submersion.lean`,
+`ImmersionDiff.lean`). Still absent: the inverse function theorem on manifolds.
+
 ## Election rules (each strategy checkpoint)
 
 1. Only the problems in this loop's own list below (Joe, 2026-09-28: topo1 = the 12 DIRECT/ADAPTER
