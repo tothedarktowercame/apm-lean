@@ -52739,6 +52739,21 @@
       :output
       "19e3aef01a18cbd3c314f70579714d05f4ea54ae\nJoe Corneli <holtzermann17@gmail.com>\n\nConstructionTargets/RealProjectiveSmoothTarget.lean"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1790651730427-27428-ce617df8",
+     :commands
+     ["git show/diff-tree 19e3aef01a18cbd3c314f70579714d05f4ea54ae"
+      "sha256sum committed/current source and frozen fixture"
+      "lake env lean ConstructionTargets/RealProjectiveSmoothTarget.lean"
+      "lake build ConstructionTargets.RealProjectiveSmoothTarget"
+      "#print axioms and #check descent contract declarations"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "comment-stripped placeholder recount at recorded commit"],
+     :finding
+     "PASS: reviewer codex-7 verified recorded commit 19e3aef01a18cbd3c314f70579714d05f4ea54ae, authored by topo-6/Joe, changes only ConstructionTargets/RealProjectiveSmoothTarget.lean and adds exactly the requested contract, antipodal smoothness theorem, and inhabitant. Committed/current source SHA-256 is 733e3b262a9c7247434f43991348300f0c7770b47abba2395db9903a387fd8c5; frozen fixture SHA-256 is eac9ba208133499291c23110ce0864f1259ba49c544053ddbd7d94847d141835. Lean compile and 8241-job build pass; both theorem declarations use only propext, Classical.choice, Quot.sound; registry is 130/130 and the 348-row worklist validates. The contract orientation is exactly SphereProjectionTwoSheetedLocalModel 2 then ContMDiff antipodal then Nonempty SmoothAtlas 2. sphereAntipodalN_contMDiff derives the required map smoothness from contMDiff_neg_sphere with matching models. The inhabitant retains both explicit hypotheses and returns the atlas through sphereProjectionQuotientLocalDiffeomorph_gives_smoothAtlas applied to the banked quotient-local-diffeomorphism certificate; that dependency chain already constructs the quotient charts and manifold compatibility on the frozen Space, so no representation is replaced or bypassed. Comment-stripped sorry/admit/axiom counts are 0/0/0 in scope and 1/0/0 in each frozen consumer."},
     :commit "19e3aef01a18cbd3c314f70579714d05f4ea54ae",
     :changed-paths
     ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
@@ -52748,7 +52763,7 @@
      "733e3b262a9c7247434f43991348300f0c7770b47abba2395db9903a387fd8c5"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -52798,7 +52813,7 @@
       [:routes-2026-09-28-rp-sphere-projection-local-model-topo2-r1],
       :other-consumers [:t96A07]}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
