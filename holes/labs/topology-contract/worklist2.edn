@@ -51582,6 +51582,21 @@
       :output
       "sphereProjection_lift_eq_or_antipodal and sphereProjection_coordinate_branch_domains each depend on [propext, Classical.choice, Quot.sound]."}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1790644638276-27023-06266b24",
+     :commands
+     ["git show 5e7343e3 -- ConstructionTargets/RealProjectiveSmoothTarget.lean"
+      "sha256sum /tmp/rp_sphere_projection_lift_branch_at_base.lean"
+      "lake env lean ConstructionTargets/RealProjectiveSmoothTarget.lean"
+      "lake build ConstructionTargets.RealProjectiveSmoothTarget"
+      "lake env lean /tmp/rp_sphere_projection_lift_branch_domains_axioms.lean"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "comment-stripped placeholder counts from git show 5e7343e3"],
+     :finding
+     "PASS: reviewer codex-7 verified commit 5e7343e3. Its sole changed path exactly matches scope, is the path latest commit, the fixture hashes to 3e6fb31f1596adec460b03a1addcd9168e059f5c21e12d3e846e390b1cb22ba5, and committed scoped source hashes to the recorded 538f1820268ebc588a01b2f634d121d11ca469d944a169d4021e2f2c7d5255e0. Direct elaboration, Lake build, both axiom audits, 130 frozen statements, and the 345-item ledger pass. The first theorem evaluates the reviewed eventual branch law at p and identifies inverseBranch at y with F.lift y without changing the fixed chart center. The domain theorem simplifies extChartAt coordinates through the chart inverse law; its ordinary branch returns the exact composite transition source, while its antipodal branch returns the first-chart target and antipodal image in the lift-chart source. No branch witness is reversed or weakened. The module has zero placeholders; frozen t95A04 and t96A07 remain at one each."},
     :commit "5e7343e3b5842624eca39aae2fb6ea8f16e8a1d9",
     :changed-paths
     ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
@@ -51591,7 +51606,7 @@
      "3e6fb31f1596adec460b03a1addcd9168e059f5c21e12d3e846e390b1cb22ba5"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -51647,7 +51662,7 @@
       [:routes-2026-09-29-rp-sphere-projection-inverse-branch-local-alternative-topo2-r1],
       :other-consumers [:t96A07]}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
