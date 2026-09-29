@@ -52100,6 +52100,71 @@
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
    {:probe
+    "Compile a placeholder-free inhabitant of SphereProjectionArbitraryInverseCoordinateLocalNormalForm in /tmp/rp_sphere_projection_local_inverse_restrictions_contmdiff.lean. For every inverse family F, every OpenPartialHomeomorph e with sphereProjection 2 = e, and every x in e.target, prove ContMDiffAt of e.symm at x. In quotientChart coordinates centered at x, prove e.symm is eventually equal either to F.inverseBranch x or to sphereAntipodalN 2 composed with F.inverseBranch x, with the exact standard-sphere chart source witnesses, and apply the banked ordinary-or-antipodal transition smoothness. Retain arbitraryInverseCoordinateLocalNormalForm_gives_restrictionsContMDiff and localInverseRestrictions_gives_projectionAndLocalInversesSmooth. This supplies the arbitrary-branch coordinate step for t95A04 and t96A07."},
+   :id
+   :routes-2026-09-29-rp-sphere-arbitrary-inverse-coordinate-local-normal-form-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-09-28-rp-sphere-projection-local-model-topo2-r1
+    :routes-2026-09-28-rp-sphere-quotient-atlas-compatibility-topo2-r1
+    :routes-2026-09-28-rp-sphere-quotient-chart-transition-topo2-r1
+    :routes-2026-09-29-rp-sphere-projection-contmdiff-topo2-r1],
+   :other-consumers [:t96A07]}
+  {:consumer :t95A04,
+   :evidence
+   {:probe
+    {:outcome :revise,
+     :seat "topo-8",
+     :fixture
+     {:path
+      "/tmp/rp_sphere_projection_local_inverse_restrictions_contmdiff.lean",
+      :sha256
+      "248ae38102e0e675541695d19eb562cc4af77cbb361844216136b8617b85957f"},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/rp_sphere_projection_local_inverse_restrictions_contmdiff.lean",
+       :exit 0}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_projection_local_inverse_restrictions_contmdiff.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "130 registered statements match, 0 do not"}
+      {:cmd
+       "sha256sum /tmp/rp_sphere_projection_local_inverse_restrictions_contmdiff.lean",
+       :exit 0}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/rp_sphere_projection_local_inverse_restrictions_contmdiff.lean",
+       :exit 1,
+       :finding
+       "The initial pointwise-to-on-set reduction supplied ContMDiffAt where Lean expected ContMDiffWithinAt; applying ContMDiffAt.contMDiffWithinAt gives the exact restriction."}],
+     :residual
+     "The quotient atlas directly controls the chosen inverse family, but the requested proposition quantifies over an arbitrary OpenPartialHomeomorph e whose forward map equals sphereProjection 2. The compiled reduction shows it is enough to prove pointwise smoothness of e.symm. The missing coordinate theorem must compare this arbitrary inverse locally with the chosen inverseBranch at x, yielding either the ordinary chosen-branch chart expression or its antipodal composite with the exact chart-domain witness.",
+     :prerequisite
+     {:consumer :t95A04,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:probe
+       "Compile a placeholder-free inhabitant of SphereProjectionArbitraryInverseCoordinateLocalNormalForm in /tmp/rp_sphere_projection_local_inverse_restrictions_contmdiff.lean. For every inverse family F, every OpenPartialHomeomorph e with sphereProjection 2 = e, and every x in e.target, prove ContMDiffAt of e.symm at x. In quotientChart coordinates centered at x, prove e.symm is eventually equal either to F.inverseBranch x or to sphereAntipodalN 2 composed with F.inverseBranch x, with the exact standard-sphere chart source witnesses, and apply the banked ordinary-or-antipodal transition smoothness. Retain arbitraryInverseCoordinateLocalNormalForm_gives_restrictionsContMDiff and localInverseRestrictions_gives_projectionAndLocalInversesSmooth. This supplies the arbitrary-branch coordinate step for t95A04 and t96A07."},
+      :id
+      :routes-2026-09-29-rp-sphere-arbitrary-inverse-coordinate-local-normal-form-topo2-r1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:routes-2026-09-28-rp-sphere-projection-local-model-topo2-r1
+       :routes-2026-09-28-rp-sphere-quotient-atlas-compatibility-topo2-r1
+       :routes-2026-09-28-rp-sphere-quotient-chart-transition-topo2-r1
+       :routes-2026-09-29-rp-sphere-projection-contmdiff-topo2-r1],
+      :other-consumers [:t96A07]}}},
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:probe
     "Compile a placeholder-free inhabitant of SphereProjectionLocalInverseRestrictionsContMDiff in /tmp/rp_sphere_projection_local_inverse_restrictions_contmdiff.lean. For every SphereProjectionLocalInverseFamily F, install exactly F.quotientChartedSpace and sphereProjectionQuotientAtlasCompatibility F; then for every OpenPartialHomeomorph e agreeing with sphereProjection 2, prove ContMDiffOn (real model 2) (real model 2) infinity e.symm e.target. Establish the inverse coordinate expression in the quotientChart and standard sphere charts using the banked ordinary-or-antipodal transition results. Retain localInverseRestrictions_gives_projectionAndLocalInversesSmooth and the downstream reductions through SphereProjectionQuotientLocalDiffeomorph. This supplies the inverse-only smoothness half for t95A04 and t96A07."},
    :id
    :routes-2026-09-29-rp-sphere-local-inverse-restrictions-contmdiff-topo2-r1,
@@ -52108,7 +52173,8 @@
    [:routes-2026-09-28-rp-sphere-projection-local-model-topo2-r1
     :routes-2026-09-28-rp-sphere-quotient-atlas-compatibility-topo2-r1
     :routes-2026-09-28-rp-sphere-quotient-chart-transition-topo2-r1
-    :routes-2026-09-29-rp-sphere-projection-contmdiff-topo2-r1],
+    :routes-2026-09-29-rp-sphere-projection-contmdiff-topo2-r1
+    :routes-2026-09-29-rp-sphere-arbitrary-inverse-coordinate-local-normal-form-topo2-r1],
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
    :evidence
