@@ -80798,8 +80798,107 @@
    "Joe 2026-09-29: the original twelve topo1 problems have reached their stop condition; topo1 now takes eight HEAVY problems (TOPOLOGY-ROUTES.md, topo1 refill): t98A06, t98J01, t98J02 (each has an ADAPTER part), t94J09, tunk01, t91A02 (shared polygon-quotient / cut-and-paste tags), t96A06, t99J05 (projective charts and rational homology, shared with topo2 RP infrastructure). All eight statements are registered; each has one sorry.",
    :other-consumers []}
   {:consumer :t98A06,
-   :phase :probe,
+   :phase :implementation,
    :state :open,
+   :scope ["problems/t98A06/lean/Main.lean"],
+   :dag-node "TOPOLOGY-ROUTES.md/t98A06/local-smooth-submersion-lift",
+   :acceptance
+   {:placeholder-after 1,
+    :fixture-sha256
+    "cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d",
+    :placeholder
+    "the part-(a) portion of the single sorry in apm_t98a06",
+    :axioms :standard-only,
+    :placeholder-before 1,
+    :commands
+    ["lake env lean problems/t98A06/lean/Main.lean"
+     "lake env lean /tmp/t98a06-part-a-probe.lean"
+     "python3 scripts/statement-registry.py check"],
+    :fixture "/tmp/t98a06-part-a-probe.lean",
+    :route-step "t98A06 part (a), route step 2",
+    :implementation
+    "Add and prove apm_t98A06_bridge_local_smooth_submersion_lift immediately before the registered theorem, without changing any registered definition or statement. At the exact frozen Euclidean-manifold generality, choose a complement of ker(mfderiv f x0), express mfderiv in tangent charts, shrink to a neighborhood where its restriction stays invertible, and define the local lift by the smooth inverse applied to v(f x). Prove total-space smoothness and the displayed mfderiv equality. Do not implement the convex gluing or part (b): the compiled fixture already proves the former from this bridge."},
+   :id :routes-2026-09-29-t98a06-local-smooth-submersion-lift-1,
+   :kind :final-adapter,
+   :depends-on [],
+   :current-residual
+   "Prove the exact neighborhoodwise smooth right inverse of the varying surjective mfderiv. The compiled fixture then supplies affine convexity and global partition-of-unity gluing; part (b) remains.",
+   :other-consumers []}
+  {:consumer :t98A06,
+   :evidence
+   {:probe
+    {:residual
+     "Exactly one prerequisite remains for part (a): the local smooth submersion lift. The fixture proves the global assembly from it with zero placeholders.",
+     :outcome :revise,
+     :warnings
+     [{:kind :interface-axiom,
+       :message
+       "The fixture has no placeholders and its only nonstandard axiom is exactly apm_t98A06_bridge_local_smooth_submersion_lift; the convexity and partition-of-unity assembly are proved."}],
+     :prerequisite
+     {:consumer :t98A06,
+      :phase :implementation,
+      :state :open,
+      :scope ["problems/t98A06/lean/Main.lean"],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/t98A06/local-smooth-submersion-lift",
+      :acceptance
+      {:placeholder-after 1,
+       :fixture-sha256
+       "cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d",
+       :placeholder
+       "the part-(a) portion of the single sorry in apm_t98a06",
+       :axioms :standard-only,
+       :placeholder-before 1,
+       :commands
+       ["lake env lean problems/t98A06/lean/Main.lean"
+        "lake env lean /tmp/t98a06-part-a-probe.lean"
+        "python3 scripts/statement-registry.py check"],
+       :fixture "/tmp/t98a06-part-a-probe.lean",
+       :route-step "t98A06 part (a), route step 2",
+       :implementation
+       "Add and prove apm_t98A06_bridge_local_smooth_submersion_lift immediately before the registered theorem, without changing any registered definition or statement. At the exact frozen Euclidean-manifold generality, choose a complement of ker(mfderiv f x0), express mfderiv in tangent charts, shrink to a neighborhood where its restriction stays invertible, and define the local lift by the smooth inverse applied to v(f x). Prove total-space smoothness and the displayed mfderiv equality. Do not implement the convex gluing or part (b): the compiled fixture already proves the former from this bridge."},
+      :id :routes-2026-09-29-t98a06-local-smooth-submersion-lift-1,
+      :kind :final-adapter,
+      :depends-on [],
+      :current-residual
+      "Prove the exact neighborhoodwise smooth right inverse of the varying surjective mfderiv. The compiled fixture then supplies affine convexity and global partition-of-unity gluing; part (b) remains.",
+      :other-consumers []},
+     :axioms
+     ["propext"
+      "Classical.choice"
+      "Quot.sound"
+      "T98A06Probe.apm_t98A06_bridge_local_smooth_submersion_lift"],
+     :commands
+     [{:cmd "test canonical .lake/packages authority", :exit 0}
+      {:cmd "lake env lean /tmp/t98a06-part-a-probe.lean", :exit 0}
+      {:cmd "sha256sum /tmp/t98a06-part-a-probe.lean",
+       :exit 0,
+       :finding
+       "cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d"}
+      {:cmd
+       "Python comment-stripped placeholder census of /tmp/t98a06-part-a-probe.lean",
+       :exit 0,
+       :finding "0"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :finding "130 registered statements match, 0 do not"}],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/t98a06-part-a-probe.lean",
+       :exit 1,
+       :stage :neighborhood-notation,
+       :correction "Replaced unavailable notation with nhds."}
+      {:cmd "lake env lean /tmp/t98a06-part-a-probe.lean",
+       :exit 1,
+       :stage :sigma-compact-instance,
+       :correction
+       "Installed the chart-induced LocallyCompactSpace instance explicitly, after which the standard second-countable sigma-compact instance applies."}],
+     :fixture
+     {:path "/tmp/t98a06-part-a-probe.lean",
+      :sha256
+      "cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d"},
+     :seat "topo-4"}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t98A06/part-a",
    :acceptance
@@ -80816,7 +80915,7 @@
    :kind :final-adapter,
    :depends-on
    [:routes-2026-09-29-topo1-refill-heavy-1
-    :routes-2026-09-29-topo1-refill-heavy-1],
+    :routes-2026-09-29-t98a06-local-smooth-submersion-lift-1],
    :current-residual "Smooth lift first; complete-flow work remains.",
    :other-consumers []}
   {:consumer :t98J01,
@@ -80985,30 +81084,6 @@
    :depends-on [:routes-2026-09-28-checkpoint-topo1-after-t95j02-1],
    :current-residual
    "Stop-after-two hold lifted by a Codex re-route (topo-10, 2026-09-29; holes/labs/topology-routes/reroute-t95J02.md). Three sorries remain.",
-   :other-consumers []}
-  {:consumer :t99J04,
-   :phase :implementation,
-   :state :open,
-   :scope ["problems/t99J04/lean/Main.lean"],
-   :dag-node
-   "TOPOLOGY-ROUTES.md/t99J04/reroute-direct-partial-diffeomorph",
-   :acceptance
-   {:placeholder
-    "the sorry in apm_t99J04_bridge_local_inverse_function",
-    :placeholder-before 3,
-    :placeholder-after 2,
-    :axioms :standard-only,
-    :route-step "t99J04 reroute steps 1-4",
-    :implementation
-    "Follow holes/labs/topology-routes/reroute-t99J04.md steps 1-4. Do NOT package charts as PartialDiffeomorphs or compose PartialDiffeomorphs (no such API). Step 1 (coordinate extraction: ContDiffAt and HasFDerivAt of writtenInExtChartAt with mfderiv) compiles at the pinned Mathlib in holes/labs/topology-routes/reroute-t99J04-probe.lean.txt. Then: Euclidean inverse via ContDiffAt.toOpenPartialHomeomorph; compose OpenPartialHomeomorphs through extChartAt with .trans and shrink the source; build one PartialDiffeomorph as a structure literal on that PartialEquiv, proving both ContMDiffOn fields pointwise (inverse via OpenPartialHomeomorph.contDiffAt_symm).",
-    :commands
-    ["lake env lean problems/t99J04/lean/Main.lean"
-     "python3 scripts/statement-registry.py check"]},
-   :id :routes-2026-09-29-t99j04-reroute-local-ift-1,
-   :kind :final-adapter,
-   :depends-on [:routes-2026-09-29-checkpoint-topo1-after-t99j04-1],
-   :current-residual
-   "Stop-after-two hold lifted by a Codex re-route (topo-11, 2026-09-29; holes/labs/topology-routes/reroute-t99J04.md). Three sorries remain.",
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
