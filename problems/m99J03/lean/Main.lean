@@ -214,7 +214,39 @@ theorem apm_m99J03_bridge_triangle_weak_limit
     Filter.Tendsto
       (fun n : ℕ => ∫ x : ℝ, apm_m99j03_triangle n x * φ x)
       Filter.atTop (nhds (φ 0)) := by
-  sorry
+  have ht := apm_m99j03_dilation_tendsto φ (apm_m99j03_triangle 1)
+    hφ.1.continuous apm_m99j03_triangle_one_continuous
+    apm_m99j03_triangle_one_hasCompactSupport
+  have ht' : Filter.Tendsto
+      (fun n : ℕ => ∫ y : ℝ, φ (y / (n : ℝ)) * apm_m99j03_triangle 1 y)
+      Filter.atTop (nhds (φ 0)) := by
+    simpa [apm_m99j03_integral_triangle_one] using ht
+  apply ht'.congr'
+  filter_upwards [Filter.eventually_gt_atTop (0 : ℕ)] with n hn
+  have hnR : (0 : ℝ) < n := by exact_mod_cast hn
+  have hn0 : (n : ℝ) ≠ 0 := ne_of_gt hnR
+  let g : ℝ → ℝ := fun y =>
+    apm_m99j03_triangle 1 y * φ (y / (n : ℝ))
+  have hchange := MeasureTheory.Measure.integral_comp_mul_left g (n : ℝ)
+  have habsinv : |((n : ℝ)⁻¹)| = (n : ℝ)⁻¹ := abs_of_pos (inv_pos.mpr hnR)
+  have hscaled :
+      (∫ x : ℝ, apm_m99j03_triangle n x * φ x) =
+        (n : ℝ) * ∫ x : ℝ, g ((n : ℝ) * x) := by
+    rw [← MeasureTheory.integral_const_mul]
+    apply MeasureTheory.integral_congr_ae
+    filter_upwards with x
+    rw [apm_m99j03_triangle_eq_scaled_profile hn x]
+    simp only [g]
+    have hx : (n : ℝ) * x / (n : ℝ) = x := by field_simp
+    rw [hx]
+    ring
+  rw [hscaled, hchange, habsinv]
+  simp only [smul_eq_mul]
+  rw [← mul_assoc, mul_inv_cancel₀ hn0, one_mul]
+  apply MeasureTheory.integral_congr_ae
+  filter_upwards with y
+  simp only [g]
+  ring
 
 /-- Why this unblocks `apm_m99j03`: this is the exact scaling and cancellation
 identity for the dipole.  It reduces the raw piecewise whole-line integral to
@@ -225,7 +257,172 @@ theorem apm_m99J03_bridge_dipole_integral_eq
     (∫ x : ℝ, apm_m99j03_dipole n x * φ x) =
       (n : ℝ) * ∫ t in (0 : ℝ)..1,
         (φ (-(t / (n : ℝ))) - φ (t / (n : ℝ))) := by
-  sorry
+  have hnR : (0 : ℝ) < n := by exact_mod_cast hn
+  have hn0 : (n : ℝ) ≠ 0 := ne_of_gt hnR
+  have hφint : MeasureTheory.Integrable φ :=
+    hφ.1.continuous.integrable_of_hasCompactSupport hφ.2
+  let a : ℝ := 1 / (n : ℝ)
+  let left : ℝ → ℝ := Set.Ioo (-a) 0 |>.indicator
+    (fun x => (n : ℝ) ^ 2 * φ x)
+  let right : ℝ → ℝ := Set.Icc 0 a |>.indicator
+    (fun x => -((n : ℝ) ^ 2) * φ x)
+  have hleft : MeasureTheory.Integrable left := by
+    exact (hφint.const_mul ((n : ℝ) ^ 2)).indicator measurableSet_Ioo
+  have hright : MeasureTheory.Integrable right := by
+    exact (hφint.const_mul (-((n : ℝ) ^ 2))).indicator measurableSet_Icc
+  have hfun : (fun x : ℝ => apm_m99j03_dipole n x * φ x) = left + right := by
+    funext x
+    unfold left right a apm_m99j03_dipole
+    simp only [Set.indicator, Set.mem_Ioo, Set.mem_Icc, Pi.add_apply]
+    split_ifs <;> simp_all <;> try linarith
+  have hraw :
+      (∫ x : ℝ, apm_m99j03_dipole n x * φ x) =
+        (n : ℝ) ^ 2 *
+          ((∫ x in (-(1 / (n : ℝ)))..0, φ x) -
+            ∫ x in (0 : ℝ)..(1 / (n : ℝ)), φ x) := by
+    rw [hfun]
+    change (∫ x : ℝ, left x + right x) = _
+    rw [MeasureTheory.integral_add hleft hright]
+    simp only [left, right, MeasureTheory.integral_indicator measurableSet_Ioo,
+      MeasureTheory.integral_indicator measurableSet_Icc]
+    rw [← MeasureTheory.integral_Ioc_eq_integral_Ioo,
+      MeasureTheory.integral_Icc_eq_integral_Ioc]
+    rw [← intervalIntegral.integral_of_le (by
+          have := one_div_pos.mpr hnR
+          linarith : -(1 / (n : ℝ)) ≤ 0),
+      ← intervalIntegral.integral_of_le (by positivity : (0 : ℝ) ≤ 1 / (n : ℝ))]
+    rw [intervalIntegral.integral_const_mul, intervalIntegral.integral_const_mul]
+    ring
+  rw [hraw]
+  have hpos := intervalIntegral.integral_comp_div (f := φ)
+    (a := (0 : ℝ)) (b := 1) hn0
+  have hneg := intervalIntegral.integral_comp_div (f := φ)
+    (a := (0 : ℝ)) (b := 1) (neg_ne_zero.mpr hn0)
+  simp only [zero_div, one_div, smul_eq_mul] at hpos hneg
+  have hiNeg : IntervalIntegrable (fun t : ℝ => φ (-(t / (n : ℝ))))
+      MeasureTheory.volume 0 1 := by
+    exact (hφ.1.continuous.comp
+      (continuous_id.div_const (n : ℝ)).neg).intervalIntegrable _ _
+  have hiPos : IntervalIntegrable (fun t : ℝ => φ (t / (n : ℝ)))
+      MeasureTheory.volume 0 1 := by
+    exact (hφ.1.continuous.comp (continuous_id.div_const (n : ℝ))).intervalIntegrable _ _
+  rw [intervalIntegral.integral_sub hiNeg hiPos]
+  rw [show (fun t : ℝ => φ (-(t / (n : ℝ)))) =
+      fun t : ℝ => φ (t / (-(n : ℝ))) by
+        funext t; congr 1; field_simp]
+  rw [hpos, hneg]
+  rw [intervalIntegral.integral_symm]
+  ring
+
+lemma apm_m99j03_symmetric_difference_tendsto
+    (A : ℝ → ℝ) {d : ℝ} (hA : HasDerivAt A d 0) :
+    Filter.Tendsto
+      (fun n : ℕ => (n : ℝ) *
+        (A (-(1 / (n : ℝ))) - A (1 / (n : ℝ))))
+      Filter.atTop (nhds (-2 * d)) := by
+  have hp : Filter.Tendsto (fun n : ℕ => (1 : ℝ) / (n : ℝ))
+      Filter.atTop (nhdsWithin 0 ({0} : Set ℝ)ᶜ) := by
+    rw [tendsto_nhdsWithin_iff]
+    refine ⟨tendsto_const_div_atTop_nhds_zero_nat 1, ?_⟩
+    filter_upwards [Filter.eventually_gt_atTop (0 : ℕ)] with n hn
+    simp [Nat.ne_of_gt hn]
+  have hm : Filter.Tendsto (fun n : ℕ => -(1 / (n : ℝ)))
+      Filter.atTop (nhdsWithin 0 ({0} : Set ℝ)ᶜ) := by
+    rw [tendsto_nhdsWithin_iff]
+    refine ⟨by simpa only [neg_zero] using
+      (tendsto_const_div_atTop_nhds_zero_nat (1 : ℝ)).neg, ?_⟩
+    filter_upwards [Filter.eventually_gt_atTop (0 : ℕ)] with n hn
+    simp [Nat.ne_of_gt hn]
+  have hsp := hA.tendsto_slope_zero.comp hp
+  have hsm := hA.tendsto_slope_zero.comp hm
+  have hsums : Filter.Tendsto
+      (fun n : ℕ => -(slope A 0 (-(1 / (n : ℝ))) +
+        slope A 0 (1 / (n : ℝ))))
+      Filter.atTop (nhds (-2 * d)) := by
+    convert (hsm.add hsp).neg using 1
+    · funext n
+      simp only [Function.comp_apply, slope, zero_add, smul_eq_mul]
+      simp only [vsub_eq_sub]
+      ring
+    · ring
+  apply hsums.congr'
+  filter_upwards [Filter.eventually_gt_atTop (0 : ℕ)] with n hn
+  have hn0 : (n : ℝ) ≠ 0 := by exact_mod_cast (Nat.ne_of_gt hn)
+  simp only [slope, zero_add, smul_eq_mul]
+  field_simp
+  simp only [vsub_eq_sub]
+  ring
+
+def apm_m99j03_average (φ : ℝ → ℝ) (s : ℝ) : ℝ :=
+  ∫ t in (0 : ℝ)..1, φ (s * t)
+
+/-- The remaining parametric-integral calculation: differentiation under the
+fixed finite interval gives the first moment `∫₀¹ t = 1/2`. -/
+theorem apm_m99j03_average_hasDerivAt
+    (φ : ℝ → ℝ) (hφ : apm_m99j03_IsTestFunction φ) :
+    HasDerivAt (apm_m99j03_average φ) (deriv φ 0 / 2) 0 := by
+  have hdcont : Continuous (deriv φ) := hφ.1.continuous_deriv (by simp)
+  obtain ⟨C, hC⟩ := isCompact_Icc.bddAbove_image hdcont.norm.continuousOn
+  have hC0 : 0 ≤ C := by
+    have hz : (0 : ℝ) ∈ Set.Icc (-1) 1 := by norm_num
+    exact (norm_nonneg (deriv φ 0)).trans (hC ⟨0, hz, rfl⟩)
+  let μ : MeasureTheory.Measure ℝ :=
+    MeasureTheory.volume.restrict (Set.Ioc (0 : ℝ) 1)
+  let F : ℝ → ℝ → ℝ := fun s t => φ (s * t)
+  let F' : ℝ → ℝ → ℝ := fun s t => t * deriv φ (s * t)
+  have hs : Set.Icc (-1 : ℝ) 1 ∈ nhds (0 : ℝ) := by
+    exact Filter.mem_of_superset (Metric.ball_mem_nhds 0 (by norm_num : (0 : ℝ) < 1)) (by
+      intro x hx
+      rw [Metric.mem_ball, Real.dist_eq] at hx
+      have h := abs_lt.mp hx
+      constructor <;> linarith)
+  have hmeas : ∀ᶠ s in nhds (0 : ℝ),
+      MeasureTheory.AEStronglyMeasurable (F s) μ := by
+    filter_upwards [] with s
+    exact (hφ.1.continuous.comp (continuous_const.mul continuous_id)).aestronglyMeasurable
+  have hFint : MeasureTheory.Integrable (F 0) μ := by
+    have : F 0 = fun _ : ℝ => φ 0 := by funext t; simp [F]
+    rw [this]
+    exact MeasureTheory.integrable_const _
+  have hF'meas : MeasureTheory.AEStronglyMeasurable (F' 0) μ := by
+    exact (continuous_id.mul (hdcont.comp
+      (continuous_const.mul continuous_id))).aestronglyMeasurable
+  have hbound : ∀ᵐ t ∂μ, ∀ s ∈ Set.Icc (-1 : ℝ) 1, ‖F' s t‖ ≤ C := by
+    filter_upwards [MeasureTheory.ae_restrict_mem measurableSet_Ioc] with t ht
+    intro s hsI
+    have htI : t ∈ Set.Icc (-1 : ℝ) 1 := ⟨by linarith [ht.1], ht.2⟩
+    have hst : s * t ∈ Set.Icc (-1 : ℝ) 1 := by
+      constructor <;> nlinarith [hsI.1, hsI.2, htI.1, htI.2]
+    have hdle : ‖deriv φ (s * t)‖ ≤ C := hC ⟨s * t, hst, rfl⟩
+    simp only [F', Real.norm_eq_abs, abs_mul]
+    have hat : |t| ≤ 1 := (abs_le.mpr htI)
+    calc
+      |t| * |deriv φ (s * t)| ≤ 1 * C :=
+        mul_le_mul hat hdle (abs_nonneg _) (by norm_num)
+      _ = C := one_mul C
+  have hboundInt : MeasureTheory.Integrable (fun _ : ℝ => C) μ :=
+    MeasureTheory.integrable_const C
+  have hdiff : ∀ᵐ t ∂μ, ∀ s ∈ Set.Icc (-1 : ℝ) 1,
+      HasDerivAt (F · t) (F' s t) s := by
+    filter_upwards with t
+    intro s hsI
+    convert (hφ.1.differentiable (by simp) (s * t)).hasDerivAt.comp s
+      ((hasDerivAt_id s).mul_const t) using 1 <;> simp [F, F'] <;> ring
+  obtain ⟨_, hderiv⟩ := hasDerivAt_integral_of_dominated_loc_of_deriv_le
+    hs hmeas hFint hF'meas hbound hboundInt hdiff
+  have hA : (fun s => ∫ t, F s t ∂μ) = apm_m99j03_average φ := by
+    funext s
+    change (∫ t in Set.Ioc (0 : ℝ) 1, F s t) = apm_m99j03_average φ s
+    rw [← intervalIntegral.integral_of_le (by norm_num : (0 : ℝ) ≤ 1)]
+    rfl
+  have hD : (∫ t, F' 0 t ∂μ) = deriv φ 0 / 2 := by
+    change (∫ t in Set.Ioc (0 : ℝ) 1, F' 0 t) = deriv φ 0 / 2
+    rw [← intervalIntegral.integral_of_le (by norm_num : (0 : ℝ) ≤ 1)]
+    simp only [F', zero_mul, mul_comm _ (deriv φ 0)]
+    rw [intervalIntegral.integral_const_mul, integral_id]
+    ring
+  rw [hA, hD] at hderiv
+  exact hderiv
 
 /-- Why this unblocks `apm_m99j03`: this is the uniform first-order Taylor
 remainder limit after dipole scaling.  Combined with the preceding exact
@@ -236,7 +433,24 @@ theorem apm_m99J03_bridge_dipole_scaled_difference_tendsto
       (fun n : ℕ => (n : ℝ) * ∫ t in (0 : ℝ)..1,
         (φ (-(t / (n : ℝ))) - φ (t / (n : ℝ))))
       Filter.atTop (nhds (-deriv φ 0)) := by
-  sorry
+  have hs := apm_m99j03_symmetric_difference_tendsto
+    (apm_m99j03_average φ) (apm_m99j03_average_hasDerivAt φ hφ)
+  have hs' : Filter.Tendsto
+      (fun n : ℕ => (n : ℝ) *
+        (apm_m99j03_average φ (-(1 / (n : ℝ))) -
+          apm_m99j03_average φ (1 / (n : ℝ))))
+      Filter.atTop (nhds (-deriv φ 0)) := by
+    convert hs using 1 <;> ring
+  apply hs'.congr'
+  filter_upwards with n
+  unfold apm_m99j03_average
+  rw [← intervalIntegral.integral_sub]
+  · apply congrArg ((n : ℝ) * ·)
+    apply intervalIntegral.integral_congr
+    intro t ht
+    congr 2 <;> ring
+  · exact (hφ.1.continuous.comp (continuous_const.mul continuous_id)).intervalIntegrable _ _
+  · exact (hφ.1.continuous.comp (continuous_const.mul continuous_id)).intervalIntegrable _ _
 
 theorem apm_m99j03
     (ψ : ℝ → ℝ) (hψ : ContDiff ℝ (⊤ : ℕ∞) ψ) :
@@ -261,48 +475,12 @@ theorem apm_m99j03
         Filter.Tendsto
           (fun n : ℕ => ∫ x : ℝ, apm_m99j03_dipole n x * φ x)
           Filter.atTop (nhds (-deriv φ 0))) := by
-    /-
-    Boundary (closer hop 1): part (c) is now fully proved by
-    `apm_m99j03_dilation_tendsto`.  Its new domination argument extracts a
-    closed-ball bound from `HasCompactSupport φ`, bounds `ψ` on that compact
-    ball with `IsCompact.bddAbove_image`, handles `n = 0` explicitly, and
-    applies `MeasureTheory.tendsto_integral_of_dominated_convergence` with
-    majorant `C * ‖φ x‖`.
-
-    Parts (a) and (b) remain open.  I additionally inspected the exact
-    interval-integral APIs used by sibling `a02J03`; they provide scaled
-    integral estimates but do not directly rewrite the present raw
-    piecewise Lebesgue integrals.  Closure requires proving support reduction
-    to `[-1/n,1/n]`, evaluating the triangular weights, and for the dipole
-    proving a uniform first-order Taylor remainder for the smooth test
-    function.  These two calculations are deliberately kept behind this
-    single sorry; the dilation limit no longer depends on it.
-
-    Closer hop 2 compiles the normalization infrastructure for part (a).
-    `apm_m99j03_triangle_eq_scaled_profile` proves, for positive `n`,
-    `triangle n x = n * triangle 1 (n*x)`. The unit profile is rewritten as
-    `max (1-|x|) 0` in `apm_m99j03_triangle_one_eq_max`, and is proved
-    continuous and compactly supported in `[-1,1]`. Mathlib source inspection
-    found `Measure.integral_comp_mul_left`, so the remaining triangle route is
-    exactly: apply that whole-line change of variables, compute the unit
-    profile's mass as one, and reuse `apm_m99j03_dilation_tendsto` with the
-    roles of profile and test function exchanged.
-
-    The dipole still needs its analogous scaling/cancellation identity and a
-    first-order remainder estimate. Closed approximate-identity artifacts
-    `a94A03` and `a94J04`, and `ConstructionTargets.RadialMajorantAE`, operate
-    in `Lᵖ`/a.e. convolution settings and do not provide this distributional
-    first-moment calculation.
-
-    Closer hop 3 proves `apm_m99j03_integral_triangle_one`, completing the
-    exact unit-mass calculation for the triangular profile.  The proof reduces
-    the whole-line integral to `[-1,1]`, splits at zero, and evaluates the two
-    affine pieces as `1/2` each.  Thus part (a) is narrowed to the final
-    whole-line change-of-variables assembly using the already compiled scaling
-    and dilation lemmas.  Part (b) remains open at the dipole scaling,
-    cancellation, and uniform first-order Taylor-remainder argument.
-    -/
-    sorry
+    refine ⟨apm_m99J03_bridge_triangle_weak_limit, ?_⟩
+    intro φ hφ
+    have hs := apm_m99J03_bridge_dipole_scaled_difference_tendsto φ hφ
+    apply hs.congr'
+    filter_upwards [Filter.eventually_gt_atTop (0 : ℕ)] with n hn
+    exact (apm_m99J03_bridge_dipole_integral_eq φ hφ n hn).symm
   refine ⟨hab.1, hab.2, ?_⟩
   intro φ hφ
   exact apm_m99j03_dilation_tendsto ψ φ hψ.continuous hφ.1.continuous hφ.2
