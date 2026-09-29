@@ -81083,7 +81083,7 @@
    :other-consumers []}
   {:consumer :t98A06,
    :review-finding
-   "Deterministic machine-graph defect remains at recorded commit d9136926: attempt 3 is still :done, the part-a adapter still depends on attempt 3, the superseded count remains 14, and no atomic supersede-plus-edge-deletion writer operation exists. The row evidence now correctly labels this atomic-ledger-graph-repair-unavailable, but an ordinary PASS/STOP transition cannot resolve it and must not mark the adapter complete. Exact repair requires owner-authorized structural work: extend the ledger writer to atomically set attempt 3 to :superseded and delete only its adapter dependency edge, or apply those two graph mutations directly in one reviewed structural commit; retain the refill dependency and attempts 1-2, and base the hold solely on reviewed attempts 1-2. Fresh verification read commit d9136926 and reran the 675-item validator, reproducing 651 done, 14 superseded, one done-unreviewed, and the offending edge.",
+   "Deterministic structural blocker is unchanged at recorded commit 6c039f93: validator reports 651 done and only 14 superseded; attempt 3 has not been superseded; the part-a adapter still depends on attempts 1, 2, and rejected attempt 3; and build_step.bb still has no dependency-deletion operation (its latest commit remains 8e9127f2). Another ordinary receipt transition cannot repair this graph. Exact repair remains: owner-authorized code/ledger change that atomically supersedes attempt 3, removes only its edge from the part-a adapter, retains the refill dependency and attempts 1-2, validates the worklist, and records the hold basis as reviewed attempts 1-2. Until then the adapter must remain needs-owner/unresolved, not done. Fresh verification this invocation read commit 6c039f93, reran the recorded 675-item validator, inspected the dependency vector, and inspected the writer implementation.",
    :evidence
    {:placeholder-delta 0,
     :residual
@@ -81112,6 +81112,12 @@
       :finding
       "The adapter remains repair-state and its active dependency vector still includes attempts 1, 2, and rejected attempt 3."}],
     :diagnostic-history [],
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1790647258030-27156-ef74e85c",
+     :finding
+     "Deterministic structural blocker is unchanged at recorded commit 6c039f93: validator reports 651 done and only 14 superseded; attempt 3 has not been superseded; the part-a adapter still depends on attempts 1, 2, and rejected attempt 3; and build_step.bb still has no dependency-deletion operation (its latest commit remains 8e9127f2). Another ordinary receipt transition cannot repair this graph. Exact repair remains: owner-authorized code/ledger change that atomically supersedes attempt 3, removes only its edge from the part-a adapter, retains the refill dependency and attempts 1-2, validates the worklist, and records the hold basis as reviewed attempts 1-2. Until then the adapter must remain needs-owner/unresolved, not done. Fresh verification this invocation read commit 6c039f93, reran the recorded 675-item validator, inspected the dependency vector, and inspected the writer implementation."},
     :required-transition
     {:atomic true,
      :supersede
@@ -81130,7 +81136,7 @@
     :changed-paths [],
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t98A06/part-a",
    :acceptance
