@@ -674,4 +674,85 @@ theorem quotientAtlasCompatibility_gives_manifold
     IsManifold (𝓡 2) ∞ (ProjectiveSpaceTopology.Space ℝ 2) :=
   h F
 
+def SphereProjectionInverseBranchLocalAlternative : Prop :=
+  ∀ (F : SphereProjectionLocalInverseFamily) (p : Sphere 2),
+    let y := sphereProjection 2 p
+    F.inverseBranch y ∘ sphereProjection 2 =ᶠ[𝓝 p] id ∨
+      F.inverseBranch y ∘ sphereProjection 2 =ᶠ[𝓝 p] sphereAntipodalN 2
+
+theorem sphereProjectionInverseBranchLocalAlternative :
+    SphereProjectionInverseBranchLocalAlternative := by
+  intro F p
+  let y := sphereProjection 2 p
+  have hy : y ∈ (F.localHomeomorph y).target := by
+    have h := (F.localHomeomorph y).map_source (F.lift_mem_source y)
+    have heq : (F.localHomeomorph y) (F.lift y) = y := by
+      rw [← F.localHomeomorph_eq y]
+      exact F.project_lift y
+    simpa only [heq] using h
+  have hc : ContinuousAt
+      (fun q : Sphere 2 => F.inverseBranch y (sphereProjection 2 q)) p := by
+    have hinv : ContinuousAt (F.inverseBranch y) y :=
+      (F.localHomeomorph y).continuousAt_symm hy
+    have hproj : ContinuousAt (sphereProjection 2) p :=
+      continuous_sphereProjection.continuousAt
+    show ContinuousAt (F.inverseBranch y ∘ sphereProjection 2) p
+    exact @ContinuousAt.comp _ _ _ _ _ _ (sphereProjection 2) p
+      (F.inverseBranch y) (by simpa [y] using hinv) hproj
+  have hinner : ContinuousAt
+      (fun q : Sphere 2 => inner ℝ q.1 (F.inverseBranch y (sphereProjection 2 q)).1) p := by
+    fun_prop (disch := assumption)
+  have ht : ∀ᶠ q in 𝓝 p,
+      sphereProjection 2 q ∈ (F.localHomeomorph y).target :=
+    continuous_sphereProjection.continuousAt.preimage_mem_nhds
+      ((F.localHomeomorph y).open_target.mem_nhds hy)
+  have hfiber : F.inverseBranch y (sphereProjection 2 p) = p ∨
+      F.inverseBranch y (sphereProjection 2 p) = sphereAntipodalN 2 p := by
+    exact (sphereProjectionTwoSheetedLocalModel.2 p
+      (F.inverseBranch y (sphereProjection 2 p))).mp (by
+        exact (F.project_inverseBranch y (sphereProjection 2 p) (by
+          simpa [y] using hy)).symm)
+  rcases hfiber with hsame | hanti
+  · left
+    have hpos : 0 < inner ℝ p.1 (F.inverseBranch y (sphereProjection 2 p)).1 := by
+      rw [hsame, real_inner_self_pos]
+      exact fun hp => by
+        have hn : ‖p.1‖ = 1 := by
+          simpa only [Metric.mem_sphere, dist_zero_right] using p.2
+        rw [hp] at hn
+        norm_num at hn
+    have hev := continuousAt_const.eventually_lt hinner hpos
+    filter_upwards [ht, hev] with q hqt hqpos
+    change F.inverseBranch y (sphereProjection 2 q) = q
+    rcases (sphereProjectionTwoSheetedLocalModel.2 q
+      (F.inverseBranch y (sphereProjection 2 q))).mp
+        ((F.project_inverseBranch y (sphereProjection 2 q) hqt).symm) with h | h
+    · exact h
+    · exfalso
+      rw [h] at hqpos
+      change 0 < inner ℝ q.1 (-q.1) at hqpos
+      rw [inner_neg_right] at hqpos
+      exact (not_lt_of_ge (neg_nonpos.mpr real_inner_self_nonneg)) hqpos
+  · right
+    have hneg : inner ℝ p.1 (F.inverseBranch y (sphereProjection 2 p)).1 < 0 := by
+      rw [hanti]
+      change inner ℝ p.1 (-p.1) < 0
+      rw [inner_neg_right, neg_lt_zero]
+      exact real_inner_self_pos.mpr (by
+        intro hp
+        have hn : ‖p.1‖ = 1 := by
+          simpa only [Metric.mem_sphere, dist_zero_right] using p.2
+        rw [hp] at hn
+        norm_num at hn)
+    have hev := hinner.eventually_lt continuousAt_const hneg
+    filter_upwards [ht, hev] with q hqt hqneg
+    change F.inverseBranch y (sphereProjection 2 q) = sphereAntipodalN 2 q
+    rcases (sphereProjectionTwoSheetedLocalModel.2 q
+      (F.inverseBranch y (sphereProjection 2 q))).mp
+        ((F.project_inverseBranch y (sphereProjection 2 q) hqt).symm) with h | h
+    · exfalso
+      rw [h] at hqneg
+      exact (not_lt_of_ge real_inner_self_nonneg) hqneg
+    · exact h
+
 end ConstructionTargets.RealProjectiveSmoothTarget
