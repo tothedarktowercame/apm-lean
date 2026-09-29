@@ -1039,4 +1039,42 @@ theorem quotientCoordinateLocalNormalForm_gives_contDiffAt
   · exact ((sphereChartTransitionAlternativesSmooth p (F.lift y) u).1 hdom).congr_of_eventuallyEq heq
   · exact ((sphereChartTransitionAlternativesSmooth p (F.lift y) u).2 hdom).congr_of_eventuallyEq heq
 
+
+theorem sphereProjectionQuotientCoordinateContDiffAt :
+    SphereProjectionQuotientCoordinateContDiffAt :=
+  quotientCoordinateLocalNormalForm_gives_contDiffAt
+    sphereProjectionQuotientCoordinateLocalNormalForm
+
+theorem quotientCoordinateContDiffAt_gives_contDiffWithinAt
+    (h : SphereProjectionQuotientCoordinateContDiffAt) :
+    SphereProjectionQuotientCoordinateContDiffWithinAt := by
+  intro F p
+  letI := F.quotientChartedSpace
+  letI : IsManifold (𝓡 2) ∞ (Space ℝ 2) :=
+    sphereProjectionQuotientAtlasCompatibility F
+  exact (h F p).contDiffWithinAt
+
+theorem quotientCoordinateContDiffWithinAt_gives_contMDiffAt
+    (h : SphereProjectionQuotientCoordinateContDiffWithinAt) :
+    SphereProjectionQuotientContMDiffAt := by
+  intro F p
+  letI := F.quotientChartedSpace
+  letI : IsManifold (𝓡 2) ∞ (Space ℝ 2) :=
+    sphereProjectionQuotientAtlasCompatibility F
+  rw [contMDiffAt_iff]
+  exact ⟨continuous_sphereProjection.continuousAt, h F p⟩
+
+theorem quotientContMDiffAt_gives_quotientContMDiff
+    (h : SphereProjectionQuotientContMDiffAt) :
+    SphereProjectionQuotientContMDiff := by
+  intro F p
+  exact h F p
+
+theorem coordinateContDiffAt_reaches_contMDiff :
+    SphereProjectionQuotientContMDiff :=
+  quotientContMDiffAt_gives_quotientContMDiff
+    (quotientCoordinateContDiffWithinAt_gives_contMDiffAt
+      (quotientCoordinateContDiffAt_gives_contDiffWithinAt
+        sphereProjectionQuotientCoordinateContDiffAt))
+
 end ConstructionTargets.RealProjectiveSmoothTarget
