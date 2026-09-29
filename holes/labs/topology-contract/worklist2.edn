@@ -51397,9 +51397,35 @@
     :routes-2026-09-28-rp-sphere-quotient-chart-transition-topo2-r1],
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/rp_sphere_projection_inverse_branch_local.lean",
+      :sha256
+      "d1c1e5bc31808368783cd0b2858d675d8d8f3fd27238552aaca4997b20f99c8b"},
+     :commands
+     [{:cmd
+       "sha256sum /tmp/rp_sphere_projection_inverse_branch_local.lean",
+       :exit 0}
+      {:cmd
+       "lake env lean /tmp/rp_sphere_projection_inverse_branch_local.lean",
+       :exit 0}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_projection_inverse_branch_local.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+     :implementation
+     {:scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"]},
+     :acceptance
+     {:implementation
+      "Add SphereProjectionInverseBranchLocalAlternative and its placeholder-free inhabitant sphereProjectionInverseBranchLocalAlternative to ConstructionTargets/RealProjectiveSmoothTarget.lean exactly as compiled in the fixture. Recompile the target, verify no new placeholders, run the statement registry check, and report axioms plus the next quotient-coordinate normal-form residual."},
+     :residual
+     "The theorem is fully proved by continuity and inner-product sign separation on the two-point projective fibre. After it is banked, the next consumer step transports either eventual branch equality through the standard extended sphere chart and records the exact ordinary or antipodal chart-domain witness."}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
    {:probe
