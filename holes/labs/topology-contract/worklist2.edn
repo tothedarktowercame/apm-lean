@@ -51505,6 +51505,21 @@
       :output
       "SphereProjectionInverseBranchLocalAlternative and sphereProjectionInverseBranchLocalAlternative each depend on [propext, Classical.choice, Quot.sound]."}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1790644042925-26996-2b8831b8",
+     :commands
+     ["git show 7e9e476a -- ConstructionTargets/RealProjectiveSmoothTarget.lean"
+      "sha256sum /tmp/rp_sphere_projection_inverse_branch_local.lean"
+      "lake env lean ConstructionTargets/RealProjectiveSmoothTarget.lean"
+      "lake build ConstructionTargets.RealProjectiveSmoothTarget"
+      "lake env lean /tmp/rp_sphere_projection_inverse_branch_local_axioms.lean"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "comment-stripped placeholder counts from git show 7e9e476a"],
+     :finding
+     "PASS: reviewer codex-7 verified commit 7e9e476a. Its sole changed path exactly matches scope, is the path latest commit, the fixture hashes to d1c1e5bc31808368783cd0b2858d675d8d8f3fd27238552aaca4997b20f99c8b, and committed scoped source hashes to the recorded 2f39034371da0f0223b56e080b07f62765b4706ce96fe430bda895129fc13f5e. Direct elaboration, Lake build, both axiom audits, 130 frozen statements, and the 344-item ledger pass. The theorem fixes y=sphereProjection p, restricts the inverse branch to its open local-homeomorph target, uses continuity of projection, inverse branch, and inner product to preserve the sign selected at p, and eliminates the opposite identity/antipodal sheet with the exact two-sheet fibre law. Thus both eventual-equality branches have the required direction and neighborhood. The module has zero placeholders; frozen t95A04 and t96A07 remain at one each."},
     :commit "7e9e476a7269047f1815ea33fa9de5da949e845d",
     :changed-paths
     ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
@@ -51514,7 +51529,7 @@
      "d1c1e5bc31808368783cd0b2858d675d8d8f3fd27238552aaca4997b20f99c8b"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -51574,7 +51589,7 @@
        :routes-2026-09-28-rp-sphere-local-inverse-family-topo2-r1],
       :other-consumers [:t96A07]}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
