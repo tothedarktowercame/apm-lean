@@ -1270,6 +1270,17 @@ theorem sphereProjectionAndLocalInversesSmooth :
   localInverseRestrictions_gives_projectionAndLocalInversesSmooth
     sphereProjectionLocalInverseRestrictionsContMDiff
 
+theorem projectionAndLocalInversesSmooth_gives_restrictionsSmooth
+    (h : SphereProjectionAndLocalInversesSmooth) :
+    SphereProjectionLocalHomeomorphRestrictionsSmooth := by
+  intro F
+  letI := F.quotientChartedSpace
+  letI : IsManifold (𝓡 2) ∞ (ProjectiveSpaceTopology.Space ℝ 2) :=
+    sphereProjectionQuotientAtlasCompatibility F
+  intro e he
+  refine ⟨?_, (h F).2 e he⟩
+  exact (h F).1.contMDiffOn.congr fun x _hx => (congrFun he x).symm
+
 theorem coordinateContDiffAt_reaches_contMDiff :
     SphereProjectionQuotientContMDiff :=
   quotientContMDiffAt_gives_quotientContMDiff
