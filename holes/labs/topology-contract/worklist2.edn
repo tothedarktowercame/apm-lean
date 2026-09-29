@@ -50725,35 +50725,12 @@
    :review-finding
    "Deterministic row-state and scope-contract defect: routes-2026-09-28-t94a08-affine-chart-homeomorph-topo2-r1 is marked :done-unreviewed, but its current implementation evidence is {:outcome :stop, :disposition :stop} and records no commit. The evidence correctly reports that the complete AffineChartConstruction 2 representation now exists placeholder-free in the reviewed prerequisite ConstructionTargets/T94A08AffineChartHomeomorph.lean, yet this parent row still scopes only ConstructionTargets/RealProjectiveSmoothTarget.lean and requests the unrelated rpSmoothAtlas_exists theorem. Its id, kind, dependencies, and representation still require complex-projective nonvanishing-patch-to-affine OpenPartialHomeomorphs. Fresh compilation of the canonical affine module passes, continuous_coordinates and affineChartConstruction are present, registry is 130/130, the 353-row ledger mechanically validates with this sole done-unreviewed row, both scoped banks have 0/0/0 sorry/admit/axiom counts, and frozen t94A08 retains one sorry. Repair by either superseding this parent row with the completed routes-2026-09-29-t94a08-affine-chart-quotient-compatibility-topo2-r1 prerequisite or changing its scope/acceptance to ConstructionTargets/T94A08AffineChartHomeomorph.lean and recording an actual in-scope affine commit; it cannot pass review while carrying stop evidence and the unrelated real-projective contract.",
    :evidence
-   {:residual
-    "No mathematical or representation residual remains. Only the parent ledger row's stale RealProjectiveSmoothTarget scope and rpSmoothAtlas acceptance prevent a valid implementation transition for the already banked AffineChartConstruction 2.",
-    :outcome :stop,
+   {:outcome :stop,
     :disposition :stop,
+    :seat "topo-6",
     :author "topo-6",
     :reason
-    "Deterministic ledger-contract boundary: the declared representation is now completely implemented and compiled in ConstructionTargets/T94A08AffineChartHomeomorph.lean, with continuous_coordinates, coordinates_chartInverse, chartInverse_coordinates, and affineChartConstruction available through the reviewed prerequisite. This parent row nevertheless authorizes only ConstructionTargets/RealProjectiveSmoothTarget.lean and its acceptance still requests rpSmoothAtlas_exists, an unrelated real-projective theorem already handled by another route. The implementation rule permits edits only within :scope, so recording the existing affine commit would fail exact-scope validation, while copying the affine representation into RealProjectiveSmoothTarget would violate module ownership and repeat the reviewed contract defect. Repair this parent row's scope to ConstructionTargets/T94A08AffineChartHomeomorph.lean and acceptance to consume affineChartConstruction, or supersede it with the completed prerequisite; no mathematical obligation remains.",
-    :commands
-    [{:cmd
-      "lake env lean ConstructionTargets/T94A08AffineChartHomeomorph.lean",
-      :exit 0}
-     {:cmd
-      "rg -n \"theorem (continuous_coordinates|coordinates_chartInverse|chartInverse_coordinates|affineChartConstruction)\" ConstructionTargets/T94A08AffineChartHomeomorph.lean ConstructionTargets/T94A08AffineCoordinateQuotientCompatibility.lean",
-      :exit 0,
-      :output
-      "continuous_coordinates, coordinates_chartInverse, chartInverse_coordinates, affineChartConstruction_of_quotientCompatibility, and affineChartConstruction are present in the canonical affine modules."}
-     {:cmd
-      "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T94A08AffineChartHomeomorph.lean",
-      :exit 1,
-      :expected-exit 1}
-     {:cmd "python3 scripts/statement-registry.py check",
-      :exit 0,
-      :output "130 registered statements match, 0 do not"}
-     {:cmd
-      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
-      :exit 0,
-      :output
-      "topology-worklist: 353 items OK; {:done 324, :superseded 23, :open 2, :blocked 4}"}
-     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    "Unexpressible ledger-repair boundary: the row must either be superseded by its completed prerequisite or have :scope and :acceptance rewritten to ConstructionTargets/T94A08AffineChartHomeomorph.lean, but build_step.bb provides neither operation for an implementation/repair receipt. A :done-unreviewed receipt is rejected unless the union of commit paths equals the stale scope #{ConstructionTargets/RealProjectiveSmoothTarget.lean}; the genuine affine commit f197fad73f26e4db68a67b08b0bfa96b8184d52c changes only ConstructionTargets/T94A08AffineChartHomeomorph.lean. A :stop receipt itself is converted to :done-unreviewed without repairing scope, reproducing the reviewed row-state defect. No in-scope source edit can make the real-projective acceptance implement this complex-projective representation without duplicating the theorem into an unrelated module. The supervisor must use the ledger writer to supersede this row with routes-2026-09-29-t94a08-affine-chart-quotient-compatibility-topo2-r1 or add a supported repair transition that atomically rewrites scope and acceptance.",
     :representation
     {:source
      "The nonvanishing-coordinate open subtypes of complex projective two-space with the frozen topology coinduced from quotientMap on nonzero vectors",
@@ -50761,15 +50738,28 @@
      "The affine coordinate spaces indexed by the two coordinates other than i",
      :direction
      "Explicit OpenPartialHomeomorphs from each projective nonvanishing-coordinate source subtype to its affine coordinate target, with forward map coordinates, inverse chartInverse, exact mutual-inverse equalities, and coordinateLine normalization"},
-    :review
-    {:outcome :fail,
-     :seat "codex-7",
-     :job "invoke-1790656168854-27711-d575687f",
-     :finding
-     "Deterministic row-state and scope-contract defect: routes-2026-09-28-t94a08-affine-chart-homeomorph-topo2-r1 is marked :done-unreviewed, but its current implementation evidence is {:outcome :stop, :disposition :stop} and records no commit. The evidence correctly reports that the complete AffineChartConstruction 2 representation now exists placeholder-free in the reviewed prerequisite ConstructionTargets/T94A08AffineChartHomeomorph.lean, yet this parent row still scopes only ConstructionTargets/RealProjectiveSmoothTarget.lean and requests the unrelated rpSmoothAtlas_exists theorem. Its id, kind, dependencies, and representation still require complex-projective nonvanishing-patch-to-affine OpenPartialHomeomorphs. Fresh compilation of the canonical affine module passes, continuous_coordinates and affineChartConstruction are present, registry is 130/130, the 353-row ledger mechanically validates with this sole done-unreviewed row, both scoped banks have 0/0/0 sorry/admit/axiom counts, and frozen t94A08 retains one sorry. Repair by either superseding this parent row with the completed routes-2026-09-29-t94a08-affine-chart-quotient-compatibility-topo2-r1 prerequisite or changing its scope/acceptance to ConstructionTargets/T94A08AffineChartHomeomorph.lean and recording an actual in-scope affine commit; it cannot pass review while carrying stop evidence and the unrelated real-projective contract."},
-    :seat "topo-6"},
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/T94A08AffineChartHomeomorph.lean",
+      :exit 0}
+     {:cmd
+      "rg -n \"implementation commit paths differ from exact scope|:stop \\(replace-item|:done-unreviewed\" holes/labs/topology-contract/build_step.bb",
+      :exit 0,
+      :output
+      "build_step enforces exact scope for done-unreviewed and converts stop to done-unreviewed; no implementation branch rewrites scope or supersedes the current row."}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "130 registered statements match, 0 do not"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 353 items OK; {:done 324, :superseded 23, :repair 1, :blocked 4, :open 1}"}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :residual
+    "No mathematical or representation work remains: affineChartConstruction is compiled placeholder-free in the completed prerequisite. Only a supervisor-level ledger transition can replace the stale scope/acceptance or supersede this parent without violating exact-scope validation."},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
