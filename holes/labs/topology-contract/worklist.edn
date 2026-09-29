@@ -81083,69 +81083,48 @@
    :other-consumers []}
   {:consumer :t98A06,
    :evidence
-   {:probe
-    {:outcome :revise,
-     :seat "topo-4",
-     :fixture
-     {:path "/tmp/t98a06-part-a-probe.lean",
-      :sha256
-      "cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d"},
-     :commands
-     [{:cmd "test canonical .lake/packages authority", :exit 0}
-      {:cmd
-       "rg apm_t98A06_bridge_local_smooth_submersion_lift, theorem apm_t98a06, and sorry in scoped source",
-       :exit 0,
-       :finding "Bridge absent; one registered sorry remains."}
-      {:cmd "lake env lean /tmp/t98a06-part-a-probe.lean", :exit 0}
-      {:cmd "sha256sum /tmp/t98a06-part-a-probe.lean",
-       :exit 0,
-       :finding
-       "cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :finding "130 registered statements match, 0 do not"}],
-     :warnings
-     [{:kind :repeated-unbanked-prerequisite,
-       :message
-       "The identical local-lift prerequisite remains absent after two dependency attempts. This probe is still REVISE rather than STOP because the boundary is implementation absence, not mathematical refutation; the supervisor should enforce its stop-after-two hold policy."}],
-     :axioms
-     ["propext"
-      "Classical.choice"
-      "Quot.sound"
-      "T98A06Probe.apm_t98A06_bridge_local_smooth_submersion_lift"],
-     :prerequisite
-     {:consumer :t98A06,
-      :phase :implementation,
-      :state :open,
-      :scope ["problems/t98A06/lean/Main.lean"],
-      :dag-node
-      "TOPOLOGY-ROUTES.md/t98A06/local-smooth-submersion-lift",
-      :acceptance
-      {:placeholder-after 1,
-       :fixture-sha256
-       "cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d",
-       :placeholder
-       "the part-(a) portion of the single sorry in apm_t98a06",
-       :axioms :standard-only,
-       :placeholder-before 1,
-       :commands
-       ["lake env lean problems/t98A06/lean/Main.lean"
-        "lake env lean /tmp/t98a06-part-a-probe.lean"
-        "python3 scripts/statement-registry.py check"],
-       :fixture "/tmp/t98a06-part-a-probe.lean",
-       :route-step "t98A06 part (a), route step 2",
-       :implementation
-       "Prove apm_t98A06_bridge_local_smooth_submersion_lift before the registered theorem at the frozen Euclidean-manifold generality. Choose a complement of the kernel, shrink to where the restricted varying mfderiv is invertible, apply its smooth inverse to v(f x), and prove total-space smoothness and the required equality. Preserve registered declarations."},
-      :id :routes-2026-09-29-t98a06-local-smooth-submersion-lift-3,
-      :kind :final-adapter,
-      :depends-on [],
-      :current-residual
-      "The exact local smooth right-inverse theorem remains absent; the compiled fixture already proves convex gluing from it.",
-      :other-consumers []},
-     :residual
-     "No new mathematical boundary was found. The same single prerequisite remains unbanked after two attempts, making t98A06 eligible for the campaign's stop-after-two hold."}},
+   {:residual
+    "Part (a) convexity and global gluing compile. The sole missing interface is the local smooth submersion lift; part (b) remains downstream.",
+    :outcome :stop,
+    :warnings
+    [{:kind :not-refutation,
+      :message
+      "The frozen statement is not refuted. This STOP records the mandated stop-after-two hold after repeated unchanged implementation absence."}],
+    :disposition :stop,
+    :axioms
+    ["propext"
+     "Classical.choice"
+     "Quot.sound"
+     "T98A06Probe.apm_t98A06_bridge_local_smooth_submersion_lift"],
+    :author "topo-4",
+    :reason
+    {:kind :stop-after-two,
+     :boundary
+     "apm_t98A06_bridge_local_smooth_submersion_lift remains absent after three elected implementation dependencies. The exact missing construction is a neighborhoodwise smooth right inverse for the varying surjective manifold derivative, obtained by a kernel complement and smooth inversion in tangent charts.",
+     :mathematical-refutation false,
+     :disposition
+     "Hold t98A06 under the campaign stop-after-two policy; do not elect the identical prerequisite again until external implementation state changes."},
+    :commands
+    [{:cmd "test canonical .lake/packages authority", :exit 0}
+     {:cmd
+      "rg apm_t98A06_bridge_local_smooth_submersion_lift, theorem apm_t98a06, and sorry in scoped source",
+      :exit 0,
+      :finding
+      "Bridge absent; registered theorem still has one sorry."}
+     {:cmd "lake env lean /tmp/t98a06-part-a-probe.lean",
+      :exit 0,
+      :finding
+      "Fixture compiles and depends exactly on the missing local-lift interface."}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "130 registered statements match, 0 do not"}],
+    :fixture
+    {:path "/tmp/t98a06-part-a-probe.lean",
+     :sha256
+     "cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d"},
+    :seat "topo-4"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t98A06/part-a",
    :acceptance
