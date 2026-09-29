@@ -50215,7 +50215,7 @@
    "single-consumer exact projective affine-chart construction",
    :consumer :t94A08,
    :review-finding
-   "Deterministic row-contract defect: routes-2026-09-28-t94a08-affine-chart-homeomorph-topo2-r1 is still kind :representation-comparison with dependencies on the t94A08 quotient-open and affine inverse-normalization rows and a representation contract requiring explicit OpenPartialHomeomorphs from complex-projective nonvanishing-coordinate patches to affine coordinate spaces, but recorded commit 922a62d462624618b2d2a437288a31b62dfe7974 changes only ConstructionTargets/RealProjectiveSmoothTarget.lean and merely adds rpSmoothAtlas_exists : Nonempty (SmoothAtlas 2). It constructs no affine chart homeomorphism, proves none of the required source/target, coordinates/chartInverse, mutual-inverse, or coordinateLine normalization fields, and its recorded scope is unrelated to the row representation. Mechanical source hash, compile/build, axiom, registry, ledger, and placeholder gates pass, but they validate the wrong theorem. Repair by restoring this row acceptance/scope/commit to an actual AffineChartConstruction 2 implementation over the frozen complex-projective topology; if rpSmoothAtlas_exists is desired, record it under a separate correctly identified real-projective atlas row.",
+   "Deterministic row-state and contract defect persists: the current evidence for routes-2026-09-28-t94a08-affine-chart-homeomorph-topo2-r1 is {:outcome :stop, :disposition :stop} and records no implementation commit, explicitly because continuous_coordinates, coordinates_chartInverse, and chartInverse_coordinates are absent; nevertheless the row is marked :done-unreviewed. Its scope and implementation acceptance still target ConstructionTargets/RealProjectiveSmoothTarget.lean and rpSmoothAtlas_exists, while its id, kind, dependencies, and representation require AffineChartConstruction 2 with explicit complex-projective patch-to-affine OpenPartialHomeomorphs. Fresh Lean compilation of the normalization bank passes, fresh search confirms the three required affine results remain absent, registry is 130/130, ledger validation mechanically passes with this sole done-unreviewed row, scoped banks contain no placeholders, and frozen t94A08 still has one sorry. Repair the ledger state to :repair/open and replace the unrelated scope/acceptance with a genuine affine-chart implementation task supplying quotient-patch coordinate continuity and both mutual-inverse identities; only then record and review a commit constructing AffineChartConstruction 2.",
    :evidence
    {:outcome :stop,
     :seat "topo-6",
@@ -50241,9 +50241,15 @@
     :residual
     "Repair the row contract to target a genuine affine-chart module and first supply the quotient-patch continuity of coordinates plus the two exact mutual-inverse identities; those are the missing mathematical inputs between the banked normalization packet and AffineChartConstruction 2.",
     :author "topo-6",
-    :disposition :stop},
+    :disposition :stop,
+    :review
+    {:outcome :fail,
+     :seat "codex-7",
+     :job "invoke-1790653019942-27517-95c38701",
+     :finding
+     "Deterministic row-state and contract defect persists: the current evidence for routes-2026-09-28-t94a08-affine-chart-homeomorph-topo2-r1 is {:outcome :stop, :disposition :stop} and records no implementation commit, explicitly because continuous_coordinates, coordinates_chartInverse, and chartInverse_coordinates are absent; nevertheless the row is marked :done-unreviewed. Its scope and implementation acceptance still target ConstructionTargets/RealProjectiveSmoothTarget.lean and rpSmoothAtlas_exists, while its id, kind, dependencies, and representation require AffineChartConstruction 2 with explicit complex-projective patch-to-affine OpenPartialHomeomorphs. Fresh Lean compilation of the normalization bank passes, fresh search confirms the three required affine results remain absent, registry is 130/130, ledger validation mechanically passes with this sole done-unreviewed row, scoped banks contain no placeholders, and frozen t94A08 still has one sorry. Repair the ledger state to :repair/open and replace the unrelated scope/acceptance with a genuine affine-chart implementation task supplying quotient-patch coordinate continuity and both mutual-inverse identities; only then record and review a commit constructing AffineChartConstruction 2."}},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
