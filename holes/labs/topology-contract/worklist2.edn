@@ -52451,6 +52451,21 @@
    :routes-2026-09-28-t97a04-memberwise-cover-small-naturality-topo2-r1,
    :kind :reusable-theorem,
    :depends-on []}
+  {:bounded-exception
+   "single-consumer bounded cover-small homology comparison naturality",
+   :consumer :t97A04,
+   :phase :probe,
+   :state :open,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:probe
+    "Compile the placeholder-free fixture /tmp/production_cover_small_homology_naturality.lean. Prove coverSmallHomologyIso_naturality_of_square: any cover-small chain map commuting with the two ambient inclusions induces the corresponding commuting square between cover-small homology and production singular homology. Specialize it as memberwiseCoverSmallHomology_naturality for the banked canonical memberwise cover-small map. Keep the statement at integral coefficients and arbitrary degree, exactly as required to conjugate productionConnecting for t97A04."},
+   :id
+   :routes-2026-09-29-t97a04-cover-small-homology-naturality-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-09-28-t97a04-memberwise-cover-small-naturality-topo2-r1]}
   {:bounded-exception "single-consumer bounded naturality theorem",
    :consumer :t97A04,
    :evidence
@@ -52458,25 +52473,31 @@
     {:outcome :revise,
      :seat "topo-8",
      :fixture
-     {:path "/tmp/production_connecting_memberwise_contract.lean",
+     {:path "/tmp/production_cover_small_homology_naturality.lean",
       :sha256
-      "8cb0953eb9f0316a8006bec0d802f5031943f220d5e4bc795ebd20bbf0bae25c"},
+      "67122ec18a860a037ace897c27daced3647ea3b3472877493122cdefa637564f"},
      :commands
      [{:cmd
-       "lake env lean /tmp/production_connecting_memberwise_contract.lean",
+       "lake env lean /tmp/production_cover_small_homology_naturality.lean",
        :exit 0}
       {:cmd
-       "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/production_connecting_memberwise_contract.lean",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/production_cover_small_homology_naturality.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+      {:cmd
+       "sha256sum /tmp/production_cover_small_homology_naturality.lean",
+       :exit 0}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/production_cover_small_homology_naturality.lean",
        :exit 1,
-       :expected-exit 1}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "130 registered statements match, 0 do not"}],
+       :finding
+       "A sequential rewrite collapsed only the left composite of homology maps; an explicit three-step calculation using homologyMap_comp on both sides proved the intended square."}],
      :residual
-     "HomologicalComplex.HomologySequence.delta_naturality is banked, and SingularExcision contains naturality for a cover restricted to a subspace. It does not contain the chain map induced by an arbitrary continuous f that sends every named source-cover member into the corresponding target-cover member. Without that map and its square with the ambient singular-chain map, there is no ShortComplex.Hom between the two Boolean Mayer-Vietoris sequences to which delta_naturality can be applied. The compiled prerequisite fixes precisely this missing cover-small chain-level interface.",
+     "The memberwise cover-small chain map is banked, and the compiled prerequisite proves that it commutes with the coverSmallHomologyIso comparisons to production singular homology in every degree. The connecting-map row still needs the Boolean intersection and pieces component maps assembled into a ShortComplex.Hom; delta_naturality can then be conjugated through this new homology square.",
      :prerequisite
      {:bounded-exception
-      "single-consumer bounded memberwise cover-small chain naturality",
+      "single-consumer bounded cover-small homology comparison naturality",
       :consumer :t97A04,
       :phase :probe,
       :state :open,
@@ -52484,13 +52505,14 @@
       :dag-node "TOPOLOGY-ROUTES.md",
       :acceptance
       {:probe
-       "Compile a placeholder-free proof of ConstructionTargets.ProductionConnectingNaturality.MemberwiseCoverSmallNaturality from /tmp/production_connecting_memberwise_contract.lean. Given f : C(X,Y), covers U and V with f image (U a) contained in V a for every a, construct the induced chain map F from coverSmallChains U to coverSmallChains V by lifting the ambient simplicial map through the target cover-small subcomplex, and prove F followed by the target inclusion equals the source inclusion followed by the ambient singular-chain map. State no stronger unrestricted cover naturality. This is the exact prerequisite for building the Boolean-cover ShortComplex.Hom and applying delta_naturality in t97A04 route step 7."},
+       "Compile the placeholder-free fixture /tmp/production_cover_small_homology_naturality.lean. Prove coverSmallHomologyIso_naturality_of_square: any cover-small chain map commuting with the two ambient inclusions induces the corresponding commuting square between cover-small homology and production singular homology. Specialize it as memberwiseCoverSmallHomology_naturality for the banked canonical memberwise cover-small map. Keep the statement at integral coefficients and arbitrary degree, exactly as required to conjugate productionConnecting for t97A04."},
       :id
-      :routes-2026-09-28-t97a04-memberwise-cover-small-naturality-topo2-r1,
+      :routes-2026-09-29-t97a04-cover-small-homology-naturality-topo2-r1,
       :kind :reusable-theorem,
-      :depends-on []}}},
+      :depends-on
+      [:routes-2026-09-28-t97a04-memberwise-cover-small-naturality-topo2-r1]}}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -52500,7 +52522,8 @@
    :kind :reusable-theorem,
    :depends-on
    [:routes-2026-09-28-checkpoint-topo2
-    :routes-2026-09-28-t97a04-memberwise-cover-small-naturality-topo2-r1]}
+    :routes-2026-09-28-t97a04-memberwise-cover-small-naturality-topo2-r1
+    :routes-2026-09-29-t97a04-cover-small-homology-naturality-topo2-r1]}
   {:bounded-exception
    "single-consumer exact type-valued strengthening of the existing Nielsen-Schreier proof",
    :consumer :t00J08,
