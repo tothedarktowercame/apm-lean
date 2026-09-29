@@ -80392,13 +80392,28 @@
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "130 registered statements match, 0 do not"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1790641149441-26848-ae5ac2ba",
+     :commands
+     ["git show/diff-tree recorded commit 0021e047"
+      "bb worklist_check on recorded worklist"
+      "verify canonical .lake/packages; lake env lean source and fixture"
+      "sha256sum fixture and STATEMENTS.json"
+      "statement-registry check and fingerprint t99J04"
+      "comment-stripped parent/commit/fixture placeholder census"
+      "inspect theorem orientations and Mathlib/ConstructionTargets boundary"
+      "git diff --check 0021e047^ 0021e047"],
+     :finding
+     "PASS: reviewer codex-3 is distinct from evidence author topo-4. Commit 0021e047 changes only the worklist, consistent with the empty row scope and STOP disposition; the recorded 660-item snapshot validates. The source is unchanged from its parent and retains exactly 3 placeholders; the exact local-IFT fixture has 0 textual placeholders, compiles with inherited sorryAx, and reproduces SHA-256 42816741b4cc4bdb68359d47b85a4b5d64ac1b1698d9b08f20e2c1019b7c82c6. Registry check is 130/130, registry hash ea373b6df8489acf2636af8b4e03ac3acc7baaeef97a366e4f28a70f3d1cd1a0 and frozen t99J04 hash f212fd5b83bec0f7fb083dcf9ed6e9e175394fdf3f3a3cd3d9f284709c6eea3c reproduce. The dependency direction is correct: ContMDiffAt plus bijective mfderiv must first yield IsLocalDiffeomorphAt; only then can coordinate-map mfderiv bijectivity and the already-compiled compact-connected surjectivity assembly close the frozen conjunctions. Mathlib explicitly marks that manifold local-IFT implication TODO, and the Euclidean OpenPartialHomeomorph API does not supply the required chart PartialDiffeomorph conjugation and fderiv/mfderiv transport. Thus the full exact-statement acceptance fixture cannot yet be constructed, and the recorded STOP identifies the deterministic prerequisite without claiming closure."},
     :fixture
     {:path "/tmp/t99j04-local-ift-consumer.lean",
      :sha256
      "42816741b4cc4bdb68359d47b85a4b5d64ac1b1698d9b08f20e2c1019b7c82c6"},
     :seat "topo-4"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t99J04",
    :acceptance
@@ -80433,7 +80448,7 @@
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
