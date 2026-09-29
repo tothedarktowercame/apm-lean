@@ -81087,23 +81087,17 @@
    :evidence
    {:placeholder-delta 0,
     :residual
-    "At c0867965 the writer remains 8e9127f2 and the ledger still has 14 superseded rows. This empty-scope repair row cannot atomically supersede attempt 3 and delete its adapter edge; stop redispatching until that structural change is committed externally.",
+    "At 1638fe36 the writer remains 8e9127f2 and the graph still reports 14 superseded rows. The required atomic supersession and edge deletion have not landed; this empty-scope row cannot perform them, so do not redispatch until external structural state changes.",
     :outcome :stop,
     :disposition :stop,
     :author "topo-2",
-    :reason :atomic-graph-repair-unavailable,
+    :reason :external-structural-change-absent,
     :commands
     [{:cmd
       "git rev-parse --short HEAD && git log -1 --format=%h -- holes/labs/topology-contract/build_step.bb && bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
       :exit 0,
       :finding
-      "HEAD c0867965; writer 8e9127f2; 675 items OK; 651 done; 14 superseded; 1 repair."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1790650679199-27353-ccc4df1a",
-     :finding
-     "Deterministic graph defect persists in recorded commit 6e2c924e. Its sole changed file is the worklist, and the empty-scope transition only records that atomic repair is unavailable: attempt 3 remains :done, the adapter remains :done-unreviewed and still depends on attempt 3, the validator reports 14 superseded items, and build_step.bb remains at 8e9127f2. Exact repair requires an owner-authorized structural commit or writer enhancement that atomically marks attempt 3 :superseded and deletes only its adapter edge, retaining the refill edge and reviewed attempts 1-2 as the stop-after-two basis. Fresh recorded-snapshot verification reproduced 675 items OK and fixture SHA-256 cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d. Stop redispatching until that external structural change is committed."},
+      "HEAD 1638fe36; writer 8e9127f2; 675 items OK; 651 done; 14 superseded; 1 repair."}],
     :required-transition
     {:supersede
      :routes-2026-09-29-t98a06-local-smooth-submersion-lift-3,
@@ -81117,7 +81111,7 @@
     :changed-paths [],
     :seat "topo-2"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t98A06/part-a",
    :acceptance
