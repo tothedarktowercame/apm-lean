@@ -51886,50 +51886,31 @@
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
    :evidence
-   {:probe
-    {:outcome :revise,
-     :seat "topo-8",
-     :fixture
-     {:path
-      "/tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
-      :sha256
-      "8a2841fa8e32d8aeb66056091e36637907b159edeef7a02e5819dc387fbb343e"},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
-       :exit 0}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
-       :exit 1,
-       :finding
-       "The first coordinate-to-manifold reduction did not explicitly reinstall F.quotientChartedSpace before rewriting contMDiffAt_iff; installing the exact charted-space and manifold instances corrected elaboration."}],
-     :warnings
-     ["Lean emitted only the stylistic suggestion to combine consecutive intro commands in quotientContMDiffAt_gives_quotientContMDiff."],
-     :residual
-     "Continuity of sphereProjection 2 is already banked, so the pointwise manifold-smoothness goal reduces exactly via contMDiffAt_iff to one ContDiffWithinAt statement for the extended-chart coordinate expression. The compiled prerequisite fixes that expression, its Set.range (real model 2) domain, and its exact base coordinate. Once proved by the local ordinary-or-antipodal normal form, the compiled reductions yield ContMDiffAt at every p and then global ContMDiff.",
-     :prerequisite
-     {:consumer :t95A04,
-      :phase :probe,
-      :state :open,
-      :scope [],
-      :dag-node "TOPOLOGY-ROUTES.md",
-      :acceptance
-      {:probe
-       "Compile a placeholder-free inhabitant of SphereProjectionQuotientCoordinateContDiffWithinAt in /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean. For every inverse family F with exactly F.quotientChartedSpace and sphereProjectionQuotientAtlasCompatibility F installed, and every p in Sphere 2, prove ContDiffWithinAt real infinity of extChartAt (real model 2) (sphereProjection 2 p) composed with sphereProjection 2 composed with the inverse extChartAt (real model 2) p, within Set.range (real model 2), at extChartAt (real model 2) p p. Prove the coordinate expression eventually equals the banked ordinary or antipodal-inserted sphere transition on the relevant chart domains. Retain quotientCoordinateContDiffWithinAt_gives_contMDiffAt and quotientContMDiffAt_gives_quotientContMDiff. This supplies the exact coordinate calculus needed by t95A04 and t96A07."},
-      :id
-      :routes-2026-09-29-rp-sphere-projection-coordinate-contdiffwithin-topo2-r1,
-      :kind :reusable-theorem,
-      :depends-on
-      [:routes-2026-09-28-rp-sphere-transition-alternatives-topo2-r1
-       :routes-2026-09-28-rp-sphere-quotient-chart-transition-topo2-r1],
-      :other-consumers [:t96A07]}}},
+   {:outcome :stop,
+    :seat "topo-8",
+    :reason
+    "Fixture-identity boundary: the prerequisite evidence pins /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean at sha256 8a2841fa8e32d8aeb66056091e36637907b159edeef7a02e5819dc387fbb343e, while this row requires adding SphereProjectionQuotientContMDiffAt to that same pathname. The requested theorem and its global ContMDiff reduction compile placeholder-free at sha256 8e9ca39a93051cad22482b9bdb484e2fa1e736e72a3230775a4fb331657f56f2. The same file cannot retain the prerequisite hash and contain the descendant theorem. Use immutable per-row fixture paths or archived dependency artifacts.",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
+      :exit 0,
+      :output
+      "8e9ca39a93051cad22482b9bdb484e2fa1e736e72a3230775a4fb331657f56f2  /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean"}
+     {:cmd
+      "lake env lean /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
+      :exit 0}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "130 registered statements match, 0 do not"}],
+    :residual
+    "No mathematical obligation remains: contMDiffAt_iff combines the banked continuity of sphereProjection with the compiled coordinate ContDiffWithinAt theorem, and quotientContMDiffAt_gives_quotientContMDiff then yields global smoothness. Only the shared mutable fixture identity prevents a ledger-valid GO.",
+    :author "topo-8",
+    :disposition :stop},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
