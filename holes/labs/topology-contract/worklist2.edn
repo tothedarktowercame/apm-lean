@@ -52782,42 +52782,59 @@
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/rp_smooth_atlas_descent_contract.lean",
-      :sha256
-      "c879e15f4441853458fe2312e1cc2ee2f68a397be09abb8bea4db69c06fc7be0"},
-     :commands
-     [{:cmd "lake env lean /tmp/rp_smooth_atlas_descent_contract.lean",
-       :exit 0}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_smooth_atlas_descent_contract.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "130 registered statements match, 0 do not"}
-      {:cmd "sha256sum /tmp/rp_smooth_atlas_descent_contract.lean",
-       :exit 0}],
-     :diagnostic-history
-     [{:cmd "lake env lean /tmp/rp_smooth_atlas_descent_contract.lean",
-       :exit 1,
-       :finding
-       "The prerequisite implementation had already banked the descent-contract declarations, so the first fixture redeclared them. Its additional local-diffeomorphism example also placed the proposition before installing the atlas ChartedSpace instance."}
-      {:cmd "lake env lean /tmp/rp_smooth_atlas_descent_contract.lean",
-       :exit 1,
-       :finding
-       "After removing duplicate declarations, the standalone local-diffeomorphism example still required a ChartedSpace while elaborating its type, before its proof-local instance could exist. Removing that redundant example left the requested SmoothAtlas construction."}],
-     :implementation
-     {:scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
-      :acceptance
-      {:implementation
-       "Add the dimension-two construction noncomputable def rpSmoothAtlas : SmoothAtlas 2 exactly as compiled. Define it by Classical.choice from sphereProjectionSmoothDescentContract applied to sphereProjectionTwoSheetedLocalModel and sphereAntipodalN_contMDiff. Do not generalize to unsupported dimensions; t95A04 and t96A07 both require SmoothAtlas 2. Run the module compile, placeholder scan, and statement-registry check."}},
-     :residual
-     "The sole shared atlas step for t95A04 and t96A07 is complete: rpSmoothAtlas is a concrete SmoothAtlas 2 whose charts use the frozen quotient topology and whose projection field is the banked local diffeomorphism. Consumer adapters can now install rpSmoothAtlas.charts and rpSmoothAtlas.smooth."}},
+   {:placeholder-delta 0,
+    :residual
+    "The shared dimension-two projective smooth atlas is now a concrete definition whose charts use the frozen quotient topology and whose projection field is the banked local diffeomorphism. The remaining work is in the t95A04 and t96A07 consumer adapters, which can install rpSmoothAtlas.charts and rpSmoothAtlas.smooth before proving their descended-map properties.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:registry "130 registered statements match, 0 do not",
+     :scoped-source-sha256
+     "3819d04af32b7d2615b84d7bcaf3676894c03369281d6ca6866af45831fcf88f"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "sha256sum /tmp/rp_smooth_atlas_descent_contract.lean",
+      :exit 0,
+      :output
+      "c879e15f4441853458fe2312e1cc2ee2f68a397be09abb8bea4db69c06fc7be0  /tmp/rp_smooth_atlas_descent_contract.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/RealProjectiveSmoothTarget.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.RealProjectiveSmoothTarget",
+      :exit 0,
+      :output "Build completed successfully (8241 jobs)."}
+     {:cmd
+      "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/RealProjectiveSmoothTarget.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "130 registered statements match, 0 do not"}
+     {:cmd "lake env lean /dev/stdin axiom audit for rpSmoothAtlas",
+      :exit 0,
+      :output
+      "The declaration depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 348 items OK; {:done 317, :superseded 23, :open 3, :blocked 5}"}
+     {:cmd "git show --format='%H%n%an <%ae>' --name-only HEAD",
+      :exit 0,
+      :output
+      "256b96650cfa9e6f032b77354e40a9cc6fb38956\nJoe Corneli <holtzermann17@gmail.com>\n\nConstructionTargets/RealProjectiveSmoothTarget.lean"}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "256b96650cfa9e6f032b77354e40a9cc6fb38956",
+    :changed-paths
+    ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
+    :fixture
+    {:path "ConstructionTargets/RealProjectiveSmoothTarget.lean",
+     :sha256
+     "3819d04af32b7d2615b84d7bcaf3676894c03369281d6ca6866af45831fcf88f"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
