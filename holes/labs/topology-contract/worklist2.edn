@@ -50215,40 +50215,68 @@
    "single-consumer affine coordinate patch preimage identification",
    :consumer :t94A08,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/t94A08_restricted_quotient_preimage.lean",
-      :sha256
-      "fb6d2732952e49e65583d3f2fdcbdc0f1b8c1478c17370804f78b407238627d7"},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/t94A08_restricted_quotient_preimage.lean",
-       :exit 0}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t94A08_restricted_quotient_preimage.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "130 registered statements match, 0 do not"}
-      {:cmd "sha256sum /tmp/t94A08_restricted_quotient_preimage.lean",
-       :exit 0}],
-     :implementation
-     {:scope
-      ["ConstructionTargets/T94A08AffineCoordinatePatchPreimageIdentification.lean"],
-      :declarations
-      ["ConstructionTargets.T94A08ProjectiveConic.quotientMap_rep_coord_ne_zero_iff"],
-      :acceptance
-      {:compile
-       "lake env lean ConstructionTargets/T94A08AffineCoordinatePatchPreimageIdentification.lean",
-       :no-placeholders true,
-       :statement-registry true,
-       :axioms :standard-only}},
-     :residual
-     "Promote the compiled scale-invariance equivalence into the single canonical target file. The next consumer uses it to identify the restricted quotient map's preimage subtype exactly, after which projectiveQuotientOpenAuthority and IsQuotientMap.restrictPreimage_isOpen construct AffineCoordinatePatchRestrictedQuotient."}},
+   {:placeholder-delta 0,
+    :residual
+    "The scale-invariance equivalence quotientMap_rep_coord_ne_zero_iff is now banked at the canonical target path. The next consumer can identify the restricted quotient map preimage exactly and combine projectiveQuotientOpenAuthority with IsQuotientMap.restrictPreimage_isOpen to construct AffineCoordinatePatchRestrictedQuotient.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:registry "130 registered statements match, 0 do not",
+     :scoped-source-sha256
+     "fb6d2732952e49e65583d3f2fdcbdc0f1b8c1478c17370804f78b407238627d7"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "sha256sum /tmp/t94A08_restricted_quotient_preimage.lean",
+      :exit 0,
+      :output
+      "fb6d2732952e49e65583d3f2fdcbdc0f1b8c1478c17370804f78b407238627d7  /tmp/t94A08_restricted_quotient_preimage.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/T94A08AffineCoordinatePatchPreimageIdentification.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.T94A08AffineCoordinatePatchPreimageIdentification",
+      :exit 0,
+      :output "Build completed successfully (8244 jobs)."}
+     {:cmd
+      "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T94A08AffineCoordinatePatchPreimageIdentification.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "130 registered statements match, 0 do not"}
+     {:cmd
+      "lake env lean /dev/stdin with import and #print axioms ConstructionTargets.T94A08ProjectiveConic.quotientMap_rep_coord_ne_zero_iff",
+      :exit 0,
+      :output
+      "depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 353 items OK; {:done 319, :superseded 23, :open 2, :blocked 9}"}
+     {:cmd "git show --format='%H%n%an <%ae>' --name-only HEAD",
+      :exit 0,
+      :output
+      "2a58cfdb6f002cf0428bc642ad88e218af886b31\nJoe Corneli <holtzermann17@gmail.com>\n\nConstructionTargets/T94A08AffineCoordinatePatchPreimageIdentification.lean"}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :diagnostic-history
+    [{:cmd
+      "lake env lean /dev/stdin importing the new module before lake build",
+      :exit 1,
+      :finding
+      "The source compiled directly, but the standalone import-based axiom audit required the module olean. Building the scoped module produced it, and the repeated axiom audit passed."}],
+    :commit "2a58cfdb6f002cf0428bc642ad88e218af886b31",
+    :changed-paths
+    ["ConstructionTargets/T94A08AffineCoordinatePatchPreimageIdentification.lean"],
+    :fixture
+    {:path
+     "ConstructionTargets/T94A08AffineCoordinatePatchPreimageIdentification.lean",
+     :sha256
+     "fb6d2732952e49e65583d3f2fdcbdc0f1b8c1478c17370804f78b407238627d7"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/T94A08AffineCoordinatePatchPreimageIdentification.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
