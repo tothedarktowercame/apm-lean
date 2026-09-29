@@ -51684,9 +51684,9 @@
     :changed-paths
     ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
     :fixture
-    {:path "/tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
+    {:path "ConstructionTargets/RealProjectiveSmoothTarget.lean",
      :sha256
-     "883aac9990abd2d1203ece3453e7f22d430dbb7526e3a3c6169e2f7b30e71b8d"},
+     "f7db6c9c5174251c7bf22a2a0ab38767e333969f6355b9a65e942ba4eaf546cb"},
     :seat "topo-6"},
    :phase :implementation,
    :state :done,

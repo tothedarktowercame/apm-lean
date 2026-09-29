@@ -622,13 +622,15 @@
   (let [fixture-path (nth *command-line-args* 2 "")
         old-hash (nth *command-line-args* 3 "")
         new-hash (nth *command-line-args* 4 "")
+        new-path (nth *command-line-args* 5 fixture-path)
         replacements (atom 0)
         repaired (walk/postwalk
                   (fn [x]
                     (if (and (map? x)
                              (= fixture-path (:path x))
                              (= old-hash (:sha256 x)))
-                      (do (swap! replacements inc) (assoc x :sha256 new-hash))
+                      (do (swap! replacements inc)
+                          (assoc x :path new-path :sha256 new-hash))
                       x))
                   data)]
     (when-not (= 1 @replacements)
@@ -636,7 +638,7 @@
                       {:path fixture-path :old-hash old-hash
                        :matches @replacements})))
     (write-ledger! repaired)
-    (println "repaired fixture hash for" fixture-path)))
+    (println "repaired fixture evidence for" fixture-path "->" new-path)))
 
 ;; A refusal has to arrive as a sentence. build_step.bb's failures reach the
 ;; operator through topology-build-loop.sh's `die "invalid receipt ...: $out"`
