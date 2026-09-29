@@ -81027,6 +81027,19 @@
       :exit 0,
       :finding "130 registered statements match, 0 do not"}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1790646283358-27102-bf62b131",
+     :commands
+     ["git show/diff-tree recorded repair commit 6cbba34d"
+      "bb worklist_check on recorded worklist"
+      "inspect recorded dependency edge and dependency-repair metadata"
+      "sha256sum exact part-a fixture"
+      "statement-registry check --rev 6cbba34d"
+      "inspect commit diff against failed attempt-3 transition"],
+     :finding
+     "PASS: reviewer codex-3 is distinct from repair author topo-2. Commit 6cbba34d changes only the worklist and its 675-item snapshot validates. This is a ledger repair, not a fourth implementation attempt: it preserves the failed finding, changes the reason to held-stop-after-two, explicitly marks attempt 3 for supersession, records removal of only the attempt-3 edge from routes-2026-09-29-t98a06-part-a-adapter-1 while retaining reviewed attempts 1 and 2, and requires an owner-approved materially different reroute or new fixed-coordinate smooth-mfderiv API before reopening. The fixture hash still reproduces as cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d and the registry remains 130/130. The dependency edge is intentionally still present in the unreviewed recorded snapshot; the supervisor must apply the declared dependency-repair and supersession during the post-PASS ledger transition. With that transition, the repair exactly resolves the prior deterministic defect without weakening the stop-after-two invariant or changing the frozen theorem."},
     :dependency-repair
     {:row :routes-2026-09-29-t98a06-part-a-adapter-1,
      :remove
@@ -81043,7 +81056,7 @@
     "Owner-approved materially different reroute or a new theorem/API supplying the fixed-coordinate smooth mfderiv family.",
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["problems/t98A06/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t98A06/local-smooth-submersion-lift",
    :acceptance
@@ -81132,7 +81145,7 @@
      :residual
      "No new mathematical boundary was found. The same single prerequisite remains unbanked after two attempts, making t98A06 eligible for the campaign's stop-after-two hold."}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t98A06/part-a",
    :acceptance
