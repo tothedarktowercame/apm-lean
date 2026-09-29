@@ -81082,6 +81082,8 @@
    "The exact local smooth right-inverse theorem remains absent; the compiled fixture already proves convex gluing from it.",
    :other-consumers []}
   {:consumer :t98A06,
+   :review-finding
+   "Deterministic incomplete-repair defect: the prior PASS required the supervisor to supersede routes-2026-09-29-t98a06-local-smooth-submersion-lift-3 and remove only its edge from routes-2026-09-29-t98a06-part-a-adapter-1, retaining attempts 1 and 2. Recorded commit 885154fd instead has attempt 3 in :done state, keeps it in the adapter depends-on vector, leaves the superseded count at 14, and describes the hold as occurring after three elected dependencies. This preserves the stop-after-two violation in the machine-readable graph even though the adapter STOP conclusion is otherwise correct. Repair the actual ledger fields: set attempt 3 to :superseded, remove its dependency edge from the part-a adapter, and state that the hold follows the two independently reviewed zero-progress STOPs 1 and 2. Fresh gates reproduced the 675-item validation, fixture hash cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d, fixture/source Lean results, 130/130 registry check, frozen hash cd9f181f88b216bb58c5fa68c3a85f32117f74dd089f7591d9827b0eb5b8b8f5, and the one remaining source placeholder.",
    :evidence
    {:residual
     "Part (a) convexity and global gluing compile. The sole missing interface is the local smooth submersion lift; part (b) remains downstream.",
@@ -81118,13 +81120,19 @@
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "130 registered statements match, 0 do not"}],
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1790646476574-27113-50a761ad",
+     :finding
+     "Deterministic incomplete-repair defect: the prior PASS required the supervisor to supersede routes-2026-09-29-t98a06-local-smooth-submersion-lift-3 and remove only its edge from routes-2026-09-29-t98a06-part-a-adapter-1, retaining attempts 1 and 2. Recorded commit 885154fd instead has attempt 3 in :done state, keeps it in the adapter depends-on vector, leaves the superseded count at 14, and describes the hold as occurring after three elected dependencies. This preserves the stop-after-two violation in the machine-readable graph even though the adapter STOP conclusion is otherwise correct. Repair the actual ledger fields: set attempt 3 to :superseded, remove its dependency edge from the part-a adapter, and state that the hold follows the two independently reviewed zero-progress STOPs 1 and 2. Fresh gates reproduced the 675-item validation, fixture hash cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d, fixture/source Lean results, 130/130 registry check, frozen hash cd9f181f88b216bb58c5fa68c3a85f32117f74dd089f7591d9827b0eb5b8b8f5, and the one remaining source placeholder."},
     :fixture
     {:path "/tmp/t98a06-part-a-probe.lean",
      :sha256
      "cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d"},
     :seat "topo-4"},
-   :phase :probe,
-   :state :done-unreviewed,
+   :phase :implementation,
+   :state :repair,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t98A06/part-a",
    :acceptance
