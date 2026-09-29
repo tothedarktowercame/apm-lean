@@ -52234,30 +52234,51 @@
    "single-consumer bounded integral degree-2 MV packet",
    :consumer :t01A02,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/t01A02_punctured_torus_h2.lean",
-      :sha256
-      "81f113321f3e9859e7d76cfb6ad6c47afef8f3113aae37c005a5926e26c259af"},
-     :commands
-     [{:cmd "lake env lean /tmp/t01A02_punctured_torus_h2.lean",
-       :exit 0}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t01A02_punctured_torus_h2.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-      {:cmd "sha256sum /tmp/t01A02_punctured_torus_h2.lean", :exit 0}],
-     :implementation
-     {:scope ["ConstructionTargets/T01A02PuncturedTorusH2.lean"]},
-     :acceptance
-     {:implementation
-      "Create ConstructionTargets/T01A02PuncturedTorusH2.lean from the compiled fixture. Bank puncturedTorus_H2_isZero using the exact production Mayer-Vietoris union segment and the reviewed cover packet, and bank H2map_eq_zero_of_factor at the integral degree-two generality compiled there. Compile the target, verify no placeholders, run the statement registry check, and print axioms for both headline theorems."},
-     :residual
-     "The punctured-torus integral H2 object is zero and every integral H2 map factoring through a zero-H2 space is zero. The consumer adapter must choose a point omitted by a nonsurjective torus map, identify its complement with the fixed missing-point model, and apply the factorization theorem to the induced map."}},
+   {:placeholder-delta 0,
+    :residual
+    "Choose a point omitted by a nonsurjective torus map, identify its complement with the fixed missing-point model, and apply H2map_eq_zero_of_factor to the induced factorization.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["The scoped direct compile emitted no warnings; lake build replayed pre-existing upstream linter warnings."],
+    :statement-hashes
+    {:registry "130 registered statements match, 0 do not",
+     :scoped-source-sha256
+     "81f113321f3e9859e7d76cfb6ad6c47afef8f3113aae37c005a5926e26c259af"},
+    :axioms
+    {:puncturedTorus_H2_isZero
+     ["propext" "Classical.choice" "Quot.sound"],
+     :H2map_eq_zero_of_factor
+     ["propext" "Classical.choice" "Quot.sound"]},
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "sha256sum /tmp/t01A02_punctured_torus_h2.lean", :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/T01A02PuncturedTorusH2.lean",
+      :exit 0}
+     {:cmd
+      "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T01A02PuncturedTorusH2.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "130 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "lake build ConstructionTargets.T01A02PuncturedTorusH2",
+      :exit 0}
+     {:cmd "lake env lean /tmp/t01A02_punctured_torus_h2_axioms.lean",
+      :exit 0,
+      :output
+      "Both puncturedTorus_H2_isZero and H2map_eq_zero_of_factor depend on [propext, Classical.choice, Quot.sound]."}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "510b0d7e1c7348372f233a92480b2576c850488f",
+    :changed-paths ["ConstructionTargets/T01A02PuncturedTorusH2.lean"],
+    :fixture
+    {:path "/tmp/t01A02_punctured_torus_h2.lean",
+     :sha256
+     "81f113321f3e9859e7d76cfb6ad6c47afef8f3113aae37c005a5926e26c259af"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T01A02PuncturedTorusH2.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
