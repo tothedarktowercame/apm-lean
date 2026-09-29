@@ -317,12 +317,11 @@ def progress_marks(pid: str) -> tuple[int, int] | None:
     return code_sorries(t), proved
 
 
-def moved(before: tuple[int, int] | None, after: tuple[int, int] | None) -> bool:
-    if after is None:
-        return False
-    if before is None:
-        return True
-    return after[0] < before[0] or after[1] > before[1]
+def moved(best: int | None, after: tuple[int, int] | None) -> bool:
+    """Only a new low in the sorry count counts. Proved helper lemmas do not: on
+    2026-09-29 m02J02 went from 30 to 108 proved lemmas over 47 attempts with its
+    3 sorries (the three basis bridges) untouched."""
+    return after is not None and (best is None or after[0] < best)
 
 
 def attempt(seat: str, pid: str, feedback: str) -> dict:
@@ -383,8 +382,9 @@ def worker(seat: str, todo: list[str], attempts: int, budget: list[int], stall_l
             pid = todo.pop(0)
         feedback = ""
         stalls = 0
+        start = progress_marks(pid)
+        best = start[0] if start else None
         for n in range(attempts):
-            before = progress_marks(pid)
             with LOCK:
                 if budget[0] <= 0:
                     return
@@ -405,10 +405,13 @@ def worker(seat: str, todo: list[str], attempts: int, budget: list[int], stall_l
                 return
             feedback = row.get("reason", "")
             # Joe, 2026-09-29: continue while the proof moves, stop when it repeats.
-            stalls = 0 if moved(before, after) else stalls + 1
+            if moved(best, after):
+                best, stalls = after[0], 0
+            else:
+                stalls += 1
             if stalls >= stall_limit:
-                log(f"{seat} {pid}: {stalls} attempts in a row without removing a sorry or proving a "
-                    f"declaration (marks {after}); leaving it")
+                log(f"{seat} {pid}: {stalls} attempts without a new low in its sorry count "
+                    f"(best {best}, marks {after}); leaving it")
                 break
 
 
@@ -420,8 +423,8 @@ def main() -> int:
     r.add_argument("--seats", required=True)
     r.add_argument("--max-jobs", type=int, default=600)
     r.add_argument("--attempts", type=int, default=50, help="cap per problem")
-    r.add_argument("--stall", type=int, default=3,
-                   help="stop a problem after this many attempts in a row that move nothing")
+    r.add_argument("--stall", type=int, default=20,
+                   help="stop a problem after this many attempts without a new low in its sorry count")
     r.add_argument("--only", help="comma-separated problem ids")
     r.add_argument("--skip", help="comma-separated problem ids to leave alone")
     o = ap.parse_args()
