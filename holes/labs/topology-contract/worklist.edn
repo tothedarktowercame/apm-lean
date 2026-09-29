@@ -81087,23 +81087,17 @@
    :evidence
    {:placeholder-delta 0,
     :residual
-    "At 535111a1 build_step.bb remains 8e9127f2 and the validated worklist still has 14 superseded rows. The graph-repair operation remains absent: supersede attempt 3 and delete only its adapter edge. This empty-scope row cannot make that mutation; do not redispatch until it is committed externally.",
+    "At 6dc7e679 build_step.bb remains 8e9127f2 and the worklist remains at 14 superseded rows. The atomic structural repair is unavailable to this empty-scope row: supersede attempt 3 and delete only its adapter edge. Stop ordinary transitions and redispatch until that operation is committed externally.",
     :outcome :stop,
     :disposition :stop,
     :author "topo-2",
-    :reason :graph-repair-operation-still-absent,
+    :reason :atomic-structural-repair-unavailable,
     :commands
     [{:cmd
       "git rev-parse --short HEAD && git log -1 --format=%h -- holes/labs/topology-contract/build_step.bb && bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
       :exit 0,
       :finding
-      "HEAD 535111a1; writer 8e9127f2; 675 items OK; 651 done; 14 superseded; 1 repair."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1790655198430-27646-6df0650e",
-     :finding
-     "Deterministic graph defect persists in recorded commit c166d6c8. Its sole changed file is the worklist, and the empty-scope transition only records that the graph-repair operation remains absent: attempt 3 remains :done, the adapter remains :done-unreviewed and still depends on attempt 3, the validator reports 14 superseded items, and build_step.bb remains at 8e9127f2. Exact repair requires an owner-authorized structural commit or deletion-capable writer that atomically marks attempt 3 :superseded and removes only its adapter edge, retaining the refill edge and reviewed attempts 1-2 as the stop-after-two basis. Fresh recorded-snapshot verification reproduced 675 items OK and fixture SHA-256 cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d. Do not redispatch until that mutation is committed externally."},
+      "HEAD 6dc7e679; writer 8e9127f2; 675 items OK; 651 done; 14 superseded; 1 repair."}],
     :required-transition
     {:supersede
      :routes-2026-09-29-t98a06-local-smooth-submersion-lift-3,
@@ -81117,7 +81111,7 @@
     :changed-paths [],
     :seat "topo-2"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t98A06/part-a",
    :acceptance
