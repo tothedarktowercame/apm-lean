@@ -50357,6 +50357,21 @@
       :output
       "e469893bfbe3dde02aa0b4f33250c2e2cadd6f69\nJoe Corneli <holtzermann17@gmail.com>\n\nConstructionTargets/T94A08AffineCoordinatePatchRestrictedQuotient.lean"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1790654570054-27607-f91d2828",
+     :commands
+     ["git show/diff-tree e469893bfbe3dde02aa0b4f33250c2e2cadd6f69"
+      "sha256sum committed/current source and frozen fixture"
+      "lake env lean ConstructionTargets/T94A08AffineCoordinatePatchRestrictedQuotient.lean"
+      "lake build ConstructionTargets.T94A08AffineCoordinatePatchRestrictedQuotient"
+      "#print axioms and #check both declared interfaces"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "comment-stripped placeholder recount at recorded commit"],
+     :finding
+     "PASS: reviewer codex-7 verified recorded commit e469893bfbe3dde02aa0b4f33250c2e2cadd6f69, authored by topo-6/Joe, creates only ConstructionTargets/T94A08AffineCoordinatePatchRestrictedQuotient.lean and exports exactly the two declared interfaces. Committed/current source SHA-256 is 5949c72fe356aec0b6c3e43f02a9a77752cde075adc24e4b4430f8e6a279fa8e; frozen fixture SHA-256 is f1a8fe1e02f238f4c9f9ce1cbda1b9a840c9770b58478d7dbecb0df1a38c7d1e. Lean compile and 8245-job build pass; both declarations use only propext, Classical.choice, Quot.sound; registry is 130/130 and the 353-row worklist validates. For each i, the theorem constructs the exact subtype map from nonzero vectors with v i != 0 to projective points whose frozen representative coordinate is nonzero, with definitional underlying value quotientMap complex 2. It identifies the domain with the literal preimage through quotientMap_rep_coord_ne_zero_iff, proves the image is exactly the target patch, obtains target openness from projectiveQuotientOpenAuthority, and composes restrictPreimage_isOpen with Homeomorph.setCongr in the correct direction to prove IsQuotientMap. No subtype, representative, quotient-map, or topology boundary is replaced. Comment-stripped sorry/admit/axiom counts are 0/0/0 in scope and 1/0/0 in the frozen t94A08 consumer."},
     :commit "e469893bfbe3dde02aa0b4f33250c2e2cadd6f69",
     :changed-paths
     ["ConstructionTargets/T94A08AffineCoordinatePatchRestrictedQuotient.lean"],
@@ -50367,7 +50382,7 @@
      "5949c72fe356aec0b6c3e43f02a9a77752cde075adc24e4b4430f8e6a279fa8e"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/T94A08AffineCoordinatePatchRestrictedQuotient.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
@@ -50434,7 +50449,7 @@
       :depends-on
       [:routes-2026-09-28-t94a08-projective-quotient-open-topo2-r1]}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
