@@ -80982,6 +80982,8 @@
    "The same exact local smooth right-inverse theorem remains absent from the source; convexity and partition-of-unity assembly are already compiled.",
    :other-consumers []}
   {:consumer :t98A06,
+   :review-finding
+   "Deterministic stop-after-two violation: routes-2026-09-29-t98a06-local-smooth-submersion-lift-1 and -2 are already two independently reviewed zero-progress STOPs at the same local smooth right-inverse DAG boundary, and the -2 review explicitly says it supplies stop-after-two evidence. This third row changes only the ledger, leaves the source at one placeholder, reuses the identical fixture/hash and interface axiom, banks no declaration, and itself records no new mathematical boundary. Repair by rejecting/superseding attempt 3, removing it as a prerequisite of the part-a adapter, and transitioning t98A06 to held-stop-after-two based on reviewed attempts 1 and 2; reopen only after an owner-approved materially different reroute or new theorem/API. Fresh replay: commit 389959ee scope/worklist validation, source and fixture Lean gates, fixture SHA-256, registry fingerprint, and parent/commit placeholder census all reproduced.",
    :evidence
    {:placeholder-delta 0,
     :residual
@@ -81031,6 +81033,12 @@
      {:cmd "git diff --exit-code -- problems/t98A06/lean/Main.lean",
       :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1790645974037-27088-585b8549",
+     :finding
+     "Deterministic stop-after-two violation: routes-2026-09-29-t98a06-local-smooth-submersion-lift-1 and -2 are already two independently reviewed zero-progress STOPs at the same local smooth right-inverse DAG boundary, and the -2 review explicitly says it supplies stop-after-two evidence. This third row changes only the ledger, leaves the source at one placeholder, reuses the identical fixture/hash and interface axiom, banks no declaration, and itself records no new mathematical boundary. Repair by rejecting/superseding attempt 3, removing it as a prerequisite of the part-a adapter, and transitioning t98A06 to held-stop-after-two based on reviewed attempts 1 and 2; reopen only after an owner-approved materially different reroute or new theorem/API. Fresh replay: commit 389959ee scope/worklist validation, source and fixture Lean gates, fixture SHA-256, registry fingerprint, and parent/commit placeholder census all reproduced."},
     :changed-paths [],
     :fixture
     {:path "/tmp/t98a06-part-a-probe.lean",
@@ -81038,7 +81046,7 @@
      "cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope ["problems/t98A06/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t98A06/local-smooth-submersion-lift",
    :acceptance
