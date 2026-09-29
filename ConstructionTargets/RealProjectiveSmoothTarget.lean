@@ -1070,6 +1070,16 @@ theorem quotientContMDiffAt_gives_quotientContMDiff
   intro F p
   exact h F p
 
+theorem sphereProjectionQuotientCoordinateContDiffWithinAt :
+    SphereProjectionQuotientCoordinateContDiffWithinAt :=
+  quotientCoordinateContDiffAt_gives_contDiffWithinAt
+    sphereProjectionQuotientCoordinateContDiffAt
+
+theorem sphereProjectionQuotientContMDiffAt :
+    SphereProjectionQuotientContMDiffAt :=
+  quotientCoordinateContDiffWithinAt_gives_contMDiffAt
+    sphereProjectionQuotientCoordinateContDiffWithinAt
+
 theorem coordinateContDiffAt_reaches_contMDiff :
     SphereProjectionQuotientContMDiff :=
   quotientContMDiffAt_gives_quotientContMDiff
