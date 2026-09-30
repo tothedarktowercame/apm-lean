@@ -50733,9 +50733,13 @@
     :disposition :stop,
     :author "topo-6",
     :reason
-    "The row has no valid implementation transition. Its declared representation is already implemented by reviewed commit f197fad73f26e4db68a67b08b0bfa96b8184d52c in ConstructionTargets/T94A08AffineChartHomeomorph.lean, but its scope and acceptance instead name ConstructionTargets/RealProjectiveSmoothTarget.lean and rpSmoothAtlas_exists. Exact-scope validation excludes the genuine commit. The supervisor must supersede the row with routes-2026-09-29-t94a08-affine-chart-quotient-compatibility-topo2-r1 or atomically correct its scope and acceptance and attach the existing commit.",
+    "The row cannot produce a valid implementation receipt. Commit f197fad73f26e4db68a67b08b0bfa96b8184d52c implements its declared complex-projective affine chart and changes only ConstructionTargets/T94A08AffineChartHomeomorph.lean, whereas the row authorizes ConstructionTargets/RealProjectiveSmoothTarget.lean and requires rpSmoothAtlas_exists. The supervisor must supersede the stale row with routes-2026-09-29-t94a08-affine-chart-quotient-compatibility-topo2-r1 or atomically correct scope and acceptance and attach the existing commit.",
     :commands
-    [{:cmd "stat -c '%F' .lake/packages", :exit 0, :output "directory"}
+    [{:cmd
+      "git diff-tree --no-commit-id --name-only -r f197fad73f26e4db68a67b08b0bfa96b8184d52c",
+      :exit 0,
+      :output "ConstructionTargets/T94A08AffineChartHomeomorph.lean"}
+     {:cmd "stat -c '%F' .lake/packages", :exit 0, :output "directory"}
      {:cmd
       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
       :exit 0,
@@ -50751,15 +50755,9 @@
      "The affine coordinate spaces indexed by the two coordinates other than i",
      :direction
      "Explicit OpenPartialHomeomorphs from each projective nonvanishing-coordinate source subtype to its affine coordinate target, with forward map coordinates, inverse chartInverse, exact mutual-inverse equalities, and coordinateLine normalization"},
-    :review
-    {:outcome :fail,
-     :seat "codex-7",
-     :job "invoke-1790743855271-28341-f94164e8",
-     :finding
-     "Deterministic ledger defect persists: the sole :done-unreviewed row contains :stop evidence and no recorded :commit, so its requested recorded-commit, fixture-hash, and acceptance-gate review is impossible. Its exact scope is ConstructionTargets/RealProjectiveSmoothTarget.lean and its acceptance requires rpSmoothAtlas, contradicting the complex-projective affine-chart-homeomorph representation. Fresh diff-tree verification shows genuine commit f197fad73f26e4db68a67b08b0bfa96b8184d52c changes only ConstructionTargets/T94A08AffineChartHomeomorph.lean; the statement registry is 131/131. Exact repair: the supervisor must supersede this stale row with routes-2026-09-29-t94a08-affine-chart-quotient-compatibility-topo2-r1, or atomically correct scope/acceptance and attach that commit. The canonical workspace lifecycle must also replace the current .lake/packages real directory with the required authority symlink before Lake gates may run."},
     :seat "topo-6"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
