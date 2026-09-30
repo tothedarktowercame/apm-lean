@@ -50723,7 +50723,7 @@
    "single-consumer exact projective affine-chart construction",
    :consumer :t94A08,
    :review-finding
-   "Fresh verification confirms the deterministic retry loop is unchanged: this sole :done-unreviewed row contains :stop evidence with no :commit or fixture hash; build_step still rejects commits outside exact scope and maps STOP back to :done-unreviewed. The row scopes RealProjectiveSmoothTarget and accepts rpSmoothAtlas, contradicting its complex-projective affine-chart-homeomorph representation, while genuine commit f197fad73f26e4db68a67b08b0bfa96b8184d52c changes T94A08AffineChartHomeomorph only. Exact repair: the supervisor must stop recycling STOP and either supersede the row with routes-2026-09-29-t94a08-affine-chart-quotient-compatibility-topo2-r1 or atomically correct scope/acceptance and attach that commit. Restore .lake/packages through the canonical workspace lifecycle because it remains a real directory and Lake gates are prohibited.",
+   "Deterministic scheduler/ledger defect remains: the sole :done-unreviewed row has :stop evidence without a recorded :commit or fixture hash, while build_step still maps STOP back to :done-unreviewed and enforces exact commit scope. The row authorizes RealProjectiveSmoothTarget and rpSmoothAtlas despite declaring a complex-projective affine-chart-homeomorph boundary; genuine commit f197fad73f26e4db68a67b08b0bfa96b8184d52c changes only T94A08AffineChartHomeomorph. Exact repair: stop scheduling this unrepaired STOP row and either supersede it with routes-2026-09-29-t94a08-affine-chart-quotient-compatibility-topo2-r1 or atomically correct scope/acceptance and attach that commit. Restore .lake/packages through the canonical workspace lifecycle because its current real-directory state prohibits Lake gates.",
    :evidence
    {:residual
     "No mathematical or representation work remains; supervisor transition repair and canonical package-authority restoration are required.",
@@ -50758,9 +50758,15 @@
      "The affine coordinate spaces indexed by the two coordinates other than i",
      :direction
      "Explicit OpenPartialHomeomorphs from each projective nonvanishing-coordinate source subtype to its affine coordinate target, with forward map coordinates, inverse chartInverse, exact mutual-inverse equalities, and coordinateLine normalization"},
+    :review
+    {:outcome :fail,
+     :seat "codex-7",
+     :job "invoke-1790745220565-28435-4f6e6106",
+     :finding
+     "Deterministic scheduler/ledger defect remains: the sole :done-unreviewed row has :stop evidence without a recorded :commit or fixture hash, while build_step still maps STOP back to :done-unreviewed and enforces exact commit scope. The row authorizes RealProjectiveSmoothTarget and rpSmoothAtlas despite declaring a complex-projective affine-chart-homeomorph boundary; genuine commit f197fad73f26e4db68a67b08b0bfa96b8184d52c changes only T94A08AffineChartHomeomorph. Exact repair: stop scheduling this unrepaired STOP row and either supersede it with routes-2026-09-29-t94a08-affine-chart-quotient-compatibility-topo2-r1 or atomically correct scope/acceptance and attach that commit. Restore .lake/packages through the canonical workspace lifecycle because its current real-directory state prohibits Lake gates."},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
