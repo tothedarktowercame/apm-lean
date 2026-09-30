@@ -1,6 +1,19 @@
 {
  "schema": "apm-statement-registry.v1",
  "entries": {
+  "m98A02": {
+   "decls": [
+    "apm_m98a02"
+   ],
+   "sha256": "a22a506ba2d05d5f982115e147f12be62943addba34816f5ae356fd00db38f44",
+   "defs": [],
+   "grade": "narrower",
+   "grader": "claude-18 outside grader (read-only Claude agent, 2026-09-30)",
+   "evidence": "holes/labs/statement-registry/m98A02-revision-grade.md",
+   "prelim_defect": "problems/m98A02/STATEMENT-REPAIR.md",
+   "rev": "0c422bb1",
+   "approved_at": "2026-09-30T03:53:12Z"
+  },
   "t00A01": {
    "decls": [
     "apm_t00a01"
