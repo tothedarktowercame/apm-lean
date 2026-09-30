@@ -264,6 +264,9 @@ Compile with `cd /home/joe/code/apm-lean && lake env lean {out}` as often as you
   repo file. Deleting, renaming or restating the theorem is refused.
 - No `sorry`, `admit`, new `axiom`, `opaque` stand-ins or `native_decide`; standard axioms only.
 - Helper and bridge lemmas are yours to rewrite, replace or delete.
+- Progress is a lower total `sorry` count. Moving a `sorry` is not progress: a `sorry` in a new,
+  renamed or restated declaration (for example, bridges merged into one theorem proved by
+  `sorry`) leaves the count where it was. Prove something.
 
 ## Finishing
 - Proved: the file compiles with no sorry. Finish with SOLVE_RESULT proved.
@@ -357,25 +360,56 @@ def wait(job: str) -> dict:
     return {"state": "timeout"}
 
 
-def progress_marks(pid: str) -> tuple[int, int] | None:
-    """(sorries, sorry-free theorem/lemma bodies) in the partial file, or None if absent.
-    An attempt moved the proof if it removed a sorry or proved another declaration
-    (splitting a sorry into sub-lemmas and proving some of them counts)."""
+def sorry_sites(text: str) -> dict[str, tuple[int, str]]:
+    """Each top-level declaration holding a `sorry`: name -> (sorry count, statement).
+    The statement is the declaration's text before its first `:=`, whitespace-normalised."""
+    code = re.sub(r"/-.*?-/", lambda m: " " * len(m.group(0)), text, flags=re.S)
+    code = re.sub(r"--[^\n]*", lambda m: " " * len(m.group(0)), code)
+    starts = [m.start() for m in TOPLEVEL.finditer(code)] + [len(code)]
+    sites = {}
+    for a, b in zip(starts, starts[1:]):
+        block = code[a:b]
+        n = code_sorries(block)
+        if not n:
+            continue
+        name = re.search(r"\b(?:theorem|lemma|def|abbrev|instance|structure|class|example)\s+([^\s(:{\[]*)", block)
+        key = (name.group(1) if name and name.group(1) else " ".join(block.split())[:120])
+        stmt = " ".join(block.split(":=", 1)[0].split())
+        c, _ = sites.get(key, (0, stmt))
+        sites[key] = (c + n, stmt)
+    return sites
+
+
+def progress_marks(pid: str) -> dict[str, tuple[int, str]] | None:
+    """Where the partial file's sorries sit, or None if the file is absent."""
     f = SCRATCH / pid / "Main.lean"
-    if not f.exists():
-        return None
-    t = re.sub(r"/-.*?-/", " ", f.read_text(), flags=re.S)
-    t = re.sub(r"--[^\n]*", " ", t)
-    bodies = re.split(r"(?m)^(?:private |protected )?(?:theorem|lemma) ", t)[1:]
-    proved = sum(1 for b in bodies if not re.search(r"(?<![A-Za-z0-9_.])sorry(?![A-Za-z0-9_.])", b))
-    return code_sorries(t), proved
+    return sorry_sites(f.read_text()) if f.exists() else None
 
 
-def moved(best: int | None, after: tuple[int, int] | None) -> bool:
-    """Only a new low in the sorry count counts. Proved helper lemmas do not: on
-    2026-09-29 m02J02 went from 30 to 108 proved lemmas over 47 attempts with its
-    3 sorries (the three basis bridges) untouched."""
-    return after is not None and (best is None or after[0] < best)
+def total(sites: dict[str, tuple[int, str]] | None) -> int | None:
+    return None if sites is None else sum(c for c, _ in sites.values())
+
+
+def moved(best: dict | None, after: dict | None) -> tuple[bool, str]:
+    """Progress is a lower total sorry count with every remaining sorry still in a
+    declaration that held one before, under the same statement. Proved helper
+    lemmas do not count: on 2026-09-29 m02J02 went from 30 to 108 proved lemmas
+    over 47 attempts with its 3 sorries (the three basis bridges) untouched.
+    Moving sorries does not count either: on 2026-09-29 an m02J02 seat folded two
+    bridges into a new theorem proved by one `sorry` and derived both from it,
+    3 -> 2 by count with nothing proved. A sorry in a new, renamed or restated
+    declaration is a move, so the attempt is not progress."""
+    if after is None:
+        return False, "no partial file"
+    if best is None:
+        return True, ""
+    if total(after) >= total(best):
+        return False, ""
+    new = sorted(k for k, (_, stmt) in after.items() if k not in best or best[k][1] != stmt)
+    if new:
+        return False, (f"sorry count {total(best)} -> {total(after)} only by moving sorries: "
+                       f"{', '.join(new)} is new or restated and still holds a sorry")
+    return True, ""
 
 
 def attempt(seat: str, pid: str, feedback: str) -> dict:
@@ -442,8 +476,7 @@ def worker(seat: str, todo: list[str], attempts: int, budget: list[int], stall_l
         feedback = ""
         stalls = 0
         passes = 0
-        start = progress_marks(pid)
-        best = start[0] if start else None
+        best = progress_marks(pid)
         for n in range(attempts):
             with LOCK:
                 if budget[0] <= 0:
@@ -455,7 +488,10 @@ def worker(seat: str, todo: list[str], attempts: int, budget: list[int], stall_l
                 row = {"id": pid, "seat": seat, "at": now(), "outcome": "error", "reason": str(e)[:500]}
             row["attempt"] = n + 1
             after = progress_marks(pid)
-            row["marks"] = after
+            row["sorries"] = total(after)
+            ok_move, why_move = moved(best, after)
+            if why_move:
+                row["moved-only"] = why_move
             record(row)
             log(f"{seat} {pid} attempt {n+1}: {row['outcome']} {row.get('commit', '')} {row.get('reason', '')[:160]}")
             if row["outcome"] in ("landed", "refuted-claim"):
@@ -463,10 +499,10 @@ def worker(seat: str, todo: list[str], attempts: int, budget: list[int], stall_l
             if "usage limit" in row.get("said", "") or "quota" in row.get("said", ""):
                 log(f"{seat}: provider quota reached; stopping this seat")
                 return
-            feedback = row.get("reason", "")
+            feedback = row.get("reason", "") + (f"\nNot progress: {why_move}" if why_move else "")
             # Joe, 2026-09-29: continue while the proof moves, stop when it repeats.
-            if moved(best, after):
-                best, stalls = after[0], 0
+            if ok_move:
+                best, stalls = after, 0
             else:
                 stalls += 1
             if stalls >= stall_limit:
@@ -474,7 +510,7 @@ def worker(seat: str, todo: list[str], attempts: int, budget: list[int], stall_l
                 if passes < max_strategy:
                     passes += 1
                     try:
-                        go, plan = strategy(strategy_seat, pid, stalls, best)
+                        go, plan = strategy(strategy_seat, pid, stalls, total(best))
                     except Exception as e:
                         plan = f"strategy pass failed: {e}"
                     record({"id": pid, "seat": strategy_seat, "at": now(), "outcome": "strategy",
@@ -482,7 +518,7 @@ def worker(seat: str, todo: list[str], attempts: int, budget: list[int], stall_l
                     log(f"{strategy_seat} {pid} strategy pass {passes}: {'continue' if go else 'stop'}")
                 if not go:
                     log(f"{seat} {pid}: {stalls} attempts without a new low in its sorry count "
-                        f"(best {best}, marks {after}); leaving it")
+                        f"(best {total(best)}, now {total(after)}); leaving it")
                     break
                 stalls = 0
 
