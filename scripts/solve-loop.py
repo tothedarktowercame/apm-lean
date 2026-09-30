@@ -264,9 +264,10 @@ Compile with `cd /home/joe/code/apm-lean && lake env lean {out}` as often as you
   repo file. Deleting, renaming or restating the theorem is refused.
 - No `sorry`, `admit`, new `axiom`, `opaque` stand-ins or `native_decide`; standard axioms only.
 - Helper and bridge lemmas are yours to rewrite, replace or delete.
-- Progress is a lower total `sorry` count. Moving a `sorry` is not progress: a `sorry` in a new,
-  renamed or restated declaration (for example, bridges merged into one theorem proved by
-  `sorry`) leaves the count where it was. Prove something.
+- Progress is counted as declarations that held a `sorry` and are now proved without one,
+  directly or through any lemma they use (checked with #print axioms). You may restructure and
+  move sorries freely, but a moved `sorry` earns nothing (e.g. bridges merged into one new
+  theorem proved by `sorry` are all still open).
 
 ## Finishing
 - Proved: the file compiles with no sorry. Finish with SOLVE_RESULT proved.
@@ -286,7 +287,7 @@ Finish with one line: SOLVE_RESULT proved | refuted | gave-up — then one sente
 STRATEGY_PROMPT = """# Strategy pass for one stalled problem (solve loop, apm-lean)
 
 Problem: {pid}. Repo: /home/joe/code/apm-lean (shared; read it, do NOT edit, stage or commit there).
-The solve loop has made {stalls} attempts on {pid} without lowering its `sorry` count (best: {best}).
+The solve loop has made {stalls} attempts on {pid} without proving any more of its sorry-backed declarations ({best} still open).
 You are a fresh pair of eyes. Decide whether the next attempts should continue, and on what route.
 
 Read problems/{pid}/problem.md, problems/{pid}/lean/Main.lean, the current partial proof {out}
@@ -390,26 +391,40 @@ def total(sites: dict[str, tuple[int, str]] | None) -> int | None:
     return None if sites is None else sum(c for c, _ in sites.values())
 
 
-def moved(best: dict | None, after: dict | None) -> tuple[bool, str]:
-    """Progress is a lower total sorry count with every remaining sorry still in a
-    declaration that held one before, under the same statement. Proved helper
-    lemmas do not count: on 2026-09-29 m02J02 went from 30 to 108 proved lemmas
-    over 47 attempts with its 3 sorries (the three basis bridges) untouched.
-    Moving sorries does not count either: on 2026-09-29 an m02J02 seat folded two
-    bridges into a new theorem proved by one `sorry` and derived both from it,
-    3 -> 2 by count with nothing proved. A sorry in a new, renamed or restated
-    declaration is a move, so the attempt is not progress."""
-    if after is None:
-        return False, "no partial file"
-    if best is None:
-        return True, ""
-    if total(after) >= total(best):
-        return False, ""
-    new = sorted(k for k, (_, stmt) in after.items() if k not in best or best[k][1] != stmt)
-    if new:
-        return False, (f"sorry count {total(best)} -> {total(after)} only by moving sorries: "
-                       f"{', '.join(new)} is new or restated and still holds a sorry")
-    return True, ""
+def still_open(pid: str, names: list[str]) -> list[str] | None:
+    """Which of NAMES (the declarations that held a sorry when this problem was
+    picked up) still rest on a sorry, directly or through any lemma they use, per
+    Lean's #print axioms. A deleted or renamed one counts as open. None when the
+    partial file is absent or does not compile.
+
+    This, not the raw sorry count, is progress. On 2026-09-29 an m02J02 seat
+    folded two bridges into a new theorem proved by one `sorry` and derived both
+    from it: 3 -> 2 by count, nothing proved. Both bridges still depend on
+    sorryAx, so they stay open. Moving sorries is allowed; it just earns nothing,
+    and a real proof counts however the rest of the file was rearranged."""
+    f = SCRATCH / pid / "Main.lean"
+    if not f.exists():
+        return None
+    text = f.read_text()
+    probe = f.with_name("Progress.lean")
+    probe.write_text(text + "\n\n" + "".join(f"#print axioms {n}\n" for n in names))
+    try:
+        r = subprocess.run(["lake", "env", "lean", str(probe)], cwd=ROOT, capture_output=True,
+                           text=True, timeout=3600)
+    except subprocess.TimeoutExpired:
+        return None
+    finally:
+        probe.unlink(missing_ok=True)
+    out = r.stdout + r.stderr
+    body_lines = text.count("\n") + 1
+    # Errors past the file body are the #print lines for deleted names: those stay open.
+    if any(int(l) <= body_lines for l in re.findall(r"(?m)Progress\.lean:(\d+):\d+: error", out)):
+        return None
+    closed = set()
+    for q, deps in re.findall(r"'([^']+)' (depends on axioms: \[[^\]]*\]|does not depend on any axioms)", out):
+        if "sorryAx" not in deps:
+            closed.update(n for n in names if q == n or q.endswith("." + n))
+    return [n for n in names if n not in closed]
 
 
 def attempt(seat: str, pid: str, feedback: str) -> dict:
@@ -476,7 +491,9 @@ def worker(seat: str, todo: list[str], attempts: int, budget: list[int], stall_l
         feedback = ""
         stalls = 0
         passes = 0
-        best = progress_marks(pid)
+        start = progress_marks(pid) or sorry_sites(git("show", f"HEAD:problems/{pid}/lean/Main.lean"))
+        names = sorted(start)
+        best = len(names)
         for n in range(attempts):
             with LOCK:
                 if budget[0] <= 0:
@@ -488,10 +505,9 @@ def worker(seat: str, todo: list[str], attempts: int, budget: list[int], stall_l
                 row = {"id": pid, "seat": seat, "at": now(), "outcome": "error", "reason": str(e)[:500]}
             row["attempt"] = n + 1
             after = progress_marks(pid)
+            left = still_open(pid, names)
             row["sorries"] = total(after)
-            ok_move, why_move = moved(best, after)
-            if why_move:
-                row["moved-only"] = why_move
+            row["open"] = left
             record(row)
             log(f"{seat} {pid} attempt {n+1}: {row['outcome']} {row.get('commit', '')} {row.get('reason', '')[:160]}")
             if row["outcome"] in ("landed", "refuted-claim"):
@@ -499,10 +515,13 @@ def worker(seat: str, todo: list[str], attempts: int, budget: list[int], stall_l
             if "usage limit" in row.get("said", "") or "quota" in row.get("said", ""):
                 log(f"{seat}: provider quota reached; stopping this seat")
                 return
-            feedback = row.get("reason", "") + (f"\nNot progress: {why_move}" if why_move else "")
+            feedback = row.get("reason", "")
+            if left is not None and len(left) >= best and total(after) is not None and total(after) < best:
+                feedback += (f"\nThe sorry count fell but nothing was proved: {', '.join(left)} still "
+                             "rest on a sorry (#print axioms). Moving a sorry is allowed but is not progress.")
             # Joe, 2026-09-29: continue while the proof moves, stop when it repeats.
-            if ok_move:
-                best, stalls = after, 0
+            if left is not None and len(left) < best:
+                best, stalls = len(left), 0
             else:
                 stalls += 1
             if stalls >= stall_limit:
@@ -510,15 +529,15 @@ def worker(seat: str, todo: list[str], attempts: int, budget: list[int], stall_l
                 if passes < max_strategy:
                     passes += 1
                     try:
-                        go, plan = strategy(strategy_seat, pid, stalls, total(best))
+                        go, plan = strategy(strategy_seat, pid, stalls, best)
                     except Exception as e:
                         plan = f"strategy pass failed: {e}"
                     record({"id": pid, "seat": strategy_seat, "at": now(), "outcome": "strategy",
                             "decision": "continue" if go else "stop", "said": plan[-300:]})
                     log(f"{strategy_seat} {pid} strategy pass {passes}: {'continue' if go else 'stop'}")
                 if not go:
-                    log(f"{seat} {pid}: {stalls} attempts without a new low in its sorry count "
-                        f"(best {total(best)}, now {total(after)}); leaving it")
+                    log(f"{seat} {pid}: {stalls} attempts without proving another sorry-backed declaration "
+                        f"(open {best} of {len(names)}); leaving it")
                     break
                 stalls = 0
 
@@ -532,7 +551,7 @@ def main() -> int:
     r.add_argument("--max-jobs", type=int, default=600)
     r.add_argument("--attempts", type=int, default=50, help="cap per problem")
     r.add_argument("--stall", type=int, default=10,
-                   help="stop a problem after this many attempts without a new low in its sorry count")
+                   help="stop a problem after this many attempts without proving another sorry-backed declaration")
     r.add_argument("--strategy-seat", default="solve-strategy",
                    help="fresh seat asked, after each stall, whether and how to continue")
     r.add_argument("--max-strategy", type=int, default=2, help="strategy passes per problem")
