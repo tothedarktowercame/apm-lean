@@ -50729,13 +50729,14 @@
     "No mathematical or representation obligation remains; supervisor ledger repair and canonical package-authority restoration are required.",
     :outcome :stop,
     :warnings
-    ["Lake was not invoked because .lake/packages is a directory rather than the required canonical symlink."],
+    ["Lake was not invoked because .lake/packages remains a directory rather than the required canonical symlink."],
     :disposition :stop,
     :author "topo-6",
     :reason
-    "The row remains unimplementable under its declared contract: reviewed commit f197fad73f26e4db68a67b08b0bfa96b8184d52c supplies the required AffineChartConstruction 2 in ConstructionTargets/T94A08AffineChartHomeomorph.lean, but the row scopes unrelated ConstructionTargets/RealProjectiveSmoothTarget.lean and accepts rpSmoothAtlas_exists. Exact-scope validation rejects the genuine commit, while STOP is returned to done-unreviewed. The supervisor must supersede this row with routes-2026-09-29-t94a08-affine-chart-quotient-compatibility-topo2-r1 or atomically rewrite its scope and acceptance and attach the affine commit.",
+    "The metadata defect is unchanged: reviewed commit f197fad73f26e4db68a67b08b0bfa96b8184d52c implements the required complex-projective AffineChartConstruction 2 in ConstructionTargets/T94A08AffineChartHomeomorph.lean, but this row scopes unrelated ConstructionTargets/RealProjectiveSmoothTarget.lean and accepts rpSmoothAtlas_exists. Exact-scope enforcement prevents a valid implementation receipt. The supervisor must supersede this parent with routes-2026-09-29-t94a08-affine-chart-quotient-compatibility-topo2-r1 or atomically rewrite scope and acceptance and attach the existing affine commit.",
     :commands
-    [{:cmd "python3 scripts/statement-registry.py check",
+    [{:cmd "stat -c '%F' .lake/packages", :exit 0, :output "directory"}
+     {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :output "131 registered statements match, 0 do not"}
      {:cmd
@@ -50743,13 +50744,7 @@
       :exit 0,
       :output
       "topology-worklist: 353 items OK; {:done 324, :superseded 23, :repair 1, :blocked 4, :open 1}"}
-     {:cmd "git status --porcelain=v1", :exit 0, :output ""}
-     {:cmd "stat -c '%F' .lake/packages", :exit 0, :output "directory"}
-     {:cmd
-      "rg -n \"implementation commit paths differ from exact scope|:stop \\\\(replace-item\" holes/labs/topology-contract/build_step.bb",
-      :exit 0,
-      :output
-      "424: exact-scope rejection; 510: STOP replacement sets done-unreviewed"}],
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
     :representation
     {:source
      "The nonvanishing-coordinate open subtypes of complex projective two-space with the frozen topology coinduced from quotientMap on nonzero vectors",
@@ -50757,15 +50752,9 @@
      "The affine coordinate spaces indexed by the two coordinates other than i",
      :direction
      "Explicit OpenPartialHomeomorphs from each projective nonvanishing-coordinate source subtype to its affine coordinate target, with forward map coordinates, inverse chartInverse, exact mutual-inverse equalities, and coordinateLine normalization"},
-    :review
-    {:outcome :fail,
-     :seat "codex-7",
-     :job "invoke-1790743427666-28314-8e397338",
-     :finding
-     "Row remains :done-unreviewed with :stop evidence and no recorded :commit; its RealProjectiveSmoothTarget scope and rpSmoothAtlas acceptance contradict the required complex-projective affine-chart-homeomorph representation. The genuine implementation is already in prerequisite commit f197fad73f26e4db68a67b08b0bfa96b8184d52c, while the registry reports this as the sole :done-unreviewed row. Exact repair: the supervisor must supersede this stale parent with that prerequisite, or atomically rewrite scope/acceptance and attach the existing affine commit. Additionally .lake/packages is a real directory, not the required canonical symlink, so the canonical workspace lifecycle must repair package authority before any Lake gate is run."},
     :seat "topo-6"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
