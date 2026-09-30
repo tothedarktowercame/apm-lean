@@ -81083,7 +81083,7 @@
    :other-consumers []}
   {:consumer :t98A06,
    :review-finding
-   "Recorded commit a5063a9f changes only the worklist and repeats the empty-scope stop, but does not perform its own required structural transition. In the recorded snapshot, routes-2026-09-29-t98a06-local-smooth-submersion-lift-3 remains :done and the adapter remains :done-unreviewed with the attempt-3 edge present; validation remains 675 items OK with 14 superseded. Exact repair: atomically mark attempt 3 :superseded and remove only its edge from the adapter, retaining the refill edge and reviewed attempts 1-2. Fresh acceptance checks passed mechanically—fixture SHA-256 cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d, Lean compilation, zero fixture sorry, one frozen Main.lean sorry, and registry 131/131—but the representation boundary is unchanged: the fixture assumes apm_t98A06_bridge_local_smooth_submersion_lift and derives convex gluing, so it does not implement the missing fixed-coordinate smooth-mfderiv construction. build_step.bb remains at 8e9127f2.",
+   "Recorded commit 48f0f70d changes only holes/labs/topology-contract/worklist.edn and records another empty-scope stop without applying its declared structural repair. The recorded graph still marks routes-2026-09-29-t98a06-local-smooth-submersion-lift-3 :done and leaves its dependency edge on the :done-unreviewed adapter; the validator reports 675 items OK with 14 superseded. Exact repair: in one owner-authorized mutation mark attempt 3 :superseded and remove only its adapter edge, retaining the refill edge and reviewed attempts 1-2. Fresh gates reproduced fixture SHA-256 cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d, successful Lean compilation, zero fixture sorry, one Main.lean sorry, registry 131/131, and writer 8e9127f2. The compiled fixture still crosses the boundary in the wrong direction for closure: it assumes the missing local-smooth-lift theorem and derives convex gluing rather than constructing that lift from fixed-coordinate smooth mfderiv data.",
    :evidence
    {:placeholder-delta 0,
     :residual
@@ -81098,6 +81098,12 @@
       :exit 0,
       :finding
       "HEAD 7c3f50da; writer 8e9127f2; 675 items OK; 651 done; 14 superseded; 1 repair."}],
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1790744202420-28376-030e44ee",
+     :finding
+     "Recorded commit 48f0f70d changes only holes/labs/topology-contract/worklist.edn and records another empty-scope stop without applying its declared structural repair. The recorded graph still marks routes-2026-09-29-t98a06-local-smooth-submersion-lift-3 :done and leaves its dependency edge on the :done-unreviewed adapter; the validator reports 675 items OK with 14 superseded. Exact repair: in one owner-authorized mutation mark attempt 3 :superseded and remove only its adapter edge, retaining the refill edge and reviewed attempts 1-2. Fresh gates reproduced fixture SHA-256 cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d, successful Lean compilation, zero fixture sorry, one Main.lean sorry, registry 131/131, and writer 8e9127f2. The compiled fixture still crosses the boundary in the wrong direction for closure: it assumes the missing local-smooth-lift theorem and derives convex gluing rather than constructing that lift from fixed-coordinate smooth mfderiv data."},
     :required-transition
     {:supersede
      :routes-2026-09-29-t98a06-local-smooth-submersion-lift-3,
@@ -81111,7 +81117,7 @@
     :changed-paths [],
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t98A06/part-a",
    :acceptance
