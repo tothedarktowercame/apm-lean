@@ -81083,7 +81083,7 @@
    :other-consumers []}
   {:consumer :t98A06,
    :review-finding
-   "Recorded commit 3d65c2c6 changes only holes/labs/topology-contract/worklist.edn. Fresh validation succeeds syntactically for 675 items but still reports only 14 superseded rows, and the committed adapter dependency vector still includes routes-2026-09-29-t98a06-local-smooth-submersion-lift-3. Exact repair: in one ledger transition mark attempt 3 :superseded and remove only that edge from routes-2026-09-29-t98a06-part-a-adapter-1, retaining the refill dependency and reviewed attempts 1-2. The frozen fixture hash remains cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d, with the previously reproduced gates unchanged: Lean probe compiles, fixture sorry count 0, Main.lean sorry count 1, registry 131/131, and the fixture assumes rather than proves the missing local-smooth-lift bridge.",
+   "Recorded commit 6077fddb changes only holes/labs/topology-contract/worklist.edn. Fresh validation reports 675 items OK but still only 14 superseded, while the committed routes-2026-09-29-t98a06-part-a-adapter-1 dependency vector still contains routes-2026-09-29-t98a06-local-smooth-submersion-lift-3. Exact repair: atomically transition attempt 3 to :superseded and remove only that adapter edge, retaining routes-2026-09-29-topo1-refill-heavy-1 and reviewed attempts 1-2. The frozen fixture remains SHA-256 cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d; acceptance evidence remains Lean compilation success, zero fixture sorry, one Main.lean sorry, registry 131/131, and an orientation that assumes the missing local-smooth-lift bridge instead of proving it from fixed-coordinate smooth mfderiv data.",
    :evidence
    {:placeholder-delta 0,
     :residual
@@ -81098,6 +81098,12 @@
       :exit 0,
       :finding
       "HEAD 1602fe93; writer 8e9127f2; 675 items OK; 651 done; 14 superseded; 1 repair."}],
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1790754937811-28894-96b2b28d",
+     :finding
+     "Recorded commit 6077fddb changes only holes/labs/topology-contract/worklist.edn. Fresh validation reports 675 items OK but still only 14 superseded, while the committed routes-2026-09-29-t98a06-part-a-adapter-1 dependency vector still contains routes-2026-09-29-t98a06-local-smooth-submersion-lift-3. Exact repair: atomically transition attempt 3 to :superseded and remove only that adapter edge, retaining routes-2026-09-29-topo1-refill-heavy-1 and reviewed attempts 1-2. The frozen fixture remains SHA-256 cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d; acceptance evidence remains Lean compilation success, zero fixture sorry, one Main.lean sorry, registry 131/131, and an orientation that assumes the missing local-smooth-lift bridge instead of proving it from fixed-coordinate smooth mfderiv data."},
     :required-transition
     {:supersede
      :routes-2026-09-29-t98a06-local-smooth-submersion-lift-3,
@@ -81111,7 +81117,7 @@
     :changed-paths [],
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t98A06/part-a",
    :acceptance
