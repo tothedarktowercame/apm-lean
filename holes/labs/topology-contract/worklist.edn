@@ -81087,7 +81087,7 @@
    :evidence
    {:placeholder-delta 0,
     :residual
-    "At 1ea5d541 build_step.bb remains 8e9127f2 and the validator still reports 14 superseded rows. The structural repair has not landed: attempt 3 must be superseded and only its adapter edge removed. This empty-scope row cannot perform the mutation; stop ordinary transitions and redispatch until the graph changes externally.",
+    "At b64d1883 build_step.bb remains 8e9127f2 and the validator still reports 14 superseded rows. The structural repair has not landed: attempt 3 must be superseded and only its adapter edge removed. This empty-scope row cannot perform the mutation; stop ordinary transitions and redispatch until the graph changes externally.",
     :outcome :stop,
     :disposition :stop,
     :author "topo-2",
@@ -81097,13 +81097,7 @@
       "git rev-parse --short HEAD && git log -1 --format=%h -- holes/labs/topology-contract/build_step.bb && bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
       :exit 0,
       :finding
-      "HEAD 1ea5d541; writer 8e9127f2; 675 items OK; 651 done; 14 superseded; 1 repair."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1790744588132-28396-17b179c3",
-     :finding
-     "Recorded commit 78c6875a changes only holes/labs/topology-contract/worklist.edn and repeats the empty-scope stop without applying its required graph mutation. Its committed snapshot still has routes-2026-09-29-t98a06-local-smooth-submersion-lift-3 :done and the :done-unreviewed adapter still depends on it; validation reports 675 items OK with 14 superseded. Exact repair: atomically mark attempt 3 :superseded and remove only that dependency edge, retaining the refill edge and reviewed attempts 1-2. Fresh gates reproduced fixture SHA-256 cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d, Lean compilation, zero fixture sorry, one Main.lean sorry, registry 131/131, and writer 8e9127f2. The fixture remains oriented from an assumed local-smooth-lift bridge to convex gluing, so it crosses but does not close the missing fixed-coordinate smooth-mfderiv representation boundary."},
+      "HEAD b64d1883; writer 8e9127f2; 675 items OK; 651 done; 14 superseded; 1 repair."}],
     :required-transition
     {:supersede
      :routes-2026-09-29-t98a06-local-smooth-submersion-lift-3,
@@ -81117,7 +81111,7 @@
     :changed-paths [],
     :seat "topo-2"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t98A06/part-a",
    :acceptance
