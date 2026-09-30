@@ -9,6 +9,12 @@ The source does not specify the admissible function class. The functional is
 encoded on `C¹` curves, and extremals are `C²` stationary curves, the standard
 minimal regularity needed for the classical Euler--Lagrange formulation.
 
+The classification of extremals is up to equality on `[0, π/2]`. Curves are
+functions `ℝ → ℝ` and the functional only sees `[0, π/2]`, so a stationary
+curve changed by a smooth bump outside the interval is still stationary; the
+earlier conclusion `y = apm_m99A01_extremal` on all of `ℝ` was false (the
+same defect as m02A05 and m95A03, repaired 2026-09-30).
+
 ## Encoding questions
 
 An extremal is encoded intrinsically by vanishing first variation for every
@@ -163,10 +169,225 @@ lemma apm_m99A01_eq_zero_on_Ioo_of_ae
   exact MeasureTheory.Measure.eqOn_open_of_ae_eq hae' isOpen_Ioo hf
     continuous_zero.continuousOn
 
+lemma apm_m99A01_extremal_cross_zero
+    (h : ℝ → ℝ) (hh : ContDiff ℝ 1 h)
+    (hh0 : h 0 = 0) (hhpi : h (Real.pi / 2) = 0) :
+    ∫ t in (0 : ℝ)..(Real.pi / 2),
+      deriv apm_m99A01_extremal t * deriv h t +
+        (apm_m99A01_extremal t + 1) * h t = 0 := by
+  have he : ContDiff ℝ 2 apm_m99A01_extremal := by
+    unfold apm_m99A01_extremal
+    fun_prop
+  have hde : ContDiff ℝ 1 (deriv apm_m99A01_extremal) := he.deriv'
+  have hue : ∀ x ∈ Set.uIcc (0 : ℝ) (Real.pi / 2),
+      HasDerivAt (deriv apm_m99A01_extremal)
+        (apm_m99A01_extremal x + 1) x := by
+    intro x hx
+    have hd := hde.differentiable (by norm_num) x |>.hasDerivAt
+    convert hd using 1
+    linarith [apm_m99A01_extremal_ode x]
+  have hv : ∀ x ∈ Set.uIcc (0 : ℝ) (Real.pi / 2),
+      HasDerivAt h (deriv h x) x := by
+    intro x hx
+    exact (hh.differentiable (by norm_num) x).hasDerivAt
+  have hu'int : IntervalIntegrable (fun x ↦ apm_m99A01_extremal x + 1)
+      MeasureTheory.volume 0 (Real.pi / 2) :=
+    (he.continuous.add continuous_const).intervalIntegrable _ _
+  have hdh : ContDiff ℝ 0 (deriv h) := hh.deriv'
+  have hv'int : IntervalIntegrable (deriv h) MeasureTheory.volume 0 (Real.pi / 2) :=
+    hdh.continuous.intervalIntegrable _ _
+  have hibp := intervalIntegral.integral_mul_deriv_eq_deriv_mul
+    hue hv hu'int hv'int
+  rw [hh0, hhpi] at hibp
+  rw [intervalIntegral.integral_add]
+  · linarith
+  · exact hv'int.continuousOn_mul hde.continuous.continuousOn
+  · exact hu'int.mul_continuousOn hh.continuous.continuousOn
+
+lemma apm_m99A01_functional_sub_extremal
+    (y : ℝ → ℝ) (hy : y ∈ apm_m99A01_admissible) :
+    apm_m99A01_functional y = apm_m99A01_functional apm_m99A01_extremal +
+      ∫ t in (0 : ℝ)..(Real.pi / 2),
+        deriv (fun x ↦ y x - apm_m99A01_extremal x) t ^ 2 +
+          (y t - apm_m99A01_extremal t) ^ 2 := by
+  let h := fun x ↦ y x - apm_m99A01_extremal x
+  have he : ContDiff ℝ 2 apm_m99A01_extremal := by
+    unfold apm_m99A01_extremal
+    fun_prop
+  have hh : ContDiff ℝ 1 h := hy.1.sub (he.of_le (by norm_num))
+  have hde : ContDiff ℝ 1 (deriv apm_m99A01_extremal) := he.deriv'
+  have hdh : ContDiff ℝ 0 (deriv h) := hh.deriv'
+  have he0 : apm_m99A01_extremal 0 = 0 := by simp [apm_m99A01_extremal]
+  have hepi : apm_m99A01_extremal (Real.pi / 2) = 0 := by
+    unfold apm_m99A01_extremal
+    have hc : Real.cosh (Real.pi / 4) ≠ 0 := ne_of_gt (Real.cosh_pos _)
+    rw [show Real.pi / 2 = 2 * (Real.pi / 4) by ring,
+      Real.cosh_two_mul, Real.sinh_two_mul, Real.tanh_eq_sinh_div_cosh]
+    field_simp [hc]
+    nlinarith [Real.cosh_sq_sub_sinh_sq (Real.pi / 4)]
+  have hcross := apm_m99A01_extremal_cross_zero h hh
+    (by simp [h, hy.2.1, he0]) (by simp [h, hy.2.2, hepi])
+  have hpoint : (fun t ↦ deriv y t ^ 2 + y t ^ 2 + 2 * y t) =
+      fun t ↦
+        (deriv apm_m99A01_extremal t ^ 2 + apm_m99A01_extremal t ^ 2 +
+          2 * apm_m99A01_extremal t) +
+        (deriv h t ^ 2 + h t ^ 2) +
+        2 * (deriv apm_m99A01_extremal t * deriv h t +
+          (apm_m99A01_extremal t + 1) * h t) := by
+    funext t
+    have hyd := hy.1.differentiable (by norm_num) t
+    have hed := he.differentiable (by norm_num) t
+    have hdecomp : y = fun x ↦ apm_m99A01_extremal x + h x := by
+      funext x
+      simp [h]
+    rw [hdecomp]
+    have hdadd : deriv (fun x ↦ apm_m99A01_extremal x + h x) t =
+        deriv apm_m99A01_extremal t + deriv h t := by
+      simpa only [Pi.add_apply] using
+        deriv_add hed (hh.differentiable (by norm_num) t)
+    rw [hdadd]
+    ring
+  unfold apm_m99A01_functional
+  rw [hpoint]
+  have hbase : IntervalIntegrable (fun t ↦
+      deriv apm_m99A01_extremal t ^ 2 + apm_m99A01_extremal t ^ 2 +
+        2 * apm_m99A01_extremal t) MeasureTheory.volume 0 (Real.pi / 2) :=
+    ((hde.continuous.pow 2).add (he.continuous.pow 2) |>.add
+      (continuous_const.mul he.continuous)).intervalIntegrable _ _
+  have hsquares : IntervalIntegrable (fun t ↦ deriv h t ^ 2 + h t ^ 2)
+      MeasureTheory.volume 0 (Real.pi / 2) :=
+    ((hdh.continuous.pow 2).add (hh.continuous.pow 2)).intervalIntegrable _ _
+  have hcrossint : IntervalIntegrable (fun t ↦ 2 *
+      (deriv apm_m99A01_extremal t * deriv h t +
+        (apm_m99A01_extremal t + 1) * h t)) MeasureTheory.volume 0 (Real.pi / 2) :=
+    (continuous_const.mul ((hde.continuous.mul hdh.continuous).add
+      ((he.continuous.add continuous_const).mul hh.continuous))).intervalIntegrable _ _
+  rw [intervalIntegral.integral_add (hbase.add hsquares) hcrossint,
+    intervalIntegral.integral_add hbase hsquares,
+    intervalIntegral.integral_const_mul, hcross]
+  simp [h]
+
+lemma apm_m99A01_line_to_extremal
+    (y : ℝ → ℝ) (hy : y ∈ apm_m99A01_admissible) (s : ℝ) :
+    apm_m99A01_functional
+        (fun t ↦ y t + s * (apm_m99A01_extremal t - y t)) =
+      apm_m99A01_functional apm_m99A01_extremal +
+        (1 - s) ^ 2 *
+          (∫ t in (0 : ℝ)..(Real.pi / 2),
+            deriv (fun x ↦ y x - apm_m99A01_extremal x) t ^ 2 +
+              (y t - apm_m99A01_extremal t) ^ 2) := by
+  let z := fun t ↦ y t + s * (apm_m99A01_extremal t - y t)
+  have he : apm_m99A01_extremal ∈ apm_m99A01_admissible := by
+    refine ⟨?_, by simp [apm_m99A01_extremal], ?_⟩
+    · unfold apm_m99A01_extremal
+      fun_prop
+    · unfold apm_m99A01_extremal
+      have hc : Real.cosh (Real.pi / 4) ≠ 0 := ne_of_gt (Real.cosh_pos _)
+      rw [show Real.pi / 2 = 2 * (Real.pi / 4) by ring,
+        Real.cosh_two_mul, Real.sinh_two_mul, Real.tanh_eq_sinh_div_cosh]
+      field_simp [hc]
+      nlinarith [Real.cosh_sq_sub_sinh_sq (Real.pi / 4)]
+  have hz : z ∈ apm_m99A01_admissible := by
+    refine ⟨hy.1.add ((he.1.sub hy.1).const_smul s), ?_, ?_⟩
+    · simp [z, hy.2.1, he.2.1]
+    · simp [z, hy.2.2, he.2.2]
+  rw [show (fun t ↦ y t + s * (apm_m99A01_extremal t - y t)) = z from rfl,
+    apm_m99A01_functional_sub_extremal z hz]
+  rw [← intervalIntegral.integral_const_mul]
+  apply congrArg (fun r : ℝ ↦ apm_m99A01_functional apm_m99A01_extremal + r)
+  apply intervalIntegral.integral_congr
+  intro t ht
+  have hyD := hy.1.differentiable (by norm_num) t
+  have heD := he.1.differentiable (by norm_num) t
+  have hsubD := hyD.sub heD
+  have hzsub : (fun x ↦ z x - apm_m99A01_extremal x) =
+      fun x ↦ (1 - s) * (y x - apm_m99A01_extremal x) := by
+    funext x
+    simp [z]
+    ring
+  rw [hzsub]
+  have hdscale : deriv (fun x ↦ (1 - s) *
+      (y x - apm_m99A01_extremal x)) t =
+      (1 - s) * deriv (fun x ↦ y x - apm_m99A01_extremal x) t := by
+    exact deriv_const_mul (1 - s) hsubD
+  change deriv (fun x ↦ (1 - s) * (y x - apm_m99A01_extremal x)) t ^ 2 +
+      (z t - apm_m99A01_extremal t) ^ 2 =
+    (1 - s) ^ 2 * (deriv (fun x ↦ y x - apm_m99A01_extremal x) t ^ 2 +
+      (y t - apm_m99A01_extremal t) ^ 2)
+  rw [hdscale]
+  simp [z]
+  ring
+
+lemma apm_m99A01_extremal_stationary :
+    apm_m99A01_stationary apm_m99A01_extremal := by
+  intro η hη hη0 hηpi
+  have he : apm_m99A01_extremal ∈ apm_m99A01_admissible := by
+    refine ⟨?_, by simp [apm_m99A01_extremal], ?_⟩
+    · unfold apm_m99A01_extremal
+      fun_prop
+    · unfold apm_m99A01_extremal
+      have hc : Real.cosh (Real.pi / 4) ≠ 0 := ne_of_gt (Real.cosh_pos _)
+      rw [show Real.pi / 2 = 2 * (Real.pi / 4) by ring,
+        Real.cosh_two_mul, Real.sinh_two_mul, Real.tanh_eq_sinh_div_cosh]
+      field_simp [hc]
+      nlinarith [Real.cosh_sq_sub_sinh_sq (Real.pi / 4)]
+  let y := fun t ↦ apm_m99A01_extremal t + η t
+  have hy : y ∈ apm_m99A01_admissible := by
+    refine ⟨he.1.add hη, ?_, ?_⟩
+    · simp [y, he.2.1, hη0]
+    · simp [y, he.2.2, hηpi]
+  let Q := ∫ t in (0 : ℝ)..(Real.pi / 2),
+    deriv (fun x ↦ y x - apm_m99A01_extremal x) t ^ 2 +
+      (y t - apm_m99A01_extremal t) ^ 2
+  have hline : (fun s ↦ apm_m99A01_functional
+      (fun t ↦ apm_m99A01_extremal t + s * η t)) =
+      fun s ↦ apm_m99A01_functional apm_m99A01_extremal + s ^ 2 * Q := by
+    funext s
+    have h := apm_m99A01_line_to_extremal y hy (1 - s)
+    calc
+      apm_m99A01_functional (fun t ↦ apm_m99A01_extremal t + s * η t) =
+          apm_m99A01_functional
+            (fun t ↦ y t + (1 - s) * (apm_m99A01_extremal t - y t)) := by
+              congr 1
+              funext t
+              simp [y]
+              ring
+      _ = apm_m99A01_functional apm_m99A01_extremal + (1 - (1 - s)) ^ 2 * Q := h
+      _ = apm_m99A01_functional apm_m99A01_extremal + s ^ 2 * Q := by ring
+  rw [hline]
+  simpa [id] using ((((hasDerivAt_id (x := (0 : ℝ))).pow 2).mul_const Q).const_add
+    (apm_m99A01_functional apm_m99A01_extremal))
+
+noncomputable def apm_m99A01_counterBump : ContDiffBump (-2 : ℝ) :=
+  ⟨1 / 4, 1 / 2, by norm_num, by norm_num⟩
+
+lemma apm_m99A01_counterBump_at_center : apm_m99A01_counterBump (-2) = 1 := by
+  apply ContDiffBump.one_of_mem_closedBall
+  simp [apm_m99A01_counterBump]
+
+lemma apm_m99A01_counterBump_notMem_tsupport {x : ℝ} (hx : 0 ≤ x) :
+    x ∉ tsupport apm_m99A01_counterBump := by
+  rw [ContDiffBump.tsupport_eq]
+  simp only [Metric.mem_closedBall, not_le]
+  change (1 / 2 : ℝ) < dist x (-2)
+  rw [Real.dist_eq]
+  have : 0 ≤ x + 2 := by linarith
+  rw [show x - -2 = x + 2 by ring, abs_of_nonneg this]
+  linarith
+
+lemma apm_m99A01_counterBump_hasDerivAt_zero {x : ℝ} (hx : 0 ≤ x) :
+    HasDerivAt apm_m99A01_counterBump 0 x := by
+  apply HasDerivAt.of_notMem_tsupport
+  exact apm_m99A01_counterBump_notMem_tsupport hx
+
+lemma apm_m99A01_counterBump_zero {x : ℝ} (hx : 0 ≤ x) :
+    apm_m99A01_counterBump x = 0 := by
+  exact image_eq_zero_of_notMem_tsupport (apm_m99A01_counterBump_notMem_tsupport hx)
+
 theorem apm_m99a01 :
-    (∀ y : ℝ → ℝ,
-      (ContDiff ℝ 2 y ∧ y ∈ apm_m99A01_admissible ∧ apm_m99A01_stationary y) ↔
-        y = apm_m99A01_extremal) ∧
+    (∀ y : ℝ → ℝ, ContDiff ℝ 2 y → y ∈ apm_m99A01_admissible →
+      (apm_m99A01_stationary y ↔
+        Set.EqOn y apm_m99A01_extremal (Set.Icc 0 (Real.pi / 2)))) ∧
     apm_m99A01_extremal ∈ apm_m99A01_admissible ∧
     (∀ y ∈ apm_m99A01_admissible,
       apm_m99A01_functional apm_m99A01_extremal ≤ apm_m99A01_functional y) ∧
@@ -234,5 +455,13 @@ theorem apm_m99a01 :
     `deriv` after setting `h = y-y₀` was not completed in this hop.
     -/
     constructor
-    · sorry
+    · intro y hy
+      rw [apm_m99A01_functional_sub_extremal y hy]
+      have hnonneg : 0 ≤ ∫ t in (0 : ℝ)..(Real.pi / 2),
+          deriv (fun x ↦ y x - apm_m99A01_extremal x) t ^ 2 +
+            (y t - apm_m99A01_extremal t) ^ 2 := by
+        apply intervalIntegral.integral_nonneg (by positivity)
+        intro t ht
+        positivity
+      linarith
     · exact apm_m99A01_no_maximum
