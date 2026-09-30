@@ -50733,7 +50733,7 @@
     :disposition :stop,
     :author "topo-6",
     :reason
-    "The scheduler defect is unchanged: build_step.bb enforces exact commit scope and maps STOP back to done-unreviewed, causing this row to be redispatched without a reviewable commit. Reviewed commit f197fad73f26e4db68a67b08b0bfa96b8184d52c implements the declared affine chart in ConstructionTargets/T94A08AffineChartHomeomorph.lean, whereas the row scopes ConstructionTargets/RealProjectiveSmoothTarget.lean and accepts unrelated rpSmoothAtlas_exists. The supervisor must stop scheduling the unrepaired row and either supersede it with routes-2026-09-29-t94a08-affine-chart-quotient-compatibility-topo2-r1 or atomically repair scope and acceptance and attach the existing commit.",
+    "The scheduled-entrypoint defect persists: build_step.bb rejects commits outside exact scope and converts STOP back to done-unreviewed. The reviewed implementation f197fad73f26e4db68a67b08b0bfa96b8184d52c supplies the required complex-projective affine chart in ConstructionTargets/T94A08AffineChartHomeomorph.lean, while this row authorizes ConstructionTargets/RealProjectiveSmoothTarget.lean and accepts unrelated rpSmoothAtlas_exists. The supervisor must stop redispatching this row and either supersede it with routes-2026-09-29-t94a08-affine-chart-quotient-compatibility-topo2-r1 or atomically repair scope and acceptance and attach the existing commit.",
     :commands
     [{:cmd
       "rg -n \"implementation commit paths differ from exact scope|:stop \\\\(replace-item\" holes/labs/topology-contract/build_step.bb",
@@ -50755,15 +50755,9 @@
      "The affine coordinate spaces indexed by the two coordinates other than i",
      :direction
      "Explicit OpenPartialHomeomorphs from each projective nonvanishing-coordinate source subtype to its affine coordinate target, with forward map coordinates, inverse chartInverse, exact mutual-inverse equalities, and coordinateLine normalization"},
-    :review
-    {:outcome :fail,
-     :seat "codex-7",
-     :job "invoke-1790745515377-28452-0f662d96",
-     :finding
-     "Fresh verification reproduces the deterministic scheduled-entrypoint defect: the sole :done-unreviewed row contains :stop evidence and no recorded :commit or fixture hash. build_step still enforces exact commit scope and maps STOP back to :done-unreviewed, repeatedly scheduling an unreviewable transition. The row scopes RealProjectiveSmoothTarget and accepts rpSmoothAtlas although its representation requires complex-projective affine-chart homeomorphs; genuine commit f197fad73f26e4db68a67b08b0bfa96b8184d52c adds only T94A08AffineChartHomeomorph. Exact repair: stop scheduling this row and either supersede it with routes-2026-09-29-t94a08-affine-chart-quotient-compatibility-topo2-r1 or atomically correct scope/acceptance and attach that commit. Restore .lake/packages through the canonical lifecycle because it remains a real directory, so Lake gates are forbidden."},
     :seat "topo-6"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
