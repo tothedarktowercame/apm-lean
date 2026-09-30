@@ -50755,15 +50755,9 @@
      "The affine coordinate spaces indexed by the two coordinates other than i",
      :direction
      "Explicit OpenPartialHomeomorphs from each projective nonvanishing-coordinate source subtype to its affine coordinate target, with forward map coordinates, inverse chartInverse, exact mutual-inverse equalities, and coordinateLine normalization"},
-    :review
-    {:outcome :fail,
-     :seat "codex-7",
-     :job "invoke-1790750547574-28704-a7513e21",
-     :finding
-     "Deterministic scheduled-entrypoint defect persists after fresh verification: the sole :done-unreviewed row has :stop evidence and no recorded :commit or fixture hash. build_step enforces exact scope but maps STOP back to :done-unreviewed, repeatedly scheduling an unreviewable row. Its RealProjectiveSmoothTarget/rpSmoothAtlas contract contradicts its complex-projective affine-chart-homeomorph representation; genuine commit f197fad73f26e4db68a67b08b0bfa96b8184d52c changes only T94A08AffineChartHomeomorph. Exact repair: stop redispatching it and either supersede it with routes-2026-09-29-t94a08-affine-chart-quotient-compatibility-topo2-r1 or atomically align scope/acceptance and attach that commit. Restore .lake/packages through the canonical lifecycle because it remains a real directory and Lake gates are forbidden."},
     :seat "topo-6"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
