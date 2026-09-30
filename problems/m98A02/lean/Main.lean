@@ -8,14 +8,11 @@ import Mathlib
 Part (b) forms `I-A`, so its operator must have equal domain and codomain.
 The initial `A : X → Y` is therefore minimally specialized there to
 `A : X → X`; part (a) remains stated for `X → Y`.
--/
 
-lemma apm_m98a02_trivial_space_obstruction
-    (A B : (Fin 0 → ℝ) →L[ℝ] (Fin 0 → ℝ)) :
-    ¬ 1 / (1 + ‖A‖) ≤ ‖B‖ := by
-  have hA : A = 0 := Subsingleton.elim _ _
-  have hB : B = 0 := Subsingleton.elim _ _
-  simp [hA, hB]
+Part (b) also assumes `X ≠ {0}` (`[Nontrivial X]`). The printed lower bound
+`1/(1+‖A‖) ≤ ‖(I-A)⁻¹‖` fails on the zero space, where `(I-A)⁻¹ = 0`; the
+intended proof uses `‖I‖ = 1`, which holds only on a nonzero space.
+-/
 
 theorem apm_m98a02 :
     (∀ (X Y : Type*) [NormedAddCommGroup X] [NormedSpace ℝ X]
@@ -25,7 +22,7 @@ theorem apm_m98a02 :
     (∀ (X Y : Type*) [NormedAddCommGroup X] [NormedSpace ℝ X]
       [NormedAddCommGroup Y] [NormedSpace ℝ Y] [CompleteSpace Y],
       Nonempty (CompleteSpace (X →L[ℝ] Y))) ∧
-    (∀ (X : Type*) [NormedAddCommGroup X] [NormedSpace ℝ X] [CompleteSpace X]
+    (∀ (X : Type*) [NormedAddCommGroup X] [NormedSpace ℝ X] [CompleteSpace X] [Nontrivial X]
       (A : X →L[ℝ] X), ‖A‖ < 1 →
       ∃ B : X →L[ℝ] X,
         B.comp (ContinuousLinearMap.id ℝ X - A) = ContinuousLinearMap.id ℝ X ∧
@@ -44,20 +41,21 @@ theorem apm_m98a02 :
       exact ⟨‖Ac‖, norm_nonneg _, fun x ↦ Ac.le_opNorm x⟩
   · intro X Y _ _ _ _ _
     exact ⟨inferInstance⟩
-  · /-
-    PARTIAL boundary (codex): this final conjunct is false as frozen because
-    it does not assume `[Nontrivial X]`.  Take a trivial real normed space
-    (for example `X := Fin 0 → ℝ`) and `A = 0`.  Then `‖A‖ < 1`, but
-    every `B : X →L[ℝ] X` is zero and has norm zero.  The required lower
-    estimate specializes to `1 / (1 + 0) ≤ 0`, i.e. `1 ≤ 0`.
-    This contradiction is now formally certified by
-    `apm_m98a02_trivial_space_obstruction` above.
-
-    Mathlib's `isUnit_one_sub_of_norm_lt_one`,
-    `NormedRing.inverse_one_sub`, and the geometric-series API do prove the
-    intended Neumann theorem once `[Nontrivial X]` is added.  Sibling
-    `m95A01` demonstrates the same unit construction.  The first two
-    conjuncts above are fully proved; this `sorry` is confined to the false
-    conjunct, and the frozen statement has not been altered.
-    -/
-    sorry
+  · intro X _ _ _ _ A hA
+    have hu : IsUnit (1 - A) := isUnit_one_sub_of_norm_lt_one hA
+    obtain ⟨u, hu'⟩ := hu
+    refine ⟨↑u⁻¹, ?_, ?_, ?_, ?_⟩
+    · change (↑u⁻¹ * (1 - A) : X →L[ℝ] X) = 1; rw [← hu']; simp
+    · change ((1 - A) * ↑u⁻¹ : X →L[ℝ] X) = 1; rw [← hu']; simp
+    · have h1 : (1:ℝ) ≤ ‖(↑u⁻¹ : X →L[ℝ] X)‖ * (1 + ‖A‖) := by
+        calc (1:ℝ) = ‖(1 : X →L[ℝ] X)‖ := norm_one.symm
+          _ = ‖(↑u⁻¹ : X →L[ℝ] X) * (1 - A)‖ := by rw [← hu']; simp
+          _ ≤ ‖(↑u⁻¹ : X →L[ℝ] X)‖ * ‖1 - A‖ := norm_mul_le _ _
+          _ ≤ ‖(↑u⁻¹ : X →L[ℝ] X)‖ * (1 + ‖A‖) := by
+              gcongr; exact (norm_sub_le _ _).trans (by rw [norm_one])
+      rw [div_le_iff₀ (by positivity)]; linarith
+    · have hinv : (↑u⁻¹ : X →L[ℝ] X) = Ring.inverse (1 - A) := by
+        rw [← hu', Ring.inverse_unit]
+      rw [hinv, NormedRing.inverse_one_sub A hA]
+      rw [one_div]
+      exact tsum_of_norm_bounded (hasSum_geometric_of_lt_one (norm_nonneg _) hA) (fun n => norm_pow_le A n)
