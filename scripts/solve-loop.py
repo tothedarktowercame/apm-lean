@@ -303,9 +303,7 @@ Then say:
 3. The route the next attempts should take: ordered steps, each naming the `sorry` it supplies.
    If the current route is wrong, say so and give a different one. Compile a probe of the
    riskiest step in /tmp/strategy-{pid}/ where you can.
-4. If the missing piece is a large body of theory (not a lemma or two), or the statement looks
-   false, say so plainly: that is a reason to stop.
-
+{stop_rule}
 Do not edit {out} or anything in the repository. Do not bell anyone: your final message is read
 directly from the job record. Finish with one line:
 STRATEGY_RESULT continue | stop — then one sentence.
@@ -313,6 +311,28 @@ STRATEGY_RESULT continue | stop — then one sentence.
 Recent attempts:
 {history}
 """
+
+
+STOP_RULE = """4. If the missing piece is a large body of theory (not a lemma or two), or the statement looks
+   false, say so plainly: that is a reason to stop.
+"""
+# Joe, 2026-09-30: problems the strategy pass stopped for missing Mathlib theory
+# get their own loop, where being blocked by Mathlib is not a reason to stop.
+BUILD_STOP_RULE = """4. This problem is in the build loop. Being blocked by Mathlib is NOT a reason to stop: we
+   need to build the relevant extensions. If the missing piece is a body of theory, lay it out
+   as an ordered list of lemmas to build in the proof file (statement of each, what it rests
+   on, which is first), and say which one the next attempt should prove. The only reason to
+   stop is that the statement looks false: then give the counterexample.
+"""
+BUILD_NOTE = """
+## Build loop
+This problem was stopped earlier because Mathlib lacks the theory it needs. Being blocked by
+Mathlib is not a reason to stop working: we need to build the relevant extensions. Build them in
+{out} as proved lemmas, the general statements Mathlib is missing, one layer at a time,
+following the strategy route below if there is one. Leave the file compiling, with `sorry` only
+in what remains, and name in REFUTATION.md the next lemma to build.
+"""
+BUILD = False
 
 
 def strategy(seat: str, pid: str, stalls: int, best: int | None) -> tuple[bool, str]:
@@ -323,7 +343,8 @@ def strategy(seat: str, pid: str, stalls: int, best: int | None) -> tuple[bool, 
     history = "\n".join(f"- attempt {r.get('attempt')}: {r.get('outcome')} {r.get('reason', '')[:200]} | "
                         f"{r.get('said', '')[-300:]}".replace("\r", " ") for r in rows)
     job = dispatch(seat, STRATEGY_PROMPT.format(pid=pid, stalls=stalls, best=best, out=d / "Main.lean",
-                                                dir=d, history=history))
+                                                dir=d, history=history,
+                                                stop_rule=BUILD_STOP_RULE if BUILD else STOP_RULE))
     log(f"{seat} <- {pid} strategy ({job})")
     j = wait(job)
     said = j.get("result") or ""
@@ -449,6 +470,8 @@ def attempt(seat: str, pid: str, feedback: str) -> dict:
     if plan.exists():
         obstruction += (f"\nA strategy pass reviewed this problem after it stalled. Follow its route "
                         f"unless you find it wrong:\n{plan.read_text()[-4000:]}\n")
+    if BUILD:
+        obstruction = BUILD_NOTE.format(out=out) + obstruction
     prompt = PROMPT.format(pid=pid, decl=", ".join(fp["decls"]), out=out, dir=d, obstruction=obstruction, start=start,
                            feedback=(f"\nA previous attempt was refused by the checker:\n{feedback}\n" if feedback else ""))
     job = dispatch(seat, prompt)
@@ -556,6 +579,8 @@ def main() -> int:
                    help="fresh seat asked, after each stall, whether and how to continue")
     r.add_argument("--max-strategy", type=int, default=2, help="strategy passes per problem")
     r.add_argument("--only", help="comma-separated problem ids")
+    r.add_argument("--build", action="store_true",
+                   help="build loop: missing Mathlib theory is built, never a reason to stop")
     r.add_argument("--skip", help="comma-separated problem ids to leave alone")
     o = ap.parse_args()
     rows = ledger_rows()
@@ -574,6 +599,8 @@ def main() -> int:
         print(f"{len(todo)} open non-topology problems not yet landed or refuted:")
         print(" ".join(todo))
         return 0
+    global BUILD
+    BUILD = getattr(o, "build", False)
     if o.only:
         todo = [p for p in o.only.split(",") if p in todo]
     if o.skip:
