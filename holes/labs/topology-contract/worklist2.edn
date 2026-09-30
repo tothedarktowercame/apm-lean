@@ -50723,7 +50723,7 @@
    "single-consumer exact projective affine-chart construction",
    :consumer :t94A08,
    :review-finding
-   "Row remains :done-unreviewed with :stop evidence and no recorded :commit; its RealProjectiveSmoothTarget scope and rpSmoothAtlas acceptance contradict the required complex-projective affine-chart-homeomorph representation. The genuine implementation is already in prerequisite commit f197fad73f26e4db68a67b08b0bfa96b8184d52c, while the registry reports this as the sole :done-unreviewed row. Exact repair: the supervisor must supersede this stale parent with that prerequisite, or atomically rewrite scope/acceptance and attach the existing affine commit. Additionally .lake/packages is a real directory, not the required canonical symlink, so the canonical workspace lifecycle must repair package authority before any Lake gate is run.",
+   "Deterministic ledger defect persists: the sole :done-unreviewed row records :stop evidence and no :commit, and its scope ConstructionTargets/RealProjectiveSmoothTarget.lean plus rpSmoothAtlas acceptance contradict its required complex-projective affine-chart-homeomorph representation. Commit f197fad73f26e4db68a67b08b0bfa96b8184d52c changes only ConstructionTargets/T94A08AffineChartHomeomorph.lean and contains the genuine implementation. Exact repair: the supervisor must supersede this stale row with routes-2026-09-29-t94a08-affine-chart-quotient-compatibility-topo2-r1, or atomically correct scope/acceptance and attach that commit. Also restore .lake/packages through the canonical workspace lifecycle: it remains a real directory, so policy forbids Lake acceptance gates.",
    :evidence
    {:residual
     "No mathematical or representation obligation remains; supervisor ledger repair and canonical package-authority restoration are required.",
@@ -50752,9 +50752,15 @@
      "The affine coordinate spaces indexed by the two coordinates other than i",
      :direction
      "Explicit OpenPartialHomeomorphs from each projective nonvanishing-coordinate source subtype to its affine coordinate target, with forward map coordinates, inverse chartInverse, exact mutual-inverse equalities, and coordinateLine normalization"},
+    :review
+    {:outcome :fail,
+     :seat "codex-7",
+     :job "invoke-1790743563173-28322-5feb3321",
+     :finding
+     "Deterministic ledger defect persists: the sole :done-unreviewed row records :stop evidence and no :commit, and its scope ConstructionTargets/RealProjectiveSmoothTarget.lean plus rpSmoothAtlas acceptance contradict its required complex-projective affine-chart-homeomorph representation. Commit f197fad73f26e4db68a67b08b0bfa96b8184d52c changes only ConstructionTargets/T94A08AffineChartHomeomorph.lean and contains the genuine implementation. Exact repair: the supervisor must supersede this stale row with routes-2026-09-29-t94a08-affine-chart-quotient-compatibility-topo2-r1, or atomically correct scope/acceptance and attach that commit. Also restore .lake/packages through the canonical workspace lifecycle: it remains a real directory, so policy forbids Lake acceptance gates."},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
