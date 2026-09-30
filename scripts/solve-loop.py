@@ -558,7 +558,17 @@ def main() -> int:
     r.add_argument("--only", help="comma-separated problem ids")
     r.add_argument("--skip", help="comma-separated problem ids to leave alone")
     o = ap.parse_args()
-    finished = {x["id"] for x in ledger_rows() if x.get("outcome") in ("landed", "refuted-claim")}
+    rows = ledger_rows()
+    # A refutation retires a problem only while the statement it refuted is the
+    # one on master; a revised statement is open again (m95A03, 2026-09-30).
+    refuted = {(x["id"], x.get("pinned")) for x in rows if x.get("outcome") == "refuted-claim"}
+    finished = {x["id"] for x in rows if x.get("outcome") == "landed"}
+    for pid, sha in refuted:
+        try:
+            if pin(pid)["sha256"] == sha:
+                finished.add(pid)
+        except (RuntimeError, ValueError):
+            finished.add(pid)
     todo = [p for p in open_problems() if p not in finished]
     if o.cmd == "queue":
         print(f"{len(todo)} open non-topology problems not yet landed or refuted:")

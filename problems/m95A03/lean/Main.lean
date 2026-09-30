@@ -5,8 +5,13 @@ import Mathlib
 
 ## Statement repairs
 
-None. The problem asks for appropriate hypotheses; we take `a < b`, `p ∈ C¹`
+The problem asks for appropriate hypotheses; we take `a < b`, `p ∈ C¹`
 uniformly positive, and continuous `q ≥ 0` and `f`.
+
+Uniqueness in part (c) is up to equality on `[a, b]`. The functions are
+`ℝ → ℝ` and the energy only sees `[a, b]`, so a minimizer changed outside
+`[a, b]` is another minimizer; `∃!` over all of `ℝ → ℝ` is false (compiled
+counterexample: holes/labs/solve-loop/refutations/m95A03/Refute.lean).
 
 ## Encoding questions
 
@@ -61,39 +66,12 @@ theorem apm_m95a03
       apm_m95A03_solves a b α β p q f u ↔
         apm_m95A03_solves a b 0 0 p q
           (apm_m95A03_modifiedRHS p q f w) (u - w)) ∧
-    ∃! u : ℝ → ℝ,
+    ∃ u : ℝ → ℝ,
       ContDiff ℝ 2 u ∧
       IsMinOn (apm_m95A03_energy a b p q f)
-        (apm_m95A03_admissible a b 0 0) u := by
-  /-
-  SKIPPED (frozen-statement defect).  The final `∃!` asserts literal equality
-  of globally defined functions, but both `apm_m95A03_energy` and
-  `apm_m95A03_admissible` inspect a candidate only on `[a,b]` (apart from the
-  global regularity predicate).  Consequently, if `u` is any `C²` minimizer,
-  adding a nonzero smooth bump supported in an interval strictly to the right
-  of `b` gives a different global `C²` function with the same endpoint data,
-  the same derivatives on `[a,b]`, and exactly the same energy.  Hence global
-  uniqueness is impossible.  The conclusion must instead use `Set.EqOn` on
-  `Icc a b`, functions on the interval subtype, or a canonical extension.
-
-  This is the same defect documented in sibling `m02A05`, whose frozen ODE
-  statement also incorrectly upgrades interval agreement to global function
-  equality. Mathlib's `ContDiffBump` library confirms this counterexample
-  directly: `ContDiffBump.support_eq` identifies the support with its chosen
-  ball, while its coercion is smooth by the `ContDiff.contDiffBump` API; a
-  center beyond `b` and sufficiently small outer radius gives the required
-  perturbation. The fully closed artifact scan supplied no quotient/extension
-  convention that changes the meaning of equality here.
-
-  Even after repairing uniqueness, the intended analytic proof would require
-  an interval integration-by-parts theorem, the fundamental lemma of the
-  calculus of variations for the chosen global `ContDiff` representation,
-  coercive minimization/Lax--Milgram, and one-dimensional regularity.  Searches
-  of `LEMMA-INDEX.md`, Mathlib, `ConstructionTargets/`, and `YoungL2.lean`
-  found no assembled theorem bridging those layers.  Partial siblings
-  `m98A06`, `m01J06`, and `m99A01` stop at the fundamental-lemma/integration-
-  by-parts boundary, while `m95A05` records the absence of a packaged
-  Lax--Milgram route for its custom encoding.  Since the theorem is already
-  false before those analytic issues arise, no local replacement was made.
-  -/
+        (apm_m95A03_admissible a b 0 0) u ∧
+      ∀ v : ℝ → ℝ, ContDiff ℝ 2 v →
+        IsMinOn (apm_m95A03_energy a b p q f)
+          (apm_m95A03_admissible a b 0 0) v →
+        Set.EqOn v u (Set.Icc a b) := by
   sorry
