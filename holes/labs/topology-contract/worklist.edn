@@ -81087,7 +81087,7 @@
    :evidence
    {:placeholder-delta 0,
     :residual
-    "At a34afe82 build_step.bb remains 8e9127f2 and the validator still reports 14 superseded rows. The structural repair has not landed: attempt 3 must be superseded and only its adapter edge removed. This empty-scope row cannot perform the mutation; stop ordinary transitions and redispatch until the graph changes externally.",
+    "At 7451ba97 build_step.bb remains 8e9127f2 and the validator still reports 14 superseded rows. The structural repair has not landed: attempt 3 must be superseded and only its adapter edge removed. This empty-scope row cannot perform the mutation; stop ordinary transitions and redispatch until the graph changes externally.",
     :outcome :stop,
     :disposition :stop,
     :author "topo-2",
@@ -81097,13 +81097,7 @@
       "git rev-parse --short HEAD && git log -1 --format=%h -- holes/labs/topology-contract/build_step.bb && bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
       :exit 0,
       :finding
-      "HEAD a34afe82; writer 8e9127f2; 675 items OK; 651 done; 14 superseded; 1 repair."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1790755202078-28904-1b968913",
-     :finding
-     "Recorded commit 3998bf4b changes only holes/labs/topology-contract/worklist.edn. Fresh validation reports 675 items OK with 14 superseded, and the committed adapter still depends on routes-2026-09-29-t98a06-local-smooth-submersion-lift-3. Exact repair: atomically mark attempt 3 :superseded and remove only its edge from routes-2026-09-29-t98a06-part-a-adapter-1, retaining routes-2026-09-29-topo1-refill-heavy-1 and reviewed attempts 1-2. The frozen fixture SHA-256 remains cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d; reproduced acceptance evidence remains successful Lean compilation, zero fixture sorry, one Main.lean sorry, registry 131/131, and a theorem orientation that assumes rather than constructs the missing local-smooth-lift bridge."},
+      "HEAD 7451ba97; writer 8e9127f2; 675 items OK; 651 done; 14 superseded; 1 repair."}],
     :required-transition
     {:supersede
      :routes-2026-09-29-t98a06-local-smooth-submersion-lift-3,
@@ -81117,7 +81111,7 @@
     :changed-paths [],
     :seat "topo-2"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t98A06/part-a",
    :acceptance
