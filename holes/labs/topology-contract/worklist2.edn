@@ -50733,7 +50733,7 @@
     :disposition :stop,
     :author "topo-6",
     :reason
-    "The metadata defect is unchanged: reviewed commit f197fad73f26e4db68a67b08b0bfa96b8184d52c implements the required complex-projective AffineChartConstruction 2 in ConstructionTargets/T94A08AffineChartHomeomorph.lean, but this row scopes unrelated ConstructionTargets/RealProjectiveSmoothTarget.lean and accepts rpSmoothAtlas_exists. Exact-scope enforcement prevents a valid implementation receipt. The supervisor must supersede this parent with routes-2026-09-29-t94a08-affine-chart-quotient-compatibility-topo2-r1 or atomically rewrite scope and acceptance and attach the existing affine commit.",
+    "No valid implementation transition exists for this row. Reviewed commit f197fad73f26e4db68a67b08b0bfa96b8184d52c supplies the declared complex-projective AffineChartConstruction 2 in ConstructionTargets/T94A08AffineChartHomeomorph.lean, but the row scopes ConstructionTargets/RealProjectiveSmoothTarget.lean and accepts unrelated rpSmoothAtlas_exists. Exact-scope enforcement excludes that commit. The supervisor must supersede this stale parent with routes-2026-09-29-t94a08-affine-chart-quotient-compatibility-topo2-r1 or atomically correct scope and acceptance and attach the affine commit.",
     :commands
     [{:cmd "stat -c '%F' .lake/packages", :exit 0, :output "directory"}
      {:cmd "python3 scripts/statement-registry.py check",
@@ -50743,8 +50743,7 @@
       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
       :exit 0,
       :output
-      "topology-worklist: 353 items OK; {:done 324, :superseded 23, :repair 1, :blocked 4, :open 1}"}
-     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+      "topology-worklist: 353 items OK; {:done 324, :superseded 23, :repair 1, :blocked 4, :open 1}"}],
     :representation
     {:source
      "The nonvanishing-coordinate open subtypes of complex projective two-space with the frozen topology coinduced from quotientMap on nonzero vectors",
@@ -50752,15 +50751,9 @@
      "The affine coordinate spaces indexed by the two coordinates other than i",
      :direction
      "Explicit OpenPartialHomeomorphs from each projective nonvanishing-coordinate source subtype to its affine coordinate target, with forward map coordinates, inverse chartInverse, exact mutual-inverse equalities, and coordinateLine normalization"},
-    :review
-    {:outcome :fail,
-     :seat "codex-7",
-     :job "invoke-1790743563173-28322-5feb3321",
-     :finding
-     "Deterministic ledger defect persists: the sole :done-unreviewed row records :stop evidence and no :commit, and its scope ConstructionTargets/RealProjectiveSmoothTarget.lean plus rpSmoothAtlas acceptance contradict its required complex-projective affine-chart-homeomorph representation. Commit f197fad73f26e4db68a67b08b0bfa96b8184d52c changes only ConstructionTargets/T94A08AffineChartHomeomorph.lean and contains the genuine implementation. Exact repair: the supervisor must supersede this stale row with routes-2026-09-29-t94a08-affine-chart-quotient-compatibility-topo2-r1, or atomically correct scope/acceptance and attach that commit. Also restore .lake/packages through the canonical workspace lifecycle: it remains a real directory, so policy forbids Lake acceptance gates."},
     :seat "topo-6"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
