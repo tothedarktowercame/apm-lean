@@ -565,7 +565,7 @@ def main() -> int:
     finished = {x["id"] for x in rows if x.get("outcome") == "landed"}
     for pid, sha in refuted:
         try:
-            if pin(pid)["sha256"] == sha:
+            if sha is None or pin(pid)["sha256"] == sha:   # manual rows carry no pin
                 finished.add(pid)
         except (RuntimeError, ValueError):
             finished.add(pid)
