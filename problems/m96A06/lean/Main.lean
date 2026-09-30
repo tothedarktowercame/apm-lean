@@ -21,6 +21,7 @@ including those with nonzero boundary traces.
 -/
 
 open MeasureTheory Set
+open RealInnerProductSpace
 open scoped ContDiff
 
 def apm_m96a06_IsWeakDerivative
@@ -153,6 +154,120 @@ lemma apm_m96a06_forceOnH_apply
     apm_m96a06_forceOnH value b hb h = ∫ t, b t * value h t ∂μ := by
   exact apm_m96a06_forceCLM_apply b hb (value h)
 
+noncomputable def apm_m96a06_bilinearCLM
+    {H : Type*} [NormedAddCommGroup H] [NormedSpace ℝ H]
+    (value weakDeriv : H →L[ℝ] Lp ℝ 2 (volume.restrict (Icc (0 : ℝ) 1)))
+    (a : ℝ → ℝ) (ha : MemLp a ⊤ (volume.restrict (Icc (0 : ℝ) 1))) :
+    H →L[ℝ] H →L[ℝ] ℝ := by
+  let μ := volume.restrict (Icc (0 : ℝ) 1)
+  let Q : Lp ℝ 2 μ →L[ℝ] Lp ℝ 2 μ →L[ℝ] ℝ :=
+    (ContinuousLinearMap.mul ℝ ℝ).lpPairing μ 2 2
+  let precomp : (Lp ℝ 2 μ →L[ℝ] ℝ) →L[ℝ] (H →L[ℝ] Lp ℝ 2 μ) →L[ℝ] H →L[ℝ] ℝ :=
+    ContinuousLinearMap.compL ℝ H (Lp ℝ 2 μ) ℝ
+  exact (precomp.flip weakDeriv).comp (Q.comp weakDeriv) +
+    (precomp.flip value).comp
+      (Q.comp ((apm_m96a06_multiplierCLM a ha).comp value))
+
+lemma apm_m96a06_bilinearCLM_apply
+    {H : Type*} [NormedAddCommGroup H] [NormedSpace ℝ H]
+    (value weakDeriv : H →L[ℝ] Lp ℝ 2 (volume.restrict (Icc (0 : ℝ) 1)))
+    (a : ℝ → ℝ) (ha : MemLp a ⊤ (volume.restrict (Icc (0 : ℝ) 1)))
+    (u h : H) :
+    apm_m96a06_bilinearCLM value weakDeriv a ha u h =
+      ∫ t, weakDeriv u t * weakDeriv h t + a t * value u t * value h t
+        ∂(volume.restrict (Icc (0 : ℝ) 1)) := by
+  let μ := volume.restrict (Icc (0 : ℝ) 1)
+  rw [apm_m96a06_bilinearCLM]
+  simp only [ContinuousLinearMap.add_apply, ContinuousLinearMap.comp_apply,
+    ContinuousLinearMap.flip_apply, ContinuousLinearMap.compL_apply]
+  rw [ContinuousLinearMap.lpPairing_eq_integral,
+    ContinuousLinearMap.lpPairing_eq_integral, integral_add
+      (apm_m96a06_integrable_pair (weakDeriv u) (weakDeriv h))
+      (apm_m96a06_integrable_weighted_pair a ha (value u) (value h))]
+  congr 1
+  apply integral_congr_ae
+  filter_upwards [apm_m96a06_multiplier_apply a ha (value u)] with t ht
+  simp [apm_m96a06_multiplierCLM_apply, ht, mul_assoc]
+
+lemma apm_m96a06_energy_eq_bilinear_sub_force
+    {H : Type*} [NormedAddCommGroup H] [NormedSpace ℝ H]
+    (value weakDeriv : H →L[ℝ] Lp ℝ 2 (volume.restrict (Icc (0 : ℝ) 1)))
+    (a b : ℝ → ℝ)
+    (ha : MemLp a ⊤ (volume.restrict (Icc (0 : ℝ) 1)))
+    (hb : MemLp b 2 (volume.restrict (Icc (0 : ℝ) 1))) (u : H) :
+    apm_m96a06_energy value weakDeriv a b u =
+      apm_m96a06_bilinearCLM value weakDeriv a ha u u -
+        2 * apm_m96a06_forceOnH value b hb u := by
+  rw [apm_m96a06_bilinearCLM_apply, apm_m96a06_forceOnH_apply]
+  unfold apm_m96a06_energy
+  simp only [pow_two]
+  rw [← integral_const_mul]
+  rw [← integral_sub]
+  · apply integral_congr_ae
+    filter_upwards [] with t
+    ring
+  · simpa only [Pi.add_apply, mul_assoc] using
+      ((apm_m96a06_integrable_pair (weakDeriv u) (weakDeriv u)).add
+        (apm_m96a06_integrable_weighted_pair a ha (value u) (value u)))
+  · exact (apm_m96a06_integrable_force b hb (value u)).const_mul 2
+
+lemma apm_m96a06_bilinearCLM_symm
+    {H : Type*} [NormedAddCommGroup H] [NormedSpace ℝ H]
+    (value weakDeriv : H →L[ℝ] Lp ℝ 2 (volume.restrict (Icc (0 : ℝ) 1)))
+    (a : ℝ → ℝ)
+    (ha : MemLp a ⊤ (volume.restrict (Icc (0 : ℝ) 1))) (u h : H) :
+    apm_m96a06_bilinearCLM value weakDeriv a ha u h =
+      apm_m96a06_bilinearCLM value weakDeriv a ha h u := by
+  rw [apm_m96a06_bilinearCLM_apply, apm_m96a06_bilinearCLM_apply]
+  apply integral_congr_ae
+  filter_upwards [] with t
+  ring
+
+lemma apm_m96a06_bilinear_sub_force_apply
+    {H : Type*} [NormedAddCommGroup H] [NormedSpace ℝ H]
+    (value weakDeriv : H →L[ℝ] Lp ℝ 2 (volume.restrict (Icc (0 : ℝ) 1)))
+    (a b : ℝ → ℝ)
+    (ha : MemLp a ⊤ (volume.restrict (Icc (0 : ℝ) 1)))
+    (hb : MemLp b 2 (volume.restrict (Icc (0 : ℝ) 1))) (u h : H) :
+    apm_m96a06_bilinearCLM value weakDeriv a ha u h -
+      apm_m96a06_forceOnH value b hb h =
+      ∫ t, weakDeriv u t * weakDeriv h t + a t * value u t * value h t -
+        b t * value h t ∂(volume.restrict (Icc (0 : ℝ) 1)) := by
+  rw [apm_m96a06_bilinearCLM_apply, apm_m96a06_forceOnH_apply,
+    ← integral_sub]
+  · simpa only [Pi.add_apply] using
+      ((apm_m96a06_integrable_pair (weakDeriv u) (weakDeriv h)).add
+      (apm_m96a06_integrable_weighted_pair a ha (value u) (value h))
+      )
+  · exact apm_m96a06_integrable_force b hb (value h)
+
+lemma apm_m96a06_energy_hasFDerivAt
+    {H : Type*} [NormedAddCommGroup H] [NormedSpace ℝ H]
+    (value weakDeriv : H →L[ℝ] Lp ℝ 2 (volume.restrict (Icc (0 : ℝ) 1)))
+    (a b : ℝ → ℝ)
+    (ha : MemLp a ⊤ (volume.restrict (Icc (0 : ℝ) 1)))
+    (hb : MemLp b 2 (volume.restrict (Icc (0 : ℝ) 1))) (u : H) :
+    HasFDerivAt (apm_m96a06_energy value weakDeriv a b)
+      (2 • (apm_m96a06_bilinearCLM value weakDeriv a ha u -
+        apm_m96a06_forceOnH value b hb)) u := by
+  let B := apm_m96a06_bilinearCLM value weakDeriv a ha
+  let F := apm_m96a06_forceOnH value b hb
+  rw [show apm_m96a06_energy value weakDeriv a b =
+      fun x => B x x - 2 * F x by
+    funext x
+    exact apm_m96a06_energy_eq_bilinear_sub_force value weakDeriv a b ha hb x]
+  have hq := B.hasFDerivAt_of_bilinear (hasFDerivAt_id u) (hasFDerivAt_id u)
+  have hf := (F.hasFDerivAt (x := u)).const_mul 2
+  convert hq.sub hf using 1 <;> simp only [id_eq]
+  ext h
+  simp only [ContinuousLinearMap.sub_apply, ContinuousLinearMap.add_apply,
+    ContinuousLinearMap.smul_apply, smul_eq_mul, ContinuousLinearMap.precompL_apply,
+    ContinuousLinearMap.precompR_apply, ContinuousLinearMap.compL_apply,
+    ContinuousLinearMap.id_apply]
+  dsimp [B, F]
+  rw [apm_m96a06_bilinearCLM_symm value weakDeriv a ha h u]
+  ring
+
 /-- Why this unblocks `apm_m96a06`: it constructs the bounded bilinear form
 from the two `L²` pairings and the descended `L∞` multiplier, and records the
 coercivity estimate needed by Lax--Milgram. -/
@@ -173,7 +288,23 @@ theorem apm_m96A06_bridge_1
           ∂(volume.restrict (Icc (0 : ℝ) 1))) ∧
       0 < min 1 ε ∧
       ∀ u : H, min 1 ε * ‖u‖ ^ 2 ≤ B u u := by
-  sorry
+  refine ⟨apm_m96a06_bilinearCLM value weakDeriv a ha,
+    apm_m96a06_bilinearCLM_apply value weakDeriv a ha, ?_, ?_⟩
+  · exact lt_min zero_lt_one hε
+  · intro u
+    rw [apm_m96a06_bilinearCLM_apply, hnorm u]
+    rw [← integral_const_mul]
+    apply integral_mono_ae
+    · simpa [pow_two, mul_add] using
+        ((apm_m96a06_integrable_pair (value u) (value u)).add
+          (apm_m96a06_integrable_pair (weakDeriv u) (weakDeriv u))).const_mul
+            (min 1 ε)
+    · exact (apm_m96a06_integrable_pair (weakDeriv u) (weakDeriv u)).add
+        (apm_m96a06_integrable_weighted_pair a ha (value u) (value u))
+    · filter_upwards [ha_lower] with t ht
+      have hc1 : min 1 ε ≤ 1 := min_le_left _ _
+      have hcε : min 1 ε ≤ ε := min_le_right _ _
+      nlinarith [sq_nonneg (value u t), sq_nonneg (weakDeriv u t)]
 
 /-- Why this unblocks the first two conjuncts of `apm_m96a06`: the exact
 quadratic expansion has a remainder bounded by `O(‖h‖²)`, yielding the stated
@@ -197,7 +328,39 @@ theorem apm_m96A06_bridge_2
       (∃ L : H →L[ℝ] ℝ,
         HasFDerivAt (apm_m96a06_energy value weakDeriv a b) L u ∧ L = 0) ↔
       apm_m96a06_IsWeakNeumannSturmLiouville value weakDeriv a b u := by
-  sorry
+  let B := apm_m96a06_bilinearCLM value weakDeriv a ha
+  let F := apm_m96a06_forceOnH value b hb
+  constructor
+  · intro u
+    let L : H →L[ℝ] ℝ := 2 • (B u - F)
+    refine ⟨L, ?_, ?_⟩
+    · exact apm_m96a06_energy_hasFDerivAt value weakDeriv a b ha hb u
+    · intro h
+      change (2 • (B u - F)) h = _
+      simp only [ContinuousLinearMap.smul_apply, ContinuousLinearMap.sub_apply,
+        smul_eq_mul]
+      rw [apm_m96a06_bilinear_sub_force_apply value weakDeriv a b ha hb]
+      simp [two_smul, two_mul]
+  · intro u
+    constructor
+    · rintro ⟨L, hL, rfl⟩
+      have hD := apm_m96a06_energy_hasFDerivAt value weakDeriv a b ha hb u
+      have heq : (0 : H →L[ℝ] ℝ) = 2 • (B u - F) := hL.unique hD
+      intro h
+      have hh := congrArg (fun G : H →L[ℝ] ℝ => G h) heq
+      have hz : B u h - F h = 0 := by
+        simpa using hh
+      rw [sub_eq_zero] at hz
+      simpa [B, F, apm_m96a06_bilinearCLM_apply,
+        apm_m96a06_forceOnH_apply] using hz
+    · intro hu
+      refine ⟨2 • (B u - F),
+        apm_m96a06_energy_hasFDerivAt value weakDeriv a b ha hb u, ?_⟩
+      ext h
+      have hBF : B u h = F h := by
+        simpa [B, F, apm_m96a06_bilinearCLM_apply,
+          apm_m96a06_forceOnH_apply] using hu h
+      simp [hBF]
 
 /-- Why this unblocks the final conjunct of `apm_m96a06`: coercivity of the
 weighted Sobolev form and continuity of the forcing functional give the
@@ -215,7 +378,28 @@ theorem apm_m96A06_bridge_3
     (ha_lower : ∀ᵐ t ∂(volume.restrict (Icc (0 : ℝ) 1)), ε ≤ a t) :
     ∃! u : H,
       apm_m96a06_IsWeakNeumannSturmLiouville value weakDeriv a b u := by
-  sorry
+  obtain ⟨B, hB, hcpos, hcoerc⟩ :=
+    apm_m96A06_bridge_1 value weakDeriv hnorm a ha ε hε ha_lower
+  have hc : IsCoercive B := by
+    refine ⟨min 1 ε, hcpos, ?_⟩
+    intro u
+    simpa [pow_two, mul_assoc] using hcoerc u
+  let F := apm_m96a06_forceOnH value b hb
+  let f : H := (InnerProductSpace.toDual ℝ H).symm F
+  let u : H := hc.continuousLinearEquivOfBilin.symm f
+  have hu : apm_m96a06_IsWeakNeumannSturmLiouville value weakDeriv a b u := by
+    intro h
+    rw [← hB]
+    rw [← hc.continuousLinearEquivOfBilin_apply]
+    simp [u, f, F, InnerProductSpace.toDual_symm_apply,
+      apm_m96a06_forceOnH_apply]
+  refine ⟨u, hu, ?_⟩
+  intro w hw
+  apply hc.continuousLinearEquivOfBilin.injective
+  apply ext_inner_right ℝ
+  intro h
+  rw [hc.continuousLinearEquivOfBilin_apply,
+    hc.continuousLinearEquivOfBilin_apply, hB, hB, hw h, hu h]
 
 theorem apm_m96a06
     {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H] [CompleteSpace H]
@@ -324,4 +508,8 @@ theorem apm_m96a06
   complete Lax--Milgram and the quadratic Frechet remainder. No unproved
   assertion was introduced; the frozen statement is unchanged.
   -/
-  sorry
+  have hderiv := apm_m96A06_bridge_2 value weakDeriv hnorm a b ha hb
+  exact ⟨hderiv.1, hderiv.2,
+    apm_m96A06_bridge_3 value weakDeriv hnorm a b ha hb ε hε ha_lower⟩
+
+#print axioms apm_m96a06
