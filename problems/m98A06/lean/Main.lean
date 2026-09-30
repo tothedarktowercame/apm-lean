@@ -9,6 +9,13 @@ The preamble says `y ∈ C¹([0,1])`, but the functional integrates to `a`
 and parts (a)–(b) impose a boundary value at `a`.  The domain is minimally
 repaired to `C¹([0,a])`.
 
+Strengthened 2026-09-30 so the statement gives the whole answer to "find the
+extrema": for `a < π` the minimiser is unique on `[0, a]` and there is no
+maximum (previously only "is a minimiser"); in part (c) the unbounded-above
+witnesses are `C¹` functions, the problem's class, not just `H¹₀`.
+Not stated: the other constrained stationary points `±√(2/π) sin kx`, `k ≥ 2`,
+of part (c). They are saddles, not extrema.
+
 ## Encoding notes
 
 Stationary extremals are defined by vanishing first variation against all
@@ -99,16 +106,160 @@ lemma apm_m98a06_positiveMode_admissible :
   change Real.sin (2 * (2 * Real.pi)) = 0
   convert Real.sin_nat_mul_pi 4 using 1 <;> ring
 
+private lemma apm_m98a06_deriv_sin_two (x : ℝ) :
+    deriv (fun t : ℝ ↦ Real.sin (2 * t)) x = 2 * Real.cos (2 * x) := by
+  convert ((Real.hasDerivAt_sin (2 * x)).comp x
+    ((hasDerivAt_id x).const_mul 2)).deriv using 1 <;> ring
+
+/-- The certified higher-frequency variation is a strictly positive energy
+direction, with its exact energy value. -/
+lemma apm_m98a06_positiveMode_energy :
+    apm_m98a06_I (2 * Real.pi) (fun x : ℝ ↦ Real.sin (2 * x)) =
+      3 * Real.pi := by
+  simp_rw [apm_m98a06_I, apm_m98a06_deriv_sin_two]
+  rw [intervalIntegral.integral_sub]
+  · rw [show (fun x : ℝ ↦ (2 * Real.cos (2 * x)) ^ 2) =
+        fun x ↦ 4 * (Real.cos (2 * x)) ^ 2 by funext x; ring]
+    rw [intervalIntegral.integral_const_mul]
+    rw [show (fun x : ℝ ↦ Real.cos (2 * x) ^ 2) =
+        fun x ↦ Real.cos (x / (1 / 2)) ^ 2 by funext x; congr 2 <;> ring]
+    rw [show (fun x : ℝ ↦ Real.sin (2 * x) ^ 2) =
+        fun x ↦ Real.sin (x / (1 / 2)) ^ 2 by funext x; congr 2 <;> ring]
+    rw [intervalIntegral.integral_comp_div (fun x : ℝ ↦ Real.cos x ^ 2)
+      (by norm_num : (1 / 2 : ℝ) ≠ 0)]
+    rw [intervalIntegral.integral_comp_div (fun x : ℝ ↦ Real.sin x ^ 2)
+      (by norm_num : (1 / 2 : ℝ) ≠ 0)]
+    simp
+    rw [show 2 * Real.pi * 2 = (4 : ℕ) * Real.pi by push_cast; ring,
+      Real.sin_nat_mul_pi]
+    ring
+  · exact (by fun_prop : Continuous fun x : ℝ ↦
+      (2 * Real.cos (2 * x)) ^ 2).intervalIntegrable _ _
+  · exact (by fun_prop : Continuous fun x : ℝ ↦
+      Real.sin (2 * x) ^ 2).intervalIntegrable _ _
+
+/-- On a positive interval, the endpoint values of `deriv` are irrelevant to
+the action, so a `C¹` path may be rewritten using its continuous within
+derivative everywhere. -/
+lemma apm_m98A06_I_eq_derivWithin {a : ℝ} (ha : 0 < a) {y : ℝ → ℝ}
+    (hy : ContDiffOn ℝ 1 y (Icc 0 a)) :
+    apm_m98a06_I a y =
+      ∫ x in (0 : ℝ)..a, (derivWithin y (Icc 0 a) x) ^ 2 - y x ^ 2 := by
+  apply intervalIntegral.integral_congr_ae
+  filter_upwards [volume.ae_ne a] with x hxa
+  intro hx
+  have hxi : x ∈ Ioo (0 : ℝ) a := by
+    rw [uIoc_of_le ha.le] at hx
+    exact ⟨hx.1, lt_of_le_of_ne hx.2 hxa⟩
+  have hd := hy.differentiableOn (by norm_num) x ⟨hxi.1.le, hxi.2.le⟩
+  have hda := hd.differentiableAt (Icc_mem_nhds hxi.1 hxi.2)
+  rw [hda.derivWithin ((uniqueDiffOn_Icc ha).uniqueDiffWithinAt
+    ⟨hxi.1.le, hxi.2.le⟩)]
+
+/-- Exact pointwise quadratic expansion of the action along an admissible
+affine line, before splitting the three interval integrals. -/
+lemma apm_m98A06_I_add_smul_expanded
+    {a c : ℝ} (ha : 0 < a) {y η : ℝ → ℝ}
+    (hy : ContDiffOn ℝ 1 y (Icc 0 a))
+    (hη : ContDiffOn ℝ 1 η (Icc 0 a)) :
+    apm_m98a06_I a (fun x ↦ y x + c * η x) =
+      ∫ x in (0 : ℝ)..a,
+        ((derivWithin y (Icc 0 a) x) ^ 2 - y x ^ 2) +
+        2 * c * (derivWithin y (Icc 0 a) x * derivWithin η (Icc 0 a) x - y x * η x) +
+        c ^ 2 * ((derivWithin η (Icc 0 a) x) ^ 2 - η x ^ 2) := by
+  have hsum : ContDiffOn ℝ 1 (fun x ↦ y x + c * η x) (Icc 0 a) :=
+    hy.add (hη.const_smul c)
+  rw [apm_m98A06_I_eq_derivWithin ha hsum]
+  apply intervalIntegral.integral_congr
+  intro x hx
+  have hx' : x ∈ Icc (0 : ℝ) a := by simpa [uIcc_of_le ha.le] using hx
+  have hyd := hy.differentiableOn (by norm_num) x hx'
+  have hηd := hη.differentiableOn (by norm_num) x hx'
+  change derivWithin (y + c • η) (Icc 0 a) x ^ 2 - (y x + c * η x) ^ 2 = _
+  rw [derivWithin_add hyd (hηd.const_smul c), derivWithin_const_smul_field]
+  simp only [smul_eq_mul]
+  ring
+
+lemma apm_m98A06_I_add_smul
+    {a c : ℝ} (ha : 0 < a) {y η : ℝ → ℝ}
+    (hy : ContDiffOn ℝ 1 y (Icc 0 a))
+    (hη : ContDiffOn ℝ 1 η (Icc 0 a)) :
+    apm_m98a06_I a (fun x ↦ y x + c * η x) =
+      apm_m98a06_I a y +
+        2 * c * (∫ x in (0 : ℝ)..a,
+          derivWithin y (Icc 0 a) x * derivWithin η (Icc 0 a) x - y x * η x) +
+        c ^ 2 * apm_m98a06_I a η := by
+  rw [apm_m98A06_I_add_smul_expanded ha hy hη,
+    apm_m98A06_I_eq_derivWithin ha hy, apm_m98A06_I_eq_derivWithin ha hη]
+  have hdy : ContinuousOn (fun x ↦ derivWithin y (Icc 0 a) x) (Icc 0 a) :=
+    hy.continuousOn_derivWithin (uniqueDiffOn_Icc ha) (by norm_num)
+  have hdη : ContinuousOn (fun x ↦ derivWithin η (Icc 0 a) x) (Icc 0 a) :=
+    hη.continuousOn_derivWithin (uniqueDiffOn_Icc ha) (by norm_num)
+  have hA : IntervalIntegrable
+      (fun x ↦ derivWithin y (Icc 0 a) x ^ 2 - y x ^ 2) volume 0 a :=
+    ((hdy.pow 2).sub (hy.continuousOn.pow 2)).intervalIntegrable_of_Icc ha.le
+  have hB : IntervalIntegrable
+      (fun x ↦ derivWithin y (Icc 0 a) x * derivWithin η (Icc 0 a) x - y x * η x)
+      volume 0 a :=
+    ((hdy.mul hdη).sub (hy.continuousOn.mul hη.continuousOn)).intervalIntegrable_of_Icc ha.le
+  have hC : IntervalIntegrable
+      (fun x ↦ derivWithin η (Icc 0 a) x ^ 2 - η x ^ 2) volume 0 a :=
+    ((hdη.pow 2).sub (hη.continuousOn.pow 2)).intervalIntegrable_of_Icc ha.le
+  rw [intervalIntegral.integral_add (hA.add (hB.const_mul (2 * c)))
+      (hC.const_mul (c ^ 2)),
+    intervalIntegral.integral_add hA (hB.const_mul (2 * c)),
+    intervalIntegral.integral_const_mul, intervalIntegral.integral_const_mul]
+
+lemma apm_m98A06_stationary_cross_zero
+    {a y₀ ya : ℝ} (ha : 0 < a) {y η : ℝ → ℝ}
+    (hy : apm_m98a06_IsStationary a y₀ ya y)
+    (hη : apm_m98a06_Admissible a 0 0 η) :
+    (∫ x in (0 : ℝ)..a,
+      derivWithin y (Icc 0 a) x * derivWithin η (Icc 0 a) x - y x * η x) = 0 := by
+  have hs := hy.2 η hη.1 hη.2.1 hη.2.2
+  have heq : (∫ x in (0 : ℝ)..a,
+      2 * (deriv y x * deriv η x - y x * η x)) =
+      ∫ x in (0 : ℝ)..a,
+        2 * (derivWithin y (Icc 0 a) x * derivWithin η (Icc 0 a) x - y x * η x) := by
+    apply intervalIntegral.integral_congr_ae
+    filter_upwards [volume.ae_ne (0 : ℝ), volume.ae_ne a] with x hx0 hxa
+    intro hx
+    rw [uIoc_of_le ha.le] at hx
+    have hxi : x ∈ Ioo (0 : ℝ) a := ⟨hx.1, lt_of_le_of_ne hx.2 hxa⟩
+    have hyd := hy.1.1.differentiableOn (by norm_num) x ⟨hxi.1.le, hxi.2.le⟩
+    have hηd := hη.1.differentiableOn (by norm_num) x ⟨hxi.1.le, hxi.2.le⟩
+    have hyda := hyd.differentiableAt (Icc_mem_nhds hxi.1 hxi.2)
+    have hηda := hηd.differentiableAt (Icc_mem_nhds hxi.1 hxi.2)
+    rw [hyda.derivWithin ((uniqueDiffOn_Icc ha).uniqueDiffWithinAt
+      ⟨hxi.1.le, hxi.2.le⟩),
+      hηda.derivWithin ((uniqueDiffOn_Icc ha).uniqueDiffWithinAt
+        ⟨hxi.1.le, hxi.2.le⟩)]
+  rw [heq, intervalIntegral.integral_const_mul] at hs
+  linarith
+
+lemma apm_m98A06_stationary_energy_split
+    {a y₀ ya : ℝ} (ha : 0 < a) {y η : ℝ → ℝ}
+    (hy : apm_m98a06_IsStationary a y₀ ya y)
+    (hη : apm_m98a06_Admissible a 0 0 η) :
+    apm_m98a06_I a (fun x ↦ y x + η x) =
+      apm_m98a06_I a y + apm_m98a06_I a η := by
+  rw [show (fun x ↦ y x + η x) = (fun x ↦ y x + (1 : ℝ) * η x) by
+    funext x; ring]
+  rw [apm_m98A06_I_add_smul ha hy.1.1 hη.1,
+    apm_m98A06_stationary_cross_zero ha hy hη]
+  ring
+
 /-- Why this unblocks the energy comparisons in `apm_m98a06`: integration
 by parts cancels the mixed term between a stationary curve and every
 endpoint-zero admissible variation, leaving an exact quadratic energy split. -/
 theorem apm_m98A06_bridge_1
     (a y₀ ya : ℝ) (y η : ℝ → ℝ)
+    (ha : 0 < a)
     (hy : apm_m98a06_IsStationary a y₀ ya y)
     (hη : apm_m98a06_Admissible a 0 0 η) :
     apm_m98a06_I a (fun x ↦ y x + η x) =
       apm_m98a06_I a y + apm_m98a06_I a η := by
-  sorry
+  exact apm_m98A06_stationary_energy_split ha hy hη
 
 /-- Why this unblocks the Euler--Lagrange clauses of `apm_m98a06`: this is
 the fundamental-lemma classification of stationary curves for the resonant
@@ -138,7 +289,8 @@ theorem apm_m98A06_bridge_3 :
           ∃ s : ℝ, (s = 1 ∨ s = -1) ∧
             y =ᵐ[volume.restrict (Ioo (0 : ℝ) Real.pi)]
               fun x ↦ s * Real.sqrt (2 / Real.pi) * Real.sin x)) ∧
-      (∀ M : ℝ, ∃ y dy : ℝ → ℝ, apm_m98a06_InH10Pi y dy ∧
+      (∀ M : ℝ, ∃ y dy : ℝ → ℝ, ContDiff ℝ 1 y ∧ dy = deriv y ∧
+        apm_m98a06_InH10Pi y dy ∧
         ∫ x, (y x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 1 ∧
         M < ∫ x, (dy x) ^ 2 - (y x) ^ 2
           ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) ∧
@@ -161,8 +313,13 @@ theorem apm_m98a06 :
       (∀ y : ℝ → ℝ, apm_m98a06_IsStationary a 0 1 y ↔
         ∀ x ∈ Icc (0 : ℝ) a, y x = Real.sin x / Real.sin a) ∧
       (a < Real.pi →
-        ∀ z : ℝ → ℝ, apm_m98a06_Admissible a 0 1 z →
-          apm_m98a06_I a (fun x ↦ Real.sin x / Real.sin a) ≤ apm_m98a06_I a z) ∧
+        (∀ z : ℝ → ℝ, apm_m98a06_Admissible a 0 1 z →
+          apm_m98a06_I a (fun x ↦ Real.sin x / Real.sin a) ≤ apm_m98a06_I a z ∧
+          (apm_m98a06_I a z = apm_m98a06_I a (fun x ↦ Real.sin x / Real.sin a) →
+            ∀ x ∈ Icc (0 : ℝ) a, z x = Real.sin x / Real.sin a)) ∧
+        ∀ y : ℝ → ℝ, apm_m98a06_Admissible a 0 1 y →
+          ∃ z : ℝ → ℝ, apm_m98a06_Admissible a 0 1 z ∧
+            apm_m98a06_I a y < apm_m98a06_I a z) ∧
       (Real.pi < a → ∀ y : ℝ → ℝ, apm_m98a06_Admissible a 0 1 y →
         (∃ z : ℝ → ℝ, apm_m98a06_Admissible a 0 1 z ∧
           apm_m98a06_I a z < apm_m98a06_I a y) ∧
@@ -179,7 +336,8 @@ theorem apm_m98a06 :
           ∃ s : ℝ, (s = 1 ∨ s = -1) ∧
             y =ᵐ[volume.restrict (Ioo (0 : ℝ) Real.pi)]
               fun x ↦ s * Real.sqrt (2 / Real.pi) * Real.sin x)) ∧
-      (∀ M : ℝ, ∃ y dy : ℝ → ℝ, apm_m98a06_InH10Pi y dy ∧
+      (∀ M : ℝ, ∃ y dy : ℝ → ℝ, ContDiff ℝ 1 y ∧ dy = deriv y ∧
+        apm_m98a06_InH10Pi y dy ∧
         ∫ x, (y x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 1 ∧
         M < ∫ x, (dy x) ^ 2 - (y x) ^ 2
           ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) ∧
