@@ -50722,42 +50722,21 @@
   {:bounded-exception
    "single-consumer exact projective affine-chart construction",
    :consumer :t94A08,
+   :stop-count 1,
    :review-finding
    "Deterministic scheduled-entrypoint defect persists after fresh verification: the sole :done-unreviewed row has :stop evidence and no recorded :commit or fixture hash. build_step enforces exact scope but maps STOP back to :done-unreviewed, repeatedly scheduling an unreviewable row. Its RealProjectiveSmoothTarget/rpSmoothAtlas contract contradicts its complex-projective affine-chart-homeomorph representation; genuine commit f197fad73f26e4db68a67b08b0bfa96b8184d52c changes only T94A08AffineChartHomeomorph. Exact repair: stop redispatching it and either supersede it with routes-2026-09-29-t94a08-affine-chart-quotient-compatibility-topo2-r1 or atomically align scope/acceptance and attach that commit. Restore .lake/packages through the canonical lifecycle because it remains a real directory and Lake gates are forbidden.",
    :evidence
-   {:residual
-    "No mathematical or representation work remains; supervisor transition repair and canonical package-authority restoration are required.",
-    :outcome :stop,
-    :warnings
-    ["Lake was not invoked because .lake/packages remains a directory rather than the required canonical authority symlink."],
-    :disposition :stop,
-    :author "topo-6",
-    :reason
-    "The scheduled-entrypoint defect remains unchanged. build_step.bb enforces exact commit scope and maps STOP back to done-unreviewed, repeatedly scheduling this row without a reviewable commit. Reviewed commit f197fad73f26e4db68a67b08b0bfa96b8184d52c implements the declared complex-projective affine chart in ConstructionTargets/T94A08AffineChartHomeomorph.lean, but this row scopes ConstructionTargets/RealProjectiveSmoothTarget.lean and accepts unrelated rpSmoothAtlas_exists. The supervisor must stop redispatching it and either supersede it with routes-2026-09-29-t94a08-affine-chart-quotient-compatibility-topo2-r1 or atomically align scope and acceptance and attach the existing commit.",
+   {:outcome :stop,
+    :seat "claude-18",
+    :reason :parked-for-owner-after-stop-fail-cycle,
     :commands
-    [{:cmd
-      "rg -n \"implementation commit paths differ from exact scope|:stop \\\\(replace-item\" holes/labs/topology-contract/build_step.bb",
-      :exit 0,
-      :output
-      "424: exact-scope rejection; 510: STOP replacement sets done-unreviewed"}
-     {:cmd
-      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
-      :exit 0,
-      :output
-      "topology-worklist: 353 items OK; {:done 324, :superseded 23, :repair 1, :blocked 4, :open 1}"}
-     {:cmd "stat -c '%F' .lake/packages",
-      :exit 0,
-      :output "directory"}],
-    :representation
-    {:source
-     "The nonvanishing-coordinate open subtypes of complex projective two-space with the frozen topology coinduced from quotientMap on nonzero vectors",
-     :target
-     "The affine coordinate spaces indexed by the two coordinates other than i",
-     :direction
-     "Explicit OpenPartialHomeomorphs from each projective nonvanishing-coordinate source subtype to its affine coordinate target, with forward map coordinates, inverse chartInverse, exact mutual-inverse equalities, and coordinateLine normalization"},
-    :seat "topo-6"},
+    [{:cmd "grep -c 'applied fail' runs2/build-loop.log", :exit 0}],
+    :finding
+    "2026-09-30: author stop and review fail alternated about 70 times. Reviewer: the row has stop evidence and no commit, and its RealProjectiveSmoothTarget/rpSmoothAtlas contract contradicts its complex-projective affine-chart representation; commit f197fad7 changes only T94A08AffineChartHomeomorph. Either supersede this row or align scope/acceptance and attach that commit.",
+    :author "claude-18",
+    :disposition :stop},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :needs-owner,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance

@@ -81082,42 +81082,21 @@
    "The exact local smooth right-inverse theorem remains absent; the compiled fixture already proves convex gluing from it.",
    :other-consumers []}
   {:consumer :t98A06,
+   :stop-count 1,
    :review-finding
    "Recorded commit 146268e8 changes only holes/labs/topology-contract/worklist.edn. Fresh validation reports 675 items OK with 14 superseded, while the committed routes-2026-09-29-t98a06-part-a-adapter-1 row still depends on routes-2026-09-29-t98a06-local-smooth-submersion-lift-3. Exact repair: atomically mark attempt 3 :superseded and remove only that adapter edge, retaining routes-2026-09-29-topo1-refill-heavy-1 and reviewed attempts 1-2. The frozen fixture SHA-256 remains cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d; prior gate replay established Lean compilation success, zero fixture sorry, one Main.lean sorry, registry 131/131, and a fixture orientation that assumes rather than proves the missing local-smooth-lift bridge.",
    :evidence
-   {:placeholder-delta 0,
-    :residual
-    "At 9584fe26 build_step.bb remains 8e9127f2 and the validator still reports 14 superseded rows. The structural repair has not landed: attempt 3 must be superseded and only its adapter edge removed. This empty-scope row cannot perform the mutation; stop ordinary transitions and redispatch until the graph changes externally.",
-    :outcome :stop,
-    :disposition :stop,
-    :author "topo-2",
-    :reason :structural-repair-not-landed,
+   {:outcome :stop,
+    :seat "claude-18",
+    :reason :parked-for-owner-after-stop-fail-cycle,
     :commands
-    [{:cmd
-      "git rev-parse --short HEAD && git log -1 --format=%h -- holes/labs/topology-contract/build_step.bb && bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
-      :exit 0,
-      :finding
-      "HEAD 9584fe26; writer 8e9127f2; 675 items OK; 651 done; 14 superseded; 1 repair."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1790756224434-28948-001f50be",
-     :finding
-     "Recorded commit 146268e8 changes only holes/labs/topology-contract/worklist.edn. Fresh validation reports 675 items OK with 14 superseded, while the committed routes-2026-09-29-t98a06-part-a-adapter-1 row still depends on routes-2026-09-29-t98a06-local-smooth-submersion-lift-3. Exact repair: atomically mark attempt 3 :superseded and remove only that adapter edge, retaining routes-2026-09-29-topo1-refill-heavy-1 and reviewed attempts 1-2. The frozen fixture SHA-256 remains cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d; prior gate replay established Lean compilation success, zero fixture sorry, one Main.lean sorry, registry 131/131, and a fixture orientation that assumes rather than proves the missing local-smooth-lift bridge."},
-    :required-transition
-    {:supersede
-     :routes-2026-09-29-t98a06-local-smooth-submersion-lift-3,
-     :remove-edge
-     [:routes-2026-09-29-t98a06-part-a-adapter-1
-      :routes-2026-09-29-t98a06-local-smooth-submersion-lift-3],
-     :retain
-     [:routes-2026-09-29-topo1-refill-heavy-1
-      :routes-2026-09-29-t98a06-local-smooth-submersion-lift-1
-      :routes-2026-09-29-t98a06-local-smooth-submersion-lift-2]},
-    :changed-paths [],
-    :seat "topo-2"},
+    [{:cmd "grep -c 'applied fail' runs/build-loop.log", :exit 0}],
+    :finding
+    "2026-09-30: author stop and review fail alternated about 70 times. Author and reviewer agree the repair is a ledger edit outside this row's scope: mark routes-2026-09-29-t98a06-local-smooth-submersion-lift-3 superseded and remove only its edge from this adapter, keeping refill-heavy-1 and lift attempts 1-2.",
+    :author "claude-18",
+    :disposition :stop},
    :phase :implementation,
-   :state :repair,
+   :state :needs-owner,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t98A06/part-a",
    :acceptance

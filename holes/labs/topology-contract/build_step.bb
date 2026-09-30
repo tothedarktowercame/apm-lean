@@ -18,6 +18,8 @@
 (def by-id (into {} (map (juxt :id identity) items)))
 (def priority {:uptake 0 :final-adapter 1 :representation-comparison 2
                :reusable-theorem 3 :consumer-closure 4 :documentation 5})
+(def max-stops (parse-long (or (System/getenv "TOPOLOGY_MAX_ROW_STOPS") "2")))
+(def max-fails (parse-long (or (System/getenv "TOPOLOGY_MAX_ROW_FAILS") "4")))
 (defn owner-blocked? [idx dependency seen]
   (when-not (seen dependency)
     (let [item (idx dependency)]
@@ -507,10 +509,20 @@
                                                   p)
                                            (-> % (assoc :state :blocked) note)]
                                           [%]) items)))))
-            :stop (replace-item items id #(-> % (assoc :state :done-unreviewed)
-                                                 (assoc :evidence (assoc receipt
-                                                                   :author (:seat receipt)
-                                                                   :disposition :stop))))
+            ;; A second :stop on the same row goes to the owner, not back to
+            ;; review. On 2026-09-30 both loops spent four hours on one row
+            ;; each (about 70 rounds): the author stopped because the repair it
+            ;; needed was a ledger edit outside its scope, the reviewer failed
+            ;; the stop because there was no commit to review, and :fail sent
+            ;; the row back to the same author.
+            :stop (replace-item items id #(let [n (inc (or (:stop-count %) 0))]
+                                            (-> % (assoc :stop-count n)
+                                                (assoc :state (if (<= max-stops n)
+                                                                :needs-owner
+                                                                :done-unreviewed))
+                                                (assoc :evidence (assoc receipt
+                                                                  :author (:seat receipt)
+                                                                  :disposition :stop)))))
             :replan (let [supersede (set (:supersede receipt))
                           replacement-ids (map :id (:replacement-items receipt))
                           conflicts (keep by-id replacement-ids)
@@ -587,9 +599,14 @@
 
                                :else %)
                             items))
-                    (replace-item items id #(-> % (assoc :state :repair :phase :implementation)
+                    ;; Likewise a row whose review keeps failing: after
+                    ;; max-fails failed reviews it waits for the owner.
+                    (replace-item items id #(let [n (inc (or (:fail-count %) 0))]
+                                              (-> % (assoc :fail-count n)
+                                                  (assoc :state (if (<= max-fails n) :needs-owner :repair)
+                                                         :phase :implementation)
                                                   (assoc :review-finding (:finding receipt))
-                                                  (assoc-in [:evidence :review] receipt))))
+                                                  (assoc-in [:evidence :review] receipt)))))
             (throw (ex-info "unknown receipt outcome" {:outcome outcome})))]
       (write-ledger! (assoc data :items (unblock-ready new-items)))
       (println "applied" (name outcome) "to" (name id)))))

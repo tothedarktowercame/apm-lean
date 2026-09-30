@@ -35,6 +35,32 @@ bb "$HERE/build_step.bb" apply-result "$stopped" edge "$HERE/fixtures/pass-recei
 bb "$HERE/worklist_check.bb" "$stopped"
 rm -f "$stopped"
 
+# The 2026-09-30 cycle: author stops, review fails the stop, author stops
+# again. The second stop must park the row for the owner: not reviewable, not
+# schedulable.
+cycle="$(mktemp)"
+cp "$HERE/fixtures/transition-ledger.edn" "$cycle"
+bb "$HERE/build_step.bb" apply-result "$cycle" edge "$HERE/fixtures/stop-receipt.edn"
+bb "$HERE/build_step.bb" apply-result "$cycle" edge "$HERE/fixtures/fail-receipt.edn"
+[ "$(bb "$HERE/build_step.bb" next-open "$cycle")" = edge ]
+bb "$HERE/build_step.bb" apply-result "$cycle" edge "$HERE/fixtures/stop-receipt.edn"
+[ -z "$(bb "$HERE/build_step.bb" unreviewed "$cycle")" ]
+[ "$(bb "$HERE/build_step.bb" next-open "$cycle")" != edge ]
+bb "$HERE/build_step.bb" row "$cycle" edge | grep -q ':state :needs-owner'
+bb "$HERE/worklist_check.bb" "$cycle"
+rm -f "$cycle"
+
+# A row whose review fails TOPOLOGY_MAX_ROW_FAILS times also goes to the owner.
+failing="$(mktemp)"
+cp "$HERE/fixtures/transition-ledger.edn" "$failing"
+for _ in 1 2 3 4; do
+  bb "$HERE/build_step.bb" row "$failing" edge | grep -q ':state :needs-owner' && { echo "parked too early" >&2; exit 1; }
+  bb "$HERE/build_step.bb" apply-result "$failing" edge "$HERE/fixtures/done-receipt.edn"
+  bb "$HERE/build_step.bb" apply-result "$failing" edge "$HERE/fixtures/fail-receipt.edn"
+done
+bb "$HERE/build_step.bb" row "$failing" edge | grep -q ':state :needs-owner'
+rm -f "$failing"
+
 export TOPOLOGY_PROBLEMS_ROOT="$HERE/fixtures/problems"
 checkpoint="$(mktemp)"
 cp "$HERE/fixtures/checkpoint-ledger.edn" "$checkpoint"
