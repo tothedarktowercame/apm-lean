@@ -132,7 +132,200 @@ theorem apm_m97A01_modulusInclusion_denseRange
     {X : Type*} [NormedAddCommGroup X] [InnerProductSpace ℂ X]
     (B : X →L[ℂ] X) :
     DenseRange (apm_m97A01_modulusInclusion B) := by
-  sorry
+  rw [DenseRange, Subtype.dense_iff]
+  intro y hy
+  change y ∈ closure
+    ((fun z : apm_m97A01_modulusRange B ↦ z.1) ''
+      Set.range (apm_m97A01_modulusInclusion B))
+  have hrange :
+      ((fun z : apm_m97A01_modulusRange B ↦ z.1) ''
+        Set.range (apm_m97A01_modulusInclusion B)) =
+          LinearMap.range B.toLinearMap := by
+    ext z
+    constructor
+    · rintro ⟨w, ⟨x, rfl⟩, rfl⟩
+      exact LinearMap.mem_range_self B.toLinearMap x
+    · rintro ⟨x, rfl⟩
+      exact ⟨apm_m97A01_modulusInclusion B x, ⟨x, rfl⟩, rfl⟩
+  rw [hrange]
+  exact hy
+
+theorem apm_m97A01_hasPolarFactor_of_norm
+    {X : Type*} [NormedAddCommGroup X]
+    [InnerProductSpace ℂ X] [CompleteSpace X]
+    (A B : X →L[ℂ] X) (hnorm : ∀ x : X, ‖B x‖ = ‖A x‖) :
+    apm_m97A01_hasPolarFactor A B := by
+  let e := (apm_m97A01_modulusInclusion B).toLinearMap
+  let U : apm_m97A01_modulusRange B →L[ℂ] X :=
+    A.toLinearMap.extendOfNorm e
+  have hd : DenseRange e := apm_m97A01_modulusInclusion_denseRange B
+  have hb : ∀ x : X, ‖A x‖ ≤ 1 * ‖e x‖ := by
+    intro x
+    rw [one_mul]
+    change ‖A x‖ ≤ ‖B x‖
+    exact (hnorm x).ge
+  have hU (x : X) : U (apm_m97A01_modulusInclusion B x) = A x := by
+    exact LinearMap.extendOfNorm_eq hd ⟨1, hb⟩ x
+  refine ⟨apm_m97A01_modulusInclusion B,
+    apm_m97A01_modulusInclusion_apply B, U, hU, ?_, ?_⟩
+  · have heq : (fun y : apm_m97A01_modulusRange B ↦ ‖U y‖) = fun y ↦ ‖y‖ := by
+      apply hd.equalizer (U.continuous.norm) continuous_norm
+      funext x
+      simp only [Function.comp_apply]
+      change ‖A.toLinearMap.extendOfNorm e (e x)‖ = ‖e x‖
+      rw [LinearMap.extendOfNorm_eq hd ⟨1, hb⟩ x]
+      change ‖A x‖ = ‖B x‖
+      exact (hnorm x).symm
+    exact congrFun heq
+  · intro V hV
+    have heq : (V : apm_m97A01_modulusRange B → X) = U := by
+      apply hd.equalizer V.continuous U.continuous
+      funext x
+      change V (apm_m97A01_modulusInclusion B x) =
+        U (apm_m97A01_modulusInclusion B x)
+      rw [hV x, hU x]
+    ext y
+    exact congrFun heq y
+
+set_option synthInstance.maxHeartbeats 100000 in
+set_option maxHeartbeats 800000 in
+theorem apm_m97A01_compact_sqrt
+    {X : Type*} [NormedAddCommGroup X]
+    [InnerProductSpace ℂ X] [CompleteSpace X]
+    (P : X →L[ℂ] X) (hP : P.IsPositive) (hPc : IsCompactOperator P) :
+    IsCompactOperator (CFC.sqrt P : X →L[ℂ] X) := by
+  let S : NonUnitalStarSubalgebra ℝ (X →L[ℂ] X) :=
+    { carrier := {T | IsCompactOperator T ∧
+          IsCompactOperator (ContinuousLinearMap.adjoint T)}
+      zero_mem' := by
+        simp only [Set.mem_setOf_eq, map_zero]
+        exact ⟨isCompactOperator_zero, isCompactOperator_zero⟩
+      add_mem' := by
+        rintro A B ⟨hA, hA'⟩ ⟨hB, hB'⟩
+        exact ⟨hA.add hB, by simpa using hA'.add hB'⟩
+      mul_mem' := by
+        rintro A B ⟨hA, hA'⟩ ⟨hB, hB'⟩
+        constructor
+        · rw [ContinuousLinearMap.mul_def]
+          simpa only [ContinuousLinearMap.coe_comp'] using hA.comp_clm B
+        · rw [ContinuousLinearMap.mul_def,
+            ContinuousLinearMap.adjoint_comp]
+          simpa only [ContinuousLinearMap.coe_comp'] using
+            hB'.comp_clm (ContinuousLinearMap.adjoint A)
+      smul_mem' := by
+        intro c A hA
+        constructor
+        · exact hA.1.smul c
+        · have hadj : ContinuousLinearMap.adjoint (c • A) =
+              c • ContinuousLinearMap.adjoint A := by
+            ext x
+            apply ext_inner_right ℂ
+            intro y
+            rw [ContinuousLinearMap.adjoint_inner_left]
+            change inner ℂ x ((c : ℂ) • A y) =
+              inner ℂ ((c : ℂ) • ContinuousLinearMap.adjoint A x) y
+            rw [inner_smul_right, inner_smul_left,
+              ContinuousLinearMap.adjoint_inner_left]
+            simp
+          rw [hadj]
+          exact hA.2.smul c
+      star_mem' := by
+        rintro A ⟨hA, hA'⟩
+        refine ⟨hA', ?_⟩
+        rw [show star A = ContinuousLinearMap.adjoint A from rfl,
+          ContinuousLinearMap.adjoint_adjoint]
+        exact hA }
+  letI : IsClosed ((S : NonUnitalStarSubalgebra ℝ (X →L[ℂ] X)) :
+      Set (X →L[ℂ] X)) := by
+    change IsClosed ({T : X →L[ℂ] X | IsCompactOperator T} ∩
+      (fun T : X →L[ℂ] X => ContinuousLinearMap.adjoint T) ⁻¹'
+        {T : X →L[ℂ] X | IsCompactOperator T})
+    exact isClosed_setOf_isCompactOperator.inter
+      (isClosed_setOf_isCompactOperator.preimage
+        ContinuousLinearMap.adjoint.continuous)
+  have hPmem : P ∈ S :=
+    ⟨hPc, by
+      rw [show ContinuousLinearMap.adjoint P = P from hP.isSelfAdjoint]
+      exact hPc⟩
+  rw [CFC.sqrt_eq_real_sqrt P
+    ((ContinuousLinearMap.nonneg_iff_isPositive P).mpr hP)]
+  exact (cfcₙ_mem (A := X →L[ℂ] X)
+    (S := NonUnitalStarSubalgebra ℝ (X →L[ℂ] X)) Real.sqrt hPmem).1
+
+theorem apm_m97A01_compact_adjoint
+    {X : Type*} [NormedAddCommGroup X]
+    [InnerProductSpace ℂ X] [CompleteSpace X]
+    (A : X →L[ℂ] X) (hA : IsCompactOperator A) :
+    IsCompactOperator (ContinuousLinearMap.adjoint A) := by
+  let C := ContinuousLinearMap.adjoint A
+  let P := (ContinuousLinearMap.adjoint C).comp C
+  have hCadj : ContinuousLinearMap.adjoint C = A := by
+    simp [C]
+  have hP : P = A.comp C := by simp [P, hCadj]
+  have hPpos : P.IsPositive := by
+    exact ContinuousLinearMap.isPositive_adjoint_comp_self C
+  have hPc : IsCompactOperator P := by
+    rw [hP]
+    exact hA.comp_clm C
+  let B : X →L[ℂ] X := CFC.sqrt P
+  have hBc : IsCompactOperator B :=
+    apm_m97A01_compact_sqrt P hPpos hPc
+  have hBsq : B.comp B = P := by
+    have hpnonneg : 0 ≤ P :=
+      (ContinuousLinearMap.nonneg_iff_isPositive P).mpr hPpos
+    exact CFC.sqrt_mul_sqrt_self P hpnonneg
+  have hBpos : B.IsPositive :=
+    (ContinuousLinearMap.nonneg_iff_isPositive B).mp (CFC.sqrt_nonneg P)
+  have hnorm : ∀ x : X, ‖B x‖ = ‖C x‖ := by
+    intro x
+    exact apm_m97A01_modulus_norm C B hBpos hBsq x
+  obtain ⟨incl, hincl, U, hU, _, _⟩ :=
+    apm_m97A01_hasPolarFactor_of_norm C B hnorm
+  have hincl_eq : incl = apm_m97A01_modulusInclusion B := by
+    ext x
+    exact hincl x
+  have hinclc : IsCompactOperator incl := by
+    rw [hincl_eq]
+    apply hBc.codRestrict
+    exact (LinearMap.range B.toLinearMap).isClosed_topologicalClosure
+  have hcomp : IsCompactOperator (U.comp incl) := hinclc.clm_comp U
+  have heq : U.comp incl = C := by
+    ext x
+    exact hU x
+  rw [heq] at hcomp
+  exact hcomp
+
+/-- The two positive products needed by a polar proof of compact-adjoint
+compactness are compact without using compactness of the adjoint itself. -/
+lemma apm_m97A01_compact_adjoint_comp_self
+    {X : Type*} [NormedAddCommGroup X]
+    [InnerProductSpace ℂ X] [CompleteSpace X]
+    (A : X →L[ℂ] X) (hA : IsCompactOperator A) :
+    IsCompactOperator ((ContinuousLinearMap.adjoint A).comp A) := by
+  exact hA.clm_comp (ContinuousLinearMap.adjoint A)
+
+lemma apm_m97A01_compact_self_comp_adjoint
+    {X : Type*} [NormedAddCommGroup X]
+    [InnerProductSpace ℂ X] [CompleteSpace X]
+    (A : X →L[ℂ] X) (hA : IsCompactOperator A) :
+    IsCompactOperator (A.comp (ContinuousLinearMap.adjoint A)) := by
+  exact hA.comp_clm (ContinuousLinearMap.adjoint A)
+
+/-- Adjoint compactness passes to an operator-norm limit once it is known for
+the approximants.  The adjoint operation is an isometry, and compact
+operators form a closed subset of the continuous-linear-map space. -/
+lemma apm_m97A01_compact_adjoint_of_tendsto
+    {X : Type*} [NormedAddCommGroup X]
+    [InnerProductSpace ℂ X] [CompleteSpace X]
+    {ι : Type*} {l : Filter ι} [l.NeBot]
+    (A : X →L[ℂ] X) (F : ι → X →L[ℂ] X)
+    (hF : Filter.Tendsto F l (nhds A))
+    (hcompact : ∀ᶠ i in l,
+      IsCompactOperator (ContinuousLinearMap.adjoint (F i))) :
+    IsCompactOperator (ContinuousLinearMap.adjoint A) := by
+  apply isCompactOperator_of_tendsto
+    ((ContinuousLinearMap.adjoint.continuous.tendsto A).comp hF)
+    hcompact
 
 theorem apm_m97a01
     (X : Type*) [NormedAddCommGroup X]
@@ -142,60 +335,10 @@ theorem apm_m97a01
       apm_m97A01_isModulus A absA ∧
       apm_m97A01_hasPolarFactor A absA) ∧
     IsCompactOperator (ContinuousLinearMap.adjoint A) := by
-  /-
-  Closer hop 1 adds `apm_m97A01_modulus_norm`, proving the remaining norm
-  clause `‖B x‖ = ‖A x‖` from positivity, self-adjointness, and `B² = A†A`.
-  It uses Mathlib's `apply_norm_sq_eq_inner_adjoint_left` and
-  `IsPositive.isSelfAdjoint`.  Consequently `apm_m97A01_modulus_core` plus
-  this lemma now supplies every field of `apm_m97A01_isModulus`; only the
-  polar-factor extension remains in the first conjunct.
-
-  Closer hop 2 finds a previously missed range-factor primitive.
-  `apm_m97A01_polarOnRange` uses `LinearMap.compLeftInverse` to construct the
-  well-defined continuous map `B x ↦ A x` on the algebraic range of `B`; its
-  internal quotient-by-kernel construction is justified by the modulus norm
-  equality. `apm_m97A01_polarOnRange_apply` proves the generator equation and
-  `apm_m97A01_polarOnRange_norm` proves exact norm preservation on every range
-  element. Thus the polar isometry is now compiled on `range B`, and only its
-  dense continuous extension to `topologicalClosure (range B)` remains.
-
-  PASS-1 PARTIAL boundary (codex): `apm_m97A01_modulus_core` constructs
-  the modulus as `CFC.sqrt ((ContinuousLinearMap.adjoint A).comp A)` and
-  proves its positivity, square identity, and uniqueness using
-  `CFC.sqrt_nonneg`, `CFC.sqrt_mul_sqrt_self`, and `CFC.sqrt_unique`.
-  Searches of
-  `Mathlib/Analysis/Normed/Operator/Compact.lean`, the CFC rpow files, the
-  closed sibling artifacts, `ConstructionTargets/`, and `YoungL2.lean` did
-  not locate either of the two remaining packaged Hilbert-space results:
-
-  * extension of the now-compiled algebraic-range isometry from `range absA`
-    to its topological closure, with the stated codomain and uniqueness;
-  * compactness of `ContinuousLinearMap.adjoint A` from `IsCompactOperator A`.
-
-  `ContinuousLinearMap.extend` is now the relevant extension API: the remaining
-  local bookkeeping is to bundle the inclusion of the algebraic range into its
-  closure as a dense uniform embedding and transport norm preservation to the
-  extension. `LinearEquiv.extendOfIsometry` still requires dense target range
-  and does not apply directly. Renewed searches covered
-  `LEMMA-INDEX.md`, Mathlib's compact-operator, adjoint, extension, projection,
-  and compact spectral-theorem sources, `ConstructionTargets`, solved siblings,
-  and git history.  No compact-adjoint theorem or codomain-nonsurjective
-  isometry extension was found.  The statement is mathematically sound; this
-  `sorry` covers precisely those assembly/dependency gaps.
-
-  Closer hop 3 closes the codomain-restriction part of that bookkeeping.
-  `apm_m97A01_modulusInclusion` is the canonical continuous linear map from
-  `X` into `topologicalClosure (range B)`, built with `B.codRestrict` and
-  `subset_closure`; `apm_m97A01_modulusInclusion_apply` proves its underlying
-  value is exactly `B x`, matching the frozen existential verbatim.
-
-  The final-hop search additionally inspected `LinearMap.extendOfNorm`, which
-  can extend `A.toLinearMap` directly along this inclusion once its dense range
-  is packaged, avoiding a separate codomain-surjective linear equivalence.
-  Mathlib's `denseRange_inclusion_iff` and subtype-in-closure dense embedding
-  are the relevant topological primitives, but assembling them with the range
-  of this linear codomain restriction remains open. Renewed compact-operator,
-  adjoint, CFC, and spectral searches still found no compact-adjoint theorem.
-  The frozen statement is unchanged.
-  -/
-  sorry
+  obtain ⟨B, hBpos, hBsq, hBuniq⟩ := apm_m97A01_modulus_core X A
+  have hnorm : ∀ x : X, ‖B x‖ = ‖A x‖ :=
+    apm_m97A01_modulus_norm A B hBpos hBsq
+  constructor
+  · exact ⟨B, ⟨hBpos, hBsq, hBuniq, hnorm⟩,
+      apm_m97A01_hasPolarFactor_of_norm A B hnorm⟩
+  · exact apm_m97A01_compact_adjoint A hA
