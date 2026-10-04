@@ -50,7 +50,8 @@ their frontiers lie in the lemniscate. A radial rescaling of the punctured
 plane proves that every strict exterior region `{z | R < ‖z‖}` is path
 connected. This supplies the one-endedness argument identifying all
 superlevel components. Finally, the components inject into the disjoint sum
-of the distinct roots of `p` and one superlevel marker.
+of the distinct roots of `p` and one superlevel marker. Since the statement
+repair of 2026-10-04 (below), the main theorem's own proof is open.
 
 **Statement repair note.** The informal-solution-proposed Lean statement used
 `Nat.card (ConnectedComponents (lemniscate p)ᶜ)`. The correct target type is
@@ -58,6 +59,12 @@ of the distinct roots of `p` and one superlevel marker.
 *subtype* (i.e. the subspace topology on the complement). Writing
 `(lemniscate p)ᶜ` directly in that position is a set-complement, not a type,
 and does not elaborate. The repair is to pass the subtype `↥((lemniscate p)ᶜ)`.
+
+**Statement repair (mfuton, 2026-10-04).** The target counts components with
+`ENat.card` and assumes the problem's degree `N ≥ 1` (`hp : 0 < p.natDegree`).
+`Nat.card` is `0` for an infinite type, so `Nat.card … ≤ natDegree p + 1` did not
+exclude infinitely many components, which "at most `N + 1` components" does; and
+the problem is posed for `N ≥ 1`. The helper lemmas are unchanged and proved.
 -/
 
 open Complex Polynomial Set Topology Metric Bornology
@@ -463,112 +470,21 @@ This step assembles the preceding ingredients into a bound on
     they contain distinct roots; hence at most `N` sublevel components.
 -/
 
-/-- **Main theorem.** The complement of the lemniscate `{z | |p(z)| = 1}` has
-at most `natDegree p + 1` connected components.
+/-- **Main theorem.** For a polynomial `p` of degree `N ≥ 1`, the complement of
+the lemniscate `{z | |p(z)| = 1}` has at most `N + 1` connected components.
 
 This is the target theorem. The proof combines:
 - at most one superlevel component (Step 2 kills bounded ones; polynomial
   growth forces a unique unbounded one),
 - at most `natDegree p` sublevel components (Step 3 + root count).
+
+Its proof is open since the statement repair of 2026-10-04 (module docstring). The
+proof of the earlier `Nat.card` statement (`af63c04b`) injects the components into
+the distinct roots of `p` plus one superlevel marker, which is the route for
+`ENat.card` as well.
 -/
-theorem connectedComponents_complement_lemniscate_le :
-    Nat.card (ConnectedComponents ↥((lemniscate p)ᶜ)) ≤ p.natDegree + 1 := by
-  classical
-  by_cases hp : 0 < p.natDegree
-  swap
-  · have hdeg : p.natDegree = 0 := Nat.eq_zero_of_not_pos hp
-    let c := p.coeff 0
-    have peq : p = C c := eq_C_of_natDegree_eq_zero hdeg
-    rw [peq]
-    by_cases hc : ‖c‖ = 1
-    · have hlem : lemniscate (C c) = Set.univ := by
-        ext z
-        simp [lemniscate, hc]
-      rw [hlem]
-      letI : IsEmpty ↥((Set.univ : Set ℂ)ᶜ) :=
-        ⟨fun x => by simpa using x.2⟩
-      letI : IsEmpty (ConnectedComponents ↥((Set.univ : Set ℂ)ᶜ)) :=
-        ConnectedComponents.isEmpty_iff_isEmpty.mpr inferInstance
-      simp [Nat.card_of_isEmpty]
-    · have hlem : lemniscate (C c) = ∅ := by
-        ext z
-        simp [lemniscate, hc]
-      rw [hlem]
-      letI : PreconnectedSpace ↥((∅ : Set ℂ)ᶜ) :=
-        isPreconnected_iff_preconnectedSpace.mp (by simpa using isPreconnected_univ)
-      simpa using (Finite.card_le_one_iff_subsingleton
-        (α := ConnectedComponents ↥((∅ : Set ℂ)ᶜ))).mpr inferInstance
-  have hp0 : p ≠ 0 := by
-    intro hpzero
-    subst p
-    simp at hp
-  let rootOf (x : ↥((lemniscate p)ᶜ))
-      (hxsub : componentSet x ⊆ sublevel p) :
-      {z // z ∈ (Polynomial.roots p).toFinset} :=
-    ⟨Classical.choose
-        (exists_root_in_componentSet_of_subset_sublevel (p := p) hp x hxsub),
-      by
-        have hz := Classical.choose_spec
-          (exists_root_in_componentSet_of_subset_sublevel (p := p) hp x hxsub)
-        rw [Multiset.mem_toFinset, Polynomial.mem_roots_iff_aeval_eq_zero hp0]
-        exact hz.2⟩
-  let tag :
-      ConnectedComponents ↥((lemniscate p)ᶜ) →
-        {z // z ∈ (Polynomial.roots p).toFinset} ⊕ Unit :=
-    fun c =>
-      let x := Quotient.out c
-      if hxsub : componentSet x ⊆ sublevel p then
-        Sum.inl (rootOf x hxsub)
-      else
-        Sum.inr ()
-  have htag : Function.Injective tag := by
-    intro c d hcd
-    let x : ↥((lemniscate p)ᶜ) := Quotient.out c
-    let y : ↥((lemniscate p)ᶜ) := Quotient.out d
-    have hxc : (x : ConnectedComponents ↥((lemniscate p)ᶜ)) = c :=
-      Quotient.out_eq c
-    have hyd : (y : ConnectedComponents ↥((lemniscate p)ᶜ)) = d :=
-      Quotient.out_eq d
-    by_cases hxsub : componentSet x ⊆ sublevel p
-    · by_cases hysub : componentSet y ⊆ sublevel p
-      · have hroots : rootOf x hxsub = rootOf y hysub := by
-          simpa [tag, x, y, hxsub, hysub] using hcd
-        have hxspec := Classical.choose_spec
-          (exists_root_in_componentSet_of_subset_sublevel (p := p) hp x hxsub)
-        have hyspec := Classical.choose_spec
-          (exists_root_in_componentSet_of_subset_sublevel (p := p) hp y hysub)
-        have hcomp :
-            (x : ConnectedComponents ↥((lemniscate p)ᶜ)) = y := by
-          apply componentSet_eq_of_common_point (p := p)
-            (z := Classical.choose
-              (exists_root_in_componentSet_of_subset_sublevel (p := p) hp x hxsub))
-          · exact hxspec.1
-          · rw [show Classical.choose
-                (exists_root_in_componentSet_of_subset_sublevel (p := p) hp x hxsub) =
-              Classical.choose
-                (exists_root_in_componentSet_of_subset_sublevel (p := p) hp y hysub) by
-                exact congrArg Subtype.val hroots]
-            exact hyspec.1
-        exact hxc ▸ hyd ▸ hcomp
-      · simp [tag, x, y, hxsub, hysub] at hcd
-    · by_cases hysub : componentSet y ⊆ sublevel p
-      · simp [tag, x, y, hxsub, hysub] at hcd
-      · have hxsuper : componentSet x ⊆ superlevel p :=
-          (componentSet_subset_superlevel_or_sublevel (p := p) x).resolve_right hxsub
-        have hysuper : componentSet y ⊆ superlevel p :=
-          (componentSet_subset_superlevel_or_sublevel (p := p) y).resolve_right hysub
-        have hcomp :
-            (x : ConnectedComponents ↥((lemniscate p)ᶜ)) = y :=
-          component_eq_of_subset_superlevel (p := p) hp hxsuper hysuper
-        exact hxc ▸ hyd ▸ hcomp
-  calc
-    Nat.card (ConnectedComponents ↥((lemniscate p)ᶜ))
-        ≤ Nat.card ({z // z ∈ (Polynomial.roots p).toFinset} ⊕ Unit) :=
-          Nat.card_le_card_of_injective tag htag
-    _ = (Polynomial.roots p).toFinset.card + 1 := by
-      rw [Nat.card_sum]
-      simp only [Nat.card_eq_fintype_card, Fintype.card_coe, Fintype.card_unique]
-    _ ≤ p.natDegree + 1 :=
-      Nat.add_le_add_right (card_roots_le_degree (p := p) hp) 1
+theorem connectedComponents_complement_lemniscate_le (hp : 0 < p.natDegree) :
+    ENat.card (ConnectedComponents ↥((lemniscate p)ᶜ)) ≤ p.natDegree + 1 := by
+  sorry
 
 end ApmCanaries.A00J04
