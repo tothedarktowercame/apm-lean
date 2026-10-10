@@ -88016,7 +88016,7 @@
    "Owner reopen 2026-10-10 (claude-14): both STOPs cite missing approved signatures for declarations the acceptance lists in prose. Under work-prompt.md WHAT IS FROZEN, only the registered statement and the fixture interface-axiom types are frozen; design the supporting signatures, discharge the frozen axiom type with standard axioms, and STOP only on a mathematical boundary.",
    :stop-count 1,
    :review-finding
-   "No implementation commit was recorded and ConstructionTargets/FiniteIndexFreeGroupSchreierRank.lean is absent. The fixture SHA-256 matches, but both consumer specializations depend on the nonstandard axiom finiteIndexSubgroupEquiv, which assumes the universal rank formula; the accepted universal name finiteIndexSubgroupFreeGroupEquiv has no frozen signature. Mathlib provides qualitative SpanningTree.endIsFree and endMulEquivSubgroup, not the required finite basis indexed by generator-coset edges outside the spanning tree or its cardinality. Repair requires a compiled placeholder-free prerequisite identifying that basis, proving the complement has (r-1)*n+1 elements, freezing the universal MulEquiv signature and orientation, and only then deriving the Fin 3/index-n and Fin 2/index-two specializations with standard-only axioms.",
+   "frozen interface axiom is false at r = 0, n = 1, H = top; require 0 < r or state the rank-zero case separately",
    :evidence
    {:residual
     "Repair the frozen universal type by requiring 0 < r or handling r = 0 separately; then prove the finite spanning-tree complement count for positive rank.",
@@ -88066,6 +88066,12 @@
       :exit 1,
       :finding
       "The first universal-negation draft left the previously proved contradiction unnamed; corrected by naming no_rank_one_equiv and applying it explicitly."}],
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1791632945763-1839-a885137e",
+     :finding
+     "frozen interface axiom is false at r = 0, n = 1, H = top; require 0 < r or state the rank-zero case separately"},
     :counterexample
     {:path "/tmp/finite-index-schreier-r0-counterexample.lean",
      :parameters {:r 0, :n 1, :subgroup "top"},
@@ -88080,7 +88086,7 @@
      :proof-placeholder-count 1},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["ConstructionTargets/FiniteIndexFreeGroupSchreierRank.lean"],
    :dag-node
@@ -88106,7 +88112,7 @@
      "python3 scripts/statement-registry.py check"]},
    :id :routes-2026-10-10-finite-index-schreier-spanning-tree-count-1,
    :kind :reusable-theorem,
-   :fail-count 0,
+   :fail-count 1,
    :depends-on [],
    :current-residual
    "Refine Mathlib's qualitative Nielsen-Schreier basis by counting the complement of a spanning tree in the finite Schreier coset quiver.",
