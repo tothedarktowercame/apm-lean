@@ -58611,9 +58611,55 @@
   {:bounded-exception
    "single-consumer compatibility of the two t02A03 meridian representations",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/t02a03_geometric_tube_cover.lean",
+      :sha256
+      "9bc68c8c1d5144bd2ed57807602550932e422488a96d1ca5714d59259b4517c8"},
+     :commands
+     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "apm_t02a03_circleMeridian_exp compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
+       :exit 0}
+      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "9bc68c8c1d5144bd2ed57807602550932e422488a96d1ca5714d59259b4517c8  /tmp/t02a03_geometric_tube_cover.lean"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :finding
+     "The compiled theorem identifies the two meridian models pointwise: the Circle-domain meridian evaluated at Circle.exp t is exactly the real-angle meridian at t. The proof is coordinatewise and uses Complex.exp_mul_I with the real/complex sine and cosine bridges.",
+     :residual
+     "Construct the attachment homotopy between the surviving right core and the Circle meridian, then extend to tube deformations and gluing.",
+     :implementation
+     {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"]},
+     :acceptance
+     {:source-fixture "/tmp/t02a03_geometric_tube_cover.lean",
+      :declaration "apm_t02a03_circleMeridian_exp",
+      :placeholder "the sole sorry in apm_t02a03",
+      :route-step
+      "t02A03 step 2, identify the real-angle and Circle-domain meridian representations",
+      :representation
+      {:source
+       "The Circle-domain frozen normal meridian evaluated at Circle.exp t",
+       :target "The frozen real-angle normal meridian evaluated at t",
+       :direction
+       "Exact point equality from the source Circle meridian representation to the target real-parameter meridian representation"},
+      :gates
+      ["fixture compiles"
+       "fixture contains no sorry token"
+       "fixture hash matches"
+       "statement registry matches"]}}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/geometric-meridian-exp-compatibility",
    :acceptance
