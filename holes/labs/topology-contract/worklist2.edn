@@ -54587,19 +54587,23 @@
    :depends-on [:routes-2026-09-28-rp-smooth-atlas-topo2-r1],
    :other-consumers [:t98A03]}
   {:consumer :t00J07,
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Deterministic acceptance-state defect: the hash repair is correct—the fixture freshly hashes to cf405c41483534c87da4bf715e92f64ea496554c8bc92d8a8725661ed18b0d80 and compiles placeholder-free—but commit 68c2a79a replaces the prior honest STOP evidence with :outcome :done-unreviewed and :phase :implementation, removes :disposition :stop and the reason, and cites empty commit e66275fd as the implementation. The fixture still only defines PositiveHemisphereEvenlyCovered : Prop and prints helper signatures; it contains no inhabitant, and no inhabitant is banked. Thus the row now presents an unsatisfied probe acceptance as completed implementation, precisely the facade boundary its earlier reason rejected. Repair by retaining the authenticated fixture hash while restoring :outcome :stop, :disposition :stop, the representation-boundary reason, and probe phase (or actually bank a compiled inhabitant before claiming implementation completion). Fresh ancillary checks: exact implementation scope is empty, 131 statements match, and the 364-item ledger validates.",
    :evidence
    {:placeholder-delta 0,
     :residual
-    "First construct and bank PositiveHemisphereTrivialization with its exact projection equation. Then this row is a short wrapper using positiveHemisphere_isOpen, sphereProjection_isOpenMap_of_authority, self_mem_positiveHemisphere, openness of the full preimage, and the banked homeomorphism.",
-    :outcome :done-unreviewed,
+    "First construct and bank the stopped PositiveHemisphereTrivialization homeomorphism with its exact projection equation. Then construct the evenly-covered witness using positiveHemisphere_isOpen, sphereProjection_isOpenMap_of_authority, self_mem_positiveHemisphere, openness of the full preimage, and that banked homeomorphism.",
+    :phase :probe,
+    :outcome :stop,
     :warnings
-    ["Fixture is interface-only and remains at an ephemeral /tmp path; the authenticated digest permits the supervisor fixture store to preserve it during transition application."],
+    ["The authenticated fixture remains at an ephemeral /tmp path; transition application should preserve it in the content-addressed fixture store."],
     :statement-hashes {:matched 131, :mismatched 0},
+    :disposition :stop,
     :axioms [],
     :author "topo-6",
+    :reason
+    "The acceptance requires a compiled inhabitant of PositiveHemisphereEvenlyCovered, but the authenticated fixture only defines that proposition and prints its type plus helper signatures; it contains no inhabitant. Fresh repository search likewise finds no inhabitant. The reviewed dependency PositiveHemisphereTrivialization completed with STOP because its fixture also exposes only a Prop-valued interface and no homeomorphism from the full sphere preimage to the projective image times Fin 2 with the exact first-projection equation. IsEvenlyCovered requires precisely that missing dependent homeomorphism. Treating either interface-only proposition or the dependency administrative state as an implementation would misreport the representation boundary. This is an exact representation boundary, not a refutation of the mathematics and not a completed implementation.",
     :commands
     [{:cmd
       "sha256sum /tmp/rp2_positive_hemisphere_evenly_covered_contract.lean",
@@ -54611,32 +54615,25 @@
       :exit 0,
       :output
       "Prints PositiveHemisphereEvenlyCovered : Prop and the two banked helper signatures; no inhabitant."}
+     {:cmd
+      "rg -n PositiveHemisphereEvenlyCovered ConstructionTargets problems -g *.lean",
+      :exit 1,
+      :expected-exit 1}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :output "131 registered statements match, 0 do not"}
      {:cmd
       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
       :exit 0,
-      :output "topology-worklist: 364 items OK"}
-     {:cmd
-      "git diff-tree --no-commit-id --name-only -r e66275fd12dd67c37a136a75cbc2c23230239df2",
-      :exit 0,
-      :output ""}],
-    :review
-    {:outcome :fail,
-     :seat "codex-7",
-     :job "invoke-1791604875340-1020-56752be2",
-     :finding
-     "Deterministic acceptance-state defect: the hash repair is correct—the fixture freshly hashes to cf405c41483534c87da4bf715e92f64ea496554c8bc92d8a8725661ed18b0d80 and compiles placeholder-free—but commit 68c2a79a replaces the prior honest STOP evidence with :outcome :done-unreviewed and :phase :implementation, removes :disposition :stop and the reason, and cites empty commit e66275fd as the implementation. The fixture still only defines PositiveHemisphereEvenlyCovered : Prop and prints helper signatures; it contains no inhabitant, and no inhabitant is banked. Thus the row now presents an unsatisfied probe acceptance as completed implementation, precisely the facade boundary its earlier reason rejected. Repair by retaining the authenticated fixture hash while restoring :outcome :stop, :disposition :stop, the representation-boundary reason, and probe phase (or actually bank a compiled inhabitant before claiming implementation completion). Fresh ancillary checks: exact implementation scope is empty, 131 statements match, and the 364-item ledger validates."},
-    :commit "e66275fd12dd67c37a136a75cbc2c23230239df2",
-    :changed-paths [],
+      :output "topology-worklist: 364 items OK"}],
     :fixture
     {:path "/tmp/rp2_positive_hemisphere_evenly_covered_contract.lean",
      :sha256
      "cf405c41483534c87da4bf715e92f64ea496554c8bc92d8a8725661ed18b0d80",
-     :status :interface-only}},
+     :status :interface-only},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :repair,
+   :state :needs-owner,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
