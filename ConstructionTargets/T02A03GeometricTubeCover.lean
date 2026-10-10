@@ -547,4 +547,12 @@ theorem apm_t02a03_rightCoreAnchorContractionMap_one
       apm_t02a03_rightCoreAnchorContractionPoint,
       apm_t02a03_rightCore, apm_t02a03_meridianAnchor]
 
+theorem apm_t02a03_anchor_eq_circleMeridianMap_quarterTurn :
+    (⟨apm_t02a03_meridianAnchor,
+        apm_t02a03_meridianAnchor_mem_geometricY⟩ :
+      apm_t02a03_geometricY_probe) =
+      apm_t02a03_circleMeridianMap (Circle.exp (Real.pi / 2)) := by
+  apply Subtype.ext
+  exact apm_t02a03_circleMeridian_quarterTurn.symm
+
 end ConstructionTargets.T02A03GeometricTubeCover
