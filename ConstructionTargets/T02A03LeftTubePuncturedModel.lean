@@ -93,4 +93,40 @@ theorem apm_t02a03_leftTubeNormalComplex_eq_norm_smul_direction
   exact (NormedSpace.norm_smul_normalize
     (apm_t02a03_leftTubeNormalComplex ⟨p.1, p.2.1⟩)).symm
 
+theorem apm_t02a03_leftTubeNormalComplex_torusInverse
+    (u : Circle × Circle) :
+    apm_t02a03_leftTubeNormalComplex
+      ⟨(apm_t02a03_leftTubeTorusInverse u).1,
+        (apm_t02a03_leftTubeTorusInverse u).2.1⟩ =
+      (1 / 8 : ℝ) • (u.2 : ℂ) := by
+  have hbre : -(1 : ℝ) ≤ (u.2 : ℂ).re := by
+    have h := Complex.abs_re_le_norm (u.2 : ℂ)
+    rw [Circle.norm_coe] at h
+    exact (abs_le.mp h).1
+  have hrpos : 0 < 1 + (1 / 8 : ℝ) * (u.2 : ℂ).re := by linarith
+  have hplanar : apm_t02a03_leftTubePlanarComplex
+      ⟨apm_t02a03_leftTubeTorusPoint u,
+        apm_t02a03_leftTubeTorusPoint_mem_leftTube u⟩ =
+      ((1 + (1 / 8 : ℝ) * (u.2 : ℂ).re : ℝ) : ℂ) * (u.1 : ℂ) := by
+    apply Complex.ext <;>
+      simp [apm_t02a03_leftTubePlanarComplex,
+        apm_t02a03_leftTubeTorusPoint]
+  have hnorm : ‖apm_t02a03_leftTubePlanarComplex
+      ⟨apm_t02a03_leftTubeTorusPoint u,
+        apm_t02a03_leftTubeTorusPoint_mem_leftTube u⟩‖ =
+      1 + (1 / 8 : ℝ) * (u.2 : ℂ).re := by
+    rw [hplanar]
+    rw [norm_mul, Circle.norm_coe, mul_one, Complex.norm_real,
+      Real.norm_eq_abs, abs_of_pos hrpos]
+  change apm_t02a03_leftTubeNormalComplex
+      ⟨apm_t02a03_leftTubeTorusPoint u,
+        apm_t02a03_leftTubeTorusPoint_mem_leftTube u⟩ =
+      (1 / 8 : ℝ) • (u.2 : ℂ)
+  apply Complex.ext
+  · simp [apm_t02a03_leftTubeNormalComplex]
+    rw [hnorm]
+    ring
+  · simp [apm_t02a03_leftTubeNormalComplex,
+      apm_t02a03_leftTubeTorusPoint]
+
 end ConstructionTargets.T02A03LeftTubePuncturedModel
