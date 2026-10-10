@@ -92976,7 +92976,8 @@
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :evidence
    {:outcome :replan,
-    :seat "topo-4",
+    :disposition :replan,
+    :author "topo-4",
     :commands
     [{:cmd
       "bb holes/labs/topology-contract/build_step.bb priorities holes/labs/topology-contract/worklist.edn",
@@ -93005,6 +93006,76 @@
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
      {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791644588361-2233-69bbd6a9",
+     :commands
+     ["git show 265535b1e6c307a21c2a7615002bf6d8eeca0bfb --stat and recorded ledger inspection"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 265535b1:holes/labs/topology-contract/worklist.edn)"
+      "lake build ConstructionTargets.FiniteIndexFreeGroupSchreierRank"
+      "sha256sum /tmp/finite-index-free-group-schreier-rank-final-probe.lean"
+      "comment-stripped placeholder census for six consumers"
+      "python3 scripts/statement-registry.py check"
+      "ranked theorem-name implementation audit in ConstructionTargets"],
+     :finding
+     "ledger-only scope and post-transition totals reproduce; the completed Schreier route builds with the recorded fixture hash and standard axioms, the six-consumer census remains eight, and the checkpoint correctly marks the stale tree-count backlog node proved before electing the unbanked Klein coordinate normal-form prerequisite"},
+    :replacement-items
+    [{:bounded-exception
+      "This single-consumer algebra lemma is the smallest dependency of the highest-ranked one-placeholder route and is required before the geometric orbit classification can be stated without opaque presented words.",
+      :consumer :t93J03,
+      :implements-lemma
+      :lemma-kleinpresentedgroup-coordinatenormalform,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/presented-group-coordinate-normal-form",
+      :acceptance
+      {:probe
+       "Compile an explicit coordinate normal form for the frozen PresentedKleinGroup. Define the integer-pair Klein coordinate group with multiplication (m,n)*(p,q)=(m+(-1)^n*p,n+q), construct a MulEquiv from PresentedKleinGroup, prove the two presented generators have the required coordinate values, and prove every element has a unique a^m*b^n coordinate. Do not construct the plane quotient or prove any topology.",
+       :placeholder "the single sorry in apm_t93j03",
+       :route-step
+       "t93J03 step 1a, finite algebra prerequisite for the plane-action square orbit classification",
+       :gates
+       ["canonical packages"
+        "fixture compiles"
+        "zero fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :id
+      :routes-2026-10-10-klein-presented-group-coordinate-normal-form-19,
+      :kind :reusable-theorem,
+      :depends-on [],
+      :current-residual
+      "Orient the frozen presentation relation into integer-pair coordinates and prove the normal-form inverse laws.",
+      :other-consumers []}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:strategy
+       "Measure the Klein presented-group coordinate normal form, bank its lemma node, recount all six consumers and eight placeholders, then elect the square orbit classification or a newly enabled nearer closure adapter."},
+      :id
+      :routes-2026-10-10-checkpoint-topo1-after-klein-coordinate-normal-form-19,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:routes-2026-10-10-klein-presented-group-coordinate-normal-form-19],
+      :current-residual
+      "Review the first bounded dependency of the highest-ranked Klein orbit-quotient route.",
+      :other-consumers []}],
     :finding
     {:routes
      {:t99J01
@@ -93107,66 +93178,9 @@
       :status :not-started,
       :consumers [:t93J03],
       :depends-on ["kleinSquareBoundaryOrbitEqvGen"]}],
-    :replacement-items
-    [{:bounded-exception
-      "This single-consumer algebra lemma is the smallest dependency of the highest-ranked one-placeholder route and is required before the geometric orbit classification can be stated without opaque presented words.",
-      :consumer :t93J03,
-      :implements-lemma
-      :lemma-kleinpresentedgroup-coordinatenormalform,
-      :phase :probe,
-      :state :open,
-      :scope [],
-      :dag-node
-      "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/presented-group-coordinate-normal-form",
-      :acceptance
-      {:probe
-       "Compile an explicit coordinate normal form for the frozen PresentedKleinGroup. Define the integer-pair Klein coordinate group with multiplication (m,n)*(p,q)=(m+(-1)^n*p,n+q), construct a MulEquiv from PresentedKleinGroup, prove the two presented generators have the required coordinate values, and prove every element has a unique a^m*b^n coordinate. Do not construct the plane quotient or prove any topology.",
-       :placeholder "the single sorry in apm_t93j03",
-       :route-step
-       "t93J03 step 1a, finite algebra prerequisite for the plane-action square orbit classification",
-       :gates
-       ["canonical packages"
-        "fixture compiles"
-        "zero fixture sorry"
-        "standard-only axioms"
-        "registry check"]},
-      :id
-      :routes-2026-10-10-klein-presented-group-coordinate-normal-form-19,
-      :kind :reusable-theorem,
-      :depends-on [],
-      :current-residual
-      "Orient the frozen presentation relation into integer-pair coordinates and prove the normal-form inverse laws.",
-      :other-consumers []}
-     {:consumer :portfolio,
-      :checkpoint
-      {:after-problems 1,
-       :may-supersede-future true,
-       :required-measures
-       [:placeholder-delta
-        :typed-residual-change
-        :infrastructure-packets
-        :review-outcomes]},
-      :stop-condition
-      "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
-      :phase :strategy,
-      :state :open,
-      :scope [],
-      :dag-node "TOPOLOGY-ROUTES.md",
-      :acceptance
-      {:strategy
-       "Measure the Klein presented-group coordinate normal form, bank its lemma node, recount all six consumers and eight placeholders, then elect the square orbit classification or a newly enabled nearer closure adapter."},
-      :id
-      :routes-2026-10-10-checkpoint-topo1-after-klein-coordinate-normal-form-19,
-      :kind :strategy-checkpoint,
-      :depends-on
-      [:routes-2026-10-10-klein-presented-group-coordinate-normal-form-19],
-      :current-residual
-      "Review the first bounded dependency of the highest-ranked Klein orbit-quotient route.",
-      :other-consumers []}],
-    :author "topo-4",
-    :disposition :replan},
+    :seat "topo-4"},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -93186,7 +93200,7 @@
    :consumer :t93J03,
    :implements-lemma :lemma-kleinpresentedgroup-coordinatenormalform,
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/presented-group-coordinate-normal-form",
@@ -93688,7 +93702,7 @@
    :other-consumers []}
   {:consumer :t99J01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "FiniteArborescenceEdgeCount.Schreier.tree_total_card",
@@ -93701,6 +93715,8 @@
     :type
     "For the n-vertex geodesic Schreier arborescence, Nat.card (Quiver.Total T) = n - 1.",
     :proved-in
+    :routes-2026-10-10-checkpoint-topo1-after-schreier-type-valued-basis-16,
+    :banked-by
     :routes-2026-10-10-checkpoint-topo1-after-schreier-type-valued-basis-16},
    :id :lemma-finitearborescenceedgecount-schreier-tree-total-card,
    :kind :lemma,
