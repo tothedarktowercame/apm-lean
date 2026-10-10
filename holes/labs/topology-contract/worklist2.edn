@@ -54355,8 +54355,30 @@
     :routes-2026-09-28-checkpoint-topo2-r1],
    :other-consumers [:t96A07]}
   {:consumer :t02A02,
+   :stop-count 1,
+   :evidence
+   {:outcome :stop,
+    :seat "topo-8",
+    :reason
+    "The acceptance requires the polygon quotient map itself to be open, and that claim is false for the frozen edge-pairing quotients. Choose an edge-interior point x and its distinct paired edge-interior point y. A sufficiently small relative-open neighborhood U of x in the closed disk omits y and every neighborhood of y. The saturation of U under the generated edge relation contains y because x is identified with y, but contains no relative neighborhood of y. For the quotient map q, q⁻¹(q(U)) is therefore not open; by the coinduced quotient topology q(U) is not open. Thus q is not an open map and cannot be an IsOpenQuotientMap. The source confirms that both frozen quotients use Quotient of EqvGen edge identifications on the closed disk and provides only continuity and surjectivity, not openness. T2 and an open embedding of the disk interior may still be true, but they require a closed-equivalence-relation argument and cannot be packaged with the refuted open-map clause or proved through t2Space_iff_of_isOpenQuotientMap. This is a mathematical refutation of the row as stated, not a request for another prerequisite.",
+    :commands
+    [{:cmd "lake env lean ConstructionTargets/Surfaces.lean", :exit 0}
+     {:cmd "sed -n '1,75p' ConstructionTargets/Surfaces.lean", :exit 0}
+     {:cmd
+      "rg -n 'IsOpenMap.*surfaceQuotient|IsOpenQuotientMap.*surfaceQuotient|polygon_quotient_t2|T2Space.*Surface' ConstructionTargets problems/t02A02 problems/t96J02 -g '*.lean'",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}],
+    :fixture
+    {:status :impossible, :refuted-clause "the quotient map is open"},
+    :residual
+    "Replace this row structurally: prove T2 directly from closedness of the generated equivalence relation on Disk × Disk, prove only the quotient-map property supplied by the coinduced topology, and separately prove that the restriction to the interior is an open embedding. Do not assert global openness of the polygon quotient map.",
+    :author "topo-8",
+    :disposition :stop},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
