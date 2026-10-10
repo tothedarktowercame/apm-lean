@@ -55385,6 +55385,19 @@
       :exit 1,
       :finding
       "The first refutation draft relied on definitional reduction under a variable affine-coordinate index. Replacing it with fin_cases on the two-element subtype proved the required inverse images equal; the final refutation then compiled."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791608150930-1147-1d9a3e81",
+     :commands
+     ["sha256sum /tmp/t94a08_projective_affine_identification_refutation.lean"
+      "lake env lean /tmp/t94a08_projective_affine_identification_refutation.lean"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 7af3d47c:holes/labs/topology-contract/worklist2.edn)"
+      "git show --format= --check 7af3d47c"
+      "recompute frozen consumer SHA-256 and comment-stripped placeholder count from commit 7af3d47c"],
+     :finding
+     "PASS: codex-7 independently reviewed topo-8 STOP. Commit 7af3d47c changes only the ledger. Fixture SHA-256 423af63c70a5b2601136daf43ef4727616edcc02e79a2e776dafec9235df946b matches, compiles, and has zero forbidden declarations. The inverse orientation is correct: symm_eq maps normalized affine points back to the projective chart, but its constant nonzero-index branch sends both (I,0) and (-I,0) to the same point; injectivity of homeomorph.symm yields the compiled contradiction. Registry is 131/0, ledger is 382 items OK, and frozen t94A08 remains fd1f6a86dde745c7d96783af49d2d1808c01a8489b94e981c397cded29babeb1 with one comment-stripped placeholder."},
     :fixture
     {:path
      "/tmp/t94a08_projective_affine_identification_refutation.lean",
@@ -55394,7 +55407,7 @@
     "The refutation needs no disputed normalization theorem. Both zPlus=(I,0) and zMinus=(-I,0) inhabit the normalized affine conic because I squared is -1. The contract's symm_eq sends both through the identical chartInverse coordinate function, since every admissible coordinate index is nonzero and hence takes the constant second branch 0. Injectivity of the inverse of a homeomorphism would force zPlus=zMinus; imaginary parts give 1=-1. This isolates the defect to the printed representation orientation formula, not the frozen t94A08 statement or projective topology.",
     :seat "topo-8"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t94A08/smooth-conic-local-charts/projective-affine-identification",
@@ -55501,7 +55514,7 @@
       "Compose this identification with the banked affine-conic parametrization and the complex-real-plane homeomorphism to construct the explicit local Euclidean witnesses.",
       :other-consumers []}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t94A08/smooth-conic-local-charts",
    :acceptance
