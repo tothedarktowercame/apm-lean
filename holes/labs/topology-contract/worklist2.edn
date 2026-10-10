@@ -59898,9 +59898,43 @@
   {:bounded-exception
    "single-consumer compact Circle parameterization of the frozen t02A03 left core",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/t02a03_geometric_tube_cover.lean",
+      :sha256
+      "c8ba25af1ad86912ae586cc791c77fb5cc6c95775e03dbbe3e28d964cb2f9e0b"},
+     :commands
+     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "apm_t02a03_leftCoreCircle, apm_t02a03_continuous_leftCoreCircle, apm_t02a03_range_leftCoreCircle, and apm_t02a03_isCompact_range_leftCore compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
+       :exit 0}
+      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "c8ba25af1ad86912ae586cc791c77fb5cc6c95775e03dbbe3e28d964cb2f9e0b  /tmp/t02a03_geometric_tube_cover.lean"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :finding
+     "The requested compact-range packet is complete and placeholder-free. The frozen real left-core parameterization factors through a continuous Circle map with identical range, so compactness follows from compactness of Circle.",
+     :implementation
+     {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
+      :declarations
+      ["apm_t02a03_leftCoreCircle"
+       "apm_t02a03_continuous_leftCoreCircle"
+       "apm_t02a03_range_leftCoreCircle"
+       "apm_t02a03_isCompact_range_leftCore"]},
+     :residual
+     "Use compactness to extract an attained nearby-core point for each closed left-tube point, prove planar center displacement is uniformly nonzero, then construct punctured-normal coordinates and the torus HomotopyEquiv."}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-core-compact-range",
    :acceptance
    {:probe
@@ -59915,6 +59949,11 @@
     "t02A03 step 2, obtain a compact frozen left-core range before extracting closed-tube distance witnesses"},
    :id :routes-2026-10-10-t02a03-left-core-compact-range-topo2-r1,
    :kind :reusable-theorem,
+   :declarations
+   ["apm_t02a03_leftCoreCircle"
+    "apm_t02a03_continuous_leftCoreCircle"
+    "apm_t02a03_range_leftCoreCircle"
+    "apm_t02a03_isCompact_range_leftCore"],
    :depends-on
    [:routes-2026-10-10-checkpoint-topo2-r5
     :routes-2026-10-10-t02a03-left-core-planar-radius-topo2-r1],
