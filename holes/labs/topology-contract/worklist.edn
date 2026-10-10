@@ -91858,63 +91858,65 @@
    :other-consumers [:t97A03]}
   {:consumer :t99J01,
    :evidence
-   {:probe
-    {:residual
-     "Use the banked n-1 geodesic-tree arrow count together with the r*n chosen-generator arrow count to prove the positive-edge complement has cardinal (r-1)*n+1; FreeGroupBasis construction remains downstream.",
-     :outcome :go,
-     :warnings [],
-     :acceptance
-     {:fixture-compiles true,
-      :zero-fixture-sorry true,
-      :standard-only-axioms true,
-      :registry-check true,
-      :complement-count-deferred true,
-      :free-group-basis-deferred true},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd "lake env lean /tmp/finite-arborescence-edge-count.lean",
-       :exit 0,
-       :finding
-       "Generic finite-arborescence cardinality and the n-vertex geodesic-subtree specialization compile."}
-      {:cmd
-       "rg -n \"sorry|admit\" /tmp/finite-arborescence-edge-count.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :finding "131 registered statements match, 0 do not"}
-      {:cmd "git status --short", :exit 0, :finding "clean"}],
-     :diagnostic-history
-     [{:cmd "lake env lean /tmp/finite-arborescence-edge-count.lean",
-       :exit 1,
-       :finding
-       "Initial fixture lacked a Fintype for the non-root subtype and a rooted-connected instance for the symmetrified action-groupoid generator quiver; corrected by installing decidable equality and constructing rooted connectedness from coset transitivity."}
-      {:cmd "lake env lean /tmp/finite-arborescence-edge-count.lean",
-       :exit 1,
-       :finding
-       "The first specialization treated ActionCategory as definitionally equal to its backing coset type; corrected with an explicit ActionCategory.back equivalence and Fintype transport."}],
-     :fixture
-     {:path "/tmp/finite-arborescence-edge-count.lean",
-      :sha256
-      "1a6ec2785ebceb2d21a90c587ce380bfdc5d6dc160e1e486258c10a9a24f22ec"},
-     :implementation
-     {:scope
-      ["ConstructionTargets/FiniteArborescenceTotalEdgeCount.lean"],
-      :declarations
-      [{:name "FiniteArborescenceEdgeCount.total_card",
-        :type
-        "(V : Type u) [Quiver V] [Arborescence V] [Finite V] -> Nat.card (Quiver.Total V) = Nat.card V - 1"}
-       {:name "FiniteArborescenceEdgeCount.Schreier.rootedConnected",
-        :type
-        "(r : Nat) (H : Subgroup (FreeGroup (Fin r))) (base : Gen r H) -> RootedConnected base in Symmetrify (Gen r H)"}
-       {:name "FiniteArborescenceEdgeCount.Schreier.tree_total_card",
-        :type
-        "(r n : Nat) (hn : 0 < n) (H : Subgroup (FreeGroup (Fin r))) (hindex : H.index = n) (base : Gen r H) -> Nat.card (Quiver.Total (tree r H base)) = n - 1"}],
-      :dependencies
-      ["ConstructionTargets.FiniteArborescenceTotalArrowEquivalence"
-       "ConstructionTargets.FiniteSchreierChosenGeneratorEdgeCoordinates"]}}},
+   {:placeholder-delta 0,
+    :residual
+    "Use the banked n-1 geodesic-tree arrow count with the r*n chosen-generator arrow count to prove the positive-edge complement has cardinal (r-1)*n+1; FreeGroupBasis construction remains downstream.",
+    :gates
+    {:target-compile :pass,
+     :fixture-compile :pass,
+     :fixture-hash :pass,
+     :zero-placeholders :pass,
+     :standard-only-axioms :pass,
+     :registry :pass,
+     :clean-worktree :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/FiniteArborescenceTotalEdgeCount.lean",
+      :exit 0}
+     {:cmd "lake env lean /tmp/finite-arborescence-edge-count.lean",
+      :exit 0}
+     {:cmd "sha256sum /tmp/finite-arborescence-edge-count.lean",
+      :exit 0,
+      :finding
+      "1a6ec2785ebceb2d21a90c587ce380bfdc5d6dc160e1e486258c10a9a24f22ec"}
+     {:cmd
+      "comment-stripped sorry/admit census of ConstructionTargets/FiniteArborescenceTotalEdgeCount.lean",
+      :exit 0,
+      :finding "0"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check HEAD^ HEAD", :exit 0}
+     {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :commit "8acfb1fbf8899e573e7def5a87f87ce30c45fa50",
+    :changed-paths
+    ["ConstructionTargets/FiniteArborescenceTotalEdgeCount.lean"],
+    :fixture
+    {:path "/tmp/finite-arborescence-edge-count.lean",
+     :sha256
+     "1a6ec2785ebceb2d21a90c587ce380bfdc5d6dc160e1e486258c10a9a24f22ec",
+     :sorry-count 0,
+     :axiom-count 0,
+     :proof-placeholder-count 0},
+    :implementation
+    {:scope
+     ["ConstructionTargets/FiniteArborescenceTotalEdgeCount.lean"],
+     :declarations
+     ["FiniteArborescenceEdgeCount.total_card"
+      "FiniteArborescenceEdgeCount.Schreier.rootedConnected"
+      "FiniteArborescenceEdgeCount.Schreier.tree_total_card"],
+     :dependencies
+     ["ConstructionTargets.FiniteArborescenceTotalArrowEquivalence"
+      "ConstructionTargets.FiniteSchreierChosenGeneratorEdgeCoordinates"]},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/FiniteArborescenceTotalEdgeCount.lean"],
    :dag-node
