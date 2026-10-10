@@ -1565,6 +1565,39 @@ def subspaceMap {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
   ext x
   rfl
 
+/-- A continuous ambient map restricts to the simplicial ranges of subspaces
+that it carries into one another, commuting with both ambient inclusions. -/
+theorem ambientSubspaceRangeMap
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (A : Set X) (B : Set Y) (f : C(X, Y)) (hf : Set.MapsTo f A B) :
+    ∃ g : (ambientSubspaceRange A : SSet) ⟶
+        (ambientSubspaceRange B : SSet),
+      g ≫ (ambientSubspaceRange B).ι =
+        (ambientSubspaceRange A).ι ≫ TopCat.toSSet.map (TopCat.ofHom f) := by
+  let F : TopCat.toSSet.obj (TopCat.of X) ⟶
+      TopCat.toSSet.obj (TopCat.of Y) :=
+    TopCat.toSSet.map (TopCat.ofHom f)
+  have himage : (ambientSubspaceRange A).image F ≤ ambientSubspaceRange B := by
+    rw [show F = TopCat.toSSet.map (TopCat.ofHom f) from rfl]
+    change (SSet.Subcomplex.range
+      (TopCat.toSSet.map (subspaceInclusion A))).image
+        (TopCat.toSSet.map (TopCat.ofHom f)) ≤
+      SSet.Subcomplex.range (TopCat.toSSet.map (subspaceInclusion B))
+    rw [← SSet.Subcomplex.range_comp, ← TopCat.toSSet.map_comp,
+      ← subspaceMap_inclusion A B f hf, TopCat.toSSet.map_comp]
+    rw [SSet.Subcomplex.range_comp]
+    exact SSet.Subcomplex.image_le_range _ _
+  let g : (ambientSubspaceRange A : SSet) ⟶
+      (ambientSubspaceRange B : SSet) :=
+    (ambientSubspaceRange A).toImage F ≫ SSet.Subcomplex.homOfLE himage
+  refine ⟨g, ?_⟩
+  change ((ambientSubspaceRange A).toImage F ≫
+      SSet.Subcomplex.homOfLE himage) ≫ (ambientSubspaceRange B).ι = _
+  rw [Category.assoc]
+  change (ambientSubspaceRange A).toImage F ≫
+      ((ambientSubspaceRange A).image F).ι = _
+  exact SSet.Subcomplex.toImage_ι _ _
+
 /-- The natural square of absolute and subspace singular-chain maps. -/
 theorem singularSubspaceMap_naturality
     {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
