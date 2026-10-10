@@ -92167,75 +92167,72 @@
    :other-consumers []}
   {:consumer :t99J01,
    :evidence
-   {:probe
-    {:residual
-     "Construct the Type-valued Nielsen-Schreier FreeGroupBasis indexed by the now-banked complement type, transport its index type to Fin ((r-1)*n+1), and package the r=3 and r=2,n=2 consumer specializations.",
-     :outcome :go,
-     :warnings [],
-     :acceptance
-     {:fixture-compiles true,
-      :zero-fixture-sorry true,
-      :standard-only-axioms true,
-      :registry-check true,
-      :free-group-basis-deferred true},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd "lake env lean /tmp/tree-positive-selection.lean",
-       :exit 0,
-       :finding
-       "The orientation-aware equivalence, generic complement count, and Schreier complement formula all compile."}
-      {:cmd "rg -n \"sorry|admit\" /tmp/tree-positive-selection.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :finding "131 registered statements match, 0 do not"}
-      {:cmd "git status --short", :exit 0, :finding "clean"}],
-     :diagnostic-history
-     [{:cmd "lake env lean /tmp/tree-positive-selection.lean",
-       :exit 1,
-       :finding
-       "The first run lacked the generated olean for the newly banked arborescence module; compiled that dependency through Lean's normal build output and reran."}
-      {:cmd "lake env lean /tmp/tree-positive-selection.lean",
-       :exit 1,
-       :finding
-       "The initial inverse needed an explicit classical decidability scope, and the no-both-orientations proof needed path-length arithmetic; both were corrected."}
-      {:cmd "lake env lean /tmp/tree-positive-selection.lean",
-       :exit 1,
-       :finding
-       "The first Schreier specialization could not reduce the opaque tree definition and lacked the multiplication lower bound needed by omega; corrected with an explicit banked tree-card equality and Nat.le_mul_of_pos_left."}],
-     :representation
-     {:source
-      "Total arrows of the geodesic subtree in the symmetrified chosen-generator quiver",
-      :target
-      "Original chosen-generator arrows selected by wideSubquiverSymmetrify and their complement",
-      :direction
-      "Exact equivalence from each forward or reverse tree arrow to its underlying selected original positive arrow; opposite orientations are disjoint by arborescence path uniqueness, after which finite complement subtraction gives the target cardinality"},
-     :fixture
-     {:path "/tmp/tree-positive-selection.lean",
-      :sha256
-      "9796b9a070ca0d756d55472787c375d4f88140ede0c74c83ee4656e4bcc60a47"},
-     :implementation
-     {:scope
-      ["ConstructionTargets/FiniteSchreierTreePositiveSelectionComplementCount.lean"],
-      :declarations
-      [{:name "TreePositiveSelection.not_both",
-        :type
-        "For e : a -> b, membership of both Sum.inl e in T a b and Sum.inr e in T b a is false for an arborescence T"}
-       {:name "TreePositiveSelection.totalEquivSelected",
-        :type
-        "Quiver.Total T equivalence {e : Quiver.Total V // e.hom belongs to wideSubquiverSymmetrify T e.left e.right}"}
-       {:name "TreePositiveSelection.complement_card",
-        :type
-        "Nat.card of the unselected original-arrow subtype equals Nat.card (Quiver.Total V) - Nat.card (Quiver.Total T)"}
-       {:name "TreePositiveSelection.Schreier.complement_card_formula",
-        :type
-        "Under 0<r, 0<n, and H.index=n, the complement selected by the geodesic Schreier tree has Nat.card (r-1)*n+1"}],
-      :dependencies
-      ["ConstructionTargets.FiniteArborescenceTotalEdgeCount"
-       "ConstructionTargets.FiniteSchreierChosenGeneratorEdgeCoordinates"]}}},
+   {:placeholder-delta 0,
+    :residual
+    "Construct the Type-valued Nielsen-Schreier FreeGroupBasis indexed by the banked complement type, transport its index type to Fin ((r-1)*n+1), and package the r=3 and r=2,n=2 consumer specializations.",
+    :gates
+    {:target-compile :pass,
+     :fixture-compile :pass,
+     :fixture-hash :pass,
+     :zero-placeholders :pass,
+     :standard-only-axioms :pass,
+     :registry :pass,
+     :clean-worktree :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/FiniteSchreierTreePositiveSelectionComplementCount.lean",
+      :exit 0}
+     {:cmd "lake env lean /tmp/tree-positive-selection.lean", :exit 0}
+     {:cmd "sha256sum /tmp/tree-positive-selection.lean",
+      :exit 0,
+      :finding
+      "9796b9a070ca0d756d55472787c375d4f88140ede0c74c83ee4656e4bcc60a47"}
+     {:cmd
+      "comment-stripped sorry/admit census of ConstructionTargets/FiniteSchreierTreePositiveSelectionComplementCount.lean",
+      :exit 0,
+      :finding "0"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check HEAD^ HEAD", :exit 0}
+     {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :representation
+    {:source
+     "Total arrows of the banked geodesic subtree inside the symmetrified chosen-generator action-groupoid quiver",
+     :target
+     "Original chosen-generator arrows selected by Mathlib wideSubquiverSymmetrify, and their complement inside the r*n positive-arrow type",
+     :direction
+     "Endpoint- and orientation-aware equivalence from each forward or reverse geodesic-tree arrow to its underlying selected original positive generator arrow, followed by exact finite-cardinality subtraction"},
+    :commit "cf840f39ec1592ea6f499d00c71f700fb6ea5a0d",
+    :changed-paths
+    ["ConstructionTargets/FiniteSchreierTreePositiveSelectionComplementCount.lean"],
+    :fixture
+    {:path "/tmp/tree-positive-selection.lean",
+     :sha256
+     "9796b9a070ca0d756d55472787c375d4f88140ede0c74c83ee4656e4bcc60a47",
+     :sorry-count 0,
+     :axiom-count 0,
+     :proof-placeholder-count 0},
+    :implementation
+    {:scope
+     ["ConstructionTargets/FiniteSchreierTreePositiveSelectionComplementCount.lean"],
+     :declarations
+     ["TreePositiveSelection.not_both"
+      "TreePositiveSelection.totalEquivSelected"
+      "TreePositiveSelection.complement_card"
+      "TreePositiveSelection.Schreier.complement_card_formula"],
+     :dependencies
+     ["ConstructionTargets.FiniteArborescenceTotalEdgeCount"
+      "ConstructionTargets.FiniteSchreierChosenGeneratorEdgeCoordinates"]},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/FiniteSchreierTreePositiveSelectionComplementCount.lean"],
    :dag-node
