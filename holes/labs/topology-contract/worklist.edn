@@ -92974,8 +92974,199 @@
      :review-outcomes]},
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+   :evidence
+   {:outcome :replan,
+    :seat "topo-4",
+    :commands
+    [{:cmd
+      "bb holes/labs/topology-contract/build_step.bb priorities holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :finding
+      "ranking begins with the already-proved tree_total_card node, then kleinOrbitQuotient_homeomorph for one-placeholder t93J03, followed by the two t97A01 polygon nodes and the two t99J01 covering nodes"}
+     {:cmd
+      "comment-stripped placeholder census for t99J01 t92J06 t97A03 t93J03 t01A03 t97A01",
+      :exit 0,
+      :finding "counts 1, 1, 3, 1, 1, 1; total 8; delta 0"}
+     {:cmd
+      "rg -n for ranked backlog theorem names in ConstructionTargets and route files",
+      :exit 0,
+      :finding
+      "no implementation of the Klein orbit quotient or its coordinate normal-form prerequisites is banked; the arborescence tree_total_card implementation is banked"}
+     {:cmd "bb holes/labs/topology-contract/worklist_check.bb",
+      :exit 0,
+      :finding
+      "783 items OK; 722 done, 20 superseded, 16 needs-owner, 9 blocked, 1 open, 9 backlog, 6 banked"}
+     {:cmd
+      "lake build ConstructionTargets.FiniteIndexFreeGroupSchreierRank",
+      :exit 0,
+      :finding
+      "canonical 1566-job build confirms the Type-valued spanning-tree basis, arborescence count, complement count, and both Schreier rank specializations"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :finding
+    {:routes
+     {:t99J01
+      ["three-circles fundamental-group coordinates"
+       "covering-subgroup index"
+       "banked positive-index Schreier rank"
+       "path-component covering restriction"
+       "cyclic connected cover"
+       "assembly"],
+      :t92J06
+      ["matched quotient-sheet saturation and local-homeomorph construction"
+       "permutation-cover construction"
+       "Cayley-tree classification"
+       "assembly"],
+      :t97A03
+      ["double-cover stratum gluing"
+       "fixed-model quotient-to-bouquet comparisons"
+       "banked index-two Schreier rank"
+       "model homology and pi1 transport"
+       "assembly"],
+      :t93J03
+      ["Klein presented-group coordinate normal form"
+       "plane-action square orbit classification"
+       "square-boundary orbit/EqvGen comparison"
+       "orbit quotient homeomorphism"
+       "deck-group fundamental-group theorem"
+       "covering lifting criterion"
+       "annulus embedding"
+       "assembly"],
+      :t01A03
+      ["circle-wedge fundamental group and torus commutativity"
+       "separating embedded-circle collar theorem"
+       "assembly"],
+      :t97A01
+      ["banked standard-N3 homeomorphism"
+       "polygon radial open-cover package"
+       "strict point-wedge overlap inclusion squares"
+       "polygon fundamental group and Mayer-Vietoris coordinates"
+       "banked Smith normalization"
+       "assembly"]},
+     :placeholder-delta 0,
+     :priority-top
+     [{:name "FiniteArborescenceEdgeCount.Schreier.tree_total_card",
+       :ledger-state :backlog,
+       :measured-state :proved,
+       :unblocks [:t99J01 :t97A03]}
+      {:name "kleinOrbitQuotient_homeomorph",
+       :ledger-state :backlog,
+       :ready true,
+       :unblocks [:t93J03],
+       :closest 1}],
+     :placeholder-counts
+     {:t99J01 1,
+      :t92J06 1,
+      :t97A03 3,
+      :t93J03 1,
+      :t01A03 1,
+      :t97A01 1},
+     :deferred
+     ["No unrelated finite-graph generalization is elected."
+      "The t97A01 polygon package, t99J01 component restriction and cyclic cover, and t97A03 model comparisons remain ready behind the nearer t93J03 route."],
+     :infrastructure-packets
+     {:banked 1, :reviewed-stops 0, :placeholder-changing 0},
+     :ranking
+     "After correcting the stale tree_total_card backlog node to proved, kleinOrbitQuotient_homeomorph is the highest-ranked ready lemma because t93J03 has one placeholder. The whole quotient theorem is too broad for one row, so the elected first dependency is its finite coordinate normal form.",
+     :typed-residual-change
+     ["The positive-index Nielsen-Schreier route is complete and canonically importable: its explicit basis has cardinal (r-1)*n+1, with r=3 and r=2,n=2 specializations."
+      "t99J01 no longer waits on finite-index free-group algebra; it still waits on the three-circles pi1 coordinate theorem, covering-subgroup index, path-component restriction, and cyclic connected-cover construction."
+      "t97A03 no longer waits on the index-two subgroup rank; its remaining work is the concrete double-cover classification and model topology/homology comparison."
+      "The top remaining ready one-placeholder route is t93J03. Its orbit-quotient lemma is split into coordinate normal form, square orbit classification, boundary EqvGen comparison, and quotient homeomorphism."],
+     :review-outcomes {:pass 1, :stop 0, :closed-problems 0}},
+    :lemmas
+    [{:name "FiniteArborescenceEdgeCount.Schreier.tree_total_card",
+      :type
+      "For the n-vertex geodesic Schreier arborescence, Nat.card (Quiver.Total T) = n - 1.",
+      :status :proved,
+      :consumers [:t99J01 :t97A03],
+      :depends-on []}
+     {:name "kleinPresentedGroup_coordinateNormalForm",
+      :type
+      "An explicit group equivalence from the presented Klein-bottle group to integer-pair coordinates with multiplication (m,n)*(p,q)=(m+(-1)^n*p,n+q), including generator coordinate formulas and uniqueness.",
+      :status :not-started,
+      :consumers [:t93J03],
+      :depends-on []}
+     {:name "kleinPlaneAction_squareOrbitClassification",
+      :type
+      "Classify equality of Klein plane-action orbits using the integer-pair normal form, including all representatives meeting the closed unit square and the edge/corner cases.",
+      :status :not-started,
+      :consumers [:t93J03],
+      :depends-on ["kleinPresentedGroup_coordinateNormalForm"]}
+     {:name "kleinSquareBoundaryOrbitEqvGen",
+      :type
+      "On the closed square, identify the plane-action orbit relation exactly with the aabb disk-boundary EqvGen relation defining ConstructionTargets.StatementSurfaceModels.KleinBottle.",
+      :status :not-started,
+      :consumers [:t93J03],
+      :depends-on ["kleinPlaneAction_squareOrbitClassification"]}
+     {:name "kleinOrbitQuotient_homeomorph",
+      :type
+      "Quotient of the Klein plane action orbit relation is homeomorphic to ConstructionTargets.StatementSurfaceModels.KleinBottle.",
+      :status :not-started,
+      :consumers [:t93J03],
+      :depends-on ["kleinSquareBoundaryOrbitEqvGen"]}],
+    :replacement-items
+    [{:bounded-exception
+      "This single-consumer algebra lemma is the smallest dependency of the highest-ranked one-placeholder route and is required before the geometric orbit classification can be stated without opaque presented words.",
+      :consumer :t93J03,
+      :implements-lemma
+      :lemma-kleinpresentedgroup-coordinatenormalform,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/presented-group-coordinate-normal-form",
+      :acceptance
+      {:probe
+       "Compile an explicit coordinate normal form for the frozen PresentedKleinGroup. Define the integer-pair Klein coordinate group with multiplication (m,n)*(p,q)=(m+(-1)^n*p,n+q), construct a MulEquiv from PresentedKleinGroup, prove the two presented generators have the required coordinate values, and prove every element has a unique a^m*b^n coordinate. Do not construct the plane quotient or prove any topology.",
+       :placeholder "the single sorry in apm_t93j03",
+       :route-step
+       "t93J03 step 1a, finite algebra prerequisite for the plane-action square orbit classification",
+       :gates
+       ["canonical packages"
+        "fixture compiles"
+        "zero fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :id
+      :routes-2026-10-10-klein-presented-group-coordinate-normal-form-19,
+      :kind :reusable-theorem,
+      :depends-on [],
+      :current-residual
+      "Orient the frozen presentation relation into integer-pair coordinates and prove the normal-form inverse laws.",
+      :other-consumers []}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:strategy
+       "Measure the Klein presented-group coordinate normal form, bank its lemma node, recount all six consumers and eight placeholders, then elect the square orbit classification or a newly enabled nearer closure adapter."},
+      :id
+      :routes-2026-10-10-checkpoint-topo1-after-klein-coordinate-normal-form-19,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:routes-2026-10-10-klein-presented-group-coordinate-normal-form-19],
+      :current-residual
+      "Review the first bounded dependency of the highest-ranked Klein orbit-quotient route.",
+      :other-consumers []}],
+    :author "topo-4",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -92989,6 +93180,62 @@
     :routes-2026-10-10-checkpoint-topo1-after-schreier-complement-count-15],
    :current-residual
    "Review the completed shared Schreier algebra route and determine whether t99J01 or t97A03 has a newly enabled adapter.",
+   :other-consumers []}
+  {:bounded-exception
+   "This single-consumer algebra lemma is the smallest dependency of the highest-ranked one-placeholder route and is required before the geometric orbit classification can be stated without opaque presented words.",
+   :consumer :t93J03,
+   :implements-lemma :lemma-kleinpresentedgroup-coordinatenormalform,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/presented-group-coordinate-normal-form",
+   :acceptance
+   {:probe
+    "Compile an explicit coordinate normal form for the frozen PresentedKleinGroup. Define the integer-pair Klein coordinate group with multiplication (m,n)*(p,q)=(m+(-1)^n*p,n+q), construct a MulEquiv from PresentedKleinGroup, prove the two presented generators have the required coordinate values, and prove every element has a unique a^m*b^n coordinate. Do not construct the plane quotient or prove any topology.",
+    :placeholder "the single sorry in apm_t93j03",
+    :route-step
+    "t93J03 step 1a, finite algebra prerequisite for the plane-action square orbit classification",
+    :gates
+    ["canonical packages"
+     "fixture compiles"
+     "zero fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id
+   :routes-2026-10-10-klein-presented-group-coordinate-normal-form-19,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo1-after-schreier-type-valued-basis-16],
+   :current-residual
+   "Orient the frozen presentation relation into integer-pair coordinates and prove the normal-form inverse laws.",
+   :other-consumers []}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:strategy
+    "Measure the Klein presented-group coordinate normal form, bank its lemma node, recount all six consumers and eight placeholders, then elect the square orbit classification or a newly enabled nearer closure adapter."},
+   :id
+   :routes-2026-10-10-checkpoint-topo1-after-klein-coordinate-normal-form-19,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:routes-2026-10-10-klein-presented-group-coordinate-normal-form-19
+    :routes-2026-10-10-checkpoint-topo1-after-schreier-type-valued-basis-16],
+   :current-residual
+   "Review the first bounded dependency of the highest-ranked Klein orbit-quotient route.",
    :other-consumers []}
   {:consumer :t99J01,
    :phase :probe,
@@ -93224,12 +93471,14 @@
     "theorem is absent: after defining kleinPlaneAction from PresentedGroup.toGroup and orbitSetoid by existence of a group element, one still must prove theorem kleinOrbitQuotient_homeomorph : Quotient orbitSetoid ≃ₜ ConstructionTargets.StatementSurfaceModels.KleinBottle, with orbitSetoid x y ↔ ∃ g : T93J03.PresentedKleinGroup, kleinPlaneAction g x = y. This theorem entails a complete classification of every orbit intersection with the closed square, all edge and corner identifications, equivalence with the disk-boundary EqvGen relation used by Surface false 2, and continuity of both quotient maps"},
    :lemma
    {:name "kleinOrbitQuotient_homeomorph",
-    :reported-by [:owner],
+    :reported-by
+    [:owner
+     :routes-2026-10-10-checkpoint-topo1-after-schreier-type-valued-basis-16],
     :type
     "theorem is absent: after defining kleinPlaneAction from PresentedGroup.toGroup and orbitSetoid by existence of a group element, one still must prove theorem kleinOrbitQuotient_homeomorph : Quotient orbitSetoid ≃ₜ ConstructionTargets.StatementSurfaceModels.KleinBottle, with orbitSetoid x y ↔ ∃ g : T93J03.PresentedKleinGroup, kleinPlaneAction g x = y. This theorem entails a complete classification of every orbit intersection with the closed square, all edge and corner identifications, equivalence with the disk-boundary EqvGen relation used by Surface false 2, and continuity of both quotient maps"},
    :id :lemma-kleinorbitquotient-homeomorph,
    :kind :lemma,
-   :depends-on [],
+   :depends-on [:lemma-kleinsquareboundaryorbiteqvgen],
    :other-consumers []}
   {:consumer :t97A03,
    :phase :lemma,
@@ -93437,18 +93686,79 @@
    :depends-on
    [:lemma-finiteindexfreegroupschreierrank-finiteindexsubgroupfreegroupequiv],
    :other-consumers []}
-  {:consumer :portfolio,
+  {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
    :scope [],
    :acceptance
-   {:lemma "FiniteArborescenceEdgeCount.Schreier.tree_total_card"},
+   {:lemma "FiniteArborescenceEdgeCount.Schreier.tree_total_card",
+    :type
+    "For the n-vertex geodesic Schreier arborescence, Nat.card (Quiver.Total T) = n - 1."},
    :lemma
    {:name "FiniteArborescenceEdgeCount.Schreier.tree_total_card",
-    :reported-by []},
+    :reported-by
+    [:routes-2026-10-10-checkpoint-topo1-after-schreier-type-valued-basis-16],
+    :type
+    "For the n-vertex geodesic Schreier arborescence, Nat.card (Quiver.Total T) = n - 1.",
+    :proved-in
+    :routes-2026-10-10-checkpoint-topo1-after-schreier-type-valued-basis-16},
    :id :lemma-finitearborescenceedgecount-schreier-tree-total-card,
    :kind :lemma,
    :depends-on [],
+   :other-consumers [:t97A03]}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "kleinPresentedGroup_coordinateNormalForm",
+    :type
+    "An explicit group equivalence from the presented Klein-bottle group to integer-pair coordinates with multiplication (m,n)*(p,q)=(m+(-1)^n*p,n+q), including generator coordinate formulas and uniqueness."},
+   :lemma
+   {:name "kleinPresentedGroup_coordinateNormalForm",
+    :reported-by
+    [:routes-2026-10-10-checkpoint-topo1-after-schreier-type-valued-basis-16],
+    :type
+    "An explicit group equivalence from the presented Klein-bottle group to integer-pair coordinates with multiplication (m,n)*(p,q)=(m+(-1)^n*p,n+q), including generator coordinate formulas and uniqueness."},
+   :id :lemma-kleinpresentedgroup-coordinatenormalform,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "kleinPlaneAction_squareOrbitClassification",
+    :type
+    "Classify equality of Klein plane-action orbits using the integer-pair normal form, including all representatives meeting the closed unit square and the edge/corner cases."},
+   :lemma
+   {:name "kleinPlaneAction_squareOrbitClassification",
+    :reported-by
+    [:routes-2026-10-10-checkpoint-topo1-after-schreier-type-valued-basis-16],
+    :type
+    "Classify equality of Klein plane-action orbits using the integer-pair normal form, including all representatives meeting the closed unit square and the edge/corner cases."},
+   :id :lemma-kleinplaneaction-squareorbitclassification,
+   :kind :lemma,
+   :depends-on [:lemma-kleinpresentedgroup-coordinatenormalform],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "kleinSquareBoundaryOrbitEqvGen",
+    :type
+    "On the closed square, identify the plane-action orbit relation exactly with the aabb disk-boundary EqvGen relation defining ConstructionTargets.StatementSurfaceModels.KleinBottle."},
+   :lemma
+   {:name "kleinSquareBoundaryOrbitEqvGen",
+    :reported-by
+    [:routes-2026-10-10-checkpoint-topo1-after-schreier-type-valued-basis-16],
+    :type
+    "On the closed square, identify the plane-action orbit relation exactly with the aabb disk-boundary EqvGen relation defining ConstructionTargets.StatementSurfaceModels.KleinBottle."},
+   :id :lemma-kleinsquareboundaryorbiteqvgen,
+   :kind :lemma,
+   :depends-on [:lemma-kleinplaneaction-squareorbitclassification],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
