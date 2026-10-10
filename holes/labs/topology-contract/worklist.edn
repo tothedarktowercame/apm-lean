@@ -86574,9 +86574,12 @@
    {:placeholder-after 0,
     :placeholder-delta 0,
     :residual
-    "The reusable path-connected covering package is complete. Consumers still need their concrete covering constructions and computations identifying the induced subgroup or monodromy action.",
+    "The reusable path-connected covering package and the exact frozen acceptance fixture are complete. Consumers still need their concrete covering constructions and computations identifying the induced subgroup or monodromy action.",
     :outcome :done-unreviewed,
-    :warnings [],
+    :warnings
+    [{:kind :fixture-interface-axiom,
+      :message
+      "The frozen probe intentionally names fiberEquivCosets as its missing interface axiom; standard-only axioms are audited separately against the implemented ConstructionTargets declarations."}],
     :statement-hashes
     {:status :unchanged,
      :registry "131 registered statements match, 0 do not"},
@@ -86584,15 +86587,11 @@
     :author {:name "Joe Corneli", :email "holtzermann17@gmail.com"},
     :placeholder-before 0,
     :commands
-    [{:cmd "stat -c '%F %n' .lake/packages",
-      :exit 0,
-      :finding
-      "directory .lake/packages; canonical package authority is present"}
-     {:cmd
+    [{:cmd
       "sha256sum /tmp/covering-monodromy-coset-lifting-probe.lean",
       :exit 0,
       :finding
-      "The initially recorded fixture hash was verified as e686b18a0cf2724a2e91de9d8ce160458143065dfbdd3f5ecc81d24d4da43219 before replacing its interface axiom with checks of the implementation; the completed fixture hash is 1d2410d8005d4022e91f02c3d8d778983a8885a13cffad193a61d5ffd0e0e2d8."}
+      "e686b18a0cf2724a2e91de9d8ce160458143065dfbdd3f5ecc81d24d4da43219; the frozen acceptance fixture bytes are restored exactly"}
      {:cmd
       "lake env lean ConstructionTargets/CoveringMonodromyCosets.lean",
       :exit 0}
@@ -86600,46 +86599,29 @@
       "lake env lean /tmp/covering-monodromy-coset-lifting-probe.lean",
       :exit 0,
       :finding
-      "All six public declarations typecheck; the axiom audit reports only propext, Classical.choice, and Quot.sound."}
-     {:cmd
-      "Python comment-stripped placeholder census of ConstructionTargets/CoveringMonodromyCosets.lean and fixture",
+      "The frozen interface fixture compiles with zero placeholders."}
+     {:cmd "lake env lean /tmp/covering-monodromy-cosets-audit.lean",
       :exit 0,
-      :finding "0 in each"}
+      :finding
+      "The implemented declarations depend only on propext, Classical.choice, and Quot.sound."}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
-     {:cmd "git status --short",
-      :exit 0,
-      :finding "clean after the concurrent writer completed"}],
+     {:cmd "git status --short", :exit 0, :finding "clean"}],
     :diagnostic-history
     [{:cmd
-      "lake env lean ConstructionTargets/CoveringMonodromyCosets.lean",
-      :exit 1,
+      "sha256sum /tmp/covering-monodromy-coset-lifting-probe.lean",
+      :exit 0,
       :finding
-      "The first monodromy action used the path-composition arguments in the wrong order.",
+      "The prior completed-fixture rewrite hashed to 1d2410d8005d4022e91f02c3d8d778983a8885a13cffad193a61d5ffd0e0e2d8 and did not match acceptance.",
       :correction
-      "Matched FundamentalGroup multiplication to monodromy_trans_apply with reversed path arguments; the final compile succeeds."}
-     {:cmd
-      "lake env lean ConstructionTargets/CoveringMonodromyCosets.lean",
-      :exit 1,
-      :finding
-      "The first orbit-surjectivity proof attempted dependent elimination on the equality between fiber base values.",
-      :correction
-      "Used quotient-path endpoint casting and reduced monodromy directly; the final compile succeeds."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1791619432313-1534-362aafba",
-     :finding
-     "Deterministic fixture-hash defect: acceptance :fixture-sha256 is e686b18a0cf2724a2e91de9d8ce160458143065dfbdd3f5ecc81d24d4da43219, but the completed fixture recorded in evidence and freshly hashed is 1d2410d8005d4022e91f02c3d8d778983a8885a13cffad193a61d5ffd0e0e2d8. Restore the frozen fixture bytes or update the acceptance hash to the intended completed fixture and rerun review."},
+      "Restored the frozen fixture byte-for-byte; the successful recorded-hash verification is in commands."}],
     :commit "e2c42bc75c14552eb2b06184a06d380ef0b97c0f",
     :changed-paths
     ["ConstructionTargets/CoveringMonodromyCosets.lean"],
     :fixture
     {:path "/tmp/covering-monodromy-coset-lifting-probe.lean",
      :sha256
-     "1d2410d8005d4022e91f02c3d8d778983a8885a13cffad193a61d5ffd0e0e2d8",
-     :recorded-sha256
      "e686b18a0cf2724a2e91de9d8ce160458143065dfbdd3f5ecc81d24d4da43219",
      :placeholder-count 0},
     :declarations
@@ -86651,7 +86633,7 @@
      "coveringExistsUniqueLift_of_range_le"],
     :seat "topo-2"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/CoveringMonodromyCosets.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/covering-monodromy-coset-lifting/fiber-cosets",
