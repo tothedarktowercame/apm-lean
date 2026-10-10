@@ -88272,93 +88272,101 @@
    :other-consumers [:t97A03]}
   {:consumer :t99J01,
    :evidence
-   {:probe
-    {:residual
-     "The shared finite-index Schreier-rank step is complete. The next consumer work is transport into the t99J01 cyclic-cover path-component argument and the t97A03 fixed double-cover model assembly.",
-     :outcome :go,
-     :warnings [],
-     :missing-theorems
-     [{:name
-       "FiniteIndexFreeGroupSchreierRank.finiteIndexSubgroupFreeGroupEquiv",
-       :type
-       "(r n : Nat) -> 0 < r -> 0 < n -> (H : Subgroup (FreeGroup (Fin r))) -> H.index = n -> H ≃* FreeGroup (Fin ((r - 1) * n + 1))",
-       :status :proved,
-       :consumers [:t99J01 :t97A03],
-       :depends-on
-       ["FiniteIndexFreeGroupSchreierRank.spanningTreeBasis"
-        "TreePositiveSelection.Schreier.complement_card_formula"]}
-      {:name
-       "FiniteIndexFreeGroupSchreierRank.indexSubgroupFreeGroupFinThreeEquiv",
-       :type
-       "positive-index subgroup of FreeGroup (Fin 3) is equivalent to FreeGroup (Fin (2*n+1))",
-       :status :proved,
-       :consumers [:t99J01],
-       :depends-on
-       ["FiniteIndexFreeGroupSchreierRank.finiteIndexSubgroupFreeGroupEquiv"]}
-      {:name
-       "FiniteIndexFreeGroupSchreierRank.indexTwoSubgroupFreeGroupFinTwoEquiv",
-       :type
-       "index-two subgroup of FreeGroup (Fin 2) is equivalent to FreeGroup (Fin 3)",
-       :status :proved,
-       :consumers [:t97A03],
-       :depends-on
-       ["FiniteIndexFreeGroupSchreierRank.finiteIndexSubgroupFreeGroupEquiv"]}],
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd
-       "lake build ConstructionTargets.FiniteIndexFreeGroupSchreierRank",
-       :exit 0,
-       :finding
-       "canonical Lake build completed all 1566 jobs; the repaired chosen-generator coordinates, arborescence count, complement count, and shared rank module replay successfully"}
-      {:cmd
-       "lake env lean /tmp/finite-index-free-group-schreier-rank-final-probe.lean",
-       :exit 0,
-       :finding
-       "fresh imported fixture compiles the universal equivalence and both requested consumer specializations; each axiom audit reports only propext, Classical.choice, and Quot.sound"}
-      {:cmd
-       "sha256sum /tmp/finite-index-free-group-schreier-rank-final-probe.lean",
-       :exit 0,
-       :finding
-       "9f380bb4578bf9aa3ea3ceeb746f313edf3bb85722dd6f04b0c8a08d6fa2b6ba"}
-      {:cmd
-       "rg -n \"\\b(sorry|admit)\\b\" /tmp/finite-index-free-group-schreier-rank-final-probe.lean",
-       :exit 1,
-       :expected-exit 1,
-       :finding "no placeholders"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :finding "131 registered statements match, 0 do not"}
-      {:cmd "git status --short", :exit 0, :finding "clean"}],
-     :fixture
-     {:path
-      "/tmp/finite-index-free-group-schreier-rank-final-probe.lean",
-      :sha256
-      "9f380bb4578bf9aa3ea3ceeb746f313edf3bb85722dd6f04b0c8a08d6fa2b6ba",
-      :interface
-      "Universal H ≃* FreeGroup (Fin ((r-1)*n+1)) from 0<r, 0<n, and H.index=n, plus the r=3 arbitrary-positive-index and r=2 index-two specializations."},
-     :implementation
-     {:scope
-      ["ConstructionTargets/FiniteIndexFreeGroupSchreierRank.lean"],
-      :declarations
-      [{:name
-        "FiniteIndexFreeGroupSchreierRank.finiteIndexSubgroupFreeGroupEquiv",
-        :type
-        "(r n : Nat) -> 0 < r -> 0 < n -> (H : Subgroup (FreeGroup (Fin r))) -> H.index = n -> H ≃* FreeGroup (Fin ((r - 1) * n + 1))"}
-       {:name
-        "FiniteIndexFreeGroupSchreierRank.indexSubgroupFreeGroupFinThreeEquiv",
-        :type
-        "(n : Nat) -> 0 < n -> (H : Subgroup (FreeGroup (Fin 3))) -> H.index = n -> Nonempty (H ≃* FreeGroup (Fin (2 * n + 1)))"}
-       {:name
-        "FiniteIndexFreeGroupSchreierRank.indexTwoSubgroupFreeGroupFinTwoEquiv",
-        :type
-        "(H : Subgroup (FreeGroup (Fin 2))) -> H.index = 2 -> Nonempty (H ≃* FreeGroup (Fin 3))"}],
-      :reuse
+   {:placeholder-delta 0,
+    :residual
+    "Transport the banked rank equivalences into the t99J01 cyclic-cover path-component adapter and the t97A03 fixed double-cover model assembly.",
+    :gates
+    {:canonical-build :pass,
+     :fixture-compile :pass,
+     :fixture-hash :pass,
+     :zero-fixture-placeholders :pass,
+     :standard-only-axioms :pass,
+     :registry :pass,
+     :clean-worktree :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :missing-theorems
+    [{:name
+      "FiniteIndexFreeGroupSchreierRank.finiteIndexSubgroupFreeGroupEquiv",
+      :type
+      "(r n : Nat) -> 0 < r -> 0 < n -> (H : Subgroup (FreeGroup (Fin r))) -> H.index = n -> H ≃* FreeGroup (Fin ((r - 1) * n + 1))",
+      :status :proved,
+      :consumers [:t99J01 :t97A03],
+      :depends-on
       ["FiniteIndexFreeGroupSchreierRank.spanningTreeBasis"
-       "TreePositiveSelection.Schreier.complement_card_formula"
-       "IsFreeGroupoid.endMulEquivSubgroup"]},
-     :seat "topo-4"}},
+       "TreePositiveSelection.Schreier.complement_card_formula"]}
+     {:name
+      "FiniteIndexFreeGroupSchreierRank.indexSubgroupFreeGroupFinThreeEquiv",
+      :type
+      "(n : Nat) -> 0 < n -> (H : Subgroup (FreeGroup (Fin 3))) -> H.index = n -> Nonempty (H ≃* FreeGroup (Fin (2 * n + 1)))",
+      :status :proved,
+      :consumers [:t99J01],
+      :depends-on
+      ["FiniteIndexFreeGroupSchreierRank.finiteIndexSubgroupFreeGroupEquiv"]}
+     {:name
+      "FiniteIndexFreeGroupSchreierRank.indexTwoSubgroupFreeGroupFinTwoEquiv",
+      :type
+      "(H : Subgroup (FreeGroup (Fin 2))) -> H.index = 2 -> Nonempty (H ≃* FreeGroup (Fin 3))",
+      :status :proved,
+      :consumers [:t97A03],
+      :depends-on
+      ["FiniteIndexFreeGroupSchreierRank.finiteIndexSubgroupFreeGroupEquiv"]}],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd
+      "lake build ConstructionTargets.FiniteIndexFreeGroupSchreierRank",
+      :exit 0,
+      :finding
+      "Canonical build replayed the complete 1566-job dependency chain."}
+     {:cmd
+      "lake env lean /tmp/finite-index-free-group-schreier-rank-final-probe.lean",
+      :exit 0,
+      :finding
+      "Universal equivalence and both consumer specializations compile with standard-only axioms."}
+     {:cmd
+      "sha256sum /tmp/finite-index-free-group-schreier-rank-final-probe.lean",
+      :exit 0,
+      :finding
+      "9f380bb4578bf9aa3ea3ceeb746f313edf3bb85722dd6f04b0c8a08d6fa2b6ba"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" /tmp/finite-index-free-group-schreier-rank-final-probe.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "No placeholders."}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git status --short", :exit 0, :finding "clean"}
+     {:cmd "git diff --check", :exit 0}],
+    :commit "983453e07912c8ce026078bcfe356b1d9e1c32eb",
+    :changed-paths
+    ["ConstructionTargets/FiniteIndexFreeGroupSchreierRank.lean"],
+    :fixture
+    {:path
+     "/tmp/finite-index-free-group-schreier-rank-final-probe.lean",
+     :sha256
+     "9f380bb4578bf9aa3ea3ceeb746f313edf3bb85722dd6f04b0c8a08d6fa2b6ba",
+     :sorry-count 0,
+     :axiom-count 0,
+     :proof-placeholder-count 0},
+    :implementation
+    {:scope
+     ["ConstructionTargets/FiniteIndexFreeGroupSchreierRank.lean"],
+     :status :already-committed,
+     :declarations
+     ["FiniteIndexFreeGroupSchreierRank.finiteIndexSubgroupFreeGroupEquiv"
+      "FiniteIndexFreeGroupSchreierRank.indexSubgroupFreeGroupFinThreeEquiv"
+      "FiniteIndexFreeGroupSchreierRank.indexTwoSubgroupFreeGroupFinTwoEquiv"],
+     :reuse
+     ["FiniteIndexFreeGroupSchreierRank.spanningTreeBasis"
+      "TreePositiveSelection.Schreier.complement_card_formula"
+      "IsFreeGroupoid.endMulEquivSubgroup"]},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/FiniteIndexFreeGroupSchreierRank.lean"],
    :reuse
