@@ -58715,9 +58715,55 @@
   {:bounded-exception
    "single-consumer meridian basepoint normalization for the t02A03 attachment",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/t02a03_geometric_tube_cover.lean",
+      :sha256
+      "68cfbc3fccbb85606ce97e52b138dbf917964562a917644206fc8fa134e29a75"},
+     :commands
+     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "apm_t02a03_circleMeridian_quarterTurn compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
+       :exit 0}
+      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "68cfbc3fccbb85606ce97e52b138dbf917964562a917644206fc8fa134e29a75  /tmp/t02a03_geometric_tube_cover.lean"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :finding
+     "The Circle meridian's quarter-turn point is exactly the explicit Euclidean anchor (0,0,1/8). This gives the attachment construction a compiled, normalized basepoint shared by the abstract Circle and concrete geometricY representations.",
+     :residual
+     "Construct the attachment homotopy from the surviving right core to the based Circle meridian, then extend to tube deformations and gluing.",
+     :implementation
+     {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"]},
+     :acceptance
+     {:source-fixture "/tmp/t02a03_geometric_tube_cover.lean",
+      :declaration "apm_t02a03_circleMeridian_quarterTurn",
+      :placeholder "the sole sorry in apm_t02a03",
+      :route-step
+      "t02A03 step 2, identify the chosen geometricY anchor with the quarter-turn point of the Circle meridian",
+      :representation
+      {:source
+       "The Circle-domain frozen meridian evaluated at the quarter-turn Circle.exp (pi/2)",
+       :target "The frozen geometricY meridian anchor (0,0,1/8)",
+       :direction
+       "Exact point equality from the source based-Circle representation to the target explicit Euclidean anchor representation"},
+      :gates
+      ["fixture compiles"
+       "fixture contains no sorry token"
+       "fixture hash matches"
+       "statement registry matches"]}}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/geometric-meridian-quarter-turn",
    :acceptance
