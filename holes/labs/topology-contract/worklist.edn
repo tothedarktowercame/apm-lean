@@ -89200,8 +89200,56 @@
    "Review two independent geometric classification advances while t99J01 is held by stop-after-two.",
    :other-consumers []}
   {:consumer :t97A03,
+   :stop-count 1,
+   :evidence
+   {:residual
+    "Provide placeholder-free typed prerequisites for each model: path-connectedness, explicit saturated covers and deformation retractions, production Mayer-Vietoris coordinate matrices and homology consequences, and free-product fundamental-group coordinates; freeze the six model-specific declaration signatures, then implement the transport adapter.",
+    :outcome :stop,
+    :warnings
+    [{:kind :specification-boundary,
+      :message
+      "The fixture freezes only the final adapter type, while the six advertised reusable declarations have no Lean signatures."}
+     {:kind :missing-mathematical-prerequisite,
+      :message
+      "No explicit open-cover and inclusion-coordinate computation exists for either frozen quotient model."}],
+    :disposition :stop,
+    :axioms
+    ["propext"
+     "Classical.choice"
+     "Quot.sound"
+     "T97A03ModelInvariantsAdapterProbe.modelInvariants"],
+    :author "topo-2",
+    :reason
+    "The frozen fixture assumes the exact five-conjunct consumer result as the nonstandard axiom modelInvariants and contains no signatures for the six accepted model-specific declarations. No ConstructionTargets module mentions either frozen cover model or supplies its path-connectedness, integral homology, higher-degree vanishing, or fundamental group calculation. The generic Mayer-Vietoris and free-product machinery does not determine the required saturated open covers, literal inclusion maps, coordinate matrices, or quotient-model deformation retractions. Consequently this is not an uptake of banked computations: both the concrete invariant calculations and their reusable API are missing, and implementing their types from prose would invent the interface.",
+    :commands
+    [{:cmd "sha256sum /tmp/t97a03-model-invariants-adapter-probe.lean",
+      :exit 0,
+      :finding "The fixture hash matches the recorded hash."}
+     {:cmd
+      "rg for the seven accepted declarations and either frozen cover model in ConstructionTargets and the fixture",
+      :exit 1,
+      :expected-exit 1,
+      :finding
+      "Only the probe axiom supplies modelInvariants; none of the six model-specific accepted APIs or concrete computations is banked."}
+     {:cmd
+      "compile Main.lean to /tmp/Main.olean and compile the fixture with /tmp on LEAN_PATH",
+      :exit 0,
+      :finding
+      "The consumer compiles with three existing sorry warnings; exactFrozenBridge depends on the nonstandard axiom modelInvariants."}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :fixture
+    {:path "/tmp/t97a03-model-invariants-adapter-probe.lean",
+     :sha256
+     "ff9f07384911e50ed9dc8f3250b207cdbab21ec220388906ac060c7dc1a96ef8",
+     :sorry-count 0,
+     :axiom-count 1,
+     :proof-placeholder-count 1},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T97A03ModelInvariants.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A03/model-invariants/fixed-model-calculation",
