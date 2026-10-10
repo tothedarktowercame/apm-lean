@@ -63223,6 +63223,21 @@
       "Unknown identifier ConstructionTargets.TorusCircleWedgeOpenCover.Torus",
       :correction
       "Added the fixture's explicit ConstructionTargets.TorusCircleWedgeOpenCover import, then reran the compile successfully."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791653318570-2540-e94bbb29",
+     :commands
+     ["git show/diff-tree/show --check a23f5870aeb7163e38539a65048bca8ac3a652f5"
+      "sha256sum /tmp/t02a03_geometric_tube_cover.lean"
+      "lake env lean /tmp/t02a03_geometric_tube_cover.lean"
+      "lake env lean ConstructionTargets/T02A03LeftTubePuncturedModel.lean"
+      "lake build ConstructionTargets.T02A03LeftTubePuncturedModel"
+      "python3 scripts/statement-registry.py check --rev a23f5870aeb7163e38539a65048bca8ac3a652f5"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "recompute frozen-type hash and comment-stripped placeholder counts"],
+     :finding
+     "PASS: author topo-6 is independent and immutable commit a23f5870aeb7163e38539a65048bca8ac3a652f5 changes exactly ConstructionTargets/T02A03LeftTubePuncturedModel.lean. Fixture SHA-256 2ee5b473f53990067685d38cb8bc87a8bf0db5926062322dd129b5510120de01 matches. LeftTubeMinusCore unfolds to exactly the required points in the frozen left tube outside Set.range leftCore. The assembled HomotopyEquiv uses the forward coordinate map and inverse reconstruction, the radial inverse-after-forward homotopy in left_inv, and the exact forward-after-inverse torus identity in right_inv; these orientations and subtype/torus boundaries are correct. It stops before the right-tube model, overlap compatibility, gluing, full geometricY equivalence, and consumer closure. Fixture, target, focused 8248-job build, registry 131/0, and 485-item ledger gate pass. Recomputed frozen-type SHA-256 is 4e518b1e809aabc9fca89524f9afcad8a021e692563332343e6572c99c6f6233; axioms are only propext/Classical.choice/Quot.sound; target placeholders remain 0 and the unchanged consumer has 1 with hash b123eca388ab2858ca55daf538c1ddd645022b52f5196a15f0bb516d78323d7d."},
     :commit "a23f5870aeb7163e38539a65048bca8ac3a652f5",
     :changed-paths
     ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
@@ -63244,7 +63259,7 @@
    :phase :implementation,
    :type
    "Nonempty (ContinuousMap.HomotopyEquiv LeftTubeMinusCore ConstructionTargets.TorusCircleWedgeOpenCover.Torus)",
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-punctured-model",
    :acceptance
@@ -63429,7 +63444,7 @@
    :phase :implementation,
    :type
    "Nonempty (ContinuousMap.HomotopyEquiv T02A03GeometricTubeCover.apm_t02a03_geometricY_probe TorusCircleWedgeOpenCover.GenericWedge)",
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/geometric-tube-deformation-equivalence",
@@ -64106,7 +64121,7 @@
     :routes-2026-09-28-checkpoint-topo2]}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "apm_t02a03_dist_leftTubePoint_angularCore",
@@ -64118,14 +64133,17 @@
     :type
     "forall p : apm_t02a03_leftTubeSubtype, dist p.1 (apm_t02a03_leftCoreCircle (apm_t02a03_leftTubeAngular p)) = norm (apm_t02a03_leftTubeNormalComplex p)",
     :proved-in
-    :routes-2026-10-10-t02a03-left-tube-punctured-model-topo2-r1},
+    :routes-2026-10-10-t02a03-left-tube-punctured-model-topo2-r1,
+    :banked-by
+    :routes-2026-10-10-t02a03-left-tube-punctured-model-topo2-r1,
+    :banked-commit "a23f5870aeb7163e38539a65048bca8ac3a652f5"},
    :id :lemma-apm-t02a03-dist-lefttubepoint-angularcore,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "apm_t02a03_leftTubeRadialPoint_mem_leftTube",
@@ -64138,7 +64156,10 @@
     :type
     "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubeRadialPoint tp ∈ apm_t02a03_leftTube",
     :proved-in
-    :routes-2026-10-10-t02a03-left-tube-punctured-model-topo2-r1},
+    :routes-2026-10-10-t02a03-left-tube-punctured-model-topo2-r1,
+    :banked-by
+    :routes-2026-10-10-t02a03-left-tube-punctured-model-topo2-r1,
+    :banked-commit "a23f5870aeb7163e38539a65048bca8ac3a652f5"},
    :id :lemma-apm-t02a03-lefttuberadialpoint-mem-lefttube,
    :kind :lemma,
    :depends-on [:lemma-apm-t02a03-dist-lefttubepoint-angularcore],
@@ -64171,7 +64192,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "apm_t02a03_leftTubeRadialNormalRadius_pos",
@@ -64184,7 +64205,10 @@
     :type
     "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, 0 < (1 - (tp.1 : Real)) * (1 / 8 : Real) + (tp.1 : Real) * norm (apm_t02a03_leftTubeNormalComplex ⟨tp.2.1, tp.2.2.1⟩)",
     :proved-in
-    :routes-2026-10-10-t02a03-left-tube-punctured-model-topo2-r1},
+    :routes-2026-10-10-t02a03-left-tube-punctured-model-topo2-r1,
+    :banked-by
+    :routes-2026-10-10-t02a03-left-tube-punctured-model-topo2-r1,
+    :banked-commit "a23f5870aeb7163e38539a65048bca8ac3a652f5"},
    :id :lemma-apm-t02a03-lefttuberadialnormalradius-pos,
    :kind :lemma,
    :depends-on [:lemma-apm-t02a03-lefttuberadialpoint-mem-lefttube],
@@ -64218,7 +64242,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "apm_t02a03_leftTubeNormalAngular_ne_zero",
@@ -64231,7 +64255,10 @@
     :type
     "forall p : apm_t02a03_LeftTubeMinusCore, ((apm_t02a03_leftTubeNormalAngular p : Circle) : Complex) ≠ 0",
     :proved-in
-    :routes-2026-10-10-t02a03-left-tube-punctured-model-topo2-r1},
+    :routes-2026-10-10-t02a03-left-tube-punctured-model-topo2-r1,
+    :banked-by
+    :routes-2026-10-10-t02a03-left-tube-punctured-model-topo2-r1,
+    :banked-commit "a23f5870aeb7163e38539a65048bca8ac3a652f5"},
    :id :lemma-apm-t02a03-lefttubenormalangular-ne-zero,
    :kind :lemma,
    :depends-on [:lemma-apm-t02a03-lefttuberadialnormalradius-pos],
@@ -64265,7 +64292,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "apm_t02a03_leftTubeNormalComplex_eq_norm_smul_direction",
@@ -64278,7 +64305,10 @@
     :type
     "forall p : apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubeNormalComplex ⟨p.1, p.2.1⟩ = (norm (apm_t02a03_leftTubeNormalComplex ⟨p.1, p.2.1⟩) : Real) • ((apm_t02a03_leftTubeNormalAngular p : Circle) : Complex)",
     :proved-in
-    :routes-2026-10-10-t02a03-left-tube-punctured-model-topo2-r1},
+    :routes-2026-10-10-t02a03-left-tube-punctured-model-topo2-r1,
+    :banked-by
+    :routes-2026-10-10-t02a03-left-tube-punctured-model-topo2-r1,
+    :banked-commit "a23f5870aeb7163e38539a65048bca8ac3a652f5"},
    :id :lemma-apm-t02a03-lefttubenormalcomplex-eq-norm-smul-direction,
    :kind :lemma,
    :depends-on [:lemma-apm-t02a03-lefttubenormalangular-ne-zero],
@@ -64315,7 +64345,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "apm_t02a03_leftTubeNormalComplex_torusInverse",
@@ -64328,7 +64358,10 @@
     :type
     "forall u : Circle × Circle, apm_t02a03_leftTubeNormalComplex ⟨(apm_t02a03_leftTubeTorusInverse u).1, (apm_t02a03_leftTubeTorusInverse u).2.1⟩ = (1 / 8 : Real) • (u.2 : Complex)",
     :proved-in
-    :routes-2026-10-10-t02a03-left-tube-punctured-model-topo2-r1},
+    :routes-2026-10-10-t02a03-left-tube-punctured-model-topo2-r1,
+    :banked-by
+    :routes-2026-10-10-t02a03-left-tube-punctured-model-topo2-r1,
+    :banked-commit "a23f5870aeb7163e38539a65048bca8ac3a652f5"},
    :id :lemma-apm-t02a03-lefttubenormalcomplex-torusinverse,
    :kind :lemma,
    :depends-on
@@ -64336,7 +64369,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "apm_t02a03_leftTubeNormalComplex_torusInverse_coordinates",
@@ -64349,7 +64382,10 @@
     :type
     "forall p : apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubeNormalComplex ⟨(apm_t02a03_leftTubeTorusInverse (apm_t02a03_leftTubeTorusCoordinates p)).1, (apm_t02a03_leftTubeTorusInverse (apm_t02a03_leftTubeTorusCoordinates p)).2.1⟩ = (1 / 8 : Real) • ((apm_t02a03_leftTubeNormalAngular p : Circle) : Complex)",
     :proved-in
-    :routes-2026-10-10-t02a03-left-tube-punctured-model-topo2-r1},
+    :routes-2026-10-10-t02a03-left-tube-punctured-model-topo2-r1,
+    :banked-by
+    :routes-2026-10-10-t02a03-left-tube-punctured-model-topo2-r1,
+    :banked-commit "a23f5870aeb7163e38539a65048bca8ac3a652f5"},
    :id
    :lemma-apm-t02a03-lefttubenormalcomplex-torusinverse-coordinates,
    :kind :lemma,
@@ -64357,7 +64393,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "apm_t02a03_leftTubePlanarComplex_radialPoint",
@@ -64370,7 +64406,10 @@
     :type
     "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubePlanarComplex ⟨apm_t02a03_leftTubeRadialPoint tp, apm_t02a03_leftTubeRadialPoint_mem_leftTube tp⟩ = (1 - (tp.1 : Real)) • apm_t02a03_leftTubePlanarComplex ⟨(apm_t02a03_leftTubeTorusInverse (apm_t02a03_leftTubeTorusCoordinates tp.2)).1, (apm_t02a03_leftTubeTorusInverse (apm_t02a03_leftTubeTorusCoordinates tp.2)).2.1⟩ + (tp.1 : Real) • apm_t02a03_leftTubePlanarComplex ⟨tp.2.1, tp.2.2.1⟩",
     :proved-in
-    :routes-2026-10-10-t02a03-left-tube-punctured-model-topo2-r1},
+    :routes-2026-10-10-t02a03-left-tube-punctured-model-topo2-r1,
+    :banked-by
+    :routes-2026-10-10-t02a03-left-tube-punctured-model-topo2-r1,
+    :banked-commit "a23f5870aeb7163e38539a65048bca8ac3a652f5"},
    :id :lemma-apm-t02a03-lefttubeplanarcomplex-radialpoint,
    :kind :lemma,
    :depends-on
@@ -64407,7 +64446,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "apm_t02a03_leftTubePlanarComplex_eq_norm_smul_angular",
@@ -64420,14 +64459,17 @@
     :type
     "forall p : apm_t02a03_leftTubeSubtype, apm_t02a03_leftTubePlanarComplex p = (norm (apm_t02a03_leftTubePlanarComplex p) : Real) • ((apm_t02a03_leftTubeAngular p : Circle) : Complex)",
     :proved-in
-    :routes-2026-10-10-t02a03-left-tube-punctured-model-topo2-r1},
+    :routes-2026-10-10-t02a03-left-tube-punctured-model-topo2-r1,
+    :banked-by
+    :routes-2026-10-10-t02a03-left-tube-punctured-model-topo2-r1,
+    :banked-commit "a23f5870aeb7163e38539a65048bca8ac3a652f5"},
    :id :lemma-apm-t02a03-lefttubeplanarcomplex-eq-norm-smul-angular,
    :kind :lemma,
    :depends-on [:lemma-apm-t02a03-lefttubeplanarcomplex-radialpoint],
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "apm_t02a03_leftTubePlanarComplex_torusInverse_coordinates",
@@ -64440,7 +64482,10 @@
     :type
     "forall p : apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubePlanarComplex ⟨(apm_t02a03_leftTubeTorusInverse (apm_t02a03_leftTubeTorusCoordinates p)).1, (apm_t02a03_leftTubeTorusInverse (apm_t02a03_leftTubeTorusCoordinates p)).2.1⟩ = (1 + (1 / 8 : Real) * ((apm_t02a03_leftTubeNormalAngular p : Circle) : Complex).re) • ((apm_t02a03_leftTubeAngular ⟨p.1, p.2.1⟩ : Circle) : Complex)",
     :proved-in
-    :routes-2026-10-10-t02a03-left-tube-punctured-model-topo2-r1},
+    :routes-2026-10-10-t02a03-left-tube-punctured-model-topo2-r1,
+    :banked-by
+    :routes-2026-10-10-t02a03-left-tube-punctured-model-topo2-r1,
+    :banked-commit "a23f5870aeb7163e38539a65048bca8ac3a652f5"},
    :id
    :lemma-apm-t02a03-lefttubeplanarcomplex-torusinverse-coordinates,
    :kind :lemma,
@@ -64449,7 +64494,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "apm_t02a03_norm_leftTubePlanarComplex_radialPoint",
@@ -64462,7 +64507,10 @@
     :type
     "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, norm (apm_t02a03_leftTubePlanarComplex ⟨apm_t02a03_leftTubeRadialPoint tp, apm_t02a03_leftTubeRadialPoint_mem_leftTube tp⟩) = (1 - (tp.1 : Real)) * (1 + (1 / 8 : Real) * ((apm_t02a03_leftTubeNormalAngular tp.2 : Circle) : Complex).re) + (tp.1 : Real) * norm (apm_t02a03_leftTubePlanarComplex ⟨tp.2.1, tp.2.2.1⟩)",
     :proved-in
-    :routes-2026-10-10-t02a03-left-tube-punctured-model-topo2-r1},
+    :routes-2026-10-10-t02a03-left-tube-punctured-model-topo2-r1,
+    :banked-by
+    :routes-2026-10-10-t02a03-left-tube-punctured-model-topo2-r1,
+    :banked-commit "a23f5870aeb7163e38539a65048bca8ac3a652f5"},
    :id :lemma-apm-t02a03-norm-lefttubeplanarcomplex-radialpoint,
    :kind :lemma,
    :depends-on
@@ -64497,7 +64545,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "apm_t02a03_leftTubeNormalComplex_radialPoint",
@@ -64510,7 +64558,10 @@
     :type
     "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubeNormalComplex ⟨apm_t02a03_leftTubeRadialPoint tp, apm_t02a03_leftTubeRadialPoint_mem_leftTube tp⟩ = ((1 - (tp.1 : Real)) * (1 / 8 : Real) + (tp.1 : Real) * norm (apm_t02a03_leftTubeNormalComplex ⟨tp.2.1, tp.2.2.1⟩)) • ((apm_t02a03_leftTubeNormalAngular tp.2 : Circle) : Complex)",
     :proved-in
-    :routes-2026-10-10-t02a03-left-tube-punctured-model-topo2-r1},
+    :routes-2026-10-10-t02a03-left-tube-punctured-model-topo2-r1,
+    :banked-by
+    :routes-2026-10-10-t02a03-left-tube-punctured-model-topo2-r1,
+    :banked-commit "a23f5870aeb7163e38539a65048bca8ac3a652f5"},
    :id :lemma-apm-t02a03-lefttubenormalcomplex-radialpoint,
    :kind :lemma,
    :depends-on
@@ -64616,7 +64667,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "leftTubeMinusCoreHomotopyEquivTorus",
@@ -64629,7 +64680,10 @@
     :type
     "Nonempty (ContinuousMap.HomotopyEquiv apm_t02a03_LeftTubeMinusCore ConstructionTargets.TorusCircleWedgeOpenCover.Torus)",
     :proved-in
-    :routes-2026-10-10-t02a03-left-tube-punctured-model-topo2-r1},
+    :routes-2026-10-10-t02a03-left-tube-punctured-model-topo2-r1,
+    :banked-by
+    :routes-2026-10-10-t02a03-left-tube-punctured-model-topo2-r1,
+    :banked-commit "a23f5870aeb7163e38539a65048bca8ac3a652f5"},
    :id :lemma-lefttubeminuscorehomotopyequivtorus,
    :kind :lemma,
    :depends-on
