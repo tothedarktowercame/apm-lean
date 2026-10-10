@@ -336,6 +336,19 @@ theorem apm_t02a03_dist_leftTubeTorusPoint_leftCoreCircle
   rw [Real.sqrt_sq_eq_abs]
   norm_num
 
+theorem apm_t02a03_leftTubeTorusPoint_mem_leftTube
+    (u : Circle × Circle) :
+    apm_t02a03_leftTubeTorusPoint u ∈ apm_t02a03_leftTube := by
+  rw [apm_t02a03_leftTube]
+  apply Metric.mem_cthickening_of_dist_le
+    (apm_t02a03_leftTubeTorusPoint u)
+    (apm_t02a03_leftCoreCircle u.1) (1 / 4 : ℝ)
+    (Set.range apm_t02a03_leftCore)
+  · rw [← apm_t02a03_range_leftCoreCircle]
+    exact ⟨u.1, rfl⟩
+  · rw [apm_t02a03_dist_leftTubeTorusPoint_leftCoreCircle]
+    norm_num
+
 theorem apm_t02a03_rightCore_zero :
     apm_t02a03_rightCore 0 = (0 : apm_t02a03_E3) := by
   ext i
