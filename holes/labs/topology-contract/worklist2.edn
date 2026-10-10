@@ -55833,55 +55833,54 @@
    "single-consumer conjugacy for the frozen t97A04 torus map",
    :consumer :t97A04,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/torus_frozen_map_circle_conjugacy.lean",
-      :sha256
-      "98eecd6300a6627dfd561e51d2e9fb6fada8cb1b3772117e21e25ce351179e85"},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/torus_frozen_map_circle_conjugacy.lean",
-       :exit 0,
-       :output
-       "exact conjugacy compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/torus_frozen_map_circle_conjugacy.lean || true)\"",
-       :exit 0}
-      {:cmd
-       "rg -n '^(def frozenLbar|def circleMatrixMap|theorem frozenTorusHomeomorphCircleProd_frozenLbar)' /tmp/torus_frozen_map_circle_conjugacy.lean",
-       :exit 0,
-       :output
-       "8:def frozenLbar; 11:def circleMatrixMap; 14:theorem frozenTorusHomeomorphCircleProd_frozenLbar"}
-      {:cmd "sha256sum /tmp/torus_frozen_map_circle_conjugacy.lean",
-       :exit 0,
-       :output
-       "98eecd6300a6627dfd561e51d2e9fb6fada8cb1b3772117e21e25ce351179e85  /tmp/torus_frozen_map_circle_conjugacy.lean"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :implementation
-     {:scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
-      :declarations
-      ["frozenLbar"
-       "circleMatrixMap"
-       "frozenTorusHomeomorphCircleProd_frozenLbar"],
-      :representation
-      {:source
-       "The frozen additive self-map (x,y) maps to (2*x+y,y-x) on AddCircle 1 x AddCircle 1",
-       :target
-       "The multiplicative self-map (z0,z1) maps to (z0^2*z1,z1*z0^-1) on Circle x Circle",
-       :direction
-       "Exact pointwise conjugacy from the source additive map to the target multiplicative map through frozenTorusHomeomorphCircleProd"},
-      :acceptance
-      "Copy the three verified declarations into the existing TorusPiOneWindingCoordinates namespace, preserving the exact pointwise conjugacy; compile the scoped module, confirm no new placeholders, and rerun the statement registry check."},
-     :finding
-     "The fixture compiles all three requested declarations without placeholders. Under frozenTorusHomeomorphCircleProd, AddCircle.toCircle_add, toCircle_neg, and toCircle_nsmul reduce the concrete formula (2*x+y,y-x) exactly to (z0^2*z1,z1*z0^-1). This is the required oriented equality of actual maps.",
-     :residual
-     "Derive the induced fundamental-group winding formulas for circle multiplication, squaring, and inversion, then combine the two coordinates into the displayed integer-matrix naturality equation for t97A04."}},
+   {:placeholder-delta 0,
+    :residual
+    "Derive the induced fundamental-group winding formulas for circle multiplication, squaring, and inversion, then combine the two coordinates into the displayed integer-matrix naturality equation for t97A04.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms [propext Classical.choice Quot.sound],
+    :author "topo-6",
+    :commands
+    [{:cmd "sha256sum /tmp/torus_frozen_map_circle_conjugacy.lean",
+      :exit 0,
+      :output
+      "98eecd6300a6627dfd561e51d2e9fb6fada8cb1b3772117e21e25ce351179e85  /tmp/torus_frozen_map_circle_conjugacy.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/TorusPiOneWindingCoordinates.lean",
+      :exit 0}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/TorusPiOneWindingCoordinates.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r 36adfcc7d5134059d842504ac081949fd2e4e680",
+      :exit 0,
+      :output
+      "ConstructionTargets/TorusPiOneWindingCoordinates.lean"}],
+    :representation
+    {:source
+     "The frozen additive self-map (x,y) maps to (2*x+y,y-x) on AddCircle 1 x AddCircle 1",
+     :target
+     "The multiplicative self-map (z0,z1) maps to (z0^2*z1,z1*z0^-1) on Circle x Circle",
+     :direction
+     "Exact pointwise conjugacy from the source additive map to the target multiplicative map through frozenTorusHomeomorphCircleProd"},
+    :commit "36adfcc7d5134059d842504ac081949fd2e4e680",
+    :changed-paths
+    ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
+    :fixture
+    {:path "/tmp/torus_frozen_map_circle_conjugacy.lean",
+     :sha256
+     "98eecd6300a6627dfd561e51d2e9fb6fada8cb1b3772117e21e25ce351179e85"},
+    :declarations
+    ["ConstructionTargets.TorusPiOneWindingCoordinates.frozenLbar"
+     "ConstructionTargets.TorusPiOneWindingCoordinates.circleMatrixMap"
+     "ConstructionTargets.TorusPiOneWindingCoordinates.frozenTorusHomeomorphCircleProd_frozenLbar"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A04/torus-pi1-winding-coordinates/frozen-map-conjugacy",
