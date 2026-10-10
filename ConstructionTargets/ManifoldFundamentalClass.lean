@@ -228,6 +228,10 @@ private abbrev moduleSingularHomology (X : TopCat) (n : ℕ) :=
   (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) n).obj
     (ModuleCat.of ℤ ℤ)).obj X)
 
+private abbrev moduleSingularHomologyMap {X Y : TopCat} (f : X ⟶ Y) (n : ℕ) :=
+  (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) n).obj
+    (ModuleCat.of ℤ ℤ)).map f)
+
 def groupGlobalGenerator (X : TopCat) (n : ℕ)
     (e : moduleSingularHomology X n ≅ ModuleCat.of ℤ ℤ) :
     (SingularChains X).homology n :=
@@ -255,6 +259,27 @@ theorem groupGlobalGenerator_generates (X : TopCat) (n : ℕ)
     _ = z := ConcreteCategory.congr_hom
       (singularHomologyComparison X n).inv_hom_id z
 
+theorem absoluteSingularMap_groupGlobalGenerator_naturality
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (f : C(X, Y)) (n : ℕ)
+    (eX : moduleSingularHomology (TopCat.of X) n ≅ ModuleCat.of ℤ ℤ)
+    (eY : moduleSingularHomology (TopCat.of Y) n ≅ ModuleCat.of ℤ ℤ)
+    (hmodule : (moduleSingularHomologyMap (TopCat.ofHom f) n).hom
+        (globalGenerator ℤ (moduleSingularHomology (TopCat.of X) n) eX) =
+      globalGenerator ℤ (moduleSingularHomology (TopCat.of Y) n) eY) :
+    HomologicalComplex.homologyMap (absoluteSingularMap f) n
+        (groupGlobalGenerator (TopCat.of X) n eX) =
+      groupGlobalGenerator (TopCat.of Y) n eY := by
+  have hmodule' :
+      (forgetIntModules.map (moduleSingularHomologyMap (TopCat.ofHom f) n)).hom
+          (globalGenerator ℤ (moduleSingularHomology (TopCat.of X) n) eX) =
+        globalGenerator ℤ (moduleSingularHomology (TopCat.of Y) n) eY := hmodule
+  have hn := ConcreteCategory.congr_hom
+    (singularHomologyComparison_naturality (TopCat.ofHom f) n)
+    (globalGenerator ℤ (moduleSingularHomology (TopCat.of X) n) eX)
+  rw [ConcreteCategory.comp_apply, ConcreteCategory.comp_apply, hmodule'] at hn
+  simpa only [groupGlobalGenerator, absoluteSingularMap] using hn.symm
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -274,3 +299,4 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.localizationMap_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.localizationMap_apply_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator_generates
+#print axioms ConstructionTargets.ManifoldFundamentalClass.absoluteSingularMap_groupGlobalGenerator_naturality
