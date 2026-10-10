@@ -54341,8 +54341,41 @@
    [:routes-2026-09-28-rp-smooth-atlas-topo2-r1
     :routes-2026-09-28-checkpoint-topo2-r1]}
   {:consumer :t95A04,
+   :stop-count 1,
+   :evidence
+   {:outcome :stop,
+    :seat "topo-8",
+    :reason
+    "The requested fixture is only an interface facade: it defines SphereProjectionContMDiffDescent as a Prop and checks the quotient authority and local-diffeomorphism signatures, but contains no inhabitant. A repository-wide search found no equivalent theorem to reuse. The exact remaining proof is already this row: for each target point choose a sphere lift by sphereProjectionQuotientAuthority, use rpSmoothAtlas.quotient_localDiffeomorph to obtain a smooth local inverse, identify f locally with (f composed with sphereProjection 2) composed with that inverse, and conclude ContMDiffAt. Naming another contract Prop would not supply a compiled prerequisite, so there is no honest REVISE boundary below this theorem.",
+    :fixture
+    {:path "/tmp/rp_projection_contmdiff_descent_contract.lean",
+     :sha256
+     "24d6a9eec3b2c4b33e556fd36022db855f35498393d0a6e68bd973900414c31b",
+     :status :interface-only},
+    :commands
+    [{:cmd
+      "lake env lean /tmp/rp_projection_contmdiff_descent_contract.lean",
+      :exit 0,
+      :output
+      "Only the Prop and prerequisite signatures were printed; no inhabitant was compiled."}
+     {:cmd
+      "rg -n 'SphereProjectionContMDiffDescent|ContMDiff.*sphereProjection.*→|contMDiff.*sphereProjection.*comp' ConstructionTargets problems -g '*.lean'",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sha256sum /tmp/rp_projection_contmdiff_descent_contract.lean",
+      :exit 0,
+      :output
+      "24d6a9eec3b2c4b33e556fd36022db855f35498393d0a6e68bd973900414c31b  /tmp/rp_projection_contmdiff_descent_contract.lean"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}],
+    :residual
+    "Implement the pointwise local-inverse argument itself in a placeholder-free fixture; the present file validates only the theorem's type, not its proof.",
+    :author "topo-8",
+    :disposition :stop},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
