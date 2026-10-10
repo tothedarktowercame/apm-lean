@@ -60499,24 +60499,65 @@
   {:bounded-exception
    "single-consumer continuous punctured-normal coordinate on the frozen t02A03 left-tube complement",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/t02a03_geometric_tube_cover.lean",
+      :sha256
+      "404f273127397fd571fe7fa5526b10b6b0acbe29189bd647eede685253e97304"},
+     :commands
+     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubePuncturedNormal, and apm_t02a03_continuous_leftTubePuncturedNormal compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
+       :exit 0}
+      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "404f273127397fd571fe7fa5526b10b6b0acbe29189bd647eede685253e97304  /tmp/t02a03_geometric_tube_cover.lean"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :implementation
+     {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
+      :declarations
+      ["apm_t02a03_LeftTubeMinusCore"
+       "apm_t02a03_leftTubePuncturedNormal"
+       "apm_t02a03_continuous_leftTubePuncturedNormal"],
+      :acceptance
+      {:implementation
+       "Add the three compiled declarations from the verified fixture to ConstructionTargets/T02A03GeometricTubeCover.lean without changing their types or the frozen consumer. Compile the scoped module, confirm the scoped file contains no sorry token, run the statement registry check, and report the declarations' axioms.",
+       :gates
+       ["scoped module compiles"
+        "scoped file contains no sorry token"
+        "statement registry matches"]}},
+     :finding
+     "The fixture completely supplies this bounded row. The exact left-tube complement subtype carries a canonical nonzero complex normal displacement because the banked zero-locus theorem identifies zero precisely with the deleted frozen core. The lifted punctured-normal map is continuous by composing the complement inclusion with the continuous ambient normal coordinate.",
+     :residual
+     "After banking these declarations, radially normalize the punctured normal to Circle, define coordinate reconstruction, construct both comparison homotopies within LeftTubeMinusCore, and assemble leftTubeMinusCoreHomotopyEquivTorus."}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/left-tube-punctured-normal-coordinate",
    :acceptance
-   {:probe
-    "Compile and bank apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubePuncturedNormal, and apm_t02a03_continuous_leftTubePuncturedNormal from /tmp/t02a03_geometric_tube_cover.lean. Define apm_t02a03_LeftTubeMinusCore as the exact subtype of points in apm_t02a03_leftTube and outside Set.range apm_t02a03_leftCore. Use the banked zero-locus equivalence to lift apm_t02a03_leftTubeNormalComplex to the subtype of nonzero complex numbers and prove the lifted map continuous. This supplies the punctured-normal coordinate required by t02A03 route step 2; do not yet claim radial normalization, a reconstruction map, comparison homotopies, the torus HomotopyEquiv, or gluing.",
-    :declarations
-    ["apm_t02a03_LeftTubeMinusCore"
-     "apm_t02a03_leftTubePuncturedNormal"
-     "apm_t02a03_continuous_leftTubePuncturedNormal"],
-    :placeholder "the sole sorry in apm_t02a03",
-    :route-step
-    "t02A03 step 2, restrict the disk-normal displacement to a continuous nonzero coordinate on the punctured left tube"},
+   {:implementation
+    "Add the three compiled declarations from the verified fixture to ConstructionTargets/T02A03GeometricTubeCover.lean without changing their types or the frozen consumer. Compile the scoped module, confirm the scoped file contains no sorry token, run the statement registry check, and report the declarations' axioms.",
+    :gates
+    ["scoped module compiles"
+     "scoped file contains no sorry token"
+     "statement registry matches"]},
    :id
    :routes-2026-10-10-t02a03-left-tube-punctured-normal-coordinate-topo2-r1,
    :kind :reusable-theorem,
+   :declarations
+   ["apm_t02a03_LeftTubeMinusCore"
+    "apm_t02a03_leftTubePuncturedNormal"
+    "apm_t02a03_continuous_leftTubePuncturedNormal"],
    :depends-on
    [:routes-2026-10-10-checkpoint-topo2-r5
     :routes-2026-10-10-t02a03-left-tube-normal-zero-locus-topo2-r1],
