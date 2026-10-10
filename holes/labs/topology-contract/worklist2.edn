@@ -57286,69 +57286,43 @@
   {:consumer :t97A04,
    :evidence
    {:probe
-    {:outcome :revise,
+    {:outcome :go,
      :seat "topo-8",
      :fixture
-     {:path "/tmp/fundamental_group_coordinate_transport_apply.lean",
+     {:path "/tmp/torus_frozen_pi1_matrix_naturality_final.lean",
       :sha256
-      "5c21fec271f790bac2a0108368ba11d379e9ec7e1d9fc5eca3fe02b63423e8b9"},
+      "57fab088a995a91ea38288996f643770fe8e36be5339d0ed13c15a96e48a997c"},
      :commands
      [{:cmd
-       "lake env lean /tmp/fundamental_group_coordinate_transport_apply.lean",
+       "lake env lean /tmp/torus_frozen_pi1_matrix_naturality_final.lean",
        :exit 0,
        :output
-       "fundamentalGroupCoordinateTransport_apply and frozenNativeCoord_eq_torusPi1Coord_cast compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "fixed-base representative and all-class frozen matrix naturality compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/fundamental_group_coordinate_transport_apply.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/torus_frozen_pi1_matrix_naturality_final.lean || true)\"",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/fundamental_group_coordinate_transport_apply.lean",
+       "sha256sum /tmp/torus_frozen_pi1_matrix_naturality_final.lean",
        :exit 0,
        :output
-       "5c21fec271f790bac2a0108368ba11d379e9ec7e1d9fc5eca3fe02b63423e8b9  /tmp/fundamental_group_coordinate_transport_apply.lean"}
+       "57fab088a995a91ea38288996f643770fe8e36be5339d0ed13c15a96e48a997c  /tmp/torus_frozen_pi1_matrix_naturality_final.lean"}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/fundamental_group_coordinate_transport_apply.lean",
-       :exit 1,
-       :finding
-       "The first draft left `.cast` unqualified, so Lean selected Quiver.Hom.cast rather than Path.Homotopic.Quotient.cast. Fully qualifying the intended quotient cast corrected elaboration; the mathematical statement was unchanged."}],
      :finding
-     "Dependent equality induction gives the required transport rule uniformly: a fundamental-group coordinate equivalence transported from basepoint y to equal basepoint x evaluates p by first casting p's endpoints along the inverse equality. The frozen specialization compiles with the exact basepoint theorem and torusPi1Coord, so it composes directly with the banked quotient-cast equality.",
+     "The complete placeholder-free fixture now derives frozenTorusPi1Coord on every explicit representative by composing the canonical homeomorphism map evaluation, native coordinate factorization, dependent coordinate transport, and quotient endpoint cast. It combines that equation with the banked frozenLbar representative conjugacy and circleMatrixPi1Map_naturality, then descends by Quotient.inductionOn to every frozen fundamental-group class. The resulting coordinates are exactly (2*n0+n1, n1-n0).",
+     :implementation
+     {:scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
+      :declarations
+      ["frozenHomeomorphPi1_mk"
+       "frozenTorusPi1Coord_mk"
+       "frozenLbarPi1Map_mk_naturality"
+       "frozenLbarPi1Map_naturality"]},
      :residual
-     "Bank the general transport application lemma and its frozen specialization. Then combine frozenTorusPi1Coord_mk_native, frozenNativeCoord_eq_torusPi1Coord_cast, and frozenCircleImageQuotient_eq_mappedQuotient_cast to obtain fixed-base representative coordinates and finish all-class frozen matrix naturality.",
-     :prerequisite
-     {:bounded-exception
-      "single-consumer dependent coordinate-equivalence transport needed by the frozen t97A04 matrix",
-      :consumer :t97A04,
-      :phase :probe,
-      :state :open,
-      :scope [],
-      :dag-node
-      "TOPOLOGY-ROUTES.md/t97A04/torus-pi1-winding-coordinates/frozen-coordinate-transport-apply",
-      :acceptance
-      {:probe
-       "Compile and bank fundamentalGroupCoordinateTransport_apply and frozenNativeCoord_eq_torusPi1Coord_cast from /tmp/fundamental_group_coordinate_transport_apply.lean. Prove by equality induction that a coordinate MulEquiv transported across x=y evaluates a native FundamentalGroup class by applying the original equivalence to its Path.Homotopic.Quotient endpoint cast, then specialize this exactly to frozenTorusHomeomorphCircleProd_base and torusPi1Coord. This supplies the dependent coordinate-equivalence normalization for t97A04 step 4; do not yet claim matrix naturality.",
-       :declarations
-       ["fundamentalGroupCoordinateTransport_apply"
-        "frozenNativeCoord_eq_torusPi1Coord_cast"],
-       :placeholder "apm_t97A04_bridge_2",
-       :route-step
-       "t97A04 step 4, normalize evaluation of the transported Circle coordinate equivalence"},
-      :id
-      :routes-2026-10-10-t97a04-frozen-coordinate-transport-apply-topo2-r1,
-      :kind :reusable-theorem,
-      :depends-on
-      [:routes-2026-10-10-checkpoint-topo2-r2
-       :routes-2026-10-10-t97a04-frozen-circle-image-quotient-cast-topo2-r1],
-      :current-residual
-      "Compose the transport evaluation with the quotient-cast equality to derive frozenTorusPi1Coord_mk, then prove representative and all-class matrix naturality.",
-      :other-consumers []}}},
-   :phase :probe,
+     "Use frozenLbarPi1Map_naturality with finiteFreeHurewiczCoordinateMulEquiv and h1_coordinate_eq_of_fundamentalGroup_coordinate_eq to assemble apm_t97A04_bridge_2. For t01A02, the coordinate/lift component is banked; its remaining fixed-point route still requires the integer lift, nonsurjectivity determinant, and planar bounded-perturbation surjectivity steps."}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/shared/torus-pi1-winding-coordinates",
    :acceptance
    {:probe
@@ -57360,6 +57334,11 @@
    :id
    :routes-2026-10-10-torus-pi1-winding-coordinates-two-consumers-topo2-r3,
    :kind :reusable-theorem,
+   :declarations
+   ["frozenHomeomorphPi1_mk"
+    "frozenTorusPi1Coord_mk"
+    "frozenLbarPi1Map_mk_naturality"
+    "frozenLbarPi1Map_naturality"],
    :depends-on
    [:routes-2026-10-10-checkpoint-topo2-r2
     :routes-2026-10-10-torus-pi1-coordinate-equivalence-two-consumers-topo2-r1
