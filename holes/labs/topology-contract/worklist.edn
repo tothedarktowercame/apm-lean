@@ -87799,6 +87799,8 @@
    :other-consumers []}
   {:consumer :t99J01,
    :stop-count 1,
+   :review-finding
+   "No implementation commit was recorded and ConstructionTargets/T99J01PathComponentCoverRestriction.lean is absent. The fixture SHA-256 matches, but its only substantive restriction result is the nonstandard axiom pathComponentRestrictionPackage; none of the nine accepted t99j01 declarations has a frozen signature in the fixture or ConstructionTargets. Repair requires an owner-approved placeholder-free typed prerequisite fixing the chosen-component subtype/topology and basepoint, restricted map, sheet-count definition, ThreeCircles local/path-connected instance forms, IsKSheetedCover theorem, positivity and upper-bound orientations, the inclusion-induced FundamentalGroup bijection, and the MulEquiv direction from component pi1 to ambient pi1 before standard-only implementation.",
    :evidence
    {:residual
     "Provide a placeholder-free typed prerequisite fixing the chosen-component subtype and topology, restricted cover map, sheet-count definition, ThreeCircles connectivity instances, component-cover theorem, bounds, induced-pi1 bijection, and MulEquiv orientation; then retry the final adapter.",
@@ -87836,6 +87838,12 @@
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
      {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1791628086929-1654-5d3af386",
+     :finding
+     "No implementation commit was recorded and ConstructionTargets/T99J01PathComponentCoverRestriction.lean is absent. The fixture SHA-256 matches, but its only substantive restriction result is the nonstandard axiom pathComponentRestrictionPackage; none of the nine accepted t99j01 declarations has a frozen signature in the fixture or ConstructionTargets. Repair requires an owner-approved placeholder-free typed prerequisite fixing the chosen-component subtype/topology and basepoint, restricted map, sheet-count definition, ThreeCircles local/path-connected instance forms, IsKSheetedCover theorem, positivity and upper-bound orientations, the inclusion-induced FundamentalGroup bijection, and the MulEquiv direction from component pi1 to ambient pi1 before standard-only implementation."},
     :fixture
     {:path "/tmp/t99j01-path-component-sheet-restriction-probe.lean",
      :sha256
@@ -87845,7 +87853,7 @@
      :proof-placeholder-count 1},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["ConstructionTargets/T99J01PathComponentCoverRestriction.lean"],
    :dag-node
@@ -87875,6 +87883,7 @@
      "python3 scripts/statement-registry.py check"]},
    :id :routes-2026-10-10-t99j01-path-component-cover-package-1,
    :kind :final-adapter,
+   :fail-count 1,
    :depends-on [],
    :current-residual
    "Prove the one coherent restriction package for the chosen path component: covering charts, positive bounded sheet count, and the inclusion-induced pi1 equivalence.",
