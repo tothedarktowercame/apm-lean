@@ -91859,55 +91859,64 @@
   {:consumer :t99J01,
    :evidence
    {:probe
-    {:outcome :revise,
-     :seat "topo-4",
-     :fixture
-     {:path "/tmp/arborescence-prereq.lean",
-      :sha256
-      "0e532a4aaa4b6655e4d76cad3c0829d983df4459325a8442851faba8c186dd7b",
-      :interface
-      "FiniteArborescencePrerequisite.totalEquivNonroot (V : Type u) [Quiver V] [Arborescence V] : Quiver.Total V equivalence {x : V // x != Quiver.root V}"},
+    {:residual
+     "Use the banked n-1 geodesic-tree arrow count together with the r*n chosen-generator arrow count to prove the positive-edge complement has cardinal (r-1)*n+1; FreeGroupBasis construction remains downstream.",
+     :outcome :go,
+     :warnings [],
+     :acceptance
+     {:fixture-compiles true,
+      :zero-fixture-sorry true,
+      :standard-only-axioms true,
+      :registry-check true,
+      :complement-count-deferred true,
+      :free-group-basis-deferred true},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
-     [{:cmd "lake env lean /tmp/arborescence-prereq.lean", :exit 0}
-      {:cmd "rg -n \"sorry\" /tmp/arborescence-prereq.lean",
+     [{:cmd "lake env lean /tmp/finite-arborescence-edge-count.lean",
+       :exit 0,
+       :finding
+       "Generic finite-arborescence cardinality and the n-vertex geodesic-subtree specialization compile."}
+      {:cmd
+       "rg -n \"sorry|admit\" /tmp/finite-arborescence-edge-count.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :finding "131 registered statements match, 0 do not"}
       {:cmd "git status --short", :exit 0, :finding "clean"}],
-     :prerequisite
-     {:consumer :t99J01,
-      :phase :probe,
-      :state :open,
-      :scope [],
-      :dag-node
-      "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/positive-index/finite-arborescence-total-arrow-equivalence",
-      :acceptance
-      {:probe
-       "Compile an explicit equivalence between Quiver.Total V and {x : V // x != Quiver.root V} for every quiver with an Arborescence instance, sending an arrow to its target and recovering the unique final arrow of the unique root path; prove both inverse laws. Do not perform cardinal arithmetic or specialize to the Schreier quiver.",
-       :placeholder
-       "the single sorry in apm_t99j01 and apm_t97A03_bridge_invariants_of_model",
-       :route-step
-       "t99J01 step 3 and t97A03 step 8, generic total-arrow/non-root equivalence needed before the finite arborescence count",
-       :gates
-       ["canonical packages"
-        "fixture compiles"
-        "zero fixture sorry"
-        "standard-only axioms"
-        "registry check"]},
-      :id
-      :routes-2026-10-10-finite-arborescence-total-arrow-nonroot-equivalence-14,
-      :kind :reusable-theorem,
-      :depends-on [],
-      :current-residual
-      "Extract the final arrow from each nontrivial unique root path, prove its target is the chosen non-root vertex, and prove it is inverse to the target map.",
-      :other-consumers [:t97A03]},
-     :residual
-     "After the total-arrow/non-root equivalence is banked, Nat.card subtraction and the n-vertex geodesic-subtree specialization are bounded consequences."}},
-   :phase :probe,
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/finite-arborescence-edge-count.lean",
+       :exit 1,
+       :finding
+       "Initial fixture lacked a Fintype for the non-root subtype and a rooted-connected instance for the symmetrified action-groupoid generator quiver; corrected by installing decidable equality and constructing rooted connectedness from coset transitivity."}
+      {:cmd "lake env lean /tmp/finite-arborescence-edge-count.lean",
+       :exit 1,
+       :finding
+       "The first specialization treated ActionCategory as definitionally equal to its backing coset type; corrected with an explicit ActionCategory.back equivalence and Fintype transport."}],
+     :fixture
+     {:path "/tmp/finite-arborescence-edge-count.lean",
+      :sha256
+      "1a6ec2785ebceb2d21a90c587ce380bfdc5d6dc160e1e486258c10a9a24f22ec"},
+     :implementation
+     {:scope
+      ["ConstructionTargets/FiniteArborescenceTotalEdgeCount.lean"],
+      :declarations
+      [{:name "FiniteArborescenceEdgeCount.total_card",
+        :type
+        "(V : Type u) [Quiver V] [Arborescence V] [Finite V] -> Nat.card (Quiver.Total V) = Nat.card V - 1"}
+       {:name "FiniteArborescenceEdgeCount.Schreier.rootedConnected",
+        :type
+        "(r : Nat) (H : Subgroup (FreeGroup (Fin r))) (base : Gen r H) -> RootedConnected base in Symmetrify (Gen r H)"}
+       {:name "FiniteArborescenceEdgeCount.Schreier.tree_total_card",
+        :type
+        "(r n : Nat) (hn : 0 < n) (H : Subgroup (FreeGroup (Fin r))) (hindex : H.index = n) (base : Gen r H) -> Nat.card (Quiver.Total (tree r H base)) = n - 1"}],
+      :dependencies
+      ["ConstructionTargets.FiniteArborescenceTotalArrowEquivalence"
+       "ConstructionTargets.FiniteSchreierChosenGeneratorEdgeCoordinates"]}}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/FiniteArborescenceTotalEdgeCount.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/positive-index/finite-arborescence-edge-count",
    :acceptance
@@ -91925,10 +91934,23 @@
      "registry check"]},
    :id :routes-2026-10-10-finite-arborescence-total-edge-count-13,
    :kind :reusable-theorem,
+   :declarations
+   [{:name "FiniteArborescenceEdgeCount.total_card",
+     :type
+     "(V : Type u) [Quiver V] [Arborescence V] [Finite V] -> Nat.card (Quiver.Total V) = Nat.card V - 1"}
+    {:name "FiniteArborescenceEdgeCount.Schreier.rootedConnected",
+     :type
+     "(r : Nat) (H : Subgroup (FreeGroup (Fin r))) (base : Gen r H) -> RootedConnected base in Symmetrify (Gen r H)"}
+    {:name "FiniteArborescenceEdgeCount.Schreier.tree_total_card",
+     :type
+     "(r n : Nat) (hn : 0 < n) (H : Subgroup (FreeGroup (Fin r))) (hindex : H.index = n) (base : Gen r H) -> Nat.card (Quiver.Total (tree r H base)) = n - 1"}],
    :depends-on
    [:routes-2026-10-10-finite-schreier-chosen-generator-edge-coordinates-12
     :routes-2026-10-10-checkpoint-topo1-after-chosen-generator-coordinates-12
     :routes-2026-10-10-finite-arborescence-total-arrow-nonroot-equivalence-14],
+   :dependencies
+   ["ConstructionTargets.FiniteArborescenceTotalArrowEquivalence"
+    "ConstructionTargets.FiniteSchreierChosenGeneratorEdgeCoordinates"],
    :current-residual
    "Turn uniqueness of root paths into one incoming arrow per non-root vertex and specialize the total-arrow cardinality to the n-vertex geodesic subtree.",
    :other-consumers [:t97A03]}
