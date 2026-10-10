@@ -84772,6 +84772,18 @@
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131 registered statements match, 0 do not"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791613228069-1328-5fffc9b4",
+     :commands
+     ["git show/diff d986259fb83dc1c9860fb074bb6ef201ebe98773"
+      "stat packages; sha256sum; target/declaration checks; lake env lean fixture"
+      "statement-registry check; worklist_check.bb"
+      "lake env lean TwoOpenFreeProductMapping and four named consumers"
+      "comment-stripped placeholder census; four frozen fingerprints"],
+     :finding
+     "PASS: ledger-only STOP is exact; fixture hash matches and its concrete basepoint equations compile without placeholders, but both desired equivalences are postulated by one custom axiom; scoped module and seven declarations are absent; the banked chosen free-product equivalence lacks the generic point-wedge connector and representative-inclusion equations needed to orient coproduct injections as indexed FreeGroup generators; consumer counts/fingerprints and registry/worklist gates reproduce."},
     :changed-paths [],
     :fixture
     {:path "/tmp/finite-circle-wedge-pi1-probe.lean",
@@ -84780,7 +84792,7 @@
      :status :self-axiomatized},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/FiniteCircleWedgeFundamentalGroup.lean"],
    :dag-node
@@ -84911,7 +84923,7 @@
       "188c22abad2f0abc5a570ded8f1bd93013fac5e470230154cbdf5b676f5e300a"},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/finite-circle-wedge-fundamental-group",
