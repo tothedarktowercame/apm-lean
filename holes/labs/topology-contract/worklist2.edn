@@ -62366,45 +62366,64 @@
    "single-consumer planar polar decomposition for the t02A03 complement interpolation",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:residual
-     "Implement the banked planar polar decomposition in the scoped module; then derive the reconstructed endpoint planar polar formula, evaluate the interpolation norm, and continue to deleted-core exclusion and the HomotopyEquiv.",
-     :outcome :go,
-     :warnings
-     ["/tmp/t02a03_geometric_tube_cover.lean:786:38: unnecessarySeqFocus linter warning in the previously banked planar interpolation proof"],
-     :acceptance
-     {:declaration
-      "apm_t02a03_leftTubePlanarComplex_eq_norm_smul_angular",
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Derive the reconstructed endpoint planar polar formula along the same angular direction, evaluate the interpolated planar norm, prove the exact normal-coordinate formula, deduce deleted-core exclusion, bundle the homotopy, and assemble the torus HomotopyEquiv.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["/tmp/t02a03_geometric_tube_cover.lean:786:38: unnecessarySeqFocus linter warning; scoped module compiles without warnings"],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_leftTubePlanarComplex_eq_norm_smul_angular",
       :type
-      "forall p : apm_t02a03_leftTubeSubtype, apm_t02a03_leftTubePlanarComplex p = (norm (apm_t02a03_leftTubePlanarComplex p) : Real) • ((apm_t02a03_leftTubeAngular p : Circle) : Complex)"},
-     :commands
-     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "apm_t02a03_leftTubePlanarComplex_eq_norm_smul_angular compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
-       :exit 0}
-      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "323989ad34d4d500e6286d20b05573669cd1bc73d62fe59b0afc237b97a5b8f0  /tmp/t02a03_geometric_tube_cover.lean"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :fixture
-     {:path "/tmp/t02a03_geometric_tube_cover.lean",
-      :sha256
-      "323989ad34d4d500e6286d20b05573669cd1bc73d62fe59b0afc237b97a5b8f0"},
-     :finding
-     "The requested planar polar decomposition is complete and placeholder-free. It is the symmetric form of NormedSpace.norm_smul_normalize after unfolding the leftTubeAngular Circle coercion.",
-     :implementation
-     {:scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
-      :declarations
-      ["ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_leftTubePlanarComplex_eq_norm_smul_angular"]},
-     :seat "topo-8"}},
+      "forall p : apm_t02a03_leftTubeSubtype, apm_t02a03_leftTubePlanarComplex p = (norm (apm_t02a03_leftTubePlanarComplex p) : Real) • ((apm_t02a03_leftTubeAngular p : Circle) : Complex)",
+      :status :proved,
+      :consumers [:t02A03],
+      :depends-on
+      ["ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_leftTubePlanarComplex_radialPoint"]}],
+    :statement-hashes
+    {:frozen-type-sha256
+     "86ee09c8c112b299a96dc9176231e6fc759d869fdb83b75d4987e7cef6b5986b",
+     :registry "131 registered statements match, 0 do not"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd
+      "git rev-parse 81714919 && git diff-tree --no-commit-id --name-only -r 81714919",
+      :exit 0,
+      :output
+      "817149193f45a7897d5d99cdff56c2eb2c9afe7e\nConstructionTargets/T02A03LeftTubePuncturedModel.lean"}
+     {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean", :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03LeftTubePuncturedModel.lean",
+      :exit 0}
+     {:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+      :exit 0}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03LeftTubePuncturedModel.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git show --check --oneline 81714919", :exit 0}],
+    :commit "817149193f45a7897d5d99cdff56c2eb2c9afe7e",
+    :changed-paths
+    ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
+    :fixture
+    {:path "/tmp/t02a03_geometric_tube_cover.lean",
+     :sha256
+     "323989ad34d4d500e6286d20b05573669cd1bc73d62fe59b0afc237b97a5b8f0"},
+    :finding
+    "The earlier receipt resolved HEAD after a concurrent ledger commit landed. The immutable implementation commit changes exactly the scoped module and banks the planar polar decomposition via NormedSpace.norm_smul_normalize.",
+    :implementation
+    {:scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
+     :declarations
+     ["ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_leftTubePlanarComplex_eq_norm_smul_angular"],
+     :type
+     "forall p : apm_t02a03_leftTubeSubtype, apm_t02a03_leftTubePlanarComplex p = (norm (apm_t02a03_leftTubePlanarComplex p) : Real) • ((apm_t02a03_leftTubeAngular p : Circle) : Complex)"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/left-tube-planar-polar-decomposition",
@@ -63636,7 +63655,8 @@
    {:name
     "ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_leftTubePlanarComplex_radialPoint",
     :reported-by
-    [:routes-2026-10-10-t02a03-left-tube-planar-coordinate-interpolation-topo2-r1],
+    [:routes-2026-10-10-t02a03-left-tube-planar-coordinate-interpolation-topo2-r1
+     :routes-2026-10-10-t02a03-left-tube-planar-polar-decomposition-topo2-r1],
     :type
     "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubePlanarComplex ⟨apm_t02a03_leftTubeRadialPoint tp, apm_t02a03_leftTubeRadialPoint_mem_leftTube tp⟩ = (1 - (tp.1 : Real)) • apm_t02a03_leftTubePlanarComplex ⟨(apm_t02a03_leftTubeTorusInverse (apm_t02a03_leftTubeTorusCoordinates tp.2)).1, (apm_t02a03_leftTubeTorusInverse (apm_t02a03_leftTubeTorusCoordinates tp.2)).2.1⟩ + (tp.1 : Real) • apm_t02a03_leftTubePlanarComplex ⟨tp.2.1, tp.2.2.1⟩",
     :proved-in
