@@ -64089,64 +64089,91 @@
    "Instantiate h1_coordinate_eq_of_fundamentalGroup_coordinate_eq with the aligned Hurewicz coordinate and this coordinate map, simplify the Hurewicz coordinate to the identity, then transport the additive H1 equation through singularHomologyComparison_naturality into the ModuleCat bridge.",
    :other-consumers []}
   {:bounded-exception
+   "single-consumer basepoint-transported raw pi1 coordinate map for t97A04",
+   :consumer :t97A04,
+   :phase :probe,
+   :state :open,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md/t97A04/frozen-pi1-raw-map-coordinate",
+   :acceptance
+   {:probe
+    "Compile and bank frozenTorusPi1CoordAtLbarBase and frozenLbarPi1Map_coordinateMap_raw from /tmp/t97a04_frozen_h1_coordinate.lean. Transport the frozen torus pi1 coordinate to the literal codomain basepoint frozenLbar (0,0) by conjugation along frozenLbar_base, and restate the frozen matrix equation using FundamentalGroup.map in the exact form required by h1_coordinate_eq_of_fundamentalGroup_coordinate_eq. Preserve the matrix exactly; do not yet claim the Hurewicz identity at the transported basepoint, the IntegralH1 equation, or apm_t97A04_bridge_2.",
+    :declarations
+    ["ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusPi1CoordAtLbarBase"
+     "ConstructionTargets.T97A04FrozenH1Coordinate.frozenLbarPi1Map_coordinateMap_raw"],
+    :type
+    "forall p : FundamentalGroup FrozenTorus (0, 0), frozenMatrixCoordinateMap (frozenTorusPi1Coord p) = frozenTorusPi1CoordAtLbarBase (FundamentalGroup.map frozenLbar (0, 0) p)",
+    :placeholder "apm_t97A04_bridge_2",
+    :route-step
+    "t97A04 step 5, align the fixed-basepoint matrix theorem with the raw fundamental-group map used by Hurewicz naturality"},
+   :id
+   :routes-2026-10-10-t97a04-frozen-pi1-raw-map-coordinate-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo2-r5
+    :routes-2026-10-10-t97a04-frozen-pi1-coordinate-map-topo2-r1],
+   :current-residual
+   "Prove the aligned Hurewicz coordinate is the identity for frozenTorusPi1CoordAtLbarBase, apply h1_coordinate_eq_of_fundamentalGroup_coordinate_eq, and transport the resulting IntegralH1 equation through singularHomologyComparison_naturality into the ModuleCat bridge.",
+   :other-consumers []}
+  {:bounded-exception
    "single-consumer assembly from the now-banked frozen torus pi1 matrix theorem",
    :consumer :t97A04,
    :evidence
    {:probe
     {:residual
-     "Bank the frozen pi1 coordinate-map theorem. Then instantiate finite-free Hurewicz naturality with the aligned coordinate and transport the resulting additive H1 equation through singularHomologyComparison_naturality into apm_t97A04_bridge_2.",
+     "Bank the raw-map pi1 coordinate theorem. Then prove Hurewicz-coordinate invariance under the frozen basepoint equality, derive the IntegralH1 matrix equation, and transport it into apm_t97A04_bridge_2.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
      [{:name
-       "ConstructionTargets.T97A04FrozenH1Coordinate.frozenLbarPi1Map_coordinateMap",
+       "ConstructionTargets.T97A04FrozenH1Coordinate.frozenLbarPi1Map_coordinateMap_raw",
        :type
-       "forall p : FundamentalGroup FrozenTorus (0, 0), frozenMatrixCoordinateMap (frozenTorusPi1Coord p) = frozenTorusPi1Coord (frozenLbarPi1Map p)",
+       "forall p : FundamentalGroup FrozenTorus (0, 0), frozenMatrixCoordinateMap (frozenTorusPi1Coord p) = frozenTorusPi1CoordAtLbarBase (FundamentalGroup.map frozenLbar (0, 0) p)",
        :status :proved,
        :consumers [:t97A04],
        :depends-on
-       ["ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusAlignedHurewiczCoordinate_apply"
-        "ConstructionTargets.TorusPiOneWindingCoordinates.frozenLbarPi1Map_naturality"]}],
+       ["ConstructionTargets.T97A04FrozenH1Coordinate.frozenLbarPi1Map_coordinateMap"]}],
      :prerequisite
      {:bounded-exception
-      "single-consumer frozen pi1 matrix packaged as a coordinate map for t97A04",
+      "single-consumer basepoint-transported raw pi1 coordinate map for t97A04",
       :consumer :t97A04,
       :phase :probe,
       :state :open,
       :scope [],
-      :dag-node "TOPOLOGY-ROUTES.md/t97A04/frozen-pi1-coordinate-map",
+      :dag-node
+      "TOPOLOGY-ROUTES.md/t97A04/frozen-pi1-raw-map-coordinate",
       :acceptance
       {:probe
-       "Compile and bank frozenMatrixAddHom, frozenMatrixCoordinateMap, and frozenLbarPi1Map_coordinateMap from /tmp/t97a04_frozen_h1_coordinate.lean. Package the frozen matrix [[2,1],[-1,1]] as the multiplicative coordinate map and orient frozenLbarPi1Map_naturality as coordinateMap(pi1 coordinate) = pi1 coordinate(map). Do not yet claim the IntegralH1 equation, ModuleCat induced-map equation, or apm_t97A04_bridge_2.",
+       "Compile and bank frozenTorusPi1CoordAtLbarBase and frozenLbarPi1Map_coordinateMap_raw from /tmp/t97a04_frozen_h1_coordinate.lean. Transport the frozen torus pi1 coordinate to the literal codomain basepoint frozenLbar (0,0) by conjugation along frozenLbar_base, and restate the frozen matrix equation using FundamentalGroup.map in the exact form required by h1_coordinate_eq_of_fundamentalGroup_coordinate_eq. Preserve the matrix exactly; do not yet claim the Hurewicz identity at the transported basepoint, the IntegralH1 equation, or apm_t97A04_bridge_2.",
        :declarations
-       ["ConstructionTargets.T97A04FrozenH1Coordinate.frozenMatrixAddHom"
-        "ConstructionTargets.T97A04FrozenH1Coordinate.frozenMatrixCoordinateMap"
-        "ConstructionTargets.T97A04FrozenH1Coordinate.frozenLbarPi1Map_coordinateMap"],
+       ["ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusPi1CoordAtLbarBase"
+        "ConstructionTargets.T97A04FrozenH1Coordinate.frozenLbarPi1Map_coordinateMap_raw"],
        :type
-       "forall p : FundamentalGroup FrozenTorus (0, 0), frozenMatrixCoordinateMap (frozenTorusPi1Coord p) = frozenTorusPi1Coord (frozenLbarPi1Map p)",
+       "forall p : FundamentalGroup FrozenTorus (0, 0), frozenMatrixCoordinateMap (frozenTorusPi1Coord p) = frozenTorusPi1CoordAtLbarBase (FundamentalGroup.map frozenLbar (0, 0) p)",
        :placeholder "apm_t97A04_bridge_2",
        :route-step
-       "t97A04 step 5, package the frozen pi1 matrix in the coordinate-map form consumed by finite-free Hurewicz naturality"},
-      :id :routes-2026-10-10-t97a04-frozen-pi1-coordinate-map-topo2-r1,
+       "t97A04 step 5, align the fixed-basepoint matrix theorem with the raw fundamental-group map used by Hurewicz naturality"},
+      :id
+      :routes-2026-10-10-t97a04-frozen-pi1-raw-map-coordinate-topo2-r1,
       :kind :reusable-theorem,
       :depends-on
       [:routes-2026-10-10-checkpoint-topo2-r5
-       :routes-2026-10-10-t97a04-frozen-h1-hurewicz-alignment-topo2-r1],
+       :routes-2026-10-10-t97a04-frozen-pi1-coordinate-map-topo2-r1],
       :current-residual
-      "Instantiate h1_coordinate_eq_of_fundamentalGroup_coordinate_eq with the aligned Hurewicz coordinate and this coordinate map, simplify the Hurewicz coordinate to the identity, then transport the additive H1 equation through singularHomologyComparison_naturality into the ModuleCat bridge.",
+      "Prove the aligned Hurewicz coordinate is the identity for frozenTorusPi1CoordAtLbarBase, apply h1_coordinate_eq_of_fundamentalGroup_coordinate_eq, and transport the resulting IntegralH1 equation through singularHomologyComparison_naturality into the ModuleCat bridge.",
       :other-consumers []},
      :commands
      [{:cmd "lake env lean /tmp/t97a04_frozen_h1_coordinate.lean",
        :exit 0,
        :output
-       "frozenLbarPi1Map_coordinateMap compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "frozenTorusPi1CoordAtLbarBase and frozenLbarPi1Map_coordinateMap_raw compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
        "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t97a04_frozen_h1_coordinate.lean || true)\"",
        :exit 0}
       {:cmd "sha256sum /tmp/t97a04_frozen_h1_coordinate.lean",
        :exit 0,
        :output
-       "951b3fe39b5d167b4c11f3d28035ee5cdb47519679b5580c4047336a8cb94a4f  /tmp/t97a04_frozen_h1_coordinate.lean"}
+       "263ab41fbf6eaf3e23d148489b20968e57996ad90dbcfe0e1d0262e1cdf415e3  /tmp/t97a04_frozen_h1_coordinate.lean"}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
@@ -64154,20 +64181,20 @@
      [{:cmd "lake env lean /tmp/t97a04_frozen_h1_coordinate.lean",
        :exit 1,
        :finding
-       "The first additive-homomorphism proof left Fin.cases expressions unreduced at the second Fin 2 coordinate; explicit coordinate reasoning was required."}
+       "Rewriting directly with the fixed-basepoint coordinate theorem failed because h1_coordinate_eq_of_fundamentalGroup_coordinate_eq uses FundamentalGroup.map with codomain basepoint frozenLbar (0,0), whereas the banked theorem uses FundamentalGroup.mapOfEq into (0,0)."}
       {:cmd "lake env lean /tmp/t97a04_frozen_h1_coordinate.lean",
        :exit 1,
        :finding
-       "The first explicit-coordinate revision supplied Fin.eq_one_of_ne_zero with the wrong argument shape and still relied on simp to reduce Fin.cases at index one. Passing the index explicitly, substituting i = 1, and stating the resulting integer identity completed the proof."}],
+       "A direct simplification of the aligned Hurewicz identity across the non-reflexive basepoint equality did not reduce the conjugation equivalence. The compiled prerequisite therefore isolates the exact basepoint-transported pi1 coordinate and raw-map equation; Hurewicz invariance under this equality transport remains the next theorem."}],
      :fixture
      {:path "/tmp/t97a04_frozen_h1_coordinate.lean",
       :sha256
-      "951b3fe39b5d167b4c11f3d28035ee5cdb47519679b5580c4047336a8cb94a4f"},
+      "263ab41fbf6eaf3e23d148489b20968e57996ad90dbcfe0e1d0262e1cdf415e3"},
      :finding
-     "The full apm_t97A04_bridge_2 proof remains absent. The compiled prerequisite packages the frozen matrix [[2,1],[-1,1]] as a monoid coordinate map and restates frozenLbarPi1Map_naturality in exactly the orientation required by h1_coordinate_eq_of_fundamentalGroup_coordinate_eq. This removes the remaining representation mismatch before instantiating finite-free Hurewicz naturality.",
+     "The full apm_t97A04_bridge_2 proof remains absent. The compiled prerequisite defines the target pi1 coordinate at the actual point frozenLbar (0,0) by conjugation along frozenLbar_base and proves the frozen matrix equation for FundamentalGroup.map itself. This is the precise input shape of h1_coordinate_eq_of_fundamentalGroup_coordinate_eq; the remaining step is to prove that the aligned Hurewicz coordinate remains the identity after this basepoint equality transport.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t97A04/h1-bridge-assembly",
    :acceptance
@@ -64184,7 +64211,8 @@
     :routes-2026-10-10-t97a04-frozen-h1-coordinate-topo2-r1
     :routes-2026-10-10-t97a04-frozen-h1-multiplicative-coordinate-topo2-r1
     :routes-2026-10-10-t97a04-frozen-h1-hurewicz-alignment-topo2-r1
-    :routes-2026-10-10-t97a04-frozen-pi1-coordinate-map-topo2-r1],
+    :routes-2026-10-10-t97a04-frozen-pi1-coordinate-map-topo2-r1
+    :routes-2026-10-10-t97a04-frozen-pi1-raw-map-coordinate-topo2-r1],
    :current-residual
    "The pi1 matrix equation is banked; align the frozen H1 equivalence and transfer the induced map equality through the Hurewicz and ModuleCat comparisons.",
    :other-consumers []}
@@ -65243,4 +65271,27 @@
    :lemma-constructiontargets-toruspionewindingcoordinates-frozenlbarpi1map-naturality,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T97A04FrozenH1Coordinate.frozenLbarPi1Map_coordinateMap_raw",
+    :type
+    "forall p : FundamentalGroup FrozenTorus (0, 0), frozenMatrixCoordinateMap (frozenTorusPi1Coord p) = frozenTorusPi1CoordAtLbarBase (FundamentalGroup.map frozenLbar (0, 0) p)"},
+   :lemma
+   {:name
+    "ConstructionTargets.T97A04FrozenH1Coordinate.frozenLbarPi1Map_coordinateMap_raw",
+    :reported-by
+    [:routes-2026-10-10-t97a04-h1-bridge-assembly-topo2-r1],
+    :type
+    "forall p : FundamentalGroup FrozenTorus (0, 0), frozenMatrixCoordinateMap (frozenTorusPi1Coord p) = frozenTorusPi1CoordAtLbarBase (FundamentalGroup.map frozenLbar (0, 0) p)",
+    :proved-in :routes-2026-10-10-t97a04-h1-bridge-assembly-topo2-r1},
+   :id
+   :lemma-constructiontargets-t97a04frozenh1coordinate-frozenlbarpi1map-coordinatemap-raw,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t97a04frozenh1coordinate-frozenlbarpi1map-coordinatemap],
    :other-consumers []}]}
