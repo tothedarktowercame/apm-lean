@@ -96789,6 +96789,22 @@
      {:cmd "git status --short",
       :exit 0,
       :finding "clean worktree after commit"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791659542759-2763-54c23efd",
+     :commands
+     ["git show 2f1fb3708bd9167315907bd84adbbfb3d3790792:ConstructionTargets/CoveringRetainedSheetHomeomorph.lean"
+      "git diff-tree --no-commit-id --name-only -r 2f1fb3708bd9167315907bd84adbbfb3d3790792"
+      "git diff --exit-code 2f1fb3708bd9167315907bd84adbbfb3d3790792 -- ConstructionTargets/CoveringRetainedSheetHomeomorph.lean"
+      "sha256sum /tmp/covering-retained-sheet-homeomorph.lean"
+      "lake build ConstructionTargets.CoveringRetainedSheetHomeomorph"
+      "lake env lean /tmp/covering-retained-sheet-homeomorph.lean"
+      "placeholder census on source, fixture, and problems/t99J01/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb on recorded ledger at 35379c62"],
+     :finding
+     "PASS: reviewer codex-3 verified author topo-2 and recorded commit 2f1fb370, whose exact scope is only ConstructionTargets/CoveringRetainedSheetHomeomorph.lean and whose source equals the reviewed checkout. The canonical package authority is correct; fixture SHA-256 2239151ab528fbb2c2327a7928045854ab4574292690dd517b13d7f8d366caf0 matches; target and fixture compile with zero placeholders; t99J01 retains one placeholder; retainedSheetHomeomorph uses only propext, Classical.choice, and Quot.sound; all 131 registered statements and the recorded 877-item ledger validate. RestrictedSource is the nested subtype of points in C lying above the chart base. The forward map records the projected base point and chart fiber coordinate, with retainedness supplied by the prior whole-sheet equivalence; the inverse applies t.invFun and proves both C-membership and base membership. left_inv and right_inv use the trivialization laws with correctly oriented source and target witnesses, and both continuity proofs respect the induced subtype topologies. The module does not yet establish even coverage for the component projection, assemble IsCoveringMap, count fibers, or compute pi1."},
     :commit "2f1fb3708bd9167315907bd84adbbfb3d3790792",
     :changed-paths
     ["ConstructionTargets/CoveringRetainedSheetHomeomorph.lean"],
@@ -96805,7 +96821,7 @@
       "ConstructionTargets.CoveringRetainedSheetHomeomorph.retainedSheetHomeomorph"]},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/CoveringRetainedSheetHomeomorph.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component/retained-sheet-homeomorph",
@@ -96945,7 +96961,7 @@
       "RestrictedSource is the component-side source over a chart base; retainedSheetHomeomorph identifies it homeomorphically with the chart base times RetainedIndex."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component",
@@ -99463,7 +99479,7 @@
    :other-consumers []}
   {:consumer :t99J01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "CoveringRetainedSheetHomeomorph.retainedSheetHomeomorph",
@@ -99476,7 +99492,10 @@
     :type
     "For a trivialization with path-connected base and clopen source subset C, RestrictedSource t C is homeomorphic to t.baseSet × RetainedIndex t C b hb",
     :proved-in
-    :routes-2026-10-10-covering-retained-sheet-homeomorph-47},
+    :routes-2026-10-10-covering-retained-sheet-homeomorph-47,
+    :banked-by
+    :routes-2026-10-10-covering-retained-sheet-homeomorph-47,
+    :banked-commit "2f1fb3708bd9167315907bd84adbbfb3d3790792"},
    :id :lemma-coveringretainedsheethomeomorph-retainedsheethomeomorph,
    :kind :lemma,
    :depends-on
