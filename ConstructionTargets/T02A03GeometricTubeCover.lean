@@ -383,6 +383,15 @@ theorem apm_t02a03_leftTubeTorusPoint_not_mem_leftCore
     simpa [Complex.normSq_apply, pow_two] using Circle.normSq_coe u.2
   nlinarith
 
+noncomputable def apm_t02a03_leftTubeTorusInverse :
+    C(Circle × Circle, apm_t02a03_LeftTubeMinusCore) where
+  toFun u := ⟨apm_t02a03_leftTubeTorusPoint u,
+    apm_t02a03_leftTubeTorusPoint_mem_leftTube u,
+    apm_t02a03_leftTubeTorusPoint_not_mem_leftCore u⟩
+  continuous_toFun := by
+    apply Continuous.subtype_mk
+    exact apm_t02a03_continuous_leftTubeTorusPoint
+
 theorem apm_t02a03_rightCore_zero :
     apm_t02a03_rightCore 0 = (0 : apm_t02a03_E3) := by
   ext i
