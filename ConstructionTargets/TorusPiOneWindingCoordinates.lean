@@ -293,4 +293,16 @@ theorem frozenLbarPi1Map_mk_circle_coord
           (Path.Homotopic.Quotient.mk (frozenCircleImagePath gamma))) := by
   rw [frozenCircleImage_frozenLbarBasedPath_mk]
 
+theorem frozenTorusPi1Coord_factor
+    (p : FundamentalGroup FrozenTorus (0, 0)) :
+    frozenTorusPi1Coord p =
+      (show FundamentalGroup (Circle × Circle)
+          (frozenTorusHomeomorphCircleProd (0, 0)) ≃*
+          Multiplicative (Fin 2 → ℤ) from by
+        rw [frozenTorusHomeomorphCircleProd_base]
+        exact torusPi1Coord)
+      ((fundamentalGroupMulEquivOfHomeomorph
+        frozenTorusHomeomorphCircleProd (0, 0)) p) := by
+  rfl
+
 end ConstructionTargets.TorusPiOneWindingCoordinates
