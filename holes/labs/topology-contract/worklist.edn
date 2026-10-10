@@ -84021,6 +84021,24 @@
      "The coinduced projective Space Real 3 of nonzero vectors modulo nonzero scaling",
      :direction
      "A homeomorphism from the source antipodal quotient to the target projective quotient induced by sphere inclusion, followed by transport of a genuine source two-sheeted covering structure to the normalized sphere projection"},
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791610684338-1249-d91cafad",
+     :commands
+     ["git show/stat/diff recorded parent STOP transition 5c00a48f39f8e9d5cd0ccf777abe5224d80e3c2d"
+      "sha256sum /tmp/t96a06-sphere-projective-covering-probe.lean"
+      "lake env lean /tmp/t96a06-sphere-projective-covering-probe.lean"
+      "rg fixture package, custom axiom, and requested covering declarations"
+      "test scoped RealProjectiveSphereCovering module is absent"
+      "inspect RealProjectiveSmoothTarget RP2 fiber/open/local-homeomorphism boundary"
+      "lake env lean problems/t96A06/lean/Main.lean"
+      "comment-stripped placeholder census and statement fingerprint for t96A06"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git diff --check 5c00a48f^ 5c00a48f"],
+     :finding
+     "PASS as STOP: reviewer codex-3 differs from author topo-4. Recorded parent transition commit 5c00a48f39f8e9d5cd0ccf777abe5224d80e3c2d changes only holes/labs/topology-contract/worklist.edn, with empty scope and no implementation commit claimed. It correctly preserves the independently reviewed covering-package STOP rather than treating the self-axiomatized fixture as the requested representation comparison. The frozen fixture hash reproduces as c9aac3057c72154f269972588390e0ad2e5d1adf8586ab1bab09312ac38315e5. It compiles and defines the elementary antipodal Setoid and normalized sphere projection, but its quotient homeomorphism, literal projection equation, IsCoveringMap proof, and two-point fiber theorem come solely from the custom axiom sphere_projective_covering_package. ConstructionTargets/RealProjectiveSphereCovering.lean and all six requested declarations remain absent, so the standard-only gate fails deterministically. The representation direction is correct: build a homeomorphism induced by sphere inclusion from the antipodal quotient of euclideanUnitSphere 4 to coinduced Space Real 3, then transport a genuine two-sheeted source covering to the normalized projection. RealProjectiveSmoothTarget proves fiber equality, openness, and local-homeomorphism results only for sphereProjection 2/RP2; the sphereProjection 3 equality-or-antipodality theorem, open/local-homeomorphism construction, evenly covered neighborhoods or finite-action covering result, and global fiber cardinality remain missing. The t96A06 consumer compiles unchanged with exactly one sorry and frozen fingerprint 937efb042dcf5949706d95c5d4266acfe20a12308284ff85af707d5413c43aad. Registry is 131/131 and all 694 worklist rows validate. Rational transfer homology, degree four, and Lefschetz remain downstream."},
     :fixture
     {:path "/tmp/t96a06-sphere-projective-covering-probe.lean",
      :sha256
@@ -84028,7 +84046,7 @@
      :status :self-axiomatized},
     :seat "topo-4"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t96A06/sphere-projective-covering-comparison",
@@ -84072,7 +84090,7 @@
    :stop-condition
    "End only when every active topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
