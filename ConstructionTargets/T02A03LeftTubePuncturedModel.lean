@@ -328,4 +328,16 @@ noncomputable def apm_t02a03_leftTubeRadialMap :
     apply Continuous.subtype_mk
     exact apm_t02a03_continuous_leftTubeRadialPoint
 
+theorem apm_t02a03_leftTubeRadialMap_endpoints
+    (p : apm_t02a03_LeftTubeMinusCore) :
+    apm_t02a03_leftTubeRadialMap (0, p) =
+        apm_t02a03_leftTubeTorusInverse
+          (apm_t02a03_leftTubeTorusCoordinates p) ∧
+      apm_t02a03_leftTubeRadialMap (1, p) = p := by
+  constructor
+  · apply Subtype.ext
+    exact apm_t02a03_leftTubeRadialPoint_zero p
+  · apply Subtype.ext
+    exact apm_t02a03_leftTubeRadialPoint_one p
+
 end ConstructionTargets.T02A03LeftTubePuncturedModel
