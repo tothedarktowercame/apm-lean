@@ -60789,6 +60789,32 @@
    "Prove the ambient realization lies in the frozen left-tube complement, bundle it as the inverse map, and construct both comparison homotopies.",
    :other-consumers []}
   {:bounded-exception
+   "single-consumer exact core-distance calculation for the t02A03 torus reconstruction",
+   :consumer :t02A03,
+   :phase :probe,
+   :state :open,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t02A03/left-tube-torus-point-core-distance",
+   :acceptance
+   {:probe
+    "Compile and bank apm_t02a03_dist_leftTubeTorusPoint_leftCoreCircle from /tmp/t02a03_geometric_tube_cover.lean. Prove that the explicit torus reconstruction lies at distance exactly 1/8 from the frozen left-core point indexed by its first Circle coordinate, by expanding the Euclidean norm and using the unit norm identities of both Circle coordinates. This supplies the radius bound needed to prove reconstruction lands in the frozen left tube; do not yet claim left-tube membership, exclusion from the frozen core, the bundled inverse map, comparison homotopies, the torus HomotopyEquiv, or gluing.",
+    :declaration "apm_t02a03_dist_leftTubeTorusPoint_leftCoreCircle",
+    :type
+    "forall u : Circle × Circle, dist (apm_t02a03_leftTubeTorusPoint u) (apm_t02a03_leftCoreCircle u.1) = (1 / 8 : ℝ)",
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "t02A03 step 2, compute the exact core distance of the torus-coordinate reconstruction"},
+   :id
+   :routes-2026-10-10-t02a03-left-tube-torus-point-core-distance-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo2-r5
+    :routes-2026-10-10-t02a03-left-tube-torus-point-topo2-r1],
+   :current-residual
+   "Use the exact 1/8 distance to prove left-tube membership, prove the reconstructed point is not on the frozen core, bundle the inverse map, and construct both comparison homotopies.",
+   :other-consumers []}
+  {:bounded-exception
    "single-consumer explicit punctured-left-tube model for t02A03",
    :consumer :t02A03,
    :evidence
@@ -60798,55 +60824,67 @@
      :fixture
      {:path "/tmp/t02a03_geometric_tube_cover.lean",
       :sha256
-      "65b54a8849eed3ce2408d4d7e49f5ef3556f2c9c83d50745ba3de5a923be308f"},
+      "fc1be108e169d9c6a8617d480af625dc66fca637b606b8047b96e6615855985b"},
      :commands
      [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
        :exit 0,
        :output
-       "apm_t02a03_leftTubeTorusPoint and apm_t02a03_continuous_leftTubeTorusPoint compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "apm_t02a03_dist_leftTubeTorusPoint_leftCoreCircle compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
        "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
        :exit 0}
       {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
        :exit 0,
        :output
-       "65b54a8849eed3ce2408d4d7e49f5ef3556f2c9c83d50745ba3de5a923be308f  /tmp/t02a03_geometric_tube_cover.lean"}
+       "fc1be108e169d9c6a8617d480af625dc66fca637b606b8047b96e6615855985b  /tmp/t02a03_geometric_tube_cover.lean"}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 1,
+       :finding
+       "The first proof expressed the Circle unit identities through norm squared but rewrite did not match powers, and the unsimplified coordinate differences did not match the proposed radicand. Switching to Circle.normSq_coe and normalizing the coordinate polynomial exposed the exact radicand."}
+      {:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 1,
+       :finding
+       "The second proof simplified Circle.norm_coe before connecting it to the complex coordinates, and its post-ring-normalization radicand no longer matched the pre-normalized expression. Using Circle.normSq_coe directly and stating the normalized radicand equality corrected both issues; the final rerun compiled."}],
      :finding
-     "The full punctured-left-tube HomotopyEquiv is still absent, but the inverse coordinate formula is now available as a compiled continuous ambient map. Given a core angle a and normal angle b, apm_t02a03_leftTubeTorusPoint uses planar radius 1 + (1/8) Re(b) about center (-1,0) and height (1/8) Im(b). Thus it realizes the torus at fixed nonzero normal radius 1/8, safely below the frozen tube radius 1/4. The remaining obligation is to prove the formula lies in the frozen left tube and outside the frozen core, then bundle it into LeftTubeMinusCore and construct the comparison homotopies.",
+     "The full punctured-left-tube HomotopyEquiv is still absent, but the reconstructed torus point is now proved to lie at exact distance 1/8 from its corresponding frozen left-core point. The calculation expands the Euclidean coordinate difference and uses the unit norm identities of both Circle factors, giving squared distance 1/64. Since 1/8 is below the frozen tube radius 1/4, this theorem is the immediate input for proving reconstruction lands in the left tube.",
      :residual
-     "Bank the continuous ambient torus realization. Then prove its distance to the corresponding frozen core point is 1/8 and that it never lies on the core, bundle it into LeftTubeMinusCore, and construct both comparison homotopies.",
+     "Bank the exact reconstruction-to-core distance. Then derive frozen left-tube membership, prove the reconstruction is outside the frozen core, bundle the inverse map into LeftTubeMinusCore, and construct both comparison homotopies.",
      :prerequisite
      {:bounded-exception
-      "single-consumer continuous ambient reconstruction formula for the t02A03 punctured left tube",
+      "single-consumer exact core-distance calculation for the t02A03 torus reconstruction",
       :consumer :t02A03,
       :phase :probe,
       :state :open,
       :scope [],
-      :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-torus-point",
+      :dag-node
+      "TOPOLOGY-ROUTES.md/t02A03/left-tube-torus-point-core-distance",
       :acceptance
       {:probe
-       "Compile and bank apm_t02a03_leftTubeTorusPoint and apm_t02a03_continuous_leftTubeTorusPoint from /tmp/t02a03_geometric_tube_cover.lean. Define the explicit ambient reconstruction from Circle times Circle using core angle a, planar radius 1 + (1/8) Re(b), and height (1/8) Im(b), and prove it continuous by explicit Euclidean coordinate continuity. This supplies the inverse-coordinate formula required by t02A03 route step 2; do not yet claim that its image lies in LeftTubeMinusCore, comparison homotopies, the torus HomotopyEquiv, or gluing.",
-       :declarations
-       ["apm_t02a03_leftTubeTorusPoint"
-        "apm_t02a03_continuous_leftTubeTorusPoint"],
+       "Compile and bank apm_t02a03_dist_leftTubeTorusPoint_leftCoreCircle from /tmp/t02a03_geometric_tube_cover.lean. Prove that the explicit torus reconstruction lies at distance exactly 1/8 from the frozen left-core point indexed by its first Circle coordinate, by expanding the Euclidean norm and using the unit norm identities of both Circle coordinates. This supplies the radius bound needed to prove reconstruction lands in the frozen left tube; do not yet claim left-tube membership, exclusion from the frozen core, the bundled inverse map, comparison homotopies, the torus HomotopyEquiv, or gluing.",
+       :declaration
+       "apm_t02a03_dist_leftTubeTorusPoint_leftCoreCircle",
+       :type
+       "forall u : Circle × Circle, dist (apm_t02a03_leftTubeTorusPoint u) (apm_t02a03_leftCoreCircle u.1) = (1 / 8 : ℝ)",
        :placeholder "the sole sorry in apm_t02a03",
        :route-step
-       "t02A03 step 2, define the continuous ambient realization of torus coordinates at fixed normal radius 1/8"},
-      :id :routes-2026-10-10-t02a03-left-tube-torus-point-topo2-r1,
+       "t02A03 step 2, compute the exact core distance of the torus-coordinate reconstruction"},
+      :id
+      :routes-2026-10-10-t02a03-left-tube-torus-point-core-distance-topo2-r1,
       :kind :reusable-theorem,
       :depends-on
       [:routes-2026-10-10-checkpoint-topo2-r5
-       :routes-2026-10-10-t02a03-left-tube-torus-coordinate-map-topo2-r1],
+       :routes-2026-10-10-t02a03-left-tube-torus-point-topo2-r1],
       :current-residual
-      "Prove the ambient realization lies in the frozen left-tube complement, bundle it as the inverse map, and construct both comparison homotopies.",
+      "Use the exact 1/8 distance to prove left-tube membership, prove the reconstructed point is not on the frozen core, bundle the inverse map, and construct both comparison homotopies.",
       :other-consumers []}}},
    :phase :probe,
    :type
    "Nonempty (ContinuousMap.HomotopyEquiv LeftTubeMinusCore ConstructionTargets.TorusCircleWedgeOpenCover.Torus)",
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-punctured-model",
    :acceptance
@@ -60881,7 +60919,8 @@
     :routes-2026-10-10-t02a03-left-tube-normal-zero-locus-topo2-r1
     :routes-2026-10-10-t02a03-left-tube-punctured-normal-coordinate-topo2-r1
     :routes-2026-10-10-t02a03-left-tube-torus-coordinate-map-topo2-r1
-    :routes-2026-10-10-t02a03-left-tube-torus-point-topo2-r1],
+    :routes-2026-10-10-t02a03-left-tube-torus-point-topo2-r1
+    :routes-2026-10-10-t02a03-left-tube-torus-point-core-distance-topo2-r1],
    :current-residual
    "After the punctured-left-tube model is banked, construct the right-tube-minus-deleted-attachment model extending the based core homotopy, then overlap compatibility and gluing for the full geometricY equivalence.",
    :other-consumers []}
