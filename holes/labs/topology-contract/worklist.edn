@@ -87320,17 +87320,17 @@
    "Conjugate the banked fiber-cardinality/index theorem to the frozen ThreeCircles cover predicate and record induced pi1 injectivity.",
    :other-consumers []}
   {:consumer :t97A01,
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "No implementation commit was recorded and ConstructionTargets/GenericPointWedgeMayerVietorisPathConnectedCoordinates.lean is absent. The frozen fixture hash is correct, but it declares only GenericWedgeMVH0Coordinates and the nonstandard axiom generic_point_wedge_mv_pathconnected_coordinates; none of the ten accepted reusable declarations has a frozen Lean signature, and repaired_intersection_coordinates depends on that axiom. Repair requires an owner-approved placeholder-free typed fixture fixing GenericPointWedgeMVH0Coordinates, the overlap/left/right H0 isomorphisms, both literal-inclusion naturality equations, signed intersection and codiagonal reassembly equations, the ThreeCircles PathConnectedSpace instance, and its specialized package, with exact ModuleCat/AddCommGrpCat morphism directions; then implement the scoped module with standard-only axioms.",
    :evidence
    {:residual
-    "Provide a placeholder-free typed fixture fixing the exact signatures of GenericPointWedgeMVH0Coordinates, the three H0 isomorphisms, both literal-inclusion naturality equations, both production-arrow coordinate equations, the ThreeCircles path-connected instance, and its specialized package.",
+    "Provide the reviewed placeholder-free fixture fixing all ten declaration signatures and exact ModuleCat/AddCommGrpCat directions, then implement the scoped module against that interface.",
     :outcome :stop,
     :warnings
     [{:kind :specification-defect,
       :message
-      "The acceptance declaration list and frozen fixture expose different names and the fixture axiomatizes the entire requested coordinate construction."}],
+      "Independent review agrees that an owner-approved typed fixture is required before implementation."}],
     :disposition :stop,
     :axioms
     ["propext"
@@ -87339,7 +87339,7 @@
      "Quot.sound"],
     :author "topo-2",
     :reason
-    "The frozen fixture does not specify the accepted reusable API and is not a standard-only implementation fixture. It declares GenericWedgeMVH0Coordinates and one axiom generic_point_wedge_mv_pathconnected_coordinates, whereas acceptance requires the differently named GenericPointWedgeMVH0Coordinates plus nine standalone declarations whose Lean types are absent. In particular, the fixture fixes no signatures for the two literal-inclusion naturality equations, the individual H0 isomorphisms, the ThreeCircles PathConnectedSpace declaration, or the specialized coordinate package. Choosing whether these are equalities of ModuleCat morphisms, AddCommGrpCat morphisms, or fields projected from a package would invent the representation interface. The repaired path-connected hypotheses remove the earlier false H0 claim, but they do not supply these missing types or a placeholder-free proof fixture.",
+    "The independently reviewed specification boundary remains unchanged. No owner-approved placeholder-free fixture or scoped module exists, and the frozen fixture still provides only GenericWedgeMVH0Coordinates plus the nonstandard axiom generic_point_wedge_mv_pathconnected_coordinates. Acceptance requests ten differently named declarations without Lean signatures, including morphism equalities whose category and composition orientation cannot be inferred uniquely from prose. Implementing them would invent the public representation API and violate the frozen-interface invariant. The path-connected hypotheses repair the mathematics but do not repair the missing specification.",
     :commands
     [{:cmd
       "sha256sum /tmp/generic-point-wedge-mv-pathconnected-probe.lean",
@@ -87347,30 +87347,25 @@
       :finding
       "a471b74db23e71f5112eaf625a6a969dc9203ba00c6582950b417d1d989fe82e"}
      {:cmd
-      "Python comment-stripped census of /tmp/generic-point-wedge-mv-pathconnected-probe.lean",
-      :exit 0,
-      :finding
-      "0 sorry tokens and 1 axiom token; the axiom is generic_point_wedge_mv_pathconnected_coordinates"}
+      "test -e ConstructionTargets/GenericPointWedgeMayerVietorisPathConnectedCoordinates.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "The scoped implementation artifact remains absent."}
      {:cmd
-      "rg -n \"^(structure|def|theorem|axiom) (GenericPointWedgeMVH0Coordinates|GenericWedgeMVH0Coordinates|genericPointWedgeOverlapH0Iso|genericPointWedgeLeftH0Iso|genericPointWedgeRightH0Iso|genericPointWedgeOverlapToLeft_H0_coordinates|genericPointWedgeOverlapToRight_H0_coordinates|genericPointWedgeIntersectionArrow_H0_coordinates|genericPointWedgeReassemblyArrow_H0_coordinates|threeCirclesPathConnectedSpace|threeCirclesMayerVietorisH0Coordinates|generic_point_wedge_mv_pathconnected_coordinates)\" /tmp/generic-point-wedge-mv-pathconnected-probe.lean",
-      :exit 0,
+      "rg -n \"GenericPointWedgeMVH0Coordinates|genericPointWedgeOverlapToLeft_H0_coordinates|threeCirclesMayerVietorisH0Coordinates\" ConstructionTargets /tmp/generic-point-wedge-mv-pathconnected-probe.lean",
+      :exit 1,
+      :expected-exit 1,
       :finding
-      "Only GenericWedgeMVH0Coordinates and generic_point_wedge_mv_pathconnected_coordinates are declared; none of the accepted standalone API signatures appears."}
+      "No accepted typed interface or replacement fixture has appeared."}
      {:cmd
       "lake env lean /tmp/generic-point-wedge-mv-pathconnected-probe.lean",
       :exit 0,
       :finding
-      "The fixture compiles, but repaired_intersection_coordinates depends on the nonstandard axiom generic_point_wedge_mv_pathconnected_coordinates."}
+      "The fixture still compiles only through generic_point_wedge_mv_pathconnected_coordinates; repaired_intersection_coordinates retains that nonstandard axiom."}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
      {:cmd "git status --short", :exit 0, :finding "clean"}],
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1791627027826-1612-8ba024fd",
-     :finding
-     "No implementation commit was recorded and ConstructionTargets/GenericPointWedgeMayerVietorisPathConnectedCoordinates.lean is absent. The frozen fixture hash is correct, but it declares only GenericWedgeMVH0Coordinates and the nonstandard axiom generic_point_wedge_mv_pathconnected_coordinates; none of the ten accepted reusable declarations has a frozen Lean signature, and repaired_intersection_coordinates depends on that axiom. Repair requires an owner-approved placeholder-free typed fixture fixing GenericPointWedgeMVH0Coordinates, the overlap/left/right H0 isomorphisms, both literal-inclusion naturality equations, signed intersection and codiagonal reassembly equations, the ThreeCircles PathConnectedSpace instance, and its specialized package, with exact ModuleCat/AddCommGrpCat morphism directions; then implement the scoped module with standard-only axioms."},
     :fixture
     {:path "/tmp/generic-point-wedge-mv-pathconnected-probe.lean",
      :sha256
@@ -87380,7 +87375,7 @@
      :proof-placeholder-count 1},
     :seat "topo-2"},
    :phase :implementation,
-   :state :repair,
+   :state :needs-owner,
    :scope
    ["ConstructionTargets/GenericPointWedgeMayerVietorisPathConnectedCoordinates.lean"],
    :dag-node
@@ -87579,7 +87574,7 @@
    :stop-condition
    "End only when every active topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
