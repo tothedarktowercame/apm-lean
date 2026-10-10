@@ -20,7 +20,12 @@ keep track of the priority of lemmas"). The ledger holds rows of kind `:lemma`
 `:other-consumers` naming the problems that need them. Every checkpoint:
 
 1. Run `bb holes/labs/topology-contract/build_step.bb priorities <this ledger>`.
-   It ranks backlog lemmas: ready ones (dependencies banked) first, then by
+   It first prints each open problem's banked/backlog lemma counts. A
+   problem whose backlog is 0 has a complete route: elect its closure
+   adapter (or closure probe) BEFORE any lemma, under rule 0. Lemmas exist to
+   close problems (Joe, 2026-10-10); between closures, steer toward the
+   problem with the fewest backlog lemmas left. It then
+   ranks backlog lemmas: ready ones (dependencies banked) first, then by
    how many open registered problems each unblocks, then by how close those
    problems are to closing. Put the top of that ranking in your `:finding`.
 2. Maintain the DAG: return `:lemmas` (same map shape as `:missing-theorems`,

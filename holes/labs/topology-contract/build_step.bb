@@ -849,7 +849,20 @@
   "repair-dependencies" (repair-dependencies!)
   "repair-fixture-hash" (repair-fixture-hash!)
   "replay" (replay!)
-  "priorities" (doseq [p (priorities items)] (prn p))
+  ;; Closure readiness first (Joe, 2026-10-10: "lemma work should lead to
+  ;; closures, it did historically"): per open registered problem, how many
+  ;; lemmas it still waits on. A problem at 0 has a complete route, and its
+  ;; closure adapter outranks every lemma (work-prompt.md rule 0/e).
+  "priorities" (let [lem (filter #(= :lemma (:kind %)) items)
+                     probs (sort (set (mapcat #(filter @registered-problems (open-problems %)) lem)))]
+                 (doseq [p probs
+                         :let [mine (filter #((set (map problem-of (cons (:consumer %) (:other-consumers %)))) p) lem)
+                               waiting (count (filter #(= :backlog (:state %)) mine))]]
+                   (prn {:problem p :placeholders (placeholder-count p)
+                         :banked (count (filter #(= :banked (:state %)) mine))
+                         :backlog waiting
+                         :route (if (zero? waiting) :COMPLETE-elect-closure-adapter-now :open)}))
+                 (doseq [p (priorities items)] (prn p)))
   ;; Owner edits to the lemma DAG go through the same upsert and validation as
   ;; receipts: `add-lemmas LEDGER FILE`, FILE holding a vector of entries.
   "add-lemmas" (let [entries (edn/read-string (slurp (nth *command-line-args* 2)))]
