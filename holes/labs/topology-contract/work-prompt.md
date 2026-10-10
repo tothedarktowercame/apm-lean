@@ -144,6 +144,23 @@ campaign: every consumer problem closed, or a row whose mathematics is
 genuinely refuted, which is reported as a STOP naming the refutation, not as
 an election request.
 
+WHAT IS FROZEN, AND WHAT YOU WRITE (owner, 2026-10-10). Two things are
+frozen: the consumer problem's registered statement, and the TYPE of each
+interface axiom in the row's fixture. The fixture's axiom names exactly what
+the row owes; discharging it means a theorem or definition in `:scope` whose
+type is that axiom's type, built from standard axioms only. Everything else
+the acceptance lists in prose -- helper structures, intermediate lemmas, the
+names and signatures of supporting declarations -- is yours to design. Pick
+types that make the frozen axiom's type provable, state them in the receipt,
+and implement them. Choosing those signatures is NOT inventing the public API
+and is NOT a reason to STOP: on 2026-10-10 ten rows across six problems
+stopped twice each on exactly that reading ("no owner-approved signatures",
+"would invent the consumer interface") and the loop paused with nothing
+built. STOP only for a mathematical boundary: a frozen type that is false or
+needs a missing hypothesis (give the counterexample or the hypothesis), or a
+prerequisite theorem that does not exist and is too large for one row (name
+it, with its Lean type).
+
 For implementation or repair, modify only `:scope`, verify the recorded fixture
 hash, run every acceptance gate, and commit the scoped change. Report author,
 commit, fixture, commands and exit codes, warnings, axioms, changed paths,

@@ -86798,7 +86798,9 @@
    "Package fiber-coset equivalence, pi1 injectivity, and subgroup-containment lifting.",
    :other-consumers [:t93J03 :t97A03]}
   {:consumer :t97A01,
-   :stop-count 2,
+   :owner-reopen
+   "Owner reopen 2026-10-10 (claude-14): both STOPs cite missing approved signatures for declarations the acceptance lists in prose. Under work-prompt.md WHAT IS FROZEN, only the registered statement and the fixture interface-axiom types are frozen; design the supporting signatures, discharge the frozen axiom type with standard axioms, and STOP only on a mathematical boundary.",
+   :stop-count 0,
    :review-finding
    "No implementation was delivered: the row records no implementation commit, ConstructionTargets/PolygonEdgeGraphOpenCover.lean and every accepted declaration are absent, and the frozen fixture proves the advertised consequences only through the nonstandard axiom PolygonEdgeGraphOpenCoverProbe.polygonOpenCoverPackages. Its recorded placeholder-count 0 is also false under the repository census, which counts that top-level axiom. Repair requires first specifying an explicit polygon-pairing/edge-graph representation and quotient maps, then implementing the two quotient-to-ThreeCircles comparisons, radial homotopy descents, literal inclusion equations, saturation/open-cover facts, and vertex identifications in the scoped module with standard-only axioms.",
    :evidence
@@ -86851,7 +86853,7 @@
      :proof-placeholder-count 1},
     :seat "topo-2"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope ["ConstructionTargets/PolygonEdgeGraphOpenCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/polygon-edge-graph-open-cover/radial-quotient-package",
@@ -86884,7 +86886,7 @@
      "python3 scripts/statement-registry.py check"]},
    :id :routes-2026-10-10-polygon-edge-graph-radial-package-1,
    :kind :reusable-theorem,
-   :fail-count 1,
+   :fail-count 0,
    :depends-on [],
    :current-residual
    "Construct one radial quotient package for both six-edge words, including saturation, three homotopy models, literal inclusions, and both vertex-class calculations.",
@@ -87320,7 +87322,9 @@
    "Conjugate the banked fiber-cardinality/index theorem to the frozen ThreeCircles cover predicate and record induced pi1 injectivity.",
    :other-consumers []}
   {:consumer :t97A01,
-   :stop-count 2,
+   :owner-reopen
+   "Owner reopen 2026-10-10 (claude-14): both STOPs cite missing approved signatures for declarations the acceptance lists in prose. Under work-prompt.md WHAT IS FROZEN, only the registered statement and the fixture interface-axiom types are frozen; design the supporting signatures, discharge the frozen axiom type with standard axioms, and STOP only on a mathematical boundary.",
+   :stop-count 0,
    :review-finding
    "No implementation commit was recorded and ConstructionTargets/GenericPointWedgeMayerVietorisPathConnectedCoordinates.lean is absent. The frozen fixture hash is correct, but it declares only GenericWedgeMVH0Coordinates and the nonstandard axiom generic_point_wedge_mv_pathconnected_coordinates; none of the ten accepted reusable declarations has a frozen Lean signature, and repaired_intersection_coordinates depends on that axiom. Repair requires an owner-approved placeholder-free typed fixture fixing GenericPointWedgeMVH0Coordinates, the overlap/left/right H0 isomorphisms, both literal-inclusion naturality equations, signed intersection and codiagonal reassembly equations, the ThreeCircles PathConnectedSpace instance, and its specialized package, with exact ModuleCat/AddCommGrpCat morphism directions; then implement the scoped module with standard-only axioms.",
    :evidence
@@ -87375,7 +87379,7 @@
      :proof-placeholder-count 1},
     :seat "topo-2"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/GenericPointWedgeMayerVietorisPathConnectedCoordinates.lean"],
    :dag-node
@@ -87415,7 +87419,7 @@
    :id
    :routes-2026-10-10-generic-point-wedge-h0-pathconnected-naturality-2,
    :kind :representation-comparison,
-   :fail-count 1,
+   :fail-count 0,
    :depends-on [],
    :current-residual
    "Prove both literal-inclusion augmentation naturality squares under explicit path-connected hypotheses and instantiate the resulting production-arrow coordinates on ThreeCircles.",
@@ -87798,7 +87802,9 @@
    "Review one consumer uptake and one corrected two-consumer representation comparison.",
    :other-consumers []}
   {:consumer :t99J01,
-   :stop-count 2,
+   :owner-reopen
+   "Owner reopen 2026-10-10 (claude-14): both STOPs cite missing approved signatures for declarations the acceptance lists in prose. Under work-prompt.md WHAT IS FROZEN, only the registered statement and the fixture interface-axiom types are frozen; design the supporting signatures, discharge the frozen axiom type with standard axioms, and STOP only on a mathematical boundary.",
+   :stop-count 0,
    :review-finding
    "No implementation commit was recorded and ConstructionTargets/T99J01PathComponentCoverRestriction.lean is absent. The fixture SHA-256 matches, but its only substantive restriction result is the nonstandard axiom pathComponentRestrictionPackage; none of the nine accepted t99j01 declarations has a frozen signature in the fixture or ConstructionTargets. Repair requires an owner-approved placeholder-free typed prerequisite fixing the chosen-component subtype/topology and basepoint, restricted map, sheet-count definition, ThreeCircles local/path-connected instance forms, IsKSheetedCover theorem, positivity and upper-bound orientations, the inclusion-induced FundamentalGroup bijection, and the MulEquiv direction from component pi1 to ambient pi1 before standard-only implementation.",
    :evidence
@@ -87846,7 +87852,7 @@
      :proof-placeholder-count 1},
     :seat "topo-2"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/T99J01PathComponentCoverRestriction.lean"],
    :dag-node
@@ -87876,7 +87882,7 @@
      "python3 scripts/statement-registry.py check"]},
    :id :routes-2026-10-10-t99j01-path-component-cover-package-1,
    :kind :final-adapter,
-   :fail-count 1,
+   :fail-count 0,
    :depends-on [],
    :current-residual
    "Prove the one coherent restriction package for the chosen path component: covering charts, positive bounded sheet count, and the inclusion-induced pi1 equivalence.",
@@ -88005,7 +88011,9 @@
    "Restrict an arbitrary finite-sheet cover to the chosen path component, bound its sheet count, and identify its based fundamental group.",
    :other-consumers []}
   {:consumer :t99J01,
-   :stop-count 2,
+   :owner-reopen
+   "Owner reopen 2026-10-10 (claude-14): both STOPs cite missing approved signatures for declarations the acceptance lists in prose. Under work-prompt.md WHAT IS FROZEN, only the registered statement and the fixture interface-axiom types are frozen; design the supporting signatures, discharge the frozen axiom type with standard axioms, and STOP only on a mathematical boundary.",
+   :stop-count 0,
    :review-finding
    "No implementation commit was recorded and ConstructionTargets/FiniteIndexFreeGroupSchreierRank.lean is absent. The fixture SHA-256 matches, but both consumer specializations depend on the nonstandard axiom finiteIndexSubgroupEquiv, which assumes the universal rank formula; the accepted universal name finiteIndexSubgroupFreeGroupEquiv has no frozen signature. Mathlib provides qualitative SpanningTree.endIsFree and endMulEquivSubgroup, not the required finite basis indexed by generator-coset edges outside the spanning tree or its cardinality. Repair requires a compiled placeholder-free prerequisite identifying that basis, proving the complement has (r-1)*n+1 elements, freezing the universal MulEquiv signature and orientation, and only then deriving the Fin 3/index-n and Fin 2/index-two specializations with standard-only axioms.",
    :evidence
@@ -88055,7 +88063,7 @@
      :proof-placeholder-count 1},
     :seat "topo-2"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/FiniteIndexFreeGroupSchreierRank.lean"],
    :dag-node
@@ -88081,7 +88089,7 @@
      "python3 scripts/statement-registry.py check"]},
    :id :routes-2026-10-10-finite-index-schreier-spanning-tree-count-1,
    :kind :reusable-theorem,
-   :fail-count 1,
+   :fail-count 0,
    :depends-on [],
    :current-residual
    "Refine Mathlib's qualitative Nielsen-Schreier basis by counting the complement of a spanning tree in the finite Schreier coset quiver.",
@@ -88209,7 +88217,9 @@
    "Count the non-tree edges in the finite Schreier coset quiver and orient Mathlib's Nielsen-Schreier freeness equivalence to the two required finite ranks.",
    :other-consumers [:t97A03]}
   {:consumer :t99J01,
-   :stop-count 2,
+   :owner-reopen
+   "Owner reopen 2026-10-10 (claude-14): both STOPs cite missing approved signatures for declarations the acceptance lists in prose. Under work-prompt.md WHAT IS FROZEN, only the registered statement and the fixture interface-axiom types are frozen; design the supporting signatures, discharge the frozen axiom type with standard axioms, and STOP only on a mathematical boundary.",
+   :stop-count 0,
    :review-finding
    "No implementation commit was recorded and ConstructionTargets/T99J01ExplicitConnectedCyclicCover.lean is absent. The fixture SHA-256 matches, but it contains one nonstandard axiom, cyclicThreeCirclesCoverExists, from which the final existential is immediate; cyclicThreeCirclesCoverTotal, cyclicThreeCirclesCoverMap, cyclicThreeCirclesCover_pathConnected, and cyclicThreeCirclesCover_isKSheeted are absent from both the fixture and ConstructionTargets. Repair requires an owner-approved placeholder-free representation fixture fixing the cyclic graph quotient type and relation, its coinduced topology, the projection to ThreeCircles, away-from-wedge and wedge-point covering charts, exact Fin n fiber equivalence, and the four concrete declaration signatures before a standard-only implementation can be reviewed.",
    :evidence
@@ -88259,7 +88269,7 @@
      :proof-placeholder-count 1},
     :seat "topo-2"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/T99J01ExplicitConnectedCyclicCover.lean"],
    :dag-node
@@ -88285,7 +88295,7 @@
      "python3 scripts/statement-registry.py check"]},
    :id :routes-2026-10-10-t99j01-cyclic-graph-cover-realization-1,
    :kind :uptake,
-   :fail-count 1,
+   :fail-count 0,
    :depends-on [],
    :current-residual
    "Construct the one bounded cyclic graph quotient and prove its wedge-point covering charts, connectedness, and exact Fin n fibers.",
@@ -88609,7 +88619,9 @@
    "Review three independent t99J01 route advances, including the Schreier theorem shared with t97A03.",
    :other-consumers []}
   {:consumer :t93J03,
-   :stop-count 2,
+   :owner-reopen
+   "Owner reopen 2026-10-10 (claude-14): both STOPs cite missing approved signatures for declarations the acceptance lists in prose. Under work-prompt.md WHAT IS FROZEN, only the registered statement and the fixture interface-axiom types are frozen; design the supporting signatures, discharge the frozen axiom type with standard axioms, and STOP only on a mathematical boundary.",
+   :stop-count 0,
    :review-finding
    "No implementation commit was recorded and ConstructionTargets/KleinDeckActionPolygonIdentification.lean is absent. The fixture SHA-256 and package orientations are exact, but exactGeometricInput is obtained solely from the nonstandard axiom kleinDeckActionPackage. No banked theorem gives controlled translation/glide-reflection parameters for PresentedKleinGroup sufficient for identity detection and compact-intersection finiteness, nor the two-way equivalence between plane-action orbits and the frozen square-boundary KleinBottle relation. Repair requires compiling those two prerequisites, then constructing the action, freeness, proper discontinuity, orbit setoid, quotient homeomorphism, generator formulas, and basepoint equation with standard-only axioms; the current instruction to defer normal form must still permit a weaker parameter theorem adequate for those proofs.",
    :evidence
@@ -88659,7 +88671,7 @@
      :proof-placeholder-count 1},
     :seat "topo-2"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/KleinDeckActionPolygonIdentification.lean"],
    :dag-node
@@ -88688,7 +88700,7 @@
      "python3 scripts/statement-registry.py check"]},
    :id :routes-2026-10-10-t93j03-klein-deck-action-polygon-package-1,
    :kind :uptake,
-   :fail-count 1,
+   :fail-count 0,
    :depends-on [],
    :current-residual
    "Construct the explicit PresentedKleinGroup plane action and prove its orbit quotient is the frozen aabb KleinBottle with the required generator and basepoint equations.",
@@ -88819,7 +88831,9 @@
    "Relate the explicit plane deck action to the frozen aabb disk quotient with generator and basepoint equations.",
    :other-consumers []}
   {:consumer :t97A03,
-   :stop-count 2,
+   :owner-reopen
+   "Owner reopen 2026-10-10 (claude-14): both STOPs cite missing approved signatures for declarations the acceptance lists in prose. Under work-prompt.md WHAT IS FROZEN, only the registered statement and the fixture interface-axiom types are frozen; design the supporting signatures, discharge the frozen axiom type with standard axioms, and STOP only on a mathematical boundary.",
+   :stop-count 0,
    :review-finding
    "No implementation commit was recorded and ConstructionTargets/T97A03ConnectedDoubleCoverClassification.lean is absent. The fixture SHA-256 and final orientation are correct, but exactFrozenBridge is merely the nonstandard axiom connectedDoubleCoverHomeomorphism; no banked theorem restricts the cover to the sphere/circle strata, labels the two lifted sphere sheets, computes the attachment permutation, excludes the disconnected pattern, or descends mutually inverse quotient maps to apm_t97A03_OneCircleCover or apm_t97A03_TwoCircleCover. Repair requires compiling those geometric classification steps as a placeholder-free prerequisite and then proving the frozen disjunction with standard-only axioms; repeating the fixture axiom is not an implementation.",
    :evidence
@@ -88869,7 +88883,7 @@
      :proof-placeholder-count 1},
     :seat "topo-2"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/T97A03ConnectedDoubleCoverClassification.lean"],
    :dag-node
@@ -88893,7 +88907,7 @@
    :id
    :routes-2026-10-10-t97a03-double-cover-monodromy-model-homeomorphism-1,
    :kind :uptake,
-   :fail-count 1,
+   :fail-count 0,
    :depends-on [],
    :current-residual
    "Construct the two explicit quotient-model homeomorphisms from the two-element circle monodromy classification; lift restriction and exact fiber cardinality are already banked.",
@@ -89200,7 +89214,9 @@
    "Review two independent geometric classification advances while t99J01 is held by stop-after-two.",
    :other-consumers []}
   {:consumer :t97A03,
-   :stop-count 2,
+   :owner-reopen
+   "Owner reopen 2026-10-10 (claude-14): both STOPs cite missing approved signatures for declarations the acceptance lists in prose. Under work-prompt.md WHAT IS FROZEN, only the registered statement and the fixture interface-axiom types are frozen; design the supporting signatures, discharge the frozen axiom type with standard axioms, and STOP only on a mathematical boundary.",
+   :stop-count 0,
    :review-finding
    "No implementation commit was recorded and ConstructionTargets/T97A03ModelInvariants.lean is absent. The fixture SHA-256 and final five-conjunct orientation are correct, but exactFrozenBridge is merely the nonstandard axiom modelInvariants; none of the six accepted model-specific declarations has a frozen Lean signature or banked computation. Repair requires owner-approved placeholder-free signatures plus explicit saturated covers, deformation retractions, literal inclusion maps and Mayer-Vietoris coordinate matrices for both frozen models, their H0/H1/H2 and higher-vanishing proofs, free-product pi1 calculations, and basepoint transport; only then can the supplied-homeomorphism adapter be proved with standard-only axioms.",
    :evidence
@@ -89252,7 +89268,7 @@
      :proof-placeholder-count 1},
     :seat "topo-2"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope ["ConstructionTargets/T97A03ModelInvariants.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A03/model-invariants/fixed-model-calculation",
@@ -89280,7 +89296,7 @@
      "python3 scripts/statement-registry.py check"]},
    :id :routes-2026-10-10-t97a03-fixed-model-invariants-1,
    :kind :uptake,
-   :fail-count 1,
+   :fail-count 0,
    :depends-on [],
    :current-residual
    "Compute path-connectedness, integral homology, higher-degree vanishing, and free rank-three fundamental groups for both fixed quotient models, then transport along the supplied homeomorphism.",
@@ -89519,6 +89535,38 @@
     :routes-2026-10-10-checkpoint-topo1-klein-double-cover-5],
    :current-residual
    "Review the only independent unheld route advance while all one-placeholder consumers remain held.",
+   :other-consumers []}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:strategy
+    "After the eight owner-reopened rows, re-measure the six covering / van Kampen problems (t99J01, t92J06, t97A03, t93J03, t01A03, t97A01) and elect the next portfolio under TOPOLOGY-ROUTES.md. A hold that rests only on missing approved signatures is not a hold (work-prompt.md WHAT IS FROZEN). generic-point-wedge-mv-inclusion-coordinates-1 stays parked: its interface is false without path-connected pieces; elect a corrected row (PathConnectedSpace X, Y, or H0(X), H0(Y) coordinates) if its consumers need it."},
+   :id :routes-2026-10-10-checkpoint-topo1-after-owner-reopen-1,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:routes-2026-10-10-finite-index-schreier-spanning-tree-count-1
+    :routes-2026-10-10-generic-point-wedge-h0-pathconnected-naturality-2
+    :routes-2026-10-10-polygon-edge-graph-radial-package-1
+    :routes-2026-10-10-t93j03-klein-deck-action-polygon-package-1
+    :routes-2026-10-10-t97a03-double-cover-monodromy-model-homeomorphism-1
+    :routes-2026-10-10-t97a03-fixed-model-invariants-1
+    :routes-2026-10-10-t99j01-cyclic-graph-cover-realization-1
+    :routes-2026-10-10-t99j01-path-component-cover-package-1],
+   :current-residual
+   "Owner reopen 2026-10-10: eight rows were parked on a signature-approval reading the prompts never stated; reopened under the clarified rule.",
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
