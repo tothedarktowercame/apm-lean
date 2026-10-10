@@ -54400,47 +54400,54 @@
    :depends-on [:routes-2026-09-28-rp-smooth-atlas-topo2-r1],
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Deterministic workspace-invariant defect: commit 61782fc4 says fresh Lake validation is forbidden because /home/joe/code/apm-lean/.lake/packages is a real directory and instructs restoring a canonical symlink. docs/TN-topology-build-loop-design.md:149-151 explicitly requires the canonical checkout to own the real package directory; only frame checkouts must symlink to it. Fresh `lake env lean /tmp/rp_even_smooth_descent_contract.lean` succeeds in this correct canonical state. Repair the reason and residual by deleting the false symlink blocker and recording the fresh successful compilation; retain the valid STOP boundary that the hash-authenticated, zero-placeholder fixture only defines EvenSphereMapSmoothDescent : Prop and the stopped SphereProjectionContMDiffDescent inhabitant is not banked. Other checks reproduce: fixture SHA-256 99814940bc99fbf3ce79d7204bf1bc86d127aef3a836bd66cad3ab19d8191b4f, commit scope only worklist2.edn, frozen t95A04/t96A07 each have one placeholder, 131 statements match, and the 364-item ledger validates.",
    :evidence
-   {:residual
-    "Restore the canonical .lake/packages symlink through the workspace lifecycle, then implement the actual pointwise local-inverse proof of SphereProjectionContMDiffDescent. Only after that theorem is banked can this row construct the quotient function from sphereProjection_eq_iff and compile an inhabitant.",
+   {:placeholder-delta 0,
+    :residual
+    "Implement and bank the actual pointwise local-inverse proof of SphereProjectionContMDiffDescent. Once that theorem is inhabited, construct the quotient function from sphereProjection_eq_iff and use the descent theorem to compile an inhabitant of EvenSphereMapSmoothDescent.",
+    :phase :probe,
     :outcome :stop,
+    :warnings [],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :consumer-placeholders {:t95A04 1, :t96A07 1},
     :disposition :stop,
-    :author "topo-8",
+    :axioms [],
+    :author "topo-6",
     :reason
-    "The row cannot produce a validated inhabitant from its recorded dependency. The named fixture is another interface facade: it defines EvenSphereMapSmoothDescent as a Prop and only #checks that proposition; it contains no theorem or inhabitant. Its sole missing proof step is SphereProjectionContMDiffDescent, and a fresh repository search confirms that theorem is not banked; that dependency was independently stopped because its fixture likewise compiled only a Prop signature rather than the required local-inverse proof. There is therefore no smaller compiled prerequisite to name and no complete fixture for GO. Additionally, fresh Lake validation is forbidden in this checkout because .lake/packages is a real directory rather than the required canonical symlink.",
+    "The canonical apm-lean checkout correctly owns the real .lake/packages directory, and fresh Lake compilation succeeds, so there is no workspace blocker. The genuine boundary remains: the authenticated zero-placeholder fixture only defines EvenSphereMapSmoothDescent as a proposition and prints its type and available atlas signatures; it supplies no inhabitant. Its required smoothness step is SphereProjectionContMDiffDescent. That dependency completed with a reviewed STOP because its own interface-only fixture banks no inhabitant and no equivalent theorem exists in ConstructionTargets or the frozen problems. Without the pointwise smooth local-inverse proof descending ContMDiff through sphereProjection 2, this row cannot prove the descended quotient function ContMDiff and cannot satisfy its acceptance probe. This is an exact missing-proof boundary, not a refutation of the mathematics and not an environment failure.",
     :commands
-    [{:cmd "test -L .lake/packages", :exit 1, :expected-exit 1}
-     {:cmd "ls -ld .lake/packages",
+    [{:cmd "ls -ld .lake/packages",
       :exit 0,
       :output "drwxrwxr-x 11 joe joe 4096 Aug 31 14:27 .lake/packages"}
      {:cmd "sha256sum /tmp/rp_even_smooth_descent_contract.lean",
       :exit 0,
       :output
       "99814940bc99fbf3ce79d7204bf1bc86d127aef3a836bd66cad3ab19d8191b4f  /tmp/rp_even_smooth_descent_contract.lean"}
+     {:cmd "lake env lean /tmp/rp_even_smooth_descent_contract.lean",
+      :exit 0,
+      :output
+      "Prints EvenSphereMapSmoothDescent : Prop, rpSmoothAtlas, and quotient_localDiffeomorph; no inhabitant."}
      {:cmd
-      "rg -n 'SphereProjectionContMDiffDescent' ConstructionTargets problems -g '*.lean'",
+      "rg -n SphereProjectionContMDiffDescent ConstructionTargets problems -g *.lean",
       :exit 1,
       :expected-exit 1}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
-      :output "131 registered statements match, 0 do not"}],
-    :review
-    {:outcome :fail,
-     :seat "codex-7",
-     :job "invoke-1791605326012-1038-da5d08c0",
-     :finding
-     "Deterministic workspace-invariant defect: commit 61782fc4 says fresh Lake validation is forbidden because /home/joe/code/apm-lean/.lake/packages is a real directory and instructs restoring a canonical symlink. docs/TN-topology-build-loop-design.md:149-151 explicitly requires the canonical checkout to own the real package directory; only frame checkouts must symlink to it. Fresh `lake env lean /tmp/rp_even_smooth_descent_contract.lean` succeeds in this correct canonical state. Repair the reason and residual by deleting the false symlink blocker and recording the fresh successful compilation; retain the valid STOP boundary that the hash-authenticated, zero-placeholder fixture only defines EvenSphereMapSmoothDescent : Prop and the stopped SphereProjectionContMDiffDescent inhabitant is not banked. Other checks reproduce: fixture SHA-256 99814940bc99fbf3ce79d7204bf1bc86d127aef3a836bd66cad3ab19d8191b4f, commit scope only worklist2.edn, frozen t95A04/t96A07 each have one placeholder, 131 statements match, and the 364-item ledger validates."},
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0,
+      :output "topology-worklist: 364 items OK"}],
     :fixture
     {:path "/tmp/rp_even_smooth_descent_contract.lean",
      :sha256
      "99814940bc99fbf3ce79d7204bf1bc86d127aef3a836bd66cad3ab19d8191b4f",
      :status :interface-only},
-    :seat "topo-8"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :repair,
+   :state :needs-owner,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -54820,7 +54827,7 @@
      :infrastructure-packets
      :review-outcomes]},
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
