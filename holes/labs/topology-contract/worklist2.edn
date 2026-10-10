@@ -59456,6 +59456,35 @@
    :current-residual
    "Deform the terminal lifted-right-core map through the collar to the based Circle meridian, then extend over the right tube and glue.",
    :other-consumers []}
+  {:bounded-exception
+   "single-consumer contraction of the t02A03 lifted right-core segment to the meridian anchor",
+   :consumer :t02A03,
+   :phase :probe,
+   :state :open,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t02A03/geometric-right-core-anchor-contraction",
+   :acceptance
+   {:probe
+    "Compile and bank apm_t02a03_rightCoreAnchorContractionPoint, apm_t02a03_rightCoreAnchorContractionPoint_mem_geometricY, apm_t02a03_rightCoreAnchorContractionMap, apm_t02a03_rightCoreAnchorContractionMap_zero, and apm_t02a03_rightCoreAnchorContractionMap_one from /tmp/t02a03_geometric_tube_cover.lean. Define the homotopy (s,t) ↦ rightCore((1-s)t)+(0,0,1/8), prove every stage lies in W and avoids the frozen left core, bundle it continuously into geometricY, prove its zero slice is the banked terminal lifted-right-core map, and prove its one slice is the constant meridian anchor. This supplies the contraction of the punctured attachment segment required by t02A03 route step 2; do not yet claim an extension over the right tube or a gluing equivalence.",
+    :declarations
+    ["apm_t02a03_rightCoreAnchorContractionPoint"
+     "apm_t02a03_rightCoreAnchorContractionPoint_mem_geometricY"
+     "apm_t02a03_rightCoreAnchorContractionMap"
+     "apm_t02a03_rightCoreAnchorContractionMap_zero"
+     "apm_t02a03_rightCoreAnchorContractionMap_one"],
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "t02A03 step 2, contract the terminal lifted-right-core attachment map inside geometricY to the meridian anchor"},
+   :id
+   :routes-2026-10-10-t02a03-geometric-right-core-anchor-contraction-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo2-r5
+    :routes-2026-10-10-t02a03-geometric-right-core-lifted-map-topo2-r1],
+   :current-residual
+   "Use the quarter-turn equality to attach the contracted endpoint to the Circle meridian, then extend across the right tube and glue the tube pieces.",
+   :other-consumers []}
   {:consumer :t02A03,
    :evidence
    {:probe
@@ -59464,55 +59493,58 @@
      :fixture
      {:path "/tmp/t02a03_geometric_tube_cover.lean",
       :sha256
-      "8d317ded3a2fabe4cc65213f3002d4fc57187c047885f63b870a4891417ddbc4"},
+      "ab06fba47e37e402835962233cfb0c3646384c73fb36601c56c0e21ffedd86d9"},
      :commands
      [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
        :exit 0,
        :output
-       "apm_t02a03_rightCoreLiftedMap and apm_t02a03_rightCoreLiftHomotopyMap_one compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "apm_t02a03_rightCoreAnchorContractionPoint, apm_t02a03_rightCoreAnchorContractionPoint_mem_geometricY, apm_t02a03_rightCoreAnchorContractionMap, apm_t02a03_rightCoreAnchorContractionMap_zero, and apm_t02a03_rightCoreAnchorContractionMap_one compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
        "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
        :exit 0}
       {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
        :exit 0,
        :output
-       "8d317ded3a2fabe4cc65213f3002d4fc57187c047885f63b870a4891417ddbc4  /tmp/t02a03_geometric_tube_cover.lean"}
+       "ab06fba47e37e402835962233cfb0c3646384c73fb36601c56c0e21ffedd86d9  /tmp/t02a03_geometric_tube_cover.lean"}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
      :finding
-     "The final geometricY-to-Y equivalence is still absent, but the vertical lift homotopy now has a compiled named terminal map. Evaluating the lift at height one defines a continuous map from the punctured right-core interval into geometricY, and the height-one slice of the banked homotopy agrees with it definitionally. This isolates the exact source map for the next deformation through the collar toward the based Circle meridian.",
+     "The full tube deformation and gluing equivalence are still absent, but the terminal lifted-right-core map now has a complete compiled contraction to the meridian anchor. The formula rightCore((1-s)t)+(0,0,1/8) remains exactly 1/8 above a right-core point for every s, so it lies in the radius-1/4 right tube; its nonzero third coordinate prevents intersection with the planar left core. The zero slice is the banked terminal lifted map and the one slice is the constant geometricY point at the meridian anchor.",
      :residual
-     "Bank the terminal lifted-right-core map and the height-one slice equality. Then deform this map through the attachment collar to the based Circle meridian, extend the deformation over the right tube, and assemble the final gluing equivalence.",
+     "Bank the contraction of the lifted right-core segment to the meridian anchor. Then relate this constant endpoint to the quarter-turn point of the Circle meridian, extend the resulting based attachment across the right tube, and assemble the tube-piece gluing equivalence.",
      :prerequisite
      {:bounded-exception
-      "single-consumer terminal map of the t02A03 vertical right-core lift homotopy",
+      "single-consumer contraction of the t02A03 lifted right-core segment to the meridian anchor",
       :consumer :t02A03,
       :phase :probe,
       :state :open,
       :scope [],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t02A03/geometric-right-core-lifted-map",
+      "TOPOLOGY-ROUTES.md/t02A03/geometric-right-core-anchor-contraction",
       :acceptance
       {:probe
-       "Compile and bank apm_t02a03_rightCoreLiftedMap and apm_t02a03_rightCoreLiftHomotopyMap_one from /tmp/t02a03_geometric_tube_cover.lean. Define the terminal lifted-right-core map by evaluating the banked vertical lift homotopy at height one, prove it is a continuous map from Set.Ioc 0 1 into geometricY, and prove the homotopy's height-one slice is exactly this map. This supplies the named terminal attachment map required by t02A03 route step 2; do not yet claim a deformation from it to the collar or meridian, a tube deformation, or a gluing equivalence.",
+       "Compile and bank apm_t02a03_rightCoreAnchorContractionPoint, apm_t02a03_rightCoreAnchorContractionPoint_mem_geometricY, apm_t02a03_rightCoreAnchorContractionMap, apm_t02a03_rightCoreAnchorContractionMap_zero, and apm_t02a03_rightCoreAnchorContractionMap_one from /tmp/t02a03_geometric_tube_cover.lean. Define the homotopy (s,t) ↦ rightCore((1-s)t)+(0,0,1/8), prove every stage lies in W and avoids the frozen left core, bundle it continuously into geometricY, prove its zero slice is the banked terminal lifted-right-core map, and prove its one slice is the constant meridian anchor. This supplies the contraction of the punctured attachment segment required by t02A03 route step 2; do not yet claim an extension over the right tube or a gluing equivalence.",
        :declarations
-       ["apm_t02a03_rightCoreLiftedMap"
-        "apm_t02a03_rightCoreLiftHomotopyMap_one"],
+       ["apm_t02a03_rightCoreAnchorContractionPoint"
+        "apm_t02a03_rightCoreAnchorContractionPoint_mem_geometricY"
+        "apm_t02a03_rightCoreAnchorContractionMap"
+        "apm_t02a03_rightCoreAnchorContractionMap_zero"
+        "apm_t02a03_rightCoreAnchorContractionMap_one"],
        :placeholder "the sole sorry in apm_t02a03",
        :route-step
-       "t02A03 step 2, name the height-one lifted-right-core map and identify it as the terminal slice of the vertical homotopy"},
+       "t02A03 step 2, contract the terminal lifted-right-core attachment map inside geometricY to the meridian anchor"},
       :id
-      :routes-2026-10-10-t02a03-geometric-right-core-lifted-map-topo2-r1,
+      :routes-2026-10-10-t02a03-geometric-right-core-anchor-contraction-topo2-r1,
       :kind :reusable-theorem,
       :depends-on
       [:routes-2026-10-10-checkpoint-topo2-r5
-       :routes-2026-10-10-t02a03-geometric-right-core-lift-homotopy-topo2-r1],
+       :routes-2026-10-10-t02a03-geometric-right-core-lifted-map-topo2-r1],
       :current-residual
-      "Deform the terminal lifted-right-core map through the collar to the based Circle meridian, then extend over the right tube and glue.",
+      "Use the quarter-turn equality to attach the contracted endpoint to the Circle meridian, then extend across the right tube and glue the tube pieces.",
       :other-consumers []}}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/closure",
    :acceptance
@@ -59541,7 +59573,8 @@
     :routes-2026-10-10-t02a03-geometric-right-core-attachment-segment-topo2-r1
     :routes-2026-10-10-t02a03-geometric-right-core-collar-endpoint-topo2-r1
     :routes-2026-10-10-t02a03-geometric-right-core-lift-homotopy-topo2-r1
-    :routes-2026-10-10-t02a03-geometric-right-core-lifted-map-topo2-r1],
+    :routes-2026-10-10-t02a03-geometric-right-core-lifted-map-topo2-r1
+    :routes-2026-10-10-t02a03-geometric-right-core-anchor-contraction-topo2-r1],
    :current-residual
    "One placeholder: two explicit homotopy equivalences, with the punctured-disk factor adapter-sized and the geometric tube deformation still missing.",
    :other-consumers []}
