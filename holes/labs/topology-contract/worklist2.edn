@@ -62097,6 +62097,21 @@
      {:cmd
       "git diff --check -- ConstructionTargets/T02A03LeftTubePuncturedModel.lean",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791646334146-2291-54e77f68",
+     :commands
+     ["git show/diff-tree/show --check 9c518832db520072d755ce05dd2630bd3f837edd"
+      "sha256sum /tmp/t02a03_geometric_tube_cover.lean"
+      "lake env lean /tmp/t02a03_geometric_tube_cover.lean"
+      "lake env lean ConstructionTargets/T02A03LeftTubePuncturedModel.lean"
+      "lake build ConstructionTargets.T02A03LeftTubePuncturedModel"
+      "python3 scripts/statement-registry.py check --rev 9c518832db520072d755ce05dd2630bd3f837edd"
+      "bb holes/labs/topology-contract/worklist_check.bb recorded-ledger"
+      "recompute accepted-type hash and comment-stripped placeholder counts"],
+     :finding
+     "PASS: author topo-6 is independent; implementation scope is exactly ConstructionTargets/T02A03LeftTubePuncturedModel.lean, transition scope is ledger-only, and fixture SHA-256 f3b70a29f91b9a0b5b1b823f89133391b18e219c8e9d528c9673ef2c660f765b matches. The proof establishes positivity of the reconstructed planar radial factor, uses the first Circle coordinate unit norm, and computes both complex components to prove in the registered orientation that the inverse reconstruction normal coordinate equals the real 1/8 scalar action on the second Circle coordinate, without claiming the combined interpolation formula. Fixture, target, focused 8241-job build, registry 131/0, and 461-item ledger gate pass; accepted-type hash 02d90d9694b2b98dd2cb8924aa2a5305e8316ce119e313037dcf4e7af4887d40 matches, the declaration uses only propext/Classical.choice/Quot.sound, target placeholders are 0, and unchanged consumer placeholders are 1."},
     :commit "9c518832db520072d755ce05dd2630bd3f837edd",
     :changed-paths
     ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
@@ -62116,7 +62131,7 @@
    :phase :implementation,
    :type
    "forall u : Circle × Circle, apm_t02a03_leftTubeNormalComplex ⟨(apm_t02a03_leftTubeTorusInverse u).1, (apm_t02a03_leftTubeTorusInverse u).2.1⟩ = (1 / 8 : Real) • (u.2 : Complex)",
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/left-tube-torus-inverse-normal-coordinate",
@@ -62204,7 +62219,7 @@
    :phase :probe,
    :type
    "Nonempty (ContinuousMap.HomotopyEquiv LeftTubeMinusCore ConstructionTargets.TorusCircleWedgeOpenCover.Torus)",
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-punctured-model",
    :acceptance
