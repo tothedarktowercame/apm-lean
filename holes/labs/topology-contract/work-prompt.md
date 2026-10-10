@@ -12,7 +12,14 @@ compiled prerequisite. STOP names the exact mathematical, hypothesis, or
 representation boundary.
 
 For `:phase :strategy`, reread `TOPOLOGY-ROUTES.md`, the routes files and the
-reviewed dependency receipts. Elect only from this loop's half of
+reviewed dependency receipts. Read `holes/labs/topology-contract/missing-theorems.edn`
+(one map per line: theorems authors found missing, with row and consumers):
+those are this loop's backlog. A `:needs-owner` row or a stop-after-two is NOT
+a hold on its problem; re-route the problem by electing the missing theorems
+it named as rows, smallest first, at the generality its consumers use. A
+checkpoint may not answer terminal while an open problem of this loop has
+listed theorems that are not yet built. Restrategising is expected; do it at
+every checkpoint (Joe, 2026-10-10). Elect only from this loop's half of
 `TOPOLOGY-ROUTES.md` and follow its election rules; where the text below says
 "the DAG", read `TOPOLOGY-ROUTES.md` and the routes files. Measure placeholder changes, typed residual changes, infrastructure
 packet counts, and STOP/PASS outcomes. Return `:outcome :replan` with a
@@ -152,14 +159,30 @@ type is that axiom's type, built from standard axioms only. Everything else
 the acceptance lists in prose -- helper structures, intermediate lemmas, the
 names and signatures of supporting declarations -- is yours to design. Pick
 types that make the frozen axiom's type provable, state them in the receipt,
-and implement them. Choosing those signatures is NOT inventing the public API
-and is NOT a reason to STOP: on 2026-10-10 ten rows across six problems
-stopped twice each on exactly that reading ("no owner-approved signatures",
-"would invent the consumer interface") and the loop paused with nothing
-built. STOP only for a mathematical boundary: a frozen type that is false or
-needs a missing hypothesis (give the counterexample or the hypothesis), or a
-prerequisite theorem that does not exist and is too large for one row (name
-it, with its Lean type).
+and implement them. Choosing those signatures is NOT inventing the public API.
+
+EXTEND MATHLIB; DO NOT STOP FOR A MISSING THEOREM (Joe, 2026-10-10). When the
+proof needs a theorem that Mathlib and `ConstructionTargets/` lack -- a
+covering restricted to a path component, a fundamental-domain homeomorphism,
+a homotopy equivalence to a model -- state it and prove it yourself, in the
+row's scope, as Mathlib would: general enough for this row's consumers, no
+more. That is the work, not an obstacle to it. Name every such theorem in the
+receipt's `:missing-theorems` vector, one map per theorem:
+
+    {:name "IsCoveringMap.restrictPathComponent"
+     :type "<full Lean statement>"
+     :status :proved | :partial | :not-started
+     :consumers [:t99J01]}
+
+If the job ends before the row is complete, commit what compiles (no `sorry`,
+no axiom beyond the fixture's frozen ones), list the rest with
+`:status :partial` or `:not-started`, and return STOP: the next strategy
+checkpoint splits the list into rows. The list is a record for strategy, never
+the reason for stopping early.
+
+The only STOP that ends work on a row's mathematics is a refutation: a frozen
+type that is false or needs a missing hypothesis, with a compiled
+counterexample or the exact hypothesis.
 
 For implementation or repair, modify only `:scope`, verify the recorded fixture
 hash, run every acceptance gate, and commit the scoped change. Report author,

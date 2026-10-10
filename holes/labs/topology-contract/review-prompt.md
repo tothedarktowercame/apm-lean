@@ -10,10 +10,13 @@ Judge an implementation against the fixture's frozen interface-axiom types
 and the registered statement, not against declaration names the acceptance
 lists in prose: the author designs supporting signatures (work-prompt.md,
 "WHAT IS FROZEN"). PASS when every frozen axiom type is discharged in scope
-with standard axioms only. A STOP that cites only missing approved
-signatures, or the risk of inventing an interface, is a deterministic
-defect: FAIL it with the finding "design the supporting signatures and
-discharge the frozen axiom type".
+with standard axioms only. A STOP that cites missing approved
+signatures, the risk of inventing an interface, or a theorem absent from
+Mathlib that the author did not attempt, is a deterministic defect: FAIL it
+with the finding "extend Mathlib: state and prove the missing theorem in
+scope" (work-prompt.md). A STOP after real progress (commit of compiled
+supporting results, remaining theorems listed in `:missing-theorems`) or a
+STOP with a compiled refutation is correct: PASS it.
 
 On PASS, report the reviewer, job, reproduced commands, and findings. On a
 deterministic defect, report the exact repair finding. Do not edit the ledger;

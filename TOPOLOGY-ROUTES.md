@@ -31,9 +31,12 @@ homotopy invariance (`AlgebraicTopology/SingularHomology/HomotopyInvariance*.lea
    route step needs.
 3. Every work row names the problem, the `sorry` and the route step it supplies. A row that
    does not shorten a route in `routes-*.md` is not elected.
-4. Apply the stop-after-two rule per problem: two consecutive rows that do not reduce that
-   problem's `sorry` count or complete a listed route step end work on it until a fresh Codex
-   seat (not a loop seat) re-routes it (Joe, 2026-09-29); record that in the finding.
+4. Apply the stop-after-two rule per ROW: a row that stops twice is parked (`:needs-owner`), but
+   its problem is not held. A missing theorem is never a reason to stop working on a problem
+   (Joe, 2026-10-10: "they need to extend mathlib not stop"); authors prove what Mathlib lacks,
+   and anything unfinished goes on `holes/labs/topology-contract/missing-theorems.edn`. Each
+   strategy checkpoint re-routes parked problems from that list. Restrategising periodically is
+   valid; no fresh outside seat is needed. (Supersedes the 2026-09-29 hold-until-re-routed rule.)
 5. If a route step turns out false or unbuildable, STOP with the evidence (a compiled
    counterexample where possible). Never change a registered statement.
 

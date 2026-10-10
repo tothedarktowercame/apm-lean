@@ -214,6 +214,23 @@
 ;; apply time; worklist_check accepts it when the recorded path is gone.
 (def fixture-store (io/file here "fixture-store"))
 
+;; Theorems authors found missing from Mathlib and ConstructionTargets, one EDN
+;; map per line, shared by both loops. Strategy checkpoints elect from it (Joe,
+;; 2026-10-10: a missing theorem goes on a list; it is not a reason to stop).
+;; Derived data: each entry also stays in its row's :evidence in the ledger.
+(def missing-theorems-file (io/file here "missing-theorems.edn"))
+
+(defn record-missing-theorems! [id consumer receipt]
+  (when-let [ts (seq (filter map? (:missing-theorems receipt)))]
+    (let [at (str (java.time.Instant/now))]
+      (spit missing-theorems-file
+            (apply str (for [t ts]
+                         (str (pr-str (assoc t :row id :row-consumer consumer
+                                             :ledger (.getName (io/file path))
+                                             :seat (:seat receipt) :at at))
+                              "\n")))
+            :append true))))
+
 (defn stash-fixture! [{:keys [path sha256]}]
   (when (and path sha256)
     (let [f (canonical-file path)]
@@ -643,6 +660,7 @@
                                                   (assoc-in [:evidence :review] receipt)))))
             (throw (ex-info "unknown receipt outcome" {:outcome outcome})))]
       (write-ledger! (assoc data :items (unblock-ready new-items)))
+      (record-missing-theorems! id (:consumer item) receipt)
       (println "applied" (name outcome) "to" (name id)))))
 
 (defn repair-dependencies! []
