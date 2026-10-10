@@ -294,4 +294,54 @@ theorem apm_t02a03_circleMeridian_quarterTurn :
   fin_cases i <;>
     simp [apm_t02a03_meridian, apm_t02a03_meridianAnchor]
 
+noncomputable def apm_t02a03_attachmentCollarPoint
+    (u : Set.Ico (0 : ℝ) 1) : apm_t02a03_E3 :=
+  WithLp.toLp 2 ![0, 0, (1 - (u : ℝ)) / 8]
+
+theorem apm_t02a03_attachmentCollarPoint_mem_geometricY
+    (u : Set.Ico (0 : ℝ) 1) :
+    apm_t02a03_attachmentCollarPoint u ∈ apm_t02a03_W ∧
+      apm_t02a03_attachmentCollarPoint u ∉
+        Set.range apm_t02a03_leftCore := by
+  have hu0 : 0 ≤ (u : ℝ) := u.property.1
+  have hu1 : (u : ℝ) < 1 := u.property.2
+  constructor
+  · rw [apm_t02a03_W_eq_leftTube_union_rightTube]
+    apply Set.mem_union_left
+    apply Metric.mem_cthickening_of_dist_le
+      (apm_t02a03_attachmentCollarPoint u) 0 (1 / 4 : ℝ)
+      (Set.range apm_t02a03_leftCore)
+      apm_t02a03_origin_mem_both_cores.1
+    rw [dist_zero_right, EuclideanSpace.norm_eq]
+    simp [apm_t02a03_attachmentCollarPoint, Fin.sum_univ_succ]
+    rw [Real.sqrt_sq_eq_abs,
+      abs_of_nonneg (by linarith : 0 ≤ (1 - (u : ℝ)) / 8)]
+    linarith
+  · rintro ⟨s, hs⟩
+    have hz := congrArg (fun q : apm_t02a03_E3 => q 2) hs
+    simp [apm_t02a03_leftCore, apm_t02a03_attachmentCollarPoint] at hz
+    linarith
+
+noncomputable def apm_t02a03_attachmentCollarMap :
+    C(Set.Ico (0 : ℝ) 1, apm_t02a03_geometricY_probe) where
+  toFun u := ⟨apm_t02a03_attachmentCollarPoint u,
+    apm_t02a03_attachmentCollarPoint_mem_geometricY u⟩
+  continuous_toFun := by
+    apply Continuous.subtype_mk
+    unfold apm_t02a03_attachmentCollarPoint
+    apply (PiLp.continuous_toLp 2 _).comp
+    apply continuous_pi
+    intro i
+    fin_cases i <;> simp <;> fun_prop
+
+theorem apm_t02a03_attachmentCollarMap_zero :
+    apm_t02a03_attachmentCollarMap ⟨0, by simp⟩ =
+      ⟨apm_t02a03_meridianAnchor,
+        apm_t02a03_meridianAnchor_mem_geometricY⟩ := by
+  apply Subtype.ext
+  ext i
+  fin_cases i <;>
+    simp [apm_t02a03_attachmentCollarMap,
+      apm_t02a03_attachmentCollarPoint, apm_t02a03_meridianAnchor]
+
 end ConstructionTargets.T02A03GeometricTubeCover
