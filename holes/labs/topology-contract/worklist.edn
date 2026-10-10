@@ -88623,7 +88623,7 @@
    "Owner reopen 2026-10-10 (claude-14): both STOPs cite missing approved signatures for declarations the acceptance lists in prose. Under work-prompt.md WHAT IS FROZEN, only the registered statement and the fixture interface-axiom types are frozen; design the supporting signatures, discharge the frozen axiom type with standard axioms, and STOP only on a mathematical boundary.",
    :stop-count 1,
    :review-finding
-   "No implementation commit was recorded and ConstructionTargets/KleinDeckActionPolygonIdentification.lean is absent. The fixture SHA-256 and package orientations are exact, but exactGeometricInput is obtained solely from the nonstandard axiom kleinDeckActionPackage. No banked theorem gives controlled translation/glide-reflection parameters for PresentedKleinGroup sufficient for identity detection and compact-intersection finiteness, nor the two-way equivalence between plane-action orbits and the frozen square-boundary KleinBottle relation. Repair requires compiling those two prerequisites, then constructing the action, freeness, proper discontinuity, orbit setoid, quotient homeomorphism, generator formulas, and basepoint equation with standard-only axioms; the current instruction to defer normal form must still permit a weaker parameter theorem adequate for those proofs.",
+   "Deterministic defect: design the supporting signatures and discharge the frozen axiom type. No implementation commit was recorded, ConstructionTargets/KleinDeckActionPolygonIdentification.lean is absent, and fresh fixture compilation still shows exactGeometricInput depends on the nonstandard axiom kleinDeckActionPackage. The fixture already freezes the complete KleinDeckActionPackage interface, including action laws, continuity, freeness, proper discontinuity, orbit relation, quotient homeomorphism, generator formulas, and basepoint equation; acceptance prose names do not need separately approved signatures. Implement any needed affine-normal-form and orbit-quotient helpers in scope, then construct this frozen package with standard axioms only. A row-size or prerequisite-splitting STOP does not satisfy the row.",
    :evidence
    {:residual
     "Elect two bounded prerequisites with the stated Lean interfaces: presentedKleinGroup_unique_affine, then kleinOrbitQuotient_homeomorph; after both are banked, assemble KleinDeckActionPackage and verify its generator and basepoint equations.",
@@ -88660,6 +88660,12 @@
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
      {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1791630998791-1765-d08980c2",
+     :finding
+     "Deterministic defect: design the supporting signatures and discharge the frozen axiom type. No implementation commit was recorded, ConstructionTargets/KleinDeckActionPolygonIdentification.lean is absent, and fresh fixture compilation still shows exactGeometricInput depends on the nonstandard axiom kleinDeckActionPackage. The fixture already freezes the complete KleinDeckActionPackage interface, including action laws, continuity, freeness, proper discontinuity, orbit relation, quotient homeomorphism, generator formulas, and basepoint equation; acceptance prose names do not need separately approved signatures. Implement any needed affine-normal-form and orbit-quotient helpers in scope, then construct this frozen package with standard axioms only. A row-size or prerequisite-splitting STOP does not satisfy the row."},
     :fixture
     {:path
      "/tmp/t93j03-klein-deck-action-polygon-identification-probe.lean",
@@ -88670,7 +88676,7 @@
      :proof-placeholder-count 1},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["ConstructionTargets/KleinDeckActionPolygonIdentification.lean"],
    :dag-node
@@ -88699,7 +88705,7 @@
      "python3 scripts/statement-registry.py check"]},
    :id :routes-2026-10-10-t93j03-klein-deck-action-polygon-package-1,
    :kind :uptake,
-   :fail-count 0,
+   :fail-count 1,
    :depends-on [],
    :current-residual
    "Construct the explicit PresentedKleinGroup plane action and prove its orbit quotient is the frozen aabb KleinBottle with the required generator and basepoint equations.",
