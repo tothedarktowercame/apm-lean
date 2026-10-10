@@ -54984,9 +54984,22 @@
       "Measure one closure, one shared theorem, and the global ledger-coherence migration.",
       :other-consumers []}],
     :author "topo-8",
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791605952852-1062-f415dad1",
+     :commands
+     ["bb full-ledger duplicate depends-on census for worklist.edn and worklist2.edn"
+      "bb active-successor distinct-dependency audit from git show 7609aab8:worklist2.edn"
+      "python3 comment-stripped placeholder census from git show 7609aab8 for all 15 topo2 consumers"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 7609aab8:holes/labs/topology-contract/worklist2.edn)"
+      "git diff --quiet 7609aab8^ 7609aab8 -- . ':(exclude)holes/labs/topology-contract/worklist2.edn'"],
+     :finding
+     "Independent of topo-8. PASS: commit 7609aab8 changes only worklist2.edn; this strategy row has empty implementation scope and no fixture or theorem-orientation gate. Fresh census reproduces 92 duplicate-edge rows among 681 worklist.edn items and 69 among the pre-repair worklist2 history; the repaired migration packet now scopes both ledgers plus worklist_check.bb, requires order-preserving deduplication with non-dependency field preservation, an unconditional validator check, and a negative regression. All four newly appended active rows have distinct dependency vectors and exactly one current-checkpoint edge where required. The 15 frozen placeholder counts reproduce as 1,3,3,3,4,1,1,1,1,1,1,1,1,4,1; 131 statements match and the committed 375-item ledger validates. The replacement queue preserves held mathematical boundaries, elects one one-placeholder closure first, one genuinely shared torus packet, the full migration, then checkpoint r5."}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -55002,7 +55015,7 @@
     :routes-2026-09-28-checkpoint-topo2-r1]}
   {:consumer :t94A08,
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t94A08",
    :acceptance
@@ -55018,7 +55031,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/shared/torus-pi1-winding-coordinates",
    :acceptance
@@ -55037,7 +55050,7 @@
    :other-consumers [:t01A02]}
   {:consumer :portfolio,
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope
    ["holes/labs/topology-contract/worklist.edn"
     "holes/labs/topology-contract/worklist2.edn"
