@@ -95451,6 +95451,20 @@
      {:cmd "git status --short",
       :exit 0,
       :finding "clean worktree after commit"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791652415967-2500-17267b7d",
+     :commands
+     ["git show 55a496906b18109c20339cbe20b8f05ffd56f091 -- ConstructionTargets/KleinSquareEqvGenCasesIff.lean"
+      "git diff --exit-code 55a496906b18109c20339cbe20b8f05ffd56f091 -- ConstructionTargets/KleinSquareEqvGenCasesIff.lean"
+      "lake build ConstructionTargets.KleinSquareEqvGenCasesIff"
+      "sha256sum /tmp/klein-square-eqvgen-cases-iff.lean && lake env lean /tmp/klein-square-eqvgen-cases-iff.lean"
+      "placeholder census on source, fixture, and problems/t93J03/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb on recorded ledger at 55f16c47"],
+     :finding
+     "PASS: reviewer codex-3 verified recorded commit 55a49690 changes only KleinSquareEqvGenCasesIff.lean and the source equals that commit. Canonical packages resolve correctly; the frozen fixture hash is exact; target and fixture compile with zero placeholders; t93J03 retains exactly one placeholder; eqvGen_iff_cases reports only propext, Classical.choice, and Quot.sound; all 131 registered statements and the recorded 830-item ledger validate. The theorem has the required orientation EqvGen SquareRel p q iff Cases p q: eqvGen_cases supplies the forward implication and cases_eqvGen supplies the reverse, with both closed-square hypotheses passed correctly. The module makes no disk-square homeomorphism, SurfaceRel transport, or quotient claim, leaving those representation bridges explicit."},
     :commit "55a496906b18109c20339cbe20b8f05ffd56f091",
     :changed-paths
     ["ConstructionTargets/KleinSquareEqvGenCasesIff.lean"],
@@ -95464,7 +95478,7 @@
      :declarations ["KleinSquareEqvGenCasesIff.eqvGen_iff_cases"]},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/KleinSquareEqvGenCasesIff.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/square-boundary-orbit-eqvgen/square-eqvgen-cases-iff",
@@ -95572,7 +95586,7 @@
       "eqvGen_iff_cases states the exact finite comparison: for endpoints in the closed unit square, Relation.EqvGen SquareRel p q if and only if the banked affine-orbit Cases disjunction holds."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/square-boundary-orbit-eqvgen",
@@ -96650,7 +96664,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "KleinSquareEqvGenCasesIff.eqvGen_iff_cases",
@@ -96661,7 +96675,9 @@
     :reported-by [:routes-2026-10-10-klein-square-eqvgen-cases-iff-35],
     :type
     "For p and q in the closed unit square, Relation.EqvGen SquareRel p q iff Cases p q",
-    :proved-in :routes-2026-10-10-klein-square-eqvgen-cases-iff-35},
+    :proved-in :routes-2026-10-10-klein-square-eqvgen-cases-iff-35,
+    :banked-by :routes-2026-10-10-klein-square-eqvgen-cases-iff-35,
+    :banked-commit "55a496906b18109c20339cbe20b8f05ffd56f091"},
    :id :lemma-kleinsquareeqvgencasesiff-eqvgen-iff-cases,
    :kind :lemma,
    :depends-on
