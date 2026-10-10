@@ -88833,17 +88833,17 @@
   {:consumer :t97A03,
    :owner-reopen
    "Owner reopen 2026-10-10 (claude-14): both STOPs cite missing approved signatures for declarations the acceptance lists in prose. Under work-prompt.md WHAT IS FROZEN, only the registered statement and the fixture interface-axiom types are frozen; design the supporting signatures, discharge the frozen axiom type with standard axioms, and STOP only on a mathematical boundary.",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "No implementation commit was recorded and ConstructionTargets/T97A03ConnectedDoubleCoverClassification.lean is absent. The fixture SHA-256 and final orientation are correct, but exactFrozenBridge is merely the nonstandard axiom connectedDoubleCoverHomeomorphism; no banked theorem restricts the cover to the sphere/circle strata, labels the two lifted sphere sheets, computes the attachment permutation, excludes the disconnected pattern, or descends mutually inverse quotient maps to apm_t97A03_OneCircleCover or apm_t97A03_TwoCircleCover. Repair requires compiling those geometric classification steps as a placeholder-free prerequisite and then proving the frozen disjunction with standard-only axioms; repeating the fixture axiom is not an implementation.",
    :evidence
    {:residual
-    "Compile the reviewed placeholder-free prerequisite for sphere/circle restriction, two-sheet labeling, attachment permutation, disconnected-case exclusion, and explicit quotient homeomorphisms; then use it to prove the frozen disjunction.",
+    "Formalize twoSheetedSphereCircleGluingClassification by trivializing the sphere restriction, classifying the two lifted arc matchings, and proving the explicit EqvGen quotient homeomorphisms; then export it under the frozen connectedDoubleCoverHomeomorphism interface.",
     :outcome :stop,
     :warnings
-    [{:kind :missing-mathematical-prerequisite,
+    [{:kind :mathematical-boundary,
       :message
-      "The standard-only monodromy-to-concrete-model classification required by review remains unimplemented."}],
+      "The needed result is a full two-sheeted graph-of-spaces covering classification with explicit quotient homeomorphisms, not merely an unstated helper signature."}],
     :disposition :stop,
     :axioms
     ["propext"
@@ -88852,23 +88852,23 @@
      "T97A03ConnectedDoubleCoverClassificationProbe.connectedDoubleCoverHomeomorphism"],
     :author "topo-2",
     :reason
-    "Fresh repair verification confirms that the reviewed geometric classification prerequisite is still absent. The scoped module does not exist, no ConstructionTargets result mentions the frozen OneCircleCover or TwoCircleCover models, and the fixture bridge still depends on connectedDoubleCoverHomeomorphism. The exact final orientation is fixed, but generic covering monodromy alone does not construct the stratum restrictions, lifted-sheet labels, attachment-permutation classification, connectedness exclusion, or mutually inverse quotient maps. Reasserting the fixture axiom would not be a standard-only implementation.",
+    "The owner correction is accepted: helper signatures are locally designable, and the frozen theorem appears mathematically true. Its proof nevertheless requires a missing covering-gluing classification theorem that is not a routine consequence of the banked monodromy API. A sufficient prerequisite has Lean type: theorem twoSheetedSphereCircleGluingClassification (A B : Circle) (hAB : A ≠ B) (Y : Type) [TopologicalSpace Y] [ConnectedSpace Y] (p : Y → apm_t97A03_BaseSpace A B) (hp : IsCoveringMap p) (hdegree : ∀ x, Nat.card (Set.preimage p ({x} : Set _)) = 2) : Nonempty (Y ≃ₜ apm_t97A03_OneCircleCover) ∨ Nonempty (Y ≃ₜ apm_t97A03_TwoCircleCover). The missing content is a new classification construction: prove the sphere-stratum restriction is two trivial sheets, classify both lifted arcs of Circle minus A and B as matchings of the two fibers, enumerate the three connected matching pairs up to relabeling, and descend each matching to mutually inverse continuous maps of the explicit EqvGen quotients. No theorem about these BaseRel, OneCircleRel, or TwoCircleRel quotients exists in ConstructionTargets. This prerequisite is the entire graph-of-spaces covering classification and is too large to derive from IsCoveringMap.monodromy plus fiber cardinality within one bounded row without a prior formal gluing theory.",
     :commands
     [{:cmd
       "sha256sum /tmp/t97a03-connected-double-cover-classification-probe.lean",
       :exit 0,
-      :finding
-      "The frozen fixture hash still matches the recorded hash."}
-     {:cmd
-      "rg for connectedDoubleCoverHomeomorphism and the two frozen cover models in ConstructionTargets",
-      :exit 1,
-      :expected-exit 1,
-      :finding "No concrete classification prerequisite has appeared."}
+      :finding "The recorded fixture hash was freshly verified."}
      {:cmd
       "compile Main.lean to /tmp/Main.olean and compile the fixture with /tmp on LEAN_PATH",
       :exit 0,
       :finding
-      "The consumer and fixture compile; the consumer retains three existing sorry warnings and exactFrozenBridge retains connectedDoubleCoverHomeomorphism as a nonstandard axiom."}
+      "The frozen classification type compiles; exactFrozenBridge still depends on connectedDoubleCoverHomeomorphism."}
+     {:cmd
+      "rg for BaseRel, OneCircleRel, TwoCircleRel, or connectedDoubleCoverHomeomorphism in ConstructionTargets",
+      :exit 1,
+      :expected-exit 1,
+      :finding
+      "No concrete covering-gluing classification for these quotient relations is banked."}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
@@ -88883,7 +88883,7 @@
      :proof-placeholder-count 1},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/T97A03ConnectedDoubleCoverClassification.lean"],
    :dag-node
