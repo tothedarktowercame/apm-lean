@@ -899,6 +899,21 @@
       "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
       :exit 0}
      {:cmd "git status --short", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791673694745-3224-074b2e97",
+     :commands
+     ["sha256sum /tmp/manifold_fundamental_class_integral_transition_sign.lean"
+      "git hash-object and git rev-parse source comparison"
+      "lake env lean /tmp/manifold_fundamental_class_integral_transition_sign.lean"
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"
+      "rg placeholder and axiom census"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped placeholder census for t00J02 and t98A02"],
+     :finding
+     "PASS: implementation commit bb485833 changes exactly ConstructionTargets/ManifoldFundamentalClass.lean and its blob matches the reviewed source; post-promotion harness hash matches a8b4238968a6d49cd9fa5aa28ff39d23c2a776ef976c97692d6cd9972743d6b6; the proof derives the integral unit sign dichotomy from u.val_inv and Int.eq_one_or_neg_one_of_mul_eq_one, preserving both u=1 and u=-1 branches with the required orientation; it introduces no orientation predicate or global class; source and harness compile with zero placeholders and only propext, Classical.choice, and Quot.sound; 131 statements match and consumer counts remain t00J02=1, t98A02=1"},
     :commit "bb485833aa727c444b66054b982bb74d93290d6c",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -916,7 +931,7 @@
      "Added the exact integral overlap transition-unit sign dichotomy, deriving the one-or-negative-one alternatives from the unit inverse equation without discarding either branch."},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/integral-transition-sign-dichotomy",
@@ -1027,7 +1042,7 @@
      "The reviewed preconnected-overlap propagation theorem is banked. For integral coefficients, the concrete transition scalar is a unit of the integers, so its value is necessarily one or negative one. The fixture proves this directly from the unit inverse equation and Int.eq_one_or_neg_one_of_mul_eq_one; it introduces no orientation predicate or unvalidated model. Thus the geometric orientation obligation is reduced to excluding the explicit negative-one branch. After that, the banked propagation and generator-equality results supply overlap coherence, while construction of the absolute global class remains separate.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -2357,7 +2372,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -2374,7 +2389,10 @@
     "forall (m : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (EuclideanSpace Real (Fin (m + 2))) M] (a b : M) (x : CoefficientOverlapPair.common m a b), overlapTransitionUnit Int m a b x = 1 or overlapTransitionUnit Int m a b x = -1",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-10-manifold-integral-transition-sign-topo3-r1},
+    :routes-2026-10-10-manifold-integral-transition-sign-topo3-r1,
+    :banked-by
+    :routes-2026-10-10-manifold-integral-transition-sign-topo3-r1,
+    :banked-commit "bb485833aa727c444b66054b982bb74d93290d6c"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-integraloverlaptransitionunit-eq-one-or-neg-one,
    :kind :lemma,
