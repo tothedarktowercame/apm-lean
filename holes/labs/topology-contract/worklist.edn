@@ -94378,103 +94378,97 @@
    "This single-consumer geometric lemma is the next ready dependency of the elected one-placeholder t93J03 route; the coordinate algebra it needs is now banked.",
    :consumer :t93J03,
    :implements-lemma :lemma-kleinplaneaction-squareorbitclassification,
+   :gates
+   ["lake build ConstructionTargets.KleinPlaneActionSquareOrbitClassification"
+    "fixture compiles"
+    "zero source and fixture sorry"
+    "standard-only axioms"
+    "registry check"],
    :evidence
    {:probe
     {:residual
-     "Closed-square representatives and both complete one-dimensional integer case splits now compile. The original row is reduced to substituting the group coordinates, forcing the vertical shift to -1, 0, or 1, simplifying the corresponding inversion sign, and assembling the finite same-orbit disjunction.",
-     :outcome :revise,
-     :warnings [],
+     "Implement the compiled fixture canonically in ConstructionTargets/KleinPlaneActionSquareOrbitClassification.lean; after review, the t93J03 route can proceed to the boundary EqvGen comparison.",
+     :outcome :go,
+     :warnings
+     [{:kind :linter,
+       :message
+       "The converse witness proof reports an unreachable trailing ring tactic in one branch; the theorem and fixture compile without placeholders."}
+      {:kind :dirty-worktree,
+       :message
+       "The pre-existing untracked holes/labs/topology-contract/worklist2.edn.tmp was not read or modified by this probe."}],
      :missing-theorems
      [{:name "kleinPlaneAction_squareOrbitClassification",
        :type
-       "Affine PresentedKleinGroup action on Real times Real with explicit coordinate formula, closed-square representatives for every orbit, and a complete same-orbit classification for square points including edges and corners",
-       :status :partial,
+       "Affine PresentedKleinGroup action on Real times Real with explicit coordinate formula, closed-square representatives for every orbit, and a complete iff same-orbit classification for square points including edges and corners",
+       :status :proved,
        :consumers [:t93J03],
        :depends-on
        ["KleinPlaneAffineAction.planeAction"
         "KleinSquareRepresentative.exists_closedSquare_smul"
         "UnitIntervalIntegerClassification.translation"
         "UnitIntervalIntegerClassification.reflection"]}],
-     :prerequisite
-     {:bounded-exception
-      "This single-consumer pair of elementary interval lemmas is the exact arithmetic case split required to turn the banked coordinate action into the final finite edge-and-corner orbit disjunction.",
-      :consumer :t93J03,
-      :phase :implementation,
-      :state :open,
-      :scope
-      ["ConstructionTargets/UnitIntervalIntegerClassification.lean"],
-      :dag-node
-      "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/plane-action-square-orbit-classification/unit-interval-integer-cases",
-      :acceptance
-      {:implementation
-       "Prove two closed-unit-interval classification theorems. First, if x,y are in [0,1] and y=(m:Int)+x, prove exactly the m=-1 left/right endpoint case, m=0 equality case, or m=1 opposite endpoint case. Second, if y=(m:Int)-x, prove exactly the m=0 (0,0) corner, m=1 reflected formula y=1-x, or m=2 (1,1) corner. Derive integer bounds by exact_mod_cast and split them with omega. Do not mention the Klein action, form a quotient, or compare EqvGen relations.",
-       :placeholder "the single sorry in apm_t93j03",
-       :route-step
-       "t93J03 step 1b.4, finite unit-interval arithmetic used by the square orbit edge/corner classification",
-       :fixture "/tmp/unit-interval-integer-classification.lean",
-       :fixture-sha256
-       "d3b6b28f437d762a3136d344cdbb762b04c58b3e31d1bd4f93deeb66872a85aa",
-       :gates
-       ["lake build ConstructionTargets.UnitIntervalIntegerClassification"
-        "fixture compiles"
-        "zero source and fixture sorry"
-        "standard-only axioms"
-        "registry check"]},
-      :id :routes-2026-10-10-unit-interval-integer-classification-27,
-      :kind :reusable-theorem,
-      :depends-on [:routes-2026-10-10-klein-square-representative-26],
-      :current-residual
-      "Extract integer coordinates from coordinateEquiv g, use vertical translation classification to force n=-1,0,1, reduce the inversion sign in those three cases, and apply translation or reflection classification to enumerate the square orbit disjunction.",
-      :other-consumers []},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
-     [{:cmd "lake build ConstructionTargets.KleinSquareRepresentative",
+     [{:cmd
+       "lake build ConstructionTargets.UnitIntervalIntegerClassification",
        :exit 0,
        :finding
-       "the banked affine action and closed-square representative theorem compile canonically"}
+       "the canonical affine action, square representative, and interval-classification dependency chain compiles"}
+      {:cmd "lake env lean /tmp/klein-square-orbit-cases.lean",
+       :exit 0,
+       :finding
+       "the complete same-orbit iff classification compiles; its printed axioms are propext, Classical.choice, and Quot.sound"}
+      {:cmd "sha256sum /tmp/klein-square-orbit-cases.lean",
+       :exit 0,
+       :finding
+       "73cd7a73092fdc1fc28f3cf5ab8c193b52fa17d8830c7b6094db37defbb459aa"}
       {:cmd
-       "lake env lean /tmp/unit-interval-integer-classification.lean",
-       :exit 0,
-       :finding
-       "the complete translation and reflection classifications on the closed unit interval compile with standard axioms"}
-      {:cmd "sha256sum /tmp/unit-interval-integer-classification.lean",
-       :exit 0,
-       :finding
-       "d3b6b28f437d762a3136d344cdbb762b04c58b3e31d1bd4f93deeb66872a85aa"}
-      {:cmd
-       "rg -n \"\\b(sorry|admit)\\b\" /tmp/unit-interval-integer-classification.lean",
+       "rg -n \"\\b(sorry|admit)\\b\" /tmp/klein-square-orbit-cases.lean",
        :exit 1,
        :expected-exit 1,
        :finding "no placeholders"}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :finding "131 registered statements match, 0 do not"}
-      {:cmd "git status --short", :exit 0, :finding "clean"}],
-     :diagnostic-history [],
+      {:cmd "git status --short",
+       :exit 0,
+       :finding
+       "only the pre-existing untracked holes/labs/topology-contract/worklist2.edn.tmp is present; the probe remained read-only"}],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/klein-square-orbit-cases.lean",
+       :exit 1,
+       :finding
+       "the first classification statement accidentally attached the vertical equation n=-1 to the horizontal witness m; removed that mistyped conjunct and retained the correct forced endpoint equations"}
+      {:cmd "lake env lean /tmp/klein-square-orbit-cases.lean",
+       :exit 1,
+       :finding
+       "the first iff edit inserted the remaining forward branches after the converse theorem and referenced branch-local names under all_goals; restored the forward branches before the converse and used each branch context directly"}],
      :fixture
-     {:path "/tmp/unit-interval-integer-classification.lean",
+     {:path "/tmp/klein-square-orbit-cases.lean",
       :sha256
-      "d3b6b28f437d762a3136d344cdbb762b04c58b3e31d1bd4f93deeb66872a85aa",
+      "73cd7a73092fdc1fc28f3cf5ab8c193b52fa17d8830c7b6094db37defbb459aa",
       :interface
-      "translation classifies y=m+x with x,y in [0,1] into the three shifts m=-1,0,1 and proves the forced endpoint equalities; reflection classifies y=m-x into m=0,1,2 and proves the two corner degeneracies and the reflected-edge formula y=1-x."},
+      "InSquare is the closed unit square. Cases explicitly enumerates the three possible vertical shifts and, within each, every translation or reflection case including forced edges and corners. sameOrbit_iff_cases proves that two square points are related by the PresentedKleinGroup affine action exactly when Cases holds; the imported affine-action and square-representative declarations provide the requested action formula, generator formulas, and orbit representatives."},
+     :implementation
+     {:scope
+      ["ConstructionTargets/KleinPlaneActionSquareOrbitClassification.lean"],
+      :acceptance
+      "Bank InSquare, Cases, sameOrbit_cases, cases_sameOrbit, and sameOrbit_iff_cases together with re-exports of the imported coordinate action, generator formulas, and closed-square representative theorem. Preserve the compiled disjunction exactly: vertical shifts -1 and 1 use reflection cases m=0,1,2; vertical shift 0 uses translation cases m=-1,0,1. Do not form a quotient, compare EqvGen relations, or construct a homeomorphism.",
+      :gates
+      ["lake build ConstructionTargets.KleinPlaneActionSquareOrbitClassification"
+       "fixture compiles"
+       "zero source and fixture sorry"
+       "standard-only axioms"
+       "registry check"]},
      :seat "topo-4"}},
-   :phase :probe,
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/KleinPlaneActionSquareOrbitClassification.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/plane-action-square-orbit-classification",
    :acceptance
-   {:probe
-    "Compile the affine action of PresentedKleinGroup on Real times Real obtained from the banked integer-pair coordinate equivalence, with a acting by horizontal unit translation and b by a glide reflection. Prove the closed-fundamental-square orbit classification needed downstream: give the coordinate formula for every a^m*b^n action, show every plane orbit meets the closed square, and characterize all pairs of square points in one orbit, including each edge and corner case. Do not form a quotient, compare EqvGen relations, or construct a homeomorphism.",
-    :placeholder "the single sorry in apm_t93j03",
-    :route-step
-    "t93J03 step 1b, affine plane action and square orbit classification before the boundary EqvGen comparison",
-    :gates
-    ["canonical packages"
-     "fixture compiles"
-     "zero fixture sorry"
-     "standard-only axioms"
-     "registry check"]},
+   "Bank InSquare, Cases, sameOrbit_cases, cases_sameOrbit, and sameOrbit_iff_cases together with re-exports of the imported coordinate action, generator formulas, and closed-square representative theorem. Preserve the compiled disjunction exactly: vertical shifts -1 and 1 use reflection cases m=0,1,2; vertical shift 0 uses translation cases m=-1,0,1. Do not form a quotient, compare EqvGen relations, or construct a homeomorphism.",
    :id
    :routes-2026-10-10-klein-plane-action-square-orbit-classification-23,
    :kind :reusable-theorem,
@@ -95027,7 +95021,9 @@
     [:routes-2026-10-10-checkpoint-topo1-after-schreier-type-valued-basis-16
      :routes-2026-10-10-klein-plane-action-square-orbit-classification-23],
     :type
-    "Classify equality of Klein plane-action orbits using the integer-pair normal form, including all representatives meeting the closed unit square and the edge/corner cases."},
+    "Classify equality of Klein plane-action orbits using the integer-pair normal form, including all representatives meeting the closed unit square and the edge/corner cases.",
+    :proved-in
+    :routes-2026-10-10-klein-plane-action-square-orbit-classification-23},
    :id :lemma-kleinplaneaction-squareorbitclassification,
    :kind :lemma,
    :depends-on
