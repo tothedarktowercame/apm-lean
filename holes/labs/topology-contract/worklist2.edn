@@ -60698,46 +60698,62 @@
    "single-consumer continuous ambient reconstruction formula for the t02A03 punctured left tube",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/t02a03_geometric_tube_cover.lean",
-      :sha256
-      "65b54a8849eed3ce2408d4d7e49f5ef3556f2c9c83d50745ba3de5a923be308f"},
-     :commands
-     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "apm_t02a03_leftTubeTorusPoint and apm_t02a03_continuous_leftTubeTorusPoint compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
-       :exit 0}
-      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "65b54a8849eed3ce2408d4d7e49f5ef3556f2c9c83d50745ba3de5a923be308f  /tmp/t02a03_geometric_tube_cover.lean"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :implementation
-     {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
-      :declarations
-      ["apm_t02a03_leftTubeTorusPoint"
-       "apm_t02a03_continuous_leftTubeTorusPoint"],
-      :acceptance
-      {:implementation
-       "Add the two compiled declarations from the verified fixture to ConstructionTargets/T02A03GeometricTubeCover.lean without changing their types or the frozen consumer. Compile the scoped module, confirm the scoped file contains no sorry token, run the statement registry check, and report the declarations' axioms.",
-       :gates
-       ["scoped module compiles"
-        "scoped file contains no sorry token"
-        "statement registry matches"]}},
-     :finding
-     "The fixture completely supplies this bounded row. The ambient inverse-coordinate formula places a torus pair at fixed normal radius 1/8 around the frozen left core, using the first Circle as core angle and the second Circle as normal angle. Explicit Euclidean coordinate continuity proves the realization continuous.",
-     :residual
-     "After banking the ambient realization, prove its image lies in the frozen left tube and outside the frozen core, bundle it into LeftTubeMinusCore, and construct both comparison homotopies."}},
+   {:placeholder-delta
+    {:path "ConstructionTargets/T02A03GeometricTubeCover.lean",
+     :before 0,
+     :after 0,
+     :delta 0},
+    :git-author "Joe Corneli <holtzermann17@gmail.com>",
+    :residual
+    "Prove the ambient realization lies in the frozen left-tube complement, bundle it as the inverse coordinate map, and construct both comparison homotopies.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not",
+     :declaration-packet-sha256
+     "d1a0779b400dc9ce693214ec253f9b79f37f77bdf2fb401858c13da0cc4cdaab"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+      :exit 0,
+      :output
+      "65b54a8849eed3ce2408d4d7e49f5ef3556f2c9c83d50745ba3de5a923be308f  /tmp/t02a03_geometric_tube_cover.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeCover.lean",
+      :exit 0}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeCover.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "lake env lean /tmp/t02a03_geometric_tube_cover.lean | rg \"continuous_leftTubeTorusPoint\"",
+      :exit 0,
+      :output
+      "'apm_t02a03_continuous_leftTubeTorusPoint' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd "git commit -m \"Bank t02A03 left-tube torus realization\"",
+      :exit 0,
+      :output
+      "[master a3cc206e] Bank t02A03 left-tube torus realization; 1 file changed, 15 insertions(+)"}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "a3cc206e25eb6f54ac2381d9f4a1d38640647571",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
+    :fixture
+    {:path "/tmp/t02a03_geometric_tube_cover.lean",
+     :sha256
+     "65b54a8849eed3ce2408d4d7e49f5ef3556f2c9c83d50745ba3de5a923be308f"},
+    :finding
+    "Banked the continuous ambient reconstruction formula from Circle times Circle at fixed normal radius 1/8 around the frozen left core. This row establishes only the Euclidean formula and its continuity.",
+    :declarations
+    ["apm_t02a03_leftTubeTorusPoint"
+     "apm_t02a03_continuous_leftTubeTorusPoint"],
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-torus-point",
    :acceptance
