@@ -56927,13 +56927,27 @@
       :exit 0,
       :output "131 registered statements match, 0 do not"}
      {:cmd "git status --short", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791614534517-1376-f1cb6bd1",
+     :commands
+     ["sha256sum /tmp/torus_frozen_pi1_native_coordinate_mk.lean"
+      "lake env lean /tmp/torus_frozen_pi1_native_coordinate_mk.lean"
+      "rg theorem declarations in fixture and canonical target"
+      "lake env lean ConstructionTargets/TorusPiOneWindingCoordinates.lean"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 21ca5ee6:holes/labs/topology-contract/worklist2.edn)"
+      "recompute frozen t97A04 SHA-256 and placeholder count from commit 21ca5ee6"],
+     :finding
+     "PASS: codex-7 independently reviewed topo-6 STOP. Transition 21ca5ee6 changes only the ledger. The current fixture hash b1d752a65e5684506b9266b696e51e602f164788f118dc2e621ddaf93d6e1005 matches and compiles placeholder-free, but it locally declares the missing prerequisite frozenHomeomorphPi1_mk before the elected frozenTorusPi1Coord_mk_native wrapper. The canonical target contains neither declaration because the prerequisite row stopped on its missing authenticated fixture. Copying both would bypass the declared dependency and exceed this row’s one-declaration scope. The native dependent-codomain orientation in the fixture is correct, but banking must wait. Registry is 131/0; ledger is 396 items OK; frozen t97A04 remains 79ca854186b39183bf53490a20b5be92695e345a2c099fcf928b5ad3300ee4ec with four placeholders. Exact repair: restore and bank the authenticated prerequisite first, then bank only the two-rewrite wrapper."},
     :fixture
     {:path "/tmp/torus_frozen_pi1_native_coordinate_mk.lean",
      :sha256
      "b1d752a65e5684506b9266b696e51e602f164788f118dc2e621ddaf93d6e1005"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A04/torus-pi1-winding-coordinates/frozen-native-coordinate-mk",
@@ -57017,7 +57031,7 @@
       "Compare the native transported coordinate value exactly with torusPi1Coord of frozenCircleImagePath at (1,1), then apply representative conjugacy and Circle matrix naturality.",
       :other-consumers []}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/shared/torus-pi1-winding-coordinates",
    :acceptance
