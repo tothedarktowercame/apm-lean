@@ -58929,55 +58929,65 @@
    "single-consumer closed deleted-origin collar and endpoint data for the t02A03 attachment",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/t02a03_geometric_tube_cover.lean",
-      :sha256
-      "bb82c936255c929f89649e9f2a2cfccce51abd90beceebbe7ac5251465dfca23"},
-     :commands
-     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "apm_t02a03_attachmentCollarClosureMap, apm_t02a03_attachmentCollarClosureMap_zero, and apm_t02a03_attachmentCollarClosureMap_one compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
-       :exit 0}
-      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "bb82c936255c929f89649e9f2a2cfccce51abd90beceebbe7ac5251465dfca23  /tmp/t02a03_geometric_tube_cover.lean"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}
-      {:cmd
-       "rg -n '^((noncomputable )?def|theorem) apm_t02a03_attachmentCollarClosureMap(_zero|_one)?' /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "340:noncomputable def apm_t02a03_attachmentCollarClosureMap :\n349:theorem apm_t02a03_attachmentCollarClosureMap_zero :\n357:theorem apm_t02a03_attachmentCollarClosureMap_one :"}],
-     :finding
-     "A complete placeholder-free fixture compiles for this bounded row. The vertical collar extends continuously from Set.Ico 0 1 to a Euclidean-space map on Set.Icc 0 1. Its zero endpoint is exactly the banked meridian anchor and its one endpoint is exactly the Euclidean origin. The existing Ico restriction remains the part valued in geometricY, so the proof does not incorrectly assert that the deleted origin belongs to the complement.",
-     :residual
-     "Promote the continuous closed collar and its endpoint equalities. The next consumer residual is to identify the punctured right-core end with the origin endpoint, construct the attachment homotopy to the based Circle meridian, and extend it over the tube pieces for gluing.",
-     :implementation
-     {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
-      :acceptance
-      {:declarations
-       ["apm_t02a03_attachmentCollarClosureMap"
-        "apm_t02a03_attachmentCollarClosureMap_zero"
-        "apm_t02a03_attachmentCollarClosureMap_one"],
-       :fixture-sha256
-       "bb82c936255c929f89649e9f2a2cfccce51abd90beceebbe7ac5251465dfca23",
-       :gates
-       ["lake env lean ConstructionTargets/T02A03GeometricTubeCover.lean"
-        "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeCover.lean || true)\""
-        "python3 scripts/statement-registry.py check"],
-       :axioms ["propext" "Classical.choice" "Quot.sound"],
-       :consumer-residual
-       "Identify the punctured right-core end with the closed collar's origin endpoint; then construct attachment and tube-deformation data. No endpoint-in-geometricY or gluing claim belongs to this packet."}}}},
+   {:placeholder-delta 0,
+    :residual
+    "Identify the punctured right-core end with the closed collar's origin endpoint; then construct attachment and tube-deformation data. No endpoint-in-geometricY or gluing claim belongs to this packet.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["An unrelated untracked holes/labs/topology-contract/worklist.edn.tmp was regenerated concurrently; it was preserved untouched and is absent from the scoped commit."],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+      :exit 0,
+      :output
+      "bb82c936255c929f89649e9f2a2cfccce51abd90beceebbe7ac5251465dfca23  /tmp/t02a03_geometric_tube_cover.lean"}
+     {:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+      :exit 0,
+      :output
+      "The three closed-collar declarations compiled; axioms [propext, Classical.choice, Quot.sound]."}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeCover.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.T02A03GeometricTubeCover",
+      :exit 0,
+      :output "Build completed successfully (8240 jobs)."}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeCover.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "comment-stripped placeholder census for problems/t02A03/lean/Main.lean",
+      :exit 0,
+      :output "1"}
+     {:cmd "sha256sum problems/t02A03/lean/Main.lean",
+      :exit 0,
+      :output
+      "b123eca388ab2858ca55daf538c1ddd645022b52f5196a15f0bb516d78323d7d  problems/t02A03/lean/Main.lean"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r 2f31fc9836f01d351db3f58f575654779c5aea15",
+      :exit 0,
+      :output "ConstructionTargets/T02A03GeometricTubeCover.lean"}
+     {:cmd "git status --short",
+      :exit 0,
+      :output "?? holes/labs/topology-contract/worklist.edn.tmp"}],
+    :commit "2f31fc9836f01d351db3f58f575654779c5aea15",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
+    :fixture
+    {:path "/tmp/t02a03_geometric_tube_cover.lean",
+     :sha256
+     "bb82c936255c929f89649e9f2a2cfccce51abd90beceebbe7ac5251465dfca23"},
+    :declarations
+    ["ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_attachmentCollarClosureMap"
+     "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_attachmentCollarClosureMap_zero"
+     "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_attachmentCollarClosureMap_one"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/geometric-attachment-collar-closure",
