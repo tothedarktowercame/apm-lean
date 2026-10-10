@@ -60930,6 +60930,20 @@
       :output
       "[master f35eab20] Bank t02A03 torus-point tube membership; 1 file changed, 13 insertions(+)"}
      {:cmd "git status --short", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791638750568-2037-74f3feac",
+     :commands
+     ["git show, diff-tree, and show --check on implementation f35eab20 and ledger transition 14f3535e"
+      "sha256sum authenticated fixture and frozen t02A03 consumer"
+      "lake env lean on fixture, target, and fresh closed-tube membership probe"
+      "lake build ConstructionTargets.T02A03GeometricTubeCover"
+      "recomputed declaration-type hash and comment-stripped placeholder counts"
+      "python3 scripts/statement-registry.py check --rev f35eab20"
+      "bb worklist_check.bb on committed transition ledger"],
+     :finding
+     "PASS: codex-7 independently reviewed topo-6 commit f35eab209803a1fdb662c79713745ca1cd79e940. Exact implementation scope is ConstructionTargets/T02A03GeometricTubeCover.lean; transition 14f3535ea9309a305a0cd75db10b3da840168021 is ledger-only. Fixture SHA-256 is 57d3f54ecf627c51f04338c2b426f1eb01997e985d542830a07f3359ca1bc767. Fixture, recorded-identical target, fresh membership probe, and 8240-job focused build pass. The theorem has exactly the frozen type and concludes that every reconstructed torus point belongs to the exact frozen closed left tube. It supplies leftCoreCircle of the first Circle coordinate as the center, transports that center into the original real-parameter Set.range leftCore, and uses the banked exact distance one eighth, correctly bounded by the frozen cthickening radius one quarter. No exclusion from the core, bundled inverse, comparison homotopy, torus equivalence, or gluing is claimed. Axioms are exactly propext, Classical.choice, and Quot.sound. Declaration type hash reproduces as 7210f9a81d69b064ad3281717ede41fbe7e1242efd82b01609dd04479ac2ed2e; target has zero executable placeholders. Frozen t02A03 consumer hash is b123eca388ab2858ca55daf538c1ddd645022b52f5196a15f0bb516d78323d7d with one executable placeholder; registry is 131/0 and the committed 439-row ledger validates with exactly one done-unreviewed row."},
     :commit "f35eab209803a1fdb662c79713745ca1cd79e940",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
@@ -60942,7 +60956,7 @@
     "Banked frozen left-tube membership for every reconstructed torus point by using the corresponding frozen core point and the exact distance 1/8 within the closed-thickening radius 1/4.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/left-tube-torus-point-membership",
@@ -61026,7 +61040,7 @@
    :phase :probe,
    :type
    "Nonempty (ContinuousMap.HomotopyEquiv LeftTubeMinusCore ConstructionTargets.TorusCircleWedgeOpenCover.Torus)",
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-punctured-model",
    :acceptance
