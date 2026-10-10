@@ -83099,76 +83099,69 @@
    "aa9153e037a78ff99237612440302e78e45b9441a451ddf7fdd00b1bd6f6450e",
    :consumer :t94J09,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-4",
-     :fixture
-     {:path "/tmp/compact-closed-equivalence-quotient-complete.lean",
-      :sha256
-      "aa9153e037a78ff99237612440302e78e45b9441a451ddf7fdd00b1bd6f6450e"},
-     :commands
-     [{:cmd "stat -c '%F %n' .lake/packages",
-       :exit 0,
-       :finding
-       "directory .lake/packages; /home/joe/code/apm-lean is the canonical package authority checkout"}
-      {:cmd
-       "sha256sum /tmp/compact-closed-equivalence-quotient-probe.lean",
-       :exit 0,
-       :finding
-       "85d98a50ee78e2aa220e73f6f515cefd82c73831bf29a9e58f8a282fb483af9c; the dependency fixture remains intact"}
-      {:cmd
-       "lake env lean ConstructionTargets/CompactClosedEquivalenceQuotient.lean",
-       :exit 0,
-       :finding
-       "both saturated-neighborhood and quotient-T2 declarations depend only on propext, Classical.choice, and Quot.sound"}
-      {:cmd
-       "lake env lean /tmp/compact-closed-equivalence-quotient-complete.lean",
-       :exit 0,
-       :finding
-       "the exact generic theorem elaborates from the banked implementation with standard axioms"}
-      {:cmd
-       "sha256sum /tmp/compact-closed-equivalence-quotient-complete.lean",
-       :exit 0,
-       :finding
-       "aa9153e037a78ff99237612440302e78e45b9441a451ddf7fdd00b1bd6f6450e"}
-      {:cmd
-       "Python comment-stripped placeholder census of /tmp/compact-closed-equivalence-quotient-complete.lean",
-       :exit 0,
-       :finding "0"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :finding "131 registered statements match, 0 do not"}
-      {:cmd "git status --short", :exit 0, :finding "clean"}],
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :warnings
-     [{:kind :downstream-boundary,
-       :message
-       "The generic compact closed-equivalence quotient theorem is complete. Each polygon consumer must still prove that its exact finite EqvGen relation graph is closed before applying it."}],
-     :implementation
-     {:scope
-      ["ConstructionTargets/CompactClosedEquivalenceQuotient.lean"],
-      :fixture
-      "/tmp/compact-closed-equivalence-quotient-complete.lean",
-      :fixture-sha256
-      "aa9153e037a78ff99237612440302e78e45b9441a451ddf7fdd00b1bd6f6450e",
-      :route-step
-      "generic corrected Hausdorff foundation before exact polygon EqvGen closedness",
-      :declarations
-      ["exists_disjoint_open_saturated_of_isClosed_setoid"
-       "compact_closed_equivalence_quotient_t2"],
-      :instructions
-      "The dependency commit 81ab9dbb already supplies the exact scoped implementation. Verify that commit and the completed fixture, preserve both declarations and their standard-only axiom audit, and record the foundation as implemented without changing any registered consumer statement. Do not add an open-projection hypothesis.",
-      :commands
-      ["lake env lean ConstructionTargets/CompactClosedEquivalenceQuotient.lean"
-       "lake env lean /tmp/compact-closed-equivalence-quotient-complete.lean"
-       "python3 scripts/statement-registry.py check"],
-      :axioms :standard-only},
-     :residual
-     "The generic compact-Hausdorff closed-equivalence quotient is proved. The next consumer step is relation-specific: give exact finite class descriptions for the polygon EqvGen relations and prove their graphs closed before applying compact_closed_equivalence_quotient_t2."}},
+   {:placeholder-after {:t94J09 1, :tunk01 1, :t91A02 1},
+    :placeholder-delta {:t94J09 0, :tunk01 0, :t91A02 0},
+    :residual
+    "The generic compact-Hausdorff closed-equivalence quotient theorem is implemented. Each consumer next needs an exact finite-class description and closed-graph proof for its polygon EqvGen relation before applying compact_closed_equivalence_quotient_t2.",
+    :outcome :done-unreviewed,
+    :warnings
+    [{:kind :concurrent-untracked-file,
+      :message
+      "holes/labs/topology-contract/worklist2.edn.tmp is an unrelated supervisor temporary file; it was not modified, staged, or committed."}],
+    :statement-hashes
+    {:status :unchanged, :registered 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author {:name "Joe Corneli", :email "holtzermann17@gmail.com"},
+    :placeholder-before {:t94J09 1, :tunk01 1, :t91A02 1},
+    :commands
+    [{:cmd "stat -c '%F %n' .lake/packages",
+      :exit 0,
+      :finding
+      "directory .lake/packages; canonical checkout owns the package authority"}
+     {:cmd
+      "sha256sum /tmp/compact-closed-equivalence-quotient-complete.lean",
+      :exit 0,
+      :finding
+      "aa9153e037a78ff99237612440302e78e45b9441a451ddf7fdd00b1bd6f6450e"}
+     {:cmd
+      "lake env lean ConstructionTargets/CompactClosedEquivalenceQuotient.lean",
+      :exit 0,
+      :finding
+      "Both declarations compile with propext, Classical.choice, and Quot.sound."}
+     {:cmd
+      "lake env lean /tmp/compact-closed-equivalence-quotient-complete.lean",
+      :exit 0,
+      :finding
+      "The exact generic quotient theorem compiles with propext, Classical.choice, and Quot.sound."}
+     {:cmd
+      "Python comment-stripped placeholder census of /tmp/compact-closed-equivalence-quotient-complete.lean",
+      :exit 0,
+      :finding "0"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd
+      "rg -n '^theorem (exists_disjoint_open_saturated_of_isClosed_setoid|compact_closed_equivalence_quotient_t2)' ConstructionTargets/CompactClosedEquivalenceQuotient.lean",
+      :exit 0,
+      :finding "Requested declarations remain at lines 9 and 65."}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r 81ab9dbbebc5739407a79a1b51d66bdd888e6182",
+      :exit 0,
+      :finding
+      "ConstructionTargets/CompactClosedEquivalenceQuotient.lean"}],
+    :commit "81ab9dbbebc5739407a79a1b51d66bdd888e6182",
+    :changed-paths
+    ["ConstructionTargets/CompactClosedEquivalenceQuotient.lean"],
+    :fixture
+    {:path "/tmp/compact-closed-equivalence-quotient-complete.lean",
+     :sha256
+     "aa9153e037a78ff99237612440302e78e45b9441a451ddf7fdd00b1bd6f6450e",
+     :placeholder-count 0},
+    :seat "topo-2"},
    :instructions
    "The dependency commit 81ab9dbb already supplies the exact scoped implementation. Verify that commit and the completed fixture, preserve both declarations and their standard-only axiom audit, and record the foundation as implemented without changing any registered consumer statement. Do not add an open-projection hypothesis.",
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CompactClosedEquivalenceQuotient.lean"],
    :dag-node
