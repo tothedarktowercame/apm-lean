@@ -644,6 +644,21 @@
       :exit 0,
       :output "131 registered statements match, 0 do not"}
      {:cmd "git status --short", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791673008742-3191-4246d044",
+     :commands
+     ["sha256sum /tmp/manifold_fundamental_class_connected_overlap.lean"
+      "git diff-tree --no-commit-id --name-only -r 32f4f2817b490e83ead6dd53b99bec12029e2e6b"
+      "lake env lean /tmp/manifold_fundamental_class_connected_overlap.lean"
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"
+      "rg placeholder and axiom census"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped placeholder census for t00J02 and t98A02"],
+     :finding
+     "PASS: repair commit 32f4f281 is empty and preserves exact source scope from implementation commit eca25ba5; repaired validation-harness hash matches 568185067c1cbb680d99eb0d54635a55414f8af641534c6b39bcf948df09afbf; the harness imports the promoted module and instantiates the exact frozen theorem type without redeclaration; local constancy and preconnected equality have the required orientation and do not identify the common value with one; source and fixture compile with zero placeholders and only propext, Classical.choice, and Quot.sound; 131 statements match and consumer counts remain t00J02=1, t98A02=1"},
     :commit "32f4f2817b490e83ead6dd53b99bec12029e2e6b",
     :commits
     ["eca25ba5955d3c1f92e8f65c168aa4196ffcc0fc"
@@ -662,7 +677,7 @@
      "Retained the correct promoted declarations from eca25ba5 and replaced the temporary promotion source with a post-promotion validation harness that imports the module, checks all three declarations, and instantiates the exact accepted theorem type without redeclaration."},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/connected-overlap-transition-unit",
@@ -786,7 +801,7 @@
      "The reviewed overlap-equality implication is banked. The remaining transition-unit geometry already has a strong banked input: CoefficientTransitionLocalConstancy.locally_constant gives, at every point of a chart overlap, an open neighborhood on which the unit is unchanged. The fixture packages those units as a function on the overlap subtype, proves that function locally constant, and proves that it has one value on any preconnected overlap. It deliberately does not identify that value with one. The next residual is to construct orientation-compatible overlap charts with a normalized basepoint value one, then apply the banked generator-equality theorem and glue the resulting local classes.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -1971,7 +1986,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -1988,7 +2003,10 @@
     "forall (R : Type) [CommRing R] (m : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (EuclideanSpace Real (Fin (m + 2))) M] (a b : M), IsPreconnected (CoefficientOverlapPair.common m a b) -> forall (x y : CoefficientOverlapPair.common m a b), overlapTransitionUnit R m a b x = overlapTransitionUnit R m a b y",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-10-manifold-connected-overlap-unit-topo3-r1},
+    :routes-2026-10-10-manifold-connected-overlap-unit-topo3-r1,
+    :banked-by
+    :routes-2026-10-10-manifold-connected-overlap-unit-topo3-r1,
+    :banked-commit "32f4f2817b490e83ead6dd53b99bec12029e2e6b"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-overlaptransitionunit-eq-of-ispreconnected,
    :kind :lemma,
@@ -1998,7 +2016,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -2014,7 +2032,10 @@
     "The transition unit restricted to the subtype CoefficientOverlapPair.common m a b.",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-10-manifold-connected-overlap-unit-topo3-r1},
+    :routes-2026-10-10-manifold-connected-overlap-unit-topo3-r1,
+    :banked-by
+    :routes-2026-10-10-manifold-connected-overlap-unit-topo3-r1,
+    :banked-commit "32f4f2817b490e83ead6dd53b99bec12029e2e6b"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-overlaptransitionunit,
    :kind :lemma,
@@ -2023,7 +2044,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -2037,7 +2058,10 @@
     :type "IsLocallyConstant (overlapTransitionUnit R m a b).",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-10-manifold-connected-overlap-unit-topo3-r1},
+    :routes-2026-10-10-manifold-connected-overlap-unit-topo3-r1,
+    :banked-by
+    :routes-2026-10-10-manifold-connected-overlap-unit-topo3-r1,
+    :banked-commit "32f4f2817b490e83ead6dd53b99bec12029e2e6b"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-overlaptransitionunit-islocallycons,
    :kind :lemma,
