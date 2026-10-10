@@ -100925,35 +100925,78 @@
    "Use half-open edge uniqueness to classify EqvGen fibers for N3CircleRel and TorusCrosscapCircleRel, prove injectivity of both three-loop maps, then form homeomorphisms and finish the boundary and package formulas.",
    :other-consumers []}
   {:bounded-exception
+   "This single-consumer prerequisite removes endpoint duplication from the source of the two pending fiber classifications by choosing half-open representatives on all three loops.",
+   :consumer :t97A01,
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/PolygonThreeLoopHalfOpenNormalForm.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/three-loop-half-open-normal-form",
+   :acceptance
+   {:implementation
+    "Promote the exact fixture. Convert half-open parameters into the banked EndpointQuotient interval carrier. Prove every EndpointQuotient class has a representative in Ico 0 1, replacing the closed endpoint one by zero. Lift this normal form through the inner and outer point-wedge quotients to prove every ThreeEndpointLoops point is literally a first-, second-, or third-loop point at a half-open parameter. Do not classify target relation fibers, prove injectivity or homeomorphism, derive ThreeCircles or outer-piece formulas, compute invariants, or close t97A01.",
+    :placeholder "the single sorry in apm_t97a01",
+    :route-step
+    "polygon radial open-cover step 25: put every three-loop source point in a half-open canonical loop coordinate",
+    :fixture "/tmp/polygon-three-loop-half-open-normal-form.lean",
+    :fixture-sha256
+    "0beff985b17d253ee13d279e39d6482cc382f9a56b8133cdd03af3fa3081922d",
+    :gates
+    ["lake build ConstructionTargets.PolygonThreeLoopHalfOpenNormalForm"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-10-polygon-three-loop-half-open-normal-form-65,
+   :kind :reusable-theorem,
+   :area "polygon-surface-open-cover",
+   :depends-on
+   [:routes-2026-10-10-polygon-six-edge-interior-uniqueness-64],
+   :current-residual
+   "Classify equality of the target quotient images of the three half-open loop forms for N3 and TorusCrosscap, use those classifications with source wedge equalities to prove injectivity, then form homeomorphisms and finish package formulas.",
+   :other-consumers []}
+  {:bounded-exception
    "This single-consumer concrete quotient package is the other final backlog lemma on t97A01 and supplies the actual two polygon models required by its frozen statement.",
    :consumer :t97A01,
    :implements-lemma :lemma-polygonradialopencoverpackages,
    :evidence
    {:probe
     {:residual
-     "Classify the generated relation fibers in canonical half-open coordinates for both boundary words, deduce injectivity of both continuous surjections, then build the boundary ThreeCircles homeomorphisms and final packages.",
+     "Prove the two target quotient fiber classifications on the three half-open source forms, then derive injectivity, homeomorphisms, literal ThreeCircles formulas, and final package assembly.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
      [{:name
-       "PolygonSixEdgeInteriorUniqueness.circleEdgePoint_interior_injective",
+       "PolygonThreeLoopHalfOpenNormalForm.endpointQuotient_halfOpen_rep",
        :type
-       "For j k : Fin 6 and t u : Set.Ico (0 : Real) 1, equality of circleEdgePoint j t and circleEdgePoint k u implies j = k and t = u.",
+       "Every EndpointQuotient class is intervalQuotientMap of a parameter in Set.Ico (0 : Real) 1.",
        :status :proved,
        :consumers [:t97A01],
-       :depends-on ["PolygonSixEdgeCircleCover.sixEdgeCircleCover"],
+       :depends-on
+       ["IntervalEndpointQuotientCircle.intervalQuotientMap_zero_eq_one"],
+       :area "polygon-surface-open-cover"}
+      {:name
+       "PolygonThreeLoopHalfOpenNormalForm.threeEndpointLoops_halfOpen_rep",
+       :type
+       "Every ThreeEndpointLoops point is a firstLoopPoint, secondLoopPoint, or thirdLoopPoint at a half-open unit-interval parameter.",
+       :status :proved,
+       :consumers [:t97A01],
+       :depends-on
+       ["PolygonThreeLoopHalfOpenNormalForm.endpointQuotient_halfOpen_rep"],
        :area "polygon-surface-open-cover"}
       {:name "polygonBoundaryThreeLoopFiberClassification",
        :type
-       "Classify EqvGen fibers of N3CircleRel and TorusCrosscapCircleRel in the three paired half-open edge coordinates, including the common endpoint class.",
+       "Classify equality of N3 and torus-crosscap quotient images for the three canonical half-open loop forms, including the common zero endpoint.",
        :status :not-started,
        :consumers [:t97A01],
        :depends-on
-       ["PolygonSixEdgeInteriorUniqueness.circleEdgePoint_interior_injective"],
+       ["PolygonThreeLoopHalfOpenNormalForm.threeEndpointLoops_halfOpen_rep"
+        "PolygonSixEdgeInteriorUniqueness.circleEdgePoint_interior_injective"],
        :area "polygon-surface-open-cover"}
       {:name "polygonBoundaryThreeCircles",
        :type
-       "Use the fiber classifications to prove both three-loop maps injective, promote the continuous bijections to homeomorphisms, and prove literal ThreeCircles boundary formulas.",
+       "Use the half-open fiber classifications to prove both three-loop maps injective, promote the continuous bijections to homeomorphisms, and prove literal boundary formulas.",
        :status :partial,
        :consumers [:t97A01],
        :depends-on
@@ -100972,50 +101015,52 @@
        :area "polygon-surface-open-cover"}],
      :prerequisite
      {:bounded-exception
-      "This single-consumer prerequisite supplies the geometric uniqueness of canonical edge interiors needed for the exact generated-relation fiber classifications.",
+      "This single-consumer prerequisite removes endpoint duplication from the source of the two pending fiber classifications by choosing half-open representatives on all three loops.",
       :consumer :t97A01,
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/PolygonSixEdgeInteriorUniqueness.lean"],
+      ["ConstructionTargets/PolygonThreeLoopHalfOpenNormalForm.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/six-edge-interior-uniqueness",
+      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/three-loop-half-open-normal-form",
       :acceptance
       {:implementation
-       "Promote the exact fixture. For j and k in Fin 6 and half-open parameters t and u in Ico 0 1, prove that equality of circleEdgePoint j t and circleEdgePoint k u implies j equals k and t equals u. Rewrite through the banked AddCircle coordinate formula, use injectivity of toCircle and uniqueness of representatives in Ico 0 6, and discharge the finite edge-index cases. Do not classify EqvGen fibers, prove injectivity or homeomorphism of the three-loop maps, derive ThreeCircles or outer-piece formulas, compute invariants, or close t97A01.",
+       "Promote the exact fixture. Convert half-open parameters into the banked EndpointQuotient interval carrier. Prove every EndpointQuotient class has a representative in Ico 0 1, replacing the closed endpoint one by zero. Lift this normal form through the inner and outer point-wedge quotients to prove every ThreeEndpointLoops point is literally a first-, second-, or third-loop point at a half-open parameter. Do not classify target relation fibers, prove injectivity or homeomorphism, derive ThreeCircles or outer-piece formulas, compute invariants, or close t97A01.",
        :placeholder "the single sorry in apm_t97a01",
        :route-step
-       "polygon radial open-cover step 24: prove uniqueness of half-open six-edge Circle coordinates for boundary fiber classification",
-       :fixture "/tmp/polygon-six-edge-interior-uniqueness.lean",
+       "polygon radial open-cover step 25: put every three-loop source point in a half-open canonical loop coordinate",
+       :fixture "/tmp/polygon-three-loop-half-open-normal-form.lean",
        :fixture-sha256
-       "3b71f1fd7ccb1d3c467c9b016d6ccfb501b9aec26508367fcdb1bdecf0e339c5",
+       "0beff985b17d253ee13d279e39d6482cc382f9a56b8133cdd03af3fa3081922d",
        :gates
-       ["lake build ConstructionTargets.PolygonSixEdgeInteriorUniqueness"
+       ["lake build ConstructionTargets.PolygonThreeLoopHalfOpenNormalForm"
         "fixture compiles"
         "zero source and fixture sorry"
         "standard-only axioms"
         "registry check"]},
-      :id :routes-2026-10-10-polygon-six-edge-interior-uniqueness-64,
+      :id
+      :routes-2026-10-10-polygon-three-loop-half-open-normal-form-65,
       :kind :reusable-theorem,
       :area "polygon-surface-open-cover",
       :depends-on
-      [:routes-2026-10-10-polygon-six-edge-circle-cover-63],
+      [:routes-2026-10-10-polygon-six-edge-interior-uniqueness-64],
       :current-residual
-      "Use half-open edge uniqueness to classify EqvGen fibers for N3CircleRel and TorusCrosscapCircleRel, prove injectivity of both three-loop maps, then form homeomorphisms and finish the boundary and package formulas.",
+      "Classify equality of the target quotient images of the three half-open loop forms for N3 and TorusCrosscap, use those classifications with source wedge equalities to prove injectivity, then form homeomorphisms and finish package formulas.",
       :other-consumers []},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake env lean /tmp/polygon-six-edge-interior-uniqueness.lean",
+       "lake env lean /tmp/polygon-three-loop-half-open-normal-form.lean",
        :exit 0,
        :finding
-       "The AddCircle representative argument and all thirty-six finite edge-index cases compile, proving exact half-open coordinate uniqueness."}
-      {:cmd "sha256sum /tmp/polygon-six-edge-interior-uniqueness.lean",
-       :exit 0,
-       :finding
-       "3b71f1fd7ccb1d3c467c9b016d6ccfb501b9aec26508367fcdb1bdecf0e339c5"}
+       "Half-open normal forms for EndpointQuotient, TwoEndpointLoops, and ThreeEndpointLoops compile with literal representative equations."}
       {:cmd
-       "rg -n ‘\\b(sorry|admit)\\b’ /tmp/polygon-six-edge-interior-uniqueness.lean",
+       "sha256sum /tmp/polygon-three-loop-half-open-normal-form.lean",
+       :exit 0,
+       :finding
+       "0beff985b17d253ee13d279e39d6482cc382f9a56b8133cdd03af3fa3081922d"}
+      {:cmd
+       "rg -n ‘\\b(sorry|admit)\\b’ /tmp/polygon-three-loop-half-open-normal-form.lean",
        :exit 1,
        :expected-exit 1,
        :finding "No fixture placeholders."}
@@ -101030,19 +101075,19 @@
        "The route guide, per-problem routes, and probe rules were read."}],
      :diagnostic-history
      [{:cmd
-       "lake env lean /tmp/polygon-six-edge-interior-uniqueness.lean",
+       "lake env lean /tmp/polygon-three-loop-half-open-normal-form.lean",
        :exit 1,
        :finding
-       "The first draft used insufficient real bounds from j < 6 and mishandled simplified diagonal conjunctions; casting j <= 5 and handling diagonal and off-diagonal finite cases separately corrected the proof."}],
+       "The first half-open carrier conversion reused a proof for Icc 0 1 where EndpointQuotient expects Icc 0 (0+1); reconstructing the two inequalities by linear arithmetic corrected the carrier."}],
      :fixture
-     {:path "/tmp/polygon-six-edge-interior-uniqueness.lean",
+     {:path "/tmp/polygon-three-loop-half-open-normal-form.lean",
       :sha256
-      "3b71f1fd7ccb1d3c467c9b016d6ccfb501b9aec26508367fcdb1bdecf0e339c5",
+      "0beff985b17d253ee13d279e39d6482cc382f9a56b8133cdd03af3fa3081922d",
       :interface
-      "On half-open unit edge parameters, equality of canonical six-edge Circle points forces equality of both the Fin 6 edge index and the parameter."},
+      "Every endpoint-glued interval class has a half-open representative, and every nested three-loop point is literally represented on one of the three half-open loop coordinates."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -101086,7 +101131,8 @@
     :routes-2026-10-10-polygon-boundary-three-loop-continuity-61
     :routes-2026-10-10-polygon-boundary-three-loop-surjectivity-reduction-62
     :routes-2026-10-10-polygon-six-edge-circle-cover-63
-    :routes-2026-10-10-polygon-six-edge-interior-uniqueness-64],
+    :routes-2026-10-10-polygon-six-edge-interior-uniqueness-64
+    :routes-2026-10-10-polygon-three-loop-half-open-normal-form-65],
    :current-residual
    "Combine the concrete cover packages with the strict overlap squares, banked Smith normalization, and final t97A01 assembly.",
    :other-consumers []}
@@ -104340,7 +104386,74 @@
    :id :lemma-polygonboundarythreeloopfiberclassification,
    :kind :lemma,
    :depends-on
-   [:lemma-polygonsixedgeinterioruniqueness-circleedgepoint-interior-injective],
+   [:lemma-polygonsixedgeinterioruniqueness-circleedgepoint-interior-injective
+    :lemma-polygonthreeloophalfopennormalform-threeendpointloops-halfopen-rep],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "PolygonThreeLoopHalfOpenNormalForm.endpointQuotient_halfOpen_rep",
+    :type
+    "Every EndpointQuotient class is intervalQuotientMap of a parameter in Set.Ico (0 : Real) 1."},
+   :lemma
+   {:name
+    "PolygonThreeLoopHalfOpenNormalForm.endpointQuotient_halfOpen_rep",
+    :reported-by
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    :type
+    "Every EndpointQuotient class is intervalQuotientMap of a parameter in Set.Ico (0 : Real) 1.",
+    :area "polygon-surface-open-cover",
+    :proved-in
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+   :id
+   :lemma-polygonthreeloophalfopennormalform-endpointquotient-halfopen-rep,
+   :kind :lemma,
+   :depends-on
+   [:lemma-intervalendpointquotientcircle-intervalquotientmap-zero-eq-one],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "IntervalEndpointQuotientCircle.intervalQuotientMap_zero_eq_one"},
+   :lemma
+   {:name
+    "IntervalEndpointQuotientCircle.intervalQuotientMap_zero_eq_one",
+    :reported-by []},
+   :id
+   :lemma-intervalendpointquotientcircle-intervalquotientmap-zero-eq-one,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "PolygonThreeLoopHalfOpenNormalForm.threeEndpointLoops_halfOpen_rep",
+    :type
+    "Every ThreeEndpointLoops point is a firstLoopPoint, secondLoopPoint, or thirdLoopPoint at a half-open unit-interval parameter."},
+   :lemma
+   {:name
+    "PolygonThreeLoopHalfOpenNormalForm.threeEndpointLoops_halfOpen_rep",
+    :reported-by
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    :type
+    "Every ThreeEndpointLoops point is a firstLoopPoint, secondLoopPoint, or thirdLoopPoint at a half-open unit-interval parameter.",
+    :area "polygon-surface-open-cover",
+    :proved-in
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+   :id
+   :lemma-polygonthreeloophalfopennormalform-threeendpointloops-halfopen-rep,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polygonthreeloophalfopennormalform-endpointquotient-halfopen-rep],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
