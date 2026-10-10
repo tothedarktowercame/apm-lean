@@ -84785,8 +84785,123 @@
    "Prove local triviality at the wedge point for the quotient-glued total space and transport the source fiber cardinality.",
    :other-consumers [:t99J01]}
   {:consumer :t97A01,
-   :phase :probe,
+   :phase :implementation,
    :state :open,
+   :scope
+   ["ConstructionTargets/FiniteCircleWedgeIntegralHomology.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/shared/finite-circle-wedge-integral-homology/point-wedge-induction",
+   :acceptance
+   {:placeholder
+    "the single sorry in apm_t97a01 and apm_t97A03_bridge_invariants_of_model",
+    :route-step
+    "t97A01 step 4 and MV input; t97A03 step 7 model-homology input",
+    :declarations
+    ["finiteCircleWedgeH0IsoInt"
+     "finiteCircleWedgeH1IsoFin"
+     "finiteCircleWedgeHomology_isZero_of_one_lt"
+     "threeCirclesH0IsoInt"
+     "threeCirclesH1IsoFinThree"
+     "threeCirclesHomology_isZero_of_one_lt"],
+    :implementation
+    "Define the finite iterated point-wedge of n circles with its chosen wedge point. Induct on n using the banked point-wedge open cover and production Mayer-Vietoris sequence. At degree zero identify the connected codiagonal cokernel with Z; at degree one use vanishing overlap H1 and the degree-zero injectivity to identify reassembly with the biproduct, then identify (Fin n -> Z) x Z with Fin (n+1) -> Z; in degrees at least two use vanishing for the overlap, the previous wedge, and the circle. Specialize at n=3 and identify the resulting space with StatementSurfaceModels.ThreeCircles. Do not construct either consumer's polygon/model comparison in this module.",
+    :axioms :standard-only,
+    :commands
+    ["lake env lean ConstructionTargets/FiniteCircleWedgeIntegralHomology.lean"
+     "lake env lean /tmp/finite-circle-wedge-homology-probe.lean"
+     "python3 scripts/statement-registry.py check"]},
+   :id :routes-2026-10-10-finite-circle-wedge-homology-induction-1,
+   :kind :reusable-theorem,
+   :depends-on [],
+   :current-residual
+   "Prove the finite point-wedge Mayer-Vietoris induction and its definitional/homeomorphic n=3 specialization; consumer-specific polygon and bridge-model comparisons remain downstream.",
+   :other-consumers [:t97A03]}
+  {:consumer :t97A01,
+   :evidence
+   {:probe
+    {:outcome :revise,
+     :seat "topo-4",
+     :fixture
+     {:path "/tmp/finite-circle-wedge-homology-probe.lean",
+      :sha256
+      "c3eda65f599432e8171adc2b38135b508a906be162d22e5779a1aab6b7cad6ea"},
+     :commands
+     [{:cmd "stat -c '%F %n' .lake/packages",
+       :exit 0,
+       :finding
+       "directory .lake/packages; canonical package authority is present"}
+      {:cmd "lake env lean ConstructionTargets/CircleHomology.lean",
+       :exit 0,
+       :finding
+       "integral circle H0, H1, and higher vanishing compile with standard axioms"}
+      {:cmd
+       "lake env lean ConstructionTargets/TorusCircleWedgeMayerVietoris.lean",
+       :exit 0,
+       :finding
+       "the banked point-wedge open-cover Mayer-Vietoris transport and rank-addition pattern compile with standard axioms"}
+      {:cmd
+       "lake env lean /tmp/finite-circle-wedge-homology-probe.lean",
+       :exit 0,
+       :finding
+       "the exact shared n=3 consumer interface elaborates from one isolated package axiom"}
+      {:cmd "sha256sum /tmp/finite-circle-wedge-homology-probe.lean",
+       :exit 0,
+       :finding
+       "c3eda65f599432e8171adc2b38135b508a906be162d22e5779a1aab6b7cad6ea"}
+      {:cmd
+       "Python comment-stripped placeholder census of /tmp/finite-circle-wedge-homology-probe.lean",
+       :exit 0,
+       :finding "0"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :finding "131 registered statements match, 0 do not"}
+      {:cmd "git status --short", :exit 0, :finding "clean"}],
+     :axioms
+     ["propext"
+      "Classical.choice"
+      "Quot.sound"
+      "FiniteCircleWedgeHomologyProbe.finite_circle_wedge_integral_homology_package"],
+     :warnings
+     [{:kind :interface-axiom,
+       :message
+       "The placeholder-free fixture uses exactly one nonstandard axiom bundling H0=Z, H1=Z^3, and vanishing in degrees at least two for the common ThreeCircles model. Circle homology and the production point-wedge Mayer-Vietoris pattern are already standard-only."}],
+     :prerequisite
+     {:consumer :t97A01,
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/FiniteCircleWedgeIntegralHomology.lean"],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/shared/finite-circle-wedge-integral-homology/point-wedge-induction",
+      :acceptance
+      {:placeholder
+       "the single sorry in apm_t97a01 and apm_t97A03_bridge_invariants_of_model",
+       :route-step
+       "t97A01 step 4 and MV input; t97A03 step 7 model-homology input",
+       :declarations
+       ["finiteCircleWedgeH0IsoInt"
+        "finiteCircleWedgeH1IsoFin"
+        "finiteCircleWedgeHomology_isZero_of_one_lt"
+        "threeCirclesH0IsoInt"
+        "threeCirclesH1IsoFinThree"
+        "threeCirclesHomology_isZero_of_one_lt"],
+       :implementation
+       "Define the finite iterated point-wedge of n circles with its chosen wedge point. Induct on n using the banked point-wedge open cover and production Mayer-Vietoris sequence. At degree zero identify the connected codiagonal cokernel with Z; at degree one use vanishing overlap H1 and the degree-zero injectivity to identify reassembly with the biproduct, then identify (Fin n -> Z) x Z with Fin (n+1) -> Z; in degrees at least two use vanishing for the overlap, the previous wedge, and the circle. Specialize at n=3 and identify the resulting space with StatementSurfaceModels.ThreeCircles. Do not construct either consumer's polygon/model comparison in this module.",
+       :axioms :standard-only,
+       :commands
+       ["lake env lean ConstructionTargets/FiniteCircleWedgeIntegralHomology.lean"
+        "lake env lean /tmp/finite-circle-wedge-homology-probe.lean"
+        "python3 scripts/statement-registry.py check"]},
+      :id :routes-2026-10-10-finite-circle-wedge-homology-induction-1,
+      :kind :reusable-theorem,
+      :depends-on [],
+      :current-residual
+      "Prove the finite point-wedge Mayer-Vietoris induction and its definitional/homeomorphic n=3 specialization; consumer-specific polygon and bridge-model comparisons remain downstream.",
+      :other-consumers [:t97A03]},
+     :residual
+     "Exactly one shared prerequisite remains: finite point-wedge integral homology induction, specialized to the common three-circle model. The required circle homology and Mayer-Vietoris infrastructure already compile."}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/finite-circle-wedge-integral-homology",
@@ -84807,7 +84922,7 @@
    :kind :reusable-theorem,
    :depends-on
    [:routes-2026-10-10-topo1-refill-covering-1
-    :routes-2026-10-10-topo1-refill-covering-1],
+    :routes-2026-10-10-finite-circle-wedge-homology-induction-1],
    :current-residual
    "Iterate the banked point-wedge Mayer-Vietoris computation and expose the n=3 integral homology package.",
    :other-consumers [:t97A03]}
