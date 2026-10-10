@@ -67306,7 +67306,62 @@
   {:bounded-exception
    "single-consumer exact right-core angular coordinate at the meridian endpoint",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:residual
+     "Implement the compiled endpoint equation; then construct a continuous Circle-valued path from angle 1 to rightTubeCoreAngularCoordinate and combine it with the bounded normal interpolation.",
+     :outcome :go,
+     :warnings [],
+     :acceptance
+     {:declaration
+      "ConstructionTargets.T02A03GeometricTubeDeformation.normalizedRightCorePlanar_circleMeridian",
+      :type
+      "forall z : Circle, NormedSpace.normalize (rightTubeCorePlanarComplex (apm_t02a03_circleMeridian z)) = (1 : Complex)",
+      :gates
+      ["Compile the scoped module after inserting the fixture declaration"
+       "Confirm only propext, Classical.choice, and Quot.sound axioms"
+       "Confirm no new sorry in the scoped module"
+       "Run python3 scripts/statement-registry.py check"]},
+     :commands
+     [{:cmd "lake env lean /tmp/t02a03_right_core_compact_probe.lean",
+       :exit 0,
+       :output
+       "normalizedRightCorePlanar_circleMeridian compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd "sha256sum /tmp/t02a03_right_core_compact_probe.lean",
+       :exit 0,
+       :output
+       "19e3eb8b592e168cca25296efd4840b52e4e01ed01c9d4ac29f251407147623a  /tmp/t02a03_right_core_compact_probe.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_right_core_compact_probe.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}
+      {:cmd
+       "rg -n 'normalizedRightCorePlanar_circleMeridian' /tmp/t02a03_right_core_compact_probe.lean",
+       :exit 0,
+       :output
+       "468:theorem normalizedRightCorePlanar_circleMeridian\n492:#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.normalizedRightCorePlanar_circleMeridian"}],
+     :fixture
+     {:path "/tmp/t02a03_right_core_compact_probe.lean",
+      :sha256
+      "19e3eb8b592e168cca25296efd4840b52e4e01ed01c9d4ac29f251407147623a"},
+     :finding
+     "The exact endpoint equation compiles placeholder-free: the right-core planar coordinate of circleMeridian z is the strictly positive real number 1-(1/8)z.re, so its normalization equals 1.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+      :declaration
+      "ConstructionTargets.T02A03GeometricTubeDeformation.normalizedRightCorePlanar_circleMeridian",
+      :type
+      "forall z : Circle, NormedSpace.normalize (rightTubeCorePlanarComplex (apm_t02a03_circleMeridian z)) = (1 : Complex)",
+      :proof-plan
+      "Compute the right-core planar coordinate of circleMeridian z as the real scalar 1-(1/8)z.re, prove that scalar positive from z.re≤1, and normalize the positive scalar multiple of 1.",
+      :axioms [propext Classical.choice Quot.sound]},
+     :seat "topo-8"}},
+   :phase :implementation,
+   :type
+   "forall z : Circle, NormedSpace.normalize (rightTubeCorePlanarComplex (apm_t02a03_circleMeridian z)) = (1 : Complex)",
    :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/meridian-right-core-angle",
@@ -67320,14 +67375,19 @@
     :placeholder "the sole sorry in apm_t02a03",
     :route-step
     "identify the right-core angular coordinate at the meridian endpoint of the ambient deformation"},
+   :axioms [propext Classical.choice Quot.sound],
    :id :routes-2026-10-10-t02a03-meridian-right-core-angle-topo2-r1,
    :kind :reusable-theorem,
    :area "explicit-r3-tube-deformation-retraction",
+   :declaration
+   "ConstructionTargets.T02A03GeometricTubeDeformation.normalizedRightCorePlanar_circleMeridian",
    :depends-on
    [:routes-2026-10-10-t02a03-right-core-interpolated-normal-radius-topo2-r2],
    :current-residual
    "Construct a continuous Circle-valued path from the constant endpoint angle 1 to rightTubeCoreAngularCoordinate, use it with the bounded normal interpolation in rightTubeCorePolarReconstruction, and prove left-core avoidance.",
-   :other-consumers []}
+   :other-consumers [],
+   :proof-plan
+   "Compute the right-core planar coordinate of circleMeridian z as the real scalar 1-(1/8)z.re, prove that scalar positive from z.re≤1, and normalize the positive scalar multiple of 1."}
   {:bounded-exception
    "single-consumer explicit ambient deformation with frozen tube and deletion invariants",
    :consumer :t02A03,
