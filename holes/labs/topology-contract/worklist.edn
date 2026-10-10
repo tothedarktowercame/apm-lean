@@ -87020,8 +87020,182 @@
      :review-outcomes]},
    :stop-condition
    "End only when every active topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+   :evidence
+   {:outcome :replan,
+    :seat "topo-4",
+    :commands
+    [{:cmd
+      "Python comment-stripped placeholder census for t99J01 t92J06 t97A03 t93J03 t01A03 t97A01",
+      :exit 0,
+      :finding
+      "t99J01=1, t92J06=1, t97A03=3, t93J03=1, t01A03=1, t97A01=1; total 8"}
+     {:cmd
+      "rg covering and Schreier reuse in the six consumers, ConstructionTargets, and pinned Mathlib",
+      :exit 0,
+      :finding
+      "CoveringMonodromyCosets supplies exact fiber/index and lifting results; no finite-index free-group rank formula is banked"}
+     {:cmd
+      "rg generic point-wedge Mayer-Vietoris coordinate reuse in ConstructionTargets",
+      :exit 0,
+      :finding
+      "production arrows and coordinate algebra are banked, while the rejected generic H0 contract still requires path-connected piece hypotheses"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :finding
+    {:routes
+     {:t99J01
+      ["banked covering coset/index, now elect exact frozen-facing index adapter"
+       "held point-wedge pi1 coordinates"
+       "Schreier rank formula"
+       "path-component restriction"
+       "explicit connected covers"
+       "assembly"],
+      :t92J06
+      ["held quotient-sheet gluing"
+       "permutation covers"
+       "Cayley-tree cover and simple connectedness"
+       "assembly"],
+      :t97A03
+      ["explicit double-cover classification"
+       "model comparisons"
+       "polygon and point-wedge representation boundaries"
+       "repaired path-connected MV coordinates"
+       "model invariants"
+       "assembly"],
+      :t93J03
+      ["Klein deck action and polygon quotient identification"
+       "banked subgroup-containment lifting criterion"
+       "annulus embedding"
+       "assembly"],
+      :t01A03
+      ["held point-wedge pi1 coordinates"
+       "separating-circle H1"
+       "assembly"],
+      :t97A01
+      ["banked standard-N3 homeomorphism"
+       "reviewed polygon open-cover STOP"
+       "held point-wedge pi1 coordinates"
+       "repaired path-connected MV coordinates"
+       "polygon boundary word and Smith algebra"
+       "assembly"]},
+     :placeholder-delta 0,
+     :placeholder-counts
+     {:t99J01 1,
+      :t92J06 1,
+      :t97A03 3,
+      :t93J03 1,
+      :t01A03 1,
+      :t97A01 1},
+     :deferred
+     ["The finite-index Schreier rank theorem serves t99J01 but no second active topo1 consumer at the required generality, so it is deferred until eligible or elected as a bounded exception."],
+     :preserved-stops
+     [:routes-2026-10-10-generic-point-wedge-pi1-inclusion-coordinates-1
+      :routes-2026-10-10-point-wedge-quotient-sheet-local-homeomorph-1
+      :routes-2026-10-10-polygon-edge-graph-open-cover-shared-2],
+     :infrastructure-packets
+     {:banked 2, :reviewed-stops 1, :placeholder-changing 0},
+     :typed-residual-change
+     ["t97A01 quotient homeomorphism to standard N3 is banked"
+      "covering fiber-coset equivalence, induced pi1 injectivity, index equality, and based lifting are banked for t99J01, t93J03, and t97A03"
+      "polygon open-cover row reached a reviewed representation/specification STOP without a standard-only implementation"],
+     :review-outcomes {:go 2, :stop 1, :closed-problems 0},
+     :unresolved-owner-repairs
+     [{:id
+       :routes-2026-10-10-generic-point-wedge-mv-inclusion-coordinates-1,
+       :state :needs-owner,
+       :replacement
+       :routes-2026-10-10-generic-point-wedge-mv-pathconnected-coordinates-2,
+       :boundary
+       "The arbitrary-X/Y H0 coordinate claim is false; the replacement states the theorem only for path-connected X and Y, matching the consumers."}]},
+    :replacement-items
+    [{:consumer :t99J01,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md/t99J01/cover-pi1-subgroup-index",
+      :acceptance
+      {:probe
+       "Compile the exact t99J01 covering adapter: for a path-connected n-sheeted cover of ThreeCircles, the induced fundamental-group map is injective and its image subgroup has index n, using CoveringMonodromyCosets and the frozen IsKSheetedCover fiber equation.",
+       :placeholder "the single sorry in apm_t99j01",
+       :route-step "t99J01 step 2, cover_pi1_subgroup_index",
+       :gates
+       ["canonical packages"
+        "fixture compiles"
+        "zero fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :id :routes-2026-10-10-t99j01-cover-subgroup-index-adapter-3,
+      :kind :final-adapter,
+      :depends-on [],
+      :current-residual
+      "Conjugate the banked fiber-cardinality/index theorem to the frozen ThreeCircles cover predicate and record induced pi1 injectivity.",
+      :other-consumers []}
+     {:consumer :t97A01,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/shared/generic-point-wedge-mv-inclusion-coordinates/pathconnected-repair",
+      :acceptance
+      {:probe
+       "Compile the generic point-wedge Mayer-Vietoris inclusion coordinates under explicit PathConnectedSpace X and PathConnectedSpace Y hypotheses: identify both overlap-to-piece maps in H0 coordinates, derive the signed diagonal and codiagonal formulas, and demonstrate the result on ThreeCircles.",
+       :placeholder
+       "the single sorry in apm_t97a01 and apm_t97A03_bridge_invariants_of_model",
+       :route-step
+       "repaired representation layer before t97A01 step 4 and t97A03 step 7",
+       :gates
+       ["canonical packages"
+        "fixture compiles"
+        "zero fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :representation
+      {:source
+       "The literal overlap inclusions and production Mayer-Vietoris arrows for the generic point-wedge cover with path-connected factors",
+       :target
+       "Integer H0 coordinates on the overlap, the two pieces, and their union",
+       :direction
+       "Exact conjugacy from literal inclusion-induced homology maps to identity coordinates, then from the production intersection and reassembly arrows to the signed diagonal and codiagonal"},
+      :id
+      :routes-2026-10-10-generic-point-wedge-mv-pathconnected-coordinates-2,
+      :kind :representation-comparison,
+      :depends-on [],
+      :current-residual
+      "Add the missing path-connected factor hypotheses and prove the two H0 naturality squares without asserting false arbitrary-space coordinates.",
+      :other-consumers [:t97A03]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 2,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only when every active topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:strategy
+       "Measure the t99J01 index adapter and repaired path-connected MV comparison, preserve reviewed STOPs, recount the six consumers and eight placeholders, then elect the nearest adapter or next shared route step."},
+      :id
+      :routes-2026-10-10-checkpoint-topo1-covering-uptake-mv-repair-3,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:routes-2026-10-10-t99j01-cover-subgroup-index-adapter-3
+       :routes-2026-10-10-generic-point-wedge-mv-pathconnected-coordinates-2],
+      :current-residual
+      "Review one consumer uptake and one corrected two-consumer representation comparison.",
+      :other-consumers []}],
+    :author "topo-4",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -87036,6 +87210,90 @@
     :routes-2026-10-10-checkpoint-topo1-covering-boundaries-1],
    :current-residual
    "Review three independent route advances while the generic MV contract awaits owner repair.",
+   :other-consumers []}
+  {:consumer :t99J01,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md/t99J01/cover-pi1-subgroup-index",
+   :acceptance
+   {:probe
+    "Compile the exact t99J01 covering adapter: for a path-connected n-sheeted cover of ThreeCircles, the induced fundamental-group map is injective and its image subgroup has index n, using CoveringMonodromyCosets and the frozen IsKSheetedCover fiber equation.",
+    :placeholder "the single sorry in apm_t99j01",
+    :route-step "t99J01 step 2, cover_pi1_subgroup_index",
+    :gates
+    ["canonical packages"
+     "fixture compiles"
+     "zero fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-10-t99j01-cover-subgroup-index-adapter-3,
+   :kind :final-adapter,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo1-covering-independent-2],
+   :current-residual
+   "Conjugate the banked fiber-cardinality/index theorem to the frozen ThreeCircles cover predicate and record induced pi1 injectivity.",
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/shared/generic-point-wedge-mv-inclusion-coordinates/pathconnected-repair",
+   :acceptance
+   {:probe
+    "Compile the generic point-wedge Mayer-Vietoris inclusion coordinates under explicit PathConnectedSpace X and PathConnectedSpace Y hypotheses: identify both overlap-to-piece maps in H0 coordinates, derive the signed diagonal and codiagonal formulas, and demonstrate the result on ThreeCircles.",
+    :placeholder
+    "the single sorry in apm_t97a01 and apm_t97A03_bridge_invariants_of_model",
+    :route-step
+    "repaired representation layer before t97A01 step 4 and t97A03 step 7",
+    :gates
+    ["canonical packages"
+     "fixture compiles"
+     "zero fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :representation
+   {:source
+    "The literal overlap inclusions and production Mayer-Vietoris arrows for the generic point-wedge cover with path-connected factors",
+    :target
+    "Integer H0 coordinates on the overlap, the two pieces, and their union",
+    :direction
+    "Exact conjugacy from literal inclusion-induced homology maps to identity coordinates, then from the production intersection and reassembly arrows to the signed diagonal and codiagonal"},
+   :id
+   :routes-2026-10-10-generic-point-wedge-mv-pathconnected-coordinates-2,
+   :kind :representation-comparison,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo1-covering-independent-2],
+   :current-residual
+   "Add the missing path-connected factor hypotheses and prove the two H0 naturality squares without asserting false arbitrary-space coordinates.",
+   :other-consumers [:t97A03]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 2,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only when every active topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:strategy
+    "Measure the t99J01 index adapter and repaired path-connected MV comparison, preserve reviewed STOPs, recount the six consumers and eight placeholders, then elect the nearest adapter or next shared route step."},
+   :id :routes-2026-10-10-checkpoint-topo1-covering-uptake-mv-repair-3,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:routes-2026-10-10-t99j01-cover-subgroup-index-adapter-3
+    :routes-2026-10-10-generic-point-wedge-mv-pathconnected-coordinates-2
+    :routes-2026-10-10-checkpoint-topo1-covering-independent-2],
+   :current-residual
+   "Review one consumer uptake and one corrected two-consumer representation comparison.",
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
