@@ -67394,60 +67394,89 @@
    :proof-plan
    "Compute the right-core planar coordinate of circleMeridian z as the real scalar 1-(1/8)z.re, prove that scalar positive from z.re≤1, and normalize the positive scalar multiple of 1."}
   {:bounded-exception
+   "single-consumer exact polar reconstruction at the meridian endpoint",
+   :consumer :t02A03,
+   :phase :probe,
+   :state :open,
+   :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t02A03/meridian-right-core-reconstruction",
+   :acceptance
+   {:probe
+    "Compile rightCorePolarReconstruction_circleMeridian. Prove by coordinates that reconstructing angular coordinate 1 with rightTubeCoreNormalComplex(circleMeridian z) returns circleMeridian z. Do not construct the angular bridge or claim tube or deletion invariants.",
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.rightCorePolarReconstruction_circleMeridian",
+    :type
+    "forall z : Circle, rightTubeCorePolarReconstruction (1 : Circle) (rightTubeCoreNormalComplex (apm_t02a03_circleMeridian z)) = apm_t02a03_circleMeridian z",
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "supply the zero endpoint equation for the reconstructed ambient deformation"},
+   :id
+   :routes-2026-10-10-t02a03-meridian-right-core-reconstruction-topo2-r1,
+   :kind :reusable-theorem,
+   :area "explicit-r3-tube-deformation-retraction",
+   :depends-on
+   [:routes-2026-10-10-t02a03-meridian-right-core-angle-topo2-r1],
+   :current-residual
+   "Construct a continuous Circle-valued angular bridge from 1 to rightTubeCoreAngularCoordinate, reconstruct it with the bounded normal interpolation, and prove left-core avoidance.",
+   :other-consumers []}
+  {:bounded-exception
    "single-consumer explicit ambient deformation with frozen tube and deletion invariants",
    :consumer :t02A03,
    :evidence
    {:probe
     {:residual
-     "Bank the exact meridian right-core angle, then construct the continuous angular component and certify the reconstructed ambient path.",
+     "Bank the exact meridian reconstruction endpoint, then construct the nonvanishing angular bridge and certify the reconstructed ambient path.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
      [{:name
-       "ConstructionTargets.T02A03GeometricTubeDeformation.normalizedRightCorePlanar_circleMeridian",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.rightCorePolarReconstruction_circleMeridian",
        :type
-       "forall z : Circle, NormedSpace.normalize (rightTubeCorePlanarComplex (apm_t02a03_circleMeridian z)) = (1 : Complex)",
+       "forall z : Circle, rightTubeCorePolarReconstruction (1 : Circle) (rightTubeCoreNormalComplex (apm_t02a03_circleMeridian z)) = apm_t02a03_circleMeridian z",
        :status :proved,
        :consumers [:t02A03],
        :depends-on
-       ["ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreInterpolatedNormalRadiusBound"],
+       ["ConstructionTargets.T02A03GeometricTubeDeformation.normalizedRightCorePlanar_circleMeridian"],
        :area "explicit-r3-tube-deformation-retraction"}],
      :prerequisite
      {:bounded-exception
-      "single-consumer exact right-core angular coordinate at the meridian endpoint",
+      "single-consumer exact polar reconstruction at the meridian endpoint",
       :consumer :t02A03,
       :phase :probe,
       :state :open,
       :scope
       ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
-      :dag-node "TOPOLOGY-ROUTES.md/t02A03/meridian-right-core-angle",
+      :dag-node
+      "TOPOLOGY-ROUTES.md/t02A03/meridian-right-core-reconstruction",
       :acceptance
       {:probe
-       "Compile normalizedRightCorePlanar_circleMeridian. Prove directly that the normalized right-core planar coordinate of circleMeridian z is 1 for every z. Do not construct an angular homotopy, reconstruct an ambient point, or claim tube or deletion invariants.",
+       "Compile rightCorePolarReconstruction_circleMeridian. Prove by coordinates that reconstructing angular coordinate 1 with rightTubeCoreNormalComplex(circleMeridian z) returns circleMeridian z. Do not construct the angular bridge or claim tube or deletion invariants.",
        :declaration
-       "ConstructionTargets.T02A03GeometricTubeDeformation.normalizedRightCorePlanar_circleMeridian",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.rightCorePolarReconstruction_circleMeridian",
        :type
-       "forall z : Circle, NormedSpace.normalize (rightTubeCorePlanarComplex (apm_t02a03_circleMeridian z)) = (1 : Complex)",
+       "forall z : Circle, rightTubeCorePolarReconstruction (1 : Circle) (rightTubeCoreNormalComplex (apm_t02a03_circleMeridian z)) = apm_t02a03_circleMeridian z",
        :placeholder "the sole sorry in apm_t02a03",
        :route-step
-       "identify the right-core angular coordinate at the meridian endpoint of the ambient deformation"},
-      :id :routes-2026-10-10-t02a03-meridian-right-core-angle-topo2-r1,
+       "supply the zero endpoint equation for the reconstructed ambient deformation"},
+      :id
+      :routes-2026-10-10-t02a03-meridian-right-core-reconstruction-topo2-r1,
       :kind :reusable-theorem,
       :area "explicit-r3-tube-deformation-retraction",
       :depends-on
-      [:routes-2026-10-10-t02a03-right-core-interpolated-normal-radius-topo2-r2],
+      [:routes-2026-10-10-t02a03-meridian-right-core-angle-topo2-r1],
       :current-residual
-      "Construct a continuous Circle-valued path from the constant endpoint angle 1 to rightTubeCoreAngularCoordinate, use it with the bounded normal interpolation in rightTubeCorePolarReconstruction, and prove left-core avoidance.",
+      "Construct a continuous Circle-valued angular bridge from 1 to rightTubeCoreAngularCoordinate, reconstruct it with the bounded normal interpolation, and prove left-core avoidance.",
       :other-consumers []},
      :commands
      [{:cmd "lake env lean /tmp/t02a03_right_core_compact_probe.lean",
        :exit 0,
        :output
-       "normalizedRightCorePlanar_circleMeridian compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "rightCorePolarReconstruction_circleMeridian compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd "sha256sum /tmp/t02a03_right_core_compact_probe.lean",
        :exit 0,
        :output
-       "19e3eb8b592e168cca25296efd4840b52e4e01ed01c9d4ac29f251407147623a  /tmp/t02a03_right_core_compact_probe.lean"}
+       "b6eeb95eb188998d9added02d76e25c0f5168b5b5f36b57c9273846847657e36  /tmp/t02a03_right_core_compact_probe.lean"}
       {:cmd
        "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_right_core_compact_probe.lean || true)\"",
        :exit 0}
@@ -67455,24 +67484,24 @@
        :exit 0,
        :output "131 registered statements match, 0 do not"}
       {:cmd
-       "rg -n 'normalizedRightCorePlanar_circleMeridian' /tmp/t02a03_right_core_compact_probe.lean",
+       "rg -n 'rightCorePolarReconstruction_circleMeridian' /tmp/t02a03_right_core_compact_probe.lean",
        :exit 0,
        :output
-       "468:theorem normalizedRightCorePlanar_circleMeridian\n492:#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.normalizedRightCorePlanar_circleMeridian"}],
+       "488:theorem rightCorePolarReconstruction_circleMeridian\n515:#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightCorePolarReconstruction_circleMeridian"}],
      :diagnostic-history
      [{:cmd "lake env lean /tmp/t02a03_right_core_compact_probe.lean",
        :exit 1,
        :finding
-       "The first statement packaged the endpoint through a right-tube subtype theorem unavailable in the accumulated fixture, and rewriting the normalization lemma did not match the elaborated scalar action. Stating the exact raw normalized-coordinate equation and applying normalize_smul_of_pos directly removed both incidental dependencies; the corrected fixture compiled."}],
+       "The first exact-coordinate proof stated the nonnegativity fact with 1/8 while simplification retained 8⁻¹, so Real.sqrt_sq did not match syntactically. Restating that fact with the elaborated reciprocal form made the rewrite exact; the corrected fixture compiled."}],
      :fixture
      {:path "/tmp/t02a03_right_core_compact_probe.lean",
       :sha256
-      "19e3eb8b592e168cca25296efd4840b52e4e01ed01c9d4ac29f251407147623a"},
+      "b6eeb95eb188998d9added02d76e25c0f5168b5b5f36b57c9273846847657e36"},
      :finding
-     "The right-core planar coordinate of circleMeridian z is the positive real number 1-(1/8)z.re. Since z.re≤1, this number is strictly positive, so its normalization is exactly 1. This compiled endpoint equation is required before constructing a continuous Circle-valued angular component from 1 to the input right-core angular coordinate; it does not assert that homotopy or either safety invariant.",
+     "Direct coordinate calculation shows that rightTubeCorePolarReconstruction at angular coordinate 1 and the right-core normal coordinate of circleMeridian z returns circleMeridian z exactly. Positivity of 1-(1/8)z.re supplies the only square-root simplification. This closes the zero endpoint algebra independently of the still-missing global angular bridge and makes no tube or deletion claim.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
@@ -67505,7 +67534,8 @@
     :routes-2026-10-10-t02a03-right-core-radial-error-bound-topo2-r1
     :routes-2026-10-10-t02a03-right-core-input-radius-bound-topo2-r2
     :routes-2026-10-10-t02a03-right-core-interpolated-normal-radius-topo2-r2
-    :routes-2026-10-10-t02a03-meridian-right-core-angle-topo2-r1],
+    :routes-2026-10-10-t02a03-meridian-right-core-angle-topo2-r1
+    :routes-2026-10-10-t02a03-meridian-right-core-reconstruction-topo2-r1],
    :current-residual
    "Lift H to RightTubeMinusLeftCore, package rightTubeMeridianRetractionHomotopy, then use the coordinate equation for the Circle-side constant homotopy.",
    :other-consumers []}
@@ -70884,4 +70914,29 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-t02a03geometrictubedeformation-righttubecoreinterpolatednorm],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T02A03GeometricTubeDeformation.rightCorePolarReconstruction_circleMeridian",
+    :type
+    "forall z : Circle, rightTubeCorePolarReconstruction (1 : Circle) (rightTubeCoreNormalComplex (apm_t02a03_circleMeridian z)) = apm_t02a03_circleMeridian z"},
+   :lemma
+   {:name
+    "ConstructionTargets.T02A03GeometricTubeDeformation.rightCorePolarReconstruction_circleMeridian",
+    :reported-by
+    [:routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1],
+    :type
+    "forall z : Circle, rightTubeCorePolarReconstruction (1 : Circle) (rightTubeCoreNormalComplex (apm_t02a03_circleMeridian z)) = apm_t02a03_circleMeridian z",
+    :area "explicit-r3-tube-deformation-retraction",
+    :proved-in
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+   :id
+   :lemma-constructiontargets-t02a03geometrictubedeformation-rightcorepolarreconstruction-,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t02a03geometrictubedeformation-normalizedrightcoreplanar-cir],
    :other-consumers []}]}
