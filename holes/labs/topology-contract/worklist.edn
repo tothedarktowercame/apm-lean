@@ -95625,8 +95625,202 @@
      :review-outcomes]},
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+   :evidence
+   {:outcome :replan,
+    :seat "topo-4",
+    :commands
+    [{:cmd
+      "bb holes/labs/topology-contract/build_step.bb priorities holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :finding
+      "t99J01 has one placeholder and the shortest open route at two backlog lemmas; its ready leaders are IsCoveringMap.restrictPathComponent and cyclicThreeCirclesPullback_pathConnected, followed by the two ready t97A01 lemmas"}
+     {:cmd
+      "comment-stripped placeholder census for t99J01 t92J06 t97A03 t93J03 t01A03 t97A01",
+      :exit 0,
+      :finding "counts 1, 1, 3, 1, 1, 1; total 8; delta 0"}
+     {:cmd "bb holes/labs/topology-contract/worklist_check.bb",
+      :exit 0,
+      :finding
+      "830 items OK; 742 done, 20 superseded, 16 needs-owner, 9 blocked, 1 open, 13 backlog, 29 banked"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :finding
+    {:routes
+     {:t99J01
+      ["banked three-circles fundamental-group coordinates"
+       "banked positive-index Schreier rank"
+       "IsCoveringMap.restrictPathComponent"
+       "cyclicThreeCirclesPullback_pathConnected"
+       "covering-subgroup index and closure adapter"],
+      :t92J06
+      ["wedge-quotient covering gluing"
+       "permutation-cover construction"
+       "Cayley-tree classification"
+       "assembly; currently held by reviewed prior outcomes"],
+      :t97A03
+      ["restricted double-cover gluing equivalence"
+       "one- and two-circle cover homotopy equivalences to model bouquets"
+       "banked index-two Schreier rank"
+       "model homology and pi1 transport"
+       "three-placeholder assembly"],
+      :t93J03
+      ["banked affine square orbit classification"
+       "banked EqvGen SquareRel iff Cases"
+       "replace the refuted edgewise disk-square map by a non-edgewise equivalence between the aabb polygon quotient presentation and the square polygon quotient presentation"
+       "orbit quotient homeomorphism"
+       "deck-group fundamental-group and lifting criterion"
+       "assembly"],
+      :t01A03
+      ["circle-wedge fundamental group and torus commutativity"
+       "separating embedded-circle collar theorem"
+       "assembly; currently held by reviewed prior outcomes"],
+      :t97A01
+      ["banked standard-N3 homeomorphism"
+       "polygonRadialOpenCoverPackages"
+       "genericPointWedgeOverlapInclusionSquares"
+       "polygon fundamental-group and Mayer-Vietoris coordinates"
+       "banked Smith normalization"
+       "assembly"]},
+     :placeholder-delta 0,
+     :priority-top
+     [{:id :lemma-iscoveringmap-restrictpathcomponent,
+       :ready true,
+       :unblocks [:t99J01],
+       :closest 2}
+      {:id :lemma-cyclicthreecirclespullback-pathconnected,
+       :ready true,
+       :unblocks [:t99J01],
+       :closest 2}
+      {:id :lemma-genericpointwedgeoverlapinclusionsquares,
+       :ready true,
+       :unblocks [:t97A01],
+       :closest 2}
+      {:id :lemma-polygonradialopencoverpackages,
+       :ready true,
+       :unblocks [:t97A01],
+       :closest 2}],
+     :placeholder-counts
+     {:t99J01 1,
+      :t92J06 1,
+      :t97A03 3,
+      :t93J03 1,
+      :t01A03 1,
+      :t97A01 1},
+     :deferred
+     ["t97A01's two ready prerequisites rank immediately after the elected t99J01 pair."
+      "t97A03 retains three ready model/gluing prerequisites and three placeholders."
+      "The t93J03 direct edgewise disk-square transport is permanently excluded by the compiled endpoint contradiction; only a non-edgewise polygon-presentation equivalence is eligible."],
+     :infrastructure-packets
+     {:banked-since-prior-checkpoint 7,
+      :placeholder-changing 0,
+      :compiled-refutations 1},
+     :ranking
+     "No consumer has zero backlog. t99J01 has the fewest remaining backlog lemmas, both are ready, and it has one placeholder; elect both independent prerequisites before the t97A01 pair. The refuted Klein edge-formula lemma is removed from the valid route and replaced by a quotient-level polygon-presentation equivalence.",
+     :typed-residual-change
+     ["The Klein campaign compiled seven reusable packets after the prior square-orbit checkpoint, including the exact finite theorem EqvGen SquareRel iff Cases."
+      "The proposed direct edge-compatible disk-square homeomorphism was refuted: consecutive frozen disk arcs share an endpoint that the prescribed square formulas send to distinct corners."
+      "t93J03 therefore needs a polygon-presentation equivalence at quotient-relation level rather than an edgewise carrier homeomorphism; that replacement is recorded in the lemma DAG but is not elected ahead of the shorter t99J01 route."
+      "The other five consumer routes retain their typed residuals."],
+     :review-outcomes {:pass 7, :stop 1, :closed-problems 0}},
+    :lemmas
+    [{:name "kleinAabbSquarePolygonPresentationEquivalence",
+      :type
+      "A homeomorphism or exact quotient-relation equivalence between the frozen aabb disk polygon quotient Surface false 2 and the standard opposite-side square quotient, without requiring an edgewise carrier map edgePoint 4 i t ↦ squareEdge i t.",
+      :status :not-started,
+      :consumers [:t93J03],
+      :depends-on ["KleinSquareEqvGenCasesIff.eqvGen_iff_cases"]}],
+    :replacement-items
+    [{:bounded-exception
+      "This single-consumer covering lemma is one of the two ready prerequisites on the shortest open topo1 route and is required to restrict a finite cover to the path component used by t99J01.",
+      :consumer :t99J01,
+      :implements-lemma :lemma-iscoveringmap-restrictpathcomponent,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component",
+      :acceptance
+      {:probe
+       "Compile a standard-only theorem IsCoveringMap.restrictPathComponent for a covering p : E → B over a locally path-connected, path-connected base, restricting p to the subtype of points joined to a chosen e : E. Supply the selected-sheet local trivializations and surjectivity needed for IsCoveringMap. Do not specialize to ThreeCircles, count fibers, compute fundamental groups, or close t99J01.",
+       :placeholder "the single sorry in apm_t99j01",
+       :route-step
+       "t99J01 covering-subgroup-index step: restrict a finite covering to one path component before counting sheets and applying Schreier",
+       :gates
+       ["canonical packages"
+        "fixture compiles"
+        "zero fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :id :routes-2026-10-10-iscoveringmap-restrict-path-component-36,
+      :kind :reusable-theorem,
+      :depends-on
+      [:routes-2026-10-10-checkpoint-topo1-after-klein-boundary-eqvgen-28],
+      :current-residual
+      "Use the component-restricted covering to establish constant finite fiber cardinality and the inclusion-induced fundamental-group image required by t99J01.",
+      :other-consumers []}
+     {:bounded-exception
+      "This single-consumer connectedness theorem is the second ready prerequisite on the shortest open topo1 route and supplies the explicit connected cyclic covers required for arbitrary positive index.",
+      :consumer :t99J01,
+      :implements-lemma
+      :lemma-cyclicthreecirclespullback-pathconnected,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/cyclic-three-circles-cover",
+      :acceptance
+      {:probe
+       "Compile the degree-n circle cover, the collapse from ThreeCircles to its first circle, and prove that their literal pullback is path connected for every positive n by computing cyclic monodromy and converting its transitivity into paths. Do not prove the general component-restriction theorem, count subgroup index, apply Schreier, or close t99J01.",
+       :placeholder "the single sorry in apm_t99j01",
+       :route-step
+       "t99J01 explicit-cover step: connected cyclic n-sheeted pullback cover of ThreeCircles",
+       :gates
+       ["canonical packages"
+        "fixture compiles"
+        "zero fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :id
+      :routes-2026-10-10-cyclic-three-circles-pullback-pathconnected-36,
+      :kind :reusable-theorem,
+      :depends-on
+      [:routes-2026-10-10-checkpoint-topo1-after-klein-boundary-eqvgen-28],
+      :current-residual
+      "Combine the connected cyclic cover with the restricted-component covering theorem, identify subgroup index with sheet count, and assemble the t99J01 closure adapter.",
+      :other-consumers []}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:strategy
+       "Measure both t99J01 covering prerequisites, recount all six consumers and eight placeholders, and elect the t99J01 closure adapter if its route is complete; otherwise refill from the complete ranked lemma DAG."},
+      :id
+      :routes-2026-10-10-checkpoint-topo1-after-t99j01-covering-prerequisites-36,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:routes-2026-10-10-iscoveringmap-restrict-path-component-36
+       :routes-2026-10-10-cyclic-three-circles-pullback-pathconnected-36],
+      :current-residual
+      "Review the two remaining covering constructions on the shortest one-placeholder route and close t99J01 as soon as both are banked.",
+      :other-consumers []}],
+    :author "topo-4",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -95640,6 +95834,91 @@
     :routes-2026-10-10-checkpoint-topo1-after-klein-square-orbits-23],
    :current-residual
    "Review the frozen-boundary comparison before descending the square/orbit identification to a homeomorphism of quotients.",
+   :other-consumers []}
+  {:bounded-exception
+   "This single-consumer covering lemma is one of the two ready prerequisites on the shortest open topo1 route and is required to restrict a finite cover to the path component used by t99J01.",
+   :consumer :t99J01,
+   :implements-lemma :lemma-iscoveringmap-restrictpathcomponent,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component",
+   :acceptance
+   {:probe
+    "Compile a standard-only theorem IsCoveringMap.restrictPathComponent for a covering p : E → B over a locally path-connected, path-connected base, restricting p to the subtype of points joined to a chosen e : E. Supply the selected-sheet local trivializations and surjectivity needed for IsCoveringMap. Do not specialize to ThreeCircles, count fibers, compute fundamental groups, or close t99J01.",
+    :placeholder "the single sorry in apm_t99j01",
+    :route-step
+    "t99J01 covering-subgroup-index step: restrict a finite covering to one path component before counting sheets and applying Schreier",
+    :gates
+    ["canonical packages"
+     "fixture compiles"
+     "zero fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-10-iscoveringmap-restrict-path-component-36,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo1-after-klein-boundary-eqvgen-28],
+   :current-residual
+   "Use the component-restricted covering to establish constant finite fiber cardinality and the inclusion-induced fundamental-group image required by t99J01.",
+   :other-consumers []}
+  {:bounded-exception
+   "This single-consumer connectedness theorem is the second ready prerequisite on the shortest open topo1 route and supplies the explicit connected cyclic covers required for arbitrary positive index.",
+   :consumer :t99J01,
+   :implements-lemma :lemma-cyclicthreecirclespullback-pathconnected,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/cyclic-three-circles-cover",
+   :acceptance
+   {:probe
+    "Compile the degree-n circle cover, the collapse from ThreeCircles to its first circle, and prove that their literal pullback is path connected for every positive n by computing cyclic monodromy and converting its transitivity into paths. Do not prove the general component-restriction theorem, count subgroup index, apply Schreier, or close t99J01.",
+    :placeholder "the single sorry in apm_t99j01",
+    :route-step
+    "t99J01 explicit-cover step: connected cyclic n-sheeted pullback cover of ThreeCircles",
+    :gates
+    ["canonical packages"
+     "fixture compiles"
+     "zero fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id
+   :routes-2026-10-10-cyclic-three-circles-pullback-pathconnected-36,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo1-after-klein-boundary-eqvgen-28],
+   :current-residual
+   "Combine the connected cyclic cover with the restricted-component covering theorem, identify subgroup index with sheet count, and assemble the t99J01 closure adapter.",
+   :other-consumers []}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:strategy
+    "Measure both t99J01 covering prerequisites, recount all six consumers and eight placeholders, and elect the t99J01 closure adapter if its route is complete; otherwise refill from the complete ranked lemma DAG."},
+   :id
+   :routes-2026-10-10-checkpoint-topo1-after-t99j01-covering-prerequisites-36,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:routes-2026-10-10-iscoveringmap-restrict-path-component-36
+    :routes-2026-10-10-cyclic-three-circles-pullback-pathconnected-36
+    :routes-2026-10-10-checkpoint-topo1-after-klein-boundary-eqvgen-28],
+   :current-residual
+   "Review the two remaining covering constructions on the shortest one-placeholder route and close t99J01 as soon as both are banked.",
    :other-consumers []}
   {:consumer :t99J01,
    :phase :probe,
@@ -96675,6 +96954,24 @@
    :depends-on
    [:lemma-kleinsquarecasestoeqvgen-cases-eqvgen
     :lemma-kleinsquareeqvgentocases-eqvgen-cases],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "kleinAabbSquarePolygonPresentationEquivalence",
+    :type
+    "A homeomorphism or exact quotient-relation equivalence between the frozen aabb disk polygon quotient Surface false 2 and the standard opposite-side square quotient, without requiring an edgewise carrier map edgePoint 4 i t ↦ squareEdge i t."},
+   :lemma
+   {:name "kleinAabbSquarePolygonPresentationEquivalence",
+    :reported-by
+    [:routes-2026-10-10-checkpoint-topo1-after-klein-boundary-eqvgen-28],
+    :type
+    "A homeomorphism or exact quotient-relation equivalence between the frozen aabb disk polygon quotient Surface false 2 and the standard opposite-side square quotient, without requiring an edgewise carrier map edgePoint 4 i t ↦ squareEdge i t."},
+   :id :lemma-kleinaabbsquarepolygonpresentationequivalence,
+   :kind :lemma,
+   :depends-on [:lemma-kleinsquareeqvgencasesiff-eqvgen-iff-cases],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
