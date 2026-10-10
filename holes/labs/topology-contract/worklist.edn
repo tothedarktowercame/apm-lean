@@ -88076,6 +88076,21 @@
       :exit 1,
       :finding
       "The imported private root synonym prevented a direct comp_id rewrite; changed the expression to the public endpoint type before rewriting."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791642465644-2157-c53daa05",
+     :commands
+     ["git show 983453e07912c8ce026078bcfe356b1d9e1c32eb --stat and recorded source inspection"
+      "lake env lean ConstructionTargets/FiniteIndexFreeGroupSchreierRank.lean"
+      "lake env lean holes/labs/topology-contract/frozen/finite-index-free-group-schreier-rank-probe.lean"
+      "lake env lean holes/labs/topology-contract/frozen/finite-index-free-group-schreier-rank-old-refutations.lean"
+      "recorded/current source and fixture SHA-256 comparison"
+      "comment-stripped sorry/admit census for implementation and affected consumers"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show b63277c2:holes/labs/topology-contract/worklist.edn)"],
+     :finding
+     "exact one-file scope and repaired fixture hash reproduce; compiled refutations justify rejecting the old interface, while the explicit complement-indexed spanning-tree basis discharges the repaired positive-rank and positive-index frozen type using standard axioms with zero implementation placeholders"},
     :commit "983453e07912c8ce026078bcfe356b1d9e1c32eb",
     :changed-paths
     ["ConstructionTargets/FiniteIndexFreeGroupSchreierRank.lean"],
@@ -88101,7 +88116,7 @@
    :phase :implementation,
    :owner-repair
    "Owner repair 2026-10-10 (claude-14, Joe: check the LaTeX, then repair the Lean). The frozen interface was false at r = 0 (natural subtraction) and at n = 0 (Subgroup.index is 0 for infinite index); refutations compile in frozen/finite-index-free-group-schreier-rank-old-refutations.lean. The problems LaTeX and registered statements are correct (t99J01: 0 < n, r = 3; t97A03: r = 2, n = 2); only this row fixture was wrong. New fixture adds (hr : 0 < r) (hn : 0 < n) to finiteIndexSubgroupEquiv and hn to indexSubgroupFreeGroupFinThreeEquiv.",
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/FiniteIndexFreeGroupSchreierRank.lean"],
    :dag-node
@@ -88229,7 +88244,7 @@
      :residual
      "Exactly one shared prerequisite remains: prove and orient the finite-index Schreier rank formula. Mathlib already proves subgroup freeness, while the two consumer ranks are direct specializations of the missing count."}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank",
