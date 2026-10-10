@@ -87266,6 +87266,21 @@
       :exit 0,
       :finding "ConstructionTargets/T99J01CoverSubgroupIndex.lean"}
      {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791626603952-1600-5063aca2",
+     :commands
+     ["git show/diff-tree 8077f0874766476737e98dd09c873ac711ea558d"
+      "sha256sum /tmp/t99j01-cover-subgroup-index-probe.lean"
+      "lake env lean ConstructionTargets/T99J01CoverSubgroupIndex.lean"
+      "lake env lean /tmp/t99j01-cover-subgroup-index-probe.lean"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb"
+      "comment-stripped source/fixture/consumer placeholder census"
+      "sha256sum problems/t99J01/lean/Main.lean"],
+     :finding
+     "PASS: reviewer codex-3 verified topo-2 commit 8077f0874766476737e98dd09c873ac711ea558d adds exactly ConstructionTargets/T99J01CoverSubgroupIndex.lean; fixture SHA-256 matches fff6a750b855a82d7e890ea716796259aef6abc515bcec165eed20ab99f72dd7; source and fixture compile with only propext, Classical.choice, and Quot.sound and contain zero placeholders; all 131 frozen statement hashes match and the frozen t99J01 consumer remains unchanged with one placeholder; the adapter correctly combines induced-pi1 injectivity with range.index = n by rewriting the banked fiber-cardinality equality using hp.card_fiber at p e."},
     :commit "8077f0874766476737e98dd09c873ac711ea558d",
     :changed-paths
     ["ConstructionTargets/T99J01CoverSubgroupIndex.lean"],
@@ -87277,7 +87292,7 @@
     :declarations ["t99j01_cover_pi1_subgroup_index"],
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T99J01CoverSubgroupIndex.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t99J01/cover-pi1-subgroup-index",
    :acceptance
