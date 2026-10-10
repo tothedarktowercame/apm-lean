@@ -99471,8 +99471,66 @@
   {:bounded-exception
    "This single-consumer prerequisite transports the completed literal-annulus model to the actual quotient overlap used by the two polygon packages.",
    :consumer :t97A01,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Construct the two radius-one boundary quotient-to-ThreeCircles identifications, their common vertex classes, and the literal inclusion formulas, then assemble the concrete packages.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :missing-theorems
+    [{:name
+      "PolygonOverlapHomotopyEquivCircle.overlapHomotopyEquivCircle",
+      :type
+      "For every radius-preserving boundary-supported disk relation, the actual quotient overlap is homotopy equivalent to Circle by transporting the literal-annulus model, with forward, inverse-on-representatives, and quotient representative formulas.",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on
+      ["PolygonAnnulusRadialHomotopy.annulusHomotopyEquivCircle"],
+      :area "polygon-surface-open-cover"}],
+    :statement-hashes "131 registered statements match",
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :finding "canonical package authority"}
+     {:cmd "sha256sum /tmp/polygon-overlap-homotopy-equiv-circle.lean",
+      :exit 0,
+      :finding "fixture hash matches"}
+     {:cmd
+      "lake build ConstructionTargets.PolygonOverlapHomotopyEquivCircle",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/polygon-overlap-homotopy-equiv-circle.lean",
+      :exit 0,
+      :finding "fixture compiles with standard axioms"}
+     {:cmd "rg source for sorry or admit",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero source placeholders"}
+     {:cmd "rg fixture for sorry or admit",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero fixture placeholders"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short",
+      :exit 0,
+      :finding "clean worktree after commit"}],
+    :diagnostic-history [],
+    :commit "ef2ae4acc1280824f6a4d3a7f31aa4c591145bc6",
+    :changed-paths
+    ["ConstructionTargets/PolygonOverlapHomotopyEquivCircle.lean"],
+    :fixture
+    {:path "/tmp/polygon-overlap-homotopy-equiv-circle.lean",
+     :sha256
+     "0379b07a71d1e887dec9d6c33c1d0ca2e9292a8352d083d4363f1a9e2bf8acea",
+     :sorry-count 0},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonOverlapHomotopyEquivCircle.lean"],
    :dag-node
@@ -102285,12 +102343,13 @@
    {:name
     "PolygonOverlapHomotopyEquivCircle.overlapHomotopyEquivCircle",
     :reported-by
-    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40
+     :routes-2026-10-10-polygon-overlap-homotopy-equiv-circle-52],
     :type
     "For every radius-preserving boundary-supported polygon relation, overlapOpen is homotopy equivalent to Circle, with explicit quotient representative and radial-normalization formulas.",
     :area "polygon-surface-open-cover",
     :proved-in
-    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+    :routes-2026-10-10-polygon-overlap-homotopy-equiv-circle-52},
    :id
    :lemma-polygonoverlaphomotopyequivcircle-overlaphomotopyequivcircle,
    :kind :lemma,
