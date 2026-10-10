@@ -93905,11 +93905,128 @@
    "Review the first bounded dependency of the highest-ranked Klein orbit-quotient route.",
    :other-consumers []}
   {:bounded-exception
+   "This single-consumer arithmetic lemma is the exact missing identity exposed by the affine action multiplication law and is immediately consumed by the elected square-orbit classification.",
+   :consumer :t93J03,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/KleinCoordinateInversionPower.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/plane-action-square-orbit-classification/inversion-power-coordinate",
+   :acceptance
+   {:implementation
+    "For the banked inversion automorphism of Multiplicative Int, prove for every n : Int and z that toAdd ((inversion ^ n) z) equals toAdd ((inversion ^ n) (ofAdd 1)) times toAdd z. Specialize this to the banked action g z. The proof must cover positive and negative integer powers by Int.induction_on. Do not define the plane action, prove square inequalities, form a quotient, or compare EqvGen relations.",
+    :placeholder "the single sorry in apm_t93j03",
+    :route-step
+    "t93J03 step 1b.1, coordinate identity required by the affine action multiplication law",
+    :fixture "/tmp/klein-inversion-power.lean",
+    :fixture-sha256
+    "692f78b74476913490121bd0160057ec47ffbcfecb20e4fdb5b3c7fd2930d02a",
+    :gates
+    ["lake build ConstructionTargets.KleinCoordinateInversionPower"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-10-klein-coordinate-inversion-power-24,
+   :kind :reusable-theorem,
+   :depends-on [:lemma-kleinpresentedgroup-coordinatenormalform],
+   :current-residual
+   "Use action_toAdd to prove the affine coordinate action law, then classify its closed-square orbit representatives and boundary coincidences.",
+   :other-consumers []}
+  {:bounded-exception
    "This single-consumer geometric lemma is the next ready dependency of the elected one-placeholder t93J03 route; the coordinate algebra it needs is now banked.",
    :consumer :t93J03,
    :implements-lemma :lemma-kleinplaneaction-squareorbitclassification,
+   :evidence
+   {:probe
+    {:residual
+     "The direct plane-action proof exposed one exact arithmetic prerequisite: the coordinate formula for arbitrary powers of inversion. Its placeholder-free fixture now compiles; after it is banked, the affine action multiplication law and square-orbit inequalities remain.",
+     :outcome :revise,
+     :warnings [],
+     :missing-theorems
+     [{:name "kleinPlaneAction_squareOrbitClassification",
+       :type
+       "Affine PresentedKleinGroup action on Real times Real with explicit coordinate formula, closed-square representatives for every orbit, and a complete same-orbit classification for square points including edges and corners",
+       :status :partial,
+       :consumers [:t93J03],
+       :depends-on ["KleinCoordinateInversionPower.action_toAdd"]}],
+     :prerequisite
+     {:bounded-exception
+      "This single-consumer arithmetic lemma is the exact missing identity exposed by the affine action multiplication law and is immediately consumed by the elected square-orbit classification.",
+      :consumer :t93J03,
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/KleinCoordinateInversionPower.lean"],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/plane-action-square-orbit-classification/inversion-power-coordinate",
+      :acceptance
+      {:implementation
+       "For the banked inversion automorphism of Multiplicative Int, prove for every n : Int and z that toAdd ((inversion ^ n) z) equals toAdd ((inversion ^ n) (ofAdd 1)) times toAdd z. Specialize this to the banked action g z. The proof must cover positive and negative integer powers by Int.induction_on. Do not define the plane action, prove square inequalities, form a quotient, or compare EqvGen relations.",
+       :placeholder "the single sorry in apm_t93j03",
+       :route-step
+       "t93J03 step 1b.1, coordinate identity required by the affine action multiplication law",
+       :fixture "/tmp/klein-inversion-power.lean",
+       :fixture-sha256
+       "692f78b74476913490121bd0160057ec47ffbcfecb20e4fdb5b3c7fd2930d02a",
+       :gates
+       ["lake build ConstructionTargets.KleinCoordinateInversionPower"
+        "fixture compiles"
+        "zero source and fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :id :routes-2026-10-10-klein-coordinate-inversion-power-24,
+      :kind :reusable-theorem,
+      :depends-on [:lemma-kleinpresentedgroup-coordinatenormalform],
+      :current-residual
+      "Use action_toAdd to prove the affine coordinate action law, then classify its closed-square orbit representatives and boundary coincidences.",
+      :other-consumers []},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd
+       "lake build ConstructionTargets.KleinPresentedGroupCoordinateNormalForm",
+       :exit 0,
+       :finding
+       "the banked coordinate normal form and its three prerequisites compile canonically"}
+      {:cmd "lake env lean /tmp/klein-inversion-power.lean",
+       :exit 0,
+       :finding
+       "the inversion-power and semidirect-action coordinate formulas compile with only propext, Classical.choice, and Quot.sound"}
+      {:cmd "sha256sum /tmp/klein-inversion-power.lean",
+       :exit 0,
+       :finding
+       "692f78b74476913490121bd0160057ec47ffbcfecb20e4fdb5b3c7fd2930d02a"}
+      {:cmd
+       "rg -n \"\\b(sorry|admit)\\b\" /tmp/klein-inversion-power.lean",
+       :exit 1,
+       :expected-exit 1,
+       :finding "no placeholders"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :finding "131 registered statements match, 0 do not"}
+      {:cmd "git status --short", :exit 0, :finding "clean"}],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/klein-plane-action.lean",
+       :exit 1,
+       :finding
+       "the direct affine-action fixture reduced multiplicativity to the missing coordinate identity toAdd (action n m) = sign(n) * toAdd m; generator and instance goals were downstream of that failure"}
+      {:cmd "lake env lean /tmp/klein-inversion-power.lean",
+       :exit 1,
+       :finding
+       "the first statement tried integer exponentiation inside Int, where no HPow Int Int instance exists; reformulated the sign intrinsically as the inversion power applied to the multiplicative generator"}
+      {:cmd "lake env lean /tmp/klein-inversion-power.lean",
+       :exit 1,
+       :finding
+       "the first induction fixed z and could not apply its hypothesis to z inverse; generalized z across Int.induction_on and exposed the successor and predecessor applications definitionally"}],
+     :fixture
+     {:path "/tmp/klein-inversion-power.lean",
+      :sha256
+      "692f78b74476913490121bd0160057ec47ffbcfecb20e4fdb5b3c7fd2930d02a",
+      :interface
+      "inversion_zpow_apply (n : Int) (z : Multiplicative Int) identifies every integer power of the inversion automorphism on z with multiplication of toAdd z by its value on 1; action_toAdd specializes this to the banked semidirect-product action."},
+     :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/plane-action-square-orbit-classification",
@@ -93930,7 +94047,8 @@
    :kind :reusable-theorem,
    :depends-on
    [:lemma-kleinpresentedgroup-coordinatenormalform
-    :routes-2026-10-10-checkpoint-topo1-after-klein-coordinate-normal-form-19],
+    :routes-2026-10-10-checkpoint-topo1-after-klein-coordinate-normal-form-19
+    :routes-2026-10-10-klein-coordinate-inversion-power-24],
    :current-residual
    "Turn unique integer-pair normal forms into the explicit affine action formula, choose a closed-square representative of every orbit, and enumerate precisely the boundary coincidences.",
    :other-consumers []}
@@ -94470,12 +94588,15 @@
    :lemma
    {:name "kleinPlaneAction_squareOrbitClassification",
     :reported-by
-    [:routes-2026-10-10-checkpoint-topo1-after-schreier-type-valued-basis-16],
+    [:routes-2026-10-10-checkpoint-topo1-after-schreier-type-valued-basis-16
+     :routes-2026-10-10-klein-plane-action-square-orbit-classification-23],
     :type
     "Classify equality of Klein plane-action orbits using the integer-pair normal form, including all representatives meeting the closed unit square and the edge/corner cases."},
    :id :lemma-kleinplaneaction-squareorbitclassification,
    :kind :lemma,
-   :depends-on [:lemma-kleinpresentedgroup-coordinatenormalform],
+   :depends-on
+   [:lemma-kleinpresentedgroup-coordinatenormalform
+    :lemma-kleincoordinateinversionpower-action-toadd],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -94586,6 +94707,18 @@
    :id :lemma-kleinpresentedgrouptwosidedconjugation-reverseconjugatea,
    :kind :lemma,
    :depends-on [:lemma-kleinpresentedgroupconjugation-conjugateapow],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "KleinCoordinateInversionPower.action_toAdd"},
+   :lemma
+   {:name "KleinCoordinateInversionPower.action_toAdd",
+    :reported-by []},
+   :id :lemma-kleincoordinateinversionpower-action-toadd,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
