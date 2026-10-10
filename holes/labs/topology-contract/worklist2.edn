@@ -60393,51 +60393,70 @@
    "single-consumer exact zero-locus comparison for the t02A03 left-tube normal coordinate",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/t02a03_geometric_tube_cover.lean",
-      :sha256
-      "10e81ad59c428cc36b365f2ad2c67fea9b3ac41b129c68d28a05cfdf81a37482"},
-     :commands
-     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "apm_t02a03_leftTubeNormalComplex_eq_zero_iff compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
-       :exit 0}
-      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "10e81ad59c428cc36b365f2ad2c67fea9b3ac41b129c68d28a05cfdf81a37482  /tmp/t02a03_geometric_tube_cover.lean"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :representation
-     {:source
-      "Zero of the continuous complex disk-normal coordinate on the frozen left-tube subtype",
-      :target
-      "Membership of the ambient point in the frozen left-core range",
-      :direction
-      "Exact logical equivalence from the source normal-coordinate zero representation to the target frozen-core membership representation, with the reverse implication included"},
-     :implementation
-     {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
-      :declarations ["apm_t02a03_leftTubeNormalComplex_eq_zero_iff"],
-      :acceptance
-      {:implementation
-       "Add the compiled zero-locus theorem from the verified fixture to ConstructionTargets/T02A03GeometricTubeCover.lean without changing its type or the frozen consumer. Compile the scoped module, confirm the scoped file contains no sorry token, run the statement registry check, and report the theorem's axioms.",
-       :gates
-       ["scoped module compiles"
-        "scoped file contains no sorry token"
-        "statement registry matches"]}},
-     :finding
-     "The fixture completely supplies the representation comparison. A zero normal coordinate forces planar norm one and height zero, so Complex.arg reconstructs a frozen left-core parameter. Conversely, substituting a frozen core point and Real.cos_sq_add_sin_sq makes both normal components zero.",
-     :residual
-     "After banking the comparison, define LeftTubeMinusCore and its continuous nonzero normal coordinate, construct the radial comparison homotopies, and assemble leftTubeMinusCoreHomotopyEquivTorus."}},
+   {:placeholder-delta
+    {:path "ConstructionTargets/T02A03GeometricTubeCover.lean",
+     :before 0,
+     :after 0,
+     :delta 0},
+    :git-author "Joe Corneli <holtzermann17@gmail.com>",
+    :residual
+    "Restrict the normal coordinate to a continuous nonzero coordinate on LeftTubeMinusCore, build radial comparison homotopies, and assemble leftTubeMinusCoreHomotopyEquivTorus.",
+    :type
+    "∀ p : apm_t02a03_leftTubeSubtype, apm_t02a03_leftTubeNormalComplex p = 0 ↔ p.1 ∈ Set.range apm_t02a03_leftCore",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not",
+     :declaration-type-sha256
+     "60f219735fb84b15de0ce20bc0dd3118705d5fffe7ad0dcc5658bbe39a6ab193"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+      :exit 0,
+      :output
+      "10e81ad59c428cc36b365f2ad2c67fea9b3ac41b129c68d28a05cfdf81a37482  /tmp/t02a03_geometric_tube_cover.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeCover.lean",
+      :exit 0}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeCover.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "lake env lean /tmp/t02a03_geometric_tube_cover.lean | rg \"leftTubeNormalComplex_eq_zero_iff\"",
+      :exit 0,
+      :output
+      "'apm_t02a03_leftTubeNormalComplex_eq_zero_iff' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "git commit -m \"Bank t02A03 normal-coordinate zero locus\"",
+      :exit 0,
+      :output
+      "[master 44f9e07b] Bank t02A03 normal-coordinate zero locus; 1 file changed, 43 insertions(+)"}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :representation
+    {:source
+     "Zero of the continuous complex disk-normal coordinate on the frozen left-tube subtype",
+     :target
+     "Membership of the ambient point in the frozen left-core range",
+     :direction
+     "Exact logical equivalence from the source normal-coordinate zero representation to the target frozen-core membership representation, with the reverse implication included"},
+    :commit "44f9e07b6940971d167df6ecb37e32e67c916517",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
+    :declaration "apm_t02a03_leftTubeNormalComplex_eq_zero_iff",
+    :fixture
+    {:path "/tmp/t02a03_geometric_tube_cover.lean",
+     :sha256
+     "10e81ad59c428cc36b365f2ad2c67fea9b3ac41b129c68d28a05cfdf81a37482"},
+    :finding
+    "Banked the exact bidirectional comparison between vanishing of the continuous disk-normal coordinate and membership in the frozen left-core range. The forward direction reconstructs a core parameter with Complex.arg; the reverse direction substitutes the frozen core coordinates.",
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-normal-zero-locus",
    :acceptance
