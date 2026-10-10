@@ -54289,8 +54289,34 @@
     :routes-2026-09-28-t00j08-quantitative-nielsen-schreier-topo2-r1
     :routes-2026-09-28-checkpoint-topo2]}
   {:consumer :t96A07,
+   :stop-count 1,
+   :evidence
+   {:outcome :stop,
+    :seat "topo-8",
+    :reason
+    "The requested closure is not an adapter over the banked rpSmoothAtlas. It crosses three independent unbanked mathematical boundaries: (1) construct the descended even quadratic map on the frozen quotient and prove ContMDiff using the local-diffeomorphism atlas; (2) compute its projective mfderiv at [e0] and prove the range joined with the axis derivative is proper; (3) compute the sphere-map derivative on every xy=z fibre for z in (0,1/2), prove transversality to the horizontal plane, construct a point in each fibre, and transfer infinitude. Repository search finds no theorem supplying any of these three packets. The atlas module compiles, but it supplies only the smooth quotient structure and projection-local-diffeomorphism machinery, not the consumer polynomial or either derivative calculation. A probe may isolate at most one missing theorem, so this three-boundary closure row cannot legally return REVISE, and no complete placeholder-free fixture exists for GO. This is a scheduling boundary, not a refutation of the frozen statement.",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/RealProjectiveSmoothTarget.lean",
+      :exit 0}
+     {:cmd
+      "rg -n 'sphereMap.*ContMDiff|Transverse.*sphereMap|sphereMap.*plane|nontransverse|not_transverse|yz.*xz.*xy' ConstructionTargets -g '*.lean'",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "python3 -c 'import re; t=open(\"problems/t96A07/lean/Main.lean\").read(); t=re.sub(r\"/-.*?-/\",\" \",t,flags=re.S); t=re.sub(r\"--[^\\n]*\",\" \",t); print(len(re.findall(r\"(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])\",t)))'",
+      :exit 0,
+      :output "1"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}],
+    :fixture {:status :absent, :required-theorem "apm_t96a07"},
+    :residual
+    "Split the route into independently compiled packets in order: first the already-elected shared even-polynomial smooth descent theorem for t95A04/t96A07; then a bounded t96A07 derivative/nontransversality theorem at [e0]; then a bounded sphere regular-horizontal-level theorem. Only after all three are banked should the one-sorry closure adapter be probed again.",
+    :author "topo-8",
+    :disposition :stop},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
