@@ -1667,6 +1667,21 @@
       :exit 1,
       :finding
       "The first post-promotion harness moved outside the ConstructionTargets namespace but retained unqualified opens; qualifying the three imported namespaces corrected the harness, and the final rerun exits zero."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791675661019-3327-e712e77c",
+     :commands
+     ["sha256sum fixture"
+      "source blob comparison"
+      "lake env lean fixture"
+      "lake env lean module"
+      "lake build target"
+      "placeholder and axiom scan"
+      "statement registry check"
+      "consumer placeholder census"],
+     :finding
+     "PASS: implementation commit a26f0d2a changes exactly ConstructionTargets/ManifoldFundamentalClass.lean and its blob matches the reviewed source; the fixture hash is 6cf5d4583cdaee3960a100d5b9d17ad87c2068b148a6494e1869a522a0174953; localizationMap_apply_naturality evaluates the canonical morphism equality on an arbitrary class in the required direction, absolute X-to-Y then localization at y equals localization at x then the relative map; it introduces no abstract replacement, localization IsIso claim, or orientation predicate; source and fixture compile with zero placeholders and only propext, Classical.choice, and Quot.sound; 131 statements match and consumer placeholders remain t00J02=1 and t98A02=1."},
     :commit "a26f0d2a41ae03b84703710979fcee17cca7f259",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -1683,7 +1698,7 @@
      "Evaluated the canonical localizationMap_naturality morphism equality on an arbitrary absolute singular-homology class to obtain the elementwise transport equation."},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/elementwise-localization-naturality",
@@ -1799,7 +1814,7 @@
      "The reviewed canonical localization morphism and its naturality square are banked. The fixture evaluates that genuine morphism equality on an arbitrary absolute homology class, yielding the exact element equality needed to transport localization of globalGenerator through a continuous map of deleted-point pairs. It introduces no abstract substitute map and no orientation predicate. The remaining geometric work is explicit: compute localizationMap on globalGenerator at one normalized oriented chart, choose the positive sign from actual orientation data, and transport that equality between points using this theorem and the banked overlap coherence results.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -3419,7 +3434,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -3436,7 +3451,10 @@
     "forall {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y] (f : C(X,Y)) (x : X) (y : Y) (h : Set.MapsTo f (deletedPoint x) (deletedPoint y)) (n : Nat) (c : (SingularChains (TopCat.of X)).homology n), localizationMap y n (HomologicalComplex.homologyMap (absoluteSingularMap f) n c) = HomologicalComplex.homologyMap (relativeSingularMap (deletedPoint x) (deletedPoint y) f h) n (localizationMap x n c)",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-10-manifold-localization-apply-naturality-topo3-r1},
+    :routes-2026-10-10-manifold-localization-apply-naturality-topo3-r1,
+    :banked-by
+    :routes-2026-10-10-manifold-localization-apply-naturality-topo3-r1,
+    :banked-commit "a26f0d2a41ae03b84703710979fcee17cca7f259"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-localizationmap-apply-naturality,
    :kind :lemma,
