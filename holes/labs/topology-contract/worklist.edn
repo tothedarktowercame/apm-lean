@@ -89722,6 +89722,8 @@
    :other-consumers []}
   {:consumer :t97A01,
    :stop-count 1,
+   :review-finding
+   "the symlink rule applies to APM frame worktrees, not the canonical /home/joe/code/apm-lean package authority; run and compile the Smith-quotient probe in the canonical checkout",
    :evidence
    {:outcome :stop,
     :seat "topo-4",
@@ -89741,9 +89743,15 @@
     :residual
     "Provision or repair the APM workspace so .lake/packages is the canonical package-authority symlink, then rerun the Smith-quotient probe from a clean checkout.",
     :author "topo-4",
-    :disposition :stop},
-   :phase :probe,
-   :state :done-unreviewed,
+    :disposition :stop,
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1791634151709-1881-71750e81",
+     :finding
+     "the symlink rule applies to APM frame worktrees, not the canonical /home/joe/code/apm-lean package authority; run and compile the Smith-quotient probe in the canonical checkout"}},
+   :phase :implementation,
+   :state :repair,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t97A01/smith-quotients",
    :acceptance
@@ -89759,6 +89767,7 @@
      "registry check"]},
    :id :routes-2026-10-10-t97a01-smith-quotients-owner-reopen-1,
    :kind :final-adapter,
+   :fail-count 1,
    :depends-on
    [:routes-2026-10-10-checkpoint-topo1-after-owner-reopen-1],
    :current-residual
