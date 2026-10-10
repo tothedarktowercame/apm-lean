@@ -295,4 +295,26 @@ theorem apm_t02a03_leftTubeNormalComplex_radialPoint
     rw [hsim', hrim']
     ring
 
+theorem apm_t02a03_leftTubeRadialPoint_not_mem_leftCore
+    (tp : unitInterval × apm_t02a03_LeftTubeMinusCore) :
+    apm_t02a03_leftTubeRadialPoint tp ∉ Set.range apm_t02a03_leftCore := by
+  intro hcore
+  have hz : apm_t02a03_leftTubeNormalComplex
+      ⟨apm_t02a03_leftTubeRadialPoint tp,
+        apm_t02a03_leftTubeRadialPoint_mem_leftTube tp⟩ = 0 :=
+    (apm_t02a03_leftTubeNormalComplex_eq_zero_iff
+      ⟨apm_t02a03_leftTubeRadialPoint tp,
+        apm_t02a03_leftTubeRadialPoint_mem_leftTube tp⟩).2 hcore
+  rw [apm_t02a03_leftTubeNormalComplex_radialPoint] at hz
+  change (((1 - (tp.1 : ℝ)) * (1 / 8 : ℝ) +
+      (tp.1 : ℝ) *
+        ‖apm_t02a03_leftTubeNormalComplex
+          ⟨tp.2.1, tp.2.2.1⟩‖ : ℝ) : ℂ) *
+      ((apm_t02a03_leftTubeNormalAngular tp.2 : Circle) : ℂ) = 0 at hz
+  rw [mul_eq_zero] at hz
+  exact hz.elim
+    (Complex.ofReal_ne_zero.mpr
+      (ne_of_gt (apm_t02a03_leftTubeRadialNormalRadius_pos tp)))
+    (apm_t02a03_leftTubeNormalAngular_ne_zero tp.2)
+
 end ConstructionTargets.T02A03LeftTubePuncturedModel
