@@ -58512,50 +58512,67 @@
    "single-consumer Circle-domain normal meridian for the t02A03 geometric complement",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/t02a03_geometric_tube_cover.lean",
-      :sha256
-      "6283b737a504993ad5a4ff242cbc098ed255dafb7dda9c25309a1bb3b7222235"},
-     :commands
-     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "apm_t02a03_circleMeridian, apm_t02a03_circleMeridian_mem_geometricY, and apm_t02a03_circleMeridianMap compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
-       :exit 0}
-      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "6283b737a504993ad5a4ff242cbc098ed255dafb7dda9c25309a1bb3b7222235  /tmp/t02a03_geometric_tube_cover.lean"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :finding
-     "The fixture directly realizes the radius-1/8 normal meridian on Mathlib Circle and bundles it as a continuous map into the exact frozen geometric complement. The unit-circle norm identity supplies its radius, while coordinate constraints prove disjointness from the planar left core.",
-     :residual
-     "Construct the compatible attachment of the surviving right core to the Circle meridian, then extend to tube deformations and gluing.",
-     :implementation
-     {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"]},
-     :acceptance
-     {:source-fixture "/tmp/t02a03_geometric_tube_cover.lean",
-      :declarations
-      ["apm_t02a03_circleMeridian"
-       "apm_t02a03_circleMeridian_mem_geometricY"
-       "apm_t02a03_circleMeridianMap"],
-      :placeholder "the sole sorry in apm_t02a03",
-      :route-step
-      "t02A03 step 2, descend the explicit normal meridian to a continuous Circle map into geometricY",
-      :gates
-      ["fixture compiles"
-       "fixture contains no sorry token"
-       "fixture hash matches"
-       "statement registry matches"]}}},
+   {:placeholder-delta 0,
+    :residual
+    "Construct the compatible attachment of the surviving right core to the Circle meridian, then extend to tube deformations and gluing.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+      :exit 0,
+      :output
+      "6283b737a504993ad5a4ff242cbc098ed255dafb7dda9c25309a1bb3b7222235  /tmp/t02a03_geometric_tube_cover.lean"}
+     {:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+      :exit 0,
+      :output
+      "Circle-meridian declarations compiled; axioms [propext, Classical.choice, Quot.sound]."}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeCover.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.T02A03GeometricTubeCover",
+      :exit 0,
+      :output "Build completed successfully (8240 jobs)."}
+     {:cmd
+      "lake env lean /tmp/check_t02a03_circle_meridian_axioms.lean",
+      :exit 0,
+      :output
+      "All three declarations depend on [propext, Classical.choice, Quot.sound]."}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeCover.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "comment-stripped placeholder census for problems/t02A03/lean/Main.lean",
+      :exit 0,
+      :output "1"}
+     {:cmd "sha256sum problems/t02A03/lean/Main.lean",
+      :exit 0,
+      :output
+      "b123eca388ab2858ca55daf538c1ddd645022b52f5196a15f0bb516d78323d7d  problems/t02A03/lean/Main.lean"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r f3b1dc90d996509ae7a362ea69002a705fe0fe69",
+      :exit 0,
+      :output "ConstructionTargets/T02A03GeometricTubeCover.lean"}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "f3b1dc90d996509ae7a362ea69002a705fe0fe69",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
+    :fixture
+    {:path "/tmp/t02a03_geometric_tube_cover.lean",
+     :sha256
+     "6283b737a504993ad5a4ff242cbc098ed255dafb7dda9c25309a1bb3b7222235"},
+    :declarations
+    ["ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_circleMeridian"
+     "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_circleMeridian_mem_geometricY"
+     "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_circleMeridianMap"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/geometric-circle-meridian",
    :acceptance
