@@ -94513,8 +94513,187 @@
      :review-outcomes]},
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+   :evidence
+   {:outcome :replan,
+    :seat "topo-4",
+    :commands
+    [{:cmd
+      "bb holes/labs/topology-contract/build_step.bb priorities holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :finding
+      "ready ranking starts with IsCoveringMap.restrictPathComponent and cyclicThreeCirclesPullback_pathConnected for t99J01, followed by the two t97A01 prerequisites; the newly banked square-orbit classification makes kleinSquareBoundaryOrbitEqvGen ready, while kleinOrbitQuotient_homeomorph waits on it"}
+     {:cmd
+      "comment-stripped placeholder census for t99J01 t92J06 t97A03 t93J03 t01A03 t97A01",
+      :exit 0,
+      :finding "counts 1, 1, 3, 1, 1, 1; total 8; delta 0"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :finding
+      "810 items OK; 733 done, 20 superseded, 16 needs-owner, 9 blocked, 1 open, 10 backlog, 21 banked"}
+     {:cmd
+      "lake build ConstructionTargets.KleinPlaneActionSquareOrbitClassification",
+      :exit 0,
+      :finding
+      "the affine action, closed-square representatives, and exact same-orbit square classification compile canonically with standard axioms"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :finding
+    {:routes
+     {:t99J01
+      ["three-circle fundamental-group coordinates"
+       "covering-subgroup index"
+       "banked positive-index Schreier rank"
+       "path-component covering restriction"
+       "cyclic pullback path connectedness"
+       "assembly"],
+      :t92J06
+      ["matched quotient-sheet saturation and local-homeomorph construction"
+       "permutation-cover construction"
+       "Cayley-tree classification"
+       "assembly"],
+      :t97A03
+      ["double-cover stratum gluing"
+       "one-circle and two-circle quotient-to-bouquet comparisons"
+       "banked index-two Schreier rank"
+       "model homology and pi1 transport"
+       "assembly"],
+      :t93J03
+      ["banked presented-group coordinate normal form"
+       "banked affine plane action and closed-square orbit classification"
+       "square-boundary orbit/EqvGen comparison"
+       "orbit quotient homeomorphism"
+       "deck-group fundamental-group theorem"
+       "covering lifting criterion"
+       "annulus embedding"
+       "assembly"],
+      :t01A03
+      ["circle-wedge fundamental group and torus commutativity"
+       "separating embedded-circle collar theorem"
+       "assembly"],
+      :t97A01
+      ["banked standard-N3 homeomorphism"
+       "polygon radial open-cover package"
+       "strict point-wedge overlap inclusion squares"
+       "polygon fundamental-group and Mayer-Vietoris coordinates"
+       "banked Smith normalization"
+       "assembly"]},
+     :placeholder-delta 0,
+     :priority-top
+     [{:id :lemma-iscoveringmap-restrictpathcomponent,
+       :ready true,
+       :unblocks [:t99J01],
+       :closest 2}
+      {:id :lemma-cyclicthreecirclespullback-pathconnected,
+       :ready true,
+       :unblocks [:t99J01],
+       :closest 2}
+      {:id :lemma-genericpointwedgeoverlapinclusionsquares,
+       :ready true,
+       :unblocks [:t97A01],
+       :closest 2}
+      {:id :lemma-polygonradialopencoverpackages,
+       :ready true,
+       :unblocks [:t97A01],
+       :closest 2}
+      {:id :lemma-kleinplaneaffineaction-planeaction,
+       :ready true,
+       :unblocks [:t93J03],
+       :closest 3}
+      {:id :lemma-kleinsquareboundaryorbiteqvgen,
+       :ready true,
+       :unblocks [:t93J03],
+       :closest 3}],
+     :placeholder-counts
+     {:t99J01 1,
+      :t92J06 1,
+      :t97A03 3,
+      :t93J03 1,
+      :t01A03 1,
+      :t97A01 1},
+     :deferred
+     ["The two ready t99J01 lemmas remain on its route but neither alone completes the two-prerequisite residual."
+      "The two ready t97A01 lemmas remain on its route but neither alone enables its polygon adapter."
+      "The orbit-quotient homeomorphism remains blocked on the elected boundary comparison; quotient topology and deck-group pi1 are not folded into this row."],
+     :infrastructure-packets
+     {:banked-this-checkpoint 1,
+      :supporting-modules-since-prior-checkpoint 5,
+      :placeholder-changing 0},
+     :ranking
+     "No closure adapter is enabled: every one-placeholder consumer still has multiple typed route steps. The checkpoint acceptance specifically advances the newly enabled frozen-boundary comparison, so it elects kleinSquareBoundaryOrbitEqvGen. The mechanically higher t99J01 and t97A01 entries remain ready but each is only one of two prerequisites and does not yet enable an adapter.",
+     :typed-residual-change
+     ["t93J03 no longer needs an unproved geometric orbit enumeration: the canonical module supplies the affine action, square representatives, and an iff classification including every edge and corner case."
+      "Its next obligation is now a representation comparison: prove that this explicit Cases relation is exactly the EqvGen relation induced by the frozen aabb disk boundary identifications."
+      "The other five consumer routes are unchanged."],
+     :review-outcomes {:pass 1, :stop 0, :closed-problems 0}},
+    :lemmas [],
+    :replacement-items
+    [{:bounded-exception
+      "This single-consumer representation comparison is the next banked-dependent step of the one-placeholder t93J03 route and is required before the orbit quotient can be identified with the frozen KleinBottle model.",
+      :consumer :t93J03,
+      :implements-lemma :lemma-kleinsquareboundaryorbiteqvgen,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/square-boundary-orbit-eqvgen",
+      :acceptance
+      {:probe
+       "Compile a placeholder-free exact comparison on the closed square between KleinPlaneActionSquareOrbitClassification.Cases and the EqvGen relation induced by the frozen aabb boundary relation defining StatementSurfaceModels.KleinBottle. Prove both directions, explicitly orient all four boundary arcs and corner classes, and expose the equality or iff needed for quotient descent. Do not construct the quotient homeomorphism, prove a covering theorem, compute a fundamental group, or alter the frozen surface model.",
+       :placeholder "the single sorry in apm_t93j03",
+       :route-step
+       "t93J03 step 1c, identify the banked square orbit cases with the frozen aabb boundary EqvGen before quotient descent",
+       :gates
+       ["canonical packages"
+        "fixture compiles"
+        "zero fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :representation
+      {:source
+       "The PresentedKleinGroup affine-action same-orbit relation restricted to the closed unit square, expressed by KleinPlaneActionSquareOrbitClassification.Cases.",
+       :target
+       "The EqvGen relation generated by the frozen aabb disk-boundary identifications used by ConstructionTargets.StatementSurfaceModels.KleinBottle (Surface false 2).",
+       :direction
+       "Exact iff identification from the target aabb boundary EqvGen relation to the source restricted affine-orbit relation, proving both implications and retaining every edge and corner identification."},
+      :id :routes-2026-10-10-klein-square-boundary-orbit-eqvgen-28,
+      :kind :representation-comparison,
+      :depends-on [:lemma-kleinplaneaction-squareorbitclassification],
+      :current-residual
+      "Unfold the frozen disk-boundary relation into square-side coordinates, prove its EqvGen closure yields exactly the translation, reflected-edge, and corner disjunction in Cases, and prove the converse generators realize every listed case.",
+      :other-consumers []}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:strategy
+       "Measure the exact Klein square-boundary orbit/EqvGen comparison, recount all six consumers and eight placeholders, then elect the orbit-quotient homeomorphism or a newly enabled nearer closure adapter."},
+      :id
+      :routes-2026-10-10-checkpoint-topo1-after-klein-boundary-eqvgen-28,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:routes-2026-10-10-klein-square-boundary-orbit-eqvgen-28],
+      :current-residual
+      "Review the frozen-boundary comparison before descending the square/orbit identification to a homeomorphism of quotients.",
+      :other-consumers []}],
+    :author "topo-4",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -94528,6 +94707,69 @@
     :routes-2026-10-10-checkpoint-topo1-after-klein-coordinate-normal-form-19],
    :current-residual
    "Review the finite geometric classification before comparing the orbit relation with the frozen aabb boundary EqvGen.",
+   :other-consumers []}
+  {:bounded-exception
+   "This single-consumer representation comparison is the next banked-dependent step of the one-placeholder t93J03 route and is required before the orbit quotient can be identified with the frozen KleinBottle model.",
+   :consumer :t93J03,
+   :implements-lemma :lemma-kleinsquareboundaryorbiteqvgen,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/square-boundary-orbit-eqvgen",
+   :acceptance
+   {:probe
+    "Compile a placeholder-free exact comparison on the closed square between KleinPlaneActionSquareOrbitClassification.Cases and the EqvGen relation induced by the frozen aabb boundary relation defining StatementSurfaceModels.KleinBottle. Prove both directions, explicitly orient all four boundary arcs and corner classes, and expose the equality or iff needed for quotient descent. Do not construct the quotient homeomorphism, prove a covering theorem, compute a fundamental group, or alter the frozen surface model.",
+    :placeholder "the single sorry in apm_t93j03",
+    :route-step
+    "t93J03 step 1c, identify the banked square orbit cases with the frozen aabb boundary EqvGen before quotient descent",
+    :gates
+    ["canonical packages"
+     "fixture compiles"
+     "zero fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :representation
+   {:source
+    "The PresentedKleinGroup affine-action same-orbit relation restricted to the closed unit square, expressed by KleinPlaneActionSquareOrbitClassification.Cases.",
+    :target
+    "The EqvGen relation generated by the frozen aabb disk-boundary identifications used by ConstructionTargets.StatementSurfaceModels.KleinBottle (Surface false 2).",
+    :direction
+    "Exact iff identification from the target aabb boundary EqvGen relation to the source restricted affine-orbit relation, proving both implications and retaining every edge and corner identification."},
+   :id :routes-2026-10-10-klein-square-boundary-orbit-eqvgen-28,
+   :kind :representation-comparison,
+   :depends-on
+   [:lemma-kleinplaneaction-squareorbitclassification
+    :routes-2026-10-10-checkpoint-topo1-after-klein-square-orbits-23],
+   :current-residual
+   "Unfold the frozen disk-boundary relation into square-side coordinates, prove its EqvGen closure yields exactly the translation, reflected-edge, and corner disjunction in Cases, and prove the converse generators realize every listed case.",
+   :other-consumers []}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:strategy
+    "Measure the exact Klein square-boundary orbit/EqvGen comparison, recount all six consumers and eight placeholders, then elect the orbit-quotient homeomorphism or a newly enabled nearer closure adapter."},
+   :id
+   :routes-2026-10-10-checkpoint-topo1-after-klein-boundary-eqvgen-28,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:routes-2026-10-10-klein-square-boundary-orbit-eqvgen-28
+    :routes-2026-10-10-checkpoint-topo1-after-klein-square-orbits-23],
+   :current-residual
+   "Review the frozen-boundary comparison before descending the square/orbit identification to a homeomorphism of quotients.",
    :other-consumers []}
   {:consumer :t99J01,
    :phase :probe,
