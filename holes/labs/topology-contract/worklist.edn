@@ -97670,6 +97670,22 @@
      {:cmd "git status --short",
       :exit 0,
       :finding "clean worktree after commit"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791660166492-2785-97d60523",
+     :commands
+     ["git show 4cd7c59b456eee8000c04c564919990dc3f93b1e:ConstructionTargets/ThreeCirclesCollapseFiberPath.lean"
+      "git diff-tree --no-commit-id --name-only -r 4cd7c59b456eee8000c04c564919990dc3f93b1e"
+      "git diff --exit-code 4cd7c59b456eee8000c04c564919990dc3f93b1e -- ConstructionTargets/ThreeCirclesCollapseFiberPath.lean"
+      "sha256sum /tmp/three-circles-collapse-fiber-path.lean"
+      "lake build ConstructionTargets.ThreeCirclesCollapseFiberPath"
+      "lake env lean /tmp/three-circles-collapse-fiber-path.lean"
+      "placeholder census on source, fixture, and problems/t99J01/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb on recorded ledger at 6ec817a1"],
+     :finding
+     "PASS: reviewer codex-3 verified author topo-2 and recorded commit 4cd7c59b, whose exact scope is only ConstructionTargets/ThreeCirclesCollapseFiberPath.lean and whose source equals the reviewed checkout. The canonical package authority is correct; fixture SHA-256 cfc417d11180ad2a1c0c4ad388d2a0cd7f469dfb56b2ba05ab3a96bcb95a77d7 matches; target and fixture compile with zero placeholders; t99J01 retains one placeholder; exists_collapseFiber_path uses only propext, Classical.choice, and Quot.sound; all 131 registered statements and the recorded 877-item ledger validate. The proof constructs the Circle and TwoCircles path-connected instances, eliminates the outer quotient, and handles both representations correctly. For an outer-left representative it maps a path from x to the inner wedge point into ThreeCircles, then casts the endpoint through wedgePoint_eq in the orientation needed to reach firstCircle (collapse y); collapse stays definitionally constant. For an outer-right representative it uses the reflexive path at firstCircle z. The theorem does not lift these paths to the pullback, construct the circle-power path, count fibers, compute subgroup index or pi1, or close t99J01."},
     :commit "4cd7c59b456eee8000c04c564919990dc3f93b1e",
     :changed-paths
     ["ConstructionTargets/ThreeCirclesCollapseFiberPath.lean"],
@@ -97684,7 +97700,7 @@
      ["ConstructionTargets.ThreeCirclesCollapseFiberPath.exists_collapseFiber_path"]},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ThreeCirclesCollapseFiberPath.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/cyclic-three-circles-cover/collapse-fiber-path",
@@ -97798,7 +97814,7 @@
       "exists_collapseFiber_path gives, for every y : ThreeCircles, a path from y to firstCircle (collapse y) along which collapse is constant."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/cyclic-three-circles-cover",
@@ -99450,7 +99466,7 @@
    :other-consumers []}
   {:consumer :t99J01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "ThreeCirclesCollapseFiberPath.exists_collapseFiber_path",
@@ -99462,8 +99478,9 @@
     [:routes-2026-10-10-three-circles-collapse-fiber-path-45],
     :type
     "For every y : ThreeCircles there exists a path from y to firstCircle (collapse y) along which collapse is constant",
-    :proved-in
-    :routes-2026-10-10-three-circles-collapse-fiber-path-45},
+    :proved-in :routes-2026-10-10-three-circles-collapse-fiber-path-45,
+    :banked-by :routes-2026-10-10-three-circles-collapse-fiber-path-45,
+    :banked-commit "4cd7c59b456eee8000c04c564919990dc3f93b1e"},
    :id :lemma-threecirclescollapsefiberpath-exists-collapsefiber-path,
    :kind :lemma,
    :depends-on
