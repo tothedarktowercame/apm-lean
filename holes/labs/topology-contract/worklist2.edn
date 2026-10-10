@@ -56503,48 +56503,65 @@
    "single-consumer fixed-base Path.cast normalization for frozenLbar",
    :consumer :t97A04,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/torus_frozen_lbar_based_path_cast.lean",
-      :sha256
-      "1b69852194410aebe5d249309f148e858d47390a8f7a62974a84cf6af8d9f0af"},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/torus_frozen_lbar_based_path_cast.lean",
-       :exit 0,
-       :output
-       "frozenLbar fixed-base cast normalization compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/torus_frozen_lbar_based_path_cast.lean || true)\"",
-       :exit 0}
-      {:cmd "sha256sum /tmp/torus_frozen_lbar_based_path_cast.lean",
-       :exit 0,
-       :output
-       "1b69852194410aebe5d249309f148e858d47390a8f7a62974a84cf6af8d9f0af  /tmp/torus_frozen_lbar_based_path_cast.lean"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :finding
-     "The placeholder-free fixture names the exact endpoint cast inserted by FundamentalGroup.mapOfEq_apply for frozenLbar at (0,0), identifies the induced endomorphism on every explicit loop class, and proves the Circle image of the casted based path is exactly frozenLbarCircleImagePath. The dependent basepoint normalization is therefore explicit and reusable.",
-     :implementation
-     {:scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
-      :declarations
-      ["frozenLbar_base"
-       "frozenLbarBasedPath"
-       "frozenLbarPi1Map"
-       "frozenLbarPi1Map_mk"
-       "frozenCircleImagePath_frozenLbarBasedPath"],
-      :acceptance
-      {:compile
-       "lake build ConstructionTargets.TorusPiOneWindingCoordinates",
-       :placeholder-free true,
-       :statement-registry true}},
-     :residual
-     "Use the normalized representative to prove the induced fundamental-group square commutes, then transport circleMatrixPi1Map_naturality through frozenTorusPi1Coord."}},
+   {:placeholder-delta 0,
+    :residual
+    "Use the normalized representative to prove the induced fundamental-group square commutes, then transport circleMatrixPi1Map_naturality through frozenTorusPi1Coord.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["The focused Lake build replayed pre-existing linter warnings from dependency modules; the scoped module compiled without new warnings."],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd "sha256sum /tmp/torus_frozen_lbar_based_path_cast.lean",
+      :exit 0,
+      :output
+      "1b69852194410aebe5d249309f148e858d47390a8f7a62974a84cf6af8d9f0af  /tmp/torus_frozen_lbar_based_path_cast.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/TorusPiOneWindingCoordinates.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.TorusPiOneWindingCoordinates",
+      :exit 0,
+      :output "Build completed successfully (8290 jobs)."}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/TorusPiOneWindingCoordinates.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "lake env lean /tmp/check_frozen_lbar_cast_axioms.lean",
+      :exit 0,
+      :output
+      "frozenLbar_base, frozenLbarPi1Map_mk, and frozenCircleImagePath_frozenLbarBasedPath each depend on [propext, Classical.choice, Quot.sound]."}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r 4891ca586555c332f2307dbc9a34af7e45d0f770",
+      :exit 0,
+      :output "ConstructionTargets/TorusPiOneWindingCoordinates.lean"}
+     {:cmd
+      "python3 -c 'import re; p=\"problems/t97A04/lean/Main.lean\"; t=open(p).read(); t=re.sub(r\"/-.*?-/\",\" \",t,flags=re.S); t=re.sub(r\"--[^\\n]*\",\" \",t); print(len(re.findall(r\"(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])\",t)))'",
+      :exit 0,
+      :output "4"}
+     {:cmd "sha256sum problems/t97A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "79ca854186b39183bf53490a20b5be92695e345a2c099fcf928b5ad3300ee4ec  problems/t97A04/lean/Main.lean"}],
+    :commit "4891ca586555c332f2307dbc9a34af7e45d0f770",
+    :changed-paths
+    ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
+    :fixture
+    {:path "/tmp/torus_frozen_lbar_based_path_cast.lean",
+     :sha256
+     "1b69852194410aebe5d249309f148e858d47390a8f7a62974a84cf6af8d9f0af"},
+    :declarations
+    ["ConstructionTargets.TorusPiOneWindingCoordinates.frozenLbar_base"
+     "ConstructionTargets.TorusPiOneWindingCoordinates.frozenLbarBasedPath"
+     "ConstructionTargets.TorusPiOneWindingCoordinates.frozenLbarPi1Map"
+     "ConstructionTargets.TorusPiOneWindingCoordinates.frozenLbarPi1Map_mk"
+     "ConstructionTargets.TorusPiOneWindingCoordinates.frozenCircleImagePath_frozenLbarBasedPath"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A04/torus-pi1-winding-coordinates/frozen-based-path-cast",
