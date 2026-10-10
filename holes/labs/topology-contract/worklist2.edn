@@ -60697,21 +60697,61 @@
   {:bounded-exception
    "single-consumer continuous ambient reconstruction formula for the t02A03 punctured left tube",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/t02a03_geometric_tube_cover.lean",
+      :sha256
+      "65b54a8849eed3ce2408d4d7e49f5ef3556f2c9c83d50745ba3de5a923be308f"},
+     :commands
+     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "apm_t02a03_leftTubeTorusPoint and apm_t02a03_continuous_leftTubeTorusPoint compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
+       :exit 0}
+      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "65b54a8849eed3ce2408d4d7e49f5ef3556f2c9c83d50745ba3de5a923be308f  /tmp/t02a03_geometric_tube_cover.lean"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :implementation
+     {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
+      :declarations
+      ["apm_t02a03_leftTubeTorusPoint"
+       "apm_t02a03_continuous_leftTubeTorusPoint"],
+      :acceptance
+      {:implementation
+       "Add the two compiled declarations from the verified fixture to ConstructionTargets/T02A03GeometricTubeCover.lean without changing their types or the frozen consumer. Compile the scoped module, confirm the scoped file contains no sorry token, run the statement registry check, and report the declarations' axioms.",
+       :gates
+       ["scoped module compiles"
+        "scoped file contains no sorry token"
+        "statement registry matches"]}},
+     :finding
+     "The fixture completely supplies this bounded row. The ambient inverse-coordinate formula places a torus pair at fixed normal radius 1/8 around the frozen left core, using the first Circle as core angle and the second Circle as normal angle. Explicit Euclidean coordinate continuity proves the realization continuous.",
+     :residual
+     "After banking the ambient realization, prove its image lies in the frozen left tube and outside the frozen core, bundle it into LeftTubeMinusCore, and construct both comparison homotopies."}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-torus-point",
    :acceptance
-   {:probe
-    "Compile and bank apm_t02a03_leftTubeTorusPoint and apm_t02a03_continuous_leftTubeTorusPoint from /tmp/t02a03_geometric_tube_cover.lean. Define the explicit ambient reconstruction from Circle times Circle using core angle a, planar radius 1 + (1/8) Re(b), and height (1/8) Im(b), and prove it continuous by explicit Euclidean coordinate continuity. This supplies the inverse-coordinate formula required by t02A03 route step 2; do not yet claim that its image lies in LeftTubeMinusCore, comparison homotopies, the torus HomotopyEquiv, or gluing.",
-    :declarations
-    ["apm_t02a03_leftTubeTorusPoint"
-     "apm_t02a03_continuous_leftTubeTorusPoint"],
-    :placeholder "the sole sorry in apm_t02a03",
-    :route-step
-    "t02A03 step 2, define the continuous ambient realization of torus coordinates at fixed normal radius 1/8"},
+   {:implementation
+    "Add the two compiled declarations from the verified fixture to ConstructionTargets/T02A03GeometricTubeCover.lean without changing their types or the frozen consumer. Compile the scoped module, confirm the scoped file contains no sorry token, run the statement registry check, and report the declarations' axioms.",
+    :gates
+    ["scoped module compiles"
+     "scoped file contains no sorry token"
+     "statement registry matches"]},
    :id :routes-2026-10-10-t02a03-left-tube-torus-point-topo2-r1,
    :kind :reusable-theorem,
+   :declarations
+   ["apm_t02a03_leftTubeTorusPoint"
+    "apm_t02a03_continuous_leftTubeTorusPoint"],
    :depends-on
    [:routes-2026-10-10-checkpoint-topo2-r5
     :routes-2026-10-10-t02a03-left-tube-torus-coordinate-map-topo2-r1],
