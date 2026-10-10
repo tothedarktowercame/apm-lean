@@ -88011,7 +88011,7 @@
   {:consumer :t99J01,
    :owner-reopen
    "Owner reopen 2026-10-10 (claude-14): both STOPs cite missing approved signatures for declarations the acceptance lists in prose. Under work-prompt.md WHAT IS FROZEN, only the registered statement and the fixture interface-axiom types are frozen; design the supporting signatures, discharge the frozen axiom type with standard axioms, and STOP only on a mathematical boundary.",
-   :stop-count 2,
+   :stop-count 0,
    :review-finding
    "frozen interface axiom is false at r = 0, n = 1, H = top; require 0 < r or state the rank-zero case separately",
    :evidence
@@ -88065,7 +88065,9 @@
      :proof-placeholder-count 1},
     :seat "topo-2"},
    :phase :implementation,
-   :state :needs-owner,
+   :owner-repair
+   "Owner repair 2026-10-10 (claude-14, Joe: check the LaTeX, then repair the Lean). The frozen interface was false at r = 0 (natural subtraction) and at n = 0 (Subgroup.index is 0 for infinite index); refutations compile in frozen/finite-index-free-group-schreier-rank-old-refutations.lean. The problems LaTeX and registered statements are correct (t99J01: 0 < n, r = 3; t97A03: r = 2, n = 2); only this row fixture was wrong. New fixture adds (hr : 0 < r) (hn : 0 < n) to finiteIndexSubgroupEquiv and hn to indexSubgroupFreeGroupFinThreeEquiv.",
+   :state :open,
    :scope
    ["ConstructionTargets/FiniteIndexFreeGroupSchreierRank.lean"],
    :dag-node
@@ -88082,16 +88084,17 @@
     :implementation
     "For H <= FreeGroup (Fin r) with H.index = n, use the coset action groupoid underlying Mathlib's NielsenSchreier construction. Its vertices are the n right cosets and its directed generator edges are Fin r times those cosets. Choose the existing geodesic spanning arborescence. Identify the vertex group at the root with H via endMulEquivSubgroup, and identify the free basis furnished by SpanningTree.endIsFree with the directed generator edges outside the tree. Prove the finite connected tree has n-1 edges, hence the complement has r*n-(n-1) = (r-1)*n+1 elements. Reindex the resulting FreeGroupBasis along an explicit finite equivalence to Fin ((r-1)*n+1), then compose its equiv with the subgroup/end-group equivalence. Export only the universal finite-rank theorem and the r=3 arbitrary-n and r=2 index-two specializations required by the two consumers.",
     :axioms :standard-only,
-    :fixture "/tmp/finite-index-free-group-schreier-rank-probe.lean",
+    :fixture
+    "holes/labs/topology-contract/frozen/finite-index-free-group-schreier-rank-probe.lean",
     :fixture-sha256
-    "5751d883226814d2b3eff08804f8c857dbe2a265f31c1c23d55aab24ab9b778a",
+    "0ac8db697087cfead465c40351e15979884f523a290ad10d13b336c27c8e7799",
     :commands
     ["lake env lean ConstructionTargets/FiniteIndexFreeGroupSchreierRank.lean"
-     "lake env lean /tmp/finite-index-free-group-schreier-rank-probe.lean"
+     "lake env lean holes/labs/topology-contract/frozen/finite-index-free-group-schreier-rank-probe.lean"
      "python3 scripts/statement-registry.py check"]},
    :id :routes-2026-10-10-finite-index-schreier-spanning-tree-count-1,
    :kind :reusable-theorem,
-   :fail-count 1,
+   :fail-count 0,
    :depends-on [],
    :current-residual
    "Refine Mathlib's qualitative Nielsen-Schreier basis by counting the complement of a spanning tree in the finite Schreier coset quiver.",
