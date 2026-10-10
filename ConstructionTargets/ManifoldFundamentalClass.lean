@@ -210,6 +210,18 @@ theorem localizationMap_naturality
   simpa only [HomologicalComplex.homologyMap_comp, localizationMap,
     absoluteSingularMap] using hhom
 
+theorem localizationMap_apply_naturality
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (f : C(X, Y)) (x : X) (y : Y)
+    (h : Set.MapsTo f (deletedPoint x) (deletedPoint y)) (n : ℕ)
+    (c : (SingularChains (TopCat.of X)).homology n) :
+    localizationMap y n
+        (HomologicalComplex.homologyMap (absoluteSingularMap f) n c) =
+      HomologicalComplex.homologyMap
+          (relativeSingularMap (deletedPoint x) (deletedPoint y) f h) n
+        (localizationMap x n c) := by
+  exact ConcreteCategory.congr_hom (localizationMap_naturality f x y h n) c
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -227,3 +239,4 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.isIso_of_map_globalGenerator_eq_globalGenerator
 #print axioms ConstructionTargets.ManifoldFundamentalClass.localizationMap
 #print axioms ConstructionTargets.ManifoldFundamentalClass.localizationMap_naturality
+#print axioms ConstructionTargets.ManifoldFundamentalClass.localizationMap_apply_naturality
