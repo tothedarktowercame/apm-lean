@@ -99888,8 +99888,78 @@
   {:bounded-exception
    "This single-consumer prerequisite exposes the exact two six-edge Circle presentations needed before constructing their quotient homeomorphisms to ThreeCircles.",
    :consumer :t97A01,
+   :evidence
+   {:placeholder-delta {:source 0, :fixture 0},
+    :residual
+    "Construct homeomorphisms from both specialized Circle relation quotients to ThreeCircles, prove the six polygon vertices share the required classes, derive the literal boundary and outer-piece inclusion formulas, and assemble the packages.",
+    :gates
+    {:module-build :pass,
+     :fixture-compiles :pass,
+     :zero-source-and-fixture-sorry :pass,
+     :standard-only-axioms :pass,
+     :registry-check :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["The successful build replayed PolygonBoundaryCircleSource and reported its two existing unnecessarySimpa lints; the new module and fixture emitted no lints."],
+    :missing-theorems
+    [{:name
+      "PolygonBoundaryCircleRelations.concreteQuotientIdentifications",
+      :type
+      "The SurfaceRel false 3 and TorusCrosscapRel pullbacks to Circle contain their three literal six-edge generators, and their quotient maps satisfy all six corresponding identification equations.",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on
+      ["PolygonBoundaryInducedQuotient.circleBoundaryQuotientHomeomorph"],
+      :area "polygon-surface-open-cover"}],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "sha256sum /tmp/polygon-boundary-circle-relations.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.PolygonBoundaryCircleRelations",
+      :exit 0}
+     {:cmd "lake env lean /tmp/polygon-boundary-circle-relations.lean",
+      :exit 0}
+     {:cmd
+      "rg -n \\b(sorry|admit)\\b ConstructionTargets/PolygonBoundaryCircleRelations.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "rg -n \\b(sorry|admit)\\b /tmp/polygon-boundary-circle-relations.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :diagnostic-history
+    [{:cmd
+      "lake build ConstructionTargets.PolygonBoundaryCircleRelations",
+      :exit 1,
+      :reason
+      "The initially applied source had one accidental leading plus before import; removing that transcription character produced the successful acceptance build."}],
+    :commit "495f0bbe02bb87b2020a57a3241358a9850cdc6d",
+    :changed-paths
+    ["ConstructionTargets/PolygonBoundaryCircleRelations.lean"],
+    :fixture
+    {:path "/tmp/polygon-boundary-circle-relations.lean",
+     :sha256
+     "1aa2f256221b8489fcc16a5f0402406a578d1afc473ca3a7fb5714f899c69d31",
+     :sorry-count 0},
+    :implementation
+    {:scope
+     ["ConstructionTargets/PolygonBoundaryCircleRelations.lean"],
+     :summary
+     "Defined six canonical Circle edge points, specialized both polygon relations, proved their three generators each, and proved all six quotient identification equations."},
+    :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PolygonBoundaryCircleRelations.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/boundary-circle-relations",
@@ -102843,6 +102913,31 @@
     :proved-in
     :routes-2026-10-10-polygon-radial-open-cover-packages-40},
    :id :lemma-polygonboundarycirclerelations-toruscrosscapcirclerel,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polygonboundaryinducedquotient-circleboundaryquotienthomeomorph],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "PolygonBoundaryCircleRelations.concreteQuotientIdentifications",
+    :type
+    "The SurfaceRel false 3 and TorusCrosscapRel pullbacks to Circle contain their three literal six-edge generators, and their quotient maps satisfy all six corresponding identification equations."},
+   :lemma
+   {:name
+    "PolygonBoundaryCircleRelations.concreteQuotientIdentifications",
+    :reported-by
+    [:routes-2026-10-10-polygon-boundary-circle-relations-56],
+    :type
+    "The SurfaceRel false 3 and TorusCrosscapRel pullbacks to Circle contain their three literal six-edge generators, and their quotient maps satisfy all six corresponding identification equations.",
+    :area "polygon-surface-open-cover",
+    :proved-in
+    :routes-2026-10-10-polygon-boundary-circle-relations-56},
+   :id
+   :lemma-polygonboundarycirclerelations-concretequotientidentifications,
    :kind :lemma,
    :depends-on
    [:lemma-polygonboundaryinducedquotient-circleboundaryquotienthomeomorph],
