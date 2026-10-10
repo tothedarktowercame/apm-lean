@@ -82173,6 +82173,22 @@
       :exit 0,
       :finding "131 registered statements match, 0 do not"}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791606103065-1068-0c7037dc",
+     :commands
+     ["git show/diff recorded transition be5d2e6c and scope checks"
+      "sha256sum /tmp/t99j05-affine-local-diagonal-probe.lean"
+      "lake env lean /tmp/t99j05-affine-local-diagonal-probe.lean"
+      "lake env lean ConstructionTargets/T99J05AffineLocalDiagonal.lean (expected exit 1: no implementation file)"
+      "rg Fin 3, CP 2, and AffineChartConstruction 2 in banked T94A08 modules"
+      "python3 scripts/statement-registry.py check and fingerprint t99J05"
+      "nested-comment-aware sorry/admit/axiom census"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git diff --check be5d2e6c^ be5d2e6c"],
+     :finding
+     "PASS as STOP: reviewer codex-3 differs from author topo-2. Commit be5d2e6c changes only the worklist, records no source changes, and the scoped ConstructionTargets/T99J05AffineLocalDiagonal.lean file is absent. The exact fixture reproduces SHA-256 b55704ee516bc4c04ab54c486d2cc148fad120bed408abaf73af79314eeec3d9 and compiles, but its census is zero sorry/admit and one axiom; #print axioms includes t99J05_affine_local_diagonal_package itself alongside standard axioms. Thus it deterministically violates the standard-only acceptance invariant and proves none of the requested package. The frozen t99J05 fingerprint remains cf42ee31318a9e37fde5e4e923ca60cbe51d483ebd813588efc9492359e37db6 with one consumer placeholder; registry is 131/131 and all 682 rows validate. The representation boundary is accurate: available quotient-coordinate compatibility and OpenPartialHomeomorph construction are specialized to Fin 3 and CP 2, while arbitrary-n affine charts must precede the separate fixed-line classification, coordinate localMap formula, real determinant positivity, and localIndex-one proofs."},
     :changed-paths [],
     :fixture
     {:path "/tmp/t99j05-affine-local-diagonal-probe.lean",
@@ -82181,7 +82197,7 @@
      :status :self-axiomatized},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T99J05AffineLocalDiagonal.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J05/affine-charts-local-diagonal/package",
@@ -82288,7 +82304,7 @@
      :residual
      "Exactly one prerequisite remains for this adapter: the arbitrary-n affine-chart and diagonal fixed-point/local-index package. Rational CPn homology, Lefschetz, and Euler characteristic remain downstream."}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t99J05/affine-charts-local-diagonal",
    :acceptance
