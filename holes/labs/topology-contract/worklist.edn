@@ -99723,6 +99723,20 @@
       :output "131 registered statements match, 0 do not"}
      {:cmd "git diff --check", :exit 0}
      {:cmd "git status --short", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791670477424-3095-8d90425b",
+     :commands
+     ["git show and diff-tree on a4eb6e8ff2645d556d43bfeab489cb02e7f4806c"
+      "sha256sum frozen fixture"
+      "lake build ConstructionTargets.PolygonBoundaryCircleSource"
+      "lake env lean frozen fixture"
+      "comment-stripped placeholder counts"
+      "python3 scripts/statement-registry.py check"
+      "git diff-tree --check"],
+     :finding
+     "PASS: recorded commit is authored by topo-2 and changes only ConstructionTargets/PolygonBoundaryCircleSource.lean; fixture hash matches; circleToBoundary and boundaryToCircle preserve the literal underlying complex coordinate, satisfy both inverse laws across the nested subtype boundary, and are continuous; boundaryCircleHomeomorph and its coordinate formula match the frozen fixture; source and fixture have zero placeholders; fixture reports only propext, Classical.choice, and Quot.sound; registry reports 131 matches and zero mismatches. Two unnecessary-simpa linter warnings are nonsemantic."},
     :commit "a4eb6e8ff2645d556d43bfeab489cb02e7f4806c",
     :changed-paths
     ["ConstructionTargets/PolygonBoundaryCircleSource.lean"],
@@ -99737,7 +99751,7 @@
      "Defined the radius-one Boundary subtype, mutually inverse continuous Circle/Boundary maps, their homeomorphism, and literal coordinate formulas."},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/PolygonBoundaryCircleSource.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/boundary-circle-source",
@@ -99864,7 +99878,7 @@
       "boundaryCircleHomeomorph identifies Circle homeomorphically with the radius-one subtype of the closed complex disk, with literal coercion formulas in both directions."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -102587,7 +102601,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "PolygonBoundaryCircleSource.boundaryCircleHomeomorph",
@@ -102601,7 +102615,9 @@
     :type
     "The complex unit circle is homeomorphic to the subtype of the canonical closed disk consisting of points of radius exactly one, with literal underlying complex coordinates.",
     :area "polygon-surface-open-cover",
-    :proved-in :routes-2026-10-10-polygon-boundary-circle-source-54},
+    :proved-in :routes-2026-10-10-polygon-boundary-circle-source-54,
+    :banked-by :routes-2026-10-10-polygon-boundary-circle-source-54,
+    :banked-commit "a4eb6e8ff2645d556d43bfeab489cb02e7f4806c"},
    :id :lemma-polygonboundarycirclesource-boundarycirclehomeomorph,
    :kind :lemma,
    :depends-on [:lemma-polygontoruscrosscaprelation-toruscrosscaprel],
