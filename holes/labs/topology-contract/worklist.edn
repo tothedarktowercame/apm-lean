@@ -86251,7 +86251,12 @@
    "End only when every active topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :evidence
    {:outcome :replan,
-    :seat "topo-4",
+    :warnings
+    [{:kind :shared-worktree-change,
+      :message
+      "ConstructionTargets/RealProjectiveSmoothTarget.lean changed outside this read-only strategy repair and was not touched."}],
+    :disposition :replan,
+    :author "topo-4",
     :commands
     [{:cmd
       "Python comment-stripped placeholder census for t99J01 t92J06 t97A03 t93J03 t01A03 t97A01",
@@ -86265,69 +86270,17 @@
       :exit 0,
       :finding
       "pre-existing unrelated modification: ConstructionTargets/RealProjectiveSmoothTarget.lean"}],
-    :warnings
-    [{:kind :shared-worktree-change,
-      :message
-      "ConstructionTargets/RealProjectiveSmoothTarget.lean changed outside this read-only strategy repair and was not touched."}],
-    :finding
-    {:placeholder-delta 0,
-     :placeholder-counts
-     {:t99J01 1,
-      :t92J06 1,
-      :t97A03 3,
-      :t93J03 1,
-      :t01A03 1,
-      :t97A01 1},
-     :typed-residual-change
-     ["generic point-wedge open-cover package banked"
-      "pi1 coordinate row preserved as reviewed STOP"
-      "quotient-sheet local-homeomorph row preserved as reviewed STOP"
-      "Mayer-Vietoris coordinate row is unresolved needs-owner repair because its generic H0 contract is false without path-connected X and Y or explicit H0(X) and H0(Y) coordinates"],
-     :infrastructure-packets
-     {:banked 1,
-      :reviewed-stops 2,
-      :needs-owner 1,
-      :placeholder-changing 0},
-     :review-outcomes
-     {:go 1, :stop 2, :needs-owner 1, :closed-problems 0},
-     :routes
-     {:t99J01
-      ["held pi1 coordinates"
-       "covering coset/index"
-       "Schreier rank"
-       "component restriction"
-       "assembly"],
-      :t92J06
-      ["held quotient-sheet gluing"
-       "permutation covers"
-       "Cayley tree"],
-      :t97A03
-      ["double-cover classification"
-       "model comparisons"
-       "invariants; MV branch requires repaired path-connected or explicit H0 coordinate contract"
-       "assembly"],
-      :t93J03
-      ["deck action"
-       "lifting criterion"
-       "annulus embedding"
-       "assembly"],
-      :t01A03 ["held wedge pi1" "separating-circle H1" "assembly"],
-      :t97A01
-      ["standard N3 homeomorphism"
-       "polygon open cover"
-       "polygon pi1/MV; MV branch requires repaired path-connected or explicit H0 coordinate contract"
-       "Smith algebra"
-       "assembly"]},
-     :preserved-stops
-     [:routes-2026-10-10-generic-point-wedge-pi1-inclusion-coordinates-1
-      :routes-2026-10-10-point-wedge-quotient-sheet-local-homeomorph-1],
-     :unresolved-owner-repairs
-     [{:id
-       :routes-2026-10-10-generic-point-wedge-mv-inclusion-coordinates-1,
-       :state :needs-owner,
-       :fail-count 1,
-       :boundary
-       "The claimed generic signed-diagonal/codiagonal H0 coordinates are false for arbitrary X and Y; repair the row by assuming path-connected X and Y or parameterizing by actual H0(X) and H0(Y) coordinates."}]},
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791617844623-1485-9122db7d",
+     :commands
+     ["git show/diff c7162a58bd7c55a1a2e5e8d5a756872a766fd5a0"
+      "statement-registry check; worklist_check.bb"
+      "EDN query of four boundary states and four replacement dependencies"
+      "nested-comment census and six frozen fingerprints"],
+     :finding
+     "PASS: repaired strategy-only checkpoint has empty scope and no fixture; it now records exactly go=1, reviewed-stop=2, needs-owner=1, removes the MV row from preserved-stops, and identifies its owner repair as path-connected X/Y or explicit H0(X)/H0(Y) coordinates. Three independent replacement probes and their checkpoint are correctly ordered, six consumer counts total eight with unchanged fingerprints, and registry/worklist gates pass."},
     :replacement-items
     [{:consumer :t97A01,
       :phase :probe,
@@ -86428,10 +86381,68 @@
       :current-residual
       "Review three independent route advances while the generic MV contract awaits owner repair.",
       :other-consumers []}],
-    :author "topo-4",
-    :disposition :replan},
+    :finding
+    {:placeholder-delta 0,
+     :placeholder-counts
+     {:t99J01 1,
+      :t92J06 1,
+      :t97A03 3,
+      :t93J03 1,
+      :t01A03 1,
+      :t97A01 1},
+     :typed-residual-change
+     ["generic point-wedge open-cover package banked"
+      "pi1 coordinate row preserved as reviewed STOP"
+      "quotient-sheet local-homeomorph row preserved as reviewed STOP"
+      "Mayer-Vietoris coordinate row is unresolved needs-owner repair because its generic H0 contract is false without path-connected X and Y or explicit H0(X) and H0(Y) coordinates"],
+     :infrastructure-packets
+     {:banked 1,
+      :reviewed-stops 2,
+      :needs-owner 1,
+      :placeholder-changing 0},
+     :review-outcomes
+     {:go 1, :stop 2, :needs-owner 1, :closed-problems 0},
+     :routes
+     {:t99J01
+      ["held pi1 coordinates"
+       "covering coset/index"
+       "Schreier rank"
+       "component restriction"
+       "assembly"],
+      :t92J06
+      ["held quotient-sheet gluing"
+       "permutation covers"
+       "Cayley tree"],
+      :t97A03
+      ["double-cover classification"
+       "model comparisons"
+       "invariants; MV branch requires repaired path-connected or explicit H0 coordinate contract"
+       "assembly"],
+      :t93J03
+      ["deck action"
+       "lifting criterion"
+       "annulus embedding"
+       "assembly"],
+      :t01A03 ["held wedge pi1" "separating-circle H1" "assembly"],
+      :t97A01
+      ["standard N3 homeomorphism"
+       "polygon open cover"
+       "polygon pi1/MV; MV branch requires repaired path-connected or explicit H0 coordinate contract"
+       "Smith algebra"
+       "assembly"]},
+     :preserved-stops
+     [:routes-2026-10-10-generic-point-wedge-pi1-inclusion-coordinates-1
+      :routes-2026-10-10-point-wedge-quotient-sheet-local-homeomorph-1],
+     :unresolved-owner-repairs
+     [{:id
+       :routes-2026-10-10-generic-point-wedge-mv-inclusion-coordinates-1,
+       :state :needs-owner,
+       :fail-count 1,
+       :boundary
+       "The claimed generic signed-diagonal/codiagonal H0 coordinates are false for arbitrary X and Y; repair the row by assuming path-connected X and Y or parameterizing by actual H0(X) and H0(Y) coordinates."}]},
+    :seat "topo-4"},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -86450,7 +86461,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t97A01/standard-n3-homeomorph",
    :acceptance
@@ -86473,7 +86484,7 @@
    :other-consumers []}
   {:consumer :t99J01,
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/covering-monodromy-coset-lifting",
@@ -86499,7 +86510,7 @@
    :other-consumers [:t93J03 :t97A03]}
   {:consumer :t97A01,
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/shared/polygon-edge-graph-open-cover",
    :acceptance
