@@ -68,4 +68,28 @@ theorem apm_t02a03_origin_mem_both_tubes :
     Metric.self_subset_cthickening _
       apm_t02a03_origin_mem_both_cores.2⟩
 
+/-- The two frozen core circles meet only at their common attachment point. -/
+theorem apm_t02a03_core_ranges_intersection :
+    Set.range apm_t02a03_leftCore ∩ Set.range apm_t02a03_rightCore =
+      ({0} : Set apm_t02a03_E3) := by
+  ext p
+  constructor
+  · rintro ⟨⟨t, rfl⟩, ⟨s, hts⟩⟩
+    have hx := congrArg (fun q : apm_t02a03_E3 => q 0) hts
+    simp [apm_t02a03_leftCore, apm_t02a03_rightCore] at hx
+    have hcost : Real.cos t = 1 := by
+      have ht := Real.cos_le_one t
+      have hs := Real.cos_le_one s
+      linarith
+    have hsint : Real.sin t = 0 := by
+      nlinarith [Real.sin_sq_add_cos_sq t]
+    simp only [Set.mem_singleton_iff]
+    ext i
+    fin_cases i <;>
+      simp [apm_t02a03_leftCore, hcost, hsint]
+  · intro hp
+    have hp0 : p = 0 := Set.mem_singleton_iff.mp hp
+    subst p
+    exact apm_t02a03_origin_mem_both_cores
+
 end ConstructionTargets.T02A03GeometricTubeCover
