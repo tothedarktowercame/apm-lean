@@ -94318,6 +94318,20 @@
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791648477942-2358-2acfd46b",
+     :commands
+     ["git show 5dac74ea2be431919b3abe35fc2190bad615458a -- ConstructionTargets/UnitIntervalIntegerClassification.lean"
+      "git diff --exit-code 5dac74ea2be431919b3abe35fc2190bad615458a -- ConstructionTargets/UnitIntervalIntegerClassification.lean"
+      "lake build ConstructionTargets.UnitIntervalIntegerClassification"
+      "sha256sum /tmp/unit-interval-integer-classification.lean && lake env lean /tmp/unit-interval-integer-classification.lean"
+      "placeholder census on source, fixture, and problems/t93J03"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb on recorded ledger at a3afa5c9"],
+     :finding
+     "PASS: reviewer codex-3 verified commit 5dac74ea changes only UnitIntervalIntegerClassification.lean and the compiled source equals the recorded commit. The frozen fixture hash is exact; target and fixture compile with zero placeholders; t93J03 retains its declared single placeholder; both theorems report only propext, Classical.choice, and Quot.sound; all 131 registry statements and the recorded ledger validate. translation correctly classifies y=m+x as m=-1 with (x,y)=(1,0), m=0 with y=x, or m=1 with (x,y)=(0,1). reflection correctly classifies y=m-x as m=0 with (0,0), m=1 with y=1-x, or m=2 with (1,1). Integer bounds are cast exactly and split by omega, and the module introduces no Klein action, quotient, or EqvGen claim."},
     :commit "5dac74ea2be431919b3abe35fc2190bad615458a",
     :changed-paths
     ["ConstructionTargets/UnitIntervalIntegerClassification.lean"],
@@ -94334,7 +94348,7 @@
       "UnitIntervalIntegerClassification.reflection"]},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/UnitIntervalIntegerClassification.lean"],
    :dag-node
@@ -94445,7 +94459,7 @@
       "translation classifies y=m+x with x,y in [0,1] into the three shifts m=-1,0,1 and proves the forced endpoint equalities; reflection classifies y=m-x into m=0,1,2 and proves the two corner degeneracies and the reflected-edge formula y=1-x."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/plane-action-square-orbit-classification",
@@ -95272,7 +95286,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "UnitIntervalIntegerClassification.translation",
@@ -95285,7 +95299,10 @@
     :type
     "For x,y in [0,1] and y=m+x, exactly the m=-1 endpoint case, m=0 equality case, or m=1 opposite endpoint case",
     :proved-in
-    :routes-2026-10-10-unit-interval-integer-classification-27},
+    :routes-2026-10-10-unit-interval-integer-classification-27,
+    :banked-by
+    :routes-2026-10-10-unit-interval-integer-classification-27,
+    :banked-commit "5dac74ea2be431919b3abe35fc2190bad615458a"},
    :id :lemma-unitintervalintegerclassification-translation,
    :kind :lemma,
    :depends-on
@@ -95293,7 +95310,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "UnitIntervalIntegerClassification.reflection",
@@ -95306,7 +95323,10 @@
     :type
     "For x,y in [0,1] and y=m-x, exactly the m=0 corner, m=1 reflection, or m=2 corner case",
     :proved-in
-    :routes-2026-10-10-unit-interval-integer-classification-27},
+    :routes-2026-10-10-unit-interval-integer-classification-27,
+    :banked-by
+    :routes-2026-10-10-unit-interval-integer-classification-27,
+    :banked-commit "5dac74ea2be431919b3abe35fc2190bad615458a"},
    :id :lemma-unitintervalintegerclassification-reflection,
    :kind :lemma,
    :depends-on
