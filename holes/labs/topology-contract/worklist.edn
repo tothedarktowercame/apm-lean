@@ -96397,13 +96397,43 @@
    "Use the open Joined component and each evenly covered neighborhood to retain exactly the sheets lying in that component, construct the restricted covering trivializations, and combine them with componentProjection_surjective.",
    :other-consumers []}
   {:bounded-exception
+   "This single-consumer sheet-selection lemma is the exact connectedness fact needed to prove that intersecting an evenly covered sheet with the clopen Joined component either retains the complete sheet or discards it.",
+   :consumer :t99J01,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/PreconnectedClopenSheet.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component/clopen-sheet-dichotomy",
+   :acceptance
+   {:implementation
+    "For a continuous map from a preconnected space into Y and a clopen C subset Y, prove its range is contained in C or disjoint from C. Expose the path-connected specialization used on refined covering-chart base neighborhoods. Do not construct covering trivializations, choose sheet index types, restrict a path component, prove surjectivity, count fibers, or compute pi1.",
+    :placeholder "the single sorry in apm_t99j01",
+    :route-step
+    "t99J01 component-restriction step 6: classify each path-connected covering sheet as wholly selected or wholly excluded by the clopen component",
+    :fixture "/tmp/preconnected-clopen-sheet.lean",
+    :fixture-sha256
+    "7ae48c1d23c3cf3f685f81e8edefe0bf55c81f3ba2d43072412f79251cac742b",
+    :gates
+    ["lake build ConstructionTargets.PreconnectedClopenSheet"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-10-preconnected-clopen-sheet-44,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-10-10-covering-path-component-surjective-43],
+   :current-residual
+   "Refine each evenly covered base neighborhood to a path-connected open neighborhood, apply the whole-sheet dichotomy to the clopen Joined component, use the retained fiber indices to build a restricted trivialization, and combine it with the banked surjectivity theorem.",
+   :other-consumers []}
+  {:bounded-exception
    "Single-consumer prerequisite first in the final ledger ranking.",
    :consumer :t99J01,
    :implements-lemma :lemma-iscoveringmap-restrictpathcomponent,
    :evidence
    {:probe
     {:residual
-     "Surjectivity of the component projection now compiles by path lifting. The sole remaining part of IsCoveringMap.restrictPathComponent is the selected-sheet local covering-chart construction for the open Joined component.",
+     "The whole-sheet selection dichotomy now compiles. The remaining restriction proof must refine covering charts to path-connected base neighborhoods and assemble a trivialization indexed by exactly the retained sheets.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
@@ -96413,53 +96443,51 @@
        :status :partial,
        :consumers [:t99J01],
        :depends-on
-       ["CoveringTotalLocPathConnected.IsCoveringMap.totalLocPathConnectedSpace"
-        "CoveringPathComponentSurjective.componentProjection_surjective"]}],
+       ["CoveringPathComponentSurjective.componentProjection_surjective"
+        "PreconnectedClopenSheet.range_subset_or_disjoint_of_isClopen_pathConnected"]}],
      :prerequisite
      {:bounded-exception
-      "This single-consumer theorem supplies surjectivity of the component-restricted projection by lifting paths from the chosen point, independently of the remaining selected-sheet covering-chart construction.",
+      "This single-consumer sheet-selection lemma is the exact connectedness fact needed to prove that intersecting an evenly covered sheet with the clopen Joined component either retains the complete sheet or discards it.",
       :consumer :t99J01,
       :phase :implementation,
       :state :open,
-      :scope
-      ["ConstructionTargets/CoveringPathComponentSurjective.lean"],
+      :scope ["ConstructionTargets/PreconnectedClopenSheet.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component/surjectivity",
+      "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component/clopen-sheet-dichotomy",
       :acceptance
       {:implementation
-       "For a covering p : E -> B over a path-connected base and e : E, prove Surjective (fun x : CoveringPathComponentDomain.Component e => p x.1). Choose a path from p e to each basepoint, lift it starting at e, use the lifted path as the Joined witness for its endpoint, and prove the projection equation from liftPath_lifts. Do not construct or restrict covering charts, select sheets, count fibers, or compute pi1.",
+       "For a continuous map from a preconnected space into Y and a clopen C subset Y, prove its range is contained in C or disjoint from C. Expose the path-connected specialization used on refined covering-chart base neighborhoods. Do not construct covering trivializations, choose sheet index types, restrict a path component, prove surjectivity, count fibers, or compute pi1.",
        :placeholder "the single sorry in apm_t99j01",
        :route-step
-       "t99J01 component-restriction step 5: prove the Joined-component projection surjective by covering path lifting",
-       :fixture "/tmp/covering-path-component-surjective.lean",
+       "t99J01 component-restriction step 6: classify each path-connected covering sheet as wholly selected or wholly excluded by the clopen component",
+       :fixture "/tmp/preconnected-clopen-sheet.lean",
        :fixture-sha256
-       "bdd2590503e0e1d76ac395d99ac62013d442ecf6686ed7e5d0c7e2ac4357430c",
+       "7ae48c1d23c3cf3f685f81e8edefe0bf55c81f3ba2d43072412f79251cac742b",
        :gates
-       ["lake build ConstructionTargets.CoveringPathComponentSurjective"
+       ["lake build ConstructionTargets.PreconnectedClopenSheet"
         "fixture compiles"
         "zero source and fixture sorry"
         "standard-only axioms"
         "registry check"]},
-      :id :routes-2026-10-10-covering-path-component-surjective-43,
+      :id :routes-2026-10-10-preconnected-clopen-sheet-44,
       :kind :reusable-theorem,
       :depends-on
-      [:routes-2026-10-10-covering-total-loc-path-connected-42],
+      [:routes-2026-10-10-covering-path-component-surjective-43],
       :current-residual
-      "Use the open Joined component and each evenly covered neighborhood to retain exactly the sheets lying in that component, construct the restricted covering trivializations, and combine them with componentProjection_surjective.",
+      "Refine each evenly covered base neighborhood to a path-connected open neighborhood, apply the whole-sheet dichotomy to the clopen Joined component, use the retained fiber indices to build a restricted trivialization, and combine it with the banked surjectivity theorem.",
       :other-consumers []},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
-     [{:cmd
-       "lake env lean /tmp/covering-path-component-surjective.lean",
+     [{:cmd "lake env lean /tmp/preconnected-clopen-sheet.lean",
        :exit 0,
        :finding
-       "lifted base paths prove surjectivity of the component projection with standard axioms"}
-      {:cmd "sha256sum /tmp/covering-path-component-surjective.lean",
+       "the clopen whole-sheet dichotomy compiles with standard axioms"}
+      {:cmd "sha256sum /tmp/preconnected-clopen-sheet.lean",
        :exit 0,
        :finding
-       "bdd2590503e0e1d76ac395d99ac62013d442ecf6686ed7e5d0c7e2ac4357430c"}
+       "7ae48c1d23c3cf3f685f81e8edefe0bf55c81f3ba2d43072412f79251cac742b"}
       {:cmd
-       "rg -n \"\\b(sorry|admit)\\b\" /tmp/covering-path-component-surjective.lean",
+       "rg -n \"\\b(sorry|admit)\\b\" /tmp/preconnected-clopen-sheet.lean",
        :exit 1,
        :expected-exit 1,
        :finding "no placeholders"}
@@ -96467,16 +96495,24 @@
        :exit 0,
        :finding "131 registered statements match, 0 do not"}
       {:cmd "git status --short", :exit 0, :finding "clean"}],
-     :diagnostic-history [],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/preconnected-clopen-sheet.lean",
+       :exit 1,
+       :finding
+       "The first draft eliminated empty-set membership incorrectly and imported only clopen connectedness, leaving PathConnectedSpace unavailable; corrected the elimination and imported PathConnected."}
+      {:cmd "lake env lean /tmp/preconnected-clopen-sheet.lean",
+       :exit 1,
+       :finding
+       "The empty-set contradiction used a nonexistent namespaced lemma; the reduced membership proof itself closes False."}],
      :fixture
-     {:path "/tmp/covering-path-component-surjective.lean",
+     {:path "/tmp/preconnected-clopen-sheet.lean",
       :sha256
-      "bdd2590503e0e1d76ac395d99ac62013d442ecf6686ed7e5d0c7e2ac4357430c",
+      "7ae48c1d23c3cf3f685f81e8edefe0bf55c81f3ba2d43072412f79251cac742b",
       :interface
-      "componentProjection_surjective proves that a covering projection restricted to the Joined component of any chosen point is onto a path-connected base."},
+      "range_subset_or_disjoint_of_isClopen proves a continuous image of a preconnected space lies wholly inside or wholly outside a clopen subset; the path-connected specialization is exposed for covering sheets."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component",
@@ -96500,7 +96536,8 @@
     :routes-2026-10-10-homeomorph-loc-path-connected-40
     :routes-2026-10-10-loc-path-connected-open-cover-41
     :routes-2026-10-10-covering-total-loc-path-connected-42
-    :routes-2026-10-10-covering-path-component-surjective-43],
+    :routes-2026-10-10-covering-path-component-surjective-43
+    :routes-2026-10-10-preconnected-clopen-sheet-44],
    :current-residual
    "Establish constant fiber cardinality and the induced subgroup image.",
    :other-consumers []}
@@ -97617,7 +97654,8 @@
     :lemma-homeomorphlocpathconnected-homeomorph-locpathconnectedspace
     :lemma-locpathconnectedopencover-locpathconnectedspace-of-open-cover
     :lemma-coveringtotallocpathconnected-iscoveringmap-totallocpathconnectedspace
-    :lemma-coveringpathcomponentsurjective-componentprojection-surjective],
+    :lemma-coveringpathcomponentsurjective-componentprojection-surjective
+    :lemma-preconnectedclopensheet-range-subset-or-disjoint-of-isclopen-pathconnected],
    :other-consumers []}
   {:consumer :t99J01,
    :phase :lemma,
@@ -98782,6 +98820,22 @@
    :depends-on
    [:lemma-coveringtotallocpathconnected-iscoveringmap-totallocpathconnectedspace
     :lemma-coveringpathcomponentdomain-component],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "PreconnectedClopenSheet.range_subset_or_disjoint_of_isClopen_pathConnected"},
+   :lemma
+   {:name
+    "PreconnectedClopenSheet.range_subset_or_disjoint_of_isClopen_pathConnected",
+    :reported-by []},
+   :id
+   :lemma-preconnectedclopensheet-range-subset-or-disjoint-of-isclopen-pathconnected,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
