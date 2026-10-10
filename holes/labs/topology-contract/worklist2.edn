@@ -61756,23 +61756,60 @@
   {:bounded-exception
    "single-consumer positive radial coefficient for the t02A03 complement interpolation",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :fixture
+     {:path "/tmp/t02a03_geometric_tube_cover.lean",
+      :sha256
+      "8b52244ebf5285a0d9b58a8c8e5818daa0263608597d8ca10d452729d7077148"},
+     :commands
+     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "apm_t02a03_leftTubeRadialNormalRadius_pos compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
+       :exit 0}
+      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "8b52244ebf5285a0d9b58a8c8e5818daa0263608597d8ca10d452729d7077148  /tmp/t02a03_geometric_tube_cover.lean"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :implementation
+     {:scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
+      :declaration
+      "ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_leftTubeRadialNormalRadius_pos",
+      :type
+      "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, 0 < (1 - (tp.1 : Real)) * (1 / 8 : Real) + (tp.1 : Real) * norm (apm_t02a03_leftTubeNormalComplex ⟨tp.2.1, tp.2.2.1⟩)",
+      :acceptance
+      ["target module compiles"
+       "declaration has the frozen type"
+       "target module contains no sorry token"
+       "statement registry matches"]},
+     :finding
+     "The fixture proves strict positivity by using the deleted-core hypothesis and normal zero-locus equivalence to obtain a positive source normal norm, then separating the endpoint case t=1 from t<1 so one convex-combination summand is strictly positive.",
+     :residual
+     "Prove the interpolation normal-coordinate formula, deduce deleted-core exclusion, bundle the homotopy, and assemble the torus HomotopyEquiv."}},
+   :phase :implementation,
+   :type
+   "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, 0 < (1 - (tp.1 : Real)) * (1 / 8 : Real) + (tp.1 : Real) * norm (apm_t02a03_leftTubeNormalComplex ⟨tp.2.1, tp.2.2.1⟩)",
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/left-tube-radial-normal-radius-positive",
    :acceptance
-   {:probe
-    "Compile and bank apm_t02a03_leftTubeRadialNormalRadius_pos from /tmp/t02a03_geometric_tube_cover.lean. Use deleted-core membership and the banked normal zero-locus equivalence to prove the source normal norm is positive, then prove its convex interpolation with the fixed reconstruction radius 1/8 is positive for every unit-interval time. This supplies the nonvanishing scalar needed for deleted-core exclusion; do not yet claim the normal-coordinate formula, exclusion itself, bundled homotopy, HomotopyEquiv, or gluing.",
-    :declaration "apm_t02a03_leftTubeRadialNormalRadius_pos",
-    :type
-    "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, 0 < (1 - (tp.1 : Real)) * (1 / 8 : Real) + (tp.1 : Real) * norm (apm_t02a03_leftTubeNormalComplex ⟨tp.2.1, tp.2.2.1⟩)",
-    :placeholder "the sole sorry in apm_t02a03",
-    :route-step
-    "t02A03 step 2, prove positivity of the radial coefficient throughout the inverse-after-forward interpolation"},
+   ["target module compiles"
+    "declaration has the frozen type"
+    "target module contains no sorry token"
+    "statement registry matches"],
    :id
    :routes-2026-10-10-t02a03-left-tube-radial-normal-radius-positive-topo2-r1,
    :kind :reusable-theorem,
+   :declaration
+   "ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_leftTubeRadialNormalRadius_pos",
    :depends-on
    [:routes-2026-10-10-checkpoint-topo2-r5
     :routes-2026-10-10-t02a03-left-tube-radial-membership-topo2-r2],
