@@ -96067,8 +96067,73 @@
   {:bounded-exception
    "This single-consumer local-to-global lemma is needed to assemble local path connectedness of the covering total space from the open covering sheets, after transporting the base property across each sheet homeomorphism.",
    :consumer :t99J01,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Use each covering trivialization sheet and the banked homeomorphism transport to obtain the open neighborhoods required by this theorem, thereby prove LocPathConnectedSpace E; then show the chosen path component selects whole sheets and prove surjectivity by lifting base paths.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :missing-theorems
+    [{:name
+      "LocPathConnectedOpenCover.locPathConnectedSpace_of_open_cover",
+      :type
+      "A space is locally path connected if every point belongs to an open subset whose subtype has LocPathConnectedSpace",
+      :status :proved,
+      :consumers [:t99J01],
+      :depends-on
+      ["HomeomorphLocPathConnected.Homeomorph.locPathConnectedSpace_iff"]}],
+    :statement-hashes "131 registered statements match",
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :finding
+      "canonical package authority resolves to /home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "sha256sum /tmp/loc-path-connected-open-cover.lean",
+      :exit 0,
+      :finding
+      "fixture hash matches 1e142ff1a702173dc4e21a0b93bdc90a5e80de57fb1628f23d867d811b6fd5e6"}
+     {:cmd "lake build ConstructionTargets.LocPathConnectedOpenCover",
+      :exit 0,
+      :finding
+      "canonical local-to-global local path-connectedness theorem builds"}
+     {:cmd "lake env lean /tmp/loc-path-connected-open-cover.lean",
+      :exit 0,
+      :finding
+      "frozen fixture compiles and reports only standard axioms"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" ConstructionTargets/LocPathConnectedOpenCover.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero source placeholders"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" /tmp/loc-path-connected-open-cover.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero fixture placeholders"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short",
+      :exit 0,
+      :finding "clean worktree after commit"}],
+    :commit "ee9d42bc6479b88f665ad772828adc2c3810bb02",
+    :changed-paths
+    ["ConstructionTargets/LocPathConnectedOpenCover.lean"],
+    :fixture
+    {:path "/tmp/loc-path-connected-open-cover.lean",
+     :sha256
+     "1e142ff1a702173dc4e21a0b93bdc90a5e80de57fb1628f23d867d811b6fd5e6",
+     :sorry-count 0},
+    :implementation
+    {:scope ["ConstructionTargets/LocPathConnectedOpenCover.lean"],
+     :declarations
+     ["ConstructionTargets.LocPathConnectedOpenCover.locPathConnectedSpace_of_open_cover"]},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/LocPathConnectedOpenCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component/lpc-open-cover",
@@ -98401,21 +98466,27 @@
    :kind :lemma,
    :depends-on [:lemma-coveringpathcomponentdomain-component],
    :other-consumers []}
-  {:consumer :portfolio,
+  {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
    :scope [],
    :acceptance
    {:lemma
-    "LocPathConnectedOpenCover.locPathConnectedSpace_of_open_cover"},
+    "LocPathConnectedOpenCover.locPathConnectedSpace_of_open_cover",
+    :type
+    "A space is locally path connected if every point belongs to an open subset whose subtype has LocPathConnectedSpace"},
    :lemma
    {:name
     "LocPathConnectedOpenCover.locPathConnectedSpace_of_open_cover",
-    :reported-by []},
+    :reported-by [:routes-2026-10-10-loc-path-connected-open-cover-41],
+    :type
+    "A space is locally path connected if every point belongs to an open subset whose subtype has LocPathConnectedSpace",
+    :proved-in :routes-2026-10-10-loc-path-connected-open-cover-41},
    :id
    :lemma-locpathconnectedopencover-locpathconnectedspace-of-open-cover,
    :kind :lemma,
-   :depends-on [],
+   :depends-on
+   [:lemma-homeomorphlocpathconnected-homeomorph-locpathconnectedspace-iff],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
