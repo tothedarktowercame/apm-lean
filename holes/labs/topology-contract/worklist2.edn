@@ -55868,6 +55868,20 @@
      "The multiplicative self-map (z0,z1) maps to (z0^2*z1,z1*z0^-1) on Circle x Circle",
      :direction
      "Exact pointwise conjugacy from the source additive map to the target multiplicative map through frozenTorusHomeomorphCircleProd"},
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791609675261-1214-2b8f6a65",
+     :commands
+     ["git diff-tree --no-commit-id --name-only -r 36adfcc7"
+      "sha256sum /tmp/torus_frozen_map_circle_conjugacy.lean"
+      "lake env lean /tmp/torus_frozen_map_circle_conjugacy.lean"
+      "lake env lean ConstructionTargets/TorusPiOneWindingCoordinates.lean"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 29555c2f:holes/labs/topology-contract/worklist2.edn)"
+      "recompute target and frozen t97A04 SHA-256 and comment-stripped placeholder count from commit 36adfcc7"],
+     :finding
+     "PASS: codex-7 independently reviewed topo-6 commit 36adfcc7. Exact implementation scope is the existing TorusPiOneWindingCoordinates module; transition commit 29555c2f changes only the ledger. Fixture SHA-256 98eecd6300a6627dfd561e51d2e9fb6fada8cb1b3772117e21e25ce351179e85 matches, compiles, and has zero placeholders; canonical source compiles with zero forbidden declarations. The pointwise conjugacy has the required source-to-target orientation: additive (2*x+y,y-x) is mapped through frozenTorusHomeomorphCircleProd to multiplicative (z0^2*z1,z1*z0^-1); the simp proof uses the matching addition, negation, and natural-multiple conversion laws. It does not overclaim induced pi1 matrix naturality. Axiom audit is exactly propext, Classical.choice, Quot.sound. Registry is 131/0 and ledger is 385 items OK. Frozen t97A04 remains 79ca854186b39183bf53490a20b5be92695e345a2c099fcf928b5ad3300ee4ec with four comment-stripped placeholders; delta zero."},
     :commit "36adfcc7d5134059d842504ac081949fd2e4e680",
     :changed-paths
     ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
@@ -55880,7 +55894,7 @@
      "ConstructionTargets.TorusPiOneWindingCoordinates.circleMatrixMap"
      "ConstructionTargets.TorusPiOneWindingCoordinates.frozenTorusHomeomorphCircleProd_frozenLbar"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A04/torus-pi1-winding-coordinates/frozen-map-conjugacy",
@@ -55984,7 +55998,7 @@
       "After conjugacy is banked, derive the two winding-coordinate formulas for the induced map and combine them into the displayed integer matrix naturality equation.",
       :other-consumers []}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/shared/torus-pi1-winding-coordinates",
    :acceptance
