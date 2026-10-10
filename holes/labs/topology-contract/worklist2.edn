@@ -56297,24 +56297,64 @@
   {:bounded-exception
    "single-consumer all-class Circle-coordinate naturality for the frozen t97A04 matrix",
    :consumer :t97A04,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path
+      "/tmp/torus_circle_matrix_pi1_representative_naturality.lean",
+      :sha256
+      "5d513a6d07389b3a7e788275274c32947d21bafbb70bd4ff8bb841f02f383780"},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/torus_circle_matrix_pi1_representative_naturality.lean",
+       :exit 0,
+       :output
+       "all-class Fin-2 matrix naturality compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/torus_circle_matrix_pi1_representative_naturality.lean || true)\"",
+       :exit 0}
+      {:cmd
+       "sha256sum /tmp/torus_circle_matrix_pi1_representative_naturality.lean",
+       :exit 0,
+       :output
+       "5d513a6d07389b3a7e788275274c32947d21bafbb70bd4ff8bb841f02f383780  /tmp/torus_circle_matrix_pi1_representative_naturality.lean"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :finding
+     "The placeholder-free fixture descends the two explicit-loop coordinate equations to arbitrary Circle-product fundamental-group classes by Quotient.inductionOn. Fin-2 extensionality then combines them into the exact function equality (n0,n1) maps to (2*n0+n1,n1-n0), with no existence-only facade.",
+     :implementation
+     {:scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
+      :declarations
+      ["circleMatrixPi1Map_coord_zero"
+       "circleMatrixPi1Map_coord_one"
+       "circleMatrixPi1Map_naturality"],
+      :acceptance
+      {:compile
+       "lake build ConstructionTargets.TorusPiOneWindingCoordinates",
+       :placeholder-free true,
+       :statement-registry true}},
+     :residual
+     "Transport the all-class equality through frozenTorusHomeomorphCircleProd using the exact frozenLbar conjugacy, then rewrite it in frozenTorusPi1Coord coordinates."}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A04/torus-pi1-winding-coordinates/all-class-circle-naturality",
    :acceptance
-   {:probe
-    "Compile and bank circleMatrixPi1Map_coord_zero, circleMatrixPi1Map_coord_one, and circleMatrixPi1Map_naturality from /tmp/torus_circle_matrix_pi1_representative_naturality. Descend the banked explicit-loop formulas to arbitrary FundamentalGroup classes by quotient induction, and combine the two coordinate equations into one exact Fin-2 function equality expressing (n0,n1) maps to (2*n0+n1,n1-n0). This supplies the Circle-coordinate quotient-level portion of t97A04 route step 4; do not yet claim transport to frozenLbar.",
-    :declarations
-    ["circleMatrixPi1Map_coord_zero"
-     "circleMatrixPi1Map_coord_one"
-     "circleMatrixPi1Map_naturality"],
-    :placeholder "apm_t97A04_bridge_2",
-    :route-step
-    "t97A04 step 4, all-class Circle-coordinate matrix naturality"},
+   {:compile
+    "lake build ConstructionTargets.TorusPiOneWindingCoordinates",
+    :placeholder-free true,
+    :statement-registry true},
    :id
    :routes-2026-10-10-t97a04-circle-matrix-pi1-all-class-naturality-topo2-r1,
    :kind :reusable-theorem,
+   :declarations
+   ["circleMatrixPi1Map_coord_zero"
+    "circleMatrixPi1Map_coord_one"
+    "circleMatrixPi1Map_naturality"],
    :depends-on
    [:routes-2026-10-10-checkpoint-topo2-r2
     :routes-2026-10-10-t97a04-circle-matrix-pi1-representative-naturality-topo2-r1],
