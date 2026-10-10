@@ -91140,9 +91140,19 @@
       "Review the first of two prerequisites isolated by the spanning-tree-count STOP.",
       :other-consumers []}],
     :author "topo-4",
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791638480811-2027-c5f83336",
+     :commands
+     ["bb holes/labs/topology-contract/worklist_check.bb <(git show 29003662:holes/labs/topology-contract/worklist.edn)"
+      "comment-stripped placeholder census for six consumers"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "recorded post-transition item count, empty checkpoint scope, placeholder counts, and ordered action-groupoid representation comparison reproduce"}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -91159,7 +91169,7 @@
    :other-consumers []}
   {:consumer :t99J01,
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/positive-index/action-groupoid-edge-comparison",
