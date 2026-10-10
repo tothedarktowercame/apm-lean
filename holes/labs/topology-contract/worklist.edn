@@ -96677,6 +96677,22 @@
      {:cmd "git status --short",
       :exit 0,
       :finding "clean worktree after commit"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791659121016-2753-2a860e3f",
+     :commands
+     ["git show 9589387f514411ee356cbaae1aee5ff51a866501:ConstructionTargets/CoveringRetainedSheetIndices.lean"
+      "git diff-tree --no-commit-id --name-only -r 9589387f514411ee356cbaae1aee5ff51a866501"
+      "git diff --exit-code 9589387f514411ee356cbaae1aee5ff51a866501 -- ConstructionTargets/CoveringRetainedSheetIndices.lean"
+      "sha256sum /tmp/covering-retained-sheet-indices.lean"
+      "lake build ConstructionTargets.CoveringRetainedSheetIndices"
+      "lake env lean /tmp/covering-retained-sheet-indices.lean"
+      "placeholder census on source, fixture, and problems/t99J01/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb on recorded ledger at 0ac2b937"],
+     :finding
+     "PASS: reviewer codex-3 verified author topo-2 and recorded commit 9589387f, whose exact scope is only ConstructionTargets/CoveringRetainedSheetIndices.lean and whose source equals the reviewed checkout. The canonical package authority is correct; fixture SHA-256 a00eeae284c2e660f2afae0397f179726c5bac05e5b905299742761434142679 matches; target and fixture compile with zero placeholders; t99J01 retains one placeholder; the theorem uses only propext, Classical.choice, and Quot.sound; all 131 registered statements and the recorded 875-item ledger validate. Retained fixes an index by membership of its invFun point over the chosen center, and RetainedIndex is exactly that subtype. For fixed i, invFun defines a continuous sheet from the chart base to E; path-connectedness plus clopenness makes its range wholly inside or disjoint from C, proving membership at arbitrary x iff membership at b. Both implications and the Set.range witnesses use the correct points and representation boundary. The module does not build the restricted chart equivalence, assemble a component covering, count fibers, or compute pi1."},
     :commit "9589387f514411ee356cbaae1aee5ff51a866501",
     :changed-paths
     ["ConstructionTargets/CoveringRetainedSheetIndices.lean"],
@@ -96693,7 +96709,7 @@
       "ConstructionTargets.CoveringRetainedSheetIndices.invFun_mem_iff_retained"]},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/CoveringRetainedSheetIndices.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component/retained-sheet-indices",
@@ -96805,7 +96821,7 @@
       "Retained and RetainedIndex select sheet indices by membership over a chart center; invFun_mem_iff_retained proves this selection is independent of the point in a path-connected chart base for a clopen domain subset."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component",
@@ -99298,7 +99314,7 @@
    :other-consumers []}
   {:consumer :t99J01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "CoveringRetainedSheetIndices.invFun_mem_iff_retained",
@@ -99310,7 +99326,9 @@
     [:routes-2026-10-10-covering-retained-sheet-indices-46],
     :type
     "For a trivialization over a path-connected base set and clopen C, t.invFun (x,i) belongs to C iff i is retained at the chosen center",
-    :proved-in :routes-2026-10-10-covering-retained-sheet-indices-46},
+    :proved-in :routes-2026-10-10-covering-retained-sheet-indices-46,
+    :banked-by :routes-2026-10-10-covering-retained-sheet-indices-46,
+    :banked-commit "9589387f514411ee356cbaae1aee5ff51a866501"},
    :id :lemma-coveringretainedsheetindices-invfun-mem-iff-retained,
    :kind :lemma,
    :depends-on
