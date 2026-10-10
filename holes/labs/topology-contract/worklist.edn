@@ -91486,6 +91486,18 @@
      "Quiver.Total (IsFreeGroupoid.Generators (ActionCategory (FreeGroup (Fin r)) (FreeGroup (Fin r) ⧸ H))) and its Symmetrify orientations",
      :direction
      "Exact endpoint-preserving equivalence from chosen-generator/coset coordinates to action-groupoid generator arrows; only cardinality, not generator action, is transported from Fin r"},
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791639382069-2057-45226054",
+     :commands
+     ["lake env lean ConstructionTargets/FiniteSchreierChosenGeneratorEdgeCoordinates.lean"
+      "lake env lean /tmp/chosen-edge.lean"
+      "sha256sum /tmp/chosen-edge.lean"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb"],
+     :finding
+     "recorded scope is exact; chosen-generator endpoint, label, inverse, Symmetrify orientation, and r*n cardinality results match the frozen fixture with zero placeholders and standard-only axioms"},
     :commit "1ed21da53f6b33539a53724ec97338bf25b9ab8e",
     :changed-paths
     ["ConstructionTargets/FiniteSchreierChosenGeneratorEdgeCoordinates.lean"],
@@ -91517,7 +91529,7 @@
       "reverseSymmEdge_orientation"]},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/FiniteSchreierChosenGeneratorEdgeCoordinates.lean"],
    :dag-node
@@ -91568,7 +91580,7 @@
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
