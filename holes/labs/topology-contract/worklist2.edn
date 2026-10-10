@@ -67215,7 +67215,62 @@
   {:bounded-exception
    "single-consumer convex radius bound for the disk-normal interpolation",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:residual
+     "Implement the compiled radius theorem in scope; then construct the compatible angular component and prove the reconstructed path avoids the left core.",
+     :outcome :go,
+     :warnings [],
+     :acceptance
+     {:declaration
+      "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreInterpolatedNormalRadiusBound",
+      :type
+      "forall (m : C(RightTubeMinusLeftCore, Circle)) (tp : unitInterval × RightTubeMinusLeftCore), norm (rightTubeCoreNormalInterpolation m tp) ≤ (1 / 4 : Real)",
+      :gates
+      ["Compile the scoped module after inserting the fixture declaration"
+       "Confirm only propext, Classical.choice, and Quot.sound axioms"
+       "Confirm no new sorry in the scoped module"
+       "Run python3 scripts/statement-registry.py check"]},
+     :commands
+     [{:cmd "lake env lean /tmp/t02a03_right_core_compact_probe.lean",
+       :exit 0,
+       :output
+       "rightTubeCoreInterpolatedNormalRadiusBound compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd "sha256sum /tmp/t02a03_right_core_compact_probe.lean",
+       :exit 0,
+       :output
+       "ddf162fc584b49d5bb642de0284085a606507df6bbeed2806fa71636e77a2afa  /tmp/t02a03_right_core_compact_probe.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_right_core_compact_probe.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}
+      {:cmd
+       "rg -n 'rightTubeCoreInterpolatedNormalRadiusBound' /tmp/t02a03_right_core_compact_probe.lean",
+       :exit 0,
+       :output
+       "430:theorem rightTubeCoreInterpolatedNormalRadiusBound\n471:#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreInterpolatedNormalRadiusBound"}],
+     :fixture
+     {:path "/tmp/t02a03_right_core_compact_probe.lean",
+      :sha256
+      "ddf162fc584b49d5bb642de0284085a606507df6bbeed2806fa71636e77a2afa"},
+     :finding
+     "The distinctly named theorem compiles placeholder-free. Since t and 1-t are nonnegative and sum to one, the triangle inequality combines the endpoint radius bounds 1/8 and 1/4 to keep every interpolated normal coordinate within radius 1/4.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+      :declaration
+      "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreInterpolatedNormalRadiusBound",
+      :type
+      "forall (m : C(RightTubeMinusLeftCore, Circle)) (tp : unitInterval × RightTubeMinusLeftCore), norm (rightTubeCoreNormalInterpolation m tp) ≤ (1 / 4 : Real)",
+      :proof-plan
+      "Use nonnegativity of t and 1-t, the triangle inequality, the exact meridian normal radius 1/8, and rightTubeCoreInputNormalRadiusBound to bound the convex linear interpolation by 1/4.",
+      :axioms [propext Classical.choice Quot.sound]},
+     :seat "topo-8"}},
+   :phase :implementation,
+   :type
+   "forall (m : C(RightTubeMinusLeftCore, Circle)) (tp : unitInterval × RightTubeMinusLeftCore), norm (rightTubeCoreNormalInterpolation m tp) ≤ (1 / 4 : Real)",
    :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
@@ -67230,15 +67285,20 @@
     :placeholder "the sole sorry in apm_t02a03",
     :route-step
     "control the disk-normal component throughout the deleted-right-tube deformation"},
+   :axioms [propext Classical.choice Quot.sound],
    :id
    :routes-2026-10-10-t02a03-right-core-interpolated-normal-radius-topo2-r2,
    :kind :reusable-theorem,
    :area "explicit-r3-tube-deformation-retraction",
+   :declaration
+   "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreInterpolatedNormalRadiusBound",
    :depends-on
    [:routes-2026-10-10-t02a03-right-core-input-radius-bound-topo2-r2],
    :current-residual
    "Construct a compatible continuous angular component, reconstruct the ambient path, and prove left-core avoidance; right-tube membership then follows from the normal-radius bound.",
-   :other-consumers []}
+   :other-consumers [],
+   :proof-plan
+   "Use nonnegativity of t and 1-t, the triangle inequality, the exact meridian normal radius 1/8, and rightTubeCoreInputNormalRadiusBound to bound the convex linear interpolation by 1/4."}
   {:bounded-exception
    "single-consumer explicit ambient deformation with frozen tube and deletion invariants",
    :consumer :t02A03,
