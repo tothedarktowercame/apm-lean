@@ -59795,41 +59795,71 @@
    "single-consumer planar-radius normalization for the frozen t02A03 left core",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/t02a03_geometric_tube_cover.lean",
-      :sha256
-      "6782eadc0d38c68b899252a4c14666ae94f8e1c14f09d839d4062dc1dc9d0221"},
-     :commands
-     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "apm_t02a03_leftCore_planar_radius_sq compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
-       :exit 0}
-      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "6782eadc0d38c68b899252a4c14666ae94f8e1c14f09d839d4062dc1dc9d0221  /tmp/t02a03_geometric_tube_cover.lean"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :finding
-     "The requested planar-radius normalization is complete and placeholder-free. Unfolding the frozen left-core coordinates reduces the equality to Real.cos_sq_add_sin_sq, proving that every core point has squared planar displacement one from center (-1,0).",
-     :implementation
-     {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
-      :declaration "apm_t02a03_leftCore_planar_radius_sq",
-      :type
-      "∀ t : ℝ, (apm_t02a03_leftCore t 0 + 1) ^ 2 + (apm_t02a03_leftCore t 1) ^ 2 = 1"},
-     :residual
-     "Use this identity to prove uniform nonvanishing of the planar center displacement on the radius-1/4 left tube, then construct angular and punctured-normal coordinates and the torus HomotopyEquiv."}},
+   {:placeholder-delta
+    {:path "ConstructionTargets/T02A03GeometricTubeCover.lean",
+     :before 0,
+     :after 0,
+     :delta 0},
+    :git-author "Joe Corneli <holtzermann17@gmail.com>",
+    :residual
+    "Use the planar radius identity to prove uniform nonvanishing of the displacement from center (-1,0) throughout the radius-1/4 left tube, then construct angular and punctured-normal coordinates and the torus HomotopyEquiv.",
+    :type
+    "∀ t : ℝ, (apm_t02a03_leftCore t 0 + 1) ^ 2 + (apm_t02a03_leftCore t 1) ^ 2 = 1",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not",
+     :declaration-type-sha256
+     "514b2cebb463f282f489c9b2ed07c9b99cbaf61007b3fecac94764aadf11f8c8"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+      :exit 0,
+      :output
+      "6782eadc0d38c68b899252a4c14666ae94f8e1c14f09d839d4062dc1dc9d0221  /tmp/t02a03_geometric_tube_cover.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeCover.lean",
+      :exit 0}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeCover.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "lake env lean /tmp/t02a03_geometric_tube_cover.lean | tail -8",
+      :exit 0,
+      :output
+      "'apm_t02a03_leftCore_planar_radius_sq' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git commit -m \"Bank t02A03 left-core planar radius identity\"",
+      :exit 0,
+      :output
+      "[master c8b23755] Bank t02A03 left-core planar radius identity; 1 file changed, 5 insertions(+)"}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :diagnostic-history
+    [{:cmd
+      "lake env lean /tmp/t02a03_left_core_planar_radius_axioms.lean",
+      :exit 1,
+      :finding
+      "An import-only axiom probe used the pre-build olean and therefore could not see the newly edited declaration. The authoritative source file and the recorded fixture were subsequently compiled directly; the fixture's successful axiom print is included in :commands."}],
+    :commit "c8b2375549e023043a907c037db320ab757a0d8f",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
+    :declaration "apm_t02a03_leftCore_planar_radius_sq",
+    :fixture
+    {:path "/tmp/t02a03_geometric_tube_cover.lean",
+     :sha256
+     "6782eadc0d38c68b899252a4c14666ae94f8e1c14f09d839d4062dc1dc9d0221"},
+    :finding
+    "Banked the exact planar radius identity for every frozen left-core point. The proof unfolds the three Euclidean coordinates and closes with Real.cos_sq_add_sin_sq; it introduces no additional axioms and changes no registered statement.",
+    :seat "topo-6"},
    :phase :implementation,
    :type
    "∀ t : ℝ, (apm_t02a03_leftCore t 0 + 1) ^ 2 + (apm_t02a03_leftCore t 1) ^ 2 = 1",
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-core-planar-radius",
    :acceptance
