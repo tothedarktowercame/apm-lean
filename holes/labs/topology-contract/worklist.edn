@@ -97846,80 +97846,80 @@
    :consumer :t99J01,
    :implements-lemma :lemma-cyclicthreecirclespullback-pathconnected,
    :evidence
-   {:probe
-    {:residual
-     "Implement the compiled fixture in ConstructionTargets/CyclicThreeCirclesPullbackPathConnected.lean; after review, combine this connected n-sheeted cover with the banked component-restriction theorem and finish the t99J01 subgroup-index adapter.",
-     :outcome :go,
-     :warnings
-     ["The worktree acquired unrelated topology-contract changes during this read-only probe; they were neither inspected as dependencies nor modified."],
-     :missing-theorems
-     [{:name "cyclicThreeCirclesPullback_pathConnected",
-       :type
-       "For every positive n, CyclicThreeCirclesPullbackCover.Pullback n is path connected.",
-       :status :proved,
-       :consumers [:t99J01],
-       :depends-on
-       ["CyclicThreeCirclesPullbackSheets.pullback_isKSheeted"
-        "CyclicPullbackNormalizationPath.exists_normalization_path"],
-       :area "covering-subgroup-correspondence"}],
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd
-       "lake env lean /tmp/cyclic-three-circles-pullback-pathconnected.lean",
-       :exit 0,
-       :finding
-       "cyclic section paths concatenate with normalization paths to prove the literal pullback path connected using standard axioms"}
-      {:cmd
-       "sha256sum /tmp/cyclic-three-circles-pullback-pathconnected.lean",
-       :exit 0,
-       :finding
-       "8f78dac00206366476b2d55c7295708aea28d04e678cb413b86bd2fbbf370200"}
-      {:cmd
-       "rg -n \"\\b(sorry|admit)\\b\" /tmp/cyclic-three-circles-pullback-pathconnected.lean",
-       :exit 1,
-       :expected-exit 1,
-       :finding "no placeholders"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :finding "131 registered statements match, 0 do not"}
-      {:cmd "git status --short",
-       :exit 0,
-       :finding
-       "unrelated concurrent changes are present in holes/labs/topology-contract/build_step.bb, holes/labs/topology-contract/test-loop.sh, and holes/labs/topology-contract/fixtures/replan-with-explicit-lemma-id.edn; the probe remained read-only"}],
-     :diagnostic-history
-     [{:cmd "lake env lean /tmp/cyclic-pullback-section-path.lean",
-       :exit 1,
-       :finding
-       "The first cyclic section path associated continuous function composition in the wrong order; parenthesized the nth-power path before composing with firstCircle."}
-      {:cmd
-       "lake env lean /tmp/cyclic-three-circles-pullback-pathconnected.lean",
-       :exit 1,
-       :finding
-       "The first aggregate fixture imported the throwaway section-path filename as though it were a built ConstructionTargets module; inlined that already compiled declaration into the standalone fixture."}
-      {:cmd
-       "lake env lean /tmp/cyclic-three-circles-pullback-pathconnected.lean",
-       :exit 1,
-       :finding
-       "The first concatenation used the wrong endpoint-cast direction, omitted an explicit pullback inhabitant for IsPathConnected, and supplied Joined where JoinedIn univ was required; corrected all three and used pathConnectedSpace_iff_univ."}
-      {:cmd
-       "lake env lean /tmp/cyclic-three-circles-pullback-pathconnected.lean",
-       :exit 1,
-       :finding
-       "The source normalization path endpoint cast also required the equality reversed; changed it to hx.symm."}],
-     :fixture
-     {:path "/tmp/cyclic-three-circles-pullback-pathconnected.lean",
-      :sha256
-      "8f78dac00206366476b2d55c7295708aea28d04e678cb413b86bd2fbbf370200",
-      :interface
-      "exists_section_path joins normalized points through nth-power final-circle coordinates; pullback_joined, pullback_isPathConnected, and pullbackPathConnectedSpace prove the literal cyclic pullback path connected for every degree."},
-     :implementation
-     {:scope
-      ["ConstructionTargets/CyclicThreeCirclesPullbackPathConnected.lean"],
-      :acceptance
-      "Implement the compiled fixture declarations exists_section_path, pullback_joined, pullback_isPathConnected, and pullbackPathConnectedSpace. Reuse the banked pullback normalization path and Circle path-connectedness transported through circleHomeomorphSphereOne. Do not count fibers or subgroup index, apply Schreier, or close t99J01."},
-     :seat "topo-4"}},
+   {:placeholder-delta 0,
+    :residual
+    "Combine the cyclic cover with component restriction and close t99J01.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["lake build replayed pre-existing linter warnings from imported homology modules; the scoped module emitted none"],
+    :missing-theorems
+    [{:name "cyclicThreeCirclesPullback_pathConnected",
+      :type
+      "For every positive n, CyclicThreeCirclesPullbackCover.Pullback n is path connected.",
+      :status :proved,
+      :consumers [:t99J01],
+      :depends-on
+      ["CyclicThreeCirclesPullbackSheets.pullback_isKSheeted"
+       "CyclicPullbackNormalizationPath.exists_normalization_path"],
+      :area "covering-subgroup-correspondence"}],
+    :statement-hashes "131 registered statements match",
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :finding
+      "canonical package authority resolves to /home/joe/code/apm-lean/.lake/packages"}
+     {:cmd
+      "sha256sum /tmp/cyclic-three-circles-pullback-pathconnected.lean",
+      :exit 0,
+      :finding
+      "fixture hash matches 8f78dac00206366476b2d55c7295708aea28d04e678cb413b86bd2fbbf370200"}
+     {:cmd
+      "lake build ConstructionTargets.CyclicThreeCirclesPullbackPathConnected",
+      :exit 0,
+      :finding
+      "section paths and pullback path-connectedness declarations build"}
+     {:cmd
+      "lake env lean /tmp/cyclic-three-circles-pullback-pathconnected.lean",
+      :exit 0,
+      :finding "frozen fixture compiles with standard axioms"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" ConstructionTargets/CyclicThreeCirclesPullbackPathConnected.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero source placeholders"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" /tmp/cyclic-three-circles-pullback-pathconnected.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero fixture placeholders"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short",
+      :exit 0,
+      :finding "clean worktree after commit"}],
+    :commit "23ebda64bb2d648bad130348c6876b63fc6710e4",
+    :changed-paths
+    ["ConstructionTargets/CyclicThreeCirclesPullbackPathConnected.lean"],
+    :fixture
+    {:path "/tmp/cyclic-three-circles-pullback-pathconnected.lean",
+     :sha256
+     "8f78dac00206366476b2d55c7295708aea28d04e678cb413b86bd2fbbf370200",
+     :sorry-count 0},
+    :implementation
+    {:scope
+     ["ConstructionTargets/CyclicThreeCirclesPullbackPathConnected.lean"],
+     :declarations
+     ["ConstructionTargets.CyclicThreeCirclesPullbackPathConnected.exists_section_path"
+      "ConstructionTargets.CyclicThreeCirclesPullbackPathConnected.pullback_joined"
+      "ConstructionTargets.CyclicThreeCirclesPullbackPathConnected.pullback_isPathConnected"
+      "ConstructionTargets.CyclicThreeCirclesPullbackPathConnected.pullbackPathConnectedSpace"]},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CyclicThreeCirclesPullbackPathConnected.lean"],
    :dag-node
