@@ -57395,6 +57395,21 @@
       "Symbol's function definition is void: check-parens-file",
       :correction
       "Used the documented arxana check-parens batch entrypoint on a .clj copy; it returned OK."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791616563756-1444-f01f340a",
+     :commands
+     ["git show/diff-tree recorded implementation and transition commits"
+      "sha256sum recorded validator fixture"
+      "clojure full-ledger parent-to-commit preservation audit"
+      "bb worklist_check.bb on both recorded ledgers"
+      "negative one-duplicate dependency regression"
+      "clj-kondo and check-parens on validator"
+      "python3 scripts/statement-registry.py check"
+      "frozen consumer hash and placeholder census at recorded commit"],
+     :finding
+     "PASS: codex-7 independently reviewed topo-6 commit 91b61d63. Exact implementation scope is both ledgers plus worklist_check.bb; transition ea5c01bb changes only worklist2.edn. Fixture hash matches. Parent-to-commit audit finds 91+69 rows requiring migration at that parent, preserves all top-level and non-dependency item fields and item order/IDs, applies exact order-preserving distinct, and leaves zero duplicate edges. Both recorded ledgers validate; a ledger with only one injected repeated edge fails with the exact duplicate-dependency diagnostic. Validator lint and parentheses pass; registry is 131/0. Frozen hashes remain 79ca8541 and 8bf7f3c3 with placeholder counts 4/3. No theorem or representation boundary is changed."},
     :commit "91b61d63538f9d22658580f6012c753e020c1ac1",
     :changed-paths
     ["holes/labs/topology-contract/worklist.edn"
@@ -57405,7 +57420,7 @@
      :sha256
      "d476f08c578bd8e29f1ecf06d2de3a5f8279fdb6cf03006206cf2362a5b483f1"}},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["holes/labs/topology-contract/worklist.edn"
     "holes/labs/topology-contract/worklist2.edn"
@@ -57438,7 +57453,7 @@
      :infrastructure-packets
      :review-outcomes]},
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
