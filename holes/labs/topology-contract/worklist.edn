@@ -87849,17 +87849,17 @@
    "Count the non-tree edges in the finite Schreier coset quiver and orient Mathlib's Nielsen-Schreier freeness equivalence to the two required finite ranks.",
    :other-consumers [:t97A03]}
   {:consumer :t99J01,
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "No implementation commit was recorded and ConstructionTargets/T99J01ExplicitConnectedCyclicCover.lean is absent. The fixture SHA-256 matches, but it contains one nonstandard axiom, cyclicThreeCirclesCoverExists, from which the final existential is immediate; cyclicThreeCirclesCoverTotal, cyclicThreeCirclesCoverMap, cyclicThreeCirclesCover_pathConnected, and cyclicThreeCirclesCover_isKSheeted are absent from both the fixture and ConstructionTargets. Repair requires an owner-approved placeholder-free representation fixture fixing the cyclic graph quotient type and relation, its coinduced topology, the projection to ThreeCircles, away-from-wedge and wedge-point covering charts, exact Fin n fiber equivalence, and the four concrete declaration signatures before a standard-only implementation can be reviewed.",
    :evidence
    {:residual
-    "Provide a placeholder-free typed fixture or prerequisite representation row fixing the cyclic graph quotient, coinduced topology, projection, covering charts, and exact signatures of the four concrete declarations; then implement the existential adapter.",
+    "Add a placeholder-free typed prerequisite that fixes the cyclic edge quotient and relation, coinduced topology, projection to ThreeCircles, away-from-wedge and wedge-point charts, Fin n fiber equivalence, and all four concrete declaration signatures; then retry the standard-only implementation.",
     :outcome :stop,
     :warnings
     [{:kind :specification-boundary,
       :message
-      "The prose describes a graph cover but the frozen Lean interface does not select a concrete graph realization or signatures for four accepted declarations."}],
+      "The accepted concrete declaration names have no Lean types, while the fixture replaces their entire construction with one axiom."}],
     :disposition :stop,
     :axioms
     ["propext"
@@ -87868,33 +87868,28 @@
      "T99J01ExplicitConnectedCyclicCoverProbe.cyclicThreeCirclesCoverExists"],
     :author "topo-2",
     :reason
-    "The elected row is not an uptake of a banked construction. Its frozen fixture specifies only an existential theorem through the nonstandard axiom cyclicThreeCirclesCoverExists; it gives no Lean signatures or representation for cyclicThreeCirclesCoverTotal, cyclicThreeCirclesCoverMap, cyclicThreeCirclesCover_pathConnected, or cyclicThreeCirclesCover_isKSheeted. No matching banked declarations exist. Choosing the graph quotient type, its relation and topology, the projection, and the chart interfaces would invent the public representation contract. A placeholder-free typed fixture or a prior representation row must fix those choices before standard-only implementation is possible.",
+    "Fresh verification confirms the reviewed specification boundary. The frozen fixture still derives only exists_connected_cyclic_cover from the nonstandard axiom cyclicThreeCirclesCoverExists. Neither the fixture nor ConstructionTargets fixes Lean signatures for cyclicThreeCirclesCoverTotal, cyclicThreeCirclesCoverMap, cyclicThreeCirclesCover_pathConnected, or cyclicThreeCirclesCover_isKSheeted, and the scoped module remains absent. Implementing the prose would require selecting an unapproved quotient relation, topology, projection, and covering-chart API. That would invent the representation contract, so this row cannot be repaired standard-only until a placeholder-free typed representation fixture or prerequisite row supplies it.",
     :commands
     [{:cmd
       "sha256sum /tmp/t99j01-explicit-connected-cyclic-cover-probe.lean",
       :exit 0,
-      :finding "The fixture hash matches the recorded hash."}
+      :finding
+      "The frozen fixture hash still matches d96931e1e28365b8b50d79de23a025047832474a1919caedb6f5aad459495442."}
      {:cmd
-      "Python comment-stripped fixture census followed by rg for the four concrete accepted declarations",
+      "rg -n \"^(def|theorem|instance) (cyclicThreeCirclesCoverTotal|cyclicThreeCirclesCoverMap|cyclicThreeCirclesCover_pathConnected|cyclicThreeCirclesCover_isKSheeted)\" ConstructionTargets /tmp/t99j01-explicit-connected-cyclic-cover-probe.lean",
       :exit 1,
       :expected-exit 1,
       :finding
-      "The fixture has 0 sorry tokens and 1 axiom token; none of the four concrete construction declarations occurs in ConstructionTargets or the fixture."}
+      "None of the four required concrete declarations has a frozen or banked signature."}
      {:cmd
       "lake env lean /tmp/t99j01-explicit-connected-cyclic-cover-probe.lean",
       :exit 0,
       :finding
-      "The fixture compiles, but exists_connected_cyclic_cover depends on cyclicThreeCirclesCoverExists."}
+      "The fixture compiles, but its exported existential depends on cyclicThreeCirclesCoverExists."}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
      {:cmd "git status --short", :exit 0, :finding "clean"}],
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1791627707115-1638-2d3f033f",
-     :finding
-     "No implementation commit was recorded and ConstructionTargets/T99J01ExplicitConnectedCyclicCover.lean is absent. The fixture SHA-256 matches, but it contains one nonstandard axiom, cyclicThreeCirclesCoverExists, from which the final existential is immediate; cyclicThreeCirclesCoverTotal, cyclicThreeCirclesCoverMap, cyclicThreeCirclesCover_pathConnected, and cyclicThreeCirclesCover_isKSheeted are absent from both the fixture and ConstructionTargets. Repair requires an owner-approved placeholder-free representation fixture fixing the cyclic graph quotient type and relation, its coinduced topology, the projection to ThreeCircles, away-from-wedge and wedge-point covering charts, exact Fin n fiber equivalence, and the four concrete declaration signatures before a standard-only implementation can be reviewed."},
     :fixture
     {:path "/tmp/t99j01-explicit-connected-cyclic-cover-probe.lean",
      :sha256
@@ -87904,7 +87899,7 @@
      :proof-placeholder-count 1},
     :seat "topo-2"},
    :phase :implementation,
-   :state :repair,
+   :state :needs-owner,
    :scope
    ["ConstructionTargets/T99J01ExplicitConnectedCyclicCover.lean"],
    :dag-node
