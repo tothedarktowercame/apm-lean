@@ -100927,8 +100927,83 @@
   {:bounded-exception
    "This single-consumer prerequisite removes endpoint duplication from the source of the two pending fiber classifications by choosing half-open representatives on all three loops.",
    :consumer :t97A01,
+   :evidence
+   {:placeholder-delta {:source 0, :fixture 0},
+    :residual
+    "Classify equality of the target quotient images of the three half-open loop forms for N3 and TorusCrosscap, use those classifications with source wedge equalities to prove injectivity, then form homeomorphisms and finish package formulas.",
+    :gates
+    {:module-build :pass,
+     :fixture-compiles :pass,
+     :zero-source-and-fixture-sorry :pass,
+     :standard-only-axioms :pass,
+     :registry-check :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["The new module and fixture emitted no warnings; imported modules replayed existing lints and informational standard-axiom reports."],
+    :missing-theorems
+    [{:name
+      "PolygonThreeLoopHalfOpenNormalForm.endpointQuotient_halfOpen_rep",
+      :type
+      "Every endpoint-glued interval quotient class has a representative with parameter in Ico 0 1.",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on
+      ["PolygonSixEdgeInteriorUniqueness.circleEdgePoint_interior_injective"],
+      :area "polygon-surface-open-cover"}
+     {:name
+      "PolygonThreeLoopHalfOpenNormalForm.threeEndpointLoops_halfOpen_rep",
+      :type
+      "Every ThreeEndpointLoops point is a first-, second-, or third-loop point at a half-open parameter.",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on
+      ["PolygonThreeLoopHalfOpenNormalForm.endpointQuotient_halfOpen_rep"],
+      :area "polygon-surface-open-cover"}],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd
+      "sha256sum /tmp/polygon-three-loop-half-open-normal-form.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.PolygonThreeLoopHalfOpenNormalForm",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/polygon-three-loop-half-open-normal-form.lean",
+      :exit 0}
+     {:cmd
+      "rg -n \\b(sorry|admit)\\b ConstructionTargets/PolygonThreeLoopHalfOpenNormalForm.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "rg -n \\b(sorry|admit)\\b /tmp/polygon-three-loop-half-open-normal-form.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "04755937fd7afc01b0f44710c56324a9b13d1b19",
+    :changed-paths
+    ["ConstructionTargets/PolygonThreeLoopHalfOpenNormalForm.lean"],
+    :fixture
+    {:path "/tmp/polygon-three-loop-half-open-normal-form.lean",
+     :sha256
+     "0beff985b17d253ee13d279e39d6482cc382f9a56b8133cdd03af3fa3081922d",
+     :sorry-count 0},
+    :implementation
+    {:scope
+     ["ConstructionTargets/PolygonThreeLoopHalfOpenNormalForm.lean"],
+     :summary
+     "Converted half-open parameters to the endpoint-quotient carrier, normalized every endpoint quotient class into Ico 0 1 by replacing endpoint one with zero, and lifted the normal form through both nested wedges to the three named loop points."},
+    :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonThreeLoopHalfOpenNormalForm.lean"],
    :dag-node
@@ -104402,17 +104477,19 @@
    {:name
     "PolygonThreeLoopHalfOpenNormalForm.endpointQuotient_halfOpen_rep",
     :reported-by
-    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40
+     :routes-2026-10-10-polygon-three-loop-half-open-normal-form-65],
     :type
     "Every EndpointQuotient class is intervalQuotientMap of a parameter in Set.Ico (0 : Real) 1.",
     :area "polygon-surface-open-cover",
     :proved-in
-    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+    :routes-2026-10-10-polygon-three-loop-half-open-normal-form-65},
    :id
    :lemma-polygonthreeloophalfopennormalform-endpointquotient-halfopen-rep,
    :kind :lemma,
    :depends-on
-   [:lemma-intervalendpointquotientcircle-intervalquotientmap-zero-eq-one],
+   [:lemma-intervalendpointquotientcircle-intervalquotientmap-zero-eq-one
+    :lemma-polygonsixedgeinterioruniqueness-circleedgepoint-interior-injective],
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
@@ -104443,12 +104520,13 @@
    {:name
     "PolygonThreeLoopHalfOpenNormalForm.threeEndpointLoops_halfOpen_rep",
     :reported-by
-    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40
+     :routes-2026-10-10-polygon-three-loop-half-open-normal-form-65],
     :type
     "Every ThreeEndpointLoops point is a firstLoopPoint, secondLoopPoint, or thirdLoopPoint at a half-open unit-interval parameter.",
     :area "polygon-surface-open-cover",
     :proved-in
-    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+    :routes-2026-10-10-polygon-three-loop-half-open-normal-form-65},
    :id
    :lemma-polygonthreeloophalfopennormalform-threeendpointloops-halfopen-rep,
    :kind :lemma,
