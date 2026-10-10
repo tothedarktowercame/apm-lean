@@ -55740,72 +55740,112 @@
    "After the endpoint formulas are banked, prove naturality under the frozen integer-matrix torus maps by identifying their R2 lifts and applying lift uniqueness.",
    :other-consumers [:t01A02]}
   {:consumer :t97A04,
+   :phase :probe,
+   :state :open,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/shared/torus-pi1-winding-coordinates/addcircle-circle-comparison",
+   :acceptance
+   {:probe
+    "Compile and bank frozenTorusHomeomorphCircleProd, frozenTorusHomeomorphCircleProd_base, and frozenTorusPi1Coord from /tmp/torus_addcircle_coordinate_comparison.lean. Use AddCircle.homeomorphCircle in both factors to construct an explicit homeomorphism from AddCircle 1 x AddCircle 1 to Circle x Circle, prove that (0,0) maps exactly to (1,1), and transport the banked torusPi1Coord equivalence to FundamentalGroup (AddCircle 1 x AddCircle 1) (0,0). This supplies the representation bridge required before stating naturality for the frozen apm_t97a04_Lbar; do not claim matrix naturality in this prerequisite.",
+    :declarations
+    ["frozenTorusHomeomorphCircleProd"
+     "frozenTorusHomeomorphCircleProd_base"
+     "frozenTorusPi1Coord"],
+    :placeholder
+    "apm_t97A04_bridge_2 and apm_t01A02_bridge_fixedPoint_of_lift",
+    :route-step
+    "t97A04 step 2 frozen AddCircle coordinate object; t01A02 step 4 frozen-torus coordinate object"},
+   :representation
+   {:source
+    "The frozen torus AddCircle 1 x AddCircle 1 with fundamental-group basepoint (0,0)",
+    :target
+    "Circle x Circle with fundamental-group basepoint (1,1) and the banked torusPi1Coord equivalence",
+    :direction
+    "Explicit product homeomorphism from the frozen AddCircle torus to Circle x Circle, followed by exact basepoint-preserving transport of the target winding-coordinate equivalence back to the source fundamental group"},
+   :id
+   :routes-2026-10-10-torus-addcircle-circle-coordinate-comparison-two-consumers-topo2-r1,
+   :kind :representation-comparison,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo2-r2
+    :routes-2026-10-10-torus-pi1-coordinate-equivalence-two-consumers-topo2-r1
+    :routes-2026-10-10-torus-pi1-projected-lift-endpoints-two-consumers-topo2-r1],
+   :current-residual
+   "After this transport is banked, prove frozenTorusPi1Coord naturality for apm_t97a04_Lbar with the displayed Fin-2 integer matrix.",
+   :other-consumers [:t01A02]}
+  {:consumer :t97A04,
    :evidence
    {:probe
     {:outcome :revise,
      :seat "topo-8",
      :fixture
-     {:path "/tmp/torus_pi1_projected_endpoint_coordinates.lean",
+     {:path "/tmp/torus_addcircle_coordinate_comparison.lean",
       :sha256
-      "873432f0adb9b7541c7cd21d00397867ff17a8cd1cc179240e48bee07bf141de"},
+      "7377dbd1a7163aa7739a0a47fa7a5ac5fafa0adfc3e6176585000653b5f21bc5"},
      :commands
      [{:cmd
-       "lake build ConstructionTargets.TorusPiOneWindingCoordinates",
-       :exit 0}
-      {:cmd
-       "lake env lean /tmp/torus_pi1_projected_endpoint_coordinates.lean",
+       "lake env lean /tmp/torus_addcircle_coordinate_comparison.lean",
        :exit 0,
        :output
-       "both projected endpoint formulas compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "frozenTorusPi1Coord compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/torus_pi1_projected_endpoint_coordinates.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/torus_addcircle_coordinate_comparison.lean || true)\"",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/torus_pi1_projected_endpoint_coordinates.lean",
+       "sha256sum /tmp/torus_addcircle_coordinate_comparison.lean",
        :exit 0,
        :output
-       "873432f0adb9b7541c7cd21d00397867ff17a8cd1cc179240e48bee07bf141de  /tmp/torus_pi1_projected_endpoint_coordinates.lean"}
+       "7377dbd1a7163aa7739a0a47fa7a5ac5fafa0adfc3e6176585000653b5f21bc5  /tmp/torus_addcircle_coordinate_comparison.lean"}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
      :diagnostic-history
      [{:cmd
-       "lake env lean /tmp/torus_pi1_projected_endpoint_coordinates.lean",
+       "lake env lean /tmp/torus_addcircle_coordinate_comparison.lean",
        :exit 1,
        :finding
-       "The canonical TorusPiOneWindingCoordinates module had been banked but its olean was absent. Building that exact module corrected the environment; the unchanged fixture then compiled."}],
+       "The first draft unfolded homeomorphCircle too early and left its image of zero opaque; using homeomorphCircle_apply proves the exact basepoint equation. A dependent basepoint mismatch then required rewriting by that equation rather than simpa. The corrected unchanged representation compiles."}],
      :finding
-     "The banked torusPi1Coord equivalence reduces each Fin-2 coordinate to the corresponding circle winding equivalence. The placeholder-free fixture now proves the exact representative-level endpoint formulas: coordinate zero is liftBasedLoopEndpointInteger of gamma.map continuous_fst and coordinate one is liftBasedLoopEndpointInteger of gamma.map continuous_snd. These follow through Quotient.mk_map and the definitional circleWindingHom_mk equation, so they connect the quotient coordinate object to actual universal-cover lift endpoints rather than introducing a proposition-only contract. Integer-matrix naturality remains independent and is not claimed.",
+     "The banked torusPi1Coord and projected endpoint formulas are stated for Circle x Circle based at (1,1), while the frozen consumers use AddCircle 1 x AddCircle 1 based at (0,0) and the concrete Lbar is defined only there. Therefore integer-matrix naturality cannot yet even be stated against the frozen map without an oriented transport. The compiled fixture constructs the exact product homeomorphism from the frozen AddCircle torus to Circle x Circle, proves that it sends (0,0) to (1,1), and transports torusPi1Coord back to the frozen fundamental group. This is the single representation prerequisite; no naturality is claimed.",
      :residual
-     "Bank the two projected representative endpoint formulas. Then prove that the lift of each frozen integer-matrix torus map is the corresponding linear map on the R2 lift and derive torusPi1Coord naturality; that remaining result supplies t97A04 steps 3-4 and the bounded t01A02 lift-coordinate component.",
+     "Bank the frozen-torus coordinate equivalence. Then formulate the induced action of apm_t97a04_Lbar in those coordinates, prove it equals the displayed matrix by projected lift uniqueness, and assemble the requested two-consumer naturality packet.",
      :prerequisite
      {:consumer :t97A04,
       :phase :probe,
       :state :open,
       :scope [],
       :dag-node
-      "TOPOLOGY-ROUTES.md/shared/torus-pi1-winding-coordinates/projected-endpoints",
+      "TOPOLOGY-ROUTES.md/shared/torus-pi1-winding-coordinates/addcircle-circle-comparison",
       :acceptance
       {:probe
-       "Compile and bank the placeholder-free torusPi1Coord_mk_apply_zero_eq_liftEndpoint and torusPi1Coord_mk_apply_one_eq_liftEndpoint declarations from /tmp/torus_pi1_projected_endpoint_coordinates.lean. For every explicit based loop gamma in Circle x Circle, identify each torusPi1Coord component with liftBasedLoopEndpointInteger of the corresponding projected Path representative using Quotient.mk_map and circleWindingHom_mk. This supplies the representative endpoint portion of t97A04 route step 3 and the coordinate/lift component used by t01A02 route step 4; do not claim integer-matrix naturality in this prerequisite.",
+       "Compile and bank frozenTorusHomeomorphCircleProd, frozenTorusHomeomorphCircleProd_base, and frozenTorusPi1Coord from /tmp/torus_addcircle_coordinate_comparison.lean. Use AddCircle.homeomorphCircle in both factors to construct an explicit homeomorphism from AddCircle 1 x AddCircle 1 to Circle x Circle, prove that (0,0) maps exactly to (1,1), and transport the banked torusPi1Coord equivalence to FundamentalGroup (AddCircle 1 x AddCircle 1) (0,0). This supplies the representation bridge required before stating naturality for the frozen apm_t97a04_Lbar; do not claim matrix naturality in this prerequisite.",
        :declarations
-       ["torusPi1Coord_mk_apply_zero_eq_liftEndpoint"
-        "torusPi1Coord_mk_apply_one_eq_liftEndpoint"],
+       ["frozenTorusHomeomorphCircleProd"
+        "frozenTorusHomeomorphCircleProd_base"
+        "frozenTorusPi1Coord"],
        :placeholder
        "apm_t97A04_bridge_2 and apm_t01A02_bridge_fixedPoint_of_lift",
        :route-step
-       "t97A04 step 3 representative endpoint formulas; t01A02 step 4 coordinate/lift component"},
+       "t97A04 step 2 frozen AddCircle coordinate object; t01A02 step 4 frozen-torus coordinate object"},
+      :representation
+      {:source
+       "The frozen torus AddCircle 1 x AddCircle 1 with fundamental-group basepoint (0,0)",
+       :target
+       "Circle x Circle with fundamental-group basepoint (1,1) and the banked torusPi1Coord equivalence",
+       :direction
+       "Explicit product homeomorphism from the frozen AddCircle torus to Circle x Circle, followed by exact basepoint-preserving transport of the target winding-coordinate equivalence back to the source fundamental group"},
       :id
-      :routes-2026-10-10-torus-pi1-projected-lift-endpoints-two-consumers-topo2-r1,
-      :kind :reusable-theorem,
+      :routes-2026-10-10-torus-addcircle-circle-coordinate-comparison-two-consumers-topo2-r1,
+      :kind :representation-comparison,
       :depends-on
       [:routes-2026-10-10-checkpoint-topo2-r2
-       :routes-2026-10-10-torus-pi1-coordinate-equivalence-two-consumers-topo2-r1],
+       :routes-2026-10-10-torus-pi1-coordinate-equivalence-two-consumers-topo2-r1
+       :routes-2026-10-10-torus-pi1-projected-lift-endpoints-two-consumers-topo2-r1],
       :current-residual
-      "After the endpoint formulas are banked, prove naturality under the frozen integer-matrix torus maps by identifying their R2 lifts and applying lift uniqueness.",
+      "After this transport is banked, prove frozenTorusPi1Coord naturality for apm_t97a04_Lbar with the displayed Fin-2 integer matrix.",
       :other-consumers [:t01A02]}}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/shared/torus-pi1-winding-coordinates",
    :acceptance
@@ -55821,7 +55861,8 @@
    :depends-on
    [:routes-2026-10-10-checkpoint-topo2-r2
     :routes-2026-10-10-torus-pi1-coordinate-equivalence-two-consumers-topo2-r1
-    :routes-2026-10-10-torus-pi1-projected-lift-endpoints-two-consumers-topo2-r1],
+    :routes-2026-10-10-torus-pi1-projected-lift-endpoints-two-consumers-topo2-r1
+    :routes-2026-10-10-torus-addcircle-circle-coordinate-comparison-two-consumers-topo2-r1],
    :current-residual
    "Exact Fin-2 endpoint-coordinate naturality is absent.",
    :other-consumers [:t01A02]}
