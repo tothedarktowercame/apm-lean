@@ -63175,60 +63175,76 @@
    "single-consumer explicit punctured-left-tube model for t02A03",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:residual
-     "Implement the compiled fixture in ConstructionTargets/T02A03LeftTubePuncturedModel.lean; afterward construct the right-tube-minus-deleted-attachment model, overlap compatibility, and gluing for the full geometricY equivalence.",
-     :outcome :go,
-     :warnings
-     ["/tmp/t02a03_geometric_tube_cover.lean:787:38: Used tac1 <;> tac2 where (tac1; tac2) would suffice"],
-     :missing-theorems
-     [{:name "leftTubeMinusCoreHomotopyEquivTorus",
-       :type
-       "Nonempty (ContinuousMap.HomotopyEquiv apm_t02a03_LeftTubeMinusCore ConstructionTargets.TorusCircleWedgeOpenCover.Torus)",
-       :status :proved,
-       :consumers [:t02A03],
-       :depends-on
-       ["apm_t02a03_leftTubeRadialHomotopy"
-        "apm_t02a03_leftTubeTorusCoordinates_torusInverse"]}],
-     :commands
-     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "leftTubeMinusCoreHomotopyEquivTorus compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
-       :exit 0}
-      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "2ee5b473f53990067685d38cb8bc87a8bf0db5926062322dd129b5510120de01  /tmp/t02a03_geometric_tube_cover.lean"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :fixture
-     {:path "/tmp/t02a03_geometric_tube_cover.lean",
-      :sha256
-      "2ee5b473f53990067685d38cb8bc87a8bf0db5926062322dd129b5510120de01"},
-     :finding
-     "The complete placeholder-free fixture now constructs the punctured-left-tube HomotopyEquiv with forward angular and normalized-normal coordinates, explicit inverse torus reconstruction, exact forward-after-inverse identity, and a radial inverse-after-forward homotopy that remains inside the left tube and outside its core.",
-     :implementation
-     {:scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
-      :declarations
-      ["ConstructionTargets.T02A03LeftTubePuncturedModel.LeftTubeMinusCore"
-       "ConstructionTargets.T02A03LeftTubePuncturedModel.leftTubeMinusCoreHomotopyEquivTorus"],
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Construct the right-tube-minus-deleted-attachment model extending the based core homotopy, then prove overlap compatibility and glue the full geometricY equivalence.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["/tmp/t02a03_geometric_tube_cover.lean:787:38: unnecessarySeqFocus linter warning in a previously banked theorem; scoped module compiles without warnings"],
+    :missing-theorems
+    [{:name "leftTubeMinusCoreHomotopyEquivTorus",
       :type
-      "Nonempty (ContinuousMap.HomotopyEquiv LeftTubeMinusCore ConstructionTargets.TorusCircleWedgeOpenCover.Torus)",
-      :source-fixture-declarations
-      ["apm_t02a03_LeftTubeMinusCore"
-       "apm_t02a03_leftTubeTorusCoordinatesMap"
-       "apm_t02a03_leftTubeTorusInverse"
-       "apm_t02a03_leftTubeRadialHomotopy"
-       "leftTubeMinusCoreHomotopyEquivTorus"]},
-     :seat "topo-8"}},
+      "Nonempty (ContinuousMap.HomotopyEquiv apm_t02a03_LeftTubeMinusCore ConstructionTargets.TorusCircleWedgeOpenCover.Torus)",
+      :status :proved,
+      :consumers [:t02A03],
+      :depends-on
+      ["apm_t02a03_leftTubeRadialHomotopy"
+       "apm_t02a03_leftTubeTorusCoordinates_torusInverse"]}],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not",
+     :fixture-sha256
+     "2ee5b473f53990067685d38cb8bc87a8bf0db5926062322dd129b5510120de01"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean", :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03LeftTubePuncturedModel.lean",
+      :exit 0}
+     {:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+      :exit 0}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03LeftTubePuncturedModel.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git rev-parse a23f5870 && git diff-tree --no-commit-id --name-only -r a23f5870",
+      :exit 0,
+      :output
+      "a23f5870aeb7163e38539a65048bca8ac3a652f5\nConstructionTargets/T02A03LeftTubePuncturedModel.lean"}],
+    :diagnostic-history
+    [{:cmd
+      "lake env lean ConstructionTargets/T02A03LeftTubePuncturedModel.lean",
+      :exit 1,
+      :output
+      "Unknown identifier ConstructionTargets.TorusCircleWedgeOpenCover.Torus",
+      :correction
+      "Added the fixture's explicit ConstructionTargets.TorusCircleWedgeOpenCover import, then reran the compile successfully."}],
+    :commit "a23f5870aeb7163e38539a65048bca8ac3a652f5",
+    :changed-paths
+    ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
+    :fixture
+    {:path "/tmp/t02a03_geometric_tube_cover.lean",
+     :sha256
+     "2ee5b473f53990067685d38cb8bc87a8bf0db5926062322dd129b5510120de01"},
+    :finding
+    "Banked the public LeftTubeMinusCore alias and explicit HomotopyEquiv whose inverse-after-forward homotopy is radial and whose forward-after-inverse composite is exactly the torus identity.",
+    :implementation
+    {:scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
+     :declarations
+     ["ConstructionTargets.T02A03LeftTubePuncturedModel.LeftTubeMinusCore"
+      "ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_leftTubeHomotopyEquivTorus"
+      "ConstructionTargets.T02A03LeftTubePuncturedModel.leftTubeMinusCoreHomotopyEquivTorus"],
+     :type
+     "Nonempty (ContinuousMap.HomotopyEquiv LeftTubeMinusCore ConstructionTargets.TorusCircleWedgeOpenCover.Torus)"},
+    :seat "topo-6"},
    :phase :implementation,
    :type
    "Nonempty (ContinuousMap.HomotopyEquiv LeftTubeMinusCore ConstructionTargets.TorusCircleWedgeOpenCover.Torus)",
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-punctured-model",
    :acceptance
