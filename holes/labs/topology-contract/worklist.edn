@@ -95395,13 +95395,42 @@
    "Combine the two banked finite implications into EqvGen SquareRel iff Cases, then construct an explicit edge-compatible disk-square homeomorphism and prove it transports SurfaceRel false 2 generators exactly to SquareRel.",
    :other-consumers []}
   {:bounded-exception
+   "This single-consumer theorem consolidates the two banked finite implications into the exact iff consumed by the final disk-relation transport.",
+   :consumer :t93J03,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/KleinSquareEqvGenCasesIff.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/square-boundary-orbit-eqvgen/square-eqvgen-cases-iff",
+   :acceptance
+   {:implementation
+    "For p and q in the closed unit square, combine the banked cases_eqvGen and eqvGen_cases theorems into Relation.EqvGen SquareRel p q iff Cases p q. Do not construct a disk-square homeomorphism, transport SurfaceRel, or construct a quotient.",
+    :placeholder "the single sorry in apm_t93j03",
+    :route-step
+    "t93J03 step 1c.7, exact finite square EqvGen/Cases comparison before transporting the frozen disk relation",
+    :fixture "/tmp/klein-square-eqvgen-cases-iff.lean",
+    :fixture-sha256
+    "6297b5804eae610e990eff5614262fde89adc9adbadbe47cb6faa21827abf932",
+    :gates
+    ["lake build ConstructionTargets.KleinSquareEqvGenCasesIff"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-10-klein-square-eqvgen-cases-iff-35,
+   :kind :reusable-theorem,
+   :depends-on [:routes-2026-10-10-klein-square-eqvgen-to-cases-34],
+   :current-residual
+   "Construct an explicit homeomorphism between the closed unit square and frozen disk whose four boundary values send squareEdge i t to edgePoint 4 i t, prove it transports SquareRel exactly to SurfaceRel false 2, and combine that transport with eqvGen_iff_cases.",
+   :other-consumers []}
+  {:bounded-exception
    "This single-consumer representation comparison is the next banked-dependent step of the one-placeholder t93J03 route and is required before the orbit quotient can be identified with the frozen KleinBottle model.",
    :consumer :t93J03,
    :implements-lemma :lemma-kleinsquareboundaryorbiteqvgen,
    :evidence
    {:probe
     {:residual
-     "Both directions of the finite closed-square comparison now compile: Cases and Relation.EqvGen SquareRel coincide. The remaining representation work is the explicit edge-compatible disk-square homeomorphism and transport of the frozen SurfaceRel generators.",
+     "The complete finite relation comparison is now a compiled iff. The sole remaining prerequisite is the explicit edge-compatible disk-square homeomorphism with exact generator transport; quotient construction remains outside this row.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
@@ -95413,55 +95442,54 @@
        :depends-on
        ["KleinSurfaceRelNormalForm.surfaceRel_false_two_iff"
         "KleinDiskSquareCarrier.exists_centeredSquare_disk_homeomorph"
-        "KleinSquareCasesToEqvGen.cases_eqvGen"
-        "KleinSquareEqvGenToCases.eqvGen_cases"
+        "KleinSquareEqvGenCasesIff.eqvGen_iff_cases"
         "KleinDiskSquareCoordinates.edge_formulas"]}],
      :prerequisite
      {:bounded-exception
-      "This single-consumer finite theorem is the remaining direction of the exact square relation comparison; it reuses the banked affine group action to close generator reachability under EqvGen and recover Cases.",
+      "This single-consumer theorem consolidates the two banked finite implications into the exact iff consumed by the final disk-relation transport.",
       :consumer :t93J03,
       :phase :implementation,
       :state :open,
-      :scope ["ConstructionTargets/KleinSquareEqvGenToCases.lean"],
+      :scope ["ConstructionTargets/KleinSquareEqvGenCasesIff.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/square-boundary-orbit-eqvgen/eqvgen-to-cases",
+      "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/square-boundary-orbit-eqvgen/square-eqvgen-cases-iff",
       :acceptance
       {:implementation
-       "Define SameOrbit as reachability under the banked PresentedKleinGroup affine action and prove it reflexive, symmetric, and transitive. Prove every SquareRel generator is a SameOrbit step using the banked square-side Cases and sameOrbit_iff_cases. Induct over Relation.EqvGen SquareRel to prove SameOrbit, then for closed-square endpoints conclude Cases. Do not construct a disk-square homeomorphism, transport SurfaceRel, or construct a quotient.",
+       "For p and q in the closed unit square, combine the banked cases_eqvGen and eqvGen_cases theorems into Relation.EqvGen SquareRel p q iff Cases p q. Do not construct a disk-square homeomorphism, transport SurfaceRel, or construct a quotient.",
        :placeholder "the single sorry in apm_t93j03",
        :route-step
-       "t93J03 step 1c.6, reverse square-EqvGen-to-Cases direction via affine orbit reachability",
-       :fixture "/tmp/klein-square-eqvgen-to-cases.lean",
+       "t93J03 step 1c.7, exact finite square EqvGen/Cases comparison before transporting the frozen disk relation",
+       :fixture "/tmp/klein-square-eqvgen-cases-iff.lean",
        :fixture-sha256
-       "96ec773225f217b9658fe5606900c0a7a620d395cdc0801e5d179cd0a0f4b5cf",
+       "6297b5804eae610e990eff5614262fde89adc9adbadbe47cb6faa21827abf932",
        :gates
-       ["lake build ConstructionTargets.KleinSquareEqvGenToCases"
+       ["lake build ConstructionTargets.KleinSquareEqvGenCasesIff"
         "fixture compiles"
         "zero source and fixture sorry"
         "standard-only axioms"
         "registry check"]},
-      :id :routes-2026-10-10-klein-square-eqvgen-to-cases-34,
+      :id :routes-2026-10-10-klein-square-eqvgen-cases-iff-35,
       :kind :reusable-theorem,
-      :depends-on [:routes-2026-10-10-klein-square-cases-to-eqvgen-33],
+      :depends-on [:routes-2026-10-10-klein-square-eqvgen-to-cases-34],
       :current-residual
-      "Combine the two banked finite implications into EqvGen SquareRel iff Cases, then construct an explicit edge-compatible disk-square homeomorphism and prove it transports SurfaceRel false 2 generators exactly to SquareRel.",
+      "Construct an explicit homeomorphism between the closed unit square and frozen disk whose four boundary values send squareEdge i t to edgePoint 4 i t, prove it transports SquareRel exactly to SurfaceRel false 2, and combine that transport with eqvGen_iff_cases.",
       :other-consumers []},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
-     [{:cmd "lake build ConstructionTargets.KleinSquareCasesToEqvGen",
+     [{:cmd "lake build ConstructionTargets.KleinSquareEqvGenToCases",
        :exit 0,
        :finding
-       "the banked square relation and constructive Cases-to-EqvGen direction compile canonically"}
-      {:cmd "lake env lean /tmp/klein-square-eqvgen-to-cases.lean",
+       "both directional finite comparison prerequisites compile canonically"}
+      {:cmd "lake env lean /tmp/klein-square-eqvgen-cases-iff.lean",
        :exit 0,
        :finding
-       "SquareRel generators map to group-orbit steps, EqvGen induction preserves reachability, and the reverse EqvGen-to-Cases implication compiles with standard axioms"}
-      {:cmd "sha256sum /tmp/klein-square-eqvgen-to-cases.lean",
+       "the exact closed-square EqvGen SquareRel iff Cases theorem compiles with standard axioms"}
+      {:cmd "sha256sum /tmp/klein-square-eqvgen-cases-iff.lean",
        :exit 0,
        :finding
-       "96ec773225f217b9658fe5606900c0a7a620d395cdc0801e5d179cd0a0f4b5cf"}
+       "6297b5804eae610e990eff5614262fde89adc9adbadbe47cb6faa21827abf932"}
       {:cmd
-       "rg -n \"\\b(sorry|admit)\\b\" /tmp/klein-square-eqvgen-to-cases.lean",
+       "rg -n \"\\b(sorry|admit)\\b\" /tmp/klein-square-eqvgen-cases-iff.lean",
        :exit 1,
        :expected-exit 1,
        :finding "no placeholders"}
@@ -95471,14 +95499,14 @@
       {:cmd "git status --short", :exit 0, :finding "clean"}],
      :diagnostic-history [],
      :fixture
-     {:path "/tmp/klein-square-eqvgen-to-cases.lean",
+     {:path "/tmp/klein-square-eqvgen-cases-iff.lean",
       :sha256
-      "96ec773225f217b9658fe5606900c0a7a620d395cdc0801e5d179cd0a0f4b5cf",
+      "6297b5804eae610e990eff5614262fde89adc9adbadbe47cb6faa21827abf932",
       :interface
-      "SameOrbit is affine-action reachability; squareRel_sameOrbit maps each oriented square generator to an action step; eqvGen_sameOrbit closes reachability under EqvGen; eqvGen_cases proves the reverse finite implication for closed-square points."},
+      "eqvGen_iff_cases states the exact finite comparison: for endpoints in the closed unit square, Relation.EqvGen SquareRel p q if and only if the banked affine-orbit Cases disjunction holds."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/square-boundary-orbit-eqvgen",
@@ -95511,7 +95539,8 @@
     :routes-2026-10-10-klein-square-edge-orientation-31
     :routes-2026-10-10-klein-square-boundary-relation-32
     :routes-2026-10-10-klein-square-cases-to-eqvgen-33
-    :routes-2026-10-10-klein-square-eqvgen-to-cases-34],
+    :routes-2026-10-10-klein-square-eqvgen-to-cases-34
+    :routes-2026-10-10-klein-square-eqvgen-cases-iff-35],
    :current-residual
    "Unfold the frozen disk-boundary relation into square-side coordinates, prove its EqvGen closure yields exactly the translation, reflected-edge, and corner disjunction in Cases, and prove the converse generators realize every listed case.",
    :other-consumers []}
@@ -96096,7 +96125,8 @@
     :lemma-kleinsquareedgeorientation-cases-edge-two-three
     :lemma-kleinsquareboundaryrelation-squarerel-cases
     :lemma-kleinsquarecasestoeqvgen-cases-eqvgen
-    :lemma-kleinsquareeqvgentocases-eqvgen-cases],
+    :lemma-kleinsquareeqvgentocases-eqvgen-cases
+    :lemma-kleinsquareeqvgencasesiff-eqvgen-iff-cases],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -96551,6 +96581,18 @@
    :id :lemma-kleinsquareeqvgentocases-eqvgen-cases,
    :kind :lemma,
    :depends-on [:lemma-kleinsquarecasestoeqvgen-cases-eqvgen],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "KleinSquareEqvGenCasesIff.eqvGen_iff_cases"},
+   :lemma
+   {:name "KleinSquareEqvGenCasesIff.eqvGen_iff_cases",
+    :reported-by []},
+   :id :lemma-kleinsquareeqvgencasesiff-eqvgen-iff-cases,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
