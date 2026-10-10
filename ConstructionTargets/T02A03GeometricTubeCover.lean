@@ -468,6 +468,25 @@ theorem apm_t02a03_leftTubeTorusCoordinates_torusInverse
   · exact apm_t02a03_leftTubeAngular_torusInverse u
   · exact apm_t02a03_leftTubeNormalAngular_torusInverse u
 
+theorem apm_t02a03_leftTubePlanar_norm_sub_one_le_corePlanarDistance
+    (p : apm_t02a03_leftTubeSubtype) (t : ℝ) :
+    |‖apm_t02a03_leftTubePlanarComplex p‖ - 1| ≤
+      ‖apm_t02a03_leftTubePlanarComplex p -
+        ((Real.cos t : ℂ) + (Real.sin t : ℂ) * Complex.I)‖ := by
+  have hunit :
+      ‖((Real.cos t : ℂ) + (Real.sin t : ℂ) * Complex.I)‖ = 1 := by
+    rw [Complex.norm_def]
+    simp only [Complex.normSq_apply, Complex.add_re, Complex.ofReal_re,
+      Complex.mul_re, Complex.ofReal_im, Complex.I_re, Complex.I_im,
+      mul_zero, sub_zero, add_zero, Complex.add_im,
+      Complex.mul_im, mul_one, zero_add]
+    rw [show Real.cos t * Real.cos t + Real.sin t * Real.sin t = 1 by
+      nlinarith [Real.sin_sq_add_cos_sq t]]
+    norm_num
+  simpa [hunit] using
+    (abs_norm_sub_norm_le (apm_t02a03_leftTubePlanarComplex p)
+      ((Real.cos t : ℂ) + (Real.sin t : ℂ) * Complex.I))
+
 theorem apm_t02a03_rightCore_zero :
     apm_t02a03_rightCore 0 = (0 : apm_t02a03_E3) := by
   ext i
