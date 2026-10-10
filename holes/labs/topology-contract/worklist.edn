@@ -83149,6 +83149,23 @@
       :exit 0,
       :finding
       "ConstructionTargets/CompactClosedEquivalenceQuotient.lean"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791609191231-1194-90c35af5",
+     :commands
+     ["git show/stat/diff recorded implementation commit 81ab9dbbebc5739407a79a1b51d66bdd888e6182"
+      "sha256sum /tmp/compact-closed-equivalence-quotient-complete.lean"
+      "lake env lean ConstructionTargets/CompactClosedEquivalenceQuotient.lean"
+      "lake env lean /tmp/compact-closed-equivalence-quotient-complete.lean"
+      "comment-stripped placeholder and axiom census of implementation, completed fixture, and three consumers"
+      "python3 scripts/statement-registry.py check"
+      "python3 scripts/statement-registry.py fingerprint t94J09, tunk01, and t91A02"
+      "inspect saturated-core construction, quotient-image preimage equalities, and Setoid relation orientations"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git diff --check 81ab9db^ 81ab9db and confirm recorded source equals current content"],
+     :finding
+     "PASS: reviewer codex-3 differs from author topo-2. The parent row correctly reuses recorded implementation commit 81ab9dbbebc5739407a79a1b51d66bdd888e6182, which changes exactly ConstructionTargets/CompactClosedEquivalenceQuotient.lean as declared; no additional consumer changes are claimed. The completed frozen fixture hash reproduces as aa9153e037a78ff99237612440302e78e45b9441a451ddf7fdd00b1bd6f6450e. Implementation and completed fixture compile with zero sorry, admit, or axiom declarations, and the saturated-neighborhood theorem, quotient T2 theorem, and fixture wrapper audit to only propext, Classical.choice, and Quot.sound. The theorem orientations and representation boundary are correct: closed relation fibers yield compact equivalence classes; generalized_tube_lemma separates their product from the relation graph; complements of projected bad-pair sets yield open saturated cores; saturation uses forward Setoid.r and transitivity; quotient images are open because their coinduced preimages equal those saturated cores, not because Quotient.mk' is assumed open; and image disjointness uses b~a from quotient equality in the direction required by V saturation. The three polygon consumers remain unchanged at one sorry each; t94J09's separate pre-existing named axiom is unchanged. Frozen fingerprints reproduce as t94J09 52b4778c4932a4b38c30b3bf2a7c9943c32f675f19f63ae1d119aa378dde0a75, tunk01 5362677d8a8f8dfcae54d23788ab8d3558ea3b78992e8b9e9c8f0b956fc636fe, and t91A02 e6b708786cf6a21dc5bd30b3d560b260aa4f2bb70519e89f1e06f46d935e41bb. Registry is 131/131 and all 690 worklist rows validate. Exact finite EqvGen classification and polygon-specific closedness remain downstream."},
     :commit "81ab9dbbebc5739407a79a1b51d66bdd888e6182",
     :changed-paths
     ["ConstructionTargets/CompactClosedEquivalenceQuotient.lean"],
@@ -83161,7 +83178,7 @@
    :instructions
    "The dependency commit 81ab9dbb already supplies the exact scoped implementation. Verify that commit and the completed fixture, preserve both declarations and their standard-only axiom audit, and record the foundation as implemented without changing any registered consumer statement. Do not add an open-projection hypothesis.",
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CompactClosedEquivalenceQuotient.lean"],
    :dag-node
@@ -83200,7 +83217,7 @@
    :other-consumers [:tunk01 :t91A02]}
   {:consumer :t94J09,
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/finite-polygon-eqvgen-classification",
