@@ -63070,9 +63070,53 @@
   {:bounded-exception
    "single-consumer inverse-after-forward homotopy for t02A03",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:residual
+     "Assemble the forward and inverse maps, exact forward-after-inverse identity, and radial inverse-after-forward homotopy into the torus HomotopyEquiv.",
+     :outcome :go,
+     :warnings
+     ["/tmp/t02a03_geometric_tube_cover.lean:786:38: Used tac1 <;> tac2 where (tac1; tac2) would suffice"],
+     :missing-theorems
+     [{:name "apm_t02a03_leftTubeRadialHomotopy",
+       :type
+       "ContinuousMap.Homotopy (apm_t02a03_leftTubeTorusInverse.comp apm_t02a03_leftTubeTorusCoordinatesMap) (ContinuousMap.id apm_t02a03_LeftTubeMinusCore)",
+       :status :proved,
+       :consumers [:t02A03],
+       :depends-on ["apm_t02a03_leftTubeRadialMap_endpoints"]}],
+     :commands
+     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "apm_t02a03_leftTubeRadialHomotopy compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
+       :exit 0}
+      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "ccf926c8a3290445efc6325dfb157bab20f783b88b286f73f43914e9079d05d9  /tmp/t02a03_geometric_tube_cover.lean"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :fixture
+     {:path "/tmp/t02a03_geometric_tube_cover.lean",
+      :sha256
+      "ccf926c8a3290445efc6325dfb157bab20f783b88b286f73f43914e9079d05d9"},
+     :finding
+     "The placeholder-free fixture packages the radial interpolation as a homotopy from inverse-after-forward to the identity on LeftTubeMinusCore. The forward-after-inverse composite is already exactly the identity.",
+     :implementation
+     {:scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
+      :declaration
+      "ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_leftTubeRadialHomotopy",
+      :type
+      "ContinuousMap.Homotopy (apm_t02a03_leftTubeTorusInverse.comp apm_t02a03_leftTubeTorusCoordinatesMap) (ContinuousMap.id apm_t02a03_LeftTubeMinusCore)"},
+     :seat "topo-8"}},
+   :phase :implementation,
+   :type
+   "ContinuousMap.Homotopy (apm_t02a03_leftTubeTorusInverse.comp apm_t02a03_leftTubeTorusCoordinatesMap) (ContinuousMap.id apm_t02a03_LeftTubeMinusCore)",
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-radial-homotopy",
    :acceptance
    {:probe
@@ -63085,6 +63129,8 @@
     "t02A03 step 2, bundle the punctured-left-tube inverse-after-forward homotopy"},
    :id :routes-2026-10-10-t02a03-left-tube-radial-homotopy-topo2-r1,
    :kind :reusable-theorem,
+   :declaration
+   "ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_leftTubeRadialHomotopy",
    :depends-on
    [:routes-2026-10-10-checkpoint-topo2-r5
     :routes-2026-10-10-t02a03-left-tube-radial-map-endpoints-topo2-r1],
@@ -64515,11 +64561,12 @@
    :lemma
    {:name "apm_t02a03_leftTubeRadialHomotopy",
     :reported-by
-    [:routes-2026-10-10-t02a03-left-tube-punctured-model-topo2-r1],
+    [:routes-2026-10-10-t02a03-left-tube-punctured-model-topo2-r1
+     :routes-2026-10-10-t02a03-left-tube-radial-homotopy-topo2-r1],
     :type
     "ContinuousMap.Homotopy (apm_t02a03_leftTubeTorusInverse.comp apm_t02a03_leftTubeTorusCoordinatesMap) (ContinuousMap.id apm_t02a03_LeftTubeMinusCore)",
     :proved-in
-    :routes-2026-10-10-t02a03-left-tube-punctured-model-topo2-r1},
+    :routes-2026-10-10-t02a03-left-tube-radial-homotopy-topo2-r1},
    :id :lemma-apm-t02a03-lefttuberadialhomotopy,
    :kind :lemma,
    :depends-on [:lemma-apm-t02a03-lefttuberadialmap-endpoints],
