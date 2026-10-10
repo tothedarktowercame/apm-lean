@@ -56094,21 +56094,62 @@
   {:bounded-exception
    "single-consumer comparison for the frozen t97A04 matrix path",
    :consumer :t97A04,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/circle_matrix_mapped_path_projection.lean",
+      :sha256
+      "28e9c5f293e18f8d9044f59d8fcc6b6e40c8407350eac8f7007dbf1c586097d4"},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/circle_matrix_mapped_path_projection.lean",
+       :exit 0,
+       :output
+       "both mapped-path projection equalities compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/circle_matrix_mapped_path_projection.lean || true)\"",
+       :exit 0}
+      {:cmd "sha256sum /tmp/circle_matrix_mapped_path_projection.lean",
+       :exit 0,
+       :output
+       "28e9c5f293e18f8d9044f59d8fcc6b6e40c8407350eac8f7007dbf1c586097d4  /tmp/circle_matrix_mapped_path_projection.lean"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :finding
+     "The placeholder-free fixture constructs the actual based path obtained by applying circleMatrixMap pointwise to gamma and proves exact Path equalities from its left and right projections to circleMatrixLeftPath gamma and circleMatrixRightPath gamma. The oriented representation comparison is therefore complete and exposes the banked endpoint formulas without replacing the mapped path by a proposition contract.",
+     :representation
+     {:source
+      "The two coordinate projections of the actual based path obtained by applying circleMatrixMap pointwise to gamma",
+      :target
+      "The explicit paths circleMatrixLeftPath gamma and circleMatrixRightPath gamma used by the endpoint computations",
+      :direction
+      "Exact Path equalities from each source projection to its corresponding target explicit matrix-coordinate path"},
+     :implementation
+     {:scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
+      :declarations
+      ["circleMatrixMappedPath"
+       "circleMatrixMappedPath_projLeft"
+       "circleMatrixMappedPath_projRight"],
+      :acceptance
+      {:compile
+       "lake build ConstructionTargets.TorusPiOneWindingCoordinates",
+       :placeholder-free true,
+       :statement-registry true}},
+     :residual
+     "Package the dependent basepoint transport for FundamentalGroup.map, descend the mapped-representative coordinate formulas through the quotient, and transport the resulting naturality equation through frozenTorusHomeomorphCircleProd."}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A04/torus-pi1-winding-coordinates/mapped-path-projections",
    :acceptance
-   {:probe
-    "Compile and bank circleMatrixMappedPath, circleMatrixMappedPath_projLeft, and circleMatrixMappedPath_projRight from /tmp/circle_matrix_mapped_path_projection.lean. Construct the actual based product path obtained by applying circleMatrixMap pointwise to gamma, and prove exact equality from its left and right projected Paths to circleMatrixLeftPath gamma and circleMatrixRightPath gamma. This supplies the representation identification needed to apply the banked endpoint formulas in t97A04 route step 4; do not claim quotient-level naturality in this prerequisite.",
-    :declarations
-    ["circleMatrixMappedPath"
-     "circleMatrixMappedPath_projLeft"
-     "circleMatrixMappedPath_projRight"],
-    :placeholder "apm_t97A04_bridge_2",
-    :route-step
-    "t97A04 step 4, identify mapped-path projections with explicit matrix-coordinate paths"},
+   {:compile
+    "lake build ConstructionTargets.TorusPiOneWindingCoordinates",
+    :placeholder-free true,
+    :statement-registry true},
    :representation
    {:source
     "The two coordinate projections of the actual based path obtained by applying circleMatrixMap pointwise to gamma",
@@ -56119,6 +56160,10 @@
    :id
    :routes-2026-10-10-t97a04-circle-matrix-mapped-path-projections-topo2-r1,
    :kind :representation-comparison,
+   :declarations
+   ["circleMatrixMappedPath"
+    "circleMatrixMappedPath_projLeft"
+    "circleMatrixMappedPath_projRight"],
    :depends-on
    [:routes-2026-10-10-checkpoint-topo2-r2
     :routes-2026-10-10-torus-pi1-coordinate-equivalence-two-consumers-topo2-r1
