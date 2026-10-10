@@ -96582,6 +96582,20 @@
      {:cmd "git status --short",
       :exit 0,
       :finding "clean worktree after commit"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791656053986-2651-5b9a7f1d",
+     :commands
+     ["git show a40331e72c1b8f7a2cdc2503ad1a6eca1bc1becb -- ConstructionTargets/CyclicThreeCirclesPullbackSheets.lean"
+      "git diff --exit-code a40331e72c1b8f7a2cdc2503ad1a6eca1bc1becb -- ConstructionTargets/CyclicThreeCirclesPullbackSheets.lean"
+      "lake build ConstructionTargets.CyclicThreeCirclesPullbackSheets"
+      "sha256sum /tmp/cyclic-three-circles-pullback-sheets.lean && lake env lean /tmp/cyclic-three-circles-pullback-sheets.lean"
+      "placeholder census on source, fixture, and problems/t99J01/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb on recorded ledger at 795a2a02"],
+     :finding
+     "PASS: reviewer codex-3 verified recorded commit a40331e7 changes only CyclicThreeCirclesPullbackSheets.lean and the source equals that commit. Canonical packages resolve correctly; the frozen fixture hash is exact; target and fixture compile with zero placeholders; t99J01 retains exactly one placeholder; pullback_isKSheeted reports only propext, Classical.choice, and Quot.sound; all 131 registered statements and the recorded 858-item ledger validate. The certificate uses the banked pullback covering. At each ThreeCircles point y, LiteralCoveringPullback.fiberEquiv maps the projection fiber to the circlePower fiber over collapse y; finiteness is transferred back along this equivalence injection, and fiber_card followed by circlePower_fiber_card gives exact cardinality n. The module correctly does not prove path connectedness, construct monodromy paths, compute subgroup index, or close t99J01."},
     :commit "a40331e72c1b8f7a2cdc2503ad1a6eca1bc1becb",
     :changed-paths
     ["ConstructionTargets/CyclicThreeCirclesPullbackSheets.lean"],
@@ -96597,7 +96611,7 @@
      ["ConstructionTargets.CyclicThreeCirclesPullbackSheets.pullback_isKSheeted"]},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CyclicThreeCirclesPullbackSheets.lean"],
    :dag-node
@@ -96700,7 +96714,7 @@
       "pullback_isKSheeted proves the literal cyclic ThreeCircles pullback projection is an n-sheeted covering for every nonzero n."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/cyclic-three-circles-cover",
@@ -98165,7 +98179,7 @@
    :other-consumers []}
   {:consumer :t99J01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "CyclicThreeCirclesPullbackSheets.pullback_isKSheeted",
@@ -98178,7 +98192,10 @@
     :type
     "For NeZero n, IsKSheetedCover (CyclicThreeCirclesPullbackCover.projection n) n",
     :proved-in
-    :routes-2026-10-10-cyclic-three-circles-pullback-sheets-43},
+    :routes-2026-10-10-cyclic-three-circles-pullback-sheets-43,
+    :banked-by
+    :routes-2026-10-10-cyclic-three-circles-pullback-sheets-43,
+    :banked-commit "a40331e72c1b8f7a2cdc2503ad1a6eca1bc1becb"},
    :id :lemma-cyclicthreecirclespullbacksheets-pullback-isksheeted,
    :kind :lemma,
    :depends-on
