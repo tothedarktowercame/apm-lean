@@ -150,7 +150,16 @@ wait_job() {
   local job="$1" label="$2" state elapsed=0 body term_reason fail_code
   while :; do
     printf '{:job %q :checked-at %q}\n' "$job" "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" > "$HEARTBEAT"
-    body="$(job_json "$job")" || die "$label status reads exhausted; in-flight job retained"
+    if ! body="$(job_json "$job")"; then
+      # A run of failed status reads says nothing about the immutable job's
+      # state.  Keep polling the persisted job instead of stopping the whole
+      # campaign or dispatching a duplicate job.  The ordinary job timeout
+      # remains the bound if Agency never becomes readable again.
+      log "$label status reads exhausted for job=$job; retaining job and continuing to poll"
+      sleep "$POLL_SECONDS"; elapsed=$((elapsed+POLL_SECONDS))
+      [ "$elapsed" -lt "$JOB_TIMEOUT" ] || die "$label timeout=${JOB_TIMEOUT}s job=$job; in-flight job retained"
+      continue
+    fi
     state="$(jq -r '.job.state // empty' <<<"$body")"
     case "$state" in
       done)
