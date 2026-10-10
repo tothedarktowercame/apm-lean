@@ -100168,6 +100168,20 @@
       :output "131 registered statements match, 0 do not"}
      {:cmd "git diff --check", :exit 0}
      {:cmd "git status --short", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791672743828-3175-ff4280b4",
+     :commands
+     ["git show and diff-tree c6874b6be3ead2f6e66940a5e21836f496af67ad"
+      "sha256sum /tmp/interval-endpoint-quotient-circle.lean"
+      "lake build ConstructionTargets.IntervalEndpointQuotientCircle"
+      "lake env lean /tmp/interval-endpoint-quotient-circle.lean"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped placeholder and SHA-256 recomputation"
+      "git diff-tree --check c6874b6be3ead2f6e66940a5e21836f496af67ad^ c6874b6be3ead2f6e66940a5e21836f496af67ad"],
+     :finding
+     "Recorded one-file commit is authored by topo-2 and matches the frozen fixture hash; the endpoint quotient homeomorphism has the required quotient-to-Circle orientation, its representative formula and endpoint equality/basepoint formulas cross representations correctly, both source and fixture have zero placeholders, frozen declarations use only standard axioms, and the registry reports 131 matched and 0 mismatched."},
     :commit "c6874b6be3ead2f6e66940a5e21836f496af67ad",
     :changed-paths
     ["ConstructionTargets/IntervalEndpointQuotientCircle.lean"],
@@ -100183,7 +100197,7 @@
      "Defined the endpoint-glued unit interval quotient, its homeomorphism to Circle, the representative formula, equality of endpoint classes, and both endpoint-to-basepoint formulas."},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/IntervalEndpointQuotientCircle.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/interval-endpoint-quotient-circle",
@@ -100318,7 +100332,7 @@
       "endpointQuotientHomeomorphCircle identifies the closed unit interval with its endpoints glued homeomorphically with Circle, with an explicit AddCircle representative formula and both endpoints sent to one."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -103227,7 +103241,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -103243,8 +103257,9 @@
     :type
     "The quotient of the closed real unit interval by the relation identifying its two endpoints is homeomorphic to Circle, with an explicit representative formula and both endpoints mapping to the Circle basepoint.",
     :area "polygon-surface-open-cover",
-    :proved-in
-    :routes-2026-10-10-interval-endpoint-quotient-circle-58},
+    :proved-in :routes-2026-10-10-interval-endpoint-quotient-circle-58,
+    :banked-by :routes-2026-10-10-interval-endpoint-quotient-circle-58,
+    :banked-commit "c6874b6be3ead2f6e66940a5e21836f496af67ad"},
    :id
    :lemma-intervalendpointquotientcircle-endpointquotienthomeomorphcircle,
    :kind :lemma,
