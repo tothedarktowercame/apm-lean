@@ -59135,18 +59135,81 @@
   {:bounded-exception
    "single-consumer deleted-endpoint comparison for the t02A03 right-core and collar attachments",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/t02a03_geometric_tube_cover.lean",
+      :sha256
+      "d626ecd219ec8dfd188a7a4115a25e02c63a283a3a6cd38846d33a07dd710524"},
+     :commands
+     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "apm_t02a03_rightCore_collar_deletedEndpoint compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
+       :exit 0}
+      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "d626ecd219ec8dfd188a7a4115a25e02c63a283a3a6cd38846d33a07dd710524  /tmp/t02a03_geometric_tube_cover.lean"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}
+      {:cmd
+       "rg -n '^theorem apm_t02a03_rightCore_collar_deletedEndpoint' /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "397:theorem apm_t02a03_rightCore_collar_deletedEndpoint :"}],
+     :finding
+     "A complete placeholder-free fixture compiles for this representation comparison. The frozen closed right-core segment at parameter zero equals the frozen closed vertical collar at parameter one because both banked endpoint theorems identify those values with the Euclidean origin. The theorem is stated in ambient Euclidean space, so it does not incorrectly introduce the deleted point into geometricY.",
+     :residual
+     "Promote the exact deleted-endpoint equality. The next consumer residual is to construct a compatible homotopy in geometricY between the punctured right-core segment and collar leading to the based Circle meridian, then extend it over the tube pieces and glue the final equivalence.",
+     :implementation
+     {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
+      :acceptance
+      {:declaration "apm_t02a03_rightCore_collar_deletedEndpoint",
+       :fixture-sha256
+       "d626ecd219ec8dfd188a7a4115a25e02c63a283a3a6cd38846d33a07dd710524",
+       :representation
+       {:source
+        "The frozen closed right-core attachment segment evaluated at parameter zero",
+        :target
+        "The frozen closed vertical collar evaluated at parameter one",
+        :direction
+        "Exact ambient Euclidean point equality from the source right-core endpoint representation to the target collar endpoint representation"},
+       :gates
+       ["lake env lean ConstructionTargets/T02A03GeometricTubeCover.lean"
+        "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeCover.lean || true)\""
+        "python3 scripts/statement-registry.py check"],
+       :axioms ["propext" "Classical.choice" "Quot.sound"],
+       :consumer-residual
+       "Construct the compatible geometricY attachment homotopy and extend it to tube deformations and gluing; this packet claims only the ambient endpoint equality."}}}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/geometric-right-core-collar-endpoint",
    :acceptance
-   {:probe
-    "Compile and bank apm_t02a03_rightCore_collar_deletedEndpoint from /tmp/t02a03_geometric_tube_cover.lean. Prove that the frozen right-core attachment closure at parameter zero is exactly the frozen collar closure at parameter one, using their two banked endpoint equalities to the Euclidean origin. This supplies the endpoint compatibility equation required by t02A03 route step 2; state it in ambient Euclidean space and do not claim the deleted endpoint lies in geometricY, or claim an attachment homotopy, tube deformation, or gluing equivalence.",
-    :declaration "apm_t02a03_rightCore_collar_deletedEndpoint",
-    :placeholder "the sole sorry in apm_t02a03",
-    :route-step
-    "t02A03 step 2, identify the deleted endpoints of the closed right-core and collar attachment representations"},
+   {:declaration "apm_t02a03_rightCore_collar_deletedEndpoint",
+    :fixture-sha256
+    "d626ecd219ec8dfd188a7a4115a25e02c63a283a3a6cd38846d33a07dd710524",
+    :representation
+    {:source
+     "The frozen closed right-core attachment segment evaluated at parameter zero",
+     :target
+     "The frozen closed vertical collar evaluated at parameter one",
+     :direction
+     "Exact ambient Euclidean point equality from the source right-core endpoint representation to the target collar endpoint representation"},
+    :gates
+    ["lake env lean ConstructionTargets/T02A03GeometricTubeCover.lean"
+     "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeCover.lean || true)\""
+     "python3 scripts/statement-registry.py check"],
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :consumer-residual
+    "Construct the compatible geometricY attachment homotopy and extend it to tube deformations and gluing; this packet claims only the ambient endpoint equality."},
    :representation
    {:source
     "The frozen closed right-core attachment segment evaluated at parameter zero",
