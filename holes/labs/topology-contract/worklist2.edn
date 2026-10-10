@@ -59792,63 +59792,46 @@
    "Extend the based attachment homotopy across the right tube, construct compatible deformation data on the other tube piece, and glue the geometricY-to-Y equivalence.",
    :other-consumers []}
   {:consumer :t02A03,
+   :stop-count 1,
    :evidence
-   {:probe
-    {:outcome :revise,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/t02a03_geometric_tube_cover.lean",
-      :sha256
-      "03caeef04ef63e83ed7d18db409c345c504bc183f7880e468fde0580ae1c37dd"},
-     :commands
-     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "apm_t02a03_rightCoreLiftHomotopy, apm_t02a03_rightCoreAnchorContractionHomotopy, and apm_t02a03_rightCoreBasedAttachmentHomotopy compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
-       :exit 0}
-      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "03caeef04ef63e83ed7d18db409c345c504bc183f7880e468fde0580ae1c37dd  /tmp/t02a03_geometric_tube_cover.lean"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :finding
-     "The geometricY-to-Y equivalence is still absent, but the banked vertical lift and anchor contraction now compose into one compiled attachment homotopy. The first Homotopy packages the lift from apm_t02a03_rightCoreAttachmentMap to apm_t02a03_rightCoreLiftedMap. The second packages the contraction to the constant Circle-meridian value at Circle.exp (pi/2), using the banked subtype endpoint equality. Their Homotopy.trans is the precise based attachment object needed before extending the deformation over the right tube.",
-     :residual
-     "Bank the composed based attachment homotopy. Then extend it from the punctured right-core segment across the right tube, construct compatible deformation data on the remaining tube piece, and assemble the geometricY-to-Y gluing equivalence and final closure.",
-     :prerequisite
-     {:bounded-exception
-      "single-consumer composed based attachment homotopy for the t02A03 punctured right-core segment",
-      :consumer :t02A03,
-      :phase :probe,
-      :state :open,
-      :scope [],
-      :dag-node
-      "TOPOLOGY-ROUTES.md/t02A03/geometric-right-core-based-attachment-homotopy",
-      :acceptance
-      {:probe
-       "Compile and bank apm_t02a03_rightCoreLiftHomotopy, apm_t02a03_rightCoreAnchorContractionHomotopy, and apm_t02a03_rightCoreBasedAttachmentHomotopy from /tmp/t02a03_geometric_tube_cover.lean. Package the banked vertical lift as a ContinuousMap.Homotopy from the punctured right-core attachment map to its lifted map; package the banked contraction as a ContinuousMap.Homotopy from that lifted map to the constant geometricY point given by the Circle meridian at Circle.exp (Real.pi / 2); and compose them with Homotopy.trans. This supplies the based attachment homotopy required by t02A03 route step 2; do not yet claim an extension over the right tube, tube-wide deformation data, or a gluing equivalence.",
-       :declarations
-       ["apm_t02a03_rightCoreLiftHomotopy"
-        "apm_t02a03_rightCoreAnchorContractionHomotopy"
-        "apm_t02a03_rightCoreBasedAttachmentHomotopy"],
-       :placeholder "the sole sorry in apm_t02a03",
-       :route-step
-       "t02A03 step 2, package and compose the punctured right-core lift and contraction into the based Circle-meridian attachment homotopy"},
-      :id
-      :routes-2026-10-10-t02a03-geometric-right-core-based-attachment-homotopy-topo2-r1,
-      :kind :reusable-theorem,
-      :depends-on
-      [:routes-2026-10-10-checkpoint-topo2-r5
-       :routes-2026-10-10-t02a03-geometric-anchor-circle-meridian-quarter-turn-topo2-r1],
-      :current-residual
-      "Extend the based attachment homotopy across the right tube, construct compatible deformation data on the other tube piece, and glue the geometricY-to-Y equivalence.",
-      :other-consumers []}}},
+   {:residual
+    "Foundation required: explicit R3 tube-neighborhood deformation/retraction with tangency-compatible overlap data, or a closed-cofibration homotopy-equivalence gluing theorem plus the corresponding left/right tube models; only then can the geometricY-to-Y HomotopyEquiv and final consumer closure be assembled.",
+    :outcome :stop,
+    :disposition :stop,
+    :author "topo-8",
+    :reason
+    "The adapter cannot yet be completed from the banked results. The compiled homotopy has domain Set.Ioc 0 1, the punctured right-core parameter segment, while the frozen obligation needs Nonempty (ContinuousMap.HomotopyEquiv apm_t02a03_geometricY apm_t02a03_Y) on the entire closed infDist-defined tube complement. Extending it requires a new tube-coordinate/deformation foundation: a continuous right-tube normal-coordinate model and deformation that avoids the deleted left core, together with compatibility on the left/right tube overlap at the tangency. Metric.cthickening membership supplies only an existential nearby core point and no continuous choice of core parameter; nearest-point projection is not banked and is singular at the common tangency. The alternative requires a homotopy-equivalence gluing theorem along the closed overlap, which the route explicitly records as absent and foundation-sized. This is a missing construction boundary, not a refutation of the frozen statement, and it is too large for one bounded prerequisite row.",
+    :commands
+    [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+      :exit 0,
+      :output
+      "The complete banked core-attachment chain through apm_t02a03_rightCoreBasedAttachmentHomotopy compiled; axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "rg -n \"Nothing found for \\(b\\)|no ℝ³ tube-neighbourhood retractions|gluing lemma.*does not exist\" holes/labs/topology-routes/routes-1.md",
+      :exit 0,
+      :output
+      "The route records that no R3 tube-neighborhood retraction or homotopy-equivalence gluing lemma is banked, and that the required gluing lemma is itself a foundation."}
+     {:cmd
+      "rg -n \"T02A03.*(Tube|Deformation|Retraction)|rightTube.*(Homotopy|retract)|cthickening.*Homotopy\" ConstructionTargets",
+      :exit 0,
+      :output
+      "Only ConstructionTargets/T02A03GeometricTubeCover.lean matched; no independent tube-wide deformation or retraction theorem was found."}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+      :exit 0,
+      :output
+      "03caeef04ef63e83ed7d18db409c345c504bc183f7880e468fde0580ae1c37dd  /tmp/t02a03_geometric_tube_cover.lean"}],
+    :fixture
+    {:path "/tmp/t02a03_geometric_tube_cover.lean",
+     :sha256
+     "03caeef04ef63e83ed7d18db409c345c504bc183f7880e468fde0580ae1c37dd"},
+    :finding
+    "All adapter-sized based attachment data now compile, through a ContinuousMap.Homotopy from the punctured right core to the constant quarter-turn Circle-meridian point. The exact remaining boundary is tube-wide: construct continuous tube coordinates/deformations on the radius-1/4 closed neighborhoods, prove avoidance of the deleted left core throughout, and glue the two tube pieces across their tangency overlap. No banked result supplies any of those three operations.",
+    :seat "topo-8"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/closure",
    :acceptance
