@@ -61662,49 +61662,65 @@
    "single-consumer frozen left-tube membership for the t02A03 radial interpolation",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:outcome :go,
-     :fixture
-     {:path "/tmp/t02a03_geometric_tube_cover.lean",
-      :sha256
-      "aea1c264799ec496f8b71b0f5c57ab60ffb32a59eb6136ad59de2e141caac637"},
-     :commands
-     [{:cmd
-       "rg -n \"t02A03|radial-membership|phase :probe|GO needs\" TOPOLOGY-ROUTES.md holes/labs/topology-routes/routes-{1,2,3}.md docs/TN-topology-build-loop-design.md",
-       :exit 0}
-      {:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "apm_t02a03_leftTubeRadialPoint_mem_leftTube compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
-       :exit 0}
-      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "aea1c264799ec496f8b71b0f5c57ab60ffb32a59eb6136ad59de2e141caac637  /tmp/t02a03_geometric_tube_cover.lean"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :implementation
-     {:scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
-      :declaration
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Prove the radial interpolation remains outside the frozen left core, bundle it as the inverse-after-forward homotopy, and assemble the torus HomotopyEquiv.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :missing-theorems
+    [{:name
       "ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_leftTubeRadialPoint_mem_leftTube",
       :type
       "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubeRadialPoint tp ∈ apm_t02a03_leftTube",
-      :acceptance
-      ["target module compiles"
-       "declaration has the frozen type"
-       "target module contains no sorry token"
-       "statement registry matches"]},
-     :finding
-     "The placeholder-free fixture proves radial-interpolation membership by placing both endpoints in the same radius-1/4 closed ball about the angularly selected frozen core point and applying convexity to their affine segment.",
-     :residual
-     "Prove the radial interpolation remains outside the frozen left core, bundle it as the inverse-after-forward homotopy, and assemble the torus HomotopyEquiv."}},
+      :status :proved,
+      :consumers [:t02A03],
+      :depends-on []}],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not",
+     :accepted-type-sha256
+     "4d6061b8f5136c4ed681e0b4a7122ab0da077c1adbe932d7a463e13d36760eaf"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+      :exit 0,
+      :output
+      "aea1c264799ec496f8b71b0f5c57ab60ffb32a59eb6136ad59de2e141caac637  /tmp/t02a03_geometric_tube_cover.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03LeftTubePuncturedModel.lean",
+      :exit 0,
+      :output ""}
+     {:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+      :exit 0,
+      :output
+      "apm_t02a03_leftTubeRadialPoint_mem_leftTube depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03LeftTubePuncturedModel.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}],
+    :commit "808be514a37b14b8d4506fcde403f866ac66b849",
+    :changed-paths
+    ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
+    :fixture
+    {:path "/tmp/t02a03_geometric_tube_cover.lean",
+     :sha256
+     "aea1c264799ec496f8b71b0f5c57ab60ffb32a59eb6136ad59de2e141caac637"},
+    :finding
+    "Banked radial-interpolation membership by placing both endpoints in one radius-1/4 closed ball about the angularly selected core point and applying convexity to their affine segment.",
+    :implementation
+    {:scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
+     :declarations
+     ["ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_leftTubeRadialPoint_mem_leftTube"],
+     :type
+     "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubeRadialPoint tp ∈ apm_t02a03_leftTube"},
+    :seat "topo-6"},
    :phase :implementation,
    :type
    "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubeRadialPoint tp ∈ apm_t02a03_leftTube",
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-radial-membership",
    :acceptance
@@ -62673,4 +62689,27 @@
    :id :lemma-apm-t02a03-lefttuberadialpoint-mem-lefttube,
    :kind :lemma,
    :depends-on [:lemma-apm-t02a03-dist-lefttubepoint-angularcore],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_leftTubeRadialPoint_mem_leftTube",
+    :type
+    "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubeRadialPoint tp ∈ apm_t02a03_leftTube"},
+   :lemma
+   {:name
+    "ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_leftTubeRadialPoint_mem_leftTube",
+    :reported-by
+    [:routes-2026-10-10-t02a03-left-tube-radial-membership-topo2-r2],
+    :type
+    "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubeRadialPoint tp ∈ apm_t02a03_leftTube",
+    :proved-in
+    :routes-2026-10-10-t02a03-left-tube-radial-membership-topo2-r2},
+   :id
+   :lemma-constructiontargets-t02a03lefttubepuncturedmodel-apm-t02a03-lefttuberadialpoint-,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}]}
