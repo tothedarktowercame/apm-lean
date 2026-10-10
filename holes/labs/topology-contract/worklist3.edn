@@ -1345,8 +1345,76 @@
   {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-isiso-of-map-globalgenerator-eq-globalgenerator,
+   :evidence
+   {:placeholder-delta {:source 0, :fixture 0},
+    :residual
+    "Prove that the actual absolute-to-local homology morphism sends the global top-homology generator to the chart-normalized local generator, using orientation to choose its sign. The compiled theorem then supplies IsIso and local generation.",
+    :gates
+    {:module-build :pass,
+     :fixture-compiles-against-promoted-module :pass,
+     :exact-declaration-type :pass,
+     :zero-source-and-fixture-sorry :pass,
+     :standard-only-axioms :pass,
+     :registry-check :pass,
+     :exact-scope :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["lake build replayed pre-existing linter warnings in dependencies; the target module emitted no warnings"],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.ManifoldFundamentalClass.isIso_of_map_globalGenerator_eq_globalGenerator",
+      :type
+      "A morphism between modules each isomorphic to the coefficient ring is an isomorphism when it maps the source globalGenerator to the target globalGenerator.",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on
+      ["ConstructionTargets.ManifoldFundamentalClass.globalGenerator_generates"],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-10",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/manifold_fundamental_class_generator_map_isiso.lean",
+      :exit 0,
+      :output
+      "acb8def917dbf697d9824a85df7027350c1f8a561409b764080bf030e33974cc"}
+     {:cmd
+      "lake env lean /tmp/manifold_fundamental_class_generator_map_isiso.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^\\s*axiom\\b' ConstructionTargets/ManifoldFundamentalClass.lean /tmp/manifold_fundamental_class_generator_map_isiso.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "5c304a58217e2eaee9fcf070c9dfdec813a6e2fe",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path "/tmp/manifold_fundamental_class_generator_map_isiso.lean",
+     :sha256
+     "acb8def917dbf697d9824a85df7027350c1f8a561409b764080bf030e33974cc",
+     :original-sha256
+     "699af5e4aaf443679e5c5c704127afe55b2ea75faa66feac9afa79bae581e9e0",
+     :sorry-count 0},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :summary
+     "Proved that a morphism between modules explicitly isomorphic to the coefficient ring is an isomorphism when it sends the concrete source globalGenerator to the concrete target globalGenerator."},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/generator-image-localization-isomorphism",
@@ -2976,11 +3044,13 @@
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.isIso_of_map_globalGenerator_eq_globalGenerator",
     :reported-by
-    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+     :routes-2026-10-10-manifold-generator-map-isiso-topo3-r1],
     :type
     "forall (R : Type) [CommRing R] (G H : ModuleCat R) (eG : G ≅ ModuleCat.of R R) (eH : H ≅ ModuleCat.of R R) (f : G ⟶ H), f.hom (globalGenerator R G eG) = globalGenerator R H eH -> IsIso f",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in
+    :routes-2026-10-10-manifold-generator-map-isiso-topo3-r1},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-isiso-of-map-globalgenerator-eq-globalgenerator,
    :kind :lemma,
