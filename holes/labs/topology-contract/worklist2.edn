@@ -64559,6 +64559,21 @@
       :exit 0,
       :output "e26b31dd Bank t97A04 Integral H1 map square"}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791657517304-2702-a9f6f8cc",
+     :commands
+     ["git show/diff-tree/show --check e26b31dd7b87277b6281433dbfc1d6716acc7c2e"
+      "sha256sum /tmp/t97a04_frozen_h1_coordinate.lean"
+      "lake env lean /tmp/t97a04_frozen_h1_coordinate.lean"
+      "lake env lean ConstructionTargets/T97A04FrozenH1Coordinate.lean"
+      "lake build ConstructionTargets.T97A04FrozenH1Coordinate"
+      "python3 scripts/statement-registry.py check --rev e26b31dd7b87277b6281433dbfc1d6716acc7c2e"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "recompute recorded statement hash and comment-stripped placeholder counts"],
+     :finding
+     "PASS: reviewer codex-7 independently reviewed topo-6 commit e26b31dd; exact scope is 15 inserted lines in ConstructionTargets/T97A04FrozenH1Coordinate.lean only. Fixture SHA-256 ebc6d1023b77af5375de2ffd15282a7385949519c87590dc2e193b517492ba52 matches. Fixture and target compile with standard axioms [propext, Classical.choice, Quot.sound], focused build completes 8291 jobs, registry is 131/0, and worklist is 511 OK. frozenLbarIntegralH1_map_commutes has the required categorical orientation homologyMap then aligned coordinate = aligned coordinate then frozenMatrixAddHom. Its extensional proof evaluates frozenLbarIntegralH1_coordinate at the aligned coordinate of each source class, cancels the inverse via symm_apply_apply, and crosses from Multiplicative back to the additive group with Multiplicative.toAdd, preserving the frozen matrix exactly. Statement SHA-256 is e9a7e5cc1124255b32740cb368b1f61cb6a2e9c188e5da51c09eddcefcd90b72; target and fixture placeholders are 0, consumer placeholders remain 4, and the consumer SHA-256 remains 79ca854186b39183bf53490a20b5be92695e345a2c099fcf928b5ad3300ee4ec."},
     :commit "e26b31dd7b87277b6281433dbfc1d6716acc7c2e",
     :changed-paths
     ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"],
@@ -64574,7 +64589,7 @@
      ["ConstructionTargets.T97A04FrozenH1Coordinate.frozenLbarIntegralH1_map_commutes"]},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t97A04/frozen-integral-h1-map-square",
    :acceptance
@@ -64665,7 +64680,7 @@
      "The full apm_t97A04_bridge_2 proof remains absent. The compiled theorem packages frozenLbarIntegralH1_coordinate as an equality of AddCommGrpCat morphisms: the concrete degree-one homology map followed by the aligned coordinate equals the aligned coordinate followed by frozenMatrixAddHom. It is obtained by evaluating the pointwise theorem at the coordinate of each class and cancelling the aligned equivalence.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t97A04/h1-bridge-assembly",
    :acceptance
@@ -65907,7 +65922,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -65923,7 +65938,10 @@
     :type
     "(HomologicalComplex.homologyMap (ConstructionTargets.SingularSubdivision.singularPostcomposition frozenLbar) 1) ≫ frozenTorusAlignedH1GroupIsoFinTwo.hom = frozenTorusAlignedH1GroupIsoFinTwo.hom ≫ AddCommGrpCat.ofHom frozenMatrixAddHom",
     :proved-in
-    :routes-2026-10-10-t97a04-frozen-integral-h1-map-square-topo2-r1},
+    :routes-2026-10-10-t97a04-frozen-integral-h1-map-square-topo2-r1,
+    :banked-by
+    :routes-2026-10-10-t97a04-frozen-integral-h1-map-square-topo2-r1,
+    :banked-commit "e26b31dd7b87277b6281433dbfc1d6716acc7c2e"},
    :id
    :lemma-constructiontargets-t97a04frozenh1coordinate-frozenlbarintegralh1-map-commutes,
    :kind :lemma,
