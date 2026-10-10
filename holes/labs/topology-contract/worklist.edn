@@ -87228,60 +87228,56 @@
    "Import CoveringMonodromyCosets, CoveringDegree, and StatementSurfaceModels. For a path-connected n-sheeted cover p:E→ThreeCircles and e:E, conjoin coveringInducedFundamentalGroupMap_injective with the equality obtained by rewriting coveringFiberCard_eq_index using hp.card_fiber (p e).",
    :consumer :t99J01,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-4",
-     :fixture
-     {:path "/tmp/t99j01-cover-subgroup-index-probe.lean",
-      :sha256
-      "fff6a750b855a82d7e890ea716796259aef6abc515bcec165eed20ab99f72dd7"},
-     :commands
-     [{:cmd "stat -c '%F %n' .lake/packages",
-       :exit 0,
-       :finding
-       "directory .lake/packages; canonical package authority is present"}
-      {:cmd
-       "lake env lean ConstructionTargets/CoveringMonodromyCosets.lean",
-       :exit 0,
-       :finding
-       "the shared fiber-coset, index, and induced-pi1 results compile"}
-      {:cmd "lake env lean ConstructionTargets/CoveringDegree.lean",
-       :exit 0,
-       :finding
-       "the frozen IsKSheetedCover fiber finiteness and cardinality interface compiles"}
-      {:cmd
-       "lake env lean /tmp/t99j01-cover-subgroup-index-probe.lean",
-       :exit 0,
-       :finding
-       "the exact ThreeCircles n-sheeted-cover adapter compiles with standard-only axioms"}
-      {:cmd "sha256sum /tmp/t99j01-cover-subgroup-index-probe.lean",
-       :exit 0,
-       :finding
-       "fff6a750b855a82d7e890ea716796259aef6abc515bcec165eed20ab99f72dd7"}
-      {:cmd
-       "Python comment-stripped placeholder census of /tmp/t99j01-cover-subgroup-index-probe.lean",
-       :exit 0,
-       :finding "0"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :finding "131 registered statements match, 0 do not"}
-      {:cmd "git status --short", :exit 0, :finding "clean"}],
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :implementation
-     {:scope ["ConstructionTargets/T99J01CoverSubgroupIndex.lean"],
-      :declarations ["t99j01_cover_pi1_subgroup_index"],
-      :description
-      "Import CoveringMonodromyCosets, CoveringDegree, and StatementSurfaceModels. For a path-connected n-sheeted cover p:E→ThreeCircles and e:E, conjoin coveringInducedFundamentalGroupMap_injective with the equality obtained by rewriting coveringFiberCard_eq_index using hp.card_fiber (p e).",
-      :axioms :standard-only,
-      :commands
-      ["lake env lean ConstructionTargets/T99J01CoverSubgroupIndex.lean"
-       "lake env lean /tmp/t99j01-cover-subgroup-index-probe.lean"
-       "python3 scripts/statement-registry.py check"]},
-     :warnings [],
-     :residual
-     "t99J01 route step 2 is ready for implementation. The remaining consumer route is the held ThreeCircles pi1 coordinate comparison, finite-index Schreier rank, path-component cover restriction, explicit connected covers, and final assembly."}},
+   {:placeholder-after 0,
+    :placeholder-delta 0,
+    :residual
+    "t99J01 route step 2 is implemented. The remaining consumer route is the held ThreeCircles pi1 coordinate comparison, finite-index Schreier rank, path-component cover restriction, explicit connected covers, and final assembly.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:status :unchanged,
+     :registry "131 registered statements match, 0 do not"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author {:name "Joe Corneli", :email "holtzermann17@gmail.com"},
+    :placeholder-before 0,
+    :commands
+    [{:cmd "stat -c '%F %n' .lake/packages",
+      :exit 0,
+      :finding
+      "directory .lake/packages; canonical package authority is present"}
+     {:cmd "sha256sum /tmp/t99j01-cover-subgroup-index-probe.lean",
+      :exit 0,
+      :finding
+      "fff6a750b855a82d7e890ea716796259aef6abc515bcec165eed20ab99f72dd7"}
+     {:cmd
+      "lake env lean ConstructionTargets/T99J01CoverSubgroupIndex.lean",
+      :exit 0,
+      :finding
+      "The promoted adapter compiles and audits to propext, Classical.choice, and Quot.sound."}
+     {:cmd "lake env lean /tmp/t99j01-cover-subgroup-index-probe.lean",
+      :exit 0,
+      :finding
+      "The exact frozen ThreeCircles n-sheeted-cover adapter compiles with standard-only axioms."}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r 8077f0874766476737e98dd09c873ac711ea558d",
+      :exit 0,
+      :finding "ConstructionTargets/T99J01CoverSubgroupIndex.lean"}
+     {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :commit "8077f0874766476737e98dd09c873ac711ea558d",
+    :changed-paths
+    ["ConstructionTargets/T99J01CoverSubgroupIndex.lean"],
+    :fixture
+    {:path "/tmp/t99j01-cover-subgroup-index-probe.lean",
+     :sha256
+     "fff6a750b855a82d7e890ea716796259aef6abc515bcec165eed20ab99f72dd7",
+     :placeholder-count 0},
+    :declarations ["t99j01_cover_pi1_subgroup_index"],
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T99J01CoverSubgroupIndex.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t99J01/cover-pi1-subgroup-index",
    :acceptance
