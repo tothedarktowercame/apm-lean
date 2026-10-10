@@ -96089,8 +96089,76 @@
   {:bounded-exception
    "This single-consumer pointed collapse is the exact map required to pull the degree-n circle cover back to ThreeCircles; its right-circle section supplies the cyclic monodromy loop used in the next step.",
    :consumer :t99J01,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Pull back Circle.npow along collapse, prove exact n-sheet fibers, and prove path connectedness by using the firstCircle section to realize cyclic transitions between sheets.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :missing-theorems
+    [{:name "CyclicThreeCirclesCollapse.collapse_firstCircle",
+      :type
+      "A continuous collapse from ThreeCircles to Circle, constant on TwoCircles and identity on the final Circle, with a continuous final-circle section",
+      :status :proved,
+      :consumers [:t99J01],
+      :depends-on []}],
+    :statement-hashes "131 registered statements match",
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :finding
+      "canonical package authority resolves to /home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "sha256sum /tmp/cyclic-three-circles-collapse.lean",
+      :exit 0,
+      :finding
+      "fixture hash matches 9cc57221539ffbe10187cde732b9c42eec055f5be725612e0f01be7e638da0fd"}
+     {:cmd "lake build ConstructionTargets.CyclicThreeCirclesCollapse",
+      :exit 0,
+      :finding "canonical pointed collapse and section build"}
+     {:cmd "lake env lean /tmp/cyclic-three-circles-collapse.lean",
+      :exit 0,
+      :finding
+      "frozen fixture compiles and reports only standard axioms"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" ConstructionTargets/CyclicThreeCirclesCollapse.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero source placeholders"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" /tmp/cyclic-three-circles-collapse.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero fixture placeholders"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short",
+      :exit 0,
+      :finding "clean worktree after commit"}],
+    :commit "ece8fc8f7ad4a46d1445edc4f5ccf44a99502a2c",
+    :changed-paths
+    ["ConstructionTargets/CyclicThreeCirclesCollapse.lean"],
+    :fixture
+    {:path "/tmp/cyclic-three-circles-collapse.lean",
+     :sha256
+     "9cc57221539ffbe10187cde732b9c42eec055f5be725612e0f01be7e638da0fd",
+     :sorry-count 0},
+    :implementation
+    {:scope ["ConstructionTargets/CyclicThreeCirclesCollapse.lean"],
+     :declarations
+     ["ConstructionTargets.CyclicThreeCirclesCollapse.collapse"
+      "ConstructionTargets.CyclicThreeCirclesCollapse.collapse_left"
+      "ConstructionTargets.CyclicThreeCirclesCollapse.collapse_right"
+      "ConstructionTargets.CyclicThreeCirclesCollapse.continuous_collapse"
+      "ConstructionTargets.CyclicThreeCirclesCollapse.firstCircle"
+      "ConstructionTargets.CyclicThreeCirclesCollapse.continuous_firstCircle"
+      "ConstructionTargets.CyclicThreeCirclesCollapse.collapse_firstCircle"]},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/CyclicThreeCirclesCollapse.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/cyclic-three-circles-collapse",
@@ -97494,15 +97562,20 @@
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
-  {:consumer :portfolio,
+  {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
    :scope [],
    :acceptance
-   {:lemma "CyclicThreeCirclesCollapse.collapse_firstCircle"},
+   {:lemma "CyclicThreeCirclesCollapse.collapse_firstCircle",
+    :type
+    "A continuous collapse from ThreeCircles to Circle, constant on TwoCircles and identity on the final Circle, with a continuous final-circle section"},
    :lemma
    {:name "CyclicThreeCirclesCollapse.collapse_firstCircle",
-    :reported-by []},
+    :reported-by [:routes-2026-10-10-cyclic-three-circles-collapse-39],
+    :type
+    "A continuous collapse from ThreeCircles to Circle, constant on TwoCircles and identity on the final Circle, with a continuous final-circle section",
+    :proved-in :routes-2026-10-10-cyclic-three-circles-collapse-39},
    :id :lemma-cyclicthreecirclescollapse-collapse-firstcircle,
    :kind :lemma,
    :depends-on [],
