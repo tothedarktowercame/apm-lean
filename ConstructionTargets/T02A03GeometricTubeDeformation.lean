@@ -332,6 +332,47 @@ theorem rightTubeCorePlanarComplex_ne_zero
   norm_num at hd
   linarith
 
+noncomputable def rightTubeCoreNormalComplex (p : apm_t02a03_E3) : ℂ :=
+  ((1 - ‖rightTubeCorePlanarComplex p‖ : ℝ) : ℂ) + (p 2 : ℂ) * Complex.I
+
+noncomputable def rightTubeCorePolarReconstruction
+    (u : Circle) (n : ℂ) : apm_t02a03_E3 :=
+  WithLp.toLp 2 ![1 - (1 - n.re) * (u : ℂ).re,
+    (1 - n.re) * (u : ℂ).im, n.im]
+
+theorem rightTubeCorePolarReconstruction_self
+    (p : apm_t02a03_E3) (hp : p ∈ apm_t02a03_rightTube) :
+    rightTubeCorePolarReconstruction
+      ⟨NormedSpace.normalize (rightTubeCorePlanarComplex p),
+        mem_sphere_zero_iff_norm.mpr
+          (NormedSpace.norm_normalize
+            (rightTubeCorePlanarComplex_ne_zero p hp))⟩
+      (rightTubeCoreNormalComplex p) = p := by
+  have hscale := NormedSpace.norm_smul_normalize (rightTubeCorePlanarComplex p)
+  have hre : ‖rightTubeCorePlanarComplex p‖ *
+      (NormedSpace.normalize (rightTubeCorePlanarComplex p)).re =
+      (rightTubeCorePlanarComplex p).re := by
+    have h := congrArg Complex.re hscale
+    exact (RCLike.smul_re ‖rightTubeCorePlanarComplex p‖
+      (NormedSpace.normalize (rightTubeCorePlanarComplex p))).symm.trans h
+  have him : ‖rightTubeCorePlanarComplex p‖ *
+      (NormedSpace.normalize (rightTubeCorePlanarComplex p)).im =
+      (rightTubeCorePlanarComplex p).im := by
+    have h := congrArg Complex.im hscale
+    exact (RCLike.smul_im ‖rightTubeCorePlanarComplex p‖
+      (NormedSpace.normalize (rightTubeCorePlanarComplex p))).symm.trans h
+  ext i
+  fin_cases i
+  · have hpre : (rightTubeCorePlanarComplex p).re = 1 - p 0 := by
+      simp [rightTubeCorePlanarComplex]
+    simp [rightTubeCorePolarReconstruction, rightTubeCoreNormalComplex]
+    linarith
+  · have hpim : (rightTubeCorePlanarComplex p).im = p 1 := by
+      simp [rightTubeCorePlanarComplex]
+    simp [rightTubeCorePolarReconstruction, rightTubeCoreNormalComplex]
+    linarith
+  · simp [rightTubeCorePolarReconstruction, rightTubeCoreNormalComplex]
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -342,3 +383,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubePlanarRotation_exists
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubePolarReconstruction_self
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCorePlanarComplex_ne_zero
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCorePolarReconstruction_self
