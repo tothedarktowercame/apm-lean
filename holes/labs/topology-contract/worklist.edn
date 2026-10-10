@@ -89772,6 +89772,18 @@
      :target "ModuleCat.of ℤ (ℤ × ℤ × ZMod 2)",
      :direction
      "Explicit isomorphisms from each categorical cokernel to Smith coordinates, induced respectively by (x,y,z) ↦ (y-x,z-x,x mod 2) and (x,y,z) ↦ (x,y,z mod 2)"},
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791634768901-1899-4e3bff08",
+     :commands
+     ["lake env lean ConstructionTargets/T97A01SmithQuotients.lean"
+      "lake env lean /tmp/t97a01-smith-probe.lean"
+      "sha256sum /tmp/t97a01-smith-probe.lean"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb"],
+     :finding
+     "recorded scope is exact; both Smith cokernel orientations compile with zero placeholders and standard-only axioms; fixture hash matches"},
     :commit "a86f69f0dbddabc6958f98ae9e6714cbad77ed39",
     :changed-paths ["ConstructionTargets/T97A01SmithQuotients.lean"],
     :fixture
@@ -89782,7 +89794,7 @@
      :axiom-count 0,
      :proof-placeholder-count 0}},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T97A01SmithQuotients.lean"],
    :acceptance
    {:placeholder "the single sorry in apm_t97a01",
@@ -89918,7 +89930,7 @@
      "After the single Smith-coordinate prerequisite compiles, rerun this closure probe and expose its two cokernel isomorphisms with the orientations required by the polygon Mayer-Vietoris adapter."},
     :seat "topo-4"},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t97A01/smith-quotients",
    :acceptance
