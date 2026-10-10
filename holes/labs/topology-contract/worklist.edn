@@ -94385,84 +94385,90 @@
     "standard-only axioms"
     "registry check"],
    :evidence
-   {:probe
-    {:residual
-     "Implement the compiled fixture canonically in ConstructionTargets/KleinPlaneActionSquareOrbitClassification.lean; after review, the t93J03 route can proceed to the boundary EqvGen comparison.",
-     :outcome :go,
-     :warnings
-     [{:kind :linter,
-       :message
-       "The converse witness proof reports an unreachable trailing ring tactic in one branch; the theorem and fixture compile without placeholders."}
-      {:kind :dirty-worktree,
-       :message
-       "The pre-existing untracked holes/labs/topology-contract/worklist2.edn.tmp was not read or modified by this probe."}],
-     :missing-theorems
-     [{:name "kleinPlaneAction_squareOrbitClassification",
-       :type
-       "Affine PresentedKleinGroup action on Real times Real with explicit coordinate formula, closed-square representatives for every orbit, and a complete iff same-orbit classification for square points including edges and corners",
-       :status :proved,
-       :consumers [:t93J03],
-       :depends-on
-       ["KleinPlaneAffineAction.planeAction"
-        "KleinSquareRepresentative.exists_closedSquare_smul"
-        "UnitIntervalIntegerClassification.translation"
-        "UnitIntervalIntegerClassification.reflection"]}],
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd
-       "lake build ConstructionTargets.UnitIntervalIntegerClassification",
-       :exit 0,
-       :finding
-       "the canonical affine action, square representative, and interval-classification dependency chain compiles"}
-      {:cmd "lake env lean /tmp/klein-square-orbit-cases.lean",
-       :exit 0,
-       :finding
-       "the complete same-orbit iff classification compiles; its printed axioms are propext, Classical.choice, and Quot.sound"}
-      {:cmd "sha256sum /tmp/klein-square-orbit-cases.lean",
-       :exit 0,
-       :finding
-       "73cd7a73092fdc1fc28f3cf5ab8c193b52fa17d8830c7b6094db37defbb459aa"}
-      {:cmd
-       "rg -n \"\\b(sorry|admit)\\b\" /tmp/klein-square-orbit-cases.lean",
-       :exit 1,
-       :expected-exit 1,
-       :finding "no placeholders"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :finding "131 registered statements match, 0 do not"}
-      {:cmd "git status --short",
-       :exit 0,
-       :finding
-       "only the pre-existing untracked holes/labs/topology-contract/worklist2.edn.tmp is present; the probe remained read-only"}],
-     :diagnostic-history
-     [{:cmd "lake env lean /tmp/klein-square-orbit-cases.lean",
-       :exit 1,
-       :finding
-       "the first classification statement accidentally attached the vertical equation n=-1 to the horizontal witness m; removed that mistyped conjunct and retained the correct forced endpoint equations"}
-      {:cmd "lake env lean /tmp/klein-square-orbit-cases.lean",
-       :exit 1,
-       :finding
-       "the first iff edit inserted the remaining forward branches after the converse theorem and referenced branch-local names under all_goals; restored the forward branches before the converse and used each branch context directly"}],
-     :fixture
-     {:path "/tmp/klein-square-orbit-cases.lean",
-      :sha256
-      "73cd7a73092fdc1fc28f3cf5ab8c193b52fa17d8830c7b6094db37defbb459aa",
-      :interface
-      "InSquare is the closed unit square. Cases explicitly enumerates the three possible vertical shifts and, within each, every translation or reflection case including forced edges and corners. sameOrbit_iff_cases proves that two square points are related by the PresentedKleinGroup affine action exactly when Cases holds; the imported affine-action and square-representative declarations provide the requested action formula, generator formulas, and orbit representatives."},
-     :implementation
-     {:scope
-      ["ConstructionTargets/KleinPlaneActionSquareOrbitClassification.lean"],
-      :acceptance
-      "Bank InSquare, Cases, sameOrbit_cases, cases_sameOrbit, and sameOrbit_iff_cases together with re-exports of the imported coordinate action, generator formulas, and closed-square representative theorem. Preserve the compiled disjunction exactly: vertical shifts -1 and 1 use reflection cases m=0,1,2; vertical shift 0 uses translation cases m=-1,0,1. Do not form a quotient, compare EqvGen relations, or construct a homeomorphism.",
-      :gates
-      ["lake build ConstructionTargets.KleinPlaneActionSquareOrbitClassification"
-       "fixture compiles"
-       "zero source and fixture sorry"
-       "standard-only axioms"
-       "registry check"]},
-     :seat "topo-4"}},
+   {:placeholder-delta 0,
+    :residual
+    "Compare the classified square-orbit relation with the Klein polygon boundary EqvGen relation, then build the quotient homeomorphism.",
+    :implements-lemma
+    :lemma-kleinplaneaction-squareorbitclassification,
+    :outcome :done-unreviewed,
+    :warnings
+    [{:kind :linter,
+      :message
+      "The converse witness proof reports an unreachable trailing ring tactic and an unused tactic; the theorem compiles unchanged from the accepted fixture."}
+     {:kind :dependency-linter,
+      :message
+      "Imported Klein algebra modules retain unnecessarySimpa and unnecessarySeqFocus warnings."}],
+    :missing-theorems
+    [{:name "kleinPlaneAction_squareOrbitClassification",
+      :type
+      "Affine PresentedKleinGroup action on Real times Real with explicit coordinate formula, closed-square representatives, and a complete iff same-orbit classification for square points including edges and corners",
+      :status :proved,
+      :consumers [:t93J03],
+      :depends-on
+      ["KleinPlaneAffineAction.planeAction"
+       "KleinSquareRepresentative.exists_closedSquare_smul"
+       "UnitIntervalIntegerClassification.translation"
+       "UnitIntervalIntegerClassification.reflection"]}],
+    :statement-hashes "131 registered statements match",
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :finding
+      "canonical package authority resolves to /home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "sha256sum /tmp/klein-square-orbit-cases.lean",
+      :exit 0,
+      :finding
+      "fixture hash matches 73cd7a73092fdc1fc28f3cf5ab8c193b52fa17d8830c7b6094db37defbb459aa"}
+     {:cmd
+      "lake build ConstructionTargets.KleinPlaneActionSquareOrbitClassification",
+      :exit 0,
+      :finding
+      "canonical module builds the full finite square-orbit classification"}
+     {:cmd "lake env lean /tmp/klein-square-orbit-cases.lean",
+      :exit 0,
+      :finding
+      "fixture compiles both directions of the same-orbit iff"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" ConstructionTargets/KleinPlaneActionSquareOrbitClassification.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero source placeholders"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" /tmp/klein-square-orbit-cases.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero fixture placeholders"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}],
+    :commit "acc68f5fd9e58b17c2f3b786ca9d47a1669f78e4",
+    :changed-paths
+    ["ConstructionTargets/KleinPlaneActionSquareOrbitClassification.lean"],
+    :fixture
+    {:path "/tmp/klein-square-orbit-cases.lean",
+     :sha256
+     "73cd7a73092fdc1fc28f3cf5ab8c193b52fa17d8830c7b6094db37defbb459aa",
+     :sorry-count 0},
+    :implementation
+    {:scope
+     ["ConstructionTargets/KleinPlaneActionSquareOrbitClassification.lean"],
+     :declarations
+     ["KleinPlaneActionSquareOrbitClassification.InSquare"
+      "KleinPlaneActionSquareOrbitClassification.Cases"
+      "KleinPlaneActionSquareOrbitClassification.sameOrbit_cases"
+      "KleinPlaneActionSquareOrbitClassification.cases_sameOrbit"
+      "KleinPlaneActionSquareOrbitClassification.sameOrbit_iff_cases"],
+     :reexports
+     ["KleinPlaneAffineAction.coordinateAct"
+      "KleinPlaneAffineAction.generatorA_smul"
+      "KleinPlaneAffineAction.generatorB_smul"
+      "KleinSquareRepresentative.exists_closedSquare_smul"]},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/KleinPlaneActionSquareOrbitClassification.lean"],
    :dag-node
