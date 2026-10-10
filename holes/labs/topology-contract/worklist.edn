@@ -93965,6 +93965,20 @@
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791647218630-2317-f8bb0ae3",
+     :commands
+     ["git show aba0cdc46dd37c23f4fa79d846a61e0981cd119f -- ConstructionTargets/KleinCoordinateInversionPower.lean"
+      "git diff --exit-code aba0cdc46dd37c23f4fa79d846a61e0981cd119f -- ConstructionTargets/KleinCoordinateInversionPower.lean"
+      "lake build ConstructionTargets.KleinCoordinateInversionPower"
+      "sha256sum /tmp/klein-inversion-power.lean && lake env lean /tmp/klein-inversion-power.lean"
+      "placeholder census on source, fixture, and problems/t93J03"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb on recorded ledger at efc6df51"],
+     :finding
+     "PASS: reviewer codex-3 verified commit aba0cdc4 changes only KleinCoordinateInversionPower.lean and the compiled source matches the recorded commit. The frozen fixture hash is exact; source and fixture compile with zero placeholders; t93J03 retains its declared single placeholder; both theorems report only propext, Classical.choice, and Quot.sound; all 131 registry statements and the recorded ledger validate. inversion_zpow_apply quantifies over every integer exponent and generalizes z through both Int.induction_on branches; action_toAdd specializes it to the banked action with the required sign-times-coordinate orientation. The module stays within coordinate algebra and introduces no plane action, inequalities, quotient, or EqvGen comparison."},
     :commit "aba0cdc46dd37c23f4fa79d846a61e0981cd119f",
     :changed-paths
     ["ConstructionTargets/KleinCoordinateInversionPower.lean"],
@@ -93980,7 +93994,7 @@
       "KleinCoordinateInversionPower.action_toAdd"]},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/KleinCoordinateInversionPower.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/plane-action-square-orbit-classification/inversion-power-coordinate",
@@ -94098,7 +94112,7 @@
       "inversion_zpow_apply (n : Int) (z : Multiplicative Int) identifies every integer power of the inversion automorphism on z with multiplication of toAdd z by its value on 1; action_toAdd specializes this to the banked semidirect-product action."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/plane-action-square-orbit-classification",
@@ -94782,7 +94796,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "KleinCoordinateInversionPower.action_toAdd",
@@ -94794,7 +94808,9 @@
     [:routes-2026-10-10-klein-coordinate-inversion-power-24],
     :type
     "(g z : Multiplicative Int) -> Multiplicative.toAdd (action g z) = Multiplicative.toAdd (action g (Multiplicative.ofAdd 1)) * Multiplicative.toAdd z",
-    :proved-in :routes-2026-10-10-klein-coordinate-inversion-power-24},
+    :proved-in :routes-2026-10-10-klein-coordinate-inversion-power-24,
+    :banked-by :routes-2026-10-10-klein-coordinate-inversion-power-24,
+    :banked-commit "aba0cdc46dd37c23f4fa79d846a61e0981cd119f"},
    :id :lemma-kleincoordinateinversionpower-action-toadd,
    :kind :lemma,
    :depends-on
@@ -94802,7 +94818,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "KleinCoordinateInversionPower.inversion_zpow_apply",
@@ -94814,7 +94830,9 @@
     [:routes-2026-10-10-klein-coordinate-inversion-power-24],
     :type
     "(n : Int) (z : Multiplicative Int) -> Multiplicative.toAdd ((inversion ^ n) z) = Multiplicative.toAdd ((inversion ^ n) (Multiplicative.ofAdd 1)) * Multiplicative.toAdd z",
-    :proved-in :routes-2026-10-10-klein-coordinate-inversion-power-24},
+    :proved-in :routes-2026-10-10-klein-coordinate-inversion-power-24,
+    :banked-by :routes-2026-10-10-klein-coordinate-inversion-power-24,
+    :banked-commit "aba0cdc46dd37c23f4fa79d846a61e0981cd119f"},
    :id :lemma-kleincoordinateinversionpower-inversion-zpow-apply,
    :kind :lemma,
    :depends-on [:lemma-kleinpresentedgroup-coordinatenormalform],
