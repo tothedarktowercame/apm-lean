@@ -88621,17 +88621,17 @@
   {:consumer :t93J03,
    :owner-reopen
    "Owner reopen 2026-10-10 (claude-14): both STOPs cite missing approved signatures for declarations the acceptance lists in prose. Under work-prompt.md WHAT IS FROZEN, only the registered statement and the fixture interface-axiom types are frozen; design the supporting signatures, discharge the frozen axiom type with standard axioms, and STOP only on a mathematical boundary.",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "No implementation commit was recorded and ConstructionTargets/KleinDeckActionPolygonIdentification.lean is absent. The fixture SHA-256 and package orientations are exact, but exactGeometricInput is obtained solely from the nonstandard axiom kleinDeckActionPackage. No banked theorem gives controlled translation/glide-reflection parameters for PresentedKleinGroup sufficient for identity detection and compact-intersection finiteness, nor the two-way equivalence between plane-action orbits and the frozen square-boundary KleinBottle relation. Repair requires compiling those two prerequisites, then constructing the action, freeness, proper discontinuity, orbit setoid, quotient homeomorphism, generator formulas, and basepoint equation with standard-only axioms; the current instruction to defer normal form must still permit a weaker parameter theorem adequate for those proofs.",
    :evidence
    {:residual
-    "Compile the weaker PresentedKleinGroup parameter theorem needed for identity detection and compact-intersection finiteness, plus the two-way plane-orbit versus aabb boundary-relation comparison; then assemble and review the frozen package.",
+    "Elect two bounded prerequisites with the stated Lean interfaces: presentedKleinGroup_unique_affine, then kleinOrbitQuotient_homeomorph; after both are banked, assemble KleinDeckActionPackage and verify its generator and basepoint equations.",
     :outcome :stop,
     :warnings
-    [{:kind :missing-mathematical-prerequisite,
+    [{:kind :row-size-boundary,
       :message
-      "The reviewed weak normal-form parameter theorem and orbit-to-polygon quotient comparison remain absent."}],
+      "The requested package combines a new presented-group normal-form development with a new fundamental-domain quotient-homeomorphism development; each needs its own compiled and reviewed prerequisite."}],
     :disposition :stop,
     :axioms
     ["propext"
@@ -88640,23 +88640,22 @@
      "T93J03KleinDeckActionPolygonIdentificationProbe.kleinDeckActionPackage"],
     :author "topo-2",
     :reason
-    "Fresh repair verification confirms that neither prerequisite required by review has appeared. There is still no controlled translation/glide-reflection parameter theorem for PresentedKleinGroup and no comparison between plane-action orbits and the frozen KleinBottle boundary relation. The fixture remains correctly typed but exactGeometricInput still depends on the nonstandard axiom kleinDeckActionPackage. Consequently freeness, proper discontinuity, and the quotient homeomorphism cannot be proved standard-only within this repair without first compiling those prerequisites.",
+    "The owner reopen resolves the earlier signature objection: supporting declarations may be designed locally. The remaining boundary is mathematical and exceeds one implementation row. The frozen package requires two independent foundational results that do not exist in Mathlib or ConstructionTargets. First, freeness and proper discontinuity need a constructive normal-form theorem for the quotient PresentedGroup, not merely generator formulas. A sufficient Lean interface is: def kleinAffine (m n : ℤ) : (ℝ × ℝ) → (ℝ × ℝ); def kleinPlaneAction : T93J03.PresentedKleinGroup → (ℝ × ℝ) → (ℝ × ℝ); theorem presentedKleinGroup_unique_affine : ∀ g, ∃! q : ℤ × ℤ, kleinPlaneAction g = kleinAffine q.1 q.2. Proving it requires a terminating/confluent reduction or an inverse homomorphism for the presented quotient. Second, the quotient field requires the full fundamental-domain theorem: theorem kleinOrbitQuotient_homeomorph : Quotient {r := fun x y => ∃ g : T93J03.PresentedKleinGroup, kleinPlaneAction g x = y, iseqv := ...} ≃ₜ ConstructionTargets.StatementSurfaceModels.KleinBottle. Proving this requires the complete two-way orbit versus aabb boundary EqvGen classification, including corners, plus quotient continuity in both directions. These are precisely the two large prerequisites identified by review; neither is a small helper or already banked. The frozen axiom type is mathematically plausible, but cannot be discharged in one bounded row without first implementing and reviewing those foundations.",
     :commands
     [{:cmd
       "sha256sum /tmp/t93j03-klein-deck-action-polygon-identification-probe.lean",
       :exit 0,
-      :finding
-      "The frozen fixture hash still matches the recorded hash."}
-     {:cmd
-      "rg for PresentedKleinGroup parameter theorems and KleinBottle quotient comparisons in ConstructionTargets",
-      :exit 1,
-      :expected-exit 1,
-      :finding "Neither reviewed prerequisite is banked."}
+      :finding "The fixture hash matches the recorded hash."}
      {:cmd
       "compile Main.lean to /tmp/Main.olean and compile the fixture with /tmp on LEAN_PATH",
       :exit 0,
       :finding
-      "The consumer compiles with its inherited sorry warning; exactGeometricInput retains kleinDeckActionPackage as a nonstandard axiom."}
+      "The frozen package type compiles; exactGeometricInput still depends on kleinDeckActionPackage."}
+     {:cmd
+      "rg for a PresentedKleinGroup integer-coordinate normal form or plane-orbit-to-KleinBottle theorem in ConstructionTargets and Mathlib",
+      :exit 1,
+      :expected-exit 1,
+      :finding "Neither prerequisite exists."}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
@@ -88671,7 +88670,7 @@
      :proof-placeholder-count 1},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/KleinDeckActionPolygonIdentification.lean"],
    :dag-node
