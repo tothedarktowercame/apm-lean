@@ -471,4 +471,16 @@ theorem apm_t02a03_rightCoreLiftHomotopyMap_zero
       apm_t02a03_rightCoreLiftPoint,
       apm_t02a03_rightCoreAttachmentMap]
 
+noncomputable def apm_t02a03_rightCoreLiftedMap :
+    C(Set.Ioc (0 : ℝ) 1, apm_t02a03_geometricY_probe) where
+  toFun t := apm_t02a03_rightCoreLiftHomotopyMap (⟨1, by simp⟩, t)
+  continuous_toFun :=
+    apm_t02a03_rightCoreLiftHomotopyMap.continuous.comp
+      (continuous_const.prodMk continuous_id)
+
+theorem apm_t02a03_rightCoreLiftHomotopyMap_one
+    (t : Set.Ioc (0 : ℝ) 1) :
+    apm_t02a03_rightCoreLiftHomotopyMap (⟨1, by simp⟩, t) =
+      apm_t02a03_rightCoreLiftedMap t := rfl
+
 end ConstructionTargets.T02A03GeometricTubeCover
