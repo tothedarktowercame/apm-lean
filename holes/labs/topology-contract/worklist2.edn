@@ -65053,17 +65053,68 @@
    "Measure one minimum-placeholder closure attempt, one two-consumer foundation, and one newly supported t97A04 adapter.",
    :other-consumers []}
   {:consumer :t97A04,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/t97a04_h0_bridge.lean",
+      :sha256
+      "99935a92b87ed4ab4b22b36cab1656f9a36b54ae1ecc733b3ec95a526a51b31c"},
+     :commands
+     [{:cmd "lake env lean /tmp/t97a04_h0_bridge.lean",
+       :exit 0,
+       :output
+       "apm_t97A04_bridge_1 compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t97a04_h0_bridge.lean || true)\"",
+       :exit 0}
+      {:cmd "sha256sum /tmp/t97a04_h0_bridge.lean",
+       :exit 0,
+       :output
+       "99935a92b87ed4ab4b22b36cab1656f9a36b54ae1ecc733b3ec95a526a51b31c  /tmp/t97a04_h0_bridge.lean"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :implementation
+     {:scope ["problems/t97A04/lean/Main.lean"],
+      :declarations ["apm_t97A04_bridge_1"],
+      :acceptance
+      {:placeholder "apm_t97A04_bridge_1",
+       :route-step "t97A04 step 1, direct H0 closure adapter",
+       :type
+       "∃ h0 : T97A04Homology 0 ≅ ModuleCat.of ℤ ℤ, ∀ a : T97A04Homology 0, h0.hom (t97A04HomologyMap 0 apm_t97a04_Lbar a) = h0.hom a",
+       :proof
+       "Install the direct PathConnectedSpace product instance, choose ConstructionTargets.CoefficientH0.h0Iso ℤ 0, and evaluate CoefficientH0.h0Augmentation_naturality ℤ apm_t97a04_Lbar at each class.",
+       :axioms ["propext" "Classical.choice" "Quot.sound"],
+       :gates
+       ["consumer compiles"
+        "only this placeholder is replaced"
+        "registered statements remain unchanged"]}},
+     :finding
+     "The exact frozen H0 bridge compiles directly. AddCircle supplies paths in each coordinate; their product supplies PathConnectedSpace for the torus. CoefficientH0.h0Iso gives the required ModuleCat isomorphism, and h0Augmentation_naturality proves that the concrete frozen self-map acts identically after applying it.",
+     :residual
+     "Replace only apm_t97A04_bridge_1. The remaining t97A04 placeholders are apm_t97A04_bridge_3 and the final hcore assembly.",
+     :warnings []}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["problems/t97A04/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t97A04/bridge-1",
    :acceptance
-   {:probe
-    "Compile a placeholder-free consumer fixture replacing only apm_t97A04_bridge_1 with the documented CoefficientH0.h0Iso and h0Augmentation_naturality proof. Preserve every registered statement and all other placeholders.",
-    :placeholder "apm_t97A04_bridge_1",
-    :route-step "t97A04 step 1, direct H0 closure adapter"},
+   {:placeholder "apm_t97A04_bridge_1",
+    :route-step "t97A04 step 1, direct H0 closure adapter",
+    :type
+    "∃ h0 : T97A04Homology 0 ≅ ModuleCat.of ℤ ℤ, ∀ a : T97A04Homology 0, h0.hom (t97A04HomologyMap 0 apm_t97a04_Lbar a) = h0.hom a",
+    :proof
+    "Install the direct PathConnectedSpace product instance, choose ConstructionTargets.CoefficientH0.h0Iso ℤ 0, and evaluate CoefficientH0.h0Augmentation_naturality ℤ apm_t97a04_Lbar at each class.",
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :gates
+    ["consumer compiles"
+     "only this placeholder is replaced"
+     "registered statements remain unchanged"]},
    :id :routes-2026-10-10-t97a04-h0-bridge-closure-topo2-r1,
    :kind :final-adapter,
+   :declarations ["apm_t97A04_bridge_1"],
    :depends-on [:routes-2026-10-10-checkpoint-topo2-r6],
    :current-residual
    "Three placeholders remain; close bridge_1 directly, leaving bridge_3 and the final hcore assembly.",
