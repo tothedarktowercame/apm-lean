@@ -385,8 +385,73 @@
   {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-neighborhoodinclusion-hsucc-isiso,
+   :evidence
+   {:placeholder-delta {:source 0, :fixture 0},
+    :residual
+    "Transport Euclidean local generators through manifold charts, prove orientation-controlled overlap coherence, and glue an absolute top class localizing to the chosen generator at every point.",
+    :gates
+    {:module-build :pass,
+     :fixture-compiles :pass,
+     :zero-source-and-fixture-sorry :pass,
+     :standard-only-axioms :pass,
+     :registry-check :pass,
+     :exact-scope :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["lake build replayed pre-existing linter warnings in dependencies; the target module emitted no warnings"],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso",
+      :type
+      "forall {X : Type} [TopologicalSpace X] [T1Space X] (U : Set X) (x : X) (hU : IsOpen U) (hx : x ∈ U) (n : ℕ), IsIso (HomologicalComplex.homologyMap (relativeSingularMap (neighborhoodDeletedPoint U x) (deletedPoint x) (neighborhoodInclusion U) (neighborhoodInclusion_mapsTo U x)) (n + 1))",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on [],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-10",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/manifold_fundamental_class_neighborhood_excision.lean",
+      :exit 0,
+      :output
+      "70de477e650f037fce463c7b60263ca816b835d33dc83d71a4734b60b0fdf09c"}
+     {:cmd
+      "lake env lean /tmp/manifold_fundamental_class_neighborhood_excision.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd
+      "rg -n \\bsorry\\b|\\badmit\\b|^\\s*axiom\\b ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "4ad0572998e42bec21156f8557039b07232d2a40",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path
+     "/tmp/manifold_fundamental_class_neighborhood_excision.lean",
+     :sha256
+     "70de477e650f037fce463c7b60263ca816b835d33dc83d71a4734b60b0fdf09c",
+     :sorry-count 0},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :summary
+     "Promoted positive-degree neighborhood excision: inclusion from an open neighborhood punctured at x into the ambient punctured pair induces an isomorphism on relative singular homology in degree n+1."},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/positive-degree-neighborhood-excision",
@@ -1626,11 +1691,13 @@
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso",
     :reported-by
-    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+     :routes-2026-10-10-manifold-local-positive-excision-topo3-r1],
     :type
     "forall {X : Type} [TopologicalSpace X] [T1Space X] (U : Set X) (x : X) (hU : IsOpen U) (hx : x ∈ U) (n : ℕ), IsIso (HomologicalComplex.homologyMap (relativeSingularMap (neighborhoodDeletedPoint U x) (deletedPoint x) (neighborhoodInclusion U) (neighborhoodInclusion_mapsTo U x)) (n + 1))",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in
+    :routes-2026-10-10-manifold-local-positive-excision-topo3-r1},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-neighborhoodinclusion-hsucc-isiso,
    :kind :lemma,
