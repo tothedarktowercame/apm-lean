@@ -1,5 +1,6 @@
 import ConstructionTargets.TorusPiOneWindingCoordinates
 import ConstructionTargets.IntegralSingularHomologyComparison
+import Mathlib.Topology.Instances.AddCircle.Real
 
 noncomputable section
 
@@ -15,6 +16,14 @@ open ConstructionTargets.SolidTorusGluingOpenCover
 
 abbrev FrozenTorus := AddCircle (1 : ℝ) × AddCircle (1 : ℝ)
 abbrev BoundaryTorus := Circle × ConstructionTargets.SphereHomology.Sphere 1
+
+local instance frozenTorusPathConnectedSpace :
+    PathConnectedSpace FrozenTorus where
+  nonempty := inferInstance
+  joined x y := by
+    rcases PathConnectedSpace.joined x.1 y.1 with ⟨p⟩
+    rcases PathConnectedSpace.joined x.2 y.2 with ⟨q⟩
+    exact ⟨p.prod q⟩
 
 def frozenTorusHomeomorphBoundaryTorus : FrozenTorus ≃ₜ BoundaryTorus :=
   (Homeomorph.prodCongr (AddCircle.homeomorphCircle one_ne_zero)
@@ -45,5 +54,27 @@ noncomputable def frozenTorusH1MulEquivFinTwo :
       left_inv := frozenTorusH1GroupIsoFinTwo.hom_inv_id_apply
       right_inv := frozenTorusH1GroupIsoFinTwo.inv_hom_id_apply
       map_add' := frozenTorusH1GroupIsoFinTwo.hom.hom.map_add }
+
+open ConstructionTargets.FiniteFreeHurewiczNaturality
+
+noncomputable def frozenTorusAlignedH1MulEquivFinTwo :
+    Multiplicative
+        (ConstructionTargets.DegreeOneHurewiczMap.IntegralH1 FrozenTorus) ≃*
+      Multiplicative (Fin 2 → ℤ) :=
+  frozenTorusH1MulEquivFinTwo.trans
+    (finiteFreeHurewiczCoordinateMulEquiv
+      frozenTorusPi1Coord frozenTorusH1MulEquivFinTwo).symm
+
+theorem frozenTorusAlignedHurewiczCoordinate_apply
+    (q : Multiplicative (Fin 2 → ℤ)) :
+    finiteFreeHurewiczCoordinateMulEquiv frozenTorusPi1Coord
+        frozenTorusAlignedH1MulEquivFinTwo q = q := by
+  change
+    (finiteFreeHurewiczCoordinateMulEquiv
+      frozenTorusPi1Coord frozenTorusH1MulEquivFinTwo).symm
+        (finiteFreeHurewiczCoordinateMulEquiv
+          frozenTorusPi1Coord frozenTorusH1MulEquivFinTwo q) = q
+  exact (finiteFreeHurewiczCoordinateMulEquiv
+    frozenTorusPi1Coord frozenTorusH1MulEquivFinTwo).symm_apply_apply q
 
 end ConstructionTargets.T97A04FrozenH1Coordinate
