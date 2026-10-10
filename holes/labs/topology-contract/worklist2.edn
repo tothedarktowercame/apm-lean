@@ -64091,24 +64091,63 @@
   {:bounded-exception
    "single-consumer basepoint-transported raw pi1 coordinate map for t97A04",
    :consumer :t97A04,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/t97a04_frozen_h1_coordinate.lean",
+      :sha256
+      "263ab41fbf6eaf3e23d148489b20968e57996ad90dbcfe0e1d0262e1cdf415e3"},
+     :commands
+     [{:cmd "sha256sum /tmp/t97a04_frozen_h1_coordinate.lean",
+       :exit 0,
+       :output
+       "263ab41fbf6eaf3e23d148489b20968e57996ad90dbcfe0e1d0262e1cdf415e3  /tmp/t97a04_frozen_h1_coordinate.lean"}
+      {:cmd "lake env lean /tmp/t97a04_frozen_h1_coordinate.lean",
+       :exit 0,
+       :output
+       "frozenTorusPi1CoordAtLbarBase and frozenLbarPi1Map_coordinateMap_raw compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t97a04_frozen_h1_coordinate.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :implementation
+     {:scope ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"],
+      :declarations
+      ["ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusPi1CoordAtLbarBase"
+       "ConstructionTargets.T97A04FrozenH1Coordinate.frozenLbarPi1Map_coordinateMap_raw"],
+      :acceptance
+      {:type
+       "forall p : FundamentalGroup FrozenTorus (0, 0), frozenMatrixCoordinateMap (frozenTorusPi1Coord p) = frozenTorusPi1CoordAtLbarBase (FundamentalGroup.map frozenLbar (0, 0) p)",
+       :gates
+       ["scoped module compiles"
+        "scoped module contains no sorry token"
+        "statement registry matches"]}},
+     :finding
+     "The complete fixture transports frozenTorusPi1Coord to the literal codomain basepoint frozenLbar (0,0) using conjugation along frozenLbar_base and proves the frozen matrix equation for FundamentalGroup.map in the exact form required by h1_coordinate_eq_of_fundamentalGroup_coordinate_eq.",
+     :residual
+     "Prove the aligned Hurewicz coordinate remains the identity for frozenTorusPi1CoordAtLbarBase, derive the IntegralH1 matrix equation, and transport it through singularHomologyComparison_naturality into apm_t97A04_bridge_2.",
+     :warnings []}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t97A04/frozen-pi1-raw-map-coordinate",
    :acceptance
-   {:probe
-    "Compile and bank frozenTorusPi1CoordAtLbarBase and frozenLbarPi1Map_coordinateMap_raw from /tmp/t97a04_frozen_h1_coordinate.lean. Transport the frozen torus pi1 coordinate to the literal codomain basepoint frozenLbar (0,0) by conjugation along frozenLbar_base, and restate the frozen matrix equation using FundamentalGroup.map in the exact form required by h1_coordinate_eq_of_fundamentalGroup_coordinate_eq. Preserve the matrix exactly; do not yet claim the Hurewicz identity at the transported basepoint, the IntegralH1 equation, or apm_t97A04_bridge_2.",
-    :declarations
-    ["ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusPi1CoordAtLbarBase"
-     "ConstructionTargets.T97A04FrozenH1Coordinate.frozenLbarPi1Map_coordinateMap_raw"],
-    :type
+   {:type
     "forall p : FundamentalGroup FrozenTorus (0, 0), frozenMatrixCoordinateMap (frozenTorusPi1Coord p) = frozenTorusPi1CoordAtLbarBase (FundamentalGroup.map frozenLbar (0, 0) p)",
-    :placeholder "apm_t97A04_bridge_2",
-    :route-step
-    "t97A04 step 5, align the fixed-basepoint matrix theorem with the raw fundamental-group map used by Hurewicz naturality"},
+    :gates
+    ["scoped module compiles"
+     "scoped module contains no sorry token"
+     "statement registry matches"]},
    :id
    :routes-2026-10-10-t97a04-frozen-pi1-raw-map-coordinate-topo2-r1,
    :kind :reusable-theorem,
+   :declarations
+   ["ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusPi1CoordAtLbarBase"
+    "ConstructionTargets.T97A04FrozenH1Coordinate.frozenLbarPi1Map_coordinateMap_raw"],
    :depends-on
    [:routes-2026-10-10-checkpoint-topo2-r5
     :routes-2026-10-10-t97a04-frozen-pi1-coordinate-map-topo2-r1],
