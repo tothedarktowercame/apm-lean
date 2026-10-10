@@ -66228,6 +66228,21 @@
       :exit 1,
       :finding
       "The first scoped compile imported a stale RealProjectiveSmoothTarget object that predated the newly banked sphereProjectionEvenMapSmoothDescent declaration. Rebuilding that prerequisite through Lake refreshed the object, after which the unchanged scoped module compiled."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791663340688-2886-13a90b3e",
+     :commands
+     ["git show/diff-tree/show --check c3d68caa"
+      "sha256sum /tmp/rp2_even_quadratic_descents.lean"
+      "git blob, placeholder, and forbidden-token checks"
+      "python3 scripts/statement-registry.py check --rev c3d68caa"
+      "lake build smooth target; lake env lean scoped module and fixture"
+      "normalized fixture/module comparison and coordinate-orientation inspection"
+      "two-consumer placeholder and fingerprint census"
+      "bb worklist_check.bb"],
+     :finding
+     "PASS: topo-6 commit c3d68caa creates exactly the scoped quadratic-descent module, matches the recorded/current blob and fixture SHA-256, and differs from the compiled fixture only in replacing its scratch import plus removing axiom-print commands. The module has zero placeholders and no new sorry/admit/axiom; registry is 131/0; prerequisite build, module, and fixture compile, and all four exported proof theorems use exactly propext/Classical.choice/Quot.sound. The Veronese and cross-term coordinate formulas exactly match T95A04SphereMap and T96A07.sphereMap; their pullback equations are oriented descended-map after sphereProjection equals sphere map, and their ContMDiff proofs use rpSmoothAtlas through the banked smooth descent without claiming embedding, immersion, or transversality. Both consumer frozen fingerprints and one-placeholder counts remain unchanged."},
     :commit "c3d68caa5b3c60a4292a671506e9e8e1a31a4382",
     :changed-paths
     ["ConstructionTargets/RealProjectiveEvenQuadraticDescent.lean"],
@@ -66253,7 +66268,7 @@
      :lemma-constructiontargets-realprojectiveevenquadraticdescent-evenquadraticdescents},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/RealProjectiveEvenQuadraticDescent.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/rp2/even-quadratic-descent",
@@ -67804,7 +67819,7 @@
    :other-consumers []}
   {:consumer :t95A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -67821,7 +67836,10 @@
     "Continuous and smooth descents through sphereProjection of the even quadratic coordinate maps used by t95A04 and t96A07, with pullback equalities",
     :area "rp-smooth-atlas",
     :proved-in
-    :routes-2026-10-10-rp2-even-quadratic-descent-two-consumers-topo2-r1},
+    :routes-2026-10-10-rp2-even-quadratic-descent-two-consumers-topo2-r1,
+    :banked-by
+    :routes-2026-10-10-rp2-even-quadratic-descent-two-consumers-topo2-r1,
+    :banked-commit "c3d68caa5b3c60a4292a671506e9e8e1a31a4382"},
    :id
    :lemma-constructiontargets-realprojectiveevenquadraticdescent-evenquadraticdescents,
    :kind :lemma,
