@@ -61496,6 +61496,22 @@
       :exit 0,
       :output "131 registered statements match, 0 do not"}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791642101551-2142-535e09ee",
+     :commands
+     ["git show/diff-tree/show --check 46197561d48639e2070b94655923a9bb549278b4"
+      "sha256sum /tmp/t02a03_geometric_tube_cover.lean"
+      "lake env lean /tmp/t02a03_geometric_tube_cover.lean"
+      "lake env lean ConstructionTargets/T02A03GeometricTubeCover.lean"
+      "lake build ConstructionTargets.T02A03GeometricTubeCover"
+      "lake env lean namespaced endpoint/continuity probe"
+      "python3 scripts/statement-registry.py check --rev 46197561d48639e2070b94655923a9bb549278b4"
+      "bb holes/labs/topology-contract/worklist_check.bb recorded-ledger"
+      "recompute declaration-packet hash and comment-stripped placeholder counts"],
+     :finding
+     "PASS: author topo-6 is independent; implementation scope is exactly ConstructionTargets/T02A03GeometricTubeCover.lean, transition scope is ledger-only, and fixture SHA-256 bb97efb8827080715d55a33a7925d58c06a0fc81abffa0a6501cd13e95cf11df matches. The map intentionally lands in ambient E3, interpolates from inverse-after-forward at time zero to the original subtype value at time one, and its continuity is correctly assembled across coordinate-map, inverse-map, and subtype projections without claiming intermediate complement membership. Fixture, target, focused 8240-job build, namespaced endpoint probe, registry 131/0, and 445-item ledger gate pass; declaration-packet hash 8e15d9e094ec19f7a83552c669ce02a61d6922230cad906de19556ba8f4fb08c matches, proof declarations use only propext/Classical.choice/Quot.sound, target placeholders are 0, and unchanged consumer placeholders are 1."},
     :commit "46197561d48639e2070b94655923a9bb549278b4",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
@@ -61515,7 +61531,7 @@
     :seat "topo-6"},
    :source-fixture "/tmp/t02a03_geometric_tube_cover.lean",
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/left-tube-radial-ambient-interpolation",
@@ -61615,7 +61631,7 @@
    :phase :probe,
    :type
    "Nonempty (ContinuousMap.HomotopyEquiv LeftTubeMinusCore ConstructionTargets.TorusCircleWedgeOpenCover.Torus)",
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-punctured-model",
    :acceptance
