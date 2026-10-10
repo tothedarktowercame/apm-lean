@@ -66673,49 +66673,51 @@
    "single-consumer continuity certificate for the right-core tubular coordinate formula",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:residual
-     "Define the disk-normal interpolation, establish its radius-1/4 bound and nonzero left-core normal coordinate, then package the ambient ContinuousMap and endpoints.",
-     :outcome :go,
-     :warnings [],
-     :missing-theorems [],
-     :axioms [propext Classical.choice Quot.sound],
-     :commands
-     [{:cmd "lake env lean /tmp/t02a03_right_core_compact_probe.lean",
-       :exit 0,
-       :output
-       "rightTubeCoreTubularCoordinates_continuous compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd "sha256sum /tmp/t02a03_right_core_compact_probe.lean",
-       :exit 0,
-       :output
-       "6ddf8c41c36042bd81d3eca721487cba940f6337fa67afd9b5e912854658498a  /tmp/t02a03_right_core_compact_probe.lean"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_right_core_compact_probe.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}
-      {:cmd
-       "rg -n \"rightTubeCoreTubularCoordinates_continuous|Continuous rightTubeCoreNormalComplex|Function.uncurry rightTubeCorePolarReconstruction\" /tmp/t02a03_right_core_compact_probe.lean",
-       :exit 0,
-       :output "Exact conjunction occurs at lines 271-273."}],
-     :fixture
-     {:path "/tmp/t02a03_right_core_compact_probe.lean",
-      :sha256
-      "6ddf8c41c36042bd81d3eca721487cba940f6337fa67afd9b5e912854658498a"},
-     :finding
-     "The fixture proves both requested continuity facts directly: norm, coordinate projections, complex arithmetic, and the PiLp constructor establish continuity of the normal coordinate and the uncurried reconstruction.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
-      :declarations
-      [{:name
-        "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreTubularCoordinates_continuous",
-        :type
-        "Continuous rightTubeCoreNormalComplex ∧ Continuous (Function.uncurry rightTubeCorePolarReconstruction)"}]},
-     :seat "topo-8"}},
+   {:placeholder-delta {:before 0, :after 0},
+    :residual
+    "Define the disk-normal interpolation, establish its radius-1/4 bound and nonzero left-core normal coordinate, then package the ambient ContinuousMap and endpoints.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["Lean reports the pre-existing unnecessarySimpa warning at module line 62; the continuity theorem compiles without additional warnings."],
+    :missing-theorems [],
+    :statement-hashes
+    {:registered "131 registered statements match, 0 do not",
+     :scoped-file-git-blob "4241cabeaa22adb2088e71ca8bacfcf88a9c485d"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd "lake env lean /tmp/t02a03_right_core_compact_probe.lean",
+      :exit 0}
+     {:cmd "sha256sum /tmp/t02a03_right_core_compact_probe.lean",
+      :exit 0,
+      :output
+      "6ddf8c41c36042bd81d3eca721487cba940f6337fa67afd9b5e912854658498a  /tmp/t02a03_right_core_compact_probe.lean"}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeDeformation.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "6235411b33defbd46c1ec553f1ceebf279d88c8a",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+    :fixture
+    {:path "/tmp/t02a03_right_core_compact_probe.lean",
+     :sha256
+     "6ddf8c41c36042bd81d3eca721487cba940f6337fa67afd9b5e912854658498a"},
+    :finding
+    "Continuity of the disk-normal coordinate follows from coordinate projections, norm, and complex arithmetic; continuity of the uncurried reconstruction follows coordinatewise through the PiLp constructor.",
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/right-core-tubular-coordinates-continuous",
