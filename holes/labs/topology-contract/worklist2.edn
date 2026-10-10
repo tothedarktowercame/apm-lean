@@ -56091,74 +56091,125 @@
    :current-residual
    "Identify the two explicit transformed paths with the projections of gamma mapped by circleMatrixMap, descend to quotient coordinates, and transport through frozenTorusHomeomorphCircleProd.",
    :other-consumers []}
+  {:bounded-exception
+   "single-consumer comparison for the frozen t97A04 matrix path",
+   :consumer :t97A04,
+   :phase :probe,
+   :state :open,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t97A04/torus-pi1-winding-coordinates/mapped-path-projections",
+   :acceptance
+   {:probe
+    "Compile and bank circleMatrixMappedPath, circleMatrixMappedPath_projLeft, and circleMatrixMappedPath_projRight from /tmp/circle_matrix_mapped_path_projection.lean. Construct the actual based product path obtained by applying circleMatrixMap pointwise to gamma, and prove exact equality from its left and right projected Paths to circleMatrixLeftPath gamma and circleMatrixRightPath gamma. This supplies the representation identification needed to apply the banked endpoint formulas in t97A04 route step 4; do not claim quotient-level naturality in this prerequisite.",
+    :declarations
+    ["circleMatrixMappedPath"
+     "circleMatrixMappedPath_projLeft"
+     "circleMatrixMappedPath_projRight"],
+    :placeholder "apm_t97A04_bridge_2",
+    :route-step
+    "t97A04 step 4, identify mapped-path projections with explicit matrix-coordinate paths"},
+   :representation
+   {:source
+    "The two coordinate projections of the actual based path obtained by applying circleMatrixMap pointwise to gamma",
+    :target
+    "The explicit paths circleMatrixLeftPath gamma and circleMatrixRightPath gamma used by the endpoint computations",
+    :direction
+    "Exact Path equalities from each source projection to its corresponding target explicit matrix-coordinate path"},
+   :id
+   :routes-2026-10-10-t97a04-circle-matrix-mapped-path-projections-topo2-r1,
+   :kind :representation-comparison,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo2-r2
+    :routes-2026-10-10-torus-pi1-coordinate-equivalence-two-consumers-topo2-r1
+    :routes-2026-10-10-torus-pi1-projected-lift-endpoints-two-consumers-topo2-r1
+    :routes-2026-10-10-torus-addcircle-circle-coordinate-comparison-two-consumers-topo2-r1
+    :routes-2026-10-10-t97a04-frozen-torus-map-circle-conjugacy-topo2-r1
+    :routes-2026-10-10-circle-winding-pointwise-group-laws-two-consumers-topo2-r1
+    :routes-2026-10-10-t97a04-circle-matrix-path-endpoint-coordinates-topo2-r1],
+   :current-residual
+   "Package dependent basepoint transport for FundamentalGroup.map, descend the mapped representative formulas through the quotient, and conjugate back to frozenLbar.",
+   :other-consumers []}
   {:consumer :t97A04,
    :evidence
    {:probe
     {:outcome :revise,
      :seat "topo-8",
      :fixture
-     {:path "/tmp/circle_matrix_path_endpoint_coordinates.lean",
+     {:path "/tmp/circle_matrix_mapped_path_projection.lean",
       :sha256
-      "de22a16d869dbd993bb2d16d3a8f561a1666aa075816d99fcfadd0c248c14522"},
+      "28e9c5f293e18f8d9044f59d8fcc6b6e40c8407350eac8f7007dbf1c586097d4"},
      :commands
      [{:cmd
        "lake build ConstructionTargets.TorusPiOneWindingCoordinates",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/circle_matrix_path_endpoint_coordinates.lean",
+       "lake env lean /tmp/circle_matrix_mapped_path_projection.lean",
        :exit 0,
        :output
-       "both matrix path endpoint formulas compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "mapped path and both exact projection equalities compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/circle_matrix_path_endpoint_coordinates.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/circle_matrix_mapped_path_projection.lean || true)\"",
        :exit 0}
-      {:cmd
-       "sha256sum /tmp/circle_matrix_path_endpoint_coordinates.lean",
+      {:cmd "sha256sum /tmp/circle_matrix_mapped_path_projection.lean",
        :exit 0,
        :output
-       "de22a16d869dbd993bb2d16d3a8f561a1666aa075816d99fcfadd0c248c14522  /tmp/circle_matrix_path_endpoint_coordinates.lean"}
+       "28e9c5f293e18f8d9044f59d8fcc6b6e40c8407350eac8f7007dbf1c586097d4  /tmp/circle_matrix_mapped_path_projection.lean"}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/circle_matrix_mapped_path_projection.lean",
+       :exit 1,
+       :finding
+       "An exploratory attempt also packaged FundamentalGroup.map as an endomorphism and exposed a dependent basepoint transport obligation. That quotient-level packaging was removed from this prerequisite; the unchanged actual mapped path and its two projection equalities compile and isolate the transport for the next row."}],
      :finding
-     "The pointwise lift arithmetic is banked and supports the two exact matrix-coordinate calculations. The placeholder-free fixture constructs the left transformed path as gamma0*gamma0*gamma1 and the right transformed path as gamma1*gamma0^-1, then proves their endpoint integers are respectively 2*n0+n1 and n1-n0. These are concrete path constructions and equalities, not an abstract matrix-action proposition. The remaining boundary is to identify these paths with the projections of circleMatrixMap composed with gamma, descend through the path quotient, and transport through the frozen AddCircle homeomorphism.",
+     "The explicit matrix paths are banked. The compiled fixture now constructs the actual image of a based product path under circleMatrixMap and proves exact Path equalities from its left and right projections to circleMatrixLeftPath and circleMatrixRightPath. Thus the endpoint formulas apply directly to the mapped representative. The only remaining boundary is dependent basepoint transport when packaging FundamentalGroup.map as an endomorphism, followed by quotient induction and conjugation back to frozenLbar.",
      :residual
-     "Bank the two transformed paths and endpoint formulas. Then prove their equality with the projected circleMatrixMap image path, descend the coordinate equations to FundamentalGroup, and conjugate back to frozenLbar to finish Fin-2 naturality.",
+     "Bank the mapped path and projection equalities. Then package the basepoint equality circleMatrixMap (1,1)=(1,1) with a one-sided dependent transport of FundamentalGroup.map, descend the two representative formulas by quotient induction, and transport through frozenTorusHomeomorphCircleProd.",
      :prerequisite
      {:bounded-exception
-      "single-consumer specialization to the frozen t97A04 matrix",
+      "single-consumer comparison for the frozen t97A04 matrix path",
       :consumer :t97A04,
       :phase :probe,
       :state :open,
       :scope [],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t97A04/torus-pi1-winding-coordinates/matrix-path-endpoints",
+      "TOPOLOGY-ROUTES.md/t97A04/torus-pi1-winding-coordinates/mapped-path-projections",
       :acceptance
       {:probe
-       "Compile and bank circleMatrixLeftPath, circleMatrixRightPath, circleMatrixLeftPath_endpointInteger, and circleMatrixRightPath_endpointInteger from /tmp/circle_matrix_path_endpoint_coordinates.lean. For every explicit based path gamma in Circle x Circle, construct the two transformed coordinate paths gamma0*gamma0*gamma1 and gamma1*gamma0^-1 using the banked pointwise path operations, and prove their lift endpoint integers are exactly 2*n0+n1 and n1-n0. This supplies the endpoint arithmetic portion of t97A04 route step 4; do not yet claim quotient-level FundamentalGroup.map naturality.",
+       "Compile and bank circleMatrixMappedPath, circleMatrixMappedPath_projLeft, and circleMatrixMappedPath_projRight from /tmp/circle_matrix_mapped_path_projection.lean. Construct the actual based product path obtained by applying circleMatrixMap pointwise to gamma, and prove exact equality from its left and right projected Paths to circleMatrixLeftPath gamma and circleMatrixRightPath gamma. This supplies the representation identification needed to apply the banked endpoint formulas in t97A04 route step 4; do not claim quotient-level naturality in this prerequisite.",
        :declarations
-       ["circleMatrixLeftPath"
-        "circleMatrixRightPath"
-        "circleMatrixLeftPath_endpointInteger"
-        "circleMatrixRightPath_endpointInteger"],
+       ["circleMatrixMappedPath"
+        "circleMatrixMappedPath_projLeft"
+        "circleMatrixMappedPath_projRight"],
        :placeholder "apm_t97A04_bridge_2",
        :route-step
-       "t97A04 step 4, explicit matrix-path endpoint coordinates"},
+       "t97A04 step 4, identify mapped-path projections with explicit matrix-coordinate paths"},
+      :representation
+      {:source
+       "The two coordinate projections of the actual based path obtained by applying circleMatrixMap pointwise to gamma",
+       :target
+       "The explicit paths circleMatrixLeftPath gamma and circleMatrixRightPath gamma used by the endpoint computations",
+       :direction
+       "Exact Path equalities from each source projection to its corresponding target explicit matrix-coordinate path"},
       :id
-      :routes-2026-10-10-t97a04-circle-matrix-path-endpoint-coordinates-topo2-r1,
-      :kind :reusable-theorem,
+      :routes-2026-10-10-t97a04-circle-matrix-mapped-path-projections-topo2-r1,
+      :kind :representation-comparison,
       :depends-on
       [:routes-2026-10-10-checkpoint-topo2-r2
        :routes-2026-10-10-torus-pi1-coordinate-equivalence-two-consumers-topo2-r1
        :routes-2026-10-10-torus-pi1-projected-lift-endpoints-two-consumers-topo2-r1
        :routes-2026-10-10-torus-addcircle-circle-coordinate-comparison-two-consumers-topo2-r1
        :routes-2026-10-10-t97a04-frozen-torus-map-circle-conjugacy-topo2-r1
-       :routes-2026-10-10-circle-winding-pointwise-group-laws-two-consumers-topo2-r1],
+       :routes-2026-10-10-circle-winding-pointwise-group-laws-two-consumers-topo2-r1
+       :routes-2026-10-10-t97a04-circle-matrix-path-endpoint-coordinates-topo2-r1],
       :current-residual
-      "Identify the two explicit transformed paths with the projections of gamma mapped by circleMatrixMap, descend to quotient coordinates, and transport through frozenTorusHomeomorphCircleProd.",
+      "Package dependent basepoint transport for FundamentalGroup.map, descend the mapped representative formulas through the quotient, and conjugate back to frozenLbar.",
       :other-consumers []}}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/shared/torus-pi1-winding-coordinates",
    :acceptance
@@ -56178,7 +56229,8 @@
     :routes-2026-10-10-torus-addcircle-circle-coordinate-comparison-two-consumers-topo2-r1
     :routes-2026-10-10-t97a04-frozen-torus-map-circle-conjugacy-topo2-r1
     :routes-2026-10-10-circle-winding-pointwise-group-laws-two-consumers-topo2-r1
-    :routes-2026-10-10-t97a04-circle-matrix-path-endpoint-coordinates-topo2-r1],
+    :routes-2026-10-10-t97a04-circle-matrix-path-endpoint-coordinates-topo2-r1
+    :routes-2026-10-10-t97a04-circle-matrix-mapped-path-projections-topo2-r1],
    :current-residual
    "Exact Fin-2 endpoint-coordinate naturality is absent.",
    :other-consumers [:t01A02]}
