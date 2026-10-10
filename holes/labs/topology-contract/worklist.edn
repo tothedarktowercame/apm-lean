@@ -90745,10 +90745,11 @@
    {:outcome :replan,
     :seat "topo-4",
     :commands
-    [{:cmd "bb holes/labs/topology-contract/worklist_check.bb",
+    [{:cmd
+      "git show 7306823e63f648a20ad5d2c09f740a65f333ccfd:holes/labs/topology-contract/worklist.edn > /tmp/worklist-pre-review.edn && bb holes/labs/topology-contract/worklist_check.bb /tmp/worklist-pre-review.edn",
       :exit 0,
       :finding
-      "747 items OK; 707 done, 14 superseded, 15 needs-owner, 10 blocked, 1 open"}
+      "exact evidence commit: 749 items OK; 707 done, 14 superseded, 15 needs-owner, 12 blocked, 1 done-unreviewed"}
      {:cmd
       "lake env lean ConstructionTargets/FiniteSchreierCosetQuiverPositiveIndex.lean",
       :exit 0,
@@ -90825,9 +90826,9 @@
      :ranking
      "No nearer consumer-closing adapter is enabled. The arborescence complement count is the next bounded step on the highest-ranked shared route for t99J01 and t97A03.",
      :typed-residual-change
-     ["The finite positive-index Schreier coset-quiver package is banked: its quotient vertex type has cardinal n, generator actions are permutations with explicit inverses, the action is transitive from the identity coset, and positive edges have cardinal r*n."
-      "The remaining shared generator-count route is now separated into the arborescence edge count followed by the Type-valued Nielsen-Schreier basis comparison."
-      "The contracts without 0<n remain excluded by the reviewed r=1,n=0,H=bottom counterexample."],
+     ["The reviewed finite positive-index Schreier coset-quiver package is banked: n coset vertices, generator permutations and inverses, transitivity, and r*n positive edges."
+      "The shared generator-count residual is the arborescence complement count followed by the Type-valued Nielsen-Schreier basis comparison."
+      "The contract without 0<n remains refuted at r=1,n=0,H=bottom."],
      :review-outcomes {:pass 1, :stop 0, :closed-problems 0}},
     :replacement-items
     [{:consumer :t99J01,
@@ -90850,7 +90851,7 @@
         "standard-only axioms"
         "registry check"]},
       :id
-      :routes-2026-10-10-finite-schreier-spanning-tree-complement-count-4,
+      :routes-2026-10-10-finite-schreier-spanning-tree-complement-count-5,
       :kind :reusable-theorem,
       :depends-on
       [:routes-2026-10-10-finite-schreier-coset-quiver-positive-index-3],
@@ -90876,23 +90877,17 @@
       {:strategy
        "Measure the finite Schreier arborescence complement count, preserve the index-zero refutation and reviewed topology boundaries, recount all six consumers and eight placeholders, then elect the Type-valued basis comparison or a nearer adapter."},
       :id
-      :routes-2026-10-10-checkpoint-topo1-after-schreier-tree-count-5,
+      :routes-2026-10-10-checkpoint-topo1-after-schreier-tree-count-6,
       :kind :strategy-checkpoint,
       :depends-on
-      [:routes-2026-10-10-finite-schreier-spanning-tree-complement-count-4],
+      [:routes-2026-10-10-finite-schreier-spanning-tree-complement-count-5],
       :current-residual
       "Review the second bounded construction in the shared positive-index Schreier generator count.",
       :other-consumers []}],
     :author "topo-4",
-    :disposition :replan,
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1791637399728-1987-2ed89d07",
-     :finding
-     "recorded worklist evidence is stale: the exact committed ledger has 749 items, 12 blocked, and 1 done-unreviewed, not 747 items, 10 blocked, and 1 open"}},
+    :disposition :replan},
    :phase :strategy,
-   :state :repair,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -90905,6 +90900,60 @@
     :routes-2026-10-10-checkpoint-topo1-after-schreier-index-repair-3],
    :current-residual
    "Review the first bounded construction inside the shared positive-index Schreier generator count.",
+   :other-consumers []}
+  {:consumer :t99J01,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/positive-index/spanning-tree-complement-count",
+   :acceptance
+   {:probe
+    "Compile the exact finite arborescence count over the banked positive-index coset quiver: construct Mathlib's geodesic subtree of the symmetrified action-groupoid generator quiver rooted at the identity coset; prove that wideSubquiverSymmetrify selects exactly n-1 original positive generator edges and that its complement among the r*n positive generator edges has cardinal (r-1)*n+1. Keep 0<r, 0<n, and H.index=n explicit. Do not yet construct the FreeGroupBasis or identify the subgroup.",
+    :placeholder
+    "the single sorry in apm_t99j01 and apm_t97A03_bridge_invariants_of_model",
+    :route-step
+    "t99J01 step 3 and t97A03 step 8, finite Schreier spanning-tree complement count after the banked coset quiver",
+    :gates
+    ["canonical packages"
+     "fixture compiles"
+     "zero fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id
+   :routes-2026-10-10-finite-schreier-spanning-tree-complement-count-5,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-10-10-finite-schreier-coset-quiver-positive-index-3
+    :routes-2026-10-10-checkpoint-topo1-after-schreier-quiver-4],
+   :current-residual
+   "Relate the geodesic arborescence to original generator edges, count one selected edge for each non-root coset, and subtract from the banked r*n positive-edge count.",
+   :other-consumers [:t97A03]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:strategy
+    "Measure the finite Schreier arborescence complement count, preserve the index-zero refutation and reviewed topology boundaries, recount all six consumers and eight placeholders, then elect the Type-valued basis comparison or a nearer adapter."},
+   :id :routes-2026-10-10-checkpoint-topo1-after-schreier-tree-count-6,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:routes-2026-10-10-finite-schreier-spanning-tree-complement-count-5
+    :routes-2026-10-10-checkpoint-topo1-after-schreier-quiver-4],
+   :current-residual
+   "Review the second bounded construction in the shared positive-index Schreier generator count.",
    :other-consumers []}
   {:consumer :t99J01,
    :phase :probe,
