@@ -1608,8 +1608,82 @@
   {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-localizationmap-apply-naturality,
+   :evidence
+   {:placeholder-delta {:source 0, :fixture 0},
+    :residual
+    "Prove at one normalized oriented chart that canonical localizationMap sends globalGenerator to the concrete chart generator; use actual orientation data to select the positive sign, then transport the equality with elementwise naturality and overlap coherence.",
+    :gates
+    {:module-build :pass,
+     :fixture-compiles-against-promoted-module :pass,
+     :exact-declaration-type :pass,
+     :zero-source-and-fixture-sorry :pass,
+     :standard-only-axioms :pass,
+     :registry-check :pass,
+     :exact-scope :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["lake build replayed pre-existing linter warnings in dependencies; the target module emitted no warnings"],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.ManifoldFundamentalClass.localizationMap_apply_naturality",
+      :type
+      "Canonical localization naturality evaluated on an arbitrary absolute singular-homology class.",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on
+      ["ConstructionTargets.ManifoldFundamentalClass.localizationMap_naturality"],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-10",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/manifold_fundamental_class_localization_apply.lean",
+      :exit 0,
+      :output
+      "6cf5d4583cdaee3960a100d5b9d17ad87c2068b148a6494e1869a522a0174953"}
+     {:cmd
+      "lake env lean /tmp/manifold_fundamental_class_localization_apply.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^\\s*axiom\\b' ConstructionTargets/ManifoldFundamentalClass.lean /tmp/manifold_fundamental_class_localization_apply.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :diagnostic-history
+    [{:cmd
+      "lake env lean /tmp/manifold_fundamental_class_localization_apply.lean",
+      :exit 1,
+      :finding
+      "The first post-promotion harness moved outside the ConstructionTargets namespace but retained unqualified opens; qualifying the three imported namespaces corrected the harness, and the final rerun exits zero."}],
+    :commit "a26f0d2a41ae03b84703710979fcee17cca7f259",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path "/tmp/manifold_fundamental_class_localization_apply.lean",
+     :sha256
+     "6cf5d4583cdaee3960a100d5b9d17ad87c2068b148a6494e1869a522a0174953",
+     :original-sha256
+     "6bfdd8bddd83427cf68c3af9bdc2c5bbbcd4e064947dad8eac651f365a113a25",
+     :sorry-count 0},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :summary
+     "Evaluated the canonical localizationMap_naturality morphism equality on an arbitrary absolute singular-homology class to obtain the elementwise transport equation."},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/elementwise-localization-naturality",
@@ -3356,11 +3430,13 @@
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.localizationMap_apply_naturality",
     :reported-by
-    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+     :routes-2026-10-10-manifold-localization-apply-naturality-topo3-r1],
     :type
     "forall {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y] (f : C(X,Y)) (x : X) (y : Y) (h : Set.MapsTo f (deletedPoint x) (deletedPoint y)) (n : Nat) (c : (SingularChains (TopCat.of X)).homology n), localizationMap y n (HomologicalComplex.homologyMap (absoluteSingularMap f) n c) = HomologicalComplex.homologyMap (relativeSingularMap (deletedPoint x) (deletedPoint y) f h) n (localizationMap x n c)",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in
+    :routes-2026-10-10-manifold-localization-apply-naturality-topo3-r1},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-localizationmap-apply-naturality,
    :kind :lemma,
