@@ -64773,6 +64773,19 @@
       :output
       "d4270091 Revert \"Prepare proof-bearing t97A04 bridge squash\""}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791659092359-2750-42edde73",
+     :commands
+     ["git show/diff-tree/show --check d4270091"
+      "sha256sum fixture; git placeholder and frozen-statement hash census"
+      "python3 scripts/statement-registry.py check --rev d4270091"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "lake env lean target, consumer, and fixture; lake build target"
+      "git blob and theorem-orientation inspection"],
+     :finding
+     "PASS: topo-6 repair commit d4270091 has exact two-file scope and recorded blobs, fixture SHA-256 matches, frozen consumer statement is unchanged, placeholders fall 4 to 3 with no new sorry/admit/axiom, registry is 131/0, worklist validates, target/consumer/fixture compile and target builds, axioms are exactly propext/Classical.choice/Quot.sound, and the aligned ModuleCat commuting square has the required direction and agrees componentwise with matrix [[2,1],[-1,1]]."},
     :commit "d4270091bc55d32c0661efddb9755ac4d147eea6",
     :commits
     ["b6d6a3c16f61d5d185868388cc98dceb69a51f1a"
@@ -64795,7 +64808,7 @@
       "apm_t97A04_bridge_2"]},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"
     "problems/t97A04/lean/Main.lean"],
@@ -64843,7 +64856,7 @@
      :infrastructure-packets
      :review-outcomes]},
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -66125,7 +66138,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "apm_t97A04_bridge_2",
@@ -66137,7 +66150,9 @@
     [:routes-2026-10-10-t97a04-h1-bridge-assembly-topo2-r1],
     :type
     "∃ h1 : T97A04Homology 1 ≅ ModuleCat.of ℤ apm_t97a04_IntPlane, ∀ a : T97A04Homology 1, h1.hom (t97A04HomologyMap 1 apm_t97a04_Lbar a) = apm_t97a04_matrix.mulVec (h1.hom a)",
-    :proved-in :routes-2026-10-10-t97a04-h1-bridge-assembly-topo2-r1},
+    :proved-in :routes-2026-10-10-t97a04-h1-bridge-assembly-topo2-r1,
+    :banked-by :routes-2026-10-10-t97a04-h1-bridge-assembly-topo2-r1,
+    :banked-commit "d4270091bc55d32c0661efddb9755ac4d147eea6"},
    :id :lemma-apm-t97a04-bridge-2,
    :kind :lemma,
    :depends-on
