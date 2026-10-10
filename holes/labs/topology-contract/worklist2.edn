@@ -63871,75 +63871,107 @@
    "Align this coordinate with frozenTorusPi1Coord through finite-free Hurewicz naturality, then transport the resulting H1 map equation through singularHomologyComparison_naturality to the ModuleCat bridge.",
    :other-consumers []}
   {:bounded-exception
+   "single-consumer identity-aligned frozen-torus Hurewicz coordinate for t97A04",
+   :consumer :t97A04,
+   :phase :probe,
+   :state :open,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md/t97A04/frozen-h1-hurewicz-alignment",
+   :acceptance
+   {:probe
+    "Compile and bank frozenTorusAlignedH1MulEquivFinTwo and frozenTorusAlignedHurewiczCoordinate_apply from /tmp/t97a04_frozen_h1_coordinate.lean. Adjust the raw frozen-torus H1 coordinate by the inverse finite-free Hurewicz coordinate automorphism and prove the resulting Hurewicz coordinate is the identity. Supply the direct PathConnectedSpace instance for the frozen product torus. Preserve the frozen matrix exactly; do not yet claim the ModuleCat induced-map equation or apm_t97A04_bridge_2.",
+    :declarations
+    ["ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusAlignedH1MulEquivFinTwo"
+     "ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusAlignedHurewiczCoordinate_apply"],
+    :type
+    "forall q : Multiplicative (Fin 2 → ℤ), finiteFreeHurewiczCoordinateMulEquiv frozenTorusPi1Coord frozenTorusAlignedH1MulEquivFinTwo q = q",
+    :placeholder "apm_t97A04_bridge_2",
+    :route-step
+    "t97A04 step 5, align the frozen IntegralH1 coordinate so Hurewicz is the identity in Fin 2 coordinates"},
+   :id :routes-2026-10-10-t97a04-frozen-h1-hurewicz-alignment-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo2-r5
+    :routes-2026-10-10-t97a04-frozen-h1-multiplicative-coordinate-topo2-r1],
+   :current-residual
+   "Apply Hurewicz naturality with the aligned coordinate and frozenLbarPi1Map_naturality, then transport the resulting additive-group H1 equation through singularHomologyComparison_naturality to the ModuleCat bridge.",
+   :other-consumers []}
+  {:bounded-exception
    "single-consumer assembly from the now-banked frozen torus pi1 matrix theorem",
    :consumer :t97A04,
    :evidence
    {:probe
     {:residual
-     "Bank the multiplicative IntegralH1 coordinate, align it with frozenTorusPi1Coord through finite-free Hurewicz naturality, and transport the induced-map equation through singularHomologyComparison_naturality.",
+     "Bank the identity-aligned Hurewicz coordinate, derive the frozen H1 matrix equation, and transport it through singularHomologyComparison_naturality.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
      [{:name
-       "ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusH1MulEquivFinTwo",
+       "ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusAlignedHurewiczCoordinate_apply",
        :type
-       "Multiplicative (ConstructionTargets.DegreeOneHurewiczMap.IntegralH1 FrozenTorus) ≃* Multiplicative (Fin 2 → ℤ)",
+       "forall q : Multiplicative (Fin 2 → ℤ), finiteFreeHurewiczCoordinateMulEquiv frozenTorusPi1Coord frozenTorusAlignedH1MulEquivFinTwo q = q",
        :status :proved,
        :consumers [:t97A04],
        :depends-on
-       ["ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusH1GroupIsoFinTwo"]}],
+       ["ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusH1MulEquivFinTwo"]}],
      :prerequisite
      {:bounded-exception
-      "single-consumer multiplicative frozen-torus IntegralH1 coordinate for t97A04",
+      "single-consumer identity-aligned frozen-torus Hurewicz coordinate for t97A04",
       :consumer :t97A04,
       :phase :probe,
       :state :open,
       :scope [],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t97A04/frozen-h1-multiplicative-coordinate",
+      "TOPOLOGY-ROUTES.md/t97A04/frozen-h1-hurewicz-alignment",
       :acceptance
       {:probe
-       "Compile and bank frozenTorusH1MulEquivFinTwo from /tmp/t97a04_frozen_h1_coordinate.lean. Convert frozenTorusH1GroupIsoFinTwo into a multiplicative equivalence from IntegralH1 FrozenTorus to Multiplicative (Fin 2 → ℤ), providing the coordinate argument required by finite-free Hurewicz naturality. Preserve the frozen matrix exactly; do not yet claim the induced-map equation or apm_t97A04_bridge_2.",
-       :declaration
-       "ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusH1MulEquivFinTwo",
+       "Compile and bank frozenTorusAlignedH1MulEquivFinTwo and frozenTorusAlignedHurewiczCoordinate_apply from /tmp/t97a04_frozen_h1_coordinate.lean. Adjust the raw frozen-torus H1 coordinate by the inverse finite-free Hurewicz coordinate automorphism and prove the resulting Hurewicz coordinate is the identity. Supply the direct PathConnectedSpace instance for the frozen product torus. Preserve the frozen matrix exactly; do not yet claim the ModuleCat induced-map equation or apm_t97A04_bridge_2.",
+       :declarations
+       ["ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusAlignedH1MulEquivFinTwo"
+        "ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusAlignedHurewiczCoordinate_apply"],
        :type
-       "Multiplicative (ConstructionTargets.DegreeOneHurewiczMap.IntegralH1 FrozenTorus) ≃* Multiplicative (Fin 2 → ℤ)",
+       "forall q : Multiplicative (Fin 2 → ℤ), finiteFreeHurewiczCoordinateMulEquiv frozenTorusPi1Coord frozenTorusAlignedH1MulEquivFinTwo q = q",
        :placeholder "apm_t97A04_bridge_2",
        :route-step
-       "t97A04 step 5, multiplicative IntegralH1 coordinate for the frozen torus"},
+       "t97A04 step 5, align the frozen IntegralH1 coordinate so Hurewicz is the identity in Fin 2 coordinates"},
       :id
-      :routes-2026-10-10-t97a04-frozen-h1-multiplicative-coordinate-topo2-r1,
+      :routes-2026-10-10-t97a04-frozen-h1-hurewicz-alignment-topo2-r1,
       :kind :reusable-theorem,
       :depends-on
       [:routes-2026-10-10-checkpoint-topo2-r5
-       :routes-2026-10-10-t97a04-frozen-h1-coordinate-topo2-r1],
+       :routes-2026-10-10-t97a04-frozen-h1-multiplicative-coordinate-topo2-r1],
       :current-residual
-      "Align this coordinate with frozenTorusPi1Coord through finite-free Hurewicz naturality, then transport the resulting H1 map equation through singularHomologyComparison_naturality to the ModuleCat bridge.",
+      "Apply Hurewicz naturality with the aligned coordinate and frozenLbarPi1Map_naturality, then transport the resulting additive-group H1 equation through singularHomologyComparison_naturality to the ModuleCat bridge.",
       :other-consumers []},
      :commands
      [{:cmd "lake env lean /tmp/t97a04_frozen_h1_coordinate.lean",
        :exit 0,
        :output
-       "frozenTorusH1MulEquivFinTwo compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "frozenTorusAlignedHurewiczCoordinate_apply compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
        "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t97a04_frozen_h1_coordinate.lean || true)\"",
        :exit 0}
       {:cmd "sha256sum /tmp/t97a04_frozen_h1_coordinate.lean",
        :exit 0,
        :output
-       "c1b38d678ccce59d905a6243a7747a9d243996e6da41c56d79499aaf6e61688a  /tmp/t97a04_frozen_h1_coordinate.lean"}
+       "27220f9b2600be27f61c260ed07cf6c89e32cbac827bd4225f5b3e9dbd2be286  /tmp/t97a04_frozen_h1_coordinate.lean"}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/t97a04_frozen_h1_coordinate.lean",
+       :exit 1,
+       :finding
+       "The first alignment compile exposed that Mathlib has component PathConnectedSpace instances for AddCircle but no inferred product instance. Adding the direct product instance by pairing component paths supplied the hypothesis required by finiteFreeHurewiczCoordinateMulEquiv."}],
      :fixture
      {:path "/tmp/t97a04_frozen_h1_coordinate.lean",
       :sha256
-      "c1b38d678ccce59d905a6243a7747a9d243996e6da41c56d79499aaf6e61688a"},
+      "27220f9b2600be27f61c260ed07cf6c89e32cbac827bd4225f5b3e9dbd2be286"},
      :finding
-     "The full apm_t97A04_bridge_2 proof remains absent. The compiled prerequisite converts the banked additive-group H1 coordinate into the exact multiplicative IntegralH1 coordinate required by finiteFreeHurewiczCoordinateMulEquiv and h1_coordinate_eq_of_fundamentalGroup_coordinate_eq, without changing the frozen matrix.",
+     "The full apm_t97A04_bridge_2 proof remains absent. The compiled aligned coordinate postcomposes the raw H1 coordinate with the inverse finite-free Hurewicz automorphism and proves that the resulting Hurewicz coordinate is exactly the identity. Consequently h1_coordinate_eq_of_fundamentalGroup_coordinate_eq now yields the frozen matrix directly, without an unknown conjugation.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t97A04/h1-bridge-assembly",
    :acceptance
@@ -63954,7 +63986,8 @@
    [:routes-2026-10-10-checkpoint-topo2-r5
     :routes-2026-10-10-torus-pi1-winding-coordinates-two-consumers-topo2-r3
     :routes-2026-10-10-t97a04-frozen-h1-coordinate-topo2-r1
-    :routes-2026-10-10-t97a04-frozen-h1-multiplicative-coordinate-topo2-r1],
+    :routes-2026-10-10-t97a04-frozen-h1-multiplicative-coordinate-topo2-r1
+    :routes-2026-10-10-t97a04-frozen-h1-hurewicz-alignment-topo2-r1],
    :current-residual
    "The pi1 matrix equation is banked; align the frozen H1 equivalence and transfer the induced map equality through the Hurewicz and ModuleCat comparisons.",
    :other-consumers []}
@@ -64940,4 +64973,27 @@
    :lemma-constructiontargets-t97a04frozenh1coordinate-frozentorush1groupisofintwo,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusAlignedHurewiczCoordinate_apply",
+    :type
+    "forall q : Multiplicative (Fin 2 → ℤ), finiteFreeHurewiczCoordinateMulEquiv frozenTorusPi1Coord frozenTorusAlignedH1MulEquivFinTwo q = q"},
+   :lemma
+   {:name
+    "ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusAlignedHurewiczCoordinate_apply",
+    :reported-by
+    [:routes-2026-10-10-t97a04-h1-bridge-assembly-topo2-r1],
+    :type
+    "forall q : Multiplicative (Fin 2 → ℤ), finiteFreeHurewiczCoordinateMulEquiv frozenTorusPi1Coord frozenTorusAlignedH1MulEquivFinTwo q = q",
+    :proved-in :routes-2026-10-10-t97a04-h1-bridge-assembly-topo2-r1},
+   :id
+   :lemma-constructiontargets-t97a04frozenh1coordinate-frozentorusalignedhurewiczcoordinat,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t97a04frozenh1coordinate-frozentorush1mulequivfintwo],
    :other-consumers []}]}
