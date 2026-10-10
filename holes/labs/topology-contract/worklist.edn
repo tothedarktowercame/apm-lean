@@ -100060,6 +100060,19 @@
       :output "131 registered statements match, 0 do not"}
      {:cmd "git diff --check", :exit 0}
      {:cmd "git status --short", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791671697415-3151-45cfbce5",
+     :commands
+     ["git show and diff-tree d545954a2cd6eadc1190813cd609c777dae0aa74"
+      "sha256sum /tmp/polygon-boundary-vertex-classes.lean"
+      "lake build ConstructionTargets.PolygonBoundaryVertexClasses"
+      "lake env lean /tmp/polygon-boundary-vertex-classes.lean"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped placeholder and SHA-256 recomputation"],
+     :finding
+     "Recorded commit is a one-file authored-by-topo-2 implementation matching the frozen fixture hash; endpoint and reversal orientations are correct for all adjacent vertex chains; both frozen quotient-class theorems compile with standard axioms only; zero placeholders; registry 131 match, 0 mismatch."},
     :commit "d545954a2cd6eadc1190813cd609c777dae0aa74",
     :changed-paths
     ["ConstructionTargets/PolygonBoundaryVertexClasses.lean"],
@@ -100074,7 +100087,7 @@
      "Defined interval endpoints and reversal formulas, proved successor-edge endpoint equality, derived adjacent quotient vertex equations, and proved all six vertices share one class for both polygon relations."},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/PolygonBoundaryVertexClasses.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/boundary-vertex-classes",
@@ -100211,7 +100224,7 @@
       "Consecutive hexagon edge endpoints agree geometrically; n3_all_vertices and torusCrosscap_all_vertices prove that all six canonical vertices have one quotient class for each specialized Circle relation."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -103067,7 +103080,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "PolygonBoundaryVertexClasses.n3_all_vertices",
@@ -103081,7 +103094,9 @@
     :type
     "All six canonical hexagon vertices represent the same class in the EqvGen quotient of N3CircleRel.",
     :area "polygon-surface-open-cover",
-    :proved-in :routes-2026-10-10-polygon-boundary-vertex-classes-57},
+    :proved-in :routes-2026-10-10-polygon-boundary-vertex-classes-57,
+    :banked-by :routes-2026-10-10-polygon-boundary-vertex-classes-57,
+    :banked-commit "d545954a2cd6eadc1190813cd609c777dae0aa74"},
    :id :lemma-polygonboundaryvertexclasses-n3-all-vertices,
    :kind :lemma,
    :depends-on
@@ -103090,7 +103105,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "PolygonBoundaryVertexClasses.torusCrosscap_all_vertices",
@@ -103104,7 +103119,9 @@
     :type
     "All six canonical hexagon vertices represent the same class in the EqvGen quotient of TorusCrosscapCircleRel.",
     :area "polygon-surface-open-cover",
-    :proved-in :routes-2026-10-10-polygon-boundary-vertex-classes-57},
+    :proved-in :routes-2026-10-10-polygon-boundary-vertex-classes-57,
+    :banked-by :routes-2026-10-10-polygon-boundary-vertex-classes-57,
+    :banked-commit "d545954a2cd6eadc1190813cd609c777dae0aa74"},
    :id :lemma-polygonboundaryvertexclasses-toruscrosscap-all-vertices,
    :kind :lemma,
    :depends-on
