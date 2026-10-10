@@ -66349,6 +66349,21 @@
       :exit 0,
       :output
       "dd39405d Add naturality of subcomplex MV connecting map"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791663606575-2896-e640e7d2",
+     :commands
+     ["git show/diff-tree/show --check dd39405d"
+      "sha256sum /tmp/production_connecting_naturality.lean"
+      "git blob, placeholder, and forbidden-token checks"
+      "python3 scripts/statement-registry.py check --rev dd39405d"
+      "lake env lean scoped module and exact fixture"
+      "fixture/module statement-hash and delta-orientation inspection"
+      "two-consumer placeholder and fingerprint census"
+      "bb worklist_check.bb"],
+     :finding
+     "PASS: topo-6 commit dd39405d changes exactly the scoped Mayer-Vietoris module, matches the recorded/current blob and fixture SHA-256, and the fixture/module frozen theorem headers have the same hash. The module remains placeholder-free with no new sorry/admit/axiom; registry is 131/0; module and fixture compile; the theorem uses exactly propext/Classical.choice/Quot.sound. Its square is correctly oriented: source connecting map then H_n(phi.tau1) equals H_(n+1)(phi.tau3) then target connecting map, with the expected n-to-n+1 degree shift and source/target short-exactness authorities passed directly to delta_naturality. It stays at the canonical subcomplex boundary and does not overclaim production-level naturality; t97A04 and t96J06 fingerprints and two-placeholder counts remain unchanged."},
     :commit "dd39405d9e4fe5223ce36cba20cdfe6802b8afe9",
     :changed-paths
     ["ConstructionTargets/ProductionOpenCoverMayerVietoris.lean"],
@@ -66369,7 +66384,7 @@
    :phase :implementation,
    :type
    "forall {S T : SSet} (P Q : S.Subcomplex) (P' Q' : T.Subcomplex) (φ : subcomplexMayerVietorisShortComplex P Q ⟶ subcomplexMayerVietorisShortComplex P' Q') (n : ℕ), subcomplexMayerVietorisConnecting P Q n ≫ HomologicalComplex.homologyMap φ.τ₁ n = HomologicalComplex.homologyMap φ.τ₃ (n + 1) ≫ subcomplexMayerVietorisConnecting P' Q' n",
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/ProductionOpenCoverMayerVietoris.lean"],
    :dag-node
@@ -66456,7 +66471,7 @@
      "productionConnecting is the canonical subcomplex connecting morphism conjugated by the production union and intersection isomorphisms. The fixture proves the first required layer: naturality of the canonical connecting morphism for any morphism between the two Mayer-Vietoris short complexes. The remaining layer is to construct the short-complex morphism induced by a cover-preserving continuous map and prove its components commute with the production isomorphisms.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope
    ["ConstructionTargets/ProductionOpenCoverMayerVietoris.lean"],
    :dag-node
@@ -68110,7 +68125,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -68127,7 +68142,10 @@
     "forall {S T : SSet} (P Q : S.Subcomplex) (P' Q' : T.Subcomplex) (φ : subcomplexMayerVietorisShortComplex P Q ⟶ subcomplexMayerVietorisShortComplex P' Q') (n : ℕ), subcomplexMayerVietorisConnecting P Q n ≫ HomologicalComplex.homologyMap φ.τ₁ n = HomologicalComplex.homologyMap φ.τ₃ (n + 1) ≫ subcomplexMayerVietorisConnecting P' Q' n",
     :area "mv-connecting-naturality",
     :proved-in
-    :routes-2026-10-10-subcomplex-mv-connecting-naturality-two-consumers-topo2-r1},
+    :routes-2026-10-10-subcomplex-mv-connecting-naturality-two-consumers-topo2-r1,
+    :banked-by
+    :routes-2026-10-10-subcomplex-mv-connecting-naturality-two-consumers-topo2-r1,
+    :banked-commit "dd39405d9e4fe5223ce36cba20cdfe6802b8afe9"},
    :id
    :lemma-constructiontargets-productionopencovermayervietoris-subcomplexmayervietorisconn,
    :kind :lemma,
