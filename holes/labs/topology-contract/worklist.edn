@@ -84478,6 +84478,30 @@
    :depends-on [:routes-2026-09-29-t99j04-adapter-closure-1],
    :current-residual
    "Stop-after-two hold lifted by a Codex re-route (topo-11, 2026-09-29; holes/labs/topology-routes/reroute-t99J04.md). Three sorries remain.",
+   :other-consumers []}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+   :phase :strategy,
+   :state :open,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:strategy
+    "Reread TOPOLOGY-ROUTES.md (topo1 second refill section), the routes-*.md entries for the six new problems, and ConstructionTargets banked by topo2 (TorusCircleWedgeOpenCover, TorusCircleWedgeFundamentalGroupoidSpan, TwoOpenPointSpanComparison, torus pi1 winding coordinates). Elect a nonempty portfolio of work rows over t99J01, t92J06, t97A03, t93J03, t01A03, t97A01: steps shared by two or more of the six first (wedge-of-circles fundamental group, two-open-set van Kampen), then each problem adapter. Every row names the problem, the sorry and the route step it supplies. Keep the existing holds on the earlier twenty."},
+   :id :routes-2026-10-10-topo1-refill-covering-1,
+   :kind :strategy-checkpoint,
+   :depends-on [:routes-2026-10-10-checkpoint-topo1-rp3-covering-1],
+   :current-residual
+   "Owner refill 2026-10-10 (claude-14 overnight, Joe: progress by morning): topo1 checkpoint rp3-covering-1 found all eight 09-29 problems held by stop-after-two or reviewed STOPs. topo1 now takes six covering / van Kampen problems from the unassigned HEAVY list: t99J01, t92J06, t97A03, t93J03, t01A03, t97A01. All six statements are registered; 8 sorries in total.",
    :other-consumers []}],
  :consumer-baselines
  {:t00A01

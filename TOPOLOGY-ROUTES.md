@@ -24,7 +24,7 @@ homotopy invariance (`AlgebraicTopology/SingularHomology/HomotopyInvariance*.lea
 ## Election rules (each strategy checkpoint)
 
 1. Only the problems in this loop's own list below (Joe, 2026-09-28: topo1 = the 12 DIRECT/ADAPTER
-   problems plus the eight-problem refill of 2026-09-29, topo2 = the 15 FOUNDATION problems; the 33 HEAVY problems are not assigned to a loop).
+   problems plus the eight-problem refill of 2026-09-29 and the six-problem refill of 2026-10-10, topo2 = the 15 FOUNDATION problems; the 33 HEAVY problems are not assigned to a loop).
 2. topo1: DIRECT first, then ADAPTER, closing problems one at a time. topo2: infrastructure steps
    shared by two or more of its problems first (by the routes' shared tags), then each problem's
    remaining steps; build a step only at the generality its named problems use. Never elect generality beyond what the named
@@ -70,6 +70,29 @@ in effect: ADAPTER parts first, then steps shared by two or more of them.
 | t98J02 | conjuncts 2, 3 are ADAPTER |
 | t94J09, tunk01, t91A02 | polygon-quotient / cut-and-paste tags shared among them |
 | t96A06, t99J05 | projective charts and rational homology; reuse topo2's RP infrastructure |
+
+### topo1 second refill — six covering / van Kampen problems (owner, 2026-10-10)
+
+topo1 paused at 05:43Z on 2026-10-10: its checkpoint `routes-2026-10-10-checkpoint-topo1-rp3-covering-1`
+found all eight 09-29 problems held by stop-after-two or reviewed STOPs. Acting as owner overnight
+(claude-14, under Joe's "progress by morning"), topo1 now also takes these six from the unassigned
+HEAVY list. They share one route through wedge-of-circles π₁, van Kampen for two open sets and
+covering classification. Existing material: `ConstructionTargets/TorusCircleWedgeOpenCover.lean`,
+`TorusCircleWedgeFundamentalGroupoidSpan.lean`, `TwoOpenPointSpanComparison.lean`,
+`FundamentalGroupConcrete.md`, and topo2's banked rows for t92J06 and t97A01. Mathlib's
+`CategoryTheory/Limits/VanKampen.lean` concerns van Kampen colimits, not Seifert–van Kampen.
+
+| id | sorries | shared tags |
+|---|---|---|
+| t99J01 | 1 | fundamental-group-wedge-of-circles, van-kampen-two-open-group, covering-subgroup-index, schreier-index-formula |
+| t92J06 | 1 | wedge-quotient-covering-gluing, wedge-of-circles-free-group |
+| t97A03 | 3 | covering-classification-explicit, van-kampen-iterated-free-rank, quotient-deformation-retraction |
+| t93J03 | 1 | deck-group-fundamental-group, covering-lifting-criterion, polygon-quotient-identification |
+| t01A03 | 1 | circle-wedge-van-kampen, torus-pi1-abelian (topo2 banked torus π₁ winding coordinates 2026-10-10) |
+| t97A01 | 1 | wedge-of-circles-pi1, wedge-of-circles-homology, van-kampen-simply-connected-piece |
+
+Elect steps shared by two or more of the six first (wedge-of-circles π₁, two-open van Kampen),
+then each problem's adapter. The holds on the earlier twenty stay.
 
 ### topo2 — FOUNDATION (15)
 
