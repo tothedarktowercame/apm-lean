@@ -86254,14 +86254,21 @@
     :seat "topo-4",
     :commands
     [{:cmd
-      "rg accepted :kind values in TOPOLOGY-ROUTES.md, holes/labs, docs, and scripts",
+      "Python comment-stripped placeholder census for t99J01 t92J06 t97A03 t93J03 t01A03 t97A01",
       :exit 0,
       :finding
-      "accepted work kinds include :uptake, :final-adapter, :reusable-theorem, :representation-comparison, :consumer-closure, and :strategy-checkpoint; :adapter is not valid"}
+      "t99J01=1, t92J06=1, t97A03=3, t93J03=1, t01A03=1, t97A01=1; total 8"}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
-     {:cmd "git status --short", :exit 0, :finding "clean"}],
+     {:cmd "git status --short",
+      :exit 0,
+      :finding
+      "pre-existing unrelated modification: ConstructionTargets/RealProjectiveSmoothTarget.lean"}],
+    :warnings
+    [{:kind :shared-worktree-change,
+      :message
+      "ConstructionTargets/RealProjectiveSmoothTarget.lean changed outside this read-only strategy repair and was not touched."}],
     :finding
     {:placeholder-delta 0,
      :placeholder-counts
@@ -86273,10 +86280,16 @@
       :t97A01 1},
      :typed-residual-change
      ["generic point-wedge open-cover package banked"
-      "three representation routes preserved at reviewed missing-artifact STOPs"],
+      "pi1 coordinate row preserved as reviewed STOP"
+      "quotient-sheet local-homeomorph row preserved as reviewed STOP"
+      "Mayer-Vietoris coordinate row is unresolved needs-owner repair because its generic H0 contract is false without path-connected X and Y or explicit H0(X) and H0(Y) coordinates"],
      :infrastructure-packets
-     {:banked 1, :reviewed-stops 3, :placeholder-changing 0},
-     :review-outcomes {:go 1, :stop 3, :closed-problems 0},
+     {:banked 1,
+      :reviewed-stops 2,
+      :needs-owner 1,
+      :placeholder-changing 0},
+     :review-outcomes
+     {:go 1, :stop 2, :needs-owner 1, :closed-problems 0},
      :routes
      {:t99J01
       ["held pi1 coordinates"
@@ -86291,7 +86304,7 @@
       :t97A03
       ["double-cover classification"
        "model comparisons"
-       "invariants"
+       "invariants; MV branch requires repaired path-connected or explicit H0 coordinate contract"
        "assembly"],
       :t93J03
       ["deck action"
@@ -86302,13 +86315,19 @@
       :t97A01
       ["standard N3 homeomorphism"
        "polygon open cover"
-       "polygon pi1/MV"
+       "polygon pi1/MV; MV branch requires repaired path-connected or explicit H0 coordinate contract"
        "Smith algebra"
        "assembly"]},
      :preserved-stops
      [:routes-2026-10-10-generic-point-wedge-pi1-inclusion-coordinates-1
-      :routes-2026-10-10-generic-point-wedge-mv-inclusion-coordinates-1
-      :routes-2026-10-10-point-wedge-quotient-sheet-local-homeomorph-1]},
+      :routes-2026-10-10-point-wedge-quotient-sheet-local-homeomorph-1],
+     :unresolved-owner-repairs
+     [{:id
+       :routes-2026-10-10-generic-point-wedge-mv-inclusion-coordinates-1,
+       :state :needs-owner,
+       :fail-count 1,
+       :boundary
+       "The claimed generic signed-diagonal/codiagonal H0 coordinates are false for arbitrary X and Y; repair the row by assuming path-connected X and Y or parameterizing by actual H0(X) and H0(Y) coordinates."}]},
     :replacement-items
     [{:consumer :t97A01,
       :phase :probe,
@@ -86399,25 +86418,20 @@
       :dag-node "TOPOLOGY-ROUTES.md",
       :acceptance
       {:strategy
-       "Measure the t97A01 uptake and two independent shared foundations, preserve reviewed STOPs, recount six consumers and eight placeholders, then refill."},
+       "Measure the t97A01 uptake and two independent shared foundations, preserve two reviewed STOPs and the unresolved MV owner repair, recount six consumers and eight placeholders, then refill."},
       :id :routes-2026-10-10-checkpoint-topo1-covering-independent-2,
       :kind :strategy-checkpoint,
       :depends-on
       [:routes-2026-10-10-t97a01-standard-n3-homeomorph-2
        :routes-2026-10-10-covering-monodromy-coset-lifting-shared-2
        :routes-2026-10-10-polygon-edge-graph-open-cover-shared-2],
-      :current-residual "Review three independent route advances.",
+      :current-residual
+      "Review three independent route advances while the generic MV contract awaits owner repair.",
       :other-consumers []}],
     :author "topo-4",
-    :disposition :replan,
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1791617643519-1477-35ac258f",
-     :finding
-     "Checkpoint misclassifies generic-point-wedge-mv-inclusion-coordinates as a reviewed STOP. The row is :needs-owner with :fail-count 1 after review rejected its claim that a mathematically false H0 contract was merely a restorable artifact. Repair checkpoint measures from go=1/stop=3 to go=1/stop=2/needs-owner=1, reduce reviewed-stops infrastructure from 3 to 2, and record the MV row as unresolved owner repair requiring path-connected X/Y or H0(X)/H0(Y) coordinates rather than in preserved-stops."}},
+    :disposition :replan},
    :phase :strategy,
-   :state :repair,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -86436,7 +86450,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :probe,
-   :state :superseded,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t97A01/standard-n3-homeomorph",
    :acceptance
@@ -86459,7 +86473,7 @@
    :other-consumers []}
   {:consumer :t99J01,
    :phase :probe,
-   :state :superseded,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/covering-monodromy-coset-lifting",
@@ -86485,7 +86499,7 @@
    :other-consumers [:t93J03 :t97A03]}
   {:consumer :t97A01,
    :phase :probe,
-   :state :superseded,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/shared/polygon-edge-graph-open-cover",
    :acceptance
@@ -86519,12 +86533,12 @@
    :stop-condition
    "End only when every active topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :phase :strategy,
-   :state :superseded,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
    {:strategy
-    "Measure the t97A01 uptake and two independent shared foundations, preserve reviewed STOPs, recount six consumers and eight placeholders, then refill."},
+    "Measure the t97A01 uptake and two independent shared foundations, preserve two reviewed STOPs and the unresolved MV owner repair, recount six consumers and eight placeholders, then refill."},
    :id :routes-2026-10-10-checkpoint-topo1-covering-independent-2,
    :kind :strategy-checkpoint,
    :depends-on
@@ -86532,7 +86546,8 @@
     :routes-2026-10-10-covering-monodromy-coset-lifting-shared-2
     :routes-2026-10-10-polygon-edge-graph-open-cover-shared-2
     :routes-2026-10-10-checkpoint-topo1-covering-boundaries-1],
-   :current-residual "Review three independent route advances.",
+   :current-residual
+   "Review three independent route advances while the generic MV contract awaits owner repair.",
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
