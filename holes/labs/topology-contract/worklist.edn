@@ -98253,76 +98253,78 @@
    :consumer :t97A01,
    :implements-lemma :lemma-genericpointwedgeoverlapinclusionsquares,
    :evidence
-   {:probe
-    {:residual
-     "Promote the compiled strict overlap-inclusion squares, then combine them with polygonRadialOpenCoverPackages to transport the two Mayer-Vietoris arrows and close t97A01.",
-     :outcome :go,
-     :warnings [],
-     :missing-theorems
-     [{:name "genericPointWedgeOverlapInclusionSquares",
-       :type
-       "For the banked genericPointWedgeCoverPackage, leftEquiv.toFun.comp (overlapToLeft.comp intersectionEquiv.invFun) = ContinuousMap.const Unit x₀ and rightEquiv.toFun.comp (overlapToRight.comp intersectionEquiv.invFun) = ContinuousMap.const Unit y₀.",
-       :status :proved,
-       :consumers [:t97A01],
-       :depends-on
-       ["GenericPointWedgeOpenCoverComparison.genericPointWedgeCoverPackage"],
-       :area "van-kampen-two-open-group"}],
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd
-       "lake env lean /tmp/generic-point-wedge-overlap-inclusion-squares.lean",
-       :exit 0,
-       :finding
-       "The complete strict-square fixture compiles and its axiom audit is [propext, Classical.choice, Quot.sound]."}
-      {:cmd
-       "sha256sum /tmp/generic-point-wedge-overlap-inclusion-squares.lean",
-       :exit 0,
-       :finding
-       "e63b0a8da007af5e3d29e1245fb8ee29c7112e4dda950a870be7800929d47fec"}
-      {:cmd
-       "rg -n \"\\b(sorry|admit)\\b\" /tmp/generic-point-wedge-overlap-inclusion-squares.lean",
-       :exit 1,
-       :expected-exit 1,
-       :finding "No fixture placeholders."}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :finding "131 registered statements match, 0 do not."}
-      {:cmd "git status --short", :exit 0, :finding "clean"}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/generic-point-wedge-overlap-inclusion-squares.lean",
-       :exit 1,
-       :finding
-       "The first fixture omitted the namespace containing PointedContraction; opening PointedPuncturedCircleContraction corrected elaboration."}
-      {:cmd
-       "lake env lean /tmp/generic-point-wedge-overlap-inclusion-squares.lean",
-       :exit 1,
-       :finding
-       "The first strict proof assumed the composite was definitionally constant; expansion showed that the intersection inverse had to be identified explicitly with a basepoint representative."}
-      {:cmd
-       "lake env lean /tmp/generic-point-wedge-overlap-inclusion-squares.lean",
-       :exit 1,
-       :finding
-       "Initial simplification stopped at HomotopyEquiv trans/symm wrappers; unfolding those wrappers exposed the restricted-homeomorphism inverse."}
-      {:cmd
-       "lake env lean /tmp/generic-point-wedge-overlap-inclusion-squares.lean",
-       :exit 1,
-       :finding
-       "The first basepoint lemma attempted a rewrite after reduction had already eliminated the restricted homeomorphism; subtype extensionality closed the remaining setCongr proof."}],
-     :fixture
-     {:path "/tmp/generic-point-wedge-overlap-inclusion-squares.lean",
-      :sha256
-      "e63b0a8da007af5e3d29e1245fb8ee29c7112e4dda950a870be7800929d47fec",
-      :interface
-      "overlapToLeft and overlapToRight are the literal subtype inclusions; genericPointWedgeOverlapInclusionSquares proves that conjugating them from the banked intersection equivalence through the banked piece equivalences gives the constant maps at x₀ and y₀."},
-     :implementation
-     {:scope
-      ["ConstructionTargets/GenericPointWedgeOverlapInclusionSquares.lean"],
-      :acceptance
-      "Promote the exact fixture. Define the two literal overlap inclusions and prove both strict ContinuousMap equalities by identifying intersectionEquiv.invFun () with the left basepoint representative, applying left_inclusion, and transporting the same quotient point to the right basepoint before applying right_inclusion. Preserve the generic hypotheses and do not construct polygon covers, compute homology, or close t97A01."},
-     :seat "topo-4"}},
+   {:placeholder-delta 0,
+    :residual
+    "Construct the polygon radial cover package, transport both inclusion maps, and close t97A01.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["lake build replayed a pre-existing unnecessarySimpa warning from ConstructionTargets.CircleUniversalCover; the scoped module emitted none"],
+    :missing-theorems
+    [{:name "genericPointWedgeOverlapInclusionSquares",
+      :type
+      "For the banked genericPointWedgeCoverPackage, the conjugated overlap inclusions equal the constant maps at x₀ and y₀.",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on
+      ["GenericPointWedgeOpenCoverComparison.genericPointWedgeCoverPackage"],
+      :area "van-kampen-two-open-group"}],
+    :statement-hashes "131 registered statements match",
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :finding
+      "canonical package authority resolves to /home/joe/code/apm-lean/.lake/packages"}
+     {:cmd
+      "sha256sum /tmp/generic-point-wedge-overlap-inclusion-squares.lean",
+      :exit 0,
+      :finding
+      "fixture hash matches e63b0a8da007af5e3d29e1245fb8ee29c7112e4dda950a870be7800929d47fec"}
+     {:cmd
+      "lake build ConstructionTargets.GenericPointWedgeOverlapInclusionSquares",
+      :exit 0,
+      :finding
+      "literal overlap inclusions and both strict ContinuousMap squares build"}
+     {:cmd
+      "lake env lean /tmp/generic-point-wedge-overlap-inclusion-squares.lean",
+      :exit 0,
+      :finding "frozen fixture compiles with standard axioms"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" ConstructionTargets/GenericPointWedgeOverlapInclusionSquares.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero source placeholders"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" /tmp/generic-point-wedge-overlap-inclusion-squares.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero fixture placeholders"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short",
+      :exit 0,
+      :finding "clean worktree after commit"}],
+    :commit "206a62e22de59acc783a14108552ddc357496ff8",
+    :changed-paths
+    ["ConstructionTargets/GenericPointWedgeOverlapInclusionSquares.lean"],
+    :fixture
+    {:path "/tmp/generic-point-wedge-overlap-inclusion-squares.lean",
+     :sha256
+     "e63b0a8da007af5e3d29e1245fb8ee29c7112e4dda950a870be7800929d47fec",
+     :sorry-count 0},
+    :implementation
+    {:scope
+     ["ConstructionTargets/GenericPointWedgeOverlapInclusionSquares.lean"],
+     :declarations
+     ["ConstructionTargets.GenericPointWedgeOverlapInclusionSquares.overlapToLeft"
+      "ConstructionTargets.GenericPointWedgeOverlapInclusionSquares.overlapToRight"
+      "ConstructionTargets.GenericPointWedgeOverlapInclusionSquares.genericPointWedgeOverlapInclusionSquares"]},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/GenericPointWedgeOverlapInclusionSquares.lean"],
    :dag-node
