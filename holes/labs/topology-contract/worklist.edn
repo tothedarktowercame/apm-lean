@@ -100392,6 +100392,21 @@
       :output "131 registered statements match, 0 do not"}
      {:cmd "git diff --check", :exit 0}
      {:cmd "git status --short", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791674004168-3238-21342161",
+     :commands
+     ["git show and diff-tree 6715646c62b4a33d53e62029545008ade7bd7792"
+      "sha256sum /tmp/polygon-boundary-three-loop-maps.lean"
+      "lake build ConstructionTargets.PolygonBoundaryThreeLoopMaps"
+      "lake env lean /tmp/polygon-boundary-three-loop-maps.lean"
+      "lake env lean /dev/stdin with fresh axiom checks"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped placeholder and SHA-256 recomputation"
+      "git diff-tree --check 6715646c62b4a33d53e62029545008ade7bd7792^ 6715646c62b4a33d53e62029545008ade7bd7792"],
+     :finding
+     "Recorded one-file commit is authored by topo-2 and is byte-identical to the frozen fixture; N3 uses edges 0, 2, and 4 while torus-crosscap uses 0, 1, and 4; endpoint quotient lifts and nested wedge injections have the required orientations and representation boundaries; source and fixture have zero placeholders, fresh checks show only standard axioms, and the registry reports 131 matched and 0 mismatched."},
     :commit "6715646c62b4a33d53e62029545008ade7bd7792",
     :changed-paths
     ["ConstructionTargets/PolygonBoundaryThreeLoopMaps.lean"],
@@ -100406,7 +100421,7 @@
      "Defined a generic wedge lift, descended the selected N3 and torus-crosscap edges through endpoint quotients, assembled both nested three-loop maps, and proved all interval and wedge representative formulas."},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/PolygonBoundaryThreeLoopMaps.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/boundary-three-loop-maps",
@@ -100552,7 +100567,7 @@
       "The three endpoint-glued interval loops map into each specialized Circle relation quotient through its three chosen edge representatives; endpoint and wedge descent use the proved common vertex classes, and all six loop formulas are literal."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -103535,7 +103550,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "PolygonBoundaryThreeLoopMaps.n3ThreeLoops",
@@ -103549,7 +103564,9 @@
     :type
     "An explicit map from ThreeEndpointLoops to CircleQuotient (SurfaceRel false 3), obtained by descending edges zero, two, and four, with literal formulas on all three loop representatives.",
     :area "polygon-surface-open-cover",
-    :proved-in :routes-2026-10-10-polygon-boundary-three-loop-maps-60},
+    :proved-in :routes-2026-10-10-polygon-boundary-three-loop-maps-60,
+    :banked-by :routes-2026-10-10-polygon-boundary-three-loop-maps-60,
+    :banked-commit "6715646c62b4a33d53e62029545008ade7bd7792"},
    :id :lemma-polygonboundarythreeloopmaps-n3threeloops,
    :kind :lemma,
    :depends-on
@@ -103558,7 +103575,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "PolygonBoundaryThreeLoopMaps.torusCrosscapThreeLoops",
@@ -103572,7 +103589,9 @@
     :type
     "An explicit map from ThreeEndpointLoops to CircleQuotient TorusCrosscapRel, obtained by descending edges zero, one, and four, with literal formulas on all three loop representatives.",
     :area "polygon-surface-open-cover",
-    :proved-in :routes-2026-10-10-polygon-boundary-three-loop-maps-60},
+    :proved-in :routes-2026-10-10-polygon-boundary-three-loop-maps-60,
+    :banked-by :routes-2026-10-10-polygon-boundary-three-loop-maps-60,
+    :banked-commit "6715646c62b4a33d53e62029545008ade7bd7792"},
    :id :lemma-polygonboundarythreeloopmaps-toruscrosscapthreeloops,
    :kind :lemma,
    :depends-on
