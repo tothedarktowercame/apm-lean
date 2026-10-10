@@ -492,83 +492,126 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :implements-lemma
+   :lemma-constructiontargets-manifoldfundamentalclass-chartgenerator-eq-of-transitionunit-eq-one,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+   :dag-node
+   "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/oriented-overlap-generator-coherence",
+   :acceptance
+   {:implementation
+    "Promote the exact fixture theorem. For arbitrary commutative coefficients and the consumer dimensions m+2, prove that transition unit one on a chart overlap makes the two normalized chart generators equal, by the banked generator_change theorem. Do not assume or claim that arbitrary chart transitions have unit one, and do not assert the global fundamental class.",
+    :declaration
+    "ConstructionTargets.ManifoldFundamentalClass.chartGenerator_eq_of_transitionUnit_eq_one",
+    :type
+    "forall (R : Type) [CommRing R] (m : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (EuclideanSpace Real (Fin (m + 2))) M] (a b x : M) (ha : x ∈ (chartAt (CoefficientOverlapPair.E m) a).source) (hb : x ∈ (chartAt (CoefficientOverlapPair.E m) b).source), CoefficientChartTransitionUnit.transitionUnit R m a b x ha hb = 1 -> CoefficientChartTransitionUnit.chartGenerator R m a x ha = CoefficientChartTransitionUnit.chartGenerator R m b x hb",
+    :fixture "/tmp/manifold_fundamental_class_oriented_overlap.lean",
+    :fixture-sha256
+    "5ce501f655e762de050d7c72cfc9630a62a480c94ebdacd55342d90549292998",
+    :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
+    :route-step
+    "orientation-controlled overlap equality before global fundamental-class gluing"},
+   :id :routes-2026-10-10-manifold-oriented-overlap-coherence-topo3-r1,
+   :kind :reusable-theorem,
+   :area "manifold-fundamental-class",
+   :depends-on
+   [:routes-2026-10-10-topo3-seed-checkpoint-1
+    :routes-2026-10-10-manifold-local-positive-excision-topo3-r1],
+   :current-residual
+   "Prove orientation-compatible chart transitions have unit one in dimensions two and four, then glue the coherent local generators to an absolute top class and prove every localization is a generator.",
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-closedorientedfundamentalclass,
    :evidence
    {:probe
     {:residual
-     "Bank positive-degree neighborhood excision, then build chart-generator overlap coherence and the global fundamental class.",
+     "After the compiled overlap-equality interface, establish the geometric unit-one theorem from orientation data and construct the global class whose localizations are the banked generators.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
      [{:id
-       :lemma-constructiontargets-manifoldfundamentalclass-neighborhoodinclusion-hsucc-isiso,
+       :lemma-constructiontargets-manifoldfundamentalclass-chartgenerator-eq-of-transitionunit-eq-one,
        :name
-       "ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso",
+       "ConstructionTargets.ManifoldFundamentalClass.chartGenerator_eq_of_transitionUnit_eq_one",
        :type
-       "forall {X : Type} [TopologicalSpace X] [T1Space X] (U : Set X) (x : X) (hU : IsOpen U) (hx : x ∈ U) (n : ℕ), IsIso (HomologicalComplex.homologyMap (relativeSingularMap (neighborhoodDeletedPoint U x) (deletedPoint x) (neighborhoodInclusion U) (neighborhoodInclusion_mapsTo U x)) (n + 1))",
+       "forall (R : Type) [CommRing R] (m : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (EuclideanSpace Real (Fin (m + 2))) M] (a b x : M) (ha : x ∈ (chartAt (CoefficientOverlapPair.E m) a).source) (hb : x ∈ (chartAt (CoefficientOverlapPair.E m) b).source), CoefficientChartTransitionUnit.transitionUnit R m a b x ha hb = 1 -> CoefficientChartTransitionUnit.chartGenerator R m a x ha = CoefficientChartTransitionUnit.chartGenerator R m b x hb",
        :status :proved,
        :consumers [:t00J02 :t98A02],
-       :depends-on [],
+       :depends-on
+       ["ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso"],
        :area "manifold-fundamental-class"}],
      :prerequisite
      {:consumer :t00J02,
       :implements-lemma
-      :lemma-constructiontargets-manifoldfundamentalclass-neighborhoodinclusion-hsucc-isiso,
+      :lemma-constructiontargets-manifoldfundamentalclass-chartgenerator-eq-of-transitionunit-eq-one,
       :phase :implementation,
       :state :open,
       :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
       :dag-node
-      "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/positive-degree-neighborhood-excision",
+      "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/oriented-overlap-generator-coherence",
       :acceptance
       {:implementation
-       "Promote the exact fixture theorem. For every open neighborhood U of x in a T1 space and every n, prove that inclusion of pairs (U,U-minus-x) into (X,X-minus-x) induces an isomorphism on relative singular homology in degree n+1. Reuse relativeExcisionMap_homologyMap_isIso_succ and relativeSingularMap_homeomorphPair_isIso. Do not assert a global fundamental class or orientation coherence.",
+       "Promote the exact fixture theorem. For arbitrary commutative coefficients and the consumer dimensions m+2, prove that transition unit one on a chart overlap makes the two normalized chart generators equal, by the banked generator_change theorem. Do not assume or claim that arbitrary chart transitions have unit one, and do not assert the global fundamental class.",
        :declaration
-       "ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso",
+       "ConstructionTargets.ManifoldFundamentalClass.chartGenerator_eq_of_transitionUnit_eq_one",
        :type
-       "forall {X : Type} [TopologicalSpace X] [T1Space X] (U : Set X) (x : X) (hU : IsOpen U) (hx : x ∈ U) (n : ℕ), IsIso (HomologicalComplex.homologyMap (relativeSingularMap (neighborhoodDeletedPoint U x) (deletedPoint x) (neighborhoodInclusion U) (neighborhoodInclusion_mapsTo U x)) (n + 1))",
+       "forall (R : Type) [CommRing R] (m : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (EuclideanSpace Real (Fin (m + 2))) M] (a b x : M) (ha : x ∈ (chartAt (CoefficientOverlapPair.E m) a).source) (hb : x ∈ (chartAt (CoefficientOverlapPair.E m) b).source), CoefficientChartTransitionUnit.transitionUnit R m a b x ha hb = 1 -> CoefficientChartTransitionUnit.chartGenerator R m a x ha = CoefficientChartTransitionUnit.chartGenerator R m b x hb",
        :fixture
-       "/tmp/manifold_fundamental_class_neighborhood_excision.lean",
+       "/tmp/manifold_fundamental_class_oriented_overlap.lean",
        :fixture-sha256
-       "70de477e650f037fce463c7b60263ca816b835d33dc83d71a4734b60b0fdf09c",
+       "5ce501f655e762de050d7c72cfc9630a62a480c94ebdacd55342d90549292998",
        :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
        :route-step
-       "positive-degree local-homology excision before chart-generator coherence and global-class gluing"},
-      :id :routes-2026-10-10-manifold-local-positive-excision-topo3-r1,
+       "orientation-controlled overlap equality before global fundamental-class gluing"},
+      :id
+      :routes-2026-10-10-manifold-oriented-overlap-coherence-topo3-r1,
       :kind :reusable-theorem,
       :area "manifold-fundamental-class",
       :depends-on
-      [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+      [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+       :routes-2026-10-10-manifold-local-positive-excision-topo3-r1],
       :current-residual
-      "Transport Euclidean local generators through actual manifold charts, prove overlap sign coherence from orientation, and glue one absolute top class whose localization is the chosen generator at every point.",
+      "Prove orientation-compatible chart transitions have unit one in dimensions two and four, then glue the coherent local generators to an absolute top class and prove every localization is a generator.",
       :other-consumers [:t98A02]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake env lean /tmp/manifold_fundamental_class_neighborhood_excision.lean",
+       "lake env lean /tmp/manifold_fundamental_class_oriented_overlap.lean",
        :exit 0,
        :output
-       "neighborhoodInclusion_Hsucc_isIso compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "chartGenerator_eq_of_transitionUnit_eq_one compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/manifold_fundamental_class_neighborhood_excision.lean",
+       "sha256sum /tmp/manifold_fundamental_class_oriented_overlap.lean",
        :exit 0,
        :output
-       "70de477e650f037fce463c7b60263ca816b835d33dc83d71a4734b60b0fdf09c  /tmp/manifold_fundamental_class_neighborhood_excision.lean"}
+       "5ce501f655e762de050d7c72cfc9630a62a480c94ebdacd55342d90549292998  /tmp/manifold_fundamental_class_oriented_overlap.lean"}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/manifold_fundamental_class_neighborhood_excision.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/manifold_fundamental_class_oriented_overlap.lean || true)\"",
        :exit 0}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/manifold_fundamental_class_oriented_overlap.lean",
+       :exit 1,
+       :finding
+       "The first draft omitted the namespace exporting E; opening CoefficientOverlapPair corrected name resolution."}
+      {:cmd
+       "lake env lean /tmp/manifold_fundamental_class_oriented_overlap.lean",
+       :exit 1,
+       :finding
+       "The second draft left the module-action one-smul goal unresolved; generalizing from integers to an arbitrary commutative coefficient ring selected the intended module action and the corrected fixture compiled."}],
      :fixture
-     {:path
-      "/tmp/manifold_fundamental_class_neighborhood_excision.lean",
+     {:path "/tmp/manifold_fundamental_class_oriented_overlap.lean",
       :sha256
-      "70de477e650f037fce463c7b60263ca816b835d33dc83d71a4734b60b0fdf09c"},
+      "5ce501f655e762de050d7c72cfc9630a62a480c94ebdacd55342d90549292998"},
      :finding
-     "The banked neighborhood-excision theorem is restricted to H1, while t00J02 needs local H2 and t98A02 needs local H4. SingularExcision already proves the relative excision map is an isomorphism in every positive degree. The fixture composes that theorem with the existing homeomorphism-of-pairs comparison and compiles the exact all-positive-degree neighborhood inclusion isomorphism. Global orientation coherence and construction of one absolute class localizing at every point remain downstream.",
+     "Positive-degree neighborhood excision is now banked. HigherChartLocalGenerator already constructs actual dimension-two and dimension-four ambient local generators; CoefficientChartTransitionUnit already constructs overlap units, proves their cocycle law, and expresses generator change as multiplication by that unit; CoefficientTransitionLocalConstancy proves those units locally constant. The exact next interface is therefore the orientation coherence implication: an overlap whose transition unit is one identifies its two chart generators. The fixture proves this without placeholders. What remains is geometric, not algebraic: derive unit one from the consumers' orientation data and glue the coherent local generators to one absolute top-homology class.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -584,7 +627,8 @@
    :area "manifold-fundamental-class",
    :depends-on
    [:routes-2026-10-10-topo3-seed-checkpoint-1
-    :routes-2026-10-10-manifold-local-positive-excision-topo3-r1],
+    :routes-2026-10-10-manifold-local-positive-excision-topo3-r1
+    :routes-2026-10-10-manifold-oriented-overlap-coherence-topo3-r1],
    :current-residual
    "Local-degree counts and wild-ball complement homology remain.",
    :other-consumers [:t98A02]}
@@ -1719,6 +1763,30 @@
    :lemma-constructiontargets-manifoldfundamentalclass-neighborhoodinclusion-hsucc-isiso,
    :kind :lemma,
    :depends-on [],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFundamentalClass.chartGenerator_eq_of_transitionUnit_eq_one",
+    :type
+    "forall (R : Type) [CommRing R] (m : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (EuclideanSpace Real (Fin (m + 2))) M] (a b x : M) (ha : x ∈ (chartAt (CoefficientOverlapPair.E m) a).source) (hb : x ∈ (chartAt (CoefficientOverlapPair.E m) b).source), CoefficientChartTransitionUnit.transitionUnit R m a b x ha hb = 1 -> CoefficientChartTransitionUnit.chartGenerator R m a x ha = CoefficientChartTransitionUnit.chartGenerator R m b x hb"},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFundamentalClass.chartGenerator_eq_of_transitionUnit_eq_one",
+    :reported-by
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    :type
+    "forall (R : Type) [CommRing R] (m : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (EuclideanSpace Real (Fin (m + 2))) M] (a b x : M) (ha : x ∈ (chartAt (CoefficientOverlapPair.E m) a).source) (hb : x ∈ (chartAt (CoefficientOverlapPair.E m) b).source), CoefficientChartTransitionUnit.transitionUnit R m a b x ha hb = 1 -> CoefficientChartTransitionUnit.chartGenerator R m a x ha = CoefficientChartTransitionUnit.chartGenerator R m b x hb",
+    :area "manifold-fundamental-class",
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+   :id
+   :lemma-constructiontargets-manifoldfundamentalclass-chartgenerator-eq-of-transitionunit-eq-one,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-manifoldfundamentalclass-neighborhoodinclusion-hsucc-isiso],
    :other-consumers [:t98A02]}],
  :consumer-baselines {},
  :statuses
