@@ -85672,6 +85672,18 @@
       :finding
       "ConstructionTargets/GenericPointWedgeOpenCoverComparison.lean"}
      {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791615183819-1398-ddcd96f5",
+     :commands
+     ["git show/diff transition 2862eca40a91afcb1a1ab19d799c11fa4702fba7 and implementation 74300cdd768f88a8d36c72e1e8db36d4946be1fb"
+      "blob equality; fixture sha256; lake env lean target and go fixture"
+      "statement-registry check; worklist_check.bb"
+      "nested-comment placeholder census; four frozen fingerprints"
+      "fixture/source inspection of equivalence and inclusion orientations"],
+     :finding
+     "PASS: parent row exactly closes over reviewed implementation commit 74300cdd; scope is one unchanged module, fixture hash matches, source and fixture have zero placeholders and standard-only axioms, all nine declarations are present, and the go fixture verifies open cover/coverage, left-to-X and right-to-Y literal representative equations, intersection-to-Unit equivalence, and basepoint specializations; consumer counts/fingerprints and registry/worklist gates reproduce."},
     :commit "74300cdd768f88a8d36c72e1e8db36d4946be1fb",
     :changed-paths
     ["ConstructionTargets/GenericPointWedgeOpenCoverComparison.lean"],
@@ -85692,7 +85704,7 @@
      "genericPointWedgeCoverPackage"],
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/GenericPointWedgeOpenCoverComparison.lean"],
    :dag-node
@@ -85730,7 +85742,7 @@
    :other-consumers [:t01A03 :t97A01 :t97A03]}
   {:consumer :t99J01,
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/generic-point-wedge-pi1-inclusion-coordinates",
@@ -85758,7 +85770,7 @@
    :other-consumers [:t01A03 :t97A01 :t97A03 :t92J06]}
   {:consumer :t97A01,
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/generic-point-wedge-mv-inclusion-coordinates",
