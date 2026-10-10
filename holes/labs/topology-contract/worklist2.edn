@@ -65203,6 +65203,20 @@
       :exit 0,
       :output "e35b077b Bank t02A03 left coordinate inverse"}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791660203574-2787-560ea8e3",
+     :commands
+     ["git show/diff-tree/show --check e35b077b"
+      "sha256sum exact-type fixture"
+      "git blob, placeholder, and declaration-hash checks"
+      "python3 scripts/statement-registry.py check --rev e35b077b"
+      "lake env lean canonical module and fixture"
+      "inverse-orientation and representation-boundary inspection"
+      "bb worklist_check.bb"],
+     :finding
+     "PASS: topo-6 commit e35b077b has exact one-module scope and only documents the already-proved declaration, as required for this banking row; recorded and current blobs and the fixture SHA-256 match. The declaration type hash and proof are unchanged, module and fixture have zero placeholders, registry is 131/0, both compile, and the theorem has exactly propext/Classical.choice/Quot.sound. Its orientation is the required coordinates-after-inverse equals identity on Circle x Circle, assembled from the separately proved angular and normal-angular identities with the subtype/model boundaries preserved."},
     :commit "e35b077b5107528af3e82163d7247c4d1e311a56",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
@@ -65220,7 +65234,7 @@
      :lemma-apm-t02a03-lefttubetoruscoordinates-torusinverse},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-coordinate-inverse",
    :acceptance
@@ -66165,13 +66179,16 @@
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "apm_t02a03_leftTubeTorusCoordinates_torusInverse"},
    :lemma
    {:name "apm_t02a03_leftTubeTorusCoordinates_torusInverse",
-    :reported-by []},
+    :reported-by [],
+    :banked-by
+    :routes-2026-10-10-t02a03-bank-left-coordinate-inverse-topo2-r1,
+    :banked-commit "e35b077b5107528af3e82163d7247c4d1e311a56"},
    :id :lemma-apm-t02a03-lefttubetoruscoordinates-torusinverse,
    :kind :lemma,
    :depends-on [],
@@ -66675,7 +66692,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -66690,7 +66707,10 @@
     :type
     "forall u : Circle × Circle, apm_t02a03_leftTubeTorusCoordinates (apm_t02a03_leftTubeTorusInverse u) = u",
     :proved-in
-    :routes-2026-10-10-t02a03-bank-left-coordinate-inverse-topo2-r1},
+    :routes-2026-10-10-t02a03-bank-left-coordinate-inverse-topo2-r1,
+    :banked-by
+    :routes-2026-10-10-t02a03-bank-left-coordinate-inverse-topo2-r1,
+    :banked-commit "e35b077b5107528af3e82163d7247c4d1e311a56"},
    :id
    :lemma-constructiontargets-t02a03geometrictubecover-apm-t02a03-lefttubetoruscoordinates,
    :kind :lemma,
