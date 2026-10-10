@@ -99830,6 +99830,20 @@
       :output "131 registered statements match, 0 do not"}
      {:cmd "git diff --check", :exit 0}
      {:cmd "git status --short", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791670884842-3113-84b876d4",
+     :commands
+     ["git show and diff-tree on 1018bc24ce8d728efcc91abcd351fd63c880c594"
+      "sha256sum frozen fixture"
+      "lake build ConstructionTargets.PolygonBoundaryInducedQuotient"
+      "lake env lean frozen fixture"
+      "comment-stripped placeholder counts"
+      "python3 scripts/statement-registry.py check"
+      "git diff-tree --check"],
+     :finding
+     "PASS: recorded commit is authored by topo-2 and changes only ConstructionTargets/PolygonBoundaryInducedQuotient.lean; fixture hash matches; eqvGen_map preserves all closure constructors in the forward direction; CircleRel is exactly the pullback of BoundaryRel; the two Quotient.lift maps transport through circleToBoundary and boundaryToCircle with correct respect proofs and inverse laws; coinduced quotient topologies support both continuity proofs; both representative formulas match the frozen interface; source and fixture have zero placeholders; fixture reports only propext, Classical.choice, and Quot.sound; registry reports 131 matches and zero mismatches."},
     :commit "1018bc24ce8d728efcc91abcd351fd63c880c594",
     :changed-paths
     ["ConstructionTargets/PolygonBoundaryInducedQuotient.lean"],
@@ -99845,7 +99859,7 @@
      "Proved generic EqvGen mapping, transported arbitrary disk boundary relations to Circle, equipped both quotients with coinduced topologies, and constructed the induced homeomorphism with representative formulas."},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/PolygonBoundaryInducedQuotient.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/boundary-induced-quotient",
@@ -99976,7 +99990,7 @@
       "CircleRel pulls a disk relation back through the boundary-circle homeomorphism; circleBoundaryQuotientHomeomorph identifies its EqvGen quotient homeomorphically with the corresponding radius-one boundary quotient, literally on representatives."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -102725,7 +102739,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -102741,8 +102755,9 @@
     :type
     "For every disk relation, the EqvGen quotient of its pullback to Circle along boundaryCircleHomeomorph is homeomorphic to the EqvGen quotient of its restriction to the radius-one disk boundary, with literal maps on representatives.",
     :area "polygon-surface-open-cover",
-    :proved-in
-    :routes-2026-10-10-polygon-boundary-induced-quotient-55},
+    :proved-in :routes-2026-10-10-polygon-boundary-induced-quotient-55,
+    :banked-by :routes-2026-10-10-polygon-boundary-induced-quotient-55,
+    :banked-commit "1018bc24ce8d728efcc91abcd351fd63c880c594"},
    :id
    :lemma-polygonboundaryinducedquotient-circleboundaryquotienthomeomorph,
    :kind :lemma,
