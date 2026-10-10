@@ -54522,8 +54522,11 @@
   {:consumer :t00J07,
    :stop-count 1,
    :evidence
-   {:outcome :stop,
-    :seat "topo-8",
+   {:residual
+    "An implementation author must construct the actual dependent homeomorphism directly, not another contract proposition: split the preimage using sphereProjection_preimage_image, build the positive-sheet homeomorphism onto the common image, obtain the negative sheet by sphereAntipodal, combine the two clopen subtypes with a sum homeomorphism, identify the sum with product by Fin 2, and prove the first-projection equation. Only a placeholder-free compiled inhabitant of the existing contract can reopen the covering chain.",
+    :outcome :stop,
+    :disposition :stop,
+    :author "topo-8",
     :reason
     "The recorded fixture is a facade: it compiles a definition whose value is the proposition PositiveHemisphereTrivialization, but contains no inhabitant and therefore validates none of the required representation comparison. Fresh repository search finds no inhabitant or equivalent homeomorphism. There is also no smaller independent prerequisite left to isolate. The missing object is exactly the row itself: one homeomorphism from the full preimage subtype to the projective-image subtype times Fin 2, with sheet labels continuous in both directions and the first-projection equality. The banked facts prove the underlying set decomposition, openness, injectivity on the positive sheet, and local homeomorphism, but they do not package the dependent subtype homeomorphism. Returning REVISE with another proposition that merely restates a component of this same homeomorphism would repeat the facade rather than provide compiled evidence. This is the exact representation boundary; it does not refute the mathematics.",
     :commands
@@ -54544,17 +54547,28 @@
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :output "131 registered statements match, 0 do not"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791604490820-1008-981a3c3d",
+     :commands
+     ["sha256sum /tmp/rp2_positive_hemisphere_trivialization_contract.lean"
+      "lake env lean /tmp/rp2_positive_hemisphere_trivialization_contract.lean"
+      "git grep -n -E 'PositiveHemisphereTrivialization|positiveHemisphere.*Trivial|preimage.*positiveHemisphere.*Fin 2' eb16aa55 -- '*.lean'"
+      "python3 inline committed SHA-256 and placeholder census for t00J07 and t98A03"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show eb16aa55:holes/labs/topology-contract/worklist2.edn)"
+      "git diff --quiet eb16aa55^ eb16aa55 -- . ':(exclude)holes/labs/topology-contract/worklist2.edn'"],
+     :finding
+     "Independent of topo-8. PASS: commit eb16aa55 changes only worklist2.edn and the row has empty implementation scope. The fixture hash reproduces as f190f179c1ac16008f07322b3605146a132707a6f3390eeec194224889eb3a82 and it compiles with zero placeholders, but contains only a Prop-valued interface and no inhabitant. Its orientation is correct: full sphere preimage subtype to projective-image subtype times Fin 2, with first projection exactly sphereProjection 2. No committed inhabitant or equivalent homeomorphism exists. Banked set decomposition, openness, and local-homeomorphism facts do not construct the dependent subtype homeomorphism, so the STOP accurately identifies the representation boundary. Frozen t00J07/t98A03 files retain 3/1 placeholders with hashes f042fa62ca7ee592464c6ef90293261975b077cbce6cc43252e8ff2792a7d1ab and 09829456deb455161d216f3baf51d41ba377d965664bc27cce778d72e04b25ce; registry 131/0 and ledger 364 valid."},
     :fixture
     {:path "/tmp/rp2_positive_hemisphere_trivialization_contract.lean",
      :sha256
      "f190f179c1ac16008f07322b3605146a132707a6f3390eeec194224889eb3a82",
      :status :interface-only},
-    :residual
-    "An implementation author must construct the actual dependent homeomorphism directly, not another contract proposition: split the preimage using sphereProjection_preimage_image, build the positive-sheet homeomorphism onto the common image, obtain the negative sheet by sphereAntipodal, combine the two clopen subtypes with a sum homeomorphism, identify the sum with product by Fin 2, and prove the first-projection equation. Only a placeholder-free compiled inhabitant of the existing contract can reopen the covering chain.",
-    :author "topo-8",
-    :disposition :stop},
+    :seat "topo-8"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -54629,7 +54643,7 @@
       :depends-on [:routes-2026-09-28-rp-smooth-atlas-topo2-r1],
       :other-consumers [:t98A03]}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
