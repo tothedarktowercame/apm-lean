@@ -55207,6 +55207,21 @@
       :exit 0,
       :output
       "ConstructionTargets/T94A08AffineSmoothConicParametrization.lean"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791607517773-1119-df0d96f0",
+     :commands
+     ["sha256sum /tmp/t94a08_affine_smooth_conic_param.lean"
+      "cmp -s <(git show b95c951c:ConstructionTargets/T94A08AffineSmoothConicParametrization.lean) /tmp/t94a08_affine_smooth_conic_param.lean"
+      "lake env lean ConstructionTargets/T94A08AffineSmoothConicParametrization.lean"
+      "lake env lean /tmp/t94a08_affine_smooth_conic_param.lean"
+      "git diff-tree --no-commit-id --name-only -r b95c951c"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 8f05f6b6:holes/labs/topology-contract/worklist2.edn)"
+      "python3 inline committed SHA-256 and placeholder census for t94A08"],
+     :finding
+     "Independent of topo-6. PASS: implementation commit b95c951c creates exactly ConstructionTargets/T94A08AffineSmoothConicParametrization.lean and transition 8f05f6b6 changes only worklist2.edn. Committed source and fixture are byte-identical; SHA-256 reproduces as 0e1b69355b1bc6bf097e662b8a429be46f97de14e4807437e3e6e45d36927fbe, and both compile with zero placeholders. The representation is correctly oriented from AffineConic {1+u^2+v^2=0} to Cstar by a=u+I*v. affineConic_factor proves a*(u-I*v)=-1, yielding a^-1=-(u-I*v) and the exact inverse formulas u=(a-a^-1)/2 and v=(a+a^-1)/(2*I). Both inverse laws and both continuity directions inhabit an actual Homeomorph; no topology instance or proposition facade is introduced. Recorded axioms are standard propext, Classical.choice, Quot.sound. Frozen t94A08 remains unchanged at one placeholder with SHA-256 fd1f6a86dde745c7d96783af49d2d1808c01a8489b94e981c397cded29babeb1; 131 statements match and the committed 380-item ledger validates."},
     :commit "b95c951c9b69c734312c8bf2ca2ccc255958a862",
     :changed-paths
     ["ConstructionTargets/T94A08AffineSmoothConicParametrization.lean"],
@@ -55227,7 +55242,7 @@
      "T94A08AffineSmoothConicParam.AffineConicParametrization"
      "T94A08AffineSmoothConicParam.affineConicParametrization"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/T94A08AffineSmoothConicParametrization.lean"],
    :dag-node
@@ -55332,7 +55347,7 @@
       "Use the homeomorphism and the banked projective affine chart to supply explicit open local Euclidean neighborhoods for every point of the smooth conic.",
       :other-consumers []}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t94A08/smooth-conic-local-charts",
    :acceptance
