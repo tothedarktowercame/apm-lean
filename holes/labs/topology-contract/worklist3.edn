@@ -220,9 +220,97 @@
    :current-residual
    "Joe 2026-10-10: third HEAVY loop over the 19 registered open problems no loop was allowed to work on.",
    :other-consumers []}
-  {:consumer :t01A08,
-   :phase :probe,
+  {:bounded-exception
+   "Single-consumer first prerequisite for the rule-0 t01A08 closure adapter; it discharges the target-norm mismatch before the independent corners-domain Sard theorem.",
+   :consumer :t01A08,
+   :implements-lemma :lemma-sard-linear-target-transport,
+   :phase :implementation,
    :state :open,
+   :scope ["ConstructionTargets/SardGeneralModel.lean"],
+   :dag-node "TOPOLOGY-ROUTES.md/t01A08/target-transport",
+   :acceptance
+   {:implementation
+    "Promote the compiled targetEquiv and surjective_comp_targetEquiv_iff theorem into ConstructionTargets.SardGeneralModel. State only the continuous-linear equivalence between the frozen sup-norm plane and EuclideanSpace ℝ (Fin 2), and the equivalence of surjectivity for postcomposition. Do not claim Sard for arbitrary ModelWithCorners or close t01A08.",
+    :declarations
+    ["ConstructionTargets.SardGeneralModel.targetEquiv"
+     "ConstructionTargets.SardGeneralModel.linearTargetTransport"],
+    :type
+    "forall {E : Type*} [SeminormedAddCommGroup E] [NormedSpace ℝ E] (D : E →L[ℝ] (Fin 2 → ℝ)), Function.Surjective (targetEquiv.toContinuousLinearMap.comp D) ↔ Function.Surjective D",
+    :fixture "/tmp/t01a08_target_transport.lean",
+    :fixture-sha256
+    "b38570e62aa5611aab0a8e091d67277116c6e3a92dd7e3c35a5a4b797a543265",
+    :placeholder "the sole sorry in apm_t01a08",
+    :route-step
+    "target transport before the convex-domain/corners Sard extension"},
+   :id :routes-2026-10-10-t01a08-linear-target-transport-topo3-r1,
+   :kind :reusable-theorem,
+   :area "manifold-sard-general-model",
+   :depends-on [:routes-2026-10-10-topo3-seed-checkpoint-1],
+   :current-residual
+   "Prove critical-image nullity for the arbitrary ModelWithCorners source using within-derivatives on convex chart ranges, then instantiate it for projection ∘ f and choose a point outside the null critical image.",
+   :other-consumers []}
+  {:consumer :t01A08,
+   :evidence
+   {:probe
+    {:residual
+     "Bank the compiled target transport, then prove the separately named sard-convex-domain prerequisite before retrying the sole consumer placeholder.",
+     :outcome :revise,
+     :warnings [],
+     :prerequisite
+     {:bounded-exception
+      "Single-consumer first prerequisite for the rule-0 t01A08 closure adapter; it discharges the target-norm mismatch before the independent corners-domain Sard theorem.",
+      :consumer :t01A08,
+      :implements-lemma :lemma-sard-linear-target-transport,
+      :phase :implementation,
+      :state :open,
+      :scope ["ConstructionTargets/SardGeneralModel.lean"],
+      :dag-node "TOPOLOGY-ROUTES.md/t01A08/target-transport",
+      :acceptance
+      {:implementation
+       "Promote the compiled targetEquiv and surjective_comp_targetEquiv_iff theorem into ConstructionTargets.SardGeneralModel. State only the continuous-linear equivalence between the frozen sup-norm plane and EuclideanSpace ℝ (Fin 2), and the equivalence of surjectivity for postcomposition. Do not claim Sard for arbitrary ModelWithCorners or close t01A08.",
+       :declarations
+       ["ConstructionTargets.SardGeneralModel.targetEquiv"
+        "ConstructionTargets.SardGeneralModel.linearTargetTransport"],
+       :type
+       "forall {E : Type*} [SeminormedAddCommGroup E] [NormedSpace ℝ E] (D : E →L[ℝ] (Fin 2 → ℝ)), Function.Surjective (targetEquiv.toContinuousLinearMap.comp D) ↔ Function.Surjective D",
+       :fixture "/tmp/t01a08_target_transport.lean",
+       :fixture-sha256
+       "b38570e62aa5611aab0a8e091d67277116c6e3a92dd7e3c35a5a4b797a543265",
+       :placeholder "the sole sorry in apm_t01a08",
+       :route-step
+       "target transport before the convex-domain/corners Sard extension"},
+      :id :routes-2026-10-10-t01a08-linear-target-transport-topo3-r1,
+      :kind :reusable-theorem,
+      :area "manifold-sard-general-model",
+      :depends-on [:routes-2026-10-10-t01a08-closure-probe-topo3-r2],
+      :current-residual
+      "Prove critical-image nullity for the arbitrary ModelWithCorners source using within-derivatives on convex chart ranges, then instantiate it for projection ∘ f and choose a point outside the null critical image.",
+      :other-consumers []},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd "lake env lean /tmp/t01a08_target_transport.lean",
+       :exit 0,
+       :output
+       "target equivalence and surjectivity transport compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd "sha256sum /tmp/t01a08_target_transport.lean",
+       :exit 0,
+       :output
+       "b38570e62aa5611aab0a8e091d67277116c6e3a92dd7e3c35a5a4b797a543265  /tmp/t01a08_target_transport.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t01a08_target_transport.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :fixture
+     {:path "/tmp/t01a08_target_transport.lean",
+      :sha256
+      "b38570e62aa5611aab0a8e091d67277116c6e3a92dd7e3c35a5a4b797a543265"},
+     :finding
+     "The banked null_critical theorem requires an inner-product target. The frozen target Fin 2 → ℝ carries the sup norm, but a finite-dimensional continuous linear equivalence to EuclideanSpace compiles, and postcomposition by it preserves derivative surjectivity. This is the first exact prerequisite. Even after it is banked, the arbitrary ModelWithCorners source still needs the separate convex-domain/corners Sard extension.",
+     :seat "topo-12"}},
+   :phase :probe,
+   :state :blocked,
    :scope ["problems/t01A08/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t01A08/closure",
    :acceptance
@@ -236,7 +324,9 @@
    :id :routes-2026-10-10-t01a08-closure-probe-topo3-r2,
    :kind :final-adapter,
    :area "manifold-sard-general-model",
-   :depends-on [:routes-2026-10-10-topo3-seed-checkpoint-1],
+   :depends-on
+   [:routes-2026-10-10-topo3-seed-checkpoint-1
+    :routes-2026-10-10-t01a08-linear-target-transport-topo3-r1],
    :current-residual
    "Expected residual is either direct closure or one exact compiled prerequisite: target-coordinate transport, then convex corners Sard.",
    :other-consumers []}
