@@ -95067,8 +95067,74 @@
   {:bounded-exception
    "This single-consumer relation declaration packages the two banked oriented side pairs as the precise square generator relation and supplies the generator-to-Cases and EqvGen introduction steps used immediately in the comparison.",
    :consumer :t93J03,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Prove Relation.EqvGen SquareRel p q iff Cases p q for square points, then construct an edge-compatible disk-square homeomorphism and transport SurfaceRel false 2 to SquareRel.",
+    :outcome :done-unreviewed,
+    :warnings
+    [{:kind :dependency-linter,
+      :message
+      "Imported Klein modules retain previously reported linter warnings; this scoped module has no warning."}],
+    :missing-theorems
+    [{:name "KleinSquareBoundaryRelation.square_generator_relation",
+      :type
+      "SquareRel is exactly the union of oriented squareEdge 0-to-1 and 2-to-3 pairs; every generator satisfies Cases and both orientations lie in Relation.EqvGen SquareRel",
+      :status :proved,
+      :consumers [:t93J03],
+      :depends-on ["KleinSquareEdgeOrientation.edge_orientation"]}],
+    :statement-hashes "131 registered statements match",
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :finding
+      "canonical package authority resolves to /home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "sha256sum /tmp/klein-square-boundary-relation.lean",
+      :exit 0,
+      :finding
+      "fixture hash matches b9d3e22baa49058243449c3a7c711085354dd8413ae258e1969c08b6e90b51d5"}
+     {:cmd
+      "lake build ConstructionTargets.KleinSquareBoundaryRelation",
+      :exit 0,
+      :finding
+      "canonical module builds the generator relation, Cases map, and both EqvGen introductions"}
+     {:cmd "lake env lean /tmp/klein-square-boundary-relation.lean",
+      :exit 0,
+      :finding "fixture compiles all declared relation steps"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" ConstructionTargets/KleinSquareBoundaryRelation.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero source placeholders"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" /tmp/klein-square-boundary-relation.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero fixture placeholders"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}],
+    :commit "7d06ea6b76acd6913e5e6f096f43e0a46e6d7bb4",
+    :changed-paths
+    ["ConstructionTargets/KleinSquareBoundaryRelation.lean"],
+    :fixture
+    {:path "/tmp/klein-square-boundary-relation.lean",
+     :sha256
+     "b9d3e22baa49058243449c3a7c711085354dd8413ae258e1969c08b6e90b51d5",
+     :sorry-count 0},
+    :implementation
+    {:scope ["ConstructionTargets/KleinSquareBoundaryRelation.lean"],
+     :declarations
+     ["KleinSquareBoundaryRelation.SquareRel"
+      "KleinSquareBoundaryRelation.squareRel_cases"
+      "KleinSquareBoundaryRelation.squareRel_eqvGen"
+      "KleinSquareBoundaryRelation.squareRel_eqvGen_reverse"]},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/KleinSquareBoundaryRelation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/square-boundary-orbit-eqvgen/square-generator-relation",
@@ -96187,6 +96253,25 @@
    :id :lemma-kleinsquareboundaryrelation-squarerel-cases,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "KleinSquareBoundaryRelation.square_generator_relation",
+    :type
+    "SquareRel is exactly the union of oriented squareEdge 0-to-1 and 2-to-3 pairs; every generator satisfies Cases and both orientations lie in Relation.EqvGen SquareRel"},
+   :lemma
+   {:name "KleinSquareBoundaryRelation.square_generator_relation",
+    :reported-by
+    [:routes-2026-10-10-klein-square-boundary-relation-32],
+    :type
+    "SquareRel is exactly the union of oriented squareEdge 0-to-1 and 2-to-3 pairs; every generator satisfies Cases and both orientations lie in Relation.EqvGen SquareRel",
+    :proved-in :routes-2026-10-10-klein-square-boundary-relation-32},
+   :id :lemma-kleinsquareboundaryrelation-square-generator-relation,
+   :kind :lemma,
+   :depends-on [:lemma-kleinsquareedgeorientation-edge-orientation],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
