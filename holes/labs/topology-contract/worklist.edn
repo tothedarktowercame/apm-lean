@@ -94775,6 +94775,21 @@
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791649643839-2390-b21e098f",
+     :commands
+     ["git show deefe624acf8d34a4699d7e15ec2fc3f78ff0c78 -- ConstructionTargets/KleinSurfaceRelNormalForm.lean"
+      "inspect frozen SurfaceRel definition in ConstructionTargets/Surfaces.lean"
+      "git diff --exit-code deefe624acf8d34a4699d7e15ec2fc3f78ff0c78 -- ConstructionTargets/KleinSurfaceRelNormalForm.lean"
+      "lake build ConstructionTargets.KleinSurfaceRelNormalForm"
+      "sha256sum /tmp/klein-surface-rel-normal-form.lean && lake env lean /tmp/klein-surface-rel-normal-form.lean"
+      "placeholder census on source, fixture, and problems/t93J03"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb on recorded ledger at da363734"],
+     :finding
+     "PASS: reviewer codex-3 verified commit deefe624 changes only KleinSurfaceRelNormalForm.lean and the compiled source equals the recorded commit. The frozen fixture hash is exact; target and fixture compile with zero placeholders; t93J03 retains its declared single placeholder; the theorem reports only propext, Classical.choice, and Quot.sound; all 131 registry statements and the recorded ledger validate. surfaceRel_false_two_iff matches the literal frozen SurfaceRel false 2 definition in both directions: j=0 gives edgePoint 4 0 to 1 and j=1 gives edgePoint 4 2 to 3, each with the same Set.Icc parameter. It introduces no square model, disk-square homeomorphism, EqvGen closure, or orbit comparison, and correctly leaves that carrier representation boundary explicit."},
     :commit "deefe624acf8d34a4699d7e15ec2fc3f78ff0c78",
     :changed-paths
     ["ConstructionTargets/KleinSurfaceRelNormalForm.lean"],
@@ -94789,7 +94804,7 @@
      ["KleinSurfaceRelNormalForm.surfaceRel_false_two_iff"]},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/KleinSurfaceRelNormalForm.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/square-boundary-orbit-eqvgen/frozen-surface-rel-normal-form",
@@ -94899,7 +94914,7 @@
       "surfaceRel_false_two_iff rewrites the literal frozen SurfaceRel false 2 into exactly two generator branches: circular edge 0 is related to edge 1 at the same parameter, and edge 2 is related to edge 3 at the same parameter."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/square-boundary-orbit-eqvgen",
@@ -95786,7 +95801,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "KleinSurfaceRelNormalForm.surfaceRel_false_two_iff",
@@ -95797,7 +95812,9 @@
     :reported-by [:routes-2026-10-10-klein-surface-rel-normal-form-29],
     :type
     "(x y : Disk) -> SurfaceRel false 2 x y iff the edgePoint 4 0/1 pair or edgePoint 4 2/3 pair shares an Icc parameter",
-    :proved-in :routes-2026-10-10-klein-surface-rel-normal-form-29},
+    :proved-in :routes-2026-10-10-klein-surface-rel-normal-form-29,
+    :banked-by :routes-2026-10-10-klein-surface-rel-normal-form-29,
+    :banked-commit "deefe624acf8d34a4699d7e15ec2fc3f78ff0c78"},
    :id :lemma-kleinsurfacerelnormalform-surfacerel-false-two-iff,
    :kind :lemma,
    :depends-on [],
