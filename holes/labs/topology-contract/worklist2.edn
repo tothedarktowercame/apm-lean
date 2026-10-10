@@ -54526,12 +54526,71 @@
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
    {:probe
+    "Compile a placeholder-free inhabitant of RP2SphereProjectionCoveringProbe.SphereProjectionTwoSheetedCovering from /tmp/rp2_sphere_projection_covering_contract.lean. Construct evenly covered neighborhoods from the banked positive-hemisphere local homeomorphism and its antipodal copy; prove the two pieces exhaust each preimage using sphereProjection_eq_iff, and prove every fibre has Nat.card 2. Keep the frozen coinduced topology and sphereProjection 2."},
+   :id
+   :routes-2026-10-10-rp2-sphere-projection-two-sheeted-covering-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on [:routes-2026-09-28-rp-smooth-atlas-topo2-r1],
+   :other-consumers [:t98A03]}
+  {:consumer :t00J07,
+   :evidence
+   {:probe
+    {:outcome :revise,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/rp2_sphere_projection_covering_contract.lean",
+      :sha256
+      "9c05acf3f822b78cf5e7a32759e27bb336ad435132640679ce08e6d94f50dfcc"},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/rp2_sphere_projection_covering_contract.lean",
+       :exit 0}
+      {:cmd
+       "sha256sum /tmp/rp2_sphere_projection_covering_contract.lean",
+       :exit 0,
+       :output
+       "9c05acf3f822b78cf5e7a32759e27bb336ad435132640679ce08e6d94f50dfcc  /tmp/rp2_sphere_projection_covering_contract.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp2_sphere_projection_covering_contract.lean || true)\"",
+       :exit 0}
+      {:cmd
+       "rg -n 'FundamentalGroup.*ZMod 2|ZMod 2.*FundamentalGroup|rp2.*pi1|projective.*fundamental' ConstructionTargets -g '*.lean'",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :finding
+     "The banked SphereProjectionTwoSheetedLocalModel is not a covering theorem: it contains IsLocalHomeomorph and the antipodal fibre equality only. The lift-endpoint fundamental-group proof requires evenly covered neighborhoods, so the exact missing prerequisite is the compiled placeholder-free SphereProjectionTwoSheetedCovering contract, asserting both IsCoveringMap (sphereProjection 2) and fibre cardinality two. Its proof can be built from the banked positive-hemisphere local charts, their antipodal partners, sphereProjection_eq_iff, and surjectivity. Once banked, the requested row can use path and homotopy lifting plus simple connectivity of Sphere 2 to identify loops by their endpoint sign and obtain Multiplicative (ZMod 2), then transport basepoints.",
+     :residual
+     "Prove the genuine two-sheet covering contract. Then complete the current packet by defining the lift-endpoint homomorphism, proving its kernel trivial and its range all of ZMod 2, and exposing basepoint transport for t00J07 and t98A03.",
+     :prerequisite
+     {:consumer :t00J07,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:probe
+       "Compile a placeholder-free inhabitant of RP2SphereProjectionCoveringProbe.SphereProjectionTwoSheetedCovering from /tmp/rp2_sphere_projection_covering_contract.lean. Construct evenly covered neighborhoods from the banked positive-hemisphere local homeomorphism and its antipodal copy; prove the two pieces exhaust each preimage using sphereProjection_eq_iff, and prove every fibre has Nat.card 2. Keep the frozen coinduced topology and sphereProjection 2."},
+      :id
+      :routes-2026-10-10-rp2-sphere-projection-two-sheeted-covering-topo2-r1,
+      :kind :reusable-theorem,
+      :depends-on [:routes-2026-09-28-rp-smooth-atlas-topo2-r1],
+      :other-consumers [:t98A03]}}},
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:probe
     "Compile a placeholder-free RP2 covering packet at the frozen coinduced topology: identify sphereProjection as a two-sheeted covering, prove FundamentalGroup RP2 is Multiplicative (ZMod 2) by lift endpoints, and expose the pointed basepoint transport needed by both consumers. Supply t00J07 route step 3's pi1 half and t98A03 route steps 3-4; defer RP2 homology and wedge assembly."},
    :id :routes-2026-10-10-rp2-double-cover-pi1-two-consumers-topo2-r2,
    :kind :reusable-theorem,
    :depends-on
    [:routes-2026-09-28-rp-smooth-atlas-topo2-r1
-    :routes-2026-09-28-checkpoint-topo2-r1],
+    :routes-2026-09-28-checkpoint-topo2-r1
+    :routes-2026-10-10-rp2-sphere-projection-two-sheeted-covering-topo2-r1],
    :other-consumers [:t98A03]}
   {:consumer :portfolio,
    :checkpoint
