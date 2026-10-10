@@ -89901,6 +89901,18 @@
      :target "ModuleCat.of ℤ (ℤ × ℤ × ZMod 2)",
      :direction
      "Explicit isomorphisms from each categorical cokernel to Smith coordinates, induced respectively by (x,y,z) ↦ (y-x,z-x,x mod 2) and (x,y,z) ↦ (x,y,z mod 2)"},
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791635095325-1907-32a62a5b",
+     :commands
+     ["lake env lean ConstructionTargets/T97A01SmithQuotients.lean"
+      "lake env lean /tmp/t97a01-smith-probe.lean"
+      "sha256sum /tmp/t97a01-smith-probe.lean"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb"],
+     :finding
+     "recorded scope and blob are exact; Smith cokernel orientations compile with zero placeholders and standard-only axioms; fixture hash matches"},
     :commit "a86f69f0dbddabc6958f98ae9e6714cbad77ed39",
     :changed-paths ["ConstructionTargets/T97A01SmithQuotients.lean"],
     :fixture
@@ -89911,7 +89923,7 @@
      :axiom-count 0,
      :proof-placeholder-count 0}},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T97A01SmithQuotients.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t97A01/smith-quotients",
    :acceptance
