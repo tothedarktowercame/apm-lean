@@ -100333,35 +100333,72 @@
    "Construct homeomorphisms from the N3CircleRel and TorusCrosscapCircleRel quotients to ThreeEndpointLoops using their paired-edge and common-vertex equations, compose with threeEndpointLoopsHomeomorphThreeCircles, derive the literal boundary-to-outerOpen inclusion formulas, and assemble the packages.",
    :other-consumers []}
   {:bounded-exception
+   "This single-consumer prerequisite constructs the explicit source-to-polygon-quotient maps and representative equations needed before proving the two three-loop comparisons are homeomorphisms.",
+   :consumer :t97A01,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/PolygonBoundaryThreeLoopMaps.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/boundary-three-loop-maps",
+   :acceptance
+   {:implementation
+    "Promote the exact fixture. Define a generic point-wedge lift. For N3 use edges zero, two, and four; for TorusCrosscap use edges zero, one, and four. Descend each chosen interval edge through EndpointQuotient using the banked common vertex theorems, assemble each triple through the nested wedge, and prove literal formulas on all interval and nested-wedge representatives. Do not prove continuity, bijectivity, or homeomorphism of these maps, compose with ThreeCircles, prove outer-piece inclusion equations, compute invariants, or close t97A01.",
+    :placeholder "the single sorry in apm_t97a01",
+    :route-step
+    "polygon radial open-cover step 20: descend and assemble the three paired-edge loops into each specialized boundary quotient",
+    :fixture "/tmp/polygon-boundary-three-loop-maps.lean",
+    :fixture-sha256
+    "6df7e5f66b8c0067e7a09849929f1c03296d4a9035b946480e6603c4194d6482",
+    :gates
+    ["lake build ConstructionTargets.PolygonBoundaryThreeLoopMaps"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-10-polygon-boundary-three-loop-maps-60,
+   :kind :reusable-theorem,
+   :area "polygon-surface-open-cover",
+   :depends-on [:routes-2026-10-10-three-endpoint-loops-homeomorph-59],
+   :current-residual
+   "Prove n3ThreeLoops and torusCrosscapThreeLoops continuous and bijective, promote them to homeomorphisms using compact-to-Hausdorff quotient topology, compose their inverses with threeEndpointLoopsHomeomorphThreeCircles, then prove literal boundary inclusions and assemble the packages.",
+   :other-consumers []}
+  {:bounded-exception
    "This single-consumer concrete quotient package is the other final backlog lemma on t97A01 and supplies the actual two polygon models required by its frozen statement.",
    :consumer :t97A01,
    :implements-lemma :lemma-polygonradialopencoverpackages,
    :evidence
    {:probe
     {:residual
-     "Compare each specialized six-edge Circle quotient with ThreeEndpointLoops, compose those homeomorphisms with the compiled ThreeCircles assembly, prove the literal boundary-to-outerOpen inclusion formulas, and assemble the two concrete radial open-cover packages.",
+     "Prove the two explicit three-loop maps are homeomorphisms onto the specialized Circle relation quotients, compose their inverses with the banked ThreeCircles homeomorphism, then derive the literal boundary-to-outerOpen inclusion formulas and assemble both radial open-cover packages.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
-     [{:name
-       "ThreeEndpointLoopsHomeomorph.threeEndpointLoopsHomeomorphThreeCircles",
+     [{:name "PolygonBoundaryThreeLoopMaps.n3ThreeLoops",
        :type
-       "The nested point wedge of three copies of the closed-unit-interval endpoint quotient is homeomorphic to StatementSurfaceModels.ThreeCircles, with literal formulas on representatives of all three loops.",
+       "An explicit map from ThreeEndpointLoops to CircleQuotient (SurfaceRel false 3), obtained by descending edges zero, two, and four, with literal formulas on all three loop representatives.",
        :status :proved,
        :consumers [:t97A01],
        :depends-on
-       ["IntervalEndpointQuotientCircle.endpointQuotientHomeomorphCircle"
-        "TorusCircleWedgeOpenCover.pointedWedgeHomeomorph"],
+       ["ThreeEndpointLoopsHomeomorph.threeEndpointLoopsHomeomorphThreeCircles"
+        "PolygonBoundaryVertexClasses.n3_all_vertices"],
        :area "polygon-surface-open-cover"}
-      {:name "polygonBoundaryThreeCircles",
+      {:name "PolygonBoundaryThreeLoopMaps.torusCrosscapThreeLoops",
        :type
-       "Construct quotient homeomorphisms from N3CircleRel and TorusCrosscapCircleRel to ThreeEndpointLoops, compose them with the ThreeCircles homeomorphism, and prove the literal boundary formulas.",
-       :status :not-started,
+       "An explicit map from ThreeEndpointLoops to CircleQuotient TorusCrosscapRel, obtained by descending edges zero, one, and four, with literal formulas on all three loop representatives.",
+       :status :proved,
        :consumers [:t97A01],
        :depends-on
        ["ThreeEndpointLoopsHomeomorph.threeEndpointLoopsHomeomorphThreeCircles"
-        "PolygonBoundaryVertexClasses.n3_all_vertices"
         "PolygonBoundaryVertexClasses.torusCrosscap_all_vertices"],
+       :area "polygon-surface-open-cover"}
+      {:name "polygonBoundaryThreeCircles",
+       :type
+       "Promote both explicit three-loop maps to homeomorphisms, compose their inverses with the banked ThreeCircles homeomorphism, and prove literal boundary formulas.",
+       :status :partial,
+       :consumers [:t97A01],
+       :depends-on
+       ["PolygonBoundaryThreeLoopMaps.n3ThreeLoops"
+        "PolygonBoundaryThreeLoopMaps.torusCrosscapThreeLoops"],
        :area "polygon-surface-open-cover"}
       {:name "polygonRadialOpenCoverPackages",
        :type
@@ -100374,68 +100411,78 @@
        :area "polygon-surface-open-cover"}],
      :prerequisite
      {:bounded-exception
-      "This single-consumer prerequisite assembles the three honest endpoint-glued interval loop models into the exact nested ThreeCircles target before either specialized polygon quotient is compared with it.",
+      "This single-consumer prerequisite constructs the explicit source-to-polygon-quotient maps and representative equations needed before proving the two three-loop comparisons are homeomorphisms.",
       :consumer :t97A01,
       :phase :implementation,
       :state :open,
-      :scope ["ConstructionTargets/ThreeEndpointLoopsHomeomorph.lean"],
+      :scope ["ConstructionTargets/PolygonBoundaryThreeLoopMaps.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/three-endpoint-loops-homeomorph",
+      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/boundary-three-loop-maps",
       :acceptance
       {:implementation
-       "Promote the exact fixture. Define the nested wedge of three copies of EndpointQuotient at their zero endpoint classes. Apply pointedWedgeHomeomorph first to the inner pair and then to the outer third loop, using endpointQuotientHomeomorphCircle and its basepoint formula. Prove the basepoint compatibility and literal representative formulas for the first, second, and third loops. Do not compare N3CircleRel or TorusCrosscapCircleRel with this source, prove polygon boundary inclusion equations, compute invariants, or close t97A01.",
+       "Promote the exact fixture. Define a generic point-wedge lift. For N3 use edges zero, two, and four; for TorusCrosscap use edges zero, one, and four. Descend each chosen interval edge through EndpointQuotient using the banked common vertex theorems, assemble each triple through the nested wedge, and prove literal formulas on all interval and nested-wedge representatives. Do not prove continuity, bijectivity, or homeomorphism of these maps, compose with ThreeCircles, prove outer-piece inclusion equations, compute invariants, or close t97A01.",
        :placeholder "the single sorry in apm_t97a01",
        :route-step
-       "polygon radial open-cover step 19: assemble three endpoint-glued interval loops homeomorphically into ThreeCircles",
-       :fixture "/tmp/three-endpoint-loops-homeomorph.lean",
+       "polygon radial open-cover step 20: descend and assemble the three paired-edge loops into each specialized boundary quotient",
+       :fixture "/tmp/polygon-boundary-three-loop-maps.lean",
        :fixture-sha256
-       "5ddd5d7cbd3c981f47f15384f4016a94f6af269244f0ba17c34e86037c2a7dac",
+       "6df7e5f66b8c0067e7a09849929f1c03296d4a9035b946480e6603c4194d6482",
        :gates
-       ["lake build ConstructionTargets.ThreeEndpointLoopsHomeomorph"
+       ["lake build ConstructionTargets.PolygonBoundaryThreeLoopMaps"
         "fixture compiles"
         "zero source and fixture sorry"
         "standard-only axioms"
         "registry check"]},
-      :id :routes-2026-10-10-three-endpoint-loops-homeomorph-59,
+      :id :routes-2026-10-10-polygon-boundary-three-loop-maps-60,
       :kind :reusable-theorem,
       :area "polygon-surface-open-cover",
       :depends-on
-      [:routes-2026-10-10-interval-endpoint-quotient-circle-58],
+      [:routes-2026-10-10-three-endpoint-loops-homeomorph-59],
       :current-residual
-      "Construct homeomorphisms from the N3CircleRel and TorusCrosscapCircleRel quotients to ThreeEndpointLoops using their paired-edge and common-vertex equations, compose with threeEndpointLoopsHomeomorphThreeCircles, derive the literal boundary-to-outerOpen inclusion formulas, and assemble the packages.",
+      "Prove n3ThreeLoops and torusCrosscapThreeLoops continuous and bijective, promote them to homeomorphisms using compact-to-Hausdorff quotient topology, compose their inverses with threeEndpointLoopsHomeomorphThreeCircles, then prove literal boundary inclusions and assemble the packages.",
       :other-consumers []},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
-     [{:cmd "lake env lean /tmp/three-endpoint-loops-homeomorph.lean",
+     [{:cmd "lake env lean /tmp/polygon-boundary-three-loop-maps.lean",
        :exit 0,
        :finding
-       "Fresh rerun: the nested three-loop source, inner and outer pointed-wedge homeomorphisms, basepoint compatibility, and all three literal loop representative formulas compile."}
-      {:cmd "sha256sum /tmp/three-endpoint-loops-homeomorph.lean",
+       "The generic wedge lift, six endpoint-quotient edge maps, both nested three-loop maps, and all representative formulas compile."}
+      {:cmd "sha256sum /tmp/polygon-boundary-three-loop-maps.lean",
        :exit 0,
        :finding
-       "5ddd5d7cbd3c981f47f15384f4016a94f6af269244f0ba17c34e86037c2a7dac"}
+       "6df7e5f66b8c0067e7a09849929f1c03296d4a9035b946480e6603c4194d6482"}
+      {:cmd
+       "rg -n ‘\\b(sorry|admit)\\b’ /tmp/polygon-boundary-three-loop-maps.lean",
+       :exit 1,
+       :expected-exit 1,
+       :finding "No fixture placeholders."}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :finding "131 registered statements match, 0 do not."}
-      {:cmd "git status --short", :exit 0, :finding "clean"}],
+      {:cmd "git status --short", :exit 0, :finding "clean"}
+      {:cmd
+       "sed -n '1,240p' TOPOLOGY-ROUTES.md >/dev/null; sed -n '1,240p' holes/labs/topology-routes/routes-1.md >/dev/null; sed -n '1,240p' holes/labs/topology-routes/routes-2.md >/dev/null; sed -n '1,240p' holes/labs/topology-routes/routes-3.md >/dev/null; sed -n '1,220p' docs/TN-topology-build-loop-design.md >/dev/null",
+       :exit 0,
+       :finding
+       "The route guide, per-problem routes, and probe outcome definitions were read."}],
      :diagnostic-history
-     [{:cmd "lake env lean /tmp/three-endpoint-loops-homeomorph.lean",
+     [{:cmd "lake env lean /tmp/polygon-boundary-three-loop-maps.lean",
        :exit 1,
        :finding
-       "The first basepoint proof expected definitional equality, but pointedWedgeHomeomorph exposes the representative before using the endpoint Circle basepoint theorem; rewriting by pointedWedgeHomeomorph_left and then simplifying endpointBase corrected the proof."}
-      {:cmd "lake env lean /tmp/three-endpoint-loops-homeomorph.lean",
+       "The first draft mixed the definitionally unequal interval carriers Icc 0 (0+1) and Icc 0 1 and tried to rewrite Fin literals with proof-sensitive endpoint equations; an explicit carrier conversion and congrArg endpoint transports corrected the types."}
+      {:cmd "lake env lean /tmp/polygon-boundary-three-loop-maps.lean",
        :exit 1,
        :finding
-       "The first simplification still hid the named endpointBase behind proof-bearing subtype terms; explicitly rewriting the pointed-wedge representative theorem before simplification corrected proof irrelevance inference."}],
+       "The first carrier conversion simplified away the source membership proposition; reconstructing both inequalities by linear arithmetic from the source subtype proof corrected the conversion and eliminated all downstream placeholders."}],
      :fixture
-     {:path "/tmp/three-endpoint-loops-homeomorph.lean",
+     {:path "/tmp/polygon-boundary-three-loop-maps.lean",
       :sha256
-      "5ddd5d7cbd3c981f47f15384f4016a94f6af269244f0ba17c34e86037c2a7dac",
+      "6df7e5f66b8c0067e7a09849929f1c03296d4a9035b946480e6603c4194d6482",
       :interface
-      "ThreeEndpointLoops is the nested point wedge of three endpoint-identified interval quotients; threeEndpointLoopsHomeomorphThreeCircles identifies it homeomorphically with ThreeCircles and gives literal formulas for all three loop representatives."},
+      "The three endpoint-glued interval loops map into each specialized Circle relation quotient through its three chosen edge representatives; endpoint and wedge descent use the proved common vertex classes, and all six loop formulas are literal."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -100474,7 +100521,8 @@
     :routes-2026-10-10-polygon-boundary-circle-relations-56
     :routes-2026-10-10-polygon-boundary-vertex-classes-57
     :routes-2026-10-10-interval-endpoint-quotient-circle-58
-    :routes-2026-10-10-three-endpoint-loops-homeomorph-59],
+    :routes-2026-10-10-three-endpoint-loops-homeomorph-59
+    :routes-2026-10-10-polygon-boundary-three-loop-maps-60],
    :current-residual
    "Combine the concrete cover packages with the strict overlap squares, banked Smith normalization, and final t97A01 assembly.",
    :other-consumers []}
@@ -102641,7 +102689,9 @@
     :lemma-polygonboundaryvertexclasses-n3-all-vertices
     :lemma-polygonboundaryvertexclasses-toruscrosscap-all-vertices
     :lemma-intervalendpointquotientcircle-endpointquotienthomeomorphcircle
-    :lemma-threeendpointloopshomeomorph-threeendpointloopshomeomorphthreecircles],
+    :lemma-threeendpointloopshomeomorph-threeendpointloopshomeomorphthreecircles
+    :lemma-polygonboundarythreeloopmaps-n3threeloops
+    :lemma-polygonboundarythreeloopmaps-toruscrosscapthreeloops],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -103412,6 +103462,52 @@
    :id :lemma-toruscirclewedgeopencover-pointedwedgehomeomorph,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "PolygonBoundaryThreeLoopMaps.n3ThreeLoops",
+    :type
+    "An explicit map from ThreeEndpointLoops to CircleQuotient (SurfaceRel false 3), obtained by descending edges zero, two, and four, with literal formulas on all three loop representatives."},
+   :lemma
+   {:name "PolygonBoundaryThreeLoopMaps.n3ThreeLoops",
+    :reported-by
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    :type
+    "An explicit map from ThreeEndpointLoops to CircleQuotient (SurfaceRel false 3), obtained by descending edges zero, two, and four, with literal formulas on all three loop representatives.",
+    :area "polygon-surface-open-cover",
+    :proved-in
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+   :id :lemma-polygonboundarythreeloopmaps-n3threeloops,
+   :kind :lemma,
+   :depends-on
+   [:lemma-threeendpointloopshomeomorph-threeendpointloopshomeomorphthreecircles
+    :lemma-polygonboundaryvertexclasses-n3-all-vertices],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "PolygonBoundaryThreeLoopMaps.torusCrosscapThreeLoops",
+    :type
+    "An explicit map from ThreeEndpointLoops to CircleQuotient TorusCrosscapRel, obtained by descending edges zero, one, and four, with literal formulas on all three loop representatives."},
+   :lemma
+   {:name "PolygonBoundaryThreeLoopMaps.torusCrosscapThreeLoops",
+    :reported-by
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    :type
+    "An explicit map from ThreeEndpointLoops to CircleQuotient TorusCrosscapRel, obtained by descending edges zero, one, and four, with literal formulas on all three loop representatives.",
+    :area "polygon-surface-open-cover",
+    :proved-in
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+   :id :lemma-polygonboundarythreeloopmaps-toruscrosscapthreeloops,
+   :kind :lemma,
+   :depends-on
+   [:lemma-threeendpointloopshomeomorph-threeendpointloopshomeomorphthreecircles
+    :lemma-polygonboundaryvertexclasses-toruscrosscap-all-vertices],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
