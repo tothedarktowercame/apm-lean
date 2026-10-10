@@ -91756,6 +91756,80 @@
    :state :open,
    :scope [],
    :dag-node
+   "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/positive-index/finite-arborescence-total-arrow-equivalence",
+   :acceptance
+   {:probe
+    "Compile an explicit equivalence between Quiver.Total V and {x : V // x != Quiver.root V} for every quiver with an Arborescence instance, sending an arrow to its target and recovering the unique final arrow of the unique root path; prove both inverse laws. Do not perform cardinal arithmetic or specialize to the Schreier quiver.",
+    :placeholder
+    "the single sorry in apm_t99j01 and apm_t97A03_bridge_invariants_of_model",
+    :route-step
+    "t99J01 step 3 and t97A03 step 8, generic total-arrow/non-root equivalence needed before the finite arborescence count",
+    :gates
+    ["canonical packages"
+     "fixture compiles"
+     "zero fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id
+   :routes-2026-10-10-finite-arborescence-total-arrow-nonroot-equivalence-14,
+   :kind :reusable-theorem,
+   :depends-on [],
+   :current-residual
+   "Extract the final arrow from each nontrivial unique root path, prove its target is the chosen non-root vertex, and prove it is inverse to the target map.",
+   :other-consumers [:t97A03]}
+  {:consumer :t99J01,
+   :evidence
+   {:probe
+    {:outcome :revise,
+     :seat "topo-4",
+     :fixture
+     {:path "/tmp/arborescence-prereq.lean",
+      :sha256
+      "0e532a4aaa4b6655e4d76cad3c0829d983df4459325a8442851faba8c186dd7b",
+      :interface
+      "FiniteArborescencePrerequisite.totalEquivNonroot (V : Type u) [Quiver V] [Arborescence V] : Quiver.Total V equivalence {x : V // x != Quiver.root V}"},
+     :commands
+     [{:cmd "lake env lean /tmp/arborescence-prereq.lean", :exit 0}
+      {:cmd "rg -n \"sorry\" /tmp/arborescence-prereq.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :finding "131 registered statements match, 0 do not"}
+      {:cmd "git status --short", :exit 0, :finding "clean"}],
+     :prerequisite
+     {:consumer :t99J01,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/positive-index/finite-arborescence-total-arrow-equivalence",
+      :acceptance
+      {:probe
+       "Compile an explicit equivalence between Quiver.Total V and {x : V // x != Quiver.root V} for every quiver with an Arborescence instance, sending an arrow to its target and recovering the unique final arrow of the unique root path; prove both inverse laws. Do not perform cardinal arithmetic or specialize to the Schreier quiver.",
+       :placeholder
+       "the single sorry in apm_t99j01 and apm_t97A03_bridge_invariants_of_model",
+       :route-step
+       "t99J01 step 3 and t97A03 step 8, generic total-arrow/non-root equivalence needed before the finite arborescence count",
+       :gates
+       ["canonical packages"
+        "fixture compiles"
+        "zero fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :id
+      :routes-2026-10-10-finite-arborescence-total-arrow-nonroot-equivalence-14,
+      :kind :reusable-theorem,
+      :depends-on [],
+      :current-residual
+      "Extract the final arrow from each nontrivial unique root path, prove its target is the chosen non-root vertex, and prove it is inverse to the target map.",
+      :other-consumers [:t97A03]},
+     :residual
+     "After the total-arrow/non-root equivalence is banked, Nat.card subtraction and the n-vertex geodesic-subtree specialization are bounded consequences."}},
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
    "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/positive-index/finite-arborescence-edge-count",
    :acceptance
    {:probe
@@ -91774,7 +91848,8 @@
    :kind :reusable-theorem,
    :depends-on
    [:routes-2026-10-10-finite-schreier-chosen-generator-edge-coordinates-12
-    :routes-2026-10-10-checkpoint-topo1-after-chosen-generator-coordinates-12],
+    :routes-2026-10-10-checkpoint-topo1-after-chosen-generator-coordinates-12
+    :routes-2026-10-10-finite-arborescence-total-arrow-nonroot-equivalence-14],
    :current-residual
    "Turn uniqueness of root paths into one incoming arrow per non-root vertex and specialize the total-arrow cardinality to the n-vertex geodesic subtree.",
    :other-consumers [:t97A03]}
