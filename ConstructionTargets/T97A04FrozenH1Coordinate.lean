@@ -164,4 +164,22 @@ theorem frozenTorusAlignedHurewiczCoordinateAtLbarBase_apply
     (h := frozenLbar_base)]
   exact frozenTorusAlignedHurewiczCoordinate_apply q
 
+theorem frozenLbarIntegralH1_coordinate
+    (q : Multiplicative (Fin 2 → ℤ)) :
+    frozenTorusAlignedH1MulEquivFinTwo
+        (Multiplicative.ofAdd
+          ((HomologicalComplex.homologyMap
+              (ConstructionTargets.SingularSubdivision.singularPostcomposition
+                frozenLbar) 1)
+            (Multiplicative.toAdd
+              (frozenTorusAlignedH1MulEquivFinTwo.symm q)))) =
+      frozenMatrixCoordinateMap q := by
+  have h := h1_coordinate_eq_of_fundamentalGroup_coordinate_eq
+    frozenLbar frozenTorusPi1Coord frozenTorusPi1CoordAtLbarBase
+    frozenTorusAlignedH1MulEquivFinTwo frozenTorusAlignedH1MulEquivFinTwo
+    frozenMatrixCoordinateMap frozenLbarPi1Map_coordinateMap_raw q
+  rw [frozenTorusAlignedHurewiczCoordinate_apply,
+    frozenTorusAlignedHurewiczCoordinateAtLbarBase_apply] at h
+  exact h
+
 end ConstructionTargets.T97A04FrozenH1Coordinate
