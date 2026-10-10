@@ -89549,10 +89549,11 @@
    {:outcome :replan,
     :seat "topo-4",
     :commands
-    [{:cmd "bb holes/labs/topology-contract/worklist_check.bb",
+    [{:cmd
+      "git show 3fe10367:holes/labs/topology-contract/worklist.edn > /tmp/worklist-3fe10367.edn && bb holes/labs/topology-contract/worklist_check.bb /tmp/worklist-3fe10367.edn",
       :exit 0,
       :finding
-      "740 items OK; 701 done, 17 superseded, 13 needs-owner, 8 blocked, 1 repair; no open item"}
+      "exact evidence commit 3fe10367 checks as 740 items OK; 701 done, 14 superseded, 13 needs-owner, 11 blocked, 1 done-unreviewed"}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
@@ -89687,15 +89688,9 @@
       "Review one bounded consumer algebra step and one corrected two-consumer foundation after the owner clarification.",
       :other-consumers []}],
     :author "topo-4",
-    :disposition :replan,
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1791633811150-1867-4b38c3f2",
-     :finding
-     "recorded worklist evidence still uses the pre-transition distribution: the exact commit has 14 superseded, 11 blocked, and 1 done-unreviewed, not 17 superseded, 8 blocked, and 1 repair"}},
+    :disposition :replan},
    :phase :strategy,
-   :state :repair,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -89717,7 +89712,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :probe,
-   :state :superseded,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t97A01/smith-quotients",
    :acceptance
@@ -89740,7 +89735,7 @@
    :other-consumers []}
   {:consumer :t99J01,
    :phase :probe,
-   :state :superseded,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/positive-rank",
@@ -89776,7 +89771,7 @@
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :phase :strategy,
-   :state :superseded,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
