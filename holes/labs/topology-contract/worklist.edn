@@ -82896,65 +82896,56 @@
    "49b6c7fb9db8380597dbc413f0cd6eee55f1fa8c98ada830e9fc497a6838029f",
    :consumer :t99J05,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-4",
-     :fixture
-     {:path "/tmp/t99j05-arbitrary-affine-charts-complete.lean",
-      :sha256
-      "49b6c7fb9db8380597dbc413f0cd6eee55f1fa8c98ada830e9fc497a6838029f"},
-     :commands
-     [{:cmd
-       "sha256sum /tmp/t99j05-arbitrary-affine-charts-probe.lean /tmp/t99j05-arbitrary-affine-charts-complete.lean",
-       :exit 0,
-       :finding
-       "dependency fixture restored at ff8a741410c5a3511bd8745bed8cd9f28c30084111da7136136d3948b2bb3d5c; completed fixture is 49b6c7fb9db8380597dbc413f0cd6eee55f1fa8c98ada830e9fc497a6838029f"}
-      {:cmd "stat -c '%F %n' .lake/packages",
-       :exit 0,
-       :finding
-       "directory .lake/packages; /home/joe/code/apm-lean is the canonical package authority checkout"}
-      {:cmd
-       "lake env lean ConstructionTargets/T99J05ArbitraryAffineChartContinuity.lean",
-       :exit 0}
-      {:cmd
-       "lake env lean /tmp/t99j05-arbitrary-affine-charts-complete.lean",
-       :exit 0,
-       :finding
-       "AffineChartConstruction n depends only on propext, Classical.choice, and Quot.sound"}
-      {:cmd
-       "Python comment-stripped placeholder census of /tmp/t99j05-arbitrary-affine-charts-complete.lean",
-       :exit 0,
-       :finding "0"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :finding "131 registered statements match, 0 do not"}
-      {:cmd "git status --short", :exit 0, :finding "clean"}],
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :warnings
-     [{:kind :inherited-placeholder,
-       :message
-       "The consumer retains its single registered-theorem sorry. This row closes step 1 only; diagonal fixed-point/local-index calculations and rational homology remain downstream."}],
-     :implementation
-     {:placeholder-after 1,
-      :fixture-sha256
-      "49b6c7fb9db8380597dbc413f0cd6eee55f1fa8c98ada830e9fc497a6838029f",
-      :instructions
-      "Import ConstructionTargets.T99J05ArbitraryAffineChartContinuity. Add a proved theorem T99J05_affineChartConstruction (n : Nat) : AffineChartConstruction n immediately before apm_t99j05, following the completed fixture. Assemble the OpenPartialHomeomorph from affineSource_isOpen, the banked inverse laws, t99J05_coordinates_continuousOn, and t99J05_chartInverse_continuous, including the coordinate-line source and normalization proofs. Do not alter the registered theorem or address its remaining conjuncts.",
-      :scope ["problems/t99J05/lean/Main.lean"],
-      :axioms :standard-only,
-      :placeholder-before 1,
-      :commands
-      ["lake env lean problems/t99J05/lean/Main.lean"
-       "lake env lean /tmp/t99j05-arbitrary-affine-charts-complete.lean"
-       "python3 scripts/statement-registry.py check"],
-      :fixture "/tmp/t99j05-arbitrary-affine-charts-complete.lean",
-      :route-step "t99J05 step 1 only"},
-     :residual
-     "The arbitrary-n affine chart construction is complete and ready to bridge into t99J05. The registered sorry remains for the diagonal fixed-point/local-index package, rational CPn homology, Lefschetz number, and Euler characteristic."}},
+   {:placeholder-after 1,
+    :placeholder-delta 0,
+    :residual
+    "The registered sorry remains for the diagonal fixed-point and local-index package, rational CPn homology, Lefschetz number, and Euler characteristic.",
+    :outcome :done-unreviewed,
+    :warnings
+    [{:kind :inherited-placeholder,
+      :message
+      "The consumer retains the single sorry in apm_t99j05; this row closes only arbitrary-n affine chart construction."}],
+    :statement-hashes {:status :match, :count 131},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2 (git author Joe Corneli)",
+    :placeholder-before 1,
+    :commands
+    [{:cmd "lake env lean problems/t99J05/lean/Main.lean", :exit 0}
+     {:cmd
+      "lake env lean /tmp/t99j05-arbitrary-affine-charts-complete.lean",
+      :exit 0,
+      :finding
+      "AffineChartConstruction n uses only propext, Classical.choice, Quot.sound"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd
+      "comment-stripped placeholder census of problems/t99J05/lean/Main.lean",
+      :exit 0,
+      :finding 1}
+     {:cmd
+      "sha256sum /tmp/t99j05-arbitrary-affine-charts-complete.lean",
+      :exit 0,
+      :finding
+      "49b6c7fb9db8380597dbc413f0cd6eee55f1fa8c98ada830e9fc497a6838029f"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git commit -m 'Expose arbitrary affine charts for t99J05'",
+      :exit 0,
+      :finding "d0a03bd353f44c5fcf6d64c9cfc0a6b230de6bd4"}],
+    :diagnostic-history [],
+    :commit "d0a03bd353f44c5fcf6d64c9cfc0a6b230de6bd4",
+    :infrastructure-packets 0,
+    :changed-paths ["problems/t99J05/lean/Main.lean"],
+    :fixture
+    {:path "/tmp/t99j05-arbitrary-affine-charts-complete.lean",
+     :sha256
+     "49b6c7fb9db8380597dbc413f0cd6eee55f1fa8c98ada830e9fc497a6838029f"},
+    :typed-residual-change
+    "The consumer now has a proved T99J05_affineChartConstruction for every n, assembled from the actual quotient topology, ratio coordinates, inverse laws, and continuity results."},
    :instructions
    "Import ConstructionTargets.T99J05ArbitraryAffineChartContinuity. Add a proved theorem T99J05_affineChartConstruction (n : Nat) : AffineChartConstruction n immediately before apm_t99j05, following the completed fixture. Assemble the OpenPartialHomeomorph from affineSource_isOpen, the banked inverse laws, t99J05_coordinates_continuousOn, and t99J05_chartInverse_continuous, including the coordinate-line source and normalization proofs. Do not alter the registered theorem or address its remaining conjuncts.",
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["problems/t99J05/lean/Main.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J05/arbitrary-n-affine-quotient-charts",
