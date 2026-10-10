@@ -81663,60 +81663,56 @@
    "c8e274a7e62ee954073b88e6acbd27b6731af51e33f862964ace22839a98b501",
    :consumer :t99J05,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-4",
-     :fixture
-     {:path "/tmp/projective-quotient-descent-exact-probe.lean",
-      :sha256
-      "c8e274a7e62ee954073b88e6acbd27b6731af51e33f862964ace22839a98b501"},
-     :commands
-     [{:cmd "stat -c '%F %n' .lake/packages",
-       :exit 0,
-       :finding
-       "directory .lake/packages; canonical checkout owns the package authority"}
-      {:cmd
-       "lake env lean /tmp/projective-quotient-descent-exact-probe.lean",
-       :exit 0}
-      {:cmd
-       "sha256sum /tmp/projective-quotient-descent-exact-probe.lean ConstructionTargets/ProjectiveConsumerLiftDemonstrations.lean",
-       :exit 0,
-       :finding
-       "fixture c8e274a7e62ee954073b88e6acbd27b6731af51e33f862964ace22839a98b501; dependency a7476f64270d07c3892143b59ad978955cc183c94336836b0fd450d91dd6c7b3"}
-      {:cmd
-       "Python comment-stripped placeholder census of /tmp/projective-quotient-descent-exact-probe.lean",
-       :exit 0,
-       :finding "0"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :finding "131 registered statements match, 0 do not"}
-      {:cmd "git status --short", :exit 0, :finding "clean"}],
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :warnings [],
-     :implementation
-     {:scope
-      ["problems/t96A06/lean/Main.lean"
-       "problems/t99J05/lean/Main.lean"],
-      :placeholder-before {:t96A06 1, :t99J05 1},
-      :placeholder-after {:t96A06 1, :t99J05 1},
-      :route-step "t96A06 step 1; t99J05 step 2",
-      :fixture-sha256
-      "c8e274a7e62ee954073b88e6acbd27b6731af51e33f862964ace22839a98b501",
-      :instructions
-      "Import ConstructionTargets.ProjectiveConsumerLiftDemonstrations in both consumers. Add consumer-facing bridge lemmas immediately before the registered theorems identifying T96A06.polynomialMap with t96A06Polynomial and T99J05Diagonal with t99J05Diagonal, then expose the exact descended continuous map and CPn homotopy witnesses supplied by the canonical module. Do not change either registered declaration or attempt the downstream Lefschetz, homology, degree, chart, fixed-point, or local-index obligations.",
-      :acceptance
-      {:axioms :standard-only,
-       :commands
-       ["lake env lean problems/t96A06/lean/Main.lean"
-        "lake env lean problems/t99J05/lean/Main.lean"
-        "lake env lean /tmp/projective-quotient-descent-exact-probe.lean"
-        "python3 scripts/statement-registry.py check"]}},
-     :residual
-     "The common quotient API and exact formula descents are complete. After consumer-facing uptake, t96A06 still needs rational RP3 homology, degree four, Lefschetz -3, and non-homotopy; t99J05 still needs affine charts, fixed points/local indices, rational CPn homology, Lefschetz, and Euler characteristic."}},
+   {:placeholder-after {:t96A06 1, :t99J05 1},
+    :placeholder-delta {:t96A06 0, :t99J05 0},
+    :residual
+    "t96A06 still needs rational RP3 homology, degree four, Lefschetz -3, and non-homotopy. t99J05 still needs affine charts, fixed points and local indices, rational CPn homology, Lefschetz, and Euler characteristic.",
+    :outcome :done-unreviewed,
+    :warnings
+    [{:kind :inherited-placeholder,
+      :message
+      "Each consumer compile reports its unchanged registered theorem sorry."}],
+    :statement-hashes {:status :match, :count 131},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2 (git author Joe Corneli)",
+    :placeholder-before {:t96A06 1, :t99J05 1},
+    :commands
+    [{:cmd "lake env lean problems/t96A06/lean/Main.lean", :exit 0}
+     {:cmd "lake env lean problems/t99J05/lean/Main.lean", :exit 0}
+     {:cmd
+      "lake env lean /tmp/projective-quotient-descent-exact-probe.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "comment-stripped placeholder census of both consumers",
+      :exit 0,
+      :finding {:t96A06 1, :t99J05 1}}
+     {:cmd
+      "sha256sum /tmp/projective-quotient-descent-exact-probe.lean",
+      :exit 0,
+      :finding
+      "c8e274a7e62ee954073b88e6acbd27b6731af51e33f862964ace22839a98b501"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git commit -m 'Expose projective consumer descents'",
+      :exit 0,
+      :finding "16cb9d7af78aae18857acb305485cb2d01defac8"}],
+    :diagnostic-history [],
+    :commit "16cb9d7af78aae18857acb305485cb2d01defac8",
+    :infrastructure-packets 0,
+    :changed-paths
+    ["problems/t96A06/lean/Main.lean"
+     "problems/t99J05/lean/Main.lean"],
+    :fixture
+    {:path "/tmp/projective-quotient-descent-exact-probe.lean",
+     :sha256
+     "c8e274a7e62ee954073b88e6acbd27b6731af51e33f862964ace22839a98b501"},
+    :typed-residual-change
+    "Both consumer files now identify their printed formulas with the canonical demonstrations and expose exact continuous descent witnesses. No downstream invariant claim was added."},
    :instructions
    "Import ConstructionTargets.ProjectiveConsumerLiftDemonstrations in both consumers. Add consumer-facing bridge lemmas immediately before the registered theorems identifying T96A06.polynomialMap with t96A06Polynomial and T99J05Diagonal with t99J05Diagonal, then expose the exact descended continuous map and CPn homotopy witnesses supplied by the canonical module. Do not change either registered declaration or attempt the downstream Lefschetz, homology, degree, chart, fixed-point, or local-index obligations.",
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean" "problems/t99J05/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/shared/projective-quotient-descent",
