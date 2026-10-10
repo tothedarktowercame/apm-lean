@@ -99067,15 +99067,46 @@
    "Transport the banked quotient homotopy across outerQuotientHomeomorph to deform outerOpen onto radius-one boundary classes; then construct the annular punctured-disk model and both boundary ThreeCircles identifications with vertex and inclusion formulas.",
    :other-consumers []}
   {:bounded-exception
+   "This single-consumer prerequisite transports the banked radial quotient homotopy onto the actual outer open piece and packages the endpoint and fixed-boundary properties needed for its contraction model.",
+   :consumer :t97A01,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/PolygonOuterOpenDeformation.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/outer-open-deformation",
+   :acceptance
+   {:implementation
+    "Promote the exact fixture. For a radius-preserving boundary-supported disk relation, conjugate the banked quotient homotopy by outerQuotientHomeomorph to define a homotopy on outerOpen. Prove joint continuity, identity at time zero, landing in the predicate of radius-one boundary classes at time one, and pointwise fixation of every boundary class for all times. Do not identify the boundary quotient with ThreeCircles, identify the annulus with a punctured disk, prove the final literal inclusion equations, compute invariants, or close t97A01.",
+    :placeholder "the single sorry in apm_t97a01",
+    :route-step
+    "polygon radial open-cover step 8: deform the actual outer open piece onto its radius-one boundary quotient",
+    :fixture "/tmp/polygon-outer-open-deformation.lean",
+    :fixture-sha256
+    "9fcf4732bedf53c138faa818673009bf4a0e6b66f6ca17b533fa54c96af656e5",
+    :gates
+    ["lake build ConstructionTargets.PolygonOuterOpenDeformation"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-10-polygon-outer-open-deformation-48,
+   :kind :reusable-theorem,
+   :area "polygon-surface-open-cover",
+   :depends-on [:routes-2026-10-10-polygon-outer-restricted-eqvgen-47],
+   :current-residual
+   "Construct the annular overlap-to-punctured-disk model and identify the radius-one boundary quotients for SurfaceRel false 3 and TorusCrosscapRel with ThreeCircles, including the required vertex classes and literal inclusion equations.",
+   :other-consumers []}
+  {:bounded-exception
    "This single-consumer concrete quotient package is the other final backlog lemma on t97A01 and supplies the actual two polygon models required by its frozen statement.",
    :consumer :t97A01,
    :implements-lemma :lemma-polygonradialopencoverpackages,
    :evidence
    {:probe
     {:residual
-     "The quotient of outer representatives is now homeomorphic to the actual outerOpen subtype. The remaining outer-piece step is transporting the radial deformation across this homeomorphism; the annular model, both boundary ThreeCircles models, vertex classes, and literal inclusion equations remain.",
+     "The actual outer open piece now strongly deforms onto its radius-one boundary classes. The remaining package consists of the annular punctured-disk comparison, the two boundary quotient-to-ThreeCircles identifications, the vertex classes, and the literal inclusion formulas.",
      :outcome :revise,
-     :warnings [],
+     :warnings
+     ["A concurrent unrelated modification exists at ConstructionTargets/T02A03GeometricTubeDeformation.lean; this read-only probe did not modify or inspect its contents."],
      :missing-theorems
      [{:name "polygonRadialOpenCoverPackages",
        :type
@@ -99083,23 +99114,14 @@
        :status :partial,
        :consumers [:t97A01],
        :depends-on
-       ["PolygonOuterRestrictedEqvGen.outerQuotientHomeomorph"
-        "polygonOuterOpenDeformation"
+       ["PolygonOuterOpenDeformation.outerOpenHomotopy"
         "polygonBoundaryThreeCircles"
         "polygonAnnulusPuncturedDisk"],
        :area "polygon-surface-open-cover"}
-      {:name "PolygonOuterRestrictedEqvGen.outerQuotientHomeomorph",
+      {:name "PolygonOuterOpenDeformation.outerOpenHomotopy",
        :type
-       "For a radius-preserving disk relation, the quotient of the outer radial source by the restricted EqvGen relation is homeomorphic to the outerOpen subtype of the full polygon quotient.",
+       "For a radius-preserving boundary-supported disk relation, outerOpen strongly deforms onto its radius-one boundary classes.",
        :status :proved,
-       :consumers [:t97A01],
-       :depends-on
-       ["PolygonOuterOpenRestrictedQuotient.namedOuterQuotientMap_isQuotientMap"],
-       :area "polygon-surface-open-cover"}
-      {:name "polygonOuterOpenDeformation",
-       :type
-       "Transport the quotient-descended radial homotopy across outerQuotientHomeomorph to a deformation of outerOpen onto its radius-one boundary classes.",
-       :status :not-started,
        :consumers [:t97A01],
        :depends-on
        ["PolygonOuterRestrictedEqvGen.outerQuotientHomeomorph"
@@ -99107,64 +99129,72 @@
        :area "polygon-surface-open-cover"}],
      :prerequisite
      {:bounded-exception
-      "This single-consumer prerequisite identifies the restricted-relation quotient with the actual outer open piece, completing the representation comparison needed to transport the banked radial deformation.",
+      "This single-consumer prerequisite transports the banked radial quotient homotopy onto the actual outer open piece and packages the endpoint and fixed-boundary properties needed for its contraction model.",
       :consumer :t97A01,
       :phase :implementation,
       :state :open,
-      :scope ["ConstructionTargets/PolygonOuterRestrictedEqvGen.lean"],
+      :scope ["ConstructionTargets/PolygonOuterOpenDeformation.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/outer-restricted-eqvgen",
+      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/outer-open-deformation",
       :acceptance
       {:implementation
-       "Promote the exact fixture. For any radius-preserving disk relation, prove that full EqvGen between outer representatives lifts to EqvGen of OuterRel and conversely, identify the kernel of namedOuterQuotientMap, construct the resulting homeomorphism from the OuterRel quotient to outerOpen using the quotient-map kernel homeomorphism, and prove its representative formula. Do not transport the radial homotopy across this homeomorphism, identify boundary quotients with ThreeCircles, identify the annulus with a punctured disk, compute invariants, or close t97A01.",
+       "Promote the exact fixture. For a radius-preserving boundary-supported disk relation, conjugate the banked quotient homotopy by outerQuotientHomeomorph to define a homotopy on outerOpen. Prove joint continuity, identity at time zero, landing in the predicate of radius-one boundary classes at time one, and pointwise fixation of every boundary class for all times. Do not identify the boundary quotient with ThreeCircles, identify the annulus with a punctured disk, prove the final literal inclusion equations, compute invariants, or close t97A01.",
        :placeholder "the single sorry in apm_t97a01",
        :route-step
-       "polygon radial open-cover step 7: identify the restricted-relation quotient homeomorphically with the actual outer open piece",
-       :fixture "/tmp/polygon-outer-restricted-eqvgen.lean",
+       "polygon radial open-cover step 8: deform the actual outer open piece onto its radius-one boundary quotient",
+       :fixture "/tmp/polygon-outer-open-deformation.lean",
        :fixture-sha256
-       "583cc8eda9e87cd1bb2631ff7bce0ae732990b278f24b1dbdb795e295046d5aa",
+       "9fcf4732bedf53c138faa818673009bf4a0e6b66f6ca17b533fa54c96af656e5",
        :gates
-       ["lake build ConstructionTargets.PolygonOuterRestrictedEqvGen"
+       ["lake build ConstructionTargets.PolygonOuterOpenDeformation"
         "fixture compiles"
         "zero source and fixture sorry"
         "standard-only axioms"
         "registry check"]},
-      :id :routes-2026-10-10-polygon-outer-restricted-eqvgen-47,
+      :id :routes-2026-10-10-polygon-outer-open-deformation-48,
       :kind :reusable-theorem,
       :area "polygon-surface-open-cover",
       :depends-on
-      [:routes-2026-10-10-polygon-outer-open-restricted-quotient-46],
+      [:routes-2026-10-10-polygon-outer-restricted-eqvgen-47],
       :current-residual
-      "Transport the banked quotient homotopy across outerQuotientHomeomorph to deform outerOpen onto radius-one boundary classes; then construct the annular punctured-disk model and both boundary ThreeCircles identifications with vertex and inclusion formulas.",
+      "Construct the annular overlap-to-punctured-disk model and identify the radius-one boundary quotients for SurfaceRel false 3 and TorusCrosscapRel with ThreeCircles, including the required vertex classes and literal inclusion equations.",
       :other-consumers []},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
-     [{:cmd "lake env lean /tmp/polygon-outer-restricted-eqvgen.lean",
+     [{:cmd "lake env lean /tmp/polygon-outer-open-deformation.lean",
        :exit 0,
        :finding
-       "The EqvGen chain lift, reverse projection, kernel equivalence, quotient homeomorphism, and representative formula compile with standard axioms."}
-      {:cmd "sha256sum /tmp/polygon-outer-restricted-eqvgen.lean",
+       "The transported outerOpen homotopy, continuity, zero endpoint, time-one boundary landing, and boundary fixation compile with standard axioms."}
+      {:cmd "sha256sum /tmp/polygon-outer-open-deformation.lean",
        :exit 0,
        :finding
-       "583cc8eda9e87cd1bb2631ff7bce0ae732990b278f24b1dbdb795e295046d5aa"}
+       "9fcf4732bedf53c138faa818673009bf4a0e6b66f6ca17b533fa54c96af656e5"}
       {:cmd
-       "rg -n \"\\b(sorry|admit)\\b\" /tmp/polygon-outer-restricted-eqvgen.lean",
+       "rg -n \"\\b(sorry|admit)\\b\" /tmp/polygon-outer-open-deformation.lean",
        :exit 1,
        :expected-exit 1,
        :finding "No fixture placeholders."}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :finding "131 registered statements match, 0 do not."}
-      {:cmd "git status --short", :exit 0, :finding "clean"}],
+      {:cmd "git status --short",
+       :exit 0,
+       :finding
+       "The worktree contains an unrelated concurrent modification: ConstructionTargets/T02A03GeometricTubeDeformation.lean."}],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/polygon-outer-open-deformation.lean",
+       :exit 1,
+       :finding
+       "The initial continuity proof used the nonexistent field spelling prod_mk; changing it to the Mathlib theorem Continuous.prodMk completed the product map proof."}],
      :fixture
-     {:path "/tmp/polygon-outer-restricted-eqvgen.lean",
+     {:path "/tmp/polygon-outer-open-deformation.lean",
       :sha256
-      "583cc8eda9e87cd1bb2631ff7bce0ae732990b278f24b1dbdb795e295046d5aa",
+      "9fcf4732bedf53c138faa818673009bf4a0e6b66f6ca17b533fa54c96af656e5",
       :interface
-      "Full EqvGen between outer representatives is equivalent to EqvGen of OuterRel; the quotient by OuterRel is homeomorphic to outerOpen with the expected representative formula."},
+      "outerOpenHomotopy is a jointly continuous deformation of outerOpen onto radius-one boundary classes, starting at the identity and fixing every boundary class pointwise."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -99191,7 +99221,8 @@
     :routes-2026-10-10-polygon-outer-radial-relation-44
     :routes-2026-10-10-polygon-outer-radial-quotient-deformation-45
     :routes-2026-10-10-polygon-outer-open-restricted-quotient-46
-    :routes-2026-10-10-polygon-outer-restricted-eqvgen-47],
+    :routes-2026-10-10-polygon-outer-restricted-eqvgen-47
+    :routes-2026-10-10-polygon-outer-open-deformation-48],
    :current-residual
    "Combine the concrete cover packages with the strict overlap squares, banked Smith normalization, and final t97A01 assembly.",
    :other-consumers []}
@@ -99704,7 +99735,8 @@
     :lemma-polygonouteropenrestrictedquotient-namedouterquotientmap-isquotientmap
     :lemma-polygonouterrestrictedeqvgen
     :lemma-polygonouterrestrictedeqvgen-outerquotienthomeomorph
-    :lemma-polygonouteropendeformation],
+    :lemma-polygonouteropendeformation
+    :lemma-polygonouteropendeformation-outeropenhomotopy],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -101612,6 +101644,29 @@
     "Transport the quotient-descended radial homotopy across outerQuotientHomeomorph to a deformation of outerOpen onto its radius-one boundary classes.",
     :area "polygon-surface-open-cover"},
    :id :lemma-polygonouteropendeformation,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polygonouterrestrictedeqvgen-outerquotienthomeomorph
+    :lemma-polygonouterradialquotientdeformation-continuous-quotienthomotopy],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "PolygonOuterOpenDeformation.outerOpenHomotopy",
+    :type
+    "For a radius-preserving boundary-supported disk relation, outerOpen strongly deforms onto its radius-one boundary classes."},
+   :lemma
+   {:name "PolygonOuterOpenDeformation.outerOpenHomotopy",
+    :reported-by
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    :type
+    "For a radius-preserving boundary-supported disk relation, outerOpen strongly deforms onto its radius-one boundary classes.",
+    :area "polygon-surface-open-cover",
+    :proved-in
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+   :id :lemma-polygonouteropendeformation-outeropenhomotopy,
    :kind :lemma,
    :depends-on
    [:lemma-polygonouterrestrictedeqvgen-outerquotienthomeomorph
