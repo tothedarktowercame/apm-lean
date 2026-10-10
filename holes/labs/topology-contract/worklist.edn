@@ -94201,6 +94201,20 @@
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791648036118-2345-9deb1be6",
+     :commands
+     ["git show 0603aa4385f764d70050b3a909d7433299112fba -- ConstructionTargets/KleinSquareRepresentative.lean"
+      "git diff --exit-code 0603aa4385f764d70050b3a909d7433299112fba -- ConstructionTargets/KleinSquareRepresentative.lean"
+      "lake build ConstructionTargets.KleinSquareRepresentative"
+      "sha256sum /tmp/klein-square-representative.lean && lake env lean /tmp/klein-square-representative.lean"
+      "placeholder census on source, fixture, and problems/t93J03"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb on recorded ledger at 63d94039"],
+     :finding
+     "PASS: reviewer codex-3 verified commit 0603aa43 changes only KleinSquareRepresentative.lean and the compiled source equals the recorded commit. The frozen fixture hash is exact; target and fixture compile with zero placeholders; t93J03 retains its declared single placeholder; both theorems report only propext, Classical.choice, and Quot.sound; all 131 registry statements and the recorded ledger validate. The construction chooses n=-floor(y), computes the inversion-action sign, chooses m=-floor(sign*x), and maps those coordinates back through coordinateEquiv.symm. The floor bounds prove a half-open-square representative and then the correctly oriented closed-square consequence. It does not classify square-point coincidences, form a quotient, or compare EqvGen relations."},
     :commit "0603aa4385f764d70050b3a909d7433299112fba",
     :changed-paths
     ["ConstructionTargets/KleinSquareRepresentative.lean"],
@@ -94216,7 +94230,7 @@
       "KleinSquareRepresentative.exists_closedSquare_smul"]},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/KleinSquareRepresentative.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/plane-action-square-orbit-classification/square-representative",
@@ -94326,7 +94340,7 @@
       "exists_halfOpenSquare_smul sends every point of Real times Real into [0,1) times [0,1) by an explicitly constructed PresentedKleinGroup element using integer floors; exists_closedSquare_smul gives the required closed-square representative."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/plane-action-square-orbit-classification",
@@ -95109,7 +95123,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "KleinSquareRepresentative.exists_closedSquare_smul",
@@ -95120,7 +95134,9 @@
     :reported-by [:routes-2026-10-10-klein-square-representative-26],
     :type
     "(p : Real × Real) -> exists g : PresentedKleinGroup, 0 ≤ (g • p).1 and (g • p).1 ≤ 1 and 0 ≤ (g • p).2 and (g • p).2 ≤ 1",
-    :proved-in :routes-2026-10-10-klein-square-representative-26},
+    :proved-in :routes-2026-10-10-klein-square-representative-26,
+    :banked-by :routes-2026-10-10-klein-square-representative-26,
+    :banked-commit "0603aa4385f764d70050b3a909d7433299112fba"},
    :id :lemma-kleinsquarerepresentative-exists-closedsquare-smul,
    :kind :lemma,
    :depends-on
@@ -95128,7 +95144,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "KleinSquareRepresentative.exists_halfOpenSquare_smul",
@@ -95139,7 +95155,9 @@
     :reported-by [:routes-2026-10-10-klein-square-representative-26],
     :type
     "(p : Real × Real) -> exists g : PresentedKleinGroup, 0 ≤ (g • p).1 and (g • p).1 < 1 and 0 ≤ (g • p).2 and (g • p).2 < 1",
-    :proved-in :routes-2026-10-10-klein-square-representative-26},
+    :proved-in :routes-2026-10-10-klein-square-representative-26,
+    :banked-by :routes-2026-10-10-klein-square-representative-26,
+    :banked-commit "0603aa4385f764d70050b3a909d7433299112fba"},
    :id :lemma-kleinsquarerepresentative-exists-halfopensquare-smul,
    :kind :lemma,
    :depends-on [:lemma-kleinplaneaffineaction-coordinateact-mul],
