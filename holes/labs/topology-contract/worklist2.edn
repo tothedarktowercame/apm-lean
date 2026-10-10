@@ -54259,9 +54259,21 @@
        :routes-2026-10-10-polygon-quotient-topology-two-consumers-topo2-r2
        :routes-2026-10-10-rp2-double-cover-pi1-two-consumers-topo2-r2]}],
     :author "topo-8",
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791603532440-961-7ed5ab2e",
+     :commands
+     ["git show --stat --oneline bf9f32f4"
+      "python3 inline comment-stripped placeholder census from git show bf9f32f4 for all 15 topo2 Main.lean files"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show bf9f32f4:holes/labs/topology-contract/worklist2.edn)"
+      "git diff --quiet bf9f32f4^ bf9f32f4 -- . ':(exclude)holes/labs/topology-contract/worklist2.edn'"],
+     :finding
+     "Independent of topo-8. PASS: commit bf9f32f4 changes only worklist2.edn; the strategy row has empty source scope and no fixture, theorem orientation, or fixture hash to authenticate. Fresh comment-stripped counts at the recorded commit exactly reproduce all 15 values: 1,3,3,3,4,1,1,1,1,1,1,1,1,4,1 in route order. The 131 frozen statements all match, and the committed 359-item ledger validates. The refill preserves held t94A08/t97A04/t00J08 boundaries, leads with exactly one one-placeholder final adapter (t96A07), then schedules three bounded two-consumer infrastructure packets and a four-problem checkpoint. The five replacement items and their dependency injection are coherent; no source or frozen statement changed."}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -54278,7 +54290,7 @@
     :routes-2026-09-28-checkpoint-topo2]}
   {:consumer :t96A07,
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -54291,7 +54303,7 @@
     :routes-2026-09-28-checkpoint-topo2-r1]}
   {:consumer :t95A04,
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -54305,7 +54317,7 @@
    :other-consumers [:t96A07]}
   {:consumer :t02A02,
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -54318,7 +54330,7 @@
    :other-consumers [:t96J02]}
   {:consumer :t00J07,
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
