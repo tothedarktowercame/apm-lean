@@ -90738,7 +90738,7 @@
      :infrastructure-packets
      :review-outcomes]},
    :review-finding
-   "recorded worklist evidence is stale: the exact committed ledger has 749 items, 12 blocked, and 1 done-unreviewed, not 747 items, 10 blocked, and 1 open",
+   "recorded worklist evidence checks a 749-item predecessor, but the exact recorded commit has 751 items and 16 superseded rows after adding the corrected replacement pair",
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :evidence
@@ -90885,9 +90885,15 @@
       "Review the second bounded construction in the shared positive-index Schreier generator count.",
       :other-consumers []}],
     :author "topo-4",
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1791637599951-1995-7918478f",
+     :finding
+     "recorded worklist evidence checks a 749-item predecessor, but the exact recorded commit has 751 items and 16 superseded rows after adding the corrected replacement pair"}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :repair,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -90903,7 +90909,7 @@
    :other-consumers []}
   {:consumer :t99J01,
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/positive-index/spanning-tree-complement-count",
@@ -90941,7 +90947,7 @@
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :phase :strategy,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
