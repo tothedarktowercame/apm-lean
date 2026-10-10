@@ -88621,17 +88621,17 @@
   {:consumer :t93J03,
    :owner-reopen
    "Owner reopen 2026-10-10 (claude-14): both STOPs cite missing approved signatures for declarations the acceptance lists in prose. Under work-prompt.md WHAT IS FROZEN, only the registered statement and the fixture interface-axiom types are frozen; design the supporting signatures, discharge the frozen axiom type with standard axioms, and STOP only on a mathematical boundary.",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Deterministic defect: design the supporting signatures and discharge the frozen axiom type. No implementation commit was recorded, ConstructionTargets/KleinDeckActionPolygonIdentification.lean is absent, and fresh fixture compilation still shows exactGeometricInput depends on the nonstandard axiom kleinDeckActionPackage. The fixture already freezes the complete KleinDeckActionPackage interface, including action laws, continuity, freeness, proper discontinuity, orbit relation, quotient homeomorphism, generator formulas, and basepoint equation; acceptance prose names do not need separately approved signatures. Implement any needed affine-normal-form and orbit-quotient helpers in scope, then construct this frozen package with standard axioms only. A row-size or prerequisite-splitting STOP does not satisfy the row.",
    :evidence
    {:residual
-    "Elect two bounded prerequisites with the stated Lean interfaces: presentedKleinGroup_unique_affine, then kleinOrbitQuotient_homeomorph; after both are banked, assemble KleinDeckActionPackage and verify its generator and basepoint equations.",
+    "Formalize kleinOrbitQuotient_homeomorph by proving the square fundamental-domain orbit classification and its exact equivalence with the Surface false 2 boundary EqvGen relation; then fill the already-frozen package fields.",
     :outcome :stop,
     :warnings
-    [{:kind :row-size-boundary,
+    [{:kind :mathematical-boundary,
       :message
-      "The requested package combines a new presented-group normal-form development with a new fundamental-domain quotient-homeomorphism development; each needs its own compiled and reviewed prerequisite."}],
+      "The frozen type appears true, but its central plane-orbit quotient homeomorphism has no existing formal prerequisite and remains wholly unproved."}],
     :disposition :stop,
     :axioms
     ["propext"
@@ -88640,32 +88640,27 @@
      "T93J03KleinDeckActionPolygonIdentificationProbe.kleinDeckActionPackage"],
     :author "topo-2",
     :reason
-    "The owner reopen resolves the earlier signature objection: supporting declarations may be designed locally. The remaining boundary is mathematical and exceeds one implementation row. The frozen package requires two independent foundational results that do not exist in Mathlib or ConstructionTargets. First, freeness and proper discontinuity need a constructive normal-form theorem for the quotient PresentedGroup, not merely generator formulas. A sufficient Lean interface is: def kleinAffine (m n : ℤ) : (ℝ × ℝ) → (ℝ × ℝ); def kleinPlaneAction : T93J03.PresentedKleinGroup → (ℝ × ℝ) → (ℝ × ℝ); theorem presentedKleinGroup_unique_affine : ∀ g, ∃! q : ℤ × ℤ, kleinPlaneAction g = kleinAffine q.1 q.2. Proving it requires a terminating/confluent reduction or an inverse homomorphism for the presented quotient. Second, the quotient field requires the full fundamental-domain theorem: theorem kleinOrbitQuotient_homeomorph : Quotient {r := fun x y => ∃ g : T93J03.PresentedKleinGroup, kleinPlaneAction g x = y, iseqv := ...} ≃ₜ ConstructionTargets.StatementSurfaceModels.KleinBottle. Proving this requires the complete two-way orbit versus aabb boundary EqvGen classification, including corners, plus quotient continuity in both directions. These are precisely the two large prerequisites identified by review; neither is a small helper or already banked. The frozen axiom type is mathematically plausible, but cannot be discharged in one bounded row without first implementing and reviewing those foundations.",
+    "The owner correction is accepted: helper signatures are mine to design, and no signature objection remains. Direct checking finds no counterexample or missing hypothesis in the frozen package. The exact mathematical boundary is that the required fundamental-domain theorem is absent: after defining kleinPlaneAction from PresentedGroup.toGroup and orbitSetoid by existence of a group element, one still must prove theorem kleinOrbitQuotient_homeomorph : Quotient orbitSetoid ≃ₜ ConstructionTargets.StatementSurfaceModels.KleinBottle, with orbitSetoid x y ↔ ∃ g : T93J03.PresentedKleinGroup, kleinPlaneAction g x = y. This theorem entails a complete classification of every orbit intersection with the closed square, all edge and corner identifications, equivalence with the disk-boundary EqvGen relation used by Surface false 2, and continuity of both quotient maps. No such result or lower-level boundary classification exists in Mathlib or ConstructionTargets. The fixture assumes exactly this missing theorem inside kleinDeckActionPackage. I cannot replace it with a standard-only proof in this invocation, and reporting DONE would falsely certify the nonstandard fixture axiom.",
     :commands
     [{:cmd
       "sha256sum /tmp/t93j03-klein-deck-action-polygon-identification-probe.lean",
       :exit 0,
-      :finding "The fixture hash matches the recorded hash."}
+      :finding "The recorded fixture hash was freshly verified."}
      {:cmd
       "compile Main.lean to /tmp/Main.olean and compile the fixture with /tmp on LEAN_PATH",
       :exit 0,
       :finding
-      "The frozen package type compiles; exactGeometricInput still depends on kleinDeckActionPackage."}
+      "The frozen interface compiles, but exactGeometricInput still depends on kleinDeckActionPackage."}
      {:cmd
-      "rg for a PresentedKleinGroup integer-coordinate normal form or plane-orbit-to-KleinBottle theorem in ConstructionTargets and Mathlib",
+      "rg for a plane-orbit-to-KleinBottle theorem or PresentedKleinGroup integer-coordinate theorem in ConstructionTargets and Mathlib",
       :exit 1,
       :expected-exit 1,
-      :finding "Neither prerequisite exists."}
+      :finding
+      "The required fundamental-domain and orbit-classification theorem is absent."}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
      {:cmd "git status --short", :exit 0, :finding "clean"}],
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1791630998791-1765-d08980c2",
-     :finding
-     "Deterministic defect: design the supporting signatures and discharge the frozen axiom type. No implementation commit was recorded, ConstructionTargets/KleinDeckActionPolygonIdentification.lean is absent, and fresh fixture compilation still shows exactGeometricInput depends on the nonstandard axiom kleinDeckActionPackage. The fixture already freezes the complete KleinDeckActionPackage interface, including action laws, continuity, freeness, proper discontinuity, orbit relation, quotient homeomorphism, generator formulas, and basepoint equation; acceptance prose names do not need separately approved signatures. Implement any needed affine-normal-form and orbit-quotient helpers in scope, then construct this frozen package with standard axioms only. A row-size or prerequisite-splitting STOP does not satisfy the row."},
     :fixture
     {:path
      "/tmp/t93j03-klein-deck-action-polygon-identification-probe.lean",
@@ -88676,7 +88671,7 @@
      :proof-placeholder-count 1},
     :seat "topo-2"},
    :phase :implementation,
-   :state :repair,
+   :state :needs-owner,
    :scope
    ["ConstructionTargets/KleinDeckActionPolygonIdentification.lean"],
    :dag-node
