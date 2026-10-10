@@ -94723,11 +94723,120 @@
    "Review the finite geometric classification before comparing the orbit relation with the frozen aabb boundary EqvGen.",
    :other-consumers []}
   {:bounded-exception
+   "This single-consumer normalization is the exact first representation step: it removes the hidden finite index j from the frozen disk relation and exposes the two paired circular-arc generators that a disk-square coordinate map must match.",
+   :consumer :t93J03,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/KleinSurfaceRelNormalForm.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/square-boundary-orbit-eqvgen/frozen-surface-rel-normal-form",
+   :acceptance
+   {:implementation
+    "Prove surfaceRel_false_two_iff for all x y in ConstructionTargets.Surfaces.Disk by unfolding the literal frozen SurfaceRel false 2, eliminating j<2 into j=0 or j=1, and exposing exactly the edgePoint 4 0/1 and edgePoint 4 2/3 branches with their shared Set.Icc parameter. Do not define a square model, construct a disk-square homeomorphism, take EqvGen closure, or compare orbit relations.",
+    :placeholder "the single sorry in apm_t93j03",
+    :route-step
+    "t93J03 step 1c.1, normalize the frozen aabb disk generator relation before transporting it to square coordinates",
+    :fixture "/tmp/klein-surface-rel-normal-form.lean",
+    :fixture-sha256
+    "79162cc731e27288903559c81dfd62c4ee48baf556adb3a4ee41eb9199a090df",
+    :gates
+    ["lake build ConstructionTargets.KleinSurfaceRelNormalForm"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-10-klein-surface-rel-normal-form-29,
+   :kind :reusable-theorem,
+   :depends-on [],
+   :current-residual
+   "Construct an explicit homeomorphism between the closed unit square and the frozen complex closed disk whose four side formulas land on edgePoint 4 0,1,2,3 with paired sides sharing the same arc parameter; then transport EqvGen and compare it with Cases.",
+   :other-consumers []}
+  {:bounded-exception
    "This single-consumer representation comparison is the next banked-dependent step of the one-placeholder t93J03 route and is required before the orbit quotient can be identified with the frozen KleinBottle model.",
    :consumer :t93J03,
    :implements-lemma :lemma-kleinsquareboundaryorbiteqvgen,
+   :evidence
+   {:probe
+    {:residual
+     "The frozen target relation is now compiled as two explicit paired circular-arc branches. After banking it, the original comparison still needs the non-definitional disk-square coordinate homeomorphism with four oriented edge formulas, followed by EqvGen induction against the banked Cases disjunction.",
+     :outcome :revise,
+     :warnings
+     [{:kind :representation-boundary,
+       :message
+       "The source relation lives on the closed unit square, while the frozen target relation lives on the complex closed disk. No disk-to-square coordinate homeomorphism with the required four edge parameter equations is banked; the comparison cannot identify these carrier types definitionally."}],
+     :missing-theorems
+     [{:name "kleinSquareBoundaryOrbitEqvGen",
+       :type
+       "For closed-square points p q, the affine-action Cases relation holds iff the images of p and q under an edge-compatible square-to-disk homeomorphism are related by Relation.EqvGen (SurfaceRel false 2).",
+       :status :partial,
+       :consumers [:t93J03],
+       :depends-on
+       ["KleinSurfaceRelNormalForm.surfaceRel_false_two_iff"
+        "KleinDiskSquareCoordinates.edge_formulas"]}],
+     :prerequisite
+     {:bounded-exception
+      "This single-consumer normalization is the exact first representation step: it removes the hidden finite index j from the frozen disk relation and exposes the two paired circular-arc generators that a disk-square coordinate map must match.",
+      :consumer :t93J03,
+      :phase :implementation,
+      :state :open,
+      :scope ["ConstructionTargets/KleinSurfaceRelNormalForm.lean"],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/square-boundary-orbit-eqvgen/frozen-surface-rel-normal-form",
+      :acceptance
+      {:implementation
+       "Prove surfaceRel_false_two_iff for all x y in ConstructionTargets.Surfaces.Disk by unfolding the literal frozen SurfaceRel false 2, eliminating j<2 into j=0 or j=1, and exposing exactly the edgePoint 4 0/1 and edgePoint 4 2/3 branches with their shared Set.Icc parameter. Do not define a square model, construct a disk-square homeomorphism, take EqvGen closure, or compare orbit relations.",
+       :placeholder "the single sorry in apm_t93j03",
+       :route-step
+       "t93J03 step 1c.1, normalize the frozen aabb disk generator relation before transporting it to square coordinates",
+       :fixture "/tmp/klein-surface-rel-normal-form.lean",
+       :fixture-sha256
+       "79162cc731e27288903559c81dfd62c4ee48baf556adb3a4ee41eb9199a090df",
+       :gates
+       ["lake build ConstructionTargets.KleinSurfaceRelNormalForm"
+        "fixture compiles"
+        "zero source and fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :id :routes-2026-10-10-klein-surface-rel-normal-form-29,
+      :kind :reusable-theorem,
+      :depends-on [],
+      :current-residual
+      "Construct an explicit homeomorphism between the closed unit square and the frozen complex closed disk whose four side formulas land on edgePoint 4 0,1,2,3 with paired sides sharing the same arc parameter; then transport EqvGen and compare it with Cases.",
+      :other-consumers []},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd
+       "lake build ConstructionTargets.KleinPlaneActionSquareOrbitClassification",
+       :exit 0,
+       :finding
+       "the banked source affine-action square classification compiles canonically"}
+      {:cmd "lake env lean /tmp/klein-surface-rel-normal-form.lean",
+       :exit 0,
+       :finding
+       "the exact two-branch normalization of the frozen SurfaceRel false 2 compiles with standard axioms"}
+      {:cmd "sha256sum /tmp/klein-surface-rel-normal-form.lean",
+       :exit 0,
+       :finding
+       "79162cc731e27288903559c81dfd62c4ee48baf556adb3a4ee41eb9199a090df"}
+      {:cmd
+       "rg -n \"\\b(sorry|admit)\\b\" /tmp/klein-surface-rel-normal-form.lean",
+       :exit 1,
+       :expected-exit 1,
+       :finding "no placeholders"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :finding "131 registered statements match, 0 do not"}
+      {:cmd "git status --short", :exit 0, :finding "clean"}],
+     :diagnostic-history [],
+     :fixture
+     {:path "/tmp/klein-surface-rel-normal-form.lean",
+      :sha256
+      "79162cc731e27288903559c81dfd62c4ee48baf556adb3a4ee41eb9199a090df",
+      :interface
+      "surfaceRel_false_two_iff rewrites the literal frozen SurfaceRel false 2 into exactly two generator branches: circular edge 0 is related to edge 1 at the same parameter, and edge 2 is related to edge 3 at the same parameter."},
+     :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/square-boundary-orbit-eqvgen",
@@ -94754,7 +94863,8 @@
    :kind :representation-comparison,
    :depends-on
    [:lemma-kleinplaneaction-squareorbitclassification
-    :routes-2026-10-10-checkpoint-topo1-after-klein-square-orbits-23],
+    :routes-2026-10-10-checkpoint-topo1-after-klein-square-orbits-23
+    :routes-2026-10-10-klein-surface-rel-normal-form-29],
    :current-residual
    "Unfold the frozen disk-boundary relation into square-side coordinates, prove its EqvGen closure yields exactly the translation, reflected-edge, and corner disjunction in Cases, and prove the converse generators realize every listed case.",
    :other-consumers []}
@@ -95324,12 +95434,16 @@
    :lemma
    {:name "kleinSquareBoundaryOrbitEqvGen",
     :reported-by
-    [:routes-2026-10-10-checkpoint-topo1-after-schreier-type-valued-basis-16],
+    [:routes-2026-10-10-checkpoint-topo1-after-schreier-type-valued-basis-16
+     :routes-2026-10-10-klein-square-boundary-orbit-eqvgen-28],
     :type
     "On the closed square, identify the plane-action orbit relation exactly with the aabb disk-boundary EqvGen relation defining ConstructionTargets.StatementSurfaceModels.KleinBottle."},
    :id :lemma-kleinsquareboundaryorbiteqvgen,
    :kind :lemma,
-   :depends-on [:lemma-kleinplaneaction-squareorbitclassification],
+   :depends-on
+   [:lemma-kleinplaneaction-squareorbitclassification
+    :lemma-kleinsurfacerelnormalform-surfacerel-false-two-iff
+    :lemma-kleindisksquarecoordinates-edge-formulas],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -95606,6 +95720,30 @@
    :kind :lemma,
    :depends-on
    [:lemma-kleinsquarerepresentative-exists-closedsquare-smul],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "KleinSurfaceRelNormalForm.surfaceRel_false_two_iff"},
+   :lemma
+   {:name "KleinSurfaceRelNormalForm.surfaceRel_false_two_iff",
+    :reported-by []},
+   :id :lemma-kleinsurfacerelnormalform-surfacerel-false-two-iff,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "KleinDiskSquareCoordinates.edge_formulas"},
+   :lemma
+   {:name "KleinDiskSquareCoordinates.edge_formulas", :reported-by []},
+   :id :lemma-kleindisksquarecoordinates-edge-formulas,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
