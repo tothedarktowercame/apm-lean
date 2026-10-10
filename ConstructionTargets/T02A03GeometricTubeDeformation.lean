@@ -403,6 +403,45 @@ noncomputable def rightTubeCoreAngularCoordinate :
       (norm_ne_zero_iff.mpr
         (rightTubeCorePlanarComplex_ne_zero p.1 p.2.1))).smul hc.continuousAt
 
+noncomputable def rightTubeCoreNormalInterpolation
+    (m : C(RightTubeMinusLeftCore, Circle)) :
+    C(unitInterval × RightTubeMinusLeftCore, ℂ) where
+  toFun tp :=
+    ((1 - (tp.1 : ℝ) : ℝ) : ℂ) * rightTubeCoreNormalComplex
+      (apm_t02a03_circleMeridian (m tp.2)) +
+    ((tp.1 : ℝ) : ℂ) * rightTubeCoreNormalComplex tp.2.1
+  continuous_toFun := by
+    have hn := rightTubeCoreTubularCoordinates_continuous.1
+    have hc : Continuous apm_t02a03_circleMeridian := by
+      unfold apm_t02a03_circleMeridian
+      apply (PiLp.continuous_toLp 2 _).comp
+      apply continuous_pi
+      intro i
+      fin_cases i <;> simp <;> fun_prop
+    fun_prop
+
+theorem rightTubeCoreNormalInterpolation_zero
+    (m : C(RightTubeMinusLeftCore, Circle)) (p : RightTubeMinusLeftCore) :
+    rightTubeCoreNormalInterpolation m (0, p) = rightTubeCoreNormalComplex
+      (apm_t02a03_circleMeridian (m p)) := by
+  simp [rightTubeCoreNormalInterpolation]
+
+theorem rightTubeCoreNormalInterpolation_one
+    (m : C(RightTubeMinusLeftCore, Circle)) (p : RightTubeMinusLeftCore) :
+    rightTubeCoreNormalInterpolation m (1, p) = rightTubeCoreNormalComplex p.1 := by
+  simp [rightTubeCoreNormalInterpolation]
+
+theorem rightTubeCoreNormalInterpolation_exists :
+    ∀ m : C(RightTubeMinusLeftCore, Circle),
+      ∃ N : C(unitInterval × RightTubeMinusLeftCore, ℂ),
+        (∀ p, N (0, p) = rightTubeCoreNormalComplex
+          (apm_t02a03_circleMeridian (m p))) ∧
+        (∀ p, N (1, p) = rightTubeCoreNormalComplex p.1) := by
+  intro m
+  exact ⟨rightTubeCoreNormalInterpolation m,
+    rightTubeCoreNormalInterpolation_zero m,
+    rightTubeCoreNormalInterpolation_one m⟩
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -416,3 +455,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCorePolarReconstruction_self
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreTubularCoordinates_continuous
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreAngularCoordinate
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreNormalInterpolation_exists
