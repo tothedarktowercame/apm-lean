@@ -64713,6 +64713,8 @@
   {:bounded-exception
    "single-consumer assembly from the now-banked frozen torus pi1 matrix theorem",
    :consumer :t97A04,
+   :review-finding
+   "Recorded commit b6d6a3c16f61d5d185868388cc98dceb69a51f1a is documentation-only: it adds two docstring lines and changes one consumer docstring, while apm_t97A04_bridge_2 was already proved in parent commit 93d8e45b15a23a777ce843a088d6d0f6e2820580 under a different Agency job. Fresh compilation, fixture SHA-256 f28e9ef0eb63d7cfdfe260a71685fa3584e72b8eeb05640354aa14a414d43143, registry 131/0, and worklist 515 OK all pass, but the recorded commit has placeholder delta 3 to 3, not the claimed 4 to 3. Repair by recording the proof-bearing commit with its true one-file scope and recomputed evidence, or record a squash that actually contains the proof removal plus documentation; then rerun review.",
    :evidence
    {:placeholder-delta
     {:before 4, :after 3, :delta -1, :closed "apm_t97A04_bridge_2"},
@@ -64775,6 +64777,12 @@
       :exit 1,
       :finding
       "A declaration docstring was initially placed before the scoped set_option command; moving it after set_option put it directly on the theorem, and the successful rerun is recorded in commands."}],
+    :review
+    {:outcome :fail,
+     :seat "codex-7",
+     :job "invoke-1791658820042-2739-1584f025",
+     :finding
+     "Recorded commit b6d6a3c16f61d5d185868388cc98dceb69a51f1a is documentation-only: it adds two docstring lines and changes one consumer docstring, while apm_t97A04_bridge_2 was already proved in parent commit 93d8e45b15a23a777ce843a088d6d0f6e2820580 under a different Agency job. Fresh compilation, fixture SHA-256 f28e9ef0eb63d7cfdfe260a71685fa3584e72b8eeb05640354aa14a414d43143, registry 131/0, and worklist 515 OK all pass, but the recorded commit has placeholder delta 3 to 3, not the claimed 4 to 3. Repair by recording the proof-bearing commit with its true one-file scope and recomputed evidence, or record a squash that actually contains the proof removal plus documentation; then rerun review."},
     :commit "b6d6a3c16f61d5d185868388cc98dceb69a51f1a",
     :changed-paths
     ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"
@@ -64794,7 +64802,7 @@
       "apm_t97A04_bridge_2"]},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"
     "problems/t97A04/lean/Main.lean"],
@@ -64812,6 +64820,7 @@
      "registered statements remain unchanged"]},
    :id :routes-2026-10-10-t97a04-h1-bridge-assembly-topo2-r1,
    :kind :reusable-theorem,
+   :fail-count 1,
    :declarations
    ["ConstructionTargets.T97A04FrozenH1Coordinate.frozenLbarModuleH1_map_commutes"
     "apm_t97A04_bridge_2"],
