@@ -57452,8 +57452,110 @@
      :typed-residual-change
      :infrastructure-packets
      :review-outcomes]},
+   :evidence
+   {:outcome :replan,
+    :seat "topo-8",
+    :commands
+    [{:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0,
+      :output
+      "399 items OK; 360 done, 30 superseded, 3 needs-owner, 5 blocked, 1 open; 156 reviewed PASS rows have accepted missing historical fixtures"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "comment-stripped placeholder recount for all fifteen topo2 consumers",
+      :exit 0,
+      :output
+      "t00J01=1 t00J07=3 t00J08=3 t01A02=3 t01A04=4 t02A02=1 t02A03=1 t91J03=1 t93A06=1 t94A08=1 t95A04=1 t96A07=1 t96J02=1 t97A04=4 t98A03=1"}],
+    :finding
+    "Measures: placeholder delta is zero across the three completed rows. t94A08 remains at one placeholder after an independently reviewed PASS on the STOP: the elected positive affine insertion is refuted because it identifies (I,0) and (-I,0); the frozen theorem itself is not refuted, and the unattempted nodal route remains. The torus-coordinate campaign produced one shared infrastructure packet, independently reviewed PASS, with exact all-class frozen matrix coordinates; it changes the typed residual for t97A04 bridge_2 from missing pi1 naturality to a finite Hurewicz/ModuleCat assembly, and supplies only the coordinate/lift component of t01A02 step 4. The duplicate-edge migration produced one global coherence packet: 160 historical rows were migrated across both ledgers and the validator now rejects repeated dependency edges; its implementation evidence is complete, with no theorem placeholders affected. Review outcomes are t94A08 STOP/PASS, torus packet PASS, and migration implementation complete with both canonical validators passing. Stop-after-two: t94A08 is held at its reviewed representation STOP; no newly elected consumer has accumulated two consecutive rows that fail to complete a listed route step. Current topo2 routes: t00J01[1] needs fold root-count plus Klein charts/H2/H3; t00J07[3] needs RP2 pi1/homology and attachment assembly; t00J08[3] needs explicit graph-cover realisation and Nielsen-Schreier rank; t01A02[3] needs punctured-torus H2 plus integer lift, determinant, and planar bounded-perturbation surjectivity; t01A04[4] needs quotient coverings, wedge pi1 inclusion naturality/ranges, and cut-point distinction; t02A02[1] needs polygon T2/classes and explicit cut-paste; t02A03[1] needs the punctured-disk product equivalence and geometric tube-minus-circle equivalence before its banked encoding closes; t91J03[1] needs circle degree and planar crossing; t93A06[1] needs torus smooth atlas, form descent, integral/nonexactness, and plane calculus; t94A08[1] is held at the refuted affine insertion and retains the nodal alternative; t95A04[1] and t96A07[1] share rpSmoothAtlas, then their respective Veronese immersion and transversality calculations; t96J02[1] needs polygon-surface pi1 then Klein subgroup classification; t97A04[4] now needs bridge_2 Hurewicz assembly while bridges 1 and 3 and hcore remain; t98A03[1] needs RP2 cover/pi1, wedge instance, manifold obstruction, and two explicit three-sheeted covers. Deferred as not yet needed ahead of these routes: general polygon classification, general surface classification, and broader manifold inverse-function infrastructure.",
+    :replacement-items
+    [{:consumer :t02A03,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md/t02A03/closure",
+      :acceptance
+      {:probe
+       "Compile one placeholder-free consumer-facing fixture replacing the sole sorry in problems/t02A03/lean/Main.lean. Construct the closed-punctured-disk times Circle homotopy equivalence with the torus, construct the concrete geometricY to Y homotopy equivalence for the radius-1/4 figure-eight tube minus its left circle, and assemble the existing apm_t02a03_previous_encoding unchanged.",
+       :placeholder "the sole sorry in apm_t02a03",
+       :route-step "t02A03 steps 1-3, complete closure"},
+      :id :routes-2026-10-10-t02a03-closure-topo2-r1,
+      :kind :final-adapter,
+      :depends-on [:routes-2026-10-10-checkpoint-topo2-r5],
+      :current-residual
+      "One placeholder: two explicit homotopy equivalences, with the punctured-disk factor adapter-sized and the geometric tube deformation still missing.",
+      :other-consumers []}
+     {:consumer :t95A04,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md/shared/rp-smooth-atlas",
+      :acceptance
+      {:probe
+       "Compile a placeholder-free rpSmoothAtlas 2 packet for the frozen projective quotient used by t95A04 and t96A07. Build hemisphere charts compatible with the coinduced topology, prove smooth transition maps, and prove sphereProjection is a local diffeomorphism. Supply t95A04 route step 1 and t96A07 route step 1 only; do not claim either consumer's descended-map conclusions.",
+       :placeholder
+       "the sole sorry in apm_t95a04 and the sole sorry in apm_t96a07",
+       :route-step
+       "t95A04 step 1 and t96A07 step 1, shared RP2 smooth atlas"},
+      :id :routes-2026-10-10-rp2-smooth-atlas-two-consumers-topo2-r1,
+      :kind :reusable-theorem,
+      :depends-on [:routes-2026-10-10-checkpoint-topo2-r5],
+      :current-residual
+      "No inhabitant of RealProjectiveSmoothTarget.SmoothAtlas 2 is banked; hemisphere quotient charts and local-diffeomorphism proofs are required.",
+      :other-consumers [:t96A07]}
+     {:bounded-exception
+      "single-consumer assembly from the now-banked frozen torus pi1 matrix theorem",
+      :consumer :t97A04,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md/t97A04/h1-bridge-assembly",
+      :acceptance
+      {:probe
+       "Compile a placeholder-free fixture for apm_t97A04_bridge_2 using frozenLbarPi1Map_naturality, finiteFreeHurewiczCoordinateMulEquiv, h1_coordinate_eq_of_fundamentalGroup_coordinate_eq, and the existing singular-homology comparison into ModuleCat. Preserve the frozen theorem and matrix [[2,1],[-1,1]] exactly; supply t97A04 route steps 5-6 only.",
+       :placeholder "apm_t97A04_bridge_2",
+       :route-step
+       "t97A04 steps 5-6, Hurewicz and ModuleCat assembly from frozen pi1 coordinates"},
+      :id :routes-2026-10-10-t97a04-h1-bridge-assembly-topo2-r1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:routes-2026-10-10-checkpoint-topo2-r5
+       :routes-2026-10-10-torus-pi1-winding-coordinates-two-consumers-topo2-r3],
+      :current-residual
+      "The pi1 matrix equation is banked; align the frozen H1 equivalence and transfer the induced map equality through the Hurewicz and ModuleCat comparisons.",
+      :other-consumers []}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 3,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:strategy
+       "Review the t02A03 closure probe, shared RP2 smooth atlas, and t97A04 H1 bridge assembly; recount all topo2 placeholders, enforce stop-after-two, and refill with exactly one minimum-placeholder closure adapter first."},
+      :id :routes-2026-10-10-checkpoint-topo2-r6,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:routes-2026-10-10-t02a03-closure-topo2-r1
+       :routes-2026-10-10-rp2-smooth-atlas-two-consumers-topo2-r1
+       :routes-2026-10-10-t97a04-h1-bridge-assembly-topo2-r1],
+      :current-residual
+      "Measure one minimum-placeholder closure attempt, one two-consumer foundation, and one newly supported t97A04 adapter.",
+      :other-consumers []}],
+    :author "topo-8",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -57468,6 +57570,87 @@
     :routes-2026-10-10-checkpoint-topo2-r2],
    :current-residual
    "Measure one closure, one shared theorem, and the global ledger-coherence migration.",
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md/t02A03/closure",
+   :acceptance
+   {:probe
+    "Compile one placeholder-free consumer-facing fixture replacing the sole sorry in problems/t02A03/lean/Main.lean. Construct the closed-punctured-disk times Circle homotopy equivalence with the torus, construct the concrete geometricY to Y homotopy equivalence for the radius-1/4 figure-eight tube minus its left circle, and assemble the existing apm_t02a03_previous_encoding unchanged.",
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step "t02A03 steps 1-3, complete closure"},
+   :id :routes-2026-10-10-t02a03-closure-topo2-r1,
+   :kind :final-adapter,
+   :depends-on [:routes-2026-10-10-checkpoint-topo2-r5],
+   :current-residual
+   "One placeholder: two explicit homotopy equivalences, with the punctured-disk factor adapter-sized and the geometric tube deformation still missing.",
+   :other-consumers []}
+  {:consumer :t95A04,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md/shared/rp-smooth-atlas",
+   :acceptance
+   {:probe
+    "Compile a placeholder-free rpSmoothAtlas 2 packet for the frozen projective quotient used by t95A04 and t96A07. Build hemisphere charts compatible with the coinduced topology, prove smooth transition maps, and prove sphereProjection is a local diffeomorphism. Supply t95A04 route step 1 and t96A07 route step 1 only; do not claim either consumer's descended-map conclusions.",
+    :placeholder
+    "the sole sorry in apm_t95a04 and the sole sorry in apm_t96a07",
+    :route-step
+    "t95A04 step 1 and t96A07 step 1, shared RP2 smooth atlas"},
+   :id :routes-2026-10-10-rp2-smooth-atlas-two-consumers-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on [:routes-2026-10-10-checkpoint-topo2-r5],
+   :current-residual
+   "No inhabitant of RealProjectiveSmoothTarget.SmoothAtlas 2 is banked; hemisphere quotient charts and local-diffeomorphism proofs are required.",
+   :other-consumers [:t96A07]}
+  {:bounded-exception
+   "single-consumer assembly from the now-banked frozen torus pi1 matrix theorem",
+   :consumer :t97A04,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md/t97A04/h1-bridge-assembly",
+   :acceptance
+   {:probe
+    "Compile a placeholder-free fixture for apm_t97A04_bridge_2 using frozenLbarPi1Map_naturality, finiteFreeHurewiczCoordinateMulEquiv, h1_coordinate_eq_of_fundamentalGroup_coordinate_eq, and the existing singular-homology comparison into ModuleCat. Preserve the frozen theorem and matrix [[2,1],[-1,1]] exactly; supply t97A04 route steps 5-6 only.",
+    :placeholder "apm_t97A04_bridge_2",
+    :route-step
+    "t97A04 steps 5-6, Hurewicz and ModuleCat assembly from frozen pi1 coordinates"},
+   :id :routes-2026-10-10-t97a04-h1-bridge-assembly-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo2-r5
+    :routes-2026-10-10-torus-pi1-winding-coordinates-two-consumers-topo2-r3],
+   :current-residual
+   "The pi1 matrix equation is banked; align the frozen H1 equivalence and transfer the induced map equality through the Hurewicz and ModuleCat comparisons.",
+   :other-consumers []}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 3,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:strategy
+    "Review the t02A03 closure probe, shared RP2 smooth atlas, and t97A04 H1 bridge assembly; recount all topo2 placeholders, enforce stop-after-two, and refill with exactly one minimum-placeholder closure adapter first."},
+   :id :routes-2026-10-10-checkpoint-topo2-r6,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:routes-2026-10-10-t02a03-closure-topo2-r1
+    :routes-2026-10-10-rp2-smooth-atlas-two-consumers-topo2-r1
+    :routes-2026-10-10-t97a04-h1-bridge-assembly-topo2-r1
+    :routes-2026-10-10-checkpoint-topo2-r5],
+   :current-residual
+   "Measure one minimum-placeholder closure attempt, one two-consumer foundation, and one newly supported t97A04 adapter.",
    :other-consumers []}
   {:consumer :t94A08,
    :phase :probe,
