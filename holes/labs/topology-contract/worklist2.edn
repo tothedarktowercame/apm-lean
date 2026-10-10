@@ -62711,6 +62711,21 @@
       :output
       "3f6dc40230648ca2b2abde43de20b5effdaa2f79\nConstructionTargets/T02A03LeftTubePuncturedModel.lean"}
      {:cmd "git show --check --oneline 3f6dc402", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791650485289-2420-18c1a28b",
+     :commands
+     ["git show/diff-tree/show --check 3f6dc40230648ca2b2abde43de20b5effdaa2f79"
+      "sha256sum /tmp/t02a03_geometric_tube_cover.lean"
+      "lake env lean /tmp/t02a03_geometric_tube_cover.lean"
+      "lake env lean ConstructionTargets/T02A03LeftTubePuncturedModel.lean"
+      "lake build ConstructionTargets.T02A03LeftTubePuncturedModel"
+      "python3 scripts/statement-registry.py check --rev 3f6dc40230648ca2b2abde43de20b5effdaa2f79"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "recompute frozen-type hash and comment-stripped placeholder counts"],
+     :finding
+     "PASS: author topo-6 is independent and immutable commit 3f6dc40230648ca2b2abde43de20b5effdaa2f79 changes exactly ConstructionTargets/T02A03LeftTubePuncturedModel.lean. Fixture SHA-256 4d72259f7d2eaa51b0e9cb58753116ee0d276c11c55579fe44bf5266bbf0f59e matches. The theorem has the frozen orientation from the interpolated point's normal coordinate to the affine radius (1-t)/8 + t*norm(source normal) acting on the original normalized normal direction. Separate real and imaginary endpoint identities, the banked planar norm, and explicit Circle-to-Complex coercions correctly preserve the representation boundary. It stops before coefficient positivity/nonvanishing exclusion, bundled homotopy, equivalence, and gluing. Fixture, target, focused 8241-job build, registry 131/0, and 475-item ledger gate pass. Recomputed frozen-type SHA-256 is 361d03300293d4ac033b68aca737dcdf51b67cef72f6348c65caa4c1ad64adab; axioms are only propext/Classical.choice/Quot.sound; target placeholders remain 0 and the unchanged consumer has 1 with hash b123eca388ab2858ca55daf538c1ddd645022b52f5196a15f0bb516d78323d7d."},
     :commit "3f6dc40230648ca2b2abde43de20b5effdaa2f79",
     :changed-paths
     ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
@@ -62728,7 +62743,7 @@
      "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubeNormalComplex ⟨apm_t02a03_leftTubeRadialPoint tp, apm_t02a03_leftTubeRadialPoint_mem_leftTube tp⟩ = ((1 - (tp.1 : Real)) * (1 / 8 : Real) + (tp.1 : Real) * norm (apm_t02a03_leftTubeNormalComplex ⟨tp.2.1, tp.2.2.1⟩)) • ((apm_t02a03_leftTubeNormalAngular tp.2 : Circle) : Complex)"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/left-tube-radial-normal-coordinate",
@@ -62827,7 +62842,7 @@
    :phase :probe,
    :type
    "Nonempty (ContinuousMap.HomotopyEquiv LeftTubeMinusCore ConstructionTargets.TorusCircleWedgeOpenCover.Torus)",
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-punctured-model",
    :acceptance
