@@ -56712,73 +56712,101 @@
    :current-residual
    "Descend the representative equality through arbitrary frozen fundamental-group classes and align the canonical Circle-image quotient map with frozenTorusPi1Coord.",
    :other-consumers []}
+  {:bounded-exception
+   "single-consumer dependent coordinate factorization for the frozen torus",
+   :consumer :t97A04,
+   :phase :probe,
+   :state :open,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t97A04/torus-pi1-winding-coordinates/frozen-coordinate-factorization",
+   :acceptance
+   {:probe
+    "Compile and bank frozenTorusPi1Coord_factor from /tmp/torus_frozen_coordinate_factorization. Prove the exact equality expressing frozenTorusPi1Coord as the canonical homeomorphism-induced fundamental-group equivalence followed by torusPi1Coord transported along frozenTorusHomeomorphCircleProd_base, retaining the dependent intermediate basepoint rather than defining a second casted equivalence. This supplies the coordinate-factor alignment needed for t97A04 route step 4; do not yet claim frozenLbar naturality.",
+    :declaration "frozenTorusPi1Coord_factor",
+    :placeholder "apm_t97A04_bridge_2",
+    :route-step
+    "t97A04 step 4, exact factorization of frozen coordinates through the canonical Circle fundamental-group image"},
+   :representation
+   {:source
+    "frozenTorusPi1Coord on the fundamental group of AddCircle 1 x AddCircle 1 at (0,0)",
+    :target
+    "The canonical fundamental-group equivalence induced by frozenTorusHomeomorphCircleProd followed by the dependent-basepoint transport of torusPi1Coord",
+    :direction
+    "Exact equality from the source frozen coordinate equivalence evaluation to the target canonical Circle-coordinate composite"},
+   :id
+   :routes-2026-10-10-t97a04-frozen-coordinate-factorization-topo2-r1,
+   :kind :representation-comparison,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo2-r2
+    :routes-2026-10-10-t97a04-frozen-pi1-representative-conjugacy-topo2-r1],
+   :current-residual
+   "Use the factorization on quotient representatives, combine it with frozenLbarPi1Map_mk_circle_coord and circleMatrixPi1Map_naturality, and descend to arbitrary frozen classes.",
+   :other-consumers []}
   {:consumer :t97A04,
    :evidence
    {:probe
     {:outcome :revise,
      :seat "topo-8",
      :fixture
-     {:path "/tmp/torus_frozen_pi1_representative_conjugacy.lean",
+     {:path "/tmp/torus_frozen_coordinate_factorization.lean",
       :sha256
-      "9e2855b19cae5256d4864f8021776e294d2b89425a6c27bf49adaa3723f4e1c2"},
+      "44623442330dd40b84fe51111c2403a3ef6d03fb54b90a12a5726a1f0afd1ba6"},
      :commands
      [{:cmd
-       "lake env lean /tmp/torus_frozen_pi1_representative_conjugacy.lean",
+       "lake env lean /tmp/torus_frozen_coordinate_factorization.lean",
        :exit 0,
        :output
-       "representative quotient conjugacy compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "exact dependent frozen-coordinate factorization compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/torus_frozen_pi1_representative_conjugacy.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/torus_frozen_coordinate_factorization.lean || true)\"",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/torus_frozen_pi1_representative_conjugacy.lean",
+       "sha256sum /tmp/torus_frozen_coordinate_factorization.lean",
        :exit 0,
        :output
-       "9e2855b19cae5256d4864f8021776e294d2b89425a6c27bf49adaa3723f4e1c2  /tmp/torus_frozen_pi1_representative_conjugacy.lean"}
+       "44623442330dd40b84fe51111c2403a3ef6d03fb54b90a12a5726a1f0afd1ba6  /tmp/torus_frozen_coordinate_factorization.lean"}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
      :finding
-     "The fixed-base cast normalization and mapped-path equality now compose at the quotient level. For every explicit frozen-torus loop gamma, the class of the Circle image of frozenLbarBasedPath gamma is exactly circleMatrixPi1Map applied to the class of frozenCircleImagePath gamma. Applying torusPi1Coord gives the matching coordinate equality without equating opaque dependent proof terms.",
+     "The canonical Circle-image quotient map was obscured only because its codomain retains the dependent basepoint frozenTorusHomeomorphCircleProd (0,0). The placeholder-free theorem states frozenTorusPi1Coord exactly as the composition of fundamentalGroupMulEquivOfHomeomorph with the dependent rewrite of torusPi1Coord. It compiles definitionally and avoids introducing a second basepoint cast whose proof term would not reduce against the frozen definition.",
      :residual
-     "Bank the representative quotient conjugacy. Then descend it to arbitrary frozen fundamental-group classes and identify the canonical Circle-image quotient map with the first factor of frozenTorusPi1Coord to obtain the final frozen matrix equation.",
+     "Bank the exact dependent factorization. Then rewrite frozenTorusPi1Coord on representative classes through the canonical homeomorphism map, apply the banked representative conjugacy and Circle all-class naturality, and descend by quotient induction.",
      :prerequisite
      {:bounded-exception
-      "single-consumer representative fundamental-group conjugacy for frozenLbar",
+      "single-consumer dependent coordinate factorization for the frozen torus",
       :consumer :t97A04,
       :phase :probe,
       :state :open,
       :scope [],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t97A04/torus-pi1-winding-coordinates/frozen-pi1-representative-conjugacy",
+      "TOPOLOGY-ROUTES.md/t97A04/torus-pi1-winding-coordinates/frozen-coordinate-factorization",
       :acceptance
       {:probe
-       "Compile and bank frozenCircleImage_frozenLbarBasedPath_mk and frozenLbarPi1Map_mk_circle_coord from /tmp/torus_frozen_pi1_representative_conjugacy. Compose the banked fixed-base cast normalization, exact frozen mapped-path conjugacy, and circleMatrixPi1Map_mk to prove that for every explicit frozen-torus loop the normalized Circle-image quotient class after frozenLbar is exactly the Circle matrix endomorphism applied to the original Circle-image class, and record the resulting torusPi1Coord equality. This supplies the representative quotient conjugacy in t97A04 route step 4; do not yet claim all-class frozen naturality.",
-       :declarations
-       ["frozenCircleImage_frozenLbarBasedPath_mk"
-        "frozenLbarPi1Map_mk_circle_coord"],
+       "Compile and bank frozenTorusPi1Coord_factor from /tmp/torus_frozen_coordinate_factorization. Prove the exact equality expressing frozenTorusPi1Coord as the canonical homeomorphism-induced fundamental-group equivalence followed by torusPi1Coord transported along frozenTorusHomeomorphCircleProd_base, retaining the dependent intermediate basepoint rather than defining a second casted equivalence. This supplies the coordinate-factor alignment needed for t97A04 route step 4; do not yet claim frozenLbar naturality.",
+       :declaration "frozenTorusPi1Coord_factor",
        :placeholder "apm_t97A04_bridge_2",
        :route-step
-       "t97A04 step 4, representative quotient conjugacy between frozenLbar and circleMatrixPi1Map"},
+       "t97A04 step 4, exact factorization of frozen coordinates through the canonical Circle fundamental-group image"},
       :representation
       {:source
-       "The quotient class of the normalized Circle image of frozenLbarBasedPath gamma",
+       "frozenTorusPi1Coord on the fundamental group of AddCircle 1 x AddCircle 1 at (0,0)",
        :target
-       "circleMatrixPi1Map applied to the quotient class of frozenCircleImagePath gamma",
+       "The canonical fundamental-group equivalence induced by frozenTorusHomeomorphCircleProd followed by the dependent-basepoint transport of torusPi1Coord",
        :direction
-       "Exact quotient equality from the source frozen-map representative class to the target Circle-matrix image class, together with equality after torusPi1Coord"},
+       "Exact equality from the source frozen coordinate equivalence evaluation to the target canonical Circle-coordinate composite"},
       :id
-      :routes-2026-10-10-t97a04-frozen-pi1-representative-conjugacy-topo2-r1,
+      :routes-2026-10-10-t97a04-frozen-coordinate-factorization-topo2-r1,
       :kind :representation-comparison,
       :depends-on
       [:routes-2026-10-10-checkpoint-topo2-r2
-       :routes-2026-10-10-t97a04-frozen-lbar-based-path-cast-topo2-r1
-       :routes-2026-10-10-t97a04-circle-matrix-pi1-all-class-naturality-topo2-r1],
+       :routes-2026-10-10-t97a04-frozen-pi1-representative-conjugacy-topo2-r1],
       :current-residual
-      "Descend the representative equality through arbitrary frozen fundamental-group classes and align the canonical Circle-image quotient map with frozenTorusPi1Coord.",
+      "Use the factorization on quotient representatives, combine it with frozenLbarPi1Map_mk_circle_coord and circleMatrixPi1Map_naturality, and descend to arbitrary frozen classes.",
       :other-consumers []}}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/shared/torus-pi1-winding-coordinates",
    :acceptance
@@ -56804,7 +56832,8 @@
     :routes-2026-10-10-t97a04-circle-matrix-pi1-all-class-naturality-topo2-r1
     :routes-2026-10-10-t97a04-frozen-mapped-path-conjugacy-topo2-r1
     :routes-2026-10-10-t97a04-frozen-lbar-based-path-cast-topo2-r1
-    :routes-2026-10-10-t97a04-frozen-pi1-representative-conjugacy-topo2-r1],
+    :routes-2026-10-10-t97a04-frozen-pi1-representative-conjugacy-topo2-r1
+    :routes-2026-10-10-t97a04-frozen-coordinate-factorization-topo2-r1],
    :current-residual
    "Exact Fin-2 endpoint-coordinate naturality is absent.",
    :other-consumers [:t01A02]}
