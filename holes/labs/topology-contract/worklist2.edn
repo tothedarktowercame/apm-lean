@@ -64349,6 +64349,21 @@
       :exit 0,
       :output "5a1fa232 Bank t97A04 Integral H1 coordinate equation"}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791656666972-2673-997bd644",
+     :commands
+     ["git show/diff-tree/show --check 5a1fa232f526d856dadc54fba55d1164988954d4"
+      "sha256sum /tmp/t97a04_frozen_h1_coordinate.lean"
+      "lake env lean /tmp/t97a04_frozen_h1_coordinate.lean"
+      "lake env lean ConstructionTargets/T97A04FrozenH1Coordinate.lean"
+      "lake build ConstructionTargets.T97A04FrozenH1Coordinate"
+      "python3 scripts/statement-registry.py check --rev 5a1fa232f526d856dadc54fba55d1164988954d4"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "recompute recorded statement hash and comment-stripped placeholder counts"],
+     :finding
+     "PASS: reviewer codex-7 independently reviewed topo-6 commit 5a1fa232; exact scope is 18 inserted lines in ConstructionTargets/T97A04FrozenH1Coordinate.lean only. Fixture SHA-256 9fed25f6ffd02a836bdad65635e22bfc4a4e5b5a4aa5686df744070722319f1b matches. Fixture and target compile with standard axioms [propext, Classical.choice, Quot.sound], focused build completes 8291 jobs, registry is 131/0, and worklist is 505 OK. frozenLbarIntegralH1_coordinate instantiates finite-free Hurewicz naturality with frozenLbar, the fixed source and transported target pi1 coordinates, identical aligned H1 coordinates, the frozen matrix coordinate map, and the raw FundamentalGroup.map equation; rewriting both Hurewicz-coordinate automorphisms to identity yields the registered source-to-target IntegralH1 matrix equation with correct Multiplicative.toAdd/ofAdd boundaries. Statement SHA-256 is 19e9da01f3bca2b2f37d23c3d95ded8bf9a623a89b9cd63789b5624c1dd19101; target and fixture placeholders are 0, consumer placeholders remain 4, and the frozen matrix consumer remains unchanged."},
     :commit "5a1fa232f526d856dadc54fba55d1164988954d4",
     :changed-paths
     ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"],
@@ -64364,7 +64379,7 @@
      ["ConstructionTargets.T97A04FrozenH1Coordinate.frozenLbarIntegralH1_coordinate"]},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t97A04/frozen-integral-h1-coordinate",
    :acceptance
@@ -64460,7 +64475,7 @@
      "The full apm_t97A04_bridge_2 proof remains absent. The compiled theorem instantiates h1_coordinate_eq_of_fundamentalGroup_coordinate_eq with frozenLbar, the source and transported-target pi1 coordinates, the aligned H1 coordinate, the frozen matrix coordinate map, and the raw-map pi1 equation. Rewriting both finite-free Hurewicz coordinates to the identity yields the exact matrix equation on IntegralH1 FrozenTorus.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t97A04/h1-bridge-assembly",
    :acceptance
@@ -65598,7 +65613,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -65614,7 +65629,10 @@
     :type
     "forall q : Multiplicative (Fin 2 → ℤ), frozenTorusAlignedH1MulEquivFinTwo (Multiplicative.ofAdd ((HomologicalComplex.homologyMap (ConstructionTargets.SingularSubdivision.singularPostcomposition frozenLbar) 1) (Multiplicative.toAdd (frozenTorusAlignedH1MulEquivFinTwo.symm q)))) = frozenMatrixCoordinateMap q",
     :proved-in
-    :routes-2026-10-10-t97a04-frozen-integral-h1-coordinate-topo2-r1},
+    :routes-2026-10-10-t97a04-frozen-integral-h1-coordinate-topo2-r1,
+    :banked-by
+    :routes-2026-10-10-t97a04-frozen-integral-h1-coordinate-topo2-r1,
+    :banked-commit "5a1fa232f526d856dadc54fba55d1164988954d4"},
    :id
    :lemma-constructiontargets-t97a04frozenh1coordinate-frozenlbarintegralh1-coordinate,
    :kind :lemma,
