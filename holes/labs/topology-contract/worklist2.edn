@@ -58008,6 +58008,37 @@
    :current-residual
    "Construct the meridional replacement of the uniquely deleted right-core point and compatible deformations of the two tube pieces.",
    :other-consumers []}
+  {:bounded-exception
+   "single-consumer right-core deleted-locus comparison for the t02A03 tube complement",
+   :consumer :t02A03,
+   :phase :probe,
+   :state :open,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t02A03/geometric-right-core-deleted-locus",
+   :acceptance
+   {:probe
+    "Compile and bank apm_t02a03_rightCore_diff_leftCore from /tmp/t02a03_geometric_tube_cover.lean. Prove that deleting the frozen left-core range from the frozen right-core range is exactly deleting the singleton Euclidean origin, using apm_t02a03_core_ranges_intersection. This supplies the surviving right-core attachment locus required by t02A03 route step 2; do not yet claim a deformation retract or gluing equivalence.",
+    :declaration "apm_t02a03_rightCore_diff_leftCore",
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "t02A03 step 2, identify the right-core locus remaining after deletion of the left core"},
+   :representation
+   {:source
+    "The frozen right-core range with the entire frozen left-core range deleted",
+    :target
+    "The frozen right-core range with only the Euclidean origin deleted",
+    :direction
+    "Exact set equality from the source core-complement representation to the target singleton-deleted right-core representation"},
+   :id
+   :routes-2026-10-10-t02a03-geometric-right-core-deleted-locus-topo2-r1,
+   :kind :representation-comparison,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo2-r5
+    :routes-2026-10-10-t02a03-geometric-core-intersection-topo2-r1],
+   :current-residual
+   "Construct the meridional replacement of the deleted origin inside the left-tube complement and compatible tube deformations.",
+   :other-consumers []}
   {:consumer :t02A03,
    :evidence
    {:probe
@@ -58016,59 +58047,60 @@
      :fixture
      {:path "/tmp/t02a03_geometric_tube_cover.lean",
       :sha256
-      "dc2f6be8d29872d27e83e16c4a93cf4abdd474b6a6bf20349c69086fc0f1a9a2"},
+      "901cff8c7ee35d2cb1f02c588e698111753e4373b9e23488b572b63d15a6c979"},
      :commands
      [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
        :exit 0,
        :output
-       "apm_t02a03_core_ranges_intersection compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "apm_t02a03_rightCore_diff_leftCore compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
        "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
        :exit 0}
       {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
        :exit 0,
        :output
-       "dc2f6be8d29872d27e83e16c4a93cf4abdd474b6a6bf20349c69086fc0f1a9a2  /tmp/t02a03_geometric_tube_cover.lean"}
+       "901cff8c7ee35d2cb1f02c588e698111753e4373b9e23488b572b63d15a6c979  /tmp/t02a03_geometric_tube_cover.lean"}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
      :finding
-     "The frozen left and right core ranges intersect at exactly the singleton origin. Equality of their first coordinates forces cos t + cos s = 2; the upper bound cos <= 1 forces cos t = 1, and the Pythagorean identity then forces sin t = 0, so the common point is the origin. Together with the banked common-attachment facts, this proves that deleting the left core removes exactly one point of the right core, a necessary input for the meridional attachment model.",
+     "The complete geometricY-to-Y homotopy equivalence is not yet available. The exact core-intersection theorem does yield one compiled next step: within the right core, deleting the entire left core is exactly deletion of the singleton origin. This isolates the surviving right-core arc that must attach to a meridian in the left-tube complement, without yet asserting deformation or gluing data.",
      :residual
-     "Bank the exact core-range intersection. Then model the right core with its unique shared point deleted, construct the meridional replacement inside the left tube complement, and extend this model to compatible tube deformations and the final glued equivalence.",
+     "Bank the right-core deleted-locus equality. Then construct the meridional replacement in the left-tube complement, extend it to compatible deformations of the two tube pieces, and glue them to the torus-wedge-circle model before final assembly.",
      :prerequisite
      {:bounded-exception
-      "single-consumer exact core-intersection comparison for the t02A03 tube complement",
+      "single-consumer right-core deleted-locus comparison for the t02A03 tube complement",
       :consumer :t02A03,
       :phase :probe,
       :state :open,
       :scope [],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t02A03/geometric-core-intersection",
+      "TOPOLOGY-ROUTES.md/t02A03/geometric-right-core-deleted-locus",
       :acceptance
       {:probe
-       "Compile and bank apm_t02a03_core_ranges_intersection from /tmp/t02a03_geometric_tube_cover.lean. Prove that the ranges of the frozen leftCore and rightCore parametrizations intersect exactly in the singleton Euclidean origin. This supplies the deleted-locus identification required by t02A03 route step 2; do not yet claim a deformation retract or gluing equivalence.",
-       :declaration "apm_t02a03_core_ranges_intersection",
+       "Compile and bank apm_t02a03_rightCore_diff_leftCore from /tmp/t02a03_geometric_tube_cover.lean. Prove that deleting the frozen left-core range from the frozen right-core range is exactly deleting the singleton Euclidean origin, using apm_t02a03_core_ranges_intersection. This supplies the surviving right-core attachment locus required by t02A03 route step 2; do not yet claim a deformation retract or gluing equivalence.",
+       :declaration "apm_t02a03_rightCore_diff_leftCore",
        :placeholder "the sole sorry in apm_t02a03",
        :route-step
-       "t02A03 step 2, identify the exact intersection of the two core circles"},
+       "t02A03 step 2, identify the right-core locus remaining after deletion of the left core"},
       :representation
       {:source
-       "The intersection of the ranges of the frozen leftCore and rightCore parametrizations",
-       :target "The singleton set containing the Euclidean origin",
+       "The frozen right-core range with the entire frozen left-core range deleted",
+       :target
+       "The frozen right-core range with only the Euclidean origin deleted",
        :direction
-       "Exact set equality from the source two-core intersection representation to the target singleton deleted-attachment representation"},
+       "Exact set equality from the source core-complement representation to the target singleton-deleted right-core representation"},
       :id
-      :routes-2026-10-10-t02a03-geometric-core-intersection-topo2-r1,
+      :routes-2026-10-10-t02a03-geometric-right-core-deleted-locus-topo2-r1,
       :kind :representation-comparison,
       :depends-on
       [:routes-2026-10-10-checkpoint-topo2-r5
-       :routes-2026-10-10-t02a03-geometric-tube-common-attachment-topo2-r1],
+       :routes-2026-10-10-t02a03-geometric-core-intersection-topo2-r1],
       :current-residual
-      "Construct the meridional replacement of the uniquely deleted right-core point and compatible deformations of the two tube pieces.",
+      "Construct the meridional replacement of the deleted origin inside the left-tube complement and compatible tube deformations.",
       :other-consumers []}}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/closure",
    :acceptance
@@ -58083,7 +58115,8 @@
     :routes-2026-10-10-t02a03-closed-punctured-disk-torus-topo2-r1
     :routes-2026-10-10-t02a03-geometric-tube-cover-topo2-r1
     :routes-2026-10-10-t02a03-geometric-tube-common-attachment-topo2-r1
-    :routes-2026-10-10-t02a03-geometric-core-intersection-topo2-r1],
+    :routes-2026-10-10-t02a03-geometric-core-intersection-topo2-r1
+    :routes-2026-10-10-t02a03-geometric-right-core-deleted-locus-topo2-r1],
    :current-residual
    "One placeholder: two explicit homotopy equivalences, with the punctured-disk factor adapter-sized and the geometric tube deformation still missing.",
    :other-consumers []}
