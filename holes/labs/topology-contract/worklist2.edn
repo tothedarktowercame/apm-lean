@@ -56390,21 +56390,62 @@
   {:bounded-exception
    "single-consumer frozen-to-Circle mapped-path comparison for t97A04",
    :consumer :t97A04,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/torus_frozen_mapped_path_conjugacy.lean",
+      :sha256
+      "ef5aec23908fb939664d0638dfcbc634b6ac7f93744e4a85b03a6cf61128a55d"},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/torus_frozen_mapped_path_conjugacy.lean",
+       :exit 0,
+       :output
+       "exact frozen-to-Circle mapped-path conjugacy compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/torus_frozen_mapped_path_conjugacy.lean || true)\"",
+       :exit 0}
+      {:cmd "sha256sum /tmp/torus_frozen_mapped_path_conjugacy.lean",
+       :exit 0,
+       :output
+       "ef5aec23908fb939664d0638dfcbc634b6ac7f93744e4a85b03a6cf61128a55d  /tmp/torus_frozen_mapped_path_conjugacy.lean"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :finding
+     "The placeholder-free fixture constructs the actual Circle-product image of every explicit frozen-torus based path and its image after frozenLbar. The banked pointwise map conjugacy proves exact Path equality from the latter to circleMatrixMappedPath of the former, preserving the required orientation and avoiding any proposition-only facade.",
+     :representation
+     {:source
+      "The Circle-product image of an explicit frozen-torus based path after applying frozenLbar",
+      :target
+      "circleMatrixMappedPath applied to the Circle-product image of the original frozen-torus path",
+      :direction
+      "Exact Path equality from the source transported frozen-map representative to the target Circle-matrix representative"},
+     :implementation
+     {:scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
+      :declarations
+      ["frozenCircleImagePath"
+       "frozenLbarCircleImagePath"
+       "frozenLbarCircleImagePath_eq_circleMatrixMappedPath"],
+      :acceptance
+      {:compile
+       "lake build ConstructionTargets.TorusPiOneWindingCoordinates",
+       :placeholder-free true,
+       :statement-registry true}},
+     :residual
+     "Descend the exact path equality through the fundamental-group quotient, align the canonical basepoint transports, and rewrite the Circle naturality equation in frozenTorusPi1Coord coordinates."}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A04/torus-pi1-winding-coordinates/frozen-mapped-path-conjugacy",
    :acceptance
-   {:probe
-    "Compile and bank frozenCircleImagePath, frozenLbarCircleImagePath, and frozenLbarCircleImagePath_eq_circleMatrixMappedPath from /tmp/torus_frozen_mapped_path_conjugacy. For every explicit based loop gamma on the frozen AddCircle torus, construct its actual Circle-product image path and the Circle-product image path after frozenLbar, and prove exact Path equality from the latter to circleMatrixMappedPath of the former using frozenTorusHomeomorphCircleProd_frozenLbar. This supplies the representative equality needed to transport t97A04 route step 4 through dependent basepoints; do not yet claim quotient-level frozen naturality.",
-    :declarations
-    ["frozenCircleImagePath"
-     "frozenLbarCircleImagePath"
-     "frozenLbarCircleImagePath_eq_circleMatrixMappedPath"],
-    :placeholder "apm_t97A04_bridge_2",
-    :route-step
-    "t97A04 step 4, exact representative conjugacy from frozenLbar paths to Circle matrix paths"},
+   {:compile
+    "lake build ConstructionTargets.TorusPiOneWindingCoordinates",
+    :placeholder-free true,
+    :statement-registry true},
    :representation
    {:source
     "The Circle-product image of an explicit frozen-torus based path after applying frozenLbar",
@@ -56414,6 +56455,10 @@
     "Exact Path equality from the source transported frozen-map representative to the target Circle-matrix representative"},
    :id :routes-2026-10-10-t97a04-frozen-mapped-path-conjugacy-topo2-r1,
    :kind :representation-comparison,
+   :declarations
+   ["frozenCircleImagePath"
+    "frozenLbarCircleImagePath"
+    "frozenLbarCircleImagePath_eq_circleMatrixMappedPath"],
    :depends-on
    [:routes-2026-10-10-checkpoint-topo2-r2
     :routes-2026-10-10-t97a04-frozen-torus-map-circle-conjugacy-topo2-r1
