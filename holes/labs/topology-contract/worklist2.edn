@@ -61564,49 +61564,63 @@
    "single-consumer exact angular-core distance identity for the t02A03 punctured left tube",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/t02a03_geometric_tube_cover.lean",
-      :sha256
-      "fba4095e6b8dc50b136e0faef5467b00edeabf767d499636c26857a8a6fb2a63"},
-     :commands
-     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "apm_t02a03_dist_leftTubePoint_angularCore compiled without warnings; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
-       :exit 0}
-      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "fba4095e6b8dc50b136e0faef5467b00edeabf767d499636c26857a8a6fb2a63  /tmp/t02a03_geometric_tube_cover.lean"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :finding
-     "The complete placeholder-free fixture proves the requested exact distance identity. It computes the real and imaginary coordinates of the normalized planar direction, clears the nonzero planar norm denominator, and identifies the Euclidean squared distance to the angularly selected frozen core point with the squared norm of the complex normal displacement. The fixture compiles without warnings using only propext, Classical.choice, and Quot.sound.",
-     :implementation
-     {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
-      :declaration "apm_t02a03_dist_leftTubePoint_angularCore",
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Use the common angular core center and uniform 1/4 normal bound to prove every ambient interpolation point remains in the frozen left tube; then prove core exclusion, bundle the homotopy, and assemble the torus HomotopyEquiv.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :missing-theorems
+    [{:name "apm_t02a03_dist_leftTubePoint_angularCore",
       :type
       "forall p : apm_t02a03_leftTubeSubtype, dist p.1 (apm_t02a03_leftCoreCircle (apm_t02a03_leftTubeAngular p)) = norm (apm_t02a03_leftTubeNormalComplex p)",
-      :source-fixture "/tmp/t02a03_geometric_tube_cover.lean"},
-     :missing-theorems
-     [{:name "apm_t02a03_dist_leftTubePoint_angularCore",
-       :type
-       "forall p : apm_t02a03_leftTubeSubtype, dist p.1 (apm_t02a03_leftCoreCircle (apm_t02a03_leftTubeAngular p)) = norm (apm_t02a03_leftTubeNormalComplex p)",
-       :status :proved,
-       :consumers [:t02A03]}],
-     :residual
-     "Use the common angular core center and the uniform 1/4 normal bound to prove every ambient interpolation point remains in the frozen left tube; then prove deleted-core exclusion, bundle the homotopy, and assemble the torus HomotopyEquiv."}},
+      :status :proved,
+      :consumers [:t02A03]}],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not",
+     :accepted-type-sha256
+     "40730fd39900ea7ba7382e052452b92b7917c7eb916e4afc6b2f35b3cabf9384"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+      :exit 0,
+      :output
+      "fba4095e6b8dc50b136e0faef5467b00edeabf767d499636c26857a8a6fb2a63  /tmp/t02a03_geometric_tube_cover.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeCover.lean",
+      :exit 0,
+      :output ""}
+     {:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+      :exit 0,
+      :output
+      "apm_t02a03_dist_leftTubePoint_angularCore depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeCover.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}],
+    :commit "e150e86d8c0d41e0607ccb4828779303b77af9f8",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
+    :fixture
+    {:path "/tmp/t02a03_geometric_tube_cover.lean",
+     :sha256
+     "fba4095e6b8dc50b136e0faef5467b00edeabf767d499636c26857a8a6fb2a63"},
+    :finding
+    "Banked the exact identity equating distance to the angularly selected frozen core point with the complex normal-displacement norm.",
+    :implementation
+    {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
+     :declarations ["apm_t02a03_dist_leftTubePoint_angularCore"],
+     :type
+     "forall p : apm_t02a03_leftTubeSubtype, dist p.1 (apm_t02a03_leftCoreCircle (apm_t02a03_leftTubeAngular p)) = norm (apm_t02a03_leftTubeNormalComplex p)"},
+    :seat "topo-6"},
    :source-fixture "/tmp/t02a03_geometric_tube_cover.lean",
    :phase :implementation,
    :type
    "forall p : apm_t02a03_leftTubeSubtype, dist p.1 (apm_t02a03_leftCoreCircle (apm_t02a03_leftTubeAngular p)) = norm (apm_t02a03_leftTubeNormalComplex p)",
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/left-tube-angular-core-distance",
