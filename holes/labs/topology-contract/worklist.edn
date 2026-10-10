@@ -87224,10 +87224,65 @@
    :current-residual
    "Review three independent route advances while the generic MV contract awaits owner repair.",
    :other-consumers []}
-  {:consumer :t99J01,
-   :phase :probe,
+  {:description
+   "Import CoveringMonodromyCosets, CoveringDegree, and StatementSurfaceModels. For a path-connected n-sheeted cover p:E→ThreeCircles and e:E, conjoin coveringInducedFundamentalGroupMap_injective with the equality obtained by rewriting coveringFiberCard_eq_index using hp.card_fiber (p e).",
+   :consumer :t99J01,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-4",
+     :fixture
+     {:path "/tmp/t99j01-cover-subgroup-index-probe.lean",
+      :sha256
+      "fff6a750b855a82d7e890ea716796259aef6abc515bcec165eed20ab99f72dd7"},
+     :commands
+     [{:cmd "stat -c '%F %n' .lake/packages",
+       :exit 0,
+       :finding
+       "directory .lake/packages; canonical package authority is present"}
+      {:cmd
+       "lake env lean ConstructionTargets/CoveringMonodromyCosets.lean",
+       :exit 0,
+       :finding
+       "the shared fiber-coset, index, and induced-pi1 results compile"}
+      {:cmd "lake env lean ConstructionTargets/CoveringDegree.lean",
+       :exit 0,
+       :finding
+       "the frozen IsKSheetedCover fiber finiteness and cardinality interface compiles"}
+      {:cmd
+       "lake env lean /tmp/t99j01-cover-subgroup-index-probe.lean",
+       :exit 0,
+       :finding
+       "the exact ThreeCircles n-sheeted-cover adapter compiles with standard-only axioms"}
+      {:cmd "sha256sum /tmp/t99j01-cover-subgroup-index-probe.lean",
+       :exit 0,
+       :finding
+       "fff6a750b855a82d7e890ea716796259aef6abc515bcec165eed20ab99f72dd7"}
+      {:cmd
+       "Python comment-stripped placeholder census of /tmp/t99j01-cover-subgroup-index-probe.lean",
+       :exit 0,
+       :finding "0"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :finding "131 registered statements match, 0 do not"}
+      {:cmd "git status --short", :exit 0, :finding "clean"}],
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :implementation
+     {:scope ["ConstructionTargets/T99J01CoverSubgroupIndex.lean"],
+      :declarations ["t99j01_cover_pi1_subgroup_index"],
+      :description
+      "Import CoveringMonodromyCosets, CoveringDegree, and StatementSurfaceModels. For a path-connected n-sheeted cover p:E→ThreeCircles and e:E, conjoin coveringInducedFundamentalGroupMap_injective with the equality obtained by rewriting coveringFiberCard_eq_index using hp.card_fiber (p e).",
+      :axioms :standard-only,
+      :commands
+      ["lake env lean ConstructionTargets/T99J01CoverSubgroupIndex.lean"
+       "lake env lean /tmp/t99j01-cover-subgroup-index-probe.lean"
+       "python3 scripts/statement-registry.py check"]},
+     :warnings [],
+     :residual
+     "t99J01 route step 2 is ready for implementation. The remaining consumer route is the held ThreeCircles pi1 coordinate comparison, finite-index Schreier rank, path-component cover restriction, explicit connected covers, and final assembly."}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/T99J01CoverSubgroupIndex.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t99J01/cover-pi1-subgroup-index",
    :acceptance
    {:probe
@@ -87240,8 +87295,14 @@
      "zero fixture sorry"
      "standard-only axioms"
      "registry check"]},
+   :axioms :standard-only,
+   :commands
+   ["lake env lean ConstructionTargets/T99J01CoverSubgroupIndex.lean"
+    "lake env lean /tmp/t99j01-cover-subgroup-index-probe.lean"
+    "python3 scripts/statement-registry.py check"],
    :id :routes-2026-10-10-t99j01-cover-subgroup-index-adapter-3,
    :kind :final-adapter,
+   :declarations ["t99j01_cover_pi1_subgroup_index"],
    :depends-on
    [:routes-2026-10-10-checkpoint-topo1-covering-independent-2],
    :current-residual
