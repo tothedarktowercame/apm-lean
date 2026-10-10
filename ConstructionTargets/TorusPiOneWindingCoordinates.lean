@@ -155,4 +155,44 @@ theorem circleMatrixMappedPath_projRight
     ConstructionTargets.CircleUniversalCover.pointwiseMulPath,
     ConstructionTargets.CircleUniversalCover.pointwiseInvPath, circleMatrixMap]
 
+theorem circleMatrixMap_base :
+    circleMatrixMap ((1 : Circle), (1 : Circle)) = ((1 : Circle), (1 : Circle)) := by
+  simp [circleMatrixMap]
+
+def circleMatrixPi1Map :
+    FundamentalGroup (Circle × Circle) ((1 : Circle), (1 : Circle)) →*
+      FundamentalGroup (Circle × Circle) ((1 : Circle), (1 : Circle)) :=
+  FundamentalGroup.mapOfEq circleMatrixMap circleMatrixMap_base
+
+theorem circleMatrixPi1Map_mk
+    (gamma : Path ((1 : Circle), (1 : Circle)) (1, 1)) :
+    circleMatrixPi1Map (Path.Homotopic.Quotient.mk gamma) =
+      Path.Homotopic.Quotient.mk (circleMatrixMappedPath gamma) := by
+  rw [circleMatrixPi1Map, FundamentalGroup.mapOfEq_apply]
+  rfl
+
+theorem circleMatrixPi1Map_mk_coord_zero
+    (gamma : Path ((1 : Circle), (1 : Circle)) (1, 1)) :
+    (torusPi1Coord (circleMatrixPi1Map (Path.Homotopic.Quotient.mk gamma))).toAdd 0 =
+      2 * (torusPi1Coord (Path.Homotopic.Quotient.mk gamma)).toAdd 0 +
+        (torusPi1Coord (Path.Homotopic.Quotient.mk gamma)).toAdd 1 := by
+  rw [circleMatrixPi1Map_mk,
+    torusPi1Coord_mk_apply_zero_eq_liftEndpoint,
+    circleMatrixMappedPath_projLeft,
+    circleMatrixLeftPath_endpointInteger,
+    ← torusPi1Coord_mk_apply_zero_eq_liftEndpoint,
+    ← torusPi1Coord_mk_apply_one_eq_liftEndpoint]
+
+theorem circleMatrixPi1Map_mk_coord_one
+    (gamma : Path ((1 : Circle), (1 : Circle)) (1, 1)) :
+    (torusPi1Coord (circleMatrixPi1Map (Path.Homotopic.Quotient.mk gamma))).toAdd 1 =
+      (torusPi1Coord (Path.Homotopic.Quotient.mk gamma)).toAdd 1 -
+        (torusPi1Coord (Path.Homotopic.Quotient.mk gamma)).toAdd 0 := by
+  rw [circleMatrixPi1Map_mk,
+    torusPi1Coord_mk_apply_one_eq_liftEndpoint,
+    circleMatrixMappedPath_projRight,
+    circleMatrixRightPath_endpointInteger,
+    ← torusPi1Coord_mk_apply_zero_eq_liftEndpoint,
+    ← torusPi1Coord_mk_apply_one_eq_liftEndpoint]
+
 end ConstructionTargets.TorusPiOneWindingCoordinates
