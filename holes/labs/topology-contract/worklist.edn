@@ -100117,8 +100117,73 @@
   {:bounded-exception
    "This single-consumer prerequisite supplies the honest Circle model for each paired polygon edge interval before the three loops are assembled into ThreeCircles.",
    :consumer :t97A01,
+   :evidence
+   {:placeholder-delta {:source 0, :fixture 0},
+    :residual
+    "Decompose each six-edge boundary quotient into three endpoint-glued interval loops, assemble those loop models into ThreeCircles, prove the literal boundary-to-outerOpen inclusion formulas, and assemble the packages.",
+    :gates
+    {:module-build :pass,
+     :fixture-compiles :pass,
+     :zero-source-and-fixture-sorry :pass,
+     :standard-only-axioms :pass,
+     :registry-check :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["The source and fixture report one unnecessarySeqFocus lint; dependency replay reports two existing unnecessarySimpa lints from PolygonBoundaryCircleSource."],
+    :missing-theorems
+    [{:name
+      "IntervalEndpointQuotientCircle.endpointQuotientHomeomorphCircle",
+      :type
+      "The closed unit interval quotient identifying its endpoints is homeomorphic to Circle, with the representative formula, equal endpoint classes, and both endpoints mapping to the Circle basepoint.",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on
+      ["PolygonBoundaryVertexClasses.n3_all_vertices"
+       "PolygonBoundaryVertexClasses.torusCrosscap_all_vertices"],
+      :area "polygon-surface-open-cover"}],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "sha256sum /tmp/interval-endpoint-quotient-circle.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.IntervalEndpointQuotientCircle",
+      :exit 0}
+     {:cmd "lake env lean /tmp/interval-endpoint-quotient-circle.lean",
+      :exit 0}
+     {:cmd
+      "rg -n \\b(sorry|admit)\\b ConstructionTargets/IntervalEndpointQuotientCircle.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "rg -n \\b(sorry|admit)\\b /tmp/interval-endpoint-quotient-circle.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "c6874b6be3ead2f6e66940a5e21836f496af67ad",
+    :changed-paths
+    ["ConstructionTargets/IntervalEndpointQuotientCircle.lean"],
+    :fixture
+    {:path "/tmp/interval-endpoint-quotient-circle.lean",
+     :sha256
+     "44bbc0321b6a88474355a4bbd1a130134f1df566982e2b7d9060f0fcabd22be6",
+     :sorry-count 0},
+    :implementation
+    {:scope
+     ["ConstructionTargets/IntervalEndpointQuotientCircle.lean"],
+     :summary
+     "Defined the endpoint-glued unit interval quotient, its homeomorphism to Circle, the representative formula, equality of endpoint classes, and both endpoint-to-basepoint formulas."},
+    :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/IntervalEndpointQuotientCircle.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/interval-endpoint-quotient-circle",
@@ -103173,12 +103238,13 @@
    {:name
     "IntervalEndpointQuotientCircle.endpointQuotientHomeomorphCircle",
     :reported-by
-    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40
+     :routes-2026-10-10-interval-endpoint-quotient-circle-58],
     :type
     "The quotient of the closed real unit interval by the relation identifying its two endpoints is homeomorphic to Circle, with an explicit representative formula and both endpoints mapping to the Circle basepoint.",
     :area "polygon-surface-open-cover",
     :proved-in
-    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+    :routes-2026-10-10-interval-endpoint-quotient-circle-58},
    :id
    :lemma-intervalendpointquotientcircle-endpointquotienthomeomorphcircle,
    :kind :lemma,
