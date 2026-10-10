@@ -89542,7 +89542,7 @@
      :infrastructure-packets
      :review-outcomes]},
    :review-finding
-   "recorded worklist evidence is stale: the exact committed ledger checks as 740 items with 11 blocked and no open item, not 737 items with 8 blocked and 1 open",
+   "recorded worklist evidence still uses the pre-transition distribution: the exact commit has 14 superseded, 11 blocked, and 1 done-unreviewed, not 17 superseded, 8 blocked, and 1 repair",
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :evidence
@@ -89687,9 +89687,15 @@
       "Review one bounded consumer algebra step and one corrected two-consumer foundation after the owner clarification.",
       :other-consumers []}],
     :author "topo-4",
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1791633811150-1867-4b38c3f2",
+     :finding
+     "recorded worklist evidence still uses the pre-transition distribution: the exact commit has 14 superseded, 11 blocked, and 1 done-unreviewed, not 17 superseded, 8 blocked, and 1 repair"}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :repair,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -89711,7 +89717,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t97A01/smith-quotients",
    :acceptance
@@ -89734,7 +89740,7 @@
    :other-consumers []}
   {:consumer :t99J01,
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/positive-rank",
@@ -89770,7 +89776,7 @@
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :phase :strategy,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
