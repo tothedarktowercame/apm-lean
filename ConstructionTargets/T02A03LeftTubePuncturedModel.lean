@@ -142,4 +142,24 @@ theorem apm_t02a03_leftTubeNormalComplex_torusInverse_coordinates
     apm_t02a03_leftTubeNormalComplex_torusInverse
       (apm_t02a03_leftTubeTorusCoordinates p)
 
+theorem apm_t02a03_leftTubePlanarComplex_radialPoint
+    (tp : unitInterval × apm_t02a03_LeftTubeMinusCore) :
+    apm_t02a03_leftTubePlanarComplex
+      ⟨apm_t02a03_leftTubeRadialPoint tp,
+        apm_t02a03_leftTubeRadialPoint_mem_leftTube tp⟩ =
+      (1 - (tp.1 : ℝ)) •
+          apm_t02a03_leftTubePlanarComplex
+            ⟨(apm_t02a03_leftTubeTorusInverse
+                (apm_t02a03_leftTubeTorusCoordinates tp.2)).1,
+              (apm_t02a03_leftTubeTorusInverse
+                (apm_t02a03_leftTubeTorusCoordinates tp.2)).2.1⟩ +
+        (tp.1 : ℝ) •
+          apm_t02a03_leftTubePlanarComplex ⟨tp.2.1, tp.2.2.1⟩ := by
+  apply Complex.ext
+  · simp [apm_t02a03_leftTubePlanarComplex,
+      apm_t02a03_leftTubeRadialPoint]
+    ring
+  · simp [apm_t02a03_leftTubePlanarComplex,
+      apm_t02a03_leftTubeRadialPoint]
+
 end ConstructionTargets.T02A03LeftTubePuncturedModel
