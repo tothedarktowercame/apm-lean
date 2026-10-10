@@ -67123,82 +67123,109 @@
    "Combine the planar radial bound with the unchanged height coordinate and an attained right-core witness to prove norm(rightTubeCoreNormalComplex p) ≤ 1/4.",
    :other-consumers []}
   {:bounded-exception
+   "single-consumer input normal-radius bound for the right-core tubular deformation",
+   :consumer :t02A03,
+   :phase :probe,
+   :state :open,
+   :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+   :dag-node "TOPOLOGY-ROUTES.md/t02A03/right-core-input-radius-bound",
+   :acceptance
+   {:probe
+    "Compile rightTubeCoreInputNormalRadiusBound. For every point of apm_t02a03_rightTube, use an attained right-core witness, rightTubeCore_radial_error_le, and the unchanged height coordinate to prove norm (rightTubeCoreNormalComplex p) ≤ 1/4. Do not bound an interpolation or claim tube or deletion invariants.",
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreInputNormalRadiusBound",
+    :type
+    "forall (p : apm_t02a03_E3) (hp : p ∈ apm_t02a03_rightTube), norm (rightTubeCoreNormalComplex p) ≤ (1 / 4 : Real)",
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "bound the input endpoint of the disk-normal interpolation by the frozen right-tube radius"},
+   :id
+   :routes-2026-10-10-t02a03-right-core-input-radius-bound-topo2-r2,
+   :kind :reusable-theorem,
+   :area "explicit-r3-tube-deformation-retraction",
+   :depends-on
+   [:routes-2026-10-10-t02a03-right-core-radial-error-bound-topo2-r1],
+   :current-residual
+   "Use the exact meridian radius and the input radius bound to control the disk-normal interpolation by convexity, then construct the compatible angular component and prove deletion avoidance.",
+   :other-consumers []}
+  {:bounded-exception
    "single-consumer explicit ambient deformation with frozen tube and deletion invariants",
    :consumer :t02A03,
    :evidence
    {:probe
     {:residual
-     "Bank the radial-error estimate, then combine it with height and the attained right-core witness for the full input normal-radius bound.",
+     "Bank the distinctly named input normal-radius bound, then prove the disk-normal interpolation stays within radius 1/4 and construct the compatible angular component.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
      [{:name
-       "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCore_radial_error_le",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreInputNormalRadiusBound",
        :type
-       "forall (p : apm_t02a03_E3) (t : Real), abs (1 - norm (rightTubeCorePlanarComplex p)) ≤ norm (rightTubeCorePlanarComplex p - ((Real.cos t : Complex) + (Real.sin t : Complex) * Complex.I))",
+       "forall (p : apm_t02a03_E3) (hp : p ∈ apm_t02a03_rightTube), norm (rightTubeCoreNormalComplex p) ≤ (1 / 4 : Real)",
        :status :proved,
        :consumers [:t02A03],
        :depends-on
-       ["ConstructionTargets.T02A03GeometricTubeDeformation.norm_rightTubeCoreNormalComplex_circleMeridian"],
+       ["ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCore_radial_error_le"
+        "ConstructionTargets.T02A03GeometricTubeDeformation.rightTube_exists_near_rightCore"],
        :area "explicit-r3-tube-deformation-retraction"}],
      :prerequisite
      {:bounded-exception
-      "single-consumer reverse-triangle estimate for the right-core tubular radius",
+      "single-consumer input normal-radius bound for the right-core tubular deformation",
       :consumer :t02A03,
       :phase :probe,
       :state :open,
       :scope
       ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t02A03/right-core-radial-error-bound",
+      "TOPOLOGY-ROUTES.md/t02A03/right-core-input-radius-bound",
       :acceptance
       {:probe
-       "Compile rightTubeCore_radial_error_le. Prove by the reverse triangle inequality that the absolute radial error abs(1-norm(rightTubeCorePlanarComplex p)) is at most the planar distance from p's right-core planar coordinate to every unit right-core direction. Do not prove the full complex-normal radius bound or any deformation invariant.",
+       "Compile rightTubeCoreInputNormalRadiusBound. For every point of apm_t02a03_rightTube, use an attained right-core witness, rightTubeCore_radial_error_le, and the unchanged height coordinate to prove norm (rightTubeCoreNormalComplex p) ≤ 1/4. Do not bound an interpolation or claim tube or deletion invariants.",
        :declaration
-       "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCore_radial_error_le",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreInputNormalRadiusBound",
        :type
-       "forall (p : apm_t02a03_E3) (t : Real), abs (1 - norm (rightTubeCorePlanarComplex p)) ≤ norm (rightTubeCorePlanarComplex p - ((Real.cos t : Complex) + (Real.sin t : Complex) * Complex.I))",
+       "forall (p : apm_t02a03_E3) (hp : p ∈ apm_t02a03_rightTube), norm (rightTubeCoreNormalComplex p) ≤ (1 / 4 : Real)",
        :placeholder "the sole sorry in apm_t02a03",
        :route-step
-       "bound the radial component of the tubular normal coordinate by distance to a right-core witness"},
+       "bound the input endpoint of the disk-normal interpolation by the frozen right-tube radius"},
       :id
-      :routes-2026-10-10-t02a03-right-core-radial-error-bound-topo2-r1,
+      :routes-2026-10-10-t02a03-right-core-input-radius-bound-topo2-r2,
       :kind :reusable-theorem,
       :area "explicit-r3-tube-deformation-retraction",
       :depends-on
-      [:routes-2026-10-10-t02a03-right-core-meridian-normal-radius-topo2-r1],
+      [:routes-2026-10-10-t02a03-right-core-radial-error-bound-topo2-r1],
       :current-residual
-      "Combine the planar radial bound with the unchanged height coordinate and an attained right-core witness to prove norm(rightTubeCoreNormalComplex p) ≤ 1/4.",
+      "Use the exact meridian radius and the input radius bound to control the disk-normal interpolation by convexity, then construct the compatible angular component and prove deletion avoidance.",
       :other-consumers []},
      :commands
      [{:cmd "lake env lean /tmp/t02a03_right_core_compact_probe.lean",
        :exit 0,
        :output
-       "rightTubeCore_radial_error_le compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "rightTubeCoreInputNormalRadiusBound compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd "sha256sum /tmp/t02a03_right_core_compact_probe.lean",
        :exit 0,
        :output
-       "cd85a3cbd352f84b2f6edf1e206cb44f684a907ece28b25f639aab8f2f5405c8  /tmp/t02a03_right_core_compact_probe.lean"}
+       "e0f34b9220031acbefd15829d6698a909ba03f869010702eef8594fb0e05524d  /tmp/t02a03_right_core_compact_probe.lean"}
       {:cmd
        "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_right_core_compact_probe.lean || true)\"",
        :exit 0}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :diagnostic-history
-     [{:cmd "lake env lean /tmp/t02a03_right_core_compact_probe.lean",
-       :exit 1,
-       :finding
-       "Broad simplification rewrote the real trigonometric terms through complex trigonometric functions. Expanding only the complex coordinate operations preserved Real.cos and Real.sin and closed the unit-norm calculation."}],
+       :output "131 registered statements match, 0 do not"}
+      {:cmd
+       "rg -n 'rightTubeCoreInputNormalRadiusBound' /tmp/t02a03_right_core_compact_probe.lean",
+       :exit 0,
+       :output
+       "382:theorem rightTubeCoreInputNormalRadiusBound\n432:#print axioms rightTubeCoreInputNormalRadiusBound"}],
      :fixture
      {:path "/tmp/t02a03_right_core_compact_probe.lean",
       :sha256
-      "cd85a3cbd352f84b2f6edf1e206cb44f684a907ece28b25f639aab8f2f5405c8"},
+      "e0f34b9220031acbefd15829d6698a909ba03f869010702eef8594fb0e05524d"},
      :finding
-     "The reverse triangle inequality gives abs(1-norm(w)) ≤ norm(w-u) for the right-core planar coordinate w and every unit core direction u=(cos t)+i(sin t). This is the exact planar estimate needed to compare the tubular normal radius with the attained Euclidean right-core distance; the height coordinate is unchanged.",
+     "The prerequisite proof remains complete after renaming its declaration to rightTubeCoreInputNormalRadiusBound, which prevents admission from conflating it with the already banked meridian endpoint theorem norm_rightTubeCoreNormalComplex_circleMeridian. For a point in the right tube, an attained right-core witness lies within 1/4; the banked reverse-triangle estimate bounds the radial error by the planar part of that distance, and adjoining the unchanged height coordinate bounds the full complex normal norm by 1/4.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
@@ -67228,7 +67255,8 @@
     :routes-2026-10-10-t02a03-right-core-angular-coordinate-topo2-r1
     :routes-2026-10-10-t02a03-right-core-normal-interpolation-topo2-r1
     :routes-2026-10-10-t02a03-right-core-meridian-normal-radius-topo2-r1
-    :routes-2026-10-10-t02a03-right-core-radial-error-bound-topo2-r1],
+    :routes-2026-10-10-t02a03-right-core-radial-error-bound-topo2-r1
+    :routes-2026-10-10-t02a03-right-core-input-radius-bound-topo2-r2],
    :current-residual
    "Lift H to RightTubeMinusLeftCore, package rightTubeMeridianRetractionHomotopy, then use the coordinate equation for the Circle-side constant homotopy.",
    :other-consumers []}
@@ -70530,4 +70558,30 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-t02a03geometrictubedeformation-norm-righttubecorenormalcompl],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreInputNormalRadiusBound",
+    :type
+    "forall (p : apm_t02a03_E3) (hp : p ∈ apm_t02a03_rightTube), norm (rightTubeCoreNormalComplex p) ≤ (1 / 4 : Real)"},
+   :lemma
+   {:name
+    "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreInputNormalRadiusBound",
+    :reported-by
+    [:routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1],
+    :type
+    "forall (p : apm_t02a03_E3) (hp : p ∈ apm_t02a03_rightTube), norm (rightTubeCoreNormalComplex p) ≤ (1 / 4 : Real)",
+    :area "explicit-r3-tube-deformation-retraction",
+    :proved-in
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+   :id
+   :lemma-constructiontargets-t02a03geometrictubedeformation-righttubecoreinputnormalradiu,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t02a03geometrictubedeformation-righttubecore-radial-error-le
+    :lemma-constructiontargets-t02a03geometrictubedeformation-righttube-exists-near-rightco],
    :other-consumers []}]}
