@@ -58407,6 +58407,31 @@
    :current-residual
    "Construct the normal meridian through the anchor and its compatible attachment to the surviving right-core map, then extend to tube deformations.",
    :other-consumers []}
+  {:bounded-exception
+   "single-consumer explicit normal meridian in the t02A03 geometric complement",
+   :consumer :t02A03,
+   :phase :probe,
+   :state :open,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md/t02A03/geometric-normal-meridian",
+   :acceptance
+   {:probe
+    "Compile and bank apm_t02a03_meridian, apm_t02a03_meridian_mem_geometricY, and apm_t02a03_meridianMap from /tmp/t02a03_geometric_tube_cover.lean. Define the radius-1/8 normal circle t ↦ (cos t/8,0,sin t/8), prove every point lies in W through the left tube and is disjoint from the frozen left core, and bundle it as a continuous map into the exact frozen geometricY subtype. This supplies the meridional replacement locus for t02A03 route step 2; do not yet claim attachment compatibility, a deformation retract, or a gluing equivalence.",
+    :declarations
+    ["apm_t02a03_meridian"
+     "apm_t02a03_meridian_mem_geometricY"
+     "apm_t02a03_meridianMap"],
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "t02A03 step 2, construct the explicit normal meridian inside geometricY"},
+   :id :routes-2026-10-10-t02a03-geometric-normal-meridian-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo2-r5
+    :routes-2026-10-10-t02a03-geometric-meridian-anchor-topo2-r1],
+   :current-residual
+   "Construct the compatible attachment of the surviving right core to the normal meridian, then extend to tube deformations and gluing.",
+   :other-consumers []}
   {:consumer :t02A03,
    :evidence
    {:probe
@@ -58415,19 +58440,19 @@
      :fixture
      {:path "/tmp/t02a03_geometric_tube_cover.lean",
       :sha256
-      "b1ec81acb3d60233325ff478246addd0f6b8ee49e9af5843062b142a0208abe6"},
+      "d67265aee2baecdc9a7a4c567aac503ca9014f93a65d803452f918654e3757f1"},
      :commands
      [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
        :exit 0,
        :output
-       "apm_t02a03_meridianAnchor and apm_t02a03_meridianAnchor_mem_geometricY compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "apm_t02a03_meridian, apm_t02a03_meridian_mem_geometricY, and apm_t02a03_meridianMap compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
        "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
        :exit 0}
       {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
        :exit 0,
        :output
-       "b1ec81acb3d60233325ff478246addd0f6b8ee49e9af5843062b142a0208abe6  /tmp/t02a03_geometric_tube_cover.lean"}
+       "d67265aee2baecdc9a7a4c567aac503ca9014f93a65d803452f918654e3757f1  /tmp/t02a03_geometric_tube_cover.lean"}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
@@ -58435,38 +58460,43 @@
      [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
        :exit 1,
        :finding
-       "The exploratory anchor proof left the Euclidean norm and vector-coordinate lookup opaque. Rewriting with EuclideanSpace.norm_eq and stating the third-coordinate equality explicitly reduced both obligations to numeral normalization; the corrected rerun compiled."}],
+       "The first meridian proof did not normalize the Euclidean square root from the sine-cosine identity. Isolating the squared norm as 1/64 exposed the required arithmetic."}
+      {:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 1,
+       :finding
+       "The first isolated squared-norm equality used 1/8 notation while simp normalized the goal to inverse notation, so rewriting did not fire. Normalizing both forms before the rewrite produced the successful compile."}],
      :finding
-     "The full geometric deformation remains absent, but a concrete meridional attachment anchor now compiles. The point (0,0,1/8) lies in the radius-1/4 left tube because its distance to the common origin is 1/8, hence lies in W through the banked tube cover; its nonzero third coordinate proves that it is outside the planar left core. This supplies an explicit point of geometricY above the deleted attachment.",
+     "The complete geometricY-to-Y equivalence is still missing, but the full normal meridian now compiles as a continuous map into geometricY. Its radius is 1/8, so every point lies in the radius-1/4 left tube via the common origin. Coordinate equalities plus the sine-cosine identities show it cannot meet the planar left core. The prior anchor is its parameter pi/2 point up to the standard trigonometric values.",
      :residual
-     "Bank the meridian anchor. Then construct the full normal meridian through this anchor inside geometricY, attach the surviving right-core map to it, and extend to compatible tube deformations and gluing.",
+     "Bank the continuous meridian. Then construct a compatible attachment between the surviving right-core map and this meridian, extend the two maps to deformation data on the tube pieces, and glue them to the torus-wedge-circle model.",
      :prerequisite
      {:bounded-exception
-      "single-consumer concrete meridian anchor for the t02A03 geometric complement",
+      "single-consumer explicit normal meridian in the t02A03 geometric complement",
       :consumer :t02A03,
       :phase :probe,
       :state :open,
       :scope [],
-      :dag-node "TOPOLOGY-ROUTES.md/t02A03/geometric-meridian-anchor",
+      :dag-node "TOPOLOGY-ROUTES.md/t02A03/geometric-normal-meridian",
       :acceptance
       {:probe
-       "Compile and bank apm_t02a03_meridianAnchor and apm_t02a03_meridianAnchor_mem_geometricY from /tmp/t02a03_geometric_tube_cover.lean. Define the frozen point (0,0,1/8) above the deleted common origin, prove it lies in the left radius-1/4 tube and hence W, and prove its nonzero third coordinate keeps it outside the frozen left core. This supplies a concrete meridional attachment anchor for t02A03 route step 2; do not yet claim the full meridian, a deformation retract, or a gluing equivalence.",
+       "Compile and bank apm_t02a03_meridian, apm_t02a03_meridian_mem_geometricY, and apm_t02a03_meridianMap from /tmp/t02a03_geometric_tube_cover.lean. Define the radius-1/8 normal circle t ↦ (cos t/8,0,sin t/8), prove every point lies in W through the left tube and is disjoint from the frozen left core, and bundle it as a continuous map into the exact frozen geometricY subtype. This supplies the meridional replacement locus for t02A03 route step 2; do not yet claim attachment compatibility, a deformation retract, or a gluing equivalence.",
        :declarations
-       ["apm_t02a03_meridianAnchor"
-        "apm_t02a03_meridianAnchor_mem_geometricY"],
+       ["apm_t02a03_meridian"
+        "apm_t02a03_meridian_mem_geometricY"
+        "apm_t02a03_meridianMap"],
        :placeholder "the sole sorry in apm_t02a03",
        :route-step
-       "t02A03 step 2, construct a concrete geometricY anchor above the deleted common attachment"},
-      :id :routes-2026-10-10-t02a03-geometric-meridian-anchor-topo2-r1,
+       "t02A03 step 2, construct the explicit normal meridian inside geometricY"},
+      :id :routes-2026-10-10-t02a03-geometric-normal-meridian-topo2-r1,
       :kind :reusable-theorem,
       :depends-on
       [:routes-2026-10-10-checkpoint-topo2-r5
-       :routes-2026-10-10-t02a03-geometric-right-core-survivor-map-topo2-r1],
+       :routes-2026-10-10-t02a03-geometric-meridian-anchor-topo2-r1],
       :current-residual
-      "Construct the normal meridian through the anchor and its compatible attachment to the surviving right-core map, then extend to tube deformations.",
+      "Construct the compatible attachment of the surviving right core to the normal meridian, then extend to tube deformations and gluing.",
       :other-consumers []}}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/closure",
    :acceptance
@@ -58485,7 +58515,8 @@
     :routes-2026-10-10-t02a03-geometric-right-core-deleted-locus-topo2-r1
     :routes-2026-10-10-t02a03-geometric-right-core-survivor-topo2-r1
     :routes-2026-10-10-t02a03-geometric-right-core-survivor-map-topo2-r1
-    :routes-2026-10-10-t02a03-geometric-meridian-anchor-topo2-r1],
+    :routes-2026-10-10-t02a03-geometric-meridian-anchor-topo2-r1
+    :routes-2026-10-10-t02a03-geometric-normal-meridian-topo2-r1],
    :current-residual
    "One placeholder: two explicit homotopy equivalences, with the punctured-disk factor adapter-sized and the geometric tube deformation still missing.",
    :other-consumers []}
