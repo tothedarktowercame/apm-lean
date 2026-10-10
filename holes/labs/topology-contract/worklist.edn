@@ -92807,88 +92807,104 @@
     "reindexes only after complement cardinality is proved"],
    :consumer :t99J01,
    :evidence
-   {:probe
-    {:residual
-     "The Type-valued positive-index Nielsen-Schreier construction is complete; consumers can now use the r=3 and index-two specializations in their topology adapters.",
-     :outcome :go,
-     :warnings [],
-     :missing-theorems
-     [{:name "FiniteIndexFreeGroupSchreierRank.spanningTreeBasis",
-       :type
-       "generic complement-indexed FreeGroupBasis for a spanning tree of a free groupoid",
-       :status :proved,
-       :consumers [:t99J01 :t97A03],
-       :depends-on []}
-      {:name "TreePositiveSelection.Schreier.complement_card_formula",
-       :type
-       "Nat.card of the selected-positive-arrow complement equals (r-1)*n+1",
-       :status :proved,
-       :consumers [:t99J01 :t97A03],
-       :depends-on
-       ["FiniteArborescenceEdgeCount.Schreier.tree_total_card"]}
-      {:name
-       "FiniteIndexFreeGroupSchreierRank.finiteIndexSubgroupFreeGroupEquiv",
-       :type
-       "positive-index subgroup equivalence reindexed by Fin ((r-1)*n+1)",
-       :status :proved,
-       :consumers [:t99J01 :t97A03],
-       :depends-on
-       ["FiniteIndexFreeGroupSchreierRank.spanningTreeBasis"
-        "TreePositiveSelection.Schreier.complement_card_formula"]}],
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd
-       "lake build ConstructionTargets.FiniteIndexFreeGroupSchreierRank && lake env lean /tmp/finite-index-free-group-schreier-rank-final-probe.lean",
-       :exit 0,
-       :finding
-       "canonical 1566-job dependency build and fresh imported fixture both succeed; the generic basis, complement count, subgroup transport, universal equivalence, and both specializations use only standard axioms"}
-      {:cmd
-       "sha256sum /tmp/finite-index-free-group-schreier-rank-final-probe.lean",
-       :exit 0,
-       :finding
-       "9f380bb4578bf9aa3ea3ceeb746f313edf3bb85722dd6f04b0c8a08d6fa2b6ba"}
-      {:cmd
-       "rg -n \"\\b(sorry|admit)\\b\" /tmp/finite-index-free-group-schreier-rank-final-probe.lean",
-       :exit 1,
-       :expected-exit 1,
-       :finding "no placeholders"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :finding "131 registered statements match, 0 do not"}
-      {:cmd "git status --short", :exit 0, :finding "clean"}],
-     :fixture
-     {:path
-      "/tmp/finite-index-free-group-schreier-rank-final-probe.lean",
-      :sha256
-      "9f380bb4578bf9aa3ea3ceeb746f313edf3bb85722dd6f04b0c8a08d6fa2b6ba",
-      :interface
-      "Positive-index Type-valued Nielsen-Schreier equivalence H ≃* FreeGroup (Fin ((r-1)*n+1)), with r=3 giving Fin (2*n+1) and r=2,n=2 giving Fin 3."},
-     :implementation
-     {:scope
-      ["ConstructionTargets/FiniteIndexFreeGroupSchreierRank.lean"],
-      :declarations
-      [{:name "FiniteIndexFreeGroupSchreierRank.spanningTreeBasis",
-        :type
-        "FreeGroupBasis on the exact wideSubquiverSymmetrify complement subtype of End (show G from Quiver.root T)"}
-       {:name
-        "FiniteIndexFreeGroupSchreierRank.finiteIndexSubgroupFreeGroupEquiv",
-        :type
-        "(r n : Nat) -> 0 < r -> 0 < n -> (H : Subgroup (FreeGroup (Fin r))) -> H.index = n -> H ≃* FreeGroup (Fin ((r-1)*n+1))"}
-       {:name
-        "FiniteIndexFreeGroupSchreierRank.indexSubgroupFreeGroupFinThreeEquiv",
-        :type
-        "positive n -> H.index=n -> Nonempty (H ≃* FreeGroup (Fin (2*n+1))) for H <= FreeGroup (Fin 3)"}
-       {:name
-        "FiniteIndexFreeGroupSchreierRank.indexTwoSubgroupFreeGroupFinTwoEquiv",
-        :type
-        "H.index=2 -> Nonempty (H ≃* FreeGroup (Fin 3)) for H <= FreeGroup (Fin 2)"}],
-      :constraints
-      ["uses Mathlib chosen IsFreeGroup.Generators natively"
-       "does not identify chosen generators with canonical FreeGroup.of generators"
-       "reindexes only after complement cardinality is proved"]},
-     :seat "topo-4"}},
+   {:placeholder-delta 0,
+    :residual
+    "Use the r=3 and index-two specializations in the t99J01 and t97A03 topology adapters.",
+    :gates
+    {:canonical-build :pass,
+     :fixture-compile :pass,
+     :fixture-hash :pass,
+     :zero-fixture-placeholders :pass,
+     :standard-only-axioms :pass,
+     :constraint-audit :pass,
+     :registry :pass,
+     :clean-worktree :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :missing-theorems
+    [{:name "FiniteIndexFreeGroupSchreierRank.spanningTreeBasis",
+      :type
+      "generic complement-indexed FreeGroupBasis for a spanning tree of a free groupoid",
+      :status :proved,
+      :consumers [:t99J01 :t97A03],
+      :depends-on []}
+     {:name "TreePositiveSelection.Schreier.complement_card_formula",
+      :type
+      "Nat.card of the selected-positive-arrow complement equals (r-1)*n+1",
+      :status :proved,
+      :consumers [:t99J01 :t97A03],
+      :depends-on
+      ["FiniteArborescenceEdgeCount.Schreier.tree_total_card"]}
+     {:name
+      "FiniteIndexFreeGroupSchreierRank.finiteIndexSubgroupFreeGroupEquiv",
+      :type
+      "(r n : Nat) -> 0 < r -> 0 < n -> (H : Subgroup (FreeGroup (Fin r))) -> H.index = n -> H ≃* FreeGroup (Fin ((r-1)*n+1))",
+      :status :proved,
+      :consumers [:t99J01 :t97A03],
+      :depends-on
+      ["FiniteIndexFreeGroupSchreierRank.spanningTreeBasis"
+       "TreePositiveSelection.Schreier.complement_card_formula"]}],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd
+      "lake build ConstructionTargets.FiniteIndexFreeGroupSchreierRank",
+      :exit 0,
+      :finding "Canonical 1566-job dependency build succeeds."}
+     {:cmd
+      "lake env lean /tmp/finite-index-free-group-schreier-rank-final-probe.lean",
+      :exit 0,
+      :finding
+      "Universal equivalence and both specializations compile with standard-only axioms."}
+     {:cmd
+      "sha256sum /tmp/finite-index-free-group-schreier-rank-final-probe.lean",
+      :exit 0,
+      :finding
+      "9f380bb4578bf9aa3ea3ceeb746f313edf3bb85722dd6f04b0c8a08d6fa2b6ba"}
+     {:cmd
+      "rg -n \"IsFreeGroup\\.Generators|FreeGroup\\.of|Finite\\.equivFinOfCardEq|complement_card_formula\" ConstructionTargets/FiniteIndexFreeGroupSchreierRank.lean",
+      :exit 0,
+      :finding
+      "The complement formula occurs before Fin reindexing; no FreeGroup.of identification occurs in the scoped module."}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" /tmp/finite-index-free-group-schreier-rank-final-probe.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "No placeholders."}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :commit "983453e07912c8ce026078bcfe356b1d9e1c32eb",
+    :changed-paths
+    ["ConstructionTargets/FiniteIndexFreeGroupSchreierRank.lean"],
+    :fixture
+    {:path
+     "/tmp/finite-index-free-group-schreier-rank-final-probe.lean",
+     :sha256
+     "9f380bb4578bf9aa3ea3ceeb746f313edf3bb85722dd6f04b0c8a08d6fa2b6ba",
+     :sorry-count 0,
+     :axiom-count 0,
+     :proof-placeholder-count 0},
+    :implementation
+    {:scope
+     ["ConstructionTargets/FiniteIndexFreeGroupSchreierRank.lean"],
+     :status :already-committed,
+     :declarations
+     ["FiniteIndexFreeGroupSchreierRank.spanningTreeBasis"
+      "FiniteIndexFreeGroupSchreierRank.finiteIndexSubgroupFreeGroupEquiv"
+      "FiniteIndexFreeGroupSchreierRank.indexSubgroupFreeGroupFinThreeEquiv"
+      "FiniteIndexFreeGroupSchreierRank.indexTwoSubgroupFreeGroupFinTwoEquiv"],
+     :constraints
+     ["uses Mathlib chosen IsFreeGroup.Generators natively through the banked Gen and complement types"
+      "contains no equation identifying chosen generators with canonical FreeGroup.of generators"
+      "calls Finite.equivFinOfCardEq only after complement_card_formula establishes the exact cardinality"]},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/FiniteIndexFreeGroupSchreierRank.lean"],
    :dag-node
