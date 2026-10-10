@@ -92,4 +92,27 @@ theorem apm_t02a03_core_ranges_intersection :
     subst p
     exact apm_t02a03_origin_mem_both_cores
 
+/-- Deleting the left core from the right core deletes exactly their common
+attachment point. -/
+theorem apm_t02a03_rightCore_diff_leftCore :
+    Set.range apm_t02a03_rightCore \ Set.range apm_t02a03_leftCore =
+      Set.range apm_t02a03_rightCore \ ({0} : Set apm_t02a03_E3) := by
+  ext p
+  constructor
+  · rintro ⟨hpR, hpL⟩
+    refine ⟨hpR, ?_⟩
+    intro hp0
+    apply hpL
+    have hpI : p ∈ Set.range apm_t02a03_leftCore ∩
+        Set.range apm_t02a03_rightCore := by
+      rw [apm_t02a03_core_ranges_intersection]
+      exact hp0
+    exact hpI.1
+  · rintro ⟨hpR, hp0⟩
+    refine ⟨hpR, ?_⟩
+    intro hpL
+    apply hp0
+    rw [← apm_t02a03_core_ranges_intersection]
+    exact ⟨hpL, hpR⟩
+
 end ConstructionTargets.T02A03GeometricTubeCover
