@@ -98457,13 +98457,43 @@
    "Use radial quotient openness to define the two open pieces and their overlap; then descend radial contractions, identify the boundary quotient with ThreeCircles for both six-edge relations, identify the punctured-disk overlap, and prove the literal inclusion equations and common vertex class.",
    :other-consumers []}
   {:bounded-exception
+   "This single-consumer prerequisite constructs the actual radial open cover common to both six-edge polygon quotients, after the banked quotient-openness theorem and before contractions or boundary graph identifications.",
+   :consumer :t97A01,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/PolygonRadialOpenCover.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/open-cover",
+   :acceptance
+   {:implementation
+    "Promote the exact fixture. For an arbitrary relation on the closed complex disk that preserves radius, define the inner source radius < 3/4, outer source radius > 1/4, annular overlap, their quotient images, and Package. Prove the two quotient images open, their union equal to univ, and the overlap image equal to their intersection. Instantiate Package for every canonical SurfaceRel. Do not descend radial homotopies, identify the boundary graph with ThreeCircles, identify the overlap with a punctured disk, prove polygon vertex classes, compute invariants, or close t97A01.",
+    :placeholder "the single sorry in apm_t97a01",
+    :route-step
+    "polygon radial open-cover step 2: define the genuine quotient cover and annular overlap",
+    :fixture "/tmp/polygon-radial-open-cover.lean",
+    :fixture-sha256
+    "3b7ebef9bd6f3acb1f52fd6fe188d7a1e8535e2e9f8d7953a21d9b8c7b626f53",
+    :gates
+    ["lake build ConstructionTargets.PolygonRadialOpenCover"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-10-polygon-radial-open-cover-42,
+   :kind :reusable-theorem,
+   :area "polygon-surface-open-cover",
+   :depends-on [:routes-2026-10-10-radial-quotient-open-sets-41],
+   :current-residual
+   "Use this actual open cover to descend the radial deformation of the outer piece to the boundary quotient and identify the annular overlap with the punctured-disk model; then prove both six-edge boundary quotients are ThreeCircles with the required vertex and inclusion equations.",
+   :other-consumers []}
+  {:bounded-exception
    "This single-consumer concrete quotient package is the other final backlog lemma on t97A01 and supplies the actual two polygon models required by its frozen statement.",
    :consumer :t97A01,
    :implements-lemma :lemma-polygonradialopencoverpackages,
    :evidence
    {:probe
     {:residual
-     "The radial quotient open sets now compile as one named prerequisite. The remaining polygon package must build the actual cover, contractions, boundary ThreeCircles models, punctured overlap models, inclusions, and six-vertex identifications for both relations.",
+     "The genuine radial quotient cover and overlap are compiled. The remaining package needs the descended outer-piece radial deformation, annulus/punctured-disk comparison, boundary quotient-to-ThreeCircles identifications for both words, vertex classes, and literal inclusion formulas.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
@@ -98473,69 +98503,71 @@
        :status :partial,
        :consumers [:t97A01],
        :depends-on
-       ["RadialQuotientOpenSets.isOpen_radial_image"
-        "RadialQuotientOpenSets.surfaceRel_norm_eq"],
+       ["PolygonRadialOpenCover.surfacePackage"
+        "PolygonRadialOpenCover.package"
+        "polygonRadialOuterDeformation"
+        "polygonBoundaryThreeCircles"
+        "polygonAnnulusPuncturedDisk"],
        :area "polygon-surface-open-cover"}
-      {:name "RadialQuotientOpenSets.isOpen_radial_image",
+      {:name "PolygonRadialOpenCover.package",
        :type
-       "If R preserves a continuous real coordinate rho, then the image in Quotient (EqvGen.setoid R) of rho ⁻¹' I is open for every open I.",
+       "For every norm-preserving disk relation, the quotient images of radius < 3/4 and radius > 1/4 are open, cover the quotient, and intersect in the image of 1/4 < radius < 3/4.",
+       :status :proved,
+       :consumers [:t97A01],
+       :depends-on ["RadialQuotientOpenSets.isOpen_radial_image"],
+       :area "polygon-surface-open-cover"}
+      {:name "PolygonRadialOpenCover.surfacePackage",
+       :type
+       "The radial quotient open-cover package specialized to SurfaceRel orientable genus for all orientable flags and genera.",
        :status :proved,
        :consumers [:t97A01],
        :depends-on
-       ["RadialQuotientOpenSets.preimage_image_eq_of_eqvGen_invariant"
-        "RadialQuotientOpenSets.eqvGen_preserves_of_rel_preserves"],
-       :area "polygon-surface-open-cover"}
-      {:name "RadialQuotientOpenSets.surfaceRel_norm_eq",
-       :type
-       "For every orientable flag and genus, SurfaceRel-related disk points have equal complex norm.",
-       :status :proved,
-       :consumers [:t97A01],
-       :depends-on [],
+       ["PolygonRadialOpenCover.package"
+        "RadialQuotientOpenSets.surfaceRel_norm_eq"],
        :area "polygon-surface-open-cover"}],
      :prerequisite
      {:bounded-exception
-      "This single-consumer prerequisite is the first construction required by the concrete polygon cover: it proves that norm-defined saturated radial bands descend to genuinely open subsets of the EqvGen quotient.",
+      "This single-consumer prerequisite constructs the actual radial open cover common to both six-edge polygon quotients, after the banked quotient-openness theorem and before contractions or boundary graph identifications.",
       :consumer :t97A01,
       :phase :implementation,
       :state :open,
-      :scope ["ConstructionTargets/RadialQuotientOpenSets.lean"],
+      :scope ["ConstructionTargets/PolygonRadialOpenCover.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/radial-quotient-openness",
+      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/open-cover",
       :acceptance
       {:implementation
-       "Promote the exact fixture. Prove the preimage/image equality for a Setoid-invariant subset, deduce openness of its quotient image, prove EqvGen preserves any relation-preserved real coordinate, and specialize to norm-defined radial sets. Prove SurfaceRel preserves complex norm for every orientation and genus. Do not construct radial contractions, boundary graph quotients, ThreeCircles homeomorphisms, punctured-disk overlap equivalences, Mayer-Vietoris maps, fundamental groups, or close t97A01.",
+       "Promote the exact fixture. For an arbitrary relation on the closed complex disk that preserves radius, define the inner source radius < 3/4, outer source radius > 1/4, annular overlap, their quotient images, and Package. Prove the two quotient images open, their union equal to univ, and the overlap image equal to their intersection. Instantiate Package for every canonical SurfaceRel. Do not descend radial homotopies, identify the boundary graph with ThreeCircles, identify the overlap with a punctured disk, prove polygon vertex classes, compute invariants, or close t97A01.",
        :placeholder "the single sorry in apm_t97a01",
        :route-step
-       "polygon radial open-cover step 1: saturated radial bands have open images in the polygon quotient",
-       :fixture "/tmp/radial-quotient-open-sets.lean",
+       "polygon radial open-cover step 2: define the genuine quotient cover and annular overlap",
+       :fixture "/tmp/polygon-radial-open-cover.lean",
        :fixture-sha256
-       "c8131021071a6a9be96d6364c5a7ccac8ff3e208a79080c021857bd3ce4740ce",
+       "3b7ebef9bd6f3acb1f52fd6fe188d7a1e8535e2e9f8d7953a21d9b8c7b626f53",
        :gates
-       ["lake build ConstructionTargets.RadialQuotientOpenSets"
+       ["lake build ConstructionTargets.PolygonRadialOpenCover"
         "fixture compiles"
         "zero source and fixture sorry"
         "standard-only axioms"
         "registry check"]},
-      :id :routes-2026-10-10-radial-quotient-open-sets-41,
+      :id :routes-2026-10-10-polygon-radial-open-cover-42,
       :kind :reusable-theorem,
       :area "polygon-surface-open-cover",
-      :depends-on
-      [:routes-2026-10-10-checkpoint-topo1-after-t99j01-covering-prerequisites-38],
+      :depends-on [:routes-2026-10-10-radial-quotient-open-sets-41],
       :current-residual
-      "Use radial quotient openness to define the two open pieces and their overlap; then descend radial contractions, identify the boundary quotient with ThreeCircles for both six-edge relations, identify the punctured-disk overlap, and prove the literal inclusion equations and common vertex class.",
+      "Use this actual open cover to descend the radial deformation of the outer piece to the boundary quotient and identify the annular overlap with the punctured-disk model; then prove both six-edge boundary quotients are ThreeCircles with the required vertex and inclusion equations.",
       :other-consumers []},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
-     [{:cmd "lake env lean /tmp/radial-quotient-open-sets.lean",
+     [{:cmd "lake env lean /tmp/polygon-radial-open-cover.lean",
        :exit 0,
        :finding
-       "The generic saturated-open quotient theorem, radial specialization, and SurfaceRel norm-invariance theorem compile with standard axioms."}
-      {:cmd "sha256sum /tmp/radial-quotient-open-sets.lean",
+       "The generic radial quotient cover, exact annular intersection, and canonical SurfaceRel specialization compile with standard axioms."}
+      {:cmd "sha256sum /tmp/polygon-radial-open-cover.lean",
        :exit 0,
        :finding
-       "c8131021071a6a9be96d6364c5a7ccac8ff3e208a79080c021857bd3ce4740ce"}
+       "3b7ebef9bd6f3acb1f52fd6fe188d7a1e8535e2e9f8d7953a21d9b8c7b626f53"}
       {:cmd
-       "rg -n \"\\b(sorry|admit)\\b\" /tmp/radial-quotient-open-sets.lean",
+       "rg -n \"\\b(sorry|admit)\\b\" /tmp/polygon-radial-open-cover.lean",
        :exit 1,
        :expected-exit 1,
        :finding "No fixture placeholders."}
@@ -98544,19 +98576,19 @@
        :finding "131 registered statements match, 0 do not."}
       {:cmd "git status --short", :exit 0, :finding "clean"}],
      :diagnostic-history
-     [{:cmd "lake env lean /tmp/radial-quotient-open-sets.lean",
+     [{:cmd "lake env lean /tmp/polygon-radial-open-cover.lean",
        :exit 1,
        :finding
-       "The first draft mixed explicit relation setoids with Quotient.mk' instance notation and did not expose preimage membership or edgePoint coercions; rewriting the generic theorem over an explicit Setoid, installing EqvGen locally, and isolating norm_edgePoint corrected all three elaboration boundaries."}],
+       "The first SurfaceRel specialization exposed radius as a named definition while the banked theorem stated complex norms; an explicit surfaceRel_radius_eq adapter and eta-expanded proof argument resolved the dependent Package parameter."}],
      :fixture
-     {:path "/tmp/radial-quotient-open-sets.lean",
+     {:path "/tmp/polygon-radial-open-cover.lean",
       :sha256
-      "c8131021071a6a9be96d6364c5a7ccac8ff3e208a79080c021857bd3ce4740ce",
+      "3b7ebef9bd6f3acb1f52fd6fe188d7a1e8535e2e9f8d7953a21d9b8c7b626f53",
       :interface
-      "Generic EqvGen-invariant open subsets have open images in the quotient; relation-preserved real coordinates yield open radial quotient images; every canonical SurfaceRel preserves the complex norm."},
+      "PolygonRadialOpenCover.Package provides the inner and outer open quotient pieces, their cover equation, and their annular overlap equation for any norm-preserving disk-edge relation; surfacePackage instantiates every canonical SurfaceRel."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -98577,7 +98609,8 @@
    :area "polygon-surface-open-cover",
    :depends-on
    [:routes-2026-10-10-checkpoint-topo1-after-t99j01-covering-prerequisites-38
-    :routes-2026-10-10-radial-quotient-open-sets-41],
+    :routes-2026-10-10-radial-quotient-open-sets-41
+    :routes-2026-10-10-polygon-radial-open-cover-42],
    :current-residual
    "Combine the concrete cover packages with the strict overlap squares, banked Smith normalization, and final t97A01 assembly.",
    :other-consumers []}
@@ -99076,7 +99109,12 @@
    :kind :lemma,
    :depends-on
    [:lemma-radialquotientopensets-isopen-radial-image
-    :lemma-radialquotientopensets-surfacerel-norm-eq],
+    :lemma-radialquotientopensets-surfacerel-norm-eq
+    :lemma-polygonradialopencover-surfacepackage
+    :lemma-polygonradialopencover-package
+    :lemma-polygonradialouterdeformation
+    :lemma-polygonboundarythreecircles
+    :lemma-polygonannuluspunctureddisk],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -100628,6 +100666,80 @@
    {:name "RadialQuotientOpenSets.eqvGen_preserves_of_rel_preserves",
     :reported-by []},
    :id :lemma-radialquotientopensets-eqvgen-preserves-of-rel-preserves,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "PolygonRadialOpenCover.surfacePackage",
+    :type
+    "The radial quotient open-cover package specialized to SurfaceRel orientable genus for all orientable flags and genera."},
+   :lemma
+   {:name "PolygonRadialOpenCover.surfacePackage",
+    :reported-by
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    :type
+    "The radial quotient open-cover package specialized to SurfaceRel orientable genus for all orientable flags and genera.",
+    :area "polygon-surface-open-cover",
+    :proved-in
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+   :id :lemma-polygonradialopencover-surfacepackage,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polygonradialopencover-package
+    :lemma-radialquotientopensets-surfacerel-norm-eq],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "PolygonRadialOpenCover.package",
+    :type
+    "For every norm-preserving disk relation, the quotient images of radius < 3/4 and radius > 1/4 are open, cover the quotient, and intersect in the image of 1/4 < radius < 3/4."},
+   :lemma
+   {:name "PolygonRadialOpenCover.package",
+    :reported-by
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    :type
+    "For every norm-preserving disk relation, the quotient images of radius < 3/4 and radius > 1/4 are open, cover the quotient, and intersect in the image of 1/4 < radius < 3/4.",
+    :area "polygon-surface-open-cover",
+    :proved-in
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+   :id :lemma-polygonradialopencover-package,
+   :kind :lemma,
+   :depends-on [:lemma-radialquotientopensets-isopen-radial-image],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "polygonRadialOuterDeformation"},
+   :lemma {:name "polygonRadialOuterDeformation", :reported-by []},
+   :id :lemma-polygonradialouterdeformation,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "polygonBoundaryThreeCircles"},
+   :lemma {:name "polygonBoundaryThreeCircles", :reported-by []},
+   :id :lemma-polygonboundarythreecircles,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "polygonAnnulusPuncturedDisk"},
+   :lemma {:name "polygonAnnulusPuncturedDisk", :reported-by []},
+   :id :lemma-polygonannuluspunctureddisk,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}],
