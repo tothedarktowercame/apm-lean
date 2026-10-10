@@ -61123,6 +61123,22 @@
       :output
       "[master 83102315] Bank t02A03 left-tube inverse map; 1 file changed, 9 insertions(+)"}
      {:cmd "git status --short", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791639703700-2069-986ac388",
+     :commands
+     ["git show/diff-tree/show --check 8310231587dfe0ec8fd2a29d625485c82977192e"
+      "sha256sum /tmp/t02a03_geometric_tube_cover.lean"
+      "lake env lean /tmp/t02a03_geometric_tube_cover.lean"
+      "lake env lean ConstructionTargets/T02A03GeometricTubeCover.lean"
+      "lake build ConstructionTargets.T02A03GeometricTubeCover"
+      "lake env lean recorded-source boundary probe"
+      "python3 scripts/statement-registry.py check --rev 8310231587dfe0ec8fd2a29d625485c82977192e"
+      "bb holes/labs/topology-contract/worklist_check.bb recorded-ledger"
+      "recompute declaration hash and comment-stripped placeholder counts"],
+     :finding
+     "PASS: author topo-6 is independent; commit scope is exactly ConstructionTargets/T02A03GeometricTubeCover.lean and fixture SHA-256 matches. The inverse is a ContinuousMap into the exact LeftTubeMinusCore subtype, definitionally valued at leftTubeTorusPoint, with membership/core-exclusion fields and subtype continuity correctly oriented. Focused build, fixture, recorded-source probe, registry 131/0, and 441-item ledger gate pass; declaration hash d701220807833d99e6524833638c109550eb4b0994dc42fe5e0cb31c5b3357e9, standard axioms only, target placeholders 0, unchanged consumer placeholders 1."},
     :commit "8310231587dfe0ec8fd2a29d625485c82977192e",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
@@ -61135,7 +61151,7 @@
     "Banked the continuous inverse-coordinate realization as a ContinuousMap from Circle times Circle into the exact punctured-left-tube subtype, using the established tube-membership and core-exclusion proofs.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-torus-inverse-map",
    :acceptance
@@ -61215,7 +61231,7 @@
    :phase :probe,
    :type
    "Nonempty (ContinuousMap.HomotopyEquiv LeftTubeMinusCore ConstructionTargets.TorusCircleWedgeOpenCover.Torus)",
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-punctured-model",
    :acceptance
