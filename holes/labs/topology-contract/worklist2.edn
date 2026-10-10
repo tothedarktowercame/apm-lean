@@ -55355,68 +55355,46 @@
   {:bounded-exception
    "single-consumer bounded projective-to-normalized-conic comparison",
    :consumer :t94A08,
+   :stop-count 1,
    :evidence
-   {:probe
-    {:outcome :revise,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/t94a08_projective_conic_normalization.lean",
-      :sha256
-      "bcf3770e24cc9d71a18bc0bcc7cd26479bb55a1e37f3cc35ef585b66d0366413"},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/t94a08_projective_conic_normalization.lean",
-       :exit 0}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t94a08_projective_conic_normalization.lean || true)\"",
-       :exit 0}
-      {:cmd
-       "sha256sum /tmp/t94a08_projective_conic_normalization.lean",
-       :exit 0,
-       :output
-       "bcf3770e24cc9d71a18bc0bcc7cd26479bb55a1e37f3cc35ef585b66d0366413  /tmp/t94a08_projective_conic_normalization.lean"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/t94a08_projective_affine_conic_identification.lean",
-       :exit 1,
-       :finding
-       "The direct homeomorphism draft reached the exact missing mapping proof: its reverse map needs the homogeneous representative equation normalized through the nonzero zeroth coordinate. Additional errors were downstream coercion and continuity packaging consequences. The prerequisite isolates the two equation equivalences before retrying the subtype homeomorphism."}],
-     :finding
-     "The forward ratio map and reverse chartInverse map are already definable and the banked continuity theorems cover them, but the subtype homeomorphism cannot be typed until the smooth projective equation is proved equivalent to 1+u^2+v^2=0. The compiled placeholder-free interface records both orientations required by map_source and map_target: normalization for an arbitrary projective point with nonzero zeroth representative coordinate, and denormalization after chartInverse. This is the single missing algebraic prerequisite for the elected representation comparison.",
-     :residual
-     "Prove the two normalization equivalences by clearing the nonzero zeroth coordinate and using coordinates_chartInverse; then the projective-affine subtype homeomorphism is obtained from the banked affine OpenPartialHomeomorph.",
-     :prerequisite
-     {:bounded-exception
-      "single-consumer bounded homogeneous-to-affine conic normalization",
-      :consumer :t94A08,
-      :phase :probe,
-      :state :open,
-      :scope [],
-      :dag-node
-      "TOPOLOGY-ROUTES.md/t94A08/smooth-conic-local-charts/projective-affine-identification/normalization",
-      :acceptance
-      {:probe
-       "Compile a placeholder-free inhabitant of T94A08ProjectiveConicNormalizationProbe.ProjectiveConicNormalization from /tmp/t94a08_projective_conic_normalization.lean. Prove that on the z0 affine source the homogeneous equation quadratic1(rep x)=0 is equivalent to 1+(rep1/rep0)^2+(rep2/rep0)^2=0, and prove the reverse chartInverse equivalence using coordinates_chartInverse and chartInverse_mem_affineSource. These exact equivalences supply the map-source and map-target obligations for t94A08 route step 2; reuse the frozen topology and do not introduce an existence-only facade.",
-       :declaration "ProjectiveConicNormalization",
-       :placeholder "the sole sorry in apm_t94a08",
-       :route-step
-       "step 2, homogeneous projective equation versus normalized affine equation"},
-      :id
-      :routes-2026-10-10-t94a08-projective-conic-normalization-topo2-r1,
-      :kind :reusable-theorem,
-      :depends-on
-      [:routes-2026-10-10-checkpoint-topo2-r2
-       :routes-2026-10-10-t94a08-affine-chart-source-open-topo2-r1
-       :routes-2026-10-10-t94a08-affine-chart-inverse-laws-topo2-r1
-       :routes-2026-10-10-t94a08-affine-smooth-conic-parametrization-topo2-r1],
-      :current-residual
-      "Use these equivalences to inhabit ProjectiveAffineConicIdentification with the banked coordinate and chartInverse continuity and inverse laws.",
-      :other-consumers []}}},
+   {:residual
+    "Define pairToCoordinates by a genuine case split sending affine index 1 to the first pair component and index 2 to the second; then regenerate both the normalization and projective-affine identification contracts with fresh ids and hashes.",
+    :outcome :stop,
+    :disposition :stop,
+    :author "topo-8",
+    :reason
+    "The elected representation comparison is mathematically inconsistent independently of its failed normalization prerequisite. Its required symm_eq uses Fin.cases z.1.1 (fun _ => z.1.2) on the nonzero indices of Fin 3, so both coordinate indices 1 and 2 receive only z.1.2 and the first affine coordinate is discarded. The two distinct normalized-conic points (I,0) and (-I,0) therefore have definitionally equal required inverse images, contradicting injectivity of homeomorph.symm. The compiled no_inhabitant theorem proves that no ProjectiveAffineConicIdentification satisfying the printed interface exists. Repair must replace the insertion function with an actual distinction between indices 1 and 2 and re-elect a fresh representation row.",
+    :commands
+    [{:cmd
+      "lake env lean /tmp/t94a08_projective_affine_identification_refutation.lean",
+      :exit 0}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t94a08_projective_affine_identification_refutation.lean || true)\"",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/t94a08_projective_affine_identification_refutation.lean",
+      :exit 0,
+      :output
+      "423af63c70a5b2601136daf43ef4727616edcc02e79a2e776dafec9235df946b  /tmp/t94a08_projective_affine_identification_refutation.lean"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}],
+    :diagnostic-history
+    [{:cmd
+      "lake env lean /tmp/t94a08_projective_affine_identification_refutation.lean",
+      :exit 1,
+      :finding
+      "The first refutation draft relied on definitional reduction under a variable affine-coordinate index. Replacing it with fin_cases on the two-element subtype proved the required inverse images equal; the final refutation then compiled."}],
+    :fixture
+    {:path
+     "/tmp/t94a08_projective_affine_identification_refutation.lean",
+     :sha256
+     "423af63c70a5b2601136daf43ef4727616edcc02e79a2e776dafec9235df946b"},
+    :finding
+    "The refutation needs no disputed normalization theorem. Both zPlus=(I,0) and zMinus=(-I,0) inhabit the normalized affine conic because I squared is -1. The contract's symm_eq sends both through the identical chartInverse coordinate function, since every admissible coordinate index is nonzero and hence takes the constant second branch 0. Injectivity of the inverse of a homeomorphism would force zPlus=zMinus; imaginary parts give 1=-1. This isolates the defect to the printed representation orientation formula, not the frozen t94A08 statement or projective topology.",
+    :seat "topo-8"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t94A08/smooth-conic-local-charts/projective-affine-identification",
