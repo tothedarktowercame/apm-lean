@@ -61398,6 +61398,21 @@
       :exit 0,
       :output "131 registered statements match, 0 do not"}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791641557026-2124-255d39a2",
+     :commands
+     ["git show/diff-tree/show --check fe543f6244ae00b3345fc7f94be7fc33704cefba"
+      "sha256sum /tmp/t02a03_geometric_tube_cover.lean"
+      "lake env lean /tmp/t02a03_geometric_tube_cover.lean"
+      "lake env lean ConstructionTargets/T02A03GeometricTubeCover.lean"
+      "lake build ConstructionTargets.T02A03GeometricTubeCover"
+      "python3 scripts/statement-registry.py check --rev fe543f6244ae00b3345fc7f94be7fc33704cefba"
+      "bb holes/labs/topology-contract/worklist_check.bb recorded-ledger"
+      "recompute accepted-type hash and comment-stripped placeholder counts"],
+     :finding
+     "PASS: author topo-6 is independent; implementation scope is exactly ConstructionTargets/T02A03GeometricTubeCover.lean, transition scope is ledger-only, and fixture SHA-256 52bd30d0b20cb91295e3ce4cf15ae63aafc51585c3763fdffad0c3b2aa6f103c matches. The helper correctly bounds the complex normal norm by ambient distance to every frozen left-core point, with the planar reverse-triangle estimate and unchanged height combined through squared norms; the accepted theorem specializes via the attained-core witness to the required norm <= 1/4 orientation. Fixture, target, focused 8240-job build, registry 131/0, and 444-item ledger gate pass; accepted-type hash 3c3d44ffb57ce14f81f40a1366a9a4a88abe299651bd0cf484cf0a93f5140b10 matches, both declarations use only propext/Classical.choice/Quot.sound, target placeholders are 0, and unchanged consumer placeholders are 1."},
     :commit "fe543f6244ae00b3345fc7f94be7fc33704cefba",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
@@ -61419,7 +61434,7 @@
    :phase :implementation,
    :type
    "forall p : apm_t02a03_leftTubeSubtype, norm (apm_t02a03_leftTubeNormalComplex p) <= (1 / 4 : Real)",
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-normal-radius-bound",
    :acceptance
@@ -61516,7 +61531,7 @@
    :phase :probe,
    :type
    "Nonempty (ContinuousMap.HomotopyEquiv LeftTubeMinusCore ConstructionTargets.TorusCircleWedgeOpenCover.Torus)",
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-punctured-model",
    :acceptance
