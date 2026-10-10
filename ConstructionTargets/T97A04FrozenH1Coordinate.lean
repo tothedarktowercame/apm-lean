@@ -252,4 +252,35 @@ theorem frozenLbarIntegralH1_map_commutes :
   rw [frozenTorusAlignedH1MulEquivFinTwo.symm_apply_apply] at h
   exact congrArg Multiplicative.toAdd h
 
+set_option maxHeartbeats 800000 in
+theorem frozenLbarModuleH1_map_commutes :
+    (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+        (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom frozenLbar)) ≫
+        frozenTorusAlignedH1ModuleIsoFinTwo.hom =
+      frozenTorusAlignedH1ModuleIsoFinTwo.hom ≫
+        ModuleCat.ofHom frozenMatrixAddHom.toIntLinearMap := by
+  apply forgetIntModules.map_injective
+  rw [Functor.map_comp, Functor.map_comp]
+  have hIso : forgetIntModules.map frozenTorusAlignedH1ModuleIsoFinTwo.hom =
+      (singularHomologyComparison (TopCat.of FrozenTorus) 1).hom ≫
+        frozenTorusAlignedH1GroupIsoFinTwo.hom := by
+    unfold frozenTorusAlignedH1ModuleIsoFinTwo
+      singularHomologyModuleIsoOfGroupIso moduleIsoOfUnderlyingIso
+    exact forgetIntModules.map_preimage _
+  rw [hIso]
+  change
+    forgetIntModules.map
+          (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+            (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom frozenLbar)) ≫
+        ((singularHomologyComparison (TopCat.of FrozenTorus) 1).hom ≫
+          frozenTorusAlignedH1GroupIsoFinTwo.hom) =
+      ((singularHomologyComparison (TopCat.of FrozenTorus) 1).hom ≫
+        frozenTorusAlignedH1GroupIsoFinTwo.hom) ≫
+          AddCommGrpCat.ofHom frozenMatrixAddHom
+  rw [← Category.assoc, singularHomologyComparison_naturality]
+  simp only [Category.assoc]
+  apply congrArg (fun z =>
+    (singularHomologyComparison (TopCat.of FrozenTorus) 1).hom ≫ z)
+  exact frozenLbarIntegralH1_map_commutes
+
 end ConstructionTargets.T97A04FrozenH1Coordinate
