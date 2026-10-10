@@ -93426,8 +93426,77 @@
   {:bounded-exception
    "This single-consumer two-sided conjugation lemma is the smallest remaining rewrite prerequisite for integer induction on b-powers in the elected normal-form route.",
    :consumer :t93J03,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Use the two conjugation orientations in Int.induction_on to prove arbitrary b-power conjugation, then construct SemidirectProduct.lift and its inverse laws.",
+    :outcome :done-unreviewed,
+    :warnings
+    [{:kind :linter,
+      :message
+      "Lean suggests simp instead of simpa in reverseConjugateAPow; proof remains accepted."}
+     {:kind :concurrent-worktree-change,
+      :message
+      "ConstructionTargets/T02A03LeftTubePuncturedModel.lean is modified outside this row scope and was preserved."}],
+    :missing-theorems
+    [{:name "KleinPresentedGroupTwoSidedConjugation.reverseConjugateA",
+      :type "generatorB * generatorA * generatorB⁻¹ = generatorA⁻¹",
+      :status :proved,
+      :consumers [:t93J03],
+      :depends-on ["KleinPresentedGroupConjugation.conjugateAPow"]}
+     {:name
+      "KleinPresentedGroupTwoSidedConjugation.reverseConjugateAPow",
+      :type
+      "(m : Int) -> generatorB * generatorA ^ m * generatorB⁻¹ = generatorA ^ (-m)",
+      :status :proved,
+      :consumers [:t93J03],
+      :depends-on
+      ["KleinPresentedGroupTwoSidedConjugation.reverseConjugateA"]}],
+    :statement-hashes "131 registered statements match",
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :finding
+      "canonical package authority resolves to /home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "sha256sum /tmp/klein-two-sided-conjugation.lean",
+      :exit 0,
+      :finding
+      "fixture hash matches 62a9b94e78ab2830c9eab9410c949244ea97db2c699dab3d50c75cddef99ccb4"}
+     {:cmd
+      "lake build ConstructionTargets.KleinPresentedGroupTwoSidedConjugation",
+      :exit 0,
+      :finding "canonical module builds successfully"}
+     {:cmd "lake env lean /tmp/klein-two-sided-conjugation.lean",
+      :exit 0,
+      :finding "frozen fixture compiles and audits both declarations"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" /tmp/klein-two-sided-conjugation.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero fixture placeholders"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}],
+    :commit "e32e8a98",
+    :changed-paths
+    ["ConstructionTargets/KleinPresentedGroupTwoSidedConjugation.lean"],
+    :fixture
+    {:path "/tmp/klein-two-sided-conjugation.lean",
+     :sha256
+     "62a9b94e78ab2830c9eab9410c949244ea97db2c699dab3d50c75cddef99ccb4",
+     :sorry-count 0},
+    :implementation
+    {:scope
+     ["ConstructionTargets/KleinPresentedGroupTwoSidedConjugation.lean"],
+     :declarations
+     ["KleinPresentedGroupTwoSidedConjugation.reverseConjugateA"
+      "KleinPresentedGroupTwoSidedConjugation.reverseConjugateAPow"]},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/KleinPresentedGroupTwoSidedConjugation.lean"],
    :dag-node
@@ -94164,21 +94233,47 @@
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
-  {:consumer :portfolio,
+  {:consumer :t93J03,
    :phase :lemma,
    :state :backlog,
    :scope [],
    :acceptance
    {:lemma
-    "KleinPresentedGroupTwoSidedConjugation.reverseConjugateAPow"},
+    "KleinPresentedGroupTwoSidedConjugation.reverseConjugateAPow",
+    :type
+    "(m : Int) -> generatorB * generatorA ^ m * generatorB⁻¹ = generatorA ^ (-m)"},
    :lemma
    {:name
     "KleinPresentedGroupTwoSidedConjugation.reverseConjugateAPow",
-    :reported-by []},
+    :reported-by
+    [:routes-2026-10-10-klein-presented-group-two-sided-conjugation-22],
+    :type
+    "(m : Int) -> generatorB * generatorA ^ m * generatorB⁻¹ = generatorA ^ (-m)",
+    :proved-in
+    :routes-2026-10-10-klein-presented-group-two-sided-conjugation-22},
    :id
    :lemma-kleinpresentedgrouptwosidedconjugation-reverseconjugateapow,
    :kind :lemma,
-   :depends-on [],
+   :depends-on
+   [:lemma-kleinpresentedgrouptwosidedconjugation-reverseconjugatea],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "KleinPresentedGroupTwoSidedConjugation.reverseConjugateA",
+    :type "generatorB * generatorA * generatorB⁻¹ = generatorA⁻¹"},
+   :lemma
+   {:name "KleinPresentedGroupTwoSidedConjugation.reverseConjugateA",
+    :reported-by
+    [:routes-2026-10-10-klein-presented-group-two-sided-conjugation-22],
+    :type "generatorB * generatorA * generatorB⁻¹ = generatorA⁻¹",
+    :proved-in
+    :routes-2026-10-10-klein-presented-group-two-sided-conjugation-22},
+   :id :lemma-kleinpresentedgrouptwosidedconjugation-reverseconjugatea,
+   :kind :lemma,
+   :depends-on [:lemma-kleinpresentedgroupconjugation-conjugateapow],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
