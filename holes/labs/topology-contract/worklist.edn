@@ -92136,9 +92136,22 @@
       "Review the final cardinality prerequisite before the Type-valued Nielsen-Schreier basis construction.",
       :other-consumers []}],
     :author "topo-4",
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791641084152-2107-7d468eb5",
+     :commands
+     ["git show 109c3b873ace5cc5dd8259dbf6153af9074ac843 --stat and recorded ledger inspection"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 109c3b87:holes/labs/topology-contract/worklist.edn)"
+      "lake env lean ConstructionTargets/FiniteArborescenceTotalEdgeCount.lean"
+      "sha256sum ConstructionTargets/FiniteArborescenceTotalEdgeCount.lean /tmp/finite-arborescence-edge-count.lean"
+      "comment-stripped placeholder census for six consumers"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "ledger-only scope and post-transition totals reproduce; the banked n-1 arborescence count, fixture hash, standard axioms, eight-placeholder census, registry, and orientation-aware selected-positive-edge successor are correct"}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -92154,7 +92167,7 @@
    :other-consumers []}
   {:consumer :t99J01,
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/positive-index/tree-positive-selection-complement-count",
