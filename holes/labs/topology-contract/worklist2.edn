@@ -60598,48 +60598,64 @@
    "single-consumer continuous torus-coordinate map for the frozen t02A03 punctured left tube",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/t02a03_geometric_tube_cover.lean",
-      :sha256
-      "beeb38fc971cd6f89353b57fba2cdf370e17f50d641ad4ad66a9fe6b53862456"},
-     :commands
-     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "apm_t02a03_leftTubeNormalAngular, apm_t02a03_continuous_leftTubeNormalAngular, apm_t02a03_leftTubeTorusCoordinates, and apm_t02a03_continuous_leftTubeTorusCoordinates compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
-       :exit 0}
-      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "beeb38fc971cd6f89353b57fba2cdf370e17f50d641ad4ad66a9fe6b53862456  /tmp/t02a03_geometric_tube_cover.lean"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :implementation
-     {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
-      :declarations
-      ["apm_t02a03_leftTubeNormalAngular"
-       "apm_t02a03_continuous_leftTubeNormalAngular"
-       "apm_t02a03_leftTubeTorusCoordinates"
-       "apm_t02a03_continuous_leftTubeTorusCoordinates"],
-      :acceptance
-      {:implementation
-       "Add the four compiled declarations from the verified fixture to ConstructionTargets/T02A03GeometricTubeCover.lean without changing their types or the frozen consumer. Compile the scoped module, confirm the scoped file contains no sorry token, run the statement registry check, and report the declarations' axioms.",
-       :gates
-       ["scoped module compiles"
-        "scoped file contains no sorry token"
-        "statement registry matches"]}},
-     :finding
-     "The fixture completely supplies this bounded row. Radial normalization converts the nonzero complex normal coordinate into a continuous Circle coordinate, and pairing it with the planar/core angle gives the continuous forward map from the exact left-tube complement to Circle times Circle, definitionally the target torus.",
-     :residual
-     "After banking the forward coordinates, construct the inverse coordinate realization in the radius-1/4 frozen tube complement, prove both comparison homotopies, and assemble leftTubeMinusCoreHomotopyEquivTorus."}},
+   {:placeholder-delta
+    {:path "ConstructionTargets/T02A03GeometricTubeCover.lean",
+     :before 0,
+     :after 0,
+     :delta 0},
+    :git-author "Joe Corneli <holtzermann17@gmail.com>",
+    :residual
+    "Construct the inverse coordinate realization in the radius-1/4 frozen tube complement, prove both comparison homotopies inside that complement, and assemble leftTubeMinusCoreHomotopyEquivTorus.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not",
+     :declaration-packet-sha256
+     "9c1d6c8ac5442618e0e2eaf01647b389aaa2f01f6b9e5a79992df8ede5ea302c"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+      :exit 0,
+      :output
+      "beeb38fc971cd6f89353b57fba2cdf370e17f50d641ad4ad66a9fe6b53862456  /tmp/t02a03_geometric_tube_cover.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeCover.lean",
+      :exit 0}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeCover.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "lake env lean /tmp/t02a03_geometric_tube_cover.lean | rg \"continuous_leftTube(NormalAngular|TorusCoordinates)\"",
+      :exit 0,
+      :output
+      "Both declarations depend on axioms [propext, Classical.choice, Quot.sound]."}
+     {:cmd "git commit -m \"Bank t02A03 left-tube torus coordinates\"",
+      :exit 0,
+      :output
+      "[master ae1f54d9] Bank t02A03 left-tube torus coordinates; 1 file changed, 35 insertions(+)"}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "ae1f54d92934b6432f9ab5487ec73bb296c029c2",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
+    :fixture
+    {:path "/tmp/t02a03_geometric_tube_cover.lean",
+     :sha256
+     "beeb38fc971cd6f89353b57fba2cdf370e17f50d641ad4ad66a9fe6b53862456"},
+    :finding
+    "Banked radial normalization of the nonzero disk-normal coordinate and paired it with the core angular coordinate to obtain a continuous map from the exact punctured left tube to Circle times Circle.",
+    :declarations
+    ["apm_t02a03_leftTubeNormalAngular"
+     "apm_t02a03_continuous_leftTubeNormalAngular"
+     "apm_t02a03_leftTubeTorusCoordinates"
+     "apm_t02a03_continuous_leftTubeTorusCoordinates"],
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/left-tube-torus-coordinate-map",
