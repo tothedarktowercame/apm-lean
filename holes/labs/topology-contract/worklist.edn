@@ -86003,65 +86003,64 @@
    "Prove one coherent H0 naturality calculation for the two literal overlap inclusions; the signed intersection and reassembly coordinate formulas then follow from the already banked production arrows and cokernel algebra.",
    :other-consumers [:t97A03]}
   {:consumer :t97A01,
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Parent STOP incorrectly describes the reviewed dependency as a missing/restorable artifact. The dependency is done with a deterministic proof that its interface is false for arbitrary X and Y: it demands H0(X)=Z and H0(Y)=Z without path-connectedness. Repair this row to propagate the specification defect and require either path-connected X/Y or H0(X)/H0(Y) coordinates before retry; restoring the absent module under the current contract is impossible standard-only.",
    :evidence
    {:residual
-    "Dependency completion is missing, not a new mathematical prerequisite: the H0 inclusion-naturality module must be restored or implemented and reviewed before the generic Mayer-Vietoris coordinate probe can establish standard-only axioms.",
+    "Repair the route specification by adding path-connectedness hypotheses or changing the piece coordinates to H0(X) and H0(Y), then elect a new implementation/probe against a placeholder-free standard-only fixture.",
     :outcome :stop,
+    :warnings
+    [{:kind :specification-defect,
+      :message
+      "Do not recreate ConstructionTargets/GenericPointWedgeMayerVietorisCoordinates.lean with the current signature; that would require a nonstandard axiom or a false theorem."}],
+    :boundary
+    "The current arbitrary-X/arbitrary-Y interface is refuted. The generic cover comparison proves the left and right pieces homotopy equivalent to X and Y, but the requested coordinate package requires both piece H0 groups to be isomorphic to Z while assuming only TopologicalSpace X and TopologicalSpace Y. For discrete X = Bool and Y = Unit, with M = univ and N = {x0}, all recorded openness, membership, and pointed-contraction hypotheses hold, yet the left piece has H0 isomorphic to Z coproduct Z rather than Z. The dependency module therefore cannot be restored or implemented standard-only under this contract.",
     :disposition :stop,
     :axioms
     ["propext"
      "Classical.choice"
      "Quot.sound"
      "GenericPointWedgeMVCoordinatesProbe.generic_point_wedge_mv_inclusion_coordinates"],
-    :author "topo-4",
+    :author "topo-2",
     :reason
-    "The row declares routes-2026-10-10-generic-point-wedge-h0-inclusion-naturality-1 as a completed dependency, but its sole scoped artifact ConstructionTargets/GenericPointWedgeMayerVietorisCoordinates.lean is absent. The recorded fixture still depends on GenericPointWedgeMVCoordinatesProbe.generic_point_wedge_mv_inclusion_coordinates, so GO would falsely certify standard-only axioms; REVISE would duplicate an already-declared dependency. Restore or complete the dependency artifact before retrying this probe.",
+    "Propagate the reviewed specification defect. A retry must either add PathConnectedSpace X and PathConnectedSpace Y to the generic interface, or retain H0(X) and H0(Y) as the piece coordinates instead of forcing Z coordinates. The absent scoped artifact is a consequence of the false interface, not a missing recoverable implementation.",
     :commands
     [{:cmd "stat -c '%F %n' .lake/packages",
       :exit 0,
       :finding
       "directory .lake/packages; canonical package authority is present"}
      {:cmd
-      "test -e ConstructionTargets/GenericPointWedgeMayerVietorisCoordinates.lean",
-      :exit 1,
-      :expected-exit 1,
-      :finding "the declared dependency artifact is absent"}
-     {:cmd
-      "rg --files ConstructionTargets | rg 'GenericPointWedgeMayerVietorisCoordinates'",
-      :exit 1,
-      :expected-exit 1,
-      :finding "no alternate file with the scoped module name exists"}
-     {:cmd
-      "lake env lean /tmp/generic-point-wedge-mv-inclusion-coordinates-probe.lean",
-      :exit 0,
-      :finding
-      "the old fixture still compiles only through its isolated interface axiom"}
-     {:cmd
       "sha256sum /tmp/generic-point-wedge-mv-inclusion-coordinates-probe.lean",
       :exit 0,
       :finding
       "8b85b579989bd59f53eff5991aaa36965b937bb9f0e87e5b88be3c93f989e2cf"}
+     {:cmd
+      "lake env lean /tmp/generic-point-wedge-mv-inclusion-coordinates-probe.lean",
+      :exit 0,
+      :finding
+      "The fixture compiles only because the false generic coordinate package is introduced as an axiom."}
+     {:cmd "rg fixture generic hypotheses and piece-coordinate fields",
+      :exit 0,
+      :finding
+      "X and Y carry only TopologicalSpace instances, while leftIso and rightIso both target AddCommGrpCat.of Int; the package itself is axiomatized."}
+     {:cmd
+      "rg genericPointWedgeLeftHomotopyEquiv and genericPointWedgeRightHomotopyEquiv",
+      :exit 0,
+      :finding
+      "The existing standard-only comparison identifies the two pieces with arbitrary X and arbitrary Y."}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
      {:cmd "git status --short", :exit 0, :finding "clean"}],
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1791616052980-1428-e06a048e",
-     :finding
-     "Parent STOP incorrectly describes the reviewed dependency as a missing/restorable artifact. The dependency is done with a deterministic proof that its interface is false for arbitrary X and Y: it demands H0(X)=Z and H0(Y)=Z without path-connectedness. Repair this row to propagate the specification defect and require either path-connected X/Y or H0(X)/H0(Y) coordinates before retry; restoring the absent module under the current contract is impossible standard-only."},
     :fixture
     {:path
      "/tmp/generic-point-wedge-mv-inclusion-coordinates-probe.lean",
      :sha256
      "8b85b579989bd59f53eff5991aaa36965b937bb9f0e87e5b88be3c93f989e2cf"},
-    :seat "topo-4"},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :repair,
+   :state :needs-owner,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/generic-point-wedge-mv-inclusion-coordinates",
