@@ -57907,9 +57907,55 @@
   {:bounded-exception
    "single-consumer exact core-intersection comparison for the t02A03 tube complement",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/t02a03_geometric_tube_cover.lean",
+      :sha256
+      "dc2f6be8d29872d27e83e16c4a93cf4abdd474b6a6bf20349c69086fc0f1a9a2"},
+     :commands
+     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "apm_t02a03_core_ranges_intersection compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
+       :exit 0}
+      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "dc2f6be8d29872d27e83e16c4a93cf4abdd474b6a6bf20349c69086fc0f1a9a2  /tmp/t02a03_geometric_tube_cover.lean"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :finding
+     "The exact intersection theorem compiles without placeholders. Equality of a left-core and right-core point forces cos t + cos s = 2; since each cosine is at most one, both equal one, and the standard trigonometric identity then forces the sine coordinate to vanish. Thus the common point is the Euclidean origin, while the reverse inclusion follows from the banked common-origin facts.",
+     :residual
+     "Bank the exact singleton core-intersection comparison. Then construct the meridional replacement of the uniquely deleted right-core attachment, compatible deformations of the two tube pieces, and their gluing to the torus-wedge-circle model.",
+     :implementation
+     {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"]},
+     :acceptance
+     {:source-fixture "/tmp/t02a03_geometric_tube_cover.lean",
+      :declaration "apm_t02a03_core_ranges_intersection",
+      :placeholder "the sole sorry in apm_t02a03",
+      :route-step
+      "t02A03 step 2, identify the exact intersection of the two core circles",
+      :representation
+      {:source
+       "The intersection of the ranges of the frozen leftCore and rightCore parametrizations",
+       :target "The singleton set containing the Euclidean origin",
+       :direction
+       "Exact set equality from the source two-core intersection representation to the target singleton deleted-attachment representation"},
+      :gates
+      ["fixture compiles"
+       "fixture contains no sorry token"
+       "fixture hash matches"
+       "statement registry matches"]}}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/geometric-core-intersection",
    :acceptance
    {:probe
