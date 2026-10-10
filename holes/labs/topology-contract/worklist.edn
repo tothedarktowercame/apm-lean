@@ -96473,6 +96473,20 @@
      {:cmd "git status --short",
       :exit 0,
       :finding "clean worktree after commit"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791655652167-2635-f0795d62",
+     :commands
+     ["git show c4e86afab70cc0cf119faef672ee116e4d8c3fc2 -- ConstructionTargets/CirclePowerFiberCard.lean"
+      "git diff --exit-code c4e86afab70cc0cf119faef672ee116e4d8c3fc2 -- ConstructionTargets/CirclePowerFiberCard.lean"
+      "lake build ConstructionTargets.CirclePowerFiberCard"
+      "sha256sum /tmp/circle-power-fiber-card.lean && lake env lean /tmp/circle-power-fiber-card.lean"
+      "placeholder census on source, fixture, and problems/t99J01/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb on recorded ledger at 7c24bb54"],
+     :finding
+     "PASS: reviewer codex-3 verified recorded commit c4e86afa changes only CirclePowerFiberCard.lean and the source equals that commit. Canonical packages resolve correctly; the frozen fixture hash is exact; target and fixture compile with zero placeholders; t99J01 retains exactly one placeholder; both audited theorems report only propext, Classical.choice, and Quot.sound; all 131 registered statements and the recorded 856-item ledger validate. Surjectivity of the positive-degree circle power map selects a with f a equal to y; rewriting identifies the requested fiber with the fiber over f a, and MonoidHom.fiberEquivKer transports it to the banked kernel. Nat.card and finiteness are transferred in the correct direction. The module correctly does not count pullback fibers, construct monodromy paths, prove connectedness, compute subgroup index, or close t99J01."},
     :commit "c4e86afab70cc0cf119faef672ee116e4d8c3fc2",
     :changed-paths ["ConstructionTargets/CirclePowerFiberCard.lean"],
     :fixture
@@ -96487,7 +96501,7 @@
       "ConstructionTargets.CirclePowerFiberCard.circlePower_fiber_finite"]},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/CirclePowerFiberCard.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/cyclic-three-circles-cover/fiber-card",
@@ -96584,7 +96598,7 @@
       "circlePower_fiber_card and circlePower_fiber_finite prove every degree-n Circle power fiber is finite with Nat.card n."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/cyclic-three-circles-cover",
@@ -98027,7 +98041,7 @@
    :other-consumers []}
   {:consumer :t99J01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "CirclePowerFiberCard.circlePower_fiber_card",
@@ -98038,7 +98052,9 @@
     :reported-by [:routes-2026-10-10-circle-power-fiber-card-42],
     :type
     "For NeZero n and every y : Circle, the subtype {z : Circle // z ^ n = y} is finite and has Nat.card n",
-    :proved-in :routes-2026-10-10-circle-power-fiber-card-42},
+    :proved-in :routes-2026-10-10-circle-power-fiber-card-42,
+    :banked-by :routes-2026-10-10-circle-power-fiber-card-42,
+    :banked-commit "c4e86afab70cc0cf119faef672ee116e4d8c3fc2"},
    :id :lemma-circlepowerfibercard-circlepower-fiber-card,
    :kind :lemma,
    :depends-on [:lemma-circlepowerkernelcard-circlepower-kernel-card],
