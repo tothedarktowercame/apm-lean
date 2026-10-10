@@ -64190,64 +64190,93 @@
    "Prove the aligned Hurewicz coordinate is the identity for frozenTorusPi1CoordAtLbarBase, apply h1_coordinate_eq_of_fundamentalGroup_coordinate_eq, and transport the resulting IntegralH1 equation through singularHomologyComparison_naturality into the ModuleCat bridge.",
    :other-consumers []}
   {:bounded-exception
+   "single-consumer equality-transported Hurewicz coordinate for t97A04",
+   :consumer :t97A04,
+   :phase :probe,
+   :state :open,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t97A04/frozen-hurewicz-basepoint-transport",
+   :acceptance
+   {:probe
+    "Compile and bank finiteFreeHurewiczCoordinateMulEquiv_eqToIso_conj and frozenTorusAlignedHurewiczCoordinateAtLbarBase_apply from /tmp/t97a04_frozen_h1_coordinate.lean. Prove generally that equality-induced conjugation of the pi1 coordinate does not change the finite-free Hurewicz coordinate, then specialize along frozenLbar_base to show the transported aligned coordinate remains the identity. Preserve the frozen matrix exactly; do not yet claim the IntegralH1 equation, ModuleCat equation, or apm_t97A04_bridge_2.",
+    :declarations
+    ["ConstructionTargets.T97A04FrozenH1Coordinate.finiteFreeHurewiczCoordinateMulEquiv_eqToIso_conj"
+     "ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusAlignedHurewiczCoordinateAtLbarBase_apply"],
+    :type
+    "forall q : Multiplicative (Fin 2 → ℤ), finiteFreeHurewiczCoordinateMulEquiv frozenTorusPi1CoordAtLbarBase frozenTorusAlignedH1MulEquivFinTwo q = q",
+    :placeholder "apm_t97A04_bridge_2",
+    :route-step
+    "t97A04 step 5, preserve the identity-aligned Hurewicz coordinate across the frozen basepoint equality"},
+   :id
+   :routes-2026-10-10-t97a04-frozen-hurewicz-basepoint-transport-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo2-r5
+    :routes-2026-10-10-t97a04-frozen-pi1-raw-map-coordinate-topo2-r1],
+   :current-residual
+   "Apply h1_coordinate_eq_of_fundamentalGroup_coordinate_eq using the raw-map pi1 equation and both aligned Hurewicz identities, then transport the resulting IntegralH1 matrix equation through singularHomologyComparison_naturality into the ModuleCat bridge.",
+   :other-consumers []}
+  {:bounded-exception
    "single-consumer assembly from the now-banked frozen torus pi1 matrix theorem",
    :consumer :t97A04,
    :evidence
    {:probe
     {:residual
-     "Bank the raw-map pi1 coordinate theorem. Then prove Hurewicz-coordinate invariance under the frozen basepoint equality, derive the IntegralH1 matrix equation, and transport it into apm_t97A04_bridge_2.",
+     "Bank the equality-transported Hurewicz identity. Then derive the IntegralH1 matrix equation and transport it through singularHomologyComparison_naturality into apm_t97A04_bridge_2.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
      [{:name
-       "ConstructionTargets.T97A04FrozenH1Coordinate.frozenLbarPi1Map_coordinateMap_raw",
+       "ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusAlignedHurewiczCoordinateAtLbarBase_apply",
        :type
-       "forall p : FundamentalGroup FrozenTorus (0, 0), frozenMatrixCoordinateMap (frozenTorusPi1Coord p) = frozenTorusPi1CoordAtLbarBase (FundamentalGroup.map frozenLbar (0, 0) p)",
+       "forall q : Multiplicative (Fin 2 → ℤ), finiteFreeHurewiczCoordinateMulEquiv frozenTorusPi1CoordAtLbarBase frozenTorusAlignedH1MulEquivFinTwo q = q",
        :status :proved,
        :consumers [:t97A04],
        :depends-on
-       ["ConstructionTargets.T97A04FrozenH1Coordinate.frozenLbarPi1Map_coordinateMap"]}],
+       ["ConstructionTargets.T97A04FrozenH1Coordinate.frozenLbarPi1Map_coordinateMap_raw"
+        "ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusAlignedHurewiczCoordinate_apply"]}],
      :prerequisite
      {:bounded-exception
-      "single-consumer basepoint-transported raw pi1 coordinate map for t97A04",
+      "single-consumer equality-transported Hurewicz coordinate for t97A04",
       :consumer :t97A04,
       :phase :probe,
       :state :open,
       :scope [],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t97A04/frozen-pi1-raw-map-coordinate",
+      "TOPOLOGY-ROUTES.md/t97A04/frozen-hurewicz-basepoint-transport",
       :acceptance
       {:probe
-       "Compile and bank frozenTorusPi1CoordAtLbarBase and frozenLbarPi1Map_coordinateMap_raw from /tmp/t97a04_frozen_h1_coordinate.lean. Transport the frozen torus pi1 coordinate to the literal codomain basepoint frozenLbar (0,0) by conjugation along frozenLbar_base, and restate the frozen matrix equation using FundamentalGroup.map in the exact form required by h1_coordinate_eq_of_fundamentalGroup_coordinate_eq. Preserve the matrix exactly; do not yet claim the Hurewicz identity at the transported basepoint, the IntegralH1 equation, or apm_t97A04_bridge_2.",
+       "Compile and bank finiteFreeHurewiczCoordinateMulEquiv_eqToIso_conj and frozenTorusAlignedHurewiczCoordinateAtLbarBase_apply from /tmp/t97a04_frozen_h1_coordinate.lean. Prove generally that equality-induced conjugation of the pi1 coordinate does not change the finite-free Hurewicz coordinate, then specialize along frozenLbar_base to show the transported aligned coordinate remains the identity. Preserve the frozen matrix exactly; do not yet claim the IntegralH1 equation, ModuleCat equation, or apm_t97A04_bridge_2.",
        :declarations
-       ["ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusPi1CoordAtLbarBase"
-        "ConstructionTargets.T97A04FrozenH1Coordinate.frozenLbarPi1Map_coordinateMap_raw"],
+       ["ConstructionTargets.T97A04FrozenH1Coordinate.finiteFreeHurewiczCoordinateMulEquiv_eqToIso_conj"
+        "ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusAlignedHurewiczCoordinateAtLbarBase_apply"],
        :type
-       "forall p : FundamentalGroup FrozenTorus (0, 0), frozenMatrixCoordinateMap (frozenTorusPi1Coord p) = frozenTorusPi1CoordAtLbarBase (FundamentalGroup.map frozenLbar (0, 0) p)",
+       "forall q : Multiplicative (Fin 2 → ℤ), finiteFreeHurewiczCoordinateMulEquiv frozenTorusPi1CoordAtLbarBase frozenTorusAlignedH1MulEquivFinTwo q = q",
        :placeholder "apm_t97A04_bridge_2",
        :route-step
-       "t97A04 step 5, align the fixed-basepoint matrix theorem with the raw fundamental-group map used by Hurewicz naturality"},
+       "t97A04 step 5, preserve the identity-aligned Hurewicz coordinate across the frozen basepoint equality"},
       :id
-      :routes-2026-10-10-t97a04-frozen-pi1-raw-map-coordinate-topo2-r1,
+      :routes-2026-10-10-t97a04-frozen-hurewicz-basepoint-transport-topo2-r1,
       :kind :reusable-theorem,
       :depends-on
       [:routes-2026-10-10-checkpoint-topo2-r5
-       :routes-2026-10-10-t97a04-frozen-pi1-coordinate-map-topo2-r1],
+       :routes-2026-10-10-t97a04-frozen-pi1-raw-map-coordinate-topo2-r1],
       :current-residual
-      "Prove the aligned Hurewicz coordinate is the identity for frozenTorusPi1CoordAtLbarBase, apply h1_coordinate_eq_of_fundamentalGroup_coordinate_eq, and transport the resulting IntegralH1 equation through singularHomologyComparison_naturality into the ModuleCat bridge.",
+      "Apply h1_coordinate_eq_of_fundamentalGroup_coordinate_eq using the raw-map pi1 equation and both aligned Hurewicz identities, then transport the resulting IntegralH1 matrix equation through singularHomologyComparison_naturality into the ModuleCat bridge.",
       :other-consumers []},
      :commands
      [{:cmd "lake env lean /tmp/t97a04_frozen_h1_coordinate.lean",
        :exit 0,
        :output
-       "frozenTorusPi1CoordAtLbarBase and frozenLbarPi1Map_coordinateMap_raw compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "finiteFreeHurewiczCoordinateMulEquiv_eqToIso_conj and frozenTorusAlignedHurewiczCoordinateAtLbarBase_apply compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
        "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t97a04_frozen_h1_coordinate.lean || true)\"",
        :exit 0}
       {:cmd "sha256sum /tmp/t97a04_frozen_h1_coordinate.lean",
        :exit 0,
        :output
-       "263ab41fbf6eaf3e23d148489b20968e57996ad90dbcfe0e1d0262e1cdf415e3  /tmp/t97a04_frozen_h1_coordinate.lean"}
+       "16e975e990678de6328bd0306dcf805f85587fb433414306a1d9ac7adc04f0a1  /tmp/t97a04_frozen_h1_coordinate.lean"}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
@@ -64255,20 +64284,28 @@
      [{:cmd "lake env lean /tmp/t97a04_frozen_h1_coordinate.lean",
        :exit 1,
        :finding
-       "Rewriting directly with the fixed-basepoint coordinate theorem failed because h1_coordinate_eq_of_fundamentalGroup_coordinate_eq uses FundamentalGroup.map with codomain basepoint frozenLbar (0,0), whereas the banked theorem uses FundamentalGroup.mapOfEq into (0,0)."}
+       "Eliminating frozenLbar_base directly failed because its left endpoint is a concrete quotient expression rather than a variable. Generalizing to arbitrary x y and h : x = y made dependent elimination available."}
       {:cmd "lake env lean /tmp/t97a04_frozen_h1_coordinate.lean",
        :exit 1,
        :finding
-       "A direct simplification of the aligned Hurewicz identity across the non-reflexive basepoint equality did not reduce the conjugation equivalence. The compiled prerequisite therefore isolates the exact basepoint-transported pi1 coordinate and raw-map equation; Hurewicz invariance under this equality transport remains the next theorem."}],
+       "After equality elimination, reflexive categorical conjugation was not definitionally the identity; expanding the coordinate exposed the remaining Iso.refl conjugation."}
+      {:cmd "lake env lean /tmp/t97a04_frozen_h1_coordinate.lean",
+       :exit 1,
+       :finding
+       "The first conjugation rewrite needed Iso.refl_conj and explicit eqToIso_refl simplification, after which only composition with MulEquiv.refl remained."}
+      {:cmd "lake env lean /tmp/t97a04_frozen_h1_coordinate.lean",
+       :exit 1,
+       :finding
+       "Rewriting the reflexive MulEquiv composition under the dependent Hurewicz construction did not match syntactically. Eliminating the proved equivalence equality and closing by reflexivity completed the proof."}],
      :fixture
      {:path "/tmp/t97a04_frozen_h1_coordinate.lean",
       :sha256
-      "263ab41fbf6eaf3e23d148489b20968e57996ad90dbcfe0e1d0262e1cdf415e3"},
+      "16e975e990678de6328bd0306dcf805f85587fb433414306a1d9ac7adc04f0a1"},
      :finding
-     "The full apm_t97A04_bridge_2 proof remains absent. The compiled prerequisite defines the target pi1 coordinate at the actual point frozenLbar (0,0) by conjugation along frozenLbar_base and proves the frozen matrix equation for FundamentalGroup.map itself. This is the precise input shape of h1_coordinate_eq_of_fundamentalGroup_coordinate_eq; the remaining step is to prove that the aligned Hurewicz coordinate remains the identity after this basepoint equality transport.",
+     "The full apm_t97A04_bridge_2 proof remains absent. The compiled general theorem proves finiteFreeHurewiczCoordinateMulEquiv is invariant when its fundamental-group coordinate is transported by equality-induced categorical conjugation. The frozen specialization combines this with the banked aligned coordinate to prove the Hurewicz coordinate at frozenLbar (0,0) is exactly the identity.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t97A04/h1-bridge-assembly",
    :acceptance
@@ -64286,7 +64323,8 @@
     :routes-2026-10-10-t97a04-frozen-h1-multiplicative-coordinate-topo2-r1
     :routes-2026-10-10-t97a04-frozen-h1-hurewicz-alignment-topo2-r1
     :routes-2026-10-10-t97a04-frozen-pi1-coordinate-map-topo2-r1
-    :routes-2026-10-10-t97a04-frozen-pi1-raw-map-coordinate-topo2-r1],
+    :routes-2026-10-10-t97a04-frozen-pi1-raw-map-coordinate-topo2-r1
+    :routes-2026-10-10-t97a04-frozen-hurewicz-basepoint-transport-topo2-r1],
    :current-residual
    "The pi1 matrix equation is banked; align the frozen H1 equivalence and transfer the induced map equality through the Hurewicz and ModuleCat comparisons.",
    :other-consumers []}
