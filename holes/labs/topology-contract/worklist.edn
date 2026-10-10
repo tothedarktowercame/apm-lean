@@ -82405,8 +82405,15 @@
   {:consumer :t96A06,
    :stop-count 1,
    :evidence
-   {:outcome :stop,
-    :seat "topo-4",
+   {:residual
+    "RP3 first needs the normalized sphere-to-coinduced-projective covering identification, followed by the rational invariant-subspace/transfer computation. CPn separately needs the affine cover and deformation-retraction package, rational open-cover Mayer-Vietoris, and induction/dimension bookkeeping. Degree four, Lefschetz, local indices, and Euler characteristic remain downstream.",
+    :outcome :stop,
+    :warnings
+    [{:kind :multi-foundation-boundary,
+      :message
+      "The RP3 transfer route and arbitrary-CPn Mayer-Vietoris induction share a destination but not a single missing compiled interface."}],
+    :disposition :stop,
+    :author "topo-4",
     :reason
     "Representation boundary: the elected shared row spans several independent missing constructions and cannot produce a complete fixture or exactly one compiled prerequisite. For RP3, ProjectiveSpaceTopology supplies only the coinduced quotient from nonzero vectors; there is no banked identification of its real projective space with the antipodal quotient of S3 and no IsCoveringMap theorem for the normalized sphere projection. CoefficientCoveringTransfer proves p_* composed with transfer equals the sheet count, but that identity alone does not identify rational homology of the base with the antipodal-invariant subspace of sphere homology or prove vanishing and finite-dimensionality in every degree. For arbitrary CPn, a separate induction is required: affine-chart/open-complement topology, deformation retractions CPn minus a point to CP(n-1) and the overlap to S^(2n-1), rational-coefficient open-cover Mayer-Vietoris, sphere input, and exact-sequence dimension bookkeeping. Those RP3 covering-identification and CPn Mayer-Vietoris routes are not one theorem and neither is banked. Treating the transfer projection identity as the requested homology computation would weaken the acceptance invariant.",
     :commands
@@ -82434,16 +82441,25 @@
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
      {:cmd "git status --short", :exit 0, :finding "clean"}],
-    :warnings
-    [{:kind :multi-foundation-boundary,
-      :message
-      "The RP3 transfer route and arbitrary-CPn Mayer-Vietoris induction share a destination but not a single missing compiled interface."}],
-    :residual
-    "RP3 first needs the normalized sphere-to-coinduced-projective covering identification, followed by the rational invariant-subspace/transfer computation. CPn separately needs the affine cover and deformation-retraction package, rational open-cover Mayer-Vietoris, and induction/dimension bookkeeping. Degree four, Lefschetz, local indices, and Euler characteristic remain downstream.",
-    :author "topo-4",
-    :disposition :stop},
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791606660017-1092-3f84e3aa",
+     :commands
+     ["git show/diff recorded transition 3193393a and exact scope checks"
+      "rg projective covering and rational projective homology in pinned Mathlib and ConstructionTargets"
+      "inspect CoefficientSphereAntipodal, CoefficientSphereShift, CoefficientCoveringTransfer, ProductionOpenCoverMayerVietoris, CoefficientSubcomplexMayerVietoris, and ProjectiveSpaceTopology declarations"
+      "lake env lean problems/t96A06/lean/Main.lean"
+      "lake env lean problems/t99J05/lean/Main.lean"
+      "python3 scripts/statement-registry.py check and fingerprint t96A06/t99J05"
+      "comment-stripped placeholder census"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git diff --check 3193393a^ 3193393a"],
+     :finding
+     "PASS as STOP: reviewer codex-3 differs from author topo-4. Commit 3193393a changes only the worklist and records empty probe scope; no fixture or theorem implementation is claimed. Fresh inspection confirms that sphere homology shifts, antipodal actions, coefficient transfer projection, and production Mayer-Vietoris machinery are banked, but the required representation bridges are absent: no normalized sphere-to-coinduced-RP3 covering identification, no rational invariant-subspace equivalence computing base homology, and no arbitrary-CPn affine-cover deformation retractions or projective homology induction. Both consumers compile unchanged with exactly one sorry and no admit or axiom declarations; frozen fingerprints reproduce as t96A06 937efb042dcf5949706d95c5d4266acfe20a12308284ff85af707d5413c43aad and t99J05 cf42ee31318a9e37fde5e4e923ca60cbe51d483ebd813588efc9492359e37db6. Registry is 131/131 and all 682 rows validate. The orientation and boundary are correct: p-star composed with transfer equals sheet count, but this alone neither identifies base homology with antipodal invariants nor proves finite-dimensionality and vanishing. RP3 covering identification plus transfer computation and CPn cover/retraction plus Mayer-Vietoris induction are distinct missing foundations; degree four, Lefschetz, local indices, and Euler characteristic remain downstream."},
+    :seat "topo-4"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/shared/rational-projective-homology",
    :acceptance
@@ -82476,7 +82492,7 @@
    :stop-condition
    "End only when every active topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
