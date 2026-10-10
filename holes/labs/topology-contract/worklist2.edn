@@ -58871,6 +58871,21 @@
      {:cmd "git status --short",
       :exit 0,
       :output "?? holes/labs/topology-contract/worklist.edn.tmp"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791628866409-1686-a50ad5ac",
+     :commands
+     ["git show/diff-tree recorded implementation b40dd0a3 and transition f0f28289"
+      "sha256sum authenticated fixture"
+      "lake env lean fixture, recorded-identical target, and collar endpoint probe"
+      "lake build ConstructionTargets.T02A03GeometricTubeCover"
+      "qualified axiom audit and forbidden-placeholder scan"
+      "frozen consumer hash and comment-stripped placeholder census"
+      "python3 scripts/statement-registry.py check --rev b40dd0a3"
+      "bb worklist_check.bb on committed transition ledger"],
+     :finding
+     "PASS: codex-7 independently reviewed topo-6 commit b40dd0a30eb4a6e551c3ae0ec0c988870368d47c. Its exact scope is ConstructionTargets/T02A03GeometricTubeCover.lean; transition f0f28289a71a077b2cff0dd5bad657b9bc7a8e50 changes only the ledger; fixture SHA-256 is 932c393580fec51dacf4a94037b638f20f07458b0ac0cef86b86dc720b3ebfdb. The fixture, recorded-identical module, collar probe, and module build pass. The collar domain is Ico 0 1 and its point is exactly (0,0,(1-u)/8). Thus the third coordinate is strictly positive, preventing contact with the planar left core and deleted origin, while its norm is at most 1/8 and the common origin places it in the left radius-1/4 tube and W. The continuous map targets the exact geometricY subtype, and the stated u=0 direction is collar-to-anchor, yielding (0,0,1/8). No full attachment homotopy, deformation data, or gluing equivalence is claimed. All four declarations use only propext, Classical.choice, and Quot.sound. Frozen t02A03 hash is b123eca388ab2858ca55daf538c1ddd645022b52f5196a15f0bb516d78323d7d with one executable placeholder; registry is 131/0 and the committed 417-row ledger validates with exactly one done-unreviewed row."},
     :commit "b40dd0a30eb4a6e551c3ae0ec0c988870368d47c",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
@@ -58884,7 +58899,7 @@
      "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_attachmentCollarMap"
      "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_attachmentCollarMap_zero"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/geometric-attachment-collar",
    :acceptance
@@ -58973,7 +58988,7 @@
       "Connect the surviving right-core end to the collar and Circle meridian, then extend to tube deformations and gluing.",
       :other-consumers []}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/closure",
    :acceptance
