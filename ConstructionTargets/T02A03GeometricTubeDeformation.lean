@@ -113,7 +113,41 @@ theorem rightTubeMeridianCoordinate_circleMeridian
   exact (NormedSpace.normalize_smul_of_pos hpos (z : ℂ)).trans
     (NormedSpace.normalize_eq_self_of_norm_eq_one (Circle.norm_coe z))
 
+noncomputable def rightCoreCircle (z : Circle) : apm_t02a03_E3 :=
+  WithLp.toLp 2 ![1 - (z : ℂ).re, (z : ℂ).im, 0]
+
+theorem continuous_rightCoreCircle : Continuous rightCoreCircle := by
+  unfold rightCoreCircle
+  apply (PiLp.continuous_toLp 2 _).comp
+  apply continuous_pi
+  intro i
+  fin_cases i <;> simp <;> fun_prop
+
+theorem range_rightCoreCircle :
+    Set.range rightCoreCircle = Set.range apm_t02a03_rightCore := by
+  ext p
+  constructor
+  · rintro ⟨z, rfl⟩
+    refine ⟨Complex.arg (z : ℂ), ?_⟩
+    ext i
+    fin_cases i
+    · simpa [rightCoreCircle, apm_t02a03_rightCore,
+        Circle.norm_coe] using Complex.cos_arg (Circle.coe_ne_zero z)
+    · simpa [rightCoreCircle, apm_t02a03_rightCore,
+        Circle.norm_coe] using Complex.sin_arg (z : ℂ)
+    · simp [rightCoreCircle, apm_t02a03_rightCore]
+  · rintro ⟨t, rfl⟩
+    refine ⟨Circle.exp t, ?_⟩
+    ext i
+    fin_cases i <;> simp [rightCoreCircle, apm_t02a03_rightCore]
+
+theorem isCompact_range_rightCore :
+    IsCompact (Set.range apm_t02a03_rightCore) := by
+  rw [← range_rightCoreCircle]
+  exact isCompact_range continuous_rightCoreCircle
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeMeridianCoordinate_circleMeridian
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.isCompact_range_rightCore
