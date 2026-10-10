@@ -90499,10 +90499,11 @@
    {:outcome :replan,
     :seat "topo-4",
     :commands
-    [{:cmd "bb holes/labs/topology-contract/worklist_check.bb",
+    [{:cmd
+      "git show 9c789ae4:holes/labs/topology-contract/worklist.edn > /tmp/worklist-9c789ae4.edn && bb holes/labs/topology-contract/worklist_check.bb /tmp/worklist-9c789ae4.edn",
       :exit 0,
       :finding
-      "745 items OK; 705 done, 14 superseded, 15 needs-owner, 10 blocked, 1 open"}
+      "exact evidence commit: 747 items OK; 705 done, 14 superseded, 15 needs-owner, 12 blocked, 1 done-unreviewed"}
      {:cmd
       "comment-stripped placeholder census for t99J01 t92J06 t97A03 t93J03 t01A03 t97A01",
       :exit 0,
@@ -90521,49 +90522,45 @@
       :t01A03 1,
       :t97A01 1},
      :typed-residual-change
-     ["The repaired positive-index adapter compiles from exactly one generator-count axiom, excluding the reviewed n=0 refutation."
-      "Implementation review found that Mathlib has subgroup freeness and basis-index invariance but no finite Schreier basis or arborescence-complement cardinality theorem."
+     ["The repaired positive-index adapter compiles from one generator-count axiom and excludes the n=0 refutation."
+      "Mathlib has subgroup freeness and basis-index invariance but no finite Schreier basis or arborescence-complement cardinality theorem."
       "The generator-count construction exceeds one bounded row and is split first at the finite coset Schreier-quiver package."],
      :infrastructure-packets
      {:banked 0, :reviewed-stops 1, :placeholder-changing 0},
      :review-outcomes {:pass 0, :stop 1, :closed-problems 0},
      :routes
      {:t99J01
-      ["three-circles pi1 coordinates"
-       "banked cover subgroup index"
-       "finite Schreier coset quiver"
-       "spanning-tree complement and Nielsen-Schreier basis"
-       "path-component and cyclic-cover boundaries"
+      ["pi1 coordinates"
+       "banked subgroup index"
+       "finite Schreier quiver"
+       "tree-complement basis"
+       "component and cyclic-cover boundaries"
        "assembly"],
-      :t92J06
-      ["quotient-sheet local-homeomorph"
-       "permutation cover"
-       "Cayley-tree classification"],
+      :t92J06 ["quotient sheets" "permutation cover" "Cayley tree"],
       :t97A03
       ["double-cover gluing"
-       "fixed-model comparisons"
-       "finite Schreier coset quiver"
-       "spanning-tree complement and Nielsen-Schreier basis"
+       "model comparisons"
+       "finite Schreier quiver"
+       "tree-complement basis"
        "assembly"],
       :t93J03
       ["Klein orbit classification"
-       "deck-group pi1"
+       "deck pi1"
        "normal form"
        "lifting"
        "annulus"
        "assembly"],
-      :t01A03
-      ["circle-wedge pi1" "separating-circle collar" "assembly"],
+      :t01A03 ["wedge pi1" "separating collar" "assembly"],
       :t97A01
-      ["banked standard-N3 homeomorphism"
+      ["banked N3 homeomorphism"
        "polygon radial cover"
-       "polygon pi1 and Mayer-Vietoris"
+       "polygon MV"
        "banked Smith normalization"
        "assembly"]},
      :preserved-refutation
-     "The contract without 0<n remains refuted at r=1,n=0,H=bottom.",
+     "The contract without 0<n is refuted at r=1,n=0,H=bottom.",
      :ranking
-     "No consumer-closing adapter is enabled. The bounded finite coset Schreier-quiver package is the first missing part of the highest-ranked two-consumer route."},
+     "No consumer-closing adapter is enabled; the finite coset Schreier-quiver package is the first bounded part of the highest-ranked two-consumer route."},
     :replacement-items
     [{:consumer :t99J01,
       :phase :probe,
@@ -90608,7 +90605,7 @@
       :dag-node "TOPOLOGY-ROUTES.md",
       :acceptance
       {:strategy
-       "Measure the bounded finite positive-index Schreier coset-quiver probe, preserve the index-zero refutation and all reviewed topology boundaries, recount six consumers and eight placeholders, then elect the spanning-tree count or a nearer adapter."},
+       "Measure the bounded finite positive-index Schreier coset-quiver probe, preserve the index-zero refutation and reviewed topology boundaries, recount six consumers and eight placeholders, then elect the spanning-tree count or a nearer adapter."},
       :id :routes-2026-10-10-checkpoint-topo1-after-schreier-quiver-4,
       :kind :strategy-checkpoint,
       :depends-on
@@ -90617,15 +90614,9 @@
       "Review the first bounded construction inside the shared positive-index Schreier generator count.",
       :other-consumers []}],
     :author "topo-4",
-    :disposition :replan,
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1791636559634-1959-f7af8ce7",
-     :finding
-     "recorded worklist evidence is stale: the exact committed ledger has 747 items, 12 blocked, and 1 done-unreviewed, not 745 items, 10 blocked, and 1 open"}},
+    :disposition :replan},
    :phase :strategy,
-   :state :repair,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -90642,7 +90633,7 @@
    :other-consumers []}
   {:consumer :t99J01,
    :phase :probe,
-   :state :superseded,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/positive-index/coset-quiver",
@@ -90679,12 +90670,12 @@
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :phase :strategy,
-   :state :superseded,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
    {:strategy
-    "Measure the bounded finite positive-index Schreier coset-quiver probe, preserve the index-zero refutation and all reviewed topology boundaries, recount six consumers and eight placeholders, then elect the spanning-tree count or a nearer adapter."},
+    "Measure the bounded finite positive-index Schreier coset-quiver probe, preserve the index-zero refutation and reviewed topology boundaries, recount six consumers and eight placeholders, then elect the spanning-tree count or a nearer adapter."},
    :id :routes-2026-10-10-checkpoint-topo1-after-schreier-quiver-4,
    :kind :strategy-checkpoint,
    :depends-on
