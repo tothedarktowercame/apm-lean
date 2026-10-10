@@ -83264,6 +83264,26 @@
      "Finite-class disjunctions consisting of equality, explicitly paired open-edge points, and computed endpoint classes",
      :direction
      "Exact iff characterization from each source EqvGen relation to the finite-class target, then reverse rewriting of target closedness into source-graph closedness"},
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791609529501-1208-751ac61a",
+     :commands
+     ["git show/stat/diff recorded STOP transition 580d7b532c623ed486241e44adfb3afe126c7aeb"
+      "sha256sum /tmp/finite-polygon-eqvgen-classification-probe.lean"
+      "LEAN_PATH=/tmp/polygon-eqvgen-probe lake env lean /tmp/finite-polygon-eqvgen-classification-probe.lean"
+      "rg fixture declarations, custom axiom, and five requested exact-IFF names"
+      "test scoped FinitePolygonEqvGenClassification target file is absent"
+      "lake env lean problems/t94J09/lean/Main.lean"
+      "lake env lean problems/tunk01/lean/Main.lean"
+      "lake env lean problems/t91A02/lean/Main.lean"
+      "comment-stripped placeholder census and statement fingerprints for t94J09, tunk01, and t91A02"
+      "inspect polygon and SurfaceRel generators, edge parametrizations, and vertex-class boundary"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git diff --check 580d7b53^ 580d7b53"],
+     :finding
+     "PASS as STOP: reviewer codex-3 differs from author topo-2. Recorded transition commit 580d7b532c623ed486241e44adfb3afe126c7aeb changes only holes/labs/topology-contract/worklist.edn; no implementation commit or scoped source change is claimed, and ConstructionTargets/FinitePolygonEqvGenClassification.lean is absent. The frozen fixture hash reproduces as 61cb12a3d34a4074623aef406e063e89e111ba23b3dcb6eca66fc19a15eadc7b. It compiles but postulates only the final four-way closed-graph conjunction through the custom axiom finite_polygon_eqvgen_classification; its axiom audit reports that dependency. The generic finitePolygonEqvGen_iff_classes theorem and all four consumer exact-IFF declarations are absent, so the standard-only gate deterministically fails and the STOP is correct. The representation diagnosis and direction are exact: the source is each Relation.EqvGen closure, while the target is the disjunction of equality, explicitly paired open-edge points, and membership in a computed finite endpoint class. Forward classification requires EqvGen induction backed by an edgePoint open-interval injectivity/intersection theorem and finite endpoint reachability; the converse must prove every target disjunct belongs to EqvGen. Only after both directions compile can target closedness be rewritten back into closedness of the source relation graph and passed to compact_closed_equivalence_quotient_t2. The three consumers compile unchanged with one sorry each; t94J09's separate pre-existing named axiom is unchanged. Frozen fingerprints reproduce as t94J09 52b4778c4932a4b38c30b3bf2a7c9943c32f675f19f63ae1d119aa378dde0a75, tunk01 5362677d8a8f8dfcae54d23788ab8d3558ea3b78992e8b9e9c8f0b956fc636fe, and t91A02 e6b708786cf6a21dc5bd30b3d560b260aa4f2bb70519e89f1e06f46d935e41bb. Registry is 131/131 and all 691 worklist rows validate."},
     :changed-paths [],
     :fixture
     {:path "/tmp/finite-polygon-eqvgen-classification-probe.lean",
@@ -83272,7 +83292,7 @@
      :status :self-axiomatized},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/FinitePolygonEqvGenClassification.lean"
     "problems/t94J09/lean/Main.lean"
@@ -83432,7 +83452,7 @@
       "61cb12a3d34a4074623aef406e063e89e111ba23b3dcb6eca66fc19a15eadc7b"},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/finite-polygon-eqvgen-classification",
