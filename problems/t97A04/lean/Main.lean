@@ -3,6 +3,7 @@ import Mathlib.AlgebraicTopology.SingularHomology.Basic
 import Mathlib.Algebra.Category.ModuleCat.Colimits
 import Mathlib.Algebra.Category.ModuleCat.Abelian
 import ConstructionTargets.T97A04FrozenH1Coordinate
+import ConstructionTargets.CoefficientH0
 
 /-!
 # APM t97A04 — homological data of an integral linear torus map
@@ -137,7 +138,16 @@ theorem apm_t97A04_bridge_1 :
     ∃ h0 : T97A04Homology 0 ≅ ModuleCat.of ℤ ℤ,
       ∀ a : T97A04Homology 0,
         h0.hom (t97A04HomologyMap 0 apm_t97a04_Lbar a) = h0.hom a := by
-  sorry
+  letI : PathConnectedSpace apm_t97a04_Torus :=
+    { nonempty := ⟨0⟩
+      joined := fun x y =>
+        ⟨(PathConnectedSpace.somePath x.1 y.1).prod
+          (PathConnectedSpace.somePath x.2 y.2)⟩ }
+  refine ⟨ConstructionTargets.CoefficientH0.h0Iso ℤ
+    (0 : apm_t97a04_Torus), fun a => ?_⟩
+  have h := ConstructionTargets.CoefficientH0.h0Augmentation_naturality
+    ℤ apm_t97a04_Lbar
+  exact congrArg (fun g => g.hom a) h
 
 /-- Why this unblocks the first-homology component of `apm_t97a04`: under
 the two coordinate-circle generators of `H₁(T²;ℤ)`, the induced map of the
