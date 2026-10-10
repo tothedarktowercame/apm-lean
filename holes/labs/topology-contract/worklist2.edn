@@ -59845,6 +59845,21 @@
       :exit 1,
       :finding
       "An import-only axiom probe used the pre-build olean and therefore could not see the newly edited declaration. The authoritative source file and the recorded fixture were subsequently compiled directly; the fixture's successful axiom print is included in :commands."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791633141569-1847-939f8f52",
+     :commands
+     ["git show, diff-tree, and show --check on recorded implementation c8b23755 and ledger transition 97c877e1"
+      "sha256sum authenticated fixture and frozen t02A03 consumer"
+      "lake env lean on fixture, target, and fresh planar-radius representation probe"
+      "lake build ConstructionTargets.T02A03GeometricTubeCover"
+      "axiom and forbidden-placeholder audits"
+      "recomputed frozen declaration-type hash and comment-stripped consumer placeholder count"
+      "python3 scripts/statement-registry.py check --rev c8b23755"
+      "bb worklist_check.bb on committed transition ledger"],
+     :finding
+     "PASS: codex-7 independently reviewed topo-6 commit c8b2375549e023043a907c037db320ab757a0d8f. Exact implementation scope is ConstructionTargets/T02A03GeometricTubeCover.lean; transition 97c877e1d2804b00a25e510c14149024f2e1d2f0 is ledger-only. Fixture SHA-256 is 6782eadc0d38c68b899252a4c14666ae94f8e1c14f09d839d4062dc1dc9d0221. Fixture, recorded-identical target, fresh representation probe, and 8240-job focused build pass. The theorem has the exact frozen type and correct orientation: unfolding leftCore gives coordinate 0 plus 1 = cos t and coordinate 1 = sin t, so Real.cos_sq_add_sin_sq proves squared planar displacement one from center (-1,0). It claims no tube coordinates, deformation, torus equivalence, or gluing. Axioms are exactly propext, Classical.choice, and Quot.sound. Declaration type hash reproduces as 514b2cebb463f282f489c9b2ed07c9b99cbaf61007b3fecac94764aadf11f8c8; target has zero executable placeholders. Frozen t02A03 consumer hash is b123eca388ab2858ca55daf538c1ddd645022b52f5196a15f0bb516d78323d7d with one executable placeholder; registry is 131/0 and the committed 428-row ledger validates with exactly one done-unreviewed row."},
     :commit "c8b2375549e023043a907c037db320ab757a0d8f",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
@@ -59859,7 +59874,7 @@
    :phase :implementation,
    :type
    "∀ t : ℝ, (apm_t02a03_leftCore t 0 + 1) ^ 2 + (apm_t02a03_leftCore t 1) ^ 2 = 1",
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-core-planar-radius",
    :acceptance
@@ -59938,7 +59953,7 @@
    :phase :probe,
    :type
    "Nonempty (ContinuousMap.HomotopyEquiv LeftTubeMinusCore ConstructionTargets.TorusCircleWedgeOpenCover.Torus)",
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-punctured-model",
    :acceptance
