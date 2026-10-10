@@ -66168,77 +66168,92 @@
    :implements-lemma
    :lemma-constructiontargets-realprojectiveevenquadraticdescent-evenquadraticdescents,
    :evidence
-   {:probe
-    {:residual
-     "t95A04 still needs the descended Veronese map's embedding and immersion proofs; t96A07 still needs the descended cross-term map's nontransversality and the sphere-map infinite regular-value argument.",
-     :outcome :go,
-     :warnings
-     ["The prerequisite source reports one unnecessarySimpa linter warning; the combined quadratic fixture itself compiles without warnings."],
-     :missing-theorems
-     [{:name
-       "ConstructionTargets.RealProjectiveEvenQuadraticDescent.evenQuadraticDescents",
-       :type
-       "The paired existence package realized by veroneseDescended and crossTermDescended, with their sphereProjection pullback equations and ContMDiff theorems under rpSmoothAtlas",
-       :status :proved,
-       :consumers [:t95A04 :t96A07],
-       :depends-on
-       ["ConstructionTargets.RealProjectiveSmoothTarget.sphereProjectionEvenMapSmoothDescent"],
-       :area "rp-smooth-atlas"}],
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd
-       "lake env lean -o /tmp/leanprobe/ProbeSmooth.olean ConstructionTargets/RealProjectiveSmoothTarget.lean",
-       :exit 0,
-       :output
-       "compiled the reviewed smooth-descent source for scratch import; one unnecessarySimpa warning"}
-      {:cmd
-       "LEAN_PATH=/tmp/leanprobe lake env lean /tmp/rp2_even_quadratic_descents.lean",
-       :exit 0,
-       :output
-       "both descents, pullback equations, and smoothness theorems compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd "sha256sum /tmp/rp2_even_quadratic_descents.lean",
-       :exit 0,
-       :output
-       "7cafeb07634612e4711419ce38358c4ef1a2895a4721796088341d22307bdccc  /tmp/rp2_even_quadratic_descents.lean"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp2_even_quadratic_descents.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :diagnostic-history
-     [{:cmd "lake env lean /tmp/rp2_even_quadratic_descents.lean",
-       :exit 1,
-       :finding
-       "Problem files are not importable Lake modules; the final ConstructionTargets fixture defines the two exact frozen coordinate formulas locally, as the implementation module must, and consumer adapters identify them definitionally."}
-      {:cmd
-       "LEAN_PATH=/tmp/leanprobe lake env lean /tmp/rp2_even_quadratic_descents.lean",
-       :exit 1,
-       :finding
-       "The first coordinate-smoothness attempt relied on fun_prop for manifold ContMDiff goals. The final proof composes contMDiff_coe_sphere, PiLp.contDiff_ofLp, scalar evaluation, multiplication and powers explicitly."}],
-     :fixture
-     {:path "/tmp/rp2_even_quadratic_descents.lean",
-      :sha256
-      "7cafeb07634612e4711419ce38358c4ef1a2895a4721796088341d22307bdccc"},
-     :finding
-     "The complete two-consumer fixture defines the two exact even quadratic sphere formulas, proves antipodal invariance coordinatewise, proves their sphere smoothness explicitly, applies sphereProjectionEvenMapSmoothDescent, and exposes each descended map together with its representative pullback equation and ContMDiff theorem. No consumer conclusion beyond descent and smoothness is claimed.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/RealProjectiveEvenQuadraticDescent.lean"],
-      :declarations
-      ["ConstructionTargets.RealProjectiveEvenQuadraticDescent.veroneseSphereMap"
-       "ConstructionTargets.RealProjectiveEvenQuadraticDescent.crossTermSphereMap"
-       "ConstructionTargets.RealProjectiveEvenQuadraticDescent.veroneseDescended"
-       "ConstructionTargets.RealProjectiveEvenQuadraticDescent.crossTermDescended"
-       "ConstructionTargets.RealProjectiveEvenQuadraticDescent.veroneseDescended_sphereProjection"
-       "ConstructionTargets.RealProjectiveEvenQuadraticDescent.crossTermDescended_sphereProjection"
-       "ConstructionTargets.RealProjectiveEvenQuadraticDescent.veroneseDescended_contMDiff"
-       "ConstructionTargets.RealProjectiveEvenQuadraticDescent.crossTermDescended_contMDiff"],
-      :acceptance
-      "Transfer the fixture into the scoped module, replacing the scratch ProbeSmooth import with ConstructionTargets.RealProjectiveSmoothTarget. Preserve the exact coordinate formulas; the consumer adapters may identify T95A04SphereMap and T96A07.sphereMap with these supporting definitions by rfl or simp."},
-     :seat "topo-8"}},
+   {:placeholder-delta
+    {:t95A04 {:before 1, :after 1, :delta 0},
+     :t96A07 {:before 1, :after 1, :delta 0},
+     :scoped-module {:before 0, :after 0, :delta 0}},
+    :residual
+    "t95A04 still needs the descended Veronese map's embedding and immersion proofs; t96A07 still needs the descended cross-term map's nontransversality and the sphere-map infinite regular-value argument.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["The prerequisite source reports one unnecessarySimpa linter warning; the quadratic descent module compiles without warnings."],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.RealProjectiveEvenQuadraticDescent.evenQuadraticDescents",
+      :type
+      "The paired existence package realized by veroneseDescended and crossTermDescended, with their sphereProjection pullback equations and ContMDiff theorems under rpSmoothAtlas",
+      :status :proved,
+      :consumers [:t95A04 :t96A07],
+      :depends-on
+      ["ConstructionTargets.RealProjectiveSmoothTarget.sphereProjectionEvenMapSmoothDescent"],
+      :area "rp-smooth-atlas"}],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not",
+     :construction-file-git-blob
+     "8d59a1aa0b3da5b01e1771a9d8d9a5618de09d72",
+     :fixture-sha256
+     "7cafeb07634612e4711419ce38358c4ef1a2895a4721796088341d22307bdccc"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd "sha256sum /tmp/rp2_even_quadratic_descents.lean",
+      :exit 0,
+      :output
+      "7cafeb07634612e4711419ce38358c4ef1a2895a4721796088341d22307bdccc  /tmp/rp2_even_quadratic_descents.lean"}
+     {:cmd "lake build ConstructionTargets.RealProjectiveSmoothTarget",
+      :exit 0,
+      :output
+      "Build completed successfully; one unnecessarySimpa warning in the prerequisite."}
+     {:cmd
+      "lake env lean ConstructionTargets/RealProjectiveEvenQuadraticDescent.lean",
+      :exit 0}
+     {:cmd
+      "LEAN_PATH=/tmp/leanprobe lake env lean /tmp/rp2_even_quadratic_descents.lean",
+      :exit 0,
+      :output
+      "both descents, pullback equations, and smoothness theorems compiled; axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/RealProjectiveEvenQuadraticDescent.lean /tmp/rp2_even_quadratic_descents.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "git show --check --oneline c3d68caa5b3c60a4292a671506e9e8e1a31a4382",
+      :exit 0,
+      :output "c3d68caa Add smooth descents for RP2 quadratic maps"}],
+    :diagnostic-history
+    [{:cmd
+      "lake env lean ConstructionTargets/RealProjectiveEvenQuadraticDescent.lean",
+      :exit 1,
+      :finding
+      "The first scoped compile imported a stale RealProjectiveSmoothTarget object that predated the newly banked sphereProjectionEvenMapSmoothDescent declaration. Rebuilding that prerequisite through Lake refreshed the object, after which the unchanged scoped module compiled."}],
+    :commit "c3d68caa5b3c60a4292a671506e9e8e1a31a4382",
+    :changed-paths
+    ["ConstructionTargets/RealProjectiveEvenQuadraticDescent.lean"],
+    :fixture
+    {:path "/tmp/rp2_even_quadratic_descents.lean",
+     :sha256
+     "7cafeb07634612e4711419ce38358c4ef1a2895a4721796088341d22307bdccc"},
+    :finding
+    "The new scoped module defines the exact Veronese and cross-term quadratic sphere maps, proves their antipodal invariance and smoothness coordinatewise, and applies the banked smooth descent to expose descended maps with pullback and ContMDiff theorems. It makes no embedding, immersion, or transversality claim.",
+    :implementation
+    {:scope
+     ["ConstructionTargets/RealProjectiveEvenQuadraticDescent.lean"],
+     :declarations
+     ["ConstructionTargets.RealProjectiveEvenQuadraticDescent.veroneseSphereMap"
+      "ConstructionTargets.RealProjectiveEvenQuadraticDescent.crossTermSphereMap"
+      "ConstructionTargets.RealProjectiveEvenQuadraticDescent.veroneseDescended"
+      "ConstructionTargets.RealProjectiveEvenQuadraticDescent.crossTermDescended"
+      "ConstructionTargets.RealProjectiveEvenQuadraticDescent.veroneseDescended_sphereProjection"
+      "ConstructionTargets.RealProjectiveEvenQuadraticDescent.crossTermDescended_sphereProjection"
+      "ConstructionTargets.RealProjectiveEvenQuadraticDescent.veroneseDescended_contMDiff"
+      "ConstructionTargets.RealProjectiveEvenQuadraticDescent.crossTermDescended_contMDiff"],
+     :implements-lemma
+     :lemma-constructiontargets-realprojectiveevenquadraticdescent-evenquadraticdescents},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/RealProjectiveEvenQuadraticDescent.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/rp2/even-quadratic-descent",
