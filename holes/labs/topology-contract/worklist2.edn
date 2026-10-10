@@ -61364,6 +61364,33 @@
    "Combine the planar radial estimate with the height coordinate and the attained core witness to prove the full normal displacement has norm at most 1/4, then construct the complement-side radial homotopy and assemble the torus HomotopyEquiv.",
    :other-consumers []}
   {:bounded-exception
+   "single-consumer frozen normal-radius bound for the t02A03 punctured left tube",
+   :consumer :t02A03,
+   :phase :probe,
+   :state :open,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-normal-radius-bound",
+   :acceptance
+   {:probe
+    "Compile and bank apm_t02a03_leftTubeNormalComplex_norm_le_dist_leftCore and apm_t02a03_leftTubeNormalComplex_norm_le from /tmp/t02a03_geometric_tube_cover.lean. Combine the planar reverse-triangle estimate with the unchanged height coordinate to prove the complex normal displacement is no larger than the Euclidean distance to every frozen left-core point, then apply apm_t02a03_leftTube_exists_near_leftCore to bound its norm by the frozen cthickening radius 1/4. This supplies the quantitative invariant needed for radial interpolation; do not yet claim the interpolation stays outside the core, either comparison homotopy, the HomotopyEquiv, or gluing.",
+    :declarations
+    ["apm_t02a03_leftTubeNormalComplex_norm_le_dist_leftCore"
+     "apm_t02a03_leftTubeNormalComplex_norm_le"],
+    :type
+    "forall p : apm_t02a03_leftTubeSubtype, norm (apm_t02a03_leftTubeNormalComplex p) <= (1 / 4 : Real)",
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "t02A03 step 2, bound the punctured normal coordinate throughout the frozen left tube"},
+   :id
+   :routes-2026-10-10-t02a03-left-tube-normal-radius-bound-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo2-r5
+    :routes-2026-10-10-t02a03-left-tube-planar-reverse-triangle-topo2-r1],
+   :current-residual
+   "Construct the inverse-after-forward radial homotopy inside LeftTubeMinusCore using the uniform normal-radius bound, then assemble the torus HomotopyEquiv.",
+   :other-consumers []}
+  {:bounded-exception
    "single-consumer explicit punctured-left-tube model for t02A03",
    :consumer :t02A03,
    :evidence
@@ -61373,63 +61400,68 @@
      :fixture
      {:path "/tmp/t02a03_geometric_tube_cover.lean",
       :sha256
-      "ae914b8bdb637ce22fd54096b9d6aae68fd306afd3cb943b2f02f03192658733"},
+      "52bd30d0b20cb91295e3ce4cf15ae63aafc51585c3763fdffad0c3b2aa6f103c"},
      :commands
      [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
        :exit 0,
        :output
-       "apm_t02a03_leftTubePlanar_norm_sub_one_le_corePlanarDistance compiled without warnings; axioms [propext, Classical.choice, Quot.sound]"}
+       "apm_t02a03_leftTubeNormalComplex_norm_le_dist_leftCore and apm_t02a03_leftTubeNormalComplex_norm_le compiled without warnings; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
        "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
        :exit 0}
       {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
        :exit 0,
        :output
-       "ae914b8bdb637ce22fd54096b9d6aae68fd306afd3cb943b2f02f03192658733  /tmp/t02a03_geometric_tube_cover.lean"}
+       "52bd30d0b20cb91295e3ce4cf15ae63aafc51585c3763fdffad0c3b2aa6f103c  /tmp/t02a03_geometric_tube_cover.lean"}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
      :diagnostic-history
      [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
+       :exit 1,
        :finding
-       "The first successful compile reported one unused simp argument in the new proof. Removing zero_mul from the explicit simp set produced the warning-free final acceptance run."}],
+       "The first squared-inequality proof asked nlinarith to infer monotonicity of squaring directly from an absolute-value bound, and the expanded planar norm retained complex trigonometric real parts. Using sq_le_sq₀ with nonnegative sides and then Complex.sq_norm isolated the required squared inequality."}
+      {:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 1,
+       :finding
+       "After isolating the squared inequality, simplification still left (Complex.cos (t : Complex)).re and (Complex.sin (t : Complex)).re, preventing polynomial normalization. Adding Complex.cos_ofReal_re and Complex.sin_ofReal_re exposed the real coordinate polynomial; the final rerun compiled."}],
      :finding
-     "The full punctured-left-tube HomotopyEquiv remains absent. The torus-side composite is already exactly the identity, but the complement-side radial homotopy requires a quantitative normal-radius bound. The compiled theorem apm_t02a03_leftTubePlanar_norm_sub_one_le_corePlanarDistance establishes the first exact estimate: for every frozen left-tube point and every core parameter t, the absolute difference between its planar radius and 1 is at most its planar distance from the corresponding unit-circle core point. It follows directly from the reverse triangle inequality after proving the trigonometric core point has complex norm 1. The next step must combine this planar estimate with the unchanged height coordinate and the attained core witness to bound the full complex normal displacement by the frozen tube radius 1/4.",
+     "The full punctured-left-tube HomotopyEquiv is still absent, but the exact normal-radius control required by its complement-side radial homotopy is now compiled. The helper apm_t02a03_leftTubeNormalComplex_norm_le_dist_leftCore proves that normal displacement is bounded by distance to every frozen left-core point: the banked planar reverse-triangle inequality controls the radial component, the height component is identical on both sides, and comparison of squared norms finishes the Euclidean estimate. Applying the attained-core witness for a point in the frozen cthickening gives apm_t02a03_leftTubeNormalComplex_norm_le, the uniform bound by 1/4.",
      :residual
-     "Bank the planar reverse-triangle estimate. Then combine it with the height coordinate and apm_t02a03_leftTube_exists_near_leftCore to prove norm(apm_t02a03_leftTubeNormalComplex p) <= 1/4, use that bound to keep the inverse-after-forward radial interpolation inside the frozen left tube and away from the core, and assemble the HomotopyEquiv.",
+     "Bank the distance comparison and uniform 1/4 normal bound. Then define the inverse-after-forward radial interpolation, prove every intermediate point remains in the frozen left tube and outside the frozen core, bundle its continuity and endpoint identities as a homotopy, and assemble the HomotopyEquiv.",
      :prerequisite
      {:bounded-exception
-      "single-consumer planar reverse-triangle estimate for the t02A03 punctured left tube",
+      "single-consumer frozen normal-radius bound for the t02A03 punctured left tube",
       :consumer :t02A03,
       :phase :probe,
       :state :open,
       :scope [],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t02A03/left-tube-planar-reverse-triangle",
+      "TOPOLOGY-ROUTES.md/t02A03/left-tube-normal-radius-bound",
       :acceptance
       {:probe
-       "Compile and bank apm_t02a03_leftTubePlanar_norm_sub_one_le_corePlanarDistance from /tmp/t02a03_geometric_tube_cover.lean. Prove by the complex reverse triangle inequality that the absolute planar radial error of any frozen left-tube point is bounded by its planar distance to every left-core circle point, first proving that the trigonometric core point has norm 1. This supplies the planar estimate needed for the full normal-radius bound; do not yet claim the full normal bound, radial homotopy, HomotopyEquiv, or gluing.",
-       :declaration
-       "apm_t02a03_leftTubePlanar_norm_sub_one_le_corePlanarDistance",
+       "Compile and bank apm_t02a03_leftTubeNormalComplex_norm_le_dist_leftCore and apm_t02a03_leftTubeNormalComplex_norm_le from /tmp/t02a03_geometric_tube_cover.lean. Combine the planar reverse-triangle estimate with the unchanged height coordinate to prove the complex normal displacement is no larger than the Euclidean distance to every frozen left-core point, then apply apm_t02a03_leftTube_exists_near_leftCore to bound its norm by the frozen cthickening radius 1/4. This supplies the quantitative invariant needed for radial interpolation; do not yet claim the interpolation stays outside the core, either comparison homotopy, the HomotopyEquiv, or gluing.",
+       :declarations
+       ["apm_t02a03_leftTubeNormalComplex_norm_le_dist_leftCore"
+        "apm_t02a03_leftTubeNormalComplex_norm_le"],
        :type
-       "forall (p : apm_t02a03_leftTubeSubtype) (t : Real), abs (norm (apm_t02a03_leftTubePlanarComplex p) - 1) <= norm (apm_t02a03_leftTubePlanarComplex p - ((Real.cos t : Complex) + (Real.sin t : Complex) * Complex.I))",
+       "forall p : apm_t02a03_leftTubeSubtype, norm (apm_t02a03_leftTubeNormalComplex p) <= (1 / 4 : Real)",
        :placeholder "the sole sorry in apm_t02a03",
        :route-step
-       "t02A03 step 2, bound planar radial error by distance to each frozen left-core point"},
+       "t02A03 step 2, bound the punctured normal coordinate throughout the frozen left tube"},
       :id
-      :routes-2026-10-10-t02a03-left-tube-planar-reverse-triangle-topo2-r1,
+      :routes-2026-10-10-t02a03-left-tube-normal-radius-bound-topo2-r1,
       :kind :reusable-theorem,
       :depends-on
       [:routes-2026-10-10-checkpoint-topo2-r5
-       :routes-2026-10-10-t02a03-left-tube-forward-inverse-identity-topo2-r1],
+       :routes-2026-10-10-t02a03-left-tube-planar-reverse-triangle-topo2-r1],
       :current-residual
-      "Combine the planar radial estimate with the height coordinate and the attained core witness to prove the full normal displacement has norm at most 1/4, then construct the complement-side radial homotopy and assemble the torus HomotopyEquiv.",
+      "Construct the inverse-after-forward radial homotopy inside LeftTubeMinusCore using the uniform normal-radius bound, then assemble the torus HomotopyEquiv.",
       :other-consumers []}}},
    :phase :probe,
    :type
    "Nonempty (ContinuousMap.HomotopyEquiv LeftTubeMinusCore ConstructionTargets.TorusCircleWedgeOpenCover.Torus)",
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-punctured-model",
    :acceptance
@@ -61470,7 +61502,8 @@
     :routes-2026-10-10-t02a03-left-tube-torus-point-core-exclusion-topo2-r1
     :routes-2026-10-10-t02a03-left-tube-torus-inverse-map-topo2-r1
     :routes-2026-10-10-t02a03-left-tube-forward-inverse-identity-topo2-r1
-    :routes-2026-10-10-t02a03-left-tube-planar-reverse-triangle-topo2-r1],
+    :routes-2026-10-10-t02a03-left-tube-planar-reverse-triangle-topo2-r1
+    :routes-2026-10-10-t02a03-left-tube-normal-radius-bound-topo2-r1],
    :current-residual
    "After the punctured-left-tube model is banked, construct the right-tube-minus-deleted-attachment model extending the based core homotopy, then overlap compatibility and gluing for the full geometricY equivalence.",
    :other-consumers []}
