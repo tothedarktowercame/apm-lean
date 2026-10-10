@@ -58460,6 +58460,21 @@
       :exit 1,
       :finding
       "The exploratory combined command stopped at test -L because the canonical /home/joe/code/apm-lean checkout owns a real .lake/packages directory. The frame-worktree symlink rule does not apply to this canonical checkout; the corrected Lean and acceptance commands were run separately and succeeded."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791627243536-1622-0aaba64b",
+     :commands
+     ["git show/diff-tree recorded implementation f9baa09c and transition b2401a5e"
+      "sha256sum authenticated fixture"
+      "lake env lean fixture, recorded-identical target, and frozen-representation bridge"
+      "lake build ConstructionTargets.T02A03GeometricTubeCover"
+      "qualified #print and axiom audit"
+      "frozen consumer hash and comment-stripped placeholder census"
+      "python3 scripts/statement-registry.py check --rev f9baa09c"
+      "bb worklist_check.bb on committed transition ledger"],
+     :finding
+     "PASS: codex-7 independently reviewed topo-6 commit f9baa09c30aa6c89bc8ccf5895c320841f672651. Its exact scope is ConstructionTargets/T02A03GeometricTubeCover.lean; transition b2401a5eed42832d412c248f74c14ae0e238c93e changes only the ledger; fixture SHA-256 is d67265aee2baecdc9a7a4c567aac503ca9014f93a65d803452f918654e3757f1. The fixture, recorded-identical module, frozen-representation bridge, and module build pass. The meridian is exactly t maps to (cos t/8,0,sin t/8), has constant norm 1/8 at most 1/4, enters W through the left tube using the common origin, and cannot meet the planar left core; the continuous map targets the definitionally matching frozen geometricY subtype. No attachment compatibility, deformation retract, or gluing equivalence is claimed. All three declarations use only propext, Classical.choice, and Quot.sound. Frozen t02A03 hash is b123eca388ab2858ca55daf538c1ddd645022b52f5196a15f0bb516d78323d7d with one executable placeholder; registry is 131/0 and the committed 413-row ledger validates with exactly one done-unreviewed row."},
     :commit "f9baa09c30aa6c89bc8ccf5895c320841f672651",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
@@ -58472,7 +58487,7 @@
      "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_meridian_mem_geometricY"
      "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_meridianMap"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/geometric-normal-meridian",
    :acceptance
@@ -58557,7 +58572,7 @@
       "Construct the compatible attachment of the surviving right core to the normal meridian, then extend to tube deformations and gluing.",
       :other-consumers []}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/closure",
    :acceptance
