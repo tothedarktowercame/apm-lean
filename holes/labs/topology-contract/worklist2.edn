@@ -59032,22 +59032,75 @@
   {:bounded-exception
    "single-consumer punctured right-core attachment segment for the t02A03 geometric complement",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/t02a03_geometric_tube_cover.lean",
+      :sha256
+      "e61cbc98aa69ee5c3bc7066839e53deb346bb7ee9ed0e7ed6a82090d04e3a138"},
+     :commands
+     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "apm_t02a03_rightCoreAttachmentClosureMap, apm_t02a03_rightCoreAttachmentClosureMap_zero, apm_t02a03_rightCoreAttachmentPoint_mem_geometricY, and apm_t02a03_rightCoreAttachmentMap compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
+       :exit 0}
+      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "e61cbc98aa69ee5c3bc7066839e53deb346bb7ee9ed0e7ed6a82090d04e3a138  /tmp/t02a03_geometric_tube_cover.lean"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}
+      {:cmd
+       "rg -n '^((noncomputable )?def|theorem) apm_t02a03_rightCoreAttachment(ClosureMap|ClosureMap_zero|Point_mem_geometricY|Map)' /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "363:noncomputable def apm_t02a03_rightCoreAttachmentClosureMap :\n369:theorem apm_t02a03_rightCoreAttachmentClosureMap_zero :\n373:theorem apm_t02a03_rightCoreAttachmentPoint_mem_geometricY\n389:noncomputable def apm_t02a03_rightCoreAttachmentMap :"}],
+     :finding
+     "A complete placeholder-free fixture compiles for this bounded row. Restricting the frozen right core to Set.Icc 0 1 gives a continuous Euclidean-space segment whose zero endpoint is the uniquely deleted origin. For parameters in Set.Ioc 0 1, the right-core image cannot be zero: its first coordinate would force cos t = 1, and the small-angle cosine characterization would force t = 0, contradicting positivity. Thus the punctured segment bundles continuously into the exact geometricY subtype.",
+     :residual
+     "Promote the closed and punctured right-core attachment segment. The next consumer residual is to compare its deleted-origin endpoint with the closed collar endpoint, construct a homotopy in geometricY joining the punctured segment to the collar and based Circle meridian, and extend it over the tube pieces for gluing.",
+     :implementation
+     {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
+      :acceptance
+      {:declarations
+       ["apm_t02a03_rightCoreAttachmentClosureMap"
+        "apm_t02a03_rightCoreAttachmentClosureMap_zero"
+        "apm_t02a03_rightCoreAttachmentPoint_mem_geometricY"
+        "apm_t02a03_rightCoreAttachmentMap"],
+       :fixture-sha256
+       "e61cbc98aa69ee5c3bc7066839e53deb346bb7ee9ed0e7ed6a82090d04e3a138",
+       :gates
+       ["lake env lean ConstructionTargets/T02A03GeometricTubeCover.lean"
+        "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeCover.lean || true)\""
+        "python3 scripts/statement-registry.py check"],
+       :axioms ["propext" "Classical.choice" "Quot.sound"],
+       :consumer-residual
+       "Join the punctured right-core segment to the collar and based Circle meridian by a compatible homotopy, then extend to tube deformations and gluing; this packet claims neither."}}}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/geometric-right-core-attachment-segment",
    :acceptance
-   {:probe
-    "Compile and bank apm_t02a03_rightCoreAttachmentClosureMap, apm_t02a03_rightCoreAttachmentClosureMap_zero, apm_t02a03_rightCoreAttachmentPoint_mem_geometricY, and apm_t02a03_rightCoreAttachmentMap from /tmp/t02a03_geometric_tube_cover.lean. Restrict the frozen right core to Set.Icc 0 1 as a continuous Euclidean-space map with zero endpoint at parameter zero, prove every point with parameter in Set.Ioc 0 1 is nonzero and hence belongs to geometricY, and bundle that punctured restriction as a continuous map into geometricY. This supplies the right-core side of the deleted-origin attachment required by t02A03 route step 2; do not yet claim an attachment homotopy, tube deformation, or gluing equivalence.",
-    :declarations
+   {:declarations
     ["apm_t02a03_rightCoreAttachmentClosureMap"
      "apm_t02a03_rightCoreAttachmentClosureMap_zero"
      "apm_t02a03_rightCoreAttachmentPoint_mem_geometricY"
      "apm_t02a03_rightCoreAttachmentMap"],
-    :placeholder "the sole sorry in apm_t02a03",
-    :route-step
-    "t02A03 step 2, construct the closed right-core segment at the deleted origin and its punctured continuous map into geometricY"},
+    :fixture-sha256
+    "e61cbc98aa69ee5c3bc7066839e53deb346bb7ee9ed0e7ed6a82090d04e3a138",
+    :gates
+    ["lake env lean ConstructionTargets/T02A03GeometricTubeCover.lean"
+     "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeCover.lean || true)\""
+     "python3 scripts/statement-registry.py check"],
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :consumer-residual
+    "Join the punctured right-core segment to the collar and based Circle meridian by a compatible homotopy, then extend to tube deformations and gluing; this packet claims neither."},
    :id
    :routes-2026-10-10-t02a03-geometric-right-core-attachment-segment-topo2-r1,
    :kind :reusable-theorem,
