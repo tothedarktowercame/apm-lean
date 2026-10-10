@@ -100335,8 +100335,78 @@
   {:bounded-exception
    "This single-consumer prerequisite constructs the explicit source-to-polygon-quotient maps and representative equations needed before proving the two three-loop comparisons are homeomorphisms.",
    :consumer :t97A01,
+   :evidence
+   {:placeholder-delta {:source 0, :fixture 0},
+    :residual
+    "Prove n3ThreeLoops and torusCrosscapThreeLoops continuous and bijective, promote them to homeomorphisms using compact-to-Hausdorff quotient topology, compose their inverses with threeEndpointLoopsHomeomorphThreeCircles, then prove literal boundary inclusions and assemble the packages.",
+    :gates
+    {:module-build :pass,
+     :fixture-compiles :pass,
+     :zero-source-and-fixture-sorry :pass,
+     :standard-only-axioms :pass,
+     :registry-check :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["The new module and fixture emitted no warnings; imported modules replayed existing lints and informational standard-axiom reports."],
+    :missing-theorems
+    [{:name "PolygonBoundaryThreeLoopMaps.n3ThreeLoops",
+      :type
+      "A representative-explicit map from the nested three endpoint-loop wedge to the SurfaceRel false 3 Circle quotient, assembled from edges zero, two, and four.",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on
+      ["ThreeEndpointLoopsHomeomorph.threeEndpointLoopsHomeomorphThreeCircles"],
+      :area "polygon-surface-open-cover"}
+     {:name "PolygonBoundaryThreeLoopMaps.torusCrosscapThreeLoops",
+      :type
+      "A representative-explicit map from the nested three endpoint-loop wedge to the TorusCrosscapRel Circle quotient, assembled from edges zero, one, and four.",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on
+      ["ThreeEndpointLoopsHomeomorph.threeEndpointLoopsHomeomorphThreeCircles"],
+      :area "polygon-surface-open-cover"}],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "sha256sum /tmp/polygon-boundary-three-loop-maps.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.PolygonBoundaryThreeLoopMaps",
+      :exit 0}
+     {:cmd "lake env lean /tmp/polygon-boundary-three-loop-maps.lean",
+      :exit 0}
+     {:cmd
+      "rg -n \\b(sorry|admit)\\b ConstructionTargets/PolygonBoundaryThreeLoopMaps.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "rg -n \\b(sorry|admit)\\b /tmp/polygon-boundary-three-loop-maps.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "6715646c62b4a33d53e62029545008ade7bd7792",
+    :changed-paths
+    ["ConstructionTargets/PolygonBoundaryThreeLoopMaps.lean"],
+    :fixture
+    {:path "/tmp/polygon-boundary-three-loop-maps.lean",
+     :sha256
+     "6df7e5f66b8c0067e7a09849929f1c03296d4a9035b946480e6603c4194d6482",
+     :sorry-count 0},
+    :implementation
+    {:scope ["ConstructionTargets/PolygonBoundaryThreeLoopMaps.lean"],
+     :summary
+     "Defined a generic wedge lift, descended the selected N3 and torus-crosscap edges through endpoint quotients, assembled both nested three-loop maps, and proved all interval and wedge representative formulas."},
+    :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PolygonBoundaryThreeLoopMaps.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/boundary-three-loop-maps",
@@ -103474,12 +103544,12 @@
    :lemma
    {:name "PolygonBoundaryThreeLoopMaps.n3ThreeLoops",
     :reported-by
-    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40
+     :routes-2026-10-10-polygon-boundary-three-loop-maps-60],
     :type
     "An explicit map from ThreeEndpointLoops to CircleQuotient (SurfaceRel false 3), obtained by descending edges zero, two, and four, with literal formulas on all three loop representatives.",
     :area "polygon-surface-open-cover",
-    :proved-in
-    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+    :proved-in :routes-2026-10-10-polygon-boundary-three-loop-maps-60},
    :id :lemma-polygonboundarythreeloopmaps-n3threeloops,
    :kind :lemma,
    :depends-on
@@ -103497,12 +103567,12 @@
    :lemma
    {:name "PolygonBoundaryThreeLoopMaps.torusCrosscapThreeLoops",
     :reported-by
-    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40
+     :routes-2026-10-10-polygon-boundary-three-loop-maps-60],
     :type
     "An explicit map from ThreeEndpointLoops to CircleQuotient TorusCrosscapRel, obtained by descending edges zero, one, and four, with literal formulas on all three loop representatives.",
     :area "polygon-surface-open-cover",
-    :proved-in
-    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+    :proved-in :routes-2026-10-10-polygon-boundary-three-loop-maps-60},
    :id :lemma-polygonboundarythreeloopmaps-toruscrosscapthreeloops,
    :kind :lemma,
    :depends-on
