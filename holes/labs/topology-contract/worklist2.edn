@@ -66803,6 +66803,19 @@
       :exit 0,
       :output
       " M ConstructionTargets/ManifoldFundamentalClass.lean\n?? ConstructionTargets/ThreeEndpointLoopsHomeomorph.lean"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791673332556-3204-fe97cd3f",
+     :commands
+     ["git show/diff-tree/check 657f71ca1de855f65995c7cce62e9430fabd3286"
+      "git rev-parse recorded blob; git hash-object current module; sha256sum fixture"
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean"
+      "lake env lean /tmp/t02a03_right_core_compact_probe.lean"
+      "python3 scripts/statement-registry.py check --rev 657f71ca1de855f65995c7cce62e9430fabd3286"
+      "statement fingerprints at commit and parent; comment-stripped placeholder census; clojure.edn/read-string worklist"],
+     :finding
+     "PASS: reviewer differs from author topo-6; commit changes only the scoped module and recorded/current blob b81761ba3800c2ba0f706f730932eb244b84ec54 matches. Fixture SHA-256 matches. Module and frozen fixture compile with only propext, Classical.choice, and Quot.sound; registry is 131/0, frozen t02A03 fingerprint remains d123afd5ae0ee067587b3ed3d7b9b6d2f075c3d95701e098ec357c7317cd34c3, and the sole frozen placeholder remains. The ContinuousMap has the required direction RightTubeMinusLeftCore to Circle, uses the banked right-tube nonvanishing proof for subtype membership, and proves normalization continuity pointwise through inverse norm and the ambient planar-coordinate map. No interpolation, deformation, or safety invariant was added."},
     :commit "657f71ca1de855f65995c7cce62e9430fabd3286",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
@@ -66814,7 +66827,7 @@
     "Normalizing the nonzero right-core planar coordinate gives a Circle-valued map. Continuity follows locally from continuity of its norm and planar coordinate together with the reciprocal at each nonzero point.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/right-core-angular-coordinate",
    :acceptance
@@ -66909,7 +66922,7 @@
      "The continuous right-core reconstruction takes a Circle argument, so the parent still needs the normalized right-core planar coordinate as an actual ContinuousMap on RightTubeMinusLeftCore. The banked denominator theorem makes normalization defined, and the standard local inverse-of-norm proof establishes continuity. The compiled declaration supplies exactly that coordinate without choosing an angular interpolation or claiming either safety invariant.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
