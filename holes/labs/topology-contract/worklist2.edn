@@ -55101,51 +55101,46 @@
    "single-consumer bounded affine-chart inverse laws",
    :consumer :t94A08,
    :evidence
-   {:probe
-    {:residual
-     "Prove continuity of coordinates on affineSource and continuity of chartInverse, then package the actual affine-chart OpenPartialHomeomorph before probing the conic and nodal-neighborhood arguments.",
-     :outcome :go,
-     :warnings [],
-     :axioms :standard-only,
-     :commands
-     [{:cmd "sha256sum /tmp/t94a08_affine_chart_inverse_laws.lean",
-       :exit 0,
-       :output
-       "28978815a3932bf3a00342ab6a4d2e4a529021a032e63cd9ddafecd74b6391e8  /tmp/t94a08_affine_chart_inverse_laws.lean"}
-      {:cmd "lake env lean /tmp/t94a08_affine_chart_inverse_laws.lean",
-       :exit 0}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t94a08_affine_chart_inverse_laws.lean || true)\"",
-       :exit 0}
-      {:cmd
-       "rg -n '^(@\\[simp\\] )?theorem (coordinates_chartInverse|chartInverse_coordinates)' /tmp/t94a08_affine_chart_inverse_laws.lean",
-       :exit 0,
-       :output
-       "11:@[simp] theorem coordinates_chartInverse {n : ℕ} (i : Fin (n + 1))\n27:theorem chartInverse_coordinates {n : ℕ} (i : Fin (n + 1))"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :fixture
-     {:path "/tmp/t94a08_affine_chart_inverse_laws.lean",
-      :sha256
-      "28978815a3932bf3a00342ab6a4d2e4a529021a032e63cd9ddafecd74b6391e8"},
-     :finding
-     "The placeholder-free fixture constructs both algebraic inverse laws at generic projective dimension from the existing representative-scaling API. coordinates_chartInverse reduces normalized insertion followed by ratios coordinatewise; chartInverse_coordinates uses Projectivization.mk_eq_mk_iff' with scalar (rep x i)⁻¹. No continuity or homeomorphism claim is included.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/ComplexProjectiveChartTargets.lean"],
-      :acceptance
-      {:declarations
-       ["coordinates_chartInverse" "chartInverse_coordinates"],
-       :commands
-       ["lake env lean ConstructionTargets/ComplexProjectiveChartTargets.lean"
-        "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/ComplexProjectiveChartTargets.lean || true)\""
-        "python3 scripts/statement-registry.py check"],
-       :constraints
-       "Insert exactly the two compiled inverse-law theorems after the banked affine-source results; preserve generic n and do not add continuity or package an OpenPartialHomeomorph."}},
-     :seat "topo-8"}},
+   {:placeholder-delta 0,
+    :residual
+    "Prove continuity of coordinates on affineSource and continuity of chartInverse, then package the actual affine-chart OpenPartialHomeomorph before probing the conic and nodal-neighborhood arguments.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms [propext Classical.choice Quot.sound],
+    :author "topo-6",
+    :commands
+    [{:cmd "sha256sum /tmp/t94a08_affine_chart_inverse_laws.lean",
+      :exit 0,
+      :output
+      "28978815a3932bf3a00342ab6a4d2e4a529021a032e63cd9ddafecd74b6391e8  /tmp/t94a08_affine_chart_inverse_laws.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/ComplexProjectiveChartTargets.lean",
+      :exit 0}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/ComplexProjectiveChartTargets.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r 4d22581bf92d816eb7a6d33c447e0b5e25286ddb",
+      :exit 0,
+      :output
+      "ConstructionTargets/ComplexProjectiveChartTargets.lean"}],
+    :commit "4d22581bf92d816eb7a6d33c447e0b5e25286ddb",
+    :changed-paths
+    ["ConstructionTargets/ComplexProjectiveChartTargets.lean"],
+    :fixture
+    {:path "/tmp/t94a08_affine_chart_inverse_laws.lean",
+     :sha256
+     "28978815a3932bf3a00342ab6a4d2e4a529021a032e63cd9ddafecd74b6391e8"},
+    :declarations
+    ["ConstructionTargets.ComplexProjectiveChartTargets.coordinates_chartInverse"
+     "ConstructionTargets.ComplexProjectiveChartTargets.chartInverse_coordinates"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ComplexProjectiveChartTargets.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t94A08/affine-chart-inverse-laws",
    :acceptance
