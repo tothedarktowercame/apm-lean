@@ -99574,8 +99574,64 @@
   {:bounded-exception
    "This single-consumer prerequisite installs the actual second six-edge relation required by the frozen t97A01 statement before constructing its boundary quotient model.",
    :consumer :t97A01,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Construct the boundary-circle quotient presentations for SurfaceRel false 3 and TorusCrosscapRel, identify both with ThreeCircles, establish their common vertex classes and boundary inclusion formulas, and assemble the packages.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :missing-theorems
+    [{:name "PolygonTorusCrosscapRelation.TorusCrosscapRel",
+      :type
+      "The six-edge word a b a-inverse b-inverse c c defines a concrete disk relation whose generators preserve norm and lie on radius one, with its EqvGen quotient map satisfying all three literal generator identifications.",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on
+      ["PolygonOverlapHomotopyEquivCircle.overlapHomotopyEquivCircle"],
+      :area "polygon-surface-open-cover"}],
+    :statement-hashes "131 registered statements match",
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :finding "canonical package authority"}
+     {:cmd "sha256sum /tmp/polygon-torus-crosscap-relation.lean",
+      :exit 0,
+      :finding "fixture hash matches"}
+     {:cmd
+      "lake build ConstructionTargets.PolygonTorusCrosscapRelation",
+      :exit 0}
+     {:cmd "lake env lean /tmp/polygon-torus-crosscap-relation.lean",
+      :exit 0,
+      :finding "fixture compiles with standard axioms"}
+     {:cmd "rg source for sorry or admit",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero source placeholders"}
+     {:cmd "rg fixture for sorry or admit",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero fixture placeholders"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short",
+      :exit 0,
+      :finding "clean worktree after commit"}],
+    :diagnostic-history [],
+    :commit "5c8b6ae14c53df01ac653f1d9496ce0189aed58d",
+    :changed-paths
+    ["ConstructionTargets/PolygonTorusCrosscapRelation.lean"],
+    :fixture
+    {:path "/tmp/polygon-torus-crosscap-relation.lean",
+     :sha256
+     "af4e6db94b4c9c7a0e6b0aae4528112bf53cb26ceb7da8d3a7eb9c21523d45e7",
+     :sorry-count 0},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PolygonTorusCrosscapRelation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/torus-crosscap-relation",
@@ -102402,15 +102458,17 @@
    :lemma
    {:name "PolygonTorusCrosscapRelation.TorusCrosscapRel",
     :reported-by
-    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40
+     :routes-2026-10-10-polygon-torus-crosscap-relation-53],
     :type
     "The concrete disk-boundary relation for the six-edge word a b a-inverse b-inverse c c, with reversed parameters on the a and b pairings, radius-one support, norm preservation, and literal quotient generator equations.",
     :area "polygon-surface-open-cover",
-    :proved-in
-    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+    :proved-in :routes-2026-10-10-polygon-torus-crosscap-relation-53},
    :id :lemma-polygontoruscrosscaprelation-toruscrosscaprel,
    :kind :lemma,
-   :depends-on [:lemma-radialquotientopensets-norm-edgepoint],
+   :depends-on
+   [:lemma-radialquotientopensets-norm-edgepoint
+    :lemma-polygonoverlaphomotopyequivcircle-overlaphomotopyequivcircle],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
