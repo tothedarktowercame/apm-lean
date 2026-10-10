@@ -61797,6 +61797,21 @@
       :exit 0,
       :output "131 registered statements match, 0 do not"}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791644292854-2223-848a2a27",
+     :commands
+     ["git show/diff-tree/show --check 875ef7044173692f45d0d3e643d1e482c2fbe1eb"
+      "sha256sum /tmp/t02a03_geometric_tube_cover.lean"
+      "lake env lean /tmp/t02a03_geometric_tube_cover.lean"
+      "lake env lean ConstructionTargets/T02A03LeftTubePuncturedModel.lean"
+      "lake build ConstructionTargets.T02A03LeftTubePuncturedModel"
+      "python3 scripts/statement-registry.py check --rev 875ef7044173692f45d0d3e643d1e482c2fbe1eb"
+      "bb holes/labs/topology-contract/worklist_check.bb recorded-ledger"
+      "recompute accepted-type hash and comment-stripped placeholder counts"],
+     :finding
+     "PASS: author topo-6 is independent; implementation scope is exactly ConstructionTargets/T02A03LeftTubePuncturedModel.lean, transition scope is ledger-only, and fixture SHA-256 8b52244ebf5285a0d9b58a8c8e5818daa0263608597d8ca10d452729d7077148 matches. Deleted-core membership is correctly converted through the banked zero-locus equivalence to positive source normal norm; splitting t=1 from t<1 proves the registered convex radial coefficient is strictly positive throughout unitInterval, without claiming the later normal-coordinate formula or core exclusion. Fixture, target, focused 8241-job build, registry 131/0, and 453-item ledger gate pass; accepted-type hash cb2e70ba6bc482bd5d422d36ee584b2e3331d04ce226e974aaf3fe87b03d9870 matches, the declaration uses only propext/Classical.choice/Quot.sound, target placeholders are 0, and unchanged consumer placeholders are 1."},
     :commit "875ef7044173692f45d0d3e643d1e482c2fbe1eb",
     :changed-paths
     ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
@@ -61816,7 +61831,7 @@
    :phase :implementation,
    :type
    "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, 0 < (1 - (tp.1 : Real)) * (1 / 8 : Real) + (tp.1 : Real) * norm (apm_t02a03_leftTubeNormalComplex ⟨tp.2.1, tp.2.2.1⟩)",
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/left-tube-radial-normal-radius-positive",
@@ -61908,7 +61923,7 @@
    :phase :probe,
    :type
    "Nonempty (ContinuousMap.HomotopyEquiv LeftTubeMinusCore ConstructionTargets.TorusCircleWedgeOpenCover.Torus)",
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-punctured-model",
    :acceptance
@@ -62842,7 +62857,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -62857,7 +62872,10 @@
     :type
     "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, 0 < (1 - (tp.1 : Real)) * (1 / 8 : Real) + (tp.1 : Real) * norm (apm_t02a03_leftTubeNormalComplex ⟨tp.2.1, tp.2.2.1⟩)",
     :proved-in
-    :routes-2026-10-10-t02a03-left-tube-radial-normal-radius-positive-topo2-r1},
+    :routes-2026-10-10-t02a03-left-tube-radial-normal-radius-positive-topo2-r1,
+    :banked-by
+    :routes-2026-10-10-t02a03-left-tube-radial-normal-radius-positive-topo2-r1,
+    :banked-commit "875ef7044173692f45d0d3e643d1e482c2fbe1eb"},
    :id
    :lemma-constructiontargets-t02a03lefttubepuncturedmodel-apm-t02a03-lefttuberadialnormal,
    :kind :lemma,
