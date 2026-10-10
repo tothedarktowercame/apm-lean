@@ -100276,6 +100276,21 @@
       :output "131 registered statements match, 0 do not"}
      {:cmd "git diff --check", :exit 0}
      {:cmd "git status --short", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791673409764-3208-9c8ccfb2",
+     :commands
+     ["git show and diff-tree 511c62fecca4aff8f0a37ac150d1ff7e1ebe2b20"
+      "sha256sum /tmp/three-endpoint-loops-homeomorph.lean"
+      "lake build ConstructionTargets.ThreeEndpointLoopsHomeomorph"
+      "lake env lean /tmp/three-endpoint-loops-homeomorph.lean"
+      "lake env lean /dev/stdin with fresh axiom checks"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped placeholder and SHA-256 recomputation"
+      "git diff-tree --check 511c62fecca4aff8f0a37ac150d1ff7e1ebe2b20^ 511c62fecca4aff8f0a37ac150d1ff7e1ebe2b20"],
+     :finding
+     "Recorded one-file commit is authored by topo-2 and is byte-identical to the frozen fixture; the inner-left/inner-right then outer-right wedge orientations correctly represent the first, second, and third loops, all formulas preserve their coproduct boundaries, source and fixture have zero placeholders, fresh checks show only standard axioms, and the registry reports 131 matched and 0 mismatched."},
     :commit "511c62fecca4aff8f0a37ac150d1ff7e1ebe2b20",
     :changed-paths
     ["ConstructionTargets/ThreeEndpointLoopsHomeomorph.lean"],
@@ -100290,7 +100305,7 @@
      "Defined the nested wedge of three endpoint quotients, assembled it homeomorphically into ThreeCircles through two pointed wedge homeomorphisms, and proved the basepoint and three loop representative formulas."},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ThreeEndpointLoopsHomeomorph.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/three-endpoint-loops-homeomorph",
@@ -100420,7 +100435,7 @@
       "ThreeEndpointLoops is the nested point wedge of three endpoint-identified interval quotients; threeEndpointLoopsHomeomorphThreeCircles identifies it homeomorphically with ThreeCircles and gives literal formulas for all three loop representatives."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -103359,7 +103374,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -103375,7 +103390,9 @@
     :type
     "The nested point wedge of three copies of the closed-unit-interval endpoint quotient is homeomorphic to StatementSurfaceModels.ThreeCircles, with literal formulas on representatives of all three loops.",
     :area "polygon-surface-open-cover",
-    :proved-in :routes-2026-10-10-three-endpoint-loops-homeomorph-59},
+    :proved-in :routes-2026-10-10-three-endpoint-loops-homeomorph-59,
+    :banked-by :routes-2026-10-10-three-endpoint-loops-homeomorph-59,
+    :banked-commit "511c62fecca4aff8f0a37ac150d1ff7e1ebe2b20"},
    :id
    :lemma-threeendpointloopshomeomorph-threeendpointloopshomeomorphthreecircles,
    :kind :lemma,
