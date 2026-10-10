@@ -91980,8 +91980,165 @@
      :review-outcomes]},
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+   :evidence
+   {:outcome :replan,
+    :seat "topo-4",
+    :commands
+    [{:cmd "bb holes/labs/topology-contract/worklist_check.bb",
+      :exit 0,
+      :finding
+      "762 items OK; 714 done, 20 superseded, 17 needs-owner, 10 blocked, 1 open"}
+     {:cmd
+      "lake env lean ConstructionTargets/FiniteArborescenceTotalEdgeCount.lean",
+      :exit 0,
+      :finding
+      "Reviewed module compiles; total_card and Schreier.tree_total_card use propext, Classical.choice, and Quot.sound"}
+     {:cmd
+      "comment-stripped placeholder census for t99J01 t92J06 t97A03 t93J03 t01A03 t97A01",
+      :exit 0,
+      :finding "counts 1, 1, 3, 1, 1, 1; total 8; delta 0"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :finding
+    {:routes
+     {:t99J01
+      ["three-circles fundamental-group coordinates"
+       "banked covering-subgroup index"
+       "banked chosen-generator action-groupoid coordinates"
+       "banked n-1 geodesic-tree arrow count"
+       "selected-positive-edge comparison and complement cardinality"
+       "Type-valued Nielsen-Schreier basis and rank specialization"
+       "path-component restriction and cyclic-cover connectedness"
+       "assembly"],
+      :t92J06
+      ["matched quotient-sheet saturation and local-homeomorph construction"
+       "permutation-cover construction"
+       "Cayley-tree classification"
+       "assembly"],
+      :t97A03
+      ["double-cover stratum gluing"
+       "fixed-model quotient-to-bouquet comparisons"
+       "banked chosen-generator action-groupoid coordinates"
+       "banked n-1 geodesic-tree arrow count"
+       "selected-positive-edge comparison and complement cardinality"
+       "Type-valued Nielsen-Schreier basis and rank specialization"
+       "transport and assembly"],
+      :t93J03
+      ["Klein square orbit classification"
+       "deck-group fundamental-group theorem"
+       "presented-group normal form"
+       "covering lifting criterion"
+       "annulus embedding"
+       "assembly"],
+      :t01A03
+      ["circle-wedge fundamental group and torus commutativity"
+       "separating embedded-circle collar theorem"
+       "assembly"],
+      :t97A01
+      ["banked standard-N3 homeomorphism"
+       "polygon radial open cover"
+       "polygon fundamental group and Mayer-Vietoris coordinates"
+       "banked Smith normalization"
+       "assembly"]},
+     :preserved-refutations
+     ["The Schreier contract without 0<n remains refuted at r=1, n=0, H=bottom."
+      "Canonical Fin r generators must not be identified with IsFreeGroup.Generators actions; only their cardinalities are transported."],
+     :placeholder-delta 0,
+     :preserved-boundaries
+     ["polygon radial descent"
+      "strict point-wedge inclusion squares"
+      "path-component cover restriction"
+      "cyclic-monodromy connectedness"
+      "Klein orbit fundamental domain"
+      "double-cover stratum gluing"
+      "fixed-model quotient-to-bouquet equivalences"],
+     :placeholder-counts
+     {:t99J01 1,
+      :t92J06 1,
+      :t97A03 3,
+      :t93J03 1,
+      :t01A03 1,
+      :t97A01 1},
+     :deferred
+     ["Type-valued Nielsen-Schreier basis construction waits for the exact selected-positive-edge complement type and its cardinality."
+      "No unrelated finite-graph generalization is elected."],
+     :infrastructure-packets
+     {:banked 2, :reviewed-stops 0, :placeholder-changing 0},
+     :ranking
+     "No route is complete enough for a consumer-closing adapter. The selected-positive-edge comparison and complement count is the next bounded step on the highest-ranked shared route for t99J01 and t97A03.",
+     :typed-residual-change
+     ["The total-arrow/non-root equivalence is banked, so every finite arborescence has exactly one arrow per non-root vertex."
+      "The chosen-generator action-groupoid geodesic subtree now has exactly n-1 arrows under H.index=n and 0<n."
+      "The shared Schreier residual is narrowed to comparing oriented tree arrows with selected original generator arrows, subtracting them from r*n, and then constructing the Type-valued Nielsen-Schreier basis."],
+     :review-outcomes {:pass 2, :stop 0, :closed-problems 0}},
+    :replacement-items
+    [{:consumer :t99J01,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/positive-index/tree-positive-selection-complement-count",
+      :acceptance
+      {:probe
+       "Compile the exact bridge from the banked geodesic subtree T of Symmetrify (IsFreeGroupoid.Generators (ActionCategory (FreeGroup (Fin r)) (FreeGroup (Fin r) quotient H))) to Mathlib's selected original positive-generator arrows: construct an equivalence from Quiver.Total T to the subtype selected by wideSubquiverSymmetrify T, recording whether each tree arrow is forward or reverse and proving the two orientations cannot select the same original arrow twice. Using the banked n-1 tree-arrow count and r*n chosen-generator-arrow count, prove that the complement of the selected positive arrows has Nat.card (r-1)*n+1 under 0<r, 0<n, and H.index=n. Do not construct the FreeGroupBasis or identify the subgroup.",
+       :placeholder
+       "the single sorry in apm_t99j01 and apm_t97A03_bridge_invariants_of_model",
+       :route-step
+       "t99J01 step 3 and t97A03 step 8, selected-positive-edge representation and finite complement cardinality after the banked arborescence count",
+       :gates
+       ["canonical packages"
+        "fixture compiles"
+        "zero fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :representation
+      {:source
+       "Total arrows of the banked geodesic subtree inside the symmetrified chosen-generator action-groupoid quiver",
+       :target
+       "Original chosen-generator arrows selected by Mathlib wideSubquiverSymmetrify, and their complement inside the r*n positive-arrow type",
+       :direction
+       "Endpoint- and orientation-aware equivalence from each forward or reverse geodesic-tree arrow to its underlying selected original positive generator arrow, followed by exact finite-cardinality subtraction"},
+      :id
+      :routes-2026-10-10-finite-schreier-tree-positive-selection-complement-count-15,
+      :kind :representation-comparison,
+      :depends-on
+      [:routes-2026-10-10-finite-arborescence-total-edge-count-13
+       :routes-2026-10-10-finite-schreier-chosen-generator-edge-coordinates-12],
+      :current-residual
+      "Relate both Symmetrify orientations in the geodesic tree to the selected original generator subtype, prove no positive arrow is counted twice, and subtract n-1 from r*n.",
+      :other-consumers [:t97A03]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:strategy
+       "Measure the selected-positive-edge comparison and complement cardinality, preserve the positive-index and canonical-generator refutations and reviewed topology boundaries, recount all six consumers and eight placeholders, then elect the Type-valued Nielsen-Schreier basis or a nearer adapter."},
+      :id
+      :routes-2026-10-10-checkpoint-topo1-after-schreier-complement-count-15,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:routes-2026-10-10-finite-schreier-tree-positive-selection-complement-count-15],
+      :current-residual
+      "Review the final cardinality prerequisite before the Type-valued Nielsen-Schreier basis construction.",
+      :other-consumers []}],
+    :author "topo-4",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -91994,6 +92151,69 @@
     :routes-2026-10-10-checkpoint-topo1-after-chosen-generator-coordinates-12],
    :current-residual
    "Review the second independent prerequisite isolated by the earlier spanning-tree STOP.",
+   :other-consumers []}
+  {:consumer :t99J01,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/positive-index/tree-positive-selection-complement-count",
+   :acceptance
+   {:probe
+    "Compile the exact bridge from the banked geodesic subtree T of Symmetrify (IsFreeGroupoid.Generators (ActionCategory (FreeGroup (Fin r)) (FreeGroup (Fin r) quotient H))) to Mathlib's selected original positive-generator arrows: construct an equivalence from Quiver.Total T to the subtype selected by wideSubquiverSymmetrify T, recording whether each tree arrow is forward or reverse and proving the two orientations cannot select the same original arrow twice. Using the banked n-1 tree-arrow count and r*n chosen-generator-arrow count, prove that the complement of the selected positive arrows has Nat.card (r-1)*n+1 under 0<r, 0<n, and H.index=n. Do not construct the FreeGroupBasis or identify the subgroup.",
+    :placeholder
+    "the single sorry in apm_t99j01 and apm_t97A03_bridge_invariants_of_model",
+    :route-step
+    "t99J01 step 3 and t97A03 step 8, selected-positive-edge representation and finite complement cardinality after the banked arborescence count",
+    :gates
+    ["canonical packages"
+     "fixture compiles"
+     "zero fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :representation
+   {:source
+    "Total arrows of the banked geodesic subtree inside the symmetrified chosen-generator action-groupoid quiver",
+    :target
+    "Original chosen-generator arrows selected by Mathlib wideSubquiverSymmetrify, and their complement inside the r*n positive-arrow type",
+    :direction
+    "Endpoint- and orientation-aware equivalence from each forward or reverse geodesic-tree arrow to its underlying selected original positive generator arrow, followed by exact finite-cardinality subtraction"},
+   :id
+   :routes-2026-10-10-finite-schreier-tree-positive-selection-complement-count-15,
+   :kind :representation-comparison,
+   :depends-on
+   [:routes-2026-10-10-finite-arborescence-total-edge-count-13
+    :routes-2026-10-10-finite-schreier-chosen-generator-edge-coordinates-12
+    :routes-2026-10-10-checkpoint-topo1-after-arborescence-count-13],
+   :current-residual
+   "Relate both Symmetrify orientations in the geodesic tree to the selected original generator subtype, prove no positive arrow is counted twice, and subtract n-1 from r*n.",
+   :other-consumers [:t97A03]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:strategy
+    "Measure the selected-positive-edge comparison and complement cardinality, preserve the positive-index and canonical-generator refutations and reviewed topology boundaries, recount all six consumers and eight placeholders, then elect the Type-valued Nielsen-Schreier basis or a nearer adapter."},
+   :id
+   :routes-2026-10-10-checkpoint-topo1-after-schreier-complement-count-15,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:routes-2026-10-10-finite-schreier-tree-positive-selection-complement-count-15
+    :routes-2026-10-10-checkpoint-topo1-after-arborescence-count-13],
+   :current-residual
+   "Review the final cardinality prerequisite before the Type-valued Nielsen-Schreier basis construction.",
    :other-consumers []}
   {:consumer :t99J01,
    :phase :probe,
