@@ -62197,6 +62197,21 @@
      {:cmd
       "git diff --check -- ConstructionTargets/T02A03LeftTubePuncturedModel.lean",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791646810905-2308-6cb16052",
+     :commands
+     ["git show/diff-tree/show --check f5ed843ad2eb68c2e60ff10cc4ef176b1c4daa89"
+      "sha256sum /tmp/t02a03_geometric_tube_cover.lean"
+      "lake env lean /tmp/t02a03_geometric_tube_cover.lean"
+      "lake env lean ConstructionTargets/T02A03LeftTubePuncturedModel.lean"
+      "lake build ConstructionTargets.T02A03LeftTubePuncturedModel"
+      "python3 scripts/statement-registry.py check --rev f5ed843ad2eb68c2e60ff10cc4ef176b1c4daa89"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "recompute accepted-type hash and comment-stripped placeholder counts"],
+     :finding
+     "PASS: author topo-6 is independent and commit f5ed843ad2eb68c2e60ff10cc4ef176b1c4daa89 changes exactly ConstructionTargets/T02A03LeftTubePuncturedModel.lean. Fixture SHA-256 8ff84e33ba80c81e4521e9cfe16e2ff2b3fa74b34ca4c9bdf610892aa00ad47c matches. The theorem correctly specializes the inverse reconstruction identity at the source point's torus coordinates, yielding real 1/8 scalar action on its normalized normal direction; it does not cross into interpolation, deleted-core exclusion, homotopy, equivalence, or gluing. Fixture, target, focused 8241-job build, registry 131/0, and 463-item ledger gate pass. Accepted-type hash 7edc789168493872f9a60aa34a705577ac75563bea6180d06586e79dab1d2ab7 matches; axioms are only propext/Classical.choice/Quot.sound; target placeholders are 0 and unchanged consumer placeholders are 1 with consumer hash b123eca388ab2858ca55daf538c1ddd645022b52f5196a15f0bb516d78323d7d."},
     :commit "f5ed843ad2eb68c2e60ff10cc4ef176b1c4daa89",
     :changed-paths
     ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
@@ -62216,7 +62231,7 @@
    :phase :implementation,
    :type
    "forall p : apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubeNormalComplex ⟨(apm_t02a03_leftTubeTorusInverse (apm_t02a03_leftTubeTorusCoordinates p)).1, (apm_t02a03_leftTubeTorusInverse (apm_t02a03_leftTubeTorusCoordinates p)).2.1⟩ = (1 / 8 : Real) • ((apm_t02a03_leftTubeNormalAngular p : Circle) : Complex)",
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/left-tube-torus-inverse-coordinate-direction",
@@ -62305,7 +62320,7 @@
    :phase :probe,
    :type
    "Nonempty (ContinuousMap.HomotopyEquiv LeftTubeMinusCore ConstructionTargets.TorusCircleWedgeOpenCover.Torus)",
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-punctured-model",
    :acceptance
