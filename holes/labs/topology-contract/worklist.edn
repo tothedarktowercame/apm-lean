@@ -86519,6 +86519,18 @@
       "The superseded fixture redeclared the promoted theorem and failed with a duplicate declaration.",
       :correction
       "Replaced the fixture declaration with an exact-type example using the promoted theorem; the successful rerun is recorded in commands."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791618521692-1507-cea38645",
+     :commands
+     ["git show/diff implementation 5b19036217baf63464ad4e683b3f89ed0a386606 and transition e65016937559aad3488243bd6ce707f343571d23"
+      "fixture sha256; compile promoted module to import path; compile repaired fixture and consumer"
+      "source inspection of forward/inverse quotient continuity"
+      "statement-registry check; worklist_check.bb"
+      "placeholder census and t97A01 frozen fingerprint"],
+     :finding
+     "PASS: repair closes the prior fixture gate defect; new hash matches, repaired import-and-check fixture compiles with zero placeholders and standard-only axioms, implementation commit remains exactly scoped to t97A01 Main.lean, and both homeomorphism directions correctly descend through the respective quotient maps. Consumer retains one unrelated sorry with frozen fingerprint unchanged; registry/worklist gates pass."},
     :commit "5b19036217baf63464ad4e683b3f89ed0a386606",
     :changed-paths ["problems/t97A01/lean/Main.lean"],
     :fixture
@@ -86529,7 +86541,7 @@
     :declarations ["apm_t97a01_X_homeomorph_standardN3"],
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["problems/t97A01/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t97A01/standard-n3-homeomorph",
    :acceptance
