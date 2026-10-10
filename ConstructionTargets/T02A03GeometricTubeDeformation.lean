@@ -570,6 +570,26 @@ theorem rightTubeCoreInterpolatedNormalRadiusBound
         (mul_le_mul_of_nonneg_left hin ht0)
     _ = (1 / 4 : ℝ) := by ring
 
+theorem normalizedRightCorePlanar_circleMeridian
+    (z : Circle) :
+    NormedSpace.normalize (rightTubeCorePlanarComplex
+      (apm_t02a03_circleMeridian z)) = (1 : ℂ) := by
+  have habs : |(z : ℂ).re| ≤ 1 := by
+    simpa [Circle.norm_coe z] using (RCLike.abs_re_le_norm (z : ℂ))
+  have hpos : 0 < 1 - (1 / 8 : ℝ) * (z : ℂ).re := by
+    have hhi : (z : ℂ).re ≤ 1 := (abs_le.mp habs).2
+    norm_num at hhi ⊢
+    linarith
+  rw [show rightTubeCorePlanarComplex (apm_t02a03_circleMeridian z) =
+      ((1 - (1 / 8 : ℝ) * (z : ℂ).re : ℝ) : ℂ) by
+    apply Complex.ext <;>
+      simp [rightTubeCorePlanarComplex, apm_t02a03_circleMeridian]]
+  rw [show ((1 - (1 / 8 : ℝ) * (z : ℂ).re : ℝ) : ℂ) =
+      (1 - (1 / 8 : ℝ) * (z : ℂ).re) • (1 : ℂ) by
+    simp]
+  exact (NormedSpace.normalize_smul_of_pos hpos (1 : ℂ)).trans
+    (NormedSpace.normalize_eq_self_of_norm_eq_one (by norm_num))
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -588,3 +608,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCore_radial_error_le
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreInputNormalRadiusBound
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreInterpolatedNormalRadiusBound
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.normalizedRightCorePlanar_circleMeridian
