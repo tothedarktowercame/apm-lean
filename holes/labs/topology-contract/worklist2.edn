@@ -62809,6 +62809,21 @@
       :output
       "a881798dfc65bed50e4968abb884deea83cffb49\nConstructionTargets/T02A03LeftTubePuncturedModel.lean"}
      {:cmd "git show --check --oneline a881798d", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791651238041-2451-d3cfae03",
+     :commands
+     ["git show/diff-tree/show --check a881798dfc65bed50e4968abb884deea83cffb49"
+      "sha256sum /tmp/t02a03_geometric_tube_cover.lean"
+      "lake env lean /tmp/t02a03_geometric_tube_cover.lean"
+      "lake env lean ConstructionTargets/T02A03LeftTubePuncturedModel.lean"
+      "lake build ConstructionTargets.T02A03LeftTubePuncturedModel"
+      "python3 scripts/statement-registry.py check --rev a881798dfc65bed50e4968abb884deea83cffb49"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "recompute frozen-type hash and comment-stripped placeholder counts"],
+     :finding
+     "PASS: author topo-6 is independent and immutable commit a881798dfc65bed50e4968abb884deea83cffb49 changes exactly ConstructionTargets/T02A03LeftTubePuncturedModel.lean. Fixture SHA-256 c5b3c22201911af17ee57262b098376c6f0ef7b545e8886c8e833dc535ae8164 matches. The theorem has the frozen exclusion orientation. It converts frozen left-core range membership to vanishing of leftTubeNormalComplex, rewrites the exact radial-coordinate identity, represents Real scalar action on Complex as multiplication, and contradicts each mul_eq_zero branch via strict radial-radius positivity and nonvanishing of the normalized Circle direction. It stops before bundled homotopy, equivalence, and gluing. Fixture, target, focused 8241-job build, registry 131/0, and 477-item ledger gate pass. Recomputed frozen-type SHA-256 is c876377c821e8646e6b66a5ad18f157cd4ba8859023e190a7dc698dcc9b66ea0; axioms are only propext/Classical.choice/Quot.sound; target placeholders remain 0 and the unchanged consumer has 1 with hash b123eca388ab2858ca55daf538c1ddd645022b52f5196a15f0bb516d78323d7d."},
     :commit "a881798dfc65bed50e4968abb884deea83cffb49",
     :changed-paths
     ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
@@ -62828,7 +62843,7 @@
    :phase :implementation,
    :type
    "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubeRadialPoint tp ∉ Set.range apm_t02a03_leftCore",
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/left-tube-radial-core-exclusion",
@@ -62929,7 +62944,7 @@
    :phase :probe,
    :type
    "Nonempty (ContinuousMap.HomotopyEquiv LeftTubeMinusCore ConstructionTargets.TorusCircleWedgeOpenCover.Torus)",
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-punctured-model",
    :acceptance
@@ -64200,7 +64215,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "apm_t02a03_leftTubeRadialPoint_not_mem_leftCore",
@@ -64214,7 +64229,10 @@
     :type
     "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubeRadialPoint tp ∉ Set.range apm_t02a03_leftCore",
     :proved-in
-    :routes-2026-10-10-t02a03-left-tube-radial-core-exclusion-topo2-r1},
+    :routes-2026-10-10-t02a03-left-tube-radial-core-exclusion-topo2-r1,
+    :banked-by
+    :routes-2026-10-10-t02a03-left-tube-radial-core-exclusion-topo2-r1,
+    :banked-commit "a881798dfc65bed50e4968abb884deea83cffb49"},
    :id :lemma-apm-t02a03-lefttuberadialpoint-not-mem-leftcore,
    :kind :lemma,
    :depends-on
