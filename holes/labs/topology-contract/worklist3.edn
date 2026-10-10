@@ -1466,8 +1466,93 @@
   {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-localizationmap-naturality,
+   :evidence
+   {:placeholder-delta {:source 0, :fixture 0},
+    :residual
+    "Prove that localizationMap x n sends the concrete globalGenerator to the orientation-coherent chart generator at a normalized basepoint, then transport that equality using localizationMap_naturality and the reviewed overlap results.",
+    :gates
+    {:module-build :pass,
+     :fixture-compiles-against-promoted-module :pass,
+     :exact-declaration-type :pass,
+     :canonical-projection-definition :pass,
+     :zero-source-and-fixture-sorry :pass,
+     :standard-only-axioms :pass,
+     :registry-check :pass,
+     :exact-scope :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["lake build replayed pre-existing linter warnings in dependencies; the target module emitted no warnings"],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.ManifoldFundamentalClass.absoluteSingularMap",
+      :type "The singular-chain map induced by a continuous map.",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on [],
+      :area "manifold-fundamental-class"}
+     {:name
+      "ConstructionTargets.ManifoldFundamentalClass.localizationMap",
+      :type
+      "The homology map of the canonical projection to the deleted-point relative singular complex.",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on
+      ["ConstructionTargets.ManifoldFundamentalClass.absoluteSingularMap"],
+      :area "manifold-fundamental-class"}
+     {:name
+      "ConstructionTargets.ManifoldFundamentalClass.localizationMap_naturality",
+      :type
+      "The canonical absolute-to-deleted-point localization maps form the displayed naturality square for maps of pairs.",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on
+      ["ConstructionTargets.ManifoldFundamentalClass.localizationMap"],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-10",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/manifold_fundamental_class_localization_map.lean",
+      :exit 0,
+      :output
+      "3649066371faf5c7aa79049c913b8709d32c77c2261ac687a7b5d02cda1e7254"}
+     {:cmd
+      "lake env lean /tmp/manifold_fundamental_class_localization_map.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^\\s*axiom\\b' ConstructionTargets/ManifoldFundamentalClass.lean /tmp/manifold_fundamental_class_localization_map.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "800df9a37b098e98c8864b35a013c5f3bb7e1e88",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path "/tmp/manifold_fundamental_class_localization_map.lean",
+     :sha256
+     "3649066371faf5c7aa79049c913b8709d32c77c2261ac687a7b5d02cda1e7254",
+     :original-sha256
+     "46c7d72c856135f26c57e73987e8e4876a8927cabcf4c19fa577c855181835c0",
+     :sorry-count 0},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :summary
+     "Defined the canonical absolute singular-chain map and deleted-point localization homology map, then proved the localization naturality square by applying homologyMap to relativeSingularMap_projection_naturality."},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/canonical-localization-map-naturality",
@@ -3141,16 +3226,66 @@
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.localizationMap_naturality",
     :reported-by
-    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+     :routes-2026-10-10-manifold-localization-map-naturality-topo3-r1],
     :type
     "forall {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y] (f : C(X,Y)) (x : X) (y : Y) (h : Set.MapsTo f (deletedPoint x) (deletedPoint y)) (n : Nat), homologyMap (absoluteSingularMap f) n ≫ localizationMap y n = localizationMap x n ≫ homologyMap (relativeSingularMap (deletedPoint x) (deletedPoint y) f h) n",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in
+    :routes-2026-10-10-manifold-localization-map-naturality-topo3-r1},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-localizationmap-naturality,
    :kind :lemma,
    :depends-on
-   [:lemma-constructiontargets-manifoldfundamentalclass-isiso-of-map-globalgenerator-eq-globalgenerator],
+   [:lemma-constructiontargets-manifoldfundamentalclass-isiso-of-map-globalgenerator-eq-globalgenerator
+    :lemma-constructiontargets-manifoldfundamentalclass-localizationmap],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFundamentalClass.absoluteSingularMap",
+    :type "The singular-chain map induced by a continuous map."},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFundamentalClass.absoluteSingularMap",
+    :reported-by
+    [:routes-2026-10-10-manifold-localization-map-naturality-topo3-r1],
+    :type "The singular-chain map induced by a continuous map.",
+    :area "manifold-fundamental-class",
+    :proved-in
+    :routes-2026-10-10-manifold-localization-map-naturality-topo3-r1},
+   :id
+   :lemma-constructiontargets-manifoldfundamentalclass-absolutesingularmap,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFundamentalClass.localizationMap",
+    :type
+    "The homology map of the canonical projection to the deleted-point relative singular complex."},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFundamentalClass.localizationMap",
+    :reported-by
+    [:routes-2026-10-10-manifold-localization-map-naturality-topo3-r1],
+    :type
+    "The homology map of the canonical projection to the deleted-point relative singular complex.",
+    :area "manifold-fundamental-class",
+    :proved-in
+    :routes-2026-10-10-manifold-localization-map-naturality-topo3-r1},
+   :id
+   :lemma-constructiontargets-manifoldfundamentalclass-localizationmap,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-manifoldfundamentalclass-absolutesingularmap],
    :other-consumers [:t98A02]}],
  :consumer-baselines {},
  :statuses
