@@ -1117,6 +1117,8 @@ noncomputable def apm_t02a03_rightCoreAnchorContractionHomotopy :
     (apm_t02a03_rightCoreAnchorContractionMap_one t).trans
       apm_t02a03_anchor_eq_circleMeridianMap_quarterTurn
 
+/-- The right-core attachment contracts through based maps to the constant
+quarter-turn meridian point. -/
 noncomputable def apm_t02a03_rightCoreBasedAttachmentHomotopy :
     ContinuousMap.Homotopy apm_t02a03_rightCoreAttachmentMap
       (ContinuousMap.const _
