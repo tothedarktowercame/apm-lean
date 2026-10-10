@@ -59569,9 +59569,51 @@
   {:bounded-exception
    "single-consumer based Circle-meridian attachment comparison for t02A03",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/t02a03_geometric_tube_cover.lean",
+      :sha256
+      "65b4bf238aa8cd24732e4a97133c37b49c3271f7f1e0f88c6bbfac555e0009ce"},
+     :commands
+     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "apm_t02a03_anchor_eq_circleMeridianMap_quarterTurn compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
+       :exit 0}
+      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "65b4bf238aa8cd24732e4a97133c37b49c3271f7f1e0f88c6bbfac555e0009ce  /tmp/t02a03_geometric_tube_cover.lean"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :finding
+     "The requested representation comparison is complete and placeholder-free. Subtype.ext reduces the exact geometricY equality to the banked ambient equality apm_t02a03_circleMeridian_quarterTurn, with symmetry orienting it from the contracted anchor to the quarter-turn Circle-meridian value.",
+     :implementation
+     {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
+      :declaration
+      "apm_t02a03_anchor_eq_circleMeridianMap_quarterTurn",
+      :type
+      "(⟨apm_t02a03_meridianAnchor, apm_t02a03_meridianAnchor_mem_geometricY⟩ : apm_t02a03_geometricY_probe) = apm_t02a03_circleMeridianMap (Circle.exp (Real.pi / 2))"},
+     :representation
+     {:source
+      "The constant geometricY meridian anchor reached by the right-core contraction",
+      :target
+      "The Circle-domain meridian map evaluated at Circle.exp (pi/2)",
+      :direction
+      "Exact subtype point equality from the source contracted-anchor representation to the target based Circle-meridian representation"},
+     :residual
+     "After banking this based endpoint equality, extend the attachment across the right tube, construct compatible tube-piece deformation data, and glue the geometricY-to-Y equivalence."}},
+   :phase :implementation,
+   :type
+   "(⟨apm_t02a03_meridianAnchor, apm_t02a03_meridianAnchor_mem_geometricY⟩ : apm_t02a03_geometricY_probe) = apm_t02a03_circleMeridianMap (Circle.exp (Real.pi / 2))",
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/geometric-anchor-circle-meridian-quarter-turn",
    :acceptance
@@ -59591,6 +59633,7 @@
    :id
    :routes-2026-10-10-t02a03-geometric-anchor-circle-meridian-quarter-turn-topo2-r1,
    :kind :representation-comparison,
+   :declaration "apm_t02a03_anchor_eq_circleMeridianMap_quarterTurn",
    :depends-on
    [:routes-2026-10-10-checkpoint-topo2-r5
     :routes-2026-10-10-t02a03-geometric-right-core-anchor-contraction-topo2-r1],
