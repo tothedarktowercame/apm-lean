@@ -55516,61 +55516,44 @@
    "After the positive smooth-conic chart witnesses are banked, prove route step 3: the nodal cross has a disconnected punctured neighborhood at [1:0:0], incompatible with an open planar neighborhood.",
    :other-consumers []}
   {:consumer :t94A08,
+   :stop-count 1,
    :evidence
-   {:probe
-    {:outcome :revise,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/t94a08_smooth_conic_local_charts_contract.lean",
-      :sha256
-      "e3c1f3b0ca81ff510f436dad7630fb73d13f01e111699a01c37f120f0bdd5346"},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/t94a08_smooth_conic_local_charts_contract.lean",
-       :exit 0}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t94a08_smooth_conic_local_charts_contract.lean || true)\"",
-       :exit 0}
-      {:cmd
-       "sha256sum /tmp/t94a08_smooth_conic_local_charts_contract.lean",
-       :exit 0,
-       :output
-       "e3c1f3b0ca81ff510f436dad7630fb73d13f01e111699a01c37f120f0bdd5346  /tmp/t94a08_smooth_conic_local_charts_contract.lean"}
-      {:cmd
-       "lake env lean ConstructionTargets/T94A08AffineChartHomeomorph.lean",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :finding
-     "Route step 1 is already banked more completely than the row evidence records: T94A08AffineChartHomeomorph compiles affineChartConstruction, with source openness, both continuity directions, inverse laws, and the actual OpenPartialHomeomorph at dimension two. The next missing result is therefore route step 2, not another continuity packet. The compiled placeholder-free contract exposes explicit open source and target neighborhoods and a homeomorphism from each smooth-conic neighborhood to an open subset of EuclideanSpace real (Fin 2); an inhabitant directly supplies the positive manifold conjunct without introducing another projective topology. The independent nodal-cross obstruction remains route step 3.",
-     :residual
-     "Construct SmoothConicLocalCharts from the banked affine charts by solving the quadratic in the z0 or z1 chart; then prove the separate nodal-cross punctured-neighborhood obstruction and assemble the frozen conjunction.",
-     :prerequisite
-     {:bounded-exception
-      "single-consumer bounded smooth-conic local-chart construction",
-      :consumer :t94A08,
-      :phase :probe,
-      :state :open,
-      :scope [],
-      :dag-node "TOPOLOGY-ROUTES.md/t94A08/smooth-conic-local-charts",
-      :acceptance
-      {:probe
-       "Compile a placeholder-free inhabitant of T94A08SmoothConicLocalChartsProbe.SmoothConicLocalCharts from /tmp/t94a08_smooth_conic_local_charts_contract.lean. Reuse ConstructionTargets.T94A08ProjectiveConic.affineChartConstruction at the frozen coinduced topology. In the z0 chart parameterize the conic by a = u + I*v with a nonzero and inverse formulas u=(a-a^-1)/2 and v=(a+a^-1)/(2*I); cover the two z0=0 points in a z1 chart. Supply explicit open source and Euclidean target neighborhoods and the homeomorphisms required by every structure field; do not define another topology or replace the witnesses with a Prop facade.",
-       :declaration "SmoothConicLocalCharts",
-       :placeholder "the sole sorry in apm_t94a08",
-       :route-step "step 2, smooth-conic local Euclidean charts"},
-      :id :routes-2026-10-10-t94a08-smooth-conic-local-charts-topo2-r1,
-      :kind :reusable-theorem,
-      :depends-on
-      [:routes-2026-10-10-checkpoint-topo2-r2
-       :routes-2026-10-10-t94a08-affine-chart-source-open-topo2-r1
-       :routes-2026-10-10-t94a08-affine-chart-inverse-laws-topo2-r1],
-      :current-residual
-      "After the positive smooth-conic chart witnesses are banked, prove route step 3: the nodal cross has a disconnected punctured neighborhood at [1:0:0], incompatible with an open planar neighborhood.",
-      :other-consumers []}}},
+   {:residual
+    "Supersede the false normalization and projective-affine comparison rows with corrected fresh ids, rebuild SmoothConicLocalCharts from that corrected comparison, then return to the nodal-cross obstruction and final conjunction.",
+    :outcome :stop,
+    :disposition :stop,
+    :author "topo-8",
+    :reason
+    "The final adapter cannot proceed through its required smooth-conic-local-charts dependency because that route now terminates in a compiled representation refutation. The mandatory projective-affine comparison specifies an inverse coordinate insertion that sends both affine indices 1 and 2 to the second pair component. Its proposed inverse therefore maps the distinct normalized-conic points (I,0) and (-I,0) to the same projective point, contradicting homeomorphism injectivity. Since the closure row requires the positive smooth-conic chart construction before assembling the frozen theorem, this is an exact dependency representation boundary, not a refutation of the registered t94A08 theorem. The malformed comparison and normalization contracts must be superseded before closure is retried.",
+    :commands
+    [{:cmd
+      "lake env lean /tmp/t94a08_projective_affine_identification_refutation.lean",
+      :exit 0}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t94a08_projective_affine_identification_refutation.lean || true)\"",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/t94a08_projective_affine_identification_refutation.lean",
+      :exit 0,
+      :output
+      "423af63c70a5b2601136daf43ef4727616edcc02e79a2e776dafec9235df946b  /tmp/t94a08_projective_affine_identification_refutation.lean"}
+     {:cmd
+      "python3 comment-stripped placeholder census for problems/t94A08/lean/Main.lean",
+      :exit 0,
+      :output "1"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}],
+    :fixture
+    {:path
+     "/tmp/t94a08_projective_affine_identification_refutation.lean",
+     :sha256
+     "423af63c70a5b2601136daf43ef4727616edcc02e79a2e776dafec9235df946b"},
+    :finding
+    "Fresh verification reproduces the no-inhabitant theorem for the depended-on comparison, confirms the frozen consumer still has exactly one comment-stripped placeholder, and confirms all 131 registered statements are unchanged. The affine projective charts and affine-conic parametrization remain valid; only the incorrectly oriented pair-to-coordinate insertion blocks the positive local-chart witness and hence this closure adapter. The independent nodal-cross route step remains unattempted.",
+    :seat "topo-8"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t94A08",
    :acceptance
