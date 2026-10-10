@@ -64136,6 +64136,21 @@
       :exit 0,
       :output "9cde5b0e Bank t97A04 raw pi1 coordinate map"}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791655784262-2643-492b3267",
+     :commands
+     ["git show/diff-tree/show --check 9cde5b0e77f402f9b07165c48893e2d80a833e22"
+      "sha256sum /tmp/t97a04_frozen_h1_coordinate.lean"
+      "lake env lean /tmp/t97a04_frozen_h1_coordinate.lean"
+      "lake env lean ConstructionTargets/T97A04FrozenH1Coordinate.lean"
+      "lake build ConstructionTargets.T97A04FrozenH1Coordinate"
+      "python3 scripts/statement-registry.py check --rev 9cde5b0e77f402f9b07165c48893e2d80a833e22"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "recompute recorded statement hash and comment-stripped placeholder counts"],
+     :finding
+     "PASS: reviewer codex-7 independently reviewed topo-6 commit 9cde5b0e; exact scope is 13 inserted lines in ConstructionTargets/T97A04FrozenH1Coordinate.lean only. Fixture SHA-256 263ab41fbf6eaf3e23d148489b20968e57996ad90dbcfe0e1d0262e1cdf415e3 matches. Fixture and target compile with standard axioms [propext, Classical.choice, Quot.sound], focused build completes 8291 jobs, registry is 131/0, and worklist is 501 OK. frozenTorusPi1CoordAtLbarBase correctly transports from FundamentalGroup at frozenLbar (0,0) to the fixed (0,0) basepoint by conjugation along frozenLbar_base, and frozenLbarPi1Map_coordinateMap_raw retains the required orientation matrixCoordinateMap(pi1Coord p) = transportedCoord(FundamentalGroup.map frozenLbar p) without collapsing the basepoint representation boundary. Statement SHA-256 is 260cd98f2b0010bc359ebc8feb1fe99cd7280e3a2289bd70f9fb88ab3bbf361a; target and fixture placeholders are 0, while consumer placeholders remain 4."},
     :commit "9cde5b0e77f402f9b07165c48893e2d80a833e22",
     :changed-paths
     ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"],
@@ -64152,7 +64167,7 @@
       "ConstructionTargets.T97A04FrozenH1Coordinate.frozenLbarPi1Map_coordinateMap_raw"]},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t97A04/frozen-pi1-raw-map-coordinate",
    :acceptance
@@ -64253,7 +64268,7 @@
      "The full apm_t97A04_bridge_2 proof remains absent. The compiled prerequisite defines the target pi1 coordinate at the actual point frozenLbar (0,0) by conjugation along frozenLbar_base and proves the frozen matrix equation for FundamentalGroup.map itself. This is the precise input shape of h1_coordinate_eq_of_fundamentalGroup_coordinate_eq; the remaining step is to prove that the aligned Hurewicz coordinate remains the identity after this basepoint equality transport.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t97A04/h1-bridge-assembly",
    :acceptance
@@ -65333,7 +65348,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -65349,7 +65364,10 @@
     :type
     "forall p : FundamentalGroup FrozenTorus (0, 0), frozenMatrixCoordinateMap (frozenTorusPi1Coord p) = frozenTorusPi1CoordAtLbarBase (FundamentalGroup.map frozenLbar (0, 0) p)",
     :proved-in
-    :routes-2026-10-10-t97a04-frozen-pi1-raw-map-coordinate-topo2-r1},
+    :routes-2026-10-10-t97a04-frozen-pi1-raw-map-coordinate-topo2-r1,
+    :banked-by
+    :routes-2026-10-10-t97a04-frozen-pi1-raw-map-coordinate-topo2-r1,
+    :banked-commit "9cde5b0e77f402f9b07165c48893e2d80a833e22"},
    :id
    :lemma-constructiontargets-t97a04frozenh1coordinate-frozenlbarpi1map-coordinatemap-raw,
    :kind :lemma,
