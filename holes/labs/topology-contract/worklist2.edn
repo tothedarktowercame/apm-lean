@@ -65104,6 +65104,20 @@
       :exit 0,
       :output "4c095e5a Close t97A04 H0 bridge"}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791659779484-2771-86815226",
+     :commands
+     ["git show/diff-tree/show --check 4c095e5a"
+      "sha256sum /tmp/t97a04_h0_bridge.lean"
+      "git blob, placeholder, frozen-statement, and forbidden-token checks"
+      "python3 scripts/statement-registry.py check --rev 4c095e5a"
+      "lake env lean consumer and fixture"
+      "CoefficientH0 orientation and representation-boundary inspection"
+      "bb worklist_check.bb"],
+     :finding
+     "PASS: topo-6 commit 4c095e5a changes exactly problems/t97A04/lean/Main.lean and matches the recorded blob and fixture SHA-256. The frozen bridge_1 statement hash is unchanged, placeholders fall 3 to 2, and no new sorry/admit/axiom occurs. Registry is 131/0; consumer and fixture compile; bridge_1 has exactly propext/Classical.choice/Quot.sound. The proof installs the product PathConnectedSpace instance, uses CoefficientH0.h0Iso, and applies h0Augmentation_naturality in the correct map-then-augmentation direction across the definitional singular-homology wrapper."},
     :commit "4c095e5a8a15bfb63f736f2ed9b665fc5cc9aaed",
     :changed-paths ["problems/t97A04/lean/Main.lean"],
     :fixture
@@ -65117,7 +65131,7 @@
      :declarations ["apm_t97A04_bridge_1"]},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["problems/t97A04/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t97A04/bridge-1",
    :acceptance
@@ -66501,7 +66515,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "apm_t97A04_bridge_1",
@@ -66513,7 +66527,9 @@
     [:routes-2026-10-10-t97a04-h0-bridge-closure-topo2-r1],
     :type
     "∃ h0 : T97A04Homology 0 ≅ ModuleCat.of ℤ ℤ, ∀ a : T97A04Homology 0, h0.hom (t97A04HomologyMap 0 apm_t97a04_Lbar a) = h0.hom a",
-    :proved-in :routes-2026-10-10-t97a04-h0-bridge-closure-topo2-r1},
+    :proved-in :routes-2026-10-10-t97a04-h0-bridge-closure-topo2-r1,
+    :banked-by :routes-2026-10-10-t97a04-h0-bridge-closure-topo2-r1,
+    :banked-commit "4c095e5a8a15bfb63f736f2ed9b665fc5cc9aaed"},
    :id :lemma-apm-t97a04-bridge-1,
    :kind :lemma,
    :depends-on [],
