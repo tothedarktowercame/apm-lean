@@ -97783,6 +97783,22 @@
      {:cmd "git status --short",
       :exit 0,
       :finding "clean worktree after commit"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791660542693-2804-5c328ace",
+     :commands
+     ["git show e7cf9f8d6433729ad6270ff12abc062cc0f99797:ConstructionTargets/CyclicPullbackNormalizationPath.lean"
+      "git diff-tree --no-commit-id --name-only -r e7cf9f8d6433729ad6270ff12abc062cc0f99797"
+      "git diff --exit-code e7cf9f8d6433729ad6270ff12abc062cc0f99797 -- ConstructionTargets/CyclicPullbackNormalizationPath.lean"
+      "sha256sum /tmp/cyclic-pullback-normalization-path.lean"
+      "lake build ConstructionTargets.CyclicPullbackNormalizationPath"
+      "lake env lean /tmp/cyclic-pullback-normalization-path.lean"
+      "placeholder census on source, fixture, and problems/t99J01/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb on recorded ledger at 81ae0500"],
+     :finding
+     "PASS: reviewer codex-3 verified author topo-2 and recorded commit e7cf9f8d, whose exact scope is only ConstructionTargets/CyclicPullbackNormalizationPath.lean and whose source equals the reviewed checkout. The canonical package authority is correct; fixture SHA-256 7af8ace6b0417db48f71142cac09f3a96b68edec13a3a9b7d75fab56f03cce9c matches; target and fixture compile with zero placeholders; t99J01 retains one placeholder; exists_normalization_path uses only propext, Classical.choice, and Quot.sound; all 131 registered statements and the recorded 879-item ledger validate. The theorem takes the collapse-constant path for the ThreeCircles coordinate and pairs it pointwise with the unchanged Circle coordinate. The pullback witness is re-established at every parameter by rewriting collapse along that path and using the original point's pullback equation. Continuity is inherited from the path and constant coordinate, while source and target are proved as equalities of the pullback subtype with correctly oriented component endpoint equations. The stated pointwise fixed-coordinate property is definitional. The module does not construct the cyclic path between normalized points, prove Pullback path connectedness, count fibers, compute subgroup index or pi1, or close t99J01."},
     :commit "e7cf9f8d6433729ad6270ff12abc062cc0f99797",
     :changed-paths
     ["ConstructionTargets/CyclicPullbackNormalizationPath.lean"],
@@ -97798,7 +97814,7 @@
      ["ConstructionTargets.CyclicPullbackNormalizationPath.exists_normalization_path"]},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/CyclicPullbackNormalizationPath.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/cyclic-three-circles-cover/pullback-normalization-path",
@@ -97912,7 +97928,7 @@
       "exists_normalization_path moves any cyclic pullback point to the final-circle section while preserving its Circle coordinate pointwise."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/cyclic-three-circles-cover",
@@ -99661,7 +99677,7 @@
    :other-consumers []}
   {:consumer :t99J01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "CyclicPullbackNormalizationPath.exists_normalization_path",
@@ -99675,7 +99691,10 @@
     "For every n and x : Pullback n, there is a path from x to the normalized final-circle point with the same Circle coordinate pointwise",
     :area "covering-subgroup-correspondence",
     :proved-in
-    :routes-2026-10-10-cyclic-pullback-normalization-path-46},
+    :routes-2026-10-10-cyclic-pullback-normalization-path-46,
+    :banked-by
+    :routes-2026-10-10-cyclic-pullback-normalization-path-46,
+    :banked-commit "e7cf9f8d6433729ad6270ff12abc062cc0f99797"},
    :id
    :lemma-cyclicpullbacknormalizationpath-exists-normalization-path,
    :kind :lemma,
