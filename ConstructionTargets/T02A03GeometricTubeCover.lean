@@ -113,6 +113,56 @@ theorem apm_t02a03_leftTube_planarCenter_ne_zero
   norm_num at hd
   linarith
 
+abbrev apm_t02a03_leftTubeSubtype :=
+  {p : apm_t02a03_E3 // p ∈ apm_t02a03_leftTube}
+
+noncomputable def apm_t02a03_leftTubePlanarComplex
+    (p : apm_t02a03_leftTubeSubtype) : ℂ :=
+  (p.1 0 + 1 : ℂ) + (p.1 1 : ℂ) * Complex.I
+
+theorem apm_t02a03_leftTubePlanarComplex_ne_zero
+    (p : apm_t02a03_leftTubeSubtype) :
+    apm_t02a03_leftTubePlanarComplex p ≠ 0 := by
+  intro h
+  have hre := congrArg Complex.re h
+  have him := congrArg Complex.im h
+  apply apm_t02a03_leftTube_planarCenter_ne_zero p.1 p.2
+  simp [apm_t02a03_leftTubePlanarComplex] at hre him
+  simp [hre, him]
+
+noncomputable def apm_t02a03_leftTubeAngular
+    (p : apm_t02a03_leftTubeSubtype) : Circle :=
+  ⟨NormedSpace.normalize (apm_t02a03_leftTubePlanarComplex p),
+    mem_sphere_zero_iff_norm.mpr
+      (NormedSpace.norm_normalize
+        (apm_t02a03_leftTubePlanarComplex_ne_zero p))⟩
+
+theorem apm_t02a03_continuous_leftTubeAngular :
+    Continuous apm_t02a03_leftTubeAngular := by
+  apply Continuous.subtype_mk
+  rw [continuous_iff_continuousAt]
+  intro p
+  have hz : Continuous
+      (fun q : apm_t02a03_leftTubeSubtype =>
+        apm_t02a03_leftTubePlanarComplex q) := by
+    have h0 : Continuous (fun q : apm_t02a03_leftTubeSubtype => q.1 0) :=
+      (PiLp.continuous_apply 2 (fun _ : Fin 3 => ℝ) 0).comp continuous_subtype_val
+    have h1 : Continuous (fun q : apm_t02a03_leftTubeSubtype => q.1 1) :=
+      (PiLp.continuous_apply 2 (fun _ : Fin 3 => ℝ) 1).comp continuous_subtype_val
+    unfold apm_t02a03_leftTubePlanarComplex
+    have hre : Continuous
+        (fun q : apm_t02a03_leftTubeSubtype =>
+          Complex.ofReal (q.1 0 + 1)) :=
+      Complex.continuous_ofReal.comp (h0.add continuous_const)
+    have him : Continuous
+        (fun q : apm_t02a03_leftTubeSubtype =>
+          Complex.ofReal (q.1 1) * Complex.I) :=
+      (Complex.continuous_ofReal.comp h1).mul continuous_const
+    simpa only [Complex.ofReal_add, Complex.ofReal_one] using hre.add him
+  exact ((continuous_norm.comp hz).continuousAt.inv₀
+      (norm_ne_zero_iff.mpr (apm_t02a03_leftTubePlanarComplex_ne_zero p))).smul
+    hz.continuousAt
+
 theorem apm_t02a03_rightCore_zero :
     apm_t02a03_rightCore 0 = (0 : apm_t02a03_E3) := by
   ext i
