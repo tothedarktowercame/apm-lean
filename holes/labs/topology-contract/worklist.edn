@@ -100226,8 +100226,71 @@
   {:bounded-exception
    "This single-consumer prerequisite assembles the three honest endpoint-glued interval loop models into the exact nested ThreeCircles target before either specialized polygon quotient is compared with it.",
    :consumer :t97A01,
+   :evidence
+   {:placeholder-delta {:source 0, :fixture 0},
+    :residual
+    "Construct homeomorphisms from the N3CircleRel and TorusCrosscapCircleRel quotients to ThreeEndpointLoops using their paired-edge and common-vertex equations, compose with threeEndpointLoopsHomeomorphThreeCircles, derive the literal boundary-to-outerOpen inclusion formulas, and assemble the packages.",
+    :gates
+    {:module-build :pass,
+     :fixture-compiles :pass,
+     :zero-source-and-fixture-sorry :pass,
+     :standard-only-axioms :pass,
+     :registry-check :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["The new module and fixture emitted no warnings; imported modules replayed existing lints and informational axiom reports."],
+    :missing-theorems
+    [{:name
+      "ThreeEndpointLoopsHomeomorph.threeEndpointLoopsHomeomorphThreeCircles",
+      :type
+      "The nested pointed wedge of three endpoint-glued interval quotients is homeomorphic to the nested ThreeCircles target, with literal formulas on all three loop representatives.",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on
+      ["IntervalEndpointQuotientCircle.endpointQuotientHomeomorphCircle"],
+      :area "polygon-surface-open-cover"}],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "sha256sum /tmp/three-endpoint-loops-homeomorph.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.ThreeEndpointLoopsHomeomorph",
+      :exit 0}
+     {:cmd "lake env lean /tmp/three-endpoint-loops-homeomorph.lean",
+      :exit 0}
+     {:cmd
+      "rg -n \\b(sorry|admit)\\b ConstructionTargets/ThreeEndpointLoopsHomeomorph.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "rg -n \\b(sorry|admit)\\b /tmp/three-endpoint-loops-homeomorph.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "511c62fecca4aff8f0a37ac150d1ff7e1ebe2b20",
+    :changed-paths
+    ["ConstructionTargets/ThreeEndpointLoopsHomeomorph.lean"],
+    :fixture
+    {:path "/tmp/three-endpoint-loops-homeomorph.lean",
+     :sha256
+     "5ddd5d7cbd3c981f47f15384f4016a94f6af269244f0ba17c34e86037c2a7dac",
+     :sorry-count 0},
+    :implementation
+    {:scope ["ConstructionTargets/ThreeEndpointLoopsHomeomorph.lean"],
+     :summary
+     "Defined the nested wedge of three endpoint quotients, assembled it homeomorphically into ThreeCircles through two pointed wedge homeomorphisms, and proved the basepoint and three loop representative formulas."},
+    :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ThreeEndpointLoopsHomeomorph.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/three-endpoint-loops-homeomorph",
@@ -103307,12 +103370,12 @@
    {:name
     "ThreeEndpointLoopsHomeomorph.threeEndpointLoopsHomeomorphThreeCircles",
     :reported-by
-    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40
+     :routes-2026-10-10-three-endpoint-loops-homeomorph-59],
     :type
     "The nested point wedge of three copies of the closed-unit-interval endpoint quotient is homeomorphic to StatementSurfaceModels.ThreeCircles, with literal formulas on representatives of all three loops.",
     :area "polygon-surface-open-cover",
-    :proved-in
-    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+    :proved-in :routes-2026-10-10-three-endpoint-loops-homeomorph-59},
    :id
    :lemma-threeendpointloopshomeomorph-threeendpointloopshomeomorphthreecircles,
    :kind :lemma,
