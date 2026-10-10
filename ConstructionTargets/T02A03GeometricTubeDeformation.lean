@@ -63,6 +63,57 @@ theorem rightTubeNormalComplex_eq_zero_iff (p : apm_t02a03_E3) :
         sub_eq_zero.mpr hu
     · simp [rightTubeNormalComplex, apm_t02a03_leftCore]
 
+theorem continuous_rightTubeNormalComplex : Continuous rightTubeNormalComplex := by
+  unfold rightTubeNormalComplex
+  fun_prop
+
+/-- Normalize the nonzero ambient normal coordinate on the deleted right
+tube. -/
+noncomputable def rightTubeMeridianCoordinate :
+    C(RightTubeMinusLeftCore, Circle) where
+  toFun p := ⟨NormedSpace.normalize (rightTubeNormalComplex p.1),
+    mem_sphere_zero_iff_norm.mpr (NormedSpace.norm_normalize (by
+      exact fun h => p.2.2 ((rightTubeNormalComplex_eq_zero_iff p.1).mp h)))⟩
+  continuous_toFun := by
+    apply Continuous.subtype_mk
+    rw [continuous_iff_continuousAt]
+    intro p
+    have hz : Continuous (fun q : RightTubeMinusLeftCore =>
+        rightTubeNormalComplex q.1) :=
+      continuous_rightTubeNormalComplex.comp continuous_subtype_val
+    exact ((continuous_norm.comp hz).continuousAt.inv₀
+      (norm_ne_zero_iff.mpr (fun h =>
+        p.2.2 ((rightTubeNormalComplex_eq_zero_iff p.1).mp h)))).smul
+          hz.continuousAt
+
+/-- The normalized normal coordinate is a left inverse to the frozen
+meridian parametrization. -/
+theorem rightTubeMeridianCoordinate_circleMeridian
+    (z : Circle)
+    (hz : apm_t02a03_circleMeridian z ∈ apm_t02a03_rightTube ∧
+      apm_t02a03_circleMeridian z ∉ Set.range apm_t02a03_leftCore) :
+    rightTubeMeridianCoordinate ⟨apm_t02a03_circleMeridian z, hz⟩ = z := by
+  apply Subtype.ext
+  change NormedSpace.normalize (rightTubeNormalComplex
+    (apm_t02a03_circleMeridian z)) = (z : ℂ)
+  have habs : |(z : ℂ).re| ≤ 1 := by
+    simpa [Circle.norm_coe z] using (RCLike.abs_re_le_norm (z : ℂ))
+  have hre : -(1 : ℝ) ≤ (z : ℂ).re := (abs_le.mp habs).1
+  have hpos : 0 < (1 / 8 : ℝ) := by norm_num
+  rw [show rightTubeNormalComplex (apm_t02a03_circleMeridian z) =
+      (1 / 8 : ℝ) • (z : ℂ) by
+    apply Complex.ext
+    · simp [rightTubeNormalComplex, apm_t02a03_circleMeridian,
+        Complex.norm_def, Complex.normSq_apply]
+      rw [show (8⁻¹ * (z : ℂ).re + 1) * (8⁻¹ * (z : ℂ).re + 1) =
+        (8⁻¹ * (z : ℂ).re + 1) ^ 2 by ring]
+      rw [Real.sqrt_sq (by norm_num at hre ⊢; linarith)]
+      ring
+    · simp [rightTubeNormalComplex, apm_t02a03_circleMeridian]]
+  exact (NormedSpace.normalize_smul_of_pos hpos (z : ℂ)).trans
+    (NormedSpace.normalize_eq_self_of_norm_eq_one (Circle.norm_coe z))
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeMeridianCoordinate_circleMeridian
