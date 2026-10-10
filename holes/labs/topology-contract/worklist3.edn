@@ -194,9 +194,21 @@
       "Refill from closure outcome and the seeded 50-node topo3 DAG.",
       :other-consumers []}],
     :author "topo-12",
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791670739873-3103-327107da",
+     :commands
+     ["clojure.edn/read-string worklist3.edn"
+      "bb holes/labs/topology-contract/build_step.bb priorities holes/labs/topology-contract/worklist3.edn"
+      "bb holes/labs/topology-contract/build_step.bb counts holes/labs/topology-contract/worklist3.edn"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped placeholder census for 19 topo3 problems"],
+     :finding
+     "PASS: recorded commit a6260f2a changes only worklist3.edn; author topo-12 differs from reviewer; the repaired portfolio elects exactly one t01A08 closure-directed probe first, then three ready foundations in distinct areas, with the checkpoint depending on all four; all 19 placeholder counts reproduce and 131 registered statements match with zero mismatches; no Lean fixture, frozen theorem hash, theorem orientation, or representation-comparison boundary applies to this strategy row"}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -210,7 +222,7 @@
    :other-consumers []}
   {:consumer :t01A08,
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["problems/t01A08/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t01A08/closure",
    :acceptance
@@ -232,7 +244,7 @@
    :implements-lemma
    :lemma-constructiontargets-surfaceclassification-compactsmoothsurfacefinitetriangulatio,
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/SurfaceClassification.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/topo3/surface-classification/triangulation-first-milestone",
@@ -261,7 +273,7 @@
    :implements-lemma
    :lemma-constructiontargets-surfaceschoenflies-embeddedcirclecollar,
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/SurfaceSchoenflies.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/topo3/schoenflies-2d/embedded-circle-collar",
@@ -284,7 +296,7 @@
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-closedorientedfundamentalclass,
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
