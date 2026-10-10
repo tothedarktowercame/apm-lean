@@ -146,8 +146,46 @@ theorem isCompact_range_rightCore :
   rw [← range_rightCoreCircle]
   exact isCompact_range continuous_rightCoreCircle
 
+theorem rightTube_exists_near_rightCore
+    (p : apm_t02a03_E3) (hp : p ∈ apm_t02a03_rightTube) :
+    ∃ q ∈ Set.range apm_t02a03_rightCore, dist p q ≤ (1 / 4 : ℝ) := by
+  rw [apm_t02a03_rightTube,
+    isCompact_range_rightCore.cthickening_eq_biUnion_closedBall
+      (by norm_num)] at hp
+  simp only [Set.mem_iUnion, Metric.mem_closedBall] at hp
+  rcases hp with ⟨q, hq, hd⟩
+  exact ⟨q, hq, by simpa [dist_comm] using hd⟩
+
+noncomputable def rightTubePlanarComplex (p : apm_t02a03_E3) : ℂ :=
+  ((p 0 + 1 : ℝ) : ℂ) + (p 1 : ℂ) * Complex.I
+
+theorem rightTubePlanarComplex_ne_zero
+    (p : apm_t02a03_E3) (hp : p ∈ apm_t02a03_rightTube) :
+    rightTubePlanarComplex p ≠ 0 := by
+  intro h
+  have hre := congrArg Complex.re h
+  have him := congrArg Complex.im h
+  simp [rightTubePlanarComplex] at hre him
+  have hx : p 0 = -1 := by linarith
+  have hy : p 1 = 0 := him
+  obtain ⟨q, ⟨t, rfl⟩, hd⟩ := rightTube_exists_near_rightCore p hp
+  rw [dist_eq_norm, EuclideanSpace.norm_eq] at hd
+  simp [apm_t02a03_rightCore, hx, hy, Fin.sum_univ_succ] at hd
+  have hs : 1 ≤ √((-2 + Real.cos t) ^ 2 +
+      (Real.sin t ^ 2 + p 2 ^ 2)) := by
+    rw [Real.le_sqrt (by norm_num) (by positivity)]
+    have hc : Real.cos t ≤ 1 := Real.cos_le_one t
+    nlinarith [Real.sin_sq_add_cos_sq t, sq_nonneg (p 2)]
+  have hd' : √((-2 + Real.cos t) ^ 2 +
+      (Real.sin t ^ 2 + p 2 ^ 2)) ≤ (1 / 4 : ℝ) := by
+    simpa [show (-1 : ℝ) - (1 - Real.cos t) = -2 + Real.cos t by ring]
+      using hd
+  norm_num at hd'
+  linarith
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeMeridianCoordinate_circleMeridian
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.isCompact_range_rightCore
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubePlanarComplex_ne_zero
