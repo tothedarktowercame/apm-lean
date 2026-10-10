@@ -57686,19 +57686,77 @@
   {:bounded-exception
    "single-consumer geometric tube-cover normalization for t02A03",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/t02a03_geometric_tube_cover.lean",
+      :sha256
+      "ca89fbceb978a1b3261173110bb5b7295ebd4be2b4a21a5e83c7e94c99cdc315"},
+     :commands
+     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "apm_t02a03_W_eq_leftTube_union_rightTube compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
+       :exit 0}
+      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "ca89fbceb978a1b3261173110bb5b7295ebd4be2b4a21a5e83c7e94c99cdc315  /tmp/t02a03_geometric_tube_cover.lean"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :finding
+     "The exact frozen infDist neighborhood is normalized successfully. After proving the union spine nonempty, finiteness of infEDist permits conversion between its ENNReal and real-valued forms; Metric.cthickening_union then identifies apm_t02a03_W with the union of the two closed radius-1/4 core thickenings.",
+     :residual
+     "Construct compatible deformations on the left tube minus its core and the right tube, prove agreement on their intersection, glue them across the banked two-tube cover, and identify the resulting spine model with apm_t02a03_Y.",
+     :implementation
+     {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
+      :acceptance
+      {:source-fixture "/tmp/t02a03_geometric_tube_cover.lean",
+       :declarations
+       ["apm_t02a03_genusTwoSpine_nonempty"
+        "apm_t02a03_W_eq_leftTube_union_rightTube"],
+       :placeholder "the sole sorry in apm_t02a03",
+       :route-step
+       "t02A03 step 2, normalize the explicit figure-eight neighborhood as a union of two closed core tubes",
+       :representation
+       {:source
+        "The frozen genus-two neighborhood represented by the inequality infDist p (leftCore range union rightCore range) <= 1/4",
+        :target
+        "The union of the closed radius-1/4 metric thickenings of the left-core and right-core ranges",
+        :direction
+        "Exact set equality from the source infDist-neighborhood representation to the target two-tube union representation"},
+       :gates
+       ["lake env lean ConstructionTargets/T02A03GeometricTubeCover.lean"
+        "placeholder scan"
+        "statement registry check"]}}}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/geometric-tube-cover",
    :acceptance
-   {:probe
-    "Compile and bank apm_t02a03_genusTwoSpine_nonempty and apm_t02a03_W_eq_leftTube_union_rightTube from /tmp/t02a03_geometric_tube_cover.lean. Define the two closed radius-1/4 core thickenings and prove that the frozen infDist neighborhood apm_t02a03_W is exactly their union. This supplies the set-level cover needed for t02A03 route step 2; do not yet claim a deformation retract or homotopy equivalence.",
+   {:source-fixture "/tmp/t02a03_geometric_tube_cover.lean",
     :declarations
     ["apm_t02a03_genusTwoSpine_nonempty"
      "apm_t02a03_W_eq_leftTube_union_rightTube"],
     :placeholder "the sole sorry in apm_t02a03",
     :route-step
-    "t02A03 step 2, normalize the explicit figure-eight neighborhood as a union of two closed core tubes"},
+    "t02A03 step 2, normalize the explicit figure-eight neighborhood as a union of two closed core tubes",
+    :representation
+    {:source
+     "The frozen genus-two neighborhood represented by the inequality infDist p (leftCore range union rightCore range) <= 1/4",
+     :target
+     "The union of the closed radius-1/4 metric thickenings of the left-core and right-core ranges",
+     :direction
+     "Exact set equality from the source infDist-neighborhood representation to the target two-tube union representation"},
+    :gates
+    ["lake env lean ConstructionTargets/T02A03GeometricTubeCover.lean"
+     "placeholder scan"
+     "statement registry check"]},
    :representation
    {:source
     "The frozen genus-two neighborhood represented by the inequality infDist p (leftCore range union rightCore range) <= 1/4",
