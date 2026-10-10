@@ -101049,8 +101049,89 @@
   {:bounded-exception
    "This single-consumer prerequisite supplies the exact source point-wedge equality criteria needed by the pending three-loop fiber classifications.",
    :consumer :t97A01,
+   :evidence
+   {:placeholder-delta
+    {:source-before 0,
+     :source-after 0,
+     :fixture-before 0,
+     :fixture-after 0,
+     :consumer-before 1,
+     :consumer-after 1},
+    :residual
+    "Specialize the exact wedge equality criteria to the three half-open endpoint loops, then classify their N3 and torus-crosscap quotient fibers.",
+    :gates
+    {:module-build :pass,
+     :fixture-compiles :pass,
+     :zero-source-and-fixture-sorry :pass,
+     :standard-only-axioms :pass,
+     :registry-check :pass,
+     :clean-worktree :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["Replayed dependency modules emitted existing linter warnings; PointWedgeExactEquality emitted no warnings."],
+    :missing-theorems
+    [{:name "PointWedgeExactEquality.quotientMap_inl_injective",
+      :type
+      "theorem quotientMap_inl_injective (x₀ : X) (y₀ : Y) : Function.Injective (fun x => quotientMap x₀ y₀ (.inl x))",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on [],
+      :area "polygon-surface-open-cover"}
+     {:name "PointWedgeExactEquality.quotientMap_inr_injective",
+      :type
+      "theorem quotientMap_inr_injective (x₀ : X) (y₀ : Y) : Function.Injective (fun y => quotientMap x₀ y₀ (.inr y))",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on [],
+      :area "polygon-surface-open-cover"}
+     {:name "PointWedgeExactEquality.quotientMap_inl_eq_inr_iff",
+      :type
+      "theorem quotientMap_inl_eq_inr_iff (x₀ : X) (y₀ : Y) (x : X) (y : Y) : quotientMap x₀ y₀ (.inl x) = quotientMap x₀ y₀ (.inr y) ↔ x = x₀ ∧ y = y₀",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on
+      ["PointWedgeExactEquality.quotientMap_inl_injective"
+       "PointWedgeExactEquality.quotientMap_inr_injective"],
+      :area "polygon-surface-open-cover"}],
+    :statement-hashes
+    {"fixture"
+     "c4c1cfdecd0e84b73974f94c9017bdbc2c0d5a876f0077fbe1297103fe48b19b",
+     "implementation"
+     "8db9dac20a7aabb13499ab520ed5020c3a183ddcb6bfa0b2456941a48318aa76"},
+    :axioms
+    {"quotientMap_inl_injective" ["propext"],
+     "quotientMap_inr_injective" ["propext"],
+     "quotientMap_inl_eq_inr_iff" ["propext" "Quot.sound"]},
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd "sha256sum /tmp/point-wedge-exact-equality.lean", :exit 0}
+     {:cmd "lake build ConstructionTargets.PointWedgeExactEquality",
+      :exit 0}
+     {:cmd "lake env lean /tmp/point-wedge-exact-equality.lean",
+      :exit 0}
+     {:cmd
+      "rg -n \\b(sorry|admit)\\b ConstructionTargets/PointWedgeExactEquality.lean /tmp/point-wedge-exact-equality.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "git diff --check HEAD^ HEAD", :exit 0}
+     {:cmd "test -z \"$(git status --porcelain)\"", :exit 0}],
+    :diagnostic-history [],
+    :commit "1b73d26875d9a041789d5fce9c0f46c5d4170948",
+    :changed-paths
+    ["ConstructionTargets/PointWedgeExactEquality.lean"],
+    :fixture
+    {:path "/tmp/point-wedge-exact-equality.lean",
+     :sha256
+     "c4c1cfdecd0e84b73974f94c9017bdbc2c0d5a876f0077fbe1297103fe48b19b"},
+    :implementation
+    {:scope ["ConstructionTargets/PointWedgeExactEquality.lean"],
+     :summary
+     "Defined relation-invariant left and right coordinates, proved each point-wedge quotient summand map injective, and characterized cross-summand equality exactly by the two chosen wedge points."},
+    :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PointWedgeExactEquality.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/point-wedge-exact-equality",
@@ -104581,12 +104662,12 @@
    :lemma
    {:name "PointWedgeExactEquality.quotientMap_inl_injective",
     :reported-by
-    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40
+     :routes-2026-10-10-point-wedge-exact-equality-66],
     :type
     "For a point wedge, the canonical map restricted to the left summand is injective.",
     :area "polygon-surface-open-cover",
-    :proved-in
-    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+    :proved-in :routes-2026-10-10-point-wedge-exact-equality-66},
    :id :lemma-pointwedgeexactequality-quotientmap-inl-injective,
    :kind :lemma,
    :depends-on [],
@@ -104602,12 +104683,12 @@
    :lemma
    {:name "PointWedgeExactEquality.quotientMap_inr_injective",
     :reported-by
-    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40
+     :routes-2026-10-10-point-wedge-exact-equality-66],
     :type
     "For a point wedge, the canonical map restricted to the right summand is injective.",
     :area "polygon-surface-open-cover",
-    :proved-in
-    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+    :proved-in :routes-2026-10-10-point-wedge-exact-equality-66},
    :id :lemma-pointwedgeexactequality-quotientmap-inr-injective,
    :kind :lemma,
    :depends-on [],
@@ -104623,15 +104704,17 @@
    :lemma
    {:name "PointWedgeExactEquality.quotientMap_inl_eq_inr_iff",
     :reported-by
-    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40
+     :routes-2026-10-10-point-wedge-exact-equality-66],
     :type
     "In a point wedge, a left representative equals a right representative exactly when both are their designated wedge points.",
     :area "polygon-surface-open-cover",
-    :proved-in
-    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+    :proved-in :routes-2026-10-10-point-wedge-exact-equality-66},
    :id :lemma-pointwedgeexactequality-quotientmap-inl-eq-inr-iff,
    :kind :lemma,
-   :depends-on [],
+   :depends-on
+   [:lemma-pointwedgeexactequality-quotientmap-inl-injective
+    :lemma-pointwedgeexactequality-quotientmap-inr-injective],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
