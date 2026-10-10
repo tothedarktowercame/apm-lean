@@ -61078,6 +61078,29 @@
    "Bundle the continuous reconstruction as a map into LeftTubeMinusCore, then construct both comparison homotopies and assemble the torus HomotopyEquiv.",
    :other-consumers []}
   {:bounded-exception
+   "single-consumer bundled continuous inverse coordinate map for the t02A03 punctured left tube",
+   :consumer :t02A03,
+   :phase :probe,
+   :state :open,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-torus-inverse-map",
+   :acceptance
+   {:probe
+    "Compile and bank apm_t02a03_leftTubeTorusInverse from /tmp/t02a03_geometric_tube_cover.lean. Bundle apm_t02a03_leftTubeTorusPoint as a ContinuousMap from Circle times Circle to apm_t02a03_LeftTubeMinusCore using the banked frozen left-tube membership and frozen left-core exclusion theorems, and prove continuity from apm_t02a03_continuous_leftTubeTorusPoint. This supplies the inverse map required by t02A03 route step 2; do not yet claim either comparison homotopy, the torus HomotopyEquiv, or gluing.",
+    :declaration "apm_t02a03_leftTubeTorusInverse",
+    :type "C(Circle × Circle, apm_t02a03_LeftTubeMinusCore)",
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "t02A03 step 2, bundle the explicit torus-coordinate reconstruction as the continuous inverse candidate"},
+   :id :routes-2026-10-10-t02a03-left-tube-torus-inverse-map-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo2-r5
+    :routes-2026-10-10-t02a03-left-tube-torus-point-core-exclusion-topo2-r1],
+   :current-residual
+   "Prove the forward-after-inverse composite homotopic to the torus identity and the inverse-after-forward composite homotopic to the complement identity, then assemble the torus HomotopyEquiv.",
+   :other-consumers []}
+  {:bounded-exception
    "single-consumer explicit punctured-left-tube model for t02A03",
    :consumer :t02A03,
    :evidence
@@ -61087,70 +61110,56 @@
      :fixture
      {:path "/tmp/t02a03_geometric_tube_cover.lean",
       :sha256
-      "14e388ccff51003ea125ba7cd10a574f36f9c98b1150ae18e673cb4e51b03b28"},
+      "08bdba085497bf8fd8aefa9fc4c8abeaf496e021f3b64775a8017ca2e15e592b"},
      :commands
      [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
        :exit 0,
        :output
-       "apm_t02a03_leftTubeTorusPoint_not_mem_leftCore compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "apm_t02a03_leftTubeTorusInverse compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
        "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
        :exit 0}
       {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
        :exit 0,
        :output
-       "14e388ccff51003ea125ba7cd10a574f36f9c98b1150ae18e673cb4e51b03b28  /tmp/t02a03_geometric_tube_cover.lean"}
+       "08bdba085497bf8fd8aefa9fc4c8abeaf496e021f3b64775a8017ca2e15e592b  /tmp/t02a03_geometric_tube_cover.lean"}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
-     :diagnostic-history
-     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 1,
-       :finding
-       "The first proof did not extract the lower real-part bound correctly from Complex.abs_re_le_norm, attempted to simplify the norm of a real scalar at the wrong type, and did not rewrite the planar norm into the zero-coordinate equation. Using abs_le.mp, separating the real and complex norm rewrites, and rewriting hnorm explicitly resolved those goals."}
-      {:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 1,
-       :finding
-       "The next norm proof inserted an unnecessary complex coercion equality after the expression had already normalized to a real coercion. Removing that rewrite exposed the remaining real-norm conversion."}
-      {:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 1,
-       :finding
-       "Complex.norm_real changed the goal to a real norm rather than an absolute value. Adding Real.norm_eq_abs before abs_of_nonneg completed the calculation; the final clean rerun compiled without warnings."}],
      :finding
-     "The full punctured-left-tube HomotopyEquiv is still absent, but the torus reconstruction is now proved to avoid the frozen left core. If it lay on the core, the banked zero-locus theorem would make its normal coordinate zero. The reconstruction's planar complex coordinate has norm 1 + Re(b)/8 because this radius is positive, while its height is Im(b)/8. Vanishing therefore forces both Re(b) and Im(b) to zero, contradicting Circle.normSq_coe for the second torus coordinate.",
+     "The full punctured-left-tube HomotopyEquiv is still absent, but its inverse candidate is now a compiled ContinuousMap from Circle times Circle into the exact frozen left-tube complement. The map uses apm_t02a03_leftTubeTorusPoint as its ambient formula, the banked left-tube membership theorem for the first subtype obligation, and the banked left-core exclusion theorem for the second. Its continuity is inherited directly from apm_t02a03_continuous_leftTubeTorusPoint.",
      :residual
-     "Bank exclusion of the reconstruction from the frozen left core. Then bundle the continuous reconstruction as a map into LeftTubeMinusCore and construct the two comparison homotopies.",
+     "Bank the bundled continuous inverse map. Then prove the forward-after-inverse composite is homotopic to the torus identity and the inverse-after-forward composite is homotopic to the complement identity, and assemble the HomotopyEquiv.",
      :prerequisite
      {:bounded-exception
-      "single-consumer frozen left-core exclusion for the t02A03 torus reconstruction",
+      "single-consumer bundled continuous inverse coordinate map for the t02A03 punctured left tube",
       :consumer :t02A03,
       :phase :probe,
       :state :open,
       :scope [],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t02A03/left-tube-torus-point-core-exclusion",
+      "TOPOLOGY-ROUTES.md/t02A03/left-tube-torus-inverse-map",
       :acceptance
       {:probe
-       "Compile and bank apm_t02a03_leftTubeTorusPoint_not_mem_leftCore from /tmp/t02a03_geometric_tube_cover.lean. Prove that every explicit torus reconstruction lies outside Set.range apm_t02a03_leftCore. Use the banked tube membership to form the left-tube subtype, the banked normal-coordinate zero-locus equivalence, positivity of the reconstructed planar radius, and the unit norm identity of the second Circle coordinate. This supplies the deleted-core component required to bundle the inverse coordinate map; do not yet claim the bundled inverse map, comparison homotopies, the torus HomotopyEquiv, or gluing.",
-       :declaration "apm_t02a03_leftTubeTorusPoint_not_mem_leftCore",
-       :type
-       "forall u : Circle × Circle, apm_t02a03_leftTubeTorusPoint u ∉ Set.range apm_t02a03_leftCore",
+       "Compile and bank apm_t02a03_leftTubeTorusInverse from /tmp/t02a03_geometric_tube_cover.lean. Bundle apm_t02a03_leftTubeTorusPoint as a ContinuousMap from Circle times Circle to apm_t02a03_LeftTubeMinusCore using the banked frozen left-tube membership and frozen left-core exclusion theorems, and prove continuity from apm_t02a03_continuous_leftTubeTorusPoint. This supplies the inverse map required by t02A03 route step 2; do not yet claim either comparison homotopy, the torus HomotopyEquiv, or gluing.",
+       :declaration "apm_t02a03_leftTubeTorusInverse",
+       :type "C(Circle × Circle, apm_t02a03_LeftTubeMinusCore)",
        :placeholder "the sole sorry in apm_t02a03",
        :route-step
-       "t02A03 step 2, prove the torus-coordinate reconstruction avoids the frozen deleted core"},
+       "t02A03 step 2, bundle the explicit torus-coordinate reconstruction as the continuous inverse candidate"},
       :id
-      :routes-2026-10-10-t02a03-left-tube-torus-point-core-exclusion-topo2-r1,
+      :routes-2026-10-10-t02a03-left-tube-torus-inverse-map-topo2-r1,
       :kind :reusable-theorem,
       :depends-on
       [:routes-2026-10-10-checkpoint-topo2-r5
-       :routes-2026-10-10-t02a03-left-tube-torus-point-membership-topo2-r1],
+       :routes-2026-10-10-t02a03-left-tube-torus-point-core-exclusion-topo2-r1],
       :current-residual
-      "Bundle the continuous reconstruction as a map into LeftTubeMinusCore, then construct both comparison homotopies and assemble the torus HomotopyEquiv.",
+      "Prove the forward-after-inverse composite homotopic to the torus identity and the inverse-after-forward composite homotopic to the complement identity, then assemble the torus HomotopyEquiv.",
       :other-consumers []}}},
    :phase :probe,
    :type
    "Nonempty (ContinuousMap.HomotopyEquiv LeftTubeMinusCore ConstructionTargets.TorusCircleWedgeOpenCover.Torus)",
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-punctured-model",
    :acceptance
@@ -61188,7 +61197,8 @@
     :routes-2026-10-10-t02a03-left-tube-torus-point-topo2-r1
     :routes-2026-10-10-t02a03-left-tube-torus-point-core-distance-topo2-r1
     :routes-2026-10-10-t02a03-left-tube-torus-point-membership-topo2-r1
-    :routes-2026-10-10-t02a03-left-tube-torus-point-core-exclusion-topo2-r1],
+    :routes-2026-10-10-t02a03-left-tube-torus-point-core-exclusion-topo2-r1
+    :routes-2026-10-10-t02a03-left-tube-torus-inverse-map-topo2-r1],
    :current-residual
    "After the punctured-left-tube model is banked, construct the right-tube-minus-deleted-attachment model extending the based core homotopy, then overlap compatibility and gluing for the full geometricY equivalence.",
    :other-consumers []}
