@@ -173,4 +173,20 @@ theorem apm_t02a03_leftTubePlanarComplex_eq_norm_smul_angular
   exact (NormedSpace.norm_smul_normalize
     (apm_t02a03_leftTubePlanarComplex p)).symm
 
+theorem apm_t02a03_leftTubePlanarComplex_torusInverse_coordinates
+    (p : apm_t02a03_LeftTubeMinusCore) :
+    apm_t02a03_leftTubePlanarComplex
+      ⟨(apm_t02a03_leftTubeTorusInverse
+          (apm_t02a03_leftTubeTorusCoordinates p)).1,
+        (apm_t02a03_leftTubeTorusInverse
+          (apm_t02a03_leftTubeTorusCoordinates p)).2.1⟩ =
+      (1 + (1 / 8 : ℝ) *
+          ((apm_t02a03_leftTubeNormalAngular p : Circle) : ℂ).re) •
+        ((apm_t02a03_leftTubeAngular ⟨p.1, p.2.1⟩ : Circle) : ℂ) := by
+  apply Complex.ext <;>
+    simp [apm_t02a03_leftTubePlanarComplex,
+      apm_t02a03_leftTubeTorusInverse,
+      apm_t02a03_leftTubeTorusCoordinates,
+      apm_t02a03_leftTubeTorusPoint]
+
 end ConstructionTargets.T02A03LeftTubePuncturedModel
