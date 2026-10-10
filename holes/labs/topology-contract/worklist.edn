@@ -93689,7 +93689,8 @@
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :evidence
    {:outcome :replan,
-    :seat "topo-4",
+    :disposition :replan,
+    :author "topo-4",
     :commands
     [{:cmd
       "bb holes/labs/topology-contract/build_step.bb priorities holes/labs/topology-contract/worklist.edn",
@@ -93719,6 +93720,76 @@
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
      {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791646757538-2306-6ddc12a9",
+     :commands
+     ["git show --stat 691fdcfcf3d543ead8cb68ebc8eaa41194d28399 and recorded ledger inspection"
+      "bb holes/labs/topology-contract/worklist_check.bb on recorded ledger at 691fdcfc"
+      "bb holes/labs/topology-contract/build_step.bb priorities on recorded ledger at 691fdcfc"
+      "lake build ConstructionTargets.KleinPresentedGroupCoordinateNormalForm"
+      "comment-stripped placeholder census for t99J01 t92J06 t97A03 t93J03 t01A03 t97A01"
+      "rg audit for an existing Klein square-orbit implementation"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS: reviewer codex-3 reproduced the ledger-only checkpoint at commit 691fdcfc. The banked coordinate normal form compiles with its coordinate equivalence, generator formulas, unique normal form, and standard axioms; all 131 statement hashes match. The six-consumer comment-stripped placeholder census is 1,1,3,1,1,1 for total 8 and delta 0. No square-orbit implementation is banked. Although two-step t99J01 lemmas rank higher mechanically, none alone closes its consumer; the checkpoint acceptance explicitly advances the newly enabled Klein route, and it correctly elects a bounded square-orbit classification with an exact typed residual and representation boundary before quotient or EqvGen work."},
+    :replacement-items
+    [{:bounded-exception
+      "This single-consumer geometric lemma is the next ready dependency of the elected one-placeholder t93J03 route; the coordinate algebra it needs is now banked.",
+      :consumer :t93J03,
+      :implements-lemma
+      :lemma-kleinplaneaction-squareorbitclassification,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/plane-action-square-orbit-classification",
+      :acceptance
+      {:probe
+       "Compile the affine action of PresentedKleinGroup on Real times Real obtained from the banked integer-pair coordinate equivalence, with a acting by horizontal unit translation and b by a glide reflection. Prove the closed-fundamental-square orbit classification needed downstream: give the coordinate formula for every a^m*b^n action, show every plane orbit meets the closed square, and characterize all pairs of square points in one orbit, including each edge and corner case. Do not form a quotient, compare EqvGen relations, or construct a homeomorphism.",
+       :placeholder "the single sorry in apm_t93j03",
+       :route-step
+       "t93J03 step 1b, affine plane action and square orbit classification before the boundary EqvGen comparison",
+       :gates
+       ["canonical packages"
+        "fixture compiles"
+        "zero fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :id
+      :routes-2026-10-10-klein-plane-action-square-orbit-classification-23,
+      :kind :reusable-theorem,
+      :depends-on [:lemma-kleinpresentedgroup-coordinatenormalform],
+      :current-residual
+      "Turn unique integer-pair normal forms into the explicit affine action formula, choose a closed-square representative of every orbit, and enumerate precisely the boundary coincidences.",
+      :other-consumers []}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:strategy
+       "Measure the Klein plane-action square orbit classification, recount all six consumers and eight placeholders, then elect the square-boundary orbit/EqvGen comparison or a newly enabled nearer closure adapter."},
+      :id
+      :routes-2026-10-10-checkpoint-topo1-after-klein-square-orbits-23,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:routes-2026-10-10-klein-plane-action-square-orbit-classification-23],
+      :current-residual
+      "Review the finite geometric classification before comparing the orbit relation with the frozen aabb boundary EqvGen.",
+      :other-consumers []}],
     :finding
     {:routes
      {:t99J01
@@ -93816,66 +93887,9 @@
       :status :proved,
       :consumers [:t93J03],
       :depends-on []}],
-    :replacement-items
-    [{:bounded-exception
-      "This single-consumer geometric lemma is the next ready dependency of the elected one-placeholder t93J03 route; the coordinate algebra it needs is now banked.",
-      :consumer :t93J03,
-      :implements-lemma
-      :lemma-kleinplaneaction-squareorbitclassification,
-      :phase :probe,
-      :state :open,
-      :scope [],
-      :dag-node
-      "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/plane-action-square-orbit-classification",
-      :acceptance
-      {:probe
-       "Compile the affine action of PresentedKleinGroup on Real times Real obtained from the banked integer-pair coordinate equivalence, with a acting by horizontal unit translation and b by a glide reflection. Prove the closed-fundamental-square orbit classification needed downstream: give the coordinate formula for every a^m*b^n action, show every plane orbit meets the closed square, and characterize all pairs of square points in one orbit, including each edge and corner case. Do not form a quotient, compare EqvGen relations, or construct a homeomorphism.",
-       :placeholder "the single sorry in apm_t93j03",
-       :route-step
-       "t93J03 step 1b, affine plane action and square orbit classification before the boundary EqvGen comparison",
-       :gates
-       ["canonical packages"
-        "fixture compiles"
-        "zero fixture sorry"
-        "standard-only axioms"
-        "registry check"]},
-      :id
-      :routes-2026-10-10-klein-plane-action-square-orbit-classification-23,
-      :kind :reusable-theorem,
-      :depends-on [:lemma-kleinpresentedgroup-coordinatenormalform],
-      :current-residual
-      "Turn unique integer-pair normal forms into the explicit affine action formula, choose a closed-square representative of every orbit, and enumerate precisely the boundary coincidences.",
-      :other-consumers []}
-     {:consumer :portfolio,
-      :checkpoint
-      {:after-problems 1,
-       :may-supersede-future true,
-       :required-measures
-       [:placeholder-delta
-        :typed-residual-change
-        :infrastructure-packets
-        :review-outcomes]},
-      :stop-condition
-      "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
-      :phase :strategy,
-      :state :open,
-      :scope [],
-      :dag-node "TOPOLOGY-ROUTES.md",
-      :acceptance
-      {:strategy
-       "Measure the Klein plane-action square orbit classification, recount all six consumers and eight placeholders, then elect the square-boundary orbit/EqvGen comparison or a newly enabled nearer closure adapter."},
-      :id
-      :routes-2026-10-10-checkpoint-topo1-after-klein-square-orbits-23,
-      :kind :strategy-checkpoint,
-      :depends-on
-      [:routes-2026-10-10-klein-plane-action-square-orbit-classification-23],
-      :current-residual
-      "Review the finite geometric classification before comparing the orbit relation with the frozen aabb boundary EqvGen.",
-      :other-consumers []}],
-    :author "topo-4",
-    :disposition :replan},
+    :seat "topo-4"},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -93895,7 +93909,7 @@
    :consumer :t93J03,
    :implements-lemma :lemma-kleinplaneaction-squareorbitclassification,
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/plane-action-square-orbit-classification",
@@ -94483,7 +94497,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "KleinPresentedGroupCoordinateModel.toCoordinates",
@@ -94496,6 +94510,8 @@
     :type
     "PresentedKleinGroup ->* Coordinates sending generatorA to A and generatorB to B",
     :proved-in
+    :routes-2026-10-10-checkpoint-topo1-after-klein-coordinate-normal-form-19,
+    :banked-by
     :routes-2026-10-10-checkpoint-topo1-after-klein-coordinate-normal-form-19},
    :id :lemma-kleinpresentedgroupcoordinatemodel-tocoordinates,
    :kind :lemma,
@@ -94503,7 +94519,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "KleinPresentedGroupConjugation.conjugateAPow",
@@ -94516,6 +94532,8 @@
     :type
     "(m : Int) -> generatorB⁻¹ * generatorA ^ m * generatorB = generatorA ^ (-m)",
     :proved-in
+    :routes-2026-10-10-checkpoint-topo1-after-klein-coordinate-normal-form-19,
+    :banked-by
     :routes-2026-10-10-checkpoint-topo1-after-klein-coordinate-normal-form-19},
    :id :lemma-kleinpresentedgroupconjugation-conjugateapow,
    :kind :lemma,
