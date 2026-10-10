@@ -91723,9 +91723,20 @@
       "Review the second independent prerequisite isolated by the earlier spanning-tree STOP.",
       :other-consumers []}],
     :author "topo-4",
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791639564572-2065-d5800ae0",
+     :commands
+     ["bb holes/labs/topology-contract/worklist_check.bb <(git show 3d3565d6:holes/labs/topology-contract/worklist.edn)"
+      "lake env lean ConstructionTargets/FiniteSchreierChosenGeneratorEdgeCoordinates.lean"
+      "comment-stripped placeholder census for six consumers"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "recorded scope and transition totals reproduce; chosen-generator theorem orientation, standard axioms, six-consumer placeholder census, registry, and finite-arborescence successor boundary are correct"}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -91742,7 +91753,7 @@
    :other-consumers []}
   {:consumer :t99J01,
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/positive-index/finite-arborescence-edge-count",
