@@ -60298,21 +60298,61 @@
   {:bounded-exception
    "single-consumer continuous disk-normal coordinate on the frozen t02A03 left tube",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/t02a03_geometric_tube_cover.lean",
+      :sha256
+      "e4cd397f6ca7aa3d986d866cd044855537cd499d92f4cc3db95f717074cdbb25"},
+     :commands
+     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "apm_t02a03_leftTubeNormalComplex and apm_t02a03_continuous_leftTubeNormalComplex compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
+       :exit 0}
+      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "e4cd397f6ca7aa3d986d866cd044855537cd499d92f4cc3db95f717074cdbb25  /tmp/t02a03_geometric_tube_cover.lean"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :implementation
+     {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
+      :declarations
+      ["apm_t02a03_leftTubeNormalComplex"
+       "apm_t02a03_continuous_leftTubeNormalComplex"],
+      :acceptance
+      {:implementation
+       "Add the two compiled declarations from the verified fixture to ConstructionTargets/T02A03GeometricTubeCover.lean without changing their types or the frozen consumer. Compile the scoped module, confirm the scoped file contains no sorry token, run the statement registry check, and report the declarations' axioms.",
+       :gates
+       ["scoped module compiles"
+        "scoped file contains no sorry token"
+        "statement registry matches"]}},
+     :finding
+     "The fixture completely supplies this bounded row. The complex normal coordinate records the radial planar offset norm((p_0+1)+p_1 i)-1 and height p_2, and its continuity follows from the banked planar complex coordinate, explicit PiLp coordinate evaluation, norm continuity, and continuous complex assembly.",
+     :residual
+     "After banking the normal coordinate, identify its zero locus with the frozen left-core range, restrict it to a nonzero punctured-normal coordinate on LeftTubeMinusCore, construct radial comparison homotopies, and assemble leftTubeMinusCoreHomotopyEquivTorus."}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-normal-coordinate",
    :acceptance
-   {:probe
-    "Compile and bank apm_t02a03_leftTubeNormalComplex and apm_t02a03_continuous_leftTubeNormalComplex from /tmp/t02a03_geometric_tube_cover.lean. On apm_t02a03_leftTubeSubtype, define the complex disk-normal displacement whose real part is norm(apm_t02a03_leftTubePlanarComplex p) - 1 and whose imaginary part is p 2, and prove it continuous using the banked planar complex coordinate and explicit PiLp coordinate continuity. This supplies the normal coordinate required by t02A03 route step 2; do not yet claim its zero locus is the frozen core, a punctured-normal coordinate, comparison homotopies, the torus HomotopyEquiv, or gluing.",
-    :declarations
-    ["apm_t02a03_leftTubeNormalComplex"
-     "apm_t02a03_continuous_leftTubeNormalComplex"],
-    :placeholder "the sole sorry in apm_t02a03",
-    :route-step
-    "t02A03 step 2, define the continuous disk-normal displacement on the closed left tube"},
+   {:implementation
+    "Add the two compiled declarations from the verified fixture to ConstructionTargets/T02A03GeometricTubeCover.lean without changing their types or the frozen consumer. Compile the scoped module, confirm the scoped file contains no sorry token, run the statement registry check, and report the declarations' axioms.",
+    :gates
+    ["scoped module compiles"
+     "scoped file contains no sorry token"
+     "statement registry matches"]},
    :id :routes-2026-10-10-t02a03-left-tube-normal-coordinate-topo2-r1,
    :kind :reusable-theorem,
+   :declarations
+   ["apm_t02a03_leftTubeNormalComplex"
+    "apm_t02a03_continuous_leftTubeNormalComplex"],
    :depends-on
    [:routes-2026-10-10-checkpoint-topo2-r5
     :routes-2026-10-10-t02a03-left-tube-angular-coordinate-topo2-r1],
