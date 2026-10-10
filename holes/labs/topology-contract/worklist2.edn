@@ -56821,39 +56821,41 @@
   {:bounded-exception
    "single-consumer representative evaluation of the frozen torus homeomorphism on pi1",
    :consumer :t97A04,
+   :stop-count 1,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/torus_frozen_homeomorphism_pi1_mk.lean",
-      :sha256
-      "032782d9b4b59680e22a0cb347bc5c1a9e3ea2224aadc19aae355ffb8d5ed969"},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/torus_frozen_homeomorphism_pi1_mk.lean",
-       :exit 0,
-       :output
-       "frozenHomeomorphPi1_mk compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/torus_frozen_homeomorphism_pi1_mk.lean || true)\"",
-       :exit 0}
-      {:cmd "sha256sum /tmp/torus_frozen_homeomorphism_pi1_mk.lean",
-       :exit 0,
-       :output
-       "032782d9b4b59680e22a0cb347bc5c1a9e3ea2224aadc19aae355ffb8d5ed969  /tmp/torus_frozen_homeomorphism_pi1_mk.lean"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :finding
-     "The placeholder-free fixture proves at the native dependent codomain that fundamentalGroupMulEquivOfHomeomorph sends every explicit frozen-loop class to the quotient class of the path mapped by frozenTorusHomeomorphCircleProd.continuous. The proof uses FundamentalGroup.map_apply and Path.Homotopic.Quotient.mk_map and introduces no separately cast fixed-base equivalence.",
-     :implementation
-     {:scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
-      :declarations ["frozenHomeomorphPi1_mk"]},
-     :residual
-     "Bank the canonical representative evaluation. Then rewrite frozenTorusPi1Coord on representatives through frozenTorusPi1Coord_factor, identify the mapped representative with frozenCircleImagePath, apply the banked representative conjugacy and Circle matrix naturality, and descend by quotient induction."}},
+   {:residual
+    "Restore the exact hash-authenticated fixture, then bank frozenHomeomorphPi1_mk at its native dependent codomain before continuing the representative coordinate proof.",
+    :outcome :stop,
+    :warnings
+    ["No scoped source was modified and no commit was created because the recorded fixture could not be authenticated."],
+    :disposition :stop,
+    :author "topo-6",
+    :reason
+    "The implementation invariant requires verification of the recorded fixture hash before copying the proof, but /tmp/torus_frozen_homeomorphism_pi1_mk.lean is absent. A fresh repository-and-notes search finds only ledger metadata and no preserved fixture bytes or banked frozenHomeomorphPi1_mk declaration. Reconstructing a plausible theorem from the acceptance prose would create unauthenticated bytes and would not verify the probe artifact. Restore the exact fixture whose SHA-256 is 032782d9b4b59680e22a0cb347bc5c1a9e3ea2224aadc19aae355ffb8d5ed969, preferably at a stable repository path, then rerun this implementation row.",
+    :commands
+    [{:cmd "test -e /tmp/torus_frozen_homeomorphism_pi1_mk.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "rg -n 'frozenHomeomorphPi1_mk|032782d9b4b59680e22a0cb347bc5c1a9e3ea2224aadc19aae355ffb8d5ed969' /home/joe/code/apm-lean /home/joe/notes",
+      :exit 0,
+      :output
+      "Matches occur only in holes/labs/topology-contract/worklist2.edn; no fixture or banked declaration is present."}
+     {:cmd
+      "lake env lean ConstructionTargets/TorusPiOneWindingCoordinates.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :fixture
+    {:path "/tmp/torus_frozen_homeomorphism_pi1_mk.lean",
+     :sha256
+     "032782d9b4b59680e22a0cb347bc5c1a9e3ea2224aadc19aae355ffb8d5ed969",
+     :status :missing},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A04/torus-pi1-winding-coordinates/frozen-homeomorphism-pi1-mk",
