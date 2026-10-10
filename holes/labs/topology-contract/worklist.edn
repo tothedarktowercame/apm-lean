@@ -100817,8 +100817,72 @@
   {:bounded-exception
    "This single-consumer prerequisite supplies the geometric uniqueness of canonical edge interiors needed for the exact generated-relation fiber classifications.",
    :consumer :t97A01,
+   :evidence
+   {:placeholder-delta {:source 0, :fixture 0},
+    :residual
+    "Use half-open edge uniqueness to classify EqvGen fibers for N3CircleRel and TorusCrosscapCircleRel, prove injectivity of both three-loop maps, then form homeomorphisms and finish the boundary and package formulas.",
+    :gates
+    {:module-build :pass,
+     :fixture-compiles :pass,
+     :zero-source-and-fixture-sorry :pass,
+     :standard-only-axioms :pass,
+     :registry-check :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["The new module and fixture emitted no warnings; imported modules replayed existing lints and informational standard-axiom reports."],
+    :missing-theorems
+    [{:name
+      "PolygonSixEdgeInteriorUniqueness.circleEdgePoint_interior_injective",
+      :type
+      "For Fin 6 edge indices and half-open parameters in Ico 0 1, equality of canonical Circle edge points implies equality of both indices and parameters.",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on ["PolygonSixEdgeCircleCover.sixEdgeCircleCover"],
+      :area "polygon-surface-open-cover"}],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "sha256sum /tmp/polygon-six-edge-interior-uniqueness.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.PolygonSixEdgeInteriorUniqueness",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/polygon-six-edge-interior-uniqueness.lean",
+      :exit 0}
+     {:cmd
+      "rg -n \\b(sorry|admit)\\b ConstructionTargets/PolygonSixEdgeInteriorUniqueness.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "rg -n \\b(sorry|admit)\\b /tmp/polygon-six-edge-interior-uniqueness.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "83d82aed04ff18314098d2a080688f3457edd4ef",
+    :changed-paths
+    ["ConstructionTargets/PolygonSixEdgeInteriorUniqueness.lean"],
+    :fixture
+    {:path "/tmp/polygon-six-edge-interior-uniqueness.lean",
+     :sha256
+     "3b71f1fd7ccb1d3c467c9b016d6ccfb501b9aec26508367fcdb1bdecf0e339c5",
+     :sorry-count 0},
+    :implementation
+    {:scope
+     ["ConstructionTargets/PolygonSixEdgeInteriorUniqueness.lean"],
+     :summary
+     "Rewrote canonical half-open edge coordinates through AddCircle.toCircle, used uniqueness of Ico representatives modulo six, and proved equality of edge points forces equality of both Fin 6 indices and Ico parameters."},
+    :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSixEdgeInteriorUniqueness.lean"],
    :dag-node
@@ -104228,12 +104292,13 @@
    {:name
     "PolygonSixEdgeInteriorUniqueness.circleEdgePoint_interior_injective",
     :reported-by
-    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40
+     :routes-2026-10-10-polygon-six-edge-interior-uniqueness-64],
     :type
     "For j k : Fin 6 and t u : Set.Ico (0 : Real) 1, equality of circleEdgePoint j t and circleEdgePoint k u implies j = k and t = u.",
     :area "polygon-surface-open-cover",
     :proved-in
-    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+    :routes-2026-10-10-polygon-six-edge-interior-uniqueness-64},
    :id
    :lemma-polygonsixedgeinterioruniqueness-circleedgepoint-interior-injective,
    :kind :lemma,
