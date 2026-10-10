@@ -89956,28 +89956,28 @@
    "Normalize the two rank-one relation quotients of Z^3 and expose injectivity plus the exact ModuleCat-compatible cokernel coordinates.",
    :other-consumers []}
   {:consumer :t99J01,
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "frozen interface is false at r = 1, n = 0, H = bottom because index zero encodes infinite index; require 0 < n, H.index != 0, or H.FiniteIndex",
    :evidence
    {:residual
-    "Repair the interface with 0 < n, H.index ≠ 0, or H.FiniteIndex, then prove the finite Schreier coset-quiver spanning-tree count.",
+    "Repair the frozen interface with 0 < n, H.index ≠ 0, or H.FiniteIndex; then implement the finite Schreier coset-quiver spanning-tree count.",
     :outcome :stop,
     :warnings
     [{:kind :frozen-type-refuted,
       :message
-      "Positive ambient rank does not exclude n = 0, which represents infinite subgroup index."}],
+      "The hypothesis 0 < r does not imply finite index; n = 0 admits infinite-index subgroups."}],
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "The frozen declaration type is false because 0 < r does not imply finite subgroup index. Take r = 1, n = 0, and H = ⊥ in FreeGroup (Fin 1). The ambient free group is infinite, so Subgroup.index_bot and Nat.card_eq_zero_of_infinite give H.index = 0. The displayed formula nevertheless reduces to (1 - 1) * 0 + 1 = 1, demanding IsFreeGroup.Generators H ≃ Fin 1. But H is the trivial group: applying IsFreeGroup.basis H and its representation map shows any alleged generator would make FreeGroup.of g = 1, contradicting FreeGroup.of_ne_one. The compiled theorem frozen_type_false proves that the universally quantified frozen interface cannot exist using only standard axioms. Add 0 < n, H.index ≠ 0, or H.FiniteIndex; then the spanning-tree count is the appropriate next row.",
+    "The independently reviewed frozen interface remains false. At r = 1, n = 0, H = ⊥ in FreeGroup (Fin 1), the ambient group is infinite and Subgroup.index_bot gives H.index = 0. Nevertheless ((r - 1) * n + 1) = 1, so generatorsEquivFinSchreier would identify the chosen generator type of the trivial subgroup with Fin 1. The compiled standard-only proof generators_bot_isEmpty shows that generator type is empty: a generator would map under IsFreeGroup.basis H to the identity, forcing FreeGroup.of g = 1 and contradicting FreeGroup.of_ne_one. Thus frozen_type_false refutes the full universal interface. No implementation in scope can discharge it until the type requires 0 < n, H.index ≠ 0, or H.FiniteIndex.",
     :commands
     [{:cmd
       "lake env lean /tmp/schreier-positive-rank-counterexample.lean",
       :exit 0,
       :finding
-      "Compiled index_bot_freeGroup_fin_one, generators_bot_isEmpty, no_generators_equiv_fin_one, and frozen_type_false with only propext, Classical.choice, and Quot.sound."}
+      "The full frozen type is freshly refuted using only propext, Classical.choice, and Quot.sound."}
      {:cmd "sha256sum /tmp/schreier-positive-rank-probe.lean",
       :exit 0,
       :finding
@@ -89985,31 +89985,22 @@
      {:cmd "lake env lean /tmp/schreier-positive-rank-probe.lean",
       :exit 0,
       :finding
-      "The fixture specializations compile only through the nonstandard axiom generatorsEquivFinSchreier."}
+      "The fixture still compiles only through the refuted nonstandard axiom generatorsEquivFinSchreier."}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
+     {:cmd
+      "test ! -e ConstructionTargets/FiniteIndexFreeGroupSchreierGeneratorCount.lean",
+      :exit 0,
+      :finding "No invalid scoped implementation was created."}
      {:cmd "git status --short",
       :exit 0,
-      :finding
-      "The worktree is clean; no scoped implementation was created for the refuted type."}],
-    :diagnostic-history
-    [{:cmd
-      "lake env lean /tmp/schreier-positive-rank-counterexample.lean",
-      :exit 1,
-      :finding
-      "The first draft left the equality b g = 1 unresolved; corrected using Subgroup.mem_bot.mp on the basis element's subtype membership proof."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1791635464976-1921-a6953b10",
-     :finding
-     "frozen interface is false at r = 1, n = 0, H = bottom because index zero encodes infinite index; require 0 < n, H.index != 0, or H.FiniteIndex"},
+      :finding "The worktree is clean."}],
     :counterexample
     {:path "/tmp/schreier-positive-rank-counterexample.lean",
      :parameters {:r 1, :n 0, :subgroup "bottom"},
      :finding
-     "The frozen formula assigns one generator to the trivial subgroup at infinite index, whose index is encoded as zero."},
+     "Infinite subgroup index is represented by zero, while the truncated-natural rank formula returns one."},
     :fixture
     {:path "/tmp/schreier-positive-rank-probe.lean",
      :sha256
@@ -90019,7 +90010,7 @@
      :proof-placeholder-count 1},
     :seat "topo-2"},
    :phase :implementation,
-   :state :repair,
+   :state :needs-owner,
    :scope
    ["ConstructionTargets/FiniteIndexFreeGroupSchreierGeneratorCount.lean"],
    :dag-node
@@ -90156,7 +90147,7 @@
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
