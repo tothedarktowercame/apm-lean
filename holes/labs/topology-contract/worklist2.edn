@@ -56040,6 +56040,20 @@
       :exit 0,
       :output
       "ConstructionTargets/TorusPiOneWindingCoordinates.lean"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791610555142-1243-3e8d4436",
+     :commands
+     ["git diff-tree --no-commit-id --name-only -r 868ae280"
+      "sha256sum /tmp/circle_matrix_path_endpoint_coordinates.lean"
+      "lake env lean /tmp/circle_matrix_path_endpoint_coordinates.lean"
+      "lake env lean ConstructionTargets/TorusPiOneWindingCoordinates.lean"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 15f3c380:holes/labs/topology-contract/worklist2.edn)"
+      "recompute target and frozen t97A04 SHA-256 and comment-stripped placeholder count from commit 868ae280"],
+     :finding
+     "PASS: codex-7 independently reviewed topo-6 commit 868ae280. Exact implementation scope is TorusPiOneWindingCoordinates.lean; transition commit 15f3c380 changes only the ledger. Fixture SHA-256 de22a16d869dbd993bb2d16d3a8f561a1666aa075816d99fcfadd0c248c14522 matches, compiles, and has zero placeholders; canonical source compiles with zero forbidden declarations. Formula orientations match circleMatrixMap: the left path is gamma0*gamma0*gamma1 and yields 2*n0+n1; the right path is gamma1*gamma0^-1 and yields n1-n0. The row correctly stops short of quotient-level FundamentalGroup.map naturality. Both endpoint axiom audits are exactly propext, Classical.choice, Quot.sound. Registry is 131/0 and ledger is 387 items OK. Frozen t97A04 remains 79ca854186b39183bf53490a20b5be92695e345a2c099fcf928b5ad3300ee4ec with four comment-stripped placeholders; delta zero."},
     :commit "868ae280b9c05efaeb3744df2576cb1f68f89f0e",
     :changed-paths
     ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
@@ -56053,7 +56067,7 @@
      "ConstructionTargets.TorusPiOneWindingCoordinates.circleMatrixLeftPath_endpointInteger"
      "ConstructionTargets.TorusPiOneWindingCoordinates.circleMatrixRightPath_endpointInteger"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A04/torus-pi1-winding-coordinates/matrix-path-endpoints",
@@ -56144,7 +56158,7 @@
       "Identify the two explicit transformed paths with the projections of gamma mapped by circleMatrixMap, descend to quotient coordinates, and transport through frozenTorusHomeomorphCircleProd.",
       :other-consumers []}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/shared/torus-pi1-winding-coordinates",
    :acceptance
