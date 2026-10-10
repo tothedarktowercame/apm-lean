@@ -56972,39 +56972,67 @@
    "single-consumer mapped-path endpoint-cast comparison for the frozen torus",
    :consumer :t97A04,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/torus_frozen_pi1_native_coordinate_mk.lean",
-      :sha256
-      "46b9ed0e048045ce6635e5b5da0549511370e75a1428969b59a1d28a86d3a89d"},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/torus_frozen_pi1_native_coordinate_mk.lean",
-       :exit 0,
-       :output
-       "frozenCircleImagePath_eq_mappedPath_cast compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/torus_frozen_pi1_native_coordinate_mk.lean || true)\"",
-       :exit 0}
-      {:cmd
-       "sha256sum /tmp/torus_frozen_pi1_native_coordinate_mk.lean",
-       :exit 0,
-       :output
-       "46b9ed0e048045ce6635e5b5da0549511370e75a1428969b59a1d28a86d3a89d  /tmp/torus_frozen_pi1_native_coordinate_mk.lean"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :finding
-     "The placeholder-free fixture proves exact Path equality from the continuously mapped frozen loop after both endpoint casts along frozenTorusHomeomorphCircleProd_base.symm to frozenCircleImagePath. The proof is definitional after Path extensionality and preserves the dependent basepoint representation.",
-     :implementation
-     {:scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
-      :declarations ["frozenCircleImagePath_eq_mappedPath_cast"]},
-     :residual
-     "Identify the induced fundamental-group quotient cast with the transport used by the native coordinate equivalence, derive the fixed-base frozenTorusPi1Coord representative equation, and finish representative then all-class matrix naturality."}},
+   {:placeholder-delta 0,
+    :residual
+    "Identify the corresponding quotient cast with the transport in the native coordinate equivalence, then rewrite to torusPi1Coord and complete matrix naturality.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["The focused Lake build replayed pre-existing linter warnings from dependency modules; the scoped module compiled without new warnings."],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd "sha256sum /tmp/torus_frozen_pi1_native_coordinate_mk.lean",
+      :exit 0,
+      :output
+      "46b9ed0e048045ce6635e5b5da0549511370e75a1428969b59a1d28a86d3a89d  /tmp/torus_frozen_pi1_native_coordinate_mk.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/TorusPiOneWindingCoordinates.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.TorusPiOneWindingCoordinates",
+      :exit 0,
+      :output "Build completed successfully (8290 jobs)."}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/TorusPiOneWindingCoordinates.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "lake env lean /tmp/check_frozen_image_cast_axioms.lean",
+      :exit 0,
+      :output
+      "frozenCircleImagePath_eq_mappedPath_cast depends on [propext, Classical.choice, Quot.sound]."}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r 2dfb52705c2a3b133596a7aa76869e33e9599baf",
+      :exit 0,
+      :output "ConstructionTargets/TorusPiOneWindingCoordinates.lean"}
+     {:cmd
+      "python3 -c 'import re; p=\"problems/t97A04/lean/Main.lean\"; t=open(p).read(); t=re.sub(r\"/-.*?-/\",\" \",t,flags=re.S); t=re.sub(r\"--[^\\n]*\",\" \",t); print(len(re.findall(r\"(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])\",t)))'",
+      :exit 0,
+      :output "4"}
+     {:cmd "sha256sum problems/t97A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "79ca854186b39183bf53490a20b5be92695e345a2c099fcf928b5ad3300ee4ec  problems/t97A04/lean/Main.lean"}],
+    :representation
+    {:source
+     "The continuously mapped frozen loop with both endpoints cast from frozenTorusHomeomorphCircleProd (0,0) to (1,1)",
+     :target "The fixed-base path frozenCircleImagePath gamma",
+     :direction
+     "Exact Path equality from the source endpoint-casted mapped path to the target fixed-base Circle-image path"},
+    :commit "2dfb52705c2a3b133596a7aa76869e33e9599baf",
+    :changed-paths
+    ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
+    :fixture
+    {:path "/tmp/torus_frozen_pi1_native_coordinate_mk.lean",
+     :sha256
+     "46b9ed0e048045ce6635e5b5da0549511370e75a1428969b59a1d28a86d3a89d"},
+    :declarations
+    ["ConstructionTargets.TorusPiOneWindingCoordinates.frozenCircleImagePath_eq_mappedPath_cast"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A04/torus-pi1-winding-coordinates/frozen-circle-image-path-cast",
