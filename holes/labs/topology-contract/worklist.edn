@@ -86462,6 +86462,8 @@
   {:description
    "Add the homeomorphism whose underlying equivalence is apm_t97a01_X_equiv_standardN3; prove both continuity directions from the quotient-map continuous_iff theorem and the two coinduced quotient maps.",
    :consumer :t97A01,
+   :review-finding
+   "Pinned acceptance fixture does not compile. Direct lake env lean cannot resolve T97A01Main; with the recorded LEAN_PATH it exits 1 because apm_t97a01_X_homeomorph_standardN3 is redeclared after promotion. The acceptance still requires fixture compiles, so Main.lean compilation cannot substitute for that failed gate. Repair the fixture to import and check/use the promoted declaration without redeclaring it, recompute fixture SHA-256, and rerun acceptance.",
    :evidence
    {:placeholder-after 1,
     :placeholder-delta 0,
@@ -86514,6 +86516,12 @@
       "After promotion, the pinned probe redeclares apm_t97a01_X_homeomorph_standardN3 and Lean correctly reports a duplicate declaration; its subsequent axiom audit resolves the imported promoted declaration to standard axioms.",
       :correction
       "The acceptance row records Main.lean and registry as its commands. Main.lean compiles successfully with the promoted declaration, and the pinned fixture hash and zero-placeholder census remain verified."}],
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1791618300996-1499-5c491f8a",
+     :finding
+     "Pinned acceptance fixture does not compile. Direct lake env lean cannot resolve T97A01Main; with the recorded LEAN_PATH it exits 1 because apm_t97a01_X_homeomorph_standardN3 is redeclared after promotion. The acceptance still requires fixture compiles, so Main.lean compilation cannot substitute for that failed gate. Repair the fixture to import and check/use the promoted declaration without redeclaring it, recompute fixture SHA-256, and rerun acceptance."},
     :commit "5b19036217baf63464ad4e683b3f89ed0a386606",
     :changed-paths ["problems/t97A01/lean/Main.lean"],
     :fixture
@@ -86524,7 +86532,7 @@
     :declarations ["apm_t97a01_X_homeomorph_standardN3"],
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope ["problems/t97A01/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t97A01/standard-n3-homeomorph",
    :acceptance
@@ -86543,6 +86551,7 @@
     "python3 scripts/statement-registry.py check"],
    :id :routes-2026-10-10-t97a01-standard-n3-homeomorph-2,
    :kind :uptake,
+   :fail-count 1,
    :declarations ["apm_t97a01_X_homeomorph_standardN3"],
    :depends-on
    [:routes-2026-10-10-checkpoint-topo1-covering-boundaries-1],
