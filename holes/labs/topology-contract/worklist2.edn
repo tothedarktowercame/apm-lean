@@ -67397,62 +67397,54 @@
    "single-consumer exact polar reconstruction at the meridian endpoint",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:residual
-     "Implement the compiled endpoint identity; then construct the nonvanishing Circle-valued angular bridge and combine it with the bounded normal interpolation.",
-     :outcome :go,
-     :warnings [],
-     :acceptance
-     {:declaration
-      "ConstructionTargets.T02A03GeometricTubeDeformation.rightCorePolarReconstruction_circleMeridian",
-      :type
-      "forall z : Circle, rightTubeCorePolarReconstruction (1 : Circle) (rightTubeCoreNormalComplex (apm_t02a03_circleMeridian z)) = apm_t02a03_circleMeridian z",
-      :gates
-      ["Compile the scoped module after inserting the fixture declaration"
-       "Confirm only propext, Classical.choice, and Quot.sound axioms"
-       "Confirm no new sorry in the scoped module"
-       "Run python3 scripts/statement-registry.py check"]},
-     :commands
-     [{:cmd "lake env lean /tmp/t02a03_right_core_compact_probe.lean",
-       :exit 0,
-       :output
-       "rightCorePolarReconstruction_circleMeridian compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd "sha256sum /tmp/t02a03_right_core_compact_probe.lean",
-       :exit 0,
-       :output
-       "b6eeb95eb188998d9added02d76e25c0f5168b5b5f36b57c9273846847657e36  /tmp/t02a03_right_core_compact_probe.lean"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_right_core_compact_probe.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}
-      {:cmd
-       "rg -n 'rightCorePolarReconstruction_circleMeridian' /tmp/t02a03_right_core_compact_probe.lean",
-       :exit 0,
-       :output
-       "488:theorem rightCorePolarReconstruction_circleMeridian\n515:#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightCorePolarReconstruction_circleMeridian"}],
-     :fixture
-     {:path "/tmp/t02a03_right_core_compact_probe.lean",
-      :sha256
-      "b6eeb95eb188998d9added02d76e25c0f5168b5b5f36b57c9273846847657e36"},
-     :finding
-     "The exact zero-endpoint reconstruction compiles placeholder-free. With angular coordinate 1, direct coordinate calculation reconstructs circleMeridian z from its right-core normal coordinate; positivity of 1-(1/8)z.re resolves the square root.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
-      :declaration
-      "ConstructionTargets.T02A03GeometricTubeDeformation.rightCorePolarReconstruction_circleMeridian",
-      :type
-      "forall z : Circle, rightTubeCorePolarReconstruction (1 : Circle) (rightTubeCoreNormalComplex (apm_t02a03_circleMeridian z)) = apm_t02a03_circleMeridian z",
-      :proof-plan
-      "Expand the reconstruction, normal coordinate, planar coordinate, and circle meridian coordinate; use z.re≤1 to simplify the positive square root and close each Euclidean coordinate algebraically.",
-      :axioms [propext Classical.choice Quot.sound]},
-     :seat "topo-8"}},
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Construct a continuous Circle-valued angular bridge from 1 to rightTubeCoreAngularCoordinate, reconstruct it with the bounded normal interpolation, and prove left-core avoidance.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["Existing linter warning at line 62: unnecessarySimpa; no new warnings"],
+    :missing-theorems [],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms [propext Classical.choice Quot.sound],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :scope-blob "cb2a7bfb34b698b83f5425475aad7c565fe7f310",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd "lake env lean /tmp/t02a03_right_core_compact_probe.lean",
+      :exit 0}
+     {:cmd "sha256sum /tmp/t02a03_right_core_compact_probe.lean",
+      :exit 0,
+      :output
+      "b6eeb95eb188998d9added02d76e25c0f5168b5b5f36b57c9273846847657e36  /tmp/t02a03_right_core_compact_probe.lean"}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeDeformation.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "23088dfc214871ec2d30d823669d65804df45e82",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.rightCorePolarReconstruction_circleMeridian",
+    :fixture
+    {:path "/tmp/t02a03_right_core_compact_probe.lean",
+     :sha256
+     "b6eeb95eb188998d9added02d76e25c0f5168b5b5f36b57c9273846847657e36"},
+    :finding
+    "Direct coordinate expansion shows that angular coordinate 1 and the right-core normal coordinate of circleMeridian z reconstruct circleMeridian z exactly; z.re <= 1 makes the remaining square root nonnegative.",
+    :seat "topo-6"},
    :phase :implementation,
    :type
    "forall z : Circle, rightTubeCorePolarReconstruction (1 : Circle) (rightTubeCoreNormalComplex (apm_t02a03_circleMeridian z)) = apm_t02a03_circleMeridian z",
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/meridian-right-core-reconstruction",
