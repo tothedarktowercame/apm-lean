@@ -54520,8 +54520,41 @@
    :depends-on [:routes-2026-09-28-checkpoint-topo2-r1],
    :other-consumers [:t96J02]}
   {:consumer :t00J07,
+   :stop-count 1,
+   :evidence
+   {:outcome :stop,
+    :seat "topo-8",
+    :reason
+    "The recorded fixture is a facade: it compiles a definition whose value is the proposition PositiveHemisphereTrivialization, but contains no inhabitant and therefore validates none of the required representation comparison. Fresh repository search finds no inhabitant or equivalent homeomorphism. There is also no smaller independent prerequisite left to isolate. The missing object is exactly the row itself: one homeomorphism from the full preimage subtype to the projective-image subtype times Fin 2, with sheet labels continuous in both directions and the first-projection equality. The banked facts prove the underlying set decomposition, openness, injectivity on the positive sheet, and local homeomorphism, but they do not package the dependent subtype homeomorphism. Returning REVISE with another proposition that merely restates a component of this same homeomorphism would repeat the facade rather than provide compiled evidence. This is the exact representation boundary; it does not refute the mathematics.",
+    :commands
+    [{:cmd
+      "lake env lean /tmp/rp2_positive_hemisphere_trivialization_contract.lean",
+      :exit 0,
+      :output
+      "The fixture prints PositiveHemisphereTrivialization : Prop; it contains no theorem inhabiting it."}
+     {:cmd
+      "rg -n 'PositiveHemisphereTrivialization|positiveHemisphere.*Trivial|preimage.*positiveHemisphere.*Fin 2' ConstructionTargets problems -g '*.lean'",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sha256sum /tmp/rp2_positive_hemisphere_trivialization_contract.lean",
+      :exit 0,
+      :output
+      "f190f179c1ac16008f07322b3605146a132707a6f3390eeec194224889eb3a82  /tmp/rp2_positive_hemisphere_trivialization_contract.lean"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}],
+    :fixture
+    {:path "/tmp/rp2_positive_hemisphere_trivialization_contract.lean",
+     :sha256
+     "f190f179c1ac16008f07322b3605146a132707a6f3390eeec194224889eb3a82",
+     :status :interface-only},
+    :residual
+    "An implementation author must construct the actual dependent homeomorphism directly, not another contract proposition: split the preimage using sphereProjection_preimage_image, build the positive-sheet homeomorphism onto the common image, obtain the negative sheet by sphereAntipodal, combine the two clopen subtypes with a sum homeomorphism, identify the sum with product by Fin 2, and prove the first-projection equation. Only a placeholder-free compiled inhabitant of the existing contract can reopen the covering chain.",
+    :author "topo-8",
+    :disposition :stop},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
