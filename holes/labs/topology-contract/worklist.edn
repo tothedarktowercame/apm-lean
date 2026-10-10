@@ -81461,8 +81461,56 @@
    "Explicit counterexamples first; collar and monodromy remain.",
    :other-consumers []}
   {:consumer :t99J05,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Apply projectiveHomogeneousMapDescent and projectiveHomogeneousHomotopyDescent in t96A06 and t99J05; charts, rational homology, degree, and Lefschetz calculations remain downstream.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes {:status :match, :count 131},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2 (git author Joe Corneli)",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/ProjectiveQuotientDescent.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd
+      "Python comment-stripped placeholder census of ConstructionTargets/ProjectiveQuotientDescent.lean",
+      :exit 0,
+      :finding 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git commit -m 'Add projective homogeneous descent'",
+      :exit 0,
+      :finding "27fbdbbea781f785ec8ab0abbb2294ca5aaaf16d"}],
+    :diagnostic-history
+    [{:cmd "emacs --batch check-parens-file on the Lean module",
+      :exit 255,
+      :correction
+      "The workspace script exposes arxana-check-parens-cli and is specified for Lisp/Clojure, not Lean. Lean compilation and git diff --check supplied the applicable syntax gates."}
+     {:cmd "lake env lean /dev/stdin importing the new unbuilt module",
+      :exit 1,
+      :correction
+      "A direct source compile was used for axiom inspection, then rerun successfully as the final acceptance compile."}],
+    :commit "27fbdbbea781f785ec8ab0abbb2294ca5aaaf16d",
+    :infrastructure-packets 1,
+    :changed-paths
+    ["ConstructionTargets/ProjectiveQuotientDescent.lean"],
+    :fixture
+    {:path "/tmp/projective-quotient-descent-shared-probe.lean",
+     :sha256
+     "9794efeb485e866486c26c329d4d7edf839c188a52a10571fc0c5f86f97fdad9"},
+    :declarations
+    ["projectiveQuotientMap_isOpen"
+     "projectiveQuotientMap_prod_interval_isOpenQuotient"
+     "projectiveHomogeneousMapDescent"
+     "projectiveHomogeneousHomotopyDescent"],
+    :typed-residual-change
+    "The shared quotient-openness and homogeneous factorization layer is complete. t96A06 and t99J05 now need only their formula-specific nonvanishing, scalar-orbit invariance, and downstream projective-space calculations."},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ProjectiveQuotientDescent.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/projective-quotient-descent/homogeneous-factorization",
