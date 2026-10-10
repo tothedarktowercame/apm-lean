@@ -53846,46 +53846,39 @@
    [:routes-2026-09-28-t97a04-memberwise-cover-small-naturality-topo2-r1]}
   {:bounded-exception "single-consumer bounded naturality theorem",
    :consumer :t97A04,
+   :stop-count 1,
    :evidence
-   {:probe
-    {:outcome :revise,
-     :seat "topo-8",
-     :commands
-     [{:cmd
-       "rg -n 'coverSmallHomologyIso_naturality_of_square|memberwiseCoverSmallHomology_naturality' ConstructionTargets -g '*.lean'",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd "test -L .lake/packages", :exit 1, :expected-exit 1}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}
-      {:cmd
-       "sha256sum ConstructionTargets/ProductionConnectingNaturality.lean",
-       :exit 0,
-       :output
-       "4203074a81bdb2d8932a767a75d855c8788e6e7e3fa85b0456aacd8c59bb0139  ConstructionTargets/ProductionConnectingNaturality.lean"}],
-     :finding
-     "The target cannot yet be probed: neither coverSmallHomologyIso_naturality_of_square nor memberwiseCoverSmallHomology_naturality is banked. The prerequisite's earlier placeholder-free fixture compiled at the recorded hash, but its implementation row stopped when that exact /tmp artifact disappeared. Fresh Lake execution is forbidden because .lake/packages is absent rather than a symlink to the canonical package authority. Restore the canonical package-authority symlink through the workspace lifecycle, reconstruct and compile the comparison theorem in a stable repository path, then bank it before assembling the Boolean ShortComplex.Hom and applying delta_naturality.",
-     :residual
-     "After the comparison theorem is banked, assemble the intersection, pieces, and union memberwise maps into a ShortComplex.Hom, apply HomologicalComplex.HomologySequence.delta_naturality, and conjugate by the three production comparison isomorphisms.",
-     :prerequisite
-     {:bounded-exception
-      "single-consumer bounded cover-small homology comparison naturality recovery",
-      :consumer :t97A04,
-      :phase :probe,
-      :state :open,
-      :scope [],
-      :dag-node "TOPOLOGY-ROUTES.md",
-      :acceptance
-      {:probe
-       "With .lake/packages verified as the canonical symlink, compile a placeholder-free fixture in a stable repository path proving coverSmallHomologyIso_naturality_of_square and its memberwiseCoverSmallHomology_naturality specialization at integral coefficients and arbitrary degree; record its actual hash so implementation can bank the theorem without depending on ephemeral /tmp state."},
-      :id
-      :routes-2026-10-10-t97a04-cover-small-homology-naturality-recovery-topo2-r1,
-      :kind :reusable-theorem,
-      :depends-on
-      [:routes-2026-09-28-t97a04-memberwise-cover-small-naturality-topo2-r1]}}},
+   {:outcome :stop,
+    :seat "topo-8",
+    :reason
+    "The requested connecting-naturality fixture cannot be constructed from the declared dependencies: the reviewed recovery dependency finished with STOP and banked neither coverSmallHomologyIso_naturality_of_square nor memberwiseCoverSmallHomology_naturality. Its acceptance required the canonical checkout's .lake/packages authority to be a symlink, contradicting the build-loop invariant that the canonical checkout owns that real directory. Treating the dependency's administrative :state :done as mathematical evidence would substitute a ledger facade for the missing compiled theorem. The lower memberwise cover-small chain map is genuinely banked and compiles placeholder-free, but delta_naturality cannot be conjugated to productionConnecting without the absent homology-comparison square. This is the exact representation boundary; no new prerequisite is returned because the one required prerequisite was already isolated and then stopped on its contradictory acceptance.",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/ProductionConnectingNaturality.lean",
+      :exit 0}
+     {:cmd
+      "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/ProductionConnectingNaturality.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "rg -n 'coverSmallHomologyIso_naturality_of_square|memberwiseCoverSmallHomology_naturality|productionConnecting_naturality' ConstructionTargets problems -g '*.lean'",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "stat -c '%F %n' .lake/packages",
+      :exit 0,
+      :output "directory .lake/packages"}],
+    :fixture
+    {:status :absent,
+     :required-declaration "productionConnecting_naturality"},
+    :residual
+    "Repair the stopped comparison-naturality row's acceptance to recognize the canonical real package directory, provide and compile a stable placeholder-free fixture, and bank coverSmallHomologyIso_naturality_of_square plus memberwiseCoverSmallHomology_naturality. Only then can this row assemble the Boolean ShortComplex.Hom, apply delta_naturality, and conjugate through the production isomorphisms.",
+    :author "topo-8",
+    :disposition :stop},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
