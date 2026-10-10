@@ -60835,6 +60835,20 @@
       :output
       "[master abd6fffb] Bank t02A03 torus-point core distance; 1 file changed, 21 insertions(+)"}
      {:cmd "git status --short", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791638356006-2021-11c28339",
+     :commands
+     ["git show, diff-tree, and show --check on implementation abd6fffb and ledger transition 5df2d3e6"
+      "sha256sum authenticated fixture and frozen t02A03 consumer"
+      "lake env lean on fixture, target, and fresh core-distance orientation probe"
+      "lake build ConstructionTargets/T02A03GeometricTubeCover"
+      "recomputed declaration-type hash and comment-stripped placeholder counts"
+      "python3 scripts/statement-registry.py check --rev abd6fffb"
+      "bb worklist_check.bb on committed transition ledger"],
+     :finding
+     "PASS: codex-7 independently reviewed topo-6 commit abd6fffb93a1d3a26f7c5694cc617f42c23c4daa. Exact implementation scope is ConstructionTargets/T02A03GeometricTubeCover.lean; transition 5df2d3e6ce7fbbb33bb5315f885f46a7acd74d55 is ledger-only. Fixture SHA-256 is fc1be108e169d9c6a8617d480af625dc66fca637b606b8047b96e6615855985b. Fixture, recorded-identical target, fresh orientation probe, and 8240-job focused build pass. The theorem has exactly the frozen type: the reconstructed ambient point is at distance exactly one eighth from leftCoreCircle indexed by the first Circle coordinate. The proof expands the Euclidean norm and uses unit norm of both Circle factors to reduce squared distance to 1/64. A fresh boundary check confirms that the selected Circle-parameterized core point lies in the original real-parameter Set.range leftCore, and the symmetric distance orientation follows. The row correctly does not yet claim tube membership, core exclusion, a bundled inverse, comparison homotopies, torus equivalence, or gluing. Axioms are exactly propext, Classical.choice, and Quot.sound. Declaration type hash reproduces as 264d4b7dfadf4605ff51569ad63ae144f12acc36eccdd7648c06211df7a0909b; target has zero executable placeholders. Frozen t02A03 consumer hash is b123eca388ab2858ca55daf538c1ddd645022b52f5196a15f0bb516d78323d7d with one executable placeholder; registry is 131/0 and the committed 438-row ledger validates with exactly one done-unreviewed row."},
     :commit "abd6fffb93a1d3a26f7c5694cc617f42c23c4daa",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
@@ -60847,7 +60861,7 @@
     "Banked the exact distance calculation from the reconstructed torus point to the corresponding frozen left-core point. Circle norm identities reduce the Euclidean squared distance to 1/64, hence the distance is 1/8.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/left-tube-torus-point-core-distance",
@@ -60939,7 +60953,7 @@
    :phase :probe,
    :type
    "Nonempty (ContinuousMap.HomotopyEquiv LeftTubeMinusCore ConstructionTargets.TorusCircleWedgeOpenCover.Torus)",
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-punctured-model",
    :acceptance
