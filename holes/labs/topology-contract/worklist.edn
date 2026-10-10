@@ -7398,7 +7398,17 @@
    :id :critical-value-sard-rank-source-induction-probe-2,
    :kind :reusable-theorem,
    :depends-on
-   [:critical-value-sard-local-rank-normal-form-probe-2 :critical-value-sard-multivariable-taylor-covering-probe-2 :critical-value-sard-rectangular-local-probe-1 :critical-value-sard-exact-rank-local-upper-locus-1 :critical-value-sard-complemented-derivative-split-1 :critical-value-sard-projected-complemented-strict-derivative-data-1 :critical-value-sard-projected-implicit-function-packaging-1 :critical-value-sard-projected-kernel-flatness-1 :critical-value-sard-local-residual-derivative-flatness-1 :critical-value-sard-constant-coordinate-slice-flatness-1 :critical-value-sard-implicit-function-residual-flatness-1],
+   [:critical-value-sard-local-rank-normal-form-probe-2
+    :critical-value-sard-multivariable-taylor-covering-probe-2
+    :critical-value-sard-rectangular-local-probe-1
+    :critical-value-sard-exact-rank-local-upper-locus-1
+    :critical-value-sard-complemented-derivative-split-1
+    :critical-value-sard-projected-complemented-strict-derivative-data-1
+    :critical-value-sard-projected-implicit-function-packaging-1
+    :critical-value-sard-projected-kernel-flatness-1
+    :critical-value-sard-local-residual-derivative-flatness-1
+    :critical-value-sard-constant-coordinate-slice-flatness-1
+    :critical-value-sard-implicit-function-residual-flatness-1],
    :current-residual
    "the standard Morse--Sard proof needs its rank/source-dimension induction after both analytic inputs",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
@@ -47175,8 +47185,7 @@
     :axioms :standard-only},
    :id :t95j04-frozen-hausdorff-closure-probe-refill9,
    :kind :final-adapter,
-   :depends-on
-   [:checkpoint-full-dag-refill-9],
+   :depends-on [:checkpoint-full-dag-refill-9],
    :current-residual
    "One executable placeholder: arbitrary compact smooth k-manifold map to the metric n-sphere, k<n, has intrinsic n-dimensional Hausdorff-null range, is nonsurjective, and is nullhomotopic. Remaining product and nonhomeomorphism conjuncts are already proved."}
   {:consumer "t93A04",
@@ -47256,8 +47265,7 @@
     "t93A04 remains one placeholder until an unconditional rectangular theorem is transported through the actual manifold charts and the frozen regular-value statement is proved; no consumer closure is inferred from this foundation alone."},
    :id :sard-smooth-rectangular-unconditional-probe-refill9,
    :kind :reusable-theorem,
-   :depends-on
-   [:checkpoint-full-dag-refill-9],
+   :depends-on [:checkpoint-full-dag-refill-9],
    :current-residual
    "Banked rank normal forms, Taylor flat-locus nullity and critical-image assemblies remain conditional. Full smooth rectangular critical-image nullity is not supplied; manifold regular-value and countability adapters remain downstream.",
    :other-consumers ["t01A08" "t01J04" "t92J07" "t96J05"]}
@@ -72934,7 +72942,8 @@
    :id :t98a01-frozen-five-torsion-uptake-probe-refill51,
    :kind :final-adapter,
    :depends-on
-   [:checkpoint-full-dag-refill-51-after-triangulation-relative-mv-and-five-torsion :unit-add-circle-five-torsion-cardinality-probe-refill50],
+   [:checkpoint-full-dag-refill-51-after-triangulation-relative-mv-and-five-torsion
+    :unit-add-circle-five-torsion-cardinality-probe-refill50],
    :current-residual
    "The five-torsion kernel has reviewed cardinality five; actual torus-fiber transport and the frozen conjunction must now be attempted, while polygon genus and Euler comparisons remain independently guarded.",
    :other-consumers []}
@@ -81747,8 +81756,7 @@
      "registry check"]},
    :id :routes-2026-09-29-polygon-quotient-hausdorff-shared-1,
    :kind :reusable-theorem,
-   :depends-on
-   [:routes-2026-09-29-topo1-refill-heavy-1],
+   :depends-on [:routes-2026-09-29-topo1-refill-heavy-1],
    :current-residual
    "Hausdorffness before cut-and-paste and cellular homology.",
    :other-consumers [:tunk01 :t91A02]}
@@ -82298,8 +82306,7 @@
      "registry check"]},
    :id :routes-2026-10-10-polygon-compact-closed-quotient-shared-1,
    :kind :reusable-theorem,
-   :depends-on
-   [:routes-2026-09-29-checkpoint-topo1-refill-five-1],
+   :depends-on [:routes-2026-09-29-checkpoint-topo1-refill-five-1],
    :current-residual
    "Replace the refuted open-projection route by compact-Hausdorff closed-equivalence separation at exactly the three consumers' finite edge-pairing generality.",
    :other-consumers [:tunk01 :t91A02]}
@@ -82375,8 +82382,7 @@
      "registry check"]},
    :id :routes-2026-10-10-rational-projective-homology-shared-1,
    :kind :reusable-theorem,
-   :depends-on
-   [:routes-2026-09-29-checkpoint-topo1-refill-five-1],
+   :depends-on [:routes-2026-09-29-checkpoint-topo1-refill-five-1],
    :current-residual
    "Supply exactly the rational homology and boundedness data needed by the two remaining projective consumers before their Lefschetz assemblies.",
    :other-consumers [:t99J05]}
@@ -85641,8 +85647,68 @@
    "Expose the reusable open pieces, overlap contraction, pointed homotopy equivalences, and their actual quotient inclusion equations.",
    :other-consumers [:t01A03 :t97A01 :t97A03]}
   {:consumer :t99J01,
+   :stop-count 1,
+   :evidence
+   {:residual
+    "Compile a source-reconstruction leg computation theorem synchronized with chosenGroupEquivalence's somePath witnesses, then implement the concrete point-wedge inclusion coordinates and their TwoCircles/ThreeCircles specializations.",
+    :outcome :stop,
+    :warnings
+    [{:kind :representation-boundary,
+      :message
+      "The future leg theorem must reuse chosenGroupEquivalence's exact PathConnectedSpace.somePath witnesses; otherwise the right coordinate is only determined up to conjugation."}],
+    :boundary
+    "The exact oriented inclusion equations are not exposed by the current source-equivalence representation. TwoOpenFreeProductMapping.chosenGroupEquivalence is obtained from GenericTargetNaturalSourceReconstruction.sourceEquivalence, whose round-trip isomorphisms use Equivalence.functor.preimageIso. No exported theorem computes that reconstructed functor on either concrete FundamentalGroupoid inclusion. The available FreeProductPointSpanRepresentations.equivalence_action_inl and equivalence_action_inr equations apply only after entering the target representation category and do not identify the reconstructed source map with those actions. Thus exact equality with Monoid.Coprod.inl and Monoid.Coprod.inr, including synchronized somePath conjugations, cannot be derived from the present interface.",
+    :disposition :stop,
+    :axioms
+    ["propext"
+     "Classical.choice"
+     "Quot.sound"
+     "GenericPointWedgePiOneCoordinatesProbe.PointWedgePiOneHypotheses"
+     "GenericPointWedgePiOneCoordinatesProbe.generic_point_wedge_pi1_inclusion_coordinates"],
+    :author "topo-2",
+    :reason
+    "A standard-only implementation requires a source-reconstruction leg-coherence theorem characterizing sourceEquivalence.functor.map on both cover inclusions, transported through the composed mapping equivalence, or a directly constructed TwoOpenFreeProductMapping.sourceEquivalence with those computation lemmas. Implementing the requested coordinate declarations now would assume precisely that missing coherence.",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/generic-point-wedge-pi1-inclusion-coordinates-probe.lean",
+      :exit 0,
+      :finding
+      "e1ae729edff3b7991142ce2739d2861caea321529d02b5409a34db42a3792464"}
+     {:cmd
+      "lake env lean ConstructionTargets/TwoOpenFreeProductMapping.lean",
+      :exit 0,
+      :finding
+      "The abstract chosen group equivalence compiles with standard axioms."}
+     {:cmd
+      "lake env lean /tmp/generic-point-wedge-pi1-inclusion-coordinates-probe.lean",
+      :exit 0,
+      :finding
+      "The fixture compiles only through abstract axioms PointWedgePiOneHypotheses and generic_point_wedge_pi1_inclusion_coordinates."}
+     {:cmd "rg preimageIso and sourceEquivalence",
+      :exit 0,
+      :finding
+      "The source equivalence is reconstructed through opaque preimageIso round trips; no leg-map computation theorem is present."}
+     {:cmd "rg equivalence_action_inl and equivalence_action_inr",
+      :exit 0,
+      :finding
+      "The inl/inr equations compute target representation actions, not the reconstructed source functor on concrete inclusions."}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :finding
+      "711 items OK; ledger duplicate-dependency defect is repaired"}
+     {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :fixture
+    {:path
+     "/tmp/generic-point-wedge-pi1-inclusion-coordinates-probe.lean",
+     :sha256
+     "e1ae729edff3b7991142ce2739d2861caea321529d02b5409a34db42a3792464"},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/GenericPointWedgeFundamentalGroupCoordinates.lean"],
    :dag-node
