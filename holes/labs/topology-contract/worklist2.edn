@@ -60198,49 +60198,66 @@
    "single-consumer Circle-valued angular coordinate on the frozen t02A03 left tube",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/t02a03_geometric_tube_cover.lean",
-      :sha256
-      "6fa554e340ac526624b77eb2421cec4cdc255d682e6b9fa016ec5de01d7797a2"},
-     :commands
-     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "apm_t02a03_leftTubeSubtype, apm_t02a03_leftTubePlanarComplex, apm_t02a03_leftTubePlanarComplex_ne_zero, apm_t02a03_leftTubeAngular, and apm_t02a03_continuous_leftTubeAngular compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
-       :exit 0}
-      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "6fa554e340ac526624b77eb2421cec4cdc255d682e6b9fa016ec5de01d7797a2  /tmp/t02a03_geometric_tube_cover.lean"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :implementation
-     {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
-      :declarations
-      ["apm_t02a03_leftTubeSubtype"
-       "apm_t02a03_leftTubePlanarComplex"
-       "apm_t02a03_leftTubePlanarComplex_ne_zero"
-       "apm_t02a03_leftTubeAngular"
-       "apm_t02a03_continuous_leftTubeAngular"],
-      :acceptance
-      {:implementation
-       "Add the five compiled declarations from the verified fixture to ConstructionTargets/T02A03GeometricTubeCover.lean without changing their types or the frozen consumer. Compile the scoped module, confirm no sorry token in the scoped file, run the statement registry check, and report the declarations' axioms.",
-       :gates
-       ["scoped module compiles"
-        "scoped file contains no sorry token"
-        "statement registry matches"]}},
-     :finding
-     "The fixture completely supplies this bounded row. On the exact frozen left-tube subtype, the planar displacement (p 0 + 1) + (p 1)i is nonzero by the banked planar-center theorem. Normalizing it therefore defines a Circle-valued angular coordinate, and explicit PiLp coordinate-continuity, Complex.ofReal continuity, norm continuity, and inversion away from zero prove the map continuous.",
-     :residual
-     "After banking the angular coordinate, define the punctured normal displacement, identify deletion of the frozen left core with nonzero normal displacement, construct radial comparison homotopies inside LeftTubeMinusCore, and assemble leftTubeMinusCoreHomotopyEquivTorus."}},
+   {:placeholder-delta
+    {:path "ConstructionTargets/T02A03GeometricTubeCover.lean",
+     :before 0,
+     :after 0,
+     :delta 0},
+    :git-author "Joe Corneli <holtzermann17@gmail.com>",
+    :residual
+    "Define the punctured normal displacement, identify deletion of the frozen left core with nonzero normal displacement, construct radial comparison homotopies inside LeftTubeMinusCore, and assemble leftTubeMinusCoreHomotopyEquivTorus.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not",
+     :declaration-packet-sha256
+     "259b7728f4852ef2784ea09bfeb553ae3755872c464ab9ae1018300098fab431"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+      :exit 0,
+      :output
+      "6fa554e340ac526624b77eb2421cec4cdc255d682e6b9fa016ec5de01d7797a2  /tmp/t02a03_geometric_tube_cover.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeCover.lean",
+      :exit 0}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeCover.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "lake env lean /tmp/t02a03_geometric_tube_cover.lean | tail -7",
+      :exit 0,
+      :output
+      "'apm_t02a03_continuous_leftTubeAngular' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "git commit -m \"Bank t02A03 left-tube angular coordinate\"",
+      :exit 0,
+      :output
+      "[master a6ed78a3] Bank t02A03 left-tube angular coordinate; 1 file changed, 50 insertions(+)"}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "a6ed78a35fa895485c4599a5be087604c187115b",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
+    :fixture
+    {:path "/tmp/t02a03_geometric_tube_cover.lean",
+     :sha256
+     "6fa554e340ac526624b77eb2421cec4cdc255d682e6b9fa016ec5de01d7797a2"},
+    :finding
+    "Banked the exact left-tube subtype, its nonzero planar complex displacement, the normalized Circle-valued angular coordinate, and continuity of that coordinate. The construction consumes the previously banked planar-center nonvanishing theorem and makes no deformation or equivalence claim.",
+    :declarations
+    ["apm_t02a03_leftTubeSubtype"
+     "apm_t02a03_leftTubePlanarComplex"
+     "apm_t02a03_leftTubePlanarComplex_ne_zero"
+     "apm_t02a03_leftTubeAngular"
+     "apm_t02a03_continuous_leftTubeAngular"],
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-angular-coordinate",
    :acceptance
