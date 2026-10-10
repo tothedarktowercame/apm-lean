@@ -81212,70 +81212,47 @@
    "Prove the exact printed-circle reflection obstruction. The compiled fixture then projects any hypothetical product homotopy to this contradiction; rational Lefschetz computation remains.",
    :other-consumers []}
   {:consumer :t98J01,
+   :stop-count 1,
    :evidence
-   {:probe
-    {:outcome :revise,
-     :seat "topo-4",
-     :fixture
-     {:path "/tmp/t98j01-part-b-probe.lean",
-      :sha256
-      "2332fdeab21cc86d9749cda9cd1a270559c880ee886e4210f1f526bbb7436717"},
-     :commands
-     [{:cmd "test canonical .lake/packages authority", :exit 0}
-      {:cmd "lake env lean /tmp/t98j01-part-b-probe.lean", :exit 0}
-      {:cmd "sha256sum /tmp/t98j01-part-b-probe.lean",
-       :exit 0,
-       :finding
-       "2332fdeab21cc86d9749cda9cd1a270559c880ee886e4210f1f526bbb7436717"}
-      {:cmd
-       "Python comment-stripped placeholder census of /tmp/t98j01-part-b-probe.lean",
-       :exit 0,
-       :finding "0"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :finding "130 registered statements match, 0 do not"}],
-     :warnings
-     [{:kind :interface-axiom,
-       :message
-       "The fixture has no placeholders and depends on one nonstandard axiom, exactly the circle-reflection non-homotopy bridge. Projection of a product homotopy is fully proved."}],
-     :axioms
-     ["propext"
-      "Classical.choice"
-      "Quot.sound"
-      "T98J01Probe.apm_t98J01_bridge_reflection_not_homotopic_id"],
-     :prerequisite
-     {:consumer :t98J01,
-      :phase :implementation,
-      :state :open,
-      :scope ["problems/t98J01/lean/Main.lean"],
-      :dag-node
-      "TOPOLOGY-ROUTES.md/t98J01/circle-reflection-obstruction",
-      :acceptance
-      {:placeholder-after 1,
-       :fixture-sha256
-       "2332fdeab21cc86d9749cda9cd1a270559c880ee886e4210f1f526bbb7436717",
-       :placeholder
-       "the part-(b) portion of the single sorry in apm_t98j01",
-       :axioms :standard-only,
-       :placeholder-before 1,
-       :commands
-       ["lake env lean problems/t98J01/lean/Main.lean"
-        "lake env lean /tmp/t98j01-part-b-probe.lean"
-        "python3 scripts/statement-registry.py check"],
-       :fixture "/tmp/t98j01-part-b-probe.lean",
-       :route-step "t98J01 part (b), route steps 1 and 3-5",
-       :implementation
-       "Add and prove apm_t98J01_bridge_reflection_not_homotopic_id immediately before the registered theorem without changing registered declarations. Construct the explicit homeomorphism from the printed S1 to Circle carrying reflection to z -> -conj z. Use CircleHurewiczIsomorphism.circleH1AddEquivInt together with SingularHomologyHomotopy and the banked reflection action, or equivalently the banked circle-cover winding endpoint, to show the induced degrees are -1 and 1 and hence the maps are not homotopic. Do not address HasLefschetzNumber."},
-      :id :routes-2026-09-29-t98j01-circle-reflection-obstruction-1,
-      :kind :final-adapter,
-      :depends-on [],
-      :current-residual
-      "Prove the exact printed-circle reflection obstruction. The compiled fixture then projects any hypothetical product homotopy to this contradiction; rational Lefschetz computation remains.",
-      :other-consumers []},
-     :residual
-     "Exactly one prerequisite remains for part (b): the printed-circle reflection is not homotopic to the identity. Product projection and contradiction compile placeholder-free."}},
+   {:residual
+    "Restore the exact fixture bytes with the recorded digest from an authoritative durable source; only then can the part-(b) adapter be reprobed. The frozen consumer still has one placeholder and its registered statement remains unchanged.",
+    :outcome :stop,
+    :warnings
+    [{:kind :missing-fixture,
+      :message
+      "The exact compiled fixture required by acceptance was stored under ephemeral /tmp and is unavailable after reboot."}],
+    :disposition :stop,
+    :author "topo-4",
+    :reason
+    "Evidence-identity boundary: the mandatory hash-pinned fixture /tmp/t98j01-part-b-probe.lean is absent, and its exact source is preserved neither in the dependency receipt nor in the repository. Therefore this probe cannot verify the recorded SHA-256 or compile the exact placeholder-free frozen part-(b) fixture; reconstructing a substitute would violate the fixture-hash invariant. The dependency receipt already records this same boundary as an independently reviewed STOP.",
+    :commands
+    [{:cmd "stat -c '%F %n' .lake/packages",
+      :exit 0,
+      :finding
+      "directory .lake/packages (canonical checkout owns the package authority)"}
+     {:cmd "test -e /tmp/t98j01-part-b-probe.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "python3 comment-stripped placeholder census of problems/t98J01/lean/Main.lean",
+      :exit 0,
+      :finding "1"}
+     {:cmd "lake env lean problems/t98J01/lean/Main.lean",
+      :exit 0,
+      :finding
+      "compiles with the existing declaration-uses-sorry warning"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :fixture
+    {:path "/tmp/t98j01-part-b-probe.lean",
+     :expected-sha256
+     "2332fdeab21cc86d9749cda9cd1a270559c880ee886e4210f1f526bbb7436717",
+     :status :missing},
+    :seat "topo-4"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t98J01/part-b",
    :acceptance
