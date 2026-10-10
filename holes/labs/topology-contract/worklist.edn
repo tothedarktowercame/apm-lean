@@ -81330,6 +81330,21 @@
       :exit 1,
       :correction
       "Classified the missing artifact as the boundary and used a successful explicit absence check in final commands; no failed gate is claimed as acceptance."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791603502363-958-2fdf1529",
+     :commands
+     ["git diff e5d95b4f^ e5d95b4f and scope checks"
+      "find /home/joe for the missing t98j02 fixture"
+      "lake env lean problems/t98J02/lean/Main.lean"
+      "LEAN_PATH=/tmp/t98j02probe lake env lean /tmp/t98j02-disconnected-counterexample-probe.lean (expected exit 1: missing fixture)"
+      "python3 scripts/statement-registry.py fingerprint t98J02"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped placeholder census"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"],
+     :finding
+     "PASS as STOP: reviewer codex-3 differs from author topo-2. Commit e5d95b4f changes only the worklist; scoped Main.lean is unchanged, compiles with exactly one sorry and no admit or axiom declarations, and reproduces frozen fingerprint c680431f81105bbade1a1624dd844b8620399808d1649624bfb66d06650fcc16. Registry is 131/131 and all 675 rows validate. The exact fixture is absent under /tmp and no matching source exists under /home/joe, so SHA-256 252ec8543adae3333cc1fd18ba9a9aad2e82e5f550a3e5a24f4491215b88e2f5 and the compiled bridge interface cannot be reverified; its Lean gate deterministically fails. The recorded boundary is correct: conjunct 2 needs the literal trivial two-sheet cover with a nonseparating base curve and separating sheet-zero lift, while connected-cover conjunct 3 and the collar theorem remain downstream."},
     :changed-paths [],
     :fixture
     {:path "/tmp/t98j02-disconnected-counterexample-probe.lean",
@@ -81338,7 +81353,7 @@
      :status :missing},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["problems/t98J02/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t98J02/disconnected-trivial-cover",
    :acceptance
@@ -81431,7 +81446,7 @@
      :residual
      "Exactly one next prerequisite is isolated: conjunct 2's disconnected trivial-cover counterexample. Conjunct 3 is larger and remains downstream; conjunct 1 remains deferred to the surface-curve collar route."}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t98J02/counterexamples",
    :acceptance
