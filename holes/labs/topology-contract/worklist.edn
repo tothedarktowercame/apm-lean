@@ -98558,8 +98558,63 @@
   {:bounded-exception
    "This single-consumer prerequisite supplies the continuous source-level radial homotopy whose boundary-fixing formula is required before it can descend through either six-edge quotient relation.",
    :consumer :t97A01,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Prove the homotopy respects EqvGen for relations supported on the radius-one boundary and descend it to the outer quotient piece; then construct the annulus comparison and the two boundary quotient-to-ThreeCircles identifications.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :missing-theorems
+    [{:name "PolygonOuterRadialDeformation.radialHomotopy",
+      :type
+      "The outer radial band admits a continuous radial deformation from the identity to radius one that fixes every radius-one point.",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on ["PolygonRadialOpenCover.surfacePackage"],
+      :area "polygon-surface-open-cover"}],
+    :statement-hashes "131 registered statements match",
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :finding "canonical package authority"}
+     {:cmd "sha256sum /tmp/polygon-outer-radial-deformation.lean",
+      :exit 0,
+      :finding "fixture hash matches"}
+     {:cmd
+      "lake build ConstructionTargets.PolygonOuterRadialDeformation",
+      :exit 0}
+     {:cmd "lake env lean /tmp/polygon-outer-radial-deformation.lean",
+      :exit 0,
+      :finding "fixture compiles with standard axioms"}
+     {:cmd "rg source for sorry or admit",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero source placeholders"}
+     {:cmd "rg fixture for sorry or admit",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero fixture placeholders"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short",
+      :exit 0,
+      :finding "clean worktree after commit"}],
+    :diagnostic-history [],
+    :commit "ba0e4f1f59cb9d30610c0522bd9dc490ab8774db",
+    :changed-paths
+    ["ConstructionTargets/PolygonOuterRadialDeformation.lean"],
+    :fixture
+    {:path "/tmp/polygon-outer-radial-deformation.lean",
+     :sha256
+     "e27319b916d76ca7c4e5235ff298fecd838e3b557ebd38af6721f70de7c2ed37",
+     :sorry-count 0},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PolygonOuterRadialDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/outer-radial-deformation",
@@ -100855,15 +100910,17 @@
    :lemma
    {:name "PolygonOuterRadialDeformation.radialHomotopy",
     :reported-by
-    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40
+     :routes-2026-10-10-polygon-outer-radial-deformation-43],
     :type
     "A continuous homotopy of the outer radial source, identity at zero, landing at radius one at time one, and fixed on radius-one points.",
     :area "polygon-surface-open-cover",
-    :proved-in
-    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+    :proved-in :routes-2026-10-10-polygon-outer-radial-deformation-43},
    :id :lemma-polygonouterradialdeformation-radialhomotopy,
    :kind :lemma,
-   :depends-on [:lemma-polygonradialopencover-outersource],
+   :depends-on
+   [:lemma-polygonradialopencover-outersource
+    :lemma-polygonradialopencover-surfacepackage],
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
