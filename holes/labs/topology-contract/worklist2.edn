@@ -60000,9 +60000,43 @@
   {:bounded-exception
    "single-consumer attained left-core witness for the frozen t02A03 closed left tube",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/t02a03_geometric_tube_cover.lean",
+      :sha256
+      "6f6d02ed4e5c571e118cb23fc0b7a74b395d801259b0d63b185411f51dd92f26"},
+     :commands
+     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "apm_t02a03_leftTube_exists_near_leftCore compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
+       :exit 0}
+      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "6f6d02ed4e5c571e118cb23fc0b7a74b395d801259b0d63b185411f51dd92f26  /tmp/t02a03_geometric_tube_cover.lean"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :finding
+     "The requested attained-distance witness is complete and placeholder-free. Compact-core cthickening is rewritten as a union of radius-1/4 closed balls, yielding an actual frozen left-core point within distance 1/4 of every left-tube point.",
+     :implementation
+     {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
+      :declaration "apm_t02a03_leftTube_exists_near_leftCore",
+      :type
+      "∀ p : apm_t02a03_E3, p ∈ apm_t02a03_leftTube → ∃ q ∈ Set.range apm_t02a03_leftCore, dist p q ≤ (1 / 4 : ℝ)"},
+     :residual
+     "Use the witness and core radius identity to prove uniform angular nonvanishing, then construct punctured-normal coordinates and the torus HomotopyEquiv."}},
+   :phase :implementation,
+   :type
+   "∀ p : apm_t02a03_E3, p ∈ apm_t02a03_leftTube → ∃ q ∈ Set.range apm_t02a03_leftCore, dist p q ≤ (1 / 4 : ℝ)",
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/left-tube-attained-core-witness",
    :acceptance
@@ -60017,6 +60051,7 @@
    :id
    :routes-2026-10-10-t02a03-left-tube-attained-core-witness-topo2-r1,
    :kind :reusable-theorem,
+   :declaration "apm_t02a03_leftTube_exists_near_leftCore",
    :depends-on
    [:routes-2026-10-10-checkpoint-topo2-r5
     :routes-2026-10-10-t02a03-left-core-compact-range-topo2-r1],
