@@ -93595,6 +93595,20 @@
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791646491315-2296-fa575479",
+     :commands
+     ["git show 0c622f2be667de8f51b3e2b56628006ea356e31a -- ConstructionTargets/KleinPresentedGroupCoordinateNormalForm.lean"
+      "git diff --exit-code 0c622f2be667de8f51b3e2b56628006ea356e31a -- ConstructionTargets/KleinPresentedGroupCoordinateNormalForm.lean"
+      "lake build ConstructionTargets.KleinPresentedGroupCoordinateNormalForm"
+      "sha256sum /tmp/klein-compat.lean && lake env lean /tmp/klein-compat.lean"
+      "rg placeholder census on source, fixture, and problems/t93J03"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb on recorded ledger at 37183fe6"],
+     :finding
+     "PASS: reviewer codex-3 verified commit 0c622f2b changes only the declared module and matches the recorded source. The exact frozen fixture hash reproduces; target and fixture compile with zero placeholders and only propext, Classical.choice, and Quot.sound. Integer-induction action compatibility is oriented from the frozen inversion action to conjugation; SemidirectProduct.lift supplies the inverse map; to_from and from_to have the correct opposite orientations; coordinateEquiv maps the two frozen generators correctly; uniqueNormalForm gives existence and uniqueness of a^m*b^n coordinates without adding topology or changing PresentedKleinGroup. The t93J03 consumer remains at its declared one placeholder, and all 131 registry statements plus the recorded ledger validate."},
     :commit "0c622f2be667de8f51b3e2b56628006ea356e31a",
     :changed-paths
     ["ConstructionTargets/KleinPresentedGroupCoordinateNormalForm.lean"],
@@ -93621,7 +93635,7 @@
       "KleinPresentedGroupCoordinateNormalForm.uniqueNormalForm"]},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/KleinPresentedGroupCoordinateNormalForm.lean"],
    :dag-node
@@ -93674,7 +93688,7 @@
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -94162,7 +94176,7 @@
    :other-consumers [:t97A03]}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "kleinPresentedGroup_coordinateNormalForm",
@@ -94176,7 +94190,10 @@
     :type
     "An explicit group equivalence from the presented Klein-bottle group to integer-pair coordinates with multiplication (m,n)*(p,q)=(m+(-1)^n*p,n+q), including generator coordinate formulas and uniqueness.",
     :proved-in
-    :routes-2026-10-10-klein-presented-group-coordinate-normal-form-19},
+    :routes-2026-10-10-klein-presented-group-coordinate-normal-form-19,
+    :banked-by
+    :routes-2026-10-10-klein-presented-group-coordinate-normal-form-19,
+    :banked-commit "0c622f2be667de8f51b3e2b56628006ea356e31a"},
    :id :lemma-kleinpresentedgroup-coordinatenormalform,
    :kind :lemma,
    :depends-on
