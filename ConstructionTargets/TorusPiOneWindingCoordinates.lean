@@ -220,4 +220,31 @@ theorem circleMatrixPi1Map_naturality
   · exact circleMatrixPi1Map_coord_zero p
   · exact circleMatrixPi1Map_coord_one p
 
+def frozenCircleImagePath
+    (gamma : Path ((0, 0) : FrozenTorus) (0, 0)) :
+    Path ((1 : Circle), (1 : Circle)) (1, 1) where
+  toFun t := frozenTorusHomeomorphCircleProd (gamma t)
+  continuous_toFun := frozenTorusHomeomorphCircleProd.continuous.comp gamma.continuous
+  source' := by simp
+  target' := by simp
+
+def frozenLbarCircleImagePath
+    (gamma : Path ((0, 0) : FrozenTorus) (0, 0)) :
+    Path ((1 : Circle), (1 : Circle)) (1, 1) where
+  toFun t := frozenTorusHomeomorphCircleProd (frozenLbar (gamma t))
+  continuous_toFun := frozenTorusHomeomorphCircleProd.continuous.comp
+    (frozenLbar.continuous.comp gamma.continuous)
+  source' := by simp [frozenLbar]
+  target' := by simp [frozenLbar]
+
+theorem frozenLbarCircleImagePath_eq_circleMatrixMappedPath
+    (gamma : Path ((0, 0) : FrozenTorus) (0, 0)) :
+    frozenLbarCircleImagePath gamma =
+      circleMatrixMappedPath (frozenCircleImagePath gamma) := by
+  ext t
+  · exact congrArg Subtype.val
+      (congrArg Prod.fst (frozenTorusHomeomorphCircleProd_frozenLbar (gamma t)))
+  · exact congrArg Subtype.val
+      (congrArg Prod.snd (frozenTorusHomeomorphCircleProd_frozenLbar (gamma t)))
+
 end ConstructionTargets.TorusPiOneWindingCoordinates
