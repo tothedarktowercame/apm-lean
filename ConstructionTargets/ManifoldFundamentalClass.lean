@@ -122,6 +122,27 @@ theorem integralOverlapTransitionUnit_eq_one_or_neg_one
     apply Units.ext
     exact hu
 
+theorem integralOverlapTransitionUnit_eq_one_of_ne_neg_one
+    (m : ℕ) {M : Type} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (EuclideanSpace ℝ (Fin (m + 2))) M]
+    (a b : M) (x : common m a b)
+    (hneg : overlapTransitionUnit ℤ m a b x ≠ -1) :
+    overlapTransitionUnit ℤ m a b x = 1 := by
+  rcases integralOverlapTransitionUnit_eq_one_or_neg_one m a b x with h | h
+  · exact h
+  · exact (hneg h).elim
+
+theorem integralChartGenerator_eq_on_preconnected_overlap_of_ne_neg_one
+    (m : ℕ) {M : Type} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (EuclideanSpace ℝ (Fin (m + 2))) M]
+    (a b : M) (hconn : IsPreconnected (common m a b))
+    (x : common m a b) (hneg : overlapTransitionUnit ℤ m a b x ≠ -1)
+    (y : common m a b) :
+    chartGenerator ℤ m a y.1 y.2.1 = chartGenerator ℤ m b y.1 y.2.2 := by
+  apply chartGenerator_eq_on_preconnected_overlap_of_baseUnit_eq_one
+    ℤ m a b hconn x
+  exact integralOverlapTransitionUnit_eq_one_of_ne_neg_one m a b x hneg
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -131,3 +152,5 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.overlapTransitionUnit_eq_one_of_isPreconnected
 #print axioms ConstructionTargets.ManifoldFundamentalClass.chartGenerator_eq_on_preconnected_overlap_of_baseUnit_eq_one
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralOverlapTransitionUnit_eq_one_or_neg_one
+#print axioms ConstructionTargets.ManifoldFundamentalClass.integralOverlapTransitionUnit_eq_one_of_ne_neg_one
+#print axioms ConstructionTargets.ManifoldFundamentalClass.integralChartGenerator_eq_on_preconnected_overlap_of_ne_neg_one
