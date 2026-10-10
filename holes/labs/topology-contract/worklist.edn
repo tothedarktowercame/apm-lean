@@ -94083,6 +94083,20 @@
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791647635148-2332-8ee89c9e",
+     :commands
+     ["git show a500ab71bb0eb18a8da073d85447bd2833c12ae4 -- ConstructionTargets/KleinPlaneAffineAction.lean"
+      "git diff --exit-code a500ab71bb0eb18a8da073d85447bd2833c12ae4 -- ConstructionTargets/KleinPlaneAffineAction.lean"
+      "lake build ConstructionTargets.KleinPlaneAffineAction"
+      "sha256sum /tmp/klein-plane-action.lean && lake env lean /tmp/klein-plane-action.lean"
+      "placeholder census on source, fixture, and problems/t93J03"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb on recorded ledger at fabe3544"],
+     :finding
+     "PASS: reviewer codex-3 verified commit a500ab71 changes only KleinPlaneAffineAction.lean and the compiled source equals the recorded commit. The frozen fixture hash is exact; target and fixture compile with zero placeholders; t93J03 retains its declared single placeholder; audited declarations report only propext, Classical.choice, and Quot.sound; all 131 registry statements and the recorded ledger validate. coordinateAct_mul has the required left-action orientation, planeAction transports it through coordinateEquiv, and generatorA_smul and generatorB_smul give (x+1,y) and (-x,y+1). The module stays before square representatives, boundary classification, quotient formation, and EqvGen comparison. The two recorded unnecessarySeqFocus warnings are stylistic and non-failing."},
     :commit "a500ab71bb0eb18a8da073d85447bd2833c12ae4",
     :changed-paths ["ConstructionTargets/KleinPlaneAffineAction.lean"],
     :fixture
@@ -94101,7 +94115,7 @@
       "KleinPlaneAffineAction.generatorB_smul"]},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/KleinPlaneAffineAction.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/plane-action-square-orbit-classification/affine-action",
@@ -94231,7 +94245,7 @@
       "coordinateAct gives the explicit affine coordinate formula; coordinateAct_mul proves its action law; planeAction installs the transported PresentedKleinGroup MulAction on Real times Real; generatorA_smul and generatorB_smul prove horizontal translation and glide-reflection formulas."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/plane-action-square-orbit-classification",
@@ -94971,7 +94985,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "KleinPlaneAffineAction.coordinateAct_mul",
@@ -94982,7 +94996,9 @@
     :reported-by [:routes-2026-10-10-klein-plane-affine-action-25],
     :type
     "(c d : Coordinates) (p : Real × Real) -> coordinateAct (c*d) p = coordinateAct c (coordinateAct d p)",
-    :proved-in :routes-2026-10-10-klein-plane-affine-action-25},
+    :proved-in :routes-2026-10-10-klein-plane-affine-action-25,
+    :banked-by :routes-2026-10-10-klein-plane-affine-action-25,
+    :banked-commit "a500ab71bb0eb18a8da073d85447bd2833c12ae4"},
    :id :lemma-kleinplaneaffineaction-coordinateact-mul,
    :kind :lemma,
    :depends-on
@@ -94991,7 +95007,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "KleinPlaneAffineAction.generator_formulas",
@@ -95001,7 +95017,9 @@
    {:name "KleinPlaneAffineAction.generator_formulas",
     :reported-by [:routes-2026-10-10-klein-plane-affine-action-25],
     :type "generatorA acts by (x+1,y) and generatorB acts by (-x,y+1)",
-    :proved-in :routes-2026-10-10-klein-plane-affine-action-25},
+    :proved-in :routes-2026-10-10-klein-plane-affine-action-25,
+    :banked-by :routes-2026-10-10-klein-plane-affine-action-25,
+    :banked-commit "a500ab71bb0eb18a8da073d85447bd2833c12ae4"},
    :id :lemma-kleinplaneaffineaction-generator-formulas,
    :kind :lemma,
    :depends-on [:lemma-kleinplaneaffineaction-coordinateact-mul],
