@@ -89957,6 +89957,8 @@
    :other-consumers []}
   {:consumer :t99J01,
    :stop-count 1,
+   :review-finding
+   "frozen interface is false at r = 1, n = 0, H = bottom because index zero encodes infinite index; require 0 < n, H.index != 0, or H.FiniteIndex",
    :evidence
    {:residual
     "Repair the interface with 0 < n, H.index ≠ 0, or H.FiniteIndex, then prove the finite Schreier coset-quiver spanning-tree count.",
@@ -89997,6 +89999,12 @@
       :exit 1,
       :finding
       "The first draft left the equality b g = 1 unresolved; corrected using Subgroup.mem_bot.mp on the basis element's subtype membership proof."}],
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1791635464976-1921-a6953b10",
+     :finding
+     "frozen interface is false at r = 1, n = 0, H = bottom because index zero encodes infinite index; require 0 < n, H.index != 0, or H.FiniteIndex"},
     :counterexample
     {:path "/tmp/schreier-positive-rank-counterexample.lean",
      :parameters {:r 1, :n 0, :subgroup "bottom"},
@@ -90011,7 +90019,7 @@
      :proof-placeholder-count 1},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["ConstructionTargets/FiniteIndexFreeGroupSchreierGeneratorCount.lean"],
    :dag-node
@@ -90036,6 +90044,7 @@
     "Construct the finite connected Schreier coset quiver for H, choose a spanning tree rooted at the identity coset, identify Mathlib's Nielsen-Schreier generators with the oriented non-tree edges, and prove their count is r*n-(n-1)=(r-1)*n+1. Reindex IsFreeGroup.basis along that equivalence."},
    :id :routes-2026-10-10-finite-index-schreier-generator-count-1,
    :kind :reusable-theorem,
+   :fail-count 1,
    :depends-on [],
    :current-residual
    "Prove the exact cardinality of the chosen Nielsen-Schreier generator type by a finite coset-quiver spanning-tree count; all group-equivalence packaging and both specializations then compile.",
