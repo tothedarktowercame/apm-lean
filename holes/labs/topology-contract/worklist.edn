@@ -84091,9 +84091,57 @@
    :stop-condition
    "End only when every active topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :evidence
-   {:outcome :stop,
-    :seat "topo-4",
+   {:residual
+    "Campaign paused at its explicit terminal condition: all eight active topo1 consumers are held by reviewed stop-after-two boundaries. A fresh non-loop reroute is required to reopen any consumer.",
+    :outcome :stop,
+    :disposition :stop,
+    :author "topo-4",
     :reason :campaign-stop-condition-satisfied,
+    :commands
+    [{:cmd
+      "Read TOPOLOGY-ROUTES.md, routes-{1,2,3}.md, and reviewed dependency receipts",
+      :exit 0}
+     {:cmd
+      "Python comment-stripped placeholder census of all eight topo1 refill consumers",
+      :exit 0,
+      :finding
+      {:t98A06 1,
+       :t91A02 1,
+       :t99J05 1,
+       :t94J09 1,
+       :t96A06 1,
+       :tunk01 1,
+       :total 8,
+       :t98J02 1,
+       :t98J01 1}}
+     {:cmd "Clojure EDN query of the RP3 prerequisite and parent rows",
+      :exit 0,
+      :finding
+      "Both rows are done with outcome STOP, stop-count 1, and independent review PASS; together they trigger stop-after-two for t96A06."}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :finding
+      "694 items OK; 677 done, 14 superseded, 2 needs-owner, 1 open"}
+     {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791610871488-1254-2d0085cf",
+     :commands
+     ["git show/stat/diff recorded terminal checkpoint transition fa466cae29438e1c950c221e108934133e18ddf1"
+      "comment-stripped placeholder and axiom census of all eight active consumers"
+      "python3 scripts/statement-registry.py fingerprint for all eight active consumers"
+      "inspect RP3 package and parent comparison STOP counts and independent review receipts"
+      "inspect all eight held route boundaries and checkpoint terminal condition"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git diff --check fa466cae^ fa466cae"],
+     :finding
+     "PASS: reviewer codex-3 differs from author topo-4. Recorded terminal checkpoint transition fa466cae29438e1c950c221e108934133e18ddf1 changes only holes/labs/topology-contract/worklist.edn, with empty scope and no fixture hash or implementation claimed. The eight-consumer census reproduces at exactly one sorry each, with t94J09's separate pre-existing named axiom unchanged. Frozen fingerprints reproduce as t98A06 cd9f181f88b216bb58c5fa68c3a85f32117f74dd089f7591d9827b0eb5b8b8f5, t98J01 be02beaf46066d3672ae7d45fe944be661d0375b71deee2eaf56732d2abdc21d, t98J02 c680431f81105bbade1a1624dd844b8620399808d1649624bfb66d06650fcc16, t94J09 52b4778c4932a4b38c30b3bf2a7c9943c32f675f19f63ae1d119aa378dde0a75, tunk01 5362677d8a8f8dfcae54d23788ab8d3558ea3b78992e8b9e9c8f0b956fc636fe, t91A02 e6b708786cf6a21dc5bd30b3d560b260aa4f2bb70519e89f1e06f46d935e41bb, t96A06 937efb042dcf5949706d95c5d4266acfe20a12308284ff85af707d5413c43aad, and t99J05 cf42ee31318a9e37fde5e4e923ca60cbe51d483ebd813588efc9492359e37db6. The RP3 package prerequisite and its parent covering-comparison row both ended in STOP with independent PASS reviews, establishing the second consecutive reviewed boundary for t96A06. Its representation diagnosis remains correctly oriented from the antipodal quotient of euclideanUnitSphere 4 to coinduced Space Real 3, followed by transport of a genuine two-sheeted source covering; the missing RP3 fiber/open/local-homeomorphism and evenly-covered-neighborhood layer prevents progress. The other seven consumers already retain reviewed stop-after-two holds. Therefore all eight active topo1 consumers satisfy the explicit terminal held condition; no policy-eligible work row remains, and electing an unrelated or repeated row would violate need-driven election and stop-after-two. This is correctly recorded as a scheduling terminal condition, not a mathematical refutation. Registry is 131/131 and all 694 worklist rows validate, with 677 done, 14 superseded, 2 needs-owner, and this sole done-unreviewed checkpoint."},
     :finding
     {:placeholder-delta {:baseline 8, :current 8, :delta 0},
      :typed-residual-change
@@ -84173,42 +84221,9 @@
         "Lefschetz and Euler"]}},
      :boundary
      "All eight active topo1 consumers satisfy the row's terminal held-by-stop-after-two condition. No policy-eligible work row remains, and inserting an unrelated or repeated row would violate need-driven election and stop-after-two. This is a scheduling terminal condition, not a mathematical refutation."},
-    :commands
-    [{:cmd
-      "Read TOPOLOGY-ROUTES.md, routes-{1,2,3}.md, and reviewed dependency receipts",
-      :exit 0}
-     {:cmd
-      "Python comment-stripped placeholder census of all eight topo1 refill consumers",
-      :exit 0,
-      :finding
-      {:t98A06 1,
-       :t91A02 1,
-       :t99J05 1,
-       :t94J09 1,
-       :t96A06 1,
-       :tunk01 1,
-       :total 8,
-       :t98J02 1,
-       :t98J01 1}}
-     {:cmd "Clojure EDN query of the RP3 prerequisite and parent rows",
-      :exit 0,
-      :finding
-      "Both rows are done with outcome STOP, stop-count 1, and independent review PASS; together they trigger stop-after-two for t96A06."}
-     {:cmd "python3 scripts/statement-registry.py check",
-      :exit 0,
-      :finding "131 registered statements match, 0 do not"}
-     {:cmd
-      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
-      :exit 0,
-      :finding
-      "694 items OK; 677 done, 14 superseded, 2 needs-owner, 1 open"}
-     {:cmd "git status --short", :exit 0, :finding "clean"}],
-    :residual
-    "Campaign paused at its explicit terminal condition: all eight active topo1 consumers are held by reviewed stop-after-two boundaries. A fresh non-loop reroute is required to reopen any consumer.",
-    :author "topo-4",
-    :disposition :stop},
+    :seat "topo-4"},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :needs-owner,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
