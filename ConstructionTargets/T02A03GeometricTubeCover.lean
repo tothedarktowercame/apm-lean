@@ -286,4 +286,12 @@ theorem apm_t02a03_circleMeridian_exp (t : ℝ) :
       Circle.coe_exp, Complex.exp_mul_I, ← Complex.ofReal_cos,
       ← Complex.ofReal_sin]
 
+theorem apm_t02a03_circleMeridian_quarterTurn :
+    apm_t02a03_circleMeridian (Circle.exp (Real.pi / 2)) =
+      apm_t02a03_meridianAnchor := by
+  rw [apm_t02a03_circleMeridian_exp]
+  ext i
+  fin_cases i <;>
+    simp [apm_t02a03_meridian, apm_t02a03_meridianAnchor]
+
 end ConstructionTargets.T02A03GeometricTubeCover
