@@ -54347,11 +54347,66 @@
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
    {:probe
+    "Compile a placeholder-free inhabitant of RPProjectionContMDiffDescentProbe.SphereProjectionContMDiffDescent from /tmp/rp_projection_contmdiff_descent_contract.lean. Prove ContMDiff f from ContMDiff (f composed with sphereProjection 2) using sphereProjectionQuotientAuthority for surjectivity and rpSmoothAtlas.quotient_localDiffeomorph for a smooth local inverse at a chosen point over every target point. Keep the theorem at dimension two and codomain E m."},
+   :id :routes-2026-10-10-sphere-projection-contmdiff-descent-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on [:routes-2026-09-28-rp-smooth-atlas-topo2-r1],
+   :other-consumers [:t96A07]}
+  {:consumer :t95A04,
+   :evidence
+   {:probe
+    {:outcome :revise,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/rp_projection_contmdiff_descent_contract.lean",
+      :sha256
+      "24d6a9eec3b2c4b33e556fd36022db855f35498393d0a6e68bd973900414c31b"},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/rp_projection_contmdiff_descent_contract.lean",
+       :exit 0}
+      {:cmd
+       "sha256sum /tmp/rp_projection_contmdiff_descent_contract.lean",
+       :exit 0,
+       :output
+       "24d6a9eec3b2c4b33e556fd36022db855f35498393d0a6e68bd973900414c31b  /tmp/rp_projection_contmdiff_descent_contract.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_projection_contmdiff_descent_contract.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :finding
+     "The original EvenSphereMapSmoothDescent contract reduces to one reusable missing theorem. Existence of the descended function follows directly from the banked sphereProjection_eq_iff: define the quotient value from any sphere representative, and antipodal invariance proves independence. Its representative equation makes f composed with sphereProjection equal g, so the remaining step is precisely SphereProjectionContMDiffDescent. The compiled placeholder-free interface states that smoothness of f composed with sphereProjection implies smoothness of f under rpSmoothAtlas. Its proof should use surjectivity from sphereProjectionQuotientAuthority and local inverses from rpSmoothAtlas.quotient_localDiffeomorph. No second topology, atlas, or consumer-specific polynomial theorem is needed.",
+     :residual
+     "Bank SphereProjectionContMDiffDescent, then construct the quotient function by sphereProjection_eq_iff and apply the theorem to the given smooth g; this completes EvenSphereMapSmoothDescent.",
+     :prerequisite
+     {:consumer :t95A04,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:probe
+       "Compile a placeholder-free inhabitant of RPProjectionContMDiffDescentProbe.SphereProjectionContMDiffDescent from /tmp/rp_projection_contmdiff_descent_contract.lean. Prove ContMDiff f from ContMDiff (f composed with sphereProjection 2) using sphereProjectionQuotientAuthority for surjectivity and rpSmoothAtlas.quotient_localDiffeomorph for a smooth local inverse at a chosen point over every target point. Keep the theorem at dimension two and codomain E m."},
+      :id
+      :routes-2026-10-10-sphere-projection-contmdiff-descent-topo2-r1,
+      :kind :reusable-theorem,
+      :depends-on [:routes-2026-09-28-rp-smooth-atlas-topo2-r1],
+      :other-consumers [:t96A07]}}},
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:probe
     "Compile a placeholder-free inhabitant of RPPolynomialSmoothDescentProbe.EvenSphereMapSmoothDescent from /tmp/rp_even_smooth_descent_contract.lean. Construct the descended function from antipodal invariance on sphereProjection fibres and prove it ContMDiff locally using rpSmoothAtlas.quotient_localDiffeomorph. Keep dimension two and codomain E m; do not construct another topology or atlas. This supplies t95A04 route steps 2-3 and t96A07 route step 2."},
    :id
    :routes-2026-10-10-even-sphere-map-smooth-descent-contract-topo2-r1,
    :kind :reusable-theorem,
-   :depends-on [:routes-2026-09-28-rp-smooth-atlas-topo2-r1],
+   :depends-on
+   [:routes-2026-09-28-rp-smooth-atlas-topo2-r1
+    :routes-2026-10-10-sphere-projection-contmdiff-descent-topo2-r1],
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
    :evidence
