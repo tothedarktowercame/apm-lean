@@ -340,4 +340,18 @@ theorem apm_t02a03_leftTubeRadialMap_endpoints
   · apply Subtype.ext
     exact apm_t02a03_leftTubeRadialPoint_one p
 
+noncomputable def apm_t02a03_leftTubeTorusCoordinatesMap :
+    C(apm_t02a03_LeftTubeMinusCore, Circle × Circle) where
+  toFun := apm_t02a03_leftTubeTorusCoordinates
+  continuous_toFun := apm_t02a03_continuous_leftTubeTorusCoordinates
+
+noncomputable def apm_t02a03_leftTubeRadialHomotopy :
+    ContinuousMap.Homotopy
+      (apm_t02a03_leftTubeTorusInverse.comp
+        apm_t02a03_leftTubeTorusCoordinatesMap)
+      (ContinuousMap.id apm_t02a03_LeftTubeMinusCore) where
+  toFun := apm_t02a03_leftTubeRadialMap
+  map_zero_left p := (apm_t02a03_leftTubeRadialMap_endpoints p).1
+  map_one_left p := (apm_t02a03_leftTubeRadialMap_endpoints p).2
+
 end ConstructionTargets.T02A03LeftTubePuncturedModel
