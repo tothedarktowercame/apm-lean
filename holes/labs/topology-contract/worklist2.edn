@@ -61601,6 +61601,21 @@
       :exit 0,
       :output "131 registered statements match, 0 do not"}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791642815752-2171-37d99413",
+     :commands
+     ["git show/diff-tree/show --check e150e86d8c0d41e0607ccb4828779303b77af9f8"
+      "sha256sum /tmp/t02a03_geometric_tube_cover.lean"
+      "lake env lean /tmp/t02a03_geometric_tube_cover.lean"
+      "lake env lean ConstructionTargets/T02A03GeometricTubeCover.lean"
+      "lake build ConstructionTargets.T02A03GeometricTubeCover"
+      "python3 scripts/statement-registry.py check --rev e150e86d8c0d41e0607ccb4828779303b77af9f8"
+      "bb holes/labs/topology-contract/worklist_check.bb recorded-ledger"
+      "recompute accepted-type hash and comment-stripped placeholder counts"],
+     :finding
+     "PASS: author topo-6 is independent; implementation scope is exactly ConstructionTargets/T02A03GeometricTubeCover.lean, transition scope is ledger-only, and fixture SHA-256 fba4095e6b8dc50b136e0faef5467b00edeabf767d499636c26857a8a6fb2a63 matches. The theorem correctly crosses from the normalized planar Circle coordinate to the selected ambient frozen-core point, uses the nonzero planar norm to clear denominators, and proves in the registered orientation that ambient distance equals the complex normal-displacement norm; it does not claim interpolation membership. Fixture, target, focused 8240-job build, registry 131/0, and 446-item ledger gate pass; accepted-type hash 40730fd39900ea7ba7382e052452b92b7917c7eb916e4afc6b2f35b3cabf9384 matches, the declaration uses only propext/Classical.choice/Quot.sound, target placeholders are 0, and unchanged consumer placeholders are 1."},
     :commit "e150e86d8c0d41e0607ccb4828779303b77af9f8",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
@@ -61620,7 +61635,7 @@
    :phase :implementation,
    :type
    "forall p : apm_t02a03_leftTubeSubtype, dist p.1 (apm_t02a03_leftCoreCircle (apm_t02a03_leftTubeAngular p)) = norm (apm_t02a03_leftTubeNormalComplex p)",
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/left-tube-angular-core-distance",
@@ -61718,7 +61733,7 @@
    :phase :probe,
    :type
    "Nonempty (ContinuousMap.HomotopyEquiv LeftTubeMinusCore ConstructionTargets.TorusCircleWedgeOpenCover.Torus)",
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-punctured-model",
    :acceptance
