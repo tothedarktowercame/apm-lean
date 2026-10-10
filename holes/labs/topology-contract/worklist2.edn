@@ -67159,6 +67159,19 @@
       :output "131 registered statements match, 0 do not"}
      {:cmd "git diff --check", :exit 0}
      {:cmd "git status --short", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791675143456-3304-6e5dde7b",
+     :commands
+     ["git show/diff-tree/check 95f3bd198e73fe5642fe193e3e427f3f9e8d040a"
+      "git rev-parse recorded blob; git hash-object current module; sha256sum fixture"
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean"
+      "lake env lean /tmp/t02a03_right_core_compact_probe.lean"
+      "python3 scripts/statement-registry.py check --rev 95f3bd198e73fe5642fe193e3e427f3f9e8d040a"
+      "statement fingerprints at commit and parent; comment-stripped placeholder census; clojure.edn/read-string worklist"],
+     :finding
+     "PASS: reviewer differs from author topo-6; commit changes only the scoped module and recorded/current blob 9dda270fd7c8a91870288f6424e8e0665d6d8b54 matches. Fixture SHA-256 matches. Module and frozen fixture compile with only propext, Classical.choice, and Quot.sound; registry is 131/0, frozen t02A03 fingerprint remains d123afd5ae0ee067587b3ed3d7b9b6d2f075c3d95701e098ec357c7317cd34c3, and the sole frozen placeholder remains. From right-tube membership the proof obtains an attained right-core witness with Euclidean distance at most 1/4. The reverse-triangle theorem bounds the planar radial error, the third coordinate supplies the unchanged height term, and the squared-sum comparison yields the requested Complex normal norm bound in the correct direction. It does not bound an interpolation or claim tube/deletion invariants."},
     :commit "95f3bd198e73fe5642fe193e3e427f3f9e8d040a",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
@@ -67172,7 +67185,7 @@
    :phase :implementation,
    :type
    "forall (p : apm_t02a03_E3) (hp : p ∈ apm_t02a03_rightTube), norm (rightTubeCoreNormalComplex p) ≤ (1 / 4 : Real)",
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/right-core-input-radius-bound",
    :acceptance
@@ -67276,7 +67289,7 @@
      "The prerequisite proof remains complete after renaming its declaration to rightTubeCoreInputNormalRadiusBound, which prevents admission from conflating it with the already banked meridian endpoint theorem norm_rightTubeCoreNormalComplex_circleMeridian. For a point in the right tube, an attained right-core witness lies within 1/4; the banked reverse-triangle estimate bounds the radial error by the planar part of that distance, and adjoining the unchanged height coordinate bounds the full complex normal norm by 1/4.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
