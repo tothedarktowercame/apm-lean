@@ -61271,9 +61271,46 @@
   {:bounded-exception
    "single-consumer planar reverse-triangle estimate for the t02A03 punctured left tube",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/t02a03_geometric_tube_cover.lean",
+      :sha256
+      "ae914b8bdb637ce22fd54096b9d6aae68fd306afd3cb943b2f02f03192658733"},
+     :commands
+     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "apm_t02a03_leftTubePlanar_norm_sub_one_le_corePlanarDistance compiled without warnings; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
+       :exit 0}
+      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "ae914b8bdb637ce22fd54096b9d6aae68fd306afd3cb943b2f02f03192658733  /tmp/t02a03_geometric_tube_cover.lean"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :finding
+     "The complete placeholder-free fixture proves apm_t02a03_leftTubePlanar_norm_sub_one_le_corePlanarDistance with the frozen requested type. It proves the trigonometric left-core point has complex norm 1 and applies abs_norm_sub_norm_le to bound planar radial error by planar distance. The fixture compiles without warnings and uses only propext, Classical.choice, and Quot.sound.",
+     :implementation
+     {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
+      :declaration
+      "apm_t02a03_leftTubePlanar_norm_sub_one_le_corePlanarDistance",
+      :type
+      "forall (p : apm_t02a03_leftTubeSubtype) (t : Real), abs (norm (apm_t02a03_leftTubePlanarComplex p) - 1) <= norm (apm_t02a03_leftTubePlanarComplex p - ((Real.cos t : Complex) + (Real.sin t : Complex) * Complex.I))",
+      :source-fixture "/tmp/t02a03_geometric_tube_cover.lean"},
+     :residual
+     "Combine the banked planar radial estimate with the height coordinate and apm_t02a03_leftTube_exists_near_leftCore to prove norm(apm_t02a03_leftTubeNormalComplex p) <= 1/4, then construct the complement-side radial homotopy and assemble the torus HomotopyEquiv."}},
+   :source-fixture "/tmp/t02a03_geometric_tube_cover.lean",
+   :phase :implementation,
+   :type
+   "forall (p : apm_t02a03_leftTubeSubtype) (t : Real), abs (norm (apm_t02a03_leftTubePlanarComplex p) - 1) <= norm (apm_t02a03_leftTubePlanarComplex p - ((Real.cos t : Complex) + (Real.sin t : Complex) * Complex.I))",
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/left-tube-planar-reverse-triangle",
    :acceptance
@@ -61289,6 +61326,8 @@
    :id
    :routes-2026-10-10-t02a03-left-tube-planar-reverse-triangle-topo2-r1,
    :kind :reusable-theorem,
+   :declaration
+   "apm_t02a03_leftTubePlanar_norm_sub_one_le_corePlanarDistance",
    :depends-on
    [:routes-2026-10-10-checkpoint-topo2-r5
     :routes-2026-10-10-t02a03-left-tube-forward-inverse-identity-topo2-r1],
