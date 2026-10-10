@@ -61561,28 +61561,84 @@
    "Prove the ambient interpolation stays inside the frozen left-tube complement, bundle it as the inverse-after-forward homotopy, and assemble the torus HomotopyEquiv.",
    :other-consumers []}
   {:bounded-exception
+   "single-consumer exact angular-core distance identity for the t02A03 punctured left tube",
+   :consumer :t02A03,
+   :phase :probe,
+   :state :open,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t02A03/left-tube-angular-core-distance",
+   :acceptance
+   {:probe
+    "Compile and bank apm_t02a03_dist_leftTubePoint_angularCore from /tmp/t02a03_geometric_tube_cover.lean. Prove that every frozen left-tube point has Euclidean distance to the frozen core point selected by its planar angular coordinate exactly equal to the norm of its complex normal displacement, by expanding normalization coordinates and comparing squared norms. This supplies the shared-center distance formula required to prove the ambient interpolation remains in the frozen tube; do not yet claim interpolation membership, deleted-core exclusion, the bundled homotopy, HomotopyEquiv, or gluing.",
+    :declaration "apm_t02a03_dist_leftTubePoint_angularCore",
+    :type
+    "forall p : apm_t02a03_leftTubeSubtype, dist p.1 (apm_t02a03_leftCoreCircle (apm_t02a03_leftTubeAngular p)) = norm (apm_t02a03_leftTubeNormalComplex p)",
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "t02A03 step 2, identify normal radius with distance to the angularly selected frozen core point"},
+   :id
+   :routes-2026-10-10-t02a03-left-tube-angular-core-distance-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo2-r5
+    :routes-2026-10-10-t02a03-left-tube-radial-ambient-interpolation-topo2-r1],
+   :current-residual
+   "Use the common angular core center to prove interpolation membership in the frozen left tube, then prove core exclusion, bundle the homotopy, and assemble the torus HomotopyEquiv.",
+   :other-consumers []}
+  {:bounded-exception
    "single-consumer explicit punctured-left-tube model for t02A03",
    :consumer :t02A03,
    :evidence
    {:probe
-    {:outcome :revise,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/t02a03_geometric_tube_cover.lean",
-      :sha256
-      "bb97efb8827080715d55a33a7925d58c06a0fc81abffa0a6501cd13e95cf11df"},
+    {:residual
+     "Bank the angular-core distance identity. Then use the common angular core center and convexity of its radius-1/4 closed ball to prove every affine interpolation point remains in the frozen left tube; separately prove its normal displacement never vanishes, bundle the homotopy, and assemble the HomotopyEquiv.",
+     :outcome :revise,
+     :missing-theorems
+     [{:name "apm_t02a03_dist_leftTubePoint_angularCore",
+       :type
+       "forall p : apm_t02a03_leftTubeSubtype, dist p.1 (apm_t02a03_leftCoreCircle (apm_t02a03_leftTubeAngular p)) = norm (apm_t02a03_leftTubeNormalComplex p)",
+       :status :proved,
+       :consumers [:t02A03]}],
+     :prerequisite
+     {:bounded-exception
+      "single-consumer exact angular-core distance identity for the t02A03 punctured left tube",
+      :consumer :t02A03,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/t02A03/left-tube-angular-core-distance",
+      :acceptance
+      {:probe
+       "Compile and bank apm_t02a03_dist_leftTubePoint_angularCore from /tmp/t02a03_geometric_tube_cover.lean. Prove that every frozen left-tube point has Euclidean distance to the frozen core point selected by its planar angular coordinate exactly equal to the norm of its complex normal displacement, by expanding normalization coordinates and comparing squared norms. This supplies the shared-center distance formula required to prove the ambient interpolation remains in the frozen tube; do not yet claim interpolation membership, deleted-core exclusion, the bundled homotopy, HomotopyEquiv, or gluing.",
+       :declaration "apm_t02a03_dist_leftTubePoint_angularCore",
+       :type
+       "forall p : apm_t02a03_leftTubeSubtype, dist p.1 (apm_t02a03_leftCoreCircle (apm_t02a03_leftTubeAngular p)) = norm (apm_t02a03_leftTubeNormalComplex p)",
+       :placeholder "the sole sorry in apm_t02a03",
+       :route-step
+       "t02A03 step 2, identify normal radius with distance to the angularly selected frozen core point"},
+      :id
+      :routes-2026-10-10-t02a03-left-tube-angular-core-distance-topo2-r1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:routes-2026-10-10-checkpoint-topo2-r5
+       :routes-2026-10-10-t02a03-left-tube-radial-ambient-interpolation-topo2-r1],
+      :current-residual
+      "Use the common angular core center to prove interpolation membership in the frozen left tube, then prove core exclusion, bundle the homotopy, and assemble the torus HomotopyEquiv.",
+      :other-consumers []},
      :commands
      [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
        :exit 0,
        :output
-       "apm_t02a03_leftTubeRadialPoint, apm_t02a03_continuous_leftTubeRadialPoint, apm_t02a03_leftTubeRadialPoint_zero, and apm_t02a03_leftTubeRadialPoint_one compiled without warnings; axioms [propext, Classical.choice, Quot.sound]"}
+       "apm_t02a03_dist_leftTubePoint_angularCore compiled without warnings; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
        "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
        :exit 0}
       {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
        :exit 0,
        :output
-       "bb97efb8827080715d55a33a7925d58c06a0fc81abffa0a6501cd13e95cf11df  /tmp/t02a03_geometric_tube_cover.lean"}
+       "fba4095e6b8dc50b136e0faef5467b00edeabf767d499636c26857a8a6fb2a63  /tmp/t02a03_geometric_tube_cover.lean"}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
@@ -61590,48 +61646,22 @@
      [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
        :exit 1,
        :finding
-       "The first definition wrote I as the interval type, but with no local notation in this fixture Lean treated I as an auto-implicit type parameter, so its points had no real coercion. Replacing it with unitInterval fixed the domain."}
+       "The first proof unfolded normalization inside all three Euclidean coordinates, leaving scalar actions nested below real and imaginary projections. Isolating explicit formulas for the normalized planar coordinate's real and imaginary parts simplified the distance expression."}
       {:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
        :exit 1,
        :finding
-       "After correcting the domain, fun_prop did not use the separately banked continuity theorem for the ambient torus reconstruction hidden under the inverse ContinuousMap. Factoring the time, source, and reconstructed-target functions and composing the explicit continuity theorems corrected the proof."}],
+       "The initial coordinate formulas still left the real scalar action under complex projections and the final denominator did not syntactically match the nonzero folded planar norm. Rewriting the scalar projection before unfolding, deriving the expanded nonzero norm, clearing denominators, and normalizing the remaining commutative products completed the proof."}],
+     :fixture
+     {:path "/tmp/t02a03_geometric_tube_cover.lean",
+      :sha256
+      "fba4095e6b8dc50b136e0faef5467b00edeabf767d499636c26857a8a6fb2a63"},
      :finding
-     "The full punctured-left-tube HomotopyEquiv remains absent, but a continuous ambient comparison path with the correct endpoints is now compiled. apm_t02a03_leftTubeRadialPoint takes the affine interpolation from the reconstructed fixed-normal-radius point at time zero to the original punctured-tube point at time one. Its continuity is assembled explicitly from the continuous torus-coordinate map, bundled inverse, subtype inclusions, scalar multiplication, and addition. The endpoint theorems reduce definitionally. What remains is geometric: prove every interpolated point remains in the frozen left tube and outside the frozen core before bundling the homotopy.",
-     :residual
-     "Bank the continuous ambient interpolation and endpoints. Then prove left-tube membership and deleted-core exclusion for every intermediate point, bundle the interpolation into LeftTubeMinusCore as the inverse-after-forward homotopy, and assemble the HomotopyEquiv.",
-     :prerequisite
-     {:bounded-exception
-      "single-consumer continuous ambient radial interpolation for the t02A03 punctured left tube",
-      :consumer :t02A03,
-      :phase :probe,
-      :state :open,
-      :scope [],
-      :dag-node
-      "TOPOLOGY-ROUTES.md/t02A03/left-tube-radial-ambient-interpolation",
-      :acceptance
-      {:probe
-       "Compile and bank apm_t02a03_leftTubeRadialPoint, apm_t02a03_continuous_leftTubeRadialPoint, apm_t02a03_leftTubeRadialPoint_zero, and apm_t02a03_leftTubeRadialPoint_one from /tmp/t02a03_geometric_tube_cover.lean. Define the affine interpolation in the ambient Euclidean space from the inverse reconstruction of a point's torus coordinates at time zero to the original point at time one, prove it continuous from the banked forward and inverse coordinate maps, and prove both endpoint identities. This supplies the ambient map underlying the complement-side comparison; do not yet claim intermediate left-tube membership, deleted-core exclusion, the bundled homotopy, HomotopyEquiv, or gluing.",
-       :declarations
-       ["apm_t02a03_leftTubeRadialPoint"
-        "apm_t02a03_continuous_leftTubeRadialPoint"
-        "apm_t02a03_leftTubeRadialPoint_zero"
-        "apm_t02a03_leftTubeRadialPoint_one"],
-       :placeholder "the sole sorry in apm_t02a03",
-       :route-step
-       "t02A03 step 2, construct the continuous ambient inverse-after-forward interpolation with its endpoints"},
-      :id
-      :routes-2026-10-10-t02a03-left-tube-radial-ambient-interpolation-topo2-r1,
-      :kind :reusable-theorem,
-      :depends-on
-      [:routes-2026-10-10-checkpoint-topo2-r5
-       :routes-2026-10-10-t02a03-left-tube-normal-radius-bound-topo2-r1],
-      :current-residual
-      "Prove the ambient interpolation stays inside the frozen left-tube complement, bundle it as the inverse-after-forward homotopy, and assemble the torus HomotopyEquiv.",
-      :other-consumers []}}},
+     "The full punctured-left-tube HomotopyEquiv remains absent, but the exact shared-center distance identity needed for the ambient interpolation is now compiled. For any point in the frozen left tube, apm_t02a03_dist_leftTubePoint_angularCore identifies its Euclidean distance to the frozen core point selected by apm_t02a03_leftTubeAngular with the norm of apm_t02a03_leftTubeNormalComplex. The proof computes the normalized planar coordinate, clears its nonzero norm denominator, and compares the Euclidean and complex squared norms. Together with the banked 1/4 normal bound, this places the original endpoint in the radius-1/4 closed ball about the same angular core point as the fixed-radius reconstruction.",
+     :seat "topo-8"}},
    :phase :probe,
    :type
    "Nonempty (ContinuousMap.HomotopyEquiv LeftTubeMinusCore ConstructionTargets.TorusCircleWedgeOpenCover.Torus)",
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-punctured-model",
    :acceptance
@@ -61674,7 +61704,8 @@
     :routes-2026-10-10-t02a03-left-tube-forward-inverse-identity-topo2-r1
     :routes-2026-10-10-t02a03-left-tube-planar-reverse-triangle-topo2-r1
     :routes-2026-10-10-t02a03-left-tube-normal-radius-bound-topo2-r1
-    :routes-2026-10-10-t02a03-left-tube-radial-ambient-interpolation-topo2-r1],
+    :routes-2026-10-10-t02a03-left-tube-radial-ambient-interpolation-topo2-r1
+    :routes-2026-10-10-t02a03-left-tube-angular-core-distance-topo2-r1],
    :current-residual
    "After the punctured-left-tube model is banked, construct the right-tube-minus-deleted-attachment model extending the based core homotopy, then overlap compatibility and gluing for the full geometricY equivalence.",
    :other-consumers []}
