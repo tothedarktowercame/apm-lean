@@ -62871,52 +62871,66 @@
    "single-consumer bundled deleted-core radial map for t02A03",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:residual
-     "Prove the radial map endpoint equalities, bundle the inverse-after-forward homotopy, and assemble the torus HomotopyEquiv.",
-     :outcome :go,
-     :warnings
-     ["/tmp/t02a03_geometric_tube_cover.lean:786:38: Used tac1 <;> tac2 where (tac1; tac2) would suffice"],
-     :missing-theorems
-     [{:name "apm_t02a03_leftTubeRadialMap",
-       :type
-       "C(unitInterval × apm_t02a03_LeftTubeMinusCore, apm_t02a03_LeftTubeMinusCore)",
-       :status :proved,
-       :consumers [:t02A03],
-       :depends-on
-       ["apm_t02a03_leftTubeRadialPoint_not_mem_leftCore"]}],
-     :commands
-     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "apm_t02a03_leftTubeRadialMap compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
-       :exit 0}
-      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "b06736dddeefb568a7555caf9c0051824b33e0c095b0827de9cd0e03d0f059fc  /tmp/t02a03_geometric_tube_cover.lean"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :fixture
-     {:path "/tmp/t02a03_geometric_tube_cover.lean",
-      :sha256
-      "b06736dddeefb568a7555caf9c0051824b33e0c095b0827de9cd0e03d0f059fc"},
-     :finding
-     "The placeholder-free fixture defines a continuous radial interpolation map with codomain LeftTubeMinusCore. Its subtype obligations use the banked left-tube membership and deleted-core exclusion theorems, so every interpolated point remains in the required punctured tube.",
-     :implementation
-     {:scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
-      :declaration
-      "ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_leftTubeRadialMap",
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Prove the radial map endpoint equalities, bundle the inverse-after-forward homotopy, and assemble the torus HomotopyEquiv.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["/tmp/t02a03_geometric_tube_cover.lean:786:38: unnecessarySeqFocus linter warning in a previously banked theorem; scoped module compiles without warnings"],
+    :missing-theorems
+    [{:name "apm_t02a03_leftTubeRadialMap",
       :type
-      "C(unitInterval × apm_t02a03_LeftTubeMinusCore, apm_t02a03_LeftTubeMinusCore)"},
-     :seat "topo-8"}},
+      "C(unitInterval × apm_t02a03_LeftTubeMinusCore, apm_t02a03_LeftTubeMinusCore)",
+      :status :proved,
+      :consumers [:t02A03],
+      :depends-on
+      ["apm_t02a03_leftTubeRadialPoint_not_mem_leftCore"]}],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not",
+     :fixture-sha256
+     "b06736dddeefb568a7555caf9c0051824b33e0c095b0827de9cd0e03d0f059fc"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean", :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03LeftTubePuncturedModel.lean",
+      :exit 0}
+     {:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+      :exit 0}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03LeftTubePuncturedModel.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git rev-parse 2cb99ea1 && git diff-tree --no-commit-id --name-only -r 2cb99ea1",
+      :exit 0,
+      :output
+      "2cb99ea123dda905a34192b2bd74a8d5e100486f\nConstructionTargets/T02A03LeftTubePuncturedModel.lean"}
+     {:cmd "git show --check --oneline 2cb99ea1", :exit 0}],
+    :commit "2cb99ea123dda905a34192b2bd74a8d5e100486f",
+    :changed-paths
+    ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
+    :fixture
+    {:path "/tmp/t02a03_geometric_tube_cover.lean",
+     :sha256
+     "b06736dddeefb568a7555caf9c0051824b33e0c095b0827de9cd0e03d0f059fc"},
+    :finding
+    "Banked a ContinuousMap into LeftTubeMinusCore whose subtype proofs are the established radial left-tube membership and deleted-core exclusion, with continuity inherited from the ambient interpolation.",
+    :implementation
+    {:scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
+     :declarations
+     ["ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_leftTubeRadialMap"],
+     :type
+     "C(unitInterval × apm_t02a03_LeftTubeMinusCore, apm_t02a03_LeftTubeMinusCore)"},
+    :seat "topo-6"},
    :phase :implementation,
    :type
    "C(unitInterval × apm_t02a03_LeftTubeMinusCore, apm_t02a03_LeftTubeMinusCore)",
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-radial-map",
    :acceptance
