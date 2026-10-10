@@ -28,7 +28,19 @@ keep track of the priority of lemmas"). The ledger holds rows of kind `:lemma`
    ranks backlog lemmas: ready ones (dependencies banked) first, then by
    how many open registered problems each unblocks, then by how close those
    problems are to closing. Put the top of that ranking in your `:finding`.
-2. Maintain the DAG: return `:lemmas` (same map shape as `:missing-theorems`,
+   Last it prints AREAS across both loops: each theory area (a shared tag
+   from TOPOLOGY-ROUTES.md, or a lemma's `:area`) with the open registered
+   problems it serves -- including the other loop's and unassigned ones --
+   its banked/backlog lemmas and its ConstructionTargets modules.
+   BALANCE (Joe, 2026-10-10): per-problem readiness finishes problems that
+   are nearly closed, but a single problem can absorb lemma after lemma.
+   Elect at most one closure-directed row per checkpoint (rule 0); fill the
+   remaining slots from the highest-impact areas that serve at least one of
+   this loop's problems, building each area's results once, in one
+   ConstructionTargets module per area, at the generality its problems use.
+2. Maintain the DAG: every lemma carries `:area`; tag any lemma printed as
+   UNTAGGED (prefer an existing TOPOLOGY-ROUTES.md tag; reuse one spelling
+   per area). Return `:lemmas` (same map shape as `:missing-theorems`,
    with `:depends-on` names) to add lemmas a route needs, split a lemma that
    is too large for one row into smaller ones it depends on, or add edges.
    On the first checkpoint after 2026-10-10, also import the non-BANKED nodes
@@ -195,7 +207,8 @@ receipt's `:missing-theorems` vector, one map per theorem:
      :type "<full Lean statement>"
      :status :proved | :partial | :not-started
      :consumers [:t99J01]
-     :depends-on ["<names of other missing theorems this one needs>"]}
+     :depends-on ["<names of other missing theorems this one needs>"]
+     :area "<theory area: a TOPOLOGY-ROUTES.md shared tag, e.g. covering-subgroup-correspondence>"}
 
 Each entry becomes (or updates) a node in the ledger's lemma DAG, matched by
 name. `:status :proved` banks that node when this row's review passes.

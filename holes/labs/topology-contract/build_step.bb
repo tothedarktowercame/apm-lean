@@ -427,7 +427,7 @@
                                   :acceptance {:lemma (str nm)}
                                   :lemma {:name (str nm) :reported-by []}}))
                         lid))]
-        (doseq [{:keys [name type status consumers depends-on]} entries]
+        (doseq [{:keys [name type status consumers depends-on area]} entries]
           (let [consumers (vec (distinct (keep #(when % (keyword (str/replace (str %) #"^:" ""))) consumers)))
                 lid (ensure! name consumers)]
             (swap! idx update lid
@@ -442,6 +442,8 @@
                          (and (not (str/blank? (str type))) (str/blank? (str (get-in n [:lemma :type]))))
                          (-> (assoc-in [:lemma :type] (str type))
                              (assoc-in [:acceptance :type] (str type)))
+                         (and (not (str/blank? (str area))) (nil? (get-in n [:lemma :area])))
+                         (assoc-in [:lemma :area] (str area))
                          (and (= :proved (keyword (str/replace (str status) #"^:" "")))
                               (= :backlog (:state n)))
                          (assoc-in [:lemma :proved-in] source-id)))))
@@ -494,6 +496,61 @@
                        :waits-on (vec (remove #(satisfied-states (:state (idx %))) (:depends-on l)))
                        :closest (or (some->> (seq (unblocks (:id l))) (map remaining) (apply min)) 0)}))
          (sort-by (juxt #(if (:ready %) 0 1) #(- (count (:unblocks %))) :closest :name)))))
+
+;; Theory areas across problems (Joe, 2026-10-10: "the DAG should still
+;; collect lemmas and theoretical areas (ConstructionTargets) of maximum impact
+;; across problems"). Per-problem readiness finishes nearly-closed problems;
+;; this view ranks AREAS by how many open registered problems they serve,
+;; across both ledgers and the unassigned HEAVY list. An area is a shared tag
+;; from TOPOLOGY-ROUTES.md's problem tables (or a lemma's own :area); its
+;; modules are the ConstructionTargets files its banked lemmas committed.
+(def routes-file (io/file (or (:canonical-root data) (.getCanonicalPath (io/file here "../../.."))) "TOPOLOGY-ROUTES.md"))
+(defn route-tags
+  "tag -> #{problem}, from every TOPOLOGY-ROUTES.md table row with an id
+   column and a shared-tags column."
+  []
+  (if-not (.exists routes-file)
+    {}
+    (reduce
+     (fn [m line]
+       (let [cells (map str/trim (str/split (str/replace line #"^\||\|$" "") #"\|"))]
+         (if (and (<= 3 (count cells)) (re-matches #"t[a-z0-9]{2}[AJ]\d\d|tunk\d\d" (first cells)))
+           (reduce (fn [m piece]
+                     (if-let [tag (re-find #"[a-z0-9]+(?:-[a-z0-9]+)+"
+                                           (-> piece (str/replace "`" "") (str/replace #"\(.*?\)" "")))]
+                       (update m tag (fnil conj #{}) (first cells))
+                       m))
+                   m (str/split (last cells) #","))
+           m)))
+     {} (str/split-lines (slurp routes-file)))))
+(defn- commit-modules [sha]
+  (when sha
+    (->> (str/split-lines (:out (shell/sh "git" "show" "--pretty=" "--name-only" sha
+                                          :dir (:canonical-root data))))
+         (filter #(re-matches #"ConstructionTargets/.*\.lean" %)) set)))
+(defn areas
+  "Areas ranked by open registered problems served, over both ledgers."
+  []
+  (let [ledgers (distinct [path (str here "/worklist.edn") (str here "/worklist2.edn")])
+        lemmas (for [l ledgers :when (.exists (io/file l))
+                     i (:items (edn/read-string (slurp l))) :when (= :lemma (:kind i))]
+                 (assoc i ::ledger (.getName (io/file l))))
+        tags (route-tags)
+        open? (memoize (fn [p] (boolean (and (@registered-problems p) (some-> (placeholder-count p) pos?)))))
+        lemma-area (fn [l] (or (get-in l [:lemma :area]) (some-> (get-in l [:lemma :banked-commit]) commit-modules sort first) "untagged"))
+        grouped (group-by lemma-area lemmas)
+        names (sort (set (concat (keys tags) (keys grouped))))]
+    (->> (for [a names
+               :let [ls (grouped a)
+                     probs (set (concat (tags a) (keep problem-of (mapcat #(cons (:consumer %) (:other-consumers %)) ls))))
+                     open (sort (filter open? probs))]
+               :when (or (seq open) (seq ls))]
+           {:area a :open-problems (count open) :problems (vec open)
+            :banked (count (filter #(= :banked (:state %)) ls))
+            :backlog (count (filter #(= :backlog (:state %)) ls))
+            :ledgers (vec (sort (set (map ::ledger ls))))
+            :modules (vec (sort (set (mapcat #(commit-modules (get-in % [:lemma :banked-commit])) ls))))})
+         (sort-by (juxt #(- (:open-problems %)) #(- (:backlog %)) :area)))))
 
 (defn apply-result! []
   (let [id (keyword (nth *command-line-args* 2 ""))
@@ -862,7 +919,20 @@
                          :banked (count (filter #(= :banked (:state %)) mine))
                          :backlog waiting
                          :route (if (zero? waiting) :COMPLETE-elect-closure-adapter-now :open)}))
-                 (doseq [p (priorities items)] (prn p)))
+                 ;; Within the ready lemmas, a lemma in a wider area ranks
+                 ;; first: building it advances that area for every problem
+                 ;; it serves, in either loop.
+                 (let [as (areas)
+                       impact (into {} (map (juxt :area :open-problems) as))
+                       ls (into {} (map (juxt :id identity) (filter #(= :lemma (:kind %)) items)))]
+                   (doseq [p (sort-by (juxt #(if (:ready %) 0 1) #(- (:area-open %)) #(- (count (:unblocks %))) :closest :name)
+                                      (map #(let [a (get-in (ls (:id %)) [:lemma :area])]
+                                              (assoc % :area (or a "UNTAGGED: give it an :area") :area-open (get impact a 0)))
+                                           (priorities items)))]
+                     (prn p))
+                   (println ";; AREAS across both loops (open problems served, lemmas, modules):")
+                   (doseq [a (take 25 as)] (prn a))))
+  "areas" (doseq [a (areas)] (prn a))
   ;; Owner edits to the lemma DAG go through the same upsert and validation as
   ;; receipts: `add-lemmas LEDGER FILE`, FILE holding a vector of entries.
   "add-lemmas" (let [entries (edn/read-string (slurp (nth *command-line-args* 2)))]
