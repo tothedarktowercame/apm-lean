@@ -43,4 +43,29 @@ theorem apm_t02a03_W_eq_leftTube_union_rightTube :
     (Metric.infEDist_ne_top apm_t02a03_genusTwoSpine_nonempty) (by finiteness)]
   norm_num
 
+theorem apm_t02a03_leftCore_zero :
+    apm_t02a03_leftCore 0 = (0 : apm_t02a03_E3) := by
+  ext i
+  fin_cases i <;> simp [apm_t02a03_leftCore]
+
+theorem apm_t02a03_rightCore_zero :
+    apm_t02a03_rightCore 0 = (0 : apm_t02a03_E3) := by
+  ext i
+  fin_cases i <;> simp [apm_t02a03_rightCore]
+
+/-- The Euclidean origin is the common attachment point of the two core
+circles in the frozen figure-eight geometry. -/
+theorem apm_t02a03_origin_mem_both_cores :
+    (0 : apm_t02a03_E3) ∈ Set.range apm_t02a03_leftCore ∩
+      Set.range apm_t02a03_rightCore := by
+  exact ⟨⟨0, apm_t02a03_leftCore_zero⟩,
+    ⟨0, apm_t02a03_rightCore_zero⟩⟩
+
+theorem apm_t02a03_origin_mem_both_tubes :
+    (0 : apm_t02a03_E3) ∈ apm_t02a03_leftTube ∩ apm_t02a03_rightTube := by
+  exact ⟨Metric.self_subset_cthickening _
+      apm_t02a03_origin_mem_both_cores.1,
+    Metric.self_subset_cthickening _
+      apm_t02a03_origin_mem_both_cores.2⟩
+
 end ConstructionTargets.T02A03GeometricTubeCover
