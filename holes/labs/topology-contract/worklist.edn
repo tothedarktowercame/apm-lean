@@ -97146,6 +97146,20 @@
      {:cmd "git status --short",
       :exit 0,
       :finding "clean worktree after commit"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791658020634-2715-d244ed6a",
+     :commands
+     ["git show d7b97cf27c709cfd713f6f518c93295b9849acd3 -- ConstructionTargets/PointWedgePathConnected.lean"
+      "git diff --exit-code d7b97cf27c709cfd713f6f518c93295b9849acd3 -- ConstructionTargets/PointWedgePathConnected.lean"
+      "lake build ConstructionTargets.PointWedgePathConnected"
+      "sha256sum /tmp/point-wedge-path-connected.lean && lake env lean /tmp/point-wedge-path-connected.lean"
+      "placeholder census on source, fixture, and problems/t99J01/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb on recorded ledger at 6797aae2"],
+     :finding
+     "PASS: reviewer codex-3 verified recorded commit d7b97cf2 changes only PointWedgePathConnected.lean and the source equals that commit. Canonical packages resolve correctly; the frozen fixture hash is exact; target and fixture compile with zero placeholders; t99J01 retains exactly one placeholder; wedgePoint_eq uses only Quot.sound and the path-connectedness declarations use only propext, Classical.choice, and Quot.sound; all 131 registered statements and the recorded 869-item ledger validate. wedgePoint_eq has the correct orientation from the left chosen representative to the right. For a left representative, a path from x0 is mapped through the quotient; for a right representative, a path from y0 is mapped and its source is cast across wedgePoint_eq. Quotient surjectivity covers every wedge point, yielding IsPathConnected univ and the PathConnectedSpace instance. The module correctly does not construct collapse-fiber paths, lift cyclic paths, count sheets, compute subgroup index, or close t99J01."},
     :commit "d7b97cf27c709cfd713f6f518c93295b9849acd3",
     :changed-paths
     ["ConstructionTargets/PointWedgePathConnected.lean"],
@@ -97162,7 +97176,7 @@
       "ConstructionTargets.PointWedgePathConnected.wedgePathConnectedSpace"]},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/PointWedgePathConnected.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/cyclic-three-circles-cover/point-wedge-path-connected",
@@ -97279,7 +97293,7 @@
       "wedgePoint_eq identifies the chosen representatives; wedge_isPathConnected and wedgePathConnectedSpace prove a point wedge of path-connected spaces is path connected."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/cyclic-three-circles-cover",
@@ -98775,7 +98789,7 @@
    :other-consumers []}
   {:consumer :t99J01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "PointWedgePathConnected.wedgePathConnectedSpace",
@@ -98786,7 +98800,9 @@
     :reported-by [:routes-2026-10-10-point-wedge-path-connected-44],
     :type
     "For path-connected pointed spaces X and Y, PointWedgeQuotient.Wedge x₀ y₀ has a PathConnectedSpace instance",
-    :proved-in :routes-2026-10-10-point-wedge-path-connected-44},
+    :proved-in :routes-2026-10-10-point-wedge-path-connected-44,
+    :banked-by :routes-2026-10-10-point-wedge-path-connected-44,
+    :banked-commit "d7b97cf27c709cfd713f6f518c93295b9849acd3"},
    :id :lemma-pointwedgepathconnected-wedgepathconnectedspace,
    :kind :lemma,
    :depends-on
