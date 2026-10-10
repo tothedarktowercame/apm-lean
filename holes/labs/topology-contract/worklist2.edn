@@ -65834,6 +65834,20 @@
       "git show --check --oneline 5d6d2913b25703b7048f56781752b7a09fa3a062",
       :exit 0,
       :output "5d6d2913 Prove t02A03 ambient normal zero locus"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791667767641-2987-4647bf64",
+     :commands
+     ["git show --format=fuller --stat 5d6d2913b25703b7048f56781752b7a09fa3a062 && git diff-tree --no-commit-id --name-status -r 5d6d2913b25703b7048f56781752b7a09fa3a062 && git show --check --oneline 5d6d2913b25703b7048f56781752b7a09fa3a062"
+      "sha256sum /tmp/t02a03_ambient_normal_zero_contract.lean"
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean"
+      "lake env lean /tmp/t02a03_ambient_normal_zero_contract.lean"
+      "python3 scripts/statement-registry.py check --rev 5d6d2913b25703b7048f56781752b7a09fa3a062"
+      "python3 scripts/statement-registry.py fingerprint --rev 5d6d2913b25703b7048f56781752b7a09fa3a062 t02A03"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"],
+     :finding
+     "PASS: commit 5d6d2913 changes exactly ConstructionTargets/T02A03GeometricTubeDeformation.lean; recorded and current blob are 53571954f211aff4f36b8669ac2ae00c5c0ef937. Fixture SHA-256 exactly matches 2e7d62cc8635485f34c9112abf1d8e03058d1cf262a8e1925d2aacbf1a488566. Module and fixture compile with only propext, Classical.choice, and Quot.sound and no new sorry, admit, or axiom. The biconditional has the required ambient orientation: rightTubeNormalComplex p = 0 iff p lies in range leftCore; the forward proof reconstructs the left-core parameter with Complex.arg, and the reverse substitutes the frozen core parametrization. This crosses no subtype boundary and provides exactly the nonvanishing certificate needed after deleting leftCore. Registry is 131/0; worklist validates; t02A03 retains one comment-stripped sorry and fingerprint d123afd5ae0ee067587b3ed3d7b9b6d2f075c3d95701e098ec357c7317cd34c3."},
     :commit "5d6d2913b25703b7048f56781752b7a09fa3a062",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
@@ -65845,7 +65859,7 @@
     "The radial-defect real coordinate and height imaginary coordinate vanish exactly on the frozen left core; Complex.arg reconstructs the core parameter in the forward direction.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/ambient-normal-zero-locus",
    :acceptance
@@ -65934,7 +65948,7 @@
      "The forward coordinate is normalization of rightTubeNormalComplex p = (norm((p0+1)+i*p1)-1)+i*p2. Its denominator is nonzero exactly because p is outside the left core. Existing apm_t02a03_leftTubeNormalComplex_eq_zero_iff proves this only for points already carrying left-tube membership, which right-tube points do not have. Generalizing that algebraic zero-locus lemma to ambient E3 is the single compiled prerequisite.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/right-tube-meridian-coordinate",
@@ -68752,7 +68766,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -68769,7 +68783,10 @@
     "forall p : apm_t02a03_E3, rightTubeNormalComplex p = 0 ↔ p ∈ Set.range apm_t02a03_leftCore",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-ambient-normal-zero-locus-topo2-r1},
+    :routes-2026-10-10-t02a03-ambient-normal-zero-locus-topo2-r1,
+    :banked-by
+    :routes-2026-10-10-t02a03-ambient-normal-zero-locus-topo2-r1,
+    :banked-commit "5d6d2913b25703b7048f56781752b7a09fa3a062"},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-righttubenormalcomplex-eq-zer,
    :kind :lemma,
