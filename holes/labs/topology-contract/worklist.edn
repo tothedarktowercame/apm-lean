@@ -84490,8 +84490,218 @@
      :review-outcomes]},
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+   :evidence
+   {:outcome :replan,
+    :seat "topo-4",
+    :commands
+    [{:cmd
+      "Read TOPOLOGY-ROUTES.md second refill and six routes entries",
+      :exit 0}
+     {:cmd
+      "Python comment-stripped census of t99J01,t92J06,t97A03,t93J03,t01A03,t97A01",
+      :exit 0,
+      :finding
+      {:t99J01 1,
+       :t92J06 1,
+       :t97A03 3,
+       :t93J03 1,
+       :t01A03 1,
+       :t97A01 1,
+       :total 8}}
+     {:cmd
+      "lake env lean ConstructionTargets/TwoOpenFreeProductMapping.lean and related banked wedge modules",
+      :exit 0,
+      :finding
+      "The generic two-open free-product group theorem and torus-circle wedge groupoid machinery compile with standard axioms."}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :finding "695 items OK"}
+     {:cmd "git status --short",
+      :exit 0,
+      :finding
+      "Concurrent modification to ConstructionTargets/TorusPiOneWindingCoordinates.lean; this read-only strategy invocation did not touch it."}],
+    :finding
+    {:placeholder-delta {:baseline 8, :current 8, :delta 0},
+     :typed-residual-change
+     "Six registered covering and van Kampen consumers enter topo1 with eight placeholders; the earlier twenty holds remain unchanged.",
+     :infrastructure-packets
+     {:banked-reused 6, :new-this-checkpoint 0},
+     :review-outcomes
+     {:earlier-twenty :preserved, :six-refill-consumers :new-open},
+     :routes
+     {:t99J01
+      {:placeholders 1,
+       :chain
+       ["three-circle wedge pi1"
+        "cover pi1 subgroup index"
+        "Schreier rank formula"
+        "path-component cover restriction"
+        "explicit connected graph cover"]},
+      :t92J06
+      {:placeholders 1,
+       :chain
+       ["point-wedge covering gluing"
+        "permutation covers"
+        "component and cut-point invariants"
+        "Cayley-tree cover"
+        "tree simple connectivity"]},
+      :t97A03
+      {:placeholders 3,
+       :chain
+       ["finite-identification quotient T2"
+        "sphere sheets and circle monodromy"
+        "model classification"
+        "model wedge pi1 and homology"
+        "transport and main assembly"]},
+      :t93J03
+      {:placeholders 1,
+       :chain
+       ["Klein deck action and polygon identification"
+        "deck-group pi1 theorem"
+        "Klein group normal form"
+        "covering lifting criterion"
+        "annulus cover embedding"]},
+      :t01A03
+      {:placeholders 1,
+       :chain
+       ["circle-wedge pi1"
+        "torus pi1 abelian banked coordinates"
+        "noncommuting free generators"
+        "wedge non-retraction"
+        "surface-circle collar and H1-zero"
+        "main assembly"]},
+      :t97A01
+      {:placeholders 1,
+       :chain
+       ["polygon quotient homeomorphism"
+        "polygon open cover and graph retraction"
+        "wedge3 pi1 and homology"
+        "boundary-word van Kampen"
+        "polygon Mayer-Vietoris"
+        "Smith quotients"
+        "assembly"]}},
+     :banked
+     {:two-open-free-product-group
+      "TwoOpenFreeProductMapping.groupEquivalence",
+      :two-open-groupoid "TwoOpenFundamentalGroupoidPseudopushout",
+      :point-span-comparison "TwoOpenPointSpanComparison",
+      :torus-circle-wedge
+      "TorusCircleWedgeOpenCover and TorusCircleWedgeFundamentalGroupoidSpan",
+      :torus-pi1 "TorusPiOneWindingCoordinates"},
+     :deferred
+     ["A new two-open van Kampen theorem is not elected because the generic free-product theorem is already banked."
+      "t93J03 deck-action work waits behind shared wedge steps."
+      "Schreier rank, infinite-tree simple connectivity, polygon geometry, and surface collar remain downstream."]},
+    :replacement-items
+    [{:consumer :t99J01,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/shared/finite-circle-wedge-fundamental-group",
+      :acceptance
+      {:probe
+       "Compile a placeholder-free finite-circle-wedge theorem identifying the fundamental group of an iterated point wedge of n circles with FreeGroup (Fin n), with representative inclusions and basepoint equations. Demonstrate n=2 on t01A03 and n=3 on t99J01, t97A01, and the model-invariant step of t97A03.",
+       :placeholder
+       "the single sorries in apm_t99j01, apm_t01a03, and apm_t97a01, plus apm_t97A03_bridge_invariants_of_model",
+       :route-step
+       "t99J01 step 1; t01A03 step 2; t97A01 steps 3-4 pi1 input; t97A03 step 8; optional t92J06 alternative pi1 route",
+       :gates
+       ["canonical packages"
+        "fixture compiles"
+        "zero fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :id :routes-2026-10-10-finite-circle-wedge-pi1-shared-1,
+      :kind :reusable-theorem,
+      :depends-on [:routes-2026-10-10-topo1-refill-covering-1],
+      :current-residual
+      "Specialize the banked two-open free-product theorem recursively to finite point wedges and normalize the result to FreeGroup (Fin n).",
+      :other-consumers [:t01A03 :t97A01 :t97A03 :t92J06]}
+     {:consumer :t92J06,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/shared/point-wedge-covering-gluing",
+      :acceptance
+      {:probe
+       "Compile a placeholder-free theorem gluing two circle coverings along a bijection of their fibers over the basepoint into a covering of the point wedge, with an explicit fiber equivalence and cardinality transport. Demonstrate it for t92J06 permutation covers and the cyclic graph-cover construction required by t99J01.",
+       :placeholder "the single sorries in apm_t92j06 and apm_t99j01",
+       :route-step
+       "t92J06 step 1; t99J01 step 5 covering construction",
+       :gates
+       ["canonical packages"
+        "fixture compiles"
+        "zero fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :id :routes-2026-10-10-point-wedge-covering-gluing-shared-1,
+      :kind :reusable-theorem,
+      :depends-on [:routes-2026-10-10-topo1-refill-covering-1],
+      :current-residual
+      "Prove local triviality at the wedge point for the quotient-glued total space and transport the source fiber cardinality.",
+      :other-consumers [:t99J01]}
+     {:consumer :t97A01,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/shared/finite-circle-wedge-integral-homology",
+      :acceptance
+      {:probe
+       "Compile integral singular homology of finite circle wedges at the exact ranks needed here: H0 is Z, H1 is Z^n, and higher homology vanishes. Demonstrate n=3 for the t97A01 polygon edge graph and the three-circle factor in the t97A03 model invariants.",
+       :placeholder
+       "the single sorry in apm_t97a01 and apm_t97A03_bridge_invariants_of_model",
+       :route-step
+       "t97A01 step 4 and MV input; t97A03 step 7 model-homology input",
+       :gates
+       ["canonical packages"
+        "fixture compiles"
+        "zero fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :id :routes-2026-10-10-finite-circle-wedge-homology-shared-1,
+      :kind :reusable-theorem,
+      :depends-on [:routes-2026-10-10-topo1-refill-covering-1],
+      :current-residual
+      "Iterate the banked point-wedge Mayer-Vietoris computation and expose the n=3 integral homology package.",
+      :other-consumers [:t97A03]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 3,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:strategy
+       "Measure the three shared covering and wedge rows, preserve earlier holds, recount the six refill consumers and eight placeholders, then elect the nearest adapters or next shared steps."},
+      :id :routes-2026-10-10-checkpoint-topo1-covering-shared-three-1,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:routes-2026-10-10-finite-circle-wedge-pi1-shared-1
+       :routes-2026-10-10-point-wedge-covering-gluing-shared-1
+       :routes-2026-10-10-finite-circle-wedge-homology-shared-1],
+      :current-residual
+      "Review the three highest-coverage shared steps and refill toward consumer adapters.",
+      :other-consumers []}],
+    :author "topo-4",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -84502,6 +84712,112 @@
    :depends-on [:routes-2026-10-10-checkpoint-topo1-rp3-covering-1],
    :current-residual
    "Owner refill 2026-10-10 (claude-14 overnight, Joe: progress by morning): topo1 checkpoint rp3-covering-1 found all eight 09-29 problems held by stop-after-two or reviewed STOPs. topo1 now takes six covering / van Kampen problems from the unassigned HEAVY list: t99J01, t92J06, t97A03, t93J03, t01A03, t97A01. All six statements are registered; 8 sorries in total.",
+   :other-consumers []}
+  {:consumer :t99J01,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/shared/finite-circle-wedge-fundamental-group",
+   :acceptance
+   {:probe
+    "Compile a placeholder-free finite-circle-wedge theorem identifying the fundamental group of an iterated point wedge of n circles with FreeGroup (Fin n), with representative inclusions and basepoint equations. Demonstrate n=2 on t01A03 and n=3 on t99J01, t97A01, and the model-invariant step of t97A03.",
+    :placeholder
+    "the single sorries in apm_t99j01, apm_t01a03, and apm_t97a01, plus apm_t97A03_bridge_invariants_of_model",
+    :route-step
+    "t99J01 step 1; t01A03 step 2; t97A01 steps 3-4 pi1 input; t97A03 step 8; optional t92J06 alternative pi1 route",
+    :gates
+    ["canonical packages"
+     "fixture compiles"
+     "zero fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-10-finite-circle-wedge-pi1-shared-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-10-10-topo1-refill-covering-1
+    :routes-2026-10-10-topo1-refill-covering-1],
+   :current-residual
+   "Specialize the banked two-open free-product theorem recursively to finite point wedges and normalize the result to FreeGroup (Fin n).",
+   :other-consumers [:t01A03 :t97A01 :t97A03 :t92J06]}
+  {:consumer :t92J06,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md/shared/point-wedge-covering-gluing",
+   :acceptance
+   {:probe
+    "Compile a placeholder-free theorem gluing two circle coverings along a bijection of their fibers over the basepoint into a covering of the point wedge, with an explicit fiber equivalence and cardinality transport. Demonstrate it for t92J06 permutation covers and the cyclic graph-cover construction required by t99J01.",
+    :placeholder "the single sorries in apm_t92j06 and apm_t99j01",
+    :route-step "t92J06 step 1; t99J01 step 5 covering construction",
+    :gates
+    ["canonical packages"
+     "fixture compiles"
+     "zero fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-10-point-wedge-covering-gluing-shared-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-10-10-topo1-refill-covering-1
+    :routes-2026-10-10-topo1-refill-covering-1],
+   :current-residual
+   "Prove local triviality at the wedge point for the quotient-glued total space and transport the source fiber cardinality.",
+   :other-consumers [:t99J01]}
+  {:consumer :t97A01,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/shared/finite-circle-wedge-integral-homology",
+   :acceptance
+   {:probe
+    "Compile integral singular homology of finite circle wedges at the exact ranks needed here: H0 is Z, H1 is Z^n, and higher homology vanishes. Demonstrate n=3 for the t97A01 polygon edge graph and the three-circle factor in the t97A03 model invariants.",
+    :placeholder
+    "the single sorry in apm_t97a01 and apm_t97A03_bridge_invariants_of_model",
+    :route-step
+    "t97A01 step 4 and MV input; t97A03 step 7 model-homology input",
+    :gates
+    ["canonical packages"
+     "fixture compiles"
+     "zero fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-10-finite-circle-wedge-homology-shared-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-10-10-topo1-refill-covering-1
+    :routes-2026-10-10-topo1-refill-covering-1],
+   :current-residual
+   "Iterate the banked point-wedge Mayer-Vietoris computation and expose the n=3 integral homology package.",
+   :other-consumers [:t97A03]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 3,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:strategy
+    "Measure the three shared covering and wedge rows, preserve earlier holds, recount the six refill consumers and eight placeholders, then elect the nearest adapters or next shared steps."},
+   :id :routes-2026-10-10-checkpoint-topo1-covering-shared-three-1,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:routes-2026-10-10-finite-circle-wedge-pi1-shared-1
+    :routes-2026-10-10-point-wedge-covering-gluing-shared-1
+    :routes-2026-10-10-finite-circle-wedge-homology-shared-1
+    :routes-2026-10-10-topo1-refill-covering-1],
+   :current-residual
+   "Review the three highest-coverage shared steps and refill toward consumer adapters.",
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
