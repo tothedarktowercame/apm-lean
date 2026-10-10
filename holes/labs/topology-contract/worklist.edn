@@ -94444,6 +94444,20 @@
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791648895021-2371-6f97d59d",
+     :commands
+     ["git show acc68f5fd9e58b17c2f3b786ca9d47a1669f78e4 -- ConstructionTargets/KleinPlaneActionSquareOrbitClassification.lean"
+      "git diff --exit-code acc68f5fd9e58b17c2f3b786ca9d47a1669f78e4 -- ConstructionTargets/KleinPlaneActionSquareOrbitClassification.lean"
+      "lake build ConstructionTargets.KleinPlaneActionSquareOrbitClassification"
+      "sha256sum /tmp/klein-square-orbit-cases.lean && lake env lean /tmp/klein-square-orbit-cases.lean"
+      "placeholder census on source, fixture, and problems/t93J03"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb on recorded ledger at 1d2badf3"],
+     :finding
+     "PASS: reviewer codex-3 verified commit acc68f5f changes only KleinPlaneActionSquareOrbitClassification.lean and the compiled source equals the recorded commit. The frozen fixture hash is exact; target and fixture compile with zero placeholders; t93J03 retains its declared single placeholder; audited theorems report only propext, Classical.choice, and Quot.sound; all 131 registry statements and the recorded ledger validate. sameOrbit_cases correctly forces vertical shifts -1, 0, or 1, applies reflection to the two nonzero shifts and translation to zero, and retains every frozen edge and corner subcase. cases_sameOrbit reconstructs the corresponding coordinate group element, yielding the correctly oriented sameOrbit_iff_cases. The module only reexports the banked action, generator formulas, and representative theorem and forms no quotient, EqvGen comparison, or homeomorphism. The unreachable/unused ring warnings are non-failing tactic-style diagnostics."},
     :commit "acc68f5fd9e58b17c2f3b786ca9d47a1669f78e4",
     :changed-paths
     ["ConstructionTargets/KleinPlaneActionSquareOrbitClassification.lean"],
@@ -94468,7 +94482,7 @@
       "KleinSquareRepresentative.exists_closedSquare_smul"]},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/KleinPlaneActionSquareOrbitClassification.lean"],
    :dag-node
@@ -94500,7 +94514,7 @@
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -95015,7 +95029,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "kleinPlaneAction_squareOrbitClassification",
@@ -95029,7 +95043,10 @@
     :type
     "Classify equality of Klein plane-action orbits using the integer-pair normal form, including all representatives meeting the closed unit square and the edge/corner cases.",
     :proved-in
-    :routes-2026-10-10-klein-plane-action-square-orbit-classification-23},
+    :routes-2026-10-10-klein-plane-action-square-orbit-classification-23,
+    :banked-by
+    :routes-2026-10-10-klein-plane-action-square-orbit-classification-23,
+    :banked-commit "acc68f5fd9e58b17c2f3b786ca9d47a1669f78e4"},
    :id :lemma-kleinplaneaction-squareorbitclassification,
    :kind :lemma,
    :depends-on
