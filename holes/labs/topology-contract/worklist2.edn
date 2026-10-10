@@ -57680,17 +57680,61 @@
    "One placeholder: two explicit homotopy equivalences, with the punctured-disk factor adapter-sized and the geometric tube deformation still missing.",
    :other-consumers []}
   {:consumer :t95A04,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/rp2_smooth_atlas_two_consumers.lean",
+      :sha256
+      "03d4a02a3a89c52032180146ad97eb7f78661e27d9d41e23e6c73d5c9b1cee2d"},
+     :commands
+     [{:cmd "lake env lean /tmp/rp2_smooth_atlas_two_consumers.lean",
+       :exit 0,
+       :output
+       "rp2SmoothAtlasPacket and rp2SphereProjectionLocalDiffeomorph compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp2_smooth_atlas_two_consumers.lean || true)\"",
+       :exit 0}
+      {:cmd "sha256sum /tmp/rp2_smooth_atlas_two_consumers.lean",
+       :exit 0,
+       :output
+       "03d4a02a3a89c52032180146ad97eb7f78661e27d9d41e23e6c73d5c9b1cee2d  /tmp/rp2_smooth_atlas_two_consumers.lean"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :finding
+     "The requested shared RP2 atlas is already fully banked in ConstructionTargets.RealProjectiveSmoothTarget. The module constructs quotient charts from local inverse branches, proves their transition compatibility using the identity-or-antipodal local normal form, supplies the IsManifold instance, proves sphereProjection is a local diffeomorphism, and packages these results as rpSmoothAtlas. The consumer-facing fixture instantiates that atlas and checks its exact quotient_localDiffeomorph field.",
+     :residual
+     "Use rpSmoothAtlas in t95A04 to descend and prove the Veronese embedding and immersion; use the same atlas in t96A07 to descend the quadratic map and prove the stated transversality claims.",
+     :implementation
+     {:scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
+      :acceptance
+      {:declarations
+       ["rpSmoothAtlas"
+        "rpSmoothAtlas_exists"
+        "sphereProjectionQuotientLocalDiffeomorph"],
+       :placeholder
+       "the sole sorry in apm_t95a04 and the sole sorry in apm_t96a07",
+       :route-step
+       "t95A04 step 1 and t96A07 step 1, shared RP2 smooth atlas",
+       :note
+       "The scoped module already contains the complete compiled packet; implementation should bank or confirm these exact declarations without changing registered consumer statements."}}}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/shared/rp-smooth-atlas",
    :acceptance
-   {:probe
-    "Compile a placeholder-free rpSmoothAtlas 2 packet for the frozen projective quotient used by t95A04 and t96A07. Build hemisphere charts compatible with the coinduced topology, prove smooth transition maps, and prove sphereProjection is a local diffeomorphism. Supply t95A04 route step 1 and t96A07 route step 1 only; do not claim either consumer's descended-map conclusions.",
+   {:declarations
+    ["rpSmoothAtlas"
+     "rpSmoothAtlas_exists"
+     "sphereProjectionQuotientLocalDiffeomorph"],
     :placeholder
     "the sole sorry in apm_t95a04 and the sole sorry in apm_t96a07",
     :route-step
-    "t95A04 step 1 and t96A07 step 1, shared RP2 smooth atlas"},
+    "t95A04 step 1 and t96A07 step 1, shared RP2 smooth atlas",
+    :note
+    "The scoped module already contains the complete compiled packet; implementation should bank or confirm these exact declarations without changing registered consumer statements."},
    :id :routes-2026-10-10-rp2-smooth-atlas-two-consumers-topo2-r1,
    :kind :reusable-theorem,
    :depends-on [:routes-2026-10-10-checkpoint-topo2-r5],
