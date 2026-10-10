@@ -63874,53 +63874,79 @@
    "single-consumer identity-aligned frozen-torus Hurewicz coordinate for t97A04",
    :consumer :t97A04,
    :evidence
-   {:probe
-    {:residual
-     "Apply Hurewicz naturality with frozenLbarPi1Map_naturality, then transport the resulting additive-group H1 matrix equation through singularHomologyComparison_naturality to apm_t97A04_bridge_2.",
-     :outcome :go,
-     :warnings [],
-     :missing-theorems
-     [{:name
-       "ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusAlignedHurewiczCoordinate_apply",
-       :type
-       "forall q : Multiplicative (Fin 2 → ℤ), finiteFreeHurewiczCoordinateMulEquiv frozenTorusPi1Coord frozenTorusAlignedH1MulEquivFinTwo q = q",
-       :status :proved,
-       :consumers [:t97A04],
-       :depends-on
-       ["ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusH1MulEquivFinTwo"]}],
-     :commands
-     [{:cmd "lake env lean /tmp/t97a04_frozen_h1_coordinate.lean",
-       :exit 0,
-       :output
-       "frozenTorusAlignedH1MulEquivFinTwo and frozenTorusAlignedHurewiczCoordinate_apply compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t97a04_frozen_h1_coordinate.lean || true)\"",
-       :exit 0}
-      {:cmd "sha256sum /tmp/t97a04_frozen_h1_coordinate.lean",
-       :exit 0,
-       :output
-       "27220f9b2600be27f61c260ed07cf6c89e32cbac827bd4225f5b3e9dbd2be286  /tmp/t97a04_frozen_h1_coordinate.lean"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :fixture
-     {:path "/tmp/t97a04_frozen_h1_coordinate.lean",
-      :sha256
-      "27220f9b2600be27f61c260ed07cf6c89e32cbac827bd4225f5b3e9dbd2be286"},
-     :finding
-     "The placeholder-free fixture defines the H1 coordinate adjusted by the inverse finite-free Hurewicz automorphism and proves that Hurewicz becomes exactly the identity in Fin 2 integer coordinates. A direct product path construction supplies the required PathConnectedSpace instance.",
-     :implementation
-     {:scope ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"],
-      :declarations
-      ["ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusAlignedH1MulEquivFinTwo"
-       "ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusAlignedHurewiczCoordinate_apply"],
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Apply Hurewicz naturality with the aligned coordinate and frozenLbarPi1Map_naturality, then transport the resulting additive-group H1 equation through singularHomologyComparison_naturality to the ModuleCat bridge.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusAlignedHurewiczCoordinate_apply",
       :type
-      "forall q : Multiplicative (Fin 2 → ℤ), finiteFreeHurewiczCoordinateMulEquiv frozenTorusPi1Coord frozenTorusAlignedH1MulEquivFinTwo q = q"},
-     :seat "topo-8"}},
+      "forall q : Multiplicative (Fin 2 → ℤ), finiteFreeHurewiczCoordinateMulEquiv frozenTorusPi1Coord frozenTorusAlignedH1MulEquivFinTwo q = q",
+      :status :proved,
+      :consumers [:t97A04],
+      :depends-on
+      ["ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusH1MulEquivFinTwo"]}],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not",
+     :scoped-file-git-blob "0f7996cde075add8a90ea6f8df48de0980785f05",
+     :fixture-sha256
+     "27220f9b2600be27f61c260ed07cf6c89e32cbac827bd4225f5b3e9dbd2be286"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd "sha256sum /tmp/t97a04_frozen_h1_coordinate.lean",
+      :exit 0,
+      :output
+      "27220f9b2600be27f61c260ed07cf6c89e32cbac827bd4225f5b3e9dbd2be286  /tmp/t97a04_frozen_h1_coordinate.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/T97A04FrozenH1Coordinate.lean",
+      :exit 0}
+     {:cmd "lake env lean /tmp/t97a04_frozen_h1_coordinate.lean",
+      :exit 0,
+      :output
+      "frozenTorusAlignedHurewiczCoordinate_apply compiled; axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T97A04FrozenH1Coordinate.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git show --check --oneline HEAD",
+      :exit 0,
+      :output "9017080b Bank t97A04 aligned Hurewicz coordinate"}],
+    :diagnostic-history
+    [{:cmd
+      "readlink -f .lake/packages && test -L .lake/packages && lake env lean ConstructionTargets/T97A04FrozenH1Coordinate.lean",
+      :exit 1,
+      :finding
+      "The symlink preflight is required for frame worktrees, but this checkout is the canonical apm-lean package authority; short-circuiting prevented Lake from running."}
+     {:cmd
+      "lake env lean ConstructionTargets/T97A04FrozenH1Coordinate.lean",
+      :exit 1,
+      :finding
+      "The initial promotion omitted the fixture's direct PathConnectedSpace instance and AddCircle.Real import; copying those exact fixture components corrected instance synthesis, and the successful rerun is recorded in commands."}],
+    :commit "9017080b669f7525e9d82b8ee5b488b066c6d3cb",
+    :changed-paths
+    ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"],
+    :fixture
+    {:path "/tmp/t97a04_frozen_h1_coordinate.lean",
+     :sha256
+     "27220f9b2600be27f61c260ed07cf6c89e32cbac827bd4225f5b3e9dbd2be286"},
+    :finding
+    "The scoped module now supplies a direct path-connectedness instance for the frozen product torus, adjusts the raw H1 coordinate by the inverse finite-free Hurewicz coordinate automorphism, and proves that Hurewicz is exactly the identity in Fin 2 integer coordinates.",
+    :implementation
+    {:scope ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"],
+     :declarations
+     ["ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusAlignedH1MulEquivFinTwo"
+      "ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusAlignedHurewiczCoordinate_apply"]},
+    :seat "topo-6"},
    :phase :implementation,
    :type
    "forall q : Multiplicative (Fin 2 → ℤ), finiteFreeHurewiczCoordinateMulEquiv frozenTorusPi1Coord frozenTorusAlignedH1MulEquivFinTwo q = q",
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t97A04/frozen-h1-hurewicz-alignment",
    :acceptance
