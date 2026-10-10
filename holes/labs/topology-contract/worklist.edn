@@ -83339,120 +83339,72 @@
    "Prove the exact source-to-target iff classifications and derive the four closed relation graphs; the generic quotient Hausdorff theorem is already banked.",
    :other-consumers [:tunk01 :t91A02]}
   {:consumer :t94J09,
+   :stop-count 1,
    :evidence
-   {:probe
-    {:residual
-     "Exactly one representation-comparison prerequisite remains: classify the four needed EqvGen relations by their explicit finite classes and derive closed graphs. The banked compact closed-equivalence theorem then gives all required Hausdorff quotient instances; cut-and-paste, homology, and covering arithmetic remain downstream.",
-     :outcome :revise,
-     :warnings
-     [{:kind :interface-axiom,
-       :message
-       "The placeholder-free fixture uses one nonstandard axiom bundling the four exact closed-graph consequences. Once supplied, Hausdorffness of both fourteen-gon quotients and the genus-16/genus-8 Surface quotients is standard-only."}
-      {:kind :inherited-placeholder,
-       :message
-       "The temporary consumer oleans report the existing registered-theorem sorries; the fixture introduces no sorry and does not use those theorems."}],
-     :prerequisite
-     {:consumer :t94J09,
-      :phase :implementation,
-      :state :open,
-      :scope
-      ["ConstructionTargets/FinitePolygonEqvGenClassification.lean"
-       "problems/t94J09/lean/Main.lean"
-       "problems/tunk01/lean/Main.lean"
-       "problems/t91A02/lean/Main.lean"],
-      :dag-node
-      "TOPOLOGY-ROUTES.md/shared/finite-polygon-eqvgen-classification/exact-iff",
-      :acceptance
-      {:placeholder
-       "the single sorries in apm_t94j09, apm_tunk01, and apm_t91a02",
-       :route-step
-       "exact polygon relation closedness after the generic quotient theorem",
-       :declarations
-       ["finitePolygonEqvGen_iff_classes"
-        "apm_t94J09_polygonEqvGen_iff_finiteClasses"
-        "apm_tunk01_polygonEqvGen_iff_finiteClasses"
-        "surfaceRel_false16_eqvGen_iff_finiteClasses"
-        "surfaceRel_false8_eqvGen_iff_finiteClasses"
-        "finite_polygon_eqvgen_classification"],
-       :implementation
-       "Define a bounded generic finite-polygon presentation interface whose edge parametrizations are injective on open parameter intervals, whose distinct edge interiors are disjoint, and whose endpoint incidence is a finite corner relation. Prove by EqvGen induction and a converse generator argument that its equivalence closure is exactly the disjunction of equality for disk-interior points, the listed paired edge-interior points, and membership in the same computed finite vertex class. Instantiate it on the duplicate fourteen-edge t94J09/tunk01 generators and on SurfaceRel false 16 and false 8. Rewrite each relation graph by the exact iff; prove it closed as a finite union of closed diagonal, paired-edge image, and finite endpoint-class pieces. Bundle the four closedness theorems under finite_polygon_eqvgen_classification and apply ConstructionTargets.compact_closed_equivalence_quotient_t2. Do not alter registered declarations.",
-       :axioms :standard-only,
-       :fixture "/tmp/finite-polygon-eqvgen-classification-probe.lean",
-       :fixture-sha256
-       "61cb12a3d34a4074623aef406e063e89e111ba23b3dcb6eca66fc19a15eadc7b",
-       :commands
-       ["lake env lean ConstructionTargets/FinitePolygonEqvGenClassification.lean"
-        "lake env lean problems/t94J09/lean/Main.lean"
-        "lake env lean problems/tunk01/lean/Main.lean"
-        "lake env lean problems/t91A02/lean/Main.lean"
-        "LEAN_PATH=/tmp/polygon-eqvgen-probe lake env lean /tmp/finite-polygon-eqvgen-classification-probe.lean"
-        "python3 scripts/statement-registry.py check"]},
-      :representation
-      {:source
-       "Relation.EqvGen closures of apm_t94J09_PolygonRel, apm_tunk01_PolygonRel, and SurfaceRel false at genera 16 and 8",
-       :target
-       "Finite-class disjunctions consisting of equal disk-interior points, explicitly paired edge-interior points, and the computed finite endpoint vertex classes",
-       :direction
-       "Exact iff characterization from each source EqvGen relation to its target finite-class disjunction, followed by closed-graph transport from the target representation back to the source quotient relation"},
-      :id :routes-2026-10-10-finite-polygon-eqvgen-exact-iff-1,
-      :kind :representation-comparison,
-      :depends-on [],
-      :current-residual
-      "Prove the exact source-to-target iff classifications and derive the four closed relation graphs; the generic quotient Hausdorff theorem is already banked.",
-      :other-consumers [:tunk01 :t91A02]},
-     :axioms
-     ["propext"
-      "Classical.choice"
-      "Quot.sound"
-      "FinitePolygonEqvGenClassificationProbe.finite_polygon_eqvgen_classification"],
-     :commands
-     [{:cmd "stat -c '%F %n' .lake/packages",
-       :exit 0,
-       :finding
-       "directory .lake/packages; /home/joe/code/apm-lean is the canonical package authority checkout"}
-      {:cmd
-       "lake env lean -o /tmp/polygon-eqvgen-probe/T94J09Main.olean problems/t94J09/lean/Main.lean",
-       :exit 0,
-       :finding
-       "consumer compiles with its inherited registered-theorem placeholder"}
-      {:cmd
-       "lake env lean -o /tmp/polygon-eqvgen-probe/Tunk01Main.olean problems/tunk01/lean/Main.lean",
-       :exit 0,
-       :finding
-       "consumer compiles with its inherited registered-theorem placeholder"}
-      {:cmd
-       "LEAN_PATH=/tmp/polygon-eqvgen-probe lake env lean /tmp/finite-polygon-eqvgen-classification-probe.lean",
-       :exit 0,
-       :finding
-       "all four closed-graph consequences feed the banked compact closed-equivalence quotient theorem and produce T2Space instances"}
-      {:cmd
-       "sha256sum /tmp/finite-polygon-eqvgen-classification-probe.lean",
-       :exit 0,
-       :finding
-       "61cb12a3d34a4074623aef406e063e89e111ba23b3dcb6eca66fc19a15eadc7b"}
-      {:cmd
-       "Python comment-stripped placeholder census of /tmp/finite-polygon-eqvgen-classification-probe.lean",
-       :exit 0,
-       :finding "0"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :finding "131 registered statements match, 0 do not"}
-      {:cmd "git status --short", :exit 0, :finding "clean"}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/finite-polygon-eqvgen-classification-probe.lean",
-       :exit 1,
-       :finding
-       "problem Main files are not Lake modules under a Problems namespace",
-       :correction
-       "compiled the two consumer Main files to temporary named oleans and imported those names through a temporary LEAN_PATH; the successful compile is in commands"}],
-     :fixture
-     {:path "/tmp/finite-polygon-eqvgen-classification-probe.lean",
-      :sha256
-      "61cb12a3d34a4074623aef406e063e89e111ba23b3dcb6eca66fc19a15eadc7b"},
-     :seat "topo-4"}},
+   {:residual
+    "Build and compile the edgePoint open-interval injectivity/intersection theorem and finite endpoint-reachability EqvGen classification before retrying the four closed-graph transports and quotient applications.",
+    :outcome :stop,
+    :warnings
+    [{:kind :self-axiomatized-fixture,
+      :message
+      "Placeholder-free compilation does not satisfy standard-only axioms because the desired closed-graph result is assumed."}],
+    :disposition :stop,
+    :axioms
+    ["propext"
+     "Classical.choice"
+     "Quot.sound"
+     "finite_polygon_eqvgen_classification"],
+    :author "topo-4",
+    :reason
+    "The reviewed prerequisite did not implement the required representation comparison. The fixture compiles only because it postulates the final four-way closed-graph conjunction as finite_polygon_eqvgen_classification; the generic exact-IFF theorem and all four consumer exact-IFF declarations are absent. The exact boundary is proving that intersections of the analytic edgePoint parameterizations occur only at equal paired open-edge parameters or shared endpoints, computing finite endpoint reachability, and using those facts in both directions of an EqvGen classification. Until those iff theorems compile, finite-class closedness cannot be transported back to the source EqvGen graphs, so the standard-only axiom gate fails.",
+    :commands
+    [{:cmd
+      "git show --format=fuller --no-ext-diff ce00b8d6 -- && git show --format=fuller --no-ext-diff 580d7b53 --",
+      :exit 0,
+      :finding
+      "The dependency STOP was independently reviewed PASS; no implementation source was added."}
+     {:cmd
+      "sha256sum /tmp/finite-polygon-eqvgen-classification-probe.lean",
+      :exit 0,
+      :finding
+      "61cb12a3d34a4074623aef406e063e89e111ba23b3dcb6eca66fc19a15eadc7b"}
+     {:cmd
+      "LEAN_PATH=/tmp/polygon-eqvgen-probe lake env lean /tmp/finite-polygon-eqvgen-classification-probe.lean",
+      :exit 0,
+      :finding
+      "Fixture compiles, but its axiom audit includes finite_polygon_eqvgen_classification."}
+     {:cmd
+      "rg -n requested-exact-IFF-declarations ConstructionTargets problems",
+      :exit 1,
+      :expected-exit 1,
+      :finding "No generic or consumer exact-IFF declaration exists."}
+     {:cmd
+      "test ! -e ConstructionTargets/FinitePolygonEqvGenClassification.lean",
+      :exit 0,
+      :finding "The scoped implementation module is absent."}
+     {:cmd
+      "Python comment-stripped placeholder census of /tmp/finite-polygon-eqvgen-classification-probe.lean",
+      :exit 0,
+      :finding "0"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :representation
+    {:source
+     "Relation.EqvGen closures of apm_t94J09_PolygonRel, apm_tunk01_PolygonRel, and SurfaceRel false at genera 16 and 8",
+     :target
+     "Finite-class disjunctions consisting of equality, explicitly paired open-edge points, and computed endpoint classes",
+     :direction
+     "Exact iff characterization from each source EqvGen relation to the finite-class target, then reverse rewriting of target closedness into source-graph closedness"},
+    :fixture
+    {:path "/tmp/finite-polygon-eqvgen-classification-probe.lean",
+     :sha256
+     "61cb12a3d34a4074623aef406e063e89e111ba23b3dcb6eca66fc19a15eadc7b",
+     :status :self-axiomatized},
+    :seat "topo-4"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/finite-polygon-eqvgen-classification",
