@@ -83643,8 +83643,180 @@
      :review-outcomes]},
    :stop-condition
    "End only when every active topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+   :evidence
+   {:outcome :replan,
+    :seat "topo-4",
+    :commands
+    [{:cmd
+      "Read TOPOLOGY-ROUTES.md, routes files, and reviewed dependency receipts",
+      :exit 0}
+     {:cmd "Python comment-stripped census of eight active consumers",
+      :exit 0,
+      :finding
+      {:t98A06 1,
+       :t91A02 1,
+       :t99J05 1,
+       :t94J09 1,
+       :t96A06 1,
+       :tunk01 1,
+       :total 8,
+       :t98J02 1,
+       :t98J01 1}}
+     {:cmd
+      "rg sphere/projective covering identifications in ConstructionTargets and pinned Mathlib",
+      :exit 0,
+      :finding
+      "No normalized sphere-to-coinduced-projective homeomorphism or IsCoveringMap theorem found."}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :finding "691 items OK"}
+     {:cmd "git status --short",
+      :exit 0,
+      :finding
+      "Concurrent unrelated modification to holes/labs/topology-contract/worklist2.edn; this read-only invocation did not touch it."}],
+    :finding
+    {:placeholder-delta {:baseline 8, :current 8, :delta 0},
+     :typed-residual-change
+     {:t98A06 "held at smooth local-right-inverse boundary",
+      :t98J01 "held after coefficient production MV non-progress pair",
+      :t98J02 "held at lost counterexample evidence boundary",
+      :t94J09
+      "generic compact quotient theorem banked; exact EqvGen classification held",
+      :tunk01
+      "generic compact quotient theorem banked; exact EqvGen classification held",
+      :t91A02
+      "generic compact quotient theorem banked; exact EqvGen classification held",
+      :t96A06
+      "projective descent and quadratic lift banked; normalized sphere-to-RP3 covering comparison is next",
+      :t99J05
+      "arbitrary-n affine charts banked; later coefficient production MV pair holds the consumer"},
+     :infrastructure-packets {:successful 2, :stopped 2},
+     :review-outcomes
+     {:affine-charts :pass,
+      :compact-closed-quotient :pass,
+      :finite-eqvgen :pass-stop,
+      :coefficient-production-mv :pass-stop,
+      :prior-holds :preserved},
+     :routes
+     {:t98A06
+      {:placeholders 1,
+       :status :held-stop-after-two,
+       :chain
+       ["local right inverse" "complete flow" "smooth dependence"]},
+      :t98J01
+      {:placeholders 1,
+       :status :held-stop-after-two,
+       :chain
+       ["coefficient production MV"
+        "product homology"
+        "trace and Lefschetz"]},
+      :t98J02
+      {:placeholders 1,
+       :status :held-stop-after-two,
+       :chain
+       ["cover evidence" "connected quotient" "collar and monodromy"]},
+      :t94J09
+      {:placeholders 1,
+       :status :held-stop-after-two,
+       :chain ["exact EqvGen classes" "cut-and-paste" "homology"]},
+      :tunk01
+      {:placeholders 1,
+       :status :held-stop-after-two,
+       :chain
+       ["exact EqvGen classes" "cut-and-paste" "N6 normalization"]},
+      :t91A02
+      {:placeholders 1,
+       :status :held-stop-after-two,
+       :chain
+       ["exact EqvGen classes"
+        "disk-cover trivialization"
+        "polygon descent"
+        "Euler characteristic"]},
+      :t96A06
+      {:placeholders 1,
+       :status :open,
+       :chain
+       ["sphere-to-RP3 covering comparison"
+        "rational transfer homology"
+        "degree four"
+        "Lefschetz and non-homotopy"]},
+      :t99J05
+      {:placeholders 1,
+       :status :held-stop-after-two,
+       :chain
+       ["local indices"
+        "coefficient production MV"
+        "CPn homology"
+        "Lefschetz and Euler"]}},
+     :deferred
+     ["Seven held consumers require a fresh non-loop reroute."
+      "RP3 transfer waits for the elected covering comparison."]},
+    :replacement-items
+    [{:consumer :t96A06,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/t96A06/sphere-projective-covering-comparison",
+      :acceptance
+      {:probe
+       "Compile a placeholder-free RP3 fixture identifying the antipodal quotient of the unit sphere in R4 with coinduced Space Real 3 and proving the normalized sphere projection is a two-sheeted IsCoveringMap. Defer rational homology, degree, and Lefschetz.",
+       :placeholder "the single sorry in apm_t96a06",
+       :route-step
+       "t96A06 step 2, first representation bridge before rational transfer",
+       :gates
+       ["canonical packages"
+        "fixture compiles"
+        "zero fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :representation
+      {:source
+       "The antipodal Setoid quotient of the unit sphere in Fin 4 to Real",
+       :target
+       "The coinduced projective Space Real 3 of nonzero vectors modulo nonzero scaling",
+       :direction
+       "A homeomorphism from the source antipodal quotient to the target projective quotient induced by sphere inclusion, then transport of the two-sheeted quotient covering to the normalized sphere projection"},
+      :id
+      :routes-2026-10-10-t96a06-sphere-projective-covering-comparison-1,
+      :kind :representation-comparison,
+      :depends-on [:routes-2026-10-10-checkpoint-topo1-split-four-1],
+      :current-residual
+      "Construct the antipodal-quotient homeomorphism and two-sheeted covering theorem before rational transfer.",
+      :other-consumers []}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only when every active topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:strategy
+       "Measure the RP3 covering comparison, preserve seven reviewed holds, recount eight placeholders, and refill or apply stop-after-two."},
+      :id :routes-2026-10-10-checkpoint-topo1-rp3-covering-1,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:routes-2026-10-10-t96a06-sphere-projective-covering-comparison-1],
+      :current-residual
+      "Review the sole eligible representation bridge and reassess completion or hold.",
+      :other-consumers []}],
+    :author "topo-4",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -83660,6 +83832,66 @@
     :routes-2026-10-10-checkpoint-topo1-refill-three-1],
    :current-residual
    "Review four independently typed route steps, then refill.",
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t96A06/sphere-projective-covering-comparison",
+   :acceptance
+   {:probe
+    "Compile a placeholder-free RP3 fixture identifying the antipodal quotient of the unit sphere in R4 with coinduced Space Real 3 and proving the normalized sphere projection is a two-sheeted IsCoveringMap. Defer rational homology, degree, and Lefschetz.",
+    :placeholder "the single sorry in apm_t96a06",
+    :route-step
+    "t96A06 step 2, first representation bridge before rational transfer",
+    :gates
+    ["canonical packages"
+     "fixture compiles"
+     "zero fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :representation
+   {:source
+    "The antipodal Setoid quotient of the unit sphere in Fin 4 to Real",
+    :target
+    "The coinduced projective Space Real 3 of nonzero vectors modulo nonzero scaling",
+    :direction
+    "A homeomorphism from the source antipodal quotient to the target projective quotient induced by sphere inclusion, then transport of the two-sheeted quotient covering to the normalized sphere projection"},
+   :id
+   :routes-2026-10-10-t96a06-sphere-projective-covering-comparison-1,
+   :kind :representation-comparison,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo1-split-four-1
+    :routes-2026-10-10-checkpoint-topo1-split-four-1],
+   :current-residual
+   "Construct the antipodal-quotient homeomorphism and two-sheeted covering theorem before rational transfer.",
+   :other-consumers []}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only when every active topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:strategy
+    "Measure the RP3 covering comparison, preserve seven reviewed holds, recount eight placeholders, and refill or apply stop-after-two."},
+   :id :routes-2026-10-10-checkpoint-topo1-rp3-covering-1,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:routes-2026-10-10-t96a06-sphere-projective-covering-comparison-1
+    :routes-2026-10-10-checkpoint-topo1-split-four-1],
+   :current-residual
+   "Review the sole eligible representation bridge and reassess completion or hold.",
    :other-consumers []}
   {:consumer :t91J06,
    :evidence
