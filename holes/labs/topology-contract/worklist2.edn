@@ -66403,71 +66403,79 @@
    :other-consumers [:t96J06]}
   {:consumer :t97A04,
    :evidence
-   {:probe
-    {:residual
-     "Instantiate the range map for the intersection and both cover pieces, induce the union component, and assemble coverPreservingShortComplexMap with both ShortComplex.hom commutative squares.",
-     :outcome :go,
-     :warnings
-     ["Lean reports an unused-variable linter warning on hf in the fixture's contract definition; the theorem itself uses hf and the warning does not affect compilation or axioms."],
-     :missing-theorems
-     [{:id
-       :lemma-constructiontargets-singularexcision-ambientsubspacerangemap,
-       :name
-       "ConstructionTargets.SingularExcision.ambientSubspaceRangeMap",
-       :type
-       "forall {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y] (A : Set X) (B : Set Y) (f : C(X, Y)) (hf : Set.MapsTo f A B), exists g : (ambientSubspaceRange A : SSet) ⟶ (ambientSubspaceRange B : SSet), g ≫ (ambientSubspaceRange B).ι = (ambientSubspaceRange A).ι ≫ TopCat.toSSet.map (TopCat.ofHom f)",
-       :status :proved,
-       :consumers [:t97A04 :t96J06],
-       :depends-on
-       ["ConstructionTargets.SingularExcision.subspaceMap_inclusion"],
-       :area "mv-connecting-naturality"}],
-     :commands
-     [{:cmd
-       "lake env lean /tmp/ambient_subspace_range_map_contract.lean",
-       :exit 0,
-       :output
-       "ambientSubspaceRangeMap compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd "sha256sum /tmp/ambient_subspace_range_map_contract.lean",
-       :exit 0,
-       :output
-       "49105ab8bc4a20c6840e18b29f070522ab740bca7428709edc0198f829b38a62  /tmp/ambient_subspace_range_map_contract.lean"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/ambient_subspace_range_map_contract.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/ambient_subspace_range_map_contract.lean",
-       :exit 1,
-       :finding
-       "The first draft omitted the namespace containing subspaceInclusion; opening ConstructionTargets.SingularHomologyConcrete exposed the established map."}
-      {:cmd
-       "lake env lean /tmp/ambient_subspace_range_map_contract.lean",
-       :exit 1,
-       :finding
-       "The draft used the nonexistent name range_image; the available theorem is SSet.Subcomplex.range_comp."}
-      {:cmd
-       "lake env lean /tmp/ambient_subspace_range_map_contract.lean",
-       :exit 1,
-       :finding
-       "After rewriting the ambient composite, one final range_comp rewrite was needed to expose image_le_range."}],
-     :fixture
-     {:path "/tmp/ambient_subspace_range_map_contract.lean",
-      :sha256
-      "49105ab8bc4a20c6840e18b29f070522ab740bca7428709edc0198f829b38a62"},
-     :finding
-     "The requested map exists without another prerequisite. Map the source range to its image under the ambient simplicial map, prove that image lies in the target range by rewriting through subspaceMap_inclusion and range_comp, then compose toImage with homOfLE. The displayed square is exactly toImage_ι after associativity.",
-     :implementation
-     {:scope ["ConstructionTargets/SingularExcision.lean"],
-      :declaration
+   {:placeholder-delta
+    {:t97A04 {:before 2, :after 2, :delta 0},
+     :t96J06 {:before 2, :after 2, :delta 0},
+     :scoped-module {:before 0, :after 0, :delta 0}},
+    :residual
+    "Instantiate the range map for the intersection and both cover pieces, induce the union component, and assemble coverPreservingShortComplexMap with both ShortComplex.hom commutative squares.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["The fixture's contract definition reports hf as unused; the implemented theorem uses hf in subspaceMap_inclusion and compiles without that warning."],
+    :missing-theorems
+    [{:id
+      :lemma-constructiontargets-singularexcision-ambientsubspacerangemap,
+      :name
       "ConstructionTargets.SingularExcision.ambientSubspaceRangeMap",
-      :acceptance
-      "Add the compiled theorem and its range-factorization proof; preserve the exact fixture type."},
-     :seat "topo-8"}},
+      :type
+      "forall {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y] (A : Set X) (B : Set Y) (f : C(X, Y)) (hf : Set.MapsTo f A B), exists g : (ambientSubspaceRange A : SSet) ⟶ (ambientSubspaceRange B : SSet), g ≫ (ambientSubspaceRange B).ι = (ambientSubspaceRange A).ι ≫ TopCat.toSSet.map (TopCat.ofHom f)",
+      :status :proved,
+      :consumers [:t97A04 :t96J06],
+      :depends-on
+      ["ConstructionTargets.SingularExcision.subspaceMap_inclusion"],
+      :area "mv-connecting-naturality"}],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not",
+     :construction-file-git-blob
+     "c37a427bfa8ae396e833fac0530036219732a155",
+     :fixture-sha256
+     "49105ab8bc4a20c6840e18b29f070522ab740bca7428709edc0198f829b38a62"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd "sha256sum /tmp/ambient_subspace_range_map_contract.lean",
+      :exit 0,
+      :output
+      "49105ab8bc4a20c6840e18b29f070522ab740bca7428709edc0198f829b38a62  /tmp/ambient_subspace_range_map_contract.lean"}
+     {:cmd "lake env lean ConstructionTargets/SingularExcision.lean",
+      :exit 0,
+      :output
+      "scoped module compiled; printed declarations use axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "lake env lean /tmp/ambient_subspace_range_map_contract.lean",
+      :exit 0,
+      :output
+      "ambientSubspaceRangeMap compiled; axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/SingularExcision.lean /tmp/ambient_subspace_range_map_contract.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "git show --check --oneline 32836acb52378c7c564f3d07639695a08e8fa27b",
+      :exit 0,
+      :output "32836acb Add ambient subspace range map"}],
+    :diagnostic-history
+    [{:cmd "lake env lean ConstructionTargets/SingularExcision.lean",
+      :exit 1,
+      :finding
+      "The first insertion placed ambientSubspaceRangeMap beside ambientSubspaceRange, before this module's later subspaceMap_inclusion theorem. Moving the unchanged construction immediately after that prerequisite resolved the declaration-order error."}],
+    :commit "32836acb52378c7c564f3d07639695a08e8fa27b",
+    :changed-paths ["ConstructionTargets/SingularExcision.lean"],
+    :fixture
+    {:path "/tmp/ambient_subspace_range_map_contract.lean",
+     :sha256
+     "49105ab8bc4a20c6840e18b29f070522ab740bca7428709edc0198f829b38a62"},
+    :finding
+    "The scoped module now factors the ambient simplicial map through the source range's image and the target subspace range. The proof rewrites the image bound using subspaceMap_inclusion and range_comp, then obtains the displayed commuting square from toImage_ι.",
+    :implementation
+    {:scope ["ConstructionTargets/SingularExcision.lean"],
+     :declarations
+     ["ConstructionTargets.SingularExcision.ambientSubspaceRangeMap"]},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SingularExcision.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/mayer-vietoris/ambient-subspace-range-map",
