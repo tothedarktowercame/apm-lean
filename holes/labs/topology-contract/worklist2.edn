@@ -57074,75 +57074,105 @@
    :current-residual
    "Identify the corresponding quotient cast with the transport in the native coordinate equivalence, then rewrite to torusPi1Coord and complete matrix naturality.",
    :other-consumers []}
+  {:bounded-exception
+   "single-consumer quotient endpoint-cast comparison for the frozen torus",
+   :consumer :t97A04,
+   :phase :probe,
+   :state :open,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t97A04/torus-pi1-winding-coordinates/frozen-circle-image-quotient-cast",
+   :acceptance
+   {:probe
+    "Compile and bank frozenCircleImageQuotient_eq_mappedQuotient_cast from /tmp/torus_frozen_circle_image_quotient_cast.lean. For every explicit frozen-torus based loop, prove that casting its mapped Path.Homotopic.Quotient class along frozenTorusHomeomorphCircleProd_base.symm at both endpoints is exactly the quotient class of frozenCircleImagePath gamma, using Quotient.mk_cast and the banked path equality. This supplies the quotient-level dependent-basepoint normalization for t97A04 step 4; do not yet claim coordinate-equivalence transport.",
+    :declaration "frozenCircleImageQuotient_eq_mappedQuotient_cast",
+    :placeholder "apm_t97A04_bridge_2",
+    :route-step
+    "t97A04 step 4, identify the casted mapped quotient class with the fixed-base Circle-image class"},
+   :representation
+   {:source
+    "The native mapped loop quotient class cast at both endpoints from frozenTorusHomeomorphCircleProd (0,0) to (1,1)",
+    :target "The quotient class of frozenCircleImagePath gamma",
+    :direction
+    "Exact quotient equality from the source casted native mapped class to the target fixed-base Circle-image class"},
+   :id
+   :routes-2026-10-10-t97a04-frozen-circle-image-quotient-cast-topo2-r1,
+   :kind :representation-comparison,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo2-r2
+    :routes-2026-10-10-t97a04-frozen-circle-image-path-cast-topo2-r1],
+   :current-residual
+   "Identify the transported native coordinate equivalence application with torusPi1Coord applied to the casted quotient, then complete representative and all-class matrix naturality.",
+   :other-consumers []}
   {:consumer :t97A04,
    :evidence
    {:probe
     {:outcome :revise,
      :seat "topo-8",
      :fixture
-     {:path "/tmp/torus_frozen_pi1_native_coordinate_mk.lean",
+     {:path "/tmp/torus_frozen_circle_image_quotient_cast.lean",
       :sha256
-      "46b9ed0e048045ce6635e5b5da0549511370e75a1428969b59a1d28a86d3a89d"},
+      "966d3da234a37ce5bea223e4dff82788f8109175988787910fed5f4d59e5903e"},
      :commands
      [{:cmd
-       "lake env lean /tmp/torus_frozen_pi1_native_coordinate_mk.lean",
+       "lake env lean /tmp/torus_frozen_circle_image_quotient_cast.lean",
        :exit 0,
        :output
-       "native coordinate evaluation and frozenCircleImagePath_eq_mappedPath_cast compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "frozenCircleImageQuotient_eq_mappedQuotient_cast compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/torus_frozen_pi1_native_coordinate_mk.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/torus_frozen_circle_image_quotient_cast.lean || true)\"",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/torus_frozen_pi1_native_coordinate_mk.lean",
+       "sha256sum /tmp/torus_frozen_circle_image_quotient_cast.lean",
        :exit 0,
        :output
-       "46b9ed0e048045ce6635e5b5da0549511370e75a1428969b59a1d28a86d3a89d  /tmp/torus_frozen_pi1_native_coordinate_mk.lean"}
+       "966d3da234a37ce5bea223e4dff82788f8109175988787910fed5f4d59e5903e  /tmp/torus_frozen_circle_image_quotient_cast.lean"}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
      :diagnostic-history
      [{:cmd
-       "lake env lean /tmp/torus_frozen_pi1_native_coordinate_mk.lean",
+       "lake env lean /tmp/torus_frozen_circle_image_quotient_cast.lean",
        :exit 1,
        :finding
-       "The exploratory theorem attempted to rewrite the dependent coordinate equivalence directly to torusPi1Coord. Lean correctly rejected the dependent motive. The corrected prerequisite instead normalizes the mapped Path by the exact endpoint cast, leaving quotient-level transport for the next row."}],
+       "The first proof used Path.Homotopic.Quotient.mk_cast in the forward rewrite direction, while the target contained a cast of a quotient constructor. Reversing the definitional mk_cast equality exposed the banked path-cast theorem and compiled."}],
      :finding
-     "The native coordinate representative theorem is not yet sufficient to rewrite to fixed-base torusPi1Coord because the coordinate equivalence itself is transported along the basepoint equality. The compiled comparison proves the representation-level fact beneath that transport: casting both endpoints of gamma mapped by frozenTorusHomeomorphCircleProd.continuous along frozenTorusHomeomorphCircleProd_base.symm gives exactly frozenCircleImagePath gamma. This avoids equating proof terms and supplies the path equality needed for the quotient cast lemma.",
+     "The path-level endpoint normalization descends definitionally through Path.Homotopic.Quotient.mk_cast. The compiled theorem identifies the quotient class obtained by casting the native mapped loop at both endpoints with the quotient class of frozenCircleImagePath. This is the exact quotient representation required to analyze the dependent MulEquiv transport, without identifying opaque proof terms.",
      :residual
-     "Bank the exact mapped-path cast normalization. Then prove that the induced quotient cast is the transport used by the native coordinate equivalence, derive frozenTorusPi1Coord_mk at fixed Circle coordinates, and finish representative and all-class matrix naturality.",
+     "Bank the quotient cast equality. Then prove that applying the basepoint-transported native coordinate equivalence equals applying torusPi1Coord to this casted quotient, derive frozenTorusPi1Coord_mk at fixed coordinates, and finish all-class frozen matrix naturality.",
      :prerequisite
      {:bounded-exception
-      "single-consumer mapped-path endpoint-cast comparison for the frozen torus",
+      "single-consumer quotient endpoint-cast comparison for the frozen torus",
       :consumer :t97A04,
       :phase :probe,
       :state :open,
       :scope [],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t97A04/torus-pi1-winding-coordinates/frozen-circle-image-path-cast",
+      "TOPOLOGY-ROUTES.md/t97A04/torus-pi1-winding-coordinates/frozen-circle-image-quotient-cast",
       :acceptance
       {:probe
-       "Compile and bank frozenCircleImagePath_eq_mappedPath_cast from /tmp/torus_frozen_pi1_native_coordinate_mk.lean. For every explicit frozen-torus based loop, prove that casting the source and target of gamma.map frozenTorusHomeomorphCircleProd.continuous along frozenTorusHomeomorphCircleProd_base.symm yields exactly frozenCircleImagePath gamma. This supplies the path-level dependent-basepoint normalization for t97A04 step 4; do not yet claim equality of the transported coordinate equivalence with torusPi1Coord.",
-       :declaration "frozenCircleImagePath_eq_mappedPath_cast",
+       "Compile and bank frozenCircleImageQuotient_eq_mappedQuotient_cast from /tmp/torus_frozen_circle_image_quotient_cast.lean. For every explicit frozen-torus based loop, prove that casting its mapped Path.Homotopic.Quotient class along frozenTorusHomeomorphCircleProd_base.symm at both endpoints is exactly the quotient class of frozenCircleImagePath gamma, using Quotient.mk_cast and the banked path equality. This supplies the quotient-level dependent-basepoint normalization for t97A04 step 4; do not yet claim coordinate-equivalence transport.",
+       :declaration "frozenCircleImageQuotient_eq_mappedQuotient_cast",
        :placeholder "apm_t97A04_bridge_2",
        :route-step
-       "t97A04 step 4, identify the endpoint-casted homeomorphism image path with frozenCircleImagePath"},
+       "t97A04 step 4, identify the casted mapped quotient class with the fixed-base Circle-image class"},
       :representation
       {:source
-       "The continuously mapped frozen loop with both endpoints cast from frozenTorusHomeomorphCircleProd (0,0) to (1,1)",
-       :target "The fixed-base path frozenCircleImagePath gamma",
+       "The native mapped loop quotient class cast at both endpoints from frozenTorusHomeomorphCircleProd (0,0) to (1,1)",
+       :target "The quotient class of frozenCircleImagePath gamma",
        :direction
-       "Exact Path equality from the source endpoint-casted mapped path to the target fixed-base Circle-image path"},
+       "Exact quotient equality from the source casted native mapped class to the target fixed-base Circle-image class"},
       :id
-      :routes-2026-10-10-t97a04-frozen-circle-image-path-cast-topo2-r1,
+      :routes-2026-10-10-t97a04-frozen-circle-image-quotient-cast-topo2-r1,
       :kind :representation-comparison,
       :depends-on
       [:routes-2026-10-10-checkpoint-topo2-r2
-       :routes-2026-10-10-t97a04-frozen-native-coordinate-mk-topo2-r1],
+       :routes-2026-10-10-t97a04-frozen-circle-image-path-cast-topo2-r1],
       :current-residual
-      "Identify the corresponding quotient cast with the transport in the native coordinate equivalence, then rewrite to torusPi1Coord and complete matrix naturality.",
+      "Identify the transported native coordinate equivalence application with torusPi1Coord applied to the casted quotient, then complete representative and all-class matrix naturality.",
       :other-consumers []}}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/shared/torus-pi1-winding-coordinates",
    :acceptance
@@ -57172,7 +57202,8 @@
     :routes-2026-10-10-t97a04-frozen-coordinate-factorization-topo2-r1
     :routes-2026-10-10-t97a04-frozen-homeomorphism-pi1-mk-topo2-r1
     :routes-2026-10-10-t97a04-frozen-native-coordinate-mk-topo2-r1
-    :routes-2026-10-10-t97a04-frozen-circle-image-path-cast-topo2-r1],
+    :routes-2026-10-10-t97a04-frozen-circle-image-path-cast-topo2-r1
+    :routes-2026-10-10-t97a04-frozen-circle-image-quotient-cast-topo2-r1],
    :current-residual
    "Exact Fin-2 endpoint-coordinate naturality is absent.",
    :other-consumers [:t01A02]}
