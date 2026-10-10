@@ -97728,8 +97728,77 @@
   {:bounded-exception
    "This single-consumer theorem lifts the banked collapse-constant normalization path into the literal pullback while fixing its Circle coordinate, reducing path connectedness to the cyclic path between normalized section points.",
    :consumer :t99J01,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "For two normalized points with Circle coordinates z0 and z1, construct a Circle path alpha from z0 to z1 and the corresponding final-circle base path firstCircle (alpha(t)^n); lift this pair into the pullback, then concatenate with the normalization paths to prove Pullback n path connected.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["lake build replayed pre-existing linter warnings from imported homology modules; the scoped module emitted none"],
+    :missing-theorems
+    [{:name
+      "CyclicPullbackNormalizationPath.exists_normalization_path",
+      :type
+      "For every n and x : Pullback n, there is a path from x to the normalized final-circle point with the same Circle coordinate pointwise",
+      :status :proved,
+      :consumers [:t99J01],
+      :depends-on
+      ["ThreeCirclesCollapseFiberPath.exists_collapseFiber_path"],
+      :area "covering-subgroup-correspondence"}],
+    :statement-hashes "131 registered statements match",
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :finding
+      "canonical package authority resolves to /home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "sha256sum /tmp/cyclic-pullback-normalization-path.lean",
+      :exit 0,
+      :finding
+      "fixture hash matches 7af8ace6b0417db48f71142cac09f3a96b68edec13a3a9b7d75fab56f03cce9c"}
+     {:cmd
+      "lake build ConstructionTargets.CyclicPullbackNormalizationPath",
+      :exit 0,
+      :finding
+      "pullback normalization path with fixed circle coordinate builds"}
+     {:cmd
+      "lake env lean /tmp/cyclic-pullback-normalization-path.lean",
+      :exit 0,
+      :finding "frozen fixture compiles with standard axioms"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" ConstructionTargets/CyclicPullbackNormalizationPath.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero source placeholders"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" /tmp/cyclic-pullback-normalization-path.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero fixture placeholders"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short",
+      :exit 0,
+      :finding "clean worktree after commit"}],
+    :commit "e7cf9f8d6433729ad6270ff12abc062cc0f99797",
+    :changed-paths
+    ["ConstructionTargets/CyclicPullbackNormalizationPath.lean"],
+    :fixture
+    {:path "/tmp/cyclic-pullback-normalization-path.lean",
+     :sha256
+     "7af8ace6b0417db48f71142cac09f3a96b68edec13a3a9b7d75fab56f03cce9c",
+     :sorry-count 0},
+    :implementation
+    {:scope
+     ["ConstructionTargets/CyclicPullbackNormalizationPath.lean"],
+     :declarations
+     ["ConstructionTargets.CyclicPullbackNormalizationPath.exists_normalization_path"]},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/CyclicPullbackNormalizationPath.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/cyclic-three-circles-cover/pullback-normalization-path",
@@ -99590,20 +99659,28 @@
    :depends-on
    [:lemma-coveringretainedsheetindices-invfun-mem-iff-retained],
    :other-consumers []}
-  {:consumer :portfolio,
+  {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
    :scope [],
    :acceptance
-   {:lemma
-    "CyclicPullbackNormalizationPath.exists_normalization_path"},
+   {:lemma "CyclicPullbackNormalizationPath.exists_normalization_path",
+    :type
+    "For every n and x : Pullback n, there is a path from x to the normalized final-circle point with the same Circle coordinate pointwise"},
    :lemma
    {:name "CyclicPullbackNormalizationPath.exists_normalization_path",
-    :reported-by []},
+    :reported-by
+    [:routes-2026-10-10-cyclic-pullback-normalization-path-46],
+    :type
+    "For every n and x : Pullback n, there is a path from x to the normalized final-circle point with the same Circle coordinate pointwise",
+    :area "covering-subgroup-correspondence",
+    :proved-in
+    :routes-2026-10-10-cyclic-pullback-normalization-path-46},
    :id
    :lemma-cyclicpullbacknormalizationpath-exists-normalization-path,
    :kind :lemma,
-   :depends-on [],
+   :depends-on
+   [:lemma-threecirclescollapsefiberpath-exists-collapsefiber-path],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
