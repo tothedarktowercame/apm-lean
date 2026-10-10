@@ -93544,93 +93544,84 @@
    :consumer :t93J03,
    :implements-lemma :lemma-kleinpresentedgroup-coordinatenormalform,
    :evidence
-   {:probe
-    {:residual
-     "The finite algebra route is complete: PresentedKleinGroup has explicit inversion-semidirect integer-pair coordinates and unique a^m*b^n normal forms. The next t93J03 step is the geometric Klein deck action and square-orbit classification using these coordinates.",
-     :outcome :go,
-     :warnings [],
-     :missing-theorems
-     [{:name "kleinPresentedGroup_coordinateNormalForm",
-       :type
-       "MulEquiv from T93J03.PresentedKleinGroup to the inversion semidirect integer-pair coordinate group, with generator formulas and unique a^m*b^n coordinates",
-       :status :proved,
-       :consumers [:t93J03],
-       :depends-on
-       ["KleinPresentedGroupCoordinateModel.toCoordinates"
-        "KleinPresentedGroupConjugation.conjugateAPow"
-        "KleinPresentedGroupTwoSidedConjugation.reverseConjugateAPow"]}],
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd "lake env lean /tmp/klein-compat.lean",
-       :exit 0,
-       :finding
-       "the arbitrary integer-power compatibility equation, SemidirectProduct.lift inverse, MulEquiv, generator formulas, and unique normal form compile with standard axioms"}
-      {:cmd "sha256sum /tmp/klein-compat.lean",
-       :exit 0,
-       :finding
-       "2b864409a411fac05f96f09f96e3854ca1e1170e35d0b51a456ca82ad1c38132"}
-      {:cmd "rg -n \"\\b(sorry|admit)\\b\" /tmp/klein-compat.lean",
-       :exit 1,
-       :expected-exit 1,
-       :finding "no placeholders"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :finding "131 registered statements match, 0 do not"}
-      {:cmd "git status --short", :exit 0, :finding "clean"}],
-     :diagnostic-history
-     [{:cmd "lake env lean /tmp/klein-compat.lean",
-       :exit 1,
-       :finding
-       "early integer induction attempts used the wrong case labels and GroupWithZero zpow lemmas; corrected to Int.induction_on zero/succ/pred and the group zpow_add_one/zpow_sub_one lemmas"}
-      {:cmd "lake env lean /tmp/klein-compat.lean",
-       :exit 1,
-       :finding
-       "the induction hypothesis concerns a while each step concerns a^-1; applying congrArg Inv.inv to the hypothesis and using the two banked conjugation orientations closed both cases"}
-      {:cmd "lake env lean /tmp/klein-compat.lean",
-       :exit 1,
-       :finding
-       "the first inverse-law proof used a submonoid density theorem against PresentedGroup's subgroup closure; corrected by cancelling the surjective PresentedGroup.mk and applying FreeGroup.ext_hom on the two Bool generators"}
-      {:cmd "lake env lean /tmp/klein-compat.lean",
-       :exit 1,
-       :finding
-       "the first unique-normal-form proof did not expose the definitional formula for fromCoordinates; an explicit local equality between a^m*b^n and the lift value completed uniqueness via injectivity of the inverse coordinate-pair equivalence"}],
-     :fixture
-     {:path "/tmp/klein-compat.lean",
-      :sha256
-      "2b864409a411fac05f96f09f96e3854ca1e1170e35d0b51a456ca82ad1c38132",
-      :interface
-      "KleinCompat.coordinateEquiv : PresentedKleinGroup equivalence-as-groups Coordinates; coordinateEquiv_a and coordinateEquiv_b give the two generator coordinates; uniqueNormalForm gives a unique pair p : Multiplicative Int times Multiplicative Int with x=a^(toAdd p.1)*b^(toAdd p.2)."},
-     :implementation
-     {:scope
-      ["ConstructionTargets/KleinPresentedGroupCoordinateNormalForm.lean"],
-      :declarations
-      ["KleinPresentedGroupCoordinateNormalForm.fromA"
-       "KleinPresentedGroupCoordinateNormalForm.fromB"
-       "KleinPresentedGroupCoordinateNormalForm.actionCompatibilityAtGenerator"
-       "KleinPresentedGroupCoordinateNormalForm.actionCompatibility"
-       "KleinPresentedGroupCoordinateNormalForm.fromCoordinates"
-       "KleinPresentedGroupCoordinateNormalForm.to_from"
-       "KleinPresentedGroupCoordinateNormalForm.from_to"
-       "KleinPresentedGroupCoordinateNormalForm.coordinateEquiv"
-       "KleinPresentedGroupCoordinateNormalForm.coordinateEquiv_a"
-       "KleinPresentedGroupCoordinateNormalForm.coordinateEquiv_b"
-       "KleinPresentedGroupCoordinateNormalForm.coordinatePairEquiv"
-       "KleinPresentedGroupCoordinateNormalForm.uniqueNormalForm"],
-      :acceptance
-      {:implementation
-       "Implement the compiled fixture under the listed scope, importing the three banked Klein coordinate/conjugation modules. Preserve the exact Coordinates semidirect product. Prove action compatibility by integer induction, construct fromCoordinates with SemidirectProduct.lift, prove both inverse homomorphism laws, package coordinateEquiv, and export generator-coordinate and unique-normal-form theorems. Do not add topology or change the frozen PresentedKleinGroup definition.",
-       :fixture "/tmp/klein-compat.lean",
-       :fixture-sha256
-       "2b864409a411fac05f96f09f96e3854ca1e1170e35d0b51a456ca82ad1c38132",
-       :gates
-       ["lake build ConstructionTargets.KleinPresentedGroupCoordinateNormalForm"
-        "fixture compiles through the canonical module"
-        "zero source and fixture sorry"
-        "standard-only axioms"
-        "registry check"]}},
-     :seat "topo-4"}},
+   {:placeholder-delta 0,
+    :residual
+    "Use the explicit integer-pair coordinates to define the geometric Klein deck action and classify square orbits for t93J03.",
+    :implements-lemma :lemma-kleinpresentedgroup-coordinatenormalform,
+    :outcome :done-unreviewed,
+    :warnings
+    [{:kind :dependency-linter,
+      :message
+      "The imported two-sided conjugation module retains an unnecessarySimpa warning; this scoped module has no warning."}],
+    :missing-theorems
+    [{:name "kleinPresentedGroup_coordinateNormalForm",
+      :type
+      "MulEquiv from T93J03.PresentedKleinGroup to the inversion semidirect integer-pair coordinate group, with generator formulas and unique a^m*b^n coordinates",
+      :status :proved,
+      :consumers [:t93J03],
+      :depends-on
+      ["KleinPresentedGroupCoordinateModel.toCoordinates"
+       "KleinPresentedGroupConjugation.conjugateAPow"
+       "KleinPresentedGroupTwoSidedConjugation.reverseConjugateAPow"]}],
+    :statement-hashes "131 registered statements match",
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :finding
+      "canonical package authority resolves to /home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "sha256sum /tmp/klein-compat.lean",
+      :exit 0,
+      :finding "fixture hash matches"}
+     {:cmd
+      "lake build ConstructionTargets.KleinPresentedGroupCoordinateNormalForm",
+      :exit 0,
+      :finding "canonical module builds all twelve declarations"}
+     {:cmd "lake env lean /tmp/klein-compat.lean",
+      :exit 0,
+      :finding
+      "fixture verifies compatibility, inverse laws, equivalence, generator formulas, and unique normal form"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" ConstructionTargets/KleinPresentedGroupCoordinateNormalForm.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero source placeholders"}
+     {:cmd "rg -n \"\\b(sorry|admit)\\b\" /tmp/klein-compat.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero fixture placeholders"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}],
+    :commit "0c622f2be667de8f51b3e2b56628006ea356e31a",
+    :changed-paths
+    ["ConstructionTargets/KleinPresentedGroupCoordinateNormalForm.lean"],
+    :fixture
+    {:path "/tmp/klein-compat.lean",
+     :sha256
+     "2b864409a411fac05f96f09f96e3854ca1e1170e35d0b51a456ca82ad1c38132",
+     :sorry-count 0},
+    :implementation
+    {:scope
+     ["ConstructionTargets/KleinPresentedGroupCoordinateNormalForm.lean"],
+     :declarations
+     ["KleinPresentedGroupCoordinateNormalForm.fromA"
+      "KleinPresentedGroupCoordinateNormalForm.fromB"
+      "KleinPresentedGroupCoordinateNormalForm.actionCompatibilityAtGenerator"
+      "KleinPresentedGroupCoordinateNormalForm.actionCompatibility"
+      "KleinPresentedGroupCoordinateNormalForm.fromCoordinates"
+      "KleinPresentedGroupCoordinateNormalForm.to_from"
+      "KleinPresentedGroupCoordinateNormalForm.from_to"
+      "KleinPresentedGroupCoordinateNormalForm.coordinateEquiv"
+      "KleinPresentedGroupCoordinateNormalForm.coordinateEquiv_a"
+      "KleinPresentedGroupCoordinateNormalForm.coordinateEquiv_b"
+      "KleinPresentedGroupCoordinateNormalForm.coordinatePairEquiv"
+      "KleinPresentedGroupCoordinateNormalForm.uniqueNormalForm"]},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/KleinPresentedGroupCoordinateNormalForm.lean"],
    :dag-node
