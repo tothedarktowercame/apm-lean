@@ -60886,23 +60886,70 @@
   {:bounded-exception
    "single-consumer frozen left-tube membership for the t02A03 torus reconstruction",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/t02a03_geometric_tube_cover.lean",
+      :sha256
+      "57d3f54ecf627c51f04338c2b426f1eb01997e985d542830a07f3359ca1bc767"},
+     :commands
+     [{:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "57d3f54ecf627c51f04338c2b426f1eb01997e985d542830a07f3359ca1bc767  /tmp/t02a03_geometric_tube_cover.lean"}
+      {:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "apm_t02a03_leftTubeTorusPoint_mem_leftTube compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}
+      {:cmd
+       "rg -n \"apm_t02a03_leftTubeTorusPoint_mem_leftTube|apm_t02a03_dist_leftTubeTorusPoint_leftCoreCircle\" ConstructionTargets/T02A03GeometricTubeCover.lean /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "The fixture contains the membership theorem; the canonical module contains its exact-distance prerequisite but not the membership theorem."}],
+     :finding
+     "The complete placeholder-free fixture proves that apm_t02a03_leftTubeTorusPoint u belongs to the frozen left tube. It uses apm_t02a03_leftCoreCircle u.1 as a center in the frozen core range and the banked exact distance 1/8 to invoke closed-thickening membership at radius 1/4. The theorem is ready for direct promotion after the existing exact-distance theorem.",
+     :implementation
+     {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
+      :declarations ["apm_t02a03_leftTubeTorusPoint_mem_leftTube"],
+      :acceptance
+      {:type
+       "forall u : Circle × Circle, apm_t02a03_leftTubeTorusPoint u ∈ apm_t02a03_leftTube",
+       :axioms ["propext" "Classical.choice" "Quot.sound"],
+       :placement
+       "Immediately after apm_t02a03_dist_leftTubeTorusPoint_leftCoreCircle",
+       :gates
+       ["module compiles"
+        "scoped file contains no sorry token"
+        "statement registry matches"]}},
+     :residual
+     "Promote the compiled membership theorem into ConstructionTargets/T02A03GeometricTubeCover.lean. Then prove the reconstructed point is outside the frozen left-core range, bundle the continuous inverse map into LeftTubeMinusCore, and construct both comparison homotopies."}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/left-tube-torus-point-membership",
    :acceptance
-   {:probe
-    "Compile and bank apm_t02a03_leftTubeTorusPoint_mem_leftTube from /tmp/t02a03_geometric_tube_cover.lean. Prove that every explicit torus reconstruction lies in apm_t02a03_leftTube by using apm_t02a03_leftCoreCircle u.1 as a center in Set.range apm_t02a03_leftCore, the banked exact distance 1/8, and the frozen cthickening radius 1/4. This supplies the tube-membership component required to bundle the inverse coordinate map; do not yet claim exclusion from the frozen core, the bundled inverse map, comparison homotopies, the torus HomotopyEquiv, or gluing.",
-    :declaration "apm_t02a03_leftTubeTorusPoint_mem_leftTube",
-    :type
+   {:type
     "forall u : Circle × Circle, apm_t02a03_leftTubeTorusPoint u ∈ apm_t02a03_leftTube",
-    :placeholder "the sole sorry in apm_t02a03",
-    :route-step
-    "t02A03 step 2, prove the torus-coordinate reconstruction remains inside the frozen left tube"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :placement
+    "Immediately after apm_t02a03_dist_leftTubeTorusPoint_leftCoreCircle",
+    :gates
+    ["module compiles"
+     "scoped file contains no sorry token"
+     "statement registry matches"]},
    :id
    :routes-2026-10-10-t02a03-left-tube-torus-point-membership-topo2-r1,
    :kind :reusable-theorem,
+   :declarations ["apm_t02a03_leftTubeTorusPoint_mem_leftTube"],
    :depends-on
    [:routes-2026-10-10-checkpoint-topo2-r5
     :routes-2026-10-10-t02a03-left-tube-torus-point-core-distance-topo2-r1],
