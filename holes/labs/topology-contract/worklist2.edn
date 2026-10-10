@@ -60044,6 +60044,20 @@
       :output
       "[master e8b7aa31] Bank t02A03 attained left-core witness; 1 file changed, 10 insertions(+)"}
      {:cmd "git status --short", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791634215459-1884-935448f7",
+     :commands
+     ["git show, diff-tree, and show --check on implementation e8b7aa31 and ledger transition aa33d91d"
+      "sha256sum authenticated fixture and frozen t02A03 consumer"
+      "lake env lean on fixture, target, and fresh attained-witness orientation probe"
+      "lake build ConstructionTargets.T02A03GeometricTubeCover"
+      "recomputed declaration-type hash and comment-stripped placeholder counts"
+      "python3 scripts/statement-registry.py check --rev e8b7aa31"
+      "bb worklist_check.bb on committed transition ledger"],
+     :finding
+     "PASS: codex-7 independently reviewed topo-6 commit e8b7aa31712c150739679d24ce9f329a31f28f4b. Exact implementation scope is ConstructionTargets/T02A03GeometricTubeCover.lean; transition aa33d91df4247383c8b47b9d2adae1070655ed9d is ledger-only. Fixture SHA-256 is 6f6d02ed4e5c571e118cb23fc0b7a74b395d801259b0d63b185411f51dd92f26. Fixture, recorded-identical target, fresh orientation probe, and 8240-job focused build pass. The theorem has exactly the frozen type: every ambient E3 point in the frozen closed left tube yields an actual q in Set.range leftCore with dist p q at most 1/4. It correctly rewrites compact-core cthickening membership as membership in a union of closed balls and uses dist_comm only to orient the closed-ball distance as the registered statement requires. A fresh check also derives the symmetric dist q p form. No continuous nearest-point choice, tube coordinates, deformation, torus equivalence, or gluing is claimed. Axioms are exactly propext, Classical.choice, and Quot.sound. Declaration type hash reproduces as f80c1cef92e6d92cb8be58b1220b0012a312eaff0e69510d16eb48847aeea5bf; target has zero executable placeholders. Frozen t02A03 consumer hash is b123eca388ab2858ca55daf538c1ddd645022b52f5196a15f0bb516d78323d7d with one executable placeholder; registry is 131/0 and the committed 430-row ledger validates with exactly one done-unreviewed row."},
     :commit "e8b7aa31712c150739679d24ce9f329a31f28f4b",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
@@ -60058,7 +60072,7 @@
    :phase :implementation,
    :type
    "∀ p : apm_t02a03_E3, p ∈ apm_t02a03_leftTube → ∃ q ∈ Set.range apm_t02a03_leftCore, dist p q ≤ (1 / 4 : ℝ)",
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/left-tube-attained-core-witness",
@@ -60146,7 +60160,7 @@
    :phase :probe,
    :type
    "Nonempty (ContinuousMap.HomotopyEquiv LeftTubeMinusCore ConstructionTargets.TorusCircleWedgeOpenCover.Torus)",
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-punctured-model",
    :acceptance
