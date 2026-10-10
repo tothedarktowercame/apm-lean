@@ -54833,27 +54833,35 @@
     :seat "topo-8",
     :commands
     [{:cmd
-      "sed -n '1,260p' TOPOLOGY-ROUTES.md; for f in holes/labs/topology-routes/routes-{1,2,3}.md; do sed -n '1,260p' \"$f\"; done; sed -n '1,240p' docs/TN-topology-build-loop-design.md",
+      "rg -n 't94a08-projective-conic-closure-topo2-r3|torus-pi1-winding-coordinates-two-consumers-topo2-r1|checkpoint-topo2-r3' holes/labs/topology-contract/worklist2.edn",
       :exit 0}
      {:cmd
-      "python3 comment-stripped placeholder census for all 15 topo2 Main.lean files",
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
       :exit 0,
       :output
-      "t00J01=1 t00J07=3 t00J08=3 t01A02=3 t01A04=4 t02A02=1 t02A03=1 t91J03=1 t93A06=1 t94A08=1 t95A04=1 t96A07=1 t96J02=1 t97A04=4 t98A03=1"}
+      "topology-worklist: 367 items OK; validator accepted duplicate dependency edges"}
+     {:cmd
+      "rg -n 'distinct|duplicate|depends-on|dependency' holes/labs/topology-contract/worklist_check.bb",
+      :exit 0,
+      :output
+      "duplicate item ids are rejected, but no per-item duplicate dependency-edge check exists"}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :output "131 registered statements match, 0 do not"}
      {:cmd
-      "rg -n 'torusPi1Coord|lift.*endpoint.*Fin 2|FundamentalGroup.*Fin 2.*ℤ|affineChart.*homeomorph|Projectivization.*≃ₜ' ConstructionTargets -g '*.lean'",
-      :exit 1,
-      :expected-exit 1}],
+      "git status --short -- ':!holes/labs/topology-contract/worklist.edn'",
+      :exit 0,
+      :output ""}],
     :finding
     {:placeholder-delta 0,
      :typed-residual-change
-     "The four reviewed rows did not close or reduce a frozen placeholder. They did sharpen the residuals: t96A07/t95A04 reach the unproved pointwise local-inverse smoothness argument; t02A02/t96J02 reach an explicit finite edge-pairing quotient topology proof; t00J07/t98A03 reach an explicit positive/antipodal sheet trivialization before the RP2 covering and pi1 calculation.",
+     "Unchanged from the reviewed strategy: no frozen placeholder moved; the four outcomes refined the RP smooth-descent, polygon quotient, and RP2 covering representation boundaries.",
      :infrastructure-packets 0,
      :review-outcomes
-     [{:row :routes-2026-10-10-t96a07-closure-after-rp-atlas-topo2-r2,
+     [{:row :routes-2026-10-10-checkpoint-topo2-r2,
+       :outcome :fail,
+       :reason :duplicate-dependency-edges}
+      {:row :routes-2026-10-10-t96a07-closure-after-rp-atlas-topo2-r2,
        :outcome :stop}
       {:row
        :routes-2026-10-10-rp-even-polynomial-smooth-descent-topo2-r2,
@@ -54864,41 +54872,41 @@
       {:row
        :routes-2026-10-10-rp2-double-cover-pi1-two-consumers-topo2-r2,
        :outcome :stop}],
+     :repair
+     "The superseded r3/r1 work rows each contain the current checkpoint twice because their templates supplied it and transition application supplied it again. The repaired work templates have empty depends-on vectors; transition application will add the current checkpoint exactly once. All replacement ids are fresh. A documentation row adds the missing validator rejection before the next checkpoint.",
      :stop-after-two
-     "Hold t95A04 and t96A07: two consecutive smooth-descent rows compiled proposition facades without an inhabitant or consumer change. Hold the polygon quotient and RP2-cover branches until a fresh Codex reroute because their descendant probes likewise stopped at representation contracts without banking the elected packet.",
+     "t95A04 and t96A07 remain held after two proposition-only smooth-descent packets. Polygon quotient and RP2-cover branches remain held pending a fresh Codex reroute.",
      :routes
      {:t93A06
-      "1 sorry: torus atlas/fibres -> form descent; periodic square calculus -> integral and nonexactness -> assembly.",
+      "1: torus atlas/form descent; square calculus; nonexactness.",
       :t01A02
-      "3 sorries: punctured-torus H2 vanishing -> factor map; independently torus integer lift -> bounded-perturbation surjectivity -> fixed point -> assembly.",
+      "3: punctured-torus H2; integer lift and bounded-perturbation fixed point; assembly.",
       :t02A03
-      "1 sorry: explicit R3 tube deformation retraction -> gluing homotopy equivalence -> reuse previous encoding.",
-      :t91J03
-      "1 sorry: circle H1 degree -> periodic lift -> planar crossing lemma -> contradiction.",
+      "1: explicit tube deformation retract; gluing homotopy equivalence; assembly.",
+      :t91J03 "1: circle H1 degree; periodic lift; planar crossing.",
       :t95A04
-      "1 sorry: RP atlas is banked, but even-map smooth descent stopped twice; then embedding derivative and immersion remain. Held by stop-after-two.",
+      "1: RP atlas banked; smooth descent and immersion remain; held.",
       :t01A04
-      "4 sorries: concrete wedge pi1 naturality -> parity ranges; wedge covering neighborhoods; cut-point invariant; assembly.",
+      "4: wedge pi1 naturality; covering neighborhoods; cut-point invariant; assembly.",
       :t00J07
-      "3 sorries: main pairing is direct, but bridges need RP2 covering/pi1 -> RP2 homology -> two-open van Kampen and MV attachment calculation; RP2 branch held.",
+      "3: direct pairing; RP2 pi1/homology; attachment van Kampen and MV; held RP2 branch.",
       :t98A03
-      "1 sorry: basepoint reduction/not-manifold; RP2 covering/pi1; wedge VK; regular and irregular cover constructions. RP2 branch held.",
+      "1: wedge nonmanifold; RP2 pi1; regular/irregular covers; held.",
       :t96J02
-      "1 sorry: polygon open cover -> puncture retract -> wedge skeleton -> van Kampen quotient -> boundary word -> Klein pi1 -> finite-index classification; polygon branch held.",
-      :t00J01
-      "1 sorry: fold root-count adapter plus Klein quotient charts -> Klein H2 vanishing -> product H3 vanishing.",
+      "1: polygon open cover through Klein pi1 and subgroup classification; held.",
+      :t00J01 "1: fold count; Klein charts and H2; product H3.",
       :t97A04
-      "4 sorries: H0 is direct; torus pi1 winding coordinates -> H1 naturality; production connecting naturality -> overlap/shear H1 -> H2 -> assembly.",
+      "4: direct H0; torus winding coordinates and H1; connecting naturality and H2; assembly.",
       :t02A02
-      "1 sorry: polygon quotient T2/open-interior topology -> word classes -> explicit cut-and-paste homeomorphism; polygon branch held.",
+      "1: polygon quotient topology; word classes; cut-and-paste; held.",
       :t00J08
-      "3 sorries: Type-valued Nielsen-Schreier basis -> arborescence cardinality -> additive rank formula -> witnesses -> assembly.",
+      "3: quantitative Nielsen-Schreier basis and cardinality; bridges; assembly.",
       :t94A08
-      "1 sorry: affine projective chart homeomorphism -> smooth conic local charts and nodal punctured-neighborhood disconnection -> assembly; selected nearest closure.",
+      "1: affine projective charts; smooth conic; nodal branch disconnection; elected closure.",
       :t96A07
-      "1 sorry: RP atlas is banked, but even-map smooth descent stopped twice; nontransversality and regular horizontal levels remain. Held by stop-after-two."},
+      "1: RP atlas banked; smooth descent, nontransversality, regular levels remain; held."},
      :deferred
-     "No further proposition-only contract row is elected. General polygon classification, Kunneth, and a second topology/atlas remain deferred because no active route needs those generalities."},
+     "No proposition-only facade is re-elected; general polygon classification, Kunneth, and any second atlas remain deferred."},
     :replacement-items
     [{:consumer :t94A08,
       :phase :probe,
@@ -54907,14 +54915,14 @@
       :dag-node "TOPOLOGY-ROUTES.md/t94A08",
       :acceptance
       {:probe
-       "Compile one placeholder-free consumer-facing fixture replacing the sole apm_t94a08 sorry. Use the frozen coinduced complex-projective topology: construct the actual affine-chart homeomorphisms, prove the smooth conic is locally Euclidean, prove the two complex branches at [1:0:0] give a disconnected punctured neighborhood, and assemble the registered conjunction without changing its statement.",
+       "Compile one placeholder-free consumer-facing fixture replacing the sole apm_t94a08 sorry. Construct the actual affine-chart homeomorphisms for the frozen coinduced complex-projective topology, prove the smooth conic locally Euclidean, prove the two branches at [1:0:0] give a disconnected punctured neighborhood, and assemble the unchanged registered conjunction.",
        :placeholder "the sole sorry in apm_t94a08",
        :route-step "steps 1-3, complete closure"},
-      :id :routes-2026-10-10-t94a08-projective-conic-closure-topo2-r3,
+      :id :routes-2026-10-10-t94a08-projective-conic-closure-topo2-r4,
       :kind :final-adapter,
-      :depends-on [:routes-2026-10-10-checkpoint-topo2-r2],
+      :depends-on [],
       :current-residual
-      "One frozen placeholder; conjunct 1 is already local, while the affine-chart topology comparison and nodal branch argument remain.",
+      "One placeholder; affine-chart topology and the nodal branch argument remain.",
       :other-consumers []}
      {:consumer :t97A04,
       :phase :probe,
@@ -54924,21 +54932,41 @@
       "TOPOLOGY-ROUTES.md/shared/torus-pi1-winding-coordinates",
       :acceptance
       {:probe
-       "Compile a placeholder-free dimension-two torus winding-coordinate packet: construct FundamentalGroup (AddCircle 1 × AddCircle 1) 0 equivalent to Multiplicative (Fin 2 → ℤ), identify each coordinate with the endpoint integer of the product universal-cover lift, and prove naturality for maps induced by integer matrices. Supply t97A04 route steps 2-4 and the coordinate/lift portion of t01A02 route step 4 only.",
+       "Compile a placeholder-free dimension-two torus winding-coordinate packet: construct FundamentalGroup (AddCircle 1 × AddCircle 1) 0 equivalent to Multiplicative (Fin 2 → ℤ), identify coordinates with product-cover lift endpoint integers, and prove integer-matrix naturality. Supply t97A04 steps 2-4 and only the coordinate/lift portion of t01A02 step 4.",
        :placeholder
        "apm_t97A04_bridge_2 and apm_t01A02_bridge_fixedPoint_of_lift",
        :route-step
        "t97A04 steps 2-4; t01A02 step 4 coordinate component"},
       :id
-      :routes-2026-10-10-torus-pi1-winding-coordinates-two-consumers-topo2-r1,
+      :routes-2026-10-10-torus-pi1-winding-coordinates-two-consumers-topo2-r2,
       :kind :reusable-theorem,
-      :depends-on [:routes-2026-10-10-checkpoint-topo2-r2],
+      :depends-on [],
       :current-residual
-      "The product fundamental-group equivalence and circle lift APIs are banked, but their exact Fin-2 endpoint-coordinate naturality is absent.",
+      "The product pi1 and circle lift APIs are banked; exact Fin-2 endpoint-coordinate naturality is absent.",
       :other-consumers [:t01A02]}
      {:consumer :portfolio,
+      :phase :implementation,
+      :state :open,
+      :scope ["holes/labs/topology-contract/worklist_check.bb"],
+      :dag-node
+      "docs/TN-topology-build-loop-design.md/strategic-invariants",
+      :acceptance
+      {:implementation
+       "Reject every worklist item whose depends-on vector contains the same id more than once. Add a validator regression fixture containing one known dependency twice and verify deterministic rejection, while the canonical topo1 and topo2 ledgers still validate.",
+       :commands
+       ["bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+        "python3 scripts/statement-registry.py check"]},
+      :id
+      :routes-2026-10-10-worklist-duplicate-dependency-validator-r1,
+      :kind :documentation,
+      :depends-on [],
+      :current-residual
+      "The validator rejects duplicate item ids but currently accepts duplicate edges inside depends-on.",
+      :other-consumers []}
+     {:consumer :portfolio,
       :checkpoint
-      {:after-problems 2,
+      {:after-problems 3,
        :may-supersede-future true,
        :required-measures
        [:placeholder-delta
@@ -54951,25 +54979,20 @@
       :dag-node "TOPOLOGY-ROUTES.md",
       :acceptance
       {:strategy
-       "Reread all topo2 routes, recount comment-stripped placeholders, review the t94A08 closure attempt and shared torus-coordinate packet, enforce stop-after-two, and refill with exactly one minimum-placeholder closure adapter first."},
-      :id :routes-2026-10-10-checkpoint-topo2-r3,
+       "Review the t94A08 closure, shared torus-coordinate packet, and duplicate-edge validator hardening; recount all topo2 placeholders, enforce stop-after-two, and refill with exactly one minimum-placeholder closure adapter first."},
+      :id :routes-2026-10-10-checkpoint-topo2-r4,
       :kind :strategy-checkpoint,
       :depends-on
-      [:routes-2026-10-10-t94a08-projective-conic-closure-topo2-r3
-       :routes-2026-10-10-torus-pi1-winding-coordinates-two-consumers-topo2-r1],
+      [:routes-2026-10-10-t94a08-projective-conic-closure-topo2-r4
+       :routes-2026-10-10-torus-pi1-winding-coordinates-two-consumers-topo2-r2
+       :routes-2026-10-10-worklist-duplicate-dependency-validator-r1],
       :current-residual
-      "Measure one direct closure attempt and one genuinely shared coordinate theorem before further infrastructure.",
+      "Measure one closure attempt, one shared theorem, and the validator repair before further infrastructure.",
       :other-consumers []}],
     :author "topo-8",
-    :disposition :replan,
-    :review
-    {:outcome :fail,
-     :seat "codex-7",
-     :job "invoke-1791605630011-1048-745257d7",
-     :finding
-     "Deterministic DAG-coherence defect: transition commit 466a2a4d appends both :routes-2026-10-10-t94a08-projective-conic-closure-topo2-r3 and :routes-2026-10-10-torus-pi1-winding-coordinates-two-consumers-topo2-r1 with identical duplicate dependency vectors [:routes-2026-10-10-checkpoint-topo2-r2 :routes-2026-10-10-checkpoint-topo2-r2]. The checkpoint evidence pre-populates that dependency in each replacement item, and transition application injects it again. Repair by removing the current checkpoint from the replacement templates so transition application adds it exactly once (or structurally deduplicate dependencies), then add a worklist-validator rejection for duplicate dependency edges and recommit. Fresh checks otherwise reproduce all 15 comment-stripped counts (1,3,3,3,4,1,1,1,1,1,1,1,1,4,1), 131 matching frozen statements, empty non-ledger scope, and a parseable 367-item ledger. No fixture or theorem-orientation gate applies to this strategy-only row."}},
+    :disposition :replan},
    :phase :strategy,
-   :state :repair,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -54983,6 +55006,86 @@
     :routes-2026-10-10-polygon-quotient-topology-two-consumers-topo2-r2
     :routes-2026-10-10-rp2-double-cover-pi1-two-consumers-topo2-r2
     :routes-2026-09-28-checkpoint-topo2-r1]}
+  {:consumer :t94A08,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md/t94A08",
+   :acceptance
+   {:probe
+    "Compile one placeholder-free consumer-facing fixture replacing the sole apm_t94a08 sorry. Construct the actual affine-chart homeomorphisms for the frozen coinduced complex-projective topology, prove the smooth conic locally Euclidean, prove the two branches at [1:0:0] give a disconnected punctured neighborhood, and assemble the unchanged registered conjunction.",
+    :placeholder "the sole sorry in apm_t94a08",
+    :route-step "steps 1-3, complete closure"},
+   :id :routes-2026-10-10-t94a08-projective-conic-closure-topo2-r4,
+   :kind :final-adapter,
+   :depends-on [:routes-2026-10-10-checkpoint-topo2-r2],
+   :current-residual
+   "One placeholder; affine-chart topology and the nodal branch argument remain.",
+   :other-consumers []}
+  {:consumer :t97A04,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md/shared/torus-pi1-winding-coordinates",
+   :acceptance
+   {:probe
+    "Compile a placeholder-free dimension-two torus winding-coordinate packet: construct FundamentalGroup (AddCircle 1 × AddCircle 1) 0 equivalent to Multiplicative (Fin 2 → ℤ), identify coordinates with product-cover lift endpoint integers, and prove integer-matrix naturality. Supply t97A04 steps 2-4 and only the coordinate/lift portion of t01A02 step 4.",
+    :placeholder
+    "apm_t97A04_bridge_2 and apm_t01A02_bridge_fixedPoint_of_lift",
+    :route-step
+    "t97A04 steps 2-4; t01A02 step 4 coordinate component"},
+   :id
+   :routes-2026-10-10-torus-pi1-winding-coordinates-two-consumers-topo2-r2,
+   :kind :reusable-theorem,
+   :depends-on [:routes-2026-10-10-checkpoint-topo2-r2],
+   :current-residual
+   "The product pi1 and circle lift APIs are banked; exact Fin-2 endpoint-coordinate naturality is absent.",
+   :other-consumers [:t01A02]}
+  {:consumer :portfolio,
+   :phase :implementation,
+   :state :blocked,
+   :scope ["holes/labs/topology-contract/worklist_check.bb"],
+   :dag-node
+   "docs/TN-topology-build-loop-design.md/strategic-invariants",
+   :acceptance
+   {:implementation
+    "Reject every worklist item whose depends-on vector contains the same id more than once. Add a validator regression fixture containing one known dependency twice and verify deterministic rejection, while the canonical topo1 and topo2 ledgers still validate.",
+    :commands
+    ["bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+     "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+     "python3 scripts/statement-registry.py check"]},
+   :id :routes-2026-10-10-worklist-duplicate-dependency-validator-r1,
+   :kind :documentation,
+   :depends-on [:routes-2026-10-10-checkpoint-topo2-r2],
+   :current-residual
+   "The validator rejects duplicate item ids but currently accepts duplicate edges inside depends-on.",
+   :other-consumers []}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 3,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:strategy
+    "Review the t94A08 closure, shared torus-coordinate packet, and duplicate-edge validator hardening; recount all topo2 placeholders, enforce stop-after-two, and refill with exactly one minimum-placeholder closure adapter first."},
+   :id :routes-2026-10-10-checkpoint-topo2-r4,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:routes-2026-10-10-t94a08-projective-conic-closure-topo2-r4
+    :routes-2026-10-10-torus-pi1-winding-coordinates-two-consumers-topo2-r2
+    :routes-2026-10-10-worklist-duplicate-dependency-validator-r1
+    :routes-2026-10-10-checkpoint-topo2-r2],
+   :current-residual
+   "Measure one closure attempt, one shared theorem, and the validator repair before further infrastructure.",
+   :other-consumers []}
   {:consumer :t94A08,
    :phase :probe,
    :state :superseded,
