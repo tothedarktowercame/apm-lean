@@ -98809,6 +98809,20 @@
       :finding
       "scoped file committed; unrelated concurrent modification remains in ConstructionTargets/ProductionOpenCoverMayerVietoris.lean"}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791665301144-2940-f878a497",
+     :commands
+     ["git show and diff-tree on f3f049c32c6083556eea2d0d2f577f298f19d25a"
+      "sha256sum frozen fixture"
+      "lake build ConstructionTargets.PolygonOuterRadialQuotientDeformation"
+      "lake env lean frozen fixture"
+      "comment-stripped placeholder counts"
+      "python3 scripts/statement-registry.py check"
+      "git diff-tree --check"],
+     :finding
+     "PASS: recorded commit is authored by topo-2 and changes only ConstructionTargets/PolygonOuterRadialQuotientDeformation.lean; fixture hash matches; quotientHomotopy has the required time-by-quotient orientation; continuous_lift_prod_right correctly descends joint continuity across the product quotient boundary; representative, zero, and radius-one endpoint formulas match the frozen interface; source and fixture have zero placeholders; the fixture reports only propext, Classical.choice, and Quot.sound; registry reports 131 matches and zero mismatches."},
     :commit "f3f049c32c6083556eea2d0d2f577f298f19d25a",
     :changed-paths
     ["ConstructionTargets/PolygonOuterRadialQuotientDeformation.lean"],
@@ -98819,7 +98833,7 @@
      :sorry-count 0},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/PolygonOuterRadialQuotientDeformation.lean"],
    :dag-node
@@ -98947,7 +98961,7 @@
       "quotientHomotopy jointly descends the outer radial homotopy through the EqvGen quotient, is continuous, starts at the identity, and has radius-one representatives at time one."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -101236,7 +101250,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -101253,7 +101267,10 @@
     "For every boundary-supported relation on the closed disk, the outer radial homotopy descends to a jointly continuous map on the EqvGen quotient, beginning at the identity and ending with radius-one representatives.",
     :area "polygon-surface-open-cover",
     :proved-in
-    :routes-2026-10-10-polygon-outer-radial-quotient-deformation-45},
+    :routes-2026-10-10-polygon-outer-radial-quotient-deformation-45,
+    :banked-by
+    :routes-2026-10-10-polygon-outer-radial-quotient-deformation-45,
+    :banked-commit "f3f049c32c6083556eea2d0d2f577f298f19d25a"},
    :id
    :lemma-polygonouterradialquotientdeformation-continuous-quotienthomotopy,
    :kind :lemma,
