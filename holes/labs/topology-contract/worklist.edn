@@ -84861,6 +84861,18 @@
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131 registered statements match, 0 do not"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791613437624-1336-6c2f5ae0",
+     :commands
+     ["git show/diff ef187e9221acdfc477791231d43d39f8e9a14d0a"
+      "stat packages; fixture hash/compile; target/declaration absence"
+      "statement-registry check; worklist_check.bb"
+      "TwoOpenFreeProductMapping and five consumer compilations"
+      "nested-comment placeholder census; five frozen fingerprints"],
+     :finding
+     "PASS: ledger-only shared-row STOP is exact; empty scope and inherited fixture hash match, the fixture has zero placeholders but postulates the desired equivalences, implementation module and accepted declarations are absent, and the bank lacks the generic connector/inclusion equations needed to carry actual circle inclusions through coproduct injections to indexed FreeGroup generators; consumer counts/fingerprints and all gates reproduce."},
     :fixture
     {:path "/tmp/finite-circle-wedge-pi1-probe.lean",
      :sha256
@@ -84868,7 +84880,7 @@
      :status :self-axiomatized},
     :seat "topo-4"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/finite-circle-wedge-fundamental-group",
