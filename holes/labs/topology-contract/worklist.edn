@@ -90491,6 +90491,8 @@
      :typed-residual-change
      :infrastructure-packets
      :review-outcomes]},
+   :review-finding
+   "recorded worklist evidence is stale: the exact committed ledger has 747 items, 12 blocked, and 1 done-unreviewed, not 745 items, 10 blocked, and 1 open",
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :evidence
@@ -90615,9 +90617,15 @@
       "Review the first bounded construction inside the shared positive-index Schreier generator count.",
       :other-consumers []}],
     :author "topo-4",
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1791636559634-1959-f7af8ce7",
+     :finding
+     "recorded worklist evidence is stale: the exact committed ledger has 747 items, 12 blocked, and 1 done-unreviewed, not 745 items, 10 blocked, and 1 open"}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :repair,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -90634,7 +90642,7 @@
    :other-consumers []}
   {:consumer :t99J01,
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/positive-index/coset-quiver",
@@ -90671,7 +90679,7 @@
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :phase :strategy,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
