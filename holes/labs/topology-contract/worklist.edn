@@ -90296,8 +90296,109 @@
    "Review one bounded consumer algebra step and one corrected two-consumer foundation after the owner clarification.",
    :other-consumers []}
   {:consumer :t99J01,
-   :phase :probe,
+   :phase :implementation,
    :state :open,
+   :scope
+   ["ConstructionTargets/FiniteIndexFreeGroupSchreierPositiveIndex.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/positive-rank-positive-index/generator-count",
+   :acceptance
+   {:fixture-sha256
+    "ad227f2788f17bc70668a5697b3ed28e407665a460f301fce71dd38681c64685",
+    :placeholder
+    "the single sorry in apm_t99j01 and apm_t97A03_bridge_invariants_of_model",
+    :type
+    "(r n : ℕ) → 0 < r → 0 < n → (H : Subgroup (FreeGroup (Fin r))) → H.index = n → IsFreeGroup.Generators H ≃ Fin ((r - 1) * n + 1)",
+    :axioms :standard-only,
+    :commands
+    ["lake env lean ConstructionTargets/FiniteIndexFreeGroupSchreierPositiveIndex.lean"
+     "lake env lean /tmp/schreier-positive-rank-probe.lean"
+     "python3 scripts/statement-registry.py check"],
+    :declaration "generatorsEquivFinSchreier",
+    :fixture "/tmp/schreier-positive-rank-probe.lean",
+    :route-step
+    "t99J01 step 3 and t97A03 step 8, positive-rank positive-index Schreier generator count",
+    :implementation
+    "Use 0<n and H.index=n to obtain the finite coset type. Construct its connected r-labelled Schreier quiver, choose a rooted spanning tree, identify the Nielsen-Schreier basis with oriented non-tree edges, and count r*n-(n-1)=(r-1)*n+1. Export the generator-type equivalence; Mathlib's IsFreeGroup.toFreeGroup and FreeGroup.freeGroupCongr then supply all requested group equivalences."},
+   :id
+   :routes-2026-10-10-finite-index-schreier-positive-index-generator-count-2,
+   :kind :reusable-theorem,
+   :depends-on [],
+   :current-residual
+   "Build and count the finite connected Schreier coset quiver under the now-sufficient 0<n hypothesis; all equivalence packaging is already compiled.",
+   :other-consumers [:t97A03]}
+  {:consumer :t99J01,
+   :evidence
+   {:probe
+    {:outcome :revise,
+     :seat "topo-4",
+     :fixture
+     {:path "/tmp/schreier-positive-rank-probe.lean",
+      :sha256
+      "ad227f2788f17bc70668a5697b3ed28e407665a460f301fce71dd38681c64685"},
+     :commands
+     [{:cmd "lake env lean /tmp/schreier-positive-rank-probe.lean",
+       :exit 0,
+       :finding
+       "the repaired general adapter and both consumer specializations compile from one isolated positive-index generator-count axiom"}
+      {:cmd "sha256sum /tmp/schreier-positive-rank-probe.lean",
+       :exit 0,
+       :finding
+       "ad227f2788f17bc70668a5697b3ed28e407665a460f301fce71dd38681c64685"}
+      {:cmd
+       "comment-stripped placeholder census of /tmp/schreier-positive-rank-probe.lean",
+       :exit 0,
+       :finding "0"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :finding "131 registered statements match, 0 do not"}
+      {:cmd "git status --short", :exit 0, :finding "clean"}],
+     :axioms
+     ["propext"
+      "Classical.choice"
+      "Quot.sound"
+      "SchreierPositiveRankProbe.generatorsEquivFinSchreier"],
+     :warnings
+     [{:kind :interface-axiom,
+       :message
+       "Exactly one nonstandard axiom remains: the positive-index finite Schreier-quiver generator count. The earlier n=0 counterexample is excluded."}],
+     :prerequisite
+     {:consumer :t99J01,
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/FiniteIndexFreeGroupSchreierPositiveIndex.lean"],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/positive-rank-positive-index/generator-count",
+      :acceptance
+      {:fixture-sha256
+       "ad227f2788f17bc70668a5697b3ed28e407665a460f301fce71dd38681c64685",
+       :placeholder
+       "the single sorry in apm_t99j01 and apm_t97A03_bridge_invariants_of_model",
+       :type
+       "(r n : ℕ) → 0 < r → 0 < n → (H : Subgroup (FreeGroup (Fin r))) → H.index = n → IsFreeGroup.Generators H ≃ Fin ((r - 1) * n + 1)",
+       :axioms :standard-only,
+       :commands
+       ["lake env lean ConstructionTargets/FiniteIndexFreeGroupSchreierPositiveIndex.lean"
+        "lake env lean /tmp/schreier-positive-rank-probe.lean"
+        "python3 scripts/statement-registry.py check"],
+       :declaration "generatorsEquivFinSchreier",
+       :fixture "/tmp/schreier-positive-rank-probe.lean",
+       :route-step
+       "t99J01 step 3 and t97A03 step 8, positive-rank positive-index Schreier generator count",
+       :implementation
+       "Use 0<n and H.index=n to obtain the finite coset type. Construct its connected r-labelled Schreier quiver, choose a rooted spanning tree, identify the Nielsen-Schreier basis with oriented non-tree edges, and count r*n-(n-1)=(r-1)*n+1. Export the generator-type equivalence; Mathlib's IsFreeGroup.toFreeGroup and FreeGroup.freeGroupCongr then supply all requested group equivalences."},
+      :id
+      :routes-2026-10-10-finite-index-schreier-positive-index-generator-count-2,
+      :kind :reusable-theorem,
+      :depends-on [],
+      :current-residual
+      "Build and count the finite connected Schreier coset quiver under the now-sufficient 0<n hypothesis; all equivalence packaging is already compiled.",
+      :other-consumers [:t97A03]},
+     :residual
+     "One corrected prerequisite remains: identify Mathlib's chosen Nielsen-Schreier generator type with Fin ((r-1)*n+1) for positive r and positive subgroup index."}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/positive-rank-positive-index",
@@ -90318,7 +90419,8 @@
    :routes-2026-10-10-finite-index-schreier-positive-rank-positive-index-2,
    :kind :reusable-theorem,
    :depends-on
-   [:routes-2026-10-10-checkpoint-topo1-after-algebra-repair-2],
+   [:routes-2026-10-10-checkpoint-topo1-after-algebra-repair-2
+    :routes-2026-10-10-finite-index-schreier-positive-index-generator-count-2],
    :current-residual
    "Count the finite Schreier coset quiver under 0<n, identify the Nielsen-Schreier generator type with Fin ((r-1)*n+1), and package both consumer specializations.",
    :other-consumers [:t97A03]}
