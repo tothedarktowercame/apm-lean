@@ -86798,8 +86798,57 @@
    "Package fiber-coset equivalence, pi1 injectivity, and subgroup-containment lifting.",
    :other-consumers [:t93J03 :t97A03]}
   {:consumer :t97A01,
+   :stop-count 1,
+   :evidence
+   {:residual
+    "Specify and construct the six-edge boundary quotient as an explicit graph, prove its homeomorphism with ThreeCircles for both words, and expose the quotient maps needed to descend the radial homotopies and prove the literal inclusion equations.",
+    :outcome :stop,
+    :warnings
+    [{:kind :representation-boundary,
+      :message
+      "The fixture packages the unrepresented boundary quotient and both radial descents as one axiom, so it is not a standard-only implementation fixture."}],
+    :disposition :stop,
+    :axioms
+    ["propext"
+     "Classical.choice"
+     "PolygonEdgeGraphOpenCoverProbe.polygonOpenCoverPackages"
+     "Quot.sound"],
+    :author "topo-2",
+    :reason
+    "The elected module has a representation boundary not supplied by the frozen fixture or the banked library: there is no definition of PolygonPairingData or of the edge-graph quotient, and no theorem identifying the quotient of the six polygon boundary edges by either pairing relation with StatementSurfaceModels.ThreeCircles. The fixture hides precisely this construction, together with saturation and radial homotopy descent, behind the axiom polygonOpenCoverPackages. Radial homotopy utilities and quotient-product continuity are available, but they cannot determine the missing boundary quotient map, its inverse, or the literal inclusion equations. Implementing the advertised package therefore requires first fixing an explicit polygon-pairing/edge-graph representation and proving its quotient homeomorphism; this is a missing representation specification, not a refutation of the consumer theorem.",
+    :commands
+    [{:cmd "sha256sum /tmp/polygon-edge-graph-open-cover-probe.lean",
+      :exit 0,
+      :finding
+      "8cfb3f1613cb6a590439bdc01c98e033cb70fbfb69ad5002626225583119b233"}
+     {:cmd
+      "lake env lean /tmp/polygon-edge-graph-open-cover-probe.lean",
+      :exit 0,
+      :finding
+      "The fixture compiles only through polygonOpenCoverPackages; both demonstrated vertex theorems retain that nonstandard axiom."}
+     {:cmd
+      "rg -n \"(def|theorem) (PolygonPairingData|PolygonOpenCoverPackage|polygonBoundary_homotopyEquiv_edgeGraph|standardN3OpenCoverPackage|torusCrosscapOpenCoverPackage)\" ConstructionTargets",
+      :exit 1,
+      :expected-exit 1,
+      :finding
+      "No banked pairing representation, edge-graph comparison, or requested package declaration exists."}
+     {:cmd
+      "rg -n \"IsQuotientMap.*prod|continuous_lift_prod\" ConstructionTargets .lake/packages/mathlib/Mathlib/Topology -g '*.lean'",
+      :exit 0,
+      :finding
+      "Generic quotient-product continuity support is present, so it is not the blocking boundary."}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :fixture
+    {:path "/tmp/polygon-edge-graph-open-cover-probe.lean",
+     :sha256
+     "8cfb3f1613cb6a590439bdc01c98e033cb70fbfb69ad5002626225583119b233",
+     :placeholder-count 0},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PolygonEdgeGraphOpenCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/polygon-edge-graph-open-cover/radial-quotient-package",
