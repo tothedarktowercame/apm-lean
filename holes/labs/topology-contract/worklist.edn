@@ -94143,109 +94143,120 @@
    "Use the explicit coordinate action to choose a closed fundamental-square representative for every point and characterize all same-orbit pairs in the square, including edge and corner cases.",
    :other-consumers []}
   {:bounded-exception
+   "This single-consumer floor-normalization theorem is the existence half of the elected square-orbit classification and leaves only the finite classification of coincidences between points already in the square.",
+   :consumer :t93J03,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/KleinSquareRepresentative.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/plane-action-square-orbit-classification/square-representative",
+   :acceptance
+   {:implementation
+    "For every p : Real times Real, explicitly choose an integer vertical coordinate n=-floor(p.2), compute the corresponding inversion sign from the banked action, choose m=-floor(sign*p.1), and use coordinateEquiv.symm to construct g : PresentedKleinGroup. Prove g • p lies in the half-open unit square and hence the closed unit square. Do not classify pairs of square points, form a quotient, or compare EqvGen relations.",
+    :placeholder "the single sorry in apm_t93j03",
+    :route-step
+    "t93J03 step 1b.3, existence of a closed-square representative before boundary coincidence classification",
+    :fixture "/tmp/klein-square-representative.lean",
+    :fixture-sha256
+    "2fbe27a38611477d9007a8361b4b6b58e2445edbc14b5d1351449065af545035",
+    :gates
+    ["lake build ConstructionTargets.KleinSquareRepresentative"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-10-klein-square-representative-26,
+   :kind :reusable-theorem,
+   :depends-on [:routes-2026-10-10-klein-plane-affine-action-25],
+   :current-residual
+   "For two points in the closed unit square, use the explicit coordinate action and interval bounds to force the vertical coordinate to -1, 0, or 1 and enumerate the resulting interior, edge, and corner coincidences.",
+   :other-consumers []}
+  {:bounded-exception
    "This single-consumer geometric lemma is the next ready dependency of the elected one-placeholder t93J03 route; the coordinate algebra it needs is now banked.",
    :consumer :t93J03,
    :implements-lemma :lemma-kleinplaneaction-squareorbitclassification,
    :evidence
    {:probe
     {:residual
-     "The full affine PresentedKleinGroup action and generator formulas now compile. The original row is reduced to floor/parity normalization into a closed fundamental square and the finite classification of its boundary orbit coincidences.",
+     "Every plane orbit now has a compiled half-open, hence closed, unit-square representative. The original row has one bounded remaining obligation: classify same-orbit pairs already in the closed square, including the edge and corner cases.",
      :outcome :revise,
-     :warnings
-     [{:kind :linter,
-       :message
-       "The fixture has two unnecessarySeqFocus style warnings in the generator formula proofs; both theorems compile without placeholders."}
-      {:kind :dirty-worktree,
-       :message
-       "ConstructionTargets/T02A03LeftTubePuncturedModel.lean was modified by another task; the probe remained read-only and did not depend on it."}],
+     :warnings [],
      :missing-theorems
      [{:name "kleinPlaneAction_squareOrbitClassification",
        :type
        "Affine PresentedKleinGroup action on Real times Real with explicit coordinate formula, closed-square representatives for every orbit, and a complete same-orbit classification for square points including edges and corners",
        :status :partial,
        :consumers [:t93J03],
-       :depends-on ["KleinPlaneAffineAction.planeAction"]}],
+       :depends-on
+       ["KleinPlaneAffineAction.planeAction"
+        "KleinSquareRepresentative.exists_closedSquare_smul"]}],
      :prerequisite
      {:bounded-exception
-      "This single-consumer affine-action construction is the exact structural first half of the elected square-orbit lemma; after it is banked only the bounded floor/parity and boundary-case classification remains.",
+      "This single-consumer floor-normalization theorem is the existence half of the elected square-orbit classification and leaves only the finite classification of coincidences between points already in the square.",
       :consumer :t93J03,
       :phase :implementation,
       :state :open,
-      :scope ["ConstructionTargets/KleinPlaneAffineAction.lean"],
+      :scope ["ConstructionTargets/KleinSquareRepresentative.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/plane-action-square-orbit-classification/affine-action",
+      "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/plane-action-square-orbit-classification/square-representative",
       :acceptance
       {:implementation
-       "Using the banked coordinate equivalence and inversion-power formula, define coordinateAct on Real times Real, prove coordinateAct_one and coordinateAct_mul, transport it to a MulAction of PresentedKleinGroup, and prove generatorA acts by (x,y) maps to (x+1,y) while generatorB acts by (x,y) maps to (-x,y+1). Export the general coordinate formula through coordinateAct. Do not prove existence of square representatives, classify boundary coincidences, form a quotient, or compare EqvGen relations.",
+       "For every p : Real times Real, explicitly choose an integer vertical coordinate n=-floor(p.2), compute the corresponding inversion sign from the banked action, choose m=-floor(sign*p.1), and use coordinateEquiv.symm to construct g : PresentedKleinGroup. Prove g • p lies in the half-open unit square and hence the closed unit square. Do not classify pairs of square points, form a quotient, or compare EqvGen relations.",
        :placeholder "the single sorry in apm_t93j03",
        :route-step
-       "t93J03 step 1b.2, affine plane action before the closed-square orbit classification",
-       :fixture "/tmp/klein-plane-action.lean",
+       "t93J03 step 1b.3, existence of a closed-square representative before boundary coincidence classification",
+       :fixture "/tmp/klein-square-representative.lean",
        :fixture-sha256
-       "d2fdc5858dccb0654d72036fffdb5331184f9cec2617cd2bae3dc81723b88777",
+       "2fbe27a38611477d9007a8361b4b6b58e2445edbc14b5d1351449065af545035",
        :gates
-       ["lake build ConstructionTargets.KleinPlaneAffineAction"
+       ["lake build ConstructionTargets.KleinSquareRepresentative"
         "fixture compiles"
         "zero source and fixture sorry"
         "standard-only axioms"
         "registry check"]},
-      :id :routes-2026-10-10-klein-plane-affine-action-25,
+      :id :routes-2026-10-10-klein-square-representative-26,
       :kind :reusable-theorem,
-      :depends-on
-      [:routes-2026-10-10-klein-coordinate-inversion-power-24
-       :lemma-kleinpresentedgroup-coordinatenormalform],
+      :depends-on [:routes-2026-10-10-klein-plane-affine-action-25],
       :current-residual
-      "Use the explicit coordinate action to choose a closed fundamental-square representative for every point and characterize all same-orbit pairs in the square, including edge and corner cases.",
+      "For two points in the closed unit square, use the explicit coordinate action and interval bounds to force the vertical coordinate to -1, 0, or 1 and enumerate the resulting interior, edge, and corner coincidences.",
       :other-consumers []},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
-     [{:cmd
-       "lake build ConstructionTargets.KleinCoordinateInversionPower",
+     [{:cmd "lake build ConstructionTargets.KleinPlaneAffineAction",
        :exit 0,
        :finding
-       "the banked coordinate normal form and inversion-power prerequisite compile canonically"}
-      {:cmd "lake env lean /tmp/klein-plane-action.lean",
+       "the banked affine action and its coordinate prerequisites compile canonically"}
+      {:cmd "lake env lean /tmp/klein-square-representative.lean",
        :exit 0,
        :finding
-       "the affine coordinate action, multiplication law, transported group action, and both generator formulas compile with standard axioms"}
-      {:cmd "sha256sum /tmp/klein-plane-action.lean",
+       "both half-open and closed fundamental-square representative theorems compile with standard axioms"}
+      {:cmd "sha256sum /tmp/klein-square-representative.lean",
        :exit 0,
        :finding
-       "d2fdc5858dccb0654d72036fffdb5331184f9cec2617cd2bae3dc81723b88777"}
+       "2fbe27a38611477d9007a8361b4b6b58e2445edbc14b5d1351449065af545035"}
       {:cmd
-       "rg -n \"\\b(sorry|admit)\\b\" /tmp/klein-plane-action.lean",
+       "rg -n \"\\b(sorry|admit)\\b\" /tmp/klein-square-representative.lean",
        :exit 1,
        :expected-exit 1,
        :finding "no placeholders"}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :finding "131 registered statements match, 0 do not"}
-      {:cmd "git status --short",
-       :exit 0,
-       :finding
-       "pre-existing unrelated modification: ConstructionTargets/T02A03LeftTubePuncturedModel.lean; this read-only probe did not touch it"}],
+      {:cmd "git status --short", :exit 0, :finding "clean"}],
      :diagnostic-history
-     [{:cmd "lake env lean /tmp/klein-plane-action.lean",
+     [{:cmd "lake env lean /tmp/klein-square-representative.lean",
        :exit 1,
        :finding
-       "the first rerun used Real zpow directly and did not expose the semidirect first-coordinate identity; replaced the sign by the intrinsic inversion-action value supplied by the banked action_toAdd theorem"}
-      {:cmd "lake env lean /tmp/klein-plane-action.lean",
-       :exit 1,
-       :finding
-       "the initial MulAction structure proof relied on global smul notation before the instance existed; made the instance noncomputable and changed its laws explicitly to coordinateAct equations"}
-      {:cmd "lake env lean /tmp/klein-plane-action.lean",
-       :exit 1,
-       :finding
-       "the first multiplication proof left casts of integer sums and products opaque; targeted action_toAdd twice, normalized the multiplicative generator, and then discharged the Real identity by ring"}],
+       "the initial floor inequalities left casts of negated Int.floor terms opaque to linarith; push_cast normalized those four expressions and the standard floor bounds closed every coordinate inequality"}],
      :fixture
-     {:path "/tmp/klein-plane-action.lean",
+     {:path "/tmp/klein-square-representative.lean",
       :sha256
-      "d2fdc5858dccb0654d72036fffdb5331184f9cec2617cd2bae3dc81723b88777",
+      "2fbe27a38611477d9007a8361b4b6b58e2445edbc14b5d1351449065af545035",
       :interface
-      "coordinateAct gives the explicit affine coordinate formula; coordinateAct_mul proves its action law; planeAction installs the transported PresentedKleinGroup MulAction on Real times Real; generatorA_smul and generatorB_smul prove horizontal translation and glide-reflection formulas."},
+      "exists_halfOpenSquare_smul sends every point of Real times Real into [0,1) times [0,1) by an explicitly constructed PresentedKleinGroup element using integer floors; exists_closedSquare_smul gives the required closed-square representative."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/plane-action-square-orbit-classification",
@@ -94268,7 +94279,8 @@
    [:lemma-kleinpresentedgroup-coordinatenormalform
     :routes-2026-10-10-checkpoint-topo1-after-klein-coordinate-normal-form-19
     :routes-2026-10-10-klein-coordinate-inversion-power-24
-    :routes-2026-10-10-klein-plane-affine-action-25],
+    :routes-2026-10-10-klein-plane-affine-action-25
+    :routes-2026-10-10-klein-square-representative-26],
    :current-residual
    "Turn unique integer-pair normal forms into the explicit affine action formula, choose a closed-square representative of every orbit, and enumerate precisely the boundary coincidences.",
    :other-consumers []}
@@ -94817,7 +94829,8 @@
    :depends-on
    [:lemma-kleinpresentedgroup-coordinatenormalform
     :lemma-kleincoordinateinversionpower-action-toadd
-    :lemma-kleinplaneaffineaction-planeaction],
+    :lemma-kleinplaneaffineaction-planeaction
+    :lemma-kleinsquarerepresentative-exists-closedsquare-smul],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -95023,6 +95036,19 @@
    :id :lemma-kleinplaneaffineaction-generator-formulas,
    :kind :lemma,
    :depends-on [:lemma-kleinplaneaffineaction-coordinateact-mul],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "KleinSquareRepresentative.exists_closedSquare_smul"},
+   :lemma
+   {:name "KleinSquareRepresentative.exists_closedSquare_smul",
+    :reported-by []},
+   :id :lemma-kleinsquarerepresentative-exists-closedsquare-smul,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
