@@ -487,6 +487,35 @@ theorem apm_t02a03_leftTubePlanar_norm_sub_one_le_corePlanarDistance
     (abs_norm_sub_norm_le (apm_t02a03_leftTubePlanarComplex p)
       ((Real.cos t : ℂ) + (Real.sin t : ℂ) * Complex.I))
 
+theorem apm_t02a03_leftTubeNormalComplex_norm_le_dist_leftCore
+    (p : apm_t02a03_leftTubeSubtype) (t : ℝ) :
+    ‖apm_t02a03_leftTubeNormalComplex p‖ ≤
+      dist p.1 (apm_t02a03_leftCore t) := by
+  rw [dist_eq_norm, EuclideanSpace.norm_eq, Complex.norm_def]
+  simp [apm_t02a03_leftTubeNormalComplex, apm_t02a03_leftTubePlanarComplex,
+    apm_t02a03_leftCore, Fin.sum_univ_succ]
+  apply Real.sqrt_le_sqrt
+  have h :=
+    apm_t02a03_leftTubePlanar_norm_sub_one_le_corePlanarDistance p t
+  have hsq :
+      (‖apm_t02a03_leftTubePlanarComplex p‖ - 1) ^ 2 ≤
+        ‖apm_t02a03_leftTubePlanarComplex p -
+          ((Real.cos t : ℂ) + (Real.sin t : ℂ) * Complex.I)‖ ^ 2 := by
+    have hs := (sq_le_sq₀ (abs_nonneg (‖apm_t02a03_leftTubePlanarComplex p‖ - 1))
+      (norm_nonneg _)).2 h
+    simpa only [sq_abs] using hs
+  rw [Complex.sq_norm] at hsq
+  simp [Complex.normSq_apply, apm_t02a03_leftTubePlanarComplex,
+    Complex.cos_ofReal_re, Complex.sin_ofReal_re] at hsq ⊢
+  nlinarith
+
+theorem apm_t02a03_leftTubeNormalComplex_norm_le
+    (p : apm_t02a03_leftTubeSubtype) :
+    ‖apm_t02a03_leftTubeNormalComplex p‖ ≤ (1 / 4 : ℝ) := by
+  obtain ⟨q, ⟨t, rfl⟩, hd⟩ :=
+    apm_t02a03_leftTube_exists_near_leftCore p.1 p.2
+  exact (apm_t02a03_leftTubeNormalComplex_norm_le_dist_leftCore p t).trans hd
+
 theorem apm_t02a03_rightCore_zero :
     apm_t02a03_rightCore 0 = (0 : apm_t02a03_E3) := by
   ext i
