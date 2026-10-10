@@ -85740,8 +85740,144 @@
    "Identify the literal inclusion maps in homology so the codiagonal cokernel and rank-addition induction can be proved.",
    :other-consumers [:t97A03]}
   {:consumer :t92J06,
-   :phase :probe,
+   :phase :implementation,
    :state :open,
+   :scope
+   ["ConstructionTargets/PointWedgeQuotientSheetLocalHomeomorph.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/shared/point-wedge-covering-gluing/quotient-sheets/matched-saturation",
+   :acceptance
+   {:placeholder "the single sorries in apm_t92j06 and apm_t99j01",
+    :route-step
+    "geometric prerequisite for t92J06 step 1 and t99J01 step 5",
+    :declarations
+    ["MatchedQuotientSheetData"
+     "matchedQuotientSheet_isSaturated"
+     "matchedQuotientSheet_image_isOpen"
+     "matchedQuotientSheet_pairwise_disjoint"
+     "matchedQuotientSheetLocalHomeomorph"
+     "matchedQuotientSheetLocalHomeomorph_apply"
+     "matchedQuotientSheetLocalHomeomorph_symm_apply"
+     "matchedQuotientSheets_preimage_eq_iUnion"],
+    :implementation
+    "For matched sheets selected from evenly covered neighborhoods on the two summands, prove the union of each matched pair is saturated for the fiber-identification EqvGen and compute its quotient preimage exactly. Use the coinduced topology to prove each quotient image open. Classify EqvGen witnesses between two matched pairs to prove distinct images disjoint. Descend the two source-sheet homeomorphisms to one OpenPartialHomeomorph onto the wedge neighborhood, proving the forward map equation and both over-base inverse identities. Prove the quotient preimage is the indexed union and instantiate only the finite two- and three-sheet circle cases needed by t92J06 and t99J01. Defer fiber cardinality and consumer classification.",
+    :axioms :standard-only,
+    :fixture
+    "/tmp/point-wedge-quotient-sheet-local-homeomorph-probe.lean",
+    :fixture-sha256
+    "5e989e6755c635999cb1623d41cd8c907d1f7c7d2a6f2f5ee6dec2042813b3f9",
+    :commands
+    ["lake env lean ConstructionTargets/PointWedgeQuotientSheetLocalHomeomorph.lean"
+     "lake env lean /tmp/point-wedge-quotient-sheet-local-homeomorph-probe.lean"
+     "python3 scripts/statement-registry.py check"]},
+   :id :routes-2026-10-10-point-wedge-matched-sheet-saturation-1,
+   :kind :reusable-theorem,
+   :depends-on [],
+   :current-residual
+   "Prove one coherent matched-sheet saturation theorem; openness, pairwise disjointness, local-homeomorph charts, the indexed preimage cover, and both inverse identities then follow in the compiled interface.",
+   :other-consumers [:t99J01]}
+  {:consumer :t92J06,
+   :evidence
+   {:probe
+    {:residual
+     "Exactly one shared geometric prerequisite remains: classify the quotient relation on matched source sheets strongly enough to prove saturation. The existing point-wedge quotient API then supplies openness, and the compiled interface packages the local homeomorphs for both consumers.",
+     :outcome :revise,
+     :warnings
+     [{:kind :interface-axiom,
+       :message
+       "The placeholder-free fixture uses exactly one nonstandard axiom for the matched quotient-sheet package; the two- and three-sheet demonstrations and all requested projection fields are otherwise proved."}],
+     :prerequisite
+     {:consumer :t92J06,
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/PointWedgeQuotientSheetLocalHomeomorph.lean"],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/shared/point-wedge-covering-gluing/quotient-sheets/matched-saturation",
+      :acceptance
+      {:placeholder "the single sorries in apm_t92j06 and apm_t99j01",
+       :route-step
+       "geometric prerequisite for t92J06 step 1 and t99J01 step 5",
+       :declarations
+       ["MatchedQuotientSheetData"
+        "matchedQuotientSheet_isSaturated"
+        "matchedQuotientSheet_image_isOpen"
+        "matchedQuotientSheet_pairwise_disjoint"
+        "matchedQuotientSheetLocalHomeomorph"
+        "matchedQuotientSheetLocalHomeomorph_apply"
+        "matchedQuotientSheetLocalHomeomorph_symm_apply"
+        "matchedQuotientSheets_preimage_eq_iUnion"],
+       :implementation
+       "For matched sheets selected from evenly covered neighborhoods on the two summands, prove the union of each matched pair is saturated for the fiber-identification EqvGen and compute its quotient preimage exactly. Use the coinduced topology to prove each quotient image open. Classify EqvGen witnesses between two matched pairs to prove distinct images disjoint. Descend the two source-sheet homeomorphisms to one OpenPartialHomeomorph onto the wedge neighborhood, proving the forward map equation and both over-base inverse identities. Prove the quotient preimage is the indexed union and instantiate only the finite two- and three-sheet circle cases needed by t92J06 and t99J01. Defer fiber cardinality and consumer classification.",
+       :axioms :standard-only,
+       :fixture
+       "/tmp/point-wedge-quotient-sheet-local-homeomorph-probe.lean",
+       :fixture-sha256
+       "5e989e6755c635999cb1623d41cd8c907d1f7c7d2a6f2f5ee6dec2042813b3f9",
+       :commands
+       ["lake env lean ConstructionTargets/PointWedgeQuotientSheetLocalHomeomorph.lean"
+        "lake env lean /tmp/point-wedge-quotient-sheet-local-homeomorph-probe.lean"
+        "python3 scripts/statement-registry.py check"]},
+      :id :routes-2026-10-10-point-wedge-matched-sheet-saturation-1,
+      :kind :reusable-theorem,
+      :depends-on [],
+      :current-residual
+      "Prove one coherent matched-sheet saturation theorem; openness, pairwise disjointness, local-homeomorph charts, the indexed preimage cover, and both inverse identities then follow in the compiled interface.",
+      :other-consumers [:t99J01]},
+     :axioms
+     ["propext"
+      "Classical.choice"
+      "Quot.sound"
+      "PointWedgeQuotientSheetProbe.matched_quotient_sheet_local_homeomorph"],
+     :commands
+     [{:cmd "stat -c '%F %n' .lake/packages",
+       :exit 0,
+       :finding
+       "directory .lake/packages; canonical package authority is present"}
+      {:cmd
+       "lake env lean ConstructionTargets/PointWedgeQuotient.lean",
+       :exit 0,
+       :finding
+       "the banked saturated-open point-wedge quotient lemmas compile with standard axioms"}
+      {:cmd
+       "lake env lean ConstructionTargets/PointWedgeRestrictedOpenQuotient.lean",
+       :exit 0,
+       :finding
+       "the banked restricted quotient homeomorphisms compile with standard axioms"}
+      {:cmd
+       "lake env lean /tmp/point-wedge-quotient-sheet-local-homeomorph-probe.lean",
+       :exit 0,
+       :finding
+       "the exact open-sheet, pairwise-disjointness, local-homeomorph, preimage-cover, and two inverse identities elaborate for Fin 2 and Fin 3 from one isolated interface axiom"}
+      {:cmd
+       "sha256sum /tmp/point-wedge-quotient-sheet-local-homeomorph-probe.lean",
+       :exit 0,
+       :finding
+       "5e989e6755c635999cb1623d41cd8c907d1f7c7d2a6f2f5ee6dec2042813b3f9"}
+      {:cmd
+       "Python comment-stripped placeholder census of /tmp/point-wedge-quotient-sheet-local-homeomorph-probe.lean",
+       :exit 0,
+       :finding "0"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :finding "131 registered statements match, 0 do not"}
+      {:cmd "git status --short", :exit 0, :finding "clean"}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/point-wedge-quotient-sheet-local-homeomorph-probe.lean",
+       :exit 1,
+       :finding
+       "The first draft used the obsolete LocalHomeomorph name and an invalid Prop-valued structure field.",
+       :correction
+       "Used Mathlib v4.29 OpenPartialHomeomorph and an abstract hypothesis predicate; the successful rerun is in commands."}],
+     :fixture
+     {:path
+      "/tmp/point-wedge-quotient-sheet-local-homeomorph-probe.lean",
+      :sha256
+      "5e989e6755c635999cb1623d41cd8c907d1f7c7d2a6f2f5ee6dec2042813b3f9"},
+     :seat "topo-4"}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/point-wedge-covering-gluing/quotient-sheets",
@@ -85761,7 +85897,8 @@
    :routes-2026-10-10-point-wedge-quotient-sheet-local-homeomorph-1,
    :kind :reusable-theorem,
    :depends-on
-   [:routes-2026-10-10-checkpoint-topo1-covering-shared-three-1],
+   [:routes-2026-10-10-checkpoint-topo1-covering-shared-three-1
+    :routes-2026-10-10-point-wedge-matched-sheet-saturation-1],
    :current-residual
    "Prove openness, disjointness, and inverse identities for matched quotient sheets at the wedge point.",
    :other-consumers [:t99J01]}
