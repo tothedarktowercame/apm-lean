@@ -53732,35 +53732,36 @@
   {:bounded-exception
    "single-consumer bounded cover-small homology comparison naturality",
    :consumer :t97A04,
+   :stop-count 1,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/production_cover_small_homology_naturality.lean",
-      :sha256
-      "67122ec18a860a037ace897c27daced3647ea3b3472877493122cdefa637564f"},
-     :commands
-     [{:cmd
-       "sha256sum /tmp/production_cover_small_homology_naturality.lean",
-       :exit 0}
-      {:cmd
-       "lake env lean /tmp/production_cover_small_homology_naturality.lean",
-       :exit 0}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/production_cover_small_homology_naturality.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
-     :implementation
-     {:scope
-      ["ConstructionTargets/ProductionConnectingNaturality.lean"]},
-     :acceptance
-     {:implementation
-      "Append coverSmallHomologyIso_naturality_of_square and memberwiseCoverSmallHomology_naturality to ConstructionTargets/ProductionConnectingNaturality.lean exactly as compiled in the fixture. Compile the target, verify no placeholders, run the statement registry check, and print axioms for both new theorems."},
-     :residual
-     "The canonical memberwise cover-small map now has the exact homology naturality square through coverSmallHomologyIso. The parent connecting-map proof next assembles the Boolean intersection, pieces, and union maps into a ShortComplex.Hom and conjugates delta_naturality through the production comparison isomorphisms."}},
+   {:residual
+    "Restore the exact fixture whose SHA-256 is recorded, then rerun this implementation row from hash verification through compilation, placeholder scan, registry check, axiom printing, and commit.",
+    :outcome :stop,
+    :disposition :stop,
+    :author "topo-1",
+    :reason
+    "The required compiled fixture /tmp/production_cover_small_homology_naturality.lean is absent, so its recorded SHA-256 cannot be verified and the mandated exact fixture text cannot be appended without reconstructing an unverified implementation. The row requires fixture-hash verification before modifying scope; no scoped change or commit was made.",
+    :commands
+    [{:cmd
+      "test -e /tmp/production_cover_small_homology_naturality.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git status --short", :exit 0, :output ""}
+     {:cmd "git rev-parse HEAD",
+      :exit 0,
+      :output "db5f9984d40dc8bf3f55bf1d2dae2e635adc7d8f"}],
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/production_cover_small_homology_naturality.lean",
+     :expected-sha256
+     "67122ec18a860a037ace897c27daced3647ea3b3472877493122cdefa637564f",
+     :status :missing},
+    :seat "topo-1"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ProductionConnectingNaturality.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
