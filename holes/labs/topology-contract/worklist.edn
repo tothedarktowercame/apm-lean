@@ -90988,8 +90988,161 @@
      :review-outcomes]},
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+   :evidence
+   {:outcome :replan,
+    :seat "topo-4",
+    :commands
+    [{:cmd "bb holes/labs/topology-contract/worklist_check.bb",
+      :exit 0,
+      :finding
+      "pre-transition ledger: 755 items, 708 done, 20 superseded, 16 needs-owner, 10 blocked, 1 open; recording this checkpoint and adding two rows yields 757 items with 20 superseded"}
+     {:cmd
+      "comment-stripped placeholder census for t99J01 t92J06 t97A03 t93J03 t01A03 t97A01",
+      :exit 0,
+      :finding "counts 1, 1, 3, 1, 1, 1; total 8; delta 0"}
+     {:cmd
+      "rg -n \"wideSubquiverSymmetrify|geodesicSubtree|ActionCategory|IsFreeGroupoid.Generators|arborescence.*card|card.*arborescence\" ConstructionTargets .lake/packages/mathlib/Mathlib/Combinatorics/Quiver .lake/packages/mathlib/Mathlib/GroupTheory/FreeGroup -g '*.lean'",
+      :exit 0,
+      :finding
+      "definitions and qualitative Nielsen-Schreier uses exist, but no endpoint-preserving edge equivalence or finite arborescence cardinality theorem"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :finding
+    {:routes
+     {:t99J01
+      ["three-circles fundamental-group coordinates"
+       "banked covering-subgroup index"
+       "banked finite coset product-edge package"
+       "action-groupoid generator-edge comparison"
+       "finite arborescence edge count"
+       "complement count and Type-valued Nielsen-Schreier basis"
+       "path-component restriction and cyclic-cover connectedness"
+       "assembly"],
+      :t92J06
+      ["matched quotient-sheet local-homeomorph"
+       "permutation cover"
+       "Cayley-tree classification"
+       "assembly"],
+      :t97A03
+      ["double-cover gluing"
+       "fixed-model comparisons"
+       "banked finite coset product-edge package"
+       "action-groupoid generator-edge comparison"
+       "finite arborescence edge count"
+       "complement count and Type-valued Nielsen-Schreier basis"
+       "transport and assembly"],
+      :t93J03
+      ["Klein orbit classification"
+       "deck-group fundamental group"
+       "normal form"
+       "lifting criterion"
+       "annulus embedding"
+       "assembly"],
+      :t01A03
+      ["circle-wedge fundamental group and torus commutativity"
+       "separating-circle collar"
+       "assembly"],
+      :t97A01
+      ["banked standard-N3 homeomorphism"
+       "polygon radial cover"
+       "polygon fundamental group and Mayer-Vietoris"
+       "banked Smith normalization"
+       "assembly"]},
+     :placeholder-delta 0,
+     :preserved-boundaries
+     ["polygon radial descent"
+      "strict point-wedge inclusion squares"
+      "path-component cover restriction"
+      "cyclic-monodromy connectedness"
+      "Klein orbit fundamental domain"
+      "double-cover stratum gluing"
+      "fixed-model quotient-to-bouquet equivalences"],
+     :placeholder-counts
+     {:t99J01 1,
+      :t92J06 1,
+      :t97A03 3,
+      :t93J03 1,
+      :t01A03 1,
+      :t97A01 1},
+     :deferred
+     ["The finite-arborescence edge-count row waits for the action-groupoid representation comparison."
+      "The Type-valued basis comparison waits for both."],
+     :infrastructure-packets
+     {:banked 0, :reviewed-stops 1, :placeholder-changing 0},
+     :ranking
+     "No nearer closing adapter is enabled. The endpoint-preserving action-groupoid edge comparison is the first bounded prerequisite on the two-consumer Schreier route.",
+     :typed-residual-change
+     ["The combined spanning-tree complement row received a reviewed STOP: the banked product-edge model is not identified with Mathlib's action-groupoid generator quiver, and the generic finite-arborescence edge count is independently absent."
+      "The route is now ordered into an action-groupoid edge representation comparison, then a finite arborescence count, then the complement arithmetic and Type-valued Nielsen-Schreier basis."
+      "The index-zero refutation remains preserved."],
+     :review-outcomes {:pass 0, :stop 1, :closed-problems 0}},
+    :replacement-items
+    [{:consumer :t99J01,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/positive-index/action-groupoid-edge-comparison",
+      :acceptance
+      {:probe
+       "Compile an explicit endpoint-preserving equivalence between the banked positive-edge coordinates Fin r × (FreeGroup (Fin r) ⧸ H) and Quiver.Total (IsFreeGroupoid.Generators (ActionCategory (FreeGroup (Fin r)) (FreeGroup (Fin r) ⧸ H))). Identify the generator label, source coset, target coset, and inverse orientation used by Symmetrify, and prove the equivalence transports the banked r*n cardinality to the action-groupoid generator arrows. Do not choose a geodesic subtree or count tree edges.",
+       :placeholder
+       "the single sorry in apm_t99j01 and apm_t97A03_bridge_invariants_of_model",
+       :route-step
+       "t99J01 step 3 and t97A03 step 8, representation bridge from banked coset coordinates to Mathlib's action-groupoid generator quiver",
+       :gates
+       ["canonical packages"
+        "fixture compiles"
+        "zero fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :representation
+      {:source
+       "Banked positive-edge coordinates Fin r × (FreeGroup (Fin r) ⧸ H), with generator permutations on cosets",
+       :target
+       "Quiver.Total (IsFreeGroupoid.Generators (ActionCategory (FreeGroup (Fin r)) (FreeGroup (Fin r) ⧸ H))) and its Symmetrify orientations",
+       :direction
+       "Explicit endpoint-preserving equivalence from banked generator/coset coordinates to Mathlib action-groupoid generator arrows, with exact source, target, label, and inverse-orientation equations"},
+      :id
+      :routes-2026-10-10-finite-schreier-action-groupoid-edge-comparison-11,
+      :kind :representation-comparison,
+      :depends-on
+      [:routes-2026-10-10-finite-schreier-coset-quiver-positive-index-3],
+      :current-residual
+      "Expose the definitional generator-arrow subtype as product coordinates and transport the banked r*n cardinality without yet constructing a tree.",
+      :other-consumers [:t97A03]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:strategy
+       "Measure the action-groupoid generator-edge representation comparison, preserve all reviewed boundaries, recount six consumers and eight placeholders, then elect the finite-arborescence edge count or a nearer adapter."},
+      :id
+      :routes-2026-10-10-checkpoint-topo1-after-schreier-edge-comparison-11,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:routes-2026-10-10-finite-schreier-action-groupoid-edge-comparison-11],
+      :current-residual
+      "Review the first of two prerequisites isolated by the spanning-tree-count STOP.",
+      :other-consumers []}],
+    :author "topo-4",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -91003,6 +91156,68 @@
     :routes-2026-10-10-checkpoint-topo1-after-schreier-quiver-4],
    :current-residual
    "Review the second bounded construction in the shared positive-index Schreier generator count.",
+   :other-consumers []}
+  {:consumer :t99J01,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/positive-index/action-groupoid-edge-comparison",
+   :acceptance
+   {:probe
+    "Compile an explicit endpoint-preserving equivalence between the banked positive-edge coordinates Fin r × (FreeGroup (Fin r) ⧸ H) and Quiver.Total (IsFreeGroupoid.Generators (ActionCategory (FreeGroup (Fin r)) (FreeGroup (Fin r) ⧸ H))). Identify the generator label, source coset, target coset, and inverse orientation used by Symmetrify, and prove the equivalence transports the banked r*n cardinality to the action-groupoid generator arrows. Do not choose a geodesic subtree or count tree edges.",
+    :placeholder
+    "the single sorry in apm_t99j01 and apm_t97A03_bridge_invariants_of_model",
+    :route-step
+    "t99J01 step 3 and t97A03 step 8, representation bridge from banked coset coordinates to Mathlib's action-groupoid generator quiver",
+    :gates
+    ["canonical packages"
+     "fixture compiles"
+     "zero fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :representation
+   {:source
+    "Banked positive-edge coordinates Fin r × (FreeGroup (Fin r) ⧸ H), with generator permutations on cosets",
+    :target
+    "Quiver.Total (IsFreeGroupoid.Generators (ActionCategory (FreeGroup (Fin r)) (FreeGroup (Fin r) ⧸ H))) and its Symmetrify orientations",
+    :direction
+    "Explicit endpoint-preserving equivalence from banked generator/coset coordinates to Mathlib action-groupoid generator arrows, with exact source, target, label, and inverse-orientation equations"},
+   :id
+   :routes-2026-10-10-finite-schreier-action-groupoid-edge-comparison-11,
+   :kind :representation-comparison,
+   :depends-on
+   [:routes-2026-10-10-finite-schreier-coset-quiver-positive-index-3
+    :routes-2026-10-10-checkpoint-topo1-after-schreier-tree-count-10],
+   :current-residual
+   "Expose the definitional generator-arrow subtype as product coordinates and transport the banked r*n cardinality without yet constructing a tree.",
+   :other-consumers [:t97A03]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:strategy
+    "Measure the action-groupoid generator-edge representation comparison, preserve all reviewed boundaries, recount six consumers and eight placeholders, then elect the finite-arborescence edge count or a nearer adapter."},
+   :id
+   :routes-2026-10-10-checkpoint-topo1-after-schreier-edge-comparison-11,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:routes-2026-10-10-finite-schreier-action-groupoid-edge-comparison-11
+    :routes-2026-10-10-checkpoint-topo1-after-schreier-tree-count-10],
+   :current-residual
+   "Review the first of two prerequisites isolated by the spanning-tree-count STOP.",
    :other-consumers []}
   {:consumer :t99J01,
    :phase :probe,
