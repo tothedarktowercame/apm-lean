@@ -27,6 +27,21 @@ private abbrev ssetChains :=
   (AlgebraicTopology.SSet.singularChainComplexFunctor AddCommGrpCat).obj
     (AddCommGrpCat.of ℤ)
 
+/-- Naturality of the canonical subcomplex Mayer--Vietoris connecting map
+under a morphism of the underlying short complexes. -/
+theorem subcomplexMayerVietorisConnecting_naturality
+    {S T : SSet} (P Q : S.Subcomplex) (P' Q' : T.Subcomplex)
+    (φ : subcomplexMayerVietorisShortComplex P Q ⟶
+      subcomplexMayerVietorisShortComplex P' Q') (n : ℕ) :
+    subcomplexMayerVietorisConnecting P Q n ≫
+        HomologicalComplex.homologyMap φ.τ₁ n =
+      HomologicalComplex.homologyMap φ.τ₃ (n + 1) ≫
+        subcomplexMayerVietorisConnecting P' Q' n := by
+  exact HomologicalComplex.HomologySequence.δ_naturality φ
+    (subcomplexMayerVietorisShortComplex_shortExact P Q)
+    (subcomplexMayerVietorisShortComplex_shortExact P' Q')
+    (n + 1) n rfl
+
 /-- Homology of an ambient range subcomplex as the production singular
 homology of its underlying topological subspace. -/
 noncomputable def ambientRangeProductionHomologyIso
