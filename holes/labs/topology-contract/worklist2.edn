@@ -59033,56 +59033,63 @@
    "single-consumer punctured right-core attachment segment for the t02A03 geometric complement",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/t02a03_geometric_tube_cover.lean",
-      :sha256
-      "e61cbc98aa69ee5c3bc7066839e53deb346bb7ee9ed0e7ed6a82090d04e3a138"},
-     :commands
-     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "apm_t02a03_rightCoreAttachmentClosureMap, apm_t02a03_rightCoreAttachmentClosureMap_zero, apm_t02a03_rightCoreAttachmentPoint_mem_geometricY, and apm_t02a03_rightCoreAttachmentMap compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
-       :exit 0}
-      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "e61cbc98aa69ee5c3bc7066839e53deb346bb7ee9ed0e7ed6a82090d04e3a138  /tmp/t02a03_geometric_tube_cover.lean"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}
-      {:cmd
-       "rg -n '^((noncomputable )?def|theorem) apm_t02a03_rightCoreAttachment(ClosureMap|ClosureMap_zero|Point_mem_geometricY|Map)' /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "363:noncomputable def apm_t02a03_rightCoreAttachmentClosureMap :\n369:theorem apm_t02a03_rightCoreAttachmentClosureMap_zero :\n373:theorem apm_t02a03_rightCoreAttachmentPoint_mem_geometricY\n389:noncomputable def apm_t02a03_rightCoreAttachmentMap :"}],
-     :finding
-     "A complete placeholder-free fixture compiles for this bounded row. Restricting the frozen right core to Set.Icc 0 1 gives a continuous Euclidean-space segment whose zero endpoint is the uniquely deleted origin. For parameters in Set.Ioc 0 1, the right-core image cannot be zero: its first coordinate would force cos t = 1, and the small-angle cosine characterization would force t = 0, contradicting positivity. Thus the punctured segment bundles continuously into the exact geometricY subtype.",
-     :residual
-     "Promote the closed and punctured right-core attachment segment. The next consumer residual is to compare its deleted-origin endpoint with the closed collar endpoint, construct a homotopy in geometricY joining the punctured segment to the collar and based Circle meridian, and extend it over the tube pieces for gluing.",
-     :implementation
-     {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
-      :acceptance
-      {:declarations
-       ["apm_t02a03_rightCoreAttachmentClosureMap"
-        "apm_t02a03_rightCoreAttachmentClosureMap_zero"
-        "apm_t02a03_rightCoreAttachmentPoint_mem_geometricY"
-        "apm_t02a03_rightCoreAttachmentMap"],
-       :fixture-sha256
-       "e61cbc98aa69ee5c3bc7066839e53deb346bb7ee9ed0e7ed6a82090d04e3a138",
-       :gates
-       ["lake env lean ConstructionTargets/T02A03GeometricTubeCover.lean"
-        "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeCover.lean || true)\""
-        "python3 scripts/statement-registry.py check"],
-       :axioms ["propext" "Classical.choice" "Quot.sound"],
-       :consumer-residual
-       "Join the punctured right-core segment to the collar and based Circle meridian by a compatible homotopy, then extend to tube deformations and gluing; this packet claims neither."}}}},
+   {:placeholder-delta 0,
+    :residual
+    "Join the punctured right-core segment to the collar and based Circle meridian by a compatible homotopy, then extend to tube deformations and gluing; this packet claims neither.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+      :exit 0,
+      :output
+      "e61cbc98aa69ee5c3bc7066839e53deb346bb7ee9ed0e7ed6a82090d04e3a138  /tmp/t02a03_geometric_tube_cover.lean"}
+     {:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+      :exit 0,
+      :output
+      "The four right-core attachment declarations compiled; axioms [propext, Classical.choice, Quot.sound]."}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeCover.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.T02A03GeometricTubeCover",
+      :exit 0,
+      :output "Build completed successfully (8240 jobs)."}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeCover.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "comment-stripped placeholder census for problems/t02A03/lean/Main.lean",
+      :exit 0,
+      :output "1"}
+     {:cmd "sha256sum problems/t02A03/lean/Main.lean",
+      :exit 0,
+      :output
+      "b123eca388ab2858ca55daf538c1ddd645022b52f5196a15f0bb516d78323d7d  problems/t02A03/lean/Main.lean"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r 9d157af362ba024574e69415044e6a3d47f55b86",
+      :exit 0,
+      :output "ConstructionTargets/T02A03GeometricTubeCover.lean"}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "9d157af362ba024574e69415044e6a3d47f55b86",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
+    :fixture
+    {:path "/tmp/t02a03_geometric_tube_cover.lean",
+     :sha256
+     "e61cbc98aa69ee5c3bc7066839e53deb346bb7ee9ed0e7ed6a82090d04e3a138"},
+    :declarations
+    ["ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_rightCoreAttachmentClosureMap"
+     "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_rightCoreAttachmentClosureMap_zero"
+     "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_rightCoreAttachmentPoint_mem_geometricY"
+     "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_rightCoreAttachmentMap"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/geometric-right-core-attachment-segment",
