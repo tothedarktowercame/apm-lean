@@ -64659,6 +64659,21 @@
       :exit 0,
       :output "acdf9a25 Bank t97A04 ModuleCat H1 map square"}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791658157906-2721-654035ba",
+     :commands
+     ["git show/diff-tree/show --check acdf9a25c84fdd6423bda53a36e9b8ca7a62b8f0"
+      "sha256sum /tmp/t97a04_frozen_h1_coordinate.lean"
+      "lake env lean /tmp/t97a04_frozen_h1_coordinate.lean"
+      "lake env lean ConstructionTargets/T97A04FrozenH1Coordinate.lean"
+      "lake build ConstructionTargets.T97A04FrozenH1Coordinate"
+      "python3 scripts/statement-registry.py check --rev acdf9a25c84fdd6423bda53a36e9b8ca7a62b8f0"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "recompute recorded statement hash and comment-stripped placeholder counts"],
+     :finding
+     "PASS: reviewer codex-7 independently reviewed topo-6 commit acdf9a25; exact scope is 31 inserted lines in ConstructionTargets/T97A04FrozenH1Coordinate.lean only. Fixture SHA-256 c10c17e87cff020bbe16a848d4b5a64c4425661e0186333f15742f23ede500fd matches. Fixture and target compile with standard axioms [propext, Classical.choice, Quot.sound], focused build completes 8291 jobs, registry is 131/0, and worklist is 514 OK. frozenLbarModuleH1_map_commutes has the required orientation: canonical ModuleCat H1 map then aligned module coordinate = aligned module coordinate then frozenMatrixAddHom.toIntLinearMap. Faithfulness of forgetIntModules is used correctly; unfolding the lifted isomorphism exposes singularHomologyComparison followed by the aligned additive coordinate, singularHomologyComparison_naturality moves the forgotten module map across that boundary, and frozenLbarIntegralH1_map_commutes closes the square. Statement SHA-256 is b37a227404f13320a16eb938ee25c38f37d6719b3d34db41344e1b20c96bd806; target and fixture placeholders are 0, consumer placeholders remain 4, and the frozen matrix consumer remains unchanged."},
     :commit "acdf9a25c84fdd6423bda53a36e9b8ca7a62b8f0",
     :changed-paths
     ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"],
@@ -64674,7 +64689,7 @@
      ["ConstructionTargets.T97A04FrozenH1Coordinate.frozenLbarModuleH1_map_commutes"]},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t97A04/frozen-module-h1-map-square",
    :acceptance
@@ -64782,7 +64797,7 @@
      "The complete apm_t97A04_bridge_2 fixture is not yet compiled. The fixture now proves the single next prerequisite: after forgetting integer-module structure, singularHomologyComparison_naturality converts the canonical ModuleCat induced map to the additive-group homology map, and frozenLbarIntegralH1_map_commutes supplies the matrix square. Faithfulness of forgetIntModules then yields the aligned ModuleCat commuting square.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t97A04/h1-bridge-assembly",
    :acceptance
@@ -66055,7 +66070,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -66071,7 +66086,10 @@
     :type
     "(((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom frozenLbar)) ≫ frozenTorusAlignedH1ModuleIsoFinTwo.hom = frozenTorusAlignedH1ModuleIsoFinTwo.hom ≫ ModuleCat.ofHom frozenMatrixAddHom.toIntLinearMap",
     :proved-in
-    :routes-2026-10-10-t97a04-frozen-module-h1-map-square-topo2-r1},
+    :routes-2026-10-10-t97a04-frozen-module-h1-map-square-topo2-r1,
+    :banked-by
+    :routes-2026-10-10-t97a04-frozen-module-h1-map-square-topo2-r1,
+    :banked-commit "acdf9a25c84fdd6423bda53a36e9b8ca7a62b8f0"},
    :id
    :lemma-constructiontargets-t97a04frozenh1coordinate-frozenlbarmoduleh1-map-commutes,
    :kind :lemma,
