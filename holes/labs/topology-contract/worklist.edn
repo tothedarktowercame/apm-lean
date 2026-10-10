@@ -92209,6 +92209,19 @@
      "Original chosen-generator arrows selected by Mathlib wideSubquiverSymmetrify, and their complement inside the r*n positive-arrow type",
      :direction
      "Endpoint- and orientation-aware equivalence from each forward or reverse geodesic-tree arrow to its underlying selected original positive generator arrow, followed by exact finite-cardinality subtraction"},
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791641508513-2122-dff87b93",
+     :commands
+     ["git show cf840f39ec1592ea6f499d00c71f700fb6ea5a0d --stat and recorded source inspection"
+      "lake env lean ConstructionTargets/FiniteSchreierTreePositiveSelectionComplementCount.lean"
+      "sha256sum /tmp/tree-positive-selection.lean and recorded-source hash comparison"
+      "comment-stripped sorry/admit census for target and affected consumers"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show c290a81b:holes/labs/topology-contract/worklist.edn)"],
+     :finding
+     "exact one-file scope and fixture hash reproduce; the forward/reverse orientation bridge is bijective, excludes duplicate selection of one original arrow, and derives the positive-arrow complement formula with standard axioms and zero target placeholders"},
     :commit "cf840f39ec1592ea6f499d00c71f700fb6ea5a0d",
     :changed-paths
     ["ConstructionTargets/FiniteSchreierTreePositiveSelectionComplementCount.lean"],
@@ -92232,7 +92245,7 @@
       "ConstructionTargets.FiniteSchreierChosenGeneratorEdgeCoordinates"]},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/FiniteSchreierTreePositiveSelectionComplementCount.lean"],
    :dag-node
@@ -92295,7 +92308,7 @@
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
