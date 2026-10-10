@@ -86681,92 +86681,68 @@
    :current-residual
    "Prove the endpoint-monodromy quotient equivalence for a path-connected covering; all requested injectivity, finite-index, cardinality, and subgroup-containment lifting consequences then follow.",
    :other-consumers [:t93J03 :t97A03]}
-  {:consumer :t99J01,
+  {:description
+   "Uptake the banked standard-only module as the shared covering monodromy package; retain the exact quotient orientation, basepoint equality, cardinality formula, and range-containment lifting interface compiled by the fixture.",
+   :consumer :t99J01,
    :evidence
    {:probe
-    {:outcome :revise,
+    {:outcome :go,
      :seat "topo-4",
      :fixture
-     {:path "/tmp/covering-monodromy-coset-lifting-probe.lean",
+     {:path "/tmp/covering-monodromy-coset-lifting-go-probe.lean",
       :sha256
-      "e686b18a0cf2724a2e91de9d8ce160458143065dfbdd3f5ecc81d24d4da43219"},
+      "054578abc9e7485b94a575514c2c659e6127e5e34ebeecc7e78b1363a7e658b4"},
      :commands
      [{:cmd "stat -c '%F %n' .lake/packages",
        :exit 0,
        :finding
        "directory .lake/packages; canonical package authority is present"}
       {:cmd
-       "lake env lean .lake/packages/mathlib/Mathlib/Topology/Homotopy/Lifting.lean",
+       "lake env lean ConstructionTargets/CoveringMonodromyCosets.lean",
        :exit 0,
        :finding
-       "Mathlib's monodromy, induced fundamental-group injectivity, and based range-containment lifting criterion compile"}
+       "the endpoint-monodromy coset equivalence and all requested consequences compile"}
       {:cmd
-       "lake env lean /tmp/covering-monodromy-coset-lifting-probe.lean",
+       "lake env lean /tmp/covering-monodromy-coset-lifting-go-probe.lean",
        :exit 0,
        :finding
-       "fiber-coset equivalence, finite-index cardinality, pi1 injectivity, and based lifting interface elaborate from one isolated axiom"}
+       "the complete shared consumer interface compiles with standard-only axioms"}
       {:cmd
-       "sha256sum /tmp/covering-monodromy-coset-lifting-probe.lean",
+       "sha256sum /tmp/covering-monodromy-coset-lifting-go-probe.lean",
        :exit 0,
        :finding
-       "e686b18a0cf2724a2e91de9d8ce160458143065dfbdd3f5ecc81d24d4da43219"}
+       "054578abc9e7485b94a575514c2c659e6127e5e34ebeecc7e78b1363a7e658b4"}
       {:cmd
-       "Python comment-stripped placeholder census of /tmp/covering-monodromy-coset-lifting-probe.lean",
+       "Python comment-stripped placeholder census of /tmp/covering-monodromy-coset-lifting-go-probe.lean",
        :exit 0,
        :finding "0"}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :finding "131 registered statements match, 0 do not"}
       {:cmd "git status --short", :exit 0, :finding "clean"}],
-     :axioms
-     ["propext"
-      "Classical.choice"
-      "Quot.sound"
-      "CoveringMonodromyCosetLiftingProbe.fiberEquivCosets"],
-     :warnings
-     [{:kind :interface-axiom,
-       :message
-       "The placeholder-free fixture uses exactly one nonstandard axiom, identifying the fiber of a path-connected covering with cosets of the induced fundamental-group image; injectivity, lifting, cardinality transport, and finite index are otherwise standard-only."}],
-     :prerequisite
-     {:consumer :t99J01,
-      :phase :implementation,
-      :state :open,
-      :scope ["ConstructionTargets/CoveringMonodromyCosets.lean"],
-      :dag-node
-      "TOPOLOGY-ROUTES.md/shared/covering-monodromy-coset-lifting/fiber-cosets",
-      :acceptance
-      {:placeholder
-       "the single sorries in apm_t99j01 and apm_t93j03 and the classification bridge sorry in t97A03",
-       :route-step
-       "t99J01 step 2, t93J03 step 4, and t97A03 monodromy input",
-       :declarations
-       ["coveringInducedFundamentalGroupMap"
-        "coveringInducedFundamentalGroupMap_injective"
-        "coveringFiberEquivCosets"
-        "coveringFiberCard_eq_index"
-        "coveringFiniteIndex_of_finiteFiber"
-        "coveringExistsUniqueLift_of_range_le"],
-       :implementation
-       "For a path-connected covering p:E→X and e:E, map a based loop class in X to the endpoint of its lift from e. Prove two loop classes have the same endpoint exactly when their quotient classes differ by the range of p_*: the forward direction joins the two lifted endpoints by equality and uses injective_path_homotopic_map; the reverse direction uses monodromy_map and monodromy_trans_apply. Descend endpoint monodromy to an equivalence from the subgroup quotient to the fiber, proving injectivity by the endpoint criterion and surjectivity by path-connectedness of E followed by monodromy_map. Derive Nat.card fiber = subgroup index and finite-index transport. Re-export Mathlib's induced pi1 injectivity and existsUnique_continuousMap_lifts_of_range_le with the same basepoint equality orientation.",
-       :axioms :standard-only,
-       :fixture "/tmp/covering-monodromy-coset-lifting-probe.lean",
-       :fixture-sha256
-       "e686b18a0cf2724a2e91de9d8ce160458143065dfbdd3f5ecc81d24d4da43219",
-       :commands
-       ["lake env lean ConstructionTargets/CoveringMonodromyCosets.lean"
-        "lake env lean /tmp/covering-monodromy-coset-lifting-probe.lean"
-        "python3 scripts/statement-registry.py check"]},
-      :id :routes-2026-10-10-covering-monodromy-fiber-cosets-1,
-      :kind :reusable-theorem,
-      :depends-on [],
-      :current-residual
-      "Prove the endpoint-monodromy quotient equivalence for a path-connected covering; all requested injectivity, finite-index, cardinality, and subgroup-containment lifting consequences then follow.",
-      :other-consumers [:t93J03 :t97A03]},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :implementation
+     {:scope ["ConstructionTargets/CoveringMonodromyCosets.lean"],
+      :declarations
+      ["coveringInducedFundamentalGroupMap"
+       "coveringInducedFundamentalGroupMap_injective"
+       "coveringFiberEquivCosets"
+       "coveringFiberCard_eq_index"
+       "coveringFiniteIndex_of_finiteFiber"
+       "coveringExistsUniqueLift_of_range_le"],
+      :description
+      "Uptake the banked standard-only module as the shared covering monodromy package; retain the exact quotient orientation, basepoint equality, cardinality formula, and range-containment lifting interface compiled by the fixture.",
+      :axioms :standard-only,
+      :commands
+      ["lake env lean ConstructionTargets/CoveringMonodromyCosets.lean"
+       "lake env lean /tmp/covering-monodromy-coset-lifting-go-probe.lean"
+       "python3 scripts/statement-registry.py check"]},
+     :warnings [],
      :residual
-     "Exactly one shared prerequisite remains: identify endpoint monodromy orbits with cosets of the induced fundamental-group image. Mathlib already supplies pi1 injectivity and the based lifting criterion; Schreier rank and consumer-specific covering classifications remain downstream."}},
-   :phase :probe,
+     "The shared covering fiber-coset and lifting step is complete. Schreier rank for t99J01, the Klein-bottle deck model for t93J03, and explicit double-cover classification for t97A03 remain consumer-specific downstream work."}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/CoveringMonodromyCosets.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/covering-monodromy-coset-lifting",
    :acceptance
@@ -86782,8 +86758,20 @@
      "zero fixture sorry"
      "standard-only axioms"
      "registry check"]},
+   :axioms :standard-only,
+   :commands
+   ["lake env lean ConstructionTargets/CoveringMonodromyCosets.lean"
+    "lake env lean /tmp/covering-monodromy-coset-lifting-go-probe.lean"
+    "python3 scripts/statement-registry.py check"],
    :id :routes-2026-10-10-covering-monodromy-coset-lifting-shared-2,
    :kind :reusable-theorem,
+   :declarations
+   ["coveringInducedFundamentalGroupMap"
+    "coveringInducedFundamentalGroupMap_injective"
+    "coveringFiberEquivCosets"
+    "coveringFiberCard_eq_index"
+    "coveringFiniteIndex_of_finiteFiber"
+    "coveringExistsUniqueLift_of_range_le"],
    :depends-on
    [:routes-2026-10-10-checkpoint-topo1-covering-boundaries-1
     :routes-2026-10-10-covering-monodromy-fiber-cosets-1],
