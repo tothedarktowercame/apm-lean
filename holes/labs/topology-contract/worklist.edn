@@ -87320,8 +87320,59 @@
    "Conjugate the banked fiber-cardinality/index theorem to the frozen ThreeCircles cover predicate and record induced pi1 injectivity.",
    :other-consumers []}
   {:consumer :t97A01,
+   :stop-count 1,
+   :evidence
+   {:residual
+    "Provide a placeholder-free typed fixture fixing the exact signatures of GenericPointWedgeMVH0Coordinates, the three H0 isomorphisms, both literal-inclusion naturality equations, both production-arrow coordinate equations, the ThreeCircles path-connected instance, and its specialized package.",
+    :outcome :stop,
+    :warnings
+    [{:kind :specification-defect,
+      :message
+      "The acceptance declaration list and frozen fixture expose different names and the fixture axiomatizes the entire requested coordinate construction."}],
+    :disposition :stop,
+    :axioms
+    ["propext"
+     "Classical.choice"
+     "GenericPointWedgeMVCoordinatesProbe.generic_point_wedge_mv_pathconnected_coordinates"
+     "Quot.sound"],
+    :author "topo-2",
+    :reason
+    "The frozen fixture does not specify the accepted reusable API and is not a standard-only implementation fixture. It declares GenericWedgeMVH0Coordinates and one axiom generic_point_wedge_mv_pathconnected_coordinates, whereas acceptance requires the differently named GenericPointWedgeMVH0Coordinates plus nine standalone declarations whose Lean types are absent. In particular, the fixture fixes no signatures for the two literal-inclusion naturality equations, the individual H0 isomorphisms, the ThreeCircles PathConnectedSpace declaration, or the specialized coordinate package. Choosing whether these are equalities of ModuleCat morphisms, AddCommGrpCat morphisms, or fields projected from a package would invent the representation interface. The repaired path-connected hypotheses remove the earlier false H0 claim, but they do not supply these missing types or a placeholder-free proof fixture.",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/generic-point-wedge-mv-pathconnected-probe.lean",
+      :exit 0,
+      :finding
+      "a471b74db23e71f5112eaf625a6a969dc9203ba00c6582950b417d1d989fe82e"}
+     {:cmd
+      "Python comment-stripped census of /tmp/generic-point-wedge-mv-pathconnected-probe.lean",
+      :exit 0,
+      :finding
+      "0 sorry tokens and 1 axiom token; the axiom is generic_point_wedge_mv_pathconnected_coordinates"}
+     {:cmd
+      "rg -n \"^(structure|def|theorem|axiom) (GenericPointWedgeMVH0Coordinates|GenericWedgeMVH0Coordinates|genericPointWedgeOverlapH0Iso|genericPointWedgeLeftH0Iso|genericPointWedgeRightH0Iso|genericPointWedgeOverlapToLeft_H0_coordinates|genericPointWedgeOverlapToRight_H0_coordinates|genericPointWedgeIntersectionArrow_H0_coordinates|genericPointWedgeReassemblyArrow_H0_coordinates|threeCirclesPathConnectedSpace|threeCirclesMayerVietorisH0Coordinates|generic_point_wedge_mv_pathconnected_coordinates)\" /tmp/generic-point-wedge-mv-pathconnected-probe.lean",
+      :exit 0,
+      :finding
+      "Only GenericWedgeMVH0Coordinates and generic_point_wedge_mv_pathconnected_coordinates are declared; none of the accepted standalone API signatures appears."}
+     {:cmd
+      "lake env lean /tmp/generic-point-wedge-mv-pathconnected-probe.lean",
+      :exit 0,
+      :finding
+      "The fixture compiles, but repaired_intersection_coordinates depends on the nonstandard axiom generic_point_wedge_mv_pathconnected_coordinates."}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :fixture
+    {:path "/tmp/generic-point-wedge-mv-pathconnected-probe.lean",
+     :sha256
+     "a471b74db23e71f5112eaf625a6a969dc9203ba00c6582950b417d1d989fe82e",
+     :sorry-count 0,
+     :axiom-count 1,
+     :proof-placeholder-count 1},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/GenericPointWedgeMayerVietorisPathConnectedCoordinates.lean"],
    :dag-node
