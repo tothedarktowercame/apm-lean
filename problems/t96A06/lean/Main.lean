@@ -1,6 +1,7 @@
 import Mathlib
 import ConstructionTargets.ProjectiveSpaceTopology
 import ConstructionTargets.RationalLefschetz
+import ConstructionTargets.ProjectiveConsumerLiftDemonstrations
 
 /-! # t96A06: quadratic self-map of real projective three-space
 
@@ -14,6 +15,7 @@ stated: descent, Lefschetz number -3, and not homotopic to identity.
 
 open ConstructionTargets.ProjectiveSpaceTopology
 open ConstructionTargets.RationalLefschetz
+open ConstructionTargets.ProjectiveConsumerLiftDemonstrations
 noncomputable section
 
 namespace T96A06
@@ -23,6 +25,21 @@ def polynomialMap (v : Vectors ℝ 3) : Vectors ℝ 3 :=
   ![v 0 ^ 2 - v 1 ^ 2, 2 * v 0 * v 1,
     v 2 ^ 2 - v 3 ^ 2, 2 * v 2 * v 3]
 end T96A06
+
+lemma T96A06_polynomialMap_eq_consumerPolynomial (v : Vectors ℝ 3) :
+    T96A06.polynomialMap v = t96A06Polynomial v := by
+  rfl
+
+/-- The printed quadratic formula has a continuous projective descent. -/
+theorem T96A06_polynomialMap_descends :
+    ∃ f : ContinuousMap T96A06.RP3 T96A06.RP3,
+      ∀ v : NonzeroVectors ℝ 3,
+        f (quotientMap ℝ 3 v) = quotientMap ℝ 3
+          ⟨T96A06.polynomialMap v.val, by
+            rw [T96A06_polynomialMap_eq_consumerPolynomial]
+            exact t96A06Polynomial_nonzero v⟩ := by
+  simpa only [T96A06_polynomialMap_eq_consumerPolynomial] using
+    t96A06Polynomial_descends
 
 theorem apm_t96a06 :
     ∃ f : ContinuousMap T96A06.RP3 T96A06.RP3,
