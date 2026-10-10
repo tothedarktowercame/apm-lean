@@ -97848,102 +97848,84 @@
    :evidence
    {:probe
     {:residual
-     "Every pullback point now has a compiled path to the final-circle section with fixed Circle coordinate. The original row still needs the cyclic nth-power path between normalized points and concatenation into a PathConnectedSpace instance.",
-     :outcome :revise,
-     :warnings [],
+     "Implement the compiled fixture in ConstructionTargets/CyclicThreeCirclesPullbackPathConnected.lean; after review, combine this connected n-sheeted cover with the banked component-restriction theorem and finish the t99J01 subgroup-index adapter.",
+     :outcome :go,
+     :warnings
+     ["The worktree acquired unrelated topology-contract changes during this read-only probe; they were neither inspected as dependencies nor modified."],
      :missing-theorems
      [{:name "cyclicThreeCirclesPullback_pathConnected",
        :type
        "For every positive n, CyclicThreeCirclesPullbackCover.Pullback n is path connected.",
-       :status :partial,
+       :status :proved,
        :consumers [:t99J01],
        :depends-on
        ["CyclicThreeCirclesPullbackSheets.pullback_isKSheeted"
         "CyclicPullbackNormalizationPath.exists_normalization_path"],
        :area "covering-subgroup-correspondence"}],
-     :prerequisite
-     {:bounded-exception
-      "This single-consumer theorem lifts the banked collapse-constant normalization path into the literal pullback while fixing its Circle coordinate, reducing path connectedness to the cyclic path between normalized section points.",
-      :consumer :t99J01,
-      :phase :implementation,
-      :state :open,
-      :scope
-      ["ConstructionTargets/CyclicPullbackNormalizationPath.lean"],
-      :dag-node
-      "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/cyclic-three-circles-cover/pullback-normalization-path",
-      :acceptance
-      {:implementation
-       "For every n and every point of CyclicThreeCirclesPullbackCover.Pullback n, construct a path to the point over firstCircle (collapse y) with the same Circle coordinate. Build the subtype path directly from the banked collapse-constant base path and prove its Circle coordinate is fixed pointwise. Do not construct the cyclic path between normalized points, prove path connectedness, count sheets, compute subgroup index, or close t99J01.",
-       :placeholder "the single sorry in apm_t99j01",
-       :route-step
-       "t99J01 cyclic-cover step 8: lift collapse-fiber normalization paths into the literal pullback while fixing the sheet coordinate",
-       :fixture "/tmp/cyclic-pullback-normalization-path.lean",
-       :fixture-sha256
-       "7af8ace6b0417db48f71142cac09f3a96b68edec13a3a9b7d75fab56f03cce9c",
-       :gates
-       ["lake build ConstructionTargets.CyclicPullbackNormalizationPath"
-        "fixture compiles"
-        "zero source and fixture sorry"
-        "standard-only axioms"
-        "registry check"]},
-      :id :routes-2026-10-10-cyclic-pullback-normalization-path-46,
-      :kind :reusable-theorem,
-      :area "covering-subgroup-correspondence",
-      :depends-on
-      [:routes-2026-10-10-three-circles-collapse-fiber-path-45],
-      :current-residual
-      "For two normalized points with Circle coordinates z0 and z1, construct a Circle path alpha from z0 to z1 and the corresponding final-circle base path firstCircle (alpha(t)^n); lift this pair into the pullback, then concatenate with the normalization paths to prove Pullback n path connected.",
-      :other-consumers []},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake env lean /tmp/cyclic-pullback-normalization-path.lean",
+       "lake env lean /tmp/cyclic-three-circles-pullback-pathconnected.lean",
        :exit 0,
        :finding
-       "the collapse-fiber base path lifts definitionally to the literal pullback with fixed Circle coordinate"}
-      {:cmd "sha256sum /tmp/cyclic-pullback-normalization-path.lean",
-       :exit 0,
-       :finding
-       "7af8ace6b0417db48f71142cac09f3a96b68edec13a3a9b7d75fab56f03cce9c"}
+       "cyclic section paths concatenate with normalization paths to prove the literal pullback path connected using standard axioms"}
       {:cmd
-       "rg -n \"\\b(sorry|admit)\\b\" /tmp/cyclic-pullback-normalization-path.lean",
+       "sha256sum /tmp/cyclic-three-circles-pullback-pathconnected.lean",
+       :exit 0,
+       :finding
+       "8f78dac00206366476b2d55c7295708aea28d04e678cb413b86bd2fbbf370200"}
+      {:cmd
+       "rg -n \"\\b(sorry|admit)\\b\" /tmp/cyclic-three-circles-pullback-pathconnected.lean",
        :exit 1,
        :expected-exit 1,
        :finding "no placeholders"}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :finding "131 registered statements match, 0 do not"}
-      {:cmd "git status --short", :exit 0, :finding "clean"}],
+      {:cmd "git status --short",
+       :exit 0,
+       :finding
+       "unrelated concurrent changes are present in holes/labs/topology-contract/build_step.bb, holes/labs/topology-contract/test-loop.sh, and holes/labs/topology-contract/fixtures/replan-with-explicit-lemma-id.edn; the probe remained read-only"}],
      :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/cyclic-pullback-normalization-path.lean",
+     [{:cmd "lake env lean /tmp/cyclic-pullback-section-path.lean",
        :exit 1,
        :finding
-       "The initial Continuous.subtype_mk left the pullback equality proof as an unresolved placeholder; supplied the collapse-constant equality explicitly for every path parameter."}],
+       "The first cyclic section path associated continuous function composition in the wrong order; parenthesized the nth-power path before composing with firstCircle."}
+      {:cmd
+       "lake env lean /tmp/cyclic-three-circles-pullback-pathconnected.lean",
+       :exit 1,
+       :finding
+       "The first aggregate fixture imported the throwaway section-path filename as though it were a built ConstructionTargets module; inlined that already compiled declaration into the standalone fixture."}
+      {:cmd
+       "lake env lean /tmp/cyclic-three-circles-pullback-pathconnected.lean",
+       :exit 1,
+       :finding
+       "The first concatenation used the wrong endpoint-cast direction, omitted an explicit pullback inhabitant for IsPathConnected, and supplied Joined where JoinedIn univ was required; corrected all three and used pathConnectedSpace_iff_univ."}
+      {:cmd
+       "lake env lean /tmp/cyclic-three-circles-pullback-pathconnected.lean",
+       :exit 1,
+       :finding
+       "The source normalization path endpoint cast also required the equality reversed; changed it to hx.symm."}],
      :fixture
-     {:path "/tmp/cyclic-pullback-normalization-path.lean",
+     {:path "/tmp/cyclic-three-circles-pullback-pathconnected.lean",
       :sha256
-      "7af8ace6b0417db48f71142cac09f3a96b68edec13a3a9b7d75fab56f03cce9c",
+      "8f78dac00206366476b2d55c7295708aea28d04e678cb413b86bd2fbbf370200",
       :interface
-      "exists_normalization_path moves any cyclic pullback point to the final-circle section while preserving its Circle coordinate pointwise."},
+      "exists_section_path joins normalized points through nth-power final-circle coordinates; pullback_joined, pullback_isPathConnected, and pullbackPathConnectedSpace prove the literal cyclic pullback path connected for every degree."},
+     :implementation
+     {:scope
+      ["ConstructionTargets/CyclicThreeCirclesPullbackPathConnected.lean"],
+      :acceptance
+      "Implement the compiled fixture declarations exists_section_path, pullback_joined, pullback_isPathConnected, and pullbackPathConnectedSpace. Reuse the banked pullback normalization path and Circle path-connectedness transported through circleHomeomorphSphereOne. Do not count fibers or subgroup index, apply Schreier, or close t99J01."},
      :seat "topo-4"}},
-   :phase :probe,
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/CyclicThreeCirclesPullbackPathConnected.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/cyclic-three-circles-cover",
    :acceptance
-   {:probe
-    "Compile the degree-n circle cover, collapse from ThreeCircles, and path-connectedness of the positive-degree pullback via cyclic monodromy. Do not count subgroup index, apply Schreier, or close t99J01.",
-    :placeholder "the single sorry in apm_t99j01",
-    :route-step
-    "connected cyclic n-sheeted pullback cover of ThreeCircles",
-    :gates
-    ["canonical packages"
-     "fixture compiles"
-     "zero fixture sorry"
-     "standard-only axioms"
-     "registry check"]},
+   "Implement the compiled fixture declarations exists_section_path, pullback_joined, pullback_isPathConnected, and pullbackPathConnectedSpace. Reuse the banked pullback normalization path and Circle path-connectedness transported through circleHomeomorphSphereOne. Do not count fibers or subgroup index, apply Schreier, or close t99J01.",
    :id
    :routes-2026-10-10-cyclic-three-circles-pullback-pathconnected-38,
    :kind :reusable-theorem,
@@ -98397,7 +98379,9 @@
      :routes-2026-10-10-cyclic-three-circles-pullback-pathconnected-38],
     :type
     "theorem proving that pullback path connected from cyclic monodromy. The exact missing prerequisite is theorem cyclicThreeCirclesPullback_pathConnected (n : ℕ) (hn : 0 < n) : PathConnectedSpace (ConstructionTargets.LiteralPullbackCover.Pullback (circleDegreeMap n) threeCirclesFirstCircle). Its proof must define the degree-n circle map and the nested-wedge collapse, compute the monodromy as the n-cycle on Fin n, and convert transitivity into paths joining arbitrary pullback points. Searches of Mathlib and ConstructionTargets find neither the transitive-monodromy connectedness theorem nor an expl",
-    :area "covering-subgroup-correspondence"},
+    :area "covering-subgroup-correspondence",
+    :proved-in
+    :routes-2026-10-10-cyclic-three-circles-pullback-pathconnected-38},
    :id :lemma-cyclicthreecirclespullback-pathconnected,
    :kind :lemma,
    :depends-on
