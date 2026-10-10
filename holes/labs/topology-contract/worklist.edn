@@ -98659,8 +98659,62 @@
   {:bounded-exception
    "This single-consumer prerequisite proves the exact relation compatibility required to descend the banked outer radial deformation through the polygon quotient.",
    :consumer :t97A01,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Use quotient-product continuity to assemble the descended continuous homotopy and compare the restricted-relation quotient with the outerOpen subtype; then build the annulus model and boundary quotient-to-ThreeCircles identifications.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :missing-theorems
+    [{:name "PolygonOuterRadialRelation.quotientTimeSlice",
+      :type
+      "For a disk relation supported on radius one, every outer radial time slice preserves the restricted relation and its EqvGen closure and hence induces a quotient function, with representative and time-zero formulas; canonical SurfaceRel is supported on radius one.",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on ["PolygonOuterRadialDeformation.radialHomotopy"],
+      :area "polygon-surface-open-cover"}],
+    :statement-hashes "131 registered statements match",
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :finding "canonical package authority"}
+     {:cmd "sha256sum /tmp/polygon-outer-radial-relation.lean",
+      :exit 0,
+      :finding "fixture hash matches"}
+     {:cmd "lake build ConstructionTargets.PolygonOuterRadialRelation",
+      :exit 0}
+     {:cmd "lake env lean /tmp/polygon-outer-radial-relation.lean",
+      :exit 0,
+      :finding "fixture compiles with standard axioms"}
+     {:cmd "rg source for sorry or admit",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero source placeholders"}
+     {:cmd "rg fixture for sorry or admit",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero fixture placeholders"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short",
+      :exit 0,
+      :finding "clean worktree after commit"}],
+    :diagnostic-history [],
+    :commit "a7b0b665fffd59f1d0b43373224144980dc70214",
+    :changed-paths
+    ["ConstructionTargets/PolygonOuterRadialRelation.lean"],
+    :fixture
+    {:path "/tmp/polygon-outer-radial-relation.lean",
+     :sha256
+     "7840236ab5ade64798a161a3925ff285cea0be5004a5022c6dc65c90ec0861ea",
+     :sorry-count 0},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PolygonOuterRadialRelation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/outer-radial-relation",
@@ -101057,6 +101111,25 @@
    :id :lemma-radialquotientopensets-norm-edgepoint,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "PolygonOuterRadialRelation.quotientTimeSlice",
+    :type
+    "For a disk relation supported on radius one, every outer radial time slice preserves the restricted relation and its EqvGen closure and hence induces a quotient function, with representative and time-zero formulas; canonical SurfaceRel is supported on radius one."},
+   :lemma
+   {:name "PolygonOuterRadialRelation.quotientTimeSlice",
+    :reported-by [:routes-2026-10-10-polygon-outer-radial-relation-44],
+    :type
+    "For a disk relation supported on radius one, every outer radial time slice preserves the restricted relation and its EqvGen closure and hence induces a quotient function, with representative and time-zero formulas; canonical SurfaceRel is supported on radius one.",
+    :area "polygon-surface-open-cover",
+    :proved-in :routes-2026-10-10-polygon-outer-radial-relation-44},
+   :id :lemma-polygonouterradialrelation-quotienttimeslice,
+   :kind :lemma,
+   :depends-on [:lemma-polygonouterradialdeformation-radialhomotopy],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
