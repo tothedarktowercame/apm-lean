@@ -132,4 +132,27 @@ theorem circleMatrixRightPath_endpointInteger
     liftBasedLoopEndpointInteger_pointwiseInvPath]
   ring
 
+def circleMatrixMappedPath
+    (gamma : Path ((1 : Circle), (1 : Circle)) (1, 1)) :
+    Path ((1 : Circle), (1 : Circle)) (1, 1) where
+  toFun t := circleMatrixMap (gamma t)
+  continuous_toFun := circleMatrixMap.continuous.comp gamma.continuous
+  source' := by simp [circleMatrixMap]
+  target' := by simp [circleMatrixMap]
+
+theorem circleMatrixMappedPath_projLeft
+    (gamma : Path ((1 : Circle), (1 : Circle)) (1, 1)) :
+    (circleMatrixMappedPath gamma).map continuous_fst = circleMatrixLeftPath gamma := by
+  ext t
+  simp [circleMatrixMappedPath, circleMatrixLeftPath,
+    ConstructionTargets.CircleUniversalCover.pointwiseMulPath, circleMatrixMap, pow_two]
+
+theorem circleMatrixMappedPath_projRight
+    (gamma : Path ((1 : Circle), (1 : Circle)) (1, 1)) :
+    (circleMatrixMappedPath gamma).map continuous_snd = circleMatrixRightPath gamma := by
+  ext t
+  simp [circleMatrixMappedPath, circleMatrixRightPath,
+    ConstructionTargets.CircleUniversalCover.pointwiseMulPath,
+    ConstructionTargets.CircleUniversalCover.pointwiseInvPath, circleMatrixMap]
+
 end ConstructionTargets.TorusPiOneWindingCoordinates
