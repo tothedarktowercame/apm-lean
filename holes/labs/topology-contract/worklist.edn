@@ -82891,102 +82891,71 @@
    :current-residual
    "Prove the two arbitrary-n continuity statements. The compiled fixture then constructs the required OpenPartialHomeomorph charts and AffineChartConstruction n without further axioms.",
    :other-consumers []}
-  {:consumer :t99J05,
+  {:placeholder-after 1,
+   :fixture-sha256
+   "49b6c7fb9db8380597dbc413f0cd6eee55f1fa8c98ada830e9fc497a6838029f",
+   :consumer :t99J05,
    :evidence
    {:probe
-    {:residual
-     "Exactly one prerequisite remains for t99J05 step 1: arbitrary-n continuity of affine coordinates on the quotient patch and of chartInverse. Openness, inverse laws, coordinate-line normalization, and final chart assembly compile placeholder-free; diagonal local calculations and rational homology remain downstream.",
-     :outcome :revise,
-     :warnings
-     [{:kind :interface-axiom,
-       :message
-       "The fixture has no placeholders and uses exactly one nonstandard axiom: arbitrary-n continuity of coordinates on the affine source together with continuity of chartInverse. Openness, both inverse laws, coordinate-line normalization, and assembly of AffineChartConstruction n are proved."}],
-     :prerequisite
-     {:consumer :t99J05,
-      :phase :implementation,
-      :state :open,
-      :scope
-      ["ConstructionTargets/T99J05ArbitraryAffineChartContinuity.lean"],
-      :dag-node
-      "TOPOLOGY-ROUTES.md/t99J05/arbitrary-n-affine-quotient-charts/continuity",
-      :acceptance
-      {:placeholder "the single sorry in apm_t99j05",
-       :route-step
-       "t99J05 step 1, arbitrary-n affine-chart continuity",
-       :declarations
-       ["t99J05_coordinates_continuousOn"
-        "t99J05_chartInverse_continuous"
-        "t99J05_affine_chart_continuity_package"],
-       :fixture "/tmp/t99j05-arbitrary-affine-charts-probe.lean",
-       :fixture-sha256
-       "ff8a741410c5a3511bd8745bed8cd9f28c30084111da7136136d3948b2bb3d5c",
-       :implementation
-       "At arbitrary n and i, restrict quotientMap C n to the open nonzero-i-coordinate vectors and the affine source. Use projectiveQuotientMap_isOpen to prove the restriction is a quotient map. Prove the vector-ratio map continuous and identify its composite with coordinates, yielding ContinuousOn coordinates. Prove chartInverse continuous directly from the continuous coordinate insert map followed by continuous_quotientMap. Package exactly these two continuity results; the compiled fixture derives AffineChartConstruction n from the already banked openness and inverse laws.",
-       :axioms :standard-only,
-       :commands
-       ["lake env lean ConstructionTargets/T99J05ArbitraryAffineChartContinuity.lean"
-        "lake env lean /tmp/t99j05-arbitrary-affine-charts-probe.lean"
-        "python3 scripts/statement-registry.py check"]},
-      :id
-      :routes-2026-10-10-t99j05-arbitrary-affine-chart-continuity-1,
-      :kind :final-adapter,
-      :depends-on [],
-      :current-residual
-      "Prove the two arbitrary-n continuity statements. The compiled fixture then constructs the required OpenPartialHomeomorph charts and AffineChartConstruction n without further axioms.",
-      :other-consumers []},
-     :axioms
-     ["propext"
-      "Classical.choice"
-      "Quot.sound"
-      "T99J05ArbitraryAffineChartsProbe.t99J05_affine_chart_continuity_package"],
+    {:outcome :go,
+     :seat "topo-4",
+     :fixture
+     {:path "/tmp/t99j05-arbitrary-affine-charts-complete.lean",
+      :sha256
+      "49b6c7fb9db8380597dbc413f0cd6eee55f1fa8c98ada830e9fc497a6838029f"},
      :commands
-     [{:cmd "stat -c '%F %n' .lake/packages",
+     [{:cmd
+       "sha256sum /tmp/t99j05-arbitrary-affine-charts-probe.lean /tmp/t99j05-arbitrary-affine-charts-complete.lean",
+       :exit 0,
+       :finding
+       "dependency fixture restored at ff8a741410c5a3511bd8745bed8cd9f28c30084111da7136136d3948b2bb3d5c; completed fixture is 49b6c7fb9db8380597dbc413f0cd6eee55f1fa8c98ada830e9fc497a6838029f"}
+      {:cmd "stat -c '%F %n' .lake/packages",
        :exit 0,
        :finding
        "directory .lake/packages; /home/joe/code/apm-lean is the canonical package authority checkout"}
       {:cmd
-       "lake env lean -o /tmp/t99j05probe/ConstructionTargets/ComplexProjectiveChartTargets.olean ConstructionTargets/ComplexProjectiveChartTargets.lean",
-       :exit 0,
-       :finding
-       "the newly banked arbitrary-n openness and inverse-law declarations compile"}
-      {:cmd
-       "apm_lean_path=$(lake env printenv LEAN_PATH); LEAN_PATH=/tmp/t99j05probe:$apm_lean_path lean /tmp/t99j05-arbitrary-affine-charts-probe.lean",
+       "lake env lean ConstructionTargets/T99J05ArbitraryAffineChartContinuity.lean",
        :exit 0}
-      {:cmd "sha256sum /tmp/t99j05-arbitrary-affine-charts-probe.lean",
+      {:cmd
+       "lake env lean /tmp/t99j05-arbitrary-affine-charts-complete.lean",
        :exit 0,
        :finding
-       "ff8a741410c5a3511bd8745bed8cd9f28c30084111da7136136d3948b2bb3d5c"}
+       "AffineChartConstruction n depends only on propext, Classical.choice, and Quot.sound"}
       {:cmd
-       "Python comment-stripped placeholder census of /tmp/t99j05-arbitrary-affine-charts-probe.lean",
+       "Python comment-stripped placeholder census of /tmp/t99j05-arbitrary-affine-charts-complete.lean",
        :exit 0,
        :finding "0"}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :finding "131 registered statements match, 0 do not"}
       {:cmd "git status --short", :exit 0, :finding "clean"}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/t99j05-arbitrary-affine-charts-probe.lean",
-       :exit 1,
-       :finding
-       "the existing build olean predates the newly committed arbitrary-n openness and inverse-law declarations, and the first membership proof used an invalid rewrite",
-       :correction
-       "compiled the current source to a temporary module overlay and replaced the membership rewrite by affineSource_preimage membership transport; the successful compile is in commands"}
-      {:cmd
-       "LEAN_PATH=/tmp/t99j05probe:$apm_lean_path lean /tmp/t99j05-arbitrary-affine-charts-probe.lean",
-       :exit 1,
-       :finding
-       "the initial temporary overlay shadowed ConstructionTargets without exposing its other compiled modules",
-       :correction
-       "populated the temporary ConstructionTargets overlay with symlinks to the canonical compiled modules while retaining the fresh chart-target olean; the successful rerun is in commands"}],
-     :fixture
-     {:path "/tmp/t99j05-arbitrary-affine-charts-probe.lean",
-      :sha256
-      "ff8a741410c5a3511bd8745bed8cd9f28c30084111da7136136d3948b2bb3d5c"},
-     :seat "topo-4"}},
-   :phase :probe,
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :warnings
+     [{:kind :inherited-placeholder,
+       :message
+       "The consumer retains its single registered-theorem sorry. This row closes step 1 only; diagonal fixed-point/local-index calculations and rational homology remain downstream."}],
+     :implementation
+     {:placeholder-after 1,
+      :fixture-sha256
+      "49b6c7fb9db8380597dbc413f0cd6eee55f1fa8c98ada830e9fc497a6838029f",
+      :instructions
+      "Import ConstructionTargets.T99J05ArbitraryAffineChartContinuity. Add a proved theorem T99J05_affineChartConstruction (n : Nat) : AffineChartConstruction n immediately before apm_t99j05, following the completed fixture. Assemble the OpenPartialHomeomorph from affineSource_isOpen, the banked inverse laws, t99J05_coordinates_continuousOn, and t99J05_chartInverse_continuous, including the coordinate-line source and normalization proofs. Do not alter the registered theorem or address its remaining conjuncts.",
+      :scope ["problems/t99J05/lean/Main.lean"],
+      :axioms :standard-only,
+      :placeholder-before 1,
+      :commands
+      ["lake env lean problems/t99J05/lean/Main.lean"
+       "lake env lean /tmp/t99j05-arbitrary-affine-charts-complete.lean"
+       "python3 scripts/statement-registry.py check"],
+      :fixture "/tmp/t99j05-arbitrary-affine-charts-complete.lean",
+      :route-step "t99J05 step 1 only"},
+     :residual
+     "The arbitrary-n affine chart construction is complete and ready to bridge into t99J05. The registered sorry remains for the diagonal fixed-point/local-index package, rational CPn homology, Lefschetz number, and Euler characteristic."}},
+   :instructions
+   "Import ConstructionTargets.T99J05ArbitraryAffineChartContinuity. Add a proved theorem T99J05_affineChartConstruction (n : Nat) : AffineChartConstruction n immediately before apm_t99j05, following the completed fixture. Assemble the OpenPartialHomeomorph from affineSource_isOpen, the banked inverse laws, t99J05_coordinates_continuousOn, and t99J05_chartInverse_continuous, including the coordinate-line source and normalization proofs. Do not alter the registered theorem or address its remaining conjuncts.",
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["problems/t99J05/lean/Main.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J05/arbitrary-n-affine-quotient-charts",
    :acceptance
@@ -83000,11 +82969,19 @@
      "zero fixture sorry"
      "standard-only axioms"
      "registry check"]},
+   :axioms :standard-only,
+   :placeholder-before 1,
+   :commands
+   ["lake env lean problems/t99J05/lean/Main.lean"
+    "lake env lean /tmp/t99j05-arbitrary-affine-charts-complete.lean"
+    "python3 scripts/statement-registry.py check"],
    :id :routes-2026-10-10-t99j05-arbitrary-affine-charts-1,
    :kind :final-adapter,
+   :fixture "/tmp/t99j05-arbitrary-affine-charts-complete.lean",
    :depends-on
    [:routes-2026-10-10-checkpoint-topo1-refill-three-1
     :routes-2026-10-10-t99j05-arbitrary-affine-chart-continuity-1],
+   :route-step "t99J05 step 1 only",
    :current-residual
    "Generalize quotient-coordinate compatibility from CP2/Fin3 to CPn/Fin(n+1); diagonal local calculations and rational homology remain.",
    :other-consumers []}
