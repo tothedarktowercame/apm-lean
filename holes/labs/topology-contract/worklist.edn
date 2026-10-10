@@ -99621,6 +99621,20 @@
       :exit 0,
       :finding "clean worktree after commit"}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791669980335-3073-5202efff",
+     :commands
+     ["git show and diff-tree on 5c8b6ae14c53df01ac653f1d9496ce0189aed58d"
+      "sha256sum frozen fixture"
+      "lake build ConstructionTargets.PolygonTorusCrosscapRelation"
+      "lake env lean frozen fixture"
+      "comment-stripped placeholder counts"
+      "python3 scripts/statement-registry.py check"
+      "git diff-tree --check"],
+     :finding
+     "PASS: recorded commit is authored by topo-2 and changes only ConstructionTargets/PolygonTorusCrosscapRelation.lean; fixture hash matches; reverse is an involution on the unit interval; TorusCrosscapRel encodes a and b with reversed parameters and c with the same parameter, matching the a b a-inverse b-inverse c c word; every generator preserves complex norm and lies on radius one; the three quotient equations use the generating relation in the required orientation; source and fixture have zero placeholders; fixture reports only propext, Classical.choice, and Quot.sound; registry reports 131 matches and zero mismatches."},
     :commit "5c8b6ae14c53df01ac653f1d9496ce0189aed58d",
     :changed-paths
     ["ConstructionTargets/PolygonTorusCrosscapRelation.lean"],
@@ -99631,7 +99645,7 @@
      :sorry-count 0},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/PolygonTorusCrosscapRelation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/torus-crosscap-relation",
@@ -99754,7 +99768,7 @@
       "TorusCrosscapRel is the concrete six-edge relation a b a-inverse b-inverse c c; it preserves radius, is supported on the unit boundary, and its quotient map satisfies all three generator identifications."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -102449,7 +102463,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "PolygonTorusCrosscapRelation.TorusCrosscapRel",
@@ -102463,7 +102477,9 @@
     :type
     "The concrete disk-boundary relation for the six-edge word a b a-inverse b-inverse c c, with reversed parameters on the a and b pairings, radius-one support, norm preservation, and literal quotient generator equations.",
     :area "polygon-surface-open-cover",
-    :proved-in :routes-2026-10-10-polygon-torus-crosscap-relation-53},
+    :proved-in :routes-2026-10-10-polygon-torus-crosscap-relation-53,
+    :banked-by :routes-2026-10-10-polygon-torus-crosscap-relation-53,
+    :banked-commit "5c8b6ae14c53df01ac653f1d9496ce0189aed58d"},
    :id :lemma-polygontoruscrosscaprelation-toruscrosscaprel,
    :kind :lemma,
    :depends-on
