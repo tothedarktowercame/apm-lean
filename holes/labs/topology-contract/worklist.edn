@@ -96315,8 +96315,72 @@
   {:bounded-exception
    "This single-consumer finite calculation supplies the exact n-element deck kernel used both for the pullback sheet count and for enumerating cyclic monodromy transitions.",
    :consumer :t99J01,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Use the quotient-cover orbit description to identify every circlePower fiber with its n-element kernel, transfer the count through LiteralCoveringPullback.fiberEquiv, and prove cyclic monodromy makes the pullback path connected.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :missing-theorems
+    [{:name "CirclePowerKernelCard.circlePower_kernel_card",
+      :type
+      "For NeZero n, the kernel of powMonoidHom n on Circle is finite and has Nat.card n via an equivalence with rootsOfUnity n Circle",
+      :status :proved,
+      :consumers [:t99J01],
+      :depends-on ["CyclicThreeCirclesPullbackCover.covering"]}],
+    :statement-hashes "131 registered statements match",
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :finding
+      "canonical package authority resolves to /home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "sha256sum /tmp/circle-power-kernel-card.lean",
+      :exit 0,
+      :finding
+      "fixture hash matches eb87b29cbe38de29ae3497ad304b25e11382d838e03c15b38654b9e1dbcaef4d"}
+     {:cmd "lake build ConstructionTargets.CirclePowerKernelCard",
+      :exit 0,
+      :finding
+      "canonical kernel equivalence, finiteness, and cardinality build"}
+     {:cmd "lake env lean /tmp/circle-power-kernel-card.lean",
+      :exit 0,
+      :finding
+      "frozen fixture compiles and reports only standard axioms"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" ConstructionTargets/CirclePowerKernelCard.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero source placeholders"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" /tmp/circle-power-kernel-card.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero fixture placeholders"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short",
+      :exit 0,
+      :finding "clean worktree after commit"}],
+    :commit "527a3e58e9103364d5856694a034711c565bd18f",
+    :changed-paths ["ConstructionTargets/CirclePowerKernelCard.lean"],
+    :fixture
+    {:path "/tmp/circle-power-kernel-card.lean",
+     :sha256
+     "eb87b29cbe38de29ae3497ad304b25e11382d838e03c15b38654b9e1dbcaef4d",
+     :sorry-count 0},
+    :implementation
+    {:scope ["ConstructionTargets/CirclePowerKernelCard.lean"],
+     :declarations
+     ["ConstructionTargets.CirclePowerKernelCard.kernelEquivRoots"
+      "ConstructionTargets.CirclePowerKernelCard.circlePower_kernel_card"
+      "ConstructionTargets.CirclePowerKernelCard.circlePower_kernel_finite"]},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/CirclePowerKernelCard.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/cyclic-three-circles-cover/kernel-card",
@@ -97843,18 +97907,23 @@
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
-  {:consumer :portfolio,
+  {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
    :scope [],
    :acceptance
-   {:lemma "CirclePowerKernelCard.circlePower_kernel_card"},
+   {:lemma "CirclePowerKernelCard.circlePower_kernel_card",
+    :type
+    "For NeZero n, the kernel of powMonoidHom n on Circle is finite and has Nat.card n via an equivalence with rootsOfUnity n Circle"},
    :lemma
    {:name "CirclePowerKernelCard.circlePower_kernel_card",
-    :reported-by []},
+    :reported-by [:routes-2026-10-10-circle-power-kernel-card-41],
+    :type
+    "For NeZero n, the kernel of powMonoidHom n on Circle is finite and has Nat.card n via an equivalence with rootsOfUnity n Circle",
+    :proved-in :routes-2026-10-10-circle-power-kernel-card-41},
    :id :lemma-circlepowerkernelcard-circlepower-kernel-card,
    :kind :lemma,
-   :depends-on [],
+   :depends-on [:lemma-cyclicthreecirclespullbackcover-covering],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
