@@ -115,4 +115,31 @@ theorem apm_t02a03_rightCore_diff_leftCore :
     rw [← apm_t02a03_core_ranges_intersection]
     exact ⟨hpL, hpR⟩
 
+/-- A point of the right core belongs to the frozen geometric complement
+exactly when it is not the common origin. -/
+theorem apm_t02a03_rightCore_mem_geometricY_iff (t : ℝ) :
+    (apm_t02a03_rightCore t ∈ apm_t02a03_W ∧
+      apm_t02a03_rightCore t ∉ Set.range apm_t02a03_leftCore) ↔
+      apm_t02a03_rightCore t ≠ 0 := by
+  have htR : apm_t02a03_rightCore t ∈ Set.range apm_t02a03_rightCore :=
+    ⟨t, rfl⟩
+  have htW : apm_t02a03_rightCore t ∈ apm_t02a03_W := by
+    rw [apm_t02a03_W_eq_leftTube_union_rightTube]
+    exact Set.mem_union_right _
+      (Metric.self_subset_cthickening _ htR)
+  constructor
+  · rintro ⟨_, htL⟩ ht0
+    apply htL
+    rw [ht0]
+    exact apm_t02a03_origin_mem_both_cores.1
+  · intro ht0
+    refine ⟨htW, ?_⟩
+    intro htL
+    apply ht0
+    have htI : apm_t02a03_rightCore t ∈
+        Set.range apm_t02a03_leftCore ∩ Set.range apm_t02a03_rightCore :=
+      ⟨htL, htR⟩
+    rw [apm_t02a03_core_ranges_intersection] at htI
+    exact Set.mem_singleton_iff.mp htI
+
 end ConstructionTargets.T02A03GeometricTubeCover
