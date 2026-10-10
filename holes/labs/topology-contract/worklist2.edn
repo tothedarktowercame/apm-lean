@@ -63325,126 +63325,69 @@
   {:bounded-exception
    "single-consumer explicit tube-complement-to-generic-wedge homotopy equivalence for t02A03",
    :consumer :t02A03,
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "design the supporting signatures and discharge the frozen axiom type",
    :evidence
-   {:residual
-    "Split this foundation into a multi-row program: explicit left-tube-minus-core coordinates and deformation, explicit right-tube-minus-arc coordinates and deformation extending the banked attachment homotopy, an overlap model at the tangency, and a gluing theorem for compatible homotopy equivalences. After those are banked, assemble the frozen geometricYHomotopyEquivGenericWedge type.",
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Prove rightTubeMinusLeftCoreHomotopyEquivCircle using the banked based attachment homotopy; then construct compatible overlap data and assemble geometricYHomotopyEquivGenericWedge.",
     :outcome :stop,
+    :warnings [],
+    :missing-theorems
+    [{:name "rightTubeMinusLeftCoreHomotopyEquivCircle",
+      :type
+      "Nonempty (ContinuousMap.HomotopyEquiv ConstructionTargets.T02A03GeometricTubeDeformation.RightTubeMinusLeftCore Circle)",
+      :status :not-started,
+      :consumers [:t02A03],
+      :depends-on ["apm_t02a03_rightCoreBasedAttachmentHomotopy"]}
+     {:name "geometricYHomotopyEquivGenericWedge",
+      :type
+      "Nonempty (ContinuousMap.HomotopyEquiv T02A03GeometricTubeCover.apm_t02a03_geometricY_probe TorusCircleWedgeOpenCover.GenericWedge)",
+      :status :partial,
+      :consumers [:t02A03],
+      :depends-on
+      ["leftTubeMinusCoreHomotopyEquivTorus"
+       "rightTubeMinusLeftCoreHomotopyEquivCircle"]}],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not"},
     :disposition :stop,
-    :author "topo-8",
-    :reason
-    "The frozen theorem ConstructionTargets.T02A03GeometricTubeDeformation.geometricYHomotopyEquivGenericWedge : Nonempty (ContinuousMap.HomotopyEquiv T02A03GeometricTubeCover.apm_t02a03_geometricY_probe TorusCircleWedgeOpenCover.GenericWedge) is exactly the missing foundation and is too large for one probe prerequisite. The source is a closed Metric.infDist/cthickening-defined union of two solid tubes with the left core deleted. Its membership proof contains no continuous core parameter or normal coordinate. A proof must first construct explicit continuous tube coordinates and inverse maps, prove every deformation stage remains within radius 1/4 and avoids the deleted left core, handle the singular common tangency where nearest-core choices cease to be unique, and prove the two tube-piece maps and homotopies agree on their overlap. No such coordinate model, retraction, or homotopy-equivalence gluing theorem exists in ConstructionTargets. The alternative closed-cofibration gluing theorem is also absent and independently foundation-sized. This is a missing-construction boundary, not a refutation of the frozen type.",
+    :axioms [],
+    :author "topo-6",
+    :reason :partial-implementation,
     :commands
     [{:cmd
-      "test ! -e ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      "rg -n 'geometricYHomotopyEquivGenericWedge|rightTube.*(HomotopyEquiv|Radial|Coordinates)|HomotopyEquiv.*(glue|union)|leftTubeMinusCoreHomotopyEquivTorus' ConstructionTargets /tmp/t02a03_geometric_tube_cover.lean holes/labs/topology-routes/routes-{1,2,3}.md",
       :exit 0}
-     {:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
-      :exit 0,
-      :output
-      "The complete dependency fixture through apm_t02a03_rightCoreBasedAttachmentHomotopy compiled; axioms [propext, Classical.choice, Quot.sound]"}
      {:cmd
-      "rg -n \"geometricYHomotopyEquivGenericWedge|T02A03GeometricTubeDeformation|rightTube.*(retract|HomotopyEquiv)|cthickening.*(retract|HomotopyEquiv)\" ConstructionTargets holes/labs/topology-routes/routes-{1,2,3}.md",
-      :exit 1,
-      :expected-exit 1,
-      :output
-      "No scoped module, frozen declaration, tube retraction, or cthickening HomotopyEquiv was found."}
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
      {:cmd
-      "rg -n \"Nothing found for \\(b\\)|no ℝ³ tube-neighbourhood retractions|That lemma does not exist|plausibly hundreds of lines\" holes/labs/topology-routes/routes-1.md",
-      :exit 0,
-      :output
-      "The route states that no R3 tube-neighborhood retraction or homotopy-equivalence gluing lemma exists, and classifies the explicit infDist/tangency deformation as plausibly hundreds of lines and HEAVY."}
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeDeformation.lean || true)\"",
+      :exit 0}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :output "131 registered statements match, 0 do not"}
-     {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git rev-parse c7770496 && git diff-tree --no-commit-id --name-only -r c7770496",
       :exit 0,
       :output
-      "03caeef04ef63e83ed7d18db409c345c504bc183f7880e468fde0580ae1c37dd  /tmp/t02a03_geometric_tube_cover.lean"}],
-    :review
-    {:outcome :fail,
-     :seat "codex-7",
-     :job "invoke-1791632668106-1829-be4e8413",
-     :finding
-     "design the supporting signatures and discharge the frozen axiom type"},
-    :probe
-    {:outcome :revise,
-     :seat "topo-6",
-     :fixture
-     {:path "/tmp/t02a03_left_tube_punctured_model_interface.lean",
-      :sha256
-      "e674160049a6ee4cf1de075997304b51c967dcc2652d86dc0e2189981f8c37e8"},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/t02a03_left_tube_punctured_model_interface.lean",
-       :exit 0,
-       :output
-       "ConstructionTargets.T02A03LeftTubePuncturedModel.leftTubeMinusCoreHomotopyEquivTorus : Nonempty (ContinuousMap.HomotopyEquiv LeftTubeMinusCore TorusCircleWedgeOpenCover.Torus)"}
-      {:cmd
-       "sha256sum /tmp/t02a03_left_tube_punctured_model_interface.lean",
-       :exit 0,
-       :output
-       "e674160049a6ee4cf1de075997304b51c967dcc2652d86dc0e2189981f8c37e8  /tmp/t02a03_left_tube_punctured_model_interface.lean"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}
-      {:cmd
-       "rg -n \"leftTubeMinusCoreHomotopyEquivTorus|LeftTubeMinusCore\" ConstructionTargets",
-       :exit 1,
-       :expected-exit 1,
-       :output ""}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/t02a03_left_tube_punctured_model_interface.lean; sha256sum /tmp/t02a03_left_tube_punctured_model_interface.lean; python3 scripts/statement-registry.py check",
-       :exit 0,
-       :finding
-       "The shell sequence returned the final registry command's zero status, but Lean reported that an unqualified Torus was inferred as a free type without a TopologicalSpace instance. The interface was corrected to use ConstructionTargets.TorusCircleWedgeOpenCover.Torus, then the successful Lean compile was rerun alone and recorded in :commands."}],
-     :finding
-     "The rejected foundation is split at a concrete mathematical seam. The first missing component is the punctured left solid tube itself: the exact subtype of points in the frozen left cthickening but outside the frozen left core must be homotopy equivalent to the already banked torus model. The complete interface fixture fixes both the supporting subtype and theorem signature, and it compiles. This prerequisite is independent of right-tube overlap gluing, so it is one coherent bounded construction rather than a restatement of the full failed row.",
-     :prerequisite
-     {:bounded-exception
-      "single-consumer explicit punctured-left-tube model for t02A03",
-      :consumer :t02A03,
-      :phase :probe,
-      :type
-      "Nonempty (ContinuousMap.HomotopyEquiv LeftTubeMinusCore ConstructionTargets.TorusCircleWedgeOpenCover.Torus)",
-      :state :open,
-      :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
-      :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-punctured-model",
-      :acceptance
-      {:probe
-       "Produce a complete placeholder-free fixture defining LeftTubeMinusCore as {p : apm_t02a03_E3 // p ∈ apm_t02a03_leftTube ∧ p ∉ Set.range apm_t02a03_leftCore} and proving leftTubeMinusCoreHomotopyEquivTorus : Nonempty (ContinuousMap.HomotopyEquiv LeftTubeMinusCore ConstructionTargets.TorusCircleWedgeOpenCover.Torus). Construct explicit angular and punctured-normal coordinates for the frozen radius-1/4 left cthickening, their continuous comparison maps, and the two homotopies. Prove throughout that points remain in the frozen left tube and outside the frozen left core. Do not construct the right-tube model, overlap compatibility, gluing theorem, full geometricY equivalence, or consumer closure in this row.",
-       :declarations
-       ["ConstructionTargets.T02A03LeftTubePuncturedModel.LeftTubeMinusCore"
-        "ConstructionTargets.T02A03LeftTubePuncturedModel.leftTubeMinusCoreHomotopyEquivTorus"],
-       :type
-       "Nonempty (ContinuousMap.HomotopyEquiv LeftTubeMinusCore ConstructionTargets.TorusCircleWedgeOpenCover.Torus)",
-       :placeholder "the sole sorry in apm_t02a03",
-       :route-step
-       "t02A03 step 2, model the punctured left tube by the torus",
-       :gates
-       ["fixture compiles"
-        "fixture contains no sorry token"
-        "statement registry matches"]},
-      :id :routes-2026-10-10-t02a03-left-tube-punctured-model-topo2-r1,
-      :kind :reusable-theorem,
-      :declarations
-      ["ConstructionTargets.T02A03LeftTubePuncturedModel.LeftTubeMinusCore"
-       "ConstructionTargets.T02A03LeftTubePuncturedModel.leftTubeMinusCoreHomotopyEquivTorus"],
-      :depends-on
-      [:routes-2026-10-10-checkpoint-topo2-r5
-       :routes-2026-10-10-t02a03-geometric-tube-cover-topo2-r1],
-      :current-residual
-      "After the punctured-left-tube model is banked, construct the right-tube-minus-deleted-attachment model extending the based core homotopy, then overlap compatibility and gluing for the full geometricY equivalence.",
-      :other-consumers []}},
+      "c7770496893a4a0ec68663a7d1b1d1643572389e\nConstructionTargets/T02A03GeometricTubeDeformation.lean"}],
+    :commit "c7770496893a4a0ec68663a7d1b1d1643572389e",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+    :fixture
+    {:path "/tmp/t02a03_geometric_tube_cover.lean",
+     :sha256
+     "03caeef04ef63e83ed7d18db409c345c504bc183f7880e468fde0580ae1c37dd"},
     :finding
-    "The punctured-right-core attachment homotopy is fully compiled and standard-axiom-only, but it controls only a one-dimensional core parameter. Repository and route checks locate no theorem that extends it to the full three-dimensional tube complement or glues the two tube models. The requested scoped file does not exist, so there is no partial fixture that could qualify for GO or a smaller compiled prerequisite that could justify REVISE.",
-    :seat "topo-8"},
+    "Fresh search confirms the left punctured-tube equivalence is banked but no right-tube-minus-deleted-arc equivalence or compatible-union HomotopyEquiv construction exists. The committed scoped module fixes GeometricY, GenericWedge, and RightTubeMinusLeftCore as compiled interfaces. Completing the frozen theorem requires first proving the right-piece equivalence, then constructing compatible maps and homotopies on the tube overlap and gluing them.",
+    :seat "topo-6"},
    :phase :implementation,
    :type
    "Nonempty (ContinuousMap.HomotopyEquiv T02A03GeometricTubeCover.apm_t02a03_geometricY_probe TorusCircleWedgeOpenCover.GenericWedge)",
-   :state :open,
+   :state :needs-owner,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/geometric-tube-deformation-equivalence",
@@ -64702,4 +64645,54 @@
    :id :lemma-apm-t02a03-lefttubetoruscoordinates-torusinverse,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "rightTubeMinusLeftCoreHomotopyEquivCircle",
+    :type
+    "Nonempty (ContinuousMap.HomotopyEquiv ConstructionTargets.T02A03GeometricTubeDeformation.RightTubeMinusLeftCore Circle)"},
+   :lemma
+   {:name "rightTubeMinusLeftCoreHomotopyEquivCircle",
+    :reported-by
+    [:routes-2026-10-10-t02a03-geometric-tube-deformation-equivalence-topo2-r1],
+    :type
+    "Nonempty (ContinuousMap.HomotopyEquiv ConstructionTargets.T02A03GeometricTubeDeformation.RightTubeMinusLeftCore Circle)"},
+   :id :lemma-righttubeminusleftcorehomotopyequivcircle,
+   :kind :lemma,
+   :depends-on [:lemma-apm-t02a03-rightcorebasedattachmenthomotopy],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "apm_t02a03_rightCoreBasedAttachmentHomotopy"},
+   :lemma
+   {:name "apm_t02a03_rightCoreBasedAttachmentHomotopy",
+    :reported-by []},
+   :id :lemma-apm-t02a03-rightcorebasedattachmenthomotopy,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "geometricYHomotopyEquivGenericWedge",
+    :type
+    "Nonempty (ContinuousMap.HomotopyEquiv T02A03GeometricTubeCover.apm_t02a03_geometricY_probe TorusCircleWedgeOpenCover.GenericWedge)"},
+   :lemma
+   {:name "geometricYHomotopyEquivGenericWedge",
+    :reported-by
+    [:routes-2026-10-10-t02a03-geometric-tube-deformation-equivalence-topo2-r1],
+    :type
+    "Nonempty (ContinuousMap.HomotopyEquiv T02A03GeometricTubeCover.apm_t02a03_geometricY_probe TorusCircleWedgeOpenCover.GenericWedge)"},
+   :id :lemma-geometricyhomotopyequivgenericwedge,
+   :kind :lemma,
+   :depends-on
+   [:lemma-lefttubeminuscorehomotopyequivtorus
+    :lemma-righttubeminusleftcorehomotopyequivcircle],
    :other-consumers []}]}
