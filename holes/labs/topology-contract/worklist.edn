@@ -100696,8 +100696,83 @@
   {:bounded-exception
    "This single-consumer prerequisite proves the common geometric six-edge cover and closes surjectivity for both boundary comparison maps before their separate fiber classifications.",
    :consumer :t97A01,
+   :evidence
+   {:placeholder-delta {:source 0, :fixture 0},
+    :residual
+    "Classify the exact fibers of n3ThreeLoops and torusCrosscapThreeLoops to prove injectivity, promote the compiled continuous bijections to homeomorphisms, compose with ThreeCircles, and finish inclusion formulas and package assembly.",
+    :gates
+    {:module-build :pass,
+     :fixture-compiles :pass,
+     :zero-source-and-fixture-sorry :pass,
+     :standard-only-axioms :pass,
+     :registry-check :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["The new module and fixture emitted no warnings; imported modules replayed existing lints and informational standard-axiom reports."],
+    :missing-theorems
+    [{:name "PolygonSixEdgeCircleCover.sixEdgeCircleCover",
+      :type
+      "Every Circle point is circleEdgePoint j t for some canonical hexagon edge j and t in the closed unit interval.",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on
+      ["PolygonBoundaryThreeLoopSurjectivityReduction.surjective_n3ThreeLoops_of_edge_cover"
+       "PolygonBoundaryThreeLoopSurjectivityReduction.surjective_torusCrosscapThreeLoops_of_edge_cover"],
+      :area "polygon-surface-open-cover"}
+     {:name "PolygonSixEdgeCircleCover.surjective_n3ThreeLoops",
+      :type "n3ThreeLoops is surjective.",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on ["PolygonSixEdgeCircleCover.sixEdgeCircleCover"],
+      :area "polygon-surface-open-cover"}
+     {:name
+      "PolygonSixEdgeCircleCover.surjective_torusCrosscapThreeLoops",
+      :type "torusCrosscapThreeLoops is surjective.",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on ["PolygonSixEdgeCircleCover.sixEdgeCircleCover"],
+      :area "polygon-surface-open-cover"}],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "sha256sum /tmp/polygon-six-edge-circle-cover.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.PolygonSixEdgeCircleCover",
+      :exit 0}
+     {:cmd "lake env lean /tmp/polygon-six-edge-circle-cover.lean",
+      :exit 0}
+     {:cmd
+      "rg -n \\b(sorry|admit)\\b ConstructionTargets/PolygonSixEdgeCircleCover.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "rg -n \\b(sorry|admit)\\b /tmp/polygon-six-edge-circle-cover.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "2023abb3a5842d227d8ae441f7f9c125ef9c12d3",
+    :changed-paths
+    ["ConstructionTargets/PolygonSixEdgeCircleCover.lean"],
+    :fixture
+    {:path "/tmp/polygon-six-edge-circle-cover.lean",
+     :sha256
+     "87bc115157b38e928fbff30cc944c3fd14d420bec3003e9c24aba022d71d9699",
+     :sorry-count 0},
+    :implementation
+    {:scope ["ConstructionTargets/PolygonSixEdgeCircleCover.lean"],
+     :summary
+     "Identified every canonical edge parameterization with AddCircle.toCircle at coordinate j+t, split the canonical Ico representative into six unit intervals to cover Circle, and proved both three-loop maps surjective."},
+    :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PolygonSixEdgeCircleCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/six-edge-circle-cover",
@@ -104031,15 +104106,17 @@
    :lemma
    {:name "PolygonSixEdgeCircleCover.sixEdgeCircleCover",
     :reported-by
-    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40
+     :routes-2026-10-10-polygon-six-edge-circle-cover-63],
     :type
     "For every z : Circle there are j : Fin 6 and t : Set.Icc (0 : Real) 1 such that circleEdgePoint j t = z.",
     :area "polygon-surface-open-cover",
-    :proved-in
-    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+    :proved-in :routes-2026-10-10-polygon-six-edge-circle-cover-63},
    :id :lemma-polygonsixedgecirclecover-sixedgecirclecover,
    :kind :lemma,
-   :depends-on [],
+   :depends-on
+   [:lemma-polygonboundarythreeloopsurjectivityreduction-surjective-n3threeloops-of-edge-co
+    :lemma-polygonboundarythreeloopsurjectivityreduction-surjective-toruscrosscapthreeloops],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -104052,12 +104129,12 @@
    :lemma
    {:name "PolygonSixEdgeCircleCover.surjective_n3ThreeLoops",
     :reported-by
-    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40
+     :routes-2026-10-10-polygon-six-edge-circle-cover-63],
     :type
     "Function.Surjective PolygonBoundaryThreeLoopMaps.n3ThreeLoops.",
     :area "polygon-surface-open-cover",
-    :proved-in
-    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+    :proved-in :routes-2026-10-10-polygon-six-edge-circle-cover-63},
    :id :lemma-polygonsixedgecirclecover-surjective-n3threeloops,
    :kind :lemma,
    :depends-on
@@ -104077,12 +104154,12 @@
    {:name
     "PolygonSixEdgeCircleCover.surjective_torusCrosscapThreeLoops",
     :reported-by
-    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40
+     :routes-2026-10-10-polygon-six-edge-circle-cover-63],
     :type
     "Function.Surjective PolygonBoundaryThreeLoopMaps.torusCrosscapThreeLoops.",
     :area "polygon-surface-open-cover",
-    :proved-in
-    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+    :proved-in :routes-2026-10-10-polygon-six-edge-circle-cover-63},
    :id
    :lemma-polygonsixedgecirclecover-surjective-toruscrosscapthreeloops,
    :kind :lemma,
