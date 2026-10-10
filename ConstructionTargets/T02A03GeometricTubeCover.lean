@@ -165,4 +165,26 @@ noncomputable def apm_t02a03_rightCoreSurvivorMap :
     exact Continuous.subtype_mk
       (apm_t02a03_continuous_rightCore.comp continuous_subtype_val) _
 
+/-- A fixed point on the normal meridian above the deleted common origin. -/
+noncomputable def apm_t02a03_meridianAnchor : apm_t02a03_E3 :=
+  WithLp.toLp 2 ![0, 0, (1 / 8 : ℝ)]
+
+theorem apm_t02a03_meridianAnchor_mem_geometricY :
+    apm_t02a03_meridianAnchor ∈ apm_t02a03_W ∧
+      apm_t02a03_meridianAnchor ∉ Set.range apm_t02a03_leftCore := by
+  constructor
+  · rw [apm_t02a03_W_eq_leftTube_union_rightTube]
+    apply Set.mem_union_left
+    apply Metric.mem_cthickening_of_dist_le apm_t02a03_meridianAnchor 0
+      (1 / 4 : ℝ) (Set.range apm_t02a03_leftCore)
+      apm_t02a03_origin_mem_both_cores.1
+    rw [dist_zero_right]
+    change ‖WithLp.toLp 2 ![0, 0, (1 / 8 : ℝ)]‖ ≤ (1 / 4 : ℝ)
+    rw [EuclideanSpace.norm_eq]
+    norm_num [Fin.sum_univ_succ]
+  · rintro ⟨t, ht⟩
+    have hz := congrArg (fun q : apm_t02a03_E3 => q 2) ht
+    change (0 : ℝ) = 1 / 8 at hz
+    norm_num at hz
+
 end ConstructionTargets.T02A03GeometricTubeCover
