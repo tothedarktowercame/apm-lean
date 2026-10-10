@@ -65245,22 +65245,93 @@
    :consumer :t02A03,
    :implements-lemma
    :lemma-apm-t02a03-rightcorebasedattachmenthomotopy,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:residual
+     "Bank this lemma node. This readies rightTubeMinusLeftCoreHomotopyEquivCircle; after that equivalence is banked, geometricYHomotopyEquivGenericWedge remains before the sole t02A03 consumer placeholder can close.",
+     :outcome :go,
+     :warnings [],
+     :missing-theorems
+     [{:name
+       "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_rightCoreBasedAttachmentHomotopy",
+       :type
+       "ContinuousMap.Homotopy apm_t02a03_rightCoreAttachmentMap (ContinuousMap.const (Set.Ioc (0 : ℝ) 1) (apm_t02a03_circleMeridianMap (Circle.exp (Real.pi / 2))))",
+       :status :proved,
+       :consumers [:t02A03],
+       :depends-on []}],
+     :commands
+     [{:cmd
+       "lake env lean /tmp/t02a03_right_attachment_homotopy_bank.lean",
+       :exit 0,
+       :output
+       "Exact declaration type checked; axioms [propext, Classical.choice, Quot.sound]."}
+      {:cmd
+       "lake env lean ConstructionTargets/T02A03GeometricTubeCover.lean",
+       :exit 0}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_right_attachment_homotopy_bank.lean ConstructionTargets/T02A03GeometricTubeCover.lean || true)\"",
+       :exit 0}
+      {:cmd
+       "sha256sum /tmp/t02a03_right_attachment_homotopy_bank.lean",
+       :exit 0,
+       :output
+       "abfdda0c9ffd4fa4d82f92a1ff503af1b4c0c56566aa802fe4d6b8db0444af77  /tmp/t02a03_right_attachment_homotopy_bank.lean"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/t02a03_right_attachment_homotopy_bank.lean",
+       :exit 1,
+       :finding
+       "The first type-exact example was declared computable while the banked homotopy is noncomputable. Adding a noncomputable section preserved the theorem type and compiled the reuse fixture."}],
+     :fixture
+     {:path "/tmp/t02a03_right_attachment_homotopy_bank.lean",
+      :sha256
+      "abfdda0c9ffd4fa4d82f92a1ff503af1b4c0c56566aa802fe4d6b8db0444af77"},
+     :finding
+     "The ready DAG node is already implemented canonically. The declaration composes the banked right-core lift homotopy with the anchor contraction homotopy, producing the exact based attachment homotopy to the constant quarter-turn circle-meridian point.",
+     :implementation
+     {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
+      :declarations
+      ["ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_rightCoreBasedAttachmentHomotopy"],
+      :acceptance
+      {:action
+       "Bank the existing compiled declaration without changing its statement or proof.",
+       :implements-lemma
+       :lemma-apm-t02a03-rightcorebasedattachmenthomotopy,
+       :type
+       "ContinuousMap.Homotopy apm_t02a03_rightCoreAttachmentMap (ContinuousMap.const (Set.Ioc (0 : ℝ) 1) (apm_t02a03_circleMeridianMap (Circle.exp (Real.pi / 2))))",
+       :axioms ["propext" "Classical.choice" "Quot.sound"],
+       :gates
+       ["canonical module compiles"
+        "type-exact fixture compiles"
+        "module and fixture contain no sorry token"
+        "statement registry matches"]}},
+     :seat "topo-8"}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/right-core-based-attachment-homotopy",
    :acceptance
-   {:probe
-    "Compile and bank the existing ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_rightCoreBasedAttachmentHomotopy without changing its statement.",
-    :declaration
-    "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_rightCoreBasedAttachmentHomotopy",
-    :placeholder "the sole sorry in apm_t02a03",
-    :route-step
-    "t02A03 geometric tube equivalence, discharge the ready based-attachment DAG node"},
+   {:action
+    "Bank the existing compiled declaration without changing its statement or proof.",
+    :implements-lemma
+    :lemma-apm-t02a03-rightcorebasedattachmenthomotopy,
+    :type
+    "ContinuousMap.Homotopy apm_t02a03_rightCoreAttachmentMap (ContinuousMap.const (Set.Ioc (0 : ℝ) 1) (apm_t02a03_circleMeridianMap (Circle.exp (Real.pi / 2))))",
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :gates
+    ["canonical module compiles"
+     "type-exact fixture compiles"
+     "module and fixture contain no sorry token"
+     "statement registry matches"]},
    :id
    :routes-2026-10-10-t02a03-bank-right-based-attachment-homotopy-topo2-r1,
    :kind :reusable-theorem,
+   :declarations
+   ["ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_rightCoreBasedAttachmentHomotopy"],
    :depends-on [:routes-2026-10-10-checkpoint-topo2-r6],
    :current-residual
    "The declaration exists but its lemma node remains backlog; banking it readies rightTubeMinusLeftCoreHomotopyEquivCircle.",
@@ -66618,6 +66689,29 @@
     :routes-2026-10-10-t02a03-bank-left-coordinate-inverse-topo2-r1},
    :id
    :lemma-constructiontargets-t02a03geometrictubecover-apm-t02a03-lefttubetoruscoordinates,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_rightCoreBasedAttachmentHomotopy",
+    :type
+    "ContinuousMap.Homotopy apm_t02a03_rightCoreAttachmentMap (ContinuousMap.const (Set.Ioc (0 : ℝ) 1) (apm_t02a03_circleMeridianMap (Circle.exp (Real.pi / 2))))"},
+   :lemma
+   {:name
+    "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_rightCoreBasedAttachmentHomotopy",
+    :reported-by
+    [:routes-2026-10-10-t02a03-bank-right-based-attachment-homotopy-topo2-r1],
+    :type
+    "ContinuousMap.Homotopy apm_t02a03_rightCoreAttachmentMap (ContinuousMap.const (Set.Ioc (0 : ℝ) 1) (apm_t02a03_circleMeridianMap (Circle.exp (Real.pi / 2))))",
+    :proved-in
+    :routes-2026-10-10-t02a03-bank-right-based-attachment-homotopy-topo2-r1},
+   :id
+   :lemma-constructiontargets-t02a03geometrictubecover-apm-t02a03-rightcorebasedattachment,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}]}
