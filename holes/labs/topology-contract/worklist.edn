@@ -95624,7 +95624,7 @@
      :infrastructure-packets
      :review-outcomes]},
    :review-finding
-   "recompute the checkpoint ranking from the recorded ledger: build_step priorities ranks lemma-genericpointwedgeoverlapinclusionsquares and lemma-polygonradialopencoverpackages for t97A01 at :closest 2, while the elected t99J01 prerequisites are :closest 3; replace the false recorded finding that t99J01 is closest 2 and elect the nearer t97A01 pair, or record a valid explicit priority criterion that overrides :closest",
+   "regenerate the checkpoint evidence from the final recorded ledger or record and hash the pre-mutation ranking snapshot: using build_step.bb and worklist.edn from commit 492bef49 ranks the t99J01 pair at :closest 2 and the t97A01 pair at :closest 3, contradicting the stored claim of a live-repair tie and the stored priority-top values; the recorded-commit worklist checker also reports 837 items rather than the stored command finding of 834",
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :evidence
@@ -95809,9 +95809,15 @@
       "Review the two remaining concrete comparison packages on the nearest one-placeholder route and close t97A01 as soon as both are banked.",
       :other-consumers []}],
     :author "topo-4",
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1791653236771-2535-efd4a8ec",
+     :finding
+     "regenerate the checkpoint evidence from the final recorded ledger or record and hash the pre-mutation ranking snapshot: using build_step.bb and worklist.edn from commit 492bef49 ranks the t99J01 pair at :closest 2 and the t97A01 pair at :closest 3, contradicting the stored claim of a live-repair tie and the stored priority-top values; the recorded-commit worklist checker also reports 837 items rather than the stored command finding of 834"}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :repair,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -95831,7 +95837,7 @@
    :consumer :t97A01,
    :implements-lemma :lemma-genericpointwedgeoverlapinclusionsquares,
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-open-cover/generic-point-wedge-overlap-squares",
@@ -95860,7 +95866,7 @@
    :consumer :t97A01,
    :implements-lemma :lemma-polygonradialopencoverpackages,
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-open-cover/radial-packages",
@@ -95895,7 +95901,7 @@
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :phase :strategy,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
