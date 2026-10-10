@@ -64245,6 +64245,21 @@
       :exit 0,
       :output "d75bb981 Bank t97A04 Hurewicz basepoint transport"}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791656309519-2659-2673e37e",
+     :commands
+     ["git show/diff-tree/show --check d75bb981592224445974c3c1d9aae91c793d5e9c"
+      "sha256sum /tmp/t97a04_frozen_h1_coordinate.lean"
+      "lake env lean /tmp/t97a04_frozen_h1_coordinate.lean"
+      "lake env lean ConstructionTargets/T97A04FrozenH1Coordinate.lean"
+      "lake build ConstructionTargets.T97A04FrozenH1Coordinate"
+      "python3 scripts/statement-registry.py check --rev d75bb981592224445974c3c1d9aae91c793d5e9c"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "recompute both frozen declaration hashes and comment-stripped placeholder counts"],
+     :finding
+     "PASS: reviewer codex-7 independently reviewed topo-6 commit d75bb981; exact scope is 38 inserted lines in ConstructionTargets/T97A04FrozenH1Coordinate.lean only. Fixture SHA-256 16e975e990678de6328bd0306dcf805f85587fb433414306a1d9ac7adc04f0a1 matches. Fixture and target compile with standard axioms [propext, Classical.choice, Quot.sound], focused build completes 8291 jobs, registry is 131/0, and worklist is 503 OK. The general lemma transports the pi1 coordinate along equality-induced conjugation, reduces reflexive conjugation and composition to identity, and leaves finiteFreeHurewiczCoordinateMulEquiv unchanged; the frozen specialization applies it along frozenLbar_base in the same direction as frozenTorusPi1CoordAtLbarBase, then reuses the aligned identity theorem. Registered and supporting statement SHA-256 values are c127575e5483b590225304324987611532978d69ae5b1a4234446bf196029ae1 and e2966b7753ddbd9522fda497ee2607741bbf2be186a95909fd90558795811618; target and fixture placeholders are 0, consumer placeholders remain 4, and the frozen matrix consumer remains unchanged."},
     :commit "d75bb981592224445974c3c1d9aae91c793d5e9c",
     :changed-paths
     ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"],
@@ -64261,7 +64276,7 @@
       "ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusAlignedHurewiczCoordinateAtLbarBase_apply"]},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A04/frozen-hurewicz-basepoint-transport",
@@ -64372,7 +64387,7 @@
      "The full apm_t97A04_bridge_2 proof remains absent. The compiled general theorem proves finiteFreeHurewiczCoordinateMulEquiv is invariant when its fundamental-group coordinate is transported by equality-induced categorical conjugation. The frozen specialization combines this with the banked aligned coordinate to prove the Hurewicz coordinate at frozenLbar (0,0) is exactly the identity.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t97A04/h1-bridge-assembly",
    :acceptance
@@ -65483,7 +65498,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -65498,7 +65513,10 @@
     :type
     "forall {X : Type} [TopologicalSpace X] [PathConnectedSpace X] {x y : X} (h : x = y) {n : ℕ} (piCoordY : FundamentalGroup X y ≃* Multiplicative (Fin n → ℤ)) (h1Coord : Multiplicative (ConstructionTargets.DegreeOneHurewiczMap.IntegralH1 X) ≃* Multiplicative (Fin n → ℤ)) (q : Multiplicative (Fin n → ℤ)), finiteFreeHurewiczCoordinateMulEquiv (((eqToIso (congr_arg FundamentalGroupoid.mk h)).conj).trans piCoordY) h1Coord q = finiteFreeHurewiczCoordinateMulEquiv piCoordY h1Coord q",
     :proved-in
-    :routes-2026-10-10-t97a04-frozen-hurewicz-basepoint-transport-topo2-r1},
+    :routes-2026-10-10-t97a04-frozen-hurewicz-basepoint-transport-topo2-r1,
+    :banked-by
+    :routes-2026-10-10-t97a04-frozen-hurewicz-basepoint-transport-topo2-r1,
+    :banked-commit "d75bb981592224445974c3c1d9aae91c793d5e9c"},
    :id
    :lemma-constructiontargets-t97a04frozenh1coordinate-finitefreehurewiczcoordinatemulequi,
    :kind :lemma,
