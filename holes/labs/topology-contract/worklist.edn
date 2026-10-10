@@ -84906,8 +84906,53 @@
    "Specialize the banked two-open free-product theorem recursively to finite point wedges and normalize the result to FreeGroup (Fin n).",
    :other-consumers [:t01A03 :t97A01 :t97A03 :t92J06]}
   {:consumer :t92J06,
+   :stop-count 1,
+   :evidence
+   {:placeholder-after {:t92J06 1, :t99J01 1},
+    :residual
+    "First compile the quotient relation on E ⊕ F, the descended map, and a wedge-point trivialization theorem proving saturation, openness, disjointness, and the sheet homeomorphisms. Then derive the fiber equivalence/cardinality and instantiate the permutation and cyclic circle covers.",
+    :outcome :stop,
+    :warnings [],
+    :disposition :stop,
+    :axioms
+    ["propext"
+     "Classical.choice"
+     "Quot.sound"
+     "point_wedge_covering_gluing_package"],
+    :author "topo-2",
+    :placeholder-before {:t92J06 1, :t99J01 1},
+    :reason
+    "The supplied probe does not construct the quotient-glued covering. It postulates point_wedge_covering_gluing_package, whose conclusion already contains the total type, topology, descended map, IsCoveringMap witness, and wedge-fiber equivalence; point_wedge_covering_fiber_card merely applies Nat.card_congr to that assumed equivalence. Its #print axioms reports the custom package axiom, contradicting :axioms :standard-only, and none of the seven acceptance declarations occurs. Mathlib supplies IsEvenlyCovered.toTrivialization and constructors assembling a covering from local trivializations, but the banked code has no theorem for the required quotient step: paired source sheets must form saturated open subsets of E ⊕ F under the fiber-identification relation, their quotient images must be disjoint and open, and each image must be homeomorphic over the wedge neighborhood assembled from the two base trivializations. Until those quotient preimage and local-homeomorphism identities are proved, local triviality at the wedge point and the explicit fiber equivalence cannot be constructed.",
+    :commands
+    [{:cmd "sha256sum /tmp/point-wedge-covering-gluing-probe.lean",
+      :exit 0,
+      :finding
+      "101f5af3cf428dd91f63c9f21ac2d566b478c9c61dff0a2c601475239c27eaf9"}
+     {:cmd "lake env lean /tmp/point-wedge-covering-gluing-probe.lean",
+      :exit 0,
+      :finding
+      "The probe compiles, but point_wedge_covering_fiber_card depends on the custom axiom point_wedge_covering_gluing_package."}
+     {:cmd
+      "rg -n \"^(axiom|structure|def|theorem)|GluedCoveringTotal|gluedCoveringMap|gluedCoveringMap_isCoveringMap|gluedCoveringFiberEquiv|gluedCovering_fiber_card|permutationCircleWedgeCover|cyclicThreeCircleWedgeCover|point_wedge_covering_gluing_package\" /tmp/point-wedge-covering-gluing-probe.lean",
+      :exit 0,
+      :finding
+      "Line 14 postulates the complete gluing package; none of the seven acceptance declarations occurs."}
+     {:cmd
+      "test ! -e ConstructionTargets/PointWedgeCoveringGluing.lean",
+      :exit 0,
+      :finding "The scoped target module is absent."}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}],
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/point-wedge-covering-gluing-probe.lean",
+     :sha256
+     "101f5af3cf428dd91f63c9f21ac2d566b478c9c61dff0a2c601475239c27eaf9",
+     :status :self-axiomatized},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PointWedgeCoveringGluing.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/point-wedge-covering-gluing/quotient-local-triviality",
