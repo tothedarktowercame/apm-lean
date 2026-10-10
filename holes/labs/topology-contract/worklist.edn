@@ -95335,6 +95335,20 @@
      {:cmd "git status --short",
       :exit 0,
       :finding "clean worktree after commit"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791652040949-2482-f12f5410",
+     :commands
+     ["git show 5a5554638788a4c8e0b6ad6c7faea08d930a40c9 -- ConstructionTargets/KleinSquareEqvGenToCases.lean"
+      "git diff --exit-code 5a5554638788a4c8e0b6ad6c7faea08d930a40c9 -- ConstructionTargets/KleinSquareEqvGenToCases.lean"
+      "lake build ConstructionTargets.KleinSquareEqvGenToCases"
+      "sha256sum /tmp/klein-square-eqvgen-to-cases.lean && lake env lean /tmp/klein-square-eqvgen-to-cases.lean"
+      "placeholder census on source, fixture, and problems/t93J03/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb on recorded ledger at 3d6f8e56"],
+     :finding
+     "PASS: reviewer codex-3 verified recorded commit 5a555463 changes only KleinSquareEqvGenToCases.lean and the source equals that commit. Canonical packages resolve correctly; the frozen fixture hash is exact; target and fixture compile with zero placeholders; t93J03 retains exactly one placeholder; eqvGen_cases reports only propext, Classical.choice, and Quot.sound; all 131 registered statements and the recorded 828-item ledger validate. SameOrbit has correctly oriented identity, inverse, and multiplication witnesses for reflexivity, symmetry, and transitivity. Each SquareRel generator maps through the banked side Cases into SameOrbit, induction covers rel, refl, symm, and trans, and closed-square endpoints are then converted to Cases. The module correctly leaves the disk-square homeomorphism, SurfaceRel transport, and quotient outside this representation boundary."},
     :commit "5a5554638788a4c8e0b6ad6c7faea08d930a40c9",
     :changed-paths
     ["ConstructionTargets/KleinSquareEqvGenToCases.lean"],
@@ -95355,7 +95369,7 @@
       "KleinSquareEqvGenToCases.eqvGen_cases"]},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/KleinSquareEqvGenToCases.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/square-boundary-orbit-eqvgen/eqvgen-to-cases",
@@ -95464,7 +95478,7 @@
       "SameOrbit is affine-action reachability; squareRel_sameOrbit maps each oriented square generator to an action step; eqvGen_sameOrbit closes reachability under EqvGen; eqvGen_cases proves the reverse finite implication for closed-square points."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/square-boundary-orbit-eqvgen",
@@ -96520,7 +96534,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "KleinSquareEqvGenToCases.eqvGen_cases",
@@ -96531,7 +96545,9 @@
     :reported-by [:routes-2026-10-10-klein-square-eqvgen-to-cases-34],
     :type
     "For closed-square p and q, Relation.EqvGen SquareRel p q implies Cases p q",
-    :proved-in :routes-2026-10-10-klein-square-eqvgen-to-cases-34},
+    :proved-in :routes-2026-10-10-klein-square-eqvgen-to-cases-34,
+    :banked-by :routes-2026-10-10-klein-square-eqvgen-to-cases-34,
+    :banked-commit "5a5554638788a4c8e0b6ad6c7faea08d930a40c9"},
    :id :lemma-kleinsquareeqvgentocases-eqvgen-cases,
    :kind :lemma,
    :depends-on [:lemma-kleinsquarecasestoeqvgen-cases-eqvgen],
