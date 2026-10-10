@@ -58411,50 +58411,68 @@
    "single-consumer explicit normal meridian in the t02A03 geometric complement",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/t02a03_geometric_tube_cover.lean",
-      :sha256
-      "d67265aee2baecdc9a7a4c567aac503ca9014f93a65d803452f918654e3757f1"},
-     :commands
-     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "apm_t02a03_meridian, apm_t02a03_meridian_mem_geometricY, and apm_t02a03_meridianMap compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
-       :exit 0}
-      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "d67265aee2baecdc9a7a4c567aac503ca9014f93a65d803452f918654e3757f1  /tmp/t02a03_geometric_tube_cover.lean"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :finding
-     "The fixture constructs the full radius-1/8 normal meridian as a continuous map into the exact frozen geometric complement. Its distance from the common origin keeps it inside W, while coordinate comparison and the sine-cosine identities prove it is disjoint from the planar left core.",
-     :residual
-     "Construct the compatible attachment of the surviving right core to the normal meridian, then extend to tube deformations and gluing.",
-     :implementation
-     {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"]},
-     :acceptance
-     {:source-fixture "/tmp/t02a03_geometric_tube_cover.lean",
-      :declarations
-      ["apm_t02a03_meridian"
-       "apm_t02a03_meridian_mem_geometricY"
-       "apm_t02a03_meridianMap"],
-      :placeholder "the sole sorry in apm_t02a03",
-      :route-step
-      "t02A03 step 2, construct the explicit normal meridian inside geometricY",
-      :gates
-      ["fixture compiles"
-       "fixture contains no sorry token"
-       "fixture hash matches"
-       "statement registry matches"]}}},
+   {:placeholder-delta 0,
+    :residual
+    "Construct the compatible attachment of the surviving right core to the normal meridian, then extend to tube deformations and gluing.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+      :exit 0,
+      :output
+      "d67265aee2baecdc9a7a4c567aac503ca9014f93a65d803452f918654e3757f1  /tmp/t02a03_geometric_tube_cover.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeCover.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.T02A03GeometricTubeCover",
+      :exit 0,
+      :output "Build completed successfully (8240 jobs)."}
+     {:cmd "lake env lean /tmp/check_t02a03_meridian_axioms.lean",
+      :exit 0,
+      :output
+      "All three declarations depend on [propext, Classical.choice, Quot.sound]."}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeCover.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "comment-stripped placeholder census for problems/t02A03/lean/Main.lean",
+      :exit 0,
+      :output "1"}
+     {:cmd "sha256sum problems/t02A03/lean/Main.lean",
+      :exit 0,
+      :output
+      "b123eca388ab2858ca55daf538c1ddd645022b52f5196a15f0bb516d78323d7d  problems/t02A03/lean/Main.lean"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r f9baa09c30aa6c89bc8ccf5895c320841f672651",
+      :exit 0,
+      :output "ConstructionTargets/T02A03GeometricTubeCover.lean"}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :diagnostic-history
+    [{:cmd
+      "test -L .lake/packages && readlink -f .lake/packages && lake env lean ConstructionTargets/T02A03GeometricTubeCover.lean && lake build ConstructionTargets.T02A03GeometricTubeCover && placeholder and registry gates",
+      :exit 1,
+      :finding
+      "The exploratory combined command stopped at test -L because the canonical /home/joe/code/apm-lean checkout owns a real .lake/packages directory. The frame-worktree symlink rule does not apply to this canonical checkout; the corrected Lean and acceptance commands were run separately and succeeded."}],
+    :commit "f9baa09c30aa6c89bc8ccf5895c320841f672651",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
+    :fixture
+    {:path "/tmp/t02a03_geometric_tube_cover.lean",
+     :sha256
+     "d67265aee2baecdc9a7a4c567aac503ca9014f93a65d803452f918654e3757f1"},
+    :declarations
+    ["ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_meridian"
+     "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_meridian_mem_geometricY"
+     "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_meridianMap"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/geometric-normal-meridian",
    :acceptance
