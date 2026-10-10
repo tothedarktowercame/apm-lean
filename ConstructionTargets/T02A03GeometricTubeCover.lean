@@ -300,6 +300,21 @@ theorem apm_t02a03_continuous_leftTubeTorusCoordinates :
         exact continuous_subtype_val)
   · exact apm_t02a03_continuous_leftTubeNormalAngular
 
+noncomputable def apm_t02a03_leftTubeTorusPoint
+    (u : Circle × Circle) : apm_t02a03_E3 :=
+  WithLp.toLp 2 ![
+    -1 + (1 + (1 / 8 : ℝ) * (u.2 : ℂ).re) * (u.1 : ℂ).re,
+    (1 + (1 / 8 : ℝ) * (u.2 : ℂ).re) * (u.1 : ℂ).im,
+    (1 / 8 : ℝ) * (u.2 : ℂ).im]
+
+theorem apm_t02a03_continuous_leftTubeTorusPoint :
+    Continuous apm_t02a03_leftTubeTorusPoint := by
+  unfold apm_t02a03_leftTubeTorusPoint
+  apply (PiLp.continuous_toLp 2 _).comp
+  apply continuous_pi
+  intro i
+  fin_cases i <;> simp <;> fun_prop
+
 theorem apm_t02a03_rightCore_zero :
     apm_t02a03_rightCore 0 = (0 : apm_t02a03_E3) := by
   ext i
