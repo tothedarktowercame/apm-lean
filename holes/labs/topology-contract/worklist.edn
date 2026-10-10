@@ -100571,8 +100571,84 @@
   {:bounded-exception
    "This single-consumer prerequisite discharges all relation-quotient combinatorics for surjectivity, leaving only the common geometric theorem that the six canonical arcs cover Circle.",
    :consumer :t97A01,
+   :evidence
+   {:placeholder-delta {:source 0, :fixture 0},
+    :residual
+    "Prove the six canonical edge arcs cover Circle, apply the compiled reductions to obtain both surjectivity theorems, then classify fibers for injectivity and form the boundary homeomorphisms and final packages.",
+    :gates
+    {:module-build :pass,
+     :fixture-compiles :pass,
+     :zero-source-and-fixture-sorry :pass,
+     :standard-only-axioms :pass,
+     :registry-check :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["The new module and fixture emitted no warnings; imported modules replayed existing lints and informational standard-axiom reports."],
+    :missing-theorems
+    [{:name
+      "PolygonBoundaryThreeLoopSurjectivityReduction.surjective_n3ThreeLoops_of_edge_cover",
+      :type
+      "An explicit six-edge cover of Circle implies surjectivity of n3ThreeLoops.",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on
+      ["PolygonBoundaryThreeLoopContinuity.continuous_n3ThreeLoops"],
+      :area "polygon-surface-open-cover"}
+     {:name
+      "PolygonBoundaryThreeLoopSurjectivityReduction.surjective_torusCrosscapThreeLoops_of_edge_cover",
+      :type
+      "An explicit six-edge cover of Circle implies surjectivity of torusCrosscapThreeLoops.",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on
+      ["PolygonBoundaryThreeLoopContinuity.continuous_torusCrosscapThreeLoops"],
+      :area "polygon-surface-open-cover"}],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd
+      "sha256sum /tmp/polygon-boundary-three-loop-surjectivity-reduction.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.PolygonBoundaryThreeLoopSurjectivityReduction",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/polygon-boundary-three-loop-surjectivity-reduction.lean",
+      :exit 0}
+     {:cmd
+      "rg -n \\b(sorry|admit)\\b ConstructionTargets/PolygonBoundaryThreeLoopSurjectivityReduction.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "rg -n \\b(sorry|admit)\\b /tmp/polygon-boundary-three-loop-surjectivity-reduction.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "4bc16f8fbd0732b589f19201edcaae4452fd3375",
+    :changed-paths
+    ["ConstructionTargets/PolygonBoundaryThreeLoopSurjectivityReduction.lean"],
+    :fixture
+    {:path
+     "/tmp/polygon-boundary-three-loop-surjectivity-reduction.lean",
+     :sha256
+     "5a2308e412754717ce87a4b013e826406fb8678eafdd057f6d0718299ffdd90d",
+     :sorry-count 0},
+    :implementation
+    {:scope
+     ["ConstructionTargets/PolygonBoundaryThreeLoopSurjectivityReduction.lean"],
+     :summary
+     "Defined literal points on all three nested loops and carrier conversion, proved all six edge classes lie in each comparison-map range with reversed torus-crosscap parameters where required, and reduced both surjectivity results to the common six-edge Circle cover."},
+    :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonBoundaryThreeLoopSurjectivityReduction.lean"],
    :dag-node
@@ -103833,12 +103909,13 @@
    {:name
     "PolygonBoundaryThreeLoopSurjectivityReduction.surjective_n3ThreeLoops_of_edge_cover",
     :reported-by
-    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40
+     :routes-2026-10-10-polygon-boundary-three-loop-surjectivity-reduction-62],
     :type
     "If every Circle point is circleEdgePoint j t for some j : Fin 6 and t in the closed unit interval, then n3ThreeLoops is surjective.",
     :area "polygon-surface-open-cover",
     :proved-in
-    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+    :routes-2026-10-10-polygon-boundary-three-loop-surjectivity-reduction-62},
    :id
    :lemma-polygonboundarythreeloopsurjectivityreduction-surjective-n3threeloops-of-edge-co,
    :kind :lemma,
@@ -103858,12 +103935,13 @@
    {:name
     "PolygonBoundaryThreeLoopSurjectivityReduction.surjective_torusCrosscapThreeLoops_of_edge_cover",
     :reported-by
-    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40
+     :routes-2026-10-10-polygon-boundary-three-loop-surjectivity-reduction-62],
     :type
     "If every Circle point is circleEdgePoint j t for some j : Fin 6 and t in the closed unit interval, then torusCrosscapThreeLoops is surjective.",
     :area "polygon-surface-open-cover",
     :proved-in
-    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+    :routes-2026-10-10-polygon-boundary-three-loop-surjectivity-reduction-62},
    :id
    :lemma-polygonboundarythreeloopsurjectivityreduction-surjective-toruscrosscapthreeloops,
    :kind :lemma,
