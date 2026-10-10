@@ -7398,18 +7398,7 @@
    :id :critical-value-sard-rank-source-induction-probe-2,
    :kind :reusable-theorem,
    :depends-on
-   [:critical-value-sard-local-rank-normal-form-probe-2
-    :critical-value-sard-multivariable-taylor-covering-probe-2
-    :critical-value-sard-rectangular-local-probe-1
-    :critical-value-sard-exact-rank-local-upper-locus-1
-    :critical-value-sard-complemented-derivative-split-1
-    :critical-value-sard-projected-complemented-strict-derivative-data-1
-    :critical-value-sard-projected-implicit-function-packaging-1
-    :critical-value-sard-projected-kernel-flatness-1
-    :critical-value-sard-local-residual-derivative-flatness-1
-    :critical-value-sard-constant-coordinate-slice-flatness-1
-    :critical-value-sard-implicit-function-residual-flatness-1
-    :critical-value-sard-implicit-function-residual-flatness-1],
+   [:critical-value-sard-local-rank-normal-form-probe-2 :critical-value-sard-multivariable-taylor-covering-probe-2 :critical-value-sard-rectangular-local-probe-1 :critical-value-sard-exact-rank-local-upper-locus-1 :critical-value-sard-complemented-derivative-split-1 :critical-value-sard-projected-complemented-strict-derivative-data-1 :critical-value-sard-projected-implicit-function-packaging-1 :critical-value-sard-projected-kernel-flatness-1 :critical-value-sard-local-residual-derivative-flatness-1 :critical-value-sard-constant-coordinate-slice-flatness-1 :critical-value-sard-implicit-function-residual-flatness-1],
    :current-residual
    "the standard Morse--Sard proof needs its rank/source-dimension induction after both analytic inputs",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
@@ -47187,7 +47176,7 @@
    :id :t95j04-frozen-hausdorff-closure-probe-refill9,
    :kind :final-adapter,
    :depends-on
-   [:checkpoint-full-dag-refill-9 :checkpoint-full-dag-refill-9],
+   [:checkpoint-full-dag-refill-9],
    :current-residual
    "One executable placeholder: arbitrary compact smooth k-manifold map to the metric n-sphere, k<n, has intrinsic n-dimensional Hausdorff-null range, is nonsurjective, and is nullhomotopic. Remaining product and nonhomeomorphism conjuncts are already proved."}
   {:consumer "t93A04",
@@ -47268,7 +47257,7 @@
    :id :sard-smooth-rectangular-unconditional-probe-refill9,
    :kind :reusable-theorem,
    :depends-on
-   [:checkpoint-full-dag-refill-9 :checkpoint-full-dag-refill-9],
+   [:checkpoint-full-dag-refill-9],
    :current-residual
    "Banked rank normal forms, Taylor flat-locus nullity and critical-image assemblies remain conditional. Full smooth rectangular critical-image nullity is not supplied; manifold regular-value and countability adapters remain downstream.",
    :other-consumers ["t01A08" "t01J04" "t92J07" "t96J05"]}
@@ -47533,8 +47522,7 @@
    :id :t00a01-frozen-free-product-closure-probe-refill10,
    :kind :final-adapter,
    :depends-on
-   [:checkpoint-full-dag-refill-10-after-closure-and-smooth
-    :checkpoint-full-dag-refill-10-after-closure-and-smooth],
+   [:checkpoint-full-dag-refill-10-after-closure-and-smooth],
    :current-residual
    "Two placeholders: actual standard-cover fundamental-group free-product bridge and final assembly; homology bridge already proved. ConnectedGroupoidSingleObjEquivalence and point-span/free-product equivalences now exist beyond the historical STOP."}
   {:consumer "t93A04",
@@ -47676,8 +47664,7 @@
    :id :sard-smooth-neighborhood-implicit-chart-probe-refill10,
    :kind :reusable-theorem,
    :depends-on
-   [:checkpoint-full-dag-refill-10-after-closure-and-smooth
-    :checkpoint-full-dag-refill-10-after-closure-and-smooth],
+   [:checkpoint-full-dag-refill-10-after-closure-and-smooth],
    :current-residual
    "Existing ImplicitFunctionData smooth chart restriction excludes genuine infinity, using eventual regularity from one point. The residual-slice producer accepts infinity when supplied smooth-on-domain charts; its producer needs a valid neighborhood contract.",
    :other-consumers ["t01A08" "t01J04" "t92J07" "t96J05"]}
@@ -47941,8 +47928,7 @@
    :id :t02a08-frozen-sphere-degree-closure-probe-refill11,
    :kind :final-adapter,
    :depends-on
-   [:checkpoint-full-dag-refill-11-after-free-product-and-smooth-chart
-    :checkpoint-full-dag-refill-11-after-free-product-and-smooth-chart],
+   [:checkpoint-full-dag-refill-11-after-free-product-and-smooth-chart],
    :current-residual
    "One placeholder: for every integer n construct a continuous self-map of the literal metric two-sphere whose actual integral H2 action is multiplication by n. The fiber-map intersection clause is already proved; sphere homology now exists beyond the frozen historical boundary."}
   {:consumer "t93A04",
@@ -48074,8 +48060,7 @@
    :sard-scalarized-jet-smooth-neighborhood-producer-probe-refill11,
    :kind :reusable-theorem,
    :depends-on
-   [:checkpoint-full-dag-refill-11-after-free-product-and-smooth-chart
-    :checkpoint-full-dag-refill-11-after-free-product-and-smooth-chart],
+   [:checkpoint-full-dag-refill-11-after-free-product-and-smooth-chart],
    :current-residual
    "Reviewed dd05a502 supplies smooth implicit charts from open-neighborhood field regularity. The actual scalarized-jet defining fields must now produce those inputs rather than assume them.",
    :other-consumers ["t01A08" "t01J04" "t92J07" "t96J05"]}
@@ -48344,8 +48329,7 @@
    :id :a97j08-frozen-planar-obstruction-closure-probe-refill12,
    :kind :final-adapter,
    :depends-on
-   [:checkpoint-full-dag-refill-12-after-degree-and-jet-chart
-    :checkpoint-full-dag-refill-12-after-degree-and-jet-chart],
+   [:checkpoint-full-dag-refill-12-after-degree-and-jet-chart],
    :current-residual
    "One executable placeholder: an open planar set with a bounded complementary component contains a non-nullhomotopic circle. The frozen analytic zero-count conclusion and its deductions from this obstruction are already assembled."}
   {:consumer "t93A04",
@@ -48488,8 +48472,7 @@
    :id :sard-smooth-first-nonzero-jet-local-induction-probe-refill12,
    :kind :reusable-theorem,
    :depends-on
-   [:checkpoint-full-dag-refill-12-after-degree-and-jet-chart
-    :checkpoint-full-dag-refill-12-after-degree-and-jet-chart],
+   [:checkpoint-full-dag-refill-12-after-degree-and-jet-chart],
    :current-residual
    "Actual scalarized-jet smooth restricted charts are banked. Existing zero-level containment and kernel dimension-drop results must connect to those restricted charts and a genuinely smooth local lower-dimensional induction hypothesis.",
    :other-consumers ["t01A08" "t01J04" "t92J07" "t96J05"]}
@@ -48821,8 +48804,7 @@
    :id :t03j06-frozen-capped-cylinder-closure-probe-refill13,
    :kind :final-adapter,
    :depends-on
-   [:checkpoint-full-dag-refill-13-after-planar-and-local-induction
-    :checkpoint-full-dag-refill-13-after-planar-and-local-induction],
+   [:checkpoint-full-dag-refill-13-after-planar-and-local-induction],
    :current-residual
    "One placeholder packages smoothness, exterior derivative equal to 3, nonexactness and the 7*pi integral. Historical capped-cylinder modules address the integral; the finite coefficient/exterior-derivative calculation remains."}
   {:consumer "t93A04",
@@ -48935,8 +48917,7 @@
    :id :sard-smooth-compact-rank-zero-induction-probe-refill13,
    :kind :reusable-theorem,
    :depends-on
-   [:checkpoint-full-dag-refill-13-after-planar-and-local-induction
-    :checkpoint-full-dag-refill-13-after-planar-and-local-induction],
+   [:checkpoint-full-dag-refill-13-after-planar-and-local-induction],
    :current-residual
    "The actual smooth local first-nonzero-jet induction step is reviewed. Compact rank-zero nullity still assumes higher-jet image nullity instead of deriving it from that producer and lower-dimensional smooth induction.",
    :other-consumers ["t01A08" "t01J04" "t92J07" "t96J05"]}
@@ -49244,8 +49225,7 @@
    :action
    "Verify the frozen and fixture hashes, then promote the complete fixture as the scoped Main.lean. Commit only this file; no DAG or ledger edits.",
    :depends-on
-   [:checkpoint-full-dag-refill-14-after-capped-cylinder-and-rank-zero
-    :checkpoint-full-dag-refill-14-after-capped-cylinder-and-rank-zero],
+   [:checkpoint-full-dag-refill-14-after-capped-cylinder-and-rank-zero],
    :current-residual
    "Two placeholders: radial square-root disk integral and final hemisphere/nonexactness assembly. Pullback simplification, swap cancellation, nonclosedness and degree-one exactness packaging are proved."}
   {:consumer "t93A04",
@@ -49370,8 +49350,7 @@
    :action
    "Verify pinned hashes and promote the fixture and documentation to the two scoped paths. Preserve existing chart APIs, consumer, DAG and ledger.",
    :depends-on
-   [:checkpoint-full-dag-refill-14-after-capped-cylinder-and-rank-zero
-    :checkpoint-full-dag-refill-14-after-capped-cylinder-and-rank-zero],
+   [:checkpoint-full-dag-refill-14-after-capped-cylinder-and-rank-zero],
    :current-residual
    "Compact rank-zero nullity now follows from local genuine-smooth induction. Positive-rank projected charts still need a neighborhood-based genuine-infinity producer and actual smooth residual slices; finite-order or pointwise-eventual APIs cannot supply this by substitution.",
    :other-consumers ["t01A08" "t01J04" "t92J07" "t96J05"]}
@@ -49664,8 +49643,7 @@
    :id :t95j05-frozen-projective-sphere-moment-closure-probe-refill15,
    :kind :final-adapter,
    :depends-on
-   [:checkpoint-full-dag-refill-15-after-hemisphere-and-projected-chart
-    :checkpoint-full-dag-refill-15-after-hemisphere-and-projected-chart],
+   [:checkpoint-full-dag-refill-15-after-hemisphere-and-projected-chart],
    :current-residual
    "One placeholder: evaluate the literal sphere-subtype Hausdorff integral after the already-proved descent and uniqueness clauses. Coordinate-square normalization and summand integrability remain."}
   {:consumer "t93A04",
@@ -49790,8 +49768,7 @@
    :action
    "Verify pinned hashes and promote fixture and documentation to the two scoped paths. Preserve all existing producers, frozen consumer, DAG and ledger.",
    :depends-on
-   [:checkpoint-full-dag-refill-15-after-hemisphere-and-projected-chart
-    :checkpoint-full-dag-refill-15-after-hemisphere-and-projected-chart],
+   [:checkpoint-full-dag-refill-15-after-hemisphere-and-projected-chart],
    :current-residual
    "Actual projected charts and complementary residual slices are genuinely smooth. Existing first-coordinate derivative surjectivity, slice constancy and rank-upper annihilation must be composed for those charts.",
    :other-consumers ["t01A08" "t01J04" "t92J07" "t96J05"]}
@@ -50071,8 +50048,7 @@
    :id :t94j08-frozen-antipodal-homology-closure-probe-refill16,
    :kind :final-adapter,
    :depends-on
-   [:checkpoint-full-dag-refill-16-after-sphere-moment-and-rank-residual
-    :checkpoint-full-dag-refill-16-after-sphere-moment-and-rank-residual],
+   [:checkpoint-full-dag-refill-16-after-sphere-moment-and-rank-residual],
    :current-residual
    "Two placeholders: actual integral sphere orientation and antipodal action, then uptake into the already-assembled local-index-negation proof."}
   {:consumer "t93A04",
@@ -50198,8 +50174,7 @@
    :id :sard-genuine-smooth-positive-rank-slice-nullity-probe-refill16,
    :kind :reusable-theorem,
    :depends-on
-   [:checkpoint-full-dag-refill-16-after-sphere-moment-and-rank-residual
-    :checkpoint-full-dag-refill-16-after-sphere-moment-and-rank-residual],
+   [:checkpoint-full-dag-refill-16-after-sphere-moment-and-rank-residual],
    :current-residual
    "Actual rank-upper residual derivative zero and genuine smoothness are banked. Strict source dimension drop and application of local smooth induction to the actual complementary residual remain.",
    :other-consumers ["t01A08" "t01J04" "t92J07" "t96J05"]}
@@ -50781,8 +50756,7 @@
    :t94j08-repaired-positive-dimension-antipodal-closure-probe-refill18,
    :kind :final-adapter,
    :depends-on
-   [:checkpoint-full-dag-refill-18-after-t94j08-spec-repair
-    :checkpoint-full-dag-refill-18-after-t94j08-spec-repair],
+   [:checkpoint-full-dag-refill-18-after-t94j08-spec-repair],
    :current-residual
    "Two placeholders in the repaired ordinary-homology branch. Actual positive-dimensional antipodal induced-map computation remains; degree composition and local-index assembly are already proved."}
   {:consumer "t93A04",
@@ -50908,8 +50882,7 @@
    :sard-genuine-smooth-compact-positive-rank-image-nullity-probe-refill18,
    :kind :reusable-theorem,
    :depends-on
-   [:checkpoint-full-dag-refill-18-after-t94j08-spec-repair
-    :checkpoint-full-dag-refill-18-after-t94j08-spec-repair],
+   [:checkpoint-full-dag-refill-18-after-t94j08-spec-repair],
    :current-residual
    "Actual complementary rank-upper slice images are null under local smooth induction. Transport source fibers into those subsets, assemble compact product images, and transport nullity through actual target orthogonal coordinates.",
    :other-consumers ["t01A08" "t01J04" "t92J07" "t96J05"]}
@@ -51179,8 +51152,7 @@
    :id :t95j05-intrinsic-mass-normalization-closure-probe-refill19,
    :kind :final-adapter,
    :depends-on
-   [:checkpoint-full-dag-refill-19-after-repaired-antipodal-and-compact-rank
-    :checkpoint-full-dag-refill-19-after-repaired-antipodal-and-compact-rank],
+   [:checkpoint-full-dag-refill-19-after-repaired-antipodal-and-compact-rank],
    :current-residual
    "One placeholder. IntrinsicSphereFinite and IntrinsicSphereSecondMoments now supply actual summand integrability and density integral in terms of intrinsic mass; numerical normalization and frozen transport remain."}
   {:consumer "t93A04",
@@ -51305,8 +51277,7 @@
    :sard-genuine-smooth-open-rank-upper-image-nullity-probe-refill19,
    :kind :reusable-theorem,
    :depends-on
-   [:checkpoint-full-dag-refill-19-after-repaired-antipodal-and-compact-rank
-    :checkpoint-full-dag-refill-19-after-repaired-antipodal-and-compact-rank],
+   [:checkpoint-full-dag-refill-19-after-repaired-antipodal-and-compact-rank],
    :current-residual
    "Actual compact positive-rank chart image nullity is reviewed under local smooth induction. The rank-upper locus intersected with the actual open chart source needs compact exhaustion and countable image-null assembly.",
    :other-consumers ["t01A08" "t01J04" "t92J07" "t96J05"]}
@@ -51567,8 +51538,7 @@
    :id :t02a05-intrinsic-flux-closure-probe-refill20,
    :kind :final-adapter,
    :depends-on
-   [:checkpoint-full-dag-refill-20-after-intrinsic-mass-and-open-rank
-    :checkpoint-full-dag-refill-20-after-intrinsic-mass-and-open-rank],
+   [:checkpoint-full-dag-refill-20-after-intrinsic-mass-and-open-rank],
    :current-residual
    "Two placeholders: literal outward-sphere flux formula and final optimization. New intrinsic fourth moments evaluate the unit flux polynomial relative to sphere mass; exact frozen tangent-projection transport and numerical normalization remain."}
   {:note-sha256
@@ -51685,8 +51655,7 @@
    :sard-genuine-smooth-positive-rank-stratum-nullity-probe-refill20,
    :kind :reusable-theorem,
    :depends-on
-   [:checkpoint-full-dag-refill-20-after-intrinsic-mass-and-open-rank
-    :checkpoint-full-dag-refill-20-after-intrinsic-mass-and-open-rank],
+   [:checkpoint-full-dag-refill-20-after-intrinsic-mass-and-open-rank],
    :current-residual
    "Actual open-chart rank-upper image nullity is reviewed. Assemble the exact fixed positive deficient-rank stratum using those neighborhoods and second countability.",
    :other-consumers ["t01A08" "t01J04" "t92J07" "t96J05"]}
@@ -51935,8 +51904,7 @@
    :id :t98a01-frozen-fivefold-surface-closure-probe-refill21,
    :kind :final-adapter,
    :depends-on
-   [:checkpoint-full-dag-refill-21-after-flux-and-rank-stratum
-    :checkpoint-full-dag-refill-21-after-flux-and-rank-stratum],
+   [:checkpoint-full-dag-refill-21-after-flux-and-rank-stratum],
    :current-residual
    "One placeholder packages the actual fivefold regular torus cover and Euler/genus rigidity for homeomorphic orientable polygon surfaces; printed connected-sum arithmetic is proved."}
   {:note-sha256
@@ -52053,8 +52021,7 @@
    :sard-genuine-smooth-global-critical-induction-step-probe-refill21,
    :kind :reusable-theorem,
    :depends-on
-   [:checkpoint-full-dag-refill-21-after-flux-and-rank-stratum
-    :checkpoint-full-dag-refill-21-after-flux-and-rank-stratum],
+   [:checkpoint-full-dag-refill-21-after-flux-and-rank-stratum],
    :current-residual
    "Positive deficient-rank strata are null under local smooth induction. Compact rank-zero nullity must be exhausted and combined with the rank strata to cover the actual critical set.",
    :other-consumers ["t01A08" "t01J04" "t92J07" "t96J05"]}
@@ -52295,8 +52262,7 @@
    :id :t03j04-frozen-torus-euler-closure-probe-refill22,
    :kind :final-adapter,
    :depends-on
-   [:checkpoint-full-dag-refill-22-after-fivefold-and-global-critical-step
-    :checkpoint-full-dag-refill-22-after-fivefold-and-global-critical-step],
+   [:checkpoint-full-dag-refill-22-after-fivefold-and-global-critical-step],
    :current-residual
    "One placeholder: literal rational singular-homology Euler characteristic of a positive-dimensional torus and its connected local-diffeomorphic target. Vector-field nonvanishing and surjectivity are proved."}
   {:note-sha256
@@ -52411,8 +52377,7 @@
    :id :sard-genuine-smooth-open-domain-localization-probe-refill22,
    :kind :reusable-theorem,
    :depends-on
-   [:checkpoint-full-dag-refill-22-after-fivefold-and-global-critical-step
-    :checkpoint-full-dag-refill-22-after-fivefold-and-global-critical-step],
+   [:checkpoint-full-dag-refill-22-after-fivefold-and-global-critical-step],
    :current-residual
    "Global smooth critical-image nullity is available conditionally. An actual open-domain localization theorem is needed to connect global induction to smooth chart domains; pointwise infinity alone cannot justify one smooth neighborhood.",
    :other-consumers ["t01A08" "t01J04" "t92J07" "t96J05"]}
@@ -52656,8 +52621,7 @@
    :id :t95j06-frozen-hopf-surface-closure-probe-refill23,
    :kind :final-adapter,
    :depends-on
-   [:checkpoint-full-dag-refill-23-after-torus-euler-and-localization
-    :checkpoint-full-dag-refill-23-after-torus-euler-and-localization],
+   [:checkpoint-full-dag-refill-23-after-torus-euler-and-localization],
    :current-residual
    "Two placeholders: classify components of an actual compact invariant orientable surface in S5 as tori. Explicit invariant torus, periodicity and flow laws are proved."}
   {:consumer "t93A04",
@@ -52763,8 +52727,7 @@
    :sard-positive-rank-slice-open-induction-contract-probe-refill23,
    :kind :reusable-theorem,
    :depends-on
-   [:checkpoint-full-dag-refill-23-after-torus-euler-and-localization
-    :checkpoint-full-dag-refill-23-after-torus-euler-and-localization],
+   [:checkpoint-full-dag-refill-23-after-torus-euler-and-localization],
    :current-residual
    "Localization supplies smooth nullity on open domains, while the existing slice producer assumes pointwise smooth nullity on arbitrary sets. The actual slice has an open domain and genuine ContDiffOn regularity.",
    :other-consumers ["t01A08" "t01J04" "t92J07" "t96J05"]}
@@ -53008,8 +52971,7 @@
    :id :t02a08-frozen-all-integer-sphere-degree-closure-probe-refill24,
    :kind :final-adapter,
    :depends-on
-   [:checkpoint-full-dag-refill-24-after-hopf-and-open-slice-contract
-    :checkpoint-full-dag-refill-24-after-hopf-and-open-slice-contract],
+   [:checkpoint-full-dag-refill-24-after-hopf-and-open-slice-contract],
    :current-residual
    "One placeholder: construct an actual continuous metric S2 self-map for every integer with the specified integral ModuleCat H2 action. Fiber intersection assembly and degree multiplication are proved."}
   {:consumer "t93A04",
@@ -53115,8 +53077,7 @@
    :sard-positive-rank-stratum-open-contract-assembly-probe-refill24,
    :kind :reusable-theorem,
    :depends-on
-   [:checkpoint-full-dag-refill-24-after-hopf-and-open-slice-contract
-    :checkpoint-full-dag-refill-24-after-hopf-and-open-slice-contract],
+   [:checkpoint-full-dag-refill-24-after-hopf-and-open-slice-contract],
    :current-residual
    "Actual residual slices now have null images under open-domain smooth induction. The existing compact/open/stratum chain still requests stronger arbitrary-set pointwise induction.",
    :other-consumers ["t01A08" "t01J04" "t92J07" "t96J05"]}
@@ -53358,8 +53319,7 @@
    :t00a01-frozen-connected-sum-free-product-closure-probe-refill25,
    :kind :final-adapter,
    :depends-on
-   [:checkpoint-full-dag-refill-25-after-sphere-degree-and-open-stratum
-    :checkpoint-full-dag-refill-25-after-sphere-degree-and-open-stratum],
+   [:checkpoint-full-dag-refill-25-after-sphere-degree-and-open-stratum],
    :current-residual
    "Two placeholders: fundamental group free-product comparison and final conjunction. The literal connected-sum homology-sphere bridge is already proved from the supplied standard open cover."}
   {:consumer "t93A04",
@@ -53464,8 +53424,7 @@
    :id :sard-compact-rank-zero-open-contract-probe-refill25,
    :kind :reusable-theorem,
    :depends-on
-   [:checkpoint-full-dag-refill-25-after-sphere-degree-and-open-stratum
-    :checkpoint-full-dag-refill-25-after-sphere-degree-and-open-stratum],
+   [:checkpoint-full-dag-refill-25-after-sphere-degree-and-open-stratum],
    :current-residual
    "Positive-rank assembly now consumes open-domain induction. Compact rank-zero nullity still invokes first-nonzero-jet local induction with arbitrary-set pointwise infinity.",
    :other-consumers ["t01A08" "t01J04" "t92J07" "t96J05"]}
@@ -53703,8 +53662,7 @@
    :id :t92j06-frozen-wedge-coverings-closure-probe-refill26,
    :kind :final-adapter,
    :depends-on
-   [:checkpoint-full-dag-refill-26-after-connected-sum-and-open-rank-zero
-    :checkpoint-full-dag-refill-26-after-connected-sum-and-open-rank-zero],
+   [:checkpoint-full-dag-refill-26-after-connected-sum-and-open-rank-zero],
    :current-residual
    "One placeholder packages a simply connected cover of the literal two-circle wedge and four three-sheet covers with pairwise nonhomeomorphic total spaces. Target quotient gluing is proved."}
   {:consumer "t93A04",
@@ -53810,8 +53768,7 @@
    :sard-genuine-smooth-euclidean-induction-discharge-probe-refill26,
    :kind :reusable-theorem,
    :depends-on
-   [:checkpoint-full-dag-refill-26-after-connected-sum-and-open-rank-zero
-    :checkpoint-full-dag-refill-26-after-connected-sum-and-open-rank-zero],
+   [:checkpoint-full-dag-refill-26-after-connected-sum-and-open-rank-zero],
    :current-residual
    "Both compact rank-zero and positive-rank strata now consume compatible open-domain induction and derive it from smaller-dimensional global smooth nullity. Exhaustion, full critical-set assembly and source-dimension induction remain.",
    :other-consumers ["t01A08" "t01J04" "t92J07" "t96J05"]}
@@ -54075,8 +54032,7 @@
    :id :t93a04-frozen-transverse-line-closure-probe-refill27,
    :kind :final-adapter,
    :depends-on
-   [:checkpoint-full-dag-refill-27-after-wedge-covers-and-euclidean-sard
-    :checkpoint-full-dag-refill-27-after-wedge-covers-and-euclidean-sard],
+   [:checkpoint-full-dag-refill-27-after-wedge-covers-and-euclidean-sard],
    :current-residual
    "One placeholder: choose a regular value of the projection of a genuine smooth manifold map to R2, then recover the frozen affine-line transversality. Euclidean global and open-domain Sard are now unconditional."}
   {:consumer "t93A04",
@@ -54185,8 +54141,7 @@
    :id :sard-genuine-smooth-manifold-vector-target-probe-refill27,
    :kind :reusable-theorem,
    :depends-on
-   [:checkpoint-full-dag-refill-27-after-wedge-covers-and-euclidean-sard
-    :checkpoint-full-dag-refill-27-after-wedge-covers-and-euclidean-sard],
+   [:checkpoint-full-dag-refill-27-after-wedge-covers-and-euclidean-sard],
    :current-residual
    "Unconditional Euclidean genuine-smooth Sard is reviewed. Actual source-chart smoothness, criticality transport and countable source coverage must be composed for a manifold map into a finite-dimensional vector target.",
    :other-consumers ["t01A08" "t01J04" "t92J07" "t96J05"]}
@@ -54489,8 +54444,7 @@
    :id :t92j07-frozen-common-regular-value-closure-probe-refill28,
    :kind :final-adapter,
    :depends-on
-   [:checkpoint-full-dag-refill-28-after-transverse-line-and-manifold-sard
-    :checkpoint-full-dag-refill-28-after-transverse-line-and-manifold-sard],
+   [:checkpoint-full-dag-refill-28-after-transverse-line-and-manifold-sard],
    :current-residual
    "Two placeholders: nullity of the frozen nonregular-value set and final common regular-fiber assembly. Unconditional manifold-to-vector Sard and countable null-set avoidance are banked."}
   {:consumer "t96J05",
@@ -54601,8 +54555,7 @@
    :id :regular-fiber-fixed-model-chart-overlap-probe-refill28,
    :kind :reusable-theorem,
    :depends-on
-   [:checkpoint-full-dag-refill-28-after-transverse-line-and-manifold-sard
-    :checkpoint-full-dag-refill-28-after-transverse-line-and-manifold-sard],
+   [:checkpoint-full-dag-refill-28-after-transverse-line-and-manifold-sard],
    :current-residual
    "RegularFiberFixedModel provides actual fixed-dimensional local parameterizations; smooth transitions between actual charts of the literal fiber are not yet supplied.",
    :other-consumers ["t00J02" "t02A07" "t94A06" "t97J05"]}
@@ -54687,8 +54640,7 @@
    :id :t93a04-reviewed-closure-documentation-refill28,
    :kind :documentation,
    :depends-on
-   [:checkpoint-full-dag-refill-28-after-transverse-line-and-manifold-sard
-    :checkpoint-full-dag-refill-28-after-transverse-line-and-manifold-sard],
+   [:checkpoint-full-dag-refill-28-after-transverse-line-and-manifold-sard],
    :current-residual
    "t93A04 is independently reviewed closed; DAG still lists its former missing manifold Sard boundary."}
   {:consumer :portfolio,
@@ -54973,8 +54925,7 @@
    :id :t01a08-frozen-projected-regular-value-closure-probe-refill29,
    :kind :final-adapter,
    :depends-on
-   [:checkpoint-full-dag-refill-29-after-common-value-and-fiber-overlaps
-    :checkpoint-full-dag-refill-29-after-common-value-and-fiber-overlaps],
+   [:checkpoint-full-dag-refill-29-after-common-value-and-fiber-overlaps],
    :current-residual
    "One placeholder: a regular value of the literal first-two-coordinate projection. Banked manifold Sard uses self-model inner-product spaces; the frozen source uses arbitrary ModelWithCorners and a finite-dimensional normed model."}
   {:consumer "t96J05",
@@ -55086,8 +55037,7 @@
    :id :regular-fiber-global-atlas-assembly-probe-refill29,
    :kind :reusable-theorem,
    :depends-on
-   [:checkpoint-full-dag-refill-29-after-common-value-and-fiber-overlaps
-    :checkpoint-full-dag-refill-29-after-common-value-and-fiber-overlaps],
+   [:checkpoint-full-dag-refill-29-after-common-value-and-fiber-overlaps],
    :current-residual
    "RegularFiberFixedModelOverlaps constructs actual fixed-model fiber charts, source coverage and smooth transitions. Global ChartedSpace and IsManifold instances remain.",
    :other-consumers ["t00J02" "t02A07" "t94A06" "t97J05"]}
@@ -55173,8 +55123,7 @@
    :id :t92j07-reviewed-closure-documentation-refill29,
    :kind :documentation,
    :depends-on
-   [:checkpoint-full-dag-refill-29-after-common-value-and-fiber-overlaps
-    :checkpoint-full-dag-refill-29-after-common-value-and-fiber-overlaps],
+   [:checkpoint-full-dag-refill-29-after-common-value-and-fiber-overlaps],
    :current-residual
    "t92J07 is reviewed closed at b364803ac4e0c6b2d20d06d9c937f1f0a9892eb4; its current DAG disposition needs the closure record."}
   {:consumer :portfolio,
@@ -55429,8 +55378,7 @@
    :id :t96j05-frozen-nonempty-radial-level-closure-probe-refill30,
    :kind :final-adapter,
    :depends-on
-   [:checkpoint-full-dag-refill-30-after-general-model-and-fiber-atlas
-    :checkpoint-full-dag-refill-30-after-general-model-and-fiber-atlas],
+   [:checkpoint-full-dag-refill-30-after-general-model-and-fiber-atlas],
    :current-residual
    "One placeholder: the literal nonempty radial level must carry the specified codimension-one manifold structure. Manifold Sard and Euclidean-source global fiber atlases are banked; attained regular-radius selection and manifold-source transport need audit."}
   {:consumer "t96J05",
@@ -55883,8 +55831,7 @@
    :id :t94j08-frozen-signed-antipodal-closure-probe-refill31,
    :kind :final-adapter,
    :depends-on
-   [:checkpoint-full-dag-refill-31-after-radial-level-and-fiber-inclusion
-    :checkpoint-full-dag-refill-31-after-radial-level-and-fiber-inclusion],
+   [:checkpoint-full-dag-refill-31-after-radial-level-and-fiber-inclusion],
    :current-residual
    "Two placeholders in the repaired positive-dimensional branch: actual integral top-homology antipodal action and final local-index assembly."}
   {:consumer "t00J02",
@@ -56273,8 +56220,7 @@
    :id :t96j05-local-radial-counterexample-preservation-refill31,
    :kind :documentation,
    :depends-on
-   [:checkpoint-full-dag-refill-31-after-radial-level-and-fiber-inclusion
-    :checkpoint-full-dag-refill-31-after-radial-level-and-fiber-inclusion],
+   [:checkpoint-full-dag-refill-31-after-radial-level-and-fiber-inclusion],
    :current-residual
    "Reviewed exact centered-circle counterexample exists in /tmp; preserve it canonically and correct the recorded residual without changing frozen Main."}
   {:consumer :portfolio,
@@ -56530,8 +56476,7 @@
    :id :t95j04-frozen-sphere-image-nullity-closure-probe-refill32,
    :kind :final-adapter,
    :depends-on
-   [:checkpoint-full-dag-refill-32-after-antipodal-and-manifold-fiber-charts
-    :checkpoint-full-dag-refill-32-after-antipodal-and-manifold-fiber-charts],
+   [:checkpoint-full-dag-refill-32-after-antipodal-and-manifold-fiber-charts],
    :current-residual
    "One placeholder remains for exact sphere Hausdorff image nullity, nonsurjectivity and null-homotopy; all simple-connectivity and nonhomeomorphism conjuncts are proved."}
   {:consumer "t00J02",
@@ -56626,8 +56571,7 @@
    :id :manifold-regular-fiber-global-atlas-inclusion-probe-refill32,
    :kind :reusable-theorem,
    :depends-on
-   [:checkpoint-full-dag-refill-32-after-antipodal-and-manifold-fiber-charts
-    :checkpoint-full-dag-refill-32-after-antipodal-and-manifold-fiber-charts],
+   [:checkpoint-full-dag-refill-32-after-antipodal-and-manifold-fiber-charts],
    :current-residual
    "ManifoldRegularFiberCharts supplies actual fixed-model charts, source coverage and smooth overlaps. Global atlas and smooth subtype inclusion remain.",
    :other-consumers ["t02A07" "t94A06" "t01J04"]}
@@ -56893,8 +56837,7 @@
    :t01j04-frozen-closed-neighborhood-preimage-closure-probe-refill33,
    :kind :final-adapter,
    :depends-on
-   [:checkpoint-full-dag-refill-33-after-sphere-nullity-and-manifold-fiber-atlas
-    :checkpoint-full-dag-refill-33-after-sphere-nullity-and-manifold-fiber-atlas],
+   [:checkpoint-full-dag-refill-33-after-sphere-nullity-and-manifold-fiber-atlas],
    :current-residual
    "One placeholder: shrink an arbitrary target neighborhood so its closed preimage has the literal manifold-with-boundary structure. Frozen source has no second-countability assumption."}
   {:consumer "t00J02",
@@ -56987,8 +56930,7 @@
    :id :manifold-regular-fiber-tangent-image-probe-refill33,
    :kind :reusable-theorem,
    :depends-on
-   [:checkpoint-full-dag-refill-33-after-sphere-nullity-and-manifold-fiber-atlas
-    :checkpoint-full-dag-refill-33-after-sphere-nullity-and-manifold-fiber-atlas],
+   [:checkpoint-full-dag-refill-33-after-sphere-nullity-and-manifold-fiber-atlas],
    :current-residual
    "The actual global manifold-fiber atlas and smooth inclusion are banked. Injectivity and kernel-range equality for that inclusion's mfderiv remain.",
    :other-consumers ["t02A07" "t94A06" "t01J04"]}
@@ -57063,8 +57005,7 @@
    :id :t95j04-reviewed-closure-documentation-refill33,
    :kind :documentation,
    :depends-on
-   [:checkpoint-full-dag-refill-33-after-sphere-nullity-and-manifold-fiber-atlas
-    :checkpoint-full-dag-refill-33-after-sphere-nullity-and-manifold-fiber-atlas],
+   [:checkpoint-full-dag-refill-33-after-sphere-nullity-and-manifold-fiber-atlas],
    :current-residual
    "Reviewed closure a13852f3 is canonical, but DAG entries still describe t95J04 as partial and exact Hausdorff nullity as absent."}
   {:consumer :portfolio,
@@ -57310,8 +57251,7 @@
    :id :t94a06-frozen-normal-translation-closure-probe-refill34,
    :kind :final-adapter,
    :depends-on
-   [:checkpoint-full-dag-refill-34-after-neighborhood-preimage-and-tangent-image
-    :checkpoint-full-dag-refill-34-after-neighborhood-preimage-and-tangent-image],
+   [:checkpoint-full-dag-refill-34-after-neighborhood-preimage-and-tangent-image],
    :current-residual
    "One placeholder: almost every literal normal-plane translate is transverse to the z-axis. Frozen source has an arbitrary normed model and no finite-dimensionality hypothesis."}
   {:consumer "t00J02",
@@ -57831,8 +57771,7 @@
    :id :t02a08-frozen-integer-degree-closure-probe-refill35,
    :kind :final-adapter,
    :depends-on
-   [:checkpoint-full-dag-refill-35-after-normal-translation-and-target-fiber-charts
-    :checkpoint-full-dag-refill-35-after-normal-translation-and-target-fiber-charts],
+   [:checkpoint-full-dag-refill-35-after-normal-translation-and-target-fiber-charts],
    :current-residual
    "One placeholder: construct a literal sphere self-map of every integer degree with its actual induced H2 action. Orientation and degree composition are banked; the all-integer map calculation remains."}
   {:consumer "t00J02",
@@ -57920,8 +57859,7 @@
    :id :manifold-target-fiber-global-atlas-inclusion-probe-refill35,
    :kind :reusable-theorem,
    :depends-on
-   [:checkpoint-full-dag-refill-35-after-normal-translation-and-target-fiber-charts
-    :checkpoint-full-dag-refill-35-after-normal-translation-and-target-fiber-charts],
+   [:checkpoint-full-dag-refill-35-after-normal-translation-and-target-fiber-charts],
    :current-residual
    "ManifoldTargetRegularFiberCharts supplies literal-fiber charts, coverage and smooth overlaps. Global charted-space and manifold structures and smooth inclusion for that atlas remain.",
    :other-consumers ["t02A07" "t01J04" "t94A06"]}
@@ -57998,8 +57936,7 @@
    :id :t96j07-reviewed-corrected-closure-documentation-refill35,
    :kind :documentation,
    :depends-on
-   [:checkpoint-full-dag-refill-35-after-normal-translation-and-target-fiber-charts
-    :checkpoint-full-dag-refill-35-after-normal-translation-and-target-fiber-charts],
+   [:checkpoint-full-dag-refill-35-after-normal-translation-and-target-fiber-charts],
    :current-residual
    "Current DAG and closure note still describe the old specification defect without recording the reviewed corrected closure."}
   {:consumer :portfolio,
@@ -58247,8 +58184,7 @@
    :id :t98a01-frozen-fivefold-cover-closure-probe-refill36,
    :kind :final-adapter,
    :depends-on
-   [:checkpoint-full-dag-refill-36-after-degree-and-target-atlas
-    :checkpoint-full-dag-refill-36-after-degree-and-target-atlas],
+   [:checkpoint-full-dag-refill-36-after-degree-and-target-atlas],
    :current-residual
    "One placeholder packages the actual fivefold regular torus cover and Euler/genus rigidity for homeomorphic orientable polygon surfaces; printed connected-sum arithmetic is proved."}
   {:consumer "t00J02",
@@ -58330,8 +58266,7 @@
    :id :manifold-target-fiber-tangent-kernel-probe-refill36,
    :kind :reusable-theorem,
    :depends-on
-   [:checkpoint-full-dag-refill-36-after-degree-and-target-atlas
-    :checkpoint-full-dag-refill-36-after-degree-and-target-atlas],
+   [:checkpoint-full-dag-refill-36-after-degree-and-target-atlas],
    :current-residual
    "ManifoldTargetRegularFiberGlobalAtlas constructs the actual global atlas and smooth inclusion. Its inclusion derivative injectivity and exact kernel-range equality remain.",
    :other-consumers ["t02A07" "t01J04" "t94A06"]}
@@ -58574,8 +58509,7 @@
    :id :t00j02-frozen-duality-producer-closure-probe-refill37,
    :kind :final-adapter,
    :depends-on
-   [:checkpoint-full-dag-refill-37-after-fivefold-and-target-tangent
-    :checkpoint-full-dag-refill-37-after-fivefold-and-target-tangent],
+   [:checkpoint-full-dag-refill-37-after-fivefold-and-target-tangent],
    :current-residual
    "One placeholder: construct OrientedSurfacePreimageDuality.Producer S. Self-model regular-fiber geometry is banked; oriented geometric-to-homological detection remains."}
   {:consumer "t00J02",
@@ -59117,8 +59051,7 @@
    :id :t95j05-frozen-hausdorff-integral-closure-probe-refill38,
    :kind :final-adapter,
    :depends-on
-   [:checkpoint-full-dag-refill-38-after-duality-and-transverse-product
-    :checkpoint-full-dag-refill-38-after-duality-and-transverse-product],
+   [:checkpoint-full-dag-refill-38-after-duality-and-transverse-product],
    :current-residual
    "One placeholder. Intrinsic finiteness and density moment relative to sphere mass are banked; numerical Hausdorff mass and frozen assembly remain."}
   {:consumer "t00J02",
@@ -59496,8 +59429,7 @@
    :id :null-winding-preimage-constant-loop-audit-probe-refill38,
    :kind :representation-comparison,
    :depends-on
-   [:checkpoint-full-dag-refill-38-after-duality-and-transverse-product
-    :checkpoint-full-dag-refill-38-after-duality-and-transverse-product],
+   [:checkpoint-full-dag-refill-38-after-duality-and-transverse-product],
    :current-residual
    "Reviewed STOP exposed constant-loop witnesses in the weak null-winding predicate, but no universal triviality theorem or exact Producer counterexample has been compiled."}
   {:consumer :portfolio,
@@ -59777,8 +59709,7 @@
    :id :t00a01-frozen-connected-sum-closure-probe-refill39,
    :kind :final-adapter,
    :depends-on
-   [:checkpoint-full-dag-refill-39-after-integral-recharting-and-null-winding-audit
-    :checkpoint-full-dag-refill-39-after-integral-recharting-and-null-winding-audit],
+   [:checkpoint-full-dag-refill-39-after-integral-recharting-and-null-winding-audit],
    :current-residual
    "Two placeholders: the fundamental-group coproduct bridge and final conjunction. The singular-homology bridge is already proved."}
   {:consumer "t00J02",
@@ -60491,8 +60422,7 @@
    :id :t94j09-frozen-polygon-homology-closure-probe-refill40,
    :kind :final-adapter,
    :depends-on
-   [:checkpoint-full-dag-refill-40-after-connected-sum-and-incidence-atlas
-    :checkpoint-full-dag-refill-40-after-connected-sum-and-incidence-atlas],
+   [:checkpoint-full-dag-refill-40-after-connected-sum-and-incidence-atlas],
    :current-residual
    "One placeholder remains for the quotient homeomorphism and integral homology conjunction; the quotient homeomorphism is separately banked and the literal homology computation remains."}
   {:consumer "t99J03",
@@ -60582,8 +60512,7 @@
    :id :compact-surface-polygon-presentation-probe-refill40,
    :kind :representation-comparison,
    :depends-on
-   [:checkpoint-full-dag-refill-40-after-connected-sum-and-incidence-atlas
-    :checkpoint-full-dag-refill-40-after-connected-sum-and-incidence-atlas],
+   [:checkpoint-full-dag-refill-40-after-connected-sum-and-incidence-atlas],
    :current-residual
    "The five-consumer surface-classification cluster lacks a constructed finite polygon presentation of an arbitrary compact surface. Consumer uptake additionally needs genus invariants and curve/cover comparisons.",
    :other-consumers ["t00A03" "t01J01" "t91J05" "t94J09"]}
@@ -61529,8 +61458,7 @@
    :id :t03j04-frozen-torus-euler-closure-probe-refill41,
    :kind :final-adapter,
    :depends-on
-   [:checkpoint-full-dag-refill-41-after-polygon-and-target-incidence
-    :checkpoint-full-dag-refill-41-after-polygon-and-target-incidence],
+   [:checkpoint-full-dag-refill-41-after-polygon-and-target-incidence],
    :current-residual
    "One placeholder remains for the full conjunction. Nonzero field and surjectivity helpers are proved; actual rational Euler computations and transport remain."}
   {:consumer "t99J03",
@@ -61619,8 +61547,7 @@
    :id :compact-surface-finite-triangulation-probe-refill41,
    :kind :representation-comparison,
    :depends-on
-   [:checkpoint-full-dag-refill-41-after-polygon-and-target-incidence
-    :checkpoint-full-dag-refill-41-after-polygon-and-target-incidence],
+   [:checkpoint-full-dag-refill-41-after-polygon-and-target-incidence],
    :current-residual
    "The reviewed classification STOP identifies construction of a finite presentation as the first missing edge, separate from polygon normalization.",
    :other-consumers ["t00A03" "t01J01" "t91J05" "t94J09"]}
@@ -61715,8 +61642,7 @@
    :id :literal-covering-pullback-probe-refill41,
    :kind :reusable-theorem,
    :depends-on
-   [:checkpoint-full-dag-refill-41-after-polygon-and-target-incidence
-    :checkpoint-full-dag-refill-41-after-polygon-and-target-incidence],
+   [:checkpoint-full-dag-refill-41-after-polygon-and-target-incidence],
    :current-residual
    "The DAG marks covering base change LOCAL-GO; a literal subtype constructor and fiber transport would serve four covering consumers.",
    :other-consumers ["t01A04" "t92J06" "t98A01"]}
@@ -61814,8 +61740,7 @@
    :id :manifold-target-incidence-global-atlas-probe-refill41,
    :kind :reusable-theorem,
    :depends-on
-   [:checkpoint-full-dag-refill-41-after-polygon-and-target-incidence
-    :checkpoint-full-dag-refill-41-after-polygon-and-target-incidence],
+   [:checkpoint-full-dag-refill-41-after-polygon-and-target-incidence],
    :current-residual
    "Reviewed local incidence charts, coverage and smooth overlaps are complete. Global atlas assembly and smooth inclusion remain; actual tangent equalizer and oriented homology remain subsequent.",
    :other-consumers ["t02A07" "t94A06" "t97J05"]}
@@ -62098,8 +62023,7 @@
    :id :t02a08-frozen-integer-degree-closure-probe-refill42,
    :kind :final-adapter,
    :depends-on
-   [:checkpoint-full-dag-refill-42-after-torus-euler-and-shared-geometry
-    :checkpoint-full-dag-refill-42-after-torus-euler-and-shared-geometry],
+   [:checkpoint-full-dag-refill-42-after-torus-euler-and-shared-geometry],
    :current-residual
    "One placeholder is the arbitrary-integer degree realization; intersection assembly is proved."}
   {:consumer "t99J03",
@@ -63260,8 +63184,7 @@
    :id :t01a08-frozen-regular-line-closure-probe-refill43,
    :kind :final-adapter,
    :depends-on
-   [:checkpoint-full-dag-refill-43-after-degree-triangles-and-tangent-transfer
-    :checkpoint-full-dag-refill-43-after-degree-triangles-and-tangent-transfer],
+   [:checkpoint-full-dag-refill-43-after-degree-triangles-and-tangent-transfer],
    :current-residual
    "One placeholder remains. Banked genuine-smooth manifold Sard may supply the regular-value argument; exact frozen regularity and model compatibility require checking."}
   {:consumer "t99J03",
@@ -63337,8 +63260,7 @@
    :id :surface-triangle-compatible-refinement-probe-refill43,
    :kind :reusable-theorem,
    :depends-on
-   [:checkpoint-full-dag-refill-43-after-degree-triangles-and-tangent-transfer
-    :checkpoint-full-dag-refill-43-after-degree-triangles-and-tangent-transfer],
+   [:checkpoint-full-dag-refill-43-after-degree-triangles-and-tangent-transfer],
    :current-residual
    "Finite embedded triangle interiors cover the surface. Shared-face refinement is absent; the cover alone is not a triangulation.",
    :other-consumers ["t00A03" "t01J01" "t91J05" "t94J09"]}
@@ -63420,8 +63342,7 @@
    :id :incidence-parameter-projection-regularity-probe-refill43,
    :kind :reusable-theorem,
    :depends-on
-   [:checkpoint-full-dag-refill-43-after-degree-triangles-and-tangent-transfer
-    :checkpoint-full-dag-refill-43-after-degree-triangles-and-tangent-transfer],
+   [:checkpoint-full-dag-refill-43-after-degree-triangles-and-tangent-transfer],
    :current-residual
    "The normalized incidence tangent equalizer is complete. Its actual projection regularity criterion is the next bounded calculus edge before Sard-based parameter arguments.",
    :other-consumers ["t00J02" "t94A06" "t97J05"]}
@@ -63515,8 +63436,7 @@
    :id :finite-cover-rational-transfer-probe-refill43,
    :kind :reusable-theorem,
    :depends-on
-   [:checkpoint-full-dag-refill-43-after-degree-triangles-and-tangent-transfer
-    :checkpoint-full-dag-refill-43-after-degree-triangles-and-tangent-transfer],
+   [:checkpoint-full-dag-refill-43-after-degree-triangles-and-tangent-transfer],
    :current-residual
    "Integral production chain transfer is complete; rational coefficient transport and its induced homology identity remain.",
    :other-consumers ["t01A02" "t98A01"]}
@@ -63751,8 +63671,7 @@
    :id :t02a05-frozen-flux-closure-probe-refill44,
    :kind :final-adapter,
    :depends-on
-   [:checkpoint-full-dag-refill-44-after-regular-line-and-face-projection-transfer
-    :checkpoint-full-dag-refill-44-after-regular-line-and-face-projection-transfer],
+   [:checkpoint-full-dag-refill-44-after-regular-line-and-face-projection-transfer],
    :current-residual
    "Two placeholders encode the flux bridge and final assembly. The quadratic optimization is proved; literal integral normalization and evaluation remain."}
   {:consumer "t98A02",
@@ -64174,8 +64093,7 @@
    :id :surface-embedded-arcs-finite-position-probe-refill44,
    :kind :reusable-theorem,
    :depends-on
-   [:checkpoint-full-dag-refill-44-after-regular-line-and-face-projection-transfer
-    :checkpoint-full-dag-refill-44-after-regular-line-and-face-projection-transfer],
+   [:checkpoint-full-dag-refill-44-after-regular-line-and-face-projection-transfer],
    :current-residual
    "The reviewed compatible-face STOP isolates controlled embedded arcs and finite intersections before graph and disk-face construction.",
    :other-consumers ["t00A03" "t01J01" "t91J05" "t94J09"]}
@@ -64441,8 +64359,7 @@
    :id :t00a01-frozen-open-union-pi1-closure-probe-refill45,
    :kind :final-adapter,
    :depends-on
-   [:checkpoint-full-dag-refill-45-after-flux-local-charts-and-arcs
-    :checkpoint-full-dag-refill-45-after-flux-local-charts-and-arcs],
+   [:checkpoint-full-dag-refill-45-after-flux-local-charts-and-arcs],
    :current-residual
    "Homology branch is proved; actual chosen-basepoint fundamental-group free-product bridge and final conjunction are the two placeholders."}
   {:consumer "t98A02",
@@ -64859,8 +64776,7 @@
    :id :surface-nested-triangle-cover-margin-probe-refill45,
    :kind :reusable-theorem,
    :depends-on
-   [:checkpoint-full-dag-refill-45-after-flux-local-charts-and-arcs
-    :checkpoint-full-dag-refill-45-after-flux-local-charts-and-arcs],
+   [:checkpoint-full-dag-refill-45-after-flux-local-charts-and-arcs],
    :current-residual
    "Controlled arc perturbation remains unavailable. A constructed nested cover can supply the coverage margin needed before moving boundaries.",
    :other-consumers ["t00A03" "t01J01" "t91J05" "t94J09"]}
@@ -65152,8 +65068,7 @@
    :id :t03j04-frozen-rational-euler-closure-probe-refill46,
    :kind :final-adapter,
    :depends-on
-   [:checkpoint-full-dag-refill-46-after-open-union-overlap-and-nested-triangles
-    :checkpoint-full-dag-refill-46-after-open-union-overlap-and-nested-triangles],
+   [:checkpoint-full-dag-refill-46-after-open-union-overlap-and-nested-triangles],
    :current-residual
    "One placeholder remains. Rational covering transfer is banked; its applicability to the literal Euler sums requires a complete audit.",
    :other-consumers []}
@@ -65265,8 +65180,7 @@
    :coefficient-triple-overlap-geometric-composition-probe-refill46,
    :kind :representation-comparison,
    :depends-on
-   [:checkpoint-full-dag-refill-46-after-open-union-overlap-and-nested-triangles
-    :checkpoint-full-dag-refill-46-after-open-union-overlap-and-nested-triangles],
+   [:checkpoint-full-dag-refill-46-after-open-union-overlap-and-nested-triangles],
    :current-residual
    "Pair overlaps, neighborhood restriction, distinguished normalization recovery and scalar transition units are banked. Explicit common-triple geometric composition remains.",
    :other-consumers ["t00J02" "t02A07" "t94A06" "t97J05"]}
@@ -65352,8 +65266,7 @@
    :id :compact-transverse-arc-intersection-finiteness-probe-refill46,
    :kind :reusable-theorem,
    :depends-on
-   [:checkpoint-full-dag-refill-46-after-open-union-overlap-and-nested-triangles
-    :checkpoint-full-dag-refill-46-after-open-union-overlap-and-nested-triangles],
+   [:checkpoint-full-dag-refill-46-after-open-union-overlap-and-nested-triangles],
    :current-residual
    "Nested triangle coverage is banked. A finite-intersection theorem under actual transverse derivative hypotheses is a bounded prerequisite; controlled endpoint-preserving position adjustment remains separate.",
    :other-consumers ["t00A03" "t01J01" "t91J05" "t94J09"]}
@@ -65860,8 +65773,7 @@
    :id :t00a01-frozen-cover-coproduct-closure-probe-refill47,
    :kind :final-adapter,
    :depends-on
-   [:checkpoint-full-dag-refill-47-after-euler-triple-arcs-and-vertex
-    :checkpoint-full-dag-refill-47-after-euler-triple-arcs-and-vertex],
+   [:checkpoint-full-dag-refill-47-after-euler-triple-arcs-and-vertex],
    :current-residual
    "The generic actual-cover comparison is reviewed. Two placeholders remain for its frozen specialization and final assembly.",
    :other-consumers []}
@@ -66189,8 +66101,7 @@
    :plane-arc-small-translation-finite-intersections-probe-refill47,
    :kind :reusable-theorem,
    :depends-on
-   [:checkpoint-full-dag-refill-47-after-euler-triple-arcs-and-vertex
-    :checkpoint-full-dag-refill-47-after-euler-triple-arcs-and-vertex],
+   [:checkpoint-full-dag-refill-47-after-euler-triple-arcs-and-vertex],
    :current-residual
    "Conditional finite intersections are reviewed; a regular-value translation is the next bounded construction before relative arc adjustment.",
    :other-consumers ["t00A03" "t01J01" "t91J05" "t94J09"]}
@@ -66443,8 +66354,7 @@
    :id :t03j02-frozen-null-circle-gluing-closure-probe-refill48,
    :kind :final-adapter,
    :depends-on
-   [:checkpoint-full-dag-refill-48-after-cover-closure-boundary-and-translations
-    :checkpoint-full-dag-refill-48-after-cover-closure-boundary-and-translations],
+   [:checkpoint-full-dag-refill-48-after-cover-closure-boundary-and-translations],
    :current-residual
    "Two placeholders remain. Generic descent and group reconstruction are banked; applicability to this closed circle gluing must be established.",
    :other-consumers []}
@@ -66851,8 +66761,7 @@
    :id :finite-plane-arc-family-small-translations-probe-refill48,
    :kind :reusable-theorem,
    :depends-on
-   [:checkpoint-full-dag-refill-48-after-cover-closure-boundary-and-translations
-    :checkpoint-full-dag-refill-48-after-cover-closure-boundary-and-translations],
+   [:checkpoint-full-dag-refill-48-after-cover-closure-boundary-and-translations],
    :current-residual
    "Two-curve small translations are reviewed. A finite-family construction remains before relative chartwise boundary adjustment.",
    :other-consumers ["t00A03" "t01J01" "t91J05" "t94J09"]}
@@ -67102,8 +67011,7 @@
    :id :t98a01-frozen-fivefold-cover-closure-probe-refill49,
    :kind :final-adapter,
    :depends-on
-   [:checkpoint-full-dag-refill-49-after-circle-gluing-units-and-arc-families
-    :checkpoint-full-dag-refill-49-after-circle-gluing-units-and-arc-families],
+   [:checkpoint-full-dag-refill-49-after-circle-gluing-units-and-arc-families],
    :current-residual
    "One placeholder contains both concrete regular-cover construction and universal genus/Euler comparison; product coverings are now banked.",
    :other-consumers []}
@@ -69732,8 +69640,7 @@
    :finite-translated-embedded-arcs-chart-containment-probe-refill49,
    :kind :reusable-theorem,
    :depends-on
-   [:checkpoint-full-dag-refill-49-after-circle-gluing-units-and-arc-families
-    :checkpoint-full-dag-refill-49-after-circle-gluing-units-and-arc-families],
+   [:checkpoint-full-dag-refill-49-after-circle-gluing-units-and-arc-families],
    :current-residual
    "Simultaneous plane translations are reviewed; containment in prescribed neighborhoods and relative endpoint control remain separate.",
    :other-consumers ["t00A03" "t01J01" "t91J05" "t94J09"]}
@@ -70135,8 +70042,7 @@
    :id :t99j03-frozen-contained-arcs-closure-probe-refill50,
    :kind :final-adapter,
    :depends-on
-   [:checkpoint-full-dag-refill-50-after-fivefold-compact-support-and-contained-arcs
-    :checkpoint-full-dag-refill-50-after-fivefold-compact-support-and-contained-arcs],
+   [:checkpoint-full-dag-refill-50-after-fivefold-compact-support-and-contained-arcs],
    :current-residual
    "Contained finite-family translations are banked; endpoint preservation, cross-chart compatibility, retained coverage and compatible faces remain before the frozen theorem.",
    :other-consumers []}
@@ -72618,8 +72524,7 @@
    :id :unit-add-circle-five-torsion-cardinality-probe-refill50,
    :kind :reusable-theorem,
    :depends-on
-   [:checkpoint-full-dag-refill-50-after-fivefold-compact-support-and-contained-arcs
-    :checkpoint-full-dag-refill-50-after-fivefold-compact-support-and-contained-arcs],
+   [:checkpoint-full-dag-refill-50-after-fivefold-compact-support-and-contained-arcs],
    :current-residual
    "The fiber equivalence and transitive deck homeomorphisms compile; numerical cardinality five is the smallest missing cover-specific step, while polygon genus and Euler comparisons remain independent.",
    :other-consumers []}
@@ -73029,9 +72934,7 @@
    :id :t98a01-frozen-five-torsion-uptake-probe-refill51,
    :kind :final-adapter,
    :depends-on
-   [:checkpoint-full-dag-refill-51-after-triangulation-relative-mv-and-five-torsion
-    :unit-add-circle-five-torsion-cardinality-probe-refill50
-    :checkpoint-full-dag-refill-51-after-triangulation-relative-mv-and-five-torsion],
+   [:checkpoint-full-dag-refill-51-after-triangulation-relative-mv-and-five-torsion :unit-add-circle-five-torsion-cardinality-probe-refill50],
    :current-residual
    "The five-torsion kernel has reviewed cardinality five; actual torus-fiber transport and the frozen conjunction must now be attempted, while polygon genus and Euler comparisons remain independently guarded.",
    :other-consumers []}
@@ -81845,8 +81748,7 @@
    :id :routes-2026-09-29-polygon-quotient-hausdorff-shared-1,
    :kind :reusable-theorem,
    :depends-on
-   [:routes-2026-09-29-topo1-refill-heavy-1
-    :routes-2026-09-29-topo1-refill-heavy-1],
+   [:routes-2026-09-29-topo1-refill-heavy-1],
    :current-residual
    "Hausdorffness before cut-and-paste and cellular homology.",
    :other-consumers [:tunk01 :t91A02]}
@@ -82397,8 +82299,7 @@
    :id :routes-2026-10-10-polygon-compact-closed-quotient-shared-1,
    :kind :reusable-theorem,
    :depends-on
-   [:routes-2026-09-29-checkpoint-topo1-refill-five-1
-    :routes-2026-09-29-checkpoint-topo1-refill-five-1],
+   [:routes-2026-09-29-checkpoint-topo1-refill-five-1],
    :current-residual
    "Replace the refuted open-projection route by compact-Hausdorff closed-equivalence separation at exactly the three consumers' finite edge-pairing generality.",
    :other-consumers [:tunk01 :t91A02]}
@@ -82475,8 +82376,7 @@
    :id :routes-2026-10-10-rational-projective-homology-shared-1,
    :kind :reusable-theorem,
    :depends-on
-   [:routes-2026-09-29-checkpoint-topo1-refill-five-1
-    :routes-2026-09-29-checkpoint-topo1-refill-five-1],
+   [:routes-2026-09-29-checkpoint-topo1-refill-five-1],
    :current-residual
    "Supply exactly the rational homology and boundedness data needed by the two remaining projective consumers before their Lefschetz assemblies.",
    :other-consumers [:t99J05]}

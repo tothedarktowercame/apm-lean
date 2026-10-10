@@ -49,6 +49,8 @@
     (when-not (contains? i k) (die (:id i) "lacks" k)))
   (when-not ((:statuses w) (:state i)) (die (:id i) "unknown state" (:state i)))
   (when-not ((:edge-kinds w) (:kind i)) (die (:id i) "unknown kind" (:kind i)))
+  (when-not (= (count (:depends-on i)) (count (set (:depends-on i))))
+    (die (:id i) "contains duplicate dependencies"))
   (doseq [d (:depends-on i)] (when-not (by-id d) (die (:id i) "unknown dependency" d)))
   (let [ready? (every? #(let [state (:state (by-id %))]
                           (or (= :done state)
