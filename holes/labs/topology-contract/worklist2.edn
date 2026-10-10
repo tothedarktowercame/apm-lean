@@ -61461,6 +61461,34 @@
    "Construct the inverse-after-forward radial homotopy inside LeftTubeMinusCore using the uniform normal-radius bound, then assemble the torus HomotopyEquiv.",
    :other-consumers []}
   {:bounded-exception
+   "single-consumer continuous ambient radial interpolation for the t02A03 punctured left tube",
+   :consumer :t02A03,
+   :phase :probe,
+   :state :open,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t02A03/left-tube-radial-ambient-interpolation",
+   :acceptance
+   {:probe
+    "Compile and bank apm_t02a03_leftTubeRadialPoint, apm_t02a03_continuous_leftTubeRadialPoint, apm_t02a03_leftTubeRadialPoint_zero, and apm_t02a03_leftTubeRadialPoint_one from /tmp/t02a03_geometric_tube_cover.lean. Define the affine interpolation in the ambient Euclidean space from the inverse reconstruction of a point's torus coordinates at time zero to the original point at time one, prove it continuous from the banked forward and inverse coordinate maps, and prove both endpoint identities. This supplies the ambient map underlying the complement-side comparison; do not yet claim intermediate left-tube membership, deleted-core exclusion, the bundled homotopy, HomotopyEquiv, or gluing.",
+    :declarations
+    ["apm_t02a03_leftTubeRadialPoint"
+     "apm_t02a03_continuous_leftTubeRadialPoint"
+     "apm_t02a03_leftTubeRadialPoint_zero"
+     "apm_t02a03_leftTubeRadialPoint_one"],
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "t02A03 step 2, construct the continuous ambient inverse-after-forward interpolation with its endpoints"},
+   :id
+   :routes-2026-10-10-t02a03-left-tube-radial-ambient-interpolation-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo2-r5
+    :routes-2026-10-10-t02a03-left-tube-normal-radius-bound-topo2-r1],
+   :current-residual
+   "Prove the ambient interpolation stays inside the frozen left-tube complement, bundle it as the inverse-after-forward homotopy, and assemble the torus HomotopyEquiv.",
+   :other-consumers []}
+  {:bounded-exception
    "single-consumer explicit punctured-left-tube model for t02A03",
    :consumer :t02A03,
    :evidence
@@ -61470,19 +61498,19 @@
      :fixture
      {:path "/tmp/t02a03_geometric_tube_cover.lean",
       :sha256
-      "52bd30d0b20cb91295e3ce4cf15ae63aafc51585c3763fdffad0c3b2aa6f103c"},
+      "bb97efb8827080715d55a33a7925d58c06a0fc81abffa0a6501cd13e95cf11df"},
      :commands
      [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
        :exit 0,
        :output
-       "apm_t02a03_leftTubeNormalComplex_norm_le_dist_leftCore and apm_t02a03_leftTubeNormalComplex_norm_le compiled without warnings; axioms [propext, Classical.choice, Quot.sound]"}
+       "apm_t02a03_leftTubeRadialPoint, apm_t02a03_continuous_leftTubeRadialPoint, apm_t02a03_leftTubeRadialPoint_zero, and apm_t02a03_leftTubeRadialPoint_one compiled without warnings; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
        "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
        :exit 0}
       {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
        :exit 0,
        :output
-       "52bd30d0b20cb91295e3ce4cf15ae63aafc51585c3763fdffad0c3b2aa6f103c  /tmp/t02a03_geometric_tube_cover.lean"}
+       "bb97efb8827080715d55a33a7925d58c06a0fc81abffa0a6501cd13e95cf11df  /tmp/t02a03_geometric_tube_cover.lean"}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
@@ -61490,48 +61518,48 @@
      [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
        :exit 1,
        :finding
-       "The first squared-inequality proof asked nlinarith to infer monotonicity of squaring directly from an absolute-value bound, and the expanded planar norm retained complex trigonometric real parts. Using sq_le_sq₀ with nonnegative sides and then Complex.sq_norm isolated the required squared inequality."}
+       "The first definition wrote I as the interval type, but with no local notation in this fixture Lean treated I as an auto-implicit type parameter, so its points had no real coercion. Replacing it with unitInterval fixed the domain."}
       {:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
        :exit 1,
        :finding
-       "After isolating the squared inequality, simplification still left (Complex.cos (t : Complex)).re and (Complex.sin (t : Complex)).re, preventing polynomial normalization. Adding Complex.cos_ofReal_re and Complex.sin_ofReal_re exposed the real coordinate polynomial; the final rerun compiled."}],
+       "After correcting the domain, fun_prop did not use the separately banked continuity theorem for the ambient torus reconstruction hidden under the inverse ContinuousMap. Factoring the time, source, and reconstructed-target functions and composing the explicit continuity theorems corrected the proof."}],
      :finding
-     "The full punctured-left-tube HomotopyEquiv is still absent, but the exact normal-radius control required by its complement-side radial homotopy is now compiled. The helper apm_t02a03_leftTubeNormalComplex_norm_le_dist_leftCore proves that normal displacement is bounded by distance to every frozen left-core point: the banked planar reverse-triangle inequality controls the radial component, the height component is identical on both sides, and comparison of squared norms finishes the Euclidean estimate. Applying the attained-core witness for a point in the frozen cthickening gives apm_t02a03_leftTubeNormalComplex_norm_le, the uniform bound by 1/4.",
+     "The full punctured-left-tube HomotopyEquiv remains absent, but a continuous ambient comparison path with the correct endpoints is now compiled. apm_t02a03_leftTubeRadialPoint takes the affine interpolation from the reconstructed fixed-normal-radius point at time zero to the original punctured-tube point at time one. Its continuity is assembled explicitly from the continuous torus-coordinate map, bundled inverse, subtype inclusions, scalar multiplication, and addition. The endpoint theorems reduce definitionally. What remains is geometric: prove every interpolated point remains in the frozen left tube and outside the frozen core before bundling the homotopy.",
      :residual
-     "Bank the distance comparison and uniform 1/4 normal bound. Then define the inverse-after-forward radial interpolation, prove every intermediate point remains in the frozen left tube and outside the frozen core, bundle its continuity and endpoint identities as a homotopy, and assemble the HomotopyEquiv.",
+     "Bank the continuous ambient interpolation and endpoints. Then prove left-tube membership and deleted-core exclusion for every intermediate point, bundle the interpolation into LeftTubeMinusCore as the inverse-after-forward homotopy, and assemble the HomotopyEquiv.",
      :prerequisite
      {:bounded-exception
-      "single-consumer frozen normal-radius bound for the t02A03 punctured left tube",
+      "single-consumer continuous ambient radial interpolation for the t02A03 punctured left tube",
       :consumer :t02A03,
       :phase :probe,
       :state :open,
       :scope [],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t02A03/left-tube-normal-radius-bound",
+      "TOPOLOGY-ROUTES.md/t02A03/left-tube-radial-ambient-interpolation",
       :acceptance
       {:probe
-       "Compile and bank apm_t02a03_leftTubeNormalComplex_norm_le_dist_leftCore and apm_t02a03_leftTubeNormalComplex_norm_le from /tmp/t02a03_geometric_tube_cover.lean. Combine the planar reverse-triangle estimate with the unchanged height coordinate to prove the complex normal displacement is no larger than the Euclidean distance to every frozen left-core point, then apply apm_t02a03_leftTube_exists_near_leftCore to bound its norm by the frozen cthickening radius 1/4. This supplies the quantitative invariant needed for radial interpolation; do not yet claim the interpolation stays outside the core, either comparison homotopy, the HomotopyEquiv, or gluing.",
+       "Compile and bank apm_t02a03_leftTubeRadialPoint, apm_t02a03_continuous_leftTubeRadialPoint, apm_t02a03_leftTubeRadialPoint_zero, and apm_t02a03_leftTubeRadialPoint_one from /tmp/t02a03_geometric_tube_cover.lean. Define the affine interpolation in the ambient Euclidean space from the inverse reconstruction of a point's torus coordinates at time zero to the original point at time one, prove it continuous from the banked forward and inverse coordinate maps, and prove both endpoint identities. This supplies the ambient map underlying the complement-side comparison; do not yet claim intermediate left-tube membership, deleted-core exclusion, the bundled homotopy, HomotopyEquiv, or gluing.",
        :declarations
-       ["apm_t02a03_leftTubeNormalComplex_norm_le_dist_leftCore"
-        "apm_t02a03_leftTubeNormalComplex_norm_le"],
-       :type
-       "forall p : apm_t02a03_leftTubeSubtype, norm (apm_t02a03_leftTubeNormalComplex p) <= (1 / 4 : Real)",
+       ["apm_t02a03_leftTubeRadialPoint"
+        "apm_t02a03_continuous_leftTubeRadialPoint"
+        "apm_t02a03_leftTubeRadialPoint_zero"
+        "apm_t02a03_leftTubeRadialPoint_one"],
        :placeholder "the sole sorry in apm_t02a03",
        :route-step
-       "t02A03 step 2, bound the punctured normal coordinate throughout the frozen left tube"},
+       "t02A03 step 2, construct the continuous ambient inverse-after-forward interpolation with its endpoints"},
       :id
-      :routes-2026-10-10-t02a03-left-tube-normal-radius-bound-topo2-r1,
+      :routes-2026-10-10-t02a03-left-tube-radial-ambient-interpolation-topo2-r1,
       :kind :reusable-theorem,
       :depends-on
       [:routes-2026-10-10-checkpoint-topo2-r5
-       :routes-2026-10-10-t02a03-left-tube-planar-reverse-triangle-topo2-r1],
+       :routes-2026-10-10-t02a03-left-tube-normal-radius-bound-topo2-r1],
       :current-residual
-      "Construct the inverse-after-forward radial homotopy inside LeftTubeMinusCore using the uniform normal-radius bound, then assemble the torus HomotopyEquiv.",
+      "Prove the ambient interpolation stays inside the frozen left-tube complement, bundle it as the inverse-after-forward homotopy, and assemble the torus HomotopyEquiv.",
       :other-consumers []}}},
    :phase :probe,
    :type
    "Nonempty (ContinuousMap.HomotopyEquiv LeftTubeMinusCore ConstructionTargets.TorusCircleWedgeOpenCover.Torus)",
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-punctured-model",
    :acceptance
@@ -61573,7 +61601,8 @@
     :routes-2026-10-10-t02a03-left-tube-torus-inverse-map-topo2-r1
     :routes-2026-10-10-t02a03-left-tube-forward-inverse-identity-topo2-r1
     :routes-2026-10-10-t02a03-left-tube-planar-reverse-triangle-topo2-r1
-    :routes-2026-10-10-t02a03-left-tube-normal-radius-bound-topo2-r1],
+    :routes-2026-10-10-t02a03-left-tube-normal-radius-bound-topo2-r1
+    :routes-2026-10-10-t02a03-left-tube-radial-ambient-interpolation-topo2-r1],
    :current-residual
    "After the punctured-left-tube model is banked, construct the right-tube-minus-deleted-attachment model extending the based core homotopy, then overlap compatibility and gluing for the full geometricY equivalence.",
    :other-consumers []}
