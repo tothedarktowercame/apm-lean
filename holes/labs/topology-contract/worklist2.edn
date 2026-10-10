@@ -59794,10 +59794,48 @@
   {:bounded-exception
    "single-consumer explicit tube-complement-to-generic-wedge homotopy equivalence for t02A03",
    :consumer :t02A03,
+   :stop-count 1,
+   :evidence
+   {:outcome :stop,
+    :seat "topo-8",
+    :commands
+    [{:cmd
+      "test ! -e ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+      :exit 0,
+      :output
+      "The complete dependency fixture through apm_t02a03_rightCoreBasedAttachmentHomotopy compiled; axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "rg -n \"geometricYHomotopyEquivGenericWedge|T02A03GeometricTubeDeformation|rightTube.*(retract|HomotopyEquiv)|cthickening.*(retract|HomotopyEquiv)\" ConstructionTargets holes/labs/topology-routes/routes-{1,2,3}.md",
+      :exit 1,
+      :expected-exit 1,
+      :output
+      "No scoped module, frozen declaration, tube retraction, or cthickening HomotopyEquiv was found."}
+     {:cmd
+      "rg -n \"Nothing found for \\(b\\)|no ℝ³ tube-neighbourhood retractions|That lemma does not exist|plausibly hundreds of lines\" holes/labs/topology-routes/routes-1.md",
+      :exit 0,
+      :output
+      "The route states that no R3 tube-neighborhood retraction or homotopy-equivalence gluing lemma exists, and classifies the explicit infDist/tangency deformation as plausibly hundreds of lines and HEAVY."}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+      :exit 0,
+      :output
+      "03caeef04ef63e83ed7d18db409c345c504bc183f7880e468fde0580ae1c37dd  /tmp/t02a03_geometric_tube_cover.lean"}],
+    :reason
+    "The frozen theorem ConstructionTargets.T02A03GeometricTubeDeformation.geometricYHomotopyEquivGenericWedge : Nonempty (ContinuousMap.HomotopyEquiv T02A03GeometricTubeCover.apm_t02a03_geometricY_probe TorusCircleWedgeOpenCover.GenericWedge) is exactly the missing foundation and is too large for one probe prerequisite. The source is a closed Metric.infDist/cthickening-defined union of two solid tubes with the left core deleted. Its membership proof contains no continuous core parameter or normal coordinate. A proof must first construct explicit continuous tube coordinates and inverse maps, prove every deformation stage remains within radius 1/4 and avoids the deleted left core, handle the singular common tangency where nearest-core choices cease to be unique, and prove the two tube-piece maps and homotopies agree on their overlap. No such coordinate model, retraction, or homotopy-equivalence gluing theorem exists in ConstructionTargets. The alternative closed-cofibration gluing theorem is also absent and independently foundation-sized. This is a missing-construction boundary, not a refutation of the frozen type.",
+    :finding
+    "The punctured-right-core attachment homotopy is fully compiled and standard-axiom-only, but it controls only a one-dimensional core parameter. Repository and route checks locate no theorem that extends it to the full three-dimensional tube complement or glues the two tube models. The requested scoped file does not exist, so there is no partial fixture that could qualify for GO or a smaller compiled prerequisite that could justify REVISE.",
+    :residual
+    "Split this foundation into a multi-row program: explicit left-tube-minus-core coordinates and deformation, explicit right-tube-minus-arc coordinates and deformation extending the banked attachment homotopy, an overlap model at the tangency, and a gluing theorem for compatible homotopy equivalences. After those are banked, assemble the frozen geometricYHomotopyEquivGenericWedge type.",
+    :author "topo-8",
+    :disposition :stop},
    :phase :probe,
    :type
    "Nonempty (ContinuousMap.HomotopyEquiv T02A03GeometricTubeCover.apm_t02a03_geometricY_probe TorusCircleWedgeOpenCover.GenericWedge)",
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/geometric-tube-deformation-equivalence",
