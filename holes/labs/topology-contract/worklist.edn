@@ -98404,6 +98404,22 @@
       :exit 1,
       :finding
       "Initial promotion used the wrong Unicode implicit-binder brackets at four sites; replaced them with Lean implicit binders and the rerun passed."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791663228271-2882-a2d97dce",
+     :commands
+     ["git show 7f09758bc1369ca6fb8b7a9ae4ee3897b964d276:ConstructionTargets/RadialQuotientOpenSets.lean"
+      "git diff-tree --no-commit-id --name-only -r 7f09758bc1369ca6fb8b7a9ae4ee3897b964d276"
+      "git diff --exit-code 7f09758bc1369ca6fb8b7a9ae4ee3897b964d276 -- ConstructionTargets/RadialQuotientOpenSets.lean"
+      "sha256sum /tmp/radial-quotient-open-sets.lean"
+      "lake build ConstructionTargets.RadialQuotientOpenSets"
+      "lake env lean /tmp/radial-quotient-open-sets.lean"
+      "placeholder census on source, fixture, and problems/t97A01/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb on recorded ledger at aecab20e"],
+     :finding
+     "PASS: reviewer codex-3 verified author topo-2 and recorded commit 7f09758b, whose exact scope is only ConstructionTargets/RadialQuotientOpenSets.lean and whose source equals the reviewed checkout. The canonical package authority is correct; fixture SHA-256 c8131021071a6a9be96d6364c5a7ccac8ff3e208a79080c021857bd3ce4740ce matches; target and fixture compile with zero placeholders; t97A01 retains one placeholder; the declarations use only propext, Classical.choice, and Quot.sound; all 131 registered statements and the recorded 893-item ledger validate. preimage_image_eq_of_eqvGen_invariant proves exact saturation in both directions with the correct quotient-equality orientation. isOpen_quotient_image_of_eqvGen_invariant applies the quotient-map open-preimage criterion to that equality. eqvGen_preserves_of_rel_preserves handles relation, reflexive, symmetric, and transitive constructors with correctly oriented equalities, and isOpen_radial_image converts coordinate preservation into saturated membership before descending openness. surfaceRel_norm_eq exhausts both SurfaceRel orientation branches and reduces identified edge points to unit norm. The quotient representation remains Relation.EqvGen.setoid R throughout. The module does not define the radial cover pieces or overlap, descend contractions, construct polygon packages, compute homology, or close t97A01."},
     :commit "7f09758bc1369ca6fb8b7a9ae4ee3897b964d276",
     :changed-paths ["ConstructionTargets/RadialQuotientOpenSets.lean"],
     :fixture
@@ -98413,7 +98429,7 @@
      :sorry-count 0},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/RadialQuotientOpenSets.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/radial-quotient-openness",
@@ -98540,7 +98556,7 @@
       "Generic EqvGen-invariant open subsets have open images in the quotient; relation-preserved real coordinates yield open radial quotient images; every canonical SurfaceRel preserves the complex norm."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -100542,7 +100558,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "RadialQuotientOpenSets.isOpen_radial_image",
@@ -100556,7 +100572,9 @@
     :type
     "If R preserves a continuous real coordinate rho, then the image in Quotient (EqvGen.setoid R) of rho ⁻¹' I is open for every open I.",
     :area "polygon-surface-open-cover",
-    :proved-in :routes-2026-10-10-radial-quotient-open-sets-41},
+    :proved-in :routes-2026-10-10-radial-quotient-open-sets-41,
+    :banked-by :routes-2026-10-10-radial-quotient-open-sets-41,
+    :banked-commit "7f09758bc1369ca6fb8b7a9ae4ee3897b964d276"},
    :id :lemma-radialquotientopensets-isopen-radial-image,
    :kind :lemma,
    :depends-on
