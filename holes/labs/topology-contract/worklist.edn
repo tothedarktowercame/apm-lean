@@ -96566,6 +96566,22 @@
       :exit 1,
       :finding
       "Unicode transcription produced unknown identifier 𝒩; corrected the source to the equivalent Lean identifier nhds before the successful acceptance rerun"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791658759009-2736-dd11cb6d",
+     :commands
+     ["git show b5ae04c9fa05b34c73d07bfa4e64396c38da3e3d:ConstructionTargets/CoveringPathConnectedChart.lean"
+      "git diff-tree --no-commit-id --name-only -r b5ae04c9fa05b34c73d07bfa4e64396c38da3e3d"
+      "git diff --exit-code b5ae04c9fa05b34c73d07bfa4e64396c38da3e3d -- ConstructionTargets/CoveringPathConnectedChart.lean"
+      "sha256sum /tmp/covering-path-connected-chart.lean"
+      "lake build ConstructionTargets.CoveringPathConnectedChart"
+      "lake env lean /tmp/covering-path-connected-chart.lean"
+      "placeholder census on source, fixture, and problems/t99J01/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb on recorded ledger at f93ffc15"],
+     :finding
+     "PASS: reviewer codex-3 verified author topo-2 and recorded commit b5ae04c9, whose exact scope is only ConstructionTargets/CoveringPathConnectedChart.lean and whose source equals the reviewed checkout. The canonical package authority is correct; fixture SHA-256 fe34c47978fa57b01f6cfb1af4fd2e2eb89f4d113a46b6a0096667cadc60f921 matches; target and fixture compile with zero placeholders; t99J01 retains one placeholder; both declarations use only propext, Classical.choice, and Quot.sound; all 131 registered statements and the recorded 873-item ledger validate. Surjectivity correctly supplies Nonempty (p preimage singleton b), the covering chart at b supplies an open neighborhood, the locally path-connected basis refines it to an open path-connected V, and restrOpen produces a trivialization with baseSet exactly V while retaining the fiber type p preimage singleton b. Membership and subset orientations are correct. The module does not select sheets, define retained indices, restrict a path component, count fibers, or compute pi1."},
     :commit "b5ae04c9fa05b34c73d07bfa4e64396c38da3e3d",
     :changed-paths
     ["ConstructionTargets/CoveringPathConnectedChart.lean"],
@@ -96581,7 +96597,7 @@
       "ConstructionTargets.CoveringPathConnectedChart.IsCoveringMap.exists_pathConnected_restrictedTrivialization"]},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/CoveringPathConnectedChart.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component/path-connected-chart",
@@ -96695,7 +96711,7 @@
       "IsCoveringMap.exists_pathConnected_trivialization and exists_pathConnected_restrictedTrivialization refine a surjective covering chart to an open path-connected base set."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component",
@@ -99162,7 +99178,7 @@
    :other-consumers []}
   {:consumer :t99J01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -99175,7 +99191,9 @@
     :reported-by [:routes-2026-10-10-covering-path-connected-chart-45],
     :type
     "For a surjective covering over a locally path-connected base and b : B, there exists a Trivialization (p ⁻¹' {b}) p whose base set contains b and is path connected",
-    :proved-in :routes-2026-10-10-covering-path-connected-chart-45},
+    :proved-in :routes-2026-10-10-covering-path-connected-chart-45,
+    :banked-by :routes-2026-10-10-covering-path-connected-chart-45,
+    :banked-commit "b5ae04c9fa05b34c73d07bfa4e64396c38da3e3d"},
    :id
    :lemma-coveringpathconnectedchart-iscoveringmap-exists-pathconnected-restrictedtriviali,
    :kind :lemma,
