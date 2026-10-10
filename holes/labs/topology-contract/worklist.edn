@@ -92801,67 +92801,96 @@
    :current-residual
    "Copy Mathlib's existing endIsFree unique-lift proof at its present generality and retain the explicit complement indexing type by constructing FreeGroupBasis.ofUniqueLift instead of erasing it into IsFreeGroup.",
    :other-consumers [:t97A03]}
-  {:consumer :t99J01,
+  {:constraints
+   ["uses Mathlib chosen IsFreeGroup.Generators natively"
+    "does not identify chosen generators with canonical FreeGroup.of generators"
+    "reindexes only after complement cardinality is proved"],
+   :consumer :t99J01,
    :evidence
    {:probe
-    {:outcome :revise,
-     :seat "topo-4",
-     :fixture
-     {:path "/tmp/schreier-type-valued-prereq.lean",
-      :sha256
-      "105c67fe116ef05bcfdc53a943624e86752a0a69de64a1b818debfbe908336e9",
-      :interface
-      "spanningTreeBasis (T : WideSubquiver (Symmetrify (IsFreeGroupoid.Generators G))) [Arborescence T] : FreeGroupBasis (((wideSubquiverEquivSetTotal (wideSubquiverSymmetrify T)) complement) : Set (Quiver.Total (IsFreeGroupoid.Generators G))) (End (show G from Quiver.root T))"},
+    {:residual
+     "The Type-valued positive-index Nielsen-Schreier construction is complete; consumers can now use the r=3 and index-two specializations in their topology adapters.",
+     :outcome :go,
+     :warnings [],
+     :missing-theorems
+     [{:name "FiniteIndexFreeGroupSchreierRank.spanningTreeBasis",
+       :type
+       "generic complement-indexed FreeGroupBasis for a spanning tree of a free groupoid",
+       :status :proved,
+       :consumers [:t99J01 :t97A03],
+       :depends-on []}
+      {:name "TreePositiveSelection.Schreier.complement_card_formula",
+       :type
+       "Nat.card of the selected-positive-arrow complement equals (r-1)*n+1",
+       :status :proved,
+       :consumers [:t99J01 :t97A03],
+       :depends-on
+       ["FiniteArborescenceEdgeCount.Schreier.tree_total_card"]}
+      {:name
+       "FiniteIndexFreeGroupSchreierRank.finiteIndexSubgroupFreeGroupEquiv",
+       :type
+       "positive-index subgroup equivalence reindexed by Fin ((r-1)*n+1)",
+       :status :proved,
+       :consumers [:t99J01 :t97A03],
+       :depends-on
+       ["FiniteIndexFreeGroupSchreierRank.spanningTreeBasis"
+        "TreePositiveSelection.Schreier.complement_card_formula"]}],
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
-     [{:cmd "lake env lean /tmp/schreier-type-valued-prereq.lean",
+     [{:cmd
+       "lake build ConstructionTargets.FiniteIndexFreeGroupSchreierRank && lake env lean /tmp/finite-index-free-group-schreier-rank-final-probe.lean",
        :exit 0,
        :finding
-       "The exact generic Type-valued spanning-tree basis interface compiles."}
+       "canonical 1566-job dependency build and fresh imported fixture both succeed; the generic basis, complement count, subgroup transport, universal equivalence, and both specializations use only standard axioms"}
       {:cmd
-       "rg -n \"sorry|admit\" /tmp/schreier-type-valued-prereq.lean",
+       "sha256sum /tmp/finite-index-free-group-schreier-rank-final-probe.lean",
+       :exit 0,
+       :finding
+       "9f380bb4578bf9aa3ea3ceeb746f313edf3bb85722dd6f04b0c8a08d6fa2b6ba"}
+      {:cmd
+       "rg -n \"\\b(sorry|admit)\\b\" /tmp/finite-index-free-group-schreier-rank-final-probe.lean",
        :exit 1,
-       :expected-exit 1}
+       :expected-exit 1,
+       :finding "no placeholders"}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :finding "131 registered statements match, 0 do not"}
       {:cmd "git status --short", :exit 0, :finding "clean"}],
-     :diagnostic-history
-     [{:cmd "lake env lean /tmp/schreier-type-valued-prereq.lean",
-       :exit 1,
-       :finding
-       "The first run lacked the generated olean for the newly banked complement module; compiled that reviewed dependency through Lean's normal build output and reran."}],
-     :prerequisite
-     {:consumer :t99J01,
-      :phase :probe,
-      :state :open,
-      :scope [],
-      :dag-node
-      "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/type-valued-spanning-tree-basis",
-      :acceptance
-      {:probe
-       "Compile the generic Type-valued restatement of Mathlib IsFreeGroupoid.SpanningTree.endIsFree. For a free groupoid G and an arborescence T of Symmetrify (IsFreeGroupoid.Generators G), return FreeGroupBasis indexed exactly by the complement subtype ((wideSubquiverEquivSetTotal (wideSubquiverSymmetrify T)) complement) on End (show G from Quiver.root T). Reuse the existing loopOfHom, functorOfMonoidHom, homOfPath, treeHom, and unique_lift argument, replacing only the final IsFreeGroup.ofUniqueLift call by FreeGroupBasis.ofUniqueLift. Do not perform finite cardinality arithmetic, subgroup transport, or Fin reindexing.",
-       :placeholder
-       "the single sorry in apm_t99j01 and apm_t97A03_bridge_invariants_of_model",
-       :route-step
-       "t99J01 step 3 and t97A03 step 8, generic Type-valued spanning-tree basis required before positive-index subgroup transport",
-       :gates
-       ["canonical packages"
-        "fixture compiles"
-        "zero fixture sorry"
-        "standard-only axioms"
-        "registry check"]},
-      :id
-      :routes-2026-10-10-type-valued-spanning-tree-free-group-basis-17,
-      :kind :reusable-theorem,
-      :depends-on [],
-      :current-residual
-      "Copy Mathlib's existing endIsFree unique-lift proof at its present generality and retain the explicit complement indexing type by constructing FreeGroupBasis.ofUniqueLift instead of erasing it into IsFreeGroup.",
-      :other-consumers [:t97A03]},
-     :residual
-     "Once spanningTreeBasis is banked, map it through endMulEquivSubgroup H, use Finite.equivFinOfCardEq with the banked complement_card_formula, and expose the general, r=3, and r=2,n=2 MulEquiv results in the original row."}},
-   :phase :probe,
+     :fixture
+     {:path
+      "/tmp/finite-index-free-group-schreier-rank-final-probe.lean",
+      :sha256
+      "9f380bb4578bf9aa3ea3ceeb746f313edf3bb85722dd6f04b0c8a08d6fa2b6ba",
+      :interface
+      "Positive-index Type-valued Nielsen-Schreier equivalence H ≃* FreeGroup (Fin ((r-1)*n+1)), with r=3 giving Fin (2*n+1) and r=2,n=2 giving Fin 3."},
+     :implementation
+     {:scope
+      ["ConstructionTargets/FiniteIndexFreeGroupSchreierRank.lean"],
+      :declarations
+      [{:name "FiniteIndexFreeGroupSchreierRank.spanningTreeBasis",
+        :type
+        "FreeGroupBasis on the exact wideSubquiverSymmetrify complement subtype of End (show G from Quiver.root T)"}
+       {:name
+        "FiniteIndexFreeGroupSchreierRank.finiteIndexSubgroupFreeGroupEquiv",
+        :type
+        "(r n : Nat) -> 0 < r -> 0 < n -> (H : Subgroup (FreeGroup (Fin r))) -> H.index = n -> H ≃* FreeGroup (Fin ((r-1)*n+1))"}
+       {:name
+        "FiniteIndexFreeGroupSchreierRank.indexSubgroupFreeGroupFinThreeEquiv",
+        :type
+        "positive n -> H.index=n -> Nonempty (H ≃* FreeGroup (Fin (2*n+1))) for H <= FreeGroup (Fin 3)"}
+       {:name
+        "FiniteIndexFreeGroupSchreierRank.indexTwoSubgroupFreeGroupFinTwoEquiv",
+        :type
+        "H.index=2 -> Nonempty (H ≃* FreeGroup (Fin 3)) for H <= FreeGroup (Fin 2)"}],
+      :constraints
+      ["uses Mathlib chosen IsFreeGroup.Generators natively"
+       "does not identify chosen generators with canonical FreeGroup.of generators"
+       "reindexes only after complement cardinality is proved"]},
+     :seat "topo-4"}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/FiniteIndexFreeGroupSchreierRank.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/positive-index/type-valued-basis",
    :acceptance
@@ -92880,6 +92909,22 @@
    :id
    :routes-2026-10-10-finite-index-schreier-type-valued-basis-positive-index-16,
    :kind :reusable-theorem,
+   :declarations
+   [{:name "FiniteIndexFreeGroupSchreierRank.spanningTreeBasis",
+     :type
+     "FreeGroupBasis on the exact wideSubquiverSymmetrify complement subtype of End (show G from Quiver.root T)"}
+    {:name
+     "FiniteIndexFreeGroupSchreierRank.finiteIndexSubgroupFreeGroupEquiv",
+     :type
+     "(r n : Nat) -> 0 < r -> 0 < n -> (H : Subgroup (FreeGroup (Fin r))) -> H.index = n -> H ≃* FreeGroup (Fin ((r-1)*n+1))"}
+    {:name
+     "FiniteIndexFreeGroupSchreierRank.indexSubgroupFreeGroupFinThreeEquiv",
+     :type
+     "positive n -> H.index=n -> Nonempty (H ≃* FreeGroup (Fin (2*n+1))) for H <= FreeGroup (Fin 3)"}
+    {:name
+     "FiniteIndexFreeGroupSchreierRank.indexTwoSubgroupFreeGroupFinTwoEquiv",
+     :type
+     "H.index=2 -> Nonempty (H ≃* FreeGroup (Fin 3)) for H <= FreeGroup (Fin 2)"}],
    :depends-on
    [:routes-2026-10-10-finite-schreier-tree-positive-selection-complement-count-15
     :routes-2026-10-10-finite-arborescence-total-edge-count-13
@@ -93241,7 +93286,9 @@
     "{G : Type u} [Groupoid G] [IsFreeGroupoid G] (T : WideSubquiver (Symmetrify (IsFreeGroupoid.Generators G))) [Arborescence T] -> FreeGroupBasis (Complement T) (End (show G from Quiver.root T))"},
    :lemma
    {:name "FiniteIndexFreeGroupSchreierRank.spanningTreeBasis",
-    :reported-by [:owner],
+    :reported-by
+    [:owner
+     :routes-2026-10-10-finite-index-schreier-type-valued-basis-positive-index-16],
     :type
     "{G : Type u} [Groupoid G] [IsFreeGroupoid G] (T : WideSubquiver (Symmetrify (IsFreeGroupoid.Generators G))) [Arborescence T] -> FreeGroupBasis (Complement T) (End (show G from Quiver.root T))",
     :proved-in
@@ -93266,7 +93313,8 @@
    {:name
     "FiniteIndexFreeGroupSchreierRank.finiteIndexSubgroupFreeGroupEquiv",
     :reported-by
-    [:routes-2026-10-10-finite-index-free-group-schreier-rank-shared-4],
+    [:routes-2026-10-10-finite-index-free-group-schreier-rank-shared-4
+     :routes-2026-10-10-finite-index-schreier-type-valued-basis-positive-index-16],
     :type
     "(r n : Nat) -> 0 < r -> 0 < n -> (H : Subgroup (FreeGroup (Fin r))) -> H.index = n -> H ≃* FreeGroup (Fin ((r - 1) * n + 1))",
     :proved-in
@@ -93281,19 +93329,27 @@
    [:lemma-finiteindexfreegroupschreierrank-spanningtreebasis
     :lemma-treepositiveselection-schreier-complement-card-formula],
    :other-consumers [:t97A03]}
-  {:consumer :portfolio,
+  {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
    :scope [],
    :acceptance
-   {:lemma "TreePositiveSelection.Schreier.complement_card_formula"},
+   {:lemma "TreePositiveSelection.Schreier.complement_card_formula",
+    :type
+    "Nat.card of the selected-positive-arrow complement equals (r-1)*n+1"},
    :lemma
    {:name "TreePositiveSelection.Schreier.complement_card_formula",
-    :reported-by []},
+    :reported-by
+    [:routes-2026-10-10-finite-index-schreier-type-valued-basis-positive-index-16],
+    :type
+    "Nat.card of the selected-positive-arrow complement equals (r-1)*n+1",
+    :proved-in
+    :routes-2026-10-10-finite-index-schreier-type-valued-basis-positive-index-16},
    :id :lemma-treepositiveselection-schreier-complement-card-formula,
    :kind :lemma,
-   :depends-on [],
-   :other-consumers []}
+   :depends-on
+   [:lemma-finitearborescenceedgecount-schreier-tree-total-card],
+   :other-consumers [:t97A03]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :banked,
@@ -93347,6 +93403,19 @@
    :kind :lemma,
    :depends-on
    [:lemma-finiteindexfreegroupschreierrank-finiteindexsubgroupfreegroupequiv],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "FiniteArborescenceEdgeCount.Schreier.tree_total_card"},
+   :lemma
+   {:name "FiniteArborescenceEdgeCount.Schreier.tree_total_card",
+    :reported-by []},
+   :id :lemma-finitearborescenceedgecount-schreier-tree-total-card,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
