@@ -56502,25 +56502,65 @@
   {:bounded-exception
    "single-consumer fixed-base Path.cast normalization for frozenLbar",
    :consumer :t97A04,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/torus_frozen_lbar_based_path_cast.lean",
+      :sha256
+      "1b69852194410aebe5d249309f148e858d47390a8f7a62974a84cf6af8d9f0af"},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/torus_frozen_lbar_based_path_cast.lean",
+       :exit 0,
+       :output
+       "frozenLbar fixed-base cast normalization compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/torus_frozen_lbar_based_path_cast.lean || true)\"",
+       :exit 0}
+      {:cmd "sha256sum /tmp/torus_frozen_lbar_based_path_cast.lean",
+       :exit 0,
+       :output
+       "1b69852194410aebe5d249309f148e858d47390a8f7a62974a84cf6af8d9f0af  /tmp/torus_frozen_lbar_based_path_cast.lean"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :finding
+     "The placeholder-free fixture names the exact endpoint cast inserted by FundamentalGroup.mapOfEq_apply for frozenLbar at (0,0), identifies the induced endomorphism on every explicit loop class, and proves the Circle image of the casted based path is exactly frozenLbarCircleImagePath. The dependent basepoint normalization is therefore explicit and reusable.",
+     :implementation
+     {:scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
+      :declarations
+      ["frozenLbar_base"
+       "frozenLbarBasedPath"
+       "frozenLbarPi1Map"
+       "frozenLbarPi1Map_mk"
+       "frozenCircleImagePath_frozenLbarBasedPath"],
+      :acceptance
+      {:compile
+       "lake build ConstructionTargets.TorusPiOneWindingCoordinates",
+       :placeholder-free true,
+       :statement-registry true}},
+     :residual
+     "Use the normalized representative to prove the induced fundamental-group square commutes, then transport circleMatrixPi1Map_naturality through frozenTorusPi1Coord."}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A04/torus-pi1-winding-coordinates/frozen-based-path-cast",
    :acceptance
-   {:probe
-    "Compile and bank frozenLbar_base, frozenLbarBasedPath, frozenLbarPi1Map, frozenLbarPi1Map_mk, and frozenCircleImagePath_frozenLbarBasedPath from /tmp/torus_frozen_lbar_based_path_cast. Name the exact Path.cast inserted by FundamentalGroup.mapOfEq_apply at the fixed point (0,0), identify the induced map on every explicit loop class, and prove the Circle image of that casted path is exactly frozenLbarCircleImagePath. This supplies the dependent basepoint normalization for t97A04 route step 4; do not yet claim the quotient-level conjugacy.",
-    :declarations
-    ["frozenLbar_base"
-     "frozenLbarBasedPath"
-     "frozenLbarPi1Map"
-     "frozenLbarPi1Map_mk"
-     "frozenCircleImagePath_frozenLbarBasedPath"],
-    :placeholder "apm_t97A04_bridge_2",
-    :route-step
-    "t97A04 step 4, normalize the fixed-base Path.cast in the induced frozenLbar map"},
+   {:compile
+    "lake build ConstructionTargets.TorusPiOneWindingCoordinates",
+    :placeholder-free true,
+    :statement-registry true},
    :id :routes-2026-10-10-t97a04-frozen-lbar-based-path-cast-topo2-r1,
    :kind :reusable-theorem,
+   :declarations
+   ["frozenLbar_base"
+    "frozenLbarBasedPath"
+    "frozenLbarPi1Map"
+    "frozenLbarPi1Map_mk"
+    "frozenCircleImagePath_frozenLbarBasedPath"],
    :depends-on
    [:routes-2026-10-10-checkpoint-topo2-r2
     :routes-2026-10-10-t97a04-frozen-mapped-path-conjugacy-topo2-r1],
