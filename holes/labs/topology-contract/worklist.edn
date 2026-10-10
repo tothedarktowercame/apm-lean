@@ -96229,6 +96229,20 @@
      {:cmd "git status --short",
       :exit 0,
       :finding "clean worktree after commit"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791657316755-2693-e16fa02f",
+     :commands
+     ["git show a14494f5589a434c9de397c68cbc8263edc845f0 -- ConstructionTargets/CoveringTotalLocPathConnected.lean"
+      "git diff --exit-code a14494f5589a434c9de397c68cbc8263edc845f0 -- ConstructionTargets/CoveringTotalLocPathConnected.lean"
+      "lake build ConstructionTargets.CoveringTotalLocPathConnected"
+      "sha256sum /tmp/covering-total-loc-path-connected.lean && lake env lean /tmp/covering-total-loc-path-connected.lean"
+      "placeholder census on source, fixture, and problems/t99J01/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb on recorded ledger at 7a77e34b"],
+     :finding
+     "PASS: reviewer codex-3 verified recorded commit a14494f5 changes only CoveringTotalLocPathConnected.lean and the source equals that commit. Canonical packages resolve correctly; the frozen fixture hash is exact; target and fixture compile with zero placeholders; t99J01 retains exactly one placeholder; both audited theorems report only propext, Classical.choice, and Quot.sound; all 131 registered statements and the recorded 865-item ledger validate. At each domain point, an IsLocalHomeomorph chart supplies an open source neighborhood. Its open target inherits LocPathConnectedSpace from the base; the source-target homeomorphism transports that instance back to the source, and the banked open-cover theorem assembles LocPathConnectedSpace E. The covering specialization uses hp.isLocalHomeomorph in the correct direction. The module correctly does not restrict a path component, select component sheets, prove surjectivity, count fibers, or compute fundamental groups."},
     :commit "a14494f5589a434c9de397c68cbc8263edc845f0",
     :changed-paths
     ["ConstructionTargets/CoveringTotalLocPathConnected.lean"],
@@ -96244,7 +96258,7 @@
       "ConstructionTargets.CoveringTotalLocPathConnected.IsCoveringMap.totalLocPathConnectedSpace"]},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/CoveringTotalLocPathConnected.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component/total-space-lpc",
@@ -96349,7 +96363,7 @@
       "IsLocalHomeomorph.locPathConnectedSpace transports local path connectedness through open local charts; IsCoveringMap.totalLocPathConnectedSpace applies it to covering maps."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component",
@@ -98602,7 +98616,7 @@
    :other-consumers []}
   {:consumer :t99J01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -98616,8 +98630,9 @@
     [:routes-2026-10-10-covering-total-loc-path-connected-42],
     :type
     "A covering map into a locally path-connected space has a locally path-connected total space",
-    :proved-in
-    :routes-2026-10-10-covering-total-loc-path-connected-42},
+    :proved-in :routes-2026-10-10-covering-total-loc-path-connected-42,
+    :banked-by :routes-2026-10-10-covering-total-loc-path-connected-42,
+    :banked-commit "a14494f5589a434c9de397c68cbc8263edc845f0"},
    :id
    :lemma-coveringtotallocpathconnected-iscoveringmap-totallocpathconnectedspace,
    :kind :lemma,
