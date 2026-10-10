@@ -99675,8 +99675,69 @@
   {:bounded-exception
    "This single-consumer prerequisite fixes the common radius-one boundary source used by both six-edge relations before their quotient relations are compared with ThreeCircles.",
    :consumer :t97A01,
+   :evidence
+   {:placeholder-delta {:source 0, :fixture 0},
+    :residual
+    "Pull both six-edge relations back to Circle along boundaryCircleHomeomorph, build their quotient presentations and compare them with ThreeCircles, then establish common vertex classes, literal inclusion formulas, and final package assembly.",
+    :gates
+    {:module-build :pass,
+     :fixture-compiles :pass,
+     :zero-source-and-fixture-sorry :pass,
+     :standard-only-axioms :pass,
+     :registry-check :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["Lean reports two unnecessarySimpa linter warnings in both source and exact fixture."],
+    :missing-theorems
+    [{:name "PolygonBoundaryCircleSource.boundaryCircleHomeomorph",
+      :type
+      "The radius-one boundary subtype of the canonical closed complex disk is homeomorphic to Circle, with mutually inverse continuous maps and literal coordinate formulas.",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on ["PolygonTorusCrosscapRelation.TorusCrosscapRel"],
+      :area "polygon-surface-open-cover"}],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "sha256sum /tmp/polygon-boundary-circle-source.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.PolygonBoundaryCircleSource",
+      :exit 0}
+     {:cmd "lake env lean /tmp/polygon-boundary-circle-source.lean",
+      :exit 0}
+     {:cmd
+      "rg -n \\b(sorry|admit)\\b ConstructionTargets/PolygonBoundaryCircleSource.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "rg -n \\b(sorry|admit)\\b /tmp/polygon-boundary-circle-source.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "a4eb6e8ff2645d556d43bfeab489cb02e7f4806c",
+    :changed-paths
+    ["ConstructionTargets/PolygonBoundaryCircleSource.lean"],
+    :fixture
+    {:path "/tmp/polygon-boundary-circle-source.lean",
+     :sha256
+     "3cbf60a4edd8d0772453789ccee974e9b3a96925b975908ede104fbcaa38c5a4",
+     :sorry-count 0},
+    :implementation
+    {:scope ["ConstructionTargets/PolygonBoundaryCircleSource.lean"],
+     :summary
+     "Defined the radius-one Boundary subtype, mutually inverse continuous Circle/Boundary maps, their homeomorphism, and literal coordinate formulas."},
+    :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PolygonBoundaryCircleSource.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/boundary-circle-source",
@@ -102535,12 +102596,12 @@
    :lemma
    {:name "PolygonBoundaryCircleSource.boundaryCircleHomeomorph",
     :reported-by
-    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40
+     :routes-2026-10-10-polygon-boundary-circle-source-54],
     :type
     "The complex unit circle is homeomorphic to the subtype of the canonical closed disk consisting of points of radius exactly one, with literal underlying complex coordinates.",
     :area "polygon-surface-open-cover",
-    :proved-in
-    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+    :proved-in :routes-2026-10-10-polygon-boundary-circle-source-54},
    :id :lemma-polygonboundarycirclesource-boundarycirclehomeomorph,
    :kind :lemma,
    :depends-on [:lemma-polygontoruscrosscaprelation-toruscrosscaprel],
