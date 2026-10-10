@@ -66574,77 +66574,110 @@
    "Normalize the right-core angular coordinate, construct its disk-normal coordinate and reconstruction, then express the meridian deformation inside the radius-1/4 tubular model.",
    :other-consumers []}
   {:bounded-exception
+   "single-consumer right-core tubular reconstruction identity needed for a tube-preserving deformation",
+   :consumer :t02A03,
+   :phase :probe,
+   :state :open,
+   :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t02A03/right-core-polar-reconstruction",
+   :acceptance
+   {:probe
+    "Compile rightTubeCoreNormalComplex, rightTubeCorePolarReconstruction, and rightTubeCorePolarReconstruction_self. Prove that the normalized right-core angular coordinate and disk-normal coordinate reconstruct every right-tube point exactly. Do not define an interpolation or claim tube/deletion invariants.",
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCorePolarReconstruction_self",
+    :type
+    "forall (p : apm_t02a03_E3) (hp : p ∈ apm_t02a03_rightTube), rightTubeCorePolarReconstruction ⟨NormedSpace.normalize (rightTubeCorePlanarComplex p), by exact mem_sphere_zero_iff_norm.mpr (NormedSpace.norm_normalize (rightTubeCorePlanarComplex_ne_zero p hp))⟩ (rightTubeCoreNormalComplex p) = p",
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "supply exact right-core tubular coordinates for the deleted-right-tube deformation"},
+   :id
+   :routes-2026-10-10-t02a03-right-core-polar-reconstruction-topo2-r1,
+   :kind :reusable-theorem,
+   :area "explicit-r3-tube-deformation-retraction",
+   :depends-on
+   [:routes-2026-10-10-t02a03-right-core-angular-denominator-topo2-r1],
+   :current-residual
+   "Interpolate the disk-normal coordinate inside the radius-1/4 disk, reconstruct the ambient path, and prove its meridian endpoint and left-core avoidance.",
+   :other-consumers []}
+  {:bounded-exception
    "single-consumer explicit ambient deformation with frozen tube and deletion invariants",
    :consumer :t02A03,
    :evidence
    {:probe
     {:residual
-     "Bank the right-core angular denominator, then build the tube-preserving tubular-coordinate deformation and prove deletion avoidance.",
+     "Bank right-core polar reconstruction, then define the disk-normal interpolation and prove endpoint, right-tube membership, and left-core avoidance.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
      [{:name
-       "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCorePlanarComplex_ne_zero",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCorePolarReconstruction_self",
        :type
-       "forall p : apm_t02a03_E3, p ∈ apm_t02a03_rightTube -> rightTubeCorePlanarComplex p ≠ 0",
+       "forall (p : apm_t02a03_E3) (hp : p ∈ apm_t02a03_rightTube), rightTubeCorePolarReconstruction ⟨NormedSpace.normalize (rightTubeCorePlanarComplex p), by exact mem_sphere_zero_iff_norm.mpr (NormedSpace.norm_normalize (rightTubeCorePlanarComplex_ne_zero p hp))⟩ (rightTubeCoreNormalComplex p) = p",
        :status :proved,
        :consumers [:t02A03],
        :depends-on
-       ["ConstructionTargets.T02A03GeometricTubeDeformation.rightTube_exists_near_rightCore"],
+       ["ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCorePlanarComplex_ne_zero"],
        :area "explicit-r3-tube-deformation-retraction"}],
      :prerequisite
      {:bounded-exception
-      "single-consumer right-core angular denominator required for a tube-preserving deformation",
+      "single-consumer right-core tubular reconstruction identity needed for a tube-preserving deformation",
       :consumer :t02A03,
       :phase :probe,
       :state :open,
       :scope
       ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t02A03/right-core-angular-denominator",
+      "TOPOLOGY-ROUTES.md/t02A03/right-core-polar-reconstruction",
       :acceptance
       {:probe
-       "Compile rightTubeCorePlanarComplex_ne_zero for rightTubeCorePlanarComplex(p)=(1-p0)+i*p1. Use the exact radius-1/4 witness to show the right tube avoids the angular singularity at its core-circle center. Do not define tubular coordinates or claim a deformation.",
+       "Compile rightTubeCoreNormalComplex, rightTubeCorePolarReconstruction, and rightTubeCorePolarReconstruction_self. Prove that the normalized right-core angular coordinate and disk-normal coordinate reconstruct every right-tube point exactly. Do not define an interpolation or claim tube/deletion invariants.",
        :declaration
-       "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCorePlanarComplex_ne_zero",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCorePolarReconstruction_self",
        :type
-       "forall p : apm_t02a03_E3, p ∈ apm_t02a03_rightTube -> rightTubeCorePlanarComplex p ≠ 0",
+       "forall (p : apm_t02a03_E3) (hp : p ∈ apm_t02a03_rightTube), rightTubeCorePolarReconstruction ⟨NormedSpace.normalize (rightTubeCorePlanarComplex p), by exact mem_sphere_zero_iff_norm.mpr (NormedSpace.norm_normalize (rightTubeCorePlanarComplex_ne_zero p hp))⟩ (rightTubeCoreNormalComplex p) = p",
        :placeholder "the sole sorry in apm_t02a03",
        :route-step
-       "certify the right-core angular coordinate needed to keep the deformation inside the frozen right tube"},
+       "supply exact right-core tubular coordinates for the deleted-right-tube deformation"},
       :id
-      :routes-2026-10-10-t02a03-right-core-angular-denominator-topo2-r1,
+      :routes-2026-10-10-t02a03-right-core-polar-reconstruction-topo2-r1,
       :kind :reusable-theorem,
       :area "explicit-r3-tube-deformation-retraction",
       :depends-on
-      [:routes-2026-10-10-t02a03-right-tube-polar-reconstruction-topo2-r1],
+      [:routes-2026-10-10-t02a03-right-core-angular-denominator-topo2-r1],
       :current-residual
-      "Normalize the right-core angular coordinate, construct its disk-normal coordinate and reconstruction, then express the meridian deformation inside the radius-1/4 tubular model.",
+      "Interpolate the disk-normal coordinate inside the radius-1/4 disk, reconstruct the ambient path, and prove its meridian endpoint and left-core avoidance.",
       :other-consumers []},
      :commands
      [{:cmd "lake env lean /tmp/t02a03_right_core_compact_probe.lean",
        :exit 0,
        :output
-       "rightTubeCorePlanarComplex_ne_zero compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "rightTubeCorePolarReconstruction_self compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd "sha256sum /tmp/t02a03_right_core_compact_probe.lean",
        :exit 0,
        :output
-       "683e9eada453ff5d4dad755b194c9a232af4264471300cb4c1fcbde43d673e15  /tmp/t02a03_right_core_compact_probe.lean"}
+       "1ba9cb7efd6e58202154c18b83e75b8ab78caed28188ee18eaaa60ef6a09c691  /tmp/t02a03_right_core_compact_probe.lean"}
       {:cmd
        "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_right_core_compact_probe.lean || true)\"",
        :exit 0}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/t02a03_right_core_reconstruction_probe.lean",
+       :exit 1,
+       :finding
+       "Importing the scoped module failed because its olean is intentionally absent during the read-only probe; placing the theorem in the accumulated fixture with the same prerequisite source compiled successfully."}],
      :fixture
      {:path "/tmp/t02a03_right_core_compact_probe.lean",
       :sha256
-      "683e9eada453ff5d4dad755b194c9a232af4264471300cb4c1fcbde43d673e15"},
+      "1ba9cb7efd6e58202154c18b83e75b8ab78caed28188ee18eaaa60ef6a09c691"},
      :finding
-     "The left-core polar reconstruction proves the identity endpoint but does not by itself preserve the nonconvex right tube: a direct normal-radius segment can cross the solid torus's central hole. A safe deformation must be expressed first in tubular coordinates about the right core. Its angular denominator is rightTubeCorePlanarComplex(p)=(1-p0)+i*p1. If this vanished, p0=1 and p1=0, while every right-core point has Euclidean distance at least 1 from p; this contradicts the attained radius-1/4 tube witness. The compiled nonvanishing theorem is therefore the single next prerequisite for defining the right-core angular coordinate.",
+     "The safe deformation must remain in the radius-1/4 tubular neighborhood of the right core. The compiled coordinate package takes u=normalize((1-p0)+i*p1), n=(1-norm((1-p0)+i*p1))+i*p2, and reconstructs p as (1-(1-n.re)u.re,(1-n.re)u.im,n.im). Its exact reconstruction identity is the single prerequisite needed before interpolating the disk-normal coordinate and proving the tube and deletion invariants.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
@@ -66668,7 +66701,8 @@
     :routes-2026-10-10-t02a03-right-tube-planar-coordinate-positive-topo2-r1
     :routes-2026-10-10-t02a03-right-tube-planar-rotation-topo2-r1
     :routes-2026-10-10-t02a03-right-tube-polar-reconstruction-topo2-r1
-    :routes-2026-10-10-t02a03-right-core-angular-denominator-topo2-r1],
+    :routes-2026-10-10-t02a03-right-core-angular-denominator-topo2-r1
+    :routes-2026-10-10-t02a03-right-core-polar-reconstruction-topo2-r1],
    :current-residual
    "Lift H to RightTubeMinusLeftCore, package rightTubeMeridianRetractionHomotopy, then use the coordinate equation for the Circle-side constant homotopy.",
    :other-consumers []}
@@ -69821,4 +69855,29 @@
    :lemma-constructiontargets-t02a03geometrictubedeformation-righttube-exists-near-rightco,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCorePolarReconstruction_self",
+    :type
+    "forall (p : apm_t02a03_E3) (hp : p ∈ apm_t02a03_rightTube), rightTubeCorePolarReconstruction ⟨NormedSpace.normalize (rightTubeCorePlanarComplex p), by exact mem_sphere_zero_iff_norm.mpr (NormedSpace.norm_normalize (rightTubeCorePlanarComplex_ne_zero p hp))⟩ (rightTubeCoreNormalComplex p) = p"},
+   :lemma
+   {:name
+    "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCorePolarReconstruction_self",
+    :reported-by
+    [:routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1],
+    :type
+    "forall (p : apm_t02a03_E3) (hp : p ∈ apm_t02a03_rightTube), rightTubeCorePolarReconstruction ⟨NormedSpace.normalize (rightTubeCorePlanarComplex p), by exact mem_sphere_zero_iff_norm.mpr (NormedSpace.norm_normalize (rightTubeCorePlanarComplex_ne_zero p hp))⟩ (rightTubeCoreNormalComplex p) = p",
+    :area "explicit-r3-tube-deformation-retraction",
+    :proved-in
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+   :id
+   :lemma-constructiontargets-t02a03geometrictubedeformation-righttubecorepolarreconstruct,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t02a03geometrictubedeformation-righttubecoreplanarcomplex-ne],
    :other-consumers []}]}
