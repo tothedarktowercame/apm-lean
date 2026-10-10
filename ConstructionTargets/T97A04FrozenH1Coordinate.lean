@@ -182,4 +182,59 @@ theorem frozenLbarIntegralH1_coordinate
     frozenTorusAlignedHurewiczCoordinateAtLbarBase_apply] at h
   exact h
 
+noncomputable def frozenTorusAlignedH1GroupIsoFinTwo :
+    SingularHomology 1 (TopCat.of FrozenTorus) ≅
+      AddCommGrpCat.of (Fin 2 → ℤ) :=
+  {
+  hom := AddCommGrpCat.ofHom
+    { toFun := fun a =>
+        (frozenTorusAlignedH1MulEquivFinTwo (Multiplicative.ofAdd a)).toAdd
+      map_zero' := by
+        change (frozenTorusAlignedH1MulEquivFinTwo 1).toAdd = 0
+        rw [map_one]
+        rfl
+      map_add' := by
+        intro a b
+        change (frozenTorusAlignedH1MulEquivFinTwo
+            (Multiplicative.ofAdd a * Multiplicative.ofAdd b)).toAdd = _
+        exact congrArg (fun z : Multiplicative _ => z.toAdd)
+          (frozenTorusAlignedH1MulEquivFinTwo.map_mul
+            (Multiplicative.ofAdd a) (Multiplicative.ofAdd b)) }
+  inv := AddCommGrpCat.ofHom
+    { toFun := fun v =>
+        (frozenTorusAlignedH1MulEquivFinTwo.symm
+          (Multiplicative.ofAdd v)).toAdd
+      map_zero' := by
+        change (frozenTorusAlignedH1MulEquivFinTwo.symm 1).toAdd = 0
+        rw [map_one]
+        rfl
+      map_add' := by
+        intro a b
+        change (frozenTorusAlignedH1MulEquivFinTwo.symm
+            (Multiplicative.ofAdd a * Multiplicative.ofAdd b)).toAdd = _
+        exact congrArg (fun z : Multiplicative _ => z.toAdd)
+          (frozenTorusAlignedH1MulEquivFinTwo.symm.map_mul
+            (Multiplicative.ofAdd a) (Multiplicative.ofAdd b)) }
+  hom_inv_id := by
+    apply AddCommGrpCat.hom_ext
+    apply DFunLike.ext _ _
+    intro a
+    exact congrArg (fun z : Multiplicative _ => z.toAdd)
+      (frozenTorusAlignedH1MulEquivFinTwo.symm_apply_apply
+        (Multiplicative.ofAdd a))
+  inv_hom_id := by
+    apply AddCommGrpCat.hom_ext
+    apply DFunLike.ext _ _
+    intro v
+    exact congrArg (fun z : Multiplicative _ => z.toAdd)
+      (frozenTorusAlignedH1MulEquivFinTwo.apply_symm_apply
+        (Multiplicative.ofAdd v)) }
+
+noncomputable def frozenTorusAlignedH1ModuleIsoFinTwo :
+    (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+      (ModuleCat.of ℤ ℤ)).obj (TopCat.of FrozenTorus)) ≅
+      ModuleCat.of ℤ (Fin 2 → ℤ) :=
+  singularHomologyModuleIsoOfGroupIso (TopCat.of FrozenTorus) 1 _
+    frozenTorusAlignedH1GroupIsoFinTwo
+
 end ConstructionTargets.T97A04FrozenH1Coordinate
