@@ -85946,6 +85946,18 @@
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
      {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791615830297-1420-c110648e",
+     :commands
+     ["git show/diff 7b7d8fddcf07a99b90ef87e95b227d4e3c849d7d"
+      "fixture sha256; target absence; lake env lean fixture and three banked modules"
+      "statement-registry check; worklist_check.bb"
+      "fixture hypothesis/coordinate inspection"
+      "placeholder census and fingerprints t97A01/t97A03"],
+     :finding
+     "PASS: recorded STOP identifies an exact specification defect. The fixture assumes H0 of both cover pieces is Z while X and Y are arbitrary; discrete X=Bool, Y=Unit, M=univ, N={x0} satisfies the open-neighborhood and pointed-contraction interface, but the left piece is homotopy equivalent to Bool and has H0=Z coproduct Z. Repair by adding path-connectedness hypotheses for X and Y, or retain H0(X)/H0(Y) coordinates and specialize later. Fixture hash, custom-axiom dependence, target absence, consumer counts/fingerprints, and registry/worklist gates reproduce."},
     :fixture
     {:path
      "/tmp/generic-point-wedge-mv-inclusion-coordinates-probe.lean",
@@ -85953,7 +85965,7 @@
      "8b85b579989bd59f53eff5991aaa36965b937bb9f0e87e5b88be3c93f989e2cf"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/GenericPointWedgeMayerVietorisCoordinates.lean"],
    :dag-node
@@ -86098,7 +86110,7 @@
       "8b85b579989bd59f53eff5991aaa36965b937bb9f0e87e5b88be3c93f989e2cf"},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/generic-point-wedge-mv-inclusion-coordinates",
