@@ -85701,6 +85701,18 @@
       :finding
       "711 items OK; ledger duplicate-dependency defect is repaired"}
      {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791616558362-1443-06dcdbf3",
+     :commands
+     ["git show/diff 38774400a0208694d58030c27f5b357e6ffa69da"
+      "fixture sha256; target absence; lake env lean bank and fixture"
+      "source inspection for preimageIso, sourceEquivalence, action_inl/inr, and somePath"
+      "statement-registry check; worklist_check.bb"
+      "placeholder census and five frozen fingerprints"],
+     :finding
+     "PASS: recorded STOP is exact; fixture hash matches and is placeholder-free but uses two custom axioms, scoped module and seven declarations are absent, and the representation boundary is real: sourceEquivalence is reconstructed through preimageIso without exported concrete-leg computation, while action_inl/inr only describe the target representation. Exact coproduct coordinates require a coherence theorem synchronized with the identical somePath witnesses used by chosenGroupEquivalence, otherwise conjugation is untracked. Consumer counts/fingerprints and all gates reproduce."},
     :fixture
     {:path
      "/tmp/generic-point-wedge-pi1-inclusion-coordinates-probe.lean",
@@ -85708,7 +85720,7 @@
      "e1ae729edff3b7991142ce2739d2861caea321529d02b5409a34db42a3792464"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/GenericPointWedgeFundamentalGroupCoordinates.lean"],
    :dag-node
@@ -85841,7 +85853,7 @@
      :residual
      "Exactly one shared prerequisite remains: inclusion naturality for the chosen two-open free-product equivalence. Once its path choices are synchronized with the pointed piece comparisons, the left and right maps have exact Monoid.Coprod.inl and inr coordinates; recursive FreeGroup normalization remains downstream."}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/generic-point-wedge-pi1-inclusion-coordinates",
