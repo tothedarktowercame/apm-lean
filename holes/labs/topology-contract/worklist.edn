@@ -89549,73 +89549,16 @@
    {:outcome :replan,
     :seat "topo-4",
     :commands
-    [{:cmd
-      "inspect the eight owner-reopened dependency receipts in holes/labs/topology-contract/worklist.edn",
+    [{:cmd "bb holes/labs/topology-contract/worklist_check.bb",
       :exit 0,
       :finding
-      "all eight reached reviewed STOPs: seven name concrete missing mathematical constructions exceeding one bounded row, while the universal Schreier interface is refuted at rank zero"}
-     {:cmd
-      "comment-stripped placeholder census for t99J01 t92J06 t97A03 t93J03 t01A03 t97A01",
-      :exit 0,
-      :finding
-      "counts remain 1, 1, 3, 1, 1, 1 for total 8 and delta 0"}
-     {:cmd "bb holes/labs/topology-contract/worklist_check.bb",
-      :exit 0,
-      :finding
-      "737 items OK; 701 done, 14 superseded, 13 needs-owner, 8 blocked, 1 open"}
+      "740 items OK; 701 done, 17 superseded, 13 needs-owner, 8 blocked, 1 repair; no open item"}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
      {:cmd "git status --short", :exit 0, :finding "clean"}],
     :finding
-    {:routes
-     {:t99J01
-      ["three-circles pi1 coordinates remain behind the literal-inclusion comparison"
-       "cover subgroup index is banked"
-       "positive-rank Schreier formula is elected in corrected form"
-       "path-component restriction and cyclic-cover connectedness remain at named mathematical boundaries"
-       "assembly"],
-      :t92J06
-      ["matched quotient-sheet saturation and local-homeomorph construction"
-       "permutation-cover construction"
-       "Cayley-tree classification"],
-      :t97A03
-      ["double-cover stratum gluing remains at a named mathematical boundary"
-       "fixed-model quotient-to-bouquet comparisons remain at a named mathematical boundary"
-       "corrected positive-rank Schreier theorem supplies the free-rank calculation when its route reaches that input"
-       "transport and assembly"],
-      :t93J03
-      ["Klein square fundamental-domain orbit classification"
-       "deck-group pi1 theorem"
-       "presented-group normal form"
-       "covering lifting criterion"
-       "annulus embedding"
-       "assembly"],
-      :t01A03
-      ["circle-wedge pi1 and torus commutativity package"
-       "separating embedded-circle H1 zero via a surface collar theorem"
-       "assembly; two-circles case already banked"],
-      :t97A01
-      ["X-to-standard-N3 homeomorphism is banked"
-       "polygon radial open cover remains at a named mathematical boundary"
-       "polygon pi1 and Mayer-Vietoris coordinate computation"
-       "Smith quotient normalization is elected as the bounded consumer step"
-       "assembly"]},
-     :parked-refutation
-     {:row
-      :routes-2026-10-10-finite-index-schreier-spanning-tree-count-1,
-      :counterexample "r=0, n=1, H=top",
-      :replacement
-      "require 0 < r; both named consumers use r=3 or r=2"},
-     :placeholder-delta 0,
-     :preserved-boundaries
-     [:routes-2026-10-10-polygon-edge-graph-radial-package-1
-      :routes-2026-10-10-generic-point-wedge-h0-pathconnected-naturality-2
-      :routes-2026-10-10-t99j01-path-component-cover-package-1
-      :routes-2026-10-10-t99j01-cyclic-graph-cover-realization-1
-      :routes-2026-10-10-t93j03-klein-deck-action-polygon-package-1
-      :routes-2026-10-10-t97a03-double-cover-monodromy-model-homeomorphism-1
-      :routes-2026-10-10-t97a03-fixed-model-invariants-1],
+    {:placeholder-delta 0,
      :placeholder-counts
      {:t99J01 1,
       :t92J06 1,
@@ -89623,25 +89566,52 @@
       :t93J03 1,
       :t01A03 1,
       :t97A01 1},
-     :deferred
-     ["No helper-signature approval boundary is preserved."
-      "Large named topology prerequisites remain deferred until elected as bounded subrows."
-      "t01A03 wedge noncommutativity and separating-circle collar inputs remain for later checkpoints."],
+     :typed-residual-change
+     ["Seven owner-reopened rows end at named mathematical prerequisites too large for one bounded row; helper-signature approval is not a boundary."
+      "The universal Schreier formula is false for r=0, n=1, H=top; the corrected positive-rank theorem covers both consumers."],
      :infrastructure-packets
      {:banked 0, :reviewed-stops 8, :placeholder-changing 0},
-     :ranking
-     "Rule 0 places one bounded t97A01 consumer step first: the Smith normalization is independent of the held polygon topology and directly supplies route step 6. Among remaining eligible foundations, the corrected positive-rank Schreier theorem lies on two consumer routes and therefore outranks single-consumer topology packages. No second consumer adapter is elected at this checkpoint.",
-     :typed-residual-change
-     ["owner clarification removed signature approval as a stopping reason; every helper signature is author-designed around the frozen fixture axiom type"
-      "seven reopened rows now stop on named mathematical constructions too large for one bounded row: polygon radial descent, strict point-wedge inclusion squares, path-component cover restriction, cyclic-monodromy connectedness, Klein orbit fundamental domain, double-cover stratum gluing, and two quotient-to-bouquet homotopy equivalences"
-      "the universal Schreier formula is genuinely false at r=0, n=1, H=top; both consumers only need positive rank, so a corrected shared theorem is eligible"
-      "no consumer placeholder changed and no reopened infrastructure packet was banked"],
-     :parked-false-interface
+     :review-outcomes {:pass 0, :stop 8, :closed-problems 0},
+     :routes
+     {:t99J01
+      ["three-circles pi1 coordinates"
+       "banked cover subgroup index"
+       "positive-rank Schreier formula"
+       "path-component restriction and cyclic-cover connectedness"
+       "assembly"],
+      :t92J06
+      ["matched quotient-sheet saturation and local-homeomorph construction"
+       "permutation-cover construction"
+       "Cayley-tree classification"],
+      :t97A03
+      ["double-cover stratum gluing"
+       "fixed-model quotient-to-bouquet comparisons"
+       "positive-rank Schreier theorem"
+       "transport and assembly"],
+      :t93J03
+      ["Klein square orbit classification"
+       "deck-group pi1 theorem"
+       "normal form"
+       "lifting criterion"
+       "annulus embedding"
+       "assembly"],
+      :t01A03
+      ["circle-wedge pi1 and torus commutativity"
+       "separating-circle collar theorem"
+       "assembly"],
+      :t97A01
+      ["banked X-to-standard-N3 homeomorphism"
+       "polygon radial open cover"
+       "polygon pi1 and Mayer-Vietoris coordinates"
+       "Smith quotient normalization"
+       "assembly"]},
+     :parked-refutation
      {:row
-      :routes-2026-10-10-generic-point-wedge-mv-inclusion-coordinates-1,
-      :reason
-      "H0 coordinates are false for arbitrary disconnected factors; only the corrected PathConnectedSpace row is retained, and it remains stopped on strict inclusion squares"},
-     :review-outcomes {:pass 0, :stop 8, :closed-problems 0}},
+      :routes-2026-10-10-finite-index-schreier-spanning-tree-count-1,
+      :counterexample "r=0, n=1, H=top",
+      :replacement "require 0 < r"},
+     :ranking
+     "Rule 0 elects the bounded t97A01 Smith normalization first; the corrected two-consumer positive-rank Schreier theorem ranks next."},
     :replacement-items
     [{:consumer :t97A01,
       :phase :probe,
@@ -89717,15 +89687,9 @@
       "Review one bounded consumer algebra step and one corrected two-consumer foundation after the owner clarification.",
       :other-consumers []}],
     :author "topo-4",
-    :disposition :replan,
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1791633571046-1859-964750b7",
-     :finding
-     "recorded worklist evidence is stale: the exact committed ledger checks as 740 items with 11 blocked and no open item, not 737 items with 8 blocked and 1 open"}},
+    :disposition :replan},
    :phase :strategy,
-   :state :repair,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -89747,7 +89711,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :probe,
-   :state :superseded,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t97A01/smith-quotients",
    :acceptance
@@ -89770,7 +89734,7 @@
    :other-consumers []}
   {:consumer :t99J01,
    :phase :probe,
-   :state :superseded,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/positive-rank",
@@ -89806,7 +89770,7 @@
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :phase :strategy,
-   :state :superseded,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
