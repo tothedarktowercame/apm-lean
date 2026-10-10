@@ -65991,10 +65991,104 @@
    "Use the coordinate to construct the deformation from inverse-forward to identity and the meridian retraction homotopy, then package rightTubeMinusLeftCoreMeridianHomotopyEquiv.",
    :other-consumers []}
   {:bounded-exception
-   "single-consumer space-side deformation needed to package the HomotopyEquiv",
+   "single-consumer explicit ambient deformation with frozen tube and deletion invariants",
    :consumer :t02A03,
    :phase :probe,
    :state :open,
+   :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
+   :acceptance
+   {:probe
+    "Compile a continuous ambient deformation H from circleMeridian(rightTubeMeridianCoordinate p) to p. Prove separately that every H(t,p) lies in apm_t02a03_rightTube and outside Set.range apm_t02a03_leftCore. Do not package H as a subtype Homotopy or claim a HomotopyEquiv.",
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.safeRightTubeMeridianDeformation",
+    :type
+    "exists H : C(unitInterval × RightTubeMinusLeftCore, apm_t02a03_E3), endpoint equations and pointwise rightTube membership and leftCore avoidance",
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "construct and certify the ambient deformation underlying the space-side meridian retraction"},
+   :id
+   :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+   :kind :reusable-theorem,
+   :area "explicit-r3-tube-deformation-retraction",
+   :depends-on
+   [:routes-2026-10-10-t02a03-right-tube-meridian-coordinate-topo2-r1],
+   :current-residual
+   "Lift H to RightTubeMinusLeftCore, package rightTubeMeridianRetractionHomotopy, then use the coordinate equation for the Circle-side constant homotopy.",
+   :other-consumers []}
+  {:bounded-exception
+   "single-consumer space-side deformation needed to package the HomotopyEquiv",
+   :consumer :t02A03,
+   :evidence
+   {:probe
+    {:outcome :revise,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/t02a03_safe_meridian_deformation_contract.lean",
+      :sha256
+      "132737f3a80a13805f28e0e9a22faf9bb1d871cbb6e3a8522ada5d88ccdee9d9"},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/t02a03_safe_meridian_deformation_contract.lean",
+       :exit 0,
+       :output "SafeMeridianDeformationExists compiled."}
+      {:cmd
+       "sha256sum /tmp/t02a03_safe_meridian_deformation_contract.lean",
+       :exit 0,
+       :output
+       "132737f3a80a13805f28e0e9a22faf9bb1d871cbb6e3a8522ada5d88ccdee9d9  /tmp/t02a03_safe_meridian_deformation_contract.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_safe_meridian_deformation_contract.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :finding
+     "The Homotopy wrapper is formal once there is a continuous ambient deformation H with four facts: its zero endpoint is circleMeridian(forward p), its one endpoint is p, every intermediate point remains in rightTube, and every intermediate point avoids the left core. These geometric invariants cannot be obtained from convexity because a closed tube around a circle is nonconvex. Isolating H and its safety proofs prevents the Homotopy constructor from hiding the actual remaining mathematics.",
+     :missing-theorems
+     [{:name
+       "ConstructionTargets.T02A03GeometricTubeDeformation.safeRightTubeMeridianDeformation",
+       :type
+       "exists (forward : C(RightTubeMinusLeftCore, Circle)) (H : C(unitInterval × RightTubeMinusLeftCore, apm_t02a03_E3)), (forall p, H (0,p) = apm_t02a03_circleMeridian (forward p)) and (forall p, H (1,p) = p.1) and (forall tp, H tp ∈ apm_t02a03_rightTube) and (forall tp, H tp ∉ Set.range apm_t02a03_leftCore)",
+       :status :not-started,
+       :consumers [:t02A03],
+       :depends-on
+       ["ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeMeridianCoordinate"],
+       :area "explicit-r3-tube-deformation-retraction"}],
+     :prerequisite
+     {:bounded-exception
+      "single-consumer explicit ambient deformation with frozen tube and deletion invariants",
+      :consumer :t02A03,
+      :phase :probe,
+      :state :open,
+      :scope
+      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
+      :acceptance
+      {:probe
+       "Compile a continuous ambient deformation H from circleMeridian(rightTubeMeridianCoordinate p) to p. Prove separately that every H(t,p) lies in apm_t02a03_rightTube and outside Set.range apm_t02a03_leftCore. Do not package H as a subtype Homotopy or claim a HomotopyEquiv.",
+       :declaration
+       "ConstructionTargets.T02A03GeometricTubeDeformation.safeRightTubeMeridianDeformation",
+       :type
+       "exists H : C(unitInterval × RightTubeMinusLeftCore, apm_t02a03_E3), endpoint equations and pointwise rightTube membership and leftCore avoidance",
+       :placeholder "the sole sorry in apm_t02a03",
+       :route-step
+       "construct and certify the ambient deformation underlying the space-side meridian retraction"},
+      :id
+      :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+      :kind :reusable-theorem,
+      :area "explicit-r3-tube-deformation-retraction",
+      :depends-on
+      [:routes-2026-10-10-t02a03-right-tube-meridian-coordinate-topo2-r1],
+      :current-residual
+      "Lift H to RightTubeMinusLeftCore, package rightTubeMeridianRetractionHomotopy, then use the coordinate equation for the Circle-side constant homotopy.",
+      :other-consumers []},
+     :residual
+     "Lift the banked safe ambient deformation to the frozen subtype and package the requested ContinuousMap.Homotopy."}},
+   :phase :probe,
+   :state :blocked,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/right-tube-meridian-retraction-homotopy",
@@ -66013,7 +66107,8 @@
    :kind :reusable-theorem,
    :area "explicit-r3-tube-deformation-retraction",
    :depends-on
-   [:routes-2026-10-10-t02a03-right-tube-meridian-coordinate-topo2-r1],
+   [:routes-2026-10-10-t02a03-right-tube-meridian-coordinate-topo2-r1
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1],
    :current-residual
    "Use the banked coordinate equation for the constant Circle-side homotopy and package rightTubeMinusLeftCoreMeridianHomotopyEquiv.",
    :other-consumers []}
@@ -68887,6 +68982,29 @@
     :area "explicit-r3-tube-deformation-retraction"},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-righttubemeridianretractionho,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t02a03geometrictubedeformation-righttubemeridiancoordinate],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T02A03GeometricTubeDeformation.safeRightTubeMeridianDeformation",
+    :type
+    "exists (forward : C(RightTubeMinusLeftCore, Circle)) (H : C(unitInterval × RightTubeMinusLeftCore, apm_t02a03_E3)), (forall p, H (0,p) = apm_t02a03_circleMeridian (forward p)) and (forall p, H (1,p) = p.1) and (forall tp, H tp ∈ apm_t02a03_rightTube) and (forall tp, H tp ∉ Set.range apm_t02a03_leftCore)"},
+   :lemma
+   {:name
+    "ConstructionTargets.T02A03GeometricTubeDeformation.safeRightTubeMeridianDeformation",
+    :reported-by
+    [:routes-2026-10-10-t02a03-right-tube-meridian-retraction-homotopy-topo2-r1],
+    :type
+    "exists (forward : C(RightTubeMinusLeftCore, Circle)) (H : C(unitInterval × RightTubeMinusLeftCore, apm_t02a03_E3)), (forall p, H (0,p) = apm_t02a03_circleMeridian (forward p)) and (forall p, H (1,p) = p.1) and (forall tp, H tp ∈ apm_t02a03_rightTube) and (forall tp, H tp ∉ Set.range apm_t02a03_leftCore)",
+    :area "explicit-r3-tube-deformation-retraction"},
+   :id
+   :lemma-constructiontargets-t02a03geometrictubedeformation-saferighttubemeridiandeformat,
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-t02a03geometrictubedeformation-righttubemeridiancoordinate],
