@@ -59998,6 +59998,32 @@
    "Use compactness to obtain an attained nearby-core point for each left-tube point, prove planar center displacement is uniformly nonzero, then construct the punctured-normal torus model.",
    :other-consumers []}
   {:bounded-exception
+   "single-consumer attained left-core witness for the frozen t02A03 closed left tube",
+   :consumer :t02A03,
+   :phase :probe,
+   :state :open,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t02A03/left-tube-attained-core-witness",
+   :acceptance
+   {:probe
+    "Compile and bank apm_t02a03_leftTube_exists_near_leftCore from /tmp/t02a03_geometric_tube_cover.lean. Prove that every p in apm_t02a03_leftTube admits q in Set.range apm_t02a03_leftCore with dist p q ≤ 1/4, by rewriting the compact core's closed thickening as the union of radius-1/4 closed balls. This supplies the attained-distance witness needed for angular-coordinate nonvanishing in t02A03 route step 2; do not yet claim a continuous nearest-point choice, tube coordinates, deformation data, the torus HomotopyEquiv, or gluing.",
+    :declaration "apm_t02a03_leftTube_exists_near_leftCore",
+    :type
+    "∀ p : apm_t02a03_E3, p ∈ apm_t02a03_leftTube → ∃ q ∈ Set.range apm_t02a03_leftCore, dist p q ≤ (1 / 4 : ℝ)",
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "t02A03 step 2, extract an attained core-distance witness from closed left-tube membership"},
+   :id
+   :routes-2026-10-10-t02a03-left-tube-attained-core-witness-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo2-r5
+    :routes-2026-10-10-t02a03-left-core-compact-range-topo2-r1],
+   :current-residual
+   "Use the distance witness and core radius identity to prove uniform angular nonvanishing, then build punctured-normal coordinates and the torus HomotopyEquiv.",
+   :other-consumers []}
+  {:bounded-exception
    "single-consumer explicit punctured-left-tube model for t02A03",
    :consumer :t02A03,
    :evidence
@@ -60007,19 +60033,19 @@
      :fixture
      {:path "/tmp/t02a03_geometric_tube_cover.lean",
       :sha256
-      "c8ba25af1ad86912ae586cc791c77fb5cc6c95775e03dbbe3e28d964cb2f9e0b"},
+      "6f6d02ed4e5c571e118cb23fc0b7a74b395d801259b0d63b185411f51dd92f26"},
      :commands
      [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
        :exit 0,
        :output
-       "apm_t02a03_leftCoreCircle, apm_t02a03_continuous_leftCoreCircle, apm_t02a03_range_leftCoreCircle, and apm_t02a03_isCompact_range_leftCore compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "apm_t02a03_leftTube_exists_near_leftCore compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
        "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
        :exit 0}
       {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
        :exit 0,
        :output
-       "c8ba25af1ad86912ae586cc791c77fb5cc6c95775e03dbbe3e28d964cb2f9e0b  /tmp/t02a03_geometric_tube_cover.lean"}
+       "6f6d02ed4e5c571e118cb23fc0b7a74b395d801259b0d63b185411f51dd92f26  /tmp/t02a03_geometric_tube_cover.lean"}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
@@ -60027,46 +60053,42 @@
      [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
        :exit 1,
        :finding
-       "The first Circle factorization attempt asked fun_prop to infer continuity through vector notation and asked simp alone to recover real and imaginary parts from Circle.exp_arg. Expanding continuity with PiLp.continuous_toLp and continuous_pi, and using Complex.cos_arg and Complex.sin_arg with Circle.norm_coe, supplied the missing facts."}
-      {:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 1,
-       :finding
-       "The intermediate correction simplified congrArg of Circle.exp_arg too aggressively. Replacing it with the direct Complex.cos_arg and Complex.sin_arg identities at unit norm corrected the range-equality proof; the final rerun compiled."}],
+       "The first proof returned the closed-ball membership distance with its arguments oriented opposite to the declared witness type. Destructuring the union witness and rewriting by dist_comm corrected the orientation; the final rerun compiled."}],
      :finding
-     "The torus HomotopyEquiv is still absent, but the frozen real left-core parameterization now factors through a continuous map from compact Circle with exactly the same range. Consequently Set.range apm_t02a03_leftCore is compact. This is the precise prerequisite for turning closed-cthickening membership into an attained radius-1/4 distance witness, from which the planar center displacement lower bound and angular normalization can be proved.",
+     "The torus HomotopyEquiv is still absent, but closed left-tube membership now yields a concrete frozen left-core point within distance 1/4. Compactness rewrites the cthickening exactly as the union of closed balls centered on the core, so no arbitrary nearest-point choice or approximation is introduced. This witness is the input needed to transfer the core's unit planar radius to a uniform lower bound for every tube point.",
      :residual
-     "Bank the compact frozen left-core range. Then extract attained nearby-core witnesses for points of apm_t02a03_leftTube, prove uniform angular-coordinate nonvanishing, define punctured-normal coordinates and homotopies, and assemble leftTubeMinusCoreHomotopyEquivTorus.",
+     "Bank the attained left-core distance witness. Then prove the planar displacement from center (-1,0) has norm at least 3/4 on the left tube, construct continuous angular and punctured-normal coordinates, prove the two comparison homotopies, and assemble leftTubeMinusCoreHomotopyEquivTorus.",
      :prerequisite
      {:bounded-exception
-      "single-consumer compact Circle parameterization of the frozen t02A03 left core",
+      "single-consumer attained left-core witness for the frozen t02A03 closed left tube",
       :consumer :t02A03,
       :phase :probe,
       :state :open,
       :scope [],
-      :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-core-compact-range",
+      :dag-node
+      "TOPOLOGY-ROUTES.md/t02A03/left-tube-attained-core-witness",
       :acceptance
       {:probe
-       "Compile and bank apm_t02a03_leftCoreCircle, apm_t02a03_continuous_leftCoreCircle, apm_t02a03_range_leftCoreCircle, and apm_t02a03_isCompact_range_leftCore from /tmp/t02a03_geometric_tube_cover.lean. Parameterize the frozen left core continuously by Circle using its real and imaginary coordinates, prove that this Circle map has exactly the same range as apm_t02a03_leftCore, and conclude that the frozen left-core range is compact. This supplies the attained-distance prerequisite for angular-coordinate nonvanishing on the closed radius-1/4 left tube in t02A03 route step 2; do not yet claim tube coordinates, deformation data, the torus HomotopyEquiv, or gluing.",
-       :declarations
-       ["apm_t02a03_leftCoreCircle"
-        "apm_t02a03_continuous_leftCoreCircle"
-        "apm_t02a03_range_leftCoreCircle"
-        "apm_t02a03_isCompact_range_leftCore"],
+       "Compile and bank apm_t02a03_leftTube_exists_near_leftCore from /tmp/t02a03_geometric_tube_cover.lean. Prove that every p in apm_t02a03_leftTube admits q in Set.range apm_t02a03_leftCore with dist p q ≤ 1/4, by rewriting the compact core's closed thickening as the union of radius-1/4 closed balls. This supplies the attained-distance witness needed for angular-coordinate nonvanishing in t02A03 route step 2; do not yet claim a continuous nearest-point choice, tube coordinates, deformation data, the torus HomotopyEquiv, or gluing.",
+       :declaration "apm_t02a03_leftTube_exists_near_leftCore",
+       :type
+       "∀ p : apm_t02a03_E3, p ∈ apm_t02a03_leftTube → ∃ q ∈ Set.range apm_t02a03_leftCore, dist p q ≤ (1 / 4 : ℝ)",
        :placeholder "the sole sorry in apm_t02a03",
        :route-step
-       "t02A03 step 2, obtain a compact frozen left-core range before extracting closed-tube distance witnesses"},
-      :id :routes-2026-10-10-t02a03-left-core-compact-range-topo2-r1,
+       "t02A03 step 2, extract an attained core-distance witness from closed left-tube membership"},
+      :id
+      :routes-2026-10-10-t02a03-left-tube-attained-core-witness-topo2-r1,
       :kind :reusable-theorem,
       :depends-on
       [:routes-2026-10-10-checkpoint-topo2-r5
-       :routes-2026-10-10-t02a03-left-core-planar-radius-topo2-r1],
+       :routes-2026-10-10-t02a03-left-core-compact-range-topo2-r1],
       :current-residual
-      "Use compactness to obtain an attained nearby-core point for each left-tube point, prove planar center displacement is uniformly nonzero, then construct the punctured-normal torus model.",
+      "Use the distance witness and core radius identity to prove uniform angular nonvanishing, then build punctured-normal coordinates and the torus HomotopyEquiv.",
       :other-consumers []}}},
    :phase :probe,
    :type
    "Nonempty (ContinuousMap.HomotopyEquiv LeftTubeMinusCore ConstructionTargets.TorusCircleWedgeOpenCover.Torus)",
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-punctured-model",
    :acceptance
@@ -60093,7 +60115,8 @@
    [:routes-2026-10-10-checkpoint-topo2-r5
     :routes-2026-10-10-t02a03-geometric-tube-cover-topo2-r1
     :routes-2026-10-10-t02a03-left-core-planar-radius-topo2-r1
-    :routes-2026-10-10-t02a03-left-core-compact-range-topo2-r1],
+    :routes-2026-10-10-t02a03-left-core-compact-range-topo2-r1
+    :routes-2026-10-10-t02a03-left-tube-attained-core-witness-topo2-r1],
    :current-residual
    "After the punctured-left-tube model is banked, construct the right-tube-minus-deleted-attachment model extending the based core homotopy, then overlap compatibility and gluing for the full geometricY equivalence.",
    :other-consumers []}
