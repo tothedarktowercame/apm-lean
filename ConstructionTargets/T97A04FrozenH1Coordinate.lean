@@ -237,4 +237,19 @@ noncomputable def frozenTorusAlignedH1ModuleIsoFinTwo :
   singularHomologyModuleIsoOfGroupIso (TopCat.of FrozenTorus) 1 _
     frozenTorusAlignedH1GroupIsoFinTwo
 
+theorem frozenLbarIntegralH1_map_commutes :
+    (HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularSubdivision.singularPostcomposition
+          frozenLbar) 1) ≫
+        frozenTorusAlignedH1GroupIsoFinTwo.hom =
+      frozenTorusAlignedH1GroupIsoFinTwo.hom ≫
+        AddCommGrpCat.ofHom frozenMatrixAddHom := by
+  apply AddCommGrpCat.hom_ext
+  apply DFunLike.ext _ _
+  intro a
+  have h := frozenLbarIntegralH1_coordinate
+    (frozenTorusAlignedH1MulEquivFinTwo (Multiplicative.ofAdd a))
+  rw [frozenTorusAlignedH1MulEquivFinTwo.symm_apply_apply] at h
+  exact congrArg Multiplicative.toAdd h
+
 end ConstructionTargets.T97A04FrozenH1Coordinate
