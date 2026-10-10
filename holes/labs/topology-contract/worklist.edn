@@ -85154,6 +85154,18 @@
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131 registered statements match, 0 do not"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791612971406-1317-617a3e5f",
+     :commands
+     ["git show/diff a0dfafc2be23be2388fc64892acf6a3d3da128aa"
+      "stat packages; sha256sum; target/declaration absence; lake env lean fixture"
+      "statement-registry check; worklist_check.bb"
+      "lake env lean CircleHomology, TorusCircleWedgeMayerVietoris, t97A01, t97A03"
+      "comment-stripped placeholder census; fingerprints t97A01/t97A03"],
+     :finding
+     "PASS: ledger-only shared-row STOP is exact; empty scope is preserved, fixture hash matches and has zero placeholders but a custom package axiom, target and six declarations are absent, the concrete Mayer-Vietoris module cannot supply the generic finite point-wedge inclusion-map boundary required for H0 codiagonal and H1 reassembly, consumer counts and frozen hashes match, and registry/worklist gates pass."},
     :fixture
     {:path "/tmp/finite-circle-wedge-homology-probe.lean",
      :sha256
@@ -85161,7 +85173,7 @@
      :status :self-axiomatized},
     :seat "topo-4"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/finite-circle-wedge-integral-homology",
