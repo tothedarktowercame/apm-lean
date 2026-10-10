@@ -86802,7 +86802,7 @@
    "Owner reopen 2026-10-10 (claude-14): both STOPs cite missing approved signatures for declarations the acceptance lists in prose. Under work-prompt.md WHAT IS FROZEN, only the registered statement and the fixture interface-axiom types are frozen; design the supporting signatures, discharge the frozen axiom type with standard axioms, and STOP only on a mathematical boundary.",
    :stop-count 1,
    :review-finding
-   "No implementation was delivered: the row records no implementation commit, ConstructionTargets/PolygonEdgeGraphOpenCover.lean and every accepted declaration are absent, and the frozen fixture proves the advertised consequences only through the nonstandard axiom PolygonEdgeGraphOpenCoverProbe.polygonOpenCoverPackages. Its recorded placeholder-count 0 is also false under the repository census, which counts that top-level axiom. Repair requires first specifying an explicit polygon-pairing/edge-graph representation and quotient maps, then implementing the two quotient-to-ThreeCircles comparisons, radial homotopy descents, literal inclusion equations, saturation/open-cover facts, and vertex identifications in the scoped module with standard-only axioms.",
+   "design the supporting signatures and discharge the frozen axiom type",
    :evidence
    {:residual
     "Formalize polygonRadialOpenCoverPackages by proving saturation/open quotient descent, the two boundary graph homeomorphisms to ThreeCircles, overlap radial equivalences, and corner/vertex classifications.",
@@ -86838,6 +86838,12 @@
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
      {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1791633240416-1849-5df74712",
+     :finding
+     "design the supporting signatures and discharge the frozen axiom type"},
     :fixture
     {:path "/tmp/polygon-edge-graph-open-cover-probe.lean",
      :sha256
@@ -86847,7 +86853,7 @@
      :proof-placeholder-count 1},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope ["ConstructionTargets/PolygonEdgeGraphOpenCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/polygon-edge-graph-open-cover/radial-quotient-package",
@@ -86880,7 +86886,7 @@
      "python3 scripts/statement-registry.py check"]},
    :id :routes-2026-10-10-polygon-edge-graph-radial-package-1,
    :kind :reusable-theorem,
-   :fail-count 0,
+   :fail-count 1,
    :depends-on [],
    :current-residual
    "Construct one radial quotient package for both six-edge words, including saturation, three homotopy models, literal inclusions, and both vertex-class calculations.",
