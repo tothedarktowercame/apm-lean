@@ -98504,6 +98504,22 @@
       :exit 0,
       :finding "clean worktree after commit"}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791663576295-2894-0ff9a086",
+     :commands
+     ["git show fb12be0a92070d8367f5dd62ac16b855a57ab729:ConstructionTargets/PolygonRadialOpenCover.lean"
+      "git diff-tree --no-commit-id --name-only -r fb12be0a92070d8367f5dd62ac16b855a57ab729"
+      "git diff --exit-code fb12be0a92070d8367f5dd62ac16b855a57ab729 -- ConstructionTargets/PolygonRadialOpenCover.lean"
+      "sha256sum /tmp/polygon-radial-open-cover.lean"
+      "lake build ConstructionTargets.PolygonRadialOpenCover"
+      "lake env lean /tmp/polygon-radial-open-cover.lean"
+      "placeholder census on source, fixture, and problems/t97A01/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb on recorded ledger at 12948812"],
+     :finding
+     "PASS: reviewer codex-3 verified author topo-2 and recorded commit fb12be0a, whose exact scope is only ConstructionTargets/PolygonRadialOpenCover.lean and whose source equals the reviewed checkout. The canonical package authority is correct; fixture SHA-256 3b7ebef9bd6f3acb1f52fd6fe188d7a1e8535e2e9f8d7953a21d9b8c7b626f53 matches; target and fixture compile with zero placeholders; t97A01 retains one placeholder; the package declarations use only propext, Classical.choice, and Quot.sound; all 131 registered statements and the recorded 899-item ledger validate. innerSource and outerSource use the stated radius thresholds and descend through the EqvGen quotient. Their quotient images are open by the banked radial-invariance theorem. Every quotient representative lies in the inner image when radius is below three quarters and otherwise in the outer image by arithmetic. For overlapOpen_eq_inter, quotient equality between the two representatives is converted with Quotient.exact, EqvGen radius invariance transports the outer inequality to the chosen inner representative, and both inclusions have the correct orientations. surfacePackage specializes the generic package using SurfaceRel norm preservation without changing the quotient representation. The module does not descend contractions, identify the overlap or boundary graph models, compute homology, or close t97A01."},
     :commit "fb12be0a92070d8367f5dd62ac16b855a57ab729",
     :changed-paths ["ConstructionTargets/PolygonRadialOpenCover.lean"],
     :fixture
@@ -98513,7 +98529,7 @@
      :sorry-count 0},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/PolygonRadialOpenCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/open-cover",
@@ -98641,7 +98657,7 @@
       "PolygonRadialOpenCover.Package provides the inner and outer open quotient pieces, their cover equation, and their annular overlap equation for any norm-preserving disk-edge relation; surfacePackage instantiates every canonical SurfaceRel."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -100724,7 +100740,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "PolygonRadialOpenCover.surfacePackage",
@@ -100738,7 +100754,9 @@
     :type
     "The radial quotient open-cover package specialized to SurfaceRel orientable genus for all orientable flags and genera.",
     :area "polygon-surface-open-cover",
-    :proved-in :routes-2026-10-10-polygon-radial-open-cover-42},
+    :proved-in :routes-2026-10-10-polygon-radial-open-cover-42,
+    :banked-by :routes-2026-10-10-polygon-radial-open-cover-42,
+    :banked-commit "fb12be0a92070d8367f5dd62ac16b855a57ab729"},
    :id :lemma-polygonradialopencover-surfacepackage,
    :kind :lemma,
    :depends-on
