@@ -317,4 +317,15 @@ theorem apm_t02a03_leftTubeRadialPoint_not_mem_leftCore
       (ne_of_gt (apm_t02a03_leftTubeRadialNormalRadius_pos tp)))
     (apm_t02a03_leftTubeNormalAngular_ne_zero tp.2)
 
+noncomputable def apm_t02a03_leftTubeRadialMap :
+    C(unitInterval × apm_t02a03_LeftTubeMinusCore,
+      apm_t02a03_LeftTubeMinusCore) where
+  toFun tp :=
+    ⟨apm_t02a03_leftTubeRadialPoint tp,
+      apm_t02a03_leftTubeRadialPoint_mem_leftTube tp,
+      apm_t02a03_leftTubeRadialPoint_not_mem_leftCore tp⟩
+  continuous_toFun := by
+    apply Continuous.subtype_mk
+    exact apm_t02a03_continuous_leftTubeRadialPoint
+
 end ConstructionTargets.T02A03LeftTubePuncturedModel
