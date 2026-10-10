@@ -86245,6 +86245,8 @@
      :typed-residual-change
      :infrastructure-packets
      :review-outcomes]},
+   :review-finding
+   "Checkpoint misclassifies generic-point-wedge-mv-inclusion-coordinates as a reviewed STOP. The row is :needs-owner with :fail-count 1 after review rejected its claim that a mathematically false H0 contract was merely a restorable artifact. Repair checkpoint measures from go=1/stop=3 to go=1/stop=2/needs-owner=1, reduce reviewed-stops infrastructure from 3 to 2, and record the MV row as unresolved owner repair requiring path-connected X/Y or H0(X)/H0(Y) coordinates rather than in preserved-stops.",
    :stop-condition
    "End only when every active topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :evidence
@@ -86407,9 +86409,15 @@
       :current-residual "Review three independent route advances.",
       :other-consumers []}],
     :author "topo-4",
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1791617643519-1477-35ac258f",
+     :finding
+     "Checkpoint misclassifies generic-point-wedge-mv-inclusion-coordinates as a reviewed STOP. The row is :needs-owner with :fail-count 1 after review rejected its claim that a mathematically false H0 contract was merely a restorable artifact. Repair checkpoint measures from go=1/stop=3 to go=1/stop=2/needs-owner=1, reduce reviewed-stops infrastructure from 3 to 2, and record the MV row as unresolved owner repair requiring path-connected X/Y or H0(X)/H0(Y) coordinates rather than in preserved-stops."}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :repair,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -86428,7 +86436,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t97A01/standard-n3-homeomorph",
    :acceptance
@@ -86451,7 +86459,7 @@
    :other-consumers []}
   {:consumer :t99J01,
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/covering-monodromy-coset-lifting",
@@ -86477,7 +86485,7 @@
    :other-consumers [:t93J03 :t97A03]}
   {:consumer :t97A01,
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/shared/polygon-edge-graph-open-cover",
    :acceptance
@@ -86511,7 +86519,7 @@
    :stop-condition
    "End only when every active topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :phase :strategy,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
