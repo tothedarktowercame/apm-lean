@@ -96286,8 +96286,77 @@
   {:bounded-exception
    "This single-consumer theorem supplies surjectivity of the component-restricted projection by lifting paths from the chosen point, independently of the remaining selected-sheet covering-chart construction.",
    :consumer :t99J01,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Use the open Joined component and each evenly covered neighborhood to retain exactly the sheets lying in that component, construct the restricted covering trivializations, and combine them with componentProjection_surjective.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :missing-theorems
+    [{:name
+      "CoveringPathComponentSurjective.componentProjection_surjective",
+      :type
+      "For a covering p : E → B over a path-connected base and e : E, the projection from Component e is surjective",
+      :status :proved,
+      :consumers [:t99J01],
+      :depends-on
+      ["CoveringTotalLocPathConnected.IsCoveringMap.totalLocPathConnectedSpace"
+       "CoveringPathComponentDomain.Component"]}],
+    :statement-hashes "131 registered statements match",
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :finding
+      "canonical package authority resolves to /home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "sha256sum /tmp/covering-path-component-surjective.lean",
+      :exit 0,
+      :finding
+      "fixture hash matches bdd2590503e0e1d76ac395d99ac62013d442ecf6686ed7e5d0c7e2ac4357430c"}
+     {:cmd
+      "lake build ConstructionTargets.CoveringPathComponentSurjective",
+      :exit 0,
+      :finding
+      "canonical component-projection surjectivity theorem builds"}
+     {:cmd
+      "lake env lean /tmp/covering-path-component-surjective.lean",
+      :exit 0,
+      :finding
+      "frozen fixture compiles and reports only standard axioms"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" ConstructionTargets/CoveringPathComponentSurjective.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero source placeholders"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" /tmp/covering-path-component-surjective.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero fixture placeholders"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short",
+      :exit 0,
+      :finding "clean worktree after commit"}],
+    :commit "2be55163fed9470e0f61d92448460c4a391909d5",
+    :changed-paths
+    ["ConstructionTargets/CoveringPathComponentSurjective.lean"],
+    :fixture
+    {:path "/tmp/covering-path-component-surjective.lean",
+     :sha256
+     "bdd2590503e0e1d76ac395d99ac62013d442ecf6686ed7e5d0c7e2ac4357430c",
+     :sorry-count 0},
+    :implementation
+    {:scope
+     ["ConstructionTargets/CoveringPathComponentSurjective.lean"],
+     :declarations
+     ["ConstructionTargets.CoveringPathComponentSurjective.componentProjection_surjective"]},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/CoveringPathComponentSurjective.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component/surjectivity",
@@ -98672,21 +98741,30 @@
    [:lemma-locpathconnectedopencover-locpathconnectedspace-of-open-cover
     :lemma-homeomorphlocpathconnected-homeomorph-locpathconnectedspace-iff],
    :other-consumers []}
-  {:consumer :portfolio,
+  {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
    :scope [],
    :acceptance
    {:lemma
-    "CoveringPathComponentSurjective.componentProjection_surjective"},
+    "CoveringPathComponentSurjective.componentProjection_surjective",
+    :type
+    "For a covering p : E → B over a path-connected base and e : E, the projection from Component e is surjective"},
    :lemma
    {:name
     "CoveringPathComponentSurjective.componentProjection_surjective",
-    :reported-by []},
+    :reported-by
+    [:routes-2026-10-10-covering-path-component-surjective-43],
+    :type
+    "For a covering p : E → B over a path-connected base and e : E, the projection from Component e is surjective",
+    :proved-in
+    :routes-2026-10-10-covering-path-component-surjective-43},
    :id
    :lemma-coveringpathcomponentsurjective-componentprojection-surjective,
    :kind :lemma,
-   :depends-on [],
+   :depends-on
+   [:lemma-coveringtotallocpathconnected-iscoveringmap-totallocpathconnectedspace
+    :lemma-coveringpathcomponentdomain-component],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
