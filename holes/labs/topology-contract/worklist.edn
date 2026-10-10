@@ -88015,59 +88015,93 @@
    :review-finding
    "frozen interface axiom is false at r = 0, n = 1, H = top; require 0 < r or state the rank-zero case separately",
    :evidence
-   {:residual
-    "Correct the frozen universal theorem with a positive-rank hypothesis or a separate rank-zero branch, then resume the positive-rank spanning-tree count.",
-    :outcome :stop,
+   {:placeholder-delta 0,
+    :residual
+    "Import the banked equivalences into the t99J01 and t97A03 consumer adapters and discharge their remaining placeholders.",
+    :gates
+    {:target-compile :pass,
+     :fixture-compile :pass,
+     :fixture-hash :pass,
+     :zero-implementation-placeholders :pass,
+     :standard-only-implementation-axioms :pass,
+     :registry :pass,
+     :clean-worktree :pass},
+    :outcome :done-unreviewed,
     :warnings
-    [{:kind :frozen-type-refuted,
+    [{:kind :frozen-interface-axiom,
       :message
-      "The r = 0, index-one case contradicts the stated natural-number rank formula."}
-     {:kind :concurrent-worktree-change,
-      :message
-      "An unrelated scoped file for another row is modified and was not touched."}],
-    :disposition :stop,
+      "The frozen probe intentionally retains its single interface axiom; the scoped declaration with the repaired type is proved from standard axioms."}],
+    :missing-theorems
+    [{:name "FiniteIndexFreeGroupSchreierRank.spanningTreeBasis",
+      :type
+      "{G : Type u} [Groupoid G] [IsFreeGroupoid G] (T : WideSubquiver (Symmetrify (IsFreeGroupoid.Generators G))) [Arborescence T] -> FreeGroupBasis (Complement T) (End (show G from Quiver.root T))",
+      :status :proved,
+      :consumers [:t99J01 :t97A03]}],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not"},
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
-    :reason
-    "The frozen interface remains formally refuted. For r = 0, n = 1, and H = top in FreeGroup (Fin 0), Subgroup.index_top satisfies the premise, but natural subtraction makes ((r - 1) * n + 1) = 1. The source subgroup is subsingleton and FreeGroup (Fin 1) is nontrivial, so no MulEquiv exists. The freshly compiled theorem frozen_universal_false proves the negation of the full quantified axiom using only standard axioms. Since review confirms the defect, the required repair is to add 0 < r to the frozen universal theorem or split out r = 0 with rank zero. Both named consumers use positive ranks, so either correction preserves their intended specializations; without it, no implementation can discharge the current fixture type.",
     :commands
     [{:cmd
-      "lake env lean /tmp/finite-index-schreier-r0-counterexample.lean",
+      "lake env lean ConstructionTargets/FiniteIndexFreeGroupSchreierRank.lean",
       :exit 0,
       :finding
-      "The exact negation of the frozen universal type compiles with only propext, Classical.choice, and Quot.sound."}
+      "Universal positive-rank positive-index equivalence and both consumer specializations compile using only standard axioms."}
      {:cmd
-      "sha256sum /tmp/finite-index-free-group-schreier-rank-probe.lean",
+      "lake env lean holes/labs/topology-contract/frozen/finite-index-free-group-schreier-rank-probe.lean",
       :exit 0,
-      :finding "The frozen fixture hash still matches."}
+      :finding "The owner-repaired frozen fixture compiles."}
      {:cmd
-      "lake env lean /tmp/finite-index-free-group-schreier-rank-probe.lean",
+      "sha256sum holes/labs/topology-contract/frozen/finite-index-free-group-schreier-rank-probe.lean",
       :exit 0,
       :finding
-      "The fixture specializations still depend on the refuted nonstandard axiom finiteIndexSubgroupEquiv."}
+      "0ac8db697087cfead465c40351e15979884f523a290ad10d13b336c27c8e7799"}
+     {:cmd
+      "comment-stripped sorry/admit census of ConstructionTargets/FiniteIndexFreeGroupSchreierRank.lean",
+      :exit 0,
+      :finding "0"}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
-     {:cmd "git status --short",
-      :exit 0,
+     {:cmd "git diff --check HEAD^ HEAD", :exit 0}
+     {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :diagnostic-history
+    [{:cmd
+      "lake env lean ConstructionTargets/FiniteIndexFreeGroupSchreierRank.lean",
+      :exit 1,
       :finding
-      "ConstructionTargets/T02A03GeometricTubeCover.lean has a concurrent modification outside this row's scope; it was preserved."}],
-    :counterexample
-    {:path "/tmp/finite-index-schreier-r0-counterexample.lean",
-     :parameters {:r 0, :n 1, :subgroup "top"},
-     :theorem "frozen_universal_false"},
+      "Initial explicit-basis draft lacked Classical decidability/transparency settings and did not install finite edge instances; added the settings and instances."}
+     {:cmd
+      "lake env lean ConstructionTargets/FiniteIndexFreeGroupSchreierRank.lean",
+      :exit 1,
+      :finding
+      "The imported private root synonym prevented a direct comp_id rewrite; changed the expression to the public endpoint type before rewriting."}],
+    :commit "983453e07912c8ce026078bcfe356b1d9e1c32eb",
+    :changed-paths
+    ["ConstructionTargets/FiniteIndexFreeGroupSchreierRank.lean"],
     :fixture
-    {:path "/tmp/finite-index-free-group-schreier-rank-probe.lean",
+    {:path
+     "holes/labs/topology-contract/frozen/finite-index-free-group-schreier-rank-probe.lean",
      :sha256
-     "5751d883226814d2b3eff08804f8c857dbe2a265f31c1c23d55aab24ab9b778a",
+     "0ac8db697087cfead465c40351e15979884f523a290ad10d13b336c27c8e7799",
      :sorry-count 0,
      :axiom-count 1,
      :proof-placeholder-count 1},
+    :implementation
+    {:scope
+     ["ConstructionTargets/FiniteIndexFreeGroupSchreierRank.lean"],
+     :declarations
+     ["FiniteIndexFreeGroupSchreierRank.spanningTreeBasis"
+      "FiniteIndexFreeGroupSchreierRank.finiteIndexSubgroupFreeGroupEquiv"
+      "FiniteIndexFreeGroupSchreierRank.indexSubgroupFreeGroupFinThreeEquiv"
+      "FiniteIndexFreeGroupSchreierRank.indexTwoSubgroupFreeGroupFinTwoEquiv"],
+     :method
+     "Expose the spanning-tree complement universal property as a FreeGroupBasis, reindex it by the banked finite complement-cardinality equivalence, and compose its representation with endMulEquivSubgroup."},
     :seat "topo-2"},
    :phase :implementation,
    :owner-repair
    "Owner repair 2026-10-10 (claude-14, Joe: check the LaTeX, then repair the Lean). The frozen interface was false at r = 0 (natural subtraction) and at n = 0 (Subgroup.index is 0 for infinite index); refutations compile in frozen/finite-index-free-group-schreier-rank-old-refutations.lean. The problems LaTeX and registered statements are correct (t99J01: 0 < n, r = 3; t97A03: r = 2, n = 2); only this row fixture was wrong. New fixture adds (hr : 0 < r) (hn : 0 < n) to finiteIndexSubgroupEquiv and hn to indexSubgroupFreeGroupFinThreeEquiv.",
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/FiniteIndexFreeGroupSchreierRank.lean"],
    :dag-node
