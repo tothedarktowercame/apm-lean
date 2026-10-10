@@ -99015,6 +99015,20 @@
       :exit 0,
       :finding "clean worktree after commit"}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791667555615-2979-41785a94",
+     :commands
+     ["git show and diff-tree on 97250921a60a924cddc405d9e5bb0930954034d9"
+      "sha256sum frozen fixture"
+      "lake build ConstructionTargets.PolygonOuterRestrictedEqvGen"
+      "lake env lean frozen fixture"
+      "comment-stripped placeholder counts"
+      "python3 scripts/statement-registry.py check"
+      "git diff-tree --check"],
+     :finding
+     "PASS: recorded commit is authored by topo-2 and changes only ConstructionTargets/PolygonOuterRestrictedEqvGen.lean; fixture hash matches; full EqvGen lifts to restricted EqvGen by reconstructing every intermediate Outer witness from radius preservation, and restricted EqvGen projects back to full EqvGen; the named-map kernel iff is correctly oriented in both directions; the two Quotient.lift maps cross the setoid representations using that iff and compose with the quotient-map kernel homeomorphism; the representative formula matches the frozen interface; source and fixture have zero placeholders; fixture reports only propext, Classical.choice, and Quot.sound; registry reports 131 matches and zero mismatches."},
     :commit "97250921a60a924cddc405d9e5bb0930954034d9",
     :changed-paths
     ["ConstructionTargets/PolygonOuterRestrictedEqvGen.lean"],
@@ -99025,7 +99039,7 @@
      :sorry-count 0},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/PolygonOuterRestrictedEqvGen.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/outer-restricted-eqvgen",
@@ -99150,7 +99164,7 @@
       "Full EqvGen between outer representatives is equivalent to EqvGen of OuterRel; the quotient by OuterRel is homeomorphic to outerOpen with the expected representative formula."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -101560,7 +101574,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "PolygonOuterRestrictedEqvGen.outerQuotientHomeomorph",
@@ -101574,7 +101588,9 @@
     :type
     "For a radius-preserving disk relation, the quotient of the outer radial source by the restricted EqvGen relation is homeomorphic to the outerOpen subtype of the full polygon quotient.",
     :area "polygon-surface-open-cover",
-    :proved-in :routes-2026-10-10-polygon-outer-restricted-eqvgen-47},
+    :proved-in :routes-2026-10-10-polygon-outer-restricted-eqvgen-47,
+    :banked-by :routes-2026-10-10-polygon-outer-restricted-eqvgen-47,
+    :banked-commit "97250921a60a924cddc405d9e5bb0930954034d9"},
    :id :lemma-polygonouterrestrictedeqvgen-outerquotienthomeomorph,
    :kind :lemma,
    :depends-on
