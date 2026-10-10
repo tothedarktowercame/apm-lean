@@ -97203,13 +97203,42 @@
    "Use the new path-connected wedge instances to construct, for every y : ThreeCircles, a path y to firstCircle (collapse y) on which collapse is constant; lift that path and then use a final-circle cyclic path to connect arbitrary pullback points.",
    :other-consumers []}
   {:bounded-exception
+   "This single-consumer normalization theorem moves every ThreeCircles point into the final-circle section while preserving collapse, so a pullback point can be moved without changing its circle-power coordinate before the cyclic monodromy step.",
+   :consumer :t99J01,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/ThreeCirclesCollapseFiberPath.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/cyclic-three-circles-cover/collapse-fiber-path",
+   :acceptance
+   {:implementation
+    "For every y : ThreeCircles, construct a path from y to CyclicThreeCirclesCollapse.firstCircle (collapse y) whose image under collapse is constant. For the TwoCircles summand, use the banked point-wedge path-connectedness to reach twoCirclesPoint and cast across the identified outer wedge representatives; for the final-circle summand, use the constant path. Prove the collapse formula pointwise. Do not lift this path to the pullback, construct cyclic power paths, prove pullback path connectedness, compute subgroup index, or close t99J01.",
+    :placeholder "the single sorry in apm_t99j01",
+    :route-step
+    "t99J01 cyclic-cover step 7: normalize every basepoint into the final-circle section within its collapse fiber",
+    :fixture "/tmp/three-circles-collapse-fiber-path.lean",
+    :fixture-sha256
+    "cfc417d11180ad2a1c0c4ad388d2a0cd7f469dfb56b2ba05ab3a96bcb95a77d7",
+    :gates
+    ["lake build ConstructionTargets.ThreeCirclesCollapseFiberPath"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-10-three-circles-collapse-fiber-path-45,
+   :kind :reusable-theorem,
+   :depends-on [:routes-2026-10-10-point-wedge-path-connected-44],
+   :current-residual
+   "Lift the collapse-constant normalization paths to the literal pullback while holding each circle coordinate fixed, then connect the normalized points over firstCircle by a circle path whose nth power supplies the base path.",
+   :other-consumers []}
+  {:bounded-exception
    "Single-consumer prerequisite second in the final ledger ranking.",
    :consumer :t99J01,
    :implements-lemma :lemma-cyclicthreecirclespullback-pathconnected,
    :evidence
    {:probe
     {:residual
-     "The point-wedge base is now path connected. The remaining proof must construct collapse-constant paths from arbitrary ThreeCircles points to the final-circle section, lift them without changing the sheet coordinate, and connect the resulting same-section points by the cyclic circle-power path.",
+     "Every ThreeCircles point now has a compiled collapse-constant path to the final-circle section. The remaining proof must lift these normalization paths in the literal pullback and establish the cyclic nth-power path between normalized sheet coordinates.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
@@ -97220,51 +97249,51 @@
        :consumers [:t99J01],
        :depends-on
        ["CyclicThreeCirclesPullbackSheets.pullback_isKSheeted"
-        "CyclicThreeCirclesCollapse.collapse_firstCircle"
-        "PointWedgePathConnected.wedgePathConnectedSpace"]}],
+        "ThreeCirclesCollapseFiberPath.exists_collapseFiber_path"]}],
      :prerequisite
      {:bounded-exception
-      "This single-consumer topological package supplies path connectedness of the nested point wedges underlying TwoCircles and ThreeCircles, which is required to build paths from arbitrary basepoints into the final-circle section before the cyclic lift argument.",
+      "This single-consumer normalization theorem moves every ThreeCircles point into the final-circle section while preserving collapse, so a pullback point can be moved without changing its circle-power coordinate before the cyclic monodromy step.",
       :consumer :t99J01,
       :phase :implementation,
       :state :open,
-      :scope ["ConstructionTargets/PointWedgePathConnected.lean"],
+      :scope
+      ["ConstructionTargets/ThreeCirclesCollapseFiberPath.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/cyclic-three-circles-cover/point-wedge-path-connected",
+      "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/cyclic-three-circles-cover/collapse-fiber-path",
       :acceptance
       {:implementation
-       "For pointed topological spaces X and Y with PathConnectedSpace instances, prove their PointWedgeQuotient.Wedge is path connected by mapping paths in each summand and concatenating across the identified wedge point. Expose the equality of the two chosen representatives and install the resulting PathConnectedSpace instance. Do not construct collapse-fiber paths, lift paths to the cyclic pullback, count sheets, compute subgroup index, or close t99J01.",
+       "For every y : ThreeCircles, construct a path from y to CyclicThreeCirclesCollapse.firstCircle (collapse y) whose image under collapse is constant. For the TwoCircles summand, use the banked point-wedge path-connectedness to reach twoCirclesPoint and cast across the identified outer wedge representatives; for the final-circle summand, use the constant path. Prove the collapse formula pointwise. Do not lift this path to the pullback, construct cyclic power paths, prove pullback path connectedness, compute subgroup index, or close t99J01.",
        :placeholder "the single sorry in apm_t99j01",
        :route-step
-       "t99J01 cyclic-cover step 6: establish path connectedness of the point-wedge base models before constructing collapse-preserving paths and cyclic pullback lifts",
-       :fixture "/tmp/point-wedge-path-connected.lean",
+       "t99J01 cyclic-cover step 7: normalize every basepoint into the final-circle section within its collapse fiber",
+       :fixture "/tmp/three-circles-collapse-fiber-path.lean",
        :fixture-sha256
-       "33b34c27c1a94a57cdc22915aeb5ec2a34cac1bc654cc9c74e081e1e9f8c8cf0",
+       "cfc417d11180ad2a1c0c4ad388d2a0cd7f469dfb56b2ba05ab3a96bcb95a77d7",
        :gates
-       ["lake build ConstructionTargets.PointWedgePathConnected"
+       ["lake build ConstructionTargets.ThreeCirclesCollapseFiberPath"
         "fixture compiles"
         "zero source and fixture sorry"
         "standard-only axioms"
         "registry check"]},
-      :id :routes-2026-10-10-point-wedge-path-connected-44,
+      :id :routes-2026-10-10-three-circles-collapse-fiber-path-45,
       :kind :reusable-theorem,
-      :depends-on
-      [:routes-2026-10-10-cyclic-three-circles-pullback-sheets-43],
+      :depends-on [:routes-2026-10-10-point-wedge-path-connected-44],
       :current-residual
-      "Use the new path-connected wedge instances to construct, for every y : ThreeCircles, a path y to firstCircle (collapse y) on which collapse is constant; lift that path and then use a final-circle cyclic path to connect arbitrary pullback points.",
+      "Lift the collapse-constant normalization paths to the literal pullback while holding each circle coordinate fixed, then connect the normalized points over firstCircle by a circle path whose nth power supplies the base path.",
       :other-consumers []},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
-     [{:cmd "lake env lean /tmp/point-wedge-path-connected.lean",
+     [{:cmd
+       "lake env lean /tmp/three-circles-collapse-fiber-path.lean",
        :exit 0,
        :finding
-       "the general point-wedge path-connectedness theorem compiles with standard axioms"}
-      {:cmd "sha256sum /tmp/point-wedge-path-connected.lean",
+       "the collapse-constant normalization path compiles with standard axioms"}
+      {:cmd "sha256sum /tmp/three-circles-collapse-fiber-path.lean",
        :exit 0,
        :finding
-       "33b34c27c1a94a57cdc22915aeb5ec2a34cac1bc654cc9c74e081e1e9f8c8cf0"}
+       "cfc417d11180ad2a1c0c4ad388d2a0cd7f469dfb56b2ba05ab3a96bcb95a77d7"}
       {:cmd
-       "rg -n \"\\b(sorry|admit)\\b\" /tmp/point-wedge-path-connected.lean",
+       "rg -n \"\\b(sorry|admit)\\b\" /tmp/three-circles-collapse-fiber-path.lean",
        :exit 1,
        :expected-exit 1,
        :finding "no placeholders"}
@@ -97273,27 +97302,25 @@
        :finding "131 registered statements match, 0 do not"}
       {:cmd "git status --short", :exit 0, :finding "clean"}],
      :diagnostic-history
-     [{:cmd "lake env lean /tmp/point-wedge-path-connected.lean",
+     [{:cmd
+       "lake env lean /tmp/three-circles-collapse-fiber-path.lean",
        :exit 1,
        :finding
-       "The first draft applied the relation constructor with explicit arguments and used the wrong IsPathConnected constructor shape; corrected the relation application and based the proof at the left wedge point."}
-      {:cmd "lake env lean /tmp/point-wedge-path-connected.lean",
+       "The banked point-wedge theorem did not automatically synthesize PathConnectedSpace TwoCircles; installed its explicit wedge instance."}
+      {:cmd
+       "lake env lean /tmp/three-circles-collapse-fiber-path.lean",
        :exit 1,
        :finding
-       "The first based proof attempted to substitute a representative equality and used the wrong direction of pathConnectedSpace_iff_univ; eliminated the unnecessary representative and used the reverse implication."}
-      {:cmd "lake env lean /tmp/point-wedge-path-connected.lean",
-       :exit 1,
-       :finding
-       "The cross-summand path cast initially reversed the wedge-point equality; corrected its orientation."}],
+       "Circle has no global PathConnectedSpace instance in the pinned environment; installed the standard local instance transported through the banked Circle-to-SphereOne homeomorphism."}],
      :fixture
-     {:path "/tmp/point-wedge-path-connected.lean",
+     {:path "/tmp/three-circles-collapse-fiber-path.lean",
       :sha256
-      "33b34c27c1a94a57cdc22915aeb5ec2a34cac1bc654cc9c74e081e1e9f8c8cf0",
+      "cfc417d11180ad2a1c0c4ad388d2a0cd7f469dfb56b2ba05ab3a96bcb95a77d7",
       :interface
-      "wedgePoint_eq identifies the chosen representatives; wedge_isPathConnected and wedgePathConnectedSpace prove a point wedge of path-connected spaces is path connected."},
+      "exists_collapseFiber_path gives, for every y : ThreeCircles, a path from y to firstCircle (collapse y) along which collapse is constant."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/cyclic-three-circles-cover",
@@ -97319,7 +97346,8 @@
     :routes-2026-10-10-circle-power-kernel-card-41
     :routes-2026-10-10-circle-power-fiber-card-42
     :routes-2026-10-10-cyclic-three-circles-pullback-sheets-43
-    :routes-2026-10-10-point-wedge-path-connected-44],
+    :routes-2026-10-10-point-wedge-path-connected-44
+    :routes-2026-10-10-three-circles-collapse-fiber-path-45],
    :current-residual
    "Combine the cyclic cover with component restriction and close t99J01.",
    :other-consumers []}
@@ -97761,7 +97789,8 @@
     :lemma-circlepowerkernelcard-circlepower-kernel-card
     :lemma-circlepowerfibercard-circlepower-fiber-card
     :lemma-cyclicthreecirclespullbacksheets-pullback-isksheeted
-    :lemma-pointwedgepathconnected-wedgepathconnectedspace],
+    :lemma-pointwedgepathconnected-wedgepathconnectedspace
+    :lemma-threecirclescollapsefiberpath-exists-collapsefiber-path],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -98922,6 +98951,19 @@
     :reported-by []},
    :id
    :lemma-preconnectedclopensheet-range-subset-or-disjoint-of-isclopen-pathconnected,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "ThreeCirclesCollapseFiberPath.exists_collapseFiber_path"},
+   :lemma
+   {:name "ThreeCirclesCollapseFiberPath.exists_collapseFiber_path",
+    :reported-by []},
+   :id :lemma-threecirclescollapsefiberpath-exists-collapsefiber-path,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}],
