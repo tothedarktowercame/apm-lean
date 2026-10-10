@@ -87573,8 +87573,203 @@
      :review-outcomes]},
    :stop-condition
    "End only when every active topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+   :evidence
+   {:outcome :replan,
+    :seat "topo-4",
+    :commands
+    [{:cmd "stat -c '%F %n' .lake/packages",
+      :exit 0,
+      :finding
+      "directory .lake/packages; canonical package authority is present"}
+     {:cmd
+      "comment-stripped placeholder census for t99J01 t92J06 t97A03 t93J03 t01A03 t97A01",
+      :exit 0,
+      :finding "counts are 1, 1, 3, 1, 1, 1; total 8"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "bb holes/labs/topology-contract/worklist_check.bb",
+      :exit 0,
+      :finding
+      "topology-worklist: 721 items OK; 698 done, 14 superseded, 6 needs-owner, 2 blocked, 1 open"}
+     {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :finding
+    {:routes
+     {:t99J01
+      ["held ThreeCircles pi1 coordinate comparison"
+       "banked cover subgroup index"
+       "path-component cover restriction"
+       "finite-index Schreier rank"
+       "explicit connected cyclic covers"
+       "assembly"],
+      :t92J06
+      ["held quotient-sheet gluing"
+       "permutation covers"
+       "Cayley-tree cover"
+       "tree simple connectedness"
+       "assembly"],
+      :t97A03
+      ["explicit connected double-cover classification"
+       "model comparisons"
+       "finite-index Schreier rank for the model pi1"
+       "held polygon and point-wedge representation comparisons"
+       "owner-blocked path-connected MV coordinates"
+       "model invariants"
+       "assembly"],
+      :t93J03
+      ["Klein deck action and polygon quotient identification"
+       "banked subgroup-containment lifting criterion"
+       "annulus-cover embedding"
+       "assembly"],
+      :t01A03
+      ["held point-wedge pi1 coordinates"
+       "separating-circle H1 via a surface collar"
+       "assembly"],
+      :t97A01
+      ["banked standard-N3 homeomorphism"
+       "reviewed polygon open-cover STOP"
+       "held point-wedge pi1 coordinates"
+       "owner-blocked path-connected MV coordinates"
+       "polygon boundary word"
+       "Smith algebra"
+       "assembly"]},
+     :placeholder-delta 0,
+     :placeholder-counts
+     {:t99J01 1,
+      :t92J06 1,
+      :t97A03 3,
+      :t93J03 1,
+      :t01A03 1,
+      :t97A01 1},
+     :deferred
+     ["The t97A03 model-invariant MV step is deferred until its typed path-connected coordinate interface is owner-approved."
+      "The held point-wedge pi1, quotient-sheet, and polygon-open-cover comparisons are preserved rather than re-elected."],
+     :preserved-stops
+     [:routes-2026-10-10-generic-point-wedge-pi1-inclusion-coordinates-1
+      :routes-2026-10-10-point-wedge-quotient-sheet-local-homeomorph-1
+      :routes-2026-10-10-polygon-edge-graph-open-cover-shared-2
+      :routes-2026-10-10-generic-point-wedge-mv-pathconnected-coordinates-2],
+     :infrastructure-packets
+     {:banked 1, :reviewed-stops 1, :placeholder-changing 0},
+     :ranking
+     "No consumer has a buildable closing adapter: every one-placeholder consumer still has at least one reviewed representation STOP or multiple unbanked route steps. The bounded t99J01 path-component adapter is elected first under rule 0, followed by the Schreier theorem shared with t97A03, then the independent explicit connected-cover construction.",
+     :typed-residual-change
+     ["t99J01 cover_pi1_subgroup_index is banked and reviewed PASS: induced pi1 injectivity and subgroup index n now match the frozen ThreeCircles cover predicate"
+      "the repaired path-connected Mayer-Vietoris comparison did not bank an implementation: review found that its ten public signatures and ModuleCat/AddCommGrpCat directions are not fixed by the fixture"
+      "the six frozen consumers remain unchanged; no problem closed"],
+     :review-outcomes {:pass 1, :stop 1, :closed-problems 0},
+     :unresolved-owner-repairs
+     [{:id
+       :routes-2026-10-10-generic-point-wedge-h0-pathconnected-naturality-2,
+       :state :needs-owner,
+       :fail-count 1,
+       :boundary
+       "PathConnectedSpace hypotheses repair the mathematical claim, but an owner-approved placeholder-free fixture must fix all ten declaration signatures and exact categorical morphism directions before implementation."}]},
+    :replacement-items
+    [{:consumer :t99J01,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/t99J01/path-component-sheet-restriction",
+      :acceptance
+      {:probe
+       "Compile the frozen-facing path-component restriction theorem for an arbitrary n-sheeted ThreeCircles cover: the path component of a chosen point is open, its restricted map is an m-sheeted covering with 0 < m and m <= n, and inclusion induces a fundamental-group equivalence at the chosen point.",
+       :placeholder "the single sorry in apm_t99j01",
+       :route-step "t99J01 step 4, pathComponent_isKSheetedCover",
+       :gates
+       ["canonical packages"
+        "fixture compiles"
+        "zero fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :id :routes-2026-10-10-t99j01-path-component-sheet-restriction-4,
+      :kind :final-adapter,
+      :depends-on [],
+      :current-residual
+      "Restrict an arbitrary finite-sheet cover to the chosen path component, bound its sheet count, and identify its based fundamental group.",
+      :other-consumers []}
+     {:consumer :t99J01,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank",
+      :acceptance
+      {:probe
+       "Compile the finite-index Schreier rank equivalences needed by both consumers: an index-n subgroup of FreeGroup (Fin 3) is isomorphic to FreeGroup (Fin (2*n+1)), and an index-two subgroup of FreeGroup (Fin 2) is isomorphic to FreeGroup (Fin 3), with explicit transport from subgroup index equalities.",
+       :placeholder
+       "the single sorry in apm_t99j01 and apm_t97A03_bridge_invariants_of_model",
+       :route-step
+       "t99J01 step 3 and t97A03 step 8, finite-index Schreier rank",
+       :gates
+       ["canonical packages"
+        "fixture compiles"
+        "zero fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :id
+      :routes-2026-10-10-finite-index-free-group-schreier-rank-shared-4,
+      :kind :reusable-theorem,
+      :depends-on [],
+      :current-residual
+      "Count the non-tree edges in the finite Schreier coset quiver and orient Mathlib's Nielsen-Schreier freeness equivalence to the two required finite ranks.",
+      :other-consumers [:t97A03]}
+     {:consumer :t99J01,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/t99J01/explicit-connected-cyclic-cover",
+      :acceptance
+      {:probe
+       "Compile, for every n > 0, an explicit path-connected n-sheeted covering of ThreeCircles, using the cyclic n-vertex graph cover and proving local triviality at the wedge point and along each circle arc.",
+       :placeholder "the single sorry in apm_t99j01",
+       :route-step "t99J01 step 5, exists_connected_cover",
+       :gates
+       ["canonical packages"
+        "fixture compiles"
+        "zero fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :id :routes-2026-10-10-t99j01-explicit-connected-cyclic-cover-4,
+      :kind :uptake,
+      :depends-on [],
+      :current-residual
+      "Construct the cyclic graph cover directly and verify connectedness, exact fiber cardinality, and covering charts.",
+      :other-consumers []}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 3,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only when every active topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:strategy
+       "Measure the t99J01 component restriction, the shared finite-index Schreier rank theorem, and the explicit connected cyclic cover; preserve reviewed representation boundaries, recount all six consumers and eight placeholders, then elect the nearest newly enabled adapter or shared route step."},
+      :id
+      :routes-2026-10-10-checkpoint-topo1-covering-schreier-components-4,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:routes-2026-10-10-t99j01-path-component-sheet-restriction-4
+       :routes-2026-10-10-finite-index-free-group-schreier-rank-shared-4
+       :routes-2026-10-10-t99j01-explicit-connected-cyclic-cover-4],
+      :current-residual
+      "Review three independent t99J01 route advances, including the Schreier theorem shared with t97A03.",
+      :other-consumers []}],
+    :author "topo-4",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -87588,6 +87783,110 @@
     :routes-2026-10-10-checkpoint-topo1-covering-independent-2],
    :current-residual
    "Review one consumer uptake and one corrected two-consumer representation comparison.",
+   :other-consumers []}
+  {:consumer :t99J01,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t99J01/path-component-sheet-restriction",
+   :acceptance
+   {:probe
+    "Compile the frozen-facing path-component restriction theorem for an arbitrary n-sheeted ThreeCircles cover: the path component of a chosen point is open, its restricted map is an m-sheeted covering with 0 < m and m <= n, and inclusion induces a fundamental-group equivalence at the chosen point.",
+    :placeholder "the single sorry in apm_t99j01",
+    :route-step "t99J01 step 4, pathComponent_isKSheetedCover",
+    :gates
+    ["canonical packages"
+     "fixture compiles"
+     "zero fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-10-t99j01-path-component-sheet-restriction-4,
+   :kind :final-adapter,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo1-covering-uptake-mv-repair-3],
+   :current-residual
+   "Restrict an arbitrary finite-sheet cover to the chosen path component, bound its sheet count, and identify its based fundamental group.",
+   :other-consumers []}
+  {:consumer :t99J01,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank",
+   :acceptance
+   {:probe
+    "Compile the finite-index Schreier rank equivalences needed by both consumers: an index-n subgroup of FreeGroup (Fin 3) is isomorphic to FreeGroup (Fin (2*n+1)), and an index-two subgroup of FreeGroup (Fin 2) is isomorphic to FreeGroup (Fin 3), with explicit transport from subgroup index equalities.",
+    :placeholder
+    "the single sorry in apm_t99j01 and apm_t97A03_bridge_invariants_of_model",
+    :route-step
+    "t99J01 step 3 and t97A03 step 8, finite-index Schreier rank",
+    :gates
+    ["canonical packages"
+     "fixture compiles"
+     "zero fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id
+   :routes-2026-10-10-finite-index-free-group-schreier-rank-shared-4,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo1-covering-uptake-mv-repair-3],
+   :current-residual
+   "Count the non-tree edges in the finite Schreier coset quiver and orient Mathlib's Nielsen-Schreier freeness equivalence to the two required finite ranks.",
+   :other-consumers [:t97A03]}
+  {:consumer :t99J01,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t99J01/explicit-connected-cyclic-cover",
+   :acceptance
+   {:probe
+    "Compile, for every n > 0, an explicit path-connected n-sheeted covering of ThreeCircles, using the cyclic n-vertex graph cover and proving local triviality at the wedge point and along each circle arc.",
+    :placeholder "the single sorry in apm_t99j01",
+    :route-step "t99J01 step 5, exists_connected_cover",
+    :gates
+    ["canonical packages"
+     "fixture compiles"
+     "zero fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-10-t99j01-explicit-connected-cyclic-cover-4,
+   :kind :uptake,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo1-covering-uptake-mv-repair-3],
+   :current-residual
+   "Construct the cyclic graph cover directly and verify connectedness, exact fiber cardinality, and covering charts.",
+   :other-consumers []}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 3,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only when every active topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:strategy
+    "Measure the t99J01 component restriction, the shared finite-index Schreier rank theorem, and the explicit connected cyclic cover; preserve reviewed representation boundaries, recount all six consumers and eight placeholders, then elect the nearest newly enabled adapter or shared route step."},
+   :id
+   :routes-2026-10-10-checkpoint-topo1-covering-schreier-components-4,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:routes-2026-10-10-t99j01-path-component-sheet-restriction-4
+    :routes-2026-10-10-finite-index-free-group-schreier-rank-shared-4
+    :routes-2026-10-10-t99j01-explicit-connected-cyclic-cover-4
+    :routes-2026-10-10-checkpoint-topo1-covering-uptake-mv-repair-3],
+   :current-residual
+   "Review three independent t99J01 route advances, including the Schreier theorem shared with t97A03.",
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
