@@ -96902,6 +96902,22 @@
      {:cmd "git status --short",
       :exit 0,
       :finding "clean worktree after commit"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791659966015-2779-af281ee2",
+     :commands
+     ["git show 86e7178f1875a32b4b904d90c2992e09cd25e70c:ConstructionTargets/RestrictPathComponent.lean"
+      "git diff-tree --no-commit-id --name-only -r 86e7178f1875a32b4b904d90c2992e09cd25e70c"
+      "git diff --exit-code 86e7178f1875a32b4b904d90c2992e09cd25e70c -- ConstructionTargets/RestrictPathComponent.lean"
+      "sha256sum /tmp/iscoveringmap-restrict-path-component.lean"
+      "lake build ConstructionTargets.RestrictPathComponent"
+      "lake env lean /tmp/iscoveringmap-restrict-path-component.lean"
+      "placeholder census on source, fixture, and problems/t99J01/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb on recorded ledger at 72b8e5a5"],
+     :finding
+     "PASS: reviewer codex-3 verified author topo-2 and recorded commit 86e7178f, whose exact scope is only ConstructionTargets/RestrictPathComponent.lean and whose source equals the reviewed checkout. The canonical package authority is correct; fixture SHA-256 420a19c8155c5fdd8d826a3cdc28aef80383f97f61874aefa3671549fccc9ca4 matches; target and fixture compile with zero placeholders; t99J01 retains one placeholder; both declarations use only propext, Classical.choice, and Quot.sound; all 131 registered statements and the recorded 877-item ledger validate. restrictClopen_isCoveringMap chooses a path-connected chart over each base point, equips the retained-index subtype with the induced topology, proves that topology discrete from discreteness of the original fiber, and converts the retained-sheet homeomorphism into the required evenly covered preimage with correctly oriented source and projection equations. restrictPathComponent obtains local path connectedness of E, forms the clopen Joined component, derives surjectivity of p from componentProjection_surjective, and returns the restricted covering together with that same component surjectivity. The Component subtype agrees with the clopen set representation. The module does not specialize to ThreeCircles, count fibers, compute subgroup index or pi1, or close t99J01."},
     :commit "86e7178f1875a32b4b904d90c2992e09cd25e70c",
     :changed-paths ["ConstructionTargets/RestrictPathComponent.lean"],
     :fixture
@@ -96916,7 +96932,7 @@
       "ConstructionTargets.RestrictPathComponent.IsCoveringMap.restrictPathComponent"]},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/RestrictPathComponent.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component",
@@ -98138,7 +98154,7 @@
    :other-consumers []}
   {:consumer :t99J01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "IsCoveringMap.restrictPathComponent",
@@ -98152,7 +98168,10 @@
     :type
     "theorem is true in ordinary covering-space theory, but its proof needs a component-restriction theorem not present in Mathlib or ConstructionTargets: theorem IsCoveringMap.restrictPathComponent {E B : Type*} [TopologicalSpace E] [TopologicalSpace B] [LocPathConnectedSpace B] [PathConnectedSpace B] {p : E → B} (hp : IsCoveringMap p) (e : E) : IsCoveringMap (fun x : {x : E // Joined e x} => p x.1). This cannot be obtained merely from openness of path components: each covering trivialization must be refined to a path-connected base neighborhood, its sheets classified by whether they meet the chos",
     :proved-in
-    :routes-2026-10-10-iscoveringmap-restrict-path-component-38},
+    :routes-2026-10-10-iscoveringmap-restrict-path-component-38,
+    :banked-by
+    :routes-2026-10-10-iscoveringmap-restrict-path-component-38,
+    :banked-commit "86e7178f1875a32b4b904d90c2992e09cd25e70c"},
    :id :lemma-iscoveringmap-restrictpathcomponent,
    :kind :lemma,
    :depends-on
