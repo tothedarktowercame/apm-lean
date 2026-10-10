@@ -65158,20 +65158,84 @@
    :consumer :t02A03,
    :implements-lemma
    :lemma-apm-t02a03-lefttubetoruscoordinates-torusinverse,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:residual
+     "Bank this lemma node. The remaining ready t02A03 prerequisite is apm_t02a03_rightCoreBasedAttachmentHomotopy; after it is banked, proceed to rightTubeMinusLeftCoreHomotopyEquivCircle and then geometricYHomotopyEquivGenericWedge.",
+     :outcome :go,
+     :warnings [],
+     :missing-theorems
+     [{:name
+       "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_leftTubeTorusCoordinates_torusInverse",
+       :type
+       "forall u : Circle × Circle, apm_t02a03_leftTubeTorusCoordinates (apm_t02a03_leftTubeTorusInverse u) = u",
+       :status :proved,
+       :consumers [:t02A03],
+       :depends-on []}],
+     :commands
+     [{:cmd
+       "lake env lean /tmp/t02a03_left_coordinate_inverse_bank.lean",
+       :exit 0,
+       :output
+       "Exact declaration type checked; axioms [propext, Classical.choice, Quot.sound]."}
+      {:cmd
+       "lake env lean ConstructionTargets/T02A03GeometricTubeCover.lean",
+       :exit 0}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_left_coordinate_inverse_bank.lean ConstructionTargets/T02A03GeometricTubeCover.lean || true)\"",
+       :exit 0}
+      {:cmd "sha256sum /tmp/t02a03_left_coordinate_inverse_bank.lean",
+       :exit 0,
+       :output
+       "a4c2a18f4fce29ec28f0c5a6ec7a52a947c1568986bd19c788ebcb11786377c3  /tmp/t02a03_left_coordinate_inverse_bank.lean"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :fixture
+     {:path "/tmp/t02a03_left_coordinate_inverse_bank.lean",
+      :sha256
+      "a4c2a18f4fce29ec28f0c5a6ec7a52a947c1568986bd19c788ebcb11786377c3"},
+     :finding
+     "The ready DAG node is stale rather than mathematically missing. Its exact declaration already exists in the canonical geometric-tube module, proves that leftTubeTorusCoordinates is a left inverse of leftTubeTorusInverse on Circle × Circle, and compiles placeholder-free.",
+     :implementation
+     {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
+      :declarations
+      ["ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_leftTubeTorusCoordinates_torusInverse"],
+      :acceptance
+      {:action
+       "Bank the existing compiled declaration without changing its statement or proof.",
+       :implements-lemma
+       :lemma-apm-t02a03-lefttubetoruscoordinates-torusinverse,
+       :type
+       "forall u : Circle × Circle, apm_t02a03_leftTubeTorusCoordinates (apm_t02a03_leftTubeTorusInverse u) = u",
+       :axioms ["propext" "Classical.choice" "Quot.sound"],
+       :gates
+       ["canonical module compiles"
+        "type-exact fixture compiles"
+        "module and fixture contain no sorry token"
+        "statement registry matches"]}},
+     :seat "topo-8"}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-coordinate-inverse",
    :acceptance
-   {:probe
-    "Compile and bank the existing ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_leftTubeTorusCoordinates_torusInverse without changing its statement.",
-    :declaration
-    "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_leftTubeTorusCoordinates_torusInverse",
-    :placeholder "the sole sorry in apm_t02a03",
-    :route-step
-    "t02A03 geometric tube equivalence, discharge the ready coordinate-inverse DAG node"},
+   {:action
+    "Bank the existing compiled declaration without changing its statement or proof.",
+    :implements-lemma
+    :lemma-apm-t02a03-lefttubetoruscoordinates-torusinverse,
+    :type
+    "forall u : Circle × Circle, apm_t02a03_leftTubeTorusCoordinates (apm_t02a03_leftTubeTorusInverse u) = u",
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :gates
+    ["canonical module compiles"
+     "type-exact fixture compiles"
+     "module and fixture contain no sorry token"
+     "statement registry matches"]},
    :id :routes-2026-10-10-t02a03-bank-left-coordinate-inverse-topo2-r1,
    :kind :reusable-theorem,
+   :declarations
+   ["ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_leftTubeTorusCoordinates_torusInverse"],
    :depends-on [:routes-2026-10-10-checkpoint-topo2-r6],
    :current-residual
    "The declaration exists but its lemma node remains backlog; banking it removes one of t02A03's two ready prerequisites.",
@@ -66531,6 +66595,29 @@
     :banked-by :routes-2026-10-10-t97a04-h0-bridge-closure-topo2-r1,
     :banked-commit "4c095e5a8a15bfb63f736f2ed9b665fc5cc9aaed"},
    :id :lemma-apm-t97a04-bridge-1,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_leftTubeTorusCoordinates_torusInverse",
+    :type
+    "forall u : Circle × Circle, apm_t02a03_leftTubeTorusCoordinates (apm_t02a03_leftTubeTorusInverse u) = u"},
+   :lemma
+   {:name
+    "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_leftTubeTorusCoordinates_torusInverse",
+    :reported-by
+    [:routes-2026-10-10-t02a03-bank-left-coordinate-inverse-topo2-r1],
+    :type
+    "forall u : Circle × Circle, apm_t02a03_leftTubeTorusCoordinates (apm_t02a03_leftTubeTorusInverse u) = u",
+    :proved-in
+    :routes-2026-10-10-t02a03-bank-left-coordinate-inverse-topo2-r1},
+   :id
+   :lemma-constructiontargets-t02a03geometrictubecover-apm-t02a03-lefttubetoruscoordinates,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}]}
