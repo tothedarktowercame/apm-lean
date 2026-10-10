@@ -1,0 +1,46 @@
+import Mathlib
+
+noncomputable section
+
+namespace ConstructionTargets.T02A03GeometricTubeCover
+
+abbrev apm_t02a03_E3 := EuclideanSpace ℝ (Fin 3)
+
+noncomputable def apm_t02a03_leftCore (t : ℝ) : apm_t02a03_E3 :=
+  WithLp.toLp 2 ![-1 + Real.cos t, Real.sin t, 0]
+
+noncomputable def apm_t02a03_rightCore (t : ℝ) : apm_t02a03_E3 :=
+  WithLp.toLp 2 ![1 - Real.cos t, Real.sin t, 0]
+
+def apm_t02a03_genusTwoSpine : Set apm_t02a03_E3 :=
+  Set.range apm_t02a03_leftCore ∪ Set.range apm_t02a03_rightCore
+
+def apm_t02a03_W : Set apm_t02a03_E3 :=
+  {p | Metric.infDist p apm_t02a03_genusTwoSpine ≤ (1 / 4 : ℝ)}
+
+def apm_t02a03_leftTube : Set apm_t02a03_E3 :=
+  Metric.cthickening (1 / 4 : ℝ) (Set.range apm_t02a03_leftCore)
+
+def apm_t02a03_rightTube : Set apm_t02a03_E3 :=
+  Metric.cthickening (1 / 4 : ℝ) (Set.range apm_t02a03_rightCore)
+
+theorem apm_t02a03_genusTwoSpine_nonempty :
+    apm_t02a03_genusTwoSpine.Nonempty := by
+  exact ⟨apm_t02a03_leftCore 0, Set.mem_union_left _ ⟨0, rfl⟩⟩
+
+/-- Exact normalization of the frozen `infDist` neighborhood as the union of
+the two closed radius-`1/4` core tubes. -/
+theorem apm_t02a03_W_eq_leftTube_union_rightTube :
+    apm_t02a03_W = apm_t02a03_leftTube ∪ apm_t02a03_rightTube := by
+  rw [apm_t02a03_leftTube, apm_t02a03_rightTube,
+    ← Metric.cthickening_union]
+  ext p
+  change Metric.infDist p apm_t02a03_genusTwoSpine ≤ (1 / 4 : ℝ) ↔
+    Metric.infEDist p apm_t02a03_genusTwoSpine ≤
+      ENNReal.ofReal (1 / 4 : ℝ)
+  rw [Metric.infDist]
+  rw [← ENNReal.toReal_le_toReal
+    (Metric.infEDist_ne_top apm_t02a03_genusTwoSpine_nonempty) (by finiteness)]
+  norm_num
+
+end ConstructionTargets.T02A03GeometricTubeCover
