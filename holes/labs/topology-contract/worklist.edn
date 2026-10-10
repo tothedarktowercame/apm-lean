@@ -82830,6 +82830,24 @@
       :exit 1,
       :correction
       "Rebuilt the updated ComplexProjectiveChartTargets olean and replaced dependent rewriting with pointwise Set.ext_iff application."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791607527683-1120-10ac6053",
+     :commands
+     ["git show/stat/diff recorded implementation commit 7811a95d3beee795c6e2d856381a6c159169618a"
+      "sha256sum /tmp/t99j05-arbitrary-affine-charts-probe.lean"
+      "lake env lean ConstructionTargets/T99J05ArbitraryAffineChartContinuity.lean"
+      "lake env lean /tmp/t99j05-arbitrary-affine-charts-probe.lean"
+      "compile axiom audit for the three committed declarations"
+      "compile probe copy with its local axiom replaced by the committed continuity-package import"
+      "comment-stripped placeholder census of implementation, probe, adapted probe, and t99J05 consumer"
+      "python3 scripts/statement-registry.py check"
+      "python3 scripts/statement-registry.py fingerprint t99J05"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git diff --check 7811a95d^ 7811a95d"],
+     :finding
+     "PASS: reviewer codex-3 differs from author topo-2. Recorded implementation commit 7811a95d3beee795c6e2d856381a6c159169618a changes exactly ConstructionTargets/T99J05ArbitraryAffineChartContinuity.lean. The frozen probe hash reproduces as ff8a741410c5a3511bd8745bed8cd9f28c30084111da7136136d3948b2bb3d5c. The implementation and original probe compile; the implementation contains zero sorry, admit, or axiom declarations, and each of its three requested declarations audits to only propext, Classical.choice, and Quot.sound. The frozen probe intentionally retains one namespace-local continuity-package axiom, exactly as the recorded warning states. A review copy replacing that axiom with an import/open of the committed package compiles the full arbitrary-n AffineChartConstruction assembly with zero placeholders and only the same three standard axioms. The theorem orientations and boundaries are exact: quotient-map descent proves ContinuousOn coordinates on the nonzero-i patch, while continuous coordinate insertion followed by continuous_quotientMap proves global Continuous chartInverse; the package merely conjoins these results and does not claim diagonal fixed-point, derivative, determinant, homology, or Lefschetz work. The t99J05 consumer remains at exactly one sorry with frozen fingerprint cf42ee31318a9e37fde5e4e923ca60cbe51d483ebd813588efc9492359e37db6. Registry is 131/131 and all 688 worklist rows validate."},
     :commit "7811a95d3beee795c6e2d856381a6c159169618a",
     :infrastructure-packets 1,
     :changed-paths
@@ -82845,7 +82863,7 @@
     :typed-residual-change
     "Arbitrary-n coordinate-ratio continuity and chart-inverse continuity are proved without placeholders. The OpenPartialHomeomorph assembly can now replace the probe's local axiom with the committed continuity package."},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/T99J05ArbitraryAffineChartContinuity.lean"],
    :dag-node
@@ -82967,7 +82985,7 @@
       "ff8a741410c5a3511bd8745bed8cd9f28c30084111da7136136d3948b2bb3d5c"},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J05/arbitrary-n-affine-quotient-charts",
