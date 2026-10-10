@@ -93480,6 +93480,21 @@
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791645899306-2274-a2303564",
+     :commands
+     ["git show e32e8a98bfa89a521aa907ec441d127f3c9dc251 -- ConstructionTargets/KleinPresentedGroupTwoSidedConjugation.lean"
+      "git diff --exit-code e32e8a98bfa89a521aa907ec441d127f3c9dc251 -- ConstructionTargets/KleinPresentedGroupTwoSidedConjugation.lean"
+      "lake build ConstructionTargets.KleinPresentedGroupTwoSidedConjugation"
+      "sha256sum /tmp/klein-two-sided-conjugation.lean"
+      "lake env lean /tmp/klein-two-sided-conjugation.lean"
+      "rg placeholder census on recorded source and frozen fixture"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb on recorded ledger at 2b05cbef"],
+     :finding
+     "PASS: reviewer codex-3 verified commit e32e8a98 changes only the declared source and the checkout source equals that commit. The frozen fixture hash matches exactly; target and fixture compile; source and fixture contain zero proof placeholders. reverseConjugateA and reverseConjugateAPow have the registered b*a*b^-1 orientations, reuse the banked opposite conjugation across the intended group representation boundary, and report only propext, Classical.choice, and Quot.sound. Registry and recorded-ledger checks pass; the non-failing unnecessarySimpa lint is recorded and does not affect acceptance."},
     :commit "e32e8a98",
     :changed-paths
     ["ConstructionTargets/KleinPresentedGroupTwoSidedConjugation.lean"],
@@ -93496,7 +93511,7 @@
       "KleinPresentedGroupTwoSidedConjugation.reverseConjugateAPow"]},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/KleinPresentedGroupTwoSidedConjugation.lean"],
    :dag-node
@@ -93625,7 +93640,7 @@
       "reverseConjugateA proves b*a*b^-1=a^-1 and reverseConjugateAPow proves b*a^m*b^-1=a^(-m), complementing the banked b^-1 conjugation orientation."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/presented-group-coordinate-normal-form",
@@ -94235,7 +94250,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -94250,7 +94265,10 @@
     :type
     "(m : Int) -> generatorB * generatorA ^ m * generatorB⁻¹ = generatorA ^ (-m)",
     :proved-in
-    :routes-2026-10-10-klein-presented-group-two-sided-conjugation-22},
+    :routes-2026-10-10-klein-presented-group-two-sided-conjugation-22,
+    :banked-by
+    :routes-2026-10-10-klein-presented-group-two-sided-conjugation-22,
+    :banked-commit "e32e8a98"},
    :id
    :lemma-kleinpresentedgrouptwosidedconjugation-reverseconjugateapow,
    :kind :lemma,
@@ -94259,7 +94277,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "KleinPresentedGroupTwoSidedConjugation.reverseConjugateA",
@@ -94270,7 +94288,10 @@
     [:routes-2026-10-10-klein-presented-group-two-sided-conjugation-22],
     :type "generatorB * generatorA * generatorB⁻¹ = generatorA⁻¹",
     :proved-in
-    :routes-2026-10-10-klein-presented-group-two-sided-conjugation-22},
+    :routes-2026-10-10-klein-presented-group-two-sided-conjugation-22,
+    :banked-by
+    :routes-2026-10-10-klein-presented-group-two-sided-conjugation-22,
+    :banked-commit "e32e8a98"},
    :id :lemma-kleinpresentedgrouptwosidedconjugation-reverseconjugatea,
    :kind :lemma,
    :depends-on [:lemma-kleinpresentedgroupconjugation-conjugateapow],
