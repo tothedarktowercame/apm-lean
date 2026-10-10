@@ -54826,6 +54826,8 @@
      :typed-residual-change
      :infrastructure-packets
      :review-outcomes]},
+   :review-finding
+   "Deterministic DAG-coherence defect: transition commit 466a2a4d appends both :routes-2026-10-10-t94a08-projective-conic-closure-topo2-r3 and :routes-2026-10-10-torus-pi1-winding-coordinates-two-consumers-topo2-r1 with identical duplicate dependency vectors [:routes-2026-10-10-checkpoint-topo2-r2 :routes-2026-10-10-checkpoint-topo2-r2]. The checkpoint evidence pre-populates that dependency in each replacement item, and transition application injects it again. Repair by removing the current checkpoint from the replacement templates so transition application adds it exactly once (or structurally deduplicate dependencies), then add a worklist-validator rejection for duplicate dependency edges and recommit. Fresh checks otherwise reproduce all 15 comment-stripped counts (1,3,3,3,4,1,1,1,1,1,1,1,1,4,1), 131 matching frozen statements, empty non-ledger scope, and a parseable 367-item ledger. No fixture or theorem-orientation gate applies to this strategy-only row.",
    :evidence
    {:outcome :replan,
     :seat "topo-8",
@@ -54959,9 +54961,15 @@
       "Measure one direct closure attempt and one genuinely shared coordinate theorem before further infrastructure.",
       :other-consumers []}],
     :author "topo-8",
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :fail,
+     :seat "codex-7",
+     :job "invoke-1791605630011-1048-745257d7",
+     :finding
+     "Deterministic DAG-coherence defect: transition commit 466a2a4d appends both :routes-2026-10-10-t94a08-projective-conic-closure-topo2-r3 and :routes-2026-10-10-torus-pi1-winding-coordinates-two-consumers-topo2-r1 with identical duplicate dependency vectors [:routes-2026-10-10-checkpoint-topo2-r2 :routes-2026-10-10-checkpoint-topo2-r2]. The checkpoint evidence pre-populates that dependency in each replacement item, and transition application injects it again. Repair by removing the current checkpoint from the replacement templates so transition application adds it exactly once (or structurally deduplicate dependencies), then add a worklist-validator rejection for duplicate dependency edges and recommit. Fresh checks otherwise reproduce all 15 comment-stripped counts (1,3,3,3,4,1,1,1,1,1,1,1,1,4,1), 131 matching frozen statements, empty non-ledger scope, and a parseable 367-item ledger. No fixture or theorem-orientation gate applies to this strategy-only row."}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :repair,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -54977,7 +54985,7 @@
     :routes-2026-09-28-checkpoint-topo2-r1]}
   {:consumer :t94A08,
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t94A08",
    :acceptance
@@ -54995,7 +55003,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/shared/torus-pi1-winding-coordinates",
    :acceptance
@@ -55024,7 +55032,7 @@
      :infrastructure-packets
      :review-outcomes]},
    :phase :strategy,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
