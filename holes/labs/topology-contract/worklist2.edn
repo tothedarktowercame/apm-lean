@@ -63990,51 +63990,68 @@
    "single-consumer frozen pi1 matrix packaged as a coordinate map for t97A04",
    :consumer :t97A04,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/t97a04_frozen_h1_coordinate.lean",
-      :sha256
-      "951b3fe39b5d167b4c11f3d28035ee5cdb47519679b5580c4047336a8cb94a4f"},
-     :commands
-     [{:cmd
-       "rg -n \"t97A04|frozen-pi1-coordinate-map|h1-bridge\" TOPOLOGY-ROUTES.md holes/labs/topology-routes/routes-{1,2,3}.md docs/TN-topology-build-loop-design.md | head -80",
-       :exit 0}
-      {:cmd "sha256sum /tmp/t97a04_frozen_h1_coordinate.lean",
-       :exit 0,
-       :output
-       "951b3fe39b5d167b4c11f3d28035ee5cdb47519679b5580c4047336a8cb94a4f  /tmp/t97a04_frozen_h1_coordinate.lean"}
-      {:cmd "lake env lean /tmp/t97a04_frozen_h1_coordinate.lean",
-       :exit 0,
-       :output
-       "frozenMatrixAddHom, frozenMatrixCoordinateMap, and frozenLbarPi1Map_coordinateMap compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t97a04_frozen_h1_coordinate.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :implementation
-     {:scope ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"],
-      :declarations
-      ["ConstructionTargets.T97A04FrozenH1Coordinate.frozenMatrixAddHom"
-       "ConstructionTargets.T97A04FrozenH1Coordinate.frozenMatrixCoordinateMap"
-       "ConstructionTargets.T97A04FrozenH1Coordinate.frozenLbarPi1Map_coordinateMap"],
-      :acceptance
-      {:type
-       "forall p : FundamentalGroup FrozenTorus (0, 0), frozenMatrixCoordinateMap (frozenTorusPi1Coord p) = frozenTorusPi1Coord (frozenLbarPi1Map p)",
-       :gates
-       ["scoped module compiles"
-        "scoped module contains no sorry token"
-        "statement registry matches"]}},
-     :finding
-     "The complete placeholder-free fixture packages the frozen matrix [[2,1],[-1,1]] as an additive homomorphism and its multiplicative transport, then derives the required coordinate-map equality directly from frozenLbarPi1Map_naturality in the orientation consumed by finite-free Hurewicz naturality.",
-     :residual
-     "After banking this coordinate-map theorem, instantiate h1_coordinate_eq_of_fundamentalGroup_coordinate_eq with the aligned Hurewicz coordinate, simplify that coordinate to the identity, and transport the additive H1 equation through singularHomologyComparison_naturality into apm_t97A04_bridge_2.",
-     :warnings []}},
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Instantiate h1_coordinate_eq_of_fundamentalGroup_coordinate_eq with the aligned Hurewicz coordinate and this coordinate map, simplify the Hurewicz coordinate to the identity, then transport the additive H1 equation through singularHomologyComparison_naturality into the ModuleCat bridge.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.T97A04FrozenH1Coordinate.frozenLbarPi1Map_coordinateMap",
+      :type
+      "forall p : FundamentalGroup FrozenTorus (0, 0), frozenMatrixCoordinateMap (frozenTorusPi1Coord p) = frozenTorusPi1Coord (frozenLbarPi1Map p)",
+      :status :proved,
+      :consumers [:t97A04],
+      :depends-on
+      ["ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusAlignedHurewiczCoordinate_apply"]}],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not",
+     :scoped-file-git-blob "99906187de73eb1310643cf58ceb5b60b9b4077f",
+     :fixture-sha256
+     "951b3fe39b5d167b4c11f3d28035ee5cdb47519679b5580c4047336a8cb94a4f"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd "sha256sum /tmp/t97a04_frozen_h1_coordinate.lean",
+      :exit 0,
+      :output
+      "951b3fe39b5d167b4c11f3d28035ee5cdb47519679b5580c4047336a8cb94a4f  /tmp/t97a04_frozen_h1_coordinate.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/T97A04FrozenH1Coordinate.lean",
+      :exit 0}
+     {:cmd "lake env lean /tmp/t97a04_frozen_h1_coordinate.lean",
+      :exit 0,
+      :output
+      "frozenMatrixAddHom, frozenMatrixCoordinateMap, and frozenLbarPi1Map_coordinateMap compiled; axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T97A04FrozenH1Coordinate.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git show --check --oneline HEAD",
+      :exit 0,
+      :output "0aa25e1b Bank t97A04 frozen pi1 coordinate map"}],
+    :diagnostic-history [],
+    :commit "0aa25e1b8d9bd441e618e18e01c2dedbfbd4c202",
+    :changed-paths
+    ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"],
+    :fixture
+    {:path "/tmp/t97a04_frozen_h1_coordinate.lean",
+     :sha256
+     "951b3fe39b5d167b4c11f3d28035ee5cdb47519679b5580c4047336a8cb94a4f"},
+    :finding
+    "The scoped module packages the frozen matrix [[2,1],[-1,1]] as an additive homomorphism and multiplicative coordinate map, then derives the coordinate-map equality in the orientation required by finite-free Hurewicz naturality.",
+    :implementation
+    {:scope ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"],
+     :declarations
+     ["ConstructionTargets.T97A04FrozenH1Coordinate.frozenMatrixAddHom"
+      "ConstructionTargets.T97A04FrozenH1Coordinate.frozenMatrixCoordinateMap"
+      "ConstructionTargets.T97A04FrozenH1Coordinate.frozenLbarPi1Map_coordinateMap"]},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t97A04/frozen-pi1-coordinate-map",
    :acceptance
@@ -65180,10 +65197,12 @@
    {:name
     "ConstructionTargets.T97A04FrozenH1Coordinate.frozenLbarPi1Map_coordinateMap",
     :reported-by
-    [:routes-2026-10-10-t97a04-h1-bridge-assembly-topo2-r1],
+    [:routes-2026-10-10-t97a04-h1-bridge-assembly-topo2-r1
+     :routes-2026-10-10-t97a04-frozen-pi1-coordinate-map-topo2-r1],
     :type
     "forall p : FundamentalGroup FrozenTorus (0, 0), frozenMatrixCoordinateMap (frozenTorusPi1Coord p) = frozenTorusPi1Coord (frozenLbarPi1Map p)",
-    :proved-in :routes-2026-10-10-t97a04-h1-bridge-assembly-topo2-r1},
+    :proved-in
+    :routes-2026-10-10-t97a04-frozen-pi1-coordinate-map-topo2-r1},
    :id
    :lemma-constructiontargets-t97a04frozenh1coordinate-frozenlbarpi1map-coordinatemap,
    :kind :lemma,
