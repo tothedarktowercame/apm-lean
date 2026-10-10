@@ -42,6 +42,34 @@ theorem affineSource_isOpen {n : ℕ} (i : Fin (n + 1)) :
   exact isOpen_compl_singleton.preimage
     ((continuous_apply i).comp continuous_subtype_val)
 
+@[simp] theorem coordinates_chartInverse {n : ℕ} (i : Fin (n + 1))
+    (z : AffineCoordinates i) :
+    coordinates i (chartInverse i z) = z := by
+  funext j
+  let v : Fin (n + 1) → ℂ := fun k => if h : k = i then 1 else z ⟨k, h⟩
+  have hv : v ≠ 0 := by
+    intro h
+    have hi := congrFun h i
+    simp [v] at hi
+  obtain ⟨a, ha⟩ := Projectivization.exists_smul_eq_mk_rep ℂ v hv
+  change (Projectivization.mk ℂ v hv).rep j.1 /
+      (Projectivization.mk ℂ v hv).rep i = z j
+  rw [← ha]
+  change (a.1 * v j.1) / (a.1 * v i) = z j
+  simp [v, j.2]
+
+theorem chartInverse_coordinates {n : ℕ} (i : Fin (n + 1))
+    (x : CP n) (hx : Projectivization.rep x i ≠ 0) :
+    chartInverse i (coordinates i x) = x := by
+  rw [← Projectivization.mk_rep x]
+  apply (Projectivization.mk_eq_mk_iff' ℂ _ _ _ _).2
+  refine ⟨(Projectivization.rep x i)⁻¹, ?_⟩
+  funext k
+  by_cases h : k = i
+  · subst k
+    simp [hx]
+  · simp [coordinates, h, div_eq_inv_mul]
+
 /-- These must be the actual affine charts of the already fixed quotient topology. -/
 def AffineChartConstruction (n : ℕ) : Prop :=
   ∀ i : Fin (n + 1), ∃ e : OpenPartialHomeomorph (CP n) (AffineCoordinates i),
