@@ -65054,50 +65054,70 @@
    :other-consumers []}
   {:consumer :t97A04,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/t97a04_h0_bridge.lean",
-      :sha256
-      "99935a92b87ed4ab4b22b36cab1656f9a36b54ae1ecc733b3ec95a526a51b31c"},
-     :commands
-     [{:cmd "lake env lean /tmp/t97a04_h0_bridge.lean",
-       :exit 0,
-       :output
-       "apm_t97A04_bridge_1 compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t97a04_h0_bridge.lean || true)\"",
-       :exit 0}
-      {:cmd "sha256sum /tmp/t97a04_h0_bridge.lean",
-       :exit 0,
-       :output
-       "99935a92b87ed4ab4b22b36cab1656f9a36b54ae1ecc733b3ec95a526a51b31c  /tmp/t97a04_h0_bridge.lean"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :implementation
-     {:scope ["problems/t97A04/lean/Main.lean"],
-      :declarations ["apm_t97A04_bridge_1"],
-      :acceptance
-      {:placeholder "apm_t97A04_bridge_1",
-       :route-step "t97A04 step 1, direct H0 closure adapter",
-       :type
-       "∃ h0 : T97A04Homology 0 ≅ ModuleCat.of ℤ ℤ, ∀ a : T97A04Homology 0, h0.hom (t97A04HomologyMap 0 apm_t97a04_Lbar a) = h0.hom a",
-       :proof
-       "Install the direct PathConnectedSpace product instance, choose ConstructionTargets.CoefficientH0.h0Iso ℤ 0, and evaluate CoefficientH0.h0Augmentation_naturality ℤ apm_t97a04_Lbar at each class.",
-       :axioms ["propext" "Classical.choice" "Quot.sound"],
-       :gates
-       ["consumer compiles"
-        "only this placeholder is replaced"
-        "registered statements remain unchanged"]}},
-     :finding
-     "The exact frozen H0 bridge compiles directly. AddCircle supplies paths in each coordinate; their product supplies PathConnectedSpace for the torus. CoefficientH0.h0Iso gives the required ModuleCat isomorphism, and h0Augmentation_naturality proves that the concrete frozen self-map acts identically after applying it.",
-     :residual
-     "Replace only apm_t97A04_bridge_1. The remaining t97A04 placeholders are apm_t97A04_bridge_3 and the final hcore assembly.",
-     :warnings []}},
+   {:placeholder-delta
+    {:before 3, :after 2, :delta -1, :closed "apm_t97A04_bridge_1"},
+    :residual
+    "apm_t97A04_bridge_3 and the final hcore assembly remain as the two consumer placeholders.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["problems/t97A04/lean/Main.lean:63:2: unnecessarySimpa"
+     "problems/t97A04/lean/Main.lean:71:2: unnecessarySimpa"
+     "problems/t97A04/lean/Main.lean:104:70: unnecessarySeqFocus"
+     "problems/t97A04/lean/Main.lean:113:70: unnecessarySeqFocus"
+     "two remaining pre-existing sorry declarations"],
+    :missing-theorems
+    [{:name "apm_t97A04_bridge_1",
+      :type
+      "∃ h0 : T97A04Homology 0 ≅ ModuleCat.of ℤ ℤ, ∀ a : T97A04Homology 0, h0.hom (t97A04HomologyMap 0 apm_t97a04_Lbar a) = h0.hom a",
+      :status :proved,
+      :consumers [:t97A04],
+      :depends-on []}],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not",
+     :consumer-file-git-blob
+     "6c70c2de9556ce46a5d677d0f5f7cc2a9ae32829",
+     :fixture-sha256
+     "99935a92b87ed4ab4b22b36cab1656f9a36b54ae1ecc733b3ec95a526a51b31c"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd "sha256sum /tmp/t97a04_h0_bridge.lean",
+      :exit 0,
+      :output
+      "99935a92b87ed4ab4b22b36cab1656f9a36b54ae1ecc733b3ec95a526a51b31c  /tmp/t97a04_h0_bridge.lean"}
+     {:cmd "lake env lean problems/t97A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "apm_t97A04_bridge_1 compiled; two pre-existing declarations still use sorry"}
+     {:cmd "lake env lean /tmp/t97a04_h0_bridge.lean",
+      :exit 0,
+      :output
+      "apm_t97A04_bridge_1 compiled; axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "test -z \"$(git diff --unified=0 -- problems/t97A04/lean/Main.lean | rg '^\\+.*(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' --pcre2 || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git show --check --oneline 4c095e5a",
+      :exit 0,
+      :output "4c095e5a Close t97A04 H0 bridge"}],
+    :diagnostic-history [],
+    :commit "4c095e5a8a15bfb63f736f2ed9b665fc5cc9aaed",
+    :changed-paths ["problems/t97A04/lean/Main.lean"],
+    :fixture
+    {:path "/tmp/t97a04_h0_bridge.lean",
+     :sha256
+     "99935a92b87ed4ab4b22b36cab1656f9a36b54ae1ecc733b3ec95a526a51b31c"},
+    :finding
+    "The consumer now installs the direct product PathConnectedSpace instance, chooses CoefficientH0.h0Iso, and evaluates h0Augmentation_naturality to prove that the frozen self-map acts identically on H0.",
+    :implementation
+    {:scope ["problems/t97A04/lean/Main.lean"],
+     :declarations ["apm_t97A04_bridge_1"]},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["problems/t97A04/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t97A04/bridge-1",
    :acceptance
@@ -66478,4 +66498,23 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-t97a04frozenh1coordinate-frozenlbarmoduleh1-map-commutes],
+   :other-consumers []}
+  {:consumer :t97A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t97A04_bridge_1",
+    :type
+    "∃ h0 : T97A04Homology 0 ≅ ModuleCat.of ℤ ℤ, ∀ a : T97A04Homology 0, h0.hom (t97A04HomologyMap 0 apm_t97a04_Lbar a) = h0.hom a"},
+   :lemma
+   {:name "apm_t97A04_bridge_1",
+    :reported-by
+    [:routes-2026-10-10-t97a04-h0-bridge-closure-topo2-r1],
+    :type
+    "∃ h0 : T97A04Homology 0 ≅ ModuleCat.of ℤ ℤ, ∀ a : T97A04Homology 0, h0.hom (t97A04HomologyMap 0 apm_t97a04_Lbar a) = h0.hom a",
+    :proved-in :routes-2026-10-10-t97a04-h0-bridge-closure-topo2-r1},
+   :id :lemma-apm-t97a04-bridge-1,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}]}
