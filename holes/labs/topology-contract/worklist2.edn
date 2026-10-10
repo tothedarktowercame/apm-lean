@@ -66670,83 +66670,107 @@
    "Interpolate the disk-normal coordinate inside the radius-1/4 disk, reconstruct the ambient path, and prove its meridian endpoint and left-core avoidance.",
    :other-consumers []}
   {:bounded-exception
+   "single-consumer continuity certificate for the right-core tubular coordinate formula",
+   :consumer :t02A03,
+   :phase :probe,
+   :state :open,
+   :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t02A03/right-core-tubular-coordinates-continuous",
+   :acceptance
+   {:probe
+    "Compile a conjunction proving continuity of rightTubeCoreNormalComplex and Function.uncurry rightTubeCorePolarReconstruction. Do not define the deformation or claim endpoint, tube-membership, or deletion-avoidance properties.",
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreTubularCoordinates_continuous",
+    :type
+    "Continuous rightTubeCoreNormalComplex ∧ Continuous (Function.uncurry rightTubeCorePolarReconstruction)",
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "certify continuity of the tubular coordinate operations used to build the ambient deformation"},
+   :id
+   :routes-2026-10-10-t02a03-right-core-tubular-coordinates-continuous-topo2-r1,
+   :kind :reusable-theorem,
+   :area "explicit-r3-tube-deformation-retraction",
+   :depends-on
+   [:routes-2026-10-10-t02a03-right-core-polar-reconstruction-topo2-r1],
+   :current-residual
+   "Define the disk-normal interpolation, establish its radius-1/4 bound and nonzero left-core normal coordinate, then package the ambient ContinuousMap and endpoints.",
+   :other-consumers []}
+  {:bounded-exception
    "single-consumer explicit ambient deformation with frozen tube and deletion invariants",
    :consumer :t02A03,
    :evidence
    {:probe
     {:residual
-     "Bank right-core polar reconstruction, then define the disk-normal interpolation and prove endpoint, right-tube membership, and left-core avoidance.",
+     "Use the continuous coordinate package to define the disk-normal interpolation; prove its radius bound, endpoints, and left-core avoidance.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
      [{:name
-       "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCorePolarReconstruction_self",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreTubularCoordinates_continuous",
        :type
-       "forall (p : apm_t02a03_E3) (hp : p ∈ apm_t02a03_rightTube), rightTubeCorePolarReconstruction ⟨NormedSpace.normalize (rightTubeCorePlanarComplex p), by exact mem_sphere_zero_iff_norm.mpr (NormedSpace.norm_normalize (rightTubeCorePlanarComplex_ne_zero p hp))⟩ (rightTubeCoreNormalComplex p) = p",
+       "Continuous rightTubeCoreNormalComplex ∧ Continuous (Function.uncurry rightTubeCorePolarReconstruction)",
        :status :proved,
        :consumers [:t02A03],
        :depends-on
-       ["ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCorePlanarComplex_ne_zero"],
+       ["ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCorePolarReconstruction_self"],
        :area "explicit-r3-tube-deformation-retraction"}],
      :prerequisite
      {:bounded-exception
-      "single-consumer right-core tubular reconstruction identity needed for a tube-preserving deformation",
+      "single-consumer continuity certificate for the right-core tubular coordinate formula",
       :consumer :t02A03,
       :phase :probe,
       :state :open,
       :scope
       ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t02A03/right-core-polar-reconstruction",
+      "TOPOLOGY-ROUTES.md/t02A03/right-core-tubular-coordinates-continuous",
       :acceptance
       {:probe
-       "Compile rightTubeCoreNormalComplex, rightTubeCorePolarReconstruction, and rightTubeCorePolarReconstruction_self. Prove that the normalized right-core angular coordinate and disk-normal coordinate reconstruct every right-tube point exactly. Do not define an interpolation or claim tube/deletion invariants.",
+       "Compile a conjunction proving continuity of rightTubeCoreNormalComplex and Function.uncurry rightTubeCorePolarReconstruction. Do not define the deformation or claim endpoint, tube-membership, or deletion-avoidance properties.",
        :declaration
-       "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCorePolarReconstruction_self",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreTubularCoordinates_continuous",
        :type
-       "forall (p : apm_t02a03_E3) (hp : p ∈ apm_t02a03_rightTube), rightTubeCorePolarReconstruction ⟨NormedSpace.normalize (rightTubeCorePlanarComplex p), by exact mem_sphere_zero_iff_norm.mpr (NormedSpace.norm_normalize (rightTubeCorePlanarComplex_ne_zero p hp))⟩ (rightTubeCoreNormalComplex p) = p",
+       "Continuous rightTubeCoreNormalComplex ∧ Continuous (Function.uncurry rightTubeCorePolarReconstruction)",
        :placeholder "the sole sorry in apm_t02a03",
        :route-step
-       "supply exact right-core tubular coordinates for the deleted-right-tube deformation"},
+       "certify continuity of the tubular coordinate operations used to build the ambient deformation"},
       :id
-      :routes-2026-10-10-t02a03-right-core-polar-reconstruction-topo2-r1,
+      :routes-2026-10-10-t02a03-right-core-tubular-coordinates-continuous-topo2-r1,
       :kind :reusable-theorem,
       :area "explicit-r3-tube-deformation-retraction",
       :depends-on
-      [:routes-2026-10-10-t02a03-right-core-angular-denominator-topo2-r1],
+      [:routes-2026-10-10-t02a03-right-core-polar-reconstruction-topo2-r1],
       :current-residual
-      "Interpolate the disk-normal coordinate inside the radius-1/4 disk, reconstruct the ambient path, and prove its meridian endpoint and left-core avoidance.",
+      "Define the disk-normal interpolation, establish its radius-1/4 bound and nonzero left-core normal coordinate, then package the ambient ContinuousMap and endpoints.",
       :other-consumers []},
      :commands
      [{:cmd "lake env lean /tmp/t02a03_right_core_compact_probe.lean",
        :exit 0,
        :output
-       "rightTubeCorePolarReconstruction_self compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "rightTubeCoreTubularCoordinates_continuous compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd "sha256sum /tmp/t02a03_right_core_compact_probe.lean",
        :exit 0,
        :output
-       "1ba9cb7efd6e58202154c18b83e75b8ab78caed28188ee18eaaa60ef6a09c691  /tmp/t02a03_right_core_compact_probe.lean"}
+       "6ddf8c41c36042bd81d3eca721487cba940f6337fa67afd9b5e912854658498a  /tmp/t02a03_right_core_compact_probe.lean"}
       {:cmd
        "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_right_core_compact_probe.lean || true)\"",
        :exit 0}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/t02a03_right_core_reconstruction_probe.lean",
-       :exit 1,
-       :finding
-       "Importing the scoped module failed because its olean is intentionally absent during the read-only probe; placing the theorem in the accumulated fixture with the same prerequisite source compiled successfully."}],
+       :output "131 registered statements match, 0 do not"}
+      {:cmd
+       "rg -n \"t02A03|explicit-r3-tube-deformation-retraction\" TOPOLOGY-ROUTES.md holes/labs/topology-routes/routes-{1,2,3}.md | head -120",
+       :exit 0}],
      :fixture
      {:path "/tmp/t02a03_right_core_compact_probe.lean",
       :sha256
-      "1ba9cb7efd6e58202154c18b83e75b8ab78caed28188ee18eaaa60ef6a09c691"},
+      "6ddf8c41c36042bd81d3eca721487cba940f6337fa67afd9b5e912854658498a"},
      :finding
-     "The safe deformation must remain in the radius-1/4 tubular neighborhood of the right core. The compiled coordinate package takes u=normalize((1-p0)+i*p1), n=(1-norm((1-p0)+i*p1))+i*p2, and reconstructs p as (1-(1-n.re)u.re,(1-n.re)u.im,n.im). Its exact reconstruction identity is the single prerequisite needed before interpolating the disk-normal coordinate and proving the tube and deletion invariants.",
+     "The right-core reconstruction identity supplies the endpoint algebra, but the requested H is a ContinuousMap. The coordinate n(p)=(1-norm((1-p0)+i*p1))+i*p2 and the uncurried reconstruction (u,n)↦(1-(1-n.re)u.re,(1-n.re)u.im,n.im) are both continuous by coordinatewise continuity and the PiLp constructor. This compiled conjunction is the single prerequisite needed before packaging any interpolated formula as H; it makes no tube or deletion claim.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
@@ -66771,7 +66795,8 @@
     :routes-2026-10-10-t02a03-right-tube-planar-rotation-topo2-r1
     :routes-2026-10-10-t02a03-right-tube-polar-reconstruction-topo2-r1
     :routes-2026-10-10-t02a03-right-core-angular-denominator-topo2-r1
-    :routes-2026-10-10-t02a03-right-core-polar-reconstruction-topo2-r1],
+    :routes-2026-10-10-t02a03-right-core-polar-reconstruction-topo2-r1
+    :routes-2026-10-10-t02a03-right-core-tubular-coordinates-continuous-topo2-r1],
    :current-residual
    "Lift H to RightTubeMinusLeftCore, package rightTubeMeridianRetractionHomotopy, then use the coordinate equation for the Circle-side constant homotopy.",
    :other-consumers []}
@@ -69949,4 +69974,29 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-t02a03geometrictubedeformation-righttubecoreplanarcomplex-ne],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreTubularCoordinates_continuous",
+    :type
+    "Continuous rightTubeCoreNormalComplex ∧ Continuous (Function.uncurry rightTubeCorePolarReconstruction)"},
+   :lemma
+   {:name
+    "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreTubularCoordinates_continuous",
+    :reported-by
+    [:routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1],
+    :type
+    "Continuous rightTubeCoreNormalComplex ∧ Continuous (Function.uncurry rightTubeCorePolarReconstruction)",
+    :area "explicit-r3-tube-deformation-retraction",
+    :proved-in
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+   :id
+   :lemma-constructiontargets-t02a03geometrictubedeformation-righttubecoretubularcoordinat,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t02a03geometrictubedeformation-righttubecorepolarreconstruct],
    :other-consumers []}]}
