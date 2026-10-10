@@ -56442,6 +56442,22 @@
      "circleMatrixMappedPath applied to the Circle-product image of the original frozen-torus path",
      :direction
      "Exact Path equality from the source transported frozen-map representative to the target Circle-matrix representative"},
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791612459993-1299-48ce1d82",
+     :commands
+     ["git diff-tree --no-commit-id --name-only -r b699414a"
+      "sha256sum /tmp/torus_frozen_mapped_path_conjugacy.lean"
+      "lake env lean /tmp/torus_frozen_mapped_path_conjugacy.lean"
+      "lake build ConstructionTargets.TorusPiOneWindingCoordinates"
+      "lake env lean ConstructionTargets/TorusPiOneWindingCoordinates.lean"
+      "fresh #print axioms audit via lake env lean /dev/stdin"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show cf18f6dc:holes/labs/topology-contract/worklist2.edn)"
+      "recompute target and frozen t97A04 SHA-256 and comment-stripped placeholder count from commit b699414a"],
+     :finding
+     "PASS: codex-7 independently reviewed topo-6 commit b699414a. Exact implementation scope is TorusPiOneWindingCoordinates.lean; transition commit cf18f6dc changes only the ledger. Fixture SHA-256 ef5aec23908fb939664d0638dfcbc634b6ac7f93744e4a85b03a6cf61128a55d matches, compiles, and has zero placeholders; focused 8290-job build and canonical compilation pass with zero forbidden declarations and only replayed dependency warnings. Representation orientation is exact: frozenLbarCircleImagePath is the Circle-product image after applying frozenLbar, and the theorem equates it to circleMatrixMappedPath of the original frozen path’s Circle image, componentwise using the banked pointwise conjugacy. It correctly stops before quotient descent and basepoint transport. Fresh axiom audit reports exactly propext, Classical.choice, Quot.sound. Registry is 131/0 and ledger is 391 items OK. Frozen t97A04 remains 79ca854186b39183bf53490a20b5be92695e345a2c099fcf928b5ad3300ee4ec with four comment-stripped placeholders; delta zero."},
     :commit "b699414a4850c93b24af35d6f0aaa3b966821d3a",
     :changed-paths
     ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
@@ -56454,7 +56470,7 @@
      "ConstructionTargets.TorusPiOneWindingCoordinates.frozenLbarCircleImagePath"
      "ConstructionTargets.TorusPiOneWindingCoordinates.frozenLbarCircleImagePath_eq_circleMatrixMappedPath"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A04/torus-pi1-winding-coordinates/frozen-mapped-path-conjugacy",
@@ -56555,7 +56571,7 @@
       "Descend the exact path equality through the fundamental-group quotient, align the canonical basepoint transports, and rewrite the Circle naturality equation in frozenTorusPi1Coord coordinates.",
       :other-consumers []}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/shared/torus-pi1-winding-coordinates",
    :acceptance
