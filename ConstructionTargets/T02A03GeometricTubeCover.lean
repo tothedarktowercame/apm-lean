@@ -265,6 +265,41 @@ theorem apm_t02a03_continuous_leftTubePuncturedNormal :
     exact continuous_subtype_val
   exact apm_t02a03_continuous_leftTubeNormalComplex.comp hi
 
+noncomputable def apm_t02a03_leftTubeNormalAngular
+    (p : apm_t02a03_LeftTubeMinusCore) : Circle :=
+  ⟨NormedSpace.normalize (apm_t02a03_leftTubePuncturedNormal p).1,
+    mem_sphere_zero_iff_norm.mpr
+      (NormedSpace.norm_normalize
+        (apm_t02a03_leftTubePuncturedNormal p).2)⟩
+
+theorem apm_t02a03_continuous_leftTubeNormalAngular :
+    Continuous apm_t02a03_leftTubeNormalAngular := by
+  apply Continuous.subtype_mk
+  rw [continuous_iff_continuousAt]
+  intro p
+  have hz : Continuous
+      (fun q : apm_t02a03_LeftTubeMinusCore =>
+        (apm_t02a03_leftTubePuncturedNormal q).1) :=
+    continuous_subtype_val.comp
+      apm_t02a03_continuous_leftTubePuncturedNormal
+  exact ((continuous_norm.comp hz).continuousAt.inv₀
+      (norm_ne_zero_iff.mpr
+        (apm_t02a03_leftTubePuncturedNormal p).2)).smul hz.continuousAt
+
+noncomputable def apm_t02a03_leftTubeTorusCoordinates
+    (p : apm_t02a03_LeftTubeMinusCore) : Circle × Circle :=
+  (apm_t02a03_leftTubeAngular ⟨p.1, p.2.1⟩,
+    apm_t02a03_leftTubeNormalAngular p)
+
+theorem apm_t02a03_continuous_leftTubeTorusCoordinates :
+    Continuous apm_t02a03_leftTubeTorusCoordinates := by
+  apply Continuous.prodMk
+  · exact apm_t02a03_continuous_leftTubeAngular.comp
+      (by
+        apply Continuous.subtype_mk
+        exact continuous_subtype_val)
+  · exact apm_t02a03_continuous_leftTubeNormalAngular
+
 theorem apm_t02a03_rightCore_zero :
     apm_t02a03_rightCore 0 = (0 : apm_t02a03_E3) := by
   ext i
