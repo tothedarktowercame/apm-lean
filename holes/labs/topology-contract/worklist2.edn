@@ -66170,84 +66170,93 @@
    :evidence
    {:probe
     {:residual
-     "Bank the shared smooth-descent theorem, then define veroneseDescended and crossTermDescended with their pullback and smoothness proofs.",
-     :outcome :revise,
-     :warnings [],
+     "t95A04 still needs the descended Veronese map's embedding and immersion proofs; t96A07 still needs the descended cross-term map's nontransversality and the sphere-map infinite regular-value argument.",
+     :outcome :go,
+     :warnings
+     ["The prerequisite source reports one unnecessarySimpa linter warning; the combined quadratic fixture itself compiles without warnings."],
      :missing-theorems
      [{:name
-       "ConstructionTargets.RealProjectiveSmoothTarget.sphereProjectionEvenMapSmoothDescent",
+       "ConstructionTargets.RealProjectiveEvenQuadraticDescent.evenQuadraticDescents",
        :type
-       "forall (m : ℕ) (g : Sphere 2 → E m), (forall p : Sphere 2, g (sphereAntipodalN 2 p) = g p) -> ContMDiff (𝓡 2) (𝓡 m) ∞ g -> letI := rpSmoothAtlas.charts; letI := rpSmoothAtlas.smooth; exists f : Space ℝ 2 → E m, (forall p, f (sphereProjection 2 p) = g p) ∧ ContMDiff (𝓡 2) (𝓡 m) ∞ f",
-       :status :not-started,
+       "The paired existence package realized by veroneseDescended and crossTermDescended, with their sphereProjection pullback equations and ContMDiff theorems under rpSmoothAtlas",
+       :status :proved,
        :consumers [:t95A04 :t96A07],
        :depends-on
-       ["ConstructionTargets.RealProjectiveSmoothTarget.sphereProjectionEvenMapDescent"
-        "ConstructionTargets.RealProjectiveSmoothTarget.rpSmoothAtlas"],
+       ["ConstructionTargets.RealProjectiveSmoothTarget.sphereProjectionEvenMapSmoothDescent"],
        :area "rp-smooth-atlas"}],
-     :prerequisite
-     {:consumer :t95A04,
-      :phase :probe,
-      :state :open,
-      :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
-      :dag-node "TOPOLOGY-ROUTES.md/rp2/even-map-smooth-descent",
-      :acceptance
-      {:probe
-       "Compile a placeholder-free inhabitant of RPPolynomialSmoothDescentProbe.EvenSphereMapSmoothDescent from /tmp/rp_even_smooth_descent_contract.lean. Prove the descended map supplied by sphereProjectionEvenMapDescent is ContMDiff under rpSmoothAtlas by local inversion of the surjective local diffeomorphism rpSmoothAtlas.quotient_localDiffeomorph. Keep dimension two and codomain E m; do not instantiate either quadratic consumer.",
-       :declaration
-       "ConstructionTargets.RealProjectiveSmoothTarget.sphereProjectionEvenMapSmoothDescent",
-       :type
-       "forall (m : ℕ) (g : Sphere 2 → E m), (forall p : Sphere 2, g (sphereAntipodalN 2 p) = g p) -> ContMDiff (𝓡 2) (𝓡 m) ∞ g -> letI := rpSmoothAtlas.charts; letI := rpSmoothAtlas.smooth; exists f : Space ℝ 2 → E m, (forall p, f (sphereProjection 2 p) = g p) ∧ ContMDiff (𝓡 2) (𝓡 m) ∞ f",
-       :placeholders
-       ["the sole sorry in t95A04" "the sole sorry in t96A07"],
-       :route-step
-       "shared RP2 route, transfer smoothness through the banked quotient local diffeomorphism"},
-      :id
-      :routes-2026-10-10-rp2-even-map-smooth-descent-two-consumers-topo2-r2,
-      :kind :reusable-theorem,
-      :area "rp-smooth-atlas",
-      :depends-on
-      [:routes-2026-10-10-rp2-even-map-continuous-descent-two-consumers-topo2-r1
-       :routes-2026-10-10-rp2-smooth-atlas-two-consumers-topo2-r1],
-      :current-residual
-      "Specialize this theorem to the two frozen quadratic maps after proving their coordinatewise antipodal invariance and ContMDiff properties.",
-      :other-consumers [:t96A07]},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
-     [{:cmd "lake env lean /tmp/rp_even_smooth_descent_contract.lean",
-       :exit 0}
-      {:cmd "sha256sum /tmp/rp_even_smooth_descent_contract.lean",
-       :exit 0}
+     [{:cmd
+       "lake env lean -o /tmp/leanprobe/ProbeSmooth.olean ConstructionTargets/RealProjectiveSmoothTarget.lean",
+       :exit 0,
+       :output
+       "compiled the reviewed smooth-descent source for scratch import; one unnecessarySimpa warning"}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_even_smooth_descent_contract.lean || true)\"",
+       "LEAN_PATH=/tmp/leanprobe lake env lean /tmp/rp2_even_quadratic_descents.lean",
+       :exit 0,
+       :output
+       "both descents, pullback equations, and smoothness theorems compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd "sha256sum /tmp/rp2_even_quadratic_descents.lean",
+       :exit 0,
+       :output
+       "7cafeb07634612e4711419ce38358c4ef1a2895a4721796088341d22307bdccc  /tmp/rp2_even_quadratic_descents.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp2_even_quadratic_descents.lean || true)\"",
        :exit 0}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/rp2_even_quadratic_descents.lean",
+       :exit 1,
+       :finding
+       "Problem files are not importable Lake modules; the final ConstructionTargets fixture defines the two exact frozen coordinate formulas locally, as the implementation module must, and consumer adapters identify them definitionally."}
+      {:cmd
+       "LEAN_PATH=/tmp/leanprobe lake env lean /tmp/rp2_even_quadratic_descents.lean",
+       :exit 1,
+       :finding
+       "The first coordinate-smoothness attempt relied on fun_prop for manifold ContMDiff goals. The final proof composes contMDiff_coe_sphere, PiLp.contDiff_ofLp, scalar evaluation, multiplication and powers explicitly."}],
      :fixture
-     {:path "/tmp/rp_even_smooth_descent_contract.lean",
+     {:path "/tmp/rp2_even_quadratic_descents.lean",
       :sha256
-      "99814940bc99fbf3ce79d7204bf1bc86d127aef3a836bd66cad3ab19d8191b4f"},
+      "7cafeb07634612e4711419ce38358c4ef1a2895a4721796088341d22307bdccc"},
      :finding
-     "The banked continuous descent gives the required quotient maps and pullback equations, but the requested packet also requires their smoothness. The compiled contract isolates one shared theorem transferring ContMDiff through the surjective local diffeomorphism in rpSmoothAtlas; it introduces no alternate topology or atlas.",
+     "The complete two-consumer fixture defines the two exact even quadratic sphere formulas, proves antipodal invariance coordinatewise, proves their sphere smoothness explicitly, applies sphereProjectionEvenMapSmoothDescent, and exposes each descended map together with its representative pullback equation and ContMDiff theorem. No consumer conclusion beyond descent and smoothness is claimed.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/RealProjectiveEvenQuadraticDescent.lean"],
+      :declarations
+      ["ConstructionTargets.RealProjectiveEvenQuadraticDescent.veroneseSphereMap"
+       "ConstructionTargets.RealProjectiveEvenQuadraticDescent.crossTermSphereMap"
+       "ConstructionTargets.RealProjectiveEvenQuadraticDescent.veroneseDescended"
+       "ConstructionTargets.RealProjectiveEvenQuadraticDescent.crossTermDescended"
+       "ConstructionTargets.RealProjectiveEvenQuadraticDescent.veroneseDescended_sphereProjection"
+       "ConstructionTargets.RealProjectiveEvenQuadraticDescent.crossTermDescended_sphereProjection"
+       "ConstructionTargets.RealProjectiveEvenQuadraticDescent.veroneseDescended_contMDiff"
+       "ConstructionTargets.RealProjectiveEvenQuadraticDescent.crossTermDescended_contMDiff"],
+      :acceptance
+      "Transfer the fixture into the scoped module, replacing the scratch ProbeSmooth import with ConstructionTargets.RealProjectiveSmoothTarget. Preserve the exact coordinate formulas; the consumer adapters may identify T95A04SphereMap and T96A07.sphereMap with these supporting definitions by rfl or simp."},
      :seat "topo-8"}},
-   :phase :probe,
+   :phase :implementation,
    :state :open,
    :scope
    ["ConstructionTargets/RealProjectiveEvenQuadraticDescent.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/rp2/even-quadratic-descent",
    :acceptance
-   {:probe
-    "Compile one placeholder-free module defining the quotient descents and smoothness of exactly the even quadratic coordinate maps used by t95A04 and t96A07. Prove their pullbacks along sphereProjection are the original sphere maps.",
-    :declarations
-    ["ConstructionTargets.RealProjectiveEvenQuadraticDescent.veroneseDescended"
-     "ConstructionTargets.RealProjectiveEvenQuadraticDescent.crossTermDescended"],
-    :placeholders
-    ["the sole sorry in t95A04" "the sole sorry in t96A07"],
-    :route-step
-    "shared RP2 atlas route, descend the consumers' even quadratic maps and prove smoothness"},
+   "Transfer the fixture into the scoped module, replacing the scratch ProbeSmooth import with ConstructionTargets.RealProjectiveSmoothTarget. Preserve the exact coordinate formulas; the consumer adapters may identify T95A04SphereMap and T96A07.sphereMap with these supporting definitions by rfl or simp.",
    :id
    :routes-2026-10-10-rp2-even-quadratic-descent-two-consumers-topo2-r1,
    :kind :reusable-theorem,
    :area "rp-smooth-atlas",
+   :declarations
+   ["ConstructionTargets.RealProjectiveEvenQuadraticDescent.veroneseSphereMap"
+    "ConstructionTargets.RealProjectiveEvenQuadraticDescent.crossTermSphereMap"
+    "ConstructionTargets.RealProjectiveEvenQuadraticDescent.veroneseDescended"
+    "ConstructionTargets.RealProjectiveEvenQuadraticDescent.crossTermDescended"
+    "ConstructionTargets.RealProjectiveEvenQuadraticDescent.veroneseDescended_sphereProjection"
+    "ConstructionTargets.RealProjectiveEvenQuadraticDescent.crossTermDescended_sphereProjection"
+    "ConstructionTargets.RealProjectiveEvenQuadraticDescent.veroneseDescended_contMDiff"
+    "ConstructionTargets.RealProjectiveEvenQuadraticDescent.crossTermDescended_contMDiff"],
    :depends-on
    [:routes-2026-10-10-checkpoint-topo2-r7
     :routes-2026-10-10-rp2-smooth-atlas-two-consumers-topo2-r1
@@ -67790,14 +67799,19 @@
    :lemma
    {:name
     "ConstructionTargets.RealProjectiveEvenQuadraticDescent.evenQuadraticDescents",
-    :reported-by [:routes-2026-10-10-checkpoint-topo2-r7],
+    :reported-by
+    [:routes-2026-10-10-checkpoint-topo2-r7
+     :routes-2026-10-10-rp2-even-quadratic-descent-two-consumers-topo2-r1],
     :type
     "Continuous and smooth descents through sphereProjection of the even quadratic coordinate maps used by t95A04 and t96A07, with pullback equalities",
-    :area "rp-smooth-atlas"},
+    :area "rp-smooth-atlas",
+    :proved-in
+    :routes-2026-10-10-rp2-even-quadratic-descent-two-consumers-topo2-r1},
    :id
    :lemma-constructiontargets-realprojectiveevenquadraticdescent-evenquadraticdescents,
    :kind :lemma,
-   :depends-on [],
+   :depends-on
+   [:lemma-constructiontargets-realprojectivesmoothtarget-sphereprojectionevenmapsmoothdesc],
    :other-consumers [:t96A07]}
   {:consumer :t97A04,
    :phase :lemma,
