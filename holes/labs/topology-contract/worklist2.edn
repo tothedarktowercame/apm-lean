@@ -66949,50 +66949,51 @@
    "single-consumer exact normal-radius calculation at the meridian endpoint",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:residual
-     "Prove the input right-core normal coordinate has norm at most 1/4, use convexity to bound the interpolation, then construct the angular component and deletion avoidance.",
-     :outcome :go,
-     :warnings [],
-     :missing-theorems [],
-     :axioms [propext Classical.choice Quot.sound],
-     :commands
-     [{:cmd "lake env lean /tmp/t02a03_right_core_compact_probe.lean",
-       :exit 0,
-       :output
-       "norm_rightTubeCoreNormalComplex_circleMeridian compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd "sha256sum /tmp/t02a03_right_core_compact_probe.lean",
-       :exit 0,
-       :output
-       "6d0996414757a58625aacf51e121e430b4ff88e578ad90f21e6c2d6f818a1fbe  /tmp/t02a03_right_core_compact_probe.lean"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_right_core_compact_probe.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}
-      {:cmd
-       "rg -n \"norm_rightTubeCoreNormalComplex_circleMeridian\" /tmp/t02a03_right_core_compact_probe.lean",
-       :exit 0,
-       :output
-       "The theorem begins at line 340 and its axiom audit is at line 366."}],
-     :fixture
-     {:path "/tmp/t02a03_right_core_compact_probe.lean",
-      :sha256
-      "6d0996414757a58625aacf51e121e430b4ff88e578ad90f21e6c2d6f818a1fbe"},
-     :finding
-     "The exact coordinate calculation reduces the squared normal norm to ((z.re)^2+(z.im)^2)/64=1/64, so its nonnegative square root is 1/8 for every Circle parameter.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
-      :declarations
-      [{:name
-        "ConstructionTargets.T02A03GeometricTubeDeformation.norm_rightTubeCoreNormalComplex_circleMeridian",
-        :type
-        "forall z : Circle, norm (rightTubeCoreNormalComplex (apm_t02a03_circleMeridian z)) = (1 / 8 : Real)"}]},
-     :seat "topo-8"}},
+   {:placeholder-delta {:before 0, :after 0},
+    :residual
+    "Prove the input right-core normal coordinate has norm at most 1/4, use convexity to bound the interpolation, then construct the angular component and deletion avoidance.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["Lean reports the pre-existing unnecessarySimpa warning at module line 62; the radius theorem compiles without additional warnings."],
+    :missing-theorems [],
+    :statement-hashes
+    {:registered "131 registered statements match, 0 do not",
+     :scoped-file-git-blob "4d61373a0942f45182ec47a44d37af6f3e94747e"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd "lake env lean /tmp/t02a03_right_core_compact_probe.lean",
+      :exit 0}
+     {:cmd "sha256sum /tmp/t02a03_right_core_compact_probe.lean",
+      :exit 0,
+      :output
+      "6d0996414757a58625aacf51e121e430b4ff88e578ad90f21e6c2d6f818a1fbe  /tmp/t02a03_right_core_compact_probe.lean"}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeDeformation.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "a26f888ec7d287c46e03c1fd77f6c72b3edced01",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+    :fixture
+    {:path "/tmp/t02a03_right_core_compact_probe.lean",
+     :sha256
+     "6d0996414757a58625aacf51e121e430b4ff88e578ad90f21e6c2d6f818a1fbe"},
+    :finding
+    "The exact meridian coordinates reduce the squared right-core normal norm to one sixty-fourth using the Circle unit-norm identity, so the nonnegative square root is one eighth.",
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/right-core-meridian-normal-radius",
