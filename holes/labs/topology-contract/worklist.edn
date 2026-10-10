@@ -96010,6 +96010,20 @@
      {:cmd "git status --short",
       :exit 0,
       :finding "clean worktree after commit"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791656572260-2669-fe1132b5",
+     :commands
+     ["git show a78ce43e29bee4e43ec39e9f75b43c780a9c6e7b -- ConstructionTargets/HomeomorphLocPathConnected.lean"
+      "git diff --exit-code a78ce43e29bee4e43ec39e9f75b43c780a9c6e7b -- ConstructionTargets/HomeomorphLocPathConnected.lean"
+      "lake build ConstructionTargets.HomeomorphLocPathConnected"
+      "sha256sum /tmp/homeomorph-loc-path-connected.lean && lake env lean /tmp/homeomorph-loc-path-connected.lean"
+      "placeholder census on source, fixture, and problems/t99J01/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb on recorded ledger at 41cd404f"],
+     :finding
+     "PASS: reviewer codex-3 verified recorded commit a78ce43e changes only HomeomorphLocPathConnected.lean and the source equals that commit. Canonical packages resolve correctly; the frozen fixture hash is exact; target and fixture compile with zero placeholders; t99J01 retains exactly one placeholder; both audited theorems report only propext, Classical.choice, and Quot.sound; all 131 registered statements and the recorded 861-item ledger validate. For h from X homeomorphic to Y, the one-way theorem correctly transports LocPathConnectedSpace from Y to X through the quotient map of h.symm. The iff uses h to transport X to Y and the proved reverse direction for Y to X. The module correctly does not construct covering charts, prove a covering total space locally path connected, restrict a component, prove surjectivity, count fibers, or compute fundamental groups."},
     :commit "a78ce43e29bee4e43ec39e9f75b43c780a9c6e7b",
     :changed-paths
     ["ConstructionTargets/HomeomorphLocPathConnected.lean"],
@@ -96025,7 +96039,7 @@
       "ConstructionTargets.HomeomorphLocPathConnected.Homeomorph.locPathConnectedSpace_iff"]},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/HomeomorphLocPathConnected.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component/homeomorph-lpc",
@@ -96125,7 +96139,7 @@
       "Homeomorph.locPathConnectedSpace and its iff transport local path-connectedness across a homeomorphism."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component",
@@ -98327,7 +98341,7 @@
    :other-consumers []}
   {:consumer :t99J01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -98340,7 +98354,9 @@
     :reported-by [:routes-2026-10-10-homeomorph-loc-path-connected-40],
     :type
     "For a homeomorphism X ≃ₜ Y, LocPathConnectedSpace X iff LocPathConnectedSpace Y",
-    :proved-in :routes-2026-10-10-homeomorph-loc-path-connected-40},
+    :proved-in :routes-2026-10-10-homeomorph-loc-path-connected-40,
+    :banked-by :routes-2026-10-10-homeomorph-loc-path-connected-40,
+    :banked-commit "a78ce43e29bee4e43ec39e9f75b43c780a9c6e7b"},
    :id
    :lemma-homeomorphlocpathconnected-homeomorph-locpathconnectedspace-iff,
    :kind :lemma,
