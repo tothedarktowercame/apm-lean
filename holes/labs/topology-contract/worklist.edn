@@ -98307,6 +98307,22 @@
      {:cmd "git status --short",
       :exit 0,
       :finding "clean worktree after commit"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791662985171-2875-571fdc34",
+     :commands
+     ["git show 206a62e22de59acc783a14108552ddc357496ff8:ConstructionTargets/GenericPointWedgeOverlapInclusionSquares.lean"
+      "git diff-tree --no-commit-id --name-only -r 206a62e22de59acc783a14108552ddc357496ff8"
+      "git diff --exit-code 206a62e22de59acc783a14108552ddc357496ff8 -- ConstructionTargets/GenericPointWedgeOverlapInclusionSquares.lean"
+      "sha256sum /tmp/generic-point-wedge-overlap-inclusion-squares.lean"
+      "lake build ConstructionTargets.GenericPointWedgeOverlapInclusionSquares"
+      "lake env lean /tmp/generic-point-wedge-overlap-inclusion-squares.lean"
+      "placeholder census on source, fixture, and problems/t97A01/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb on recorded ledger at 667028fd"],
+     :finding
+     "PASS: reviewer codex-3 verified author topo-2 and recorded commit 206a62e2, whose exact scope is only ConstructionTargets/GenericPointWedgeOverlapInclusionSquares.lean and whose source equals the reviewed checkout. The canonical package authority is correct; fixture SHA-256 e63b0a8da007af5e3d29e1245fb8ee29c7112e4dda950a870be7800929d47fec matches; target and fixture compile with zero placeholders; t97A01 retains one placeholder; genericPointWedgeOverlapInclusionSquares uses only propext, Classical.choice, and Quot.sound; all 131 registered statements and the recorded 893-item ledger validate. overlapToLeft and overlapToRight are the literal subtype inclusions from the intersection into each open piece. The proof unfolds the banked intersection equivalence enough to identify its inverse at the unique Unit point with the left basepoint quotient representative. The left composite then closes by left_inclusion. For the right composite, Quotient.sound transports that same wedge point across the base relation to the right basepoint representative before right_inclusion is applied. Thus both strict ContinuousMap equalities have the required orientations and preserve the literal quotient and subtype boundaries. The module does not construct polygon covers, compute homology, or close t97A01."},
     :commit "206a62e22de59acc783a14108552ddc357496ff8",
     :changed-paths
     ["ConstructionTargets/GenericPointWedgeOverlapInclusionSquares.lean"],
@@ -98324,7 +98340,7 @@
       "ConstructionTargets.GenericPointWedgeOverlapInclusionSquares.genericPointWedgeOverlapInclusionSquares"]},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/GenericPointWedgeOverlapInclusionSquares.lean"],
    :dag-node
@@ -98995,7 +99011,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "genericPointWedgeOverlapInclusionSquares",
@@ -99011,7 +99027,10 @@
     "theorem genericPointWedgeOverlapInclusionSquares (x0 : X) (y0 : Y) (M : Set Y) (N : Set X) (hM : IsOpen M) (hN : IsOpen N) (hy : y0 ∈ M) (hx : x0 ∈ N) (cM : PointedContraction M ⟨y0,hy⟩) (cN : PointedContraction N ⟨x0,hx⟩) : leftEquiv.toFun.comp (overlapToLeft.comp overlapEquiv.invFun) = ContinuousMap.const _ x0 ∧ rightEquiv.toFun.comp (overlapToRight.comp overlapEquiv.invFun) = ContinuousMap.const _ y0, instantiated from genericPointWedgeCoverPackage. Its proof is a full expansion through Homeomorph.setCongr, restrictedOpenHomeomorphWedge, pointedWedgeHomeomorph, wedgeHomotopyEquivLeft/right,",
     :area "van-kampen-two-open-group",
     :proved-in
-    :routes-2026-10-10-generic-point-wedge-overlap-inclusion-squares-40},
+    :routes-2026-10-10-generic-point-wedge-overlap-inclusion-squares-40,
+    :banked-by
+    :routes-2026-10-10-generic-point-wedge-overlap-inclusion-squares-40,
+    :banked-commit "206a62e22de59acc783a14108552ddc357496ff8"},
    :id :lemma-genericpointwedgeoverlapinclusionsquares,
    :kind :lemma,
    :depends-on
