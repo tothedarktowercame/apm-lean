@@ -99117,6 +99117,20 @@
       :exit 0,
       :finding "clean worktree after commit"}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791667923905-2995-9b8ef5ab",
+     :commands
+     ["git show and diff-tree on d8ad863a805f90aeb5f3fff27e11e6d11a9b3085"
+      "sha256sum frozen fixture"
+      "lake build ConstructionTargets.PolygonOuterOpenDeformation"
+      "lake env lean frozen fixture"
+      "comment-stripped placeholder counts"
+      "python3 scripts/statement-registry.py check"
+      "git diff-tree --check"],
+     :finding
+     "PASS: recorded commit is authored by topo-2 and changes only ConstructionTargets/PolygonOuterOpenDeformation.lean; fixture hash matches; outerOpenHomotopy conjugates the quotient homotopy through outerQuotientHomeomorph in the correct inverse-then-forward order; joint continuity composes across the product and homeomorphism boundaries; the zero identity, time-one boundary witness, and all-time pointwise boundary fixation match the frozen interface; source and fixture have zero placeholders; fixture reports only propext, Classical.choice, and Quot.sound; registry reports 131 matches and zero mismatches."},
     :commit "d8ad863a805f90aeb5f3fff27e11e6d11a9b3085",
     :changed-paths
     ["ConstructionTargets/PolygonOuterOpenDeformation.lean"],
@@ -99127,7 +99141,7 @@
      :sorry-count 0},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/PolygonOuterOpenDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/outer-open-deformation",
@@ -99251,7 +99265,7 @@
       "outerOpenHomotopy is a jointly continuous deformation of outerOpen onto radius-one boundary classes, starting at the identity and fixing every boundary class pointwise."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -101687,7 +101701,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "polygonOuterOpenDeformation",
@@ -101701,7 +101715,9 @@
     :type
     "Transport the quotient-descended radial homotopy across outerQuotientHomeomorph to a deformation of outerOpen onto its radius-one boundary classes.",
     :area "polygon-surface-open-cover",
-    :proved-in :routes-2026-10-10-polygon-outer-open-deformation-48},
+    :proved-in :routes-2026-10-10-polygon-outer-open-deformation-48,
+    :banked-by :routes-2026-10-10-polygon-outer-open-deformation-48,
+    :banked-commit "d8ad863a805f90aeb5f3fff27e11e6d11a9b3085"},
    :id :lemma-polygonouteropendeformation,
    :kind :lemma,
    :depends-on
