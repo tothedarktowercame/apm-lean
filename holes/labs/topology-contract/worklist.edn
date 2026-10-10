@@ -96735,13 +96735,42 @@
    "Use RetainedIndex as the discrete fiber type, restrict the chart equivalence to the clopen Joined component and retained indices, assemble the component-projection covering trivialization, and combine it with the banked surjectivity theorem.",
    :other-consumers []}
   {:bounded-exception
+   "This single-consumer theorem supplies the exact local product homeomorphism for the component-restricted projection; only its conversion to an evenly covered neighborhood and assembly with banked surjectivity remain.",
+   :consumer :t99J01,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/CoveringRetainedSheetHomeomorph.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component/retained-sheet-homeomorph",
+   :acceptance
+   {:implementation
+    "For a trivialization with path-connected base set and a clopen subset C of its source space, define the restricted source subtype over the chart base and construct a Homeomorph from it to the product of the chart base with the banked RetainedIndex. Prove the coordinate formulas, inverses, and continuity using the original trivialization and invFun_mem_iff_retained. Do not package IsEvenlyCovered or IsCoveringMap, prove surjectivity, count fibers, or compute pi1.",
+    :placeholder "the single sorry in apm_t99j01",
+    :route-step
+    "t99J01 component-restriction step 9: identify the component-side chart source with the base neighborhood times retained sheet indices before packaging the restricted covering map",
+    :fixture "/tmp/covering-retained-sheet-homeomorph.lean",
+    :fixture-sha256
+    "2239151ab528fbb2c2327a7928045854ab4574292690dd517b13d7f8d366caf0",
+    :gates
+    ["lake build ConstructionTargets.CoveringRetainedSheetHomeomorph"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-10-covering-retained-sheet-homeomorph-47,
+   :kind :reusable-theorem,
+   :depends-on [:routes-2026-10-10-covering-retained-sheet-indices-46],
+   :current-residual
+   "Instantiate C as the open Joined component, use retainedSheetHomeomorph to prove each refined chart is evenly covered for the component projection, assemble IsCoveringMap, and pair it with componentProjection_surjective.",
+   :other-consumers []}
+  {:bounded-exception
    "Single-consumer prerequisite first in the final ledger ranking.",
    :consumer :t99J01,
    :implements-lemma :lemma-iscoveringmap-restrictpathcomponent,
    :evidence
    {:probe
     {:residual
-     "The retained index subtype and its whole-sheet criterion now compile. The original theorem still needs the final restricted Trivialization over Component e and combination with componentProjection_surjective.",
+     "The component-side chart is now homeomorphic to the path-connected base neighborhood times the retained sheet indices. The original theorem only needs the IsEvenlyCovered/IsCoveringMap packaging and the banked componentProjection_surjective theorem.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
@@ -96752,51 +96781,52 @@
        :consumers [:t99J01],
        :depends-on
        ["CoveringPathComponentSurjective.componentProjection_surjective"
-        "CoveringPathConnectedChart.IsCoveringMap.exists_pathConnected_restrictedTrivialization"
-        "CoveringRetainedSheetIndices.invFun_mem_iff_retained"]}],
+        "CoveringRetainedSheetHomeomorph.retainedSheetHomeomorph"]}],
      :prerequisite
      {:bounded-exception
-      "This single-consumer package defines the exact retained fiber-index subtype and proves that center-point membership selects a complete sheet; it is the final indexing fact needed before assembling the restricted covering trivialization.",
+      "This single-consumer theorem supplies the exact local product homeomorphism for the component-restricted projection; only its conversion to an evenly covered neighborhood and assembly with banked surjectivity remain.",
       :consumer :t99J01,
       :phase :implementation,
       :state :open,
-      :scope ["ConstructionTargets/CoveringRetainedSheetIndices.lean"],
+      :scope
+      ["ConstructionTargets/CoveringRetainedSheetHomeomorph.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component/retained-sheet-indices",
+      "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component/retained-sheet-homeomorph",
       :acceptance
       {:implementation
-       "For a bundle trivialization over a path-connected base set and a clopen subset C of its source space, define Retained and RetainedIndex using membership of the inverse-chart point over a chosen chart center. Prove that an inverse-chart point over any base point lies in C exactly when its fiber index is retained, using continuity of the sheet and the banked clopen whole-sheet dichotomy. Do not assemble a restricted trivialization, prove the restricted projection is a covering map or surjective, count fibers, or compute pi1.",
+       "For a trivialization with path-connected base set and a clopen subset C of its source space, define the restricted source subtype over the chart base and construct a Homeomorph from it to the product of the chart base with the banked RetainedIndex. Prove the coordinate formulas, inverses, and continuity using the original trivialization and invFun_mem_iff_retained. Do not package IsEvenlyCovered or IsCoveringMap, prove surjectivity, count fibers, or compute pi1.",
        :placeholder "the single sorry in apm_t99j01",
        :route-step
-       "t99J01 component-restriction step 8: define the retained sheet-index subtype and prove that it selects whole sheets before assembling the component-restricted chart",
-       :fixture "/tmp/covering-retained-sheet-indices.lean",
+       "t99J01 component-restriction step 9: identify the component-side chart source with the base neighborhood times retained sheet indices before packaging the restricted covering map",
+       :fixture "/tmp/covering-retained-sheet-homeomorph.lean",
        :fixture-sha256
-       "a00eeae284c2e660f2afae0397f179726c5bac05e5b905299742761434142679",
+       "2239151ab528fbb2c2327a7928045854ab4574292690dd517b13d7f8d366caf0",
        :gates
-       ["lake build ConstructionTargets.CoveringRetainedSheetIndices"
+       ["lake build ConstructionTargets.CoveringRetainedSheetHomeomorph"
         "fixture compiles"
         "zero source and fixture sorry"
         "standard-only axioms"
         "registry check"]},
-      :id :routes-2026-10-10-covering-retained-sheet-indices-46,
+      :id :routes-2026-10-10-covering-retained-sheet-homeomorph-47,
       :kind :reusable-theorem,
       :depends-on
-      [:routes-2026-10-10-covering-path-connected-chart-45],
+      [:routes-2026-10-10-covering-retained-sheet-indices-46],
       :current-residual
-      "Use RetainedIndex as the discrete fiber type, restrict the chart equivalence to the clopen Joined component and retained indices, assemble the component-projection covering trivialization, and combine it with the banked surjectivity theorem.",
+      "Instantiate C as the open Joined component, use retainedSheetHomeomorph to prove each refined chart is evenly covered for the component projection, assemble IsCoveringMap, and pair it with componentProjection_surjective.",
       :other-consumers []},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
-     [{:cmd "lake env lean /tmp/covering-retained-sheet-indices.lean",
+     [{:cmd
+       "lake env lean /tmp/covering-retained-sheet-homeomorph.lean",
        :exit 0,
        :finding
-       "the retained sheet-index predicate and its point-independence theorem compile with standard axioms"}
-      {:cmd "sha256sum /tmp/covering-retained-sheet-indices.lean",
+       "the restriction of a path-connected chart to a clopen source subset compiles as a homeomorphism onto the retained-index product"}
+      {:cmd "sha256sum /tmp/covering-retained-sheet-homeomorph.lean",
        :exit 0,
        :finding
-       "a00eeae284c2e660f2afae0397f179726c5bac05e5b905299742761434142679"}
+       "2239151ab528fbb2c2327a7928045854ab4574292690dd517b13d7f8d366caf0"}
       {:cmd
-       "rg -n \"\\b(sorry|admit)\\b\" /tmp/covering-retained-sheet-indices.lean",
+       "rg -n \"\\b(sorry|admit)\\b\" /tmp/covering-retained-sheet-homeomorph.lean",
        :exit 1,
        :expected-exit 1,
        :finding "no placeholders"}
@@ -96805,23 +96835,50 @@
        :finding "131 registered statements match, 0 do not"}
       {:cmd "git status --short", :exit 0, :finding "clean"}],
      :diagnostic-history
-     [{:cmd "lake env lean /tmp/covering-retained-sheet-indices.lean",
+     [{:cmd
+       "lake env lean /tmp/covering-retained-sheet-homeomorph.lean",
        :exit 1,
        :finding
-       "The first draft passed subtype pairs to Trivialization.invFun, whose argument is an ambient base-and-fiber pair; changed those applications to ambient pairs and exposed the sheet membership type."}
-      {:cmd "lake env lean /tmp/covering-retained-sheet-indices.lean",
+       "RetainedIndex did not inherit a reducible topology through its named definition; supplied its induced subtype topology explicitly."}
+      {:cmd
+       "lake env lean /tmp/covering-retained-sheet-homeomorph.lean",
        :exit 1,
        :finding
-       "The continuous-sheet proof initially let comp_continuous infer the wrong intermediate map; supplied continuous_subtype_val.prodMk continuous_const and discharged target membership explicitly."}],
+       "The first inverse formulas used nonexistent invFun_toFun notation and left Trivialization pair types ambiguous; changed them to symm_apply_mk_proj and explicitly typed target pairs."}
+      {:cmd
+       "lake env lean /tmp/covering-retained-sheet-homeomorph.lean",
+       :exit 1,
+       :finding
+       "The first continuity proof used the wrong subtype constructor syntax and an underconstrained nested coercion; used Continuous.subtype_mk and typed RestrictedSource arguments."}
+      {:cmd
+       "lake env lean /tmp/covering-retained-sheet-homeomorph.lean",
+       :exit 1,
+       :finding
+       "The inverse source-membership proof needed an explicit equality transport from proj_symm_apply rather than simplification through nested subtypes."}
+      {:cmd
+       "lake env lean /tmp/covering-retained-sheet-homeomorph.lean",
+       :exit 1,
+       :finding
+       "The forward base-coordinate continuity proof initially produced the first chart coordinate rather than the projection syntactically; transported it with Trivialization.coe_fst."}
+      {:cmd
+       "lake env lean /tmp/covering-retained-sheet-homeomorph.lean",
+       :exit 1,
+       :finding
+       "Rewriting proj_symm_apply through invFun notation did not match the reducible partial-equivalence expression; introduced the projection equality explicitly and transported base membership."}
+      {:cmd
+       "lake env lean /tmp/covering-retained-sheet-homeomorph.lean",
+       :exit 1,
+       :finding
+       "After the inverse source proof compiled, the left inverse still required stating the exact invFun coordinate equation; changed it to symm_apply_mk_proj."}],
      :fixture
-     {:path "/tmp/covering-retained-sheet-indices.lean",
+     {:path "/tmp/covering-retained-sheet-homeomorph.lean",
       :sha256
-      "a00eeae284c2e660f2afae0397f179726c5bac05e5b905299742761434142679",
+      "2239151ab528fbb2c2327a7928045854ab4574292690dd517b13d7f8d366caf0",
       :interface
-      "Retained and RetainedIndex select sheet indices by membership over a chart center; invFun_mem_iff_retained proves this selection is independent of the point in a path-connected chart base for a clopen domain subset."},
+      "RestrictedSource is the component-side source over a chart base; retainedSheetHomeomorph identifies it homeomorphically with the chart base times RetainedIndex."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component",
@@ -96848,7 +96905,8 @@
     :routes-2026-10-10-covering-path-component-surjective-43
     :routes-2026-10-10-preconnected-clopen-sheet-44
     :routes-2026-10-10-covering-path-connected-chart-45
-    :routes-2026-10-10-covering-retained-sheet-indices-46],
+    :routes-2026-10-10-covering-retained-sheet-indices-46
+    :routes-2026-10-10-covering-retained-sheet-homeomorph-47],
    :current-residual
    "Establish constant fiber cardinality and the induced subgroup image.",
    :other-consumers []}
@@ -98076,7 +98134,8 @@
     :lemma-coveringpathcomponentsurjective-componentprojection-surjective
     :lemma-preconnectedclopensheet-range-subset-or-disjoint-of-isclopen-pathconnected
     :lemma-coveringpathconnectedchart-iscoveringmap-exists-pathconnected-restrictedtriviali
-    :lemma-coveringretainedsheetindices-invfun-mem-iff-retained],
+    :lemma-coveringretainedsheetindices-invfun-mem-iff-retained
+    :lemma-coveringretainedsheethomeomorph-retainedsheethomeomorph],
    :other-consumers []}
   {:consumer :t99J01,
    :phase :lemma,
@@ -99334,6 +99393,19 @@
    :depends-on
    [:lemma-preconnectedclopensheet-range-subset-or-disjoint-of-isclopen-pathconnected
     :lemma-coveringpathconnectedchart-iscoveringmap-exists-pathconnected-restrictedtriviali],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "CoveringRetainedSheetHomeomorph.retainedSheetHomeomorph"},
+   :lemma
+   {:name "CoveringRetainedSheetHomeomorph.retainedSheetHomeomorph",
+    :reported-by []},
+   :id :lemma-coveringretainedsheethomeomorph-retainedsheethomeomorph,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
