@@ -56196,73 +56196,96 @@
    :current-residual
    "Package dependent basepoint transport for FundamentalGroup.map, descend the mapped representative formulas through the quotient, and conjugate back to frozenLbar.",
    :other-consumers []}
+  {:bounded-exception
+   "single-consumer representative naturality for the frozen t97A04 matrix",
+   :consumer :t97A04,
+   :phase :probe,
+   :state :open,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t97A04/torus-pi1-winding-coordinates/representative-naturality",
+   :acceptance
+   {:probe
+    "Compile and bank circleMatrixMap_base, circleMatrixPi1Map, circleMatrixPi1Map_mk, circleMatrixPi1Map_mk_coord_zero, and circleMatrixPi1Map_mk_coord_one from /tmp/torus_circle_matrix_pi1_representative_naturality. Use the exact fixed-base equation to define FundamentalGroup.mapOfEq for circleMatrixMap, prove its value on every explicit based-loop class is the banked circleMatrixMappedPath class, and prove the two winding coordinates are exactly 2*n0+n1 and n1-n0. This supplies the representative-level quotient-map portion of t97A04 route step 4; do not yet claim all-class or frozen AddCircle naturality.",
+    :declarations
+    ["circleMatrixMap_base"
+     "circleMatrixPi1Map"
+     "circleMatrixPi1Map_mk"
+     "circleMatrixPi1Map_mk_coord_zero"
+     "circleMatrixPi1Map_mk_coord_one"],
+    :placeholder "apm_t97A04_bridge_2",
+    :route-step
+    "t97A04 step 4, fixed-base FundamentalGroup map and representative coordinate naturality"},
+   :id
+   :routes-2026-10-10-t97a04-circle-matrix-pi1-representative-naturality-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo2-r2
+    :routes-2026-10-10-torus-pi1-coordinate-equivalence-two-consumers-topo2-r1
+    :routes-2026-10-10-torus-pi1-projected-lift-endpoints-two-consumers-topo2-r1
+    :routes-2026-10-10-torus-addcircle-circle-coordinate-comparison-two-consumers-topo2-r1
+    :routes-2026-10-10-t97a04-frozen-torus-map-circle-conjugacy-topo2-r1
+    :routes-2026-10-10-circle-winding-pointwise-group-laws-two-consumers-topo2-r1
+    :routes-2026-10-10-t97a04-circle-matrix-path-endpoint-coordinates-topo2-r1
+    :routes-2026-10-10-t97a04-circle-matrix-mapped-path-projections-topo2-r1],
+   :current-residual
+   "Descend the two formulas from explicit loop representatives to arbitrary FundamentalGroup classes, combine them as a Fin-2 function equality, and conjugate back to frozenLbar.",
+   :other-consumers []}
   {:consumer :t97A04,
    :evidence
    {:probe
     {:outcome :revise,
      :seat "topo-8",
      :fixture
-     {:path "/tmp/circle_matrix_mapped_path_projection.lean",
+     {:path
+      "/tmp/torus_circle_matrix_pi1_representative_naturality.lean",
       :sha256
-      "28e9c5f293e18f8d9044f59d8fcc6b6e40c8407350eac8f7007dbf1c586097d4"},
+      "c31b296ba250b0b823f759dbf364b2e285086df9ffb8d0532e961608e54e2ce7"},
      :commands
      [{:cmd
-       "lake build ConstructionTargets.TorusPiOneWindingCoordinates",
-       :exit 0}
-      {:cmd
-       "lake env lean /tmp/circle_matrix_mapped_path_projection.lean",
+       "lake env lean /tmp/torus_circle_matrix_pi1_representative_naturality.lean",
        :exit 0,
        :output
-       "mapped path and both exact projection equalities compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "both representative-level matrix-coordinate formulas compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/circle_matrix_mapped_path_projection.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/torus_circle_matrix_pi1_representative_naturality.lean || true)\"",
        :exit 0}
-      {:cmd "sha256sum /tmp/circle_matrix_mapped_path_projection.lean",
+      {:cmd
+       "sha256sum /tmp/torus_circle_matrix_pi1_representative_naturality.lean",
        :exit 0,
        :output
-       "28e9c5f293e18f8d9044f59d8fcc6b6e40c8407350eac8f7007dbf1c586097d4  /tmp/circle_matrix_mapped_path_projection.lean"}
+       "c31b296ba250b0b823f759dbf364b2e285086df9ffb8d0532e961608e54e2ce7  /tmp/torus_circle_matrix_pi1_representative_naturality.lean"}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/circle_matrix_mapped_path_projection.lean",
-       :exit 1,
-       :finding
-       "An exploratory attempt also packaged FundamentalGroup.map as an endomorphism and exposed a dependent basepoint transport obligation. That quotient-level packaging was removed from this prerequisite; the unchanged actual mapped path and its two projection equalities compile and isolate the transport for the next row."}],
      :finding
-     "The explicit matrix paths are banked. The compiled fixture now constructs the actual image of a based product path under circleMatrixMap and proves exact Path equalities from its left and right projections to circleMatrixLeftPath and circleMatrixRightPath. Thus the endpoint formulas apply directly to the mapped representative. The only remaining boundary is dependent basepoint transport when packaging FundamentalGroup.map as an endomorphism, followed by quotient induction and conjugation back to frozenLbar.",
+     "The exact fixed-base equation for circleMatrixMap permits a genuine FundamentalGroup endomorphism via FundamentalGroup.mapOfEq. On every explicit based loop, mapOfEq_apply reduces definitionally to the banked circleMatrixMappedPath. The two compiled coordinate theorems then use the exact projection equalities and endpoint arithmetic to obtain 2*n0+n1 and n1-n0. This resolves the dependent basepoint transport on representatives; quotient induction and conjugation to the frozen AddCircle map remain separate.",
      :residual
-     "Bank the mapped path and projection equalities. Then package the basepoint equality circleMatrixMap (1,1)=(1,1) with a one-sided dependent transport of FundamentalGroup.map, descend the two representative formulas by quotient induction, and transport through frozenTorusHomeomorphCircleProd.",
+     "Bank the fixed-base FundamentalGroup endomorphism and its two representative coordinate formulas. Then extend the formulas to every quotient class and transport the resulting Fin-2 naturality equation through frozenTorusHomeomorphCircleProd and the exact frozenLbar conjugacy.",
      :prerequisite
      {:bounded-exception
-      "single-consumer comparison for the frozen t97A04 matrix path",
+      "single-consumer representative naturality for the frozen t97A04 matrix",
       :consumer :t97A04,
       :phase :probe,
       :state :open,
       :scope [],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t97A04/torus-pi1-winding-coordinates/mapped-path-projections",
+      "TOPOLOGY-ROUTES.md/t97A04/torus-pi1-winding-coordinates/representative-naturality",
       :acceptance
       {:probe
-       "Compile and bank circleMatrixMappedPath, circleMatrixMappedPath_projLeft, and circleMatrixMappedPath_projRight from /tmp/circle_matrix_mapped_path_projection.lean. Construct the actual based product path obtained by applying circleMatrixMap pointwise to gamma, and prove exact equality from its left and right projected Paths to circleMatrixLeftPath gamma and circleMatrixRightPath gamma. This supplies the representation identification needed to apply the banked endpoint formulas in t97A04 route step 4; do not claim quotient-level naturality in this prerequisite.",
+       "Compile and bank circleMatrixMap_base, circleMatrixPi1Map, circleMatrixPi1Map_mk, circleMatrixPi1Map_mk_coord_zero, and circleMatrixPi1Map_mk_coord_one from /tmp/torus_circle_matrix_pi1_representative_naturality. Use the exact fixed-base equation to define FundamentalGroup.mapOfEq for circleMatrixMap, prove its value on every explicit based-loop class is the banked circleMatrixMappedPath class, and prove the two winding coordinates are exactly 2*n0+n1 and n1-n0. This supplies the representative-level quotient-map portion of t97A04 route step 4; do not yet claim all-class or frozen AddCircle naturality.",
        :declarations
-       ["circleMatrixMappedPath"
-        "circleMatrixMappedPath_projLeft"
-        "circleMatrixMappedPath_projRight"],
+       ["circleMatrixMap_base"
+        "circleMatrixPi1Map"
+        "circleMatrixPi1Map_mk"
+        "circleMatrixPi1Map_mk_coord_zero"
+        "circleMatrixPi1Map_mk_coord_one"],
        :placeholder "apm_t97A04_bridge_2",
        :route-step
-       "t97A04 step 4, identify mapped-path projections with explicit matrix-coordinate paths"},
-      :representation
-      {:source
-       "The two coordinate projections of the actual based path obtained by applying circleMatrixMap pointwise to gamma",
-       :target
-       "The explicit paths circleMatrixLeftPath gamma and circleMatrixRightPath gamma used by the endpoint computations",
-       :direction
-       "Exact Path equalities from each source projection to its corresponding target explicit matrix-coordinate path"},
+       "t97A04 step 4, fixed-base FundamentalGroup map and representative coordinate naturality"},
       :id
-      :routes-2026-10-10-t97a04-circle-matrix-mapped-path-projections-topo2-r1,
-      :kind :representation-comparison,
+      :routes-2026-10-10-t97a04-circle-matrix-pi1-representative-naturality-topo2-r1,
+      :kind :reusable-theorem,
       :depends-on
       [:routes-2026-10-10-checkpoint-topo2-r2
        :routes-2026-10-10-torus-pi1-coordinate-equivalence-two-consumers-topo2-r1
@@ -56270,12 +56293,13 @@
        :routes-2026-10-10-torus-addcircle-circle-coordinate-comparison-two-consumers-topo2-r1
        :routes-2026-10-10-t97a04-frozen-torus-map-circle-conjugacy-topo2-r1
        :routes-2026-10-10-circle-winding-pointwise-group-laws-two-consumers-topo2-r1
-       :routes-2026-10-10-t97a04-circle-matrix-path-endpoint-coordinates-topo2-r1],
+       :routes-2026-10-10-t97a04-circle-matrix-path-endpoint-coordinates-topo2-r1
+       :routes-2026-10-10-t97a04-circle-matrix-mapped-path-projections-topo2-r1],
       :current-residual
-      "Package dependent basepoint transport for FundamentalGroup.map, descend the mapped representative formulas through the quotient, and conjugate back to frozenLbar.",
+      "Descend the two formulas from explicit loop representatives to arbitrary FundamentalGroup classes, combine them as a Fin-2 function equality, and conjugate back to frozenLbar.",
       :other-consumers []}}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/shared/torus-pi1-winding-coordinates",
    :acceptance
@@ -56296,7 +56320,8 @@
     :routes-2026-10-10-t97a04-frozen-torus-map-circle-conjugacy-topo2-r1
     :routes-2026-10-10-circle-winding-pointwise-group-laws-two-consumers-topo2-r1
     :routes-2026-10-10-t97a04-circle-matrix-path-endpoint-coordinates-topo2-r1
-    :routes-2026-10-10-t97a04-circle-matrix-mapped-path-projections-topo2-r1],
+    :routes-2026-10-10-t97a04-circle-matrix-mapped-path-projections-topo2-r1
+    :routes-2026-10-10-t97a04-circle-matrix-pi1-representative-naturality-topo2-r1],
    :current-residual
    "Exact Fin-2 endpoint-coordinate naturality is absent.",
    :other-consumers [:t01A02]}
