@@ -88014,69 +88014,51 @@
   {:consumer :t99J01,
    :owner-reopen
    "Owner reopen 2026-10-10 (claude-14): both STOPs cite missing approved signatures for declarations the acceptance lists in prose. Under work-prompt.md WHAT IS FROZEN, only the registered statement and the fixture interface-axiom types are frozen; design the supporting signatures, discharge the frozen axiom type with standard axioms, and STOP only on a mathematical boundary.",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "frozen interface axiom is false at r = 0, n = 1, H = top; require 0 < r or state the rank-zero case separately",
    :evidence
    {:residual
-    "Repair the frozen universal type by requiring 0 < r or handling r = 0 separately; then prove the finite spanning-tree complement count for positive rank.",
+    "Correct the frozen universal theorem with a positive-rank hypothesis or a separate rank-zero branch, then resume the positive-rank spanning-tree count.",
     :outcome :stop,
     :warnings
     [{:kind :frozen-type-refuted,
       :message
-      "At r = 0 and index one, the formula produces FreeGroup (Fin 1) instead of the trivial group."}
+      "The r = 0, index-one case contradicts the stated natural-number rank formula."}
      {:kind :concurrent-worktree-change,
       :message
-      "The untracked worklist2.edn.tmp is outside scope and was preserved."}],
+      "An unrelated scoped file for another row is modified and was not touched."}],
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "The frozen interface axiom is false as stated because it quantifies over r = 0. Take H = ⊤ in FreeGroup (Fin 0) and n = 1. Subgroup.index_top gives H.index = 1, while ((0 - 1) * 1 + 1) simplifies to 1, so the axiom asserts Nonempty (H ≃* FreeGroup (Fin 1)). The source is subsingleton because FreeGroup (Fin 0) is trivial; the target is nontrivial because FreeGroup.of (0 : Fin 1) ≠ 1. The compiled theorem frozen_universal_false proves the negation of the entire quantified fixture type using only standard axioms. The mathematical repair is to add 0 < r (sufficient for both consumers r = 3 and r = 2), or to state a separate rank-zero case whose resulting rank is zero. The current frozen axiom cannot be discharged.",
+    "The frozen interface remains formally refuted. For r = 0, n = 1, and H = top in FreeGroup (Fin 0), Subgroup.index_top satisfies the premise, but natural subtraction makes ((r - 1) * n + 1) = 1. The source subgroup is subsingleton and FreeGroup (Fin 1) is nontrivial, so no MulEquiv exists. The freshly compiled theorem frozen_universal_false proves the negation of the full quantified axiom using only standard axioms. Since review confirms the defect, the required repair is to add 0 < r to the frozen universal theorem or split out r = 0 with rank zero. Both named consumers use positive ranks, so either correction preserves their intended specializations; without it, no implementation can discharge the current fixture type.",
     :commands
     [{:cmd
       "lake env lean /tmp/finite-index-schreier-r0-counterexample.lean",
       :exit 0,
       :finding
-      "Compiled no_rank_one_equiv and frozen_universal_false; both use only propext, Classical.choice, and Quot.sound."}
+      "The exact negation of the frozen universal type compiles with only propext, Classical.choice, and Quot.sound."}
      {:cmd
       "sha256sum /tmp/finite-index-free-group-schreier-rank-probe.lean",
       :exit 0,
-      :finding "The fixture hash matches the frozen hash."}
+      :finding "The frozen fixture hash still matches."}
      {:cmd
       "lake env lean /tmp/finite-index-free-group-schreier-rank-probe.lean",
       :exit 0,
       :finding
-      "The two positive-rank specializations compile, but only through the false universal axiom finiteIndexSubgroupEquiv."}
+      "The fixture specializations still depend on the refuted nonstandard axiom finiteIndexSubgroupEquiv."}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
      {:cmd "git status --short",
       :exit 0,
       :finding
-      "An unrelated untracked holes/labs/topology-contract/worklist2.edn.tmp appeared during verification; no scoped file was changed."}],
-    :diagnostic-history
-    [{:cmd
-      "lake env lean /tmp/finite-index-schreier-r0-counterexample.lean",
-      :exit 1,
-      :finding
-      "The first counterexample draft imported too narrow a module for FreeGroup.of_ne_one; corrected by importing Mathlib."}
-     {:cmd
-      "lake env lean /tmp/finite-index-schreier-r0-counterexample.lean",
-      :exit 1,
-      :finding
-      "The first universal-negation draft left the previously proved contradiction unnamed; corrected by naming no_rank_one_equiv and applying it explicitly."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1791632945763-1839-a885137e",
-     :finding
-     "frozen interface axiom is false at r = 0, n = 1, H = top; require 0 < r or state the rank-zero case separately"},
+      "ConstructionTargets/T02A03GeometricTubeCover.lean has a concurrent modification outside this row's scope; it was preserved."}],
     :counterexample
     {:path "/tmp/finite-index-schreier-r0-counterexample.lean",
      :parameters {:r 0, :n 1, :subgroup "top"},
-     :finding
-     "The universal frozen rank formula yields rank one for the trivial rank-zero free group subgroup, and the claimed MulEquiv is impossible."},
+     :theorem "frozen_universal_false"},
     :fixture
     {:path "/tmp/finite-index-free-group-schreier-rank-probe.lean",
      :sha256
@@ -88086,7 +88068,7 @@
      :proof-placeholder-count 1},
     :seat "topo-2"},
    :phase :implementation,
-   :state :repair,
+   :state :needs-owner,
    :scope
    ["ConstructionTargets/FiniteIndexFreeGroupSchreierRank.lean"],
    :dag-node
