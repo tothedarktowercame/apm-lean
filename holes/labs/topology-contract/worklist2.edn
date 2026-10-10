@@ -67071,6 +67071,19 @@
       :output "131 registered statements match, 0 do not"}
      {:cmd "git diff --check", :exit 0}
      {:cmd "git status --short", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791674570135-3272-df869cd5",
+     :commands
+     ["git show/diff-tree/check 9febb0ca8d3aa5ad67ba5f773cf6cc6dcda80fd1"
+      "git rev-parse recorded blob; git hash-object current module; sha256sum fixture"
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean"
+      "lake env lean /tmp/t02a03_right_core_compact_probe.lean"
+      "python3 scripts/statement-registry.py check --rev 9febb0ca8d3aa5ad67ba5f773cf6cc6dcda80fd1"
+      "statement fingerprints at commit and parent; comment-stripped placeholder census; clojure.edn/read-string worklist"],
+     :finding
+     "PASS: reviewer differs from author topo-6; commit changes only the scoped module and recorded/current blob 196c3d559aa25a35552a997ee3233756c3cf5b26 matches. Fixture SHA-256 matches. Module and frozen fixture compile with only propext, Classical.choice, and Quot.sound; registry is 131/0, frozen t02A03 fingerprint remains d123afd5ae0ee067587b3ed3d7b9b6d2f075c3d95701e098ec357c7317cd34c3, and the sole frozen placeholder remains. The inequality has the required direction: abs(1 minus norm w) is bounded above by norm(w minus u) for every real t, where u=cos t+i sin t is proved to have Complex norm one. Applying abs_norm_sub_norm_le and abs_sub_comm establishes exactly the registered theorem. No full normal-radius or deformation invariant is claimed."},
     :commit "9febb0ca8d3aa5ad67ba5f773cf6cc6dcda80fd1",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
@@ -67082,7 +67095,7 @@
     "Each right-core direction has complex norm one, so abs_norm_sub_norm_le bounds the absolute radial error by the planar distance to that direction.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/right-core-radial-error-bound",
    :acceptance
@@ -67185,7 +67198,7 @@
      "The reverse triangle inequality gives abs(1-norm(w)) ≤ norm(w-u) for the right-core planar coordinate w and every unit core direction u=(cos t)+i(sin t). This is the exact planar estimate needed to compare the tubular normal radius with the attained Euclidean right-core distance; the height coordinate is unchanged.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
