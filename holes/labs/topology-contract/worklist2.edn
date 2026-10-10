@@ -65952,25 +65952,59 @@
   {:consumer :t95A04,
    :implements-lemma
    :lemma-constructiontargets-realprojectivesmoothtarget-sphereprojectionevenmapdescent,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:residual
+     "Instantiate the descent for the two continuous antipodal-even quadratic sphere maps, then prove the descended maps ContMDiff from the banked smooth local branches.",
+     :outcome :go,
+     :warnings
+     ["Lean linter reports an unnecessarySimpa warning at fixture line 18; compilation succeeds."],
+     :missing-theorems
+     [{:name
+       "ConstructionTargets.RealProjectiveSmoothTarget.sphereProjectionEvenMapDescent",
+       :type
+       "forall {Y : Type*} [TopologicalSpace Y] (f : C(Sphere 2, Y)), (forall p, f (sphereAntipodal p) = f p) -> exists g : C(ProjectiveSpaceTopology.Space ℝ 2, Y), forall p, g (sphereProjection 2 p) = f p",
+       :status :proved,
+       :consumers [:t95A04 :t96A07],
+       :depends-on [],
+       :area "rp-smooth-atlas"}],
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd "lake env lean /tmp/rp2_even_map_descent.lean", :exit 0}
+      {:cmd "sha256sum /tmp/rp2_even_map_descent.lean", :exit 0}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp2_even_map_descent.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+     :fixture
+     {:path "/tmp/rp2_even_map_descent.lean",
+      :sha256
+      "0c9896febedd82cf49d2ef3999693a5dedc1881f7af34cd6b5a4473608a65c65"},
+     :finding
+     "The placeholder-free fixture proves the exact generic antipodal-even continuous descent using sphereProjection_isQuotientMap and sphereProjection_fiber_iff, without instantiating either quadratic consumer or asserting smoothness.",
+     :implementation
+     {:scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
+      :declaration
+      "ConstructionTargets.RealProjectiveSmoothTarget.sphereProjectionEvenMapDescent",
+      :type
+      "forall {Y : Type*} [TopologicalSpace Y] (f : C(Sphere 2, Y)), (forall p, f (sphereAntipodal p) = f p) -> exists g : C(ProjectiveSpaceTopology.Space ℝ 2, Y), forall p, g (sphereProjection 2 p) = f p",
+      :acceptance
+      "Move the compiled fixture theorem into the scoped module without changing its type; retain the quotient-map descent proof and do not add consumer instantiations or smoothness claims."},
+     :seat "topo-8"}},
+   :phase :implementation,
+   :type
+   "forall {Y : Type*} [TopologicalSpace Y] (f : C(Sphere 2, Y)), (forall p, f (sphereAntipodal p) = f p) -> exists g : C(ProjectiveSpaceTopology.Space ℝ 2, Y), forall p, g (sphereProjection 2 p) = f p",
    :state :open,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/rp2/even-map-continuous-descent",
    :acceptance
-   {:probe
-    "Compile and bank sphereProjectionEvenMapDescent from /tmp/rp2_even_map_descent.lean. For any continuous map from Sphere 2 that is invariant under sphereAntipodal, descend it continuously through sphereProjection using the proved quotient authority and fiber dichotomy. Do not yet instantiate either quadratic consumer or claim descended smoothness.",
-    :declaration
-    "ConstructionTargets.RealProjectiveSmoothTarget.sphereProjectionEvenMapDescent",
-    :type
-    "forall {Y : Type*} [TopologicalSpace Y] (f : C(Sphere 2, Y)), (forall p, f (sphereAntipodal p) = f p) -> exists g : C(ProjectiveSpaceTopology.Space ℝ 2, Y), forall p, g (sphereProjection 2 p) = f p",
-    :placeholders
-    ["the sole sorry in t95A04" "the sole sorry in t96A07"],
-    :route-step
-    "shared RP2 route, continuous quotient descent for antipodal-even maps"},
+   "Move the compiled fixture theorem into the scoped module without changing its type; retain the quotient-map descent proof and do not add consumer instantiations or smoothness claims.",
    :id
    :routes-2026-10-10-rp2-even-map-continuous-descent-two-consumers-topo2-r1,
    :kind :reusable-theorem,
    :area "rp-smooth-atlas",
+   :declaration
+   "ConstructionTargets.RealProjectiveSmoothTarget.sphereProjectionEvenMapDescent",
    :depends-on
    [:routes-2026-10-10-checkpoint-topo2-r7
     :routes-2026-10-10-rp2-smooth-atlas-two-consumers-topo2-r1],
@@ -67866,12 +67900,13 @@
    {:name
     "ConstructionTargets.RealProjectiveSmoothTarget.sphereProjectionEvenMapDescent",
     :reported-by
-    [:routes-2026-10-10-rp2-even-quadratic-descent-two-consumers-topo2-r1],
+    [:routes-2026-10-10-rp2-even-quadratic-descent-two-consumers-topo2-r1
+     :routes-2026-10-10-rp2-even-map-continuous-descent-two-consumers-topo2-r1],
     :type
     "forall {Y : Type*} [TopologicalSpace Y] (f : C(Sphere 2, Y)), (forall p, f (sphereAntipodal p) = f p) -> exists g : C(ProjectiveSpaceTopology.Space ℝ 2, Y), forall p, g (sphereProjection 2 p) = f p",
     :area "rp-smooth-atlas",
     :proved-in
-    :routes-2026-10-10-rp2-even-quadratic-descent-two-consumers-topo2-r1},
+    :routes-2026-10-10-rp2-even-map-continuous-descent-two-consumers-topo2-r1},
    :id
    :lemma-constructiontargets-realprojectivesmoothtarget-sphereprojectionevenmapdescent,
    :kind :lemma,
