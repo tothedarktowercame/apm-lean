@@ -99371,8 +99371,64 @@
   {:bounded-exception
    "This single-consumer prerequisite completes the radial circle model of the literal annulus before transporting it to the actual quotient overlap.",
    :consumer :t97A01,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Transport annulusHomotopyEquivCircle across overlapHomeomorph to model overlapOpen by Circle with explicit representative formulas, then identify both radius-one boundary quotients with ThreeCircles and prove the vertex and literal inclusion formulas.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :missing-theorems
+    [{:name "PolygonAnnulusRadialHomotopy.annulusHomotopyEquivCircle",
+      :type
+      "The literal polygon annulus is homotopy equivalent to Circle via half-radius inclusion and radial normalization, with the reverse composite joined to the identity by a continuous radial homotopy remaining inside the annulus.",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on
+      ["PolygonAnnulusRadialMaps.radialNormalize_halfCircle"],
+      :area "polygon-surface-open-cover"}],
+    :statement-hashes "131 registered statements match",
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :finding "canonical package authority"}
+     {:cmd "sha256sum /tmp/polygon-annulus-radial-homotopy.lean",
+      :exit 0,
+      :finding "fixture hash matches"}
+     {:cmd
+      "lake build ConstructionTargets.PolygonAnnulusRadialHomotopy",
+      :exit 0}
+     {:cmd "lake env lean /tmp/polygon-annulus-radial-homotopy.lean",
+      :exit 0,
+      :finding "fixture compiles with standard axioms"}
+     {:cmd "rg source for sorry or admit",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero source placeholders"}
+     {:cmd "rg fixture for sorry or admit",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero fixture placeholders"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short",
+      :exit 0,
+      :finding "clean worktree after commit"}],
+    :diagnostic-history [],
+    :commit "f3f1da65e5d564107aea29c0a281efc97dadd787",
+    :changed-paths
+    ["ConstructionTargets/PolygonAnnulusRadialHomotopy.lean"],
+    :fixture
+    {:path "/tmp/polygon-annulus-radial-homotopy.lean",
+     :sha256
+     "74bb0ed26183e0b022fc06d8a8b6c15081c6ba041970b7e726bf25d8302bda67",
+     :sorry-count 0},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PolygonAnnulusRadialHomotopy.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/annulus-radial-homotopy",
@@ -102115,15 +102171,17 @@
    :lemma
    {:name "PolygonAnnulusRadialHomotopy.annulusHomotopyEquivCircle",
     :reported-by
-    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40
+     :routes-2026-10-10-polygon-annulus-radial-homotopy-51],
     :type
     "The literal annular source 1/4 < radius < 3/4 is homotopy equivalent to Circle by radial normalization and radius-one-half inclusion.",
     :area "polygon-surface-open-cover",
-    :proved-in
-    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+    :proved-in :routes-2026-10-10-polygon-annulus-radial-homotopy-51},
    :id :lemma-polygonannulusradialhomotopy-annulushomotopyequivcircle,
    :kind :lemma,
-   :depends-on [:lemma-polygonannulusradialmaps-radialnormalizemap],
+   :depends-on
+   [:lemma-polygonannulusradialmaps-radialnormalizemap
+    :lemma-polygonannulusradialmaps-radialnormalize-halfcircle],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
