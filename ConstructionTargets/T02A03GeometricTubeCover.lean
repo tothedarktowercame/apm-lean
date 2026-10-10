@@ -243,6 +243,28 @@ theorem apm_t02a03_leftTubeNormalComplex_eq_zero_iff
       exact sub_eq_zero.mpr hnorm
     · simpa [apm_t02a03_leftTubeNormalComplex] using h2.symm
 
+abbrev apm_t02a03_LeftTubeMinusCore :=
+  {p : apm_t02a03_E3 //
+    p ∈ apm_t02a03_leftTube ∧ p ∉ Set.range apm_t02a03_leftCore}
+
+noncomputable def apm_t02a03_leftTubePuncturedNormal
+    (p : apm_t02a03_LeftTubeMinusCore) : {
+      z : ℂ // z ≠ 0} :=
+  ⟨apm_t02a03_leftTubeNormalComplex ⟨p.1, p.2.1⟩, by
+    intro h
+    exact p.2.2
+      ((apm_t02a03_leftTubeNormalComplex_eq_zero_iff ⟨p.1, p.2.1⟩).mp h)⟩
+
+theorem apm_t02a03_continuous_leftTubePuncturedNormal :
+    Continuous apm_t02a03_leftTubePuncturedNormal := by
+  apply Continuous.subtype_mk
+  have hi : Continuous
+      (fun p : apm_t02a03_LeftTubeMinusCore =>
+        (⟨p.1, p.2.1⟩ : apm_t02a03_leftTubeSubtype)) := by
+    apply Continuous.subtype_mk
+    exact continuous_subtype_val
+  exact apm_t02a03_continuous_leftTubeNormalComplex.comp hi
+
 theorem apm_t02a03_rightCore_zero :
     apm_t02a03_rightCore 0 = (0 : apm_t02a03_E3) := by
   ext i
