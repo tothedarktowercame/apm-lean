@@ -86798,17 +86798,17 @@
    "Package fiber-coset equivalence, pi1 injectivity, and subgroup-containment lifting.",
    :other-consumers [:t93J03 :t97A03]}
   {:consumer :t97A01,
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "No implementation was delivered: the row records no implementation commit, ConstructionTargets/PolygonEdgeGraphOpenCover.lean and every accepted declaration are absent, and the frozen fixture proves the advertised consequences only through the nonstandard axiom PolygonEdgeGraphOpenCoverProbe.polygonOpenCoverPackages. Its recorded placeholder-count 0 is also false under the repository census, which counts that top-level axiom. Repair requires first specifying an explicit polygon-pairing/edge-graph representation and quotient maps, then implementing the two quotient-to-ThreeCircles comparisons, radial homotopy descents, literal inclusion equations, saturation/open-cover facts, and vertex identifications in the scoped module with standard-only axioms.",
    :evidence
    {:residual
-    "Specify and construct the six-edge boundary quotient as an explicit graph, prove its homeomorphism with ThreeCircles for both words, and expose the quotient maps needed to descend the radial homotopies and prove the literal inclusion equations.",
+    "Provide a placeholder-free typed fixture fixing all accepted declaration signatures, including the explicit PolygonPairingData representation, edge-graph quotient maps, and the exact categories of both literal-inclusion equalities; implementation can then proceed without inventing API semantics.",
     :outcome :stop,
     :warnings
-    [{:kind :representation-boundary,
+    [{:kind :specification-defect,
       :message
-      "The fixture packages the unrepresented boundary quotient and both radial descents as one axiom, so it is not a standard-only implementation fixture."}],
+      "Acceptance names a reusable API without fixing its Lean types; the only typed fixture interface has different names and is axiomatized."}],
     :disposition :stop,
     :axioms
     ["propext"
@@ -86817,46 +86817,41 @@
      "Quot.sound"],
     :author "topo-2",
     :reason
-    "The elected module has a representation boundary not supplied by the frozen fixture or the banked library: there is no definition of PolygonPairingData or of the edge-graph quotient, and no theorem identifying the quotient of the six polygon boundary edges by either pairing relation with StatementSurfaceModels.ThreeCircles. The fixture hides precisely this construction, together with saturation and radial homotopy descent, behind the axiom polygonOpenCoverPackages. Radial homotopy utilities and quotient-product continuity are available, but they cannot determine the missing boundary quotient map, its inverse, or the literal inclusion equations. Implementing the advertised package therefore requires first fixing an explicit polygon-pairing/edge-graph representation and proving its quotient homeomorphism; this is a missing representation specification, not a refutation of the consumer theorem.",
+    "The repair request cannot be implemented without inventing public theorem statements. The frozen fixture specifies only PolygonEdgeGraphOpenCoverProbe.OpenCoverPackage and the single axiom polygonOpenCoverPackages. It gives no types for nine accepted declarations: PolygonPairingData, PolygonOpenCoverPackage, polygonOpen_cover, polygonInterior_contractible, polygonBoundary_homotopyEquiv_edgeGraph, polygonOverlap_homotopyEquiv_puncturedDisk, polygonBoundary_literal_inclusion, polygonOverlap_literal_inclusion, standardN3OpenCoverPackage, or torusCrosscapOpenCoverPackage. Several materially different signatures satisfy the prose—for example whether pairing data stores parametrizations or only a relation, and whether literal-inclusion results are equalities of functions, ContinuousMaps, or subtype composites. Choosing among them would invent the reusable API and violate the frozen-interface rule. The fixture also contains one top-level axiom, so it is not a standard-only completed fixture. This is an exact specification and representation boundary, not a claim that the polygon construction is false.",
     :commands
     [{:cmd "sha256sum /tmp/polygon-edge-graph-open-cover-probe.lean",
       :exit 0,
       :finding
       "8cfb3f1613cb6a590439bdc01c98e033cb70fbfb69ad5002626225583119b233"}
      {:cmd
+      "Python comment-stripped census of /tmp/polygon-edge-graph-open-cover-probe.lean",
+      :exit 0,
+      :finding
+      "0 sorry tokens and 1 axiom token; the axiom is polygonOpenCoverPackages"}
+     {:cmd
+      "rg -n \"^(structure|def|theorem|axiom) (PolygonPairingData|PolygonOpenCoverPackage|OpenCoverPackage|polygonOpen_cover|polygonInterior_contractible|polygonBoundary_homotopyEquiv_edgeGraph|polygonOverlap_homotopyEquiv_puncturedDisk|polygonBoundary_literal_inclusion|polygonOverlap_literal_inclusion|standardN3_sixVerticesIdentified|torusCrosscap_sixVerticesIdentified|standardN3OpenCoverPackage|torusCrosscapOpenCoverPackage|polygonOpenCoverPackages)\" /tmp/polygon-edge-graph-open-cover-probe.lean",
+      :exit 0,
+      :finding
+      "Only OpenCoverPackage and polygonOpenCoverPackages are declared; none of the accepted reusable API signatures appears."}
+     {:cmd
       "lake env lean /tmp/polygon-edge-graph-open-cover-probe.lean",
       :exit 0,
       :finding
-      "The fixture compiles only through polygonOpenCoverPackages; both demonstrated vertex theorems retain that nonstandard axiom."}
-     {:cmd
-      "rg -n \"(def|theorem) (PolygonPairingData|PolygonOpenCoverPackage|polygonBoundary_homotopyEquiv_edgeGraph|standardN3OpenCoverPackage|torusCrosscapOpenCoverPackage)\" ConstructionTargets",
-      :exit 1,
-      :expected-exit 1,
-      :finding
-      "No banked pairing representation, edge-graph comparison, or requested package declaration exists."}
-     {:cmd
-      "rg -n \"IsQuotientMap.*prod|continuous_lift_prod\" ConstructionTargets .lake/packages/mathlib/Mathlib/Topology -g '*.lean'",
-      :exit 0,
-      :finding
-      "Generic quotient-product continuity support is present, so it is not the blocking boundary."}
+      "The fixture compiles, but both concluding theorems depend on the nonstandard axiom polygonOpenCoverPackages."}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
      {:cmd "git status --short", :exit 0, :finding "clean"}],
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1791625968561-1576-d9344ebe",
-     :finding
-     "No implementation was delivered: the row records no implementation commit, ConstructionTargets/PolygonEdgeGraphOpenCover.lean and every accepted declaration are absent, and the frozen fixture proves the advertised consequences only through the nonstandard axiom PolygonEdgeGraphOpenCoverProbe.polygonOpenCoverPackages. Its recorded placeholder-count 0 is also false under the repository census, which counts that top-level axiom. Repair requires first specifying an explicit polygon-pairing/edge-graph representation and quotient maps, then implementing the two quotient-to-ThreeCircles comparisons, radial homotopy descents, literal inclusion equations, saturation/open-cover facts, and vertex identifications in the scoped module with standard-only axioms."},
     :fixture
     {:path "/tmp/polygon-edge-graph-open-cover-probe.lean",
      :sha256
      "8cfb3f1613cb6a590439bdc01c98e033cb70fbfb69ad5002626225583119b233",
-     :placeholder-count 0},
+     :sorry-count 0,
+     :axiom-count 1,
+     :proof-placeholder-count 1},
     :seat "topo-2"},
    :phase :implementation,
-   :state :repair,
+   :state :needs-owner,
    :scope ["ConstructionTargets/PolygonEdgeGraphOpenCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/polygon-edge-graph-open-cover/radial-quotient-package",
@@ -87026,7 +87021,7 @@
    :stop-condition
    "End only when every active topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
