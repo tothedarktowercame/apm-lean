@@ -89724,53 +89724,65 @@
    :method
    "Define the two literal ModuleCat maps and Smith coordinate linear maps; prove surjectivity and range=kernel explicitly; compose ModuleCat.cokernelIsoRangeQuotient with Submodule.quotEquivOfEq and LinearMap.quotKerEquivOfSurjective, oriented from each categorical cokernel to ModuleCat.of ℤ (ℤ × ℤ × ZMod 2).",
    :evidence
-   {:probe
-    {:outcome :go,
-     :fixture
-     {:path "/tmp/t97a01-smith-probe.lean",
-      :sha256
-      "d47c4e8570292c36799cff2c21f2c2b95bfc22e64cb3a43f053e3cd3083f1acf"},
-     :commands
-     [{:cmd "stat -c '%F %N' .lake/packages",
-       :exit 0,
-       :finding
-       "directory '.lake/packages'; this checkout is the canonical package authority itself"}
-      {:cmd "lake env lean /tmp/t97a01-smith-probe.lean",
-       :exit 0,
-       :finding
-       "both injective boundary maps, exact kernel-range identities, surjective Smith coordinate maps, and categorical cokernel isomorphisms compile"}
-      {:cmd "sha256sum /tmp/t97a01-smith-probe.lean",
-       :exit 0,
-       :finding
-       "d47c4e8570292c36799cff2c21f2c2b95bfc22e64cb3a43f053e3cd3083f1acf"}
-      {:cmd
-       "comment-stripped placeholder census of /tmp/t97a01-smith-probe.lean",
-       :exit 0,
-       :finding "0"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :finding "131 registered statements match, 0 do not"}
-      {:cmd "git status --short", :exit 0, :finding "clean"}],
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :warnings
-     [{:kind :linter,
-       :message
-       "Two unused mul_assoc simp arguments in boundary-map scalar proofs; no proof or axiom impact."}],
-     :implementation
-     {:scope ["ConstructionTargets/T97A01SmithQuotients.lean"],
-      :declarations
-      ["standardN3BoundaryMap"
-       "torusCrosscapBoundaryMap"
-       "standardN3BoundaryMap_injective"
-       "torusCrosscapBoundaryMap_injective"
-       "standardN3SmithCokernelIso"
-       "torusCrosscapSmithCokernelIso"],
-      :method
-      "Define the two literal ModuleCat maps and Smith coordinate linear maps; prove surjectivity and range=kernel explicitly; compose ModuleCat.cokernelIsoRangeQuotient with Submodule.quotEquivOfEq and LinearMap.quotKerEquivOfSurjective, oriented from each categorical cokernel to ModuleCat.of ℤ (ℤ × ℤ × ZMod 2)."},
-     :residual
-     "Implement the compiled fixture in the scoped ConstructionTarget; the downstream polygon Mayer-Vietoris adapter remains separate."}},
+   {:placeholder-delta {:scoped-file 0, :consumer 0},
+    :residual
+    "Use standardN3SmithCokernelIso and torusCrosscapSmithCokernelIso in the downstream polygon Mayer-Vietoris adapter; the consumer placeholder is unchanged by this infrastructure row.",
+    :gates
+    {:scoped-compile :pass,
+     :fixture-compile :pass,
+     :fixture-hash :pass,
+     :zero-placeholders :pass,
+     :standard-only-axioms :pass,
+     :statement-registry :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    [{:kind :linter,
+      :message
+      "The frozen fixture retains two unused mul_assoc simp-argument warnings; the scoped implementation removes those unused arguments."}
+     {:kind :concurrent-worktree-change,
+      :message
+      "ConstructionTargets/T02A03GeometricTubeCover.lean was already modified outside this scope and was not staged or committed."}],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/T97A01SmithQuotients.lean",
+      :exit 0,
+      :finding
+      "The scoped module compiles; both cokernel isomorphisms report only propext, Classical.choice, and Quot.sound."}
+     {:cmd "lake env lean /tmp/t97a01-smith-probe.lean",
+      :exit 0,
+      :finding
+      "The frozen fixture recompiles; its two recorded unused-simp-argument warnings have no proof or axiom impact."}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "sha256sum /tmp/t97a01-smith-probe.lean",
+      :exit 0,
+      :finding
+      "The fixture hash matches d47c4e8570292c36799cff2c21f2c2b95bfc22e64cb3a43f053e3cd3083f1acf."}
+     {:cmd "git status --short",
+      :exit 0,
+      :finding
+      "Only the unrelated pre-existing modification ConstructionTargets/T02A03GeometricTubeCover.lean remains; it was preserved and excluded from the commit."}],
+    :representation
+    {:source
+     "The categorical cokernels of the two literal boundary morphisms from ℤ to ℤ³",
+     :target "ModuleCat.of ℤ (ℤ × ℤ × ZMod 2)",
+     :direction
+     "Explicit isomorphisms from each categorical cokernel to Smith coordinates, induced respectively by (x,y,z) ↦ (y-x,z-x,x mod 2) and (x,y,z) ↦ (x,y,z mod 2)"},
+    :commit "a86f69f0dbddabc6958f98ae9e6714cbad77ed39",
+    :changed-paths ["ConstructionTargets/T97A01SmithQuotients.lean"],
+    :fixture
+    {:path "/tmp/t97a01-smith-probe.lean",
+     :sha256
+     "d47c4e8570292c36799cff2c21f2c2b95bfc22e64cb3a43f053e3cd3083f1acf",
+     :sorry-count 0,
+     :axiom-count 0,
+     :proof-placeholder-count 0}},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T97A01SmithQuotients.lean"],
    :acceptance
    {:placeholder "the single sorry in apm_t97a01",
