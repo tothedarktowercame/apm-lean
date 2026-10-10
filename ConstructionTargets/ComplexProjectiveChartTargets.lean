@@ -24,6 +24,24 @@ def chartInverse {n : ℕ} (i : Fin (n + 1)) (z : AffineCoordinates i) : CP n :=
     have hi := congrFun h i
     simp at hi⟩
 
+theorem affineSource_preimage {n : ℕ} (i : Fin (n + 1)) :
+    quotientMap ℂ n ⁻¹' {x : CP n | Projectivization.rep x i ≠ 0} =
+      {v : NonzeroVectors ℂ n | v.1 i ≠ 0} := by
+  ext v
+  change (Projectivization.mk ℂ v.1 v.2).rep i ≠ 0 ↔ v.1 i ≠ 0
+  obtain ⟨a, ha⟩ := Projectivization.exists_smul_eq_mk_rep ℂ v.1 v.2
+  rw [← ha]
+  change a.1 * v.1 i ≠ 0 ↔ v.1 i ≠ 0
+  simp
+
+theorem affineSource_isOpen {n : ℕ} (i : Fin (n + 1)) :
+    IsOpen {x : CP n | Projectivization.rep x i ≠ 0} := by
+  rw [isOpen_coinduced]
+  rw [affineSource_preimage i]
+  change IsOpen ((fun v : NonzeroVectors ℂ n => v.1 i) ⁻¹' ({0}ᶜ : Set ℂ))
+  exact isOpen_compl_singleton.preimage
+    ((continuous_apply i).comp continuous_subtype_val)
+
 /-- These must be the actual affine charts of the already fixed quotient topology. -/
 def AffineChartConstruction (n : ℕ) : Prop :=
   ∀ i : Fin (n + 1), ∃ e : OpenPartialHomeomorph (CP n) (AffineCoordinates i),
