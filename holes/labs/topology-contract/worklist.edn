@@ -96365,6 +96365,20 @@
      {:cmd "git status --short",
       :exit 0,
       :finding "clean worktree after commit"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791655290064-2621-5fe3302a",
+     :commands
+     ["git show 527a3e58e9103364d5856694a034711c565bd18f -- ConstructionTargets/CirclePowerKernelCard.lean"
+      "git diff --exit-code 527a3e58e9103364d5856694a034711c565bd18f -- ConstructionTargets/CirclePowerKernelCard.lean"
+      "lake build ConstructionTargets.CirclePowerKernelCard"
+      "sha256sum /tmp/circle-power-kernel-card.lean && lake env lean /tmp/circle-power-kernel-card.lean"
+      "placeholder census on source, fixture, and problems/t99J01/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb on recorded ledger at e3e29b62"],
+     :finding
+     "PASS: reviewer codex-3 verified recorded commit 527a3e58 changes only CirclePowerKernelCard.lean and the source equals that commit. Canonical packages resolve correctly; the frozen fixture hash is exact; target and fixture compile with zero placeholders; t99J01 retains exactly one placeholder; both audited theorems report only propext, Classical.choice, and Quot.sound; all 131 registered statements and the recorded 854-item ledger validate. kernelEquivRoots sends a kernel element to the identical Circle unit with its nth-root proof and reconstructs the kernel proof in reverse, with both inverse laws preserving values. Nat.card is transported from the kernel to rootsOfUnity and then evaluated as n under NeZero n; finiteness is pulled back along the equivalence injection. The module correctly does not count arbitrary circlePower or pullback fibers, construct monodromy paths, prove connectedness, compute subgroup index, or close t99J01."},
     :commit "527a3e58e9103364d5856694a034711c565bd18f",
     :changed-paths ["ConstructionTargets/CirclePowerKernelCard.lean"],
     :fixture
@@ -96380,7 +96394,7 @@
       "ConstructionTargets.CirclePowerKernelCard.circlePower_kernel_finite"]},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/CirclePowerKernelCard.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/cyclic-three-circles-cover/kernel-card",
@@ -96488,7 +96502,7 @@
       "kernelEquivRoots identifies the Circle npow kernel with rootsOfUnity; circlePower_kernel_card proves cardinality n and circlePower_kernel_finite supplies finiteness."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/cyclic-three-circles-cover",
@@ -97909,7 +97923,7 @@
    :other-consumers []}
   {:consumer :t99J01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "CirclePowerKernelCard.circlePower_kernel_card",
@@ -97920,7 +97934,9 @@
     :reported-by [:routes-2026-10-10-circle-power-kernel-card-41],
     :type
     "For NeZero n, the kernel of powMonoidHom n on Circle is finite and has Nat.card n via an equivalence with rootsOfUnity n Circle",
-    :proved-in :routes-2026-10-10-circle-power-kernel-card-41},
+    :proved-in :routes-2026-10-10-circle-power-kernel-card-41,
+    :banked-by :routes-2026-10-10-circle-power-kernel-card-41,
+    :banked-commit "527a3e58e9103364d5856694a034711c565bd18f"},
    :id :lemma-circlepowerkernelcard-circlepower-kernel-card,
    :kind :lemma,
    :depends-on [:lemma-cyclicthreecirclespullbackcover-covering],
