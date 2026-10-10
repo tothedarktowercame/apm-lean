@@ -313,4 +313,14 @@ theorem frozenCircleImagePath_eq_mappedPath_cast
       frozenCircleImagePath gamma := by
   ext t <;> rfl
 
+theorem frozenCircleImageQuotient_eq_mappedQuotient_cast
+    (gamma : Path ((0, 0) : FrozenTorus) (0, 0)) :
+    (Path.Homotopic.Quotient.mk
+        (gamma.map frozenTorusHomeomorphCircleProd.continuous)).cast
+        frozenTorusHomeomorphCircleProd_base.symm
+        frozenTorusHomeomorphCircleProd_base.symm =
+      Path.Homotopic.Quotient.mk (frozenCircleImagePath gamma) := by
+  rw [← Path.Homotopic.Quotient.mk_cast]
+  rw [frozenCircleImagePath_eq_mappedPath_cast]
+
 end ConstructionTargets.TorusPiOneWindingCoordinates
