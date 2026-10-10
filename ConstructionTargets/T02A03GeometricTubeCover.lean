@@ -349,6 +349,40 @@ theorem apm_t02a03_leftTubeTorusPoint_mem_leftTube
   · rw [apm_t02a03_dist_leftTubeTorusPoint_leftCoreCircle]
     norm_num
 
+theorem apm_t02a03_leftTubeTorusPoint_not_mem_leftCore
+    (u : Circle × Circle) :
+    apm_t02a03_leftTubeTorusPoint u ∉ Set.range apm_t02a03_leftCore := by
+  let p : apm_t02a03_leftTubeSubtype :=
+    ⟨apm_t02a03_leftTubeTorusPoint u,
+      apm_t02a03_leftTubeTorusPoint_mem_leftTube u⟩
+  have hplanar : apm_t02a03_leftTubePlanarComplex p =
+      ((1 + (1 / 8 : ℝ) * (u.2 : ℂ).re : ℝ) : ℂ) * (u.1 : ℂ) := by
+    apply Complex.ext <;>
+      simp [p, apm_t02a03_leftTubePlanarComplex,
+        apm_t02a03_leftTubeTorusPoint]
+  have hbre : -(1 : ℝ) ≤ (u.2 : ℂ).re := by
+    have h := Complex.abs_re_le_norm (u.2 : ℂ)
+    rw [Circle.norm_coe] at h
+    exact (abs_le.mp h).1
+  have hrnonneg : 0 ≤ 1 + (1 / 8 : ℝ) * (u.2 : ℂ).re := by
+    linarith
+  have hnorm : ‖apm_t02a03_leftTubePlanarComplex p‖ =
+      1 + (1 / 8 : ℝ) * (u.2 : ℂ).re := by
+    rw [hplanar, norm_mul, Circle.norm_coe, mul_one]
+    rw [Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg hrnonneg]
+  intro hcore
+  have hzero :=
+    (apm_t02a03_leftTubeNormalComplex_eq_zero_iff p).2 hcore
+  have hre := congrArg Complex.re hzero
+  have him := congrArg Complex.im hzero
+  simp [apm_t02a03_leftTubeNormalComplex] at hre
+  rw [hnorm] at hre
+  simp [apm_t02a03_leftTubeNormalComplex, p,
+    apm_t02a03_leftTubeTorusPoint] at him
+  have hb : ((u.2 : ℂ).re) ^ 2 + ((u.2 : ℂ).im) ^ 2 = 1 := by
+    simpa [Complex.normSq_apply, pow_two] using Circle.normSq_coe u.2
+  nlinarith
+
 theorem apm_t02a03_rightCore_zero :
     apm_t02a03_rightCore 0 = (0 : apm_t02a03_E3) := by
   ext i
