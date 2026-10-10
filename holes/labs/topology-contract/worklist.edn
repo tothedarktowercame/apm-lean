@@ -94725,8 +94725,71 @@
   {:bounded-exception
    "This single-consumer normalization is the exact first representation step: it removes the hidden finite index j from the frozen disk relation and exposes the two paired circular-arc generators that a disk-square coordinate map must match.",
    :consumer :t93J03,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Construct the closed-unit-square to frozen-disk homeomorphism with explicit four-side edgePoint formulas, then transport EqvGen and compare it with the classified orbit relation.",
+    :outcome :done-unreviewed,
+    :warnings
+    [{:kind :dependency-linter,
+      :message
+      "Imported Klein modules retain previously reported linter warnings; this scoped module has no warning."}],
+    :missing-theorems
+    [{:name "KleinSurfaceRelNormalForm.surfaceRel_false_two_iff",
+      :type
+      "(x y : Disk) -> SurfaceRel false 2 x y iff the edgePoint 4 0/1 pair or edgePoint 4 2/3 pair shares an Icc parameter",
+      :status :proved,
+      :consumers [:t93J03],
+      :depends-on []}],
+    :statement-hashes "131 registered statements match",
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :finding
+      "canonical package authority resolves to /home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "sha256sum /tmp/klein-surface-rel-normal-form.lean",
+      :exit 0,
+      :finding
+      "fixture hash matches 79162cc731e27288903559c81dfd62c4ee48baf556adb3a4ee41eb9199a090df"}
+     {:cmd "lake build ConstructionTargets.KleinSurfaceRelNormalForm",
+      :exit 0,
+      :finding
+      "canonical module builds the exact frozen SurfaceRel false 2 normalization"}
+     {:cmd "lake env lean /tmp/klein-surface-rel-normal-form.lean",
+      :exit 0,
+      :finding
+      "fixture compiles both relation directions and the j=0/1 split"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" ConstructionTargets/KleinSurfaceRelNormalForm.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero source placeholders"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" /tmp/klein-surface-rel-normal-form.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero fixture placeholders"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}],
+    :commit "deefe624acf8d34a4699d7e15ec2fc3f78ff0c78",
+    :changed-paths
+    ["ConstructionTargets/KleinSurfaceRelNormalForm.lean"],
+    :fixture
+    {:path "/tmp/klein-surface-rel-normal-form.lean",
+     :sha256
+     "79162cc731e27288903559c81dfd62c4ee48baf556adb3a4ee41eb9199a090df",
+     :sorry-count 0},
+    :implementation
+    {:scope ["ConstructionTargets/KleinSurfaceRelNormalForm.lean"],
+     :declarations
+     ["KleinSurfaceRelNormalForm.surfaceRel_false_two_iff"]},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/KleinSurfaceRelNormalForm.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/square-boundary-orbit-eqvgen/frozen-surface-rel-normal-form",
@@ -95721,15 +95784,20 @@
    :depends-on
    [:lemma-kleinsquarerepresentative-exists-closedsquare-smul],
    :other-consumers []}
-  {:consumer :portfolio,
+  {:consumer :t93J03,
    :phase :lemma,
    :state :backlog,
    :scope [],
    :acceptance
-   {:lemma "KleinSurfaceRelNormalForm.surfaceRel_false_two_iff"},
+   {:lemma "KleinSurfaceRelNormalForm.surfaceRel_false_two_iff",
+    :type
+    "(x y : Disk) -> SurfaceRel false 2 x y iff the edgePoint 4 0/1 pair or edgePoint 4 2/3 pair shares an Icc parameter"},
    :lemma
    {:name "KleinSurfaceRelNormalForm.surfaceRel_false_two_iff",
-    :reported-by []},
+    :reported-by [:routes-2026-10-10-klein-surface-rel-normal-form-29],
+    :type
+    "(x y : Disk) -> SurfaceRel false 2 x y iff the edgePoint 4 0/1 pair or edgePoint 4 2/3 pair shares an Icc parameter",
+    :proved-in :routes-2026-10-10-klein-surface-rel-normal-form-29},
    :id :lemma-kleinsurfacerelnormalform-surfacerel-false-two-iff,
    :kind :lemma,
    :depends-on [],
