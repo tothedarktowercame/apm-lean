@@ -61080,20 +61080,66 @@
   {:bounded-exception
    "single-consumer bundled continuous inverse coordinate map for the t02A03 punctured left tube",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/t02a03_geometric_tube_cover.lean",
+      :sha256
+      "08bdba085497bf8fd8aefa9fc4c8abeaf496e021f3b64775a8017ca2e15e592b"},
+     :commands
+     [{:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "08bdba085497bf8fd8aefa9fc4c8abeaf496e021f3b64775a8017ca2e15e592b  /tmp/t02a03_geometric_tube_cover.lean"}
+      {:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "apm_t02a03_leftTubeTorusInverse compiled without warnings; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}
+      {:cmd
+       "rg -n \"apm_t02a03_leftTubeTorus(Inverse|Point_not_mem_leftCore)\" ConstructionTargets/T02A03GeometricTubeCover.lean /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "The canonical module contains the core-exclusion prerequisite; only the fixture contains apm_t02a03_leftTubeTorusInverse."}],
+     :finding
+     "The complete placeholder-free fixture bundles the explicit reconstruction as a ContinuousMap from Circle times Circle into apm_t02a03_LeftTubeMinusCore. Its value uses the canonical tube-membership and core-exclusion proofs, and its continuity follows directly from apm_t02a03_continuous_leftTubeTorusPoint. The construction is ready for direct promotion after the canonical core-exclusion theorem.",
+     :implementation
+     {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
+      :declarations ["apm_t02a03_leftTubeTorusInverse"],
+      :acceptance
+      {:type "C(Circle × Circle, apm_t02a03_LeftTubeMinusCore)",
+       :axioms ["propext" "Classical.choice" "Quot.sound"],
+       :placement
+       "Immediately after apm_t02a03_leftTubeTorusPoint_not_mem_leftCore",
+       :gates
+       ["module compiles without warnings"
+        "scoped file contains no sorry token"
+        "statement registry matches"]}},
+     :residual
+     "Promote the compiled inverse ContinuousMap into ConstructionTargets/T02A03GeometricTubeCover.lean. Then prove the forward-after-inverse composite homotopic to the torus identity and the inverse-after-forward composite homotopic to the complement identity, and assemble the HomotopyEquiv."}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-torus-inverse-map",
    :acceptance
-   {:probe
-    "Compile and bank apm_t02a03_leftTubeTorusInverse from /tmp/t02a03_geometric_tube_cover.lean. Bundle apm_t02a03_leftTubeTorusPoint as a ContinuousMap from Circle times Circle to apm_t02a03_LeftTubeMinusCore using the banked frozen left-tube membership and frozen left-core exclusion theorems, and prove continuity from apm_t02a03_continuous_leftTubeTorusPoint. This supplies the inverse map required by t02A03 route step 2; do not yet claim either comparison homotopy, the torus HomotopyEquiv, or gluing.",
-    :declaration "apm_t02a03_leftTubeTorusInverse",
-    :type "C(Circle × Circle, apm_t02a03_LeftTubeMinusCore)",
-    :placeholder "the sole sorry in apm_t02a03",
-    :route-step
-    "t02A03 step 2, bundle the explicit torus-coordinate reconstruction as the continuous inverse candidate"},
+   {:type "C(Circle × Circle, apm_t02a03_LeftTubeMinusCore)",
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :placement
+    "Immediately after apm_t02a03_leftTubeTorusPoint_not_mem_leftCore",
+    :gates
+    ["module compiles without warnings"
+     "scoped file contains no sorry token"
+     "statement registry matches"]},
    :id :routes-2026-10-10-t02a03-left-tube-torus-inverse-map-topo2-r1,
    :kind :reusable-theorem,
+   :declarations ["apm_t02a03_leftTubeTorusInverse"],
    :depends-on
    [:routes-2026-10-10-checkpoint-topo2-r5
     :routes-2026-10-10-t02a03-left-tube-torus-point-core-exclusion-topo2-r1],
