@@ -90296,8 +90296,57 @@
    "Review one bounded consumer algebra step and one corrected two-consumer foundation after the owner clarification.",
    :other-consumers []}
   {:consumer :t99J01,
+   :stop-count 1,
+   :evidence
+   {:residual
+    "First prove finite free-group basis-rank invariance in the exact generatorsEquivFin_of_explicitBasis form; then construct and count the finite Schreier coset-quiver basis under 0 < n.",
+    :outcome :stop,
+    :warnings
+    [{:kind :missing-mathematical-prerequisite,
+      :message
+      "Qualitative Nielsen-Schreier chooses a basis but does not prove uniqueness of finite basis rank or count the spanning-tree complement."}],
+    :disposition :stop,
+    :axioms
+    ["propext"
+     "Classical.choice"
+     "Quot.sound"
+     "SchreierPositiveRankProbe.generatorsEquivFinSchreier"],
+    :author "topo-2",
+    :reason
+    "The added 0 < n hypothesis repairs the prior counterexample, but the requested conclusion is not obtainable from Mathlib's Nielsen-Schreier API without a missing basis-rank invariance theorem. NielsenSchreier.endIsFree constructs an explicit FreeGroupBasis indexed by the complement of a geodesic spanning tree, while IsFreeGroup.Generators H is defined by Classical.choose from an arbitrary basis existence proof. Mathlib has no theorem comparing the index types of two FreeGroupBasis values. A necessary prerequisite has Lean type: theorem generatorsEquivFin_of_explicitBasis {G : Type*} [Group G] [IsFreeGroup G] (k : ℕ) (b : FreeGroupBasis (Fin k) G) : Nonempty (IsFreeGroup.Generators G ≃ Fin k). Proving this is free-group rank invariance, requiring abelianization and finite-rank dimension/cardinality invariance; it is not supplied by qualitative Nielsen-Schreier. After that theorem, this row still must expose the concrete coset quiver and prove the complement of its geodesic spanning tree has r*n-(n-1) elements. Neither comparison is banked, and together they are too large to introduce as unreviewed helpers while claiming the frozen generator equivalence discharged.",
+    :commands
+    [{:cmd "sha256sum /tmp/schreier-positive-rank-probe.lean",
+      :exit 0,
+      :finding "The corrected positive-index fixture hash matches."}
+     {:cmd "lake env lean /tmp/schreier-positive-rank-probe.lean",
+      :exit 0,
+      :finding
+      "The specializations compile only through the nonstandard axiom generatorsEquivFinSchreier."}
+     {:cmd
+      "rg -n \"FreeGroupBasis.*(Equiv|equiv|card|Card|rank)|Generators.*Fin|basis.*index.*equiv|equiv.*basis.*index|free.*basis.*card\" .lake/packages/mathlib/Mathlib/GroupTheory ConstructionTargets -g '*.lean'",
+      :exit 0,
+      :finding
+      "Only constructors for explicit bases and the arbitrary chosen IsFreeGroup.basis appear; no basis-index equivalence or rank-invariance theorem is banked."}
+     {:cmd
+      "test ! -e ConstructionTargets/FiniteIndexFreeGroupSchreierPositiveIndex.lean",
+      :exit 0,
+      :finding "No scoped implementation artifact exists."}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git status --short",
+      :exit 0,
+      :finding "The worktree is clean."}],
+    :fixture
+    {:path "/tmp/schreier-positive-rank-probe.lean",
+     :sha256
+     "ad227f2788f17bc70668a5697b3ed28e407665a460f301fce71dd38681c64685",
+     :sorry-count 0,
+     :axiom-count 1,
+     :proof-placeholder-count 1},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/FiniteIndexFreeGroupSchreierPositiveIndex.lean"],
    :dag-node
