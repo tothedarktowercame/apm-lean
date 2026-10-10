@@ -93907,8 +93907,80 @@
   {:bounded-exception
    "This single-consumer arithmetic lemma is the exact missing identity exposed by the affine action multiplication law and is immediately consumed by the elected square-orbit classification.",
    :consumer :t93J03,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Use action_toAdd to prove the affine coordinate action law, then classify closed-square orbit representatives and boundary coincidences.",
+    :outcome :done-unreviewed,
+    :warnings
+    [{:kind :dependency-linter,
+      :message
+      "The imported two-sided conjugation module retains an unnecessarySimpa warning; this scoped module has no warning."}],
+    :missing-theorems
+    [{:name "KleinCoordinateInversionPower.inversion_zpow_apply",
+      :type
+      "(n : Int) (z : Multiplicative Int) -> Multiplicative.toAdd ((inversion ^ n) z) = Multiplicative.toAdd ((inversion ^ n) (Multiplicative.ofAdd 1)) * Multiplicative.toAdd z",
+      :status :proved,
+      :consumers [:t93J03],
+      :depends-on ["kleinPresentedGroup_coordinateNormalForm"]}
+     {:name "KleinCoordinateInversionPower.action_toAdd",
+      :type
+      "(g z : Multiplicative Int) -> Multiplicative.toAdd (action g z) = Multiplicative.toAdd (action g (Multiplicative.ofAdd 1)) * Multiplicative.toAdd z",
+      :status :proved,
+      :consumers [:t93J03],
+      :depends-on
+      ["KleinCoordinateInversionPower.inversion_zpow_apply"]}],
+    :statement-hashes "131 registered statements match",
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :finding
+      "canonical package authority resolves to /home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "sha256sum /tmp/klein-inversion-power.lean",
+      :exit 0,
+      :finding
+      "fixture hash matches 692f78b74476913490121bd0160057ec47ffbcfecb20e4fdb5b3c7fd2930d02a"}
+     {:cmd
+      "lake build ConstructionTargets.KleinCoordinateInversionPower",
+      :exit 0,
+      :finding
+      "canonical module builds both integer-power coordinate identities"}
+     {:cmd "lake env lean /tmp/klein-inversion-power.lean",
+      :exit 0,
+      :finding
+      "fixture compiles positive and negative Int.induction_on cases"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" ConstructionTargets/KleinCoordinateInversionPower.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero source placeholders"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" /tmp/klein-inversion-power.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero fixture placeholders"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}],
+    :commit "aba0cdc46dd37c23f4fa79d846a61e0981cd119f",
+    :changed-paths
+    ["ConstructionTargets/KleinCoordinateInversionPower.lean"],
+    :fixture
+    {:path "/tmp/klein-inversion-power.lean",
+     :sha256
+     "692f78b74476913490121bd0160057ec47ffbcfecb20e4fdb5b3c7fd2930d02a",
+     :sorry-count 0},
+    :implementation
+    {:scope ["ConstructionTargets/KleinCoordinateInversionPower.lean"],
+     :declarations
+     ["KleinCoordinateInversionPower.inversion_zpow_apply"
+      "KleinCoordinateInversionPower.action_toAdd"]},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/KleinCoordinateInversionPower.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/plane-action-square-orbit-classification/inversion-power-coordinate",
@@ -94708,17 +94780,44 @@
    :kind :lemma,
    :depends-on [:lemma-kleinpresentedgroupconjugation-conjugateapow],
    :other-consumers []}
-  {:consumer :portfolio,
+  {:consumer :t93J03,
    :phase :lemma,
    :state :backlog,
    :scope [],
-   :acceptance {:lemma "KleinCoordinateInversionPower.action_toAdd"},
+   :acceptance
+   {:lemma "KleinCoordinateInversionPower.action_toAdd",
+    :type
+    "(g z : Multiplicative Int) -> Multiplicative.toAdd (action g z) = Multiplicative.toAdd (action g (Multiplicative.ofAdd 1)) * Multiplicative.toAdd z"},
    :lemma
    {:name "KleinCoordinateInversionPower.action_toAdd",
-    :reported-by []},
+    :reported-by
+    [:routes-2026-10-10-klein-coordinate-inversion-power-24],
+    :type
+    "(g z : Multiplicative Int) -> Multiplicative.toAdd (action g z) = Multiplicative.toAdd (action g (Multiplicative.ofAdd 1)) * Multiplicative.toAdd z",
+    :proved-in :routes-2026-10-10-klein-coordinate-inversion-power-24},
    :id :lemma-kleincoordinateinversionpower-action-toadd,
    :kind :lemma,
-   :depends-on [],
+   :depends-on
+   [:lemma-kleincoordinateinversionpower-inversion-zpow-apply],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "KleinCoordinateInversionPower.inversion_zpow_apply",
+    :type
+    "(n : Int) (z : Multiplicative Int) -> Multiplicative.toAdd ((inversion ^ n) z) = Multiplicative.toAdd ((inversion ^ n) (Multiplicative.ofAdd 1)) * Multiplicative.toAdd z"},
+   :lemma
+   {:name "KleinCoordinateInversionPower.inversion_zpow_apply",
+    :reported-by
+    [:routes-2026-10-10-klein-coordinate-inversion-power-24],
+    :type
+    "(n : Int) (z : Multiplicative Int) -> Multiplicative.toAdd ((inversion ^ n) z) = Multiplicative.toAdd ((inversion ^ n) (Multiplicative.ofAdd 1)) * Multiplicative.toAdd z",
+    :proved-in :routes-2026-10-10-klein-coordinate-inversion-power-24},
+   :id :lemma-kleincoordinateinversionpower-inversion-zpow-apply,
+   :kind :lemma,
+   :depends-on [:lemma-kleinpresentedgroup-coordinatenormalform],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
