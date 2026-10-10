@@ -97,6 +97,22 @@ theorem apm_t02a03_leftTube_exists_near_leftCore
   rcases hp with ⟨q, hq, hd⟩
   exact ⟨q, hq, by simpa [dist_comm] using hd⟩
 
+theorem apm_t02a03_leftTube_planarCenter_ne_zero
+    (p : apm_t02a03_E3) (hp : p ∈ apm_t02a03_leftTube) :
+    (p 0 + 1) ^ 2 + (p 1) ^ 2 ≠ 0 := by
+  rintro hzero
+  have hx : p 0 = -1 := by nlinarith [sq_nonneg (p 0 + 1), sq_nonneg (p 1)]
+  have hy : p 1 = 0 := by nlinarith [sq_nonneg (p 0 + 1), sq_nonneg (p 1)]
+  obtain ⟨q, ⟨t, rfl⟩, hd⟩ :=
+    apm_t02a03_leftTube_exists_near_leftCore p hp
+  rw [dist_eq_norm, EuclideanSpace.norm_eq] at hd
+  simp [apm_t02a03_leftCore, hx, hy, Fin.sum_univ_succ] at hd
+  have hs : 1 ≤ √(Real.cos t ^ 2 + (Real.sin t ^ 2 + p 2 ^ 2)) := by
+    rw [Real.le_sqrt (by norm_num) (by positivity)]
+    nlinarith [Real.sin_sq_add_cos_sq t, sq_nonneg (p 2)]
+  norm_num at hd
+  linarith
+
 theorem apm_t02a03_rightCore_zero :
     apm_t02a03_rightCore 0 = (0 : apm_t02a03_E3) := by
   ext i
