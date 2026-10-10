@@ -98704,6 +98704,20 @@
       :exit 0,
       :finding "clean worktree after commit"}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791664350275-2921-68fce6c1",
+     :commands
+     ["git show and diff-tree on a7b0b665fffd59f1d0b43373224144980dc70214"
+      "sha256sum frozen fixture"
+      "lake build ConstructionTargets.PolygonOuterRadialRelation"
+      "lake env lean frozen fixture"
+      "comment-stripped placeholder count"
+      "python3 scripts/statement-registry.py check"
+      "git diff-tree --check"],
+     :finding
+     "PASS: recorded commit changes only ConstructionTargets/PolygonOuterRadialRelation.lean; fixture hash matches; relation and EqvGen preservation have the required forward orientation; Quotient.lift crosses the representation boundary with the proved compatibility; representative and zero formulas and SurfaceRel boundary support match the frozen interface; source and fixture have zero placeholders; fixture reports only propext, Classical.choice, and Quot.sound; registry reports 131 matches and zero mismatches."},
     :commit "a7b0b665fffd59f1d0b43373224144980dc70214",
     :changed-paths
     ["ConstructionTargets/PolygonOuterRadialRelation.lean"],
@@ -98714,7 +98728,7 @@
      :sorry-count 0},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/PolygonOuterRadialRelation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/outer-radial-relation",
@@ -98849,7 +98863,7 @@
       "OuterRel restricts a disk-edge relation to the outer source; every radial time slice preserves boundary-supported generators and their EqvGen closure; quotientTimeSlice descends the set-level map; every canonical SurfaceRel is boundary-supported."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -101114,7 +101128,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "PolygonOuterRadialRelation.quotientTimeSlice",
@@ -101126,7 +101140,9 @@
     :type
     "For a disk relation supported on radius one, every outer radial time slice preserves the restricted relation and its EqvGen closure and hence induces a quotient function, with representative and time-zero formulas; canonical SurfaceRel is supported on radius one.",
     :area "polygon-surface-open-cover",
-    :proved-in :routes-2026-10-10-polygon-outer-radial-relation-44},
+    :proved-in :routes-2026-10-10-polygon-outer-radial-relation-44,
+    :banked-by :routes-2026-10-10-polygon-outer-radial-relation-44,
+    :banked-commit "a7b0b665fffd59f1d0b43373224144980dc70214"},
    :id :lemma-polygonouterradialrelation-quotienttimeslice,
    :kind :lemma,
    :depends-on [:lemma-polygonouterradialdeformation-radialhomotopy],
