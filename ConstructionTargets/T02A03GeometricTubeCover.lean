@@ -277,4 +277,13 @@ noncomputable def apm_t02a03_circleMeridianMap :
     intro i
     fin_cases i <;> simp <;> fun_prop
 
+theorem apm_t02a03_circleMeridian_exp (t : ℝ) :
+    apm_t02a03_circleMeridian (Circle.exp t) =
+      apm_t02a03_meridian t := by
+  ext i
+  fin_cases i <;>
+    simp [apm_t02a03_circleMeridian, apm_t02a03_meridian,
+      Circle.coe_exp, Complex.exp_mul_I, ← Complex.ofReal_cos,
+      ← Complex.ofReal_sin]
+
 end ConstructionTargets.T02A03GeometricTubeCover
