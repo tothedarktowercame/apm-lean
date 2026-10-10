@@ -94946,8 +94946,86 @@
   {:bounded-exception
    "This single-consumer orientation declaration fixes the four square-side parameterizations and proves their exact correspondence to both the frozen disk generators and the banked affine-orbit Cases relation.",
    :consumer :t93J03,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Construct a specific homeomorphism sending squareEdge i t to edgePoint 4 i t for all four sides, then transport the generator correspondence through Relation.EqvGen.",
+    :outcome :done-unreviewed,
+    :warnings
+    [{:kind :linter,
+      :message
+      "Lean reports an unreachable trailing linarith tactic in the finite edge membership proof."}
+     {:kind :dependency-linter,
+      :message
+      "Imported Klein modules retain previously reported linter warnings."}],
+    :missing-theorems
+    [{:name "KleinSquareEdgeOrientation.edge_orientation",
+      :type
+      "Four oriented square-side parameterizations with exact orbit Cases and SurfaceRel false 2 generator correspondences",
+      :status :proved,
+      :consumers [:t93J03],
+      :depends-on
+      ["KleinDiskSquareCarrier.exists_centeredSquare_disk_homeomorph"
+       "kleinPlaneAction_squareOrbitClassification"
+       "KleinSurfaceRelNormalForm.surfaceRel_false_two_iff"]}],
+    :statement-hashes "131 registered statements match",
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :finding
+      "canonical package authority resolves to /home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "sha256sum /tmp/klein-square-edge-orientation.lean",
+      :exit 0,
+      :finding
+      "fixture hash matches 7f1ad4c93eae56a4a0de984d2d9fdbb8f95e24641538e98b4a642bb49b89d312"}
+     {:cmd "lake build ConstructionTargets.KleinSquareEdgeOrientation",
+      :exit 0,
+      :finding
+      "canonical module builds the four orientations and both relation correspondences"}
+     {:cmd "lake env lean /tmp/klein-square-edge-orientation.lean",
+      :exit 0,
+      :finding
+      "fixture compiles all square membership, Cases, and SurfaceRel claims"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" ConstructionTargets/KleinSquareEdgeOrientation.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero source placeholders"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" /tmp/klein-square-edge-orientation.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero fixture placeholders"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}],
+    :commit "818c7f5dfce60f4c01681b728f086f9c586ee383",
+    :changed-paths
+    ["ConstructionTargets/KleinSquareEdgeOrientation.lean"],
+    :fixture
+    {:path "/tmp/klein-square-edge-orientation.lean",
+     :sha256
+     "7f1ad4c93eae56a4a0de984d2d9fdbb8f95e24641538e98b4a642bb49b89d312",
+     :sorry-count 0},
+    :implementation
+    {:scope ["ConstructionTargets/KleinSquareEdgeOrientation.lean"],
+     :declarations
+     ["KleinSquareEdgeOrientation.squareEdge"
+      "KleinSquareEdgeOrientation.squareEdge_zero"
+      "KleinSquareEdgeOrientation.squareEdge_one"
+      "KleinSquareEdgeOrientation.squareEdge_two"
+      "KleinSquareEdgeOrientation.squareEdge_three"
+      "KleinSquareEdgeOrientation.inSquare_squareEdge"
+      "KleinSquareEdgeOrientation.cases_edge_zero_one"
+      "KleinSquareEdgeOrientation.cases_edge_two_three"
+      "KleinSquareEdgeOrientation.surfaceRel_edge_zero_one"
+      "KleinSquareEdgeOrientation.surfaceRel_edge_two_three"]},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/KleinSquareEdgeOrientation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/square-boundary-orbit-eqvgen/edge-orientation",
@@ -96025,6 +96103,27 @@
    :id :lemma-kleinsquareedgeorientation-cases-edge-two-three,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "KleinSquareEdgeOrientation.edge_orientation",
+    :type
+    "Four oriented square-side parameterizations with exact orbit Cases and SurfaceRel false 2 generator correspondences"},
+   :lemma
+   {:name "KleinSquareEdgeOrientation.edge_orientation",
+    :reported-by [:routes-2026-10-10-klein-square-edge-orientation-31],
+    :type
+    "Four oriented square-side parameterizations with exact orbit Cases and SurfaceRel false 2 generator correspondences",
+    :proved-in :routes-2026-10-10-klein-square-edge-orientation-31},
+   :id :lemma-kleinsquareedgeorientation-edge-orientation,
+   :kind :lemma,
+   :depends-on
+   [:lemma-kleindisksquarecarrier-exists-centeredsquare-disk-homeomorph
+    :lemma-kleinplaneaction-squareorbitclassification
+    :lemma-kleinsurfacerelnormalform-surfacerel-false-two-iff],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
