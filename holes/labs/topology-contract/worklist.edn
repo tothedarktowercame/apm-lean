@@ -96529,8 +96529,75 @@
   {:bounded-exception
    "This single-consumer certificate transports the banked circle-power fiber calculation through the literal pullback equivalence and supplies the exact IsKSheetedCover required by the first conjunct of t99J01.",
    :consumer :t99J01,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Prove the pullback path connected by showing the firstCircle loop induces a cyclic transitive permutation of the n sheets, then package the PathConnectedSpace instance.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :missing-theorems
+    [{:name "CyclicThreeCirclesPullbackSheets.pullback_isKSheeted",
+      :type
+      "For NeZero n, IsKSheetedCover (CyclicThreeCirclesPullbackCover.projection n) n",
+      :status :proved,
+      :consumers [:t99J01],
+      :depends-on
+      ["CyclicThreeCirclesPullbackCover.covering"
+       "CirclePowerFiberCard.circlePower_fiber_card"]}],
+    :statement-hashes "131 registered statements match",
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :finding
+      "canonical package authority resolves to /home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "sha256sum /tmp/cyclic-three-circles-pullback-sheets.lean",
+      :exit 0,
+      :finding
+      "fixture hash matches cc68cdc0e02d849939a7ffa239f2129cbdc83ec8d6f4e0c288a78ab669b772c3"}
+     {:cmd
+      "lake build ConstructionTargets.CyclicThreeCirclesPullbackSheets",
+      :exit 0,
+      :finding "canonical n-sheeted pullback certificate builds"}
+     {:cmd
+      "lake env lean /tmp/cyclic-three-circles-pullback-sheets.lean",
+      :exit 0,
+      :finding
+      "frozen fixture compiles and reports only standard axioms"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" ConstructionTargets/CyclicThreeCirclesPullbackSheets.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero source placeholders"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" /tmp/cyclic-three-circles-pullback-sheets.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero fixture placeholders"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short",
+      :exit 0,
+      :finding "clean worktree after commit"}],
+    :commit "a40331e72c1b8f7a2cdc2503ad1a6eca1bc1becb",
+    :changed-paths
+    ["ConstructionTargets/CyclicThreeCirclesPullbackSheets.lean"],
+    :fixture
+    {:path "/tmp/cyclic-three-circles-pullback-sheets.lean",
+     :sha256
+     "cc68cdc0e02d849939a7ffa239f2129cbdc83ec8d6f4e0c288a78ab669b772c3",
+     :sorry-count 0},
+    :implementation
+    {:scope
+     ["ConstructionTargets/CyclicThreeCirclesPullbackSheets.lean"],
+     :declarations
+     ["ConstructionTargets.CyclicThreeCirclesPullbackSheets.pullback_isKSheeted"]},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CyclicThreeCirclesPullbackSheets.lean"],
    :dag-node
@@ -98096,18 +98163,27 @@
    :kind :lemma,
    :depends-on [:lemma-circlepowerkernelcard-circlepower-kernel-card],
    :other-consumers []}
-  {:consumer :portfolio,
+  {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
    :scope [],
    :acceptance
-   {:lemma "CyclicThreeCirclesPullbackSheets.pullback_isKSheeted"},
+   {:lemma "CyclicThreeCirclesPullbackSheets.pullback_isKSheeted",
+    :type
+    "For NeZero n, IsKSheetedCover (CyclicThreeCirclesPullbackCover.projection n) n"},
    :lemma
    {:name "CyclicThreeCirclesPullbackSheets.pullback_isKSheeted",
-    :reported-by []},
+    :reported-by
+    [:routes-2026-10-10-cyclic-three-circles-pullback-sheets-43],
+    :type
+    "For NeZero n, IsKSheetedCover (CyclicThreeCirclesPullbackCover.projection n) n",
+    :proved-in
+    :routes-2026-10-10-cyclic-three-circles-pullback-sheets-43},
    :id :lemma-cyclicthreecirclespullbacksheets-pullback-isksheeted,
    :kind :lemma,
-   :depends-on [],
+   :depends-on
+   [:lemma-cyclicthreecirclespullbackcover-covering
+    :lemma-circlepowerfibercard-circlepower-fiber-card],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
