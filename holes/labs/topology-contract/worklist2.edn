@@ -53848,8 +53848,11 @@
    :consumer :t97A04,
    :stop-count 1,
    :evidence
-   {:outcome :stop,
-    :seat "topo-8",
+   {:residual
+    "Repair the stopped comparison-naturality row's acceptance to recognize the canonical real package directory, provide and compile a stable placeholder-free fixture, and bank coverSmallHomologyIso_naturality_of_square plus memberwiseCoverSmallHomology_naturality. Only then can this row assemble the Boolean ShortComplex.Hom, apply delta_naturality, and conjugate through the production isomorphisms.",
+    :outcome :stop,
+    :disposition :stop,
+    :author "topo-8",
     :reason
     "The requested connecting-naturality fixture cannot be constructed from the declared dependencies: the reviewed recovery dependency finished with STOP and banked neither coverSmallHomologyIso_naturality_of_square nor memberwiseCoverSmallHomology_naturality. Its acceptance required the canonical checkout's .lake/packages authority to be a symlink, contradicting the build-loop invariant that the canonical checkout owns that real directory. Treating the dependency's administrative :state :done as mathematical evidence would substitute a ledger facade for the missing compiled theorem. The lower memberwise cover-small chain map is genuinely banked and compiles placeholder-free, but delta_naturality cannot be conjugated to productionConnecting without the absent homology-comparison square. This is the exact representation boundary; no new prerequisite is returned because the one required prerequisite was already isolated and then stopped on its contradictory acceptance.",
     :commands
@@ -53870,15 +53873,24 @@
      {:cmd "stat -c '%F %n' .lake/packages",
       :exit 0,
       :output "directory .lake/packages"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791603331165-951-101d0176",
+     :commands
+     ["lake env lean ConstructionTargets/ProductionConnectingNaturality.lean"
+      "rg -n 'coverSmallHomologyIso_naturality_of_square|memberwiseCoverSmallHomology_naturality|productionConnecting_naturality' ConstructionTargets problems -g '*.lean'"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show e0ceb2c7:holes/labs/topology-contract/worklist2.edn)"
+      "git diff --exit-code e0ceb2c7^ e0ceb2c7 -- . ':(exclude)holes/labs/topology-contract/worklist2.edn'"],
+     :finding
+     "Independent of topo-8. PASS: commit e0ceb2c7 changes only worklist2.edn and the row has empty implementation scope and no fixture/hash to authenticate. The banked source compiles, has source SHA-256 4203074a81bdb2d8932a767a75d855c8788e6e7e3fa85b0456aacd8c59bb0139, and has zero forbidden placeholders. Its chain map is correctly oriented U to V with F ≫ iota_V = iota_U ≫ chains(f), but the homology-comparison square and productionConnecting_naturality are absent, so delta_naturality cannot yet be conjugated across the production isomorphisms. The STOP correctly preserves that representation boundary rather than treating a reviewed administrative dependency as a theorem. Registry: 131 matched, 0 mismatched; ledger: 354 items valid."},
     :fixture
     {:status :absent,
      :required-declaration "productionConnecting_naturality"},
-    :residual
-    "Repair the stopped comparison-naturality row's acceptance to recognize the canonical real package directory, provide and compile a stable placeholder-free fixture, and bank coverSmallHomologyIso_naturality_of_square plus memberwiseCoverSmallHomology_naturality. Only then can this row assemble the Boolean ShortComplex.Hom, apply delta_naturality, and conjugate through the production isomorphisms.",
-    :author "topo-8",
-    :disposition :stop},
+    :seat "topo-8"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -54078,7 +54090,7 @@
      :infrastructure-packets
      :review-outcomes]},
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
