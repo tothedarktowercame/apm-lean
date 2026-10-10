@@ -63811,6 +63811,21 @@
       :exit 0,
       :output
       "67eba32b8ddf7aca38db6ea0fb72ad3a344f7807\nConstructionTargets/T97A04FrozenH1Coordinate.lean"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791654128865-2572-b519b333",
+     :commands
+     ["git show/diff-tree/show --check 67eba32b8ddf7aca38db6ea0fb72ad3a344f7807"
+      "sha256sum /tmp/t97a04_frozen_h1_coordinate.lean"
+      "lake env lean /tmp/t97a04_frozen_h1_coordinate.lean"
+      "lake env lean ConstructionTargets/T97A04FrozenH1Coordinate.lean"
+      "lake build ConstructionTargets.T97A04FrozenH1Coordinate"
+      "python3 scripts/statement-registry.py check --rev 67eba32b8ddf7aca38db6ea0fb72ad3a344f7807"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "recompute statement hash and comment-stripped placeholder counts from commit 67eba32b"],
+     :finding
+     "PASS: reviewer codex-7 independently reviewed topo-6 commit 67eba32b; exact scope is 11 added lines in one recorded target file, fixture SHA-256 c1b38d678ccce59d905a6243a7747a9d243996e6da41c56d79499aaf6e61688a matches, fixture and target compile with standard axioms [propext, Classical.choice, Quot.sound], and the focused build completes 8291 jobs. The equivalence is oriented from Multiplicative IntegralH1 FrozenTorus to Multiplicative (Fin 2 to integers), faithfully transports the banked additive group isomorphism through AddEquiv.toMultiplicative, and does not alter or claim the downstream frozen matrix equation. Registered statement hash is 27ab21bdd745f9a8b4ec78e39729d7fda39925467d152616862f6080ef55ab58; target and fixture placeholders are 0, consumer placeholders remain 4; registry is 131/0 and worklist is 494 OK."},
     :commit "67eba32b8ddf7aca38db6ea0fb72ad3a344f7807",
     :changed-paths
     ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"],
@@ -63830,7 +63845,7 @@
    :phase :implementation,
    :type
    "Multiplicative (ConstructionTargets.DegreeOneHurewiczMap.IntegralH1 FrozenTorus) ≃* Multiplicative (Fin 2 → ℤ)",
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A04/frozen-h1-multiplicative-coordinate",
@@ -63924,7 +63939,7 @@
      "The full apm_t97A04_bridge_2 proof remains absent. The compiled prerequisite converts the banked additive-group H1 coordinate into the exact multiplicative IntegralH1 coordinate required by finiteFreeHurewiczCoordinateMulEquiv and h1_coordinate_eq_of_fundamentalGroup_coordinate_eq, without changing the frozen matrix.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t97A04/h1-bridge-assembly",
    :acceptance
@@ -64884,7 +64899,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -64900,7 +64915,10 @@
     :type
     "Multiplicative (ConstructionTargets.DegreeOneHurewiczMap.IntegralH1 FrozenTorus) ≃* Multiplicative (Fin 2 → ℤ)",
     :proved-in
-    :routes-2026-10-10-t97a04-frozen-h1-multiplicative-coordinate-topo2-r1},
+    :routes-2026-10-10-t97a04-frozen-h1-multiplicative-coordinate-topo2-r1,
+    :banked-by
+    :routes-2026-10-10-t97a04-frozen-h1-multiplicative-coordinate-topo2-r1,
+    :banked-commit "67eba32b8ddf7aca38db6ea0fb72ad3a344f7807"},
    :id
    :lemma-constructiontargets-t97a04frozenh1coordinate-frozentorush1mulequivfintwo,
    :kind :lemma,
