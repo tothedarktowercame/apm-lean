@@ -91168,45 +91168,58 @@
    "Review the second bounded construction in the shared positive-index Schreier generator count.",
    :other-consumers []}
   {:consumer :t99J01,
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "transport the subgroup and coset action through IsFreeGroup.toFreeGroup, or restate the source in IsFreeGroup.Generators coordinates, then compile the endpoint- and orientation-preserving edge comparison",
    :evidence
    {:residual
-    "Restate the Schreier quiver directly in IsFreeGroup.Generators coordinates, or explicitly transport the subgroup and coset action through IsFreeGroup.toFreeGroup before requesting an endpoint-preserving comparison.",
+    "Elect a representation-comparison row with writable scope that transports H and its coset action through IsFreeGroup.toFreeGroup, or rebuild the banked quiver directly in IsFreeGroup.Generators coordinates; then retry the edge comparison.",
     :outcome :stop,
+    :warnings
+    [{:kind :missing-representation-comparison,
+      :message
+      "Endpoint preservation requires transporting the subgroup and coset action, or changing the source labels to IsFreeGroup.Generators coordinates."}],
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
-    :author "topo-4",
+    :author "topo-2",
     :reason
-    "The required endpoint-preserving comparison is not available for the stated source and target. The banked source labels an edge by i : Fin r and acts by the canonical element FreeGroup.of i. Mathlib's actionGroupoidIsFree labels generator arrows by IsFreeGroup.Generators (FreeGroup (Fin r)) and acts by IsFreeGroup.of j, where Generators and of come from an arbitrarily chosen FreeGroupBasis. Equiv.ofFreeGroupEquiv supplies a cardinality equivalence Fin r ≃ IsFreeGroup.Generators (FreeGroup (Fin r)), but it supplies no equation IsFreeGroup.of (e i) = FreeGroup.of i. Preserving source and target cosets for the same H requires precisely that compatibility; for H = ⊥, equality of the endpoint actions forces equality of the group elements. The frozen comparison therefore needs a missing hypothesis/changed representation: either use IsFreeGroup.Generators coordinates from the outset, or transport H and the coset action along the basis isomorphism. Neither is the requested exact endpoint-preserving equivalence on the unchanged H-coset space.",
+    "The reviewed repair is valid only after changing the representation, which the frozen acceptance still does not do. The banked source edge (i,v) has endpoint FreeGroup.of i • v on the unchanged quotient FreeGroup (Fin r) ⧸ H. The action-groupoid generator arrow labelled j has endpoint IsFreeGroup.of j • v. Equiv.ofFreeGroupEquiv yields only a type equivalence e : Fin r ≃ IsFreeGroup.Generators (FreeGroup (Fin r)); neither it nor IsFreeGroup.toFreeGroup proves IsFreeGroup.of (e i) = FreeGroup.of i. Transporting through IsFreeGroup.toFreeGroup instead replaces H by its mapped subgroup and requires an induced coset equivalence; restating the source in Generators coordinates replaces the banked Fin r labels. Thus neither repair inhabits the requested endpoint-preserving equivalence on the unchanged H-coset space. A sufficient corrected prerequisite has Lean type: for φ := IsFreeGroup.toFreeGroup (FreeGroup (Fin r)), let H' := H.map φ.toMonoidHom; construct (FreeGroup (Fin r) ⧸ H) ≃ (FreeGroup (IsFreeGroup.Generators (FreeGroup (Fin r))) ⧸ H') together with exact equivariance under φ, then compare transported Fin r-labelled edges to action-groupoid arrows. The present row has empty scope and its acceptance freezes the untransported source and target, so that prerequisite cannot be implemented without changing the representation contract.",
     :commands
-    [{:cmd "lake env lean /tmp/edgecomp.lean",
+    [{:cmd "sha256sum /tmp/edgecomp.lean",
+      :exit 0,
+      :finding "The diagnostic fixture hash matches."}
+     {:cmd "lake env lean /tmp/edgecomp.lean",
       :exit 0,
       :finding
-      "placeholder-free diagnostic compiles the available labelEquiv and shows its type is only Fin r ≃ IsFreeGroup.Generators (FreeGroup (Fin r)); no generator-image compatibility is provided"}
+      "The available labelEquiv compiles with standard axioms, but exposes only Fin r ≃ IsFreeGroup.Generators (FreeGroup (Fin r))."}
      {:cmd
-      "rg -n '(^|[^A-Za-z0-9_])sorry([^A-Za-z0-9_]|$)' /tmp/edgecomp.lean",
-      :exit 1,
-      :expected-exit 1,
-      :finding "zero fixture placeholders"}
+      "rg -n \"ofFreeGroupEquiv|ofIsFreeGroupEquiv|IsFreeGroup\\.of.*FreeGroup\\.of|FreeGroup\\.of.*IsFreeGroup\\.of|mulEquiv.*of\" .lake/packages/mathlib/Mathlib/GroupTheory/FreeGroup ConstructionTargets -g '*.lean'",
+      :exit 0,
+      :finding
+      "No generator-image compatibility theorem identifies IsFreeGroup.of after labelEquiv with the canonical FreeGroup.of."}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
-     {:cmd "git status --short", :exit 0, :finding "clean"}],
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1791638707193-2035-4d209b31",
-     :finding
-     "transport the subgroup and coset action through IsFreeGroup.toFreeGroup, or restate the source in IsFreeGroup.Generators coordinates, then compile the endpoint- and orientation-preserving edge comparison"},
+     {:cmd "git status --short",
+      :exit 0,
+      :finding "The worktree is clean."}],
+    :representation
+    {:source
+     "Banked positive-edge coordinates Fin r × (FreeGroup (Fin r) ⧸ H), with canonical FreeGroup.of action",
+     :target
+     "Action-groupoid generator arrows labelled by IsFreeGroup.Generators and acting through IsFreeGroup.of",
+     :direction
+     "No endpoint-preserving equivalence exists from the stated source to target without first transporting H and the coset action through IsFreeGroup.toFreeGroup"},
     :fixture
     {:path "/tmp/edgecomp.lean",
      :sha256
-     "f6dd643332ba000c27b6cbcc241753aaee0b61e9cd5ffee9cb6b3bacd0ba12b4"},
-    :seat "topo-4"},
+     "f6dd643332ba000c27b6cbcc241753aaee0b61e9cd5ffee9cb6b3bacd0ba12b4",
+     :sorry-count 0,
+     :axiom-count 0,
+     :proof-placeholder-count 0},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :repair,
+   :state :needs-owner,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/positive-index/action-groupoid-edge-comparison",
@@ -91252,7 +91265,7 @@
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
