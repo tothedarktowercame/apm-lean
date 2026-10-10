@@ -98604,6 +98604,22 @@
       :exit 0,
       :finding "clean worktree after commit"}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791663964713-2909-52f75bf1",
+     :commands
+     ["git show ba0e4f1f59cb9d30610c0522bd9dc490ab8774db:ConstructionTargets/PolygonOuterRadialDeformation.lean"
+      "git diff-tree --no-commit-id --name-only -r ba0e4f1f59cb9d30610c0522bd9dc490ab8774db"
+      "git diff --exit-code ba0e4f1f59cb9d30610c0522bd9dc490ab8774db -- ConstructionTargets/PolygonOuterRadialDeformation.lean"
+      "sha256sum /tmp/polygon-outer-radial-deformation.lean"
+      "lake build ConstructionTargets.PolygonOuterRadialDeformation"
+      "lake env lean /tmp/polygon-outer-radial-deformation.lean"
+      "placeholder census on source, fixture, and problems/t97A01/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb on recorded ledger at 7a8174c7"],
+     :finding
+     "PASS: reviewer codex-3 verified author topo-2 and recorded commit ba0e4f1f, whose exact scope is only ConstructionTargets/PolygonOuterRadialDeformation.lean and whose source equals the reviewed checkout. The canonical package authority is correct; fixture SHA-256 e27319b916d76ca7c4e5235ff298fecd838e3b557ebd38af6721f70de7c2ed37 matches; target and fixture compile with zero placeholders; t97A01 retains one placeholder; the deformation declarations use only propext, Classical.choice, and Quot.sound; all 131 registered statements and the recorded 903-item ledger validate. Outer is exactly the strict radius-greater-than-one-quarter source subtype. The positive scale interpolates the output radius as one minus t times the original radius plus t; positivity follows from the outer bound. radialHomotopy proves the scaled complex point remains in the closed disk and strict outer band. Its continuity proof uses the nonzero-radius denominator. At t zero it is the identity, at t one its radius is one, and radius-one inputs are fixed for every t. Endpoint and subtype equalities have the correct orientations. This is deliberately the source-level deformation; the module does not yet prove EqvGen compatibility, descend to the quotient, identify the annulus or boundary graph, compute homology, or close t97A01."},
     :commit "ba0e4f1f59cb9d30610c0522bd9dc490ab8774db",
     :changed-paths
     ["ConstructionTargets/PolygonOuterRadialDeformation.lean"],
@@ -98614,7 +98630,7 @@
      :sorry-count 0},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/PolygonOuterRadialDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/outer-radial-deformation",
@@ -98738,7 +98754,7 @@
       "radialHomotopy continuously deforms the outer radial source to radius one, starts at the identity, lands on the boundary at time one, and fixes every boundary point for all times."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -100901,7 +100917,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "PolygonOuterRadialDeformation.radialHomotopy",
@@ -100915,7 +100931,9 @@
     :type
     "A continuous homotopy of the outer radial source, identity at zero, landing at radius one at time one, and fixed on radius-one points.",
     :area "polygon-surface-open-cover",
-    :proved-in :routes-2026-10-10-polygon-outer-radial-deformation-43},
+    :proved-in :routes-2026-10-10-polygon-outer-radial-deformation-43,
+    :banked-by :routes-2026-10-10-polygon-outer-radial-deformation-43,
+    :banked-commit "ba0e4f1f59cb9d30610c0522bd9dc490ab8774db"},
    :id :lemma-polygonouterradialdeformation-radialhomotopy,
    :kind :lemma,
    :depends-on
