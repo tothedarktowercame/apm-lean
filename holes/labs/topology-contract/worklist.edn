@@ -86616,6 +86616,21 @@
       "The prior completed-fixture rewrite hashed to 1d2410d8005d4022e91f02c3d8d778983a8885a13cffad193a61d5ffd0e0e2d8 and did not match acceptance.",
       :correction
       "Restored the frozen fixture byte-for-byte; the successful recorded-hash verification is in commands."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791625505100-1555-c74c2aa3",
+     :commands
+     ["git show/diff e2c42bc75c14552eb2b06184a06d380ef0b97c0f"
+      "sha256sum /tmp/covering-monodromy-coset-lifting-probe.lean"
+      "lake env lean ConstructionTargets/CoveringMonodromyCosets.lean"
+      "lake env lean /tmp/covering-monodromy-coset-lifting-probe.lean"
+      "lake env lean /tmp/covering-monodromy-cosets-audit.lean"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb"
+      "placeholder census"],
+     :finding
+     "PASS: topo-2 implementation commit is exactly scoped to one added source file; restored frozen fixture matches acceptance SHA-256; source, fixture, and independent axiom audit compile; implementation uses only standard axioms; registered statement hashes are unchanged; source has zero placeholders and the frozen interface fixture has zero sorry/admit plus its explicitly declared single probe axiom; quotient-to-fiber, cardinal/index, finite-index, induced-pi1, and lifting equality orientations match their consumers."},
     :commit "e2c42bc75c14552eb2b06184a06d380ef0b97c0f",
     :changed-paths
     ["ConstructionTargets/CoveringMonodromyCosets.lean"],
@@ -86633,7 +86648,7 @@
      "coveringExistsUniqueLift_of_range_le"],
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/CoveringMonodromyCosets.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/covering-monodromy-coset-lifting/fiber-cosets",
@@ -86750,7 +86765,7 @@
      :residual
      "Exactly one shared prerequisite remains: identify endpoint monodromy orbits with cosets of the induced fundamental-group image. Mathlib already supplies pi1 injectivity and the based lifting criterion; Schreier rank and consumer-specific covering classifications remain downstream."}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/covering-monodromy-coset-lifting",
