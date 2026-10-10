@@ -85516,8 +85516,149 @@
    "Review the three highest-coverage shared steps and refill toward consumer adapters.",
    :other-consumers []}
   {:consumer :t99J01,
-   :phase :probe,
+   :phase :implementation,
    :state :open,
+   :scope
+   ["ConstructionTargets/GenericPointWedgeOpenCoverComparison.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/shared/generic-point-wedge-open-cover-comparison/model-assembly",
+   :acceptance
+   {:placeholder
+    "the single sorries in apm_t99j01, apm_t01a03, and apm_t97a01, plus apm_t97A03_bridge_invariants_of_model",
+    :route-step
+    "common geometric prerequisite for t99J01 step 1, t01A03 step 2, t97A01 steps 2 and 4, and t97A03 steps 7-8",
+    :declarations
+    ["genericPointWedgeLeftOpen_eq_restricted"
+     "genericPointWedgeRightOpen_eq_restricted"
+     "genericPointWedgeIntersection_eq_restricted"
+     "genericPointWedgeLeftHomotopyEquiv"
+     "genericPointWedgeRightHomotopyEquiv"
+     "genericPointWedgeIntersectionHomotopyEquiv"
+     "genericPointWedgeLeftHomotopyEquiv_inclusion"
+     "genericPointWedgeRightHomotopyEquiv_inclusion"
+     "genericPointWedgeCoverPackage"],
+    :implementation
+    "Parameterize by open neighborhoods M⊆Y and N⊆X containing y0 and x0 and by pointed contractions of their subtypes. Prove leftOpen equals restrictedOpen univ M, rightOpen equals restrictedOpen N univ, and their intersection equals restrictedOpen N M by quotient-preimage injectivity. Compose Homeomorph.setCongr, restrictedOpenHomeomorphWedge, wedgeHomotopyEquivLeft, and the symmetric right-wedge equivalence already patterned in TorusCircleWedgeOpenCover. For the intersection, contract both factors and compose to Unit. Prove the left/right representative formulas and both basepoint formulas by the existing restrictedOpenHomeomorphWedge simp theorems. Package openness, union coverage, all three equivalences, and equations without specializing X or Y.",
+    :axioms :standard-only,
+    :commands
+    ["lake env lean ConstructionTargets/GenericPointWedgeOpenCoverComparison.lean"
+     "lake env lean /tmp/generic-point-wedge-open-cover-probe.lean"
+     "python3 scripts/statement-registry.py check"]},
+   :id :routes-2026-10-10-generic-point-wedge-cover-model-assembly-1,
+   :kind :reusable-theorem,
+   :depends-on [],
+   :current-residual
+   "Assemble the already banked restricted-open homeomorphisms and pointed contraction descent into one generic cover package with literal inclusion equations.",
+   :other-consumers [:t01A03 :t97A01 :t97A03]}
+  {:consumer :t99J01,
+   :evidence
+   {:probe
+    {:residual
+     "Exactly one compiled prerequisite remains: generic model assembly for the two point-wedge opens and their intersection. The quotient topology, restricted-open homeomorphisms, contractions, openness, and coverage are already banked.",
+     :outcome :revise,
+     :warnings
+     [{:kind :interface-axiom,
+       :message
+       "The placeholder-free fixture uses exactly one nonstandard axiom for assembling the three generic homotopy equivalences with their representative equations. Openness and coverage are already proved."}
+      {:kind :necessary-hypotheses,
+       :message
+       "The generic theorem must take open neighborhoods M,N containing the wedge points together with PointedContraction M and PointedContraction N; the unqualified statement is false for arbitrary pointed spaces without contractible neighborhoods."}],
+     :prerequisite
+     {:consumer :t99J01,
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/GenericPointWedgeOpenCoverComparison.lean"],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/shared/generic-point-wedge-open-cover-comparison/model-assembly",
+      :acceptance
+      {:placeholder
+       "the single sorries in apm_t99j01, apm_t01a03, and apm_t97a01, plus apm_t97A03_bridge_invariants_of_model",
+       :route-step
+       "common geometric prerequisite for t99J01 step 1, t01A03 step 2, t97A01 steps 2 and 4, and t97A03 steps 7-8",
+       :declarations
+       ["genericPointWedgeLeftOpen_eq_restricted"
+        "genericPointWedgeRightOpen_eq_restricted"
+        "genericPointWedgeIntersection_eq_restricted"
+        "genericPointWedgeLeftHomotopyEquiv"
+        "genericPointWedgeRightHomotopyEquiv"
+        "genericPointWedgeIntersectionHomotopyEquiv"
+        "genericPointWedgeLeftHomotopyEquiv_inclusion"
+        "genericPointWedgeRightHomotopyEquiv_inclusion"
+        "genericPointWedgeCoverPackage"],
+       :implementation
+       "Parameterize by open neighborhoods M⊆Y and N⊆X containing y0 and x0 and by pointed contractions of their subtypes. Prove leftOpen equals restrictedOpen univ M, rightOpen equals restrictedOpen N univ, and their intersection equals restrictedOpen N M by quotient-preimage injectivity. Compose Homeomorph.setCongr, restrictedOpenHomeomorphWedge, wedgeHomotopyEquivLeft, and the symmetric right-wedge equivalence already patterned in TorusCircleWedgeOpenCover. For the intersection, contract both factors and compose to Unit. Prove the left/right representative formulas and both basepoint formulas by the existing restrictedOpenHomeomorphWedge simp theorems. Package openness, union coverage, all three equivalences, and equations without specializing X or Y.",
+       :axioms :standard-only,
+       :commands
+       ["lake env lean ConstructionTargets/GenericPointWedgeOpenCoverComparison.lean"
+        "lake env lean /tmp/generic-point-wedge-open-cover-probe.lean"
+        "python3 scripts/statement-registry.py check"]},
+      :id
+      :routes-2026-10-10-generic-point-wedge-cover-model-assembly-1,
+      :kind :reusable-theorem,
+      :depends-on [],
+      :current-residual
+      "Assemble the already banked restricted-open homeomorphisms and pointed contraction descent into one generic cover package with literal inclusion equations.",
+      :other-consumers [:t01A03 :t97A01 :t97A03]},
+     :axioms
+     ["propext"
+      "Classical.choice"
+      "Quot.sound"
+      "GenericPointWedgeOpenCoverProbe.generic_point_wedge_open_cover_comparison"],
+     :commands
+     [{:cmd "stat -c '%F %n' .lake/packages",
+       :exit 0,
+       :finding
+       "directory .lake/packages; canonical package authority is present"}
+      {:cmd
+       "lake env lean ConstructionTargets/PointWedgeRestrictedOpenQuotient.lean",
+       :exit 0,
+       :finding
+       "generic restricted-open quotient homeomorphisms and literal representative/basepoint equations compile with standard axioms"}
+      {:cmd
+       "lake env lean ConstructionTargets/PointWedgePointedContractionDescent.lean",
+       :exit 0,
+       :finding
+       "generic pointed contraction descent and left-piece homotopy equivalence compile with standard axioms"}
+      {:cmd
+       "lake env lean /tmp/generic-point-wedge-open-cover-probe.lean",
+       :exit 0,
+       :finding
+       "openness and coverage are proved; the three coherent homotopy equivalences and representative equations elaborate from one isolated package axiom"}
+      {:cmd "sha256sum /tmp/generic-point-wedge-open-cover-probe.lean",
+       :exit 0,
+       :finding
+       "d2daecf435c9bbcb69a55491aaf64ceed422553e938111d898d5f433531d820e"}
+      {:cmd
+       "Python comment-stripped placeholder census of /tmp/generic-point-wedge-open-cover-probe.lean",
+       :exit 0,
+       :finding "0"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :finding "131 registered statements match, 0 do not"}
+      {:cmd "git status --short", :exit 0, :finding "clean"}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/generic-point-wedge-open-cover-probe.lean",
+       :exit 1,
+       :finding
+       "the first draft omitted the namespace containing PointedContraction, treated open sets as types, and relied on section variables not present in two theorem statements",
+       :correction
+       "opened PointedPuncturedCircleContraction, used explicit open-set subtypes, and added the openness/membership binders"}
+      {:cmd
+       "lake env lean /tmp/generic-point-wedge-open-cover-probe.lean",
+       :exit 1,
+       :finding
+       "HomotopyEquiv notation required Topology and ContinuousMap scopes, and the package axiom did not depend on the openness proofs",
+       :correction
+       "opened the required scopes and removed the unused openness arguments from the axiom application; the successful compile is in commands"}],
+     :fixture
+     {:path "/tmp/generic-point-wedge-open-cover-probe.lean",
+      :sha256
+      "d2daecf435c9bbcb69a55491aaf64ceed422553e938111d898d5f433531d820e"},
+     :seat "topo-4"}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/generic-point-wedge-open-cover-comparison",
@@ -85537,7 +85678,8 @@
    :id :routes-2026-10-10-generic-point-wedge-open-cover-comparison-1,
    :kind :reusable-theorem,
    :depends-on
-   [:routes-2026-10-10-checkpoint-topo1-covering-shared-three-1],
+   [:routes-2026-10-10-checkpoint-topo1-covering-shared-three-1
+    :routes-2026-10-10-generic-point-wedge-cover-model-assembly-1],
    :current-residual
    "Expose the reusable open pieces, overlap contraction, pointed homotopy equivalences, and their actual quotient inclusion equations.",
    :other-consumers [:t01A03 :t97A01 :t97A03]}
