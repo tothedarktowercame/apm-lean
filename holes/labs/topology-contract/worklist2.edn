@@ -55740,32 +55740,76 @@
    "After the endpoint formulas are banked, prove naturality under the frozen integer-matrix torus maps by identifying their R2 lifts and applying lift uniqueness.",
    :other-consumers [:t01A02]}
   {:consumer :t97A04,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/torus_addcircle_coordinate_comparison.lean",
+      :sha256
+      "7377dbd1a7163aa7739a0a47fa7a5ac5fafa0adfc3e6176585000653b5f21bc5"},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/torus_addcircle_coordinate_comparison.lean",
+       :exit 0,
+       :output
+       "frozenTorusPi1Coord compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/torus_addcircle_coordinate_comparison.lean || true)\"",
+       :exit 0}
+      {:cmd
+       "rg -n '^(def frozenTorusHomeomorphCircleProd|@\\[simp\\] theorem frozenTorusHomeomorphCircleProd_base|noncomputable def frozenTorusPi1Coord)' /tmp/torus_addcircle_coordinate_comparison.lean",
+       :exit 0,
+       :output
+       "12:def frozenTorusHomeomorphCircleProd; 16:@[simp] theorem frozenTorusHomeomorphCircleProd_base; 20:noncomputable def frozenTorusPi1Coord"}
+      {:cmd
+       "sha256sum /tmp/torus_addcircle_coordinate_comparison.lean",
+       :exit 0,
+       :output
+       "7377dbd1a7163aa7739a0a47fa7a5ac5fafa0adfc3e6176585000653b5f21bc5  /tmp/torus_addcircle_coordinate_comparison.lean"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :implementation
+     {:scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
+      :declarations
+      ["frozenTorusHomeomorphCircleProd"
+       "frozenTorusHomeomorphCircleProd_base"
+       "frozenTorusPi1Coord"],
+      :representation
+      {:source
+       "The frozen torus AddCircle 1 x AddCircle 1 with fundamental-group basepoint (0,0)",
+       :target
+       "Circle x Circle with fundamental-group basepoint (1,1) and torusPi1Coord",
+       :direction
+       "Explicit product homeomorphism from the source to the target and exact dependent transport of the target winding-coordinate equivalence back to the source fundamental group"},
+      :acceptance
+      "Copy the three verified declarations into the existing TorusPiOneWindingCoordinates namespace, preserving the oriented product homeomorphism and exact basepoint theorem; compile the scoped module, confirm no new placeholders, and rerun the statement registry check."},
+     :finding
+     "All three required declarations compile without placeholders. The product of AddCircle.homeomorphCircle maps the frozen basepoint (0,0) exactly to (1,1), and fundamentalGroupMulEquivOfHomeomorph followed by torusPi1Coord yields the required equivalence on the frozen AddCircle torus. The representation direction and dependent basepoint transport are explicit.",
+     :residual
+     "Prove frozenTorusPi1Coord naturality for the concrete apm_t97a04_Lbar and its displayed Fin-2 integer matrix; no part of that matrix calculation is claimed by this comparison packet."}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/torus-pi1-winding-coordinates/addcircle-circle-comparison",
    :acceptance
-   {:probe
-    "Compile and bank frozenTorusHomeomorphCircleProd, frozenTorusHomeomorphCircleProd_base, and frozenTorusPi1Coord from /tmp/torus_addcircle_coordinate_comparison.lean. Use AddCircle.homeomorphCircle in both factors to construct an explicit homeomorphism from AddCircle 1 x AddCircle 1 to Circle x Circle, prove that (0,0) maps exactly to (1,1), and transport the banked torusPi1Coord equivalence to FundamentalGroup (AddCircle 1 x AddCircle 1) (0,0). This supplies the representation bridge required before stating naturality for the frozen apm_t97a04_Lbar; do not claim matrix naturality in this prerequisite.",
-    :declarations
-    ["frozenTorusHomeomorphCircleProd"
-     "frozenTorusHomeomorphCircleProd_base"
-     "frozenTorusPi1Coord"],
-    :placeholder
-    "apm_t97A04_bridge_2 and apm_t01A02_bridge_fixedPoint_of_lift",
-    :route-step
-    "t97A04 step 2 frozen AddCircle coordinate object; t01A02 step 4 frozen-torus coordinate object"},
+   "Copy the three verified declarations into the existing TorusPiOneWindingCoordinates namespace, preserving the oriented product homeomorphism and exact basepoint theorem; compile the scoped module, confirm no new placeholders, and rerun the statement registry check.",
    :representation
    {:source
     "The frozen torus AddCircle 1 x AddCircle 1 with fundamental-group basepoint (0,0)",
     :target
-    "Circle x Circle with fundamental-group basepoint (1,1) and the banked torusPi1Coord equivalence",
+    "Circle x Circle with fundamental-group basepoint (1,1) and torusPi1Coord",
     :direction
-    "Explicit product homeomorphism from the frozen AddCircle torus to Circle x Circle, followed by exact basepoint-preserving transport of the target winding-coordinate equivalence back to the source fundamental group"},
+    "Explicit product homeomorphism from the source to the target and exact dependent transport of the target winding-coordinate equivalence back to the source fundamental group"},
    :id
    :routes-2026-10-10-torus-addcircle-circle-coordinate-comparison-two-consumers-topo2-r1,
    :kind :representation-comparison,
+   :declarations
+   ["frozenTorusHomeomorphCircleProd"
+    "frozenTorusHomeomorphCircleProd_base"
+    "frozenTorusPi1Coord"],
    :depends-on
    [:routes-2026-10-10-checkpoint-topo2-r2
     :routes-2026-10-10-torus-pi1-coordinate-equivalence-two-consumers-topo2-r1
