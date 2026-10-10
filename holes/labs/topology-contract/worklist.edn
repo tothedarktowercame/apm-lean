@@ -81709,8 +81709,38 @@
    "Stop-after-two hold lifted by a Codex re-route (topo-10, 2026-09-29; holes/labs/topology-routes/reroute-t95J02.md). Three sorries remain.",
    :other-consumers []}
   {:consumer :t99J04,
+   :stop-count 1,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Prove one bounded Euclidean shrinking lemma: from ContDiffAt g a and bijective fderiv, construct an OpenPartialHomeomorph agreeing with g whose source is contained in a chosen open ContDiffOn neighborhood and whose inverse is ContDiffOn on its target. Then rerun route steps 3-4 to transport it through extChartAt and fill apm_t99J04_bridge_local_inverse_function.",
+    :outcome :stop,
+    :warnings [],
+    :statement-hashes {:status :unchanged},
+    :disposition :stop,
+    :axioms :not-measured,
+    :author "topo-2",
+    :reason
+    "The reroute's compiled probe proves only ContDiffAt and HasFDerivAt for writtenInExtChartAt at the base point. Steps 3-4 additionally require a proved open restriction of the Euclidean inverse-function OpenPartialHomeomorph whose entire source lies in a neighborhood where the coordinate representative is ContDiff; only then can OpenPartialHomeomorph.contDiffAt_symm prove inverse smoothness pointwise on the whole target. No such shrinking-and-smoothness lemma is supplied by the probe or pinned Mathlib, and the row forbids leaving the PartialDiffeomorph smoothness fields unproved. This is the exact missing representation boundary between pointwise Euclidean IFT data and the required manifold PartialDiffeomorph.",
+    :commands
+    [{:cmd
+      "sed -n '1,280p' holes/labs/topology-routes/reroute-t99J04.md and inspect reroute-t99J04-probe.lean.txt",
+      :exit 0,
+      :finding
+      "probe contains only coordinate ContDiffAt and HasFDerivAt extraction"}
+     {:cmd
+      "rg for PartialDiffeomorph, ContDiffAt.toOpenPartialHomeomorph, OpenPartialHomeomorph.contDiffAt_symm, and OpenPartialHomeomorph.trans in pinned Mathlib",
+      :exit 0,
+      :finding
+      "topological composition and pointwise inverse smoothness exist; no manifold IFT promotion or packaged smooth restriction exists"}
+     {:cmd "git status --short",
+      :exit 0,
+      :finding "worktree unchanged by this invocation"}],
+    :diagnostic-history [],
+    :changed-paths [],
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["problems/t99J04/lean/Main.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J04/reroute-direct-partial-diffeomorph",
