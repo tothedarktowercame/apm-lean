@@ -63873,9 +63873,55 @@
   {:bounded-exception
    "single-consumer identity-aligned frozen-torus Hurewicz coordinate for t97A04",
    :consumer :t97A04,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:residual
+     "Apply Hurewicz naturality with frozenLbarPi1Map_naturality, then transport the resulting additive-group H1 matrix equation through singularHomologyComparison_naturality to apm_t97A04_bridge_2.",
+     :outcome :go,
+     :warnings [],
+     :missing-theorems
+     [{:name
+       "ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusAlignedHurewiczCoordinate_apply",
+       :type
+       "forall q : Multiplicative (Fin 2 → ℤ), finiteFreeHurewiczCoordinateMulEquiv frozenTorusPi1Coord frozenTorusAlignedH1MulEquivFinTwo q = q",
+       :status :proved,
+       :consumers [:t97A04],
+       :depends-on
+       ["ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusH1MulEquivFinTwo"]}],
+     :commands
+     [{:cmd "lake env lean /tmp/t97a04_frozen_h1_coordinate.lean",
+       :exit 0,
+       :output
+       "frozenTorusAlignedH1MulEquivFinTwo and frozenTorusAlignedHurewiczCoordinate_apply compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t97a04_frozen_h1_coordinate.lean || true)\"",
+       :exit 0}
+      {:cmd "sha256sum /tmp/t97a04_frozen_h1_coordinate.lean",
+       :exit 0,
+       :output
+       "27220f9b2600be27f61c260ed07cf6c89e32cbac827bd4225f5b3e9dbd2be286  /tmp/t97a04_frozen_h1_coordinate.lean"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :fixture
+     {:path "/tmp/t97a04_frozen_h1_coordinate.lean",
+      :sha256
+      "27220f9b2600be27f61c260ed07cf6c89e32cbac827bd4225f5b3e9dbd2be286"},
+     :finding
+     "The placeholder-free fixture defines the H1 coordinate adjusted by the inverse finite-free Hurewicz automorphism and proves that Hurewicz becomes exactly the identity in Fin 2 integer coordinates. A direct product path construction supplies the required PathConnectedSpace instance.",
+     :implementation
+     {:scope ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"],
+      :declarations
+      ["ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusAlignedH1MulEquivFinTwo"
+       "ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusAlignedHurewiczCoordinate_apply"],
+      :type
+      "forall q : Multiplicative (Fin 2 → ℤ), finiteFreeHurewiczCoordinateMulEquiv frozenTorusPi1Coord frozenTorusAlignedH1MulEquivFinTwo q = q"},
+     :seat "topo-8"}},
+   :phase :implementation,
+   :type
+   "forall q : Multiplicative (Fin 2 → ℤ), finiteFreeHurewiczCoordinateMulEquiv frozenTorusPi1Coord frozenTorusAlignedH1MulEquivFinTwo q = q",
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t97A04/frozen-h1-hurewicz-alignment",
    :acceptance
    {:probe
@@ -63890,6 +63936,9 @@
     "t97A04 step 5, align the frozen IntegralH1 coordinate so Hurewicz is the identity in Fin 2 coordinates"},
    :id :routes-2026-10-10-t97a04-frozen-h1-hurewicz-alignment-topo2-r1,
    :kind :reusable-theorem,
+   :declarations
+   ["ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusAlignedH1MulEquivFinTwo"
+    "ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusAlignedHurewiczCoordinate_apply"],
    :depends-on
    [:routes-2026-10-10-checkpoint-topo2-r5
     :routes-2026-10-10-t97a04-frozen-h1-multiplicative-coordinate-topo2-r1],
@@ -64987,10 +65036,12 @@
    {:name
     "ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusAlignedHurewiczCoordinate_apply",
     :reported-by
-    [:routes-2026-10-10-t97a04-h1-bridge-assembly-topo2-r1],
+    [:routes-2026-10-10-t97a04-h1-bridge-assembly-topo2-r1
+     :routes-2026-10-10-t97a04-frozen-h1-hurewicz-alignment-topo2-r1],
     :type
     "forall q : Multiplicative (Fin 2 → ℤ), finiteFreeHurewiczCoordinateMulEquiv frozenTorusPi1Coord frozenTorusAlignedH1MulEquivFinTwo q = q",
-    :proved-in :routes-2026-10-10-t97a04-h1-bridge-assembly-topo2-r1},
+    :proved-in
+    :routes-2026-10-10-t97a04-frozen-h1-hurewicz-alignment-topo2-r1},
    :id
    :lemma-constructiontargets-t97a04frozenh1coordinate-frozentorusalignedhurewiczcoordinat,
    :kind :lemma,
