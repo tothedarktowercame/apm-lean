@@ -846,8 +846,77 @@
   {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-integraloverlaptransitionunit-eq-one-or-neg-one,
+   :evidence
+   {:placeholder-delta {:source 0, :fixture 0},
+    :residual
+    "Use actual manifold orientation data to rule out the negative-one transition at a normalized overlap basepoint; then apply the banked connected propagation and glue coherent local generators to an absolute top class.",
+    :gates
+    {:module-build :pass,
+     :fixture-compiles-against-promoted-module :pass,
+     :exact-declaration-type :pass,
+     :zero-source-and-fixture-sorry :pass,
+     :standard-only-axioms :pass,
+     :registry-check :pass,
+     :exact-scope :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["lake build replayed pre-existing linter warnings in dependencies; the target module emitted no warnings"],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.ManifoldFundamentalClass.integralOverlapTransitionUnit_eq_one_or_neg_one",
+      :type
+      "For every point of an actual chart overlap, the integral overlap transition unit is one or negative one.",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on
+      ["ConstructionTargets.ManifoldFundamentalClass.overlapTransitionUnit"],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-10",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/manifold_fundamental_class_integral_transition_sign.lean",
+      :exit 0,
+      :output
+      "a8b4238968a6d49cd9fa5aa28ff39d23c2a776ef976c97692d6cd9972743d6b6"}
+     {:cmd
+      "lake env lean /tmp/manifold_fundamental_class_integral_transition_sign.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^\\s*axiom\\b' ConstructionTargets/ManifoldFundamentalClass.lean /tmp/manifold_fundamental_class_integral_transition_sign.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "bb485833aa727c444b66054b982bb74d93290d6c",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path
+     "/tmp/manifold_fundamental_class_integral_transition_sign.lean",
+     :sha256
+     "a8b4238968a6d49cd9fa5aa28ff39d23c2a776ef976c97692d6cd9972743d6b6",
+     :original-sha256
+     "f7503dd4187a62d7af873e52a5a81b92d476b92526b333d17bd40cfb0f2fdc2f",
+     :sorry-count 0},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :summary
+     "Added the exact integral overlap transition-unit sign dichotomy, deriving the one-or-negative-one alternatives from the unit inverse equation without discarding either branch."},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/integral-transition-sign-dichotomy",
@@ -2299,16 +2368,19 @@
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.integralOverlapTransitionUnit_eq_one_or_neg_one",
     :reported-by
-    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+     :routes-2026-10-10-manifold-integral-transition-sign-topo3-r1],
     :type
     "forall (m : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (EuclideanSpace Real (Fin (m + 2))) M] (a b : M) (x : CoefficientOverlapPair.common m a b), overlapTransitionUnit Int m a b x = 1 or overlapTransitionUnit Int m a b x = -1",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in
+    :routes-2026-10-10-manifold-integral-transition-sign-topo3-r1},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-integraloverlaptransitionunit-eq-one-or-neg-one,
    :kind :lemma,
    :depends-on
-   [:lemma-constructiontargets-manifoldfundamentalclass-chartgenerator-eq-on-preconnected-overlap-of-baseunit-eq-one],
+   [:lemma-constructiontargets-manifoldfundamentalclass-chartgenerator-eq-on-preconnected-overlap-of-baseunit-eq-one
+    :lemma-constructiontargets-manifoldfundamentalclass-overlaptransitionunit],
    :other-consumers [:t98A02]}],
  :consumer-baselines {},
  :statuses
