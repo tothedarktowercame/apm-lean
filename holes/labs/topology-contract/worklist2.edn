@@ -57792,10 +57792,88 @@
    "No inhabitant of RealProjectiveSmoothTarget.SmoothAtlas 2 is banked; hemisphere quotient charts and local-diffeomorphism proofs are required.",
    :other-consumers [:t96A07]}
   {:bounded-exception
-   "single-consumer assembly from the now-banked frozen torus pi1 matrix theorem",
+   "single-consumer frozen torus H1 group and ModuleCat coordinate for t97A04",
    :consumer :t97A04,
    :phase :probe,
    :state :open,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md/t97A04/frozen-h1-coordinate",
+   :acceptance
+   {:probe
+    "Compile and bank frozenTorusHomeomorphBoundaryTorus, frozenTorusH1GroupIsoFinTwo, and frozenTorusH1ModuleIsoFinTwo from /tmp/t97a04_frozen_h1_coordinate.lean. Transport the existing boundary-torus degree-one singular-homology coordinate through the canonical AddCircle-product homeomorphism and lift it through IntegralSingularHomologyComparison to the exact ModuleCat object used by apm_t97A04_bridge_2. This supplies the H1 coordinate input to t97A04 step 5; do not yet claim induced-map matrix naturality.",
+    :declarations
+    ["frozenTorusHomeomorphBoundaryTorus"
+     "frozenTorusH1GroupIsoFinTwo"
+     "frozenTorusH1ModuleIsoFinTwo"],
+    :placeholder "apm_t97A04_bridge_2",
+    :route-step
+    "t97A04 step 5, concrete frozen-torus IntegralH1 and ModuleCat coordinates"},
+   :id :routes-2026-10-10-t97a04-frozen-h1-coordinate-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo2-r5
+    :routes-2026-10-10-torus-pi1-winding-coordinates-two-consumers-topo2-r3],
+   :current-residual
+   "Align the transported H1 coordinate with frozenTorusPi1Coord through finite-free Hurewicz naturality, then transport the induced-map equation through singularHomologyComparison_naturality.",
+   :other-consumers []}
+  {:bounded-exception
+   "single-consumer assembly from the now-banked frozen torus pi1 matrix theorem",
+   :consumer :t97A04,
+   :evidence
+   {:probe
+    {:outcome :revise,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/t97a04_frozen_h1_coordinate.lean",
+      :sha256
+      "3a8383d772a08d0d38b11f1149a00ee793191cc053919f2d276d8b4239f8ee3d"},
+     :commands
+     [{:cmd "lake env lean /tmp/t97a04_frozen_h1_coordinate.lean",
+       :exit 0,
+       :output
+       "frozenTorusH1GroupIsoFinTwo and frozenTorusH1ModuleIsoFinTwo compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t97a04_frozen_h1_coordinate.lean || true)\"",
+       :exit 0}
+      {:cmd "sha256sum /tmp/t97a04_frozen_h1_coordinate.lean",
+       :exit 0,
+       :output
+       "3a8383d772a08d0d38b11f1149a00ee793191cc053919f2d276d8b4239f8ee3d  /tmp/t97a04_frozen_h1_coordinate.lean"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :finding
+     "The frozen pi1 matrix theorem and finite-free Hurewicz naturality compile, but the consumer conclusion is stated in canonical ModuleCat singular homology of AddCircle 1 x AddCircle 1. No concrete degree-one group or ModuleCat coordinate for that frozen space was banked. The compiled prerequisite transports the existing boundary-torus H1 computation along the canonical product homeomorphism from AddCircle x AddCircle to Circle x SphereOne, then applies the integral singular-homology comparison to obtain the exact ModuleCat isomorphism.",
+     :residual
+     "Bank the frozen degree-one group and ModuleCat coordinates. Then derive the multiplicative IntegralH1 coordinate from frozenTorusH1GroupIsoFinTwo, apply h1_coordinate_eq_of_fundamentalGroup_coordinate_eq to frozenLbarPi1Map_naturality, and use singularHomologyComparison_naturality to identify that homology map with t97A04HomologyMap 1 apm_t97a04_Lbar.",
+     :prerequisite
+     {:bounded-exception
+      "single-consumer frozen torus H1 group and ModuleCat coordinate for t97A04",
+      :consumer :t97A04,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md/t97A04/frozen-h1-coordinate",
+      :acceptance
+      {:probe
+       "Compile and bank frozenTorusHomeomorphBoundaryTorus, frozenTorusH1GroupIsoFinTwo, and frozenTorusH1ModuleIsoFinTwo from /tmp/t97a04_frozen_h1_coordinate.lean. Transport the existing boundary-torus degree-one singular-homology coordinate through the canonical AddCircle-product homeomorphism and lift it through IntegralSingularHomologyComparison to the exact ModuleCat object used by apm_t97A04_bridge_2. This supplies the H1 coordinate input to t97A04 step 5; do not yet claim induced-map matrix naturality.",
+       :declarations
+       ["frozenTorusHomeomorphBoundaryTorus"
+        "frozenTorusH1GroupIsoFinTwo"
+        "frozenTorusH1ModuleIsoFinTwo"],
+       :placeholder "apm_t97A04_bridge_2",
+       :route-step
+       "t97A04 step 5, concrete frozen-torus IntegralH1 and ModuleCat coordinates"},
+      :id :routes-2026-10-10-t97a04-frozen-h1-coordinate-topo2-r1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:routes-2026-10-10-checkpoint-topo2-r5
+       :routes-2026-10-10-torus-pi1-winding-coordinates-two-consumers-topo2-r3],
+      :current-residual
+      "Align the transported H1 coordinate with frozenTorusPi1Coord through finite-free Hurewicz naturality, then transport the induced-map equation through singularHomologyComparison_naturality.",
+      :other-consumers []}}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t97A04/h1-bridge-assembly",
    :acceptance
@@ -57808,7 +57886,8 @@
    :kind :reusable-theorem,
    :depends-on
    [:routes-2026-10-10-checkpoint-topo2-r5
-    :routes-2026-10-10-torus-pi1-winding-coordinates-two-consumers-topo2-r3],
+    :routes-2026-10-10-torus-pi1-winding-coordinates-two-consumers-topo2-r3
+    :routes-2026-10-10-t97a04-frozen-h1-coordinate-topo2-r1],
    :current-residual
    "The pi1 matrix equation is banked; align the frozen H1 equivalence and transfer the induced map equality through the Hurewicz and ModuleCat comparisons.",
    :other-consumers []}
