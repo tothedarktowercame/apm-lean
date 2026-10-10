@@ -61997,6 +61997,21 @@
      {:cmd
       "git diff --check -- ConstructionTargets/T02A03LeftTubePuncturedModel.lean",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791645858023-2272-5560b1ba",
+     :commands
+     ["git show/diff-tree/show --check c8143c37536b567a42d0108b6c6a925c952234d0"
+      "sha256sum /tmp/t02a03_geometric_tube_cover.lean"
+      "lake env lean /tmp/t02a03_geometric_tube_cover.lean"
+      "lake env lean ConstructionTargets/T02A03LeftTubePuncturedModel.lean"
+      "lake build ConstructionTargets.T02A03LeftTubePuncturedModel"
+      "python3 scripts/statement-registry.py check --rev c8143c37536b567a42d0108b6c6a925c952234d0"
+      "bb holes/labs/topology-contract/worklist_check.bb recorded-ledger"
+      "recompute accepted-type hash and comment-stripped placeholder counts"],
+     :finding
+     "PASS: author topo-6 is independent; implementation scope is exactly ConstructionTargets/T02A03LeftTubePuncturedModel.lean, transition scope is ledger-only, and fixture SHA-256 faedd1bed2eb70b47a435de23ae4fe25c26a2f5ca10482b9249a5f1660960f75 matches. After unfolding the Circle-valued normal direction to complex normalization, symmetry of NormedSpace.norm_smul_normalize proves the registered orientation source normal = real norm scalar-multiplied by normalized complex direction, with no claim of the later interpolation formula. Fixture, target, focused 8241-job build, registry 131/0, and 459-item ledger gate pass; accepted-type hash a57f20738698c75be3ca10bbe601710cd10823298ee0976dc8bb4b2553931d7c matches, the declaration uses only propext/Classical.choice/Quot.sound, target placeholders are 0, and unchanged consumer placeholders are 1."},
     :commit "c8143c37536b567a42d0108b6c6a925c952234d0",
     :changed-paths
     ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
@@ -62016,7 +62031,7 @@
    :phase :implementation,
    :type
    "forall p : apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubeNormalComplex ⟨p.1, p.2.1⟩ = (norm (apm_t02a03_leftTubeNormalComplex ⟨p.1, p.2.1⟩) : Real) • ((apm_t02a03_leftTubeNormalAngular p : Circle) : Complex)",
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/left-tube-normal-decomposition",
@@ -62109,7 +62124,7 @@
    :phase :probe,
    :type
    "Nonempty (ContinuousMap.HomotopyEquiv LeftTubeMinusCore ConstructionTargets.TorusCircleWedgeOpenCover.Torus)",
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-punctured-model",
    :acceptance
@@ -63139,7 +63154,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -63154,7 +63169,10 @@
     :type
     "forall p : apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubeNormalComplex ⟨p.1, p.2.1⟩ = (norm (apm_t02a03_leftTubeNormalComplex ⟨p.1, p.2.1⟩) : Real) • ((apm_t02a03_leftTubeNormalAngular p : Circle) : Complex)",
     :proved-in
-    :routes-2026-10-10-t02a03-left-tube-normal-decomposition-topo2-r1},
+    :routes-2026-10-10-t02a03-left-tube-normal-decomposition-topo2-r1,
+    :banked-by
+    :routes-2026-10-10-t02a03-left-tube-normal-decomposition-topo2-r1,
+    :banked-commit "c8143c37536b567a42d0108b6c6a925c952234d0"},
    :id
    :lemma-constructiontargets-t02a03lefttubepuncturedmodel-apm-t02a03-lefttubenormalcomple,
    :kind :lemma,
