@@ -93198,8 +93198,79 @@
   {:bounded-exception
    "This single-consumer algebra declaration is the compiled first half of the elected normal-form lemma and is used immediately to prove its inverse laws.",
    :consumer :t93J03,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Prove every presented word equals a^m*b^n, construct Coordinates -> PresentedKleinGroup, and prove it inverse to toCoordinates.",
+    :gates
+    {:canonical-build :pass,
+     :fixture-compile :pass,
+     :fixture-hash :pass,
+     :zero-fixture-placeholders :pass,
+     :standard-only-axioms :pass,
+     :registry :pass,
+     :clean-worktree :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :missing-theorems [],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd
+      "lake build ConstructionTargets.KleinPresentedGroupCoordinateModel",
+      :exit 0,
+      :finding
+      "Canonical build completed all 8243 jobs and audited the forward map to standard-only axioms."}
+     {:cmd "lake env lean /tmp/klein-coordinate-model.lean",
+      :exit 0,
+      :finding "The compiled forward-model fixture succeeds."}
+     {:cmd "sha256sum /tmp/klein-coordinate-model.lean",
+      :exit 0,
+      :finding
+      "3b55c1fb8dcc870e32c4c5b7b3fa47b0c664c418ef3ccb0da620ff66e60129c8"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" /tmp/klein-coordinate-model.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "No placeholders."}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check HEAD^ HEAD", :exit 0}
+     {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :commit "62fa7ceb0ecf382dfc657a2c96ef236895f36aa8",
+    :changed-paths
+    ["ConstructionTargets/KleinPresentedGroupCoordinateModel.lean"],
+    :fixture
+    {:path "/tmp/klein-coordinate-model.lean",
+     :sha256
+     "3b55c1fb8dcc870e32c4c5b7b3fa47b0c664c418ef3ccb0da620ff66e60129c8",
+     :sorry-count 0,
+     :axiom-count 0,
+     :proof-placeholder-count 0},
+    :implementation
+    {:scope
+     ["ConstructionTargets/KleinPresentedGroupCoordinateModel.lean"],
+     :declarations
+     ["KleinPresentedGroupCoordinateModel.inversion"
+      "KleinPresentedGroupCoordinateModel.action"
+      "KleinPresentedGroupCoordinateModel.Coordinates"
+      "KleinPresentedGroupCoordinateModel.A"
+      "KleinPresentedGroupCoordinateModel.B"
+      "KleinPresentedGroupCoordinateModel.relation"
+      "KleinPresentedGroupCoordinateModel.PresentedKleinGroup"
+      "KleinPresentedGroupCoordinateModel.generatorA"
+      "KleinPresentedGroupCoordinateModel.generatorB"
+      "KleinPresentedGroupCoordinateModel.toCoordinates"
+      "KleinPresentedGroupCoordinateModel.toCoordinates_a"
+      "KleinPresentedGroupCoordinateModel.toCoordinates_b"],
+     :method
+     "Model the Klein presentation in the semidirect product Multiplicative Int ⋊ Multiplicative Int with inversion action, prove the relator, and descend the generator assignment through PresentedGroup.toGroup."},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/KleinPresentedGroupCoordinateModel.lean"],
    :dag-node
