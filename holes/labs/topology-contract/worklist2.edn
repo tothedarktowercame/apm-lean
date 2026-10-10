@@ -62771,51 +62771,64 @@
    "single-consumer deleted-core exclusion for the t02A03 radial interpolation",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:residual
-     "Bank the deleted-core exclusion, then bundle the radial interpolation as a homotopy through LeftTubeMinusCore, prove its endpoints, and assemble the torus HomotopyEquiv.",
-     :outcome :go,
-     :warnings
-     ["/tmp/t02a03_geometric_tube_cover.lean:786:38: unnecessarySeqFocus linter warning in a previously banked theorem"],
-     :missing-theorems
-     [{:name "apm_t02a03_leftTubeRadialPoint_not_mem_leftCore",
-       :type
-       "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubeRadialPoint tp ∉ Set.range apm_t02a03_leftCore",
-       :status :proved,
-       :consumers [:t02A03],
-       :depends-on ["apm_t02a03_leftTubeNormalComplex_radialPoint"]}],
-     :commands
-     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "apm_t02a03_leftTubeRadialPoint_not_mem_leftCore compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
-       :exit 0}
-      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "c5b3c22201911af17ee57262b098376c6f0ef7b545e8886c8e833dc535ae8164  /tmp/t02a03_geometric_tube_cover.lean"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :fixture
-     {:path "/tmp/t02a03_geometric_tube_cover.lean",
-      :sha256
-      "c5b3c22201911af17ee57262b098376c6f0ef7b545e8886c8e833dc535ae8164"},
-     :finding
-     "The placeholder-free fixture proves every radial interpolation point avoids the frozen left core: the normal zero-locus reduces core membership to vanishing of the computed normal coordinate, while the radial coefficient is strictly positive and the normalized Circle direction is nonzero.",
-     :implementation
-     {:scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
-      :declaration
-      "ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_leftTubeRadialPoint_not_mem_leftCore",
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Bundle the radial interpolation as a homotopy through LeftTubeMinusCore, prove its endpoints, and assemble the torus HomotopyEquiv.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :missing-theorems
+    [{:name "apm_t02a03_leftTubeRadialPoint_not_mem_leftCore",
       :type
-      "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubeRadialPoint tp ∉ Set.range apm_t02a03_leftCore"},
-     :seat "topo-8"}},
+      "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubeRadialPoint tp ∉ Set.range apm_t02a03_leftCore",
+      :status :proved,
+      :consumers [:t02A03],
+      :depends-on ["apm_t02a03_leftTubeNormalComplex_radialPoint"]}],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not",
+     :fixture-sha256
+     "c5b3c22201911af17ee57262b098376c6f0ef7b545e8886c8e833dc535ae8164"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean", :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03LeftTubePuncturedModel.lean",
+      :exit 0}
+     {:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+      :exit 0}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03LeftTubePuncturedModel.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git rev-parse a881798d && git diff-tree --no-commit-id --name-only -r a881798d",
+      :exit 0,
+      :output
+      "a881798dfc65bed50e4968abb884deea83cffb49\nConstructionTargets/T02A03LeftTubePuncturedModel.lean"}
+     {:cmd "git show --check --oneline a881798d", :exit 0}],
+    :commit "a881798dfc65bed50e4968abb884deea83cffb49",
+    :changed-paths
+    ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
+    :fixture
+    {:path "/tmp/t02a03_geometric_tube_cover.lean",
+     :sha256
+     "c5b3c22201911af17ee57262b098376c6f0ef7b545e8886c8e833dc535ae8164"},
+    :finding
+    "Banked deleted-core exclusion by reducing core membership to a zero normal coordinate and contradicting it using the strictly positive radial coefficient and nonzero Circle direction.",
+    :implementation
+    {:scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
+     :declarations
+     ["ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_leftTubeRadialPoint_not_mem_leftCore"],
+     :type
+     "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubeRadialPoint tp ∉ Set.range apm_t02a03_leftCore"},
+    :seat "topo-6"},
    :phase :implementation,
    :type
    "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubeRadialPoint tp ∉ Set.range apm_t02a03_leftCore",
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/left-tube-radial-core-exclusion",
