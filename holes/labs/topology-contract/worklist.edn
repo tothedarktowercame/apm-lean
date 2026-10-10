@@ -96138,6 +96138,20 @@
      {:cmd "git status --short",
       :exit 0,
       :finding "clean worktree after commit"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791654468973-2584-54a1eef7",
+     :commands
+     ["git show ece8fc8f7ad4a46d1445edc4f5ccf44a99502a2c -- ConstructionTargets/CyclicThreeCirclesCollapse.lean"
+      "git diff --exit-code ece8fc8f7ad4a46d1445edc4f5ccf44a99502a2c -- ConstructionTargets/CyclicThreeCirclesCollapse.lean"
+      "lake build ConstructionTargets.CyclicThreeCirclesCollapse"
+      "sha256sum /tmp/cyclic-three-circles-collapse.lean && lake env lean /tmp/cyclic-three-circles-collapse.lean"
+      "placeholder census on source, fixture, and problems/t99J01/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb on recorded ledger at 6d6d5d8e"],
+     :finding
+     "PASS: reviewer codex-3 verified recorded commit ece8fc8f changes only CyclicThreeCirclesCollapse.lean and the source equals that commit. Canonical packages resolve correctly; the frozen fixture hash is exact; target and fixture compile with zero placeholders; t99J01 retains exactly one placeholder; all five audited theorems report only propext, Classical.choice, and Quot.sound; all 131 registered statements and the recorded 849-item ledger validate. collapse sends the TwoCircles summand constantly to the circle basepoint and the final Circle summand identically, with quotient compatibility at the wedge identification. firstCircle is the final-circle inclusion; both maps are continuous and collapse composed with firstCircle is the identity. The module correctly does not construct a pullback, prove a covering or path connectedness, count sheets, or compute fundamental groups."},
     :commit "ece8fc8f7ad4a46d1445edc4f5ccf44a99502a2c",
     :changed-paths
     ["ConstructionTargets/CyclicThreeCirclesCollapse.lean"],
@@ -96158,7 +96172,7 @@
       "ConstructionTargets.CyclicThreeCirclesCollapse.collapse_firstCircle"]},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/CyclicThreeCirclesCollapse.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/cyclic-three-circles-collapse",
@@ -96264,7 +96278,7 @@
       "collapse : ThreeCircles -> Circle, firstCircle : Circle -> ThreeCircles, their continuity, representative formulas, and collapse_firstCircle."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/cyclic-three-circles-cover",
@@ -97564,7 +97578,7 @@
    :other-consumers []}
   {:consumer :t99J01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "CyclicThreeCirclesCollapse.collapse_firstCircle",
@@ -97575,7 +97589,9 @@
     :reported-by [:routes-2026-10-10-cyclic-three-circles-collapse-39],
     :type
     "A continuous collapse from ThreeCircles to Circle, constant on TwoCircles and identity on the final Circle, with a continuous final-circle section",
-    :proved-in :routes-2026-10-10-cyclic-three-circles-collapse-39},
+    :proved-in :routes-2026-10-10-cyclic-three-circles-collapse-39,
+    :banked-by :routes-2026-10-10-cyclic-three-circles-collapse-39,
+    :banked-commit "ece8fc8f7ad4a46d1445edc4f5ccf44a99502a2c"},
    :id :lemma-cyclicthreecirclescollapse-collapse-firstcircle,
    :kind :lemma,
    :depends-on [],
