@@ -55283,6 +55283,39 @@
    "Use the homeomorphism and the banked projective affine chart to supply explicit open local Euclidean neighborhoods for every point of the smooth conic.",
    :other-consumers []}
   {:bounded-exception
+   "single-consumer bounded projective-to-normalized-conic comparison",
+   :consumer :t94A08,
+   :phase :probe,
+   :state :open,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t94A08/smooth-conic-local-charts/projective-affine-identification",
+   :acceptance
+   {:probe
+    "Compile a placeholder-free inhabitant of T94A08ProjectiveAffineConicIdentificationProbe.ProjectiveAffineConicIdentification from /tmp/t94a08_projective_affine_conic_identification.lean. Restrict the banked dimension-two affine OpenPartialHomeomorph to the intersection of its z0 source with the smooth projective conic; prove its image is exactly the normalized affine conic 1+u^2+v^2=0 using homogeneity under the representative scalar, and prove the recorded coordinate-ratio and chartInverse equalities. Reuse the frozen coinduced topology and do not replace the homeomorphism with a Prop contract.",
+    :declaration "ProjectiveAffineConicIdentification",
+    :placeholder "the sole sorry in apm_t94a08",
+    :route-step
+    "step 2, transport from the projective affine chart to the normalized conic"},
+   :representation
+   {:source
+    "The subtype of CP2 lying in the z0 affine source and the smooth projective conic",
+    :target
+    "The normalized affine conic subtype of complex pairs satisfying 1 + u^2 + v^2 = 0",
+    :direction
+    "Explicit homeomorphism from the projective chart-intersection representation to normalized affine coordinates, with exact forward coordinate-ratio equalities and exact reverse chartInverse equality"},
+   :id
+   :routes-2026-10-10-t94a08-projective-affine-conic-identification-topo2-r1,
+   :kind :representation-comparison,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo2-r2
+    :routes-2026-10-10-t94a08-affine-chart-source-open-topo2-r1
+    :routes-2026-10-10-t94a08-affine-chart-inverse-laws-topo2-r1
+    :routes-2026-10-10-t94a08-affine-smooth-conic-parametrization-topo2-r1],
+   :current-residual
+   "Compose this identification with the banked affine-conic parametrization and the complex-real-plane homeomorphism to construct the explicit local Euclidean witnesses.",
+   :other-consumers []}
+  {:bounded-exception
    "single-consumer bounded smooth-conic local-chart construction",
    :consumer :t94A08,
    :evidence
@@ -55290,64 +55323,76 @@
     {:outcome :revise,
      :seat "topo-8",
      :fixture
-     {:path "/tmp/t94a08_affine_smooth_conic_param.lean",
+     {:path "/tmp/t94a08_projective_affine_conic_identification.lean",
       :sha256
-      "f1638608ee6f2a1b0e2e545ef90e5edcbf0ce66ec2dd17ec868ec66ff2cdc4d3"},
+      "498fe0fc50c0119d4ea59057b7065df275033140e086064177d6834f16fb3668"},
      :commands
-     [{:cmd "lake env lean /tmp/t94a08_affine_smooth_conic_param.lean",
+     [{:cmd
+       "lake build ConstructionTargets.T94A08AffineSmoothConicParametrization",
+       :exit 0,
+       :warnings
+       ["T94A08AffineCoordinatePatchTopology: unused variable hv"
+        "T94A08AffineCoordinateQuotientCompatibility: unnecessary simpa"]}
+      {:cmd
+       "lake env lean /tmp/t94a08_projective_affine_conic_identification.lean",
        :exit 0}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t94a08_affine_smooth_conic_param.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t94a08_projective_affine_conic_identification.lean || true)\"",
        :exit 0}
-      {:cmd "sha256sum /tmp/t94a08_affine_smooth_conic_param.lean",
+      {:cmd
+       "sha256sum /tmp/t94a08_projective_affine_conic_identification.lean",
        :exit 0,
        :output
-       "f1638608ee6f2a1b0e2e545ef90e5edcbf0ce66ec2dd17ec868ec66ff2cdc4d3  /tmp/t94a08_affine_smooth_conic_param.lean"}
+       "498fe0fc50c0119d4ea59057b7065df275033140e086064177d6834f16fb3668  /tmp/t94a08_projective_affine_conic_identification.lean"}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
      :diagnostic-history
-     [{:cmd "lake env lean /tmp/t94a08_affine_smooth_conic_param.lean",
+     [{:cmd
+       "lake env lean /tmp/t94a08_projective_affine_conic_identification.lean",
        :exit 1,
        :finding
-       "An exploratory direct inhabitant exposed the exact remaining Lean algebra obligations: normalize Complex.I squared before field simplification and prove the inverse of u + I*v from the conic equation. The failed draft was replaced by the stable oriented representation contract; it is not included among acceptance commands."}],
+       "The newly banked parametrization source had not yet been built into an olean, so the first import failed before elaboration. Building the canonical module corrected the environment; the unchanged fixture then compiled."}],
      :finding
-     "The banked projective affine chart reduces the positive conic step to one concrete representation comparison. In the z0=1 chart, 1+u^2+v^2=0 is equivalent to (u+I*v)(u-I*v)=-1, so a=u+I*v is nonzero and determines u=(a-a^-1)/2 and v=(a+a^-1)/(2*I). The compiled contract fixes an actual homeomorphism and both inverse formulas. Constructing this bounded homeomorphism is the single prerequisite before transporting its open C-star neighborhoods through the banked projective chart to inhabit SmoothConicLocalCharts.",
+     "The affine parametrization is banked and compiles, but SmoothConicLocalCharts still needs one exact transport comparison before its neighborhoods can be assembled. The compiled contract identifies the subtype of projective points simultaneously in the z0 source and smooth conic with the normalized affine conic. It fixes the forward coordinate ratios and the reverse chartInverse formula, so this is the missing equality-sensitive bridge between the two already banked homeomorphisms, not another manifold proposition.",
      :residual
-     "Bank the explicit affine-conic-to-Cstar homeomorphism; then transport local Cstar neighborhoods through affineChartConstruction, handling the two z0=0 points in the z1 chart.",
+     "Bank the projective-chart-intersection to normalized-affine-conic homeomorphism. Its composition with affineConicHomeomorphCstar and Complex.equivRealProdCLM then supplies the z0 local witnesses; repeat by coordinate permutation in the z1 chart for the two z0=0 points.",
      :prerequisite
      {:bounded-exception
-      "single-consumer bounded affine smooth-conic parametrization",
+      "single-consumer bounded projective-to-normalized-conic comparison",
       :consumer :t94A08,
       :phase :probe,
       :state :open,
       :scope [],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t94A08/smooth-conic-local-charts/affine-parametrization",
+      "TOPOLOGY-ROUTES.md/t94A08/smooth-conic-local-charts/projective-affine-identification",
       :acceptance
       {:probe
-       "Compile a placeholder-free inhabitant of T94A08AffineSmoothConicParam.AffineConicParametrization from /tmp/t94a08_affine_smooth_conic_param.lean. Construct the homeomorphism from the normalized affine conic 1+u^2+v^2=0 to the nonzero complex numbers by a=u+I*v, and prove the recorded inverse formulas u=(a-a^-1)/2 and v=(a+a^-1)/(2*I). This supplies the explicit representation used in t94A08 route step 2; do not introduce another projective topology or weaken the result to an un-oriented existence proposition.",
-       :declaration "AffineConicParametrization",
+       "Compile a placeholder-free inhabitant of T94A08ProjectiveAffineConicIdentificationProbe.ProjectiveAffineConicIdentification from /tmp/t94a08_projective_affine_conic_identification.lean. Restrict the banked dimension-two affine OpenPartialHomeomorph to the intersection of its z0 source with the smooth projective conic; prove its image is exactly the normalized affine conic 1+u^2+v^2=0 using homogeneity under the representative scalar, and prove the recorded coordinate-ratio and chartInverse equalities. Reuse the frozen coinduced topology and do not replace the homeomorphism with a Prop contract.",
+       :declaration "ProjectiveAffineConicIdentification",
        :placeholder "the sole sorry in apm_t94a08",
-       :route-step "step 2, normalized affine-conic parametrization"},
+       :route-step
+       "step 2, transport from the projective affine chart to the normalized conic"},
       :representation
       {:source
-       "The subtype of complex pairs (u,v) satisfying 1 + u^2 + v^2 = 0",
-       :target "The subtype of nonzero complex numbers",
+       "The subtype of CP2 lying in the z0 affine source and the smooth projective conic",
+       :target
+       "The normalized affine conic subtype of complex pairs satisfying 1 + u^2 + v^2 = 0",
        :direction
-       "Explicit homeomorphism from normalized affine-conic coordinates to the nonzero-complex parameter a = u + I*v, with exact inverse-coordinate equalities in the target-to-source direction"},
+       "Explicit homeomorphism from the projective chart-intersection representation to normalized affine coordinates, with exact forward coordinate-ratio equalities and exact reverse chartInverse equality"},
       :id
-      :routes-2026-10-10-t94a08-affine-smooth-conic-parametrization-topo2-r1,
+      :routes-2026-10-10-t94a08-projective-affine-conic-identification-topo2-r1,
       :kind :representation-comparison,
       :depends-on
       [:routes-2026-10-10-checkpoint-topo2-r2
        :routes-2026-10-10-t94a08-affine-chart-source-open-topo2-r1
-       :routes-2026-10-10-t94a08-affine-chart-inverse-laws-topo2-r1],
+       :routes-2026-10-10-t94a08-affine-chart-inverse-laws-topo2-r1
+       :routes-2026-10-10-t94a08-affine-smooth-conic-parametrization-topo2-r1],
       :current-residual
-      "Use the homeomorphism and the banked projective affine chart to supply explicit open local Euclidean neighborhoods for every point of the smooth conic.",
+      "Compose this identification with the banked affine-conic parametrization and the complex-real-plane homeomorphism to construct the explicit local Euclidean witnesses.",
       :other-consumers []}}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t94A08/smooth-conic-local-charts",
    :acceptance
@@ -55362,7 +55407,8 @@
    [:routes-2026-10-10-checkpoint-topo2-r2
     :routes-2026-10-10-t94a08-affine-chart-source-open-topo2-r1
     :routes-2026-10-10-t94a08-affine-chart-inverse-laws-topo2-r1
-    :routes-2026-10-10-t94a08-affine-smooth-conic-parametrization-topo2-r1],
+    :routes-2026-10-10-t94a08-affine-smooth-conic-parametrization-topo2-r1
+    :routes-2026-10-10-t94a08-projective-affine-conic-identification-topo2-r1],
    :current-residual
    "After the positive smooth-conic chart witnesses are banked, prove route step 3: the nodal cross has a disconnected punctured neighborhood at [1:0:0], incompatible with an open planar neighborhood.",
    :other-consumers []}
