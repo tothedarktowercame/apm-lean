@@ -63712,6 +63712,21 @@
       :exit 0,
       :output
       "0be698ae8656c45f8ea88f2ffa7ec02d0172bf00\nConstructionTargets/T97A04FrozenH1Coordinate.lean"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791653679731-2555-42ff8cde",
+     :commands
+     ["git show/diff-tree/show --check 0be698ae8656c45f8ea88f2ffa7ec02d0172bf00"
+      "sha256sum /tmp/t97a04_frozen_h1_coordinate.lean"
+      "lake env lean /tmp/t97a04_frozen_h1_coordinate.lean"
+      "lake env lean ConstructionTargets/T97A04FrozenH1Coordinate.lean"
+      "lake build ConstructionTargets.T97A04FrozenH1Coordinate"
+      "python3 scripts/statement-registry.py check --rev 0be698ae8656c45f8ea88f2ffa7ec02d0172bf00"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "recompute frozen declaration hashes and comment-stripped placeholder counts"],
+     :finding
+     "PASS: commit 0be698ae has exact scope (one added target); fixture SHA-256 3a8383d772a08d0d38b11f1149a00ee793191cc053919f2d276d8b4239f8ee3d matches; fixture and target compile, focused build completes 8291 jobs, registry is 131/0 and worklist is 491 OK; orientations are FrozenTorus to BoundaryTorus to Fin 2 integer coordinates, and group-to-module representation transport is exact; frozen type hashes homeomorph/group/module are 20ec669f7bfdb947e0b668e7c24432cc6baca5e2b53eb1d9e1735663da13fc82, 924d6708b45e12b851c5177e60597c71a8a5d943e136b8eef0b0ee3e8bdfe165, cc823986f42c983f09bceb594184ae31ad83e87d9eeb11a00ad2e7da9680d771; target placeholders 0, consumer placeholders 4; standard axioms only."},
     :commit "0be698ae8656c45f8ea88f2ffa7ec02d0172bf00",
     :changed-paths
     ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"],
@@ -63729,7 +63744,7 @@
       "ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusH1ModuleIsoFinTwo"]},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t97A04/frozen-h1-coordinate",
    :acceptance
@@ -63810,7 +63825,7 @@
       "Align the transported H1 coordinate with frozenTorusPi1Coord through finite-free Hurewicz naturality, then transport the induced-map equation through singularHomologyComparison_naturality.",
       :other-consumers []}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t97A04/h1-bridge-assembly",
    :acceptance
@@ -64716,7 +64731,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenTorusH1GroupIsoFinTwo",
@@ -64728,8 +64743,9 @@
     [:routes-2026-10-10-t97a04-frozen-h1-coordinate-topo2-r1],
     :type
     "SingularHomology 1 (TopCat.of FrozenTorus) ≅ AddCommGrpCat.of (Fin 2 → ℤ)",
-    :proved-in
-    :routes-2026-10-10-t97a04-frozen-h1-coordinate-topo2-r1},
+    :proved-in :routes-2026-10-10-t97a04-frozen-h1-coordinate-topo2-r1,
+    :banked-by :routes-2026-10-10-t97a04-frozen-h1-coordinate-topo2-r1,
+    :banked-commit "0be698ae8656c45f8ea88f2ffa7ec02d0172bf00"},
    :id :lemma-frozentorush1groupisofintwo,
    :kind :lemma,
    :depends-on [:lemma-frozentorushomeomorphboundarytorus],
@@ -64747,7 +64763,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenTorusH1ModuleIsoFinTwo",
@@ -64759,8 +64775,9 @@
     [:routes-2026-10-10-t97a04-frozen-h1-coordinate-topo2-r1],
     :type
     "(((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj (ModuleCat.of ℤ ℤ)).obj (TopCat.of FrozenTorus)) ≅ ModuleCat.of ℤ (Fin 2 → ℤ)",
-    :proved-in
-    :routes-2026-10-10-t97a04-frozen-h1-coordinate-topo2-r1},
+    :proved-in :routes-2026-10-10-t97a04-frozen-h1-coordinate-topo2-r1,
+    :banked-by :routes-2026-10-10-t97a04-frozen-h1-coordinate-topo2-r1,
+    :banked-commit "0be698ae8656c45f8ea88f2ffa7ec02d0172bf00"},
    :id :lemma-frozentorush1moduleisofintwo,
    :kind :lemma,
    :depends-on [:lemma-frozentorush1groupisofintwo],
