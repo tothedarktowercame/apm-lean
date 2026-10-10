@@ -60500,47 +60500,63 @@
    "single-consumer continuous punctured-normal coordinate on the frozen t02A03 left-tube complement",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/t02a03_geometric_tube_cover.lean",
-      :sha256
-      "404f273127397fd571fe7fa5526b10b6b0acbe29189bd647eede685253e97304"},
-     :commands
-     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubePuncturedNormal, and apm_t02a03_continuous_leftTubePuncturedNormal compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
-       :exit 0}
-      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "404f273127397fd571fe7fa5526b10b6b0acbe29189bd647eede685253e97304  /tmp/t02a03_geometric_tube_cover.lean"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :implementation
-     {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
-      :declarations
-      ["apm_t02a03_LeftTubeMinusCore"
-       "apm_t02a03_leftTubePuncturedNormal"
-       "apm_t02a03_continuous_leftTubePuncturedNormal"],
-      :acceptance
-      {:implementation
-       "Add the three compiled declarations from the verified fixture to ConstructionTargets/T02A03GeometricTubeCover.lean without changing their types or the frozen consumer. Compile the scoped module, confirm the scoped file contains no sorry token, run the statement registry check, and report the declarations' axioms.",
-       :gates
-       ["scoped module compiles"
-        "scoped file contains no sorry token"
-        "statement registry matches"]}},
-     :finding
-     "The fixture completely supplies this bounded row. The exact left-tube complement subtype carries a canonical nonzero complex normal displacement because the banked zero-locus theorem identifies zero precisely with the deleted frozen core. The lifted punctured-normal map is continuous by composing the complement inclusion with the continuous ambient normal coordinate.",
-     :residual
-     "After banking these declarations, radially normalize the punctured normal to Circle, define coordinate reconstruction, construct both comparison homotopies within LeftTubeMinusCore, and assemble leftTubeMinusCoreHomotopyEquivTorus."}},
+   {:placeholder-delta
+    {:path "ConstructionTargets/T02A03GeometricTubeCover.lean",
+     :before 0,
+     :after 0,
+     :delta 0},
+    :git-author "Joe Corneli <holtzermann17@gmail.com>",
+    :residual
+    "Radially normalize the punctured normal to Circle, define coordinate reconstruction, construct both comparison homotopies inside LeftTubeMinusCore, and assemble leftTubeMinusCoreHomotopyEquivTorus.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not",
+     :declaration-packet-sha256
+     "896e8bbe1541a5b29c6acaa7f1badc78337758b3d5f4bac32ab1559cf728f33d"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+      :exit 0,
+      :output
+      "404f273127397fd571fe7fa5526b10b6b0acbe29189bd647eede685253e97304  /tmp/t02a03_geometric_tube_cover.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeCover.lean",
+      :exit 0}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeCover.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "lake env lean /tmp/t02a03_geometric_tube_cover.lean | rg \"continuous_leftTubePuncturedNormal\"",
+      :exit 0,
+      :output
+      "'apm_t02a03_continuous_leftTubePuncturedNormal' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd "git commit -m \"Bank t02A03 punctured normal coordinate\"",
+      :exit 0,
+      :output
+      "[master 26ea5816] Bank t02A03 punctured normal coordinate; 1 file changed, 22 insertions(+)"}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "26ea58169167bb0c6cb7db1a595613ba341aaa27",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
+    :fixture
+    {:path "/tmp/t02a03_geometric_tube_cover.lean",
+     :sha256
+     "404f273127397fd571fe7fa5526b10b6b0acbe29189bd647eede685253e97304"},
+    :finding
+    "Banked the exact left-tube-minus-core subtype and the continuous lift of its complex normal coordinate to the nonzero-complex subtype. Nonvanishing follows directly from the banked zero-locus equivalence and the subtype's deleted-core proof.",
+    :declarations
+    ["apm_t02a03_LeftTubeMinusCore"
+     "apm_t02a03_leftTubePuncturedNormal"
+     "apm_t02a03_continuous_leftTubePuncturedNormal"],
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/left-tube-punctured-normal-coordinate",
