@@ -95623,11 +95623,14 @@
      :typed-residual-change
      :infrastructure-packets
      :review-outcomes]},
+   :review-finding
+   "recompute the checkpoint ranking from the recorded ledger: build_step priorities ranks lemma-genericpointwedgeoverlapinclusionsquares and lemma-polygonradialopencoverpackages for t97A01 at :closest 2, while the elected t99J01 prerequisites are :closest 3; replace the false recorded finding that t99J01 is closest 2 and elect the nearer t97A01 pair, or record a valid explicit priority criterion that overrides :closest",
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :evidence
    {:outcome :replan,
-    :seat "topo-4",
+    :disposition :replan,
+    :author "topo-4",
     :commands
     [{:cmd
       "bb holes/labs/topology-contract/build_step.bb priorities holes/labs/topology-contract/worklist.edn",
@@ -95646,91 +95649,12 @@
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
      {:cmd "git status --short", :exit 0, :finding "clean"}],
-    :finding
-    {:routes
-     {:t99J01
-      ["banked three-circles fundamental-group coordinates"
-       "banked positive-index Schreier rank"
-       "IsCoveringMap.restrictPathComponent"
-       "cyclicThreeCirclesPullback_pathConnected"
-       "covering-subgroup index and closure adapter"],
-      :t92J06
-      ["wedge-quotient covering gluing"
-       "permutation-cover construction"
-       "Cayley-tree classification"
-       "assembly; currently held by reviewed prior outcomes"],
-      :t97A03
-      ["restricted double-cover gluing equivalence"
-       "one- and two-circle cover homotopy equivalences to model bouquets"
-       "banked index-two Schreier rank"
-       "model homology and pi1 transport"
-       "three-placeholder assembly"],
-      :t93J03
-      ["banked affine square orbit classification"
-       "banked EqvGen SquareRel iff Cases"
-       "replace the refuted edgewise disk-square map by a non-edgewise equivalence between the aabb polygon quotient presentation and the square polygon quotient presentation"
-       "orbit quotient homeomorphism"
-       "deck-group fundamental-group and lifting criterion"
-       "assembly"],
-      :t01A03
-      ["circle-wedge fundamental group and torus commutativity"
-       "separating embedded-circle collar theorem"
-       "assembly; currently held by reviewed prior outcomes"],
-      :t97A01
-      ["banked standard-N3 homeomorphism"
-       "polygonRadialOpenCoverPackages"
-       "genericPointWedgeOverlapInclusionSquares"
-       "polygon fundamental-group and Mayer-Vietoris coordinates"
-       "banked Smith normalization"
-       "assembly"]},
-     :placeholder-delta 0,
-     :priority-top
-     [{:id :lemma-iscoveringmap-restrictpathcomponent,
-       :ready true,
-       :unblocks [:t99J01],
-       :closest 2}
-      {:id :lemma-cyclicthreecirclespullback-pathconnected,
-       :ready true,
-       :unblocks [:t99J01],
-       :closest 2}
-      {:id :lemma-genericpointwedgeoverlapinclusionsquares,
-       :ready true,
-       :unblocks [:t97A01],
-       :closest 2}
-      {:id :lemma-polygonradialopencoverpackages,
-       :ready true,
-       :unblocks [:t97A01],
-       :closest 2}],
-     :placeholder-counts
-     {:t99J01 1,
-      :t92J06 1,
-      :t97A03 3,
-      :t93J03 1,
-      :t01A03 1,
-      :t97A01 1},
-     :deferred
-     ["t97A01's two ready prerequisites rank immediately after the elected t99J01 pair."
-      "t97A03 retains three ready model/gluing prerequisites and three placeholders."
-      "The t93J03 direct edgewise disk-square transport is permanently excluded by the compiled endpoint contradiction; only a non-edgewise polygon-presentation equivalence is eligible."],
-     :infrastructure-packets
-     {:banked-since-prior-checkpoint 7,
-      :placeholder-changing 0,
-      :compiled-refutations 1},
-     :ranking
-     "No consumer has zero backlog. t99J01 has the fewest remaining backlog lemmas, both are ready, and it has one placeholder; elect both independent prerequisites before the t97A01 pair. The refuted Klein edge-formula lemma is removed from the valid route and replaced by a quotient-level polygon-presentation equivalence.",
-     :typed-residual-change
-     ["The Klein campaign compiled seven reusable packets after the prior square-orbit checkpoint, including the exact finite theorem EqvGen SquareRel iff Cases."
-      "The proposed direct edge-compatible disk-square homeomorphism was refuted: consecutive frozen disk arcs share an endpoint that the prescribed square formulas send to distinct corners."
-      "t93J03 therefore needs a polygon-presentation equivalence at quotient-relation level rather than an edgewise carrier homeomorphism; that replacement is recorded in the lemma DAG but is not elected ahead of the shorter t99J01 route."
-      "The other five consumer routes retain their typed residuals."],
-     :review-outcomes {:pass 7, :stop 1, :closed-problems 0}},
-    :lemmas
-    [{:name "kleinAabbSquarePolygonPresentationEquivalence",
-      :type
-      "A homeomorphism or exact quotient-relation equivalence between the frozen aabb disk polygon quotient Surface false 2 and the standard opposite-side square quotient, without requiring an edgewise carrier map edgePoint 4 i t ↦ squareEdge i t.",
-      :status :not-started,
-      :consumers [:t93J03],
-      :depends-on ["KleinSquareEqvGenCasesIff.eqvGen_iff_cases"]}],
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1791652913792-2523-1c482e6a",
+     :finding
+     "recompute the checkpoint ranking from the recorded ledger: build_step priorities ranks lemma-genericpointwedgeoverlapinclusionsquares and lemma-polygonradialopencoverpackages for t97A01 at :closest 2, while the elected t99J01 prerequisites are :closest 3; replace the false recorded finding that t99J01 is closest 2 and elect the nearer t97A01 pair, or record a valid explicit priority criterion that overrides :closest"},
     :replacement-items
     [{:bounded-exception
       "This single-consumer covering lemma is one of the two ready prerequisites on the shortest open topo1 route and is required to restrict a finite cover to the path component used by t99J01.",
@@ -95817,10 +95741,94 @@
       :current-residual
       "Review the two remaining covering constructions on the shortest one-placeholder route and close t99J01 as soon as both are banked.",
       :other-consumers []}],
-    :author "topo-4",
-    :disposition :replan},
+    :finding
+    {:routes
+     {:t99J01
+      ["banked three-circles fundamental-group coordinates"
+       "banked positive-index Schreier rank"
+       "IsCoveringMap.restrictPathComponent"
+       "cyclicThreeCirclesPullback_pathConnected"
+       "covering-subgroup index and closure adapter"],
+      :t92J06
+      ["wedge-quotient covering gluing"
+       "permutation-cover construction"
+       "Cayley-tree classification"
+       "assembly; currently held by reviewed prior outcomes"],
+      :t97A03
+      ["restricted double-cover gluing equivalence"
+       "one- and two-circle cover homotopy equivalences to model bouquets"
+       "banked index-two Schreier rank"
+       "model homology and pi1 transport"
+       "three-placeholder assembly"],
+      :t93J03
+      ["banked affine square orbit classification"
+       "banked EqvGen SquareRel iff Cases"
+       "replace the refuted edgewise disk-square map by a non-edgewise equivalence between the aabb polygon quotient presentation and the square polygon quotient presentation"
+       "orbit quotient homeomorphism"
+       "deck-group fundamental-group and lifting criterion"
+       "assembly"],
+      :t01A03
+      ["circle-wedge fundamental group and torus commutativity"
+       "separating embedded-circle collar theorem"
+       "assembly; currently held by reviewed prior outcomes"],
+      :t97A01
+      ["banked standard-N3 homeomorphism"
+       "polygonRadialOpenCoverPackages"
+       "genericPointWedgeOverlapInclusionSquares"
+       "polygon fundamental-group and Mayer-Vietoris coordinates"
+       "banked Smith normalization"
+       "assembly"]},
+     :placeholder-delta 0,
+     :priority-top
+     [{:id :lemma-iscoveringmap-restrictpathcomponent,
+       :ready true,
+       :unblocks [:t99J01],
+       :closest 2}
+      {:id :lemma-cyclicthreecirclespullback-pathconnected,
+       :ready true,
+       :unblocks [:t99J01],
+       :closest 2}
+      {:id :lemma-genericpointwedgeoverlapinclusionsquares,
+       :ready true,
+       :unblocks [:t97A01],
+       :closest 2}
+      {:id :lemma-polygonradialopencoverpackages,
+       :ready true,
+       :unblocks [:t97A01],
+       :closest 2}],
+     :placeholder-counts
+     {:t99J01 1,
+      :t92J06 1,
+      :t97A03 3,
+      :t93J03 1,
+      :t01A03 1,
+      :t97A01 1},
+     :deferred
+     ["t97A01's two ready prerequisites rank immediately after the elected t99J01 pair."
+      "t97A03 retains three ready model/gluing prerequisites and three placeholders."
+      "The t93J03 direct edgewise disk-square transport is permanently excluded by the compiled endpoint contradiction; only a non-edgewise polygon-presentation equivalence is eligible."],
+     :infrastructure-packets
+     {:banked-since-prior-checkpoint 7,
+      :placeholder-changing 0,
+      :compiled-refutations 1},
+     :ranking
+     "No consumer has zero backlog. t99J01 has the fewest remaining backlog lemmas, both are ready, and it has one placeholder; elect both independent prerequisites before the t97A01 pair. The refuted Klein edge-formula lemma is removed from the valid route and replaced by a quotient-level polygon-presentation equivalence.",
+     :typed-residual-change
+     ["The Klein campaign compiled seven reusable packets after the prior square-orbit checkpoint, including the exact finite theorem EqvGen SquareRel iff Cases."
+      "The proposed direct edge-compatible disk-square homeomorphism was refuted: consecutive frozen disk arcs share an endpoint that the prescribed square formulas send to distinct corners."
+      "t93J03 therefore needs a polygon-presentation equivalence at quotient-relation level rather than an edgewise carrier homeomorphism; that replacement is recorded in the lemma DAG but is not elected ahead of the shorter t99J01 route."
+      "The other five consumer routes retain their typed residuals."],
+     :review-outcomes {:pass 7, :stop 1, :closed-problems 0}},
+    :lemmas
+    [{:name "kleinAabbSquarePolygonPresentationEquivalence",
+      :type
+      "A homeomorphism or exact quotient-relation equivalence between the frozen aabb disk polygon quotient Surface false 2 and the standard opposite-side square quotient, without requiring an edgewise carrier map edgePoint 4 i t ↦ squareEdge i t.",
+      :status :not-started,
+      :consumers [:t93J03],
+      :depends-on ["KleinSquareEqvGenCasesIff.eqvGen_iff_cases"]}],
+    :seat "topo-4"},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :repair,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -95840,7 +95848,7 @@
    :consumer :t99J01,
    :implements-lemma :lemma-iscoveringmap-restrictpathcomponent,
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component",
@@ -95868,7 +95876,7 @@
    :consumer :t99J01,
    :implements-lemma :lemma-cyclicthreecirclespullback-pathconnected,
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/cyclic-three-circles-cover",
@@ -95904,7 +95912,7 @@
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :phase :strategy,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
