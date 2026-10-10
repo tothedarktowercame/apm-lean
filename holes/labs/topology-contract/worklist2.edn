@@ -54400,49 +54400,39 @@
    :depends-on [:routes-2026-09-28-rp-smooth-atlas-topo2-r1],
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
+   :stop-count 1,
    :evidence
-   {:probe
-    {:outcome :revise,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/rp_projection_contmdiff_descent_contract.lean",
-      :sha256
-      "24d6a9eec3b2c4b33e556fd36022db855f35498393d0a6e68bd973900414c31b"},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/rp_projection_contmdiff_descent_contract.lean",
-       :exit 0}
-      {:cmd
-       "sha256sum /tmp/rp_projection_contmdiff_descent_contract.lean",
-       :exit 0,
-       :output
-       "24d6a9eec3b2c4b33e556fd36022db855f35498393d0a6e68bd973900414c31b  /tmp/rp_projection_contmdiff_descent_contract.lean"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_projection_contmdiff_descent_contract.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :finding
-     "The original EvenSphereMapSmoothDescent contract reduces to one reusable missing theorem. Existence of the descended function follows directly from the banked sphereProjection_eq_iff: define the quotient value from any sphere representative, and antipodal invariance proves independence. Its representative equation makes f composed with sphereProjection equal g, so the remaining step is precisely SphereProjectionContMDiffDescent. The compiled placeholder-free interface states that smoothness of f composed with sphereProjection implies smoothness of f under rpSmoothAtlas. Its proof should use surjectivity from sphereProjectionQuotientAuthority and local inverses from rpSmoothAtlas.quotient_localDiffeomorph. No second topology, atlas, or consumer-specific polynomial theorem is needed.",
-     :residual
-     "Bank SphereProjectionContMDiffDescent, then construct the quotient function by sphereProjection_eq_iff and apply the theorem to the given smooth g; this completes EvenSphereMapSmoothDescent.",
-     :prerequisite
-     {:consumer :t95A04,
-      :phase :probe,
-      :state :open,
-      :scope [],
-      :dag-node "TOPOLOGY-ROUTES.md",
-      :acceptance
-      {:probe
-       "Compile a placeholder-free inhabitant of RPProjectionContMDiffDescentProbe.SphereProjectionContMDiffDescent from /tmp/rp_projection_contmdiff_descent_contract.lean. Prove ContMDiff f from ContMDiff (f composed with sphereProjection 2) using sphereProjectionQuotientAuthority for surjectivity and rpSmoothAtlas.quotient_localDiffeomorph for a smooth local inverse at a chosen point over every target point. Keep the theorem at dimension two and codomain E m."},
-      :id
-      :routes-2026-10-10-sphere-projection-contmdiff-descent-topo2-r1,
-      :kind :reusable-theorem,
-      :depends-on [:routes-2026-09-28-rp-smooth-atlas-topo2-r1],
-      :other-consumers [:t96A07]}}},
+   {:outcome :stop,
+    :seat "topo-8",
+    :reason
+    "The row cannot produce a validated inhabitant from its recorded dependency. The named fixture is another interface facade: it defines EvenSphereMapSmoothDescent as a Prop and only #checks that proposition; it contains no theorem or inhabitant. Its sole missing proof step is SphereProjectionContMDiffDescent, and a fresh repository search confirms that theorem is not banked; that dependency was independently stopped because its fixture likewise compiled only a Prop signature rather than the required local-inverse proof. There is therefore no smaller compiled prerequisite to name and no complete fixture for GO. Additionally, fresh Lake validation is forbidden in this checkout because .lake/packages is a real directory rather than the required canonical symlink.",
+    :fixture
+    {:path "/tmp/rp_even_smooth_descent_contract.lean",
+     :sha256
+     "99814940bc99fbf3ce79d7204bf1bc86d127aef3a836bd66cad3ab19d8191b4f",
+     :status :interface-only},
+    :commands
+    [{:cmd "test -L .lake/packages", :exit 1, :expected-exit 1}
+     {:cmd "ls -ld .lake/packages",
+      :exit 0,
+      :output "drwxrwxr-x 11 joe joe 4096 Aug 31 14:27 .lake/packages"}
+     {:cmd "sha256sum /tmp/rp_even_smooth_descent_contract.lean",
+      :exit 0,
+      :output
+      "99814940bc99fbf3ce79d7204bf1bc86d127aef3a836bd66cad3ab19d8191b4f  /tmp/rp_even_smooth_descent_contract.lean"}
+     {:cmd
+      "rg -n 'SphereProjectionContMDiffDescent' ConstructionTargets problems -g '*.lean'",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}],
+    :residual
+    "Restore the canonical .lake/packages symlink through the workspace lifecycle, then implement the actual pointwise local-inverse proof of SphereProjectionContMDiffDescent. Only after that theorem is banked can this row construct the quotient function from sphereProjection_eq_iff and compile an inhabitant.",
+    :author "topo-8",
+    :disposition :stop},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
