@@ -60541,6 +60541,20 @@
       :output
       "[master 26ea5816] Bank t02A03 punctured normal coordinate; 1 file changed, 22 insertions(+)"}
      {:cmd "git status --short", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791636835270-1971-48c09c28",
+     :commands
+     ["git show, diff-tree, and show --check on implementation 26ea5816 and ledger transition 8f009313"
+      "sha256sum authenticated fixture and frozen t02A03 consumer"
+      "lake env lean on fixture, target, and fresh punctured-normal representation probe"
+      "lake build ConstructionTargets/T02A03GeometricTubeCover"
+      "axiom and comment-stripped placeholder audits"
+      "python3 scripts/statement-registry.py check --rev 26ea5816"
+      "bb worklist_check.bb on committed transition ledger"],
+     :finding
+     "PASS: codex-7 independently reviewed topo-6 commit 26ea58169167bb0c6cb7db1a595613ba341aaa27. Exact implementation scope is ConstructionTargets/T02A03GeometricTubeCover.lean; transition 8f00931356d891fd17530f7c42cab82c0aaa96a8 is ledger-only. Fixture SHA-256 is 404f273127397fd571fe7fa5526b10b6b0acbe29189bd647eede685253e97304. Fixture, recorded-identical target, fresh representation probe, and 8240-job focused build pass. All three fixture interfaces elaborate exactly. LeftTubeMinusCore is precisely the ambient E3 subtype whose points lie in the frozen left tube and outside Set.range leftCore. The punctured-normal map lifts the previously banked normal complex coordinate to the nonzero-complex subtype; coercion returns that exact value, and nonvanishing follows in the correct direction from the zero-locus equivalence and the source deletion proof. Continuity composes the exact subtype inclusion with the banked normal-coordinate continuity. No radial normalization, reconstruction, homotopy, torus equivalence, or gluing is claimed. The checked theorem uses only propext, Classical.choice, and Quot.sound. Target has zero executable placeholders. Frozen t02A03 consumer hash is b123eca388ab2858ca55daf538c1ddd645022b52f5196a15f0bb516d78323d7d with one executable placeholder; registry is 131/0 and the committed 435-row ledger validates with exactly one done-unreviewed row."},
     :commit "26ea58169167bb0c6cb7db1a595613ba341aaa27",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
@@ -60556,7 +60570,7 @@
      "apm_t02a03_continuous_leftTubePuncturedNormal"],
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/left-tube-punctured-normal-coordinate",
@@ -60646,7 +60660,7 @@
    :phase :probe,
    :type
    "Nonempty (ContinuousMap.HomotopyEquiv LeftTubeMinusCore ConstructionTargets.TorusCircleWedgeOpenCover.Torus)",
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-punctured-model",
    :acceptance
