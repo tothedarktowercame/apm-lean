@@ -85757,103 +85757,61 @@
    "Prove the single naturality theorem orienting the abstract chosenGroupEquivalence against both concrete quotient inclusions while sharing its chosen basepoint paths.",
    :other-consumers [:t01A03 :t97A01 :t97A03 :t92J06]}
   {:consumer :t99J01,
+   :stop-count 1,
    :evidence
-   {:probe
-    {:outcome :revise,
-     :seat "topo-4",
-     :fixture
-     {:path
-      "/tmp/generic-point-wedge-pi1-inclusion-coordinates-probe.lean",
-      :sha256
-      "e1ae729edff3b7991142ce2739d2861caea321529d02b5409a34db42a3792464"},
-     :commands
-     [{:cmd "stat -c '%F %n' .lake/packages",
-       :exit 0,
-       :finding
-       "directory .lake/packages; canonical package authority is present"}
-      {:cmd
-       "lake env lean ConstructionTargets/TwoOpenFreeProductMapping.lean",
-       :exit 0,
-       :finding
-       "the abstract groupEquivalence, basedGroupEquivalence, and chosenGroupEquivalence compile with standard axioms"}
-      {:cmd
-       "lake env lean ConstructionTargets/GenericPointWedgeOpenCoverComparison.lean",
-       :exit 0,
-       :finding
-       "the generic wedge cover and literal representative equations compile with standard axioms"}
-      {:cmd
-       "lake env lean /tmp/generic-point-wedge-pi1-inclusion-coordinates-probe.lean",
-       :exit 0,
-       :finding
-       "the oriented coproduct-coordinate interface for both inclusion homomorphisms elaborates from one isolated naturality axiom"}
-      {:cmd
-       "sha256sum /tmp/generic-point-wedge-pi1-inclusion-coordinates-probe.lean",
-       :exit 0,
-       :finding
-       "e1ae729edff3b7991142ce2739d2861caea321529d02b5409a34db42a3792464"}
-      {:cmd
-       "Python comment-stripped placeholder census of /tmp/generic-point-wedge-pi1-inclusion-coordinates-probe.lean",
-       :exit 0,
-       :finding "0"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :finding "131 registered statements match, 0 do not"}
-      {:cmd "git status --short", :exit 0, :finding "clean"}],
-     :axioms
-     ["propext"
-      "Classical.choice"
-      "Quot.sound"
-      "GenericPointWedgePiOneCoordinatesProbe.generic_point_wedge_pi1_inclusion_coordinates"],
-     :warnings
-     [{:kind :interface-axiom,
-       :message
-       "The placeholder-free fixture uses one nonstandard axiom for the two oriented inclusion equations. The chosen free-product equivalence itself is standard-only."}
-      {:kind :basepoint-path-orientation,
-       :message
-       "chosenGroupEquivalence changes piece basepoints using arbitrary somePath witnesses, so the pointed piece comparisons must use those same paths; otherwise the right coordinate is only specified up to conjugation."}],
-     :prerequisite
-     {:consumer :t99J01,
-      :phase :implementation,
-      :state :open,
-      :scope
-      ["ConstructionTargets/GenericPointWedgeFundamentalGroupCoordinates.lean"],
-      :dag-node
-      "TOPOLOGY-ROUTES.md/shared/generic-point-wedge-pi1-inclusion-coordinates/naturality",
-      :acceptance
-      {:placeholder
-       "the single sorries in apm_t99j01, apm_t01a03, and apm_t97a01, plus apm_t97A03_bridge_invariants_of_model; optional alternative input for apm_t92j06",
-       :route-step
-       "representation layer before t99J01 step 1, t01A03 step 2, t97A01 step 3, and t97A03 step 8",
-       :declarations
-       ["genericPointWedgeGroupEquivalence"
-        "genericPointWedgeLeftFundamentalGroupMap"
-        "genericPointWedgeRightFundamentalGroupMap"
-        "genericPointWedgeGroupEquivalence_left"
-        "genericPointWedgeGroupEquivalence_right"
-        "twoCirclesGroupEquivalence_coordinates"
-        "threeCirclesGroupEquivalence_coordinates"],
-       :implementation
-       "Specialize TwoOpenFreeProductMapping.chosenGroupEquivalence to genericPointWedgeCoverPackage. Define the actual left and right representative maps into the quotient and their induced fundamental-group homomorphisms. Use the literal representative/basepoint equations from the generic cover comparison to identify the piece comparisons, choosing exactly the same PathConnectedSpace.somePath witnesses used by chosenGroupEquivalence. Prove by the source-equivalence reconstruction and the free-product point-span inl/inr action lemmas that the left composite is Monoid.Coprod.inl and the right composite is Monoid.Coprod.inr, with no unrecorded conjugation. Specialize the oriented equations to TwoCircles and ThreeCircles; do not normalize the recursive coproduct to FreeGroup.",
-       :axioms :standard-only,
-       :fixture
-       "/tmp/generic-point-wedge-pi1-inclusion-coordinates-probe.lean",
-       :fixture-sha256
-       "e1ae729edff3b7991142ce2739d2861caea321529d02b5409a34db42a3792464",
-       :commands
-       ["lake env lean ConstructionTargets/GenericPointWedgeFundamentalGroupCoordinates.lean"
-        "lake env lean /tmp/generic-point-wedge-pi1-inclusion-coordinates-probe.lean"
-        "python3 scripts/statement-registry.py check"]},
-      :id
-      :routes-2026-10-10-generic-point-wedge-pi1-inclusion-naturality-1,
-      :kind :reusable-theorem,
-      :depends-on [],
-      :current-residual
-      "Prove the single naturality theorem orienting the abstract chosenGroupEquivalence against both concrete quotient inclusions while sharing its chosen basepoint paths.",
-      :other-consumers [:t01A03 :t97A01 :t97A03 :t92J06]},
-     :residual
-     "Exactly one shared prerequisite remains: inclusion naturality for the chosen two-open free-product equivalence. Once its path choices are synchronized with the pointed piece comparisons, the left and right maps have exact Monoid.Coprod.inl and inr coordinates; recursive FreeGroup normalization remains downstream."}},
+   {:residual
+    "Dependency completion is missing, not a new mathematical prerequisite: the generic inclusion-naturality module must be implemented and reviewed before this probe can establish exact Monoid.Coprod.inl/inr coordinates with standard-only axioms.",
+    :outcome :stop,
+    :disposition :stop,
+    :axioms
+    ["propext"
+     "Classical.choice"
+     "Quot.sound"
+     "GenericPointWedgePiOneCoordinatesProbe.generic_point_wedge_pi1_inclusion_coordinates"],
+    :author "topo-4",
+    :reason
+    "The row declares routes-2026-10-10-generic-point-wedge-pi1-inclusion-naturality-1 as a completed dependency, but its sole scoped artifact ConstructionTargets/GenericPointWedgeFundamentalGroupCoordinates.lean is absent. Commit c4351fa5, despite its subject, changes only TorusPiOneWindingCoordinates.lean. The recorded fixture still uses GenericPointWedgePiOneCoordinatesProbe.generic_point_wedge_pi1_inclusion_coordinates, so GO would falsely certify standard-only axioms and REVISE would duplicate an already-declared dependency. Complete or restore the dependency artifact before retrying.",
+    :commands
+    [{:cmd "stat -c '%F %n' .lake/packages",
+      :exit 0,
+      :finding
+      "directory .lake/packages; canonical package authority is present"}
+     {:cmd
+      "test -e ConstructionTargets/GenericPointWedgeFundamentalGroupCoordinates.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "the declared dependency artifact is absent"}
+     {:cmd "git show --stat --oneline c4351fa5",
+      :exit 0,
+      :finding
+      "the similarly named commit changes only ConstructionTargets/TorusPiOneWindingCoordinates.lean"}
+     {:cmd
+      "rg --files ConstructionTargets | rg -i 'fundamental.*coordinate|coordinate.*fundamental|pointwedge.*group'",
+      :exit 0,
+      :finding
+      "only unrelated TwiceSpiral fundamental-groupoid coordinate files match; no generic point-wedge module exists"}
+     {:cmd
+      "lake env lean /tmp/generic-point-wedge-pi1-inclusion-coordinates-probe.lean",
+      :exit 0,
+      :finding
+      "the old fixture still compiles through its isolated interface axiom"}
+     {:cmd
+      "sha256sum /tmp/generic-point-wedge-pi1-inclusion-coordinates-probe.lean",
+      :exit 0,
+      :finding
+      "e1ae729edff3b7991142ce2739d2861caea321529d02b5409a34db42a3792464"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :fixture
+    {:path
+     "/tmp/generic-point-wedge-pi1-inclusion-coordinates-probe.lean",
+     :sha256
+     "e1ae729edff3b7991142ce2739d2861caea321529d02b5409a34db42a3792464"},
+    :seat "topo-4"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/generic-point-wedge-pi1-inclusion-coordinates",
