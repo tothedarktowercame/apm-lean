@@ -55152,6 +55152,85 @@
    :phase :probe,
    :state :open,
    :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/shared/torus-pi1-winding-coordinates/equivalence",
+   :acceptance
+   {:probe
+    "Compile and bank the placeholder-free torusPi1Coord, torusPi1Coord_apply_zero, and torusPi1Coord_apply_one declarations from /tmp/torus_pi1_coordinate_equiv.lean. Construct the exact product-torus fundamental-group equivalence to Multiplicative (Fin 2 → ℤ) from the banked product and circle winding equivalences, and prove by reduction that its two coordinates are the left and right circle winding coordinates. This supplies t97A04 route step 2 and the coordinate object used by t01A02 route step 4; do not claim integer-matrix naturality in this prerequisite.",
+    :declarations
+    ["torusPi1Coord"
+     "torusPi1Coord_apply_zero"
+     "torusPi1Coord_apply_one"],
+    :placeholder
+    "apm_t97A04_bridge_2 and apm_t01A02_bridge_fixedPoint_of_lift",
+    :route-step "t97A04 step 2; t01A02 step 4 coordinate object"},
+   :id
+   :routes-2026-10-10-torus-pi1-coordinate-equivalence-two-consumers-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on [:routes-2026-10-10-checkpoint-topo2-r2],
+   :current-residual
+   "After the equivalence is banked, prove projected representative endpoint formulas and integer-matrix naturality.",
+   :other-consumers [:t01A02]}
+  {:consumer :t97A04,
+   :evidence
+   {:probe
+    {:outcome :revise,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/torus_pi1_coordinate_equiv.lean",
+      :sha256
+      "5cdbd26fee758e9aa1b327df2ca494dd60443897eb03b7db26157320cb2bfd28"},
+     :commands
+     [{:cmd "lake env lean /tmp/torus_pi1_coordinate_equiv.lean",
+       :exit 0,
+       :output
+       "torusPi1Coord compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/torus_pi1_coordinate_equiv.lean || true)\"",
+       :exit 0}
+      {:cmd "sha256sum /tmp/torus_pi1_coordinate_equiv.lean",
+       :exit 0,
+       :output
+       "5cdbd26fee758e9aa1b327df2ca494dd60443897eb03b7db26157320cb2bfd28  /tmp/torus_pi1_coordinate_equiv.lean"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/torus_pi1_coordinate_equiv.lean",
+       :exit 1,
+       :finding
+       "An exploratory endpoint lemma used unsupported gamma.fst/gamma.snd field notation for a Path into a product. Removing those unproved lemmas restored the fixture to the compiled equivalence and its two exact projection-coordinate formulas."}],
+     :finding
+     "The entire requested naturality packet is not yet compiled, but its first reusable step is now concrete. torusPi1Coord composes the banked product fundamental-group equivalence, the two circle endpoint-winding equivalences, the product-to-Multiplicative conversion, and the Fin-2 coordinate equivalence. Two rfl lemmas identify coordinate 0 and coordinate 1 with circleFundamentalGroupMulEquivInt applied to the left and right projected loop classes. Since circleFundamentalGroupMulEquivInt is built from circleWindingHom, these are the correct endpoint-winding coordinates. The remaining work is path-level endpoint identification for projected representatives and naturality under integer-matrix torus maps; neither is disguised as a Prop contract.",
+     :residual
+     "Bank torusPi1Coord and its two projection-coordinate lemmas. Then prove the projected Path representative endpoint formulas and use lift uniqueness to derive integer-matrix naturality required by t97A04 and the lift-coordinate component required by t01A02.",
+     :prerequisite
+     {:consumer :t97A04,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/shared/torus-pi1-winding-coordinates/equivalence",
+      :acceptance
+      {:probe
+       "Compile and bank the placeholder-free torusPi1Coord, torusPi1Coord_apply_zero, and torusPi1Coord_apply_one declarations from /tmp/torus_pi1_coordinate_equiv.lean. Construct the exact product-torus fundamental-group equivalence to Multiplicative (Fin 2 → ℤ) from the banked product and circle winding equivalences, and prove by reduction that its two coordinates are the left and right circle winding coordinates. This supplies t97A04 route step 2 and the coordinate object used by t01A02 route step 4; do not claim integer-matrix naturality in this prerequisite.",
+       :declarations
+       ["torusPi1Coord"
+        "torusPi1Coord_apply_zero"
+        "torusPi1Coord_apply_one"],
+       :placeholder
+       "apm_t97A04_bridge_2 and apm_t01A02_bridge_fixedPoint_of_lift",
+       :route-step "t97A04 step 2; t01A02 step 4 coordinate object"},
+      :id
+      :routes-2026-10-10-torus-pi1-coordinate-equivalence-two-consumers-topo2-r1,
+      :kind :reusable-theorem,
+      :depends-on [:routes-2026-10-10-checkpoint-topo2-r2],
+      :current-residual
+      "After the equivalence is banked, prove projected representative endpoint formulas and integer-matrix naturality.",
+      :other-consumers [:t01A02]}}},
+   :phase :probe,
+   :state :blocked,
+   :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/shared/torus-pi1-winding-coordinates",
    :acceptance
    {:probe
@@ -55163,7 +55242,9 @@
    :id
    :routes-2026-10-10-torus-pi1-winding-coordinates-two-consumers-topo2-r3,
    :kind :reusable-theorem,
-   :depends-on [:routes-2026-10-10-checkpoint-topo2-r2],
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo2-r2
+    :routes-2026-10-10-torus-pi1-coordinate-equivalence-two-consumers-topo2-r1],
    :current-residual
    "Exact Fin-2 endpoint-coordinate naturality is absent.",
    :other-consumers [:t01A02]}
