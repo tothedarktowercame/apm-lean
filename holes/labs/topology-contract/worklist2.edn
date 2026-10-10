@@ -61027,6 +61027,20 @@
       :output
       "[master fdd091ac] Bank t02A03 torus-point core exclusion; 1 file changed, 34 insertions(+)"}
      {:cmd "git status --short", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791639289680-2055-7d2f78a1",
+     :commands
+     ["git show, diff-tree, and show --check on implementation fdd091ac and ledger transition efa94158"
+      "sha256sum authenticated fixture and frozen t02A03 consumer"
+      "lake env lean on fixture, target, and corrected fresh full-range-exclusion probe"
+      "lake build ConstructionTargets/T02A03GeometricTubeCover"
+      "recomputed declaration-type hash and comment-stripped placeholder counts"
+      "python3 scripts/statement-registry.py check --rev fdd091ac"
+      "bb worklist_check.bb on committed transition ledger"],
+     :finding
+     "PASS: codex-7 independently reviewed topo-6 commit fdd091ac6f60a2b888401aad2a1feca29983d6f3. Exact implementation scope is ConstructionTargets/T02A03GeometricTubeCover.lean; transition efa9415816b5704edf3cf13d8dcbd853e16d92ba is ledger-only. Fixture SHA-256 is 14e388ccff51003ea125ba7cd10a574f36f9c98b1150ae18e673cb4e51b03b28. Fixture, recorded-identical target, corrected fresh representation probe, and 8240-job focused build pass. The theorem has exactly the frozen type and excludes every reconstructed torus point from the entire Set.range leftCore. It first forms the exact left-tube subtype, then uses the banked zero-locus equivalence. Core membership would make the normal coordinate vanish; positivity of the reconstructed planar radius forces the second Circle coordinate real part to zero, height forces its imaginary part to zero, contradicting its unit norm. A fresh probe combines this exclusion with tube membership into the exact LeftTubeMinusCore subtype. No bundled inverse map, comparison homotopy, torus equivalence, or gluing is claimed. Axioms are exactly propext, Classical.choice, and Quot.sound. Declaration type hash reproduces as 2de341394c1b75ec65c8cc21df4e9266a78960b52289158d072365752a099cb1; target has zero executable placeholders. Frozen t02A03 consumer hash is b123eca388ab2858ca55daf538c1ddd645022b52f5196a15f0bb516d78323d7d with one executable placeholder; registry is 131/0 and the committed 440-row ledger validates with exactly one done-unreviewed row."},
     :commit "fdd091ac6f60a2b888401aad2a1feca29983d6f3",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
@@ -61039,7 +61053,7 @@
     "Banked exclusion of every reconstructed torus point from the frozen left-core range. Assuming core membership forces both components of the second Circle coordinate to vanish through the normal-coordinate zero-locus theorem, contradicting its unit norm.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/left-tube-torus-point-core-exclusion",
@@ -61136,7 +61150,7 @@
    :phase :probe,
    :type
    "Nonempty (ContinuousMap.HomotopyEquiv LeftTubeMinusCore ConstructionTargets.TorusCircleWedgeOpenCover.Torus)",
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-punctured-model",
    :acceptance
