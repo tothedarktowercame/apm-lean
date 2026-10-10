@@ -86004,6 +86004,8 @@
    :other-consumers [:t97A03]}
   {:consumer :t97A01,
    :stop-count 1,
+   :review-finding
+   "Parent STOP incorrectly describes the reviewed dependency as a missing/restorable artifact. The dependency is done with a deterministic proof that its interface is false for arbitrary X and Y: it demands H0(X)=Z and H0(Y)=Z without path-connectedness. Repair this row to propagate the specification defect and require either path-connected X/Y or H0(X)/H0(Y) coordinates before retry; restoring the absent module under the current contract is impossible standard-only.",
    :evidence
    {:residual
     "Dependency completion is missing, not a new mathematical prerequisite: the H0 inclusion-naturality module must be restored or implemented and reviewed before the generic Mayer-Vietoris coordinate probe can establish standard-only axioms.",
@@ -86046,14 +86048,20 @@
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
      {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1791616052980-1428-e06a048e",
+     :finding
+     "Parent STOP incorrectly describes the reviewed dependency as a missing/restorable artifact. The dependency is done with a deterministic proof that its interface is false for arbitrary X and Y: it demands H0(X)=Z and H0(Y)=Z without path-connectedness. Repair this row to propagate the specification defect and require either path-connected X/Y or H0(X)/H0(Y) coordinates before retry; restoring the absent module under the current contract is impossible standard-only."},
     :fixture
     {:path
      "/tmp/generic-point-wedge-mv-inclusion-coordinates-probe.lean",
      :sha256
      "8b85b579989bd59f53eff5991aaa36965b937bb9f0e87e5b88be3c93f989e2cf"},
     :seat "topo-4"},
-   :phase :probe,
-   :state :done-unreviewed,
+   :phase :implementation,
+   :state :repair,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/generic-point-wedge-mv-inclusion-coordinates",
@@ -86073,6 +86081,7 @@
    :id
    :routes-2026-10-10-generic-point-wedge-mv-inclusion-coordinates-1,
    :kind :reusable-theorem,
+   :fail-count 1,
    :depends-on
    [:routes-2026-10-10-generic-point-wedge-open-cover-comparison-1
     :routes-2026-10-10-checkpoint-topo1-covering-shared-three-1
