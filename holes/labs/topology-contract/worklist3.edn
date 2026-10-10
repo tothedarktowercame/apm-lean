@@ -545,6 +545,20 @@
       "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
       :exit 0}
      {:cmd "git status --short", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791672367041-3162-d91ba302",
+     :commands
+     ["sha256sum /tmp/manifold_fundamental_class_oriented_overlap.lean"
+      "lake env lean /tmp/manifold_fundamental_class_oriented_overlap.lean"
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"
+      "rg placeholder and axiom census"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped placeholder census for t00J02 and t98A02"],
+     :finding
+     "PASS: implementation commit 91f35c95 changes exactly ConstructionTargets/ManifoldFundamentalClass.lean; fixture hash matches 5ce501f655e762de050d7c72cfc9630a62a480c94ebdacd55342d90549292998; the theorem discharges the frozen conditional overlap-coherence type in the generator_change a-to-b orientation, rewriting transitionUnit to one without asserting arbitrary transitions are oriented; fixture and source compile with zero placeholders and only propext, Classical.choice, and Quot.sound; 131 registered statements match with zero mismatches; consumer counts remain t00J02=1 and t98A02=1"},
     :commit "91f35c956af22cb6d849d3ad280f099bc59452ae",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -559,7 +573,7 @@
      "Added chartGenerator_eq_of_transitionUnit_eq_one for arbitrary commutative coefficients and dimensions m+2, deriving normalized chart-generator equality exactly from generator_change and a transition-unit-one hypothesis."},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/oriented-overlap-generator-coherence",
@@ -676,7 +690,7 @@
      "Positive-degree neighborhood excision is now banked. HigherChartLocalGenerator already constructs actual dimension-two and dimension-four ambient local generators; CoefficientChartTransitionUnit already constructs overlap units, proves their cocycle law, and expresses generator change as multiplication by that unit; CoefficientTransitionLocalConstancy proves those units locally constant. The exact next interface is therefore the orientation coherence implication: an overlap whose transition unit is one identifies its two chart generators. The fixture proves this without placeholders. What remains is geometric, not algebraic: derive unit one from the consumers' orientation data and glue the coherent local generators to one absolute top-homology class.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -1831,7 +1845,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -1848,7 +1862,10 @@
     "forall (R : Type) [CommRing R] (m : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (EuclideanSpace Real (Fin (m + 2))) M] (a b x : M) (ha : x ∈ (chartAt (CoefficientOverlapPair.E m) a).source) (hb : x ∈ (chartAt (CoefficientOverlapPair.E m) b).source), CoefficientChartTransitionUnit.transitionUnit R m a b x ha hb = 1 -> CoefficientChartTransitionUnit.chartGenerator R m a x ha = CoefficientChartTransitionUnit.chartGenerator R m b x hb",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-10-manifold-oriented-overlap-coherence-topo3-r1},
+    :routes-2026-10-10-manifold-oriented-overlap-coherence-topo3-r1,
+    :banked-by
+    :routes-2026-10-10-manifold-oriented-overlap-coherence-topo3-r1,
+    :banked-commit "91f35c956af22cb6d849d3ad280f099bc59452ae"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-chartgenerator-eq-of-transitionunit-eq-one,
    :kind :lemma,
