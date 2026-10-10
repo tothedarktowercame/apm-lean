@@ -466,6 +466,24 @@ theorem norm_rightTubeCoreNormalComplex_circleMeridian (z : Circle) :
   rw [hinside]
   norm_num
 
+theorem rightTubeCore_radial_error_le (p : apm_t02a03_E3) (t : ℝ) :
+    |1 - ‖rightTubeCorePlanarComplex p‖| ≤
+      ‖rightTubeCorePlanarComplex p -
+        ((Real.cos t : ℂ) + (Real.sin t : ℂ) * Complex.I)‖ := by
+  have hu : ‖((Real.cos t : ℂ) + (Real.sin t : ℂ) * Complex.I)‖ = 1 := by
+    rw [Complex.norm_def]
+    simp only [Complex.normSq_apply, Complex.add_re, Complex.ofReal_re,
+      Complex.mul_re, Complex.ofReal_im, Complex.I_re, Complex.I_im,
+      mul_zero, sub_zero, add_zero, Complex.add_im, Complex.mul_im,
+      mul_one, zero_add]
+    rw [show Real.cos t * Real.cos t + Real.sin t * Real.sin t = 1 by
+      nlinarith [Real.sin_sq_add_cos_sq t]]
+    norm_num
+  have h := abs_norm_sub_norm_le (rightTubeCorePlanarComplex p)
+    ((Real.cos t : ℂ) + (Real.sin t : ℂ) * Complex.I)
+  rw [hu] at h
+  simpa [abs_sub_comm] using h
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -481,3 +499,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreAngularCoordinate
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreNormalInterpolation_exists
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.norm_rightTubeCoreNormalComplex_circleMeridian
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCore_radial_error_le
