@@ -82994,8 +82994,130 @@
    "Generalize quotient-coordinate compatibility from CP2/Fin3 to CPn/Fin(n+1); diagonal local calculations and rational homology remain.",
    :other-consumers []}
   {:consumer :t94J09,
-   :phase :probe,
+   :phase :implementation,
    :state :open,
+   :scope
+   ["ConstructionTargets/CompactClosedEquivalenceQuotient.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/shared/compact-closed-equivalence-quotient/saturated-neighborhoods",
+   :acceptance
+   {:placeholder
+    "the single sorries in apm_t94j09, apm_tunk01, and apm_t91a02",
+    :route-step
+    "generic corrected Hausdorff foundation before exact polygon EqvGen closedness",
+    :declarations
+    ["exists_disjoint_open_saturated_of_isClosed_setoid"
+     "compact_closed_equivalence_quotient_t2"],
+    :fixture "/tmp/compact-closed-equivalence-quotient-probe.lean",
+    :fixture-sha256
+    "85d98a50ee78e2aa220e73f6f515cefd82c73831bf29a9e58f8a282fb483af9c",
+    :implementation
+    "For inequivalent x and y, show their equivalence classes are disjoint closed compact subsets using closedness of the relation graph. Obtain open neighborhoods O and P of the two classes whose product misses the relation graph. Define the saturated cores U={z | class(z) is contained in O} and V={z | class(z) is contained in P}. Prove their complements are projections of closed subsets of the compact product, hence closed; prove U and V are saturated, contain x and y, and are disjoint. Then use the compiled fixture argument: images of saturated open sets have open preimages under Quotient.mk', are disjoint, and separate arbitrary unequal quotient points. Do not assume the quotient projection is open.",
+    :axioms :standard-only,
+    :commands
+    ["lake env lean ConstructionTargets/CompactClosedEquivalenceQuotient.lean"
+     "lake env lean /tmp/compact-closed-equivalence-quotient-probe.lean"
+     "python3 scripts/statement-registry.py check"]},
+   :id
+   :routes-2026-10-10-compact-closed-equivalence-saturated-neighborhoods-1,
+   :kind :reusable-theorem,
+   :depends-on [],
+   :current-residual
+   "Prove disjoint open saturated neighborhoods for two inequivalent points under a closed equivalence graph on a compact Hausdorff space; quotient Hausdorffness then compiles directly.",
+   :other-consumers [:tunk01 :t91A02]}
+  {:consumer :t94J09,
+   :evidence
+   {:probe
+    {:residual
+     "Exactly one shared prerequisite remains: the compact closed-equivalence saturated-neighborhood lemma. The fixture then proves the coinduced Quotient is Hausdorff without any open-projection assumption; polygon-specific EqvGen graph closedness remains downstream.",
+     :outcome :revise,
+     :warnings
+     [{:kind :interface-axiom,
+       :message
+       "The fixture is placeholder-free and depends on one nonstandard axiom, the compact closed-equivalence disjoint saturated-neighborhood lemma. The coinduced quotient separation and T2Space construction are fully proved."}],
+     :prerequisite
+     {:consumer :t94J09,
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/CompactClosedEquivalenceQuotient.lean"],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/shared/compact-closed-equivalence-quotient/saturated-neighborhoods",
+      :acceptance
+      {:placeholder
+       "the single sorries in apm_t94j09, apm_tunk01, and apm_t91a02",
+       :route-step
+       "generic corrected Hausdorff foundation before exact polygon EqvGen closedness",
+       :declarations
+       ["exists_disjoint_open_saturated_of_isClosed_setoid"
+        "compact_closed_equivalence_quotient_t2"],
+       :fixture "/tmp/compact-closed-equivalence-quotient-probe.lean",
+       :fixture-sha256
+       "85d98a50ee78e2aa220e73f6f515cefd82c73831bf29a9e58f8a282fb483af9c",
+       :implementation
+       "For inequivalent x and y, show their equivalence classes are disjoint closed compact subsets using closedness of the relation graph. Obtain open neighborhoods O and P of the two classes whose product misses the relation graph. Define the saturated cores U={z | class(z) is contained in O} and V={z | class(z) is contained in P}. Prove their complements are projections of closed subsets of the compact product, hence closed; prove U and V are saturated, contain x and y, and are disjoint. Then use the compiled fixture argument: images of saturated open sets have open preimages under Quotient.mk', are disjoint, and separate arbitrary unequal quotient points. Do not assume the quotient projection is open.",
+       :axioms :standard-only,
+       :commands
+       ["lake env lean ConstructionTargets/CompactClosedEquivalenceQuotient.lean"
+        "lake env lean /tmp/compact-closed-equivalence-quotient-probe.lean"
+        "python3 scripts/statement-registry.py check"]},
+      :id
+      :routes-2026-10-10-compact-closed-equivalence-saturated-neighborhoods-1,
+      :kind :reusable-theorem,
+      :depends-on [],
+      :current-residual
+      "Prove disjoint open saturated neighborhoods for two inequivalent points under a closed equivalence graph on a compact Hausdorff space; quotient Hausdorffness then compiles directly.",
+      :other-consumers [:tunk01 :t91A02]},
+     :axioms
+     ["propext"
+      "Classical.choice"
+      "Quot.sound"
+      "CompactClosedEquivalenceQuotientProbe.exists_disjoint_open_saturated"],
+     :commands
+     [{:cmd "stat -c '%F %n' .lake/packages",
+       :exit 0,
+       :finding
+       "directory .lake/packages; /home/joe/code/apm-lean is the canonical package authority checkout"}
+      {:cmd
+       "lake env lean /tmp/compact-closed-equivalence-quotient-probe.lean",
+       :exit 0,
+       :finding
+       "the generic quotient T2 theorem follows from exactly the saturated-neighborhood lemma"}
+      {:cmd
+       "sha256sum /tmp/compact-closed-equivalence-quotient-probe.lean",
+       :exit 0,
+       :finding
+       "85d98a50ee78e2aa220e73f6f515cefd82c73831bf29a9e58f8a282fb483af9c"}
+      {:cmd
+       "Python comment-stripped placeholder census of /tmp/compact-closed-equivalence-quotient-probe.lean",
+       :exit 0,
+       :finding "0"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :finding "131 registered statements match, 0 do not"}
+      {:cmd "git status --short", :exit 0, :finding "clean"}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/compact-closed-equivalence-quotient-probe.lean",
+       :exit 1,
+       :finding
+       "the first draft used Setoid.Rel instead of Setoid.r and an invalid dependent binder",
+       :correction
+       "used Setoid.r and explicit saturation binders; a second compile exposed only an equality orientation in the image-disjointness proof"}
+      {:cmd
+       "lake env lean /tmp/compact-closed-equivalence-quotient-probe.lean",
+       :exit 1,
+       :finding
+       "the second image witness equality was oriented as Quotient.mk' b = Quotient.mk' a",
+       :correction
+       "used the V-saturation direction from b to a; the successful rerun is in commands"}],
+     :fixture
+     {:path "/tmp/compact-closed-equivalence-quotient-probe.lean",
+      :sha256
+      "85d98a50ee78e2aa220e73f6f515cefd82c73831bf29a9e58f8a282fb483af9c"},
+     :seat "topo-4"}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/compact-closed-equivalence-quotient",
@@ -83016,7 +83138,7 @@
    :kind :reusable-theorem,
    :depends-on
    [:routes-2026-10-10-checkpoint-topo1-refill-three-1
-    :routes-2026-10-10-checkpoint-topo1-refill-three-1],
+    :routes-2026-10-10-compact-closed-equivalence-saturated-neighborhoods-1],
    :current-residual
    "Supply the generic compact closed-equivalence separation theorem required by all three polygon consumers.",
    :other-consumers [:tunk01 :t91A02]}
