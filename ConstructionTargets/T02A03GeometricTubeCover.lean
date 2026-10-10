@@ -142,4 +142,27 @@ theorem apm_t02a03_rightCore_mem_geometricY_iff (t : ℝ) :
     rw [apm_t02a03_core_ranges_intersection] at htI
     exact Set.mem_singleton_iff.mp htI
 
+abbrev apm_t02a03_geometricY_probe :=
+  {p : apm_t02a03_E3 // p ∈ apm_t02a03_W ∧
+    p ∉ Set.range apm_t02a03_leftCore}
+
+theorem apm_t02a03_continuous_rightCore :
+    Continuous apm_t02a03_rightCore := by
+  unfold apm_t02a03_rightCore
+  apply (PiLp.continuous_toLp 2 _).comp
+  apply continuous_pi
+  intro i
+  fin_cases i <;> simp <;> fun_prop
+
+/-- The surviving right-core parametrization, with its codomain restricted to
+the frozen geometric complement. -/
+noncomputable def apm_t02a03_rightCoreSurvivorMap :
+    C({t : ℝ // apm_t02a03_rightCore t ≠ 0},
+      apm_t02a03_geometricY_probe) where
+  toFun t := ⟨apm_t02a03_rightCore t,
+    (apm_t02a03_rightCore_mem_geometricY_iff t).2 t.property⟩
+  continuous_toFun := by
+    exact Continuous.subtype_mk
+      (apm_t02a03_continuous_rightCore.comp continuous_subtype_val) _
+
 end ConstructionTargets.T02A03GeometricTubeCover
