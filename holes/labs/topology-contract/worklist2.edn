@@ -61757,46 +61757,66 @@
    "single-consumer positive radial coefficient for the t02A03 complement interpolation",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:outcome :go,
-     :fixture
-     {:path "/tmp/t02a03_geometric_tube_cover.lean",
-      :sha256
-      "8b52244ebf5285a0d9b58a8c8e5818daa0263608597d8ca10d452729d7077148"},
-     :commands
-     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "apm_t02a03_leftTubeRadialNormalRadius_pos compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
-       :exit 0}
-      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "8b52244ebf5285a0d9b58a8c8e5818daa0263608597d8ca10d452729d7077148  /tmp/t02a03_geometric_tube_cover.lean"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :implementation
-     {:scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
-      :declaration
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Prove the interpolation normal-coordinate formula, deduce deleted-core exclusion, bundle the homotopy, and assemble the torus HomotopyEquiv.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :missing-theorems
+    [{:name
       "ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_leftTubeRadialNormalRadius_pos",
       :type
       "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, 0 < (1 - (tp.1 : Real)) * (1 / 8 : Real) + (tp.1 : Real) * norm (apm_t02a03_leftTubeNormalComplex ⟨tp.2.1, tp.2.2.1⟩)",
-      :acceptance
-      ["target module compiles"
-       "declaration has the frozen type"
-       "target module contains no sorry token"
-       "statement registry matches"]},
-     :finding
-     "The fixture proves strict positivity by using the deleted-core hypothesis and normal zero-locus equivalence to obtain a positive source normal norm, then separating the endpoint case t=1 from t<1 so one convex-combination summand is strictly positive.",
-     :residual
-     "Prove the interpolation normal-coordinate formula, deduce deleted-core exclusion, bundle the homotopy, and assemble the torus HomotopyEquiv."}},
+      :status :proved,
+      :consumers [:t02A03],
+      :depends-on
+      ["ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_leftTubeRadialPoint_mem_leftTube"]}],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not",
+     :accepted-type-sha256
+     "cb2e70ba6bc482bd5d422d36ee584b2e3331d04ce226e974aaf3fe87b03d9870"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+      :exit 0,
+      :output
+      "8b52244ebf5285a0d9b58a8c8e5818daa0263608597d8ca10d452729d7077148  /tmp/t02a03_geometric_tube_cover.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03LeftTubePuncturedModel.lean",
+      :exit 0,
+      :output ""}
+     {:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+      :exit 0,
+      :output
+      "apm_t02a03_leftTubeRadialNormalRadius_pos depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03LeftTubePuncturedModel.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}],
+    :commit "875ef7044173692f45d0d3e643d1e482c2fbe1eb",
+    :changed-paths
+    ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
+    :fixture
+    {:path "/tmp/t02a03_geometric_tube_cover.lean",
+     :sha256
+     "8b52244ebf5285a0d9b58a8c8e5818daa0263608597d8ca10d452729d7077148"},
+    :finding
+    "Banked strict positivity of the interpolated normal radius, using deleted-core nonvanishing and the endpoint split t = 1 versus t < 1.",
+    :implementation
+    {:scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
+     :declarations
+     ["ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_leftTubeRadialNormalRadius_pos"],
+     :type
+     "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, 0 < (1 - (tp.1 : Real)) * (1 / 8 : Real) + (tp.1 : Real) * norm (apm_t02a03_leftTubeNormalComplex ⟨tp.2.1, tp.2.2.1⟩)"},
+    :seat "topo-6"},
    :phase :implementation,
    :type
    "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, 0 < (1 - (tp.1 : Real)) * (1 / 8 : Real) + (tp.1 : Real) * norm (apm_t02a03_leftTubeNormalComplex ⟨tp.2.1, tp.2.2.1⟩)",
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/left-tube-radial-normal-radius-positive",
@@ -62819,4 +62839,28 @@
    :id :lemma-apm-t02a03-lefttuberadialnormalradius-pos,
    :kind :lemma,
    :depends-on [:lemma-apm-t02a03-lefttuberadialpoint-mem-lefttube],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_leftTubeRadialNormalRadius_pos",
+    :type
+    "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, 0 < (1 - (tp.1 : Real)) * (1 / 8 : Real) + (tp.1 : Real) * norm (apm_t02a03_leftTubeNormalComplex ⟨tp.2.1, tp.2.2.1⟩)"},
+   :lemma
+   {:name
+    "ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_leftTubeRadialNormalRadius_pos",
+    :reported-by
+    [:routes-2026-10-10-t02a03-left-tube-radial-normal-radius-positive-topo2-r1],
+    :type
+    "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, 0 < (1 - (tp.1 : Real)) * (1 / 8 : Real) + (tp.1 : Real) * norm (apm_t02a03_leftTubeNormalComplex ⟨tp.2.1, tp.2.2.1⟩)",
+    :proved-in
+    :routes-2026-10-10-t02a03-left-tube-radial-normal-radius-positive-topo2-r1},
+   :id
+   :lemma-constructiontargets-t02a03lefttubepuncturedmodel-apm-t02a03-lefttuberadialnormal,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t02a03lefttubepuncturedmodel-apm-t02a03-lefttuberadialpoint-],
    :other-consumers []}]}
