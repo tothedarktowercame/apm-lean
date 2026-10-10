@@ -407,4 +407,68 @@ theorem apm_t02a03_rightCore_collar_deletedEndpoint :
   rw [apm_t02a03_rightCoreAttachmentClosureMap_zero,
     apm_t02a03_attachmentCollarClosureMap_one]
 
+noncomputable def apm_t02a03_rightCoreLiftPoint
+    (v : Set.Icc (0 : ℝ) 1 × Set.Ioc (0 : ℝ) 1) : apm_t02a03_E3 :=
+  apm_t02a03_rightCore (v.2 : ℝ) +
+    WithLp.toLp 2 ![0, 0, (v.1 : ℝ) / 8]
+
+theorem apm_t02a03_rightCoreLiftPoint_mem_geometricY
+    (v : Set.Icc (0 : ℝ) 1 × Set.Ioc (0 : ℝ) 1) :
+    apm_t02a03_rightCoreLiftPoint v ∈ apm_t02a03_W ∧
+      apm_t02a03_rightCoreLiftPoint v ∉
+        Set.range apm_t02a03_leftCore := by
+  constructor
+  · rw [apm_t02a03_W_eq_leftTube_union_rightTube]
+    apply Set.mem_union_right
+    apply Metric.mem_cthickening_of_dist_le
+      (apm_t02a03_rightCoreLiftPoint v)
+      (apm_t02a03_rightCore (v.2 : ℝ)) (1 / 4 : ℝ)
+      (Set.range apm_t02a03_rightCore) ⟨(v.2 : ℝ), rfl⟩
+    rw [dist_eq_norm, EuclideanSpace.norm_eq]
+    simp [apm_t02a03_rightCoreLiftPoint, apm_t02a03_rightCore,
+      Fin.sum_univ_succ]
+    rw [Real.sqrt_sq_eq_abs, abs_of_nonneg
+      (div_nonneg v.1.property.1 (by norm_num))]
+    nlinarith [v.1.property.2]
+  · intro hL
+    rcases hL with ⟨u, hu⟩
+    have hz := congrArg (fun q : apm_t02a03_E3 => q 2) hu
+    simp [apm_t02a03_rightCoreLiftPoint, apm_t02a03_rightCore,
+      apm_t02a03_leftCore] at hz
+    have hs0 : (v.1 : ℝ) = 0 := by linarith
+    have hp : apm_t02a03_rightCoreLiftPoint v =
+        apm_t02a03_rightCore (v.2 : ℝ) := by
+      ext i
+      fin_cases i <;>
+        simp [apm_t02a03_rightCoreLiftPoint, hs0]
+    exact (apm_t02a03_rightCoreAttachmentPoint_mem_geometricY v.2).2
+      ⟨u, hp ▸ hu⟩
+
+noncomputable def apm_t02a03_rightCoreLiftHomotopyMap :
+    C(Set.Icc (0 : ℝ) 1 × Set.Ioc (0 : ℝ) 1,
+      apm_t02a03_geometricY_probe) where
+  toFun v := ⟨apm_t02a03_rightCoreLiftPoint v,
+    apm_t02a03_rightCoreLiftPoint_mem_geometricY v⟩
+  continuous_toFun := by
+    apply Continuous.subtype_mk
+    unfold apm_t02a03_rightCoreLiftPoint
+    apply Continuous.add
+    · exact apm_t02a03_continuous_rightCore.comp
+        (continuous_subtype_val.comp continuous_snd)
+    · apply (PiLp.continuous_toLp 2 _).comp
+      apply continuous_pi
+      intro i
+      fin_cases i <;> simp <;> fun_prop
+
+theorem apm_t02a03_rightCoreLiftHomotopyMap_zero
+    (t : Set.Ioc (0 : ℝ) 1) :
+    apm_t02a03_rightCoreLiftHomotopyMap (⟨0, by simp⟩, t) =
+      apm_t02a03_rightCoreAttachmentMap t := by
+  apply Subtype.ext
+  ext i
+  fin_cases i <;>
+    simp [apm_t02a03_rightCoreLiftHomotopyMap,
+      apm_t02a03_rightCoreLiftPoint,
+      apm_t02a03_rightCoreAttachmentMap]
+
 end ConstructionTargets.T02A03GeometricTubeCover
