@@ -88833,17 +88833,17 @@
   {:consumer :t97A03,
    :owner-reopen
    "Owner reopen 2026-10-10 (claude-14): both STOPs cite missing approved signatures for declarations the acceptance lists in prose. Under work-prompt.md WHAT IS FROZEN, only the registered statement and the fixture interface-axiom types are frozen; design the supporting signatures, discharge the frozen axiom type with standard axioms, and STOP only on a mathematical boundary.",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "design the supporting signatures and discharge the frozen axiom type",
    :evidence
    {:residual
-    "Formalize twoSheetedSphereCircleGluingClassification by trivializing the sphere restriction, classifying the two lifted arc matchings, and proving the explicit EqvGen quotient homeomorphisms; then export it under the frozen connectedDoubleCoverHomeomorphism interface.",
+    "Formalize gluedDoubleCover, prove Y is homeomorphic to it from compatible sphere/arc trivializations, and prove restrictedDoubleCoverGluingEquiv for the connected Fin 2 matching cases; then discharge connectedDoubleCoverHomeomorphism.",
     :outcome :stop,
     :warnings
     [{:kind :mathematical-boundary,
       :message
-      "The needed result is a full two-sheeted graph-of-spaces covering classification with explicit quotient homeomorphisms, not merely an unstated helper signature."}],
+      "The missing result is the global trivialization-and-gluing theorem converting an arbitrary cover into the finite matching quotient, followed by the explicit matching-quotient homeomorphism."}],
     :disposition :stop,
     :axioms
     ["propext"
@@ -88852,33 +88852,27 @@
      "T97A03ConnectedDoubleCoverClassificationProbe.connectedDoubleCoverHomeomorphism"],
     :author "topo-2",
     :reason
-    "The owner correction is accepted: helper signatures are locally designable, and the frozen theorem appears mathematically true. Its proof nevertheless requires a missing covering-gluing classification theorem that is not a routine consequence of the banked monodromy API. A sufficient prerequisite has Lean type: theorem twoSheetedSphereCircleGluingClassification (A B : Circle) (hAB : A ≠ B) (Y : Type) [TopologicalSpace Y] [ConnectedSpace Y] (p : Y → apm_t97A03_BaseSpace A B) (hp : IsCoveringMap p) (hdegree : ∀ x, Nat.card (Set.preimage p ({x} : Set _)) = 2) : Nonempty (Y ≃ₜ apm_t97A03_OneCircleCover) ∨ Nonempty (Y ≃ₜ apm_t97A03_TwoCircleCover). The missing content is a new classification construction: prove the sphere-stratum restriction is two trivial sheets, classify both lifted arcs of Circle minus A and B as matchings of the two fibers, enumerate the three connected matching pairs up to relabeling, and descend each matching to mutually inverse continuous maps of the explicit EqvGen quotients. No theorem about these BaseRel, OneCircleRel, or TwoCircleRel quotients exists in ConstructionTargets. This prerequisite is the entire graph-of-spaces covering classification and is too large to derive from IsCoveringMap.monodromy plus fiber cardinality within one bounded row without a prior formal gluing theory.",
+    "The supporting signatures are designable and are not the blocker. The frozen theorem is mathematically plausible and I found no missing hypothesis, but its proof requires a concrete theorem not present in the repository: after defining the sphere and two open-arc strata and their restricted covers, one needs theorem restrictedDoubleCoverGluingEquiv (matchingNorth matchingSouth : Equiv.Perm (Fin 2)) (hconnected : matchingNorth ≠ matchingSouth ∨ matchingNorth = Equiv.swap 0 1) : Nonempty (gluedDoubleCover matchingNorth matchingSouth ≃ₜ apm_t97A03_OneCircleCover) ∨ Nonempty (gluedDoubleCover matchingNorth matchingSouth ≃ₜ apm_t97A03_TwoCircleCover), together with a homeomorphism Y ≃ₜ gluedDoubleCover matchingNorth matchingSouth obtained from hp. Here gluedDoubleCover is the locally designed quotient of two sphere sheets and the lifted arc sheets by those endpoint matchings. Constructing that homeomorphism requires compatible global trivializations on the simply connected sphere and both open arcs, agreement at four attachment fibers, and quotient continuity in both directions. None of those stratum-gluing results exists, and the fixture assumes their complete composite as connectedDoubleCoverHomeomorphism. I cannot truthfully discharge that axiom standard-only in this invocation.",
     :commands
     [{:cmd
       "sha256sum /tmp/t97a03-connected-double-cover-classification-probe.lean",
       :exit 0,
-      :finding "The recorded fixture hash was freshly verified."}
+      :finding "The frozen fixture hash matches."}
+     {:cmd
+      "rg for concrete BaseRel, lifted-arc matching, and two-sphere-sheet gluing results in ConstructionTargets",
+      :exit 1,
+      :expected-exit 1,
+      :finding
+      "No concrete stratum-gluing classification has appeared."}
      {:cmd
       "compile Main.lean to /tmp/Main.olean and compile the fixture with /tmp on LEAN_PATH",
       :exit 0,
       :finding
-      "The frozen classification type compiles; exactFrozenBridge still depends on connectedDoubleCoverHomeomorphism."}
-     {:cmd
-      "rg for BaseRel, OneCircleRel, TwoCircleRel, or connectedDoubleCoverHomeomorphism in ConstructionTargets",
-      :exit 1,
-      :expected-exit 1,
-      :finding
-      "No concrete covering-gluing classification for these quotient relations is banked."}
+      "The consumer retains three existing sorry warnings; exactFrozenBridge retains connectedDoubleCoverHomeomorphism as a nonstandard axiom."}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
      {:cmd "git status --short", :exit 0, :finding "clean"}],
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1791631269454-1775-f17df3d0",
-     :finding
-     "design the supporting signatures and discharge the frozen axiom type"},
     :fixture
     {:path
      "/tmp/t97a03-connected-double-cover-classification-probe.lean",
@@ -88889,7 +88883,7 @@
      :proof-placeholder-count 1},
     :seat "topo-2"},
    :phase :implementation,
-   :state :repair,
+   :state :needs-owner,
    :scope
    ["ConstructionTargets/T97A03ConnectedDoubleCoverClassification.lean"],
    :dag-node
