@@ -66856,54 +66856,51 @@
    "single-consumer continuous disk-normal interpolation underlying the ambient deformation",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:residual
-     "Construct the right-core angular interpolation, prove the interpolated normal coordinate stays within radius 1/4 and avoids the left core after reconstruction, then package H.",
-     :outcome :go,
-     :warnings [],
-     :missing-theorems [],
-     :axioms [propext Classical.choice Quot.sound],
-     :commands
-     [{:cmd "lake env lean /tmp/t02a03_right_core_compact_probe.lean",
-       :exit 0,
-       :output
-       "rightTubeCoreNormalInterpolation_exists compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd "sha256sum /tmp/t02a03_right_core_compact_probe.lean",
-       :exit 0,
-       :output
-       "9f475b05b4ccf62f44279a5935809668afd31f4c5d01f45e52a3e5820a8ebcb9  /tmp/t02a03_right_core_compact_probe.lean"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_right_core_compact_probe.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}
-      {:cmd
-       "rg -n \"rightTubeCoreNormalInterpolation(_zero|_one|_exists)?\" /tmp/t02a03_right_core_compact_probe.lean",
-       :exit 0,
-       :output
-       "Definition, endpoint theorems, and existential occur at lines 301-338."}],
-     :fixture
-     {:path "/tmp/t02a03_right_core_compact_probe.lean",
-      :sha256
-      "9f475b05b4ccf62f44279a5935809668afd31f4c5d01f45e52a3e5820a8ebcb9"},
-     :finding
-     "For each continuous Circle-valued meridian coordinate, the fixture constructs the continuous complex line segment between the meridian endpoint's right-core normal coordinate and the input point's coordinate, with both endpoint equations proved by simplification.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
-      :declarations
-      [{:name
-        "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreNormalInterpolation",
-        :type
-        "C(RightTubeMinusLeftCore, Circle) -> C(unitInterval × RightTubeMinusLeftCore, Complex)"}
-       {:name
-        "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreNormalInterpolation_exists",
-        :type
-        "forall m : C(RightTubeMinusLeftCore, Circle), exists N : C(unitInterval × RightTubeMinusLeftCore, Complex), (forall p, N (0,p) = rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (m p))) and (forall p, N (1,p) = rightTubeCoreNormalComplex p.1)"}]},
-     :seat "topo-8"}},
+   {:placeholder-delta {:before 0, :after 0},
+    :residual
+    "Construct the right-core angular interpolation, prove the interpolated normal coordinate stays within radius 1/4 and avoids the left core after reconstruction, then package H.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["Lean reports the pre-existing unnecessarySimpa warning at module line 62; the normal-interpolation declarations compile without additional warnings."],
+    :missing-theorems [],
+    :statement-hashes
+    {:registered "131 registered statements match, 0 do not",
+     :scoped-file-git-blob "a3a0f9f17c9cb66323de20cd08ac537fee54e80d"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd "lake env lean /tmp/t02a03_right_core_compact_probe.lean",
+      :exit 0}
+     {:cmd "sha256sum /tmp/t02a03_right_core_compact_probe.lean",
+      :exit 0,
+      :output
+      "9f475b05b4ccf62f44279a5935809668afd31f4c5d01f45e52a3e5820a8ebcb9  /tmp/t02a03_right_core_compact_probe.lean"}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeDeformation.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "49b610e8b3df308a706f90ad78d9fb9132e16f65",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+    :fixture
+    {:path "/tmp/t02a03_right_core_compact_probe.lean",
+     :sha256
+     "9f475b05b4ccf62f44279a5935809668afd31f4c5d01f45e52a3e5820a8ebcb9"},
+    :finding
+    "For any continuous meridian coordinate, the complex line segment from the meridian endpoint's disk-normal coordinate to the input point's disk-normal coordinate is continuous and has the required endpoint equations.",
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/right-core-normal-interpolation",
