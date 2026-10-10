@@ -76,4 +76,9 @@ theorem apm_t02a03_leftTubeRadialNormalRadius_pos
       mul_nonneg ht0 (norm_nonneg _)
     exact add_pos_of_pos_of_nonneg hfirst hsecond
 
+theorem apm_t02a03_leftTubeNormalAngular_ne_zero
+    (p : apm_t02a03_LeftTubeMinusCore) :
+    ((apm_t02a03_leftTubeNormalAngular p : Circle) : ℂ) ≠ 0 := by
+  exact Circle.coe_ne_zero _
+
 end ConstructionTargets.T02A03LeftTubePuncturedModel
