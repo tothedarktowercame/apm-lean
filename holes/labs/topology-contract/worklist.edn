@@ -81483,8 +81483,67 @@
    :current-residual "Common quotient API before charts and homology.",
    :other-consumers [:t96A06]}
   {:consumer :t94J09,
+   :stop-count 1,
+   :evidence
+   {:residual
+    "Replace the route with a compact-Hausdorff closed-equivalence quotient theorem plus exact closedness proofs for the finite edge-pairing EqvGen relations; cut-and-paste and cellular homology remain deferred.",
+    :outcome :stop,
+    :warnings
+    [{:kind :route-refutation,
+      :message
+      "Closedness of the equivalence graph may still imply Hausdorffness by a different compact-Hausdorff quotient argument; only the elected open-quotient route is refuted."}],
+    :disposition :stop,
+    :author "topo-4",
+    :reason
+    "Mathematical boundary in the elected route: the canonical projection for a disk quotient obtained by identifying only paired boundary arcs is not generally an open map, so Mathlib's t2Space_iff_of_isOpenQuotientMap cannot establish these polygon quotients are Hausdorff. Already for [0,1] with endpoints identified, an open neighborhood of 0 has saturation equal to that neighborhood union {1}, which is not open; the polygon edge-pairing projection has the same local boundary phenomenon. The compiled conditional adapter confirms that the proposed criterion requires both IsOpenMap of Quotient.mk' and closedness of EqvGen. The frozen files provide only continuity and surjectivity of their quotient maps. A valid replacement route must prove the compact-Hausdorff closed-equivalence-relation quotient theorem directly (or construct explicit separating saturated neighborhoods), then prove the exact EqvGen graphs closed; it cannot use the requested open-quotient premise.",
+    :commands
+    [{:cmd "stat -c '%F %n' .lake/packages",
+      :exit 0,
+      :finding
+      "directory .lake/packages; canonical checkout owns the package authority"}
+     {:cmd
+      "lake env lean /tmp/polygon-quotient-hausdorff-route-check.lean",
+      :exit 0,
+      :finding
+      "placeholder-free conditional Hausdorff adapter compiles and requires explicit open-map and closed-EqvGen hypotheses"}
+     {:cmd
+      "sha256sum /tmp/polygon-quotient-hausdorff-route-check.lean",
+      :exit 0,
+      :finding
+      "82585bb422a708d000d11a57bd1eb133c3641ff0fd64a64d2885b5ef7ca01bd1"}
+     {:cmd
+      "Python comment-stripped placeholder census of /tmp/polygon-quotient-hausdorff-route-check.lean",
+      :exit 0,
+      :finding "0"}
+     {:cmd "lake env lean problems/t94J09/lean/Main.lean",
+      :exit 0,
+      :finding "existing declaration-uses-sorry warning"}
+     {:cmd "lake env lean problems/tunk01/lean/Main.lean",
+      :exit 0,
+      :finding "existing declaration-uses-sorry warning"}
+     {:cmd "lake env lean problems/t91A02/lean/Main.lean",
+      :exit 0,
+      :finding "existing declaration-uses-sorry warning"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :diagnostic-history
+    [{:cmd
+      "lake env lean /tmp/polygon-quotient-hausdorff-route-check.lean",
+      :exit 1,
+      :finding
+      "first draft left Quotient.mk' setoid implicit ambiguous",
+      :correction
+      "supplied the exact Relation.EqvGen.setoid argument explicitly; the successful rerun is recorded in commands"}],
+    :fixture
+    {:path "/tmp/polygon-quotient-hausdorff-route-check.lean",
+     :sha256
+     "82585bb422a708d000d11a57bd1eb133c3641ff0fd64a64d2885b5ef7ca01bd1",
+     :role :boundary-check},
+    :seat "topo-4"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/shared/polygon-quotient-hausdorff",
    :acceptance
