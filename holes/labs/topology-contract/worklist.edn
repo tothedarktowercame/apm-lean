@@ -98863,8 +98863,67 @@
   {:bounded-exception
    "This single-consumer prerequisite establishes the quotient topology of the actual outer open piece before identifying its kernel with the restricted polygon relation.",
    :consumer :t97A01,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Prove the named map kernel is exactly EqvGen of OuterRel and use the quotient-map kernel homeomorphism to identify the restricted-relation quotient with outerOpen; then transport the radial deformation and construct the annular and boundary models.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :missing-theorems
+    [{:name
+      "PolygonOuterOpenRestrictedQuotient.namedOuterQuotientMap_isQuotientMap",
+      :type
+      "For a radius-preserving disk relation, outerSource is exactly the preimage of outerOpen, and the transported restriction of the full quotient map from Outer onto outerOpen is a quotient map with the expected representative formula.",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on
+      ["PolygonOuterRadialQuotientDeformation.continuous_quotientHomotopy"],
+      :area "polygon-surface-open-cover"}],
+    :statement-hashes "131 registered statements match",
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :finding "canonical package authority"}
+     {:cmd
+      "sha256sum /tmp/polygon-outer-open-restricted-quotient.lean",
+      :exit 0,
+      :finding "fixture hash matches"}
+     {:cmd
+      "lake build ConstructionTargets.PolygonOuterOpenRestrictedQuotient",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/polygon-outer-open-restricted-quotient.lean",
+      :exit 0,
+      :finding "fixture compiles with standard axioms"}
+     {:cmd "rg source for sorry or admit",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero source placeholders"}
+     {:cmd "rg fixture for sorry or admit",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero fixture placeholders"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short",
+      :exit 0,
+      :finding "clean worktree after commit"}],
+    :diagnostic-history [],
+    :commit "b99facc86aa5f5e43482214dc9180225719ac395",
+    :changed-paths
+    ["ConstructionTargets/PolygonOuterOpenRestrictedQuotient.lean"],
+    :fixture
+    {:path "/tmp/polygon-outer-open-restricted-quotient.lean",
+     :sha256
+     "e70dfe4064ed0efc0a7f88cba3e5c4630d7d23ca80e012ee2bf509af2824261f",
+     :sorry-count 0},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonOuterOpenRestrictedQuotient.lean"],
    :dag-node
@@ -101355,16 +101414,19 @@
    {:name
     "PolygonOuterOpenRestrictedQuotient.namedOuterQuotientMap_isQuotientMap",
     :reported-by
-    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40
+     :routes-2026-10-10-polygon-outer-open-restricted-quotient-46],
     :type
     "For a radius-preserving disk relation, the quotient map restricted to the outer radial source is a quotient map onto the outerOpen subtype.",
     :area "polygon-surface-open-cover",
     :proved-in
-    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+    :routes-2026-10-10-polygon-outer-open-restricted-quotient-46},
    :id
    :lemma-polygonouteropenrestrictedquotient-namedouterquotientmap-isquotientmap,
    :kind :lemma,
-   :depends-on [:lemma-polygonradialopencover-outeropen-isopen],
+   :depends-on
+   [:lemma-polygonradialopencover-outeropen-isopen
+    :lemma-polygonouterradialquotientdeformation-continuous-quotienthomotopy],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
