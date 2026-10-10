@@ -61897,6 +61897,21 @@
      {:cmd
       "git diff --check -- ConstructionTargets/T02A03LeftTubePuncturedModel.lean",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791645417180-2257-2721fd55",
+     :commands
+     ["git show/diff-tree/show --check cb76b051da7d3c5b00525a2d0040c26a5b3bf2c2"
+      "sha256sum /tmp/t02a03_geometric_tube_cover.lean"
+      "lake env lean /tmp/t02a03_geometric_tube_cover.lean"
+      "lake env lean ConstructionTargets/T02A03LeftTubePuncturedModel.lean"
+      "lake build ConstructionTargets.T02A03LeftTubePuncturedModel"
+      "python3 scripts/statement-registry.py check --rev cb76b051da7d3c5b00525a2d0040c26a5b3bf2c2"
+      "bb holes/labs/topology-contract/worklist_check.bb recorded-ledger"
+      "recompute accepted-type hash and comment-stripped placeholder counts"],
+     :finding
+     "PASS: author topo-6 is independent; implementation scope is exactly ConstructionTargets/T02A03LeftTubePuncturedModel.lean, transition scope is ledger-only, and fixture SHA-256 eae43e95c04bbd1b2f10ca7d062408cb9bebc328d9fdff96cd4b5ade42172d49 matches. The theorem preserves the precise representation boundary: leftTubeNormalAngular returns a Circle point, its coercion to Complex is nonzero by Circle.coe_ne_zero, and the result has exactly the registered direction-side nonvanishing type without asserting the later interpolation formula. Fixture, target, focused 8241-job build, registry 131/0, and 456-item ledger gate pass; accepted-type hash 20c7c56b3a8dc405b1d9c0f923979a415b0e5c21db137806fc7904d65e6312c8 matches, the declaration uses only propext/Classical.choice/Quot.sound, target placeholders are 0, and unchanged consumer placeholders are 1."},
     :commit "cb76b051da7d3c5b00525a2d0040c26a5b3bf2c2",
     :changed-paths
     ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
@@ -61916,7 +61931,7 @@
    :phase :implementation,
    :type
    "forall p : apm_t02a03_LeftTubeMinusCore, ((apm_t02a03_leftTubeNormalAngular p : Circle) : Complex) ≠ 0",
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/left-tube-normal-direction-nonzero",
@@ -62008,7 +62023,7 @@
    :phase :probe,
    :type
    "Nonempty (ContinuousMap.HomotopyEquiv LeftTubeMinusCore ConstructionTargets.TorusCircleWedgeOpenCover.Torus)",
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-punctured-model",
    :acceptance
@@ -62990,7 +63005,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -63005,7 +63020,10 @@
     :type
     "forall p : apm_t02a03_LeftTubeMinusCore, ((apm_t02a03_leftTubeNormalAngular p : Circle) : Complex) ≠ 0",
     :proved-in
-    :routes-2026-10-10-t02a03-left-tube-normal-direction-nonzero-topo2-r1},
+    :routes-2026-10-10-t02a03-left-tube-normal-direction-nonzero-topo2-r1,
+    :banked-by
+    :routes-2026-10-10-t02a03-left-tube-normal-direction-nonzero-topo2-r1,
+    :banked-commit "cb76b051da7d3c5b00525a2d0040c26a5b3bf2c2"},
    :id
    :lemma-constructiontargets-t02a03lefttubepuncturedmodel-apm-t02a03-lefttubenormalangula,
    :kind :lemma,
