@@ -113,4 +113,17 @@ theorem frozenLbarPi1Map_coordinateMap
     (frozenTorusPi1Coord (frozenLbarPi1Map p)).toAdd
   exact (frozenLbarPi1Map_naturality p).symm
 
+noncomputable def frozenTorusPi1CoordAtLbarBase :
+    FundamentalGroup FrozenTorus (frozenLbar (0, 0)) ≃*
+      Multiplicative (Fin 2 → ℤ) := by
+  exact ((eqToIso (congr_arg FundamentalGroupoid.mk frozenLbar_base)).conj).trans
+    frozenTorusPi1Coord
+
+theorem frozenLbarPi1Map_coordinateMap_raw
+    (p : FundamentalGroup FrozenTorus (0, 0)) :
+    frozenMatrixCoordinateMap (frozenTorusPi1Coord p) =
+      frozenTorusPi1CoordAtLbarBase
+        (FundamentalGroup.map frozenLbar (0, 0) p) := by
+  exact frozenLbarPi1Map_coordinateMap p
+
 end ConstructionTargets.T97A04FrozenH1Coordinate
