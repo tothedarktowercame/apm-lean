@@ -1398,4 +1398,38 @@ theorem sphereProjectionEvenMapDescent
   exact DFunLike.congr_fun
     (hq.lift_comp f hfac) p
 
+/-- A smooth antipodal-even map on the two-sphere descends smoothly through
+the frozen real-projective quotient atlas. -/
+theorem sphereProjectionEvenMapSmoothDescent
+    (m : ℕ) (g : Sphere 2 → E m)
+    (heven : ∀ p : Sphere 2, g (sphereAntipodalN 2 p) = g p)
+    (hg : ContMDiff (𝓡 2) (𝓡 m) ∞ g) :
+    letI := rpSmoothAtlas.charts
+    letI := rpSmoothAtlas.smooth
+    ∃ f : Space ℝ 2 → E m,
+      (∀ p : Sphere 2, f (sphereProjection 2 p) = g p) ∧
+      ContMDiff (𝓡 2) (𝓡 m) ∞ f := by
+  letI := rpSmoothAtlas.charts
+  letI := rpSmoothAtlas.smooth
+  have heven' : ∀ p, g (sphereAntipodal p) = g p := by
+    intro p
+    simpa [sphereAntipodalN, sphereAntipodal] using heven p
+  obtain ⟨f, hf⟩ := sphereProjectionEvenMapDescent
+    ⟨g, hg.continuous⟩ heven'
+  refine ⟨f, hf, ?_⟩
+  intro x
+  obtain ⟨p, rfl⟩ := sphereProjectionQuotientAuthority.surjective x
+  have hloc := rpSmoothAtlas.quotient_localDiffeomorph p
+  have hsmooth : ContMDiffAt (𝓡 2) (𝓡 m) ∞
+      (g ∘ hloc.localInverse) (sphereProjection 2 p) :=
+    hg.contMDiffAt.comp (sphereProjection 2 p) hloc.localInverse_contMDiffAt
+  apply hsmooth.congr_of_eventuallyEq
+  filter_upwards [hloc.localInverse_open_source.mem_nhds
+      hloc.localInverse_mem_source] with y hy
+  change f y = g (hloc.localInverse y)
+  calc
+    f y = f (sphereProjection 2 (hloc.localInverse y)) :=
+      congrArg f (hloc.localInverse_right_inv hy).symm
+    _ = g (hloc.localInverse y) := hf (hloc.localInverse y)
+
 end ConstructionTargets.RealProjectiveSmoothTarget
