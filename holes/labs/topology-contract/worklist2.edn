@@ -66585,56 +66585,70 @@
    "Prove that the intersection and union components of this morphism commute with booleanIntersectionProductionHomologyIso and booleanUnionProductionHomologyIso, then conjugate subcomplex connecting naturality.",
    :other-consumers [:t96J06]}
   {:consumer :t97A04,
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma
    :lemma-constructiontargets-productionopencovermayervietoris-productionconnecting-natura,
    :evidence
    {:residual
-    "Repair and bank a dependency whose result returns a specified ShortComplex.Hom plus equations for τ₁, τ₂, and τ₃; then conjugate canonical connecting naturality through booleanIntersectionProductionHomologyIso and booleanUnionProductionHomologyIso.",
+    "Within the same scope, construct the f-induced union component using subcomplexChains_isPushout, assemble a ShortComplex.Hom with proved τ₁, τ₂, and τ₃ equations, and specialize the committed conjugation theorem.",
     :outcome :stop,
-    :boundary
-    {:kind :representation,
-     :source
-     "Nonempty of an uncharacterized Boolean-cover short-complex morphism",
-     :target
-     "The specified f-induced short-complex morphism with intersection, pieces, and union component equations needed by production homology transport",
-     :direction
-     "No identification from the arbitrary Nonempty witness to the f-induced component maps is present or derivable"},
+    :warnings [],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.ProductionOpenCoverMayerVietoris.productionConnecting_naturality",
+      :type
+      "Naturality after conjugating a specified short-complex morphism through the Boolean intersection and union production homology isomorphisms",
+      :status :proved,
+      :consumers [:t97A04 :t96J06],
+      :depends-on
+      ["ConstructionTargets.ProductionOpenCoverMayerVietoris.subcomplexMayerVietorisConnecting_naturality"],
+      :area "mv-connecting-naturality"}],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not",
+     :construction-file-git-blob
+     "ca715a417f9de0e8c0dd43e65f74da721127e5ce",
+     :fixture-sha256
+     "9b867a9a9525e8055e66ba1c1d52a73e2a5665f436382b24289aa0f3bafe7164"},
     :disposition :stop,
-    :author "topo-8",
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
     :reason
-    "representation boundary: the reviewed prerequisite coverPreservingShortComplexMap has frozen result Nonempty (shortComplex U V ⟶ shortComplex U' V'), with no returned morphism tied to f and no component equations. The compiled prerequisite can choose the zero morphism without using f or the MapsTo hypotheses. Applying subcomplexMayerVietorisConnecting_naturality to that witness yields only the zero-morphism square, not naturality for the maps induced by f. Consequently the production endpoint comparison squares required to state and prove productionConnecting_naturality cannot be recovered from the dependency interface.",
+    "The valid production conjugation theorem is committed, but the row is not complete: productionConnecting_naturality currently consumes a specified ShortComplex.Hom, while the existing coverPreservingShortComplexMap interface returns only an uncharacterized Nonempty witness. The remaining work is to extend the scoped module with an f-induced morphism and component equations without changing or pretending to strengthen that existing lemma.",
     :commands
     [{:cmd
-      "lake env lean /tmp/production_cover_short_complex_map_contract.lean",
-      :exit 0,
-      :output
-      "Compiled the stronger hypothesis-free inhabitant by the zero short-complex morphism; axioms [propext, Classical.choice, Quot.sound]."}
+      "lake env lean ConstructionTargets/ProductionOpenCoverMayerVietoris.lean",
+      :exit 0}
      {:cmd
-      "rg -n \"def productionConnecting|subcomplexMayerVietorisConnecting_naturality|productionConnecting_naturality|coverPreservingShortComplexMap\" ConstructionTargets/ProductionOpenCoverMayerVietoris.lean /tmp/production_cover_short_complex_map_contract.lean",
+      "sha256sum /tmp/production_cover_short_complex_map_contract.lean",
       :exit 0,
       :output
-      "The module contains canonical connecting naturality and productionConnecting, while the prerequisite fixture exposes only the vacuous Nonempty witness."}
+      "9b867a9a9525e8055e66ba1c1d52a73e2a5665f436382b24289aa0f3bafe7164  /tmp/production_cover_short_complex_map_contract.lean"}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
-      :output "131 registered statements match, 0 do not"}],
-    :review
-    {:outcome :fail,
-     :seat "codex-7",
-     :job "invoke-1791664645027-2931-5685cb18",
-     :finding
-     "extend Mathlib: state and prove the missing theorem in scope"},
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "test -z \"$(git show --format= --unified=0 e2a2a31686803c4f371f0d8502ed9a1d50528922 -- ConstructionTargets/ProductionOpenCoverMayerVietoris.lean | rg '^\\+.*(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' --pcre2 || true)\"",
+      :exit 0}
+     {:cmd
+      "git show --check --oneline e2a2a31686803c4f371f0d8502ed9a1d50528922",
+      :exit 0,
+      :output
+      "e2a2a316 Add production connecting transport naturality"}
+     {:cmd "git status --porcelain", :exit 0}],
+    :commit "e2a2a31686803c4f371f0d8502ed9a1d50528922",
+    :changed-paths
+    ["ConstructionTargets/ProductionOpenCoverMayerVietoris.lean"],
     :fixture
     {:path "/tmp/production_cover_short_complex_map_contract.lean",
      :sha256
      "9b867a9a9525e8055e66ba1c1d52a73e2a5665f436382b24289aa0f3bafe7164"},
     :finding
-    "Canonical δ naturality is parameterized by a particular ShortComplex.Hom and mentions homologyMap of its τ₁ and τ₃. The predecessor interface existentially erases that morphism behind Nonempty and supplies no equalities relating those components to the continuous map f. A zero witness satisfies it for every choice of covers, so no downstream proof may treat its components as the geometric induced maps.",
-    :seat "topo-8"},
+    "Fresh compilation verifies the committed conjugation theorem and the continuous-map range/intersection compatibility helpers. The earlier receipt defect is removed: it no longer invents a second theorem name for the existing coverPreservingShortComplexMap lemma node.",
+    :seat "topo-6"},
    :phase :implementation,
-   :state :repair,
+   :state :needs-owner,
    :scope
    ["ConstructionTargets/ProductionOpenCoverMayerVietoris.lean"],
    :dag-node
@@ -68100,14 +68114,19 @@
    :lemma
    {:name
     "ConstructionTargets.ProductionOpenCoverMayerVietoris.productionConnecting_naturality",
-    :reported-by [:routes-2026-10-10-checkpoint-topo2-r7],
+    :reported-by
+    [:routes-2026-10-10-checkpoint-topo2-r7
+     :routes-2026-10-10-production-connecting-naturality-topo2-r1],
     :type
     "Naturality of the production Mayer-Vietoris connecting morphism for a continuous map carrying each source cover member into the corresponding target cover member",
-    :area "mv-connecting-naturality"},
+    :area "mv-connecting-naturality",
+    :proved-in
+    :routes-2026-10-10-production-connecting-naturality-topo2-r1},
    :id
    :lemma-constructiontargets-productionopencovermayervietoris-productionconnecting-natura,
    :kind :lemma,
-   :depends-on [],
+   :depends-on
+   [:lemma-constructiontargets-productionopencovermayervietoris-subcomplexmayervietorisconn],
    :other-consumers [:t96J06]}
   {:consumer :t97A04,
    :phase :lemma,
