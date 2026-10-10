@@ -57232,6 +57232,21 @@
       :output
       "79ca854186b39183bf53490a20b5be92695e345a2c099fcf928b5ad3300ee4ec  problems/t97A04/lean/Main.lean"}
      {:cmd "git status --short", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791615769360-1418-b2640528",
+     :commands
+     ["git diff-tree --no-commit-id --name-only -r c4351fa5"
+      "sha256sum /tmp/fundamental_group_coordinate_transport_apply.lean"
+      "lake env lean /tmp/fundamental_group_coordinate_transport_apply.lean"
+      "lake env lean ConstructionTargets/TorusPiOneWindingCoordinates.lean"
+      "fresh #print axioms audit via lake env lean /dev/stdin"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show c5b41d84:holes/labs/topology-contract/worklist2.edn)"
+      "recompute frozen t97A04 SHA-256 and placeholder count from commit c4351fa5"],
+     :finding
+     "PASS: codex-7 independently reviewed topo-6 commit c4351fa5. Exact scope is TorusPiOneWindingCoordinates.lean; transition c5b41d84 changes only the ledger. Fixture SHA-256 5c21fec271f790bac2a0108368ba11d379e9ec7e1d9fc5eca3fe02b63423e8b9 matches, and fixture plus canonical target compile placeholder-free. Transport orientation is correct: for h:x=y, evaluation of the equivalence transported back to FundamentalGroup X x equals e applied to the quotient cast of p along h.symm at both endpoints; the frozen specialization uses the basepoint equality in exactly that direction. Fresh audits of both declarations are exactly propext, Classical.choice, Quot.sound. Registry is 131/0; ledger is 399 items OK. Frozen t97A04 remains 79ca854186b39183bf53490a20b5be92695e345a2c099fcf928b5ad3300ee4ec with four placeholders; delta zero."},
     :commit "c4351fa5630707902ef2da7572126704b4cdde47",
     :changed-paths
     ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
@@ -57243,7 +57258,7 @@
     ["ConstructionTargets.TorusPiOneWindingCoordinates.fundamentalGroupCoordinateTransport_apply"
      "ConstructionTargets.TorusPiOneWindingCoordinates.frozenNativeCoord_eq_torusPi1Coord_cast"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A04/torus-pi1-winding-coordinates/frozen-coordinate-transport-apply",
@@ -57332,7 +57347,7 @@
       "Compose the transport evaluation with the quotient-cast equality to derive frozenTorusPi1Coord_mk, then prove representative and all-class matrix naturality.",
       :other-consumers []}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/shared/torus-pi1-winding-coordinates",
    :acceptance
