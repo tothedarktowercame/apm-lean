@@ -82403,8 +82403,47 @@
    "Replace the refuted open-projection route by compact-Hausdorff closed-equivalence separation at exactly the three consumers' finite edge-pairing generality.",
    :other-consumers [:tunk01 :t91A02]}
   {:consumer :t96A06,
+   :stop-count 1,
+   :evidence
+   {:outcome :stop,
+    :seat "topo-4",
+    :reason
+    "Representation boundary: the elected shared row spans several independent missing constructions and cannot produce a complete fixture or exactly one compiled prerequisite. For RP3, ProjectiveSpaceTopology supplies only the coinduced quotient from nonzero vectors; there is no banked identification of its real projective space with the antipodal quotient of S3 and no IsCoveringMap theorem for the normalized sphere projection. CoefficientCoveringTransfer proves p_* composed with transfer equals the sheet count, but that identity alone does not identify rational homology of the base with the antipodal-invariant subspace of sphere homology or prove vanishing and finite-dimensionality in every degree. For arbitrary CPn, a separate induction is required: affine-chart/open-complement topology, deformation retractions CPn minus a point to CP(n-1) and the overlap to S^(2n-1), rational-coefficient open-cover Mayer-Vietoris, sphere input, and exact-sequence dimension bookkeeping. Those RP3 covering-identification and CPn Mayer-Vietoris routes are not one theorem and neither is banked. Treating the transfer projection identity as the requested homology computation would weaken the acceptance invariant.",
+    :commands
+    [{:cmd
+      "rg IsCoveringMap sphereProjection/quotientMap and rational projective homology in ConstructionTargets",
+      :exit 1,
+      :expected-exit 1,
+      :finding "no projective covering or homology theorem"}
+     {:cmd
+      "inspect CoefficientSphereAntipodal, CoefficientSphereShift, CoefficientCoveringTransfer, ProductionOpenCoverMayerVietoris, CoefficientSubcomplexMayerVietoris, and ProjectiveSpaceTopology declarations",
+      :exit 0,
+      :finding
+      "sphere actions and transfer projection are banked; projective covering identification, invariant-subspace equivalence, CPn cover retractions, and rational homology computation are absent"}
+     {:cmd "lake env lean problems/t96A06/lean/Main.lean",
+      :exit 0,
+      :finding "existing declaration-uses-sorry warning"}
+     {:cmd "lake env lean problems/t99J05/lean/Main.lean",
+      :exit 0,
+      :finding "existing declaration-uses-sorry warning"}
+     {:cmd
+      "Python comment-stripped placeholder census of t96A06 and t99J05",
+      :exit 0,
+      :finding {:t96A06 1, :t99J05 1}}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :warnings
+    [{:kind :multi-foundation-boundary,
+      :message
+      "The RP3 transfer route and arbitrary-CPn Mayer-Vietoris induction share a destination but not a single missing compiled interface."}],
+    :residual
+    "RP3 first needs the normalized sphere-to-coinduced-projective covering identification, followed by the rational invariant-subspace/transfer computation. CPn separately needs the affine cover and deformation-retraction package, rational open-cover Mayer-Vietoris, and induction/dimension bookkeeping. Degree four, Lefschetz, local indices, and Euler characteristic remain downstream.",
+    :author "topo-4",
+    :disposition :stop},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/shared/rational-projective-homology",
    :acceptance
