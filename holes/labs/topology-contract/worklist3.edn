@@ -24,11 +24,14 @@
      :typed-residual-change
      :infrastructure-packets
      :review-outcomes]},
+   :review-finding
+   "replacement portfolio violates rule 0: multiple consumers have at most two placeholders, but it elects three foundation rows and no closure adapter; repair by electing exactly one nearest-problem closure adapter first, or return STOP naming the exact missing prerequisite that prevents that adapter",
    :stop-condition
    "End only when every topo3 problem is closed or stopped with a compiled refutation. A missing theorem is backlog, never a stop.",
    :evidence
    {:outcome :replan,
-    :seat "topo-12",
+    :disposition :replan,
+    :author "topo-12",
     :commands
     [{:cmd
       "bb holes/labs/topology-contract/build_step.bb priorities holes/labs/topology-contract/worklist3.edn",
@@ -47,6 +50,115 @@
      {:cmd "clojure.edn/read-string /tmp/topo3_receipt.line",
       :exit 0,
       :output ":parsed 50"}],
+    :review
+    {:outcome :fail,
+     :seat "codex-11",
+     :job "invoke-1791670479490-3097-833dc0c1",
+     :finding
+     "replacement portfolio violates rule 0: multiple consumers have at most two placeholders, but it elects three foundation rows and no closure adapter; repair by electing exactly one nearest-problem closure adapter first, or return STOP naming the exact missing prerequisite that prevents that adapter"},
+    :replacement-items
+    [{:consumer :t00A02,
+      :implements-lemma
+      :lemma-constructiontargets-surfaceclassification-compactsmoothsurfacefinitetriangulatio,
+      :phase :probe,
+      :state :open,
+      :scope ["ConstructionTargets/SurfaceClassification.lean"],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/topo3/surface-classification/triangulation-first-milestone",
+      :acceptance
+      {:probe
+       "Compile the finite-triangulation package for compact connected smooth two-manifolds and inherited triangulations on finite covers; do not claim classification.",
+       :declaration
+       "ConstructionTargets.SurfaceClassification.compactSmoothSurfaceFiniteTriangulation",
+       :placeholders
+       ["t00A02 bridge_global_cover_classification"
+        "t00A03 bridges 1/2"
+        "t91J05 bridge_1"
+        "t92J05 genusTwo bridge"
+        "t94J04 equal-index bridge"
+        "t96A01 sole sorry"
+        "t97J02 classify bridge"],
+       :route-step "shared first surface-classification step"},
+      :id :routes-2026-10-10-surface-triangulation-topo3-r1,
+      :kind :reusable-theorem,
+      :area "surface-classification",
+      :depends-on [:routes-2026-10-10-topo3-seed-checkpoint-1],
+      :current-residual
+      "Normal-form reduction, orientability and Euler-characteristic recognition remain.",
+      :other-consumers
+      [:t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02]}
+     {:consumer :t00A03,
+      :implements-lemma
+      :lemma-constructiontargets-surfaceschoenflies-embeddedcirclecollar,
+      :phase :probe,
+      :state :open,
+      :scope ["ConstructionTargets/SurfaceSchoenflies.lean"],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/topo3/schoenflies-2d/embedded-circle-collar",
+      :acceptance
+      {:probe
+       "Compile the annular collar theorem for a topologically embedded Circle in the consumers' Hausdorff two-manifolds.",
+       :declaration
+       "ConstructionTargets.SurfaceSchoenflies.embeddedCircleCollar",
+       :placeholders
+       ["t00A03 bridge_1" "t01J01 bridges" "t03J02 bridge_1"],
+       :route-step "topological circle tameness and collar"},
+      :id :routes-2026-10-10-surface-schoenflies-collar-topo3-r1,
+      :kind :reusable-theorem,
+      :area "schoenflies-2d",
+      :depends-on [:routes-2026-10-10-topo3-seed-checkpoint-1],
+      :current-residual
+      "Surface cutting, intersection separation, van Kampen and classification remain.",
+      :other-consumers [:t01J01 :t03J02]}
+     {:consumer :t00J02,
+      :implements-lemma
+      :lemma-constructiontargets-manifoldfundamentalclass-closedorientedfundamentalclass,
+      :phase :probe,
+      :state :open,
+      :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+      :dag-node
+      "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
+      :acceptance
+      {:probe
+       "Compile localization of a closed oriented manifold's fundamental class to local top-homology generators.",
+       :declaration
+       "ConstructionTargets.ManifoldFundamentalClass.closedOrientedFundamentalClass",
+       :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
+       :route-step
+       "reviewed fundamental-classes/localization DAG node"},
+      :id :routes-2026-10-10-manifold-fundamental-class-topo3-r1,
+      :kind :reusable-theorem,
+      :area "manifold-fundamental-class",
+      :depends-on [:routes-2026-10-10-topo3-seed-checkpoint-1],
+      :current-residual
+      "Local-degree counts and wild-ball complement homology remain.",
+      :other-consumers [:t98A02]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 3,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:strategy
+       "Review the three rows, bank proved lemmas, rerun priorities/areas and refill with at most one closure adapter before balanced area work."},
+      :id :routes-2026-10-10-topo3-seed-checkpoint-2,
+      :kind :strategy-checkpoint,
+      :area "portfolio",
+      :depends-on
+      [:routes-2026-10-10-surface-triangulation-topo3-r1
+       :routes-2026-10-10-surface-schoenflies-collar-topo3-r1
+       :routes-2026-10-10-manifold-fundamental-class-topo3-r1],
+      :current-residual
+      "No topo3 route is complete; refill from the seeded DAG after review.",
+      :other-consumers []}],
     :finding
     {:placeholder-delta
      {:t00J02 {:before 1, :after 1, :delta 0},
@@ -670,113 +782,9 @@
       :depends-on
       ["ConstructionTargets.WildBallComplement.homologyComparison"],
       :area "mayer-vietoris-open-cover"}],
-    :replacement-items
-    [{:consumer :t00A02,
-      :implements-lemma
-      :lemma-constructiontargets-surfaceclassification-compactsmoothsurfacefinitetriangulatio,
-      :phase :probe,
-      :state :open,
-      :scope ["ConstructionTargets/SurfaceClassification.lean"],
-      :dag-node
-      "TOPOLOGY-ROUTES.md/topo3/surface-classification/triangulation-first-milestone",
-      :acceptance
-      {:probe
-       "Compile the finite-triangulation package for compact connected smooth two-manifolds and inherited triangulations on finite covers; do not claim classification.",
-       :declaration
-       "ConstructionTargets.SurfaceClassification.compactSmoothSurfaceFiniteTriangulation",
-       :placeholders
-       ["t00A02 bridge_global_cover_classification"
-        "t00A03 bridges 1/2"
-        "t91J05 bridge_1"
-        "t92J05 genusTwo bridge"
-        "t94J04 equal-index bridge"
-        "t96A01 sole sorry"
-        "t97J02 classify bridge"],
-       :route-step "shared first surface-classification step"},
-      :id :routes-2026-10-10-surface-triangulation-topo3-r1,
-      :kind :reusable-theorem,
-      :area "surface-classification",
-      :depends-on [:routes-2026-10-10-topo3-seed-checkpoint-1],
-      :current-residual
-      "Normal-form reduction, orientability and Euler-characteristic recognition remain.",
-      :other-consumers
-      [:t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02]}
-     {:consumer :t00A03,
-      :implements-lemma
-      :lemma-constructiontargets-surfaceschoenflies-embeddedcirclecollar,
-      :phase :probe,
-      :state :open,
-      :scope ["ConstructionTargets/SurfaceSchoenflies.lean"],
-      :dag-node
-      "TOPOLOGY-ROUTES.md/topo3/schoenflies-2d/embedded-circle-collar",
-      :acceptance
-      {:probe
-       "Compile the annular collar theorem for a topologically embedded Circle in the consumers' Hausdorff two-manifolds.",
-       :declaration
-       "ConstructionTargets.SurfaceSchoenflies.embeddedCircleCollar",
-       :placeholders
-       ["t00A03 bridge_1" "t01J01 bridges" "t03J02 bridge_1"],
-       :route-step "topological circle tameness and collar"},
-      :id :routes-2026-10-10-surface-schoenflies-collar-topo3-r1,
-      :kind :reusable-theorem,
-      :area "schoenflies-2d",
-      :depends-on [:routes-2026-10-10-topo3-seed-checkpoint-1],
-      :current-residual
-      "Surface cutting, intersection separation, van Kampen and classification remain.",
-      :other-consumers [:t01J01 :t03J02]}
-     {:consumer :t00J02,
-      :implements-lemma
-      :lemma-constructiontargets-manifoldfundamentalclass-closedorientedfundamentalclass,
-      :phase :probe,
-      :state :open,
-      :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
-      :dag-node
-      "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
-      :acceptance
-      {:probe
-       "Compile localization of a closed oriented manifold's fundamental class to local top-homology generators.",
-       :declaration
-       "ConstructionTargets.ManifoldFundamentalClass.closedOrientedFundamentalClass",
-       :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
-       :route-step
-       "reviewed fundamental-classes/localization DAG node"},
-      :id :routes-2026-10-10-manifold-fundamental-class-topo3-r1,
-      :kind :reusable-theorem,
-      :area "manifold-fundamental-class",
-      :depends-on [:routes-2026-10-10-topo3-seed-checkpoint-1],
-      :current-residual
-      "Local-degree counts and wild-ball complement homology remain.",
-      :other-consumers [:t98A02]}
-     {:consumer :portfolio,
-      :checkpoint
-      {:after-problems 3,
-       :may-supersede-future true,
-       :required-measures
-       [:placeholder-delta
-        :typed-residual-change
-        :infrastructure-packets
-        :review-outcomes]},
-      :phase :strategy,
-      :state :blocked,
-      :scope [],
-      :dag-node "TOPOLOGY-ROUTES.md",
-      :acceptance
-      {:strategy
-       "Review the three rows, bank proved lemmas, rerun priorities/areas and refill with at most one closure adapter before balanced area work."},
-      :id :routes-2026-10-10-topo3-seed-checkpoint-2,
-      :kind :strategy-checkpoint,
-      :area "portfolio",
-      :depends-on
-      [:routes-2026-10-10-surface-triangulation-topo3-r1
-       :routes-2026-10-10-surface-schoenflies-collar-topo3-r1
-       :routes-2026-10-10-manifold-fundamental-class-topo3-r1],
-      :current-residual
-      "No topo3 route is complete; refill from the seeded DAG after review.",
-      :other-consumers []}],
-    :author "topo-12",
-    :disposition :replan},
+    :seat "topo-12"},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :repair,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -792,7 +800,7 @@
    :implements-lemma
    :lemma-constructiontargets-surfaceclassification-compactsmoothsurfacefinitetriangulatio,
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope ["ConstructionTargets/SurfaceClassification.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/topo3/surface-classification/triangulation-first-milestone",
@@ -821,7 +829,7 @@
    :implements-lemma
    :lemma-constructiontargets-surfaceschoenflies-embeddedcirclecollar,
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope ["ConstructionTargets/SurfaceSchoenflies.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/topo3/schoenflies-2d/embedded-circle-collar",
@@ -844,7 +852,7 @@
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-closedorientedfundamentalclass,
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -872,7 +880,7 @@
      :infrastructure-packets
      :review-outcomes]},
    :phase :strategy,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
