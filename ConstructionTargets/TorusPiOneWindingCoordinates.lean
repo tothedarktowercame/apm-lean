@@ -323,4 +323,28 @@ theorem frozenCircleImageQuotient_eq_mappedQuotient_cast
   rw [← Path.Homotopic.Quotient.mk_cast]
   rw [frozenCircleImagePath_eq_mappedPath_cast]
 
+theorem fundamentalGroupCoordinateTransport_apply
+    {X M : Type*} [TopologicalSpace X] [Group M]
+    {x y : X} (h : x = y) (e : FundamentalGroup X y ≃* M)
+    (p : FundamentalGroup X x) :
+    (show FundamentalGroup X x ≃* M from by rw [h]; exact e) p =
+      e (Path.Homotopic.Quotient.cast p h.symm h.symm) := by
+  subst h
+  simp
+
+theorem frozenNativeCoord_eq_torusPi1Coord_cast
+    (p : FundamentalGroup (Circle × Circle)
+      (frozenTorusHomeomorphCircleProd (0, 0))) :
+    (show FundamentalGroup (Circle × Circle)
+        (frozenTorusHomeomorphCircleProd (0, 0)) ≃*
+        Multiplicative (Fin 2 → ℤ) from by
+      rw [frozenTorusHomeomorphCircleProd_base]
+      exact torusPi1Coord) p =
+      torusPi1Coord
+        (Path.Homotopic.Quotient.cast p
+          frozenTorusHomeomorphCircleProd_base.symm
+          frozenTorusHomeomorphCircleProd_base.symm) := by
+  exact fundamentalGroupCoordinateTransport_apply
+    frozenTorusHomeomorphCircleProd_base torusPi1Coord p
+
 end ConstructionTargets.TorusPiOneWindingCoordinates
