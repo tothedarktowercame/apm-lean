@@ -64403,25 +64403,64 @@
   {:bounded-exception
    "single-consumer aligned frozen-torus ModuleCat H1 coordinate for t97A04",
    :consumer :t97A04,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/t97a04_frozen_h1_coordinate.lean",
+      :sha256
+      "810a8c99252a67966d7eeb79579f806dd4829b4d1d2485f70eade52ccdce338c"},
+     :commands
+     [{:cmd "sha256sum /tmp/t97a04_frozen_h1_coordinate.lean",
+       :exit 0,
+       :output
+       "810a8c99252a67966d7eeb79579f806dd4829b4d1d2485f70eade52ccdce338c  /tmp/t97a04_frozen_h1_coordinate.lean"}
+      {:cmd "lake env lean /tmp/t97a04_frozen_h1_coordinate.lean",
+       :exit 0,
+       :output
+       "frozenTorusAlignedH1GroupIsoFinTwo and frozenTorusAlignedH1ModuleIsoFinTwo compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t97a04_frozen_h1_coordinate.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :implementation
+     {:scope ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"],
+      :declarations
+      ["ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusAlignedH1GroupIsoFinTwo"
+       "ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusAlignedH1ModuleIsoFinTwo"],
+      :acceptance
+      {:type
+       "(((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj (ModuleCat.of ℤ ℤ)).obj (TopCat.of FrozenTorus)) ≅ ModuleCat.of ℤ (Fin 2 → ℤ)",
+       :gates
+       ["scoped module compiles"
+        "scoped module contains no sorry token"
+        "statement registry matches"]}},
+     :finding
+     "The complete fixture converts the identity-aligned multiplicative IntegralH1 coordinate into an AddCommGrpCat isomorphism and lifts it through singularHomologyModuleIsoOfGroupIso to the canonical ModuleCat degree-one object. This preserves the aligned matrix coordinate instead of reverting to the earlier raw coordinate.",
+     :residual
+     "Use singularHomologyComparison_naturality and the definition of singularHomologyModuleIsoOfGroupIso to prove the aligned ModuleCat induced-map equation, then identify frozenLbar and the frozen matrix map with the consumer definitions and assemble apm_t97A04_bridge_2.",
+     :warnings []}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A04/frozen-aligned-h1-module-coordinate",
    :acceptance
-   {:probe
-    "Compile and bank frozenTorusAlignedH1GroupIsoFinTwo and frozenTorusAlignedH1ModuleIsoFinTwo from /tmp/t97a04_frozen_h1_coordinate.lean. Convert the aligned multiplicative IntegralH1 coordinate into an AddCommGrpCat isomorphism and lift it through singularHomologyModuleIsoOfGroupIso to the canonical ModuleCat degree-one object used by t97A04. Do not use the earlier raw coordinate, change the frozen matrix, or claim the final induced-map equation or apm_t97A04_bridge_2.",
-    :declarations
-    ["ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusAlignedH1GroupIsoFinTwo"
-     "ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusAlignedH1ModuleIsoFinTwo"],
-    :type
+   {:type
     "(((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj (ModuleCat.of ℤ ℤ)).obj (TopCat.of FrozenTorus)) ≅ ModuleCat.of ℤ (Fin 2 → ℤ)",
-    :placeholder "apm_t97A04_bridge_2",
-    :route-step
-    "t97A04 step 6, lift the identity-aligned IntegralH1 coordinate to the consumer's ModuleCat homology object"},
+    :gates
+    ["scoped module compiles"
+     "scoped module contains no sorry token"
+     "statement registry matches"]},
    :id
    :routes-2026-10-10-t97a04-frozen-aligned-h1-module-coordinate-topo2-r1,
    :kind :reusable-theorem,
+   :declarations
+   ["ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusAlignedH1GroupIsoFinTwo"
+    "ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusAlignedH1ModuleIsoFinTwo"],
    :depends-on
    [:routes-2026-10-10-checkpoint-topo2-r5
     :routes-2026-10-10-t97a04-frozen-integral-h1-coordinate-topo2-r1],
