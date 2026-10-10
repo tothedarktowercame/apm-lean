@@ -94022,8 +94022,86 @@
   {:bounded-exception
    "This single-consumer affine-action construction is the exact structural first half of the elected square-orbit lemma; after it is banked only the bounded floor/parity and boundary-case classification remains.",
    :consumer :t93J03,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Use the explicit coordinate action to choose a closed fundamental-square representative and classify all same-orbit square pairs, including edge and corner cases.",
+    :outcome :done-unreviewed,
+    :warnings
+    [{:kind :linter,
+      :message
+      "Lean reports two unnecessarySeqFocus suggestions in the generator-coordinate proofs."}
+     {:kind :dependency-linter,
+      :message
+      "The imported two-sided conjugation module retains an unnecessarySimpa warning."}],
+    :missing-theorems
+    [{:name "KleinPlaneAffineAction.coordinateAct_mul",
+      :type
+      "(c d : Coordinates) (p : Real × Real) -> coordinateAct (c*d) p = coordinateAct c (coordinateAct d p)",
+      :status :proved,
+      :consumers [:t93J03],
+      :depends-on
+      ["KleinCoordinateInversionPower.action_toAdd"
+       "kleinPresentedGroup_coordinateNormalForm"]}
+     {:name "KleinPlaneAffineAction.generator_formulas",
+      :type
+      "generatorA acts by (x+1,y) and generatorB acts by (-x,y+1)",
+      :status :proved,
+      :consumers [:t93J03],
+      :depends-on ["KleinPlaneAffineAction.coordinateAct_mul"]}],
+    :statement-hashes "131 registered statements match",
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :finding
+      "canonical package authority resolves to /home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "sha256sum /tmp/klein-plane-action.lean",
+      :exit 0,
+      :finding
+      "fixture hash matches d2fdc5858dccb0654d72036fffdb5331184f9cec2617cd2bae3dc81723b88777"}
+     {:cmd "lake build ConstructionTargets.KleinPlaneAffineAction",
+      :exit 0,
+      :finding
+      "canonical module builds the affine action and generator formulas"}
+     {:cmd "lake env lean /tmp/klein-plane-action.lean",
+      :exit 0,
+      :finding
+      "fixture independently compiles the coordinate multiplication law and transported action"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" ConstructionTargets/KleinPlaneAffineAction.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero source placeholders"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" /tmp/klein-plane-action.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero fixture placeholders"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}],
+    :commit "a500ab71bb0eb18a8da073d85447bd2833c12ae4",
+    :changed-paths ["ConstructionTargets/KleinPlaneAffineAction.lean"],
+    :fixture
+    {:path "/tmp/klein-plane-action.lean",
+     :sha256
+     "d2fdc5858dccb0654d72036fffdb5331184f9cec2617cd2bae3dc81723b88777",
+     :sorry-count 0},
+    :implementation
+    {:scope ["ConstructionTargets/KleinPlaneAffineAction.lean"],
+     :declarations
+     ["KleinPlaneAffineAction.coordinateAct"
+      "KleinPlaneAffineAction.coordinateAct_one"
+      "KleinPlaneAffineAction.coordinateAct_mul"
+      "KleinPlaneAffineAction.planeAction"
+      "KleinPlaneAffineAction.generatorA_smul"
+      "KleinPlaneAffineAction.generatorB_smul"]},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/KleinPlaneAffineAction.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/plane-action-square-orbit-classification/affine-action",
@@ -94890,6 +94968,43 @@
    :id :lemma-kleinplaneaffineaction-planeaction,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "KleinPlaneAffineAction.coordinateAct_mul",
+    :type
+    "(c d : Coordinates) (p : Real × Real) -> coordinateAct (c*d) p = coordinateAct c (coordinateAct d p)"},
+   :lemma
+   {:name "KleinPlaneAffineAction.coordinateAct_mul",
+    :reported-by [:routes-2026-10-10-klein-plane-affine-action-25],
+    :type
+    "(c d : Coordinates) (p : Real × Real) -> coordinateAct (c*d) p = coordinateAct c (coordinateAct d p)",
+    :proved-in :routes-2026-10-10-klein-plane-affine-action-25},
+   :id :lemma-kleinplaneaffineaction-coordinateact-mul,
+   :kind :lemma,
+   :depends-on
+   [:lemma-kleincoordinateinversionpower-action-toadd
+    :lemma-kleinpresentedgroup-coordinatenormalform],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "KleinPlaneAffineAction.generator_formulas",
+    :type
+    "generatorA acts by (x+1,y) and generatorB acts by (-x,y+1)"},
+   :lemma
+   {:name "KleinPlaneAffineAction.generator_formulas",
+    :reported-by [:routes-2026-10-10-klein-plane-affine-action-25],
+    :type "generatorA acts by (x+1,y) and generatorB acts by (-x,y+1)",
+    :proved-in :routes-2026-10-10-klein-plane-affine-action-25},
+   :id :lemma-kleinplaneaffineaction-generator-formulas,
+   :kind :lemma,
+   :depends-on [:lemma-kleinplaneaffineaction-coordinateact-mul],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
