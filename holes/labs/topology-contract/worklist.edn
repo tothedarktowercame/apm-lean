@@ -99271,8 +99271,63 @@
   {:bounded-exception
    "This single-consumer prerequisite constructs the two continuous radial maps and exact left inverse required before the annular overlap can be packaged as a circle homotopy model.",
    :consumer :t97A01,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Construct the straight radial homotopy from halfCircleMap composed with radialNormalizeMap to the identity on Annulus, package the annulus and overlapOpen homotopy equivalences with Circle, then identify both radius-one boundary quotients with ThreeCircles and prove vertex and inclusion formulas.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :missing-theorems
+    [{:name "PolygonAnnulusRadialMaps.radialNormalize_halfCircle",
+      :type
+      "The continuous half-radius inclusion from Circle into the literal annulus and continuous radial normalization back to Circle are well-defined, and normalization after inclusion is exactly the identity.",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on
+      ["PolygonAnnularOverlapHomeomorph.overlapHomeomorph"],
+      :area "polygon-surface-open-cover"}],
+    :statement-hashes "131 registered statements match",
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :finding "canonical package authority"}
+     {:cmd "sha256sum /tmp/polygon-annulus-radial-maps.lean",
+      :exit 0,
+      :finding "fixture hash matches"}
+     {:cmd "lake build ConstructionTargets.PolygonAnnulusRadialMaps",
+      :exit 0}
+     {:cmd "lake env lean /tmp/polygon-annulus-radial-maps.lean",
+      :exit 0,
+      :finding "fixture compiles with standard axioms"}
+     {:cmd "rg source for sorry or admit",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero source placeholders"}
+     {:cmd "rg fixture for sorry or admit",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero fixture placeholders"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short",
+      :exit 0,
+      :finding "clean worktree after commit"}],
+    :diagnostic-history [],
+    :commit "0911204a2e2ef238dba07ebf039029e512fd44f8",
+    :changed-paths
+    ["ConstructionTargets/PolygonAnnulusRadialMaps.lean"],
+    :fixture
+    {:path "/tmp/polygon-annulus-radial-maps.lean",
+     :sha256
+     "b01af2d514df2a541514bb4eaf704c4cd6fc6b82b172037f7576eaddab8ca296",
+     :sorry-count 0},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PolygonAnnulusRadialMaps.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/annulus-radial-maps",
@@ -101983,6 +102038,26 @@
    :id :lemma-polygonannulusradialhomotopy,
    :kind :lemma,
    :depends-on [:lemma-polygonannulusradialmaps-radialnormalizemap],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "PolygonAnnulusRadialMaps.radialNormalize_halfCircle",
+    :type
+    "The continuous half-radius inclusion from Circle into the literal annulus and continuous radial normalization back to Circle are well-defined, and normalization after inclusion is exactly the identity."},
+   :lemma
+   {:name "PolygonAnnulusRadialMaps.radialNormalize_halfCircle",
+    :reported-by [:routes-2026-10-10-polygon-annulus-radial-maps-50],
+    :type
+    "The continuous half-radius inclusion from Circle into the literal annulus and continuous radial normalization back to Circle are well-defined, and normalization after inclusion is exactly the identity.",
+    :area "polygon-surface-open-cover",
+    :proved-in :routes-2026-10-10-polygon-annulus-radial-maps-50},
+   :id :lemma-polygonannulusradialmaps-radialnormalize-halfcircle,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polygonannularoverlaphomeomorph-overlaphomeomorph],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
