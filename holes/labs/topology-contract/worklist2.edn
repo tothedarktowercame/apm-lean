@@ -55588,54 +55588,49 @@
    :other-consumers []}
   {:consumer :t97A04,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/torus_pi1_coordinate_equiv.lean",
-      :sha256
-      "5cdbd26fee758e9aa1b327df2ca494dd60443897eb03b7db26157320cb2bfd28"},
-     :commands
-     [{:cmd "sha256sum /tmp/torus_pi1_coordinate_equiv.lean",
-       :exit 0,
-       :output
-       "5cdbd26fee758e9aa1b327df2ca494dd60443897eb03b7db26157320cb2bfd28  /tmp/torus_pi1_coordinate_equiv.lean"}
-      {:cmd "lake env lean /tmp/torus_pi1_coordinate_equiv.lean",
-       :exit 0,
-       :output
-       "torusPi1Coord compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/torus_pi1_coordinate_equiv.lean || true)\"",
-       :exit 0}
-      {:cmd
-       "rg -n '^def torusPi1Coord|^@\\[simp\\] theorem torusPi1Coord_apply_(zero|one)' /tmp/torus_pi1_coordinate_equiv.lean",
-       :exit 0,
-       :output
-       "14:def torusPi1Coord; 23:torusPi1Coord_apply_zero; 29:torusPi1Coord_apply_one"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :warnings [],
-     :implementation
-     {:scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
-      :declarations
-      ["ConstructionTargets.TorusPiOneWindingCoordinates.torusPi1Coord"
-       "ConstructionTargets.TorusPiOneWindingCoordinates.torusPi1Coord_apply_zero"
-       "ConstructionTargets.TorusPiOneWindingCoordinates.torusPi1Coord_apply_one"],
-      :instructions
-      "Create the scoped module from the compiled fixture. Import FundamentalGroupProduct, CircleUniversalCover, and TwiceSpiralH1Coordinates. Define torusPi1Coord by composing the product fundamental-group equivalence, both circleFundamentalGroupMulEquivInt factors, prodMultiplicative, and intProdMulEquivFinTwo. Retain the two simp theorems identifying Fin coordinates 0 and 1 with the projected circle winding coordinates by rfl. Do not add uncompiled Path endpoint or integer-matrix naturality claims.",
-      :acceptance
-      {:axioms ["propext" "Classical.choice" "Quot.sound"],
-       :commands
-       ["lake env lean ConstructionTargets/TorusPiOneWindingCoordinates.lean"
-        "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/TorusPiOneWindingCoordinates.lean || true)\""
-        "python3 scripts/statement-registry.py check"]}},
-     :residual
-     "The coordinate equivalence is ready to bank. Next prove that its coordinates on a quotient representative equal the liftBasedLoopEndpointInteger values of the two projected paths, then prove naturality for the integer-matrix torus maps used by t97A04 and the lift decomposition used by t01A02."}},
+   {:placeholder-delta 0,
+    :residual
+    "Next prove that torusPi1Coord on a quotient representative equals the liftBasedLoopEndpointInteger values of the two projected paths, then prove naturality for the integer-matrix torus maps used by t97A04 and the lift decomposition used by t01A02.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms [propext Classical.choice Quot.sound],
+    :author "topo-6",
+    :commands
+    [{:cmd "sha256sum /tmp/torus_pi1_coordinate_equiv.lean",
+      :exit 0,
+      :output
+      "5cdbd26fee758e9aa1b327df2ca494dd60443897eb03b7db26157320cb2bfd28  /tmp/torus_pi1_coordinate_equiv.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/TorusPiOneWindingCoordinates.lean",
+      :exit 0}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/TorusPiOneWindingCoordinates.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r 935c6e943350540127a9e7349c6da20ab925dd00",
+      :exit 0,
+      :output
+      "ConstructionTargets/TorusPiOneWindingCoordinates.lean"}],
+    :commit "935c6e943350540127a9e7349c6da20ab925dd00",
+    :changed-paths
+    ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
+    :fixture
+    {:path "/tmp/torus_pi1_coordinate_equiv.lean",
+     :sha256
+     "5cdbd26fee758e9aa1b327df2ca494dd60443897eb03b7db26157320cb2bfd28"},
+    :declarations
+    ["ConstructionTargets.TorusPiOneWindingCoordinates.torusPi1Coord"
+     "ConstructionTargets.TorusPiOneWindingCoordinates.torusPi1Coord_apply_zero"
+     "ConstructionTargets.TorusPiOneWindingCoordinates.torusPi1Coord_apply_one"]},
    :instructions
    "Create the scoped module from the compiled fixture. Import FundamentalGroupProduct, CircleUniversalCover, and TwiceSpiralH1Coordinates. Define torusPi1Coord by composing the product fundamental-group equivalence, both circleFundamentalGroupMulEquivInt factors, prodMultiplicative, and intProdMulEquivFinTwo. Retain the two simp theorems identifying Fin coordinates 0 and 1 with the projected circle winding coordinates by rfl. Do not add uncompiled Path endpoint or integer-matrix naturality claims.",
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/torus-pi1-winding-coordinates/equivalence",
