@@ -1,6 +1,7 @@
 import ConstructionTargets.FundamentalGroupProduct
 import ConstructionTargets.CircleUniversalCover
 import ConstructionTargets.TwiceSpiralH1Coordinates
+import ConstructionTargets.BoundaryTorusHurewiczIsomorphism
 
 noncomputable section
 namespace ConstructionTargets.TorusPiOneWindingCoordinates
@@ -8,6 +9,9 @@ namespace ConstructionTargets.TorusPiOneWindingCoordinates
 open ConstructionTargets.FundamentalGroupProduct
 open ConstructionTargets.CircleUniversalCover
 open ConstructionTargets.TwiceSpiralH1Coordinates
+open ConstructionTargets.BoundaryTorusHurewiczIsomorphism
+
+abbrev FrozenTorus := AddCircle (1 : ℝ) × AddCircle (1 : ℝ)
 
 /-- The two endpoint-winding coordinates on the based fundamental group of
 the product torus. -/
@@ -61,5 +65,20 @@ theorem torusPi1Coord_mk_apply_one_eq_liftEndpoint
       Path.Homotopic.Quotient.mk (gamma.map continuous_snd) by
     exact (Path.Homotopic.Quotient.mk_map gamma ⟨Prod.snd, continuous_snd⟩).symm]
   rfl
+
+def frozenTorusHomeomorphCircleProd : FrozenTorus ≃ₜ Circle × Circle :=
+  Homeomorph.prodCongr (AddCircle.homeomorphCircle one_ne_zero)
+    (AddCircle.homeomorphCircle one_ne_zero)
+
+@[simp] theorem frozenTorusHomeomorphCircleProd_base :
+    frozenTorusHomeomorphCircleProd (0, 0) = ((1 : Circle), 1) := by
+  simp [frozenTorusHomeomorphCircleProd, AddCircle.homeomorphCircle_apply]
+
+noncomputable def frozenTorusPi1Coord :
+    FundamentalGroup FrozenTorus (0, 0) ≃* Multiplicative (Fin 2 → ℤ) :=
+  (fundamentalGroupMulEquivOfHomeomorph frozenTorusHomeomorphCircleProd (0, 0)).trans
+    (by
+      rw [frozenTorusHomeomorphCircleProd_base]
+      exact torusPi1Coord)
 
 end ConstructionTargets.TorusPiOneWindingCoordinates
