@@ -88635,8 +88635,59 @@
    "Relate the explicit plane deck action to the frozen aabb disk quotient with generator and basepoint equations.",
    :other-consumers []}
   {:consumer :t97A03,
+   :stop-count 1,
+   :evidence
+   {:residual
+    "Compile a placeholder-free prerequisite restricting the cover to the sphere and circle strata, labeling both lifted sphere sheets, classifying the attachment permutation, excluding the disconnected case, and descending explicit mutually inverse quotient maps to OneCircleCover or TwoCircleCover.",
+    :outcome :stop,
+    :warnings
+    [{:kind :missing-mathematical-prerequisite,
+      :message
+      "Generic covering monodromy is banked, but no theorem converts the two-element attachment monodromy into homeomorphisms with the frozen quotient models."}],
+    :disposition :stop,
+    :axioms
+    ["propext"
+     "Classical.choice"
+     "Quot.sound"
+     "T97A03ConnectedDoubleCoverClassificationProbe.connectedDoubleCoverHomeomorphism"],
+    :author "topo-2",
+    :reason
+    "The exact homeomorphism disjunction is typed by the frozen fixture, but the fixture assumes that entire classification as the nonstandard axiom connectedDoubleCoverHomeomorphism. No ConstructionTargets theorem relates either frozen quotient cover model to a two-sheet monodromy case. The banked generic fiber-coset monodromy package does not supply the required stratum restriction, labeling of the two lifted sphere sheets, computation of the attachment permutation, exclusion of the disconnected permutation pattern, or quotient-induced homeomorphisms to the two concrete models. Thus this row is not an uptake: its exact missing mathematical prerequisite is the compiled monodromy-to-quotient-model classification itself. Repeating the fixture axiom would violate standard-only acceptance.",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/t97a03-connected-double-cover-classification-probe.lean",
+      :exit 0,
+      :finding "The fixture hash matches the recorded hash."}
+     {:cmd
+      "lake env lean -o /tmp/Main.olean problems/t97A03/lean/Main.lean",
+      :exit 0,
+      :finding
+      "The frozen consumer compiles with its three existing sorry warnings."}
+     {:cmd "compile the fixture with /tmp on LEAN_PATH",
+      :exit 0,
+      :finding
+      "The exact fixture bridge compiles but depends on connectedDoubleCoverHomeomorphism."}
+     {:cmd
+      "rg for connectedDoubleCoverHomeomorphism and the two frozen cover models in ConstructionTargets",
+      :exit 1,
+      :expected-exit 1,
+      :finding
+      "No banked concrete classification or homeomorphism to either frozen model exists."}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :fixture
+    {:path
+     "/tmp/t97a03-connected-double-cover-classification-probe.lean",
+     :sha256
+     "2715145a07053eba3f69a7c3e864880f00317476b2f43b6bc87f551cbec1f1b5",
+     :sorry-count 0,
+     :axiom-count 1,
+     :proof-placeholder-count 1},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/T97A03ConnectedDoubleCoverClassification.lean"],
    :dag-node
