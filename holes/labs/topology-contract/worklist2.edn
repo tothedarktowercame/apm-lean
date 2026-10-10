@@ -62306,6 +62306,21 @@
       "The attempted semicolon rewrite was syntactically invalid and left the real-coordinate ring goal open.",
       :correction
       "Split Complex.ext into explicit real and imaginary branches; the real branch uses ring and the imaginary branch closes by simp."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791647554480-2329-d8960d2f",
+     :commands
+     ["git show/diff-tree/show --check f287440c56e4fcf72f0ccdabc0a786ee29e7d963"
+      "sha256sum /tmp/t02a03_geometric_tube_cover.lean"
+      "lake env lean /tmp/t02a03_geometric_tube_cover.lean"
+      "lake env lean ConstructionTargets/T02A03LeftTubePuncturedModel.lean"
+      "lake build ConstructionTargets.T02A03LeftTubePuncturedModel"
+      "python3 scripts/statement-registry.py check --rev f287440c56e4fcf72f0ccdabc0a786ee29e7d963"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "recompute accepted-type hash and comment-stripped placeholder counts"],
+     :finding
+     "PASS: author topo-6 is independent and commit f287440c56e4fcf72f0ccdabc0a786ee29e7d963 changes exactly ConstructionTargets/T02A03LeftTubePuncturedModel.lean. Fixture SHA-256 3607b0dedf7784addfeced6d661ef5a5b2c8c1be34fd1de72ae3267efe85db67 matches. The theorem has the frozen orientation from the shifted planar coordinate of the ambient radial interpolation to the affine combination of reconstructed and source planar coordinates; explicit real and imaginary component proofs correctly account for the affine coefficients summing to one. It stops before the planar-norm formula, normal-coordinate formula, deleted-core exclusion, homotopy, equivalence, and gluing. Fixture, target, focused 8241-job build, registry 131/0, and 466-item ledger gate pass. Accepted-type hash 3866280035ff59c0ab2dadb459f0ee84825ff2be49fe94b54c5bdd0d78429a6e matches; axioms are only propext/Classical.choice/Quot.sound; target placeholders remain 0 and the unchanged consumer has 1 with hash b123eca388ab2858ca55daf538c1ddd645022b52f5196a15f0bb516d78323d7d."},
     :commit "f287440c56e4fcf72f0ccdabc0a786ee29e7d963",
     :changed-paths
     ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
@@ -62323,7 +62338,7 @@
      "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubePlanarComplex ⟨apm_t02a03_leftTubeRadialPoint tp, apm_t02a03_leftTubeRadialPoint_mem_leftTube tp⟩ = (1 - (tp.1 : Real)) • apm_t02a03_leftTubePlanarComplex ⟨(apm_t02a03_leftTubeTorusInverse (apm_t02a03_leftTubeTorusCoordinates tp.2)).1, (apm_t02a03_leftTubeTorusInverse (apm_t02a03_leftTubeTorusCoordinates tp.2)).2.1⟩ + (tp.1 : Real) • apm_t02a03_leftTubePlanarComplex ⟨tp.2.1, tp.2.2.1⟩"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/left-tube-planar-coordinate-interpolation",
@@ -62417,7 +62432,7 @@
    :phase :probe,
    :type
    "Nonempty (ContinuousMap.HomotopyEquiv LeftTubeMinusCore ConstructionTargets.TorusCircleWedgeOpenCover.Torus)",
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-punctured-model",
    :acceptance
@@ -63542,7 +63557,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -63557,7 +63572,10 @@
     :type
     "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubePlanarComplex ⟨apm_t02a03_leftTubeRadialPoint tp, apm_t02a03_leftTubeRadialPoint_mem_leftTube tp⟩ = (1 - (tp.1 : Real)) • apm_t02a03_leftTubePlanarComplex ⟨(apm_t02a03_leftTubeTorusInverse (apm_t02a03_leftTubeTorusCoordinates tp.2)).1, (apm_t02a03_leftTubeTorusInverse (apm_t02a03_leftTubeTorusCoordinates tp.2)).2.1⟩ + (tp.1 : Real) • apm_t02a03_leftTubePlanarComplex ⟨tp.2.1, tp.2.2.1⟩",
     :proved-in
-    :routes-2026-10-10-t02a03-left-tube-planar-coordinate-interpolation-topo2-r1},
+    :routes-2026-10-10-t02a03-left-tube-planar-coordinate-interpolation-topo2-r1,
+    :banked-by
+    :routes-2026-10-10-t02a03-left-tube-planar-coordinate-interpolation-topo2-r1,
+    :banked-commit "f287440c56e4fcf72f0ccdabc0a786ee29e7d963"},
    :id
    :lemma-constructiontargets-t02a03lefttubepuncturedmodel-apm-t02a03-lefttubeplanarcomple,
    :kind :lemma,
