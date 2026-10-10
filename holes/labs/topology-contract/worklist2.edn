@@ -65881,55 +65881,33 @@
    :evidence
    {:probe
     {:residual
-     "Bank the ambient zero-locus lemma, then finish the normalized forward coordinate and its meridian equation.",
-     :outcome :revise,
+     "Construct the deformation from the meridian inverse-forward composite to identity and the forward-inverse homotopy, then package rightTubeMinusLeftCoreMeridianHomotopyEquiv.",
+     :outcome :go,
+     :warnings
+     ["Lean reports one unnecessarySimpa linter warning; it does not affect the theorem or axioms."],
      :missing-theorems
      [{:name
-       "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeMeridianCoordinate",
        :type
-       "forall p : apm_t02a03_E3, rightTubeNormalComplex p = 0 ↔ p ∈ Set.range apm_t02a03_leftCore",
-       :status :not-started,
+       "exists forward : C(RightTubeMinusLeftCore, Circle), forall (z : Circle) (hz : apm_t02a03_circleMeridian z ∈ apm_t02a03_rightTube ∧ apm_t02a03_circleMeridian z ∉ Set.range apm_t02a03_leftCore), forward ⟨apm_t02a03_circleMeridian z, hz⟩ = z",
+       :status :proved,
        :consumers [:t02A03],
-       :depends-on [],
+       :depends-on
+       ["ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff"],
        :area "explicit-r3-tube-deformation-retraction"}],
-     :prerequisite
-     {:bounded-exception
-      "single-consumer denominator lemma for the frozen forward normal coordinate",
-      :consumer :t02A03,
-      :phase :probe,
-      :state :open,
-      :scope
-      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
-      :dag-node "TOPOLOGY-ROUTES.md/t02A03/ambient-normal-zero-locus",
-      :acceptance
-      {:probe
-       "Compile rightTubeNormalComplex and prove its zero set on ambient E3 is exactly Set.range apm_t02a03_leftCore. Use the radial-defect and height coordinates; do not define the normalized Circle map or claim homotopies.",
-       :declaration
-       "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff",
-       :type
-       "forall p : apm_t02a03_E3, rightTubeNormalComplex p = 0 ↔ p ∈ Set.range apm_t02a03_leftCore",
-       :placeholder "the sole sorry in apm_t02a03",
-       :route-step
-       "certify the denominator of the deleted-right-tube normal coordinate"},
-      :id :routes-2026-10-10-t02a03-ambient-normal-zero-locus-topo2-r1,
-      :kind :reusable-theorem,
-      :area "explicit-r3-tube-deformation-retraction",
-      :depends-on
-      [:routes-2026-10-10-t02a03-circle-meridian-right-tube-membership-topo2-r1],
-      :current-residual
-      "Normalize rightTubeNormalComplex on RightTubeMinusLeftCore, prove continuity and the circleMeridian equation, then construct both homotopies.",
-      :other-consumers []},
      :commands
      [{:cmd
-       "lake env lean /tmp/t02a03_ambient_normal_zero_contract.lean",
-       :exit 0,
-       :output "AmbientNormalZeroLocusExact compiled."}
-      {:cmd "sha256sum /tmp/t02a03_ambient_normal_zero_contract.lean",
+       "lake env lean /tmp/t02a03_right_tube_forward_coordinate_contract.lean",
        :exit 0,
        :output
-       "2dc553f680d919436c9f772c2039a31fe75faa0a456a69121a15ae6c0d7ac550  /tmp/t02a03_ambient_normal_zero_contract.lean"}
+       "rightTubeMeridianCoordinate_exists compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_ambient_normal_zero_contract.lean || true)\"",
+       "sha256sum /tmp/t02a03_right_tube_forward_coordinate_contract.lean",
+       :exit 0,
+       :output
+       "b0a924ef0f48a74e832e35b0b89d6efb6530879dc1598b51bf99c2c85261cf2e  /tmp/t02a03_right_tube_forward_coordinate_contract.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_right_tube_forward_coordinate_contract.lean || true)\"",
        :exit 0}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
@@ -65939,33 +65917,40 @@
        "lake env lean /tmp/t02a03_right_tube_forward_coordinate_contract.lean",
        :exit 1,
        :finding
-       "The direct coordinate draft exposed that the banked zero-locus theorem is restricted to leftTubeSubtype; normalization on RightTubeMinusLeftCore first needs the same zero-locus characterization on ambient E3."}],
+       "The initial direct draft needed the ambient zero-locus proof, an explicitly typed subtype continuity composition, and a syntactic square rewrite before Real.sqrt_sq."}],
      :fixture
-     {:path "/tmp/t02a03_ambient_normal_zero_contract.lean",
+     {:path "/tmp/t02a03_right_tube_forward_coordinate_contract.lean",
       :sha256
-      "2dc553f680d919436c9f772c2039a31fe75faa0a456a69121a15ae6c0d7ac550"},
+      "b0a924ef0f48a74e832e35b0b89d6efb6530879dc1598b51bf99c2c85261cf2e"},
      :finding
-     "The forward coordinate is normalization of rightTubeNormalComplex p = (norm((p0+1)+i*p1)-1)+i*p2. Its denominator is nonzero exactly because p is outside the left core. Existing apm_t02a03_leftTubeNormalComplex_eq_zero_iff proves this only for points already carrying left-tube membership, which right-tube points do not have. Generalizing that algebraic zero-locus lemma to ambient E3 is the single compiled prerequisite.",
+     "The forward map continuously normalizes the complex coordinate (planar radial defect, height). The ambient zero-locus characterization makes its denominator nonzero precisely from the frozen exclusion of the left core. On circleMeridian z the coordinate is (1/8) • z: the planar radius is positive because re(z) lies in [-1,1], so normalization returns z.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+      :declarations
+      ["ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex"
+       "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff"
+       "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeMeridianCoordinate"
+       "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeMeridianCoordinate_circleMeridian"],
+      :acceptance
+      "Add the compiled normalized coordinate and its exact equality on the existing circleMeridian; do not add either homotopy."},
      :seat "topo-8"}},
-   :phase :probe,
+   :phase :implementation,
    :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/right-tube-meridian-coordinate",
    :acceptance
-   {:probe
-    "Compile a placeholder-free rightTubeMeridianCoordinate from the normalized left-core normal complex on RightTubeMinusLeftCore. Prove nonvanishing exactly from exclusion of the left core, continuity, and the displayed equality on the existing circleMeridian. Do not claim either homotopy or a HomotopyEquiv.",
-    :declaration
-    "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeMeridianCoordinate",
-    :type
-    "exists forward : C(RightTubeMinusLeftCore, Circle), forall (z : Circle) (hz : apm_t02a03_circleMeridian z ∈ apm_t02a03_rightTube ∧ apm_t02a03_circleMeridian z ∉ Set.range apm_t02a03_leftCore), forward ⟨apm_t02a03_circleMeridian z, hz⟩ = z",
-    :placeholder "the sole sorry in apm_t02a03",
-    :route-step
-    "define and validate the forward map used by the deleted-right-tube equivalence"},
+   "Add the compiled normalized coordinate and its exact equality on the existing circleMeridian; do not add either homotopy.",
    :id
    :routes-2026-10-10-t02a03-right-tube-meridian-coordinate-topo2-r1,
    :kind :reusable-theorem,
    :area "explicit-r3-tube-deformation-retraction",
+   :declarations
+   ["ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex"
+    "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff"
+    "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeMeridianCoordinate"
+    "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeMeridianCoordinate_circleMeridian"],
    :depends-on
    [:routes-2026-10-10-t02a03-circle-meridian-right-tube-membership-topo2-r1
     :routes-2026-10-10-t02a03-ambient-normal-zero-locus-topo2-r1],
@@ -68754,15 +68739,19 @@
    {:name
     "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeMeridianCoordinate",
     :reported-by
-    [:routes-2026-10-10-t02a03-right-tube-meridian-homotopy-equivalence-topo2-r1],
+    [:routes-2026-10-10-t02a03-right-tube-meridian-homotopy-equivalence-topo2-r1
+     :routes-2026-10-10-t02a03-right-tube-meridian-coordinate-topo2-r1],
     :type
     "exists forward : C(RightTubeMinusLeftCore, Circle), forall (z : Circle) (hz : apm_t02a03_circleMeridian z ∈ apm_t02a03_rightTube ∧ apm_t02a03_circleMeridian z ∉ Set.range apm_t02a03_leftCore), forward ⟨apm_t02a03_circleMeridian z, hz⟩ = z",
-    :area "explicit-r3-tube-deformation-retraction"},
+    :area "explicit-r3-tube-deformation-retraction",
+    :proved-in
+    :routes-2026-10-10-t02a03-right-tube-meridian-coordinate-topo2-r1},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-righttubemeridiancoordinate,
    :kind :lemma,
    :depends-on
-   [:lemma-constructiontargets-t02a03geometrictubecover-apm-t02a03-circlemeridian-mem-right],
+   [:lemma-constructiontargets-t02a03geometrictubecover-apm-t02a03-circlemeridian-mem-right
+    :lemma-constructiontargets-t02a03geometrictubedeformation-righttubenormalcomplex-eq-zer],
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
