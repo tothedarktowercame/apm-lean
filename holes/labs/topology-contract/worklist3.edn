@@ -436,6 +436,20 @@
       "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
       :exit 0}
      {:cmd "git status --short", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791671453828-3140-adfaf4de",
+     :commands
+     ["sha256sum /tmp/manifold_fundamental_class_neighborhood_excision.lean"
+      "lake env lean /tmp/manifold_fundamental_class_neighborhood_excision.lean"
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"
+      "rg placeholder and axiom census"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped placeholder census for t00J02 and t98A02"],
+     :finding
+     "PASS: implementation commit 4ad05729 changes exactly ConstructionTargets/ManifoldFundamentalClass.lean; fixture hash matches 70de477e650f037fce463c7b60263ca816b835d33dc83d71a4734b60b0fdf09c; the theorem exactly discharges the frozen type in the neighborhood-to-ambient inclusion direction by positive-degree relative excision and pair-homeomorphism transport; fixture and source compile with zero placeholders and only propext, Classical.choice, and Quot.sound; 131 registered statements match with zero mismatches; consumer counts remain t00J02=1 and t98A02=1"},
     :commit "4ad0572998e42bec21156f8557039b07232d2a40",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -451,7 +465,7 @@
      "Promoted positive-degree neighborhood excision: inclusion from an open neighborhood punctured at x into the ambient punctured pair induces an isomorphism on relative singular homology in degree n+1."},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/positive-degree-neighborhood-excision",
@@ -554,7 +568,7 @@
      "The banked neighborhood-excision theorem is restricted to H1, while t00J02 needs local H2 and t98A02 needs local H4. SingularExcision already proves the relative excision map is an isomorphism in every positive degree. The fixture composes that theorem with the existing homeomorphism-of-pairs comparison and compiles the exact all-positive-degree neighborhood inclusion isomorphism. Global orientation coherence and construction of one absolute class localizing at every point remain downstream.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -1680,7 +1694,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -1697,7 +1711,10 @@
     "forall {X : Type} [TopologicalSpace X] [T1Space X] (U : Set X) (x : X) (hU : IsOpen U) (hx : x ∈ U) (n : ℕ), IsIso (HomologicalComplex.homologyMap (relativeSingularMap (neighborhoodDeletedPoint U x) (deletedPoint x) (neighborhoodInclusion U) (neighborhoodInclusion_mapsTo U x)) (n + 1))",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-10-manifold-local-positive-excision-topo3-r1},
+    :routes-2026-10-10-manifold-local-positive-excision-topo3-r1,
+    :banked-by
+    :routes-2026-10-10-manifold-local-positive-excision-topo3-r1,
+    :banked-commit "4ad0572998e42bec21156f8557039b07232d2a40"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-neighborhoodinclusion-hsucc-isiso,
    :kind :lemma,
