@@ -187,4 +187,47 @@ theorem apm_t02a03_meridianAnchor_mem_geometricY :
     change (0 : ℝ) = 1 / 8 at hz
     norm_num at hz
 
+noncomputable def apm_t02a03_meridian (t : ℝ) : apm_t02a03_E3 :=
+  WithLp.toLp 2 ![(1 / 8 : ℝ) * Real.cos t, 0,
+    (1 / 8 : ℝ) * Real.sin t]
+
+theorem apm_t02a03_meridian_mem_geometricY (t : ℝ) :
+    apm_t02a03_meridian t ∈ apm_t02a03_W ∧
+      apm_t02a03_meridian t ∉ Set.range apm_t02a03_leftCore := by
+  constructor
+  · rw [apm_t02a03_W_eq_leftTube_union_rightTube]
+    apply Set.mem_union_left
+    apply Metric.mem_cthickening_of_dist_le (apm_t02a03_meridian t) 0
+      (1 / 4 : ℝ) (Set.range apm_t02a03_leftCore)
+      apm_t02a03_origin_mem_both_cores.1
+    rw [dist_zero_right]
+    rw [EuclideanSpace.norm_eq]
+    have hsq : ((1 / 8 : ℝ) * Real.cos t) ^ 2 +
+        ((1 / 8 : ℝ) * Real.sin t) ^ 2 = 1 / 64 := by
+      nlinarith [Real.sin_sq_add_cos_sq t]
+    simp [apm_t02a03_meridian, Fin.sum_univ_succ]
+    rw [show (8⁻¹ * Real.cos t) ^ 2 + (8⁻¹ * Real.sin t) ^ 2 =
+        (1 / 64 : ℝ) by norm_num at hsq ⊢; exact hsq]
+    norm_num
+  · rintro ⟨s, hs⟩
+    have hx := congrArg (fun q : apm_t02a03_E3 => q 0) hs
+    have hy := congrArg (fun q : apm_t02a03_E3 => q 1) hs
+    have hz := congrArg (fun q : apm_t02a03_E3 => q 2) hs
+    simp [apm_t02a03_leftCore, apm_t02a03_meridian] at hx hy hz
+    nlinarith [Real.sin_sq_add_cos_sq s, Real.sin_sq_add_cos_sq t,
+      Real.neg_one_le_cos s, Real.cos_le_one s,
+      Real.neg_one_le_cos t, Real.cos_le_one t]
+
+noncomputable def apm_t02a03_meridianMap :
+    C(ℝ, apm_t02a03_geometricY_probe) where
+  toFun t := ⟨apm_t02a03_meridian t,
+    apm_t02a03_meridian_mem_geometricY t⟩
+  continuous_toFun := by
+    apply Continuous.subtype_mk
+    unfold apm_t02a03_meridian
+    apply (PiLp.continuous_toLp 2 _).comp
+    apply continuous_pi
+    intro i
+    fin_cases i <;> simp <;> fun_prop
+
 end ConstructionTargets.T02A03GeometricTubeCover
