@@ -61303,6 +61303,21 @@
       :exit 0,
       :output "131 registered statements match, 0 do not"}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791640998281-2105-dac67b69",
+     :commands
+     ["git show/diff-tree/show --check 6592325c62a4eafb9ac88acff3f6dfe16691a1ef"
+      "sha256sum /tmp/t02a03_geometric_tube_cover.lean"
+      "lake env lean /tmp/t02a03_geometric_tube_cover.lean"
+      "lake env lean ConstructionTargets/T02A03GeometricTubeCover.lean"
+      "lake build ConstructionTargets.T02A03GeometricTubeCover"
+      "python3 scripts/statement-registry.py check --rev 6592325c62a4eafb9ac88acff3f6dfe16691a1ef"
+      "bb holes/labs/topology-contract/worklist_check.bb recorded-ledger"
+      "recompute accepted-type hash and comment-stripped placeholder counts"],
+     :finding
+     "PASS: author topo-6 is independent; implementation scope is exactly ConstructionTargets/T02A03GeometricTubeCover.lean, transition scope is ledger-only, and fixture SHA-256 ae914b8bdb637ce22fd54096b9d6aae68fd306afd3cb943b2f02f03192658733 matches. The theorem proves the trigonometric core point has complex norm one and applies the reverse triangle inequality in the required orientation, bounding planar radial error by planar distance for every left-tube subtype point and core parameter without claiming the later normal bound or homotopy. Fixture, target, focused 8240-job build, registry 131/0, and 443-item ledger gate pass; accepted-type hash 76a05253ecc88ae37b6d9a5a9d78dbc7fd05c4f1992ab809b6a8d6f622fe843d matches, axioms are only propext/Classical.choice/Quot.sound, target placeholders are 0, and unchanged consumer placeholders are 1."},
     :commit "6592325c62a4eafb9ac88acff3f6dfe16691a1ef",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
@@ -61323,7 +61338,7 @@
    :phase :implementation,
    :type
    "forall (p : apm_t02a03_leftTubeSubtype) (t : Real), abs (norm (apm_t02a03_leftTubePlanarComplex p) - 1) <= norm (apm_t02a03_leftTubePlanarComplex p - ((Real.cos t : Complex) + (Real.sin t : Complex) * Complex.I))",
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/left-tube-planar-reverse-triangle",
@@ -61414,7 +61429,7 @@
    :phase :probe,
    :type
    "Nonempty (ContinuousMap.HomotopyEquiv LeftTubeMinusCore ConstructionTargets.TorusCircleWedgeOpenCover.Torus)",
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-punctured-model",
    :acceptance
