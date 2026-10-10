@@ -66576,7 +66576,56 @@
   {:bounded-exception
    "single-consumer right-core tubular reconstruction identity needed for a tube-preserving deformation",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:residual
+     "Interpolate the disk-normal coordinate inside the radius-1/4 disk, reconstruct the ambient path, and prove its meridian endpoint and left-core avoidance.",
+     :outcome :go,
+     :warnings [],
+     :missing-theorems [],
+     :axioms [propext Classical.choice Quot.sound],
+     :commands
+     [{:cmd "lake env lean /tmp/t02a03_right_core_compact_probe.lean",
+       :exit 0,
+       :output
+       "rightTubeCorePolarReconstruction_self compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd "sha256sum /tmp/t02a03_right_core_compact_probe.lean",
+       :exit 0,
+       :output
+       "1ba9cb7efd6e58202154c18b83e75b8ab78caed28188ee18eaaa60ef6a09c691  /tmp/t02a03_right_core_compact_probe.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_right_core_compact_probe.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}
+      {:cmd
+       "rg -n \"rightTubeCore(NormalComplex|PolarReconstruction|PolarReconstruction_self)\" /tmp/t02a03_right_core_compact_probe.lean",
+       :exit 0,
+       :output
+       "Definitions and reconstruction theorem occur at lines 230-269."}],
+     :fixture
+     {:path "/tmp/t02a03_right_core_compact_probe.lean",
+      :sha256
+      "1ba9cb7efd6e58202154c18b83e75b8ab78caed28188ee18eaaa60ef6a09c691"},
+     :finding
+     "The compiled package defines the right-core disk-normal coordinate n=(1-norm((1-p0)+i*p1))+i*p2 and reconstructs from angular direction u by (1-(1-n.re)u.re,(1-n.re)u.im,n.im). The norm-times-normalize identity proves exact reconstruction for every right-tube point.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+      :declarations
+      [{:name
+        "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreNormalComplex",
+        :type "apm_t02a03_E3 -> Complex"}
+       {:name
+        "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCorePolarReconstruction",
+        :type "Circle -> Complex -> apm_t02a03_E3"}
+       {:name
+        "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCorePolarReconstruction_self",
+        :type
+        "forall (p : apm_t02a03_E3) (hp : p ∈ apm_t02a03_rightTube), rightTubeCorePolarReconstruction ⟨NormedSpace.normalize (rightTubeCorePlanarComplex p), by exact mem_sphere_zero_iff_norm.mpr (NormedSpace.norm_normalize (rightTubeCorePlanarComplex_ne_zero p hp))⟩ (rightTubeCoreNormalComplex p) = p"}]},
+     :seat "topo-8"}},
+   :phase :implementation,
    :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
@@ -66595,6 +66644,17 @@
    :routes-2026-10-10-t02a03-right-core-polar-reconstruction-topo2-r1,
    :kind :reusable-theorem,
    :area "explicit-r3-tube-deformation-retraction",
+   :declarations
+   [{:name
+     "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreNormalComplex",
+     :type "apm_t02a03_E3 -> Complex"}
+    {:name
+     "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCorePolarReconstruction",
+     :type "Circle -> Complex -> apm_t02a03_E3"}
+    {:name
+     "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCorePolarReconstruction_self",
+     :type
+     "forall (p : apm_t02a03_E3) (hp : p ∈ apm_t02a03_rightTube), rightTubeCorePolarReconstruction ⟨NormedSpace.normalize (rightTubeCorePlanarComplex p), by exact mem_sphere_zero_iff_norm.mpr (NormedSpace.norm_normalize (rightTubeCorePlanarComplex_ne_zero p hp))⟩ (rightTubeCoreNormalComplex p) = p"}],
    :depends-on
    [:routes-2026-10-10-t02a03-right-core-angular-denominator-topo2-r1],
    :current-residual
