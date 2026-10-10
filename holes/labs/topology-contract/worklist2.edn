@@ -55052,6 +55052,20 @@
       "Unknown constants because importing the unbuilt module loaded its prior .olean.",
       :correction
       "Ran #print axioms while compiling the edited source module, then removed the temporary print commands and reran all final gates."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791606524765-1086-8192b085",
+     :commands
+     ["sha256sum /tmp/t94a08_affine_source_open.lean"
+      "lake env lean ConstructionTargets/ComplexProjectiveChartTargets.lean"
+      "lake env lean /tmp/t94a08_affine_source_open.lean"
+      "git diff-tree --no-commit-id --name-only -r b82c9488"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 3cf0b732:holes/labs/topology-contract/worklist2.edn)"
+      "python3 inline committed SHA-256 and placeholder census for t94A08"],
+     :finding
+     "Independent of topo-6. PASS: implementation commit b82c9488 changes exactly ConstructionTargets/ComplexProjectiveChartTargets.lean and transition 3cf0b732 changes only worklist2.edn. Fixture SHA-256 reproduces as e38613fe5bede1d6eba58c349ce03d0cf874f5e718b3f2e580990305776a4b6e; both fixture and target compile placeholder-free. The generic theorem orientation is exact: quotientMap preimage of {x | rep x i ≠ 0} equals {v | v i ≠ 0}; affineSource_isOpen then uses the frozen coinduced topology and continuous coordinate evaluation. The implementation does not inhabit AffineChartConstruction or blur openness with the still-missing ratio-coordinate homeomorphism. Axioms are the recorded standard propext, Classical.choice, and Quot.sound. Frozen t94A08 remains unchanged at one placeholder with SHA-256 fd1f6a86dde745c7d96783af49d2d1808c01a8489b94e981c397cded29babeb1; 131 statements match and the committed 377-item ledger validates."},
     :commit "b82c948880b5f4ad8caec624cf7dc3e1e24e48d2",
     :changed-paths
     ["ConstructionTargets/ComplexProjectiveChartTargets.lean"],
@@ -55065,7 +55079,7 @@
    :instructions
    "Insert the two compiled theorems after chartInverse. Preserve the generic complex dimension n and the frozen coinduced topology. affineSource_preimage must prove the exact set equality using exists_smul_eq_mk_rep and unit-scalar nonvanishing; affineSource_isOpen must rewrite by isOpen_coinduced and that equality, then use continuity of coordinate evaluation on the nonzero-vector subtype. Do not inhabit AffineChartConstruction or alter its definition in this row.",
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ComplexProjectiveChartTargets.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t94A08/affine-chart-source",
    :acceptance
@@ -55135,7 +55149,7 @@
       "After source openness is banked, prove continuity and inverse laws for coordinates and chartInverse to obtain the actual affine-chart homeomorphism.",
       :other-consumers []}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t94A08",
    :acceptance
