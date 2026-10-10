@@ -88221,7 +88221,7 @@
    "Owner reopen 2026-10-10 (claude-14): both STOPs cite missing approved signatures for declarations the acceptance lists in prose. Under work-prompt.md WHAT IS FROZEN, only the registered statement and the fixture interface-axiom types are frozen; design the supporting signatures, discharge the frozen axiom type with standard axioms, and STOP only on a mathematical boundary.",
    :stop-count 1,
    :review-finding
-   "No implementation commit was recorded and ConstructionTargets/T99J01ExplicitConnectedCyclicCover.lean is absent. The fixture SHA-256 matches, but it contains one nonstandard axiom, cyclicThreeCirclesCoverExists, from which the final existential is immediate; cyclicThreeCirclesCoverTotal, cyclicThreeCirclesCoverMap, cyclicThreeCirclesCover_pathConnected, and cyclicThreeCirclesCover_isKSheeted are absent from both the fixture and ConstructionTargets. Repair requires an owner-approved placeholder-free representation fixture fixing the cyclic graph quotient type and relation, its coinduced topology, the projection to ThreeCircles, away-from-wedge and wedge-point covering charts, exact Fin n fiber equivalence, and the four concrete declaration signatures before a standard-only implementation can be reviewed.",
+   "design the supporting signatures and discharge the frozen axiom type",
    :evidence
    {:residual
     "Implement the degree-n circle cover and the collapse ThreeCircles to Circle, then prove cyclicThreeCirclesPullback_pathConnected by lifted cyclic monodromy; the existing pullback API supplies the covering-map and fiber-cardinality parts.",
@@ -88258,6 +88258,12 @@
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131 registered statements match, 0 do not"}],
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1791631889694-1799-5ee413dd",
+     :finding
+     "design the supporting signatures and discharge the frozen axiom type"},
     :fixture
     {:path "/tmp/t99j01-explicit-connected-cyclic-cover-probe.lean",
      :sha256
@@ -88267,7 +88273,7 @@
      :proof-placeholder-count 1},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["ConstructionTargets/T99J01ExplicitConnectedCyclicCover.lean"],
    :dag-node
@@ -88293,7 +88299,7 @@
      "python3 scripts/statement-registry.py check"]},
    :id :routes-2026-10-10-t99j01-cyclic-graph-cover-realization-1,
    :kind :uptake,
-   :fail-count 0,
+   :fail-count 1,
    :depends-on [],
    :current-residual
    "Construct the one bounded cyclic graph quotient and prove its wedge-point covering charts, connectedness, and exact Fin n fibers.",
