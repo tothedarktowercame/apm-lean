@@ -97726,13 +97726,44 @@
    "Lift the collapse-constant normalization paths to the literal pullback while holding each circle coordinate fixed, then connect the normalized points over firstCircle by a circle path whose nth power supplies the base path.",
    :other-consumers []}
   {:bounded-exception
+   "This single-consumer theorem lifts the banked collapse-constant normalization path into the literal pullback while fixing its Circle coordinate, reducing path connectedness to the cyclic path between normalized section points.",
+   :consumer :t99J01,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/CyclicPullbackNormalizationPath.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/cyclic-three-circles-cover/pullback-normalization-path",
+   :acceptance
+   {:implementation
+    "For every n and every point of CyclicThreeCirclesPullbackCover.Pullback n, construct a path to the point over firstCircle (collapse y) with the same Circle coordinate. Build the subtype path directly from the banked collapse-constant base path and prove its Circle coordinate is fixed pointwise. Do not construct the cyclic path between normalized points, prove path connectedness, count sheets, compute subgroup index, or close t99J01.",
+    :placeholder "the single sorry in apm_t99j01",
+    :route-step
+    "t99J01 cyclic-cover step 8: lift collapse-fiber normalization paths into the literal pullback while fixing the sheet coordinate",
+    :fixture "/tmp/cyclic-pullback-normalization-path.lean",
+    :fixture-sha256
+    "7af8ace6b0417db48f71142cac09f3a96b68edec13a3a9b7d75fab56f03cce9c",
+    :gates
+    ["lake build ConstructionTargets.CyclicPullbackNormalizationPath"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-10-cyclic-pullback-normalization-path-46,
+   :kind :reusable-theorem,
+   :area "covering-subgroup-correspondence",
+   :depends-on
+   [:routes-2026-10-10-three-circles-collapse-fiber-path-45],
+   :current-residual
+   "For two normalized points with Circle coordinates z0 and z1, construct a Circle path alpha from z0 to z1 and the corresponding final-circle base path firstCircle (alpha(t)^n); lift this pair into the pullback, then concatenate with the normalization paths to prove Pullback n path connected.",
+   :other-consumers []}
+  {:bounded-exception
    "Single-consumer prerequisite second in the final ledger ranking.",
    :consumer :t99J01,
    :implements-lemma :lemma-cyclicthreecirclespullback-pathconnected,
    :evidence
    {:probe
     {:residual
-     "Every ThreeCircles point now has a compiled collapse-constant path to the final-circle section. The remaining proof must lift these normalization paths in the literal pullback and establish the cyclic nth-power path between normalized sheet coordinates.",
+     "Every pullback point now has a compiled path to the final-circle section with fixed Circle coordinate. The original row still needs the cyclic nth-power path between normalized points and concatenation into a PathConnectedSpace instance.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
@@ -97743,51 +97774,54 @@
        :consumers [:t99J01],
        :depends-on
        ["CyclicThreeCirclesPullbackSheets.pullback_isKSheeted"
-        "ThreeCirclesCollapseFiberPath.exists_collapseFiber_path"]}],
+        "CyclicPullbackNormalizationPath.exists_normalization_path"],
+       :area "covering-subgroup-correspondence"}],
      :prerequisite
      {:bounded-exception
-      "This single-consumer normalization theorem moves every ThreeCircles point into the final-circle section while preserving collapse, so a pullback point can be moved without changing its circle-power coordinate before the cyclic monodromy step.",
+      "This single-consumer theorem lifts the banked collapse-constant normalization path into the literal pullback while fixing its Circle coordinate, reducing path connectedness to the cyclic path between normalized section points.",
       :consumer :t99J01,
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/ThreeCirclesCollapseFiberPath.lean"],
+      ["ConstructionTargets/CyclicPullbackNormalizationPath.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/cyclic-three-circles-cover/collapse-fiber-path",
+      "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/cyclic-three-circles-cover/pullback-normalization-path",
       :acceptance
       {:implementation
-       "For every y : ThreeCircles, construct a path from y to CyclicThreeCirclesCollapse.firstCircle (collapse y) whose image under collapse is constant. For the TwoCircles summand, use the banked point-wedge path-connectedness to reach twoCirclesPoint and cast across the identified outer wedge representatives; for the final-circle summand, use the constant path. Prove the collapse formula pointwise. Do not lift this path to the pullback, construct cyclic power paths, prove pullback path connectedness, compute subgroup index, or close t99J01.",
+       "For every n and every point of CyclicThreeCirclesPullbackCover.Pullback n, construct a path to the point over firstCircle (collapse y) with the same Circle coordinate. Build the subtype path directly from the banked collapse-constant base path and prove its Circle coordinate is fixed pointwise. Do not construct the cyclic path between normalized points, prove path connectedness, count sheets, compute subgroup index, or close t99J01.",
        :placeholder "the single sorry in apm_t99j01",
        :route-step
-       "t99J01 cyclic-cover step 7: normalize every basepoint into the final-circle section within its collapse fiber",
-       :fixture "/tmp/three-circles-collapse-fiber-path.lean",
+       "t99J01 cyclic-cover step 8: lift collapse-fiber normalization paths into the literal pullback while fixing the sheet coordinate",
+       :fixture "/tmp/cyclic-pullback-normalization-path.lean",
        :fixture-sha256
-       "cfc417d11180ad2a1c0c4ad388d2a0cd7f469dfb56b2ba05ab3a96bcb95a77d7",
+       "7af8ace6b0417db48f71142cac09f3a96b68edec13a3a9b7d75fab56f03cce9c",
        :gates
-       ["lake build ConstructionTargets.ThreeCirclesCollapseFiberPath"
+       ["lake build ConstructionTargets.CyclicPullbackNormalizationPath"
         "fixture compiles"
         "zero source and fixture sorry"
         "standard-only axioms"
         "registry check"]},
-      :id :routes-2026-10-10-three-circles-collapse-fiber-path-45,
+      :id :routes-2026-10-10-cyclic-pullback-normalization-path-46,
       :kind :reusable-theorem,
-      :depends-on [:routes-2026-10-10-point-wedge-path-connected-44],
+      :area "covering-subgroup-correspondence",
+      :depends-on
+      [:routes-2026-10-10-three-circles-collapse-fiber-path-45],
       :current-residual
-      "Lift the collapse-constant normalization paths to the literal pullback while holding each circle coordinate fixed, then connect the normalized points over firstCircle by a circle path whose nth power supplies the base path.",
+      "For two normalized points with Circle coordinates z0 and z1, construct a Circle path alpha from z0 to z1 and the corresponding final-circle base path firstCircle (alpha(t)^n); lift this pair into the pullback, then concatenate with the normalization paths to prove Pullback n path connected.",
       :other-consumers []},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake env lean /tmp/three-circles-collapse-fiber-path.lean",
+       "lake env lean /tmp/cyclic-pullback-normalization-path.lean",
        :exit 0,
        :finding
-       "the collapse-constant normalization path compiles with standard axioms"}
-      {:cmd "sha256sum /tmp/three-circles-collapse-fiber-path.lean",
+       "the collapse-fiber base path lifts definitionally to the literal pullback with fixed Circle coordinate"}
+      {:cmd "sha256sum /tmp/cyclic-pullback-normalization-path.lean",
        :exit 0,
        :finding
-       "cfc417d11180ad2a1c0c4ad388d2a0cd7f469dfb56b2ba05ab3a96bcb95a77d7"}
+       "7af8ace6b0417db48f71142cac09f3a96b68edec13a3a9b7d75fab56f03cce9c"}
       {:cmd
-       "rg -n \"\\b(sorry|admit)\\b\" /tmp/three-circles-collapse-fiber-path.lean",
+       "rg -n \"\\b(sorry|admit)\\b\" /tmp/cyclic-pullback-normalization-path.lean",
        :exit 1,
        :expected-exit 1,
        :finding "no placeholders"}
@@ -97797,24 +97831,19 @@
       {:cmd "git status --short", :exit 0, :finding "clean"}],
      :diagnostic-history
      [{:cmd
-       "lake env lean /tmp/three-circles-collapse-fiber-path.lean",
+       "lake env lean /tmp/cyclic-pullback-normalization-path.lean",
        :exit 1,
        :finding
-       "The banked point-wedge theorem did not automatically synthesize PathConnectedSpace TwoCircles; installed its explicit wedge instance."}
-      {:cmd
-       "lake env lean /tmp/three-circles-collapse-fiber-path.lean",
-       :exit 1,
-       :finding
-       "Circle has no global PathConnectedSpace instance in the pinned environment; installed the standard local instance transported through the banked Circle-to-SphereOne homeomorphism."}],
+       "The initial Continuous.subtype_mk left the pullback equality proof as an unresolved placeholder; supplied the collapse-constant equality explicitly for every path parameter."}],
      :fixture
-     {:path "/tmp/three-circles-collapse-fiber-path.lean",
+     {:path "/tmp/cyclic-pullback-normalization-path.lean",
       :sha256
-      "cfc417d11180ad2a1c0c4ad388d2a0cd7f469dfb56b2ba05ab3a96bcb95a77d7",
+      "7af8ace6b0417db48f71142cac09f3a96b68edec13a3a9b7d75fab56f03cce9c",
       :interface
-      "exists_collapseFiber_path gives, for every y : ThreeCircles, a path from y to firstCircle (collapse y) along which collapse is constant."},
+      "exists_normalization_path moves any cyclic pullback point to the final-circle section while preserving its Circle coordinate pointwise."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/cyclic-three-circles-cover",
@@ -97841,7 +97870,8 @@
     :routes-2026-10-10-circle-power-fiber-card-42
     :routes-2026-10-10-cyclic-three-circles-pullback-sheets-43
     :routes-2026-10-10-point-wedge-path-connected-44
-    :routes-2026-10-10-three-circles-collapse-fiber-path-45],
+    :routes-2026-10-10-three-circles-collapse-fiber-path-45
+    :routes-2026-10-10-cyclic-pullback-normalization-path-46],
    :current-residual
    "Combine the cyclic cover with component restriction and close t99J01.",
    :other-consumers []}
@@ -98281,7 +98311,8 @@
     [:owner
      :routes-2026-10-10-cyclic-three-circles-pullback-pathconnected-38],
     :type
-    "theorem proving that pullback path connected from cyclic monodromy. The exact missing prerequisite is theorem cyclicThreeCirclesPullback_pathConnected (n : ℕ) (hn : 0 < n) : PathConnectedSpace (ConstructionTargets.LiteralPullbackCover.Pullback (circleDegreeMap n) threeCirclesFirstCircle). Its proof must define the degree-n circle map and the nested-wedge collapse, compute the monodromy as the n-cycle on Fin n, and convert transitivity into paths joining arbitrary pullback points. Searches of Mathlib and ConstructionTargets find neither the transitive-monodromy connectedness theorem nor an expl"},
+    "theorem proving that pullback path connected from cyclic monodromy. The exact missing prerequisite is theorem cyclicThreeCirclesPullback_pathConnected (n : ℕ) (hn : 0 < n) : PathConnectedSpace (ConstructionTargets.LiteralPullbackCover.Pullback (circleDegreeMap n) threeCirclesFirstCircle). Its proof must define the degree-n circle map and the nested-wedge collapse, compute the monodromy as the n-cycle on Fin n, and convert transitivity into paths joining arbitrary pullback points. Searches of Mathlib and ConstructionTargets find neither the transitive-monodromy connectedness theorem nor an expl",
+    :area "covering-subgroup-correspondence"},
    :id :lemma-cyclicthreecirclespullback-pathconnected,
    :kind :lemma,
    :depends-on
@@ -98292,7 +98323,8 @@
     :lemma-circlepowerfibercard-circlepower-fiber-card
     :lemma-cyclicthreecirclespullbacksheets-pullback-isksheeted
     :lemma-pointwedgepathconnected-wedgepathconnectedspace
-    :lemma-threecirclescollapsefiberpath-exists-collapsefiber-path],
+    :lemma-threecirclescollapsefiberpath-exists-collapsefiber-path
+    :lemma-cyclicpullbacknormalizationpath-exists-normalization-path],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -99557,6 +99589,21 @@
    :kind :lemma,
    :depends-on
    [:lemma-coveringretainedsheetindices-invfun-mem-iff-retained],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "CyclicPullbackNormalizationPath.exists_normalization_path"},
+   :lemma
+   {:name "CyclicPullbackNormalizationPath.exists_normalization_path",
+    :reported-by []},
+   :id
+   :lemma-cyclicpullbacknormalizationpath-exists-normalization-path,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
