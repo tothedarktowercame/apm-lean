@@ -81289,8 +81289,56 @@
    "Non-homotopy first; rational homology and trace remain.",
    :other-consumers []}
   {:consumer :t98J02,
+   :stop-count 1,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Restore the exact hashed fixture, or return this implementation row to a fresh probe that creates a new recorded fixture. Only then can conjunct 2 be implemented; conjunct 3 and the conjunct-1 collar theorem remain downstream.",
+    :outcome :stop,
+    :warnings
+    [{:kind :inherited-placeholder,
+      :message "Lean reports the existing sorry in apm_t98j02."}],
+    :statement-hashes {:status :match, :count 131},
+    :disposition :stop,
+    :axioms :not-measured,
+    :author "topo-2",
+    :reason
+    "Required implementation evidence is unavailable: /tmp/t98j02-disconnected-counterexample-probe.lean is absent, no matching copy exists under /home/joe, and the dependency receipt preserves only its SHA-256 rather than its source. Therefore the mandated exact fixture hash and compiled interface cannot be verified. Reconstructing a different fixture would not satisfy the recorded hash and would bypass the row invariant.",
+    :commands
+    [{:cmd
+      "test ! -e /tmp/t98j02-disconnected-counterexample-probe.lean",
+      :exit 0,
+      :finding "required fixture is absent"}
+     {:cmd
+      "find /home/joe -type f matching t98j02 probe or disconnected counterexample fixture names",
+      :exit 0,
+      :finding "no matching file"}
+     {:cmd "lake env lean problems/t98J02/lean/Main.lean", :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd
+      "comment-stripped placeholder census of problems/t98J02/lean/Main.lean",
+      :exit 0,
+      :finding 1}
+     {:cmd "git status --short -- problems/t98J02/lean/Main.lean",
+      :exit 0,
+      :finding "clean"}],
+    :diagnostic-history
+    [{:cmd
+      "sha256sum /tmp/t98j02-disconnected-counterexample-probe.lean",
+      :exit 1,
+      :correction
+      "Classified the missing artifact as the boundary and used a successful explicit absence check in final commands; no failed gate is claimed as acceptance."}],
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/t98j02-disconnected-counterexample-probe.lean",
+     :expected-sha256
+     "252ec8543adae3333cc1fd18ba9a9aad2e82e5f550a3e5a24f4491215b88e2f5",
+     :status :missing},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["problems/t98J02/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t98J02/disconnected-trivial-cover",
    :acceptance
