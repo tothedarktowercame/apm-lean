@@ -66115,6 +66115,21 @@
       :exit 0,
       :output
       "97ff2ddb Add smooth descent for antipodal-even sphere maps"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791662855984-2871-84e1cc6d",
+     :commands
+     ["git show/diff-tree/show --check 97ff2ddb"
+      "sha256sum /tmp/rp_even_smooth_descent_proof.lean"
+      "git blob, placeholder, and forbidden-token checks"
+      "python3 scripts/statement-registry.py check --rev 97ff2ddb"
+      "lake env lean scoped module and smooth-descent fixture"
+      "frozen type and quotient-local-diffeomorphism orientation inspection"
+      "two-consumer placeholder and fingerprint census"
+      "bb worklist_check.bb"],
+     :finding
+     "PASS: topo-6 commit 97ff2ddb changes exactly the scoped RP2 module and matches the recorded/current blob and fixture SHA-256. The module remains placeholder-free with no new sorry/admit/axiom; registry is 131/0; module and fixture compile with exactly propext/Classical.choice/Quot.sound. The declaration has the frozen type: an antipodal-even smooth sphere map descends to a map on Space R 2 that both pulls back to the original map and is smooth under rpSmoothAtlas. The proof uses the banked continuous descent, quotient surjectivity, and the correctly oriented local inverse of quotient_localDiffeomorph to establish local smoothness without crossing the quotient/manifold representation boundary. No consumer instantiation is added; t95A04 and t96A07 each retain one unchanged frozen placeholder/fingerprint."},
     :commit "97ff2ddbfb573ee2e6f923dbf97d6796de76e4b2",
     :changed-paths
     ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
@@ -66132,7 +66147,7 @@
    :phase :implementation,
    :type
    "forall (m : ℕ) (g : Sphere 2 → E m), (forall p : Sphere 2, g (sphereAntipodalN 2 p) = g p) -> ContMDiff (𝓡 2) (𝓡 m) ∞ g -> letI := rpSmoothAtlas.charts; letI := rpSmoothAtlas.smooth; exists f : Space ℝ 2 → E m, (forall p, f (sphereProjection 2 p) = g p) ∧ ContMDiff (𝓡 2) (𝓡 m) ∞ f",
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/rp2/even-map-smooth-descent",
    :acceptance
@@ -66215,7 +66230,7 @@
      "The banked continuous descent gives the required quotient maps and pullback equations, but the requested packet also requires their smoothness. The compiled contract isolates one shared theorem transferring ContMDiff through the surjective local diffeomorphism in rpSmoothAtlas; it introduces no alternate topology or atlas.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope
    ["ConstructionTargets/RealProjectiveEvenQuadraticDescent.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/rp2/even-quadratic-descent",
@@ -68072,7 +68087,7 @@
    :other-consumers []}
   {:consumer :t95A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -68089,7 +68104,10 @@
     "forall (m : ℕ) (g : Sphere 2 → E m), (forall p : Sphere 2, g (sphereAntipodalN 2 p) = g p) -> ContMDiff (𝓡 2) (𝓡 m) ∞ g -> letI := rpSmoothAtlas.charts; letI := rpSmoothAtlas.smooth; exists f : Space ℝ 2 → E m, (forall p, f (sphereProjection 2 p) = g p) ∧ ContMDiff (𝓡 2) (𝓡 m) ∞ f",
     :area "rp-smooth-atlas",
     :proved-in
-    :routes-2026-10-10-rp2-even-map-smooth-descent-two-consumers-topo2-r2},
+    :routes-2026-10-10-rp2-even-map-smooth-descent-two-consumers-topo2-r2,
+    :banked-by
+    :routes-2026-10-10-rp2-even-map-smooth-descent-two-consumers-topo2-r2,
+    :banked-commit "97ff2ddbfb573ee2e6f923dbf97d6796de76e4b2"},
    :id
    :lemma-constructiontargets-realprojectivesmoothtarget-sphereprojectionevenmapsmoothdesc,
    :kind :lemma,
