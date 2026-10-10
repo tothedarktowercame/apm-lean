@@ -93240,6 +93240,20 @@
       :finding "131 registered statements match, 0 do not"}
      {:cmd "git diff --check HEAD^ HEAD", :exit 0}
      {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791645046463-2243-5d4b6a9a",
+     :commands
+     ["git show 62fa7ceb0ecf382dfc657a2c96ef236895f36aa8 --stat and recorded source inspection"
+      "lake build ConstructionTargets.KleinPresentedGroupCoordinateModel"
+      "sha256sum /tmp/klein-coordinate-model.lean && lake env lean /tmp/klein-coordinate-model.lean"
+      "comment-stripped sorry/admit census for source, fixture, and t93J03"
+      "frozen/local Klein relation and generator alignment audit"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 0e5c7b90:holes/labs/topology-contract/worklist.edn)"],
+     :finding
+     "exact one-file scope and fixture hash reproduce; the semidirect forward map sends false to A and true to B, proves the frozen B-inverse-A-B-A relator, aligns definitionally with the consumer presentation, uses standard axioms with zero scoped placeholders, and correctly leaves bijectivity and unique normal forms downstream"},
     :commit "62fa7ceb0ecf382dfc657a2c96ef236895f36aa8",
     :changed-paths
     ["ConstructionTargets/KleinPresentedGroupCoordinateModel.lean"],
@@ -93270,7 +93284,7 @@
      "Model the Klein presentation in the semidirect product Multiplicative Int ⋊ Multiplicative Int with inversion action, prove the relator, and descend the generator assignment through PresentedGroup.toGroup."},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/KleinPresentedGroupCoordinateModel.lean"],
    :dag-node
@@ -93379,7 +93393,7 @@
       "Coordinates := Multiplicative Int semidirect-product Multiplicative Int under inversion; generators A and B satisfy B^-1*A*B*A=1; toCoordinates maps the frozen presented generators to A and B."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/presented-group-coordinate-normal-form",
