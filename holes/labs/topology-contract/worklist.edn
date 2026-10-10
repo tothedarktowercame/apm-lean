@@ -94887,6 +94887,20 @@
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791650105626-2401-05020465",
+     :commands
+     ["git show cea0a73ec2683b7852cf57d7ff6f8442ea6b271b -- ConstructionTargets/KleinDiskSquareCarrier.lean"
+      "git diff --exit-code cea0a73ec2683b7852cf57d7ff6f8442ea6b271b -- ConstructionTargets/KleinDiskSquareCarrier.lean"
+      "lake build ConstructionTargets.KleinDiskSquareCarrier"
+      "sha256sum /tmp/klein-disk-square-carrier.lean && lake env lean /tmp/klein-disk-square-carrier.lean"
+      "placeholder census on source, fixture, and problems/t93J03"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb on recorded ledger at 86c49eeb"],
+     :finding
+     "PASS: reviewer codex-3 verified commit cea0a73e changes only KleinDiskSquareCarrier.lean and the compiled source equals the recorded commit. The frozen fixture hash is exact; target and fixture compile with zero placeholders; t93J03 retains its declared single placeholder; the carrier theorem reports only propext, Classical.choice, and Quot.sound; all 131 registry statements and the recorded ledger validate. centeredSquare is exactly Icc(-1,1) reProdIm Icc(-1,1); its convexity, nonempty interior, and boundedness justify Mathlib gauge rescaling, and closure normalization yields the correctly directed homeomorphism centeredSquare to the frozen complex closed disk. The theorem does not claim edge formulas or relation/EqvGen compatibility; it explicitly leaves the noncanonical-choice boundary for the required explicit coordinate map. The two unnecessarySimpa warnings are non-failing style diagnostics."},
     :commit "cea0a73ec2683b7852cf57d7ff6f8442ea6b271b",
     :changed-paths ["ConstructionTargets/KleinDiskSquareCarrier.lean"],
     :fixture
@@ -94904,7 +94918,7 @@
       "KleinDiskSquareCarrier.exists_centeredSquare_disk_homeomorph"]},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/KleinDiskSquareCarrier.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/square-boundary-orbit-eqvgen/disk-square-carrier",
@@ -95022,7 +95036,7 @@
       "centeredSquare is the complex square with real and imaginary coordinates in [-1,1]. exists_centeredSquare_disk_homeomorph proves it is homeomorphic to the frozen complex closed unit disk by restricting Mathlib's convex gauge-rescaling ambient homeomorphism."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/square-boundary-orbit-eqvgen",
@@ -95942,7 +95956,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -95955,7 +95969,9 @@
     :reported-by [:routes-2026-10-10-klein-disk-square-carrier-30],
     :type
     "Nonempty (centeredSquare ≃ₜ Metric.closedBall (0 : Complex) 1)",
-    :proved-in :routes-2026-10-10-klein-disk-square-carrier-30},
+    :proved-in :routes-2026-10-10-klein-disk-square-carrier-30,
+    :banked-by :routes-2026-10-10-klein-disk-square-carrier-30,
+    :banked-commit "cea0a73ec2683b7852cf57d7ff6f8442ea6b271b"},
    :id
    :lemma-kleindisksquarecarrier-exists-centeredsquare-disk-homeomorph,
    :kind :lemma,
