@@ -56971,9 +56971,41 @@
   {:bounded-exception
    "single-consumer mapped-path endpoint-cast comparison for the frozen torus",
    :consumer :t97A04,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/torus_frozen_pi1_native_coordinate_mk.lean",
+      :sha256
+      "46b9ed0e048045ce6635e5b5da0549511370e75a1428969b59a1d28a86d3a89d"},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/torus_frozen_pi1_native_coordinate_mk.lean",
+       :exit 0,
+       :output
+       "frozenCircleImagePath_eq_mappedPath_cast compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/torus_frozen_pi1_native_coordinate_mk.lean || true)\"",
+       :exit 0}
+      {:cmd
+       "sha256sum /tmp/torus_frozen_pi1_native_coordinate_mk.lean",
+       :exit 0,
+       :output
+       "46b9ed0e048045ce6635e5b5da0549511370e75a1428969b59a1d28a86d3a89d  /tmp/torus_frozen_pi1_native_coordinate_mk.lean"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :finding
+     "The placeholder-free fixture proves exact Path equality from the continuously mapped frozen loop after both endpoint casts along frozenTorusHomeomorphCircleProd_base.symm to frozenCircleImagePath. The proof is definitional after Path extensionality and preserves the dependent basepoint representation.",
+     :implementation
+     {:scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
+      :declarations ["frozenCircleImagePath_eq_mappedPath_cast"]},
+     :residual
+     "Identify the induced fundamental-group quotient cast with the transport used by the native coordinate equivalence, derive the fixed-base frozenTorusPi1Coord representative equation, and finish representative then all-class matrix naturality."}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A04/torus-pi1-winding-coordinates/frozen-circle-image-path-cast",
    :acceptance
@@ -56992,6 +57024,7 @@
    :id
    :routes-2026-10-10-t97a04-frozen-circle-image-path-cast-topo2-r1,
    :kind :representation-comparison,
+   :declarations ["frozenCircleImagePath_eq_mappedPath_cast"],
    :depends-on
    [:routes-2026-10-10-checkpoint-topo2-r2
     :routes-2026-10-10-t97a04-frozen-native-coordinate-mk-topo2-r1],
