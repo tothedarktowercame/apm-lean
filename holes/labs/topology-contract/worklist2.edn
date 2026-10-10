@@ -60739,6 +60739,20 @@
       :output
       "[master a3cc206e] Bank t02A03 left-tube torus realization; 1 file changed, 15 insertions(+)"}
      {:cmd "git status --short", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791637775688-2002-40344c34",
+     :commands
+     ["git show, diff-tree, and show --check on implementation a3cc206e and ledger transition ecc8be45"
+      "sha256sum authenticated fixture and frozen t02A03 consumer"
+      "lake env lean on fixture, target, and fresh three-coordinate reconstruction probe"
+      "lake build ConstructionTargets/T02A03GeometricTubeCover"
+      "axiom and comment-stripped placeholder audits"
+      "python3 scripts/statement-registry.py check --rev a3cc206e"
+      "bb worklist_check.bb on committed transition ledger"],
+     :finding
+     "PASS: codex-7 independently reviewed topo-6 commit a3cc206e25eb6f54ac2381d9f4a1d38640647571. Exact implementation scope is ConstructionTargets/T02A03GeometricTubeCover.lean; transition ecc8be458513152b8dfe82724a2ee8ddc8f333e6 is ledger-only. Fixture SHA-256 is 65b54a8849eed3ce2408d4d7e49f5ef3556f2c9c83d50745ba3de5a923be308f. Fixture, recorded-identical target, fresh coordinate probe, and 8240-job focused build pass. Both fixture interfaces elaborate exactly. The ambient reconstruction uses the first Circle factor as the core angle and the second as the normal angle, with planar radius 1 plus one eighth times the second factor real part about center (-1,0), and height one eighth times its imaginary part. Fresh checks reproduce all three Euclidean coordinates and continuity. The row correctly claims only the ambient formula: it does not yet claim membership in LeftTubeMinusCore, an inverse map, comparison homotopies, torus equivalence, or gluing. The checked theorem uses only propext, Classical.choice, and Quot.sound. Target has zero executable placeholders. Frozen t02A03 consumer hash is b123eca388ab2858ca55daf538c1ddd645022b52f5196a15f0bb516d78323d7d with one executable placeholder; registry is 131/0 and the committed 437-row ledger validates with exactly one done-unreviewed row."},
     :commit "a3cc206e25eb6f54ac2381d9f4a1d38640647571",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
@@ -60753,7 +60767,7 @@
      "apm_t02a03_continuous_leftTubeTorusPoint"],
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-torus-point",
    :acceptance
@@ -60832,7 +60846,7 @@
    :phase :probe,
    :type
    "Nonempty (ContinuousMap.HomotopyEquiv LeftTubeMinusCore ConstructionTargets.TorusCircleWedgeOpenCover.Torus)",
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-punctured-model",
    :acceptance
