@@ -96119,6 +96119,20 @@
      {:cmd "git status --short",
       :exit 0,
       :finding "clean worktree after commit"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791656991559-2681-53cf7f8d",
+     :commands
+     ["git show ee9d42bc6479b88f665ad772828adc2c3810bb02 -- ConstructionTargets/LocPathConnectedOpenCover.lean"
+      "git diff --exit-code ee9d42bc6479b88f665ad772828adc2c3810bb02 -- ConstructionTargets/LocPathConnectedOpenCover.lean"
+      "lake build ConstructionTargets.LocPathConnectedOpenCover"
+      "sha256sum /tmp/loc-path-connected-open-cover.lean && lake env lean /tmp/loc-path-connected-open-cover.lean"
+      "placeholder census on source, fixture, and problems/t99J01/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb on recorded ledger at a5099043"],
+     :finding
+     "PASS: reviewer codex-3 verified recorded commit ee9d42bc changes only LocPathConnectedOpenCover.lean and the source equals that commit. Canonical packages resolve correctly; the frozen fixture hash is exact; target and fixture compile with zero placeholders; t99J01 retains exactly one placeholder; the audited theorem reports only propext, Classical.choice, and Quot.sound; all 131 registered statements and the recorded 863-item ledger validate. For each point, the proof works inside the supplied open locally path-connected subtype, takes the path component in the pulled-back ambient neighborhood, proves its subtype image is an open ambient neighborhood containing the point, maps its paths continuously into X, and places that image inside the ambient pathComponentIn. This establishes exactly the standard local path-connectedness neighborhood criterion without assuming global connectedness. The module correctly does not mention covering maps, construct charts, select component sheets, prove surjectivity, count fibers, or compute fundamental groups."},
     :commit "ee9d42bc6479b88f665ad772828adc2c3810bb02",
     :changed-paths
     ["ConstructionTargets/LocPathConnectedOpenCover.lean"],
@@ -96133,7 +96147,7 @@
      ["ConstructionTargets.LocPathConnectedOpenCover.locPathConnectedSpace_of_open_cover"]},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/LocPathConnectedOpenCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component/lpc-open-cover",
@@ -96241,7 +96255,7 @@
       "locPathConnectedSpace_of_open_cover proves that open locally path-connected neighborhoods at every point make the ambient space locally path connected."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component",
@@ -98468,7 +98482,7 @@
    :other-consumers []}
   {:consumer :t99J01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -98481,7 +98495,9 @@
     :reported-by [:routes-2026-10-10-loc-path-connected-open-cover-41],
     :type
     "A space is locally path connected if every point belongs to an open subset whose subtype has LocPathConnectedSpace",
-    :proved-in :routes-2026-10-10-loc-path-connected-open-cover-41},
+    :proved-in :routes-2026-10-10-loc-path-connected-open-cover-41,
+    :banked-by :routes-2026-10-10-loc-path-connected-open-cover-41,
+    :banked-commit "ee9d42bc6479b88f665ad772828adc2c3810bb02"},
    :id
    :lemma-locpathconnectedopencover-locpathconnectedspace-of-open-cover,
    :kind :lemma,
