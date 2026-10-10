@@ -83850,8 +83850,144 @@
    "Review four independently typed route steps, then refill.",
    :other-consumers []}
   {:consumer :t96A06,
-   :phase :probe,
+   :phase :implementation,
    :state :open,
+   :scope ["ConstructionTargets/RealProjectiveSphereCovering.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t96A06/sphere-projective-covering-comparison/package",
+   :acceptance
+   {:placeholder "the single sorry in apm_t96a06",
+    :route-step
+    "t96A06 step 2, sphere-to-coinduced-RP3 covering representation",
+    :declarations
+    ["realProjectiveAntipodalSetoid"
+     "realProjectiveSphereProjection"
+     "realProjectiveSphereQuotientHomeomorph"
+     "realProjectiveSphereQuotientHomeomorph_mk"
+     "realProjectiveSphereProjection_isCoveringMap"
+     "realProjectiveSphereProjection_fiber_card_two"],
+    :fixture "/tmp/t96a06-sphere-projective-covering-probe.lean",
+    :fixture-sha256
+    "c9aac3057c72154f269972588390e0ad2e5d1adf8586ab1bab09312ac38315e5",
+    :implementation
+    "At n=3, define the antipodal Setoid on euclideanUnitSphere 4 and give its quotient the coinduced topology. Define the normalized sphere projection by the existing projective quotientMap. Prove its fibers are exactly x and minus x using Projectivization equality, construct the induced continuous bijection from the antipodal quotient to Space Real 3, and prove it is a homeomorphism using compactness of the sphere quotient and Hausdorffness from the projective quotient openness. Build explicit evenly covered neighborhoods by choosing a coordinate with nonzero representative and splitting its sign, yielding IsCoveringMap and two-point fibers. Package the homeomorphism equation, covering theorem, and fiber cardinality coherently; do not compute homology, degree, or Lefschetz.",
+    :axioms :standard-only,
+    :commands
+    ["lake env lean ConstructionTargets/RealProjectiveSphereCovering.lean"
+     "lake env lean /tmp/t96a06-sphere-projective-covering-probe.lean"
+     "python3 scripts/statement-registry.py check"]},
+   :representation
+   {:source
+    "The antipodal Setoid quotient of the unit sphere in Fin 4 to Real",
+    :target
+    "The coinduced projective Space Real 3 of nonzero vectors modulo nonzero scaling",
+    :direction
+    "A homeomorphism from the source antipodal quotient to the target projective quotient induced by sphere inclusion, then transport of the two-sheeted quotient covering structure to the normalized sphere projection"},
+   :id
+   :routes-2026-10-10-t96a06-real-projective-sphere-covering-package-1,
+   :kind :representation-comparison,
+   :depends-on [],
+   :current-residual
+   "Prove the single coherent antipodal-quotient homeomorphism and two-sheeted covering package; the compiled fixture then supplies the representation bridge required before rational transfer.",
+   :other-consumers []}
+  {:consumer :t96A06,
+   :evidence
+   {:probe
+    {:residual
+     "Exactly one prerequisite remains: the RP3 antipodal-quotient homeomorphism and normalized two-sheeted covering package. Rational transfer homology, degree four, and Lefschetz remain downstream.",
+     :outcome :revise,
+     :warnings
+     [{:kind :interface-axiom,
+       :message
+       "The placeholder-free fixture uses exactly one nonstandard axiom bundling the antipodal-quotient homeomorphism, normalized covering map, and two-point fibers."}],
+     :prerequisite
+     {:consumer :t96A06,
+      :phase :implementation,
+      :state :open,
+      :scope ["ConstructionTargets/RealProjectiveSphereCovering.lean"],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/t96A06/sphere-projective-covering-comparison/package",
+      :acceptance
+      {:placeholder "the single sorry in apm_t96a06",
+       :route-step
+       "t96A06 step 2, sphere-to-coinduced-RP3 covering representation",
+       :declarations
+       ["realProjectiveAntipodalSetoid"
+        "realProjectiveSphereProjection"
+        "realProjectiveSphereQuotientHomeomorph"
+        "realProjectiveSphereQuotientHomeomorph_mk"
+        "realProjectiveSphereProjection_isCoveringMap"
+        "realProjectiveSphereProjection_fiber_card_two"],
+       :fixture "/tmp/t96a06-sphere-projective-covering-probe.lean",
+       :fixture-sha256
+       "c9aac3057c72154f269972588390e0ad2e5d1adf8586ab1bab09312ac38315e5",
+       :implementation
+       "At n=3, define the antipodal Setoid on euclideanUnitSphere 4 and give its quotient the coinduced topology. Define the normalized sphere projection by the existing projective quotientMap. Prove its fibers are exactly x and minus x using Projectivization equality, construct the induced continuous bijection from the antipodal quotient to Space Real 3, and prove it is a homeomorphism using compactness of the sphere quotient and Hausdorffness from the projective quotient openness. Build explicit evenly covered neighborhoods by choosing a coordinate with nonzero representative and splitting its sign, yielding IsCoveringMap and two-point fibers. Package the homeomorphism equation, covering theorem, and fiber cardinality coherently; do not compute homology, degree, or Lefschetz.",
+       :axioms :standard-only,
+       :commands
+       ["lake env lean ConstructionTargets/RealProjectiveSphereCovering.lean"
+        "lake env lean /tmp/t96a06-sphere-projective-covering-probe.lean"
+        "python3 scripts/statement-registry.py check"]},
+      :representation
+      {:source
+       "The antipodal Setoid quotient of the unit sphere in Fin 4 to Real",
+       :target
+       "The coinduced projective Space Real 3 of nonzero vectors modulo nonzero scaling",
+       :direction
+       "A homeomorphism from the source antipodal quotient to the target projective quotient induced by sphere inclusion, then transport of the two-sheeted quotient covering structure to the normalized sphere projection"},
+      :id
+      :routes-2026-10-10-t96a06-real-projective-sphere-covering-package-1,
+      :kind :representation-comparison,
+      :depends-on [],
+      :current-residual
+      "Prove the single coherent antipodal-quotient homeomorphism and two-sheeted covering package; the compiled fixture then supplies the representation bridge required before rational transfer.",
+      :other-consumers []},
+     :axioms
+     ["propext"
+      "Classical.choice"
+      "Quot.sound"
+      "T96A06SphereProjectiveCoveringProbe.sphere_projective_covering_package"],
+     :commands
+     [{:cmd "stat -c directory .lake/packages",
+       :exit 0,
+       :finding "canonical checkout package authority is present"}
+      {:cmd
+       "lake env lean /tmp/t96a06-sphere-projective-covering-probe.lean",
+       :exit 0,
+       :finding
+       "The exact antipodal quotient, RP3 map, homeomorphism interface, covering interface, and fiber-cardinality consequence elaborate."}
+      {:cmd
+       "sha256sum /tmp/t96a06-sphere-projective-covering-probe.lean",
+       :exit 0,
+       :finding
+       "c9aac3057c72154f269972588390e0ad2e5d1adf8586ab1bab09312ac38315e5"}
+      {:cmd
+       "Python comment-stripped placeholder census of /tmp/t96a06-sphere-projective-covering-probe.lean",
+       :exit 0,
+       :finding "0"}
+      {:cmd "lake env lean problems/t96A06/lean/Main.lean",
+       :exit 0,
+       :finding
+       "The consumer compiles with its existing registered-theorem placeholder."}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :finding "131 registered statements match, 0 do not"}
+      {:cmd "git status --short", :exit 0, :finding "clean"}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/t96a06-sphere-projective-covering-probe.lean",
+       :exit 1,
+       :finding
+       "The first draft omitted the module defining euclideanUnitSphere and used implicit Quotient.mk prime where the explicit Setoid was required.",
+       :correction
+       "Imported CoefficientSphereAntipodal, opened T02A06, used the explicit Quotient.mk antipodalSetoid map, and proved the underlying coordinate function nonzero from sphere membership; the successful rerun is in commands."}],
+     :fixture
+     {:path "/tmp/t96a06-sphere-projective-covering-probe.lean",
+      :sha256
+      "c9aac3057c72154f269972588390e0ad2e5d1adf8586ab1bab09312ac38315e5"},
+     :seat "topo-4"}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t96A06/sphere-projective-covering-comparison",
@@ -83879,7 +84015,7 @@
    :kind :representation-comparison,
    :depends-on
    [:routes-2026-10-10-checkpoint-topo1-split-four-1
-    :routes-2026-10-10-checkpoint-topo1-split-four-1],
+    :routes-2026-10-10-t96a06-real-projective-sphere-covering-package-1],
    :current-residual
    "Construct the antipodal-quotient homeomorphism and two-sheeted covering theorem before rational transfer.",
    :other-consumers []}
