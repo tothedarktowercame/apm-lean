@@ -58712,6 +58712,36 @@
    :current-residual
    "Construct the attachment homotopy between the surviving right core and the Circle meridian, then extend to tube deformations and gluing.",
    :other-consumers []}
+  {:bounded-exception
+   "single-consumer meridian basepoint normalization for the t02A03 attachment",
+   :consumer :t02A03,
+   :phase :probe,
+   :state :open,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t02A03/geometric-meridian-quarter-turn",
+   :acceptance
+   {:probe
+    "Compile and bank apm_t02a03_circleMeridian_quarterTurn from /tmp/t02a03_geometric_tube_cover.lean. Prove that the Circle-domain meridian at Circle.exp (pi/2) is exactly apm_t02a03_meridianAnchor, using apm_t02a03_circleMeridian_exp and the standard quarter-turn trigonometric values. This supplies the based attachment normalization required by t02A03 route step 2; do not yet claim an attachment homotopy, deformation data, or a gluing equivalence.",
+    :declaration "apm_t02a03_circleMeridian_quarterTurn",
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "t02A03 step 2, identify the chosen geometricY anchor with the quarter-turn point of the Circle meridian"},
+   :representation
+   {:source
+    "The Circle-domain frozen meridian evaluated at the quarter-turn Circle.exp (pi/2)",
+    :target "The frozen geometricY meridian anchor (0,0,1/8)",
+    :direction
+    "Exact point equality from the source based-Circle representation to the target explicit Euclidean anchor representation"},
+   :id
+   :routes-2026-10-10-t02a03-geometric-meridian-quarter-turn-topo2-r1,
+   :kind :representation-comparison,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo2-r5
+    :routes-2026-10-10-t02a03-geometric-meridian-exp-compatibility-topo2-r1],
+   :current-residual
+   "Construct the attachment homotopy from the surviving right core to the based Circle meridian, then extend to tube deformations and gluing.",
+   :other-consumers []}
   {:consumer :t02A03,
    :evidence
    {:probe
@@ -58720,64 +58750,59 @@
      :fixture
      {:path "/tmp/t02a03_geometric_tube_cover.lean",
       :sha256
-      "9bc68c8c1d5144bd2ed57807602550932e422488a96d1ca5714d59259b4517c8"},
+      "68cfbc3fccbb85606ce97e52b138dbf917964562a917644206fc8fa134e29a75"},
      :commands
      [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
        :exit 0,
        :output
-       "apm_t02a03_circleMeridian_exp compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "apm_t02a03_circleMeridian_quarterTurn compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
        "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
        :exit 0}
       {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
        :exit 0,
        :output
-       "9bc68c8c1d5144bd2ed57807602550932e422488a96d1ca5714d59259b4517c8  /tmp/t02a03_geometric_tube_cover.lean"}
+       "68cfbc3fccbb85606ce97e52b138dbf917964562a917644206fc8fa134e29a75  /tmp/t02a03_geometric_tube_cover.lean"}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
-     :diagnostic-history
-     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 1,
-       :finding
-       "The first compatibility proof reduced to real parts of complex cosine and sine but simp lacked their ofReal bridge. Adding Complex.ofReal_cos and Complex.ofReal_sin closed the two coordinate goals; the corrected rerun compiled."}],
      :finding
-     "The closure still lacks the tube deformation, but the two meridian representations now agree exactly. Evaluating the Circle-domain meridian on Circle.exp t produces the previously banked real-angle meridian point for every t. This removes a representation mismatch between real-parameter homotopies and the genuine Circle attachment locus.",
+     "The complete tube deformation remains unavailable, but its chosen attachment basepoint is now normalized. The quarter-turn point Circle.exp (pi/2) on the Circle-domain meridian is exactly the previously banked geometricY anchor (0,0,1/8), by the exponential compatibility and the standard sine and cosine values.",
      :residual
-     "Bank the exponential compatibility. Then construct the attachment homotopy from the surviving right core to the Circle meridian, extend it over the tube pieces, and glue to the torus-wedge-circle model.",
+     "Bank the quarter-turn anchor equality. Then construct the attachment homotopy from the surviving right core to this based Circle meridian, extend over the tube pieces, and glue to the torus-wedge-circle model.",
      :prerequisite
      {:bounded-exception
-      "single-consumer compatibility of the two t02A03 meridian representations",
+      "single-consumer meridian basepoint normalization for the t02A03 attachment",
       :consumer :t02A03,
       :phase :probe,
       :state :open,
       :scope [],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t02A03/geometric-meridian-exp-compatibility",
+      "TOPOLOGY-ROUTES.md/t02A03/geometric-meridian-quarter-turn",
       :acceptance
       {:probe
-       "Compile and bank apm_t02a03_circleMeridian_exp from /tmp/t02a03_geometric_tube_cover.lean. Prove for every real t that evaluating the Circle-domain normal meridian at Circle.exp t is exactly the real-angle meridian at t, coordinatewise via Complex.exp_mul_I and the real/complex sine-cosine comparison. This supplies the representation compatibility needed by t02A03 route step 2; do not yet claim an attachment homotopy, deformation data, or a gluing equivalence.",
-       :declaration "apm_t02a03_circleMeridian_exp",
+       "Compile and bank apm_t02a03_circleMeridian_quarterTurn from /tmp/t02a03_geometric_tube_cover.lean. Prove that the Circle-domain meridian at Circle.exp (pi/2) is exactly apm_t02a03_meridianAnchor, using apm_t02a03_circleMeridian_exp and the standard quarter-turn trigonometric values. This supplies the based attachment normalization required by t02A03 route step 2; do not yet claim an attachment homotopy, deformation data, or a gluing equivalence.",
+       :declaration "apm_t02a03_circleMeridian_quarterTurn",
        :placeholder "the sole sorry in apm_t02a03",
        :route-step
-       "t02A03 step 2, identify the real-angle and Circle-domain meridian representations"},
+       "t02A03 step 2, identify the chosen geometricY anchor with the quarter-turn point of the Circle meridian"},
       :representation
       {:source
-       "The Circle-domain frozen normal meridian evaluated at Circle.exp t",
-       :target "The frozen real-angle normal meridian evaluated at t",
+       "The Circle-domain frozen meridian evaluated at the quarter-turn Circle.exp (pi/2)",
+       :target "The frozen geometricY meridian anchor (0,0,1/8)",
        :direction
-       "Exact point equality from the source Circle meridian representation to the target real-parameter meridian representation"},
+       "Exact point equality from the source based-Circle representation to the target explicit Euclidean anchor representation"},
       :id
-      :routes-2026-10-10-t02a03-geometric-meridian-exp-compatibility-topo2-r1,
+      :routes-2026-10-10-t02a03-geometric-meridian-quarter-turn-topo2-r1,
       :kind :representation-comparison,
       :depends-on
       [:routes-2026-10-10-checkpoint-topo2-r5
-       :routes-2026-10-10-t02a03-geometric-circle-meridian-topo2-r1],
+       :routes-2026-10-10-t02a03-geometric-meridian-exp-compatibility-topo2-r1],
       :current-residual
-      "Construct the attachment homotopy between the surviving right core and the Circle meridian, then extend to tube deformations and gluing.",
+      "Construct the attachment homotopy from the surviving right core to the based Circle meridian, then extend to tube deformations and gluing.",
       :other-consumers []}}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/closure",
    :acceptance
@@ -58799,7 +58824,8 @@
     :routes-2026-10-10-t02a03-geometric-meridian-anchor-topo2-r1
     :routes-2026-10-10-t02a03-geometric-normal-meridian-topo2-r1
     :routes-2026-10-10-t02a03-geometric-circle-meridian-topo2-r1
-    :routes-2026-10-10-t02a03-geometric-meridian-exp-compatibility-topo2-r1],
+    :routes-2026-10-10-t02a03-geometric-meridian-exp-compatibility-topo2-r1
+    :routes-2026-10-10-t02a03-geometric-meridian-quarter-turn-topo2-r1],
    :current-residual
    "One placeholder: two explicit homotopy equivalences, with the punctured-disk factor adapter-sized and the geometric tube deformation still missing.",
    :other-consumers []}
