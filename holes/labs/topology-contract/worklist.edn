@@ -88005,8 +88005,53 @@
    "Restrict an arbitrary finite-sheet cover to the chosen path component, bound its sheet count, and identify its based fundamental group.",
    :other-consumers []}
   {:consumer :t99J01,
+   :stop-count 1,
+   :evidence
+   {:residual
+    "Compile a placeholder-free prerequisite that identifies the Nielsen-Schreier basis with finite generator-coset edges outside the geodesic spanning tree and proves its cardinality is (r-1)*n+1; freeze the universal declaration signature, then derive the two specializations.",
+    :outcome :stop,
+    :warnings
+    [{:kind :missing-mathematical-prerequisite,
+      :message
+      "Qualitative Nielsen-Schreier freeness is banked, but the finite Schreier basis and spanning-tree complement cardinality refinement is not."}],
+    :disposition :stop,
+    :axioms
+    ["propext"
+     "Classical.choice"
+     "Quot.sound"
+     "FiniteIndexFreeGroupSchreierRankProbe.finiteIndexSubgroupEquiv"],
+    :author "topo-2",
+    :reason
+    "The frozen fixture does not establish a standard-only implementation interface for the elected refinement. It assumes the universal finite-rank Schreier formula as finiteIndexSubgroupEquiv and derives both consumer specializations immediately. Mathlib supplies qualitative Nielsen-Schreier freeness through SpanningTree.endIsFree and endMulEquivSubgroup, but the searched API exposes no finite basis indexed by non-tree Schreier edges and no theorem counting that complement. Moreover the accepted universal name finiteIndexSubgroupFreeGroupEquiv has no frozen Lean signature. The exact missing prerequisite is a compiled finite Schreier-basis comparison identifying a subgroup basis with generator-coset edges outside a finite spanning tree, together with the cardinality formula. Without that bridge, implementing this row would reproduce the fixture axiom rather than satisfy standard-only acceptance.",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/finite-index-free-group-schreier-rank-probe.lean",
+      :exit 0,
+      :finding "The fixture hash matches the recorded hash."}
+     {:cmd
+      "rg for the three accepted declarations and Nielsen-Schreier counting interfaces",
+      :exit 0,
+      :finding
+      "Only the two fixture specializations occur; the accepted universal declaration is absent. Mathlib exposes qualitative endIsFree and endMulEquivSubgroup but no finite non-tree-edge basis count found by the search."}
+     {:cmd
+      "lake env lean /tmp/finite-index-free-group-schreier-rank-probe.lean",
+      :exit 0,
+      :finding
+      "Both fixture specializations compile but depend on the nonstandard axiom finiteIndexSubgroupEquiv."}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :fixture
+    {:path "/tmp/finite-index-free-group-schreier-rank-probe.lean",
+     :sha256
+     "5751d883226814d2b3eff08804f8c857dbe2a265f31c1c23d55aab24ab9b778a",
+     :sorry-count 0,
+     :axiom-count 1,
+     :proof-placeholder-count 1},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/FiniteIndexFreeGroupSchreierRank.lean"],
    :dag-node
