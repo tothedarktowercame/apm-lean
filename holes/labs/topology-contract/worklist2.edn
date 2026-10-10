@@ -57683,66 +57683,99 @@
    :current-residual
    "Construct the concrete geometricY-to-Y homotopy equivalence, then assemble both equivalences with apm_t02a03_previous_encoding.",
    :other-consumers []}
+  {:bounded-exception
+   "single-consumer geometric tube-cover normalization for t02A03",
+   :consumer :t02A03,
+   :phase :probe,
+   :state :open,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md/t02A03/geometric-tube-cover",
+   :acceptance
+   {:probe
+    "Compile and bank apm_t02a03_genusTwoSpine_nonempty and apm_t02a03_W_eq_leftTube_union_rightTube from /tmp/t02a03_geometric_tube_cover.lean. Define the two closed radius-1/4 core thickenings and prove that the frozen infDist neighborhood apm_t02a03_W is exactly their union. This supplies the set-level cover needed for t02A03 route step 2; do not yet claim a deformation retract or homotopy equivalence.",
+    :declarations
+    ["apm_t02a03_genusTwoSpine_nonempty"
+     "apm_t02a03_W_eq_leftTube_union_rightTube"],
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "t02A03 step 2, normalize the explicit figure-eight neighborhood as a union of two closed core tubes"},
+   :representation
+   {:source
+    "The frozen genus-two neighborhood represented by the inequality infDist p (leftCore range union rightCore range) <= 1/4",
+    :target
+    "The union of the closed radius-1/4 metric thickenings of the left-core and right-core ranges",
+    :direction
+    "Exact set equality from the source infDist-neighborhood representation to the target two-tube union representation"},
+   :id :routes-2026-10-10-t02a03-geometric-tube-cover-topo2-r1,
+   :kind :representation-comparison,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo2-r5
+    :routes-2026-10-10-t02a03-closed-punctured-disk-torus-topo2-r1],
+   :current-residual
+   "Construct and glue the core-complement tube deformations, then identify the resulting spine model with apm_t02a03_Y.",
+   :other-consumers []}
   {:consumer :t02A03,
    :evidence
    {:probe
     {:outcome :revise,
      :seat "topo-8",
      :fixture
-     {:path "/tmp/t02a03_closed_punctured_disk_torus.lean",
+     {:path "/tmp/t02a03_geometric_tube_cover.lean",
       :sha256
-      "7dc858262c4a21646e28083e2ff4c878406d5d8dfd1c341d3d8eff620e36132f"},
+      "ca89fbceb978a1b3261173110bb5b7295ebd4be2b4a21a5e83c7e94c99cdc315"},
      :commands
-     [{:cmd
-       "lake env lean /tmp/t02a03_closed_punctured_disk_torus.lean",
+     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
        :exit 0,
        :output
-       "t02a03_closed_punctured_disk_torus compiled; axioms [propext, Classical.choice, Quot.sound]; one unnecessarySimpa linter warning"}
+       "apm_t02a03_W_eq_leftTube_union_rightTube compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_closed_punctured_disk_torus.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
        :exit 0}
-      {:cmd "sha256sum /tmp/t02a03_closed_punctured_disk_torus.lean",
+      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
        :exit 0,
        :output
-       "7dc858262c4a21646e28083e2ff4c878406d5d8dfd1c341d3d8eff620e36132f  /tmp/t02a03_closed_punctured_disk_torus.lean"}
+       "ca89fbceb978a1b3261173110bb5b7295ebd4be2b4a21a5e83c7e94c99cdc315  /tmp/t02a03_geometric_tube_cover.lean"}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/t02a03_closed_punctured_disk_torus.lean",
-       :exit 1,
-       :finding
-       "Exploratory drafts exposed Circle as Submonoid.unitSphere rather than a metric-sphere subtype, used the wrong HomotopyEquiv inverse-field orientation, and initially left the real-to-complex radial scalar coercion unnormalized. The corrected fixture uses mem_sphere_zero_iff_norm, places the radial homotopy in left_inv, and proves the scalar endpoint through Complex.real_smul."}],
      :finding
-     "The first missing consumer conjunct is adapter-sized: radial normalization and positive radial interpolation stay inside the closed unit disk and give the exact homotopy equivalence from the punctured closed disk times Circle to Circle times Circle. The complete closure fixture is not yet available because no banked theorem constructs a deformation of the explicit infDist radius-1/4 figure-eight tube with the left core removed onto apm_t02a03_Y.",
+     "The closed-punctured-disk factor is available, but the explicit geometric complement still has no deformation data. Its first necessary normalization now compiles: the set defined by infDist to the union spine is exactly the union of the closed radius-1/4 thickenings of the left and right core ranges. This follows from cthickening_union after proving the spine nonempty and converting the finite ENNReal infimum to infDist. The normalization exposes the two solid-tube pieces on which local retractions and their overlap compatibility must be constructed.",
      :residual
-     "Bank the closed-punctured-disk product equivalence. The remaining closure step is the concrete geometricY-to-Y homotopy equivalence for the radius-1/4 figure-eight tube minus its left core; then assemble it with apm_t02a03_previous_encoding.",
+     "Bank the exact tube-cover equality. Then construct compatible deformation data on the left closed tube minus its core and the right closed tube, prove agreement on their intersection near the wedge point, glue the deformation to a spine model, and identify that model with apm_t02a03_Y before final assembly.",
      :prerequisite
      {:bounded-exception
-      "single-consumer closed punctured disk product equivalence for t02A03",
+      "single-consumer geometric tube-cover normalization for t02A03",
       :consumer :t02A03,
       :phase :probe,
       :state :open,
       :scope [],
-      :dag-node
-      "TOPOLOGY-ROUTES.md/t02A03/closed-punctured-disk-torus",
+      :dag-node "TOPOLOGY-ROUTES.md/t02A03/geometric-tube-cover",
       :acceptance
       {:probe
-       "Compile and bank t02a03_closed_punctured_disk_torus from /tmp/t02a03_closed_punctured_disk_torus.lean. Construct the exact radial homotopy equivalence from apm_t02a03_X, the punctured closed unit disk times Circle, to apm_t02a03_Torus, preserving the closed-ball bound throughout the homotopy. This supplies t02A03 route step 1; do not yet claim the geometric tube deformation or final closure.",
-       :declaration "t02a03_closed_punctured_disk_torus",
+       "Compile and bank apm_t02a03_genusTwoSpine_nonempty and apm_t02a03_W_eq_leftTube_union_rightTube from /tmp/t02a03_geometric_tube_cover.lean. Define the two closed radius-1/4 core thickenings and prove that the frozen infDist neighborhood apm_t02a03_W is exactly their union. This supplies the set-level cover needed for t02A03 route step 2; do not yet claim a deformation retract or homotopy equivalence.",
+       :declarations
+       ["apm_t02a03_genusTwoSpine_nonempty"
+        "apm_t02a03_W_eq_leftTube_union_rightTube"],
        :placeholder "the sole sorry in apm_t02a03",
        :route-step
-       "t02A03 step 1, closed-punctured-disk times Circle homotopy equivalence"},
-      :id
-      :routes-2026-10-10-t02a03-closed-punctured-disk-torus-topo2-r1,
-      :kind :reusable-theorem,
-      :depends-on [:routes-2026-10-10-checkpoint-topo2-r5],
+       "t02A03 step 2, normalize the explicit figure-eight neighborhood as a union of two closed core tubes"},
+      :representation
+      {:source
+       "The frozen genus-two neighborhood represented by the inequality infDist p (leftCore range union rightCore range) <= 1/4",
+       :target
+       "The union of the closed radius-1/4 metric thickenings of the left-core and right-core ranges",
+       :direction
+       "Exact set equality from the source infDist-neighborhood representation to the target two-tube union representation"},
+      :id :routes-2026-10-10-t02a03-geometric-tube-cover-topo2-r1,
+      :kind :representation-comparison,
+      :depends-on
+      [:routes-2026-10-10-checkpoint-topo2-r5
+       :routes-2026-10-10-t02a03-closed-punctured-disk-torus-topo2-r1],
       :current-residual
-      "Construct the concrete geometricY-to-Y homotopy equivalence, then assemble both equivalences with apm_t02a03_previous_encoding.",
+      "Construct and glue the core-complement tube deformations, then identify the resulting spine model with apm_t02a03_Y.",
       :other-consumers []}}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/closure",
    :acceptance
@@ -57754,7 +57787,8 @@
    :kind :final-adapter,
    :depends-on
    [:routes-2026-10-10-checkpoint-topo2-r5
-    :routes-2026-10-10-t02a03-closed-punctured-disk-torus-topo2-r1],
+    :routes-2026-10-10-t02a03-closed-punctured-disk-torus-topo2-r1
+    :routes-2026-10-10-t02a03-geometric-tube-cover-topo2-r1],
    :current-residual
    "One placeholder: two explicit homotopy equivalences, with the punctured-disk factor adapter-sized and the geometric tube deformation still missing.",
    :other-consumers []}
