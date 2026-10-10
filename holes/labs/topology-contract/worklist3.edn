@@ -26,8 +26,757 @@
      :review-outcomes]},
    :stop-condition
    "End only when every topo3 problem is closed or stopped with a compiled refutation. A missing theorem is backlog, never a stop.",
+   :evidence
+   {:outcome :replan,
+    :seat "topo-12",
+    :commands
+    [{:cmd
+      "bb holes/labs/topology-contract/build_step.bb priorities holes/labs/topology-contract/worklist3.edn",
+      :exit 0,
+      :output
+      "AREAS: surface-classification 7; mayer-vietoris-open-cover 5; no prior topo3 lemma nodes."}
+     {:cmd "comment-stripped placeholder census for 19 topo3 problems",
+      :exit 0,
+      :output
+      "t00A02=2 t00A03=2 t00J02=1 t01A08=1 t01J01=3 t02A04=3 t03J02=2 t03J03=4 t91J05=3 t92J05=3 t94J04=2 t95J06=2 t96A01=1 t96A02=1 t96J06=2 t97A05=1 t97A06=1 t97J02=3 t98A02=1"}
+     {:cmd
+      "bb holes/labs/topology-contract/build_step.bb apply-result /tmp/topo3-ledger-test2.edn routes-2026-10-10-topo3-seed-checkpoint-1 /tmp/topo3_receipt.line",
+      :exit 0,
+      :output
+      "applied replan to routes-2026-10-10-topo3-seed-checkpoint-1"}
+     {:cmd "clojure.edn/read-string /tmp/topo3_receipt.line",
+      :exit 0,
+      :output ":parsed 50"}],
+    :finding
+    {:placeholder-delta
+     {:t00J02 {:before 1, :after 1, :delta 0},
+      :t03J02 {:before 2, :after 2, :delta 0},
+      :t97A06 {:before 1, :after 1, :delta 0},
+      :t95J06 {:before 2, :after 2, :delta 0},
+      :t96A02 {:before 1, :after 1, :delta 0},
+      :t97A05 {:before 1, :after 1, :delta 0},
+      :t97J02 {:before 3, :after 3, :delta 0},
+      :t96A01 {:before 1, :after 1, :delta 0},
+      :t96J06 {:before 2, :after 2, :delta 0},
+      :t00A03 {:before 2, :after 2, :delta 0},
+      :t94J04 {:before 2, :after 2, :delta 0},
+      :t01A08 {:before 1, :after 1, :delta 0},
+      :t98A02 {:before 1, :after 1, :delta 0},
+      :t03J03 {:before 4, :after 4, :delta 0},
+      :t91J05 {:before 3, :after 3, :delta 0},
+      :t00A02 {:before 2, :after 2, :delta 0},
+      :t02A04 {:before 3, :after 3, :delta 0},
+      :t01J01 {:before 3, :after 3, :delta 0},
+      :t92J05 {:before 3, :after 3, :delta 0}},
+     :typed-residual-change
+     "Seeded all topo3 routes as ordered lemma chains and imported applicable non-BANKED DAG programmes.",
+     :infrastructure-packets {:reviewed 0, :passed 0, :failed 0},
+     :review-outcomes [],
+     :priority
+     "Dry-run ranking puts compactSmoothSurfaceFiniteTriangulation first: ready, surface-classification, seven consumers. Production open-cover Mayer-Vietoris is already banked, so the remaining balanced rows are the three-consumer embedded-circle collar and two-consumer fundamental-class localization.",
+     :routes
+     {:t00J02
+      {:placeholders 1,
+       :chain
+       [:surface-fundamental-class
+        :surface-local-degree
+        :surface-preimage-degree-zero]},
+      :t03J02
+      {:placeholders 2,
+       :chain
+       [:embedded-circle-collar
+        :closed-gluing-open-cover
+        :glued-tori-vankampen-mv]},
+      :t97A06
+      {:placeholders 1,
+       :chain
+       [:manifold-form-calculus
+        :form-extension
+        :derham-homotopy
+        :compact-manifold-stokes]},
+      :t95J06
+      {:placeholders 2,
+       :chain
+       [:free-circle-slice :circle-bundle-surface-classification]},
+      :t96A02
+      {:placeholders 1,
+       :chain
+       [:rp2-rational-homology
+        :wedge-rational-homology
+        :lefschetz-compact-polyhedron]},
+      :t97A05
+      {:placeholders 1,
+       :chain
+       [:tubular-neighborhood
+        :separating-hypersurface-bounds
+        :transverse-cobordism
+        :intersection-count-homotopy]},
+      :t97J02
+      {:placeholders 3,
+       :chain
+       [:polygon-manifold-charts
+        :polygon-permutation-cover
+        :surface-triangulation
+        :finite-cover-euler
+        :surface-cover-recognition]},
+      :t96A01
+      {:placeholders 1,
+       :chain
+       [:surface-group-presentation
+        :subgroup-cover-correspondence
+        :surface-triangulation
+        :finite-cover-euler
+        :surface-cover-recognition]},
+      :t96J06
+      {:placeholders 2,
+       :chain
+       [:rp2-mod2-homology
+        :singular-cross-product
+        :boundary-fundamental-class-mod2
+        :boundary-pairing-contradiction]},
+      :t00A03
+      {:placeholders 2,
+       :chain
+       [:embedded-circle-collar
+        :surface-triangulation
+        :surface-boundary-classification
+        :pants-count]},
+      :t94J04
+      {:placeholders 2,
+       :chain
+       [:surface-triangulation
+        :surface-genus-recognition
+        :subgroup-cover-correspondence
+        :finite-cover-euler]},
+      :t01A08
+      {:placeholders 1,
+       :chain [:sard-linear-target-transport :sard-corners]},
+      :t98A02
+      {:placeholders 1,
+       :chain
+       [:manifold-local-homology
+        :surface-fundamental-class
+        :wild-ball-complement
+        :connected-sum-mv]},
+      :t03J03
+      {:placeholders 4,
+       :chain
+       [:disk-cover-trivialization
+        :polygon-cover-descent
+        :double-cover-surface-identification
+        :annulus-orientation-lift]},
+      :t91J05
+      {:placeholders 3,
+       :chain
+       [:polygon-quotient-cover
+        :surface-triangulation
+        :finite-cover-euler
+        :surface-cover-recognition]},
+      :t00A02
+      {:placeholders 2,
+       :chain
+       [:antipodal-cover
+        :wedge-cover
+        :surface-triangulation
+        :surface-cover-recognition]},
+      :t02A04
+      {:placeholders 3,
+       :chain [:cell-attachment-mv-q :lefschetz-compact-polyhedron]},
+      :t01J01
+      {:placeholders 3,
+       :chain
+       [:embedded-circle-collar
+        :surface-mod2-separation
+        :annulus-recognition]},
+      :t92J05
+      {:placeholders 3,
+       :chain
+       [:antipodal-rp2-cover
+        :simply-connected-cover-fiber
+        :surface-triangulation
+        :surface-genus-recognition
+        :surface-group-presentation]}}},
+    :lemmas
+    [{:id :lemma-antipodal-cover,
+      :name
+      "ConstructionTargets.FiniteFreeActionCover.antipodalCoverIsCovering",
+      :type
+      "Antipodal quotient on the frozen sphere is an IsCoveringMap.",
+      :status :not-started,
+      :consumers [:t00A02],
+      :depends-on [],
+      :area "quotient-by-finite-free-action-covering"}
+     {:id :lemma-wedge-cover,
+      :name "ConstructionTargets.WedgeCoverGluing.gluedCover",
+      :type
+      "Fiberwise gluing gives a covering of a point wedge with preserved fiber cardinality.",
+      :status :not-started,
+      :consumers [:t00A02],
+      :depends-on
+      ["ConstructionTargets.FiniteFreeActionCover.antipodalCoverIsCovering"],
+      :area "wedge-cover-gluing"}
+     {:id
+      :lemma-constructiontargets-surfaceclassification-compactsmoothsurfacefinitetriangulatio,
+      :name
+      "ConstructionTargets.SurfaceClassification.compactSmoothSurfaceFiniteTriangulation",
+      :type
+      "Compact connected smooth two-manifolds used by these consumers admit finite triangulations, inherited by finite covers.",
+      :status :not-started,
+      :consumers
+      [:t00A02 :t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02],
+      :depends-on [],
+      :area "surface-classification"}
+     {:id :lemma-surface-cover-recognition,
+      :name
+      "ConstructionTargets.SurfaceClassification.finiteCoverSurfaceRecognition",
+      :type
+      "Finite covers are homeomorphic to the standard polygon surface determined by orientability and Euler characteristic.",
+      :status :not-started,
+      :consumers [:t00A02 :t91J05 :t96A01 :t97J02],
+      :depends-on
+      ["ConstructionTargets.SurfaceEulerCover.eulerCharacteristic_mul"],
+      :area "surface-classification"}
+     {:id
+      :lemma-constructiontargets-surfaceschoenflies-embeddedcirclecollar,
+      :name
+      "ConstructionTargets.SurfaceSchoenflies.embeddedCircleCollar",
+      :type
+      "A topologically embedded circle in the consumers' Hausdorff two-manifolds has the required annular collar.",
+      :status :not-started,
+      :consumers [:t00A03 :t01J01 :t03J02],
+      :depends-on [],
+      :area "embedded-circle-collar-surface"}
+     {:id :lemma-surface-boundary-classification,
+      :name
+      "ConstructionTargets.SurfaceClassification.compactSurfaceWithBoundaryNormalForm",
+      :type
+      "Classify the compact orientable surfaces with boundary used by t00A03.",
+      :status :not-started,
+      :consumers [:t00A03],
+      :depends-on
+      ["ConstructionTargets.SurfaceClassification.compactSmoothSurfaceFiniteTriangulation"],
+      :area "surface-classification"}
+     {:id :lemma-pants-count,
+      :name
+      "ConstructionTargets.SurfaceClassification.maximalCurveFamilyPantsCount",
+      :type
+      "The frozen maximal curve family cuts into pants and has cardinality 3g-3.",
+      :status :not-started,
+      :consumers [:t00A03],
+      :depends-on
+      ["ConstructionTargets.SurfaceClassification.compactSurfaceWithBoundaryNormalForm"],
+      :area "euler-characteristic-cut-additivity"}
+     {:id
+      :lemma-constructiontargets-manifoldfundamentalclass-closedorientedfundamentalclass,
+      :name
+      "ConstructionTargets.ManifoldFundamentalClass.closedOrientedFundamentalClass",
+      :type
+      "A closed oriented manifold's top class localizes to generators of local top homology.",
+      :status :not-started,
+      :consumers [:t00J02 :t98A02],
+      :depends-on [],
+      :area "manifold-fundamental-class"}
+     {:id :lemma-surface-local-degree,
+      :name
+      "ConstructionTargets.ManifoldLocalDegree.regularValueSignedCount",
+      :type
+      "The induced top-homology map is multiplication by the signed regular-value count.",
+      :status :not-started,
+      :consumers [:t00J02],
+      :depends-on
+      ["ConstructionTargets.ManifoldFundamentalClass.closedOrientedFundamentalClass"],
+      :area "local-degree-signed-count"}
+     {:id :lemma-surface-preimage-degree-zero,
+      :name
+      "ConstructionTargets.SurfacePreimageDegree.preimageComponentsForceDegreeZero",
+      :type
+      "The frozen preimage-component winding hypotheses force degree zero.",
+      :status :not-started,
+      :consumers [:t00J02],
+      :depends-on
+      ["ConstructionTargets.ManifoldLocalDegree.regularValueSignedCount"],
+      :area "circle-degree-signed-count"}
+     {:id :lemma-sard-linear-target-transport,
+      :name
+      "ConstructionTargets.SardGeneralModel.linearTargetTransport",
+      :type
+      "Transport criticality and nullity to Euclidean target coordinates.",
+      :status :not-started,
+      :consumers [:t01A08],
+      :depends-on [],
+      :area "manifold-sard-general-model"}
+     {:id :lemma-sard-corners,
+      :name "ConstructionTargets.SardConvexDomain.criticalImageNull",
+      :type
+      "Sard nullity on the convex model-with-corners domains used by t01A08.",
+      :status :not-started,
+      :consumers [:t01A08],
+      :depends-on
+      ["ConstructionTargets.SardGeneralModel.linearTargetTransport"],
+      :area "sard-convex-domain"}
+     {:id :lemma-surface-mod2-separation,
+      :name
+      "ConstructionTargets.SurfaceIntersection.nullHomologySeparates",
+      :type
+      "A null-homologous embedded circle in the frozen orientable surface separates.",
+      :status :not-started,
+      :consumers [:t01J01],
+      :depends-on
+      ["ConstructionTargets.SurfaceSchoenflies.embeddedCircleCollar"],
+      :area "surface-mod2-intersection-pairing"}
+     {:id :lemma-annulus-recognition,
+      :name
+      "ConstructionTargets.SurfaceClassification.separatingCurvesCoboundAnnulus",
+      :type
+      "The frozen disjoint essential separating circles cobound the required annulus.",
+      :status :not-started,
+      :consumers [:t01J01],
+      :depends-on
+      ["ConstructionTargets.SurfaceIntersection.nullHomologySeparates"],
+      :area "surface-cut-and-classify"}
+     {:id :lemma-cell-attachment-mv-q,
+      :name
+      "ConstructionTargets.CoefficientMayerVietoris.cellAttachmentHomologyQ",
+      :type "Compute the frozen cell attachment's rational homology.",
+      :status :not-started,
+      :consumers [:t02A04],
+      :depends-on [],
+      :area "coefficient-q-mayer-vietoris"}
+     {:id :lemma-lefschetz-compact-polyhedron,
+      :name
+      "ConstructionTargets.LefschetzCompactPolyhedron.fixedPointOfNonzeroLefschetz",
+      :type
+      "A self-map of the consumers' compact polyhedra with nonzero rational Lefschetz number has a fixed point.",
+      :status :not-started,
+      :consumers [:t02A04 :t96A02],
+      :depends-on [],
+      :area "lefschetz-fixed-point-theorem"}
+     {:id :lemma-closed-gluing-open-cover,
+      :name
+      "ConstructionTargets.ClosedGluingOpenCover.collaredPushoutCover",
+      :type
+      "A collared closed gluing has the open-cover homotopy types needed by t03J02.",
+      :status :not-started,
+      :consumers [:t03J02],
+      :depends-on
+      ["ConstructionTargets.SurfaceSchoenflies.embeddedCircleCollar"],
+      :area "mayer-vietoris-open-cover"}
+     {:id :lemma-glued-tori-vankampen-mv,
+      :name "ConstructionTargets.GluedToriInvariants.compute",
+      :type
+      "Compute the frozen glued-tori fundamental group and homology.",
+      :status :not-started,
+      :consumers [:t03J02],
+      :depends-on
+      ["ConstructionTargets.ClosedGluingOpenCover.collaredPushoutCover"],
+      :area "van-kampen-open-cover"}
+     {:id :lemma-disk-cover-trivialization,
+      :name "ConstructionTargets.DiskCoverTrivialization.trivialize",
+      :type
+      "Every frozen two-sheeted disk cover is equivalent to the trivial cover.",
+      :status :not-started,
+      :consumers [:t03J03],
+      :depends-on [],
+      :area "covering-trivial-over-disk"}
+     {:id :lemma-polygon-cover-descent,
+      :name "ConstructionTargets.PolygonCoverDescent.classifyLabels",
+      :type
+      "Pulled-back double covers descend from and are classified by edge-swap labels.",
+      :status :not-started,
+      :consumers [:t03J03],
+      :depends-on
+      ["ConstructionTargets.DiskCoverTrivialization.trivialize"],
+      :area "polygon-cover-descent"}
+     {:id :lemma-double-cover-surface-identification,
+      :name
+      "ConstructionTargets.PolygonCoverNormalForm.doubleCoverModels",
+      :type
+      "Identify the seven labeled covers with the required standard surface models.",
+      :status :not-started,
+      :consumers [:t03J03],
+      :depends-on
+      ["ConstructionTargets.PolygonCoverDescent.classifyLabels"],
+      :area "polygon-cut-and-paste-homeomorph"}
+     {:id :lemma-annulus-orientation-lift,
+      :name
+      "ConstructionTargets.SurfaceOrientation.twoSidedAnnulusLifts",
+      :type
+      "The embedded annulus core has trivial orientation monodromy and lifts.",
+      :status :not-started,
+      :consumers [:t03J03],
+      :depends-on
+      ["ConstructionTargets.PolygonCoverNormalForm.doubleCoverModels"],
+      :area "surface-local-homology-orientation"}
+     {:id :lemma-polygon-quotient-cover,
+      :name
+      "ConstructionTargets.PolygonQuotientCovering.isCoveringMap",
+      :type
+      "Consistent lifted polygon edge pairings induce finite-sheeted coverings.",
+      :status :not-started,
+      :consumers [:t91J05],
+      :depends-on [],
+      :area "polygon-quotient-covering"}
+     {:id :lemma-finite-cover-euler,
+      :name
+      "ConstructionTargets.SurfaceEulerCover.eulerCharacteristic_mul",
+      :type
+      "Euler characteristic multiplies under the consumers' finite-sheeted surface covers.",
+      :status :not-started,
+      :consumers [:t91J05 :t94J04 :t96A01 :t97J02],
+      :depends-on
+      ["ConstructionTargets.SurfaceClassification.compactSmoothSurfaceFiniteTriangulation"],
+      :area "euler-characteristic-finite-cover"}
+     {:id :lemma-antipodal-rp2-cover,
+      :name "ConstructionTargets.ProjectivePlaneCover.sphereCover",
+      :type
+      "The normalized sphere projection to the frozen RP2 is a two-sheeted covering.",
+      :status :not-started,
+      :consumers [:t92J05],
+      :depends-on [],
+      :area "antipodal-sphere-cover"}
+     {:id :lemma-simply-connected-cover-fiber,
+      :name
+      "ConstructionTargets.SimplyConnectedCoverFiber.fundamentalGroupEquivFiber",
+      :type
+      "Monodromy identifies the fundamental group with the fiber of a simply connected cover.",
+      :status :not-started,
+      :consumers [:t92J05],
+      :depends-on
+      ["ConstructionTargets.ProjectivePlaneCover.sphereCover"],
+      :area "simply-connected-cover-fiber-bijection"}
+     {:id :lemma-surface-genus-recognition,
+      :name
+      "ConstructionTargets.SurfaceClassification.recognizeFromIntegralHomology",
+      :type
+      "Recognize the consumers' compact smooth surfaces from integral homology.",
+      :status :not-started,
+      :consumers [:t92J05 :t94J04],
+      :depends-on
+      ["ConstructionTargets.SurfaceClassification.compactSmoothSurfaceFiniteTriangulation"],
+      :area "surface-classification"}
+     {:id :lemma-surface-group-presentation,
+      :name "ConstructionTargets.SurfaceFundamentalGroup.presentation",
+      :type
+      "Compute the standard orientable polygon surface fundamental-group presentation.",
+      :status :not-started,
+      :consumers [:t92J05 :t96A01],
+      :depends-on [],
+      :area "van-kampen-amalgamated"}
+     {:id :lemma-subgroup-cover-correspondence,
+      :name
+      "ConstructionTargets.CoveringSubgroupCorrespondence.connectedCover",
+      :type
+      "Realize a finite-index surface subgroup as the fundamental group of its connected finite cover.",
+      :status :not-started,
+      :consumers [:t94J04 :t96A01],
+      :depends-on
+      ["ConstructionTargets.SurfaceFundamentalGroup.presentation"],
+      :area "covering-subgroup-correspondence"}
+     {:id :lemma-free-circle-slice,
+      :name "ConstructionTargets.FreeCircleSurfaceAction.localSlice",
+      :type
+      "The frozen free circle action admits local cross-sections.",
+      :status :not-started,
+      :consumers [:t95J06],
+      :depends-on [],
+      :area "free-circle-action-slice"}
+     {:id :lemma-circle-bundle-surface-classification,
+      :name
+      "ConstructionTargets.FreeCircleSurfaceAction.totalSpaceTorusOrKlein",
+      :type
+      "The resulting surface bundle is torus or Klein bottle, with H2 selecting torus.",
+      :status :not-started,
+      :consumers [:t95J06],
+      :depends-on
+      ["ConstructionTargets.FreeCircleSurfaceAction.localSlice"],
+      :area "surface-homology-invariants"}
+     {:id :lemma-rp2-rational-homology,
+      :name
+      "ConstructionTargets.ProjectivePlaneRationalHomology.acyclic",
+      :type
+      "The frozen RP2 polygon model has trivial reduced rational homology.",
+      :status :not-started,
+      :consumers [:t96A02],
+      :depends-on [],
+      :area "rp-rational-homology"}
+     {:id :lemma-wedge-rational-homology,
+      :name "ConstructionTargets.PointWedgeRationalHomology.acyclic",
+      :type
+      "The frozen wedge of rationally acyclic projective planes is rationally acyclic.",
+      :status :not-started,
+      :consumers [:t96A02],
+      :depends-on
+      ["ConstructionTargets.ProjectivePlaneRationalHomology.acyclic"],
+      :area "mayer-vietoris-open-cover"}
+     {:id :lemma-rp2-mod2-homology,
+      :name
+      "ConstructionTargets.ProjectivePlaneMod2Homology.degreeOneGenerator",
+      :type "Construct the mod-two class detecting the frozen RP1.",
+      :status :not-started,
+      :consumers [:t96J06],
+      :depends-on [],
+      :area "projective-plane-homology-mod2"}
+     {:id :lemma-singular-cross-product,
+      :name "ConstructionTargets.SingularCrossProduct.eilenbergZilber",
+      :type
+      "Supply the singular cross-product comparison detecting RP1×RP1.",
+      :status :not-started,
+      :consumers [:t96J06],
+      :depends-on
+      ["ConstructionTargets.ProjectivePlaneMod2Homology.degreeOneGenerator"],
+      :area "kunneth-cross-product"}
+     {:id :lemma-boundary-fundamental-class-mod2,
+      :name
+      "ConstructionTargets.ManifoldBoundaryFundamentalClass.mod2BoundaryClass",
+      :type
+      "The intrinsic boundary maps to zero in ambient mod-two homology.",
+      :status :not-started,
+      :consumers [:t96J06],
+      :depends-on
+      ["ConstructionTargets.SingularCrossProduct.eilenbergZilber"],
+      :area "manifold-fundamental-class-mod2-with-boundary"}
+     {:id :lemma-boundary-pairing-contradiction,
+      :name
+      "ConstructionTargets.ProjectivePlaneProductPairing.boundaryObstruction",
+      :type
+      "Product pairing proves RP1×RP1 cannot be the frozen intrinsic boundary.",
+      :status :not-started,
+      :consumers [:t96J06],
+      :depends-on
+      ["ConstructionTargets.ManifoldBoundaryFundamentalClass.mod2BoundaryClass"],
+      :area "intersection-pairing"}
+     {:id :lemma-tubular-neighborhood,
+      :name
+      "ConstructionTargets.OrientedHypersurfaceCobordism.tubularNeighborhood",
+      :type
+      "The frozen compact oriented hypersurface has a two-sided tubular neighborhood.",
+      :status :not-started,
+      :consumers [:t97A05],
+      :depends-on [],
+      :area "tubular-neighbourhood"}
+     {:id :lemma-separating-hypersurface-bounds,
+      :name
+      "ConstructionTargets.OrientedHypersurfaceCobordism.componentClosureBoundary",
+      :type
+      "A separated component closure is a compact oriented manifold bounded by the hypersurface.",
+      :status :not-started,
+      :consumers [:t97A05],
+      :depends-on
+      ["ConstructionTargets.OrientedHypersurfaceCobordism.tubularNeighborhood"],
+      :area "hypersurface-separation-bounds"}
+     {:id :lemma-transverse-cobordism,
+      :name
+      "ConstructionTargets.OrientedHypersurfaceCobordism.transversePreimageCobordism",
+      :type
+      "The transverse preimage supplies the required compact oriented one-manifold cobordism.",
+      :status :not-started,
+      :consumers [:t97A05],
+      :depends-on
+      ["ConstructionTargets.OrientedHypersurfaceCobordism.componentClosureBoundary"],
+      :area "transversality-perturbation"}
+     {:id :lemma-intersection-count-homotopy,
+      :name
+      "ConstructionTargets.OrientedHypersurfaceCobordism.signedBoundaryCountZero",
+      :type
+      "Boundary orientations make the frozen signed count vanish.",
+      :status :not-started,
+      :consumers [:t97A05],
+      :depends-on
+      ["ConstructionTargets.OrientedHypersurfaceCobordism.transversePreimageCobordism"],
+      :area "intersection-homotopy-invariance"}
+     {:id :lemma-manifold-form-calculus,
+      :name
+      "ConstructionTargets.ManifoldFormCalculus.smoothPullbackExteriorDerivative",
+      :type
+      "Smooth pullback commutes with exterior differentiation for the frozen form calculus.",
+      :status :not-started,
+      :consumers [:t97A06],
+      :depends-on [],
+      :area "manifold-form-calculus"}
+     {:id :lemma-form-extension,
+      :name
+      "ConstructionTargets.ManifoldFormExtension.extendAlongCompactImmersion",
+      :type
+      "Extend the frozen volume form smoothly to the ambient manifold.",
+      :status :not-started,
+      :consumers [:t97A06],
+      :depends-on
+      ["ConstructionTargets.ManifoldFormCalculus.smoothPullbackExteriorDerivative"],
+      :area "form-extension-partition-of-unity"}
+     {:id :lemma-derham-homotopy,
+      :name
+      "ConstructionTargets.DeRhamHomotopy.pullbackDifferenceExact",
+      :type
+      "Pullbacks of a closed form along smoothly homotopic maps differ by an exact form.",
+      :status :not-started,
+      :consumers [:t97A06],
+      :depends-on
+      ["ConstructionTargets.ManifoldFormExtension.extendAlongCompactImmersion"],
+      :area "de-rham-homotopy-formula"}
+     {:id :lemma-compact-manifold-stokes,
+      :name
+      "ConstructionTargets.ManifoldStokes.integral_exteriorDerivative_eq_zero",
+      :type
+      "Stokes and positivity give the frozen closed-form obstruction.",
+      :status :not-started,
+      :consumers [:t97A06],
+      :depends-on
+      ["ConstructionTargets.DeRhamHomotopy.pullbackDifferenceExact"],
+      :area "stokes-compact-manifold"}
+     {:id :lemma-polygon-manifold-charts,
+      :name
+      "ConstructionTargets.PolygonSurfaceCharts.surfaceIsManifold",
+      :type
+      "The frozen polygon quotients have explicit compact Hausdorff surface charts.",
+      :status :not-started,
+      :consumers [:t97J02],
+      :depends-on [],
+      :area "polygon-quotient-manifold-charts"}
+     {:id :lemma-polygon-permutation-cover,
+      :name
+      "ConstructionTargets.PolygonPermutationCover.isCoveringMap",
+      :type
+      "Relator-compatible edge permutations build the exact finite-sheeted polygon covers.",
+      :status :not-started,
+      :consumers [:t97J02],
+      :depends-on
+      ["ConstructionTargets.PolygonSurfaceCharts.surfaceIsManifold"],
+      :area "polygon-permutation-cover"}
+     {:id :lemma-manifold-local-homology,
+      :name
+      "ConstructionTargets.ManifoldLocalHomology.dimensionVanishing",
+      :type
+      "Closed four-manifold homology vanishes above dimension four and punctured top homology vanishes.",
+      :status :not-started,
+      :consumers [:t98A02],
+      :depends-on [],
+      :area "manifold-homology-local-to-global"}
+     {:id :lemma-wild-ball-complement,
+      :name
+      "ConstructionTargets.WildBallComplement.homologyComparison",
+      :type
+      "The frozen wild-ball complements have the required ambient homology comparison.",
+      :status :not-started,
+      :consumers [:t98A02],
+      :depends-on
+      ["ConstructionTargets.ManifoldFundamentalClass.closedOrientedFundamentalClass"],
+      :area "wild-embedding-anr"}
+     {:id :lemma-connected-sum-mv,
+      :name "ConstructionTargets.ConnectedSumMayerVietoris.homology",
+      :type
+      "The frozen quotient gluing has the claimed connected-sum homology.",
+      :status :not-started,
+      :consumers [:t98A02],
+      :depends-on
+      ["ConstructionTargets.WildBallComplement.homologyComparison"],
+      :area "mayer-vietoris-open-cover"}],
+    :replacement-items
+    [{:consumer :t00A02,
+      :implements-lemma
+      :lemma-constructiontargets-surfaceclassification-compactsmoothsurfacefinitetriangulatio,
+      :phase :probe,
+      :state :open,
+      :scope ["ConstructionTargets/SurfaceClassification.lean"],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/topo3/surface-classification/triangulation-first-milestone",
+      :acceptance
+      {:probe
+       "Compile the finite-triangulation package for compact connected smooth two-manifolds and inherited triangulations on finite covers; do not claim classification.",
+       :declaration
+       "ConstructionTargets.SurfaceClassification.compactSmoothSurfaceFiniteTriangulation",
+       :placeholders
+       ["t00A02 bridge_global_cover_classification"
+        "t00A03 bridges 1/2"
+        "t91J05 bridge_1"
+        "t92J05 genusTwo bridge"
+        "t94J04 equal-index bridge"
+        "t96A01 sole sorry"
+        "t97J02 classify bridge"],
+       :route-step "shared first surface-classification step"},
+      :id :routes-2026-10-10-surface-triangulation-topo3-r1,
+      :kind :reusable-theorem,
+      :area "surface-classification",
+      :depends-on [:routes-2026-10-10-topo3-seed-checkpoint-1],
+      :current-residual
+      "Normal-form reduction, orientability and Euler-characteristic recognition remain.",
+      :other-consumers
+      [:t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02]}
+     {:consumer :t00A03,
+      :implements-lemma
+      :lemma-constructiontargets-surfaceschoenflies-embeddedcirclecollar,
+      :phase :probe,
+      :state :open,
+      :scope ["ConstructionTargets/SurfaceSchoenflies.lean"],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/topo3/schoenflies-2d/embedded-circle-collar",
+      :acceptance
+      {:probe
+       "Compile the annular collar theorem for a topologically embedded Circle in the consumers' Hausdorff two-manifolds.",
+       :declaration
+       "ConstructionTargets.SurfaceSchoenflies.embeddedCircleCollar",
+       :placeholders
+       ["t00A03 bridge_1" "t01J01 bridges" "t03J02 bridge_1"],
+       :route-step "topological circle tameness and collar"},
+      :id :routes-2026-10-10-surface-schoenflies-collar-topo3-r1,
+      :kind :reusable-theorem,
+      :area "schoenflies-2d",
+      :depends-on [:routes-2026-10-10-topo3-seed-checkpoint-1],
+      :current-residual
+      "Surface cutting, intersection separation, van Kampen and classification remain.",
+      :other-consumers [:t01J01 :t03J02]}
+     {:consumer :t00J02,
+      :implements-lemma
+      :lemma-constructiontargets-manifoldfundamentalclass-closedorientedfundamentalclass,
+      :phase :probe,
+      :state :open,
+      :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+      :dag-node
+      "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
+      :acceptance
+      {:probe
+       "Compile localization of a closed oriented manifold's fundamental class to local top-homology generators.",
+       :declaration
+       "ConstructionTargets.ManifoldFundamentalClass.closedOrientedFundamentalClass",
+       :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
+       :route-step
+       "reviewed fundamental-classes/localization DAG node"},
+      :id :routes-2026-10-10-manifold-fundamental-class-topo3-r1,
+      :kind :reusable-theorem,
+      :area "manifold-fundamental-class",
+      :depends-on [:routes-2026-10-10-topo3-seed-checkpoint-1],
+      :current-residual
+      "Local-degree counts and wild-ball complement homology remain.",
+      :other-consumers [:t98A02]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 3,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:strategy
+       "Review the three rows, bank proved lemmas, rerun priorities/areas and refill with at most one closure adapter before balanced area work."},
+      :id :routes-2026-10-10-topo3-seed-checkpoint-2,
+      :kind :strategy-checkpoint,
+      :area "portfolio",
+      :depends-on
+      [:routes-2026-10-10-surface-triangulation-topo3-r1
+       :routes-2026-10-10-surface-schoenflies-collar-topo3-r1
+       :routes-2026-10-10-manifold-fundamental-class-topo3-r1],
+      :current-residual
+      "No topo3 route is complete; refill from the seeded DAG after review.",
+      :other-consumers []}],
+    :author "topo-12",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -38,6 +787,1082 @@
    :depends-on [],
    :current-residual
    "Joe 2026-10-10: third HEAVY loop over the 19 registered open problems no loop was allowed to work on.",
+   :other-consumers []}
+  {:consumer :t00A02,
+   :implements-lemma
+   :lemma-constructiontargets-surfaceclassification-compactsmoothsurfacefinitetriangulatio,
+   :phase :probe,
+   :state :blocked,
+   :scope ["ConstructionTargets/SurfaceClassification.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/topo3/surface-classification/triangulation-first-milestone",
+   :acceptance
+   {:probe
+    "Compile the finite-triangulation package for compact connected smooth two-manifolds and inherited triangulations on finite covers; do not claim classification.",
+    :declaration
+    "ConstructionTargets.SurfaceClassification.compactSmoothSurfaceFiniteTriangulation",
+    :placeholders
+    ["t00A02 bridge_global_cover_classification"
+     "t00A03 bridges 1/2"
+     "t91J05 bridge_1"
+     "t92J05 genusTwo bridge"
+     "t94J04 equal-index bridge"
+     "t96A01 sole sorry"
+     "t97J02 classify bridge"],
+    :route-step "shared first surface-classification step"},
+   :id :routes-2026-10-10-surface-triangulation-topo3-r1,
+   :kind :reusable-theorem,
+   :area "surface-classification",
+   :depends-on [:routes-2026-10-10-topo3-seed-checkpoint-1],
+   :current-residual
+   "Normal-form reduction, orientability and Euler-characteristic recognition remain.",
+   :other-consumers [:t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02]}
+  {:consumer :t00A03,
+   :implements-lemma
+   :lemma-constructiontargets-surfaceschoenflies-embeddedcirclecollar,
+   :phase :probe,
+   :state :blocked,
+   :scope ["ConstructionTargets/SurfaceSchoenflies.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/topo3/schoenflies-2d/embedded-circle-collar",
+   :acceptance
+   {:probe
+    "Compile the annular collar theorem for a topologically embedded Circle in the consumers' Hausdorff two-manifolds.",
+    :declaration
+    "ConstructionTargets.SurfaceSchoenflies.embeddedCircleCollar",
+    :placeholders
+    ["t00A03 bridge_1" "t01J01 bridges" "t03J02 bridge_1"],
+    :route-step "topological circle tameness and collar"},
+   :id :routes-2026-10-10-surface-schoenflies-collar-topo3-r1,
+   :kind :reusable-theorem,
+   :area "schoenflies-2d",
+   :depends-on [:routes-2026-10-10-topo3-seed-checkpoint-1],
+   :current-residual
+   "Surface cutting, intersection separation, van Kampen and classification remain.",
+   :other-consumers [:t01J01 :t03J02]}
+  {:consumer :t00J02,
+   :implements-lemma
+   :lemma-constructiontargets-manifoldfundamentalclass-closedorientedfundamentalclass,
+   :phase :probe,
+   :state :blocked,
+   :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+   :dag-node
+   "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
+   :acceptance
+   {:probe
+    "Compile localization of a closed oriented manifold's fundamental class to local top-homology generators.",
+    :declaration
+    "ConstructionTargets.ManifoldFundamentalClass.closedOrientedFundamentalClass",
+    :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
+    :route-step "reviewed fundamental-classes/localization DAG node"},
+   :id :routes-2026-10-10-manifold-fundamental-class-topo3-r1,
+   :kind :reusable-theorem,
+   :area "manifold-fundamental-class",
+   :depends-on [:routes-2026-10-10-topo3-seed-checkpoint-1],
+   :current-residual
+   "Local-degree counts and wild-ball complement homology remain.",
+   :other-consumers [:t98A02]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 3,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:strategy
+    "Review the three rows, bank proved lemmas, rerun priorities/areas and refill with at most one closure adapter before balanced area work."},
+   :id :routes-2026-10-10-topo3-seed-checkpoint-2,
+   :kind :strategy-checkpoint,
+   :area "portfolio",
+   :depends-on
+   [:routes-2026-10-10-surface-triangulation-topo3-r1
+    :routes-2026-10-10-surface-schoenflies-collar-topo3-r1
+    :routes-2026-10-10-manifold-fundamental-class-topo3-r1
+    :routes-2026-10-10-topo3-seed-checkpoint-1],
+   :current-residual
+   "No topo3 route is complete; refill from the seeded DAG after review.",
+   :other-consumers []}
+  {:consumer :t00A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.FiniteFreeActionCover.antipodalCoverIsCovering",
+    :type
+    "Antipodal quotient on the frozen sphere is an IsCoveringMap."},
+   :lemma
+   {:name
+    "ConstructionTargets.FiniteFreeActionCover.antipodalCoverIsCovering",
+    :reported-by [:routes-2026-10-10-topo3-seed-checkpoint-1],
+    :type
+    "Antipodal quotient on the frozen sphere is an IsCoveringMap.",
+    :area "quotient-by-finite-free-action-covering"},
+   :id :lemma-antipodal-cover,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t00A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "ConstructionTargets.WedgeCoverGluing.gluedCover",
+    :type
+    "Fiberwise gluing gives a covering of a point wedge with preserved fiber cardinality."},
+   :lemma
+   {:name "ConstructionTargets.WedgeCoverGluing.gluedCover",
+    :reported-by [:routes-2026-10-10-topo3-seed-checkpoint-1],
+    :type
+    "Fiberwise gluing gives a covering of a point wedge with preserved fiber cardinality.",
+    :area "wedge-cover-gluing"},
+   :id :lemma-wedge-cover,
+   :kind :lemma,
+   :depends-on [:lemma-antipodal-cover],
+   :other-consumers []}
+  {:consumer :t00A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SurfaceClassification.compactSmoothSurfaceFiniteTriangulation",
+    :type
+    "Compact connected smooth two-manifolds used by these consumers admit finite triangulations, inherited by finite covers."},
+   :lemma
+   {:name
+    "ConstructionTargets.SurfaceClassification.compactSmoothSurfaceFiniteTriangulation",
+    :reported-by [:routes-2026-10-10-topo3-seed-checkpoint-1],
+    :type
+    "Compact connected smooth two-manifolds used by these consumers admit finite triangulations, inherited by finite covers.",
+    :area "surface-classification"},
+   :id
+   :lemma-constructiontargets-surfaceclassification-compactsmoothsurfacefinitetriangulatio,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02]}
+  {:consumer :t00A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SurfaceClassification.finiteCoverSurfaceRecognition",
+    :type
+    "Finite covers are homeomorphic to the standard polygon surface determined by orientability and Euler characteristic."},
+   :lemma
+   {:name
+    "ConstructionTargets.SurfaceClassification.finiteCoverSurfaceRecognition",
+    :reported-by [:routes-2026-10-10-topo3-seed-checkpoint-1],
+    :type
+    "Finite covers are homeomorphic to the standard polygon surface determined by orientability and Euler characteristic.",
+    :area "surface-classification"},
+   :id :lemma-surface-cover-recognition,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-surfaceeulercover-eulercharacteristic-mul],
+   :other-consumers [:t91J05 :t96A01 :t97J02]}
+  {:consumer :t91J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SurfaceEulerCover.eulerCharacteristic_mul",
+    :type
+    "Euler characteristic multiplies under the consumers' finite-sheeted surface covers."},
+   :lemma
+   {:name
+    "ConstructionTargets.SurfaceEulerCover.eulerCharacteristic_mul",
+    :reported-by [:routes-2026-10-10-topo3-seed-checkpoint-1],
+    :type
+    "Euler characteristic multiplies under the consumers' finite-sheeted surface covers.",
+    :area "euler-characteristic-finite-cover"},
+   :id
+   :lemma-constructiontargets-surfaceeulercover-eulercharacteristic-mul,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-surfaceclassification-compactsmoothsurfacefinitetriangulatio],
+   :other-consumers [:t94J04 :t96A01 :t97J02]}
+  {:consumer :t00A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SurfaceSchoenflies.embeddedCircleCollar",
+    :type
+    "A topologically embedded circle in the consumers' Hausdorff two-manifolds has the required annular collar."},
+   :lemma
+   {:name
+    "ConstructionTargets.SurfaceSchoenflies.embeddedCircleCollar",
+    :reported-by [:routes-2026-10-10-topo3-seed-checkpoint-1],
+    :type
+    "A topologically embedded circle in the consumers' Hausdorff two-manifolds has the required annular collar.",
+    :area "embedded-circle-collar-surface"},
+   :id
+   :lemma-constructiontargets-surfaceschoenflies-embeddedcirclecollar,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t01J01 :t03J02]}
+  {:consumer :t00A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SurfaceClassification.compactSurfaceWithBoundaryNormalForm",
+    :type
+    "Classify the compact orientable surfaces with boundary used by t00A03."},
+   :lemma
+   {:name
+    "ConstructionTargets.SurfaceClassification.compactSurfaceWithBoundaryNormalForm",
+    :reported-by [:routes-2026-10-10-topo3-seed-checkpoint-1],
+    :type
+    "Classify the compact orientable surfaces with boundary used by t00A03.",
+    :area "surface-classification"},
+   :id :lemma-surface-boundary-classification,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-surfaceclassification-compactsmoothsurfacefinitetriangulatio],
+   :other-consumers []}
+  {:consumer :t00A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SurfaceClassification.maximalCurveFamilyPantsCount",
+    :type
+    "The frozen maximal curve family cuts into pants and has cardinality 3g-3."},
+   :lemma
+   {:name
+    "ConstructionTargets.SurfaceClassification.maximalCurveFamilyPantsCount",
+    :reported-by [:routes-2026-10-10-topo3-seed-checkpoint-1],
+    :type
+    "The frozen maximal curve family cuts into pants and has cardinality 3g-3.",
+    :area "euler-characteristic-cut-additivity"},
+   :id :lemma-pants-count,
+   :kind :lemma,
+   :depends-on [:lemma-surface-boundary-classification],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFundamentalClass.closedOrientedFundamentalClass",
+    :type
+    "A closed oriented manifold's top class localizes to generators of local top homology."},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFundamentalClass.closedOrientedFundamentalClass",
+    :reported-by [:routes-2026-10-10-topo3-seed-checkpoint-1],
+    :type
+    "A closed oriented manifold's top class localizes to generators of local top homology.",
+    :area "manifold-fundamental-class"},
+   :id
+   :lemma-constructiontargets-manifoldfundamentalclass-closedorientedfundamentalclass,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldLocalDegree.regularValueSignedCount",
+    :type
+    "The induced top-homology map is multiplication by the signed regular-value count."},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldLocalDegree.regularValueSignedCount",
+    :reported-by [:routes-2026-10-10-topo3-seed-checkpoint-1],
+    :type
+    "The induced top-homology map is multiplication by the signed regular-value count.",
+    :area "local-degree-signed-count"},
+   :id :lemma-surface-local-degree,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-manifoldfundamentalclass-closedorientedfundamentalclass],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SurfacePreimageDegree.preimageComponentsForceDegreeZero",
+    :type
+    "The frozen preimage-component winding hypotheses force degree zero."},
+   :lemma
+   {:name
+    "ConstructionTargets.SurfacePreimageDegree.preimageComponentsForceDegreeZero",
+    :reported-by [:routes-2026-10-10-topo3-seed-checkpoint-1],
+    :type
+    "The frozen preimage-component winding hypotheses force degree zero.",
+    :area "circle-degree-signed-count"},
+   :id :lemma-surface-preimage-degree-zero,
+   :kind :lemma,
+   :depends-on [:lemma-surface-local-degree],
+   :other-consumers []}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SardGeneralModel.linearTargetTransport",
+    :type
+    "Transport criticality and nullity to Euclidean target coordinates."},
+   :lemma
+   {:name "ConstructionTargets.SardGeneralModel.linearTargetTransport",
+    :reported-by [:routes-2026-10-10-topo3-seed-checkpoint-1],
+    :type
+    "Transport criticality and nullity to Euclidean target coordinates.",
+    :area "manifold-sard-general-model"},
+   :id :lemma-sard-linear-target-transport,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "ConstructionTargets.SardConvexDomain.criticalImageNull",
+    :type
+    "Sard nullity on the convex model-with-corners domains used by t01A08."},
+   :lemma
+   {:name "ConstructionTargets.SardConvexDomain.criticalImageNull",
+    :reported-by [:routes-2026-10-10-topo3-seed-checkpoint-1],
+    :type
+    "Sard nullity on the convex model-with-corners domains used by t01A08.",
+    :area "sard-convex-domain"},
+   :id :lemma-sard-corners,
+   :kind :lemma,
+   :depends-on [:lemma-sard-linear-target-transport],
+   :other-consumers []}
+  {:consumer :t01J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SurfaceIntersection.nullHomologySeparates",
+    :type
+    "A null-homologous embedded circle in the frozen orientable surface separates."},
+   :lemma
+   {:name
+    "ConstructionTargets.SurfaceIntersection.nullHomologySeparates",
+    :reported-by [:routes-2026-10-10-topo3-seed-checkpoint-1],
+    :type
+    "A null-homologous embedded circle in the frozen orientable surface separates.",
+    :area "surface-mod2-intersection-pairing"},
+   :id :lemma-surface-mod2-separation,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-surfaceschoenflies-embeddedcirclecollar],
+   :other-consumers []}
+  {:consumer :t01J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SurfaceClassification.separatingCurvesCoboundAnnulus",
+    :type
+    "The frozen disjoint essential separating circles cobound the required annulus."},
+   :lemma
+   {:name
+    "ConstructionTargets.SurfaceClassification.separatingCurvesCoboundAnnulus",
+    :reported-by [:routes-2026-10-10-topo3-seed-checkpoint-1],
+    :type
+    "The frozen disjoint essential separating circles cobound the required annulus.",
+    :area "surface-cut-and-classify"},
+   :id :lemma-annulus-recognition,
+   :kind :lemma,
+   :depends-on [:lemma-surface-mod2-separation],
+   :other-consumers []}
+  {:consumer :t02A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.CoefficientMayerVietoris.cellAttachmentHomologyQ",
+    :type "Compute the frozen cell attachment's rational homology."},
+   :lemma
+   {:name
+    "ConstructionTargets.CoefficientMayerVietoris.cellAttachmentHomologyQ",
+    :reported-by [:routes-2026-10-10-topo3-seed-checkpoint-1],
+    :type "Compute the frozen cell attachment's rational homology.",
+    :area "coefficient-q-mayer-vietoris"},
+   :id :lemma-cell-attachment-mv-q,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t02A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.LefschetzCompactPolyhedron.fixedPointOfNonzeroLefschetz",
+    :type
+    "A self-map of the consumers' compact polyhedra with nonzero rational Lefschetz number has a fixed point."},
+   :lemma
+   {:name
+    "ConstructionTargets.LefschetzCompactPolyhedron.fixedPointOfNonzeroLefschetz",
+    :reported-by [:routes-2026-10-10-topo3-seed-checkpoint-1],
+    :type
+    "A self-map of the consumers' compact polyhedra with nonzero rational Lefschetz number has a fixed point.",
+    :area "lefschetz-fixed-point-theorem"},
+   :id :lemma-lefschetz-compact-polyhedron,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t96A02]}
+  {:consumer :t03J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ClosedGluingOpenCover.collaredPushoutCover",
+    :type
+    "A collared closed gluing has the open-cover homotopy types needed by t03J02."},
+   :lemma
+   {:name
+    "ConstructionTargets.ClosedGluingOpenCover.collaredPushoutCover",
+    :reported-by [:routes-2026-10-10-topo3-seed-checkpoint-1],
+    :type
+    "A collared closed gluing has the open-cover homotopy types needed by t03J02.",
+    :area "mayer-vietoris-open-cover"},
+   :id :lemma-closed-gluing-open-cover,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-surfaceschoenflies-embeddedcirclecollar],
+   :other-consumers []}
+  {:consumer :t03J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "ConstructionTargets.GluedToriInvariants.compute",
+    :type
+    "Compute the frozen glued-tori fundamental group and homology."},
+   :lemma
+   {:name "ConstructionTargets.GluedToriInvariants.compute",
+    :reported-by [:routes-2026-10-10-topo3-seed-checkpoint-1],
+    :type
+    "Compute the frozen glued-tori fundamental group and homology.",
+    :area "van-kampen-open-cover"},
+   :id :lemma-glued-tori-vankampen-mv,
+   :kind :lemma,
+   :depends-on [:lemma-closed-gluing-open-cover],
+   :other-consumers []}
+  {:consumer :t03J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "ConstructionTargets.DiskCoverTrivialization.trivialize",
+    :type
+    "Every frozen two-sheeted disk cover is equivalent to the trivial cover."},
+   :lemma
+   {:name "ConstructionTargets.DiskCoverTrivialization.trivialize",
+    :reported-by [:routes-2026-10-10-topo3-seed-checkpoint-1],
+    :type
+    "Every frozen two-sheeted disk cover is equivalent to the trivial cover.",
+    :area "covering-trivial-over-disk"},
+   :id :lemma-disk-cover-trivialization,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t03J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "ConstructionTargets.PolygonCoverDescent.classifyLabels",
+    :type
+    "Pulled-back double covers descend from and are classified by edge-swap labels."},
+   :lemma
+   {:name "ConstructionTargets.PolygonCoverDescent.classifyLabels",
+    :reported-by [:routes-2026-10-10-topo3-seed-checkpoint-1],
+    :type
+    "Pulled-back double covers descend from and are classified by edge-swap labels.",
+    :area "polygon-cover-descent"},
+   :id :lemma-polygon-cover-descent,
+   :kind :lemma,
+   :depends-on [:lemma-disk-cover-trivialization],
+   :other-consumers []}
+  {:consumer :t03J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.PolygonCoverNormalForm.doubleCoverModels",
+    :type
+    "Identify the seven labeled covers with the required standard surface models."},
+   :lemma
+   {:name
+    "ConstructionTargets.PolygonCoverNormalForm.doubleCoverModels",
+    :reported-by [:routes-2026-10-10-topo3-seed-checkpoint-1],
+    :type
+    "Identify the seven labeled covers with the required standard surface models.",
+    :area "polygon-cut-and-paste-homeomorph"},
+   :id :lemma-double-cover-surface-identification,
+   :kind :lemma,
+   :depends-on [:lemma-polygon-cover-descent],
+   :other-consumers []}
+  {:consumer :t03J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SurfaceOrientation.twoSidedAnnulusLifts",
+    :type
+    "The embedded annulus core has trivial orientation monodromy and lifts."},
+   :lemma
+   {:name
+    "ConstructionTargets.SurfaceOrientation.twoSidedAnnulusLifts",
+    :reported-by [:routes-2026-10-10-topo3-seed-checkpoint-1],
+    :type
+    "The embedded annulus core has trivial orientation monodromy and lifts.",
+    :area "surface-local-homology-orientation"},
+   :id :lemma-annulus-orientation-lift,
+   :kind :lemma,
+   :depends-on [:lemma-double-cover-surface-identification],
+   :other-consumers []}
+  {:consumer :t91J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "ConstructionTargets.PolygonQuotientCovering.isCoveringMap",
+    :type
+    "Consistent lifted polygon edge pairings induce finite-sheeted coverings."},
+   :lemma
+   {:name "ConstructionTargets.PolygonQuotientCovering.isCoveringMap",
+    :reported-by [:routes-2026-10-10-topo3-seed-checkpoint-1],
+    :type
+    "Consistent lifted polygon edge pairings induce finite-sheeted coverings.",
+    :area "polygon-quotient-covering"},
+   :id :lemma-polygon-quotient-cover,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t92J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "ConstructionTargets.ProjectivePlaneCover.sphereCover",
+    :type
+    "The normalized sphere projection to the frozen RP2 is a two-sheeted covering."},
+   :lemma
+   {:name "ConstructionTargets.ProjectivePlaneCover.sphereCover",
+    :reported-by [:routes-2026-10-10-topo3-seed-checkpoint-1],
+    :type
+    "The normalized sphere projection to the frozen RP2 is a two-sheeted covering.",
+    :area "antipodal-sphere-cover"},
+   :id :lemma-antipodal-rp2-cover,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t92J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SimplyConnectedCoverFiber.fundamentalGroupEquivFiber",
+    :type
+    "Monodromy identifies the fundamental group with the fiber of a simply connected cover."},
+   :lemma
+   {:name
+    "ConstructionTargets.SimplyConnectedCoverFiber.fundamentalGroupEquivFiber",
+    :reported-by [:routes-2026-10-10-topo3-seed-checkpoint-1],
+    :type
+    "Monodromy identifies the fundamental group with the fiber of a simply connected cover.",
+    :area "simply-connected-cover-fiber-bijection"},
+   :id :lemma-simply-connected-cover-fiber,
+   :kind :lemma,
+   :depends-on [:lemma-antipodal-rp2-cover],
+   :other-consumers []}
+  {:consumer :t92J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SurfaceClassification.recognizeFromIntegralHomology",
+    :type
+    "Recognize the consumers' compact smooth surfaces from integral homology."},
+   :lemma
+   {:name
+    "ConstructionTargets.SurfaceClassification.recognizeFromIntegralHomology",
+    :reported-by [:routes-2026-10-10-topo3-seed-checkpoint-1],
+    :type
+    "Recognize the consumers' compact smooth surfaces from integral homology.",
+    :area "surface-classification"},
+   :id :lemma-surface-genus-recognition,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-surfaceclassification-compactsmoothsurfacefinitetriangulatio],
+   :other-consumers [:t94J04]}
+  {:consumer :t92J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "ConstructionTargets.SurfaceFundamentalGroup.presentation",
+    :type
+    "Compute the standard orientable polygon surface fundamental-group presentation."},
+   :lemma
+   {:name "ConstructionTargets.SurfaceFundamentalGroup.presentation",
+    :reported-by [:routes-2026-10-10-topo3-seed-checkpoint-1],
+    :type
+    "Compute the standard orientable polygon surface fundamental-group presentation.",
+    :area "van-kampen-amalgamated"},
+   :id :lemma-surface-group-presentation,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t96A01]}
+  {:consumer :t94J04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.CoveringSubgroupCorrespondence.connectedCover",
+    :type
+    "Realize a finite-index surface subgroup as the fundamental group of its connected finite cover."},
+   :lemma
+   {:name
+    "ConstructionTargets.CoveringSubgroupCorrespondence.connectedCover",
+    :reported-by [:routes-2026-10-10-topo3-seed-checkpoint-1],
+    :type
+    "Realize a finite-index surface subgroup as the fundamental group of its connected finite cover.",
+    :area "covering-subgroup-correspondence"},
+   :id :lemma-subgroup-cover-correspondence,
+   :kind :lemma,
+   :depends-on [:lemma-surface-group-presentation],
+   :other-consumers [:t96A01]}
+  {:consumer :t95J06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "ConstructionTargets.FreeCircleSurfaceAction.localSlice",
+    :type
+    "The frozen free circle action admits local cross-sections."},
+   :lemma
+   {:name "ConstructionTargets.FreeCircleSurfaceAction.localSlice",
+    :reported-by [:routes-2026-10-10-topo3-seed-checkpoint-1],
+    :type "The frozen free circle action admits local cross-sections.",
+    :area "free-circle-action-slice"},
+   :id :lemma-free-circle-slice,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t95J06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.FreeCircleSurfaceAction.totalSpaceTorusOrKlein",
+    :type
+    "The resulting surface bundle is torus or Klein bottle, with H2 selecting torus."},
+   :lemma
+   {:name
+    "ConstructionTargets.FreeCircleSurfaceAction.totalSpaceTorusOrKlein",
+    :reported-by [:routes-2026-10-10-topo3-seed-checkpoint-1],
+    :type
+    "The resulting surface bundle is torus or Klein bottle, with H2 selecting torus.",
+    :area "surface-homology-invariants"},
+   :id :lemma-circle-bundle-surface-classification,
+   :kind :lemma,
+   :depends-on [:lemma-free-circle-slice],
+   :other-consumers []}
+  {:consumer :t96A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ProjectivePlaneRationalHomology.acyclic",
+    :type
+    "The frozen RP2 polygon model has trivial reduced rational homology."},
+   :lemma
+   {:name
+    "ConstructionTargets.ProjectivePlaneRationalHomology.acyclic",
+    :reported-by [:routes-2026-10-10-topo3-seed-checkpoint-1],
+    :type
+    "The frozen RP2 polygon model has trivial reduced rational homology.",
+    :area "rp-rational-homology"},
+   :id :lemma-rp2-rational-homology,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t96A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "ConstructionTargets.PointWedgeRationalHomology.acyclic",
+    :type
+    "The frozen wedge of rationally acyclic projective planes is rationally acyclic."},
+   :lemma
+   {:name "ConstructionTargets.PointWedgeRationalHomology.acyclic",
+    :reported-by [:routes-2026-10-10-topo3-seed-checkpoint-1],
+    :type
+    "The frozen wedge of rationally acyclic projective planes is rationally acyclic.",
+    :area "mayer-vietoris-open-cover"},
+   :id :lemma-wedge-rational-homology,
+   :kind :lemma,
+   :depends-on [:lemma-rp2-rational-homology],
+   :other-consumers []}
+  {:consumer :t96J06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ProjectivePlaneMod2Homology.degreeOneGenerator",
+    :type "Construct the mod-two class detecting the frozen RP1."},
+   :lemma
+   {:name
+    "ConstructionTargets.ProjectivePlaneMod2Homology.degreeOneGenerator",
+    :reported-by [:routes-2026-10-10-topo3-seed-checkpoint-1],
+    :type "Construct the mod-two class detecting the frozen RP1.",
+    :area "projective-plane-homology-mod2"},
+   :id :lemma-rp2-mod2-homology,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t96J06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "ConstructionTargets.SingularCrossProduct.eilenbergZilber",
+    :type
+    "Supply the singular cross-product comparison detecting RP1×RP1."},
+   :lemma
+   {:name "ConstructionTargets.SingularCrossProduct.eilenbergZilber",
+    :reported-by [:routes-2026-10-10-topo3-seed-checkpoint-1],
+    :type
+    "Supply the singular cross-product comparison detecting RP1×RP1.",
+    :area "kunneth-cross-product"},
+   :id :lemma-singular-cross-product,
+   :kind :lemma,
+   :depends-on [:lemma-rp2-mod2-homology],
+   :other-consumers []}
+  {:consumer :t96J06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldBoundaryFundamentalClass.mod2BoundaryClass",
+    :type
+    "The intrinsic boundary maps to zero in ambient mod-two homology."},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldBoundaryFundamentalClass.mod2BoundaryClass",
+    :reported-by [:routes-2026-10-10-topo3-seed-checkpoint-1],
+    :type
+    "The intrinsic boundary maps to zero in ambient mod-two homology.",
+    :area "manifold-fundamental-class-mod2-with-boundary"},
+   :id :lemma-boundary-fundamental-class-mod2,
+   :kind :lemma,
+   :depends-on [:lemma-singular-cross-product],
+   :other-consumers []}
+  {:consumer :t96J06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ProjectivePlaneProductPairing.boundaryObstruction",
+    :type
+    "Product pairing proves RP1×RP1 cannot be the frozen intrinsic boundary."},
+   :lemma
+   {:name
+    "ConstructionTargets.ProjectivePlaneProductPairing.boundaryObstruction",
+    :reported-by [:routes-2026-10-10-topo3-seed-checkpoint-1],
+    :type
+    "Product pairing proves RP1×RP1 cannot be the frozen intrinsic boundary.",
+    :area "intersection-pairing"},
+   :id :lemma-boundary-pairing-contradiction,
+   :kind :lemma,
+   :depends-on [:lemma-boundary-fundamental-class-mod2],
+   :other-consumers []}
+  {:consumer :t97A05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.OrientedHypersurfaceCobordism.tubularNeighborhood",
+    :type
+    "The frozen compact oriented hypersurface has a two-sided tubular neighborhood."},
+   :lemma
+   {:name
+    "ConstructionTargets.OrientedHypersurfaceCobordism.tubularNeighborhood",
+    :reported-by [:routes-2026-10-10-topo3-seed-checkpoint-1],
+    :type
+    "The frozen compact oriented hypersurface has a two-sided tubular neighborhood.",
+    :area "tubular-neighbourhood"},
+   :id :lemma-tubular-neighborhood,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.OrientedHypersurfaceCobordism.componentClosureBoundary",
+    :type
+    "A separated component closure is a compact oriented manifold bounded by the hypersurface."},
+   :lemma
+   {:name
+    "ConstructionTargets.OrientedHypersurfaceCobordism.componentClosureBoundary",
+    :reported-by [:routes-2026-10-10-topo3-seed-checkpoint-1],
+    :type
+    "A separated component closure is a compact oriented manifold bounded by the hypersurface.",
+    :area "hypersurface-separation-bounds"},
+   :id :lemma-separating-hypersurface-bounds,
+   :kind :lemma,
+   :depends-on [:lemma-tubular-neighborhood],
+   :other-consumers []}
+  {:consumer :t97A05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.OrientedHypersurfaceCobordism.transversePreimageCobordism",
+    :type
+    "The transverse preimage supplies the required compact oriented one-manifold cobordism."},
+   :lemma
+   {:name
+    "ConstructionTargets.OrientedHypersurfaceCobordism.transversePreimageCobordism",
+    :reported-by [:routes-2026-10-10-topo3-seed-checkpoint-1],
+    :type
+    "The transverse preimage supplies the required compact oriented one-manifold cobordism.",
+    :area "transversality-perturbation"},
+   :id :lemma-transverse-cobordism,
+   :kind :lemma,
+   :depends-on [:lemma-separating-hypersurface-bounds],
+   :other-consumers []}
+  {:consumer :t97A05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.OrientedHypersurfaceCobordism.signedBoundaryCountZero",
+    :type
+    "Boundary orientations make the frozen signed count vanish."},
+   :lemma
+   {:name
+    "ConstructionTargets.OrientedHypersurfaceCobordism.signedBoundaryCountZero",
+    :reported-by [:routes-2026-10-10-topo3-seed-checkpoint-1],
+    :type "Boundary orientations make the frozen signed count vanish.",
+    :area "intersection-homotopy-invariance"},
+   :id :lemma-intersection-count-homotopy,
+   :kind :lemma,
+   :depends-on [:lemma-transverse-cobordism],
+   :other-consumers []}
+  {:consumer :t97A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFormCalculus.smoothPullbackExteriorDerivative",
+    :type
+    "Smooth pullback commutes with exterior differentiation for the frozen form calculus."},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFormCalculus.smoothPullbackExteriorDerivative",
+    :reported-by [:routes-2026-10-10-topo3-seed-checkpoint-1],
+    :type
+    "Smooth pullback commutes with exterior differentiation for the frozen form calculus.",
+    :area "manifold-form-calculus"},
+   :id :lemma-manifold-form-calculus,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFormExtension.extendAlongCompactImmersion",
+    :type
+    "Extend the frozen volume form smoothly to the ambient manifold."},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFormExtension.extendAlongCompactImmersion",
+    :reported-by [:routes-2026-10-10-topo3-seed-checkpoint-1],
+    :type
+    "Extend the frozen volume form smoothly to the ambient manifold.",
+    :area "form-extension-partition-of-unity"},
+   :id :lemma-form-extension,
+   :kind :lemma,
+   :depends-on [:lemma-manifold-form-calculus],
+   :other-consumers []}
+  {:consumer :t97A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.DeRhamHomotopy.pullbackDifferenceExact",
+    :type
+    "Pullbacks of a closed form along smoothly homotopic maps differ by an exact form."},
+   :lemma
+   {:name "ConstructionTargets.DeRhamHomotopy.pullbackDifferenceExact",
+    :reported-by [:routes-2026-10-10-topo3-seed-checkpoint-1],
+    :type
+    "Pullbacks of a closed form along smoothly homotopic maps differ by an exact form.",
+    :area "de-rham-homotopy-formula"},
+   :id :lemma-derham-homotopy,
+   :kind :lemma,
+   :depends-on [:lemma-form-extension],
+   :other-consumers []}
+  {:consumer :t97A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldStokes.integral_exteriorDerivative_eq_zero",
+    :type
+    "Stokes and positivity give the frozen closed-form obstruction."},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldStokes.integral_exteriorDerivative_eq_zero",
+    :reported-by [:routes-2026-10-10-topo3-seed-checkpoint-1],
+    :type
+    "Stokes and positivity give the frozen closed-form obstruction.",
+    :area "stokes-compact-manifold"},
+   :id :lemma-compact-manifold-stokes,
+   :kind :lemma,
+   :depends-on [:lemma-derham-homotopy],
+   :other-consumers []}
+  {:consumer :t97J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.PolygonSurfaceCharts.surfaceIsManifold",
+    :type
+    "The frozen polygon quotients have explicit compact Hausdorff surface charts."},
+   :lemma
+   {:name "ConstructionTargets.PolygonSurfaceCharts.surfaceIsManifold",
+    :reported-by [:routes-2026-10-10-topo3-seed-checkpoint-1],
+    :type
+    "The frozen polygon quotients have explicit compact Hausdorff surface charts.",
+    :area "polygon-quotient-manifold-charts"},
+   :id :lemma-polygon-manifold-charts,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "ConstructionTargets.PolygonPermutationCover.isCoveringMap",
+    :type
+    "Relator-compatible edge permutations build the exact finite-sheeted polygon covers."},
+   :lemma
+   {:name "ConstructionTargets.PolygonPermutationCover.isCoveringMap",
+    :reported-by [:routes-2026-10-10-topo3-seed-checkpoint-1],
+    :type
+    "Relator-compatible edge permutations build the exact finite-sheeted polygon covers.",
+    :area "polygon-permutation-cover"},
+   :id :lemma-polygon-permutation-cover,
+   :kind :lemma,
+   :depends-on [:lemma-polygon-manifold-charts],
+   :other-consumers []}
+  {:consumer :t98A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldLocalHomology.dimensionVanishing",
+    :type
+    "Closed four-manifold homology vanishes above dimension four and punctured top homology vanishes."},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldLocalHomology.dimensionVanishing",
+    :reported-by [:routes-2026-10-10-topo3-seed-checkpoint-1],
+    :type
+    "Closed four-manifold homology vanishes above dimension four and punctured top homology vanishes.",
+    :area "manifold-homology-local-to-global"},
+   :id :lemma-manifold-local-homology,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t98A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "ConstructionTargets.WildBallComplement.homologyComparison",
+    :type
+    "The frozen wild-ball complements have the required ambient homology comparison."},
+   :lemma
+   {:name "ConstructionTargets.WildBallComplement.homologyComparison",
+    :reported-by [:routes-2026-10-10-topo3-seed-checkpoint-1],
+    :type
+    "The frozen wild-ball complements have the required ambient homology comparison.",
+    :area "wild-embedding-anr"},
+   :id :lemma-wild-ball-complement,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-manifoldfundamentalclass-closedorientedfundamentalclass],
+   :other-consumers []}
+  {:consumer :t98A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "ConstructionTargets.ConnectedSumMayerVietoris.homology",
+    :type
+    "The frozen quotient gluing has the claimed connected-sum homology."},
+   :lemma
+   {:name "ConstructionTargets.ConnectedSumMayerVietoris.homology",
+    :reported-by [:routes-2026-10-10-topo3-seed-checkpoint-1],
+    :type
+    "The frozen quotient gluing has the claimed connected-sum homology.",
+    :area "mayer-vietoris-open-cover"},
+   :id :lemma-connected-sum-mv,
+   :kind :lemma,
+   :depends-on [:lemma-wild-ball-complement],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
