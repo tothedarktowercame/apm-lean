@@ -87804,17 +87804,17 @@
   {:consumer :t99J01,
    :owner-reopen
    "Owner reopen 2026-10-10 (claude-14): both STOPs cite missing approved signatures for declarations the acceptance lists in prose. Under work-prompt.md WHAT IS FROZEN, only the registered statement and the fixture interface-axiom types are frozen; design the supporting signatures, discharge the frozen axiom type with standard axioms, and STOP only on a mathematical boundary.",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "design the supporting signatures and discharge the frozen axiom type",
    :evidence
    {:residual
-    "Prove IsCoveringMap.restrictPathComponent after establishing LocPathConnectedSpace and PathConnectedSpace for ThreeCircles; then count the restricted fibers and prove inclusion induces a pi1 bijection.",
+    "Implement and review IsCoveringMap.restrictPathComponent with selected-sheet trivializations; then specialize it to ThreeCircles, count fibers, and prove the inclusion-induced pi1 bijection.",
     :outcome :stop,
     :warnings
     [{:kind :missing-mathematical-prerequisite,
       :message
-      "Mathlib has openness of path components but not restriction of a covering map to a chosen domain path component."}],
+      "Restriction of a covering map to a chosen domain path component, with selected-sheet trivializations, is not banked."}],
     :disposition :stop,
     :axioms
     ["propext"
@@ -87823,32 +87823,27 @@
      "T99J01PathComponentRestrictionProbe.pathComponentRestrictionPackage"],
     :author "topo-2",
     :reason
-    "The frozen package is mathematically plausible and helper signatures are locally designable. Fresh API inspection isolates one absent theorem on which the rest depends: theorem IsCoveringMap.restrictPathComponent {E B : Type*} [TopologicalSpace E] [TopologicalSpace B] [LocPathConnectedSpace B] [PathConnectedSpace B] {p : E → B} (hp : IsCoveringMap p) (e : E) : IsCoveringMap (fun x : {x : E // Joined e x} => p x.1). Mathlib proves that path components are open in a locally path-connected space and supplies covering trivializations, but has no restriction-to-domain-component theorem. Proving this requires refining every evenly covered neighborhood to a path-connected neighborhood, showing each lifted sheet is path connected, proving a sheet meeting the chosen component lies wholly in it, discarding the other sheets while retaining a product trivialization, and proving surjectivity of the selected sheets using path lifting over the path-connected base. The scoped ThreeCircles work must additionally establish the two required connectivity instances before this theorem applies. Once banked, fiber inclusion gives the sheet upper bound, the chosen basepoint gives positivity, and loops and homotopies factor through the component subtype to yield the pi1 bijection. No existing theorem performs the decisive component restriction, and assuming it would reproduce the nonstandard fixture axiom.",
+    "Fresh verification shows the same mathematical prerequisite remains absent after the first reviewed repair. The frozen theorem is true in ordinary covering-space theory, but its proof needs a component-restriction theorem not present in Mathlib or ConstructionTargets: theorem IsCoveringMap.restrictPathComponent {E B : Type*} [TopologicalSpace E] [TopologicalSpace B] [LocPathConnectedSpace B] [PathConnectedSpace B] {p : E → B} (hp : IsCoveringMap p) (e : E) : IsCoveringMap (fun x : {x : E // Joined e x} => p x.1). This cannot be obtained merely from openness of path components: each covering trivialization must be refined to a path-connected base neighborhood, its sheets classified by whether they meet the chosen component, the selected-sheet index type transported across the connected base, and surjectivity proved by path lifting. The frozen package then additionally requires constant finite fiber cardinality and factoring loops and null-homotopies through the component subtype to prove the FundamentalGroup map bijective. Those combined covering-space constructions are the row's missing mathematical content and remain too large to replace by an unproved local helper; no standard-only implementation file exists to commit.",
     :commands
     [{:cmd
       "sha256sum /tmp/t99j01-path-component-sheet-restriction-probe.lean",
       :exit 0,
-      :finding "The frozen fixture hash matches."}
+      :finding "The frozen fixture hash still matches."}
+     {:cmd
+      "rg -n \"restrictPathComponent|pathComponentRestrictionPackage|ComponentCover_isKSheeted|ComponentInclusion_pi1\" ConstructionTargets .lake/packages/mathlib/Mathlib -g '*.lean'",
+      :exit 1,
+      :expected-exit 1,
+      :finding
+      "No component-cover restriction implementation or equivalent banked theorem has appeared."}
      {:cmd
       "lake env lean /tmp/t99j01-path-component-sheet-restriction-probe.lean",
       :exit 0,
       :finding
-      "The frozen theorem compiles but depends on the nonstandard axiom pathComponentRestrictionPackage."}
-     {:cmd
-      "rg -n \"cover.*(connectedComponent|pathComponent)|connectedComponent.*cover|pathComponent.*cover|IsCoveringMap.*component|component.*IsCoveringMap\" .lake/packages/mathlib/Mathlib ConstructionTargets -g '*.lean'",
-      :exit 0,
-      :finding
-      "The sole textual match is an unrelated connected-component proof; no covering restriction theorem exists."}
+      "The fixture compiles and still reports pathComponentRestrictionPackage as its only nonstandard axiom."}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
      {:cmd "git status --short", :exit 0, :finding "clean"}],
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1791632241545-1813-099104be",
-     :finding
-     "design the supporting signatures and discharge the frozen axiom type"},
     :fixture
     {:path "/tmp/t99j01-path-component-sheet-restriction-probe.lean",
      :sha256
@@ -87858,7 +87853,7 @@
      :proof-placeholder-count 1},
     :seat "topo-2"},
    :phase :implementation,
-   :state :repair,
+   :state :needs-owner,
    :scope
    ["ConstructionTargets/T99J01PathComponentCoverRestriction.lean"],
    :dag-node
