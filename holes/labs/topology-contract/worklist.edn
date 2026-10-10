@@ -81135,8 +81135,44 @@
    :current-residual "Smooth lift first; complete-flow work remains.",
    :other-consumers []}
   {:consumer :t98J01,
+   :stop-count 1,
+   :evidence
+   {:placeholder-delta {:before 1, :after 1},
+    :residual
+    "Restore the exact fixture with the recorded digest, preferably to a durable repository or ~/notes path as well as the acceptance path, then rerun the adapter implementation and all compilation and axiom gates.",
+    :outcome :stop,
+    :statement-hashes {:status :matching, :count 131},
+    :disposition :stop,
+    :author "topo-1",
+    :reason
+    "The mandatory compiled fixture /tmp/t98j01-part-b-probe.lean is absent. Its recorded SHA-256 cannot be verified, the exact probed source is not preserved in the dependency receipt or repository, and the required acceptance command cannot run. Reconstructing a substitute theorem would bypass the row's fixture-hash invariant, so no scoped edit or commit was made.",
+    :commands
+    [{:cmd "test -e /tmp/t98j01-part-b-probe.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "python3 -c 'comment-stripped placeholder census of problems/t98J01/lean/Main.lean'",
+      :exit 0,
+      :output "1"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "test -L .lake/packages && test \"$(readlink -f .lake/packages)\" = /home/joe/code/apm-lean/.lake/packages",
+      :exit 0}
+     {:cmd "git status --short", :exit 0, :output ""}
+     {:cmd "git rev-parse HEAD",
+      :exit 0,
+      :output "380b0d23d5610f5148d842d39d092ae478b3109d"}],
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/t98j01-part-b-probe.lean",
+     :expected-sha256
+     "2332fdeab21cc86d9749cda9cd1a270559c880ee886e4210f1f526bbb7436717",
+     :status :missing},
+    :seat "topo-1"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["problems/t98J01/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t98J01/circle-reflection-obstruction",
    :acceptance
