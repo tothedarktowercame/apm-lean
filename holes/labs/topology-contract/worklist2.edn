@@ -64714,70 +64714,87 @@
    "single-consumer assembly from the now-banked frozen torus pi1 matrix theorem",
    :consumer :t97A04,
    :evidence
-   {:probe
-    {:residual
-     "Implement the compiled declarations in ConstructionTargets/T97A04FrozenH1Coordinate.lean and replace only apm_t97A04_bridge_2 in the frozen consumer; bridges 1 and 3 remain separate residuals.",
-     :outcome :go,
-     :warnings [],
-     :commands
-     [{:cmd "lake env lean /tmp/t97a04_frozen_h1_coordinate.lean",
-       :exit 0,
-       :output
-       "apm_t97A04_bridge_2_probe compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t97a04_frozen_h1_coordinate.lean || true)\"",
-       :exit 0}
-      {:cmd "sha256sum /tmp/t97a04_frozen_h1_coordinate.lean",
-       :exit 0,
-       :output
-       "f28e9ef0eb63d7cfdfe260a71685fa3584e72b8eeb05640354aa14a414d43143  /tmp/t97a04_frozen_h1_coordinate.lean"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :diagnostic-history
-     [{:cmd "lake env lean /tmp/t97a04_frozen_h1_coordinate.lean",
-       :exit 1,
-       :finding
-       "The first consumer matrix calculation left Fin.cases unreduced at coordinate one."}
-      {:cmd "lake env lean /tmp/t97a04_frozen_h1_coordinate.lean",
-       :exit 1,
-       :finding
-       "A direct change to the coordinate-one subtraction did not unfold frozenMatrixAddHom at the dependent Fin index."}
-      {:cmd "lake env lean /tmp/t97a04_frozen_h1_coordinate.lean",
-       :exit 1,
-       :finding
-       "The first explicit Fin.succ reduction did not provide the motive expected by Fin.cases."}
-      {:cmd "lake env lean /tmp/t97a04_frozen_h1_coordinate.lean",
-       :exit 1,
-       :finding
-       "Annotating only the successor branch still left the dependent eliminator motive unavailable; supplying @Fin.cases with its explicit ℤ-valued motive completed the calculation."}],
-     :fixture
-     {:path "/tmp/t97a04_frozen_h1_coordinate.lean",
-      :sha256
-      "f28e9ef0eb63d7cfdfe260a71685fa3584e72b8eeb05640354aa14a414d43143"},
-     :finding
-     "The complete placeholder-free fixture compiles the consumer-shaped first-homology bridge. It chooses frozenTorusAlignedH1ModuleIsoFinTwo, evaluates frozenLbarModuleH1_map_commutes at each homology class, and proves the resulting frozenMatrixAddHom value equals multiplication by the exact matrix [[2,1],[-1,1]].",
-     :implementation
-     {:scope
-      ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"
-       "problems/t97A04/lean/Main.lean"],
-      :declarations
-      ["ConstructionTargets.T97A04FrozenH1Coordinate.frozenLbarModuleH1_map_commutes"
-       "apm_t97A04_bridge_2"],
-      :acceptance
-      {:placeholder "apm_t97A04_bridge_2",
-       :route-step
-       "t97A04 steps 5-6, Hurewicz and ModuleCat assembly from frozen pi1 coordinates",
-       :consumer-type
-       "∃ h1 : T97A04Homology 1 ≅ ModuleCat.of ℤ apm_t97a04_IntPlane, ∀ a : T97A04Homology 1, h1.hom (t97A04HomologyMap 1 apm_t97a04_Lbar a) = apm_t97a04_matrix.mulVec (h1.hom a)",
-       :axioms ["propext" "Classical.choice" "Quot.sound"],
-       :gates
-       ["both scoped modules compile"
-        "scoped changes contain no new sorry"
-        "registered statements remain unchanged"]}},
-     :seat "topo-8"}},
+   {:placeholder-delta
+    {:before 4, :after 3, :delta -1, :closed "apm_t97A04_bridge_2"},
+    :residual
+    "apm_t97A04_bridge_1, apm_t97A04_bridge_3, and the final theorem remain as the three consumer placeholders.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["problems/t97A04/lean/Main.lean:62:2: unnecessarySimpa"
+     "problems/t97A04/lean/Main.lean:70:2: unnecessarySimpa"
+     "problems/t97A04/lean/Main.lean:103:70: unnecessarySeqFocus"
+     "problems/t97A04/lean/Main.lean:112:70: unnecessarySeqFocus"
+     "three remaining pre-existing sorry declarations"],
+    :missing-theorems
+    [{:name "apm_t97A04_bridge_2",
+      :type
+      "∃ h1 : T97A04Homology 1 ≅ ModuleCat.of ℤ apm_t97a04_IntPlane, ∀ a : T97A04Homology 1, h1.hom (t97A04HomologyMap 1 apm_t97a04_Lbar a) = apm_t97a04_matrix.mulVec (h1.hom a)",
+      :status :proved,
+      :consumers [:t97A04],
+      :depends-on
+      ["ConstructionTargets.T97A04FrozenH1Coordinate.frozenLbarModuleH1_map_commutes"]}],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not",
+     :construction-file-git-blob
+     "78897cc6ca3fcb1bc3bb0a2b90eb414f112843f2",
+     :consumer-file-git-blob
+     "9870f102960b9c4d989be5d715d8233602970c99",
+     :fixture-sha256
+     "f28e9ef0eb63d7cfdfe260a71685fa3584e72b8eeb05640354aa14a414d43143"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd "sha256sum /tmp/t97a04_frozen_h1_coordinate.lean",
+      :exit 0,
+      :output
+      "f28e9ef0eb63d7cfdfe260a71685fa3584e72b8eeb05640354aa14a414d43143  /tmp/t97a04_frozen_h1_coordinate.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/T97A04FrozenH1Coordinate.lean",
+      :exit 0}
+     {:cmd "lake env lean problems/t97A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "apm_t97A04_bridge_2 compiled; three pre-existing declarations still use sorry"}
+     {:cmd "lake env lean /tmp/t97a04_frozen_h1_coordinate.lean",
+      :exit 0,
+      :output
+      "apm_t97A04_bridge_2_probe compiled; axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "test -z \"$(git diff --unified=0 -- ConstructionTargets/T97A04FrozenH1Coordinate.lean problems/t97A04/lean/Main.lean | rg '^\\+.*(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' --pcre2 || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git show --check --oneline b6d6a3c1",
+      :exit 0,
+      :output "b6d6a3c1 Document t97A04 H1 bridge assembly"}],
+    :diagnostic-history
+    [{:cmd
+      "lake env lean ConstructionTargets/T97A04FrozenH1Coordinate.lean",
+      :exit 1,
+      :finding
+      "A declaration docstring was initially placed before the scoped set_option command; moving it after set_option put it directly on the theorem, and the successful rerun is recorded in commands."}],
+    :commit "b6d6a3c16f61d5d185868388cc98dceb69a51f1a",
+    :changed-paths
+    ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"
+     "problems/t97A04/lean/Main.lean"],
+    :fixture
+    {:path "/tmp/t97a04_frozen_h1_coordinate.lean",
+     :sha256
+     "f28e9ef0eb63d7cfdfe260a71685fa3584e72b8eeb05640354aa14a414d43143"},
+    :finding
+    "The exact-scope commit now contains both the banked ModuleCat theorem path and the consumer bridge path. The consumer chooses frozenTorusAlignedH1ModuleIsoFinTwo, evaluates the commuting square at each class, and identifies frozenMatrixAddHom with the exact matrix [[2,1],[-1,1]].",
+    :implementation
+    {:scope
+     ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"
+      "problems/t97A04/lean/Main.lean"],
+     :declarations
+     ["ConstructionTargets.T97A04FrozenH1Coordinate.frozenLbarModuleH1_map_commutes"
+      "apm_t97A04_bridge_2"]},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"
     "problems/t97A04/lean/Main.lean"],
@@ -66103,4 +66120,24 @@
    :lemma-constructiontargets-integralsingularhomologycomparison-singularhomologycompariso,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t97A04_bridge_2",
+    :type
+    "∃ h1 : T97A04Homology 1 ≅ ModuleCat.of ℤ apm_t97a04_IntPlane, ∀ a : T97A04Homology 1, h1.hom (t97A04HomologyMap 1 apm_t97a04_Lbar a) = apm_t97a04_matrix.mulVec (h1.hom a)"},
+   :lemma
+   {:name "apm_t97A04_bridge_2",
+    :reported-by
+    [:routes-2026-10-10-t97a04-h1-bridge-assembly-topo2-r1],
+    :type
+    "∃ h1 : T97A04Homology 1 ≅ ModuleCat.of ℤ apm_t97a04_IntPlane, ∀ a : T97A04Homology 1, h1.hom (t97A04HomologyMap 1 apm_t97a04_Lbar a) = apm_t97a04_matrix.mulVec (h1.hom a)",
+    :proved-in :routes-2026-10-10-t97a04-h1-bridge-assembly-topo2-r1},
+   :id :lemma-apm-t97a04-bridge-2,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t97a04frozenh1coordinate-frozenlbarmoduleh1-map-commutes],
    :other-consumers []}]}
