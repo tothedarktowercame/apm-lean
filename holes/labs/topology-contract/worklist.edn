@@ -101118,6 +101118,21 @@
      {:cmd "git diff --check HEAD^ HEAD", :exit 0}
      {:cmd "test -z \"$(git status --porcelain)\"", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791676687726-3379-ba46675b",
+     :commands
+     ["git show and diff-tree 1b73d26875d9a041789d5fce9c0f46c5d4170948"
+      "sha256sum /tmp/point-wedge-exact-equality.lean"
+      "lake build ConstructionTargets.PointWedgeExactEquality"
+      "lake env lean /tmp/point-wedge-exact-equality.lean"
+      "lake env lean /dev/stdin with fresh axiom checks"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped placeholder and SHA-256 recomputation"
+      "git diff-tree --check 1b73d26875d9a041789d5fce9c0f46c5d4170948^ 1b73d26875d9a041789d5fce9c0f46c5d4170948"],
+     :finding
+     "Recorded one-file commit is authored by topo-2; recomputed implementation and fixture hashes match their recorded values; relation-invariant coordinates correctly prove same-summand injectivity and characterize cross-summand equality exactly at both wedge points with the required right-coordinate reversal; all frozen theorems use only standard axioms, placeholder counts are zero, and the registry reports 131 matched and 0 mismatched."},
     :commit "1b73d26875d9a041789d5fce9c0f46c5d4170948",
     :changed-paths
     ["ConstructionTargets/PointWedgeExactEquality.lean"],
@@ -101131,7 +101146,7 @@
      "Defined relation-invariant left and right coordinates, proved each point-wedge quotient summand map injective, and characterized cross-summand equality exactly by the two chosen wedge points."},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/PointWedgeExactEquality.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/point-wedge-exact-equality",
@@ -101270,7 +101285,7 @@
       "The point-wedge quotient map is injective on each summand, and cross-summand representatives are equal exactly at the two chosen wedge points."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -104653,7 +104668,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "PointWedgeExactEquality.quotientMap_inl_injective",
@@ -104667,14 +104682,16 @@
     :type
     "For a point wedge, the canonical map restricted to the left summand is injective.",
     :area "polygon-surface-open-cover",
-    :proved-in :routes-2026-10-10-point-wedge-exact-equality-66},
+    :proved-in :routes-2026-10-10-point-wedge-exact-equality-66,
+    :banked-by :routes-2026-10-10-point-wedge-exact-equality-66,
+    :banked-commit "1b73d26875d9a041789d5fce9c0f46c5d4170948"},
    :id :lemma-pointwedgeexactequality-quotientmap-inl-injective,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "PointWedgeExactEquality.quotientMap_inr_injective",
@@ -104688,14 +104705,16 @@
     :type
     "For a point wedge, the canonical map restricted to the right summand is injective.",
     :area "polygon-surface-open-cover",
-    :proved-in :routes-2026-10-10-point-wedge-exact-equality-66},
+    :proved-in :routes-2026-10-10-point-wedge-exact-equality-66,
+    :banked-by :routes-2026-10-10-point-wedge-exact-equality-66,
+    :banked-commit "1b73d26875d9a041789d5fce9c0f46c5d4170948"},
    :id :lemma-pointwedgeexactequality-quotientmap-inr-injective,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "PointWedgeExactEquality.quotientMap_inl_eq_inr_iff",
@@ -104709,7 +104728,9 @@
     :type
     "In a point wedge, a left representative equals a right representative exactly when both are their designated wedge points.",
     :area "polygon-surface-open-cover",
-    :proved-in :routes-2026-10-10-point-wedge-exact-equality-66},
+    :proved-in :routes-2026-10-10-point-wedge-exact-equality-66,
+    :banked-by :routes-2026-10-10-point-wedge-exact-equality-66,
+    :banked-commit "1b73d26875d9a041789d5fce9c0f46c5d4170948"},
    :id :lemma-pointwedgeexactequality-quotientmap-inl-eq-inr-iff,
    :kind :lemma,
    :depends-on
