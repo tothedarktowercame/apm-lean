@@ -129,4 +129,17 @@ theorem apm_t02a03_leftTubeNormalComplex_torusInverse
   · simp [apm_t02a03_leftTubeNormalComplex,
       apm_t02a03_leftTubeTorusPoint]
 
+theorem apm_t02a03_leftTubeNormalComplex_torusInverse_coordinates
+    (p : apm_t02a03_LeftTubeMinusCore) :
+    apm_t02a03_leftTubeNormalComplex
+      ⟨(apm_t02a03_leftTubeTorusInverse
+          (apm_t02a03_leftTubeTorusCoordinates p)).1,
+        (apm_t02a03_leftTubeTorusInverse
+          (apm_t02a03_leftTubeTorusCoordinates p)).2.1⟩ =
+      (1 / 8 : ℝ) •
+        ((apm_t02a03_leftTubeNormalAngular p : Circle) : ℂ) := by
+  simpa [apm_t02a03_leftTubeTorusCoordinates] using
+    apm_t02a03_leftTubeNormalComplex_torusInverse
+      (apm_t02a03_leftTubeTorusCoordinates p)
+
 end ConstructionTargets.T02A03LeftTubePuncturedModel
