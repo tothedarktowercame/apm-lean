@@ -56135,6 +56135,21 @@
      "The explicit paths circleMatrixLeftPath gamma and circleMatrixRightPath gamma used by the endpoint computations",
      :direction
      "Exact Path equalities from each source projection to its corresponding target explicit matrix-coordinate path"},
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791611075085-1262-030fa3f8",
+     :commands
+     ["git diff-tree --no-commit-id --name-only -r 6ec32973"
+      "sha256sum /tmp/circle_matrix_mapped_path_projection.lean"
+      "lake env lean /tmp/circle_matrix_mapped_path_projection.lean"
+      "lake build ConstructionTargets.TorusPiOneWindingCoordinates"
+      "lake env lean ConstructionTargets/TorusPiOneWindingCoordinates.lean"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 97c431a0:holes/labs/topology-contract/worklist2.edn)"
+      "recompute target and frozen t97A04 SHA-256 and comment-stripped placeholder count from commit 6ec32973"],
+     :finding
+     "PASS: codex-7 independently reviewed topo-6 commit 6ec32973. Exact implementation scope is TorusPiOneWindingCoordinates.lean; transition commit 97c431a0 changes only the ledger. Fixture SHA-256 28e9c5f293e18f8d9044f59d8fcc6b6e40c8407350eac8f7007dbf1c586097d4 matches, compiles, and has zero placeholders; focused 8290-job build and canonical compilation pass with zero forbidden declarations and only replayed dependency warnings. Representation orientation is exact: the left and right projections of the actual circleMatrixMap image path equal circleMatrixLeftPath and circleMatrixRightPath respectively, matching the previously banked endpoint formulas; no quotient-level naturality is claimed. Both projection axiom audits are exactly propext, Classical.choice, Quot.sound. Registry is 131/0 and ledger is 388 items OK. Frozen t97A04 remains 79ca854186b39183bf53490a20b5be92695e345a2c099fcf928b5ad3300ee4ec with four comment-stripped placeholders; delta zero."},
     :commit "6ec32973a2acb12b2b5b543a165d7e65b818bc97",
     :changed-paths
     ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
@@ -56147,7 +56162,7 @@
      "ConstructionTargets.TorusPiOneWindingCoordinates.circleMatrixMappedPath_projLeft"
      "ConstructionTargets.TorusPiOneWindingCoordinates.circleMatrixMappedPath_projRight"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A04/torus-pi1-winding-coordinates/mapped-path-projections",
@@ -56260,7 +56275,7 @@
       "Package dependent basepoint transport for FundamentalGroup.map, descend the mapped representative formulas through the quotient, and conjugate back to frozenLbar.",
       :other-consumers []}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/shared/torus-pi1-winding-coordinates",
    :acceptance
