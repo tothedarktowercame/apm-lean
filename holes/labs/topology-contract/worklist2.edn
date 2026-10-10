@@ -60984,52 +60984,62 @@
    "single-consumer frozen left-core exclusion for the t02A03 torus reconstruction",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/t02a03_geometric_tube_cover.lean",
-      :sha256
-      "14e388ccff51003ea125ba7cd10a574f36f9c98b1150ae18e673cb4e51b03b28"},
-     :commands
-     [{:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "14e388ccff51003ea125ba7cd10a574f36f9c98b1150ae18e673cb4e51b03b28  /tmp/t02a03_geometric_tube_cover.lean"}
-      {:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "apm_t02a03_leftTubeTorusPoint_not_mem_leftCore compiled without warnings; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}
-      {:cmd
-       "rg -n \"apm_t02a03_leftTubeTorusPoint_(mem_leftTube|not_mem_leftCore)\" ConstructionTargets/T02A03GeometricTubeCover.lean /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "The canonical module contains apm_t02a03_leftTubeTorusPoint_mem_leftTube; only the fixture contains apm_t02a03_leftTubeTorusPoint_not_mem_leftCore."}],
-     :finding
-     "The complete placeholder-free fixture proves that every explicit torus reconstruction avoids Set.range apm_t02a03_leftCore. Core membership would make its banked normal coordinate vanish. Positivity of the reconstructed planar radius identifies the real normal component with Re(b)/8, while the height is Im(b)/8; both would vanish, contradicting the unit norm of the second Circle coordinate. The theorem is ready for promotion after the canonical membership theorem.",
-     :implementation
-     {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
-      :declarations ["apm_t02a03_leftTubeTorusPoint_not_mem_leftCore"],
-      :acceptance
-      {:type
-       "forall u : Circle × Circle, apm_t02a03_leftTubeTorusPoint u ∉ Set.range apm_t02a03_leftCore",
-       :axioms ["propext" "Classical.choice" "Quot.sound"],
-       :placement
-       "Immediately after apm_t02a03_leftTubeTorusPoint_mem_leftTube",
-       :gates
-       ["module compiles without warnings"
-        "scoped file contains no sorry token"
-        "statement registry matches"]}},
-     :residual
-     "Promote the compiled core-exclusion theorem into ConstructionTargets/T02A03GeometricTubeCover.lean. Then bundle the continuous reconstruction as a map into LeftTubeMinusCore and construct both comparison homotopies."}},
+   {:placeholder-delta
+    {:path "ConstructionTargets/T02A03GeometricTubeCover.lean",
+     :before 0,
+     :after 0,
+     :delta 0},
+    :git-author "Joe Corneli <holtzermann17@gmail.com>",
+    :residual
+    "Bundle the continuous reconstruction as a map into LeftTubeMinusCore, then construct both comparison homotopies and assemble the torus HomotopyEquiv.",
+    :type
+    "∀ u : Circle × Circle, apm_t02a03_leftTubeTorusPoint u ∉ Set.range apm_t02a03_leftCore",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not",
+     :declaration-type-sha256
+     "2de341394c1b75ec65c8cc21df4e9266a78960b52289158d072365752a099cb1"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+      :exit 0,
+      :output
+      "14e388ccff51003ea125ba7cd10a574f36f9c98b1150ae18e673cb4e51b03b28  /tmp/t02a03_geometric_tube_cover.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeCover.lean",
+      :exit 0}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeCover.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "lake env lean /tmp/t02a03_geometric_tube_cover.lean | rg \"leftTubeTorusPoint_not_mem_leftCore\"",
+      :exit 0,
+      :output
+      "'apm_t02a03_leftTubeTorusPoint_not_mem_leftCore' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd "git commit -m \"Bank t02A03 torus-point core exclusion\"",
+      :exit 0,
+      :output
+      "[master fdd091ac] Bank t02A03 torus-point core exclusion; 1 file changed, 34 insertions(+)"}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "fdd091ac6f60a2b888401aad2a1feca29983d6f3",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
+    :declaration "apm_t02a03_leftTubeTorusPoint_not_mem_leftCore",
+    :fixture
+    {:path "/tmp/t02a03_geometric_tube_cover.lean",
+     :sha256
+     "14e388ccff51003ea125ba7cd10a574f36f9c98b1150ae18e673cb4e51b03b28"},
+    :finding
+    "Banked exclusion of every reconstructed torus point from the frozen left-core range. Assuming core membership forces both components of the second Circle coordinate to vanish through the normal-coordinate zero-locus theorem, contradicting its unit norm.",
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/left-tube-torus-point-core-exclusion",
