@@ -89200,20 +89200,20 @@
    "Review two independent geometric classification advances while t99J01 is held by stop-after-two.",
    :other-consumers []}
   {:consumer :t97A03,
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "No implementation commit was recorded and ConstructionTargets/T97A03ModelInvariants.lean is absent. The fixture SHA-256 and final five-conjunct orientation are correct, but exactFrozenBridge is merely the nonstandard axiom modelInvariants; none of the six accepted model-specific declarations has a frozen Lean signature or banked computation. Repair requires owner-approved placeholder-free signatures plus explicit saturated covers, deformation retractions, literal inclusion maps and Mayer-Vietoris coordinate matrices for both frozen models, their H0/H1/H2 and higher-vanishing proofs, free-product pi1 calculations, and basepoint transport; only then can the supplied-homeomorphism adapter be proved with standard-only axioms.",
    :evidence
    {:residual
-    "Provide placeholder-free typed prerequisites for each model: path-connectedness, explicit saturated covers and deformation retractions, production Mayer-Vietoris coordinate matrices and homology consequences, and free-product fundamental-group coordinates; freeze the six model-specific declaration signatures, then implement the transport adapter.",
+    "Supply owner-approved placeholder-free signatures and proofs for both models covering path-connectedness, H0/H1/H2, higher vanishing, free rank-three pi1, and the required coordinate computations; then implement transport along the supplied homeomorphism.",
     :outcome :stop,
     :warnings
     [{:kind :specification-boundary,
       :message
-      "The fixture freezes only the final adapter type, while the six advertised reusable declarations have no Lean signatures."}
+      "The six model-specific accepted declarations remain without frozen Lean signatures."}
      {:kind :missing-mathematical-prerequisite,
       :message
-      "No explicit open-cover and inclusion-coordinate computation exists for either frozen quotient model."}],
+      "Neither quotient model has a banked standard-only homology or fundamental-group computation."}],
     :disposition :stop,
     :axioms
     ["propext"
@@ -89222,32 +89222,27 @@
      "T97A03ModelInvariantsAdapterProbe.modelInvariants"],
     :author "topo-2",
     :reason
-    "The frozen fixture assumes the exact five-conjunct consumer result as the nonstandard axiom modelInvariants and contains no signatures for the six accepted model-specific declarations. No ConstructionTargets module mentions either frozen cover model or supplies its path-connectedness, integral homology, higher-degree vanishing, or fundamental group calculation. The generic Mayer-Vietoris and free-product machinery does not determine the required saturated open covers, literal inclusion maps, coordinate matrices, or quotient-model deformation retractions. Consequently this is not an uptake of banked computations: both the concrete invariant calculations and their reusable API are missing, and implementing their types from prose would invent the interface.",
+    "Fresh repair verification confirms the reviewed boundary is unchanged. None of the six model-specific APIs or any computation mentioning the frozen OneCircleCover and TwoCircleCover exists in ConstructionTargets. The fixture still proves the correctly oriented final bridge only by the nonstandard axiom modelInvariants. Without approved signatures and compiled saturated-cover, Mayer-Vietoris, free-product, and basepoint-transport calculations for both models, this uptake cannot be implemented standard-only.",
     :commands
     [{:cmd "sha256sum /tmp/t97a03-model-invariants-adapter-probe.lean",
       :exit 0,
-      :finding "The fixture hash matches the recorded hash."}
+      :finding
+      "The frozen fixture hash still matches the recorded hash."}
      {:cmd
-      "rg for the seven accepted declarations and either frozen cover model in ConstructionTargets and the fixture",
+      "rg for both frozen models and the six model-specific invariant declarations in ConstructionTargets",
       :exit 1,
       :expected-exit 1,
       :finding
-      "Only the probe axiom supplies modelInvariants; none of the six model-specific accepted APIs or concrete computations is banked."}
+      "No reviewed prerequisite signatures or computations have appeared."}
      {:cmd
       "compile Main.lean to /tmp/Main.olean and compile the fixture with /tmp on LEAN_PATH",
       :exit 0,
       :finding
-      "The consumer compiles with three existing sorry warnings; exactFrozenBridge depends on the nonstandard axiom modelInvariants."}
+      "The consumer compiles with three inherited sorry warnings; exactFrozenBridge still retains modelInvariants as a nonstandard axiom."}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
      {:cmd "git status --short", :exit 0, :finding "clean"}],
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1791630112278-1734-cc8a0ea5",
-     :finding
-     "No implementation commit was recorded and ConstructionTargets/T97A03ModelInvariants.lean is absent. The fixture SHA-256 and final five-conjunct orientation are correct, but exactFrozenBridge is merely the nonstandard axiom modelInvariants; none of the six accepted model-specific declarations has a frozen Lean signature or banked computation. Repair requires owner-approved placeholder-free signatures plus explicit saturated covers, deformation retractions, literal inclusion maps and Mayer-Vietoris coordinate matrices for both frozen models, their H0/H1/H2 and higher-vanishing proofs, free-product pi1 calculations, and basepoint transport; only then can the supplied-homeomorphism adapter be proved with standard-only axioms."},
     :fixture
     {:path "/tmp/t97a03-model-invariants-adapter-probe.lean",
      :sha256
@@ -89257,7 +89252,7 @@
      :proof-placeholder-count 1},
     :seat "topo-2"},
    :phase :implementation,
-   :state :repair,
+   :state :needs-owner,
    :scope ["ConstructionTargets/T97A03ModelInvariants.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A03/model-invariants/fixed-model-calculation",
@@ -89429,7 +89424,7 @@
    :stop-condition
    "End only when every active topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
