@@ -54089,8 +54089,179 @@
      :typed-residual-change
      :infrastructure-packets
      :review-outcomes]},
+   :evidence
+   {:outcome :replan,
+    :seat "topo-8",
+    :commands
+    [{:cmd
+      "comment-stripped placeholder count for all 15 topo2 problems",
+      :exit 0,
+      :output
+      "t00J01=1 t00J07=3 t00J08=3 t01A02=3 t01A04=4 t02A02=1 t02A03=1 t91J03=1 t93A06=1 t94A08=1 t95A04=1 t96A07=1 t96J02=1 t97A04=4 t98A03=1"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 354 items OK; {:done 327, :superseded 23, :needs-owner 1, :blocked 2, :open 1}"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}],
+    :finding
+    {:measures
+     {:placeholder-delta 0,
+      :typed-residual-change
+      ["t94A08 closure isolated the affine-chart/topological bridge but did not bank it"
+       "t95A04/t96A07 gained the shared concrete rpSmoothAtlas"
+       "t01A02 gained puncturedTorus_H2_isZero and H2map_eq_zero_of_factor"
+       "t97A04 gained memberwise chain naturality but stopped before the homology comparison and production connecting square"
+       "t00J08 isolated the private-root representation boundary without completing quantitative Nielsen-Schreier"],
+      :infrastructure-packets 3,
+      :review-outcomes
+      {:pass 5, :stop-results 2, :placeholder-closing 0}},
+     :stop-after-two
+     {:held [:t94A08 :t97A04 :t00J08],
+      :reason
+      "Each has accumulated two consecutive packets without reducing a frozen placeholder; t94A08 remains behind its affine-chart chain, t97A04 behind the contradictory recovery acceptance and absent homology square, and t00J08 behind Mathlib's private root-prime representation."},
+     :routes
+     [{:problem :t00J01,
+       :placeholders 1,
+       :remaining
+       "fold root-count adapter; Klein quotient charts; Klein H2 and product H3 vanishing via open-cover Mayer-Vietoris"}
+      {:problem :t00J07,
+       :placeholders 3,
+       :remaining
+       "RP2 double cover/pi1 and homology; punctured attachment cover; van Kampen; MV invariant bridges; main assembly"}
+      {:problem :t00J08,
+       :placeholders 3,
+       :remaining
+       "held: public Type-valued Nielsen-Schreier basis with count, two bridges, assembly"}
+      {:problem :t01A02,
+       :placeholders 3,
+       :remaining
+       "punctured-torus H2 is banked; still torus integer-matrix lift, planar bounded-perturbation surjectivity, and assembly"}
+      {:problem :t01A04,
+       :placeholders 4,
+       :remaining
+       "EqvGen quotient covering, two-sheet monodromy, wedge pi1 inclusion naturality, cut-point invariant, assembly"}
+      {:problem :t02A02,
+       :placeholders 1,
+       :remaining
+       "polygon quotient T2/classes, explicit cut-paste map, bijectivity, homeomorphism assembly"}
+      {:problem :t02A03,
+       :placeholders 1,
+       :remaining
+       "closed punctured-disk product equivalence and explicit R3 tube-minus-circle deformation to torus wedge circle"}
+      {:problem :t91J03,
+       :placeholders 1,
+       :remaining "planar crossing lemma and circle H1 degree adapter"}
+      {:problem :t93A06,
+       :placeholders 1,
+       :remaining
+       "torus quotient atlas, descended form, periodic Stokes/integration, primitive and boundary integral"}
+      {:problem :t94A08,
+       :placeholders 1,
+       :remaining
+       "held: affine projective chart comparison, smooth-conic local charts, nodal punctured-neighbourhood obstruction"}
+      {:problem :t95A04,
+       :placeholders 1,
+       :remaining
+       "rpSmoothAtlas banked; descend Veronese, smoothness, embedding, injective-mfderiv-to-immersion, assembly"}
+      {:problem :t96A07,
+       :placeholders 1,
+       :remaining
+       "rpSmoothAtlas banked; descend/smooth even quadratic map, nontransversality at e0, regular horizontal levels, assembly"}
+      {:problem :t96J02,
+       :placeholders 1,
+       :remaining
+       "polygon open cover/retract/wedge pi1, van Kampen quotient, boundary word, Klein semidirect subgroup classification"}
+      {:problem :t97A04,
+       :placeholders 4,
+       :remaining
+       "H0 direct; torus pi1 coordinates/H1; held MV connecting naturality then shear H2; assembly"}
+      {:problem :t98A03,
+       :placeholders 1,
+       :remaining
+       "basepoint reduction, wedge nonmanifold, RP2 cover/pi1, wedge van Kampen, regular and irregular three-sheet covers, assembly"}],
+     :deferred
+     "Generality beyond these named route steps, all t94A08/t97A04/t00J08 continuations pending fresh external rerouting, and non-topo2 consumers are deferred."},
+    :replacement-items
+    [{:consumer :t96A07,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:probe
+       "Compile one placeholder-free fixture replacing the sole apm_t96a07 sorry using the banked rpSmoothAtlas, route steps 2-4: descend and prove smooth the even map (yz,xz,xy), prove failure of transversality to the z-axis at [e0], prove the regular horizontal-level family for z in (0,1/2), and assemble the frozen conjunction without changing its statement."},
+      :id :routes-2026-10-10-t96a07-closure-after-rp-atlas-topo2-r2,
+      :kind :final-adapter,
+      :depends-on [:routes-2026-09-28-rp-smooth-atlas-topo2-r1]}
+     {:consumer :t95A04,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:probe
+       "Compile a placeholder-free theorem at exactly the two consumers' dimension-two interface: any of the two named even smooth sphere polynomial maps descends through sphereProjection to Space real 2 under rpSmoothAtlas, agrees after projection, and is ContMDiff. Supply t95A04 route steps 2-3 and t96A07 route step 2; reuse sphereProjectionSmoothDescentContract rather than defining another topology or atlas."},
+      :id
+      :routes-2026-10-10-rp-even-polynomial-smooth-descent-topo2-r2,
+      :kind :reusable-theorem,
+      :depends-on [:routes-2026-09-28-rp-smooth-atlas-topo2-r1],
+      :other-consumers [:t96A07]}
+     {:consumer :t02A02,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:probe
+       "Compile a placeholder-free bounded polygon-quotient topology package for the round-disk edge-pairing relations used by t02A02 and t96J02: the quotient is T2, the quotient map is open, and its restriction to the disk interior is an open embedding. Supply t02A02 route step 1 and t96J02 route step 1 only; do not introduce general polygon classification."},
+      :id
+      :routes-2026-10-10-polygon-quotient-topology-two-consumers-topo2-r2,
+      :kind :reusable-theorem,
+      :depends-on [],
+      :other-consumers [:t96J02]}
+     {:consumer :t00J07,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:probe
+       "Compile a placeholder-free RP2 covering packet at the frozen coinduced topology: identify sphereProjection as a two-sheeted covering, prove FundamentalGroup RP2 is Multiplicative (ZMod 2) by lift endpoints, and expose the pointed basepoint transport needed by both consumers. Supply t00J07 route step 3's pi1 half and t98A03 route steps 3-4; defer RP2 homology and wedge assembly."},
+      :id
+      :routes-2026-10-10-rp2-double-cover-pi1-two-consumers-topo2-r2,
+      :kind :reusable-theorem,
+      :depends-on [:routes-2026-09-28-rp-smooth-atlas-topo2-r1],
+      :other-consumers [:t98A03]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 4,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:strategy
+       "Reread TOPOLOGY-ROUTES.md and all route files; recount all 15 topo2 placeholders comment-stripped; review the one closure adapter and three shared packets; enforce stop-after-two; then refill from the complete topo2 portfolio with exactly one minimum-placeholder closure adapter first."},
+      :id :routes-2026-10-10-checkpoint-topo2-r2,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:routes-2026-10-10-t96a07-closure-after-rp-atlas-topo2-r2
+       :routes-2026-10-10-rp-even-polynomial-smooth-descent-topo2-r2
+       :routes-2026-10-10-polygon-quotient-topology-two-consumers-topo2-r2
+       :routes-2026-10-10-rp2-double-cover-pi1-two-consumers-topo2-r2]}],
+    :author "topo-8",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -54105,6 +54276,84 @@
     :routes-2026-09-28-t97a04-mv-connecting-naturality-topo2-r1
     :routes-2026-09-28-t00j08-quantitative-nielsen-schreier-topo2-r1
     :routes-2026-09-28-checkpoint-topo2]}
+  {:consumer :t96A07,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:probe
+    "Compile one placeholder-free fixture replacing the sole apm_t96a07 sorry using the banked rpSmoothAtlas, route steps 2-4: descend and prove smooth the even map (yz,xz,xy), prove failure of transversality to the z-axis at [e0], prove the regular horizontal-level family for z in (0,1/2), and assemble the frozen conjunction without changing its statement."},
+   :id :routes-2026-10-10-t96a07-closure-after-rp-atlas-topo2-r2,
+   :kind :final-adapter,
+   :depends-on
+   [:routes-2026-09-28-rp-smooth-atlas-topo2-r1
+    :routes-2026-09-28-checkpoint-topo2-r1]}
+  {:consumer :t95A04,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:probe
+    "Compile a placeholder-free theorem at exactly the two consumers' dimension-two interface: any of the two named even smooth sphere polynomial maps descends through sphereProjection to Space real 2 under rpSmoothAtlas, agrees after projection, and is ContMDiff. Supply t95A04 route steps 2-3 and t96A07 route step 2; reuse sphereProjectionSmoothDescentContract rather than defining another topology or atlas."},
+   :id :routes-2026-10-10-rp-even-polynomial-smooth-descent-topo2-r2,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-09-28-rp-smooth-atlas-topo2-r1
+    :routes-2026-09-28-checkpoint-topo2-r1],
+   :other-consumers [:t96A07]}
+  {:consumer :t02A02,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:probe
+    "Compile a placeholder-free bounded polygon-quotient topology package for the round-disk edge-pairing relations used by t02A02 and t96J02: the quotient is T2, the quotient map is open, and its restriction to the disk interior is an open embedding. Supply t02A02 route step 1 and t96J02 route step 1 only; do not introduce general polygon classification."},
+   :id
+   :routes-2026-10-10-polygon-quotient-topology-two-consumers-topo2-r2,
+   :kind :reusable-theorem,
+   :depends-on [:routes-2026-09-28-checkpoint-topo2-r1],
+   :other-consumers [:t96J02]}
+  {:consumer :t00J07,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:probe
+    "Compile a placeholder-free RP2 covering packet at the frozen coinduced topology: identify sphereProjection as a two-sheeted covering, prove FundamentalGroup RP2 is Multiplicative (ZMod 2) by lift endpoints, and expose the pointed basepoint transport needed by both consumers. Supply t00J07 route step 3's pi1 half and t98A03 route steps 3-4; defer RP2 homology and wedge assembly."},
+   :id :routes-2026-10-10-rp2-double-cover-pi1-two-consumers-topo2-r2,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-09-28-rp-smooth-atlas-topo2-r1
+    :routes-2026-09-28-checkpoint-topo2-r1],
+   :other-consumers [:t98A03]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 4,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:strategy
+    "Reread TOPOLOGY-ROUTES.md and all route files; recount all 15 topo2 placeholders comment-stripped; review the one closure adapter and three shared packets; enforce stop-after-two; then refill from the complete topo2 portfolio with exactly one minimum-placeholder closure adapter first."},
+   :id :routes-2026-10-10-checkpoint-topo2-r2,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:routes-2026-10-10-t96a07-closure-after-rp-atlas-topo2-r2
+    :routes-2026-10-10-rp-even-polynomial-smooth-descent-topo2-r2
+    :routes-2026-10-10-polygon-quotient-topology-two-consumers-topo2-r2
+    :routes-2026-10-10-rp2-double-cover-pi1-two-consumers-topo2-r2
+    :routes-2026-09-28-checkpoint-topo2-r1]}
   {:consumer :t00J07,
    :phase :probe,
    :state :superseded,
