@@ -91752,9 +91752,52 @@
    "Review the representation repair before returning to finite arborescence counting.",
    :other-consumers []}
   {:consumer :t99J01,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :fixture
+     {:path "/tmp/arborescence-total-equivalence.lean",
+      :sha256
+      "0472c4cecffd4fef31f8ea3c423d8d742dfde9446cead0d2e955fd20dccbae2b"},
+     :commands
+     [{:cmd "lake env lean /tmp/arborescence-total-equivalence.lean",
+       :exit 0,
+       :finding
+       "Complete equivalence compiles; #print axioms reports propext and Classical.choice."}
+      {:cmd
+       "rg -n \"sorry|admit\" /tmp/arborescence-total-equivalence.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :finding "131 registered statements match, 0 do not"}
+      {:cmd "git status --short", :exit 0, :finding "clean"}],
+     :axioms ["propext" "Classical.choice"],
+     :implementation
+     {:scope
+      ["ConstructionTargets/FiniteArborescenceTotalArrowEquivalence.lean"],
+      :declarations
+      [{:name "FiniteArborescenceTotalArrow.targetNonroot",
+        :type
+        "(V : Type u) [Quiver V] [Arborescence V] -> Quiver.Total V -> {x : V // x != Quiver.root V}"}
+       {:name "FiniteArborescenceTotalArrow.totalEquivNonroot",
+        :type
+        "(V : Type u) [Quiver V] [Arborescence V] -> Quiver.Total V equivalence {x : V // x != Quiver.root V}"}],
+      :proof
+      "Map every arrow to its target. An arrow into the root would extend the unique root path to a nonempty root-to-root path, contradicting uniqueness with Path.nil. Surjectivity extracts the final arrow from the unique nonempty root path to a non-root vertex. Injectivity follows by comparing the two extended root paths and applying Path.cons.inj."},
+     :acceptance
+     {:fixture-compiles true,
+      :zero-fixture-sorry true,
+      :standard-only-axioms true,
+      :registry-check true},
+     :residual
+     "Implement the compiled equivalence in the scoped ConstructionTargets module; the downstream row can then derive Nat.card (Quiver.Total V) = Nat.card V - 1 and specialize it to the geodesic subtree."}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :proof
+   "Map every arrow to its target. An arrow into the root would extend the unique root path to a nonempty root-to-root path, contradicting uniqueness with Path.nil. Surjectivity extracts the final arrow from the unique nonempty root path to a non-root vertex. Injectivity follows by comparing the two extended root paths and applying Path.cons.inj.",
+   :scope
+   ["ConstructionTargets/FiniteArborescenceTotalArrowEquivalence.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/positive-index/finite-arborescence-total-arrow-equivalence",
    :acceptance
@@ -91773,6 +91816,13 @@
    :id
    :routes-2026-10-10-finite-arborescence-total-arrow-nonroot-equivalence-14,
    :kind :reusable-theorem,
+   :declarations
+   [{:name "FiniteArborescenceTotalArrow.targetNonroot",
+     :type
+     "(V : Type u) [Quiver V] [Arborescence V] -> Quiver.Total V -> {x : V // x != Quiver.root V}"}
+    {:name "FiniteArborescenceTotalArrow.totalEquivNonroot",
+     :type
+     "(V : Type u) [Quiver V] [Arborescence V] -> Quiver.Total V equivalence {x : V // x != Quiver.root V}"}],
    :depends-on [],
    :current-residual
    "Extract the final arrow from each nontrivial unique root path, prove its target is the chosen non-root vertex, and prove it is inverse to the target map.",
