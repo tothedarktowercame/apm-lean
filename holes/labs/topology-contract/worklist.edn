@@ -83850,8 +83850,62 @@
    "Review four independently typed route steps, then refill.",
    :other-consumers []}
   {:consumer :t96A06,
+   :stop-count 1,
+   :evidence
+   {:placeholder-after {:t96A06 1},
+    :residual
+    "First generalize the banked RP2 sphere-projection fiber/open/local-homeomorphism results to RP3 and compile a genuine two-sheeted covering construction; then form the antipodal quotient homeomorphism and prove its literal projection equation and fiber cardinality.",
+    :outcome :stop,
+    :warnings [],
+    :disposition :stop,
+    :axioms
+    ["propext"
+     "Classical.choice"
+     "Quot.sound"
+     "sphere_projective_covering_package"],
+    :author "topo-2",
+    :placeholder-before {:t96A06 1},
+    :reason
+    "The supplied fixture does not implement the requested representation comparison. It defines the elementary antipodal relation, setoid, nonzero-vector conversion, and projection, but then postulates SphereProjectiveCoveringPackage. The quotient homeomorphism, IsCoveringMap proof, and two-point fiber theorem are fields of that postulated package, and #print axioms reports sphere_projective_covering_package, contradicting :axioms :standard-only. The closest banked module, RealProjectiveSmoothTarget, proves an open quotient and local-homeomorphism model only for sphereProjection 2 (the sphere in Fin 3, projecting to RP2), not sphereProjection 3 / Fin 4 / RP3. The exact missing representation layer is therefore the dimension-3 fiber equality iff equality-or-antipodality, its open/local-homeomorphism construction, and an evenly-covered-neighborhood or properly-discontinuous finite-action theorem upgrading that local model to a global two-sheeted covering. Without that layer there is no standard-only source covering structure to transport across the quotient homeomorphism.",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/t96a06-sphere-projective-covering-probe.lean",
+      :exit 0,
+      :finding
+      "c9aac3057c72154f269972588390e0ad2e5d1adf8586ab1bab09312ac38315e5"}
+     {:cmd
+      "lake env lean /tmp/t96a06-sphere-projective-covering-probe.lean",
+      :exit 0,
+      :finding
+      "The fixture compiles, but normalized_projection_isCoveringMap depends on the custom axiom sphere_projective_covering_package."}
+     {:cmd
+      "rg -n \"^(axiom|structure|def|theorem)|realProjectiveAntipodalSetoid|realProjectiveSphereProjection|realProjectiveSphereQuotientHomeomorph|realProjectiveSphereProjection_isCoveringMap|realProjectiveSphereProjection_fiber_card_two\" /tmp/t96a06-sphere-projective-covering-probe.lean",
+      :exit 0,
+      :finding
+      "Lines 56-63 define and postulate the package; none of the six required acceptance declarations occurs."}
+     {:cmd
+      "test ! -e ConstructionTargets/RealProjectiveSphereCovering.lean",
+      :exit 0,
+      :finding "The scoped target module is absent."}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}],
+    :representation
+    {:source
+     "The antipodal Setoid quotient of the unit sphere in Fin 4 to Real",
+     :target
+     "The coinduced projective Space Real 3 of nonzero vectors modulo nonzero scaling",
+     :direction
+     "A homeomorphism from the source antipodal quotient to the target projective quotient induced by sphere inclusion, followed by transport of the source two-sheeted quotient covering structure to the normalized sphere projection"},
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/t96a06-sphere-projective-covering-probe.lean",
+     :sha256
+     "c9aac3057c72154f269972588390e0ad2e5d1adf8586ab1bab09312ac38315e5",
+     :status :self-axiomatized},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/RealProjectiveSphereCovering.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t96A06/sphere-projective-covering-comparison/package",
