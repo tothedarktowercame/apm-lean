@@ -60887,52 +60887,62 @@
    "single-consumer frozen left-tube membership for the t02A03 torus reconstruction",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/t02a03_geometric_tube_cover.lean",
-      :sha256
-      "57d3f54ecf627c51f04338c2b426f1eb01997e985d542830a07f3359ca1bc767"},
-     :commands
-     [{:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "57d3f54ecf627c51f04338c2b426f1eb01997e985d542830a07f3359ca1bc767  /tmp/t02a03_geometric_tube_cover.lean"}
-      {:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "apm_t02a03_leftTubeTorusPoint_mem_leftTube compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}
-      {:cmd
-       "rg -n \"apm_t02a03_leftTubeTorusPoint_mem_leftTube|apm_t02a03_dist_leftTubeTorusPoint_leftCoreCircle\" ConstructionTargets/T02A03GeometricTubeCover.lean /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "The fixture contains the membership theorem; the canonical module contains its exact-distance prerequisite but not the membership theorem."}],
-     :finding
-     "The complete placeholder-free fixture proves that apm_t02a03_leftTubeTorusPoint u belongs to the frozen left tube. It uses apm_t02a03_leftCoreCircle u.1 as a center in the frozen core range and the banked exact distance 1/8 to invoke closed-thickening membership at radius 1/4. The theorem is ready for direct promotion after the existing exact-distance theorem.",
-     :implementation
-     {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
-      :declarations ["apm_t02a03_leftTubeTorusPoint_mem_leftTube"],
-      :acceptance
-      {:type
-       "forall u : Circle × Circle, apm_t02a03_leftTubeTorusPoint u ∈ apm_t02a03_leftTube",
-       :axioms ["propext" "Classical.choice" "Quot.sound"],
-       :placement
-       "Immediately after apm_t02a03_dist_leftTubeTorusPoint_leftCoreCircle",
-       :gates
-       ["module compiles"
-        "scoped file contains no sorry token"
-        "statement registry matches"]}},
-     :residual
-     "Promote the compiled membership theorem into ConstructionTargets/T02A03GeometricTubeCover.lean. Then prove the reconstructed point is outside the frozen left-core range, bundle the continuous inverse map into LeftTubeMinusCore, and construct both comparison homotopies."}},
+   {:placeholder-delta
+    {:path "ConstructionTargets/T02A03GeometricTubeCover.lean",
+     :before 0,
+     :after 0,
+     :delta 0},
+    :git-author "Joe Corneli <holtzermann17@gmail.com>",
+    :residual
+    "Prove the reconstructed point is outside the frozen left-core range, bundle the continuous inverse map into LeftTubeMinusCore, and construct both comparison homotopies.",
+    :type
+    "∀ u : Circle × Circle, apm_t02a03_leftTubeTorusPoint u ∈ apm_t02a03_leftTube",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not",
+     :declaration-type-sha256
+     "7210f9a81d69b064ad3281717ede41fbe7e1242efd82b01609dd04479ac2ed2e"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+      :exit 0,
+      :output
+      "57d3f54ecf627c51f04338c2b426f1eb01997e985d542830a07f3359ca1bc767  /tmp/t02a03_geometric_tube_cover.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeCover.lean",
+      :exit 0}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeCover.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "lake env lean /tmp/t02a03_geometric_tube_cover.lean | rg \"leftTubeTorusPoint_mem_leftTube\"",
+      :exit 0,
+      :output
+      "'apm_t02a03_leftTubeTorusPoint_mem_leftTube' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd "git commit -m \"Bank t02A03 torus-point tube membership\"",
+      :exit 0,
+      :output
+      "[master f35eab20] Bank t02A03 torus-point tube membership; 1 file changed, 13 insertions(+)"}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "f35eab209803a1fdb662c79713745ca1cd79e940",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
+    :declaration "apm_t02a03_leftTubeTorusPoint_mem_leftTube",
+    :fixture
+    {:path "/tmp/t02a03_geometric_tube_cover.lean",
+     :sha256
+     "57d3f54ecf627c51f04338c2b426f1eb01997e985d542830a07f3359ca1bc767"},
+    :finding
+    "Banked frozen left-tube membership for every reconstructed torus point by using the corresponding frozen core point and the exact distance 1/8 within the closed-thickening radius 1/4.",
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/left-tube-torus-point-membership",
