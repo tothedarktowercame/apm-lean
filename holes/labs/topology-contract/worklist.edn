@@ -82994,8 +82994,61 @@
    "Generalize quotient-coordinate compatibility from CP2/Fin3 to CPn/Fin(n+1); diagonal local calculations and rational homology remain.",
    :other-consumers []}
   {:consumer :t94J09,
+   :evidence
+   {:placeholder-after {:t94J09 1, :tunk01 1, :t91A02 1},
+    :placeholder-delta {:t94J09 0, :tunk01 0, :t91A02 0},
+    :residual
+    "The generic compact closed-equivalence quotient Hausdorff theorem is banked. Consumers still need exact closedness proofs for their polygon or geometric EqvGen relation graphs and local bridge adapters.",
+    :outcome :done-unreviewed,
+    :warnings
+    [{:kind :fixture-assumption,
+      :message
+      "The supplied probe retains its local axiom exists_disjoint_open_saturated; the scoped module proves the corresponding requested theorem without it."}
+     {:kind :concurrent-worktree-change,
+      :message
+      "ConstructionTargets/TorusPiOneWindingCoordinates.lean was already modified by another writer and was neither staged nor committed."}],
+    :statement-hashes
+    {:status :unchanged, :registered 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author {:name "Joe Corneli", :email "holtzermann17@gmail.com"},
+    :placeholder-before {:t94J09 1, :tunk01 1, :t91A02 1},
+    :commands
+    [{:cmd
+      "sha256sum /tmp/compact-closed-equivalence-quotient-probe.lean",
+      :exit 0,
+      :finding
+      "85d98a50ee78e2aa220e73f6f515cefd82c73831bf29a9e58f8a282fb483af9c"}
+     {:cmd
+      "lake env lean ConstructionTargets/CompactClosedEquivalenceQuotient.lean",
+      :exit 0,
+      :finding
+      "Both requested declarations compile; axioms are propext, Classical.choice, and Quot.sound."}
+     {:cmd
+      "lake env lean /tmp/compact-closed-equivalence-quotient-probe.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git diff-tree --no-commit-id --name-only -r HEAD",
+      :exit 0,
+      :finding
+      "ConstructionTargets/CompactClosedEquivalenceQuotient.lean"}],
+    :diagnostic-history
+    [{:cmd
+      "lake env lean ConstructionTargets/CompactClosedEquivalenceQuotient.lean",
+      :exit 1,
+      :finding
+      "The first compile exposed one elaboration mismatch at the explicit membership proof for (z,z) in the relation graph; adding the expected set-membership type corrected it."}],
+    :commit "81ab9dbbebc5739407a79a1b51d66bdd888e6182",
+    :changed-paths
+    ["ConstructionTargets/CompactClosedEquivalenceQuotient.lean"],
+    :fixture
+    {:path "/tmp/compact-closed-equivalence-quotient-probe.lean",
+     :sha256
+     "85d98a50ee78e2aa220e73f6f515cefd82c73831bf29a9e58f8a282fb483af9c"},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CompactClosedEquivalenceQuotient.lean"],
    :dag-node
