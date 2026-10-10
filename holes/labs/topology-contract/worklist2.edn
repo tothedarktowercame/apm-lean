@@ -56011,50 +56011,49 @@
    "single-consumer specialization to the frozen t97A04 matrix",
    :consumer :t97A04,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/circle_matrix_path_endpoint_coordinates.lean",
-      :sha256
-      "de22a16d869dbd993bb2d16d3a8f561a1666aa075816d99fcfadd0c248c14522"},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/circle_matrix_path_endpoint_coordinates.lean",
-       :exit 0,
-       :output
-       "all four declarations compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/circle_matrix_path_endpoint_coordinates.lean || true)\"",
-       :exit 0}
-      {:cmd
-       "rg -n '^(def circleMatrix(Left|Right)Path|theorem circleMatrix(Left|Right)Path_endpointInteger)' /tmp/circle_matrix_path_endpoint_coordinates.lean",
-       :exit 0,
-       :output
-       "four requested declarations found at lines 8, 13, 18, and 31"}
-      {:cmd
-       "sha256sum /tmp/circle_matrix_path_endpoint_coordinates.lean",
-       :exit 0,
-       :output
-       "de22a16d869dbd993bb2d16d3a8f561a1666aa075816d99fcfadd0c248c14522  /tmp/circle_matrix_path_endpoint_coordinates.lean"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :implementation
-     {:scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
-      :declarations
-      ["circleMatrixLeftPath"
-       "circleMatrixRightPath"
-       "circleMatrixLeftPath_endpointInteger"
-       "circleMatrixRightPath_endpointInteger"],
-      :acceptance
-      "Copy the four verified declarations into TorusPiOneWindingCoordinates, preserving the explicit transformed paths and endpoint-integer equalities; compile the scoped module, confirm no new placeholders, and rerun the statement registry check."},
-     :finding
-     "All four requested declarations compile without placeholders. For every based path in Circle x Circle, the left transformed path is the pointwise product gamma0*gamma0*gamma1 and has endpoint integer 2*n0+n1; the right transformed path is gamma1*gamma0^-1 and has endpoint integer n1-n0. The endpoint theorems use only propext, Classical.choice, and Quot.sound.",
-     :residual
-     "Identify these explicit paths with the two projections of the circleMatrixMap image path, descend the formulas through Path.Homotopic.Quotient, and transport them through frozenTorusHomeomorphCircleProd to complete the induced matrix naturality theorem."}},
+   {:placeholder-delta 0,
+    :residual
+    "Identify these explicit paths with the two projections of the circleMatrixMap image path, descend the formulas through Path.Homotopic.Quotient, and transport them through frozenTorusHomeomorphCircleProd to complete the induced matrix naturality theorem.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms [propext Classical.choice Quot.sound],
+    :author "topo-6",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/circle_matrix_path_endpoint_coordinates.lean",
+      :exit 0,
+      :output
+      "de22a16d869dbd993bb2d16d3a8f561a1666aa075816d99fcfadd0c248c14522  /tmp/circle_matrix_path_endpoint_coordinates.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/TorusPiOneWindingCoordinates.lean",
+      :exit 0}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/TorusPiOneWindingCoordinates.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r 868ae280b9c05efaeb3744df2576cb1f68f89f0e",
+      :exit 0,
+      :output
+      "ConstructionTargets/TorusPiOneWindingCoordinates.lean"}],
+    :commit "868ae280b9c05efaeb3744df2576cb1f68f89f0e",
+    :changed-paths
+    ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
+    :fixture
+    {:path "/tmp/circle_matrix_path_endpoint_coordinates.lean",
+     :sha256
+     "de22a16d869dbd993bb2d16d3a8f561a1666aa075816d99fcfadd0c248c14522"},
+    :declarations
+    ["ConstructionTargets.TorusPiOneWindingCoordinates.circleMatrixLeftPath"
+     "ConstructionTargets.TorusPiOneWindingCoordinates.circleMatrixRightPath"
+     "ConstructionTargets.TorusPiOneWindingCoordinates.circleMatrixLeftPath_endpointInteger"
+     "ConstructionTargets.TorusPiOneWindingCoordinates.circleMatrixRightPath_endpointInteger"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A04/torus-pi1-winding-coordinates/matrix-path-endpoints",
