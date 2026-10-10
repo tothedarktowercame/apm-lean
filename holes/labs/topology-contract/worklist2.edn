@@ -60444,6 +60444,20 @@
      "Membership of the ambient point in the frozen left-core range",
      :direction
      "Exact logical equivalence from the source normal-coordinate zero representation to the target frozen-core membership representation, with the reverse implication included"},
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791636377986-1953-42d86e85",
+     :commands
+     ["git show, diff-tree, and show --check on implementation 44f9e07b and ledger transition e011cc5f"
+      "sha256sum authenticated fixture and frozen t02A03 consumer"
+      "lake env lean on fixture, target, and fresh bidirectional zero-locus probe"
+      "lake build ConstructionTargets.T02A03GeometricTubeCover"
+      "recomputed declaration-type hash and comment-stripped placeholder counts"
+      "python3 scripts/statement-registry.py check --rev 44f9e07b"
+      "bb worklist_check.bb on committed transition ledger"],
+     :finding
+     "PASS: codex-7 independently reviewed topo-6 commit 44f9e07b6940971d167df6ecb37e32e67c916517. Exact implementation scope is ConstructionTargets/T02A03GeometricTubeCover.lean; transition e011cc5f3ab61382993b20048209c275c3bd2685 is ledger-only. Fixture SHA-256 is 10e81ad59c428cc36b365f2ad2c67fea9b3ac41b129c68d28a05cfdf81a37482. Fixture, recorded-identical target, fresh bidirectional representation probe, and 8240-job focused build pass. The theorem has exactly the frozen type and orientation: for every point of the exact left-tube subtype, vanishing of its complex normal coordinate is equivalent to membership of its ambient value in Set.range leftCore. Forward reconstruction uses Complex.arg after obtaining planar norm one and height zero; reverse substitution uses the frozen core coordinates and the unit-circle identity. A fresh negated-equivalence check confirms that nonzero normal coordinate corresponds exactly to deletion of that core range. No punctured-normal map, homotopy, torus equivalence, or gluing is claimed. Axioms are exactly propext, Classical.choice, and Quot.sound. Declaration type hash reproduces as 60f219735fb84b15de0ce20bc0dd3118705d5fffe7ad0dcc5658bbe39a6ab193; target has zero executable placeholders. Frozen t02A03 consumer hash is b123eca388ab2858ca55daf538c1ddd645022b52f5196a15f0bb516d78323d7d with one executable placeholder; registry is 131/0 and the committed 434-row ledger validates with exactly one done-unreviewed row."},
     :commit "44f9e07b6940971d167df6ecb37e32e67c916517",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
@@ -60456,7 +60470,7 @@
     "Banked the exact bidirectional comparison between vanishing of the continuous disk-normal coordinate and membership in the frozen left-core range. The forward direction reconstructs a core parameter with Complex.arg; the reverse direction substitutes the frozen core coordinates.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-normal-zero-locus",
    :acceptance
@@ -60562,7 +60576,7 @@
    :phase :probe,
    :type
    "Nonempty (ContinuousMap.HomotopyEquiv LeftTubeMinusCore ConstructionTargets.TorusCircleWedgeOpenCover.Torus)",
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-punctured-model",
    :acceptance
