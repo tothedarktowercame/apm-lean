@@ -56298,48 +56298,58 @@
    "single-consumer all-class Circle-coordinate naturality for the frozen t97A04 matrix",
    :consumer :t97A04,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path
-      "/tmp/torus_circle_matrix_pi1_representative_naturality.lean",
-      :sha256
-      "5d513a6d07389b3a7e788275274c32947d21bafbb70bd4ff8bb841f02f383780"},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/torus_circle_matrix_pi1_representative_naturality.lean",
-       :exit 0,
-       :output
-       "all-class Fin-2 matrix naturality compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/torus_circle_matrix_pi1_representative_naturality.lean || true)\"",
-       :exit 0}
-      {:cmd
-       "sha256sum /tmp/torus_circle_matrix_pi1_representative_naturality.lean",
-       :exit 0,
-       :output
-       "5d513a6d07389b3a7e788275274c32947d21bafbb70bd4ff8bb841f02f383780  /tmp/torus_circle_matrix_pi1_representative_naturality.lean"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :finding
-     "The placeholder-free fixture descends the two explicit-loop coordinate equations to arbitrary Circle-product fundamental-group classes by Quotient.inductionOn. Fin-2 extensionality then combines them into the exact function equality (n0,n1) maps to (2*n0+n1,n1-n0), with no existence-only facade.",
-     :implementation
-     {:scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
-      :declarations
-      ["circleMatrixPi1Map_coord_zero"
-       "circleMatrixPi1Map_coord_one"
-       "circleMatrixPi1Map_naturality"],
-      :acceptance
-      {:compile
-       "lake build ConstructionTargets.TorusPiOneWindingCoordinates",
-       :placeholder-free true,
-       :statement-registry true}},
-     :residual
-     "Transport the all-class equality through frozenTorusHomeomorphCircleProd using the exact frozenLbar conjugacy, then rewrite it in frozenTorusPi1Coord coordinates."}},
+   {:placeholder-delta 0,
+    :residual
+    "Transport the all-class equality through frozenTorusHomeomorphCircleProd using the exact frozenLbar conjugacy, then rewrite it in frozenTorusPi1Coord coordinates.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["The full Lake build replayed pre-existing linter warnings from dependency modules; the scoped module compiled without new warnings."],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/torus_circle_matrix_pi1_representative_naturality.lean",
+      :exit 0,
+      :output
+      "5d513a6d07389b3a7e788275274c32947d21bafbb70bd4ff8bb841f02f383780  /tmp/torus_circle_matrix_pi1_representative_naturality.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/TorusPiOneWindingCoordinates.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.TorusPiOneWindingCoordinates",
+      :exit 0,
+      :output "Build completed successfully (8290 jobs)."}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/TorusPiOneWindingCoordinates.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "lake env lean /tmp/check_torus_all_class_axioms.lean",
+      :exit 0,
+      :output
+      "Each of circleMatrixPi1Map_coord_zero, circleMatrixPi1Map_coord_one, and circleMatrixPi1Map_naturality depends on [propext, Classical.choice, Quot.sound]."}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r 04428243488bf54ea0b1238f3a8d39f7dd0cbd9c",
+      :exit 0,
+      :output
+      "ConstructionTargets/TorusPiOneWindingCoordinates.lean"}],
+    :commit "04428243488bf54ea0b1238f3a8d39f7dd0cbd9c",
+    :changed-paths
+    ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
+    :fixture
+    {:path
+     "/tmp/torus_circle_matrix_pi1_representative_naturality.lean",
+     :sha256
+     "5d513a6d07389b3a7e788275274c32947d21bafbb70bd4ff8bb841f02f383780"},
+    :declarations
+    ["ConstructionTargets.TorusPiOneWindingCoordinates.circleMatrixPi1Map_coord_zero"
+     "ConstructionTargets.TorusPiOneWindingCoordinates.circleMatrixPi1Map_coord_one"
+     "ConstructionTargets.TorusPiOneWindingCoordinates.circleMatrixPi1Map_naturality"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A04/torus-pi1-winding-coordinates/all-class-circle-naturality",
