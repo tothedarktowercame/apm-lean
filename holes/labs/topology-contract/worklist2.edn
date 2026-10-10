@@ -55174,64 +55174,84 @@
    :current-residual
    "After inverse laws are banked, prove both continuity directions and package the actual affine-chart OpenPartialHomeomorph.",
    :other-consumers []}
+  {:bounded-exception
+   "single-consumer bounded smooth-conic local-chart construction",
+   :consumer :t94A08,
+   :phase :probe,
+   :state :open,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md/t94A08/smooth-conic-local-charts",
+   :acceptance
+   {:probe
+    "Compile a placeholder-free inhabitant of T94A08SmoothConicLocalChartsProbe.SmoothConicLocalCharts from /tmp/t94a08_smooth_conic_local_charts_contract.lean. Reuse ConstructionTargets.T94A08ProjectiveConic.affineChartConstruction at the frozen coinduced topology. In the z0 chart parameterize the conic by a = u + I*v with a nonzero and inverse formulas u=(a-a^-1)/2 and v=(a+a^-1)/(2*I); cover the two z0=0 points in a z1 chart. Supply explicit open source and Euclidean target neighborhoods and the homeomorphisms required by every structure field; do not define another topology or replace the witnesses with a Prop facade.",
+    :declaration "SmoothConicLocalCharts",
+    :placeholder "the sole sorry in apm_t94a08",
+    :route-step "step 2, smooth-conic local Euclidean charts"},
+   :id :routes-2026-10-10-t94a08-smooth-conic-local-charts-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo2-r2
+    :routes-2026-10-10-t94a08-affine-chart-source-open-topo2-r1
+    :routes-2026-10-10-t94a08-affine-chart-inverse-laws-topo2-r1],
+   :current-residual
+   "After the positive smooth-conic chart witnesses are banked, prove route step 3: the nodal cross has a disconnected punctured neighborhood at [1:0:0], incompatible with an open planar neighborhood.",
+   :other-consumers []}
   {:consumer :t94A08,
    :evidence
    {:probe
     {:outcome :revise,
      :seat "topo-8",
      :fixture
-     {:path "/tmp/t94a08_affine_chart_inverse_laws.lean",
+     {:path "/tmp/t94a08_smooth_conic_local_charts_contract.lean",
       :sha256
-      "28978815a3932bf3a00342ab6a4d2e4a529021a032e63cd9ddafecd74b6391e8"},
+      "e3c1f3b0ca81ff510f436dad7630fb73d13f01e111699a01c37f120f0bdd5346"},
      :commands
      [{:cmd
-       "rg -n 'affineSource_preimage|affineSource_isOpen' ConstructionTargets/ComplexProjectiveChartTargets.lean",
-       :exit 0,
-       :output "banked at lines 27 and 37"}
-      {:cmd
-       "lake env lean ConstructionTargets/ComplexProjectiveChartTargets.lean",
-       :exit 0}
-      {:cmd "lake env lean /tmp/t94a08_affine_chart_inverse_laws.lean",
+       "lake env lean /tmp/t94a08_smooth_conic_local_charts_contract.lean",
        :exit 0}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t94a08_affine_chart_inverse_laws.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t94a08_smooth_conic_local_charts_contract.lean || true)\"",
        :exit 0}
-      {:cmd "sha256sum /tmp/t94a08_affine_chart_inverse_laws.lean",
+      {:cmd
+       "sha256sum /tmp/t94a08_smooth_conic_local_charts_contract.lean",
        :exit 0,
        :output
-       "28978815a3932bf3a00342ab6a4d2e4a529021a032e63cd9ddafecd74b6391e8  /tmp/t94a08_affine_chart_inverse_laws.lean"}
+       "e3c1f3b0ca81ff510f436dad7630fb73d13f01e111699a01c37f120f0bdd5346  /tmp/t94a08_smooth_conic_local_charts_contract.lean"}
+      {:cmd
+       "lake env lean ConstructionTargets/T94A08AffineChartHomeomorph.lean",
+       :exit 0}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
      :finding
-     "The banked source-preimage and openness theorems reproduce successfully. The next actual representation step also compiles without placeholders: coordinates composed with chartInverse is the identity on all affine coordinates, and chartInverse composed with coordinates is the identity on the nonzero-coordinate projective source. The first proof normalizes the inserted representative using exists_smul_eq_mk_rep; the second applies Projectivization.mk_eq_mk_iff' with inverse of the distinguished representative coordinate. These are exact inverse laws, not a declaration that a chart ought to exist. Continuity of coordinates from the coinduced topology is still required before packaging the OpenPartialHomeomorph, so the full consumer closure is not GO yet.",
+     "Route step 1 is already banked more completely than the row evidence records: T94A08AffineChartHomeomorph compiles affineChartConstruction, with source openness, both continuity directions, inverse laws, and the actual OpenPartialHomeomorph at dimension two. The next missing result is therefore route step 2, not another continuity packet. The compiled placeholder-free contract exposes explicit open source and target neighborhoods and a homeomorphism from each smooth-conic neighborhood to an open subset of EuclideanSpace real (Fin 2); an inhabitant directly supplies the positive manifold conjunct without introducing another projective topology. The independent nodal-cross obstruction remains route step 3.",
      :residual
-     "Bank the two inverse laws. The remaining route-step-1 boundary is continuity of coordinates on the open source and continuity of chartInverse, followed by packaging the OpenPartialHomeomorph. Then prove the smooth-conic and nodal-cross local topology statements.",
+     "Construct SmoothConicLocalCharts from the banked affine charts by solving the quadratic in the z0 or z1 chart; then prove the separate nodal-cross punctured-neighborhood obstruction and assemble the frozen conjunction.",
      :prerequisite
      {:bounded-exception
-      "single-consumer bounded affine-chart inverse laws",
+      "single-consumer bounded smooth-conic local-chart construction",
       :consumer :t94A08,
       :phase :probe,
       :state :open,
       :scope [],
-      :dag-node "TOPOLOGY-ROUTES.md/t94A08/affine-chart-inverse-laws",
+      :dag-node "TOPOLOGY-ROUTES.md/t94A08/smooth-conic-local-charts",
       :acceptance
       {:probe
-       "Compile and bank coordinates_chartInverse and chartInverse_coordinates from /tmp/t94a08_affine_chart_inverse_laws.lean. At the frozen coinduced projective topology, prove the ratio-coordinate and normalized-insertion functions are mutual inverses on the exact open affine source already banked. This supplies the algebraic inverse-law portion of t94A08 route step 1; do not assert continuity or package an OpenPartialHomeomorph in this row.",
-       :declarations
-       ["coordinates_chartInverse" "chartInverse_coordinates"],
+       "Compile a placeholder-free inhabitant of T94A08SmoothConicLocalChartsProbe.SmoothConicLocalCharts from /tmp/t94a08_smooth_conic_local_charts_contract.lean. Reuse ConstructionTargets.T94A08ProjectiveConic.affineChartConstruction at the frozen coinduced topology. In the z0 chart parameterize the conic by a = u + I*v with a nonzero and inverse formulas u=(a-a^-1)/2 and v=(a+a^-1)/(2*I); cover the two z0=0 points in a z1 chart. Supply explicit open source and Euclidean target neighborhoods and the homeomorphisms required by every structure field; do not define another topology or replace the witnesses with a Prop facade.",
+       :declaration "SmoothConicLocalCharts",
        :placeholder "the sole sorry in apm_t94a08",
-       :route-step "step 1, affine-chart inverse laws"},
-      :id :routes-2026-10-10-t94a08-affine-chart-inverse-laws-topo2-r1,
+       :route-step "step 2, smooth-conic local Euclidean charts"},
+      :id :routes-2026-10-10-t94a08-smooth-conic-local-charts-topo2-r1,
       :kind :reusable-theorem,
       :depends-on
       [:routes-2026-10-10-checkpoint-topo2-r2
-       :routes-2026-10-10-t94a08-affine-chart-source-open-topo2-r1],
+       :routes-2026-10-10-t94a08-affine-chart-source-open-topo2-r1
+       :routes-2026-10-10-t94a08-affine-chart-inverse-laws-topo2-r1],
       :current-residual
-      "After inverse laws are banked, prove both continuity directions and package the actual affine-chart OpenPartialHomeomorph.",
+      "After the positive smooth-conic chart witnesses are banked, prove route step 3: the nodal cross has a disconnected punctured neighborhood at [1:0:0], incompatible with an open planar neighborhood.",
       :other-consumers []}}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t94A08",
    :acceptance
@@ -55244,7 +55264,8 @@
    :depends-on
    [:routes-2026-10-10-checkpoint-topo2-r2
     :routes-2026-10-10-t94a08-affine-chart-source-open-topo2-r1
-    :routes-2026-10-10-t94a08-affine-chart-inverse-laws-topo2-r1],
+    :routes-2026-10-10-t94a08-affine-chart-inverse-laws-topo2-r1
+    :routes-2026-10-10-t94a08-smooth-conic-local-charts-topo2-r1],
    :current-residual
    "Affine-chart topology and the nodal branch argument remain.",
    :other-consumers []}
