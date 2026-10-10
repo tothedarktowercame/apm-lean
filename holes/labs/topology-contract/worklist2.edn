@@ -54343,15 +54343,13 @@
   {:consumer :t95A04,
    :stop-count 1,
    :evidence
-   {:outcome :stop,
-    :seat "topo-8",
+   {:residual
+    "Implement the pointwise local-inverse argument itself in a placeholder-free fixture; the present file validates only the theorem's type, not its proof.",
+    :outcome :stop,
+    :disposition :stop,
+    :author "topo-8",
     :reason
     "The requested fixture is only an interface facade: it defines SphereProjectionContMDiffDescent as a Prop and checks the quotient authority and local-diffeomorphism signatures, but contains no inhabitant. A repository-wide search found no equivalent theorem to reuse. The exact remaining proof is already this row: for each target point choose a sphere lift by sphereProjectionQuotientAuthority, use rpSmoothAtlas.quotient_localDiffeomorph to obtain a smooth local inverse, identify f locally with (f composed with sphereProjection 2) composed with that inverse, and conclude ContMDiffAt. Naming another contract Prop would not supply a compiled prerequisite, so there is no honest REVISE boundary below this theorem.",
-    :fixture
-    {:path "/tmp/rp_projection_contmdiff_descent_contract.lean",
-     :sha256
-     "24d6a9eec3b2c4b33e556fd36022db855f35498393d0a6e68bd973900414c31b",
-     :status :interface-only},
     :commands
     [{:cmd
       "lake env lean /tmp/rp_projection_contmdiff_descent_contract.lean",
@@ -54370,12 +54368,28 @@
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :output "131 registered statements match, 0 do not"}],
-    :residual
-    "Implement the pointwise local-inverse argument itself in a placeholder-free fixture; the present file validates only the theorem's type, not its proof.",
-    :author "topo-8",
-    :disposition :stop},
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791605143852-1031-756f7421",
+     :commands
+     ["sha256sum /tmp/rp_projection_contmdiff_descent_contract.lean"
+      "lake env lean /tmp/rp_projection_contmdiff_descent_contract.lean"
+      "git grep -n -E 'SphereProjectionContMDiffDescent|ContMDiff.*sphereProjection.*→|contMDiff.*sphereProjection.*comp' 97f40ba6 -- 'ConstructionTargets/*.lean' 'problems/**/*.lean'"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 97f40ba6:holes/labs/topology-contract/worklist2.edn)"
+      "python3 inline committed SHA-256 and placeholder census for t95A04 and t96A07"
+      "git diff --quiet 97f40ba6^ 97f40ba6 -- . ':(exclude)holes/labs/topology-contract/worklist2.edn'"],
+     :finding
+     "Independent of topo-8. PASS: commit 97f40ba6 changes only worklist2.edn and the row has empty implementation scope. The exact fixture hash reproduces as 24d6a9eec3b2c4b33e556fd36022db855f35498393d0a6e68bd973900414c31b; it compiles with zero placeholders but defines only SphereProjectionContMDiffDescent : Prop, with no inhabitant or equivalent banked theorem. Its direction is correct: for f : RP2 → E m, ContMDiff (f ∘ sphereProjection 2) implies ContMDiff f under rpSmoothAtlas. The quotient authority and local-diffeomorphism field provide the necessary representation facts but not the pointwise local-inverse proof, so the STOP is accurate. Frozen t95A04/t96A07 each retain one placeholder with hashes 4c7127b62804465cfe844ba7f1254eee80eee61bd62c92223e7cbec7c9f6f78d and bb7ba547a62c9efd1f86f4258c09089e005d1d455a93a582fce7a9edb36bc22c; registry 131/0 and ledger 364 valid."},
+    :fixture
+    {:path "/tmp/rp_projection_contmdiff_descent_contract.lean",
+     :sha256
+     "24d6a9eec3b2c4b33e556fd36022db855f35498393d0a6e68bd973900414c31b",
+     :status :interface-only},
+    :seat "topo-8"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -54428,7 +54442,7 @@
       :depends-on [:routes-2026-09-28-rp-smooth-atlas-topo2-r1],
       :other-consumers [:t96A07]}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
