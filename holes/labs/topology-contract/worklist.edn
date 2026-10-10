@@ -85516,8 +85516,66 @@
    "Review the three highest-coverage shared steps and refill toward consumer adapters.",
    :other-consumers []}
   {:consumer :t99J01,
+   :evidence
+   {:placeholder-after {:t99J01 1, :t01A03 1, :t97A01 1, :t97A03 3},
+    :placeholder-delta {:t99J01 0, :t01A03 0, :t97A01 0, :t97A03 0},
+    :residual
+    "The generic point-wedge open cover, its piece/intersection homotopy models, and literal inclusion equations are banked. The pi1 route next needs the fundamental-groupoid connector comparison and recursive coproduct normalization; the homology route next needs Mayer-Vietoris arrow coordinates and the finite-rank induction.",
+    :outcome :done-unreviewed,
+    :warnings
+    [{:kind :fixture-assumption,
+      :message
+      "The supplied probe retains its custom axiom generic_point_wedge_open_cover_comparison; the scoped module independently constructs the package without it."}
+     {:kind :fixture-linter,
+      :message
+      "The probe reports unused topology section variables in cover and unused variable eI."}],
+    :statement-hashes
+    {:status :unchanged, :registered 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author {:name "Joe Corneli", :email "holtzermann17@gmail.com"},
+    :placeholder-before {:t99J01 1, :t01A03 1, :t97A01 1, :t97A03 3},
+    :commands
+    [{:cmd "sha256sum /tmp/generic-point-wedge-open-cover-probe.lean",
+      :exit 0,
+      :finding
+      "d2daecf435c9bbcb69a55491aaf64ceed422553e938111d898d5f433531d820e"}
+     {:cmd
+      "lake env lean ConstructionTargets/GenericPointWedgeOpenCoverComparison.lean",
+      :exit 0,
+      :finding
+      "All nine requested declarations compile; their axiom audits use only propext, Classical.choice, and Quot.sound."}
+     {:cmd
+      "lake env lean /tmp/generic-point-wedge-open-cover-probe.lean",
+      :exit 0,
+      :finding "The recorded probe compiles."}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git diff-tree --no-commit-id --name-only -r HEAD",
+      :exit 0,
+      :finding
+      "ConstructionTargets/GenericPointWedgeOpenCoverComparison.lean"}],
+    :diagnostic-history
+    [{:cmd
+      "lake env lean ConstructionTargets/GenericPointWedgeOpenCoverComparison.lean",
+      :exit 1,
+      :finding
+      "The initial compile left the two representative inclusion equations unsolved because simplification did not reduce the composed homotopy equivalences; explicit restricted-open and pointed-wedge representative rewrites corrected them."}
+     {:cmd
+      "lake env lean ConstructionTargets/GenericPointWedgeOpenCoverComparison.lean",
+      :exit 1,
+      :finding
+      "The first explicit rewrite omitted the Set.univ membership arguments; supplying Set.mem_univ resolved both side goals."}],
+    :commit "74300cdd768f88a8d36c72e1e8db36d4946be1fb",
+    :changed-paths
+    ["ConstructionTargets/GenericPointWedgeOpenCoverComparison.lean"],
+    :fixture
+    {:path "/tmp/generic-point-wedge-open-cover-probe.lean",
+     :sha256
+     "d2daecf435c9bbcb69a55491aaf64ceed422553e938111d898d5f433531d820e"},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/GenericPointWedgeOpenCoverComparison.lean"],
    :dag-node
