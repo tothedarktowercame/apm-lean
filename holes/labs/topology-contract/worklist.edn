@@ -96451,6 +96451,22 @@
      {:cmd "git status --short",
       :exit 0,
       :finding "clean worktree after commit"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791658402642-2727-1e7a46ab",
+     :commands
+     ["git show 2be15c58f33c20a0af6a39f4c9f79c7b12d12976:ConstructionTargets/PreconnectedClopenSheet.lean"
+      "git diff-tree --no-commit-id --name-only -r 2be15c58f33c20a0af6a39f4c9f79c7b12d12976"
+      "git diff --exit-code 2be15c58f33c20a0af6a39f4c9f79c7b12d12976 -- ConstructionTargets/PreconnectedClopenSheet.lean"
+      "sha256sum /tmp/preconnected-clopen-sheet.lean"
+      "lake build ConstructionTargets.PreconnectedClopenSheet"
+      "lake env lean /tmp/preconnected-clopen-sheet.lean"
+      "placeholder census on source, fixture, and problems/t99J01/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb on recorded ledger at 8f659993"],
+     :finding
+     "PASS: reviewer codex-3 verified author topo-2 and recorded commit 2be15c58, whose exact scope is only ConstructionTargets/PreconnectedClopenSheet.lean and whose source equals the reviewed checkout. The canonical package authority is correct; fixture SHA-256 7ae48c1d23c3cf3f685f81e8edefe0bf55c81f3ba2d43072412f79251cac742b matches; target and fixture compile with zero placeholders; t99J01 retains one placeholder; both declarations use only propext, Classical.choice, and Quot.sound; all 131 registered statements and the recorded 871-item ledger validate. The general theorem correctly pulls the clopen target set back along the continuous map, uses preconnectedness to split the preimage into empty or universal, and returns respectively disjointness or range containment. The path-connected specialization supplies the stronger instance to the same theorem. The representation boundary remains Set.range versus target Set membership, with no covering trivialization, sheet-index choice, component restriction, fiber count, or pi1 computation."},
     :commit "2be15c58f33c20a0af6a39f4c9f79c7b12d12976",
     :changed-paths
     ["ConstructionTargets/PreconnectedClopenSheet.lean"],
@@ -96466,7 +96482,7 @@
       "ConstructionTargets.PreconnectedClopenSheet.range_subset_or_disjoint_of_isClopen_pathConnected"]},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/PreconnectedClopenSheet.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component/clopen-sheet-dichotomy",
@@ -96578,7 +96594,7 @@
       "range_subset_or_disjoint_of_isClopen proves a continuous image of a preconnected space lies wholly inside or wholly outside a clopen subset; the path-connected specialization is exposed for covering sheets."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component",
@@ -99006,7 +99022,7 @@
    :other-consumers []}
   {:consumer :t99J01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -99019,7 +99035,9 @@
     :reported-by [:routes-2026-10-10-preconnected-clopen-sheet-44],
     :type
     "A continuous map from a path-connected space has range contained in or disjoint from any clopen target subset",
-    :proved-in :routes-2026-10-10-preconnected-clopen-sheet-44},
+    :proved-in :routes-2026-10-10-preconnected-clopen-sheet-44,
+    :banked-by :routes-2026-10-10-preconnected-clopen-sheet-44,
+    :banked-commit "2be15c58f33c20a0af6a39f4c9f79c7b12d12976"},
    :id
    :lemma-preconnectedclopensheet-range-subset-or-disjoint-of-isclopen-pathconnected,
    :kind :lemma,
