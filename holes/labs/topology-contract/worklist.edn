@@ -88014,47 +88014,63 @@
   {:consumer :t99J01,
    :owner-reopen
    "Owner reopen 2026-10-10 (claude-14): both STOPs cite missing approved signatures for declarations the acceptance lists in prose. Under work-prompt.md WHAT IS FROZEN, only the registered statement and the fixture interface-axiom types are frozen; design the supporting signatures, discharge the frozen axiom type with standard axioms, and STOP only on a mathematical boundary.",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "No implementation commit was recorded and ConstructionTargets/FiniteIndexFreeGroupSchreierRank.lean is absent. The fixture SHA-256 matches, but both consumer specializations depend on the nonstandard axiom finiteIndexSubgroupEquiv, which assumes the universal rank formula; the accepted universal name finiteIndexSubgroupFreeGroupEquiv has no frozen signature. Mathlib provides qualitative SpanningTree.endIsFree and endMulEquivSubgroup, not the required finite basis indexed by generator-coset edges outside the spanning tree or its cardinality. Repair requires a compiled placeholder-free prerequisite identifying that basis, proving the complement has (r-1)*n+1 elements, freezing the universal MulEquiv signature and orientation, and only then deriving the Fin 3/index-n and Fin 2/index-two specializations with standard-only axioms.",
    :evidence
    {:residual
-    "Implement and freeze a placeholder-free finite Schreier-basis prerequisite with the (r-1)*n+1 cardinality theorem and universal subgroup-to-FreeGroup MulEquiv orientation; then derive and review the two consumer specializations.",
+    "Repair the frozen universal type by requiring 0 < r or handling r = 0 separately; then prove the finite spanning-tree complement count for positive rank.",
     :outcome :stop,
     :warnings
-    [{:kind :missing-mathematical-prerequisite,
+    [{:kind :frozen-type-refuted,
       :message
-      "The reviewed finite basis identification and spanning-tree complement count remain absent."}],
+      "At r = 0 and index one, the formula produces FreeGroup (Fin 1) instead of the trivial group."}
+     {:kind :concurrent-worktree-change,
+      :message
+      "The untracked worklist2.edn.tmp is outside scope and was preserved."}],
     :disposition :stop,
-    :axioms
-    ["propext"
-     "Classical.choice"
-     "Quot.sound"
-     "FiniteIndexFreeGroupSchreierRankProbe.finiteIndexSubgroupEquiv"],
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Fresh repair verification confirms that neither the reviewed finite Schreier-basis prerequisite nor the accepted universal signature exists. The fixture still assumes the complete rank formula as finiteIndexSubgroupEquiv, and both specializations retain that nonstandard axiom. Mathlib remains sufficient only for qualitative freeness. A standard-only repair first needs a compiled identification of the subgroup basis with generator-coset edges outside the finite spanning tree and a proof that this complement has (r-1)*n+1 elements, with the universal MulEquiv type and orientation fixed.",
+    "The frozen interface axiom is false as stated because it quantifies over r = 0. Take H = ⊤ in FreeGroup (Fin 0) and n = 1. Subgroup.index_top gives H.index = 1, while ((0 - 1) * 1 + 1) simplifies to 1, so the axiom asserts Nonempty (H ≃* FreeGroup (Fin 1)). The source is subsingleton because FreeGroup (Fin 0) is trivial; the target is nontrivial because FreeGroup.of (0 : Fin 1) ≠ 1. The compiled theorem frozen_universal_false proves the negation of the entire quantified fixture type using only standard axioms. The mathematical repair is to add 0 < r (sufficient for both consumers r = 3 and r = 2), or to state a separate rank-zero case whose resulting rank is zero. The current frozen axiom cannot be discharged.",
     :commands
     [{:cmd
-      "sha256sum /tmp/finite-index-free-group-schreier-rank-probe.lean",
+      "lake env lean /tmp/finite-index-schreier-r0-counterexample.lean",
       :exit 0,
       :finding
-      "The frozen fixture hash still matches the recorded hash."}
+      "Compiled no_rank_one_equiv and frozen_universal_false; both use only propext, Classical.choice, and Quot.sound."}
      {:cmd
-      "rg -n for finiteIndexSubgroupFreeGroupEquiv and finite non-tree spanning-basis interfaces",
-      :exit 1,
-      :expected-exit 1,
-      :finding
-      "No universal accepted declaration or compiled finite Schreier-basis counting bridge exists in ConstructionTargets or the searched Mathlib group-theory modules."}
+      "sha256sum /tmp/finite-index-free-group-schreier-rank-probe.lean",
+      :exit 0,
+      :finding "The fixture hash matches the frozen hash."}
      {:cmd
       "lake env lean /tmp/finite-index-free-group-schreier-rank-probe.lean",
       :exit 0,
       :finding
-      "Both specializations compile only with finiteIndexSubgroupEquiv in their axiom sets."}
+      "The two positive-rank specializations compile, but only through the false universal axiom finiteIndexSubgroupEquiv."}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
-     {:cmd "git status --short", :exit 0, :finding "clean"}],
+     {:cmd "git status --short",
+      :exit 0,
+      :finding
+      "An unrelated untracked holes/labs/topology-contract/worklist2.edn.tmp appeared during verification; no scoped file was changed."}],
+    :diagnostic-history
+    [{:cmd
+      "lake env lean /tmp/finite-index-schreier-r0-counterexample.lean",
+      :exit 1,
+      :finding
+      "The first counterexample draft imported too narrow a module for FreeGroup.of_ne_one; corrected by importing Mathlib."}
+     {:cmd
+      "lake env lean /tmp/finite-index-schreier-r0-counterexample.lean",
+      :exit 1,
+      :finding
+      "The first universal-negation draft left the previously proved contradiction unnamed; corrected by naming no_rank_one_equiv and applying it explicitly."}],
+    :counterexample
+    {:path "/tmp/finite-index-schreier-r0-counterexample.lean",
+     :parameters {:r 0, :n 1, :subgroup "top"},
+     :finding
+     "The universal frozen rank formula yields rank one for the trivial rank-zero free group subgroup, and the claimed MulEquiv is impossible."},
     :fixture
     {:path "/tmp/finite-index-free-group-schreier-rank-probe.lean",
      :sha256
@@ -88064,7 +88080,7 @@
      :proof-placeholder-count 1},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/FiniteIndexFreeGroupSchreierRank.lean"],
    :dag-node
