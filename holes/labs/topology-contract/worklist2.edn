@@ -62670,44 +62670,65 @@
    "single-consumer exact radial normal-coordinate identity for the t02A03 complement interpolation",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:residual
-     "Implement the exact radial normal-coordinate identity in the scoped module; then use coefficient positivity and direction nonvanishing to prove deleted-core exclusion and bundle the homotopy.",
-     :outcome :go,
-     :warnings
-     ["/tmp/t02a03_geometric_tube_cover.lean:786:38: unnecessarySeqFocus linter warning in a previously banked theorem"],
-     :acceptance
-     {:declaration "apm_t02a03_leftTubeNormalComplex_radialPoint",
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Use positivity of the radial coefficient and nonvanishing of the normalized direction to prove deleted-core exclusion, bundle the homotopy, and assemble the torus HomotopyEquiv.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["/tmp/t02a03_geometric_tube_cover.lean:786:38: unnecessarySeqFocus linter warning in a previously banked theorem; scoped module compiles without warnings"],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_leftTubeNormalComplex_radialPoint",
       :type
-      "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubeNormalComplex ⟨apm_t02a03_leftTubeRadialPoint tp, apm_t02a03_leftTubeRadialPoint_mem_leftTube tp⟩ = ((1 - (tp.1 : Real)) * (1 / 8 : Real) + (tp.1 : Real) * norm (apm_t02a03_leftTubeNormalComplex ⟨tp.2.1, tp.2.2.1⟩)) • ((apm_t02a03_leftTubeNormalAngular tp.2 : Circle) : Complex)"},
-     :commands
-     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "apm_t02a03_leftTubeNormalComplex_radialPoint compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
-       :exit 0}
-      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "4d72259f7d2eaa51b0e9cb58753116ee0d276c11c55579fe44bf5266bbf0f59e  /tmp/t02a03_geometric_tube_cover.lean"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :fixture
-     {:path "/tmp/t02a03_geometric_tube_cover.lean",
-      :sha256
-      "4d72259f7d2eaa51b0e9cb58753116ee0d276c11c55579fe44bf5266bbf0f59e"},
-     :finding
-     "The exact radial normal-coordinate identity is complete and placeholder-free. It expresses the interpolated normal as the affine positive radius times the source normalized normal direction.",
-     :implementation
-     {:scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
-      :declarations
-      ["ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_leftTubeNormalComplex_radialPoint"]},
-     :seat "topo-8"}},
+      "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubeNormalComplex ⟨apm_t02a03_leftTubeRadialPoint tp, apm_t02a03_leftTubeRadialPoint_mem_leftTube tp⟩ = ((1 - (tp.1 : Real)) * (1 / 8 : Real) + (tp.1 : Real) * norm (apm_t02a03_leftTubeNormalComplex ⟨tp.2.1, tp.2.2.1⟩)) • ((apm_t02a03_leftTubeNormalAngular tp.2 : Circle) : Complex)",
+      :status :proved,
+      :consumers [:t02A03],
+      :depends-on
+      ["ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_norm_leftTubePlanarComplex_radialPoint"]}],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not",
+     :fixture-sha256
+     "4d72259f7d2eaa51b0e9cb58753116ee0d276c11c55579fe44bf5266bbf0f59e"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean", :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03LeftTubePuncturedModel.lean",
+      :exit 0}
+     {:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+      :exit 0}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03LeftTubePuncturedModel.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git rev-parse 3f6dc402 && git diff-tree --no-commit-id --name-only -r 3f6dc402",
+      :exit 0,
+      :output
+      "3f6dc40230648ca2b2abde43de20b5effdaa2f79\nConstructionTargets/T02A03LeftTubePuncturedModel.lean"}
+     {:cmd "git show --check --oneline 3f6dc402", :exit 0}],
+    :commit "3f6dc40230648ca2b2abde43de20b5effdaa2f79",
+    :changed-paths
+    ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
+    :fixture
+    {:path "/tmp/t02a03_geometric_tube_cover.lean",
+     :sha256
+     "4d72259f7d2eaa51b0e9cb58753116ee0d276c11c55579fe44bf5266bbf0f59e"},
+    :finding
+    "Banked the exact radial normal-coordinate identity by substituting the interpolated planar norm and combining the source and reconstructed endpoint normal decompositions.",
+    :implementation
+    {:scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
+     :declarations
+     ["ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_leftTubeNormalComplex_radialPoint"],
+     :type
+     "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubeNormalComplex ⟨apm_t02a03_leftTubeRadialPoint tp, apm_t02a03_leftTubeRadialPoint_mem_leftTube tp⟩ = ((1 - (tp.1 : Real)) * (1 / 8 : Real) + (tp.1 : Real) * norm (apm_t02a03_leftTubeNormalComplex ⟨tp.2.1, tp.2.2.1⟩)) • ((apm_t02a03_leftTubeNormalAngular tp.2 : Circle) : Complex)"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/left-tube-radial-normal-coordinate",
@@ -63856,7 +63877,8 @@
     :reported-by
     [:routes-2026-10-10-t02a03-left-tube-normal-decomposition-topo2-r1
      :routes-2026-10-10-t02a03-left-tube-torus-inverse-normal-coordinate-topo2-r1
-     :routes-2026-10-10-t02a03-left-tube-torus-inverse-coordinate-direction-topo2-r1],
+     :routes-2026-10-10-t02a03-left-tube-torus-inverse-coordinate-direction-topo2-r1
+     :routes-2026-10-10-t02a03-left-tube-radial-normal-coordinate-topo2-r1],
     :type
     "forall p : apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubeNormalComplex ⟨p.1, p.2.1⟩ = (norm (apm_t02a03_leftTubeNormalComplex ⟨p.1, p.2.1⟩) : Real) • ((apm_t02a03_leftTubeNormalAngular p : Circle) : Complex)",
     :proved-in
