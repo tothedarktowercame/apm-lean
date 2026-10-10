@@ -367,4 +367,38 @@ theorem apm_t02a03_attachmentCollarClosureMap_one :
   fin_cases i <;>
     simp [apm_t02a03_attachmentCollarClosureMap]
 
+noncomputable def apm_t02a03_rightCoreAttachmentClosureMap :
+    C(Set.Icc (0 : ℝ) 1, apm_t02a03_E3) where
+  toFun t := apm_t02a03_rightCore (t : ℝ)
+  continuous_toFun :=
+    apm_t02a03_continuous_rightCore.comp continuous_subtype_val
+
+theorem apm_t02a03_rightCoreAttachmentClosureMap_zero :
+    apm_t02a03_rightCoreAttachmentClosureMap ⟨0, by simp⟩ = 0 := by
+  exact apm_t02a03_rightCore_zero
+
+theorem apm_t02a03_rightCoreAttachmentPoint_mem_geometricY
+    (t : Set.Ioc (0 : ℝ) 1) :
+    apm_t02a03_rightCore (t : ℝ) ∈ apm_t02a03_W ∧
+      apm_t02a03_rightCore (t : ℝ) ∉
+        Set.range apm_t02a03_leftCore := by
+  apply (apm_t02a03_rightCore_mem_geometricY_iff (t : ℝ)).2
+  intro ht
+  have hx := congrArg (fun q : apm_t02a03_E3 => q 0) ht
+  simp [apm_t02a03_rightCore] at hx
+  have hx' : Real.cos (t : ℝ) = 1 := by linarith
+  have htlt : (t : ℝ) < 2 * Real.pi := by
+    nlinarith [t.property.2, Real.pi_gt_three]
+  have ht0 := (Real.cos_eq_one_iff_of_lt_of_lt
+    (x := (t : ℝ)) (by nlinarith [t.property.1, Real.pi_pos]) htlt).mp hx'
+  exact (ne_of_gt t.property.1) ht0
+
+noncomputable def apm_t02a03_rightCoreAttachmentMap :
+    C(Set.Ioc (0 : ℝ) 1, apm_t02a03_geometricY_probe) where
+  toFun t := ⟨apm_t02a03_rightCore (t : ℝ),
+    apm_t02a03_rightCoreAttachmentPoint_mem_geometricY t⟩
+  continuous_toFun := by
+    exact Continuous.subtype_mk
+      (apm_t02a03_continuous_rightCore.comp continuous_subtype_val) _
+
 end ConstructionTargets.T02A03GeometricTubeCover
