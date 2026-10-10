@@ -63068,75 +63068,97 @@
    "Bundle the radial map as the inverse-after-forward homotopy and assemble the torus HomotopyEquiv.",
    :other-consumers []}
   {:bounded-exception
+   "single-consumer inverse-after-forward homotopy for t02A03",
+   :consumer :t02A03,
+   :phase :probe,
+   :state :open,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-radial-homotopy",
+   :acceptance
+   {:probe
+    "Compile and bank apm_t02a03_leftTubeRadialHomotopy from /tmp/t02a03_geometric_tube_cover.lean. Define the continuous forward torus-coordinate map and package the radial interpolation as a ContinuousMap.Homotopy from inverse-after-forward to the identity on LeftTubeMinusCore. Do not yet claim the HomotopyEquiv or gluing.",
+    :declaration "apm_t02a03_leftTubeRadialHomotopy",
+    :type
+    "ContinuousMap.Homotopy (apm_t02a03_leftTubeTorusInverse.comp apm_t02a03_leftTubeTorusCoordinatesMap) (ContinuousMap.id apm_t02a03_LeftTubeMinusCore)",
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "t02A03 step 2, bundle the punctured-left-tube inverse-after-forward homotopy"},
+   :id :routes-2026-10-10-t02a03-left-tube-radial-homotopy-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo2-r5
+    :routes-2026-10-10-t02a03-left-tube-radial-map-endpoints-topo2-r1],
+   :current-residual
+   "Assemble the forward and inverse maps, exact forward-after-inverse identity, and radial inverse-after-forward homotopy into the torus HomotopyEquiv.",
+   :other-consumers []}
+  {:bounded-exception
    "single-consumer explicit punctured-left-tube model for t02A03",
    :consumer :t02A03,
    :evidence
    {:probe
     {:residual
-     "Bank the radial endpoint identities. Then bundle the inverse-after-forward homotopy and assemble the torus HomotopyEquiv.",
+     "Bank the radial homotopy, then assemble the torus HomotopyEquiv.",
      :outcome :revise,
      :warnings
      ["/tmp/t02a03_geometric_tube_cover.lean:786:38: Used tac1 <;> tac2 where (tac1; tac2) would suffice"],
      :missing-theorems
-     [{:name "apm_t02a03_leftTubeRadialMap_endpoints",
+     [{:name "apm_t02a03_leftTubeRadialHomotopy",
        :type
-       "forall p : apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubeRadialMap (0, p) = apm_t02a03_leftTubeTorusInverse (apm_t02a03_leftTubeTorusCoordinates p) ∧ apm_t02a03_leftTubeRadialMap (1, p) = p",
+       "ContinuousMap.Homotopy (apm_t02a03_leftTubeTorusInverse.comp apm_t02a03_leftTubeTorusCoordinatesMap) (ContinuousMap.id apm_t02a03_LeftTubeMinusCore)",
        :status :proved,
        :consumers [:t02A03],
-       :depends-on ["apm_t02a03_leftTubeRadialMap"]}],
+       :depends-on ["apm_t02a03_leftTubeRadialMap_endpoints"]}],
      :prerequisite
      {:bounded-exception
-      "single-consumer bundled radial endpoint identities for t02A03",
+      "single-consumer inverse-after-forward homotopy for t02A03",
       :consumer :t02A03,
       :phase :probe,
       :state :open,
       :scope [],
-      :dag-node
-      "TOPOLOGY-ROUTES.md/t02A03/left-tube-radial-map-endpoints",
+      :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-radial-homotopy",
       :acceptance
       {:probe
-       "Compile and bank apm_t02a03_leftTubeRadialMap_endpoints from /tmp/t02a03_geometric_tube_cover.lean. Lift the ambient zero and one endpoint identities through LeftTubeMinusCore, proving that the bundled radial map runs from inverse-after-forward to the identity. Do not yet claim the bundled homotopy, HomotopyEquiv, or gluing.",
-       :declaration "apm_t02a03_leftTubeRadialMap_endpoints",
+       "Compile and bank apm_t02a03_leftTubeRadialHomotopy from /tmp/t02a03_geometric_tube_cover.lean. Define the continuous forward torus-coordinate map and package the radial interpolation as a ContinuousMap.Homotopy from inverse-after-forward to the identity on LeftTubeMinusCore. Do not yet claim the HomotopyEquiv or gluing.",
+       :declaration "apm_t02a03_leftTubeRadialHomotopy",
        :type
-       "forall p : apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubeRadialMap (0, p) = apm_t02a03_leftTubeTorusInverse (apm_t02a03_leftTubeTorusCoordinates p) ∧ apm_t02a03_leftTubeRadialMap (1, p) = p",
+       "ContinuousMap.Homotopy (apm_t02a03_leftTubeTorusInverse.comp apm_t02a03_leftTubeTorusCoordinatesMap) (ContinuousMap.id apm_t02a03_LeftTubeMinusCore)",
        :placeholder "the sole sorry in apm_t02a03",
        :route-step
-       "t02A03 step 2, prove both endpoints of the punctured-left-tube radial interpolation"},
-      :id
-      :routes-2026-10-10-t02a03-left-tube-radial-map-endpoints-topo2-r1,
+       "t02A03 step 2, bundle the punctured-left-tube inverse-after-forward homotopy"},
+      :id :routes-2026-10-10-t02a03-left-tube-radial-homotopy-topo2-r1,
       :kind :reusable-theorem,
       :depends-on
       [:routes-2026-10-10-checkpoint-topo2-r5
-       :routes-2026-10-10-t02a03-left-tube-radial-map-topo2-r1],
+       :routes-2026-10-10-t02a03-left-tube-radial-map-endpoints-topo2-r1],
       :current-residual
-      "Bundle the radial map as the inverse-after-forward homotopy and assemble the torus HomotopyEquiv.",
+      "Assemble the forward and inverse maps, exact forward-after-inverse identity, and radial inverse-after-forward homotopy into the torus HomotopyEquiv.",
       :other-consumers []},
      :commands
      [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
        :exit 0,
        :output
-       "apm_t02a03_leftTubeRadialMap_endpoints compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "apm_t02a03_leftTubeRadialHomotopy compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
        "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
        :exit 0}
       {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
        :exit 0,
        :output
-       "174f1979fbc2e62913fadf0a5de516bd891f5b9b8f26d9a82704ca06df31e4fd  /tmp/t02a03_geometric_tube_cover.lean"}
+       "ccf926c8a3290445efc6325dfb157bab20f783b88b286f73f43914e9079d05d9  /tmp/t02a03_geometric_tube_cover.lean"}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
      :fixture
      {:path "/tmp/t02a03_geometric_tube_cover.lean",
       :sha256
-      "174f1979fbc2e62913fadf0a5de516bd891f5b9b8f26d9a82704ca06df31e4fd"},
+      "ccf926c8a3290445efc6325dfb157bab20f783b88b286f73f43914e9079d05d9"},
      :finding
-     "The full HomotopyEquiv remains absent. The compiled endpoint theorem identifies the bundled radial map at zero with inverse-after-forward and at one with the original punctured-left-tube point. These are exactly the two boundary equations required to package the map as the inverse-after-forward homotopy.",
+     "The full HomotopyEquiv remains absent. The compiled declaration packages the radial interpolation as a homotopy from leftTubeTorusInverse composed with leftTubeTorusCoordinatesMap to the identity on LeftTubeMinusCore. The opposite composite is already an exact equality, leaving assembly of the HomotopyEquiv.",
      :seat "topo-8"}},
    :phase :probe,
    :type
    "Nonempty (ContinuousMap.HomotopyEquiv LeftTubeMinusCore ConstructionTargets.TorusCircleWedgeOpenCover.Torus)",
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-punctured-model",
    :acceptance
@@ -63194,7 +63216,8 @@
     :routes-2026-10-10-t02a03-left-tube-radial-normal-coordinate-topo2-r1
     :routes-2026-10-10-t02a03-left-tube-radial-core-exclusion-topo2-r1
     :routes-2026-10-10-t02a03-left-tube-radial-map-topo2-r1
-    :routes-2026-10-10-t02a03-left-tube-radial-map-endpoints-topo2-r1],
+    :routes-2026-10-10-t02a03-left-tube-radial-map-endpoints-topo2-r1
+    :routes-2026-10-10-t02a03-left-tube-radial-homotopy-topo2-r1],
    :current-residual
    "After the punctured-left-tube model is banked, construct the right-tube-minus-deleted-attachment model extending the based core homotopy, then overlap compatibility and gluing for the full geometricY equivalence.",
    :other-consumers []}
@@ -64480,4 +64503,24 @@
    :id :lemma-apm-t02a03-lefttuberadialmap-endpoints,
    :kind :lemma,
    :depends-on [:lemma-apm-t02a03-lefttuberadialmap],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t02a03_leftTubeRadialHomotopy",
+    :type
+    "ContinuousMap.Homotopy (apm_t02a03_leftTubeTorusInverse.comp apm_t02a03_leftTubeTorusCoordinatesMap) (ContinuousMap.id apm_t02a03_LeftTubeMinusCore)"},
+   :lemma
+   {:name "apm_t02a03_leftTubeRadialHomotopy",
+    :reported-by
+    [:routes-2026-10-10-t02a03-left-tube-punctured-model-topo2-r1],
+    :type
+    "ContinuousMap.Homotopy (apm_t02a03_leftTubeTorusInverse.comp apm_t02a03_leftTubeTorusCoordinatesMap) (ContinuousMap.id apm_t02a03_LeftTubeMinusCore)",
+    :proved-in
+    :routes-2026-10-10-t02a03-left-tube-punctured-model-topo2-r1},
+   :id :lemma-apm-t02a03-lefttuberadialhomotopy,
+   :kind :lemma,
+   :depends-on [:lemma-apm-t02a03-lefttuberadialmap-endpoints],
    :other-consumers []}]}
