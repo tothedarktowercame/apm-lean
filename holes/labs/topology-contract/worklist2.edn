@@ -58219,6 +58219,30 @@
    :current-residual
    "Construct the meridional attachment of the surviving right core inside the left-tube complement and compatible tube deformations.",
    :other-consumers []}
+  {:bounded-exception
+   "single-consumer continuous surviving-right-core map for the t02A03 geometric complement",
+   :consumer :t02A03,
+   :phase :probe,
+   :state :open,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t02A03/geometric-right-core-survivor-map",
+   :acceptance
+   {:probe
+    "Compile and bank apm_t02a03_rightCoreSurvivorMap from /tmp/t02a03_geometric_tube_cover.lean. Construct the continuous map from the subtype of real parameters whose frozen right-core image is nonzero into the exact frozen geometricY subtype, using apm_t02a03_rightCore_mem_geometricY_iff for its codomain proof and a coordinatewise continuity proof for rightCore. This supplies the continuous surviving-core attachment map required by t02A03 route step 2; do not yet claim a meridional extension, deformation retract, or gluing equivalence.",
+    :declaration "apm_t02a03_rightCoreSurvivorMap",
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "t02A03 step 2, construct the continuous surviving-right-core map into geometricY"},
+   :id
+   :routes-2026-10-10-t02a03-geometric-right-core-survivor-map-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo2-r5
+    :routes-2026-10-10-t02a03-geometric-right-core-survivor-topo2-r1],
+   :current-residual
+   "Construct the meridional target path and its compatible attachment to the surviving right-core map, then extend to tube deformations.",
+   :other-consumers []}
   {:consumer :t02A03,
    :evidence
    {:probe
@@ -58227,59 +58251,62 @@
      :fixture
      {:path "/tmp/t02a03_geometric_tube_cover.lean",
       :sha256
-      "0475620de58c222b858c8821e513312bd25721ad39fc42fc61b9d4b80f8f00f4"},
+      "344acae0d83d164af026c3d9c4a3dfb917b679cccc85436931b2be3e86780ca9"},
      :commands
      [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
        :exit 0,
        :output
-       "apm_t02a03_rightCore_mem_geometricY_iff compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "apm_t02a03_rightCoreSurvivorMap compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
        "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
        :exit 0}
       {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
        :exit 0,
        :output
-       "0475620de58c222b858c8821e513312bd25721ad39fc42fc61b9d4b80f8f00f4  /tmp/t02a03_geometric_tube_cover.lean"}
+       "344acae0d83d164af026c3d9c4a3dfb917b679cccc85436931b2be3e86780ca9  /tmp/t02a03_geometric_tube_cover.lean"}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 1,
+       :finding
+       "The first exploratory proof asked fun_prop to infer continuity through the opaque frozen rightCore definition; unfolding and supplying an explicit coordinatewise continuity proof was required."}
+      {:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 1,
+       :finding
+       "After unfolding, vector notation still hid Matrix.vecCons from fun_prop. Splitting the Fin 3 coordinate and simplifying each vector lookup exposed the elementary cosine, sine, and constant coordinate maps; the corrected rerun compiled."}],
      :finding
-     "The final homotopy equivalence is still absent, but the banked deleted-locus equality supports one exact compiled prerequisite. A frozen right-core point satisfies the defining conjunction for geometricY precisely when it is not the Euclidean origin: right-core membership puts it in W through the tube cover, and the singleton core intersection converts avoidance of the left core to nonzeroness. This establishes the correct source locus for the meridional attachment construction.",
+     "The closure fixture still lacks the tube deformation, but one concrete continuous source object now compiles. Restricting the real right-core parametrization to parameters whose image is nonzero gives a continuous map into the exact frozen geometricY subtype. Its codomain proof is supplied by the banked survivor equivalence, while continuity is proved coordinatewise through PiLp.continuous_toLp.",
      :residual
-     "Bank the surviving-right-core characterization. Then construct its attachment to a meridian in the left-tube complement, extend to compatible tube deformations, and glue to the torus-wedge-circle model.",
+     "Bank the surviving right-core continuous map. Then construct the meridional target path in the left-tube complement, identify its attachment endpoints with this map, and extend to compatible tube deformations and gluing.",
      :prerequisite
      {:bounded-exception
-      "single-consumer surviving right-core characterization for the t02A03 geometric complement",
+      "single-consumer continuous surviving-right-core map for the t02A03 geometric complement",
       :consumer :t02A03,
       :phase :probe,
       :state :open,
       :scope [],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t02A03/geometric-right-core-survivor",
+      "TOPOLOGY-ROUTES.md/t02A03/geometric-right-core-survivor-map",
       :acceptance
       {:probe
-       "Compile and bank apm_t02a03_rightCore_mem_geometricY_iff from /tmp/t02a03_geometric_tube_cover.lean. For every frozen right-core parameter t, prove that its point lies in W and outside the left-core range exactly when that point is nonzero, using the tube-cover and exact core-intersection theorems. This supplies the surviving right-core source locus required by t02A03 route step 2; do not yet claim a deformation retract, meridional extension, or gluing equivalence.",
-       :declaration "apm_t02a03_rightCore_mem_geometricY_iff",
+       "Compile and bank apm_t02a03_rightCoreSurvivorMap from /tmp/t02a03_geometric_tube_cover.lean. Construct the continuous map from the subtype of real parameters whose frozen right-core image is nonzero into the exact frozen geometricY subtype, using apm_t02a03_rightCore_mem_geometricY_iff for its codomain proof and a coordinatewise continuity proof for rightCore. This supplies the continuous surviving-core attachment map required by t02A03 route step 2; do not yet claim a meridional extension, deformation retract, or gluing equivalence.",
+       :declaration "apm_t02a03_rightCoreSurvivorMap",
        :placeholder "the sole sorry in apm_t02a03",
        :route-step
-       "t02A03 step 2, characterize the surviving right-core points inside the frozen geometric complement"},
-      :representation
-      {:source
-       "The defining geometricY membership conjunction for a point on the frozen right core",
-       :target "Nonzeroness of that frozen right-core point",
-       :direction
-       "Exact logical equivalence from the source geometric-complement membership representation to the target singleton-deleted right-core representation"},
+       "t02A03 step 2, construct the continuous surviving-right-core map into geometricY"},
       :id
-      :routes-2026-10-10-t02a03-geometric-right-core-survivor-topo2-r1,
-      :kind :representation-comparison,
+      :routes-2026-10-10-t02a03-geometric-right-core-survivor-map-topo2-r1,
+      :kind :reusable-theorem,
       :depends-on
       [:routes-2026-10-10-checkpoint-topo2-r5
-       :routes-2026-10-10-t02a03-geometric-right-core-deleted-locus-topo2-r1],
+       :routes-2026-10-10-t02a03-geometric-right-core-survivor-topo2-r1],
       :current-residual
-      "Construct the meridional attachment of the surviving right core inside the left-tube complement and compatible tube deformations.",
+      "Construct the meridional target path and its compatible attachment to the surviving right-core map, then extend to tube deformations.",
       :other-consumers []}}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/closure",
    :acceptance
@@ -58296,7 +58323,8 @@
     :routes-2026-10-10-t02a03-geometric-tube-common-attachment-topo2-r1
     :routes-2026-10-10-t02a03-geometric-core-intersection-topo2-r1
     :routes-2026-10-10-t02a03-geometric-right-core-deleted-locus-topo2-r1
-    :routes-2026-10-10-t02a03-geometric-right-core-survivor-topo2-r1],
+    :routes-2026-10-10-t02a03-geometric-right-core-survivor-topo2-r1
+    :routes-2026-10-10-t02a03-geometric-right-core-survivor-map-topo2-r1],
    :current-residual
    "One placeholder: two explicit homotopy equivalences, with the punctured-disk factor adapter-sized and the geometric tube deformation still missing.",
    :other-consumers []}
