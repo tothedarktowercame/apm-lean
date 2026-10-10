@@ -88609,17 +88609,17 @@
    "Review three independent t99J01 route advances, including the Schreier theorem shared with t97A03.",
    :other-consumers []}
   {:consumer :t93J03,
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "No implementation commit was recorded and ConstructionTargets/KleinDeckActionPolygonIdentification.lean is absent. The fixture SHA-256 and package orientations are exact, but exactGeometricInput is obtained solely from the nonstandard axiom kleinDeckActionPackage. No banked theorem gives controlled translation/glide-reflection parameters for PresentedKleinGroup sufficient for identity detection and compact-intersection finiteness, nor the two-way equivalence between plane-action orbits and the frozen square-boundary KleinBottle relation. Repair requires compiling those two prerequisites, then constructing the action, freeness, proper discontinuity, orbit setoid, quotient homeomorphism, generator formulas, and basepoint equation with standard-only axioms; the current instruction to defer normal form must still permit a weaker parameter theorem adequate for those proofs.",
    :evidence
    {:residual
-    "First compile a PresentedKleinGroup parameter/normal-form theorem sufficient to prove identity detection and compact-intersection finiteness, and a placeholder-free comparison identifying plane action orbits with the frozen square-boundary KleinBottle relation; then assemble the typed package.",
+    "Compile the weaker PresentedKleinGroup parameter theorem needed for identity detection and compact-intersection finiteness, plus the two-way plane-orbit versus aabb boundary-relation comparison; then assemble and review the frozen package.",
     :outcome :stop,
     :warnings
     [{:kind :missing-mathematical-prerequisite,
       :message
-      "Freeness and proper discontinuity require controlled normal-form parameters, and the quotient homeomorphism requires a separate orbit-versus-boundary-relation comparison; neither is banked."}],
+      "The reviewed weak normal-form parameter theorem and orbit-to-polygon quotient comparison remain absent."}],
     :disposition :stop,
     :axioms
     ["propext"
@@ -88628,33 +88628,27 @@
      "T93J03KleinDeckActionPolygonIdentificationProbe.kleinDeckActionPackage"],
     :author "topo-2",
     :reason
-    "The fixture precisely types the package, but assumes the entire package as the nonstandard axiom kleinDeckActionPackage. No banked result supplies either a normal form for PresentedKleinGroup or an orbit-quotient homeomorphism with the frozen aabb KleinBottle. The action can be proposed on generators, but freeness and proper discontinuity require a theorem that every presented-group element has controlled translation or glide-reflection parameters and that these parameters detect the identity. The requested quotient homeomorphism additionally requires the unbanked two-way equivalence between plane orbits and the square-boundary pairing relation. The row says to defer the presented-group normal-form equivalence while simultaneously requiring a normal-form proof of freeness and proper discontinuity; without a weaker compiled parameter theorem, those obligations cannot be discharged standard-only.",
+    "Fresh repair verification confirms that neither prerequisite required by review has appeared. There is still no controlled translation/glide-reflection parameter theorem for PresentedKleinGroup and no comparison between plane-action orbits and the frozen KleinBottle boundary relation. The fixture remains correctly typed but exactGeometricInput still depends on the nonstandard axiom kleinDeckActionPackage. Consequently freeness, proper discontinuity, and the quotient homeomorphism cannot be proved standard-only within this repair without first compiling those prerequisites.",
     :commands
     [{:cmd
       "sha256sum /tmp/t93j03-klein-deck-action-polygon-identification-probe.lean",
       :exit 0,
-      :finding "The fixture hash matches the recorded hash."}
+      :finding
+      "The frozen fixture hash still matches the recorded hash."}
+     {:cmd
+      "rg for PresentedKleinGroup parameter theorems and KleinBottle quotient comparisons in ConstructionTargets",
+      :exit 1,
+      :expected-exit 1,
+      :finding "Neither reviewed prerequisite is banked."}
      {:cmd
       "compile Main.lean to /tmp/Main.olean and compile the fixture with /tmp on LEAN_PATH",
       :exit 0,
       :finding
-      "The consumer compiles with its existing sorry warning; exactGeometricInput compiles only with kleinDeckActionPackage in its axiom set."}
-     {:cmd
-      "rg for PresentedKleinGroup normal forms, KleinBottle quotient comparisons, and kleinDeckActionPackage in ConstructionTargets",
-      :exit 1,
-      :expected-exit 1,
-      :finding
-      "No algebraic normal-form/parameter theorem or polygon-orbit quotient comparison is banked."}
+      "The consumer compiles with its inherited sorry warning; exactGeometricInput retains kleinDeckActionPackage as a nonstandard axiom."}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
      {:cmd "git status --short", :exit 0, :finding "clean"}],
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1791629483306-1710-7bddfff4",
-     :finding
-     "No implementation commit was recorded and ConstructionTargets/KleinDeckActionPolygonIdentification.lean is absent. The fixture SHA-256 and package orientations are exact, but exactGeometricInput is obtained solely from the nonstandard axiom kleinDeckActionPackage. No banked theorem gives controlled translation/glide-reflection parameters for PresentedKleinGroup sufficient for identity detection and compact-intersection finiteness, nor the two-way equivalence between plane-action orbits and the frozen square-boundary KleinBottle relation. Repair requires compiling those two prerequisites, then constructing the action, freeness, proper discontinuity, orbit setoid, quotient homeomorphism, generator formulas, and basepoint equation with standard-only axioms; the current instruction to defer normal form must still permit a weaker parameter theorem adequate for those proofs."},
     :fixture
     {:path
      "/tmp/t93j03-klein-deck-action-polygon-identification-probe.lean",
@@ -88665,7 +88659,7 @@
      :proof-placeholder-count 1},
     :seat "topo-2"},
    :phase :implementation,
-   :state :repair,
+   :state :needs-owner,
    :scope
    ["ConstructionTargets/KleinDeckActionPolygonIdentification.lean"],
    :dag-node
@@ -89043,7 +89037,7 @@
    :stop-condition
    "End only when every active topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
