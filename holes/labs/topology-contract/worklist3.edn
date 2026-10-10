@@ -1892,8 +1892,87 @@
   {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-absolutesingularmap-groupglobalgenerator-naturality,
+   :evidence
+   {:placeholder-delta {:source 0, :fixture 0},
+    :residual
+    "Combine transported-global-generator naturality with elementwise localization naturality and a concrete relative chart-generator map equation; then prove the normalized basepoint localization equality and orientation-selected sign.",
+    :gates
+    {:canonical-homology-maps :pass,
+     :module-build :pass,
+     :registry-check :pass,
+     :exact-declaration-type :pass,
+     :standard-only-axioms :pass,
+     :exact-scope :pass,
+     :zero-source-and-fixture-sorry :pass,
+     :representation-direction :pass,
+     :fixture-compiles-against-promoted-module :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["lake build replayed pre-existing linter warnings in dependencies; the target module emitted no warnings"],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.ManifoldFundamentalClass.absoluteSingularMap_groupGlobalGenerator_naturality",
+      :type
+      "Preservation of the canonical integral module globalGenerator implies preservation of groupGlobalGenerator by homologyMap of absoluteSingularMap.",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on
+      ["ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator"
+       "ConstructionTargets.ManifoldFundamentalClass.absoluteSingularMap"],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-10",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/manifold_fundamental_class_group_generator_naturality.lean",
+      :exit 0,
+      :output
+      "11fda4089a277a561be8907a436955b0bc6a6310e65257b5ae80ee8dd6d001b6"}
+     {:cmd
+      "lake env lean /tmp/manifold_fundamental_class_group_generator_naturality.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^\\s*axiom\\b' ConstructionTargets/ManifoldFundamentalClass.lean /tmp/manifold_fundamental_class_group_generator_naturality.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :representation
+    {:source
+     "Preservation of globalGenerator by the canonical ModuleCat Int singular-homology map",
+     :target
+     "Preservation of groupGlobalGenerator by homologyMap of the AddCommGrpCat absoluteSingularMap",
+     :direction
+     "Exact implication from module-valued generator preservation to additive-group-valued generator preservation through singularHomologyComparison_naturality"},
+    :commit "8f7ae7617ede5fa8ffd933b7e2fd46ecbc6ec955",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path
+     "/tmp/manifold_fundamental_class_group_generator_naturality.lean",
+     :sha256
+     "11fda4089a277a561be8907a436955b0bc6a6310e65257b5ae80ee8dd6d001b6",
+     :original-sha256
+     "58cda784a24bb3602648723c28527fb2ff3bb228cf31f060d14390ab93ab3bd3",
+     :sorry-count 0},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :summary
+     "Added a local abbreviation for the canonical integral module homology map and proved transported global-generator naturality by evaluating singularHomologyComparison_naturality on the concrete module generator."},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/transported-global-generator-naturality",
@@ -3770,16 +3849,20 @@
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.absoluteSingularMap_groupGlobalGenerator_naturality",
     :reported-by
-    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+     :routes-2026-10-10-manifold-group-generator-naturality-topo3-r1],
     :type
     "forall {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y] (f : C(X,Y)) (n : Nat) (eX : (((AlgebraicTopology.singularHomologyFunctor (ModuleCat Int) n).obj (ModuleCat.of Int Int)).obj (TopCat.of X)) ≅ ModuleCat.of Int Int) (eY : (((AlgebraicTopology.singularHomologyFunctor (ModuleCat Int) n).obj (ModuleCat.of Int Int)).obj (TopCat.of Y)) ≅ ModuleCat.of Int Int), ((((AlgebraicTopology.singularHomologyFunctor (ModuleCat Int) n).obj (ModuleCat.of Int Int)).map (TopCat.ofHom f)).hom (globalGenerator Int _ eX) = globalGenerator Int _ eY) -> HomologicalComplex.homologyMap (absoluteSingularMap f) n (groupGlobalGenerator (TopCat.of X) n eX) = groupGlobalGenerator (TopCat.of Y) n eY",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in
+    :routes-2026-10-10-manifold-group-generator-naturality-topo3-r1},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-absolutesingularmap-groupglobalgenerator-naturality,
    :kind :lemma,
    :depends-on
-   [:lemma-constructiontargets-manifoldfundamentalclass-groupglobalgenerator-generates],
+   [:lemma-constructiontargets-manifoldfundamentalclass-groupglobalgenerator-generates
+    :lemma-constructiontargets-manifoldfundamentalclass-groupglobalgenerator
+    :lemma-constructiontargets-manifoldfundamentalclass-absolutesingularmap],
    :other-consumers [:t98A02]}],
  :consumer-baselines {},
  :statuses
