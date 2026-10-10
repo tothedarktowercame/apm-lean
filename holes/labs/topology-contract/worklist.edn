@@ -93314,8 +93314,76 @@
   {:bounded-exception
    "This single-consumer conjugation lemma is the next finite algebra step of the elected normal-form route and is used immediately to prove the arbitrary b-power action and semidirect-product lift.",
    :consumer :t93J03,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Extend conjugation from one b to b^n, use SemidirectProduct.lift to define Coordinates -> PresentedKleinGroup, and prove both inverse laws.",
+    :gates
+    {:canonical-build :pass,
+     :fixture-compile :pass,
+     :fixture-hash :pass,
+     :zero-fixture-placeholders :pass,
+     :standard-only-axioms :pass,
+     :registry :pass,
+     :scoped-diff :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    [{:kind :concurrent-worktree-change,
+      :message
+      "ConstructionTargets/T02A03LeftTubePuncturedModel.lean is modified outside this row scope; it was not touched or committed."}],
+    :missing-theorems [],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd
+      "lake build ConstructionTargets.KleinPresentedGroupConjugation",
+      :exit 0,
+      :finding
+      "Canonical build completed all 8244 jobs and all three declarations use standard-only axioms."}
+     {:cmd "lake env lean /tmp/klein-presented-conjugation.lean",
+      :exit 0,
+      :finding "The compiled conjugation fixture succeeds."}
+     {:cmd "sha256sum /tmp/klein-presented-conjugation.lean",
+      :exit 0,
+      :finding
+      "32427346eeb1a203fb840b34da6e219ec2b7b75acc2df533b3d992e51b2ea800"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" /tmp/klein-presented-conjugation.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "No placeholders."}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check HEAD^ HEAD", :exit 0}
+     {:cmd "git status --short",
+      :exit 0,
+      :finding
+      "A concurrent modification to ConstructionTargets/T02A03LeftTubePuncturedModel.lean appeared after the scoped commit and was preserved."}],
+    :commit "c403d7a1be1c5690fa0cad25346d219857313889",
+    :changed-paths
+    ["ConstructionTargets/KleinPresentedGroupConjugation.lean"],
+    :fixture
+    {:path "/tmp/klein-presented-conjugation.lean",
+     :sha256
+     "32427346eeb1a203fb840b34da6e219ec2b7b75acc2df533b3d992e51b2ea800",
+     :sorry-count 0,
+     :axiom-count 0,
+     :proof-placeholder-count 0},
+    :implementation
+    {:scope
+     ["ConstructionTargets/KleinPresentedGroupConjugation.lean"],
+     :declarations
+     ["KleinPresentedGroupConjugation.presented_relation"
+      "KleinPresentedGroupConjugation.conjugateA"
+      "KleinPresentedGroupConjugation.conjugateAPow"],
+     :method
+     "Use PresentedGroup.one_of_mem for the frozen relator, group cancellation for b^-1*a*b=a^-1, and conj_zpow to extend the rewrite to every integer power of a."},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/KleinPresentedGroupConjugation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/presented-group-coordinate-normal-form/conjugation-rewrite",
