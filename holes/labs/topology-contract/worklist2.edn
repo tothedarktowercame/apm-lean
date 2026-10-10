@@ -66672,7 +66672,49 @@
   {:bounded-exception
    "single-consumer continuity certificate for the right-core tubular coordinate formula",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:residual
+     "Define the disk-normal interpolation, establish its radius-1/4 bound and nonzero left-core normal coordinate, then package the ambient ContinuousMap and endpoints.",
+     :outcome :go,
+     :warnings [],
+     :missing-theorems [],
+     :axioms [propext Classical.choice Quot.sound],
+     :commands
+     [{:cmd "lake env lean /tmp/t02a03_right_core_compact_probe.lean",
+       :exit 0,
+       :output
+       "rightTubeCoreTubularCoordinates_continuous compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd "sha256sum /tmp/t02a03_right_core_compact_probe.lean",
+       :exit 0,
+       :output
+       "6ddf8c41c36042bd81d3eca721487cba940f6337fa67afd9b5e912854658498a  /tmp/t02a03_right_core_compact_probe.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_right_core_compact_probe.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}
+      {:cmd
+       "rg -n \"rightTubeCoreTubularCoordinates_continuous|Continuous rightTubeCoreNormalComplex|Function.uncurry rightTubeCorePolarReconstruction\" /tmp/t02a03_right_core_compact_probe.lean",
+       :exit 0,
+       :output "Exact conjunction occurs at lines 271-273."}],
+     :fixture
+     {:path "/tmp/t02a03_right_core_compact_probe.lean",
+      :sha256
+      "6ddf8c41c36042bd81d3eca721487cba940f6337fa67afd9b5e912854658498a"},
+     :finding
+     "The fixture proves both requested continuity facts directly: norm, coordinate projections, complex arithmetic, and the PiLp constructor establish continuity of the normal coordinate and the uncurried reconstruction.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+      :declarations
+      [{:name
+        "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreTubularCoordinates_continuous",
+        :type
+        "Continuous rightTubeCoreNormalComplex ∧ Continuous (Function.uncurry rightTubeCorePolarReconstruction)"}]},
+     :seat "topo-8"}},
+   :phase :implementation,
    :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
@@ -66691,6 +66733,11 @@
    :routes-2026-10-10-t02a03-right-core-tubular-coordinates-continuous-topo2-r1,
    :kind :reusable-theorem,
    :area "explicit-r3-tube-deformation-retraction",
+   :declarations
+   [{:name
+     "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreTubularCoordinates_continuous",
+     :type
+     "Continuous rightTubeCoreNormalComplex ∧ Continuous (Function.uncurry rightTubeCorePolarReconstruction)"}],
    :depends-on
    [:routes-2026-10-10-t02a03-right-core-polar-reconstruction-topo2-r1],
    :current-residual
