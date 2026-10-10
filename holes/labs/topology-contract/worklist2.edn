@@ -53789,8 +53789,11 @@
    :consumer :t97A04,
    :stop-count 1,
    :evidence
-   {:outcome :stop,
-    :seat "topo-8",
+   {:residual
+    "Correct the acceptance condition to verify that the canonical checkout owns the real .lake/packages authority (and require symlinks only in frame worktrees), then run a new read-only probe against a stable pre-existing fixture. No Lake command was run because the present acceptance demands a false workspace state.",
+    :outcome :stop,
+    :disposition :stop,
+    :author "topo-8",
     :reason
     "The row's acceptance condition conflicts with the canonical workspace invariant. /home/joe/code/apm-lean is the master canonical checkout, and docs/TN-topology-build-loop-design.md says its .lake/packages path owns the real canonical package directory; only frame worktrees must symlink to it. The acceptance instead requires .lake/packages in this canonical checkout to be verified as a symlink. It is correctly a real directory resolving to itself. Replacing it with a self-referential or external symlink would violate package authority, so the requested fixture may not be compiled under the stated acceptance. Independently, no stable repository fixture or banked declaration named coverSmallHomologyIso_naturality_of_square or memberwiseCoverSmallHomology_naturality exists. This is an exact workspace-representation boundary, not a mathematical refutation.",
     :commands
@@ -53812,15 +53815,25 @@
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :output "131 registered statements match, 0 do not"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791603173296-942-189915fb",
+     :commands
+     ["test -L .lake/packages"
+      "realpath .lake/packages"
+      "git grep -n -E 'coverSmallHomologyIso_naturality_of_square|memberwiseCoverSmallHomology_naturality' 33630f4c -- '*.lean'"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 33630f4c:holes/labs/topology-contract/worklist2.edn)"
+      "git diff --exit-code 33630f4c^ 33630f4c -- . ':(exclude)holes/labs/topology-contract/worklist2.edn'"],
+     :finding
+     "Independent of topo-8. PASS: commit 33630f4c changes only worklist2.edn and the row has empty implementation scope. The canonical checkout owns .lake/packages as a real directory, exactly as the design document requires; only frame worktrees use the canonical symlink, so the acceptance condition is contradictory. No stable fixture, fixture hash, or named theorem exists to authenticate, hence theorem orientations cannot be reviewed without inventing an artifact. The STOP correctly preserves this workspace-representation boundary. Registry: 131 matched, 0 mismatched; ledger: 354 items valid; unchanged scoped source hash 4203074a81bdb2d8932a767a75d855c8788e6e7e3fa85b0456aacd8c59bb0139 with zero forbidden placeholders."},
     :fixture
     {:path "stable repository path required by acceptance",
      :status :absent},
-    :residual
-    "Correct the acceptance condition to verify that the canonical checkout owns the real .lake/packages authority (and require symlinks only in frame worktrees), then run a new read-only probe against a stable pre-existing fixture. No Lake command was run because the present acceptance demands a false workspace state.",
-    :author "topo-8",
-    :disposition :stop},
+    :seat "topo-8"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -53872,7 +53885,7 @@
       :depends-on
       [:routes-2026-09-28-t97a04-memberwise-cover-small-naturality-topo2-r1]}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
