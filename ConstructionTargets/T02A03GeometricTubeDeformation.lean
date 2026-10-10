@@ -373,6 +373,18 @@ theorem rightTubeCorePolarReconstruction_self
     linarith
   · simp [rightTubeCorePolarReconstruction, rightTubeCoreNormalComplex]
 
+theorem rightTubeCoreTubularCoordinates_continuous :
+    Continuous rightTubeCoreNormalComplex ∧
+      Continuous (Function.uncurry rightTubeCorePolarReconstruction) := by
+  constructor
+  · unfold rightTubeCoreNormalComplex rightTubeCorePlanarComplex
+    fun_prop
+  · unfold rightTubeCorePolarReconstruction Function.uncurry
+    apply (PiLp.continuous_toLp 2 _).comp
+    apply continuous_pi
+    intro i
+    fin_cases i <;> simp <;> fun_prop
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -384,3 +396,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubePolarReconstruction_self
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCorePlanarComplex_ne_zero
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCorePolarReconstruction_self
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreTubularCoordinates_continuous
