@@ -59680,9 +59680,46 @@
   {:bounded-exception
    "single-consumer composed based attachment homotopy for the t02A03 punctured right-core segment",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/t02a03_geometric_tube_cover.lean",
+      :sha256
+      "03caeef04ef63e83ed7d18db409c345c504bc183f7880e468fde0580ae1c37dd"},
+     :commands
+     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "apm_t02a03_rightCoreLiftHomotopy, apm_t02a03_rightCoreAnchorContractionHomotopy, and apm_t02a03_rightCoreBasedAttachmentHomotopy compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
+       :exit 0}
+      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "03caeef04ef63e83ed7d18db409c345c504bc183f7880e468fde0580ae1c37dd  /tmp/t02a03_geometric_tube_cover.lean"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :finding
+     "The requested attachment homotopy packet is complete and placeholder-free. The vertical lift and anchor contraction are packaged with their banked endpoint equations as ContinuousMap.Homotopy values, and Homotopy.trans composes them from the punctured right-core attachment map to the constant quarter-turn Circle-meridian point.",
+     :implementation
+     {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
+      :declarations
+      ["apm_t02a03_rightCoreLiftHomotopy"
+       "apm_t02a03_rightCoreAnchorContractionHomotopy"
+       "apm_t02a03_rightCoreBasedAttachmentHomotopy"],
+      :types
+      ["ContinuousMap.Homotopy apm_t02a03_rightCoreAttachmentMap apm_t02a03_rightCoreLiftedMap"
+       "ContinuousMap.Homotopy apm_t02a03_rightCoreLiftedMap (ContinuousMap.const _ (apm_t02a03_circleMeridianMap (Circle.exp (Real.pi / 2))))"
+       "ContinuousMap.Homotopy apm_t02a03_rightCoreAttachmentMap (ContinuousMap.const _ (apm_t02a03_circleMeridianMap (Circle.exp (Real.pi / 2))))"]},
+     :residual
+     "Extend this based attachment homotopy across the right tube, construct compatible deformation data on the other tube piece, and glue the geometricY-to-Y equivalence."}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/geometric-right-core-based-attachment-homotopy",
    :acceptance
@@ -59695,9 +59732,17 @@
     :placeholder "the sole sorry in apm_t02a03",
     :route-step
     "t02A03 step 2, package and compose the punctured right-core lift and contraction into the based Circle-meridian attachment homotopy"},
+   :types
+   ["ContinuousMap.Homotopy apm_t02a03_rightCoreAttachmentMap apm_t02a03_rightCoreLiftedMap"
+    "ContinuousMap.Homotopy apm_t02a03_rightCoreLiftedMap (ContinuousMap.const _ (apm_t02a03_circleMeridianMap (Circle.exp (Real.pi / 2))))"
+    "ContinuousMap.Homotopy apm_t02a03_rightCoreAttachmentMap (ContinuousMap.const _ (apm_t02a03_circleMeridianMap (Circle.exp (Real.pi / 2))))"],
    :id
    :routes-2026-10-10-t02a03-geometric-right-core-based-attachment-homotopy-topo2-r1,
    :kind :reusable-theorem,
+   :declarations
+   ["apm_t02a03_rightCoreLiftHomotopy"
+    "apm_t02a03_rightCoreAnchorContractionHomotopy"
+    "apm_t02a03_rightCoreBasedAttachmentHomotopy"],
    :depends-on
    [:routes-2026-10-10-checkpoint-topo2-r5
     :routes-2026-10-10-t02a03-geometric-anchor-circle-meridian-quarter-turn-topo2-r1],
