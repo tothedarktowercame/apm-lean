@@ -88412,8 +88412,173 @@
      :review-outcomes]},
    :stop-condition
    "End only when every active topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+   :evidence
+   {:outcome :replan,
+    :seat "topo-4",
+    :commands
+    [{:cmd "stat -c '%F %n' .lake/packages",
+      :exit 0,
+      :finding
+      "directory .lake/packages; canonical package authority is present"}
+     {:cmd
+      "comment-stripped placeholder census for t99J01 t92J06 t97A03 t93J03 t01A03 t97A01",
+      :exit 0,
+      :finding "counts are 1, 1, 3, 1, 1, 1; total 8"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "bb holes/labs/topology-contract/worklist_check.bb",
+      :exit 0,
+      :finding
+      "topology-worklist: 728 items OK; 699 done, 14 superseded, 9 needs-owner, 5 blocked, 1 open"}
+     {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :finding
+    {:routes
+     {:t99J01
+      ["held by stop-after-two: ThreeCircles pi1 coordinates, component restriction, finite Schreier rank, explicit cyclic covers, assembly"],
+      :t92J06
+      ["held quotient-sheet gluing"
+       "permutation covers"
+       "Cayley-tree cover and simple connectedness"
+       "assembly"],
+      :t97A03
+      ["explicit connected double-cover classification"
+       "model comparisons"
+       "held finite Schreier rank"
+       "held polygon and point-wedge representations"
+       "owner-blocked path-connected MV coordinates"
+       "model invariants"
+       "assembly"],
+      :t93J03
+      ["Klein deck action and polygon quotient identification"
+       "banked subgroup-containment lifting criterion"
+       "annulus-cover embedding"
+       "assembly"],
+      :t01A03
+      ["held point-wedge pi1 coordinates"
+       "separating-circle H1 via surface collar"
+       "assembly"],
+      :t97A01
+      ["banked standard-N3 homeomorphism"
+       "held polygon open cover, point-wedge pi1 coordinates, and path-connected MV coordinates"
+       "polygon boundary word and Smith algebra"
+       "assembly"]},
+     :placeholder-delta 0,
+     :held-by-stop-after-two
+     [{:consumer :t99J01,
+       :reason
+       "Three consecutive reviewed packets did not complete a listed route step; component restriction, finite Schreier rank, and cyclic cover construction are held until a fresh Codex reroute."}],
+     :placeholder-counts
+     {:t99J01 1,
+      :t92J06 1,
+      :t97A03 3,
+      :t93J03 1,
+      :t01A03 1,
+      :t97A01 1},
+     :deferred
+     ["All t99J01 rows are deferred under stop-after-two."
+      "t92J06, t01A03, and t97A01 remain behind reviewed representation boundaries."
+      "t97A03 invariant calculations are deferred; only its independent cover-classification bridge is elected."],
+     :preserved-stops
+     [:routes-2026-10-10-generic-point-wedge-pi1-inclusion-coordinates-1
+      :routes-2026-10-10-point-wedge-quotient-sheet-local-homeomorph-1
+      :routes-2026-10-10-polygon-edge-graph-open-cover-shared-2
+      :routes-2026-10-10-generic-point-wedge-mv-pathconnected-coordinates-2
+      :routes-2026-10-10-t99j01-path-component-sheet-restriction-4
+      :routes-2026-10-10-finite-index-free-group-schreier-rank-shared-4
+      :routes-2026-10-10-t99j01-explicit-connected-cyclic-cover-4],
+     :infrastructure-packets
+     {:banked 0, :reviewed-stops 3, :placeholder-changing 0},
+     :ranking
+     "No frozen problem has a buildable closing adapter from banked results. Under rule 0 the one-placeholder t93J03 route is advanced first by its exact deck-action/polygon-identification prerequisite. The next independent eligible route is t97A03 connected double-cover classification, which can use the banked covering monodromy interface without depending on the held invariant calculations.",
+     :typed-residual-change
+     ["t99J01 path-component restriction reached a reviewed specification STOP: the component subtype, restricted map, connectivity instances, bounds, pi1 bijection, and MulEquiv signatures remain unfrozen"
+      "the shared finite-index Schreier row reached a reviewed mathematical-prerequisite STOP: qualitative subgroup freeness is banked, but no finite Schreier basis or (r-1)*n+1 complement count is compiled"
+      "t99J01 explicit cyclic cover reached a reviewed representation STOP: the graph quotient relation, topology, projection, charts, and fiber equivalence remain unfrozen"
+      "no consumer file changed and no route step was banked"],
+     :review-outcomes {:pass 0, :stop 3, :closed-problems 0}},
+    :replacement-items
+    [{:consumer :t93J03,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action-polygon-identification",
+      :acceptance
+      {:probe
+       "Compile the exact geometric input for t93J03: a free properly discontinuous action of the presented Klein group on the plane by translation and glide reflection, together with a homeomorphism from its orbit quotient to StatementSurfaceModels.KleinBottle that identifies the standard generators and chosen basepoint.",
+       :placeholder "the single sorry in apm_t93j03",
+       :route-step
+       "t93J03 step 1, kleinDeckAction and polygon quotient identification",
+       :gates
+       ["canonical packages"
+        "fixture compiles"
+        "zero fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :id
+      :routes-2026-10-10-t93j03-klein-deck-action-polygon-identification-5,
+      :kind :final-adapter,
+      :depends-on [],
+      :current-residual
+      "Relate the explicit plane deck action to the frozen aabb disk quotient with generator and basepoint equations.",
+      :other-consumers []}
+     {:consumer :t97A03,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/t97A03/connected-double-cover-classification",
+      :acceptance
+      {:probe
+       "Compile the classification bridge for a connected two-sheeted cover of BaseSpace A B: separate the two lifted sphere sheets, compute whether circle monodromy fixes or swaps them, eliminate the disconnected case, and construct a homeomorphism to OneCircleCover or TwoCircleCover. Defer all homology and fundamental-group invariant calculations.",
+       :placeholder
+       "apm_t97A03_bridge_classify_connected_double_cover",
+       :route-step
+       "t97A03 bridge 1, explicit classification steps 1-5",
+       :gates
+       ["canonical packages"
+        "fixture compiles"
+        "zero fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :id
+      :routes-2026-10-10-t97a03-connected-double-cover-classification-5,
+      :kind :uptake,
+      :depends-on [],
+      :current-residual
+      "Turn the banked lift/monodromy data into one of the two explicit quotient-model homeomorphisms.",
+      :other-consumers []}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 2,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only when every active topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:strategy
+       "Measure the t93J03 Klein deck-action comparison and the independent t97A03 connected-double-cover classification, preserve all reviewed holds, recount the six consumers and eight placeholders, then refill from the complete topo1 portfolio."},
+      :id :routes-2026-10-10-checkpoint-topo1-klein-double-cover-5,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:routes-2026-10-10-t93j03-klein-deck-action-polygon-identification-5
+       :routes-2026-10-10-t97a03-connected-double-cover-classification-5],
+      :current-residual
+      "Review two independent geometric classification advances while t99J01 is held by stop-after-two.",
+      :other-consumers []}],
+    :author "topo-4",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -88429,6 +88594,84 @@
     :routes-2026-10-10-checkpoint-topo1-covering-uptake-mv-repair-3],
    :current-residual
    "Review three independent t99J01 route advances, including the Schreier theorem shared with t97A03.",
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action-polygon-identification",
+   :acceptance
+   {:probe
+    "Compile the exact geometric input for t93J03: a free properly discontinuous action of the presented Klein group on the plane by translation and glide reflection, together with a homeomorphism from its orbit quotient to StatementSurfaceModels.KleinBottle that identifies the standard generators and chosen basepoint.",
+    :placeholder "the single sorry in apm_t93j03",
+    :route-step
+    "t93J03 step 1, kleinDeckAction and polygon quotient identification",
+    :gates
+    ["canonical packages"
+     "fixture compiles"
+     "zero fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id
+   :routes-2026-10-10-t93j03-klein-deck-action-polygon-identification-5,
+   :kind :final-adapter,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo1-covering-schreier-components-4],
+   :current-residual
+   "Relate the explicit plane deck action to the frozen aabb disk quotient with generator and basepoint equations.",
+   :other-consumers []}
+  {:consumer :t97A03,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t97A03/connected-double-cover-classification",
+   :acceptance
+   {:probe
+    "Compile the classification bridge for a connected two-sheeted cover of BaseSpace A B: separate the two lifted sphere sheets, compute whether circle monodromy fixes or swaps them, eliminate the disconnected case, and construct a homeomorphism to OneCircleCover or TwoCircleCover. Defer all homology and fundamental-group invariant calculations.",
+    :placeholder "apm_t97A03_bridge_classify_connected_double_cover",
+    :route-step "t97A03 bridge 1, explicit classification steps 1-5",
+    :gates
+    ["canonical packages"
+     "fixture compiles"
+     "zero fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id
+   :routes-2026-10-10-t97a03-connected-double-cover-classification-5,
+   :kind :uptake,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo1-covering-schreier-components-4],
+   :current-residual
+   "Turn the banked lift/monodromy data into one of the two explicit quotient-model homeomorphisms.",
+   :other-consumers []}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 2,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only when every active topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:strategy
+    "Measure the t93J03 Klein deck-action comparison and the independent t97A03 connected-double-cover classification, preserve all reviewed holds, recount the six consumers and eight placeholders, then refill from the complete topo1 portfolio."},
+   :id :routes-2026-10-10-checkpoint-topo1-klein-double-cover-5,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:routes-2026-10-10-t93j03-klein-deck-action-polygon-identification-5
+    :routes-2026-10-10-t97a03-connected-double-cover-classification-5
+    :routes-2026-10-10-checkpoint-topo1-covering-schreier-components-4],
+   :current-residual
+   "Review two independent geometric classification advances while t99J01 is held by stop-after-two.",
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
