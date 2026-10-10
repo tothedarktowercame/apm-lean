@@ -315,6 +315,27 @@ theorem apm_t02a03_continuous_leftTubeTorusPoint :
   intro i
   fin_cases i <;> simp <;> fun_prop
 
+theorem apm_t02a03_dist_leftTubeTorusPoint_leftCoreCircle
+    (u : Circle × Circle) :
+    dist (apm_t02a03_leftTubeTorusPoint u)
+      (apm_t02a03_leftCoreCircle u.1) = (1 / 8 : ℝ) := by
+  have ha : ((u.1 : ℂ).re) ^ 2 + ((u.1 : ℂ).im) ^ 2 = 1 := by
+    simpa [Complex.normSq_apply, pow_two] using Circle.normSq_coe u.1
+  have hb : ((u.2 : ℂ).re) ^ 2 + ((u.2 : ℂ).im) ^ 2 = 1 := by
+    simpa [Complex.normSq_apply, pow_two] using Circle.normSq_coe u.2
+  rw [dist_eq_norm, EuclideanSpace.norm_eq]
+  simp [apm_t02a03_leftTubeTorusPoint, apm_t02a03_leftCoreCircle,
+    Fin.sum_univ_succ]
+  ring_nf
+  have hrad :
+      (u.2 : ℂ).re ^ 2 * (u.1 : ℂ).re ^ 2 * (1 / 64 : ℝ) +
+          (u.2 : ℂ).re ^ 2 * (u.1 : ℂ).im ^ 2 * (1 / 64 : ℝ) +
+          (u.2 : ℂ).im ^ 2 * (1 / 64 : ℝ) = (1 / 8 : ℝ) ^ 2 := by
+    nlinarith
+  rw [hrad]
+  rw [Real.sqrt_sq_eq_abs]
+  norm_num
+
 theorem apm_t02a03_rightCore_zero :
     apm_t02a03_rightCore 0 = (0 : apm_t02a03_E3) := by
   ext i
