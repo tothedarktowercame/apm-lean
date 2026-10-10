@@ -189,4 +189,58 @@ theorem apm_t02a03_leftTubePlanarComplex_torusInverse_coordinates
       apm_t02a03_leftTubeTorusCoordinates,
       apm_t02a03_leftTubeTorusPoint]
 
+theorem apm_t02a03_norm_leftTubePlanarComplex_radialPoint
+    (tp : unitInterval × apm_t02a03_LeftTubeMinusCore) :
+    ‖apm_t02a03_leftTubePlanarComplex
+      ⟨apm_t02a03_leftTubeRadialPoint tp,
+        apm_t02a03_leftTubeRadialPoint_mem_leftTube tp⟩‖ =
+      (1 - (tp.1 : ℝ)) *
+          (1 + (1 / 8 : ℝ) *
+            ((apm_t02a03_leftTubeNormalAngular tp.2 : Circle) : ℂ).re) +
+        (tp.1 : ℝ) *
+          ‖apm_t02a03_leftTubePlanarComplex ⟨tp.2.1, tp.2.2.1⟩‖ := by
+  have hplanar : apm_t02a03_leftTubePlanarComplex
+      ⟨apm_t02a03_leftTubeRadialPoint tp,
+        apm_t02a03_leftTubeRadialPoint_mem_leftTube tp⟩ =
+      ((1 - (tp.1 : ℝ)) *
+          (1 + (1 / 8 : ℝ) *
+            ((apm_t02a03_leftTubeNormalAngular tp.2 : Circle) : ℂ).re) +
+        (tp.1 : ℝ) *
+          ‖apm_t02a03_leftTubePlanarComplex ⟨tp.2.1, tp.2.2.1⟩‖ : ℝ) •
+        ((apm_t02a03_leftTubeAngular
+          ⟨tp.2.1, tp.2.2.1⟩ : Circle) : ℂ) := by
+    rw [apm_t02a03_leftTubePlanarComplex_radialPoint,
+      apm_t02a03_leftTubePlanarComplex_torusInverse_coordinates]
+    conv_lhs =>
+      rhs
+      rw [apm_t02a03_leftTubePlanarComplex_eq_norm_smul_angular]
+    apply Complex.ext <;> simp <;> ring
+  rw [hplanar]
+  change ‖(((_ : ℝ) : ℂ) *
+      ((apm_t02a03_leftTubeAngular
+        ⟨tp.2.1, tp.2.2.1⟩ : Circle) : ℂ))‖ = _
+  rw [norm_mul, Circle.norm_coe, mul_one, Complex.norm_real,
+    Real.norm_eq_abs]
+  apply abs_of_pos
+  have hre : -(1 : ℝ) ≤
+      ((apm_t02a03_leftTubeNormalAngular tp.2 : Circle) : ℂ).re := by
+    have h := Complex.abs_re_le_norm
+      ((apm_t02a03_leftTubeNormalAngular tp.2 : Circle) : ℂ)
+    rw [Circle.norm_coe] at h
+    exact (abs_le.mp h).1
+  have ha : 0 < 1 + (1 / 8 : ℝ) *
+      ((apm_t02a03_leftTubeNormalAngular tp.2 : Circle) : ℂ).re := by
+    linarith
+  have hr : 0 < ‖apm_t02a03_leftTubePlanarComplex
+      ⟨tp.2.1, tp.2.2.1⟩‖ :=
+    norm_pos_iff.mpr (apm_t02a03_leftTubePlanarComplex_ne_zero
+      ⟨tp.2.1, tp.2.2.1⟩)
+  have ht0 : 0 ≤ (tp.1 : ℝ) := tp.1.2.1
+  have ht1 : (tp.1 : ℝ) ≤ 1 := tp.1.2.2
+  by_cases ht : (tp.1 : ℝ) = 1
+  · simp [ht, hr]
+  · exact add_pos_of_pos_of_nonneg
+      (mul_pos (sub_pos.mpr (lt_of_le_of_ne ht1 ht)) ha)
+      (mul_nonneg ht0 (norm_nonneg _))
+
 end ConstructionTargets.T02A03LeftTubePuncturedModel
