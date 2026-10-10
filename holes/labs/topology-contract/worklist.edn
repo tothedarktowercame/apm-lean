@@ -88006,6 +88006,8 @@
    :other-consumers []}
   {:consumer :t99J01,
    :stop-count 1,
+   :review-finding
+   "No implementation commit was recorded and ConstructionTargets/FiniteIndexFreeGroupSchreierRank.lean is absent. The fixture SHA-256 matches, but both consumer specializations depend on the nonstandard axiom finiteIndexSubgroupEquiv, which assumes the universal rank formula; the accepted universal name finiteIndexSubgroupFreeGroupEquiv has no frozen signature. Mathlib provides qualitative SpanningTree.endIsFree and endMulEquivSubgroup, not the required finite basis indexed by generator-coset edges outside the spanning tree or its cardinality. Repair requires a compiled placeholder-free prerequisite identifying that basis, proving the complement has (r-1)*n+1 elements, freezing the universal MulEquiv signature and orientation, and only then deriving the Fin 3/index-n and Fin 2/index-two specializations with standard-only axioms.",
    :evidence
    {:residual
     "Compile a placeholder-free prerequisite that identifies the Nielsen-Schreier basis with finite generator-coset edges outside the geodesic spanning tree and proves its cardinality is (r-1)*n+1; freeze the universal declaration signature, then derive the two specializations.",
@@ -88042,6 +88044,12 @@
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
      {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1791628444872-1670-7c32c04d",
+     :finding
+     "No implementation commit was recorded and ConstructionTargets/FiniteIndexFreeGroupSchreierRank.lean is absent. The fixture SHA-256 matches, but both consumer specializations depend on the nonstandard axiom finiteIndexSubgroupEquiv, which assumes the universal rank formula; the accepted universal name finiteIndexSubgroupFreeGroupEquiv has no frozen signature. Mathlib provides qualitative SpanningTree.endIsFree and endMulEquivSubgroup, not the required finite basis indexed by generator-coset edges outside the spanning tree or its cardinality. Repair requires a compiled placeholder-free prerequisite identifying that basis, proving the complement has (r-1)*n+1 elements, freezing the universal MulEquiv signature and orientation, and only then deriving the Fin 3/index-n and Fin 2/index-two specializations with standard-only axioms."},
     :fixture
     {:path "/tmp/finite-index-free-group-schreier-rank-probe.lean",
      :sha256
@@ -88051,7 +88059,7 @@
      :proof-placeholder-count 1},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["ConstructionTargets/FiniteIndexFreeGroupSchreierRank.lean"],
    :dag-node
@@ -88077,6 +88085,7 @@
      "python3 scripts/statement-registry.py check"]},
    :id :routes-2026-10-10-finite-index-schreier-spanning-tree-count-1,
    :kind :reusable-theorem,
+   :fail-count 1,
    :depends-on [],
    :current-residual
    "Refine Mathlib's qualitative Nielsen-Schreier basis by counting the complement of a spanning tree in the finite Schreier coset quiver.",
