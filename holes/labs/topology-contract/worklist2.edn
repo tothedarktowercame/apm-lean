@@ -62610,6 +62610,21 @@
       :output
       "5a64b71f5674cff394715614dcf318f1232cf391\nConstructionTargets/T02A03LeftTubePuncturedModel.lean"}
      {:cmd "git show --check --oneline 5a64b71f", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791649428466-2384-1a440e6c",
+     :commands
+     ["git show/diff-tree/show --check 5a64b71f5674cff394715614dcf318f1232cf391"
+      "sha256sum /tmp/t02a03_geometric_tube_cover.lean"
+      "lake env lean /tmp/t02a03_geometric_tube_cover.lean"
+      "lake env lean ConstructionTargets/T02A03LeftTubePuncturedModel.lean"
+      "lake build ConstructionTargets.T02A03LeftTubePuncturedModel"
+      "python3 scripts/statement-registry.py check --rev 5a64b71f5674cff394715614dcf318f1232cf391"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "recompute frozen-type hash and comment-stripped placeholder counts"],
+     :finding
+     "PASS: author topo-6 is independent and immutable commit 5a64b71f5674cff394715614dcf318f1232cf391 changes exactly ConstructionTargets/T02A03LeftTubePuncturedModel.lean. Fixture SHA-256 86bf8286cabaef27e1e106995e2ed0498bf3f3635f67425a751e3f562db1e0b8 matches. The theorem has the frozen norm orientation and correctly combines both endpoint planar coordinates along the same unit Circle direction. Its positivity argument handles t=1 separately and otherwise uses interval bounds, the Circle real-part lower bound, and source-coordinate nonvanishing, justifying removal of the absolute value after the Real-to-Complex scalar coercion. It stops before the exact normal-coordinate formula, deleted-core exclusion, homotopy, equivalence, and gluing. Fixture, target, focused 8241-job build, registry 131/0, and 473-item ledger gate pass. Frozen-type hash 4cb5d7e924ff1d79fe1d3f3fa3ae39a1a438796459f47cb8e8dea48ddd45e2e7 matches; axioms are only propext/Classical.choice/Quot.sound; target placeholders remain 0 and the unchanged consumer has 1 with hash b123eca388ab2858ca55daf538c1ddd645022b52f5196a15f0bb516d78323d7d."},
     :commit "5a64b71f5674cff394715614dcf318f1232cf391",
     :changed-paths
     ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
@@ -62627,7 +62642,7 @@
      "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, norm (apm_t02a03_leftTubePlanarComplex ⟨apm_t02a03_leftTubeRadialPoint tp, apm_t02a03_leftTubeRadialPoint_mem_leftTube tp⟩) = (1 - (tp.1 : Real)) * (1 + (1 / 8 : Real) * ((apm_t02a03_leftTubeNormalAngular tp.2 : Circle) : Complex).re) + (tp.1 : Real) * norm (apm_t02a03_leftTubePlanarComplex ⟨tp.2.1, tp.2.2.1⟩)"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/left-tube-interpolated-planar-norm",
@@ -62731,7 +62746,7 @@
    :phase :probe,
    :type
    "Nonempty (ContinuousMap.HomotopyEquiv LeftTubeMinusCore ConstructionTargets.TorusCircleWedgeOpenCover.Torus)",
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-punctured-model",
    :acceptance
@@ -63951,7 +63966,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -63966,7 +63981,10 @@
     :type
     "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, norm (apm_t02a03_leftTubePlanarComplex ⟨apm_t02a03_leftTubeRadialPoint tp, apm_t02a03_leftTubeRadialPoint_mem_leftTube tp⟩) = (1 - (tp.1 : Real)) * (1 + (1 / 8 : Real) * ((apm_t02a03_leftTubeNormalAngular tp.2 : Circle) : Complex).re) + (tp.1 : Real) * norm (apm_t02a03_leftTubePlanarComplex ⟨tp.2.1, tp.2.2.1⟩)",
     :proved-in
-    :routes-2026-10-10-t02a03-left-tube-interpolated-planar-norm-topo2-r1},
+    :routes-2026-10-10-t02a03-left-tube-interpolated-planar-norm-topo2-r1,
+    :banked-by
+    :routes-2026-10-10-t02a03-left-tube-interpolated-planar-norm-topo2-r1,
+    :banked-commit "5a64b71f5674cff394715614dcf318f1232cf391"},
    :id
    :lemma-constructiontargets-t02a03lefttubepuncturedmodel-apm-t02a03-norm-lefttubeplanarc,
    :kind :lemma,
