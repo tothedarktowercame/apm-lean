@@ -55924,51 +55924,51 @@
    :other-consumers []}
   {:consumer :t97A04,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/circle_winding_pointwise_group_laws.lean",
-      :sha256
-      "5b287ab0d8fb95833f108950c7aa30ca5e2e6dbb7287ad85802b330b8e874db4"},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/circle_winding_pointwise_group_laws.lean",
-       :exit 0,
-       :output
-       "all six declarations compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/circle_winding_pointwise_group_laws.lean || true)\"",
-       :exit 0}
-      {:cmd
-       "rg -n '^(def pointwise(Mul|Inv)Path|theorem liftBasedLoop(_endpointInteger)?_pointwise(Mul|Inv)Path|theorem liftBasedLoopEndpointInteger_pointwise(Mul|Inv)Path)' /tmp/circle_winding_pointwise_group_laws.lean",
-       :exit 0,
-       :output
-       "six requested path, lift, and endpoint-integer declarations found at lines 8, 14, 20, 36, 50, and 64"}
-      {:cmd "sha256sum /tmp/circle_winding_pointwise_group_laws.lean",
-       :exit 0,
-       :output
-       "5b287ab0d8fb95833f108950c7aa30ca5e2e6dbb7287ad85802b330b8e874db4  /tmp/circle_winding_pointwise_group_laws.lean"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :implementation
-     {:scope ["ConstructionTargets/CircleUniversalCover.lean"],
-      :declarations
-      ["pointwiseMulPath"
-       "pointwiseInvPath"
-       "liftBasedLoop_pointwiseMulPath"
-       "liftBasedLoop_pointwiseInvPath"
-       "liftBasedLoopEndpointInteger_pointwiseMulPath"
-       "liftBasedLoopEndpointInteger_pointwiseInvPath"],
-      :acceptance
-      "Copy the six verified declarations into CircleUniversalCover, preserving the explicit paths, lift equalities proved through eq_liftPath_iff', and endpoint-integer formulas proved through period_integer_unique; compile the scoped module, confirm no new placeholders, and rerun the statement registry check."},
-     :finding
-     "The complete fixture compiles without placeholders. It constructs the actual pointwise product and inverse loops, identifies their canonical real lifts with addition and negation using covering-lift uniqueness, and proves the corresponding exact addition and negation laws for liftBasedLoopEndpointInteger. Both endpoint theorems use only propext, Classical.choice, and Quot.sound.",
-     :residual
-     "Specialize the banked laws to the two coordinate projections of circleMatrixMap and combine them with the frozen-map conjugacy to prove the final Fin-2 integer-matrix naturality equation."}},
+   {:placeholder-delta 0,
+    :residual
+    "Specialize the banked laws to the two coordinate projections of circleMatrixMap and combine them with the frozen-map conjugacy to prove the final Fin-2 integer-matrix naturality equation.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["ConstructionTargets/CircleUniversalCover.lean:137:4 reports the pre-existing linter warning: try simp instead of simpa."],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms [propext Classical.choice Quot.sound],
+    :author "topo-6",
+    :commands
+    [{:cmd "sha256sum /tmp/circle_winding_pointwise_group_laws.lean",
+      :exit 0,
+      :output
+      "5b287ab0d8fb95833f108950c7aa30ca5e2e6dbb7287ad85802b330b8e874db4  /tmp/circle_winding_pointwise_group_laws.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/CircleUniversalCover.lean",
+      :exit 0,
+      :output
+      "Compiled with the pre-existing unnecessarySimpa warning at line 137."}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/CircleUniversalCover.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r 50e7971c28ccb885e765fb9de6cfa5b55e6a6ac0",
+      :exit 0,
+      :output "ConstructionTargets/CircleUniversalCover.lean"}],
+    :commit "50e7971c28ccb885e765fb9de6cfa5b55e6a6ac0",
+    :changed-paths ["ConstructionTargets/CircleUniversalCover.lean"],
+    :fixture
+    {:path "/tmp/circle_winding_pointwise_group_laws.lean",
+     :sha256
+     "5b287ab0d8fb95833f108950c7aa30ca5e2e6dbb7287ad85802b330b8e874db4"},
+    :declarations
+    ["ConstructionTargets.CircleUniversalCover.pointwiseMulPath"
+     "ConstructionTargets.CircleUniversalCover.pointwiseInvPath"
+     "ConstructionTargets.CircleUniversalCover.liftBasedLoop_pointwiseMulPath"
+     "ConstructionTargets.CircleUniversalCover.liftBasedLoop_pointwiseInvPath"
+     "ConstructionTargets.CircleUniversalCover.liftBasedLoopEndpointInteger_pointwiseMulPath"
+     "ConstructionTargets.CircleUniversalCover.liftBasedLoopEndpointInteger_pointwiseInvPath"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/CircleUniversalCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/torus-pi1-winding-coordinates/circle-pointwise-group-laws",
