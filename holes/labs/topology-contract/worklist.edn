@@ -97969,8 +97969,280 @@
      :review-outcomes]},
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+   :evidence
+   {:outcome :replan,
+    :seat "topo-4",
+    :commands
+    [{:cmd
+      "bb holes/labs/topology-contract/build_step.bb priorities holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :finding
+      "t99J01 has 25 banked lemmas, zero backlog, and is COMPLETE-elect-closure-adapter-now; the next genuine unproved ready nodes are the two t97A01 foundations"}
+     {:cmd
+      "comment-stripped placeholder census for t99J01 t92J06 t97A03 t93J03 t01A03 t97A01",
+      :exit 0,
+      :finding "counts are 1, 1, 3, 1, 1, 1; total 8 and delta 0"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :finding
+    {:placeholder-delta 0,
+     :placeholder-counts
+     {:t99J01 1,
+      :t92J06 1,
+      :t97A03 3,
+      :t93J03 1,
+      :t01A03 1,
+      :t97A01 1},
+     :routes
+     {:t99J01
+      ["single apm_t99j01 placeholder"
+       "all 25 route lemmas banked"
+       "closure probe now required"],
+      :t92J06
+      ["single placeholder"
+       "remaining wedge-quotient covering gluing and wedge free-group adapter"],
+      :t97A03
+      ["three placeholders"
+       "oneCircleCover_homotopyEquiv_modelBouquet"
+       "restrictedDoubleCoverGluingEquiv"
+       "twoCircleCover_homotopyEquiv_modelBouquet"
+       "consumer assembly"],
+      :t93J03
+      ["single placeholder"
+       "banked affine plane action and boundary comparison"
+       "remaining Klein orbit quotient/homeomorphism and frozen adapter"],
+      :t01A03
+      ["single placeholder"
+       "remaining circle-wedge van Kampen and torus pi1 adapter"],
+      :t97A01
+      ["single placeholder"
+       "genericPointWedgeOverlapInclusionSquares"
+       "polygonRadialOpenCoverPackages"
+       "homology/fundamental-group coordinate assembly"]},
+     :typed-residual-change
+     ["IsCoveringMap.restrictPathComponent is reviewed and banked."
+      "The positive-degree cyclic ThreeCircles pullback is reviewed as an n-sheeted path-connected cover."
+      "t99J01 moved from two backlog prerequisites to a complete route; only consumer assembly remains."],
+     :infrastructure-packets
+     {:banked-since-prior-checkpoint 19,
+      :placeholder-changing 0,
+      :compiled-refutations 0},
+     :review-outcomes {:pass 19, :stop 0, :closed-problems 0},
+     :priority-top
+     ["t99J01 closure adapter under rule 0"
+      "genericPointWedgeOverlapInclusionSquares for t97A01"
+      "polygonRadialOpenCoverPackages for t97A01"],
+     :areas
+     ["covering-subgroup-correspondence serves t94J04, t96A01, and t99J01 and has four banked, zero backlog"
+      "the two elected t97A01 foundations are assigned van-kampen-two-open-group and polygon-surface-open-cover"
+      "KleinPlaneAffineAction.planeAction is printed as backlog but its canonical module and reviewed implementation are already banked, so rebuilding it is deferred as a stale lemma-ledger repair rather than elected"]},
+    :lemmas
+    [{:name "KleinPlaneAffineAction.planeAction",
+      :status :partial,
+      :consumers [:t93J03 :t99J01],
+      :depends-on [],
+      :area "deck-group-fundamental-group"}
+     {:name "genericPointWedgeOverlapInclusionSquares",
+      :status :not-started,
+      :consumers [:t97A01],
+      :depends-on [],
+      :area "van-kampen-two-open-group"}
+     {:name "polygonRadialOpenCoverPackages",
+      :status :not-started,
+      :consumers [:t97A01],
+      :depends-on [],
+      :area "polygon-surface-open-cover"}
+     {:name "oneCircleCover_homotopyEquiv_modelBouquet",
+      :status :not-started,
+      :consumers [:t97A03],
+      :depends-on [],
+      :area "covering-classification-explicit"}
+     {:name "restrictedDoubleCoverGluingEquiv",
+      :status :not-started,
+      :consumers [:t97A03],
+      :depends-on [],
+      :area "covering-classification-explicit"}
+     {:name "twoCircleCover_homotopyEquiv_modelBouquet",
+      :status :not-started,
+      :consumers [:t97A03],
+      :depends-on [],
+      :area "covering-classification-explicit"}
+     {:name "CoveringPathComponentDomain.componentPathConnectedSpace",
+      :status :proved,
+      :consumers [:t99J01],
+      :depends-on [],
+      :area "covering-subgroup-correspondence"}
+     {:name "CoveringPathComponentDomain.component_isOpen",
+      :status :proved,
+      :consumers [:t99J01],
+      :depends-on [],
+      :area "covering-subgroup-correspondence"}
+     {:name "CyclicThreeCirclesCollapse.continuous_collapse",
+      :status :proved,
+      :consumers [:t99J01],
+      :depends-on [],
+      :area "covering-subgroup-correspondence"}
+     {:name
+      "HomeomorphLocPathConnected.Homeomorph.locPathConnectedSpace",
+      :status :proved,
+      :consumers [:t99J01],
+      :depends-on [],
+      :area "covering-subgroup-correspondence"}
+     {:name "LiteralCoveringPullback.covering",
+      :status :proved,
+      :consumers [:t99J01],
+      :depends-on [],
+      :area "covering-subgroup-correspondence"}
+     {:name "KleinDiskSquareCoordinates.edge_formulas",
+      :status :proved,
+      :consumers [:t93J03],
+      :depends-on [],
+      :area "polygon-quotient-identification"}
+     {:name "KleinSquareBoundaryRelation.squareRel_cases",
+      :status :proved,
+      :consumers [:t93J03],
+      :depends-on [],
+      :area "polygon-quotient-identification"}
+     {:name "KleinSquareEdgeOrientation.cases_edge_two_three",
+      :status :proved,
+      :consumers [:t93J03],
+      :depends-on [],
+      :area "polygon-quotient-identification"}
+     {:name "KleinSquareEdgeOrientation.cases_edge_zero_one",
+      :status :proved,
+      :consumers [:t93J03],
+      :depends-on [],
+      :area "polygon-quotient-identification"}
+     {:name "kleinAabbSquarePolygonPresentationEquivalence",
+      :status :partial,
+      :consumers [:t93J03],
+      :depends-on [],
+      :area "polygon-quotient-identification"}
+     {:name "kleinOrbitQuotient_homeomorph",
+      :status :partial,
+      :consumers [:t93J03],
+      :depends-on [],
+      :area "deck-group-fundamental-group"}],
+    :replacement-items
+    [{:consumer :t99J01,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md/t99J01/closure",
+      :acceptance
+      {:probe
+       "Compile a complete replacement for the single sorry in apm_t99j01 using the banked cyclic connected n-sheeted pullback, ThreeCircles fundamental-group equivalence, covering subgroup-index theorem, finite-index Schreier rank theorem, component-restriction covering theorem, and component fiber count. Prove all three frozen conjuncts without changing T99J01ComponentSheets or the registered theorem.",
+       :placeholder "the single sorry in apm_t99j01",
+       :route-step
+       "rule-0 consumer closure after every lemma on the t99J01 route is banked",
+       :gates
+       ["canonical packages"
+        "fixture compiles"
+        "zero fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :id :routes-2026-10-10-t99j01-closure-probe-39,
+      :kind :consumer-closure,
+      :area "covering-subgroup-correspondence",
+      :depends-on
+      [:routes-2026-10-10-checkpoint-topo1-after-t99j01-covering-prerequisites-38],
+      :current-residual
+      "Replace the single frozen placeholder and close t99J01.",
+      :other-consumers []}
+     {:bounded-exception
+      "This single-consumer strict comparison is one of the two final backlog lemmas on t97A01 and is the smaller coherent theorem.",
+      :consumer :t97A01,
+      :implements-lemma
+      :lemma-genericpointwedgeoverlapinclusionsquares,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/t97A01/generic-point-wedge-overlap-inclusion-squares",
+      :acceptance
+      {:probe
+       "Compile genericPointWedgeOverlapInclusionSquares for the banked genericPointWedgeCoverPackage: after conjugating the literal overlap-to-left and overlap-to-right maps by the package homotopy equivalences, prove the two continuous maps are respectively constant at x0 and y0. Do not assume either equality, construct polygon radial covers, compute homology, or close t97A01.",
+       :placeholder "the single sorry in apm_t97a01",
+       :route-step
+       "strict overlap-inclusion squares before transporting the two Mayer-Vietoris arrows",
+       :gates
+       ["canonical packages"
+        "fixture compiles"
+        "zero fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :id
+      :routes-2026-10-10-generic-point-wedge-overlap-inclusion-squares-39,
+      :kind :reusable-theorem,
+      :area "van-kampen-two-open-group",
+      :depends-on
+      [:routes-2026-10-10-checkpoint-topo1-after-t99j01-covering-prerequisites-38],
+      :current-residual
+      "Construct the polygon radial cover package, transport both inclusion maps, and close t97A01.",
+      :other-consumers []}
+     {:bounded-exception
+      "This single-consumer concrete quotient package is the other final backlog lemma on t97A01 and supplies the actual two polygon models required by its frozen statement.",
+      :consumer :t97A01,
+      :implements-lemma :lemma-polygonradialopencoverpackages,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
+      :acceptance
+      {:probe
+       "Compile polygonRadialOpenCoverPackages for SurfaceRel false 3 and TorusCrosscapRel. Construct saturated radial bands, prove quotient openness and cover, descend radial contractions, identify both boundary graph quotients with ThreeCircles, identify punctured-disk overlaps, prove literal inclusion equations, and establish the required corner and vertex classes. Do not postulate package fields, compute final homology or fundamental groups, or close t97A01.",
+       :placeholder "the single sorry in apm_t97a01",
+       :route-step
+       "concrete polygon radial open-cover packages before the final homology and fundamental-group coordinate assembly",
+       :gates
+       ["canonical packages"
+        "fixture compiles"
+        "zero fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :id :routes-2026-10-10-polygon-radial-open-cover-packages-39,
+      :kind :reusable-theorem,
+      :area "polygon-surface-open-cover",
+      :depends-on
+      [:routes-2026-10-10-checkpoint-topo1-after-t99j01-covering-prerequisites-38],
+      :current-residual
+      "Combine the concrete cover packages with the strict overlap squares, banked Smith normalization, and final t97A01 assembly.",
+      :other-consumers []}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:strategy
+       "Measure the t99J01 closure outcome and both t97A01 foundations, rerun priorities and AREAS, tag every remaining untagged lemma, and elect the next rule-0 closure or highest-impact area portfolio."},
+      :id
+      :routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-39,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:routes-2026-10-10-t99j01-closure-probe-39
+       :routes-2026-10-10-generic-point-wedge-overlap-inclusion-squares-39
+       :routes-2026-10-10-polygon-radial-open-cover-packages-39],
+      :current-residual
+      "Close t99J01 if its adapter passes, then reassess t97A01 and the remaining topo1 routes.",
+      :other-consumers []}],
+    :author "topo-4",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -97985,6 +98257,119 @@
     :routes-2026-10-10-checkpoint-topo1-after-klein-boundary-eqvgen-28],
    :current-residual
    "Review both covering constructions and close t99J01 when banked.",
+   :other-consumers []}
+  {:consumer :t99J01,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md/t99J01/closure",
+   :acceptance
+   {:probe
+    "Compile a complete replacement for the single sorry in apm_t99j01 using the banked cyclic connected n-sheeted pullback, ThreeCircles fundamental-group equivalence, covering subgroup-index theorem, finite-index Schreier rank theorem, component-restriction covering theorem, and component fiber count. Prove all three frozen conjuncts without changing T99J01ComponentSheets or the registered theorem.",
+    :placeholder "the single sorry in apm_t99j01",
+    :route-step
+    "rule-0 consumer closure after every lemma on the t99J01 route is banked",
+    :gates
+    ["canonical packages"
+     "fixture compiles"
+     "zero fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-10-t99j01-closure-probe-39,
+   :kind :consumer-closure,
+   :area "covering-subgroup-correspondence",
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo1-after-t99j01-covering-prerequisites-38],
+   :current-residual
+   "Replace the single frozen placeholder and close t99J01.",
+   :other-consumers []}
+  {:bounded-exception
+   "This single-consumer strict comparison is one of the two final backlog lemmas on t97A01 and is the smaller coherent theorem.",
+   :consumer :t97A01,
+   :implements-lemma :lemma-genericpointwedgeoverlapinclusionsquares,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t97A01/generic-point-wedge-overlap-inclusion-squares",
+   :acceptance
+   {:probe
+    "Compile genericPointWedgeOverlapInclusionSquares for the banked genericPointWedgeCoverPackage: after conjugating the literal overlap-to-left and overlap-to-right maps by the package homotopy equivalences, prove the two continuous maps are respectively constant at x0 and y0. Do not assume either equality, construct polygon radial covers, compute homology, or close t97A01.",
+    :placeholder "the single sorry in apm_t97a01",
+    :route-step
+    "strict overlap-inclusion squares before transporting the two Mayer-Vietoris arrows",
+    :gates
+    ["canonical packages"
+     "fixture compiles"
+     "zero fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id
+   :routes-2026-10-10-generic-point-wedge-overlap-inclusion-squares-39,
+   :kind :reusable-theorem,
+   :area "van-kampen-two-open-group",
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo1-after-t99j01-covering-prerequisites-38],
+   :current-residual
+   "Construct the polygon radial cover package, transport both inclusion maps, and close t97A01.",
+   :other-consumers []}
+  {:bounded-exception
+   "This single-consumer concrete quotient package is the other final backlog lemma on t97A01 and supplies the actual two polygon models required by its frozen statement.",
+   :consumer :t97A01,
+   :implements-lemma :lemma-polygonradialopencoverpackages,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
+   :acceptance
+   {:probe
+    "Compile polygonRadialOpenCoverPackages for SurfaceRel false 3 and TorusCrosscapRel. Construct saturated radial bands, prove quotient openness and cover, descend radial contractions, identify both boundary graph quotients with ThreeCircles, identify punctured-disk overlaps, prove literal inclusion equations, and establish the required corner and vertex classes. Do not postulate package fields, compute final homology or fundamental groups, or close t97A01.",
+    :placeholder "the single sorry in apm_t97a01",
+    :route-step
+    "concrete polygon radial open-cover packages before the final homology and fundamental-group coordinate assembly",
+    :gates
+    ["canonical packages"
+     "fixture compiles"
+     "zero fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-10-polygon-radial-open-cover-packages-39,
+   :kind :reusable-theorem,
+   :area "polygon-surface-open-cover",
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo1-after-t99j01-covering-prerequisites-38],
+   :current-residual
+   "Combine the concrete cover packages with the strict overlap squares, banked Smith normalization, and final t97A01 assembly.",
+   :other-consumers []}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:strategy
+    "Measure the t99J01 closure outcome and both t97A01 foundations, rerun priorities and AREAS, tag every remaining untagged lemma, and elect the next rule-0 closure or highest-impact area portfolio."},
+   :id
+   :routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-39,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:routes-2026-10-10-t99j01-closure-probe-39
+    :routes-2026-10-10-generic-point-wedge-overlap-inclusion-squares-39
+    :routes-2026-10-10-polygon-radial-open-cover-packages-39
+    :routes-2026-10-10-checkpoint-topo1-after-t99j01-covering-prerequisites-38],
+   :current-residual
+   "Close t99J01 if its adapter passes, then reassess t97A01 and the remaining topo1 routes.",
    :other-consumers []}
   {:bounded-exception
    "This single-consumer comparison lemma is one of the two ready prerequisites on the nearest one-placeholder t97A01 route and identifies both literal overlap inclusions under the banked generic point-wedge equivalences.",
@@ -98324,7 +98709,11 @@
    :scope [],
    :acceptance {:lemma "polygonRadialOpenCoverPackages"},
    :lemma
-   {:name "polygonRadialOpenCoverPackages", :reported-by [:owner]},
+   {:name "polygonRadialOpenCoverPackages",
+    :reported-by
+    [:owner
+     :routes-2026-10-10-checkpoint-topo1-after-t99j01-covering-prerequisites-38],
+    :area "polygon-surface-open-cover"},
    :id :lemma-polygonradialopencoverpackages,
    :kind :lemma,
    :depends-on [],
@@ -98339,9 +98728,12 @@
     "theorem genericPointWedgeOverlapInclusionSquares (x0 : X) (y0 : Y) (M : Set Y) (N : Set X) (hM : IsOpen M) (hN : IsOpen N) (hy : y0 ∈ M) (hx : x0 ∈ N) (cM : PointedContraction M ⟨y0,hy⟩) (cN : PointedContraction N ⟨x0,hx⟩) : leftEquiv.toFun.comp (overlapToLeft.comp overlapEquiv.invFun) = ContinuousMap.const _ x0 ∧ rightEquiv.toFun.comp (overlapToRight.comp overlapEquiv.invFun) = ContinuousMap.const _ y0, instantiated from genericPointWedgeCoverPackage. Its proof is a full expansion through Homeomorph.setCongr, restrictedOpenHomeomorphWedge, pointedWedgeHomeomorph, wedgeHomotopyEquivLeft/right,"},
    :lemma
    {:name "genericPointWedgeOverlapInclusionSquares",
-    :reported-by [:owner],
+    :reported-by
+    [:owner
+     :routes-2026-10-10-checkpoint-topo1-after-t99j01-covering-prerequisites-38],
     :type
-    "theorem genericPointWedgeOverlapInclusionSquares (x0 : X) (y0 : Y) (M : Set Y) (N : Set X) (hM : IsOpen M) (hN : IsOpen N) (hy : y0 ∈ M) (hx : x0 ∈ N) (cM : PointedContraction M ⟨y0,hy⟩) (cN : PointedContraction N ⟨x0,hx⟩) : leftEquiv.toFun.comp (overlapToLeft.comp overlapEquiv.invFun) = ContinuousMap.const _ x0 ∧ rightEquiv.toFun.comp (overlapToRight.comp overlapEquiv.invFun) = ContinuousMap.const _ y0, instantiated from genericPointWedgeCoverPackage. Its proof is a full expansion through Homeomorph.setCongr, restrictedOpenHomeomorphWedge, pointedWedgeHomeomorph, wedgeHomotopyEquivLeft/right,"},
+    "theorem genericPointWedgeOverlapInclusionSquares (x0 : X) (y0 : Y) (M : Set Y) (N : Set X) (hM : IsOpen M) (hN : IsOpen N) (hy : y0 ∈ M) (hx : x0 ∈ N) (cM : PointedContraction M ⟨y0,hy⟩) (cN : PointedContraction N ⟨x0,hx⟩) : leftEquiv.toFun.comp (overlapToLeft.comp overlapEquiv.invFun) = ContinuousMap.const _ x0 ∧ rightEquiv.toFun.comp (overlapToRight.comp overlapEquiv.invFun) = ContinuousMap.const _ y0, instantiated from genericPointWedgeCoverPackage. Its proof is a full expansion through Homeomorph.setCongr, restrictedOpenHomeomorphWedge, pointedWedgeHomeomorph, wedgeHomotopyEquivLeft/right,",
+    :area "van-kampen-two-open-group"},
    :id :lemma-genericpointwedgeoverlapinclusionsquares,
    :kind :lemma,
    :depends-on [],
@@ -98426,9 +98818,11 @@
    {:name "kleinOrbitQuotient_homeomorph",
     :reported-by
     [:owner
-     :routes-2026-10-10-checkpoint-topo1-after-schreier-type-valued-basis-16],
+     :routes-2026-10-10-checkpoint-topo1-after-schreier-type-valued-basis-16
+     :routes-2026-10-10-checkpoint-topo1-after-t99j01-covering-prerequisites-38],
     :type
-    "theorem is absent: after defining kleinPlaneAction from PresentedGroup.toGroup and orbitSetoid by existence of a group element, one still must prove theorem kleinOrbitQuotient_homeomorph : Quotient orbitSetoid ≃ₜ ConstructionTargets.StatementSurfaceModels.KleinBottle, with orbitSetoid x y ↔ ∃ g : T93J03.PresentedKleinGroup, kleinPlaneAction g x = y. This theorem entails a complete classification of every orbit intersection with the closed square, all edge and corner identifications, equivalence with the disk-boundary EqvGen relation used by Surface false 2, and continuity of both quotient maps"},
+    "theorem is absent: after defining kleinPlaneAction from PresentedGroup.toGroup and orbitSetoid by existence of a group element, one still must prove theorem kleinOrbitQuotient_homeomorph : Quotient orbitSetoid ≃ₜ ConstructionTargets.StatementSurfaceModels.KleinBottle, with orbitSetoid x y ↔ ∃ g : T93J03.PresentedKleinGroup, kleinPlaneAction g x = y. This theorem entails a complete classification of every orbit intersection with the closed square, all edge and corner identifications, equivalence with the disk-boundary EqvGen relation used by Surface false 2, and continuity of both quotient maps",
+    :area "deck-group-fundamental-group"},
    :id :lemma-kleinorbitquotient-homeomorph,
    :kind :lemma,
    :depends-on [:lemma-kleinsquareboundaryorbiteqvgen],
@@ -98443,9 +98837,12 @@
     "theorem is mathematically plausible and I found no missing hypothesis, but its proof requires a concrete theorem not present in the repository: after defining the sphere and two open-arc strata and their restricted covers, one needs theorem restrictedDoubleCoverGluingEquiv (matchingNorth matchingSouth : Equiv.Perm (Fin 2)) (hconnected : matchingNorth ≠ matchingSouth ∨ matchingNorth = Equiv.swap 0 1) : Nonempty (gluedDoubleCover matchingNorth matchingSouth ≃ₜ apm_t97A03_OneCircleCover) ∨ Nonempty (gluedDoubleCover matchingNorth matchingSouth ≃ₜ apm_t97A03_TwoCircleCover), together with a homeom"},
    :lemma
    {:name "restrictedDoubleCoverGluingEquiv",
-    :reported-by [:owner],
+    :reported-by
+    [:owner
+     :routes-2026-10-10-checkpoint-topo1-after-t99j01-covering-prerequisites-38],
     :type
-    "theorem is mathematically plausible and I found no missing hypothesis, but its proof requires a concrete theorem not present in the repository: after defining the sphere and two open-arc strata and their restricted covers, one needs theorem restrictedDoubleCoverGluingEquiv (matchingNorth matchingSouth : Equiv.Perm (Fin 2)) (hconnected : matchingNorth ≠ matchingSouth ∨ matchingNorth = Equiv.swap 0 1) : Nonempty (gluedDoubleCover matchingNorth matchingSouth ≃ₜ apm_t97A03_OneCircleCover) ∨ Nonempty (gluedDoubleCover matchingNorth matchingSouth ≃ₜ apm_t97A03_TwoCircleCover), together with a homeom"},
+    "theorem is mathematically plausible and I found no missing hypothesis, but its proof requires a concrete theorem not present in the repository: after defining the sphere and two open-arc strata and their restricted covers, one needs theorem restrictedDoubleCoverGluingEquiv (matchingNorth matchingSouth : Equiv.Perm (Fin 2)) (hconnected : matchingNorth ≠ matchingSouth ∨ matchingNorth = Equiv.swap 0 1) : Nonempty (gluedDoubleCover matchingNorth matchingSouth ≃ₜ apm_t97A03_OneCircleCover) ∨ Nonempty (gluedDoubleCover matchingNorth matchingSouth ≃ₜ apm_t97A03_TwoCircleCover), together with a homeom",
+    :area "covering-classification-explicit"},
    :id :lemma-restricteddoublecovergluingequiv,
    :kind :lemma,
    :depends-on [],
@@ -98460,9 +98857,12 @@
     "theorem appears true. The exact missing mathematical input remains two explicit quotient-space comparisons. With ModelBouquet defined as the iterated point wedge of apm_t97A03_S2, apm_t97A03_S2, and ThreeCircles, the required types are theorem oneCircleCover_homotopyEquiv_modelBouquet : Nonempty (apm_t97A03_OneCircleCover ≃ₕ ModelBouquet) and theorem twoCircleCover_homotopyEquiv_modelBouquet : Nonempty (apm_t97A03_TwoCircleCover ≃ₕ ModelBouquet). Neither theorem nor any lemma mentioning the two frozen models exists in ConstructionTargets. Each proof must define maps from a distinct EqvGen quot"},
    :lemma
    {:name "oneCircleCover_homotopyEquiv_modelBouquet",
-    :reported-by [:owner],
+    :reported-by
+    [:owner
+     :routes-2026-10-10-checkpoint-topo1-after-t99j01-covering-prerequisites-38],
     :type
-    "theorem appears true. The exact missing mathematical input remains two explicit quotient-space comparisons. With ModelBouquet defined as the iterated point wedge of apm_t97A03_S2, apm_t97A03_S2, and ThreeCircles, the required types are theorem oneCircleCover_homotopyEquiv_modelBouquet : Nonempty (apm_t97A03_OneCircleCover ≃ₕ ModelBouquet) and theorem twoCircleCover_homotopyEquiv_modelBouquet : Nonempty (apm_t97A03_TwoCircleCover ≃ₕ ModelBouquet). Neither theorem nor any lemma mentioning the two frozen models exists in ConstructionTargets. Each proof must define maps from a distinct EqvGen quot"},
+    "theorem appears true. The exact missing mathematical input remains two explicit quotient-space comparisons. With ModelBouquet defined as the iterated point wedge of apm_t97A03_S2, apm_t97A03_S2, and ThreeCircles, the required types are theorem oneCircleCover_homotopyEquiv_modelBouquet : Nonempty (apm_t97A03_OneCircleCover ≃ₕ ModelBouquet) and theorem twoCircleCover_homotopyEquiv_modelBouquet : Nonempty (apm_t97A03_TwoCircleCover ≃ₕ ModelBouquet). Neither theorem nor any lemma mentioning the two frozen models exists in ConstructionTargets. Each proof must define maps from a distinct EqvGen quot",
+    :area "covering-classification-explicit"},
    :id :lemma-onecirclecover-homotopyequiv-modelbouquet,
    :kind :lemma,
    :depends-on [],
@@ -98477,9 +98877,12 @@
     "theorem appears true. The exact missing mathematical input remains two explicit quotient-space comparisons. With ModelBouquet defined as the iterated point wedge of apm_t97A03_S2, apm_t97A03_S2, and ThreeCircles, the required types are theorem oneCircleCover_homotopyEquiv_modelBouquet : Nonempty (apm_t97A03_OneCircleCover ≃ₕ ModelBouquet) and theorem twoCircleCover_homotopyEquiv_modelBouquet : Nonempty (apm_t97A03_TwoCircleCover ≃ₕ ModelBouquet). Neither theorem nor any lemma mentioning the two frozen models exists in ConstructionTargets. Each proof must define maps from a distinct EqvGen quot"},
    :lemma
    {:name "twoCircleCover_homotopyEquiv_modelBouquet",
-    :reported-by [:owner],
+    :reported-by
+    [:owner
+     :routes-2026-10-10-checkpoint-topo1-after-t99j01-covering-prerequisites-38],
     :type
-    "theorem appears true. The exact missing mathematical input remains two explicit quotient-space comparisons. With ModelBouquet defined as the iterated point wedge of apm_t97A03_S2, apm_t97A03_S2, and ThreeCircles, the required types are theorem oneCircleCover_homotopyEquiv_modelBouquet : Nonempty (apm_t97A03_OneCircleCover ≃ₕ ModelBouquet) and theorem twoCircleCover_homotopyEquiv_modelBouquet : Nonempty (apm_t97A03_TwoCircleCover ≃ₕ ModelBouquet). Neither theorem nor any lemma mentioning the two frozen models exists in ConstructionTargets. Each proof must define maps from a distinct EqvGen quot"},
+    "theorem appears true. The exact missing mathematical input remains two explicit quotient-space comparisons. With ModelBouquet defined as the iterated point wedge of apm_t97A03_S2, apm_t97A03_S2, and ThreeCircles, the required types are theorem oneCircleCover_homotopyEquiv_modelBouquet : Nonempty (apm_t97A03_OneCircleCover ≃ₕ ModelBouquet) and theorem twoCircleCover_homotopyEquiv_modelBouquet : Nonempty (apm_t97A03_TwoCircleCover ≃ₕ ModelBouquet). Neither theorem nor any lemma mentioning the two frozen models exists in ConstructionTargets. Each proof must define maps from a distinct EqvGen quot",
+    :area "covering-classification-explicit"},
    :id :lemma-twocirclecover-homotopyequiv-modelbouquet,
    :kind :lemma,
    :depends-on [],
@@ -98884,17 +99287,20 @@
    :kind :lemma,
    :depends-on [:lemma-kleinpresentedgroup-coordinatenormalform],
    :other-consumers []}
-  {:consumer :portfolio,
+  {:consumer :t93J03,
    :phase :lemma,
    :state :backlog,
    :scope [],
    :acceptance {:lemma "KleinPlaneAffineAction.planeAction"},
    :lemma
-   {:name "KleinPlaneAffineAction.planeAction", :reported-by []},
+   {:name "KleinPlaneAffineAction.planeAction",
+    :reported-by
+    [:routes-2026-10-10-checkpoint-topo1-after-t99j01-covering-prerequisites-38],
+    :area "deck-group-fundamental-group"},
    :id :lemma-kleinplaneaffineaction-planeaction,
    :kind :lemma,
    :depends-on [],
-   :other-consumers []}
+   :other-consumers [:t99J01]}
   {:consumer :t93J03,
    :phase :lemma,
    :state :banked,
@@ -99045,13 +99451,18 @@
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
-  {:consumer :portfolio,
+  {:consumer :t93J03,
    :phase :lemma,
    :state :backlog,
    :scope [],
    :acceptance {:lemma "KleinDiskSquareCoordinates.edge_formulas"},
    :lemma
-   {:name "KleinDiskSquareCoordinates.edge_formulas", :reported-by []},
+   {:name "KleinDiskSquareCoordinates.edge_formulas",
+    :reported-by
+    [:routes-2026-10-10-checkpoint-topo1-after-t99j01-covering-prerequisites-38],
+    :area "polygon-quotient-identification",
+    :proved-in
+    :routes-2026-10-10-checkpoint-topo1-after-t99j01-covering-prerequisites-38},
    :id :lemma-kleindisksquarecoordinates-edge-formulas,
    :kind :lemma,
    :depends-on [],
@@ -99080,7 +99491,7 @@
    :depends-on
    [:lemma-kleinsurfacerelnormalform-surfacerel-false-two-iff],
    :other-consumers []}
-  {:consumer :portfolio,
+  {:consumer :t93J03,
    :phase :lemma,
    :state :backlog,
    :scope [],
@@ -99088,12 +99499,16 @@
    {:lemma "KleinSquareEdgeOrientation.cases_edge_zero_one"},
    :lemma
    {:name "KleinSquareEdgeOrientation.cases_edge_zero_one",
-    :reported-by []},
+    :reported-by
+    [:routes-2026-10-10-checkpoint-topo1-after-t99j01-covering-prerequisites-38],
+    :area "polygon-quotient-identification",
+    :proved-in
+    :routes-2026-10-10-checkpoint-topo1-after-t99j01-covering-prerequisites-38},
    :id :lemma-kleinsquareedgeorientation-cases-edge-zero-one,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
-  {:consumer :portfolio,
+  {:consumer :t93J03,
    :phase :lemma,
    :state :backlog,
    :scope [],
@@ -99101,7 +99516,11 @@
    {:lemma "KleinSquareEdgeOrientation.cases_edge_two_three"},
    :lemma
    {:name "KleinSquareEdgeOrientation.cases_edge_two_three",
-    :reported-by []},
+    :reported-by
+    [:routes-2026-10-10-checkpoint-topo1-after-t99j01-covering-prerequisites-38],
+    :area "polygon-quotient-identification",
+    :proved-in
+    :routes-2026-10-10-checkpoint-topo1-after-t99j01-covering-prerequisites-38},
    :id :lemma-kleinsquareedgeorientation-cases-edge-two-three,
    :kind :lemma,
    :depends-on [],
@@ -99129,14 +99548,18 @@
     :lemma-kleinplaneaction-squareorbitclassification
     :lemma-kleinsurfacerelnormalform-surfacerel-false-two-iff],
    :other-consumers []}
-  {:consumer :portfolio,
+  {:consumer :t93J03,
    :phase :lemma,
    :state :backlog,
    :scope [],
    :acceptance {:lemma "KleinSquareBoundaryRelation.squareRel_cases"},
    :lemma
    {:name "KleinSquareBoundaryRelation.squareRel_cases",
-    :reported-by []},
+    :reported-by
+    [:routes-2026-10-10-checkpoint-topo1-after-t99j01-covering-prerequisites-38],
+    :area "polygon-quotient-identification",
+    :proved-in
+    :routes-2026-10-10-checkpoint-topo1-after-t99j01-covering-prerequisites-38},
    :id :lemma-kleinsquareboundaryrelation-squarerel-cases,
    :kind :lemma,
    :depends-on [],
@@ -99236,14 +99659,16 @@
    :lemma
    {:name "kleinAabbSquarePolygonPresentationEquivalence",
     :reported-by
-    [:routes-2026-10-10-checkpoint-topo1-after-klein-boundary-eqvgen-28],
+    [:routes-2026-10-10-checkpoint-topo1-after-klein-boundary-eqvgen-28
+     :routes-2026-10-10-checkpoint-topo1-after-t99j01-covering-prerequisites-38],
     :type
-    "A homeomorphism or exact quotient-relation equivalence between the frozen aabb disk polygon quotient Surface false 2 and the standard opposite-side square quotient, without requiring an edgewise carrier map edgePoint 4 i t ↦ squareEdge i t."},
+    "A homeomorphism or exact quotient-relation equivalence between the frozen aabb disk polygon quotient Surface false 2 and the standard opposite-side square quotient, without requiring an edgewise carrier map edgePoint 4 i t ↦ squareEdge i t.",
+    :area "polygon-quotient-identification"},
    :id :lemma-kleinaabbsquarepolygonpresentationequivalence,
    :kind :lemma,
    :depends-on [:lemma-kleinsquareeqvgencasesiff-eqvgen-iff-cases],
    :other-consumers []}
-  {:consumer :portfolio,
+  {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
    :scope [],
@@ -99251,7 +99676,11 @@
    {:lemma "CyclicThreeCirclesCollapse.continuous_collapse"},
    :lemma
    {:name "CyclicThreeCirclesCollapse.continuous_collapse",
-    :reported-by []},
+    :reported-by
+    [:routes-2026-10-10-checkpoint-topo1-after-t99j01-covering-prerequisites-38],
+    :area "covering-subgroup-correspondence",
+    :proved-in
+    :routes-2026-10-10-checkpoint-topo1-after-t99j01-covering-prerequisites-38},
    :id :lemma-cyclicthreecirclescollapse-continuous-collapse,
    :kind :lemma,
    :depends-on [],
@@ -99276,19 +99705,23 @@
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
-  {:consumer :portfolio,
+  {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
    :scope [],
    :acceptance {:lemma "CoveringPathComponentDomain.component_isOpen"},
    :lemma
    {:name "CoveringPathComponentDomain.component_isOpen",
-    :reported-by []},
+    :reported-by
+    [:routes-2026-10-10-checkpoint-topo1-after-t99j01-covering-prerequisites-38],
+    :area "covering-subgroup-correspondence",
+    :proved-in
+    :routes-2026-10-10-checkpoint-topo1-after-t99j01-covering-prerequisites-38},
    :id :lemma-coveringpathcomponentdomain-component-isopen,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
-  {:consumer :portfolio,
+  {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
    :scope [],
@@ -99296,7 +99729,11 @@
    {:lemma "CoveringPathComponentDomain.componentPathConnectedSpace"},
    :lemma
    {:name "CoveringPathComponentDomain.componentPathConnectedSpace",
-    :reported-by []},
+    :reported-by
+    [:routes-2026-10-10-checkpoint-topo1-after-t99j01-covering-prerequisites-38],
+    :area "covering-subgroup-correspondence",
+    :proved-in
+    :routes-2026-10-10-checkpoint-topo1-after-t99j01-covering-prerequisites-38},
    :id :lemma-coveringpathcomponentdomain-componentpathconnectedspace,
    :kind :lemma,
    :depends-on [],
@@ -99322,7 +99759,7 @@
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
-  {:consumer :portfolio,
+  {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
    :scope [],
@@ -99332,7 +99769,11 @@
    :lemma
    {:name
     "HomeomorphLocPathConnected.Homeomorph.locPathConnectedSpace",
-    :reported-by []},
+    :reported-by
+    [:routes-2026-10-10-checkpoint-topo1-after-t99j01-covering-prerequisites-38],
+    :area "covering-subgroup-correspondence",
+    :proved-in
+    :routes-2026-10-10-checkpoint-topo1-after-t99j01-covering-prerequisites-38},
    :id
    :lemma-homeomorphlocpathconnected-homeomorph-locpathconnectedspace,
    :kind :lemma,
@@ -99363,12 +99804,18 @@
    [:lemma-cyclicthreecirclescollapse-collapse-firstcircle
     :lemma-literalcoveringpullback-covering],
    :other-consumers []}
-  {:consumer :portfolio,
+  {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
    :scope [],
    :acceptance {:lemma "LiteralCoveringPullback.covering"},
-   :lemma {:name "LiteralCoveringPullback.covering", :reported-by []},
+   :lemma
+   {:name "LiteralCoveringPullback.covering",
+    :reported-by
+    [:routes-2026-10-10-checkpoint-topo1-after-t99j01-covering-prerequisites-38],
+    :area "covering-subgroup-correspondence",
+    :proved-in
+    :routes-2026-10-10-checkpoint-topo1-after-t99j01-covering-prerequisites-38},
    :id :lemma-literalcoveringpullback-covering,
    :kind :lemma,
    :depends-on [],
