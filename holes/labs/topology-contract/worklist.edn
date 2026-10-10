@@ -87849,8 +87849,126 @@
    "Count the non-tree edges in the finite Schreier coset quiver and orient Mathlib's Nielsen-Schreier freeness equivalence to the two required finite ranks.",
    :other-consumers [:t97A03]}
   {:consumer :t99J01,
-   :phase :probe,
+   :phase :implementation,
    :state :open,
+   :scope
+   ["ConstructionTargets/T99J01ExplicitConnectedCyclicCover.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t99J01/explicit-connected-cyclic-cover/graph-realization",
+   :acceptance
+   {:placeholder "the single sorry in apm_t99j01",
+    :route-step "t99J01 step 5, exists_connected_cover",
+    :declarations
+    ["cyclicThreeCirclesCoverTotal"
+     "cyclicThreeCirclesCoverMap"
+     "cyclicThreeCirclesCover_pathConnected"
+     "cyclicThreeCirclesCover_isKSheeted"
+     "exists_connected_cyclic_cover"],
+    :implementation
+    "For n > 0, realize the graph with vertex set Fin n, one cyclic first-circle edge from i to i+1, and one loop at every vertex for each of the other two circles. Give its edge quotient the coinduced topology and define the projection to StatementSurfaceModels.ThreeCircles edgewise. Prove path connectedness by reaching every vertex along the cyclic edges and every edge point through an endpoint. Away from the wedge point, descend the standard open-arc charts on the relevant circle. At the wedge point, take one small arc from each of the six incident half-edges at every vertex, prove these n neighborhoods are open and pairwise disjoint, and construct their inverse charts over the common three-circle wedge neighborhood. Use these charts for IsCoveringMap, compute every fiber by an explicit equivalence with Fin n, and package IsKSheetedCover. Export the exact existential statement used by the first conjunct of apm_t99j01; do not build arbitrary permutation covers or the universal tree cover.",
+    :axioms :standard-only,
+    :fixture "/tmp/t99j01-explicit-connected-cyclic-cover-probe.lean",
+    :fixture-sha256
+    "d96931e1e28365b8b50d79de23a025047832474a1919caedb6f5aad459495442",
+    :commands
+    ["lake env lean ConstructionTargets/T99J01ExplicitConnectedCyclicCover.lean"
+     "lake env lean /tmp/t99j01-explicit-connected-cyclic-cover-probe.lean"
+     "python3 scripts/statement-registry.py check"]},
+   :id :routes-2026-10-10-t99j01-cyclic-graph-cover-realization-1,
+   :kind :uptake,
+   :depends-on [],
+   :current-residual
+   "Construct the one bounded cyclic graph quotient and prove its wedge-point covering charts, connectedness, and exact Fin n fibers.",
+   :other-consumers []}
+  {:consumer :t99J01,
+   :evidence
+   {:probe
+    {:outcome :revise,
+     :seat "topo-4",
+     :fixture
+     {:path "/tmp/t99j01-explicit-connected-cyclic-cover-probe.lean",
+      :sha256
+      "d96931e1e28365b8b50d79de23a025047832474a1919caedb6f5aad459495442"},
+     :commands
+     [{:cmd "stat -c '%F %n' .lake/packages",
+       :exit 0,
+       :finding
+       "directory .lake/packages; canonical package authority is present"}
+      {:cmd "lake env lean ConstructionTargets/CoveringDegree.lean",
+       :exit 0,
+       :finding
+       "the finite-sheet predicate and fiber-cardinality API compile with standard axioms"}
+      {:cmd
+       "lake env lean /tmp/t99j01-explicit-connected-cyclic-cover-probe.lean",
+       :exit 0,
+       :finding
+       "the exact positive-n connected ThreeCircles cover interface elaborates from one isolated construction axiom"}
+      {:cmd
+       "sha256sum /tmp/t99j01-explicit-connected-cyclic-cover-probe.lean",
+       :exit 0,
+       :finding
+       "d96931e1e28365b8b50d79de23a025047832474a1919caedb6f5aad459495442"}
+      {:cmd
+       "Python comment-stripped placeholder census of /tmp/t99j01-explicit-connected-cyclic-cover-probe.lean",
+       :exit 0,
+       :finding "0"}
+      {:cmd
+       "rg -n \"cyclicThreeCirclesCover|permutationCover|Graph.*IsCoveringMap|IsCoveringMap.*graph\" ConstructionTargets .lake/packages/mathlib/Mathlib/Topology",
+       :exit 1,
+       :expected-exit 1,
+       :finding
+       "no banked cyclic graph-cover or generic graph-covering realization supplies this construction"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :finding "131 registered statements match, 0 do not"}
+      {:cmd "git status --short", :exit 0, :finding "clean"}],
+     :axioms
+     ["propext"
+      "Classical.choice"
+      "Quot.sound"
+      "T99J01ExplicitConnectedCyclicCoverProbe.cyclicThreeCirclesCoverExists"],
+     :warnings
+     [{:kind :interface-axiom,
+       :message
+       "The placeholder-free fixture uses exactly one nonstandard axiom for the cyclic graph realization, its path connectedness, and its exact n-sheeted covering structure; no existing ConstructionTargets or pinned Mathlib theorem supplies that package."}],
+     :prerequisite
+     {:consumer :t99J01,
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/T99J01ExplicitConnectedCyclicCover.lean"],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/t99J01/explicit-connected-cyclic-cover/graph-realization",
+      :acceptance
+      {:placeholder "the single sorry in apm_t99j01",
+       :route-step "t99J01 step 5, exists_connected_cover",
+       :declarations
+       ["cyclicThreeCirclesCoverTotal"
+        "cyclicThreeCirclesCoverMap"
+        "cyclicThreeCirclesCover_pathConnected"
+        "cyclicThreeCirclesCover_isKSheeted"
+        "exists_connected_cyclic_cover"],
+       :implementation
+       "For n > 0, realize the graph with vertex set Fin n, one cyclic first-circle edge from i to i+1, and one loop at every vertex for each of the other two circles. Give its edge quotient the coinduced topology and define the projection to StatementSurfaceModels.ThreeCircles edgewise. Prove path connectedness by reaching every vertex along the cyclic edges and every edge point through an endpoint. Away from the wedge point, descend the standard open-arc charts on the relevant circle. At the wedge point, take one small arc from each of the six incident half-edges at every vertex, prove these n neighborhoods are open and pairwise disjoint, and construct their inverse charts over the common three-circle wedge neighborhood. Use these charts for IsCoveringMap, compute every fiber by an explicit equivalence with Fin n, and package IsKSheetedCover. Export the exact existential statement used by the first conjunct of apm_t99j01; do not build arbitrary permutation covers or the universal tree cover.",
+       :axioms :standard-only,
+       :fixture
+       "/tmp/t99j01-explicit-connected-cyclic-cover-probe.lean",
+       :fixture-sha256
+       "d96931e1e28365b8b50d79de23a025047832474a1919caedb6f5aad459495442",
+       :commands
+       ["lake env lean ConstructionTargets/T99J01ExplicitConnectedCyclicCover.lean"
+        "lake env lean /tmp/t99j01-explicit-connected-cyclic-cover-probe.lean"
+        "python3 scripts/statement-registry.py check"]},
+      :id :routes-2026-10-10-t99j01-cyclic-graph-cover-realization-1,
+      :kind :uptake,
+      :depends-on [],
+      :current-residual
+      "Construct the one bounded cyclic graph quotient and prove its wedge-point covering charts, connectedness, and exact Fin n fibers.",
+      :other-consumers []},
+     :residual
+     "Exactly one compiled prerequisite remains: the cyclic n-vertex graph realization as a connected n-sheeted cover of ThreeCircles. The fiber-count predicate is already banked; arbitrary permutation covers and tree covers remain outside this row."}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/explicit-connected-cyclic-cover",
@@ -87868,7 +87986,8 @@
    :id :routes-2026-10-10-t99j01-explicit-connected-cyclic-cover-4,
    :kind :uptake,
    :depends-on
-   [:routes-2026-10-10-checkpoint-topo1-covering-uptake-mv-repair-3],
+   [:routes-2026-10-10-checkpoint-topo1-covering-uptake-mv-repair-3
+    :routes-2026-10-10-t99j01-cyclic-graph-cover-realization-1],
    :current-residual
    "Construct the cyclic graph cover directly and verify connectedness, exact fiber cardinality, and covering charts.",
    :other-consumers []}
