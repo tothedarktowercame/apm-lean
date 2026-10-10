@@ -59794,9 +59794,43 @@
   {:bounded-exception
    "single-consumer planar-radius normalization for the frozen t02A03 left core",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/t02a03_geometric_tube_cover.lean",
+      :sha256
+      "6782eadc0d38c68b899252a4c14666ae94f8e1c14f09d839d4062dc1dc9d0221"},
+     :commands
+     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "apm_t02a03_leftCore_planar_radius_sq compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
+       :exit 0}
+      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "6782eadc0d38c68b899252a4c14666ae94f8e1c14f09d839d4062dc1dc9d0221  /tmp/t02a03_geometric_tube_cover.lean"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :finding
+     "The requested planar-radius normalization is complete and placeholder-free. Unfolding the frozen left-core coordinates reduces the equality to Real.cos_sq_add_sin_sq, proving that every core point has squared planar displacement one from center (-1,0).",
+     :implementation
+     {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
+      :declaration "apm_t02a03_leftCore_planar_radius_sq",
+      :type
+      "∀ t : ℝ, (apm_t02a03_leftCore t 0 + 1) ^ 2 + (apm_t02a03_leftCore t 1) ^ 2 = 1"},
+     :residual
+     "Use this identity to prove uniform nonvanishing of the planar center displacement on the radius-1/4 left tube, then construct angular and punctured-normal coordinates and the torus HomotopyEquiv."}},
+   :phase :implementation,
+   :type
+   "∀ t : ℝ, (apm_t02a03_leftCore t 0 + 1) ^ 2 + (apm_t02a03_leftCore t 1) ^ 2 = 1",
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-core-planar-radius",
    :acceptance
    {:probe
@@ -59809,6 +59843,7 @@
     "t02A03 step 2, establish the frozen left core's exact planar radius before constructing left-tube angular coordinates"},
    :id :routes-2026-10-10-t02a03-left-core-planar-radius-topo2-r1,
    :kind :reusable-theorem,
+   :declaration "apm_t02a03_leftCore_planar_radius_sq",
    :depends-on
    [:routes-2026-10-10-checkpoint-topo2-r5
     :routes-2026-10-10-t02a03-geometric-tube-cover-topo2-r1],
