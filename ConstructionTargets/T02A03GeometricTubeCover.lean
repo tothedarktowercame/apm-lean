@@ -163,6 +163,43 @@ theorem apm_t02a03_continuous_leftTubeAngular :
       (norm_ne_zero_iff.mpr (apm_t02a03_leftTubePlanarComplex_ne_zero p))).smul
     hz.continuousAt
 
+noncomputable def apm_t02a03_leftTubeNormalComplex
+    (p : apm_t02a03_leftTubeSubtype) : ℂ :=
+  (‖apm_t02a03_leftTubePlanarComplex p‖ - 1 : ℂ) +
+    (p.1 2 : ℂ) * Complex.I
+
+theorem apm_t02a03_continuous_leftTubeNormalComplex :
+    Continuous apm_t02a03_leftTubeNormalComplex := by
+  have hz : Continuous
+      (fun p : apm_t02a03_leftTubeSubtype =>
+        apm_t02a03_leftTubePlanarComplex p) := by
+    have h0 : Continuous (fun p : apm_t02a03_leftTubeSubtype => p.1 0) :=
+      (PiLp.continuous_apply 2 (fun _ : Fin 3 => ℝ) 0).comp continuous_subtype_val
+    have h1 : Continuous (fun p : apm_t02a03_leftTubeSubtype => p.1 1) :=
+      (PiLp.continuous_apply 2 (fun _ : Fin 3 => ℝ) 1).comp continuous_subtype_val
+    unfold apm_t02a03_leftTubePlanarComplex
+    have hre : Continuous
+        (fun p : apm_t02a03_leftTubeSubtype =>
+          Complex.ofReal (p.1 0 + 1)) :=
+      Complex.continuous_ofReal.comp (h0.add continuous_const)
+    have him : Continuous
+        (fun p : apm_t02a03_leftTubeSubtype =>
+          Complex.ofReal (p.1 1) * Complex.I) :=
+      (Complex.continuous_ofReal.comp h1).mul continuous_const
+    simpa only [Complex.ofReal_add, Complex.ofReal_one] using hre.add him
+  have h2 : Continuous (fun p : apm_t02a03_leftTubeSubtype => p.1 2) :=
+    (PiLp.continuous_apply 2 (fun _ : Fin 3 => ℝ) 2).comp continuous_subtype_val
+  unfold apm_t02a03_leftTubeNormalComplex
+  have hre : Continuous
+      (fun p : apm_t02a03_leftTubeSubtype =>
+        Complex.ofReal (‖apm_t02a03_leftTubePlanarComplex p‖ - 1)) :=
+    Complex.continuous_ofReal.comp ((continuous_norm.comp hz).sub continuous_const)
+  have him : Continuous
+      (fun p : apm_t02a03_leftTubeSubtype =>
+        Complex.ofReal (p.1 2) * Complex.I) :=
+    (Complex.continuous_ofReal.comp h2).mul continuous_const
+  simpa only [Complex.ofReal_sub, Complex.ofReal_one] using hre.add him
+
 theorem apm_t02a03_rightCore_zero :
     apm_t02a03_rightCore 0 = (0 : apm_t02a03_E3) := by
   ext i
