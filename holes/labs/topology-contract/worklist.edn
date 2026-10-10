@@ -99778,16 +99778,45 @@
    "Pull both six-edge relations back to Circle along boundaryCircleHomeomorph, build their quotient presentations and compare them with ThreeCircles, then establish common vertex classes, literal inclusion formulas, and final package assembly.",
    :other-consumers []}
   {:bounded-exception
+   "This single-consumer prerequisite transports arbitrary boundary relations and their honest quotient topologies across the banked Circle-to-boundary homeomorphism before specializing the two polygon words.",
+   :consumer :t97A01,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/PolygonBoundaryInducedQuotient.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/boundary-induced-quotient",
+   :acceptance
+   {:implementation
+    "Promote the exact fixture. Prove a generic EqvGen map theorem. Pull an arbitrary disk relation back to Circle through circleToBoundary, define its restriction to Boundary, equip both EqvGen quotients with their coinduced topologies, construct the induced homeomorphism between those quotients, and prove both literal representative formulas. Do not specialize SurfaceRel or TorusCrosscapRel, identify ThreeCircles, prove vertex classes or final inclusion equations, compute invariants, or close t97A01.",
+    :placeholder "the single sorry in apm_t97a01",
+    :route-step
+    "polygon radial open-cover step 15: transport boundary relation quotients across the Circle-to-radius-one-boundary homeomorphism",
+    :fixture "/tmp/polygon-boundary-induced-quotient.lean",
+    :fixture-sha256
+    "5fc86892e81e1b112d2838849ba49469050bef156506d43b36ab01cb9d4d1a9a",
+    :gates
+    ["lake build ConstructionTargets.PolygonBoundaryInducedQuotient"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-10-polygon-boundary-induced-quotient-55,
+   :kind :reusable-theorem,
+   :area "polygon-surface-open-cover",
+   :depends-on [:routes-2026-10-10-polygon-boundary-circle-source-54],
+   :current-residual
+   "Specialize CircleRel to the two six-edge words, identify both Circle relation quotients with ThreeCircles, prove their common vertex classes and literal inclusion formulas, and assemble the packages.",
+   :other-consumers []}
+  {:bounded-exception
    "This single-consumer concrete quotient package is the other final backlog lemma on t97A01 and supplies the actual two polygon models required by its frozen statement.",
    :consumer :t97A01,
    :implements-lemma :lemma-polygonradialopencoverpackages,
    :evidence
    {:probe
     {:residual
-     "The common radius-one boundary is now explicitly homeomorphic to Circle. The remaining package needs the two induced Circle relation quotients, their ThreeCircles identifications, common vertex classes, literal inclusion formulas, and final assembly.",
+     "Boundary relations now transport homeomorphically between Circle and the radius-one disk subtype at the quotient level. The remaining package needs the two specialized Circle quotient-to-ThreeCircles identifications, common vertex classes, literal inclusion formulas, and final assembly.",
      :outcome :revise,
-     :warnings
-     ["Lean reports two unnecessarySimpa style warnings in circleToBoundary; they do not affect the theorem statements, proof terms, or axioms."],
+     :warnings [],
      :missing-theorems
      [{:name "polygonRadialOpenCoverPackages",
        :type
@@ -99796,68 +99825,72 @@
        :consumers [:t97A01],
        :depends-on
        ["PolygonOverlapHomotopyEquivCircle.overlapHomotopyEquivCircle"
-        "PolygonBoundaryCircleSource.boundaryCircleHomeomorph"
+        "PolygonBoundaryInducedQuotient.circleBoundaryQuotientHomeomorph"
         "polygonBoundaryThreeCircles"],
        :area "polygon-surface-open-cover"}
-      {:name "PolygonBoundaryCircleSource.boundaryCircleHomeomorph",
+      {:name
+       "PolygonBoundaryInducedQuotient.circleBoundaryQuotientHomeomorph",
        :type
-       "The complex unit circle is homeomorphic to the subtype of the canonical closed disk consisting of points of radius exactly one, with literal underlying complex coordinates.",
+       "For every disk relation, the EqvGen quotient of its pullback to Circle along boundaryCircleHomeomorph is homeomorphic to the EqvGen quotient of its restriction to the radius-one disk boundary, with literal maps on representatives.",
        :status :proved,
-       :consumers [:t97A01],
-       :depends-on ["PolygonTorusCrosscapRelation.TorusCrosscapRel"],
-       :area "polygon-surface-open-cover"}
-      {:name "polygonBoundaryThreeCircles",
-       :type
-       "Transport SurfaceRel false 3 and TorusCrosscapRel to Circle through boundaryCircleHomeomorph, identify both generated quotient relations with ThreeCircles, and prove common vertex classes and literal boundary inclusion formulas.",
-       :status :not-started,
        :consumers [:t97A01],
        :depends-on
        ["PolygonBoundaryCircleSource.boundaryCircleHomeomorph"],
+       :area "polygon-surface-open-cover"}
+      {:name "polygonBoundaryThreeCircles",
+       :type
+       "Specialize the induced Circle relations to SurfaceRel false 3 and TorusCrosscapRel, identify both EqvGen quotients with ThreeCircles, and prove common vertex classes and literal boundary inclusion formulas.",
+       :status :not-started,
+       :consumers [:t97A01],
+       :depends-on
+       ["PolygonBoundaryInducedQuotient.circleBoundaryQuotientHomeomorph"],
        :area "polygon-surface-open-cover"}],
      :prerequisite
      {:bounded-exception
-      "This single-consumer prerequisite fixes the common radius-one boundary source used by both six-edge relations before their quotient relations are compared with ThreeCircles.",
+      "This single-consumer prerequisite transports arbitrary boundary relations and their honest quotient topologies across the banked Circle-to-boundary homeomorphism before specializing the two polygon words.",
       :consumer :t97A01,
       :phase :implementation,
       :state :open,
-      :scope ["ConstructionTargets/PolygonBoundaryCircleSource.lean"],
+      :scope
+      ["ConstructionTargets/PolygonBoundaryInducedQuotient.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/boundary-circle-source",
+      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/boundary-induced-quotient",
       :acceptance
       {:implementation
-       "Promote the exact fixture. Define the radius-one subtype Boundary of the canonical closed complex disk, construct mutually inverse maps between Circle and Boundary, prove both maps continuous, package the resulting homeomorphism, and prove its literal underlying-coordinate formulas. Do not transport either polygon relation to Circle, construct relation quotients, identify ThreeCircles, prove vertex classes or final inclusion equations, compute invariants, or close t97A01.",
+       "Promote the exact fixture. Prove a generic EqvGen map theorem. Pull an arbitrary disk relation back to Circle through circleToBoundary, define its restriction to Boundary, equip both EqvGen quotients with their coinduced topologies, construct the induced homeomorphism between those quotients, and prove both literal representative formulas. Do not specialize SurfaceRel or TorusCrosscapRel, identify ThreeCircles, prove vertex classes or final inclusion equations, compute invariants, or close t97A01.",
        :placeholder "the single sorry in apm_t97a01",
        :route-step
-       "polygon radial open-cover step 14: identify the common radius-one disk boundary homeomorphically with Circle",
-       :fixture "/tmp/polygon-boundary-circle-source.lean",
+       "polygon radial open-cover step 15: transport boundary relation quotients across the Circle-to-radius-one-boundary homeomorphism",
+       :fixture "/tmp/polygon-boundary-induced-quotient.lean",
        :fixture-sha256
-       "3cbf60a4edd8d0772453789ccee974e9b3a96925b975908ede104fbcaa38c5a4",
+       "5fc86892e81e1b112d2838849ba49469050bef156506d43b36ab01cb9d4d1a9a",
        :gates
-       ["lake build ConstructionTargets.PolygonBoundaryCircleSource"
+       ["lake build ConstructionTargets.PolygonBoundaryInducedQuotient"
         "fixture compiles"
         "zero source and fixture sorry"
         "standard-only axioms"
         "registry check"]},
-      :id :routes-2026-10-10-polygon-boundary-circle-source-54,
+      :id :routes-2026-10-10-polygon-boundary-induced-quotient-55,
       :kind :reusable-theorem,
       :area "polygon-surface-open-cover",
       :depends-on
-      [:routes-2026-10-10-polygon-torus-crosscap-relation-53],
+      [:routes-2026-10-10-polygon-boundary-circle-source-54],
       :current-residual
-      "Pull both six-edge relations back to Circle along boundaryCircleHomeomorph, build their quotient presentations and compare them with ThreeCircles, then establish common vertex classes, literal inclusion formulas, and final package assembly.",
+      "Specialize CircleRel to the two six-edge words, identify both Circle relation quotients with ThreeCircles, prove their common vertex classes and literal inclusion formulas, and assemble the packages.",
       :other-consumers []},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
-     [{:cmd "lake env lean /tmp/polygon-boundary-circle-source.lean",
+     [{:cmd
+       "lake env lean /tmp/polygon-boundary-induced-quotient.lean",
        :exit 0,
        :finding
-       "The radius-one disk boundary subtype, mutually inverse Circle maps, their continuity, the resulting homeomorphism, and representative formulas compile with standard axioms."}
-      {:cmd "sha256sum /tmp/polygon-boundary-circle-source.lean",
+       "Generic EqvGen transport, the Circle and boundary relations, both coinduced quotient topologies, the quotient homeomorphism, and its two representative formulas compile with standard axioms."}
+      {:cmd "sha256sum /tmp/polygon-boundary-induced-quotient.lean",
        :exit 0,
        :finding
-       "3cbf60a4edd8d0772453789ccee974e9b3a96925b975908ede104fbcaa38c5a4"}
+       "5fc86892e81e1b112d2838849ba49469050bef156506d43b36ab01cb9d4d1a9a"}
       {:cmd
-       "rg -n \"\\b(sorry|admit)\\b\" /tmp/polygon-boundary-circle-source.lean",
+       "rg -n \"\\b(sorry|admit)\\b\" /tmp/polygon-boundary-induced-quotient.lean",
        :exit 1,
        :expected-exit 1,
        :finding "No fixture placeholders."}
@@ -99866,19 +99899,20 @@
        :finding "131 registered statements match, 0 do not."}
       {:cmd "git status --short", :exit 0, :finding "clean"}],
      :diagnostic-history
-     [{:cmd "lake env lean /tmp/polygon-boundary-circle-source.lean",
+     [{:cmd
+       "lake env lean /tmp/polygon-boundary-induced-quotient.lean",
        :exit 1,
        :finding
-       "The initial inverse-map proof treated Circle membership as definitionally a norm equation, but Circle is bundled through Submonoid.unitSphere; exposing membership in Metric.sphere before rewriting its distance equation corrected the boundary proof."}],
+       "The initial generic EqvGen map used method-style transitivity that selected incompatible implicit universes and left the quotient respect proof underconstrained; applying Relation.EqvGen.trans explicitly and naming both source and target relations corrected inference."}],
      :fixture
-     {:path "/tmp/polygon-boundary-circle-source.lean",
+     {:path "/tmp/polygon-boundary-induced-quotient.lean",
       :sha256
-      "3cbf60a4edd8d0772453789ccee974e9b3a96925b975908ede104fbcaa38c5a4",
+      "5fc86892e81e1b112d2838849ba49469050bef156506d43b36ab01cb9d4d1a9a",
       :interface
-      "boundaryCircleHomeomorph identifies Circle homeomorphically with the radius-one subtype of the closed complex disk, with literal coercion formulas in both directions."},
+      "CircleRel pulls a disk relation back through the boundary-circle homeomorphism; circleBoundaryQuotientHomeomorph identifies its EqvGen quotient homeomorphically with the corresponding radius-one boundary quotient, literally on representatives."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -99912,7 +99946,8 @@
     :routes-2026-10-10-polygon-annulus-radial-homotopy-51
     :routes-2026-10-10-polygon-overlap-homotopy-equiv-circle-52
     :routes-2026-10-10-polygon-torus-crosscap-relation-53
-    :routes-2026-10-10-polygon-boundary-circle-source-54],
+    :routes-2026-10-10-polygon-boundary-circle-source-54
+    :routes-2026-10-10-polygon-boundary-induced-quotient-55],
    :current-residual
    "Combine the concrete cover packages with the strict overlap squares, banked Smith normalization, and final t97A01 assembly.",
    :other-consumers []}
@@ -100434,7 +100469,8 @@
     :lemma-polygonoverlaphomotopyequivcircle
     :lemma-polygonoverlaphomotopyequivcircle-overlaphomotopyequivcircle
     :lemma-polygontoruscrosscaprelation-toruscrosscaprel
-    :lemma-polygonboundarycirclesource-boundarycirclehomeomorph],
+    :lemma-polygonboundarycirclesource-boundarycirclehomeomorph
+    :lemma-polygonboundaryinducedquotient-circleboundaryquotienthomeomorph],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -102066,7 +102102,8 @@
    :depends-on
    [:lemma-polygonouteropendeformation-outeropenhomotopy
     :lemma-polygontoruscrosscaprelation-toruscrosscaprel
-    :lemma-polygonboundarycirclesource-boundarycirclehomeomorph],
+    :lemma-polygonboundarycirclesource-boundarycirclehomeomorph
+    :lemma-polygonboundaryinducedquotient-circleboundaryquotienthomeomorph],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -102621,6 +102658,31 @@
    :id :lemma-polygonboundarycirclesource-boundarycirclehomeomorph,
    :kind :lemma,
    :depends-on [:lemma-polygontoruscrosscaprelation-toruscrosscaprel],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "PolygonBoundaryInducedQuotient.circleBoundaryQuotientHomeomorph",
+    :type
+    "For every disk relation, the EqvGen quotient of its pullback to Circle along boundaryCircleHomeomorph is homeomorphic to the EqvGen quotient of its restriction to the radius-one disk boundary, with literal maps on representatives."},
+   :lemma
+   {:name
+    "PolygonBoundaryInducedQuotient.circleBoundaryQuotientHomeomorph",
+    :reported-by
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    :type
+    "For every disk relation, the EqvGen quotient of its pullback to Circle along boundaryCircleHomeomorph is homeomorphic to the EqvGen quotient of its restriction to the radius-one disk boundary, with literal maps on representatives.",
+    :area "polygon-surface-open-cover",
+    :proved-in
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+   :id
+   :lemma-polygonboundaryinducedquotient-circleboundaryquotienthomeomorph,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polygonboundarycirclesource-boundarycirclehomeomorph],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
