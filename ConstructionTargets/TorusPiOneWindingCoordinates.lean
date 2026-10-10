@@ -347,4 +347,55 @@ theorem frozenNativeCoord_eq_torusPi1Coord_cast
   exact fundamentalGroupCoordinateTransport_apply
     frozenTorusHomeomorphCircleProd_base torusPi1Coord p
 
+theorem frozenHomeomorphPi1_mk
+    (gamma : Path ((0, 0) : FrozenTorus) (0, 0)) :
+    (fundamentalGroupMulEquivOfHomeomorph
+      frozenTorusHomeomorphCircleProd (0, 0))
+        (Path.Homotopic.Quotient.mk gamma) =
+      Path.Homotopic.Quotient.mk
+        (gamma.map frozenTorusHomeomorphCircleProd.continuous) := by
+  rw [fundamentalGroupMulEquivOfHomeomorph]
+  change (FundamentalGroup.map
+    ⟨frozenTorusHomeomorphCircleProd,
+      frozenTorusHomeomorphCircleProd.continuous⟩ (0, 0))
+      (Path.Homotopic.Quotient.mk gamma) = _
+  rw [FundamentalGroup.map_apply]
+  exact (Path.Homotopic.Quotient.mk_map gamma
+    ⟨frozenTorusHomeomorphCircleProd,
+      frozenTorusHomeomorphCircleProd.continuous⟩).symm
+
+theorem frozenTorusPi1Coord_mk
+    (gamma : Path ((0, 0) : FrozenTorus) (0, 0)) :
+    frozenTorusPi1Coord (Path.Homotopic.Quotient.mk gamma) =
+      torusPi1Coord (Path.Homotopic.Quotient.mk (frozenCircleImagePath gamma)) := by
+  rw [frozenTorusPi1Coord_factor]
+  rw [frozenHomeomorphPi1_mk]
+  rw [frozenNativeCoord_eq_torusPi1Coord_cast]
+  rw [frozenCircleImageQuotient_eq_mappedQuotient_cast]
+
+theorem frozenLbarPi1Map_mk_naturality
+    (gamma : Path ((0, 0) : FrozenTorus) (0, 0)) :
+    (frozenTorusPi1Coord
+      (frozenLbarPi1Map (Path.Homotopic.Quotient.mk gamma))).toAdd =
+      fun i => Fin.cases
+        (2 * (frozenTorusPi1Coord (Path.Homotopic.Quotient.mk gamma)).toAdd 0 +
+          (frozenTorusPi1Coord (Path.Homotopic.Quotient.mk gamma)).toAdd 1)
+        (fun _ =>
+          (frozenTorusPi1Coord (Path.Homotopic.Quotient.mk gamma)).toAdd 1 -
+          (frozenTorusPi1Coord (Path.Homotopic.Quotient.mk gamma)).toAdd 0) i := by
+  rw [frozenLbarPi1Map_mk]
+  rw [frozenTorusPi1Coord_mk, frozenTorusPi1Coord_mk]
+  rw [frozenLbarPi1Map_mk_circle_coord]
+  exact circleMatrixPi1Map_naturality _
+
+theorem frozenLbarPi1Map_naturality
+    (p : FundamentalGroup FrozenTorus (0, 0)) :
+    (frozenTorusPi1Coord (frozenLbarPi1Map p)).toAdd =
+      fun i => Fin.cases
+        (2 * (frozenTorusPi1Coord p).toAdd 0 + (frozenTorusPi1Coord p).toAdd 1)
+        (fun _ => (frozenTorusPi1Coord p).toAdd 1 -
+          (frozenTorusPi1Coord p).toAdd 0) i := by
+  induction p using Quotient.inductionOn with
+  | _ gamma => exact frozenLbarPi1Map_mk_naturality gamma
+
 end ConstructionTargets.TorusPiOneWindingCoordinates
