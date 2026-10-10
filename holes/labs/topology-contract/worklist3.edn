@@ -1737,8 +1737,96 @@
   {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-groupglobalgenerator-generates,
+   :evidence
+   {:placeholder-delta {:source 0, :fixture 0},
+    :residual
+    "Prove that canonical localizationMap at one normalized oriented chart sends groupGlobalGenerator to the concrete chart generator, select the positive sign from actual orientation data, and propagate using elementwise naturality and overlap coherence.",
+    :gates
+    {:module-build :pass,
+     :registry-check :pass,
+     :exact-declaration-type :pass,
+     :module-action-to-zsmul :pass,
+     :standard-only-axioms :pass,
+     :exact-scope :pass,
+     :zero-source-and-fixture-sorry :pass,
+     :representation-direction :pass,
+     :fixture-compiles-against-promoted-module :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["lake build replayed pre-existing linter warnings in dependencies; the target module emitted no warnings"],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator",
+      :type
+      "The canonical integral module globalGenerator transported to AddCommGrpCat singular homology through singularHomologyComparison.",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on
+      ["ConstructionTargets.ManifoldFundamentalClass.globalGenerator"],
+      :area "manifold-fundamental-class"}
+     {:name
+      "ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator_generates",
+      :type
+      "Every additive-group singular-homology class is an integral multiple of groupGlobalGenerator.",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on
+      ["ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator"
+       "ConstructionTargets.ManifoldFundamentalClass.globalGenerator_generates"],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-10",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/manifold_fundamental_class_group_global_generator.lean",
+      :exit 0,
+      :output
+      "02d73c154a5061690806d63f4b88a78749c3f2a4da39e48e8d4d00692705a448"}
+     {:cmd
+      "lake env lean /tmp/manifold_fundamental_class_group_global_generator.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^\\s*axiom\\b' ConstructionTargets/ManifoldFundamentalClass.lean /tmp/manifold_fundamental_class_group_global_generator.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :representation
+    {:source
+     "The canonical ModuleCat Int singular-homology object and its globalGenerator",
+     :target
+     "The AddCommGrpCat homology object (SingularChains X).homology n used as the source of localizationMap",
+     :direction
+     "Exact transport from the module-valued global generator to the additive-group-valued generator through the hom component of singularHomologyComparison"},
+    :commit "9da77d04a38e499ea5c36aa5805b892a928c8ceb",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path
+     "/tmp/manifold_fundamental_class_group_global_generator.lean",
+     :sha256
+     "02d73c154a5061690806d63f4b88a78749c3f2a4da39e48e8d4d00692705a448",
+     :original-sha256
+     "3c93e57313659062903e1f2751b34ba1e29fef1436475eddaa27d27de3133b15",
+     :sorry-count 0},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :summary
+     "Imported IntegralSingularHomologyComparison, transported the canonical integral module generator into additive-group singular homology, and proved it generates after explicitly reconciling Int module scalar multiplication with zsmul."},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/module-to-additive-group-global-generator",
@@ -3557,17 +3645,20 @@
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator_generates",
     :reported-by
-    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+     :routes-2026-10-10-manifold-group-global-generator-topo3-r1],
     :type
     "forall (X : TopCat) (n : Nat) (e : (((AlgebraicTopology.singularHomologyFunctor (ModuleCat Int) n).obj (ModuleCat.of Int Int)).obj X) ≅ ModuleCat.of Int Int) (z : (SingularChains X).homology n), exists r : Int, r • groupGlobalGenerator X n e = z",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in
+    :routes-2026-10-10-manifold-group-global-generator-topo3-r1},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-groupglobalgenerator-generates,
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-manifoldfundamentalclass-globalgenerator-generates
-    :lemma-constructiontargets-integralsingularhomologycomparison-singularhomologycompariso],
+    :lemma-constructiontargets-integralsingularhomologycomparison-singularhomologycompariso
+    :lemma-constructiontargets-manifoldfundamentalclass-groupglobalgenerator],
    :other-consumers [:t98A02]}
   {:consumer :portfolio,
    :phase :lemma,
@@ -3584,7 +3675,32 @@
    :lemma-constructiontargets-integralsingularhomologycomparison-singularhomologycompariso,
    :kind :lemma,
    :depends-on [],
-   :other-consumers []}],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator",
+    :type
+    "The canonical integral module globalGenerator transported to AddCommGrpCat singular homology through singularHomologyComparison."},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator",
+    :reported-by
+    [:routes-2026-10-10-manifold-group-global-generator-topo3-r1],
+    :type
+    "The canonical integral module globalGenerator transported to AddCommGrpCat singular homology through singularHomologyComparison.",
+    :area "manifold-fundamental-class",
+    :proved-in
+    :routes-2026-10-10-manifold-group-global-generator-topo3-r1},
+   :id
+   :lemma-constructiontargets-manifoldfundamentalclass-groupglobalgenerator,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-manifoldfundamentalclass-globalgenerator],
+   :other-consumers [:t98A02]}],
  :consumer-baselines {},
  :statuses
  #{:open
