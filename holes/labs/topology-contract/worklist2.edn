@@ -55178,66 +55178,56 @@
    "single-consumer bounded affine smooth-conic parametrization",
    :consumer :t94A08,
    :evidence
-   {:probe
-    {:residual
-     "Transport this homeomorphism through affineChartConstruction to build the explicit local Euclidean chart witnesses for the smooth conic, including the two points with z0=0 in the z1 chart.",
-     :outcome :go,
-     :warnings [],
-     :axioms :standard-only,
-     :commands
-     [{:cmd "lake env lean /tmp/t94a08_affine_smooth_conic_param.lean",
-       :exit 0}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t94a08_affine_smooth_conic_param.lean || true)\"",
-       :exit 0}
-      {:cmd "sha256sum /tmp/t94a08_affine_smooth_conic_param.lean",
-       :exit 0,
-       :output
-       "0e1b69355b1bc6bf097e662b8a429be46f97de14e4807437e3e6e45d36927fbe  /tmp/t94a08_affine_smooth_conic_param.lean"}
-      {:cmd
-       "rg -n '^def affineConicParametrization|^def affineConicHomeomorphCstar|^theorem affineConic_inverse_formula' /tmp/t94a08_affine_smooth_conic_param.lean",
-       :exit 0,
-       :output
-       "48:theorem affineConic_inverse_formula (z : AffineConic) :\n68:def affineConicHomeomorphCstar : AffineConic ≃ₜ Cstar where\n85:def affineConicParametrization : AffineConicParametrization where"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :diagnostic-history
-     [{:cmd "lake env lean /tmp/t94a08_affine_param_impl.lean",
-       :exit 1,
-       :finding
-       "The first direct proof used inv_eq_of_mul_eq_one_left with the factors in the wrong commutative order. Rewriting the product as the negative of affineConic_factor corrected the orientation; the final fixture then compiled."}],
-     :fixture
-     {:path "/tmp/t94a08_affine_smooth_conic_param.lean",
-      :sha256
-      "0e1b69355b1bc6bf097e662b8a429be46f97de14e4807437e3e6e45d36927fbe"},
-     :finding
-     "The requested oriented representation is inhabited. The forward map sends (u,v) to a=u+I*v and proves a is nonzero from (u+I*v)(u-I*v)=-1. The inverse uses ((a-a^-1)/2,(a+a^-1)/(2*I)); both inverse laws and continuity in both directions compile. The structure fields reduce definitionally to these formulas, so this is an actual homeomorphism rather than an existence contract.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/T94A08AffineSmoothConicParametrization.lean"],
-      :acceptance
-      {:declarations
-       ["AffineConic"
-        "Cstar"
-        "affineConic_factor"
-        "toCstar"
-        "fromCstar"
-        "toCstar_fromCstar"
-        "affineConic_inverse_formula"
-        "fromCstar_toCstar"
-        "affineConicHomeomorphCstar"
-        "AffineConicParametrization"
-        "affineConicParametrization"],
-       :commands
-       ["lake env lean ConstructionTargets/T94A08AffineSmoothConicParametrization.lean"
-        "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T94A08AffineSmoothConicParametrization.lean || true)\""
-        "python3 scripts/statement-registry.py check"],
-       :constraints
-       "Preserve the exact source-to-target orientation and both inverse-coordinate equalities from the fixture; import the banked affine-chart module and introduce no topology instance."}},
-     :seat "topo-8"}},
+   {:placeholder-delta 0,
+    :residual
+    "Transport this homeomorphism through affineChartConstruction to build the explicit local Euclidean chart witnesses for the smooth conic, including the two points with z0=0 in the z1 chart.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["Unrelated untracked ConstructionTargets/T99J05ArbitraryAffineChartContinuity.lean was present during final verification and was preserved outside this commit."],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms [propext Classical.choice Quot.sound],
+    :author "topo-6",
+    :commands
+    [{:cmd "sha256sum /tmp/t94a08_affine_smooth_conic_param.lean",
+      :exit 0,
+      :output
+      "0e1b69355b1bc6bf097e662b8a429be46f97de14e4807437e3e6e45d36927fbe  /tmp/t94a08_affine_smooth_conic_param.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/T94A08AffineSmoothConicParametrization.lean",
+      :exit 0}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T94A08AffineSmoothConicParametrization.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r b95c951c9b69c734312c8bf2ca2ccc255958a862",
+      :exit 0,
+      :output
+      "ConstructionTargets/T94A08AffineSmoothConicParametrization.lean"}],
+    :commit "b95c951c9b69c734312c8bf2ca2ccc255958a862",
+    :changed-paths
+    ["ConstructionTargets/T94A08AffineSmoothConicParametrization.lean"],
+    :fixture
+    {:path "/tmp/t94a08_affine_smooth_conic_param.lean",
+     :sha256
+     "0e1b69355b1bc6bf097e662b8a429be46f97de14e4807437e3e6e45d36927fbe"},
+    :declarations
+    ["T94A08AffineSmoothConicParam.AffineConic"
+     "T94A08AffineSmoothConicParam.Cstar"
+     "T94A08AffineSmoothConicParam.affineConic_factor"
+     "T94A08AffineSmoothConicParam.toCstar"
+     "T94A08AffineSmoothConicParam.fromCstar"
+     "T94A08AffineSmoothConicParam.toCstar_fromCstar"
+     "T94A08AffineSmoothConicParam.affineConic_inverse_formula"
+     "T94A08AffineSmoothConicParam.fromCstar_toCstar"
+     "T94A08AffineSmoothConicParam.affineConicHomeomorphCstar"
+     "T94A08AffineSmoothConicParam.AffineConicParametrization"
+     "T94A08AffineSmoothConicParam.affineConicParametrization"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/T94A08AffineSmoothConicParametrization.lean"],
    :dag-node
