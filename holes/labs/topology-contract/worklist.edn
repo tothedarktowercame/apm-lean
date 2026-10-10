@@ -95553,6 +95553,19 @@
       :finding "131 registered statements match, 0 do not"}
      {:cmd "git status --short", :exit 0, :finding "clean"}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791652645867-2512-88ca4474",
+     :commands
+     ["git show --stat 578f9839349fd324f2e59f0dca9cd1b278fc291f"
+      "lake build ConstructionTargets.KleinSquareEqvGenCasesIff"
+      "sha256sum /tmp/klein-edge-compatible-map-refutation.lean && lake env lean /tmp/klein-edge-compatible-map-refutation.lean"
+      "placeholder census on refutation fixture and problems/t93J03/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb on recorded ledger at 578f9839"],
+     :finding
+     "PASS: reviewer codex-3 verified a correct progress STOP by topo-4. The banked finite comparison EqvGen SquareRel iff Cases rebuilds, and the frozen refutation fixture has exact SHA-256 5b41ca7bd5013ab5b2b26b4329c2f120c3a261b42b018c353d238f1cd9505b13, compiles with zero placeholders, and reports only propext, Classical.choice, and Quot.sound; t93J03 retains exactly one placeholder; all 131 registered statements and the recorded 830-item ledger validate. The refutation is exact: edgePoint 4 0 at t=1 equals edgePoint 4 1 at t=0, but the prescribed images squareEdge 0 at t=1 and squareEdge 1 at t=0 are respectively (0,1) and (1,0). Thus no function, and therefore no homeomorphism, satisfies even those two edge formulas. This is real compiled progress plus a compiled representation refutation, not a STOP based on an unattempted missing theorem. The residual correctly requires a polygon-presentation equivalence or revised boundary parameterization rather than the impossible direct edgewise carrier map."},
     :fixture
     {:path "/tmp/klein-edge-compatible-map-refutation.lean",
      :sha256
@@ -95563,7 +95576,7 @@
     "The demanded edge-compatible disk-square coordinate map cannot exist. The frozen disk parameterization has edgePoint 4 0 at t=1 equal to edgePoint 4 1 at t=0 because consecutive circular arcs share an endpoint. The banked prescribed square parameterization sends those arguments to squareEdge 0 at t=1 = (0,1) and squareEdge 1 at t=0 = (1,0), which are distinct. Therefore no function from the frozen disk to the square, hence no homeomorphism, can satisfy the required four edge formulas. The aabb disk presentation and the chosen opposite-side square presentation require a nontrivial polygon-presentation change, not direct edgewise carrier coordinates.",
     :seat "topo-4"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/square-boundary-orbit-eqvgen",
@@ -95613,7 +95626,7 @@
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -96158,7 +96171,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "kleinSquareBoundaryOrbitEqvGen",
@@ -96170,7 +96183,9 @@
     [:routes-2026-10-10-checkpoint-topo1-after-schreier-type-valued-basis-16
      :routes-2026-10-10-klein-square-boundary-orbit-eqvgen-28],
     :type
-    "On the closed square, identify the plane-action orbit relation exactly with the aabb disk-boundary EqvGen relation defining ConstructionTargets.StatementSurfaceModels.KleinBottle."},
+    "On the closed square, identify the plane-action orbit relation exactly with the aabb disk-boundary EqvGen relation defining ConstructionTargets.StatementSurfaceModels.KleinBottle.",
+    :banked-by
+    :routes-2026-10-10-klein-square-boundary-orbit-eqvgen-28},
    :id :lemma-kleinsquareboundaryorbiteqvgen,
    :kind :lemma,
    :depends-on
