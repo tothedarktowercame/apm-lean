@@ -92487,9 +92487,72 @@
    "Review the final cardinality prerequisite before the Type-valued Nielsen-Schreier basis construction.",
    :other-consumers []}
   {:consumer :t99J01,
-   :phase :probe,
+   :method
+   "Reuse Mathlib's existing private spanning-tree helpers and unchanged unique_lift argument, replacing IsFreeGroup.ofUniqueLift with FreeGroupBasis.ofUniqueLift; retain endIsFree as the basis-induced proposition.",
+   :evidence
+   {:probe
+    {:residual
+     "Bank this generic Type-valued spanning-tree basis, then transport it through IsFreeGroupoid.endMulEquivSubgroup H and reindex the already-counted complement by Fin ((r-1)*n+1); no cardinal arithmetic or subgroup transport is included here.",
+     :outcome :go,
+     :warnings [],
+     :missing-theorems
+     [{:name "IsFreeGroupoid.SpanningTree.endBasis",
+       :type
+       "FreeGroupBasis ((wideSubquiverEquivSetTotal (wideSubquiverSymmetrify T)) complement) (End (show G from Quiver.root T))",
+       :status :proved,
+       :consumers [:t99J01 :t97A03]}],
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd "lake env lean /tmp/nielsen-type-basis.lean",
+       :exit 0,
+       :finding
+       "fixture compiles; #check confirms the exact complement-indexed FreeGroupBasis endpoint type; #print axioms reports only propext, Classical.choice, and Quot.sound"}
+      {:cmd "sha256sum /tmp/nielsen-type-basis.lean",
+       :exit 0,
+       :finding
+       "e3e0af14bc4449415e742d640f0ee0cd79628f561c2bf0aed238b83876f22e34"}
+      {:cmd
+       "rg -n \"\\b(sorry|admit)\\b\" /tmp/nielsen-type-basis.lean",
+       :exit 1,
+       :expected-exit 1,
+       :finding "no placeholders"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :finding "131 registered statements match, 0 do not"}
+      {:cmd "git status --short", :exit 0, :finding "clean"}],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/nielsen-type-basis.lean",
+       :exit 1,
+       :finding
+       "Declaring FreeGroupBasis with lemma was rejected because it is data, and the separately added corollary initially lacked private-declaration visibility; corrected by using noncomputable def and scoped visibility."}
+      {:cmd "lake env lean /tmp/nielsen-type-basis.lean",
+       :exit 1,
+       :finding
+       "After spelling the public endpoint as show G from Quiver.root T, the copied uniqueness proof needed an explicit root identity and Category.comp_id step; corrected without changing the result type."}
+      {:cmd "lake env lean /tmp/nielsen-type-basis.lean",
+       :exit 1,
+       :finding
+       "The module-form fixture rejected #print axioms; corrected by using ordinary imports in the throwaway fixture, after which the same proof compiled and the axiom audit ran."}],
+     :fixture
+     {:path "/tmp/nielsen-type-basis.lean",
+      :sha256
+      "e3e0af14bc4449415e742d640f0ee0cd79628f561c2bf0aed238b83876f22e34",
+      :interface
+      "IsFreeGroupoid.SpanningTree.endBasis (T : WideSubquiver (Symmetrify (IsFreeGroupoid.Generators G))) [Arborescence T] : FreeGroupBasis ((wideSubquiverEquivSetTotal (wideSubquiverSymmetrify T)) complement) (End (show G from Quiver.root T))"},
+     :implementation
+     {:scope
+      ["ConstructionTargets/TypeValuedSpanningTreeFreeGroupBasis.lean"],
+      :declarations
+      [{:name "IsFreeGroupoid.SpanningTree.endBasis",
+        :type
+        "For a free groupoid G and arborescence T of Symmetrify (IsFreeGroupoid.Generators G), FreeGroupBasis indexed by the complement of wideSubquiverSymmetrify T on End (show G from Quiver.root T)."}],
+      :method
+      "Reuse Mathlib's existing private spanning-tree helpers and unchanged unique_lift argument, replacing IsFreeGroup.ofUniqueLift with FreeGroupBasis.ofUniqueLift; retain endIsFree as the basis-induced proposition."},
+     :seat "topo-4"}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/TypeValuedSpanningTreeFreeGroupBasis.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/type-valued-spanning-tree-basis",
    :acceptance
@@ -92508,6 +92571,10 @@
    :id
    :routes-2026-10-10-type-valued-spanning-tree-free-group-basis-17,
    :kind :reusable-theorem,
+   :declarations
+   [{:name "IsFreeGroupoid.SpanningTree.endBasis",
+     :type
+     "For a free groupoid G and arborescence T of Symmetrify (IsFreeGroupoid.Generators G), FreeGroupBasis indexed by the complement of wideSubquiverSymmetrify T on End (show G from Quiver.root T)."}],
    :depends-on [],
    :current-residual
    "Copy Mathlib's existing endIsFree unique-lift proof at its present generality and retain the explicit complement indexing type by constructing FreeGroupBasis.ofUniqueLift instead of erasing it into IsFreeGroup.",
