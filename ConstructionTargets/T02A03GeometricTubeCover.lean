@@ -392,6 +392,82 @@ noncomputable def apm_t02a03_leftTubeTorusInverse :
     apply Continuous.subtype_mk
     exact apm_t02a03_continuous_leftTubeTorusPoint
 
+theorem apm_t02a03_leftTubeAngular_torusInverse
+    (u : Circle × Circle) :
+    apm_t02a03_leftTubeAngular
+      ⟨(apm_t02a03_leftTubeTorusInverse u).1,
+        (apm_t02a03_leftTubeTorusInverse u).2.1⟩ = u.1 := by
+  apply Subtype.ext
+  have hbre : -(1 : ℝ) ≤ (u.2 : ℂ).re := by
+    have h := Complex.abs_re_le_norm (u.2 : ℂ)
+    rw [Circle.norm_coe] at h
+    exact (abs_le.mp h).1
+  have hrpos : 0 < 1 + (1 / 8 : ℝ) * (u.2 : ℂ).re := by linarith
+  change NormedSpace.normalize
+      (apm_t02a03_leftTubePlanarComplex
+        ⟨apm_t02a03_leftTubeTorusPoint u,
+          apm_t02a03_leftTubeTorusPoint_mem_leftTube u⟩) = (u.1 : ℂ)
+  rw [show apm_t02a03_leftTubePlanarComplex
+      ⟨apm_t02a03_leftTubeTorusPoint u,
+        apm_t02a03_leftTubeTorusPoint_mem_leftTube u⟩ =
+      (1 + (1 / 8 : ℝ) * (u.2 : ℂ).re) • (u.1 : ℂ) by
+    apply Complex.ext <;>
+      simp [apm_t02a03_leftTubePlanarComplex,
+        apm_t02a03_leftTubeTorusPoint]]
+  exact (NormedSpace.normalize_smul_of_pos hrpos (u.1 : ℂ)).trans
+    (NormedSpace.normalize_eq_self_of_norm_eq_one (Circle.norm_coe u.1))
+
+theorem apm_t02a03_leftTubeNormalAngular_torusInverse
+    (u : Circle × Circle) :
+    apm_t02a03_leftTubeNormalAngular
+      (apm_t02a03_leftTubeTorusInverse u) = u.2 := by
+  apply Subtype.ext
+  have hbre : -(1 : ℝ) ≤ (u.2 : ℂ).re := by
+    have h := Complex.abs_re_le_norm (u.2 : ℂ)
+    rw [Circle.norm_coe] at h
+    exact (abs_le.mp h).1
+  have hrpos : 0 < 1 + (1 / 8 : ℝ) * (u.2 : ℂ).re := by linarith
+  have hplanar : apm_t02a03_leftTubePlanarComplex
+      ⟨apm_t02a03_leftTubeTorusPoint u,
+        apm_t02a03_leftTubeTorusPoint_mem_leftTube u⟩ =
+      ((1 + (1 / 8 : ℝ) * (u.2 : ℂ).re : ℝ) : ℂ) * (u.1 : ℂ) := by
+    apply Complex.ext <;>
+      simp [apm_t02a03_leftTubePlanarComplex,
+        apm_t02a03_leftTubeTorusPoint]
+  have hnorm : ‖apm_t02a03_leftTubePlanarComplex
+      ⟨apm_t02a03_leftTubeTorusPoint u,
+        apm_t02a03_leftTubeTorusPoint_mem_leftTube u⟩‖ =
+      1 + (1 / 8 : ℝ) * (u.2 : ℂ).re := by
+    rw [hplanar]
+    rw [norm_mul, Circle.norm_coe, mul_one, Complex.norm_real,
+      Real.norm_eq_abs, abs_of_pos hrpos]
+  change NormedSpace.normalize
+      (apm_t02a03_leftTubeNormalComplex
+        ⟨apm_t02a03_leftTubeTorusPoint u,
+          apm_t02a03_leftTubeTorusPoint_mem_leftTube u⟩) = (u.2 : ℂ)
+  rw [show apm_t02a03_leftTubeNormalComplex
+      ⟨apm_t02a03_leftTubeTorusPoint u,
+        apm_t02a03_leftTubeTorusPoint_mem_leftTube u⟩ =
+      (1 / 8 : ℝ) • (u.2 : ℂ) by
+    apply Complex.ext
+    · simp [apm_t02a03_leftTubeNormalComplex]
+      rw [hnorm]
+      ring
+    · simp [apm_t02a03_leftTubeNormalComplex,
+        apm_t02a03_leftTubeTorusPoint]
+      ]
+  exact (NormedSpace.normalize_smul_of_pos
+      (by norm_num : (0 : ℝ) < 1 / 8) (u.2 : ℂ)).trans
+    (NormedSpace.normalize_eq_self_of_norm_eq_one (Circle.norm_coe u.2))
+
+theorem apm_t02a03_leftTubeTorusCoordinates_torusInverse
+    (u : Circle × Circle) :
+    apm_t02a03_leftTubeTorusCoordinates
+      (apm_t02a03_leftTubeTorusInverse u) = u := by
+  apply Prod.ext
+  · exact apm_t02a03_leftTubeAngular_torusInverse u
+  · exact apm_t02a03_leftTubeNormalAngular_torusInverse u
+
 theorem apm_t02a03_rightCore_zero :
     apm_t02a03_rightCore 0 = (0 : apm_t02a03_E3) := by
   ext i
