@@ -88005,8 +88005,134 @@
    "Restrict an arbitrary finite-sheet cover to the chosen path component, bound its sheet count, and identify its based fundamental group.",
    :other-consumers []}
   {:consumer :t99J01,
-   :phase :probe,
+   :phase :implementation,
    :state :open,
+   :scope
+   ["ConstructionTargets/FiniteIndexFreeGroupSchreierRank.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/spanning-tree-count",
+   :acceptance
+   {:placeholder
+    "the single sorry in apm_t99j01 and apm_t97A03_bridge_invariants_of_model",
+    :route-step
+    "t99J01 step 3 and t97A03 step 8, finite-index Schreier rank",
+    :declarations
+    ["finiteIndexSubgroupFreeGroupEquiv"
+     "indexSubgroupFreeGroupFinThreeEquiv"
+     "indexTwoSubgroupFreeGroupFinTwoEquiv"],
+    :implementation
+    "For H <= FreeGroup (Fin r) with H.index = n, use the coset action groupoid underlying Mathlib's NielsenSchreier construction. Its vertices are the n right cosets and its directed generator edges are Fin r times those cosets. Choose the existing geodesic spanning arborescence. Identify the vertex group at the root with H via endMulEquivSubgroup, and identify the free basis furnished by SpanningTree.endIsFree with the directed generator edges outside the tree. Prove the finite connected tree has n-1 edges, hence the complement has r*n-(n-1) = (r-1)*n+1 elements. Reindex the resulting FreeGroupBasis along an explicit finite equivalence to Fin ((r-1)*n+1), then compose its equiv with the subgroup/end-group equivalence. Export only the universal finite-rank theorem and the r=3 arbitrary-n and r=2 index-two specializations required by the two consumers.",
+    :axioms :standard-only,
+    :fixture "/tmp/finite-index-free-group-schreier-rank-probe.lean",
+    :fixture-sha256
+    "5751d883226814d2b3eff08804f8c857dbe2a265f31c1c23d55aab24ab9b778a",
+    :commands
+    ["lake env lean ConstructionTargets/FiniteIndexFreeGroupSchreierRank.lean"
+     "lake env lean /tmp/finite-index-free-group-schreier-rank-probe.lean"
+     "python3 scripts/statement-registry.py check"]},
+   :id :routes-2026-10-10-finite-index-schreier-spanning-tree-count-1,
+   :kind :reusable-theorem,
+   :depends-on [],
+   :current-residual
+   "Refine Mathlib's qualitative Nielsen-Schreier basis by counting the complement of a spanning tree in the finite Schreier coset quiver.",
+   :other-consumers [:t97A03]}
+  {:consumer :t99J01,
+   :evidence
+   {:probe
+    {:outcome :revise,
+     :seat "topo-4",
+     :fixture
+     {:path "/tmp/finite-index-free-group-schreier-rank-probe.lean",
+      :sha256
+      "5751d883226814d2b3eff08804f8c857dbe2a265f31c1c23d55aab24ab9b778a"},
+     :commands
+     [{:cmd "stat -c '%F %n' .lake/packages",
+       :exit 0,
+       :finding
+       "directory .lake/packages; canonical package authority is present"}
+      {:cmd
+       "lake env lean .lake/packages/mathlib/Mathlib/GroupTheory/FreeGroup/NielsenSchreier.lean",
+       :exit 0,
+       :finding
+       "pinned Mathlib's subgroup freeness and spanning-tree construction compile, but expose no finite-index generator-count theorem"}
+      {:cmd
+       "lake env lean /tmp/finite-index-free-group-schreier-rank-probe.lean",
+       :exit 0,
+       :finding
+       "the universal finite-index rank interface and both consumer specializations elaborate from one isolated rank-formula axiom"}
+      {:cmd
+       "sha256sum /tmp/finite-index-free-group-schreier-rank-probe.lean",
+       :exit 0,
+       :finding
+       "5751d883226814d2b3eff08804f8c857dbe2a265f31c1c23d55aab24ab9b778a"}
+      {:cmd
+       "Python comment-stripped placeholder census of /tmp/finite-index-free-group-schreier-rank-probe.lean",
+       :exit 0,
+       :finding "0"}
+      {:cmd
+       "rg -n -i \"schreier (rank|index)|rank formula|finite.index subgroup|subgroup.*rank\" .lake/packages/mathlib/Mathlib/GroupTheory/FreeGroup /home/joe/code/mathlib4-latest/Mathlib/GroupTheory/FreeGroup",
+       :exit 1,
+       :expected-exit 1,
+       :finding
+       "neither pinned nor current Mathlib contains the finite-index Schreier rank formula"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :finding "131 registered statements match, 0 do not"}
+      {:cmd "git status --short",
+       :exit 0,
+       :finding
+       "pre-existing unrelated modification: ConstructionTargets/T02A03GeometricTubeCover.lean; this read-only probe did not touch it"}],
+     :axioms
+     ["propext"
+      "Classical.choice"
+      "Quot.sound"
+      "FiniteIndexFreeGroupSchreierRankProbe.finiteIndexSubgroupEquiv"],
+     :warnings
+     [{:kind :interface-axiom,
+       :message
+       "The placeholder-free fixture uses exactly one nonstandard axiom for the finite-index Schreier rank formula; the two required specializations then compile by arithmetic reduction."}
+      {:kind :dirty-worktree,
+       :message
+       "ConstructionTargets/T02A03GeometricTubeCover.lean was already modified by another task. The probe remained read-only and did not alter or depend on that path."}],
+     :prerequisite
+     {:consumer :t99J01,
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/FiniteIndexFreeGroupSchreierRank.lean"],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/spanning-tree-count",
+      :acceptance
+      {:placeholder
+       "the single sorry in apm_t99j01 and apm_t97A03_bridge_invariants_of_model",
+       :route-step
+       "t99J01 step 3 and t97A03 step 8, finite-index Schreier rank",
+       :declarations
+       ["finiteIndexSubgroupFreeGroupEquiv"
+        "indexSubgroupFreeGroupFinThreeEquiv"
+        "indexTwoSubgroupFreeGroupFinTwoEquiv"],
+       :implementation
+       "For H <= FreeGroup (Fin r) with H.index = n, use the coset action groupoid underlying Mathlib's NielsenSchreier construction. Its vertices are the n right cosets and its directed generator edges are Fin r times those cosets. Choose the existing geodesic spanning arborescence. Identify the vertex group at the root with H via endMulEquivSubgroup, and identify the free basis furnished by SpanningTree.endIsFree with the directed generator edges outside the tree. Prove the finite connected tree has n-1 edges, hence the complement has r*n-(n-1) = (r-1)*n+1 elements. Reindex the resulting FreeGroupBasis along an explicit finite equivalence to Fin ((r-1)*n+1), then compose its equiv with the subgroup/end-group equivalence. Export only the universal finite-rank theorem and the r=3 arbitrary-n and r=2 index-two specializations required by the two consumers.",
+       :axioms :standard-only,
+       :fixture
+       "/tmp/finite-index-free-group-schreier-rank-probe.lean",
+       :fixture-sha256
+       "5751d883226814d2b3eff08804f8c857dbe2a265f31c1c23d55aab24ab9b778a",
+       :commands
+       ["lake env lean ConstructionTargets/FiniteIndexFreeGroupSchreierRank.lean"
+        "lake env lean /tmp/finite-index-free-group-schreier-rank-probe.lean"
+        "python3 scripts/statement-registry.py check"]},
+      :id
+      :routes-2026-10-10-finite-index-schreier-spanning-tree-count-1,
+      :kind :reusable-theorem,
+      :depends-on [],
+      :current-residual
+      "Refine Mathlib's qualitative Nielsen-Schreier basis by counting the complement of a spanning tree in the finite Schreier coset quiver.",
+      :other-consumers [:t97A03]},
+     :residual
+     "Exactly one shared prerequisite remains: prove and orient the finite-index Schreier rank formula. Mathlib already proves subgroup freeness, while the two consumer ranks are direct specializations of the missing count."}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank",
@@ -88027,7 +88153,8 @@
    :routes-2026-10-10-finite-index-free-group-schreier-rank-shared-4,
    :kind :reusable-theorem,
    :depends-on
-   [:routes-2026-10-10-checkpoint-topo1-covering-uptake-mv-repair-3],
+   [:routes-2026-10-10-checkpoint-topo1-covering-uptake-mv-repair-3
+    :routes-2026-10-10-finite-index-schreier-spanning-tree-count-1],
    :current-residual
    "Count the non-tree edges in the finite Schreier coset quiver and orient Mathlib's Nielsen-Schreier freeness equivalence to the two required finite ranks.",
    :other-consumers [:t97A03]}
