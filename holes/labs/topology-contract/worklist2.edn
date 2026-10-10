@@ -57285,43 +57285,68 @@
    :other-consumers []}
   {:consumer :t97A04,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/torus_frozen_pi1_matrix_naturality_final.lean",
-      :sha256
-      "57fab088a995a91ea38288996f643770fe8e36be5339d0ed13c15a96e48a997c"},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/torus_frozen_pi1_matrix_naturality_final.lean",
-       :exit 0,
-       :output
-       "fixed-base representative and all-class frozen matrix naturality compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/torus_frozen_pi1_matrix_naturality_final.lean || true)\"",
-       :exit 0}
-      {:cmd
-       "sha256sum /tmp/torus_frozen_pi1_matrix_naturality_final.lean",
-       :exit 0,
-       :output
-       "57fab088a995a91ea38288996f643770fe8e36be5339d0ed13c15a96e48a997c  /tmp/torus_frozen_pi1_matrix_naturality_final.lean"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :finding
-     "The complete placeholder-free fixture now derives frozenTorusPi1Coord on every explicit representative by composing the canonical homeomorphism map evaluation, native coordinate factorization, dependent coordinate transport, and quotient endpoint cast. It combines that equation with the banked frozenLbar representative conjugacy and circleMatrixPi1Map_naturality, then descends by Quotient.inductionOn to every frozen fundamental-group class. The resulting coordinates are exactly (2*n0+n1, n1-n0).",
-     :implementation
-     {:scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
-      :declarations
-      ["frozenHomeomorphPi1_mk"
-       "frozenTorusPi1Coord_mk"
-       "frozenLbarPi1Map_mk_naturality"
-       "frozenLbarPi1Map_naturality"]},
-     :residual
-     "Use frozenLbarPi1Map_naturality with finiteFreeHurewiczCoordinateMulEquiv and h1_coordinate_eq_of_fundamentalGroup_coordinate_eq to assemble apm_t97A04_bridge_2. For t01A02, the coordinate/lift component is banked; its remaining fixed-point route still requires the integer lift, nonsurjectivity determinant, and planar bounded-perturbation surjectivity steps."}},
+   {:placeholder-delta 0,
+    :residual
+    "Use frozenLbarPi1Map_naturality with finiteFreeHurewiczCoordinateMulEquiv and h1_coordinate_eq_of_fundamentalGroup_coordinate_eq to assemble apm_t97A04_bridge_2. For t01A02, the coordinate/lift component is banked; its remaining fixed-point route still requires the integer lift, nonsurjectivity determinant, and planar bounded-perturbation surjectivity steps.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["The focused Lake build replayed pre-existing linter warnings from dependency modules; the scoped module compiled without new warnings."],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/torus_frozen_pi1_matrix_naturality_final.lean",
+      :exit 0,
+      :output
+      "57fab088a995a91ea38288996f643770fe8e36be5339d0ed13c15a96e48a997c  /tmp/torus_frozen_pi1_matrix_naturality_final.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/TorusPiOneWindingCoordinates.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.TorusPiOneWindingCoordinates",
+      :exit 0,
+      :output "Build completed successfully (8290 jobs)."}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/TorusPiOneWindingCoordinates.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "lake env lean /tmp/check_final_torus_pi1_axioms.lean",
+      :exit 0,
+      :output
+      "All four declarations depend on [propext, Classical.choice, Quot.sound]."}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r ed68be5dd2817d9c229eb3ea0ad459b706894a68",
+      :exit 0,
+      :output "ConstructionTargets/TorusPiOneWindingCoordinates.lean"}
+     {:cmd
+      "python3 -c 'import re,sys\nfor p in sys.argv[1:]:\n t=open(p).read(); t=re.sub(r\"/-.*?-/\",\" \",t,flags=re.S); t=re.sub(r\"--[^\\n]*\",\" \",t); print(p, len(re.findall(r\"(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])\",t)))' problems/t97A04/lean/Main.lean problems/t01A02/lean/Main.lean",
+      :exit 0,
+      :output
+      "problems/t97A04/lean/Main.lean 4\nproblems/t01A02/lean/Main.lean 3"}
+     {:cmd
+      "sha256sum problems/t97A04/lean/Main.lean problems/t01A02/lean/Main.lean",
+      :exit 0,
+      :output
+      "79ca854186b39183bf53490a20b5be92695e345a2c099fcf928b5ad3300ee4ec  problems/t97A04/lean/Main.lean\n8bf7f3c39d6adb451332d0c30433ae0df833110a0b93605d23b26f30c7caa1fc  problems/t01A02/lean/Main.lean"}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "ed68be5dd2817d9c229eb3ea0ad459b706894a68",
+    :changed-paths
+    ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
+    :fixture
+    {:path "/tmp/torus_frozen_pi1_matrix_naturality_final.lean",
+     :sha256
+     "57fab088a995a91ea38288996f643770fe8e36be5339d0ed13c15a96e48a997c"},
+    :declarations
+    ["ConstructionTargets.TorusPiOneWindingCoordinates.frozenHomeomorphPi1_mk"
+     "ConstructionTargets.TorusPiOneWindingCoordinates.frozenTorusPi1Coord_mk"
+     "ConstructionTargets.TorusPiOneWindingCoordinates.frozenLbarPi1Map_mk_naturality"
+     "ConstructionTargets.TorusPiOneWindingCoordinates.frozenLbarPi1Map_naturality"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/shared/torus-pi1-winding-coordinates",
    :acceptance
