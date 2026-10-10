@@ -90144,6 +90144,8 @@
      :typed-residual-change
      :infrastructure-packets
      :review-outcomes]},
+   :review-finding
+   "recorded worklist evidence is stale: the exact committed ledger has 744 items, 11 blocked, and 1 done-unreviewed, not 742 items, 9 blocked, and 1 open",
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :evidence
@@ -90278,9 +90280,15 @@
       "Review the repaired shared Schreier route after excluding infinite-index subgroups encoded by index zero.",
       :other-consumers []}],
     :author "topo-4",
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1791635734438-1931-87b15ee0",
+     :finding
+     "recorded worklist evidence is stale: the exact committed ledger has 744 items, 11 blocked, and 1 done-unreviewed, not 742 items, 9 blocked, and 1 open"}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :repair,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -90297,7 +90305,7 @@
    :other-consumers []}
   {:consumer :t99J01,
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/positive-rank-positive-index",
@@ -90334,7 +90342,7 @@
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :phase :strategy,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
