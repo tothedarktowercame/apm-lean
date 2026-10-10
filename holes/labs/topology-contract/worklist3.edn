@@ -1398,6 +1398,21 @@
       "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
       :exit 0}
      {:cmd "git status --short", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791674959429-3293-d6be8c91",
+     :commands
+     ["sha256sum /tmp/manifold_fundamental_class_generator_map_isiso.lean"
+      "git hash-object and git rev-parse source comparison"
+      "lake env lean /tmp/manifold_fundamental_class_generator_map_isiso.lean"
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"
+      "rg placeholder and axiom census"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped placeholder census for t00J02 and t98A02"],
+     :finding
+     "PASS: implementation commit 5c304a58 changes exactly ConstructionTargets/ManifoldFundamentalClass.lean and its blob matches the reviewed source; post-promotion harness hash matches acb8def917dbf697d9824a85df7027350c1f8a561409b764080bf030e33974cc; extensionality and globalGenerator_generates identify f with eG.hom followed by eH.inv using the supplied generator-image equality, so IsIso is derived in the correct G-to-H direction; no manifold localization equality or orientation predicate is asserted; source and harness compile with zero placeholders and only propext, Classical.choice, and Quot.sound; 131 statements match and consumer counts remain t00J02=1, t98A02=1"},
     :commit "5c304a58217e2eaee9fcf070c9dfdec813a6e2fe",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -1414,7 +1429,7 @@
      "Proved that a morphism between modules explicitly isomorphic to the coefficient ring is an isomorphism when it sends the concrete source globalGenerator to the concrete target globalGenerator."},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/generator-image-localization-isomorphism",
@@ -1528,7 +1543,7 @@
      "The reviewed forward transport theorem is banked. The fixture proves the converse criterion needed to establish that a localization map is an isomorphism: when source and target module objects each carry a supplied isomorphism to the coefficient ring, any morphism sending source globalGenerator to target globalGenerator equals the explicit composite eG.hom followed by eH.inv and is therefore an isomorphism. This does not assume a manifold localization result. It reduces that result to one concrete equality between the localization image of the global top class and the chart-normalized local generator.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -3033,7 +3048,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -3050,7 +3065,10 @@
     "forall (R : Type) [CommRing R] (G H : ModuleCat R) (eG : G ≅ ModuleCat.of R R) (eH : H ≅ ModuleCat.of R R) (f : G ⟶ H), f.hom (globalGenerator R G eG) = globalGenerator R H eH -> IsIso f",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-10-manifold-generator-map-isiso-topo3-r1},
+    :routes-2026-10-10-manifold-generator-map-isiso-topo3-r1,
+    :banked-by
+    :routes-2026-10-10-manifold-generator-map-isiso-topo3-r1,
+    :banked-commit "5c304a58217e2eaee9fcf070c9dfdec813a6e2fe"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-isiso-of-map-globalgenerator-eq-globalgenerator,
    :kind :lemma,
