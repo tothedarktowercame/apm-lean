@@ -483,4 +483,68 @@ theorem apm_t02a03_rightCoreLiftHomotopyMap_one
     apm_t02a03_rightCoreLiftHomotopyMap (⟨1, by simp⟩, t) =
       apm_t02a03_rightCoreLiftedMap t := rfl
 
+noncomputable def apm_t02a03_rightCoreAnchorContractionPoint
+    (v : Set.Icc (0 : ℝ) 1 × Set.Ioc (0 : ℝ) 1) : apm_t02a03_E3 :=
+  apm_t02a03_rightCore ((1 - (v.1 : ℝ)) * (v.2 : ℝ)) +
+    WithLp.toLp 2 ![0, 0, (1 / 8 : ℝ)]
+
+theorem apm_t02a03_rightCoreAnchorContractionPoint_mem_geometricY
+    (v : Set.Icc (0 : ℝ) 1 × Set.Ioc (0 : ℝ) 1) :
+    apm_t02a03_rightCoreAnchorContractionPoint v ∈ apm_t02a03_W ∧
+      apm_t02a03_rightCoreAnchorContractionPoint v ∉
+        Set.range apm_t02a03_leftCore := by
+  constructor
+  · rw [apm_t02a03_W_eq_leftTube_union_rightTube]
+    apply Set.mem_union_right
+    apply Metric.mem_cthickening_of_dist_le
+      (apm_t02a03_rightCoreAnchorContractionPoint v)
+      (apm_t02a03_rightCore ((1 - (v.1 : ℝ)) * (v.2 : ℝ)))
+      (1 / 4 : ℝ) (Set.range apm_t02a03_rightCore)
+      ⟨(1 - (v.1 : ℝ)) * (v.2 : ℝ), rfl⟩
+    rw [dist_eq_norm, EuclideanSpace.norm_eq]
+    simp [apm_t02a03_rightCoreAnchorContractionPoint,
+      apm_t02a03_rightCore, Fin.sum_univ_succ]
+    norm_num
+  · rintro ⟨u, hu⟩
+    have hz := congrArg (fun q : apm_t02a03_E3 => q 2) hu
+    simp [apm_t02a03_rightCoreAnchorContractionPoint,
+      apm_t02a03_rightCore, apm_t02a03_leftCore] at hz
+
+noncomputable def apm_t02a03_rightCoreAnchorContractionMap :
+    C(Set.Icc (0 : ℝ) 1 × Set.Ioc (0 : ℝ) 1,
+      apm_t02a03_geometricY_probe) where
+  toFun v := ⟨apm_t02a03_rightCoreAnchorContractionPoint v,
+    apm_t02a03_rightCoreAnchorContractionPoint_mem_geometricY v⟩
+  continuous_toFun := by
+    apply Continuous.subtype_mk
+    unfold apm_t02a03_rightCoreAnchorContractionPoint
+    apply Continuous.add
+    · exact apm_t02a03_continuous_rightCore.comp (by fun_prop)
+    · fun_prop
+
+theorem apm_t02a03_rightCoreAnchorContractionMap_zero
+    (t : Set.Ioc (0 : ℝ) 1) :
+    apm_t02a03_rightCoreAnchorContractionMap (⟨0, by simp⟩, t) =
+      apm_t02a03_rightCoreLiftedMap t := by
+  apply Subtype.ext
+  ext i
+  fin_cases i <;>
+    simp [apm_t02a03_rightCoreAnchorContractionMap,
+      apm_t02a03_rightCoreAnchorContractionPoint,
+      apm_t02a03_rightCoreLiftedMap,
+      apm_t02a03_rightCoreLiftHomotopyMap,
+      apm_t02a03_rightCoreLiftPoint]
+
+theorem apm_t02a03_rightCoreAnchorContractionMap_one
+    (t : Set.Ioc (0 : ℝ) 1) :
+    apm_t02a03_rightCoreAnchorContractionMap (⟨1, by simp⟩, t) =
+      ⟨apm_t02a03_meridianAnchor,
+        apm_t02a03_meridianAnchor_mem_geometricY⟩ := by
+  apply Subtype.ext
+  ext i
+  fin_cases i <;>
+    simp [apm_t02a03_rightCoreAnchorContractionMap,
+      apm_t02a03_rightCoreAnchorContractionPoint,
+      apm_t02a03_rightCore, apm_t02a03_meridianAnchor]
+
 end ConstructionTargets.T02A03GeometricTubeCover
