@@ -272,4 +272,25 @@ theorem frozenCircleImagePath_frozenLbarBasedPath
       frozenLbarCircleImagePath gamma := by
   ext t <;> rfl
 
+theorem frozenCircleImage_frozenLbarBasedPath_mk
+    (gamma : Path ((0, 0) : FrozenTorus) (0, 0)) :
+    Path.Homotopic.Quotient.mk
+        (frozenCircleImagePath (frozenLbarBasedPath gamma)) =
+      circleMatrixPi1Map
+        (Path.Homotopic.Quotient.mk (frozenCircleImagePath gamma)) := by
+  rw [frozenCircleImagePath_frozenLbarBasedPath]
+  rw [frozenLbarCircleImagePath_eq_circleMatrixMappedPath]
+  rw [circleMatrixPi1Map_mk]
+
+theorem frozenLbarPi1Map_mk_circle_coord
+    (gamma : Path ((0, 0) : FrozenTorus) (0, 0)) :
+    torusPi1Coord
+        (Path.Homotopic.Quotient.mk
+          (frozenCircleImagePath
+            (frozenLbarBasedPath gamma))) =
+      torusPi1Coord
+        (circleMatrixPi1Map
+          (Path.Homotopic.Quotient.mk (frozenCircleImagePath gamma))) := by
+  rw [frozenCircleImage_frozenLbarBasedPath_mk]
+
 end ConstructionTargets.TorusPiOneWindingCoordinates
