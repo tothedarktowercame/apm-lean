@@ -56199,26 +56199,68 @@
   {:bounded-exception
    "single-consumer representative naturality for the frozen t97A04 matrix",
    :consumer :t97A04,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path
+      "/tmp/torus_circle_matrix_pi1_representative_naturality.lean",
+      :sha256
+      "c31b296ba250b0b823f759dbf364b2e285086df9ffb8d0532e961608e54e2ce7"},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/torus_circle_matrix_pi1_representative_naturality.lean",
+       :exit 0,
+       :output
+       "both representative-level matrix-coordinate formulas compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/torus_circle_matrix_pi1_representative_naturality.lean || true)\"",
+       :exit 0}
+      {:cmd
+       "sha256sum /tmp/torus_circle_matrix_pi1_representative_naturality.lean",
+       :exit 0,
+       :output
+       "c31b296ba250b0b823f759dbf364b2e285086df9ffb8d0532e961608e54e2ce7  /tmp/torus_circle_matrix_pi1_representative_naturality.lean"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :finding
+     "The placeholder-free fixture supplies the exact fixed-base equation for circleMatrixMap, defines the resulting FundamentalGroup endomorphism with FundamentalGroup.mapOfEq, identifies its value on every explicit based-loop class with the banked circleMatrixMappedPath class, and proves its two winding coordinates are 2*n0+n1 and n1-n0. The dependent basepoint transport is therefore explicit rather than hidden behind a proposition contract.",
+     :implementation
+     {:scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
+      :declarations
+      ["circleMatrixMap_base"
+       "circleMatrixPi1Map"
+       "circleMatrixPi1Map_mk"
+       "circleMatrixPi1Map_mk_coord_zero"
+       "circleMatrixPi1Map_mk_coord_one"],
+      :acceptance
+      {:compile
+       "lake build ConstructionTargets.TorusPiOneWindingCoordinates",
+       :placeholder-free true,
+       :statement-registry true}},
+     :residual
+     "Descend the two representative formulas to arbitrary FundamentalGroup classes, combine them as a Fin-2 function equality, and transport the result through frozenTorusHomeomorphCircleProd and the exact frozenLbar conjugacy."}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A04/torus-pi1-winding-coordinates/representative-naturality",
    :acceptance
-   {:probe
-    "Compile and bank circleMatrixMap_base, circleMatrixPi1Map, circleMatrixPi1Map_mk, circleMatrixPi1Map_mk_coord_zero, and circleMatrixPi1Map_mk_coord_one from /tmp/torus_circle_matrix_pi1_representative_naturality. Use the exact fixed-base equation to define FundamentalGroup.mapOfEq for circleMatrixMap, prove its value on every explicit based-loop class is the banked circleMatrixMappedPath class, and prove the two winding coordinates are exactly 2*n0+n1 and n1-n0. This supplies the representative-level quotient-map portion of t97A04 route step 4; do not yet claim all-class or frozen AddCircle naturality.",
-    :declarations
-    ["circleMatrixMap_base"
-     "circleMatrixPi1Map"
-     "circleMatrixPi1Map_mk"
-     "circleMatrixPi1Map_mk_coord_zero"
-     "circleMatrixPi1Map_mk_coord_one"],
-    :placeholder "apm_t97A04_bridge_2",
-    :route-step
-    "t97A04 step 4, fixed-base FundamentalGroup map and representative coordinate naturality"},
+   {:compile
+    "lake build ConstructionTargets.TorusPiOneWindingCoordinates",
+    :placeholder-free true,
+    :statement-registry true},
    :id
    :routes-2026-10-10-t97a04-circle-matrix-pi1-representative-naturality-topo2-r1,
    :kind :reusable-theorem,
+   :declarations
+   ["circleMatrixMap_base"
+    "circleMatrixPi1Map"
+    "circleMatrixPi1Map_mk"
+    "circleMatrixPi1Map_mk_coord_zero"
+    "circleMatrixPi1Map_mk_coord_one"],
    :depends-on
    [:routes-2026-10-10-checkpoint-topo2-r2
     :routes-2026-10-10-torus-pi1-coordinate-equivalence-two-consumers-topo2-r1
