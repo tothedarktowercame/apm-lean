@@ -56715,18 +56715,60 @@
   {:bounded-exception
    "single-consumer dependent coordinate factorization for the frozen torus",
    :consumer :t97A04,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/torus_frozen_coordinate_factorization.lean",
+      :sha256
+      "44623442330dd40b84fe51111c2403a3ef6d03fb54b90a12a5726a1f0afd1ba6"},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/torus_frozen_coordinate_factorization.lean",
+       :exit 0,
+       :output
+       "exact dependent frozen-coordinate factorization compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/torus_frozen_coordinate_factorization.lean || true)\"",
+       :exit 0}
+      {:cmd
+       "sha256sum /tmp/torus_frozen_coordinate_factorization.lean",
+       :exit 0,
+       :output
+       "44623442330dd40b84fe51111c2403a3ef6d03fb54b90a12a5726a1f0afd1ba6  /tmp/torus_frozen_coordinate_factorization.lean"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :finding
+     "The placeholder-free theorem gives the exact evaluation equality from frozenTorusPi1Coord to the canonical homeomorphism-induced fundamental-group equivalence followed by torusPi1Coord transported along frozenTorusHomeomorphCircleProd_base. Retaining the dependent intermediate basepoint makes the equality definitional and avoids a second incompatible cast.",
+     :representation
+     {:source
+      "frozenTorusPi1Coord on the fundamental group of AddCircle 1 x AddCircle 1 at (0,0)",
+      :target
+      "The canonical fundamental-group equivalence induced by frozenTorusHomeomorphCircleProd followed by the dependent-basepoint transport of torusPi1Coord",
+      :direction
+      "Exact equality from the source frozen coordinate equivalence evaluation to the target canonical Circle-coordinate composite"},
+     :implementation
+     {:scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
+      :declarations ["frozenTorusPi1Coord_factor"],
+      :acceptance
+      {:compile
+       "lake build ConstructionTargets.TorusPiOneWindingCoordinates",
+       :placeholder-free true,
+       :statement-registry true}},
+     :residual
+     "Use the factorization on quotient representatives, combine it with frozenLbarPi1Map_mk_circle_coord and circleMatrixPi1Map_naturality, and descend to arbitrary frozen classes."}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A04/torus-pi1-winding-coordinates/frozen-coordinate-factorization",
    :acceptance
-   {:probe
-    "Compile and bank frozenTorusPi1Coord_factor from /tmp/torus_frozen_coordinate_factorization. Prove the exact equality expressing frozenTorusPi1Coord as the canonical homeomorphism-induced fundamental-group equivalence followed by torusPi1Coord transported along frozenTorusHomeomorphCircleProd_base, retaining the dependent intermediate basepoint rather than defining a second casted equivalence. This supplies the coordinate-factor alignment needed for t97A04 route step 4; do not yet claim frozenLbar naturality.",
-    :declaration "frozenTorusPi1Coord_factor",
-    :placeholder "apm_t97A04_bridge_2",
-    :route-step
-    "t97A04 step 4, exact factorization of frozen coordinates through the canonical Circle fundamental-group image"},
+   {:compile
+    "lake build ConstructionTargets.TorusPiOneWindingCoordinates",
+    :placeholder-free true,
+    :statement-registry true},
    :representation
    {:source
     "frozenTorusPi1Coord on the fundamental group of AddCircle 1 x AddCircle 1 at (0,0)",
@@ -56737,6 +56779,7 @@
    :id
    :routes-2026-10-10-t97a04-frozen-coordinate-factorization-topo2-r1,
    :kind :representation-comparison,
+   :declarations ["frozenTorusPi1Coord_factor"],
    :depends-on
    [:routes-2026-10-10-checkpoint-topo2-r2
     :routes-2026-10-10-t97a04-frozen-pi1-representative-conjugacy-topo2-r1],
