@@ -403,8 +403,9 @@
       false)))
 
 (defn upsert-lemmas
-  "Add or update lemma nodes from receipt entries {:name :type :status
-   :consumers :depends-on [names]}. Unknown dependency names become stub
+  "Add or update lemma nodes from receipt entries {:id? :name :type :status
+   :consumers :depends-on [names]}. An explicit id is used for a new node so
+   same-receipt work rows can name it. Unknown dependency names become stub
    nodes; an edge that would close a cycle is dropped, not fatal."
   [items entries source-id]
   (let [entries (filter #(and (map? %) (not (str/blank? (str (:name %))))) entries)]
@@ -412,11 +413,27 @@
       items
       (let [idx (atom (into {} (map (juxt :id identity) items)))
             order (atom (mapv :id items))
-            ensure! (fn [nm consumers]
-                      (let [lid (lemma-id nm)
+            ensure! (fn [nm consumers requested-id]
+                      ;; Strategy receipts name newly elected rows' lemma node
+                      ;; before that node exists in the ledger.  Preserve the
+                      ;; explicit id they supplied; otherwise a qualified
+                      ;; theorem name generates a different slug and leaves
+                      ;; :implements-lemma dangling.  Existing nodes still win
+                      ;; by theorem name, which keeps name-based upserts stable.
+                      (let [existing-id (some (fn [[id row]]
+                                                (when (and (= :lemma (:kind row))
+                                                           (= (str nm) (get-in row [:lemma :name])))
+                                                  id))
+                                              @idx)
+                            lid (or existing-id requested-id (lemma-id nm))
                             cur (@idx lid)]
                         (when (and cur (not= :lemma (:kind cur)))
                           (throw (ex-info "lemma id collides with a work row" {:id lid})))
+                        (when (and cur (= :lemma (:kind cur))
+                                   (not= (str nm) (get-in cur [:lemma :name])))
+                          (throw (ex-info "lemma id names a different theorem"
+                                          {:id lid :existing (get-in cur [:lemma :name])
+                                           :requested (str nm)})))
                         (when-not cur
                           (swap! order conj lid)
                           (swap! idx assoc lid
@@ -427,9 +444,9 @@
                                   :acceptance {:lemma (str nm)}
                                   :lemma {:name (str nm) :reported-by []}}))
                         lid))]
-        (doseq [{:keys [name type status consumers depends-on area]} entries]
+        (doseq [{:keys [id name type status consumers depends-on area]} entries]
           (let [consumers (vec (distinct (keep #(when % (keyword (str/replace (str %) #"^:" ""))) consumers)))
-                lid (ensure! name consumers)]
+                lid (ensure! name consumers id)]
             (swap! idx update lid
                    (fn [n]
                      (let [all (vec (distinct (remove #{:portfolio}
@@ -448,7 +465,7 @@
                               (= :backlog (:state n)))
                          (assoc-in [:lemma :proved-in] source-id)))))
             (doseq [dn depends-on :when (not (str/blank? (str dn)))]
-              (let [did (ensure! dn [])]
+              (let [did (ensure! dn [] nil)]
                 (when-not (or (= did lid) (reaches? @idx did lid)
                               (some #{did} (:depends-on (@idx lid))))
                   (swap! idx update-in [lid :depends-on] conj did))))))

@@ -1,0 +1,20 @@
+{:outcome :replan :seat "codex-test"
+ :commands [{:cmd "bb build_step.bb priorities worklist.edn" :exit 0}]
+ :finding "elect a row for a newly declared qualified lemma"
+ :lemmas
+ [{:id :lemma-short-explicit-id
+   :name "ConstructionTargets.Example.qualifiedTheoremName"
+   :type "True"
+   :status :not-started
+   :consumers [:tfix01]
+   :depends-on []
+   :area "test-area"}]
+ :replacement-items
+ [{:id :qualified-lemma-work :kind :final-adapter :phase :probe :depends-on []
+   :consumer :tfix01 :scope []
+   :implements-lemma :lemma-short-explicit-id
+   :acceptance {:probe "compile the qualified lemma"}}
+  {:id :qualified-lemma-checkpoint :kind :strategy-checkpoint :phase :strategy
+   :depends-on [:qualified-lemma-work] :consumer :portfolio :scope []
+   :checkpoint {:after-problems 1}
+   :acceptance {:strategy "refill after the qualified lemma"}}]}

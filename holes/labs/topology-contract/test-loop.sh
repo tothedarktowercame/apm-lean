@@ -105,6 +105,20 @@ bb "$HERE/build_step.bb" apply-result "$checkpoint" checkpoint "$HERE/fixtures/p
 bb "$HERE/worklist_check.bb" "$checkpoint"
 rm -f "$checkpoint"
 
+# A checkpoint may declare a new lemma and elect its implementation in the
+# same receipt.  Its explicit id must survive name-based upsert even when the
+# theorem name is qualified and would generate a different automatic slug.
+checkpoint_lemma="$(mktemp)"
+cp "$HERE/fixtures/checkpoint-ledger.edn" "$checkpoint_lemma"
+bb "$HERE/build_step.bb" apply-result "$checkpoint_lemma" checkpoint \
+  "$HERE/fixtures/replan-with-explicit-lemma-id.edn"
+bb "$HERE/worklist_check.bb" "$checkpoint_lemma"
+bb "$HERE/build_step.bb" row "$checkpoint_lemma" lemma-short-explicit-id \
+  | grep -q ':kind :lemma'
+bb "$HERE/build_step.bb" row "$checkpoint_lemma" qualified-lemma-work \
+  | grep -q ':implements-lemma :lemma-short-explicit-id'
+rm -f "$checkpoint_lemma"
+
 checkpoint_stop="$(mktemp)"
 cp "$HERE/fixtures/checkpoint-ledger.edn" "$checkpoint_stop"
 bb "$HERE/build_step.bb" apply-result "$checkpoint_stop" checkpoint "$HERE/fixtures/stop-receipt.edn"
