@@ -94258,8 +94258,83 @@
   {:bounded-exception
    "This single-consumer pair of elementary interval lemmas is the exact arithmetic case split required to turn the banked coordinate action into the final finite edge-and-corner orbit disjunction.",
    :consumer :t93J03,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Extract integer coordinates from coordinateEquiv g, force the vertical coordinate to -1, 0, or 1, reduce the inversion sign, and apply these classifications to enumerate square-orbit coincidences.",
+    :outcome :done-unreviewed,
+    :warnings
+    [{:kind :dependency-linter,
+      :message
+      "Imported Klein algebra modules retain unnecessarySimpa and unnecessarySeqFocus warnings; this scoped module has no warning."}],
+    :missing-theorems
+    [{:name "UnitIntervalIntegerClassification.translation",
+      :type
+      "For x,y in [0,1] and y=m+x, exactly the m=-1 endpoint case, m=0 equality case, or m=1 opposite endpoint case",
+      :status :proved,
+      :consumers [:t93J03],
+      :depends-on
+      ["KleinSquareRepresentative.exists_closedSquare_smul"]}
+     {:name "UnitIntervalIntegerClassification.reflection",
+      :type
+      "For x,y in [0,1] and y=m-x, exactly the m=0 corner, m=1 reflection, or m=2 corner case",
+      :status :proved,
+      :consumers [:t93J03],
+      :depends-on
+      ["KleinSquareRepresentative.exists_closedSquare_smul"]}],
+    :statement-hashes "131 registered statements match",
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :finding
+      "canonical package authority resolves to /home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "sha256sum /tmp/unit-interval-integer-classification.lean",
+      :exit 0,
+      :finding
+      "fixture hash matches d3b6b28f437d762a3136d344cdbb762b04c58b3e31d1bd4f93deeb66872a85aa"}
+     {:cmd
+      "lake build ConstructionTargets.UnitIntervalIntegerClassification",
+      :exit 0,
+      :finding
+      "canonical module builds both three-case interval classifications"}
+     {:cmd
+      "lake env lean /tmp/unit-interval-integer-classification.lean",
+      :exit 0,
+      :finding
+      "fixture compiles exact casts, omega splits, and endpoint arithmetic"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" ConstructionTargets/UnitIntervalIntegerClassification.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero source placeholders"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" /tmp/unit-interval-integer-classification.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero fixture placeholders"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}],
+    :commit "5dac74ea2be431919b3abe35fc2190bad615458a",
+    :changed-paths
+    ["ConstructionTargets/UnitIntervalIntegerClassification.lean"],
+    :fixture
+    {:path "/tmp/unit-interval-integer-classification.lean",
+     :sha256
+     "d3b6b28f437d762a3136d344cdbb762b04c58b3e31d1bd4f93deeb66872a85aa",
+     :sorry-count 0},
+    :implementation
+    {:scope
+     ["ConstructionTargets/UnitIntervalIntegerClassification.lean"],
+     :declarations
+     ["UnitIntervalIntegerClassification.translation"
+      "UnitIntervalIntegerClassification.reflection"]},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/UnitIntervalIntegerClassification.lean"],
    :dag-node
@@ -95195,30 +95270,47 @@
    :kind :lemma,
    :depends-on [:lemma-kleinplaneaffineaction-coordinateact-mul],
    :other-consumers []}
-  {:consumer :portfolio,
+  {:consumer :t93J03,
    :phase :lemma,
    :state :backlog,
    :scope [],
    :acceptance
-   {:lemma "UnitIntervalIntegerClassification.translation"},
+   {:lemma "UnitIntervalIntegerClassification.translation",
+    :type
+    "For x,y in [0,1] and y=m+x, exactly the m=-1 endpoint case, m=0 equality case, or m=1 opposite endpoint case"},
    :lemma
    {:name "UnitIntervalIntegerClassification.translation",
-    :reported-by []},
+    :reported-by
+    [:routes-2026-10-10-unit-interval-integer-classification-27],
+    :type
+    "For x,y in [0,1] and y=m+x, exactly the m=-1 endpoint case, m=0 equality case, or m=1 opposite endpoint case",
+    :proved-in
+    :routes-2026-10-10-unit-interval-integer-classification-27},
    :id :lemma-unitintervalintegerclassification-translation,
    :kind :lemma,
-   :depends-on [],
+   :depends-on
+   [:lemma-kleinsquarerepresentative-exists-closedsquare-smul],
    :other-consumers []}
-  {:consumer :portfolio,
+  {:consumer :t93J03,
    :phase :lemma,
    :state :backlog,
    :scope [],
-   :acceptance {:lemma "UnitIntervalIntegerClassification.reflection"},
+   :acceptance
+   {:lemma "UnitIntervalIntegerClassification.reflection",
+    :type
+    "For x,y in [0,1] and y=m-x, exactly the m=0 corner, m=1 reflection, or m=2 corner case"},
    :lemma
    {:name "UnitIntervalIntegerClassification.reflection",
-    :reported-by []},
+    :reported-by
+    [:routes-2026-10-10-unit-interval-integer-classification-27],
+    :type
+    "For x,y in [0,1] and y=m-x, exactly the m=0 corner, m=1 reflection, or m=2 corner case",
+    :proved-in
+    :routes-2026-10-10-unit-interval-integer-classification-27},
    :id :lemma-unitintervalintegerclassification-reflection,
    :kind :lemma,
-   :depends-on [],
+   :depends-on
+   [:lemma-kleinsquarerepresentative-exists-closedsquare-smul],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
