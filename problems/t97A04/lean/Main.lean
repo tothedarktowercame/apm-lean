@@ -2,7 +2,6 @@ import Mathlib
 import Mathlib.AlgebraicTopology.SingularHomology.Basic
 import Mathlib.Algebra.Category.ModuleCat.Colimits
 import Mathlib.Algebra.Category.ModuleCat.Abelian
-import ConstructionTargets.T97A04FrozenH1Coordinate
 
 /-!
 # APM t97A04 — homological data of an integral linear torus map
@@ -26,7 +25,6 @@ None.
 -/
 
 open CategoryTheory
-open ConstructionTargets.T97A04FrozenH1Coordinate
 
 noncomputable section
 
@@ -141,36 +139,13 @@ theorem apm_t97A04_bridge_1 :
 
 /-- Why this unblocks the first-homology component of `apm_t97a04`: under
 the two coordinate-circle generators of `H₁(T²;ℤ)`, the induced map of the
-concrete torus map is multiplication by its displayed integral matrix.  The
-witness is the aligned frozen-torus ModuleCat coordinate. -/
+concrete torus map is multiplication by its displayed integral matrix. -/
 theorem apm_t97A04_bridge_2 :
     ∃ h1 : T97A04Homology 1 ≅ ModuleCat.of ℤ apm_t97a04_IntPlane,
       ∀ a : T97A04Homology 1,
         h1.hom (t97A04HomologyMap 1 apm_t97a04_Lbar a) =
           apm_t97a04_matrix.mulVec (h1.hom a) := by
-  refine ⟨frozenTorusAlignedH1ModuleIsoFinTwo, ?_⟩
-  intro a
-  have h := congrArg (fun f => f a) frozenLbarModuleH1_map_commutes
-  change frozenTorusAlignedH1ModuleIsoFinTwo.hom
-      (t97A04HomologyMap 1 apm_t97a04_Lbar a) =
-    frozenMatrixAddHom
-      (frozenTorusAlignedH1ModuleIsoFinTwo.hom a) at h
-  rw [h]
-  funext i
-  by_cases hi : i = 0
-  · simp [hi, frozenMatrixAddHom, apm_t97a04_matrix,
-      Matrix.mulVec, dotProduct]
-  · have hi' : i = 1 := Fin.eq_one_of_ne_zero i hi
-    subst i
-    change @Fin.cases 1 (fun _ => ℤ)
-        (2 * frozenTorusAlignedH1ModuleIsoFinTwo.hom a 0 +
-          frozenTorusAlignedH1ModuleIsoFinTwo.hom a 1)
-        (fun _ : Fin 1 => frozenTorusAlignedH1ModuleIsoFinTwo.hom a 1 -
-          frozenTorusAlignedH1ModuleIsoFinTwo.hom a 0)
-        (Fin.succ 0) = _
-    rw [Fin.cases_succ]
-    simp [apm_t97a04_matrix, Matrix.mulVec, dotProduct]
-    ring
+  sorry
 
 /-- Why this unblocks the top-homology component of `apm_t97a04`: under the
 product fundamental-class generator of `H₂(T²;ℤ)`, the induced map multiplies
