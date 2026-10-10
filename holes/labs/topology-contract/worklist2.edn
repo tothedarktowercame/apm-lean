@@ -65022,9 +65022,21 @@
       "Measure the H0 closure and two t02A03 DAG corrections, then refill from the corrected complete route graph.",
       :other-consumers []}],
     :author "topo-8",
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791659445519-2761-628a3bb1",
+     :commands
+     ["git show/diff-tree/show --check b7676f7"
+      "bb worklist_check.bb and build_step.bb priorities"
+      "python3 statement registry check --rev b7676f7"
+      "comment-stripped 15-consumer placeholder and fingerprint census at b7676f7"
+      "checkpoint dependency-state and declared-support inspection"],
+     :finding
+     "PASS: topo-8 checkpoint evidence is recorded by ledger-only commit b7676f7; strategy rows have no implementation fixture, so fixture hashing and theorem-orientation checks are not applicable. The worklist validates, registry is 131/0, dependencies reproduce as t02A03 revise/blocked, shared RP2 PASS/done, t97A04 PASS/done, and checkpoint r5 PASS/done. Counts reproduce as 1,3,3,3,4,1,1,1,1,1,1,1,1,3,1 with all fingerprints recomputed; the measured delta is t97A04 -1 and zero for the other packets. Priorities reproduce t97A04 H0 first, followed by the two ready compiled t02A03 declarations, while explicitly carrying the under-modeled H2 chain into checkpoint r7."}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -65042,7 +65054,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t97A04/bridge-1",
    :acceptance
@@ -65062,7 +65074,7 @@
    :implements-lemma
    :lemma-apm-t02a03-lefttubetoruscoordinates-torusinverse,
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-coordinate-inverse",
    :acceptance
@@ -65085,7 +65097,7 @@
    :implements-lemma
    :lemma-apm-t02a03-rightcorebasedattachmenthomotopy,
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/right-core-based-attachment-homotopy",
