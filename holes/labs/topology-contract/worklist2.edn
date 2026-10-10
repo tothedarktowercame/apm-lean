@@ -59360,20 +59360,71 @@
   {:bounded-exception
    "single-consumer terminal map of the t02A03 vertical right-core lift homotopy",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/t02a03_geometric_tube_cover.lean",
+      :sha256
+      "8d317ded3a2fabe4cc65213f3002d4fc57187c047885f63b870a4891417ddbc4"},
+     :commands
+     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "apm_t02a03_rightCoreLiftedMap and apm_t02a03_rightCoreLiftHomotopyMap_one compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
+       :exit 0}
+      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "8d317ded3a2fabe4cc65213f3002d4fc57187c047885f63b870a4891417ddbc4  /tmp/t02a03_geometric_tube_cover.lean"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}
+      {:cmd
+       "rg -n '^((noncomputable )?def|theorem) apm_t02a03_rightCoreLift(edMap|HomotopyMap_one)' /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "467:noncomputable def apm_t02a03_rightCoreLiftedMap :\n474:theorem apm_t02a03_rightCoreLiftHomotopyMap_one"}],
+     :finding
+     "A complete placeholder-free fixture compiles for this bounded packet. Evaluating the banked vertical lift homotopy at height one defines a continuous map from Set.Ioc 0 1 into geometricY. The homotopy's height-one slice agrees definitionally with this named terminal map, providing the precise source for the next deformation toward the attachment collar and based Circle meridian.",
+     :residual
+     "Promote the terminal lifted-right-core map and height-one slice equality. The next consumer residual is to deform this map through the attachment collar to the based Circle meridian, extend that deformation over the right tube, and assemble the final gluing equivalence.",
+     :implementation
+     {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
+      :acceptance
+      {:declarations
+       ["apm_t02a03_rightCoreLiftedMap"
+        "apm_t02a03_rightCoreLiftHomotopyMap_one"],
+       :fixture-sha256
+       "8d317ded3a2fabe4cc65213f3002d4fc57187c047885f63b870a4891417ddbc4",
+       :gates
+       ["lake env lean ConstructionTargets/T02A03GeometricTubeCover.lean"
+        "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeCover.lean || true)\""
+        "python3 scripts/statement-registry.py check"],
+       :axioms ["propext" "Classical.choice" "Quot.sound"],
+       :consumer-residual
+       "Deform the terminal lifted-right-core map through the collar to the based Circle meridian, then extend over the right tube and glue; those constructions remain outside this packet."}}}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/geometric-right-core-lifted-map",
    :acceptance
-   {:probe
-    "Compile and bank apm_t02a03_rightCoreLiftedMap and apm_t02a03_rightCoreLiftHomotopyMap_one from /tmp/t02a03_geometric_tube_cover.lean. Define the terminal lifted-right-core map by evaluating the banked vertical lift homotopy at height one, prove it is a continuous map from Set.Ioc 0 1 into geometricY, and prove the homotopy's height-one slice is exactly this map. This supplies the named terminal attachment map required by t02A03 route step 2; do not yet claim a deformation from it to the collar or meridian, a tube deformation, or a gluing equivalence.",
-    :declarations
+   {:declarations
     ["apm_t02a03_rightCoreLiftedMap"
      "apm_t02a03_rightCoreLiftHomotopyMap_one"],
-    :placeholder "the sole sorry in apm_t02a03",
-    :route-step
-    "t02A03 step 2, name the height-one lifted-right-core map and identify it as the terminal slice of the vertical homotopy"},
+    :fixture-sha256
+    "8d317ded3a2fabe4cc65213f3002d4fc57187c047885f63b870a4891417ddbc4",
+    :gates
+    ["lake env lean ConstructionTargets/T02A03GeometricTubeCover.lean"
+     "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeCover.lean || true)\""
+     "python3 scripts/statement-registry.py check"],
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :consumer-residual
+    "Deform the terminal lifted-right-core map through the collar to the based Circle meridian, then extend over the right tube and glue; those constructions remain outside this packet."},
    :id
    :routes-2026-10-10-t02a03-geometric-right-core-lifted-map-topo2-r1,
    :kind :reusable-theorem,
