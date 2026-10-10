@@ -65673,9 +65673,60 @@
   {:bounded-exception
    "single-consumer frozen meridian membership needed to type the inverse map",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:residual
+     "After banking this membership theorem, define the restricted circleMeridian inverse and construct the forward normal coordinate and both homotopies for rightTubeMinusLeftCoreMeridianHomotopyEquiv.",
+     :outcome :go,
+     :warnings [],
+     :missing-theorems
+     [{:name
+       "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_circleMeridian_mem_rightTubeMinusLeftCore",
+       :type
+       "forall z : Circle, apm_t02a03_circleMeridian z ∈ apm_t02a03_rightTube ∧ apm_t02a03_circleMeridian z ∉ Set.range apm_t02a03_leftCore",
+       :status :proved,
+       :consumers [:t02A03],
+       :depends-on
+       ["ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_circleMeridian_mem_geometricY"
+        "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_origin_mem_both_cores"],
+       :area "explicit-r3-tube-deformation-retraction"}],
+     :commands
+     [{:cmd "lake env lean /tmp/t02a03_meridian_right_tube.lean",
+       :exit 0,
+       :output
+       "apm_t02a03_circleMeridian_mem_rightTubeMinusLeftCore compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd "sha256sum /tmp/t02a03_meridian_right_tube.lean",
+       :exit 0,
+       :output
+       "0936693afa3d55429cdc5145e13178759111b7f389335c4ce9aa466a1739a87b  /tmp/t02a03_meridian_right_tube.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_meridian_right_tube.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :fixture
+     {:path "/tmp/t02a03_meridian_right_tube.lean",
+      :sha256
+      "0936693afa3d55429cdc5145e13178759111b7f389335c4ce9aa466a1739a87b"},
+     :finding
+     "The fixture proves the exact requested declaration directly. It combines the existing exclusion from the left core with a distance-to-origin estimate: the meridian has norm 1/8, the origin lies on the right core, and 1/8 ≤ 1/4, so every meridian point belongs to the frozen closed right tube.",
+     :implementation
+     {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
+      :declaration
+      "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_circleMeridian_mem_rightTubeMinusLeftCore",
+      :type
+      "forall z : Circle, apm_t02a03_circleMeridian z ∈ apm_t02a03_rightTube ∧ apm_t02a03_circleMeridian z ∉ Set.range apm_t02a03_leftCore",
+      :instructions
+      "Insert the compiled theorem after apm_t02a03_circleMeridian_mem_geometricY. Preserve all existing declarations and the frozen tube radius."},
+     :seat "topo-8"}},
+   :instructions
+   "Insert the compiled theorem after apm_t02a03_circleMeridian_mem_geometricY. Preserve all existing declarations and the frozen tube radius.",
+   :phase :implementation,
+   :type
+   "forall z : Circle, apm_t02a03_circleMeridian z ∈ apm_t02a03_rightTube ∧ apm_t02a03_circleMeridian z ∉ Set.range apm_t02a03_leftCore",
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/circle-meridian-right-tube-membership",
    :acceptance
@@ -65692,6 +65743,8 @@
    :routes-2026-10-10-t02a03-circle-meridian-right-tube-membership-topo2-r1,
    :kind :reusable-theorem,
    :area "explicit-r3-tube-deformation-retraction",
+   :declaration
+   "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_circleMeridian_mem_rightTubeMinusLeftCore",
    :depends-on
    [:routes-2026-10-10-checkpoint-topo2-r7
     :lemma-apm-t02a03-rightcorebasedattachmenthomotopy],
@@ -67524,12 +67577,13 @@
    {:name
     "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_circleMeridian_mem_rightTubeMinusLeftCore",
     :reported-by
-    [:routes-2026-10-10-t02a03-right-tube-meridian-homotopy-equivalence-topo2-r1],
+    [:routes-2026-10-10-t02a03-right-tube-meridian-homotopy-equivalence-topo2-r1
+     :routes-2026-10-10-t02a03-circle-meridian-right-tube-membership-topo2-r1],
     :type
     "forall z : Circle, apm_t02a03_circleMeridian z ∈ apm_t02a03_rightTube ∧ apm_t02a03_circleMeridian z ∉ Set.range apm_t02a03_leftCore",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-right-tube-meridian-homotopy-equivalence-topo2-r1},
+    :routes-2026-10-10-t02a03-circle-meridian-right-tube-membership-topo2-r1},
    :id
    :lemma-constructiontargets-t02a03geometrictubecover-apm-t02a03-circlemeridian-mem-right,
    :kind :lemma,
