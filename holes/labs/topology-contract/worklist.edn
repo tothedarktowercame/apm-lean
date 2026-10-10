@@ -99572,16 +99572,46 @@
    "Construct the two radius-one boundary quotient-to-ThreeCircles identifications, their common vertex classes, and the literal inclusion formulas, then assemble the concrete packages.",
    :other-consumers []}
   {:bounded-exception
+   "This single-consumer prerequisite installs the actual second six-edge relation required by the frozen t97A01 statement before constructing its boundary quotient model.",
+   :consumer :t97A01,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/PolygonTorusCrosscapRelation.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/torus-crosscap-relation",
+   :acceptance
+   {:implementation
+    "Promote the exact fixture. Define the interval reversal and prove it involutive. Define TorusCrosscapRel on the canonical six-edge disk by the word a b a-inverse b-inverse c c, prove its generators preserve complex norm and lie on radius one, define its EqvGen quotient and quotient map, and prove the three literal generator identification equations. Do not construct boundary quotient homeomorphisms, identify ThreeCircles, prove common vertex classes or final inclusion equations, compute invariants, or close t97A01.",
+    :placeholder "the single sorry in apm_t97a01",
+    :route-step
+    "polygon radial open-cover step 13: define and verify the concrete torus-crosscap six-edge relation used by the second polygon package",
+    :fixture "/tmp/polygon-torus-crosscap-relation.lean",
+    :fixture-sha256
+    "af4e6db94b4c9c7a0e6b0aae4528112bf53cb26ceb7da8d3a7eb9c21523d45e7",
+    :gates
+    ["lake build ConstructionTargets.PolygonTorusCrosscapRelation"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-10-polygon-torus-crosscap-relation-53,
+   :kind :reusable-theorem,
+   :area "polygon-surface-open-cover",
+   :depends-on
+   [:routes-2026-10-10-polygon-overlap-homotopy-equiv-circle-52],
+   :current-residual
+   "Construct the boundary-circle quotient presentations for SurfaceRel false 3 and TorusCrosscapRel, identify both with ThreeCircles, establish their common vertex classes and boundary inclusion formulas, and assemble the packages.",
+   :other-consumers []}
+  {:bounded-exception
    "This single-consumer concrete quotient package is the other final backlog lemma on t97A01 and supplies the actual two polygon models required by its frozen statement.",
    :consumer :t97A01,
    :implements-lemma :lemma-polygonradialopencoverpackages,
    :evidence
    {:probe
     {:residual
-     "The actual quotient overlap now has a Circle homotopy model with literal representative formulas. The remaining package needs both boundary ThreeCircles identifications, the common vertex classes, the literal inclusion formulas, and final assembly.",
+     "The second six-edge relation is now concrete and verified. The remaining package needs boundary-circle quotient presentations for both relations, their ThreeCircles identifications, common vertex classes, literal inclusion formulas, and final assembly.",
      :outcome :revise,
-     :warnings
-     ["A concurrent unrelated untracked file exists at holes/labs/topology-contract/worklist2.edn.tmp; this read-only probe did not inspect or modify it."],
+     :warnings [],
      :missing-theorems
      [{:name "polygonRadialOpenCoverPackages",
        :type
@@ -99590,102 +99620,85 @@
        :consumers [:t97A01],
        :depends-on
        ["PolygonOverlapHomotopyEquivCircle.overlapHomotopyEquivCircle"
+        "PolygonTorusCrosscapRelation.TorusCrosscapRel"
         "polygonBoundaryThreeCircles"],
        :area "polygon-surface-open-cover"}
-      {:name
-       "PolygonOverlapHomotopyEquivCircle.overlapHomotopyEquivCircle",
+      {:name "PolygonTorusCrosscapRelation.TorusCrosscapRel",
        :type
-       "For every radius-preserving boundary-supported polygon relation, overlapOpen is homotopy equivalent to Circle, with explicit quotient representative and radial-normalization formulas.",
+       "The concrete disk-boundary relation for the six-edge word a b a-inverse b-inverse c c, with reversed parameters on the a and b pairings, radius-one support, norm preservation, and literal quotient generator equations.",
        :status :proved,
        :consumers [:t97A01],
-       :depends-on
-       ["PolygonAnnulusRadialHomotopy.annulusHomotopyEquivCircle"
-        "PolygonAnnularOverlapHomeomorph.overlapHomeomorph"],
+       :depends-on ["RadialQuotientOpenSets.norm_edgePoint"],
        :area "polygon-surface-open-cover"}
       {:name "polygonBoundaryThreeCircles",
        :type
-       "Identify the radius-one boundary quotients for SurfaceRel false 3 and the torus-crosscap six-edge relation with ThreeCircles, including common vertex classes and the literal boundary inclusion formulas required by the package.",
+       "Identify the radius-one boundary quotients for SurfaceRel false 3 and PolygonTorusCrosscapRelation.TorusCrosscapRel with ThreeCircles, including common vertex classes and the literal boundary inclusion formulas required by the package.",
        :status :not-started,
        :consumers [:t97A01],
-       :depends-on ["PolygonOuterOpenDeformation.outerOpenHomotopy"],
+       :depends-on
+       ["PolygonTorusCrosscapRelation.TorusCrosscapRel"
+        "PolygonOuterOpenDeformation.outerOpenHomotopy"],
        :area "polygon-surface-open-cover"}],
      :prerequisite
      {:bounded-exception
-      "This single-consumer prerequisite transports the completed literal-annulus model to the actual quotient overlap used by the two polygon packages.",
+      "This single-consumer prerequisite installs the actual second six-edge relation required by the frozen t97A01 statement before constructing its boundary quotient model.",
       :consumer :t97A01,
       :phase :implementation,
       :state :open,
-      :scope
-      ["ConstructionTargets/PolygonOverlapHomotopyEquivCircle.lean"],
+      :scope ["ConstructionTargets/PolygonTorusCrosscapRelation.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/overlap-homotopy-equiv-circle",
+      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/torus-crosscap-relation",
       :acceptance
       {:implementation
-       "Promote the exact fixture. For any radius-preserving boundary-supported disk relation, compose annulusHomotopyEquivCircle with overlapHomeomorph to define a Circle-to-overlapOpen homotopy equivalence. Prove that its forward map is literally overlapMap of halfCircleMap, that its inverse on overlapMap representatives is radialNormalizeMap, and that its underlying quotient representative is quotientMap of the half-radius disk point. Do not identify boundary quotients with ThreeCircles, prove vertex classes or final inclusion equations, compute invariants, or close t97A01.",
+       "Promote the exact fixture. Define the interval reversal and prove it involutive. Define TorusCrosscapRel on the canonical six-edge disk by the word a b a-inverse b-inverse c c, prove its generators preserve complex norm and lie on radius one, define its EqvGen quotient and quotient map, and prove the three literal generator identification equations. Do not construct boundary quotient homeomorphisms, identify ThreeCircles, prove common vertex classes or final inclusion equations, compute invariants, or close t97A01.",
        :placeholder "the single sorry in apm_t97a01",
        :route-step
-       "polygon radial open-cover step 12: transport the Circle homotopy model from the literal annulus to the actual quotient overlap",
-       :fixture "/tmp/polygon-overlap-homotopy-equiv-circle.lean",
+       "polygon radial open-cover step 13: define and verify the concrete torus-crosscap six-edge relation used by the second polygon package",
+       :fixture "/tmp/polygon-torus-crosscap-relation.lean",
        :fixture-sha256
-       "0379b07a71d1e887dec9d6c33c1d0ca2e9292a8352d083d4363f1a9e2bf8acea",
+       "af4e6db94b4c9c7a0e6b0aae4528112bf53cb26ceb7da8d3a7eb9c21523d45e7",
        :gates
-       ["lake build ConstructionTargets.PolygonOverlapHomotopyEquivCircle"
+       ["lake build ConstructionTargets.PolygonTorusCrosscapRelation"
         "fixture compiles"
         "zero source and fixture sorry"
         "standard-only axioms"
         "registry check"]},
-      :id :routes-2026-10-10-polygon-overlap-homotopy-equiv-circle-52,
+      :id :routes-2026-10-10-polygon-torus-crosscap-relation-53,
       :kind :reusable-theorem,
       :area "polygon-surface-open-cover",
       :depends-on
-      [:routes-2026-10-10-polygon-annulus-radial-homotopy-51],
+      [:routes-2026-10-10-polygon-overlap-homotopy-equiv-circle-52],
       :current-residual
-      "Construct the two radius-one boundary quotient-to-ThreeCircles identifications, their common vertex classes, and the literal inclusion formulas, then assemble the concrete packages.",
+      "Construct the boundary-circle quotient presentations for SurfaceRel false 3 and TorusCrosscapRel, identify both with ThreeCircles, establish their common vertex classes and boundary inclusion formulas, and assemble the packages.",
       :other-consumers []},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
-     [{:cmd
-       "lake env lean /tmp/polygon-overlap-homotopy-equiv-circle.lean",
+     [{:cmd "lake env lean /tmp/polygon-torus-crosscap-relation.lean",
        :exit 0,
        :finding
-       "The transported Circle-to-overlapOpen homotopy equivalence and its forward, inverse, and quotient representative formulas compile with standard axioms."}
-      {:cmd
-       "sha256sum /tmp/polygon-overlap-homotopy-equiv-circle.lean",
+       "The reversed interval parameter, concrete torus-crosscap relation, norm invariance, radius-one support, quotient type, and three generator equations compile with standard axioms."}
+      {:cmd "sha256sum /tmp/polygon-torus-crosscap-relation.lean",
        :exit 0,
        :finding
-       "0379b07a71d1e887dec9d6c33c1d0ca2e9292a8352d083d4363f1a9e2bf8acea"}
+       "af4e6db94b4c9c7a0e6b0aae4528112bf53cb26ceb7da8d3a7eb9c21523d45e7"}
       {:cmd
-       "rg -n \"\\b(sorry|admit)\\b\" /tmp/polygon-overlap-homotopy-equiv-circle.lean",
+       "rg -n \"\\b(sorry|admit)\\b\" /tmp/polygon-torus-crosscap-relation.lean",
        :exit 1,
        :expected-exit 1,
        :finding "No fixture placeholders."}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :finding "131 registered statements match, 0 do not."}
-      {:cmd "git status --short",
-       :exit 0,
-       :finding
-       "The worktree contains an unrelated untracked ledger temporary file: holes/labs/topology-contract/worklist2.edn.tmp."}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/polygon-overlap-homotopy-equiv-circle.lean",
-       :exit 1,
-       :finding
-       "The first draft used a Unicode subscript character that the pinned parser treated as an unimplemented syntax form; spelling the HomotopyEquiv type explicitly corrected parsing."}
-      {:cmd
-       "lake env lean /tmp/polygon-overlap-homotopy-equiv-circle.lean",
-       :exit 1,
-       :finding
-       "The inverse representative formula is not definitional because overlapHomeomorph is built from a quotient-map bijection; rewriting by overlapHomeomorph_apply and Homeomorph.symm_apply_apply proves the exact formula."}],
+      {:cmd "git status --short", :exit 0, :finding "clean"}],
      :fixture
-     {:path "/tmp/polygon-overlap-homotopy-equiv-circle.lean",
+     {:path "/tmp/polygon-torus-crosscap-relation.lean",
       :sha256
-      "0379b07a71d1e887dec9d6c33c1d0ca2e9292a8352d083d4363f1a9e2bf8acea",
+      "af4e6db94b4c9c7a0e6b0aae4528112bf53cb26ceb7da8d3a7eb9c21523d45e7",
       :interface
-      "overlapHomotopyEquivCircle transports the literal annulus Circle homotopy equivalence to overlapOpen; its forward and inverse representative formulas are explicit."},
+      "TorusCrosscapRel is the concrete six-edge relation a b a-inverse b-inverse c c; it preserves radius, is supported on the unit boundary, and its quotient map satisfies all three generator identifications."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -99717,7 +99730,8 @@
     :routes-2026-10-10-polygon-annular-overlap-homeomorph-49
     :routes-2026-10-10-polygon-annulus-radial-maps-50
     :routes-2026-10-10-polygon-annulus-radial-homotopy-51
-    :routes-2026-10-10-polygon-overlap-homotopy-equiv-circle-52],
+    :routes-2026-10-10-polygon-overlap-homotopy-equiv-circle-52
+    :routes-2026-10-10-polygon-torus-crosscap-relation-53],
    :current-residual
    "Combine the concrete cover packages with the strict overlap squares, banked Smith normalization, and final t97A01 assembly.",
    :other-consumers []}
@@ -100237,7 +100251,8 @@
     :lemma-polygonannulusradialhomotopy
     :lemma-polygonannulusradialhomotopy-annulushomotopyequivcircle
     :lemma-polygonoverlaphomotopyequivcircle
-    :lemma-polygonoverlaphomotopyequivcircle-overlaphomotopyequivcircle],
+    :lemma-polygonoverlaphomotopyequivcircle-overlaphomotopyequivcircle
+    :lemma-polygontoruscrosscaprelation-toruscrosscaprel],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -101866,7 +101881,9 @@
     :area "polygon-surface-open-cover"},
    :id :lemma-polygonboundarythreecircles,
    :kind :lemma,
-   :depends-on [:lemma-polygonouteropendeformation-outeropenhomotopy],
+   :depends-on
+   [:lemma-polygonouteropendeformation-outeropenhomotopy
+    :lemma-polygontoruscrosscaprelation-toruscrosscaprel],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -102373,6 +102390,27 @@
    :depends-on
    [:lemma-polygonannulusradialhomotopy-annulushomotopyequivcircle
     :lemma-polygonannularoverlaphomeomorph-overlaphomeomorph],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "PolygonTorusCrosscapRelation.TorusCrosscapRel",
+    :type
+    "The concrete disk-boundary relation for the six-edge word a b a-inverse b-inverse c c, with reversed parameters on the a and b pairings, radius-one support, norm preservation, and literal quotient generator equations."},
+   :lemma
+   {:name "PolygonTorusCrosscapRelation.TorusCrosscapRel",
+    :reported-by
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    :type
+    "The concrete disk-boundary relation for the six-edge word a b a-inverse b-inverse c c, with reversed parameters on the a and b pairings, radius-one support, norm preservation, and literal quotient generator equations.",
+    :area "polygon-surface-open-cover",
+    :proved-in
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+   :id :lemma-polygontoruscrosscaprelation-toruscrosscaprel,
+   :kind :lemma,
+   :depends-on [:lemma-radialquotientopensets-norm-edgepoint],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
