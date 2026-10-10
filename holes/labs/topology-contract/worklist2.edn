@@ -56234,6 +56234,21 @@
       :exit 0,
       :output
       "ConstructionTargets/TorusPiOneWindingCoordinates.lean"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791611488806-1271-852e95cf",
+     :commands
+     ["git diff-tree --no-commit-id --name-only -r 89fb53ce"
+      "sha256sum /tmp/torus_circle_matrix_pi1_representative_naturality.lean"
+      "lake env lean /tmp/torus_circle_matrix_pi1_representative_naturality.lean"
+      "lake build ConstructionTargets.TorusPiOneWindingCoordinates"
+      "lake env lean ConstructionTargets/TorusPiOneWindingCoordinates.lean"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show c9c3667d:holes/labs/topology-contract/worklist2.edn)"
+      "recompute target and frozen t97A04 SHA-256 and comment-stripped placeholder count from commit 89fb53ce"],
+     :finding
+     "PASS: codex-7 independently reviewed topo-6 commit 89fb53ce. Exact implementation scope is TorusPiOneWindingCoordinates.lean; transition commit c9c3667d changes only the ledger. Fixture SHA-256 c31b296ba250b0b823f759dbf364b2e285086df9ffb8d0532e961608e54e2ce7 matches, compiles, and has zero placeholders; focused 8290-job build and canonical compilation pass with zero forbidden declarations and only replayed dependency warnings. The fixed-base and representative orientations are correct: mapOfEq uses circleMatrixMap_base, sends mk gamma to mk(circleMatrixMappedPath gamma), then the coordinate equalities derive 2*n0+n1 and n1-n0 via the matching projection endpoint formulas. The row correctly stops short of arbitrary-class and frozen AddCircle naturality. Both coordinate axiom audits are exactly propext, Classical.choice, Quot.sound. Registry is 131/0 and ledger is 389 items OK. Frozen t97A04 remains 79ca854186b39183bf53490a20b5be92695e345a2c099fcf928b5ad3300ee4ec with four comment-stripped placeholders; delta zero."},
     :commit "89fb53ce6b9a77b03171ebaf1a020a60ad91a8d4",
     :changed-paths
     ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
@@ -56249,7 +56264,7 @@
      "ConstructionTargets.TorusPiOneWindingCoordinates.circleMatrixPi1Map_mk_coord_zero"
      "ConstructionTargets.TorusPiOneWindingCoordinates.circleMatrixPi1Map_mk_coord_one"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A04/torus-pi1-winding-coordinates/representative-naturality",
@@ -56347,7 +56362,7 @@
       "Descend the two formulas from explicit loop representatives to arbitrary FundamentalGroup classes, combine them as a Fin-2 function equality, and conjugate back to frozenLbar.",
       :other-consumers []}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/shared/torus-pi1-winding-coordinates",
    :acceptance
