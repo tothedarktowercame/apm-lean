@@ -91443,24 +91443,76 @@
    "Review the first of two prerequisites isolated by the spanning-tree-count STOP.",
    :other-consumers []}
   {:consumer :t99J01,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-4",
+     :fixture
+     {:path "/tmp/chosen-edge.lean",
+      :sha256
+      "cfe9dbd2335342f09d422964cdc34c9461bc6da9f596a671ab083ede8fcf727a"},
+     :commands
+     [{:cmd "lake env lean /tmp/chosen-edge.lean",
+       :exit 0,
+       :finding
+       "complete chosen-generator edge-coordinate fixture compiles; edge equivalence, endpoint and label equations, inverse laws, Symmetrify orientations, chosen-generator cardinality, and r*n total-edge cardinality use only standard axioms"}
+      {:cmd
+       "rg -n '(^|[^A-Za-z0-9_])sorry([^A-Za-z0-9_]|$)' /tmp/chosen-edge.lean",
+       :exit 1,
+       :expected-exit 1,
+       :finding "zero fixture placeholders"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :finding "131 registered statements match, 0 do not"}
+      {:cmd "readlink -f .lake/packages",
+       :exit 0,
+       :finding "/home/joe/code/apm-lean/.lake/packages"}
+      {:cmd "git status --short", :exit 0, :finding "clean"}],
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :implementation
+     {:scope
+      ["ConstructionTargets/FiniteSchreierChosenGeneratorEdgeCoordinates.lean"],
+      :declarations
+      ["labelEquiv"
+       "edgeEquiv"
+       "edgeEquiv_left"
+       "edgeEquiv_right"
+       "edgeEquiv_label"
+       "labelsFintype"
+       "labels_card"
+       "vertexFintype"
+       "vertex_card"
+       "edgesFintype"
+       "edges_card"
+       "forwardSymmEdge"
+       "reverseSymmEdge"
+       "forwardSymmEdge_orientation"
+       "reverseSymmEdge_orientation"],
+      :acceptance
+      "Implement the compiled fixture exactly in native IsFreeGroup.Generators coordinates. Preserve the product-to-Quiver.Total orientation, the exact endpoint and label equations, the forward and reverse Symmetrify constructors, and cardinal transport through Equiv.ofFreeGroupEquiv. Do not identify IsFreeGroup.of with FreeGroup.of and do not add subtree counting."},
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/chosen-edge.lean",
+       :exit 1,
+       :finding
+       "Initial object construction used ActionCategory values where the Generators synonym was expected and omitted a local Fintype instance; corrected with explicit generator objects and local instances."}
+      {:cmd "lake env lean /tmp/chosen-edge.lean",
+       :exit 1,
+       :finding
+       "The first dependent inverse proof did not eliminate ActionCategory wrappers; corrected by destructing both category-of-elements objects and substituting the endpoint equation."}
+      {:cmd "lake env lean /tmp/chosen-edge.lean",
+       :exit 1,
+       :finding
+       "Cardinality theorem calls used inferred implicit parameters as explicit arguments and Symmetrify constructors needed noncomputable; corrected with named parameters and noncomputable definitions."}],
+     :residual
+     "Implement the chosen-generator action-groupoid coordinate package; the next independent route step is the finite-arborescence total-edge count."}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/FiniteSchreierChosenGeneratorEdgeCoordinates.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/positive-index/chosen-generator-action-groupoid-coordinates",
    :acceptance
-   {:probe
-    "Compile the corrected action-groupoid edge coordinates. Construct an endpoint-preserving equivalence from IsFreeGroup.Generators (FreeGroup (Fin r)) × (FreeGroup (Fin r) ⧸ H) to Quiver.Total (IsFreeGroupoid.Generators (ActionCategory (FreeGroup (Fin r)) (FreeGroup (Fin r) ⧸ H))) by sending (j,v) to the generator arrow labelled j from v to IsFreeGroup.of j • v. Prove exact source, target, label, inverse, and Symmetrify orientation equations. Separately use Equiv.ofFreeGroupEquiv only to prove that the chosen generator type has cardinal r, then prove the total positive-arrow type has cardinal r*n. Do not assert IsFreeGroup.of agrees with FreeGroup.of, and do not choose or count a subtree.",
-    :placeholder
-    "the single sorry in apm_t99j01 and apm_t97A03_bridge_invariants_of_model",
-    :route-step
-    "t99J01 step 3 and t97A03 step 8, corrected chosen-generator coordinates for Mathlib's action-groupoid quiver",
-    :gates
-    ["canonical packages"
-     "fixture compiles"
-     "zero fixture sorry"
-     "standard-only axioms"
-     "registry check"]},
+   "Implement the compiled fixture exactly in native IsFreeGroup.Generators coordinates. Preserve the product-to-Quiver.Total orientation, the exact endpoint and label equations, the forward and reverse Symmetrify constructors, and cardinal transport through Equiv.ofFreeGroupEquiv. Do not identify IsFreeGroup.of with FreeGroup.of and do not add subtree counting.",
    :representation
    {:source
     "IsFreeGroup.Generators (FreeGroup (Fin r)) × (FreeGroup (Fin r) ⧸ H), with endpoints defined using IsFreeGroup.of",
@@ -91471,6 +91523,22 @@
    :id
    :routes-2026-10-10-finite-schreier-chosen-generator-edge-coordinates-12,
    :kind :representation-comparison,
+   :declarations
+   ["labelEquiv"
+    "edgeEquiv"
+    "edgeEquiv_left"
+    "edgeEquiv_right"
+    "edgeEquiv_label"
+    "labelsFintype"
+    "labels_card"
+    "vertexFintype"
+    "vertex_card"
+    "edgesFintype"
+    "edges_card"
+    "forwardSymmEdge"
+    "reverseSymmEdge"
+    "forwardSymmEdge_orientation"
+    "reverseSymmEdge_orientation"],
    :depends-on
    [:routes-2026-10-10-finite-schreier-coset-quiver-positive-index-3
     :routes-2026-10-10-checkpoint-topo1-after-schreier-edge-comparison-11],
