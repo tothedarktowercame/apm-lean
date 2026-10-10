@@ -90493,8 +90493,131 @@
      :review-outcomes]},
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+   :evidence
+   {:outcome :replan,
+    :seat "topo-4",
+    :commands
+    [{:cmd "bb holes/labs/topology-contract/worklist_check.bb",
+      :exit 0,
+      :finding
+      "745 items OK; 705 done, 14 superseded, 15 needs-owner, 10 blocked, 1 open"}
+     {:cmd
+      "comment-stripped placeholder census for t99J01 t92J06 t97A03 t93J03 t01A03 t97A01",
+      :exit 0,
+      :finding "counts 1, 1, 3, 1, 1, 1; total 8; delta 0"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :finding
+    {:placeholder-delta 0,
+     :placeholder-counts
+     {:t99J01 1,
+      :t92J06 1,
+      :t97A03 3,
+      :t93J03 1,
+      :t01A03 1,
+      :t97A01 1},
+     :typed-residual-change
+     ["The repaired positive-index adapter compiles from exactly one generator-count axiom, excluding the reviewed n=0 refutation."
+      "Implementation review found that Mathlib has subgroup freeness and basis-index invariance but no finite Schreier basis or arborescence-complement cardinality theorem."
+      "The generator-count construction exceeds one bounded row and is split first at the finite coset Schreier-quiver package."],
+     :infrastructure-packets
+     {:banked 0, :reviewed-stops 1, :placeholder-changing 0},
+     :review-outcomes {:pass 0, :stop 1, :closed-problems 0},
+     :routes
+     {:t99J01
+      ["three-circles pi1 coordinates"
+       "banked cover subgroup index"
+       "finite Schreier coset quiver"
+       "spanning-tree complement and Nielsen-Schreier basis"
+       "path-component and cyclic-cover boundaries"
+       "assembly"],
+      :t92J06
+      ["quotient-sheet local-homeomorph"
+       "permutation cover"
+       "Cayley-tree classification"],
+      :t97A03
+      ["double-cover gluing"
+       "fixed-model comparisons"
+       "finite Schreier coset quiver"
+       "spanning-tree complement and Nielsen-Schreier basis"
+       "assembly"],
+      :t93J03
+      ["Klein orbit classification"
+       "deck-group pi1"
+       "normal form"
+       "lifting"
+       "annulus"
+       "assembly"],
+      :t01A03
+      ["circle-wedge pi1" "separating-circle collar" "assembly"],
+      :t97A01
+      ["banked standard-N3 homeomorphism"
+       "polygon radial cover"
+       "polygon pi1 and Mayer-Vietoris"
+       "banked Smith normalization"
+       "assembly"]},
+     :preserved-refutation
+     "The contract without 0<n remains refuted at r=1,n=0,H=bottom.",
+     :ranking
+     "No consumer-closing adapter is enabled. The bounded finite coset Schreier-quiver package is the first missing part of the highest-ranked two-consumer route."},
+    :replacement-items
+    [{:consumer :t99J01,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/positive-index/coset-quiver",
+      :acceptance
+      {:probe
+       "Compile the finite Schreier coset-quiver package for 0<r, 0<n, and H.index=n: give the n-element right-coset vertex type, the r labelled generator edges and inverse edges, prove every labelled edge is a permutation of vertices, prove the underlying quiver is connected from the identity coset, and record exactly r*n positive oriented edges. Do not yet choose or count a spanning tree or identify the Nielsen-Schreier basis.",
+       :placeholder
+       "the single sorry in apm_t99j01 and apm_t97A03_bridge_invariants_of_model",
+       :route-step
+       "t99J01 step 3 and t97A03 step 8, finite positive-index Schreier coset quiver before spanning-tree count",
+       :gates
+       ["canonical packages"
+        "fixture compiles"
+        "zero fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :id
+      :routes-2026-10-10-finite-schreier-coset-quiver-positive-index-3,
+      :kind :reusable-theorem,
+      :depends-on [],
+      :current-residual
+      "Package the finite n-vertex r-labelled coset action quiver, its connectedness, and its r*n positive-edge count; spanning-tree and basis comparison remain downstream.",
+      :other-consumers [:t97A03]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:strategy
+       "Measure the bounded finite positive-index Schreier coset-quiver probe, preserve the index-zero refutation and all reviewed topology boundaries, recount six consumers and eight placeholders, then elect the spanning-tree count or a nearer adapter."},
+      :id :routes-2026-10-10-checkpoint-topo1-after-schreier-quiver-4,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:routes-2026-10-10-finite-schreier-coset-quiver-positive-index-3],
+      :current-residual
+      "Review the first bounded construction inside the shared positive-index Schreier generator count.",
+      :other-consumers []}],
+    :author "topo-4",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -90508,6 +90631,59 @@
     :routes-2026-10-10-checkpoint-topo1-after-algebra-repair-2],
    :current-residual
    "Review the repaired shared Schreier route after excluding infinite-index subgroups encoded by index zero.",
+   :other-consumers []}
+  {:consumer :t99J01,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/positive-index/coset-quiver",
+   :acceptance
+   {:probe
+    "Compile the finite Schreier coset-quiver package for 0<r, 0<n, and H.index=n: give the n-element right-coset vertex type, the r labelled generator edges and inverse edges, prove every labelled edge is a permutation of vertices, prove the underlying quiver is connected from the identity coset, and record exactly r*n positive oriented edges. Do not yet choose or count a spanning tree or identify the Nielsen-Schreier basis.",
+    :placeholder
+    "the single sorry in apm_t99j01 and apm_t97A03_bridge_invariants_of_model",
+    :route-step
+    "t99J01 step 3 and t97A03 step 8, finite positive-index Schreier coset quiver before spanning-tree count",
+    :gates
+    ["canonical packages"
+     "fixture compiles"
+     "zero fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id
+   :routes-2026-10-10-finite-schreier-coset-quiver-positive-index-3,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo1-after-schreier-index-repair-3],
+   :current-residual
+   "Package the finite n-vertex r-labelled coset action quiver, its connectedness, and its r*n positive-edge count; spanning-tree and basis comparison remain downstream.",
+   :other-consumers [:t97A03]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:strategy
+    "Measure the bounded finite positive-index Schreier coset-quiver probe, preserve the index-zero refutation and all reviewed topology boundaries, recount six consumers and eight placeholders, then elect the spanning-tree count or a nearer adapter."},
+   :id :routes-2026-10-10-checkpoint-topo1-after-schreier-quiver-4,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:routes-2026-10-10-finite-schreier-coset-quiver-positive-index-3
+    :routes-2026-10-10-checkpoint-topo1-after-schreier-index-repair-3],
+   :current-residual
+   "Review the first bounded construction inside the shared positive-index Schreier generator count.",
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
