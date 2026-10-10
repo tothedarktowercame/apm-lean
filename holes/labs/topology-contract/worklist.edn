@@ -100632,6 +100632,21 @@
       :output "131 registered statements match, 0 do not"}
      {:cmd "git diff --check", :exit 0}
      {:cmd "git status --short", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791674747262-3281-addcfbb1",
+     :commands
+     ["git show and diff-tree 4bc16f8fbd0732b589f19201edcaae4452fd3375"
+      "sha256sum /tmp/polygon-boundary-three-loop-surjectivity-reduction.lean"
+      "lake build ConstructionTargets.PolygonBoundaryThreeLoopSurjectivityReduction"
+      "lake env lean /tmp/polygon-boundary-three-loop-surjectivity-reduction.lean"
+      "lake env lean /dev/stdin with fresh axiom checks"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped placeholder and SHA-256 recomputation"
+      "git diff-tree --check 4bc16f8fbd0732b589f19201edcaae4452fd3375^ 4bc16f8fbd0732b589f19201edcaae4452fd3375"],
+     :finding
+     "Recorded one-file commit is authored by topo-2 and is byte-identical to the frozen fixture; all six N3 and torus-crosscap edge cases have correct loop witnesses, torus-crosscap edges 2 and 3 reverse their parameters, and the quotient-representative reductions establish surjectivity in the required direction; both frozen theorems use only standard axioms, placeholder counts are zero, and the registry reports 131 matched and 0 mismatched."},
     :commit "4bc16f8fbd0732b589f19201edcaae4452fd3375",
     :changed-paths
     ["ConstructionTargets/PolygonBoundaryThreeLoopSurjectivityReduction.lean"],
@@ -100648,7 +100663,7 @@
      "Defined literal points on all three nested loops and carrier conversion, proved all six edge classes lie in each comparison-map range with reversed torus-crosscap parameters where required, and reduced both surjectivity results to the common six-edge Circle cover."},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/PolygonBoundaryThreeLoopSurjectivityReduction.lean"],
    :dag-node
@@ -100804,7 +100819,7 @@
       "Every one of the six canonical edge representatives lies in the image of each specialized three-loop map, with reversed parameters for the torus-crosscap a and b partners; surjectivity of both maps follows from the common six-edge cover of Circle."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -103898,7 +103913,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -103915,7 +103930,10 @@
     "If every Circle point is circleEdgePoint j t for some j : Fin 6 and t in the closed unit interval, then n3ThreeLoops is surjective.",
     :area "polygon-surface-open-cover",
     :proved-in
-    :routes-2026-10-10-polygon-boundary-three-loop-surjectivity-reduction-62},
+    :routes-2026-10-10-polygon-boundary-three-loop-surjectivity-reduction-62,
+    :banked-by
+    :routes-2026-10-10-polygon-boundary-three-loop-surjectivity-reduction-62,
+    :banked-commit "4bc16f8fbd0732b589f19201edcaae4452fd3375"},
    :id
    :lemma-polygonboundarythreeloopsurjectivityreduction-surjective-n3threeloops-of-edge-co,
    :kind :lemma,
@@ -103924,7 +103942,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -103941,7 +103959,10 @@
     "If every Circle point is circleEdgePoint j t for some j : Fin 6 and t in the closed unit interval, then torusCrosscapThreeLoops is surjective.",
     :area "polygon-surface-open-cover",
     :proved-in
-    :routes-2026-10-10-polygon-boundary-three-loop-surjectivity-reduction-62},
+    :routes-2026-10-10-polygon-boundary-three-loop-surjectivity-reduction-62,
+    :banked-by
+    :routes-2026-10-10-polygon-boundary-three-loop-surjectivity-reduction-62,
+    :banked-commit "4bc16f8fbd0732b589f19201edcaae4452fd3375"},
    :id
    :lemma-polygonboundarythreeloopsurjectivityreduction-surjective-toruscrosscapthreeloops,
    :kind :lemma,
