@@ -87798,8 +87798,54 @@
    "Review one consumer uptake and one corrected two-consumer representation comparison.",
    :other-consumers []}
   {:consumer :t99J01,
+   :stop-count 1,
+   :evidence
+   {:residual
+    "Provide a placeholder-free typed prerequisite fixing the chosen-component subtype and topology, restricted cover map, sheet-count definition, ThreeCircles connectivity instances, component-cover theorem, bounds, induced-pi1 bijection, and MulEquiv orientation; then retry the final adapter.",
+    :outcome :stop,
+    :warnings
+    [{:kind :specification-boundary,
+      :message
+      "The generic helper definitions in the fixture do not fix the accepted t99j01 API, and its only substantive result is axiomatized."}],
+    :disposition :stop,
+    :axioms
+    ["propext"
+     "Classical.choice"
+     "Quot.sound"
+     "T99J01PathComponentRestrictionProbe.pathComponentRestrictionPackage"],
+    :author "topo-2",
+    :reason
+    "The frozen fixture is not a standard-only implementation specification for the accepted API. It defines generic probe-local componentAt, componentCoverMap, and componentSheets, then assumes the entire covering restriction and pi1-bijectivity result as pathComponentRestrictionPackage. None of the nine accepted t99j01 declarations has a Lean signature in the fixture or ConstructionTargets, including the orientation and type of t99j01ComponentFundamentalGroupEquiv and the instance form of the two ThreeCircles connectivity declarations. Implementing those names from prose would invent the public interface and conceal the nonstandard fixture axiom. A placeholder-free typed prerequisite must expose the restriction theorem and exact accepted signatures before this final adapter can be implemented.",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/t99j01-path-component-sheet-restriction-probe.lean",
+      :exit 0,
+      :finding "The fixture hash matches the recorded hash."}
+     {:cmd
+      "rg for all nine accepted declaration signatures in ConstructionTargets and the fixture",
+      :exit 1,
+      :expected-exit 1,
+      :finding
+      "None of the nine accepted declarations has a frozen or banked signature."}
+     {:cmd
+      "lake env lean /tmp/t99j01-path-component-sheet-restriction-probe.lean",
+      :exit 0,
+      :finding
+      "The fixture compiles, but pathComponent_isKSheetedCover depends on pathComponentRestrictionPackage."}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :fixture
+    {:path "/tmp/t99j01-path-component-sheet-restriction-probe.lean",
+     :sha256
+     "3931266497ef83433fbbf4d01f17aa1c9a301ab3a69c52ca38aea6f20bcd3b63",
+     :sorry-count 0,
+     :axiom-count 1,
+     :proof-placeholder-count 1},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/T99J01PathComponentCoverRestriction.lean"],
    :dag-node
