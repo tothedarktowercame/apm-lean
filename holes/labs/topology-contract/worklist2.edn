@@ -62466,9 +62466,47 @@
   {:bounded-exception
    "single-consumer reconstructed planar polar formula for the t02A03 complement interpolation",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:residual
+     "Implement the reconstructed planar polar formula in the scoped module; then combine both endpoint formulas to evaluate the interpolation norm and continue to the exact normal-coordinate formula and deleted-core exclusion.",
+     :outcome :go,
+     :warnings
+     ["/tmp/t02a03_geometric_tube_cover.lean:786:38: unnecessarySeqFocus linter warning in a previously banked theorem"],
+     :acceptance
+     {:declaration
+      "apm_t02a03_leftTubePlanarComplex_torusInverse_coordinates",
+      :type
+      "forall p : apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubePlanarComplex ⟨(apm_t02a03_leftTubeTorusInverse (apm_t02a03_leftTubeTorusCoordinates p)).1, (apm_t02a03_leftTubeTorusInverse (apm_t02a03_leftTubeTorusCoordinates p)).2.1⟩ = (1 + (1 / 8 : Real) * ((apm_t02a03_leftTubeNormalAngular p : Circle) : Complex).re) • ((apm_t02a03_leftTubeAngular ⟨p.1, p.2.1⟩ : Circle) : Complex)"},
+     :commands
+     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "apm_t02a03_leftTubePlanarComplex_torusInverse_coordinates compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
+       :exit 0}
+      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "dc062176b19d0f11197fc6c9636b8016a60bff441916fc4bf88d20b87e3b8b04  /tmp/t02a03_geometric_tube_cover.lean"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :fixture
+     {:path "/tmp/t02a03_geometric_tube_cover.lean",
+      :sha256
+      "dc062176b19d0f11197fc6c9636b8016a60bff441916fc4bf88d20b87e3b8b04"},
+     :finding
+     "The reconstructed planar polar formula is complete and placeholder-free. Direct coordinate expansion identifies the inverse-after-forward planar coordinate with the source angular direction scaled by 1 + (1/8) times the normal direction's real part.",
+     :implementation
+     {:scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
+      :declarations
+      ["ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_leftTubePlanarComplex_torusInverse_coordinates"]},
+     :seat "topo-8"}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/left-tube-reconstructed-planar-polar",
    :acceptance
@@ -62484,6 +62522,8 @@
    :id
    :routes-2026-10-10-t02a03-left-tube-reconstructed-planar-polar-topo2-r1,
    :kind :reusable-theorem,
+   :declarations
+   ["ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_leftTubePlanarComplex_torusInverse_coordinates"],
    :depends-on
    [:routes-2026-10-10-checkpoint-topo2-r5
     :routes-2026-10-10-t02a03-left-tube-planar-polar-decomposition-topo2-r1],
