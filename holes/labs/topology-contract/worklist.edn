@@ -94256,13 +94256,43 @@
    "For two points in the closed unit square, use the explicit coordinate action and interval bounds to force the vertical coordinate to -1, 0, or 1 and enumerate the resulting interior, edge, and corner coincidences.",
    :other-consumers []}
   {:bounded-exception
+   "This single-consumer pair of elementary interval lemmas is the exact arithmetic case split required to turn the banked coordinate action into the final finite edge-and-corner orbit disjunction.",
+   :consumer :t93J03,
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/UnitIntervalIntegerClassification.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/plane-action-square-orbit-classification/unit-interval-integer-cases",
+   :acceptance
+   {:implementation
+    "Prove two closed-unit-interval classification theorems. First, if x,y are in [0,1] and y=(m:Int)+x, prove exactly the m=-1 left/right endpoint case, m=0 equality case, or m=1 opposite endpoint case. Second, if y=(m:Int)-x, prove exactly the m=0 (0,0) corner, m=1 reflected formula y=1-x, or m=2 (1,1) corner. Derive integer bounds by exact_mod_cast and split them with omega. Do not mention the Klein action, form a quotient, or compare EqvGen relations.",
+    :placeholder "the single sorry in apm_t93j03",
+    :route-step
+    "t93J03 step 1b.4, finite unit-interval arithmetic used by the square orbit edge/corner classification",
+    :fixture "/tmp/unit-interval-integer-classification.lean",
+    :fixture-sha256
+    "d3b6b28f437d762a3136d344cdbb762b04c58b3e31d1bd4f93deeb66872a85aa",
+    :gates
+    ["lake build ConstructionTargets.UnitIntervalIntegerClassification"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-10-unit-interval-integer-classification-27,
+   :kind :reusable-theorem,
+   :depends-on [:routes-2026-10-10-klein-square-representative-26],
+   :current-residual
+   "Extract integer coordinates from coordinateEquiv g, use vertical translation classification to force n=-1,0,1, reduce the inversion sign in those three cases, and apply translation or reflection classification to enumerate the square orbit disjunction.",
+   :other-consumers []}
+  {:bounded-exception
    "This single-consumer geometric lemma is the next ready dependency of the elected one-placeholder t93J03 route; the coordinate algebra it needs is now banked.",
    :consumer :t93J03,
    :implements-lemma :lemma-kleinplaneaction-squareorbitclassification,
    :evidence
    {:probe
     {:residual
-     "Every plane orbit now has a compiled half-open, hence closed, unit-square representative. The original row has one bounded remaining obligation: classify same-orbit pairs already in the closed square, including the edge and corner cases.",
+     "Closed-square representatives and both complete one-dimensional integer case splits now compile. The original row is reduced to substituting the group coordinates, forcing the vertical shift to -1, 0, or 1, simplifying the corresponding inversion sign, and assembling the finite same-orbit disjunction.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
@@ -94273,53 +94303,57 @@
        :consumers [:t93J03],
        :depends-on
        ["KleinPlaneAffineAction.planeAction"
-        "KleinSquareRepresentative.exists_closedSquare_smul"]}],
+        "KleinSquareRepresentative.exists_closedSquare_smul"
+        "UnitIntervalIntegerClassification.translation"
+        "UnitIntervalIntegerClassification.reflection"]}],
      :prerequisite
      {:bounded-exception
-      "This single-consumer floor-normalization theorem is the existence half of the elected square-orbit classification and leaves only the finite classification of coincidences between points already in the square.",
+      "This single-consumer pair of elementary interval lemmas is the exact arithmetic case split required to turn the banked coordinate action into the final finite edge-and-corner orbit disjunction.",
       :consumer :t93J03,
       :phase :implementation,
       :state :open,
-      :scope ["ConstructionTargets/KleinSquareRepresentative.lean"],
+      :scope
+      ["ConstructionTargets/UnitIntervalIntegerClassification.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/plane-action-square-orbit-classification/square-representative",
+      "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/plane-action-square-orbit-classification/unit-interval-integer-cases",
       :acceptance
       {:implementation
-       "For every p : Real times Real, explicitly choose an integer vertical coordinate n=-floor(p.2), compute the corresponding inversion sign from the banked action, choose m=-floor(sign*p.1), and use coordinateEquiv.symm to construct g : PresentedKleinGroup. Prove g • p lies in the half-open unit square and hence the closed unit square. Do not classify pairs of square points, form a quotient, or compare EqvGen relations.",
+       "Prove two closed-unit-interval classification theorems. First, if x,y are in [0,1] and y=(m:Int)+x, prove exactly the m=-1 left/right endpoint case, m=0 equality case, or m=1 opposite endpoint case. Second, if y=(m:Int)-x, prove exactly the m=0 (0,0) corner, m=1 reflected formula y=1-x, or m=2 (1,1) corner. Derive integer bounds by exact_mod_cast and split them with omega. Do not mention the Klein action, form a quotient, or compare EqvGen relations.",
        :placeholder "the single sorry in apm_t93j03",
        :route-step
-       "t93J03 step 1b.3, existence of a closed-square representative before boundary coincidence classification",
-       :fixture "/tmp/klein-square-representative.lean",
+       "t93J03 step 1b.4, finite unit-interval arithmetic used by the square orbit edge/corner classification",
+       :fixture "/tmp/unit-interval-integer-classification.lean",
        :fixture-sha256
-       "2fbe27a38611477d9007a8361b4b6b58e2445edbc14b5d1351449065af545035",
+       "d3b6b28f437d762a3136d344cdbb762b04c58b3e31d1bd4f93deeb66872a85aa",
        :gates
-       ["lake build ConstructionTargets.KleinSquareRepresentative"
+       ["lake build ConstructionTargets.UnitIntervalIntegerClassification"
         "fixture compiles"
         "zero source and fixture sorry"
         "standard-only axioms"
         "registry check"]},
-      :id :routes-2026-10-10-klein-square-representative-26,
+      :id :routes-2026-10-10-unit-interval-integer-classification-27,
       :kind :reusable-theorem,
-      :depends-on [:routes-2026-10-10-klein-plane-affine-action-25],
+      :depends-on [:routes-2026-10-10-klein-square-representative-26],
       :current-residual
-      "For two points in the closed unit square, use the explicit coordinate action and interval bounds to force the vertical coordinate to -1, 0, or 1 and enumerate the resulting interior, edge, and corner coincidences.",
+      "Extract integer coordinates from coordinateEquiv g, use vertical translation classification to force n=-1,0,1, reduce the inversion sign in those three cases, and apply translation or reflection classification to enumerate the square orbit disjunction.",
       :other-consumers []},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
-     [{:cmd "lake build ConstructionTargets.KleinPlaneAffineAction",
+     [{:cmd "lake build ConstructionTargets.KleinSquareRepresentative",
        :exit 0,
        :finding
-       "the banked affine action and its coordinate prerequisites compile canonically"}
-      {:cmd "lake env lean /tmp/klein-square-representative.lean",
-       :exit 0,
-       :finding
-       "both half-open and closed fundamental-square representative theorems compile with standard axioms"}
-      {:cmd "sha256sum /tmp/klein-square-representative.lean",
-       :exit 0,
-       :finding
-       "2fbe27a38611477d9007a8361b4b6b58e2445edbc14b5d1351449065af545035"}
+       "the banked affine action and closed-square representative theorem compile canonically"}
       {:cmd
-       "rg -n \"\\b(sorry|admit)\\b\" /tmp/klein-square-representative.lean",
+       "lake env lean /tmp/unit-interval-integer-classification.lean",
+       :exit 0,
+       :finding
+       "the complete translation and reflection classifications on the closed unit interval compile with standard axioms"}
+      {:cmd "sha256sum /tmp/unit-interval-integer-classification.lean",
+       :exit 0,
+       :finding
+       "d3b6b28f437d762a3136d344cdbb762b04c58b3e31d1bd4f93deeb66872a85aa"}
+      {:cmd
+       "rg -n \"\\b(sorry|admit)\\b\" /tmp/unit-interval-integer-classification.lean",
        :exit 1,
        :expected-exit 1,
        :finding "no placeholders"}
@@ -94327,20 +94361,16 @@
        :exit 0,
        :finding "131 registered statements match, 0 do not"}
       {:cmd "git status --short", :exit 0, :finding "clean"}],
-     :diagnostic-history
-     [{:cmd "lake env lean /tmp/klein-square-representative.lean",
-       :exit 1,
-       :finding
-       "the initial floor inequalities left casts of negated Int.floor terms opaque to linarith; push_cast normalized those four expressions and the standard floor bounds closed every coordinate inequality"}],
+     :diagnostic-history [],
      :fixture
-     {:path "/tmp/klein-square-representative.lean",
+     {:path "/tmp/unit-interval-integer-classification.lean",
       :sha256
-      "2fbe27a38611477d9007a8361b4b6b58e2445edbc14b5d1351449065af545035",
+      "d3b6b28f437d762a3136d344cdbb762b04c58b3e31d1bd4f93deeb66872a85aa",
       :interface
-      "exists_halfOpenSquare_smul sends every point of Real times Real into [0,1) times [0,1) by an explicitly constructed PresentedKleinGroup element using integer floors; exists_closedSquare_smul gives the required closed-square representative."},
+      "translation classifies y=m+x with x,y in [0,1] into the three shifts m=-1,0,1 and proves the forced endpoint equalities; reflection classifies y=m-x into m=0,1,2 and proves the two corner degeneracies and the reflected-edge formula y=1-x."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/plane-action-square-orbit-classification",
@@ -94364,7 +94394,8 @@
     :routes-2026-10-10-checkpoint-topo1-after-klein-coordinate-normal-form-19
     :routes-2026-10-10-klein-coordinate-inversion-power-24
     :routes-2026-10-10-klein-plane-affine-action-25
-    :routes-2026-10-10-klein-square-representative-26],
+    :routes-2026-10-10-klein-square-representative-26
+    :routes-2026-10-10-unit-interval-integer-classification-27],
    :current-residual
    "Turn unique integer-pair normal forms into the explicit affine action formula, choose a closed-square representative of every orbit, and enumerate precisely the boundary coincidences.",
    :other-consumers []}
@@ -94914,7 +94945,9 @@
    [:lemma-kleinpresentedgroup-coordinatenormalform
     :lemma-kleincoordinateinversionpower-action-toadd
     :lemma-kleinplaneaffineaction-planeaction
-    :lemma-kleinsquarerepresentative-exists-closedsquare-smul],
+    :lemma-kleinsquarerepresentative-exists-closedsquare-smul
+    :lemma-unitintervalintegerclassification-translation
+    :lemma-unitintervalintegerclassification-reflection],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -95161,6 +95194,31 @@
    :id :lemma-kleinsquarerepresentative-exists-halfopensquare-smul,
    :kind :lemma,
    :depends-on [:lemma-kleinplaneaffineaction-coordinateact-mul],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "UnitIntervalIntegerClassification.translation"},
+   :lemma
+   {:name "UnitIntervalIntegerClassification.translation",
+    :reported-by []},
+   :id :lemma-unitintervalintegerclassification-translation,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "UnitIntervalIntegerClassification.reflection"},
+   :lemma
+   {:name "UnitIntervalIntegerClassification.reflection",
+    :reported-by []},
+   :id :lemma-unitintervalintegerclassification-reflection,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
