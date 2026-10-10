@@ -1376,4 +1376,26 @@ theorem coordinateContDiffAt_reaches_contMDiff :
       (quotientCoordinateContDiffAt_gives_contDiffWithinAt
         sphereProjectionQuotientCoordinateContDiffAt))
 
+/-- A continuous antipodal-even map on the two-sphere descends continuously
+to the frozen real-projective quotient. -/
+theorem sphereProjectionEvenMapDescent
+    {Y : Type*} [TopologicalSpace Y] (f : C(Sphere 2, Y))
+    (heven : ∀ p, f (sphereAntipodal p) = f p) :
+    ∃ g : C(Space ℝ 2, Y), ∀ p, g (sphereProjection 2 p) = f p := by
+  let q : C(Sphere 2, Space ℝ 2) :=
+    ⟨sphereProjection 2, continuous_sphereProjection⟩
+  have hfac : Function.FactorsThrough f q := by
+    intro p q hpq
+    rcases (sphereProjection_eq_iff p q).mp hpq with h | h
+    · simpa [h]
+    · simpa [h] using (heven p).symm
+  have hq : Topology.IsQuotientMap q := by
+    exact sphereProjectionQuotientAuthority
+  let g : C(Space ℝ 2, Y) :=
+    hq.lift f hfac
+  refine ⟨g, ?_⟩
+  intro p
+  exact DFunLike.congr_fun
+    (hq.lift_comp f hfac) p
+
 end ConstructionTargets.RealProjectiveSmoothTarget
