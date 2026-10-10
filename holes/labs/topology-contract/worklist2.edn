@@ -58062,6 +58062,22 @@
      "The frozen right-core range with only the Euclidean origin deleted",
      :direction
      "Exact set equality from the source core-complement representation to the target singleton-deleted right-core representation"},
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791625603358-1558-7655e45b",
+     :commands
+     ["git show/diff-tree recorded implementation and transition"
+      "sha256sum authenticated fixture"
+      "lake env lean fixture and recorded-identical target"
+      "lake build ConstructionTargets.T02A03GeometricTubeCover"
+      "qualified #print and axiom audit"
+      "fresh frozen-geometry deleted-locus compatibility check"
+      "frozen consumer hash and placeholder census"
+      "python3 scripts/statement-registry.py check"
+      "bb worklist_check.bb on committed ledger"],
+     :finding
+     "PASS: codex-7 independently reviewed topo-6 commit 3804eae6. Exact implementation scope is T02A03GeometricTubeCover.lean; transition ab66bc4d is ledger-only. Fixture SHA-256 matches, and fixture, target, and 8240-job focused build pass with zero target placeholders. The representation equality has the required direction from rightCore range minus the entire leftCore range to rightCore range minus the singleton origin. Both inclusions correctly use the banked exact intersection theorem, so within the right core left-core membership is equivalent to origin membership. A fresh unfold/type-check confirms exact compatibility with the frozen consumer geometry. The theorem remains set-level and does not claim an arc model, meridional replacement, deformation, overlap gluing, or homotopy equivalence. Axioms are exactly propext, Classical.choice, Quot.sound. Frozen t02A03 hash is b123eca3 with one placeholder; registry is 131/0 and the committed ledger validates."},
     :commit "3804eae6f1cb74ac38bf3c169b218fa96c6c1116",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
@@ -58072,7 +58088,7 @@
     :declarations
     ["ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_rightCore_diff_leftCore"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/geometric-right-core-deleted-locus",
@@ -58160,7 +58176,7 @@
       "Construct the meridional replacement of the deleted origin inside the left-tube complement and compatible tube deformations.",
       :other-consumers []}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/closure",
    :acceptance
