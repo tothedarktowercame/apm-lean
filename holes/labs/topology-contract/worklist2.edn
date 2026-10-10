@@ -61081,51 +61081,61 @@
    "single-consumer bundled continuous inverse coordinate map for the t02A03 punctured left tube",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/t02a03_geometric_tube_cover.lean",
-      :sha256
-      "08bdba085497bf8fd8aefa9fc4c8abeaf496e021f3b64775a8017ca2e15e592b"},
-     :commands
-     [{:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "08bdba085497bf8fd8aefa9fc4c8abeaf496e021f3b64775a8017ca2e15e592b  /tmp/t02a03_geometric_tube_cover.lean"}
-      {:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "apm_t02a03_leftTubeTorusInverse compiled without warnings; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}
-      {:cmd
-       "rg -n \"apm_t02a03_leftTubeTorus(Inverse|Point_not_mem_leftCore)\" ConstructionTargets/T02A03GeometricTubeCover.lean /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "The canonical module contains the core-exclusion prerequisite; only the fixture contains apm_t02a03_leftTubeTorusInverse."}],
-     :finding
-     "The complete placeholder-free fixture bundles the explicit reconstruction as a ContinuousMap from Circle times Circle into apm_t02a03_LeftTubeMinusCore. Its value uses the canonical tube-membership and core-exclusion proofs, and its continuity follows directly from apm_t02a03_continuous_leftTubeTorusPoint. The construction is ready for direct promotion after the canonical core-exclusion theorem.",
-     :implementation
-     {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
-      :declarations ["apm_t02a03_leftTubeTorusInverse"],
-      :acceptance
-      {:type "C(Circle × Circle, apm_t02a03_LeftTubeMinusCore)",
-       :axioms ["propext" "Classical.choice" "Quot.sound"],
-       :placement
-       "Immediately after apm_t02a03_leftTubeTorusPoint_not_mem_leftCore",
-       :gates
-       ["module compiles without warnings"
-        "scoped file contains no sorry token"
-        "statement registry matches"]}},
-     :residual
-     "Promote the compiled inverse ContinuousMap into ConstructionTargets/T02A03GeometricTubeCover.lean. Then prove the forward-after-inverse composite homotopic to the torus identity and the inverse-after-forward composite homotopic to the complement identity, and assemble the HomotopyEquiv."}},
+   {:placeholder-delta
+    {:path "ConstructionTargets/T02A03GeometricTubeCover.lean",
+     :before 0,
+     :after 0,
+     :delta 0},
+    :git-author "Joe Corneli <holtzermann17@gmail.com>",
+    :residual
+    "Prove the forward-after-inverse composite homotopic to the torus identity and the inverse-after-forward composite homotopic to the complement identity, then assemble the torus HomotopyEquiv.",
+    :type "C(Circle × Circle, apm_t02a03_LeftTubeMinusCore)",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not",
+     :declaration-type-sha256
+     "d701220807833d99e6524833638c109550eb4b0994dc42fe5e0cb31c5b3357e9"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+      :exit 0,
+      :output
+      "08bdba085497bf8fd8aefa9fc4c8abeaf496e021f3b64775a8017ca2e15e592b  /tmp/t02a03_geometric_tube_cover.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeCover.lean",
+      :exit 0}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeCover.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "lake env lean /tmp/t02a03_geometric_tube_cover.lean | rg \"leftTubeTorusInverse\"",
+      :exit 0,
+      :output
+      "'apm_t02a03_leftTubeTorusInverse' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd "git commit -m \"Bank t02A03 left-tube inverse map\"",
+      :exit 0,
+      :output
+      "[master 83102315] Bank t02A03 left-tube inverse map; 1 file changed, 9 insertions(+)"}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "8310231587dfe0ec8fd2a29d625485c82977192e",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
+    :declaration "apm_t02a03_leftTubeTorusInverse",
+    :fixture
+    {:path "/tmp/t02a03_geometric_tube_cover.lean",
+     :sha256
+     "08bdba085497bf8fd8aefa9fc4c8abeaf496e021f3b64775a8017ca2e15e592b"},
+    :finding
+    "Banked the continuous inverse-coordinate realization as a ContinuousMap from Circle times Circle into the exact punctured-left-tube subtype, using the established tube-membership and core-exclusion proofs.",
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-torus-inverse-map",
    :acceptance
