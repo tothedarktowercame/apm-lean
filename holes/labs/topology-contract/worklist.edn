@@ -98913,6 +98913,20 @@
       :exit 0,
       :finding "clean worktree after commit"}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791665628935-2954-6b83a0fc",
+     :commands
+     ["git show and diff-tree on b99facc86aa5f5e43482214dc9180225719ac395"
+      "sha256sum frozen fixture"
+      "lake build ConstructionTargets.PolygonOuterOpenRestrictedQuotient"
+      "lake env lean frozen fixture"
+      "comment-stripped placeholder counts"
+      "python3 scripts/statement-registry.py check"
+      "git diff-tree --check"],
+     :finding
+     "PASS: recorded commit is authored by topo-2 and changes only ConstructionTargets/PolygonOuterOpenRestrictedQuotient.lean; fixture hash matches; the full quotient preimage equality is proved in both directions using radius preservation through EqvGen; restrictPreimage targets outerOpen, Homeomorph.setCongr transports exactly from the preimage subtype to Outer, quotient-map composition has the correct orientation, and the representative formula matches the frozen interface; source and fixture have zero placeholders; fixture reports only propext, Classical.choice, and Quot.sound; registry reports 131 matches and zero mismatches."},
     :commit "b99facc86aa5f5e43482214dc9180225719ac395",
     :changed-paths
     ["ConstructionTargets/PolygonOuterOpenRestrictedQuotient.lean"],
@@ -98923,7 +98937,7 @@
      :sorry-count 0},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/PolygonOuterOpenRestrictedQuotient.lean"],
    :dag-node
@@ -99057,7 +99071,7 @@
       "The quotient map restricted to the saturated outer radial source is a quotient map onto outerOpen, after the canonical source-subtype homeomorphism, with its representative formula."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -101403,7 +101417,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -101420,7 +101434,10 @@
     "For a radius-preserving disk relation, the quotient map restricted to the outer radial source is a quotient map onto the outerOpen subtype.",
     :area "polygon-surface-open-cover",
     :proved-in
-    :routes-2026-10-10-polygon-outer-open-restricted-quotient-46},
+    :routes-2026-10-10-polygon-outer-open-restricted-quotient-46,
+    :banked-by
+    :routes-2026-10-10-polygon-outer-open-restricted-quotient-46,
+    :banked-commit "b99facc86aa5f5e43482214dc9180225719ac395"},
    :id
    :lemma-polygonouteropenrestrictedquotient-namedouterquotientmap-isquotientmap,
    :kind :lemma,
