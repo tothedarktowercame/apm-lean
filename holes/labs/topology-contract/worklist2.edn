@@ -64034,6 +64034,21 @@
       :exit 0,
       :output "0aa25e1b Bank t97A04 frozen pi1 coordinate map"}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791655311126-2623-a2e41f28",
+     :commands
+     ["git show/diff-tree/show --check 0aa25e1b8d9bd441e618e18e01c2dedbfbd4c202"
+      "sha256sum /tmp/t97a04_frozen_h1_coordinate.lean"
+      "lake env lean /tmp/t97a04_frozen_h1_coordinate.lean"
+      "lake env lean ConstructionTargets/T97A04FrozenH1Coordinate.lean"
+      "lake build ConstructionTargets.T97A04FrozenH1Coordinate"
+      "python3 scripts/statement-registry.py check --rev 0aa25e1b8d9bd441e618e18e01c2dedbfbd4c202"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "recompute recorded statement hash and comment-stripped placeholder counts"],
+     :finding
+     "PASS: reviewer codex-7 independently reviewed topo-6 commit 0aa25e1b; exact scope is 36 inserted lines in ConstructionTargets/T97A04FrozenH1Coordinate.lean only. Fixture SHA-256 951b3fe39b5d167b4c11f3d28035ee5cdb47519679b5580c4047336a8cb94a4f matches. Fixture and target compile with standard axioms [propext, Classical.choice, Quot.sound], focused build completes 8291 jobs, registry is 131/0, and worklist is 499 OK. frozenMatrixAddHom implements the frozen matrix [[2,1],[-1,1]] as (x,y) maps to (2x+y,y-x); AddMonoidHom.toMultiplicative preserves that representation exactly; and frozenLbarPi1Map_coordinateMap has the consumer-required orientation coordinateMap(pi1Coord p) = pi1Coord(map p), obtained correctly by symmetry from frozenLbarPi1Map_naturality. Statement SHA-256 is eab166a4c4d44b9eb15efa84c7417884cfa2d00db2965326bffda82d43496659; target and fixture placeholders are 0, while consumer placeholders remain 4."},
     :commit "0aa25e1b8d9bd441e618e18e01c2dedbfbd4c202",
     :changed-paths
     ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"],
@@ -64051,7 +64066,7 @@
       "ConstructionTargets.T97A04FrozenH1Coordinate.frozenLbarPi1Map_coordinateMap"]},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t97A04/frozen-pi1-coordinate-map",
    :acceptance
@@ -64152,7 +64167,7 @@
      "The full apm_t97A04_bridge_2 proof remains absent. The compiled prerequisite packages the frozen matrix [[2,1],[-1,1]] as a monoid coordinate map and restates frozenLbarPi1Map_naturality in exactly the orientation required by h1_coordinate_eq_of_fundamentalGroup_coordinate_eq. This removes the remaining representation mismatch before instantiating finite-free Hurewicz naturality.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t97A04/h1-bridge-assembly",
    :acceptance
@@ -65186,7 +65201,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -65202,7 +65217,10 @@
     :type
     "forall p : FundamentalGroup FrozenTorus (0, 0), frozenMatrixCoordinateMap (frozenTorusPi1Coord p) = frozenTorusPi1Coord (frozenLbarPi1Map p)",
     :proved-in
-    :routes-2026-10-10-t97a04-frozen-pi1-coordinate-map-topo2-r1},
+    :routes-2026-10-10-t97a04-frozen-pi1-coordinate-map-topo2-r1,
+    :banked-by
+    :routes-2026-10-10-t97a04-frozen-pi1-coordinate-map-topo2-r1,
+    :banked-commit "0aa25e1b8d9bd441e618e18e01c2dedbfbd4c202"},
    :id
    :lemma-constructiontargets-t97a04frozenh1coordinate-frozenlbarpi1map-coordinatemap,
    :kind :lemma,
