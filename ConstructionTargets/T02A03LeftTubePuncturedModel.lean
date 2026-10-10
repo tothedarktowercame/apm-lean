@@ -81,4 +81,16 @@ theorem apm_t02a03_leftTubeNormalAngular_ne_zero
     ((apm_t02a03_leftTubeNormalAngular p : Circle) : ℂ) ≠ 0 := by
   exact Circle.coe_ne_zero _
 
+theorem apm_t02a03_leftTubeNormalComplex_eq_norm_smul_direction
+    (p : apm_t02a03_LeftTubeMinusCore) :
+    apm_t02a03_leftTubeNormalComplex ⟨p.1, p.2.1⟩ =
+      (‖apm_t02a03_leftTubeNormalComplex ⟨p.1, p.2.1⟩‖ : ℝ) •
+        ((apm_t02a03_leftTubeNormalAngular p : Circle) : ℂ) := by
+  change apm_t02a03_leftTubeNormalComplex ⟨p.1, p.2.1⟩ =
+    ‖apm_t02a03_leftTubeNormalComplex ⟨p.1, p.2.1⟩‖ •
+      NormedSpace.normalize
+        (apm_t02a03_leftTubeNormalComplex ⟨p.1, p.2.1⟩)
+  exact (NormedSpace.norm_smul_normalize
+    (apm_t02a03_leftTubeNormalComplex ⟨p.1, p.2.1⟩)).symm
+
 end ConstructionTargets.T02A03LeftTubePuncturedModel
