@@ -35,4 +35,15 @@ noncomputable def frozenTorusH1ModuleIsoFinTwo :
   singularHomologyModuleIsoOfGroupIso (TopCat.of FrozenTorus) 1 _
     frozenTorusH1GroupIsoFinTwo
 
+noncomputable def frozenTorusH1MulEquivFinTwo :
+    Multiplicative
+        (ConstructionTargets.DegreeOneHurewiczMap.IntegralH1 FrozenTorus) ≃*
+      Multiplicative (Fin 2 → ℤ) :=
+  AddEquiv.toMultiplicative
+    { toFun := frozenTorusH1GroupIsoFinTwo.hom
+      invFun := frozenTorusH1GroupIsoFinTwo.inv
+      left_inv := frozenTorusH1GroupIsoFinTwo.hom_inv_id_apply
+      right_inv := frozenTorusH1GroupIsoFinTwo.inv_hom_id_apply
+      map_add' := frozenTorusH1GroupIsoFinTwo.hom.hom.map_add }
+
 end ConstructionTargets.T97A04FrozenH1Coordinate
