@@ -55616,6 +55616,20 @@
       :exit 0,
       :output
       "ConstructionTargets/TorusPiOneWindingCoordinates.lean"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791608546237-1166-62262c55",
+     :commands
+     ["git diff-tree --no-commit-id --name-only -r 935c6e94"
+      "sha256sum /tmp/torus_pi1_coordinate_equiv.lean"
+      "lake env lean /tmp/torus_pi1_coordinate_equiv.lean"
+      "lake env lean ConstructionTargets/TorusPiOneWindingCoordinates.lean"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 0308786b:holes/labs/topology-contract/worklist2.edn)"
+      "recompute target and frozen-consumer SHA-256 and comment-stripped placeholder counts from commit 935c6e94"],
+     :finding
+     "PASS: codex-7 independently reviewed topo-6 commit 935c6e94. Exact scope is the single elected Lean module; transition commit 0308786b changes only the ledger. Fixture hash 5cdbd26fee758e9aa1b327df2ca494dd60443897eb03b7db26157320cb2bfd28 matches and compiles; the canonical source is the fixture with only #check/#print audit lines removed, compiles, and has zero forbidden declarations. The equivalence direction is product-torus fundamental group to Multiplicative (Fin 2 to Int); the two rfl simp theorems correctly select left at index 0 and right at index 1. Axiom audit is exactly propext, Classical.choice, Quot.sound. Registry is 131/0 and ledger is 382 items OK. Frozen t97A04 is 79ca854186b39183bf53490a20b5be92695e345a2c099fcf928b5ad3300ee4ec with four placeholders; frozen t01A02 is 8bf7f3c39d6adb451332d0c30433ae0df833110a0b93605d23b26f30c7caa1fc with three; placeholder delta is zero."},
     :commit "935c6e943350540127a9e7349c6da20ab925dd00",
     :changed-paths
     ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
@@ -55630,7 +55644,7 @@
    :instructions
    "Create the scoped module from the compiled fixture. Import FundamentalGroupProduct, CircleUniversalCover, and TwiceSpiralH1Coordinates. Define torusPi1Coord by composing the product fundamental-group equivalence, both circleFundamentalGroupMulEquivInt factors, prodMultiplicative, and intProdMulEquivFinTwo. Retain the two simp theorems identifying Fin coordinates 0 and 1 with the projected circle winding coordinates by rfl. Do not add uncompiled Path endpoint or integer-matrix naturality claims.",
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/torus-pi1-winding-coordinates/equivalence",
@@ -55709,7 +55723,7 @@
       "After the equivalence is banked, prove projected representative endpoint formulas and integer-matrix naturality.",
       :other-consumers [:t01A02]}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/shared/torus-pi1-winding-coordinates",
    :acceptance
