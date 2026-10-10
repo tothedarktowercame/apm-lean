@@ -56818,70 +56818,90 @@
    :current-residual
    "Use the factorization on quotient representatives, combine it with frozenLbarPi1Map_mk_circle_coord and circleMatrixPi1Map_naturality, and descend to arbitrary frozen classes.",
    :other-consumers []}
+  {:bounded-exception
+   "single-consumer representative evaluation of the frozen torus homeomorphism on pi1",
+   :consumer :t97A04,
+   :phase :probe,
+   :state :open,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t97A04/torus-pi1-winding-coordinates/frozen-homeomorphism-pi1-mk",
+   :acceptance
+   {:probe
+    "Compile and bank frozenHomeomorphPi1_mk from /tmp/torus_frozen_homeomorph_pi1_mk. At the native dependent codomain FundamentalGroup (Circle x Circle) (frozenTorusHomeomorphCircleProd (0,0)), prove that fundamentalGroupMulEquivOfHomeomorph sends every explicit frozen loop class to the quotient class of gamma mapped by frozenTorusHomeomorphCircleProd.continuous, using FundamentalGroup.map_apply and Path.Homotopic.Quotient.mk_map. This supplies the canonical representative evaluation needed by t97A04 route step 4; do not introduce a separately cast fixed-base equivalence.",
+    :declaration "frozenHomeomorphPi1_mk",
+    :placeholder "apm_t97A04_bridge_2",
+    :route-step
+    "t97A04 step 4, evaluate the canonical frozen-to-Circle pi1 equivalence on representatives"},
+   :id :routes-2026-10-10-t97a04-frozen-homeomorphism-pi1-mk-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo2-r2
+    :routes-2026-10-10-t97a04-frozen-coordinate-factorization-topo2-r1],
+   :current-residual
+   "Rewrite frozenTorusPi1Coord on representatives using this equation, then apply the banked quotient conjugacy and Circle matrix naturality before quotient induction.",
+   :other-consumers []}
   {:consumer :t97A04,
    :evidence
    {:probe
     {:outcome :revise,
      :seat "topo-8",
      :fixture
-     {:path "/tmp/torus_frozen_coordinate_factorization.lean",
+     {:path "/tmp/torus_frozen_homeomorph_pi1_mk.lean",
       :sha256
-      "44623442330dd40b84fe51111c2403a3ef6d03fb54b90a12a5726a1f0afd1ba6"},
+      "032782d9b4b59680e22a0cb347bc5c1a9e3ea2224aadc19aae355ffb8d5ed969"},
      :commands
-     [{:cmd
-       "lake env lean /tmp/torus_frozen_coordinate_factorization.lean",
+     [{:cmd "lake env lean /tmp/torus_frozen_homeomorph_pi1_mk.lean",
        :exit 0,
        :output
-       "exact dependent frozen-coordinate factorization compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "canonical homeomorphism-induced fundamental-group representative equation compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/torus_frozen_coordinate_factorization.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/torus_frozen_homeomorph_pi1_mk.lean || true)\"",
        :exit 0}
-      {:cmd
-       "sha256sum /tmp/torus_frozen_coordinate_factorization.lean",
+      {:cmd "sha256sum /tmp/torus_frozen_homeomorph_pi1_mk.lean",
        :exit 0,
        :output
-       "44623442330dd40b84fe51111c2403a3ef6d03fb54b90a12a5726a1f0afd1ba6  /tmp/torus_frozen_coordinate_factorization.lean"}
+       "032782d9b4b59680e22a0cb347bc5c1a9e3ea2224aadc19aae355ffb8d5ed969  /tmp/torus_frozen_homeomorph_pi1_mk.lean"}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/torus_frozen_pi1_matrix_naturality_final.lean",
+       :exit 1,
+       :finding
+       "The final representative proof could not rewrite FundamentalGroup.map_apply through the bundled homeomorphism equivalence at its dependent codomain. The corrected prerequisite exposes that bundle evaluation explicitly and proves it with map_apply plus Quotient.mk_map."}],
      :finding
-     "The canonical Circle-image quotient map was obscured only because its codomain retains the dependent basepoint frozenTorusHomeomorphCircleProd (0,0). The placeholder-free theorem states frozenTorusPi1Coord exactly as the composition of fundamentalGroupMulEquivOfHomeomorph with the dependent rewrite of torusPi1Coord. It compiles definitionally and avoids introducing a second basepoint cast whose proof term would not reduce against the frozen definition.",
+     "The exact frozen coordinate factorization is banked, but its first factor is the bundled fundamentalGroupMulEquivOfHomeomorph at the dependent basepoint. The placeholder-free theorem evaluates that bundle on every explicit quotient representative and identifies it with the quotient class of the path mapped by frozenTorusHomeomorphCircleProd. This is the single library-facing reduction needed before coordinate rewriting.",
      :residual
-     "Bank the exact dependent factorization. Then rewrite frozenTorusPi1Coord on representative classes through the canonical homeomorphism map, apply the banked representative conjugacy and Circle all-class naturality, and descend by quotient induction.",
+     "Bank the canonical representative evaluation. Then combine it with frozenTorusPi1Coord_factor, normalize the mapped path to frozenCircleImagePath, apply the representative conjugacy and Circle matrix equation, and descend by quotient induction.",
      :prerequisite
      {:bounded-exception
-      "single-consumer dependent coordinate factorization for the frozen torus",
+      "single-consumer representative evaluation of the frozen torus homeomorphism on pi1",
       :consumer :t97A04,
       :phase :probe,
       :state :open,
       :scope [],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t97A04/torus-pi1-winding-coordinates/frozen-coordinate-factorization",
+      "TOPOLOGY-ROUTES.md/t97A04/torus-pi1-winding-coordinates/frozen-homeomorphism-pi1-mk",
       :acceptance
       {:probe
-       "Compile and bank frozenTorusPi1Coord_factor from /tmp/torus_frozen_coordinate_factorization. Prove the exact equality expressing frozenTorusPi1Coord as the canonical homeomorphism-induced fundamental-group equivalence followed by torusPi1Coord transported along frozenTorusHomeomorphCircleProd_base, retaining the dependent intermediate basepoint rather than defining a second casted equivalence. This supplies the coordinate-factor alignment needed for t97A04 route step 4; do not yet claim frozenLbar naturality.",
-       :declaration "frozenTorusPi1Coord_factor",
+       "Compile and bank frozenHomeomorphPi1_mk from /tmp/torus_frozen_homeomorph_pi1_mk. At the native dependent codomain FundamentalGroup (Circle x Circle) (frozenTorusHomeomorphCircleProd (0,0)), prove that fundamentalGroupMulEquivOfHomeomorph sends every explicit frozen loop class to the quotient class of gamma mapped by frozenTorusHomeomorphCircleProd.continuous, using FundamentalGroup.map_apply and Path.Homotopic.Quotient.mk_map. This supplies the canonical representative evaluation needed by t97A04 route step 4; do not introduce a separately cast fixed-base equivalence.",
+       :declaration "frozenHomeomorphPi1_mk",
        :placeholder "apm_t97A04_bridge_2",
        :route-step
-       "t97A04 step 4, exact factorization of frozen coordinates through the canonical Circle fundamental-group image"},
-      :representation
-      {:source
-       "frozenTorusPi1Coord on the fundamental group of AddCircle 1 x AddCircle 1 at (0,0)",
-       :target
-       "The canonical fundamental-group equivalence induced by frozenTorusHomeomorphCircleProd followed by the dependent-basepoint transport of torusPi1Coord",
-       :direction
-       "Exact equality from the source frozen coordinate equivalence evaluation to the target canonical Circle-coordinate composite"},
+       "t97A04 step 4, evaluate the canonical frozen-to-Circle pi1 equivalence on representatives"},
       :id
-      :routes-2026-10-10-t97a04-frozen-coordinate-factorization-topo2-r1,
-      :kind :representation-comparison,
+      :routes-2026-10-10-t97a04-frozen-homeomorphism-pi1-mk-topo2-r1,
+      :kind :reusable-theorem,
       :depends-on
       [:routes-2026-10-10-checkpoint-topo2-r2
-       :routes-2026-10-10-t97a04-frozen-pi1-representative-conjugacy-topo2-r1],
+       :routes-2026-10-10-t97a04-frozen-coordinate-factorization-topo2-r1],
       :current-residual
-      "Use the factorization on quotient representatives, combine it with frozenLbarPi1Map_mk_circle_coord and circleMatrixPi1Map_naturality, and descend to arbitrary frozen classes.",
+      "Rewrite frozenTorusPi1Coord on representatives using this equation, then apply the banked quotient conjugacy and Circle matrix naturality before quotient induction.",
       :other-consumers []}}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/shared/torus-pi1-winding-coordinates",
    :acceptance
@@ -56908,7 +56928,8 @@
     :routes-2026-10-10-t97a04-frozen-mapped-path-conjugacy-topo2-r1
     :routes-2026-10-10-t97a04-frozen-lbar-based-path-cast-topo2-r1
     :routes-2026-10-10-t97a04-frozen-pi1-representative-conjugacy-topo2-r1
-    :routes-2026-10-10-t97a04-frozen-coordinate-factorization-topo2-r1],
+    :routes-2026-10-10-t97a04-frozen-coordinate-factorization-topo2-r1
+    :routes-2026-10-10-t97a04-frozen-homeomorphism-pi1-mk-topo2-r1],
    :current-residual
    "Exact Fin-2 endpoint-coordinate naturality is absent.",
    :other-consumers [:t01A02]}
