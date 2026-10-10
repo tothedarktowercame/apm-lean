@@ -1322,6 +1322,8 @@ theorem sphereProjectionSmoothLocalHomeomorphBranches :
   localHomeomorphRestrictionsSmooth_gives_smoothBranches
     sphereProjectionLocalHomeomorphRestrictionsSmooth
 
+/-- The quotient-chart local-diffeomorphism certificate used by the shared
+`t95A04` and `t96A07` dimension-two projective-space atlas. -/
 theorem sphereProjectionQuotientLocalDiffeomorph :
     SphereProjectionQuotientLocalDiffeomorph :=
   smoothLocalHomeomorphBranches_gives_localDiffeomorph
@@ -1355,11 +1357,15 @@ theorem sphereProjectionSmoothDescentContract :
   exact sphereProjectionQuotientLocalDiffeomorph_gives_smoothAtlas
     sphereProjectionQuotientLocalDiffeomorph
 
+/-- The shared smooth atlas on real projective two-space used by `t95A04` and
+`t96A07`; its charts are the frozen quotient charts and its sphere projection
+is the banked local diffeomorphism. -/
 noncomputable def rpSmoothAtlas : SmoothAtlas 2 :=
   Classical.choice
     (sphereProjectionSmoothDescentContract
       sphereProjectionTwoSheetedLocalModel sphereAntipodalN_contMDiff)
 
+/-- Public existence form of `rpSmoothAtlas` for the two RP² consumers. -/
 theorem rpSmoothAtlas_exists : Nonempty (SmoothAtlas 2) :=
   ⟨rpSmoothAtlas⟩
 
