@@ -97095,8 +97095,74 @@
   {:bounded-exception
    "This single-consumer topological package supplies path connectedness of the nested point wedges underlying TwoCircles and ThreeCircles, which is required to build paths from arbitrary basepoints into the final-circle section before the cyclic lift argument.",
    :consumer :t99J01,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Use the new path-connected wedge instances to construct, for every y : ThreeCircles, a path y to firstCircle (collapse y) on which collapse is constant; lift that path and then use a final-circle cyclic path to connect arbitrary pullback points.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :missing-theorems
+    [{:name "PointWedgePathConnected.wedgePathConnectedSpace",
+      :type
+      "For path-connected pointed spaces X and Y, PointWedgeQuotient.Wedge x₀ y₀ has a PathConnectedSpace instance",
+      :status :proved,
+      :consumers [:t99J01],
+      :depends-on
+      ["CyclicThreeCirclesPullbackSheets.pullback_isKSheeted"]}],
+    :statement-hashes "131 registered statements match",
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :finding
+      "canonical package authority resolves to /home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "sha256sum /tmp/point-wedge-path-connected.lean",
+      :exit 0,
+      :finding
+      "fixture hash matches 33b34c27c1a94a57cdc22915aeb5ec2a34cac1bc654cc9c74e081e1e9f8c8cf0"}
+     {:cmd "lake build ConstructionTargets.PointWedgePathConnected",
+      :exit 0,
+      :finding
+      "canonical representative equality, path-connectedness theorem, and instance build"}
+     {:cmd "lake env lean /tmp/point-wedge-path-connected.lean",
+      :exit 0,
+      :finding
+      "frozen fixture compiles and reports only standard axioms"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" ConstructionTargets/PointWedgePathConnected.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero source placeholders"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" /tmp/point-wedge-path-connected.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero fixture placeholders"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short",
+      :exit 0,
+      :finding "clean worktree after commit"}],
+    :commit "d7b97cf27c709cfd713f6f518c93295b9849acd3",
+    :changed-paths
+    ["ConstructionTargets/PointWedgePathConnected.lean"],
+    :fixture
+    {:path "/tmp/point-wedge-path-connected.lean",
+     :sha256
+     "33b34c27c1a94a57cdc22915aeb5ec2a34cac1bc654cc9c74e081e1e9f8c8cf0",
+     :sorry-count 0},
+    :implementation
+    {:scope ["ConstructionTargets/PointWedgePathConnected.lean"],
+     :declarations
+     ["ConstructionTargets.PointWedgePathConnected.wedgePoint_eq"
+      "ConstructionTargets.PointWedgePathConnected.wedge_isPathConnected"
+      "ConstructionTargets.PointWedgePathConnected.wedgePathConnectedSpace"]},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PointWedgePathConnected.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/cyclic-three-circles-cover/point-wedge-path-connected",
@@ -98707,18 +98773,24 @@
    [:lemma-cyclicthreecirclespullbackcover-covering
     :lemma-circlepowerfibercard-circlepower-fiber-card],
    :other-consumers []}
-  {:consumer :portfolio,
+  {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
    :scope [],
    :acceptance
-   {:lemma "PointWedgePathConnected.wedgePathConnectedSpace"},
+   {:lemma "PointWedgePathConnected.wedgePathConnectedSpace",
+    :type
+    "For path-connected pointed spaces X and Y, PointWedgeQuotient.Wedge x₀ y₀ has a PathConnectedSpace instance"},
    :lemma
    {:name "PointWedgePathConnected.wedgePathConnectedSpace",
-    :reported-by []},
+    :reported-by [:routes-2026-10-10-point-wedge-path-connected-44],
+    :type
+    "For path-connected pointed spaces X and Y, PointWedgeQuotient.Wedge x₀ y₀ has a PathConnectedSpace instance",
+    :proved-in :routes-2026-10-10-point-wedge-path-connected-44},
    :id :lemma-pointwedgepathconnected-wedgepathconnectedspace,
    :kind :lemma,
-   :depends-on [],
+   :depends-on
+   [:lemma-cyclicthreecirclespullbacksheets-pullback-isksheeted],
    :other-consumers []}
   {:consumer :t99J01,
    :phase :lemma,
