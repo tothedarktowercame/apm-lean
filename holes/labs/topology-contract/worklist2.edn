@@ -60197,24 +60197,67 @@
   {:bounded-exception
    "single-consumer Circle-valued angular coordinate on the frozen t02A03 left tube",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/t02a03_geometric_tube_cover.lean",
+      :sha256
+      "6fa554e340ac526624b77eb2421cec4cdc255d682e6b9fa016ec5de01d7797a2"},
+     :commands
+     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "apm_t02a03_leftTubeSubtype, apm_t02a03_leftTubePlanarComplex, apm_t02a03_leftTubePlanarComplex_ne_zero, apm_t02a03_leftTubeAngular, and apm_t02a03_continuous_leftTubeAngular compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
+       :exit 0}
+      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "6fa554e340ac526624b77eb2421cec4cdc255d682e6b9fa016ec5de01d7797a2  /tmp/t02a03_geometric_tube_cover.lean"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :implementation
+     {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
+      :declarations
+      ["apm_t02a03_leftTubeSubtype"
+       "apm_t02a03_leftTubePlanarComplex"
+       "apm_t02a03_leftTubePlanarComplex_ne_zero"
+       "apm_t02a03_leftTubeAngular"
+       "apm_t02a03_continuous_leftTubeAngular"],
+      :acceptance
+      {:implementation
+       "Add the five compiled declarations from the verified fixture to ConstructionTargets/T02A03GeometricTubeCover.lean without changing their types or the frozen consumer. Compile the scoped module, confirm no sorry token in the scoped file, run the statement registry check, and report the declarations' axioms.",
+       :gates
+       ["scoped module compiles"
+        "scoped file contains no sorry token"
+        "statement registry matches"]}},
+     :finding
+     "The fixture completely supplies this bounded row. On the exact frozen left-tube subtype, the planar displacement (p 0 + 1) + (p 1)i is nonzero by the banked planar-center theorem. Normalizing it therefore defines a Circle-valued angular coordinate, and explicit PiLp coordinate-continuity, Complex.ofReal continuity, norm continuity, and inversion away from zero prove the map continuous.",
+     :residual
+     "After banking the angular coordinate, define the punctured normal displacement, identify deletion of the frozen left core with nonzero normal displacement, construct radial comparison homotopies inside LeftTubeMinusCore, and assemble leftTubeMinusCoreHomotopyEquivTorus."}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-angular-coordinate",
    :acceptance
-   {:probe
-    "Compile and bank apm_t02a03_leftTubeSubtype, apm_t02a03_leftTubePlanarComplex, apm_t02a03_leftTubePlanarComplex_ne_zero, apm_t02a03_leftTubeAngular, and apm_t02a03_continuous_leftTubeAngular from /tmp/t02a03_geometric_tube_cover.lean. Define the exact frozen left-tube subtype, form the complex planar displacement (p 0 + 1) + (p 1)i, prove it is nonzero from the banked planar-center theorem, normalize it to Circle, and prove the resulting angular coordinate is continuous. This supplies the angular coordinate required by t02A03 route step 2; do not yet claim punctured-normal coordinates, comparison homotopies, the torus HomotopyEquiv, or gluing.",
-    :declarations
-    ["apm_t02a03_leftTubeSubtype"
-     "apm_t02a03_leftTubePlanarComplex"
-     "apm_t02a03_leftTubePlanarComplex_ne_zero"
-     "apm_t02a03_leftTubeAngular"
-     "apm_t02a03_continuous_leftTubeAngular"],
-    :placeholder "the sole sorry in apm_t02a03",
-    :route-step
-    "t02A03 step 2, define the continuous Circle-valued angular coordinate on the closed left tube"},
+   {:implementation
+    "Add the five compiled declarations from the verified fixture to ConstructionTargets/T02A03GeometricTubeCover.lean without changing their types or the frozen consumer. Compile the scoped module, confirm no sorry token in the scoped file, run the statement registry check, and report the declarations' axioms.",
+    :gates
+    ["scoped module compiles"
+     "scoped file contains no sorry token"
+     "statement registry matches"]},
    :id :routes-2026-10-10-t02a03-left-tube-angular-coordinate-topo2-r1,
    :kind :reusable-theorem,
+   :declarations
+   ["apm_t02a03_leftTubeSubtype"
+    "apm_t02a03_leftTubePlanarComplex"
+    "apm_t02a03_leftTubePlanarComplex_ne_zero"
+    "apm_t02a03_leftTubeAngular"
+    "apm_t02a03_continuous_leftTubeAngular"],
    :depends-on
    [:routes-2026-10-10-checkpoint-topo2-r5
     :routes-2026-10-10-t02a03-left-tube-planar-center-nonzero-topo2-r1],
