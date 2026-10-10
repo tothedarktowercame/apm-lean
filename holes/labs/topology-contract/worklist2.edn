@@ -60497,6 +60497,33 @@
    "Restrict the normal coordinate to the punctured left tube, build radial comparison homotopies, and assemble the torus HomotopyEquiv.",
    :other-consumers []}
   {:bounded-exception
+   "single-consumer continuous punctured-normal coordinate on the frozen t02A03 left-tube complement",
+   :consumer :t02A03,
+   :phase :probe,
+   :state :open,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t02A03/left-tube-punctured-normal-coordinate",
+   :acceptance
+   {:probe
+    "Compile and bank apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubePuncturedNormal, and apm_t02a03_continuous_leftTubePuncturedNormal from /tmp/t02a03_geometric_tube_cover.lean. Define apm_t02a03_LeftTubeMinusCore as the exact subtype of points in apm_t02a03_leftTube and outside Set.range apm_t02a03_leftCore. Use the banked zero-locus equivalence to lift apm_t02a03_leftTubeNormalComplex to the subtype of nonzero complex numbers and prove the lifted map continuous. This supplies the punctured-normal coordinate required by t02A03 route step 2; do not yet claim radial normalization, a reconstruction map, comparison homotopies, the torus HomotopyEquiv, or gluing.",
+    :declarations
+    ["apm_t02a03_LeftTubeMinusCore"
+     "apm_t02a03_leftTubePuncturedNormal"
+     "apm_t02a03_continuous_leftTubePuncturedNormal"],
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "t02A03 step 2, restrict the disk-normal displacement to a continuous nonzero coordinate on the punctured left tube"},
+   :id
+   :routes-2026-10-10-t02a03-left-tube-punctured-normal-coordinate-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo2-r5
+    :routes-2026-10-10-t02a03-left-tube-normal-zero-locus-topo2-r1],
+   :current-residual
+   "Radially normalize the punctured normal, define coordinate reconstruction, build both homotopies inside the complement, and assemble the torus HomotopyEquiv.",
+   :other-consumers []}
+  {:bounded-exception
    "single-consumer explicit punctured-left-tube model for t02A03",
    :consumer :t02A03,
    :evidence
@@ -60506,19 +60533,19 @@
      :fixture
      {:path "/tmp/t02a03_geometric_tube_cover.lean",
       :sha256
-      "10e81ad59c428cc36b365f2ad2c67fea9b3ac41b129c68d28a05cfdf81a37482"},
+      "404f273127397fd571fe7fa5526b10b6b0acbe29189bd647eede685253e97304"},
      :commands
      [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
        :exit 0,
        :output
-       "apm_t02a03_leftTubeNormalComplex_eq_zero_iff compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubePuncturedNormal, and apm_t02a03_continuous_leftTubePuncturedNormal compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
        "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
        :exit 0}
       {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
        :exit 0,
        :output
-       "10e81ad59c428cc36b365f2ad2c67fea9b3ac41b129c68d28a05cfdf81a37482  /tmp/t02a03_geometric_tube_cover.lean"}
+       "404f273127397fd571fe7fa5526b10b6b0acbe29189bd647eede685253e97304  /tmp/t02a03_geometric_tube_cover.lean"}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
@@ -60526,57 +60553,43 @@
      [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
        :exit 1,
        :finding
-       "The first proof did not rewrite the zero-coordinate equality into norm z = 1 before applying Complex.cos_arg and Complex.sin_arg, and its reverse norm calculation used Real.sq_sqrt at the wrong goal shape. Making the norm equality and coordinate equalities explicit reduced the remaining issue to normSq normalization."}
-      {:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 1,
-       :finding
-       "Complex.normSq_add_mul_I did not match because the real constant had elaborated inside complex addition. Expanding with Complex.normSq_apply exposed the real coordinate polynomial."}
-      {:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 1,
-       :finding
-       "After substituting the core coordinates, linarith did not normalize the trigonometric unit-circle identity automatically. Rewriting the products as squares and applying Real.cos_sq_add_sin_sq directly corrected the proof; the final rerun compiled."}],
+       "The first continuity proof called continuous_subtype_mk as a standalone identifier, but this Mathlib version exposes subtype construction through Continuous.subtype_mk. Introducing the continuous inclusion from LeftTubeMinusCore into the left-tube subtype and composing the normal-coordinate continuity corrected the proof; the final rerun compiled."}],
      :finding
-     "The full punctured-left-tube HomotopyEquiv is still absent, but the deleted locus now has the exact coordinate characterization needed to form a punctured normal. For every point of the frozen left tube, its complex normal displacement is zero if and only if its ambient point lies in Set.range apm_t02a03_leftCore. The forward direction reconstructs the core parameter with Complex.arg after proving planar norm one and height zero; the reverse direction substitutes the frozen core coordinates and the unit-circle identity.",
+     "The full punctured-left-tube HomotopyEquiv is still absent, but the exact source subtype and its punctured normal coordinate are now compiled. apm_t02a03_LeftTubeMinusCore is the frozen left tube with Set.range apm_t02a03_leftCore removed. The zero-locus equivalence proves its normal displacement is nonzero, so it lifts canonically and continuously to the subtype of nonzero complex numbers. This is the normal factor needed for radial normalization and the eventual torus coordinate map.",
      :residual
-     "Bank the exact zero-locus comparison. Then define LeftTubeMinusCore and its continuous nonzero normal coordinate, normalize the punctured normal radially, construct the two comparison homotopies, and assemble leftTubeMinusCoreHomotopyEquivTorus.",
+     "Bank LeftTubeMinusCore and its continuous nonzero complex normal coordinate. Then radially normalize that coordinate to Circle, construct the coordinate reconstruction map and both comparison homotopies within the frozen tube complement, and assemble leftTubeMinusCoreHomotopyEquivTorus.",
      :prerequisite
      {:bounded-exception
-      "single-consumer exact zero-locus comparison for the t02A03 left-tube normal coordinate",
+      "single-consumer continuous punctured-normal coordinate on the frozen t02A03 left-tube complement",
       :consumer :t02A03,
       :phase :probe,
       :state :open,
       :scope [],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t02A03/left-tube-normal-zero-locus",
+      "TOPOLOGY-ROUTES.md/t02A03/left-tube-punctured-normal-coordinate",
       :acceptance
       {:probe
-       "Compile and bank apm_t02a03_leftTubeNormalComplex_eq_zero_iff from /tmp/t02a03_geometric_tube_cover.lean. Prove for every p in apm_t02a03_leftTubeSubtype that apm_t02a03_leftTubeNormalComplex p = 0 if and only if p.1 lies in Set.range apm_t02a03_leftCore. Reconstruct a core parameter with Complex.arg in the forward direction and use the frozen core coordinates plus Real.cos_sq_add_sin_sq in the reverse direction. This supplies the deleted-core comparison required by t02A03 route step 2; do not yet claim the punctured-normal map, radial homotopies, the torus HomotopyEquiv, or gluing.",
-       :declaration "apm_t02a03_leftTubeNormalComplex_eq_zero_iff",
-       :type
-       "forall p : apm_t02a03_leftTubeSubtype, apm_t02a03_leftTubeNormalComplex p = 0 iff p.1 in Set.range apm_t02a03_leftCore",
+       "Compile and bank apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubePuncturedNormal, and apm_t02a03_continuous_leftTubePuncturedNormal from /tmp/t02a03_geometric_tube_cover.lean. Define apm_t02a03_LeftTubeMinusCore as the exact subtype of points in apm_t02a03_leftTube and outside Set.range apm_t02a03_leftCore. Use the banked zero-locus equivalence to lift apm_t02a03_leftTubeNormalComplex to the subtype of nonzero complex numbers and prove the lifted map continuous. This supplies the punctured-normal coordinate required by t02A03 route step 2; do not yet claim radial normalization, a reconstruction map, comparison homotopies, the torus HomotopyEquiv, or gluing.",
+       :declarations
+       ["apm_t02a03_LeftTubeMinusCore"
+        "apm_t02a03_leftTubePuncturedNormal"
+        "apm_t02a03_continuous_leftTubePuncturedNormal"],
        :placeholder "the sole sorry in apm_t02a03",
        :route-step
-       "t02A03 step 2, identify deletion of the frozen left core with nonvanishing of the disk-normal coordinate"},
-      :representation
-      {:source
-       "Zero of the continuous complex disk-normal coordinate on the frozen left-tube subtype",
-       :target
-       "Membership of the ambient point in the frozen left-core range",
-       :direction
-       "Exact logical equivalence from the source normal-coordinate zero representation to the target frozen-core membership representation, with the reverse implication included"},
+       "t02A03 step 2, restrict the disk-normal displacement to a continuous nonzero coordinate on the punctured left tube"},
       :id
-      :routes-2026-10-10-t02a03-left-tube-normal-zero-locus-topo2-r1,
-      :kind :representation-comparison,
+      :routes-2026-10-10-t02a03-left-tube-punctured-normal-coordinate-topo2-r1,
+      :kind :reusable-theorem,
       :depends-on
       [:routes-2026-10-10-checkpoint-topo2-r5
-       :routes-2026-10-10-t02a03-left-tube-normal-coordinate-topo2-r1],
+       :routes-2026-10-10-t02a03-left-tube-normal-zero-locus-topo2-r1],
       :current-residual
-      "Restrict the normal coordinate to the punctured left tube, build radial comparison homotopies, and assemble the torus HomotopyEquiv.",
+      "Radially normalize the punctured normal, define coordinate reconstruction, build both homotopies inside the complement, and assemble the torus HomotopyEquiv.",
       :other-consumers []}}},
    :phase :probe,
    :type
    "Nonempty (ContinuousMap.HomotopyEquiv LeftTubeMinusCore ConstructionTargets.TorusCircleWedgeOpenCover.Torus)",
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-punctured-model",
    :acceptance
@@ -60608,7 +60621,8 @@
     :routes-2026-10-10-t02a03-left-tube-planar-center-nonzero-topo2-r1
     :routes-2026-10-10-t02a03-left-tube-angular-coordinate-topo2-r1
     :routes-2026-10-10-t02a03-left-tube-normal-coordinate-topo2-r1
-    :routes-2026-10-10-t02a03-left-tube-normal-zero-locus-topo2-r1],
+    :routes-2026-10-10-t02a03-left-tube-normal-zero-locus-topo2-r1
+    :routes-2026-10-10-t02a03-left-tube-punctured-normal-coordinate-topo2-r1],
    :current-residual
    "After the punctured-left-tube model is banked, construct the right-tube-minus-deleted-attachment model extending the based core homotopy, then overlap compatibility and gluing for the full geometricY equivalence.",
    :other-consumers []}
