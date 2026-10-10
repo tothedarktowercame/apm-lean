@@ -54827,7 +54827,7 @@
      :infrastructure-packets
      :review-outcomes]},
    :review-finding
-   "Deterministic DAG-coherence defect: transition commit 466a2a4d appends both :routes-2026-10-10-t94a08-projective-conic-closure-topo2-r3 and :routes-2026-10-10-torus-pi1-winding-coordinates-two-consumers-topo2-r1 with identical duplicate dependency vectors [:routes-2026-10-10-checkpoint-topo2-r2 :routes-2026-10-10-checkpoint-topo2-r2]. The checkpoint evidence pre-populates that dependency in each replacement item, and transition application injects it again. Repair by removing the current checkpoint from the replacement templates so transition application adds it exactly once (or structurally deduplicate dependencies), then add a worklist-validator rejection for duplicate dependency edges and recommit. Fresh checks otherwise reproduce all 15 comment-stripped counts (1,3,3,3,4,1,1,1,1,1,1,1,1,4,1), 131 matching frozen statements, empty non-ledger scope, and a parseable 367-item ledger. No fixture or theorem-orientation gate applies to this strategy-only row.",
+   "Deterministic repair-coherence defect: commit bec90b6d creates clean r4/r2 successor rows, but leaves the two faulty r3/r1 rows in the canonical ledger as :superseded with their duplicate [:routes-2026-10-10-checkpoint-topo2-r2 :routes-2026-10-10-checkpoint-topo2-r2] edges intact. It then schedules :routes-2026-10-10-worklist-duplicate-dependency-validator-r1 with acceptance to reject every duplicate edge while both canonical ledgers still validate, yet declares scope only [\"holes/labs/topology-contract/worklist_check.bb\"]. A fresh full-ledger scan finds those two plus numerous historical done/superseded duplicate-edge rows, so that acceptance is impossible without either migrating the ledgers outside declared scope or weakening/special-casing the invariant. Repair structurally: define and execute an explicit canonical-ledger migration that deduplicates every depends-on vector (including the two superseded rows), include both ledger paths in scope, add the validator regression, and prove both migrated ledgers validate; alternatively state a coherent prospective invariant and justify it without claiming every item. Fresh ancillary checks: repaired active successors each have one r2 dependency, worklist2 currently parses as 371 items, 131 statements match, and the transition changes only worklist2.edn. No fixture or theorem-orientation gate applies.",
    :evidence
    {:outcome :replan,
     :seat "topo-8",
@@ -54990,9 +54990,15 @@
       "Measure one closure attempt, one shared theorem, and the validator repair before further infrastructure.",
       :other-consumers []}],
     :author "topo-8",
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :fail,
+     :seat "codex-7",
+     :job "invoke-1791605789146-1056-a50dd750",
+     :finding
+     "Deterministic repair-coherence defect: commit bec90b6d creates clean r4/r2 successor rows, but leaves the two faulty r3/r1 rows in the canonical ledger as :superseded with their duplicate [:routes-2026-10-10-checkpoint-topo2-r2 :routes-2026-10-10-checkpoint-topo2-r2] edges intact. It then schedules :routes-2026-10-10-worklist-duplicate-dependency-validator-r1 with acceptance to reject every duplicate edge while both canonical ledgers still validate, yet declares scope only [\"holes/labs/topology-contract/worklist_check.bb\"]. A fresh full-ledger scan finds those two plus numerous historical done/superseded duplicate-edge rows, so that acceptance is impossible without either migrating the ledgers outside declared scope or weakening/special-casing the invariant. Repair structurally: define and execute an explicit canonical-ledger migration that deduplicates every depends-on vector (including the two superseded rows), include both ledger paths in scope, add the validator regression, and prove both migrated ledgers validate; alternatively state a coherent prospective invariant and justify it without claiming every item. Fresh ancillary checks: repaired active successors each have one r2 dependency, worklist2 currently parses as 371 items, 131 statements match, and the transition changes only worklist2.edn. No fixture or theorem-orientation gate applies."}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :repair,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -55008,7 +55014,7 @@
     :routes-2026-09-28-checkpoint-topo2-r1]}
   {:consumer :t94A08,
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t94A08",
    :acceptance
@@ -55024,7 +55030,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/shared/torus-pi1-winding-coordinates",
    :acceptance
@@ -55043,7 +55049,7 @@
    :other-consumers [:t01A02]}
   {:consumer :portfolio,
    :phase :implementation,
-   :state :blocked,
+   :state :superseded,
    :scope ["holes/labs/topology-contract/worklist_check.bb"],
    :dag-node
    "docs/TN-topology-build-loop-design.md/strategic-invariants",
@@ -55070,7 +55076,7 @@
      :infrastructure-packets
      :review-outcomes]},
    :phase :strategy,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
