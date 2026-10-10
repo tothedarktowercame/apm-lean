@@ -64092,47 +64092,67 @@
    "single-consumer basepoint-transported raw pi1 coordinate map for t97A04",
    :consumer :t97A04,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/t97a04_frozen_h1_coordinate.lean",
-      :sha256
-      "263ab41fbf6eaf3e23d148489b20968e57996ad90dbcfe0e1d0262e1cdf415e3"},
-     :commands
-     [{:cmd "sha256sum /tmp/t97a04_frozen_h1_coordinate.lean",
-       :exit 0,
-       :output
-       "263ab41fbf6eaf3e23d148489b20968e57996ad90dbcfe0e1d0262e1cdf415e3  /tmp/t97a04_frozen_h1_coordinate.lean"}
-      {:cmd "lake env lean /tmp/t97a04_frozen_h1_coordinate.lean",
-       :exit 0,
-       :output
-       "frozenTorusPi1CoordAtLbarBase and frozenLbarPi1Map_coordinateMap_raw compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t97a04_frozen_h1_coordinate.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :implementation
-     {:scope ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"],
-      :declarations
-      ["ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusPi1CoordAtLbarBase"
-       "ConstructionTargets.T97A04FrozenH1Coordinate.frozenLbarPi1Map_coordinateMap_raw"],
-      :acceptance
-      {:type
-       "forall p : FundamentalGroup FrozenTorus (0, 0), frozenMatrixCoordinateMap (frozenTorusPi1Coord p) = frozenTorusPi1CoordAtLbarBase (FundamentalGroup.map frozenLbar (0, 0) p)",
-       :gates
-       ["scoped module compiles"
-        "scoped module contains no sorry token"
-        "statement registry matches"]}},
-     :finding
-     "The complete fixture transports frozenTorusPi1Coord to the literal codomain basepoint frozenLbar (0,0) using conjugation along frozenLbar_base and proves the frozen matrix equation for FundamentalGroup.map in the exact form required by h1_coordinate_eq_of_fundamentalGroup_coordinate_eq.",
-     :residual
-     "Prove the aligned Hurewicz coordinate remains the identity for frozenTorusPi1CoordAtLbarBase, derive the IntegralH1 matrix equation, and transport it through singularHomologyComparison_naturality into apm_t97A04_bridge_2.",
-     :warnings []}},
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Prove the aligned Hurewicz coordinate is the identity for frozenTorusPi1CoordAtLbarBase, apply h1_coordinate_eq_of_fundamentalGroup_coordinate_eq, and transport the resulting IntegralH1 equation through singularHomologyComparison_naturality into the ModuleCat bridge.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.T97A04FrozenH1Coordinate.frozenLbarPi1Map_coordinateMap_raw",
+      :type
+      "forall p : FundamentalGroup FrozenTorus (0, 0), frozenMatrixCoordinateMap (frozenTorusPi1Coord p) = frozenTorusPi1CoordAtLbarBase (FundamentalGroup.map frozenLbar (0, 0) p)",
+      :status :proved,
+      :consumers [:t97A04],
+      :depends-on
+      ["ConstructionTargets.T97A04FrozenH1Coordinate.frozenLbarPi1Map_coordinateMap"]}],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not",
+     :scoped-file-git-blob "2d41953e2ee136d2cd9bc0c4e82e5f45e758f386",
+     :fixture-sha256
+     "263ab41fbf6eaf3e23d148489b20968e57996ad90dbcfe0e1d0262e1cdf415e3"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd "sha256sum /tmp/t97a04_frozen_h1_coordinate.lean",
+      :exit 0,
+      :output
+      "263ab41fbf6eaf3e23d148489b20968e57996ad90dbcfe0e1d0262e1cdf415e3  /tmp/t97a04_frozen_h1_coordinate.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/T97A04FrozenH1Coordinate.lean",
+      :exit 0}
+     {:cmd "lake env lean /tmp/t97a04_frozen_h1_coordinate.lean",
+      :exit 0,
+      :output
+      "frozenTorusPi1CoordAtLbarBase and frozenLbarPi1Map_coordinateMap_raw compiled; axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T97A04FrozenH1Coordinate.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git show --check --oneline HEAD",
+      :exit 0,
+      :output "9cde5b0e Bank t97A04 raw pi1 coordinate map"}],
+    :diagnostic-history [],
+    :commit "9cde5b0e77f402f9b07165c48893e2d80a833e22",
+    :changed-paths
+    ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"],
+    :fixture
+    {:path "/tmp/t97a04_frozen_h1_coordinate.lean",
+     :sha256
+     "263ab41fbf6eaf3e23d148489b20968e57996ad90dbcfe0e1d0262e1cdf415e3"},
+    :finding
+    "The scoped module transports frozenTorusPi1Coord to the literal codomain basepoint frozenLbar (0,0) by conjugation along frozenLbar_base and proves the frozen matrix equation directly for FundamentalGroup.map.",
+    :implementation
+    {:scope ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"],
+     :declarations
+     ["ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusPi1CoordAtLbarBase"
+      "ConstructionTargets.T97A04FrozenH1Coordinate.frozenLbarPi1Map_coordinateMap_raw"]},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t97A04/frozen-pi1-raw-map-coordinate",
    :acceptance
@@ -65324,10 +65344,12 @@
    {:name
     "ConstructionTargets.T97A04FrozenH1Coordinate.frozenLbarPi1Map_coordinateMap_raw",
     :reported-by
-    [:routes-2026-10-10-t97a04-h1-bridge-assembly-topo2-r1],
+    [:routes-2026-10-10-t97a04-h1-bridge-assembly-topo2-r1
+     :routes-2026-10-10-t97a04-frozen-pi1-raw-map-coordinate-topo2-r1],
     :type
     "forall p : FundamentalGroup FrozenTorus (0, 0), frozenMatrixCoordinateMap (frozenTorusPi1Coord p) = frozenTorusPi1CoordAtLbarBase (FundamentalGroup.map frozenLbar (0, 0) p)",
-    :proved-in :routes-2026-10-10-t97a04-h1-bridge-assembly-topo2-r1},
+    :proved-in
+    :routes-2026-10-10-t97a04-frozen-pi1-raw-map-coordinate-topo2-r1},
    :id
    :lemma-constructiontargets-t97a04frozenh1coordinate-frozenlbarpi1map-coordinatemap-raw,
    :kind :lemma,
