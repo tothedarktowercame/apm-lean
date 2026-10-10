@@ -81553,8 +81553,67 @@
    "Factor continuous scale-invariant maps and interval homotopies from nonzero vectors through the projective quotient, using the compiled general open-quotient and product-open-quotient proofs.",
    :other-consumers [:t96A06]}
   {:consumer :t99J05,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "t96A06 still needs the Lefschetz value and non-homotopy argument. t99J05 still needs affine charts, fixed-point and local-index calculations, rational Lefschetz homology, and Euler characteristic.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes {:status :match, :count 131},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2 (git author Joe Corneli)",
+    :commands
+    [{:cmd
+      "sha256sum ConstructionTargets/ProjectiveConsumerLiftDemonstrations.lean",
+      :exit 0,
+      :finding
+      "a7476f64270d07c3892143b59ad978955cc183c94336836b0fd450d91dd6c7b3"}
+     {:cmd
+      "lake env lean ConstructionTargets/ProjectiveConsumerLiftDemonstrations.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd
+      "git show --stat --oneline --no-renames c4c98357938653bf6888fc95ddc6ced37c114f59",
+      :exit 0,
+      :finding "one scoped file, 158 insertions"}
+     {:cmd
+      "git status --short -- ConstructionTargets/ProjectiveConsumerLiftDemonstrations.lean",
+      :exit 0,
+      :finding "clean"}],
+    :diagnostic-history
+    [{:cmd
+      "lake env lean ConstructionTargets/ProjectiveConsumerLiftDemonstrations.lean (first draft)",
+      :exit 1,
+      :correction
+      "Split the quadratic zero proof into product-zero cases, supplied coordinatewise continuity proofs, and oriented quotient orbit equalities correctly."}
+     {:cmd
+      "lake env lean ConstructionTargets/ProjectiveConsumerLiftDemonstrations.lean (second draft)",
+      :exit 1,
+      :correction
+      "Replaced unsupported vector continuity automation with explicit continuous_pi proofs and normalized unit scalar actions."}],
+    :commit "c4c98357938653bf6888fc95ddc6ced37c114f59",
+    :infrastructure-packets 1,
+    :changed-paths
+    ["ConstructionTargets/ProjectiveConsumerLiftDemonstrations.lean"],
+    :fixture
+    {:path
+     "ConstructionTargets/ProjectiveConsumerLiftDemonstrations.lean",
+     :sha256
+     "a7476f64270d07c3892143b59ad978955cc183c94336836b0fd450d91dd6c7b3"},
+    :declarations
+    ["t96A06Polynomial_nonzero"
+     "t96A06Polynomial_orbit"
+     "t96A06Polynomial_descends"
+     "t99J05Diagonal_nonzero"
+     "t99J05DiagonalHomotopy_nonzero"
+     "t99J05Diagonal_orbit"
+     "t99J05DiagonalHomotopy_descends"],
+    :typed-residual-change
+    "The exact RP3 quadratic formula descends to a continuous projective map, and the exact CPn diagonal deformation descends to a continuous interval family with identity and printed-diagonal endpoints."},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/ProjectiveConsumerLiftDemonstrations.lean"],
    :dag-node
