@@ -93546,72 +93546,30 @@
    :evidence
    {:probe
     {:residual
-     "The coordinate map and both one-step conjugation orientations are compiled. Arbitrary b-power action compatibility, the SemidirectProduct.lift inverse, and the two MulEquiv inverse laws remain.",
-     :outcome :revise,
-     :warnings
-     [{:kind :linter,
-       :message
-       "Lean suggests simp instead of simpa in reverseConjugateAPow; the suggested direct replacement was checked and fails, while the compiled term is placeholder-free."}],
+     "The finite algebra route is complete: PresentedKleinGroup has explicit inversion-semidirect integer-pair coordinates and unique a^m*b^n normal forms. The next t93J03 step is the geometric Klein deck action and square-orbit classification using these coordinates.",
+     :outcome :go,
+     :warnings [],
      :missing-theorems
      [{:name "kleinPresentedGroup_coordinateNormalForm",
        :type
        "MulEquiv from T93J03.PresentedKleinGroup to the inversion semidirect integer-pair coordinate group, with generator formulas and unique a^m*b^n coordinates",
-       :status :partial,
+       :status :proved,
        :consumers [:t93J03],
        :depends-on
        ["KleinPresentedGroupCoordinateModel.toCoordinates"
         "KleinPresentedGroupConjugation.conjugateAPow"
         "KleinPresentedGroupTwoSidedConjugation.reverseConjugateAPow"]}],
-     :prerequisite
-     {:bounded-exception
-      "This single-consumer two-sided conjugation lemma is the smallest remaining rewrite prerequisite for integer induction on b-powers in the elected normal-form route.",
-      :consumer :t93J03,
-      :phase :implementation,
-      :state :open,
-      :scope
-      ["ConstructionTargets/KleinPresentedGroupTwoSidedConjugation.lean"],
-      :dag-node
-      "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/presented-group-coordinate-normal-form/two-sided-conjugation",
-      :acceptance
-      {:implementation
-       "Using the banked b^-1 conjugation theorem, prove b*a*b^-1=a^-1 and b*a^m*b^-1=a^(-m) for every m : Int. These are the positive and negative induction steps needed for arbitrary b-power conjugation. Do not construct the semidirect-product lift, claim bijectivity, or prove topology.",
-       :placeholder "the single sorry in apm_t93j03",
-       :route-step
-       "t93J03 step 1a.3, reverse conjugation rewrite before integer induction and the coordinate inverse",
-       :fixture "/tmp/klein-two-sided-conjugation.lean",
-       :fixture-sha256
-       "62a9b94e78ab2830c9eab9410c949244ea97db2c699dab3d50c75cddef99ccb4",
-       :gates
-       ["canonical packages"
-        "fixture compiles"
-        "zero fixture sorry"
-        "standard-only axioms"
-        "registry check"]},
-      :id
-      :routes-2026-10-10-klein-presented-group-two-sided-conjugation-22,
-      :kind :reusable-theorem,
-      :depends-on
-      [:routes-2026-10-10-klein-presented-group-conjugation-rewrite-21],
-      :current-residual
-      "Use the two conjugation orientations in Int.induction_on to prove the action compatibility for all b^n, then construct SemidirectProduct.lift and its inverse laws.",
-      :other-consumers []},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
-     [{:cmd
-       "lake build ConstructionTargets.KleinPresentedGroupConjugation",
+     [{:cmd "lake env lean /tmp/klein-compat.lean",
        :exit 0,
        :finding
-       "the coordinate model and first conjugation orientation compile canonically"}
-      {:cmd "lake env lean /tmp/klein-two-sided-conjugation.lean",
+       "the arbitrary integer-power compatibility equation, SemidirectProduct.lift inverse, MulEquiv, generator formulas, and unique normal form compile with standard axioms"}
+      {:cmd "sha256sum /tmp/klein-compat.lean",
        :exit 0,
        :finding
-       "both reverse-conjugation declarations compile and use only propext, Classical.choice, and Quot.sound"}
-      {:cmd "sha256sum /tmp/klein-two-sided-conjugation.lean",
-       :exit 0,
-       :finding
-       "62a9b94e78ab2830c9eab9410c949244ea97db2c699dab3d50c75cddef99ccb4"}
-      {:cmd
-       "rg -n \"\\b(sorry|admit)\\b\" /tmp/klein-two-sided-conjugation.lean",
+       "2b864409a411fac05f96f09f96e3854ca1e1170e35d0b51a456ca82ad1c38132"}
+      {:cmd "rg -n \"\\b(sorry|admit)\\b\" /tmp/klein-compat.lean",
        :exit 1,
        :expected-exit 1,
        :finding "no placeholders"}
@@ -93620,45 +93578,91 @@
        :finding "131 registered statements match, 0 do not"}
       {:cmd "git status --short", :exit 0, :finding "clean"}],
      :diagnostic-history
-     [{:cmd "lake env lean /tmp/klein-two-sided-conjugation.lean",
+     [{:cmd "lake env lean /tmp/klein-compat.lean",
        :exit 1,
        :finding
-       "the first proof tried to rewrite conjugateAPow (-1) before simplifying zpow -1; normalizing that theorem with simpa supplied the required equation"}
-      {:cmd "lake env lean /tmp/klein-two-sided-conjugation.lean",
+       "early integer induction attempts used the wrong case labels and GroupWithZero zpow lemmas; corrected to Int.induction_on zero/succ/pred and the group zpow_add_one/zpow_sub_one lemmas"}
+      {:cmd "lake env lean /tmp/klein-compat.lean",
        :exit 1,
        :finding
-       "a redundant simp followed a rewrite that had already closed its goal; removing the redundant tactic produced the compiled proof"}
-      {:cmd "lake env lean /tmp/klein-two-sided-conjugation.lean",
+       "the induction hypothesis concerns a while each step concerns a^-1; applying congrArg Inv.inv to the hypothesis and using the two banked conjugation orientations closed both cases"}
+      {:cmd "lake env lean /tmp/klein-compat.lean",
        :exit 1,
        :finding
-       "an attempted linter cleanup used simp only [inv_inv], which made no progress in the conjugation-power step; restored the compiling simpa proof"}],
+       "the first inverse-law proof used a submonoid density theorem against PresentedGroup's subgroup closure; corrected by cancelling the surjective PresentedGroup.mk and applying FreeGroup.ext_hom on the two Bool generators"}
+      {:cmd "lake env lean /tmp/klein-compat.lean",
+       :exit 1,
+       :finding
+       "the first unique-normal-form proof did not expose the definitional formula for fromCoordinates; an explicit local equality between a^m*b^n and the lift value completed uniqueness via injectivity of the inverse coordinate-pair equivalence"}],
      :fixture
-     {:path "/tmp/klein-two-sided-conjugation.lean",
+     {:path "/tmp/klein-compat.lean",
       :sha256
-      "62a9b94e78ab2830c9eab9410c949244ea97db2c699dab3d50c75cddef99ccb4",
+      "2b864409a411fac05f96f09f96e3854ca1e1170e35d0b51a456ca82ad1c38132",
       :interface
-      "reverseConjugateA proves b*a*b^-1=a^-1 and reverseConjugateAPow proves b*a^m*b^-1=a^(-m), complementing the banked b^-1 conjugation orientation."},
+      "KleinCompat.coordinateEquiv : PresentedKleinGroup equivalence-as-groups Coordinates; coordinateEquiv_a and coordinateEquiv_b give the two generator coordinates; uniqueNormalForm gives a unique pair p : Multiplicative Int times Multiplicative Int with x=a^(toAdd p.1)*b^(toAdd p.2)."},
+     :implementation
+     {:scope
+      ["ConstructionTargets/KleinPresentedGroupCoordinateNormalForm.lean"],
+      :declarations
+      ["KleinPresentedGroupCoordinateNormalForm.fromA"
+       "KleinPresentedGroupCoordinateNormalForm.fromB"
+       "KleinPresentedGroupCoordinateNormalForm.actionCompatibilityAtGenerator"
+       "KleinPresentedGroupCoordinateNormalForm.actionCompatibility"
+       "KleinPresentedGroupCoordinateNormalForm.fromCoordinates"
+       "KleinPresentedGroupCoordinateNormalForm.to_from"
+       "KleinPresentedGroupCoordinateNormalForm.from_to"
+       "KleinPresentedGroupCoordinateNormalForm.coordinateEquiv"
+       "KleinPresentedGroupCoordinateNormalForm.coordinateEquiv_a"
+       "KleinPresentedGroupCoordinateNormalForm.coordinateEquiv_b"
+       "KleinPresentedGroupCoordinateNormalForm.coordinatePairEquiv"
+       "KleinPresentedGroupCoordinateNormalForm.uniqueNormalForm"],
+      :acceptance
+      {:implementation
+       "Implement the compiled fixture under the listed scope, importing the three banked Klein coordinate/conjugation modules. Preserve the exact Coordinates semidirect product. Prove action compatibility by integer induction, construct fromCoordinates with SemidirectProduct.lift, prove both inverse homomorphism laws, package coordinateEquiv, and export generator-coordinate and unique-normal-form theorems. Do not add topology or change the frozen PresentedKleinGroup definition.",
+       :fixture "/tmp/klein-compat.lean",
+       :fixture-sha256
+       "2b864409a411fac05f96f09f96e3854ca1e1170e35d0b51a456ca82ad1c38132",
+       :gates
+       ["lake build ConstructionTargets.KleinPresentedGroupCoordinateNormalForm"
+        "fixture compiles through the canonical module"
+        "zero source and fixture sorry"
+        "standard-only axioms"
+        "registry check"]}},
      :seat "topo-4"}},
-   :phase :probe,
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/KleinPresentedGroupCoordinateNormalForm.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/presented-group-coordinate-normal-form",
    :acceptance
-   {:probe
-    "Compile an explicit coordinate normal form for the frozen PresentedKleinGroup. Define the integer-pair Klein coordinate group with multiplication (m,n)*(p,q)=(m+(-1)^n*p,n+q), construct a MulEquiv from PresentedKleinGroup, prove the two presented generators have the required coordinate values, and prove every element has a unique a^m*b^n coordinate. Do not construct the plane quotient or prove any topology.",
-    :placeholder "the single sorry in apm_t93j03",
-    :route-step
-    "t93J03 step 1a, finite algebra prerequisite for the plane-action square orbit classification",
+   {:implementation
+    "Implement the compiled fixture under the listed scope, importing the three banked Klein coordinate/conjugation modules. Preserve the exact Coordinates semidirect product. Prove action compatibility by integer induction, construct fromCoordinates with SemidirectProduct.lift, prove both inverse homomorphism laws, package coordinateEquiv, and export generator-coordinate and unique-normal-form theorems. Do not add topology or change the frozen PresentedKleinGroup definition.",
+    :fixture "/tmp/klein-compat.lean",
+    :fixture-sha256
+    "2b864409a411fac05f96f09f96e3854ca1e1170e35d0b51a456ca82ad1c38132",
     :gates
-    ["canonical packages"
-     "fixture compiles"
-     "zero fixture sorry"
+    ["lake build ConstructionTargets.KleinPresentedGroupCoordinateNormalForm"
+     "fixture compiles through the canonical module"
+     "zero source and fixture sorry"
      "standard-only axioms"
      "registry check"]},
    :id
    :routes-2026-10-10-klein-presented-group-coordinate-normal-form-19,
    :kind :reusable-theorem,
+   :declarations
+   ["KleinPresentedGroupCoordinateNormalForm.fromA"
+    "KleinPresentedGroupCoordinateNormalForm.fromB"
+    "KleinPresentedGroupCoordinateNormalForm.actionCompatibilityAtGenerator"
+    "KleinPresentedGroupCoordinateNormalForm.actionCompatibility"
+    "KleinPresentedGroupCoordinateNormalForm.fromCoordinates"
+    "KleinPresentedGroupCoordinateNormalForm.to_from"
+    "KleinPresentedGroupCoordinateNormalForm.from_to"
+    "KleinPresentedGroupCoordinateNormalForm.coordinateEquiv"
+    "KleinPresentedGroupCoordinateNormalForm.coordinateEquiv_a"
+    "KleinPresentedGroupCoordinateNormalForm.coordinateEquiv_b"
+    "KleinPresentedGroupCoordinateNormalForm.coordinatePairEquiv"
+    "KleinPresentedGroupCoordinateNormalForm.uniqueNormalForm"],
    :depends-on
    [:routes-2026-10-10-checkpoint-topo1-after-schreier-type-valued-basis-16
     :routes-2026-10-10-klein-presented-group-coordinate-model-forward-map-20
@@ -94179,7 +94183,9 @@
     [:routes-2026-10-10-checkpoint-topo1-after-schreier-type-valued-basis-16
      :routes-2026-10-10-klein-presented-group-coordinate-normal-form-19],
     :type
-    "An explicit group equivalence from the presented Klein-bottle group to integer-pair coordinates with multiplication (m,n)*(p,q)=(m+(-1)^n*p,n+q), including generator coordinate formulas and uniqueness."},
+    "An explicit group equivalence from the presented Klein-bottle group to integer-pair coordinates with multiplication (m,n)*(p,q)=(m+(-1)^n*p,n+q), including generator coordinate formulas and uniqueness.",
+    :proved-in
+    :routes-2026-10-10-klein-presented-group-coordinate-normal-form-19},
    :id :lemma-kleinpresentedgroup-coordinatenormalform,
    :kind :lemma,
    :depends-on
