@@ -66948,7 +66948,50 @@
   {:bounded-exception
    "single-consumer exact normal-radius calculation at the meridian endpoint",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:residual
+     "Prove the input right-core normal coordinate has norm at most 1/4, use convexity to bound the interpolation, then construct the angular component and deletion avoidance.",
+     :outcome :go,
+     :warnings [],
+     :missing-theorems [],
+     :axioms [propext Classical.choice Quot.sound],
+     :commands
+     [{:cmd "lake env lean /tmp/t02a03_right_core_compact_probe.lean",
+       :exit 0,
+       :output
+       "norm_rightTubeCoreNormalComplex_circleMeridian compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd "sha256sum /tmp/t02a03_right_core_compact_probe.lean",
+       :exit 0,
+       :output
+       "6d0996414757a58625aacf51e121e430b4ff88e578ad90f21e6c2d6f818a1fbe  /tmp/t02a03_right_core_compact_probe.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_right_core_compact_probe.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}
+      {:cmd
+       "rg -n \"norm_rightTubeCoreNormalComplex_circleMeridian\" /tmp/t02a03_right_core_compact_probe.lean",
+       :exit 0,
+       :output
+       "The theorem begins at line 340 and its axiom audit is at line 366."}],
+     :fixture
+     {:path "/tmp/t02a03_right_core_compact_probe.lean",
+      :sha256
+      "6d0996414757a58625aacf51e121e430b4ff88e578ad90f21e6c2d6f818a1fbe"},
+     :finding
+     "The exact coordinate calculation reduces the squared normal norm to ((z.re)^2+(z.im)^2)/64=1/64, so its nonnegative square root is 1/8 for every Circle parameter.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+      :declarations
+      [{:name
+        "ConstructionTargets.T02A03GeometricTubeDeformation.norm_rightTubeCoreNormalComplex_circleMeridian",
+        :type
+        "forall z : Circle, norm (rightTubeCoreNormalComplex (apm_t02a03_circleMeridian z)) = (1 / 8 : Real)"}]},
+     :seat "topo-8"}},
+   :phase :implementation,
    :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
@@ -66967,6 +67010,11 @@
    :routes-2026-10-10-t02a03-right-core-meridian-normal-radius-topo2-r1,
    :kind :reusable-theorem,
    :area "explicit-r3-tube-deformation-retraction",
+   :declarations
+   [{:name
+     "ConstructionTargets.T02A03GeometricTubeDeformation.norm_rightTubeCoreNormalComplex_circleMeridian",
+     :type
+     "forall z : Circle, norm (rightTubeCoreNormalComplex (apm_t02a03_circleMeridian z)) = (1 / 8 : Real)"}],
    :depends-on
    [:routes-2026-10-10-t02a03-right-core-normal-interpolation-topo2-r1],
    :current-residual
