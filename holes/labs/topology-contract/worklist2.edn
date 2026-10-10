@@ -59795,9 +59795,16 @@
    "single-consumer explicit tube-complement-to-generic-wedge homotopy equivalence for t02A03",
    :consumer :t02A03,
    :stop-count 1,
+   :review-finding
+   "design the supporting signatures and discharge the frozen axiom type",
    :evidence
-   {:outcome :stop,
-    :seat "topo-8",
+   {:residual
+    "Split this foundation into a multi-row program: explicit left-tube-minus-core coordinates and deformation, explicit right-tube-minus-arc coordinates and deformation extending the banked attachment homotopy, an overlap model at the tangency, and a gluing theorem for compatible homotopy equivalences. After those are banked, assemble the frozen geometricYHomotopyEquivGenericWedge type.",
+    :outcome :stop,
+    :disposition :stop,
+    :author "topo-8",
+    :reason
+    "The frozen theorem ConstructionTargets.T02A03GeometricTubeDeformation.geometricYHomotopyEquivGenericWedge : Nonempty (ContinuousMap.HomotopyEquiv T02A03GeometricTubeCover.apm_t02a03_geometricY_probe TorusCircleWedgeOpenCover.GenericWedge) is exactly the missing foundation and is too large for one probe prerequisite. The source is a closed Metric.infDist/cthickening-defined union of two solid tubes with the left core deleted. Its membership proof contains no continuous core parameter or normal coordinate. A proof must first construct explicit continuous tube coordinates and inverse maps, prove every deformation stage remains within radius 1/4 and avoids the deleted left core, handle the singular common tangency where nearest-core choices cease to be unique, and prove the two tube-piece maps and homotopies agree on their overlap. No such coordinate model, retraction, or homotopy-equivalence gluing theorem exists in ConstructionTargets. The alternative closed-cofibration gluing theorem is also absent and independently foundation-sized. This is a missing-construction boundary, not a refutation of the frozen type.",
     :commands
     [{:cmd
       "test ! -e ConstructionTargets/T02A03GeometricTubeDeformation.lean",
@@ -59824,18 +59831,19 @@
       :exit 0,
       :output
       "03caeef04ef63e83ed7d18db409c345c504bc183f7880e468fde0580ae1c37dd  /tmp/t02a03_geometric_tube_cover.lean"}],
-    :reason
-    "The frozen theorem ConstructionTargets.T02A03GeometricTubeDeformation.geometricYHomotopyEquivGenericWedge : Nonempty (ContinuousMap.HomotopyEquiv T02A03GeometricTubeCover.apm_t02a03_geometricY_probe TorusCircleWedgeOpenCover.GenericWedge) is exactly the missing foundation and is too large for one probe prerequisite. The source is a closed Metric.infDist/cthickening-defined union of two solid tubes with the left core deleted. Its membership proof contains no continuous core parameter or normal coordinate. A proof must first construct explicit continuous tube coordinates and inverse maps, prove every deformation stage remains within radius 1/4 and avoids the deleted left core, handle the singular common tangency where nearest-core choices cease to be unique, and prove the two tube-piece maps and homotopies agree on their overlap. No such coordinate model, retraction, or homotopy-equivalence gluing theorem exists in ConstructionTargets. The alternative closed-cofibration gluing theorem is also absent and independently foundation-sized. This is a missing-construction boundary, not a refutation of the frozen type.",
+    :review
+    {:outcome :fail,
+     :seat "codex-7",
+     :job "invoke-1791632668106-1829-be4e8413",
+     :finding
+     "design the supporting signatures and discharge the frozen axiom type"},
     :finding
     "The punctured-right-core attachment homotopy is fully compiled and standard-axiom-only, but it controls only a one-dimensional core parameter. Repository and route checks locate no theorem that extends it to the full three-dimensional tube complement or glues the two tube models. The requested scoped file does not exist, so there is no partial fixture that could qualify for GO or a smaller compiled prerequisite that could justify REVISE.",
-    :residual
-    "Split this foundation into a multi-row program: explicit left-tube-minus-core coordinates and deformation, explicit right-tube-minus-arc coordinates and deformation extending the banked attachment homotopy, an overlap model at the tangency, and a gluing theorem for compatible homotopy equivalences. After those are banked, assemble the frozen geometricYHomotopyEquivGenericWedge type.",
-    :author "topo-8",
-    :disposition :stop},
-   :phase :probe,
+    :seat "topo-8"},
+   :phase :implementation,
    :type
    "Nonempty (ContinuousMap.HomotopyEquiv T02A03GeometricTubeCover.apm_t02a03_geometricY_probe TorusCircleWedgeOpenCover.GenericWedge)",
-   :state :done-unreviewed,
+   :state :repair,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/geometric-tube-deformation-equivalence",
@@ -59858,6 +59866,7 @@
    :kind :reusable-theorem,
    :declaration
    "ConstructionTargets.T02A03GeometricTubeDeformation.geometricYHomotopyEquivGenericWedge",
+   :fail-count 1,
    :depends-on
    [:routes-2026-10-10-checkpoint-topo2-r5
     :routes-2026-10-10-t02a03-geometric-right-core-based-attachment-homotopy-topo2-r1],
