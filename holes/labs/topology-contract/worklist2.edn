@@ -62467,45 +62467,65 @@
    "single-consumer reconstructed planar polar formula for the t02A03 complement interpolation",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:residual
-     "Implement the reconstructed planar polar formula in the scoped module; then combine both endpoint formulas to evaluate the interpolation norm and continue to the exact normal-coordinate formula and deleted-core exclusion.",
-     :outcome :go,
-     :warnings
-     ["/tmp/t02a03_geometric_tube_cover.lean:786:38: unnecessarySeqFocus linter warning in a previously banked theorem"],
-     :acceptance
-     {:declaration
-      "apm_t02a03_leftTubePlanarComplex_torusInverse_coordinates",
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Combine both planar endpoint formulas to evaluate the interpolated planar norm, prove the exact normal-coordinate formula, deduce deleted-core exclusion, bundle the homotopy, and assemble the torus HomotopyEquiv.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["/tmp/t02a03_geometric_tube_cover.lean:786:38: unnecessarySeqFocus linter warning in a previously banked theorem; scoped module compiles without warnings"],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_leftTubePlanarComplex_torusInverse_coordinates",
       :type
-      "forall p : apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubePlanarComplex ⟨(apm_t02a03_leftTubeTorusInverse (apm_t02a03_leftTubeTorusCoordinates p)).1, (apm_t02a03_leftTubeTorusInverse (apm_t02a03_leftTubeTorusCoordinates p)).2.1⟩ = (1 + (1 / 8 : Real) * ((apm_t02a03_leftTubeNormalAngular p : Circle) : Complex).re) • ((apm_t02a03_leftTubeAngular ⟨p.1, p.2.1⟩ : Circle) : Complex)"},
-     :commands
-     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "apm_t02a03_leftTubePlanarComplex_torusInverse_coordinates compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
-       :exit 0}
-      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "dc062176b19d0f11197fc6c9636b8016a60bff441916fc4bf88d20b87e3b8b04  /tmp/t02a03_geometric_tube_cover.lean"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :fixture
-     {:path "/tmp/t02a03_geometric_tube_cover.lean",
-      :sha256
-      "dc062176b19d0f11197fc6c9636b8016a60bff441916fc4bf88d20b87e3b8b04"},
-     :finding
-     "The reconstructed planar polar formula is complete and placeholder-free. Direct coordinate expansion identifies the inverse-after-forward planar coordinate with the source angular direction scaled by 1 + (1/8) times the normal direction's real part.",
-     :implementation
-     {:scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
-      :declarations
-      ["ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_leftTubePlanarComplex_torusInverse_coordinates"]},
-     :seat "topo-8"}},
+      "forall p : apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubePlanarComplex ⟨(apm_t02a03_leftTubeTorusInverse (apm_t02a03_leftTubeTorusCoordinates p)).1, (apm_t02a03_leftTubeTorusInverse (apm_t02a03_leftTubeTorusCoordinates p)).2.1⟩ = (1 + (1 / 8 : Real) * ((apm_t02a03_leftTubeNormalAngular p : Circle) : Complex).re) • ((apm_t02a03_leftTubeAngular ⟨p.1, p.2.1⟩ : Circle) : Complex)",
+      :status :proved,
+      :consumers [:t02A03],
+      :depends-on
+      ["ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_leftTubePlanarComplex_eq_norm_smul_angular"]}],
+    :statement-hashes
+    {:frozen-type-sha256
+     "089b942cf26f3b5d64f81092456365d553b8de8eca9dd31fca89fc92839505c9",
+     :registry "131 registered statements match, 0 do not"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean", :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03LeftTubePuncturedModel.lean",
+      :exit 0}
+     {:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+      :exit 0}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03LeftTubePuncturedModel.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git rev-parse 2a75937d && git diff-tree --no-commit-id --name-only -r 2a75937d",
+      :exit 0,
+      :output
+      "2a75937d1082dbc0e6b254434e29c93d288e5a70\nConstructionTargets/T02A03LeftTubePuncturedModel.lean"}
+     {:cmd "git show --check --oneline 2a75937d", :exit 0}],
+    :commit "2a75937d1082dbc0e6b254434e29c93d288e5a70",
+    :changed-paths
+    ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
+    :fixture
+    {:path "/tmp/t02a03_geometric_tube_cover.lean",
+     :sha256
+     "dc062176b19d0f11197fc6c9636b8016a60bff441916fc4bf88d20b87e3b8b04"},
+    :finding
+    "Banked the exact inverse-after-forward planar endpoint formula by direct complex-coordinate expansion of the explicit torus reconstruction.",
+    :implementation
+    {:scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
+     :declarations
+     ["ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_leftTubePlanarComplex_torusInverse_coordinates"],
+     :type
+     "forall p : apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubePlanarComplex ⟨(apm_t02a03_leftTubeTorusInverse (apm_t02a03_leftTubeTorusCoordinates p)).1, (apm_t02a03_leftTubeTorusInverse (apm_t02a03_leftTubeTorusCoordinates p)).2.1⟩ = (1 + (1 / 8 : Real) * ((apm_t02a03_leftTubeNormalAngular p : Circle) : Complex).re) • ((apm_t02a03_leftTubeAngular ⟨p.1, p.2.1⟩ : Circle) : Complex)"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/left-tube-reconstructed-planar-polar",
@@ -63741,7 +63761,8 @@
     "ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_leftTubePlanarComplex_radialPoint",
     :reported-by
     [:routes-2026-10-10-t02a03-left-tube-planar-coordinate-interpolation-topo2-r1
-     :routes-2026-10-10-t02a03-left-tube-planar-polar-decomposition-topo2-r1],
+     :routes-2026-10-10-t02a03-left-tube-planar-polar-decomposition-topo2-r1
+     :routes-2026-10-10-t02a03-left-tube-reconstructed-planar-polar-topo2-r1],
     :type
     "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubePlanarComplex ⟨apm_t02a03_leftTubeRadialPoint tp, apm_t02a03_leftTubeRadialPoint_mem_leftTube tp⟩ = (1 - (tp.1 : Real)) • apm_t02a03_leftTubePlanarComplex ⟨(apm_t02a03_leftTubeTorusInverse (apm_t02a03_leftTubeTorusCoordinates tp.2)).1, (apm_t02a03_leftTubeTorusInverse (apm_t02a03_leftTubeTorusCoordinates tp.2)).2.1⟩ + (tp.1 : Real) • apm_t02a03_leftTubePlanarComplex ⟨tp.2.1, tp.2.2.1⟩",
     :proved-in
