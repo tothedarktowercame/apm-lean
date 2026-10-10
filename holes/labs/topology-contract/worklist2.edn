@@ -57731,47 +57731,67 @@
    :other-consumers []}
   {:consumer :t95A04,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/rp2_smooth_atlas_two_consumers.lean",
-      :sha256
-      "03d4a02a3a89c52032180146ad97eb7f78661e27d9d41e23e6c73d5c9b1cee2d"},
-     :commands
-     [{:cmd "lake env lean /tmp/rp2_smooth_atlas_two_consumers.lean",
-       :exit 0,
-       :output
-       "rp2SmoothAtlasPacket and rp2SphereProjectionLocalDiffeomorph compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp2_smooth_atlas_two_consumers.lean || true)\"",
-       :exit 0}
-      {:cmd "sha256sum /tmp/rp2_smooth_atlas_two_consumers.lean",
-       :exit 0,
-       :output
-       "03d4a02a3a89c52032180146ad97eb7f78661e27d9d41e23e6c73d5c9b1cee2d  /tmp/rp2_smooth_atlas_two_consumers.lean"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :finding
-     "The requested shared RP2 atlas is already fully banked in ConstructionTargets.RealProjectiveSmoothTarget. The module constructs quotient charts from local inverse branches, proves their transition compatibility using the identity-or-antipodal local normal form, supplies the IsManifold instance, proves sphereProjection is a local diffeomorphism, and packages these results as rpSmoothAtlas. The consumer-facing fixture instantiates that atlas and checks its exact quotient_localDiffeomorph field.",
-     :residual
-     "Use rpSmoothAtlas in t95A04 to descend and prove the Veronese embedding and immersion; use the same atlas in t96A07 to descend the quadratic map and prove the stated transversality claims.",
-     :implementation
-     {:scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
-      :acceptance
-      {:declarations
-       ["rpSmoothAtlas"
-        "rpSmoothAtlas_exists"
-        "sphereProjectionQuotientLocalDiffeomorph"],
-       :placeholder
-       "the sole sorry in apm_t95a04 and the sole sorry in apm_t96a07",
-       :route-step
-       "t95A04 step 1 and t96A07 step 1, shared RP2 smooth atlas",
-       :note
-       "The scoped module already contains the complete compiled packet; implementation should bank or confirm these exact declarations without changing registered consumer statements."}}}},
+   {:placeholder-delta 0,
+    :residual
+    "Use rpSmoothAtlas in t95A04 to descend the Veronese map and prove embedding and immersion; use the same atlas in t96A07 to descend the quadratic map and prove its stated transversality claims.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd "sha256sum /tmp/rp2_smooth_atlas_two_consumers.lean",
+      :exit 0,
+      :output
+      "03d4a02a3a89c52032180146ad97eb7f78661e27d9d41e23e6c73d5c9b1cee2d  /tmp/rp2_smooth_atlas_two_consumers.lean"}
+     {:cmd "lake env lean /tmp/rp2_smooth_atlas_two_consumers.lean",
+      :exit 0,
+      :output
+      "rp2SmoothAtlasPacket and rp2SphereProjectionLocalDiffeomorph compiled"}
+     {:cmd
+      "lake env lean ConstructionTargets/RealProjectiveSmoothTarget.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.RealProjectiveSmoothTarget",
+      :exit 0,
+      :output "Build completed successfully (8241 jobs)."}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/RealProjectiveSmoothTarget.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "lake env lean /tmp/check_rp2_atlas_axioms.lean",
+      :exit 0,
+      :output
+      "All three declarations depend on [propext, Classical.choice, Quot.sound]."}
+     {:cmd
+      "comment-stripped placeholder census for problems/t95A04/lean/Main.lean and problems/t96A07/lean/Main.lean",
+      :exit 0,
+      :output "t95A04 1; t96A07 1"}
+     {:cmd
+      "sha256sum problems/t95A04/lean/Main.lean problems/t96A07/lean/Main.lean",
+      :exit 0,
+      :output
+      "4c7127b62804465cfe844ba7f1254eee80eee61bd62c92223e7cbec7c9f6f78d  problems/t95A04/lean/Main.lean\nbb7ba547a62c9efd1f86f4258c09089e005d1d455a93a582fce7a9edb36bc22c  problems/t96A07/lean/Main.lean"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r 7255886501f11286c5d21f4cb216d1ac2bdc7ce8",
+      :exit 0,
+      :output "ConstructionTargets/RealProjectiveSmoothTarget.lean"}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "7255886501f11286c5d21f4cb216d1ac2bdc7ce8",
+    :changed-paths
+    ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
+    :fixture
+    {:path "/tmp/rp2_smooth_atlas_two_consumers.lean",
+     :sha256
+     "03d4a02a3a89c52032180146ad97eb7f78661e27d9d41e23e6c73d5c9b1cee2d"},
+    :declarations
+    ["ConstructionTargets.RealProjectiveSmoothTarget.rpSmoothAtlas"
+     "ConstructionTargets.RealProjectiveSmoothTarget.rpSmoothAtlas_exists"
+     "ConstructionTargets.RealProjectiveSmoothTarget.sphereProjectionQuotientLocalDiffeomorph"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/shared/rp-smooth-atlas",
    :acceptance
