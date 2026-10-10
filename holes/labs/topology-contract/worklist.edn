@@ -92488,6 +92488,89 @@
    :state :open,
    :scope [],
    :dag-node
+   "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/type-valued-spanning-tree-basis",
+   :acceptance
+   {:probe
+    "Compile the generic Type-valued restatement of Mathlib IsFreeGroupoid.SpanningTree.endIsFree. For a free groupoid G and an arborescence T of Symmetrify (IsFreeGroupoid.Generators G), return FreeGroupBasis indexed exactly by the complement subtype ((wideSubquiverEquivSetTotal (wideSubquiverSymmetrify T)) complement) on End (show G from Quiver.root T). Reuse the existing loopOfHom, functorOfMonoidHom, homOfPath, treeHom, and unique_lift argument, replacing only the final IsFreeGroup.ofUniqueLift call by FreeGroupBasis.ofUniqueLift. Do not perform finite cardinality arithmetic, subgroup transport, or Fin reindexing.",
+    :placeholder
+    "the single sorry in apm_t99j01 and apm_t97A03_bridge_invariants_of_model",
+    :route-step
+    "t99J01 step 3 and t97A03 step 8, generic Type-valued spanning-tree basis required before positive-index subgroup transport",
+    :gates
+    ["canonical packages"
+     "fixture compiles"
+     "zero fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id
+   :routes-2026-10-10-type-valued-spanning-tree-free-group-basis-17,
+   :kind :reusable-theorem,
+   :depends-on [],
+   :current-residual
+   "Copy Mathlib's existing endIsFree unique-lift proof at its present generality and retain the explicit complement indexing type by constructing FreeGroupBasis.ofUniqueLift instead of erasing it into IsFreeGroup.",
+   :other-consumers [:t97A03]}
+  {:consumer :t99J01,
+   :evidence
+   {:probe
+    {:outcome :revise,
+     :seat "topo-4",
+     :fixture
+     {:path "/tmp/schreier-type-valued-prereq.lean",
+      :sha256
+      "105c67fe116ef05bcfdc53a943624e86752a0a69de64a1b818debfbe908336e9",
+      :interface
+      "spanningTreeBasis (T : WideSubquiver (Symmetrify (IsFreeGroupoid.Generators G))) [Arborescence T] : FreeGroupBasis (((wideSubquiverEquivSetTotal (wideSubquiverSymmetrify T)) complement) : Set (Quiver.Total (IsFreeGroupoid.Generators G))) (End (show G from Quiver.root T))"},
+     :commands
+     [{:cmd "lake env lean /tmp/schreier-type-valued-prereq.lean",
+       :exit 0,
+       :finding
+       "The exact generic Type-valued spanning-tree basis interface compiles."}
+      {:cmd
+       "rg -n \"sorry|admit\" /tmp/schreier-type-valued-prereq.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :finding "131 registered statements match, 0 do not"}
+      {:cmd "git status --short", :exit 0, :finding "clean"}],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/schreier-type-valued-prereq.lean",
+       :exit 1,
+       :finding
+       "The first run lacked the generated olean for the newly banked complement module; compiled that reviewed dependency through Lean's normal build output and reran."}],
+     :prerequisite
+     {:consumer :t99J01,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/type-valued-spanning-tree-basis",
+      :acceptance
+      {:probe
+       "Compile the generic Type-valued restatement of Mathlib IsFreeGroupoid.SpanningTree.endIsFree. For a free groupoid G and an arborescence T of Symmetrify (IsFreeGroupoid.Generators G), return FreeGroupBasis indexed exactly by the complement subtype ((wideSubquiverEquivSetTotal (wideSubquiverSymmetrify T)) complement) on End (show G from Quiver.root T). Reuse the existing loopOfHom, functorOfMonoidHom, homOfPath, treeHom, and unique_lift argument, replacing only the final IsFreeGroup.ofUniqueLift call by FreeGroupBasis.ofUniqueLift. Do not perform finite cardinality arithmetic, subgroup transport, or Fin reindexing.",
+       :placeholder
+       "the single sorry in apm_t99j01 and apm_t97A03_bridge_invariants_of_model",
+       :route-step
+       "t99J01 step 3 and t97A03 step 8, generic Type-valued spanning-tree basis required before positive-index subgroup transport",
+       :gates
+       ["canonical packages"
+        "fixture compiles"
+        "zero fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :id
+      :routes-2026-10-10-type-valued-spanning-tree-free-group-basis-17,
+      :kind :reusable-theorem,
+      :depends-on [],
+      :current-residual
+      "Copy Mathlib's existing endIsFree unique-lift proof at its present generality and retain the explicit complement indexing type by constructing FreeGroupBasis.ofUniqueLift instead of erasing it into IsFreeGroup.",
+      :other-consumers [:t97A03]},
+     :residual
+     "Once spanningTreeBasis is banked, map it through endMulEquivSubgroup H, use Finite.equivFinOfCardEq with the banked complement_card_formula, and expose the general, r=3, and r=2,n=2 MulEquiv results in the original row."}},
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
    "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/positive-index/type-valued-basis",
    :acceptance
    {:probe
@@ -92508,7 +92591,8 @@
    :depends-on
    [:routes-2026-10-10-finite-schreier-tree-positive-selection-complement-count-15
     :routes-2026-10-10-finite-arborescence-total-edge-count-13
-    :routes-2026-10-10-checkpoint-topo1-after-schreier-complement-count-15],
+    :routes-2026-10-10-checkpoint-topo1-after-schreier-complement-count-15
+    :routes-2026-10-10-type-valued-spanning-tree-free-group-basis-17],
    :current-residual
    "Copy the existing spanning-tree unique-lift proof into FreeGroupBasis.ofUniqueLift, map the resulting end-group basis across endMulEquivSubgroup H, and reindex its counted complement by Fin ((r-1)*n+1).",
    :other-consumers [:t97A03]}
