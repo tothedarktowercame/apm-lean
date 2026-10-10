@@ -95850,8 +95850,75 @@
   {:bounded-exception
    "This single-consumer subtype package fixes the exact Joined-based component used by T99J01ComponentSheets and supplies the openness and path-connectedness facts needed before restricting covering charts.",
    :consumer :t99J01,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Prove a covering over a locally path-connected base has locally path-connected total space, restrict each evenly covered chart to the selected open component sheets, and prove the component restriction surjective by lifting base paths.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :missing-theorems
+    [{:name "CoveringPathComponentDomain.Component",
+      :type
+      "The subtype {x : E // Joined e x}, with carrier equal to pathComponent e, open under LocPathConnectedSpace E, path connected, and carrying PathConnectedSpace",
+      :status :proved,
+      :consumers [:t99J01],
+      :depends-on []}],
+    :statement-hashes "131 registered statements match",
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :finding
+      "canonical package authority resolves to /home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "sha256sum /tmp/covering-path-component-domain.lean",
+      :exit 0,
+      :finding
+      "fixture hash matches bfbaa5c5a73005f4a652f205a6c36ba557c81bb56a68252dd4b2d98c512333a8"}
+     {:cmd
+      "lake build ConstructionTargets.CoveringPathComponentDomain",
+      :exit 0,
+      :finding "canonical Joined-component subtype package builds"}
+     {:cmd "lake env lean /tmp/covering-path-component-domain.lean",
+      :exit 0,
+      :finding
+      "frozen fixture compiles and reports only standard axioms"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" ConstructionTargets/CoveringPathComponentDomain.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero source placeholders"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" /tmp/covering-path-component-domain.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero fixture placeholders"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short",
+      :exit 0,
+      :finding "clean worktree after commit"}],
+    :commit "3bc6577f0aa9f4dd45cf88977ec32481f857562a",
+    :changed-paths
+    ["ConstructionTargets/CoveringPathComponentDomain.lean"],
+    :fixture
+    {:path "/tmp/covering-path-component-domain.lean",
+     :sha256
+     "bfbaa5c5a73005f4a652f205a6c36ba557c81bb56a68252dd4b2d98c512333a8",
+     :sorry-count 0},
+    :implementation
+    {:scope ["ConstructionTargets/CoveringPathComponentDomain.lean"],
+     :declarations
+     ["ConstructionTargets.CoveringPathComponentDomain.Component"
+      "ConstructionTargets.CoveringPathComponentDomain.component_set_eq"
+      "ConstructionTargets.CoveringPathComponentDomain.component_isOpen"
+      "ConstructionTargets.CoveringPathComponentDomain.component_isPathConnected"
+      "ConstructionTargets.CoveringPathComponentDomain.componentPathConnectedSpace"]},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/CoveringPathComponentDomain.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component/domain",
@@ -97416,6 +97483,25 @@
    {:name "CoveringPathComponentDomain.componentPathConnectedSpace",
     :reported-by []},
    :id :lemma-coveringpathcomponentdomain-componentpathconnectedspace,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t99J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "CoveringPathComponentDomain.Component",
+    :type
+    "The subtype {x : E // Joined e x}, with carrier equal to pathComponent e, open under LocPathConnectedSpace E, path connected, and carrying PathConnectedSpace"},
+   :lemma
+   {:name "CoveringPathComponentDomain.Component",
+    :reported-by
+    [:routes-2026-10-10-covering-path-component-domain-39],
+    :type
+    "The subtype {x : E // Joined e x}, with carrier equal to pathComponent e, open under LocPathConnectedSpace E, path connected, and carrying PathConnectedSpace",
+    :proved-in :routes-2026-10-10-covering-path-component-domain-39},
+   :id :lemma-coveringpathcomponentdomain-component,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}],
