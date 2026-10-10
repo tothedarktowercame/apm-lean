@@ -60099,41 +60099,65 @@
    "single-consumer angular-coordinate nonvanishing on the frozen t02A03 left tube",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/t02a03_geometric_tube_cover.lean",
-      :sha256
-      "b3f61e992acbcc3d178c7820119d84bb13ef00e99e4605e59ef0b94f957c9790"},
-     :commands
-     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "apm_t02a03_leftTube_planarCenter_ne_zero compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
-       :exit 0}
-      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "b3f61e992acbcc3d178c7820119d84bb13ef00e99e4605e59ef0b94f957c9790  /tmp/t02a03_geometric_tube_cover.lean"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :finding
-     "The requested planar-center nonvanishing theorem is complete and placeholder-free. A vanishing planar displacement would place the tube point over the circle center, forcing distance at least one from every unit-radius core point and contradicting the attained radius-1/4 witness.",
-     :implementation
-     {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
-      :declaration "apm_t02a03_leftTube_planarCenter_ne_zero",
-      :type
-      "∀ p : apm_t02a03_E3, p ∈ apm_t02a03_leftTube → (p 0 + 1) ^ 2 + (p 1) ^ 2 ≠ 0"},
-     :residual
-     "Define the continuous Circle-valued angular coordinate and punctured-normal coordinate, construct their comparison homotopies, and assemble the torus HomotopyEquiv."}},
+   {:placeholder-delta
+    {:path "ConstructionTargets/T02A03GeometricTubeCover.lean",
+     :before 0,
+     :after 0,
+     :delta 0},
+    :git-author "Joe Corneli <holtzermann17@gmail.com>",
+    :residual
+    "Define the continuous Circle-valued angular coordinate and punctured-normal coordinate, prove their comparison homotopies, and assemble the torus HomotopyEquiv.",
+    :type
+    "∀ p : apm_t02a03_E3, p ∈ apm_t02a03_leftTube → (p 0 + 1) ^ 2 + (p 1) ^ 2 ≠ 0",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not",
+     :declaration-type-sha256
+     "ed2fd06147c6911a592983a682df097bd469d20275abdd73b357093b2ff205e4"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+      :exit 0,
+      :output
+      "b3f61e992acbcc3d178c7820119d84bb13ef00e99e4605e59ef0b94f957c9790  /tmp/t02a03_geometric_tube_cover.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeCover.lean",
+      :exit 0}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeCover.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "lake env lean /tmp/t02a03_geometric_tube_cover.lean | tail -6",
+      :exit 0,
+      :output
+      "'apm_t02a03_leftTube_planarCenter_ne_zero' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "git commit -m \"Bank t02A03 left-tube angular nonvanishing\"",
+      :exit 0,
+      :output
+      "[master 42db7362] Bank t02A03 left-tube angular nonvanishing; 1 file changed, 16 insertions(+)"}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "42db7362658d36491a598fc884c87a3e2d381717",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
+    :declaration "apm_t02a03_leftTube_planarCenter_ne_zero",
+    :fixture
+    {:path "/tmp/t02a03_geometric_tube_cover.lean",
+     :sha256
+     "b3f61e992acbcc3d178c7820119d84bb13ef00e99e4605e59ef0b94f957c9790"},
+    :finding
+    "Banked uniform planar-center nonvanishing on the frozen closed left tube. If the displacement vanished, the attained radius-1/4 witness would be at distance at least one by the exact unit-radius core identity, a contradiction.",
+    :seat "topo-6"},
    :phase :implementation,
    :type
    "∀ p : apm_t02a03_E3, p ∈ apm_t02a03_leftTube → (p 0 + 1) ^ 2 + (p 1) ^ 2 ≠ 0",
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/left-tube-planar-center-nonzero",
