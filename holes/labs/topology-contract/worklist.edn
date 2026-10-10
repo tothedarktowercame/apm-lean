@@ -88609,8 +88609,141 @@
    "Review three independent t99J01 route advances, including the Schreier theorem shared with t97A03.",
    :other-consumers []}
   {:consumer :t93J03,
-   :phase :probe,
+   :phase :implementation,
    :state :open,
+   :scope
+   ["ConstructionTargets/KleinDeckActionPolygonIdentification.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action-polygon-identification/explicit-package",
+   :acceptance
+   {:placeholder "the single sorry in apm_t93j03",
+    :route-step
+    "t93J03 step 1, kleinDeckAction and polygon quotient identification",
+    :declarations
+    ["IsGroupAction"
+     "IsFreeAction"
+     "IsProperlyDiscontinuousAction"
+     "KleinDeckActionPackage"
+     "kleinDeckActionPackage"],
+    :implementation
+    "Define the PresentedKleinGroup action on the plane with generator a acting by (x,y) |-> (x+1,y) and generator b acting by (x,y) |-> (-x,y+1), proving the presented relator acts trivially and descending the FreeGroup action. Prove the group-action laws and continuity, freeness by a normal-form calculation, and proper discontinuity by bounding the finitely many integer translation and glide-reflection parameters that can move one compact set to meet another. Define the orbit setoid and construct a homeomorphism from its quotient to StatementSurfaceModels.KleinBottle. Build it from a square fundamental domain and the coinduced aabb disk quotient, prove the full boundary and corner relation equivalence in both directions, and establish the displayed generator formulas and that the orbit of (0,0) maps to surfacePoint false 2. Defer the general deck-group fundamental-group theorem, presented-group normal-form equivalence, lifting criterion, and annulus embedding.",
+    :axioms :standard-only,
+    :fixture
+    "/tmp/t93j03-klein-deck-action-polygon-identification-probe.lean",
+    :fixture-sha256
+    "a7af38c238c547b240c88ffc75871f3afb2bc7b662d3e63e4e77c70009a2ff78",
+    :commands
+    ["lake env lean ConstructionTargets/KleinDeckActionPolygonIdentification.lean"
+     "lake env lean -o /tmp/Main.olean problems/t93J03/lean/Main.lean"
+     "lake env bash -c 'export LEAN_PATH=\"/tmp:$LEAN_PATH\"; lean /tmp/t93j03-klein-deck-action-polygon-identification-probe.lean'"
+     "python3 scripts/statement-registry.py check"]},
+   :id :routes-2026-10-10-t93j03-klein-deck-action-polygon-package-1,
+   :kind :uptake,
+   :depends-on [],
+   :current-residual
+   "Construct the explicit PresentedKleinGroup plane action and prove its orbit quotient is the frozen aabb KleinBottle with the required generator and basepoint equations.",
+   :other-consumers []}
+  {:consumer :t93J03,
+   :evidence
+   {:probe
+    {:residual
+     "Exactly one consumer-specific geometric prerequisite remains: the coherent explicit plane action and orbit-quotient-to-polygon homeomorphism package. The deck-group pi1 theorem, group normal form, lifting criterion, and annulus embedding remain downstream.",
+     :outcome :revise,
+     :warnings
+     [{:kind :interface-axiom,
+       :message
+       "The placeholder-free fixture uses exactly one nonstandard axiom for the coherent explicit deck-action and polygon-identification package; no existing ConstructionTargets theorem supplies the orbit-quotient homeomorphism."}],
+     :prerequisite
+     {:consumer :t93J03,
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/KleinDeckActionPolygonIdentification.lean"],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action-polygon-identification/explicit-package",
+      :acceptance
+      {:placeholder "the single sorry in apm_t93j03",
+       :route-step
+       "t93J03 step 1, kleinDeckAction and polygon quotient identification",
+       :declarations
+       ["IsGroupAction"
+        "IsFreeAction"
+        "IsProperlyDiscontinuousAction"
+        "KleinDeckActionPackage"
+        "kleinDeckActionPackage"],
+       :implementation
+       "Define the PresentedKleinGroup action on the plane with generator a acting by (x,y) |-> (x+1,y) and generator b acting by (x,y) |-> (-x,y+1), proving the presented relator acts trivially and descending the FreeGroup action. Prove the group-action laws and continuity, freeness by a normal-form calculation, and proper discontinuity by bounding the finitely many integer translation and glide-reflection parameters that can move one compact set to meet another. Define the orbit setoid and construct a homeomorphism from its quotient to StatementSurfaceModels.KleinBottle. Build it from a square fundamental domain and the coinduced aabb disk quotient, prove the full boundary and corner relation equivalence in both directions, and establish the displayed generator formulas and that the orbit of (0,0) maps to surfacePoint false 2. Defer the general deck-group fundamental-group theorem, presented-group normal-form equivalence, lifting criterion, and annulus embedding.",
+       :axioms :standard-only,
+       :fixture
+       "/tmp/t93j03-klein-deck-action-polygon-identification-probe.lean",
+       :fixture-sha256
+       "a7af38c238c547b240c88ffc75871f3afb2bc7b662d3e63e4e77c70009a2ff78",
+       :commands
+       ["lake env lean ConstructionTargets/KleinDeckActionPolygonIdentification.lean"
+        "lake env lean -o /tmp/Main.olean problems/t93J03/lean/Main.lean"
+        "lake env bash -c 'export LEAN_PATH=\"/tmp:$LEAN_PATH\"; lean /tmp/t93j03-klein-deck-action-polygon-identification-probe.lean'"
+        "python3 scripts/statement-registry.py check"]},
+      :id
+      :routes-2026-10-10-t93j03-klein-deck-action-polygon-package-1,
+      :kind :uptake,
+      :depends-on [],
+      :current-residual
+      "Construct the explicit PresentedKleinGroup plane action and prove its orbit quotient is the frozen aabb KleinBottle with the required generator and basepoint equations.",
+      :other-consumers []},
+     :axioms
+     ["propext"
+      "Classical.choice"
+      "Quot.sound"
+      "T93J03KleinDeckActionPolygonIdentificationProbe.kleinDeckActionPackage"],
+     :commands
+     [{:cmd "stat -c '%F %n' .lake/packages",
+       :exit 0,
+       :finding
+       "directory .lake/packages; canonical package authority is present"}
+      {:cmd
+       "lake env lean ConstructionTargets/StatementSurfaceModels.lean",
+       :exit 0,
+       :finding
+       "the frozen aabb disk-quotient Klein-bottle model compiles with standard axioms"}
+      {:cmd
+       "lake env lean -o /tmp/Main.olean problems/t93J03/lean/Main.lean",
+       :exit 0,
+       :finding
+       "the frozen t93J03 source compiles to a throwaway import artifact with its single recorded placeholder warning"}
+      {:cmd
+       "lake env bash -c 'export LEAN_PATH=\"/tmp:$LEAN_PATH\"; lean /tmp/t93j03-klein-deck-action-polygon-identification-probe.lean'",
+       :exit 0,
+       :finding
+       "the complete action, orbit quotient, generator, and basepoint interface elaborates from one isolated geometric package axiom"}
+      {:cmd
+       "sha256sum /tmp/t93j03-klein-deck-action-polygon-identification-probe.lean",
+       :exit 0,
+       :finding
+       "a7af38c238c547b240c88ffc75871f3afb2bc7b662d3e63e4e77c70009a2ff78"}
+      {:cmd
+       "Python comment-stripped placeholder census of /tmp/t93j03-klein-deck-action-polygon-identification-probe.lean",
+       :exit 0,
+       :finding "0"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :finding "131 registered statements match, 0 do not"}
+      {:cmd "git status --short", :exit 0, :finding "clean"}],
+     :diagnostic-history
+     [{:cmd
+       "lake env bash -c 'export LEAN_PATH=\"/tmp:$LEAN_PATH\"; lean /tmp/t93j03-klein-deck-action-polygon-identification-probe.lean'",
+       :exit 1,
+       :finding
+       "The initial interface used the nonexistent Setoid.Rel projection.",
+       :correction
+       "Used the Setoid coercion orbitSetoid x y; the successful rerun is in commands."}],
+     :fixture
+     {:path
+      "/tmp/t93j03-klein-deck-action-polygon-identification-probe.lean",
+      :sha256
+      "a7af38c238c547b240c88ffc75871f3afb2bc7b662d3e63e4e77c70009a2ff78"},
+     :seat "topo-4"}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action-polygon-identification",
@@ -88630,7 +88763,8 @@
    :routes-2026-10-10-t93j03-klein-deck-action-polygon-identification-5,
    :kind :final-adapter,
    :depends-on
-   [:routes-2026-10-10-checkpoint-topo1-covering-schreier-components-4],
+   [:routes-2026-10-10-checkpoint-topo1-covering-schreier-components-4
+    :routes-2026-10-10-t93j03-klein-deck-action-polygon-package-1],
    :current-residual
    "Relate the explicit plane deck action to the frozen aabb disk quotient with generator and basepoint equations.",
    :other-consumers []}
