@@ -97901,6 +97901,22 @@
      {:cmd "git status --short",
       :exit 0,
       :finding "clean worktree after commit"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791660985914-2820-a617bbd7",
+     :commands
+     ["git show 23ebda64bb2d648bad130348c6876b63fc6710e4:ConstructionTargets/CyclicThreeCirclesPullbackPathConnected.lean"
+      "git diff-tree --no-commit-id --name-only -r 23ebda64bb2d648bad130348c6876b63fc6710e4"
+      "git diff --exit-code 23ebda64bb2d648bad130348c6876b63fc6710e4 -- ConstructionTargets/CyclicThreeCirclesPullbackPathConnected.lean"
+      "sha256sum /tmp/cyclic-three-circles-pullback-pathconnected.lean"
+      "lake build ConstructionTargets.CyclicThreeCirclesPullbackPathConnected"
+      "lake env lean /tmp/cyclic-three-circles-pullback-pathconnected.lean"
+      "placeholder census on source, fixture, and problems/t99J01/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb on recorded ledger at f29e1e96"],
+     :finding
+     "PASS: reviewer codex-3 verified author topo-2 and recorded commit 23ebda64, whose exact scope is only ConstructionTargets/CyclicThreeCirclesPullbackPathConnected.lean and whose source equals the reviewed checkout. The canonical package authority is correct; fixture SHA-256 8f78dac00206366476b2d55c7295708aea28d04e678cb413b86bd2fbbf370200 matches; target and fixture compile with zero placeholders; t99J01 retains one placeholder; pullback_joined, pullback_isPathConnected, and pullbackPathConnectedSpace use only propext, Classical.choice, and Quot.sound; all 131 registered statements and the recorded 879-item ledger validate. exists_section_path transports Circle path connectedness into the pullback by pairing alpha with firstCircle of alpha to the nth power and proves both subtype endpoints. pullback_joined normalizes x and y, rewrites each normalized endpoint through the pullback equation, concatenates the x normalization with the section path and the reversed y normalization, and uses the required cast orientations. The universal-set proof supplies an explicit pullback point and converts Joined to JoinedIn univ before installing PathConnectedSpace. The implementation is stronger than the positive-degree registered claim because it works for every natural n. It does not count fibers or subgroup index, apply Schreier, compute pi1, or close t99J01."},
     :commit "23ebda64bb2d648bad130348c6876b63fc6710e4",
     :changed-paths
     ["ConstructionTargets/CyclicThreeCirclesPullbackPathConnected.lean"],
@@ -97919,7 +97935,7 @@
       "ConstructionTargets.CyclicThreeCirclesPullbackPathConnected.pullbackPathConnectedSpace"]},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CyclicThreeCirclesPullbackPathConnected.lean"],
    :dag-node
@@ -97954,7 +97970,7 @@
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -98366,7 +98382,7 @@
    :other-consumers []}
   {:consumer :t99J01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "cyclicThreeCirclesPullback_pathConnected",
@@ -98381,7 +98397,10 @@
     "theorem proving that pullback path connected from cyclic monodromy. The exact missing prerequisite is theorem cyclicThreeCirclesPullback_pathConnected (n : ℕ) (hn : 0 < n) : PathConnectedSpace (ConstructionTargets.LiteralPullbackCover.Pullback (circleDegreeMap n) threeCirclesFirstCircle). Its proof must define the degree-n circle map and the nested-wedge collapse, compute the monodromy as the n-cycle on Fin n, and convert transitivity into paths joining arbitrary pullback points. Searches of Mathlib and ConstructionTargets find neither the transitive-monodromy connectedness theorem nor an expl",
     :area "covering-subgroup-correspondence",
     :proved-in
-    :routes-2026-10-10-cyclic-three-circles-pullback-pathconnected-38},
+    :routes-2026-10-10-cyclic-three-circles-pullback-pathconnected-38,
+    :banked-by
+    :routes-2026-10-10-cyclic-three-circles-pullback-pathconnected-38,
+    :banked-commit "23ebda64bb2d648bad130348c6876b63fc6710e4"},
    :id :lemma-cyclicthreecirclespullback-pathconnected,
    :kind :lemma,
    :depends-on
