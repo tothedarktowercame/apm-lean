@@ -81658,31 +81658,33 @@
    :current-residual
    "Instantiate the banked homogeneous map and homotopy descent API on the exact quadratic RP3 map and diagonal CPn homotopy.",
    :other-consumers [:t96A06]}
-  {:consumer :t99J05,
+  {:placeholder-after {:t96A06 1, :t99J05 1},
+   :fixture-sha256
+   "c8e274a7e62ee954073b88e6acbd27b6731af51e33f862964ace22839a98b501",
+   :consumer :t99J05,
    :evidence
    {:probe
-    {:outcome :revise,
+    {:outcome :go,
      :seat "topo-4",
      :fixture
-     {:path "/tmp/projective-quotient-descent-shared-probe.lean",
+     {:path "/tmp/projective-quotient-descent-exact-probe.lean",
       :sha256
-      "9794efeb485e866486c26c329d4d7edf839c188a52a10571fc0c5f86f97fdad9"},
+      "c8e274a7e62ee954073b88e6acbd27b6731af51e33f862964ace22839a98b501"},
      :commands
-     [{:cmd
-       "sha256sum /tmp/projective-quotient-descent-shared-probe.lean ConstructionTargets/ProjectiveQuotientDescent.lean",
+     [{:cmd "stat -c '%F %n' .lake/packages",
        :exit 0,
        :finding
-       "fixture 9794efeb485e866486c26c329d4d7edf839c188a52a10571fc0c5f86f97fdad9; implementation 42d0da912e7e666eed5cb59cb71a9f91ea2e58b968e1c09d4225fe75cdadd76f"}
+       "directory .lake/packages; canonical checkout owns the package authority"}
       {:cmd
-       "lake env lean ConstructionTargets/ProjectiveQuotientDescent.lean",
-       :exit 0,
-       :finding
-       "all four required generic declarations elaborate at RP3 and arbitrary CPn generalities"}
-      {:cmd
-       "lake env lean /tmp/projective-quotient-descent-shared-probe.lean",
+       "lake env lean /tmp/projective-quotient-descent-exact-probe.lean",
        :exit 0}
       {:cmd
-       "Python comment-stripped placeholder census of ConstructionTargets/ProjectiveQuotientDescent.lean",
+       "sha256sum /tmp/projective-quotient-descent-exact-probe.lean ConstructionTargets/ProjectiveConsumerLiftDemonstrations.lean",
+       :exit 0,
+       :finding
+       "fixture c8e274a7e62ee954073b88e6acbd27b6731af51e33f862964ace22839a98b501; dependency a7476f64270d07c3892143b59ad978955cc183c94336836b0fd450d91dd6c7b3"}
+      {:cmd
+       "Python comment-stripped placeholder census of /tmp/projective-quotient-descent-exact-probe.lean",
        :exit 0,
        :finding "0"}
       {:cmd "python3 scripts/statement-registry.py check",
@@ -81690,63 +81692,49 @@
        :finding "131 registered statements match, 0 do not"}
       {:cmd "git status --short", :exit 0, :finding "clean"}],
      :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :warnings
-     [{:kind :consumer-algebra,
-       :message
-       "The generic dependency is complete and reviewed; the acceptance fixture still lacks instantiations for the two printed formulas."}],
-     :prerequisite
-     {:consumer :t99J05,
-      :phase :implementation,
-      :state :open,
-      :scope
-      ["ConstructionTargets/ProjectiveConsumerLiftDemonstrations.lean"],
-      :dag-node
-      "TOPOLOGY-ROUTES.md/shared/projective-quotient-descent/consumer-demonstrations",
+     :warnings [],
+     :implementation
+     {:scope
+      ["problems/t96A06/lean/Main.lean"
+       "problems/t99J05/lean/Main.lean"],
+      :placeholder-before {:t96A06 1, :t99J05 1},
+      :placeholder-after {:t96A06 1, :t99J05 1},
+      :route-step "t96A06 step 1; t99J05 step 2",
+      :fixture-sha256
+      "c8e274a7e62ee954073b88e6acbd27b6731af51e33f862964ace22839a98b501",
+      :instructions
+      "Import ConstructionTargets.ProjectiveConsumerLiftDemonstrations in both consumers. Add consumer-facing bridge lemmas immediately before the registered theorems identifying T96A06.polynomialMap with t96A06Polynomial and T99J05Diagonal with t99J05Diagonal, then expose the exact descended continuous map and CPn homotopy witnesses supplied by the canonical module. Do not change either registered declaration or attempt the downstream Lefschetz, homology, degree, chart, fixed-point, or local-index obligations.",
       :acceptance
-      {:placeholder "the single sorries in apm_t96a06 and apm_t99j05",
-       :route-step "t96A06 step 1; t99J05 step 2",
-       :declarations
-       ["t96A06Polynomial_nonzero"
-        "t96A06Polynomial_orbit"
-        "t96A06Polynomial_descends"
-        "t99J05Diagonal_nonzero"
-        "t99J05DiagonalHomotopy_nonzero"
-        "t99J05Diagonal_orbit"
-        "t99J05DiagonalHomotopy_descends"],
-       :implementation
-       "Import ProjectiveQuotientDescent and restate the two printed vector formulas without importing problem Main files. For the real quadratic formula, prove simultaneous vanishing forces all four coordinates zero and scaling multiplies outputs by the square scalar; use projectiveHomogeneousMapDescent to obtain the RP3 continuous map with the exact quotient equation. For arbitrary complex n, use positive real weights 1+t*i to prove the diagonal homotopy never vanishes, is continuous, and commutes with scalar multiplication; use projectiveHomogeneousHomotopyDescent and record endpoint equalities to identity and the printed diagonal map.",
-       :axioms :standard-only,
+      {:axioms :standard-only,
        :commands
-       ["lake env lean ConstructionTargets/ProjectiveConsumerLiftDemonstrations.lean"
-        "python3 scripts/statement-registry.py check"]},
-      :id :routes-2026-10-10-projective-consumer-lift-demonstrations-1,
-      :kind :reusable-theorem,
-      :depends-on [],
-      :current-residual
-      "Instantiate the banked homogeneous map and homotopy descent API on the exact quadratic RP3 map and diagonal CPn homotopy.",
-      :other-consumers [:t96A06]},
+       ["lake env lean problems/t96A06/lean/Main.lean"
+        "lake env lean problems/t99J05/lean/Main.lean"
+        "lake env lean /tmp/projective-quotient-descent-exact-probe.lean"
+        "python3 scripts/statement-registry.py check"]}},
      :residual
-     "Exactly one prerequisite remains: the formula-specific RP3 and CPn instantiations in one shared demonstration module. The quotient openness, product openness, and generic map/homotopy factorization are compiled and independently reviewed; charts, homology, degree, and Lefschetz computations remain downstream."}},
-   :phase :probe,
+     "The common quotient API and exact formula descents are complete. After consumer-facing uptake, t96A06 still needs rational RP3 homology, degree four, Lefschetz -3, and non-homotopy; t99J05 still needs affine charts, fixed points/local indices, rational CPn homology, Lefschetz, and Euler characteristic."}},
+   :instructions
+   "Import ConstructionTargets.ProjectiveConsumerLiftDemonstrations in both consumers. Add consumer-facing bridge lemmas immediately before the registered theorems identifying T96A06.polynomialMap with t96A06Polynomial and T99J05Diagonal with t99J05Diagonal, then expose the exact descended continuous map and CPn homotopy witnesses supplied by the canonical module. Do not change either registered declaration or attempt the downstream Lefschetz, homology, degree, chart, fixed-point, or local-index obligations.",
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["problems/t96A06/lean/Main.lean" "problems/t99J05/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/shared/projective-quotient-descent",
    :acceptance
-   {:probe
-    "Compile a shared placeholder-free fixture at the exact RP3 and CPn generalities: quotient openness, product-with-interval quotient openness, and descent of homogeneous maps and homotopies, demonstrated on the t96A06 quadratic map and t99J05 diagonal homotopy.",
-    :placeholder "the single sorries in apm_t96a06 and apm_t99j05",
-    :route-step "t96A06 step 1; t99J05 steps 1-2",
-    :gates
-    ["canonical packages"
-     "fixture compiles"
-     "zero fixture sorry"
-     "registry check"]},
+   {:axioms :standard-only,
+    :commands
+    ["lake env lean problems/t96A06/lean/Main.lean"
+     "lake env lean problems/t99J05/lean/Main.lean"
+     "lake env lean /tmp/projective-quotient-descent-exact-probe.lean"
+     "python3 scripts/statement-registry.py check"]},
+   :placeholder-before {:t96A06 1, :t99J05 1},
    :id :routes-2026-09-29-projective-quotient-descent-shared-1,
    :kind :reusable-theorem,
    :depends-on
    [:routes-2026-09-29-topo1-refill-heavy-1
     :routes-2026-10-10-projective-homogeneous-factorization-shared-1
     :routes-2026-10-10-projective-consumer-lift-demonstrations-1],
+   :route-step "t96A06 step 1; t99J05 step 2",
    :current-residual "Common quotient API before charts and homology.",
    :other-consumers [:t96A06]}
   {:consumer :t94J09,
