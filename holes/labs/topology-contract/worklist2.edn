@@ -56600,73 +56600,107 @@
    :current-residual
    "Use the normalized representative to prove the induced fundamental-group square commutes, then transport circleMatrixPi1Map_naturality through frozenTorusPi1Coord.",
    :other-consumers []}
+  {:bounded-exception
+   "single-consumer representative fundamental-group conjugacy for frozenLbar",
+   :consumer :t97A04,
+   :phase :probe,
+   :state :open,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t97A04/torus-pi1-winding-coordinates/frozen-pi1-representative-conjugacy",
+   :acceptance
+   {:probe
+    "Compile and bank frozenCircleImage_frozenLbarBasedPath_mk and frozenLbarPi1Map_mk_circle_coord from /tmp/torus_frozen_pi1_representative_conjugacy. Compose the banked fixed-base cast normalization, exact frozen mapped-path conjugacy, and circleMatrixPi1Map_mk to prove that for every explicit frozen-torus loop the normalized Circle-image quotient class after frozenLbar is exactly the Circle matrix endomorphism applied to the original Circle-image class, and record the resulting torusPi1Coord equality. This supplies the representative quotient conjugacy in t97A04 route step 4; do not yet claim all-class frozen naturality.",
+    :declarations
+    ["frozenCircleImage_frozenLbarBasedPath_mk"
+     "frozenLbarPi1Map_mk_circle_coord"],
+    :placeholder "apm_t97A04_bridge_2",
+    :route-step
+    "t97A04 step 4, representative quotient conjugacy between frozenLbar and circleMatrixPi1Map"},
+   :representation
+   {:source
+    "The quotient class of the normalized Circle image of frozenLbarBasedPath gamma",
+    :target
+    "circleMatrixPi1Map applied to the quotient class of frozenCircleImagePath gamma",
+    :direction
+    "Exact quotient equality from the source frozen-map representative class to the target Circle-matrix image class, together with equality after torusPi1Coord"},
+   :id
+   :routes-2026-10-10-t97a04-frozen-pi1-representative-conjugacy-topo2-r1,
+   :kind :representation-comparison,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo2-r2
+    :routes-2026-10-10-t97a04-frozen-lbar-based-path-cast-topo2-r1
+    :routes-2026-10-10-t97a04-circle-matrix-pi1-all-class-naturality-topo2-r1],
+   :current-residual
+   "Descend the representative equality through arbitrary frozen fundamental-group classes and align the canonical Circle-image quotient map with frozenTorusPi1Coord.",
+   :other-consumers []}
   {:consumer :t97A04,
    :evidence
    {:probe
     {:outcome :revise,
      :seat "topo-8",
      :fixture
-     {:path "/tmp/torus_frozen_lbar_based_path_cast.lean",
+     {:path "/tmp/torus_frozen_pi1_representative_conjugacy.lean",
       :sha256
-      "1b69852194410aebe5d249309f148e858d47390a8f7a62974a84cf6af8d9f0af"},
+      "9e2855b19cae5256d4864f8021776e294d2b89425a6c27bf49adaa3723f4e1c2"},
      :commands
      [{:cmd
-       "lake env lean /tmp/torus_frozen_lbar_based_path_cast.lean",
+       "lake env lean /tmp/torus_frozen_pi1_representative_conjugacy.lean",
        :exit 0,
        :output
-       "frozenLbar fixed-base cast normalization compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "representative quotient conjugacy compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/torus_frozen_lbar_based_path_cast.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/torus_frozen_pi1_representative_conjugacy.lean || true)\"",
        :exit 0}
-      {:cmd "sha256sum /tmp/torus_frozen_lbar_based_path_cast.lean",
+      {:cmd
+       "sha256sum /tmp/torus_frozen_pi1_representative_conjugacy.lean",
        :exit 0,
        :output
-       "1b69852194410aebe5d249309f148e858d47390a8f7a62974a84cf6af8d9f0af  /tmp/torus_frozen_lbar_based_path_cast.lean"}
+       "9e2855b19cae5256d4864f8021776e294d2b89425a6c27bf49adaa3723f4e1c2  /tmp/torus_frozen_pi1_representative_conjugacy.lean"}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/torus_frozen_pi1_representative_naturality.lean",
-       :exit 1,
-       :finding
-       "The direct representative-coordinate proof reached the exact Path.cast inserted by FundamentalGroup.mapOfEq_apply. The earlier mapped-path conjugacy does not rewrite until this casted path is named and its Circle image is normalized."}],
      :finding
-     "FundamentalGroup.mapOfEq applies frozenLbar to a representative and then casts both endpoints back along frozenLbar_base.symm. The placeholder-free fixture names that exact based path, proves the induced endomorphism sends each explicit class to its class, and proves its Circle image is exactly frozenLbarCircleImagePath. This is the missing cast normalization needed to compose the banked mapped-path conjugacy with quotient induction.",
+     "The fixed-base cast normalization and mapped-path equality now compose at the quotient level. For every explicit frozen-torus loop gamma, the class of the Circle image of frozenLbarBasedPath gamma is exactly circleMatrixPi1Map applied to the class of frozenCircleImagePath gamma. Applying torusPi1Coord gives the matching coordinate equality without equating opaque dependent proof terms.",
      :residual
-     "Bank the fixed-base cast normalization. Then rewrite the frozen map representative through frozenLbarBasedPath, its Circle image, and frozenLbarCircleImagePath_eq_circleMatrixMappedPath to prove the quotient-level commuting square and final frozen coordinate equation.",
+     "Bank the representative quotient conjugacy. Then descend it to arbitrary frozen fundamental-group classes and identify the canonical Circle-image quotient map with the first factor of frozenTorusPi1Coord to obtain the final frozen matrix equation.",
      :prerequisite
      {:bounded-exception
-      "single-consumer fixed-base Path.cast normalization for frozenLbar",
+      "single-consumer representative fundamental-group conjugacy for frozenLbar",
       :consumer :t97A04,
       :phase :probe,
       :state :open,
       :scope [],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t97A04/torus-pi1-winding-coordinates/frozen-based-path-cast",
+      "TOPOLOGY-ROUTES.md/t97A04/torus-pi1-winding-coordinates/frozen-pi1-representative-conjugacy",
       :acceptance
       {:probe
-       "Compile and bank frozenLbar_base, frozenLbarBasedPath, frozenLbarPi1Map, frozenLbarPi1Map_mk, and frozenCircleImagePath_frozenLbarBasedPath from /tmp/torus_frozen_lbar_based_path_cast. Name the exact Path.cast inserted by FundamentalGroup.mapOfEq_apply at the fixed point (0,0), identify the induced map on every explicit loop class, and prove the Circle image of that casted path is exactly frozenLbarCircleImagePath. This supplies the dependent basepoint normalization for t97A04 route step 4; do not yet claim the quotient-level conjugacy.",
+       "Compile and bank frozenCircleImage_frozenLbarBasedPath_mk and frozenLbarPi1Map_mk_circle_coord from /tmp/torus_frozen_pi1_representative_conjugacy. Compose the banked fixed-base cast normalization, exact frozen mapped-path conjugacy, and circleMatrixPi1Map_mk to prove that for every explicit frozen-torus loop the normalized Circle-image quotient class after frozenLbar is exactly the Circle matrix endomorphism applied to the original Circle-image class, and record the resulting torusPi1Coord equality. This supplies the representative quotient conjugacy in t97A04 route step 4; do not yet claim all-class frozen naturality.",
        :declarations
-       ["frozenLbar_base"
-        "frozenLbarBasedPath"
-        "frozenLbarPi1Map"
-        "frozenLbarPi1Map_mk"
-        "frozenCircleImagePath_frozenLbarBasedPath"],
+       ["frozenCircleImage_frozenLbarBasedPath_mk"
+        "frozenLbarPi1Map_mk_circle_coord"],
        :placeholder "apm_t97A04_bridge_2",
        :route-step
-       "t97A04 step 4, normalize the fixed-base Path.cast in the induced frozenLbar map"},
+       "t97A04 step 4, representative quotient conjugacy between frozenLbar and circleMatrixPi1Map"},
+      :representation
+      {:source
+       "The quotient class of the normalized Circle image of frozenLbarBasedPath gamma",
+       :target
+       "circleMatrixPi1Map applied to the quotient class of frozenCircleImagePath gamma",
+       :direction
+       "Exact quotient equality from the source frozen-map representative class to the target Circle-matrix image class, together with equality after torusPi1Coord"},
       :id
-      :routes-2026-10-10-t97a04-frozen-lbar-based-path-cast-topo2-r1,
-      :kind :reusable-theorem,
+      :routes-2026-10-10-t97a04-frozen-pi1-representative-conjugacy-topo2-r1,
+      :kind :representation-comparison,
       :depends-on
       [:routes-2026-10-10-checkpoint-topo2-r2
-       :routes-2026-10-10-t97a04-frozen-mapped-path-conjugacy-topo2-r1],
+       :routes-2026-10-10-t97a04-frozen-lbar-based-path-cast-topo2-r1
+       :routes-2026-10-10-t97a04-circle-matrix-pi1-all-class-naturality-topo2-r1],
       :current-residual
-      "Use the normalized representative to prove the induced fundamental-group square commutes, then transport circleMatrixPi1Map_naturality through frozenTorusPi1Coord.",
+      "Descend the representative equality through arbitrary frozen fundamental-group classes and align the canonical Circle-image quotient map with frozenTorusPi1Coord.",
       :other-consumers []}}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/shared/torus-pi1-winding-coordinates",
    :acceptance
@@ -56691,7 +56725,8 @@
     :routes-2026-10-10-t97a04-circle-matrix-pi1-representative-naturality-topo2-r1
     :routes-2026-10-10-t97a04-circle-matrix-pi1-all-class-naturality-topo2-r1
     :routes-2026-10-10-t97a04-frozen-mapped-path-conjugacy-topo2-r1
-    :routes-2026-10-10-t97a04-frozen-lbar-based-path-cast-topo2-r1],
+    :routes-2026-10-10-t97a04-frozen-lbar-based-path-cast-topo2-r1
+    :routes-2026-10-10-t97a04-frozen-pi1-representative-conjugacy-topo2-r1],
    :current-residual
    "Exact Fin-2 endpoint-coordinate naturality is absent.",
    :other-consumers [:t01A02]}
