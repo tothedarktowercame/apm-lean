@@ -59570,49 +59570,71 @@
    "single-consumer based Circle-meridian attachment comparison for t02A03",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/t02a03_geometric_tube_cover.lean",
-      :sha256
-      "65b4bf238aa8cd24732e4a97133c37b49c3271f7f1e0f88c6bbfac555e0009ce"},
-     :commands
-     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "apm_t02a03_anchor_eq_circleMeridianMap_quarterTurn compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
-       :exit 0}
-      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "65b4bf238aa8cd24732e4a97133c37b49c3271f7f1e0f88c6bbfac555e0009ce  /tmp/t02a03_geometric_tube_cover.lean"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :finding
-     "The requested representation comparison is complete and placeholder-free. Subtype.ext reduces the exact geometricY equality to the banked ambient equality apm_t02a03_circleMeridian_quarterTurn, with symmetry orienting it from the contracted anchor to the quarter-turn Circle-meridian value.",
-     :implementation
-     {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
-      :declaration
-      "apm_t02a03_anchor_eq_circleMeridianMap_quarterTurn",
-      :type
-      "(⟨apm_t02a03_meridianAnchor, apm_t02a03_meridianAnchor_mem_geometricY⟩ : apm_t02a03_geometricY_probe) = apm_t02a03_circleMeridianMap (Circle.exp (Real.pi / 2))"},
-     :representation
-     {:source
-      "The constant geometricY meridian anchor reached by the right-core contraction",
-      :target
-      "The Circle-domain meridian map evaluated at Circle.exp (pi/2)",
-      :direction
-      "Exact subtype point equality from the source contracted-anchor representation to the target based Circle-meridian representation"},
-     :residual
-     "After banking this based endpoint equality, extend the attachment across the right tube, construct compatible tube-piece deformation data, and glue the geometricY-to-Y equivalence."}},
+   {:placeholder-delta 0,
+    :residual
+    "Extend the based attachment across the right tube, construct compatible tube-piece deformation data, and glue the geometricY-to-Y equivalence.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+      :exit 0,
+      :output
+      "65b4bf238aa8cd24732e4a97133c37b49c3271f7f1e0f88c6bbfac555e0009ce  /tmp/t02a03_geometric_tube_cover.lean"}
+     {:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+      :exit 0,
+      :output
+      "apm_t02a03_anchor_eq_circleMeridianMap_quarterTurn compiled; axioms [propext, Classical.choice, Quot.sound]."}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeCover.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.T02A03GeometricTubeCover",
+      :exit 0,
+      :output "Build completed successfully (8240 jobs)."}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeCover.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "comment-stripped placeholder census for problems/t02A03/lean/Main.lean",
+      :exit 0,
+      :output "1"}
+     {:cmd "sha256sum problems/t02A03/lean/Main.lean",
+      :exit 0,
+      :output
+      "b123eca388ab2858ca55daf538c1ddd645022b52f5196a15f0bb516d78323d7d  problems/t02A03/lean/Main.lean"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r f0a72109bc672a7689a4ccf4bf86827c4cc42af7",
+      :exit 0,
+      :output "ConstructionTargets/T02A03GeometricTubeCover.lean"}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :representation
+    {:source
+     "The constant geometricY meridian anchor reached by the right-core contraction",
+     :target
+     "The Circle-domain meridian map evaluated at Circle.exp (pi/2)",
+     :direction
+     "Exact subtype point equality from the source contracted-anchor representation to the target based Circle-meridian representation"},
+    :commit "f0a72109bc672a7689a4ccf4bf86827c4cc42af7",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
+    :fixture
+    {:path "/tmp/t02a03_geometric_tube_cover.lean",
+     :sha256
+     "65b4bf238aa8cd24732e4a97133c37b49c3271f7f1e0f88c6bbfac555e0009ce"},
+    :declarations
+    ["ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_anchor_eq_circleMeridianMap_quarterTurn"],
+    :declaration-types
+    ["(⟨apm_t02a03_meridianAnchor, apm_t02a03_meridianAnchor_mem_geometricY⟩ : apm_t02a03_geometricY_probe) = apm_t02a03_circleMeridianMap (Circle.exp (Real.pi / 2))"]},
    :phase :implementation,
    :type
    "(⟨apm_t02a03_meridianAnchor, apm_t02a03_meridianAnchor_mem_geometricY⟩ : apm_t02a03_geometricY_probe) = apm_t02a03_circleMeridianMap (Circle.exp (Real.pi / 2))",
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/geometric-anchor-circle-meridian-quarter-turn",
