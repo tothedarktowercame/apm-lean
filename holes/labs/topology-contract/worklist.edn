@@ -89721,12 +89721,47 @@
    "Owner reopen 2026-10-10: eight rows were parked on a signature-approval reading the prompts never stated; reopened under the clarified rule.",
    :other-consumers []}
   {:consumer :t97A01,
+   :phase :probe,
+   :state :open,
+   :scope ["ConstructionTargets/T97A01SmithQuotients.lean"],
+   :acceptance
+   {:placeholder "the single sorry in apm_t97a01",
+    :route-step "t97A01 step 6, smith_quotients",
+    :declarations
+    ["standardN3BoundaryMap"
+     "torusCrosscapBoundaryMap"
+     "standardN3BoundaryMap_injective"
+     "torusCrosscapBoundaryMap_injective"
+     "standardN3SmithCokernelIso"
+     "torusCrosscapSmithCokernelIso"],
+    :implementation
+    "Define the two ModuleCat morphisms ℤ → ℤ³ by n ↦ (2*n,2*n,2*n) and n ↦ (0,0,2*n). Define quotient coordinate maps (x,y,z) ↦ (y-x,z-x,x mod 2) and (x,y,z) ↦ (x,y,z mod 2). Prove each coordinate map is surjective and its kernel is exactly the corresponding boundary-map range. Use ModuleCat.cokernelIsoRangeQuotient and the induced quotient LinearEquiv to obtain cokernel isomorphisms oriented from the categorical cokernel to ModuleCat.of ℤ (ℤ × ℤ × ZMod 2). Prove both boundary maps injective.",
+    :axioms :standard-only,
+    :commands
+    ["lake env lean ConstructionTargets/T97A01SmithQuotients.lean"
+     "python3 scripts/statement-registry.py check"]},
+   :representation
+   {:source
+    "The categorical cokernels of the two literal boundary morphisms from ℤ to ℤ³",
+    :target "ModuleCat.of ℤ (ℤ × ℤ × ZMod 2)",
+    :direction
+    "Explicit isomorphisms from each categorical cokernel to Smith coordinates, induced respectively by (x,y,z) ↦ (y-x,z-x,x mod 2) and (x,y,z) ↦ (x,y,z mod 2)"},
+   :id :routes-2026-10-10-t97a01-smith-coordinate-kernel-range-1,
+   :kind :representation-comparison,
+   :depends-on [],
+   :current-residual
+   "Prove the two coordinate maps have kernels exactly equal to the two boundary-map ranges; the banked ModuleCat cokernel-range quotient isomorphism then supplies the categorical result.",
+   :other-consumers []}
+  {:consumer :t97A01,
    :stop-count 1,
    :review-finding
    "the symlink rule applies to APM frame worktrees, not the canonical /home/joe/code/apm-lean package authority; run and compile the Smith-quotient probe in the canonical checkout",
    :evidence
-   {:outcome :stop,
-    :seat "topo-4",
+   {:residual
+    "Provision or repair the APM workspace so .lake/packages is the canonical package-authority symlink, then rerun the Smith-quotient probe from a clean checkout.",
+    :outcome :stop,
+    :disposition :stop,
+    :author "topo-4",
     :reason
     "Canonical-package workspace boundary: /home/joe/code/apm-lean/.lake/packages is a real directory, not the required symbolic link to /home/joe/code/apm-lean/.lake/packages authority. Workspace policy forbids every Lake/Lean invocation until the canonical lifecycle repairs this checkout; therefore no compiled fixture can be produced or assessed in this probe.",
     :commands
@@ -89740,18 +89775,83 @@
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131 registered statements match, 0 do not"}],
-    :residual
-    "Provision or repair the APM workspace so .lake/packages is the canonical package-authority symlink, then rerun the Smith-quotient probe from a clean checkout.",
-    :author "topo-4",
-    :disposition :stop,
     :review
     {:outcome :fail,
      :seat "codex-3",
      :job "invoke-1791634151709-1881-71750e81",
      :finding
-     "the symlink rule applies to APM frame worktrees, not the canonical /home/joe/code/apm-lean package authority; run and compile the Smith-quotient probe in the canonical checkout"}},
+     "the symlink rule applies to APM frame worktrees, not the canonical /home/joe/code/apm-lean package authority; run and compile the Smith-quotient probe in the canonical checkout"},
+    :probe
+    {:outcome :revise,
+     :seat "topo-2",
+     :fixture
+     {:path "problems/t97A01/lean/Main.lean",
+      :sorry-count 1,
+      :axiom-count 0,
+      :proof-placeholder-count 1},
+     :commands
+     [{:cmd "pwd",
+       :exit 0,
+       :finding
+       "Ran in the canonical /home/joe/code/apm-lean checkout; the frame-worktree symlink rule does not apply."}
+      {:cmd "stat -c '%F %N' .lake/packages",
+       :exit 0,
+       :finding
+       "The canonical package authority is a directory, as expected."}
+      {:cmd
+       "rg -n \"Smith|smith|Cokernel|cokernel|ZMod 2|LinearEquiv.*ZMod\" ConstructionTargets problems/t97A01 holes/labs/topology-routes TOPOLOGY-ROUTES.md -g '*.lean' -g '*.md'",
+       :exit 0,
+       :finding
+       "Categorical cokernel infrastructure is banked, but neither required rank-one kernel/range calculation nor quotient coordinate equivalence exists."}
+      {:cmd
+       "lake env lean -o /tmp/t97A01-Main.olean problems/t97A01/lean/Main.lean",
+       :exit 0,
+       :finding
+       "The canonical consumer compiles and exposes the exact ModuleCat target; its single existing sorry remains."}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :finding "131 registered statements match, 0 do not"}
+      {:cmd "git status --short",
+       :exit 0,
+       :finding "The worktree is clean."}],
+     :prerequisite
+     {:consumer :t97A01,
+      :phase :probe,
+      :state :open,
+      :scope ["ConstructionTargets/T97A01SmithQuotients.lean"],
+      :acceptance
+      {:placeholder "the single sorry in apm_t97a01",
+       :route-step "t97A01 step 6, smith_quotients",
+       :declarations
+       ["standardN3BoundaryMap"
+        "torusCrosscapBoundaryMap"
+        "standardN3BoundaryMap_injective"
+        "torusCrosscapBoundaryMap_injective"
+        "standardN3SmithCokernelIso"
+        "torusCrosscapSmithCokernelIso"],
+       :implementation
+       "Define the two ModuleCat morphisms ℤ → ℤ³ by n ↦ (2*n,2*n,2*n) and n ↦ (0,0,2*n). Define quotient coordinate maps (x,y,z) ↦ (y-x,z-x,x mod 2) and (x,y,z) ↦ (x,y,z mod 2). Prove each coordinate map is surjective and its kernel is exactly the corresponding boundary-map range. Use ModuleCat.cokernelIsoRangeQuotient and the induced quotient LinearEquiv to obtain cokernel isomorphisms oriented from the categorical cokernel to ModuleCat.of ℤ (ℤ × ℤ × ZMod 2). Prove both boundary maps injective.",
+       :axioms :standard-only,
+       :commands
+       ["lake env lean ConstructionTargets/T97A01SmithQuotients.lean"
+        "python3 scripts/statement-registry.py check"]},
+      :representation
+      {:source
+       "The categorical cokernels of the two literal boundary morphisms from ℤ to ℤ³",
+       :target "ModuleCat.of ℤ (ℤ × ℤ × ZMod 2)",
+       :direction
+       "Explicit isomorphisms from each categorical cokernel to Smith coordinates, induced respectively by (x,y,z) ↦ (y-x,z-x,x mod 2) and (x,y,z) ↦ (x,y,z mod 2)"},
+      :id :routes-2026-10-10-t97a01-smith-coordinate-kernel-range-1,
+      :kind :representation-comparison,
+      :depends-on [],
+      :current-residual
+      "Prove the two coordinate maps have kernels exactly equal to the two boundary-map ranges; the banked ModuleCat cokernel-range quotient isomorphism then supplies the categorical result.",
+      :other-consumers []},
+     :residual
+     "After the single Smith-coordinate prerequisite compiles, rerun this closure probe and expose its two cokernel isomorphisms with the orientations required by the polygon Mayer-Vietoris adapter."},
+    :seat "topo-4"},
    :phase :implementation,
-   :state :repair,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t97A01/smith-quotients",
    :acceptance
@@ -89769,7 +89869,8 @@
    :kind :final-adapter,
    :fail-count 1,
    :depends-on
-   [:routes-2026-10-10-checkpoint-topo1-after-owner-reopen-1],
+   [:routes-2026-10-10-checkpoint-topo1-after-owner-reopen-1
+    :routes-2026-10-10-t97a01-smith-coordinate-kernel-range-1],
    :current-residual
    "Normalize the two rank-one relation quotients of Z^3 and expose injectivity plus the exact ModuleCat-compatible cokernel coordinates.",
    :other-consumers []}
