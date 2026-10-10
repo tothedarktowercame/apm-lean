@@ -100988,6 +100988,21 @@
       :output "131 registered statements match, 0 do not"}
      {:cmd "git diff --check", :exit 0}
      {:cmd "git status --short", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791676200779-3354-94aec802",
+     :commands
+     ["git show and diff-tree 04755937fd7afc01b0f44710c56324a9b13d1b19"
+      "sha256sum /tmp/polygon-three-loop-half-open-normal-form.lean"
+      "lake build ConstructionTargets.PolygonThreeLoopHalfOpenNormalForm"
+      "lake env lean /tmp/polygon-three-loop-half-open-normal-form.lean"
+      "lake env lean /dev/stdin with fresh axiom checks"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped placeholder and SHA-256 recomputation"
+      "git diff-tree --check 04755937fd7afc01b0f44710c56324a9b13d1b19^ 04755937fd7afc01b0f44710c56324a9b13d1b19"],
+     :finding
+     "Recorded one-file commit is authored by topo-2 and is byte-identical to the frozen fixture; endpoint one is correctly normalized to half-open endpoint zero with the required equality orientation, and quotient induction lifts literal representatives through the inner and outer wedge boundaries into exactly the first, second, or third loop forms; both frozen theorems use only standard axioms, placeholder counts are zero, and the registry reports 131 matched and 0 mismatched."},
     :commit "04755937fd7afc01b0f44710c56324a9b13d1b19",
     :changed-paths
     ["ConstructionTargets/PolygonThreeLoopHalfOpenNormalForm.lean"],
@@ -101003,7 +101018,7 @@
      "Converted half-open parameters to the endpoint-quotient carrier, normalized every endpoint quotient class into Ico 0 1 by replacing endpoint one with zero, and lifted the normal form through both nested wedges to the three named loop points."},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/PolygonThreeLoopHalfOpenNormalForm.lean"],
    :dag-node
@@ -101162,7 +101177,7 @@
       "Every endpoint-glued interval class has a half-open representative, and every nested three-loop point is literally represented on one of the three half-open loop coordinates."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -104466,7 +104481,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -104483,7 +104498,10 @@
     "Every EndpointQuotient class is intervalQuotientMap of a parameter in Set.Ico (0 : Real) 1.",
     :area "polygon-surface-open-cover",
     :proved-in
-    :routes-2026-10-10-polygon-three-loop-half-open-normal-form-65},
+    :routes-2026-10-10-polygon-three-loop-half-open-normal-form-65,
+    :banked-by
+    :routes-2026-10-10-polygon-three-loop-half-open-normal-form-65,
+    :banked-commit "04755937fd7afc01b0f44710c56324a9b13d1b19"},
    :id
    :lemma-polygonthreeloophalfopennormalform-endpointquotient-halfopen-rep,
    :kind :lemma,
@@ -104509,7 +104527,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -104526,7 +104544,10 @@
     "Every ThreeEndpointLoops point is a firstLoopPoint, secondLoopPoint, or thirdLoopPoint at a half-open unit-interval parameter.",
     :area "polygon-surface-open-cover",
     :proved-in
-    :routes-2026-10-10-polygon-three-loop-half-open-normal-form-65},
+    :routes-2026-10-10-polygon-three-loop-half-open-normal-form-65,
+    :banked-by
+    :routes-2026-10-10-polygon-three-loop-half-open-normal-form-65,
+    :banked-commit "04755937fd7afc01b0f44710c56324a9b13d1b19"},
    :id
    :lemma-polygonthreeloophalfopennormalform-threeendpointloops-halfopen-rep,
    :kind :lemma,
