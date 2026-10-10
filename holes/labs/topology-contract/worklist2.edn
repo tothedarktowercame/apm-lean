@@ -55129,6 +55129,20 @@
       :exit 0,
       :output
       "ConstructionTargets/ComplexProjectiveChartTargets.lean"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791606884055-1100-8873d513",
+     :commands
+     ["sha256sum /tmp/t94a08_affine_chart_inverse_laws.lean"
+      "lake env lean ConstructionTargets/ComplexProjectiveChartTargets.lean"
+      "lake env lean /tmp/t94a08_affine_chart_inverse_laws.lean"
+      "git diff-tree --no-commit-id --name-only -r 4d22581b"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show e5c1fb71:holes/labs/topology-contract/worklist2.edn)"
+      "python3 inline committed SHA-256 and placeholder census for t94A08"],
+     :finding
+     "Independent of topo-6. PASS: implementation commit 4d22581b changes exactly ConstructionTargets/ComplexProjectiveChartTargets.lean and transition e5c1fb71 changes only worklist2.edn. Fixture SHA-256 reproduces as 28978815a3932bf3a00342ab6a4d2e4a529021a032e63cd9ddafecd74b6391e8; fixture and target compile placeholder-free. The directions and domains are exact: coordinates(chartInverse z)=z for all affine coordinates, while chartInverse(coordinates x)=x assumes rep x i ≠ 0 on the banked affine source. The proofs cross the representative boundary via exists_smul_eq_mk_rep and mk_eq_mk_iff with the inverse distinguished coordinate, without asserting continuity or packaging an OpenPartialHomeomorph. Recorded axioms are standard: propext, Classical.choice, Quot.sound. Frozen t94A08 remains unchanged at one placeholder with SHA-256 fd1f6a86dde745c7d96783af49d2d1808c01a8489b94e981c397cded29babeb1; 131 statements match and the committed 378-item ledger validates."},
     :commit "4d22581bf92d816eb7a6d33c447e0b5e25286ddb",
     :changed-paths
     ["ConstructionTargets/ComplexProjectiveChartTargets.lean"],
@@ -55140,7 +55154,7 @@
     ["ConstructionTargets.ComplexProjectiveChartTargets.coordinates_chartInverse"
      "ConstructionTargets.ComplexProjectiveChartTargets.chartInverse_coordinates"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ComplexProjectiveChartTargets.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t94A08/affine-chart-inverse-laws",
    :acceptance
@@ -55217,7 +55231,7 @@
       "After inverse laws are banked, prove both continuity directions and package the actual affine-chart OpenPartialHomeomorph.",
       :other-consumers []}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t94A08",
    :acceptance
