@@ -57553,9 +57553,22 @@
       "Measure one minimum-placeholder closure attempt, one two-consumer foundation, and one newly supported t97A04 adapter.",
       :other-consumers []}],
     :author "topo-8",
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791616920115-1454-420b9a45",
+     :commands
+     ["git show/diff-tree recorded checkpoint commit"
+      "bb worklist_check.bb on committed worklist2.edn"
+      "clojure checkpoint dependency and replacement-order audit"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped placeholder and SHA-256 census for all fifteen consumers at the recorded commit"
+      "git show --check 34851dd3"],
+     :finding
+     "PASS: codex-7 independently reviewed topo-8 checkpoint commit 34851dd3. It has exact ledger-only transition scope; strategy/replan rows require no implementation fixture, so fixture hashing is not applicable. All four checkpoint dependencies are done and independently reviewed PASS. The required measures reproduce: zero placeholder delta; t94A08 remains a representation-specific STOP without refuting its frozen theorem; the torus packet changes t97A04 from missing pi1 naturality to Hurewicz/ModuleCat assembly and does not cross into consumer closure; the duplicate-edge migration is a reviewed infrastructure packet. All fifteen frozen hashes were recomputed and counts reproduce as 1,3,3,3,4,1,1,1,1,1,1,1,1,4,1; registry is 131/0 and the committed 403-item ledger validates. Stop-after-two is respected. Refill order is exactly one minimum-placeholder closure adapter first (t02A03), then the shared RP2 atlas, the supported t97A04 H1 assembly, and checkpoint r6."}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -57573,7 +57586,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/closure",
    :acceptance
@@ -57589,7 +57602,7 @@
    :other-consumers []}
   {:consumer :t95A04,
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/shared/rp-smooth-atlas",
    :acceptance
@@ -57609,7 +57622,7 @@
    "single-consumer assembly from the now-banked frozen torus pi1 matrix theorem",
    :consumer :t97A04,
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t97A04/h1-bridge-assembly",
    :acceptance
