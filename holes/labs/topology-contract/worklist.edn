@@ -89200,8 +89200,145 @@
    "Review two independent geometric classification advances while t99J01 is held by stop-after-two.",
    :other-consumers []}
   {:consumer :t97A03,
-   :phase :probe,
+   :phase :implementation,
    :state :open,
+   :scope ["ConstructionTargets/T97A03ModelInvariants.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t97A03/model-invariants/fixed-model-calculation",
+   :acceptance
+   {:placeholder "apm_t97A03_bridge_invariants_of_model",
+    :route-step "t97A03 bridge 2, explicit invariant steps 6-9",
+    :declarations
+    ["oneCircleCover_pathConnected"
+     "twoCircleCover_pathConnected"
+     "oneCircleCover_homology"
+     "twoCircleCover_homology"
+     "oneCircleCover_fundamentalGroup"
+     "twoCircleCover_fundamentalGroup"
+     "modelInvariants"],
+    :implementation
+    "For each frozen quotient model, construct saturated open covers whose pieces and intersections explicitly deformation-retract to the required sphere, circle, and point components. Prove path-connectedness and use CoefficientH0 for H0. Apply ProductionOpenCoverMayerVietoris with literal inclusion maps and computed coordinate matrices to obtain integral H1 isomorphic to Fin 3 -> Z, H2 isomorphic to Fin 2 -> Z, and vanishing in degrees at least 3. Apply TwoOpenFreeProductMapping iteratively over the same covers, identify three circle factors with Multiplicative Z and then FreeGroup (Fin 3), and prove the sphere and overlap contributions trivial. For an arbitrary supplied homeomorphism from Y to either model, transport all homology isomorphisms, vanishing instances, and the fundamental-group equivalence; use model path-connectedness to change from the transported model basepoint to the arbitrary y. Prove the exact five-conjunct frozen signature without assuming the held cover-classification bridge.",
+    :axioms :standard-only,
+    :fixture "/tmp/t97a03-model-invariants-adapter-probe.lean",
+    :fixture-sha256
+    "ff9f07384911e50ed9dc8f3250b207cdbab21ec220388906ac060c7dc1a96ef8",
+    :commands
+    ["lake env lean ConstructionTargets/T97A03ModelInvariants.lean"
+     "lake env lean -o /tmp/Main.olean problems/t97A03/lean/Main.lean"
+     "lake env bash -c 'export LEAN_PATH=\"/tmp:$LEAN_PATH\"; lean /tmp/t97a03-model-invariants-adapter-probe.lean'"
+     "python3 scripts/statement-registry.py check"]},
+   :id :routes-2026-10-10-t97a03-fixed-model-invariants-1,
+   :kind :uptake,
+   :depends-on [],
+   :current-residual
+   "Compute path-connectedness, integral homology, higher-degree vanishing, and free rank-three fundamental groups for both fixed quotient models, then transport along the supplied homeomorphism.",
+   :other-consumers []}
+  {:consumer :t97A03,
+   :evidence
+   {:probe
+    {:outcome :revise,
+     :seat "topo-4",
+     :fixture
+     {:path "/tmp/t97a03-model-invariants-adapter-probe.lean",
+      :sha256
+      "ff9f07384911e50ed9dc8f3250b207cdbab21ec220388906ac060c7dc1a96ef8"},
+     :commands
+     [{:cmd "stat -c '%F %n' .lake/packages",
+       :exit 0,
+       :finding
+       "directory .lake/packages; canonical package authority is present"}
+      {:cmd
+       "lake env lean ConstructionTargets/ProductionOpenCoverMayerVietoris.lean",
+       :exit 0,
+       :finding
+       "the production integral Mayer-Vietoris exactness and arrow interfaces compile with standard axioms"}
+      {:cmd
+       "lake env lean ConstructionTargets/TwoOpenFreeProductMapping.lean",
+       :exit 0,
+       :finding
+       "the based free-product van Kampen interfaces compile with standard axioms"}
+      {:cmd
+       "lake env lean ConstructionTargets/BoundaryTorusHurewiczIsomorphism.lean",
+       :exit 0,
+       :finding
+       "the fundamental-group transport along homeomorphisms compiles with standard axioms"}
+      {:cmd
+       "lake env lean -o /tmp/Main.olean problems/t97A03/lean/Main.lean",
+       :exit 0,
+       :finding
+       "the frozen t97A03 source compiles to a throwaway import artifact with its three recorded placeholder warnings"}
+      {:cmd
+       "lake env bash -c 'export LEAN_PATH=\"/tmp:$LEAN_PATH\"; lean /tmp/t97a03-model-invariants-adapter-probe.lean'",
+       :exit 0,
+       :finding
+       "the exact five-conjunct frozen invariant bridge elaborates from one isolated model-invariants axiom"}
+      {:cmd
+       "sha256sum /tmp/t97a03-model-invariants-adapter-probe.lean",
+       :exit 0,
+       :finding
+       "ff9f07384911e50ed9dc8f3250b207cdbab21ec220388906ac060c7dc1a96ef8"}
+      {:cmd
+       "Python comment-stripped placeholder census of /tmp/t97a03-model-invariants-adapter-probe.lean",
+       :exit 0,
+       :finding "0"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :finding "131 registered statements match, 0 do not"}
+      {:cmd "git status --short",
+       :exit 0,
+       :finding
+       "ConstructionTargets/T02A03GeometricTubeCover.lean is modified by unrelated concurrent work; this read-only probe did not touch it"}],
+     :axioms
+     ["propext"
+      "Classical.choice"
+      "Quot.sound"
+      "T97A03ModelInvariantsAdapterProbe.modelInvariants"],
+     :warnings
+     [{:kind :interface-axiom,
+       :message
+       "The placeholder-free fixture uses exactly one nonstandard axiom for the fixed-model invariant computation and transport; no existing theorem mentions either frozen model's homology or fundamental group."}
+      {:kind :dirty-worktree,
+       :message
+       "ConstructionTargets/T02A03GeometricTubeCover.lean became modified during this read-only invocation and was preserved as unrelated work."}],
+     :prerequisite
+     {:consumer :t97A03,
+      :phase :implementation,
+      :state :open,
+      :scope ["ConstructionTargets/T97A03ModelInvariants.lean"],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/t97A03/model-invariants/fixed-model-calculation",
+      :acceptance
+      {:placeholder "apm_t97A03_bridge_invariants_of_model",
+       :route-step "t97A03 bridge 2, explicit invariant steps 6-9",
+       :declarations
+       ["oneCircleCover_pathConnected"
+        "twoCircleCover_pathConnected"
+        "oneCircleCover_homology"
+        "twoCircleCover_homology"
+        "oneCircleCover_fundamentalGroup"
+        "twoCircleCover_fundamentalGroup"
+        "modelInvariants"],
+       :implementation
+       "For each frozen quotient model, construct saturated open covers whose pieces and intersections explicitly deformation-retract to the required sphere, circle, and point components. Prove path-connectedness and use CoefficientH0 for H0. Apply ProductionOpenCoverMayerVietoris with literal inclusion maps and computed coordinate matrices to obtain integral H1 isomorphic to Fin 3 -> Z, H2 isomorphic to Fin 2 -> Z, and vanishing in degrees at least 3. Apply TwoOpenFreeProductMapping iteratively over the same covers, identify three circle factors with Multiplicative Z and then FreeGroup (Fin 3), and prove the sphere and overlap contributions trivial. For an arbitrary supplied homeomorphism from Y to either model, transport all homology isomorphisms, vanishing instances, and the fundamental-group equivalence; use model path-connectedness to change from the transported model basepoint to the arbitrary y. Prove the exact five-conjunct frozen signature without assuming the held cover-classification bridge.",
+       :axioms :standard-only,
+       :fixture "/tmp/t97a03-model-invariants-adapter-probe.lean",
+       :fixture-sha256
+       "ff9f07384911e50ed9dc8f3250b207cdbab21ec220388906ac060c7dc1a96ef8",
+       :commands
+       ["lake env lean ConstructionTargets/T97A03ModelInvariants.lean"
+        "lake env lean -o /tmp/Main.olean problems/t97A03/lean/Main.lean"
+        "lake env bash -c 'export LEAN_PATH=\"/tmp:$LEAN_PATH\"; lean /tmp/t97a03-model-invariants-adapter-probe.lean'"
+        "python3 scripts/statement-registry.py check"]},
+      :id :routes-2026-10-10-t97a03-fixed-model-invariants-1,
+      :kind :uptake,
+      :depends-on [],
+      :current-residual
+      "Compute path-connectedness, integral homology, higher-degree vanishing, and free rank-three fundamental groups for both fixed quotient models, then transport along the supplied homeomorphism.",
+      :other-consumers []},
+     :residual
+     "Exactly one consumer-specific prerequisite remains: the complete invariant package for the two fixed quotient models and its transport to an arbitrary homeomorphic space. The held connected-cover classification is not required by this interface."}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t97A03/model-invariants",
    :acceptance
@@ -89218,7 +89355,8 @@
    :id :routes-2026-10-10-t97a03-model-invariants-adapter-6,
    :kind :final-adapter,
    :depends-on
-   [:routes-2026-10-10-checkpoint-topo1-klein-double-cover-5],
+   [:routes-2026-10-10-checkpoint-topo1-klein-double-cover-5
+    :routes-2026-10-10-t97a03-fixed-model-invariants-1],
    :current-residual
    "Compute the homology and fundamental group of the two fixed quotient models and transport them along the supplied homeomorphism.",
    :other-consumers []}
