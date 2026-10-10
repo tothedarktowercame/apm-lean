@@ -96175,8 +96175,76 @@
   {:bounded-exception
    "This single-consumer theorem supplies the inherited local path connectedness of a covering total space, making the chosen Joined component open and allowing covering charts to be restricted to its selected sheets.",
    :consumer :t99J01,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Use total-space local path connectedness to make Component e open, restrict each evenly covered chart to the sheets contained in that component, and prove the restricted map surjective by lifting paths from p e to arbitrary basepoints.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :missing-theorems
+    [{:name
+      "CoveringTotalLocPathConnected.IsCoveringMap.totalLocPathConnectedSpace",
+      :type
+      "A covering map into a locally path-connected space has a locally path-connected total space",
+      :status :proved,
+      :consumers [:t99J01],
+      :depends-on
+      ["LocPathConnectedOpenCover.locPathConnectedSpace_of_open_cover"
+       "HomeomorphLocPathConnected.Homeomorph.locPathConnectedSpace_iff"]}],
+    :statement-hashes "131 registered statements match",
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :finding
+      "canonical package authority resolves to /home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "sha256sum /tmp/covering-total-loc-path-connected.lean",
+      :exit 0,
+      :finding
+      "fixture hash matches dacab0cd9a598e43ca706a038f74f8ba2c80c1224477d36cecea786672daf94d"}
+     {:cmd
+      "lake build ConstructionTargets.CoveringTotalLocPathConnected",
+      :exit 0,
+      :finding
+      "canonical local-homeomorphism and covering LPC inheritance build"}
+     {:cmd "lake env lean /tmp/covering-total-loc-path-connected.lean",
+      :exit 0,
+      :finding
+      "frozen fixture compiles and reports only standard axioms"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" ConstructionTargets/CoveringTotalLocPathConnected.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero source placeholders"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" /tmp/covering-total-loc-path-connected.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero fixture placeholders"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short",
+      :exit 0,
+      :finding "clean worktree after commit"}],
+    :commit "a14494f5589a434c9de397c68cbc8263edc845f0",
+    :changed-paths
+    ["ConstructionTargets/CoveringTotalLocPathConnected.lean"],
+    :fixture
+    {:path "/tmp/covering-total-loc-path-connected.lean",
+     :sha256
+     "dacab0cd9a598e43ca706a038f74f8ba2c80c1224477d36cecea786672daf94d",
+     :sorry-count 0},
+    :implementation
+    {:scope ["ConstructionTargets/CoveringTotalLocPathConnected.lean"],
+     :declarations
+     ["ConstructionTargets.CoveringTotalLocPathConnected.IsLocalHomeomorph.locPathConnectedSpace"
+      "ConstructionTargets.CoveringTotalLocPathConnected.IsCoveringMap.totalLocPathConnectedSpace"]},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/CoveringTotalLocPathConnected.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component/total-space-lpc",
@@ -98532,21 +98600,30 @@
    :depends-on
    [:lemma-homeomorphlocpathconnected-homeomorph-locpathconnectedspace-iff],
    :other-consumers []}
-  {:consumer :portfolio,
+  {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
    :scope [],
    :acceptance
    {:lemma
-    "CoveringTotalLocPathConnected.IsCoveringMap.totalLocPathConnectedSpace"},
+    "CoveringTotalLocPathConnected.IsCoveringMap.totalLocPathConnectedSpace",
+    :type
+    "A covering map into a locally path-connected space has a locally path-connected total space"},
    :lemma
    {:name
     "CoveringTotalLocPathConnected.IsCoveringMap.totalLocPathConnectedSpace",
-    :reported-by []},
+    :reported-by
+    [:routes-2026-10-10-covering-total-loc-path-connected-42],
+    :type
+    "A covering map into a locally path-connected space has a locally path-connected total space",
+    :proved-in
+    :routes-2026-10-10-covering-total-loc-path-connected-42},
    :id
    :lemma-coveringtotallocpathconnected-iscoveringmap-totallocpathconnectedspace,
    :kind :lemma,
-   :depends-on [],
+   :depends-on
+   [:lemma-locpathconnectedopencover-locpathconnectedspace-of-open-cover
+    :lemma-homeomorphlocpathconnected-homeomorph-locpathconnectedspace-iff],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
