@@ -60299,46 +60299,62 @@
    "single-consumer continuous disk-normal coordinate on the frozen t02A03 left tube",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/t02a03_geometric_tube_cover.lean",
-      :sha256
-      "e4cd397f6ca7aa3d986d866cd044855537cd499d92f4cc3db95f717074cdbb25"},
-     :commands
-     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "apm_t02a03_leftTubeNormalComplex and apm_t02a03_continuous_leftTubeNormalComplex compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
-       :exit 0}
-      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "e4cd397f6ca7aa3d986d866cd044855537cd499d92f4cc3db95f717074cdbb25  /tmp/t02a03_geometric_tube_cover.lean"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :implementation
-     {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
-      :declarations
-      ["apm_t02a03_leftTubeNormalComplex"
-       "apm_t02a03_continuous_leftTubeNormalComplex"],
-      :acceptance
-      {:implementation
-       "Add the two compiled declarations from the verified fixture to ConstructionTargets/T02A03GeometricTubeCover.lean without changing their types or the frozen consumer. Compile the scoped module, confirm the scoped file contains no sorry token, run the statement registry check, and report the declarations' axioms.",
-       :gates
-       ["scoped module compiles"
-        "scoped file contains no sorry token"
-        "statement registry matches"]}},
-     :finding
-     "The fixture completely supplies this bounded row. The complex normal coordinate records the radial planar offset norm((p_0+1)+p_1 i)-1 and height p_2, and its continuity follows from the banked planar complex coordinate, explicit PiLp coordinate evaluation, norm continuity, and continuous complex assembly.",
-     :residual
-     "After banking the normal coordinate, identify its zero locus with the frozen left-core range, restrict it to a nonzero punctured-normal coordinate on LeftTubeMinusCore, construct radial comparison homotopies, and assemble leftTubeMinusCoreHomotopyEquivTorus."}},
+   {:placeholder-delta
+    {:path "ConstructionTargets/T02A03GeometricTubeCover.lean",
+     :before 0,
+     :after 0,
+     :delta 0},
+    :git-author "Joe Corneli <holtzermann17@gmail.com>",
+    :residual
+    "Identify the normal coordinate's zero locus with the frozen left-core range, restrict it to a nonzero coordinate on LeftTubeMinusCore, build radial comparison homotopies, and assemble leftTubeMinusCoreHomotopyEquivTorus.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not",
+     :declaration-packet-sha256
+     "f77d18dbfaacf6b95975f1e23dc87138140a9a1152401bc190f2caae2e5aadfb"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+      :exit 0,
+      :output
+      "e4cd397f6ca7aa3d986d866cd044855537cd499d92f4cc3db95f717074cdbb25  /tmp/t02a03_geometric_tube_cover.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeCover.lean",
+      :exit 0}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeCover.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "lake env lean /tmp/t02a03_geometric_tube_cover.lean | rg \"leftTubeNormalComplex\"",
+      :exit 0,
+      :output
+      "'apm_t02a03_continuous_leftTubeNormalComplex' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd "git commit -m \"Bank t02A03 left-tube normal coordinate\"",
+      :exit 0,
+      :output
+      "[master 70721679] Bank t02A03 left-tube normal coordinate; 1 file changed, 37 insertions(+)"}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "70721679d7ed64e2588884f01cbbcee843d55171",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
+    :fixture
+    {:path "/tmp/t02a03_geometric_tube_cover.lean",
+     :sha256
+     "e4cd397f6ca7aa3d986d866cd044855537cd499d92f4cc3db95f717074cdbb25"},
+    :finding
+    "Banked the continuous complex normal coordinate on the exact frozen left-tube subtype. It records radial planar displacement from the unit core radius as its real component and height as its imaginary component, without yet asserting its zero-locus characterization.",
+    :declarations
+    ["apm_t02a03_leftTubeNormalComplex"
+     "apm_t02a03_continuous_leftTubeNormalComplex"],
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-normal-coordinate",
    :acceptance
