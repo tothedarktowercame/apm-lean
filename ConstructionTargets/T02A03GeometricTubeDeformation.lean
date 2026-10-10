@@ -310,6 +310,28 @@ theorem rightTubePolarReconstruction_self
     linarith
   · simp [rightTubePolarReconstruction, rightTubeNormalComplex]
 
+noncomputable def rightTubeCorePlanarComplex (p : apm_t02a03_E3) : ℂ :=
+  ((1 - p 0 : ℝ) : ℂ) + (p 1 : ℂ) * Complex.I
+
+theorem rightTubeCorePlanarComplex_ne_zero
+    (p : apm_t02a03_E3) (hp : p ∈ apm_t02a03_rightTube) :
+    rightTubeCorePlanarComplex p ≠ 0 := by
+  intro h
+  have hre := congrArg Complex.re h
+  have him := congrArg Complex.im h
+  simp [rightTubeCorePlanarComplex] at hre him
+  have hx : p 0 = 1 := by linarith
+  have hy : p 1 = 0 := him
+  obtain ⟨q, ⟨t, rfl⟩, hd⟩ := rightTube_exists_near_rightCore p hp
+  rw [dist_eq_norm, EuclideanSpace.norm_eq] at hd
+  simp [apm_t02a03_rightCore, hx, hy, Fin.sum_univ_succ] at hd
+  have hs : 1 ≤ √(Real.cos t ^ 2 +
+      (Real.sin t ^ 2 + p 2 ^ 2)) := by
+    rw [Real.le_sqrt (by norm_num) (by positivity)]
+    nlinarith [Real.sin_sq_add_cos_sq t, sq_nonneg (p 2)]
+  norm_num at hd
+  linarith
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -319,3 +341,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubePlanarComplex_re_pos
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubePlanarRotation_exists
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubePolarReconstruction_self
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCorePlanarComplex_ne_zero
