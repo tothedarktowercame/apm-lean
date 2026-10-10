@@ -385,6 +385,24 @@ theorem rightTubeCoreTubularCoordinates_continuous :
     intro i
     fin_cases i <;> simp <;> fun_prop
 
+noncomputable def rightTubeCoreAngularCoordinate :
+    C(RightTubeMinusLeftCore, Circle) where
+  toFun p := ⟨NormedSpace.normalize (rightTubeCorePlanarComplex p.1),
+    mem_sphere_zero_iff_norm.mpr
+      (NormedSpace.norm_normalize
+        (rightTubeCorePlanarComplex_ne_zero p.1 p.2.1))⟩
+  continuous_toFun := by
+    apply Continuous.subtype_mk
+    rw [continuous_iff_continuousAt]
+    intro p
+    have hc : Continuous (fun q : RightTubeMinusLeftCore =>
+        rightTubeCorePlanarComplex q.1) := by
+      unfold rightTubeCorePlanarComplex
+      fun_prop
+    exact ((continuous_norm.comp hc).continuousAt.inv₀
+      (norm_ne_zero_iff.mpr
+        (rightTubeCorePlanarComplex_ne_zero p.1 p.2.1))).smul hc.continuousAt
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -397,3 +415,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCorePlanarComplex_ne_zero
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCorePolarReconstruction_self
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreTubularCoordinates_continuous
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreAngularCoordinate
