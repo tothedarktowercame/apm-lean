@@ -66278,57 +66278,51 @@
    "single-consumer normalized positive-half-plane rotation used by the ambient deformation",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:residual
-     "Use the rotation in the polar-normal E3 reconstruction, interpolate normal magnitude to 1/8, and prove endpoint, right-tube, and left-core-avoidance properties.",
-     :outcome :go,
-     :warnings [],
-     :missing-theorems [],
-     :axioms [propext Classical.choice Quot.sound],
-     :commands
-     [{:cmd
-       "rg -n \"t02A03|explicit-r3-tube-deformation-retraction\" TOPOLOGY-ROUTES.md holes/labs/topology-routes/routes-{1,2,3}.md | head -120",
-       :exit 0}
-      {:cmd "lake env lean /tmp/t02a03_right_core_compact_probe.lean",
-       :exit 0,
-       :output
-       "rightTubePlanarRotation_exists compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd "sha256sum /tmp/t02a03_right_core_compact_probe.lean",
-       :exit 0,
-       :output
-       "8b15b861c3d8eace094b84d46aaca1f8947ad9187871e392c8796fcb5143fecb  /tmp/t02a03_right_core_compact_probe.lean"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_right_core_compact_probe.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :fixture
-     {:path "/tmp/t02a03_right_core_compact_probe.lean",
-      :sha256
-      "8b15b861c3d8eace094b84d46aaca1f8947ad9187871e392c8796fcb5143fecb"},
-     :finding
-     "The complex interpolation (1-t)+t*rightTubePlanarComplex(p) never vanishes: at t=1 its real part is positive, and for t<1 the positive constant contribution remains. Normalizing therefore defines a continuous Circle-valued rotation. Its t=0 endpoint is 1 and its t=1 endpoint is the normalized frozen planar coordinate, exactly as required.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
-      :declarations
-      [{:name
-        "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubePlanarInterpolation",
-        :type "unitInterval × RightTubeMinusLeftCore -> ℂ"}
-       {:name
-        "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubePlanarInterpolation_ne_zero",
-        :type "forall tp, rightTubePlanarInterpolation tp ≠ 0"}
-       {:name
-        "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubePlanarRotation",
-        :type "C(unitInterval × RightTubeMinusLeftCore, Circle)"}
-       {:name
-        "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubePlanarRotation_exists",
-        :type
-        "exists R : C(unitInterval × RightTubeMinusLeftCore, Circle), (forall p, (R (0,p) : ℂ) = 1) and (forall p, (R (1,p) : ℂ) = NormedSpace.normalize (rightTubePlanarComplex p.1))"}]},
-     :seat "topo-8"}},
+   {:placeholder-delta {:before 0, :after 0},
+    :residual
+    "Use the rotation in the polar-normal E3 reconstruction, interpolate normal magnitude to 1/8, and prove endpoint, right-tube, and left-core-avoidance properties.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["Lean reports the pre-existing unnecessarySimpa warning at module line 62; the planar rotation declarations compile without additional warnings."],
+    :missing-theorems [],
+    :statement-hashes
+    {:registered "131 registered statements match, 0 do not",
+     :scoped-file-git-blob "7f261b31fa311c0e1d238d5b5963c177f74d84ac"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd "lake env lean /tmp/t02a03_right_core_compact_probe.lean",
+      :exit 0}
+     {:cmd "sha256sum /tmp/t02a03_right_core_compact_probe.lean",
+      :exit 0,
+      :output
+      "8b15b861c3d8eace094b84d46aaca1f8947ad9187871e392c8796fcb5143fecb  /tmp/t02a03_right_core_compact_probe.lean"}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeDeformation.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "0d6199c0a7b0d602f28e9be217dc4ab9cc1c2496",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+    :fixture
+    {:path "/tmp/t02a03_right_core_compact_probe.lean",
+     :sha256
+     "8b15b861c3d8eace094b84d46aaca1f8947ad9187871e392c8796fcb5143fecb"},
+    :finding
+    "The interpolation (1-t)+t*w remains nonzero because w has positive real part. Normalization therefore gives a continuous Circle-valued rotation whose endpoints are 1 and the normalized planar coordinate.",
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/right-tube-planar-rotation",
    :acceptance
