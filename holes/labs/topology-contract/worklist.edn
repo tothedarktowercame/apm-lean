@@ -84734,8 +84734,53 @@
    "Owner refill 2026-10-10 (claude-14 overnight, Joe: progress by morning): topo1 checkpoint rp3-covering-1 found all eight 09-29 problems held by stop-after-two or reviewed STOPs. topo1 now takes six covering / van Kampen problems from the unassigned HEAVY list: t99J01, t92J06, t97A03, t93J03, t01A03, t97A01. All six statements are registered; 8 sorries in total.",
    :other-consumers []}
   {:consumer :t99J01,
+   :stop-count 1,
+   :evidence
+   {:placeholder-after {:t99J01 1, :t01A03 1, :t97A01 1, :t97A03 1},
+    :residual
+    "First compile a generic point-wedge open-cover and connector comparison whose chosenGroupEquivalence equations identify both representative inclusions with the coproduct injections. Then normalize the recursive coproduct with the circle fundamental group to FreeGroup (Fin (n+1)) and specialize at two and three circles.",
+    :outcome :stop,
+    :warnings [],
+    :disposition :stop,
+    :axioms
+    ["propext"
+     "Classical.choice"
+     "Quot.sound"
+     "finite_circle_wedge_fundamental_group_package"],
+    :author "topo-2",
+    :placeholder-before {:t99J01 1, :t01A03 1, :t97A01 1, :t97A03 1},
+    :reason
+    "The supplied probe does not implement the recursive van Kampen normalization. It proves only four basepoint equations, then postulates finite_circle_wedge_fundamental_group_package with the two desired fundamental-group equivalences. Its #print axioms reports that custom axiom, contradicting :axioms :standard-only, and none of the seven acceptance declarations occurs. TwoOpenFreeProductMapping.chosenGroupEquivalence is banked but requires an explicit two-open cover with path-connected pieces, a simply connected overlap, a chosen overlap point, and connector-dependent fundamental groups. The repository supplies those data and their coordinate comparison only for the torus-circle wedge, not for a generic point wedge of the preceding finite-circle wedge with a new circle. The exact missing representation layer is therefore a generic point-wedge open-cover and fundamental-groupoid-span comparison proving that the chosen equivalence carries the two actual representative inclusions to the two Monoid.Coprod injections. Without those inclusion equations, even an abstract free-product isomorphism cannot establish the required FreeGroup generator normalization.",
+    :commands
+    [{:cmd "sha256sum /tmp/finite-circle-wedge-pi1-probe.lean",
+      :exit 0,
+      :finding
+      "188c22abad2f0abc5a570ded8f1bd93013fac5e470230154cbdf5b676f5e300a"}
+     {:cmd "lake env lean /tmp/finite-circle-wedge-pi1-probe.lean",
+      :exit 0,
+      :finding
+      "The probe compiles, but finite_circle_wedge_fundamental_group_package depends on its own custom axiom."}
+     {:cmd
+      "rg -n \"^(axiom|structure|def|theorem)|finiteCircleWedge|finiteCircleWedgeBase|finiteCircleWedgeInclusion|finiteCircleWedgeFundamentalGroupEquiv|twoCirclesFundamentalGroupEquiv|threeCirclesFundamentalGroupEquiv|finite_circle_wedge_fundamental_group_package\" /tmp/finite-circle-wedge-pi1-probe.lean",
+      :exit 0,
+      :finding
+      "Line 30 postulates the package; none of the seven acceptance declarations occurs."}
+     {:cmd
+      "test ! -e ConstructionTargets/FiniteCircleWedgeFundamentalGroup.lean",
+      :exit 0,
+      :finding "The scoped target module is absent."}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}],
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/finite-circle-wedge-pi1-probe.lean",
+     :sha256
+     "188c22abad2f0abc5a570ded8f1bd93013fac5e470230154cbdf5b676f5e300a",
+     :status :self-axiomatized},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/FiniteCircleWedgeFundamentalGroup.lean"],
    :dag-node
