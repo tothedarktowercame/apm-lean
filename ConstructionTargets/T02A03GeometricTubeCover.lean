@@ -200,6 +200,49 @@ theorem apm_t02a03_continuous_leftTubeNormalComplex :
     (Complex.continuous_ofReal.comp h2).mul continuous_const
   simpa only [Complex.ofReal_sub, Complex.ofReal_one] using hre.add him
 
+theorem apm_t02a03_leftTubeNormalComplex_eq_zero_iff
+    (p : apm_t02a03_leftTubeSubtype) :
+    apm_t02a03_leftTubeNormalComplex p = 0 ↔
+      p.1 ∈ Set.range apm_t02a03_leftCore := by
+  constructor
+  · intro h
+    have hre := congrArg Complex.re h
+    have him := congrArg Complex.im h
+    simp [apm_t02a03_leftTubeNormalComplex] at hre him
+    let z := apm_t02a03_leftTubePlanarComplex p
+    have hz : z ≠ 0 := apm_t02a03_leftTubePlanarComplex_ne_zero p
+    have hnorm : ‖z‖ = 1 := by simpa [z] using sub_eq_zero.mp hre
+    refine ⟨Complex.arg z, ?_⟩
+    ext i
+    fin_cases i
+    · have hc := Complex.cos_arg hz
+      rw [hnorm, div_one] at hc
+      simp [apm_t02a03_leftCore, z, apm_t02a03_leftTubePlanarComplex] at hc ⊢
+      linarith
+    · have hs := Complex.sin_arg z
+      rw [hnorm, div_one] at hs
+      simpa [apm_t02a03_leftCore, z,
+        apm_t02a03_leftTubePlanarComplex] using hs
+    · simpa [apm_t02a03_leftCore] using him.symm
+  · rintro ⟨t, ht⟩
+    have h0 := congrArg (fun q : apm_t02a03_E3 => q 0) ht
+    have h1 := congrArg (fun q : apm_t02a03_E3 => q 1) ht
+    have h2 := congrArg (fun q : apm_t02a03_E3 => q 2) ht
+    simp [apm_t02a03_leftCore] at h0 h1 h2
+    have hnorm : ‖apm_t02a03_leftTubePlanarComplex p‖ = 1 := by
+      rw [Complex.norm_def]
+      have hsq : Complex.normSq (apm_t02a03_leftTubePlanarComplex p) = 1 := by
+        rw [Complex.normSq_apply]
+        simp [apm_t02a03_leftTubePlanarComplex]
+        rw [← h0, ← h1]
+        simpa [pow_two] using Real.cos_sq_add_sin_sq t
+      rw [hsq]
+      norm_num
+    apply Complex.ext
+    · simp [apm_t02a03_leftTubeNormalComplex]
+      exact sub_eq_zero.mpr hnorm
+    · simpa [apm_t02a03_leftTubeNormalComplex] using h2.symm
+
 theorem apm_t02a03_rightCore_zero :
     apm_t02a03_rightCore 0 = (0 : apm_t02a03_E3) := by
   ext i
