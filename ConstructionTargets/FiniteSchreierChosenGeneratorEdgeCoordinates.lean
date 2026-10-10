@@ -2,6 +2,8 @@ import Mathlib.GroupTheory.FreeGroup.NielsenSchreier
 import Mathlib.GroupTheory.FreeGroup.GeneratorEquiv
 import Mathlib.GroupTheory.GroupAction.Quotient
 
+set_option autoImplicit false
+
 open CategoryTheory CategoryTheory.ActionCategory Quiver FreeGroup
 
 namespace ConstructionTargets.FiniteSchreierChosenGeneratorEdgeCoordinates
@@ -34,19 +36,22 @@ noncomputable def edgeEquiv (r : ℕ) (H : Subgroup (G r)) :
     subst b
     rfl
 
-@[simp] theorem edgeEquiv_left (j : Labels r) (v : V r H) :
+@[simp] theorem edgeEquiv_left {r : ℕ} {H : Subgroup (G r)}
+    (j : Labels r) (v : V r H) :
     (edgeEquiv r H (j, v)).left.back = v := by rfl
 
-@[simp] theorem edgeEquiv_right (j : Labels r) (v : V r H) :
+@[simp] theorem edgeEquiv_right {r : ℕ} {H : Subgroup (G r)}
+    (j : Labels r) (v : V r H) :
     (edgeEquiv r H (j, v)).right.back = IsFreeGroup.of j • v := by rfl
 
-@[simp] theorem edgeEquiv_label (j : Labels r) (v : V r H) :
+@[simp] theorem edgeEquiv_label {r : ℕ} {H : Subgroup (G r)}
+    (j : Labels r) (v : V r H) :
     (edgeEquiv r H (j, v)).hom.val = j := by rfl
 
 @[reducible] noncomputable def labelsFintype (r : ℕ) : Fintype (Labels r) :=
   Fintype.ofEquiv (Fin r) (labelEquiv r)
 
-theorem labels_card : @Fintype.card (Labels r) (labelsFintype r) = r := by
+theorem labels_card {r : ℕ} : @Fintype.card (Labels r) (labelsFintype r) = r := by
   letI := labelsFintype r
   simpa using (Fintype.card_congr (labelEquiv r).symm)
 
@@ -54,7 +59,7 @@ theorem labels_card : @Fintype.card (Labels r) (labelsFintype r) = r := by
     (H : Subgroup (G r)) (hindex : H.index = n) : Fintype (V r H) :=
   H.fintypeOfIndexNeZero (hindex ▸ Nat.ne_of_gt hn)
 
-theorem vertex_card (hn : 0 < n) (H : Subgroup (G r)) (hindex : H.index = n) :
+theorem vertex_card {r n : ℕ} (hn : 0 < n) (H : Subgroup (G r)) (hindex : H.index = n) :
     @Fintype.card (V r H) (vertexFintype r n hn H hindex) = n := by
   letI := vertexFintype r n hn H hindex
   rw [← Nat.card_eq_fintype_card]
@@ -66,7 +71,7 @@ theorem vertex_card (hn : 0 < n) (H : Subgroup (G r)) (hindex : H.index = n) :
   letI := vertexFintype r n hn H hindex
   exact Fintype.ofEquiv (Labels r × V r H) (edgeEquiv r H)
 
-theorem edges_card (hn : 0 < n) (H : Subgroup (G r)) (hindex : H.index = n) :
+theorem edges_card {r n : ℕ} (hn : 0 < n) (H : Subgroup (G r)) (hindex : H.index = n) :
     @Fintype.card (Edges r H) (edgesFintype r n hn H hindex) = r * n := by
   letI := labelsFintype r
   letI := vertexFintype r n hn H hindex
@@ -74,22 +79,26 @@ theorem edges_card (hn : 0 < n) (H : Subgroup (G r)) (hindex : H.index = n) :
   rw [Fintype.card_congr (edgeEquiv r H).symm, Fintype.card_prod,
     @labels_card r, vertex_card (r := r) hn H hindex]
 
-noncomputable def forwardSymmEdge (j : Labels r) (v : V r H) :
+noncomputable def forwardSymmEdge {r : ℕ} {H : Subgroup (G r)}
+    (j : Labels r) (v : V r H) :
     Quiver.Total (Symmetrify (Gen r H)) :=
   { left := (show Gen r H from ⟨(), v⟩)
     right := (show Gen r H from ⟨(), IsFreeGroup.of j • v⟩)
     hom := Sum.inl ⟨j, rfl⟩ }
 
-noncomputable def reverseSymmEdge (j : Labels r) (v : V r H) :
+noncomputable def reverseSymmEdge {r : ℕ} {H : Subgroup (G r)}
+    (j : Labels r) (v : V r H) :
     Quiver.Total (Symmetrify (Gen r H)) :=
   { left := (show Gen r H from ⟨(), IsFreeGroup.of j • v⟩)
     right := (show Gen r H from ⟨(), v⟩)
     hom := Sum.inr ⟨j, rfl⟩ }
 
-@[simp] theorem forwardSymmEdge_orientation (j : Labels r) (v : V r H) :
+@[simp] theorem forwardSymmEdge_orientation {r : ℕ} {H : Subgroup (G r)}
+    (j : Labels r) (v : V r H) :
     (forwardSymmEdge (r := r) (H := H) j v).hom = Sum.inl (edgeEquiv r H (j, v)).hom := rfl
 
-@[simp] theorem reverseSymmEdge_orientation (j : Labels r) (v : V r H) :
+@[simp] theorem reverseSymmEdge_orientation {r : ℕ} {H : Subgroup (G r)}
+    (j : Labels r) (v : V r H) :
     (reverseSymmEdge (r := r) (H := H) j v).hom = Sum.inr (edgeEquiv r H (j, v)).hom := rfl
 
 #print axioms edgeEquiv
