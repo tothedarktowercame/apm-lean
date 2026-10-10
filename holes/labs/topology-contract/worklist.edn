@@ -96853,63 +96853,32 @@
    :evidence
    {:probe
     {:residual
-     "The component-side chart is now homeomorphic to the path-connected base neighborhood times the retained sheet indices. The original theorem only needs the IsEvenlyCovered/IsCoveringMap packaging and the banked componentProjection_surjective theorem.",
-     :outcome :revise,
+     "Implement the compiled fixture in ConstructionTargets/RestrictPathComponent.lean; after review, t99J01 can use the surjective component-restricted covering before establishing its constant fiber cardinality and induced subgroup image.",
+     :outcome :go,
      :warnings [],
      :missing-theorems
      [{:name "IsCoveringMap.restrictPathComponent",
        :type
        "For p : E -> B covering a locally path-connected path-connected base and e : E, the restriction p : {x // Joined e x} -> B is a surjective covering map.",
-       :status :partial,
+       :status :proved,
        :consumers [:t99J01],
        :depends-on
        ["CoveringPathComponentSurjective.componentProjection_surjective"
         "CoveringRetainedSheetHomeomorph.retainedSheetHomeomorph"]}],
-     :prerequisite
-     {:bounded-exception
-      "This single-consumer theorem supplies the exact local product homeomorphism for the component-restricted projection; only its conversion to an evenly covered neighborhood and assembly with banked surjectivity remain.",
-      :consumer :t99J01,
-      :phase :implementation,
-      :state :open,
-      :scope
-      ["ConstructionTargets/CoveringRetainedSheetHomeomorph.lean"],
-      :dag-node
-      "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component/retained-sheet-homeomorph",
-      :acceptance
-      {:implementation
-       "For a trivialization with path-connected base set and a clopen subset C of its source space, define the restricted source subtype over the chart base and construct a Homeomorph from it to the product of the chart base with the banked RetainedIndex. Prove the coordinate formulas, inverses, and continuity using the original trivialization and invFun_mem_iff_retained. Do not package IsEvenlyCovered or IsCoveringMap, prove surjectivity, count fibers, or compute pi1.",
-       :placeholder "the single sorry in apm_t99j01",
-       :route-step
-       "t99J01 component-restriction step 9: identify the component-side chart source with the base neighborhood times retained sheet indices before packaging the restricted covering map",
-       :fixture "/tmp/covering-retained-sheet-homeomorph.lean",
-       :fixture-sha256
-       "2239151ab528fbb2c2327a7928045854ab4574292690dd517b13d7f8d366caf0",
-       :gates
-       ["lake build ConstructionTargets.CoveringRetainedSheetHomeomorph"
-        "fixture compiles"
-        "zero source and fixture sorry"
-        "standard-only axioms"
-        "registry check"]},
-      :id :routes-2026-10-10-covering-retained-sheet-homeomorph-47,
-      :kind :reusable-theorem,
-      :depends-on
-      [:routes-2026-10-10-covering-retained-sheet-indices-46],
-      :current-residual
-      "Instantiate C as the open Joined component, use retainedSheetHomeomorph to prove each refined chart is evenly covered for the component projection, assemble IsCoveringMap, and pair it with componentProjection_surjective.",
-      :other-consumers []},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake env lean /tmp/covering-retained-sheet-homeomorph.lean",
+       "lake env lean /tmp/iscoveringmap-restrict-path-component.lean",
        :exit 0,
        :finding
-       "the restriction of a path-connected chart to a clopen source subset compiles as a homeomorphism onto the retained-index product"}
-      {:cmd "sha256sum /tmp/covering-retained-sheet-homeomorph.lean",
-       :exit 0,
-       :finding
-       "2239151ab528fbb2c2327a7928045854ab4574292690dd517b13d7f8d366caf0"}
+       "the clopen-domain covering restriction and surjective Joined-component specialization compile with standard axioms"}
       {:cmd
-       "rg -n \"\\b(sorry|admit)\\b\" /tmp/covering-retained-sheet-homeomorph.lean",
+       "sha256sum /tmp/iscoveringmap-restrict-path-component.lean",
+       :exit 0,
+       :finding
+       "420a19c8155c5fdd8d826a3cdc28aef80383f97f61874aefa3671549fccc9ca4"}
+      {:cmd
+       "rg -n \"\\b(sorry|admit)\\b\" /tmp/iscoveringmap-restrict-path-component.lean",
        :exit 1,
        :expected-exit 1,
        :finding "no placeholders"}
@@ -96919,64 +96888,58 @@
       {:cmd "git status --short", :exit 0, :finding "clean"}],
      :diagnostic-history
      [{:cmd
-       "lake env lean /tmp/covering-retained-sheet-homeomorph.lean",
+       "lake env lean /tmp/iscoveringmap-restrict-path-component.lean",
        :exit 1,
        :finding
-       "RetainedIndex did not inherit a reducible topology through its named definition; supplied its induced subtype topology explicitly."}
+       "The first packaging attempt lacked an explicit topology and discreteness proof for the named RetainedIndex type, reversed the IsClopen fields, and incorrectly assumed covering maps are surjective; introduced the induced topology, used the locally path-connected path-component closed theorem, and derived surjectivity from the banked component projection."}
       {:cmd
-       "lake env lean /tmp/covering-retained-sheet-homeomorph.lean",
+       "lake env lean /tmp/iscoveringmap-restrict-path-component.lean",
        :exit 1,
        :finding
-       "The first inverse formulas used nonexistent invFun_toFun notation and left Trivialization pair types ambiguous; changed them to symm_apply_mk_proj and explicitly typed target pairs."}
+       "Unfolding RetainedIndex alone did not synthesize discreteness under its explicitly induced topology; proved that induced topology is bottom from discreteness of the original covering fiber."}
       {:cmd
-       "lake env lean /tmp/covering-retained-sheet-homeomorph.lean",
+       "lake env lean /tmp/iscoveringmap-restrict-path-component.lean",
        :exit 1,
        :finding
-       "The first continuity proof used the wrong subtype constructor syntax and an underconstrained nested coercion; used Continuous.subtype_mk and typed RestrictedSource arguments."}
+       "The first bottom-topology proof left the ambient fiber topology implicit in DiscreteTopology.eq_bot; specified the covering fiber topology explicitly."}
       {:cmd
-       "lake env lean /tmp/covering-retained-sheet-homeomorph.lean",
+       "lake env lean /tmp/iscoveringmap-restrict-path-component.lean",
        :exit 1,
        :finding
-       "The inverse source-membership proof needed an explicit equality transport from proj_symm_apply rather than simplification through nested subtypes."}
+       "TopologicalSpace.induced of the bottom topology was not definitionally bottom as a structure; switched to extensional equality of open-set predicates."}
       {:cmd
-       "lake env lean /tmp/covering-retained-sheet-homeomorph.lean",
+       "lake env lean /tmp/iscoveringmap-restrict-path-component.lean",
        :exit 1,
        :finding
-       "The forward base-coordinate continuity proof initially produced the first chart coordinate rather than the projection syntactically; transported it with Trivialization.coe_fst."}
+       "The first extensional proof introduced a set before reducing equality of the IsOpen functions; added function extensionality and propositional extensionality."}
       {:cmd
-       "lake env lean /tmp/covering-retained-sheet-homeomorph.lean",
+       "lake env lean /tmp/iscoveringmap-restrict-path-component.lean",
        :exit 1,
        :finding
-       "Rewriting proj_symm_apply through invFun notation did not match the reducible partial-equivalence expression; introduced the projection equality explicitly and transported base membership."}
+       "The open-set predicate proof initially used change before propositional extensionality; moved propext ahead of the explicit induced-open characterization."}
       {:cmd
-       "lake env lean /tmp/covering-retained-sheet-homeomorph.lean",
+       "lake env lean /tmp/iscoveringmap-restrict-path-component.lean",
        :exit 1,
        :finding
-       "After the inverse source proof compiled, the left inverse still required stating the exact invFun coordinate equation; changed it to symm_apply_mk_proj."}],
+       "The final IsEvenlyCovered conversion left its auxiliary fiber type ambiguous; supplied RetainedIndex explicitly."}],
      :fixture
-     {:path "/tmp/covering-retained-sheet-homeomorph.lean",
+     {:path "/tmp/iscoveringmap-restrict-path-component.lean",
       :sha256
-      "2239151ab528fbb2c2327a7928045854ab4574292690dd517b13d7f8d366caf0",
+      "420a19c8155c5fdd8d826a3cdc28aef80383f97f61874aefa3671549fccc9ca4",
       :interface
-      "RestrictedSource is the component-side source over a chart base; retainedSheetHomeomorph identifies it homeomorphically with the chart base times RetainedIndex."},
+      "restrictClopen_isCoveringMap packages the retained-sheet homeomorphisms as evenly covered neighborhoods; IsCoveringMap.restrictPathComponent proves the Joined-component projection is both a covering map and surjective."},
+     :implementation
+     {:scope ["ConstructionTargets/RestrictPathComponent.lean"],
+      :acceptance
+      "Implement the compiled fixture declarations restrictClopen_isCoveringMap and IsCoveringMap.restrictPathComponent. Reuse the banked path-connected chart, retained-sheet homeomorphism, total-space local path connectedness, and component-projection surjectivity results. Do not specialize to ThreeCircles, count fibers, compute pi1, or close t99J01."},
      :seat "topo-4"}},
-   :phase :probe,
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/RestrictPathComponent.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component",
    :acceptance
-   {:probe
-    "Compile IsCoveringMap.restrictPathComponent over a locally path-connected, path-connected base, including selected-sheet trivializations and surjectivity. Do not specialize, count fibers, compute pi1, or close t99J01.",
-    :placeholder "the single sorry in apm_t99j01",
-    :route-step
-    "restrict a finite covering to one path component before counting sheets",
-    :gates
-    ["canonical packages"
-     "fixture compiles"
-     "zero fixture sorry"
-     "standard-only axioms"
-     "registry check"]},
+   "Implement the compiled fixture declarations restrictClopen_isCoveringMap and IsCoveringMap.restrictPathComponent. Reuse the banked path-connected chart, retained-sheet homeomorphism, total-space local path connectedness, and component-projection surjectivity results. Do not specialize to ThreeCircles, count fibers, compute pi1, or close t99J01.",
    :id :routes-2026-10-10-iscoveringmap-restrict-path-component-38,
    :kind :reusable-theorem,
    :depends-on
@@ -98205,7 +98168,9 @@
     [:owner
      :routes-2026-10-10-iscoveringmap-restrict-path-component-38],
     :type
-    "theorem is true in ordinary covering-space theory, but its proof needs a component-restriction theorem not present in Mathlib or ConstructionTargets: theorem IsCoveringMap.restrictPathComponent {E B : Type*} [TopologicalSpace E] [TopologicalSpace B] [LocPathConnectedSpace B] [PathConnectedSpace B] {p : E → B} (hp : IsCoveringMap p) (e : E) : IsCoveringMap (fun x : {x : E // Joined e x} => p x.1). This cannot be obtained merely from openness of path components: each covering trivialization must be refined to a path-connected base neighborhood, its sheets classified by whether they meet the chos"},
+    "theorem is true in ordinary covering-space theory, but its proof needs a component-restriction theorem not present in Mathlib or ConstructionTargets: theorem IsCoveringMap.restrictPathComponent {E B : Type*} [TopologicalSpace E] [TopologicalSpace B] [LocPathConnectedSpace B] [PathConnectedSpace B] {p : E → B} (hp : IsCoveringMap p) (e : E) : IsCoveringMap (fun x : {x : E // Joined e x} => p x.1). This cannot be obtained merely from openness of path components: each covering trivialization must be refined to a path-connected base neighborhood, its sheets classified by whether they meet the chos",
+    :proved-in
+    :routes-2026-10-10-iscoveringmap-restrict-path-component-38},
    :id :lemma-iscoveringmap-restrictpathcomponent,
    :kind :lemma,
    :depends-on
