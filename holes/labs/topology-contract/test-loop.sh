@@ -106,8 +106,9 @@ bb "$HERE/worklist_check.bb" "$checkpoint"
 rm -f "$checkpoint"
 
 # A checkpoint may declare a new lemma and elect its implementation in the
-# same receipt.  Its explicit id must survive name-based upsert even when the
-# theorem name is qualified and would generate a different automatic slug.
+# same receipt.  Its explicit id must survive name-based upsert, and a work row
+# that synthesized a different id from the qualified theorem name must be
+# linked back to the unique lemma named by its exact declaration.
 checkpoint_lemma="$(mktemp)"
 cp "$HERE/fixtures/checkpoint-ledger.edn" "$checkpoint_lemma"
 bb "$HERE/build_step.bb" apply-result "$checkpoint_lemma" checkpoint \

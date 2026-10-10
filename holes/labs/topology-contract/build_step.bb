@@ -471,6 +471,30 @@
                   (swap! idx update-in [lid :depends-on] conj did))))))
         (mapv @idx @order)))))
 
+(defn reconcile-implements-lemmas
+  "Resolve a replacement row's stale/synthesized lemma id from its exact
+   declaration.  Strategy agents sometimes derive an id from the qualified
+   theorem name even though that theorem already has a shorter stable ledger
+   id.  Only an exact, unique theorem-name match is rewritten; ambiguity or a
+   missing declaration remains invalid and is rejected by worklist_check."
+  [items]
+  (let [idx (into {} (map (juxt :id identity) items))
+        ids-by-name (reduce (fn [m row]
+                              (if (= :lemma (:kind row))
+                                (update m (get-in row [:lemma :name]) (fnil conj []) (:id row))
+                                m))
+                            {} items)]
+    (mapv (fn [row]
+            (let [lid (:implements-lemma row)
+                  declaration (get-in row [:acceptance :declaration])
+                  matches (get ids-by-name declaration)]
+              (if (and lid
+                       (not= :lemma (:kind (idx lid)))
+                       (= 1 (count matches)))
+                (assoc row :implements-lemma (first matches))
+                row)))
+          items)))
+
 (defn bank-lemmas
   "On a PASS for row id: bank the lemma it implements and any lemma whose
    author reported it proved in this row."
@@ -844,9 +868,10 @@
             (throw (ex-info "unknown receipt outcome" {:outcome outcome})))]
       (write-ledger! (assoc data :items
                             (unblock-ready
-                             (cond-> (upsert-lemmas new-items
-                                                    (concat (:missing-theorems receipt) (:lemmas receipt))
-                                                    id)
+                             (cond-> (reconcile-implements-lemmas
+                                      (upsert-lemmas new-items
+                                                      (concat (:missing-theorems receipt) (:lemmas receipt))
+                                                      id))
                                (= :pass outcome) (bank-lemmas id)))))
       (println "applied" (name outcome) "to" (name id)))))
 
