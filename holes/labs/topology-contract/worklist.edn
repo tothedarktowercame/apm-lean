@@ -85769,8 +85769,153 @@
    "Orient the banked abstract free-product equivalence against the concrete quotient inclusions so recursive generator normalization becomes meaningful.",
    :other-consumers [:t01A03 :t97A01 :t97A03 :t92J06]}
   {:consumer :t97A01,
-   :phase :probe,
+   :phase :implementation,
    :state :open,
+   :scope
+   ["ConstructionTargets/GenericPointWedgeMayerVietorisCoordinates.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/shared/generic-point-wedge-mv-inclusion-coordinates/h0-naturality",
+   :acceptance
+   {:placeholder
+    "the single sorry in apm_t97a01 and apm_t97A03_bridge_invariants_of_model",
+    :route-step
+    "representation layer before t97A01 step 4/MV input and t97A03 step 7",
+    :declarations
+    ["genericPointWedgeOverlapHomologyIso"
+     "genericPointWedgeLeftHomologyIso"
+     "genericPointWedgeRightHomologyIso"
+     "genericPointWedgeOverlapToLeft_naturality"
+     "genericPointWedgeOverlapToRight_naturality"
+     "genericPointWedgeIntersectionArrow_H0_coordinates"
+     "genericPointWedgeReassemblyArrow_H0_coordinates"
+     "threeCirclesMayerVietorisCoordinates"],
+    :implementation
+    "Build the overlap and piece homology isomorphisms in every degree from genericPointWedgeCoverPackage and singularHomologyIsoOfHomotopyEquiv. For each literal subtype inclusion from the overlap into a cover piece, use the representative equations and HomotopyEquivHomologySquare to identify its induced H0 map after augmentation coordinates with the identity of Z. Substitute these two naturality equations into productionIntersectionArrow to obtain the signed diagonal. Define the ambient H0 coordinate with openCoverH0IsoOfCoordinates and prove that productionReassemblyArrow conjugates to the codiagonal, using the production zero composite and the existing signed-diagonal cokernel uniqueness. Package the exact formulas and specialize them to the iterated ThreeCircles point-wedge cover without carrying out the finite-rank induction.",
+    :axioms :standard-only,
+    :fixture
+    "/tmp/generic-point-wedge-mv-inclusion-coordinates-probe.lean",
+    :fixture-sha256
+    "8b85b579989bd59f53eff5991aaa36965b937bb9f0e87e5b88be3c93f989e2cf",
+    :commands
+    ["lake env lean ConstructionTargets/GenericPointWedgeMayerVietorisCoordinates.lean"
+     "lake env lean /tmp/generic-point-wedge-mv-inclusion-coordinates-probe.lean"
+     "python3 scripts/statement-registry.py check"]},
+   :id
+   :routes-2026-10-10-generic-point-wedge-h0-inclusion-naturality-1,
+   :kind :reusable-theorem,
+   :depends-on [],
+   :current-residual
+   "Prove one coherent H0 naturality calculation for the two literal overlap inclusions; the signed intersection and reassembly coordinate formulas then follow from the already banked production arrows and cokernel algebra.",
+   :other-consumers [:t97A03]}
+  {:consumer :t97A01,
+   :evidence
+   {:probe
+    {:residual
+     "Exactly one shared prerequisite remains: show that the two literal overlap inclusions become identity maps in the H0 coordinates induced by the generic wedge homotopy equivalences. This yields the signed diagonal and codiagonal formulas; finite-rank induction stays downstream.",
+     :outcome :revise,
+     :warnings
+     [{:kind :interface-axiom,
+       :message
+       "The placeholder-free fixture uses exactly one nonstandard axiom for the naturality calculation identifying the actual degree-zero inclusion maps with identity coordinates; the production arrows and generic cover equivalences are already standard-only."}],
+     :prerequisite
+     {:consumer :t97A01,
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/GenericPointWedgeMayerVietorisCoordinates.lean"],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/shared/generic-point-wedge-mv-inclusion-coordinates/h0-naturality",
+      :acceptance
+      {:placeholder
+       "the single sorry in apm_t97a01 and apm_t97A03_bridge_invariants_of_model",
+       :route-step
+       "representation layer before t97A01 step 4/MV input and t97A03 step 7",
+       :declarations
+       ["genericPointWedgeOverlapHomologyIso"
+        "genericPointWedgeLeftHomologyIso"
+        "genericPointWedgeRightHomologyIso"
+        "genericPointWedgeOverlapToLeft_naturality"
+        "genericPointWedgeOverlapToRight_naturality"
+        "genericPointWedgeIntersectionArrow_H0_coordinates"
+        "genericPointWedgeReassemblyArrow_H0_coordinates"
+        "threeCirclesMayerVietorisCoordinates"],
+       :implementation
+       "Build the overlap and piece homology isomorphisms in every degree from genericPointWedgeCoverPackage and singularHomologyIsoOfHomotopyEquiv. For each literal subtype inclusion from the overlap into a cover piece, use the representative equations and HomotopyEquivHomologySquare to identify its induced H0 map after augmentation coordinates with the identity of Z. Substitute these two naturality equations into productionIntersectionArrow to obtain the signed diagonal. Define the ambient H0 coordinate with openCoverH0IsoOfCoordinates and prove that productionReassemblyArrow conjugates to the codiagonal, using the production zero composite and the existing signed-diagonal cokernel uniqueness. Package the exact formulas and specialize them to the iterated ThreeCircles point-wedge cover without carrying out the finite-rank induction.",
+       :axioms :standard-only,
+       :fixture
+       "/tmp/generic-point-wedge-mv-inclusion-coordinates-probe.lean",
+       :fixture-sha256
+       "8b85b579989bd59f53eff5991aaa36965b937bb9f0e87e5b88be3c93f989e2cf",
+       :commands
+       ["lake env lean ConstructionTargets/GenericPointWedgeMayerVietorisCoordinates.lean"
+        "lake env lean /tmp/generic-point-wedge-mv-inclusion-coordinates-probe.lean"
+        "python3 scripts/statement-registry.py check"]},
+      :id
+      :routes-2026-10-10-generic-point-wedge-h0-inclusion-naturality-1,
+      :kind :reusable-theorem,
+      :depends-on [],
+      :current-residual
+      "Prove one coherent H0 naturality calculation for the two literal overlap inclusions; the signed intersection and reassembly coordinate formulas then follow from the already banked production arrows and cokernel algebra.",
+      :other-consumers [:t97A03]},
+     :axioms
+     ["propext"
+      "Classical.choice"
+      "Quot.sound"
+      "GenericPointWedgeMVCoordinatesProbe.generic_point_wedge_mv_inclusion_coordinates"],
+     :commands
+     [{:cmd "stat -c '%F %n' .lake/packages",
+       :exit 0,
+       :finding
+       "directory .lake/packages; canonical package authority is present"}
+      {:cmd
+       "lake env lean ConstructionTargets/ProductionOpenCoverMayerVietoris.lean",
+       :exit 0,
+       :finding
+       "the literal signed intersection arrow, reassembly arrow, and production exactness theorems compile with standard axioms"}
+      {:cmd
+       "lake env lean ConstructionTargets/T00A01MayerVietorisAdapters.lean",
+       :exit 0,
+       :finding
+       "the existing H0 coordinate and codiagonal-cokernel infrastructure compiles with standard axioms"}
+      {:cmd
+       "lake env lean ConstructionTargets/GenericPointWedgeOpenCoverComparison.lean",
+       :exit 0,
+       :finding
+       "the generic wedge cover and its three homotopy equivalences compile with standard axioms"}
+      {:cmd
+       "lake env lean /tmp/generic-point-wedge-mv-inclusion-coordinates-probe.lean",
+       :exit 0,
+       :finding
+       "the exact signed-diagonal and codiagonal coordinate interface elaborates from one isolated naturality axiom"}
+      {:cmd
+       "sha256sum /tmp/generic-point-wedge-mv-inclusion-coordinates-probe.lean",
+       :exit 0,
+       :finding
+       "8b85b579989bd59f53eff5991aaa36965b937bb9f0e87e5b88be3c93f989e2cf"}
+      {:cmd
+       "Python comment-stripped placeholder census of /tmp/generic-point-wedge-mv-inclusion-coordinates-probe.lean",
+       :exit 0,
+       :finding "0"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :finding "131 registered statements match, 0 do not"}
+      {:cmd "git status --short", :exit 0, :finding "clean"}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/generic-point-wedge-mv-inclusion-coordinates-probe.lean",
+       :exit 1,
+       :finding
+       "The first draft omitted the SingularHomologyConcrete namespace and quantified over arbitrary universes although the production Mayer-Vietoris API is Type 0.",
+       :correction
+       "Opened the concrete homology namespace and restricted the generic fixture to Type 0, matching the production API; the successful rerun is in commands."}],
+     :fixture
+     {:path
+      "/tmp/generic-point-wedge-mv-inclusion-coordinates-probe.lean",
+      :sha256
+      "8b85b579989bd59f53eff5991aaa36965b937bb9f0e87e5b88be3c93f989e2cf"},
+     :seat "topo-4"}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/generic-point-wedge-mv-inclusion-coordinates",
@@ -85792,7 +85937,8 @@
    :kind :reusable-theorem,
    :depends-on
    [:routes-2026-10-10-generic-point-wedge-open-cover-comparison-1
-    :routes-2026-10-10-checkpoint-topo1-covering-shared-three-1],
+    :routes-2026-10-10-checkpoint-topo1-covering-shared-three-1
+    :routes-2026-10-10-generic-point-wedge-h0-inclusion-naturality-1],
    :current-residual
    "Identify the literal inclusion maps in homology so the codiagonal cokernel and rank-addition induction can be proved.",
    :other-consumers [:t97A03]}
