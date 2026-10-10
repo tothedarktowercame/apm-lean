@@ -62569,44 +62569,65 @@
    "single-consumer interpolated planar norm identity for the t02A03 complement interpolation",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:residual
-     "Implement the interpolated planar-norm identity in the scoped module; then substitute it into leftTubeNormalComplex and continue to the exact normal-coordinate formula and deleted-core exclusion.",
-     :outcome :go,
-     :warnings
-     ["/tmp/t02a03_geometric_tube_cover.lean:786:38: unnecessarySeqFocus linter warning in a previously banked theorem"],
-     :acceptance
-     {:declaration "apm_t02a03_norm_leftTubePlanarComplex_radialPoint",
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Substitute the planar norm identity into leftTubeNormalComplex, prove the exact interpolated normal-coordinate formula, deduce deleted-core exclusion, bundle the homotopy, and assemble the torus HomotopyEquiv.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["/tmp/t02a03_geometric_tube_cover.lean:786:38: unnecessarySeqFocus linter warning in a previously banked theorem; scoped module compiles without warnings"],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_norm_leftTubePlanarComplex_radialPoint",
       :type
-      "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, norm (apm_t02a03_leftTubePlanarComplex ⟨apm_t02a03_leftTubeRadialPoint tp, apm_t02a03_leftTubeRadialPoint_mem_leftTube tp⟩) = (1 - (tp.1 : Real)) * (1 + (1 / 8 : Real) * ((apm_t02a03_leftTubeNormalAngular tp.2 : Circle) : Complex).re) + (tp.1 : Real) * norm (apm_t02a03_leftTubePlanarComplex ⟨tp.2.1, tp.2.2.1⟩)"},
-     :commands
-     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "apm_t02a03_norm_leftTubePlanarComplex_radialPoint compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
-       :exit 0}
-      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "86bf8286cabaef27e1e106995e2ed0498bf3f3635f67425a751e3f562db1e0b8  /tmp/t02a03_geometric_tube_cover.lean"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :fixture
-     {:path "/tmp/t02a03_geometric_tube_cover.lean",
-      :sha256
-      "86bf8286cabaef27e1e106995e2ed0498bf3f3635f67425a751e3f562db1e0b8"},
-     :finding
-     "The interpolated planar-norm identity is complete and placeholder-free. The proof combines the common-direction endpoint formulas and proves their affine scalar strictly positive before removing the absolute value.",
-     :implementation
-     {:scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
-      :declarations
-      ["ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_norm_leftTubePlanarComplex_radialPoint"]},
-     :seat "topo-8"}},
+      "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, norm (apm_t02a03_leftTubePlanarComplex ⟨apm_t02a03_leftTubeRadialPoint tp, apm_t02a03_leftTubeRadialPoint_mem_leftTube tp⟩) = (1 - (tp.1 : Real)) * (1 + (1 / 8 : Real) * ((apm_t02a03_leftTubeNormalAngular tp.2 : Circle) : Complex).re) + (tp.1 : Real) * norm (apm_t02a03_leftTubePlanarComplex ⟨tp.2.1, tp.2.2.1⟩)",
+      :status :proved,
+      :consumers [:t02A03],
+      :depends-on
+      ["ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_leftTubePlanarComplex_torusInverse_coordinates"]}],
+    :statement-hashes
+    {:frozen-type-sha256
+     "4cb5d7e924ff1d79fe1d3f3fa3ae39a1a438796459f47cb8e8dea48ddd45e2e7",
+     :registry "131 registered statements match, 0 do not"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean", :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03LeftTubePuncturedModel.lean",
+      :exit 0}
+     {:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+      :exit 0}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03LeftTubePuncturedModel.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git rev-parse 5a64b71f && git diff-tree --no-commit-id --name-only -r 5a64b71f",
+      :exit 0,
+      :output
+      "5a64b71f5674cff394715614dcf318f1232cf391\nConstructionTargets/T02A03LeftTubePuncturedModel.lean"}
+     {:cmd "git show --check --oneline 5a64b71f", :exit 0}],
+    :commit "5a64b71f5674cff394715614dcf318f1232cf391",
+    :changed-paths
+    ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
+    :fixture
+    {:path "/tmp/t02a03_geometric_tube_cover.lean",
+     :sha256
+     "86bf8286cabaef27e1e106995e2ed0498bf3f3635f67425a751e3f562db1e0b8"},
+    :finding
+    "Banked the interpolated planar norm identity by combining the common-direction endpoint formulas and proving the affine scalar strictly positive from unit-interval bounds and the Circle real-part bound.",
+    :implementation
+    {:scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
+     :declarations
+     ["ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_norm_leftTubePlanarComplex_radialPoint"],
+     :type
+     "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, norm (apm_t02a03_leftTubePlanarComplex ⟨apm_t02a03_leftTubeRadialPoint tp, apm_t02a03_leftTubeRadialPoint_mem_leftTube tp⟩) = (1 - (tp.1 : Real)) * (1 + (1 / 8 : Real) * ((apm_t02a03_leftTubeNormalAngular tp.2 : Circle) : Complex).re) + (tp.1 : Real) * norm (apm_t02a03_leftTubePlanarComplex ⟨tp.2.1, tp.2.2.1⟩)"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/left-tube-interpolated-planar-norm",
@@ -63927,4 +63948,28 @@
    :kind :lemma,
    :depends-on
    [:lemma-apm-t02a03-lefttubeplanarcomplex-torusinverse-coordinates],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_norm_leftTubePlanarComplex_radialPoint",
+    :type
+    "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, norm (apm_t02a03_leftTubePlanarComplex ⟨apm_t02a03_leftTubeRadialPoint tp, apm_t02a03_leftTubeRadialPoint_mem_leftTube tp⟩) = (1 - (tp.1 : Real)) * (1 + (1 / 8 : Real) * ((apm_t02a03_leftTubeNormalAngular tp.2 : Circle) : Complex).re) + (tp.1 : Real) * norm (apm_t02a03_leftTubePlanarComplex ⟨tp.2.1, tp.2.2.1⟩)"},
+   :lemma
+   {:name
+    "ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_norm_leftTubePlanarComplex_radialPoint",
+    :reported-by
+    [:routes-2026-10-10-t02a03-left-tube-interpolated-planar-norm-topo2-r1],
+    :type
+    "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, norm (apm_t02a03_leftTubePlanarComplex ⟨apm_t02a03_leftTubeRadialPoint tp, apm_t02a03_leftTubeRadialPoint_mem_leftTube tp⟩) = (1 - (tp.1 : Real)) * (1 + (1 / 8 : Real) * ((apm_t02a03_leftTubeNormalAngular tp.2 : Circle) : Complex).re) + (tp.1 : Real) * norm (apm_t02a03_leftTubePlanarComplex ⟨tp.2.1, tp.2.2.1⟩)",
+    :proved-in
+    :routes-2026-10-10-t02a03-left-tube-interpolated-planar-norm-topo2-r1},
+   :id
+   :lemma-constructiontargets-t02a03lefttubepuncturedmodel-apm-t02a03-norm-lefttubeplanarc,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t02a03lefttubepuncturedmodel-apm-t02a03-lefttubeplanarcomple],
    :other-consumers []}]}
