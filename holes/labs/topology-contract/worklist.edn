@@ -82090,9 +82090,23 @@
       "Review one consumer-facing adapter and two need-ranked shared foundations, then refill.",
       :other-consumers []}],
     :author "topo-4",
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791605762981-1054-d65ef136",
+     :commands
+     ["git show/diff recorded checkpoint transition 3517aa4e"
+      "nested-comment-aware placeholder census of all eight active consumers"
+      "python3 scripts/statement-registry.py check"
+      "rg corrected polygon Hausdorff, rational projective homology, and affine-chart infrastructure in ConstructionTargets"
+      "inspect ConstructionTargets/Surfaces.lean representation for t91A02"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git diff --check 3517aa4e^ 3517aa4e"],
+     :finding
+     "PASS: reviewer codex-3 differs from author topo-4. Recorded checkpoint commit 3517aa4e changes only holes/labs/topology-contract/worklist.edn, preserves prior rows, records all required measures, and adds exactly three bounded replacement probes plus their next checkpoint; no fixture or theorem implementation is attached to this strategy row. Fresh nested-comment-aware census reproduces one placeholder in each of t98A06, t98J01, t98J02, t94J09, tunk01, t91A02, t96A06, and t99J05, total 8 and delta 0. Registry is 131/131 and all 681 post-refill rows validate. Infrastructure claims reproduce: AffineChartConstruction has only n=2 inhabitants, while no compact-Hausdorff closed-equivalence quotient theorem or rational RP3/CPn homology package was found. The route orientations and boundaries remain honest: reviewed smooth and lost-fixture STOPs are preserved; the false polygon open-map route is replaced by closed-relation separation before cut-and-paste; the concrete Surface false genus models are disk EqvGen quotients suitable for the t91A02 polygon route; and banked projective descent does not stand in for affine charts, fixed-point indices, rational homology, degree, Lefschetz, or Euler calculations. The three selected probes address those first reusable boundaries without claiming consumer closure."}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -82112,7 +82126,7 @@
    :other-consumers []}
   {:consumer :t99J05,
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t99J05/affine-charts-local-diagonal",
    :acceptance
@@ -82135,7 +82149,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/polygon-quotient-compact-closed-relation",
@@ -82161,7 +82175,7 @@
    :other-consumers [:tunk01 :t91A02]}
   {:consumer :t96A06,
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/shared/rational-projective-homology",
    :acceptance
