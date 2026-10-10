@@ -59791,6 +59791,41 @@
    :current-residual
    "Extend the based attachment homotopy across the right tube, construct compatible deformation data on the other tube piece, and glue the geometricY-to-Y equivalence.",
    :other-consumers []}
+  {:bounded-exception
+   "single-consumer explicit tube-complement-to-generic-wedge homotopy equivalence for t02A03",
+   :consumer :t02A03,
+   :phase :probe,
+   :type
+   "Nonempty (ContinuousMap.HomotopyEquiv T02A03GeometricTubeCover.apm_t02a03_geometricY_probe TorusCircleWedgeOpenCover.GenericWedge)",
+   :state :open,
+   :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t02A03/geometric-tube-deformation-equivalence",
+   :acceptance
+   {:probe
+    "Produce a complete placeholder-free fixture proving ConstructionTargets.T02A03GeometricTubeDeformation.geometricYHomotopyEquivGenericWedge with the frozen type Nonempty (ContinuousMap.HomotopyEquiv T02A03GeometricTubeCover.apm_t02a03_geometricY_probe TorusCircleWedgeOpenCover.GenericWedge). Design and implement the explicit tube-wide maps and homotopies, using the banked punctured-right-core based attachment homotopy to control the deleted tangency and proving compatibility on the two radius-1/4 tube pieces. Do not edit the consumer or claim its final encoding in this prerequisite.",
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.geometricYHomotopyEquivGenericWedge",
+    :type
+    "Nonempty (ContinuousMap.HomotopyEquiv T02A03GeometricTubeCover.apm_t02a03_geometricY_probe TorusCircleWedgeOpenCover.GenericWedge)",
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "t02A03 step 2, construct the full geometric tube-complement homotopy equivalence",
+    :gates
+    ["fixture compiles"
+     "fixture contains no sorry token"
+     "statement registry matches"]},
+   :id
+   :routes-2026-10-10-t02a03-geometric-tube-deformation-equivalence-topo2-r1,
+   :kind :reusable-theorem,
+   :declaration
+   "ConstructionTargets.T02A03GeometricTubeDeformation.geometricYHomotopyEquivGenericWedge",
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo2-r5
+    :routes-2026-10-10-t02a03-geometric-right-core-based-attachment-homotopy-topo2-r1],
+   :current-residual
+   "Construct the explicit tube-wide homotopy equivalence from the frozen geometric complement to GenericWedge; after it is banked, the final consumer closure is an adapter composition.",
+   :other-consumers []}
   {:consumer :t02A03,
    :stop-count 1,
    :review-finding
@@ -59831,6 +59866,70 @@
      :job "invoke-1791632312766-1816-983dafab",
      :finding
      "design the supporting signatures and discharge the frozen axiom type"},
+    :probe
+    {:outcome :revise,
+     :seat "topo-6",
+     :fixture
+     {:path "/tmp/t02a03_tube_to_generic_wedge_interface.lean",
+      :sha256
+      "9622bcdaefde3cf89c382e9abc98a9cf0efa00cddfc07017a1b1e31b85832982"},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/t02a03_tube_to_generic_wedge_interface.lean",
+       :exit 0,
+       :output "The exact prerequisite interface type compiled."}
+      {:cmd
+       "sha256sum /tmp/t02a03_tube_to_generic_wedge_interface.lean",
+       :exit 0,
+       :output
+       "9622bcdaefde3cf89c382e9abc98a9cf0efa00cddfc07017a1b1e31b85832982  /tmp/t02a03_tube_to_generic_wedge_interface.lean"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}
+      {:cmd
+       "rg -n \"geometricYHomotopyEquivGenericWedge|HomotopyEquiv.*geometricY|geometricY.*HomotopyEquiv\" ConstructionTargets",
+       :exit 1,
+       :expected-exit 1,
+       :output ""}],
+     :finding
+     "The failed closure is repaired by one exact prerequisite rather than another STOP. The compiled interface isolates the missing theorem as a Nonempty ContinuousMap.HomotopyEquiv from the already frozen geometric tube complement to the already banked GenericWedge. No ConstructionTargets declaration currently supplies such an equivalence. Once this theorem is banked, the closure row can compose it with the existing GenericWedge-to-Y homeomorphism and the already banked closed-punctured-disk equivalence; the consumer statement and its definitions remain unchanged.",
+     :prerequisite
+     {:bounded-exception
+      "single-consumer explicit tube-complement-to-generic-wedge homotopy equivalence for t02A03",
+      :consumer :t02A03,
+      :phase :probe,
+      :type
+      "Nonempty (ContinuousMap.HomotopyEquiv T02A03GeometricTubeCover.apm_t02a03_geometricY_probe TorusCircleWedgeOpenCover.GenericWedge)",
+      :state :open,
+      :scope
+      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/t02A03/geometric-tube-deformation-equivalence",
+      :acceptance
+      {:probe
+       "Produce a complete placeholder-free fixture proving ConstructionTargets.T02A03GeometricTubeDeformation.geometricYHomotopyEquivGenericWedge with the frozen type Nonempty (ContinuousMap.HomotopyEquiv T02A03GeometricTubeCover.apm_t02a03_geometricY_probe TorusCircleWedgeOpenCover.GenericWedge). Design and implement the explicit tube-wide maps and homotopies, using the banked punctured-right-core based attachment homotopy to control the deleted tangency and proving compatibility on the two radius-1/4 tube pieces. Do not edit the consumer or claim its final encoding in this prerequisite.",
+       :declaration
+       "ConstructionTargets.T02A03GeometricTubeDeformation.geometricYHomotopyEquivGenericWedge",
+       :type
+       "Nonempty (ContinuousMap.HomotopyEquiv T02A03GeometricTubeCover.apm_t02a03_geometricY_probe TorusCircleWedgeOpenCover.GenericWedge)",
+       :placeholder "the sole sorry in apm_t02a03",
+       :route-step
+       "t02A03 step 2, construct the full geometric tube-complement homotopy equivalence",
+       :gates
+       ["fixture compiles"
+        "fixture contains no sorry token"
+        "statement registry matches"]},
+      :id
+      :routes-2026-10-10-t02a03-geometric-tube-deformation-equivalence-topo2-r1,
+      :kind :reusable-theorem,
+      :declaration
+      "ConstructionTargets.T02A03GeometricTubeDeformation.geometricYHomotopyEquivGenericWedge",
+      :depends-on
+      [:routes-2026-10-10-checkpoint-topo2-r5
+       :routes-2026-10-10-t02a03-geometric-right-core-based-attachment-homotopy-topo2-r1],
+      :current-residual
+      "Construct the explicit tube-wide homotopy equivalence from the frozen geometric complement to GenericWedge; after it is banked, the final consumer closure is an adapter composition.",
+      :other-consumers []}},
     :fixture
     {:path "/tmp/t02a03_geometric_tube_cover.lean",
      :sha256
@@ -59839,7 +59938,7 @@
     "All adapter-sized based attachment data now compile, through a ContinuousMap.Homotopy from the punctured right core to the constant quarter-turn Circle-meridian point. The exact remaining boundary is tube-wide: construct continuous tube coordinates/deformations on the radius-1/4 closed neighborhoods, prove avoidance of the deleted left core throughout, and glue the two tube pieces across their tangency overlap. No banked result supplies any of those three operations.",
     :seat "topo-8"},
    :phase :implementation,
-   :state :repair,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/closure",
    :acceptance
@@ -59872,7 +59971,8 @@
     :routes-2026-10-10-t02a03-geometric-right-core-lifted-map-topo2-r1
     :routes-2026-10-10-t02a03-geometric-right-core-anchor-contraction-topo2-r1
     :routes-2026-10-10-t02a03-geometric-anchor-circle-meridian-quarter-turn-topo2-r1
-    :routes-2026-10-10-t02a03-geometric-right-core-based-attachment-homotopy-topo2-r1],
+    :routes-2026-10-10-t02a03-geometric-right-core-based-attachment-homotopy-topo2-r1
+    :routes-2026-10-10-t02a03-geometric-tube-deformation-equivalence-topo2-r1],
    :current-residual
    "One placeholder: two explicit homotopy equivalences, with the punctured-disk factor adapter-sized and the geometric tube deformation still missing.",
    :other-consumers []}
