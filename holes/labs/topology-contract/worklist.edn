@@ -95397,8 +95397,74 @@
   {:bounded-exception
    "This single-consumer theorem consolidates the two banked finite implications into the exact iff consumed by the final disk-relation transport.",
    :consumer :t93J03,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Construct an explicit homeomorphism between the closed unit square and frozen disk whose four boundary values send squareEdge i t to edgePoint 4 i t, prove it transports SquareRel exactly to SurfaceRel false 2, and combine that transport with eqvGen_iff_cases.",
+    :outcome :done-unreviewed,
+    :warnings
+    [{:kind :dependency-linter,
+      :message
+      "Replayed dependency modules retain previously reported linter warnings; the scoped module emitted none."}],
+    :missing-theorems
+    [{:name "KleinSquareEqvGenCasesIff.eqvGen_iff_cases",
+      :type
+      "For p and q in the closed unit square, Relation.EqvGen SquareRel p q iff Cases p q",
+      :status :proved,
+      :consumers [:t93J03],
+      :depends-on
+      ["KleinSquareCasesToEqvGen.cases_eqvGen"
+       "KleinSquareEqvGenToCases.eqvGen_cases"]}],
+    :statement-hashes "131 registered statements match",
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :finding
+      "canonical package authority resolves to /home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "sha256sum /tmp/klein-square-eqvgen-cases-iff.lean",
+      :exit 0,
+      :finding
+      "fixture hash matches 6297b5804eae610e990eff5614262fde89adc9adbadbe47cb6faa21827abf932"}
+     {:cmd "lake build ConstructionTargets.KleinSquareEqvGenCasesIff",
+      :exit 0,
+      :finding "canonical exact EqvGen/Cases comparison builds"}
+     {:cmd "lake env lean /tmp/klein-square-eqvgen-cases-iff.lean",
+      :exit 0,
+      :finding
+      "frozen fixture compiles and reports only standard axioms"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" ConstructionTargets/KleinSquareEqvGenCasesIff.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero source placeholders"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" /tmp/klein-square-eqvgen-cases-iff.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero fixture placeholders"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short",
+      :exit 0,
+      :finding "clean worktree after commit"}],
+    :commit "55a496906b18109c20339cbe20b8f05ffd56f091",
+    :changed-paths
+    ["ConstructionTargets/KleinSquareEqvGenCasesIff.lean"],
+    :fixture
+    {:path "/tmp/klein-square-eqvgen-cases-iff.lean",
+     :sha256
+     "6297b5804eae610e990eff5614262fde89adc9adbadbe47cb6faa21827abf932",
+     :sorry-count 0},
+    :implementation
+    {:scope ["ConstructionTargets/KleinSquareEqvGenCasesIff.lean"],
+     :declarations ["KleinSquareEqvGenCasesIff.eqvGen_iff_cases"]},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/KleinSquareEqvGenCasesIff.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/square-boundary-orbit-eqvgen/square-eqvgen-cases-iff",
@@ -96582,17 +96648,25 @@
    :kind :lemma,
    :depends-on [:lemma-kleinsquarecasestoeqvgen-cases-eqvgen],
    :other-consumers []}
-  {:consumer :portfolio,
+  {:consumer :t93J03,
    :phase :lemma,
    :state :backlog,
    :scope [],
-   :acceptance {:lemma "KleinSquareEqvGenCasesIff.eqvGen_iff_cases"},
+   :acceptance
+   {:lemma "KleinSquareEqvGenCasesIff.eqvGen_iff_cases",
+    :type
+    "For p and q in the closed unit square, Relation.EqvGen SquareRel p q iff Cases p q"},
    :lemma
    {:name "KleinSquareEqvGenCasesIff.eqvGen_iff_cases",
-    :reported-by []},
+    :reported-by [:routes-2026-10-10-klein-square-eqvgen-cases-iff-35],
+    :type
+    "For p and q in the closed unit square, Relation.EqvGen SquareRel p q iff Cases p q",
+    :proved-in :routes-2026-10-10-klein-square-eqvgen-cases-iff-35},
    :id :lemma-kleinsquareeqvgencasesiff-eqvgen-iff-cases,
    :kind :lemma,
-   :depends-on [],
+   :depends-on
+   [:lemma-kleinsquarecasestoeqvgen-cases-eqvgen
+    :lemma-kleinsquareeqvgentocases-eqvgen-cases],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
