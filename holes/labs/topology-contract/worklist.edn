@@ -96341,6 +96341,20 @@
      {:cmd "git status --short",
       :exit 0,
       :finding "clean worktree after commit"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791657658568-2707-400ff3c2",
+     :commands
+     ["git show 2be55163fed9470e0f61d92448460c4a391909d5 -- ConstructionTargets/CoveringPathComponentSurjective.lean"
+      "git diff --exit-code 2be55163fed9470e0f61d92448460c4a391909d5 -- ConstructionTargets/CoveringPathComponentSurjective.lean"
+      "lake build ConstructionTargets.CoveringPathComponentSurjective"
+      "sha256sum /tmp/covering-path-component-surjective.lean && lake env lean /tmp/covering-path-component-surjective.lean"
+      "placeholder census on source, fixture, and problems/t99J01/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb on recorded ledger at 72deb506"],
+     :finding
+     "PASS: reviewer codex-3 verified recorded commit 2be55163 changes only CoveringPathComponentSurjective.lean and the source equals that commit. Canonical packages resolve correctly; the frozen fixture hash is exact; target and fixture compile with zero placeholders; t99J01 retains exactly one placeholder; componentProjection_surjective reports only propext, Classical.choice, and Quot.sound; all 131 registered statements and the recorded 867-item ledger validate. For each base point b, the proof chooses a path gamma from p e to b, lifts gamma starting at e, uses the lifted path with its initial and terminal endpoint equations as the Joined witness for the lifted endpoint, and evaluates liftPath_lifts at 1 followed by gamma.target to prove p of that endpoint equals b. The module correctly does not construct or restrict covering charts, select sheets, count fibers, or compute fundamental groups."},
     :commit "2be55163fed9470e0f61d92448460c4a391909d5",
     :changed-paths
     ["ConstructionTargets/CoveringPathComponentSurjective.lean"],
@@ -96356,7 +96370,7 @@
      ["ConstructionTargets.CoveringPathComponentSurjective.componentProjection_surjective"]},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/CoveringPathComponentSurjective.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component/surjectivity",
@@ -96462,7 +96476,7 @@
       "componentProjection_surjective proves that a covering projection restricted to the Joined component of any chosen point is onto a path-connected base."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component",
@@ -98743,7 +98757,7 @@
    :other-consumers []}
   {:consumer :t99J01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -98758,7 +98772,10 @@
     :type
     "For a covering p : E → B over a path-connected base and e : E, the projection from Component e is surjective",
     :proved-in
-    :routes-2026-10-10-covering-path-component-surjective-43},
+    :routes-2026-10-10-covering-path-component-surjective-43,
+    :banked-by
+    :routes-2026-10-10-covering-path-component-surjective-43,
+    :banked-commit "2be55163fed9470e0f61d92448460c4a391909d5"},
    :id
    :lemma-coveringpathcomponentsurjective-componentprojection-surjective,
    :kind :lemma,
