@@ -62054,23 +62054,60 @@
   {:bounded-exception
    "single-consumer reconstructed normal-coordinate identity for the t02A03 complement interpolation",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :fixture
+     {:path "/tmp/t02a03_geometric_tube_cover.lean",
+      :sha256
+      "f3b70a29f91b9a0b5b1b823f89133391b18e219c8e9d528c9673ef2c660f765b"},
+     :commands
+     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "apm_t02a03_leftTubeNormalComplex_torusInverse compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
+       :exit 0}
+      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "f3b70a29f91b9a0b5b1b823f89133391b18e219c8e9d528c9673ef2c660f765b  /tmp/t02a03_geometric_tube_cover.lean"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :implementation
+     {:scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
+      :declaration
+      "ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_leftTubeNormalComplex_torusInverse",
+      :type
+      "forall u : Circle × Circle, apm_t02a03_leftTubeNormalComplex ⟨(apm_t02a03_leftTubeTorusInverse u).1, (apm_t02a03_leftTubeTorusInverse u).2.1⟩ = (1 / 8 : Real) • (u.2 : Complex)",
+      :acceptance
+      ["target module compiles"
+       "declaration has the frozen type"
+       "target module contains no sorry token"
+       "statement registry matches"]},
+     :finding
+     "The fixture computes the reconstruction endpoint normal coordinate exactly as the real scalar 1/8 times the second Circle coordinate, using positivity of its planar radius.",
+     :residual
+     "Combine both endpoint formulas into the exact interpolation normal-coordinate formula, deduce deleted-core exclusion, bundle the homotopy, and assemble the torus HomotopyEquiv."}},
+   :phase :implementation,
+   :type
+   "forall u : Circle × Circle, apm_t02a03_leftTubeNormalComplex ⟨(apm_t02a03_leftTubeTorusInverse u).1, (apm_t02a03_leftTubeTorusInverse u).2.1⟩ = (1 / 8 : Real) • (u.2 : Complex)",
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/left-tube-torus-inverse-normal-coordinate",
    :acceptance
-   {:probe
-    "Compile and bank apm_t02a03_leftTubeNormalComplex_torusInverse from /tmp/t02a03_geometric_tube_cover.lean. Prove that the explicit torus reconstruction has complex normal coordinate exactly the real scalar 1/8 times its second Circle coordinate, using positivity of the reconstructed planar radius and the unit norm of the first Circle coordinate. This supplies the reconstruction endpoint algebra for the interpolation formula; do not yet claim the full formula, deleted-core exclusion, bundled homotopy, HomotopyEquiv, or gluing.",
-    :declaration "apm_t02a03_leftTubeNormalComplex_torusInverse",
-    :type
-    "forall u : Circle × Circle, apm_t02a03_leftTubeNormalComplex ⟨(apm_t02a03_leftTubeTorusInverse u).1, (apm_t02a03_leftTubeTorusInverse u).2.1⟩ = (1 / 8 : Real) • (u.2 : Complex)",
-    :placeholder "the sole sorry in apm_t02a03",
-    :route-step
-    "t02A03 step 2, compute the reconstruction endpoint's normal coordinate along the shared interpolation direction"},
+   ["target module compiles"
+    "declaration has the frozen type"
+    "target module contains no sorry token"
+    "statement registry matches"],
    :id
    :routes-2026-10-10-t02a03-left-tube-torus-inverse-normal-coordinate-topo2-r1,
    :kind :reusable-theorem,
+   :declaration
+   "ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_leftTubeNormalComplex_torusInverse",
    :depends-on
    [:routes-2026-10-10-checkpoint-topo2-r5
     :routes-2026-10-10-t02a03-left-tube-normal-decomposition-topo2-r1],
