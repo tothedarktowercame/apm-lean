@@ -86468,15 +86468,12 @@
    {:placeholder-after 1,
     :placeholder-delta 0,
     :residual
-    "The concrete aa bb cc quotient is now homeomorphic to the canonical nonorientable genus-three surface. Remaining work is the polygon open cover and edge graph, pi1 and Mayer-Vietoris calculations, Smith normalization, and final frozen theorem assembly.",
+    "The quotient-to-standard-N3 homeomorphism and its compiling acceptance fixture are complete. Remaining work is the polygon open cover and edge graph, pi1 and Mayer-Vietoris calculations, Smith normalization, and final frozen theorem assembly.",
     :outcome :done-unreviewed,
     :warnings
     [{:kind :inherited-placeholder,
       :message
-      "The single sorry in the registered theorem apm_t97a01 remains; this uptake row supplies only route step 1."}
-     {:kind :post-promotion-fixture-collision,
-      :message
-      "The pinned probe contains the same declaration now promoted into Main.lean, so compiling it after promotion produces the expected duplicate-name error."}],
+      "The single sorry in the registered theorem apm_t97a01 remains; this uptake row supplies only route step 1."}],
     :statement-hashes
     {:status :unchanged,
      :registry "131 registered statements match, 0 do not"},
@@ -86488,10 +86485,24 @@
       :exit 0,
       :finding
       "directory .lake/packages; canonical package authority is present"}
+     {:cmd
+      "lake env lean -o /tmp/t97a01-probe/T97A01Main.olean problems/t97A01/lean/Main.lean",
+      :exit 0,
+      :finding
+      "The promoted consumer module compiles to the fixture import path; only the inherited registered-theorem sorry warning remains."}
+     {:cmd
+      "LEAN_PATH=/tmp/t97a01-probe lake env lean /tmp/t97a01-homeomorph-probe.lean",
+      :exit 0,
+      :finding
+      "The repaired fixture imports and checks the promoted homeomorphism and reports only propext, Classical.choice, and Quot.sound."}
      {:cmd "sha256sum /tmp/t97a01-homeomorph-probe.lean",
       :exit 0,
       :finding
-      "2d0b5ac183e488c5e839ba9879dd7be05dfa412a1a3347b01100ec0c9121cbac"}
+      "9ee4cfa3064e07e3630baf6e1284c4aa0cf4a984558aaaf3275c8ba04b44c97d"}
+     {:cmd
+      "Python comment-stripped placeholder census of /tmp/t97a01-homeomorph-probe.lean",
+      :exit 0,
+      :finding "0"}
      {:cmd "lake env lean problems/t97A01/lean/Main.lean",
       :exit 0,
       :finding
@@ -86499,40 +86510,26 @@
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
-     {:cmd
-      "Python comment-stripped placeholder census of problems/t97A01/lean/Main.lean",
-      :exit 0,
-      :finding "1"}
-     {:cmd
-      "git diff-tree --no-commit-id --name-only -r 5b19036217baf63464ad4e683b3f89ed0a386606",
-      :exit 0,
-      :finding "problems/t97A01/lean/Main.lean"}
      {:cmd "git status --short", :exit 0, :finding "clean"}],
     :diagnostic-history
     [{:cmd
       "LEAN_PATH=/tmp/t97a01-probe lake env lean /tmp/t97a01-homeomorph-probe.lean",
       :exit 1,
       :finding
-      "After promotion, the pinned probe redeclares apm_t97a01_X_homeomorph_standardN3 and Lean correctly reports a duplicate declaration; its subsequent axiom audit resolves the imported promoted declaration to standard axioms.",
+      "The superseded fixture redeclared the promoted theorem and failed with a duplicate declaration.",
       :correction
-      "The acceptance row records Main.lean and registry as its commands. Main.lean compiles successfully with the promoted declaration, and the pinned fixture hash and zero-placeholder census remain verified."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1791618300996-1499-5c491f8a",
-     :finding
-     "Pinned acceptance fixture does not compile. Direct lake env lean cannot resolve T97A01Main; with the recorded LEAN_PATH it exits 1 because apm_t97a01_X_homeomorph_standardN3 is redeclared after promotion. The acceptance still requires fixture compiles, so Main.lean compilation cannot substitute for that failed gate. Repair the fixture to import and check/use the promoted declaration without redeclaring it, recompute fixture SHA-256, and rerun acceptance."},
+      "Replaced the fixture declaration with an exact-type example using the promoted theorem; the successful rerun is recorded in commands."}],
     :commit "5b19036217baf63464ad4e683b3f89ed0a386606",
     :changed-paths ["problems/t97A01/lean/Main.lean"],
     :fixture
     {:path "/tmp/t97a01-homeomorph-probe.lean",
      :sha256
-     "2d0b5ac183e488c5e839ba9879dd7be05dfa412a1a3347b01100ec0c9121cbac",
+     "9ee4cfa3064e07e3630baf6e1284c4aa0cf4a984558aaaf3275c8ba04b44c97d",
      :placeholder-count 0},
     :declarations ["apm_t97a01_X_homeomorph_standardN3"],
     :seat "topo-2"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope ["problems/t97A01/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t97A01/standard-n3-homeomorph",
    :acceptance
