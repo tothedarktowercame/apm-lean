@@ -57588,54 +57588,67 @@
    "single-consumer closed punctured disk product equivalence for t02A03",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/t02a03_closed_punctured_disk_torus.lean",
-      :sha256
-      "4d1f6aa7be1d0a86f9e9f479934f16af4198cdf80318eeca631cc6472589167a"},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/t02a03_closed_punctured_disk_torus.lean",
-       :exit 0,
-       :output
-       "t02a03_closed_punctured_disk_torus compiled; axioms [propext, Classical.choice, Quot.sound]; one unnecessarySimpa linter warning"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_closed_punctured_disk_torus.lean || true)\"",
-       :exit 0}
-      {:cmd "sha256sum /tmp/t02a03_closed_punctured_disk_torus.lean",
-       :exit 0,
-       :output
-       "4d1f6aa7be1d0a86f9e9f479934f16af4198cdf80318eeca631cc6472589167a  /tmp/t02a03_closed_punctured_disk_torus.lean"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/t02a03_closed_punctured_disk_torus.lean",
-       :exit 1,
-       :finding
-       "An exploratory exact-interface fixture attempted to import problems.t02A03.lean.Main, but the problems tree is not exposed as a Lake module and Lean rejected the module prefix. The corrected fixture reproduces the frozen three abbreviations verbatim under their consumer names and proves the exact requested type without importing the consumer theorem or its sorry."}],
-     :finding
-     "The exact consumer-shaped equivalence compiles. Radial normalization maps every nonzero closed-disk point to Circle; the inverse includes Circle at radius one; positive radial interpolation remains nonzero and its norm is a convex combination of one and the original norm, hence remains in the closed unit disk. Taking the second Circle coordinate unchanged yields the required HomotopyEquiv.",
-     :residual
-     "Bank this equivalence, then construct the concrete homotopy equivalence from apm_t02a03_geometricY to apm_t02a03_Y and assemble both with apm_t02a03_previous_encoding.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/T02A03ClosedPuncturedDiskTorus.lean"],
-      :acceptance
-      {:source-fixture "/tmp/t02a03_closed_punctured_disk_torus.lean",
-       :declaration "t02a03_closed_punctured_disk_torus",
-       :placeholder "the sole sorry in apm_t02a03",
-       :route-step
-       "t02A03 step 1, closed-punctured-disk times Circle homotopy equivalence",
-       :gates
-       ["lake env lean ConstructionTargets/T02A03ClosedPuncturedDiskTorus.lean"
-        "placeholder scan"
-        "statement registry check"]}}}},
+   {:placeholder-delta 0,
+    :residual
+    "Construct the concrete homotopy equivalence from apm_t02a03_geometricY to apm_t02a03_Y, then assemble it with t02a03_closed_punctured_disk_torus and apm_t02a03_previous_encoding.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd "sha256sum /tmp/t02a03_closed_punctured_disk_torus.lean",
+      :exit 0,
+      :output
+      "4d1f6aa7be1d0a86f9e9f479934f16af4198cdf80318eeca631cc6472589167a  /tmp/t02a03_closed_punctured_disk_torus.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03ClosedPuncturedDiskTorus.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.T02A03ClosedPuncturedDiskTorus",
+      :exit 0,
+      :output "Build completed successfully (1924 jobs)."}
+     {:cmd
+      "lake env lean /tmp/check_t02a03_closed_punctured_axioms.lean",
+      :exit 0,
+      :output
+      "t02a03_closed_punctured_disk_torus depends on [propext, Classical.choice, Quot.sound]."}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03ClosedPuncturedDiskTorus.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "comment-stripped placeholder census for problems/t02A03/lean/Main.lean",
+      :exit 0,
+      :output "1"}
+     {:cmd "sha256sum problems/t02A03/lean/Main.lean",
+      :exit 0,
+      :output
+      "b123eca388ab2858ca55daf538c1ddd645022b52f5196a15f0bb516d78323d7d  problems/t02A03/lean/Main.lean"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r 2e65694b013383d8b3141bc5d3d849cba0a69a94",
+      :exit 0,
+      :output
+      "ConstructionTargets/T02A03ClosedPuncturedDiskTorus.lean"}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "2e65694b013383d8b3141bc5d3d849cba0a69a94",
+    :changed-paths
+    ["ConstructionTargets/T02A03ClosedPuncturedDiskTorus.lean"],
+    :fixture
+    {:path "/tmp/t02a03_closed_punctured_disk_torus.lean",
+     :sha256
+     "4d1f6aa7be1d0a86f9e9f479934f16af4198cdf80318eeca631cc6472589167a"},
+    :declarations
+    ["ConstructionTargets.T02A03ClosedPuncturedDiskTorus.probeToTorus"
+     "ConstructionTargets.T02A03ClosedPuncturedDiskTorus.torusToProbe"
+     "ConstructionTargets.T02A03ClosedPuncturedDiskTorus.probeRadialHomotopy"
+     "ConstructionTargets.T02A03ClosedPuncturedDiskTorus.closedPuncturedDiskProductHomotopyEquivTorus"
+     "ConstructionTargets.T02A03ClosedPuncturedDiskTorus.t02a03_closed_punctured_disk_torus"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03ClosedPuncturedDiskTorus.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/closed-punctured-disk-torus",
    :acceptance
