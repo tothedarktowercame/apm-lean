@@ -158,6 +158,16 @@ theorem globalGenerator_generates (R : Type) [CommRing R] (G : ModuleCat R)
   rw [smul_eq_mul, mul_one]
   exact ConcreteCategory.congr_hom e.hom_inv_id z
 
+theorem mapGlobalGenerator_generates_of_isIso
+    (R : Type) [CommRing R] (G H : ModuleCat R)
+    (e : G ≅ ModuleCat.of R R) (f : G ⟶ H) [IsIso f] :
+    ∀ z : H, ∃ r : R, r • f.hom (globalGenerator R G e) = z := by
+  intro z
+  obtain ⟨r, hr⟩ := globalGenerator_generates R G e ((asIso f).inv.hom z)
+  refine ⟨r, ?_⟩
+  rw [← f.hom.map_smul, hr]
+  exact ConcreteCategory.congr_hom (asIso f).inv_hom_id z
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -171,3 +181,4 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralChartGenerator_eq_on_preconnected_overlap_of_ne_neg_one
 #print axioms ConstructionTargets.ManifoldFundamentalClass.globalGenerator
 #print axioms ConstructionTargets.ManifoldFundamentalClass.globalGenerator_generates
+#print axioms ConstructionTargets.ManifoldFundamentalClass.mapGlobalGenerator_generates_of_isIso
