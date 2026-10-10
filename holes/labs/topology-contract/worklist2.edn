@@ -65944,6 +65944,20 @@
       "git show --check --oneline 8f38c73b0a085d9206c1cb84e1f28d2789baaa46",
       :exit 0,
       :output "8f38c73b Add t02A03 right tube meridian coordinate"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791668142405-3001-c74840f9",
+     :commands
+     ["git show --format=fuller --stat 8f38c73b0a085d9206c1cb84e1f28d2789baaa46 && git diff-tree --no-commit-id --name-status -r 8f38c73b0a085d9206c1cb84e1f28d2789baaa46 && git show --check --oneline 8f38c73b0a085d9206c1cb84e1f28d2789baaa46"
+      "sha256sum /tmp/t02a03_right_tube_forward_coordinate_contract.lean"
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean"
+      "lake env lean /tmp/t02a03_right_tube_forward_coordinate_contract.lean"
+      "python3 scripts/statement-registry.py check --rev 8f38c73b0a085d9206c1cb84e1f28d2789baaa46"
+      "python3 scripts/statement-registry.py fingerprint --rev 8f38c73b0a085d9206c1cb84e1f28d2789baaa46 t02A03"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"],
+     :finding
+     "PASS: commit 8f38c73b changes exactly ConstructionTargets/T02A03GeometricTubeDeformation.lean; recorded and current blob are cf0feebb58230b995e346683e5a637850de41674. Fixture SHA-256 exactly matches b0a924ef0f48a74e832e35b0b89d6efb6530879dc1598b51bf99c2c85261cf2e. Module and fixture compile with only propext, Classical.choice, and Quot.sound and no new sorry, admit, or axiom. The forward map has the required direction RightTubeMinusLeftCore to Circle, normalizes rightTubeNormalComplex, obtains nonvanishing precisely from the subtype leftCore-exclusion proof through the ambient zero-locus biconditional, and proves continuity locally away from zero. On the typed circleMeridian it proves forward(inverse(z)) = z by reducing the normal complex to the positive scalar (1/8) times z. No homotopy is claimed. Registry is 131/0; worklist validates; t02A03 retains one comment-stripped sorry and fingerprint d123afd5ae0ee067587b3ed3d7b9b6d2f075c3d95701e098ec357c7317cd34c3."},
     :commit "8f38c73b0a085d9206c1cb84e1f28d2789baaa46",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
@@ -65955,7 +65969,7 @@
     "The coordinate continuously normalizes the planar radial-defect/height complex number, whose nonvanishing follows exactly from deletion of the left core; on circleMeridian it reduces to normalization of a positive one-eighth scalar multiple.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/right-tube-meridian-coordinate",
@@ -66055,7 +66069,7 @@
      "The existing left-tube construction supplies the correct formula: normalize the complex normal coordinate with radial-defect real part and height imaginary part. Before either homotopy can be typed on RightTubeMinusLeftCore, that formula must be generalized to the frozen right-tube subtype, proved nonzero from exclusion of the left core, proved continuous, and shown to recover z on circleMeridian z. This is one coherent prerequisite and does not claim either homotopy.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/right-tube-meridian-homotopy-equivalence",
@@ -68747,7 +68761,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -68764,7 +68778,10 @@
     "exists forward : C(RightTubeMinusLeftCore, Circle), forall (z : Circle) (hz : apm_t02a03_circleMeridian z ∈ apm_t02a03_rightTube ∧ apm_t02a03_circleMeridian z ∉ Set.range apm_t02a03_leftCore), forward ⟨apm_t02a03_circleMeridian z, hz⟩ = z",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-right-tube-meridian-coordinate-topo2-r1},
+    :routes-2026-10-10-t02a03-right-tube-meridian-coordinate-topo2-r1,
+    :banked-by
+    :routes-2026-10-10-t02a03-right-tube-meridian-coordinate-topo2-r1,
+    :banked-commit "8f38c73b0a085d9206c1cb84e1f28d2789baaa46"},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-righttubemeridiancoordinate,
    :kind :lemma,
@@ -68802,7 +68819,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -68818,7 +68835,10 @@
     "The forward coordinate sends every typed frozen circleMeridian point back to its Circle parameter",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-right-tube-meridian-coordinate-topo2-r1},
+    :routes-2026-10-10-t02a03-right-tube-meridian-coordinate-topo2-r1,
+    :banked-by
+    :routes-2026-10-10-t02a03-right-tube-meridian-coordinate-topo2-r1,
+    :banked-commit "8f38c73b0a085d9206c1cb84e1f28d2789baaa46"},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-righttubemeridiancoordinate-c,
    :kind :lemma,
