@@ -100569,40 +100569,84 @@
    "Classify the fibers of the two assembled three-loop maps to prove surjectivity and injectivity, promote the continuous bijections to homeomorphisms, compose with ThreeCircles, and finish literal inclusion formulas and package assembly.",
    :other-consumers []}
   {:bounded-exception
+   "This single-consumer prerequisite discharges all relation-quotient combinatorics for surjectivity, leaving only the common geometric theorem that the six canonical arcs cover Circle.",
+   :consumer :t97A01,
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/PolygonBoundaryThreeLoopSurjectivityReduction.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/boundary-three-loop-surjectivity-reduction",
+   :acceptance
+   {:implementation
+    "Promote the exact fixture. Define literal points on each of the three nested endpoint loops and convert between the two closed-unit-interval carrier spellings. Prove that every canonical edge zero through five represents a point in the range of n3ThreeLoops and torusCrosscapThreeLoops, using reversed parameters for torus-crosscap edges two and three. Deduce surjectivity of each map from an explicit six-edge-cover hypothesis. Do not prove the geometric edge cover, injectivity, homeomorphism, ThreeCircles formulas, outer-piece inclusions, invariants, or t97A01.",
+    :placeholder "the single sorry in apm_t97a01",
+    :route-step
+    "polygon radial open-cover step 22: reduce surjectivity of both boundary comparison maps to the common six-edge Circle cover",
+    :fixture
+    "/tmp/polygon-boundary-three-loop-surjectivity-reduction.lean",
+    :fixture-sha256
+    "5a2308e412754717ce87a4b013e826406fb8678eafdd057f6d0718299ffdd90d",
+    :gates
+    ["lake build ConstructionTargets.PolygonBoundaryThreeLoopSurjectivityReduction"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id
+   :routes-2026-10-10-polygon-boundary-three-loop-surjectivity-reduction-62,
+   :kind :reusable-theorem,
+   :area "polygon-surface-open-cover",
+   :depends-on
+   [:routes-2026-10-10-polygon-boundary-three-loop-continuity-61],
+   :current-residual
+   "Prove the six canonical edge arcs cover Circle, apply the compiled reductions to obtain both surjectivity theorems, then classify fibers for injectivity and form the boundary homeomorphisms and final packages.",
+   :other-consumers []}
+  {:bounded-exception
    "This single-consumer concrete quotient package is the other final backlog lemma on t97A01 and supplies the actual two polygon models required by its frozen statement.",
    :consumer :t97A01,
    :implements-lemma :lemma-polygonradialopencoverpackages,
    :evidence
    {:probe
     {:residual
-     "Prove surjectivity and injectivity of both continuous three-loop maps by classifying the six edge representatives and generated relation fibers; then form the boundary homeomorphisms, compose with ThreeCircles, and finish the literal inclusions and packages.",
+     "Prove the common six-edge Circle cover, obtain both surjectivity results, then prove exact fiber classifications for injectivity before building the two ThreeCircles homeomorphisms and final inclusion formulas.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
      [{:name
-       "PolygonBoundaryThreeLoopContinuity.continuous_n3ThreeLoops",
-       :type "Continuous PolygonBoundaryThreeLoopMaps.n3ThreeLoops.",
-       :status :proved,
-       :consumers [:t97A01],
-       :depends-on ["PolygonBoundaryThreeLoopMaps.n3ThreeLoops"],
-       :area "polygon-surface-open-cover"}
-      {:name
-       "PolygonBoundaryThreeLoopContinuity.continuous_torusCrosscapThreeLoops",
+       "PolygonBoundaryThreeLoopSurjectivityReduction.surjective_n3ThreeLoops_of_edge_cover",
        :type
-       "Continuous PolygonBoundaryThreeLoopMaps.torusCrosscapThreeLoops.",
+       "If every Circle point is circleEdgePoint j t for some j : Fin 6 and t in the closed unit interval, then n3ThreeLoops is surjective.",
        :status :proved,
        :consumers [:t97A01],
        :depends-on
-       ["PolygonBoundaryThreeLoopMaps.torusCrosscapThreeLoops"],
+       ["PolygonBoundaryThreeLoopContinuity.continuous_n3ThreeLoops"],
+       :area "polygon-surface-open-cover"}
+      {:name
+       "PolygonBoundaryThreeLoopSurjectivityReduction.surjective_torusCrosscapThreeLoops_of_edge_cover",
+       :type
+       "If every Circle point is circleEdgePoint j t for some j : Fin 6 and t in the closed unit interval, then torusCrosscapThreeLoops is surjective.",
+       :status :proved,
+       :consumers [:t97A01],
+       :depends-on
+       ["PolygonBoundaryThreeLoopContinuity.continuous_torusCrosscapThreeLoops"],
+       :area "polygon-surface-open-cover"}
+      {:name "polygonSixEdgeCircleCover",
+       :type
+       "Every z : Circle equals circleEdgePoint j t for some j : Fin 6 and t : Set.Icc (0 : Real) 1.",
+       :status :not-started,
+       :consumers [:t97A01],
+       :depends-on [],
        :area "polygon-surface-open-cover"}
       {:name "polygonBoundaryThreeCircles",
        :type
-       "Classify fibers and prove both continuous three-loop maps are homeomorphisms, then compose their inverses with the banked ThreeCircles homeomorphism and prove literal boundary formulas.",
+       "Use the six-edge cover and compiled surjectivity reductions, classify fibers for injectivity, promote both maps to homeomorphisms, and prove literal ThreeCircles boundary formulas.",
        :status :partial,
        :consumers [:t97A01],
        :depends-on
-       ["PolygonBoundaryThreeLoopContinuity.continuous_n3ThreeLoops"
-        "PolygonBoundaryThreeLoopContinuity.continuous_torusCrosscapThreeLoops"],
+       ["polygonSixEdgeCircleCover"
+        "PolygonBoundaryThreeLoopSurjectivityReduction.surjective_n3ThreeLoops_of_edge_cover"
+        "PolygonBoundaryThreeLoopSurjectivityReduction.surjective_torusCrosscapThreeLoops_of_edge_cover"],
        :area "polygon-surface-open-cover"}
       {:name "polygonRadialOpenCoverPackages",
        :type
@@ -100615,51 +100659,53 @@
        :area "polygon-surface-open-cover"}],
      :prerequisite
      {:bounded-exception
-      "This single-consumer prerequisite proves continuity of the two explicit three-loop comparison maps independently of their remaining fiber classification and bijectivity proofs.",
+      "This single-consumer prerequisite discharges all relation-quotient combinatorics for surjectivity, leaving only the common geometric theorem that the six canonical arcs cover Circle.",
       :consumer :t97A01,
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/PolygonBoundaryThreeLoopContinuity.lean"],
+      ["ConstructionTargets/PolygonBoundaryThreeLoopSurjectivityReduction.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/boundary-three-loop-continuity",
+      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/boundary-three-loop-surjectivity-reduction",
       :acceptance
       {:implementation
-       "Promote the exact fixture. Prove continuity of the interval-carrier conversion and every canonical Circle edge parameterization. Prove a generic continuity theorem for wedgeLift. Descend continuity through each endpoint Quot using the coinduced polygon Circle-quotient topology, then through both nested point-wedge quotient stages for N3 and TorusCrosscap. Do not prove surjectivity, injectivity, homeomorphism, ThreeCircles formulas, outer-piece inclusion equations, invariants, or t97A01.",
+       "Promote the exact fixture. Define literal points on each of the three nested endpoint loops and convert between the two closed-unit-interval carrier spellings. Prove that every canonical edge zero through five represents a point in the range of n3ThreeLoops and torusCrosscapThreeLoops, using reversed parameters for torus-crosscap edges two and three. Deduce surjectivity of each map from an explicit six-edge-cover hypothesis. Do not prove the geometric edge cover, injectivity, homeomorphism, ThreeCircles formulas, outer-piece inclusions, invariants, or t97A01.",
        :placeholder "the single sorry in apm_t97a01",
        :route-step
-       "polygon radial open-cover step 21: prove continuity of both explicit three-loop boundary comparison maps",
-       :fixture "/tmp/polygon-boundary-three-loop-continuity.lean",
+       "polygon radial open-cover step 22: reduce surjectivity of both boundary comparison maps to the common six-edge Circle cover",
+       :fixture
+       "/tmp/polygon-boundary-three-loop-surjectivity-reduction.lean",
        :fixture-sha256
-       "b6c9531de6c2a2af309af2c3c72f70a9e408cd90ca02f208adf536c4562aa4f8",
+       "5a2308e412754717ce87a4b013e826406fb8678eafdd057f6d0718299ffdd90d",
        :gates
-       ["lake build ConstructionTargets.PolygonBoundaryThreeLoopContinuity"
+       ["lake build ConstructionTargets.PolygonBoundaryThreeLoopSurjectivityReduction"
         "fixture compiles"
         "zero source and fixture sorry"
         "standard-only axioms"
         "registry check"]},
-      :id :routes-2026-10-10-polygon-boundary-three-loop-continuity-61,
+      :id
+      :routes-2026-10-10-polygon-boundary-three-loop-surjectivity-reduction-62,
       :kind :reusable-theorem,
       :area "polygon-surface-open-cover",
       :depends-on
-      [:routes-2026-10-10-polygon-boundary-three-loop-maps-60],
+      [:routes-2026-10-10-polygon-boundary-three-loop-continuity-61],
       :current-residual
-      "Classify the fibers of the two assembled three-loop maps to prove surjectivity and injectivity, promote the continuous bijections to homeomorphisms, compose with ThreeCircles, and finish literal inclusion formulas and package assembly.",
+      "Prove the six canonical edge arcs cover Circle, apply the compiled reductions to obtain both surjectivity theorems, then classify fibers for injectivity and form the boundary homeomorphisms and final packages.",
       :other-consumers []},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake env lean /tmp/polygon-boundary-three-loop-continuity.lean",
+       "lake env lean /tmp/polygon-boundary-three-loop-surjectivity-reduction.lean",
        :exit 0,
        :finding
-       "Continuity of the carrier conversion, Circle edge maps, generic wedge lift, six endpoint-loop maps, and both nested three-loop maps compiles."}
+       "All twelve edge-in-range cases and both conditional surjectivity theorems compile, including the two reversed torus-crosscap parameters."}
       {:cmd
-       "sha256sum /tmp/polygon-boundary-three-loop-continuity.lean",
+       "sha256sum /tmp/polygon-boundary-three-loop-surjectivity-reduction.lean",
        :exit 0,
        :finding
-       "b6c9531de6c2a2af309af2c3c72f70a9e408cd90ca02f208adf536c4562aa4f8"}
+       "5a2308e412754717ce87a4b013e826406fb8678eafdd057f6d0718299ffdd90d"}
       {:cmd
-       "rg -n ‘\\b(sorry|admit)\\b’ /tmp/polygon-boundary-three-loop-continuity.lean",
+       "rg -n ‘\\b(sorry|admit)\\b’ /tmp/polygon-boundary-three-loop-surjectivity-reduction.lean",
        :exit 1,
        :expected-exit 1,
        :finding "No fixture placeholders."}
@@ -100672,26 +100718,17 @@
        :exit 0,
        :finding
        "The route guide, per-problem routes, and probe rules were read."}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/polygon-boundary-three-loop-continuity.lean",
-       :exit 1,
-       :finding
-       "The first draft asked fun_prop to infer continuity of boundaryToCircle and used the wrong quotient-lift theorem names; composing the banked boundary homeomorphism and selecting Quot versus Quotient continuity eliminators corrected those goals."}
-      {:cmd
-       "lake env lean /tmp/polygon-boundary-three-loop-continuity.lean",
-       :exit 1,
-       :finding
-       "After the homeomorphism composition reduced the goal, boundaryEdgePoint had already unfolded; removing the redundant unfold allowed the explicit subtype continuity proof to compile."}],
+     :diagnostic-history [],
      :fixture
-     {:path "/tmp/polygon-boundary-three-loop-continuity.lean",
+     {:path
+      "/tmp/polygon-boundary-three-loop-surjectivity-reduction.lean",
       :sha256
-      "b6c9531de6c2a2af309af2c3c72f70a9e408cd90ca02f208adf536c4562aa4f8",
+      "5a2308e412754717ce87a4b013e826406fb8678eafdd057f6d0718299ffdd90d",
       :interface
-      "The explicit N3 and torus-crosscap maps from ThreeEndpointLoops to their specialized Circle relation quotients are continuous through the endpoint Quot and both nested point-wedge quotient topologies."},
+      "Every one of the six canonical edge representatives lies in the image of each specialized three-loop map, with reversed parameters for the torus-crosscap a and b partners; surjectivity of both maps follows from the common six-edge cover of Circle."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -100732,7 +100769,8 @@
     :routes-2026-10-10-interval-endpoint-quotient-circle-58
     :routes-2026-10-10-three-endpoint-loops-homeomorph-59
     :routes-2026-10-10-polygon-boundary-three-loop-maps-60
-    :routes-2026-10-10-polygon-boundary-three-loop-continuity-61],
+    :routes-2026-10-10-polygon-boundary-three-loop-continuity-61
+    :routes-2026-10-10-polygon-boundary-three-loop-surjectivity-reduction-62],
    :current-residual
    "Combine the concrete cover packages with the strict overlap squares, banked Smith normalization, and final t97A01 assembly.",
    :other-consumers []}
@@ -102903,7 +102941,10 @@
     :lemma-polygonboundarythreeloopmaps-n3threeloops
     :lemma-polygonboundarythreeloopmaps-toruscrosscapthreeloops
     :lemma-polygonboundarythreeloopcontinuity-continuous-n3threeloops
-    :lemma-polygonboundarythreeloopcontinuity-continuous-toruscrosscapthreeloops],
+    :lemma-polygonboundarythreeloopcontinuity-continuous-toruscrosscapthreeloops
+    :lemma-polygonsixedgecirclecover
+    :lemma-polygonboundarythreeloopsurjectivityreduction-surjective-n3threeloops-of-edge-co
+    :lemma-polygonboundarythreeloopsurjectivityreduction-surjective-toruscrosscapthreeloops],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -103778,6 +103819,75 @@
    :kind :lemma,
    :depends-on
    [:lemma-polygonboundarythreeloopmaps-toruscrosscapthreeloops],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "PolygonBoundaryThreeLoopSurjectivityReduction.surjective_n3ThreeLoops_of_edge_cover",
+    :type
+    "If every Circle point is circleEdgePoint j t for some j : Fin 6 and t in the closed unit interval, then n3ThreeLoops is surjective."},
+   :lemma
+   {:name
+    "PolygonBoundaryThreeLoopSurjectivityReduction.surjective_n3ThreeLoops_of_edge_cover",
+    :reported-by
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    :type
+    "If every Circle point is circleEdgePoint j t for some j : Fin 6 and t in the closed unit interval, then n3ThreeLoops is surjective.",
+    :area "polygon-surface-open-cover",
+    :proved-in
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+   :id
+   :lemma-polygonboundarythreeloopsurjectivityreduction-surjective-n3threeloops-of-edge-co,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polygonboundarythreeloopcontinuity-continuous-n3threeloops],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "PolygonBoundaryThreeLoopSurjectivityReduction.surjective_torusCrosscapThreeLoops_of_edge_cover",
+    :type
+    "If every Circle point is circleEdgePoint j t for some j : Fin 6 and t in the closed unit interval, then torusCrosscapThreeLoops is surjective."},
+   :lemma
+   {:name
+    "PolygonBoundaryThreeLoopSurjectivityReduction.surjective_torusCrosscapThreeLoops_of_edge_cover",
+    :reported-by
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    :type
+    "If every Circle point is circleEdgePoint j t for some j : Fin 6 and t in the closed unit interval, then torusCrosscapThreeLoops is surjective.",
+    :area "polygon-surface-open-cover",
+    :proved-in
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+   :id
+   :lemma-polygonboundarythreeloopsurjectivityreduction-surjective-toruscrosscapthreeloops,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polygonboundarythreeloopcontinuity-continuous-toruscrosscapthreeloops],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "polygonSixEdgeCircleCover",
+    :type
+    "Every z : Circle equals circleEdgePoint j t for some j : Fin 6 and t : Set.Icc (0 : Real) 1."},
+   :lemma
+   {:name "polygonSixEdgeCircleCover",
+    :reported-by
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    :type
+    "Every z : Circle equals circleEdgePoint j t for some j : Fin 6 and t : Set.Icc (0 : Real) 1.",
+    :area "polygon-surface-open-cover"},
+   :id :lemma-polygonsixedgecirclecover,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
