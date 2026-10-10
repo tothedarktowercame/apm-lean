@@ -1,6 +1,7 @@
 import ConstructionTargets.LocalHomologyNeighborhoodExcision
 import ConstructionTargets.CoefficientChartTransitionUnit
 import ConstructionTargets.CoefficientTransitionLocalConstancy
+import ConstructionTargets.IntegralSingularHomologyComparison
 
 open CategoryTheory
 noncomputable section
@@ -16,6 +17,7 @@ open ConstructionTargets.CoefficientChartTransitionUnit
 open ConstructionTargets.CoefficientNeighborhoodLocal
 open ConstructionTargets.CoefficientOverlapPair
 open ConstructionTargets.CoefficientTransitionLocalConstancy
+open ConstructionTargets.IntegralSingularHomologyComparison
 
 variable {X : Type} [TopologicalSpace X]
 
@@ -222,6 +224,37 @@ theorem localizationMap_apply_naturality
         (localizationMap x n c) := by
   exact ConcreteCategory.congr_hom (localizationMap_naturality f x y h n) c
 
+private abbrev moduleSingularHomology (X : TopCat) (n : ℕ) :=
+  (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) n).obj
+    (ModuleCat.of ℤ ℤ)).obj X)
+
+def groupGlobalGenerator (X : TopCat) (n : ℕ)
+    (e : moduleSingularHomology X n ≅ ModuleCat.of ℤ ℤ) :
+    (SingularChains X).homology n :=
+  (singularHomologyComparison X n).hom.hom
+    (globalGenerator ℤ (moduleSingularHomology X n) e)
+
+theorem groupGlobalGenerator_generates (X : TopCat) (n : ℕ)
+    (e : moduleSingularHomology X n ≅ ModuleCat.of ℤ ℤ)
+    (z : (SingularChains X).homology n) :
+    ∃ r : ℤ, r • groupGlobalGenerator X n e = z := by
+  let c := (singularHomologyComparison X n).inv.hom z
+  obtain ⟨r, hr⟩ := globalGenerator_generates ℤ (moduleSingularHomology X n) e c
+  have hrz : r • globalGenerator ℤ (moduleSingularHomology X n) e = c := by
+    rw [← int_smul_eq_zsmul]
+    exact hr
+  refine ⟨r, ?_⟩
+  rw [groupGlobalGenerator]
+  calc
+    r • (singularHomologyComparison X n).hom.hom
+          (globalGenerator ℤ (moduleSingularHomology X n) e) =
+        (singularHomologyComparison X n).hom.hom
+          (r • globalGenerator ℤ (moduleSingularHomology X n) e) := by
+            exact ((singularHomologyComparison X n).hom.hom.map_zsmul _ _).symm
+    _ = (singularHomologyComparison X n).hom.hom c := congrArg _ hrz
+    _ = z := ConcreteCategory.congr_hom
+      (singularHomologyComparison X n).inv_hom_id z
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -240,3 +273,4 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.localizationMap
 #print axioms ConstructionTargets.ManifoldFundamentalClass.localizationMap_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.localizationMap_apply_naturality
+#print axioms ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator_generates
