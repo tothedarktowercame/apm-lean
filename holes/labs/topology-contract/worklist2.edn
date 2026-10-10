@@ -60195,6 +60195,33 @@
    "Define continuous angular and punctured-normal coordinates, prove their comparison homotopies, and assemble the torus HomotopyEquiv.",
    :other-consumers []}
   {:bounded-exception
+   "single-consumer Circle-valued angular coordinate on the frozen t02A03 left tube",
+   :consumer :t02A03,
+   :phase :probe,
+   :state :open,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-angular-coordinate",
+   :acceptance
+   {:probe
+    "Compile and bank apm_t02a03_leftTubeSubtype, apm_t02a03_leftTubePlanarComplex, apm_t02a03_leftTubePlanarComplex_ne_zero, apm_t02a03_leftTubeAngular, and apm_t02a03_continuous_leftTubeAngular from /tmp/t02a03_geometric_tube_cover.lean. Define the exact frozen left-tube subtype, form the complex planar displacement (p 0 + 1) + (p 1)i, prove it is nonzero from the banked planar-center theorem, normalize it to Circle, and prove the resulting angular coordinate is continuous. This supplies the angular coordinate required by t02A03 route step 2; do not yet claim punctured-normal coordinates, comparison homotopies, the torus HomotopyEquiv, or gluing.",
+    :declarations
+    ["apm_t02a03_leftTubeSubtype"
+     "apm_t02a03_leftTubePlanarComplex"
+     "apm_t02a03_leftTubePlanarComplex_ne_zero"
+     "apm_t02a03_leftTubeAngular"
+     "apm_t02a03_continuous_leftTubeAngular"],
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "t02A03 step 2, define the continuous Circle-valued angular coordinate on the closed left tube"},
+   :id :routes-2026-10-10-t02a03-left-tube-angular-coordinate-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo2-r5
+    :routes-2026-10-10-t02a03-left-tube-planar-center-nonzero-topo2-r1],
+   :current-residual
+   "Define punctured-normal coordinates and the core-deletion comparison, build the radial homotopies, and assemble the torus HomotopyEquiv.",
+   :other-consumers []}
+  {:bounded-exception
    "single-consumer explicit punctured-left-tube model for t02A03",
    :consumer :t02A03,
    :evidence
@@ -60204,19 +60231,19 @@
      :fixture
      {:path "/tmp/t02a03_geometric_tube_cover.lean",
       :sha256
-      "b3f61e992acbcc3d178c7820119d84bb13ef00e99e4605e59ef0b94f957c9790"},
+      "6fa554e340ac526624b77eb2421cec4cdc255d682e6b9fa016ec5de01d7797a2"},
      :commands
      [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
        :exit 0,
        :output
-       "apm_t02a03_leftTube_planarCenter_ne_zero compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "apm_t02a03_leftTubeSubtype, apm_t02a03_leftTubePlanarComplex, apm_t02a03_leftTubePlanarComplex_ne_zero, apm_t02a03_leftTubeAngular, and apm_t02a03_continuous_leftTubeAngular compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
        "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
        :exit 0}
       {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
        :exit 0,
        :output
-       "b3f61e992acbcc3d178c7820119d84bb13ef00e99e4605e59ef0b94f957c9790  /tmp/t02a03_geometric_tube_cover.lean"}
+       "6fa554e340ac526624b77eb2421cec4cdc255d682e6b9fa016ec5de01d7797a2  /tmp/t02a03_geometric_tube_cover.lean"}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
@@ -60224,42 +60251,53 @@
      [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
        :exit 1,
        :finding
-       "The first proof reduced the contradiction to sqrt(cos(t)^2 + sin(t)^2 + p_2^2) ≤ 1/4 but did not supply the lower bound on that square root. Applying Real.le_sqrt with the trigonometric unit-radius identity and nonnegativity of p_2^2 established the bound 1 ≤ sqrt(...); the final rerun compiled."}],
+       "The initial continuity proof asked fun_prop to synthesize continuity for Complex.mk, for which no theorem was registered. The coordinate was rewritten using Complex.ofReal and Complex.I."}
+      {:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 1,
+       :finding
+       "After rewriting the complex coordinate, fun_prop still could not infer continuity of EuclideanSpace coordinate evaluation. Supplying PiLp.continuous_apply explicitly exposed only a coercion normalization mismatch."}
+      {:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 1,
+       :finding
+       "The explicit continuity proof produced Complex.ofReal (x + 1) while the definition elaborated as Complex.ofReal x + 1. Simplifying with Complex.ofReal_add and Complex.ofReal_one corrected the mismatch; the final rerun compiled."}],
      :finding
-     "The torus HomotopyEquiv is still absent, but angular normalization on the entire closed left tube is now justified. If a tube point had zero planar displacement from center (-1,0), its attained nearby core point would be at distance at least one because the core has unit planar radius; this contradicts the radius-1/4 witness. Thus the squared planar displacement is nonzero everywhere on apm_t02a03_leftTube.",
+     "The full punctured-left-tube HomotopyEquiv is still absent, but the closed left tube now has a compiled continuous Circle-valued angular coordinate. The coordinate sends p to the normalization of the nonzero complex planar displacement (p_0+1)+p_1 i. The banked planar-center theorem proves the denominator never vanishes, and explicit PiLp coordinate-continuity lemmas establish continuity on the exact frozen left-tube subtype.",
      :residual
-     "Bank planar-center nonvanishing. Then define the normalized Circle-valued angular coordinate and continuous normal displacement, identify deletion of the core with nonzero normal displacement, construct the radial normal homotopies, and assemble leftTubeMinusCoreHomotopyEquivTorus.",
+     "Bank the continuous angular coordinate. Then define the punctured normal displacement, identify deletion of the frozen left core with nonzero normal displacement, construct the radial comparison homotopies inside LeftTubeMinusCore, and assemble leftTubeMinusCoreHomotopyEquivTorus.",
      :prerequisite
      {:bounded-exception
-      "single-consumer angular-coordinate nonvanishing on the frozen t02A03 left tube",
+      "single-consumer Circle-valued angular coordinate on the frozen t02A03 left tube",
       :consumer :t02A03,
       :phase :probe,
       :state :open,
       :scope [],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t02A03/left-tube-planar-center-nonzero",
+      "TOPOLOGY-ROUTES.md/t02A03/left-tube-angular-coordinate",
       :acceptance
       {:probe
-       "Compile and bank apm_t02a03_leftTube_planarCenter_ne_zero from /tmp/t02a03_geometric_tube_cover.lean. Prove that for every p in apm_t02a03_leftTube, (p 0 + 1)^2 + (p 1)^2 is nonzero, using the attained radius-1/4 core witness and the frozen core's unit planar-radius identity. This supplies the nonvanishing denominator required for the Circle-valued angular coordinate in t02A03 route step 2; do not yet claim tube coordinates, normal-coordinate homotopies, the torus HomotopyEquiv, or gluing.",
-       :declaration "apm_t02a03_leftTube_planarCenter_ne_zero",
-       :type
-       "∀ p : apm_t02a03_E3, p ∈ apm_t02a03_leftTube → (p 0 + 1) ^ 2 + (p 1) ^ 2 ≠ 0",
+       "Compile and bank apm_t02a03_leftTubeSubtype, apm_t02a03_leftTubePlanarComplex, apm_t02a03_leftTubePlanarComplex_ne_zero, apm_t02a03_leftTubeAngular, and apm_t02a03_continuous_leftTubeAngular from /tmp/t02a03_geometric_tube_cover.lean. Define the exact frozen left-tube subtype, form the complex planar displacement (p 0 + 1) + (p 1)i, prove it is nonzero from the banked planar-center theorem, normalize it to Circle, and prove the resulting angular coordinate is continuous. This supplies the angular coordinate required by t02A03 route step 2; do not yet claim punctured-normal coordinates, comparison homotopies, the torus HomotopyEquiv, or gluing.",
+       :declarations
+       ["apm_t02a03_leftTubeSubtype"
+        "apm_t02a03_leftTubePlanarComplex"
+        "apm_t02a03_leftTubePlanarComplex_ne_zero"
+        "apm_t02a03_leftTubeAngular"
+        "apm_t02a03_continuous_leftTubeAngular"],
        :placeholder "the sole sorry in apm_t02a03",
        :route-step
-       "t02A03 step 2, prove the planar angular coordinate is defined everywhere on the closed left tube"},
+       "t02A03 step 2, define the continuous Circle-valued angular coordinate on the closed left tube"},
       :id
-      :routes-2026-10-10-t02a03-left-tube-planar-center-nonzero-topo2-r1,
+      :routes-2026-10-10-t02a03-left-tube-angular-coordinate-topo2-r1,
       :kind :reusable-theorem,
       :depends-on
       [:routes-2026-10-10-checkpoint-topo2-r5
-       :routes-2026-10-10-t02a03-left-tube-attained-core-witness-topo2-r1],
+       :routes-2026-10-10-t02a03-left-tube-planar-center-nonzero-topo2-r1],
       :current-residual
-      "Define continuous angular and punctured-normal coordinates, prove their comparison homotopies, and assemble the torus HomotopyEquiv.",
+      "Define punctured-normal coordinates and the core-deletion comparison, build the radial homotopies, and assemble the torus HomotopyEquiv.",
       :other-consumers []}}},
    :phase :probe,
    :type
    "Nonempty (ContinuousMap.HomotopyEquiv LeftTubeMinusCore ConstructionTargets.TorusCircleWedgeOpenCover.Torus)",
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-punctured-model",
    :acceptance
@@ -60288,7 +60326,8 @@
     :routes-2026-10-10-t02a03-left-core-planar-radius-topo2-r1
     :routes-2026-10-10-t02a03-left-core-compact-range-topo2-r1
     :routes-2026-10-10-t02a03-left-tube-attained-core-witness-topo2-r1
-    :routes-2026-10-10-t02a03-left-tube-planar-center-nonzero-topo2-r1],
+    :routes-2026-10-10-t02a03-left-tube-planar-center-nonzero-topo2-r1
+    :routes-2026-10-10-t02a03-left-tube-angular-coordinate-topo2-r1],
    :current-residual
    "After the punctured-left-tube model is banked, construct the right-tube-minus-deleted-attachment model extending the based core homotopy, then overlap compatibility and gluing for the full geometricY equivalence.",
    :other-consumers []}
