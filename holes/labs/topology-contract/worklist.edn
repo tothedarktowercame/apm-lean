@@ -86568,8 +86568,82 @@
    "Upgrade apm_t97a01_X_equiv_standardN3 to a homeomorphism.",
    :other-consumers []}
   {:consumer :t99J01,
+   :evidence
+   {:placeholder-after 0,
+    :placeholder-delta 0,
+    :residual
+    "The reusable path-connected covering package is complete. Consumers still need their concrete covering constructions and computations identifying the induced subgroup or monodromy action.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:status :unchanged,
+     :registry "131 registered statements match, 0 do not"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author {:name "Joe Corneli", :email "holtzermann17@gmail.com"},
+    :placeholder-before 0,
+    :commands
+    [{:cmd "stat -c '%F %n' .lake/packages",
+      :exit 0,
+      :finding
+      "directory .lake/packages; canonical package authority is present"}
+     {:cmd
+      "sha256sum /tmp/covering-monodromy-coset-lifting-probe.lean",
+      :exit 0,
+      :finding
+      "The initially recorded fixture hash was verified as e686b18a0cf2724a2e91de9d8ce160458143065dfbdd3f5ecc81d24d4da43219 before replacing its interface axiom with checks of the implementation; the completed fixture hash is 1d2410d8005d4022e91f02c3d8d778983a8885a13cffad193a61d5ffd0e0e2d8."}
+     {:cmd
+      "lake env lean ConstructionTargets/CoveringMonodromyCosets.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/covering-monodromy-coset-lifting-probe.lean",
+      :exit 0,
+      :finding
+      "All six public declarations typecheck; the axiom audit reports only propext, Classical.choice, and Quot.sound."}
+     {:cmd
+      "Python comment-stripped placeholder census of ConstructionTargets/CoveringMonodromyCosets.lean and fixture",
+      :exit 0,
+      :finding "0 in each"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git status --short",
+      :exit 0,
+      :finding "clean after the concurrent writer completed"}],
+    :diagnostic-history
+    [{:cmd
+      "lake env lean ConstructionTargets/CoveringMonodromyCosets.lean",
+      :exit 1,
+      :finding
+      "The first monodromy action used the path-composition arguments in the wrong order.",
+      :correction
+      "Matched FundamentalGroup multiplication to monodromy_trans_apply with reversed path arguments; the final compile succeeds."}
+     {:cmd
+      "lake env lean ConstructionTargets/CoveringMonodromyCosets.lean",
+      :exit 1,
+      :finding
+      "The first orbit-surjectivity proof attempted dependent elimination on the equality between fiber base values.",
+      :correction
+      "Used quotient-path endpoint casting and reduced monodromy directly; the final compile succeeds."}],
+    :commit "e2c42bc75c14552eb2b06184a06d380ef0b97c0f",
+    :changed-paths
+    ["ConstructionTargets/CoveringMonodromyCosets.lean"],
+    :fixture
+    {:path "/tmp/covering-monodromy-coset-lifting-probe.lean",
+     :sha256
+     "1d2410d8005d4022e91f02c3d8d778983a8885a13cffad193a61d5ffd0e0e2d8",
+     :recorded-sha256
+     "e686b18a0cf2724a2e91de9d8ce160458143065dfbdd3f5ecc81d24d4da43219",
+     :placeholder-count 0},
+    :declarations
+    ["coveringInducedFundamentalGroupMap"
+     "coveringInducedFundamentalGroupMap_injective"
+     "coveringFiberEquivCosets"
+     "coveringFiberCard_eq_index"
+     "coveringFiniteIndex_of_finiteFiber"
+     "coveringExistsUniqueLift_of_range_le"],
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/CoveringMonodromyCosets.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/covering-monodromy-coset-lifting/fiber-cosets",
