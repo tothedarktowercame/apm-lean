@@ -60791,23 +60791,62 @@
   {:bounded-exception
    "single-consumer exact core-distance calculation for the t02A03 torus reconstruction",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/t02a03_geometric_tube_cover.lean",
+      :sha256
+      "fc1be108e169d9c6a8617d480af625dc66fca637b606b8047b96e6615855985b"},
+     :commands
+     [{:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "fc1be108e169d9c6a8617d480af625dc66fca637b606b8047b96e6615855985b  /tmp/t02a03_geometric_tube_cover.lean"}
+      {:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "apm_t02a03_dist_leftTubeTorusPoint_leftCoreCircle compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :finding
+     "The placeholder-free fixture proves the exact requested theorem. Expanding the Euclidean coordinate difference between apm_t02a03_leftTubeTorusPoint u and apm_t02a03_leftCoreCircle u.1 reduces its squared norm to 1/64 using Circle.normSq_coe for both Circle coordinates; therefore the distance is 1/8. The canonical module already contains the reconstruction formula and continuity theorem immediately preceding this addition.",
+     :implementation
+     {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
+      :declarations
+      ["apm_t02a03_dist_leftTubeTorusPoint_leftCoreCircle"],
+      :acceptance
+      {:type
+       "forall u : Circle × Circle, dist (apm_t02a03_leftTubeTorusPoint u) (apm_t02a03_leftCoreCircle u.1) = (1 / 8 : ℝ)",
+       :axioms ["propext" "Classical.choice" "Quot.sound"],
+       :gates
+       ["module compiles"
+        "scoped file contains no sorry token"
+        "statement registry matches"]}},
+     :residual
+     "Promote the compiled exact-distance theorem into ConstructionTargets/T02A03GeometricTubeCover.lean. The next route step derives frozen left-tube membership, proves the reconstructed point is outside the frozen core, bundles the inverse map, and constructs both comparison homotopies."}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/left-tube-torus-point-core-distance",
    :acceptance
-   {:probe
-    "Compile and bank apm_t02a03_dist_leftTubeTorusPoint_leftCoreCircle from /tmp/t02a03_geometric_tube_cover.lean. Prove that the explicit torus reconstruction lies at distance exactly 1/8 from the frozen left-core point indexed by its first Circle coordinate, by expanding the Euclidean norm and using the unit norm identities of both Circle coordinates. This supplies the radius bound needed to prove reconstruction lands in the frozen left tube; do not yet claim left-tube membership, exclusion from the frozen core, the bundled inverse map, comparison homotopies, the torus HomotopyEquiv, or gluing.",
-    :declaration "apm_t02a03_dist_leftTubeTorusPoint_leftCoreCircle",
-    :type
+   {:type
     "forall u : Circle × Circle, dist (apm_t02a03_leftTubeTorusPoint u) (apm_t02a03_leftCoreCircle u.1) = (1 / 8 : ℝ)",
-    :placeholder "the sole sorry in apm_t02a03",
-    :route-step
-    "t02A03 step 2, compute the exact core distance of the torus-coordinate reconstruction"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :gates
+    ["module compiles"
+     "scoped file contains no sorry token"
+     "statement registry matches"]},
    :id
    :routes-2026-10-10-t02a03-left-tube-torus-point-core-distance-topo2-r1,
    :kind :reusable-theorem,
+   :declarations ["apm_t02a03_dist_leftTubeTorusPoint_leftCoreCircle"],
    :depends-on
    [:routes-2026-10-10-checkpoint-topo2-r5
     :routes-2026-10-10-t02a03-left-tube-torus-point-topo2-r1],
