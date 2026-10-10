@@ -61852,59 +61852,85 @@
    "Prove the interpolation normal-coordinate formula, deduce deleted-core exclusion, bundle the homotopy, and assemble the torus HomotopyEquiv.",
    :other-consumers []}
   {:bounded-exception
+   "single-consumer nonzero normalized normal direction for the t02A03 complement interpolation",
+   :consumer :t02A03,
+   :phase :probe,
+   :state :open,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t02A03/left-tube-normal-direction-nonzero",
+   :acceptance
+   {:probe
+    "Compile and bank apm_t02a03_leftTubeNormalAngular_ne_zero from /tmp/t02a03_geometric_tube_cover.lean. Prove that the coerced normalized complex normal direction of every punctured-left-tube point is nonzero using its Circle membership. This supplies the direction-side nonvanishing needed with the positive radial coefficient; do not yet claim the interpolation normal-coordinate formula, deleted-core exclusion, bundled homotopy, HomotopyEquiv, or gluing.",
+    :declaration "apm_t02a03_leftTubeNormalAngular_ne_zero",
+    :type
+    "forall p : apm_t02a03_LeftTubeMinusCore, ((apm_t02a03_leftTubeNormalAngular p : Circle) : Complex) ≠ 0",
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "t02A03 step 2, prove the normalized normal direction used by the radial interpolation is nonzero"},
+   :id
+   :routes-2026-10-10-t02a03-left-tube-normal-direction-nonzero-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo2-r5
+    :routes-2026-10-10-t02a03-left-tube-radial-normal-radius-positive-topo2-r1],
+   :current-residual
+   "Prove the exact interpolation normal-coordinate formula, deduce deleted-core exclusion, bundle the homotopy, and assemble the torus HomotopyEquiv.",
+   :other-consumers []}
+  {:bounded-exception
    "single-consumer explicit punctured-left-tube model for t02A03",
    :consumer :t02A03,
    :evidence
    {:probe
     {:residual
-     "Bank positivity of the interpolated normal radius. Then prove the interpolation normal-coordinate formula, deduce deleted-core exclusion, bundle the homotopy, and assemble the torus HomotopyEquiv.",
+     "Bank nonvanishing of the normal direction. Then prove the exact interpolation normal-coordinate formula, deduce deleted-core exclusion, bundle the homotopy, and assemble the torus HomotopyEquiv.",
      :outcome :revise,
      :missing-theorems
-     [{:name "apm_t02a03_leftTubeRadialNormalRadius_pos",
+     [{:name "apm_t02a03_leftTubeNormalAngular_ne_zero",
        :type
-       "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, 0 < (1 - (tp.1 : Real)) * (1 / 8 : Real) + (tp.1 : Real) * norm (apm_t02a03_leftTubeNormalComplex ⟨tp.2.1, tp.2.2.1⟩)",
+       "forall p : apm_t02a03_LeftTubeMinusCore, ((apm_t02a03_leftTubeNormalAngular p : Circle) : Complex) ≠ 0",
        :status :proved,
        :consumers [:t02A03],
-       :depends-on ["apm_t02a03_leftTubeRadialPoint_mem_leftTube"]}],
+       :depends-on ["apm_t02a03_leftTubeRadialNormalRadius_pos"]}],
      :prerequisite
      {:bounded-exception
-      "single-consumer positive radial coefficient for the t02A03 complement interpolation",
+      "single-consumer nonzero normalized normal direction for the t02A03 complement interpolation",
       :consumer :t02A03,
       :phase :probe,
       :state :open,
       :scope [],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t02A03/left-tube-radial-normal-radius-positive",
+      "TOPOLOGY-ROUTES.md/t02A03/left-tube-normal-direction-nonzero",
       :acceptance
       {:probe
-       "Compile and bank apm_t02a03_leftTubeRadialNormalRadius_pos from /tmp/t02a03_geometric_tube_cover.lean. Use deleted-core membership and the banked normal zero-locus equivalence to prove the source normal norm is positive, then prove its convex interpolation with the fixed reconstruction radius 1/8 is positive for every unit-interval time. This supplies the nonvanishing scalar needed for deleted-core exclusion; do not yet claim the normal-coordinate formula, exclusion itself, bundled homotopy, HomotopyEquiv, or gluing.",
-       :declaration "apm_t02a03_leftTubeRadialNormalRadius_pos",
+       "Compile and bank apm_t02a03_leftTubeNormalAngular_ne_zero from /tmp/t02a03_geometric_tube_cover.lean. Prove that the coerced normalized complex normal direction of every punctured-left-tube point is nonzero using its Circle membership. This supplies the direction-side nonvanishing needed with the positive radial coefficient; do not yet claim the interpolation normal-coordinate formula, deleted-core exclusion, bundled homotopy, HomotopyEquiv, or gluing.",
+       :declaration "apm_t02a03_leftTubeNormalAngular_ne_zero",
        :type
-       "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, 0 < (1 - (tp.1 : Real)) * (1 / 8 : Real) + (tp.1 : Real) * norm (apm_t02a03_leftTubeNormalComplex ⟨tp.2.1, tp.2.2.1⟩)",
+       "forall p : apm_t02a03_LeftTubeMinusCore, ((apm_t02a03_leftTubeNormalAngular p : Circle) : Complex) ≠ 0",
        :placeholder "the sole sorry in apm_t02a03",
        :route-step
-       "t02A03 step 2, prove positivity of the radial coefficient throughout the inverse-after-forward interpolation"},
+       "t02A03 step 2, prove the normalized normal direction used by the radial interpolation is nonzero"},
       :id
-      :routes-2026-10-10-t02a03-left-tube-radial-normal-radius-positive-topo2-r1,
+      :routes-2026-10-10-t02a03-left-tube-normal-direction-nonzero-topo2-r1,
       :kind :reusable-theorem,
       :depends-on
       [:routes-2026-10-10-checkpoint-topo2-r5
-       :routes-2026-10-10-t02a03-left-tube-radial-membership-topo2-r2],
+       :routes-2026-10-10-t02a03-left-tube-radial-normal-radius-positive-topo2-r1],
       :current-residual
-      "Prove the interpolation normal-coordinate formula, deduce deleted-core exclusion, bundle the homotopy, and assemble the torus HomotopyEquiv.",
+      "Prove the exact interpolation normal-coordinate formula, deduce deleted-core exclusion, bundle the homotopy, and assemble the torus HomotopyEquiv.",
       :other-consumers []},
      :commands
      [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
        :exit 0,
        :output
-       "apm_t02a03_leftTubeRadialNormalRadius_pos compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "apm_t02a03_leftTubeNormalAngular_ne_zero compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
        "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
        :exit 0}
       {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
        :exit 0,
        :output
-       "8b52244ebf5285a0d9b58a8c8e5818daa0263608597d8ca10d452729d7077148  /tmp/t02a03_geometric_tube_cover.lean"}
+       "eae43e95c04bbd1b2f10ca7d062408cb9bebc328d9fdff96cd4b5ade42172d49  /tmp/t02a03_geometric_tube_cover.lean"}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
@@ -61912,18 +61938,18 @@
      [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
        :exit 1,
        :finding
-       "The initial nonzero-normal proof selected the subtype property pair rather than its deleted-core component. Projecting (tp.2.property).2 supplied the required contradiction; the clean rerun compiled."}],
+       "Exploration of a stronger source-normal decomposition exposed scalar-action coercion mismatches between real normalization and complex multiplication. The bounded next fact actually needed independently is direction nonvanishing; stating it directly as Circle.coe_ne_zero compiled cleanly without asserting the later coordinate formula."}],
      :fixture
      {:path "/tmp/t02a03_geometric_tube_cover.lean",
       :sha256
-      "8b52244ebf5285a0d9b58a8c8e5818daa0263608597d8ca10d452729d7077148"},
+      "eae43e95c04bbd1b2f10ca7d062408cb9bebc328d9fdff96cd4b5ade42172d49"},
      :finding
-     "The full punctured-left-tube HomotopyEquiv remains absent. The compiled positivity lemma proves that at every interval time the scalar interpolated normal radius (1-t)/8 + t*norm(sourceNormal) is strictly positive. The source normal norm is positive because membership in LeftTubeMinusCore and the banked zero-locus equivalence exclude zero; the endpoint coefficients are nonnegative, with a positive summand in both the t=1 and t<1 cases.",
+     "The full HomotopyEquiv remains absent. The compiled theorem proves the normalized complex normal direction is nonzero because it is the coercion of a Circle point. Combined with the already banked strict positivity of the interpolated radius, deleted-core exclusion will follow once the exact interpolation normal-coordinate formula is established.",
      :seat "topo-8"}},
    :phase :probe,
    :type
    "Nonempty (ContinuousMap.HomotopyEquiv LeftTubeMinusCore ConstructionTargets.TorusCircleWedgeOpenCover.Torus)",
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-punctured-model",
    :acceptance
@@ -61969,7 +61995,8 @@
     :routes-2026-10-10-t02a03-left-tube-radial-ambient-interpolation-topo2-r1
     :routes-2026-10-10-t02a03-left-tube-angular-core-distance-topo2-r1
     :routes-2026-10-10-t02a03-left-tube-radial-membership-topo2-r2
-    :routes-2026-10-10-t02a03-left-tube-radial-normal-radius-positive-topo2-r1],
+    :routes-2026-10-10-t02a03-left-tube-radial-normal-radius-positive-topo2-r1
+    :routes-2026-10-10-t02a03-left-tube-normal-direction-nonzero-topo2-r1],
    :current-residual
    "After the punctured-left-tube model is banked, construct the right-tube-minus-deleted-attachment model extending the based core homotopy, then overlap compatibility and gluing for the full geometricY equivalence.",
    :other-consumers []}
@@ -62881,4 +62908,24 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-t02a03lefttubepuncturedmodel-apm-t02a03-lefttuberadialpoint-],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t02a03_leftTubeNormalAngular_ne_zero",
+    :type
+    "forall p : apm_t02a03_LeftTubeMinusCore, ((apm_t02a03_leftTubeNormalAngular p : Circle) : Complex) ≠ 0"},
+   :lemma
+   {:name "apm_t02a03_leftTubeNormalAngular_ne_zero",
+    :reported-by
+    [:routes-2026-10-10-t02a03-left-tube-punctured-model-topo2-r1],
+    :type
+    "forall p : apm_t02a03_LeftTubeMinusCore, ((apm_t02a03_leftTubeNormalAngular p : Circle) : Complex) ≠ 0",
+    :proved-in
+    :routes-2026-10-10-t02a03-left-tube-punctured-model-topo2-r1},
+   :id :lemma-apm-t02a03-lefttubenormalangular-ne-zero,
+   :kind :lemma,
+   :depends-on [:lemma-apm-t02a03-lefttuberadialnormalradius-pos],
    :other-consumers []}]}
