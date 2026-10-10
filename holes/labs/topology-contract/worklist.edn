@@ -88636,6 +88636,8 @@
    :other-consumers []}
   {:consumer :t97A03,
    :stop-count 1,
+   :review-finding
+   "No implementation commit was recorded and ConstructionTargets/T97A03ConnectedDoubleCoverClassification.lean is absent. The fixture SHA-256 and final orientation are correct, but exactFrozenBridge is merely the nonstandard axiom connectedDoubleCoverHomeomorphism; no banked theorem restricts the cover to the sphere/circle strata, labels the two lifted sphere sheets, computes the attachment permutation, excludes the disconnected pattern, or descends mutually inverse quotient maps to apm_t97A03_OneCircleCover or apm_t97A03_TwoCircleCover. Repair requires compiling those geometric classification steps as a placeholder-free prerequisite and then proving the frozen disjunction with standard-only axioms; repeating the fixture axiom is not an implementation.",
    :evidence
    {:residual
     "Compile a placeholder-free prerequisite restricting the cover to the sphere and circle strata, labeling both lifted sphere sheets, classifying the attachment permutation, excluding the disconnected case, and descending explicit mutually inverse quotient maps to OneCircleCover or TwoCircleCover.",
@@ -88677,6 +88679,12 @@
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
      {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1791629084726-1694-756a37e5",
+     :finding
+     "No implementation commit was recorded and ConstructionTargets/T97A03ConnectedDoubleCoverClassification.lean is absent. The fixture SHA-256 and final orientation are correct, but exactFrozenBridge is merely the nonstandard axiom connectedDoubleCoverHomeomorphism; no banked theorem restricts the cover to the sphere/circle strata, labels the two lifted sphere sheets, computes the attachment permutation, excludes the disconnected pattern, or descends mutually inverse quotient maps to apm_t97A03_OneCircleCover or apm_t97A03_TwoCircleCover. Repair requires compiling those geometric classification steps as a placeholder-free prerequisite and then proving the frozen disjunction with standard-only axioms; repeating the fixture axiom is not an implementation."},
     :fixture
     {:path
      "/tmp/t97a03-connected-double-cover-classification-probe.lean",
@@ -88687,7 +88695,7 @@
      :proof-placeholder-count 1},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["ConstructionTargets/T97A03ConnectedDoubleCoverClassification.lean"],
    :dag-node
@@ -88711,6 +88719,7 @@
    :id
    :routes-2026-10-10-t97a03-double-cover-monodromy-model-homeomorphism-1,
    :kind :uptake,
+   :fail-count 1,
    :depends-on [],
    :current-residual
    "Construct the two explicit quotient-model homeomorphisms from the two-element circle monodromy classification; lift restriction and exact fiber cardinality are already banked.",
