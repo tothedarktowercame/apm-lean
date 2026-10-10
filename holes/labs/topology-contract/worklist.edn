@@ -95900,6 +95900,20 @@
      {:cmd "git status --short",
       :exit 0,
       :finding "clean worktree after commit"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791654094177-2570-47c29822",
+     :commands
+     ["git show 3bc6577f0aa9f4dd45cf88977ec32481f857562a -- ConstructionTargets/CoveringPathComponentDomain.lean"
+      "git diff --exit-code 3bc6577f0aa9f4dd45cf88977ec32481f857562a -- ConstructionTargets/CoveringPathComponentDomain.lean"
+      "lake build ConstructionTargets.CoveringPathComponentDomain"
+      "sha256sum /tmp/covering-path-component-domain.lean && lake env lean /tmp/covering-path-component-domain.lean"
+      "placeholder census on source, fixture, and problems/t99J01/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb on recorded ledger at 860923ec"],
+     :finding
+     "PASS: reviewer codex-3 verified recorded commit 3bc6577f changes only CoveringPathComponentDomain.lean and the source equals that commit. Canonical packages resolve correctly; the frozen fixture hash is exact; target and fixture compile with zero placeholders; t99J01 retains exactly one placeholder; all four audited declarations report only propext, Classical.choice, and Quot.sound; all 131 registered statements and the recorded 847-item ledger validate. Component e is definitionally the subtype of points Joined to e, its carrier is pathComponent e, openness uses exactly LocPathConnectedSpace E, and the path-connected carrier supplies PathConnectedSpace for the subtype. The module correctly does not assert inherited local path connectedness, restrict a covering map, select sheets, prove surjectivity, count fibers, or compute fundamental groups; those boundaries remain explicit residual work."},
     :commit "3bc6577f0aa9f4dd45cf88977ec32481f857562a",
     :changed-paths
     ["ConstructionTargets/CoveringPathComponentDomain.lean"],
@@ -95918,7 +95932,7 @@
       "ConstructionTargets.CoveringPathComponentDomain.componentPathConnectedSpace"]},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/CoveringPathComponentDomain.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component/domain",
@@ -96017,7 +96031,7 @@
       "Component e is the Joined path-component subtype; component_isOpen and componentPathConnectedSpace expose the open and path-connected domain needed for restriction."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component",
@@ -97488,7 +97502,7 @@
    :other-consumers []}
   {:consumer :t99J01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "CoveringPathComponentDomain.Component",
@@ -97500,7 +97514,9 @@
     [:routes-2026-10-10-covering-path-component-domain-39],
     :type
     "The subtype {x : E // Joined e x}, with carrier equal to pathComponent e, open under LocPathConnectedSpace E, path connected, and carrying PathConnectedSpace",
-    :proved-in :routes-2026-10-10-covering-path-component-domain-39},
+    :proved-in :routes-2026-10-10-covering-path-component-domain-39,
+    :banked-by :routes-2026-10-10-covering-path-component-domain-39,
+    :banked-commit "3bc6577f0aa9f4dd45cf88977ec32481f857562a"},
    :id :lemma-coveringpathcomponentdomain-component,
    :kind :lemma,
    :depends-on [],
