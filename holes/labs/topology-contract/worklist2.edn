@@ -56547,6 +56547,22 @@
       :exit 0,
       :output
       "79ca854186b39183bf53490a20b5be92695e345a2c099fcf928b5ad3300ee4ec  problems/t97A04/lean/Main.lean"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791612896717-1314-692bcafe",
+     :commands
+     ["git diff-tree --no-commit-id --name-only -r 4891ca58"
+      "sha256sum /tmp/torus_frozen_lbar_based_path_cast.lean"
+      "lake env lean /tmp/torus_frozen_lbar_based_path_cast.lean"
+      "lake build ConstructionTargets.TorusPiOneWindingCoordinates"
+      "lake env lean ConstructionTargets/TorusPiOneWindingCoordinates.lean"
+      "fresh #print axioms audit via lake env lean /dev/stdin"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show d60553a9:holes/labs/topology-contract/worklist2.edn)"
+      "recompute target and frozen t97A04 SHA-256 and comment-stripped placeholder count from commit 4891ca58"],
+     :finding
+     "PASS: codex-7 independently reviewed topo-6 commit 4891ca58. Exact implementation scope is TorusPiOneWindingCoordinates.lean; transition commit d60553a9 changes only the ledger. Fixture SHA-256 1b69852194410aebe5d249309f148e858d47390a8f7a62974a84cf6af8d9f0af matches, compiles, and has zero placeholders; focused 8290-job build and canonical compilation pass with zero forbidden declarations and only replayed dependency warnings. The dependent endpoint normalization is correctly oriented: gamma.map frozenLbar.continuous is cast by frozenLbar_base.symm at both endpoints to a loop based at (0,0), mapOfEq sends mk gamma to that exact casted representative, and its Circle image is definitionally frozenLbarCircleImagePath gamma. The row stops before quotient-level conjugacy. Fresh audits of the three proof declarations report exactly propext, Classical.choice, Quot.sound. Registry is 131/0 and ledger is 392 items OK. Frozen t97A04 remains 79ca854186b39183bf53490a20b5be92695e345a2c099fcf928b5ad3300ee4ec with four comment-stripped placeholders; delta zero."},
     :commit "4891ca586555c332f2307dbc9a34af7e45d0f770",
     :changed-paths
     ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
@@ -56561,7 +56577,7 @@
      "ConstructionTargets.TorusPiOneWindingCoordinates.frozenLbarPi1Map_mk"
      "ConstructionTargets.TorusPiOneWindingCoordinates.frozenCircleImagePath_frozenLbarBasedPath"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A04/torus-pi1-winding-coordinates/frozen-based-path-cast",
@@ -56650,7 +56666,7 @@
       "Use the normalized representative to prove the induced fundamental-group square commutes, then transport circleMatrixPi1Map_naturality through frozenTorusPi1Coord.",
       :other-consumers []}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/shared/torus-pi1-winding-coordinates",
    :acceptance
