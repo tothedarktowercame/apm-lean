@@ -81553,76 +81553,106 @@
    "Factor continuous scale-invariant maps and interval homotopies from nonzero vectors through the projective quotient, using the compiled general open-quotient and product-open-quotient proofs.",
    :other-consumers [:t96A06]}
   {:consumer :t99J05,
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/ProjectiveConsumerLiftDemonstrations.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/shared/projective-quotient-descent/consumer-demonstrations",
+   :acceptance
+   {:placeholder "the single sorries in apm_t96a06 and apm_t99j05",
+    :route-step "t96A06 step 1; t99J05 step 2",
+    :declarations
+    ["t96A06Polynomial_nonzero"
+     "t96A06Polynomial_orbit"
+     "t96A06Polynomial_descends"
+     "t99J05Diagonal_nonzero"
+     "t99J05DiagonalHomotopy_nonzero"
+     "t99J05Diagonal_orbit"
+     "t99J05DiagonalHomotopy_descends"],
+    :implementation
+    "Import ProjectiveQuotientDescent and restate the two printed vector formulas without importing problem Main files. For the real quadratic formula, prove simultaneous vanishing forces all four coordinates zero and scaling multiplies outputs by the square scalar; use projectiveHomogeneousMapDescent to obtain the RP3 continuous map with the exact quotient equation. For arbitrary complex n, use positive real weights 1+t*i to prove the diagonal homotopy never vanishes, is continuous, and commutes with scalar multiplication; use projectiveHomogeneousHomotopyDescent and record endpoint equalities to identity and the printed diagonal map.",
+    :axioms :standard-only,
+    :commands
+    ["lake env lean ConstructionTargets/ProjectiveConsumerLiftDemonstrations.lean"
+     "python3 scripts/statement-registry.py check"]},
+   :id :routes-2026-10-10-projective-consumer-lift-demonstrations-1,
+   :kind :reusable-theorem,
+   :depends-on [],
+   :current-residual
+   "Instantiate the banked homogeneous map and homotopy descent API on the exact quadratic RP3 map and diagonal CPn homotopy.",
+   :other-consumers [:t96A06]}
+  {:consumer :t99J05,
    :evidence
    {:probe
-    {:residual
-     "Exactly one shared prerequisite remains: projectiveHomogeneousMapDescent together with its interval-parametrized form in one coherent factorization module. Quotient openness and product openness already compile; charts, rational homology, degree, and Lefschetz calculations remain downstream.",
-     :outcome :revise,
-     :warnings
-     [{:kind :bounded-residual,
-       :message
-       "The fixture proves quotient openness and interval-product quotient openness at all dimensions. It does not claim the consumer maps themselves; their nonvanishing and scale-invariance are formula-specific algebra after the shared factorization theorem."}],
-     :prerequisite
-     {:consumer :t99J05,
-      :phase :implementation,
-      :state :open,
-      :scope ["ConstructionTargets/ProjectiveQuotientDescent.lean"],
-      :dag-node
-      "TOPOLOGY-ROUTES.md/shared/projective-quotient-descent/homogeneous-factorization",
-      :acceptance
-      {:placeholder "the single sorries in apm_t96a06 and apm_t99j05",
-       :route-step "t96A06 step 1; t99J05 step 2",
-       :declarations
-       ["projectiveQuotientMap_isOpen"
-        "projectiveQuotientMap_prod_interval_isOpenQuotient"
-        "projectiveHomogeneousMapDescent"
-        "projectiveHomogeneousHomotopyDescent"],
-       :implementation
-       "Promote the compiled field-and-dimension-general openness proofs. Add one generic continuous factorization theorem for a continuous nonzero-vector lift constant on nonzero scalar orbits, and its interval-parametrized analogue using IsOpenQuotientMap.prodMap. Demonstrate their signatures on K=R,n=3 and K=C, arbitrary n; consumer-local polynomial nonvanishing and homogeneity remain elementary applications, not new infrastructure.",
-       :axioms :standard-only,
-       :commands
-       ["lake env lean ConstructionTargets/ProjectiveQuotientDescent.lean"
-        "python3 scripts/statement-registry.py check"]},
-      :id
-      :routes-2026-10-10-projective-homogeneous-factorization-shared-1,
-      :kind :reusable-theorem,
-      :depends-on [],
-      :current-residual
-      "Factor continuous scale-invariant maps and interval homotopies from nonzero vectors through the projective quotient, using the compiled general open-quotient and product-open-quotient proofs.",
-      :other-consumers [:t96A06]},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
+    {:outcome :revise,
+     :seat "topo-4",
+     :fixture
+     {:path "/tmp/projective-quotient-descent-shared-probe.lean",
+      :sha256
+      "9794efeb485e866486c26c329d4d7edf839c188a52a10571fc0c5f86f97fdad9"},
      :commands
      [{:cmd
+       "sha256sum /tmp/projective-quotient-descent-shared-probe.lean ConstructionTargets/ProjectiveQuotientDescent.lean",
+       :exit 0,
+       :finding
+       "fixture 9794efeb485e866486c26c329d4d7edf839c188a52a10571fc0c5f86f97fdad9; implementation 42d0da912e7e666eed5cb59cb71a9f91ea2e58b968e1c09d4225fe75cdadd76f"}
+      {:cmd
+       "lake env lean ConstructionTargets/ProjectiveQuotientDescent.lean",
+       :exit 0,
+       :finding
+       "all four required generic declarations elaborate at RP3 and arbitrary CPn generalities"}
+      {:cmd
        "lake env lean /tmp/projective-quotient-descent-shared-probe.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/projective-quotient-descent-shared-probe.lean",
-       :exit 0,
-       :finding
-       "9794efeb485e866486c26c329d4d7edf839c188a52a10571fc0c5f86f97fdad9"}
-      {:cmd
-       "Python comment-stripped placeholder census of /tmp/projective-quotient-descent-shared-probe.lean",
+       "Python comment-stripped placeholder census of ConstructionTargets/ProjectiveQuotientDescent.lean",
        :exit 0,
        :finding "0"}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :finding "131 registered statements match, 0 do not"}
       {:cmd "git status --short", :exit 0, :finding "clean"}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/projective-quotient-descent-shared-probe.lean",
-       :exit 1,
-       :finding
-       "the first product-map statement used an underconstrained id term",
-       :correction
-       "replaced id by the explicitly typed identity on Set.Icc 0 1; the successful rerun is in commands"}],
-     :fixture
-     {:path "/tmp/projective-quotient-descent-shared-probe.lean",
-      :sha256
-      "9794efeb485e866486c26c329d4d7edf839c188a52a10571fc0c5f86f97fdad9"},
-     :seat "topo-4"}},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :warnings
+     [{:kind :consumer-algebra,
+       :message
+       "The generic dependency is complete and reviewed; the acceptance fixture still lacks instantiations for the two printed formulas."}],
+     :prerequisite
+     {:consumer :t99J05,
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/ProjectiveConsumerLiftDemonstrations.lean"],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/shared/projective-quotient-descent/consumer-demonstrations",
+      :acceptance
+      {:placeholder "the single sorries in apm_t96a06 and apm_t99j05",
+       :route-step "t96A06 step 1; t99J05 step 2",
+       :declarations
+       ["t96A06Polynomial_nonzero"
+        "t96A06Polynomial_orbit"
+        "t96A06Polynomial_descends"
+        "t99J05Diagonal_nonzero"
+        "t99J05DiagonalHomotopy_nonzero"
+        "t99J05Diagonal_orbit"
+        "t99J05DiagonalHomotopy_descends"],
+       :implementation
+       "Import ProjectiveQuotientDescent and restate the two printed vector formulas without importing problem Main files. For the real quadratic formula, prove simultaneous vanishing forces all four coordinates zero and scaling multiplies outputs by the square scalar; use projectiveHomogeneousMapDescent to obtain the RP3 continuous map with the exact quotient equation. For arbitrary complex n, use positive real weights 1+t*i to prove the diagonal homotopy never vanishes, is continuous, and commutes with scalar multiplication; use projectiveHomogeneousHomotopyDescent and record endpoint equalities to identity and the printed diagonal map.",
+       :axioms :standard-only,
+       :commands
+       ["lake env lean ConstructionTargets/ProjectiveConsumerLiftDemonstrations.lean"
+        "python3 scripts/statement-registry.py check"]},
+      :id :routes-2026-10-10-projective-consumer-lift-demonstrations-1,
+      :kind :reusable-theorem,
+      :depends-on [],
+      :current-residual
+      "Instantiate the banked homogeneous map and homotopy descent API on the exact quadratic RP3 map and diagonal CPn homotopy.",
+      :other-consumers [:t96A06]},
+     :residual
+     "Exactly one prerequisite remains: the formula-specific RP3 and CPn instantiations in one shared demonstration module. The quotient openness, product openness, and generic map/homotopy factorization are compiled and independently reviewed; charts, homology, degree, and Lefschetz computations remain downstream."}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/shared/projective-quotient-descent",
    :acceptance
@@ -81639,7 +81669,8 @@
    :kind :reusable-theorem,
    :depends-on
    [:routes-2026-09-29-topo1-refill-heavy-1
-    :routes-2026-10-10-projective-homogeneous-factorization-shared-1],
+    :routes-2026-10-10-projective-homogeneous-factorization-shared-1
+    :routes-2026-10-10-projective-consumer-lift-demonstrations-1],
    :current-residual "Common quotient API before charts and homology.",
    :other-consumers [:t96A06]}
   {:consumer :t94J09,
