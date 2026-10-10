@@ -82227,84 +82227,57 @@
    "Prove t99J05_affine_local_diagonal_package at arbitrary n; the compiled fixture then supplies every non-homological local obligation of the frozen theorem.",
    :other-consumers []}
   {:consumer :t99J05,
+   :stop-count 1,
    :evidence
-   {:probe
-    {:outcome :revise,
-     :seat "topo-4",
-     :fixture
-     {:path "/tmp/t99j05-affine-local-diagonal-probe.lean",
-      :sha256
-      "b55704ee516bc4c04ab54c486d2cc148fad120bed408abaf73af79314eeec3d9"},
-     :commands
-     [{:cmd "stat -c '%F %n' .lake/packages",
-       :exit 0,
-       :finding
-       "directory .lake/packages; canonical checkout owns the package authority"}
-      {:cmd
-       "lake env lean /tmp/t99j05-affine-local-diagonal-probe.lean",
-       :exit 0}
-      {:cmd "sha256sum /tmp/t99j05-affine-local-diagonal-probe.lean",
-       :exit 0,
-       :finding
-       "b55704ee516bc4c04ab54c486d2cc148fad120bed408abaf73af79314eeec3d9"}
-      {:cmd
-       "Python comment-stripped placeholder census of /tmp/t99j05-affine-local-diagonal-probe.lean",
-       :exit 0,
-       :finding "0"}
-      {:cmd "lake env lean problems/t99J05/lean/Main.lean",
-       :exit 0,
-       :finding "existing registered-theorem placeholder only"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :finding "131 registered statements match, 0 do not"}
-      {:cmd "git status --short", :exit 0, :finding "clean"}],
-     :axioms
-     ["propext"
-      "Classical.choice"
-      "Quot.sound"
-      "t99J05_affine_local_diagonal_package"],
-     :warnings
-     [{:kind :interface-axiom,
-       :message
-       "The placeholder-free fixture depends on exactly one nonstandard axiom, the arbitrary-n affine-chart plus diagonal fixed-point/local-index package. The projective quotient and homotopy descent are already proved."}],
-     :prerequisite
-     {:bounded-exception
-      "Consumer-specific arbitrary-n adapter coupling the chart coordinates to the printed diagonal local-index calculation.",
-      :consumer :t99J05,
-      :phase :implementation,
-      :state :open,
-      :scope ["ConstructionTargets/T99J05AffineLocalDiagonal.lean"],
-      :dag-node
-      "TOPOLOGY-ROUTES.md/t99J05/affine-charts-local-diagonal/package",
-      :acceptance
-      {:placeholder "the single sorry in apm_t99j05",
-       :route-step "t99J05 steps 1, 3, and 4",
-       :declarations
-       ["t99J05_affineChartConstruction"
-        "t99J05_diagonal_fixed_iff_coordinateLine"
-        "t99J05_diagonal_localMap"
-        "t99J05_diagonal_localIndex_one"
-        "t99J05_affine_local_diagonal_package"],
-       :implementation
-       "Generalize the existing CP2 affine-coordinate quotient compatibility and OpenPartialHomeomorph construction to arbitrary n using the banked projective quotient openness. Use the canonical descended diagonal map. Prove a fixed projective line has support in one coordinate because the diagonal weights are pairwise distinct. In chart i compute localMap coordinatewise as ((j+1)/(i+1))*z_j. Derive ContDiffAt, then compute the real determinant of id minus this complex diagonal operator as the product of squared nonzero real factors, hence positive and localIndex=1. Package these results with the exact quotient equation used by the fixture. Do not address rational homology, Lefschetz, or Euler characteristic.",
-       :fixture "/tmp/t99j05-affine-local-diagonal-probe.lean",
-       :fixture-sha256
-       "b55704ee516bc4c04ab54c486d2cc148fad120bed408abaf73af79314eeec3d9",
-       :axioms :standard-only,
-       :commands
-       ["lake env lean ConstructionTargets/T99J05AffineLocalDiagonal.lean"
-        "lake env lean /tmp/t99j05-affine-local-diagonal-probe.lean"
-        "python3 scripts/statement-registry.py check"]},
-      :id :routes-2026-10-10-t99j05-affine-local-diagonal-package-1,
-      :kind :final-adapter,
-      :depends-on [],
-      :current-residual
-      "Prove t99J05_affine_local_diagonal_package at arbitrary n; the compiled fixture then supplies every non-homological local obligation of the frozen theorem.",
-      :other-consumers []},
-     :residual
-     "Exactly one prerequisite remains for this adapter: the arbitrary-n affine-chart and diagonal fixed-point/local-index package. Rational CPn homology, Lefschetz, and Euler characteristic remain downstream."}},
+   {:residual
+    "First build arbitrary-n affine quotient-coordinate compatibility and AffineChartConstruction n without nonstandard axioms. The diagonal fixed-point classification, local derivative, determinant positivity, and localIndex-one proofs remain subsequent route steps; rational CPn homology, Lefschetz, and Euler characteristic remain downstream.",
+    :outcome :stop,
+    :warnings
+    [{:kind :invalid-probe-evidence,
+      :message
+      "A zero-sorry census is insufficient: the fixture replaces the requested proof by a new axiom."}],
+    :disposition :stop,
+    :axioms
+    ["propext"
+     "t99J05_affine_local_diagonal_package"
+     "Classical.choice"
+     "Quot.sound"],
+    :author "topo-4",
+    :reason
+    "Representation boundary: the only banked affine quotient-coordinate compatibility and OpenPartialHomeomorph construction is specialized to Fin 3 and CP 2, while the frozen t99J05 theorem quantifies over every n. The prerequisite implementation produced no source file, and its recorded fixture merely declares the entire requested arbitrary-n chart/fixed-point/local-index package as an axiom; #print axioms therefore includes t99J05_affine_local_diagonal_package itself and violates the standard-only invariant. An honest route must first prove arbitrary-n affine quotient-coordinate compatibility (open nonzero-coordinate patches, continuous coordinate ratios, continuous chart inverses, and inverse laws), then construct AffineChartConstruction n, and only afterward prove the distinct-weight fixed-line classification, localMap formula, real determinant positivity, and localIndex=1. Bundling those absent stages behind an axiom is not compiled evidence.",
+    :commands
+    [{:cmd "stat -c '%F %n' .lake/packages",
+      :exit 0,
+      :finding
+      "directory .lake/packages; canonical checkout owns the package authority"}
+     {:cmd
+      "test -e ConstructionTargets/T99J05AffineLocalDiagonal.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "sha256sum /tmp/t99j05-affine-local-diagonal-probe.lean",
+      :exit 0,
+      :finding
+      "b55704ee516bc4c04ab54c486d2cc148fad120bed408abaf73af79314eeec3d9"}
+     {:cmd
+      "lake env lean /tmp/t99j05-affine-local-diagonal-probe.lean",
+      :exit 0,
+      :finding "#print axioms includes the package declaration itself"}
+     {:cmd "lake env lean problems/t99J05/lean/Main.lean",
+      :exit 0,
+      :finding
+      "consumer compiles with its existing registered-theorem placeholder"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :fixture
+    {:path "/tmp/t99j05-affine-local-diagonal-probe.lean",
+     :sha256
+     "b55704ee516bc4c04ab54c486d2cc148fad120bed408abaf73af79314eeec3d9",
+     :status :self-axiomatized},
+    :seat "topo-4"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t99J05/affine-charts-local-diagonal",
    :acceptance
