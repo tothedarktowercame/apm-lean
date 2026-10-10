@@ -97967,11 +97967,14 @@
      :typed-residual-change
      :infrastructure-packets
      :review-outcomes]},
+   :review-finding
+   "Recorded checkpoint commit 034a437a does not reproduce its central priority finding: `bb holes/labs/topology-contract/build_step.bb priorities` on that exact ledger reports t99J01 with 25 banked lemmas, 6 backlog lemmas, and route :open, not zero backlog or COMPLETE-elect-closure-adapter-now. Repair the six stale t99J01 lemma-ledger states or revise the checkpoint election and evidence so the recorded command output supports the disposition.",
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :evidence
    {:outcome :replan,
-    :seat "topo-4",
+    :disposition :replan,
+    :author "topo-4",
     :commands
     [{:cmd
       "bb holes/labs/topology-contract/build_step.bb priorities holes/labs/topology-contract/worklist.edn",
@@ -97986,6 +97989,126 @@
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
      {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1791661349490-2834-a52b519b",
+     :finding
+     "Recorded checkpoint commit 034a437a does not reproduce its central priority finding: `bb holes/labs/topology-contract/build_step.bb priorities` on that exact ledger reports t99J01 with 25 banked lemmas, 6 backlog lemmas, and route :open, not zero backlog or COMPLETE-elect-closure-adapter-now. Repair the six stale t99J01 lemma-ledger states or revise the checkpoint election and evidence so the recorded command output supports the disposition."},
+    :replacement-items
+    [{:consumer :t99J01,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md/t99J01/closure",
+      :acceptance
+      {:probe
+       "Compile a complete replacement for the single sorry in apm_t99j01 using the banked cyclic connected n-sheeted pullback, ThreeCircles fundamental-group equivalence, covering subgroup-index theorem, finite-index Schreier rank theorem, component-restriction covering theorem, and component fiber count. Prove all three frozen conjuncts without changing T99J01ComponentSheets or the registered theorem.",
+       :placeholder "the single sorry in apm_t99j01",
+       :route-step
+       "rule-0 consumer closure after every lemma on the t99J01 route is banked",
+       :gates
+       ["canonical packages"
+        "fixture compiles"
+        "zero fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :id :routes-2026-10-10-t99j01-closure-probe-39,
+      :kind :consumer-closure,
+      :area "covering-subgroup-correspondence",
+      :depends-on
+      [:routes-2026-10-10-checkpoint-topo1-after-t99j01-covering-prerequisites-38],
+      :current-residual
+      "Replace the single frozen placeholder and close t99J01.",
+      :other-consumers []}
+     {:bounded-exception
+      "This single-consumer strict comparison is one of the two final backlog lemmas on t97A01 and is the smaller coherent theorem.",
+      :consumer :t97A01,
+      :implements-lemma
+      :lemma-genericpointwedgeoverlapinclusionsquares,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/t97A01/generic-point-wedge-overlap-inclusion-squares",
+      :acceptance
+      {:probe
+       "Compile genericPointWedgeOverlapInclusionSquares for the banked genericPointWedgeCoverPackage: after conjugating the literal overlap-to-left and overlap-to-right maps by the package homotopy equivalences, prove the two continuous maps are respectively constant at x0 and y0. Do not assume either equality, construct polygon radial covers, compute homology, or close t97A01.",
+       :placeholder "the single sorry in apm_t97a01",
+       :route-step
+       "strict overlap-inclusion squares before transporting the two Mayer-Vietoris arrows",
+       :gates
+       ["canonical packages"
+        "fixture compiles"
+        "zero fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :id
+      :routes-2026-10-10-generic-point-wedge-overlap-inclusion-squares-39,
+      :kind :reusable-theorem,
+      :area "van-kampen-two-open-group",
+      :depends-on
+      [:routes-2026-10-10-checkpoint-topo1-after-t99j01-covering-prerequisites-38],
+      :current-residual
+      "Construct the polygon radial cover package, transport both inclusion maps, and close t97A01.",
+      :other-consumers []}
+     {:bounded-exception
+      "This single-consumer concrete quotient package is the other final backlog lemma on t97A01 and supplies the actual two polygon models required by its frozen statement.",
+      :consumer :t97A01,
+      :implements-lemma :lemma-polygonradialopencoverpackages,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
+      :acceptance
+      {:probe
+       "Compile polygonRadialOpenCoverPackages for SurfaceRel false 3 and TorusCrosscapRel. Construct saturated radial bands, prove quotient openness and cover, descend radial contractions, identify both boundary graph quotients with ThreeCircles, identify punctured-disk overlaps, prove literal inclusion equations, and establish the required corner and vertex classes. Do not postulate package fields, compute final homology or fundamental groups, or close t97A01.",
+       :placeholder "the single sorry in apm_t97a01",
+       :route-step
+       "concrete polygon radial open-cover packages before the final homology and fundamental-group coordinate assembly",
+       :gates
+       ["canonical packages"
+        "fixture compiles"
+        "zero fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :id :routes-2026-10-10-polygon-radial-open-cover-packages-39,
+      :kind :reusable-theorem,
+      :area "polygon-surface-open-cover",
+      :depends-on
+      [:routes-2026-10-10-checkpoint-topo1-after-t99j01-covering-prerequisites-38],
+      :current-residual
+      "Combine the concrete cover packages with the strict overlap squares, banked Smith normalization, and final t97A01 assembly.",
+      :other-consumers []}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:strategy
+       "Measure the t99J01 closure outcome and both t97A01 foundations, rerun priorities and AREAS, tag every remaining untagged lemma, and elect the next rule-0 closure or highest-impact area portfolio."},
+      :id
+      :routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-39,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:routes-2026-10-10-t99j01-closure-probe-39
+       :routes-2026-10-10-generic-point-wedge-overlap-inclusion-squares-39
+       :routes-2026-10-10-polygon-radial-open-cover-packages-39],
+      :current-residual
+      "Close t99J01 if its adapter passes, then reassess t97A01 and the remaining topo1 routes.",
+      :other-consumers []}],
     :finding
     {:placeholder-delta 0,
      :placeholder-counts
@@ -98125,124 +98248,9 @@
       :consumers [:t93J03],
       :depends-on [],
       :area "deck-group-fundamental-group"}],
-    :replacement-items
-    [{:consumer :t99J01,
-      :phase :probe,
-      :state :open,
-      :scope [],
-      :dag-node "TOPOLOGY-ROUTES.md/t99J01/closure",
-      :acceptance
-      {:probe
-       "Compile a complete replacement for the single sorry in apm_t99j01 using the banked cyclic connected n-sheeted pullback, ThreeCircles fundamental-group equivalence, covering subgroup-index theorem, finite-index Schreier rank theorem, component-restriction covering theorem, and component fiber count. Prove all three frozen conjuncts without changing T99J01ComponentSheets or the registered theorem.",
-       :placeholder "the single sorry in apm_t99j01",
-       :route-step
-       "rule-0 consumer closure after every lemma on the t99J01 route is banked",
-       :gates
-       ["canonical packages"
-        "fixture compiles"
-        "zero fixture sorry"
-        "standard-only axioms"
-        "registry check"]},
-      :id :routes-2026-10-10-t99j01-closure-probe-39,
-      :kind :consumer-closure,
-      :area "covering-subgroup-correspondence",
-      :depends-on
-      [:routes-2026-10-10-checkpoint-topo1-after-t99j01-covering-prerequisites-38],
-      :current-residual
-      "Replace the single frozen placeholder and close t99J01.",
-      :other-consumers []}
-     {:bounded-exception
-      "This single-consumer strict comparison is one of the two final backlog lemmas on t97A01 and is the smaller coherent theorem.",
-      :consumer :t97A01,
-      :implements-lemma
-      :lemma-genericpointwedgeoverlapinclusionsquares,
-      :phase :probe,
-      :state :open,
-      :scope [],
-      :dag-node
-      "TOPOLOGY-ROUTES.md/t97A01/generic-point-wedge-overlap-inclusion-squares",
-      :acceptance
-      {:probe
-       "Compile genericPointWedgeOverlapInclusionSquares for the banked genericPointWedgeCoverPackage: after conjugating the literal overlap-to-left and overlap-to-right maps by the package homotopy equivalences, prove the two continuous maps are respectively constant at x0 and y0. Do not assume either equality, construct polygon radial covers, compute homology, or close t97A01.",
-       :placeholder "the single sorry in apm_t97a01",
-       :route-step
-       "strict overlap-inclusion squares before transporting the two Mayer-Vietoris arrows",
-       :gates
-       ["canonical packages"
-        "fixture compiles"
-        "zero fixture sorry"
-        "standard-only axioms"
-        "registry check"]},
-      :id
-      :routes-2026-10-10-generic-point-wedge-overlap-inclusion-squares-39,
-      :kind :reusable-theorem,
-      :area "van-kampen-two-open-group",
-      :depends-on
-      [:routes-2026-10-10-checkpoint-topo1-after-t99j01-covering-prerequisites-38],
-      :current-residual
-      "Construct the polygon radial cover package, transport both inclusion maps, and close t97A01.",
-      :other-consumers []}
-     {:bounded-exception
-      "This single-consumer concrete quotient package is the other final backlog lemma on t97A01 and supplies the actual two polygon models required by its frozen statement.",
-      :consumer :t97A01,
-      :implements-lemma :lemma-polygonradialopencoverpackages,
-      :phase :probe,
-      :state :open,
-      :scope [],
-      :dag-node
-      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
-      :acceptance
-      {:probe
-       "Compile polygonRadialOpenCoverPackages for SurfaceRel false 3 and TorusCrosscapRel. Construct saturated radial bands, prove quotient openness and cover, descend radial contractions, identify both boundary graph quotients with ThreeCircles, identify punctured-disk overlaps, prove literal inclusion equations, and establish the required corner and vertex classes. Do not postulate package fields, compute final homology or fundamental groups, or close t97A01.",
-       :placeholder "the single sorry in apm_t97a01",
-       :route-step
-       "concrete polygon radial open-cover packages before the final homology and fundamental-group coordinate assembly",
-       :gates
-       ["canonical packages"
-        "fixture compiles"
-        "zero fixture sorry"
-        "standard-only axioms"
-        "registry check"]},
-      :id :routes-2026-10-10-polygon-radial-open-cover-packages-39,
-      :kind :reusable-theorem,
-      :area "polygon-surface-open-cover",
-      :depends-on
-      [:routes-2026-10-10-checkpoint-topo1-after-t99j01-covering-prerequisites-38],
-      :current-residual
-      "Combine the concrete cover packages with the strict overlap squares, banked Smith normalization, and final t97A01 assembly.",
-      :other-consumers []}
-     {:consumer :portfolio,
-      :checkpoint
-      {:after-problems 1,
-       :may-supersede-future true,
-       :required-measures
-       [:placeholder-delta
-        :typed-residual-change
-        :infrastructure-packets
-        :review-outcomes]},
-      :stop-condition
-      "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
-      :phase :strategy,
-      :state :open,
-      :scope [],
-      :dag-node "TOPOLOGY-ROUTES.md",
-      :acceptance
-      {:strategy
-       "Measure the t99J01 closure outcome and both t97A01 foundations, rerun priorities and AREAS, tag every remaining untagged lemma, and elect the next rule-0 closure or highest-impact area portfolio."},
-      :id
-      :routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-39,
-      :kind :strategy-checkpoint,
-      :depends-on
-      [:routes-2026-10-10-t99j01-closure-probe-39
-       :routes-2026-10-10-generic-point-wedge-overlap-inclusion-squares-39
-       :routes-2026-10-10-polygon-radial-open-cover-packages-39],
-      :current-residual
-      "Close t99J01 if its adapter passes, then reassess t97A01 and the remaining topo1 routes.",
-      :other-consumers []}],
-    :author "topo-4",
-    :disposition :replan},
+    :seat "topo-4"},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :repair,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -98260,7 +98268,7 @@
    :other-consumers []}
   {:consumer :t99J01,
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t99J01/closure",
    :acceptance
@@ -98288,7 +98296,7 @@
    :consumer :t97A01,
    :implements-lemma :lemma-genericpointwedgeoverlapinclusionsquares,
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/generic-point-wedge-overlap-inclusion-squares",
@@ -98318,7 +98326,7 @@
    :consumer :t97A01,
    :implements-lemma :lemma-polygonradialopencoverpackages,
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -98354,7 +98362,7 @@
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :phase :strategy,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
