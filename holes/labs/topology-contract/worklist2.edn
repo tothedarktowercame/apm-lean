@@ -61701,6 +61701,21 @@
       :exit 0,
       :output "131 registered statements match, 0 do not"}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791643828328-2203-75572c46",
+     :commands
+     ["git show/diff-tree/show --check 808be514a37b14b8d4506fcde403f866ac66b849"
+      "sha256sum /tmp/t02a03_geometric_tube_cover.lean"
+      "lake env lean /tmp/t02a03_geometric_tube_cover.lean"
+      "lake env lean ConstructionTargets/T02A03LeftTubePuncturedModel.lean"
+      "lake build ConstructionTargets.T02A03LeftTubePuncturedModel"
+      "python3 scripts/statement-registry.py check --rev 808be514a37b14b8d4506fcde403f866ac66b849"
+      "bb holes/labs/topology-contract/worklist_check.bb recorded-ledger"
+      "recompute accepted-type hash and comment-stripped placeholder counts"],
+     :finding
+     "PASS: author topo-6 is independent; implementation scope is exactly the new ConstructionTargets/T02A03LeftTubePuncturedModel.lean module, transition scope is ledger-only, and fixture SHA-256 aea1c264799ec496f8b71b0f5c57ab60ffb32a59eb6136ad59de2e141caac637 matches. The proof places reconstruction and source endpoints in the same radius-1/4 closed ball about the angularly selected frozen core point, applies closed-ball convexity to the correctly oriented unit-interval affine segment, and converts ball membership through the frozen cthickening representation to left-tube membership without claiming core exclusion. Fixture, target, focused 8241-job build, registry 131/0, and 450-item ledger gate pass; accepted-type hash 4d6061b8f5136c4ed681e0b4a7122ab0da077c1adbe932d7a463e13d36760eaf matches, the declaration uses only propext/Classical.choice/Quot.sound, target placeholders are 0, and unchanged consumer placeholders are 1."},
     :commit "808be514a37b14b8d4506fcde403f866ac66b849",
     :changed-paths
     ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
@@ -61720,7 +61735,7 @@
    :phase :implementation,
    :type
    "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubeRadialPoint tp ∈ apm_t02a03_leftTube",
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-radial-membership",
    :acceptance
@@ -61805,7 +61820,7 @@
    :phase :probe,
    :type
    "Nonempty (ContinuousMap.HomotopyEquiv LeftTubeMinusCore ConstructionTargets.TorusCircleWedgeOpenCover.Torus)",
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-punctured-model",
    :acceptance
@@ -62692,7 +62707,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -62707,7 +62722,10 @@
     :type
     "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubeRadialPoint tp ∈ apm_t02a03_leftTube",
     :proved-in
-    :routes-2026-10-10-t02a03-left-tube-radial-membership-topo2-r2},
+    :routes-2026-10-10-t02a03-left-tube-radial-membership-topo2-r2,
+    :banked-by
+    :routes-2026-10-10-t02a03-left-tube-radial-membership-topo2-r2,
+    :banked-commit "808be514a37b14b8d4506fcde403f866ac66b849"},
    :id
    :lemma-constructiontargets-t02a03lefttubepuncturedmodel-apm-t02a03-lefttuberadialpoint-,
    :kind :lemma,
