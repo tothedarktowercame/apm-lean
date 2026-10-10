@@ -376,6 +376,30 @@ resume_inflight() {
     return 0
   fi
   log "reclaim row=$row job=$job seat=$seat"
+  # Agency keeps job records in memory, so after it restarts (2026-09-07,
+  # 09-27, and zone's rebuild before 10-10) the job answers 404 for good and
+  # five failed status reads stop the loop on every supervisor restart. Each
+  # time a human moved inflight.edn into orphaned/ by hand. Do that here: a
+  # 404 is not a transient failure (a down Agency refuses the connection).
+  # If this loop already fetched the result before it was stopped, apply that
+  # copy; the receipt still has to carry this row's nonce.
+  local code
+  code="$(curl --connect-timeout 5 --max-time 20 -s -o /dev/null -w '%{http_code}' \
+            "$AGENCY/api/alpha/invoke/jobs/$job")"
+  if [ "$code" = 404 ]; then
+    if [ -s "$RUNS/jobs/$job.result.txt" ]; then
+      LAST_JOB="$job"; LAST_RESULT="$RUNS/jobs/$job.result.txt"
+      log "reclaim($row) job=$job unknown to Agency; applying the result fetched before the stop"
+      apply_job_result "$row" "$token"
+      return
+    fi
+    mkdir -p "$RUNS/orphaned"
+    local dest
+    dest="$RUNS/orphaned/inflight-agency-lost-$(date -u '+%Y%m%dT%H%M%SZ').edn"
+    mv "$INFLIGHT" "$dest"
+    log "reclaim($row) job=$job unknown to Agency and no local result; moved in-flight record to $dest, row will be dispatched afresh"
+    return 0
+  fi
   wait_job "$job" "reclaim($row)"
   apply_job_result "$row" "$token"
 }
