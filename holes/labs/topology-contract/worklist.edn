@@ -99369,13 +99369,43 @@
    "Construct the straight radial homotopy from halfCircleMap composed with radialNormalizeMap to the identity on Annulus, package the annulus and overlapOpen homotopy equivalences with Circle, then identify both radius-one boundary quotients with ThreeCircles and prove vertex and inclusion formulas.",
    :other-consumers []}
   {:bounded-exception
+   "This single-consumer prerequisite completes the radial circle model of the literal annulus before transporting it to the actual quotient overlap.",
+   :consumer :t97A01,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/PolygonAnnulusRadialHomotopy.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/annulus-radial-homotopy",
+   :acceptance
+   {:implementation
+    "Promote the exact fixture. Construct the straight radial homotopy from halfCircleMap composed with radialNormalizeMap to the identity on Annulus, prove every intermediate point remains strictly between radii one quarter and three quarters, prove continuity and both endpoint formulas, and package the resulting homotopy equivalence from Circle to Annulus. Do not transport it across overlapHomeomorph, identify boundary quotients with ThreeCircles, prove final inclusion equations, compute invariants, or close t97A01.",
+    :placeholder "the single sorry in apm_t97a01",
+    :route-step
+    "polygon radial open-cover step 11: complete the radial Circle homotopy model of the literal annulus",
+    :fixture "/tmp/polygon-annulus-radial-homotopy.lean",
+    :fixture-sha256
+    "74bb0ed26183e0b022fc06d8a8b6c15081c6ba041970b7e726bf25d8302bda67",
+    :gates
+    ["lake build ConstructionTargets.PolygonAnnulusRadialHomotopy"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-10-polygon-annulus-radial-homotopy-51,
+   :kind :reusable-theorem,
+   :area "polygon-surface-open-cover",
+   :depends-on [:routes-2026-10-10-polygon-annulus-radial-maps-50],
+   :current-residual
+   "Transport annulusHomotopyEquivCircle across overlapHomeomorph to model overlapOpen by Circle with explicit representative formulas, then identify both radius-one boundary quotients with ThreeCircles and prove the vertex and literal inclusion formulas.",
+   :other-consumers []}
+  {:bounded-exception
    "This single-consumer concrete quotient package is the other final backlog lemma on t97A01 and supplies the actual two polygon models required by its frozen statement.",
    :consumer :t97A01,
    :implements-lemma :lemma-polygonradialopencoverpackages,
    :evidence
    {:probe
     {:residual
-     "The annular overlap now has explicit continuous maps to and from Circle with an exact left inverse. The remaining overlap step is the straight radial right-inverse homotopy and its transport across overlapHomeomorph; both boundary ThreeCircles models, vertex classes, and literal inclusion equations remain.",
+     "The literal annulus is now explicitly homotopy equivalent to Circle. The remaining overlap step is transport across the quotient overlap homeomorphism; both boundary ThreeCircles models, vertex classes, and literal inclusion equations remain.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
@@ -99385,69 +99415,69 @@
        :status :partial,
        :consumers [:t97A01],
        :depends-on
-       ["PolygonAnnulusRadialMaps.radialNormalizeMap"
-        "polygonAnnulusRadialHomotopy"
+       ["PolygonAnnulusRadialHomotopy.annulusHomotopyEquivCircle"
+        "polygonOverlapHomotopyEquivCircle"
         "polygonBoundaryThreeCircles"],
        :area "polygon-surface-open-cover"}
-      {:name "PolygonAnnulusRadialMaps.radialNormalizeMap",
+      {:name "PolygonAnnulusRadialHomotopy.annulusHomotopyEquivCircle",
        :type
-       "The literal polygon annulus admits a continuous radial normalization to Circle with radius-one-half inclusion as an exact left inverse.",
+       "The literal annular source 1/4 < radius < 3/4 is homotopy equivalent to Circle by radial normalization and radius-one-half inclusion.",
        :status :proved,
        :consumers [:t97A01],
-       :depends-on
-       ["PolygonAnnularOverlapHomeomorph.overlapHomeomorph"],
+       :depends-on ["PolygonAnnulusRadialMaps.radialNormalizeMap"],
        :area "polygon-surface-open-cover"}
-      {:name "polygonAnnulusRadialHomotopy",
+      {:name "polygonOverlapHomotopyEquivCircle",
        :type
-       "The radius-one-half inclusion after radial normalization is homotopic through the annulus to the identity, completing the annulus-to-circle homotopy equivalence.",
+       "Transport the annulus homotopy equivalence across overlapHomeomorph to give the actual overlapOpen subtype its Circle homotopy model with representative formulas.",
        :status :not-started,
        :consumers [:t97A01],
-       :depends-on ["PolygonAnnulusRadialMaps.radialNormalizeMap"],
+       :depends-on
+       ["PolygonAnnulusRadialHomotopy.annulusHomotopyEquivCircle"
+        "PolygonAnnularOverlapHomeomorph.overlapHomeomorph"],
        :area "polygon-surface-open-cover"}],
      :prerequisite
      {:bounded-exception
-      "This single-consumer prerequisite constructs the two continuous radial maps and exact left inverse required before the annular overlap can be packaged as a circle homotopy model.",
+      "This single-consumer prerequisite completes the radial circle model of the literal annulus before transporting it to the actual quotient overlap.",
       :consumer :t97A01,
       :phase :implementation,
       :state :open,
-      :scope ["ConstructionTargets/PolygonAnnulusRadialMaps.lean"],
+      :scope ["ConstructionTargets/PolygonAnnulusRadialHomotopy.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/annulus-radial-maps",
+      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/annulus-radial-homotopy",
       :acceptance
       {:implementation
-       "Promote the exact fixture. Define the continuous inclusion of the complex unit circle into the literal annulus at radius one half and the continuous radial normalization of every annular point to Circle. Prove both maps land in their declared subtypes and prove normalization after inclusion is exactly the identity. Do not construct the reverse radial homotopy, package a homotopy equivalence, identify boundary quotients with ThreeCircles, prove final inclusion equations, compute invariants, or close t97A01.",
+       "Promote the exact fixture. Construct the straight radial homotopy from halfCircleMap composed with radialNormalizeMap to the identity on Annulus, prove every intermediate point remains strictly between radii one quarter and three quarters, prove continuity and both endpoint formulas, and package the resulting homotopy equivalence from Circle to Annulus. Do not transport it across overlapHomeomorph, identify boundary quotients with ThreeCircles, prove final inclusion equations, compute invariants, or close t97A01.",
        :placeholder "the single sorry in apm_t97a01",
        :route-step
-       "polygon radial open-cover step 10: construct the circle inclusion and radial normalization maps for the literal annulus",
-       :fixture "/tmp/polygon-annulus-radial-maps.lean",
+       "polygon radial open-cover step 11: complete the radial Circle homotopy model of the literal annulus",
+       :fixture "/tmp/polygon-annulus-radial-homotopy.lean",
        :fixture-sha256
-       "b01af2d514df2a541514bb4eaf704c4cd6fc6b82b172037f7576eaddab8ca296",
+       "74bb0ed26183e0b022fc06d8a8b6c15081c6ba041970b7e726bf25d8302bda67",
        :gates
-       ["lake build ConstructionTargets.PolygonAnnulusRadialMaps"
+       ["lake build ConstructionTargets.PolygonAnnulusRadialHomotopy"
         "fixture compiles"
         "zero source and fixture sorry"
         "standard-only axioms"
         "registry check"]},
-      :id :routes-2026-10-10-polygon-annulus-radial-maps-50,
+      :id :routes-2026-10-10-polygon-annulus-radial-homotopy-51,
       :kind :reusable-theorem,
       :area "polygon-surface-open-cover",
-      :depends-on
-      [:routes-2026-10-10-polygon-annular-overlap-homeomorph-49],
+      :depends-on [:routes-2026-10-10-polygon-annulus-radial-maps-50],
       :current-residual
-      "Construct the straight radial homotopy from halfCircleMap composed with radialNormalizeMap to the identity on Annulus, package the annulus and overlapOpen homotopy equivalences with Circle, then identify both radius-one boundary quotients with ThreeCircles and prove vertex and inclusion formulas.",
+      "Transport annulusHomotopyEquivCircle across overlapHomeomorph to model overlapOpen by Circle with explicit representative formulas, then identify both radius-one boundary quotients with ThreeCircles and prove the vertex and literal inclusion formulas.",
       :other-consumers []},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
-     [{:cmd "lake env lean /tmp/polygon-annulus-radial-maps.lean",
+     [{:cmd "lake env lean /tmp/polygon-annulus-radial-homotopy.lean",
        :exit 0,
        :finding
-       "The radius-one-half circle inclusion, continuous radial normalization, and exact left inverse compile with standard axioms."}
-      {:cmd "sha256sum /tmp/polygon-annulus-radial-maps.lean",
+       "The straight radial homotopy, annulus bounds, continuity, endpoint formulas, and Circle-to-annulus homotopy equivalence compile with standard axioms."}
+      {:cmd "sha256sum /tmp/polygon-annulus-radial-homotopy.lean",
        :exit 0,
        :finding
-       "b01af2d514df2a541514bb4eaf704c4cd6fc6b82b172037f7576eaddab8ca296"}
+       "74bb0ed26183e0b022fc06d8a8b6c15081c6ba041970b7e726bf25d8302bda67"}
       {:cmd
-       "rg -n \"\\b(sorry|admit)\\b\" /tmp/polygon-annulus-radial-maps.lean",
+       "rg -n \"\\b(sorry|admit)\\b\" /tmp/polygon-annulus-radial-homotopy.lean",
        :exit 1,
        :expected-exit 1,
        :finding "No fixture placeholders."}
@@ -99456,27 +99486,23 @@
        :finding "131 registered statements match, 0 do not."}
       {:cmd "git status --short", :exit 0, :finding "clean"}],
      :diagnostic-history
-     [{:cmd "lake env lean /tmp/polygon-annulus-radial-maps.lean",
+     [{:cmd "lake env lean /tmp/polygon-annulus-radial-homotopy.lean",
        :exit 1,
        :finding
-       "The first draft used real scalar multiplication on Complex, for which the pinned environment lacks NormSMulClass; replacing scaling by multiplication with the corresponding real complex number corrected the model."}
-      {:cmd "lake env lean /tmp/polygon-annulus-radial-maps.lean",
+       "The first radius bounds rewrote a complex norm with the real norm lemma directly and positivity could not unfold the local coefficient; simplifying the coerced-real norm first and proving coefficient nonnegativity explicitly corrected the inequalities."}
+      {:cmd "lake env lean /tmp/polygon-annulus-radial-homotopy.lean",
        :exit 1,
        :finding
-       "The first complex-multiplication proof still parsed the inverse after coercion and used a global continuity combinator at a point; coercing the real inverse explicitly and composing ContinuousAt maps corrected both types."}
-      {:cmd "lake env lean /tmp/polygon-annulus-radial-maps.lean",
-       :exit 1,
-       :finding
-       "Circle membership unfolds through Submonoid.unitSphere and the coerced-real norm required simplification before applying inv_mul_cancel₀; exposing the metric-sphere goal completed normalization."}],
+       "Strict convex lower and upper annulus bounds needed a separate zero-time case before nonlinear arithmetic; the endpoint proof also needed the homotopy and radial maps unfolded before ring normalization."}],
      :fixture
-     {:path "/tmp/polygon-annulus-radial-maps.lean",
+     {:path "/tmp/polygon-annulus-radial-homotopy.lean",
       :sha256
-      "b01af2d514df2a541514bb4eaf704c4cd6fc6b82b172037f7576eaddab8ca296",
+      "74bb0ed26183e0b022fc06d8a8b6c15081c6ba041970b7e726bf25d8302bda67",
       :interface
-      "halfCircleMap includes Circle at radius one half in the annulus; radialNormalizeMap continuously normalizes annular points to Circle; normalization after inclusion is the identity."},
+      "annulusRadialHomotopy joins the radius-one-half normalization composite to the identity through the annulus; annulusHomotopyEquivCircle packages the resulting Circle-to-annulus homotopy equivalence."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -99506,7 +99532,8 @@
     :routes-2026-10-10-polygon-outer-restricted-eqvgen-47
     :routes-2026-10-10-polygon-outer-open-deformation-48
     :routes-2026-10-10-polygon-annular-overlap-homeomorph-49
-    :routes-2026-10-10-polygon-annulus-radial-maps-50],
+    :routes-2026-10-10-polygon-annulus-radial-maps-50
+    :routes-2026-10-10-polygon-annulus-radial-homotopy-51],
    :current-residual
    "Combine the concrete cover packages with the strict overlap squares, banked Smith normalization, and final t97A01 assembly.",
    :other-consumers []}
@@ -100023,7 +100050,9 @@
     :lemma-polygonouteropendeformation-outeropenhomotopy
     :lemma-polygonannularoverlaphomeomorph-overlaphomeomorph
     :lemma-polygonannulusradialmaps-radialnormalizemap
-    :lemma-polygonannulusradialhomotopy],
+    :lemma-polygonannulusradialhomotopy
+    :lemma-polygonannulusradialhomotopy-annulushomotopyequivcircle
+    :lemma-polygonoverlaphomotopyequivcircle],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -102074,6 +102103,48 @@
    :kind :lemma,
    :depends-on
    [:lemma-polygonannularoverlaphomeomorph-overlaphomeomorph],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "PolygonAnnulusRadialHomotopy.annulusHomotopyEquivCircle",
+    :type
+    "The literal annular source 1/4 < radius < 3/4 is homotopy equivalent to Circle by radial normalization and radius-one-half inclusion."},
+   :lemma
+   {:name "PolygonAnnulusRadialHomotopy.annulusHomotopyEquivCircle",
+    :reported-by
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    :type
+    "The literal annular source 1/4 < radius < 3/4 is homotopy equivalent to Circle by radial normalization and radius-one-half inclusion.",
+    :area "polygon-surface-open-cover",
+    :proved-in
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+   :id :lemma-polygonannulusradialhomotopy-annulushomotopyequivcircle,
+   :kind :lemma,
+   :depends-on [:lemma-polygonannulusradialmaps-radialnormalizemap],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "polygonOverlapHomotopyEquivCircle",
+    :type
+    "Transport the annulus homotopy equivalence across overlapHomeomorph to give the actual overlapOpen subtype its Circle homotopy model with representative formulas."},
+   :lemma
+   {:name "polygonOverlapHomotopyEquivCircle",
+    :reported-by
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    :type
+    "Transport the annulus homotopy equivalence across overlapHomeomorph to give the actual overlapOpen subtype its Circle homotopy model with representative formulas.",
+    :area "polygon-surface-open-cover"},
+   :id :lemma-polygonoverlaphomotopyequivcircle,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polygonannulusradialhomotopy-annulushomotopyequivcircle
+    :lemma-polygonannularoverlaphomeomorph-overlaphomeomorph],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
