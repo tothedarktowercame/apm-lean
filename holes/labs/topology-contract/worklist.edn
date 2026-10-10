@@ -96638,13 +96638,43 @@
    "Prove the pullback path connected by showing the firstCircle loop induces a cyclic transitive permutation of the n sheets, then package the PathConnectedSpace instance.",
    :other-consumers []}
   {:bounded-exception
+   "This single-consumer topological package supplies path connectedness of the nested point wedges underlying TwoCircles and ThreeCircles, which is required to build paths from arbitrary basepoints into the final-circle section before the cyclic lift argument.",
+   :consumer :t99J01,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/PointWedgePathConnected.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/cyclic-three-circles-cover/point-wedge-path-connected",
+   :acceptance
+   {:implementation
+    "For pointed topological spaces X and Y with PathConnectedSpace instances, prove their PointWedgeQuotient.Wedge is path connected by mapping paths in each summand and concatenating across the identified wedge point. Expose the equality of the two chosen representatives and install the resulting PathConnectedSpace instance. Do not construct collapse-fiber paths, lift paths to the cyclic pullback, count sheets, compute subgroup index, or close t99J01.",
+    :placeholder "the single sorry in apm_t99j01",
+    :route-step
+    "t99J01 cyclic-cover step 6: establish path connectedness of the point-wedge base models before constructing collapse-preserving paths and cyclic pullback lifts",
+    :fixture "/tmp/point-wedge-path-connected.lean",
+    :fixture-sha256
+    "33b34c27c1a94a57cdc22915aeb5ec2a34cac1bc654cc9c74e081e1e9f8c8cf0",
+    :gates
+    ["lake build ConstructionTargets.PointWedgePathConnected"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-10-point-wedge-path-connected-44,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-10-10-cyclic-three-circles-pullback-sheets-43],
+   :current-residual
+   "Use the new path-connected wedge instances to construct, for every y : ThreeCircles, a path y to firstCircle (collapse y) on which collapse is constant; lift that path and then use a final-circle cyclic path to connect arbitrary pullback points.",
+   :other-consumers []}
+  {:bounded-exception
    "Single-consumer prerequisite second in the final ledger ranking.",
    :consumer :t99J01,
    :implements-lemma :lemma-cyclicthreecirclespullback-pathconnected,
    :evidence
    {:probe
     {:residual
-     "The concrete pullback is now a compiled n-sheeted cover. Only the cyclic-monodromy path-connectedness proof remains for the original row.",
+     "The point-wedge base is now path connected. The remaining proof must construct collapse-constant paths from arbitrary ThreeCircles points to the final-circle section, lift them without changing the sheet coordinate, and connect the resulting same-section points by the cyclic circle-power path.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
@@ -96655,66 +96685,80 @@
        :consumers [:t99J01],
        :depends-on
        ["CyclicThreeCirclesPullbackSheets.pullback_isKSheeted"
-        "CyclicThreeCirclesCollapse.collapse_firstCircle"]}],
+        "CyclicThreeCirclesCollapse.collapse_firstCircle"
+        "PointWedgePathConnected.wedgePathConnectedSpace"]}],
      :prerequisite
      {:bounded-exception
-      "This single-consumer certificate transports the banked circle-power fiber calculation through the literal pullback equivalence and supplies the exact IsKSheetedCover required by the first conjunct of t99J01.",
+      "This single-consumer topological package supplies path connectedness of the nested point wedges underlying TwoCircles and ThreeCircles, which is required to build paths from arbitrary basepoints into the final-circle section before the cyclic lift argument.",
       :consumer :t99J01,
       :phase :implementation,
       :state :open,
-      :scope
-      ["ConstructionTargets/CyclicThreeCirclesPullbackSheets.lean"],
+      :scope ["ConstructionTargets/PointWedgePathConnected.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/cyclic-three-circles-cover/sheet-certificate",
+      "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/cyclic-three-circles-cover/point-wedge-path-connected",
       :acceptance
       {:implementation
-       "For NeZero n, prove IsKSheetedCover (CyclicThreeCirclesPullbackCover.projection n) n. Reuse the banked pullback covering theorem, transfer fiber finiteness through LiteralCoveringPullback.fiberEquiv, and transfer Nat.card through LiteralCoveringPullback.fiber_card and circlePower_fiber_card. Do not prove path connectedness, construct monodromy paths, compute subgroup index, or close t99J01.",
+       "For pointed topological spaces X and Y with PathConnectedSpace instances, prove their PointWedgeQuotient.Wedge is path connected by mapping paths in each summand and concatenating across the identified wedge point. Expose the equality of the two chosen representatives and install the resulting PathConnectedSpace instance. Do not construct collapse-fiber paths, lift paths to the cyclic pullback, count sheets, compute subgroup index, or close t99J01.",
        :placeholder "the single sorry in apm_t99j01",
        :route-step
-       "t99J01 cyclic-cover step 5: assemble the exact n-sheeted pullback certificate before proving connectedness",
-       :fixture "/tmp/cyclic-three-circles-pullback-sheets.lean",
+       "t99J01 cyclic-cover step 6: establish path connectedness of the point-wedge base models before constructing collapse-preserving paths and cyclic pullback lifts",
+       :fixture "/tmp/point-wedge-path-connected.lean",
        :fixture-sha256
-       "cc68cdc0e02d849939a7ffa239f2129cbdc83ec8d6f4e0c288a78ab669b772c3",
+       "33b34c27c1a94a57cdc22915aeb5ec2a34cac1bc654cc9c74e081e1e9f8c8cf0",
        :gates
-       ["lake build ConstructionTargets.CyclicThreeCirclesPullbackSheets"
+       ["lake build ConstructionTargets.PointWedgePathConnected"
         "fixture compiles"
         "zero source and fixture sorry"
         "standard-only axioms"
         "registry check"]},
-      :id :routes-2026-10-10-cyclic-three-circles-pullback-sheets-43,
+      :id :routes-2026-10-10-point-wedge-path-connected-44,
       :kind :reusable-theorem,
-      :depends-on [:routes-2026-10-10-circle-power-fiber-card-42],
+      :depends-on
+      [:routes-2026-10-10-cyclic-three-circles-pullback-sheets-43],
       :current-residual
-      "Prove the pullback path connected by showing the firstCircle loop induces a cyclic transitive permutation of the n sheets, then package the PathConnectedSpace instance.",
+      "Use the new path-connected wedge instances to construct, for every y : ThreeCircles, a path y to firstCircle (collapse y) on which collapse is constant; lift that path and then use a final-circle cyclic path to connect arbitrary pullback points.",
       :other-consumers []},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
-     [{:cmd
-       "lake env lean /tmp/cyclic-three-circles-pullback-sheets.lean",
-       :exit 0}
-      {:cmd "sha256sum /tmp/cyclic-three-circles-pullback-sheets.lean",
-       :exit 0}
+     [{:cmd "lake env lean /tmp/point-wedge-path-connected.lean",
+       :exit 0,
+       :finding
+       "the general point-wedge path-connectedness theorem compiles with standard axioms"}
+      {:cmd "sha256sum /tmp/point-wedge-path-connected.lean",
+       :exit 0,
+       :finding
+       "33b34c27c1a94a57cdc22915aeb5ec2a34cac1bc654cc9c74e081e1e9f8c8cf0"}
       {:cmd
-       "rg -n \"\\b(sorry|admit)\\b\" /tmp/cyclic-three-circles-pullback-sheets.lean",
+       "rg -n \"\\b(sorry|admit)\\b\" /tmp/point-wedge-path-connected.lean",
        :exit 1,
-       :expected-exit 1}
-      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+       :expected-exit 1,
+       :finding "no placeholders"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :finding "131 registered statements match, 0 do not"}
       {:cmd "git status --short", :exit 0, :finding "clean"}],
      :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/cyclic-three-circles-pullback-sheets.lean",
+     [{:cmd "lake env lean /tmp/point-wedge-path-connected.lean",
        :exit 1,
        :finding
-       "The structure fields use equality subtypes while the banked pullback API uses singleton preimages; explicit changes to the preimage forms made the equivalence and fiber-card theorem apply."}],
+       "The first draft applied the relation constructor with explicit arguments and used the wrong IsPathConnected constructor shape; corrected the relation application and based the proof at the left wedge point."}
+      {:cmd "lake env lean /tmp/point-wedge-path-connected.lean",
+       :exit 1,
+       :finding
+       "The first based proof attempted to substitute a representative equality and used the wrong direction of pathConnectedSpace_iff_univ; eliminated the unnecessary representative and used the reverse implication."}
+      {:cmd "lake env lean /tmp/point-wedge-path-connected.lean",
+       :exit 1,
+       :finding
+       "The cross-summand path cast initially reversed the wedge-point equality; corrected its orientation."}],
      :fixture
-     {:path "/tmp/cyclic-three-circles-pullback-sheets.lean",
+     {:path "/tmp/point-wedge-path-connected.lean",
       :sha256
-      "cc68cdc0e02d849939a7ffa239f2129cbdc83ec8d6f4e0c288a78ab669b772c3",
+      "33b34c27c1a94a57cdc22915aeb5ec2a34cac1bc654cc9c74e081e1e9f8c8cf0",
       :interface
-      "pullback_isKSheeted proves the literal cyclic ThreeCircles pullback projection is an n-sheeted covering for every nonzero n."},
+      "wedgePoint_eq identifies the chosen representatives; wedge_isPathConnected and wedgePathConnectedSpace prove a point wedge of path-connected spaces is path connected."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/cyclic-three-circles-cover",
@@ -96739,7 +96783,8 @@
     :routes-2026-10-10-cyclic-three-circles-pullback-cover-40
     :routes-2026-10-10-circle-power-kernel-card-41
     :routes-2026-10-10-circle-power-fiber-card-42
-    :routes-2026-10-10-cyclic-three-circles-pullback-sheets-43],
+    :routes-2026-10-10-cyclic-three-circles-pullback-sheets-43
+    :routes-2026-10-10-point-wedge-path-connected-44],
    :current-residual
    "Combine the cyclic cover with component restriction and close t99J01.",
    :other-consumers []}
@@ -97176,7 +97221,8 @@
     :lemma-cyclicthreecirclespullbackcover-covering
     :lemma-circlepowerkernelcard-circlepower-kernel-card
     :lemma-circlepowerfibercard-circlepower-fiber-card
-    :lemma-cyclicthreecirclespullbacksheets-pullback-isksheeted],
+    :lemma-cyclicthreecirclespullbacksheets-pullback-isksheeted
+    :lemma-pointwedgepathconnected-wedgepathconnectedspace],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -98201,6 +98247,19 @@
    :depends-on
    [:lemma-cyclicthreecirclespullbackcover-covering
     :lemma-circlepowerfibercard-circlepower-fiber-card],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "PointWedgePathConnected.wedgePathConnectedSpace"},
+   :lemma
+   {:name "PointWedgePathConnected.wedgePathConnectedSpace",
+    :reported-by []},
+   :id :lemma-pointwedgepathconnected-wedgepathconnectedspace,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
