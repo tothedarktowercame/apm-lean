@@ -95002,6 +95002,20 @@
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791650688008-2429-8ffd487c",
+     :commands
+     ["git show 818c7f5dfce60f4c01681b728f086f9c586ee383 -- ConstructionTargets/KleinSquareEdgeOrientation.lean"
+      "git diff --exit-code 818c7f5dfce60f4c01681b728f086f9c586ee383 -- ConstructionTargets/KleinSquareEdgeOrientation.lean"
+      "lake build ConstructionTargets.KleinSquareEdgeOrientation"
+      "sha256sum /tmp/klein-square-edge-orientation.lean && lake env lean /tmp/klein-square-edge-orientation.lean"
+      "placeholder census on source, fixture, and problems/t93J03"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb on recorded ledger at 7f493281"],
+     :finding
+     "PASS: reviewer codex-3 verified commit 818c7f5d changes only KleinSquareEdgeOrientation.lean and the compiled source equals the recorded commit. The frozen fixture hash is exact; target and fixture compile with zero placeholders; t93J03 retains its declared single placeholder; all four audited correspondence theorems report only propext, Classical.choice, and Quot.sound; all 131 registry statements and the recorded ledger validate. squareEdge fixes the required orientations (0,t), (1,t), (t,0), and (1-t,1). Edges 0-to-1 realize the Cases translation branch with m=1; edges 2-to-3 realize the reflected branch with vertical shift 1 and m=1. The disk generators use edgePoint 4 0-to-1 and 2-to-3 with the same parameter. The module does not falsely claim an edge-compatible homeomorphism, EqvGen closure, or quotient; that representation bridge remains explicit. The trailing unreachable linarith warning is a non-failing tactic-style diagnostic."},
     :commit "818c7f5dfce60f4c01681b728f086f9c586ee383",
     :changed-paths
     ["ConstructionTargets/KleinSquareEdgeOrientation.lean"],
@@ -95025,7 +95039,7 @@
       "KleinSquareEdgeOrientation.surfaceRel_edge_two_three"]},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/KleinSquareEdgeOrientation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/square-boundary-orbit-eqvgen/edge-orientation",
@@ -95133,7 +95147,7 @@
       "squareEdge orients the four closed-square sides; cases_edge_zero_one and cases_edge_two_three prove the affine-orbit generators; surfaceRel_edge_zero_one and surfaceRel_edge_two_three prove the matching frozen disk generators."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/square-boundary-orbit-eqvgen",
@@ -96106,7 +96120,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "KleinSquareEdgeOrientation.edge_orientation",
@@ -96117,7 +96131,9 @@
     :reported-by [:routes-2026-10-10-klein-square-edge-orientation-31],
     :type
     "Four oriented square-side parameterizations with exact orbit Cases and SurfaceRel false 2 generator correspondences",
-    :proved-in :routes-2026-10-10-klein-square-edge-orientation-31},
+    :proved-in :routes-2026-10-10-klein-square-edge-orientation-31,
+    :banked-by :routes-2026-10-10-klein-square-edge-orientation-31,
+    :banked-commit "818c7f5dfce60f4c01681b728f086f9c586ee383"},
    :id :lemma-kleinsquareedgeorientation-edge-orientation,
    :kind :lemma,
    :depends-on
