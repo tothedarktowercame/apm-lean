@@ -99218,6 +99218,20 @@
       :finding
       "clean worktree after concurrent ledger writer completed"}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791668307306-3007-1c9c4d5d",
+     :commands
+     ["git show and diff-tree on ea47e10866a35ebe9ea89391e6846c4fecd6ae6d"
+      "sha256sum frozen fixture"
+      "lake build ConstructionTargets.PolygonAnnularOverlapHomeomorph"
+      "lake env lean frozen fixture"
+      "comment-stripped placeholder counts"
+      "python3 scripts/statement-registry.py check"
+      "git diff-tree --check"],
+     :finding
+     "PASS: recorded commit is authored by topo-2 and changes only ConstructionTargets/PolygonAnnularOverlapHomeomorph.lean; fixture hash matches; EqvGen below radius one collapses to equality with correctly oriented symmetric and transitive cases; the quotient preimage is exactly the literal annulus; overlapMap is obtained through the matching preimage-subtype homeomorphism, is a quotient map and injective, and yields a homeomorphism with the required representative formula; source and fixture have zero placeholders; fixture reports only propext, Classical.choice, and Quot.sound; registry reports 131 matches and zero mismatches."},
     :commit "ea47e10866a35ebe9ea89391e6846c4fecd6ae6d",
     :changed-paths
     ["ConstructionTargets/PolygonAnnularOverlapHomeomorph.lean"],
@@ -99228,7 +99242,7 @@
      :sorry-count 0},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/PolygonAnnularOverlapHomeomorph.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/annular-overlap-homeomorph",
@@ -99357,7 +99371,7 @@
       "For any radius-preserving boundary-supported polygon relation, the literal annular source is homeomorphic to overlapOpen; EqvGen is equality on this subunit-radius region."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -101853,7 +101867,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "PolygonAnnularOverlapHomeomorph.overlapHomeomorph",
@@ -101868,7 +101882,10 @@
     "For any radius-preserving boundary-supported disk relation, the annular source 1/4 < radius < 3/4 is homeomorphic via the quotient map to overlapOpen.",
     :area "polygon-surface-open-cover",
     :proved-in
-    :routes-2026-10-10-polygon-annular-overlap-homeomorph-49},
+    :routes-2026-10-10-polygon-annular-overlap-homeomorph-49,
+    :banked-by
+    :routes-2026-10-10-polygon-annular-overlap-homeomorph-49,
+    :banked-commit "ea47e10866a35ebe9ea89391e6846c4fecd6ae6d"},
    :id :lemma-polygonannularoverlaphomeomorph-overlaphomeomorph,
    :kind :lemma,
    :depends-on
