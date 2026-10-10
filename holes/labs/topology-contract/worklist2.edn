@@ -64611,76 +64611,118 @@
    "Compose singularHomologyComparison_naturality with this commuting square, unfold singularHomologyModuleIsoOfGroupIso, use forgetIntModules faithfulness to obtain the aligned ModuleCat induced-map equation, then identify the consumer map and matrix definitions.",
    :other-consumers []}
   {:bounded-exception
+   "single-consumer aligned frozen-torus ModuleCat H1 commuting square for t97A04",
+   :consumer :t97A04,
+   :phase :probe,
+   :state :open,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md/t97A04/frozen-module-h1-map-square",
+   :acceptance
+   {:probe
+    "Compile and bank frozenLbarModuleH1_map_commutes from /tmp/t97a04_frozen_h1_coordinate.lean. Transfer frozenLbarIntegralH1_map_commutes through singularHomologyComparison_naturality and forgetIntModules faithfulness to the canonical ModuleCat degree-one homology map and the aligned module coordinate. Preserve the frozen matrix exactly; do not yet claim apm_t97A04_bridge_2.",
+    :declaration
+    "ConstructionTargets.T97A04FrozenH1Coordinate.frozenLbarModuleH1_map_commutes",
+    :type
+    "(((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom frozenLbar)) ≫ frozenTorusAlignedH1ModuleIsoFinTwo.hom = frozenTorusAlignedH1ModuleIsoFinTwo.hom ≫ ModuleCat.ofHom frozenMatrixAddHom.toIntLinearMap",
+    :placeholder "apm_t97A04_bridge_2",
+    :route-step
+    "t97A04 step 6, transfer the aligned IntegralH1 matrix square through the singular-homology comparison into ModuleCat"},
+   :id :routes-2026-10-10-t97a04-frozen-module-h1-map-square-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo2-r5
+    :routes-2026-10-10-t97a04-frozen-integral-h1-map-square-topo2-r1],
+   :current-residual
+   "Identify frozenLbar definitionally with apm_t97a04_Lbar and frozenMatrixAddHom with apm_t97a04_matrix.mulVec in the consumer fixture, then use frozenTorusAlignedH1ModuleIsoFinTwo as the witness for apm_t97A04_bridge_2.",
+   :other-consumers []}
+  {:bounded-exception
    "single-consumer assembly from the now-banked frozen torus pi1 matrix theorem",
    :consumer :t97A04,
    :evidence
    {:probe
     {:residual
-     "Bank the AddCommGrpCat map square, then transfer it through singularHomologyComparison_naturality to ModuleCat and assemble apm_t97A04_bridge_2.",
+     "Bank the aligned ModuleCat commuting square, then perform the bounded consumer-definition identifications and assemble apm_t97A04_bridge_2.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
      [{:name
-       "ConstructionTargets.T97A04FrozenH1Coordinate.frozenLbarIntegralH1_map_commutes",
+       "ConstructionTargets.T97A04FrozenH1Coordinate.frozenLbarModuleH1_map_commutes",
        :type
-       "(HomologicalComplex.homologyMap (ConstructionTargets.SingularSubdivision.singularPostcomposition frozenLbar) 1) ≫ frozenTorusAlignedH1GroupIsoFinTwo.hom = frozenTorusAlignedH1GroupIsoFinTwo.hom ≫ AddCommGrpCat.ofHom frozenMatrixAddHom",
+       "(((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom frozenLbar)) ≫ frozenTorusAlignedH1ModuleIsoFinTwo.hom = frozenTorusAlignedH1ModuleIsoFinTwo.hom ≫ ModuleCat.ofHom frozenMatrixAddHom.toIntLinearMap",
        :status :proved,
        :consumers [:t97A04],
        :depends-on
-       ["ConstructionTargets.T97A04FrozenH1Coordinate.frozenLbarIntegralH1_coordinate"
-        "ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusAlignedH1ModuleIsoFinTwo"]}],
+       ["ConstructionTargets.T97A04FrozenH1Coordinate.frozenLbarIntegralH1_map_commutes"
+        "ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison_naturality"]}],
      :prerequisite
      {:bounded-exception
-      "single-consumer frozen IntegralH1 commuting map square for t97A04",
+      "single-consumer aligned frozen-torus ModuleCat H1 commuting square for t97A04",
       :consumer :t97A04,
       :phase :probe,
       :state :open,
       :scope [],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t97A04/frozen-integral-h1-map-square",
+      "TOPOLOGY-ROUTES.md/t97A04/frozen-module-h1-map-square",
       :acceptance
       {:probe
-       "Compile and bank frozenLbarIntegralH1_map_commutes from /tmp/t97a04_frozen_h1_coordinate.lean. Repackage the pointwise aligned IntegralH1 matrix equation as an equality of AddCommGrpCat morphisms, suitable for composition with singularHomologyComparison_naturality. Preserve the frozen matrix exactly; do not yet claim the ModuleCat induced-map equation or apm_t97A04_bridge_2.",
+       "Compile and bank frozenLbarModuleH1_map_commutes from /tmp/t97a04_frozen_h1_coordinate.lean. Transfer frozenLbarIntegralH1_map_commutes through singularHomologyComparison_naturality and forgetIntModules faithfulness to the canonical ModuleCat degree-one homology map and the aligned module coordinate. Preserve the frozen matrix exactly; do not yet claim apm_t97A04_bridge_2.",
        :declaration
-       "ConstructionTargets.T97A04FrozenH1Coordinate.frozenLbarIntegralH1_map_commutes",
+       "ConstructionTargets.T97A04FrozenH1Coordinate.frozenLbarModuleH1_map_commutes",
        :type
-       "(HomologicalComplex.homologyMap (ConstructionTargets.SingularSubdivision.singularPostcomposition frozenLbar) 1) ≫ frozenTorusAlignedH1GroupIsoFinTwo.hom = frozenTorusAlignedH1GroupIsoFinTwo.hom ≫ AddCommGrpCat.ofHom frozenMatrixAddHom",
+       "(((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom frozenLbar)) ≫ frozenTorusAlignedH1ModuleIsoFinTwo.hom = frozenTorusAlignedH1ModuleIsoFinTwo.hom ≫ ModuleCat.ofHom frozenMatrixAddHom.toIntLinearMap",
        :placeholder "apm_t97A04_bridge_2",
        :route-step
-       "t97A04 step 6, express the aligned IntegralH1 matrix calculation as the commuting square used by the comparison naturality proof"},
+       "t97A04 step 6, transfer the aligned IntegralH1 matrix square through the singular-homology comparison into ModuleCat"},
       :id
-      :routes-2026-10-10-t97a04-frozen-integral-h1-map-square-topo2-r1,
+      :routes-2026-10-10-t97a04-frozen-module-h1-map-square-topo2-r1,
       :kind :reusable-theorem,
       :depends-on
       [:routes-2026-10-10-checkpoint-topo2-r5
-       :routes-2026-10-10-t97a04-frozen-aligned-h1-module-coordinate-topo2-r1],
+       :routes-2026-10-10-t97a04-frozen-integral-h1-map-square-topo2-r1],
       :current-residual
-      "Compose singularHomologyComparison_naturality with this commuting square, unfold singularHomologyModuleIsoOfGroupIso, use forgetIntModules faithfulness to obtain the aligned ModuleCat induced-map equation, then identify the consumer map and matrix definitions.",
+      "Identify frozenLbar definitionally with apm_t97a04_Lbar and frozenMatrixAddHom with apm_t97a04_matrix.mulVec in the consumer fixture, then use frozenTorusAlignedH1ModuleIsoFinTwo as the witness for apm_t97A04_bridge_2.",
       :other-consumers []},
      :commands
      [{:cmd "lake env lean /tmp/t97a04_frozen_h1_coordinate.lean",
        :exit 0,
        :output
-       "frozenLbarIntegralH1_map_commutes compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "frozenLbarModuleH1_map_commutes compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
        "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t97a04_frozen_h1_coordinate.lean || true)\"",
        :exit 0}
       {:cmd "sha256sum /tmp/t97a04_frozen_h1_coordinate.lean",
        :exit 0,
        :output
-       "ebc6d1023b77af5375de2ffd15282a7385949519c87590dc2e193b517492ba52  /tmp/t97a04_frozen_h1_coordinate.lean"}
+       "c10c17e87cff020bbe16a848d4b5a64c4425661e0186333f15742f23ede500fd  /tmp/t97a04_frozen_h1_coordinate.lean"}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/t97a04_frozen_h1_coordinate.lean",
+       :exit 1,
+       :finding
+       "The first ModuleCat square stated the matrix morphism with an additive homomorphism; ModuleCat.ofHom requires its canonical integer-linear lift frozenMatrixAddHom.toIntLinearMap."}
+      {:cmd "lake env lean /tmp/t97a04_frozen_h1_coordinate.lean",
+       :exit 1,
+       :finding
+       "Direct definitional reduction of singularHomologyModuleIsoOfGroupIso did not expose the preimage isomorphism under the forgetful functor; the proof now uses forgetIntModules.map_preimage explicitly."}
+      {:cmd "lake env lean /tmp/t97a04_frozen_h1_coordinate.lean",
+       :exit 1,
+       :finding
+       "The initial comparison rewrite exceeded the default heartbeat bound while unfolding categorical constructions; isolating the theorem at 800000 heartbeats exposed the remaining type and reassociation obligations."}
+      {:cmd "lake env lean /tmp/t97a04_frozen_h1_coordinate.lean",
+       :exit 1,
+       :finding
+       "After comparison naturality, simp did not identify the native additive-group functor map with the concrete homologyMap syntactically. Applying congrArg for left composition to the banked commuting square closed the definitionally equal inner equation."}],
      :fixture
      {:path "/tmp/t97a04_frozen_h1_coordinate.lean",
       :sha256
-      "ebc6d1023b77af5375de2ffd15282a7385949519c87590dc2e193b517492ba52"},
+      "c10c17e87cff020bbe16a848d4b5a64c4425661e0186333f15742f23ede500fd"},
      :finding
-     "The full apm_t97A04_bridge_2 proof remains absent. The compiled theorem packages frozenLbarIntegralH1_coordinate as an equality of AddCommGrpCat morphisms: the concrete degree-one homology map followed by the aligned coordinate equals the aligned coordinate followed by frozenMatrixAddHom. It is obtained by evaluating the pointwise theorem at the coordinate of each class and cancelling the aligned equivalence.",
+     "The complete apm_t97A04_bridge_2 fixture is not yet compiled. The fixture now proves the single next prerequisite: after forgetting integer-module structure, singularHomologyComparison_naturality converts the canonical ModuleCat induced map to the additive-group homology map, and frozenLbarIntegralH1_map_commutes supplies the matrix square. Faithfulness of forgetIntModules then yields the aligned ModuleCat commuting square.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t97A04/h1-bridge-assembly",
    :acceptance
@@ -64702,7 +64744,8 @@
     :routes-2026-10-10-t97a04-frozen-hurewicz-basepoint-transport-topo2-r1
     :routes-2026-10-10-t97a04-frozen-integral-h1-coordinate-topo2-r1
     :routes-2026-10-10-t97a04-frozen-aligned-h1-module-coordinate-topo2-r1
-    :routes-2026-10-10-t97a04-frozen-integral-h1-map-square-topo2-r1],
+    :routes-2026-10-10-t97a04-frozen-integral-h1-map-square-topo2-r1
+    :routes-2026-10-10-t97a04-frozen-module-h1-map-square-topo2-r1],
    :current-residual
    "The pi1 matrix equation is banked; align the frozen H1 equivalence and transfer the induced map equality through the Hurewicz and ModuleCat comparisons.",
    :other-consumers []}
@@ -65949,4 +65992,44 @@
    [:lemma-constructiontargets-t97a04frozenh1coordinate-frozenlbarintegralh1-coordinate
     :lemma-constructiontargets-t97a04frozenh1coordinate-frozentorusalignedh1moduleisofintwo
     :lemma-constructiontargets-t97a04frozenh1coordinate-frozentorusalignedh1groupisofintwo],
+   :other-consumers []}
+  {:consumer :t97A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T97A04FrozenH1Coordinate.frozenLbarModuleH1_map_commutes",
+    :type
+    "(((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom frozenLbar)) ≫ frozenTorusAlignedH1ModuleIsoFinTwo.hom = frozenTorusAlignedH1ModuleIsoFinTwo.hom ≫ ModuleCat.ofHom frozenMatrixAddHom.toIntLinearMap"},
+   :lemma
+   {:name
+    "ConstructionTargets.T97A04FrozenH1Coordinate.frozenLbarModuleH1_map_commutes",
+    :reported-by
+    [:routes-2026-10-10-t97a04-h1-bridge-assembly-topo2-r1],
+    :type
+    "(((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom frozenLbar)) ≫ frozenTorusAlignedH1ModuleIsoFinTwo.hom = frozenTorusAlignedH1ModuleIsoFinTwo.hom ≫ ModuleCat.ofHom frozenMatrixAddHom.toIntLinearMap",
+    :proved-in :routes-2026-10-10-t97a04-h1-bridge-assembly-topo2-r1},
+   :id
+   :lemma-constructiontargets-t97a04frozenh1coordinate-frozenlbarmoduleh1-map-commutes,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t97a04frozenh1coordinate-frozenlbarintegralh1-map-commutes
+    :lemma-constructiontargets-integralsingularhomologycomparison-singularhomologycompariso],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison_naturality"},
+   :lemma
+   {:name
+    "ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison_naturality",
+    :reported-by []},
+   :id
+   :lemma-constructiontargets-integralsingularhomologycomparison-singularhomologycompariso,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}]}
