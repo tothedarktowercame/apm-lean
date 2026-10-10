@@ -99418,6 +99418,20 @@
       :exit 0,
       :finding "clean worktree after commit"}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791669233174-3038-78c7fec4",
+     :commands
+     ["git show and diff-tree on f3f1da65e5d564107aea29c0a281efc97dadd787"
+      "sha256sum frozen fixture"
+      "lake build ConstructionTargets.PolygonAnnulusRadialHomotopy"
+      "lake env lean frozen fixture"
+      "comment-stripped placeholder counts"
+      "python3 scripts/statement-registry.py check"
+      "git diff-tree --check"],
+     :finding
+     "PASS: recorded commit is authored by topo-2 and changes only ConstructionTargets/PolygonAnnulusRadialHomotopy.lean; fixture hash matches; annulusRadialHomotopy interpolates from halfCircleMap after radialNormalizeMap at time zero to the identity at time one; both strict annulus bounds and closed-disk membership are preserved, and continuity explicitly discharges the nonzero denominator boundary; annulusHomotopyEquivCircle packages the exact left inverse and the correctly oriented right-inverse homotopy; source and fixture have zero placeholders; fixture reports only propext, Classical.choice, and Quot.sound; registry reports 131 matches and zero mismatches."},
     :commit "f3f1da65e5d564107aea29c0a281efc97dadd787",
     :changed-paths
     ["ConstructionTargets/PolygonAnnulusRadialHomotopy.lean"],
@@ -99428,7 +99442,7 @@
      :sorry-count 0},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/PolygonAnnulusRadialHomotopy.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/annulus-radial-homotopy",
@@ -99558,7 +99572,7 @@
       "annulusRadialHomotopy joins the radius-one-half normalization composite to the identity through the annulus; annulusHomotopyEquivCircle packages the resulting Circle-to-annulus homotopy equivalence."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -102162,7 +102176,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "PolygonAnnulusRadialHomotopy.annulusHomotopyEquivCircle",
@@ -102176,7 +102190,9 @@
     :type
     "The literal annular source 1/4 < radius < 3/4 is homotopy equivalent to Circle by radial normalization and radius-one-half inclusion.",
     :area "polygon-surface-open-cover",
-    :proved-in :routes-2026-10-10-polygon-annulus-radial-homotopy-51},
+    :proved-in :routes-2026-10-10-polygon-annulus-radial-homotopy-51,
+    :banked-by :routes-2026-10-10-polygon-annulus-radial-homotopy-51,
+    :banked-commit "f3f1da65e5d564107aea29c0a281efc97dadd787"},
    :id :lemma-polygonannulusradialhomotopy-annulushomotopyequivcircle,
    :kind :lemma,
    :depends-on
