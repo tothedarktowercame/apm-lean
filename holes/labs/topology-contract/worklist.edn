@@ -96623,13 +96623,42 @@
    "For the clopen Joined component, classify every fiber-index sheet of the refined trivialization as retained or excluded, define the retained discrete index subtype, and assemble the restricted covering trivialization.",
    :other-consumers []}
   {:bounded-exception
+   "This single-consumer package defines the exact retained fiber-index subtype and proves that center-point membership selects a complete sheet; it is the final indexing fact needed before assembling the restricted covering trivialization.",
+   :consumer :t99J01,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/CoveringRetainedSheetIndices.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component/retained-sheet-indices",
+   :acceptance
+   {:implementation
+    "For a bundle trivialization over a path-connected base set and a clopen subset C of its source space, define Retained and RetainedIndex using membership of the inverse-chart point over a chosen chart center. Prove that an inverse-chart point over any base point lies in C exactly when its fiber index is retained, using continuity of the sheet and the banked clopen whole-sheet dichotomy. Do not assemble a restricted trivialization, prove the restricted projection is a covering map or surjective, count fibers, or compute pi1.",
+    :placeholder "the single sorry in apm_t99j01",
+    :route-step
+    "t99J01 component-restriction step 8: define the retained sheet-index subtype and prove that it selects whole sheets before assembling the component-restricted chart",
+    :fixture "/tmp/covering-retained-sheet-indices.lean",
+    :fixture-sha256
+    "a00eeae284c2e660f2afae0397f179726c5bac05e5b905299742761434142679",
+    :gates
+    ["lake build ConstructionTargets.CoveringRetainedSheetIndices"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-10-covering-retained-sheet-indices-46,
+   :kind :reusable-theorem,
+   :depends-on [:routes-2026-10-10-covering-path-connected-chart-45],
+   :current-residual
+   "Use RetainedIndex as the discrete fiber type, restrict the chart equivalence to the clopen Joined component and retained indices, assemble the component-projection covering trivialization, and combine it with the banked surjectivity theorem.",
+   :other-consumers []}
+  {:bounded-exception
    "Single-consumer prerequisite first in the final ledger ranking.",
    :consumer :t99J01,
    :implements-lemma :lemma-iscoveringmap-restrictpathcomponent,
    :evidence
    {:probe
     {:residual
-     "Path-connected covering charts now compile. The remaining restriction proof must define the retained sheet-index subtype and assemble the trivialization of the projection on the clopen Joined component.",
+     "The retained index subtype and its whole-sheet criterion now compile. The original theorem still needs the final restricted Trivialization over Component e and combination with componentProjection_surjective.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
@@ -96639,50 +96668,52 @@
        :status :partial,
        :consumers [:t99J01],
        :depends-on
-       ["PreconnectedClopenSheet.range_subset_or_disjoint_of_isClopen_pathConnected"
-        "CoveringPathConnectedChart.IsCoveringMap.exists_pathConnected_restrictedTrivialization"]}],
+       ["CoveringPathComponentSurjective.componentProjection_surjective"
+        "CoveringPathConnectedChart.IsCoveringMap.exists_pathConnected_restrictedTrivialization"
+        "CoveringRetainedSheetIndices.invFun_mem_iff_retained"]}],
      :prerequisite
      {:bounded-exception
-      "This single-consumer chart-refinement theorem supplies an open path-connected base set for each covering trivialization, which is required before the clopen-component dichotomy can select complete sheets.",
+      "This single-consumer package defines the exact retained fiber-index subtype and proves that center-point membership selects a complete sheet; it is the final indexing fact needed before assembling the restricted covering trivialization.",
       :consumer :t99J01,
       :phase :implementation,
       :state :open,
-      :scope ["ConstructionTargets/CoveringPathConnectedChart.lean"],
+      :scope ["ConstructionTargets/CoveringRetainedSheetIndices.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component/path-connected-chart",
+      "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component/retained-sheet-indices",
       :acceptance
       {:implementation
-       "For a surjective covering p : E -> B over a locally path-connected base and each b : B, choose the canonical covering trivialization and refine its base set to an open path-connected neighborhood of b. Expose both the contained-neighborhood form and a restrOpen trivialization whose base set itself is path connected. Do not select component sheets, restrict the covering domain, count fibers, or compute pi1.",
+       "For a bundle trivialization over a path-connected base set and a clopen subset C of its source space, define Retained and RetainedIndex using membership of the inverse-chart point over a chosen chart center. Prove that an inverse-chart point over any base point lies in C exactly when its fiber index is retained, using continuity of the sheet and the banked clopen whole-sheet dichotomy. Do not assemble a restricted trivialization, prove the restricted projection is a covering map or surjective, count fibers, or compute pi1.",
        :placeholder "the single sorry in apm_t99j01",
        :route-step
-       "t99J01 component-restriction step 7: refine each covering chart to a path-connected base neighborhood before selecting clopen-component sheets",
-       :fixture "/tmp/covering-path-connected-chart.lean",
+       "t99J01 component-restriction step 8: define the retained sheet-index subtype and prove that it selects whole sheets before assembling the component-restricted chart",
+       :fixture "/tmp/covering-retained-sheet-indices.lean",
        :fixture-sha256
-       "fe34c47978fa57b01f6cfb1af4fd2e2eb89f4d113a46b6a0096667cadc60f921",
+       "a00eeae284c2e660f2afae0397f179726c5bac05e5b905299742761434142679",
        :gates
-       ["lake build ConstructionTargets.CoveringPathConnectedChart"
+       ["lake build ConstructionTargets.CoveringRetainedSheetIndices"
         "fixture compiles"
         "zero source and fixture sorry"
         "standard-only axioms"
         "registry check"]},
-      :id :routes-2026-10-10-covering-path-connected-chart-45,
+      :id :routes-2026-10-10-covering-retained-sheet-indices-46,
       :kind :reusable-theorem,
-      :depends-on [:routes-2026-10-10-preconnected-clopen-sheet-44],
+      :depends-on
+      [:routes-2026-10-10-covering-path-connected-chart-45],
       :current-residual
-      "For the clopen Joined component, classify every fiber-index sheet of the refined trivialization as retained or excluded, define the retained discrete index subtype, and assemble the restricted covering trivialization.",
+      "Use RetainedIndex as the discrete fiber type, restrict the chart equivalence to the clopen Joined component and retained indices, assemble the component-projection covering trivialization, and combine it with the banked surjectivity theorem.",
       :other-consumers []},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
-     [{:cmd "lake env lean /tmp/covering-path-connected-chart.lean",
+     [{:cmd "lake env lean /tmp/covering-retained-sheet-indices.lean",
        :exit 0,
        :finding
-       "path-connected refinement of surjective covering trivializations compiles with standard axioms"}
-      {:cmd "sha256sum /tmp/covering-path-connected-chart.lean",
+       "the retained sheet-index predicate and its point-independence theorem compile with standard axioms"}
+      {:cmd "sha256sum /tmp/covering-retained-sheet-indices.lean",
        :exit 0,
        :finding
-       "fe34c47978fa57b01f6cfb1af4fd2e2eb89f4d113a46b6a0096667cadc60f921"}
+       "a00eeae284c2e660f2afae0397f179726c5bac05e5b905299742761434142679"}
       {:cmd
-       "rg -n \"\\b(sorry|admit)\\b\" /tmp/covering-path-connected-chart.lean",
+       "rg -n \"\\b(sorry|admit)\\b\" /tmp/covering-retained-sheet-indices.lean",
        :exit 1,
        :expected-exit 1,
        :finding "no placeholders"}
@@ -96691,27 +96722,23 @@
        :finding "131 registered statements match, 0 do not"}
       {:cmd "git status --short", :exit 0, :finding "clean"}],
      :diagnostic-history
-     [{:cmd "lake env lean /tmp/covering-path-connected-chart.lean",
+     [{:cmd "lake env lean /tmp/covering-retained-sheet-indices.lean",
        :exit 1,
        :finding
-       "The first draft omitted the Bundle namespace and attempted to construct a fiber trivialization without deriving a Nonempty fiber from surjectivity; opened Bundle and added the exact surjectivity hypothesis."}
-      {:cmd "lake env lean /tmp/covering-path-connected-chart.lean",
+       "The first draft passed subtype pairs to Trivialization.invFun, whose argument is an ambient base-and-fiber pair; changed those applications to ambient pairs and exposed the sheet membership type."}
+      {:cmd "lake env lean /tmp/covering-retained-sheet-indices.lean",
        :exit 1,
        :finding
-       "Dot notation did not resolve the newly namespaced theorem from the companion refinement theorem; using its explicit namespace compiled."}
-      {:cmd "lake env lean /tmp/covering-path-connected-chart.lean",
-       :exit 1,
-       :finding
-       "The restricted-chart membership proof unnecessarily requested a new Nonempty fiber instance; using the recorded containment of the refined base set avoided that requirement."}],
+       "The continuous-sheet proof initially let comp_continuous infer the wrong intermediate map; supplied continuous_subtype_val.prodMk continuous_const and discharged target membership explicitly."}],
      :fixture
-     {:path "/tmp/covering-path-connected-chart.lean",
+     {:path "/tmp/covering-retained-sheet-indices.lean",
       :sha256
-      "fe34c47978fa57b01f6cfb1af4fd2e2eb89f4d113a46b6a0096667cadc60f921",
+      "a00eeae284c2e660f2afae0397f179726c5bac05e5b905299742761434142679",
       :interface
-      "IsCoveringMap.exists_pathConnected_trivialization and exists_pathConnected_restrictedTrivialization refine a surjective covering chart to an open path-connected base set."},
+      "Retained and RetainedIndex select sheet indices by membership over a chart center; invFun_mem_iff_retained proves this selection is independent of the point in a path-connected chart base for a clopen domain subset."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component",
@@ -96737,7 +96764,8 @@
     :routes-2026-10-10-covering-total-loc-path-connected-42
     :routes-2026-10-10-covering-path-component-surjective-43
     :routes-2026-10-10-preconnected-clopen-sheet-44
-    :routes-2026-10-10-covering-path-connected-chart-45],
+    :routes-2026-10-10-covering-path-connected-chart-45
+    :routes-2026-10-10-covering-retained-sheet-indices-46],
    :current-residual
    "Establish constant fiber cardinality and the induced subgroup image.",
    :other-consumers []}
@@ -97964,7 +97992,8 @@
     :lemma-coveringtotallocpathconnected-iscoveringmap-totallocpathconnectedspace
     :lemma-coveringpathcomponentsurjective-componentprojection-surjective
     :lemma-preconnectedclopensheet-range-subset-or-disjoint-of-isclopen-pathconnected
-    :lemma-coveringpathconnectedchart-iscoveringmap-exists-pathconnected-restrictedtriviali],
+    :lemma-coveringpathconnectedchart-iscoveringmap-exists-pathconnected-restrictedtriviali
+    :lemma-coveringretainedsheetindices-invfun-mem-iff-retained],
    :other-consumers []}
   {:consumer :t99J01,
    :phase :lemma,
@@ -99199,6 +99228,19 @@
    :kind :lemma,
    :depends-on
    [:lemma-preconnectedclopensheet-range-subset-or-disjoint-of-isclopen-pathconnected],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "CoveringRetainedSheetIndices.invFun_mem_iff_retained"},
+   :lemma
+   {:name "CoveringRetainedSheetIndices.invFun_mem_iff_retained",
+    :reported-by []},
+   :id :lemma-coveringretainedsheetindices-invfun-mem-iff-retained,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
