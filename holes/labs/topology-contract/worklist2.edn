@@ -59132,6 +59132,37 @@
    :current-residual
    "Join the punctured right-core segment to the collar and based Circle meridian by a compatible homotopy, then extend to tube deformations and gluing.",
    :other-consumers []}
+  {:bounded-exception
+   "single-consumer deleted-endpoint comparison for the t02A03 right-core and collar attachments",
+   :consumer :t02A03,
+   :phase :probe,
+   :state :open,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t02A03/geometric-right-core-collar-endpoint",
+   :acceptance
+   {:probe
+    "Compile and bank apm_t02a03_rightCore_collar_deletedEndpoint from /tmp/t02a03_geometric_tube_cover.lean. Prove that the frozen right-core attachment closure at parameter zero is exactly the frozen collar closure at parameter one, using their two banked endpoint equalities to the Euclidean origin. This supplies the endpoint compatibility equation required by t02A03 route step 2; state it in ambient Euclidean space and do not claim the deleted endpoint lies in geometricY, or claim an attachment homotopy, tube deformation, or gluing equivalence.",
+    :declaration "apm_t02a03_rightCore_collar_deletedEndpoint",
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "t02A03 step 2, identify the deleted endpoints of the closed right-core and collar attachment representations"},
+   :representation
+   {:source
+    "The frozen closed right-core attachment segment evaluated at parameter zero",
+    :target
+    "The frozen closed vertical collar evaluated at parameter one",
+    :direction
+    "Exact ambient Euclidean point equality from the source right-core endpoint representation to the target collar endpoint representation"},
+   :id
+   :routes-2026-10-10-t02a03-geometric-right-core-collar-endpoint-topo2-r1,
+   :kind :representation-comparison,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo2-r5
+    :routes-2026-10-10-t02a03-geometric-right-core-attachment-segment-topo2-r1],
+   :current-residual
+   "Construct a compatible geometricY homotopy between the punctured right-core segment and collar leading to the based Circle meridian, then extend to tube deformations and gluing.",
+   :other-consumers []}
   {:consumer :t02A03,
    :evidence
    {:probe
@@ -59140,62 +59171,60 @@
      :fixture
      {:path "/tmp/t02a03_geometric_tube_cover.lean",
       :sha256
-      "e61cbc98aa69ee5c3bc7066839e53deb346bb7ee9ed0e7ed6a82090d04e3a138"},
+      "d626ecd219ec8dfd188a7a4115a25e02c63a283a3a6cd38846d33a07dd710524"},
      :commands
      [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
        :exit 0,
        :output
-       "apm_t02a03_rightCoreAttachmentClosureMap, apm_t02a03_rightCoreAttachmentClosureMap_zero, apm_t02a03_rightCoreAttachmentPoint_mem_geometricY, and apm_t02a03_rightCoreAttachmentMap compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "apm_t02a03_rightCore_collar_deletedEndpoint compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
        "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
        :exit 0}
       {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
        :exit 0,
        :output
-       "e61cbc98aa69ee5c3bc7066839e53deb346bb7ee9ed0e7ed6a82090d04e3a138  /tmp/t02a03_geometric_tube_cover.lean"}
+       "d626ecd219ec8dfd188a7a4115a25e02c63a283a3a6cd38846d33a07dd710524  /tmp/t02a03_geometric_tube_cover.lean"}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
-     :diagnostic-history
-     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 1,
-       :finding
-       "The first right-core segment proof passed the first-coordinate equation 1 - cos t = 0 directly to a lemma requiring cos t = 1, and did not expose positivity of t when proving the lower small-angle bound. Normalizing the coordinate equation by linear arithmetic and using t > 0 with pi > 0 corrected both obligations; the rerun compiled."}],
      :finding
-     "The final geometricY-to-Y equivalence is still absent, but a matching right-core attachment segment now compiles. The right core restricted to the closed interval [0,1] is continuous and has value zero at parameter zero, exactly matching the deleted endpoint of the closed collar. On the punctured interval (0,1], its image is nonzero: the small-angle characterization cos t = 1 iff t = 0 converts the first coordinate equation into a contradiction. Therefore the punctured segment bundles continuously into geometricY.",
+     "The complete geometricY-to-Y equivalence is still absent, but the two attachment closures now have a compiled exact endpoint comparison. The right-core closure at parameter zero equals the collar closure at parameter one, because both equal the Euclidean origin. The equality is correctly stated in the ambient Euclidean space: neither side is falsely promoted to geometricY at the deleted endpoint. This supplies the compatibility equation required before gluing their punctured geometricY maps.",
      :residual
-     "Bank the closed and punctured right-core attachment segment. Then compare its deleted-origin endpoint with the closed collar endpoint, construct a homotopy in geometricY joining the punctured segment to the collar and based meridian, and extend it over the tube pieces for gluing.",
+     "Bank the deleted-endpoint comparison. Then construct the compatible homotopy in geometricY between the punctured right-core segment and collar leading to the based Circle meridian, extend it over the tube pieces, and glue the final geometricY-to-Y equivalence.",
      :prerequisite
      {:bounded-exception
-      "single-consumer punctured right-core attachment segment for the t02A03 geometric complement",
+      "single-consumer deleted-endpoint comparison for the t02A03 right-core and collar attachments",
       :consumer :t02A03,
       :phase :probe,
       :state :open,
       :scope [],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t02A03/geometric-right-core-attachment-segment",
+      "TOPOLOGY-ROUTES.md/t02A03/geometric-right-core-collar-endpoint",
       :acceptance
       {:probe
-       "Compile and bank apm_t02a03_rightCoreAttachmentClosureMap, apm_t02a03_rightCoreAttachmentClosureMap_zero, apm_t02a03_rightCoreAttachmentPoint_mem_geometricY, and apm_t02a03_rightCoreAttachmentMap from /tmp/t02a03_geometric_tube_cover.lean. Restrict the frozen right core to Set.Icc 0 1 as a continuous Euclidean-space map with zero endpoint at parameter zero, prove every point with parameter in Set.Ioc 0 1 is nonzero and hence belongs to geometricY, and bundle that punctured restriction as a continuous map into geometricY. This supplies the right-core side of the deleted-origin attachment required by t02A03 route step 2; do not yet claim an attachment homotopy, tube deformation, or gluing equivalence.",
-       :declarations
-       ["apm_t02a03_rightCoreAttachmentClosureMap"
-        "apm_t02a03_rightCoreAttachmentClosureMap_zero"
-        "apm_t02a03_rightCoreAttachmentPoint_mem_geometricY"
-        "apm_t02a03_rightCoreAttachmentMap"],
+       "Compile and bank apm_t02a03_rightCore_collar_deletedEndpoint from /tmp/t02a03_geometric_tube_cover.lean. Prove that the frozen right-core attachment closure at parameter zero is exactly the frozen collar closure at parameter one, using their two banked endpoint equalities to the Euclidean origin. This supplies the endpoint compatibility equation required by t02A03 route step 2; state it in ambient Euclidean space and do not claim the deleted endpoint lies in geometricY, or claim an attachment homotopy, tube deformation, or gluing equivalence.",
+       :declaration "apm_t02a03_rightCore_collar_deletedEndpoint",
        :placeholder "the sole sorry in apm_t02a03",
        :route-step
-       "t02A03 step 2, construct the closed right-core segment at the deleted origin and its punctured continuous map into geometricY"},
+       "t02A03 step 2, identify the deleted endpoints of the closed right-core and collar attachment representations"},
+      :representation
+      {:source
+       "The frozen closed right-core attachment segment evaluated at parameter zero",
+       :target
+       "The frozen closed vertical collar evaluated at parameter one",
+       :direction
+       "Exact ambient Euclidean point equality from the source right-core endpoint representation to the target collar endpoint representation"},
       :id
-      :routes-2026-10-10-t02a03-geometric-right-core-attachment-segment-topo2-r1,
-      :kind :reusable-theorem,
+      :routes-2026-10-10-t02a03-geometric-right-core-collar-endpoint-topo2-r1,
+      :kind :representation-comparison,
       :depends-on
       [:routes-2026-10-10-checkpoint-topo2-r5
-       :routes-2026-10-10-t02a03-geometric-attachment-collar-closure-topo2-r1],
+       :routes-2026-10-10-t02a03-geometric-right-core-attachment-segment-topo2-r1],
       :current-residual
-      "Join the punctured right-core segment to the collar and based Circle meridian by a compatible homotopy, then extend to tube deformations and gluing.",
+      "Construct a compatible geometricY homotopy between the punctured right-core segment and collar leading to the based Circle meridian, then extend to tube deformations and gluing.",
       :other-consumers []}}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/closure",
    :acceptance
@@ -59221,7 +59250,8 @@
     :routes-2026-10-10-t02a03-geometric-meridian-quarter-turn-topo2-r1
     :routes-2026-10-10-t02a03-geometric-attachment-collar-topo2-r1
     :routes-2026-10-10-t02a03-geometric-attachment-collar-closure-topo2-r1
-    :routes-2026-10-10-t02a03-geometric-right-core-attachment-segment-topo2-r1],
+    :routes-2026-10-10-t02a03-geometric-right-core-attachment-segment-topo2-r1
+    :routes-2026-10-10-t02a03-geometric-right-core-collar-endpoint-topo2-r1],
    :current-residual
    "One placeholder: two explicit homotopy equivalences, with the punctured-disk factor adapter-sized and the geometric tube deformation still missing.",
    :other-consumers []}
