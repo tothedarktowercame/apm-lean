@@ -55017,52 +55017,55 @@
    "single-consumer bounded affine-chart source theorem",
    :consumer :t94A08,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/t94a08_affine_source_open.lean",
-      :sha256
-      "e38613fe5bede1d6eba58c349ce03d0cf874f5e718b3f2e580990305776a4b6e"},
-     :commands
-     [{:cmd "sha256sum /tmp/t94a08_affine_source_open.lean",
-       :exit 0,
-       :output
-       "e38613fe5bede1d6eba58c349ce03d0cf874f5e718b3f2e580990305776a4b6e  /tmp/t94a08_affine_source_open.lean"}
-      {:cmd "lake env lean /tmp/t94a08_affine_source_open.lean",
-       :exit 0}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t94a08_affine_source_open.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}
-      {:cmd
-       "rg -n '^theorem affineSource_(preimage|isOpen)' /tmp/t94a08_affine_source_open.lean",
-       :exit 0,
-       :output
-       "11:theorem affineSource_preimage; 21:theorem affineSource_isOpen"}],
-     :warnings [],
-     :implementation
-     {:scope
-      ["ConstructionTargets/ComplexProjectiveChartTargets.lean"],
-      :declarations
-      ["ConstructionTargets.ComplexProjectiveChartTargets.affineSource_preimage"
-       "ConstructionTargets.ComplexProjectiveChartTargets.affineSource_isOpen"],
-      :instructions
-      "Insert the two compiled theorems after chartInverse. Preserve the generic complex dimension n and the frozen coinduced topology. affineSource_preimage must prove the exact set equality using exists_smul_eq_mk_rep and unit-scalar nonvanishing; affineSource_isOpen must rewrite by isOpen_coinduced and that equality, then use continuity of coordinate evaluation on the nonzero-vector subtype. Do not inhabit AffineChartConstruction or alter its definition in this row.",
-      :acceptance
-      {:axioms :standard-only,
-       :commands
-       ["lake env lean ConstructionTargets/ComplexProjectiveChartTargets.lean"
-        "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/ComplexProjectiveChartTargets.lean || true)\""
-        "python3 scripts/statement-registry.py check"]}},
-     :residual
-     "With affine chart sources proved open, the next t94A08 route step is the actual coordinate-ratio OpenPartialHomeomorph: prove coordinates and chartInverse are inverse on the source and establish continuity in both directions. The conic and nodal-neighborhood arguments remain downstream."}},
+   {:placeholder-delta 0,
+    :residual
+    "With affine chart sources proved open, the next t94A08 route step is the actual coordinate-ratio OpenPartialHomeomorph: prove coordinates and chartInverse are inverse on the source and establish continuity in both directions. The conic and nodal-neighborhood arguments remain downstream.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms [propext Classical.choice Quot.sound],
+    :author "topo-6",
+    :commands
+    [{:cmd "sha256sum /tmp/t94a08_affine_source_open.lean",
+      :exit 0,
+      :output
+      "e38613fe5bede1d6eba58c349ce03d0cf874f5e718b3f2e580990305776a4b6e  /tmp/t94a08_affine_source_open.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/ComplexProjectiveChartTargets.lean",
+      :exit 0}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/ComplexProjectiveChartTargets.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r b82c948880b5f4ad8caec624cf7dc3e1e24e48d2",
+      :exit 0,
+      :output
+      "ConstructionTargets/ComplexProjectiveChartTargets.lean"}],
+    :diagnostic-history
+    [{:cmd "lake env lean /tmp/t94a08_affine_source_axioms.lean",
+      :exit 1,
+      :output
+      "Unknown constants because importing the unbuilt module loaded its prior .olean.",
+      :correction
+      "Ran #print axioms while compiling the edited source module, then removed the temporary print commands and reran all final gates."}],
+    :commit "b82c948880b5f4ad8caec624cf7dc3e1e24e48d2",
+    :changed-paths
+    ["ConstructionTargets/ComplexProjectiveChartTargets.lean"],
+    :fixture
+    {:path "/tmp/t94a08_affine_source_open.lean",
+     :sha256
+     "e38613fe5bede1d6eba58c349ce03d0cf874f5e718b3f2e580990305776a4b6e"},
+    :declarations
+    ["ConstructionTargets.ComplexProjectiveChartTargets.affineSource_preimage"
+     "ConstructionTargets.ComplexProjectiveChartTargets.affineSource_isOpen"]},
    :instructions
    "Insert the two compiled theorems after chartInverse. Preserve the generic complex dimension n and the frozen coinduced topology. affineSource_preimage must prove the exact set equality using exists_smul_eq_mk_rep and unit-scalar nonvanishing; affineSource_isOpen must rewrite by isOpen_coinduced and that equality, then use continuity of coordinate evaluation on the nonzero-vector subtype. Do not inhabit AffineChartConstruction or alter its definition in this row.",
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ComplexProjectiveChartTargets.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t94A08/affine-chart-source",
    :acceptance
