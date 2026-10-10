@@ -62868,83 +62868,98 @@
    "Bundle the radial interpolation as a homotopy through LeftTubeMinusCore, prove its endpoints, and assemble the torus HomotopyEquiv.",
    :other-consumers []}
   {:bounded-exception
+   "single-consumer bundled deleted-core radial map for t02A03",
+   :consumer :t02A03,
+   :phase :probe,
+   :state :open,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-radial-map",
+   :acceptance
+   {:probe
+    "Compile and bank apm_t02a03_leftTubeRadialMap from /tmp/t02a03_geometric_tube_cover.lean. Package the continuous ambient radial interpolation as a ContinuousMap into LeftTubeMinusCore using the banked left-tube membership and deleted-core exclusion theorems. Do not yet claim endpoint equalities, the bundled homotopy, HomotopyEquiv, or gluing.",
+    :declaration "apm_t02a03_leftTubeRadialMap",
+    :type
+    "C(unitInterval × apm_t02a03_LeftTubeMinusCore, apm_t02a03_LeftTubeMinusCore)",
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "t02A03 step 2, package the inverse-after-forward radial interpolation through the punctured left tube"},
+   :id :routes-2026-10-10-t02a03-left-tube-radial-map-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo2-r5
+    :routes-2026-10-10-t02a03-left-tube-radial-core-exclusion-topo2-r1],
+   :current-residual
+   "Prove the radial map endpoint equalities, bundle the inverse-after-forward homotopy, and assemble the torus HomotopyEquiv.",
+   :other-consumers []}
+  {:bounded-exception
    "single-consumer explicit punctured-left-tube model for t02A03",
    :consumer :t02A03,
    :evidence
    {:probe
     {:residual
-     "Bank deleted-core exclusion. Then bundle the radial interpolation as a homotopy through LeftTubeMinusCore, prove its endpoints, and assemble the torus HomotopyEquiv.",
+     "Bank the bundled radial map. Then prove its endpoint equalities, bundle the inverse-after-forward homotopy, and assemble the torus HomotopyEquiv.",
      :outcome :revise,
      :warnings
-     ["/tmp/t02a03_geometric_tube_cover.lean:786:38: unnecessarySeqFocus linter warning in a previously banked theorem"],
+     ["/tmp/t02a03_geometric_tube_cover.lean:786:38: Used tac1 <;> tac2 where (tac1; tac2) would suffice"],
      :missing-theorems
-     [{:name "apm_t02a03_leftTubeRadialPoint_not_mem_leftCore",
+     [{:name "apm_t02a03_leftTubeRadialMap",
        :type
-       "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubeRadialPoint tp ∉ Set.range apm_t02a03_leftCore",
+       "C(unitInterval × apm_t02a03_LeftTubeMinusCore, apm_t02a03_LeftTubeMinusCore)",
        :status :proved,
        :consumers [:t02A03],
        :depends-on
-       ["apm_t02a03_leftTubeNormalComplex_radialPoint"
-        "apm_t02a03_leftTubeRadialNormalRadius_pos"
-        "apm_t02a03_leftTubeNormalAngular_ne_zero"]}],
+       ["apm_t02a03_leftTubeRadialPoint_not_mem_leftCore"]}],
      :prerequisite
      {:bounded-exception
-      "single-consumer deleted-core exclusion for the t02A03 radial interpolation",
+      "single-consumer bundled deleted-core radial map for t02A03",
       :consumer :t02A03,
       :phase :probe,
       :state :open,
       :scope [],
-      :dag-node
-      "TOPOLOGY-ROUTES.md/t02A03/left-tube-radial-core-exclusion",
+      :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-radial-map",
       :acceptance
       {:probe
-       "Compile and bank apm_t02a03_leftTubeRadialPoint_not_mem_leftCore from /tmp/t02a03_geometric_tube_cover.lean. Use the normal zero-locus equivalence, exact radial normal-coordinate identity, strict positivity of the radial coefficient, and nonvanishing of the normalized Circle direction to prove every interpolation point remains outside the frozen left core. Do not yet claim the bundled homotopy, HomotopyEquiv, or gluing.",
-       :declaration "apm_t02a03_leftTubeRadialPoint_not_mem_leftCore",
+       "Compile and bank apm_t02a03_leftTubeRadialMap from /tmp/t02a03_geometric_tube_cover.lean. Package the continuous ambient radial interpolation as a ContinuousMap into LeftTubeMinusCore using the banked left-tube membership and deleted-core exclusion theorems. Do not yet claim endpoint equalities, the bundled homotopy, HomotopyEquiv, or gluing.",
+       :declaration "apm_t02a03_leftTubeRadialMap",
        :type
-       "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubeRadialPoint tp ∉ Set.range apm_t02a03_leftCore",
+       "C(unitInterval × apm_t02a03_LeftTubeMinusCore, apm_t02a03_LeftTubeMinusCore)",
        :placeholder "the sole sorry in apm_t02a03",
        :route-step
-       "t02A03 step 2, prove the inverse-after-forward radial interpolation avoids the deleted core"},
-      :id
-      :routes-2026-10-10-t02a03-left-tube-radial-core-exclusion-topo2-r1,
+       "t02A03 step 2, package the inverse-after-forward radial interpolation through the punctured left tube"},
+      :id :routes-2026-10-10-t02a03-left-tube-radial-map-topo2-r1,
       :kind :reusable-theorem,
       :depends-on
       [:routes-2026-10-10-checkpoint-topo2-r5
-       :routes-2026-10-10-t02a03-left-tube-radial-normal-coordinate-topo2-r1],
+       :routes-2026-10-10-t02a03-left-tube-radial-core-exclusion-topo2-r1],
       :current-residual
-      "Bundle the radial interpolation as a homotopy through LeftTubeMinusCore, prove its endpoints, and assemble the torus HomotopyEquiv.",
+      "Prove the radial map endpoint equalities, bundle the inverse-after-forward homotopy, and assemble the torus HomotopyEquiv.",
       :other-consumers []},
      :commands
      [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
        :exit 0,
        :output
-       "apm_t02a03_leftTubeRadialPoint_not_mem_leftCore compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "apm_t02a03_leftTubeRadialMap compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
        "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
        :exit 0}
       {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
        :exit 0,
        :output
-       "c5b3c22201911af17ee57262b098376c6f0ef7b545e8886c8e833dc535ae8164  /tmp/t02a03_geometric_tube_cover.lean"}
+       "b06736dddeefb568a7555caf9c0051824b33e0c095b0827de9cd0e03d0f059fc  /tmp/t02a03_geometric_tube_cover.lean"}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
-     :diagnostic-history
-     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 1,
-       :finding
-       "The initial proof tried to rewrite with a generic smul_eq_zero theorem, but the real scalar action on Complex did not match that theorem's inferred structure. Recasting the scalar action as multiplication by the coerced real complex number and using mul_eq_zero, Complex.ofReal_ne_zero, coefficient positivity, and direction nonvanishing completed the proof."}],
      :fixture
      {:path "/tmp/t02a03_geometric_tube_cover.lean",
       :sha256
-      "c5b3c22201911af17ee57262b098376c6f0ef7b545e8886c8e833dc535ae8164"},
+      "b06736dddeefb568a7555caf9c0051824b33e0c095b0827de9cd0e03d0f059fc"},
      :finding
-     "The full HomotopyEquiv remains absent. The compiled theorem proves every radial interpolation point lies outside the frozen left core: core membership would force its normal coordinate to vanish, while the exact normal formula is a product of a strictly positive radius and a nonzero Circle direction.",
+     "The full HomotopyEquiv remains absent. The compiled continuous map packages the radial interpolation directly in LeftTubeMinusCore, using the banked left-tube membership and deleted-core exclusion proofs. Endpoint equalities can now be lifted through the subtype and used to construct the inverse-after-forward homotopy.",
      :seat "topo-8"}},
    :phase :probe,
    :type
    "Nonempty (ContinuousMap.HomotopyEquiv LeftTubeMinusCore ConstructionTargets.TorusCircleWedgeOpenCover.Torus)",
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-punctured-model",
    :acceptance
@@ -63000,7 +63015,8 @@
     :routes-2026-10-10-t02a03-left-tube-reconstructed-planar-polar-topo2-r1
     :routes-2026-10-10-t02a03-left-tube-interpolated-planar-norm-topo2-r1
     :routes-2026-10-10-t02a03-left-tube-radial-normal-coordinate-topo2-r1
-    :routes-2026-10-10-t02a03-left-tube-radial-core-exclusion-topo2-r1],
+    :routes-2026-10-10-t02a03-left-tube-radial-core-exclusion-topo2-r1
+    :routes-2026-10-10-t02a03-left-tube-radial-map-topo2-r1],
    :current-residual
    "After the punctured-left-tube model is banked, construct the right-tube-minus-deleted-attachment model extending the based core homotopy, then overlap compatibility and gluing for the full geometricY equivalence.",
    :other-consumers []}
@@ -64239,4 +64255,25 @@
    [:lemma-apm-t02a03-lefttubenormalcomplex-radialpoint
     :lemma-apm-t02a03-lefttuberadialnormalradius-pos
     :lemma-apm-t02a03-lefttubenormalangular-ne-zero],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t02a03_leftTubeRadialMap",
+    :type
+    "C(unitInterval × apm_t02a03_LeftTubeMinusCore, apm_t02a03_LeftTubeMinusCore)"},
+   :lemma
+   {:name "apm_t02a03_leftTubeRadialMap",
+    :reported-by
+    [:routes-2026-10-10-t02a03-left-tube-punctured-model-topo2-r1],
+    :type
+    "C(unitInterval × apm_t02a03_LeftTubeMinusCore, apm_t02a03_LeftTubeMinusCore)",
+    :proved-in
+    :routes-2026-10-10-t02a03-left-tube-punctured-model-topo2-r1},
+   :id :lemma-apm-t02a03-lefttuberadialmap,
+   :kind :lemma,
+   :depends-on
+   [:lemma-apm-t02a03-lefttuberadialpoint-not-mem-leftcore],
    :other-consumers []}]}
