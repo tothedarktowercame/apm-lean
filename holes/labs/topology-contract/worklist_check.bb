@@ -135,7 +135,13 @@
             (cond
               (= sha current) nil
               (some #(= sha (committed-file-sha % p)) commits) nil
-              (and out-of-repo? (nil? current) (= sha (file-sha (str fixture-store "/" sha)))) nil
+              ;; `/tmp` paths are reusable names, not stable identities.  A
+              ;; later dependent probe may legitimately rewrite the same
+              ;; pathname while the completed row's exact bytes remain in
+              ;; the immutable, content-addressed fixture store.  Consult
+              ;; that store regardless of whether the ephemeral path is now
+              ;; absent or contains a newer fixture.
+              (and out-of-repo? (= sha (file-sha (str fixture-store "/" sha)))) nil
               (and out-of-repo? (nil? current)
                    (= :pass (get-in i [:evidence :review :outcome])))
               (swap! lost-fixtures conj (:id i))
