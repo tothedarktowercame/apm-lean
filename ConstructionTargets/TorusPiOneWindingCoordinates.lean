@@ -247,4 +247,29 @@ theorem frozenLbarCircleImagePath_eq_circleMatrixMappedPath
   · exact congrArg Subtype.val
       (congrArg Prod.snd (frozenTorusHomeomorphCircleProd_frozenLbar (gamma t)))
 
+theorem frozenLbar_base : frozenLbar (0, 0) = ((0, 0) : FrozenTorus) := by
+  simp [frozenLbar]
+
+def frozenLbarBasedPath
+    (gamma : Path ((0, 0) : FrozenTorus) (0, 0)) :
+    Path ((0, 0) : FrozenTorus) (0, 0) :=
+  (gamma.map frozenLbar.continuous).cast frozenLbar_base.symm frozenLbar_base.symm
+
+def frozenLbarPi1Map :
+    FundamentalGroup FrozenTorus (0, 0) →* FundamentalGroup FrozenTorus (0, 0) :=
+  FundamentalGroup.mapOfEq frozenLbar frozenLbar_base
+
+theorem frozenLbarPi1Map_mk
+    (gamma : Path ((0, 0) : FrozenTorus) (0, 0)) :
+    frozenLbarPi1Map (Path.Homotopic.Quotient.mk gamma) =
+      Path.Homotopic.Quotient.mk (frozenLbarBasedPath gamma) := by
+  rw [frozenLbarPi1Map, FundamentalGroup.mapOfEq_apply]
+  rfl
+
+theorem frozenCircleImagePath_frozenLbarBasedPath
+    (gamma : Path ((0, 0) : FrozenTorus) (0, 0)) :
+    frozenCircleImagePath (frozenLbarBasedPath gamma) =
+      frozenLbarCircleImagePath gamma := by
+  ext t <;> rfl
+
 end ConstructionTargets.TorusPiOneWindingCoordinates
