@@ -59677,6 +59677,33 @@
    :current-residual
    "Extend the based attachment across the right tube, construct compatible tube-piece deformation data, and glue the geometricY-to-Y equivalence.",
    :other-consumers []}
+  {:bounded-exception
+   "single-consumer composed based attachment homotopy for the t02A03 punctured right-core segment",
+   :consumer :t02A03,
+   :phase :probe,
+   :state :open,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t02A03/geometric-right-core-based-attachment-homotopy",
+   :acceptance
+   {:probe
+    "Compile and bank apm_t02a03_rightCoreLiftHomotopy, apm_t02a03_rightCoreAnchorContractionHomotopy, and apm_t02a03_rightCoreBasedAttachmentHomotopy from /tmp/t02a03_geometric_tube_cover.lean. Package the banked vertical lift as a ContinuousMap.Homotopy from the punctured right-core attachment map to its lifted map; package the banked contraction as a ContinuousMap.Homotopy from that lifted map to the constant geometricY point given by the Circle meridian at Circle.exp (Real.pi / 2); and compose them with Homotopy.trans. This supplies the based attachment homotopy required by t02A03 route step 2; do not yet claim an extension over the right tube, tube-wide deformation data, or a gluing equivalence.",
+    :declarations
+    ["apm_t02a03_rightCoreLiftHomotopy"
+     "apm_t02a03_rightCoreAnchorContractionHomotopy"
+     "apm_t02a03_rightCoreBasedAttachmentHomotopy"],
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "t02A03 step 2, package and compose the punctured right-core lift and contraction into the based Circle-meridian attachment homotopy"},
+   :id
+   :routes-2026-10-10-t02a03-geometric-right-core-based-attachment-homotopy-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo2-r5
+    :routes-2026-10-10-t02a03-geometric-anchor-circle-meridian-quarter-turn-topo2-r1],
+   :current-residual
+   "Extend the based attachment homotopy across the right tube, construct compatible deformation data on the other tube piece, and glue the geometricY-to-Y equivalence.",
+   :other-consumers []}
   {:consumer :t02A03,
    :evidence
    {:probe
@@ -59685,61 +59712,56 @@
      :fixture
      {:path "/tmp/t02a03_geometric_tube_cover.lean",
       :sha256
-      "65b4bf238aa8cd24732e4a97133c37b49c3271f7f1e0f88c6bbfac555e0009ce"},
+      "03caeef04ef63e83ed7d18db409c345c504bc183f7880e468fde0580ae1c37dd"},
      :commands
      [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
        :exit 0,
        :output
-       "apm_t02a03_anchor_eq_circleMeridianMap_quarterTurn compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "apm_t02a03_rightCoreLiftHomotopy, apm_t02a03_rightCoreAnchorContractionHomotopy, and apm_t02a03_rightCoreBasedAttachmentHomotopy compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
        "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
        :exit 0}
       {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
        :exit 0,
        :output
-       "65b4bf238aa8cd24732e4a97133c37b49c3271f7f1e0f88c6bbfac555e0009ce  /tmp/t02a03_geometric_tube_cover.lean"}
+       "03caeef04ef63e83ed7d18db409c345c504bc183f7880e468fde0580ae1c37dd  /tmp/t02a03_geometric_tube_cover.lean"}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
      :finding
-     "The full right-tube deformation and gluing equivalence remain absent, but the contracted attachment endpoint now has a compiled equality to the based Circle meridian inside the exact geometricY subtype. The constant meridian anchor reached by the right-core contraction equals apm_t02a03_circleMeridianMap at Circle.exp (pi/2), by lifting the banked ambient quarter-turn equality through Subtype.ext. This supplies the based endpoint equation needed before extending the attachment across the right tube.",
+     "The geometricY-to-Y equivalence is still absent, but the banked vertical lift and anchor contraction now compose into one compiled attachment homotopy. The first Homotopy packages the lift from apm_t02a03_rightCoreAttachmentMap to apm_t02a03_rightCoreLiftedMap. The second packages the contraction to the constant Circle-meridian value at Circle.exp (pi/2), using the banked subtype endpoint equality. Their Homotopy.trans is the precise based attachment object needed before extending the deformation over the right tube.",
      :residual
-     "Bank the geometricY subtype equality between the contracted anchor and the quarter-turn Circle meridian point. Then extend the based attachment across the right tube, construct compatible tube-piece deformation data, and assemble the geometricY-to-Y gluing equivalence and final closure.",
+     "Bank the composed based attachment homotopy. Then extend it from the punctured right-core segment across the right tube, construct compatible deformation data on the remaining tube piece, and assemble the geometricY-to-Y gluing equivalence and final closure.",
      :prerequisite
      {:bounded-exception
-      "single-consumer based Circle-meridian attachment comparison for t02A03",
+      "single-consumer composed based attachment homotopy for the t02A03 punctured right-core segment",
       :consumer :t02A03,
       :phase :probe,
       :state :open,
       :scope [],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t02A03/geometric-anchor-circle-meridian-quarter-turn",
+      "TOPOLOGY-ROUTES.md/t02A03/geometric-right-core-based-attachment-homotopy",
       :acceptance
       {:probe
-       "Compile and bank apm_t02a03_anchor_eq_circleMeridianMap_quarterTurn from /tmp/t02a03_geometric_tube_cover.lean. Prove in the exact geometricY subtype that the constant meridian anchor reached by the banked right-core contraction equals the banked Circle meridian map evaluated at Circle.exp (Real.pi / 2), using the banked ambient quarter-turn equality and subtype extensionality. This supplies the based attachment endpoint equation required by t02A03 route step 2; do not yet claim an extension over the right tube, tube deformation data, or a gluing equivalence.",
-       :declaration
-       "apm_t02a03_anchor_eq_circleMeridianMap_quarterTurn",
+       "Compile and bank apm_t02a03_rightCoreLiftHomotopy, apm_t02a03_rightCoreAnchorContractionHomotopy, and apm_t02a03_rightCoreBasedAttachmentHomotopy from /tmp/t02a03_geometric_tube_cover.lean. Package the banked vertical lift as a ContinuousMap.Homotopy from the punctured right-core attachment map to its lifted map; package the banked contraction as a ContinuousMap.Homotopy from that lifted map to the constant geometricY point given by the Circle meridian at Circle.exp (Real.pi / 2); and compose them with Homotopy.trans. This supplies the based attachment homotopy required by t02A03 route step 2; do not yet claim an extension over the right tube, tube-wide deformation data, or a gluing equivalence.",
+       :declarations
+       ["apm_t02a03_rightCoreLiftHomotopy"
+        "apm_t02a03_rightCoreAnchorContractionHomotopy"
+        "apm_t02a03_rightCoreBasedAttachmentHomotopy"],
        :placeholder "the sole sorry in apm_t02a03",
        :route-step
-       "t02A03 step 2, identify the contracted geometricY anchor with the quarter-turn point of the Circle meridian map"},
-      :representation
-      {:source
-       "The constant geometricY meridian anchor reached by the right-core contraction",
-       :target
-       "The Circle-domain meridian map evaluated at Circle.exp (pi/2)",
-       :direction
-       "Exact subtype point equality from the source contracted-anchor representation to the target based Circle-meridian representation"},
+       "t02A03 step 2, package and compose the punctured right-core lift and contraction into the based Circle-meridian attachment homotopy"},
       :id
-      :routes-2026-10-10-t02a03-geometric-anchor-circle-meridian-quarter-turn-topo2-r1,
-      :kind :representation-comparison,
+      :routes-2026-10-10-t02a03-geometric-right-core-based-attachment-homotopy-topo2-r1,
+      :kind :reusable-theorem,
       :depends-on
       [:routes-2026-10-10-checkpoint-topo2-r5
-       :routes-2026-10-10-t02a03-geometric-right-core-anchor-contraction-topo2-r1],
+       :routes-2026-10-10-t02a03-geometric-anchor-circle-meridian-quarter-turn-topo2-r1],
       :current-residual
-      "Extend the based attachment across the right tube, construct compatible tube-piece deformation data, and glue the geometricY-to-Y equivalence.",
+      "Extend the based attachment homotopy across the right tube, construct compatible deformation data on the other tube piece, and glue the geometricY-to-Y equivalence.",
       :other-consumers []}}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/closure",
    :acceptance
@@ -59770,7 +59792,8 @@
     :routes-2026-10-10-t02a03-geometric-right-core-lift-homotopy-topo2-r1
     :routes-2026-10-10-t02a03-geometric-right-core-lifted-map-topo2-r1
     :routes-2026-10-10-t02a03-geometric-right-core-anchor-contraction-topo2-r1
-    :routes-2026-10-10-t02a03-geometric-anchor-circle-meridian-quarter-turn-topo2-r1],
+    :routes-2026-10-10-t02a03-geometric-anchor-circle-meridian-quarter-turn-topo2-r1
+    :routes-2026-10-10-t02a03-geometric-right-core-based-attachment-homotopy-topo2-r1],
    :current-residual
    "One placeholder: two explicit homotopy equivalences, with the punctured-disk factor adapter-sized and the geometric tube deformation still missing.",
    :other-consumers []}
