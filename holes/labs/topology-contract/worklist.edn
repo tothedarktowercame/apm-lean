@@ -91753,47 +91753,63 @@
    :other-consumers []}
   {:consumer :t99J01,
    :evidence
-   {:probe
-    {:outcome :go,
-     :fixture
-     {:path "/tmp/arborescence-total-equivalence.lean",
-      :sha256
-      "0472c4cecffd4fef31f8ea3c423d8d742dfde9446cead0d2e955fd20dccbae2b"},
-     :commands
-     [{:cmd "lake env lean /tmp/arborescence-total-equivalence.lean",
-       :exit 0,
-       :finding
-       "Complete equivalence compiles; #print axioms reports propext and Classical.choice."}
-      {:cmd
-       "rg -n \"sorry|admit\" /tmp/arborescence-total-equivalence.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :finding "131 registered statements match, 0 do not"}
-      {:cmd "git status --short", :exit 0, :finding "clean"}],
-     :axioms ["propext" "Classical.choice"],
-     :implementation
-     {:scope
-      ["ConstructionTargets/FiniteArborescenceTotalArrowEquivalence.lean"],
-      :declarations
-      [{:name "FiniteArborescenceTotalArrow.targetNonroot",
-        :type
-        "(V : Type u) [Quiver V] [Arborescence V] -> Quiver.Total V -> {x : V // x != Quiver.root V}"}
-       {:name "FiniteArborescenceTotalArrow.totalEquivNonroot",
-        :type
-        "(V : Type u) [Quiver V] [Arborescence V] -> Quiver.Total V equivalence {x : V // x != Quiver.root V}"}],
-      :proof
-      "Map every arrow to its target. An arrow into the root would extend the unique root path to a nonempty root-to-root path, contradicting uniqueness with Path.nil. Surjectivity extracts the final arrow from the unique nonempty root path to a non-root vertex. Injectivity follows by comparing the two extended root paths and applying Path.cons.inj."},
-     :acceptance
-     {:fixture-compiles true,
-      :zero-fixture-sorry true,
-      :standard-only-axioms true,
-      :registry-check true},
-     :residual
-     "Implement the compiled equivalence in the scoped ConstructionTargets module; the downstream row can then derive Nat.card (Quiver.Total V) = Nat.card V - 1 and specialize it to the geodesic subtree."}},
+   {:placeholder-delta 0,
+    :residual
+    "Derive Nat.card (Quiver.Total V) = Nat.card V - 1 from the equivalence and specialize it to the finite geodesic Schreier arborescence.",
+    :gates
+    {:target-compile :pass,
+     :fixture-compile :pass,
+     :fixture-hash :pass,
+     :zero-placeholders :pass,
+     :standard-only-axioms :pass,
+     :registry :pass,
+     :clean-worktree :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not"},
+    :axioms ["propext" "Classical.choice"],
+    :author "topo-2",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/FiniteArborescenceTotalArrowEquivalence.lean",
+      :exit 0}
+     {:cmd "lake env lean /tmp/arborescence-total-equivalence.lean",
+      :exit 0}
+     {:cmd "sha256sum /tmp/arborescence-total-equivalence.lean",
+      :exit 0,
+      :finding
+      "0472c4cecffd4fef31f8ea3c423d8d742dfde9446cead0d2e955fd20dccbae2b"}
+     {:cmd
+      "comment-stripped sorry/admit census of ConstructionTargets/FiniteArborescenceTotalArrowEquivalence.lean",
+      :exit 0,
+      :finding "0"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check HEAD^ HEAD", :exit 0}
+     {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :commit "37e3546ab4ddd0304166557bc3ada76d28e5d722",
+    :changed-paths
+    ["ConstructionTargets/FiniteArborescenceTotalArrowEquivalence.lean"],
+    :fixture
+    {:path "/tmp/arborescence-total-equivalence.lean",
+     :sha256
+     "0472c4cecffd4fef31f8ea3c423d8d742dfde9446cead0d2e955fd20dccbae2b",
+     :sorry-count 0,
+     :axiom-count 0,
+     :proof-placeholder-count 0},
+    :implementation
+    {:scope
+     ["ConstructionTargets/FiniteArborescenceTotalArrowEquivalence.lean"],
+     :declarations
+     ["FiniteArborescenceTotalArrow.targetNonroot"
+      "FiniteArborescenceTotalArrow.totalEquivNonroot"],
+     :proof
+     "Map every arrow to its target; rule out arrows into the root by path uniqueness, recover the final arrow of each nonempty root path, and prove injectivity using Path.cons.inj."},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :proof
    "Map every arrow to its target. An arrow into the root would extend the unique root path to a nonempty root-to-root path, contradicting uniqueness with Path.nil. Surjectivity extracts the final arrow from the unique nonempty root path to a non-root vertex. Injectivity follows by comparing the two extended root paths and applying Path.cons.inj.",
    :scope
