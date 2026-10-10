@@ -100815,49 +100815,71 @@
    "Classify the exact fibers of n3ThreeLoops and torusCrosscapThreeLoops to prove injectivity, promote the compiled continuous bijections to homeomorphisms, compose with ThreeCircles, and finish inclusion formulas and package assembly.",
    :other-consumers []}
   {:bounded-exception
+   "This single-consumer prerequisite supplies the geometric uniqueness of canonical edge interiors needed for the exact generated-relation fiber classifications.",
+   :consumer :t97A01,
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/PolygonSixEdgeInteriorUniqueness.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/six-edge-interior-uniqueness",
+   :acceptance
+   {:implementation
+    "Promote the exact fixture. For j and k in Fin 6 and half-open parameters t and u in Ico 0 1, prove that equality of circleEdgePoint j t and circleEdgePoint k u implies j equals k and t equals u. Rewrite through the banked AddCircle coordinate formula, use injectivity of toCircle and uniqueness of representatives in Ico 0 6, and discharge the finite edge-index cases. Do not classify EqvGen fibers, prove injectivity or homeomorphism of the three-loop maps, derive ThreeCircles or outer-piece formulas, compute invariants, or close t97A01.",
+    :placeholder "the single sorry in apm_t97a01",
+    :route-step
+    "polygon radial open-cover step 24: prove uniqueness of half-open six-edge Circle coordinates for boundary fiber classification",
+    :fixture "/tmp/polygon-six-edge-interior-uniqueness.lean",
+    :fixture-sha256
+    "3b71f1fd7ccb1d3c467c9b016d6ccfb501b9aec26508367fcdb1bdecf0e339c5",
+    :gates
+    ["lake build ConstructionTargets.PolygonSixEdgeInteriorUniqueness"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-10-polygon-six-edge-interior-uniqueness-64,
+   :kind :reusable-theorem,
+   :area "polygon-surface-open-cover",
+   :depends-on [:routes-2026-10-10-polygon-six-edge-circle-cover-63],
+   :current-residual
+   "Use half-open edge uniqueness to classify EqvGen fibers for N3CircleRel and TorusCrosscapCircleRel, prove injectivity of both three-loop maps, then form homeomorphisms and finish the boundary and package formulas.",
+   :other-consumers []}
+  {:bounded-exception
    "This single-consumer concrete quotient package is the other final backlog lemma on t97A01 and supplies the actual two polygon models required by its frozen statement.",
    :consumer :t97A01,
    :implements-lemma :lemma-polygonradialopencoverpackages,
    :evidence
    {:probe
     {:residual
-     "Prove exact fiber classifications for both surjective continuous three-loop maps, deduce injectivity and homeomorphisms, then compose with the ThreeCircles model and finish literal inclusions and package assembly.",
+     "Classify the generated relation fibers in canonical half-open coordinates for both boundary words, deduce injectivity of both continuous surjections, then build the boundary ThreeCircles homeomorphisms and final packages.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
-     [{:name "PolygonSixEdgeCircleCover.sixEdgeCircleCover",
+     [{:name
+       "PolygonSixEdgeInteriorUniqueness.circleEdgePoint_interior_injective",
        :type
-       "For every z : Circle there are j : Fin 6 and t : Set.Icc (0 : Real) 1 such that circleEdgePoint j t = z.",
+       "For j k : Fin 6 and t u : Set.Ico (0 : Real) 1, equality of circleEdgePoint j t and circleEdgePoint k u implies j = k and t = u.",
        :status :proved,
        :consumers [:t97A01],
-       :depends-on [],
+       :depends-on ["PolygonSixEdgeCircleCover.sixEdgeCircleCover"],
        :area "polygon-surface-open-cover"}
-      {:name "PolygonSixEdgeCircleCover.surjective_n3ThreeLoops",
+      {:name "polygonBoundaryThreeLoopFiberClassification",
        :type
-       "Function.Surjective PolygonBoundaryThreeLoopMaps.n3ThreeLoops.",
-       :status :proved,
+       "Classify EqvGen fibers of N3CircleRel and TorusCrosscapCircleRel in the three paired half-open edge coordinates, including the common endpoint class.",
+       :status :not-started,
        :consumers [:t97A01],
        :depends-on
-       ["PolygonSixEdgeCircleCover.sixEdgeCircleCover"
-        "PolygonBoundaryThreeLoopSurjectivityReduction.surjective_n3ThreeLoops_of_edge_cover"],
-       :area "polygon-surface-open-cover"}
-      {:name
-       "PolygonSixEdgeCircleCover.surjective_torusCrosscapThreeLoops",
-       :type
-       "Function.Surjective PolygonBoundaryThreeLoopMaps.torusCrosscapThreeLoops.",
-       :status :proved,
-       :consumers [:t97A01],
-       :depends-on
-       ["PolygonSixEdgeCircleCover.sixEdgeCircleCover"
-        "PolygonBoundaryThreeLoopSurjectivityReduction.surjective_torusCrosscapThreeLoops_of_edge_cover"],
+       ["PolygonSixEdgeInteriorUniqueness.circleEdgePoint_interior_injective"],
        :area "polygon-surface-open-cover"}
       {:name "polygonBoundaryThreeCircles",
        :type
-       "Classify fibers for injectivity, promote both continuous surjections to homeomorphisms, compose with ThreeCircles, and prove literal boundary formulas.",
+       "Use the fiber classifications to prove both three-loop maps injective, promote the continuous bijections to homeomorphisms, and prove literal ThreeCircles boundary formulas.",
        :status :partial,
        :consumers [:t97A01],
        :depends-on
-       ["PolygonSixEdgeCircleCover.surjective_n3ThreeLoops"
+       ["polygonBoundaryThreeLoopFiberClassification"
+        "PolygonSixEdgeCircleCover.surjective_n3ThreeLoops"
         "PolygonSixEdgeCircleCover.surjective_torusCrosscapThreeLoops"],
        :area "polygon-surface-open-cover"}
       {:name "polygonRadialOpenCoverPackages",
@@ -100871,48 +100893,50 @@
        :area "polygon-surface-open-cover"}],
      :prerequisite
      {:bounded-exception
-      "This single-consumer prerequisite proves the common geometric six-edge cover and closes surjectivity for both boundary comparison maps before their separate fiber classifications.",
+      "This single-consumer prerequisite supplies the geometric uniqueness of canonical edge interiors needed for the exact generated-relation fiber classifications.",
       :consumer :t97A01,
       :phase :implementation,
       :state :open,
-      :scope ["ConstructionTargets/PolygonSixEdgeCircleCover.lean"],
+      :scope
+      ["ConstructionTargets/PolygonSixEdgeInteriorUniqueness.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/six-edge-circle-cover",
+      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/six-edge-interior-uniqueness",
       :acceptance
       {:implementation
-       "Promote the exact fixture. Identify each circleEdgePoint with AddCircle.toCircle at coordinate j+t for period six. Use the canonical half-open representative in Ico 0 6, split it into the six unit subintervals, and prove every Circle point lies on a canonical edge. Apply the banked reductions to prove n3ThreeLoops and torusCrosscapThreeLoops surjective. Do not classify fibers, prove injectivity or homeomorphism, derive ThreeCircles representative formulas or outer-piece inclusions, compute invariants, or close t97A01.",
+       "Promote the exact fixture. For j and k in Fin 6 and half-open parameters t and u in Ico 0 1, prove that equality of circleEdgePoint j t and circleEdgePoint k u implies j equals k and t equals u. Rewrite through the banked AddCircle coordinate formula, use injectivity of toCircle and uniqueness of representatives in Ico 0 6, and discharge the finite edge-index cases. Do not classify EqvGen fibers, prove injectivity or homeomorphism of the three-loop maps, derive ThreeCircles or outer-piece formulas, compute invariants, or close t97A01.",
        :placeholder "the single sorry in apm_t97a01",
        :route-step
-       "polygon radial open-cover step 23: prove the six-edge Circle cover and surjectivity of both boundary comparison maps",
-       :fixture "/tmp/polygon-six-edge-circle-cover.lean",
+       "polygon radial open-cover step 24: prove uniqueness of half-open six-edge Circle coordinates for boundary fiber classification",
+       :fixture "/tmp/polygon-six-edge-interior-uniqueness.lean",
        :fixture-sha256
-       "87bc115157b38e928fbff30cc944c3fd14d420bec3003e9c24aba022d71d9699",
+       "3b71f1fd7ccb1d3c467c9b016d6ccfb501b9aec26508367fcdb1bdecf0e339c5",
        :gates
-       ["lake build ConstructionTargets.PolygonSixEdgeCircleCover"
+       ["lake build ConstructionTargets.PolygonSixEdgeInteriorUniqueness"
         "fixture compiles"
         "zero source and fixture sorry"
         "standard-only axioms"
         "registry check"]},
-      :id :routes-2026-10-10-polygon-six-edge-circle-cover-63,
+      :id :routes-2026-10-10-polygon-six-edge-interior-uniqueness-64,
       :kind :reusable-theorem,
       :area "polygon-surface-open-cover",
       :depends-on
-      [:routes-2026-10-10-polygon-boundary-three-loop-surjectivity-reduction-62],
+      [:routes-2026-10-10-polygon-six-edge-circle-cover-63],
       :current-residual
-      "Classify the exact fibers of n3ThreeLoops and torusCrosscapThreeLoops to prove injectivity, promote the compiled continuous bijections to homeomorphisms, compose with ThreeCircles, and finish inclusion formulas and package assembly.",
+      "Use half-open edge uniqueness to classify EqvGen fibers for N3CircleRel and TorusCrosscapCircleRel, prove injectivity of both three-loop maps, then form homeomorphisms and finish the boundary and package formulas.",
       :other-consumers []},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
-     [{:cmd "lake env lean /tmp/polygon-six-edge-circle-cover.lean",
+     [{:cmd
+       "lake env lean /tmp/polygon-six-edge-interior-uniqueness.lean",
        :exit 0,
        :finding
-       "The AddCircle coordinate formula, six-case cover, and both unconditional surjectivity theorems compile."}
-      {:cmd "sha256sum /tmp/polygon-six-edge-circle-cover.lean",
+       "The AddCircle representative argument and all thirty-six finite edge-index cases compile, proving exact half-open coordinate uniqueness."}
+      {:cmd "sha256sum /tmp/polygon-six-edge-interior-uniqueness.lean",
        :exit 0,
        :finding
-       "87bc115157b38e928fbff30cc944c3fd14d420bec3003e9c24aba022d71d9699"}
+       "3b71f1fd7ccb1d3c467c9b016d6ccfb501b9aec26508367fcdb1bdecf0e339c5"}
       {:cmd
-       "rg -n ‘\\b(sorry|admit)\\b’ /tmp/polygon-six-edge-circle-cover.lean",
+       "rg -n ‘\\b(sorry|admit)\\b’ /tmp/polygon-six-edge-interior-uniqueness.lean",
        :exit 1,
        :expected-exit 1,
        :finding "No fixture placeholders."}
@@ -100926,19 +100950,20 @@
        :finding
        "The route guide, per-problem routes, and probe rules were read."}],
      :diagnostic-history
-     [{:cmd "lake env lean /tmp/polygon-six-edge-circle-cover.lean",
+     [{:cmd
+       "lake env lean /tmp/polygon-six-edge-interior-uniqueness.lean",
        :exit 1,
        :finding
-       "The first draft lacked the positive-period Fact instance, tried to rewrite through a subtype coercion, and left a redundant closing tactic; adding the local instance, proving the underlying exponential identity directly, and simplifying by the canonical representative equality corrected the proof."}],
+       "The first draft used insufficient real bounds from j < 6 and mishandled simplified diagonal conjunctions; casting j <= 5 and handling diagonal and off-diagonal finite cases separately corrected the proof."}],
      :fixture
-     {:path "/tmp/polygon-six-edge-circle-cover.lean",
+     {:path "/tmp/polygon-six-edge-interior-uniqueness.lean",
       :sha256
-      "87bc115157b38e928fbff30cc944c3fd14d420bec3003e9c24aba022d71d9699",
+      "3b71f1fd7ccb1d3c467c9b016d6ccfb501b9aec26508367fcdb1bdecf0e339c5",
       :interface
-      "The six canonical polygon edge arcs cover Circle via the canonical AddCircle 6 representative, and both specialized three-loop comparison maps are consequently surjective."},
+      "On half-open unit edge parameters, equality of canonical six-edge Circle points forces equality of both the Fin 6 edge index and the parameter."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -100981,7 +101006,8 @@
     :routes-2026-10-10-polygon-boundary-three-loop-maps-60
     :routes-2026-10-10-polygon-boundary-three-loop-continuity-61
     :routes-2026-10-10-polygon-boundary-three-loop-surjectivity-reduction-62
-    :routes-2026-10-10-polygon-six-edge-circle-cover-63],
+    :routes-2026-10-10-polygon-six-edge-circle-cover-63
+    :routes-2026-10-10-polygon-six-edge-interior-uniqueness-64],
    :current-residual
    "Combine the concrete cover packages with the strict overlap squares, banked Smith normalization, and final t97A01 assembly.",
    :other-consumers []}
@@ -103157,7 +103183,8 @@
     :lemma-polygonboundarythreeloopsurjectivityreduction-surjective-n3threeloops-of-edge-co
     :lemma-polygonboundarythreeloopsurjectivityreduction-surjective-toruscrosscapthreeloops
     :lemma-polygonsixedgecirclecover-surjective-n3threeloops
-    :lemma-polygonsixedgecirclecover-surjective-toruscrosscapthreeloops],
+    :lemma-polygonsixedgecirclecover-surjective-toruscrosscapthreeloops
+    :lemma-polygonboundarythreeloopfiberclassification],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -104187,6 +104214,50 @@
    :depends-on
    [:lemma-polygonsixedgecirclecover-sixedgecirclecover
     :lemma-polygonboundarythreeloopsurjectivityreduction-surjective-toruscrosscapthreeloops],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "PolygonSixEdgeInteriorUniqueness.circleEdgePoint_interior_injective",
+    :type
+    "For j k : Fin 6 and t u : Set.Ico (0 : Real) 1, equality of circleEdgePoint j t and circleEdgePoint k u implies j = k and t = u."},
+   :lemma
+   {:name
+    "PolygonSixEdgeInteriorUniqueness.circleEdgePoint_interior_injective",
+    :reported-by
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    :type
+    "For j k : Fin 6 and t u : Set.Ico (0 : Real) 1, equality of circleEdgePoint j t and circleEdgePoint k u implies j = k and t = u.",
+    :area "polygon-surface-open-cover",
+    :proved-in
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+   :id
+   :lemma-polygonsixedgeinterioruniqueness-circleedgepoint-interior-injective,
+   :kind :lemma,
+   :depends-on [:lemma-polygonsixedgecirclecover-sixedgecirclecover],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "polygonBoundaryThreeLoopFiberClassification",
+    :type
+    "Classify EqvGen fibers of N3CircleRel and TorusCrosscapCircleRel in the three paired half-open edge coordinates, including the common endpoint class."},
+   :lemma
+   {:name "polygonBoundaryThreeLoopFiberClassification",
+    :reported-by
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    :type
+    "Classify EqvGen fibers of N3CircleRel and TorusCrosscapCircleRel in the three paired half-open edge coordinates, including the common endpoint class.",
+    :area "polygon-surface-open-cover"},
+   :id :lemma-polygonboundarythreeloopfiberclassification,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polygonsixedgeinterioruniqueness-circleedgepoint-interior-injective],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
