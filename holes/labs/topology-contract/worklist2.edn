@@ -63108,6 +63108,21 @@
       :exit 0,
       :output
       "88e1f3745b5d0dc3153b37bb8d0f1eab190f1581\nConstructionTargets/T02A03LeftTubePuncturedModel.lean"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791652819179-2518-8024b7f6",
+     :commands
+     ["git show/diff-tree/show --check 88e1f3745b5d0dc3153b37bb8d0f1eab190f1581"
+      "sha256sum /tmp/t02a03_geometric_tube_cover.lean"
+      "lake env lean /tmp/t02a03_geometric_tube_cover.lean"
+      "lake env lean ConstructionTargets/T02A03LeftTubePuncturedModel.lean"
+      "lake build ConstructionTargets.T02A03LeftTubePuncturedModel"
+      "python3 scripts/statement-registry.py check --rev 88e1f3745b5d0dc3153b37bb8d0f1eab190f1581"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "recompute frozen-type hash and comment-stripped placeholder counts"],
+     :finding
+     "PASS: author topo-6 is independent and immutable commit 88e1f3745b5d0dc3153b37bb8d0f1eab190f1581 changes exactly ConstructionTargets/T02A03LeftTubePuncturedModel.lean. Fixture SHA-256 ccf926c8a3290445efc6325dfb157bab20f783b88b286f73f43914e9079d05d9 matches. The frozen homotopy is oriented from leftTubeTorusInverse composed with the continuous forward-coordinate map to the identity. The implementation packages the forward map with its proved continuity, uses the radial ContinuousMap as toFun, and supplies the correct zero and one endpoint fields without claiming the HomotopyEquiv or gluing. Fixture, target, focused 8241-job build, registry 131/0, and 483-item ledger gate pass. Recomputed frozen-type SHA-256 is bf04ab7d6bb166c0649623d035f9fe49e155ba895f162f687927878d4b45e009; axioms are only propext/Classical.choice/Quot.sound; target placeholders remain 0 and the unchanged consumer has 1 with hash b123eca388ab2858ca55daf538c1ddd645022b52f5196a15f0bb516d78323d7d."},
     :commit "88e1f3745b5d0dc3153b37bb8d0f1eab190f1581",
     :changed-paths
     ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
@@ -63128,7 +63143,7 @@
    :phase :implementation,
    :type
    "ContinuousMap.Homotopy (apm_t02a03_leftTubeTorusInverse.comp apm_t02a03_leftTubeTorusCoordinatesMap) (ContinuousMap.id apm_t02a03_LeftTubeMinusCore)",
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-radial-homotopy",
    :acceptance
@@ -63217,7 +63232,7 @@
    :phase :probe,
    :type
    "Nonempty (ContinuousMap.HomotopyEquiv LeftTubeMinusCore ConstructionTargets.TorusCircleWedgeOpenCover.Torus)",
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-punctured-model",
    :acceptance
@@ -64565,7 +64580,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "apm_t02a03_leftTubeRadialHomotopy",
@@ -64579,7 +64594,10 @@
     :type
     "ContinuousMap.Homotopy (apm_t02a03_leftTubeTorusInverse.comp apm_t02a03_leftTubeTorusCoordinatesMap) (ContinuousMap.id apm_t02a03_LeftTubeMinusCore)",
     :proved-in
-    :routes-2026-10-10-t02a03-left-tube-radial-homotopy-topo2-r1},
+    :routes-2026-10-10-t02a03-left-tube-radial-homotopy-topo2-r1,
+    :banked-by
+    :routes-2026-10-10-t02a03-left-tube-radial-homotopy-topo2-r1,
+    :banked-commit "88e1f3745b5d0dc3153b37bb8d0f1eab190f1581"},
    :id :lemma-apm-t02a03-lefttuberadialhomotopy,
    :kind :lemma,
    :depends-on [:lemma-apm-t02a03-lefttuberadialmap-endpoints],
