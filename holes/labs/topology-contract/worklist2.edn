@@ -59186,6 +59186,21 @@
      "The frozen closed vertical collar evaluated at parameter one",
      :direction
      "Exact ambient Euclidean point equality from the source right-core endpoint representation to the target collar endpoint representation"},
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791630047539-1732-2dfe8bb9",
+     :commands
+     ["git show/diff-tree recorded implementation 9019281a and transition 6b8f85ba"
+      "sha256sum authenticated fixture"
+      "lake env lean fixture, recorded-identical target, and deleted-endpoint orientation probe"
+      "lake build ConstructionTargets.T02A03GeometricTubeCover"
+      "qualified #print, axiom audit, and forbidden-placeholder scan"
+      "frozen consumer hash and comment-stripped placeholder census"
+      "python3 scripts/statement-registry.py check --rev 9019281a"
+      "bb worklist_check.bb on committed transition ledger"],
+     :finding
+     "PASS: codex-7 independently reviewed topo-6 commit 9019281acf0fd9070c4275e8d8d97f305247b5f4. Its exact scope is ConstructionTargets/T02A03GeometricTubeCover.lean; transition 6b8f85bac7fdd7a41f4b136652fcf01c432f1186 changes only the ledger; fixture SHA-256 is d626ecd219ec8dfd188a7a4115a25e02c63a283a3a6cd38846d33a07dd710524. The fixture, recorded-identical module, endpoint-orientation probe, and module build pass. The equality has the required direction from the frozen closed right-core segment at parameter zero to the frozen closed collar at parameter one. Both sides reduce through their banked endpoint theorems to the Euclidean origin. The statement correctly remains in ambient E3: the origin lies on the frozen left core and is not promoted into geometricY. No attachment homotopy, tube deformation, or gluing equivalence is claimed. The declaration uses only propext, Classical.choice, and Quot.sound. Frozen t02A03 hash is b123eca388ab2858ca55daf538c1ddd645022b52f5196a15f0bb516d78323d7d with one executable placeholder; registry is 131/0 and the committed 420-row ledger validates with exactly one done-unreviewed row."},
     :commit "9019281acf0fd9070c4275e8d8d97f305247b5f4",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
@@ -59196,7 +59211,7 @@
     :declarations
     ["ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_rightCore_collar_deletedEndpoint"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/geometric-right-core-collar-endpoint",
@@ -59295,7 +59310,7 @@
       "Construct a compatible geometricY homotopy between the punctured right-core segment and collar leading to the based Circle meridian, then extend to tube deformations and gluing.",
       :other-consumers []}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/closure",
    :acceptance
