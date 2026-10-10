@@ -62406,6 +62406,21 @@
       :exit 0,
       :output "131 registered statements match, 0 do not"}
      {:cmd "git show --check --oneline 81714919", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791648225378-2350-eafac2ea",
+     :commands
+     ["git show/diff-tree/show --check 817149193f45a7897d5d99cdff56c2eb2c9afe7e"
+      "sha256sum /tmp/t02a03_geometric_tube_cover.lean"
+      "lake env lean /tmp/t02a03_geometric_tube_cover.lean"
+      "lake env lean ConstructionTargets/T02A03LeftTubePuncturedModel.lean"
+      "lake build ConstructionTargets.T02A03LeftTubePuncturedModel"
+      "python3 scripts/statement-registry.py check --rev 817149193f45a7897d5d99cdff56c2eb2c9afe7e"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "recompute frozen-type hash and comment-stripped placeholder counts"],
+     :finding
+     "PASS: author topo-6 is independent and immutable commit 817149193f45a7897d5d99cdff56c2eb2c9afe7e changes exactly ConstructionTargets/T02A03LeftTubePuncturedModel.lean. Fixture SHA-256 323989ad34d4d500e6286d20b05573669cd1bc73d62fe59b0afc237b97a5b8f0 matches. The theorem has the frozen orientation from the planar complex coordinate to its norm scalar-multiplied by the normalized leftTubeAngular Circle direction; reversing NormedSpace.norm_smul_normalize respects the subtype and Complex coercion boundary. It stops before reconstructed-endpoint polar form, interpolation norm, exact normal-coordinate formula, deleted-core exclusion, homotopy, equivalence, and gluing. Fixture, target, focused 8241-job build, registry 131/0, and 468-item ledger gate pass. Frozen-type hash 86ee09c8c112b299a96dc9176231e6fc759d869fdb83b75d4987e7cef6b5986b matches; axioms are only propext/Classical.choice/Quot.sound; target placeholders remain 0 and the unchanged consumer has 1 with hash b123eca388ab2858ca55daf538c1ddd645022b52f5196a15f0bb516d78323d7d."},
     :commit "817149193f45a7897d5d99cdff56c2eb2c9afe7e",
     :changed-paths
     ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
@@ -62423,7 +62438,7 @@
      "forall p : apm_t02a03_leftTubeSubtype, apm_t02a03_leftTubePlanarComplex p = (norm (apm_t02a03_leftTubePlanarComplex p) : Real) • ((apm_t02a03_leftTubeAngular p : Circle) : Complex)"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/left-tube-planar-polar-decomposition",
@@ -62518,7 +62533,7 @@
    :phase :probe,
    :type
    "Nonempty (ContinuousMap.HomotopyEquiv LeftTubeMinusCore ConstructionTargets.TorusCircleWedgeOpenCover.Torus)",
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-punctured-model",
    :acceptance
