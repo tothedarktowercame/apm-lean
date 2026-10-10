@@ -96509,13 +96509,42 @@
    "Refine each evenly covered base neighborhood to a path-connected open neighborhood, apply the whole-sheet dichotomy to the clopen Joined component, use the retained fiber indices to build a restricted trivialization, and combine it with the banked surjectivity theorem.",
    :other-consumers []}
   {:bounded-exception
+   "This single-consumer chart-refinement theorem supplies an open path-connected base set for each covering trivialization, which is required before the clopen-component dichotomy can select complete sheets.",
+   :consumer :t99J01,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/CoveringPathConnectedChart.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component/path-connected-chart",
+   :acceptance
+   {:implementation
+    "For a surjective covering p : E -> B over a locally path-connected base and each b : B, choose the canonical covering trivialization and refine its base set to an open path-connected neighborhood of b. Expose both the contained-neighborhood form and a restrOpen trivialization whose base set itself is path connected. Do not select component sheets, restrict the covering domain, count fibers, or compute pi1.",
+    :placeholder "the single sorry in apm_t99j01",
+    :route-step
+    "t99J01 component-restriction step 7: refine each covering chart to a path-connected base neighborhood before selecting clopen-component sheets",
+    :fixture "/tmp/covering-path-connected-chart.lean",
+    :fixture-sha256
+    "fe34c47978fa57b01f6cfb1af4fd2e2eb89f4d113a46b6a0096667cadc60f921",
+    :gates
+    ["lake build ConstructionTargets.CoveringPathConnectedChart"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-10-covering-path-connected-chart-45,
+   :kind :reusable-theorem,
+   :depends-on [:routes-2026-10-10-preconnected-clopen-sheet-44],
+   :current-residual
+   "For the clopen Joined component, classify every fiber-index sheet of the refined trivialization as retained or excluded, define the retained discrete index subtype, and assemble the restricted covering trivialization.",
+   :other-consumers []}
+  {:bounded-exception
    "Single-consumer prerequisite first in the final ledger ranking.",
    :consumer :t99J01,
    :implements-lemma :lemma-iscoveringmap-restrictpathcomponent,
    :evidence
    {:probe
     {:residual
-     "The whole-sheet selection dichotomy now compiles. The remaining restriction proof must refine covering charts to path-connected base neighborhoods and assemble a trivialization indexed by exactly the retained sheets.",
+     "Path-connected covering charts now compile. The remaining restriction proof must define the retained sheet-index subtype and assemble the trivialization of the projection on the clopen Joined component.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
@@ -96525,51 +96554,50 @@
        :status :partial,
        :consumers [:t99J01],
        :depends-on
-       ["CoveringPathComponentSurjective.componentProjection_surjective"
-        "PreconnectedClopenSheet.range_subset_or_disjoint_of_isClopen_pathConnected"]}],
+       ["PreconnectedClopenSheet.range_subset_or_disjoint_of_isClopen_pathConnected"
+        "CoveringPathConnectedChart.IsCoveringMap.exists_pathConnected_restrictedTrivialization"]}],
      :prerequisite
      {:bounded-exception
-      "This single-consumer sheet-selection lemma is the exact connectedness fact needed to prove that intersecting an evenly covered sheet with the clopen Joined component either retains the complete sheet or discards it.",
+      "This single-consumer chart-refinement theorem supplies an open path-connected base set for each covering trivialization, which is required before the clopen-component dichotomy can select complete sheets.",
       :consumer :t99J01,
       :phase :implementation,
       :state :open,
-      :scope ["ConstructionTargets/PreconnectedClopenSheet.lean"],
+      :scope ["ConstructionTargets/CoveringPathConnectedChart.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component/clopen-sheet-dichotomy",
+      "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component/path-connected-chart",
       :acceptance
       {:implementation
-       "For a continuous map from a preconnected space into Y and a clopen C subset Y, prove its range is contained in C or disjoint from C. Expose the path-connected specialization used on refined covering-chart base neighborhoods. Do not construct covering trivializations, choose sheet index types, restrict a path component, prove surjectivity, count fibers, or compute pi1.",
+       "For a surjective covering p : E -> B over a locally path-connected base and each b : B, choose the canonical covering trivialization and refine its base set to an open path-connected neighborhood of b. Expose both the contained-neighborhood form and a restrOpen trivialization whose base set itself is path connected. Do not select component sheets, restrict the covering domain, count fibers, or compute pi1.",
        :placeholder "the single sorry in apm_t99j01",
        :route-step
-       "t99J01 component-restriction step 6: classify each path-connected covering sheet as wholly selected or wholly excluded by the clopen component",
-       :fixture "/tmp/preconnected-clopen-sheet.lean",
+       "t99J01 component-restriction step 7: refine each covering chart to a path-connected base neighborhood before selecting clopen-component sheets",
+       :fixture "/tmp/covering-path-connected-chart.lean",
        :fixture-sha256
-       "7ae48c1d23c3cf3f685f81e8edefe0bf55c81f3ba2d43072412f79251cac742b",
+       "fe34c47978fa57b01f6cfb1af4fd2e2eb89f4d113a46b6a0096667cadc60f921",
        :gates
-       ["lake build ConstructionTargets.PreconnectedClopenSheet"
+       ["lake build ConstructionTargets.CoveringPathConnectedChart"
         "fixture compiles"
         "zero source and fixture sorry"
         "standard-only axioms"
         "registry check"]},
-      :id :routes-2026-10-10-preconnected-clopen-sheet-44,
+      :id :routes-2026-10-10-covering-path-connected-chart-45,
       :kind :reusable-theorem,
-      :depends-on
-      [:routes-2026-10-10-covering-path-component-surjective-43],
+      :depends-on [:routes-2026-10-10-preconnected-clopen-sheet-44],
       :current-residual
-      "Refine each evenly covered base neighborhood to a path-connected open neighborhood, apply the whole-sheet dichotomy to the clopen Joined component, use the retained fiber indices to build a restricted trivialization, and combine it with the banked surjectivity theorem.",
+      "For the clopen Joined component, classify every fiber-index sheet of the refined trivialization as retained or excluded, define the retained discrete index subtype, and assemble the restricted covering trivialization.",
       :other-consumers []},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
-     [{:cmd "lake env lean /tmp/preconnected-clopen-sheet.lean",
+     [{:cmd "lake env lean /tmp/covering-path-connected-chart.lean",
        :exit 0,
        :finding
-       "the clopen whole-sheet dichotomy compiles with standard axioms"}
-      {:cmd "sha256sum /tmp/preconnected-clopen-sheet.lean",
+       "path-connected refinement of surjective covering trivializations compiles with standard axioms"}
+      {:cmd "sha256sum /tmp/covering-path-connected-chart.lean",
        :exit 0,
        :finding
-       "7ae48c1d23c3cf3f685f81e8edefe0bf55c81f3ba2d43072412f79251cac742b"}
+       "fe34c47978fa57b01f6cfb1af4fd2e2eb89f4d113a46b6a0096667cadc60f921"}
       {:cmd
-       "rg -n \"\\b(sorry|admit)\\b\" /tmp/preconnected-clopen-sheet.lean",
+       "rg -n \"\\b(sorry|admit)\\b\" /tmp/covering-path-connected-chart.lean",
        :exit 1,
        :expected-exit 1,
        :finding "no placeholders"}
@@ -96578,23 +96606,27 @@
        :finding "131 registered statements match, 0 do not"}
       {:cmd "git status --short", :exit 0, :finding "clean"}],
      :diagnostic-history
-     [{:cmd "lake env lean /tmp/preconnected-clopen-sheet.lean",
+     [{:cmd "lake env lean /tmp/covering-path-connected-chart.lean",
        :exit 1,
        :finding
-       "The first draft eliminated empty-set membership incorrectly and imported only clopen connectedness, leaving PathConnectedSpace unavailable; corrected the elimination and imported PathConnected."}
-      {:cmd "lake env lean /tmp/preconnected-clopen-sheet.lean",
+       "The first draft omitted the Bundle namespace and attempted to construct a fiber trivialization without deriving a Nonempty fiber from surjectivity; opened Bundle and added the exact surjectivity hypothesis."}
+      {:cmd "lake env lean /tmp/covering-path-connected-chart.lean",
        :exit 1,
        :finding
-       "The empty-set contradiction used a nonexistent namespaced lemma; the reduced membership proof itself closes False."}],
+       "Dot notation did not resolve the newly namespaced theorem from the companion refinement theorem; using its explicit namespace compiled."}
+      {:cmd "lake env lean /tmp/covering-path-connected-chart.lean",
+       :exit 1,
+       :finding
+       "The restricted-chart membership proof unnecessarily requested a new Nonempty fiber instance; using the recorded containment of the refined base set avoided that requirement."}],
      :fixture
-     {:path "/tmp/preconnected-clopen-sheet.lean",
+     {:path "/tmp/covering-path-connected-chart.lean",
       :sha256
-      "7ae48c1d23c3cf3f685f81e8edefe0bf55c81f3ba2d43072412f79251cac742b",
+      "fe34c47978fa57b01f6cfb1af4fd2e2eb89f4d113a46b6a0096667cadc60f921",
       :interface
-      "range_subset_or_disjoint_of_isClopen proves a continuous image of a preconnected space lies wholly inside or wholly outside a clopen subset; the path-connected specialization is exposed for covering sheets."},
+      "IsCoveringMap.exists_pathConnected_trivialization and exists_pathConnected_restrictedTrivialization refine a surjective covering chart to an open path-connected base set."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component",
@@ -96619,7 +96651,8 @@
     :routes-2026-10-10-loc-path-connected-open-cover-41
     :routes-2026-10-10-covering-total-loc-path-connected-42
     :routes-2026-10-10-covering-path-component-surjective-43
-    :routes-2026-10-10-preconnected-clopen-sheet-44],
+    :routes-2026-10-10-preconnected-clopen-sheet-44
+    :routes-2026-10-10-covering-path-connected-chart-45],
    :current-residual
    "Establish constant fiber cardinality and the induced subgroup image.",
    :other-consumers []}
@@ -97845,7 +97878,8 @@
     :lemma-locpathconnectedopencover-locpathconnectedspace-of-open-cover
     :lemma-coveringtotallocpathconnected-iscoveringmap-totallocpathconnectedspace
     :lemma-coveringpathcomponentsurjective-componentprojection-surjective
-    :lemma-preconnectedclopensheet-range-subset-or-disjoint-of-isclopen-pathconnected],
+    :lemma-preconnectedclopensheet-range-subset-or-disjoint-of-isclopen-pathconnected
+    :lemma-coveringpathconnectedchart-iscoveringmap-exists-pathconnected-restrictedtriviali],
    :other-consumers []}
   {:consumer :t99J01,
    :phase :lemma,
@@ -99054,6 +99088,22 @@
    {:name "ThreeCirclesCollapseFiberPath.exists_collapseFiber_path",
     :reported-by []},
    :id :lemma-threecirclescollapsefiberpath-exists-collapsefiber-path,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "CoveringPathConnectedChart.IsCoveringMap.exists_pathConnected_restrictedTrivialization"},
+   :lemma
+   {:name
+    "CoveringPathConnectedChart.IsCoveringMap.exists_pathConnected_restrictedTrivialization",
+    :reported-by []},
+   :id
+   :lemma-coveringpathconnectedchart-iscoveringmap-exists-pathconnected-restrictedtriviali,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}],
