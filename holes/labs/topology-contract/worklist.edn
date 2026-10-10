@@ -86247,8 +86247,169 @@
      :review-outcomes]},
    :stop-condition
    "End only when every active topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+   :evidence
+   {:outcome :replan,
+    :seat "topo-4",
+    :commands
+    [{:cmd
+      "rg accepted :kind values in TOPOLOGY-ROUTES.md, holes/labs, docs, and scripts",
+      :exit 0,
+      :finding
+      "accepted work kinds include :uptake, :final-adapter, :reusable-theorem, :representation-comparison, :consumer-closure, and :strategy-checkpoint; :adapter is not valid"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :finding
+    {:placeholder-delta 0,
+     :placeholder-counts
+     {:t99J01 1,
+      :t92J06 1,
+      :t97A03 3,
+      :t93J03 1,
+      :t01A03 1,
+      :t97A01 1},
+     :typed-residual-change
+     ["generic point-wedge open-cover package banked"
+      "three representation routes preserved at reviewed missing-artifact STOPs"],
+     :infrastructure-packets
+     {:banked 1, :reviewed-stops 3, :placeholder-changing 0},
+     :review-outcomes {:go 1, :stop 3, :closed-problems 0},
+     :routes
+     {:t99J01
+      ["held pi1 coordinates"
+       "covering coset/index"
+       "Schreier rank"
+       "component restriction"
+       "assembly"],
+      :t92J06
+      ["held quotient-sheet gluing"
+       "permutation covers"
+       "Cayley tree"],
+      :t97A03
+      ["double-cover classification"
+       "model comparisons"
+       "invariants"
+       "assembly"],
+      :t93J03
+      ["deck action"
+       "lifting criterion"
+       "annulus embedding"
+       "assembly"],
+      :t01A03 ["held wedge pi1" "separating-circle H1" "assembly"],
+      :t97A01
+      ["standard N3 homeomorphism"
+       "polygon open cover"
+       "polygon pi1/MV"
+       "Smith algebra"
+       "assembly"]},
+     :preserved-stops
+     [:routes-2026-10-10-generic-point-wedge-pi1-inclusion-coordinates-1
+      :routes-2026-10-10-generic-point-wedge-mv-inclusion-coordinates-1
+      :routes-2026-10-10-point-wedge-quotient-sheet-local-homeomorph-1]},
+    :replacement-items
+    [{:consumer :t97A01,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md/t97A01/standard-n3-homeomorph",
+      :acceptance
+      {:probe
+       "Compile a placeholder-free homeomorphism from the frozen quotient X to Surface false 3 by upgrading the banked relation equivalence and proving continuity in both coinduced topologies.",
+       :placeholder "the single sorry in apm_t97a01",
+       :route-step
+       "t97A01 step 1, quotient homeomorphism to standard N3",
+       :gates
+       ["canonical packages"
+        "fixture compiles"
+        "zero fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :id :routes-2026-10-10-t97a01-standard-n3-homeomorph-2,
+      :kind :uptake,
+      :depends-on [],
+      :current-residual
+      "Upgrade apm_t97a01_X_equiv_standardN3 to a homeomorphism.",
+      :other-consumers []}
+     {:consumer :t99J01,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/shared/covering-monodromy-coset-lifting",
+      :acceptance
+      {:probe
+       "Compile the common covering theorem identifying a path-connected covering fiber with cosets of the fundamental-group image, proving pi1 injectivity and the based lifting criterion; demonstrate finite-index cardinality and subgroup-containment lifting.",
+       :placeholder
+       "the single sorries in apm_t99j01 and apm_t93j03 and the classification bridge sorry in t97A03",
+       :route-step
+       "t99J01 step 2, t93J03 step 4, and t97A03 monodromy input",
+       :gates
+       ["canonical packages"
+        "fixture compiles"
+        "zero fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :id :routes-2026-10-10-covering-monodromy-coset-lifting-shared-2,
+      :kind :reusable-theorem,
+      :depends-on [],
+      :current-residual
+      "Package fiber-coset equivalence, pi1 injectivity, and subgroup-containment lifting.",
+      :other-consumers [:t93J03 :t97A03]}
+     {:consumer :t97A01,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/shared/polygon-edge-graph-open-cover",
+      :acceptance
+      {:probe
+       "Compile the finite polygon quotient open cover: contractible interior piece, boundary-neighborhood piece retracting to the edge graph, punctured-disk intersection, literal inclusions, and six-vertex identification for both consumer words.",
+       :placeholder
+       "the single sorry in apm_t97a01 and apm_t97A03_bridge_invariants_of_model",
+       :route-step "t97A01 step 2 and t97A03 quotient-model input",
+       :gates
+       ["canonical packages"
+        "fixture compiles"
+        "zero fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :id :routes-2026-10-10-polygon-edge-graph-open-cover-shared-2,
+      :kind :reusable-theorem,
+      :depends-on [],
+      :current-residual
+      "Construct the bounded polygon open cover and edge-graph retraction.",
+      :other-consumers [:t97A03]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 3,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only when every active topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:strategy
+       "Measure the t97A01 uptake and two independent shared foundations, preserve reviewed STOPs, recount six consumers and eight placeholders, then refill."},
+      :id :routes-2026-10-10-checkpoint-topo1-covering-independent-2,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:routes-2026-10-10-t97a01-standard-n3-homeomorph-2
+       :routes-2026-10-10-covering-monodromy-coset-lifting-shared-2
+       :routes-2026-10-10-polygon-edge-graph-open-cover-shared-2],
+      :current-residual "Review three independent route advances.",
+      :other-consumers []}],
+    :author "topo-4",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -86264,6 +86425,106 @@
     :routes-2026-10-10-checkpoint-topo1-covering-shared-three-1],
    :current-residual
    "Review the generic point-wedge representation layers and quotient-sheet local theorem, then refill from the complete topo1 portfolio.",
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md/t97A01/standard-n3-homeomorph",
+   :acceptance
+   {:probe
+    "Compile a placeholder-free homeomorphism from the frozen quotient X to Surface false 3 by upgrading the banked relation equivalence and proving continuity in both coinduced topologies.",
+    :placeholder "the single sorry in apm_t97a01",
+    :route-step "t97A01 step 1, quotient homeomorphism to standard N3",
+    :gates
+    ["canonical packages"
+     "fixture compiles"
+     "zero fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-10-t97a01-standard-n3-homeomorph-2,
+   :kind :uptake,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo1-covering-boundaries-1],
+   :current-residual
+   "Upgrade apm_t97a01_X_equiv_standardN3 to a homeomorphism.",
+   :other-consumers []}
+  {:consumer :t99J01,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/shared/covering-monodromy-coset-lifting",
+   :acceptance
+   {:probe
+    "Compile the common covering theorem identifying a path-connected covering fiber with cosets of the fundamental-group image, proving pi1 injectivity and the based lifting criterion; demonstrate finite-index cardinality and subgroup-containment lifting.",
+    :placeholder
+    "the single sorries in apm_t99j01 and apm_t93j03 and the classification bridge sorry in t97A03",
+    :route-step
+    "t99J01 step 2, t93J03 step 4, and t97A03 monodromy input",
+    :gates
+    ["canonical packages"
+     "fixture compiles"
+     "zero fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-10-covering-monodromy-coset-lifting-shared-2,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo1-covering-boundaries-1],
+   :current-residual
+   "Package fiber-coset equivalence, pi1 injectivity, and subgroup-containment lifting.",
+   :other-consumers [:t93J03 :t97A03]}
+  {:consumer :t97A01,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md/shared/polygon-edge-graph-open-cover",
+   :acceptance
+   {:probe
+    "Compile the finite polygon quotient open cover: contractible interior piece, boundary-neighborhood piece retracting to the edge graph, punctured-disk intersection, literal inclusions, and six-vertex identification for both consumer words.",
+    :placeholder
+    "the single sorry in apm_t97a01 and apm_t97A03_bridge_invariants_of_model",
+    :route-step "t97A01 step 2 and t97A03 quotient-model input",
+    :gates
+    ["canonical packages"
+     "fixture compiles"
+     "zero fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-10-polygon-edge-graph-open-cover-shared-2,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo1-covering-boundaries-1],
+   :current-residual
+   "Construct the bounded polygon open cover and edge-graph retraction.",
+   :other-consumers [:t97A03]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 3,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only when every active topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:strategy
+    "Measure the t97A01 uptake and two independent shared foundations, preserve reviewed STOPs, recount six consumers and eight placeholders, then refill."},
+   :id :routes-2026-10-10-checkpoint-topo1-covering-independent-2,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:routes-2026-10-10-t97a01-standard-n3-homeomorph-2
+    :routes-2026-10-10-covering-monodromy-coset-lifting-shared-2
+    :routes-2026-10-10-polygon-edge-graph-open-cover-shared-2
+    :routes-2026-10-10-checkpoint-topo1-covering-boundaries-1],
+   :current-residual "Review three independent route advances.",
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
