@@ -96200,8 +96200,80 @@
   {:bounded-exception
    "This single-consumer construction instantiates the banked literal pullback API with the degree-n circle power map and the banked ThreeCircles collapse; it is the exact covering space whose connectedness the original row must prove.",
    :consumer :t99J01,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Prove exact n-point fibers for the circle power map and its pullback, then prove the pullback path connected by cyclic transitions realized through the banked firstCircle section.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :missing-theorems
+    [{:name "CyclicThreeCirclesPullbackCover.covering",
+      :type
+      "For NeZero n, the literal pullback projection of Circle.npow n along the ThreeCircles collapse is an IsCoveringMap",
+      :status :proved,
+      :consumers [:t99J01],
+      :depends-on
+      ["CyclicThreeCirclesCollapse.collapse_firstCircle"
+       "LiteralCoveringPullback.covering"]}],
+    :statement-hashes "131 registered statements match",
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :finding
+      "canonical package authority resolves to /home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "sha256sum /tmp/cyclic-three-circles-pullback-cover.lean",
+      :exit 0,
+      :finding
+      "fixture hash matches def28e26cdf4dfa9d0de9f51fe83ec87a8b747228488f7a98892f2c888827c17"}
+     {:cmd
+      "lake build ConstructionTargets.CyclicThreeCirclesPullbackCover",
+      :exit 0,
+      :finding "canonical literal degree-n pullback covering builds"}
+     {:cmd
+      "lake env lean /tmp/cyclic-three-circles-pullback-cover.lean",
+      :exit 0,
+      :finding
+      "frozen fixture compiles and reports only standard axioms"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" ConstructionTargets/CyclicThreeCirclesPullbackCover.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero source placeholders"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" /tmp/cyclic-three-circles-pullback-cover.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero fixture placeholders"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short",
+      :exit 0,
+      :finding "clean worktree after commit"}],
+    :commit "4528faca6fe82884d1df39a33c88b5d7ae719db6",
+    :changed-paths
+    ["ConstructionTargets/CyclicThreeCirclesPullbackCover.lean"],
+    :fixture
+    {:path "/tmp/cyclic-three-circles-pullback-cover.lean",
+     :sha256
+     "def28e26cdf4dfa9d0de9f51fe83ec87a8b747228488f7a98892f2c888827c17",
+     :sorry-count 0},
+    :implementation
+    {:scope
+     ["ConstructionTargets/CyclicThreeCirclesPullbackCover.lean"],
+     :declarations
+     ["ConstructionTargets.CyclicThreeCirclesPullbackCover.circlePower"
+      "ConstructionTargets.CyclicThreeCirclesPullbackCover.continuous_circlePower"
+      "ConstructionTargets.CyclicThreeCirclesPullbackCover.Pullback"
+      "ConstructionTargets.CyclicThreeCirclesPullbackCover.projection"
+      "ConstructionTargets.CyclicThreeCirclesPullbackCover.covering"
+      "ConstructionTargets.CyclicThreeCirclesPullbackCover.projection_apply"]},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/CyclicThreeCirclesPullbackCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/cyclic-three-circles-cover/literal-pullback",
@@ -97681,14 +97753,35 @@
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
+  {:consumer :t99J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "CyclicThreeCirclesPullbackCover.covering",
+    :type
+    "For NeZero n, the literal pullback projection of Circle.npow n along the ThreeCircles collapse is an IsCoveringMap"},
+   :lemma
+   {:name "CyclicThreeCirclesPullbackCover.covering",
+    :reported-by
+    [:routes-2026-10-10-cyclic-three-circles-pullback-cover-40],
+    :type
+    "For NeZero n, the literal pullback projection of Circle.npow n along the ThreeCircles collapse is an IsCoveringMap",
+    :proved-in
+    :routes-2026-10-10-cyclic-three-circles-pullback-cover-40},
+   :id :lemma-cyclicthreecirclespullbackcover-covering,
+   :kind :lemma,
+   :depends-on
+   [:lemma-cyclicthreecirclescollapse-collapse-firstcircle
+    :lemma-literalcoveringpullback-covering],
+   :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
    :state :backlog,
    :scope [],
-   :acceptance {:lemma "CyclicThreeCirclesPullbackCover.covering"},
-   :lemma
-   {:name "CyclicThreeCirclesPullbackCover.covering", :reported-by []},
-   :id :lemma-cyclicthreecirclespullbackcover-covering,
+   :acceptance {:lemma "LiteralCoveringPullback.covering"},
+   :lemma {:name "LiteralCoveringPullback.covering", :reported-by []},
+   :id :lemma-literalcoveringpullback-covering,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}],
