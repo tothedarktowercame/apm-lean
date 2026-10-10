@@ -96527,13 +96527,43 @@
    "Transport finiteness and cardinality through LiteralCoveringPullback.fiberEquiv to build the n-sheeted pullback certificate, then prove path connectedness via cyclic monodromy.",
    :other-consumers []}
   {:bounded-exception
+   "This single-consumer certificate transports the banked circle-power fiber calculation through the literal pullback equivalence and supplies the exact IsKSheetedCover required by the first conjunct of t99J01.",
+   :consumer :t99J01,
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/CyclicThreeCirclesPullbackSheets.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/cyclic-three-circles-cover/sheet-certificate",
+   :acceptance
+   {:implementation
+    "For NeZero n, prove IsKSheetedCover (CyclicThreeCirclesPullbackCover.projection n) n. Reuse the banked pullback covering theorem, transfer fiber finiteness through LiteralCoveringPullback.fiberEquiv, and transfer Nat.card through LiteralCoveringPullback.fiber_card and circlePower_fiber_card. Do not prove path connectedness, construct monodromy paths, compute subgroup index, or close t99J01.",
+    :placeholder "the single sorry in apm_t99j01",
+    :route-step
+    "t99J01 cyclic-cover step 5: assemble the exact n-sheeted pullback certificate before proving connectedness",
+    :fixture "/tmp/cyclic-three-circles-pullback-sheets.lean",
+    :fixture-sha256
+    "cc68cdc0e02d849939a7ffa239f2129cbdc83ec8d6f4e0c288a78ab669b772c3",
+    :gates
+    ["lake build ConstructionTargets.CyclicThreeCirclesPullbackSheets"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-10-cyclic-three-circles-pullback-sheets-43,
+   :kind :reusable-theorem,
+   :depends-on [:routes-2026-10-10-circle-power-fiber-card-42],
+   :current-residual
+   "Prove the pullback path connected by showing the firstCircle loop induces a cyclic transitive permutation of the n sheets, then package the PathConnectedSpace instance.",
+   :other-consumers []}
+  {:bounded-exception
    "Single-consumer prerequisite second in the final ledger ranking.",
    :consumer :t99J01,
    :implements-lemma :lemma-cyclicthreecirclespullback-pathconnected,
    :evidence
    {:probe
     {:residual
-     "Every circle-power fiber now has compiled cardinality n. The original row still needs literal-pullback sheet transport and path connectedness.",
+     "The concrete pullback is now a compiled n-sheeted cover. Only the cyclic-monodromy path-connectedness proof remains for the original row.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
@@ -96543,62 +96573,67 @@
        :status :partial,
        :consumers [:t99J01],
        :depends-on
-       ["CyclicThreeCirclesPullbackCover.covering"
-        "CirclePowerFiberCard.circlePower_fiber_card"]}],
+       ["CyclicThreeCirclesPullbackSheets.pullback_isKSheeted"
+        "CyclicThreeCirclesCollapse.collapse_firstCircle"]}],
      :prerequisite
      {:bounded-exception
-      "This single-consumer calculation transports the banked kernel cardinality to every circle-power fiber; it is the exact input needed by the literal pullback fiber equivalence and the t99J01 sheet certificate.",
+      "This single-consumer certificate transports the banked circle-power fiber calculation through the literal pullback equivalence and supplies the exact IsKSheetedCover required by the first conjunct of t99J01.",
       :consumer :t99J01,
       :phase :implementation,
       :state :open,
-      :scope ["ConstructionTargets/CirclePowerFiberCard.lean"],
+      :scope
+      ["ConstructionTargets/CyclicThreeCirclesPullbackSheets.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/cyclic-three-circles-cover/fiber-card",
+      "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/cyclic-three-circles-cover/sheet-certificate",
       :acceptance
       {:implementation
-       "For NeZero n and every y : Circle, use surjectivity of Circle.isQuotientCoveringMap_npow, a chosen preimage, MonoidHom.fiberEquivKer, and the banked kernel theorem to prove that {z : Circle // z ^ n = y} is finite and has Nat.card n. Do not transport to the ThreeCircles pullback, prove path connectedness, construct monodromy paths, compute subgroup index, or close t99J01.",
+       "For NeZero n, prove IsKSheetedCover (CyclicThreeCirclesPullbackCover.projection n) n. Reuse the banked pullback covering theorem, transfer fiber finiteness through LiteralCoveringPullback.fiberEquiv, and transfer Nat.card through LiteralCoveringPullback.fiber_card and circlePower_fiber_card. Do not prove path connectedness, construct monodromy paths, compute subgroup index, or close t99J01.",
        :placeholder "the single sorry in apm_t99j01",
        :route-step
-       "t99J01 cyclic-cover step 4: identify every circle-power fiber with the n-element kernel before literal-pullback transport",
-       :fixture "/tmp/circle-power-fiber-card.lean",
+       "t99J01 cyclic-cover step 5: assemble the exact n-sheeted pullback certificate before proving connectedness",
+       :fixture "/tmp/cyclic-three-circles-pullback-sheets.lean",
        :fixture-sha256
-       "e0e18a9463c6bbfb3c23935a10fe439067961569e333e06ff57c4ceb2ae6a55b",
+       "cc68cdc0e02d849939a7ffa239f2129cbdc83ec8d6f4e0c288a78ab669b772c3",
        :gates
-       ["lake build ConstructionTargets.CirclePowerFiberCard"
+       ["lake build ConstructionTargets.CyclicThreeCirclesPullbackSheets"
         "fixture compiles"
         "zero source and fixture sorry"
         "standard-only axioms"
         "registry check"]},
-      :id :routes-2026-10-10-circle-power-fiber-card-42,
+      :id :routes-2026-10-10-cyclic-three-circles-pullback-sheets-43,
       :kind :reusable-theorem,
-      :depends-on [:routes-2026-10-10-circle-power-kernel-card-41],
+      :depends-on [:routes-2026-10-10-circle-power-fiber-card-42],
       :current-residual
-      "Transport finiteness and cardinality through LiteralCoveringPullback.fiberEquiv to build the n-sheeted pullback certificate, then prove path connectedness via cyclic monodromy.",
+      "Prove the pullback path connected by showing the firstCircle loop induces a cyclic transitive permutation of the n sheets, then package the PathConnectedSpace instance.",
       :other-consumers []},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
-     [{:cmd "lake env lean /tmp/circle-power-fiber-card.lean", :exit 0}
-      {:cmd "sha256sum /tmp/circle-power-fiber-card.lean", :exit 0}
+     [{:cmd
+       "lake env lean /tmp/cyclic-three-circles-pullback-sheets.lean",
+       :exit 0}
+      {:cmd "sha256sum /tmp/cyclic-three-circles-pullback-sheets.lean",
+       :exit 0}
       {:cmd
-       "rg -n \"\\b(sorry|admit)\\b\" /tmp/circle-power-fiber-card.lean",
+       "rg -n \"\\b(sorry|admit)\\b\" /tmp/cyclic-three-circles-pullback-sheets.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd "python3 scripts/statement-registry.py check", :exit 0}
       {:cmd "git status --short", :exit 0, :finding "clean"}],
      :diagnostic-history
-     [{:cmd "lake env lean /tmp/circle-power-fiber-card.lean",
+     [{:cmd
+       "lake env lean /tmp/cyclic-three-circles-pullback-sheets.lean",
        :exit 1,
        :finding
-       "Finite.of_injective required an explicit Finite instance for the power-map kernel; installed it from the banked kernel-finiteness theorem."}],
+       "The structure fields use equality subtypes while the banked pullback API uses singleton preimages; explicit changes to the preimage forms made the equivalence and fiber-card theorem apply."}],
      :fixture
-     {:path "/tmp/circle-power-fiber-card.lean",
+     {:path "/tmp/cyclic-three-circles-pullback-sheets.lean",
       :sha256
-      "e0e18a9463c6bbfb3c23935a10fe439067961569e333e06ff57c4ceb2ae6a55b",
+      "cc68cdc0e02d849939a7ffa239f2129cbdc83ec8d6f4e0c288a78ab669b772c3",
       :interface
-      "circlePower_fiber_card and circlePower_fiber_finite prove every degree-n Circle power fiber is finite with Nat.card n."},
+      "pullback_isKSheeted proves the literal cyclic ThreeCircles pullback projection is an n-sheeted covering for every nonzero n."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/cyclic-three-circles-cover",
@@ -96622,7 +96657,8 @@
     :routes-2026-10-10-cyclic-three-circles-collapse-39
     :routes-2026-10-10-cyclic-three-circles-pullback-cover-40
     :routes-2026-10-10-circle-power-kernel-card-41
-    :routes-2026-10-10-circle-power-fiber-card-42],
+    :routes-2026-10-10-circle-power-fiber-card-42
+    :routes-2026-10-10-cyclic-three-circles-pullback-sheets-43],
    :current-residual
    "Combine the cyclic cover with component restriction and close t99J01.",
    :other-consumers []}
@@ -97058,7 +97094,8 @@
     :lemma-cyclicthreecirclescollapse-collapse-firstcircle
     :lemma-cyclicthreecirclespullbackcover-covering
     :lemma-circlepowerkernelcard-circlepower-kernel-card
-    :lemma-circlepowerfibercard-circlepower-fiber-card],
+    :lemma-circlepowerfibercard-circlepower-fiber-card
+    :lemma-cyclicthreecirclespullbacksheets-pullback-isksheeted],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -98058,6 +98095,19 @@
    :id :lemma-circlepowerfibercard-circlepower-fiber-card,
    :kind :lemma,
    :depends-on [:lemma-circlepowerkernelcard-circlepower-kernel-card],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "CyclicThreeCirclesPullbackSheets.pullback_isKSheeted"},
+   :lemma
+   {:name "CyclicThreeCirclesPullbackSheets.pullback_isKSheeted",
+    :reported-by []},
+   :id :lemma-cyclicthreecirclespullbacksheets-pullback-isksheeted,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
