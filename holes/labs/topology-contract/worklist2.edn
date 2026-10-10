@@ -65721,6 +65721,20 @@
       "git show --check --oneline 809eb291eb023b0295691f65de0a765c583d5bc3",
       :exit 0,
       :output "809eb291 Prove t02A03 meridian tube membership"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791665592103-2952-4ad61540",
+     :commands
+     ["git show --format=fuller --stat 809eb291eb023b0295691f65de0a765c583d5bc3 && git diff-tree --no-commit-id --name-status -r 809eb291eb023b0295691f65de0a765c583d5bc3 && git show --check --oneline 809eb291eb023b0295691f65de0a765c583d5bc3"
+      "sha256sum /tmp/t02a03_meridian_right_tube.lean"
+      "lake env lean ConstructionTargets/T02A03GeometricTubeCover.lean"
+      "lake env lean /tmp/t02a03_meridian_right_tube.lean"
+      "python3 scripts/statement-registry.py check --rev 809eb291eb023b0295691f65de0a765c583d5bc3"
+      "python3 scripts/statement-registry.py fingerprint --rev 809eb291eb023b0295691f65de0a765c583d5bc3 t02A03"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"],
+     :finding
+     "PASS: recorded commit 809eb291 changes exactly ConstructionTargets/T02A03GeometricTubeCover.lean and its blob 2dd7361e6e9ed5c4b5c61eec7c96ca43dbf7fd95 matches HEAD. Fixture SHA-256 exactly matches 0936693afa3d55429cdc5145e13178759111b7f389335c4ce9aa466a1739a87b; module and fixture compile with only propext, Classical.choice, and Quot.sound, with no new sorry, admit, or axiom. The theorem has the frozen orientation Circle to rightTube-minus-leftCore: the radius-1/8 meridian is within the closed radius-1/4 right tube via the common origin on rightCore, while the existing geometricY theorem supplies leftCore exclusion. Registry is 131/0; worklist validates; t02A03 remains at one comment-stripped sorry and fingerprint d123afd5ae0ee067587b3ed3d7b9b6d2f075c3d95701e098ec357c7317cd34c3."},
     :commit "809eb291eb023b0295691f65de0a765c583d5bc3",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
@@ -65736,7 +65750,7 @@
    :phase :implementation,
    :type
    "forall z : Circle, apm_t02a03_circleMeridian z ∈ apm_t02a03_rightTube ∧ apm_t02a03_circleMeridian z ∉ Set.range apm_t02a03_leftCore",
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/circle-meridian-right-tube-membership",
@@ -65834,7 +65848,7 @@
      "The proposed inverse circleMeridianMap was previously typed only into geometricY, whose membership proof chooses the left tube. The fixture proves the stronger frozen-coordinate fact needed here: every circle meridian point is within 1/8 of the common origin, hence belongs to the closed radius-1/4 right tube, and the existing coordinate calculation keeps it off the left core. This validates restriction of circleMeridianMap to RightTubeMinusLeftCore. The forward normal coordinate and the two deformation homotopies remain absent, so the full HomotopyEquiv is not yet a GO.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/right-tube-meridian-homotopy-equivalence",
@@ -68261,7 +68275,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -68278,7 +68292,10 @@
     "forall z : Circle, apm_t02a03_circleMeridian z ∈ apm_t02a03_rightTube ∧ apm_t02a03_circleMeridian z ∉ Set.range apm_t02a03_leftCore",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-circle-meridian-right-tube-membership-topo2-r1},
+    :routes-2026-10-10-t02a03-circle-meridian-right-tube-membership-topo2-r1,
+    :banked-by
+    :routes-2026-10-10-t02a03-circle-meridian-right-tube-membership-topo2-r1,
+    :banked-commit "809eb291eb023b0295691f65de0a765c583d5bc3"},
    :id
    :lemma-constructiontargets-t02a03geometrictubecover-apm-t02a03-circlemeridian-mem-right,
    :kind :lemma,
