@@ -99168,16 +99168,45 @@
    "Construct the annular overlap-to-punctured-disk model and identify the radius-one boundary quotients for SurfaceRel false 3 and TorusCrosscapRel with ThreeCircles, including the required vertex classes and literal inclusion equations.",
    :other-consumers []}
   {:bounded-exception
+   "This single-consumer prerequisite proves that polygon identifications disappear on the strict annular overlap and identifies that overlap with its literal source before radial comparison to a punctured disk.",
+   :consumer :t97A01,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/PolygonAnnularOverlapHomeomorph.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/annular-overlap-homeomorph",
+   :acceptance
+   {:implementation
+    "Promote the exact fixture. For a radius-preserving relation whose generators lie on radius one, prove that EqvGen between points of radius less than one is equality, prove the preimage of overlapOpen is exactly the literal annular source, prove the restricted quotient map from that annulus is a quotient map and injective, construct its homeomorphism onto overlapOpen, and prove the representative formula. Do not identify the annulus with a punctured disk or circle, identify boundary quotients with ThreeCircles, prove final inclusion equations, compute invariants, or close t97A01.",
+    :placeholder "the single sorry in apm_t97a01",
+    :route-step
+    "polygon radial open-cover step 9: identify the quotient overlap homeomorphically with the literal annulus before radial normalization",
+    :fixture "/tmp/polygon-annular-overlap-homeomorph.lean",
+    :fixture-sha256
+    "4acfb5f78b3b5831a36ca6611f1579f368a7da62e31f4ab124546ed11544af71",
+    :gates
+    ["lake build ConstructionTargets.PolygonAnnularOverlapHomeomorph"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-10-polygon-annular-overlap-homeomorph-49,
+   :kind :reusable-theorem,
+   :area "polygon-surface-open-cover",
+   :depends-on [:routes-2026-10-10-polygon-outer-open-deformation-48],
+   :current-residual
+   "Construct the explicit radial homotopy equivalence from the annular source to the punctured-disk or circle model used by the package, then identify both radius-one boundary quotients with ThreeCircles and prove vertex and literal inclusion formulas.",
+   :other-consumers []}
+  {:bounded-exception
    "This single-consumer concrete quotient package is the other final backlog lemma on t97A01 and supplies the actual two polygon models required by its frozen statement.",
    :consumer :t97A01,
    :implements-lemma :lemma-polygonradialopencoverpackages,
    :evidence
    {:probe
     {:residual
-     "The actual outer open piece now strongly deforms onto its radius-one boundary classes. The remaining package consists of the annular punctured-disk comparison, the two boundary quotient-to-ThreeCircles identifications, the vertex classes, and the literal inclusion formulas.",
+     "The quotient overlap is now homeomorphic to the literal annulus because boundary identifications are absent below radius one. The remaining package needs radial normalization of this annulus to the punctured-disk model, both boundary ThreeCircles identifications, vertex classes, and literal inclusion equations.",
      :outcome :revise,
-     :warnings
-     ["A concurrent unrelated modification exists at ConstructionTargets/T02A03GeometricTubeDeformation.lean; this read-only probe did not modify or inspect its contents."],
+     :warnings [],
      :missing-theorems
      [{:name "polygonRadialOpenCoverPackages",
        :type
@@ -99185,87 +99214,93 @@
        :status :partial,
        :consumers [:t97A01],
        :depends-on
-       ["PolygonOuterOpenDeformation.outerOpenHomotopy"
-        "polygonBoundaryThreeCircles"
-        "polygonAnnulusPuncturedDisk"],
+       ["PolygonAnnularOverlapHomeomorph.overlapHomeomorph"
+        "polygonAnnulusPuncturedDisk"
+        "polygonBoundaryThreeCircles"],
        :area "polygon-surface-open-cover"}
-      {:name "PolygonOuterOpenDeformation.outerOpenHomotopy",
+      {:name "PolygonAnnularOverlapHomeomorph.overlapHomeomorph",
        :type
-       "For a radius-preserving boundary-supported disk relation, outerOpen strongly deforms onto its radius-one boundary classes.",
+       "For any radius-preserving boundary-supported disk relation, the annular source 1/4 < radius < 3/4 is homeomorphic via the quotient map to overlapOpen.",
        :status :proved,
        :consumers [:t97A01],
+       :depends-on ["PolygonRadialOpenCover.overlapOpen_eq_inter"],
+       :area "polygon-surface-open-cover"}
+      {:name "polygonAnnulusPuncturedDisk",
+       :type
+       "Identify the annular source, and hence overlapOpen, with the required punctured-disk homotopy model with explicit radial representative formulas.",
+       :status :not-started,
+       :consumers [:t97A01],
        :depends-on
-       ["PolygonOuterRestrictedEqvGen.outerQuotientHomeomorph"
-        "PolygonOuterRadialQuotientDeformation.continuous_quotientHomotopy"],
+       ["PolygonAnnularOverlapHomeomorph.overlapHomeomorph"],
        :area "polygon-surface-open-cover"}],
      :prerequisite
      {:bounded-exception
-      "This single-consumer prerequisite transports the banked radial quotient homotopy onto the actual outer open piece and packages the endpoint and fixed-boundary properties needed for its contraction model.",
+      "This single-consumer prerequisite proves that polygon identifications disappear on the strict annular overlap and identifies that overlap with its literal source before radial comparison to a punctured disk.",
       :consumer :t97A01,
       :phase :implementation,
       :state :open,
-      :scope ["ConstructionTargets/PolygonOuterOpenDeformation.lean"],
+      :scope
+      ["ConstructionTargets/PolygonAnnularOverlapHomeomorph.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/outer-open-deformation",
+      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/annular-overlap-homeomorph",
       :acceptance
       {:implementation
-       "Promote the exact fixture. For a radius-preserving boundary-supported disk relation, conjugate the banked quotient homotopy by outerQuotientHomeomorph to define a homotopy on outerOpen. Prove joint continuity, identity at time zero, landing in the predicate of radius-one boundary classes at time one, and pointwise fixation of every boundary class for all times. Do not identify the boundary quotient with ThreeCircles, identify the annulus with a punctured disk, prove the final literal inclusion equations, compute invariants, or close t97A01.",
+       "Promote the exact fixture. For a radius-preserving relation whose generators lie on radius one, prove that EqvGen between points of radius less than one is equality, prove the preimage of overlapOpen is exactly the literal annular source, prove the restricted quotient map from that annulus is a quotient map and injective, construct its homeomorphism onto overlapOpen, and prove the representative formula. Do not identify the annulus with a punctured disk or circle, identify boundary quotients with ThreeCircles, prove final inclusion equations, compute invariants, or close t97A01.",
        :placeholder "the single sorry in apm_t97a01",
        :route-step
-       "polygon radial open-cover step 8: deform the actual outer open piece onto its radius-one boundary quotient",
-       :fixture "/tmp/polygon-outer-open-deformation.lean",
+       "polygon radial open-cover step 9: identify the quotient overlap homeomorphically with the literal annulus before radial normalization",
+       :fixture "/tmp/polygon-annular-overlap-homeomorph.lean",
        :fixture-sha256
-       "9fcf4732bedf53c138faa818673009bf4a0e6b66f6ca17b533fa54c96af656e5",
+       "4acfb5f78b3b5831a36ca6611f1579f368a7da62e31f4ab124546ed11544af71",
        :gates
-       ["lake build ConstructionTargets.PolygonOuterOpenDeformation"
+       ["lake build ConstructionTargets.PolygonAnnularOverlapHomeomorph"
         "fixture compiles"
         "zero source and fixture sorry"
         "standard-only axioms"
         "registry check"]},
-      :id :routes-2026-10-10-polygon-outer-open-deformation-48,
+      :id :routes-2026-10-10-polygon-annular-overlap-homeomorph-49,
       :kind :reusable-theorem,
       :area "polygon-surface-open-cover",
       :depends-on
-      [:routes-2026-10-10-polygon-outer-restricted-eqvgen-47],
+      [:routes-2026-10-10-polygon-outer-open-deformation-48],
       :current-residual
-      "Construct the annular overlap-to-punctured-disk model and identify the radius-one boundary quotients for SurfaceRel false 3 and TorusCrosscapRel with ThreeCircles, including the required vertex classes and literal inclusion equations.",
+      "Construct the explicit radial homotopy equivalence from the annular source to the punctured-disk or circle model used by the package, then identify both radius-one boundary quotients with ThreeCircles and prove vertex and literal inclusion formulas.",
       :other-consumers []},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
-     [{:cmd "lake env lean /tmp/polygon-outer-open-deformation.lean",
+     [{:cmd
+       "lake env lean /tmp/polygon-annular-overlap-homeomorph.lean",
        :exit 0,
        :finding
-       "The transported outerOpen homotopy, continuity, zero endpoint, time-one boundary landing, and boundary fixation compile with standard axioms."}
-      {:cmd "sha256sum /tmp/polygon-outer-open-deformation.lean",
+       "EqvGen triviality below radius one, the overlap preimage equation, restricted quotient map, injectivity, annulus-to-overlap homeomorphism, and representative formula compile with standard axioms."}
+      {:cmd "sha256sum /tmp/polygon-annular-overlap-homeomorph.lean",
        :exit 0,
        :finding
-       "9fcf4732bedf53c138faa818673009bf4a0e6b66f6ca17b533fa54c96af656e5"}
+       "4acfb5f78b3b5831a36ca6611f1579f368a7da62e31f4ab124546ed11544af71"}
       {:cmd
-       "rg -n \"\\b(sorry|admit)\\b\" /tmp/polygon-outer-open-deformation.lean",
+       "rg -n \"\\b(sorry|admit)\\b\" /tmp/polygon-annular-overlap-homeomorph.lean",
        :exit 1,
        :expected-exit 1,
        :finding "No fixture placeholders."}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :finding "131 registered statements match, 0 do not."}
-      {:cmd "git status --short",
-       :exit 0,
-       :finding
-       "The worktree contains an unrelated concurrent modification: ConstructionTargets/T02A03GeometricTubeDeformation.lean."}],
+      {:cmd "git status --short", :exit 0, :finding "clean"}],
      :diagnostic-history
-     [{:cmd "lake env lean /tmp/polygon-outer-open-deformation.lean",
+     [{:cmd
+       "lake env lean /tmp/polygon-annular-overlap-homeomorph.lean",
        :exit 1,
        :finding
-       "The initial continuity proof used the nonexistent field spelling prod_mk; changing it to the Mathlib theorem Continuous.prodMk completed the product map proof."}],
+       "The first draft incorrectly treated the relation-independent Annulus alias as relation-parameterized and left outer-source membership folded; removing the spurious parameter and exposing both radius inequalities corrected the types."}],
      :fixture
-     {:path "/tmp/polygon-outer-open-deformation.lean",
+     {:path "/tmp/polygon-annular-overlap-homeomorph.lean",
       :sha256
-      "9fcf4732bedf53c138faa818673009bf4a0e6b66f6ca17b533fa54c96af656e5",
+      "4acfb5f78b3b5831a36ca6611f1579f368a7da62e31f4ab124546ed11544af71",
       :interface
-      "outerOpenHomotopy is a jointly continuous deformation of outerOpen onto radius-one boundary classes, starting at the identity and fixing every boundary class pointwise."},
+      "For any radius-preserving boundary-supported polygon relation, the literal annular source is homeomorphic to overlapOpen; EqvGen is equality on this subunit-radius region."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -99293,7 +99328,8 @@
     :routes-2026-10-10-polygon-outer-radial-quotient-deformation-45
     :routes-2026-10-10-polygon-outer-open-restricted-quotient-46
     :routes-2026-10-10-polygon-outer-restricted-eqvgen-47
-    :routes-2026-10-10-polygon-outer-open-deformation-48],
+    :routes-2026-10-10-polygon-outer-open-deformation-48
+    :routes-2026-10-10-polygon-annular-overlap-homeomorph-49],
    :current-residual
    "Combine the concrete cover packages with the strict overlap squares, banked Smith normalization, and final t97A01 assembly.",
    :other-consumers []}
@@ -99807,7 +99843,8 @@
     :lemma-polygonouterrestrictedeqvgen
     :lemma-polygonouterrestrictedeqvgen-outerquotienthomeomorph
     :lemma-polygonouteropendeformation
-    :lemma-polygonouteropendeformation-outeropenhomotopy],
+    :lemma-polygonouteropendeformation-outeropenhomotopy
+    :lemma-polygonannularoverlaphomeomorph-overlaphomeomorph],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -101429,15 +101466,25 @@
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
-  {:consumer :portfolio,
+  {:consumer :t97A01,
    :phase :lemma,
    :state :backlog,
    :scope [],
-   :acceptance {:lemma "polygonAnnulusPuncturedDisk"},
-   :lemma {:name "polygonAnnulusPuncturedDisk", :reported-by []},
+   :acceptance
+   {:lemma "polygonAnnulusPuncturedDisk",
+    :type
+    "Identify the annular source, and hence overlapOpen, with the required punctured-disk homotopy model with explicit radial representative formulas."},
+   :lemma
+   {:name "polygonAnnulusPuncturedDisk",
+    :reported-by
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    :type
+    "Identify the annular source, and hence overlapOpen, with the required punctured-disk homotopy model with explicit radial representative formulas.",
+    :area "polygon-surface-open-cover"},
    :id :lemma-polygonannuluspunctureddisk,
    :kind :lemma,
-   :depends-on [],
+   :depends-on
+   [:lemma-polygonannularoverlaphomeomorph-overlaphomeomorph],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -101746,6 +101793,39 @@
    :depends-on
    [:lemma-polygonouterrestrictedeqvgen-outerquotienthomeomorph
     :lemma-polygonouterradialquotientdeformation-continuous-quotienthomotopy],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "PolygonAnnularOverlapHomeomorph.overlapHomeomorph",
+    :type
+    "For any radius-preserving boundary-supported disk relation, the annular source 1/4 < radius < 3/4 is homeomorphic via the quotient map to overlapOpen."},
+   :lemma
+   {:name "PolygonAnnularOverlapHomeomorph.overlapHomeomorph",
+    :reported-by
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    :type
+    "For any radius-preserving boundary-supported disk relation, the annular source 1/4 < radius < 3/4 is homeomorphic via the quotient map to overlapOpen.",
+    :area "polygon-surface-open-cover",
+    :proved-in
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+   :id :lemma-polygonannularoverlaphomeomorph-overlaphomeomorph,
+   :kind :lemma,
+   :depends-on [:lemma-polygonradialopencover-overlapopen-eq-inter],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "PolygonRadialOpenCover.overlapOpen_eq_inter"},
+   :lemma
+   {:name "PolygonRadialOpenCover.overlapOpen_eq_inter",
+    :reported-by []},
+   :id :lemma-polygonradialopencover-overlapopen-eq-inter,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
