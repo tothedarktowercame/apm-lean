@@ -59460,57 +59460,69 @@
    "single-consumer contraction of the t02A03 lifted right-core segment to the meridian anchor",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/t02a03_geometric_tube_cover.lean",
-      :sha256
-      "ab06fba47e37e402835962233cfb0c3646384c73fb36601c56c0e21ffedd86d9"},
-     :commands
-     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "apm_t02a03_rightCoreAnchorContractionPoint, apm_t02a03_rightCoreAnchorContractionPoint_mem_geometricY, apm_t02a03_rightCoreAnchorContractionMap, apm_t02a03_rightCoreAnchorContractionMap_zero, and apm_t02a03_rightCoreAnchorContractionMap_one compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
-       :exit 0}
-      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "ab06fba47e37e402835962233cfb0c3646384c73fb36601c56c0e21ffedd86d9  /tmp/t02a03_geometric_tube_cover.lean"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}
-      {:cmd
-       "rg -n '^((noncomputable )?def|theorem) apm_t02a03_rightCoreAnchorContraction(Point|Point_mem_geometricY|Map|Map_zero|Map_one)' /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "479:noncomputable def apm_t02a03_rightCoreAnchorContractionPoint\n484:theorem apm_t02a03_rightCoreAnchorContractionPoint_mem_geometricY\n506:noncomputable def apm_t02a03_rightCoreAnchorContractionMap :\n518:theorem apm_t02a03_rightCoreAnchorContractionMap_zero\n531:theorem apm_t02a03_rightCoreAnchorContractionMap_one"}],
-     :finding
-     "A complete placeholder-free fixture compiles for this bounded contraction. The homotopy (s,t) ↦ rightCore((1-s)t)+(0,0,1/8) stays exactly 1/8 above a right-core point and therefore lies in W, while its positive third coordinate prevents intersection with the planar left core. Its zero slice is the banked terminal lifted-right-core map and its one slice is the constant geometricY point at the meridian anchor.",
-     :residual
-     "Promote the contraction of the terminal lifted-right-core map to the meridian anchor. The next consumer residual is to use the quarter-turn equality to attach this endpoint to the Circle meridian, extend the attachment across the right tube, and assemble the tube-piece gluing equivalence.",
-     :implementation
-     {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
-      :acceptance
-      {:declarations
-       ["apm_t02a03_rightCoreAnchorContractionPoint"
-        "apm_t02a03_rightCoreAnchorContractionPoint_mem_geometricY"
-        "apm_t02a03_rightCoreAnchorContractionMap"
-        "apm_t02a03_rightCoreAnchorContractionMap_zero"
-        "apm_t02a03_rightCoreAnchorContractionMap_one"],
-       :fixture-sha256
-       "ab06fba47e37e402835962233cfb0c3646384c73fb36601c56c0e21ffedd86d9",
-       :gates
-       ["lake env lean ConstructionTargets/T02A03GeometricTubeCover.lean"
-        "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeCover.lean || true)\""
-        "python3 scripts/statement-registry.py check"],
-       :axioms ["propext" "Classical.choice" "Quot.sound"],
-       :consumer-residual
-       "Use the quarter-turn equality to attach the contraction endpoint to the Circle meridian, then extend over the right tube and glue; those later constructions are outside this packet."}}}},
+   {:placeholder-delta 0,
+    :residual
+    "Use the quarter-turn equality to attach the contraction endpoint to the Circle meridian, then extend over the right tube and glue; those later constructions are outside this packet.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+      :exit 0,
+      :output
+      "ab06fba47e37e402835962233cfb0c3646384c73fb36601c56c0e21ffedd86d9  /tmp/t02a03_geometric_tube_cover.lean"}
+     {:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+      :exit 0,
+      :output
+      "The five right-core anchor-contraction declarations compiled; axioms [propext, Classical.choice, Quot.sound]."}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeCover.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.T02A03GeometricTubeCover",
+      :exit 0,
+      :output "Build completed successfully (8240 jobs)."}
+     {:cmd
+      "lake env lean /tmp/check_t02a03_anchor_contraction_axioms.lean",
+      :exit 0,
+      :output
+      "All five declarations depend on [propext, Classical.choice, Quot.sound]."}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeCover.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "comment-stripped placeholder census for problems/t02A03/lean/Main.lean",
+      :exit 0,
+      :output "1"}
+     {:cmd "sha256sum problems/t02A03/lean/Main.lean",
+      :exit 0,
+      :output
+      "b123eca388ab2858ca55daf538c1ddd645022b52f5196a15f0bb516d78323d7d  problems/t02A03/lean/Main.lean"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r 142d4a1985e742b7295685919ea64afd315f6079",
+      :exit 0,
+      :output "ConstructionTargets/T02A03GeometricTubeCover.lean"}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "142d4a1985e742b7295685919ea64afd315f6079",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
+    :fixture
+    {:path "/tmp/t02a03_geometric_tube_cover.lean",
+     :sha256
+     "ab06fba47e37e402835962233cfb0c3646384c73fb36601c56c0e21ffedd86d9"},
+    :declarations
+    ["ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_rightCoreAnchorContractionPoint"
+     "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_rightCoreAnchorContractionPoint_mem_geometricY"
+     "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_rightCoreAnchorContractionMap"
+     "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_rightCoreAnchorContractionMap_zero"
+     "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_rightCoreAnchorContractionMap_one"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/geometric-right-core-anchor-contraction",
