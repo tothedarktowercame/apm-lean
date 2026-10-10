@@ -100510,6 +100510,21 @@
       :output "131 registered statements match, 0 do not"}
      {:cmd "git diff --check", :exit 0}
      {:cmd "git status --short", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791674418830-3262-6ec0a183",
+     :commands
+     ["git show and diff-tree 0f7123ecd8668b4060715bc91b482935e4c992c8"
+      "sha256sum /tmp/polygon-boundary-three-loop-continuity.lean"
+      "lake build ConstructionTargets.PolygonBoundaryThreeLoopContinuity"
+      "lake env lean /tmp/polygon-boundary-three-loop-continuity.lean"
+      "lake env lean /dev/stdin with fresh axiom checks"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped placeholder and SHA-256 recomputation"
+      "git diff-tree --check 0f7123ecd8668b4060715bc91b482935e4c992c8^ 0f7123ecd8668b4060715bc91b482935e4c992c8"],
+     :finding
+     "Recorded one-file commit is authored by topo-2 and is byte-identical to the frozen fixture; continuity runs from interval conversion through edge parameterization into the coinduced polygon quotient and then descends through the endpoint and nested wedge quotients in the correct direction; both frozen theorems use only standard axioms, source and fixture have zero placeholders, and the registry reports 131 matched and 0 mismatched."},
     :commit "0f7123ecd8668b4060715bc91b482935e4c992c8",
     :changed-paths
     ["ConstructionTargets/PolygonBoundaryThreeLoopContinuity.lean"],
@@ -100525,7 +100540,7 @@
      "Proved continuity of interval conversion and every Circle edge parameterization, a generic wedgeLift continuity theorem, all six endpoint-quotient loop maps, both two-loop maps, and both nested three-loop comparison maps."},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/PolygonBoundaryThreeLoopContinuity.lean"],
    :dag-node
@@ -100676,7 +100691,7 @@
       "The explicit N3 and torus-crosscap maps from ThreeEndpointLoops to their specialized Circle relation quotients are continuous through the endpoint Quot and both nested point-wedge quotient topologies."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -103712,7 +103727,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -103726,7 +103741,10 @@
     :type "Continuous PolygonBoundaryThreeLoopMaps.n3ThreeLoops.",
     :area "polygon-surface-open-cover",
     :proved-in
-    :routes-2026-10-10-polygon-boundary-three-loop-continuity-61},
+    :routes-2026-10-10-polygon-boundary-three-loop-continuity-61,
+    :banked-by
+    :routes-2026-10-10-polygon-boundary-three-loop-continuity-61,
+    :banked-commit "0f7123ecd8668b4060715bc91b482935e4c992c8"},
    :id
    :lemma-polygonboundarythreeloopcontinuity-continuous-n3threeloops,
    :kind :lemma,
@@ -103734,7 +103752,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -103751,7 +103769,10 @@
     "Continuous PolygonBoundaryThreeLoopMaps.torusCrosscapThreeLoops.",
     :area "polygon-surface-open-cover",
     :proved-in
-    :routes-2026-10-10-polygon-boundary-three-loop-continuity-61},
+    :routes-2026-10-10-polygon-boundary-three-loop-continuity-61,
+    :banked-by
+    :routes-2026-10-10-polygon-boundary-three-loop-continuity-61,
+    :banked-commit "0f7123ecd8668b4060715bc91b482935e4c992c8"},
    :id
    :lemma-polygonboundarythreeloopcontinuity-continuous-toruscrosscapthreeloops,
    :kind :lemma,
