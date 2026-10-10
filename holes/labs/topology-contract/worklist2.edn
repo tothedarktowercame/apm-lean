@@ -56848,6 +56848,19 @@
       :exit 0,
       :output "131 registered statements match, 0 do not"}
      {:cmd "git status --short", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791614116904-1362-d4341c00",
+     :commands
+     ["test -e /tmp/torus_frozen_homeomorphism_pi1_mk.lean"
+      "rg -n frozenHomeomorphPi1_mk-or-recorded-hash /home/joe/code/apm-lean /home/joe/notes"
+      "lake env lean ConstructionTargets/TorusPiOneWindingCoordinates.lean"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 21f99019:holes/labs/topology-contract/worklist2.edn)"
+      "recompute frozen t97A04 SHA-256 and placeholder count from commit 21f99019"],
+     :finding
+     "PASS: codex-7 independently reviewed topo-6 STOP. Transition commit 21f99019 changes only the ledger. The required fixture is still absent, and a fresh repository-and-notes search finds only ledger metadata: no authentic bytes with recorded SHA-256 032782d9b4b59680e22a0cb347bc5c1a9e3ea2224aadc19aae355ffb8d5ed969 and no banked frozenHomeomorphPi1_mk declaration. Therefore implementation cannot verify or preserve the elected native-dependent-codomain theorem, and reconstructing it would violate fixture authentication. Canonical target compiles; registry is 131/0; ledger is 395 items OK. Frozen t97A04 remains 79ca854186b39183bf53490a20b5be92695e345a2c099fcf928b5ad3300ee4ec with four placeholders. Exact repair: restore the hash-authenticated fixture at a stable path, then rerun the row."},
     :fixture
     {:path "/tmp/torus_frozen_homeomorphism_pi1_mk.lean",
      :sha256
@@ -56855,7 +56868,7 @@
      :status :missing},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A04/torus-pi1-winding-coordinates/frozen-homeomorphism-pi1-mk",
@@ -56935,7 +56948,7 @@
       "Rewrite frozenTorusPi1Coord on representatives using this equation, then apply the banked quotient conjugacy and Circle matrix naturality before quotient induction.",
       :other-consumers []}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/shared/torus-pi1-winding-coordinates",
    :acceptance
