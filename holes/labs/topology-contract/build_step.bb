@@ -147,11 +147,22 @@
   ;; and older receipts conventionally named the same datum :residual.  Keep
   ;; the producer's explicit field for audit, but present the canonical ledger
   ;; key to validation and downstream readers.
-  (cond-> receipt
-    (and (= :done-unreviewed (:outcome receipt))
-         (nil? (:residual receipt))
-         (some? (:next-consumer-residual receipt)))
-    (assoc :residual (:next-consumer-residual receipt))))
+  (let [canonical-kind (fn [row]
+                         (update row :kind
+                                 #(get {:adapter :final-adapter
+                                        :problem-adapter :final-adapter}
+                                       % %)))]
+    (cond-> receipt
+      (and (= :done-unreviewed (:outcome receipt))
+           (nil? (:residual receipt))
+           (some? (:next-consumer-residual receipt)))
+      (assoc :residual (:next-consumer-residual receipt))
+
+      (= :replan (:outcome receipt))
+      (update :replacement-items #(mapv canonical-kind %))
+
+      (and (= :revise (:outcome receipt)) (:prerequisite receipt))
+      (update :prerequisite canonical-kind))))
 
 (def fixture-transition-preserve-schemas
   {:checkpoint60-primary
