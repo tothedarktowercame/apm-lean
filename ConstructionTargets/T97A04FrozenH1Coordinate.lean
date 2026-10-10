@@ -77,4 +77,40 @@ theorem frozenTorusAlignedHurewiczCoordinate_apply
   exact (finiteFreeHurewiczCoordinateMulEquiv
     frozenTorusPi1Coord frozenTorusH1MulEquivFinTwo).symm_apply_apply q
 
+def frozenMatrixAddHom : (Fin 2 → ℤ) →+ (Fin 2 → ℤ) where
+  toFun v := fun i => Fin.cases (2 * v 0 + v 1) (fun _ => v 1 - v 0) i
+  map_zero' := by
+    funext i
+    by_cases hi : i = 0
+    · simp [hi]
+    · have hi' : i = 1 := Fin.eq_one_of_ne_zero i hi
+      subst i
+      rfl
+  map_add' x y := by
+    funext i
+    by_cases hi : i = 0
+    · simp [hi]
+      ring
+    · have hi' : i = 1 := Fin.eq_one_of_ne_zero i hi
+      subst i
+      change (x 1 + y 1) - (x 0 + y 0) = (x 1 - x 0) + (y 1 - y 0)
+      ring
+
+def frozenMatrixCoordinateMap :
+    Multiplicative (Fin 2 → ℤ) →* Multiplicative (Fin 2 → ℤ) :=
+  AddMonoidHom.toMultiplicative frozenMatrixAddHom
+
+theorem frozenLbarPi1Map_coordinateMap
+    (p : FundamentalGroup FrozenTorus (0, 0)) :
+    frozenMatrixCoordinateMap (frozenTorusPi1Coord p) =
+      frozenTorusPi1Coord (frozenLbarPi1Map p) := by
+  apply Multiplicative.toAdd.injective
+  change (fun i => Fin.cases
+      (2 * (frozenTorusPi1Coord p).toAdd 0 +
+        (frozenTorusPi1Coord p).toAdd 1)
+      (fun _ => (frozenTorusPi1Coord p).toAdd 1 -
+        (frozenTorusPi1Coord p).toAdd 0) i) =
+    (frozenTorusPi1Coord (frozenLbarPi1Map p)).toAdd
+  exact (frozenLbarPi1Map_naturality p).symm
+
 end ConstructionTargets.T97A04FrozenH1Coordinate
