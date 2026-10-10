@@ -58011,9 +58011,56 @@
   {:bounded-exception
    "single-consumer right-core deleted-locus comparison for the t02A03 tube complement",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/t02a03_geometric_tube_cover.lean",
+      :sha256
+      "901cff8c7ee35d2cb1f02c588e698111753e4373b9e23488b572b63d15a6c979"},
+     :commands
+     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "apm_t02a03_rightCore_diff_leftCore compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
+       :exit 0}
+      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "901cff8c7ee35d2cb1f02c588e698111753e4373b9e23488b572b63d15a6c979  /tmp/t02a03_geometric_tube_cover.lean"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :finding
+     "The compiled equality uses the exact core-range intersection to show that membership in the right core while avoiding the left core is equivalent to membership in the right core while avoiding the singleton origin. It isolates precisely the surviving right-core attachment locus without introducing deformation or gluing claims.",
+     :residual
+     "Construct the meridional replacement of the deleted origin inside the left-tube complement, extend it to compatible deformations of the two tube pieces, and glue them to the torus-wedge-circle model.",
+     :implementation
+     {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"]},
+     :acceptance
+     {:source-fixture "/tmp/t02a03_geometric_tube_cover.lean",
+      :declaration "apm_t02a03_rightCore_diff_leftCore",
+      :placeholder "the sole sorry in apm_t02a03",
+      :route-step
+      "t02A03 step 2, identify the right-core locus remaining after deletion of the left core",
+      :representation
+      {:source
+       "The frozen right-core range with the entire frozen left-core range deleted",
+       :target
+       "The frozen right-core range with only the Euclidean origin deleted",
+       :direction
+       "Exact set equality from the source core-complement representation to the target singleton-deleted right-core representation"},
+      :gates
+      ["fixture compiles"
+       "fixture contains no sorry token"
+       "fixture hash matches"
+       "statement registry matches"]}}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/geometric-right-core-deleted-locus",
    :acceptance
