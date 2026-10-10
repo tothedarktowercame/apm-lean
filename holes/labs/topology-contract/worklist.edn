@@ -83397,6 +83397,23 @@
      "Finite-class disjunctions consisting of equality, explicitly paired open-edge points, and computed endpoint classes",
      :direction
      "Exact iff characterization from each source EqvGen relation to the finite-class target, then reverse rewriting of target closedness into source-graph closedness"},
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791609794416-1218-1b8f510d",
+     :commands
+     ["git show/stat/diff recorded parent STOP transition ea1b344322010da241d8ac08163a8457c67d6efe"
+      "sha256sum /tmp/finite-polygon-eqvgen-classification-probe.lean"
+      "LEAN_PATH=/tmp/polygon-eqvgen-probe lake env lean /tmp/finite-polygon-eqvgen-classification-probe.lean"
+      "rg fixture custom axiom and requested exact-IFF declarations"
+      "test scoped FinitePolygonEqvGenClassification target file is absent"
+      "comment-stripped placeholder census and statement fingerprints for t94J09, tunk01, and t91A02"
+      "inspect source EqvGen, target finite-class, and closedness-transport directions"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git diff --check ea1b3443^ ea1b3443"],
+     :finding
+     "PASS as STOP: reviewer codex-3 differs from author topo-4. Recorded parent transition commit ea1b344322010da241d8ac08163a8457c67d6efe changes only holes/labs/topology-contract/worklist.edn, with empty scope and no implementation commit claimed. It correctly preserves the independently reviewed exact-IFF prerequisite STOP instead of treating the self-axiomatized fixture as implementation. The frozen fixture hash reproduces as 61cb12a3d34a4074623aef406e063e89e111ba23b3dcb6eca66fc19a15eadc7b. It compiles with zero placeholders but postulates the final four-way closed-graph conjunction through the custom axiom finite_polygon_eqvgen_classification; its axiom audit reports that dependency. ConstructionTargets/FinitePolygonEqvGenClassification.lean, the generic finitePolygonEqvGen_iff_classes theorem, and all four consumer exact-IFF declarations remain absent, so the standard-only gate fails deterministically. The representation diagnosis and orientation are correct: each source Relation.EqvGen graph must be classified iff as equality, an explicitly paired open-edge class, or a computed endpoint class; forward EqvGen induction needs open-edge injectivity/intersection and endpoint reachability, the converse must return every finite-class disjunct to EqvGen, and only then can target closedness be rewritten back into source-graph closedness and fed to the banked compact quotient T2 theorem. The three consumers remain at one sorry each; t94J09's separate pre-existing named axiom is unchanged. Frozen fingerprints reproduce as t94J09 52b4778c4932a4b38c30b3bf2a7c9943c32f675f19f63ae1d119aa378dde0a75, tunk01 5362677d8a8f8dfcae54d23788ab8d3558ea3b78992e8b9e9c8f0b956fc636fe, and t91A02 e6b708786cf6a21dc5bd30b3d560b260aa4f2bb70519e89f1e06f46d935e41bb. Registry is 131/131 and all 691 worklist rows validate."},
     :fixture
     {:path "/tmp/finite-polygon-eqvgen-classification-probe.lean",
      :sha256
@@ -83404,7 +83421,7 @@
      :status :self-axiomatized},
     :seat "topo-4"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/finite-polygon-eqvgen-classification",
@@ -83627,7 +83644,7 @@
    :stop-condition
    "End only when every active topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
