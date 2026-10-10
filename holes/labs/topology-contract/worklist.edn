@@ -91579,8 +91579,153 @@
      :review-outcomes]},
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+   :evidence
+   {:outcome :replan,
+    :seat "topo-4",
+    :commands
+    [{:cmd "bb holes/labs/topology-contract/worklist_check.bb",
+      :exit 0,
+      :finding
+      "pre-transition ledger: 759 items, 711 done, 20 superseded, 17 needs-owner, 10 blocked, 1 open; recording this checkpoint and adding the replacement pair yields 761 items with 20 superseded"}
+     {:cmd
+      "lake env lean ConstructionTargets/FiniteSchreierChosenGeneratorEdgeCoordinates.lean",
+      :exit 0,
+      :finding
+      "reviewed chosen-generator coordinate module compiles with standard axioms"}
+     {:cmd
+      "comment-stripped placeholder census for t99J01 t92J06 t97A03 t93J03 t01A03 t97A01",
+      :exit 0,
+      :finding "counts 1, 1, 3, 1, 1, 1; total 8; delta 0"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :finding
+    {:routes
+     {:t99J01
+      ["three-circles fundamental-group coordinates"
+       "banked covering-subgroup index"
+       "banked chosen-generator action-groupoid coordinates"
+       "finite arborescence total-edge count"
+       "tree-complement arithmetic and Type-valued Nielsen-Schreier basis"
+       "path-component restriction and cyclic-cover connectedness"
+       "assembly"],
+      :t92J06
+      ["matched quotient-sheet local-homeomorph"
+       "permutation cover"
+       "Cayley-tree classification"
+       "assembly"],
+      :t97A03
+      ["double-cover gluing"
+       "fixed-model comparisons"
+       "banked chosen-generator action-groupoid coordinates"
+       "finite arborescence total-edge count"
+       "tree-complement arithmetic and Type-valued Nielsen-Schreier basis"
+       "transport and assembly"],
+      :t93J03
+      ["Klein orbit classification"
+       "deck-group fundamental group"
+       "normal form"
+       "lifting criterion"
+       "annulus embedding"
+       "assembly"],
+      :t01A03
+      ["circle-wedge fundamental group and torus commutativity"
+       "separating-circle collar"
+       "assembly"],
+      :t97A01
+      ["banked standard-N3 homeomorphism"
+       "polygon radial cover"
+       "polygon fundamental group and Mayer-Vietoris"
+       "banked Smith normalization"
+       "assembly"]},
+     :placeholder-delta 0,
+     :preserved-boundaries
+     ["canonical Fin labels cannot preserve chosen-basis action endpoints on unchanged H cosets"
+      "index zero encodes infinite index"
+      "polygon radial descent"
+      "strict point-wedge inclusion squares"
+      "path-component cover restriction"
+      "cyclic-monodromy connectedness"
+      "Klein orbit fundamental domain"
+      "double-cover stratum gluing"
+      "fixed-model quotient-to-bouquet equivalences"],
+     :placeholder-counts
+     {:t99J01 1,
+      :t92J06 1,
+      :t97A03 3,
+      :t93J03 1,
+      :t01A03 1,
+      :t97A01 1},
+     :deferred
+     ["Complement cardinal arithmetic and the Type-valued basis wait for the arborescence count."
+      "No unrelated graph theory is elected."],
+     :infrastructure-packets
+     {:banked 1, :reviewed-stops 0, :placeholder-changing 0},
+     :ranking
+     "No nearer consumer-closing adapter is enabled. The finite-arborescence count is the next bounded theorem on both open Schreier routes.",
+     :typed-residual-change
+     ["The corrected native chosen-generator action-groupoid edge coordinates are banked and reviewed, including endpoint, label, inverse, Symmetrify orientation, and r*n cardinality results."
+      "The canonical-Fin endpoint comparison remains refuted; only generator-type cardinality is transported from Fin r."
+      "The next independent shared gap is the finite-arborescence total-edge count, after which complement arithmetic and the Type-valued Nielsen-Schreier basis remain."],
+     :review-outcomes {:pass 1, :stop 0, :closed-problems 0}},
+    :replacement-items
+    [{:consumer :t99J01,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/positive-index/finite-arborescence-edge-count",
+      :acceptance
+      {:probe
+       "Compile the finite arborescence edge-count theorem at exactly the needed generality: for a finite quiver V with an Arborescence instance and finite total arrow type, construct the equivalence between Quiver.Total V and the non-root vertices by sending each arrow to its target and recovering the unique final arrow of the unique root path; prove Nat.card (Quiver.Total V) = Nat.card V - 1. Then instantiate it for the geodesic subtree of the symmetrified chosen-generator action-groupoid quiver to obtain n-1 tree edges. Do not count the complement and do not construct a FreeGroupBasis.",
+       :placeholder
+       "the single sorry in apm_t99j01 and apm_t97A03_bridge_invariants_of_model",
+       :route-step
+       "t99J01 step 3 and t97A03 step 8, generic finite-arborescence edge count and geodesic-subtree specialization",
+       :gates
+       ["canonical packages"
+        "fixture compiles"
+        "zero fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :id :routes-2026-10-10-finite-arborescence-total-edge-count-13,
+      :kind :reusable-theorem,
+      :depends-on
+      [:routes-2026-10-10-finite-schreier-chosen-generator-edge-coordinates-12],
+      :current-residual
+      "Turn uniqueness of root paths into one incoming arrow per non-root vertex and specialize the total-arrow cardinality to the n-vertex geodesic subtree.",
+      :other-consumers [:t97A03]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:strategy
+       "Measure the finite-arborescence total-edge count, preserve the chosen-generator representation and reviewed refutations, recount six consumers and eight placeholders, then elect tree-complement arithmetic and the Type-valued basis or a nearer adapter."},
+      :id
+      :routes-2026-10-10-checkpoint-topo1-after-arborescence-count-13,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:routes-2026-10-10-finite-arborescence-total-edge-count-13],
+      :current-residual
+      "Review the second independent prerequisite isolated by the earlier spanning-tree STOP.",
+      :other-consumers []}],
+    :author "topo-4",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -91594,6 +91739,59 @@
     :routes-2026-10-10-checkpoint-topo1-after-schreier-edge-comparison-11],
    :current-residual
    "Review the representation repair before returning to finite arborescence counting.",
+   :other-consumers []}
+  {:consumer :t99J01,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/positive-index/finite-arborescence-edge-count",
+   :acceptance
+   {:probe
+    "Compile the finite arborescence edge-count theorem at exactly the needed generality: for a finite quiver V with an Arborescence instance and finite total arrow type, construct the equivalence between Quiver.Total V and the non-root vertices by sending each arrow to its target and recovering the unique final arrow of the unique root path; prove Nat.card (Quiver.Total V) = Nat.card V - 1. Then instantiate it for the geodesic subtree of the symmetrified chosen-generator action-groupoid quiver to obtain n-1 tree edges. Do not count the complement and do not construct a FreeGroupBasis.",
+    :placeholder
+    "the single sorry in apm_t99j01 and apm_t97A03_bridge_invariants_of_model",
+    :route-step
+    "t99J01 step 3 and t97A03 step 8, generic finite-arborescence edge count and geodesic-subtree specialization",
+    :gates
+    ["canonical packages"
+     "fixture compiles"
+     "zero fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-10-finite-arborescence-total-edge-count-13,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-10-10-finite-schreier-chosen-generator-edge-coordinates-12
+    :routes-2026-10-10-checkpoint-topo1-after-chosen-generator-coordinates-12],
+   :current-residual
+   "Turn uniqueness of root paths into one incoming arrow per non-root vertex and specialize the total-arrow cardinality to the n-vertex geodesic subtree.",
+   :other-consumers [:t97A03]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:strategy
+    "Measure the finite-arborescence total-edge count, preserve the chosen-generator representation and reviewed refutations, recount six consumers and eight placeholders, then elect tree-complement arithmetic and the Type-valued basis or a nearer adapter."},
+   :id :routes-2026-10-10-checkpoint-topo1-after-arborescence-count-13,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:routes-2026-10-10-finite-arborescence-total-edge-count-13
+    :routes-2026-10-10-checkpoint-topo1-after-chosen-generator-coordinates-12],
+   :current-residual
+   "Review the second independent prerequisite isolated by the earlier spanning-tree STOP.",
    :other-consumers []}
   {:consumer :t99J01,
    :phase :probe,
