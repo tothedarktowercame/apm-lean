@@ -90614,9 +90614,19 @@
       "Review the first bounded construction inside the shared positive-index Schreier generator count.",
       :other-consumers []}],
     :author "topo-4",
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791636722583-1967-47a8d1a9",
+     :commands
+     ["bb holes/labs/topology-contract/worklist_check.bb <(git show fdc4786b:holes/labs/topology-contract/worklist.edn)"
+      "comment-stripped placeholder census for six consumers"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "recorded checkpoint scope, worklist distribution, placeholder counts, and bounded positive-index coset-quiver replacement reproduce"}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -90633,7 +90643,7 @@
    :other-consumers []}
   {:consumer :t99J01,
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/positive-index/coset-quiver",
