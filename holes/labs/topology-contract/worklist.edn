@@ -85256,8 +85256,238 @@
      :review-outcomes]},
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+   :evidence
+   {:outcome :replan,
+    :seat "topo-4",
+    :commands
+    [{:cmd
+      "Python comment-stripped placeholder census of problems/{t99J01,t92J06,t97A03,t93J03,t01A03,t97A01}/lean/Main.lean",
+      :exit 0,
+      :finding
+      {:t99J01 1,
+       :t92J06 1,
+       :t97A03 3,
+       :t93J03 1,
+       :t01A03 1,
+       :t97A01 1,
+       :total 8}}
+     {:cmd
+      "rg route entries for t99J01, t92J06, t97A03, t93J03, t01A03, and t97A01 in TOPOLOGY-ROUTES.md and routes-{1,2,3}.md",
+      :exit 0,
+      :finding
+      "all six routes reread; the three reviewed STOP boundaries are generic point-wedge geometry/coordinates and quotient-sheet local triviality"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :finding
+    {:placeholder-delta 0,
+     :placeholder-counts
+     {:t99J01 1,
+      :t92J06 1,
+      :t97A03 3,
+      :t93J03 1,
+      :t01A03 1,
+      :t97A01 1,
+      :total 8},
+     :infrastructure-packets 0,
+     :review-outcomes
+     {:finite-circle-wedge-pi1 :stop-reviewed,
+      :point-wedge-covering-gluing :stop-reviewed,
+      :finite-circle-wedge-homology :stop-reviewed},
+     :typed-residual-change
+     ["finite-circle-wedge pi1 narrowed from recursive normalization to a missing generic point-wedge open-cover connector comparison with representative-inclusion equations"
+      "finite-circle-wedge homology narrowed from Mayer-Vietoris induction to a missing generic point-wedge cover with piece/intersection homotopy equivalences and degree-zero inclusion coordinates"
+      "covering gluing narrowed from generic quotient construction to openness/disjointness of matched quotient sheets and over-base local-homeomorphism identities"],
+     :routes
+     {:t99J01
+      ["one sorry"
+       "generic point-wedge open-cover geometry"
+       "representative-inclusion pi1 coordinates"
+       "pi1 ThreeCircles=F3"
+       "cover pi1 subgroup index"
+       "Schreier rank formula"
+       "path-component cover restriction"
+       "cyclic connected cover via quotient-sheet local triviality"
+       "assembly"],
+      :t92J06
+      ["one sorry"
+       "quotient-sheet local triviality for point-wedge covering gluing"
+       "permutation circle covers"
+       "four nonhomeomorphic three-sheeted totals"
+       "Cayley-tree universal cover and simple connectivity"
+       "assembly"],
+      :t97A03
+      ["three sorries"
+       "finite-identification quotient T2/compactness"
+       "sphere-sheet and circle-monodromy classification"
+       "model quotient deformation retractions"
+       "generic point-wedge pi1 and MV coordinates"
+       "model homology/pi1 invariants"
+       "transport and assembly"],
+      :t93J03
+      ["one sorry"
+       "Klein deck action and polygon quotient identification"
+       "fundamental group of free properly discontinuous quotient"
+       "presented Klein-group normal form"
+       "covering lifting criterion"
+       "annulus-cover planar embedding"
+       "assembly"],
+      :t01A03
+      ["one sorry"
+       "generic point-wedge pi1 coordinates for the two-circle nonretraction"
+       "banked torus pi1 commutativity"
+       "separating-circle H1 vanishing, requiring a surface-curve collar or duality"
+       "assembly with already banked disconnected-source nonretraction"],
+      :t97A01
+      ["one sorry"
+       "polygon open cover and puncture retract"
+       "generic point-wedge pi1 and MV coordinates"
+       "polygon boundary-word pi1"
+       "polygon Mayer-Vietoris boundary coordinate"
+       "Smith quotient calculations"
+       "transport and assembly"]},
+     :deferred
+     ["consumer closure adapters: no one-sorry consumer has a complete banked route; the exact missing prerequisites are elected below"
+      "Schreier rank, covering classification, Cayley-tree realization, polygon surface identification, and surface-curve collar remain later route steps"]},
+    :replacement-items
+    [{:consumer :t99J01,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/shared/generic-point-wedge-open-cover-comparison",
+      :acceptance
+      {:probe
+       "Compile a generic point-wedge two-open cover for Wedge x0 y0: both opens cover the quotient, their intersection is pointed-contractible, the left and right pieces are pointed-homotopy-equivalent to X and Y, and every equivalence is accompanied by literal inclusion and basepoint equations. Reuse PointWedgeQuotient, PointWedgeRestrictedOpenQuotient, and PointWedgePointedContractionDescent.",
+       :placeholder
+       "the single sorries in apm_t99j01, apm_t01a03, and apm_t97a01, plus apm_t97A03_bridge_invariants_of_model",
+       :route-step
+       "common geometric prerequisite for t99J01 step 1, t01A03 step 2, t97A01 steps 2 and 4, and t97A03 steps 7-8",
+       :gates
+       ["canonical packages"
+        "fixture compiles"
+        "zero fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :id
+      :routes-2026-10-10-generic-point-wedge-open-cover-comparison-1,
+      :kind :reusable-theorem,
+      :depends-on [],
+      :current-residual
+      "Expose the reusable open pieces, overlap contraction, pointed homotopy equivalences, and their actual quotient inclusion equations.",
+      :other-consumers [:t01A03 :t97A01 :t97A03]}
+     {:consumer :t99J01,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/shared/generic-point-wedge-pi1-inclusion-coordinates",
+      :acceptance
+      {:probe
+       "Compile the generic point-wedge specialization of TwoOpenFreeProductMapping.chosenGroupEquivalence and prove that the actual left and right representative inclusions map exactly to Monoid.Coprod.inl and Monoid.Coprod.inr after the pointed piece comparisons. Demonstrate the oriented equations on TwoCircles and ThreeCircles; do not yet normalize recursively to FreeGroup (Fin n).",
+       :placeholder
+       "the single sorries in apm_t99j01, apm_t01a03, and apm_t97a01, plus apm_t97A03_bridge_invariants_of_model; optional alternative input for apm_t92j06",
+       :route-step
+       "representation layer before t99J01 step 1, t01A03 step 2, t97A01 step 3, and t97A03 step 8",
+       :gates
+       ["canonical packages"
+        "fixture compiles"
+        "zero fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :id
+      :routes-2026-10-10-generic-point-wedge-pi1-inclusion-coordinates-1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:routes-2026-10-10-generic-point-wedge-open-cover-comparison-1],
+      :current-residual
+      "Orient the banked abstract free-product equivalence against the concrete quotient inclusions so recursive generator normalization becomes meaningful.",
+      :other-consumers [:t01A03 :t97A01 :t97A03 :t92J06]}
+     {:consumer :t97A01,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/shared/generic-point-wedge-mv-inclusion-coordinates",
+      :acceptance
+      {:probe
+       "Compile the production Mayer-Vietoris comparison for the generic point-wedge cover, including homology equivalences of the overlap and pieces and exact coordinate formulas for the degree-zero signed intersection arrow and piece-to-wedge reassembly. Demonstrate the formulas on ThreeCircles without performing the finite-rank induction.",
+       :placeholder
+       "the single sorry in apm_t97a01 and apm_t97A03_bridge_invariants_of_model",
+       :route-step
+       "representation layer before t97A01 step 4/MV input and t97A03 step 7",
+       :gates
+       ["canonical packages"
+        "fixture compiles"
+        "zero fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :id
+      :routes-2026-10-10-generic-point-wedge-mv-inclusion-coordinates-1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:routes-2026-10-10-generic-point-wedge-open-cover-comparison-1],
+      :current-residual
+      "Identify the literal inclusion maps in homology so the codiagonal cokernel and rank-addition induction can be proved.",
+      :other-consumers [:t97A03]}
+     {:consumer :t92J06,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/shared/point-wedge-covering-gluing/quotient-sheets",
+      :acceptance
+      {:probe
+       "Compile the missing local theorem for quotient-glued coverings: matched evenly covered source sheets have open pairwise-disjoint images in the quotient total space and glue to LocalHomeomorphs over the coinduced wedge neighborhood, with both over-base inverse identities. Demonstrate the theorem for two finite circle covers; defer fiber counting and consumer classification.",
+       :placeholder "the single sorries in apm_t92j06 and apm_t99j01",
+       :route-step
+       "geometric prerequisite for t92J06 step 1 and t99J01 step 5",
+       :gates
+       ["canonical packages"
+        "fixture compiles"
+        "zero fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :id
+      :routes-2026-10-10-point-wedge-quotient-sheet-local-homeomorph-1,
+      :kind :reusable-theorem,
+      :depends-on [],
+      :current-residual
+      "Prove openness, disjointness, and inverse identities for matched quotient sheets at the wedge point.",
+      :other-consumers [:t99J01]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 4,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only when every active topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:strategy
+       "Measure the four exact boundary rows, preserve reviewed STOPs and earlier holds, recount all six consumers and eight placeholders, and elect the nearest newly enabled adapter or next route step."},
+      :id :routes-2026-10-10-checkpoint-topo1-covering-boundaries-1,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:routes-2026-10-10-generic-point-wedge-open-cover-comparison-1
+       :routes-2026-10-10-generic-point-wedge-pi1-inclusion-coordinates-1
+       :routes-2026-10-10-generic-point-wedge-mv-inclusion-coordinates-1
+       :routes-2026-10-10-point-wedge-quotient-sheet-local-homeomorph-1],
+      :current-residual
+      "Review the generic point-wedge representation layers and quotient-sheet local theorem, then refill from the complete topo1 portfolio.",
+      :other-consumers []}],
+    :author "topo-4",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -85272,6 +85502,143 @@
     :routes-2026-10-10-topo1-refill-covering-1],
    :current-residual
    "Review the three highest-coverage shared steps and refill toward consumer adapters.",
+   :other-consumers []}
+  {:consumer :t99J01,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/shared/generic-point-wedge-open-cover-comparison",
+   :acceptance
+   {:probe
+    "Compile a generic point-wedge two-open cover for Wedge x0 y0: both opens cover the quotient, their intersection is pointed-contractible, the left and right pieces are pointed-homotopy-equivalent to X and Y, and every equivalence is accompanied by literal inclusion and basepoint equations. Reuse PointWedgeQuotient, PointWedgeRestrictedOpenQuotient, and PointWedgePointedContractionDescent.",
+    :placeholder
+    "the single sorries in apm_t99j01, apm_t01a03, and apm_t97a01, plus apm_t97A03_bridge_invariants_of_model",
+    :route-step
+    "common geometric prerequisite for t99J01 step 1, t01A03 step 2, t97A01 steps 2 and 4, and t97A03 steps 7-8",
+    :gates
+    ["canonical packages"
+     "fixture compiles"
+     "zero fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-10-generic-point-wedge-open-cover-comparison-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo1-covering-shared-three-1],
+   :current-residual
+   "Expose the reusable open pieces, overlap contraction, pointed homotopy equivalences, and their actual quotient inclusion equations.",
+   :other-consumers [:t01A03 :t97A01 :t97A03]}
+  {:consumer :t99J01,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/shared/generic-point-wedge-pi1-inclusion-coordinates",
+   :acceptance
+   {:probe
+    "Compile the generic point-wedge specialization of TwoOpenFreeProductMapping.chosenGroupEquivalence and prove that the actual left and right representative inclusions map exactly to Monoid.Coprod.inl and Monoid.Coprod.inr after the pointed piece comparisons. Demonstrate the oriented equations on TwoCircles and ThreeCircles; do not yet normalize recursively to FreeGroup (Fin n).",
+    :placeholder
+    "the single sorries in apm_t99j01, apm_t01a03, and apm_t97a01, plus apm_t97A03_bridge_invariants_of_model; optional alternative input for apm_t92j06",
+    :route-step
+    "representation layer before t99J01 step 1, t01A03 step 2, t97A01 step 3, and t97A03 step 8",
+    :gates
+    ["canonical packages"
+     "fixture compiles"
+     "zero fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id
+   :routes-2026-10-10-generic-point-wedge-pi1-inclusion-coordinates-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-10-10-generic-point-wedge-open-cover-comparison-1
+    :routes-2026-10-10-checkpoint-topo1-covering-shared-three-1],
+   :current-residual
+   "Orient the banked abstract free-product equivalence against the concrete quotient inclusions so recursive generator normalization becomes meaningful.",
+   :other-consumers [:t01A03 :t97A01 :t97A03 :t92J06]}
+  {:consumer :t97A01,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/shared/generic-point-wedge-mv-inclusion-coordinates",
+   :acceptance
+   {:probe
+    "Compile the production Mayer-Vietoris comparison for the generic point-wedge cover, including homology equivalences of the overlap and pieces and exact coordinate formulas for the degree-zero signed intersection arrow and piece-to-wedge reassembly. Demonstrate the formulas on ThreeCircles without performing the finite-rank induction.",
+    :placeholder
+    "the single sorry in apm_t97a01 and apm_t97A03_bridge_invariants_of_model",
+    :route-step
+    "representation layer before t97A01 step 4/MV input and t97A03 step 7",
+    :gates
+    ["canonical packages"
+     "fixture compiles"
+     "zero fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id
+   :routes-2026-10-10-generic-point-wedge-mv-inclusion-coordinates-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-10-10-generic-point-wedge-open-cover-comparison-1
+    :routes-2026-10-10-checkpoint-topo1-covering-shared-three-1],
+   :current-residual
+   "Identify the literal inclusion maps in homology so the codiagonal cokernel and rank-addition induction can be proved.",
+   :other-consumers [:t97A03]}
+  {:consumer :t92J06,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/shared/point-wedge-covering-gluing/quotient-sheets",
+   :acceptance
+   {:probe
+    "Compile the missing local theorem for quotient-glued coverings: matched evenly covered source sheets have open pairwise-disjoint images in the quotient total space and glue to LocalHomeomorphs over the coinduced wedge neighborhood, with both over-base inverse identities. Demonstrate the theorem for two finite circle covers; defer fiber counting and consumer classification.",
+    :placeholder "the single sorries in apm_t92j06 and apm_t99j01",
+    :route-step
+    "geometric prerequisite for t92J06 step 1 and t99J01 step 5",
+    :gates
+    ["canonical packages"
+     "fixture compiles"
+     "zero fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id
+   :routes-2026-10-10-point-wedge-quotient-sheet-local-homeomorph-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo1-covering-shared-three-1],
+   :current-residual
+   "Prove openness, disjointness, and inverse identities for matched quotient sheets at the wedge point.",
+   :other-consumers [:t99J01]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 4,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only when every active topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:strategy
+    "Measure the four exact boundary rows, preserve reviewed STOPs and earlier holds, recount all six consumers and eight placeholders, and elect the nearest newly enabled adapter or next route step."},
+   :id :routes-2026-10-10-checkpoint-topo1-covering-boundaries-1,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:routes-2026-10-10-generic-point-wedge-open-cover-comparison-1
+    :routes-2026-10-10-generic-point-wedge-pi1-inclusion-coordinates-1
+    :routes-2026-10-10-generic-point-wedge-mv-inclusion-coordinates-1
+    :routes-2026-10-10-point-wedge-quotient-sheet-local-homeomorph-1
+    :routes-2026-10-10-checkpoint-topo1-covering-shared-three-1],
+   :current-residual
+   "Review the generic point-wedge representation layers and quotient-sheet local theorem, then refill from the complete topo1 portfolio.",
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
