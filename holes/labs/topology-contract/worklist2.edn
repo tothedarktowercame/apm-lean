@@ -62667,63 +62667,88 @@
    "Substitute the planar norm identity into leftTubeNormalComplex, prove the exact interpolated normal-coordinate formula, deduce deleted-core exclusion, bundle the homotopy, and assemble the torus HomotopyEquiv.",
    :other-consumers []}
   {:bounded-exception
+   "single-consumer exact radial normal-coordinate identity for the t02A03 complement interpolation",
+   :consumer :t02A03,
+   :phase :probe,
+   :state :open,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t02A03/left-tube-radial-normal-coordinate",
+   :acceptance
+   {:probe
+    "Compile and bank apm_t02a03_leftTubeNormalComplex_radialPoint from /tmp/t02a03_geometric_tube_cover.lean. Substitute the banked interpolated planar norm into leftTubeNormalComplex and use the source and reconstruction endpoint normal identities to prove that the interpolation normal coordinate is the positive affine radius (1-t)/8 + t*norm(sourceNormal) times the original normalized normal direction. Do not yet claim deleted-core exclusion, the bundled homotopy, HomotopyEquiv, or gluing.",
+    :declaration "apm_t02a03_leftTubeNormalComplex_radialPoint",
+    :type
+    "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubeNormalComplex ⟨apm_t02a03_leftTubeRadialPoint tp, apm_t02a03_leftTubeRadialPoint_mem_leftTube tp⟩ = ((1 - (tp.1 : Real)) * (1 / 8 : Real) + (tp.1 : Real) * norm (apm_t02a03_leftTubeNormalComplex ⟨tp.2.1, tp.2.2.1⟩)) • ((apm_t02a03_leftTubeNormalAngular tp.2 : Circle) : Complex)",
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "t02A03 step 2, compute the normal coordinate throughout the inverse-after-forward radial interpolation"},
+   :id
+   :routes-2026-10-10-t02a03-left-tube-radial-normal-coordinate-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo2-r5
+    :routes-2026-10-10-t02a03-left-tube-interpolated-planar-norm-topo2-r1],
+   :current-residual
+   "Use positivity of the radial coefficient and nonvanishing of the normalized direction to prove deleted-core exclusion, bundle the homotopy, and assemble the torus HomotopyEquiv.",
+   :other-consumers []}
+  {:bounded-exception
    "single-consumer explicit punctured-left-tube model for t02A03",
    :consumer :t02A03,
    :evidence
    {:probe
     {:residual
-     "Bank the interpolated planar norm identity. Then substitute it into leftTubeNormalComplex to prove the exact interpolated normal-coordinate formula, deduce deleted-core exclusion, bundle the homotopy, and assemble the HomotopyEquiv.",
+     "Bank the exact radial normal-coordinate identity. Then combine coefficient positivity and direction nonvanishing to prove deleted-core exclusion, bundle the inverse-after-forward homotopy, and assemble the torus HomotopyEquiv.",
      :outcome :revise,
      :warnings
      ["/tmp/t02a03_geometric_tube_cover.lean:786:38: unnecessarySeqFocus linter warning in a previously banked theorem"],
      :missing-theorems
-     [{:name "apm_t02a03_norm_leftTubePlanarComplex_radialPoint",
+     [{:name "apm_t02a03_leftTubeNormalComplex_radialPoint",
        :type
-       "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, norm (apm_t02a03_leftTubePlanarComplex ⟨apm_t02a03_leftTubeRadialPoint tp, apm_t02a03_leftTubeRadialPoint_mem_leftTube tp⟩) = (1 - (tp.1 : Real)) * (1 + (1 / 8 : Real) * ((apm_t02a03_leftTubeNormalAngular tp.2 : Circle) : Complex).re) + (tp.1 : Real) * norm (apm_t02a03_leftTubePlanarComplex ⟨tp.2.1, tp.2.2.1⟩)",
+       "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubeNormalComplex ⟨apm_t02a03_leftTubeRadialPoint tp, apm_t02a03_leftTubeRadialPoint_mem_leftTube tp⟩ = ((1 - (tp.1 : Real)) * (1 / 8 : Real) + (tp.1 : Real) * norm (apm_t02a03_leftTubeNormalComplex ⟨tp.2.1, tp.2.2.1⟩)) • ((apm_t02a03_leftTubeNormalAngular tp.2 : Circle) : Complex)",
        :status :proved,
        :consumers [:t02A03],
        :depends-on
-       ["apm_t02a03_leftTubePlanarComplex_torusInverse_coordinates"]}],
+       ["apm_t02a03_norm_leftTubePlanarComplex_radialPoint"]}],
      :prerequisite
      {:bounded-exception
-      "single-consumer interpolated planar norm identity for the t02A03 complement interpolation",
+      "single-consumer exact radial normal-coordinate identity for the t02A03 complement interpolation",
       :consumer :t02A03,
       :phase :probe,
       :state :open,
       :scope [],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t02A03/left-tube-interpolated-planar-norm",
+      "TOPOLOGY-ROUTES.md/t02A03/left-tube-radial-normal-coordinate",
       :acceptance
       {:probe
-       "Compile and bank apm_t02a03_norm_leftTubePlanarComplex_radialPoint from /tmp/t02a03_geometric_tube_cover.lean. Combine the banked affine planar-coordinate identity with the source and reconstruction polar formulas, prove the resulting scalar is positive using the unit-interval bounds and Circle real-part bound, and identify the radial planar norm with that affine scalar. Do not yet claim the exact normal-coordinate formula, deleted-core exclusion, bundled homotopy, HomotopyEquiv, or gluing.",
-       :declaration
-       "apm_t02a03_norm_leftTubePlanarComplex_radialPoint",
+       "Compile and bank apm_t02a03_leftTubeNormalComplex_radialPoint from /tmp/t02a03_geometric_tube_cover.lean. Substitute the banked interpolated planar norm into leftTubeNormalComplex and use the source and reconstruction endpoint normal identities to prove that the interpolation normal coordinate is the positive affine radius (1-t)/8 + t*norm(sourceNormal) times the original normalized normal direction. Do not yet claim deleted-core exclusion, the bundled homotopy, HomotopyEquiv, or gluing.",
+       :declaration "apm_t02a03_leftTubeNormalComplex_radialPoint",
        :type
-       "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, norm (apm_t02a03_leftTubePlanarComplex ⟨apm_t02a03_leftTubeRadialPoint tp, apm_t02a03_leftTubeRadialPoint_mem_leftTube tp⟩) = (1 - (tp.1 : Real)) * (1 + (1 / 8 : Real) * ((apm_t02a03_leftTubeNormalAngular tp.2 : Circle) : Complex).re) + (tp.1 : Real) * norm (apm_t02a03_leftTubePlanarComplex ⟨tp.2.1, tp.2.2.1⟩)",
+       "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubeNormalComplex ⟨apm_t02a03_leftTubeRadialPoint tp, apm_t02a03_leftTubeRadialPoint_mem_leftTube tp⟩ = ((1 - (tp.1 : Real)) * (1 / 8 : Real) + (tp.1 : Real) * norm (apm_t02a03_leftTubeNormalComplex ⟨tp.2.1, tp.2.2.1⟩)) • ((apm_t02a03_leftTubeNormalAngular tp.2 : Circle) : Complex)",
        :placeholder "the sole sorry in apm_t02a03",
        :route-step
-       "t02A03 step 2, evaluate the planar norm throughout the inverse-after-forward radial interpolation"},
+       "t02A03 step 2, compute the normal coordinate throughout the inverse-after-forward radial interpolation"},
       :id
-      :routes-2026-10-10-t02a03-left-tube-interpolated-planar-norm-topo2-r1,
+      :routes-2026-10-10-t02a03-left-tube-radial-normal-coordinate-topo2-r1,
       :kind :reusable-theorem,
       :depends-on
       [:routes-2026-10-10-checkpoint-topo2-r5
-       :routes-2026-10-10-t02a03-left-tube-reconstructed-planar-polar-topo2-r1],
+       :routes-2026-10-10-t02a03-left-tube-interpolated-planar-norm-topo2-r1],
       :current-residual
-      "Substitute the planar norm identity into leftTubeNormalComplex, prove the exact interpolated normal-coordinate formula, deduce deleted-core exclusion, bundle the homotopy, and assemble the torus HomotopyEquiv.",
+      "Use positivity of the radial coefficient and nonvanishing of the normalized direction to prove deleted-core exclusion, bundle the homotopy, and assemble the torus HomotopyEquiv.",
       :other-consumers []},
      :commands
      [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
        :exit 0,
        :output
-       "apm_t02a03_norm_leftTubePlanarComplex_radialPoint compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "apm_t02a03_leftTubeNormalComplex_radialPoint compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
        "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
        :exit 0}
       {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
        :exit 0,
        :output
-       "86bf8286cabaef27e1e106995e2ed0498bf3f3635f67425a751e3f562db1e0b8  /tmp/t02a03_geometric_tube_cover.lean"}
+       "4d72259f7d2eaa51b0e9cb58753116ee0d276c11c55579fe44bf5266bbf0f59e  /tmp/t02a03_geometric_tube_cover.lean"}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
@@ -62731,22 +62756,18 @@
      [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
        :exit 1,
        :finding
-       "Unrestricted rewriting of the source polar decomposition also rewrote the target norm, preventing the common-direction scalar combination. Isolating the vector equality avoided rewriting the target."}
-      {:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 1,
-       :finding
-       "The generic norm_smul lemma required a NormSMulClass Real Complex instance unavailable for this scalar action. Recasting the real scalar action as multiplication by a coerced complex scalar allowed norm_mul and Complex.norm_real to finish the proof."}],
+       "The initial component proof unfolded the ambient interpolation before rewriting its planar norm, so the banked norm theorem no longer matched syntactically. The corrected proof isolates the source norm as an opaque scalar, records clean real and imaginary endpoint identities, rewrites the planar norm before normalization, and closes the remaining polynomial identities by ring normalization."}],
      :fixture
      {:path "/tmp/t02a03_geometric_tube_cover.lean",
       :sha256
-      "86bf8286cabaef27e1e106995e2ed0498bf3f3635f67425a751e3f562db1e0b8"},
+      "4d72259f7d2eaa51b0e9cb58753116ee0d276c11c55579fe44bf5266bbf0f59e"},
      :finding
-     "The full HomotopyEquiv remains absent. The compiled theorem gives the exact planar norm throughout the radial interpolation. Both endpoint planar coordinates share one unit angular direction, and their interpolated scalar is strictly positive, so the norm is the affine scalar without an absolute value.",
+     "The full HomotopyEquiv remains absent. The compiled identity computes the radial interpolation's complex normal coordinate exactly as the strictly positive affine radius (1-t)/8 + t times the source normal norm, multiplied by the original normalized normal direction. Together with the banked positivity and direction nonvanishing lemmas, this directly enables deleted-core exclusion.",
      :seat "topo-8"}},
    :phase :probe,
    :type
    "Nonempty (ContinuousMap.HomotopyEquiv LeftTubeMinusCore ConstructionTargets.TorusCircleWedgeOpenCover.Torus)",
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-punctured-model",
    :acceptance
@@ -62800,7 +62821,8 @@
     :routes-2026-10-10-t02a03-left-tube-planar-coordinate-interpolation-topo2-r1
     :routes-2026-10-10-t02a03-left-tube-planar-polar-decomposition-topo2-r1
     :routes-2026-10-10-t02a03-left-tube-reconstructed-planar-polar-topo2-r1
-    :routes-2026-10-10-t02a03-left-tube-interpolated-planar-norm-topo2-r1],
+    :routes-2026-10-10-t02a03-left-tube-interpolated-planar-norm-topo2-r1
+    :routes-2026-10-10-t02a03-left-tube-radial-normal-coordinate-topo2-r1],
    :current-residual
    "After the punctured-left-tube model is banked, construct the right-tube-minus-deleted-attachment model extending the based core homotopy, then overlap compatibility and gluing for the full geometricY equivalence.",
    :other-consumers []}
@@ -63990,4 +64012,25 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-t02a03lefttubepuncturedmodel-apm-t02a03-lefttubeplanarcomple],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t02a03_leftTubeNormalComplex_radialPoint",
+    :type
+    "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubeNormalComplex ⟨apm_t02a03_leftTubeRadialPoint tp, apm_t02a03_leftTubeRadialPoint_mem_leftTube tp⟩ = ((1 - (tp.1 : Real)) * (1 / 8 : Real) + (tp.1 : Real) * norm (apm_t02a03_leftTubeNormalComplex ⟨tp.2.1, tp.2.2.1⟩)) • ((apm_t02a03_leftTubeNormalAngular tp.2 : Circle) : Complex)"},
+   :lemma
+   {:name "apm_t02a03_leftTubeNormalComplex_radialPoint",
+    :reported-by
+    [:routes-2026-10-10-t02a03-left-tube-punctured-model-topo2-r1],
+    :type
+    "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubeNormalComplex ⟨apm_t02a03_leftTubeRadialPoint tp, apm_t02a03_leftTubeRadialPoint_mem_leftTube tp⟩ = ((1 - (tp.1 : Real)) * (1 / 8 : Real) + (tp.1 : Real) * norm (apm_t02a03_leftTubeNormalComplex ⟨tp.2.1, tp.2.2.1⟩)) • ((apm_t02a03_leftTubeNormalAngular tp.2 : Circle) : Complex)",
+    :proved-in
+    :routes-2026-10-10-t02a03-left-tube-punctured-model-topo2-r1},
+   :id :lemma-apm-t02a03-lefttubenormalcomplex-radialpoint,
+   :kind :lemma,
+   :depends-on
+   [:lemma-apm-t02a03-norm-lefttubeplanarcomplex-radialpoint],
    :other-consumers []}]}
