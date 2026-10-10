@@ -87849,8 +87849,54 @@
    "Count the non-tree edges in the finite Schreier coset quiver and orient Mathlib's Nielsen-Schreier freeness equivalence to the two required finite ranks.",
    :other-consumers [:t97A03]}
   {:consumer :t99J01,
+   :stop-count 1,
+   :evidence
+   {:residual
+    "Provide a placeholder-free typed fixture or prerequisite representation row fixing the cyclic graph quotient, coinduced topology, projection, covering charts, and exact signatures of the four concrete declarations; then implement the existential adapter.",
+    :outcome :stop,
+    :warnings
+    [{:kind :specification-boundary,
+      :message
+      "The prose describes a graph cover but the frozen Lean interface does not select a concrete graph realization or signatures for four accepted declarations."}],
+    :disposition :stop,
+    :axioms
+    ["propext"
+     "Classical.choice"
+     "Quot.sound"
+     "T99J01ExplicitConnectedCyclicCoverProbe.cyclicThreeCirclesCoverExists"],
+    :author "topo-2",
+    :reason
+    "The elected row is not an uptake of a banked construction. Its frozen fixture specifies only an existential theorem through the nonstandard axiom cyclicThreeCirclesCoverExists; it gives no Lean signatures or representation for cyclicThreeCirclesCoverTotal, cyclicThreeCirclesCoverMap, cyclicThreeCirclesCover_pathConnected, or cyclicThreeCirclesCover_isKSheeted. No matching banked declarations exist. Choosing the graph quotient type, its relation and topology, the projection, and the chart interfaces would invent the public representation contract. A placeholder-free typed fixture or a prior representation row must fix those choices before standard-only implementation is possible.",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/t99j01-explicit-connected-cyclic-cover-probe.lean",
+      :exit 0,
+      :finding "The fixture hash matches the recorded hash."}
+     {:cmd
+      "Python comment-stripped fixture census followed by rg for the four concrete accepted declarations",
+      :exit 1,
+      :expected-exit 1,
+      :finding
+      "The fixture has 0 sorry tokens and 1 axiom token; none of the four concrete construction declarations occurs in ConstructionTargets or the fixture."}
+     {:cmd
+      "lake env lean /tmp/t99j01-explicit-connected-cyclic-cover-probe.lean",
+      :exit 0,
+      :finding
+      "The fixture compiles, but exists_connected_cyclic_cover depends on cyclicThreeCirclesCoverExists."}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :fixture
+    {:path "/tmp/t99j01-explicit-connected-cyclic-cover-probe.lean",
+     :sha256
+     "d96931e1e28365b8b50d79de23a025047832474a1919caedb6f5aad459495442",
+     :sorry-count 0,
+     :axiom-count 1,
+     :proof-placeholder-count 1},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/T99J01ExplicitConnectedCyclicCover.lean"],
    :dag-node
