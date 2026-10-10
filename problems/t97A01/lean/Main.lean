@@ -140,6 +140,23 @@ def apm_t97a01_X_equiv_standardN3 :
     exact ⟨apm_t97a01_RelX_to_standardN3, apm_t97a01_standardN3_to_RelX⟩
   rw [hrel]
 
+/-- The quotient equivalence with the canonical nonorientable genus-three
+surface respects the coinduced topologies on both polygon quotients. -/
+def apm_t97a01_X_homeomorph_standardN3 :
+    apm_t97a01_X ≃ₜ ConstructionTargets.Surfaces.Surface false 3 where
+  toEquiv := apm_t97a01_X_equiv_standardN3
+  continuous_toFun := by
+    apply isQuotientMap_quotient_mk'.continuous_iff.mpr
+    change Continuous (fun x : apm_t97a01_Disk =>
+      apm_t97a01_X_equiv_standardN3 (Quotient.mk _ x))
+    simpa [apm_t97a01_X_equiv_standardN3] using
+      (ConstructionTargets.Surfaces.continuous_surfaceQuotient false 3)
+  continuous_invFun := by
+    apply isQuotientMap_quotient_mk'.continuous_iff.mpr
+    change Continuous (fun x : ConstructionTargets.Surfaces.Disk =>
+      apm_t97a01_X_equiv_standardN3.symm (Quotient.mk _ x))
+    simpa [apm_t97a01_X_equiv_standardN3] using apm_t97a01_continuous_quotientX
+
 abbrev apm_t97a01_H (k : ℕ) (Y : Type) [TopologicalSpace Y] :=
   (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
     (ModuleCat.of ℤ ℤ)).obj (TopCat.of Y))
