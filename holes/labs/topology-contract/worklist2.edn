@@ -66706,6 +66706,19 @@
       :output "131 registered statements match, 0 do not"}
      {:cmd "git diff --check", :exit 0}
      {:cmd "git status --short", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791672906373-3187-58301c02",
+     :commands
+     ["git show/diff-tree/check 6235411b33defbd46c1ec553f1ceebf279d88c8a"
+      "git rev-parse recorded blob; git hash-object current module; sha256sum fixture"
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean"
+      "lake env lean /tmp/t02a03_right_core_compact_probe.lean"
+      "python3 scripts/statement-registry.py check --rev 6235411b33defbd46c1ec553f1ceebf279d88c8a"
+      "statement fingerprints at commit and parent; comment-stripped placeholder census; clojure.edn/read-string worklist"],
+     :finding
+     "PASS: reviewer differs from author topo-6; commit changes only the scoped module and recorded/current blob 4241cabeaa22adb2088e71ca8bacfcf88a9c485d matches. Fixture SHA-256 matches. Module and frozen fixture compile with only propext, Classical.choice, and Quot.sound; registry is 131/0, frozen t02A03 fingerprint remains d123afd5ae0ee067587b3ed3d7b9b6d2f075c3d95701e098ec357c7317cd34c3, and the sole frozen placeholder remains. The conjunction has the requested orientation: ambient E3 to Complex normal-coordinate continuity and product Circle-times-Complex to E3 continuity after Function.uncurry; PiLp.toLp is crossed via its continuity theorem and coordinates are proved continuous individually. No deformation, endpoints, tube-membership, or deletion-avoidance claims were added."},
     :commit "6235411b33defbd46c1ec553f1ceebf279d88c8a",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
@@ -66717,7 +66730,7 @@
     "Continuity of the disk-normal coordinate follows from coordinate projections, norm, and complex arithmetic; continuity of the uncurried reconstruction follows coordinatewise through the PiLp constructor.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/right-core-tubular-coordinates-continuous",
@@ -66819,7 +66832,7 @@
      "The right-core reconstruction identity supplies the endpoint algebra, but the requested H is a ContinuousMap. The coordinate n(p)=(1-norm((1-p0)+i*p1))+i*p2 and the uncurried reconstruction (u,n)↦(1-(1-n.re)u.re,(1-n.re)u.im,n.im) are both continuous by coordinatewise continuity and the PiLp constructor. This compiled conjunction is the single prerequisite needed before packaging any interpolated formula as H; it makes no tube or deletion claim.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
