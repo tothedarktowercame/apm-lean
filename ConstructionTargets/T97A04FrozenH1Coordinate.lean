@@ -126,4 +126,42 @@ theorem frozenLbarPi1Map_coordinateMap_raw
         (FundamentalGroup.map frozenLbar (0, 0) p) := by
   exact frozenLbarPi1Map_coordinateMap p
 
+theorem finiteFreeHurewiczCoordinateMulEquiv_eqToIso_conj
+    {X : Type} [TopologicalSpace X] [PathConnectedSpace X]
+    {x y : X} (h : x = y) {n : ℕ}
+    (piCoordY : FundamentalGroup X y ≃* Multiplicative (Fin n → ℤ))
+    (h1Coord : Multiplicative
+        (ConstructionTargets.DegreeOneHurewiczMap.IntegralH1 X) ≃*
+      Multiplicative (Fin n → ℤ))
+    (q : Multiplicative (Fin n → ℤ)) :
+    finiteFreeHurewiczCoordinateMulEquiv
+        (((eqToIso (congr_arg FundamentalGroupoid.mk h)).conj).trans piCoordY)
+        h1Coord q =
+      finiteFreeHurewiczCoordinateMulEquiv piCoordY h1Coord q := by
+  subst y
+  have hconj : (Iso.refl (FundamentalGroupoid.mk x)).conj =
+      MulEquiv.refl (FundamentalGroup X x) := by
+    ext p
+    exact Iso.refl_conj p
+  simp only [eqToIso_refl]
+  rw [hconj]
+  have htrans : (MulEquiv.refl (FundamentalGroup X x)).trans piCoordY =
+      piCoordY := by
+    ext p
+    rfl
+  cases htrans
+  rfl
+
+theorem frozenTorusAlignedHurewiczCoordinateAtLbarBase_apply
+    (q : Multiplicative (Fin 2 → ℤ)) :
+    finiteFreeHurewiczCoordinateMulEquiv frozenTorusPi1CoordAtLbarBase
+        frozenTorusAlignedH1MulEquivFinTwo q = q := by
+  change finiteFreeHurewiczCoordinateMulEquiv
+      (((eqToIso (congr_arg FundamentalGroupoid.mk frozenLbar_base)).conj).trans
+        frozenTorusPi1Coord)
+      frozenTorusAlignedH1MulEquivFinTwo q = q
+  rw [finiteFreeHurewiczCoordinateMulEquiv_eqToIso_conj
+    (h := frozenLbar_base)]
+  exact frozenTorusAlignedHurewiczCoordinate_apply q
+
 end ConstructionTargets.T97A04FrozenH1Coordinate
