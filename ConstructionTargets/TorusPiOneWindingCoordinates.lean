@@ -96,4 +96,40 @@ theorem frozenTorusHomeomorphCircleProd_frozenLbar (p : FrozenTorus) :
       AddCircle.toCircle_add, AddCircle.toCircle_neg,
       AddCircle.toCircle_nsmul]
 
+def circleMatrixLeftPath (gamma : Path ((1 : Circle), (1 : Circle)) (1, 1)) :
+    Path (1 : Circle) 1 :=
+  pointwiseMulPath (pointwiseMulPath (gamma.map continuous_fst) (gamma.map continuous_fst))
+    (gamma.map continuous_snd)
+
+def circleMatrixRightPath (gamma : Path ((1 : Circle), (1 : Circle)) (1, 1)) :
+    Path (1 : Circle) 1 :=
+  pointwiseMulPath (gamma.map continuous_snd)
+    (pointwiseInvPath (gamma.map continuous_fst))
+
+theorem circleMatrixLeftPath_endpointInteger
+    (gamma : Path ((1 : Circle), (1 : Circle)) (1, 1)) :
+    liftBasedLoopEndpointInteger (circleMatrixLeftPath gamma)
+        (circleMatrixLeftPath gamma).source (circleMatrixLeftPath gamma).target =
+      2 * liftBasedLoopEndpointInteger (gamma.map continuous_fst)
+          (gamma.map continuous_fst).source (gamma.map continuous_fst).target +
+        liftBasedLoopEndpointInteger (gamma.map continuous_snd)
+          (gamma.map continuous_snd).source (gamma.map continuous_snd).target := by
+  rw [circleMatrixLeftPath,
+    liftBasedLoopEndpointInteger_pointwiseMulPath,
+    liftBasedLoopEndpointInteger_pointwiseMulPath]
+  ring
+
+theorem circleMatrixRightPath_endpointInteger
+    (gamma : Path ((1 : Circle), (1 : Circle)) (1, 1)) :
+    liftBasedLoopEndpointInteger (circleMatrixRightPath gamma)
+        (circleMatrixRightPath gamma).source (circleMatrixRightPath gamma).target =
+      liftBasedLoopEndpointInteger (gamma.map continuous_snd)
+          (gamma.map continuous_snd).source (gamma.map continuous_snd).target -
+        liftBasedLoopEndpointInteger (gamma.map continuous_fst)
+          (gamma.map continuous_fst).source (gamma.map continuous_fst).target := by
+  rw [circleMatrixRightPath,
+    liftBasedLoopEndpointInteger_pointwiseMulPath,
+    liftBasedLoopEndpointInteger_pointwiseInvPath]
+  ring
+
 end ConstructionTargets.TorusPiOneWindingCoordinates
