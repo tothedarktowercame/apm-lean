@@ -86463,51 +86463,68 @@
    "Add the homeomorphism whose underlying equivalence is apm_t97a01_X_equiv_standardN3; prove both continuity directions from the quotient-map continuous_iff theorem and the two coinduced quotient maps.",
    :consumer :t97A01,
    :evidence
-   {:probe
-    {:residual
-     "The quotient-to-standard-N3 homeomorphism is directly implementable; polygon pi1, Mayer-Vietoris homology, Smith normalization, and final consumer assembly remain downstream.",
-     :outcome :go,
-     :warnings
-     [{:kind :consumer-placeholder,
-       :message
-       "Compiling Main emits its pre-existing sorry warning; the fixture theorem itself has zero placeholders and standard-only axioms."}],
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd "stat -c '%F %n' .lake/packages", :exit 0}
-      {:cmd
-       "lake env lean -o /tmp/t97a01-probe/T97A01Main.olean problems/t97A01/lean/Main.lean",
-       :exit 0}
-      {:cmd
-       "LEAN_PATH=/tmp/t97a01-probe lake env lean /tmp/t97a01-homeomorph-probe.lean",
-       :exit 0}
-      {:cmd "sha256sum /tmp/t97a01-homeomorph-probe.lean", :exit 0}
-      {:cmd
-       "Python comment-stripped placeholder census of /tmp/t97a01-homeomorph-probe.lean",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-      {:cmd "git status --short", :exit 0}],
-     :diagnostic-history
-     [{:cmd "lake env lean /tmp/t97a01-homeomorph-probe.lean",
-       :exit 1,
-       :finding
-       "The first import used the source-tree problems prefix, which is not on Lean's module search path.",
-       :correction
-       "Compiled the frozen consumer to a throwaway T97A01Main.olean and reran with LEAN_PATH; the successful compile is in commands."}],
-     :fixture
-     {:path "/tmp/t97a01-homeomorph-probe.lean",
-      :sha256
-      "2d0b5ac183e488c5e839ba9879dd7be05dfa412a1a3347b01100ec0c9121cbac"},
-     :implementation
-     {:scope ["problems/t97A01/lean/Main.lean"],
-      :declarations ["apm_t97a01_X_homeomorph_standardN3"],
-      :description
-      "Add the homeomorphism whose underlying equivalence is apm_t97a01_X_equiv_standardN3; prove both continuity directions from the quotient-map continuous_iff theorem and the two coinduced quotient maps.",
-      :commands
-      ["lake env lean problems/t97A01/lean/Main.lean"
-       "python3 scripts/statement-registry.py check"]},
-     :seat "topo-4"}},
+   {:placeholder-after 1,
+    :placeholder-delta 0,
+    :residual
+    "The concrete aa bb cc quotient is now homeomorphic to the canonical nonorientable genus-three surface. Remaining work is the polygon open cover and edge graph, pi1 and Mayer-Vietoris calculations, Smith normalization, and final frozen theorem assembly.",
+    :outcome :done-unreviewed,
+    :warnings
+    [{:kind :inherited-placeholder,
+      :message
+      "The single sorry in the registered theorem apm_t97a01 remains; this uptake row supplies only route step 1."}
+     {:kind :post-promotion-fixture-collision,
+      :message
+      "The pinned probe contains the same declaration now promoted into Main.lean, so compiling it after promotion produces the expected duplicate-name error."}],
+    :statement-hashes
+    {:status :unchanged,
+     :registry "131 registered statements match, 0 do not"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author {:name "Joe Corneli", :email "holtzermann17@gmail.com"},
+    :placeholder-before 1,
+    :commands
+    [{:cmd "stat -c '%F %n' .lake/packages",
+      :exit 0,
+      :finding
+      "directory .lake/packages; canonical package authority is present"}
+     {:cmd "sha256sum /tmp/t97a01-homeomorph-probe.lean",
+      :exit 0,
+      :finding
+      "2d0b5ac183e488c5e839ba9879dd7be05dfa412a1a3347b01100ec0c9121cbac"}
+     {:cmd "lake env lean problems/t97A01/lean/Main.lean",
+      :exit 0,
+      :finding
+      "The consumer compiles; only its inherited registered-theorem sorry warning remains."}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd
+      "Python comment-stripped placeholder census of problems/t97A01/lean/Main.lean",
+      :exit 0,
+      :finding "1"}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r 5b19036217baf63464ad4e683b3f89ed0a386606",
+      :exit 0,
+      :finding "problems/t97A01/lean/Main.lean"}
+     {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :diagnostic-history
+    [{:cmd
+      "LEAN_PATH=/tmp/t97a01-probe lake env lean /tmp/t97a01-homeomorph-probe.lean",
+      :exit 1,
+      :finding
+      "After promotion, the pinned probe redeclares apm_t97a01_X_homeomorph_standardN3 and Lean correctly reports a duplicate declaration; its subsequent axiom audit resolves the imported promoted declaration to standard axioms.",
+      :correction
+      "The acceptance row records Main.lean and registry as its commands. Main.lean compiles successfully with the promoted declaration, and the pinned fixture hash and zero-placeholder census remain verified."}],
+    :commit "5b19036217baf63464ad4e683b3f89ed0a386606",
+    :changed-paths ["problems/t97A01/lean/Main.lean"],
+    :fixture
+    {:path "/tmp/t97a01-homeomorph-probe.lean",
+     :sha256
+     "2d0b5ac183e488c5e839ba9879dd7be05dfa412a1a3347b01100ec0c9121cbac",
+     :placeholder-count 0},
+    :declarations ["apm_t97a01_X_homeomorph_standardN3"],
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["problems/t97A01/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t97A01/standard-n3-homeomorph",
    :acceptance
