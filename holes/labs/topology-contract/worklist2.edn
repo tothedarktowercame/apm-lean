@@ -57794,20 +57794,65 @@
   {:bounded-exception
    "single-consumer frozen torus H1 group and ModuleCat coordinate for t97A04",
    :consumer :t97A04,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/t97a04_frozen_h1_coordinate.lean",
+      :sha256
+      "3a8383d772a08d0d38b11f1149a00ee793191cc053919f2d276d8b4239f8ee3d"},
+     :commands
+     [{:cmd "lake env lean /tmp/t97a04_frozen_h1_coordinate.lean",
+       :exit 0,
+       :output
+       "frozenTorusH1GroupIsoFinTwo and frozenTorusH1ModuleIsoFinTwo compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t97a04_frozen_h1_coordinate.lean || true)\"",
+       :exit 0}
+      {:cmd "sha256sum /tmp/t97a04_frozen_h1_coordinate.lean",
+       :exit 0,
+       :output
+       "3a8383d772a08d0d38b11f1149a00ee793191cc053919f2d276d8b4239f8ee3d  /tmp/t97a04_frozen_h1_coordinate.lean"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :finding
+     "The placeholder-free fixture constructs the canonical homeomorphism from the frozen AddCircle product to the computed boundary torus, transports the degree-one additive-group singular-homology coordinate through that homeomorphism, and lifts it via IntegralSingularHomologyComparison to the exact ModuleCat object used by t97A04. Both requested coordinate declarations compile with only propext, Classical.choice, and Quot.sound.",
+     :residual
+     "Use frozenTorusH1GroupIsoFinTwo to define the multiplicative IntegralH1 coordinate, apply finite-free Hurewicz naturality to frozenLbarPi1Map_naturality, and transport the resulting equation through singularHomologyComparison_naturality to the consumer ModuleCat map.",
+     :implementation
+     {:scope ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"],
+      :acceptance
+      {:source-fixture "/tmp/t97a04_frozen_h1_coordinate.lean",
+       :declarations
+       ["frozenTorusHomeomorphBoundaryTorus"
+        "frozenTorusH1GroupIsoFinTwo"
+        "frozenTorusH1ModuleIsoFinTwo"],
+       :placeholder "apm_t97A04_bridge_2",
+       :route-step
+       "t97A04 step 5, concrete frozen-torus IntegralH1 and ModuleCat coordinates",
+       :gates
+       ["lake env lean ConstructionTargets/T97A04FrozenH1Coordinate.lean"
+        "placeholder scan"
+        "statement registry check"]}}}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t97A04/frozen-h1-coordinate",
    :acceptance
-   {:probe
-    "Compile and bank frozenTorusHomeomorphBoundaryTorus, frozenTorusH1GroupIsoFinTwo, and frozenTorusH1ModuleIsoFinTwo from /tmp/t97a04_frozen_h1_coordinate.lean. Transport the existing boundary-torus degree-one singular-homology coordinate through the canonical AddCircle-product homeomorphism and lift it through IntegralSingularHomologyComparison to the exact ModuleCat object used by apm_t97A04_bridge_2. This supplies the H1 coordinate input to t97A04 step 5; do not yet claim induced-map matrix naturality.",
+   {:source-fixture "/tmp/t97a04_frozen_h1_coordinate.lean",
     :declarations
     ["frozenTorusHomeomorphBoundaryTorus"
      "frozenTorusH1GroupIsoFinTwo"
      "frozenTorusH1ModuleIsoFinTwo"],
     :placeholder "apm_t97A04_bridge_2",
     :route-step
-    "t97A04 step 5, concrete frozen-torus IntegralH1 and ModuleCat coordinates"},
+    "t97A04 step 5, concrete frozen-torus IntegralH1 and ModuleCat coordinates",
+    :gates
+    ["lake env lean ConstructionTargets/T97A04FrozenH1Coordinate.lean"
+     "placeholder scan"
+     "statement registry check"]},
    :id :routes-2026-10-10-t97a04-frozen-h1-coordinate-topo2-r1,
    :kind :reusable-theorem,
    :depends-on
