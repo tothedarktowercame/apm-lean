@@ -96284,13 +96284,43 @@
    "Use total-space local path connectedness to make Component e open, restrict each evenly covered chart to the sheets contained in that component, and prove the restricted map surjective by lifting paths from p e to arbitrary basepoints.",
    :other-consumers []}
   {:bounded-exception
+   "This single-consumer theorem supplies surjectivity of the component-restricted projection by lifting paths from the chosen point, independently of the remaining selected-sheet covering-chart construction.",
+   :consumer :t99J01,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/CoveringPathComponentSurjective.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component/surjectivity",
+   :acceptance
+   {:implementation
+    "For a covering p : E -> B over a path-connected base and e : E, prove Surjective (fun x : CoveringPathComponentDomain.Component e => p x.1). Choose a path from p e to each basepoint, lift it starting at e, use the lifted path as the Joined witness for its endpoint, and prove the projection equation from liftPath_lifts. Do not construct or restrict covering charts, select sheets, count fibers, or compute pi1.",
+    :placeholder "the single sorry in apm_t99j01",
+    :route-step
+    "t99J01 component-restriction step 5: prove the Joined-component projection surjective by covering path lifting",
+    :fixture "/tmp/covering-path-component-surjective.lean",
+    :fixture-sha256
+    "bdd2590503e0e1d76ac395d99ac62013d442ecf6686ed7e5d0c7e2ac4357430c",
+    :gates
+    ["lake build ConstructionTargets.CoveringPathComponentSurjective"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-10-covering-path-component-surjective-43,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-10-10-covering-total-loc-path-connected-42],
+   :current-residual
+   "Use the open Joined component and each evenly covered neighborhood to retain exactly the sheets lying in that component, construct the restricted covering trivializations, and combine them with componentProjection_surjective.",
+   :other-consumers []}
+  {:bounded-exception
    "Single-consumer prerequisite first in the final ledger ranking.",
    :consumer :t99J01,
    :implements-lemma :lemma-iscoveringmap-restrictpathcomponent,
    :evidence
    {:probe
     {:residual
-     "The covering total space is now compiled as locally path connected. The original theorem still needs selected-sheet covering trivializations for the open Joined component and surjectivity from path lifting.",
+     "Surjectivity of the component projection now compiles by path lifting. The sole remaining part of IsCoveringMap.restrictPathComponent is the selected-sheet local covering-chart construction for the open Joined component.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
@@ -96300,53 +96330,53 @@
        :status :partial,
        :consumers [:t99J01],
        :depends-on
-       ["CoveringPathComponentDomain.componentPathConnectedSpace"
-        "CoveringTotalLocPathConnected.IsCoveringMap.totalLocPathConnectedSpace"]}],
+       ["CoveringTotalLocPathConnected.IsCoveringMap.totalLocPathConnectedSpace"
+        "CoveringPathComponentSurjective.componentProjection_surjective"]}],
      :prerequisite
      {:bounded-exception
-      "This single-consumer theorem supplies the inherited local path connectedness of a covering total space, making the chosen Joined component open and allowing covering charts to be restricted to its selected sheets.",
+      "This single-consumer theorem supplies surjectivity of the component-restricted projection by lifting paths from the chosen point, independently of the remaining selected-sheet covering-chart construction.",
       :consumer :t99J01,
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/CoveringTotalLocPathConnected.lean"],
+      ["ConstructionTargets/CoveringPathComponentSurjective.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component/total-space-lpc",
+      "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component/surjectivity",
       :acceptance
       {:implementation
-       "Prove that the domain of a local homeomorphism into a locally path-connected space is locally path connected by covering the domain with the open sources of its local partial homeomorphisms, transporting local path connectedness from their open targets through the banked homeomorphism theorem, and applying the banked open-cover theorem. Deduce the covering-map specialization. Do not restrict a path component, select component sheets, prove surjectivity, count fibers, or compute pi1.",
+       "For a covering p : E -> B over a path-connected base and e : E, prove Surjective (fun x : CoveringPathComponentDomain.Component e => p x.1). Choose a path from p e to each basepoint, lift it starting at e, use the lifted path as the Joined witness for its endpoint, and prove the projection equation from liftPath_lifts. Do not construct or restrict covering charts, select sheets, count fibers, or compute pi1.",
        :placeholder "the single sorry in apm_t99j01",
        :route-step
-       "t99J01 component-restriction step 4: prove the covering total space locally path connected so its Joined components are open",
-       :fixture "/tmp/covering-total-loc-path-connected.lean",
+       "t99J01 component-restriction step 5: prove the Joined-component projection surjective by covering path lifting",
+       :fixture "/tmp/covering-path-component-surjective.lean",
        :fixture-sha256
-       "dacab0cd9a598e43ca706a038f74f8ba2c80c1224477d36cecea786672daf94d",
+       "bdd2590503e0e1d76ac395d99ac62013d442ecf6686ed7e5d0c7e2ac4357430c",
        :gates
-       ["lake build ConstructionTargets.CoveringTotalLocPathConnected"
+       ["lake build ConstructionTargets.CoveringPathComponentSurjective"
         "fixture compiles"
         "zero source and fixture sorry"
         "standard-only axioms"
         "registry check"]},
-      :id :routes-2026-10-10-covering-total-loc-path-connected-42,
+      :id :routes-2026-10-10-covering-path-component-surjective-43,
       :kind :reusable-theorem,
       :depends-on
-      [:routes-2026-10-10-loc-path-connected-open-cover-41],
+      [:routes-2026-10-10-covering-total-loc-path-connected-42],
       :current-residual
-      "Use total-space local path connectedness to make Component e open, restrict each evenly covered chart to the sheets contained in that component, and prove the restricted map surjective by lifting paths from p e to arbitrary basepoints.",
+      "Use the open Joined component and each evenly covered neighborhood to retain exactly the sheets lying in that component, construct the restricted covering trivializations, and combine them with componentProjection_surjective.",
       :other-consumers []},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake env lean /tmp/covering-total-loc-path-connected.lean",
+       "lake env lean /tmp/covering-path-component-surjective.lean",
        :exit 0,
        :finding
-       "local-homeomorphism and covering total-space local path connectedness compile with standard axioms"}
-      {:cmd "sha256sum /tmp/covering-total-loc-path-connected.lean",
+       "lifted base paths prove surjectivity of the component projection with standard axioms"}
+      {:cmd "sha256sum /tmp/covering-path-component-surjective.lean",
        :exit 0,
        :finding
-       "dacab0cd9a598e43ca706a038f74f8ba2c80c1224477d36cecea786672daf94d"}
+       "bdd2590503e0e1d76ac395d99ac62013d442ecf6686ed7e5d0c7e2ac4357430c"}
       {:cmd
-       "rg -n \"\\b(sorry|admit)\\b\" /tmp/covering-total-loc-path-connected.lean",
+       "rg -n \"\\b(sorry|admit)\\b\" /tmp/covering-path-component-surjective.lean",
        :exit 1,
        :expected-exit 1,
        :finding "no placeholders"}
@@ -96356,14 +96386,14 @@
       {:cmd "git status --short", :exit 0, :finding "clean"}],
      :diagnostic-history [],
      :fixture
-     {:path "/tmp/covering-total-loc-path-connected.lean",
+     {:path "/tmp/covering-path-component-surjective.lean",
       :sha256
-      "dacab0cd9a598e43ca706a038f74f8ba2c80c1224477d36cecea786672daf94d",
+      "bdd2590503e0e1d76ac395d99ac62013d442ecf6686ed7e5d0c7e2ac4357430c",
       :interface
-      "IsLocalHomeomorph.locPathConnectedSpace transports local path connectedness through open local charts; IsCoveringMap.totalLocPathConnectedSpace applies it to covering maps."},
+      "componentProjection_surjective proves that a covering projection restricted to the Joined component of any chosen point is onto a path-connected base."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component",
@@ -96386,7 +96416,8 @@
     :routes-2026-10-10-covering-path-component-domain-39
     :routes-2026-10-10-homeomorph-loc-path-connected-40
     :routes-2026-10-10-loc-path-connected-open-cover-41
-    :routes-2026-10-10-covering-total-loc-path-connected-42],
+    :routes-2026-10-10-covering-total-loc-path-connected-42
+    :routes-2026-10-10-covering-path-component-surjective-43],
    :current-residual
    "Establish constant fiber cardinality and the induced subgroup image.",
    :other-consumers []}
@@ -97502,7 +97533,8 @@
     :lemma-coveringpathcomponentdomain-componentpathconnectedspace
     :lemma-homeomorphlocpathconnected-homeomorph-locpathconnectedspace
     :lemma-locpathconnectedopencover-locpathconnectedspace-of-open-cover
-    :lemma-coveringtotallocpathconnected-iscoveringmap-totallocpathconnectedspace],
+    :lemma-coveringtotallocpathconnected-iscoveringmap-totallocpathconnectedspace
+    :lemma-coveringpathcomponentsurjective-componentprojection-surjective],
    :other-consumers []}
   {:consumer :t99J01,
    :phase :lemma,
@@ -98639,6 +98671,22 @@
    :depends-on
    [:lemma-locpathconnectedopencover-locpathconnectedspace-of-open-cover
     :lemma-homeomorphlocpathconnected-homeomorph-locpathconnectedspace-iff],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "CoveringPathComponentSurjective.componentProjection_surjective"},
+   :lemma
+   {:name
+    "CoveringPathComponentSurjective.componentProjection_surjective",
+    :reported-by []},
+   :id
+   :lemma-coveringpathcomponentsurjective-componentprojection-surjective,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
