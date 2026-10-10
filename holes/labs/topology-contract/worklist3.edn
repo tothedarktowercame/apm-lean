@@ -600,6 +600,8 @@
    "Prove orientation-compatible chart transitions have unit one in dimensions two and four, then glue the coherent local generators to an absolute top class and prove every localization is a generator.",
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
+   :review-finding
+   "frozen fixture 5bdfa239ae19ce93a172e751eccdcf2bb233544bfccf7e38d4c423f4037fa470 does not compile against implementation commit eca25ba5: it imports ConstructionTargets.ManifoldFundamentalClass and then redeclares overlapTransitionUnit, overlapTransitionUnit_isLocallyConstant, and overlapTransitionUnit_eq_of_isPreconnected in the same namespace; repair the fixture harness so it validates the promoted declarations without duplicate declarations, re-freeze its hash, and rerun the fixture gate",
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-overlaptransitionunit-eq-of-ispreconnected,
    :evidence
@@ -671,6 +673,12 @@
       "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
       :exit 0}
      {:cmd "git status --short", :exit 0, :output ""}],
+    :review
+    {:outcome :fail,
+     :seat "codex-11",
+     :job "invoke-1791672771830-3178-1d9a6fe0",
+     :finding
+     "frozen fixture 5bdfa239ae19ce93a172e751eccdcf2bb233544bfccf7e38d4c423f4037fa470 does not compile against implementation commit eca25ba5: it imports ConstructionTargets.ManifoldFundamentalClass and then redeclares overlapTransitionUnit, overlapTransitionUnit_isLocallyConstant, and overlapTransitionUnit_eq_of_isPreconnected in the same namespace; repair the fixture harness so it validates the promoted declarations without duplicate declarations, re-freeze its hash, and rerun the fixture gate"},
     :commit "eca25ba5955d3c1f92e8f65c168aa4196ffcc0fc",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -685,7 +693,7 @@
      "Added the overlap-subtype transition-unit function, proved its local constancy from CoefficientTransitionLocalConstancy.locally_constant, and proved equality of its values on preconnected overlaps."},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/connected-overlap-transition-unit",
@@ -708,6 +716,7 @@
    :id :routes-2026-10-10-manifold-connected-overlap-unit-topo3-r1,
    :kind :reusable-theorem,
    :area "manifold-fundamental-class",
+   :fail-count 1,
    :depends-on
    [:routes-2026-10-10-topo3-seed-checkpoint-1
     :routes-2026-10-10-manifold-local-positive-excision-topo3-r1
