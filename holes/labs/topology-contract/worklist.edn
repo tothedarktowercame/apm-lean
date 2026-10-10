@@ -94020,99 +94020,140 @@
    "Use action_toAdd to prove the affine coordinate action law, then classify its closed-square orbit representatives and boundary coincidences.",
    :other-consumers []}
   {:bounded-exception
+   "This single-consumer affine-action construction is the exact structural first half of the elected square-orbit lemma; after it is banked only the bounded floor/parity and boundary-case classification remains.",
+   :consumer :t93J03,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/KleinPlaneAffineAction.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/plane-action-square-orbit-classification/affine-action",
+   :acceptance
+   {:implementation
+    "Using the banked coordinate equivalence and inversion-power formula, define coordinateAct on Real times Real, prove coordinateAct_one and coordinateAct_mul, transport it to a MulAction of PresentedKleinGroup, and prove generatorA acts by (x,y) maps to (x+1,y) while generatorB acts by (x,y) maps to (-x,y+1). Export the general coordinate formula through coordinateAct. Do not prove existence of square representatives, classify boundary coincidences, form a quotient, or compare EqvGen relations.",
+    :placeholder "the single sorry in apm_t93j03",
+    :route-step
+    "t93J03 step 1b.2, affine plane action before the closed-square orbit classification",
+    :fixture "/tmp/klein-plane-action.lean",
+    :fixture-sha256
+    "d2fdc5858dccb0654d72036fffdb5331184f9cec2617cd2bae3dc81723b88777",
+    :gates
+    ["lake build ConstructionTargets.KleinPlaneAffineAction"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-10-klein-plane-affine-action-25,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-10-10-klein-coordinate-inversion-power-24
+    :lemma-kleinpresentedgroup-coordinatenormalform],
+   :current-residual
+   "Use the explicit coordinate action to choose a closed fundamental-square representative for every point and characterize all same-orbit pairs in the square, including edge and corner cases.",
+   :other-consumers []}
+  {:bounded-exception
    "This single-consumer geometric lemma is the next ready dependency of the elected one-placeholder t93J03 route; the coordinate algebra it needs is now banked.",
    :consumer :t93J03,
    :implements-lemma :lemma-kleinplaneaction-squareorbitclassification,
    :evidence
    {:probe
     {:residual
-     "The direct plane-action proof exposed one exact arithmetic prerequisite: the coordinate formula for arbitrary powers of inversion. Its placeholder-free fixture now compiles; after it is banked, the affine action multiplication law and square-orbit inequalities remain.",
+     "The full affine PresentedKleinGroup action and generator formulas now compile. The original row is reduced to floor/parity normalization into a closed fundamental square and the finite classification of its boundary orbit coincidences.",
      :outcome :revise,
-     :warnings [],
+     :warnings
+     [{:kind :linter,
+       :message
+       "The fixture has two unnecessarySeqFocus style warnings in the generator formula proofs; both theorems compile without placeholders."}
+      {:kind :dirty-worktree,
+       :message
+       "ConstructionTargets/T02A03LeftTubePuncturedModel.lean was modified by another task; the probe remained read-only and did not depend on it."}],
      :missing-theorems
      [{:name "kleinPlaneAction_squareOrbitClassification",
        :type
        "Affine PresentedKleinGroup action on Real times Real with explicit coordinate formula, closed-square representatives for every orbit, and a complete same-orbit classification for square points including edges and corners",
        :status :partial,
        :consumers [:t93J03],
-       :depends-on ["KleinCoordinateInversionPower.action_toAdd"]}],
+       :depends-on ["KleinPlaneAffineAction.planeAction"]}],
      :prerequisite
      {:bounded-exception
-      "This single-consumer arithmetic lemma is the exact missing identity exposed by the affine action multiplication law and is immediately consumed by the elected square-orbit classification.",
+      "This single-consumer affine-action construction is the exact structural first half of the elected square-orbit lemma; after it is banked only the bounded floor/parity and boundary-case classification remains.",
       :consumer :t93J03,
       :phase :implementation,
       :state :open,
-      :scope
-      ["ConstructionTargets/KleinCoordinateInversionPower.lean"],
+      :scope ["ConstructionTargets/KleinPlaneAffineAction.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/plane-action-square-orbit-classification/inversion-power-coordinate",
+      "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/plane-action-square-orbit-classification/affine-action",
       :acceptance
       {:implementation
-       "For the banked inversion automorphism of Multiplicative Int, prove for every n : Int and z that toAdd ((inversion ^ n) z) equals toAdd ((inversion ^ n) (ofAdd 1)) times toAdd z. Specialize this to the banked action g z. The proof must cover positive and negative integer powers by Int.induction_on. Do not define the plane action, prove square inequalities, form a quotient, or compare EqvGen relations.",
+       "Using the banked coordinate equivalence and inversion-power formula, define coordinateAct on Real times Real, prove coordinateAct_one and coordinateAct_mul, transport it to a MulAction of PresentedKleinGroup, and prove generatorA acts by (x,y) maps to (x+1,y) while generatorB acts by (x,y) maps to (-x,y+1). Export the general coordinate formula through coordinateAct. Do not prove existence of square representatives, classify boundary coincidences, form a quotient, or compare EqvGen relations.",
        :placeholder "the single sorry in apm_t93j03",
        :route-step
-       "t93J03 step 1b.1, coordinate identity required by the affine action multiplication law",
-       :fixture "/tmp/klein-inversion-power.lean",
+       "t93J03 step 1b.2, affine plane action before the closed-square orbit classification",
+       :fixture "/tmp/klein-plane-action.lean",
        :fixture-sha256
-       "692f78b74476913490121bd0160057ec47ffbcfecb20e4fdb5b3c7fd2930d02a",
+       "d2fdc5858dccb0654d72036fffdb5331184f9cec2617cd2bae3dc81723b88777",
        :gates
-       ["lake build ConstructionTargets.KleinCoordinateInversionPower"
+       ["lake build ConstructionTargets.KleinPlaneAffineAction"
         "fixture compiles"
         "zero source and fixture sorry"
         "standard-only axioms"
         "registry check"]},
-      :id :routes-2026-10-10-klein-coordinate-inversion-power-24,
+      :id :routes-2026-10-10-klein-plane-affine-action-25,
       :kind :reusable-theorem,
-      :depends-on [:lemma-kleinpresentedgroup-coordinatenormalform],
+      :depends-on
+      [:routes-2026-10-10-klein-coordinate-inversion-power-24
+       :lemma-kleinpresentedgroup-coordinatenormalform],
       :current-residual
-      "Use action_toAdd to prove the affine coordinate action law, then classify its closed-square orbit representatives and boundary coincidences.",
+      "Use the explicit coordinate action to choose a closed fundamental-square representative for every point and characterize all same-orbit pairs in the square, including edge and corner cases.",
       :other-consumers []},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake build ConstructionTargets.KleinPresentedGroupCoordinateNormalForm",
+       "lake build ConstructionTargets.KleinCoordinateInversionPower",
        :exit 0,
        :finding
-       "the banked coordinate normal form and its three prerequisites compile canonically"}
-      {:cmd "lake env lean /tmp/klein-inversion-power.lean",
+       "the banked coordinate normal form and inversion-power prerequisite compile canonically"}
+      {:cmd "lake env lean /tmp/klein-plane-action.lean",
        :exit 0,
        :finding
-       "the inversion-power and semidirect-action coordinate formulas compile with only propext, Classical.choice, and Quot.sound"}
-      {:cmd "sha256sum /tmp/klein-inversion-power.lean",
+       "the affine coordinate action, multiplication law, transported group action, and both generator formulas compile with standard axioms"}
+      {:cmd "sha256sum /tmp/klein-plane-action.lean",
        :exit 0,
        :finding
-       "692f78b74476913490121bd0160057ec47ffbcfecb20e4fdb5b3c7fd2930d02a"}
+       "d2fdc5858dccb0654d72036fffdb5331184f9cec2617cd2bae3dc81723b88777"}
       {:cmd
-       "rg -n \"\\b(sorry|admit)\\b\" /tmp/klein-inversion-power.lean",
+       "rg -n \"\\b(sorry|admit)\\b\" /tmp/klein-plane-action.lean",
        :exit 1,
        :expected-exit 1,
        :finding "no placeholders"}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :finding "131 registered statements match, 0 do not"}
-      {:cmd "git status --short", :exit 0, :finding "clean"}],
+      {:cmd "git status --short",
+       :exit 0,
+       :finding
+       "pre-existing unrelated modification: ConstructionTargets/T02A03LeftTubePuncturedModel.lean; this read-only probe did not touch it"}],
      :diagnostic-history
      [{:cmd "lake env lean /tmp/klein-plane-action.lean",
        :exit 1,
        :finding
-       "the direct affine-action fixture reduced multiplicativity to the missing coordinate identity toAdd (action n m) = sign(n) * toAdd m; generator and instance goals were downstream of that failure"}
-      {:cmd "lake env lean /tmp/klein-inversion-power.lean",
+       "the first rerun used Real zpow directly and did not expose the semidirect first-coordinate identity; replaced the sign by the intrinsic inversion-action value supplied by the banked action_toAdd theorem"}
+      {:cmd "lake env lean /tmp/klein-plane-action.lean",
        :exit 1,
        :finding
-       "the first statement tried integer exponentiation inside Int, where no HPow Int Int instance exists; reformulated the sign intrinsically as the inversion power applied to the multiplicative generator"}
-      {:cmd "lake env lean /tmp/klein-inversion-power.lean",
+       "the initial MulAction structure proof relied on global smul notation before the instance existed; made the instance noncomputable and changed its laws explicitly to coordinateAct equations"}
+      {:cmd "lake env lean /tmp/klein-plane-action.lean",
        :exit 1,
        :finding
-       "the first induction fixed z and could not apply its hypothesis to z inverse; generalized z across Int.induction_on and exposed the successor and predecessor applications definitionally"}],
+       "the first multiplication proof left casts of integer sums and products opaque; targeted action_toAdd twice, normalized the multiplicative generator, and then discharged the Real identity by ring"}],
      :fixture
-     {:path "/tmp/klein-inversion-power.lean",
+     {:path "/tmp/klein-plane-action.lean",
       :sha256
-      "692f78b74476913490121bd0160057ec47ffbcfecb20e4fdb5b3c7fd2930d02a",
+      "d2fdc5858dccb0654d72036fffdb5331184f9cec2617cd2bae3dc81723b88777",
       :interface
-      "inversion_zpow_apply (n : Int) (z : Multiplicative Int) identifies every integer power of the inversion automorphism on z with multiplication of toAdd z by its value on 1; action_toAdd specializes this to the banked semidirect-product action."},
+      "coordinateAct gives the explicit affine coordinate formula; coordinateAct_mul proves its action law; planeAction installs the transported PresentedKleinGroup MulAction on Real times Real; generatorA_smul and generatorB_smul prove horizontal translation and glide-reflection formulas."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/plane-action-square-orbit-classification",
@@ -94134,7 +94175,8 @@
    :depends-on
    [:lemma-kleinpresentedgroup-coordinatenormalform
     :routes-2026-10-10-checkpoint-topo1-after-klein-coordinate-normal-form-19
-    :routes-2026-10-10-klein-coordinate-inversion-power-24],
+    :routes-2026-10-10-klein-coordinate-inversion-power-24
+    :routes-2026-10-10-klein-plane-affine-action-25],
    :current-residual
    "Turn unique integer-pair normal forms into the explicit affine action formula, choose a closed-square representative of every orbit, and enumerate precisely the boundary coincidences.",
    :other-consumers []}
@@ -94682,7 +94724,8 @@
    :kind :lemma,
    :depends-on
    [:lemma-kleinpresentedgroup-coordinatenormalform
-    :lemma-kleincoordinateinversionpower-action-toadd],
+    :lemma-kleincoordinateinversionpower-action-toadd
+    :lemma-kleinplaneaffineaction-planeaction],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -94836,6 +94879,17 @@
    :id :lemma-kleincoordinateinversionpower-inversion-zpow-apply,
    :kind :lemma,
    :depends-on [:lemma-kleinpresentedgroup-coordinatenormalform],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "KleinPlaneAffineAction.planeAction"},
+   :lemma
+   {:name "KleinPlaneAffineAction.planeAction", :reported-by []},
+   :id :lemma-kleinplaneaffineaction-planeaction,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
