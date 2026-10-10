@@ -90912,8 +90912,34 @@
    "Review the first bounded construction inside the shared positive-index Schreier generator count.",
    :other-consumers []}
   {:consumer :t99J01,
+   :stop-count 1,
+   :evidence
+   {:outcome :stop,
+    :seat "topo-4",
+    :reason
+    "Representation boundary with two independent missing constructions. The banked module defines positive edges only as Fin r × (FreeGroup (Fin r) ⧸ H), generator permutations, transitivity, and cardinality; it does not define or identify Mathlib's quiver IsFreeGroupoid.Generators (ActionCategory (FreeGroup (Fin r)) (FreeGroup (Fin r) ⧸ H)). The requested geodesicSubtree and wideSubquiverSymmetrify live on that second representation. One prerequisite must construct an endpoint- and orientation-preserving equivalence between the banked positive-edge product and Quiver.Total of the action-groupoid generator quiver. Independently, Mathlib lacks the finite-arborescence theorem Nat.card (Quiver.Total T) = Nat.card V - 1 for T : WideSubquiver V with Arborescence T. Either result can be stated without the other, and both are required before the requested complement count, so REVISE's exactly-one-prerequisite rule does not apply. This is a representation-scope stop, not a refutation of the Schreier formula.",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/FiniteSchreierCosetQuiverPositiveIndex.lean",
+      :exit 0,
+      :finding
+      "banked packet compiles and exposes only vertex/cardinality, product-edge, permutation, inverse, and transitivity declarations"}
+     {:cmd
+      "rg -n \"wideSubquiverSymmetrify|geodesicSubtree|ActionCategory|IsFreeGroupoid.Generators|arborescence.*card|card.*arborescence\" ConstructionTargets",
+      :exit 1,
+      :expected-exit 1,
+      :finding
+      "no banked action-groupoid/quiver representation bridge or arborescence cardinality theorem"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :residual
+    "Split the route into two ordered foundation rows: first the action-groupoid generator-edge representation equivalence, then the finite arborescence total-edge count; only afterward probe the (r-1)*n+1 complement calculation.",
+    :author "topo-4",
+    :disposition :stop},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/positive-index/spanning-tree-complement-count",
