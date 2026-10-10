@@ -810,6 +810,22 @@ theorem apm_t02a03_circleMeridian_mem_geometricY (z : Circle) :
     nlinarith [sq_nonneg (Real.cos s - 1),
       sq_nonneg ((z : ℂ).re - 1), sq_nonneg ((z : ℂ).re + 1)]
 
+theorem apm_t02a03_circleMeridian_mem_rightTubeMinusLeftCore (z : Circle) :
+    apm_t02a03_circleMeridian z ∈ apm_t02a03_rightTube ∧
+      apm_t02a03_circleMeridian z ∉ Set.range apm_t02a03_leftCore := by
+  refine ⟨?_, (apm_t02a03_circleMeridian_mem_geometricY z).2⟩
+  apply Metric.mem_cthickening_of_dist_le
+    (apm_t02a03_circleMeridian z) 0 (1 / 4 : ℝ)
+    (Set.range apm_t02a03_rightCore)
+    apm_t02a03_origin_mem_both_cores.2
+  rw [dist_zero_right, EuclideanSpace.norm_eq]
+  have hzsq : (z : ℂ).re ^ 2 + (z : ℂ).im ^ 2 = 1 := by
+    simpa [Complex.normSq_apply, pow_two] using Circle.normSq_coe z
+  simp [apm_t02a03_circleMeridian, Fin.sum_univ_succ]
+  rw [show (8⁻¹ * (z : ℂ).re) ^ 2 + (8⁻¹ * (z : ℂ).im) ^ 2 =
+      (1 / 64 : ℝ) by nlinarith]
+  norm_num
+
 noncomputable def apm_t02a03_circleMeridianMap :
     C(Circle, apm_t02a03_geometricY_probe) where
   toFun z := ⟨apm_t02a03_circleMeridian z,
@@ -1127,3 +1143,5 @@ noncomputable def apm_t02a03_rightCoreBasedAttachmentHomotopy :
     apm_t02a03_rightCoreAnchorContractionHomotopy
 
 end ConstructionTargets.T02A03GeometricTubeCover
+
+#print axioms ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_circleMeridian_mem_rightTubeMinusLeftCore
