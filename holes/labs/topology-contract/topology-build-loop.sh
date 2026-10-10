@@ -310,7 +310,23 @@ apply_job_result() {
   fi
   rm -f "$REJECTION" || die "could not clear receipt rejection state"
   log "$transition"
-  git -C "$ROOT" add "$LEDGER"
+  # Both loops commit to the same repository. At 08:07:41 on 2026-10-10 they
+  # applied receipts in the same second: topo2's commit held .git/index.lock,
+  # topo1's unchecked `git add` failed on it, the staged diff below was empty,
+  # and topo1 logged "nothing to commit" over its own uncommitted transition.
+  # It then waited 15 min for "the other writer" (itself), stopped, and its
+  # supervisor held the tree for hours while topo2 stopped on the same dirt.
+  # So: one ledger commit at a time across loops (flock), a checked add with
+  # retries for other committers' locks, and "already recorded" judged
+  # against HEAD, not against whatever the index happens to hold.
+  exec 8>"$ROOT/.git/topology-ledger-commit.lock"
+  flock -w 300 8 || die "could not take the ledger commit lock"
+  local add_try=1
+  until git -C "$ROOT" add -- "$LEDGER"; do
+    [ "$add_try" -lt 12 ] || die "could not stage $row ledger transition (index lock held?)"
+    log "git add of ledger failed (attempt $add_try); retrying"
+    add_try=$((add_try+1)); sleep 5
+  done
   # Applying a receipt is IDEMPOTENT, and the reclaim path re-applies a
   # retained in-flight result on every restart. When someone else has already
   # applied and committed that same receipt -- a human, or one of the repair
@@ -322,16 +338,21 @@ apply_job_result() {
   # An empty diff means the ledger already records this transition, which is
   # success. Check the LEDGER's staged diff specifically rather than swallowing
   # every commit failure -- a real one still dies.
-  if git -C "$ROOT" diff --cached --quiet -- "$LEDGER"; then
+  if git -C "$ROOT" diff --quiet HEAD -- "$LEDGER"; then
     log "ledger already records $row transition $LAST_JOB; nothing to commit"
   else
     # Path-scoped on purpose. A bare `git commit` takes whatever is staged,
     # and this repo has other committers -- the apm-land-certified timer, the
     # frames' own end-of-frame commits, and now a second topology loop. Naming
     # the ledger keeps this commit to the transition it claims to record.
-    git -C "$ROOT" commit -q -m "topology-loop: record $row transition $LAST_JOB" -- "$LEDGER" \
-      || die "could not commit $row ledger transition"
+    local commit_try=1
+    until git -C "$ROOT" commit -q -m "topology-loop: record $row transition $LAST_JOB" -- "$LEDGER"; do
+      [ "$commit_try" -lt 12 ] || die "could not commit $row ledger transition"
+      log "git commit of ledger failed (attempt $commit_try); retrying"
+      commit_try=$((commit_try+1)); sleep 5
+    done
   fi
+  exec 8>&-
   bb "$HERE/inflight.bb" clear "$INFLIGHT" || die "could not clear committed in-flight job"
   refresh_status "$row"
   send_notice "milestone applied: row=$row job=$LAST_JOB $transition"
@@ -350,16 +371,29 @@ refresh_status() {
     return 0
   fi
   [ -n "$changed" ] || return 0
+  # Same lock and checks as the ledger commit in apply_job_result: an add
+  # that loses an index-lock race leaves status.json dirty, and a dirty tree
+  # stops both loops.
+  exec 8>"$ROOT/.git/topology-ledger-commit.lock"
+  flock -w 300 8 || { log "WARNING could not take the commit lock for status.json after $row"; exec 8>&-; return 0; }
+  local try=1
   # shellcheck disable=SC2086
-  git -C "$ROOT" add -- $changed
+  until git -C "$ROOT" add -- $changed; do
+    [ "$try" -lt 12 ] || { log "WARNING could not stage status.json refresh after $row"; break; }
+    try=$((try+1)); sleep 5
+  done
   # shellcheck disable=SC2086
-  if git -C "$ROOT" diff --cached --quiet -- $changed; then
-    return 0   # the other loop already committed the same counts
+  if git -C "$ROOT" diff --quiet HEAD -- $changed; then
+    exec 8>&-; return 0   # the other loop already committed the same counts
   fi
+  try=1
   # shellcheck disable=SC2086
-  git -C "$ROOT" commit -q -m "topology-loop: refresh status.json after $row" -- $changed \
-    && log "status.json refreshed after $row: $(echo $changed | wc -w) file(s)" \
-    || log "WARNING could not commit status.json refresh after $row"
+  until git -C "$ROOT" commit -q -m "topology-loop: refresh status.json after $row" -- $changed; do
+    if [ "$try" -ge 12 ]; then log "WARNING could not commit status.json refresh after $row"; break; fi
+    try=$((try+1)); sleep 5
+  done
+  [ "$try" -lt 12 ] && log "status.json refreshed after $row: $(echo $changed | wc -w) file(s)"
+  exec 8>&-
 }
 resume_inflight() {
   [ -f "$INFLIGHT" ] || return 0
