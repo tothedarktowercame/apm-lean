@@ -186,6 +186,30 @@ theorem isIso_of_map_globalGenerator_eq_globalGenerator
   rw [hf]
   infer_instance
 
+def absoluteSingularMap {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (f : C(X, Y)) : SingularChains (TopCat.of X) ⟶ SingularChains (TopCat.of Y) :=
+  ((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj
+    (AddCommGrpCat.of ℤ)).map (TopCat.ofHom f)
+
+def localizationMap {X : Type} [TopologicalSpace X] (x : X) (n : ℕ) :
+    (SingularChains (TopCat.of X)).homology n ⟶
+      (RelativeSingularChains (deletedPoint x)).homology n :=
+  HomologicalComplex.homologyMap (relativeSingularProjection (deletedPoint x)) n
+
+theorem localizationMap_naturality
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (f : C(X, Y)) (x : X) (y : Y)
+    (h : Set.MapsTo f (deletedPoint x) (deletedPoint y)) (n : ℕ) :
+    HomologicalComplex.homologyMap (absoluteSingularMap f) n ≫ localizationMap y n =
+      localizationMap x n ≫
+        HomologicalComplex.homologyMap
+          (relativeSingularMap (deletedPoint x) (deletedPoint y) f h) n := by
+  have hchain := relativeSingularMap_projection_naturality
+    (deletedPoint x) (deletedPoint y) f h
+  have hhom := congrArg (fun q => HomologicalComplex.homologyMap q n) hchain
+  simpa only [HomologicalComplex.homologyMap_comp, localizationMap,
+    absoluteSingularMap] using hhom
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -201,3 +225,5 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.globalGenerator_generates
 #print axioms ConstructionTargets.ManifoldFundamentalClass.mapGlobalGenerator_generates_of_isIso
 #print axioms ConstructionTargets.ManifoldFundamentalClass.isIso_of_map_globalGenerator_eq_globalGenerator
+#print axioms ConstructionTargets.ManifoldFundamentalClass.localizationMap
+#print axioms ConstructionTargets.ManifoldFundamentalClass.localizationMap_naturality
