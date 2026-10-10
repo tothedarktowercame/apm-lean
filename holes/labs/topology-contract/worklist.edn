@@ -93002,7 +93002,178 @@
     :routes-2026-10-10-checkpoint-topo1-after-schreier-quiver-4],
    :current-residual
    "Review the second bounded construction in the shared positive-index Schreier generator count.",
-   :other-consumers []}],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "polygonRadialOpenCoverPackages"},
+   :lemma
+   {:name "polygonRadialOpenCoverPackages", :reported-by [:owner]},
+   :id :lemma-polygonradialopencoverpackages,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "genericPointWedgeOverlapInclusionSquares",
+    :type
+    "theorem genericPointWedgeOverlapInclusionSquares (x0 : X) (y0 : Y) (M : Set Y) (N : Set X) (hM : IsOpen M) (hN : IsOpen N) (hy : y0 ∈ M) (hx : x0 ∈ N) (cM : PointedContraction M ⟨y0,hy⟩) (cN : PointedContraction N ⟨x0,hx⟩) : leftEquiv.toFun.comp (overlapToLeft.comp overlapEquiv.invFun) = ContinuousMap.const _ x0 ∧ rightEquiv.toFun.comp (overlapToRight.comp overlapEquiv.invFun) = ContinuousMap.const _ y0, instantiated from genericPointWedgeCoverPackage. Its proof is a full expansion through Homeomorph.setCongr, restrictedOpenHomeomorphWedge, pointedWedgeHomeomorph, wedgeHomotopyEquivLeft/right,"},
+   :lemma
+   {:name "genericPointWedgeOverlapInclusionSquares",
+    :reported-by [:owner],
+    :type
+    "theorem genericPointWedgeOverlapInclusionSquares (x0 : X) (y0 : Y) (M : Set Y) (N : Set X) (hM : IsOpen M) (hN : IsOpen N) (hy : y0 ∈ M) (hx : x0 ∈ N) (cM : PointedContraction M ⟨y0,hy⟩) (cN : PointedContraction N ⟨x0,hx⟩) : leftEquiv.toFun.comp (overlapToLeft.comp overlapEquiv.invFun) = ContinuousMap.const _ x0 ∧ rightEquiv.toFun.comp (overlapToRight.comp overlapEquiv.invFun) = ContinuousMap.const _ y0, instantiated from genericPointWedgeCoverPackage. Its proof is a full expansion through Homeomorph.setCongr, restrictedOpenHomeomorphWedge, pointedWedgeHomeomorph, wedgeHomotopyEquivLeft/right,"},
+   :id :lemma-genericpointwedgeoverlapinclusionsquares,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t99J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "IsCoveringMap.restrictPathComponent",
+    :type
+    "theorem is true in ordinary covering-space theory, but its proof needs a component-restriction theorem not present in Mathlib or ConstructionTargets: theorem IsCoveringMap.restrictPathComponent {E B : Type*} [TopologicalSpace E] [TopologicalSpace B] [LocPathConnectedSpace B] [PathConnectedSpace B] {p : E → B} (hp : IsCoveringMap p) (e : E) : IsCoveringMap (fun x : {x : E // Joined e x} => p x.1). This cannot be obtained merely from openness of path components: each covering trivialization must be refined to a path-connected base neighborhood, its sheets classified by whether they meet the chos"},
+   :lemma
+   {:name "IsCoveringMap.restrictPathComponent",
+    :reported-by [:owner],
+    :type
+    "theorem is true in ordinary covering-space theory, but its proof needs a component-restriction theorem not present in Mathlib or ConstructionTargets: theorem IsCoveringMap.restrictPathComponent {E B : Type*} [TopologicalSpace E] [TopologicalSpace B] [LocPathConnectedSpace B] [PathConnectedSpace B] {p : E → B} (hp : IsCoveringMap p) (e : E) : IsCoveringMap (fun x : {x : E // Joined e x} => p x.1). This cannot be obtained merely from openness of path components: each covering trivialization must be refined to a path-connected base neighborhood, its sheets classified by whether they meet the chos"},
+   :id :lemma-iscoveringmap-restrictpathcomponent,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t99J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "cyclicThreeCirclesPullback_pathConnected",
+    :type
+    "theorem proving that pullback path connected from cyclic monodromy. The exact missing prerequisite is theorem cyclicThreeCirclesPullback_pathConnected (n : ℕ) (hn : 0 < n) : PathConnectedSpace (ConstructionTargets.LiteralPullbackCover.Pullback (circleDegreeMap n) threeCirclesFirstCircle). Its proof must define the degree-n circle map and the nested-wedge collapse, compute the monodromy as the n-cycle on Fin n, and convert transitivity into paths joining arbitrary pullback points. Searches of Mathlib and ConstructionTargets find neither the transitive-monodromy connectedness theorem nor an expl"},
+   :lemma
+   {:name "cyclicThreeCirclesPullback_pathConnected",
+    :reported-by [:owner],
+    :type
+    "theorem proving that pullback path connected from cyclic monodromy. The exact missing prerequisite is theorem cyclicThreeCirclesPullback_pathConnected (n : ℕ) (hn : 0 < n) : PathConnectedSpace (ConstructionTargets.LiteralPullbackCover.Pullback (circleDegreeMap n) threeCirclesFirstCircle). Its proof must define the degree-n circle map and the nested-wedge collapse, compute the monodromy as the n-cycle on Fin n, and convert transitivity into paths joining arbitrary pullback points. Searches of Mathlib and ConstructionTargets find neither the transitive-monodromy connectedness theorem nor an expl"},
+   :id :lemma-cyclicthreecirclespullback-pathconnected,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "kleinOrbitQuotient_homeomorph",
+    :type
+    "theorem is absent: after defining kleinPlaneAction from PresentedGroup.toGroup and orbitSetoid by existence of a group element, one still must prove theorem kleinOrbitQuotient_homeomorph : Quotient orbitSetoid ≃ₜ ConstructionTargets.StatementSurfaceModels.KleinBottle, with orbitSetoid x y ↔ ∃ g : T93J03.PresentedKleinGroup, kleinPlaneAction g x = y. This theorem entails a complete classification of every orbit intersection with the closed square, all edge and corner identifications, equivalence with the disk-boundary EqvGen relation used by Surface false 2, and continuity of both quotient maps"},
+   :lemma
+   {:name "kleinOrbitQuotient_homeomorph",
+    :reported-by [:owner],
+    :type
+    "theorem is absent: after defining kleinPlaneAction from PresentedGroup.toGroup and orbitSetoid by existence of a group element, one still must prove theorem kleinOrbitQuotient_homeomorph : Quotient orbitSetoid ≃ₜ ConstructionTargets.StatementSurfaceModels.KleinBottle, with orbitSetoid x y ↔ ∃ g : T93J03.PresentedKleinGroup, kleinPlaneAction g x = y. This theorem entails a complete classification of every orbit intersection with the closed square, all edge and corner identifications, equivalence with the disk-boundary EqvGen relation used by Surface false 2, and continuity of both quotient maps"},
+   :id :lemma-kleinorbitquotient-homeomorph,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "restrictedDoubleCoverGluingEquiv",
+    :type
+    "theorem is mathematically plausible and I found no missing hypothesis, but its proof requires a concrete theorem not present in the repository: after defining the sphere and two open-arc strata and their restricted covers, one needs theorem restrictedDoubleCoverGluingEquiv (matchingNorth matchingSouth : Equiv.Perm (Fin 2)) (hconnected : matchingNorth ≠ matchingSouth ∨ matchingNorth = Equiv.swap 0 1) : Nonempty (gluedDoubleCover matchingNorth matchingSouth ≃ₜ apm_t97A03_OneCircleCover) ∨ Nonempty (gluedDoubleCover matchingNorth matchingSouth ≃ₜ apm_t97A03_TwoCircleCover), together with a homeom"},
+   :lemma
+   {:name "restrictedDoubleCoverGluingEquiv",
+    :reported-by [:owner],
+    :type
+    "theorem is mathematically plausible and I found no missing hypothesis, but its proof requires a concrete theorem not present in the repository: after defining the sphere and two open-arc strata and their restricted covers, one needs theorem restrictedDoubleCoverGluingEquiv (matchingNorth matchingSouth : Equiv.Perm (Fin 2)) (hconnected : matchingNorth ≠ matchingSouth ∨ matchingNorth = Equiv.swap 0 1) : Nonempty (gluedDoubleCover matchingNorth matchingSouth ≃ₜ apm_t97A03_OneCircleCover) ∨ Nonempty (gluedDoubleCover matchingNorth matchingSouth ≃ₜ apm_t97A03_TwoCircleCover), together with a homeom"},
+   :id :lemma-restricteddoublecovergluingequiv,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "oneCircleCover_homotopyEquiv_modelBouquet",
+    :type
+    "theorem appears true. The exact missing mathematical input remains two explicit quotient-space comparisons. With ModelBouquet defined as the iterated point wedge of apm_t97A03_S2, apm_t97A03_S2, and ThreeCircles, the required types are theorem oneCircleCover_homotopyEquiv_modelBouquet : Nonempty (apm_t97A03_OneCircleCover ≃ₕ ModelBouquet) and theorem twoCircleCover_homotopyEquiv_modelBouquet : Nonempty (apm_t97A03_TwoCircleCover ≃ₕ ModelBouquet). Neither theorem nor any lemma mentioning the two frozen models exists in ConstructionTargets. Each proof must define maps from a distinct EqvGen quot"},
+   :lemma
+   {:name "oneCircleCover_homotopyEquiv_modelBouquet",
+    :reported-by [:owner],
+    :type
+    "theorem appears true. The exact missing mathematical input remains two explicit quotient-space comparisons. With ModelBouquet defined as the iterated point wedge of apm_t97A03_S2, apm_t97A03_S2, and ThreeCircles, the required types are theorem oneCircleCover_homotopyEquiv_modelBouquet : Nonempty (apm_t97A03_OneCircleCover ≃ₕ ModelBouquet) and theorem twoCircleCover_homotopyEquiv_modelBouquet : Nonempty (apm_t97A03_TwoCircleCover ≃ₕ ModelBouquet). Neither theorem nor any lemma mentioning the two frozen models exists in ConstructionTargets. Each proof must define maps from a distinct EqvGen quot"},
+   :id :lemma-onecirclecover-homotopyequiv-modelbouquet,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "twoCircleCover_homotopyEquiv_modelBouquet",
+    :type
+    "theorem appears true. The exact missing mathematical input remains two explicit quotient-space comparisons. With ModelBouquet defined as the iterated point wedge of apm_t97A03_S2, apm_t97A03_S2, and ThreeCircles, the required types are theorem oneCircleCover_homotopyEquiv_modelBouquet : Nonempty (apm_t97A03_OneCircleCover ≃ₕ ModelBouquet) and theorem twoCircleCover_homotopyEquiv_modelBouquet : Nonempty (apm_t97A03_TwoCircleCover ≃ₕ ModelBouquet). Neither theorem nor any lemma mentioning the two frozen models exists in ConstructionTargets. Each proof must define maps from a distinct EqvGen quot"},
+   :lemma
+   {:name "twoCircleCover_homotopyEquiv_modelBouquet",
+    :reported-by [:owner],
+    :type
+    "theorem appears true. The exact missing mathematical input remains two explicit quotient-space comparisons. With ModelBouquet defined as the iterated point wedge of apm_t97A03_S2, apm_t97A03_S2, and ThreeCircles, the required types are theorem oneCircleCover_homotopyEquiv_modelBouquet : Nonempty (apm_t97A03_OneCircleCover ≃ₕ ModelBouquet) and theorem twoCircleCover_homotopyEquiv_modelBouquet : Nonempty (apm_t97A03_TwoCircleCover ≃ₕ ModelBouquet). Neither theorem nor any lemma mentioning the two frozen models exists in ConstructionTargets. Each proof must define maps from a distinct EqvGen quot"},
+   :id :lemma-twocirclecover-homotopyequiv-modelbouquet,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t99J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "IsFreeGroupoid.SpanningTree.endBasis",
+    :type
+    "FreeGroupBasis ((wideSubquiverEquivSetTotal (wideSubquiverSymmetrify T)) complement) (End (show G from Quiver.root T))"},
+   :lemma
+   {:name "IsFreeGroupoid.SpanningTree.endBasis",
+    :reported-by [:owner],
+    :type
+    "FreeGroupBasis ((wideSubquiverEquivSetTotal (wideSubquiverSymmetrify T)) complement) (End (show G from Quiver.root T))",
+    :proved-in
+    :routes-2026-10-10-type-valued-spanning-tree-free-group-basis-17},
+   :id :lemma-isfreegroupoid-spanningtree-endbasis,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t97A03]}
+  {:consumer :t99J01,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "FiniteIndexFreeGroupSchreierRank.spanningTreeBasis",
+    :type
+    "{G : Type u} [Groupoid G] [IsFreeGroupoid G] (T : WideSubquiver (Symmetrify (IsFreeGroupoid.Generators G))) [Arborescence T] -> FreeGroupBasis (Complement T) (End (show G from Quiver.root T))"},
+   :lemma
+   {:name "FiniteIndexFreeGroupSchreierRank.spanningTreeBasis",
+    :reported-by [:owner],
+    :type
+    "{G : Type u} [Groupoid G] [IsFreeGroupoid G] (T : WideSubquiver (Symmetrify (IsFreeGroupoid.Generators G))) [Arborescence T] -> FreeGroupBasis (Complement T) (End (show G from Quiver.root T))",
+    :proved-in
+    :routes-2026-10-10-finite-index-schreier-spanning-tree-count-1,
+    :banked-by
+    :routes-2026-10-10-finite-index-schreier-spanning-tree-count-1,
+    :banked-commit "983453e07912c8ce026078bcfe356b1d9e1c32eb"},
+   :id :lemma-finiteindexfreegroupschreierrank-spanningtreebasis,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t97A03]}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",

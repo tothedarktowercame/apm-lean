@@ -34,8 +34,9 @@ homotopy invariance (`AlgebraicTopology/SingularHomology/HomotopyInvariance*.lea
 4. Apply the stop-after-two rule per ROW: a row that stops twice is parked (`:needs-owner`), but
    its problem is not held. A missing theorem is never a reason to stop working on a problem
    (Joe, 2026-10-10: "they need to extend mathlib not stop"); authors prove what Mathlib lacks,
-   and anything unfinished goes on `holes/labs/topology-contract/missing-theorems.edn`. Each
-   strategy checkpoint re-routes parked problems from that list. Restrategising periodically is
+   and anything unfinished becomes a `:lemma` node (state `:backlog`) in the ledger's lemma DAG.
+   Each strategy checkpoint ranks the DAG (`build_step.bb priorities`) and re-routes parked
+   problems through it. Restrategising periodically is
    valid; no fresh outside seat is needed. (Supersedes the 2026-09-29 hold-until-re-routed rule.)
 5. If a route step turns out false or unbuildable, STOP with the evidence (a compiled
    counterexample where possible). Never change a registered statement.

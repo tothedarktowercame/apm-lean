@@ -62577,4 +62577,23 @@
     :routes-2026-09-28-t01a02-punctured-torus-h2-topo2
     :routes-2026-09-28-t97a04-mv-connecting-naturality-topo2
     :routes-2026-09-28-t00j08-quantitative-nielsen-schreier-topo2
-    :routes-2026-09-28-checkpoint-topo2]}]}
+    :routes-2026-09-28-checkpoint-topo2]}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t02a03_dist_leftTubePoint_angularCore",
+    :type
+    "forall p : apm_t02a03_leftTubeSubtype, dist p.1 (apm_t02a03_leftCoreCircle (apm_t02a03_leftTubeAngular p)) = norm (apm_t02a03_leftTubeNormalComplex p)"},
+   :lemma
+   {:name "apm_t02a03_dist_leftTubePoint_angularCore",
+    :reported-by [:owner],
+    :type
+    "forall p : apm_t02a03_leftTubeSubtype, dist p.1 (apm_t02a03_leftCoreCircle (apm_t02a03_leftTubeAngular p)) = norm (apm_t02a03_leftTubeNormalComplex p)",
+    :proved-in
+    :routes-2026-10-10-t02a03-left-tube-punctured-model-topo2-r1},
+   :id :lemma-apm-t02a03-dist-lefttubepoint-angularcore,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}]}

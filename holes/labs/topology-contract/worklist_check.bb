@@ -47,13 +47,15 @@
 (doseq [i items]
   (doseq [k [:id :kind :state :depends-on :consumer :acceptance]]
     (when-not (contains? i k) (die (:id i) "lacks" k)))
-  (when-not ((:statuses w) (:state i)) (die (:id i) "unknown state" (:state i)))
-  (when-not ((:edge-kinds w) (:kind i)) (die (:id i) "unknown kind" (:kind i)))
+  ;; :backlog/:banked and :lemma belong to the lemma DAG, defined in code
+  ;; (build_step.bb), so every ledger accepts them without a data migration.
+  (when-not ((into (:statuses w) #{:backlog :banked}) (:state i)) (die (:id i) "unknown state" (:state i)))
+  (when-not ((conj (:edge-kinds w) :lemma) (:kind i)) (die (:id i) "unknown kind" (:kind i)))
   (when-not (= (count (:depends-on i)) (count (set (:depends-on i))))
     (die (:id i) "contains duplicate dependencies"))
   (doseq [d (:depends-on i)] (when-not (by-id d) (die (:id i) "unknown dependency" d)))
   (let [ready? (every? #(let [state (:state (by-id %))]
-                          (or (= :done state)
+                          (or (#{:done :banked} state)
                               (and (= :strategy-checkpoint (:kind i))
                                    (owner-blocked? % #{}))))
                        (:depends-on i))]
@@ -81,6 +83,16 @@
              [:orientation [[:representation :direction] [:orientation]]]]]
       (when-not (some #(not (str/blank? (str (get-in i %)))) paths)
         (die (:id i) "representation comparison lacks" label))))
+  ;; Lemma-DAG nodes (build_step.bb, "Lemma DAG"): never scheduled directly,
+  ;; only :backlog until a reviewed row proves them, then :banked.
+  (if (= :lemma (:kind i))
+    (do (when-not (#{:backlog :banked} (:state i)) (die (:id i) "lemma node in state" (:state i)))
+        (when (str/blank? (str (get-in i [:lemma :name]))) (die (:id i) "lemma node lacks :lemma :name"))
+        (when (and (= :banked (:state i)) (not (get-in i [:lemma :banked-by])))
+          (die (:id i) "banked lemma lacks :banked-by")))
+    (when (#{:backlog :banked} (:state i)) (die (:id i) "only lemma nodes may be" (:state i))))
+  (when-let [l (:implements-lemma i)]
+    (when-not (= :lemma (:kind (by-id l))) (die (:id i) ":implements-lemma names no lemma node" l)))
   (when (= :strategy-checkpoint (:kind i))
     (when-not (and (= :strategy (:phase i)) (map? (:checkpoint i)))
       (die (:id i) "strategy checkpoint lacks :phase :strategy or checkpoint policy")))

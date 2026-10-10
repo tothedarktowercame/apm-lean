@@ -27,9 +27,13 @@
           (and (= :blocked (:state item))
                (some #(owner-blocked? idx % (conj seen dependency))
                      (:depends-on item)))))))
+(def satisfied-states
+  "A dependency in one of these states no longer blocks its dependents: a
+   reviewed row, or a lemma-DAG node someone has proved and banked."
+  #{:done :banked})
 (defn dependency-ready? [dependent dependency]
   (let [state (:state (by-id dependency))]
-    (or (= :done state)
+    (or (satisfied-states state)
         (and (= :strategy-checkpoint (:kind dependent))
              (owner-blocked? by-id dependency #{})))))
 (defn eligible? [i]
@@ -136,7 +140,7 @@
     (mapv #(if (and (= :blocked (:state %))
                     (every? (fn [d]
                               (let [state (:state (idx d))]
-                                (or (= :done state)
+                                (or (satisfied-states state)
                                     (and (= :strategy-checkpoint (:kind %))
                                          (owner-blocked? idx d #{})))))
                             (:depends-on %)))
@@ -213,23 +217,6 @@
 ;; could restart. Keep a content-addressed copy, shared by both ledgers, at
 ;; apply time; worklist_check accepts it when the recorded path is gone.
 (def fixture-store (io/file here "fixture-store"))
-
-;; Theorems authors found missing from Mathlib and ConstructionTargets, one EDN
-;; map per line, shared by both loops. Strategy checkpoints elect from it (Joe,
-;; 2026-10-10: a missing theorem goes on a list; it is not a reason to stop).
-;; Derived data: each entry also stays in its row's :evidence in the ledger.
-(def missing-theorems-file (io/file here "missing-theorems.edn"))
-
-(defn record-missing-theorems! [id consumer receipt]
-  (when-let [ts (seq (filter map? (:missing-theorems receipt)))]
-    (let [at (str (java.time.Instant/now))]
-      (spit missing-theorems-file
-            (apply str (for [t ts]
-                         (str (pr-str (assoc t :row id :row-consumer consumer
-                                             :ledger (.getName (io/file path))
-                                             :seat (:seat receipt) :at at))
-                              "\n")))
-            :append true))))
 
 (defn stash-fixture! [{:keys [path sha256]}]
   (when (and path sha256)
@@ -386,6 +373,128 @@
       (and (= :reusable-theorem (:kind row)) (not (:bounded-exception row)) (< (count open) 2))
       {:id (:id row) :open-problems (vec open)
        :reason "reusable theorem needed by fewer than two open problems; elect it as that problem's adapter or record a :bounded-exception"})))
+;; ---------------------------------------------------------------------------
+;; Lemma DAG (Joe, 2026-10-10: "previous loops maintained a DAG so they could
+;; keep track of the priority of lemmas"). TOPOLOGY-DEPENDENCY-DAG.md did this
+;; by hand until 2026-09-28, when TOPOLOGY-ROUTES.md replaced it for elections
+;; and nothing kept lemma dependencies any more. Lemmas now live in the ledger
+;; as rows of kind :lemma, state :backlog or :banked, so they validate, commit
+;; and rebase with every transition:
+;;   - :depends-on      edges to the lemmas a lemma needs
+;;   - :consumer/:other-consumers  the problems that need it directly
+;;   - :lemma {:name :type :reported-by [...] :proved-in row}
+;; Authors' :missing-theorems and strategy receipts' :lemmas add or update
+;; nodes by name. A work row with :implements-lemma L, or a row whose author
+;; reported L :status :proved, banks L when its review passes. `priorities`
+;; ranks the backlog for strategy checkpoints.
+(defn lemma-id [nm]
+  (let [slug (-> (str nm) str/lower-case (str/replace #"[^a-z0-9]+" "-")
+                 (str/replace #"^-+|-+$" ""))]
+    (keyword (str "lemma-" (subs slug 0 (min 80 (count slug)))))))
+
+(defn- reaches?
+  "Does `from` reach `to` along :depends-on in idx?"
+  [idx from to]
+  (loop [stack [from] seen #{}]
+    (if-let [x (peek stack)]
+      (cond (= x to) true
+            (seen x) (recur (pop stack) seen)
+            :else (recur (into (pop stack) (:depends-on (idx x))) (conj seen x)))
+      false)))
+
+(defn upsert-lemmas
+  "Add or update lemma nodes from receipt entries {:name :type :status
+   :consumers :depends-on [names]}. Unknown dependency names become stub
+   nodes; an edge that would close a cycle is dropped, not fatal."
+  [items entries source-id]
+  (let [entries (filter #(and (map? %) (not (str/blank? (str (:name %))))) entries)]
+    (if (empty? entries)
+      items
+      (let [idx (atom (into {} (map (juxt :id identity) items)))
+            order (atom (mapv :id items))
+            ensure! (fn [nm consumers]
+                      (let [lid (lemma-id nm)
+                            cur (@idx lid)]
+                        (when (and cur (not= :lemma (:kind cur)))
+                          (throw (ex-info "lemma id collides with a work row" {:id lid})))
+                        (when-not cur
+                          (swap! order conj lid)
+                          (swap! idx assoc lid
+                                 {:id lid :kind :lemma :state :backlog :phase :lemma
+                                  :scope [] :depends-on []
+                                  :consumer (or (first consumers) :portfolio)
+                                  :other-consumers (vec (rest consumers))
+                                  :acceptance {:lemma (str nm)}
+                                  :lemma {:name (str nm) :reported-by []}}))
+                        lid))]
+        (doseq [{:keys [name type status consumers depends-on]} entries]
+          (let [consumers (vec (distinct (keep #(when % (keyword (str/replace (str %) #"^:" ""))) consumers)))
+                lid (ensure! name consumers)]
+            (swap! idx update lid
+                   (fn [n]
+                     (let [all (vec (distinct (remove #{:portfolio}
+                                                      (concat [(:consumer n)] (:other-consumers n) consumers))))]
+                       (cond-> (-> n
+                                   (assoc :consumer (or (first all) :portfolio)
+                                          :other-consumers (vec (rest all)))
+                                   (update-in [:lemma :reported-by]
+                                              #(vec (distinct (conj (or % []) source-id)))))
+                         (and (not (str/blank? (str type))) (str/blank? (str (get-in n [:lemma :type]))))
+                         (-> (assoc-in [:lemma :type] (str type))
+                             (assoc-in [:acceptance :type] (str type)))
+                         (and (= :proved (keyword (str/replace (str status) #"^:" "")))
+                              (= :backlog (:state n)))
+                         (assoc-in [:lemma :proved-in] source-id)))))
+            (doseq [dn depends-on :when (not (str/blank? (str dn)))]
+              (let [did (ensure! dn [])]
+                (when-not (or (= did lid) (reaches? @idx did lid)
+                              (some #{did} (:depends-on (@idx lid))))
+                  (swap! idx update-in [lid :depends-on] conj did))))))
+        (mapv @idx @order)))))
+
+(defn bank-lemmas
+  "On a PASS for row id: bank the lemma it implements and any lemma whose
+   author reported it proved in this row."
+  [items id]
+  (let [row (some #(when (= id (:id %)) %) items)
+        target (:implements-lemma row)
+        commit (or (get-in row [:evidence :commit]) (last (get-in row [:evidence :commits])))]
+    (mapv #(if (and (= :lemma (:kind %)) (= :backlog (:state %))
+                    (or (= target (:id %)) (= id (get-in % [:lemma :proved-in]))))
+             (-> % (assoc :state :banked)
+                 (assoc-in [:lemma :banked-by] id)
+                 (cond-> commit (assoc-in [:lemma :banked-commit] commit)))
+             %)
+          items)))
+
+(defn priorities
+  "Backlog lemmas ranked for election: ready ones (every dependency banked or
+   done) first, then by how many open registered problems they unblock
+   (directly, or through any row or lemma that depends on them), then by how
+   few backlog lemmas those problems still wait on."
+  [items]
+  (let [idx (into {} (map (juxt :id identity) items))
+        dependents (reduce (fn [m i] (reduce #(update %1 %2 (fnil conj #{}) (:id i)) m (:depends-on i)))
+                           {} (remove #(#{:superseded} (:state %)) items))
+        upward (fn [lid] (loop [stack [lid] seen #{}]
+                           (if-let [x (peek stack)]
+                             (if (seen x) (recur (pop stack) seen)
+                                 (recur (into (pop stack) (dependents x)) (conj seen x)))
+                             seen)))
+        open-reg (fn [row] (set (filter @registered-problems (open-problems row))))
+        backlog (filter #(and (= :lemma (:kind %)) (= :backlog (:state %))) items)
+        unblocks (into {} (for [l backlog]
+                            [(:id l) (set (mapcat #(open-reg (idx %)) (upward (:id l))))]))
+        remaining (frequencies (mapcat val unblocks))
+        ready? (fn [l] (every? #(satisfied-states (:state (idx %))) (:depends-on l)))]
+    (->> backlog
+         (map (fn [l] {:id (:id l) :name (get-in l [:lemma :name])
+                       :ready (ready? l)
+                       :unblocks (vec (sort (unblocks (:id l))))
+                       :waits-on (vec (remove #(satisfied-states (:state (idx %))) (:depends-on l)))
+                       :closest (or (some->> (seq (unblocks (:id l))) (map remaining) (apply min)) 0)}))
+         (sort-by (juxt #(if (:ready %) 0 1) #(- (count (:unblocks %))) :closest :name)))))
+
 (defn apply-result! []
   (let [id (keyword (nth *command-line-args* 2 ""))
         receipt-path (nth *command-line-args* 3 "")
@@ -659,8 +768,12 @@
                                                   (assoc :review-finding (:finding receipt))
                                                   (assoc-in [:evidence :review] receipt)))))
             (throw (ex-info "unknown receipt outcome" {:outcome outcome})))]
-      (write-ledger! (assoc data :items (unblock-ready new-items)))
-      (record-missing-theorems! id (:consumer item) receipt)
+      (write-ledger! (assoc data :items
+                            (unblock-ready
+                             (cond-> (upsert-lemmas new-items
+                                                    (concat (:missing-theorems receipt) (:lemmas receipt))
+                                                    id)
+                               (= :pass outcome) (bank-lemmas id)))))
       (println "applied" (name outcome) "to" (name id)))))
 
 (defn repair-dependencies! []
@@ -736,6 +849,26 @@
   "repair-dependencies" (repair-dependencies!)
   "repair-fixture-hash" (repair-fixture-hash!)
   "replay" (replay!)
+  "priorities" (doseq [p (priorities items)] (prn p))
+  ;; Owner edits to the lemma DAG go through the same upsert and validation as
+  ;; receipts: `add-lemmas LEDGER FILE`, FILE holding a vector of entries.
+  "add-lemmas" (let [entries (edn/read-string (slurp (nth *command-line-args* 2)))]
+                 (write-ledger! (assoc data :items
+                                       (unblock-ready
+                                        (let [xs (upsert-lemmas items (map #(dissoc % :row) entries) :owner)
+                                              ;; an entry carrying the :row that proved it
+                                              ;; is linked to it (banked on its PASS), and banked at
+                                              ;; once if that row already passed
+                                              proved (for [{:keys [name row status]} entries
+                                                           :when (and row (= :proved (keyword (str/replace (str status) #"^:" ""))))
+                                                           :let [r (by-id (keyword (str/replace (str row) #"^:" "")))]
+                                                           :when r]
+                                                       [(lemma-id name) r])
+                                              xs (mapv #(if-let [r (some (fn [[l r]] (when (= l (:id %)) r)) proved)]
+                                                          (if (= :backlog (:state %)) (assoc-in % [:lemma :proved-in] (:id r)) %)
+                                                          %) xs)]
+                                          (reduce bank-lemmas xs (distinct (map :id (filter #(= :done (:state %)) (map second proved)))))))))
+                 (println "lemma DAG:" (count (filter #(= :lemma (:kind %)) (:items (edn/read-string (slurp path))))) "nodes"))
   (do (binding [*out* *err*]
         (println "usage: build_step.bb next-open|unreviewed|counts|row|apply-result|repair-dependencies|repair-fixture-hash|replay [ledger] [args...]"))
       (System/exit 2)))

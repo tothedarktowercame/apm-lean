@@ -12,14 +12,31 @@ compiled prerequisite. STOP names the exact mathematical, hypothesis, or
 representation boundary.
 
 For `:phase :strategy`, reread `TOPOLOGY-ROUTES.md`, the routes files and the
-reviewed dependency receipts. Read `holes/labs/topology-contract/missing-theorems.edn`
-(one map per line: theorems authors found missing, with row and consumers):
-those are this loop's backlog. A `:needs-owner` row or a stop-after-two is NOT
-a hold on its problem; re-route the problem by electing the missing theorems
-it named as rows, smallest first, at the generality its consumers use. A
-checkpoint may not answer terminal while an open problem of this loop has
-listed theorems that are not yet built. Restrategising is expected; do it at
-every checkpoint (Joe, 2026-10-10). Elect only from this loop's half of
+reviewed dependency receipts. 
+LEMMA DAG (Joe, 2026-10-10: "previous loops maintained a DAG so they could
+keep track of the priority of lemmas"). The ledger holds rows of kind `:lemma`
+-- missing theorems, state `:backlog` until a reviewed row proves them, then
+`:banked` -- with `:depends-on` edges between lemmas and `:consumer` /
+`:other-consumers` naming the problems that need them. Every checkpoint:
+
+1. Run `bb holes/labs/topology-contract/build_step.bb priorities <this ledger>`.
+   It ranks backlog lemmas: ready ones (dependencies banked) first, then by
+   how many open registered problems each unblocks, then by how close those
+   problems are to closing. Put the top of that ranking in your `:finding`.
+2. Maintain the DAG: return `:lemmas` (same map shape as `:missing-theorems`,
+   with `:depends-on` names) to add lemmas a route needs, split a lemma that
+   is too large for one row into smaller ones it depends on, or add edges.
+   On the first checkpoint after 2026-10-10, also import the non-BANKED nodes
+   of `TOPOLOGY-DEPENDENCY-DAG.md` that lie on this loop's open problems.
+3. Elect work rows for the top ready lemmas: give each `:implements-lemma
+   <lemma id>` (and `:depends-on` the lemma ids it uses). Its PASS banks the
+   lemma and unblocks everything waiting on it. Rule 0 (close nearly-closed
+   problems first) still comes first.
+
+A `:needs-owner` row or a stop-after-two is NOT a hold on its problem; re-route
+it through the DAG. A checkpoint may not answer terminal while an open problem
+of this loop has backlog lemmas. Restrategising is expected at every
+checkpoint. Elect only from this loop's half of
 `TOPOLOGY-ROUTES.md` and follow its election rules; where the text below says
 "the DAG", read `TOPOLOGY-ROUTES.md` and the routes files. Measure placeholder changes, typed residual changes, infrastructure
 packet counts, and STOP/PASS outcomes. Return `:outcome :replan` with a
@@ -172,7 +189,11 @@ receipt's `:missing-theorems` vector, one map per theorem:
     {:name "IsCoveringMap.restrictPathComponent"
      :type "<full Lean statement>"
      :status :proved | :partial | :not-started
-     :consumers [:t99J01]}
+     :consumers [:t99J01]
+     :depends-on ["<names of other missing theorems this one needs>"]}
+
+Each entry becomes (or updates) a node in the ledger's lemma DAG, matched by
+name. `:status :proved` banks that node when this row's review passes.
 
 If the job ends before the row is complete, commit what compiles (no `sorry`,
 no axiom beyond the fixture's frozen ones), list the rest with
