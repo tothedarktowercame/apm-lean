@@ -95876,11 +95876,116 @@
    "Establish constant fiber cardinality and the induced subgroup image.",
    :other-consumers []}
   {:bounded-exception
+   "This single-consumer pointed collapse is the exact map required to pull the degree-n circle cover back to ThreeCircles; its right-circle section supplies the cyclic monodromy loop used in the next step.",
+   :consumer :t99J01,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/CyclicThreeCirclesCollapse.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/cyclic-three-circles-collapse",
+   :acceptance
+   {:implementation
+    "Define collapse : ThreeCircles -> Circle by sending the TwoCircles summand constantly to 1 and the final Circle summand identically to Circle. Define firstCircle as the final-circle inclusion. Prove both maps continuous, their representative formulas, and collapse (firstCircle z) = z. Do not construct a pullback, prove covering or path connectedness, count sheets, or close t99J01.",
+    :placeholder "the single sorry in apm_t99j01",
+    :route-step
+    "t99J01 cyclic-cover step 1: construct the pointed collapse and final-circle section before pulling back the degree-n circle cover",
+    :fixture "/tmp/cyclic-three-circles-collapse.lean",
+    :fixture-sha256
+    "9cc57221539ffbe10187cde732b9c42eec055f5be725612e0f01be7e638da0fd",
+    :gates
+    ["lake build ConstructionTargets.CyclicThreeCirclesCollapse"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-10-cyclic-three-circles-collapse-39,
+   :kind :reusable-theorem,
+   :depends-on [],
+   :current-residual
+   "Pull back Circle.npow along collapse, prove exact n-sheet fibers, and prove path connectedness by using the firstCircle section to realize cyclic transitions between sheets.",
+   :other-consumers []}
+  {:bounded-exception
    "Single-consumer prerequisite second in the final ledger ranking.",
    :consumer :t99J01,
    :implements-lemma :lemma-cyclicthreecirclespullback-pathconnected,
+   :evidence
+   {:probe
+    {:residual
+     "The literal pullback and covering APIs are banked. After promoting the compiled collapse and section, the original row must construct the npow pullback, prove its n-sheet cardinality, and connect arbitrary pullback points using cyclic sheet transitions.",
+     :outcome :revise,
+     :warnings [],
+     :missing-theorems
+     [{:name "cyclicThreeCirclesPullback_pathConnected",
+       :type
+       "For every positive n, the literal pullback of the degree-n Circle power covering along CyclicThreeCirclesCollapse.collapse is path connected.",
+       :status :partial,
+       :consumers [:t99J01],
+       :depends-on
+       ["CyclicThreeCirclesCollapse.continuous_collapse"
+        "CyclicThreeCirclesCollapse.collapse_firstCircle"]}],
+     :prerequisite
+     {:bounded-exception
+      "This single-consumer pointed collapse is the exact map required to pull the degree-n circle cover back to ThreeCircles; its right-circle section supplies the cyclic monodromy loop used in the next step.",
+      :consumer :t99J01,
+      :phase :implementation,
+      :state :open,
+      :scope ["ConstructionTargets/CyclicThreeCirclesCollapse.lean"],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/cyclic-three-circles-collapse",
+      :acceptance
+      {:implementation
+       "Define collapse : ThreeCircles -> Circle by sending the TwoCircles summand constantly to 1 and the final Circle summand identically to Circle. Define firstCircle as the final-circle inclusion. Prove both maps continuous, their representative formulas, and collapse (firstCircle z) = z. Do not construct a pullback, prove covering or path connectedness, count sheets, or close t99J01.",
+       :placeholder "the single sorry in apm_t99j01",
+       :route-step
+       "t99J01 cyclic-cover step 1: construct the pointed collapse and final-circle section before pulling back the degree-n circle cover",
+       :fixture "/tmp/cyclic-three-circles-collapse.lean",
+       :fixture-sha256
+       "9cc57221539ffbe10187cde732b9c42eec055f5be725612e0f01be7e638da0fd",
+       :gates
+       ["lake build ConstructionTargets.CyclicThreeCirclesCollapse"
+        "fixture compiles"
+        "zero source and fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :id :routes-2026-10-10-cyclic-three-circles-collapse-39,
+      :kind :reusable-theorem,
+      :depends-on [],
+      :current-residual
+      "Pull back Circle.npow along collapse, prove exact n-sheet fibers, and prove path connectedness by using the firstCircle section to realize cyclic transitions between sheets.",
+      :other-consumers []},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd
+       "lake build ConstructionTargets.LiteralCoveringPullback ConstructionTargets.StatementSurfaceModels",
+       :exit 0}
+      {:cmd "lake env lean /tmp/cyclic-three-circles-collapse.lean",
+       :exit 0}
+      {:cmd "sha256sum /tmp/cyclic-three-circles-collapse.lean",
+       :exit 0}
+      {:cmd
+       "rg -n \"\\b(sorry|admit)\\b\" /tmp/cyclic-three-circles-collapse.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+      {:cmd "git status --short", :exit 0, :finding "clean"}],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/cyclic-three-circles-collapse.lean",
+       :exit 1,
+       :finding
+       "The quotient respects proof initially handled only the generator although WedgeSetoid is EqvGen; corrected by EqvGen induction."}
+      {:cmd "lake env lean /tmp/cyclic-three-circles-collapse.lean",
+       :exit 1,
+       :finding
+       "The first correction matched the generator constructor at the wrong induction layer; corrected with rel/refl/symm/trans cases."}],
+     :fixture
+     {:path "/tmp/cyclic-three-circles-collapse.lean",
+      :sha256
+      "9cc57221539ffbe10187cde732b9c42eec055f5be725612e0f01be7e638da0fd",
+      :interface
+      "collapse : ThreeCircles -> Circle, firstCircle : Circle -> ThreeCircles, their continuity, representative formulas, and collapse_firstCircle."},
+     :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/cyclic-three-circles-cover",
@@ -95900,7 +96005,8 @@
    :routes-2026-10-10-cyclic-three-circles-pullback-pathconnected-38,
    :kind :reusable-theorem,
    :depends-on
-   [:routes-2026-10-10-checkpoint-topo1-after-klein-boundary-eqvgen-28],
+   [:routes-2026-10-10-checkpoint-topo1-after-klein-boundary-eqvgen-28
+    :routes-2026-10-10-cyclic-three-circles-collapse-39],
    :current-residual
    "Combine the cyclic cover with component restriction and close t99J01.",
    :other-consumers []}
@@ -96319,12 +96425,16 @@
     "theorem proving that pullback path connected from cyclic monodromy. The exact missing prerequisite is theorem cyclicThreeCirclesPullback_pathConnected (n : ℕ) (hn : 0 < n) : PathConnectedSpace (ConstructionTargets.LiteralPullbackCover.Pullback (circleDegreeMap n) threeCirclesFirstCircle). Its proof must define the degree-n circle map and the nested-wedge collapse, compute the monodromy as the n-cycle on Fin n, and convert transitivity into paths joining arbitrary pullback points. Searches of Mathlib and ConstructionTargets find neither the transitive-monodromy connectedness theorem nor an expl"},
    :lemma
    {:name "cyclicThreeCirclesPullback_pathConnected",
-    :reported-by [:owner],
+    :reported-by
+    [:owner
+     :routes-2026-10-10-cyclic-three-circles-pullback-pathconnected-38],
     :type
     "theorem proving that pullback path connected from cyclic monodromy. The exact missing prerequisite is theorem cyclicThreeCirclesPullback_pathConnected (n : ℕ) (hn : 0 < n) : PathConnectedSpace (ConstructionTargets.LiteralPullbackCover.Pullback (circleDegreeMap n) threeCirclesFirstCircle). Its proof must define the degree-n circle map and the nested-wedge collapse, compute the monodromy as the n-cycle on Fin n, and convert transitivity into paths joining arbitrary pullback points. Searches of Mathlib and ConstructionTargets find neither the transitive-monodromy connectedness theorem nor an expl"},
    :id :lemma-cyclicthreecirclespullback-pathconnected,
    :kind :lemma,
-   :depends-on [],
+   :depends-on
+   [:lemma-cyclicthreecirclescollapse-continuous-collapse
+    :lemma-cyclicthreecirclescollapse-collapse-firstcircle],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -97154,6 +97264,32 @@
    :id :lemma-kleinaabbsquarepolygonpresentationequivalence,
    :kind :lemma,
    :depends-on [:lemma-kleinsquareeqvgencasesiff-eqvgen-iff-cases],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "CyclicThreeCirclesCollapse.continuous_collapse"},
+   :lemma
+   {:name "CyclicThreeCirclesCollapse.continuous_collapse",
+    :reported-by []},
+   :id :lemma-cyclicthreecirclescollapse-continuous-collapse,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "CyclicThreeCirclesCollapse.collapse_firstCircle"},
+   :lemma
+   {:name "CyclicThreeCirclesCollapse.collapse_firstCircle",
+    :reported-by []},
+   :id :lemma-cyclicthreecirclescollapse-collapse-firstcircle,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
