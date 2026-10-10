@@ -56716,51 +56716,68 @@
    "single-consumer dependent coordinate factorization for the frozen torus",
    :consumer :t97A04,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/torus_frozen_coordinate_factorization.lean",
-      :sha256
-      "44623442330dd40b84fe51111c2403a3ef6d03fb54b90a12a5726a1f0afd1ba6"},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/torus_frozen_coordinate_factorization.lean",
-       :exit 0,
-       :output
-       "exact dependent frozen-coordinate factorization compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/torus_frozen_coordinate_factorization.lean || true)\"",
-       :exit 0}
-      {:cmd
-       "sha256sum /tmp/torus_frozen_coordinate_factorization.lean",
-       :exit 0,
-       :output
-       "44623442330dd40b84fe51111c2403a3ef6d03fb54b90a12a5726a1f0afd1ba6  /tmp/torus_frozen_coordinate_factorization.lean"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :finding
-     "The placeholder-free theorem gives the exact evaluation equality from frozenTorusPi1Coord to the canonical homeomorphism-induced fundamental-group equivalence followed by torusPi1Coord transported along frozenTorusHomeomorphCircleProd_base. Retaining the dependent intermediate basepoint makes the equality definitional and avoids a second incompatible cast.",
-     :representation
-     {:source
-      "frozenTorusPi1Coord on the fundamental group of AddCircle 1 x AddCircle 1 at (0,0)",
-      :target
-      "The canonical fundamental-group equivalence induced by frozenTorusHomeomorphCircleProd followed by the dependent-basepoint transport of torusPi1Coord",
-      :direction
-      "Exact equality from the source frozen coordinate equivalence evaluation to the target canonical Circle-coordinate composite"},
-     :implementation
-     {:scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
-      :declarations ["frozenTorusPi1Coord_factor"],
-      :acceptance
-      {:compile
-       "lake build ConstructionTargets.TorusPiOneWindingCoordinates",
-       :placeholder-free true,
-       :statement-registry true}},
-     :residual
-     "Use the factorization on quotient representatives, combine it with frozenLbarPi1Map_mk_circle_coord and circleMatrixPi1Map_naturality, and descend to arbitrary frozen classes."}},
+   {:placeholder-delta 0,
+    :residual
+    "Use the factorization on quotient representatives, combine it with frozenLbarPi1Map_mk_circle_coord and circleMatrixPi1Map_naturality, and descend to arbitrary frozen classes.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["The focused Lake build replayed pre-existing linter warnings from dependency modules; the scoped module compiled without new warnings."],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd "sha256sum /tmp/torus_frozen_coordinate_factorization.lean",
+      :exit 0,
+      :output
+      "44623442330dd40b84fe51111c2403a3ef6d03fb54b90a12a5726a1f0afd1ba6  /tmp/torus_frozen_coordinate_factorization.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/TorusPiOneWindingCoordinates.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.TorusPiOneWindingCoordinates",
+      :exit 0,
+      :output "Build completed successfully (8290 jobs)."}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/TorusPiOneWindingCoordinates.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "lake env lean /tmp/check_frozen_coord_factor_axioms.lean",
+      :exit 0,
+      :output
+      "frozenTorusPi1Coord_factor depends on [propext, Classical.choice, Quot.sound]."}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r 479f11413eec39eb2c038730762e97503ff4ad2e",
+      :exit 0,
+      :output "ConstructionTargets/TorusPiOneWindingCoordinates.lean"}
+     {:cmd
+      "python3 -c 'import re; p=\"problems/t97A04/lean/Main.lean\"; t=open(p).read(); t=re.sub(r\"/-.*?-/\",\" \",t,flags=re.S); t=re.sub(r\"--[^\\n]*\",\" \",t); print(len(re.findall(r\"(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])\",t)))'",
+      :exit 0,
+      :output "4"}
+     {:cmd "sha256sum problems/t97A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "79ca854186b39183bf53490a20b5be92695e345a2c099fcf928b5ad3300ee4ec  problems/t97A04/lean/Main.lean"}],
+    :representation
+    {:source
+     "frozenTorusPi1Coord on the fundamental group of AddCircle 1 x AddCircle 1 at (0,0)",
+     :target
+     "The canonical fundamental-group equivalence induced by frozenTorusHomeomorphCircleProd followed by the dependent-basepoint transport of torusPi1Coord",
+     :direction
+     "Exact equality from the source frozen coordinate equivalence evaluation to the target canonical Circle-coordinate composite"},
+    :commit "479f11413eec39eb2c038730762e97503ff4ad2e",
+    :changed-paths
+    ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
+    :fixture
+    {:path "/tmp/torus_frozen_coordinate_factorization.lean",
+     :sha256
+     "44623442330dd40b84fe51111c2403a3ef6d03fb54b90a12a5726a1f0afd1ba6"},
+    :declarations
+    ["ConstructionTargets.TorusPiOneWindingCoordinates.frozenTorusPi1Coord_factor"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A04/torus-pi1-winding-coordinates/frozen-coordinate-factorization",
