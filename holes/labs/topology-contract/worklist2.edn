@@ -57801,6 +57801,34 @@
    :current-residual
    "Construct and glue the core-complement tube deformations, then identify the resulting spine model with apm_t02a03_Y.",
    :other-consumers []}
+  {:bounded-exception
+   "single-consumer common-core attachment geometry for the t02A03 tube complement",
+   :consumer :t02A03,
+   :phase :probe,
+   :state :open,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t02A03/geometric-tube-common-attachment",
+   :acceptance
+   {:probe
+    "Compile and bank apm_t02a03_leftCore_zero, apm_t02a03_rightCore_zero, apm_t02a03_origin_mem_both_cores, and apm_t02a03_origin_mem_both_tubes from /tmp/t02a03_geometric_tube_cover.lean. Prove that the frozen core circles share the origin and hence their radius-1/4 tubes overlap there. This supplies the deleted-attachment geometry required by t02A03 route step 2; do not yet claim a tube deformation or gluing equivalence.",
+    :declarations
+    ["apm_t02a03_leftCore_zero"
+     "apm_t02a03_rightCore_zero"
+     "apm_t02a03_origin_mem_both_cores"
+     "apm_t02a03_origin_mem_both_tubes"],
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "t02A03 step 2, identify the shared core attachment point that is removed from geometricY"},
+   :id
+   :routes-2026-10-10-t02a03-geometric-tube-common-attachment-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo2-r5
+    :routes-2026-10-10-t02a03-geometric-tube-cover-topo2-r1],
+   :current-residual
+   "Construct the meridional replacement of the deleted common attachment and compatible deformations of the two tube pieces.",
+   :other-consumers []}
   {:consumer :t02A03,
    :evidence
    {:probe
@@ -57809,60 +57837,62 @@
      :fixture
      {:path "/tmp/t02a03_geometric_tube_cover.lean",
       :sha256
-      "ca89fbceb978a1b3261173110bb5b7295ebd4be2b4a21a5e83c7e94c99cdc315"},
+      "12963cdffac347af224e065a832491c3f704367711107834b8c6c502c01e8586"},
      :commands
      [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
        :exit 0,
        :output
-       "apm_t02a03_W_eq_leftTube_union_rightTube compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "tube-cover normalization and common-core attachment facts compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
        "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
        :exit 0}
       {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
        :exit 0,
        :output
-       "ca89fbceb978a1b3261173110bb5b7295ebd4be2b4a21a5e83c7e94c99cdc315  /tmp/t02a03_geometric_tube_cover.lean"}
+       "12963cdffac347af224e065a832491c3f704367711107834b8c6c502c01e8586  /tmp/t02a03_geometric_tube_cover.lean"}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 1,
+       :finding
+       "The first draft invoked a nonexistent WithLp.ext constant and supplied one argument too many to self_subset_cthickening. Using the ext tactic for EuclideanSpace coordinates and the theorem's actual implicit-radius signature corrected elaboration without changing the geometric claims."}],
      :finding
-     "The closed-punctured-disk factor is available, but the explicit geometric complement still has no deformation data. Its first necessary normalization now compiles: the set defined by infDist to the union spine is exactly the union of the closed radius-1/4 thickenings of the left and right core ranges. This follows from cthickening_union after proving the spine nonempty and converting the finite ENNReal infimum to infDist. The normalization exposes the two solid-tube pieces on which local retractions and their overlap compatibility must be constructed.",
+     "The two core parametrizations both send parameter zero to the Euclidean origin, so the origin lies in both core ranges and therefore in both closed tubes. Because the frozen complement deletes the entire left core, it deletes this shared attachment point as well. Any compatible deformation must consequently replace that attachment by a meridional route around the left core; a naive pair of radial core retractions would pass through a point outside geometricY and cannot define the requested homotopy equivalence.",
      :residual
-     "Bank the exact tube-cover equality. Then construct compatible deformation data on the left closed tube minus its core and the right closed tube, prove agreement on their intersection near the wedge point, glue the deformation to a spine model, and identify that model with apm_t02a03_Y before final assembly.",
+     "Bank the common-core attachment facts. Then construct a left-tube core-complement model with a meridian, attach the right tube through that meridional boundary rather than through the deleted origin, prove overlap compatibility, and glue to the torus-wedge-circle model.",
      :prerequisite
      {:bounded-exception
-      "single-consumer geometric tube-cover normalization for t02A03",
+      "single-consumer common-core attachment geometry for the t02A03 tube complement",
       :consumer :t02A03,
       :phase :probe,
       :state :open,
       :scope [],
-      :dag-node "TOPOLOGY-ROUTES.md/t02A03/geometric-tube-cover",
+      :dag-node
+      "TOPOLOGY-ROUTES.md/t02A03/geometric-tube-common-attachment",
       :acceptance
       {:probe
-       "Compile and bank apm_t02a03_genusTwoSpine_nonempty and apm_t02a03_W_eq_leftTube_union_rightTube from /tmp/t02a03_geometric_tube_cover.lean. Define the two closed radius-1/4 core thickenings and prove that the frozen infDist neighborhood apm_t02a03_W is exactly their union. This supplies the set-level cover needed for t02A03 route step 2; do not yet claim a deformation retract or homotopy equivalence.",
+       "Compile and bank apm_t02a03_leftCore_zero, apm_t02a03_rightCore_zero, apm_t02a03_origin_mem_both_cores, and apm_t02a03_origin_mem_both_tubes from /tmp/t02a03_geometric_tube_cover.lean. Prove that the frozen core circles share the origin and hence their radius-1/4 tubes overlap there. This supplies the deleted-attachment geometry required by t02A03 route step 2; do not yet claim a tube deformation or gluing equivalence.",
        :declarations
-       ["apm_t02a03_genusTwoSpine_nonempty"
-        "apm_t02a03_W_eq_leftTube_union_rightTube"],
+       ["apm_t02a03_leftCore_zero"
+        "apm_t02a03_rightCore_zero"
+        "apm_t02a03_origin_mem_both_cores"
+        "apm_t02a03_origin_mem_both_tubes"],
        :placeholder "the sole sorry in apm_t02a03",
        :route-step
-       "t02A03 step 2, normalize the explicit figure-eight neighborhood as a union of two closed core tubes"},
-      :representation
-      {:source
-       "The frozen genus-two neighborhood represented by the inequality infDist p (leftCore range union rightCore range) <= 1/4",
-       :target
-       "The union of the closed radius-1/4 metric thickenings of the left-core and right-core ranges",
-       :direction
-       "Exact set equality from the source infDist-neighborhood representation to the target two-tube union representation"},
-      :id :routes-2026-10-10-t02a03-geometric-tube-cover-topo2-r1,
-      :kind :representation-comparison,
+       "t02A03 step 2, identify the shared core attachment point that is removed from geometricY"},
+      :id
+      :routes-2026-10-10-t02a03-geometric-tube-common-attachment-topo2-r1,
+      :kind :reusable-theorem,
       :depends-on
       [:routes-2026-10-10-checkpoint-topo2-r5
-       :routes-2026-10-10-t02a03-closed-punctured-disk-torus-topo2-r1],
+       :routes-2026-10-10-t02a03-geometric-tube-cover-topo2-r1],
       :current-residual
-      "Construct and glue the core-complement tube deformations, then identify the resulting spine model with apm_t02a03_Y.",
+      "Construct the meridional replacement of the deleted common attachment and compatible deformations of the two tube pieces.",
       :other-consumers []}}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/closure",
    :acceptance
@@ -57875,7 +57905,8 @@
    :depends-on
    [:routes-2026-10-10-checkpoint-topo2-r5
     :routes-2026-10-10-t02a03-closed-punctured-disk-torus-topo2-r1
-    :routes-2026-10-10-t02a03-geometric-tube-cover-topo2-r1],
+    :routes-2026-10-10-t02a03-geometric-tube-cover-topo2-r1
+    :routes-2026-10-10-t02a03-geometric-tube-common-attachment-topo2-r1],
    :current-residual
    "One placeholder: two explicit homotopy equivalences, with the punctured-disk factor adapter-sized and the geometric tube deformation still missing.",
    :other-consumers []}
