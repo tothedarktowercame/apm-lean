@@ -81593,6 +81593,23 @@
       :exit 1,
       :correction
       "Replaced unsupported vector continuity automation with explicit continuous_pi proofs and normalized unit scalar actions."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791605158197-1032-be3f1824",
+     :commands
+     ["git show/diff-tree implementation c4c98357 and transition 45206618"
+      "sha256sum ConstructionTargets/ProjectiveConsumerLiftDemonstrations.lean"
+      "lake env lean ConstructionTargets/ProjectiveConsumerLiftDemonstrations.lean"
+      "lake build ConstructionTargets.ProjectiveConsumerLiftDemonstrations"
+      "#print axioms for all seven declarations"
+      "python3 scripts/statement-registry.py check and fingerprint t96A06/t99J05"
+      "nested-comment-aware placeholder census"
+      "rg exact declaration occurrences"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git diff --check c4c98357^ c4c98357"],
+     :finding
+     "PASS: reviewer codex-3 differs from author topo-2. Recorded implementation commit c4c98357 adds exactly ConstructionTargets/ProjectiveConsumerLiftDemonstrations.lean and is an ancestor of transition 45206618. The committed source remains byte-identical and reproduces fixture SHA-256 a7476f64270d07c3892143b59ad978955cc183c94336836b0fd450d91dd6c7b3. Direct compilation and the 8242-job module build pass; all seven required declarations occur exactly once, with zero sorry/admit/axiom declarations and axioms exactly propext, Classical.choice, and Quot.sound. Registry is 131/131 and all 677 rows validate. Frozen consumers remain unchanged with one placeholder each and fingerprints t96A06 937efb042dcf5949706d95c5d4266acfe20a12308284ff85af707d5413c43aad and t99J05 cf42ee31318a9e37fde5e4e923ca60cbe51d483ebd813588efc9492359e37db6. Orientations and representation boundaries are correct: the RP3 polynomial cannot vanish on a nonzero four-vector and scales by t squared, so its projective quotient equation matches the printed formula; the CPn homotopy uses strictly positive weights 1 plus s times i, is scalar-equivariant, and descends with identity at s=0 and the printed diagonal at s=1. Lefschetz, non-homotopy, charts, fixed points, local indices, homology, and Euler characteristic remain downstream."},
     :commit "c4c98357938653bf6888fc95ddc6ced37c114f59",
     :infrastructure-packets 1,
     :changed-paths
@@ -81613,7 +81630,7 @@
     :typed-residual-change
     "The exact RP3 quadratic formula descends to a continuous projective map, and the exact CPn diagonal deformation descends to a continuous interval family with identity and printed-diagonal endpoints."},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/ProjectiveConsumerLiftDemonstrations.lean"],
    :dag-node
@@ -81711,7 +81728,7 @@
      :residual
      "Exactly one prerequisite remains: the formula-specific RP3 and CPn instantiations in one shared demonstration module. The quotient openness, product openness, and generic map/homotopy factorization are compiled and independently reviewed; charts, homology, degree, and Lefschetz computations remain downstream."}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/shared/projective-quotient-descent",
    :acceptance
