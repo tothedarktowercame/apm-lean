@@ -98861,13 +98861,45 @@
    "Compare the restricted-relation quotient with the actual outerOpen subtype, then identify the annular overlap and both six-edge boundary quotients with their punctured-disk and ThreeCircles models, including vertex and literal inclusion formulas.",
    :other-consumers []}
   {:bounded-exception
+   "This single-consumer prerequisite establishes the quotient topology of the actual outer open piece before identifying its kernel with the restricted polygon relation.",
+   :consumer :t97A01,
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/PolygonOuterOpenRestrictedQuotient.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/outer-open-restricted-quotient",
+   :acceptance
+   {:implementation
+    "Promote the exact fixture. For any radius-preserving relation on the closed disk, prove that the preimage of outerOpen under the full quotient map is exactly outerSource, restrict the full quotient map to that open subtype, transport its source along the canonical subtype homeomorphism to Outer, prove the resulting named map is a quotient map, and prove its representative formula. Do not identify its kernel with restricted EqvGen, construct the resulting quotient homeomorphism, transport the radial homotopy, identify ThreeCircles or punctured disks, compute invariants, or close t97A01.",
+    :placeholder "the single sorry in apm_t97a01",
+    :route-step
+    "polygon radial open-cover step 6: realize the actual outer open piece as a quotient of the outer radial source",
+    :fixture "/tmp/polygon-outer-open-restricted-quotient.lean",
+    :fixture-sha256
+    "e70dfe4064ed0efc0a7f88cba3e5c4630d7d23ca80e012ee2bf509af2824261f",
+    :gates
+    ["lake build ConstructionTargets.PolygonOuterOpenRestrictedQuotient"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-10-polygon-outer-open-restricted-quotient-46,
+   :kind :reusable-theorem,
+   :area "polygon-surface-open-cover",
+   :depends-on
+   [:routes-2026-10-10-polygon-outer-radial-quotient-deformation-45],
+   :current-residual
+   "Prove the named map's kernel is exactly EqvGen of OuterRel and use the quotient-map kernel homeomorphism to identify the restricted-relation quotient with outerOpen; then transport the radial deformation and construct the annular and boundary models.",
+   :other-consumers []}
+  {:bounded-exception
    "This single-consumer concrete quotient package is the other final backlog lemma on t97A01 and supplies the actual two polygon models required by its frozen statement.",
    :consumer :t97A01,
    :implements-lemma :lemma-polygonradialopencoverpackages,
    :evidence
    {:probe
     {:residual
-     "The outer radial deformation now descends as a jointly continuous quotient homotopy. The remaining polygon package needs the outerOpen subtype comparison, annular punctured-disk model, both boundary ThreeCircles identifications, vertex classes, and literal inclusion equations.",
+     "The actual outerOpen subtype now has a compiled quotient presentation by outer radial representatives. The remaining comparison is the explicit equivalence between full EqvGen on outer representatives and EqvGen of the restricted relation, followed by the induced homeomorphism and deformation transport; annular and boundary models still remain.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
@@ -98877,69 +98909,74 @@
        :status :partial,
        :consumers [:t97A01],
        :depends-on
-       ["PolygonOuterRadialQuotientDeformation.continuous_quotientHomotopy"
-        "polygonRadialOuterOpenComparison"
+       ["PolygonOuterOpenRestrictedQuotient.namedOuterQuotientMap_isQuotientMap"
+        "polygonOuterRestrictedEqvGen"
         "polygonBoundaryThreeCircles"
         "polygonAnnulusPuncturedDisk"],
        :area "polygon-surface-open-cover"}
       {:name
-       "PolygonOuterRadialQuotientDeformation.continuous_quotientHomotopy",
+       "PolygonOuterOpenRestrictedQuotient.namedOuterQuotientMap_isQuotientMap",
        :type
-       "For every boundary-supported relation on the closed disk, the outer radial homotopy descends to a jointly continuous map on the EqvGen quotient, beginning at the identity and ending with radius-one representatives.",
+       "For a radius-preserving disk relation, the quotient map restricted to the outer radial source is a quotient map onto the outerOpen subtype.",
        :status :proved,
        :consumers [:t97A01],
+       :depends-on ["PolygonRadialOpenCover.outerOpen_isOpen"],
+       :area "polygon-surface-open-cover"}
+      {:name "polygonOuterRestrictedEqvGen",
+       :type
+       "For outer radial representatives, EqvGen of the full disk relation is equivalent to EqvGen of its restriction to the outer source, yielding a homeomorphism from the restricted-relation quotient to outerOpen.",
+       :status :not-started,
+       :consumers [:t97A01],
        :depends-on
-       ["PolygonOuterRadialRelation.radialHomotopy_eqvGen"
-        "PolygonOuterRadialDeformation.continuous_radialHomotopy"],
+       ["PolygonOuterOpenRestrictedQuotient.namedOuterQuotientMap_isQuotientMap"],
        :area "polygon-surface-open-cover"}],
      :prerequisite
      {:bounded-exception
-      "This single-consumer prerequisite supplies the jointly continuous quotient homotopy needed before comparing the restricted-relation quotient with the actual outer open-piece subtype.",
+      "This single-consumer prerequisite establishes the quotient topology of the actual outer open piece before identifying its kernel with the restricted polygon relation.",
       :consumer :t97A01,
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/PolygonOuterRadialQuotientDeformation.lean"],
+      ["ConstructionTargets/PolygonOuterOpenRestrictedQuotient.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/outer-radial-quotient-deformation",
+      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/outer-open-restricted-quotient",
       :acceptance
       {:implementation
-       "Promote the exact fixture. For any disk relation supported on radius one, define the time-dependent map on the quotient of the outer radial source, prove its representative formula, prove joint continuity using the quotient-map product lifting theorem, prove the time-zero identity, and prove time-one representatives have radius one. Do not compare this quotient with the outerOpen subtype, identify boundary quotients with ThreeCircles, identify the annulus with a punctured disk, compute invariants, or close t97A01.",
+       "Promote the exact fixture. For any radius-preserving relation on the closed disk, prove that the preimage of outerOpen under the full quotient map is exactly outerSource, restrict the full quotient map to that open subtype, transport its source along the canonical subtype homeomorphism to Outer, prove the resulting named map is a quotient map, and prove its representative formula. Do not identify its kernel with restricted EqvGen, construct the resulting quotient homeomorphism, transport the radial homotopy, identify ThreeCircles or punctured disks, compute invariants, or close t97A01.",
        :placeholder "the single sorry in apm_t97a01",
        :route-step
-       "polygon radial open-cover step 5: continuously descend the boundary-fixing outer radial deformation through the restricted EqvGen quotient",
-       :fixture "/tmp/polygon-outer-radial-quotient-deformation.lean",
+       "polygon radial open-cover step 6: realize the actual outer open piece as a quotient of the outer radial source",
+       :fixture "/tmp/polygon-outer-open-restricted-quotient.lean",
        :fixture-sha256
-       "0d8e5f27f831cc400a71593186d810e6758d8ef4984955b4a1f01b79b384a3e3",
+       "e70dfe4064ed0efc0a7f88cba3e5c4630d7d23ca80e012ee2bf509af2824261f",
        :gates
-       ["lake build ConstructionTargets.PolygonOuterRadialQuotientDeformation"
+       ["lake build ConstructionTargets.PolygonOuterOpenRestrictedQuotient"
         "fixture compiles"
         "zero source and fixture sorry"
         "standard-only axioms"
         "registry check"]},
-      :id
-      :routes-2026-10-10-polygon-outer-radial-quotient-deformation-45,
+      :id :routes-2026-10-10-polygon-outer-open-restricted-quotient-46,
       :kind :reusable-theorem,
       :area "polygon-surface-open-cover",
       :depends-on
-      [:routes-2026-10-10-polygon-outer-radial-relation-44],
+      [:routes-2026-10-10-polygon-outer-radial-quotient-deformation-45],
       :current-residual
-      "Compare the restricted-relation quotient with the actual outerOpen subtype, then identify the annular overlap and both six-edge boundary quotients with their punctured-disk and ThreeCircles models, including vertex and literal inclusion formulas.",
+      "Prove the named map's kernel is exactly EqvGen of OuterRel and use the quotient-map kernel homeomorphism to identify the restricted-relation quotient with outerOpen; then transport the radial deformation and construct the annular and boundary models.",
       :other-consumers []},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake env lean /tmp/polygon-outer-radial-quotient-deformation.lean",
+       "lake env lean /tmp/polygon-outer-open-restricted-quotient.lean",
        :exit 0,
        :finding
-       "The jointly continuous quotient-descended radial homotopy, representative formula, zero endpoint, and radius-one endpoint compile with standard axioms."}
+       "The outer-source preimage equality, restricted quotient map, canonical source homeomorphism, named quotient map, and representative formula compile with standard axioms."}
       {:cmd
-       "sha256sum /tmp/polygon-outer-radial-quotient-deformation.lean",
+       "sha256sum /tmp/polygon-outer-open-restricted-quotient.lean",
        :exit 0,
        :finding
-       "0d8e5f27f831cc400a71593186d810e6758d8ef4984955b4a1f01b79b384a3e3"}
+       "e70dfe4064ed0efc0a7f88cba3e5c4630d7d23ca80e012ee2bf509af2824261f"}
       {:cmd
-       "rg -n \"\\b(sorry|admit)\\b\" /tmp/polygon-outer-radial-quotient-deformation.lean",
+       "rg -n \"\\b(sorry|admit)\\b\" /tmp/polygon-outer-open-restricted-quotient.lean",
        :exit 1,
        :expected-exit 1,
        :finding "No fixture placeholders."}
@@ -98949,19 +98986,19 @@
       {:cmd "git status --short", :exit 0, :finding "clean"}],
      :diagnostic-history
      [{:cmd
-       "lake env lean /tmp/polygon-outer-radial-quotient-deformation.lean",
+       "lake env lean /tmp/polygon-outer-open-restricted-quotient.lean",
        :exit 1,
        :finding
-       "The initial fixture resolved Disk to Mathlib's generic disk and left the quotient alias non-parameterized; qualifying Surfaces.Disk and making the relation an explicit alias parameter corrected the elaboration boundary."}],
+       "The first fixture attempted to identify full EqvGen on outer representatives definitionally with EqvGen of the restricted relation; this is not definitional and was removed from this bounded quotient-topology prerequisite for a subsequent explicit kernel proof."}],
      :fixture
-     {:path "/tmp/polygon-outer-radial-quotient-deformation.lean",
+     {:path "/tmp/polygon-outer-open-restricted-quotient.lean",
       :sha256
-      "0d8e5f27f831cc400a71593186d810e6758d8ef4984955b4a1f01b79b384a3e3",
+      "e70dfe4064ed0efc0a7f88cba3e5c4630d7d23ca80e012ee2bf509af2824261f",
       :interface
-      "quotientHomotopy jointly descends the outer radial homotopy through the EqvGen quotient, is continuous, starts at the identity, and has radius-one representatives at time one."},
+      "The quotient map restricted to the saturated outer radial source is a quotient map onto outerOpen, after the canonical source-subtype homeomorphism, with its representative formula."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -98986,7 +99023,8 @@
     :routes-2026-10-10-polygon-radial-open-cover-42
     :routes-2026-10-10-polygon-outer-radial-deformation-43
     :routes-2026-10-10-polygon-outer-radial-relation-44
-    :routes-2026-10-10-polygon-outer-radial-quotient-deformation-45],
+    :routes-2026-10-10-polygon-outer-radial-quotient-deformation-45
+    :routes-2026-10-10-polygon-outer-open-restricted-quotient-46],
    :current-residual
    "Combine the concrete cover packages with the strict overlap squares, banked Smith normalization, and final t97A01 assembly.",
    :other-consumers []}
@@ -99495,7 +99533,9 @@
     :lemma-polygonradialouterquotientdeformation
     :lemma-polygonouterradialrelation-radialhomotopy-eqvgen
     :lemma-polygonouterradialquotientdeformation-continuous-quotienthomotopy
-    :lemma-polygonradialouteropencomparison],
+    :lemma-polygonradialouteropencomparison
+    :lemma-polygonouteropenrestrictedquotient-namedouterquotientmap-isquotientmap
+    :lemma-polygonouterrestrictedeqvgen],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -101299,6 +101339,61 @@
    {:name "PolygonOuterRadialDeformation.continuous_radialHomotopy",
     :reported-by []},
    :id :lemma-polygonouterradialdeformation-continuous-radialhomotopy,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "PolygonOuterOpenRestrictedQuotient.namedOuterQuotientMap_isQuotientMap",
+    :type
+    "For a radius-preserving disk relation, the quotient map restricted to the outer radial source is a quotient map onto the outerOpen subtype."},
+   :lemma
+   {:name
+    "PolygonOuterOpenRestrictedQuotient.namedOuterQuotientMap_isQuotientMap",
+    :reported-by
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    :type
+    "For a radius-preserving disk relation, the quotient map restricted to the outer radial source is a quotient map onto the outerOpen subtype.",
+    :area "polygon-surface-open-cover",
+    :proved-in
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+   :id
+   :lemma-polygonouteropenrestrictedquotient-namedouterquotientmap-isquotientmap,
+   :kind :lemma,
+   :depends-on [:lemma-polygonradialopencover-outeropen-isopen],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "polygonOuterRestrictedEqvGen",
+    :type
+    "For outer radial representatives, EqvGen of the full disk relation is equivalent to EqvGen of its restriction to the outer source, yielding a homeomorphism from the restricted-relation quotient to outerOpen."},
+   :lemma
+   {:name "polygonOuterRestrictedEqvGen",
+    :reported-by
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    :type
+    "For outer radial representatives, EqvGen of the full disk relation is equivalent to EqvGen of its restriction to the outer source, yielding a homeomorphism from the restricted-relation quotient to outerOpen.",
+    :area "polygon-surface-open-cover"},
+   :id :lemma-polygonouterrestrictedeqvgen,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polygonouteropenrestrictedquotient-namedouterquotientmap-isquotientmap],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "PolygonRadialOpenCover.outerOpen_isOpen"},
+   :lemma
+   {:name "PolygonRadialOpenCover.outerOpen_isOpen", :reported-by []},
+   :id :lemma-polygonradialopencover-outeropen-isopen,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}],
