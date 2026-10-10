@@ -55097,59 +55097,86 @@
    :current-residual
    "After source openness is banked, prove continuity and inverse laws for coordinates and chartInverse to obtain the actual affine-chart homeomorphism.",
    :other-consumers []}
+  {:bounded-exception
+   "single-consumer bounded affine-chart inverse laws",
+   :consumer :t94A08,
+   :phase :probe,
+   :state :open,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md/t94A08/affine-chart-inverse-laws",
+   :acceptance
+   {:probe
+    "Compile and bank coordinates_chartInverse and chartInverse_coordinates from /tmp/t94a08_affine_chart_inverse_laws.lean. At the frozen coinduced projective topology, prove the ratio-coordinate and normalized-insertion functions are mutual inverses on the exact open affine source already banked. This supplies the algebraic inverse-law portion of t94A08 route step 1; do not assert continuity or package an OpenPartialHomeomorph in this row.",
+    :declarations
+    ["coordinates_chartInverse" "chartInverse_coordinates"],
+    :placeholder "the sole sorry in apm_t94a08",
+    :route-step "step 1, affine-chart inverse laws"},
+   :id :routes-2026-10-10-t94a08-affine-chart-inverse-laws-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo2-r2
+    :routes-2026-10-10-t94a08-affine-chart-source-open-topo2-r1],
+   :current-residual
+   "After inverse laws are banked, prove both continuity directions and package the actual affine-chart OpenPartialHomeomorph.",
+   :other-consumers []}
   {:consumer :t94A08,
    :evidence
    {:probe
     {:outcome :revise,
      :seat "topo-8",
      :fixture
-     {:path "/tmp/t94a08_affine_source_open.lean",
+     {:path "/tmp/t94a08_affine_chart_inverse_laws.lean",
       :sha256
-      "e38613fe5bede1d6eba58c349ce03d0cf874f5e718b3f2e580990305776a4b6e"},
+      "28978815a3932bf3a00342ab6a4d2e4a529021a032e63cd9ddafecd74b6391e8"},
      :commands
-     [{:cmd "lake env lean /tmp/t94a08_affine_source_open.lean",
+     [{:cmd
+       "rg -n 'affineSource_preimage|affineSource_isOpen' ConstructionTargets/ComplexProjectiveChartTargets.lean",
+       :exit 0,
+       :output "banked at lines 27 and 37"}
+      {:cmd
+       "lake env lean ConstructionTargets/ComplexProjectiveChartTargets.lean",
+       :exit 0}
+      {:cmd "lake env lean /tmp/t94a08_affine_chart_inverse_laws.lean",
        :exit 0}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t94a08_affine_source_open.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t94a08_affine_chart_inverse_laws.lean || true)\"",
        :exit 0}
-      {:cmd "sha256sum /tmp/t94a08_affine_source_open.lean",
+      {:cmd "sha256sum /tmp/t94a08_affine_chart_inverse_laws.lean",
        :exit 0,
        :output
-       "e38613fe5bede1d6eba58c349ce03d0cf874f5e718b3f2e580990305776a4b6e  /tmp/t94a08_affine_source_open.lean"}
+       "28978815a3932bf3a00342ab6a4d2e4a529021a032e63cd9ddafecd74b6391e8  /tmp/t94a08_affine_chart_inverse_laws.lean"}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
-     :diagnostic-history
-     [{:cmd "lake env lean /tmp/t94a08_affine_source_open.lean",
-       :exit 1,
-       :finding
-       "The first draft left unit scalar nonvanishing and the openness lemma underconstrained. Expanding the unit action to a.1 * v i and expressing the source as the preimage of the complement of {0} resolved both goals."}],
      :finding
-     "The complete closure is not yet compilable, but the first route boundary is now a proved theorem rather than a proposition facade. For every affine coordinate i, the preimage of the proposed projective chart source under quotientMap is exactly the nonzero-coordinate locus in nonzero vectors, and that chart source is open in the frozen coinduced topology. The proof uses exists_smul_eq_mk_rep to show coordinate nonvanishing is invariant under the representative scalar. The next single prerequisite should bank these exact declarations; afterward the chart homeomorphism still needs the ratio/insertion inverse and continuity proofs before the conic and node arguments can be assembled.",
+     "The banked source-preimage and openness theorems reproduce successfully. The next actual representation step also compiles without placeholders: coordinates composed with chartInverse is the identity on all affine coordinates, and chartInverse composed with coordinates is the identity on the nonzero-coordinate projective source. The first proof normalizes the inserted representative using exists_smul_eq_mk_rep; the second applies Projectivization.mk_eq_mk_iff' with inverse of the distinguished representative coordinate. These are exact inverse laws, not a declaration that a chart ought to exist. Continuity of coordinates from the coinduced topology is still required before packaging the OpenPartialHomeomorph, so the full consumer closure is not GO yet.",
      :residual
-     "Bank affineSource_preimage and affineSource_isOpen. Then construct the actual coordinate-ratio OpenPartialHomeomorph; only after that representation is available should the positive conic and negative nodal-neighborhood arguments be probed.",
+     "Bank the two inverse laws. The remaining route-step-1 boundary is continuity of coordinates on the open source and continuity of chartInverse, followed by packaging the OpenPartialHomeomorph. Then prove the smooth-conic and nodal-cross local topology statements.",
      :prerequisite
      {:bounded-exception
-      "single-consumer bounded affine-chart source theorem",
+      "single-consumer bounded affine-chart inverse laws",
       :consumer :t94A08,
       :phase :probe,
       :state :open,
       :scope [],
-      :dag-node "TOPOLOGY-ROUTES.md/t94A08/affine-chart-source",
+      :dag-node "TOPOLOGY-ROUTES.md/t94A08/affine-chart-inverse-laws",
       :acceptance
       {:probe
-       "Compile and bank the placeholder-free affineSource_preimage and affineSource_isOpen theorems from /tmp/t94a08_affine_source_open.lean at the frozen coinduced complex-projective topology. Prove exactly that quotientMap preimages of representative-coordinate nonvanishing are the corresponding nonzero-vector coordinate loci and hence that every affine-chart source is open. This supplies the openness portion of t94A08 route step 1; do not replace the still-required chart homeomorphism by a Prop contract.",
-       :declarations ["affineSource_preimage" "affineSource_isOpen"],
+       "Compile and bank coordinates_chartInverse and chartInverse_coordinates from /tmp/t94a08_affine_chart_inverse_laws.lean. At the frozen coinduced projective topology, prove the ratio-coordinate and normalized-insertion functions are mutual inverses on the exact open affine source already banked. This supplies the algebraic inverse-law portion of t94A08 route step 1; do not assert continuity or package an OpenPartialHomeomorph in this row.",
+       :declarations
+       ["coordinates_chartInverse" "chartInverse_coordinates"],
        :placeholder "the sole sorry in apm_t94a08",
-       :route-step "step 1, affine-source equality and openness"},
-      :id :routes-2026-10-10-t94a08-affine-chart-source-open-topo2-r1,
+       :route-step "step 1, affine-chart inverse laws"},
+      :id :routes-2026-10-10-t94a08-affine-chart-inverse-laws-topo2-r1,
       :kind :reusable-theorem,
-      :depends-on [:routes-2026-10-10-checkpoint-topo2-r2],
+      :depends-on
+      [:routes-2026-10-10-checkpoint-topo2-r2
+       :routes-2026-10-10-t94a08-affine-chart-source-open-topo2-r1],
       :current-residual
-      "After source openness is banked, prove continuity and inverse laws for coordinates and chartInverse to obtain the actual affine-chart homeomorphism.",
+      "After inverse laws are banked, prove both continuity directions and package the actual affine-chart OpenPartialHomeomorph.",
       :other-consumers []}}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t94A08",
    :acceptance
@@ -55161,7 +55188,8 @@
    :kind :final-adapter,
    :depends-on
    [:routes-2026-10-10-checkpoint-topo2-r2
-    :routes-2026-10-10-t94a08-affine-chart-source-open-topo2-r1],
+    :routes-2026-10-10-t94a08-affine-chart-source-open-topo2-r1
+    :routes-2026-10-10-t94a08-affine-chart-inverse-laws-topo2-r1],
    :current-residual
    "Affine-chart topology and the nodal branch argument remain.",
    :other-consumers []}
