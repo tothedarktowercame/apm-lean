@@ -243,4 +243,56 @@ theorem apm_t02a03_norm_leftTubePlanarComplex_radialPoint
       (mul_pos (sub_pos.mpr (lt_of_le_of_ne ht1 ht)) ha)
       (mul_nonneg ht0 (norm_nonneg _))
 
+theorem apm_t02a03_leftTubeNormalComplex_radialPoint
+    (tp : unitInterval × apm_t02a03_LeftTubeMinusCore) :
+    apm_t02a03_leftTubeNormalComplex
+      ⟨apm_t02a03_leftTubeRadialPoint tp,
+        apm_t02a03_leftTubeRadialPoint_mem_leftTube tp⟩ =
+      ((1 - (tp.1 : ℝ)) * (1 / 8 : ℝ) +
+        (tp.1 : ℝ) *
+          ‖apm_t02a03_leftTubeNormalComplex
+            ⟨tp.2.1, tp.2.2.1⟩‖) •
+        ((apm_t02a03_leftTubeNormalAngular tp.2 : Circle) : ℂ) := by
+  let N : ℝ := ‖apm_t02a03_leftTubeNormalComplex
+    ⟨tp.2.1, tp.2.2.1⟩‖
+  change apm_t02a03_leftTubeNormalComplex
+      ⟨apm_t02a03_leftTubeRadialPoint tp,
+        apm_t02a03_leftTubeRadialPoint_mem_leftTube tp⟩ =
+    ((1 - (tp.1 : ℝ)) * (1 / 8 : ℝ) + (tp.1 : ℝ) * N) •
+      ((apm_t02a03_leftTubeNormalAngular tp.2 : Circle) : ℂ)
+  have hs := apm_t02a03_leftTubeNormalComplex_eq_norm_smul_direction tp.2
+  have hsre := congrArg Complex.re hs
+  have hsim := congrArg Complex.im hs
+  have hr := apm_t02a03_leftTubeNormalComplex_torusInverse_coordinates tp.2
+  have hrim := congrArg Complex.im hr
+  have hsre' : ‖apm_t02a03_leftTubePlanarComplex
+        ⟨tp.2.1, tp.2.2.1⟩‖ - 1 =
+      N *
+        ((apm_t02a03_leftTubeNormalAngular tp.2 : Circle) : ℂ).re := by
+    simpa [N, apm_t02a03_leftTubeNormalComplex] using hsre
+  have hsim' : tp.2.1 2 =
+      N *
+        ((apm_t02a03_leftTubeNormalAngular tp.2 : Circle) : ℂ).im := by
+    simpa [N, apm_t02a03_leftTubeNormalComplex] using hsim
+  have hrim' :
+      (apm_t02a03_leftTubeTorusInverse
+        (apm_t02a03_leftTubeTorusCoordinates tp.2)).1 2 =
+      (1 / 8 : ℝ) *
+        ((apm_t02a03_leftTubeNormalAngular tp.2 : Circle) : ℂ).im := by
+    simpa [apm_t02a03_leftTubeNormalComplex] using hrim
+  have hnormSource : ‖apm_t02a03_leftTubePlanarComplex
+        ⟨tp.2.1, tp.2.2.1⟩‖ =
+      1 + N *
+        ((apm_t02a03_leftTubeNormalAngular tp.2 : Circle) : ℂ).re := by
+    linarith [hsre']
+  apply Complex.ext
+  · simp [apm_t02a03_leftTubeNormalComplex]
+    rw [apm_t02a03_norm_leftTubePlanarComplex_radialPoint]
+    rw [hnormSource]
+    ring
+  · simp [apm_t02a03_leftTubeNormalComplex,
+      apm_t02a03_leftTubeRadialPoint]
+    rw [hsim', hrim']
+    ring
+
 end ConstructionTargets.T02A03LeftTubePuncturedModel
