@@ -83266,91 +83266,54 @@
    "Transport the compiled coefficient subcomplex sequence to literal intersection, pieces, and union homology and prove connecting-map naturality in the same coherent module.",
    :other-consumers [:t98J01]}
   {:consumer :t99J05,
+   :stop-count 1,
    :evidence
-   {:probe
-    {:outcome :revise,
-     :seat "topo-4",
-     :fixture
-     {:path "/tmp/coefficient-production-open-cover-mv-probe.lean",
-      :sha256
-      "ced7052d087fe061bcd53410748aafaf9e4aad746d72f330cf4d97c0c3a3b1f4"},
-     :commands
-     [{:cmd "stat -c '%F %n' .lake/packages",
-       :exit 0,
-       :finding
-       "directory .lake/packages; /home/joe/code/apm-lean is the canonical package authority checkout"}
-      {:cmd
-       "lake env lean ConstructionTargets/CoefficientSubcomplexMayerVietoris.lean",
-       :exit 0,
-       :finding
-       "arbitrary-commutative-ring subcomplex short exact sequence and its three homology exactness theorems compile with standard axioms"}
-      {:cmd
-       "lake env lean ConstructionTargets/CoefficientSubspaceUnionRangeHomologyEquivalence.lean",
-       :exit 0,
-       :finding
-       "for two open subsets, the union-generated ambient range inclusion is a homology isomorphism over an arbitrary commutative ring"}
-      {:cmd
-       "lake env lean /tmp/coefficient-production-open-cover-mv-probe.lean",
-       :exit 0}
-      {:cmd
-       "sha256sum /tmp/coefficient-production-open-cover-mv-probe.lean",
-       :exit 0,
-       :finding
-       "ced7052d087fe061bcd53410748aafaf9e4aad746d72f330cf4d97c0c3a3b1f4"}
-      {:cmd
-       "Python comment-stripped placeholder census of /tmp/coefficient-production-open-cover-mv-probe.lean",
-       :exit 0,
-       :finding "0"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :finding "131 registered statements match, 0 do not"}
-      {:cmd "git status --short", :exit 0, :finding "clean"}],
-     :axioms
-     ["CoefficientProductionOpenCoverMVProbe.coefficientProductionOpenCoverMVPackage_proved"],
-     :warnings
-     [{:kind :interface-axiom,
-       :message
-       "The fixture has no placeholders and isolates one nonstandard package axiom. The banked arbitrary-coefficient subcomplex exact sequence and union-range homology equivalence are standard-only; the missing package is their coherent transport to literal production homology objects together with cover-preserving-map naturality."}
-      {:kind :bounded-demonstration,
-       :message
-       "The Q specializations elaborate, but consumer-specific CPn and circle-product cover geometry should remain demonstrations after the generic production transport exists; neither requires a second infrastructure prerequisite."}],
-     :prerequisite
-     {:consumer :t99J05,
-      :phase :implementation,
-      :state :open,
-      :scope
-      ["ConstructionTargets/CoefficientProductionOpenCoverMayerVietoris.lean"],
-      :dag-node
-      "TOPOLOGY-ROUTES.md/shared/coefficient-production-open-cover-mv/transport-and-naturality",
-      :acceptance
-      {:placeholder "the single sorries in apm_t99j05 and apm_t98j01",
-       :route-step "t99J05 step 5 MV input; t98J01 step 8",
-       :declarations
-       ["coefficientProductionIntersectionArrow"
-        "coefficientProductionReassemblyArrow"
-        "coefficientProductionConnecting"
-        "coefficientProductionMayerVietoris_exact_intersection"
-        "coefficientProductionMayerVietoris_exact_pieces"
-        "coefficientProductionMayerVietoris_exact_union"
-        "coefficientProductionConnecting_naturality"],
-       :implementation
-       "Generalize the literal-object transport pattern of ProductionOpenCoverMayerVietoris from AddCommGrpCat/integral chains to ModuleCat R. Reuse CoefficientSubcomplexMayerVietoris for the short exact sequence and CoefficientSubspaceUnionRangeHomologyEquivalence.unionRange_homologyMap_isIso for the union term. Construct the intersection and piece range-to-production isomorphisms, identify the signed inclusion and reassembly arrows, conjugate the connecting morphism, and transport all three exactness statements. For a continuous cover-preserving map, construct the induced morphism of the two short exact sequences and use HomologicalComplex.HomologySequence.delta_naturality plus the range/production comparison naturality to prove coefficientProductionConnecting_naturality. End with Q typechecking examples for the CPn affine induction cover and the circle-product two-arc cover; keep their geometry consumer-local.",
-       :axioms :standard-only,
-       :commands
-       ["lake env lean ConstructionTargets/CoefficientProductionOpenCoverMayerVietoris.lean"
-        "lake env lean /tmp/coefficient-production-open-cover-mv-probe.lean"
-        "python3 scripts/statement-registry.py check"]},
-      :id
-      :routes-2026-10-10-coefficient-production-open-cover-mv-transport-naturality-1,
-      :kind :reusable-theorem,
-      :depends-on [],
-      :current-residual
-      "Transport the compiled coefficient subcomplex sequence to literal intersection, pieces, and union homology and prove connecting-map naturality in the same coherent module.",
-      :other-consumers [:t98J01]},
-     :residual
-     "Exactly one shared prerequisite remains: the arbitrary-coefficient production-object transport and its cover-preserving-map naturality. The coefficient subcomplex exact sequence and open-union range homology equivalence already compile; CPn and circle-product computations remain downstream."}},
+   {:residual
+    "First compile standard-only coefficient range-to-production comparison isomorphisms with cover-map naturality and a morphism of coefficient Mayer-Vietoris short exact sequences. Only then can the three literal exactness statements and connecting-map naturality be transported for the CPn and circle-product consumers.",
+    :outcome :stop,
+    :warnings
+    [{:kind :fixture-linter, :message "unused variable n"}
+     {:kind :reviewed-stop,
+      :message
+      "The dependency STOP was independently reviewed and passed; re-electing the same self-axiomatized package would not advance either consumer."}],
+    :disposition :stop,
+    :axioms
+    ["CoefficientProductionOpenCoverMVProbe.coefficientProductionOpenCoverMVPackage_proved"],
+    :author "topo-4",
+    :reason
+    "Representation boundary: the bank contains the arbitrary-coefficient subcomplex Mayer-Vietoris exact sequence and an IsIso for the union-generated range inclusion, but it lacks the coefficient range-to-literal-production comparison isomorphisms for intersection and pieces, their cover-map naturality, and a morphism of coefficient Mayer-Vietoris short exact sequences. Consequently the literal signed arrows cannot yet be identified and HomologicalComplex.HomologySequence.delta_naturality cannot state the requested connecting-map naturality. The reviewed dependency supplied no implementation: its fixture package has only a True field and is inhabited by a custom axiom, so it fails the standard-only gate and cannot justify GO.",
+    :commands
+    [{:cmd
+      "lake env lean /tmp/coefficient-production-open-cover-mv-probe.lean",
+      :exit 0,
+      :finding
+      "fixture compiles but #print axioms reports coefficientProductionOpenCoverMVPackage_proved"}
+     {:cmd
+      "rg -n \"^(axiom|structure)|exact_literal_sequence_and_naturality|coefficientProductionOpenCoverMVPackage_proved\" /tmp/coefficient-production-open-cover-mv-probe.lean",
+      :exit 0,
+      :finding
+      "the package contains only a True field and is postulated by a custom axiom"}
+     {:cmd
+      "rg -n \"coefficientProductionIntersectionArrow|coefficientProductionReassemblyArrow|coefficientProductionConnecting|coefficientProductionMayerVietoris_exact|coefficientProductionConnecting_naturality\" ConstructionTargets",
+      :exit 1,
+      :expected-exit 1,
+      :finding
+      "none of the seven requested production declarations exists"}
+     {:cmd
+      "test ! -e ConstructionTargets/CoefficientProductionOpenCoverMayerVietoris.lean",
+      :exit 0,
+      :finding "the dependency implementation scope is absent"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}],
+    :fixture
+    {:path "/tmp/coefficient-production-open-cover-mv-probe.lean",
+     :sha256
+     "ced7052d087fe061bcd53410748aafaf9e4aad746d72f330cf4d97c0c3a3b1f4",
+     :status :self-axiomatized},
+    :seat "topo-4"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/coefficient-production-open-cover-mv",
