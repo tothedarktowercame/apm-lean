@@ -94145,8 +94145,78 @@
   {:bounded-exception
    "This single-consumer floor-normalization theorem is the existence half of the elected square-orbit classification and leaves only the finite classification of coincidences between points already in the square.",
    :consumer :t93J03,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "For two points in the closed unit square, force the vertical coordinate to -1, 0, or 1 and enumerate the interior, edge, and corner orbit coincidences.",
+    :outcome :done-unreviewed,
+    :warnings
+    [{:kind :dependency-linter,
+      :message
+      "Imported Klein algebra modules retain unnecessarySimpa and unnecessarySeqFocus warnings; this scoped module has no warning."}],
+    :missing-theorems
+    [{:name "KleinSquareRepresentative.exists_halfOpenSquare_smul",
+      :type
+      "(p : Real × Real) -> exists g : PresentedKleinGroup, 0 ≤ (g • p).1 and (g • p).1 < 1 and 0 ≤ (g • p).2 and (g • p).2 < 1",
+      :status :proved,
+      :consumers [:t93J03],
+      :depends-on ["KleinPlaneAffineAction.coordinateAct_mul"]}
+     {:name "KleinSquareRepresentative.exists_closedSquare_smul",
+      :type
+      "(p : Real × Real) -> exists g : PresentedKleinGroup, 0 ≤ (g • p).1 and (g • p).1 ≤ 1 and 0 ≤ (g • p).2 and (g • p).2 ≤ 1",
+      :status :proved,
+      :consumers [:t93J03],
+      :depends-on
+      ["KleinSquareRepresentative.exists_halfOpenSquare_smul"]}],
+    :statement-hashes "131 registered statements match",
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :finding
+      "canonical package authority resolves to /home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "sha256sum /tmp/klein-square-representative.lean",
+      :exit 0,
+      :finding
+      "fixture hash matches 2fbe27a38611477d9007a8361b4b6b58e2445edbc14b5d1351449065af545035"}
+     {:cmd "lake build ConstructionTargets.KleinSquareRepresentative",
+      :exit 0,
+      :finding
+      "canonical module builds half-open and closed-square representatives"}
+     {:cmd "lake env lean /tmp/klein-square-representative.lean",
+      :exit 0,
+      :finding "fixture compiles the explicit floor normalization"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" ConstructionTargets/KleinSquareRepresentative.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero source placeholders"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" /tmp/klein-square-representative.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero fixture placeholders"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}],
+    :commit "0603aa4385f764d70050b3a909d7433299112fba",
+    :changed-paths
+    ["ConstructionTargets/KleinSquareRepresentative.lean"],
+    :fixture
+    {:path "/tmp/klein-square-representative.lean",
+     :sha256
+     "2fbe27a38611477d9007a8361b4b6b58e2445edbc14b5d1351449065af545035",
+     :sorry-count 0},
+    :implementation
+    {:scope ["ConstructionTargets/KleinSquareRepresentative.lean"],
+     :declarations
+     ["KleinSquareRepresentative.exists_halfOpenSquare_smul"
+      "KleinSquareRepresentative.exists_closedSquare_smul"]},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/KleinSquareRepresentative.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/plane-action-square-orbit-classification/square-representative",
@@ -95037,18 +95107,42 @@
    :kind :lemma,
    :depends-on [:lemma-kleinplaneaffineaction-coordinateact-mul],
    :other-consumers []}
-  {:consumer :portfolio,
+  {:consumer :t93J03,
    :phase :lemma,
    :state :backlog,
    :scope [],
    :acceptance
-   {:lemma "KleinSquareRepresentative.exists_closedSquare_smul"},
+   {:lemma "KleinSquareRepresentative.exists_closedSquare_smul",
+    :type
+    "(p : Real × Real) -> exists g : PresentedKleinGroup, 0 ≤ (g • p).1 and (g • p).1 ≤ 1 and 0 ≤ (g • p).2 and (g • p).2 ≤ 1"},
    :lemma
    {:name "KleinSquareRepresentative.exists_closedSquare_smul",
-    :reported-by []},
+    :reported-by [:routes-2026-10-10-klein-square-representative-26],
+    :type
+    "(p : Real × Real) -> exists g : PresentedKleinGroup, 0 ≤ (g • p).1 and (g • p).1 ≤ 1 and 0 ≤ (g • p).2 and (g • p).2 ≤ 1",
+    :proved-in :routes-2026-10-10-klein-square-representative-26},
    :id :lemma-kleinsquarerepresentative-exists-closedsquare-smul,
    :kind :lemma,
-   :depends-on [],
+   :depends-on
+   [:lemma-kleinsquarerepresentative-exists-halfopensquare-smul],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "KleinSquareRepresentative.exists_halfOpenSquare_smul",
+    :type
+    "(p : Real × Real) -> exists g : PresentedKleinGroup, 0 ≤ (g • p).1 and (g • p).1 < 1 and 0 ≤ (g • p).2 and (g • p).2 < 1"},
+   :lemma
+   {:name "KleinSquareRepresentative.exists_halfOpenSquare_smul",
+    :reported-by [:routes-2026-10-10-klein-square-representative-26],
+    :type
+    "(p : Real × Real) -> exists g : PresentedKleinGroup, 0 ≤ (g • p).1 and (g • p).1 < 1 and 0 ≤ (g • p).2 and (g • p).2 < 1",
+    :proved-in :routes-2026-10-10-klein-square-representative-26},
+   :id :lemma-kleinsquarerepresentative-exists-halfopensquare-smul,
+   :kind :lemma,
+   :depends-on [:lemma-kleinplaneaffineaction-coordinateact-mul],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
