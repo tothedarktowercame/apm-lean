@@ -66188,48 +66188,51 @@
    "single-consumer half-plane bound needed to contract the planar angle without crossing zero",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:residual
-     "Normalize the positive-half-plane interpolation to rotate the planar direction to 1, interpolate the normal radius to 1/8, and prove the ambient deformation's endpoint, right-tube, and left-core-avoidance properties.",
-     :outcome :go,
-     :warnings [],
-     :missing-theorems [],
-     :axioms [propext Classical.choice Quot.sound],
-     :commands
-     [{:cmd
-       "rg -n \"right-tube-planar-coordinate-positive|explicit-r3-tube-deformation-retraction|t02A03\" TOPOLOGY-ROUTES.md holes/labs/topology-routes/routes-{1,2,3}.md | head -120",
-       :exit 0}
-      {:cmd "lake env lean /tmp/t02a03_right_core_compact_probe.lean",
-       :exit 0,
-       :output
-       "rightTubePlanarComplex_re_pos compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd "sha256sum /tmp/t02a03_right_core_compact_probe.lean",
-       :exit 0,
-       :output
-       "3baf51cc452b17b2d88afa50952c716a07d50858849581c71641b0377ba2d247  /tmp/t02a03_right_core_compact_probe.lean"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_right_core_compact_probe.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :fixture
-     {:path "/tmp/t02a03_right_core_compact_probe.lean",
-      :sha256
-      "3baf51cc452b17b2d88afa50952c716a07d50858849581c71641b0377ba2d247"},
-     :finding
-     "For p in the closed radius-1/4 right tube, compactness supplies q=rightCore(t) with dist p q≤1/4. Coordinate evaluation is 1-Lipschitz, q0=1-cos(t)≥0, and therefore p0≥-1/4. Since re(rightTubePlanarComplex p)=p0+1, it is at least 3/4 and hence strictly positive. This puts the planar coordinate in the positive half-plane needed for the subsequent normalized interpolation.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
-      :declarations
-      [{:name
-        "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubePlanarComplex_re_pos",
-        :type
-        "forall p : apm_t02a03_E3, p ∈ apm_t02a03_rightTube -> 0 < (rightTubePlanarComplex p).re"}]},
-     :seat "topo-8"}},
+   {:placeholder-delta {:before 0, :after 0},
+    :residual
+    "Normalize the positive-half-plane interpolation to rotate the planar direction to 1, interpolate the normal radius to 1/8, and prove the four ambient deformation invariants.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["Lean reports the pre-existing unnecessarySimpa warning at module line 62; the new positivity theorem compiles without additional warnings."],
+    :missing-theorems [],
+    :statement-hashes
+    {:registered "131 registered statements match, 0 do not",
+     :scoped-file-git-blob "0a6fae4d7b649e562941266d9b1bf1271d59c01d"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd "lake env lean /tmp/t02a03_right_core_compact_probe.lean",
+      :exit 0}
+     {:cmd "sha256sum /tmp/t02a03_right_core_compact_probe.lean",
+      :exit 0,
+      :output
+      "3baf51cc452b17b2d88afa50952c716a07d50858849581c71641b0377ba2d247  /tmp/t02a03_right_core_compact_probe.lean"}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeDeformation.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "52d0ae75d771f55faba115a5d2d04552c3793e02",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+    :fixture
+    {:path "/tmp/t02a03_right_core_compact_probe.lean",
+     :sha256
+     "3baf51cc452b17b2d88afa50952c716a07d50858849581c71641b0377ba2d247"},
+    :finding
+    "An attained right-core point is within distance 1/4. Coordinate evaluation bounds p0 below by -1/4 because every right-core first coordinate is nonnegative, so the planar complex real part p0+1 is strictly positive.",
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/right-tube-planar-coordinate-positive",
