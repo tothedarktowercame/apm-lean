@@ -94832,8 +94832,79 @@
   {:bounded-exception
    "This single-consumer carrier theorem is the exact topological identification required before the frozen disk relation can be compared with a relation on square points; it uses Mathlib's genuine convex gauge-rescaling homeomorphism rather than an assumed polygon equivalence.",
    :consumer :t93J03,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Replace the existential carrier choice by the explicit centered-square gauge rescaling composed with the affine unit-square map, and prove its four side formulas match edgePoint 4 0,1,2,3.",
+    :outcome :done-unreviewed,
+    :warnings
+    [{:kind :linter,
+      :message
+      "Lean suggests simp instead of simpa twice in the interior proof."}
+     {:kind :dependency-linter,
+      :message
+      "Imported Klein modules retain previously reported linter warnings."}],
+    :missing-theorems
+    [{:name
+      "KleinDiskSquareCarrier.exists_centeredSquare_disk_homeomorph",
+      :type
+      "Nonempty (centeredSquare ≃ₜ Metric.closedBall (0 : Complex) 1)",
+      :status :proved,
+      :consumers [:t93J03],
+      :depends-on
+      ["KleinSurfaceRelNormalForm.surfaceRel_false_two_iff"]}],
+    :statement-hashes "131 registered statements match",
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :finding
+      "canonical package authority resolves to /home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "sha256sum /tmp/klein-disk-square-carrier.lean",
+      :exit 0,
+      :finding
+      "fixture hash matches b2edec7ed43c9143c8e1508fa18aae99ce8417fc62823d612654fe7bc4fe082e"}
+     {:cmd "lake build ConstructionTargets.KleinDiskSquareCarrier",
+      :exit 0,
+      :finding
+      "canonical module builds convexity, interior, boundedness, and the restricted carrier homeomorphism"}
+     {:cmd "lake env lean /tmp/klein-disk-square-carrier.lean",
+      :exit 0,
+      :finding
+      "fixture compiles the closure normalization and subtype homeomorphism"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" ConstructionTargets/KleinDiskSquareCarrier.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero source placeholders"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" /tmp/klein-disk-square-carrier.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero fixture placeholders"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}],
+    :commit "cea0a73ec2683b7852cf57d7ff6f8442ea6b271b",
+    :changed-paths ["ConstructionTargets/KleinDiskSquareCarrier.lean"],
+    :fixture
+    {:path "/tmp/klein-disk-square-carrier.lean",
+     :sha256
+     "b2edec7ed43c9143c8e1508fa18aae99ce8417fc62823d612654fe7bc4fe082e",
+     :sorry-count 0},
+    :implementation
+    {:scope ["ConstructionTargets/KleinDiskSquareCarrier.lean"],
+     :declarations
+     ["KleinDiskSquareCarrier.centeredSquare"
+      "KleinDiskSquareCarrier.convex_centeredSquare"
+      "KleinDiskSquareCarrier.interior_centeredSquare_nonempty"
+      "KleinDiskSquareCarrier.bounded_centeredSquare"
+      "KleinDiskSquareCarrier.exists_centeredSquare_disk_homeomorph"]},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/KleinDiskSquareCarrier.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/square-boundary-orbit-eqvgen/disk-square-carrier",
@@ -95869,21 +95940,27 @@
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
-  {:consumer :portfolio,
+  {:consumer :t93J03,
    :phase :lemma,
    :state :backlog,
    :scope [],
    :acceptance
    {:lemma
-    "KleinDiskSquareCarrier.exists_centeredSquare_disk_homeomorph"},
+    "KleinDiskSquareCarrier.exists_centeredSquare_disk_homeomorph",
+    :type
+    "Nonempty (centeredSquare ≃ₜ Metric.closedBall (0 : Complex) 1)"},
    :lemma
    {:name
     "KleinDiskSquareCarrier.exists_centeredSquare_disk_homeomorph",
-    :reported-by []},
+    :reported-by [:routes-2026-10-10-klein-disk-square-carrier-30],
+    :type
+    "Nonempty (centeredSquare ≃ₜ Metric.closedBall (0 : Complex) 1)",
+    :proved-in :routes-2026-10-10-klein-disk-square-carrier-30},
    :id
    :lemma-kleindisksquarecarrier-exists-centeredsquare-disk-homeomorph,
    :kind :lemma,
-   :depends-on [],
+   :depends-on
+   [:lemma-kleinsurfacerelnormalform-surfacerel-false-two-iff],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
