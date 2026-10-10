@@ -60792,46 +60792,62 @@
    "single-consumer exact core-distance calculation for the t02A03 torus reconstruction",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/t02a03_geometric_tube_cover.lean",
-      :sha256
-      "fc1be108e169d9c6a8617d480af625dc66fca637b606b8047b96e6615855985b"},
-     :commands
-     [{:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "fc1be108e169d9c6a8617d480af625dc66fca637b606b8047b96e6615855985b  /tmp/t02a03_geometric_tube_cover.lean"}
-      {:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "apm_t02a03_dist_leftTubeTorusPoint_leftCoreCircle compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :finding
-     "The placeholder-free fixture proves the exact requested theorem. Expanding the Euclidean coordinate difference between apm_t02a03_leftTubeTorusPoint u and apm_t02a03_leftCoreCircle u.1 reduces its squared norm to 1/64 using Circle.normSq_coe for both Circle coordinates; therefore the distance is 1/8. The canonical module already contains the reconstruction formula and continuity theorem immediately preceding this addition.",
-     :implementation
-     {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
-      :declarations
-      ["apm_t02a03_dist_leftTubeTorusPoint_leftCoreCircle"],
-      :acceptance
-      {:type
-       "forall u : Circle × Circle, dist (apm_t02a03_leftTubeTorusPoint u) (apm_t02a03_leftCoreCircle u.1) = (1 / 8 : ℝ)",
-       :axioms ["propext" "Classical.choice" "Quot.sound"],
-       :gates
-       ["module compiles"
-        "scoped file contains no sorry token"
-        "statement registry matches"]}},
-     :residual
-     "Promote the compiled exact-distance theorem into ConstructionTargets/T02A03GeometricTubeCover.lean. The next route step derives frozen left-tube membership, proves the reconstructed point is outside the frozen core, bundles the inverse map, and constructs both comparison homotopies."}},
+   {:placeholder-delta
+    {:path "ConstructionTargets/T02A03GeometricTubeCover.lean",
+     :before 0,
+     :after 0,
+     :delta 0},
+    :git-author "Joe Corneli <holtzermann17@gmail.com>",
+    :residual
+    "Use the exact 1/8 distance to prove frozen left-tube membership, prove the reconstructed point is outside the frozen core, bundle the inverse map, and construct both comparison homotopies.",
+    :type
+    "∀ u : Circle × Circle, dist (apm_t02a03_leftTubeTorusPoint u) (apm_t02a03_leftCoreCircle u.1) = (1 / 8 : ℝ)",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not",
+     :declaration-type-sha256
+     "264d4b7dfadf4605ff51569ad63ae144f12acc36eccdd7648c06211df7a0909b"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+      :exit 0,
+      :output
+      "fc1be108e169d9c6a8617d480af625dc66fca637b606b8047b96e6615855985b  /tmp/t02a03_geometric_tube_cover.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeCover.lean",
+      :exit 0}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeCover.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "lake env lean /tmp/t02a03_geometric_tube_cover.lean | rg \"dist_leftTubeTorusPoint_leftCoreCircle\"",
+      :exit 0,
+      :output
+      "'apm_t02a03_dist_leftTubeTorusPoint_leftCoreCircle' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd "git commit -m \"Bank t02A03 torus-point core distance\"",
+      :exit 0,
+      :output
+      "[master abd6fffb] Bank t02A03 torus-point core distance; 1 file changed, 21 insertions(+)"}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "abd6fffb93a1d3a26f7c5694cc617f42c23c4daa",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
+    :declaration "apm_t02a03_dist_leftTubeTorusPoint_leftCoreCircle",
+    :fixture
+    {:path "/tmp/t02a03_geometric_tube_cover.lean",
+     :sha256
+     "fc1be108e169d9c6a8617d480af625dc66fca637b606b8047b96e6615855985b"},
+    :finding
+    "Banked the exact distance calculation from the reconstructed torus point to the corresponding frozen left-core point. Circle norm identities reduce the Euclidean squared distance to 1/64, hence the distance is 1/8.",
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/left-tube-torus-point-core-distance",
