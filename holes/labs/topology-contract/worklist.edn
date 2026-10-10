@@ -90297,6 +90297,8 @@
    :other-consumers []}
   {:consumer :t99J01,
    :stop-count 1,
+   :review-finding
+   "implement finite free-group basis-rank invariance and the finite Schreier spanning-tree complement count in scope, then discharge generatorsEquivFinSchreier with standard axioms",
    :evidence
    {:residual
     "First prove finite free-group basis-rank invariance in the exact generatorsEquivFin_of_explicitBasis form; then construct and count the finite Schreier coset-quiver basis under 0 < n.",
@@ -90337,6 +90339,12 @@
      {:cmd "git status --short",
       :exit 0,
       :finding "The worktree is clean."}],
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1791636207504-1947-e9a3b2f4",
+     :finding
+     "implement finite free-group basis-rank invariance and the finite Schreier spanning-tree complement count in scope, then discharge generatorsEquivFinSchreier with standard axioms"},
     :fixture
     {:path "/tmp/schreier-positive-rank-probe.lean",
      :sha256
@@ -90346,7 +90354,7 @@
      :proof-placeholder-count 1},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["ConstructionTargets/FiniteIndexFreeGroupSchreierPositiveIndex.lean"],
    :dag-node
@@ -90372,6 +90380,7 @@
    :id
    :routes-2026-10-10-finite-index-schreier-positive-index-generator-count-2,
    :kind :reusable-theorem,
+   :fail-count 1,
    :depends-on [],
    :current-residual
    "Build and count the finite connected Schreier coset quiver under the now-sufficient 0<n hypothesis; all equivalence packaging is already compiled.",
