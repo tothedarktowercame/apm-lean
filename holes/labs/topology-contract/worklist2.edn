@@ -62568,9 +62568,46 @@
   {:bounded-exception
    "single-consumer interpolated planar norm identity for the t02A03 complement interpolation",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:residual
+     "Implement the interpolated planar-norm identity in the scoped module; then substitute it into leftTubeNormalComplex and continue to the exact normal-coordinate formula and deleted-core exclusion.",
+     :outcome :go,
+     :warnings
+     ["/tmp/t02a03_geometric_tube_cover.lean:786:38: unnecessarySeqFocus linter warning in a previously banked theorem"],
+     :acceptance
+     {:declaration "apm_t02a03_norm_leftTubePlanarComplex_radialPoint",
+      :type
+      "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, norm (apm_t02a03_leftTubePlanarComplex ⟨apm_t02a03_leftTubeRadialPoint tp, apm_t02a03_leftTubeRadialPoint_mem_leftTube tp⟩) = (1 - (tp.1 : Real)) * (1 + (1 / 8 : Real) * ((apm_t02a03_leftTubeNormalAngular tp.2 : Circle) : Complex).re) + (tp.1 : Real) * norm (apm_t02a03_leftTubePlanarComplex ⟨tp.2.1, tp.2.2.1⟩)"},
+     :commands
+     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "apm_t02a03_norm_leftTubePlanarComplex_radialPoint compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
+       :exit 0}
+      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "86bf8286cabaef27e1e106995e2ed0498bf3f3635f67425a751e3f562db1e0b8  /tmp/t02a03_geometric_tube_cover.lean"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :fixture
+     {:path "/tmp/t02a03_geometric_tube_cover.lean",
+      :sha256
+      "86bf8286cabaef27e1e106995e2ed0498bf3f3635f67425a751e3f562db1e0b8"},
+     :finding
+     "The interpolated planar-norm identity is complete and placeholder-free. The proof combines the common-direction endpoint formulas and proves their affine scalar strictly positive before removing the absolute value.",
+     :implementation
+     {:scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
+      :declarations
+      ["ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_norm_leftTubePlanarComplex_radialPoint"]},
+     :seat "topo-8"}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/left-tube-interpolated-planar-norm",
    :acceptance
@@ -62585,6 +62622,8 @@
    :id
    :routes-2026-10-10-t02a03-left-tube-interpolated-planar-norm-topo2-r1,
    :kind :reusable-theorem,
+   :declarations
+   ["ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_norm_leftTubePlanarComplex_radialPoint"],
    :depends-on
    [:routes-2026-10-10-checkpoint-topo2-r5
     :routes-2026-10-10-t02a03-left-tube-reconstructed-planar-polar-topo2-r1],
