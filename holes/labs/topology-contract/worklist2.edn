@@ -66277,7 +66277,57 @@
   {:bounded-exception
    "single-consumer normalized positive-half-plane rotation used by the ambient deformation",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:residual
+     "Use the rotation in the polar-normal E3 reconstruction, interpolate normal magnitude to 1/8, and prove endpoint, right-tube, and left-core-avoidance properties.",
+     :outcome :go,
+     :warnings [],
+     :missing-theorems [],
+     :axioms [propext Classical.choice Quot.sound],
+     :commands
+     [{:cmd
+       "rg -n \"t02A03|explicit-r3-tube-deformation-retraction\" TOPOLOGY-ROUTES.md holes/labs/topology-routes/routes-{1,2,3}.md | head -120",
+       :exit 0}
+      {:cmd "lake env lean /tmp/t02a03_right_core_compact_probe.lean",
+       :exit 0,
+       :output
+       "rightTubePlanarRotation_exists compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd "sha256sum /tmp/t02a03_right_core_compact_probe.lean",
+       :exit 0,
+       :output
+       "8b15b861c3d8eace094b84d46aaca1f8947ad9187871e392c8796fcb5143fecb  /tmp/t02a03_right_core_compact_probe.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_right_core_compact_probe.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :fixture
+     {:path "/tmp/t02a03_right_core_compact_probe.lean",
+      :sha256
+      "8b15b861c3d8eace094b84d46aaca1f8947ad9187871e392c8796fcb5143fecb"},
+     :finding
+     "The complex interpolation (1-t)+t*rightTubePlanarComplex(p) never vanishes: at t=1 its real part is positive, and for t<1 the positive constant contribution remains. Normalizing therefore defines a continuous Circle-valued rotation. Its t=0 endpoint is 1 and its t=1 endpoint is the normalized frozen planar coordinate, exactly as required.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+      :declarations
+      [{:name
+        "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubePlanarInterpolation",
+        :type "unitInterval × RightTubeMinusLeftCore -> ℂ"}
+       {:name
+        "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubePlanarInterpolation_ne_zero",
+        :type "forall tp, rightTubePlanarInterpolation tp ≠ 0"}
+       {:name
+        "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubePlanarRotation",
+        :type "C(unitInterval × RightTubeMinusLeftCore, Circle)"}
+       {:name
+        "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubePlanarRotation_exists",
+        :type
+        "exists R : C(unitInterval × RightTubeMinusLeftCore, Circle), (forall p, (R (0,p) : ℂ) = 1) and (forall p, (R (1,p) : ℂ) = NormedSpace.normalize (rightTubePlanarComplex p.1))"}]},
+     :seat "topo-8"}},
+   :phase :implementation,
    :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/right-tube-planar-rotation",
@@ -66294,6 +66344,20 @@
    :id :routes-2026-10-10-t02a03-right-tube-planar-rotation-topo2-r1,
    :kind :reusable-theorem,
    :area "explicit-r3-tube-deformation-retraction",
+   :declarations
+   [{:name
+     "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubePlanarInterpolation",
+     :type "unitInterval × RightTubeMinusLeftCore -> ℂ"}
+    {:name
+     "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubePlanarInterpolation_ne_zero",
+     :type "forall tp, rightTubePlanarInterpolation tp ≠ 0"}
+    {:name
+     "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubePlanarRotation",
+     :type "C(unitInterval × RightTubeMinusLeftCore, Circle)"}
+    {:name
+     "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubePlanarRotation_exists",
+     :type
+     "exists R : C(unitInterval × RightTubeMinusLeftCore, Circle), (forall p, (R (0,p) : ℂ) = 1) and (forall p, (R (1,p) : ℂ) = NormedSpace.normalize (rightTubePlanarComplex p.1))"}],
    :depends-on
    [:routes-2026-10-10-t02a03-right-tube-planar-coordinate-positive-topo2-r1],
    :current-residual
