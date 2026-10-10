@@ -66855,7 +66855,54 @@
   {:bounded-exception
    "single-consumer continuous disk-normal interpolation underlying the ambient deformation",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:residual
+     "Construct the right-core angular interpolation, prove the interpolated normal coordinate stays within radius 1/4 and avoids the left core after reconstruction, then package H.",
+     :outcome :go,
+     :warnings [],
+     :missing-theorems [],
+     :axioms [propext Classical.choice Quot.sound],
+     :commands
+     [{:cmd "lake env lean /tmp/t02a03_right_core_compact_probe.lean",
+       :exit 0,
+       :output
+       "rightTubeCoreNormalInterpolation_exists compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd "sha256sum /tmp/t02a03_right_core_compact_probe.lean",
+       :exit 0,
+       :output
+       "9f475b05b4ccf62f44279a5935809668afd31f4c5d01f45e52a3e5820a8ebcb9  /tmp/t02a03_right_core_compact_probe.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_right_core_compact_probe.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}
+      {:cmd
+       "rg -n \"rightTubeCoreNormalInterpolation(_zero|_one|_exists)?\" /tmp/t02a03_right_core_compact_probe.lean",
+       :exit 0,
+       :output
+       "Definition, endpoint theorems, and existential occur at lines 301-338."}],
+     :fixture
+     {:path "/tmp/t02a03_right_core_compact_probe.lean",
+      :sha256
+      "9f475b05b4ccf62f44279a5935809668afd31f4c5d01f45e52a3e5820a8ebcb9"},
+     :finding
+     "For each continuous Circle-valued meridian coordinate, the fixture constructs the continuous complex line segment between the meridian endpoint's right-core normal coordinate and the input point's coordinate, with both endpoint equations proved by simplification.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+      :declarations
+      [{:name
+        "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreNormalInterpolation",
+        :type
+        "C(RightTubeMinusLeftCore, Circle) -> C(unitInterval × RightTubeMinusLeftCore, Complex)"}
+       {:name
+        "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreNormalInterpolation_exists",
+        :type
+        "forall m : C(RightTubeMinusLeftCore, Circle), exists N : C(unitInterval × RightTubeMinusLeftCore, Complex), (forall p, N (0,p) = rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (m p))) and (forall p, N (1,p) = rightTubeCoreNormalComplex p.1)"}]},
+     :seat "topo-8"}},
+   :phase :implementation,
    :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
@@ -66874,6 +66921,15 @@
    :routes-2026-10-10-t02a03-right-core-normal-interpolation-topo2-r1,
    :kind :reusable-theorem,
    :area "explicit-r3-tube-deformation-retraction",
+   :declarations
+   [{:name
+     "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreNormalInterpolation",
+     :type
+     "C(RightTubeMinusLeftCore, Circle) -> C(unitInterval × RightTubeMinusLeftCore, Complex)"}
+    {:name
+     "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreNormalInterpolation_exists",
+     :type
+     "forall m : C(RightTubeMinusLeftCore, Circle), exists N : C(unitInterval × RightTubeMinusLeftCore, Complex), (forall p, N (0,p) = rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (m p))) and (forall p, N (1,p) = rightTubeCoreNormalComplex p.1)"}],
    :depends-on
    [:routes-2026-10-10-t02a03-right-core-angular-coordinate-topo2-r1],
    :current-residual
