@@ -66424,6 +66424,20 @@
       :exit 1,
       :finding
       "The first norm equality used a different coercion normal form; stating it in the goal's exact complex-addition form made rewriting succeed."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791671102552-3119-d77ac8f0",
+     :commands
+     ["git show --format=fuller --stat 37ead94b788b808a414caca18ab6d1ae34a26e89 && git diff-tree --no-commit-id --name-status -r 37ead94b788b808a414caca18ab6d1ae34a26e89 && git show --check --oneline 37ead94b788b808a414caca18ab6d1ae34a26e89"
+      "sha256sum /tmp/t02a03_right_core_compact_probe.lean"
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean"
+      "lake env lean /tmp/t02a03_right_core_compact_probe.lean"
+      "python3 scripts/statement-registry.py check --rev 37ead94b788b808a414caca18ab6d1ae34a26e89"
+      "python3 scripts/statement-registry.py fingerprint --rev 37ead94b788b808a414caca18ab6d1ae34a26e89 t02A03"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"],
+     :finding
+     "PASS: commit 37ead94b changes exactly ConstructionTargets/T02A03GeometricTubeDeformation.lean; recorded and current blob are f77ad0c83a23601f07720b602ea6c0112fe2bd20. Fixture SHA-256 exactly matches f392902550e2fea167871ddbf308d9445cfda5b34398837925fbbe885ec264e8. Module and fixture compile with only propext, Classical.choice, and Quot.sound and no new sorry, admit, or axiom. The reconstruction maps Circle direction u and normal coordinate n back to the exact frozen E3 coordinates (-1+(1+n.re)u.re, (1+n.re)u.im, n.im). Substituting normalized rightTubePlanarComplex and rightTubeNormalComplex recovers p componentwise via norm(w) times normalize(w)=w; the equality is oriented reconstruction(...)=p and requires right-tube membership only for the nonzero normalization witness. No deformation or path-safety claim is made. Registry is 131/0; worklist validates; t02A03 retains one comment-stripped sorry and fingerprint d123afd5ae0ee067587b3ed3d7b9b6d2f075c3d95701e098ec357c7317cd34c3."},
     :commit "37ead94b788b808a414caca18ab6d1ae34a26e89",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
@@ -66435,7 +66449,7 @@
     "The reconstruction recovers the first two coordinates from norm(w) times normalize(w), and the third coordinate directly from the normal complex imaginary part. An explicit norm equality connects the module's expanded coordinate expression to rightTubePlanarComplex.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/right-tube-polar-reconstruction",
@@ -66542,7 +66556,7 @@
      "Define polar reconstruction by (-1+(1+n.re)u.re, (1+n.re)u.im, n.im). For a right-tube point p, take u to be the normalized planar complex and n to be the normal complex. The identity norm(w) • normalize(w)=w recovers the first two coordinates, while n.im is definitionally p2. This supplies the exact t=1 endpoint algebra required by the ambient deformation without claiming tube membership or left-core avoidance along the path.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
