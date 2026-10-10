@@ -196,6 +196,21 @@
     (let [{:keys [exit out]} (shell/sh "sha256sum" (.getPath f))]
       (when (zero? exit) (first (str/split out #"\s+"))))))
 
+;; Seats write most probe fixtures under /tmp, and worklist_check re-hashes
+;; every completed row's fixture on each start. zone's 2026-10-06 disk loss
+;; wiped /tmp, so 750 reviewed rows failed validation on 10-10 and neither loop
+;; could restart. Keep a content-addressed copy, shared by both ledgers, at
+;; apply time; worklist_check accepts it when the recorded path is gone.
+(def fixture-store (io/file here "fixture-store"))
+
+(defn stash-fixture! [{:keys [path sha256]}]
+  (when (and path sha256)
+    (let [f (canonical-file path)]
+      (when (= sha256 (sha256-file f))
+        (.mkdirs fixture-store)
+        (let [dest (io/file fixture-store sha256)]
+          (when-not (.isFile dest) (io/copy f dest)))))))
+
 (defn apply-completion-transition [xs receipt outcome]
   (if-let [transition (:completion-transition receipt)]
     (do
@@ -425,7 +440,8 @@
             (when-not (= (set (:scope item)) paths)
               (throw (ex-info "implementation commit paths differ from exact scope"
                               {:id id :scope (set (:scope item))
-                               :commit-paths paths :commits commits}))))))
+                               :commit-paths paths :commits commits})))))
+        (stash-fixture! (:fixture receipt)))
       :pass (doseq [k [:seat :commands :finding]]
               (when-not (get receipt k)
                 (throw (ex-info "PASS receipt lacks field" {:field k}))))

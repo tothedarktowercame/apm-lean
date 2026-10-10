@@ -22,6 +22,8 @@
                (some #(owner-blocked? % (conj seen dependency))
                      (:depends-on item)))))))
 (def root (:canonical-root w))
+(def fixture-store (io/file here "fixture-store"))
+(def lost-fixtures (atom []))
 (defn sh [& args] (apply shell/sh (concat args [:dir root])))
 (defn commit-exists? [sha]
   (and (string? sha)
@@ -115,9 +117,29 @@
           ;; proof, or a graded statement repair (t96J07's rewrite, 2026-09-28,
           ;; failed two finished rows here) -- so accept the hash of the file
           ;; at one of the row's own commits as well as the current file.
-          (when-not (or (= (:sha256 fixture) (file-sha (:path fixture)))
-                        (some #(= (:sha256 fixture) (committed-file-sha % (:path fixture))) commits))
-            (die (:id i) "fixture hash mismatch or file absent" (:path fixture)))))
+          ;;
+          ;; A fixture outside the repo (seats mostly write /tmp probes) does
+          ;; not survive a reboot. build_step.bb keeps a content-addressed
+          ;; copy in fixture-store/, which stands in for the recorded path
+          ;; once that path is gone. Rows applied before the store existed
+          ;; lost their /tmp fixtures when zone was rebuilt (2026-10-06);
+          ;; for those, a PASS review that saw the file is the remaining
+          ;; record, so an ABSENT out-of-repo fixture on a PASS row is
+          ;; counted rather than fatal. A file that is present and differs
+          ;; still fails.
+          (let [p (:path fixture)
+                sha (:sha256 fixture)
+                out-of-repo? (and (.isAbsolute (io/file p))
+                                  (not (str/starts-with? p (str root "/"))))
+                current (file-sha p)]
+            (cond
+              (= sha current) nil
+              (some #(= sha (committed-file-sha % p)) commits) nil
+              (and out-of-repo? (nil? current) (= sha (file-sha (str fixture-store "/" sha)))) nil
+              (and out-of-repo? (nil? current)
+                   (= :pass (get-in i [:evidence :review :outcome])))
+              (swap! lost-fixtures conj (:id i))
+              :else (die (:id i) "fixture hash mismatch or file absent" p)))))
       (when (some #(not= (get % :expected-exit 0) (:exit %)) (:commands e))
         (die (:id i) "records an unexpected gate exit"))))
   (when (= :done (:state i))
@@ -149,3 +171,6 @@
   (when-not (= "0" (str (:exit (shell/sh "git" "rev-parse" "--verify" (:git-sha (:baseline w)) :dir root))))
     (die "baseline commit absent" (:git-sha (:baseline w)))))
 (println "topology-worklist:" (count items) "items OK;" (pr-str (frequencies (map :state items))))
+(when (seq @lost-fixtures)
+  (println "topology-worklist:" (count @lost-fixtures)
+           "PASS rows whose out-of-repo fixture is gone; accepted on their review"))
