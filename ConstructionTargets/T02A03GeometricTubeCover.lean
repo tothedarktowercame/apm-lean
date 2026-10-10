@@ -555,4 +555,28 @@ theorem apm_t02a03_anchor_eq_circleMeridianMap_quarterTurn :
   apply Subtype.ext
   exact apm_t02a03_circleMeridian_quarterTurn.symm
 
+noncomputable def apm_t02a03_rightCoreLiftHomotopy :
+    ContinuousMap.Homotopy apm_t02a03_rightCoreAttachmentMap
+      apm_t02a03_rightCoreLiftedMap where
+  toFun := apm_t02a03_rightCoreLiftHomotopyMap
+  map_zero_left := apm_t02a03_rightCoreLiftHomotopyMap_zero
+  map_one_left := apm_t02a03_rightCoreLiftHomotopyMap_one
+
+noncomputable def apm_t02a03_rightCoreAnchorContractionHomotopy :
+    ContinuousMap.Homotopy apm_t02a03_rightCoreLiftedMap
+      (ContinuousMap.const _
+        (apm_t02a03_circleMeridianMap (Circle.exp (Real.pi / 2)))) where
+  toFun := apm_t02a03_rightCoreAnchorContractionMap
+  map_zero_left := apm_t02a03_rightCoreAnchorContractionMap_zero
+  map_one_left t :=
+    (apm_t02a03_rightCoreAnchorContractionMap_one t).trans
+      apm_t02a03_anchor_eq_circleMeridianMap_quarterTurn
+
+noncomputable def apm_t02a03_rightCoreBasedAttachmentHomotopy :
+    ContinuousMap.Homotopy apm_t02a03_rightCoreAttachmentMap
+      (ContinuousMap.const _
+        (apm_t02a03_circleMeridianMap (Circle.exp (Real.pi / 2)))) :=
+  apm_t02a03_rightCoreLiftHomotopy.trans
+    apm_t02a03_rightCoreAnchorContractionHomotopy
+
 end ConstructionTargets.T02A03GeometricTubeCover
