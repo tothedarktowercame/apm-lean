@@ -82270,6 +82270,22 @@
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
      {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791606301534-1076-b17b6645",
+     :commands
+     ["git show/diff recorded transition 92ba8821 and exact scope checks"
+      "test ! -e ConstructionTargets/T99J05AffineLocalDiagonal.lean"
+      "sha256sum /tmp/t99j05-affine-local-diagonal-probe.lean"
+      "lake env lean /tmp/t99j05-affine-local-diagonal-probe.lean"
+      "lake env lean problems/t99J05/lean/Main.lean"
+      "python3 scripts/statement-registry.py check and fingerprint t99J05"
+      "comment-stripped sorry/admit/axiom census"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git diff --check 92ba8821^ 92ba8821"],
+     :finding
+     "PASS as STOP: reviewer codex-3 differs from author topo-4. Commit 92ba8821 changes only the worklist and records empty probe scope; the prerequisite implementation file remains absent. The exact fixture reproduces SHA-256 b55704ee516bc4c04ab54c486d2cc148fad120bed408abaf73af79314eeec3d9 and compiles, but its census is zero sorry/admit and one axiom, and #print axioms includes t99J05_affine_local_diagonal_package itself. It therefore supplies no standard-only evidence for the requested arbitrary-n package. The frozen consumer compiles with its one existing sorry and fingerprint cf42ee31318a9e37fde5e4e923ca60cbe51d483ebd813588efc9492359e37db6; registry is 131/131 and all 682 rows validate. The recorded orientation and representation boundary are exact: arbitrary-n nonzero-coordinate patches, ratios, chart inverses, and inverse laws must first construct AffineChartConstruction n; fixed-line classification, the chart localMap formula, real determinant positivity, and localIndex=1 are separate subsequent proofs; rational homology, Lefschetz, and Euler characteristic remain downstream."},
     :fixture
     {:path "/tmp/t99j05-affine-local-diagonal-probe.lean",
      :sha256
@@ -82277,7 +82293,7 @@
      :status :self-axiomatized},
     :seat "topo-4"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t99J05/affine-charts-local-diagonal",
    :acceptance
