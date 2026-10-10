@@ -85903,8 +85903,57 @@
    "Orient the banked abstract free-product equivalence against the concrete quotient inclusions so recursive generator normalization becomes meaningful.",
    :other-consumers [:t01A03 :t97A01 :t97A03 :t92J06]}
   {:consumer :t97A01,
+   :stop-count 1,
+   :evidence
+   {:residual
+    "Repair the row by requiring PathConnectedSpace X and PathConnectedSpace Y for integral augmentation coordinates, or restate the signed inclusion formula with H0(X) and H0(Y) targets. Then re-probe the corrected signature.",
+    :outcome :stop,
+    :warnings [],
+    :disposition :stop,
+    :axioms
+    ["propext"
+     "Classical.choice"
+     "Quot.sound"
+     "GenericPointWedgeMVCoordinatesProbe.generic_point_wedge_mv_inclusion_coordinates"],
+    :author "topo-2",
+    :reason
+    "The elected generic H0 coordinate package is mathematically false under its recorded hypotheses. X and Y are arbitrary topological spaces; the banked equivalences identify the left and right cover pieces with X and Y, respectively, but the required fixture asserts isomorphisms from both H0 groups to Z. Taking discrete X = Bool, Y = Unit, M = univ, and N = {x0} satisfies the neighborhood and pointed-contraction hypotheses, while the left piece is homotopy equivalent to Bool and has H0 isomorphic to Z coproduct Z, not Z. The exact missing hypothesis is path-connectedness of X and Y (or, alternatively, the target coordinates must remain H0(X) and H0(Y) rather than Z). Adding either changes the requested interface and must be repaired in the route specification.",
+    :commands
+    [{:cmd "stat -c '%F %n' .lake/packages",
+      :exit 0,
+      :finding
+      "directory .lake/packages; canonical package authority is present"}
+     {:cmd
+      "sha256sum /tmp/generic-point-wedge-mv-inclusion-coordinates-probe.lean",
+      :exit 0,
+      :finding
+      "8b85b579989bd59f53eff5991aaa36965b937bb9f0e87e5b88be3c93f989e2cf"}
+     {:cmd
+      "lake env lean /tmp/generic-point-wedge-mv-inclusion-coordinates-probe.lean",
+      :exit 0,
+      :finding
+      "The fixture compiles only because generic_point_wedge_mv_inclusion_coordinates is declared as an axiom."}
+     {:cmd "rg fixture hypotheses and H0 coordinate fields",
+      :exit 0,
+      :finding
+      "X and Y have only TopologicalSpace instances, while leftIso and rightIso both target AddCommGrpCat.of Int."}
+     {:cmd
+      "rg genericPointWedgeLeftHomotopyEquiv and genericPointWedgeRightHomotopyEquiv",
+      :exit 0,
+      :finding
+      "The banked cover pieces are homotopy equivalent to arbitrary X and Y."}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :fixture
+    {:path
+     "/tmp/generic-point-wedge-mv-inclusion-coordinates-probe.lean",
+     :sha256
+     "8b85b579989bd59f53eff5991aaa36965b937bb9f0e87e5b88be3c93f989e2cf"},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/GenericPointWedgeMayerVietorisCoordinates.lean"],
    :dag-node
