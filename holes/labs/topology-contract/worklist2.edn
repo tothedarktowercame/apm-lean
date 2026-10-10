@@ -58318,49 +58318,61 @@
    "single-consumer concrete meridian anchor for the t02A03 geometric complement",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/t02a03_geometric_tube_cover.lean",
-      :sha256
-      "b1ec81acb3d60233325ff478246addd0f6b8ee49e9af5843062b142a0208abe6"},
-     :commands
-     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "apm_t02a03_meridianAnchor and apm_t02a03_meridianAnchor_mem_geometricY compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
-       :exit 0}
-      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "b1ec81acb3d60233325ff478246addd0f6b8ee49e9af5843062b142a0208abe6  /tmp/t02a03_geometric_tube_cover.lean"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :finding
-     "The point (0,0,1/8) is a compiled explicit inhabitant of the frozen geometric complement. Its distance from the common origin places it in the radius-1/4 left tube and hence W, while its third coordinate excludes membership in the planar left core.",
-     :residual
-     "Construct the normal meridian through the anchor, attach the surviving right-core map to it, and extend to compatible tube deformations and gluing.",
-     :implementation
-     {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"]},
-     :acceptance
-     {:source-fixture "/tmp/t02a03_geometric_tube_cover.lean",
-      :declarations
-      ["apm_t02a03_meridianAnchor"
-       "apm_t02a03_meridianAnchor_mem_geometricY"],
-      :placeholder "the sole sorry in apm_t02a03",
-      :route-step
-      "t02A03 step 2, construct a concrete geometricY anchor above the deleted common attachment",
-      :gates
-      ["fixture compiles"
-       "fixture contains no sorry token"
-       "fixture hash matches"
-       "statement registry matches"]}}},
+   {:placeholder-delta 0,
+    :residual
+    "Construct the normal meridian through the anchor, attach the surviving right-core map to it, and extend to compatible tube deformations and gluing.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+      :exit 0,
+      :output
+      "b1ec81acb3d60233325ff478246addd0f6b8ee49e9af5843062b142a0208abe6  /tmp/t02a03_geometric_tube_cover.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeCover.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.T02A03GeometricTubeCover",
+      :exit 0,
+      :output "Build completed successfully (8240 jobs)."}
+     {:cmd "lake env lean /tmp/check_t02a03_anchor_axioms.lean",
+      :exit 0,
+      :output
+      "Both declarations depend on [propext, Classical.choice, Quot.sound]."}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeCover.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "comment-stripped placeholder census for problems/t02A03/lean/Main.lean",
+      :exit 0,
+      :output "1"}
+     {:cmd "sha256sum problems/t02A03/lean/Main.lean",
+      :exit 0,
+      :output
+      "b123eca388ab2858ca55daf538c1ddd645022b52f5196a15f0bb516d78323d7d  problems/t02A03/lean/Main.lean"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r a329477cbd5ed1a6b7b0b8ec4e830d3143ed1b93",
+      :exit 0,
+      :output "ConstructionTargets/T02A03GeometricTubeCover.lean"}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "a329477cbd5ed1a6b7b0b8ec4e830d3143ed1b93",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
+    :fixture
+    {:path "/tmp/t02a03_geometric_tube_cover.lean",
+     :sha256
+     "b1ec81acb3d60233325ff478246addd0f6b8ee49e9af5843062b142a0208abe6"},
+    :declarations
+    ["ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_meridianAnchor"
+     "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_meridianAnchor_mem_geometricY"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/geometric-meridian-anchor",
    :acceptance
