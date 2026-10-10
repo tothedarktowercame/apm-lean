@@ -82317,8 +82317,15 @@
   {:consumer :t94J09,
    :stop-count 1,
    :evidence
-   {:outcome :stop,
-    :seat "topo-4",
+   {:residual
+    "Prove the generic compact-Hausdorff closed-equivalence quotient theorem first. Then separately classify each finite polygon EqvGen closure, including vertex classes, and prove its graph closed. Cut-and-paste, polygon descent, and homology remain downstream.",
+    :outcome :stop,
+    :warnings
+    [{:kind :shared-worktree-change,
+      :message
+      "An unrelated modification to ConstructionTargets/ComplexProjectiveChartTargets.lean appeared during this read-only probe and was left untouched."}],
+    :disposition :stop,
+    :author "topo-4",
     :reason
     "Representation boundary: the corrected route still contains two sequential unbanked results, so it cannot yield GO or a single-prerequisite REVISE. First, neither Mathlib nor ConstructionTargets provides the theorem that a closed equivalence relation on a compact Hausdorff space has a Hausdorff coinduced quotient; this must be proved directly by constructing disjoint saturated neighborhoods. Second, the exact polygon setoids use Relation.EqvGen of boundary-edge generators. Closedness of the generator graphs does not imply closedness of an arbitrary transitive closure. For these finite polygon relations, the proof must classify the EqvGen closure explicitly: interior points are singleton classes, paired edge interiors form finite classes, and polygon endpoints merge according to separately computed finite vertex classes. Only after that classification can the EqvGen graph be expressed as a finite union of closed graphs and the generic compact-quotient theorem applied. The repository contains neither result, and no complete placeholder-free exact fixture can be compiled from the current bank.",
     :commands
@@ -82352,16 +82359,26 @@
       :exit 0,
       :finding
       "ConstructionTargets/ComplexProjectiveChartTargets.lean is modified by unrelated concurrent work; no files were changed by this probe"}],
-    :warnings
-    [{:kind :shared-worktree-change,
-      :message
-      "An unrelated modification to ConstructionTargets/ComplexProjectiveChartTargets.lean appeared during this read-only probe and was left untouched."}],
-    :residual
-    "Prove the generic compact-Hausdorff closed-equivalence quotient theorem first. Then separately classify each finite polygon EqvGen closure, including vertex classes, and prove its graph closed. Cut-and-paste, polygon descent, and homology remain downstream.",
-    :author "topo-4",
-    :disposition :stop},
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791606493017-1084-3e165e04",
+     :commands
+     ["git show/diff recorded transition f2607051 and exact scope checks"
+      "rg compact closed-equivalence quotient T2 theorems in pinned Mathlib and ConstructionTargets"
+      "rg EqvGen graph closedness theorems in pinned Mathlib and ConstructionTargets"
+      "lake env lean problems/t94J09/lean/Main.lean"
+      "lake env lean problems/tunk01/lean/Main.lean"
+      "lake env lean problems/t91A02/lean/Main.lean"
+      "python3 scripts/statement-registry.py check and fingerprint all three consumers"
+      "comment-stripped placeholder census"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git diff --check f2607051^ f2607051"],
+     :finding
+     "PASS as STOP: reviewer codex-3 differs from author topo-4. Commit f2607051 changes only the worklist and records empty probe scope; no fixture or theorem implementation is claimed. Fresh broad searches reproduce the absence of both sequential prerequisites: pinned Mathlib and ConstructionTargets provide no generic theorem giving a Hausdorff coinduced quotient from a closed equivalence graph on a compact Hausdorff source, and no theorem making Relation.EqvGen closed from closed generator graphs. All three consumers compile unchanged with exactly one sorry and no admit or axiom declarations; frozen fingerprints reproduce as t94J09 52b4778c4932a4b38c30b3bf2a7c9943c32f675f19f63ae1d119aa378dde0a75, tunk01 5362677d8a8f8dfcae54d23788ab8d3558ea3b78992e8b9e9c8f0b956fc636fe, and t91A02 e6b708786cf6a21dc5bd30b3d560b260aa4f2bb70519e89f1e06f46d935e41bb. Registry is 131/131 and all 682 rows validate. The orientation and representation boundary are correct: first prove the generic compact closed-relation quotient separation theorem; then classify each concrete EqvGen closure into singleton interior classes, paired edge-interior classes, and finite endpoint vertex classes before expressing its graph as a finite closed union. Cut-and-paste, polygon descent, Euler data, and homology remain downstream."},
+    :seat "topo-4"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/polygon-quotient-compact-closed-relation",
