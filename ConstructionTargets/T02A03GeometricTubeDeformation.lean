@@ -442,6 +442,30 @@ theorem rightTubeCoreNormalInterpolation_exists :
     rightTubeCoreNormalInterpolation_zero m,
     rightTubeCoreNormalInterpolation_one m⟩
 
+theorem norm_rightTubeCoreNormalComplex_circleMeridian (z : Circle) :
+    ‖rightTubeCoreNormalComplex (apm_t02a03_circleMeridian z)‖ = (1 / 8 : ℝ) := by
+  have hzsq : (z : ℂ).re ^ 2 + (z : ℂ).im ^ 2 = 1 := by
+    simpa [Complex.normSq_apply, pow_two] using Circle.normSq_coe z
+  have habs : |(z : ℂ).re| ≤ 1 := by
+    simpa [Circle.norm_coe z] using (RCLike.abs_re_le_norm (z : ℂ))
+  have hlo : -(1 : ℝ) ≤ (z : ℂ).re := (abs_le.mp habs).1
+  have hhi : (z : ℂ).re ≤ 1 := (abs_le.mp habs).2
+  rw [Complex.norm_def]
+  simp [rightTubeCoreNormalComplex, rightTubeCorePlanarComplex,
+    apm_t02a03_circleMeridian, Complex.norm_def, Complex.normSq_apply]
+  have hsqrt : √((1 - 8⁻¹ * (z : ℂ).re) *
+      (1 - 8⁻¹ * (z : ℂ).re)) = 1 - 8⁻¹ * (z : ℂ).re := by
+    rw [← pow_two, Real.sqrt_sq (by norm_num at hlo hhi ⊢; linarith)]
+  rw [hsqrt]
+  have hinside :
+      (1 - (1 - 8⁻¹ * (z : ℂ).re)) *
+          (1 - (1 - 8⁻¹ * (z : ℂ).re)) +
+        8⁻¹ * (z : ℂ).im * (8⁻¹ * (z : ℂ).im) = (1 / 64 : ℝ) := by
+    norm_num at hzsq ⊢
+    nlinarith
+  rw [hinside]
+  norm_num
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -456,3 +480,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreTubularCoordinates_continuous
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreAngularCoordinate
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreNormalInterpolation_exists
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.norm_rightTubeCoreNormalComplex_circleMeridian
