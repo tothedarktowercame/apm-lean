@@ -88207,6 +88207,20 @@
       :exit 1,
       :finding
       "Using positional explicit r and n binders exactly as the isolated fixture broke banked calls such as vertex_card hn; corrected by explicitly declaring those parameters as implicit binders, preserving the established API within the single-file scope."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791643253080-2182-35e34408",
+     :commands
+     ["git show c1797fc55c4c3feb59eef57b6983397565b63221 --stat and recorded diff inspection"
+      "lake build ConstructionTargets.FiniteSchreierChosenGeneratorEdgeCoordinates"
+      "lake build ConstructionTargets.FiniteIndexFreeGroupSchreierRank"
+      "sha256sum /tmp/finite-schreier-chosen-generator-explicit-binders.lean && lake env lean /tmp/finite-schreier-chosen-generator-explicit-binders.lean"
+      "comment-stripped sorry/admit census for source, fixture, and affected consumers"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 2f609898:holes/labs/topology-contract/worklist.edn)"],
+     :finding
+     "exact one-file scope and fixture hash reproduce; all formerly inferred binders are explicitly declared under autoImplicit=false without changing caller orientation, both canonical dependency builds pass with standard axioms, and source plus fixture have zero placeholders"},
     :commit "c1797fc55c4c3feb59eef57b6983397565b63221",
     :changed-paths
     ["ConstructionTargets/FiniteSchreierChosenGeneratorEdgeCoordinates.lean"],
@@ -88225,7 +88239,7 @@
      "Enable autoImplicit=false and explicitly declare every formerly inferred r, n, and H binder. Preserve the existing caller API by declaring inferred parameters as explicit implicit binders rather than changing their positional argument order."},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/FiniteSchreierChosenGeneratorEdgeCoordinates.lean"],
    :dag-node
@@ -88342,7 +88356,7 @@
       "The existing chosen-generator coordinate declarations with every r, n, and H parameter explicitly bound under set_option autoImplicit false."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank",
