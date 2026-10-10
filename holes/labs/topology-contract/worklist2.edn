@@ -55829,79 +55829,119 @@
    :current-residual
    "After this transport is banked, prove frozenTorusPi1Coord naturality for apm_t97a04_Lbar with the displayed Fin-2 integer matrix.",
    :other-consumers [:t01A02]}
+  {:bounded-exception
+   "single-consumer conjugacy for the frozen t97A04 torus map",
+   :consumer :t97A04,
+   :phase :probe,
+   :state :open,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t97A04/torus-pi1-winding-coordinates/frozen-map-conjugacy",
+   :acceptance
+   {:probe
+    "Compile and bank frozenLbar, circleMatrixMap, and frozenTorusHomeomorphCircleProd_frozenLbar from /tmp/torus_frozen_map_circle_conjugacy.lean. Define the exact additive frozen map (x,y) maps to (2*x+y,y-x), define its multiplicative Circle-coordinate map (z0,z1) maps to (z0^2*z1,z1*z0^-1), and prove pointwise that the banked AddCircle-to-Circle product homeomorphism conjugates the former to the latter. This supplies the representation equality used by t97A04 route step 4; do not claim induced fundamental-group matrix naturality in this prerequisite.",
+    :declarations
+    ["frozenLbar"
+     "circleMatrixMap"
+     "frozenTorusHomeomorphCircleProd_frozenLbar"],
+    :placeholder "apm_t97A04_bridge_2",
+    :route-step
+    "t97A04 step 4, exact conjugacy of the frozen torus map with its Circle-coordinate formula"},
+   :representation
+   {:source
+    "The frozen additive self-map (x,y) maps to (2*x+y,y-x) on AddCircle 1 x AddCircle 1",
+    :target
+    "The multiplicative self-map (z0,z1) maps to (z0^2*z1,z1*z0^-1) on Circle x Circle",
+    :direction
+    "Exact pointwise conjugacy from the source additive map to the target multiplicative map through frozenTorusHomeomorphCircleProd"},
+   :id
+   :routes-2026-10-10-t97a04-frozen-torus-map-circle-conjugacy-topo2-r1,
+   :kind :representation-comparison,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo2-r2
+    :routes-2026-10-10-torus-pi1-coordinate-equivalence-two-consumers-topo2-r1
+    :routes-2026-10-10-torus-pi1-projected-lift-endpoints-two-consumers-topo2-r1
+    :routes-2026-10-10-torus-addcircle-circle-coordinate-comparison-two-consumers-topo2-r1],
+   :current-residual
+   "After conjugacy is banked, derive the two winding-coordinate formulas for the induced map and combine them into the displayed integer matrix naturality equation.",
+   :other-consumers []}
   {:consumer :t97A04,
    :evidence
    {:probe
     {:outcome :revise,
      :seat "topo-8",
      :fixture
-     {:path "/tmp/torus_addcircle_coordinate_comparison.lean",
+     {:path "/tmp/torus_frozen_map_circle_conjugacy.lean",
       :sha256
-      "7377dbd1a7163aa7739a0a47fa7a5ac5fafa0adfc3e6176585000653b5f21bc5"},
+      "98eecd6300a6627dfd561e51d2e9fb6fada8cb1b3772117e21e25ce351179e85"},
      :commands
      [{:cmd
-       "lake env lean /tmp/torus_addcircle_coordinate_comparison.lean",
-       :exit 0,
-       :output
-       "frozenTorusPi1Coord compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/torus_addcircle_coordinate_comparison.lean || true)\"",
+       "lake build ConstructionTargets.TorusPiOneWindingCoordinates",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/torus_addcircle_coordinate_comparison.lean",
+       "lake env lean /tmp/torus_frozen_map_circle_conjugacy.lean",
        :exit 0,
        :output
-       "7377dbd1a7163aa7739a0a47fa7a5ac5fafa0adfc3e6176585000653b5f21bc5  /tmp/torus_addcircle_coordinate_comparison.lean"}
+       "exact frozen-map conjugacy compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/torus_frozen_map_circle_conjugacy.lean || true)\"",
+       :exit 0}
+      {:cmd "sha256sum /tmp/torus_frozen_map_circle_conjugacy.lean",
+       :exit 0,
+       :output
+       "98eecd6300a6627dfd561e51d2e9fb6fada8cb1b3772117e21e25ce351179e85  /tmp/torus_frozen_map_circle_conjugacy.lean"}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
      :diagnostic-history
      [{:cmd
-       "lake env lean /tmp/torus_addcircle_coordinate_comparison.lean",
+       "lake env lean /tmp/torus_frozen_map_circle_conjugacy.lean",
        :exit 1,
        :finding
-       "The first draft unfolded homeomorphCircle too early and left its image of zero opaque; using homeomorphCircle_apply proves the exact basepoint equation. A dependent basepoint mismatch then required rewriting by that equation rather than simpa. The corrected unchanged representation compiles."}],
+       "The first run used the stale olean predating FrozenTorus and then attempted a nonexistent Homeomorph.toContinuousMap projection. Building the canonical dependency and stating the same conjugacy pointwise removed both elaboration issues; the corrected theorem compiles."}],
      :finding
-     "The banked torusPi1Coord and projected endpoint formulas are stated for Circle x Circle based at (1,1), while the frozen consumers use AddCircle 1 x AddCircle 1 based at (0,0) and the concrete Lbar is defined only there. Therefore integer-matrix naturality cannot yet even be stated against the frozen map without an oriented transport. The compiled fixture constructs the exact product homeomorphism from the frozen AddCircle torus to Circle x Circle, proves that it sends (0,0) to (1,1), and transports torusPi1Coord back to the frozen fundamental group. This is the single representation prerequisite; no naturality is claimed.",
+     "The frozen AddCircle coordinate equivalence is now banked, but the full matrix-naturality theorem still needs to relate the concrete additive formula to the multiplicative Circle model on which torusPi1Coord is defined. The compiled fixture proves that exact conjugacy: (2*x+y,y-x) becomes (z0^2*z1,z1*z0^-1) under the banked product homeomorphism. This is an equality of the actual maps at every point, not an existence contract. Once banked, the remaining proof is algebra on the two circle winding homomorphisms and functoriality of FundamentalGroup.map.",
      :residual
-     "Bank the frozen-torus coordinate equivalence. Then formulate the induced action of apm_t97a04_Lbar in those coordinates, prove it equals the displayed matrix by projected lift uniqueness, and assemble the requested two-consumer naturality packet.",
+     "Bank the exact additive-to-multiplicative map conjugacy. Then prove circle winding under pointwise multiplication, square, and inverse on mapped loop classes, combine the two coordinates into the displayed [[2,1],[-1,1]] formula, and finish the original two-consumer packet.",
      :prerequisite
-     {:consumer :t97A04,
+     {:bounded-exception
+      "single-consumer conjugacy for the frozen t97A04 torus map",
+      :consumer :t97A04,
       :phase :probe,
       :state :open,
       :scope [],
       :dag-node
-      "TOPOLOGY-ROUTES.md/shared/torus-pi1-winding-coordinates/addcircle-circle-comparison",
+      "TOPOLOGY-ROUTES.md/t97A04/torus-pi1-winding-coordinates/frozen-map-conjugacy",
       :acceptance
       {:probe
-       "Compile and bank frozenTorusHomeomorphCircleProd, frozenTorusHomeomorphCircleProd_base, and frozenTorusPi1Coord from /tmp/torus_addcircle_coordinate_comparison.lean. Use AddCircle.homeomorphCircle in both factors to construct an explicit homeomorphism from AddCircle 1 x AddCircle 1 to Circle x Circle, prove that (0,0) maps exactly to (1,1), and transport the banked torusPi1Coord equivalence to FundamentalGroup (AddCircle 1 x AddCircle 1) (0,0). This supplies the representation bridge required before stating naturality for the frozen apm_t97a04_Lbar; do not claim matrix naturality in this prerequisite.",
+       "Compile and bank frozenLbar, circleMatrixMap, and frozenTorusHomeomorphCircleProd_frozenLbar from /tmp/torus_frozen_map_circle_conjugacy.lean. Define the exact additive frozen map (x,y) maps to (2*x+y,y-x), define its multiplicative Circle-coordinate map (z0,z1) maps to (z0^2*z1,z1*z0^-1), and prove pointwise that the banked AddCircle-to-Circle product homeomorphism conjugates the former to the latter. This supplies the representation equality used by t97A04 route step 4; do not claim induced fundamental-group matrix naturality in this prerequisite.",
        :declarations
-       ["frozenTorusHomeomorphCircleProd"
-        "frozenTorusHomeomorphCircleProd_base"
-        "frozenTorusPi1Coord"],
-       :placeholder
-       "apm_t97A04_bridge_2 and apm_t01A02_bridge_fixedPoint_of_lift",
+       ["frozenLbar"
+        "circleMatrixMap"
+        "frozenTorusHomeomorphCircleProd_frozenLbar"],
+       :placeholder "apm_t97A04_bridge_2",
        :route-step
-       "t97A04 step 2 frozen AddCircle coordinate object; t01A02 step 4 frozen-torus coordinate object"},
+       "t97A04 step 4, exact conjugacy of the frozen torus map with its Circle-coordinate formula"},
       :representation
       {:source
-       "The frozen torus AddCircle 1 x AddCircle 1 with fundamental-group basepoint (0,0)",
+       "The frozen additive self-map (x,y) maps to (2*x+y,y-x) on AddCircle 1 x AddCircle 1",
        :target
-       "Circle x Circle with fundamental-group basepoint (1,1) and the banked torusPi1Coord equivalence",
+       "The multiplicative self-map (z0,z1) maps to (z0^2*z1,z1*z0^-1) on Circle x Circle",
        :direction
-       "Explicit product homeomorphism from the frozen AddCircle torus to Circle x Circle, followed by exact basepoint-preserving transport of the target winding-coordinate equivalence back to the source fundamental group"},
+       "Exact pointwise conjugacy from the source additive map to the target multiplicative map through frozenTorusHomeomorphCircleProd"},
       :id
-      :routes-2026-10-10-torus-addcircle-circle-coordinate-comparison-two-consumers-topo2-r1,
+      :routes-2026-10-10-t97a04-frozen-torus-map-circle-conjugacy-topo2-r1,
       :kind :representation-comparison,
       :depends-on
       [:routes-2026-10-10-checkpoint-topo2-r2
        :routes-2026-10-10-torus-pi1-coordinate-equivalence-two-consumers-topo2-r1
-       :routes-2026-10-10-torus-pi1-projected-lift-endpoints-two-consumers-topo2-r1],
+       :routes-2026-10-10-torus-pi1-projected-lift-endpoints-two-consumers-topo2-r1
+       :routes-2026-10-10-torus-addcircle-circle-coordinate-comparison-two-consumers-topo2-r1],
       :current-residual
-      "After this transport is banked, prove frozenTorusPi1Coord naturality for apm_t97a04_Lbar with the displayed Fin-2 integer matrix.",
-      :other-consumers [:t01A02]}}},
+      "After conjugacy is banked, derive the two winding-coordinate formulas for the induced map and combine them into the displayed integer matrix naturality equation.",
+      :other-consumers []}}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/shared/torus-pi1-winding-coordinates",
    :acceptance
@@ -55918,7 +55958,8 @@
    [:routes-2026-10-10-checkpoint-topo2-r2
     :routes-2026-10-10-torus-pi1-coordinate-equivalence-two-consumers-topo2-r1
     :routes-2026-10-10-torus-pi1-projected-lift-endpoints-two-consumers-topo2-r1
-    :routes-2026-10-10-torus-addcircle-circle-coordinate-comparison-two-consumers-topo2-r1],
+    :routes-2026-10-10-torus-addcircle-circle-coordinate-comparison-two-consumers-topo2-r1
+    :routes-2026-10-10-t97a04-frozen-torus-map-circle-conjugacy-topo2-r1],
    :current-residual
    "Exact Fin-2 endpoint-coordinate naturality is absent.",
    :other-consumers [:t01A02]}
