@@ -159,6 +159,10 @@ theorem rightTube_exists_near_rightCore
 noncomputable def rightTubePlanarComplex (p : apm_t02a03_E3) : ℂ :=
   ((p 0 + 1 : ℝ) : ℂ) + (p 1 : ℂ) * Complex.I
 
+theorem continuous_rightTubePlanarComplex : Continuous rightTubePlanarComplex := by
+  unfold rightTubePlanarComplex
+  fun_prop
+
 theorem rightTubePlanarComplex_ne_zero
     (p : apm_t02a03_E3) (hp : p ∈ apm_t02a03_rightTube) :
     rightTubePlanarComplex p ≠ 0 := by
@@ -200,6 +204,69 @@ theorem rightTubePlanarComplex_re_pos
   simp [rightTubePlanarComplex]
   linarith
 
+noncomputable def rightTubePlanarInterpolation
+    (tp : unitInterval × RightTubeMinusLeftCore) : ℂ :=
+  ((1 - (tp.1 : ℝ) : ℝ) : ℂ) +
+    ((tp.1 : ℝ) : ℂ) * rightTubePlanarComplex tp.2.1
+
+theorem rightTubePlanarInterpolation_ne_zero
+    (tp : unitInterval × RightTubeMinusLeftCore) :
+    rightTubePlanarInterpolation tp ≠ 0 := by
+  intro h
+  have hre := congrArg Complex.re h
+  have hs0 : 0 ≤ (tp.1 : ℝ) := tp.1.2.1
+  have hs1 : (tp.1 : ℝ) ≤ 1 := tp.1.2.2
+  have hp := rightTubePlanarComplex_re_pos tp.2.1 tp.2.2.1
+  simp [rightTubePlanarInterpolation] at hre
+  by_cases hs : (tp.1 : ℝ) = 1
+  · rw [hs] at hre
+    nlinarith
+  · have hslt : (tp.1 : ℝ) < 1 := lt_of_le_of_ne hs1 hs
+    have hmul : 0 ≤ (tp.1 : ℝ) * (rightTubePlanarComplex tp.2.1).re :=
+      mul_nonneg hs0 hp.le
+    nlinarith
+
+theorem continuous_rightTubePlanarInterpolation :
+    Continuous rightTubePlanarInterpolation := by
+  unfold rightTubePlanarInterpolation
+  apply Continuous.add
+  · fun_prop
+  · apply Continuous.mul
+    · fun_prop
+    · exact continuous_rightTubePlanarComplex.comp
+        (continuous_subtype_val.comp continuous_snd)
+
+noncomputable def rightTubePlanarRotation :
+    C(unitInterval × RightTubeMinusLeftCore, Circle) where
+  toFun tp := ⟨NormedSpace.normalize (rightTubePlanarInterpolation tp),
+    mem_sphere_zero_iff_norm.mpr
+      (NormedSpace.norm_normalize (rightTubePlanarInterpolation_ne_zero tp))⟩
+  continuous_toFun := by
+    apply Continuous.subtype_mk
+    rw [continuous_iff_continuousAt]
+    intro tp
+    exact ((continuous_norm.comp continuous_rightTubePlanarInterpolation).continuousAt.inv₀
+      (norm_ne_zero_iff.mpr (rightTubePlanarInterpolation_ne_zero tp))).smul
+        continuous_rightTubePlanarInterpolation.continuousAt
+
+theorem rightTubePlanarRotation_zero (p : RightTubeMinusLeftCore) :
+    (rightTubePlanarRotation (0, p) : ℂ) = 1 := by
+  simp [rightTubePlanarRotation, rightTubePlanarInterpolation,
+    NormedSpace.normalize_eq_self_of_norm_eq_one]
+
+theorem rightTubePlanarRotation_one (p : RightTubeMinusLeftCore) :
+    (rightTubePlanarRotation (1, p) : ℂ) =
+      NormedSpace.normalize (rightTubePlanarComplex p.1) := by
+  simp [rightTubePlanarRotation, rightTubePlanarInterpolation]
+
+theorem rightTubePlanarRotation_exists :
+    ∃ R : C(unitInterval × RightTubeMinusLeftCore, Circle),
+      (∀ p, (R (0, p) : ℂ) = 1) ∧
+      (∀ p, (R (1, p) : ℂ) =
+        NormedSpace.normalize (rightTubePlanarComplex p.1)) := by
+  exact ⟨rightTubePlanarRotation, rightTubePlanarRotation_zero,
+    rightTubePlanarRotation_one⟩
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -207,3 +274,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.isCompact_range_rightCore
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubePlanarComplex_ne_zero
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubePlanarComplex_re_pos
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubePlanarRotation_exists
