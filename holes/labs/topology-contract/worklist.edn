@@ -85622,90 +85622,77 @@
    :other-consumers [:t01A03 :t97A01 :t97A03]}
   {:consumer :t99J01,
    :evidence
-   {:probe
-    {:residual
-     "The generic point-wedge open-cover comparison is banked and consumer-facing: both opens cover, their intersection is homotopy equivalent to Unit, the pieces are homotopy equivalent to X and Y, and literal representative/basepoint equations compile. Consumer-specific finite-wedge pi1 and homology adapters remain downstream.",
-     :outcome :go,
-     :warnings
-     [{:kind :fixture-linter,
-       :message
-       "Lean reports the existentially returned intersection equivalence binder as unused in the concluding proposition; its type still verifies the pointed-contractible intersection result."}],
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd "stat -c '%F %n' .lake/packages",
-       :exit 0,
-       :finding
-       "directory .lake/packages; canonical package authority is present"}
-      {:cmd
-       "lake env lean -o .lake/build/lib/lean/ConstructionTargets/GenericPointWedgeOpenCoverComparison.olean ConstructionTargets/GenericPointWedgeOpenCoverComparison.lean",
-       :exit 0,
-       :finding
-       "the banked generic cover package compiles and all exported declarations use only standard axioms"}
-      {:cmd
-       "lake env lean /tmp/generic-point-wedge-open-cover-go.lean",
-       :exit 0,
-       :finding
-       "the consumer-facing existential package compiles directly from the banked implementation with open cover, three homotopy equivalences, representative equations, and basepoint equations"}
-      {:cmd "sha256sum /tmp/generic-point-wedge-open-cover-go.lean",
-       :exit 0,
-       :finding
-       "8d175609a00fc388537399ae033db771074eaff9109347d4b86408b359dec43b"}
-      {:cmd
-       "Python comment-stripped placeholder census of /tmp/generic-point-wedge-open-cover-go.lean",
-       :exit 0,
-       :finding "0"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :finding "131 registered statements match, 0 do not"}
-      {:cmd "git status --short", :exit 0, :finding "clean"}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/generic-point-wedge-open-cover-go.lean",
-       :exit 1,
-       :finding
-       "the first compile could not import the newly banked module because its olean had not been emitted by the earlier source-file check",
-       :correction
-       "compiled the module to its canonical .lake/build olean path before rerunning the fixture"}
-      {:cmd
-       "lake env lean /tmp/generic-point-wedge-open-cover-go.lean",
-       :exit 1,
-       :finding
-       "the first fixture theorem relied on section variables hM and hN that did not occur in its declaration and were therefore omitted",
-       :correction
-       "bound the openness and membership hypotheses explicitly; the successful rerun is in commands"}],
-     :fixture
-     {:path "/tmp/generic-point-wedge-open-cover-go.lean",
-      :sha256
-      "8d175609a00fc388537399ae033db771074eaff9109347d4b86408b359dec43b"},
-     :implementation
-     {:scope
-      ["ConstructionTargets/GenericPointWedgeOpenCoverComparison.lean"],
-      :acceptance
-      {:placeholder
-       "the single sorries in apm_t99j01, apm_t01a03, and apm_t97a01, plus apm_t97A03_bridge_invariants_of_model",
-       :route-step
-       "common geometric prerequisite for t99J01 step 1, t01A03 step 2, t97A01 steps 2 and 4, and t97A03 steps 7-8",
-       :declarations
-       ["genericPointWedgeLeftOpen_eq_restricted"
-        "genericPointWedgeRightOpen_eq_restricted"
-        "genericPointWedgeIntersection_eq_restricted"
-        "genericPointWedgeLeftHomotopyEquiv"
-        "genericPointWedgeRightHomotopyEquiv"
-        "genericPointWedgeIntersectionHomotopyEquiv"
-        "genericPointWedgeLeftHomotopyEquiv_inclusion"
-        "genericPointWedgeRightHomotopyEquiv_inclusion"
-        "genericPointWedgeCoverPackage"],
-       :axioms :standard-only,
-       :fixture "/tmp/generic-point-wedge-open-cover-go.lean",
-       :fixture-sha256
-       "8d175609a00fc388537399ae033db771074eaff9109347d4b86408b359dec43b",
-       :commands
-       ["lake env lean ConstructionTargets/GenericPointWedgeOpenCoverComparison.lean"
-        "lake env lean /tmp/generic-point-wedge-open-cover-go.lean"
-        "python3 scripts/statement-registry.py check"]}},
-     :seat "topo-4"}},
+   {:placeholder-after {:t99J01 1, :t01A03 1, :t97A01 1, :t97A03 3},
+    :placeholder-delta 0,
+    :residual
+    "The generic point-wedge open-cover comparison is complete. Consumer routes next require finite-wedge fundamental-group normalization and the Mayer-Vietoris homology induction; no consumer placeholder is removed by this shared infrastructure row.",
+    :outcome :done-unreviewed,
+    :warnings
+    [{:kind :fixture-linter,
+      :message
+      "Lean reports the existential intersection-equivalence binder eI as unused in the concluding proposition; its type still checks the pointed-contractible intersection result."}],
+    :statement-hashes
+    {:status :unchanged,
+     :registry "131 registered statements match, 0 do not"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author {:name "Joe Corneli", :email "holtzermann17@gmail.com"},
+    :placeholder-before {:t99J01 1, :t01A03 1, :t97A01 1, :t97A03 3},
+    :commands
+    [{:cmd "stat -c '%F %n' .lake/packages",
+      :exit 0,
+      :finding
+      "directory .lake/packages; canonical package authority is present"}
+     {:cmd "sha256sum /tmp/generic-point-wedge-open-cover-go.lean",
+      :exit 0,
+      :finding
+      "8d175609a00fc388537399ae033db771074eaff9109347d4b86408b359dec43b"}
+     {:cmd
+      "lake env lean ConstructionTargets/GenericPointWedgeOpenCoverComparison.lean",
+      :exit 0}
+     {:cmd "lake env lean /tmp/generic-point-wedge-open-cover-go.lean",
+      :exit 0}
+     {:cmd
+      "Python comment-stripped placeholder census of /tmp/generic-point-wedge-open-cover-go.lean",
+      :exit 0,
+      :finding "0"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd
+      "rg declaration names in ConstructionTargets/GenericPointWedgeOpenCoverComparison.lean",
+      :exit 0,
+      :finding "all nine required declarations present"}
+     {:cmd
+      "Python comment-stripped placeholder census of four consumers",
+      :exit 0,
+      :finding "t99J01=1, t01A03=1, t97A01=1, t97A03=3"}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r 74300cdd768f88a8d36c72e1e8db36d4946be1fb",
+      :exit 0,
+      :finding
+      "ConstructionTargets/GenericPointWedgeOpenCoverComparison.lean"}
+     {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :commit "74300cdd768f88a8d36c72e1e8db36d4946be1fb",
+    :changed-paths
+    ["ConstructionTargets/GenericPointWedgeOpenCoverComparison.lean"],
+    :fixture
+    {:path "/tmp/generic-point-wedge-open-cover-go.lean",
+     :sha256
+     "8d175609a00fc388537399ae033db771074eaff9109347d4b86408b359dec43b",
+     :placeholder-count 0},
+    :declarations
+    ["genericPointWedgeLeftOpen_eq_restricted"
+     "genericPointWedgeRightOpen_eq_restricted"
+     "genericPointWedgeIntersection_eq_restricted"
+     "genericPointWedgeLeftHomotopyEquiv"
+     "genericPointWedgeRightHomotopyEquiv"
+     "genericPointWedgeIntersectionHomotopyEquiv"
+     "genericPointWedgeLeftHomotopyEquiv_inclusion"
+     "genericPointWedgeRightHomotopyEquiv_inclusion"
+     "genericPointWedgeCoverPackage"],
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/GenericPointWedgeOpenCoverComparison.lean"],
    :dag-node
