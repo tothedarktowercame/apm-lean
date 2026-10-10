@@ -141,7 +141,8 @@ theorem apm_t97A04_bridge_1 :
 
 /-- Why this unblocks the first-homology component of `apm_t97a04`: under
 the two coordinate-circle generators of `H₁(T²;ℤ)`, the induced map of the
-concrete torus map is multiplication by its displayed integral matrix. -/
+concrete torus map is multiplication by its displayed integral matrix.  The
+witness is the aligned frozen-torus ModuleCat coordinate. -/
 theorem apm_t97A04_bridge_2 :
     ∃ h1 : T97A04Homology 1 ≅ ModuleCat.of ℤ apm_t97a04_IntPlane,
       ∀ a : T97A04Homology 1,
