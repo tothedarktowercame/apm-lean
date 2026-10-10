@@ -96511,8 +96511,77 @@
   {:bounded-exception
    "This single-consumer chart-refinement theorem supplies an open path-connected base set for each covering trivialization, which is required before the clopen-component dichotomy can select complete sheets.",
    :consumer :t99J01,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "For the clopen Joined component, classify every fiber-index sheet of the refined trivialization as retained or excluded, define the retained discrete index subtype, and assemble the restricted covering trivialization.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :missing-theorems
+    [{:name
+      "CoveringPathConnectedChart.IsCoveringMap.exists_pathConnected_restrictedTrivialization",
+      :type
+      "For a surjective covering over a locally path-connected base and b : B, there exists a Trivialization (p ⁻¹' {b}) p whose base set contains b and is path connected",
+      :status :proved,
+      :consumers [:t99J01],
+      :depends-on
+      ["PreconnectedClopenSheet.range_subset_or_disjoint_of_isClopen_pathConnected"]}],
+    :statement-hashes "131 registered statements match",
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :finding
+      "canonical package authority resolves to /home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "sha256sum /tmp/covering-path-connected-chart.lean",
+      :exit 0,
+      :finding
+      "fixture hash matches fe34c47978fa57b01f6cfb1af4fd2e2eb89f4d113a46b6a0096667cadc60f921"}
+     {:cmd "lake build ConstructionTargets.CoveringPathConnectedChart",
+      :exit 0,
+      :finding "path-connected covering chart refinements build"}
+     {:cmd "lake env lean /tmp/covering-path-connected-chart.lean",
+      :exit 0,
+      :finding "frozen fixture compiles with standard axioms"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" ConstructionTargets/CoveringPathConnectedChart.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero source placeholders"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" /tmp/covering-path-connected-chart.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero fixture placeholders"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short",
+      :exit 0,
+      :finding "clean worktree after commit"}],
+    :diagnostic-history
+    [{:cmd "lake build ConstructionTargets.CoveringPathConnectedChart",
+      :exit 1,
+      :finding
+      "Unicode transcription produced unknown identifier 𝒩; corrected the source to the equivalent Lean identifier nhds before the successful acceptance rerun"}],
+    :commit "b5ae04c9fa05b34c73d07bfa4e64396c38da3e3d",
+    :changed-paths
+    ["ConstructionTargets/CoveringPathConnectedChart.lean"],
+    :fixture
+    {:path "/tmp/covering-path-connected-chart.lean",
+     :sha256
+     "fe34c47978fa57b01f6cfb1af4fd2e2eb89f4d113a46b6a0096667cadc60f921",
+     :sorry-count 0},
+    :implementation
+    {:scope ["ConstructionTargets/CoveringPathConnectedChart.lean"],
+     :declarations
+     ["ConstructionTargets.CoveringPathConnectedChart.IsCoveringMap.exists_pathConnected_trivialization"
+      "ConstructionTargets.CoveringPathConnectedChart.IsCoveringMap.exists_pathConnected_restrictedTrivialization"]},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/CoveringPathConnectedChart.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component/path-connected-chart",
@@ -99091,21 +99160,27 @@
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
-  {:consumer :portfolio,
+  {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
    :scope [],
    :acceptance
    {:lemma
-    "CoveringPathConnectedChart.IsCoveringMap.exists_pathConnected_restrictedTrivialization"},
+    "CoveringPathConnectedChart.IsCoveringMap.exists_pathConnected_restrictedTrivialization",
+    :type
+    "For a surjective covering over a locally path-connected base and b : B, there exists a Trivialization (p ⁻¹' {b}) p whose base set contains b and is path connected"},
    :lemma
    {:name
     "CoveringPathConnectedChart.IsCoveringMap.exists_pathConnected_restrictedTrivialization",
-    :reported-by []},
+    :reported-by [:routes-2026-10-10-covering-path-connected-chart-45],
+    :type
+    "For a surjective covering over a locally path-connected base and b : B, there exists a Trivialization (p ⁻¹' {b}) p whose base set contains b and is path connected",
+    :proved-in :routes-2026-10-10-covering-path-connected-chart-45},
    :id
    :lemma-coveringpathconnectedchart-iscoveringmap-exists-pathconnected-restrictedtriviali,
    :kind :lemma,
-   :depends-on [],
+   :depends-on
+   [:lemma-preconnectedclopensheet-range-subset-or-disjoint-of-isclopen-pathconnected],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
