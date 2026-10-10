@@ -63771,9 +63771,54 @@
   {:bounded-exception
    "single-consumer multiplicative frozen-torus IntegralH1 coordinate for t97A04",
    :consumer :t97A04,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:residual
+     "Align this coordinate with frozenTorusPi1Coord through finite-free Hurewicz naturality, then transport the induced H1 equation through singularHomologyComparison_naturality to apm_t97A04_bridge_2.",
+     :outcome :go,
+     :warnings [],
+     :missing-theorems
+     [{:name
+       "ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusH1MulEquivFinTwo",
+       :type
+       "Multiplicative (ConstructionTargets.DegreeOneHurewiczMap.IntegralH1 FrozenTorus) ≃* Multiplicative (Fin 2 → ℤ)",
+       :status :proved,
+       :consumers [:t97A04],
+       :depends-on
+       ["ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusH1GroupIsoFinTwo"]}],
+     :commands
+     [{:cmd "lake env lean /tmp/t97a04_frozen_h1_coordinate.lean",
+       :exit 0,
+       :output
+       "frozenTorusH1MulEquivFinTwo compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t97a04_frozen_h1_coordinate.lean || true)\"",
+       :exit 0}
+      {:cmd "sha256sum /tmp/t97a04_frozen_h1_coordinate.lean",
+       :exit 0,
+       :output
+       "c1b38d678ccce59d905a6243a7747a9d243996e6da41c56d79499aaf6e61688a  /tmp/t97a04_frozen_h1_coordinate.lean"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :fixture
+     {:path "/tmp/t97a04_frozen_h1_coordinate.lean",
+      :sha256
+      "c1b38d678ccce59d905a6243a7747a9d243996e6da41c56d79499aaf6e61688a"},
+     :finding
+     "The placeholder-free fixture converts the banked frozen-torus additive H1 isomorphism into the multiplicative IntegralH1 coordinate required by finite-free Hurewicz naturality, preserving the exact Fin 2 integer coordinate space.",
+     :implementation
+     {:scope ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"],
+      :declaration
+      "ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusH1MulEquivFinTwo",
+      :type
+      "Multiplicative (ConstructionTargets.DegreeOneHurewiczMap.IntegralH1 FrozenTorus) ≃* Multiplicative (Fin 2 → ℤ)"},
+     :seat "topo-8"}},
+   :phase :implementation,
+   :type
+   "Multiplicative (ConstructionTargets.DegreeOneHurewiczMap.IntegralH1 FrozenTorus) ≃* Multiplicative (Fin 2 → ℤ)",
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A04/frozen-h1-multiplicative-coordinate",
    :acceptance
@@ -63789,6 +63834,8 @@
    :id
    :routes-2026-10-10-t97a04-frozen-h1-multiplicative-coordinate-topo2-r1,
    :kind :reusable-theorem,
+   :declaration
+   "ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusH1MulEquivFinTwo",
    :depends-on
    [:routes-2026-10-10-checkpoint-topo2-r5
     :routes-2026-10-10-t97a04-frozen-h1-coordinate-topo2-r1],
@@ -64835,10 +64882,12 @@
    {:name
     "ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusH1MulEquivFinTwo",
     :reported-by
-    [:routes-2026-10-10-t97a04-h1-bridge-assembly-topo2-r1],
+    [:routes-2026-10-10-t97a04-h1-bridge-assembly-topo2-r1
+     :routes-2026-10-10-t97a04-frozen-h1-multiplicative-coordinate-topo2-r1],
     :type
     "Multiplicative (ConstructionTargets.DegreeOneHurewiczMap.IntegralH1 FrozenTorus) ≃* Multiplicative (Fin 2 → ℤ)",
-    :proved-in :routes-2026-10-10-t97a04-h1-bridge-assembly-topo2-r1},
+    :proved-in
+    :routes-2026-10-10-t97a04-frozen-h1-multiplicative-coordinate-topo2-r1},
    :id
    :lemma-constructiontargets-t97a04frozenh1coordinate-frozentorush1mulequivfintwo,
    :kind :lemma,
