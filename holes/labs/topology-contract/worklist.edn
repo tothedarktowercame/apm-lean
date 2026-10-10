@@ -88149,8 +88149,83 @@
    "Refine Mathlib's qualitative Nielsen-Schreier basis by counting the complement of a spanning tree in the finite Schreier coset quiver.",
    :other-consumers [:t97A03]}
   {:consumer :t99J01,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "The chosen-generator coordinate module is canonically importable; proceed with the t99J01 and t97A03 consumer adapters using the rebuilt finite-index Schreier-rank equivalences.",
+    :gates
+    {:coordinate-build :pass,
+     :rank-build :pass,
+     :fixture-compile :pass,
+     :fixture-hash :pass,
+     :zero-placeholders :pass,
+     :standard-only-axioms :pass,
+     :registry :pass,
+     :clean-worktree :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    [{:kind :api-preservation,
+      :message
+      "The isolated fixture uses positional explicit binders, while the scoped repair explicitly declares the same parameters as implicit binders so existing banked callers remain source-compatible under autoImplicit=false."}],
+    :missing-theorems [],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd
+      "lake build ConstructionTargets.FiniteSchreierChosenGeneratorEdgeCoordinates",
+      :exit 0,
+      :finding
+      "Canonical olean rebuilt with autoImplicit=false and standard-only axioms."}
+     {:cmd
+      "lake build ConstructionTargets.FiniteIndexFreeGroupSchreierRank",
+      :exit 0,
+      :finding
+      "The complete dependent Schreier-rank chain rebuilt from canonical oleans."}
+     {:cmd
+      "lake env lean /tmp/finite-schreier-chosen-generator-explicit-binders.lean",
+      :exit 0,
+      :finding "The exact explicit-binder fixture compiles."}
+     {:cmd
+      "sha256sum /tmp/finite-schreier-chosen-generator-explicit-binders.lean",
+      :exit 0,
+      :finding
+      "f9f4560c4db2178d4a996445d78bea644cbaa8223ef8bf45618371b0d246e67c"}
+     {:cmd
+      "comment-stripped sorry/admit census of /tmp/finite-schreier-chosen-generator-explicit-binders.lean",
+      :exit 0,
+      :finding "0"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check HEAD^ HEAD", :exit 0}
+     {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :diagnostic-history
+    [{:cmd
+      "lake build ConstructionTargets.FiniteIndexFreeGroupSchreierRank",
+      :exit 1,
+      :finding
+      "Using positional explicit r and n binders exactly as the isolated fixture broke banked calls such as vertex_card hn; corrected by explicitly declaring those parameters as implicit binders, preserving the established API within the single-file scope."}],
+    :commit "c1797fc55c4c3feb59eef57b6983397565b63221",
+    :changed-paths
+    ["ConstructionTargets/FiniteSchreierChosenGeneratorEdgeCoordinates.lean"],
+    :fixture
+    {:path
+     "/tmp/finite-schreier-chosen-generator-explicit-binders.lean",
+     :sha256
+     "f9f4560c4db2178d4a996445d78bea644cbaa8223ef8bf45618371b0d246e67c",
+     :sorry-count 0,
+     :axiom-count 0,
+     :proof-placeholder-count 0},
+    :implementation
+    {:scope
+     ["ConstructionTargets/FiniteSchreierChosenGeneratorEdgeCoordinates.lean"],
+     :method
+     "Enable autoImplicit=false and explicitly declare every formerly inferred r, n, and H binder. Preserve the existing caller API by declaring inferred parameters as explicit implicit binders rather than changing their positional argument order."},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/FiniteSchreierChosenGeneratorEdgeCoordinates.lean"],
    :dag-node
