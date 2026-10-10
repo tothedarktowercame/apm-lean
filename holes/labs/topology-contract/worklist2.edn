@@ -65159,64 +65159,68 @@
    :implements-lemma
    :lemma-apm-t02a03-lefttubetoruscoordinates-torusinverse,
    :evidence
-   {:probe
-    {:residual
-     "Bank this lemma node. The remaining ready t02A03 prerequisite is apm_t02a03_rightCoreBasedAttachmentHomotopy; after it is banked, proceed to rightTubeMinusLeftCoreHomotopyEquivCircle and then geometricYHomotopyEquivGenericWedge.",
-     :outcome :go,
-     :warnings [],
-     :missing-theorems
-     [{:name
-       "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_leftTubeTorusCoordinates_torusInverse",
-       :type
-       "forall u : Circle × Circle, apm_t02a03_leftTubeTorusCoordinates (apm_t02a03_leftTubeTorusInverse u) = u",
-       :status :proved,
-       :consumers [:t02A03],
-       :depends-on []}],
-     :commands
-     [{:cmd
-       "lake env lean /tmp/t02a03_left_coordinate_inverse_bank.lean",
-       :exit 0,
-       :output
-       "Exact declaration type checked; axioms [propext, Classical.choice, Quot.sound]."}
-      {:cmd
-       "lake env lean ConstructionTargets/T02A03GeometricTubeCover.lean",
-       :exit 0}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_left_coordinate_inverse_bank.lean ConstructionTargets/T02A03GeometricTubeCover.lean || true)\"",
-       :exit 0}
-      {:cmd "sha256sum /tmp/t02a03_left_coordinate_inverse_bank.lean",
-       :exit 0,
-       :output
-       "a4c2a18f4fce29ec28f0c5a6ec7a52a947c1568986bd19c788ebcb11786377c3  /tmp/t02a03_left_coordinate_inverse_bank.lean"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :fixture
-     {:path "/tmp/t02a03_left_coordinate_inverse_bank.lean",
-      :sha256
-      "a4c2a18f4fce29ec28f0c5a6ec7a52a947c1568986bd19c788ebcb11786377c3"},
-     :finding
-     "The ready DAG node is stale rather than mathematically missing. Its exact declaration already exists in the canonical geometric-tube module, proves that leftTubeTorusCoordinates is a left inverse of leftTubeTorusInverse on Circle × Circle, and compiles placeholder-free.",
-     :implementation
-     {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
-      :declarations
-      ["ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_leftTubeTorusCoordinates_torusInverse"],
-      :acceptance
-      {:action
-       "Bank the existing compiled declaration without changing its statement or proof.",
-       :implements-lemma
-       :lemma-apm-t02a03-lefttubetoruscoordinates-torusinverse,
-       :type
-       "forall u : Circle × Circle, apm_t02a03_leftTubeTorusCoordinates (apm_t02a03_leftTubeTorusInverse u) = u",
-       :axioms ["propext" "Classical.choice" "Quot.sound"],
-       :gates
-       ["canonical module compiles"
-        "type-exact fixture compiles"
-        "module and fixture contain no sorry token"
-        "statement registry matches"]}},
-     :seat "topo-8"}},
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Bank this lemma node. The remaining ready t02A03 prerequisite is apm_t02a03_rightCoreBasedAttachmentHomotopy; after it is banked, proceed to rightTubeMinusLeftCoreHomotopyEquivCircle and then geometricYHomotopyEquivGenericWedge.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_leftTubeTorusCoordinates_torusInverse",
+      :type
+      "forall u : Circle × Circle, apm_t02a03_leftTubeTorusCoordinates (apm_t02a03_leftTubeTorusInverse u) = u",
+      :status :proved,
+      :consumers [:t02A03],
+      :depends-on []}],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not",
+     :scoped-file-git-blob "3509c1948da1f81b06200780e21b1f4bf64dfa3b",
+     :fixture-sha256
+     "a4c2a18f4fce29ec28f0c5a6ec7a52a947c1568986bd19c788ebcb11786377c3"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd "sha256sum /tmp/t02a03_left_coordinate_inverse_bank.lean",
+      :exit 0,
+      :output
+      "a4c2a18f4fce29ec28f0c5a6ec7a52a947c1568986bd19c788ebcb11786377c3  /tmp/t02a03_left_coordinate_inverse_bank.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeCover.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/t02a03_left_coordinate_inverse_bank.lean",
+      :exit 0,
+      :output
+      "Exact declaration type checked; axioms [propext, Classical.choice, Quot.sound]."}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_left_coordinate_inverse_bank.lean ConstructionTargets/T02A03GeometricTubeCover.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git show --check --oneline e35b077b",
+      :exit 0,
+      :output "e35b077b Bank t02A03 left coordinate inverse"}],
+    :diagnostic-history [],
+    :commit "e35b077b5107528af3e82163d7247c4d1e311a56",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
+    :fixture
+    {:path "/tmp/t02a03_left_coordinate_inverse_bank.lean",
+     :sha256
+     "a4c2a18f4fce29ec28f0c5a6ec7a52a947c1568986bd19c788ebcb11786377c3"},
+    :finding
+    "The backlog node was stale: its exact declaration and proof already existed. The scoped commit documents the existing coordinate inverse without changing its statement or proof, and fresh canonical and exact-type fixture compiles confirm the node is bankable.",
+    :implementation
+    {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
+     :declarations
+     ["ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_leftTubeTorusCoordinates_torusInverse"],
+     :implements-lemma
+     :lemma-apm-t02a03-lefttubetoruscoordinates-torusinverse},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-coordinate-inverse",
    :acceptance
