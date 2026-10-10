@@ -65671,11 +65671,111 @@
    "Measure the H0 closure and two t02A03 DAG corrections, then refill from the corrected complete route graph.",
    :other-consumers []}
   {:bounded-exception
+   "single-consumer explicit deleted-right-tube deformation to its normal meridian circle",
+   :consumer :t02A03,
+   :phase :probe,
+   :state :open,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t02A03/right-tube-meridian-homotopy-equivalence",
+   :acceptance
+   {:probe
+    "Compile a placeholder-free fixture constructing explicit forward and inverse continuous maps between RightTubeMinusLeftCore and Circle and both homotopies, packaged as rightTubeMinusLeftCoreMeridianHomotopyEquiv. The forward map must be the normal meridian coordinate of the deleted left-core locus; verify the inverse is the existing circleMeridianMap restricted to the right-tube complement. Do not assume the requested homotopy equivalence or weaken the frozen subtype.",
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeCover.rightTubeMinusLeftCoreMeridianHomotopyEquiv",
+    :type
+    "ContinuousMap.HomotopyEquiv ConstructionTargets.T02A03GeometricTubeDeformation.RightTubeMinusLeftCore Circle",
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "t02A03 geometric tube equivalence, explicit deformation of the deleted right tube onto its normal meridian"},
+   :id
+   :routes-2026-10-10-t02a03-right-tube-meridian-homotopy-equivalence-topo2-r1,
+   :kind :reusable-theorem,
+   :area "explicit-r3-tube-deformation-retraction",
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo2-r7
+    :lemma-apm-t02a03-rightcorebasedattachmenthomotopy],
+   :current-residual
+   "Package the constructed HomotopyEquiv in Nonempty to bank rightTubeMinusLeftCoreHomotopyEquivCircle, then assemble geometricYHomotopyEquivGenericWedge.",
+   :other-consumers []}
+  {:bounded-exception
    "single-consumer final geometric prerequisite for the sole t02A03 placeholder",
    :consumer :t02A03,
    :implements-lemma :lemma-righttubeminusleftcorehomotopyequivcircle,
+   :evidence
+   {:probe
+    {:residual
+     "Prove the explicit deleted-right-tube-to-meridian HomotopyEquiv; the requested theorem then closes by constructor.",
+     :outcome :revise,
+     :warnings [],
+     :missing-theorems
+     [{:name
+       "ConstructionTargets.T02A03GeometricTubeCover.rightTubeMinusLeftCoreMeridianHomotopyEquiv",
+       :type
+       "ContinuousMap.HomotopyEquiv ConstructionTargets.T02A03GeometricTubeDeformation.RightTubeMinusLeftCore Circle",
+       :status :not-started,
+       :consumers [:t02A03],
+       :depends-on
+       ["ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_rightCoreBasedAttachmentHomotopy"],
+       :area "explicit-r3-tube-deformation-retraction"}],
+     :prerequisite
+     {:bounded-exception
+      "single-consumer explicit deleted-right-tube deformation to its normal meridian circle",
+      :consumer :t02A03,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/t02A03/right-tube-meridian-homotopy-equivalence",
+      :acceptance
+      {:probe
+       "Compile a placeholder-free fixture constructing explicit forward and inverse continuous maps between RightTubeMinusLeftCore and Circle and both homotopies, packaged as rightTubeMinusLeftCoreMeridianHomotopyEquiv. The forward map must be the normal meridian coordinate of the deleted left-core locus; verify the inverse is the existing circleMeridianMap restricted to the right-tube complement. Do not assume the requested homotopy equivalence or weaken the frozen subtype.",
+       :declaration
+       "ConstructionTargets.T02A03GeometricTubeCover.rightTubeMinusLeftCoreMeridianHomotopyEquiv",
+       :type
+       "ContinuousMap.HomotopyEquiv ConstructionTargets.T02A03GeometricTubeDeformation.RightTubeMinusLeftCore Circle",
+       :placeholder "the sole sorry in apm_t02a03",
+       :route-step
+       "t02A03 geometric tube equivalence, explicit deformation of the deleted right tube onto its normal meridian"},
+      :id
+      :routes-2026-10-10-t02a03-right-tube-meridian-homotopy-equivalence-topo2-r1,
+      :kind :reusable-theorem,
+      :area "explicit-r3-tube-deformation-retraction",
+      :depends-on
+      [:routes-2026-10-10-checkpoint-topo2-r7
+       :lemma-apm-t02a03-rightcorebasedattachmenthomotopy],
+      :current-residual
+      "Package the constructed HomotopyEquiv in Nonempty to bank rightTubeMinusLeftCoreHomotopyEquivCircle, then assemble geometricYHomotopyEquivGenericWedge.",
+      :other-consumers []},
+     :commands
+     [{:cmd "lake env lean /tmp/t02a03_right_tube_circle_probe.lean",
+       :exit 0,
+       :output
+       "target theorem compiled from the single geometric interface; axioms [propext, Classical.choice, Quot.sound, rightTubeMinusLeftCoreMeridianHomotopyEquiv]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_right_tube_circle_probe.lean || true)\"",
+       :exit 0}
+      {:cmd "sha256sum /tmp/t02a03_right_tube_circle_probe.lean",
+       :exit 0,
+       :output
+       "8f36ad49b839a8d066ead34c8508557b9f08ea4f3ea93e17a1f89c7af6d398bc  /tmp/t02a03_right_tube_circle_probe.lean"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/t02a03_right_tube_circle_probe.lean",
+       :exit 1,
+       :finding
+       "The first fixture imported T02A03GeometricTubeDeformation, whose olean is not built. Importing the banked cover module and restating its one-line RightTubeMinusLeftCore subtype abbreviation made the probe independent of that unbuilt consumer-facing module."}],
+     :fixture
+     {:path "/tmp/t02a03_right_tube_circle_probe.lean",
+      :sha256
+      "8f36ad49b839a8d066ead34c8508557b9f08ea4f3ea93e17a1f89c7af6d398bc"},
+     :finding
+     "The banked rightCoreBasedAttachmentHomotopy only contracts the surviving right-core attachment map inside geometricY. It supplies no maps or inverse homotopies between the entire deleted right tube and Circle. The compiled fixture isolates exactly one missing geometric witness, rightTubeMinusLeftCoreMeridianHomotopyEquiv; the requested Nonempty theorem is its immediate packaging.",
+     :seat "topo-8"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/right-tube-circle-equivalence",
    :acceptance
@@ -65694,7 +65794,8 @@
    :area "explicit-r3-tube-deformation-retraction",
    :depends-on
    [:routes-2026-10-10-checkpoint-topo2-r7
-    :lemma-apm-t02a03-rightcorebasedattachmenthomotopy],
+    :lemma-apm-t02a03-rightcorebasedattachmenthomotopy
+    :routes-2026-10-10-t02a03-right-tube-meridian-homotopy-equivalence-topo2-r1],
    :current-residual
    "Use this equivalence in the geometricY gluing equivalence, then close the consumer.",
    :other-consumers []}
@@ -67289,4 +67390,27 @@
    :id :lemma-t97a04-hcore,
    :kind :lemma,
    :depends-on [:lemma-t97a04-bridge-3],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T02A03GeometricTubeCover.rightTubeMinusLeftCoreMeridianHomotopyEquiv",
+    :type
+    "ContinuousMap.HomotopyEquiv ConstructionTargets.T02A03GeometricTubeDeformation.RightTubeMinusLeftCore Circle"},
+   :lemma
+   {:name
+    "ConstructionTargets.T02A03GeometricTubeCover.rightTubeMinusLeftCoreMeridianHomotopyEquiv",
+    :reported-by
+    [:routes-2026-10-10-t02a03-right-tube-circle-equivalence-topo2-r1],
+    :type
+    "ContinuousMap.HomotopyEquiv ConstructionTargets.T02A03GeometricTubeDeformation.RightTubeMinusLeftCore Circle",
+    :area "explicit-r3-tube-deformation-retraction"},
+   :id
+   :lemma-constructiontargets-t02a03geometrictubecover-righttubeminusleftcoremeridianhomot,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t02a03geometrictubecover-apm-t02a03-rightcorebasedattachment],
    :other-consumers []}]}
