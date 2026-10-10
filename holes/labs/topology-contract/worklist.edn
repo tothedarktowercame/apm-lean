@@ -82491,8 +82491,269 @@
      :review-outcomes]},
    :stop-condition
    "End only when every active topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+   :evidence
+   {:outcome :replan,
+    :seat "topo-4",
+    :commands
+    [{:cmd
+      "reread TOPOLOGY-ROUTES.md and routes-{1,2,3}.md for all eight active consumers",
+      :exit 0}
+     {:cmd
+      "Python comment-stripped placeholder census of t98A06,t98J01,t98J02,t94J09,tunk01,t91A02,t96A06,t99J05",
+      :exit 0,
+      :finding
+      {:t98A06 1,
+       :t91A02 1,
+       :t99J05 1,
+       :t94J09 1,
+       :t96A06 1,
+       :tunk01 1,
+       :total 8,
+       :t98J02 1,
+       :t98J01 1}}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd
+      "rg affine charts, closed quotient relations, EqvGen closedness, and coefficient Mayer-Vietoris in ConstructionTargets",
+      :exit 0,
+      :finding
+      "CP2-only affine charts; no compact closed-relation quotient theorem; no EqvGen closedness theorem; coefficient subcomplex MV exists but production open-cover transport is integral"}
+     {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :finding
+    {:placeholder-delta {:baseline 8, :current 8, :delta 0},
+     :typed-residual-change
+     {:t99J05
+      "The bundled local adapter was rejected because its fixture self-axiomatized the entire package. The first honest step is arbitrary-n affine quotient-coordinate compatibility; fixed points, local derivative, determinant, rational homology, and global formulas remain ordered after it.",
+      :t94J09
+      "The corrected Hausdorff row split into a generic compact closed-equivalence quotient theorem and a separate exact EqvGen finite-class classification before cut-and-paste and homology.",
+      :tunk01
+      "The same two Hausdorff steps precede boundary reparametrization, cut-and-paste, and N6 normalization.",
+      :t91A02
+      "The same two Hausdorff steps precede disk-cover trivialization, labelled polygon descent, and Euler-characteristic comparison.",
+      :t96A06
+      "The over-broad rational-projective row split at sphere-to-projective covering identification and transfer/invariant homology; degree four and Lefschetz remain later.",
+      :t98J01
+      "Its rational product route shares the missing coefficient production open-cover Mayer-Vietoris transport with CPn; the lost part-b fixture remains stopped.",
+      :t98A06
+      "Reviewed smooth local-right-inverse boundary preserved.",
+      :t98J02 "Reviewed lost-fixture boundary preserved."},
+     :infrastructure-packets
+     {:this-portfolio 0, :cumulative-projective-descent 2},
+     :review-outcomes
+     {:t99J05-affine-local :pass-stop-invalid-self-axiom,
+      :polygon-compact-closed :stop-two-stage-boundary,
+      :rational-projective-homology :stop-multi-foundation-boundary,
+      :prior-stops-and-original-holds :preserved},
+     :routes
+     {:t98A06
+      {:placeholders 1,
+       :status :stopped,
+       :chain
+       ["varying-tangent smooth local right inverse"
+        "complete smooth flow"
+        "smooth dependence"
+        "fiber diffeomorphism"]},
+      :t98J01
+      {:placeholders 1,
+       :status :stopped-part-b-open-part-a,
+       :chain
+       ["restore part-b fixture"
+        "coefficient production open-cover MV"
+        "circle-product exact sequence and trace additivity"
+        "Lefschetz assembly"]},
+      :t98J02
+      {:placeholders 1,
+       :status :stopped,
+       :chain
+       ["restore conjunct-2 fixture"
+        "connected involution quotient"
+        "surface collar"
+        "monodromy"]},
+      :t94J09
+      {:placeholders 1,
+       :status :open,
+       :chain
+       ["compact closed-relation quotient theorem"
+        "exact finite EqvGen classification"
+        "cut-and-paste"
+        "homology"]},
+      :tunk01
+      {:placeholders 1,
+       :status :open,
+       :chain
+       ["compact closed-relation quotient theorem"
+        "exact finite EqvGen classification"
+        "boundary reparametrization/cut-paste"
+        "N6 normalization"]},
+      :t91A02
+      {:placeholders 1,
+       :status :open,
+       :chain
+       ["compact closed-relation quotient theorem"
+        "exact finite EqvGen classification"
+        "disk-cover trivialization"
+        "polygon descent"
+        "Euler characteristic"]},
+      :t96A06
+      {:placeholders 1,
+       :status :open,
+       :chain
+       ["sphere-to-coinduced-RP3 covering"
+        "rational transfer/invariant homology"
+        "degree four"
+        "Lefschetz/non-homotopy"]},
+      :t99J05
+      {:placeholders 1,
+       :status :open,
+       :chain
+       ["arbitrary-n affine quotient charts"
+        "fixed points/local index"
+        "coefficient production open-cover MV"
+        "CPn cover retractions and homology induction"
+        "Lefschetz/Euler"]}},
+     :deferred
+     ["polygon cut-and-paste until the two separation rows compile"
+      "RP3 rational transfer until the sphere-projective covering representation is built"
+      "CPn homology induction until coefficient production MV and affine cover topology are banked"
+      "lost-fixture and smooth-flow routes retain reviewed STOPs"]},
+    :replacement-items
+    [{:consumer :t99J05,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/t99J05/arbitrary-n-affine-quotient-charts",
+      :acceptance
+      {:probe
+       "Compile a placeholder-free arbitrary-n generalization of the banked CP2 affine coordinate construction: prove the nonzero-coordinate patch open, coordinates continuous on it, chartInverse continuous, both inverse laws, and AffineChartConstruction n. Do not address the diagonal fixed-point or determinant calculation.",
+       :placeholder "the single sorry in apm_t99j05",
+       :route-step "t99J05 step 1 only",
+       :gates
+       ["canonical packages"
+        "fixture compiles"
+        "zero fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :id :routes-2026-10-10-t99j05-arbitrary-affine-charts-1,
+      :kind :final-adapter,
+      :depends-on [:routes-2026-10-10-checkpoint-topo1-refill-three-1],
+      :current-residual
+      "Generalize quotient-coordinate compatibility from CP2/Fin3 to CPn/Fin(n+1); diagonal local calculations and rational homology remain.",
+      :other-consumers []}
+     {:consumer :t94J09,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/shared/compact-closed-equivalence-quotient",
+      :acceptance
+      {:probe
+       "Compile the generic theorem: for a compact Hausdorff source X and a Setoid whose graph is closed in XxX, the coinduced topology on Quotient s is Hausdorff. Prove it by disjoint saturated neighborhoods, without assuming Quotient.mk' is open.",
+       :placeholder
+       "the single sorries in apm_t94j09, apm_tunk01, and apm_t91a02",
+       :route-step
+       "generic corrected Hausdorff foundation before exact polygon EqvGen closedness",
+       :gates
+       ["canonical packages"
+        "fixture compiles"
+        "zero fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :id :routes-2026-10-10-compact-closed-equivalence-quotient-1,
+      :kind :reusable-theorem,
+      :depends-on [:routes-2026-10-10-checkpoint-topo1-refill-three-1],
+      :current-residual
+      "Supply the generic compact closed-equivalence separation theorem required by all three polygon consumers.",
+      :other-consumers [:tunk01 :t91A02]}
+     {:consumer :t94J09,
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/shared/finite-polygon-eqvgen-classification",
+      :acceptance
+      {:probe
+       "Compile exact iff classifications of the three finite polygon EqvGen relations by singleton interiors, paired edge interiors, and their finite endpoint vertex classes; derive closedness of each relation graph and apply the banked compact closed-equivalence quotient theorem.",
+       :placeholder
+       "the single sorries in apm_t94j09, apm_tunk01, and apm_t91a02",
+       :route-step
+       "exact polygon relation closedness after the generic quotient theorem",
+       :gates
+       ["canonical packages"
+        "fixture compiles"
+        "zero fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :representation
+      {:source
+       "Relation.EqvGen closures of the exact boundary-edge generators in t94J09, tunk01, and ConstructionTargets.Surfaces",
+       :target
+       "Explicit finite equivalence classes: singleton disk interiors, paired edge-interior points, and computed finite polygon-vertex classes",
+       :direction
+       "Exact iff characterization from each source EqvGen relation to the target finite-class disjunction, then closed-graph transport from the target representation back to the source quotient relation"},
+      :id :routes-2026-10-10-finite-polygon-eqvgen-classification-1,
+      :kind :representation-comparison,
+      :depends-on
+      [:routes-2026-10-10-compact-closed-equivalence-quotient-1],
+      :current-residual
+      "Replace opaque transitive closures by exact finite class descriptions and transport closedness/Hausdorffness to the three consumer quotients.",
+      :other-consumers [:tunk01 :t91A02]}
+     {:consumer :t99J05,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/shared/coefficient-production-open-cover-mv",
+      :acceptance
+      {:probe
+       "Compile the production open-cover Mayer-Vietoris exact sequence over an arbitrary commutative coefficient ring by transporting CoefficientSubcomplexMayerVietoris to the literal intersection, pieces, and union homology objects, including naturality for cover-preserving maps. Demonstrate at R=Q on the CPn affine cover and the circle-product cover needed by t98J01.",
+       :placeholder "the single sorries in apm_t99j05 and apm_t98j01",
+       :route-step "t99J05 step 5 MV input; t98J01 step 8",
+       :gates
+       ["canonical packages"
+        "fixture compiles"
+        "zero fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :id :routes-2026-10-10-coefficient-production-open-cover-mv-1,
+      :kind :reusable-theorem,
+      :depends-on [:routes-2026-10-10-checkpoint-topo1-refill-three-1],
+      :current-residual
+      "Lift the banked coefficient subcomplex sequence to geometric production open covers with the naturality required by both consumers.",
+      :other-consumers [:t98J01]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 4,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only when every active topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:strategy
+       "Measure the four split rows, preserve reviewed STOPs and original holds, recount all eight placeholders, and refill from the complete active topo1 portfolio."},
+      :id :routes-2026-10-10-checkpoint-topo1-split-four-1,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:routes-2026-10-10-t99j05-arbitrary-affine-charts-1
+       :routes-2026-10-10-compact-closed-equivalence-quotient-1
+       :routes-2026-10-10-finite-polygon-eqvgen-classification-1
+       :routes-2026-10-10-coefficient-production-open-cover-mv-1],
+      :current-residual
+      "Review four independently typed route steps, then refill.",
+      :other-consumers []}],
+    :author "topo-4",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -82507,6 +82768,146 @@
     :routes-2026-09-29-checkpoint-topo1-refill-five-1],
    :current-residual
    "Review one consumer-facing adapter and two need-ranked shared foundations, then refill.",
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t99J05/arbitrary-n-affine-quotient-charts",
+   :acceptance
+   {:probe
+    "Compile a placeholder-free arbitrary-n generalization of the banked CP2 affine coordinate construction: prove the nonzero-coordinate patch open, coordinates continuous on it, chartInverse continuous, both inverse laws, and AffineChartConstruction n. Do not address the diagonal fixed-point or determinant calculation.",
+    :placeholder "the single sorry in apm_t99j05",
+    :route-step "t99J05 step 1 only",
+    :gates
+    ["canonical packages"
+     "fixture compiles"
+     "zero fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-10-t99j05-arbitrary-affine-charts-1,
+   :kind :final-adapter,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo1-refill-three-1
+    :routes-2026-10-10-checkpoint-topo1-refill-three-1],
+   :current-residual
+   "Generalize quotient-coordinate compatibility from CP2/Fin3 to CPn/Fin(n+1); diagonal local calculations and rational homology remain.",
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/shared/compact-closed-equivalence-quotient",
+   :acceptance
+   {:probe
+    "Compile the generic theorem: for a compact Hausdorff source X and a Setoid whose graph is closed in XxX, the coinduced topology on Quotient s is Hausdorff. Prove it by disjoint saturated neighborhoods, without assuming Quotient.mk' is open.",
+    :placeholder
+    "the single sorries in apm_t94j09, apm_tunk01, and apm_t91a02",
+    :route-step
+    "generic corrected Hausdorff foundation before exact polygon EqvGen closedness",
+    :gates
+    ["canonical packages"
+     "fixture compiles"
+     "zero fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-10-compact-closed-equivalence-quotient-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo1-refill-three-1
+    :routes-2026-10-10-checkpoint-topo1-refill-three-1],
+   :current-residual
+   "Supply the generic compact closed-equivalence separation theorem required by all three polygon consumers.",
+   :other-consumers [:tunk01 :t91A02]}
+  {:consumer :t94J09,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/shared/finite-polygon-eqvgen-classification",
+   :acceptance
+   {:probe
+    "Compile exact iff classifications of the three finite polygon EqvGen relations by singleton interiors, paired edge interiors, and their finite endpoint vertex classes; derive closedness of each relation graph and apply the banked compact closed-equivalence quotient theorem.",
+    :placeholder
+    "the single sorries in apm_t94j09, apm_tunk01, and apm_t91a02",
+    :route-step
+    "exact polygon relation closedness after the generic quotient theorem",
+    :gates
+    ["canonical packages"
+     "fixture compiles"
+     "zero fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :representation
+   {:source
+    "Relation.EqvGen closures of the exact boundary-edge generators in t94J09, tunk01, and ConstructionTargets.Surfaces",
+    :target
+    "Explicit finite equivalence classes: singleton disk interiors, paired edge-interior points, and computed finite polygon-vertex classes",
+    :direction
+    "Exact iff characterization from each source EqvGen relation to the target finite-class disjunction, then closed-graph transport from the target representation back to the source quotient relation"},
+   :id :routes-2026-10-10-finite-polygon-eqvgen-classification-1,
+   :kind :representation-comparison,
+   :depends-on
+   [:routes-2026-10-10-compact-closed-equivalence-quotient-1
+    :routes-2026-10-10-checkpoint-topo1-refill-three-1],
+   :current-residual
+   "Replace opaque transitive closures by exact finite class descriptions and transport closedness/Hausdorffness to the three consumer quotients.",
+   :other-consumers [:tunk01 :t91A02]}
+  {:consumer :t99J05,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/shared/coefficient-production-open-cover-mv",
+   :acceptance
+   {:probe
+    "Compile the production open-cover Mayer-Vietoris exact sequence over an arbitrary commutative coefficient ring by transporting CoefficientSubcomplexMayerVietoris to the literal intersection, pieces, and union homology objects, including naturality for cover-preserving maps. Demonstrate at R=Q on the CPn affine cover and the circle-product cover needed by t98J01.",
+    :placeholder "the single sorries in apm_t99j05 and apm_t98j01",
+    :route-step "t99J05 step 5 MV input; t98J01 step 8",
+    :gates
+    ["canonical packages"
+     "fixture compiles"
+     "zero fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-10-coefficient-production-open-cover-mv-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo1-refill-three-1
+    :routes-2026-10-10-checkpoint-topo1-refill-three-1],
+   :current-residual
+   "Lift the banked coefficient subcomplex sequence to geometric production open covers with the naturality required by both consumers.",
+   :other-consumers [:t98J01]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 4,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only when every active topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:strategy
+    "Measure the four split rows, preserve reviewed STOPs and original holds, recount all eight placeholders, and refill from the complete active topo1 portfolio."},
+   :id :routes-2026-10-10-checkpoint-topo1-split-four-1,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:routes-2026-10-10-t99j05-arbitrary-affine-charts-1
+    :routes-2026-10-10-compact-closed-equivalence-quotient-1
+    :routes-2026-10-10-finite-polygon-eqvgen-classification-1
+    :routes-2026-10-10-coefficient-production-open-cover-mv-1
+    :routes-2026-10-10-checkpoint-topo1-refill-three-1],
+   :current-residual
+   "Review four independently typed route steps, then refill.",
    :other-consumers []}
   {:consumer :t91J06,
    :evidence
