@@ -99944,6 +99944,20 @@
       :exit 1,
       :reason
       "The initially applied source had one accidental leading plus before import; removing that transcription character produced the successful acceptance build."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791671337344-3134-6da0594b",
+     :commands
+     ["git show and diff-tree on 495f0bbe02bb87b2020a57a3241358a9850cdc6d"
+      "sha256sum frozen fixture"
+      "lake build ConstructionTargets.PolygonBoundaryCircleRelations"
+      "lake env lean frozen fixture"
+      "comment-stripped placeholder counts"
+      "python3 scripts/statement-registry.py check"
+      "git diff-tree --check"],
+     :finding
+     "PASS: recorded commit is authored by topo-2 and changes only ConstructionTargets/PolygonBoundaryCircleRelations.lean; fixture hash matches; circleEdgePoint crosses the boundary homeomorphism with the literal edge representative; N3CircleRel pairs adjacent edges 0-1, 2-3, and 4-5 in the same direction; TorusCrosscapCircleRel pairs 0-2 and 1-3 with reverse and 4-5 in the same direction; all six quotient equations follow from the matching generators in the required orientation; source and fixture have zero placeholders; fixture reports only propext, Classical.choice, and Quot.sound; registry reports 131 matches and zero mismatches."},
     :commit "495f0bbe02bb87b2020a57a3241358a9850cdc6d",
     :changed-paths
     ["ConstructionTargets/PolygonBoundaryCircleRelations.lean"],
@@ -99959,7 +99973,7 @@
      "Defined six canonical Circle edge points, specialized both polygon relations, proved their three generators each, and proved all six quotient identification equations."},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/PolygonBoundaryCircleRelations.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/boundary-circle-relations",
@@ -100094,7 +100108,7 @@
       "circleEdgePoint gives the six canonical Circle arcs; N3CircleRel and TorusCrosscapCircleRel are the two pulled-back boundary words, with all generator and quotient-identification equations explicit."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -102919,7 +102933,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -102934,8 +102948,9 @@
     :type
     "The SurfaceRel false 3 and TorusCrosscapRel pullbacks to Circle contain their three literal six-edge generators, and their quotient maps satisfy all six corresponding identification equations.",
     :area "polygon-surface-open-cover",
-    :proved-in
-    :routes-2026-10-10-polygon-boundary-circle-relations-56},
+    :proved-in :routes-2026-10-10-polygon-boundary-circle-relations-56,
+    :banked-by :routes-2026-10-10-polygon-boundary-circle-relations-56,
+    :banked-commit "495f0bbe02bb87b2020a57a3241358a9850cdc6d"},
    :id
    :lemma-polygonboundarycirclerelations-concretequotientidentifications,
    :kind :lemma,
