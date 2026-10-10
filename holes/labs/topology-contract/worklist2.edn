@@ -66508,75 +66508,42 @@
    "Instantiate the range map for intersection and both pieces, induce the union component, and assemble coverPreservingShortComplexMap with its two commutative squares.",
    :other-consumers [:t96J06]}
   {:consumer :t97A04,
+   :stop-count 1,
    :evidence
-   {:probe
-    {:residual
-     "Bank ambientSubspaceRangeMap, then assemble coverPreservingShortComplexMap and continue the production comparison transport.",
-     :outcome :revise,
-     :warnings
-     ["Lean reports hf as syntactically unused in the proposition result; it remains the mathematical hypothesis used to construct the restricted map and prove its range containment."],
-     :missing-theorems
-     [{:name
-       "ConstructionTargets.SingularExcision.ambientSubspaceRangeMap",
-       :type
-       "forall {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y] (A : Set X) (B : Set Y) (f : C(X, Y)) (hf : Set.MapsTo f A B), exists g : (ambientSubspaceRange A : SSet) ⟶ (ambientSubspaceRange B : SSet), g ≫ (ambientSubspaceRange B).ι = (ambientSubspaceRange A).ι ≫ TopCat.toSSet.map (TopCat.ofHom f)",
-       :status :not-started,
-       :consumers [:t97A04 :t96J06],
-       :depends-on [],
-       :area "mv-connecting-naturality"}],
-     :prerequisite
-     {:consumer :t97A04,
-      :phase :probe,
-      :state :open,
-      :scope ["ConstructionTargets/SingularExcision.lean"],
-      :dag-node
-      "TOPOLOGY-ROUTES.md/mayer-vietoris/ambient-subspace-range-map",
-      :acceptance
-      {:probe
-       "Compile a placeholder-free inhabitant of ConstructionTargets.SingularExcision.AmbientSubspaceRangeMapExists from /tmp/ambient_subspace_range_map_contract.lean. Construct the restricted simplicial map using SSet.Subcomplex.toImage followed by homOfLE; prove image containment from hf via subspaceMap_inclusion and range functoriality, and prove the displayed commuting equation with ambient inclusions. Do not yet assemble a Boolean-cover short-complex morphism.",
-       :declaration
-       "ConstructionTargets.SingularExcision.ambientSubspaceRangeMap",
-       :type
-       "forall {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y] (A : Set X) (B : Set Y) (f : C(X, Y)) (hf : Set.MapsTo f A B), exists g : (ambientSubspaceRange A : SSet) ⟶ (ambientSubspaceRange B : SSet), g ≫ (ambientSubspaceRange B).ι = (ambientSubspaceRange A).ι ≫ TopCat.toSSet.map (TopCat.ofHom f)",
-       :placeholders
-       ["apm_t97A04_bridge_3"
-        "the H2 Mayer-Vietoris placeholder in t96J06"],
-       :route-step
-       "shared H2 step, restrict a cover-preserving ambient map to the stored simplicial range subcomplexes"},
-      :id
-      :routes-2026-10-10-ambient-subspace-range-map-two-consumers-topo2-r1,
-      :kind :reusable-theorem,
-      :area "mv-connecting-naturality",
-      :depends-on
-      [:routes-2026-10-10-subcomplex-mv-connecting-naturality-two-consumers-topo2-r1],
-      :current-residual
-      "Instantiate the range map for intersection and both pieces, induce the union component, and assemble coverPreservingShortComplexMap with its two commutative squares.",
-      :other-consumers [:t96J06]},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/ambient_subspace_range_map_contract.lean",
-       :exit 0,
-       :output
-       "AmbientSubspaceRangeMapExists compiled; one unused-variable warning for the proof-relevant MapsTo witness"}
-      {:cmd "sha256sum /tmp/ambient_subspace_range_map_contract.lean",
-       :exit 0,
-       :output
-       "dbb52020242c7b3603959cf1c14e1d069fd194ce1469a972f10e23e75270356f  /tmp/ambient_subspace_range_map_contract.lean"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/ambient_subspace_range_map_contract.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :fixture
-     {:path "/tmp/ambient_subspace_range_map_contract.lean",
-      :sha256
-      "dbb52020242c7b3603959cf1c14e1d069fd194ce1469a972f10e23e75270356f"},
-     :finding
-     "The short-complex construction needs a functorial map between ambientSubspaceRange A and ambientSubspaceRange B. Existing code supplies ambientSubspaceRange, subspaceMap, and Subcomplex.toImage, but no named restriction of the ambient simplicial map with the commuting inclusion equation. Once this single map is banked, instantiate it for U, V, and U∩V, induce the union map, apply singular chains, and assemble the two ShortComplex.hom squares.",
-     :seat "topo-8"}},
+   {:residual
+    "Repair the interface type so the induced morphism and its component identifications are observable; only then can production connecting naturality consume it without inventing that the arbitrary Nonempty witness is the induced map.",
+    :outcome :stop,
+    :boundary
+    {:kind :representation,
+     :missing
+     "A specified ShortComplex.Hom together with equations identifying its τ₁, τ₂, and τ₃ components with the chain maps induced by f on the intersection, biproduct of pieces, and union."},
+    :disposition :stop,
+    :author "topo-8",
+    :reason
+    "representation boundary: the frozen type Nonempty (shortComplex U V ⟶ shortComplex U' V') does not encode that the morphism is induced by f, uses the range restrictions, or has the requested intersection, biproduct, and union components. It is inhabited by the zero morphism for arbitrary U, V, U', and V', without f or either MapsTo hypothesis. Therefore compilation of the frozen declaration cannot validate the acceptance claim, and implementing the zero inhabitant would be a forbidden facade.",
+    :commands
+    [{:cmd
+      "lake env lean /tmp/production_cover_short_complex_map_contract.lean",
+      :exit 0,
+      :output
+      "Compiled coverPreservingShortComplexMap_contract_vacuous and the frozen declaration using the zero morphism; both have axioms [propext, Classical.choice, Quot.sound]."}
+     {:cmd
+      "sha256sum /tmp/production_cover_short_complex_map_contract.lean",
+      :exit 0,
+      :output
+      "9b867a9a9525e8055e66ba1c1d52a73e2a5665f436382b24289aa0f3bafe7164  /tmp/production_cover_short_complex_map_contract.lean"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}],
+    :fixture
+    {:path "/tmp/production_cover_short_complex_map_contract.lean",
+     :sha256
+     "9b867a9a9525e8055e66ba1c1d52a73e2a5665f436382b24289aa0f3bafe7164"},
+    :finding
+    "The compiled stronger theorem has no continuous map and no cover-preservation assumptions: forall U V U' V', Nonempty (shortComplex U V ⟶ shortComplex U' V'), proved by ⟨0⟩. Hence the frozen proposition erases precisely the data and commutative-square evidence required by the route's next naturality step.",
+    :seat "topo-8"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/ProductionOpenCoverMayerVietoris.lean"],
    :dag-node
