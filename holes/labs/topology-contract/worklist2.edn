@@ -57078,40 +57078,68 @@
    "single-consumer quotient endpoint-cast comparison for the frozen torus",
    :consumer :t97A04,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/torus_frozen_circle_image_quotient_cast.lean",
-      :sha256
-      "966d3da234a37ce5bea223e4dff82788f8109175988787910fed5f4d59e5903e"},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/torus_frozen_circle_image_quotient_cast.lean",
-       :exit 0,
-       :output
-       "frozenCircleImageQuotient_eq_mappedQuotient_cast compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/torus_frozen_circle_image_quotient_cast.lean || true)\"",
-       :exit 0}
-      {:cmd
-       "sha256sum /tmp/torus_frozen_circle_image_quotient_cast.lean",
-       :exit 0,
-       :output
-       "966d3da234a37ce5bea223e4dff82788f8109175988787910fed5f4d59e5903e  /tmp/torus_frozen_circle_image_quotient_cast.lean"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :finding
-     "The placeholder-free theorem uses the reverse definitional mk_cast equality and the banked mapped-path endpoint cast to identify the casted native mapped quotient class exactly with the quotient class of frozenCircleImagePath. It preserves the dependent basepoint and makes no coordinate-equivalence claim.",
-     :implementation
-     {:scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
-      :declarations
-      ["frozenCircleImageQuotient_eq_mappedQuotient_cast"]},
-     :residual
-     "Prove that the transported native coordinate equivalence evaluates a native quotient as torusPi1Coord evaluates its endpoint-casted quotient, then derive fixed-base representative naturality and descend to all classes."}},
+   {:placeholder-delta 0,
+    :residual
+    "Identify the transported native coordinate equivalence application with torusPi1Coord applied to the casted quotient, then complete representative and all-class matrix naturality.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["The focused Lake build replayed pre-existing linter warnings from dependency modules; the scoped module compiled without new warnings."],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/torus_frozen_circle_image_quotient_cast.lean",
+      :exit 0,
+      :output
+      "966d3da234a37ce5bea223e4dff82788f8109175988787910fed5f4d59e5903e  /tmp/torus_frozen_circle_image_quotient_cast.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/TorusPiOneWindingCoordinates.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.TorusPiOneWindingCoordinates",
+      :exit 0,
+      :output "Build completed successfully (8290 jobs)."}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/TorusPiOneWindingCoordinates.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "lake env lean /tmp/check_frozen_quot_cast_axioms.lean",
+      :exit 0,
+      :output
+      "frozenCircleImageQuotient_eq_mappedQuotient_cast depends on [propext, Classical.choice, Quot.sound]."}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r 6dfe22d88e04b489c52856c3f6f968d3911c2ae8",
+      :exit 0,
+      :output "ConstructionTargets/TorusPiOneWindingCoordinates.lean"}
+     {:cmd
+      "python3 -c 'import re; p=\"problems/t97A04/lean/Main.lean\"; t=open(p).read(); t=re.sub(r\"/-.*?-/\",\" \",t,flags=re.S); t=re.sub(r\"--[^\\n]*\",\" \",t); print(len(re.findall(r\"(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])\",t)))'",
+      :exit 0,
+      :output "4"}
+     {:cmd "sha256sum problems/t97A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "79ca854186b39183bf53490a20b5be92695e345a2c099fcf928b5ad3300ee4ec  problems/t97A04/lean/Main.lean"}],
+    :representation
+    {:source
+     "The native mapped loop quotient class cast at both endpoints from frozenTorusHomeomorphCircleProd (0,0) to (1,1)",
+     :target "The quotient class of frozenCircleImagePath gamma",
+     :direction
+     "Exact quotient equality from the source casted native mapped class to the target fixed-base Circle-image class"},
+    :commit "6dfe22d88e04b489c52856c3f6f968d3911c2ae8",
+    :changed-paths
+    ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
+    :fixture
+    {:path "/tmp/torus_frozen_circle_image_quotient_cast.lean",
+     :sha256
+     "966d3da234a37ce5bea223e4dff82788f8109175988787910fed5f4d59e5903e"},
+    :declarations
+    ["ConstructionTargets.TorusPiOneWindingCoordinates.frozenCircleImageQuotient_eq_mappedQuotient_cast"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A04/torus-pi1-winding-coordinates/frozen-circle-image-quotient-cast",
