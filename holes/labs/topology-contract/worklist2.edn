@@ -60639,6 +60639,20 @@
       :output
       "[master ae1f54d9] Bank t02A03 left-tube torus coordinates; 1 file changed, 35 insertions(+)"}
      {:cmd "git status --short", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791637330876-1985-ac15aa0f",
+     :commands
+     ["git show, diff-tree, and show --check on implementation ae1f54d9 and ledger transition 211207f7"
+      "sha256sum authenticated fixture and frozen t02A03 consumer"
+      "lake env lean on fixture, target, and fresh two-factor torus-coordinate probe"
+      "lake build ConstructionTargets/T02A03GeometricTubeCover"
+      "axiom and comment-stripped placeholder audits"
+      "python3 scripts/statement-registry.py check --rev ae1f54d9"
+      "bb worklist_check.bb on committed transition ledger"],
+     :finding
+     "PASS: codex-7 independently reviewed topo-6 commit ae1f54d92934b6432f9ab5487ec73bb296c029c2. Exact implementation scope is ConstructionTargets/T02A03GeometricTubeCover.lean; transition 211207f770c8476b574d8882aa8d4e0b4dfe0eb9 is ledger-only. Fixture SHA-256 is beeb38fc971cd6f89353b57fba2cdf370e17f50d641ad4ad66a9fe6b53862456. Fixture, recorded-identical target, fresh two-factor representation probe, and 8240-job focused build pass. All four fixture interfaces elaborate exactly. The normal-angle Circle value is radial normalization of the banked nonzero complex normal coordinate. The forward Circle-times-Circle map has the intended ordering: first the planar/core angular coordinate, then the normal angular coordinate. Its source is exactly LeftTubeMinusCore, and both factors and their product are continuous. No reconstruction map, comparison homotopy, torus equivalence, or gluing is claimed. The checked theorems use only propext, Classical.choice, and Quot.sound. Target has zero executable placeholders. Frozen t02A03 consumer hash is b123eca388ab2858ca55daf538c1ddd645022b52f5196a15f0bb516d78323d7d with one executable placeholder; registry is 131/0 and the committed 436-row ledger validates with exactly one done-unreviewed row."},
     :commit "ae1f54d92934b6432f9ab5487ec73bb296c029c2",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
@@ -60655,7 +60669,7 @@
      "apm_t02a03_continuous_leftTubeTorusCoordinates"],
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/left-tube-torus-coordinate-map",
@@ -60742,7 +60756,7 @@
    :phase :probe,
    :type
    "Nonempty (ContinuousMap.HomotopyEquiv LeftTubeMinusCore ConstructionTargets.TorusCircleWedgeOpenCover.Torus)",
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-punctured-model",
    :acceptance
