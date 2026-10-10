@@ -58511,9 +58511,52 @@
   {:bounded-exception
    "single-consumer Circle-domain normal meridian for the t02A03 geometric complement",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/t02a03_geometric_tube_cover.lean",
+      :sha256
+      "6283b737a504993ad5a4ff242cbc098ed255dafb7dda9c25309a1bb3b7222235"},
+     :commands
+     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "apm_t02a03_circleMeridian, apm_t02a03_circleMeridian_mem_geometricY, and apm_t02a03_circleMeridianMap compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
+       :exit 0}
+      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "6283b737a504993ad5a4ff242cbc098ed255dafb7dda9c25309a1bb3b7222235  /tmp/t02a03_geometric_tube_cover.lean"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :finding
+     "The fixture directly realizes the radius-1/8 normal meridian on Mathlib Circle and bundles it as a continuous map into the exact frozen geometric complement. The unit-circle norm identity supplies its radius, while coordinate constraints prove disjointness from the planar left core.",
+     :residual
+     "Construct the compatible attachment of the surviving right core to the Circle meridian, then extend to tube deformations and gluing.",
+     :implementation
+     {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"]},
+     :acceptance
+     {:source-fixture "/tmp/t02a03_geometric_tube_cover.lean",
+      :declarations
+      ["apm_t02a03_circleMeridian"
+       "apm_t02a03_circleMeridian_mem_geometricY"
+       "apm_t02a03_circleMeridianMap"],
+      :placeholder "the sole sorry in apm_t02a03",
+      :route-step
+      "t02A03 step 2, descend the explicit normal meridian to a continuous Circle map into geometricY",
+      :gates
+      ["fixture compiles"
+       "fixture contains no sorry token"
+       "fixture hash matches"
+       "statement registry matches"]}}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/geometric-circle-meridian",
    :acceptance
    {:probe
