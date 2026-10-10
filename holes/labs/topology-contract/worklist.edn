@@ -86568,6 +86568,8 @@
    "Upgrade apm_t97a01_X_equiv_standardN3 to a homeomorphism.",
    :other-consumers []}
   {:consumer :t99J01,
+   :review-finding
+   "Deterministic fixture-hash defect: acceptance :fixture-sha256 is e686b18a0cf2724a2e91de9d8ce160458143065dfbdd3f5ecc81d24d4da43219, but the completed fixture recorded in evidence and freshly hashed is 1d2410d8005d4022e91f02c3d8d778983a8885a13cffad193a61d5ffd0e0e2d8. Restore the frozen fixture bytes or update the acceptance hash to the intended completed fixture and rerun review.",
    :evidence
    {:placeholder-after 0,
     :placeholder-delta 0,
@@ -86624,6 +86626,12 @@
       "The first orbit-surjectivity proof attempted dependent elimination on the equality between fiber base values.",
       :correction
       "Used quotient-path endpoint casting and reduced monodromy directly; the final compile succeeds."}],
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1791619432313-1534-362aafba",
+     :finding
+     "Deterministic fixture-hash defect: acceptance :fixture-sha256 is e686b18a0cf2724a2e91de9d8ce160458143065dfbdd3f5ecc81d24d4da43219, but the completed fixture recorded in evidence and freshly hashed is 1d2410d8005d4022e91f02c3d8d778983a8885a13cffad193a61d5ffd0e0e2d8. Restore the frozen fixture bytes or update the acceptance hash to the intended completed fixture and rerun review."},
     :commit "e2c42bc75c14552eb2b06184a06d380ef0b97c0f",
     :changed-paths
     ["ConstructionTargets/CoveringMonodromyCosets.lean"],
@@ -86643,7 +86651,7 @@
      "coveringExistsUniqueLift_of_range_le"],
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope ["ConstructionTargets/CoveringMonodromyCosets.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/covering-monodromy-coset-lifting/fiber-cosets",
@@ -86671,6 +86679,7 @@
      "python3 scripts/statement-registry.py check"]},
    :id :routes-2026-10-10-covering-monodromy-fiber-cosets-1,
    :kind :reusable-theorem,
+   :fail-count 1,
    :depends-on [],
    :current-residual
    "Prove the endpoint-monodromy quotient equivalence for a path-connected covering; all requested injectivity, finite-index, cardinality, and subgroup-containment lifting consequences then follow.",
