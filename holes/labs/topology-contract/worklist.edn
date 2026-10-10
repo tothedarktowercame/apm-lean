@@ -98459,8 +98459,61 @@
   {:bounded-exception
    "This single-consumer prerequisite constructs the actual radial open cover common to both six-edge polygon quotients, after the banked quotient-openness theorem and before contractions or boundary graph identifications.",
    :consumer :t97A01,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Descend the radial deformation of the outer piece to the boundary quotient and identify the annular overlap with the punctured-disk model; then prove both six-edge boundary quotients are ThreeCircles with the required vertex and inclusion equations.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :missing-theorems
+    [{:name "PolygonRadialOpenCover.surfacePackage",
+      :type
+      "For every canonical SurfaceRel, the radius-defined inner and outer quotient images form an open cover whose intersection is the annular overlap image.",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on ["RadialQuotientOpenSets.isOpen_radial_image"],
+      :area "polygon-surface-open-cover"}],
+    :statement-hashes "131 registered statements match",
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :finding "canonical package authority"}
+     {:cmd "sha256sum /tmp/polygon-radial-open-cover.lean",
+      :exit 0,
+      :finding "fixture hash matches"}
+     {:cmd "lake build ConstructionTargets.PolygonRadialOpenCover",
+      :exit 0}
+     {:cmd "lake env lean /tmp/polygon-radial-open-cover.lean",
+      :exit 0,
+      :finding "fixture compiles with standard axioms"}
+     {:cmd "rg source for sorry or admit",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero source placeholders"}
+     {:cmd "rg fixture for sorry or admit",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero fixture placeholders"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short",
+      :exit 0,
+      :finding "clean worktree after commit"}],
+    :diagnostic-history [],
+    :commit "fb12be0a92070d8367f5dd62ac16b855a57ab729",
+    :changed-paths ["ConstructionTargets/PolygonRadialOpenCover.lean"],
+    :fixture
+    {:path "/tmp/polygon-radial-open-cover.lean",
+     :sha256
+     "3b7ebef9bd6f3acb1f52fd6fe188d7a1e8535e2e9f8d7953a21d9b8c7b626f53",
+     :sorry-count 0},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PolygonRadialOpenCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/open-cover",
@@ -100680,17 +100733,18 @@
    :lemma
    {:name "PolygonRadialOpenCover.surfacePackage",
     :reported-by
-    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40
+     :routes-2026-10-10-polygon-radial-open-cover-42],
     :type
     "The radial quotient open-cover package specialized to SurfaceRel orientable genus for all orientable flags and genera.",
     :area "polygon-surface-open-cover",
-    :proved-in
-    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+    :proved-in :routes-2026-10-10-polygon-radial-open-cover-42},
    :id :lemma-polygonradialopencover-surfacepackage,
    :kind :lemma,
    :depends-on
    [:lemma-polygonradialopencover-package
-    :lemma-radialquotientopensets-surfacerel-norm-eq],
+    :lemma-radialquotientopensets-surfacerel-norm-eq
+    :lemma-radialquotientopensets-isopen-radial-image],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
