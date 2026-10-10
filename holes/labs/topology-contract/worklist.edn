@@ -94944,21 +94944,47 @@
    "Replace the existential choice by the explicit centered-square gauge-rescale restriction composed with the affine [0,1]^2 coordinate map, and prove its four side images agree with edgePoint 4 0,1,2,3 in the orientations needed by the two frozen relation branches.",
    :other-consumers []}
   {:bounded-exception
+   "This single-consumer orientation declaration fixes the four square-side parameterizations and proves their exact correspondence to both the frozen disk generators and the banked affine-orbit Cases relation.",
+   :consumer :t93J03,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/KleinSquareEdgeOrientation.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/square-boundary-orbit-eqvgen/edge-orientation",
+   :acceptance
+   {:implementation
+    "Define squareEdge for the four closed-unit-square sides with edges 0 and 1 sharing height t, edge 2 parameterized by (t,0), and edge 3 by (1-t,1). Prove every squareEdge lies in the square, prove the 0-to-1 and 2-to-3 pairs satisfy Cases, and prove edgePoint 4 0-to-1 and 2-to-3 are SurfaceRel false 2 generators. Do not claim a disk-square homeomorphism has these values, take EqvGen closure, or construct a quotient.",
+    :placeholder "the single sorry in apm_t93j03",
+    :route-step
+    "t93J03 step 1c.3, fix and verify the four boundary orientations before constructing an edge-compatible disk-square homeomorphism",
+    :fixture "/tmp/klein-square-edge-orientation.lean",
+    :fixture-sha256
+    "7f1ad4c93eae56a4a0de984d2d9fdbb8f95e24641538e98b4a642bb49b89d312",
+    :gates
+    ["lake build ConstructionTargets.KleinSquareEdgeOrientation"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-10-klein-square-edge-orientation-31,
+   :kind :reusable-theorem,
+   :depends-on [:routes-2026-10-10-klein-disk-square-carrier-30],
+   :current-residual
+   "Construct a specific homeomorphism sending squareEdge i t to edgePoint 4 i t for all four oriented sides, then transport the generator correspondence through Relation.EqvGen.",
+   :other-consumers []}
+  {:bounded-exception
    "This single-consumer representation comparison is the next banked-dependent step of the one-placeholder t93J03 route and is required before the orbit quotient can be identified with the frozen KleinBottle model.",
    :consumer :t93J03,
    :implements-lemma :lemma-kleinsquareboundaryorbiteqvgen,
    :evidence
    {:probe
     {:residual
-     "The frozen disk and a centered closed square now have a compiled genuine homeomorphism. The original comparison still needs a specified equivariant choice with four oriented side formulas; only then can EqvGen induction compare the transported frozen relation with Cases.",
+     "The two pairs of boundary generators now agree combinatorially and compile. The remaining exact representation step is an explicit edge-compatible disk-square homeomorphism; after its four value equations, EqvGen induction can prove the requested iff.",
      :outcome :revise,
      :warnings
      [{:kind :linter,
        :message
-       "Lean suggests simp instead of simpa for the two elementary interior-coordinate goals; the fixture compiles without placeholders."}
-      {:kind :noncanonical-choice,
-       :message
-       "The existential carrier homeomorphism alone does not preserve named edge parameters. The next prerequisite must expose the specific gauge-rescale map and its quarter-turn/side equations before relation transport."}],
+       "Lean reports an unreachable trailing linarith in the finite edge membership proof; every declaration compiles without placeholders."}],
      :missing-theorems
      [{:name "kleinSquareBoundaryOrbitEqvGen",
        :type
@@ -94968,50 +94994,51 @@
        :depends-on
        ["KleinSurfaceRelNormalForm.surfaceRel_false_two_iff"
         "KleinDiskSquareCarrier.exists_centeredSquare_disk_homeomorph"
+        "KleinSquareEdgeOrientation.cases_edge_zero_one"
+        "KleinSquareEdgeOrientation.cases_edge_two_three"
         "KleinDiskSquareCoordinates.edge_formulas"]}],
      :prerequisite
      {:bounded-exception
-      "This single-consumer carrier theorem is the exact topological identification required before the frozen disk relation can be compared with a relation on square points; it uses Mathlib's genuine convex gauge-rescaling homeomorphism rather than an assumed polygon equivalence.",
+      "This single-consumer orientation declaration fixes the four square-side parameterizations and proves their exact correspondence to both the frozen disk generators and the banked affine-orbit Cases relation.",
       :consumer :t93J03,
       :phase :implementation,
       :state :open,
-      :scope ["ConstructionTargets/KleinDiskSquareCarrier.lean"],
+      :scope ["ConstructionTargets/KleinSquareEdgeOrientation.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/square-boundary-orbit-eqvgen/disk-square-carrier",
+      "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/square-boundary-orbit-eqvgen/edge-orientation",
       :acceptance
       {:implementation
-       "Define centeredSquare as Set.Icc (-1) 1 reProdIm Set.Icc (-1) 1 in Complex. Prove it convex, with nonempty interior and bounded. Apply exists_homeomorph_image_eq to centeredSquare and the complex open unit ball, normalize the two closure identities, and restrict the resulting ambient homeomorphism to prove Nonempty (centeredSquare ≃ₜ Metric.closedBall (0 : Complex) 1). Do not claim edge formulas, relation compatibility, EqvGen compatibility, or a quotient homeomorphism.",
+       "Define squareEdge for the four closed-unit-square sides with edges 0 and 1 sharing height t, edge 2 parameterized by (t,0), and edge 3 by (1-t,1). Prove every squareEdge lies in the square, prove the 0-to-1 and 2-to-3 pairs satisfy Cases, and prove edgePoint 4 0-to-1 and 2-to-3 are SurfaceRel false 2 generators. Do not claim a disk-square homeomorphism has these values, take EqvGen closure, or construct a quotient.",
        :placeholder "the single sorry in apm_t93j03",
        :route-step
-       "t93J03 step 1c.2, identify the square and frozen disk carrier spaces before orienting their four boundary edges",
-       :fixture "/tmp/klein-disk-square-carrier.lean",
+       "t93J03 step 1c.3, fix and verify the four boundary orientations before constructing an edge-compatible disk-square homeomorphism",
+       :fixture "/tmp/klein-square-edge-orientation.lean",
        :fixture-sha256
-       "b2edec7ed43c9143c8e1508fa18aae99ce8417fc62823d612654fe7bc4fe082e",
+       "7f1ad4c93eae56a4a0de984d2d9fdbb8f95e24641538e98b4a642bb49b89d312",
        :gates
-       ["lake build ConstructionTargets.KleinDiskSquareCarrier"
+       ["lake build ConstructionTargets.KleinSquareEdgeOrientation"
         "fixture compiles"
         "zero source and fixture sorry"
         "standard-only axioms"
         "registry check"]},
-      :id :routes-2026-10-10-klein-disk-square-carrier-30,
+      :id :routes-2026-10-10-klein-square-edge-orientation-31,
       :kind :reusable-theorem,
-      :depends-on
-      [:routes-2026-10-10-klein-surface-rel-normal-form-29],
+      :depends-on [:routes-2026-10-10-klein-disk-square-carrier-30],
       :current-residual
-      "Replace the existential choice by the explicit centered-square gauge-rescale restriction composed with the affine [0,1]^2 coordinate map, and prove its four side images agree with edgePoint 4 0,1,2,3 in the orientations needed by the two frozen relation branches.",
+      "Construct a specific homeomorphism sending squareEdge i t to edgePoint 4 i t for all four oriented sides, then transport the generator correspondence through Relation.EqvGen.",
       :other-consumers []},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
-     [{:cmd "lake env lean /tmp/klein-disk-square-carrier.lean",
+     [{:cmd "lake env lean /tmp/klein-square-edge-orientation.lean",
        :exit 0,
        :finding
-       "the centered-square to frozen-disk carrier homeomorphism exists and uses only propext, Classical.choice, and Quot.sound"}
-      {:cmd "sha256sum /tmp/klein-disk-square-carrier.lean",
+       "fresh rerun: all four square edge formulas and both source/target generator correspondences compile with standard axioms"}
+      {:cmd "sha256sum /tmp/klein-square-edge-orientation.lean",
        :exit 0,
        :finding
-       "b2edec7ed43c9143c8e1508fa18aae99ce8417fc62823d612654fe7bc4fe082e"}
+       "7f1ad4c93eae56a4a0de984d2d9fdbb8f95e24641538e98b4a642bb49b89d312"}
       {:cmd
-       "rg -n \"\\b(sorry|admit)\\b\" /tmp/klein-disk-square-carrier.lean",
+       "rg -n \"\\b(sorry|admit)\\b\" /tmp/klein-square-edge-orientation.lean",
        :exit 1,
        :expected-exit 1,
        :finding "no placeholders"}
@@ -95019,24 +95046,16 @@
        :exit 0,
        :finding "131 registered statements match, 0 do not"}
       {:cmd "git status --short", :exit 0, :finding "clean"}],
-     :diagnostic-history
-     [{:cmd "lake env lean /tmp/klein-disk-square-carrier.lean",
-       :exit 1,
-       :finding
-       "the first carrier proof left membership simplification and a namespaced boundedness theorem unresolved; expanded complex square membership and called Bornology.IsBounded.reProdIm explicitly"}
-      {:cmd "lake env lean /tmp/klein-disk-square-carrier.lean",
-       :exit 1,
-       :finding
-       "the next proof tried to rewrite interval interiors after Complex.interior_reProdIm had exposed them under reProdIm membership; supplied the two coordinate membership proofs directly"}],
+     :diagnostic-history [],
      :fixture
-     {:path "/tmp/klein-disk-square-carrier.lean",
+     {:path "/tmp/klein-square-edge-orientation.lean",
       :sha256
-      "b2edec7ed43c9143c8e1508fa18aae99ce8417fc62823d612654fe7bc4fe082e",
+      "7f1ad4c93eae56a4a0de984d2d9fdbb8f95e24641538e98b4a642bb49b89d312",
       :interface
-      "centeredSquare is the complex square with real and imaginary coordinates in [-1,1]. exists_centeredSquare_disk_homeomorph proves it is homeomorphic to the frozen complex closed unit disk by restricting Mathlib's convex gauge-rescaling ambient homeomorphism."},
+      "squareEdge orients the four closed-square sides; cases_edge_zero_one and cases_edge_two_three prove the affine-orbit generators; surfaceRel_edge_zero_one and surfaceRel_edge_two_three prove the matching frozen disk generators."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/square-boundary-orbit-eqvgen",
@@ -95065,7 +95084,8 @@
    [:lemma-kleinplaneaction-squareorbitclassification
     :routes-2026-10-10-checkpoint-topo1-after-klein-square-orbits-23
     :routes-2026-10-10-klein-surface-rel-normal-form-29
-    :routes-2026-10-10-klein-disk-square-carrier-30],
+    :routes-2026-10-10-klein-disk-square-carrier-30
+    :routes-2026-10-10-klein-square-edge-orientation-31],
    :current-residual
    "Unfold the frozen disk-boundary relation into square-side coordinates, prove its EqvGen closure yields exactly the translation, reflected-edge, and corner disjunction in Cases, and prove the converse generators realize every listed case.",
    :other-consumers []}
@@ -95645,7 +95665,9 @@
    [:lemma-kleinplaneaction-squareorbitclassification
     :lemma-kleinsurfacerelnormalform-surfacerel-false-two-iff
     :lemma-kleindisksquarecoordinates-edge-formulas
-    :lemma-kleindisksquarecarrier-exists-centeredsquare-disk-homeomorph],
+    :lemma-kleindisksquarecarrier-exists-centeredsquare-disk-homeomorph
+    :lemma-kleinsquareedgeorientation-cases-edge-zero-one
+    :lemma-kleinsquareedgeorientation-cases-edge-two-three],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -95977,6 +95999,32 @@
    :kind :lemma,
    :depends-on
    [:lemma-kleinsurfacerelnormalform-surfacerel-false-two-iff],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "KleinSquareEdgeOrientation.cases_edge_zero_one"},
+   :lemma
+   {:name "KleinSquareEdgeOrientation.cases_edge_zero_one",
+    :reported-by []},
+   :id :lemma-kleinsquareedgeorientation-cases-edge-zero-one,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "KleinSquareEdgeOrientation.cases_edge_two_three"},
+   :lemma
+   {:name "KleinSquareEdgeOrientation.cases_edge_two_three",
+    :reported-by []},
+   :id :lemma-kleinsquareedgeorientation-cases-edge-two-three,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
