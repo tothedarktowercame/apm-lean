@@ -96625,8 +96625,75 @@
   {:bounded-exception
    "This single-consumer package defines the exact retained fiber-index subtype and proves that center-point membership selects a complete sheet; it is the final indexing fact needed before assembling the restricted covering trivialization.",
    :consumer :t99J01,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Use RetainedIndex as the discrete fiber type, restrict the chart equivalence to the clopen Joined component and retained indices, assemble the component-projection covering trivialization, and combine it with the banked surjectivity theorem.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :missing-theorems
+    [{:name "CoveringRetainedSheetIndices.invFun_mem_iff_retained",
+      :type
+      "For a trivialization over a path-connected base set and clopen C, t.invFun (x,i) belongs to C iff i is retained at the chosen center",
+      :status :proved,
+      :consumers [:t99J01],
+      :depends-on
+      ["PreconnectedClopenSheet.range_subset_or_disjoint_of_isClopen_pathConnected"
+       "CoveringPathConnectedChart.IsCoveringMap.exists_pathConnected_restrictedTrivialization"]}],
+    :statement-hashes "131 registered statements match",
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :finding
+      "canonical package authority resolves to /home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "sha256sum /tmp/covering-retained-sheet-indices.lean",
+      :exit 0,
+      :finding
+      "fixture hash matches a00eeae284c2e660f2afae0397f179726c5bac05e5b905299742761434142679"}
+     {:cmd
+      "lake build ConstructionTargets.CoveringRetainedSheetIndices",
+      :exit 0,
+      :finding
+      "retained index definitions and whole-sheet equivalence build"}
+     {:cmd "lake env lean /tmp/covering-retained-sheet-indices.lean",
+      :exit 0,
+      :finding "frozen fixture compiles with standard axioms"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" ConstructionTargets/CoveringRetainedSheetIndices.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero source placeholders"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" /tmp/covering-retained-sheet-indices.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero fixture placeholders"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short",
+      :exit 0,
+      :finding "clean worktree after commit"}],
+    :commit "9589387f514411ee356cbaae1aee5ff51a866501",
+    :changed-paths
+    ["ConstructionTargets/CoveringRetainedSheetIndices.lean"],
+    :fixture
+    {:path "/tmp/covering-retained-sheet-indices.lean",
+     :sha256
+     "a00eeae284c2e660f2afae0397f179726c5bac05e5b905299742761434142679",
+     :sorry-count 0},
+    :implementation
+    {:scope ["ConstructionTargets/CoveringRetainedSheetIndices.lean"],
+     :declarations
+     ["ConstructionTargets.CoveringRetainedSheetIndices.Retained"
+      "ConstructionTargets.CoveringRetainedSheetIndices.RetainedIndex"
+      "ConstructionTargets.CoveringRetainedSheetIndices.invFun_mem_iff_retained"]},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/CoveringRetainedSheetIndices.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component/retained-sheet-indices",
@@ -99229,18 +99296,26 @@
    :depends-on
    [:lemma-preconnectedclopensheet-range-subset-or-disjoint-of-isclopen-pathconnected],
    :other-consumers []}
-  {:consumer :portfolio,
+  {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
    :scope [],
    :acceptance
-   {:lemma "CoveringRetainedSheetIndices.invFun_mem_iff_retained"},
+   {:lemma "CoveringRetainedSheetIndices.invFun_mem_iff_retained",
+    :type
+    "For a trivialization over a path-connected base set and clopen C, t.invFun (x,i) belongs to C iff i is retained at the chosen center"},
    :lemma
    {:name "CoveringRetainedSheetIndices.invFun_mem_iff_retained",
-    :reported-by []},
+    :reported-by
+    [:routes-2026-10-10-covering-retained-sheet-indices-46],
+    :type
+    "For a trivialization over a path-connected base set and clopen C, t.invFun (x,i) belongs to C iff i is retained at the chosen center",
+    :proved-in :routes-2026-10-10-covering-retained-sheet-indices-46},
    :id :lemma-coveringretainedsheetindices-invfun-mem-iff-retained,
    :kind :lemma,
-   :depends-on [],
+   :depends-on
+   [:lemma-preconnectedclopensheet-range-subset-or-disjoint-of-isclopen-pathconnected
+    :lemma-coveringpathconnectedchart-iscoveringmap-exists-pathconnected-restrictedtriviali],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
