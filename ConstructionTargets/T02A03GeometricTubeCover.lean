@@ -401,4 +401,10 @@ noncomputable def apm_t02a03_rightCoreAttachmentMap :
     exact Continuous.subtype_mk
       (apm_t02a03_continuous_rightCore.comp continuous_subtype_val) _
 
+theorem apm_t02a03_rightCore_collar_deletedEndpoint :
+    apm_t02a03_rightCoreAttachmentClosureMap ⟨0, by simp⟩ =
+      apm_t02a03_attachmentCollarClosureMap ⟨1, by simp⟩ := by
+  rw [apm_t02a03_rightCoreAttachmentClosureMap_zero,
+    apm_t02a03_attachmentCollarClosureMap_one]
+
 end ConstructionTargets.T02A03GeometricTubeCover
