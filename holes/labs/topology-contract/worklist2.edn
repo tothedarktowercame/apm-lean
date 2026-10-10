@@ -59253,56 +59253,68 @@
    "single-consumer vertical lift homotopy of the t02A03 punctured right-core attachment segment",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/t02a03_geometric_tube_cover.lean",
-      :sha256
-      "4dd2d17da2a28ab60db4f691cb664db89633cbf93439c7a087b5dfcaec5a2a15"},
-     :commands
-     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "apm_t02a03_rightCoreLiftPoint, apm_t02a03_rightCoreLiftPoint_mem_geometricY, apm_t02a03_rightCoreLiftHomotopyMap, and apm_t02a03_rightCoreLiftHomotopyMap_zero compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
-       :exit 0}
-      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "4dd2d17da2a28ab60db4f691cb664db89633cbf93439c7a087b5dfcaec5a2a15  /tmp/t02a03_geometric_tube_cover.lean"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}
-      {:cmd
-       "rg -n '^((noncomputable )?def|theorem) apm_t02a03_rightCoreLift(Point|Point_mem_geometricY|HomotopyMap|HomotopyMap_zero)' /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "403:noncomputable def apm_t02a03_rightCoreLiftPoint\n408:theorem apm_t02a03_rightCoreLiftPoint_mem_geometricY\n440:noncomputable def apm_t02a03_rightCoreLiftHomotopyMap :\n456:theorem apm_t02a03_rightCoreLiftHomotopyMap_zero"}],
-     :finding
-     "A complete placeholder-free fixture compiles for this bounded homotopy packet. For s in Set.Icc 0 1 and t in Set.Ioc 0 1, vertically translating rightCore(t) by s/8 remains within distance at most 1/8 of the right core and therefore stays in W. Any intersection with the planar left core would force s=0, reducing to the already excluded punctured right-core intersection. The resulting map is continuous into geometricY and its zero-height slice is exactly the banked right-core attachment map.",
-     :residual
-     "Promote the vertical right-core lift homotopy and its zero-slice compatibility. The next consumer residual is to identify its height-one slice and deform that lifted segment through the collar to the based Circle meridian, then extend over the right tube and glue.",
-     :implementation
-     {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
-      :acceptance
-      {:declarations
-       ["apm_t02a03_rightCoreLiftPoint"
-        "apm_t02a03_rightCoreLiftPoint_mem_geometricY"
-        "apm_t02a03_rightCoreLiftHomotopyMap"
-        "apm_t02a03_rightCoreLiftHomotopyMap_zero"],
-       :fixture-sha256
-       "4dd2d17da2a28ab60db4f691cb664db89633cbf93439c7a087b5dfcaec5a2a15",
-       :gates
-       ["lake env lean ConstructionTargets/T02A03GeometricTubeCover.lean"
-        "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeCover.lean || true)\""
-        "python3 scripts/statement-registry.py check"],
-       :axioms ["propext" "Classical.choice" "Quot.sound"],
-       :consumer-residual
-       "Identify the height-one lifted segment and deform it through the collar to the based Circle meridian; extension over the right tube and gluing remain outside this packet."}}}},
+   {:placeholder-delta 0,
+    :residual
+    "Identify the height-one lifted segment and deform it through the collar to the based Circle meridian; extension over the right tube and gluing remain outside this packet.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+      :exit 0,
+      :output
+      "4dd2d17da2a28ab60db4f691cb664db89633cbf93439c7a087b5dfcaec5a2a15  /tmp/t02a03_geometric_tube_cover.lean"}
+     {:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+      :exit 0,
+      :output
+      "The four right-core lift declarations compiled; axioms [propext, Classical.choice, Quot.sound]."}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeCover.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.T02A03GeometricTubeCover",
+      :exit 0,
+      :output "Build completed successfully (8240 jobs)."}
+     {:cmd
+      "lake env lean /tmp/check_t02a03_right_core_lift_axioms.lean",
+      :exit 0,
+      :output
+      "All four declarations depend on [propext, Classical.choice, Quot.sound]."}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeCover.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "comment-stripped placeholder census for problems/t02A03/lean/Main.lean",
+      :exit 0,
+      :output "1"}
+     {:cmd "sha256sum problems/t02A03/lean/Main.lean",
+      :exit 0,
+      :output
+      "b123eca388ab2858ca55daf538c1ddd645022b52f5196a15f0bb516d78323d7d  problems/t02A03/lean/Main.lean"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r 97016786e9f8a29a122f331e3a37a8f3a4c996d1",
+      :exit 0,
+      :output "ConstructionTargets/T02A03GeometricTubeCover.lean"}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "97016786e9f8a29a122f331e3a37a8f3a4c996d1",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
+    :fixture
+    {:path "/tmp/t02a03_geometric_tube_cover.lean",
+     :sha256
+     "4dd2d17da2a28ab60db4f691cb664db89633cbf93439c7a087b5dfcaec5a2a15"},
+    :declarations
+    ["ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_rightCoreLiftPoint"
+     "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_rightCoreLiftPoint_mem_geometricY"
+     "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_rightCoreLiftHomotopyMap"
+     "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_rightCoreLiftHomotopyMap_zero"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/geometric-right-core-lift-homotopy",
