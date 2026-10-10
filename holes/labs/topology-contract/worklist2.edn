@@ -56891,9 +56891,41 @@
   {:bounded-exception
    "single-consumer native dependent-coordinate representative evaluation for the frozen torus",
    :consumer :t97A04,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/torus_frozen_pi1_native_coordinate_mk.lean",
+      :sha256
+      "b1d752a65e5684506b9266b696e51e602f164788f118dc2e621ddaf93d6e1005"},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/torus_frozen_pi1_native_coordinate_mk.lean",
+       :exit 0,
+       :output
+       "frozenTorusPi1Coord_mk_native compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/torus_frozen_pi1_native_coordinate_mk.lean || true)\"",
+       :exit 0}
+      {:cmd
+       "sha256sum /tmp/torus_frozen_pi1_native_coordinate_mk.lean",
+       :exit 0,
+       :output
+       "b1d752a65e5684506b9266b696e51e602f164788f118dc2e621ddaf93d6e1005  /tmp/torus_frozen_pi1_native_coordinate_mk.lean"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :finding
+     "The placeholder-free fixture composes frozenTorusPi1Coord_factor with frozenHomeomorphPi1_mk and proves the exact representative evaluation at the native dependent Circle basepoint. It retains frozenTorusHomeomorphCircleProd (0,0) in the codomain and introduces no second casted equivalence.",
+     :implementation
+     {:scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
+      :declarations ["frozenTorusPi1Coord_mk_native"]},
+     :residual
+     "Prove the exact representation comparison from the native transported coordinate value on the continuously mapped path to torusPi1Coord of frozenCircleImagePath at (1,1), then combine representative conjugacy with Circle matrix naturality and descend by quotient induction."}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A04/torus-pi1-winding-coordinates/frozen-native-coordinate-mk",
    :acceptance
@@ -56905,6 +56937,7 @@
     "t97A04 step 4, evaluate frozen coordinates on representatives at the native dependent Circle basepoint"},
    :id :routes-2026-10-10-t97a04-frozen-native-coordinate-mk-topo2-r1,
    :kind :reusable-theorem,
+   :declarations ["frozenTorusPi1Coord_mk_native"],
    :depends-on
    [:routes-2026-10-10-checkpoint-topo2-r2
     :routes-2026-10-10-t97a04-frozen-coordinate-factorization-topo2-r1
