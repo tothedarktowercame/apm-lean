@@ -92741,6 +92741,19 @@
       :finding "131 registered statements match, 0 do not"}
      {:cmd "git diff --check HEAD^ HEAD", :exit 0}
      {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791643835640-2204-b59ba635",
+     :commands
+     ["git show 9cde2691ec0a21516712d42206619a22e3c46259 --stat and recorded source inspection"
+      "lake build ConstructionTargets.TypeValuedSpanningTreeFreeGroupBasis"
+      "sha256sum /tmp/nielsen-type-basis.lean && lake env lean /tmp/nielsen-type-basis.lean"
+      "comment-stripped sorry/admit census for source, fixture, and affected consumers"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show b5b84c4f:holes/labs/topology-contract/worklist.edn)"],
+     :finding
+     "exact one-file scope and fixture hash reproduce; the generic theorem has the required complement-subtype-to-root-End FreeGroupBasis orientation, builds with standard axioms and zero placeholders, and keeps cardinal arithmetic, subgroup transport, and Fin reindexing outside the scoped module"},
     :commit "9cde2691ec0a21516712d42206619a22e3c46259",
     :changed-paths
     ["ConstructionTargets/TypeValuedSpanningTreeFreeGroupBasis.lean"],
@@ -92759,7 +92772,7 @@
      "Expose the already-compiled unchanged unique-lift construction FiniteIndexFreeGroupSchreierRank.spanningTreeBasis under the requested generic Mathlib-compatible namespace and exact complement-indexed type; no cardinality arithmetic, subgroup transport, or Fin reindexing is present in this module."},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/TypeValuedSpanningTreeFreeGroupBasis.lean"],
    :dag-node
@@ -92847,7 +92860,7 @@
      :residual
      "Once spanningTreeBasis is banked, map it through endMulEquivSubgroup H, use Finite.equivFinOfCardEq with the banked complement_card_formula, and expose the general, r=3, and r=2,n=2 MulEquiv results in the original row."}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/positive-index/type-valued-basis",
@@ -93196,7 +93209,7 @@
    :other-consumers []}
   {:consumer :t99J01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "IsFreeGroupoid.SpanningTree.endBasis",
@@ -93210,7 +93223,10 @@
     :type
     "FreeGroupBasis ((wideSubquiverEquivSetTotal (wideSubquiverSymmetrify T)) complement) (End (show G from Quiver.root T))",
     :proved-in
-    :routes-2026-10-10-type-valued-spanning-tree-free-group-basis-17},
+    :routes-2026-10-10-type-valued-spanning-tree-free-group-basis-17,
+    :banked-by
+    :routes-2026-10-10-type-valued-spanning-tree-free-group-basis-17,
+    :banked-commit "9cde2691ec0a21516712d42206619a22e3c46259"},
    :id :lemma-isfreegroupoid-spanningtree-endbasis,
    :kind :lemma,
    :depends-on [],
