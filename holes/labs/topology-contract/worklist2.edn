@@ -57779,6 +57779,21 @@
       :exit 0,
       :output "ConstructionTargets/RealProjectiveSmoothTarget.lean"}
      {:cmd "git status --short", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791617874860-1487-6225f823",
+     :commands
+     ["git show/diff-tree recorded implementation and transition"
+      "sha256sum authenticated fixture"
+      "lake env lean fixture and recorded-identical target"
+      "lake build ConstructionTargets.RealProjectiveSmoothTarget"
+      "qualified #print and axiom audit"
+      "placeholder and frozen-consumer hash census"
+      "python3 scripts/statement-registry.py check"
+      "bb worklist_check.bb on committed ledger"],
+     :finding
+     "PASS: codex-7 independently reviewed topo-6 commit 72558865. Exact implementation scope is RealProjectiveSmoothTarget.lean and transition 3386e13c is ledger-only. The fixture hash matches and fixture, target, and 8241-job focused build pass with zero target placeholders. As the acceptance note permits, the three declarations were already fully banked in the parent; this commit only documents and confirms them without changing statements or proofs. The atlas uses the frozen projective quotient charts and compatibility proof, and sphereProjectionQuotientLocalDiffeomorph certifies the actual sphereProjection 2 under those instances. Orientation is quotient sphere projection to RP2 local diffeomorphism, yielding Nonempty (SmoothAtlas 2); it does not cross into either consumer descent/immersion/transversality claim. Axioms are exactly propext, Classical.choice, Quot.sound. Frozen t95A04/t96A07 hashes reproduce as 4c7127b6/bb7ba547 with one placeholder each; registry is 131/0 and the committed ledger validates."},
     :commit "7255886501f11286c5d21f4cb216d1ac2bdc7ce8",
     :changed-paths
     ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
@@ -57791,7 +57806,7 @@
      "ConstructionTargets.RealProjectiveSmoothTarget.rpSmoothAtlas_exists"
      "ConstructionTargets.RealProjectiveSmoothTarget.sphereProjectionQuotientLocalDiffeomorph"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/shared/rp-smooth-atlas",
    :acceptance
