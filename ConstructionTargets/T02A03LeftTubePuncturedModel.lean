@@ -162,4 +162,15 @@ theorem apm_t02a03_leftTubePlanarComplex_radialPoint
   · simp [apm_t02a03_leftTubePlanarComplex,
       apm_t02a03_leftTubeRadialPoint]
 
+theorem apm_t02a03_leftTubePlanarComplex_eq_norm_smul_angular
+    (p : apm_t02a03_leftTubeSubtype) :
+    apm_t02a03_leftTubePlanarComplex p =
+      (‖apm_t02a03_leftTubePlanarComplex p‖ : ℝ) •
+        ((apm_t02a03_leftTubeAngular p : Circle) : ℂ) := by
+  change apm_t02a03_leftTubePlanarComplex p =
+    ‖apm_t02a03_leftTubePlanarComplex p‖ •
+      NormedSpace.normalize (apm_t02a03_leftTubePlanarComplex p)
+  exact (NormedSpace.norm_smul_normalize
+    (apm_t02a03_leftTubePlanarComplex p)).symm
+
 end ConstructionTargets.T02A03LeftTubePuncturedModel
