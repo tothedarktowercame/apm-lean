@@ -55696,6 +55696,20 @@
       :exit 0,
       :output
       "ConstructionTargets/TorusPiOneWindingCoordinates.lean"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791608921940-1184-47845316",
+     :commands
+     ["git diff-tree --no-commit-id --name-only -r 9033474e"
+      "sha256sum /tmp/torus_pi1_projected_endpoint_coordinates.lean"
+      "lake env lean /tmp/torus_pi1_projected_endpoint_coordinates.lean"
+      "lake env lean ConstructionTargets/TorusPiOneWindingCoordinates.lean"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 13ac6d8b:holes/labs/topology-contract/worklist2.edn)"
+      "recompute target and frozen-consumer SHA-256 and comment-stripped placeholder counts from commit 9033474e"],
+     :finding
+     "PASS: codex-7 independently reviewed topo-6 commit 9033474e. Exact implementation scope is the existing TorusPiOneWindingCoordinates module; transition commit 13ac6d8b changes only the ledger. Fixture SHA-256 873432f0adb9b7541c7cd21d00397867ff17a8cd1cc179240e48bee07bf141de matches, compiles, and has zero placeholders; canonical source compiles with zero forbidden declarations. Both theorem statements and proofs are preserved: coordinate 0 uses projLeft and continuous_fst, coordinate 1 uses projRight and continuous_snd, and mk_map is applied in the required reversed equality orientation before definitional reduction to liftBasedLoopEndpointInteger. Both axiom audits are exactly propext, Classical.choice, Quot.sound. Registry is 131/0 and ledger is 383 items OK. Frozen t97A04 remains 79ca854186b39183bf53490a20b5be92695e345a2c099fcf928b5ad3300ee4ec with four placeholders; t01A02 remains 8bf7f3c39d6adb451332d0c30433ae0df833110a0b93605d23b26f30c7caa1fc with three; delta zero."},
     :commit "9033474ecc8bb26d6d8ed59f1f518029e35c27c8",
     :changed-paths
     ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
@@ -55707,7 +55721,7 @@
     ["ConstructionTargets.TorusPiOneWindingCoordinates.torusPi1Coord_mk_apply_zero_eq_liftEndpoint"
      "ConstructionTargets.TorusPiOneWindingCoordinates.torusPi1Coord_mk_apply_one_eq_liftEndpoint"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/torus-pi1-winding-coordinates/projected-endpoints",
@@ -55791,7 +55805,7 @@
       "After the endpoint formulas are banked, prove naturality under the frozen integer-matrix torus maps by identifying their R2 lifts and applying lift uniqueness.",
       :other-consumers [:t01A02]}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/shared/torus-pi1-winding-coordinates",
    :acceptance
