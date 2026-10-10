@@ -95960,8 +95960,72 @@
   {:bounded-exception
    "This single-consumer transport lemma is the exact local chart fact needed to transfer local path-connectedness from each open base neighborhood to its selected covering sheet.",
    :consumer :t99J01,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Apply the transport on path-connected open base neighborhoods to prove the covering total space locally path connected, then build selected-sheet trivializations and path-lifting surjectivity.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :missing-theorems
+    [{:name
+      "HomeomorphLocPathConnected.Homeomorph.locPathConnectedSpace_iff",
+      :type
+      "For a homeomorphism X ≃ₜ Y, LocPathConnectedSpace X iff LocPathConnectedSpace Y",
+      :status :proved,
+      :consumers [:t99J01],
+      :depends-on ["CoveringPathComponentDomain.Component"]}],
+    :statement-hashes "131 registered statements match",
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :finding
+      "canonical package authority resolves to /home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "sha256sum /tmp/homeomorph-loc-path-connected.lean",
+      :exit 0,
+      :finding
+      "fixture hash matches d16687d9af908dfc7902542708a5955e71eb18e1297ac7867299ce12405e6973"}
+     {:cmd "lake build ConstructionTargets.HomeomorphLocPathConnected",
+      :exit 0,
+      :finding "canonical homeomorphism LPC transport and iff build"}
+     {:cmd "lake env lean /tmp/homeomorph-loc-path-connected.lean",
+      :exit 0,
+      :finding
+      "frozen fixture compiles and reports only standard axioms"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" ConstructionTargets/HomeomorphLocPathConnected.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero source placeholders"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" /tmp/homeomorph-loc-path-connected.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero fixture placeholders"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short",
+      :exit 0,
+      :finding "clean worktree after commit"}],
+    :commit "a78ce43e29bee4e43ec39e9f75b43c780a9c6e7b",
+    :changed-paths
+    ["ConstructionTargets/HomeomorphLocPathConnected.lean"],
+    :fixture
+    {:path "/tmp/homeomorph-loc-path-connected.lean",
+     :sha256
+     "d16687d9af908dfc7902542708a5955e71eb18e1297ac7867299ce12405e6973",
+     :sorry-count 0},
+    :implementation
+    {:scope ["ConstructionTargets/HomeomorphLocPathConnected.lean"],
+     :declarations
+     ["ConstructionTargets.HomeomorphLocPathConnected.Homeomorph.locPathConnectedSpace"
+      "ConstructionTargets.HomeomorphLocPathConnected.Homeomorph.locPathConnectedSpace_iff"]},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/HomeomorphLocPathConnected.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component/homeomorph-lpc",
@@ -98260,6 +98324,27 @@
    :id :lemma-pointwedgepathconnected-wedgepathconnectedspace,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t99J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "HomeomorphLocPathConnected.Homeomorph.locPathConnectedSpace_iff",
+    :type
+    "For a homeomorphism X ≃ₜ Y, LocPathConnectedSpace X iff LocPathConnectedSpace Y"},
+   :lemma
+   {:name
+    "HomeomorphLocPathConnected.Homeomorph.locPathConnectedSpace_iff",
+    :reported-by [:routes-2026-10-10-homeomorph-loc-path-connected-40],
+    :type
+    "For a homeomorphism X ≃ₜ Y, LocPathConnectedSpace X iff LocPathConnectedSpace Y",
+    :proved-in :routes-2026-10-10-homeomorph-loc-path-connected-40},
+   :id
+   :lemma-homeomorphlocpathconnected-homeomorph-locpathconnectedspace-iff,
+   :kind :lemma,
+   :depends-on [:lemma-coveringpathcomponentdomain-component],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
