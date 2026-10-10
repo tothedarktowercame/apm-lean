@@ -83177,8 +83177,47 @@
    "Replace opaque transitive closures by exact finite class descriptions and transport closedness/Hausdorffness to the three consumer quotients.",
    :other-consumers [:tunk01 :t91A02]}
   {:consumer :t99J05,
+   :stop-count 1,
+   :evidence
+   {:placeholder-after {:t99J05 1, :t98J01 1},
+    :residual
+    "First provide compiled, standard-only coefficient range-to-production comparison isomorphisms with cover-map naturality and a morphism of coefficient Mayer-Vietoris short exact sequences; then transport the three exactness statements and connecting morphism.",
+    :outcome :stop,
+    :warnings [{:kind :fixture-linter, :message "unused variable n"}],
+    :disposition :stop,
+    :axioms ["coefficientProductionOpenCoverMVPackage_proved"],
+    :author "topo-2",
+    :placeholder-before {:t99J05 1, :t98J01 1},
+    :reason
+    "The supplied fixture does not state or prove any requested declaration: it defines a package whose only field is True and postulates that package with coefficientProductionOpenCoverMVPackage_proved. Its own #print axioms reports dependence on that custom axiom, contradicting :axioms :standard-only. The banked coefficient modules provide the abstract subcomplex short exact sequence and only IsIso for the union-range homology inclusion; they do not provide coefficient range-to-production comparison isomorphisms natural under cover-preserving maps, nor a morphism between the two Mayer-Vietoris short exact sequences. Those concrete comparison and sequence-morphism interfaces are required before the literal arrows can be identified and HomologySequence.delta_naturality can prove the requested connecting-map naturality.",
+    :commands
+    [{:cmd
+      "lake env lean /tmp/coefficient-production-open-cover-mv-probe.lean",
+      :exit 0,
+      :finding
+      "The file compiles, but #print axioms reports the custom axiom coefficientProductionOpenCoverMVPackage_proved; the package field is only True."}
+     {:cmd
+      "rg -n \"^(axiom|structure)|exact_literal_sequence_and_naturality|coefficientProductionOpenCoverMVPackage_proved\" /tmp/coefficient-production-open-cover-mv-probe.lean",
+      :exit 0,
+      :finding
+      "Lines 12-16 define a True-valued structure and postulate its inhabitant; none of the seven acceptance declarations occurs."}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd
+      "test ! -e ConstructionTargets/CoefficientProductionOpenCoverMayerVietoris.lean",
+      :exit 0,
+      :finding
+      "The scoped target file is absent; no scoped changes were made."}],
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/coefficient-production-open-cover-mv-probe.lean",
+     :sha256
+     "ced7052d087fe061bcd53410748aafaf9e4aad746d72f330cf4d97c0c3a3b1f4",
+     :status :self-axiomatized},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientProductionOpenCoverMayerVietoris.lean"],
    :dag-node
