@@ -6539,8 +6539,7 @@
     "51f5c94da12b4d5e1eb1f7ada0fd397cbbfccdfb223a6ae6287978da86605750"},
    :id :oriented-checkpoint8-t01a05-exact-cover-class-1,
    :kind :final-adapter,
-   :depends-on
-   [:oriented-checkpoint8-hopf-and-regular-fiber-refill],
+   :depends-on [:oriented-checkpoint8-hopf-and-regular-fiber-refill],
    :current-residual
    "One frozen placeholder. The theorem requires a top-homology orientation on every compact covering total space without connectedness or positive-dimension hypotheses.",
    :other-consumers []}
@@ -7079,7 +7078,9 @@
    :id :oriented-checkpoint9-cover-and-fiber-atlas-refill,
    :kind :strategy-checkpoint,
    :depends-on
-   [:oriented-checkpoint8-t01a05-exact-cover-class-1 :oriented-checkpoint8-smooth-regular-fiber-atlas-1 :oriented-checkpoint8-hopf-and-regular-fiber-refill],
+   [:oriented-checkpoint8-t01a05-exact-cover-class-1
+    :oriented-checkpoint8-smooth-regular-fiber-atlas-1
+    :oriented-checkpoint8-hopf-and-regular-fiber-refill],
    :current-residual
    "Measure exact covering-consumer outcome separately from smooth fiber infrastructure; retain numerical normalization, orientation and surface-classification boundaries."}
   {:consumer :t92J06,
@@ -7183,8 +7184,7 @@
     "85f64495f251de4b505d8981f77b947a8775ab71b685dd580dbc98e13abd82fa"},
    :id :oriented-checkpoint9-t92j06-exact-graph-covers-1,
    :kind :final-adapter,
-   :depends-on
-   [:oriented-checkpoint9-cover-and-fiber-atlas-refill],
+   :depends-on [:oriented-checkpoint9-cover-and-fiber-atlas-refill],
    :current-residual
    "One frozen placeholder: an actual simply-connected covering and four three-sheeted coverings with pairwise nonhomeomorphic total spaces.",
    :other-consumers []}
@@ -7312,8 +7312,7 @@
     "GO requires the actual covering construction, fiber homeomorphism and cardinality equations. REVISE only to one compiled missing trivialization or topology prerequisite. This does not resolve stopped wedge-point covering gluing or classify total spaces."},
    :id :oriented-checkpoint9-literal-pullback-cover-1,
    :kind :reusable-theorem,
-   :depends-on
-   [:oriented-checkpoint9-cover-and-fiber-atlas-refill],
+   :depends-on [:oriented-checkpoint9-cover-and-fiber-atlas-refill],
    :current-residual
    "Product coverings are banked, but the full-DAG pullback/base-change constructor remains unelected.",
    :other-consumers [:t01A02 :t98A01 :t92J06]}
@@ -7503,7 +7502,9 @@
    :id :oriented-checkpoint10-graph-and-base-change-refill,
    :kind :strategy-checkpoint,
    :depends-on
-   [:oriented-checkpoint9-t92j06-exact-graph-covers-1 :oriented-checkpoint9-literal-pullback-cover-1 :oriented-checkpoint9-cover-and-fiber-atlas-refill],
+   [:oriented-checkpoint9-t92j06-exact-graph-covers-1
+    :oriented-checkpoint9-literal-pullback-cover-1
+    :oriented-checkpoint9-cover-and-fiber-atlas-refill],
    :current-residual
    "Measure actual graph-cover closure separately from pullback infrastructure; retain the t01A05 refutation and regular-fiber atlas STOP."}
   {:consumer :t00J01,
@@ -7605,8 +7606,7 @@
     "03f9c56fbb9d5b417dc16298c6b81d10876a4463f9c7e5a8479615706584c217"},
    :id :oriented-checkpoint10-t00j01-exact-counterexamples-1,
    :kind :final-adapter,
-   :depends-on
-   [:oriented-checkpoint10-graph-and-base-change-refill],
+   :depends-on [:oriented-checkpoint10-graph-and-base-change-refill],
    :current-residual
    "One placeholder bundles the literal Klein-bottle-times-circle manifold and H3 calculation, actual rational S2 Lefschetz traces, and exact regular circle-fold fibers.",
    :other-consumers []}
@@ -8092,7 +8092,9 @@
    :id :oriented-checkpoint11-counterexamples-and-action-refill,
    :kind :strategy-checkpoint,
    :depends-on
-   [:oriented-checkpoint10-t00j01-exact-counterexamples-1 :oriented-checkpoint10-equivariant-quotient-cover-transport-1 :oriented-checkpoint10-graph-and-base-change-refill],
+   [:oriented-checkpoint10-t00j01-exact-counterexamples-1
+    :oriented-checkpoint10-equivariant-quotient-cover-transport-1
+    :oriented-checkpoint10-graph-and-base-change-refill],
    :current-residual
    "Measure exact t00J01 uptake separately from quotient-action infrastructure; preserve all unresolved consumer and atlas boundaries."}
   {:consumer :t94A06,
@@ -8622,7 +8624,9 @@
    :id :oriented-checkpoint12-transversality-and-coefficients-refill,
    :kind :strategy-checkpoint,
    :depends-on
-   [:oriented-checkpoint11-t94a06-exact-transversality-1 :oriented-checkpoint11-sphere-explicit-coefficients-1 :oriented-checkpoint11-counterexamples-and-action-refill],
+   [:oriented-checkpoint11-t94a06-exact-transversality-1
+    :oriented-checkpoint11-sphere-explicit-coefficients-1
+    :oriented-checkpoint11-counterexamples-and-action-refill],
    :current-residual
    "Measure frozen transversality outcome separately from sphere coefficient infrastructure; preserve unresolved consumer boundaries."}
   {:consumer :t99J03,
@@ -9321,7 +9325,8 @@
    :id :oriented-checkpoint13-relative-pair-homology-naturality-1,
    :kind :reusable-theorem,
    :depends-on
-   [:oriented-checkpoint13-surface-and-relative-coefficients-refill :oriented-checkpoint12-relative-singular-explicit-coefficients-1],
+   [:oriented-checkpoint13-surface-and-relative-coefficients-refill
+    :oriented-checkpoint12-relative-singular-explicit-coefficients-1],
    :current-residual
    "Reviewed RelativeSingularCoefficients constructs the actual pair short exact sequence. Functorial maps of its image quotients, connecting-map naturality and explicit pair homology exactness remain unexported.",
    :other-consumers [:t03J04 :t02A08 :t94J08]}
@@ -10070,8 +10075,7 @@
     "45809d8373c2342cf817e88713ac2cae3fe14318bb38539977a0847950af2c8b"},
    :id :oriented-checkpoint15-t01j04-exact-neighborhood-preimage-1,
    :kind :final-adapter,
-   :depends-on
-   [:oriented-checkpoint15-radial-level-and-h0-refill],
+   :depends-on [:oriented-checkpoint15-radial-level-and-h0-refill],
    :current-residual
    "One frozen placeholder asks for a neighborhood whose closed preimage admits the literal dimension-n manifold-with-boundary structure. The source has no second-countability hypothesis.",
    :other-consumers []}
@@ -10173,7 +10177,9 @@
    :id :oriented-checkpoint15-explicit-coefficient-excision-1,
    :kind :reusable-theorem,
    :depends-on
-   [:oriented-checkpoint15-radial-level-and-h0-refill :oriented-checkpoint12-relative-singular-explicit-coefficients-1 :oriented-checkpoint13-relative-pair-homology-naturality-1],
+   [:oriented-checkpoint15-radial-level-and-h0-refill
+    :oriented-checkpoint12-relative-singular-explicit-coefficients-1
+    :oriented-checkpoint13-relative-pair-homology-naturality-1],
    :current-residual
    "Actual ModuleCat R relative complexes and natural pair sequences are reviewed. Existing geometric subdivision and excision exports remain coefficient-specific; the rational sphere calculation requires the actual excision comparison over R.",
    :other-consumers [:t03J04 :t02A08 :t94J08]}
@@ -11873,7 +11879,9 @@
    :oriented-checkpoint18-coefficient-affine-realization-naturality-1,
    :kind :representation-comparison,
    :depends-on
-   [:oriented-checkpoint18-projective-boundary-and-subdivision-refill :coefficient-general-affine-realization-1 :coefficient-general-ordered-vertex-cone-1],
+   [:oriented-checkpoint18-projective-boundary-and-subdivision-refill
+    :coefficient-general-affine-realization-1
+    :coefficient-general-ordered-vertex-cone-1],
    :current-residual
    "Reviewed coefficient-general affine realization has its differential equation but lacks compatibility with affine changes of simplex. The stopped singular subdivision differential proof needs this comparison.",
    :other-consumers [:t03J04 :t02A08 :t94J08]}
@@ -12294,7 +12302,10 @@
    :id :oriented-checkpoint19-coefficient-barycentric-affine-change-1,
    :kind :reusable-theorem,
    :depends-on
-   [:oriented-checkpoint19-pants-and-affine-naturality-refill :oriented-checkpoint18-coefficient-affine-realization-naturality-1 :coefficient-general-ordered-vertex-cone-1 :coefficient-general-affine-realization-1],
+   [:oriented-checkpoint19-pants-and-affine-naturality-refill
+    :oriented-checkpoint18-coefficient-affine-realization-naturality-1
+    :coefficient-general-ordered-vertex-cone-1
+    :coefficient-general-affine-realization-1],
    :current-residual
    "The reviewed realization square is available. The temporary coefficient-general recursion commutes with the vertex differential but has no banked affine-change compatibility, still needed by MissingFaceTransport.",
    :other-consumers [:t03J04 :t02A08 :t94J08]}
@@ -12637,8 +12648,7 @@
      "Distinguish specification repair plus corrected closure from frozen closure. Propose implementation scope only after full compilation."]},
    :id :oriented-checkpoint20-t96j07-parenthesized-axis-repair-1,
    :kind :final-adapter,
-   :depends-on
-   [:oriented-checkpoint20-polygon-and-barycentric-refill],
+   :depends-on [:oriented-checkpoint20-polygon-and-barycentric-refill],
    :current-residual
    "One placeholder remains in a refuted statement. The intended nonzero-vector implication must enclose the equivalence; coordinate cancellation and four determinant signs then remain.",
    :other-consumers []}
@@ -12780,7 +12790,8 @@
    :oriented-checkpoint20-coefficient-singular-subdivision-assembly-1,
    :kind :reusable-theorem,
    :depends-on
-   [:oriented-checkpoint20-polygon-and-barycentric-refill :oriented-checkpoint19-coefficient-barycentric-affine-change-1],
+   [:oriented-checkpoint20-polygon-and-barycentric-refill
+    :oriented-checkpoint19-coefficient-barycentric-affine-change-1],
    :current-residual
    "Reviewed actual_subdivided_face resolves the recorded MissingFaceTransport boundary. The actual singular degree maps still need assembly into a natural chain endomorphism with degree-zero identity.",
    :other-consumers [:t03J04 :t02A08 :t94J08]}
@@ -13531,7 +13542,8 @@
    :id :oriented-checkpoint21-t96j07-corrected-closure-documentation-1,
    :kind :documentation,
    :depends-on
-   [:oriented-checkpoint21-axis-repair-and-singular-subdivision-refill :oriented-checkpoint20-t96j07-parenthesized-axis-repair-1],
+   [:oriented-checkpoint21-axis-repair-and-singular-subdivision-refill
+    :oriented-checkpoint20-t96j07-parenthesized-axis-repair-1],
    :current-residual
    "DAG still describes t96J07 as awaiting statement repair although the explicit parenthesis repair and corrected proof passed review.",
    :other-consumers []}
@@ -16237,7 +16249,8 @@
    :oriented-checkpoint26-coefficient-simplicial-pushout-relative-1,
    :kind :representation-comparison,
    :depends-on
-   [:oriented-checkpoint26-relative-comparison-and-consumer-refill :oriented-checkpoint25-coefficient-relative-small-comparison-1],
+   [:oriented-checkpoint26-relative-comparison-and-consumer-refill
+    :oriented-checkpoint25-coefficient-relative-small-comparison-1],
    :current-residual
    "The existing simplicial pushout relative-chain construction is AddCommGrpCat-specific. Coefficient-general excision requires the actual R-linear chain functor and its quotient-map equations.",
    :other-consumers [:t03J04 :t02A08 :t94J08]}
@@ -16626,7 +16639,9 @@
    :id :oriented-checkpoint27-coefficient-actual-subspace-excision-1,
    :kind :representation-comparison,
    :depends-on
-   [:oriented-checkpoint27-pushout-relative-and-consumer-refill :oriented-checkpoint26-coefficient-simplicial-pushout-relative-1 :oriented-checkpoint25-coefficient-relative-small-comparison-1],
+   [:oriented-checkpoint27-pushout-relative-and-consumer-refill
+    :oriented-checkpoint26-coefficient-simplicial-pushout-relative-1
+    :oriented-checkpoint25-coefficient-relative-small-comparison-1],
    :current-residual
    "The R-linear simplicial pushout relative isomorphism and all-degree relative small-chain comparison are reviewed. Their source and target must be transported to actual subspaces, and the composite must be proved equal to the canonical excision cokernel map.",
    :other-consumers [:t03J04 :t02A08 :t94J08]}
@@ -16842,7 +16857,8 @@
    :id :oriented-checkpoint28-actual-excision-and-consumer-refill,
    :kind :strategy-checkpoint,
    :depends-on
-   [:oriented-checkpoint27-coefficient-actual-subspace-excision-1 :oriented-checkpoint27-pushout-relative-and-consumer-refill],
+   [:oriented-checkpoint27-coefficient-actual-subspace-excision-1
+    :oriented-checkpoint27-pushout-relative-and-consumer-refill],
    :current-residual
    "Measure actual-subspace excision separately from consumer closure, and reassess all reviewed boundaries and concurrent outcomes.",
    :other-consumers []}
@@ -17403,7 +17419,8 @@
    :id :oriented-checkpoint29-pair-sequence-and-consumer-refill,
    :kind :strategy-checkpoint,
    :depends-on
-   [:oriented-checkpoint28-coefficient-contractible-pair-sequence-1 :oriented-checkpoint28-actual-excision-and-consumer-refill],
+   [:oriented-checkpoint28-coefficient-contractible-pair-sequence-1
+    :oriented-checkpoint28-actual-excision-and-consumer-refill],
    :current-residual
    "Measure pair-sequence infrastructure separately from consumer closure and reassess all reviewed boundaries and concurrent outcomes.",
    :other-consumers []}
@@ -17981,7 +17998,8 @@
    :oriented-checkpoint30-geometric-sphere-shift-and-consumer-refill,
    :kind :strategy-checkpoint,
    :depends-on
-   [:oriented-checkpoint29-coefficient-geometric-sphere-shift-1 :oriented-checkpoint29-pair-sequence-and-consumer-refill],
+   [:oriented-checkpoint29-coefficient-geometric-sphere-shift-1
+    :oriented-checkpoint29-pair-sequence-and-consumer-refill],
    :current-residual
    "Measure sphere-shift infrastructure separately from consumer closure and reassess all reviewed boundaries and concurrent outcomes.",
    :other-consumers []}
@@ -18663,7 +18681,8 @@
    :id :oriented-checkpoint31-sphere-endpoints-and-consumer-refill,
    :kind :strategy-checkpoint,
    :depends-on
-   [:oriented-checkpoint30-coefficient-sphere-endpoints-1 :oriented-checkpoint30-geometric-sphere-shift-and-consumer-refill],
+   [:oriented-checkpoint30-coefficient-sphere-endpoints-1
+    :oriented-checkpoint30-geometric-sphere-shift-and-consumer-refill],
    :current-residual
    "Measure endpoint computations separately from frozen closure and recheck exact consumer branches, reviewed boundaries and concurrent outcomes.",
    :other-consumers []}
@@ -18811,7 +18830,8 @@
    :action
    "Promote the compiled Main candidate. It imports the reviewed endpoints, adds the proved sphere branch, and uses it in the unchanged final theorem. A single suffices obligation retains only the Klein-product and fold-fiber conjunction.",
    :depends-on
-   [:oriented-checkpoint31-sphere-endpoints-and-consumer-refill :oriented-checkpoint30-coefficient-sphere-endpoints-1],
+   [:oriented-checkpoint31-sphere-endpoints-and-consumer-refill
+    :oriented-checkpoint30-coefficient-sphere-endpoints-1],
    :current-residual
    "The rational endpoint isomorphisms and identity-map equations are reviewed; the exact frozen sphere-identity Lefschetz conjunct still lacks transport and trace evaluation.",
    :other-consumers []}
@@ -19032,7 +19052,8 @@
    :oriented-checkpoint32-sphere-identity-uptake-and-consumer-refill,
    :kind :strategy-checkpoint,
    :depends-on
-   [:oriented-checkpoint31-t00j01-sphere-identity-uptake-1 :oriented-checkpoint31-sphere-endpoints-and-consumer-refill],
+   [:oriented-checkpoint31-t00j01-sphere-identity-uptake-1
+    :oriented-checkpoint31-sphere-endpoints-and-consumer-refill],
    :current-residual
    "Verify whether the exact sphere branch is consumed by Main, measure its remaining typed obligation separately from placeholder count, and rerank all consumers.",
    :other-consumers []}
@@ -19186,7 +19207,9 @@
    :id :oriented-checkpoint32-coefficient-pair-connecting-naturality-1,
    :kind :reusable-theorem,
    :depends-on
-   [:oriented-checkpoint32-sphere-identity-uptake-and-consumer-refill :coefficient-general-actual-pair-homology-sequence-1 :coefficient-general-radial-relative-comparison-1],
+   [:oriented-checkpoint32-sphere-identity-uptake-and-consumer-refill
+    :coefficient-general-actual-pair-homology-sequence-1
+    :coefficient-general-radial-relative-comparison-1],
    :current-residual
    "Actual R-linear pair maps and connecting morphisms are reviewed separately. Their naturality requires a constructed morphism of the actual subtype-inclusion short exact sequences with the correct cokernel component.",
    :other-consumers [:t02A08 :t98A02 :t96J06]}
@@ -19408,7 +19431,8 @@
    :id :oriented-checkpoint33-pair-naturality-and-consumer-refill,
    :kind :strategy-checkpoint,
    :depends-on
-   [:oriented-checkpoint32-coefficient-pair-connecting-naturality-1 :oriented-checkpoint32-sphere-identity-uptake-and-consumer-refill],
+   [:oriented-checkpoint32-coefficient-pair-connecting-naturality-1
+    :oriented-checkpoint32-sphere-identity-uptake-and-consumer-refill],
    :current-residual
    "Measure actual pair-map naturality separately from signed-action and consumer conclusions; reassess all reviewed boundaries and concurrent outcomes.",
    :other-consumers []}
@@ -19986,7 +20010,8 @@
    :id :oriented-checkpoint34-disk-reflection-and-consumer-refill,
    :kind :strategy-checkpoint,
    :depends-on
-   [:oriented-checkpoint33-coefficient-disk-reflection-sign-1 :oriented-checkpoint33-pair-naturality-and-consumer-refill],
+   [:oriented-checkpoint33-coefficient-disk-reflection-sign-1
+    :oriented-checkpoint33-pair-naturality-and-consumer-refill],
    :current-residual
    "Measure actual reflection-sign progress separately from higher-dimensional sphere action and consumer closure; reassess the complete DAG and concurrent outcomes.",
    :other-consumers []}
@@ -20599,7 +20624,8 @@
    :oriented-checkpoint35-orthogonal-comparison-and-consumer-refill,
    :kind :strategy-checkpoint,
    :depends-on
-   [:oriented-checkpoint34-coefficient-orthogonal-sphere-comparison-1 :oriented-checkpoint34-disk-reflection-and-consumer-refill],
+   [:oriented-checkpoint34-coefficient-orthogonal-sphere-comparison-1
+    :oriented-checkpoint34-disk-reflection-and-consumer-refill],
    :current-residual
    "Measure geometric equivariance separately from signed-action and consumer conclusions, and rerank the complete DAG against concurrent outcomes.",
    :other-consumers []}
@@ -21314,7 +21340,8 @@
    :oriented-checkpoint36-antipodal-computation-and-consumer-refill,
    :kind :strategy-checkpoint,
    :depends-on
-   [:oriented-checkpoint35-coefficient-positive-sphere-antipodal-1 :oriented-checkpoint35-orthogonal-comparison-and-consumer-refill],
+   [:oriented-checkpoint35-coefficient-positive-sphere-antipodal-1
+    :oriented-checkpoint35-orthogonal-comparison-and-consumer-refill],
    :current-residual
    "Measure the actual signed computation separately from frozen uptake and rerank every consumer against concurrent outcomes.",
    :other-consumers []}
@@ -21456,7 +21483,8 @@
    :id :oriented-checkpoint36-t94j08-positive-antipodal-closure-1,
    :kind :final-adapter,
    :depends-on
-   [:oriented-checkpoint36-antipodal-computation-and-consumer-refill :oriented-checkpoint35-coefficient-positive-sphere-antipodal-1],
+   [:oriented-checkpoint36-antipodal-computation-and-consumer-refill
+    :oriented-checkpoint35-coefficient-positive-sphere-antipodal-1],
    :current-residual
    "Both frozen placeholders need the reviewed integral positive-dimensional orientation and antipodal scalar equation; the remaining local-index proof is already assembled.",
    :other-consumers []}
@@ -21809,7 +21837,8 @@
    :id :oriented-checkpoint37-t94j08-reviewed-closure-documentation-1,
    :kind :documentation,
    :depends-on
-   [:oriented-checkpoint37-t94j08-uptake-and-consumer-refill :oriented-checkpoint36-t94j08-positive-antipodal-closure-1],
+   [:oriented-checkpoint37-t94j08-uptake-and-consumer-refill
+    :oriented-checkpoint36-t94j08-positive-antipodal-closure-1],
    :current-residual
    "Reviewed consumer closure is not yet reflected in the DAG and closure-experiment note.",
    :other-consumers []}
@@ -21984,7 +22013,10 @@
    :id :oriented-checkpoint37-coefficient-model-local-negation-1,
    :kind :reusable-theorem,
    :depends-on
-   [:oriented-checkpoint37-t94j08-uptake-and-consumer-refill :oriented-checkpoint35-coefficient-positive-sphere-antipodal-1 :oriented-checkpoint32-coefficient-pair-connecting-naturality-1 :oriented-checkpoint28-coefficient-contractible-pair-sequence-1],
+   [:oriented-checkpoint37-t94j08-uptake-and-consumer-refill
+    :oriented-checkpoint35-coefficient-positive-sphere-antipodal-1
+    :oriented-checkpoint32-coefficient-pair-connecting-naturality-1
+    :oriented-checkpoint28-coefficient-contractible-pair-sequence-1],
    :current-residual
    "The banked higher model calculation uses AddCommGrpCat integers. Actual R-linear model local homology and its geometric negation action are not yet assembled for coefficient-general localization.",
    :other-consumers [:t01A02 :t03J05 :t96J06]}
@@ -22344,7 +22376,10 @@
    :oriented-checkpoint38-coefficient-neighborhood-local-excision-1,
    :kind :reusable-theorem,
    :depends-on
-   [:oriented-checkpoint38-local-model-and-consumer-refill :oriented-checkpoint37-coefficient-model-local-negation-1 :oriented-checkpoint27-coefficient-actual-subspace-excision-1 :oriented-checkpoint32-coefficient-pair-connecting-naturality-1],
+   [:oriented-checkpoint38-local-model-and-consumer-refill
+    :oriented-checkpoint37-coefficient-model-local-negation-1
+    :oriented-checkpoint27-coefficient-actual-subspace-excision-1
+    :oriented-checkpoint32-coefficient-pair-connecting-naturality-1],
    :current-residual
    "The actual R-linear local model is reviewed; its transport from an open neighborhood to the ambient space requires an actual all-degree neighborhood-inclusion excision isomorphism.",
    :other-consumers [:t01A02 :t03J05 :t96J06]}
@@ -24779,7 +24814,8 @@
    :id :oriented-checkpoint41-overlap-transition-and-consumer-refill,
    :kind :strategy-checkpoint,
    :depends-on
-   [:oriented-checkpoint40-coefficient-actual-overlap-transition-1 :oriented-checkpoint40-chart-local-homology-and-consumer-refill],
+   [:oriented-checkpoint40-coefficient-actual-overlap-transition-1
+    :oriented-checkpoint40-chart-local-homology-and-consumer-refill],
    :current-residual
    "Measure actual overlap comparison separately from orientation compatibility and global localization; rerank every consumer against concurrent outcomes.",
    :other-consumers []}
@@ -27159,7 +27195,8 @@
    :id :oriented-checkpoint44-uniform-graph-hausdorff-bounds-1,
    :kind :reusable-theorem,
    :depends-on
-   [:oriented-checkpoint44-linear-area-and-consumer-refill :oriented-checkpoint43-linear-graph-hausdorff-distortion-1],
+   [:oriented-checkpoint44-linear-area-and-consumer-refill
+    :oriented-checkpoint43-linear-graph-hausdorff-distortion-1],
    :current-residual
    "Exact linear graph density is reviewed. Nonlinear area transport needs quantitative graph-image measure bounds on sets where the scalar function is uniformly approximated by a fixed linear functional.",
    :other-consumers [:t95J05 :t01J06 :t94A10]}
@@ -27950,7 +27987,8 @@
    :oriented-checkpoint46-measurable-graph-partition-and-consumer-refill,
    :kind :strategy-checkpoint,
    :depends-on
-   [:oriented-checkpoint45-c1-graph-measurable-approximation-partition-1 :oriented-checkpoint45-uniform-area-bounds-and-consumer-refill],
+   [:oriented-checkpoint45-c1-graph-measurable-approximation-partition-1
+    :oriented-checkpoint45-uniform-area-bounds-and-consumer-refill],
    :current-residual
    "Measure measurable approximation progress separately from exact area equality and numerical normalization; rerank every consumer against concurrent outcomes.",
    :other-consumers []}
@@ -29056,7 +29094,8 @@
    :id :oriented-checkpoint47-exact-graph-area-and-consumer-refill,
    :kind :strategy-checkpoint,
    :depends-on
-   [:oriented-checkpoint46-c1-graph-exact-hausdorff-area-1 :oriented-checkpoint46-measurable-graph-partition-and-consumer-refill],
+   [:oriented-checkpoint46-c1-graph-exact-hausdorff-area-1
+    :oriented-checkpoint46-measurable-graph-partition-and-consumer-refill],
    :current-residual
    "Measure exact graph-area progress separately from sphere-chart assembly and numerical normalization; rerank every consumer against concurrent outcomes.",
    :other-consumers []}
@@ -49417,7 +49456,8 @@
    :oriented-checkpoint48-euclidean-hausdorff-volume-normalization-1,
    :kind :reusable-theorem,
    :depends-on
-   [:oriented-checkpoint48-sphere-cap-area-and-consumer-refill-repair2 :oriented-checkpoint47-sphere-cap-c1-graph-area-comparison-repair2],
+   [:oriented-checkpoint48-sphere-cap-area-and-consumer-refill-repair2
+    :oriented-checkpoint47-sphere-cap-c1-graph-area-comparison-repair2],
    :current-residual
    "The strict sphere-cap formulas integrate against d-dimensional Hausdorff measure on EuclideanSpace real (Fin d); numerical evaluation requires its exact comparison with Lebesgue volume under the repository's diameter-power convention.",
    :other-consumers [:t02A05 :t01J06 :t94A10]}
@@ -49489,7 +49529,8 @@
    :oriented-checkpoint47-sphere-cap-c1-graph-area-comparison-repair1,
    :kind :representation-comparison,
    :depends-on
-   [:oriented-checkpoint46-c1-graph-exact-hausdorff-area-1 :oriented-checkpoint47-exact-graph-area-and-consumer-refill],
+   [:oriented-checkpoint46-c1-graph-exact-hausdorff-area-1
+    :oriented-checkpoint47-exact-graph-area-and-consumer-refill],
    :current-residual
    "The exact scalar graph-area theorem is banked, but the literal upper and lower unit-sphere subsets have not been identified with its WithLp 2 graph representation and induced Hausdorff measures.",
    :other-consumers [:t02A05 :t01J06 :t94A10]}
@@ -49560,7 +49601,8 @@
    :id :oriented-checkpoint47-sphere-cap-c1-graph-area-comparison-1,
    :kind :representation-comparison,
    :depends-on
-   [:oriented-checkpoint46-c1-graph-exact-hausdorff-area-1 :oriented-checkpoint47-exact-graph-area-and-consumer-refill],
+   [:oriented-checkpoint46-c1-graph-exact-hausdorff-area-1
+    :oriented-checkpoint47-exact-graph-area-and-consumer-refill],
    :current-residual
    "The exact scalar graph-area theorem is banked, but the literal upper and lower unit-sphere subsets have not been identified with its WithLp 2 graph representation and induced Hausdorff measures.",
    :other-consumers [:t02A05 :t01J06 :t94A10]}
@@ -57288,8 +57330,82 @@
    "Exact Fin-2 endpoint-coordinate naturality is absent.",
    :other-consumers [:t01A02]}
   {:consumer :portfolio,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Both canonical ledgers now have unique dependency edges, and worklist_check rejects any future row whose :depends-on vector repeats an edge.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["The canonical validators reported 503 and 156 reviewed PASS rows whose historical out-of-repository fixtures are gone; this is their existing accepted condition."],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms [],
+    :author "topo-6",
+    :commands
+    [{:cmd
+      "clojure full-ledger migration audit against git parent: assert unchanged top-level fields, item count/order/ids, and every non-:depends-on item field; assert each new :depends-on equals order-preserving distinct of the old vector",
+      :exit 0,
+      :output
+      "worklist.edn: 711 items, 91 rows migrated; worklist2.edn: 399 items, 69 rows migrated; zero duplicate-edge rows; all asserted fields preserved"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output "711 items OK"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0,
+      :output "399 items OK"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/worklist-duplicate-dependency-regression.edn",
+      :exit 1,
+      :expected-exit 1,
+      :output
+      "topology-worklist: :generic-two-open-free-product-principle contains duplicate dependencies"}
+     {:cmd
+      "clj-kondo --lint holes/labs/topology-contract/worklist_check.bb",
+      :exit 0,
+      :output "errors: 0, warnings: 0"}
+     {:cmd
+      "cp holes/labs/topology-contract/worklist_check.bb /tmp/worklist_check.clj && emacs -Q --batch -l /home/joe/code/futon4/dev/check-parens.el /tmp/worklist_check.clj",
+      :exit 0,
+      :output "OK"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r 91b61d63538f9d22658580f6012c753e020c1ac1",
+      :exit 0,
+      :output
+      "holes/labs/topology-contract/worklist.edn\nholes/labs/topology-contract/worklist2.edn\nholes/labs/topology-contract/worklist_check.bb"}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :diagnostic-history
+    [{:cmd "first inline clojure migration scanner",
+      :exit 1,
+      :output "Unmatched delimiter: ]",
+      :correction
+      "Moved the scanner into a readable temporary Clojure file and reran it successfully."}
+     {:cmd "second inline clojure migration scanner",
+      :exit 1,
+      :output "Unmatched delimiter: ]",
+      :correction
+      "Used the corrected temporary Clojure migration file; it migrated 91 and 69 rows."}
+     {:cmd
+      "emacs --batch -Q -l /home/joe/code/futon4/dev/check-parens.el --eval '(check-parens-file ...)'",
+      :exit 255,
+      :output
+      "Symbol's function definition is void: check-parens-file",
+      :correction
+      "Used the documented arxana check-parens batch entrypoint on a .clj copy; it returned OK."}],
+    :commit "91b61d63538f9d22658580f6012c753e020c1ac1",
+    :changed-paths
+    ["holes/labs/topology-contract/worklist.edn"
+     "holes/labs/topology-contract/worklist2.edn"
+     "holes/labs/topology-contract/worklist_check.bb"],
+    :fixture
+    {:path "holes/labs/topology-contract/worklist_check.bb",
+     :sha256
+     "d476f08c578bd8e29f1ecf06d2de3a5f8279fdb6cf03006206cf2362a5b483f1"}},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["holes/labs/topology-contract/worklist.edn"
     "holes/labs/topology-contract/worklist2.edn"
@@ -57430,8 +57546,7 @@
     :route-step "steps 1-3, complete closure"},
    :id :routes-2026-10-10-t94a08-projective-conic-closure-topo2-r3,
    :kind :final-adapter,
-   :depends-on
-   [:routes-2026-10-10-checkpoint-topo2-r2],
+   :depends-on [:routes-2026-10-10-checkpoint-topo2-r2],
    :current-residual
    "One frozen placeholder; conjunct 1 is already local, while the affine-chart topology comparison and nodal branch argument remain.",
    :other-consumers []}
@@ -57450,8 +57565,7 @@
    :id
    :routes-2026-10-10-torus-pi1-winding-coordinates-two-consumers-topo2-r1,
    :kind :reusable-theorem,
-   :depends-on
-   [:routes-2026-10-10-checkpoint-topo2-r2],
+   :depends-on [:routes-2026-10-10-checkpoint-topo2-r2],
    :current-residual
    "The product fundamental-group equivalence and circle lift APIs are banked, but their exact Fin-2 endpoint-coordinate naturality is absent.",
    :other-consumers [:t01A02]}
