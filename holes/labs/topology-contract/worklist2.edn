@@ -54357,8 +54357,11 @@
   {:consumer :t02A02,
    :stop-count 1,
    :evidence
-   {:outcome :stop,
-    :seat "topo-8",
+   {:residual
+    "Replace this row structurally: prove T2 directly from closedness of the generated equivalence relation on Disk × Disk, prove only the quotient-map property supplied by the coinduced topology, and separately prove that the restriction to the interior is an open embedding. Do not assert global openness of the polygon quotient map.",
+    :outcome :stop,
+    :disposition :stop,
+    :author "topo-8",
     :reason
     "The acceptance requires the polygon quotient map itself to be open, and that claim is false for the frozen edge-pairing quotients. Choose an edge-interior point x and its distinct paired edge-interior point y. A sufficiently small relative-open neighborhood U of x in the closed disk omits y and every neighborhood of y. The saturation of U under the generated edge relation contains y because x is identified with y, but contains no relative neighborhood of y. For the quotient map q, q⁻¹(q(U)) is therefore not open; by the coinduced quotient topology q(U) is not open. Thus q is not an open map and cannot be an IsOpenQuotientMap. The source confirms that both frozen quotients use Quotient of EqvGen edge identifications on the closed disk and provides only continuity and surjectivity, not openness. T2 and an open embedding of the disk interior may still be true, but they require a closed-equivalence-relation argument and cannot be packaged with the refuted open-map clause or proved through t2Space_iff_of_isOpenQuotientMap. This is a mathematical refutation of the row as stated, not a request for another prerequisite.",
     :commands
@@ -54371,14 +54374,24 @@
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :output "131 registered statements match, 0 do not"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791603888855-980-e1612cd3",
+     :commands
+     ["lake env lean ConstructionTargets/Surfaces.lean"
+      "git grep -n -E 'IsOpenMap.*surfaceQuotient|IsOpenQuotientMap.*surfaceQuotient|polygon_quotient_t2|T2Space.*Surface' 14936727 -- 'ConstructionTargets/*.lean' 'problems/t02A02/*.lean' 'problems/t96J02/*.lean'"
+      "python3 inline committed SHA-256 and comment-stripped placeholder census for t02A02 and t96J02"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 14936727:holes/labs/topology-contract/worklist2.edn)"
+      "git diff --quiet 14936727^ 14936727 -- . ':(exclude)holes/labs/topology-contract/worklist2.edn'"],
+     :finding
+     "Independent of topo-8. PASS: commit 14936727 changes only worklist2.edn; the probe has empty implementation scope and correctly marks the requested fixture/hash impossible because the global open-map clause is false. The committed quotient is oriented Disk to Quotient(EqvGen SurfaceRel) with the coinduced topology. A relative-open neighborhood at one edge point saturates at its paired point to a boundary arc without an interior half-neighborhood, so the image is not open. Surfaces.lean compiles and supplies continuity and surjectivity only; no committed global open-map theorem was found. Both frozen consumers retain one placeholder, with hashes d1c36240a666ac307e290ab8dbfe9aff9241fe6de271ae45dd80d3992a1f23a9 and e67845d7cd1eef2f72278b11b32dbdccd9094ee090b25565a0ef1a207d9dc498. Registry: 131 matched, 0 mismatched; ledger: 359 items valid. The structural residual correctly separates T2, quotient-map, and interior open-embedding claims."},
     :fixture
     {:status :impossible, :refuted-clause "the quotient map is open"},
-    :residual
-    "Replace this row structurally: prove T2 directly from closedness of the generated equivalence relation on Disk × Disk, prove only the quotient-map property supplied by the coinduced topology, and separately prove that the restriction to the interior is an open embedding. Do not assert global openness of the polygon quotient map.",
-    :author "topo-8",
-    :disposition :stop},
+    :seat "topo-8"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
