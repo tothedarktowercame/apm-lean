@@ -91264,8 +91264,159 @@
      :review-outcomes]},
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+   :evidence
+   {:outcome :replan,
+    :seat "topo-4",
+    :commands
+    [{:cmd "bb holes/labs/topology-contract/worklist_check.bb",
+      :exit 0,
+      :finding
+      "pre-transition ledger: 757 items, 709 done, 20 superseded, 17 needs-owner, 10 blocked, 1 open; recording this checkpoint and adding the replacement pair yields 759 items with 20 superseded"}
+     {:cmd "lake env lean /tmp/edgecomp.lean",
+      :exit 0,
+      :finding
+      "the corrected label-cardinality bridge Fin r ≃ IsFreeGroup.Generators (FreeGroup (Fin r)) compiles with standard axioms"}
+     {:cmd
+      "comment-stripped placeholder census for t99J01 t92J06 t97A03 t93J03 t01A03 t97A01",
+      :exit 0,
+      :finding "counts 1, 1, 3, 1, 1, 1; total 8; delta 0"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :finding
+    {:routes
+     {:t99J01
+      ["three-circles fundamental-group coordinates"
+       "banked covering-subgroup index"
+       "chosen-generator action-groupoid edge coordinates"
+       "finite arborescence edge count"
+       "complement count and Type-valued Nielsen-Schreier basis"
+       "path-component restriction and cyclic-cover connectedness"
+       "assembly"],
+      :t92J06
+      ["matched quotient-sheet local-homeomorph"
+       "permutation cover"
+       "Cayley-tree classification"
+       "assembly"],
+      :t97A03
+      ["double-cover gluing"
+       "fixed-model comparisons"
+       "chosen-generator action-groupoid edge coordinates"
+       "finite arborescence edge count"
+       "complement count and Type-valued Nielsen-Schreier basis"
+       "transport and assembly"],
+      :t93J03
+      ["Klein orbit classification"
+       "deck-group fundamental group"
+       "normal form"
+       "lifting criterion"
+       "annulus embedding"
+       "assembly"],
+      :t01A03
+      ["circle-wedge fundamental group and torus commutativity"
+       "separating-circle collar"
+       "assembly"],
+      :t97A01
+      ["banked standard-N3 homeomorphism"
+       "polygon radial cover"
+       "polygon fundamental group and Mayer-Vietoris"
+       "banked Smith normalization"
+       "assembly"]},
+     :placeholder-delta 0,
+     :preserved-boundaries
+     ["canonical Fin labels cannot preserve the chosen-basis action endpoints on unchanged H cosets"
+      "polygon radial descent"
+      "strict point-wedge inclusion squares"
+      "path-component cover restriction"
+      "cyclic-monodromy connectedness"
+      "Klein orbit fundamental domain"
+      "double-cover stratum gluing"
+      "fixed-model quotient-to-bouquet equivalences"],
+     :placeholder-counts
+     {:t99J01 1,
+      :t92J06 1,
+      :t97A03 3,
+      :t93J03 1,
+      :t01A03 1,
+      :t97A01 1},
+     :deferred
+     ["Finite-arborescence edge counting waits for the corrected action-groupoid coordinate package."
+      "Canonical-generator coordinates are not reused for endpoint equations."],
+     :infrastructure-packets
+     {:banked 0, :reviewed-stops 1, :placeholder-changing 0},
+     :ranking
+     "No nearer closing adapter is enabled. The corrected chosen-generator coordinate equivalence is a bounded representation step on both open Schreier routes.",
+     :typed-residual-change
+     ["The canonical-Fin endpoint comparison received a reviewed STOP: Equiv.ofFreeGroupEquiv preserves rank but does not identify IsFreeGroup.of with FreeGroup.of on the unchanged H-coset action."
+      "The corrected comparison uses IsFreeGroup.Generators coordinates, where action-groupoid endpoints are definitional, and uses Fin r only to transport cardinality r."
+      "After this comparison, the independent finite-arborescence edge count remains before complement arithmetic and the Type-valued basis."],
+     :review-outcomes {:pass 0, :stop 1, :closed-problems 0}},
+    :replacement-items
+    [{:consumer :t99J01,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/positive-index/chosen-generator-action-groupoid-coordinates",
+      :acceptance
+      {:probe
+       "Compile the corrected action-groupoid edge coordinates. Construct an endpoint-preserving equivalence from IsFreeGroup.Generators (FreeGroup (Fin r)) × (FreeGroup (Fin r) ⧸ H) to Quiver.Total (IsFreeGroupoid.Generators (ActionCategory (FreeGroup (Fin r)) (FreeGroup (Fin r) ⧸ H))) by sending (j,v) to the generator arrow labelled j from v to IsFreeGroup.of j • v. Prove exact source, target, label, inverse, and Symmetrify orientation equations. Separately use Equiv.ofFreeGroupEquiv only to prove that the chosen generator type has cardinal r, then prove the total positive-arrow type has cardinal r*n. Do not assert IsFreeGroup.of agrees with FreeGroup.of, and do not choose or count a subtree.",
+       :placeholder
+       "the single sorry in apm_t99j01 and apm_t97A03_bridge_invariants_of_model",
+       :route-step
+       "t99J01 step 3 and t97A03 step 8, corrected chosen-generator coordinates for Mathlib's action-groupoid quiver",
+       :gates
+       ["canonical packages"
+        "fixture compiles"
+        "zero fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :representation
+      {:source
+       "IsFreeGroup.Generators (FreeGroup (Fin r)) × (FreeGroup (Fin r) ⧸ H), with endpoints defined using IsFreeGroup.of",
+       :target
+       "Quiver.Total (IsFreeGroupoid.Generators (ActionCategory (FreeGroup (Fin r)) (FreeGroup (Fin r) ⧸ H))) and its Symmetrify orientations",
+       :direction
+       "Exact endpoint-preserving equivalence from chosen-generator/coset coordinates to action-groupoid generator arrows; only cardinality, not generator action, is transported from Fin r"},
+      :id
+      :routes-2026-10-10-finite-schreier-chosen-generator-edge-coordinates-12,
+      :kind :representation-comparison,
+      :depends-on
+      [:routes-2026-10-10-finite-schreier-coset-quiver-positive-index-3],
+      :current-residual
+      "Expose action-groupoid generator arrows in their native chosen-basis coordinates and prove their r*n cardinality without equating chosen and canonical generators.",
+      :other-consumers [:t97A03]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:strategy
+       "Measure the corrected chosen-generator action-groupoid coordinate comparison, preserve the canonical-generator endpoint refutation and all topology boundaries, recount six consumers and eight placeholders, then elect the finite-arborescence edge count."},
+      :id
+      :routes-2026-10-10-checkpoint-topo1-after-chosen-generator-coordinates-12,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:routes-2026-10-10-finite-schreier-chosen-generator-edge-coordinates-12],
+      :current-residual
+      "Review the representation repair before returning to finite arborescence counting.",
+      :other-consumers []}],
+    :author "topo-4",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -91279,6 +91430,68 @@
     :routes-2026-10-10-checkpoint-topo1-after-schreier-tree-count-10],
    :current-residual
    "Review the first of two prerequisites isolated by the spanning-tree-count STOP.",
+   :other-consumers []}
+  {:consumer :t99J01,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/positive-index/chosen-generator-action-groupoid-coordinates",
+   :acceptance
+   {:probe
+    "Compile the corrected action-groupoid edge coordinates. Construct an endpoint-preserving equivalence from IsFreeGroup.Generators (FreeGroup (Fin r)) × (FreeGroup (Fin r) ⧸ H) to Quiver.Total (IsFreeGroupoid.Generators (ActionCategory (FreeGroup (Fin r)) (FreeGroup (Fin r) ⧸ H))) by sending (j,v) to the generator arrow labelled j from v to IsFreeGroup.of j • v. Prove exact source, target, label, inverse, and Symmetrify orientation equations. Separately use Equiv.ofFreeGroupEquiv only to prove that the chosen generator type has cardinal r, then prove the total positive-arrow type has cardinal r*n. Do not assert IsFreeGroup.of agrees with FreeGroup.of, and do not choose or count a subtree.",
+    :placeholder
+    "the single sorry in apm_t99j01 and apm_t97A03_bridge_invariants_of_model",
+    :route-step
+    "t99J01 step 3 and t97A03 step 8, corrected chosen-generator coordinates for Mathlib's action-groupoid quiver",
+    :gates
+    ["canonical packages"
+     "fixture compiles"
+     "zero fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :representation
+   {:source
+    "IsFreeGroup.Generators (FreeGroup (Fin r)) × (FreeGroup (Fin r) ⧸ H), with endpoints defined using IsFreeGroup.of",
+    :target
+    "Quiver.Total (IsFreeGroupoid.Generators (ActionCategory (FreeGroup (Fin r)) (FreeGroup (Fin r) ⧸ H))) and its Symmetrify orientations",
+    :direction
+    "Exact endpoint-preserving equivalence from chosen-generator/coset coordinates to action-groupoid generator arrows; only cardinality, not generator action, is transported from Fin r"},
+   :id
+   :routes-2026-10-10-finite-schreier-chosen-generator-edge-coordinates-12,
+   :kind :representation-comparison,
+   :depends-on
+   [:routes-2026-10-10-finite-schreier-coset-quiver-positive-index-3
+    :routes-2026-10-10-checkpoint-topo1-after-schreier-edge-comparison-11],
+   :current-residual
+   "Expose action-groupoid generator arrows in their native chosen-basis coordinates and prove their r*n cardinality without equating chosen and canonical generators.",
+   :other-consumers [:t97A03]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:strategy
+    "Measure the corrected chosen-generator action-groupoid coordinate comparison, preserve the canonical-generator endpoint refutation and all topology boundaries, recount six consumers and eight placeholders, then elect the finite-arborescence edge count."},
+   :id
+   :routes-2026-10-10-checkpoint-topo1-after-chosen-generator-coordinates-12,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:routes-2026-10-10-finite-schreier-chosen-generator-edge-coordinates-12
+    :routes-2026-10-10-checkpoint-topo1-after-schreier-edge-comparison-11],
+   :current-residual
+   "Review the representation repair before returning to finite arborescence counting.",
    :other-consumers []}
   {:consumer :t99J01,
    :phase :probe,
