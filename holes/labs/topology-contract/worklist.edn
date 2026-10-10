@@ -85026,8 +85026,54 @@
    "Prove local triviality at the wedge point for the quotient-glued total space and transport the source fiber cardinality.",
    :other-consumers [:t99J01]}
   {:consumer :t97A01,
+   :stop-count 1,
+   :evidence
+   {:placeholder-after {:t97A01 1, :t97A03 1},
+    :residual
+    "First compile a generic point-wedge cover package with piece/intersection homotopy equivalences and degree-zero inclusion coordinates. Then the production Mayer-Vietoris sequence can support the finite-wedge induction and its definitional ThreeCircles specialization.",
+    :outcome :stop,
+    :warnings [],
+    :disposition :stop,
+    :axioms
+    ["propext"
+     "Classical.choice"
+     "Quot.sound"
+     "finite_circle_wedge_integral_homology_package"],
+    :author "topo-2",
+    :placeholder-before {:t97A01 1, :t97A03 1},
+    :reason
+    "The supplied probe does not implement the finite point-wedge Mayer-Vietoris induction. It postulates finite_circle_wedge_integral_homology_package with exactly the desired H0, H1, and higher-vanishing conclusions, and #print axioms reports that custom axiom, contradicting :axioms :standard-only. None of the six accepted declarations occurs. The available PointWedgeQuotient modules establish the quotient topology and restricted-open/contraction facts, while the existing production Mayer-Vietoris applications are tied to concrete covers such as torus-circle wedges. The exact missing geometric interface is a generic point-wedge two-open cover, with compiled homotopy equivalences from its left piece to the preceding finite wedge, its right piece to Circle, and its intersection to a point, plus the literal inclusion maps needed to identify the degree-zero signed diagonal. Without those maps the abstract exact sequence cannot establish the codiagonal cokernel in H0 or the reassembly isomorphism in H1, so the requested induction cannot be derived from the banked results.",
+    :commands
+    [{:cmd "sha256sum /tmp/finite-circle-wedge-homology-probe.lean",
+      :exit 0,
+      :finding
+      "c3eda65f599432e8171adc2b38135b508a906be162d22e5779a1aab6b7cad6ea"}
+     {:cmd
+      "lake env lean /tmp/finite-circle-wedge-homology-probe.lean",
+      :exit 0,
+      :finding
+      "The probe compiles, but threeCircles_integral_homology depends on the custom axiom finite_circle_wedge_integral_homology_package."}
+     {:cmd
+      "rg -n \"^(axiom|structure|def|theorem)|finiteCircleWedgeH0IsoInt|finiteCircleWedgeH1IsoFin|finiteCircleWedgeHomology_isZero_of_one_lt|threeCirclesH0IsoInt|threeCirclesH1IsoFinThree|threeCirclesHomology_isZero_of_one_lt|finite_circle_wedge_integral_homology_package\" /tmp/finite-circle-wedge-homology-probe.lean",
+      :exit 0,
+      :finding
+      "The only substantive declaration is the package axiom at line 19; none of the six acceptance declarations occurs."}
+     {:cmd
+      "test ! -e ConstructionTargets/FiniteCircleWedgeIntegralHomology.lean",
+      :exit 0,
+      :finding "The scoped target module is absent."}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}],
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/finite-circle-wedge-homology-probe.lean",
+     :sha256
+     "c3eda65f599432e8171adc2b38135b508a906be162d22e5779a1aab6b7cad6ea",
+     :status :self-axiomatized},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/FiniteCircleWedgeIntegralHomology.lean"],
    :dag-node
