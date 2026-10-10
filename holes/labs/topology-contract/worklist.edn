@@ -90642,27 +90642,76 @@
    "Review the repaired shared Schreier route after excluding infinite-index subgroups encoded by index zero.",
    :other-consumers []}
   {:consumer :t99J01,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-4",
+     :fixture
+     {:path "/tmp/schreier-coset-quiver-probe.lean",
+      :sha256
+      "f48f42d2c1f248e685d5fef1593e6bb8cd25b2d502efd8ac550c9e67e8f66338"},
+     :commands
+     [{:cmd "lake env lean /tmp/schreier-coset-quiver-probe.lean",
+       :exit 0,
+       :finding
+       "fixture compiles; all four printed declarations use only propext, Classical.choice, and Quot.sound"}
+      {:cmd
+       "rg -n '(^|[^A-Za-z0-9_])sorry([^A-Za-z0-9_]|$)' /tmp/schreier-coset-quiver-probe.lean",
+       :exit 1,
+       :expected-exit 1,
+       :finding "zero fixture placeholders"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :finding "131 registered statements match, 0 do not"}
+      {:cmd "readlink -f .lake/packages",
+       :exit 0,
+       :finding "/home/joe/code/apm-lean/.lake/packages"}],
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :implementation
+     {:scope
+      ["ConstructionTargets/FiniteSchreierCosetQuiverPositiveIndex.lean"],
+      :declarations
+      ["vertexFintype"
+       "vertex_card"
+       "positiveEdgeFintype"
+       "generatorPermutation"
+       "inverseGeneratorPermutation"
+       "generatorPermutation_inverse"
+       "connected_from_identity"
+       "positive_edge_card"],
+      :acceptance
+      "Implement the compiled fixture exactly: finite coset vertices from H.fintypeOfIndexNeZero, generator and inverse permutations from the quotient action, transitivity from MulAction.exists_smul_eq, and the product-cardinality proof r*n. Preserve hypotheses 0<r, 0<n, and H.index=n; do not add spanning-tree or basis results."},
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/schreier-coset-quiver-probe.lean",
+       :exit 1,
+       :finding
+       "Initial draft confused Nat.card with the chosen Fintype.card and did not align the product instance; corrected by installing the explicit vertex instance and using Nat.card_eq_fintype_card."}
+      {:cmd "lake env lean /tmp/schreier-coset-quiver-probe.lean",
+       :exit 1,
+       :finding
+       "Intermediate rewrite referenced the elaborator-omitted hr argument and lacked the local quotient Fintype instance; corrected signature use and instance installation."}],
+     :residual
+     "Implement the bounded finite coset-action quiver package; spanning-tree complement counting and Nielsen-Schreier basis identification remain downstream."}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/FiniteSchreierCosetQuiverPositiveIndex.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/positive-index/coset-quiver",
    :acceptance
-   {:probe
-    "Compile the finite Schreier coset-quiver package for 0<r, 0<n, and H.index=n: give the n-element right-coset vertex type, the r labelled generator edges and inverse edges, prove every labelled edge is a permutation of vertices, prove the underlying quiver is connected from the identity coset, and record exactly r*n positive oriented edges. Do not yet choose or count a spanning tree or identify the Nielsen-Schreier basis.",
-    :placeholder
-    "the single sorry in apm_t99j01 and apm_t97A03_bridge_invariants_of_model",
-    :route-step
-    "t99J01 step 3 and t97A03 step 8, finite positive-index Schreier coset quiver before spanning-tree count",
-    :gates
-    ["canonical packages"
-     "fixture compiles"
-     "zero fixture sorry"
-     "standard-only axioms"
-     "registry check"]},
+   "Implement the compiled fixture exactly: finite coset vertices from H.fintypeOfIndexNeZero, generator and inverse permutations from the quotient action, transitivity from MulAction.exists_smul_eq, and the product-cardinality proof r*n. Preserve hypotheses 0<r, 0<n, and H.index=n; do not add spanning-tree or basis results.",
    :id
    :routes-2026-10-10-finite-schreier-coset-quiver-positive-index-3,
    :kind :reusable-theorem,
+   :declarations
+   ["vertexFintype"
+    "vertex_card"
+    "positiveEdgeFintype"
+    "generatorPermutation"
+    "inverseGeneratorPermutation"
+    "generatorPermutation_inverse"
+    "connected_from_identity"
+    "positive_edge_card"],
    :depends-on
    [:routes-2026-10-10-checkpoint-topo1-after-schreier-index-repair-3],
    :current-residual
