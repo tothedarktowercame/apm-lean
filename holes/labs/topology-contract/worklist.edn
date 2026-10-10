@@ -89721,7 +89721,55 @@
    "Owner reopen 2026-10-10: eight rows were parked on a signature-approval reading the prompts never stated; reopened under the clarified rule.",
    :other-consumers []}
   {:consumer :t97A01,
-   :phase :probe,
+   :method
+   "Define the two literal ModuleCat maps and Smith coordinate linear maps; prove surjectivity and range=kernel explicitly; compose ModuleCat.cokernelIsoRangeQuotient with Submodule.quotEquivOfEq and LinearMap.quotKerEquivOfSurjective, oriented from each categorical cokernel to ModuleCat.of ℤ (ℤ × ℤ × ZMod 2).",
+   :evidence
+   {:probe
+    {:outcome :go,
+     :fixture
+     {:path "/tmp/t97a01-smith-probe.lean",
+      :sha256
+      "d47c4e8570292c36799cff2c21f2c2b95bfc22e64cb3a43f053e3cd3083f1acf"},
+     :commands
+     [{:cmd "stat -c '%F %N' .lake/packages",
+       :exit 0,
+       :finding
+       "directory '.lake/packages'; this checkout is the canonical package authority itself"}
+      {:cmd "lake env lean /tmp/t97a01-smith-probe.lean",
+       :exit 0,
+       :finding
+       "both injective boundary maps, exact kernel-range identities, surjective Smith coordinate maps, and categorical cokernel isomorphisms compile"}
+      {:cmd "sha256sum /tmp/t97a01-smith-probe.lean",
+       :exit 0,
+       :finding
+       "d47c4e8570292c36799cff2c21f2c2b95bfc22e64cb3a43f053e3cd3083f1acf"}
+      {:cmd
+       "comment-stripped placeholder census of /tmp/t97a01-smith-probe.lean",
+       :exit 0,
+       :finding "0"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :finding "131 registered statements match, 0 do not"}
+      {:cmd "git status --short", :exit 0, :finding "clean"}],
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :warnings
+     [{:kind :linter,
+       :message
+       "Two unused mul_assoc simp arguments in boundary-map scalar proofs; no proof or axiom impact."}],
+     :implementation
+     {:scope ["ConstructionTargets/T97A01SmithQuotients.lean"],
+      :declarations
+      ["standardN3BoundaryMap"
+       "torusCrosscapBoundaryMap"
+       "standardN3BoundaryMap_injective"
+       "torusCrosscapBoundaryMap_injective"
+       "standardN3SmithCokernelIso"
+       "torusCrosscapSmithCokernelIso"],
+      :method
+      "Define the two literal ModuleCat maps and Smith coordinate linear maps; prove surjectivity and range=kernel explicitly; compose ModuleCat.cokernelIsoRangeQuotient with Submodule.quotEquivOfEq and LinearMap.quotKerEquivOfSurjective, oriented from each categorical cokernel to ModuleCat.of ℤ (ℤ × ℤ × ZMod 2)."},
+     :residual
+     "Implement the compiled fixture in the scoped ConstructionTarget; the downstream polygon Mayer-Vietoris adapter remains separate."}},
+   :phase :implementation,
    :state :open,
    :scope ["ConstructionTargets/T97A01SmithQuotients.lean"],
    :acceptance
@@ -89748,6 +89796,13 @@
     "Explicit isomorphisms from each categorical cokernel to Smith coordinates, induced respectively by (x,y,z) ↦ (y-x,z-x,x mod 2) and (x,y,z) ↦ (x,y,z mod 2)"},
    :id :routes-2026-10-10-t97a01-smith-coordinate-kernel-range-1,
    :kind :representation-comparison,
+   :declarations
+   ["standardN3BoundaryMap"
+    "torusCrosscapBoundaryMap"
+    "standardN3BoundaryMap_injective"
+    "torusCrosscapBoundaryMap_injective"
+    "standardN3SmithCokernelIso"
+    "torusCrosscapSmithCokernelIso"],
    :depends-on [],
    :current-residual
    "Prove the two coordinate maps have kernels exactly equal to the two boundary-map ranges; the banked ModuleCat cokernel-range quotient isomorphism then supplies the categorical result.",
