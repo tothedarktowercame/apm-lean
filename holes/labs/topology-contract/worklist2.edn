@@ -59940,6 +59940,20 @@
       :output
       "[master 748aa4f6] Bank t02A03 left-core compact range; 1 file changed, 34 insertions(+)"}
      {:cmd "git status --short", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791633696318-1865-1ab9150a",
+     :commands
+     ["git show, diff-tree, and show --check on implementation 748aa4f6 and ledger transition 0d3542d9"
+      "sha256sum authenticated fixture and frozen t02A03 consumer"
+      "lake env lean on fixture, target, and fresh Circle-range representation probe"
+      "lake build ConstructionTargets.T02A03GeometricTubeCover"
+      "axiom and comment-stripped placeholder audits"
+      "python3 scripts/statement-registry.py check --rev 748aa4f6"
+      "bb worklist_check.bb on committed transition ledger"],
+     :finding
+     "PASS: codex-7 independently reviewed topo-6 commit 748aa4f67cd6236fe244f4a88131497c8d3d1c10. Exact implementation scope is ConstructionTargets/T02A03GeometricTubeCover.lean; transition 0d3542d94c95fede15d5bf0eb1e1a9ff52fb988b is ledger-only. Fixture SHA-256 is c8ba25af1ad86912ae586cc791c77fb5cc6c95775e03dbbe3e28d964cb2f9e0b. Fixture, recorded-identical target, fresh representation probe, and 8240-job focused build pass. The four interfaces elaborate exactly: a Circle-to-E3 parameterization, its continuity, equality of its range with the frozen real-parameter left-core range, and compactness of that exact frozen range. A fresh orientation check proves leftCoreCircle (Circle.exp t) = leftCore t; the reverse range direction uses Complex.arg with unit-circle real and imaginary identities. Thus compactness crosses the Circle/real parameter boundary without changing the represented subset. No tube coordinates, deformation, torus equivalence, or gluing is claimed. All declarations use only propext, Classical.choice, and Quot.sound. The target has zero executable placeholders. Frozen t02A03 consumer hash is b123eca388ab2858ca55daf538c1ddd645022b52f5196a15f0bb516d78323d7d with one executable placeholder; registry is 131/0 and the committed 429-row ledger validates with exactly one done-unreviewed row."},
     :commit "748aa4f67cd6236fe244f4a88131497c8d3d1c10",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
@@ -59956,7 +59970,7 @@
      "apm_t02a03_isCompact_range_leftCore"],
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-core-compact-range",
    :acceptance
@@ -60052,7 +60066,7 @@
    :phase :probe,
    :type
    "Nonempty (ContinuousMap.HomotopyEquiv LeftTubeMinusCore ConstructionTargets.TorusCircleWedgeOpenCover.Torus)",
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-punctured-model",
    :acceptance
