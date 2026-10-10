@@ -62971,51 +62971,64 @@
    "single-consumer bundled radial endpoint identities for t02A03",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:residual
-     "Bundle the radial map as the inverse-after-forward homotopy and assemble the torus HomotopyEquiv.",
-     :outcome :go,
-     :warnings
-     ["/tmp/t02a03_geometric_tube_cover.lean:786:38: Used tac1 <;> tac2 where (tac1; tac2) would suffice"],
-     :missing-theorems
-     [{:name "apm_t02a03_leftTubeRadialMap_endpoints",
-       :type
-       "forall p : apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubeRadialMap (0, p) = apm_t02a03_leftTubeTorusInverse (apm_t02a03_leftTubeTorusCoordinates p) ∧ apm_t02a03_leftTubeRadialMap (1, p) = p",
-       :status :proved,
-       :consumers [:t02A03],
-       :depends-on ["apm_t02a03_leftTubeRadialMap"]}],
-     :commands
-     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "apm_t02a03_leftTubeRadialMap_endpoints compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
-       :exit 0}
-      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "174f1979fbc2e62913fadf0a5de516bd891f5b9b8f26d9a82704ca06df31e4fd  /tmp/t02a03_geometric_tube_cover.lean"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :fixture
-     {:path "/tmp/t02a03_geometric_tube_cover.lean",
-      :sha256
-      "174f1979fbc2e62913fadf0a5de516bd891f5b9b8f26d9a82704ca06df31e4fd"},
-     :finding
-     "The placeholder-free theorem proves both subtype endpoint identities: at zero the radial map is inverse-after-forward, and at one it is the original punctured-left-tube point.",
-     :implementation
-     {:scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
-      :declaration
-      "ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_leftTubeRadialMap_endpoints",
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Bundle the radial map as the inverse-after-forward homotopy and assemble the torus HomotopyEquiv.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["/tmp/t02a03_geometric_tube_cover.lean:786:38: unnecessarySeqFocus linter warning in a previously banked theorem; scoped module compiles without warnings"],
+    :missing-theorems
+    [{:name "apm_t02a03_leftTubeRadialMap_endpoints",
       :type
-      "forall p : apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubeRadialMap (0, p) = apm_t02a03_leftTubeTorusInverse (apm_t02a03_leftTubeTorusCoordinates p) ∧ apm_t02a03_leftTubeRadialMap (1, p) = p"},
-     :seat "topo-8"}},
+      "forall p : apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubeRadialMap (0, p) = apm_t02a03_leftTubeTorusInverse (apm_t02a03_leftTubeTorusCoordinates p) ∧ apm_t02a03_leftTubeRadialMap (1, p) = p",
+      :status :proved,
+      :consumers [:t02A03],
+      :depends-on ["apm_t02a03_leftTubeRadialMap"]}],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not",
+     :fixture-sha256
+     "174f1979fbc2e62913fadf0a5de516bd891f5b9b8f26d9a82704ca06df31e4fd"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean", :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03LeftTubePuncturedModel.lean",
+      :exit 0}
+     {:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+      :exit 0}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03LeftTubePuncturedModel.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git rev-parse f55f15a8 && git diff-tree --no-commit-id --name-only -r f55f15a8",
+      :exit 0,
+      :output
+      "f55f15a832cedd2bb8c1bacc36b351e7e5f83683\nConstructionTargets/T02A03LeftTubePuncturedModel.lean"}],
+    :commit "f55f15a832cedd2bb8c1bacc36b351e7e5f83683",
+    :changed-paths
+    ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
+    :fixture
+    {:path "/tmp/t02a03_geometric_tube_cover.lean",
+     :sha256
+     "174f1979fbc2e62913fadf0a5de516bd891f5b9b8f26d9a82704ca06df31e4fd"},
+    :finding
+    "Banked both punctured-subtype endpoint identities by lifting the established ambient zero and one equalities through Subtype.ext.",
+    :implementation
+    {:scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
+     :declarations
+     ["ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_leftTubeRadialMap_endpoints"],
+     :type
+     "forall p : apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubeRadialMap (0, p) = apm_t02a03_leftTubeTorusInverse (apm_t02a03_leftTubeTorusCoordinates p) ∧ apm_t02a03_leftTubeRadialMap (1, p) = p"},
+    :seat "topo-6"},
    :phase :implementation,
    :type
    "forall p : apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubeRadialMap (0, p) = apm_t02a03_leftTubeTorusInverse (apm_t02a03_leftTubeTorusCoordinates p) ∧ apm_t02a03_leftTubeRadialMap (1, p) = p",
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/left-tube-radial-map-endpoints",
