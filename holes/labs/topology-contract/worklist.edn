@@ -98968,8 +98968,64 @@
   {:bounded-exception
    "This single-consumer prerequisite identifies the restricted-relation quotient with the actual outer open piece, completing the representation comparison needed to transport the banked radial deformation.",
    :consumer :t97A01,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Transport the banked quotient homotopy across outerQuotientHomeomorph to deform outerOpen onto radius-one boundary classes; then construct the annular punctured-disk model and both boundary ThreeCircles identifications.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :missing-theorems
+    [{:name "PolygonOuterRestrictedEqvGen.outerQuotientHomeomorph",
+      :type
+      "For a radius-preserving disk relation, full EqvGen between outer representatives is equivalent to EqvGen of OuterRel, yielding a homeomorphism from the OuterRel quotient to outerOpen with the expected representative formula.",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on
+      ["PolygonOuterOpenRestrictedQuotient.namedOuterQuotientMap_isQuotientMap"],
+      :area "polygon-surface-open-cover"}],
+    :statement-hashes "131 registered statements match",
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :finding "canonical package authority"}
+     {:cmd "sha256sum /tmp/polygon-outer-restricted-eqvgen.lean",
+      :exit 0,
+      :finding "fixture hash matches"}
+     {:cmd
+      "lake build ConstructionTargets.PolygonOuterRestrictedEqvGen",
+      :exit 0}
+     {:cmd "lake env lean /tmp/polygon-outer-restricted-eqvgen.lean",
+      :exit 0,
+      :finding "fixture compiles with standard axioms"}
+     {:cmd "rg source for sorry or admit",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero source placeholders"}
+     {:cmd "rg fixture for sorry or admit",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero fixture placeholders"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short",
+      :exit 0,
+      :finding "clean worktree after commit"}],
+    :diagnostic-history [],
+    :commit "97250921a60a924cddc405d9e5bb0930954034d9",
+    :changed-paths
+    ["ConstructionTargets/PolygonOuterRestrictedEqvGen.lean"],
+    :fixture
+    {:path "/tmp/polygon-outer-restricted-eqvgen.lean",
+     :sha256
+     "583cc8eda9e87cd1bb2631ff7bce0ae732990b278f24b1dbdb795e295046d5aa",
+     :sorry-count 0},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PolygonOuterRestrictedEqvGen.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/outer-restricted-eqvgen",
@@ -101513,12 +101569,12 @@
    :lemma
    {:name "PolygonOuterRestrictedEqvGen.outerQuotientHomeomorph",
     :reported-by
-    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40
+     :routes-2026-10-10-polygon-outer-restricted-eqvgen-47],
     :type
     "For a radius-preserving disk relation, the quotient of the outer radial source by the restricted EqvGen relation is homeomorphic to the outerOpen subtype of the full polygon quotient.",
     :area "polygon-surface-open-cover",
-    :proved-in
-    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+    :proved-in :routes-2026-10-10-polygon-outer-restricted-eqvgen-47},
    :id :lemma-polygonouterrestrictedeqvgen-outerquotienthomeomorph,
    :kind :lemma,
    :depends-on
