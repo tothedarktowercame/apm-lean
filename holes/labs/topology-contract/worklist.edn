@@ -100867,6 +100867,21 @@
       :output "131 registered statements match, 0 do not"}
      {:cmd "git diff --check", :exit 0}
      {:cmd "git status --short", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791675741924-3332-bb5133e6",
+     :commands
+     ["git show and diff-tree 83d82aed04ff18314098d2a080688f3457edd4ef"
+      "sha256sum /tmp/polygon-six-edge-interior-uniqueness.lean"
+      "lake build ConstructionTargets.PolygonSixEdgeInteriorUniqueness"
+      "lake env lean /tmp/polygon-six-edge-interior-uniqueness.lean"
+      "lake env lean /dev/stdin with fresh axiom check"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped placeholder and SHA-256 recomputation"
+      "git diff-tree --check 83d82aed04ff18314098d2a080688f3457edd4ef^ 83d82aed04ff18314098d2a080688f3457edd4ef"],
+     :finding
+     "Recorded one-file commit is authored by topo-2 and is byte-identical to the frozen fixture; both edge coordinates are placed in the canonical half-open [0,6) representative interval, equality is pulled back from Circle through AddCircle, and finite cases establish index equality before parameter subtype equality; the frozen theorem uses only standard axioms, placeholder counts are zero, and the registry reports 131 matched and 0 mismatched."},
     :commit "83d82aed04ff18314098d2a080688f3457edd4ef",
     :changed-paths
     ["ConstructionTargets/PolygonSixEdgeInteriorUniqueness.lean"],
@@ -100882,7 +100897,7 @@
      "Rewrote canonical half-open edge coordinates through AddCircle.toCircle, used uniqueness of Ico representatives modulo six, and proved equality of edge points forces equality of both Fin 6 indices and Ico parameters."},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/PolygonSixEdgeInteriorUniqueness.lean"],
    :dag-node
@@ -101027,7 +101042,7 @@
       "On half-open unit edge parameters, equality of canonical six-edge Circle points forces equality of both the Fin 6 edge index and the parameter."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -104281,7 +104296,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -104298,7 +104313,10 @@
     "For j k : Fin 6 and t u : Set.Ico (0 : Real) 1, equality of circleEdgePoint j t and circleEdgePoint k u implies j = k and t = u.",
     :area "polygon-surface-open-cover",
     :proved-in
-    :routes-2026-10-10-polygon-six-edge-interior-uniqueness-64},
+    :routes-2026-10-10-polygon-six-edge-interior-uniqueness-64,
+    :banked-by
+    :routes-2026-10-10-polygon-six-edge-interior-uniqueness-64,
+    :banked-commit "83d82aed04ff18314098d2a080688f3457edd4ef"},
    :id
    :lemma-polygonsixedgeinterioruniqueness-circleedgepoint-interior-injective,
    :kind :lemma,
