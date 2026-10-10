@@ -89201,6 +89201,8 @@
    :other-consumers []}
   {:consumer :t97A03,
    :stop-count 1,
+   :review-finding
+   "No implementation commit was recorded and ConstructionTargets/T97A03ModelInvariants.lean is absent. The fixture SHA-256 and final five-conjunct orientation are correct, but exactFrozenBridge is merely the nonstandard axiom modelInvariants; none of the six accepted model-specific declarations has a frozen Lean signature or banked computation. Repair requires owner-approved placeholder-free signatures plus explicit saturated covers, deformation retractions, literal inclusion maps and Mayer-Vietoris coordinate matrices for both frozen models, their H0/H1/H2 and higher-vanishing proofs, free-product pi1 calculations, and basepoint transport; only then can the supplied-homeomorphism adapter be proved with standard-only axioms.",
    :evidence
    {:residual
     "Provide placeholder-free typed prerequisites for each model: path-connectedness, explicit saturated covers and deformation retractions, production Mayer-Vietoris coordinate matrices and homology consequences, and free-product fundamental-group coordinates; freeze the six model-specific declaration signatures, then implement the transport adapter.",
@@ -89240,6 +89242,12 @@
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
      {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1791630112278-1734-cc8a0ea5",
+     :finding
+     "No implementation commit was recorded and ConstructionTargets/T97A03ModelInvariants.lean is absent. The fixture SHA-256 and final five-conjunct orientation are correct, but exactFrozenBridge is merely the nonstandard axiom modelInvariants; none of the six accepted model-specific declarations has a frozen Lean signature or banked computation. Repair requires owner-approved placeholder-free signatures plus explicit saturated covers, deformation retractions, literal inclusion maps and Mayer-Vietoris coordinate matrices for both frozen models, their H0/H1/H2 and higher-vanishing proofs, free-product pi1 calculations, and basepoint transport; only then can the supplied-homeomorphism adapter be proved with standard-only axioms."},
     :fixture
     {:path "/tmp/t97a03-model-invariants-adapter-probe.lean",
      :sha256
@@ -89249,7 +89257,7 @@
      :proof-placeholder-count 1},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope ["ConstructionTargets/T97A03ModelInvariants.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A03/model-invariants/fixed-model-calculation",
@@ -89277,6 +89285,7 @@
      "python3 scripts/statement-registry.py check"]},
    :id :routes-2026-10-10-t97a03-fixed-model-invariants-1,
    :kind :uptake,
+   :fail-count 1,
    :depends-on [],
    :current-residual
    "Compute path-connectedness, integral homology, higher-degree vanishing, and free rank-three fundamental groups for both fixed quotient models, then transport along the supplied homeomorphism.",
