@@ -88274,61 +88274,54 @@
    :evidence
    {:probe
     {:residual
-     "After the explicit-binder repair, rebuild the already-proved complement count and FiniteIndexFreeGroupSchreierRank modules, then compile the universal r,n equivalence and both requested specializations through a fresh import.",
-     :outcome :revise,
-     :warnings
-     [{:kind :canonical-build-failure,
-       :message
-       "Direct lake env lean source checks accepted auto-implicit parameters, but the configured Lake library build correctly enforces autoImplicit=false. A GO would rely on stale dependency objects and is therefore refused."}],
-     :missing-theorems [],
-     :prerequisite
-     {:consumer :t99J01,
-      :phase :implementation,
-      :state :open,
-      :scope
-      ["ConstructionTargets/FiniteSchreierChosenGeneratorEdgeCoordinates.lean"],
-      :dag-node
-      "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/positive-index/chosen-generator-action-groupoid-coordinates/explicit-binder-repair",
-      :acceptance
-      {:implementation
-       "Make every r, n, and H parameter in edgeEquiv_left, edgeEquiv_right, edgeEquiv_label, labels_card, vertex_card, edges_card, forwardSymmEdge, reverseSymmEdge, and their orientation lemmas explicit so the module compiles with the repository's autoImplicit=false Lake option. Preserve all existing declaration meanings and standard-only axioms.",
-       :placeholder
-       "the single sorry in apm_t99j01 and apm_t97A03_bridge_invariants_of_model",
-       :route-step
-       "t99J01 step 3 and t97A03 step 8, make the banked chosen-generator coordinate prerequisite canonically importable before the shared rank equivalence is accepted",
-       :fixture
-       "/tmp/finite-schreier-chosen-generator-explicit-binders.lean",
-       :fixture-sha256
-       "f9f4560c4db2178d4a996445d78bea644cbaa8223ef8bf45618371b0d246e67c",
-       :gates
-       ["lake build ConstructionTargets.FiniteSchreierChosenGeneratorEdgeCoordinates"
-        "lake build ConstructionTargets.FiniteIndexFreeGroupSchreierRank"
-        "fixture compiles"
-        "zero fixture sorry"
-        "standard-only axioms"
-        "registry check"]},
-      :id
-      :routes-2026-10-10-finite-schreier-chosen-generator-explicit-binders-repair-18,
-      :kind :reusable-theorem,
-      :depends-on
-      [:routes-2026-10-10-finite-schreier-chosen-generator-edge-coordinates-12],
-      :current-residual
-      "Apply the compiled explicit-binder patch, then rebuild the rank module and rerun its consumer-facing fixture from canonical oleans.",
-      :other-consumers [:t97A03]},
+     "The shared finite-index Schreier-rank step is complete. The next consumer work is transport into the t99J01 cyclic-cover path-component argument and the t97A03 fixed double-cover model assembly.",
+     :outcome :go,
+     :warnings [],
+     :missing-theorems
+     [{:name
+       "FiniteIndexFreeGroupSchreierRank.finiteIndexSubgroupFreeGroupEquiv",
+       :type
+       "(r n : Nat) -> 0 < r -> 0 < n -> (H : Subgroup (FreeGroup (Fin r))) -> H.index = n -> H ≃* FreeGroup (Fin ((r - 1) * n + 1))",
+       :status :proved,
+       :consumers [:t99J01 :t97A03],
+       :depends-on
+       ["FiniteIndexFreeGroupSchreierRank.spanningTreeBasis"
+        "TreePositiveSelection.Schreier.complement_card_formula"]}
+      {:name
+       "FiniteIndexFreeGroupSchreierRank.indexSubgroupFreeGroupFinThreeEquiv",
+       :type
+       "positive-index subgroup of FreeGroup (Fin 3) is equivalent to FreeGroup (Fin (2*n+1))",
+       :status :proved,
+       :consumers [:t99J01],
+       :depends-on
+       ["FiniteIndexFreeGroupSchreierRank.finiteIndexSubgroupFreeGroupEquiv"]}
+      {:name
+       "FiniteIndexFreeGroupSchreierRank.indexTwoSubgroupFreeGroupFinTwoEquiv",
+       :type
+       "index-two subgroup of FreeGroup (Fin 2) is equivalent to FreeGroup (Fin 3)",
+       :status :proved,
+       :consumers [:t97A03],
+       :depends-on
+       ["FiniteIndexFreeGroupSchreierRank.finiteIndexSubgroupFreeGroupEquiv"]}],
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake env lean /tmp/finite-schreier-chosen-generator-explicit-binders.lean",
+       "lake build ConstructionTargets.FiniteIndexFreeGroupSchreierRank",
        :exit 0,
        :finding
-       "explicit-binder repair compiles under autoImplicit false; edgeEquiv, labels_card, and edges_card use only propext, Classical.choice, and Quot.sound"}
+       "canonical Lake build completed all 1566 jobs; the repaired chosen-generator coordinates, arborescence count, complement count, and shared rank module replay successfully"}
       {:cmd
-       "sha256sum /tmp/finite-schreier-chosen-generator-explicit-binders.lean",
+       "lake env lean /tmp/finite-index-free-group-schreier-rank-final-probe.lean",
        :exit 0,
        :finding
-       "f9f4560c4db2178d4a996445d78bea644cbaa8223ef8bf45618371b0d246e67c"}
+       "fresh imported fixture compiles the universal equivalence and both requested consumer specializations; each axiom audit reports only propext, Classical.choice, and Quot.sound"}
       {:cmd
-       "rg -n \"\\b(sorry|admit)\\b\" /tmp/finite-schreier-chosen-generator-explicit-binders.lean",
+       "sha256sum /tmp/finite-index-free-group-schreier-rank-final-probe.lean",
+       :exit 0,
+       :finding
+       "9f380bb4578bf9aa3ea3ceeb746f313edf3bb85722dd6f04b0c8a08d6fa2b6ba"}
+      {:cmd
+       "rg -n \"\\b(sorry|admit)\\b\" /tmp/finite-index-free-group-schreier-rank-final-probe.lean",
        :exit 1,
        :expected-exit 1,
        :finding "no placeholders"}
@@ -88336,28 +88329,42 @@
        :exit 0,
        :finding "131 registered statements match, 0 do not"}
       {:cmd "git status --short", :exit 0, :finding "clean"}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/finite-index-free-group-schreier-rank-final-probe.lean",
-       :exit 1,
-       :finding
-       "fresh consumer fixture could not import the rank module because no canonical olean exists"}
-      {:cmd
-       "lake build ConstructionTargets.FiniteIndexFreeGroupSchreierRank",
-       :exit 1,
-       :finding
-       "canonical build reached FiniteSchreierChosenGeneratorEdgeCoordinates and rejected its auto-implicit r, n, and H parameters under the project's autoImplicit=false option; this is the source-coherence failure masked by direct-file compilation"}],
      :fixture
      {:path
-      "/tmp/finite-schreier-chosen-generator-explicit-binders.lean",
+      "/tmp/finite-index-free-group-schreier-rank-final-probe.lean",
       :sha256
-      "f9f4560c4db2178d4a996445d78bea644cbaa8223ef8bf45618371b0d246e67c",
+      "9f380bb4578bf9aa3ea3ceeb746f313edf3bb85722dd6f04b0c8a08d6fa2b6ba",
       :interface
-      "The existing chosen-generator coordinate declarations with every r, n, and H parameter explicitly bound under set_option autoImplicit false."},
+      "Universal H ≃* FreeGroup (Fin ((r-1)*n+1)) from 0<r, 0<n, and H.index=n, plus the r=3 arbitrary-positive-index and r=2 index-two specializations."},
+     :implementation
+     {:scope
+      ["ConstructionTargets/FiniteIndexFreeGroupSchreierRank.lean"],
+      :declarations
+      [{:name
+        "FiniteIndexFreeGroupSchreierRank.finiteIndexSubgroupFreeGroupEquiv",
+        :type
+        "(r n : Nat) -> 0 < r -> 0 < n -> (H : Subgroup (FreeGroup (Fin r))) -> H.index = n -> H ≃* FreeGroup (Fin ((r - 1) * n + 1))"}
+       {:name
+        "FiniteIndexFreeGroupSchreierRank.indexSubgroupFreeGroupFinThreeEquiv",
+        :type
+        "(n : Nat) -> 0 < n -> (H : Subgroup (FreeGroup (Fin 3))) -> H.index = n -> Nonempty (H ≃* FreeGroup (Fin (2 * n + 1)))"}
+       {:name
+        "FiniteIndexFreeGroupSchreierRank.indexTwoSubgroupFreeGroupFinTwoEquiv",
+        :type
+        "(H : Subgroup (FreeGroup (Fin 2))) -> H.index = 2 -> Nonempty (H ≃* FreeGroup (Fin 3))"}],
+      :reuse
+      ["FiniteIndexFreeGroupSchreierRank.spanningTreeBasis"
+       "TreePositiveSelection.Schreier.complement_card_formula"
+       "IsFreeGroupoid.endMulEquivSubgroup"]},
      :seat "topo-4"}},
-   :phase :probe,
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/FiniteIndexFreeGroupSchreierRank.lean"],
+   :reuse
+   ["FiniteIndexFreeGroupSchreierRank.spanningTreeBasis"
+    "TreePositiveSelection.Schreier.complement_card_formula"
+    "IsFreeGroupoid.endMulEquivSubgroup"],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank",
    :acceptance
@@ -88376,6 +88383,19 @@
    :id
    :routes-2026-10-10-finite-index-free-group-schreier-rank-shared-4,
    :kind :reusable-theorem,
+   :declarations
+   [{:name
+     "FiniteIndexFreeGroupSchreierRank.finiteIndexSubgroupFreeGroupEquiv",
+     :type
+     "(r n : Nat) -> 0 < r -> 0 < n -> (H : Subgroup (FreeGroup (Fin r))) -> H.index = n -> H ≃* FreeGroup (Fin ((r - 1) * n + 1))"}
+    {:name
+     "FiniteIndexFreeGroupSchreierRank.indexSubgroupFreeGroupFinThreeEquiv",
+     :type
+     "(n : Nat) -> 0 < n -> (H : Subgroup (FreeGroup (Fin 3))) -> H.index = n -> Nonempty (H ≃* FreeGroup (Fin (2 * n + 1)))"}
+    {:name
+     "FiniteIndexFreeGroupSchreierRank.indexTwoSubgroupFreeGroupFinTwoEquiv",
+     :type
+     "(H : Subgroup (FreeGroup (Fin 2))) -> H.index = 2 -> Nonempty (H ≃* FreeGroup (Fin 3))"}],
    :depends-on
    [:routes-2026-10-10-checkpoint-topo1-covering-uptake-mv-repair-3
     :routes-2026-10-10-finite-index-schreier-spanning-tree-count-1
@@ -93187,7 +93207,93 @@
    :id :lemma-finiteindexfreegroupschreierrank-spanningtreebasis,
    :kind :lemma,
    :depends-on [],
-   :other-consumers [:t97A03]}],
+   :other-consumers [:t97A03]}
+  {:consumer :t99J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "FiniteIndexFreeGroupSchreierRank.finiteIndexSubgroupFreeGroupEquiv",
+    :type
+    "(r n : Nat) -> 0 < r -> 0 < n -> (H : Subgroup (FreeGroup (Fin r))) -> H.index = n -> H ≃* FreeGroup (Fin ((r - 1) * n + 1))"},
+   :lemma
+   {:name
+    "FiniteIndexFreeGroupSchreierRank.finiteIndexSubgroupFreeGroupEquiv",
+    :reported-by
+    [:routes-2026-10-10-finite-index-free-group-schreier-rank-shared-4],
+    :type
+    "(r n : Nat) -> 0 < r -> 0 < n -> (H : Subgroup (FreeGroup (Fin r))) -> H.index = n -> H ≃* FreeGroup (Fin ((r - 1) * n + 1))",
+    :proved-in
+    :routes-2026-10-10-finite-index-free-group-schreier-rank-shared-4},
+   :id
+   :lemma-finiteindexfreegroupschreierrank-finiteindexsubgroupfreegroupequiv,
+   :kind :lemma,
+   :depends-on
+   [:lemma-finiteindexfreegroupschreierrank-spanningtreebasis
+    :lemma-treepositiveselection-schreier-complement-card-formula],
+   :other-consumers [:t97A03]}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "TreePositiveSelection.Schreier.complement_card_formula"},
+   :lemma
+   {:name "TreePositiveSelection.Schreier.complement_card_formula",
+    :reported-by []},
+   :id :lemma-treepositiveselection-schreier-complement-card-formula,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t99J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "FiniteIndexFreeGroupSchreierRank.indexSubgroupFreeGroupFinThreeEquiv",
+    :type
+    "positive-index subgroup of FreeGroup (Fin 3) is equivalent to FreeGroup (Fin (2*n+1))"},
+   :lemma
+   {:name
+    "FiniteIndexFreeGroupSchreierRank.indexSubgroupFreeGroupFinThreeEquiv",
+    :reported-by
+    [:routes-2026-10-10-finite-index-free-group-schreier-rank-shared-4],
+    :type
+    "positive-index subgroup of FreeGroup (Fin 3) is equivalent to FreeGroup (Fin (2*n+1))",
+    :proved-in
+    :routes-2026-10-10-finite-index-free-group-schreier-rank-shared-4},
+   :id
+   :lemma-finiteindexfreegroupschreierrank-indexsubgroupfreegroupfinthreeequiv,
+   :kind :lemma,
+   :depends-on
+   [:lemma-finiteindexfreegroupschreierrank-finiteindexsubgroupfreegroupequiv],
+   :other-consumers []}
+  {:consumer :t97A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "FiniteIndexFreeGroupSchreierRank.indexTwoSubgroupFreeGroupFinTwoEquiv",
+    :type
+    "index-two subgroup of FreeGroup (Fin 2) is equivalent to FreeGroup (Fin 3)"},
+   :lemma
+   {:name
+    "FiniteIndexFreeGroupSchreierRank.indexTwoSubgroupFreeGroupFinTwoEquiv",
+    :reported-by
+    [:routes-2026-10-10-finite-index-free-group-schreier-rank-shared-4],
+    :type
+    "index-two subgroup of FreeGroup (Fin 2) is equivalent to FreeGroup (Fin 3)",
+    :proved-in
+    :routes-2026-10-10-finite-index-free-group-schreier-rank-shared-4},
+   :id
+   :lemma-finiteindexfreegroupschreierrank-indextwosubgroupfreegroupfintwoequiv,
+   :kind :lemma,
+   :depends-on
+   [:lemma-finiteindexfreegroupschreierrank-finiteindexsubgroupfreegroupequiv],
+   :other-consumers []}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",
