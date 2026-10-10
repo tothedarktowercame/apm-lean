@@ -65991,10 +65991,103 @@
    "Use the coordinate to construct the deformation from inverse-forward to identity and the meridian retraction homotopy, then package rightTubeMinusLeftCoreMeridianHomotopyEquiv.",
    :other-consumers []}
   {:bounded-exception
-   "single-consumer explicit ambient deformation with frozen tube and deletion invariants",
+   "single-consumer denominator lemma for polar deformation coordinates on the right tube",
    :consumer :t02A03,
    :phase :probe,
    :state :open,
+   :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t02A03/right-tube-planar-coordinate-nonzero",
+   :acceptance
+   {:probe
+    "Compile rightTubePlanarComplex and prove it is nonzero for every point of apm_t02a03_rightTube, using the tube's exact 1/4 distance bound from the right core. Do not define the deformation or claim its safety invariants.",
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubePlanarComplex_ne_zero",
+    :type
+    "forall p : apm_t02a03_E3, p ∈ apm_t02a03_rightTube -> rightTubePlanarComplex p ≠ 0",
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "certify the planar angular denominator used by the safe radial deformation"},
+   :id
+   :routes-2026-10-10-t02a03-right-tube-planar-coordinate-nonzero-topo2-r1,
+   :kind :reusable-theorem,
+   :area "explicit-r3-tube-deformation-retraction",
+   :depends-on
+   [:routes-2026-10-10-t02a03-right-tube-meridian-coordinate-topo2-r1],
+   :current-residual
+   "Define the polar-normal radial deformation, prove its endpoint equations, rightTube membership, and leftCore avoidance.",
+   :other-consumers []}
+  {:bounded-exception
+   "single-consumer explicit ambient deformation with frozen tube and deletion invariants",
+   :consumer :t02A03,
+   :evidence
+   {:probe
+    {:outcome :revise,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/t02a03_right_tube_planar_nonzero_contract.lean",
+      :sha256
+      "54e47055bd6df846f9f0810d492fd54aa405b067b4fca07c0243325081d8b579"},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/t02a03_right_tube_planar_nonzero_contract.lean",
+       :exit 0,
+       :output "RightTubePlanarCoordinateNonzero compiled."}
+      {:cmd
+       "sha256sum /tmp/t02a03_right_tube_planar_nonzero_contract.lean",
+       :exit 0,
+       :output
+       "54e47055bd6df846f9f0810d492fd54aa405b067b4fca07c0243325081d8b579  /tmp/t02a03_right_tube_planar_nonzero_contract.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_right_tube_planar_nonzero_contract.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :finding
+     "The explicit safe deformation uses polar coordinates about the left-core center: preserve the planar angular direction and the normalized normal-meridian direction while scaling the normal radius to 1/8. This formula requires normalizing rightTubePlanarComplex p = (p0+1)+i*p1. The existing nonvanishing theorem is restricted to leftTubeSubtype, so the right-tube version must first be proved from the exact radius-1/4 geometry. The polar singularity is the point (-1,0,*) and lies farther than 1/4 from the right core.",
+     :missing-theorems
+     [{:name
+       "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubePlanarComplex_ne_zero",
+       :type
+       "forall p : apm_t02a03_E3, p ∈ apm_t02a03_rightTube -> rightTubePlanarComplex p ≠ 0",
+       :status :not-started,
+       :consumers [:t02A03],
+       :depends-on [],
+       :area "explicit-r3-tube-deformation-retraction"}],
+     :prerequisite
+     {:bounded-exception
+      "single-consumer denominator lemma for polar deformation coordinates on the right tube",
+      :consumer :t02A03,
+      :phase :probe,
+      :state :open,
+      :scope
+      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/t02A03/right-tube-planar-coordinate-nonzero",
+      :acceptance
+      {:probe
+       "Compile rightTubePlanarComplex and prove it is nonzero for every point of apm_t02a03_rightTube, using the tube's exact 1/4 distance bound from the right core. Do not define the deformation or claim its safety invariants.",
+       :declaration
+       "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubePlanarComplex_ne_zero",
+       :type
+       "forall p : apm_t02a03_E3, p ∈ apm_t02a03_rightTube -> rightTubePlanarComplex p ≠ 0",
+       :placeholder "the sole sorry in apm_t02a03",
+       :route-step
+       "certify the planar angular denominator used by the safe radial deformation"},
+      :id
+      :routes-2026-10-10-t02a03-right-tube-planar-coordinate-nonzero-topo2-r1,
+      :kind :reusable-theorem,
+      :area "explicit-r3-tube-deformation-retraction",
+      :depends-on
+      [:routes-2026-10-10-t02a03-right-tube-meridian-coordinate-topo2-r1],
+      :current-residual
+      "Define the polar-normal radial deformation, prove its endpoint equations, rightTube membership, and leftCore avoidance.",
+      :other-consumers []},
+     :residual
+     "After planar nonvanishing is banked, define the polar-normal radial deformation and prove its four required invariants."}},
+   :phase :probe,
+   :state :blocked,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
@@ -66013,7 +66106,8 @@
    :kind :reusable-theorem,
    :area "explicit-r3-tube-deformation-retraction",
    :depends-on
-   [:routes-2026-10-10-t02a03-right-tube-meridian-coordinate-topo2-r1],
+   [:routes-2026-10-10-t02a03-right-tube-meridian-coordinate-topo2-r1
+    :routes-2026-10-10-t02a03-right-tube-planar-coordinate-nonzero-topo2-r1],
    :current-residual
    "Lift H to RightTubeMinusLeftCore, package rightTubeMeridianRetractionHomotopy, then use the coordinate equation for the Circle-side constant homotopy.",
    :other-consumers []}
@@ -69008,4 +69102,26 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-t02a03geometrictubedeformation-righttubemeridiancoordinate],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubePlanarComplex_ne_zero",
+    :type
+    "forall p : apm_t02a03_E3, p ∈ apm_t02a03_rightTube -> rightTubePlanarComplex p ≠ 0"},
+   :lemma
+   {:name
+    "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubePlanarComplex_ne_zero",
+    :reported-by
+    [:routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1],
+    :type
+    "forall p : apm_t02a03_E3, p ∈ apm_t02a03_rightTube -> rightTubePlanarComplex p ≠ 0",
+    :area "explicit-r3-tube-deformation-retraction"},
+   :id
+   :lemma-constructiontargets-t02a03geometrictubedeformation-righttubeplanarcomplex-ne-zer,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}]}
