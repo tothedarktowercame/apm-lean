@@ -89721,8 +89721,29 @@
    "Owner reopen 2026-10-10: eight rows were parked on a signature-approval reading the prompts never stated; reopened under the clarified rule.",
    :other-consumers []}
   {:consumer :t97A01,
+   :stop-count 1,
+   :evidence
+   {:outcome :stop,
+    :seat "topo-4",
+    :reason
+    "Canonical-package workspace boundary: /home/joe/code/apm-lean/.lake/packages is a real directory, not the required symbolic link to /home/joe/code/apm-lean/.lake/packages authority. Workspace policy forbids every Lake/Lean invocation until the canonical lifecycle repairs this checkout; therefore no compiled fixture can be produced or assessed in this probe.",
+    :commands
+    [{:cmd "stat -c '%F %N' .lake/packages",
+      :exit 0,
+      :finding "directory '.lake/packages'"}
+     {:cmd "test -L .lake/packages",
+      :exit 1,
+      :expected-exit 1,
+      :finding ".lake/packages is not a symbolic link"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}],
+    :residual
+    "Provision or repair the APM workspace so .lake/packages is the canonical package-authority symlink, then rerun the Smith-quotient probe from a clean checkout.",
+    :author "topo-4",
+    :disposition :stop},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t97A01/smith-quotients",
    :acceptance
