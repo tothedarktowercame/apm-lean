@@ -100115,15 +100115,46 @@
    "Construct the two quotient homeomorphisms to ThreeCircles using the banked edge and vertex equations, derive the literal boundary-to-outerOpen inclusion formulas, and assemble the packages.",
    :other-consumers []}
   {:bounded-exception
+   "This single-consumer prerequisite supplies the honest Circle model for each paired polygon edge interval before the three loops are assembled into ThreeCircles.",
+   :consumer :t97A01,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/IntervalEndpointQuotientCircle.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/interval-endpoint-quotient-circle",
+   :acceptance
+   {:implementation
+    "Promote the exact fixture. Reuse Mathlib's AddCircle.EndpointIdent and homeoIccQuot to define the closed-unit-interval endpoint quotient and its homeomorphism to Circle. Prove the formula on quotient representatives, the literal equality of the two endpoint classes, and that both endpoints map to the Circle basepoint. Do not assemble three loops, identify either polygon boundary quotient with ThreeCircles, prove final outer-piece inclusion equations, compute invariants, or close t97A01.",
+    :placeholder "the single sorry in apm_t97a01",
+    :route-step
+    "polygon radial open-cover step 18: identify one endpoint-glued edge interval with the standard Circle model",
+    :fixture "/tmp/interval-endpoint-quotient-circle.lean",
+    :fixture-sha256
+    "44bbc0321b6a88474355a4bbd1a130134f1df566982e2b7d9060f0fcabd22be6",
+    :gates
+    ["lake build ConstructionTargets.IntervalEndpointQuotientCircle"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-10-interval-endpoint-quotient-circle-58,
+   :kind :reusable-theorem,
+   :area "polygon-surface-open-cover",
+   :depends-on [:routes-2026-10-10-polygon-boundary-vertex-classes-57],
+   :current-residual
+   "Decompose each six-edge boundary quotient into three endpoint-glued interval loops, assemble those loop models into ThreeCircles, prove the literal boundary-to-outerOpen inclusion formulas, and assemble the packages.",
+   :other-consumers []}
+  {:bounded-exception
    "This single-consumer concrete quotient package is the other final backlog lemma on t97A01 and supplies the actual two polygon models required by its frozen statement.",
    :consumer :t97A01,
    :implements-lemma :lemma-polygonradialopencoverpackages,
    :evidence
    {:probe
     {:residual
-     "Both boundary words now have proved common six-vertex classes. The remaining package needs the two quotient-to-ThreeCircles homeomorphisms, literal inclusion formulas, and final assembly.",
+     "A single paired-edge loop now has an explicit standard Circle homeomorphism. The remaining package needs the three-loop decompositions for both boundary words, their assembly into ThreeCircles, literal inclusion formulas, and final assembly.",
      :outcome :revise,
-     :warnings [],
+     :warnings
+     ["Lean reports one unnecessarySeqFocus style warning in the endpoint-constructor conversion; it does not affect the theorem statements, proof terms, or axioms."],
      :missing-theorems
      [{:name "polygonRadialOpenCoverPackages",
        :type
@@ -100134,76 +100165,73 @@
        ["PolygonOverlapHomotopyEquivCircle.overlapHomotopyEquivCircle"
         "PolygonBoundaryVertexClasses.n3_all_vertices"
         "PolygonBoundaryVertexClasses.torusCrosscap_all_vertices"
+        "IntervalEndpointQuotientCircle.endpointQuotientHomeomorphCircle"
         "polygonBoundaryThreeCircles"],
        :area "polygon-surface-open-cover"}
-      {:name "PolygonBoundaryVertexClasses.n3_all_vertices",
+      {:name
+       "IntervalEndpointQuotientCircle.endpointQuotientHomeomorphCircle",
        :type
-       "All six canonical hexagon vertices represent the same class in the EqvGen quotient of N3CircleRel.",
+       "The quotient of the closed real unit interval by the relation identifying its two endpoints is homeomorphic to Circle, with an explicit representative formula and both endpoints mapping to the Circle basepoint.",
        :status :proved,
-       :consumers [:t97A01],
-       :depends-on ["PolygonBoundaryCircleRelations.N3CircleRel"],
-       :area "polygon-surface-open-cover"}
-      {:name "PolygonBoundaryVertexClasses.torusCrosscap_all_vertices",
-       :type
-       "All six canonical hexagon vertices represent the same class in the EqvGen quotient of TorusCrosscapCircleRel.",
-       :status :proved,
-       :consumers [:t97A01],
-       :depends-on
-       ["PolygonBoundaryCircleRelations.TorusCrosscapCircleRel"],
-       :area "polygon-surface-open-cover"}
-      {:name "polygonBoundaryThreeCircles",
-       :type
-       "Construct quotient homeomorphisms from N3CircleRel and TorusCrosscapCircleRel to ThreeCircles, respecting the proved common vertex classes and yielding the literal boundary inclusion formulas.",
-       :status :not-started,
        :consumers [:t97A01],
        :depends-on
        ["PolygonBoundaryVertexClasses.n3_all_vertices"
         "PolygonBoundaryVertexClasses.torusCrosscap_all_vertices"],
+       :area "polygon-surface-open-cover"}
+      {:name "polygonBoundaryThreeCircles",
+       :type
+       "Decompose each specialized six-edge Circle quotient into three endpoint-identified interval loops, use endpointQuotientHomeomorphCircle on each loop, and assemble the resulting homeomorphisms to ThreeCircles with literal boundary formulas.",
+       :status :not-started,
+       :consumers [:t97A01],
+       :depends-on
+       ["IntervalEndpointQuotientCircle.endpointQuotientHomeomorphCircle"],
        :area "polygon-surface-open-cover"}],
      :prerequisite
      {:bounded-exception
-      "This single-consumer prerequisite proves the common vertex classes required by both boundary graph quotient models before constructing their ThreeCircles homeomorphisms.",
+      "This single-consumer prerequisite supplies the honest Circle model for each paired polygon edge interval before the three loops are assembled into ThreeCircles.",
       :consumer :t97A01,
       :phase :implementation,
       :state :open,
-      :scope ["ConstructionTargets/PolygonBoundaryVertexClasses.lean"],
+      :scope
+      ["ConstructionTargets/IntervalEndpointQuotientCircle.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/boundary-vertex-classes",
+      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/interval-endpoint-quotient-circle",
       :acceptance
       {:implementation
-       "Promote the exact fixture. Define the zero and one interval endpoints and prove their reversal formulas. Prove that the endpoint of each nonfinal canonical hexagon edge equals the start of its successor. Use the specialized generator equations at zero and one to prove the necessary adjacent vertex equations and then prove all six vertices represent the same quotient class for N3CircleRel and TorusCrosscapCircleRel. Do not construct quotient homeomorphisms to ThreeCircles, prove final outer-piece inclusion equations, compute invariants, or close t97A01.",
+       "Promote the exact fixture. Reuse Mathlib's AddCircle.EndpointIdent and homeoIccQuot to define the closed-unit-interval endpoint quotient and its homeomorphism to Circle. Prove the formula on quotient representatives, the literal equality of the two endpoint classes, and that both endpoints map to the Circle basepoint. Do not assemble three loops, identify either polygon boundary quotient with ThreeCircles, prove final outer-piece inclusion equations, compute invariants, or close t97A01.",
        :placeholder "the single sorry in apm_t97a01",
        :route-step
-       "polygon radial open-cover step 17: establish the common six-vertex classes for both boundary words",
-       :fixture "/tmp/polygon-boundary-vertex-classes.lean",
+       "polygon radial open-cover step 18: identify one endpoint-glued edge interval with the standard Circle model",
+       :fixture "/tmp/interval-endpoint-quotient-circle.lean",
        :fixture-sha256
-       "db1e679676d284dfd9f315f82b6c5d5970e179a13cfcc67db5d6814535b67a95",
+       "44bbc0321b6a88474355a4bbd1a130134f1df566982e2b7d9060f0fcabd22be6",
        :gates
-       ["lake build ConstructionTargets.PolygonBoundaryVertexClasses"
+       ["lake build ConstructionTargets.IntervalEndpointQuotientCircle"
         "fixture compiles"
         "zero source and fixture sorry"
         "standard-only axioms"
         "registry check"]},
-      :id :routes-2026-10-10-polygon-boundary-vertex-classes-57,
+      :id :routes-2026-10-10-interval-endpoint-quotient-circle-58,
       :kind :reusable-theorem,
       :area "polygon-surface-open-cover",
       :depends-on
-      [:routes-2026-10-10-polygon-boundary-circle-relations-56],
+      [:routes-2026-10-10-polygon-boundary-vertex-classes-57],
       :current-residual
-      "Construct the two quotient homeomorphisms to ThreeCircles using the banked edge and vertex equations, derive the literal boundary-to-outerOpen inclusion formulas, and assemble the packages.",
+      "Decompose each six-edge boundary quotient into three endpoint-glued interval loops, assemble those loop models into ThreeCircles, prove the literal boundary-to-outerOpen inclusion formulas, and assemble the packages.",
       :other-consumers []},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
-     [{:cmd "lake env lean /tmp/polygon-boundary-vertex-classes.lean",
+     [{:cmd
+       "lake env lean /tmp/interval-endpoint-quotient-circle.lean",
        :exit 0,
        :finding
-       "The interval endpoints and reversal formulas, consecutive-edge endpoint identity, individual quotient vertex equations, and both six-vertex common-class theorems compile with standard axioms."}
-      {:cmd "sha256sum /tmp/polygon-boundary-vertex-classes.lean",
+       "The endpoint relation and quotient, homeomorphism to Circle, representative formula, endpoint quotient equality, and common Circle basepoint formulas compile with standard axioms."}
+      {:cmd "sha256sum /tmp/interval-endpoint-quotient-circle.lean",
        :exit 0,
        :finding
-       "db1e679676d284dfd9f315f82b6c5d5970e179a13cfcc67db5d6814535b67a95"}
+       "44bbc0321b6a88474355a4bbd1a130134f1df566982e2b7d9060f0fcabd22be6"}
       {:cmd
-       "rg -n \"\\b(sorry|admit)\\b\" /tmp/polygon-boundary-vertex-classes.lean",
+       "rg -n \"\\b(sorry|admit)\\b\" /tmp/interval-endpoint-quotient-circle.lean",
        :exit 1,
        :expected-exit 1,
        :finding "No fixture placeholders."}
@@ -100212,19 +100240,20 @@
        :finding "131 registered statements match, 0 do not."}
       {:cmd "git status --short", :exit 0, :finding "clean"}],
      :diagnostic-history
-     [{:cmd "lake env lean /tmp/polygon-boundary-vertex-classes.lean",
+     [{:cmd
+       "lake env lean /tmp/interval-endpoint-quotient-circle.lean",
        :exit 1,
        :finding
-       "The first endpoint lift applied congrArg at the Disk subtype level when Circle.ext required the underlying complex coordinate, and direct rw did not unfold the named vertex abbreviation; applying congrArg to the complex coercion and transporting endpoint equalities explicitly corrected both boundaries."}],
+       "The first draft treated Icc 0 1 as definitionally identical to Mathlib's Icc 0 (0 + 1) endpoint-relation carrier and left Quot.mk underconstrained; using the relation's exact carrier spelling, an explicit quotient-map lambda, and a converted endpoint constructor corrected the types."}],
      :fixture
-     {:path "/tmp/polygon-boundary-vertex-classes.lean",
+     {:path "/tmp/interval-endpoint-quotient-circle.lean",
       :sha256
-      "db1e679676d284dfd9f315f82b6c5d5970e179a13cfcc67db5d6814535b67a95",
+      "44bbc0321b6a88474355a4bbd1a130134f1df566982e2b7d9060f0fcabd22be6",
       :interface
-      "Consecutive hexagon edge endpoints agree geometrically; n3_all_vertices and torusCrosscap_all_vertices prove that all six canonical vertices have one quotient class for each specialized Circle relation."},
+      "endpointQuotientHomeomorphCircle identifies the closed unit interval with its endpoints glued homeomorphically with Circle, with an explicit AddCircle representative formula and both endpoints sent to one."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -100261,7 +100290,8 @@
     :routes-2026-10-10-polygon-boundary-circle-source-54
     :routes-2026-10-10-polygon-boundary-induced-quotient-55
     :routes-2026-10-10-polygon-boundary-circle-relations-56
-    :routes-2026-10-10-polygon-boundary-vertex-classes-57],
+    :routes-2026-10-10-polygon-boundary-vertex-classes-57
+    :routes-2026-10-10-interval-endpoint-quotient-circle-58],
    :current-residual
    "Combine the concrete cover packages with the strict overlap squares, banked Smith normalization, and final t97A01 assembly.",
    :other-consumers []}
@@ -100788,7 +100818,8 @@
     :lemma-polygonboundarycirclerelations-n3circlerel
     :lemma-polygonboundarycirclerelations-toruscrosscapcirclerel
     :lemma-polygonboundaryvertexclasses-n3-all-vertices
-    :lemma-polygonboundaryvertexclasses-toruscrosscap-all-vertices],
+    :lemma-polygonboundaryvertexclasses-toruscrosscap-all-vertices
+    :lemma-intervalendpointquotientcircle-endpointquotienthomeomorphcircle],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -102425,7 +102456,8 @@
     :lemma-polygonboundarycirclerelations-n3circlerel
     :lemma-polygonboundarycirclerelations-toruscrosscapcirclerel
     :lemma-polygonboundaryvertexclasses-n3-all-vertices
-    :lemma-polygonboundaryvertexclasses-toruscrosscap-all-vertices],
+    :lemma-polygonboundaryvertexclasses-toruscrosscap-all-vertices
+    :lemma-intervalendpointquotientcircle-endpointquotienthomeomorphcircle],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -103127,6 +103159,32 @@
    :depends-on
    [:lemma-polygonboundarycirclerelations-toruscrosscapcirclerel
     :lemma-polygonboundarycirclerelations-concretequotientidentifications],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "IntervalEndpointQuotientCircle.endpointQuotientHomeomorphCircle",
+    :type
+    "The quotient of the closed real unit interval by the relation identifying its two endpoints is homeomorphic to Circle, with an explicit representative formula and both endpoints mapping to the Circle basepoint."},
+   :lemma
+   {:name
+    "IntervalEndpointQuotientCircle.endpointQuotientHomeomorphCircle",
+    :reported-by
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    :type
+    "The quotient of the closed real unit interval by the relation identifying its two endpoints is homeomorphic to Circle, with an explicit representative formula and both endpoints mapping to the Circle basepoint.",
+    :area "polygon-surface-open-cover",
+    :proved-in
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+   :id
+   :lemma-intervalendpointquotientcircle-endpointquotienthomeomorphcircle,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polygonboundaryvertexclasses-n3-all-vertices
+    :lemma-polygonboundaryvertexclasses-toruscrosscap-all-vertices],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
