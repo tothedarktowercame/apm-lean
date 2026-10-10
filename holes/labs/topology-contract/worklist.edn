@@ -87326,7 +87326,7 @@
    "Owner reopen 2026-10-10 (claude-14): both STOPs cite missing approved signatures for declarations the acceptance lists in prose. Under work-prompt.md WHAT IS FROZEN, only the registered statement and the fixture interface-axiom types are frozen; design the supporting signatures, discharge the frozen axiom type with standard axioms, and STOP only on a mathematical boundary.",
    :stop-count 1,
    :review-finding
-   "No implementation commit was recorded and ConstructionTargets/GenericPointWedgeMayerVietorisPathConnectedCoordinates.lean is absent. The frozen fixture hash is correct, but it declares only GenericWedgeMVH0Coordinates and the nonstandard axiom generic_point_wedge_mv_pathconnected_coordinates; none of the ten accepted reusable declarations has a frozen Lean signature, and repaired_intersection_coordinates depends on that axiom. Repair requires an owner-approved placeholder-free typed fixture fixing GenericPointWedgeMVH0Coordinates, the overlap/left/right H0 isomorphisms, both literal-inclusion naturality equations, signed intersection and codiagonal reassembly equations, the ThreeCircles PathConnectedSpace instance, and its specialized package, with exact ModuleCat/AddCommGrpCat morphism directions; then implement the scoped module with standard-only axioms.",
+   "design the supporting signatures and discharge the frozen axiom type",
    :evidence
    {:residual
     "Prove genericPointWedgeOverlapInclusionSquares on arbitrary quotient representatives, apply conjugated_homologyMap_of_strict_square in degree zero, and assemble GenericWedgeMVH0Coordinates.",
@@ -87370,6 +87370,12 @@
      "Integer H0 coordinates on the overlap, pieces, and union",
      :direction
      "Exact conjugacy from each literal inclusion-induced H0 map to the identity of Z, yielding the signed diagonal and then the codiagonal for the production arrows"},
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1791632572592-1823-e8c46de4",
+     :finding
+     "design the supporting signatures and discharge the frozen axiom type"},
     :fixture
     {:path "/tmp/generic-point-wedge-mv-pathconnected-probe.lean",
      :sha256
@@ -87379,7 +87385,7 @@
      :proof-placeholder-count 1},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["ConstructionTargets/GenericPointWedgeMayerVietorisPathConnectedCoordinates.lean"],
    :dag-node
@@ -87419,7 +87425,7 @@
    :id
    :routes-2026-10-10-generic-point-wedge-h0-pathconnected-naturality-2,
    :kind :representation-comparison,
-   :fail-count 0,
+   :fail-count 1,
    :depends-on [],
    :current-residual
    "Prove both literal-inclusion augmentation naturality squares under explicit path-connected hypotheses and instantiate the resulting production-arrow coordinates on ThreeCircles.",
