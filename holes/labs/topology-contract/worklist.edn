@@ -99886,13 +99886,44 @@
    "Specialize CircleRel to the two six-edge words, identify both Circle relation quotients with ThreeCircles, prove their common vertex classes and literal inclusion formulas, and assemble the packages.",
    :other-consumers []}
   {:bounded-exception
+   "This single-consumer prerequisite exposes the exact two six-edge Circle presentations needed before constructing their quotient homeomorphisms to ThreeCircles.",
+   :consumer :t97A01,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/PolygonBoundaryCircleRelations.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/boundary-circle-relations",
+   :acceptance
+   {:implementation
+    "Promote the exact fixture. Define the six canonical Circle edge points through the banked boundary homeomorphism. Specialize CircleRel to SurfaceRel false 3 and TorusCrosscapRel. Prove all three literal edge-pair generators for each word, define both Circle quotient maps, and prove all six quotient-identification equations. Do not construct quotient homeomorphisms to ThreeCircles, prove common vertex classes or final outer-piece inclusion equations, compute invariants, or close t97A01.",
+    :placeholder "the single sorry in apm_t97a01",
+    :route-step
+    "polygon radial open-cover step 16: expose the two concrete six-edge relations on Circle and their literal quotient equations",
+    :fixture "/tmp/polygon-boundary-circle-relations.lean",
+    :fixture-sha256
+    "1aa2f256221b8489fcc16a5f0402406a578d1afc473ca3a7fb5714f899c69d31",
+    :gates
+    ["lake build ConstructionTargets.PolygonBoundaryCircleRelations"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-10-polygon-boundary-circle-relations-56,
+   :kind :reusable-theorem,
+   :area "polygon-surface-open-cover",
+   :depends-on
+   [:routes-2026-10-10-polygon-boundary-induced-quotient-55],
+   :current-residual
+   "Construct homeomorphisms from both specialized Circle relation quotients to ThreeCircles, prove the six polygon vertices share the required classes, derive the literal boundary and outer-piece inclusion formulas, and assemble the packages.",
+   :other-consumers []}
+  {:bounded-exception
    "This single-consumer concrete quotient package is the other final backlog lemma on t97A01 and supplies the actual two polygon models required by its frozen statement.",
    :consumer :t97A01,
    :implements-lemma :lemma-polygonradialopencoverpackages,
    :evidence
    {:probe
     {:residual
-     "Boundary relations now transport homeomorphically between Circle and the radius-one disk subtype at the quotient level. The remaining package needs the two specialized Circle quotient-to-ThreeCircles identifications, common vertex classes, literal inclusion formulas, and final assembly.",
+     "Both specialized Circle boundary words and their literal quotient generator equations now compile. The remaining package needs their quotient-to-ThreeCircles homeomorphisms, common vertex classes, literal inclusion formulas, and final assembly.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
@@ -99903,72 +99934,81 @@
        :consumers [:t97A01],
        :depends-on
        ["PolygonOverlapHomotopyEquivCircle.overlapHomotopyEquivCircle"
-        "PolygonBoundaryInducedQuotient.circleBoundaryQuotientHomeomorph"
+        "PolygonBoundaryCircleRelations.N3CircleRel"
+        "PolygonBoundaryCircleRelations.TorusCrosscapCircleRel"
         "polygonBoundaryThreeCircles"],
        :area "polygon-surface-open-cover"}
-      {:name
-       "PolygonBoundaryInducedQuotient.circleBoundaryQuotientHomeomorph",
+      {:name "PolygonBoundaryCircleRelations.N3CircleRel",
        :type
-       "For every disk relation, the EqvGen quotient of its pullback to Circle along boundaryCircleHomeomorph is homeomorphic to the EqvGen quotient of its restriction to the radius-one disk boundary, with literal maps on representatives.",
+       "The pullback of SurfaceRel false 3 to Circle, with the three literal aa, bb, and cc edge-pair generators and their quotient-identification equations.",
        :status :proved,
        :consumers [:t97A01],
        :depends-on
-       ["PolygonBoundaryCircleSource.boundaryCircleHomeomorph"],
+       ["PolygonBoundaryInducedQuotient.circleBoundaryQuotientHomeomorph"],
        :area "polygon-surface-open-cover"}
-      {:name "polygonBoundaryThreeCircles",
+      {:name "PolygonBoundaryCircleRelations.TorusCrosscapCircleRel",
        :type
-       "Specialize the induced Circle relations to SurfaceRel false 3 and TorusCrosscapRel, identify both EqvGen quotients with ThreeCircles, and prove common vertex classes and literal boundary inclusion formulas.",
-       :status :not-started,
+       "The pullback of TorusCrosscapRel to Circle, with the literal a, b reversed and c same-direction edge-pair generators and their quotient-identification equations.",
+       :status :proved,
        :consumers [:t97A01],
        :depends-on
        ["PolygonBoundaryInducedQuotient.circleBoundaryQuotientHomeomorph"],
+       :area "polygon-surface-open-cover"}
+      {:name "polygonBoundaryThreeCircles",
+       :type
+       "Identify the EqvGen quotients of N3CircleRel and TorusCrosscapCircleRel with ThreeCircles and prove the common vertex classes and literal boundary inclusion formulas.",
+       :status :not-started,
+       :consumers [:t97A01],
+       :depends-on
+       ["PolygonBoundaryCircleRelations.N3CircleRel"
+        "PolygonBoundaryCircleRelations.TorusCrosscapCircleRel"],
        :area "polygon-surface-open-cover"}],
      :prerequisite
      {:bounded-exception
-      "This single-consumer prerequisite transports arbitrary boundary relations and their honest quotient topologies across the banked Circle-to-boundary homeomorphism before specializing the two polygon words.",
+      "This single-consumer prerequisite exposes the exact two six-edge Circle presentations needed before constructing their quotient homeomorphisms to ThreeCircles.",
       :consumer :t97A01,
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/PolygonBoundaryInducedQuotient.lean"],
+      ["ConstructionTargets/PolygonBoundaryCircleRelations.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/boundary-induced-quotient",
+      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/boundary-circle-relations",
       :acceptance
       {:implementation
-       "Promote the exact fixture. Prove a generic EqvGen map theorem. Pull an arbitrary disk relation back to Circle through circleToBoundary, define its restriction to Boundary, equip both EqvGen quotients with their coinduced topologies, construct the induced homeomorphism between those quotients, and prove both literal representative formulas. Do not specialize SurfaceRel or TorusCrosscapRel, identify ThreeCircles, prove vertex classes or final inclusion equations, compute invariants, or close t97A01.",
+       "Promote the exact fixture. Define the six canonical Circle edge points through the banked boundary homeomorphism. Specialize CircleRel to SurfaceRel false 3 and TorusCrosscapRel. Prove all three literal edge-pair generators for each word, define both Circle quotient maps, and prove all six quotient-identification equations. Do not construct quotient homeomorphisms to ThreeCircles, prove common vertex classes or final outer-piece inclusion equations, compute invariants, or close t97A01.",
        :placeholder "the single sorry in apm_t97a01",
        :route-step
-       "polygon radial open-cover step 15: transport boundary relation quotients across the Circle-to-radius-one-boundary homeomorphism",
-       :fixture "/tmp/polygon-boundary-induced-quotient.lean",
+       "polygon radial open-cover step 16: expose the two concrete six-edge relations on Circle and their literal quotient equations",
+       :fixture "/tmp/polygon-boundary-circle-relations.lean",
        :fixture-sha256
-       "5fc86892e81e1b112d2838849ba49469050bef156506d43b36ab01cb9d4d1a9a",
+       "1aa2f256221b8489fcc16a5f0402406a578d1afc473ca3a7fb5714f899c69d31",
        :gates
-       ["lake build ConstructionTargets.PolygonBoundaryInducedQuotient"
+       ["lake build ConstructionTargets.PolygonBoundaryCircleRelations"
         "fixture compiles"
         "zero source and fixture sorry"
         "standard-only axioms"
         "registry check"]},
-      :id :routes-2026-10-10-polygon-boundary-induced-quotient-55,
+      :id :routes-2026-10-10-polygon-boundary-circle-relations-56,
       :kind :reusable-theorem,
       :area "polygon-surface-open-cover",
       :depends-on
-      [:routes-2026-10-10-polygon-boundary-circle-source-54],
+      [:routes-2026-10-10-polygon-boundary-induced-quotient-55],
       :current-residual
-      "Specialize CircleRel to the two six-edge words, identify both Circle relation quotients with ThreeCircles, prove their common vertex classes and literal inclusion formulas, and assemble the packages.",
+      "Construct homeomorphisms from both specialized Circle relation quotients to ThreeCircles, prove the six polygon vertices share the required classes, derive the literal boundary and outer-piece inclusion formulas, and assemble the packages.",
       :other-consumers []},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake env lean /tmp/polygon-boundary-induced-quotient.lean",
+       "lake env lean /tmp/polygon-boundary-circle-relations.lean",
        :exit 0,
        :finding
-       "Generic EqvGen transport, the Circle and boundary relations, both coinduced quotient topologies, the quotient homeomorphism, and its two representative formulas compile with standard axioms."}
-      {:cmd "sha256sum /tmp/polygon-boundary-induced-quotient.lean",
+       "The six Circle edge parameterizations, both specialized boundary relations, their six generator proofs, both quotient maps, and all six quotient-identification equations compile with standard axioms."}
+      {:cmd "sha256sum /tmp/polygon-boundary-circle-relations.lean",
        :exit 0,
        :finding
-       "5fc86892e81e1b112d2838849ba49469050bef156506d43b36ab01cb9d4d1a9a"}
+       "1aa2f256221b8489fcc16a5f0402406a578d1afc473ca3a7fb5714f899c69d31"}
       {:cmd
-       "rg -n \"\\b(sorry|admit)\\b\" /tmp/polygon-boundary-induced-quotient.lean",
+       "rg -n \"\\b(sorry|admit)\\b\" /tmp/polygon-boundary-circle-relations.lean",
        :exit 1,
        :expected-exit 1,
        :finding "No fixture placeholders."}
@@ -99976,21 +100016,15 @@
        :exit 0,
        :finding "131 registered statements match, 0 do not."}
       {:cmd "git status --short", :exit 0, :finding "clean"}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/polygon-boundary-induced-quotient.lean",
-       :exit 1,
-       :finding
-       "The initial generic EqvGen map used method-style transitivity that selected incompatible implicit universes and left the quotient respect proof underconstrained; applying Relation.EqvGen.trans explicitly and naming both source and target relations corrected inference."}],
      :fixture
-     {:path "/tmp/polygon-boundary-induced-quotient.lean",
+     {:path "/tmp/polygon-boundary-circle-relations.lean",
       :sha256
-      "5fc86892e81e1b112d2838849ba49469050bef156506d43b36ab01cb9d4d1a9a",
+      "1aa2f256221b8489fcc16a5f0402406a578d1afc473ca3a7fb5714f899c69d31",
       :interface
-      "CircleRel pulls a disk relation back through the boundary-circle homeomorphism; circleBoundaryQuotientHomeomorph identifies its EqvGen quotient homeomorphically with the corresponding radius-one boundary quotient, literally on representatives."},
+      "circleEdgePoint gives the six canonical Circle arcs; N3CircleRel and TorusCrosscapCircleRel are the two pulled-back boundary words, with all generator and quotient-identification equations explicit."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -100025,7 +100059,8 @@
     :routes-2026-10-10-polygon-overlap-homotopy-equiv-circle-52
     :routes-2026-10-10-polygon-torus-crosscap-relation-53
     :routes-2026-10-10-polygon-boundary-circle-source-54
-    :routes-2026-10-10-polygon-boundary-induced-quotient-55],
+    :routes-2026-10-10-polygon-boundary-induced-quotient-55
+    :routes-2026-10-10-polygon-boundary-circle-relations-56],
    :current-residual
    "Combine the concrete cover packages with the strict overlap squares, banked Smith normalization, and final t97A01 assembly.",
    :other-consumers []}
@@ -100548,7 +100583,9 @@
     :lemma-polygonoverlaphomotopyequivcircle-overlaphomotopyequivcircle
     :lemma-polygontoruscrosscaprelation-toruscrosscaprel
     :lemma-polygonboundarycirclesource-boundarycirclehomeomorph
-    :lemma-polygonboundaryinducedquotient-circleboundaryquotienthomeomorph],
+    :lemma-polygonboundaryinducedquotient-circleboundaryquotienthomeomorph
+    :lemma-polygonboundarycirclerelations-n3circlerel
+    :lemma-polygonboundarycirclerelations-toruscrosscapcirclerel],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -102181,7 +102218,9 @@
    [:lemma-polygonouteropendeformation-outeropenhomotopy
     :lemma-polygontoruscrosscaprelation-toruscrosscaprel
     :lemma-polygonboundarycirclesource-boundarycirclehomeomorph
-    :lemma-polygonboundaryinducedquotient-circleboundaryquotienthomeomorph],
+    :lemma-polygonboundaryinducedquotient-circleboundaryquotienthomeomorph
+    :lemma-polygonboundarycirclerelations-n3circlerel
+    :lemma-polygonboundarycirclerelations-toruscrosscapcirclerel],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -102763,6 +102802,50 @@
    :kind :lemma,
    :depends-on
    [:lemma-polygonboundarycirclesource-boundarycirclehomeomorph],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "PolygonBoundaryCircleRelations.N3CircleRel",
+    :type
+    "The pullback of SurfaceRel false 3 to Circle, with the three literal aa, bb, and cc edge-pair generators and their quotient-identification equations."},
+   :lemma
+   {:name "PolygonBoundaryCircleRelations.N3CircleRel",
+    :reported-by
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    :type
+    "The pullback of SurfaceRel false 3 to Circle, with the three literal aa, bb, and cc edge-pair generators and their quotient-identification equations.",
+    :area "polygon-surface-open-cover",
+    :proved-in
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+   :id :lemma-polygonboundarycirclerelations-n3circlerel,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polygonboundaryinducedquotient-circleboundaryquotienthomeomorph],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "PolygonBoundaryCircleRelations.TorusCrosscapCircleRel",
+    :type
+    "The pullback of TorusCrosscapRel to Circle, with the literal a, b reversed and c same-direction edge-pair generators and their quotient-identification equations."},
+   :lemma
+   {:name "PolygonBoundaryCircleRelations.TorusCrosscapCircleRel",
+    :reported-by
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    :type
+    "The pullback of TorusCrosscapRel to Circle, with the literal a, b reversed and c same-direction edge-pair generators and their quotient-identification equations.",
+    :area "polygon-surface-open-cover",
+    :proved-in
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+   :id :lemma-polygonboundarycirclerelations-toruscrosscapcirclerel,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polygonboundaryinducedquotient-circleboundaryquotienthomeomorph],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
