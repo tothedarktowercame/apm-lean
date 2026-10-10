@@ -62154,24 +62154,60 @@
   {:bounded-exception
    "single-consumer shared-direction reconstruction normal identity for t02A03",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :fixture
+     {:path "/tmp/t02a03_geometric_tube_cover.lean",
+      :sha256
+      "8ff84e33ba80c81e4521e9cfe16e2ff2b3fa74b34ca4c9bdf610892aa00ad47c"},
+     :commands
+     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "apm_t02a03_leftTubeNormalComplex_torusInverse_coordinates compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
+       :exit 0}
+      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "8ff84e33ba80c81e4521e9cfe16e2ff2b3fa74b34ca4c9bdf610892aa00ad47c  /tmp/t02a03_geometric_tube_cover.lean"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :implementation
+     {:scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
+      :declaration
+      "ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_leftTubeNormalComplex_torusInverse_coordinates",
+      :type
+      "forall p : apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubeNormalComplex ⟨(apm_t02a03_leftTubeTorusInverse (apm_t02a03_leftTubeTorusCoordinates p)).1, (apm_t02a03_leftTubeTorusInverse (apm_t02a03_leftTubeTorusCoordinates p)).2.1⟩ = (1 / 8 : Real) • ((apm_t02a03_leftTubeNormalAngular p : Circle) : Complex)",
+      :acceptance
+      ["target module compiles"
+       "declaration has the frozen type"
+       "target module contains no sorry token"
+       "statement registry matches"]},
+     :finding
+     "The fixture specializes the reconstructed normal-coordinate identity to a source point's forward coordinates, reducing its direction to that point's normalized normal Circle coordinate.",
+     :residual
+     "Calculate the interpolation normal coordinate, deduce deleted-core exclusion, bundle the homotopy, and assemble the torus HomotopyEquiv."}},
+   :phase :implementation,
+   :type
+   "forall p : apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubeNormalComplex ⟨(apm_t02a03_leftTubeTorusInverse (apm_t02a03_leftTubeTorusCoordinates p)).1, (apm_t02a03_leftTubeTorusInverse (apm_t02a03_leftTubeTorusCoordinates p)).2.1⟩ = (1 / 8 : Real) • ((apm_t02a03_leftTubeNormalAngular p : Circle) : Complex)",
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/left-tube-torus-inverse-coordinate-direction",
    :acceptance
-   {:probe
-    "Compile and bank apm_t02a03_leftTubeNormalComplex_torusInverse_coordinates from /tmp/t02a03_geometric_tube_cover.lean. Specialize the reconstruction normal-coordinate identity to a punctured-left-tube point's forward torus coordinates and reduce the second coordinate to its normalized normal direction. This supplies the common-direction reconstruction endpoint formula; do not yet claim the full interpolation formula, deleted-core exclusion, bundled homotopy, HomotopyEquiv, or gluing.",
-    :declaration
-    "apm_t02a03_leftTubeNormalComplex_torusInverse_coordinates",
-    :type
-    "forall p : apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubeNormalComplex ⟨(apm_t02a03_leftTubeTorusInverse (apm_t02a03_leftTubeTorusCoordinates p)).1, (apm_t02a03_leftTubeTorusInverse (apm_t02a03_leftTubeTorusCoordinates p)).2.1⟩ = (1 / 8 : Real) • ((apm_t02a03_leftTubeNormalAngular p : Circle) : Complex)",
-    :placeholder "the sole sorry in apm_t02a03",
-    :route-step
-    "t02A03 step 2, specialize the reconstructed normal coordinate to the source point's shared normal direction"},
+   ["target module compiles"
+    "declaration has the frozen type"
+    "target module contains no sorry token"
+    "statement registry matches"],
    :id
    :routes-2026-10-10-t02a03-left-tube-torus-inverse-coordinate-direction-topo2-r1,
    :kind :reusable-theorem,
+   :declaration
+   "ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_leftTubeNormalComplex_torusInverse_coordinates",
    :depends-on
    [:routes-2026-10-10-checkpoint-topo2-r5
     :routes-2026-10-10-t02a03-left-tube-torus-inverse-normal-coordinate-topo2-r1],
