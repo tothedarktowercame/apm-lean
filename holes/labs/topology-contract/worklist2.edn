@@ -66761,7 +66761,49 @@
   {:bounded-exception
    "single-consumer continuous right-core angular coordinate for the tube-preserving deformation",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:residual
+     "Construct the angular and disk-normal interpolation to the meridian endpoint, then prove the radius-1/4 and left-core-avoidance invariants.",
+     :outcome :go,
+     :warnings [],
+     :missing-theorems [],
+     :axioms [propext Classical.choice Quot.sound],
+     :commands
+     [{:cmd "lake env lean /tmp/t02a03_right_core_compact_probe.lean",
+       :exit 0,
+       :output
+       "rightTubeCoreAngularCoordinate compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd "sha256sum /tmp/t02a03_right_core_compact_probe.lean",
+       :exit 0,
+       :output
+       "ff552e5ff1df705560fa644d283438d8010436001b3c14bcce6c5e08eae02554  /tmp/t02a03_right_core_compact_probe.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_right_core_compact_probe.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}
+      {:cmd
+       "rg -n \"noncomputable def rightTubeCoreAngularCoordinate|C\\(RightTubeMinusLeftCore, Circle\\)\" /tmp/t02a03_right_core_compact_probe.lean",
+       :exit 0,
+       :output
+       "Exact ContinuousMap declaration occurs at lines 283-284."}],
+     :fixture
+     {:path "/tmp/t02a03_right_core_compact_probe.lean",
+      :sha256
+      "ff552e5ff1df705560fa644d283438d8010436001b3c14bcce6c5e08eae02554"},
+     :finding
+     "The compiled declaration normalizes the nonzero right-core planar complex at each deleted-right-tube point and proves continuity using the continuous planar coordinate and the local reciprocal of its nonzero norm.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+      :declarations
+      [{:name
+        "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreAngularCoordinate",
+        :type "C(RightTubeMinusLeftCore, Circle)"}]},
+     :seat "topo-8"}},
+   :phase :implementation,
    :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/right-core-angular-coordinate",
@@ -66778,6 +66820,10 @@
    :routes-2026-10-10-t02a03-right-core-angular-coordinate-topo2-r1,
    :kind :reusable-theorem,
    :area "explicit-r3-tube-deformation-retraction",
+   :declarations
+   [{:name
+     "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreAngularCoordinate",
+     :type "C(RightTubeMinusLeftCore, Circle)"}],
    :depends-on
    [:routes-2026-10-10-t02a03-right-core-tubular-coordinates-continuous-topo2-r1],
    :current-residual
