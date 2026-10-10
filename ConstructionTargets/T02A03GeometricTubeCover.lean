@@ -53,6 +53,40 @@ theorem apm_t02a03_leftCore_planar_radius_sq (t : ℝ) :
       (apm_t02a03_leftCore t 1) ^ 2 = 1 := by
   simp [apm_t02a03_leftCore, Real.cos_sq_add_sin_sq]
 
+noncomputable def apm_t02a03_leftCoreCircle (z : Circle) : apm_t02a03_E3 :=
+  WithLp.toLp 2 ![-1 + (z : ℂ).re, (z : ℂ).im, 0]
+
+theorem apm_t02a03_continuous_leftCoreCircle :
+    Continuous apm_t02a03_leftCoreCircle := by
+  unfold apm_t02a03_leftCoreCircle
+  apply (PiLp.continuous_toLp 2 _).comp
+  apply continuous_pi
+  intro i
+  fin_cases i <;> simp <;> fun_prop
+
+theorem apm_t02a03_range_leftCoreCircle :
+    Set.range apm_t02a03_leftCoreCircle = Set.range apm_t02a03_leftCore := by
+  ext p
+  constructor
+  · rintro ⟨z, rfl⟩
+    refine ⟨Complex.arg (z : ℂ), ?_⟩
+    ext i
+    fin_cases i
+    · simpa [apm_t02a03_leftCoreCircle, apm_t02a03_leftCore,
+        Circle.norm_coe] using Complex.cos_arg (Circle.coe_ne_zero z)
+    · simpa [apm_t02a03_leftCoreCircle, apm_t02a03_leftCore,
+        Circle.norm_coe] using Complex.sin_arg (z : ℂ)
+    · simp [apm_t02a03_leftCoreCircle, apm_t02a03_leftCore]
+  · rintro ⟨t, rfl⟩
+    refine ⟨Circle.exp t, ?_⟩
+    ext i
+    fin_cases i <;> simp [apm_t02a03_leftCoreCircle, apm_t02a03_leftCore]
+
+theorem apm_t02a03_isCompact_range_leftCore :
+    IsCompact (Set.range apm_t02a03_leftCore) := by
+  rw [← apm_t02a03_range_leftCoreCircle]
+  exact isCompact_range apm_t02a03_continuous_leftCoreCircle
+
 theorem apm_t02a03_rightCore_zero :
     apm_t02a03_rightCore 0 = (0 : apm_t02a03_E3) := by
   ext i
