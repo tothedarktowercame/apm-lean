@@ -55100,17 +55100,63 @@
   {:bounded-exception
    "single-consumer bounded affine-chart inverse laws",
    :consumer :t94A08,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:residual
+     "Prove continuity of coordinates on affineSource and continuity of chartInverse, then package the actual affine-chart OpenPartialHomeomorph before probing the conic and nodal-neighborhood arguments.",
+     :outcome :go,
+     :warnings [],
+     :axioms :standard-only,
+     :commands
+     [{:cmd "sha256sum /tmp/t94a08_affine_chart_inverse_laws.lean",
+       :exit 0,
+       :output
+       "28978815a3932bf3a00342ab6a4d2e4a529021a032e63cd9ddafecd74b6391e8  /tmp/t94a08_affine_chart_inverse_laws.lean"}
+      {:cmd "lake env lean /tmp/t94a08_affine_chart_inverse_laws.lean",
+       :exit 0}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t94a08_affine_chart_inverse_laws.lean || true)\"",
+       :exit 0}
+      {:cmd
+       "rg -n '^(@\\[simp\\] )?theorem (coordinates_chartInverse|chartInverse_coordinates)' /tmp/t94a08_affine_chart_inverse_laws.lean",
+       :exit 0,
+       :output
+       "11:@[simp] theorem coordinates_chartInverse {n : ℕ} (i : Fin (n + 1))\n27:theorem chartInverse_coordinates {n : ℕ} (i : Fin (n + 1))"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :fixture
+     {:path "/tmp/t94a08_affine_chart_inverse_laws.lean",
+      :sha256
+      "28978815a3932bf3a00342ab6a4d2e4a529021a032e63cd9ddafecd74b6391e8"},
+     :finding
+     "The placeholder-free fixture constructs both algebraic inverse laws at generic projective dimension from the existing representative-scaling API. coordinates_chartInverse reduces normalized insertion followed by ratios coordinatewise; chartInverse_coordinates uses Projectivization.mk_eq_mk_iff' with scalar (rep x i)⁻¹. No continuity or homeomorphism claim is included.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/ComplexProjectiveChartTargets.lean"],
+      :acceptance
+      {:declarations
+       ["coordinates_chartInverse" "chartInverse_coordinates"],
+       :commands
+       ["lake env lean ConstructionTargets/ComplexProjectiveChartTargets.lean"
+        "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/ComplexProjectiveChartTargets.lean || true)\""
+        "python3 scripts/statement-registry.py check"],
+       :constraints
+       "Insert exactly the two compiled inverse-law theorems after the banked affine-source results; preserve generic n and do not add continuity or package an OpenPartialHomeomorph."}},
+     :seat "topo-8"}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/ComplexProjectiveChartTargets.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t94A08/affine-chart-inverse-laws",
    :acceptance
-   {:probe
-    "Compile and bank coordinates_chartInverse and chartInverse_coordinates from /tmp/t94a08_affine_chart_inverse_laws.lean. At the frozen coinduced projective topology, prove the ratio-coordinate and normalized-insertion functions are mutual inverses on the exact open affine source already banked. This supplies the algebraic inverse-law portion of t94A08 route step 1; do not assert continuity or package an OpenPartialHomeomorph in this row.",
-    :declarations
+   {:declarations
     ["coordinates_chartInverse" "chartInverse_coordinates"],
-    :placeholder "the sole sorry in apm_t94a08",
-    :route-step "step 1, affine-chart inverse laws"},
+    :commands
+    ["lake env lean ConstructionTargets/ComplexProjectiveChartTargets.lean"
+     "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/ComplexProjectiveChartTargets.lean || true)\""
+     "python3 scripts/statement-registry.py check"],
+    :constraints
+    "Insert exactly the two compiled inverse-law theorems after the banked affine-source results; preserve generic n and do not add continuity or package an OpenPartialHomeomorph."},
    :id :routes-2026-10-10-t94a08-affine-chart-inverse-laws-topo2-r1,
    :kind :reusable-theorem,
    :depends-on
