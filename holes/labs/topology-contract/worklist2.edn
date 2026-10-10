@@ -66275,62 +66275,86 @@
    "Normalize the positive-half-plane interpolation to rotate the planar direction to 1, interpolate the normal radius to 1/8, and prove the four ambient deformation invariants.",
    :other-consumers []}
   {:bounded-exception
+   "single-consumer normalized positive-half-plane rotation used by the ambient deformation",
+   :consumer :t02A03,
+   :phase :probe,
+   :state :open,
+   :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+   :dag-node "TOPOLOGY-ROUTES.md/t02A03/right-tube-planar-rotation",
+   :acceptance
+   {:probe
+    "Compile rightTubePlanarRotation_exists by normalizing (1-t)+t*rightTubePlanarComplex(p). Prove the interpolation is nonzero using rightTubePlanarComplex_re_pos, prove continuity, and prove its endpoints are 1 and the normalized planar coordinate. Do not define the ambient E3 deformation or claim tube/deletion invariants.",
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubePlanarRotation_exists",
+    :type
+    "exists R : C(unitInterval × RightTubeMinusLeftCore, Circle), (forall p, (R (0,p) : ℂ) = 1) and (forall p, (R (1,p) : ℂ) = NormedSpace.normalize (rightTubePlanarComplex p.1))",
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "construct the safe planar angular interpolation used by the deleted-right-tube deformation"},
+   :id :routes-2026-10-10-t02a03-right-tube-planar-rotation-topo2-r1,
+   :kind :reusable-theorem,
+   :area "explicit-r3-tube-deformation-retraction",
+   :depends-on
+   [:routes-2026-10-10-t02a03-right-tube-planar-coordinate-positive-topo2-r1],
+   :current-residual
+   "Use the rotation in the polar-normal reconstruction, interpolate normal magnitude to 1/8, and prove endpoint, right-tube, and left-core-avoidance properties.",
+   :other-consumers []}
+  {:bounded-exception
    "single-consumer explicit ambient deformation with frozen tube and deletion invariants",
    :consumer :t02A03,
    :evidence
    {:probe
     {:residual
-     "Bank planar-coordinate positivity, then construct the polar-normal deformation with its endpoint, right-tube, and left-core-avoidance proofs.",
+     "Bank the planar rotation, then build and certify the ambient polar-normal deformation.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
      [{:name
-       "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubePlanarComplex_re_pos",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubePlanarRotation_exists",
        :type
-       "forall p : apm_t02a03_E3, p ∈ apm_t02a03_rightTube -> 0 < (rightTubePlanarComplex p).re",
+       "exists R : C(unitInterval × RightTubeMinusLeftCore, Circle), (forall p, (R (0,p) : ℂ) = 1) and (forall p, (R (1,p) : ℂ) = NormedSpace.normalize (rightTubePlanarComplex p.1))",
        :status :proved,
        :consumers [:t02A03],
        :depends-on
-       ["ConstructionTargets.T02A03GeometricTubeDeformation.rightTubePlanarComplex_ne_zero"],
+       ["ConstructionTargets.T02A03GeometricTubeDeformation.rightTubePlanarComplex_re_pos"],
        :area "explicit-r3-tube-deformation-retraction"}],
      :prerequisite
      {:bounded-exception
-      "single-consumer half-plane bound needed to contract the planar angle without crossing zero",
+      "single-consumer normalized positive-half-plane rotation used by the ambient deformation",
       :consumer :t02A03,
       :phase :probe,
       :state :open,
       :scope
       ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
-      :dag-node
-      "TOPOLOGY-ROUTES.md/t02A03/right-tube-planar-coordinate-positive",
+      :dag-node "TOPOLOGY-ROUTES.md/t02A03/right-tube-planar-rotation",
       :acceptance
       {:probe
-       "Compile rightTubePlanarComplex_re_pos. From the exact right-core distance witness prove that every right-tube point satisfies 0 < re(rightTubePlanarComplex p), equivalently p0+1>0. Do not define the deformation or claim endpoint or safety invariants.",
+       "Compile rightTubePlanarRotation_exists by normalizing (1-t)+t*rightTubePlanarComplex(p). Prove the interpolation is nonzero using rightTubePlanarComplex_re_pos, prove continuity, and prove its endpoints are 1 and the normalized planar coordinate. Do not define the ambient E3 deformation or claim tube/deletion invariants.",
        :declaration
-       "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubePlanarComplex_re_pos",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubePlanarRotation_exists",
        :type
-       "forall p : apm_t02a03_E3, p ∈ apm_t02a03_rightTube -> 0 < (rightTubePlanarComplex p).re",
+       "exists R : C(unitInterval × RightTubeMinusLeftCore, Circle), (forall p, (R (0,p) : ℂ) = 1) and (forall p, (R (1,p) : ℂ) = NormedSpace.normalize (rightTubePlanarComplex p.1))",
        :placeholder "the sole sorry in apm_t02a03",
        :route-step
-       "place the planar angular coordinate in the contractible positive half-plane before constructing the safe radial deformation"},
+       "construct the safe planar angular interpolation used by the deleted-right-tube deformation"},
       :id
-      :routes-2026-10-10-t02a03-right-tube-planar-coordinate-positive-topo2-r1,
+      :routes-2026-10-10-t02a03-right-tube-planar-rotation-topo2-r1,
       :kind :reusable-theorem,
       :area "explicit-r3-tube-deformation-retraction",
       :depends-on
-      [:routes-2026-10-10-t02a03-right-tube-planar-coordinate-nonzero-topo2-r1],
+      [:routes-2026-10-10-t02a03-right-tube-planar-coordinate-positive-topo2-r1],
       :current-residual
-      "Normalize the positive-half-plane interpolation to rotate the planar direction to 1, interpolate the normal radius to 1/8, and prove the four ambient deformation invariants.",
+      "Use the rotation in the polar-normal reconstruction, interpolate normal magnitude to 1/8, and prove endpoint, right-tube, and left-core-avoidance properties.",
       :other-consumers []},
      :commands
      [{:cmd "lake env lean /tmp/t02a03_right_core_compact_probe.lean",
        :exit 0,
        :output
-       "rightTubePlanarComplex_re_pos compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "rightTubePlanarRotation_exists compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd "sha256sum /tmp/t02a03_right_core_compact_probe.lean",
        :exit 0,
        :output
-       "3baf51cc452b17b2d88afa50952c716a07d50858849581c71641b0377ba2d247  /tmp/t02a03_right_core_compact_probe.lean"}
+       "8b15b861c3d8eace094b84d46aaca1f8947ad9187871e392c8796fcb5143fecb  /tmp/t02a03_right_core_compact_probe.lean"}
       {:cmd
        "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_right_core_compact_probe.lean || true)\"",
        :exit 0}
@@ -66338,23 +66362,19 @@
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
      :diagnostic-history
-     [{:cmd "lake env lean /tmp/t02a03_right_tube_planar_re_pos.lean",
+     [{:cmd "lake env lean /tmp/t02a03_right_core_compact_probe.lean",
        :exit 1,
        :finding
-       "The scoped deformation module has no generated olean during probe; the final fixture imports the banked cover module and includes the already compiled prerequisite declarations transparently."}
-      {:cmd "lake env lean /tmp/t02a03_right_core_compact_probe.lean",
-       :exit 1,
-       :finding
-       "A simplifier changed the coordinate nonnegativity goal to cos(t) ≤ 1; applying Real.cos_le_one directly corrected the proof."}],
+       "The first interpolation proof asked nonlinear arithmetic to infer strict positivity across the endpoint split and used real scalar multiplication without a ContinuousSMul instance. Splitting t=1 from t<1 and expressing scalar action as complex multiplication corrected both issues."}],
      :fixture
      {:path "/tmp/t02a03_right_core_compact_probe.lean",
       :sha256
-      "3baf51cc452b17b2d88afa50952c716a07d50858849581c71641b0377ba2d247"},
+      "8b15b861c3d8eace094b84d46aaca1f8947ad9187871e392c8796fcb5143fecb"},
      :finding
-     "The safe deformation must continuously rotate the normalized planar coordinate toward the positive real axis while preserving a nonzero planar radius. Such a rotation is not available on all of Circle. On the frozen right tube it is justified by the stronger quantitative fact re(rightTubePlanarComplex p)>0: the attained right-core witness puts p0 within 1/4 of 1-cos(t)≥0, hence p0+1≥3/4. This positivity makes every convex interpolation with 1 nonzero and supplies the contractible right-half-plane coordinate required by the deformation.",
+     "Planar-coordinate positivity makes the convex complex interpolation (1-t)+t*rightTubePlanarComplex(p) nonzero for every t in the unit interval. Normalizing it gives a continuous Circle-valued rotation whose zero endpoint is 1 and whose one endpoint is the normalized planar coordinate. This is the exact planar angular component of the safe ambient deformation; the remaining parent work is the reconstruction formula and its normal-radius, tube, and deletion estimates.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
@@ -66375,7 +66395,8 @@
    :depends-on
    [:routes-2026-10-10-t02a03-right-tube-meridian-coordinate-topo2-r1
     :routes-2026-10-10-t02a03-right-tube-planar-coordinate-nonzero-topo2-r1
-    :routes-2026-10-10-t02a03-right-tube-planar-coordinate-positive-topo2-r1],
+    :routes-2026-10-10-t02a03-right-tube-planar-coordinate-positive-topo2-r1
+    :routes-2026-10-10-t02a03-right-tube-planar-rotation-topo2-r1],
    :current-residual
    "Lift H to RightTubeMinusLeftCore, package rightTubeMeridianRetractionHomotopy, then use the coordinate equation for the Circle-side constant homotopy.",
    :other-consumers []}
@@ -69437,4 +69458,29 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-t02a03geometrictubedeformation-righttubeplanarcomplex-ne-zer],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubePlanarRotation_exists",
+    :type
+    "exists R : C(unitInterval × RightTubeMinusLeftCore, Circle), (forall p, (R (0,p) : ℂ) = 1) and (forall p, (R (1,p) : ℂ) = NormedSpace.normalize (rightTubePlanarComplex p.1))"},
+   :lemma
+   {:name
+    "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubePlanarRotation_exists",
+    :reported-by
+    [:routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1],
+    :type
+    "exists R : C(unitInterval × RightTubeMinusLeftCore, Circle), (forall p, (R (0,p) : ℂ) = 1) and (forall p, (R (1,p) : ℂ) = NormedSpace.normalize (rightTubePlanarComplex p.1))",
+    :area "explicit-r3-tube-deformation-retraction",
+    :proved-in
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+   :id
+   :lemma-constructiontargets-t02a03geometrictubedeformation-righttubeplanarrotation-exist,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t02a03geometrictubedeformation-righttubeplanarcomplex-re-pos],
    :other-consumers []}]}
