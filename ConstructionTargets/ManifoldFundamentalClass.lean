@@ -168,6 +168,24 @@ theorem mapGlobalGenerator_generates_of_isIso
   rw [← f.hom.map_smul, hr]
   exact ConcreteCategory.congr_hom (asIso f).inv_hom_id z
 
+theorem isIso_of_map_globalGenerator_eq_globalGenerator
+    (R : Type) [CommRing R] (G H : ModuleCat R)
+    (eG : G ≅ ModuleCat.of R R) (eH : H ≅ ModuleCat.of R R)
+    (f : G ⟶ H)
+    (hgen : f.hom (globalGenerator R G eG) = globalGenerator R H eH) :
+    IsIso f := by
+  have hf : f = eG.hom ≫ eH.inv := by
+    ext z
+    obtain ⟨r, rfl⟩ := globalGenerator_generates R G eG z
+    rw [map_smul, hgen]
+    change r • eH.inv.hom 1 = eH.inv.hom (eG.hom.hom (r • eG.inv.hom 1))
+    rw [map_smul, map_smul]
+    have hone : eG.hom.hom (eG.inv.hom (1 : R)) = 1 :=
+      ConcreteCategory.congr_hom eG.inv_hom_id 1
+    rw [hone]
+  rw [hf]
+  infer_instance
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -182,3 +200,4 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.globalGenerator
 #print axioms ConstructionTargets.ManifoldFundamentalClass.globalGenerator_generates
 #print axioms ConstructionTargets.ManifoldFundamentalClass.mapGlobalGenerator_generates_of_isIso
+#print axioms ConstructionTargets.ManifoldFundamentalClass.isIso_of_map_globalGenerator_eq_globalGenerator
