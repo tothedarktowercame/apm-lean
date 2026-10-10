@@ -48,6 +48,11 @@ theorem apm_t02a03_leftCore_zero :
   ext i
   fin_cases i <;> simp [apm_t02a03_leftCore]
 
+theorem apm_t02a03_leftCore_planar_radius_sq (t : ℝ) :
+    (apm_t02a03_leftCore t 0 + 1) ^ 2 +
+      (apm_t02a03_leftCore t 1) ^ 2 = 1 := by
+  simp [apm_t02a03_leftCore, Real.cos_sq_add_sin_sq]
+
 theorem apm_t02a03_rightCore_zero :
     apm_t02a03_rightCore 0 = (0 : apm_t02a03_E3) := by
   ext i
