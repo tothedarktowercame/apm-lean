@@ -66402,76 +66402,111 @@
    "Construct the short-complex morphism induced by a continuous map preserving both cover members, prove compatibility of its intersection and union components with the production homology isomorphisms, and conjugate the banked equality to productionConnecting_naturality.",
    :other-consumers [:t96J06]}
   {:consumer :t97A04,
+   :phase :probe,
+   :state :open,
+   :scope
+   ["ConstructionTargets/ProductionOpenCoverMayerVietoris.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/mayer-vietoris/cover-preserving-short-complex-map",
+   :acceptance
+   {:probe
+    "Compile a placeholder-free inhabitant of CoverPreservingShortComplexMapExists from /tmp/production_cover_short_complex_map_contract.lean. For a continuous f carrying U into U' and V into V', construct the induced morphism shortComplex U V ⟶ shortComplex U' V' from the intersection, biproduct-of-pieces, and union subcomplex maps, and prove both ShortComplex.hom commutative squares. Do not yet claim compatibility with production comparison isomorphisms or productionConnecting_naturality.",
+    :declaration
+    "ConstructionTargets.ProductionOpenCoverMayerVietoris.coverPreservingShortComplexMap",
+    :type
+    "forall {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y] (U V : Set X) (U' V' : Set Y) (f : C(X, Y)), Set.MapsTo f U U' -> Set.MapsTo f V V' -> Nonempty (shortComplex U V ⟶ shortComplex U' V')",
+    :placeholders
+    ["apm_t97A04_bridge_3"
+     "the H2 Mayer-Vietoris placeholder in t96J06"],
+    :route-step
+    "shared H2 step, assemble the Boolean-cover short-complex morphism induced by a cover-preserving map"},
+   :id
+   :routes-2026-10-10-cover-preserving-short-complex-map-two-consumers-topo2-r1,
+   :kind :reusable-theorem,
+   :area "mv-connecting-naturality",
+   :depends-on
+   [:routes-2026-10-10-subcomplex-mv-connecting-naturality-two-consumers-topo2-r1],
+   :current-residual
+   "Prove that the intersection and union components of this morphism commute with booleanIntersectionProductionHomologyIso and booleanUnionProductionHomologyIso, then conjugate subcomplex connecting naturality.",
+   :other-consumers [:t96J06]}
+  {:consumer :t97A04,
    :implements-lemma
    :lemma-constructiontargets-productionopencovermayervietoris-productionconnecting-natura,
    :evidence
    {:probe
     {:residual
-     "Bank canonical connecting naturality, then build the cover-preserving short-complex map and transport its square through the production isomorphisms.",
+     "Bank the cover-preserving Boolean short-complex morphism, then prove its endpoint-component compatibility with production homology isomorphisms and derive productionConnecting_naturality.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
-     [{:id
-       :lemma-constructiontargets-productionopencovermayervietoris-subcomplexmayervietorisconn,
-       :name
-       "ConstructionTargets.ProductionOpenCoverMayerVietoris.subcomplexMayerVietorisConnecting_naturality",
+     [{:name
+       "ConstructionTargets.ProductionOpenCoverMayerVietoris.coverPreservingShortComplexMap",
        :type
-       "forall {S T : SSet} (P Q : S.Subcomplex) (P' Q' : T.Subcomplex) (φ : subcomplexMayerVietorisShortComplex P Q ⟶ subcomplexMayerVietorisShortComplex P' Q') (n : ℕ), subcomplexMayerVietorisConnecting P Q n ≫ HomologicalComplex.homologyMap φ.τ₁ n = HomologicalComplex.homologyMap φ.τ₃ (n + 1) ≫ subcomplexMayerVietorisConnecting P' Q' n",
-       :status :proved,
+       "forall {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y] (U V : Set X) (U' V' : Set Y) (f : C(X, Y)), Set.MapsTo f U U' -> Set.MapsTo f V V' -> Nonempty (shortComplex U V ⟶ shortComplex U' V')",
+       :status :not-started,
        :consumers [:t97A04 :t96J06],
        :depends-on [],
        :area "mv-connecting-naturality"}],
      :prerequisite
      {:consumer :t97A04,
-      :implements-lemma
-      :lemma-constructiontargets-productionopencovermayervietoris-subcomplexmayervietorisconn,
       :phase :probe,
       :state :open,
       :scope
       ["ConstructionTargets/ProductionOpenCoverMayerVietoris.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/mayer-vietoris/subcomplex-connecting-naturality",
+      "TOPOLOGY-ROUTES.md/mayer-vietoris/cover-preserving-short-complex-map",
       :acceptance
       {:probe
-       "Compile and bank subcomplexMayerVietorisConnecting_naturality from /tmp/production_connecting_naturality.lean. State the exact connecting-square equality for an arbitrary morphism between canonical subcomplex Mayer-Vietoris short complexes and prove it with HomologicalComplex.HomologySequence.δ_naturality. Do not yet claim a cover-preserving short-complex map or productionConnecting_naturality.",
+       "Compile a placeholder-free inhabitant of CoverPreservingShortComplexMapExists from /tmp/production_cover_short_complex_map_contract.lean. For a continuous f carrying U into U' and V into V', construct the induced morphism shortComplex U V ⟶ shortComplex U' V' from the intersection, biproduct-of-pieces, and union subcomplex maps, and prove both ShortComplex.hom commutative squares. Do not yet claim compatibility with production comparison isomorphisms or productionConnecting_naturality.",
        :declaration
-       "ConstructionTargets.ProductionOpenCoverMayerVietoris.subcomplexMayerVietorisConnecting_naturality",
+       "ConstructionTargets.ProductionOpenCoverMayerVietoris.coverPreservingShortComplexMap",
        :type
-       "forall {S T : SSet} (P Q : S.Subcomplex) (P' Q' : T.Subcomplex) (φ : subcomplexMayerVietorisShortComplex P Q ⟶ subcomplexMayerVietorisShortComplex P' Q') (n : ℕ), subcomplexMayerVietorisConnecting P Q n ≫ HomologicalComplex.homologyMap φ.τ₁ n = HomologicalComplex.homologyMap φ.τ₃ (n + 1) ≫ subcomplexMayerVietorisConnecting P' Q' n",
+       "forall {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y] (U V : Set X) (U' V' : Set Y) (f : C(X, Y)), Set.MapsTo f U U' -> Set.MapsTo f V V' -> Nonempty (shortComplex U V ⟶ shortComplex U' V')",
        :placeholders
        ["apm_t97A04_bridge_3"
         "the H2 Mayer-Vietoris placeholder in t96J06"],
        :route-step
-       "shared H2 step, canonical connecting naturality before production transport"},
+       "shared H2 step, assemble the Boolean-cover short-complex morphism induced by a cover-preserving map"},
       :id
-      :routes-2026-10-10-subcomplex-mv-connecting-naturality-two-consumers-topo2-r1,
+      :routes-2026-10-10-cover-preserving-short-complex-map-two-consumers-topo2-r1,
       :kind :reusable-theorem,
       :area "mv-connecting-naturality",
-      :depends-on [:routes-2026-10-10-checkpoint-topo2-r7],
+      :depends-on
+      [:routes-2026-10-10-subcomplex-mv-connecting-naturality-two-consumers-topo2-r1],
       :current-residual
-      "Construct the short-complex morphism induced by a continuous map preserving both cover members, prove compatibility of its intersection and union components with the production homology isomorphisms, and conjugate the banked equality to productionConnecting_naturality.",
+      "Prove that the intersection and union components of this morphism commute with booleanIntersectionProductionHomologyIso and booleanUnionProductionHomologyIso, then conjugate subcomplex connecting naturality.",
       :other-consumers [:t96J06]},
      :commands
-     [{:cmd "bb -e derive ledger lemma id from declaration name",
+     [{:cmd
+       "lake env lean /tmp/production_cover_short_complex_map_contract.lean",
+       :exit 0,
+       :output "CoverPreservingShortComplexMapExists compiled"}
+      {:cmd
+       "sha256sum /tmp/production_cover_short_complex_map_contract.lean",
        :exit 0,
        :output
-       ":lemma-constructiontargets-productionopencovermayervietoris-subcomplexmayervietorisconn"}
-      {:cmd "lake env lean /tmp/production_connecting_naturality.lean",
-       :exit 0,
-       :output
-       "subcomplexMayerVietorisConnecting_naturality compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "01d7d59da365520f68f9a7263f01c1dbb03074e5426d65474d41f165eb6a4a3d  /tmp/production_cover_short_complex_map_contract.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/production_cover_short_complex_map_contract.lean || true)\"",
+       :exit 0}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/production_cover_short_complex_map_contract.lean",
+       :exit 1,
+       :finding
+       "The first contract omitted the BooleanTwoCoverScaffold namespace qualifier for shortComplex and checked the newly banked naturality declaration through a stale compiled object. Opening the scaffold namespace and removing that irrelevant check yields the final compiled contract."}],
      :fixture
-     {:path "/tmp/production_connecting_naturality.lean",
+     {:path "/tmp/production_cover_short_complex_map_contract.lean",
       :sha256
-      "fe4b7104770c861a4fc12a0a9d6d9032f053407a8fbc42de8e0ca488e1ef5935"},
+      "01d7d59da365520f68f9a7263f01c1dbb03074e5426d65474d41f165eb6a4a3d"},
      :finding
-     "productionConnecting is the canonical subcomplex connecting morphism conjugated by the production union and intersection isomorphisms. The fixture proves the first required layer: naturality of the canonical connecting morphism for any morphism between the two Mayer-Vietoris short complexes. The remaining layer is to construct the short-complex morphism induced by a cover-preserving continuous map and prove its components commute with the production isomorphisms.",
+     "productionConnecting is a conjugate of the canonical subcomplex connecting morphism, so canonical δ naturality applies only after constructing a morphism shortComplex U V ⟶ shortComplex U' V'. The current module has subspaceMap for the three geometric components but no assembled Boolean-cover short-complex morphism. The fixture freezes exactly that construction for a continuous f with explicit MapsTo hypotheses for U and V; comparison with production homology is deliberately left for the following transport step.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope
    ["ConstructionTargets/ProductionOpenCoverMayerVietoris.lean"],
    :dag-node
@@ -66493,7 +66528,8 @@
    :area "mv-connecting-naturality",
    :depends-on
    [:routes-2026-10-10-checkpoint-topo2-r7
-    :routes-2026-10-10-subcomplex-mv-connecting-naturality-two-consumers-topo2-r1],
+    :routes-2026-10-10-subcomplex-mv-connecting-naturality-two-consumers-topo2-r1
+    :routes-2026-10-10-cover-preserving-short-complex-map-two-consumers-topo2-r1],
    :current-residual
    "Specialize to the frozen torus y-cover, prove connecting injectivity, compute overlap H1, and derive shearY_H2.",
    :other-consumers [:t96J06]}
@@ -68258,4 +68294,26 @@
    :lemma-constructiontargets-realprojectivesmoothtarget-rpsmoothatlas,
    :kind :lemma,
    :depends-on [],
-   :other-consumers []}]}
+   :other-consumers []}
+  {:consumer :t97A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ProductionOpenCoverMayerVietoris.coverPreservingShortComplexMap",
+    :type
+    "forall {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y] (U V : Set X) (U' V' : Set Y) (f : C(X, Y)), Set.MapsTo f U U' -> Set.MapsTo f V V' -> Nonempty (shortComplex U V ⟶ shortComplex U' V')"},
+   :lemma
+   {:name
+    "ConstructionTargets.ProductionOpenCoverMayerVietoris.coverPreservingShortComplexMap",
+    :reported-by
+    [:routes-2026-10-10-production-connecting-naturality-topo2-r1],
+    :type
+    "forall {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y] (U V : Set X) (U' V' : Set Y) (f : C(X, Y)), Set.MapsTo f U U' -> Set.MapsTo f V V' -> Nonempty (shortComplex U V ⟶ shortComplex U' V')",
+    :area "mv-connecting-naturality"},
+   :id
+   :lemma-constructiontargets-productionopencovermayervietoris-coverpreservingshortcomplex,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t96J06]}]}
