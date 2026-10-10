@@ -87320,8 +87320,161 @@
    "Conjugate the banked fiber-cardinality/index theorem to the frozen ThreeCircles cover predicate and record induced pi1 injectivity.",
    :other-consumers []}
   {:consumer :t97A01,
-   :phase :probe,
+   :phase :implementation,
    :state :open,
+   :scope
+   ["ConstructionTargets/GenericPointWedgeMayerVietorisPathConnectedCoordinates.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/shared/generic-point-wedge-mv-inclusion-coordinates/pathconnected-naturality",
+   :acceptance
+   {:placeholder
+    "the single sorry in apm_t97a01 and apm_t97A03_bridge_invariants_of_model",
+    :route-step
+    "repaired representation layer before t97A01 step 4 and t97A03 step 7",
+    :declarations
+    ["GenericPointWedgeMVH0Coordinates"
+     "genericPointWedgeOverlapH0Iso"
+     "genericPointWedgeLeftH0Iso"
+     "genericPointWedgeRightH0Iso"
+     "genericPointWedgeOverlapToLeft_H0_coordinates"
+     "genericPointWedgeOverlapToRight_H0_coordinates"
+     "genericPointWedgeIntersectionArrow_H0_coordinates"
+     "genericPointWedgeReassemblyArrow_H0_coordinates"
+     "threeCirclesPathConnectedSpace"
+     "threeCirclesMayerVietorisH0Coordinates"],
+    :implementation
+    "Require explicit PathConnectedSpace X and PathConnectedSpace Y arguments. Obtain H0 isomorphisms for X and Y from CoefficientH0.h0Iso and for the contractible overlap from its homotopy equivalence. Use the literal representative equations in genericPointWedgeCoverPackage together with h0Augmentation_naturality, or HomotopyEquivHomologySquare where needed, to prove that each actual overlap inclusion conjugates to the identity of Z. Expand productionIntersectionArrow to derive the signed diagonal. Apply openCoverH0IsoOfCoordinates and the zero-composite/cokernel uniqueness lemmas to derive the reassembly codiagonal. Prove path connectedness for Circle, its point wedge, and the iterated ThreeCircles quotient, then instantiate the same equations on its concrete two-open cover. Do not assert H0=Z for arbitrary disconnected factors.",
+    :axioms :standard-only,
+    :fixture "/tmp/generic-point-wedge-mv-pathconnected-probe.lean",
+    :fixture-sha256
+    "a471b74db23e71f5112eaf625a6a969dc9203ba00c6582950b417d1d989fe82e",
+    :commands
+    ["lake env lean ConstructionTargets/GenericPointWedgeMayerVietorisPathConnectedCoordinates.lean"
+     "lake env lean /tmp/generic-point-wedge-mv-pathconnected-probe.lean"
+     "python3 scripts/statement-registry.py check"]},
+   :representation
+   {:source
+    "Literal overlap inclusions and production Mayer-Vietoris arrows for point wedges of path-connected factors",
+    :target "Integer H0 coordinates on the overlap, pieces, and union",
+    :direction
+    "Exact conjugacy from each literal inclusion-induced H0 map to the identity of Z, yielding the signed diagonal and then the codiagonal for the production arrows"},
+   :id
+   :routes-2026-10-10-generic-point-wedge-h0-pathconnected-naturality-2,
+   :kind :representation-comparison,
+   :depends-on [],
+   :current-residual
+   "Prove both literal-inclusion augmentation naturality squares under explicit path-connected hypotheses and instantiate the resulting production-arrow coordinates on ThreeCircles.",
+   :other-consumers [:t97A03]}
+  {:consumer :t97A01,
+   :evidence
+   {:probe
+    {:outcome :revise,
+     :seat "topo-4",
+     :fixture
+     {:path "/tmp/generic-point-wedge-mv-pathconnected-probe.lean",
+      :sha256
+      "a471b74db23e71f5112eaf625a6a969dc9203ba00c6582950b417d1d989fe82e"},
+     :commands
+     [{:cmd "stat -c '%F %n' .lake/packages",
+       :exit 0,
+       :finding
+       "directory .lake/packages; canonical package authority is present"}
+      {:cmd
+       "lake env lean ConstructionTargets/GenericPointWedgeOpenCoverComparison.lean",
+       :exit 0,
+       :finding
+       "the literal generic point-wedge cover and representative equations compile with standard axioms"}
+      {:cmd "lake env lean ConstructionTargets/CoefficientH0.lean",
+       :exit 0,
+       :finding
+       "path-connected H0 augmentation coordinates and naturality compile with standard axioms"}
+      {:cmd
+       "lake env lean ConstructionTargets/T00A01MayerVietorisAdapters.lean",
+       :exit 0,
+       :finding
+       "the signed-diagonal and codiagonal cokernel algebra compiles with standard axioms"}
+      {:cmd
+       "lake env lean /tmp/generic-point-wedge-mv-pathconnected-probe.lean",
+       :exit 0,
+       :finding
+       "the corrected path-connected coordinate contract elaborates from one isolated naturality-package axiom"}
+      {:cmd
+       "sha256sum /tmp/generic-point-wedge-mv-pathconnected-probe.lean",
+       :exit 0,
+       :finding
+       "a471b74db23e71f5112eaf625a6a969dc9203ba00c6582950b417d1d989fe82e"}
+      {:cmd
+       "Python comment-stripped placeholder census of /tmp/generic-point-wedge-mv-pathconnected-probe.lean",
+       :exit 0,
+       :finding "0"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :finding "131 registered statements match, 0 do not"}
+      {:cmd "git status --short", :exit 0, :finding "clean"}],
+     :axioms
+     ["propext"
+      "Classical.choice"
+      "Quot.sound"
+      "GenericPointWedgeMVCoordinatesProbe.generic_point_wedge_mv_pathconnected_coordinates"],
+     :warnings
+     [{:kind :interface-axiom,
+       :message
+       "The fixture uses exactly one nonstandard axiom for the corrected coordinate package; unlike the rejected contract, PathConnectedSpace X and PathConnectedSpace Y are explicit arguments to that axiom."}
+      {:kind :specialization-obligation,
+       :message
+       "The prerequisite must also expose the ThreeCircles instantiation by proving path connectedness of the iterated point wedge and selecting its concrete cover neighborhoods; this is included in the same scoped implementation."}],
+     :prerequisite
+     {:consumer :t97A01,
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/GenericPointWedgeMayerVietorisPathConnectedCoordinates.lean"],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/shared/generic-point-wedge-mv-inclusion-coordinates/pathconnected-naturality",
+      :acceptance
+      {:placeholder
+       "the single sorry in apm_t97a01 and apm_t97A03_bridge_invariants_of_model",
+       :route-step
+       "repaired representation layer before t97A01 step 4 and t97A03 step 7",
+       :declarations
+       ["GenericPointWedgeMVH0Coordinates"
+        "genericPointWedgeOverlapH0Iso"
+        "genericPointWedgeLeftH0Iso"
+        "genericPointWedgeRightH0Iso"
+        "genericPointWedgeOverlapToLeft_H0_coordinates"
+        "genericPointWedgeOverlapToRight_H0_coordinates"
+        "genericPointWedgeIntersectionArrow_H0_coordinates"
+        "genericPointWedgeReassemblyArrow_H0_coordinates"
+        "threeCirclesPathConnectedSpace"
+        "threeCirclesMayerVietorisH0Coordinates"],
+       :implementation
+       "Require explicit PathConnectedSpace X and PathConnectedSpace Y arguments. Obtain H0 isomorphisms for X and Y from CoefficientH0.h0Iso and for the contractible overlap from its homotopy equivalence. Use the literal representative equations in genericPointWedgeCoverPackage together with h0Augmentation_naturality, or HomotopyEquivHomologySquare where needed, to prove that each actual overlap inclusion conjugates to the identity of Z. Expand productionIntersectionArrow to derive the signed diagonal. Apply openCoverH0IsoOfCoordinates and the zero-composite/cokernel uniqueness lemmas to derive the reassembly codiagonal. Prove path connectedness for Circle, its point wedge, and the iterated ThreeCircles quotient, then instantiate the same equations on its concrete two-open cover. Do not assert H0=Z for arbitrary disconnected factors.",
+       :axioms :standard-only,
+       :fixture "/tmp/generic-point-wedge-mv-pathconnected-probe.lean",
+       :fixture-sha256
+       "a471b74db23e71f5112eaf625a6a969dc9203ba00c6582950b417d1d989fe82e",
+       :commands
+       ["lake env lean ConstructionTargets/GenericPointWedgeMayerVietorisPathConnectedCoordinates.lean"
+        "lake env lean /tmp/generic-point-wedge-mv-pathconnected-probe.lean"
+        "python3 scripts/statement-registry.py check"]},
+      :representation
+      {:source
+       "Literal overlap inclusions and production Mayer-Vietoris arrows for point wedges of path-connected factors",
+       :target
+       "Integer H0 coordinates on the overlap, pieces, and union",
+       :direction
+       "Exact conjugacy from each literal inclusion-induced H0 map to the identity of Z, yielding the signed diagonal and then the codiagonal for the production arrows"},
+      :id
+      :routes-2026-10-10-generic-point-wedge-h0-pathconnected-naturality-2,
+      :kind :representation-comparison,
+      :depends-on [],
+      :current-residual
+      "Prove both literal-inclusion augmentation naturality squares under explicit path-connected hypotheses and instantiate the resulting production-arrow coordinates on ThreeCircles.",
+      :other-consumers [:t97A03]},
+     :residual
+     "Exactly one corrected representation prerequisite remains: the two path-connected H0 naturality squares and their ThreeCircles specialization. The false arbitrary-space H0 claim is not retained."}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/generic-point-wedge-mv-inclusion-coordinates/pathconnected-repair",
@@ -87349,7 +87502,8 @@
    :routes-2026-10-10-generic-point-wedge-mv-pathconnected-coordinates-2,
    :kind :representation-comparison,
    :depends-on
-   [:routes-2026-10-10-checkpoint-topo1-covering-independent-2],
+   [:routes-2026-10-10-checkpoint-topo1-covering-independent-2
+    :routes-2026-10-10-generic-point-wedge-h0-pathconnected-naturality-2],
    :current-residual
    "Add the missing path-connected factor hypotheses and prove the two H0 naturality squares without asserting false arbitrary-space coordinates.",
    :other-consumers [:t97A03]}
