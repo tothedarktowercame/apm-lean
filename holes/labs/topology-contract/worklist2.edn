@@ -58410,9 +58410,52 @@
   {:bounded-exception
    "single-consumer explicit normal meridian in the t02A03 geometric complement",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/t02a03_geometric_tube_cover.lean",
+      :sha256
+      "d67265aee2baecdc9a7a4c567aac503ca9014f93a65d803452f918654e3757f1"},
+     :commands
+     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "apm_t02a03_meridian, apm_t02a03_meridian_mem_geometricY, and apm_t02a03_meridianMap compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
+       :exit 0}
+      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "d67265aee2baecdc9a7a4c567aac503ca9014f93a65d803452f918654e3757f1  /tmp/t02a03_geometric_tube_cover.lean"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :finding
+     "The fixture constructs the full radius-1/8 normal meridian as a continuous map into the exact frozen geometric complement. Its distance from the common origin keeps it inside W, while coordinate comparison and the sine-cosine identities prove it is disjoint from the planar left core.",
+     :residual
+     "Construct the compatible attachment of the surviving right core to the normal meridian, then extend to tube deformations and gluing.",
+     :implementation
+     {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"]},
+     :acceptance
+     {:source-fixture "/tmp/t02a03_geometric_tube_cover.lean",
+      :declarations
+      ["apm_t02a03_meridian"
+       "apm_t02a03_meridian_mem_geometricY"
+       "apm_t02a03_meridianMap"],
+      :placeholder "the sole sorry in apm_t02a03",
+      :route-step
+      "t02A03 step 2, construct the explicit normal meridian inside geometricY",
+      :gates
+      ["fixture compiles"
+       "fixture contains no sorry token"
+       "fixture hash matches"
+       "statement registry matches"]}}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/geometric-normal-meridian",
    :acceptance
    {:probe
