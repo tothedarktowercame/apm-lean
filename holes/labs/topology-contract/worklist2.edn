@@ -66090,61 +66090,51 @@
    "single-consumer denominator lemma for polar deformation coordinates on the right tube",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:residual
-     "Define the polar-normal radial deformation and prove its endpoint equations, right-tube membership, and left-core avoidance.",
-     :outcome :go,
-     :warnings [],
-     :missing-theorems [],
-     :axioms [propext Classical.choice Quot.sound],
-     :commands
-     [{:cmd "lake env lean /tmp/t02a03_right_core_compact_probe.lean",
-       :exit 0,
-       :output
-       "rightTubePlanarComplex_ne_zero compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd "sha256sum /tmp/t02a03_right_core_compact_probe.lean",
-       :exit 0,
-       :output
-       "2ded46b29051257282143a566df19fc5af7c4d2a344f70d25578291ee4896f18  /tmp/t02a03_right_core_compact_probe.lean"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_right_core_compact_probe.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :diagnostic-history
-     [{:cmd "lake env lean /tmp/t02a03_right_core_compact_probe.lean",
-       :exit 1,
-       :finding
-       "The initial contradiction compared algebraically equal but syntactically different square-root expressions; introducing the exact normalized distance inequality corrected the proof."}
-      {:cmd "lake env lean /tmp/t02a03_right_core_compact_probe.lean",
-       :exit 1,
-       :finding
-       "The first simplification retained p0 because the real-part equation had not been converted to p0=-1; deriving explicit coordinate equalities corrected the distance calculation."}],
-     :fixture
-     {:path "/tmp/t02a03_right_core_compact_probe.lean",
-      :sha256
-      "2ded46b29051257282143a566df19fc5af7c4d2a344f70d25578291ee4896f18"},
-     :finding
-     "Compactness of the periodic right core turns closed-thickening membership into an attained point q=rightCore(t) at distance at most 1/4. If rightTubePlanarComplex p vanished, its real and imaginary parts would give p0=-1 and p1=0. The Euclidean distance from such p to q is at least 1 because q0=1-cos(t), contradicting the tube bound.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
-      :declarations
-      [{:name
-        "ConstructionTargets.T02A03GeometricTubeDeformation.rightTube_exists_near_rightCore",
-        :type
-        "forall p : apm_t02a03_E3, p ∈ apm_t02a03_rightTube -> exists q ∈ Set.range apm_t02a03_rightCore, dist p q ≤ (1 / 4 : ℝ)"}
-       {:name
-        "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubePlanarComplex",
-        :type "apm_t02a03_E3 -> ℂ"}
-       {:name
-        "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubePlanarComplex_ne_zero",
-        :type
-        "forall p : apm_t02a03_E3, p ∈ apm_t02a03_rightTube -> rightTubePlanarComplex p ≠ 0"}]},
-     :seat "topo-8"}},
+   {:placeholder-delta {:before 0, :after 0},
+    :residual
+    "Define the polar-normal radial deformation, prove its endpoint equations, rightTube membership, and leftCore avoidance.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["Lean reports the pre-existing unnecessarySimpa warning at module line 62; the new declarations compile without additional warnings."],
+    :missing-theorems [],
+    :statement-hashes
+    {:registered "131 registered statements match, 0 do not",
+     :scoped-file-git-blob "2bdc40987188b985d83c3f7800693445ccc23ee9"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd "lake env lean /tmp/t02a03_right_core_compact_probe.lean",
+      :exit 0}
+     {:cmd "sha256sum /tmp/t02a03_right_core_compact_probe.lean",
+      :exit 0,
+      :output
+      "2ded46b29051257282143a566df19fc5af7c4d2a344f70d25578291ee4896f18  /tmp/t02a03_right_core_compact_probe.lean"}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeDeformation.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "b812ec91a642f552aa086ce396e57aa785e2ed7d",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+    :fixture
+    {:path "/tmp/t02a03_right_core_compact_probe.lean",
+     :sha256
+     "2ded46b29051257282143a566df19fc5af7c4d2a344f70d25578291ee4896f18"},
+    :finding
+    "Compactness supplies an attained right-core point within distance 1/4. If the planar coordinate vanished, the first two coordinates would be (-1,0), forcing distance at least 1 from every right-core point and contradicting that bound.",
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/right-tube-planar-coordinate-nonzero",
