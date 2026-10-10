@@ -484,6 +484,54 @@ theorem rightTubeCore_radial_error_le (p : apm_t02a03_E3) (t : ℝ) :
   rw [hu] at h
   simpa [abs_sub_comm] using h
 
+theorem rightTubeCoreInputNormalRadiusBound
+    (p : apm_t02a03_E3) (hp : p ∈ apm_t02a03_rightTube) :
+    ‖rightTubeCoreNormalComplex p‖ ≤ (1 / 4 : ℝ) := by
+  obtain ⟨q, ⟨t, rfl⟩, hd⟩ := rightTube_exists_near_rightCore p hp
+  have hr := rightTubeCore_radial_error_le p t
+  have hnormplan : ‖rightTubeCorePlanarComplex p -
+      ((Real.cos t : ℂ) + (Real.sin t : ℂ) * Complex.I)‖ =
+      √((1 - p 0 - Real.cos t) ^ 2 + (p 1 - Real.sin t) ^ 2) := by
+    rw [Complex.norm_def]
+    simp only [rightTubeCorePlanarComplex, Complex.normSq_apply,
+      Complex.sub_re, Complex.add_re, Complex.ofReal_re, Complex.mul_re,
+      Complex.ofReal_im, Complex.I_re, Complex.I_im, mul_zero, sub_zero,
+      add_zero, Complex.sub_im, Complex.add_im, Complex.mul_im, mul_one,
+      zero_add]
+    ring_nf
+  rw [hnormplan] at hr
+  rw [dist_eq_norm, EuclideanSpace.norm_eq] at hd
+  simp [apm_t02a03_rightCore, Fin.sum_univ_succ] at hd
+  rw [Complex.norm_def]
+  simp [rightTubeCoreNormalComplex, Complex.normSq_apply]
+  have hplan_nonneg : 0 ≤
+      (1 - p 0 - Real.cos t) ^ 2 + (p 1 - Real.sin t) ^ 2 := by positivity
+  have hsqrt_sq : (√((1 - p 0 - Real.cos t) ^ 2 +
+      (p 1 - Real.sin t) ^ 2)) ^ 2 =
+      (1 - p 0 - Real.cos t) ^ 2 + (p 1 - Real.sin t) ^ 2 := by
+    exact (Real.sq_sqrt hplan_nonneg)
+  have hrad_sq : (1 - ‖rightTubeCorePlanarComplex p‖) ^ 2 ≤
+      (1 - p 0 - Real.cos t) ^ 2 + (p 1 - Real.sin t) ^ 2 := by
+    have hsqrt_nonneg : 0 ≤ √((1 - p 0 - Real.cos t) ^ 2 +
+        (p 1 - Real.sin t) ^ 2) := Real.sqrt_nonneg _
+    have habs_sq : |1 - ‖rightTubeCorePlanarComplex p‖| ^ 2 =
+        (1 - ‖rightTubeCorePlanarComplex p‖) ^ 2 := sq_abs _
+    have hmul : 0 ≤
+        (√((1 - p 0 - Real.cos t) ^ 2 + (p 1 - Real.sin t) ^ 2) -
+          |1 - ‖rightTubeCorePlanarComplex p‖|) *
+        (√((1 - p 0 - Real.cos t) ^ 2 + (p 1 - Real.sin t) ^ 2) +
+          |1 - ‖rightTubeCorePlanarComplex p‖|) :=
+      mul_nonneg (sub_nonneg.mpr hr)
+        (add_nonneg hsqrt_nonneg (abs_nonneg _))
+    nlinarith [sq_nonneg (1 - ‖rightTubeCorePlanarComplex p‖)]
+  have hinside :
+      (1 - ‖rightTubeCorePlanarComplex p‖) ^ 2 + p 2 ^ 2 ≤
+      (p 0 - (1 - Real.cos t)) ^ 2 +
+        ((p 1 - Real.sin t) ^ 2 + p 2 ^ 2) := by
+    nlinarith
+  have hsqrt := Real.sqrt_le_sqrt hinside
+  simpa [pow_two] using hsqrt.trans hd
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -500,3 +548,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreNormalInterpolation_exists
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.norm_rightTubeCoreNormalComplex_circleMeridian
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCore_radial_error_le
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreInputNormalRadiusBound
