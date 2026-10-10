@@ -344,4 +344,27 @@ theorem apm_t02a03_attachmentCollarMap_zero :
     simp [apm_t02a03_attachmentCollarMap,
       apm_t02a03_attachmentCollarPoint, apm_t02a03_meridianAnchor]
 
+noncomputable def apm_t02a03_attachmentCollarClosureMap :
+    C(Set.Icc (0 : ℝ) 1, apm_t02a03_E3) where
+  toFun u := WithLp.toLp 2 ![0, 0, (1 - (u : ℝ)) / 8]
+  continuous_toFun := by
+    apply (PiLp.continuous_toLp 2 _).comp
+    apply continuous_pi
+    intro i
+    fin_cases i <;> simp <;> fun_prop
+
+theorem apm_t02a03_attachmentCollarClosureMap_zero :
+    apm_t02a03_attachmentCollarClosureMap ⟨0, by simp⟩ =
+      apm_t02a03_meridianAnchor := by
+  ext i
+  fin_cases i <;>
+    simp [apm_t02a03_attachmentCollarClosureMap,
+      apm_t02a03_meridianAnchor]
+
+theorem apm_t02a03_attachmentCollarClosureMap_one :
+    apm_t02a03_attachmentCollarClosureMap ⟨1, by simp⟩ = 0 := by
+  ext i
+  fin_cases i <;>
+    simp [apm_t02a03_attachmentCollarClosureMap]
+
 end ConstructionTargets.T02A03GeometricTubeCover
