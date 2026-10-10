@@ -82784,8 +82784,68 @@
    "Review one consumer-facing adapter and two need-ranked shared foundations, then refill.",
    :other-consumers []}
   {:consumer :t99J05,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Update the downstream affine-chart assembly to import this module and use t99J05_affine_chart_continuity_package; then prove the diagonal fixed-point, local-map, determinant, and local-index results.",
+    :outcome :done-unreviewed,
+    :warnings
+    [{:kind :fixture-local-placeholder,
+      :message
+      "The fixed probe declares its own namespace-local t99J05_affine_chart_continuity_package axiom instead of importing the new module, so its final affineChartConstruction axiom audit still lists that local axiom. The committed requested declarations themselves contain no axiom or sorry."}],
+    :statement-hashes {:status :match, :count 131},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2 (git author Joe Corneli)",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/T99J05ArbitraryAffineChartContinuity.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/t99j05-arbitrary-affine-charts-probe.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd
+      "comment-stripped sorry and axiom census of ConstructionTargets/T99J05ArbitraryAffineChartContinuity.lean",
+      :exit 0,
+      :finding {:sorries 0, :axioms 0}}
+     {:cmd "sha256sum /tmp/t99j05-arbitrary-affine-charts-probe.lean",
+      :exit 0,
+      :finding
+      "ff8a741410c5a3511bd8745bed8cd9f28c30084111da7136136d3948b2bb3d5c"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git commit -m 'Prove arbitrary projective chart continuity'",
+      :exit 0,
+      :finding "7811a95d3beee795c6e2d856381a6c159169618a"}],
+    :diagnostic-history
+    [{:cmd
+      "lake env lean ConstructionTargets/T99J05ArbitraryAffineChartContinuity.lean (first draft)",
+      :exit 1,
+      :correction
+      "Qualified the newly banked affine-source theorem and unfolded quotientMap before applying representative scaling."}
+     {:cmd
+      "lake env lean ConstructionTargets/T99J05ArbitraryAffineChartContinuity.lean (second draft)",
+      :exit 1,
+      :correction
+      "Rebuilt the updated ComplexProjectiveChartTargets olean and replaced dependent rewriting with pointwise Set.ext_iff application."}],
+    :commit "7811a95d3beee795c6e2d856381a6c159169618a",
+    :infrastructure-packets 1,
+    :changed-paths
+    ["ConstructionTargets/T99J05ArbitraryAffineChartContinuity.lean"],
+    :fixture
+    {:path "/tmp/t99j05-arbitrary-affine-charts-probe.lean",
+     :sha256
+     "ff8a741410c5a3511bd8745bed8cd9f28c30084111da7136136d3948b2bb3d5c"},
+    :declarations
+    ["t99J05_coordinates_continuousOn"
+     "t99J05_chartInverse_continuous"
+     "t99J05_affine_chart_continuity_package"],
+    :typed-residual-change
+    "Arbitrary-n coordinate-ratio continuity and chart-inverse continuity are proved without placeholders. The OpenPartialHomeomorph assembly can now replace the probe's local axiom with the committed continuity package."},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/T99J05ArbitraryAffineChartContinuity.lean"],
    :dag-node
