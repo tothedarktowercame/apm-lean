@@ -90152,10 +90152,11 @@
    {:outcome :replan,
     :seat "topo-4",
     :commands
-    [{:cmd "bb holes/labs/topology-contract/worklist_check.bb",
+    [{:cmd
+      "git show 455d4ec8:holes/labs/topology-contract/worklist.edn > /tmp/worklist-455d4ec8.edn && bb holes/labs/topology-contract/worklist_check.bb /tmp/worklist-455d4ec8.edn",
       :exit 0,
       :finding
-      "742 items OK; 704 done, 14 superseded, 14 needs-owner, 9 blocked, 1 open"}
+      "exact evidence commit: 744 items OK; 704 done, 14 superseded, 14 needs-owner, 11 blocked, 1 done-unreviewed"}
      {:cmd
       "comment-stripped placeholder census for t99J01 t92J06 t97A03 t93J03 t01A03 t97A01",
       :exit 0,
@@ -90163,10 +90164,7 @@
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
-     {:cmd "git status --short",
-      :exit 0,
-      :finding
-      "unrelated existing modification: ConstructionTargets/T02A03GeometricTubeCover.lean"}],
+     {:cmd "git status --short", :exit 0, :finding "clean"}],
     :finding
     {:placeholder-delta 0,
      :placeholder-counts
@@ -90177,9 +90175,9 @@
       :t01A03 1,
       :t97A01 1},
      :typed-residual-change
-     ["The t97A01 Smith normalization is banked and reviewed, reducing its algebra residual to the polygon Mayer-Vietoris arrow comparison."
-      "The proposed Schreier prerequisite is refuted because index zero denotes infinite index: r=1, n=0, H=bottom makes the claimed Fin 1 generator type false."
-      "Both consumers have positive finite sheet counts, so adding 0<n repairs the shared theorem without changing either frozen consumer statement."],
+     ["The t97A01 Smith normalization is banked and reviewed; its remaining route is the polygon Mayer-Vietoris comparison."
+      "The Schreier prerequisite is refuted at r=1,n=0,H=bottom because index zero denotes infinite index."
+      "Both consumers have positive finite sheet counts, so 0<n repairs the shared route without changing a frozen consumer statement."],
      :infrastructure-packets
      {:banked 1, :reviewed-stops 1, :placeholder-changing 0},
      :review-outcomes {:pass 1, :stop 1, :closed-problems 0},
@@ -90188,44 +90186,34 @@
       ["three-circles pi1 coordinates"
        "banked cover subgroup index"
        "positive-rank positive-index Schreier formula"
-       "path-component restriction and cyclic-cover connectedness"
+       "path-component and cyclic-cover boundaries"
        "assembly"],
       :t92J06
-      ["matched quotient-sheet local-homeomorph construction"
-       "permutation-cover construction"
+      ["quotient-sheet local-homeomorph"
+       "permutation cover"
        "Cayley-tree classification"],
       :t97A03
-      ["double-cover stratum gluing"
-       "fixed-model quotient-to-bouquet comparisons"
+      ["double-cover gluing"
+       "fixed-model comparisons"
        "positive-rank positive-index Schreier formula"
-       "transport and assembly"],
+       "assembly"],
       :t93J03
-      ["Klein square orbit classification"
-       "deck-group pi1 theorem"
+      ["Klein orbit classification"
+       "deck-group pi1"
        "normal form"
-       "lifting criterion"
-       "annulus embedding"
+       "lifting"
+       "annulus"
        "assembly"],
       :t01A03
-      ["circle-wedge pi1 and torus commutativity"
-       "separating-circle collar theorem"
-       "assembly"],
+      ["circle-wedge pi1" "separating-circle collar" "assembly"],
       :t97A01
       ["banked standard-N3 homeomorphism"
-       "polygon radial open cover"
-       "polygon pi1 and Mayer-Vietoris coordinates"
+       "polygon radial cover"
+       "polygon pi1 and Mayer-Vietoris"
        "banked Smith normalization"
        "assembly"]},
-     :preserved-boundaries
-     ["polygon radial descent"
-      "strict point-wedge inclusion squares"
-      "path-component cover restriction"
-      "cyclic-monodromy connectedness"
-      "Klein orbit fundamental domain"
-      "double-cover stratum gluing"
-      "fixed-model quotient-to-bouquet equivalences"],
      :ranking
-     "No newly enabled consumer-closing adapter can bypass the preserved topology boundaries. The repaired positive-index Schreier theorem lies on two open consumer routes and is the highest-ranked eligible shared step."},
+     "No consumer-closing adapter bypasses the preserved topology boundaries; the repaired positive-index Schreier theorem serves two open consumers and ranks first."},
     :replacement-items
     [{:consumer :t99J01,
       :phase :probe,
@@ -90251,7 +90239,7 @@
       :kind :reusable-theorem,
       :depends-on [],
       :current-residual
-      "Count the finite Schreier coset quiver under 0<n, identify the Nielsen-Schreier generator type with Fin ((r-1)*n+1), and package the two consumer specializations.",
+      "Count the finite Schreier coset quiver under 0<n, identify the Nielsen-Schreier generator type with Fin ((r-1)*n+1), and package both consumer specializations.",
       :other-consumers [:t97A03]}
      {:consumer :portfolio,
       :checkpoint
@@ -90280,15 +90268,9 @@
       "Review the repaired shared Schreier route after excluding infinite-index subgroups encoded by index zero.",
       :other-consumers []}],
     :author "topo-4",
-    :disposition :replan,
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1791635734438-1931-87b15ee0",
-     :finding
-     "recorded worklist evidence is stale: the exact committed ledger has 744 items, 11 blocked, and 1 done-unreviewed, not 742 items, 9 blocked, and 1 open"}},
+    :disposition :replan},
    :phase :strategy,
-   :state :repair,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -90305,7 +90287,7 @@
    :other-consumers []}
   {:consumer :t99J01,
    :phase :probe,
-   :state :superseded,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/positive-rank-positive-index",
@@ -90328,7 +90310,7 @@
    :depends-on
    [:routes-2026-10-10-checkpoint-topo1-after-algebra-repair-2],
    :current-residual
-   "Count the finite Schreier coset quiver under 0<n, identify the Nielsen-Schreier generator type with Fin ((r-1)*n+1), and package the two consumer specializations.",
+   "Count the finite Schreier coset quiver under 0<n, identify the Nielsen-Schreier generator type with Fin ((r-1)*n+1), and package both consumer specializations.",
    :other-consumers [:t97A03]}
   {:consumer :portfolio,
    :checkpoint
@@ -90342,7 +90324,7 @@
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :phase :strategy,
-   :state :superseded,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
