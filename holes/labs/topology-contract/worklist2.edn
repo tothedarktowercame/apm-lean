@@ -58816,6 +58816,32 @@
    :current-residual
    "Construct the attachment homotopy from the surviving right core to the based Circle meridian, then extend to tube deformations and gluing.",
    :other-consumers []}
+  {:bounded-exception
+   "single-consumer deleted-origin attachment collar for the t02A03 geometric complement",
+   :consumer :t02A03,
+   :phase :probe,
+   :state :open,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md/t02A03/geometric-attachment-collar",
+   :acceptance
+   {:probe
+    "Compile and bank apm_t02a03_attachmentCollarPoint, apm_t02a03_attachmentCollarPoint_mem_geometricY, apm_t02a03_attachmentCollarMap, and apm_t02a03_attachmentCollarMap_zero from /tmp/t02a03_geometric_tube_cover.lean. Define the vertical collar u in [0,1) by (0,0,(1-u)/8), prove it lies in W and avoids the frozen left core, bundle it as a continuous map into the exact geometricY subtype, and prove its u=0 endpoint is the banked meridian anchor. This supplies the deleted-origin attachment collar required by t02A03 route step 2; do not yet claim the full attachment homotopy, deformation data, or gluing equivalence.",
+    :declarations
+    ["apm_t02a03_attachmentCollarPoint"
+     "apm_t02a03_attachmentCollarPoint_mem_geometricY"
+     "apm_t02a03_attachmentCollarMap"
+     "apm_t02a03_attachmentCollarMap_zero"],
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "t02A03 step 2, construct a continuous collar from the based meridian anchor toward the deleted common origin"},
+   :id :routes-2026-10-10-t02a03-geometric-attachment-collar-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo2-r5
+    :routes-2026-10-10-t02a03-geometric-meridian-quarter-turn-topo2-r1],
+   :current-residual
+   "Connect the surviving right-core end to the collar and Circle meridian, then extend to tube deformations and gluing.",
+   :other-consumers []}
   {:consumer :t02A03,
    :evidence
    {:probe
@@ -58824,59 +58850,62 @@
      :fixture
      {:path "/tmp/t02a03_geometric_tube_cover.lean",
       :sha256
-      "68cfbc3fccbb85606ce97e52b138dbf917964562a917644206fc8fa134e29a75"},
+      "932c393580fec51dacf4a94037b638f20f07458b0ac0cef86b86dc720b3ebfdb"},
      :commands
      [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
        :exit 0,
        :output
-       "apm_t02a03_circleMeridian_quarterTurn compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "apm_t02a03_attachmentCollarMap and apm_t02a03_attachmentCollarMap_zero compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
        "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
        :exit 0}
       {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
        :exit 0,
        :output
-       "68cfbc3fccbb85606ce97e52b138dbf917964562a917644206fc8fa134e29a75  /tmp/t02a03_geometric_tube_cover.lean"}
+       "932c393580fec51dacf4a94037b638f20f07458b0ac0cef86b86dc720b3ebfdb  /tmp/t02a03_geometric_tube_cover.lean"}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 1,
+       :finding
+       "The first collar membership proof left the Euclidean square root of the squared vertical coordinate unnormalized. Rewriting sqrt(x^2) as abs(x) and using u in [0,1) to prove nonnegativity reduced the tube-radius goal to linear arithmetic; the corrected rerun compiled."}],
      :finding
-     "The complete tube deformation remains unavailable, but its chosen attachment basepoint is now normalized. The quarter-turn point Circle.exp (pi/2) on the Circle-domain meridian is exactly the previously banked geometricY anchor (0,0,1/8), by the exponential compatibility and the standard sine and cosine values.",
+     "The final geometricY-to-Y homotopy equivalence is still absent, but a continuous deleted-origin collar now compiles. For u in [0,1), the point (0,0,(1-u)/8) remains in the radius-1/4 left tube and avoids the planar left core because its third coordinate is positive. At u=0 it is exactly the banked meridian anchor, while as u approaches 1 it approaches the deleted common origin without adding that endpoint. This supplies the domain needed to attach the punctured right-core end to the based meridian.",
      :residual
-     "Bank the quarter-turn anchor equality. Then construct the attachment homotopy from the surviving right core to this based Circle meridian, extend over the tube pieces, and glue to the torus-wedge-circle model.",
+     "Bank the deleted-origin attachment collar. Then connect the surviving right-core end to this collar and Circle meridian, extend the construction over the two tube pieces, and assemble the geometricY-to-Y homotopy equivalence and final closure.",
      :prerequisite
      {:bounded-exception
-      "single-consumer meridian basepoint normalization for the t02A03 attachment",
+      "single-consumer deleted-origin attachment collar for the t02A03 geometric complement",
       :consumer :t02A03,
       :phase :probe,
       :state :open,
       :scope [],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t02A03/geometric-meridian-quarter-turn",
+      "TOPOLOGY-ROUTES.md/t02A03/geometric-attachment-collar",
       :acceptance
       {:probe
-       "Compile and bank apm_t02a03_circleMeridian_quarterTurn from /tmp/t02a03_geometric_tube_cover.lean. Prove that the Circle-domain meridian at Circle.exp (pi/2) is exactly apm_t02a03_meridianAnchor, using apm_t02a03_circleMeridian_exp and the standard quarter-turn trigonometric values. This supplies the based attachment normalization required by t02A03 route step 2; do not yet claim an attachment homotopy, deformation data, or a gluing equivalence.",
-       :declaration "apm_t02a03_circleMeridian_quarterTurn",
+       "Compile and bank apm_t02a03_attachmentCollarPoint, apm_t02a03_attachmentCollarPoint_mem_geometricY, apm_t02a03_attachmentCollarMap, and apm_t02a03_attachmentCollarMap_zero from /tmp/t02a03_geometric_tube_cover.lean. Define the vertical collar u in [0,1) by (0,0,(1-u)/8), prove it lies in W and avoids the frozen left core, bundle it as a continuous map into the exact geometricY subtype, and prove its u=0 endpoint is the banked meridian anchor. This supplies the deleted-origin attachment collar required by t02A03 route step 2; do not yet claim the full attachment homotopy, deformation data, or gluing equivalence.",
+       :declarations
+       ["apm_t02a03_attachmentCollarPoint"
+        "apm_t02a03_attachmentCollarPoint_mem_geometricY"
+        "apm_t02a03_attachmentCollarMap"
+        "apm_t02a03_attachmentCollarMap_zero"],
        :placeholder "the sole sorry in apm_t02a03",
        :route-step
-       "t02A03 step 2, identify the chosen geometricY anchor with the quarter-turn point of the Circle meridian"},
-      :representation
-      {:source
-       "The Circle-domain frozen meridian evaluated at the quarter-turn Circle.exp (pi/2)",
-       :target "The frozen geometricY meridian anchor (0,0,1/8)",
-       :direction
-       "Exact point equality from the source based-Circle representation to the target explicit Euclidean anchor representation"},
+       "t02A03 step 2, construct a continuous collar from the based meridian anchor toward the deleted common origin"},
       :id
-      :routes-2026-10-10-t02a03-geometric-meridian-quarter-turn-topo2-r1,
-      :kind :representation-comparison,
+      :routes-2026-10-10-t02a03-geometric-attachment-collar-topo2-r1,
+      :kind :reusable-theorem,
       :depends-on
       [:routes-2026-10-10-checkpoint-topo2-r5
-       :routes-2026-10-10-t02a03-geometric-meridian-exp-compatibility-topo2-r1],
+       :routes-2026-10-10-t02a03-geometric-meridian-quarter-turn-topo2-r1],
       :current-residual
-      "Construct the attachment homotopy from the surviving right core to the based Circle meridian, then extend to tube deformations and gluing.",
+      "Connect the surviving right-core end to the collar and Circle meridian, then extend to tube deformations and gluing.",
       :other-consumers []}}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/closure",
    :acceptance
@@ -58899,7 +58928,8 @@
     :routes-2026-10-10-t02a03-geometric-normal-meridian-topo2-r1
     :routes-2026-10-10-t02a03-geometric-circle-meridian-topo2-r1
     :routes-2026-10-10-t02a03-geometric-meridian-exp-compatibility-topo2-r1
-    :routes-2026-10-10-t02a03-geometric-meridian-quarter-turn-topo2-r1],
+    :routes-2026-10-10-t02a03-geometric-meridian-quarter-turn-topo2-r1
+    :routes-2026-10-10-t02a03-geometric-attachment-collar-topo2-r1],
    :current-residual
    "One placeholder: two explicit homotopy equivalences, with the punctured-disk factor adapter-sized and the geometric tube deformation still missing.",
    :other-consumers []}
