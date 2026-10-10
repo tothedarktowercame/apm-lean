@@ -66517,6 +66517,20 @@
       :output "131 registered statements match, 0 do not"}
      {:cmd "git diff --check", :exit 0}
      {:cmd "git status --short", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791671498468-3143-c1e13987",
+     :commands
+     ["git show --format=fuller --stat 97ea75ef353c3b4b8b29dcf1ecdc9648fc16a99a && git diff-tree --no-commit-id --name-status -r 97ea75ef353c3b4b8b29dcf1ecdc9648fc16a99a && git show --check --oneline 97ea75ef353c3b4b8b29dcf1ecdc9648fc16a99a"
+      "sha256sum /tmp/t02a03_right_core_compact_probe.lean"
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean"
+      "lake env lean /tmp/t02a03_right_core_compact_probe.lean"
+      "python3 scripts/statement-registry.py check --rev 97ea75ef353c3b4b8b29dcf1ecdc9648fc16a99a"
+      "python3 scripts/statement-registry.py fingerprint --rev 97ea75ef353c3b4b8b29dcf1ecdc9648fc16a99a t02A03"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"],
+     :finding
+     "PASS: commit 97ea75ef changes exactly ConstructionTargets/T02A03GeometricTubeDeformation.lean; recorded and current blob are ff5e1e4ff1b19be8ce56dc158a59689b163345af. Fixture SHA-256 exactly matches 683e9eada453ff5d4dad755b194c9a232af4264471300cb4c1fcbde43d673e15. Module and fixture compile with only propext, Classical.choice, and Quot.sound and no new sorry, admit, or axiom. The denominator is exactly the right-core-centered planar coordinate (1-p0)+i*p1. Its vanishing forces (p0,p1)=(1,0); the attained exact right-core witness then gives an ambient distance at most 1/4, while the circle identity yields distance at least 1, a contradiction. Thus the theorem has the required right-tube-to-nonzero orientation without changing ambient representations or claiming tubular coordinates/deformation. Registry is 131/0; worklist validates; t02A03 retains one comment-stripped sorry and fingerprint d123afd5ae0ee067587b3ed3d7b9b6d2f075c3d95701e098ec357c7317cd34c3."},
     :commit "97ea75ef353c3b4b8b29dcf1ecdc9648fc16a99a",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
@@ -66528,7 +66542,7 @@
     "If the core-centered planar coordinate vanished, p would have first two coordinates (1,0). Its distance from every right-core point is then at least 1, contradicting the attained right-core witness within radius 1/4.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/right-core-angular-denominator",
@@ -66630,7 +66644,7 @@
      "The left-core polar reconstruction proves the identity endpoint but does not by itself preserve the nonconvex right tube: a direct normal-radius segment can cross the solid torus's central hole. A safe deformation must be expressed first in tubular coordinates about the right core. Its angular denominator is rightTubeCorePlanarComplex(p)=(1-p0)+i*p1. If this vanished, p0=1 and p1=0, while every right-core point has Euclidean distance at least 1 from p; this contradicts the attained radius-1/4 tube witness. The compiled nonvanishing theorem is therefore the single next prerequisite for defining the right-core angular coordinate.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
