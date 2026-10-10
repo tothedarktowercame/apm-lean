@@ -81737,10 +81737,26 @@
       :exit 0,
       :finding "worktree unchanged by this invocation"}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791603881006-977-7a66d292",
+     :commands
+     ["git diff 2a62ace2^ 2a62ace2 and scope checks"
+      "lake env lean holes/labs/topology-routes/reroute-t99J04-probe.lean.txt"
+      "lake env lean problems/t99J04/lean/Main.lean"
+      "python3 scripts/statement-registry.py fingerprint t99J04"
+      "python3 scripts/statement-registry.py check"
+      "nested-comment-aware placeholder census"
+      "rg pinned Mathlib inverse-function and PartialDiffeomorph APIs"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git diff --check 2a62ace2^ 2a62ace2"],
+     :finding
+     "PASS as STOP: reviewer codex-3 differs from author topo-2. Commit 2a62ace2 changes only the worklist; t99J04 Main.lean and reroute artifacts are unchanged. Main compiles with exactly three sorries and no admit or axiom declarations, reproduces frozen fingerprint f212fd5b83bec0f7fb083dcf9ed6e9e175394fdf3f3a3cd3d9f284709c6eea3c, and registry is 131/131. The tracked step-1 probe compiles with zero placeholders at SHA-256 f0b40b4c18566b6d10da74a15ff6d849e7d16a18a64655f34f4eb51b312a2289; no separate acceptance fixture is attached to this STOP row. All 675 worklist rows validate. Orientation is correct: coordinate ContDiffAt and HasFDerivAt flow toward a Euclidean OpenPartialHomeomorph, but a neighborhood-wide smooth restriction and inverse proof are still required before constructing the manifold PartialDiffeomorph. Pinned Mathlib supplies topological restriction/composition and pointwise inverse smoothness but explicitly leaves the converse manifold IFT as TODO, so the row does not cross that representation boundary or claim the placeholder reduction."},
     :changed-paths [],
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["problems/t99J04/lean/Main.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J04/reroute-direct-partial-diffeomorph",
