@@ -63669,49 +63669,67 @@
    "single-consumer frozen torus H1 group and ModuleCat coordinate for t97A04",
    :consumer :t97A04,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/t97a04_frozen_h1_coordinate.lean",
-      :sha256
-      "3a8383d772a08d0d38b11f1149a00ee793191cc053919f2d276d8b4239f8ee3d"},
-     :commands
-     [{:cmd "lake env lean /tmp/t97a04_frozen_h1_coordinate.lean",
-       :exit 0,
-       :output
-       "frozenTorusH1GroupIsoFinTwo and frozenTorusH1ModuleIsoFinTwo compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t97a04_frozen_h1_coordinate.lean || true)\"",
-       :exit 0}
-      {:cmd "sha256sum /tmp/t97a04_frozen_h1_coordinate.lean",
-       :exit 0,
-       :output
-       "3a8383d772a08d0d38b11f1149a00ee793191cc053919f2d276d8b4239f8ee3d  /tmp/t97a04_frozen_h1_coordinate.lean"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :finding
-     "The placeholder-free fixture constructs the canonical homeomorphism from the frozen AddCircle product to the computed boundary torus, transports the degree-one additive-group singular-homology coordinate through that homeomorphism, and lifts it via IntegralSingularHomologyComparison to the exact ModuleCat object used by t97A04. Both requested coordinate declarations compile with only propext, Classical.choice, and Quot.sound.",
-     :residual
-     "Use frozenTorusH1GroupIsoFinTwo to define the multiplicative IntegralH1 coordinate, apply finite-free Hurewicz naturality to frozenLbarPi1Map_naturality, and transport the resulting equation through singularHomologyComparison_naturality to the consumer ModuleCat map.",
-     :implementation
-     {:scope ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"],
-      :acceptance
-      {:source-fixture "/tmp/t97a04_frozen_h1_coordinate.lean",
-       :declarations
-       ["frozenTorusHomeomorphBoundaryTorus"
-        "frozenTorusH1GroupIsoFinTwo"
-        "frozenTorusH1ModuleIsoFinTwo"],
-       :placeholder "apm_t97A04_bridge_2",
-       :route-step
-       "t97A04 step 5, concrete frozen-torus IntegralH1 and ModuleCat coordinates",
-       :gates
-       ["lake env lean ConstructionTargets/T97A04FrozenH1Coordinate.lean"
-        "placeholder scan"
-        "statement registry check"]}}}},
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Align the transported H1 coordinate with frozenTorusPi1Coord through finite-free Hurewicz naturality, then transport the induced-map equation through singularHomologyComparison_naturality.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :missing-theorems
+    [{:name "frozenTorusH1GroupIsoFinTwo",
+      :type
+      "SingularHomology 1 (TopCat.of FrozenTorus) ≅ AddCommGrpCat.of (Fin 2 → ℤ)",
+      :status :proved,
+      :consumers [:t97A04],
+      :depends-on ["frozenTorusHomeomorphBoundaryTorus"]}
+     {:name "frozenTorusH1ModuleIsoFinTwo",
+      :type
+      "(((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj (ModuleCat.of ℤ ℤ)).obj (TopCat.of FrozenTorus)) ≅ ModuleCat.of ℤ (Fin 2 → ℤ)",
+      :status :proved,
+      :consumers [:t97A04],
+      :depends-on ["frozenTorusH1GroupIsoFinTwo"]}],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not",
+     :fixture-sha256
+     "3a8383d772a08d0d38b11f1149a00ee793191cc053919f2d276d8b4239f8ee3d"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd "sha256sum /tmp/t97a04_frozen_h1_coordinate.lean", :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/T97A04FrozenH1Coordinate.lean",
+      :exit 0}
+     {:cmd "lake env lean /tmp/t97a04_frozen_h1_coordinate.lean",
+      :exit 0}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T97A04FrozenH1Coordinate.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git rev-parse 0be698ae && git diff-tree --no-commit-id --name-only -r 0be698ae",
+      :exit 0,
+      :output
+      "0be698ae8656c45f8ea88f2ffa7ec02d0172bf00\nConstructionTargets/T97A04FrozenH1Coordinate.lean"}],
+    :commit "0be698ae8656c45f8ea88f2ffa7ec02d0172bf00",
+    :changed-paths
+    ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"],
+    :fixture
+    {:path "/tmp/t97a04_frozen_h1_coordinate.lean",
+     :sha256
+     "3a8383d772a08d0d38b11f1149a00ee793191cc053919f2d276d8b4239f8ee3d"},
+    :finding
+    "Banked the canonical homeomorphism from the frozen AddCircle product to the computed boundary torus, transported the degree-one additive singular-homology coordinate, and lifted it to the exact ModuleCat object.",
+    :implementation
+    {:scope ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"],
+     :declarations
+     ["ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusHomeomorphBoundaryTorus"
+      "ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusH1GroupIsoFinTwo"
+      "ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusH1ModuleIsoFinTwo"]},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t97A04/frozen-h1-coordinate",
    :acceptance
@@ -64695,4 +64713,55 @@
    :depends-on
    [:lemma-lefttubeminuscorehomotopyequivtorus
     :lemma-righttubeminusleftcorehomotopyequivcircle],
+   :other-consumers []}
+  {:consumer :t97A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "frozenTorusH1GroupIsoFinTwo",
+    :type
+    "SingularHomology 1 (TopCat.of FrozenTorus) ≅ AddCommGrpCat.of (Fin 2 → ℤ)"},
+   :lemma
+   {:name "frozenTorusH1GroupIsoFinTwo",
+    :reported-by
+    [:routes-2026-10-10-t97a04-frozen-h1-coordinate-topo2-r1],
+    :type
+    "SingularHomology 1 (TopCat.of FrozenTorus) ≅ AddCommGrpCat.of (Fin 2 → ℤ)",
+    :proved-in
+    :routes-2026-10-10-t97a04-frozen-h1-coordinate-topo2-r1},
+   :id :lemma-frozentorush1groupisofintwo,
+   :kind :lemma,
+   :depends-on [:lemma-frozentorushomeomorphboundarytorus],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "frozenTorusHomeomorphBoundaryTorus"},
+   :lemma
+   {:name "frozenTorusHomeomorphBoundaryTorus", :reported-by []},
+   :id :lemma-frozentorushomeomorphboundarytorus,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "frozenTorusH1ModuleIsoFinTwo",
+    :type
+    "(((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj (ModuleCat.of ℤ ℤ)).obj (TopCat.of FrozenTorus)) ≅ ModuleCat.of ℤ (Fin 2 → ℤ)"},
+   :lemma
+   {:name "frozenTorusH1ModuleIsoFinTwo",
+    :reported-by
+    [:routes-2026-10-10-t97a04-frozen-h1-coordinate-topo2-r1],
+    :type
+    "(((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj (ModuleCat.of ℤ ℤ)).obj (TopCat.of FrozenTorus)) ≅ ModuleCat.of ℤ (Fin 2 → ℤ)",
+    :proved-in
+    :routes-2026-10-10-t97a04-frozen-h1-coordinate-topo2-r1},
+   :id :lemma-frozentorush1moduleisofintwo,
+   :kind :lemma,
+   :depends-on [:lemma-frozentorush1groupisofintwo],
    :other-consumers []}]}
