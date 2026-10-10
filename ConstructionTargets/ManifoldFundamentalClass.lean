@@ -143,6 +143,21 @@ theorem integralChartGenerator_eq_on_preconnected_overlap_of_ne_neg_one
     ℤ m a b hconn x
   exact integralOverlapTransitionUnit_eq_one_of_ne_neg_one m a b x hneg
 
+def globalGenerator (R : Type) [CommRing R] (G : ModuleCat R)
+    (e : G ≅ ModuleCat.of R R) : G :=
+  e.inv.hom 1
+
+theorem globalGenerator_generates (R : Type) [CommRing R] (G : ModuleCat R)
+    (e : G ≅ ModuleCat.of R R) :
+    ∀ z : G, ∃ r : R, r • globalGenerator R G e = z := by
+  intro z
+  refine ⟨e.hom.hom z, ?_⟩
+  unfold globalGenerator
+  rw [← e.inv.hom.map_smul]
+  change e.inv.hom (e.hom.hom z • (1 : R)) = z
+  rw [smul_eq_mul, mul_one]
+  exact ConcreteCategory.congr_hom e.hom_inv_id z
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -154,3 +169,5 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralOverlapTransitionUnit_eq_one_or_neg_one
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralOverlapTransitionUnit_eq_one_of_ne_neg_one
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralChartGenerator_eq_on_preconnected_overlap_of_ne_neg_one
+#print axioms ConstructionTargets.ManifoldFundamentalClass.globalGenerator
+#print axioms ConstructionTargets.ManifoldFundamentalClass.globalGenerator_generates
