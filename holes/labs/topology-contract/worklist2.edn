@@ -53787,8 +53787,40 @@
   {:bounded-exception
    "single-consumer bounded cover-small homology comparison naturality recovery",
    :consumer :t97A04,
+   :stop-count 1,
+   :evidence
+   {:outcome :stop,
+    :seat "topo-8",
+    :reason
+    "The row's acceptance condition conflicts with the canonical workspace invariant. /home/joe/code/apm-lean is the master canonical checkout, and docs/TN-topology-build-loop-design.md says its .lake/packages path owns the real canonical package directory; only frame worktrees must symlink to it. The acceptance instead requires .lake/packages in this canonical checkout to be verified as a symlink. It is correctly a real directory resolving to itself. Replacing it with a self-referential or external symlink would violate package authority, so the requested fixture may not be compiled under the stated acceptance. Independently, no stable repository fixture or banked declaration named coverSmallHomologyIso_naturality_of_square or memberwiseCoverSmallHomology_naturality exists. This is an exact workspace-representation boundary, not a mathematical refutation.",
+    :commands
+    [{:cmd "test -L .lake/packages", :exit 1, :expected-exit 1}
+     {:cmd "realpath .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "stat -c '%F %n' .lake/packages",
+      :exit 0,
+      :output "directory .lake/packages"}
+     {:cmd "git worktree list --porcelain | sed -n '1,3p'",
+      :exit 0,
+      :output
+      "worktree /home/joe/code/apm-lean\nHEAD 47986a19ab9b5583aec72b8e322f200bee14415c\nbranch refs/heads/master"}
+     {:cmd
+      "rg -n 'coverSmallHomologyIso_naturality_of_square|memberwiseCoverSmallHomology_naturality' . /home/joe/notes /home/joe/worktrees -g '*.lean'",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}],
+    :fixture
+    {:path "stable repository path required by acceptance",
+     :status :absent},
+    :residual
+    "Correct the acceptance condition to verify that the canonical checkout owns the real .lake/packages authority (and require symlinks only in frame worktrees), then run a new read-only probe against a stable pre-existing fixture. No Lake command was run because the present acceptance demands a false workspace state.",
+    :author "topo-8",
+    :disposition :stop},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
