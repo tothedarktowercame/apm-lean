@@ -57077,9 +57077,42 @@
   {:bounded-exception
    "single-consumer quotient endpoint-cast comparison for the frozen torus",
    :consumer :t97A04,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/torus_frozen_circle_image_quotient_cast.lean",
+      :sha256
+      "966d3da234a37ce5bea223e4dff82788f8109175988787910fed5f4d59e5903e"},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/torus_frozen_circle_image_quotient_cast.lean",
+       :exit 0,
+       :output
+       "frozenCircleImageQuotient_eq_mappedQuotient_cast compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/torus_frozen_circle_image_quotient_cast.lean || true)\"",
+       :exit 0}
+      {:cmd
+       "sha256sum /tmp/torus_frozen_circle_image_quotient_cast.lean",
+       :exit 0,
+       :output
+       "966d3da234a37ce5bea223e4dff82788f8109175988787910fed5f4d59e5903e  /tmp/torus_frozen_circle_image_quotient_cast.lean"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :finding
+     "The placeholder-free theorem uses the reverse definitional mk_cast equality and the banked mapped-path endpoint cast to identify the casted native mapped quotient class exactly with the quotient class of frozenCircleImagePath. It preserves the dependent basepoint and makes no coordinate-equivalence claim.",
+     :implementation
+     {:scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
+      :declarations
+      ["frozenCircleImageQuotient_eq_mappedQuotient_cast"]},
+     :residual
+     "Prove that the transported native coordinate equivalence evaluates a native quotient as torusPi1Coord evaluates its endpoint-casted quotient, then derive fixed-base representative naturality and descend to all classes."}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A04/torus-pi1-winding-coordinates/frozen-circle-image-quotient-cast",
    :acceptance
@@ -57098,6 +57131,7 @@
    :id
    :routes-2026-10-10-t97a04-frozen-circle-image-quotient-cast-topo2-r1,
    :kind :representation-comparison,
+   :declarations ["frozenCircleImageQuotient_eq_mappedQuotient_cast"],
    :depends-on
    [:routes-2026-10-10-checkpoint-topo2-r2
     :routes-2026-10-10-t97a04-frozen-circle-image-path-cast-topo2-r1],
