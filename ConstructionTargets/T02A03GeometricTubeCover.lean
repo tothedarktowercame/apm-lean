@@ -516,6 +516,44 @@ theorem apm_t02a03_leftTubeNormalComplex_norm_le
     apm_t02a03_leftTube_exists_near_leftCore p.1 p.2
   exact (apm_t02a03_leftTubeNormalComplex_norm_le_dist_leftCore p t).trans hd
 
+noncomputable def apm_t02a03_leftTubeRadialPoint
+    (tp : unitInterval × apm_t02a03_LeftTubeMinusCore) : apm_t02a03_E3 := by
+  let t : ℝ := tp.1
+  exact (1 - t) •
+      (apm_t02a03_leftTubeTorusInverse
+        (apm_t02a03_leftTubeTorusCoordinates tp.2)).1 +
+    t • tp.2.1
+
+theorem apm_t02a03_continuous_leftTubeRadialPoint :
+    Continuous apm_t02a03_leftTubeRadialPoint := by
+  unfold apm_t02a03_leftTubeRadialPoint
+  have ht : Continuous
+      (fun tp : unitInterval × apm_t02a03_LeftTubeMinusCore => (tp.1 : ℝ)) :=
+    continuous_subtype_val.comp continuous_fst
+  have hp : Continuous
+      (fun tp : unitInterval × apm_t02a03_LeftTubeMinusCore => tp.2.1) :=
+    continuous_subtype_val.comp continuous_snd
+  have hc : Continuous
+      (fun tp : unitInterval × apm_t02a03_LeftTubeMinusCore =>
+        (apm_t02a03_leftTubeTorusInverse
+          (apm_t02a03_leftTubeTorusCoordinates tp.2)).1) :=
+    continuous_subtype_val.comp
+      (apm_t02a03_leftTubeTorusInverse.continuous.comp
+        (apm_t02a03_continuous_leftTubeTorusCoordinates.comp continuous_snd))
+  exact ((continuous_const.sub ht).smul hc).add (ht.smul hp)
+
+theorem apm_t02a03_leftTubeRadialPoint_zero
+    (p : apm_t02a03_LeftTubeMinusCore) :
+    apm_t02a03_leftTubeRadialPoint (0, p) =
+      (apm_t02a03_leftTubeTorusInverse
+        (apm_t02a03_leftTubeTorusCoordinates p)).1 := by
+  simp [apm_t02a03_leftTubeRadialPoint]
+
+theorem apm_t02a03_leftTubeRadialPoint_one
+    (p : apm_t02a03_LeftTubeMinusCore) :
+    apm_t02a03_leftTubeRadialPoint (1, p) = p.1 := by
+  simp [apm_t02a03_leftTubeRadialPoint]
+
 theorem apm_t02a03_rightCore_zero :
     apm_t02a03_rightCore 0 = (0 : apm_t02a03_E3) := by
   ext i
