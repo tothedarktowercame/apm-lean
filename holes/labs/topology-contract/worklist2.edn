@@ -58118,9 +58118,55 @@
   {:bounded-exception
    "single-consumer surviving right-core characterization for the t02A03 geometric complement",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/t02a03_geometric_tube_cover.lean",
+      :sha256
+      "0475620de58c222b858c8821e513312bd25721ad39fc42fc61b9d4b80f8f00f4"},
+     :commands
+     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "apm_t02a03_rightCore_mem_geometricY_iff compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
+       :exit 0}
+      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "0475620de58c222b858c8821e513312bd25721ad39fc42fc61b9d4b80f8f00f4  /tmp/t02a03_geometric_tube_cover.lean"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :finding
+     "The theorem compiles without placeholders. Right-core membership supplies membership in W through the banked two-tube cover, and the exact singleton intersection converts avoidance of the left core into nonzeroness. Thus it identifies precisely the right-core points present in the frozen geometric complement.",
+     :residual
+     "Construct the meridional attachment of the surviving right core inside the left-tube complement, then compatible tube deformations and their gluing to the torus-wedge-circle model.",
+     :implementation
+     {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"]},
+     :acceptance
+     {:source-fixture "/tmp/t02a03_geometric_tube_cover.lean",
+      :declaration "apm_t02a03_rightCore_mem_geometricY_iff",
+      :placeholder "the sole sorry in apm_t02a03",
+      :route-step
+      "t02A03 step 2, characterize the surviving right-core points inside the frozen geometric complement",
+      :representation
+      {:source
+       "The defining geometricY membership conjunction for a point on the frozen right core",
+       :target "Nonzeroness of that frozen right-core point",
+       :direction
+       "Exact logical equivalence from the source geometric-complement membership representation to the target singleton-deleted right-core representation"},
+      :gates
+      ["fixture compiles"
+       "fixture contains no sorry token"
+       "fixture hash matches"
+       "statement registry matches"]}}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/geometric-right-core-survivor",
    :acceptance
    {:probe
