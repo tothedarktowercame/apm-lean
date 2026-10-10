@@ -95817,9 +95817,22 @@
        :routes-2026-10-10-cyclic-three-circles-pullback-pathconnected-38],
       :current-residual
       "Review both covering constructions and close t99J01 when banked.",
-      :other-consumers []}]},
+      :other-consumers []}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791653501900-2546-d1f1a18c",
+     :commands
+     ["git show --stat d5a4a1c6baa16eb4097cc813ebc66e81bd026c03"
+      "git show a03e92f1b146c7638118e2bd3dd9153a5dc18eaa:holes/labs/topology-contract/worklist.edn | sha256sum"
+      "bb recorded build_step.bb priorities recorded worklist.edn at a03e92f1"
+      "bb holes/labs/topology-contract/worklist_check.bb on evidence snapshot a03e92f1 and final transition d5a4a1c6"
+      "comment-stripped placeholder census for six topo1 consumers"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS: reviewer codex-3 verified topo-4 is distinct from the reviewer and the repair commit d5a4a1c6 changes only the worklist. The evidence now identifies immutable snapshot a03e92f1 with exact worklist SHA-256 a00364a452fa3af7969c340eeefc2a4d1bff0b1184768b346ce51c4881170903. Replaying the recorded build_step and ledger from that snapshot reproduces a four-way closest-2 tie in the recorded order: the two t99J01 prerequisites followed by the two t97A01 prerequisites; the snapshot checker reproduces 837 items. The final transition ledger also validates with 840 items. The comment-stripped placeholder census is 1,1,3,1,1,1, total 8 and delta 0, and all 131 registered statements match. The election of the first two tied nodes follows documented tool order. The compiled Klein endpoint refutation remains respected, its non-edgewise polygon-presentation replacement remains recorded, and no invalid edgewise homeomorphism or quotient claim is introduced."}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -95839,7 +95852,7 @@
    :consumer :t99J01,
    :implements-lemma :lemma-iscoveringmap-restrictpathcomponent,
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component",
@@ -95867,7 +95880,7 @@
    :consumer :t99J01,
    :implements-lemma :lemma-cyclicthreecirclespullback-pathconnected,
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/cyclic-three-circles-cover",
