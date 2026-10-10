@@ -57184,9 +57184,43 @@
   {:bounded-exception
    "single-consumer dependent coordinate-equivalence transport needed by the frozen t97A04 matrix",
    :consumer :t97A04,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/fundamental_group_coordinate_transport_apply.lean",
+      :sha256
+      "5c21fec271f790bac2a0108368ba11d379e9ec7e1d9fc5eca3fe02b63423e8b9"},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/fundamental_group_coordinate_transport_apply.lean",
+       :exit 0,
+       :output
+       "fundamentalGroupCoordinateTransport_apply and frozenNativeCoord_eq_torusPi1Coord_cast compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/fundamental_group_coordinate_transport_apply.lean || true)\"",
+       :exit 0}
+      {:cmd
+       "sha256sum /tmp/fundamental_group_coordinate_transport_apply.lean",
+       :exit 0,
+       :output
+       "5c21fec271f790bac2a0108368ba11d379e9ec7e1d9fc5eca3fe02b63423e8b9  /tmp/fundamental_group_coordinate_transport_apply.lean"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :finding
+     "The fixture proves by equality induction that transporting a fundamental-group coordinate MulEquiv across a basepoint equality evaluates a class after the corresponding endpoint cast. Its frozen specialization uses frozenTorusHomeomorphCircleProd_base and torusPi1Coord exactly, with no proof-term identification or separately defined equivalence.",
+     :implementation
+     {:scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
+      :declarations
+      ["fundamentalGroupCoordinateTransport_apply"
+       "frozenNativeCoord_eq_torusPi1Coord_cast"]},
+     :residual
+     "Compose the frozen transport evaluation with frozenCircleImageQuotient_eq_mappedQuotient_cast and frozenTorusPi1Coord_mk_native, then prove representative and all-class frozen matrix naturality."}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A04/torus-pi1-winding-coordinates/frozen-coordinate-transport-apply",
    :acceptance
@@ -57201,6 +57235,9 @@
    :id
    :routes-2026-10-10-t97a04-frozen-coordinate-transport-apply-topo2-r1,
    :kind :reusable-theorem,
+   :declarations
+   ["fundamentalGroupCoordinateTransport_apply"
+    "frozenNativeCoord_eq_torusPi1Coord_cast"],
    :depends-on
    [:routes-2026-10-10-checkpoint-topo2-r2
     :routes-2026-10-10-t97a04-frozen-circle-image-quotient-cast-topo2-r1],
