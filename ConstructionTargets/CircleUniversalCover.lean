@@ -333,6 +333,74 @@ noncomputable def circleFundamentalGroupMulEquivInt :
   MulEquiv.ofBijective circleWindingHom
     ⟨circleWindingHom_injective, circleWindingHom_surjective⟩
 
+def pointwiseMulPath (gamma delta : Path (1 : Circle) 1) : Path (1 : Circle) 1 where
+  toFun t := gamma t * delta t
+  continuous_toFun := gamma.continuous.mul delta.continuous
+  source' := by simp
+  target' := by simp
+
+def pointwiseInvPath (gamma : Path (1 : Circle) 1) : Path (1 : Circle) 1 where
+  toFun t := (gamma t)⁻¹
+  continuous_toFun := by fun_prop
+  source' := by simp
+  target' := by simp
+
+theorem liftBasedLoop_pointwiseMulPath (gamma delta : Path (1 : Circle) 1) :
+    liftBasedLoop (pointwiseMulPath gamma delta) (pointwiseMulPath gamma delta).source =
+      ⟨fun t ↦ liftBasedLoop gamma gamma.source t + liftBasedLoop delta delta.source t,
+        (liftBasedLoop gamma gamma.source).continuous.add
+          (liftBasedLoop delta delta.source).continuous⟩ := by
+  symm
+  apply (circleCover_isCoveringMap.eq_liftPath_iff' _).2
+  constructor
+  · funext t
+    change Circle.exp (_ + _) = gamma t * delta t
+    rw [Circle.exp_add]
+    congr 1
+    · exact congrFun (circleCover_comp_liftBasedLoop gamma gamma.source) t
+    · exact congrFun (circleCover_comp_liftBasedLoop delta delta.source) t
+  · simp
+
+theorem liftBasedLoop_pointwiseInvPath (gamma : Path (1 : Circle) 1) :
+    liftBasedLoop (pointwiseInvPath gamma) (pointwiseInvPath gamma).source =
+      ⟨fun t ↦ - liftBasedLoop gamma gamma.source t,
+        (liftBasedLoop gamma gamma.source).continuous.neg⟩ := by
+  symm
+  apply (circleCover_isCoveringMap.eq_liftPath_iff' _).2
+  constructor
+  · funext t
+    change Circle.exp (- _) = (gamma t)⁻¹
+    rw [Circle.exp_neg]
+    congr 1
+    exact congrFun (circleCover_comp_liftBasedLoop gamma gamma.source) t
+  · simp
+
+theorem liftBasedLoopEndpointInteger_pointwiseMulPath
+    (gamma delta : Path (1 : Circle) 1) :
+    liftBasedLoopEndpointInteger (pointwiseMulPath gamma delta)
+        (pointwiseMulPath gamma delta).source (pointwiseMulPath gamma delta).target =
+      liftBasedLoopEndpointInteger gamma gamma.source gamma.target +
+        liftBasedLoopEndpointInteger delta delta.source delta.target := by
+  apply period_integer_unique
+    (liftBasedLoopEndpointInteger_spec (pointwiseMulPath gamma delta)
+      (pointwiseMulPath gamma delta).source (pointwiseMulPath gamma delta).target)
+  rw [liftBasedLoop_pointwiseMulPath]
+  simp only [ContinuousMap.coe_mk]
+  rw [add_zsmul]
+  rw [liftBasedLoopEndpointInteger_spec, liftBasedLoopEndpointInteger_spec]
+
+theorem liftBasedLoopEndpointInteger_pointwiseInvPath (gamma : Path (1 : Circle) 1) :
+    liftBasedLoopEndpointInteger (pointwiseInvPath gamma)
+        (pointwiseInvPath gamma).source (pointwiseInvPath gamma).target =
+      - liftBasedLoopEndpointInteger gamma gamma.source gamma.target := by
+  apply period_integer_unique
+    (liftBasedLoopEndpointInteger_spec (pointwiseInvPath gamma)
+      (pointwiseInvPath gamma).source (pointwiseInvPath gamma).target)
+  rw [liftBasedLoop_pointwiseInvPath]
+  simp only [ContinuousMap.coe_mk]
+  rw [neg_zsmul]
+  rw [liftBasedLoopEndpointInteger_spec]
+
 #print axioms circleCover_isCoveringMap
 #print axioms circleCover_eq_iff
 #print axioms liftBasedLoop_endpoint_periodic
