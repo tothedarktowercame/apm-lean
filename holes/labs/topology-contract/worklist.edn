@@ -91168,8 +91168,37 @@
    "Review the second bounded construction in the shared positive-index Schreier generator count.",
    :other-consumers []}
   {:consumer :t99J01,
+   :stop-count 1,
+   :evidence
+   {:residual
+    "Restate the Schreier quiver directly in IsFreeGroup.Generators coordinates, or explicitly transport the subgroup and coset action through IsFreeGroup.toFreeGroup before requesting an endpoint-preserving comparison.",
+    :outcome :stop,
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-4",
+    :reason
+    "The required endpoint-preserving comparison is not available for the stated source and target. The banked source labels an edge by i : Fin r and acts by the canonical element FreeGroup.of i. Mathlib's actionGroupoidIsFree labels generator arrows by IsFreeGroup.Generators (FreeGroup (Fin r)) and acts by IsFreeGroup.of j, where Generators and of come from an arbitrarily chosen FreeGroupBasis. Equiv.ofFreeGroupEquiv supplies a cardinality equivalence Fin r ≃ IsFreeGroup.Generators (FreeGroup (Fin r)), but it supplies no equation IsFreeGroup.of (e i) = FreeGroup.of i. Preserving source and target cosets for the same H requires precisely that compatibility; for H = ⊥, equality of the endpoint actions forces equality of the group elements. The frozen comparison therefore needs a missing hypothesis/changed representation: either use IsFreeGroup.Generators coordinates from the outset, or transport H and the coset action along the basis isomorphism. Neither is the requested exact endpoint-preserving equivalence on the unchanged H-coset space.",
+    :commands
+    [{:cmd "lake env lean /tmp/edgecomp.lean",
+      :exit 0,
+      :finding
+      "placeholder-free diagnostic compiles the available labelEquiv and shows its type is only Fin r ≃ IsFreeGroup.Generators (FreeGroup (Fin r)); no generator-image compatibility is provided"}
+     {:cmd
+      "rg -n '(^|[^A-Za-z0-9_])sorry([^A-Za-z0-9_]|$)' /tmp/edgecomp.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero fixture placeholders"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :fixture
+    {:path "/tmp/edgecomp.lean",
+     :sha256
+     "f6dd643332ba000c27b6cbcc241753aaee0b61e9cd5ffee9cb6b3bacd0ba12b4"},
+    :seat "topo-4"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/positive-index/action-groupoid-edge-comparison",
