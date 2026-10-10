@@ -55309,6 +55309,18 @@
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :output "131 registered statements match, 0 do not"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791607953923-1139-f5007d49",
+     :commands
+     ["lake env lean /tmp/t94a08_projective_conic_normalization_refutation.lean"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 5b4c913f:holes/labs/topology-contract/worklist2.edn)"
+      "git show --format= --check 5b4c913f"
+      "recompute SHA-256 and comment-stripped placeholder counts from commit 5b4c913f"],
+     :finding
+     "PASS: independent review of topo-8 STOP. Commit 5b4c913f changes only the ledger; the refutation fixture hash matches, compiles, and has zero placeholders. Its z=(0,I) contradiction correctly exposes pairToCoordinates mapping both indices 1 and 2 to z.2, so chartInverse_iff is uninhabitable. Registry is 131/0, ledger is 382 items OK, frozen t94A08 SHA-256 is fd1f6a86dde745c7d96783af49d2d1808c01a8489b94e981c397cded29babeb1 with one comment-stripped placeholder."},
     :fixture
     {:path
      "/tmp/t94a08_projective_conic_normalization_refutation.lean",
@@ -55318,7 +55330,7 @@
     "The refutation imports the banked affine chart and proves the correct homogeneous-to-ratio normalization independently. Assuming the elected chartInverse_iff field at z=(0,I) yields the homogeneous equation for chartInverse of pairToCoordinates z. The correct normalization plus coordinates_chartInverse reduces this to 1+I^2+I^2=0, contradicted by Complex.I_sq. Thus the failure is the exact coordinate-insertion representation, not topology, continuity, or the frozen consumer statement.",
     :seat "topo-8"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t94A08/smooth-conic-local-charts/projective-affine-identification/normalization",
@@ -55404,7 +55416,7 @@
       "Use these equivalences to inhabit ProjectiveAffineConicIdentification with the banked coordinate and chartInverse continuity and inverse laws.",
       :other-consumers []}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t94A08/smooth-conic-local-charts/projective-affine-identification",
