@@ -66027,6 +66027,20 @@
       :output "131 registered statements match, 0 do not"}
      {:cmd "git diff --check", :exit 0}
      {:cmd "git status --short", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791668954787-3028-2d265f62",
+     :commands
+     ["git show --format=fuller --stat cf0fb03ff36389ea75056b9bfa273cd897a43582 && git diff-tree --no-commit-id --name-status -r cf0fb03ff36389ea75056b9bfa273cd897a43582 && git show --check --oneline cf0fb03ff36389ea75056b9bfa273cd897a43582"
+      "sha256sum /tmp/t02a03_right_core_compact_probe.lean"
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean"
+      "lake env lean /tmp/t02a03_right_core_compact_probe.lean"
+      "python3 scripts/statement-registry.py check --rev cf0fb03ff36389ea75056b9bfa273cd897a43582"
+      "python3 scripts/statement-registry.py fingerprint --rev cf0fb03ff36389ea75056b9bfa273cd897a43582 t02A03"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"],
+     :finding
+     "PASS: commit cf0fb03f changes exactly ConstructionTargets/T02A03GeometricTubeDeformation.lean; recorded and current blob are ec85d66c86049767905364a78ce14b0f1fd9ad49. Fixture SHA-256 exactly matches 12abde2bc281f354ecf340f253e170273b1e810dd70cf0b470426fd0356fd861. Module and fixture compile with only propext, Classical.choice, and Quot.sound and no new sorry, admit, or axiom. The implementation preserves the frozen ambient E3 representation: rightCoreCircle parametrizes the identical range as apm_t02a03_rightCore, with Circle-to-real direction proved by Complex.arg and real-to-Circle direction by Circle.exp; compactness then follows as the continuous image of compact Circle. It claims no tube coordinate or deformation. Registry is 131/0; worklist validates; t02A03 retains one comment-stripped sorry and fingerprint d123afd5ae0ee067587b3ed3d7b9b6d2f075c3d95701e098ec357c7317cd34c3."},
     :commit "cf0fb03ff36389ea75056b9bfa273cd897a43582",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
@@ -66038,7 +66052,7 @@
     "Factored the periodic right-core parametrization through Circle, proved its image equals the frozen real-parameter range using Complex.arg and Circle.exp, and obtained compactness as the continuous image of Circle.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/right-core-compact",
    :acceptance
@@ -66137,7 +66151,7 @@
      :residual
      "Use compactness to obtain a right-core point within 1/4 and contradict the planar singularity's first-coordinate distance."}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/right-tube-planar-coordinate-nonzero",
