@@ -86711,8 +86711,142 @@
    "Package fiber-coset equivalence, pi1 injectivity, and subgroup-containment lifting.",
    :other-consumers [:t93J03 :t97A03]}
   {:consumer :t97A01,
-   :phase :probe,
+   :phase :implementation,
    :state :open,
+   :scope ["ConstructionTargets/PolygonEdgeGraphOpenCover.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/shared/polygon-edge-graph-open-cover/radial-quotient-package",
+   :acceptance
+   {:placeholder
+    "the single sorry in apm_t97a01 and apm_t97A03_bridge_invariants_of_model",
+    :route-step "t97A01 step 2 and t97A03 quotient-model input",
+    :declarations
+    ["PolygonPairingData"
+     "PolygonOpenCoverPackage"
+     "polygonOpen_cover"
+     "polygonInterior_contractible"
+     "polygonBoundary_homotopyEquiv_edgeGraph"
+     "polygonOverlap_homotopyEquiv_puncturedDisk"
+     "polygonBoundary_literal_inclusion"
+     "polygonOverlap_literal_inclusion"
+     "standardN3_sixVerticesIdentified"
+     "torusCrosscap_sixVerticesIdentified"
+     "standardN3OpenCoverPackage"
+     "torusCrosscapOpenCoverPackage"],
+    :implementation
+    "Use fixed radial bands. Prove their preimages saturated and open, contract the interior radially, descend radial projection of the boundary band to the quotient edge graph, identify the overlap with the punctured disk, and record literal subtype inclusions. Prove all six vertices lie in one EqvGen class for each word and identify the graph with ThreeCircles. Instantiate exactly the canonical nonorientable genus-three and torus-crosscap words.",
+    :axioms :standard-only,
+    :fixture "/tmp/polygon-edge-graph-open-cover-probe.lean",
+    :fixture-sha256
+    "8cfb3f1613cb6a590439bdc01c98e033cb70fbfb69ad5002626225583119b233",
+    :commands
+    ["lake env lean ConstructionTargets/PolygonEdgeGraphOpenCover.lean"
+     "lake env lean /tmp/polygon-edge-graph-open-cover-probe.lean"
+     "python3 scripts/statement-registry.py check"]},
+   :id :routes-2026-10-10-polygon-edge-graph-radial-package-1,
+   :kind :reusable-theorem,
+   :depends-on [],
+   :current-residual
+   "Construct one radial quotient package for both six-edge words, including saturation, three homotopy models, literal inclusions, and both vertex-class calculations.",
+   :other-consumers [:t97A03]}
+  {:consumer :t97A01,
+   :evidence
+   {:probe
+    {:residual
+     "Exactly one shared prerequisite remains: the radial polygon-quotient open-cover package for both six-edge words. Boundary-word and Mayer-Vietoris calculations remain downstream.",
+     :outcome :revise,
+     :warnings
+     [{:kind :interface-axiom,
+       :message
+       "The fixture uses one nonstandard axiom bundling the polygon open-cover geometry for both six-edge words."}],
+     :prerequisite
+     {:consumer :t97A01,
+      :phase :implementation,
+      :state :open,
+      :scope ["ConstructionTargets/PolygonEdgeGraphOpenCover.lean"],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/shared/polygon-edge-graph-open-cover/radial-quotient-package",
+      :acceptance
+      {:placeholder
+       "the single sorry in apm_t97a01 and apm_t97A03_bridge_invariants_of_model",
+       :route-step "t97A01 step 2 and t97A03 quotient-model input",
+       :declarations
+       ["PolygonPairingData"
+        "PolygonOpenCoverPackage"
+        "polygonOpen_cover"
+        "polygonInterior_contractible"
+        "polygonBoundary_homotopyEquiv_edgeGraph"
+        "polygonOverlap_homotopyEquiv_puncturedDisk"
+        "polygonBoundary_literal_inclusion"
+        "polygonOverlap_literal_inclusion"
+        "standardN3_sixVerticesIdentified"
+        "torusCrosscap_sixVerticesIdentified"
+        "standardN3OpenCoverPackage"
+        "torusCrosscapOpenCoverPackage"],
+       :implementation
+       "Use fixed radial bands. Prove their preimages saturated and open, contract the interior radially, descend radial projection of the boundary band to the quotient edge graph, identify the overlap with the punctured disk, and record literal subtype inclusions. Prove all six vertices lie in one EqvGen class for each word and identify the graph with ThreeCircles. Instantiate exactly the canonical nonorientable genus-three and torus-crosscap words.",
+       :axioms :standard-only,
+       :fixture "/tmp/polygon-edge-graph-open-cover-probe.lean",
+       :fixture-sha256
+       "8cfb3f1613cb6a590439bdc01c98e033cb70fbfb69ad5002626225583119b233",
+       :commands
+       ["lake env lean ConstructionTargets/PolygonEdgeGraphOpenCover.lean"
+        "lake env lean /tmp/polygon-edge-graph-open-cover-probe.lean"
+        "python3 scripts/statement-registry.py check"]},
+      :id :routes-2026-10-10-polygon-edge-graph-radial-package-1,
+      :kind :reusable-theorem,
+      :depends-on [],
+      :current-residual
+      "Construct one radial quotient package for both six-edge words, including saturation, three homotopy models, literal inclusions, and both vertex-class calculations.",
+      :other-consumers [:t97A03]},
+     :axioms
+     ["propext"
+      "Classical.choice"
+      "Quot.sound"
+      "PolygonEdgeGraphOpenCoverProbe.polygonOpenCoverPackages"],
+     :commands
+     [{:cmd "stat -c '%F %n' .lake/packages", :exit 0}
+      {:cmd "lake env lean ConstructionTargets/Surfaces.lean", :exit 0}
+      {:cmd
+       "lake env lean ConstructionTargets/StatementSurfaceModels.lean",
+       :exit 0}
+      {:cmd
+       "lake env lean /tmp/polygon-edge-graph-open-cover-probe.lean",
+       :exit 0}
+      {:cmd "sha256sum /tmp/polygon-edge-graph-open-cover-probe.lean",
+       :exit 0}
+      {:cmd
+       "Python comment-stripped placeholder census of /tmp/polygon-edge-graph-open-cover-probe.lean",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+      {:cmd "git status --short", :exit 0}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/polygon-edge-graph-open-cover-probe.lean",
+       :exit 1,
+       :finding
+       "The first draft imported a nonexistent homotopy-equivalence module.",
+       :correction "Imported Mathlib.Topology.Homotopy.Equiv."}
+      {:cmd
+       "lake env lean /tmp/polygon-edge-graph-open-cover-probe.lean",
+       :exit 1,
+       :finding
+       "The structure had ambiguous field names and no inferred punctured-disk topology.",
+       :correction
+       "Renamed the opens U and V and used a reducible subtype."}
+      {:cmd
+       "lake env lean /tmp/polygon-edge-graph-open-cover-probe.lean",
+       :exit 1,
+       :finding "The PUnit equivalence left an unsolved universe.",
+       :correction
+       "Recorded ContractibleSpace U directly; the successful compile is in commands."}],
+     :fixture
+     {:path "/tmp/polygon-edge-graph-open-cover-probe.lean",
+      :sha256
+      "8cfb3f1613cb6a590439bdc01c98e033cb70fbfb69ad5002626225583119b233"},
+     :seat "topo-4"}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/shared/polygon-edge-graph-open-cover",
    :acceptance
@@ -86730,7 +86864,8 @@
    :id :routes-2026-10-10-polygon-edge-graph-open-cover-shared-2,
    :kind :reusable-theorem,
    :depends-on
-   [:routes-2026-10-10-checkpoint-topo1-covering-boundaries-1],
+   [:routes-2026-10-10-checkpoint-topo1-covering-boundaries-1
+    :routes-2026-10-10-polygon-edge-graph-radial-package-1],
    :current-residual
    "Construct the bounded polygon open cover and edge-graph retraction.",
    :other-consumers [:t97A03]}
