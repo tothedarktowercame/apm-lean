@@ -99069,8 +99069,65 @@
   {:bounded-exception
    "This single-consumer prerequisite transports the banked radial quotient homotopy onto the actual outer open piece and packages the endpoint and fixed-boundary properties needed for its contraction model.",
    :consumer :t97A01,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Construct the annular overlap-to-punctured-disk model and identify the radius-one boundary quotients for SurfaceRel false 3 and TorusCrosscapRel with ThreeCircles, including the required vertex classes and literal inclusion equations.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :missing-theorems
+    [{:name "polygonOuterOpenDeformation",
+      :type
+      "For a radius-preserving boundary-supported disk relation, conjugating the quotient radial homotopy gives a continuous homotopy on outerOpen that starts at the identity, ends in radius-one boundary classes, and fixes every boundary class.",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on
+      ["PolygonOuterRestrictedEqvGen.outerQuotientHomeomorph"
+       "PolygonOuterRadialQuotientDeformation.continuous_quotientHomotopy"],
+      :area "polygon-surface-open-cover"}],
+    :statement-hashes "131 registered statements match",
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :finding "canonical package authority"}
+     {:cmd "sha256sum /tmp/polygon-outer-open-deformation.lean",
+      :exit 0,
+      :finding "fixture hash matches"}
+     {:cmd
+      "lake build ConstructionTargets.PolygonOuterOpenDeformation",
+      :exit 0}
+     {:cmd "lake env lean /tmp/polygon-outer-open-deformation.lean",
+      :exit 0,
+      :finding "fixture compiles with standard axioms"}
+     {:cmd "rg source for sorry or admit",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero source placeholders"}
+     {:cmd "rg fixture for sorry or admit",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero fixture placeholders"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short",
+      :exit 0,
+      :finding "clean worktree after commit"}],
+    :diagnostic-history [],
+    :commit "d8ad863a805f90aeb5f3fff27e11e6d11a9b3085",
+    :changed-paths
+    ["ConstructionTargets/PolygonOuterOpenDeformation.lean"],
+    :fixture
+    {:path "/tmp/polygon-outer-open-deformation.lean",
+     :sha256
+     "9fcf4732bedf53c138faa818673009bf4a0e6b66f6ca17b533fa54c96af656e5",
+     :sorry-count 0},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PolygonOuterOpenDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/outer-open-deformation",
@@ -101639,10 +101696,12 @@
    :lemma
    {:name "polygonOuterOpenDeformation",
     :reported-by
-    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40
+     :routes-2026-10-10-polygon-outer-open-deformation-48],
     :type
     "Transport the quotient-descended radial homotopy across outerQuotientHomeomorph to a deformation of outerOpen onto its radius-one boundary classes.",
-    :area "polygon-surface-open-cover"},
+    :area "polygon-surface-open-cover",
+    :proved-in :routes-2026-10-10-polygon-outer-open-deformation-48},
    :id :lemma-polygonouteropendeformation,
    :kind :lemma,
    :depends-on
