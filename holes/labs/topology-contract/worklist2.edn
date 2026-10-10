@@ -62254,9 +62254,46 @@
   {:bounded-exception
    "single-consumer affine planar-coordinate identity for the t02A03 complement interpolation",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:residual
+     "Implement the banked planar-coordinate interpolation identity in the scoped module; then evaluate the interpolated planar norm along the common angular ray and continue to the exact normal-coordinate formula and deleted-core exclusion.",
+     :outcome :go,
+     :warnings
+     ["/tmp/t02a03_geometric_tube_cover.lean:786:38: unnecessarySeqFocus linter warning"],
+     :acceptance
+     {:declaration "apm_t02a03_leftTubePlanarComplex_radialPoint",
+      :type
+      "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubePlanarComplex ⟨apm_t02a03_leftTubeRadialPoint tp, apm_t02a03_leftTubeRadialPoint_mem_leftTube tp⟩ = (1 - (tp.1 : Real)) • apm_t02a03_leftTubePlanarComplex ⟨(apm_t02a03_leftTubeTorusInverse (apm_t02a03_leftTubeTorusCoordinates tp.2)).1, (apm_t02a03_leftTubeTorusInverse (apm_t02a03_leftTubeTorusCoordinates tp.2)).2.1⟩ + (tp.1 : Real) • apm_t02a03_leftTubePlanarComplex ⟨tp.2.1, tp.2.2.1⟩"},
+     :commands
+     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "apm_t02a03_leftTubePlanarComplex_radialPoint compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
+       :exit 0}
+      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "3607b0dedf7784addfeced6d661ef5a5b2c8c1be34fd1de72ae3267efe85db67  /tmp/t02a03_geometric_tube_cover.lean"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :fixture
+     {:path "/tmp/t02a03_geometric_tube_cover.lean",
+      :sha256
+      "3607b0dedf7784addfeced6d661ef5a5b2c8c1be34fd1de72ae3267efe85db67"},
+     :finding
+     "The declared affine planar-coordinate identity is complete and placeholder-free. Expanding the shifted planar complex coordinate reduces both real and imaginary components to ring identities because the interpolation coefficients sum to one.",
+     :implementation
+     {:scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
+      :declarations
+      ["ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_leftTubePlanarComplex_radialPoint"]},
+     :seat "topo-8"}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/left-tube-planar-coordinate-interpolation",
    :acceptance
@@ -62271,6 +62308,8 @@
    :id
    :routes-2026-10-10-t02a03-left-tube-planar-coordinate-interpolation-topo2-r1,
    :kind :reusable-theorem,
+   :declarations
+   ["ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_leftTubePlanarComplex_radialPoint"],
    :depends-on
    [:routes-2026-10-10-checkpoint-topo2-r5
     :routes-2026-10-10-t02a03-left-tube-torus-inverse-coordinate-direction-topo2-r1],
