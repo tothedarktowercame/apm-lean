@@ -64192,25 +64192,64 @@
   {:bounded-exception
    "single-consumer equality-transported Hurewicz coordinate for t97A04",
    :consumer :t97A04,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/t97a04_frozen_h1_coordinate.lean",
+      :sha256
+      "16e975e990678de6328bd0306dcf805f85587fb433414306a1d9ac7adc04f0a1"},
+     :commands
+     [{:cmd "sha256sum /tmp/t97a04_frozen_h1_coordinate.lean",
+       :exit 0,
+       :output
+       "16e975e990678de6328bd0306dcf805f85587fb433414306a1d9ac7adc04f0a1  /tmp/t97a04_frozen_h1_coordinate.lean"}
+      {:cmd "lake env lean /tmp/t97a04_frozen_h1_coordinate.lean",
+       :exit 0,
+       :output
+       "finiteFreeHurewiczCoordinateMulEquiv_eqToIso_conj and frozenTorusAlignedHurewiczCoordinateAtLbarBase_apply compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t97a04_frozen_h1_coordinate.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :implementation
+     {:scope ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"],
+      :declarations
+      ["ConstructionTargets.T97A04FrozenH1Coordinate.finiteFreeHurewiczCoordinateMulEquiv_eqToIso_conj"
+       "ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusAlignedHurewiczCoordinateAtLbarBase_apply"],
+      :acceptance
+      {:type
+       "forall q : Multiplicative (Fin 2 → ℤ), finiteFreeHurewiczCoordinateMulEquiv frozenTorusPi1CoordAtLbarBase frozenTorusAlignedH1MulEquivFinTwo q = q",
+       :gates
+       ["scoped module compiles"
+        "scoped module contains no sorry token"
+        "statement registry matches"]}},
+     :finding
+     "The complete fixture proves generally that equality-induced categorical conjugation of a fundamental-group coordinate leaves finiteFreeHurewiczCoordinateMulEquiv unchanged. Specializing along frozenLbar_base and using the banked aligned coordinate proves the transported frozen-torus Hurewicz coordinate is exactly the identity.",
+     :residual
+     "Apply h1_coordinate_eq_of_fundamentalGroup_coordinate_eq with the raw-map pi1 equation and the two aligned Hurewicz identities, then transport the IntegralH1 matrix equation through singularHomologyComparison_naturality into apm_t97A04_bridge_2.",
+     :warnings []}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A04/frozen-hurewicz-basepoint-transport",
    :acceptance
-   {:probe
-    "Compile and bank finiteFreeHurewiczCoordinateMulEquiv_eqToIso_conj and frozenTorusAlignedHurewiczCoordinateAtLbarBase_apply from /tmp/t97a04_frozen_h1_coordinate.lean. Prove generally that equality-induced conjugation of the pi1 coordinate does not change the finite-free Hurewicz coordinate, then specialize along frozenLbar_base to show the transported aligned coordinate remains the identity. Preserve the frozen matrix exactly; do not yet claim the IntegralH1 equation, ModuleCat equation, or apm_t97A04_bridge_2.",
-    :declarations
-    ["ConstructionTargets.T97A04FrozenH1Coordinate.finiteFreeHurewiczCoordinateMulEquiv_eqToIso_conj"
-     "ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusAlignedHurewiczCoordinateAtLbarBase_apply"],
-    :type
+   {:type
     "forall q : Multiplicative (Fin 2 → ℤ), finiteFreeHurewiczCoordinateMulEquiv frozenTorusPi1CoordAtLbarBase frozenTorusAlignedH1MulEquivFinTwo q = q",
-    :placeholder "apm_t97A04_bridge_2",
-    :route-step
-    "t97A04 step 5, preserve the identity-aligned Hurewicz coordinate across the frozen basepoint equality"},
+    :gates
+    ["scoped module compiles"
+     "scoped module contains no sorry token"
+     "statement registry matches"]},
    :id
    :routes-2026-10-10-t97a04-frozen-hurewicz-basepoint-transport-topo2-r1,
    :kind :reusable-theorem,
+   :declarations
+   ["ConstructionTargets.T97A04FrozenH1Coordinate.finiteFreeHurewiczCoordinateMulEquiv_eqToIso_conj"
+    "ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusAlignedHurewiczCoordinateAtLbarBase_apply"],
    :depends-on
    [:routes-2026-10-10-checkpoint-topo2-r5
     :routes-2026-10-10-t97a04-frozen-pi1-raw-map-coordinate-topo2-r1],
