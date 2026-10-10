@@ -95848,11 +95848,109 @@
    "Review the frozen-boundary comparison before descending the square/orbit identification to a homeomorphism of quotients.",
    :other-consumers []}
   {:bounded-exception
+   "This single-consumer subtype package fixes the exact Joined-based component used by T99J01ComponentSheets and supplies the openness and path-connectedness facts needed before restricting covering charts.",
+   :consumer :t99J01,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/CoveringPathComponentDomain.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component/domain",
+   :acceptance
+   {:implementation
+    "Define Component e as {x : E // Joined e x}. Identify its carrier with pathComponent e, prove it open when E is locally path connected, prove the carrier path connected, and install PathConnectedSpace (Component e). Do not restrict a covering map, prove local path connectedness of a covering total space, select sheets, prove surjectivity, count fibers, or compute pi1.",
+    :placeholder "the single sorry in apm_t99j01",
+    :route-step
+    "t99J01 component-restriction step 1: package the exact Joined component as an open path-connected subtype",
+    :fixture "/tmp/covering-path-component-domain.lean",
+    :fixture-sha256
+    "bfbaa5c5a73005f4a652f205a6c36ba557c81bb56a68252dd4b2d98c512333a8",
+    :gates
+    ["lake build ConstructionTargets.CoveringPathComponentDomain"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-10-covering-path-component-domain-39,
+   :kind :reusable-theorem,
+   :depends-on [],
+   :current-residual
+   "Prove a covering over a locally path-connected base has locally path-connected total space, restrict each evenly covered chart to the selected open component sheets, and prove the component restriction surjective by lifting base paths.",
+   :other-consumers []}
+  {:bounded-exception
    "Single-consumer prerequisite first in the final ledger ranking.",
    :consumer :t99J01,
    :implements-lemma :lemma-iscoveringmap-restrictpathcomponent,
+   :evidence
+   {:probe
+    {:residual
+     "The exact Joined component subtype is now compiled. The original theorem still needs inherited local path connectedness, selected-sheet local trivializations, and path-lifting surjectivity.",
+     :outcome :revise,
+     :warnings [],
+     :missing-theorems
+     [{:name "IsCoveringMap.restrictPathComponent",
+       :type
+       "For p : E -> B covering a locally path-connected path-connected base and e : E, the restriction p : {x // Joined e x} -> B is a surjective covering map.",
+       :status :partial,
+       :consumers [:t99J01],
+       :depends-on
+       ["CoveringPathComponentDomain.component_isOpen"
+        "CoveringPathComponentDomain.componentPathConnectedSpace"]}],
+     :prerequisite
+     {:bounded-exception
+      "This single-consumer subtype package fixes the exact Joined-based component used by T99J01ComponentSheets and supplies the openness and path-connectedness facts needed before restricting covering charts.",
+      :consumer :t99J01,
+      :phase :implementation,
+      :state :open,
+      :scope ["ConstructionTargets/CoveringPathComponentDomain.lean"],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component/domain",
+      :acceptance
+      {:implementation
+       "Define Component e as {x : E // Joined e x}. Identify its carrier with pathComponent e, prove it open when E is locally path connected, prove the carrier path connected, and install PathConnectedSpace (Component e). Do not restrict a covering map, prove local path connectedness of a covering total space, select sheets, prove surjectivity, count fibers, or compute pi1.",
+       :placeholder "the single sorry in apm_t99j01",
+       :route-step
+       "t99J01 component-restriction step 1: package the exact Joined component as an open path-connected subtype",
+       :fixture "/tmp/covering-path-component-domain.lean",
+       :fixture-sha256
+       "bfbaa5c5a73005f4a652f205a6c36ba557c81bb56a68252dd4b2d98c512333a8",
+       :gates
+       ["lake build ConstructionTargets.CoveringPathComponentDomain"
+        "fixture compiles"
+        "zero source and fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :id :routes-2026-10-10-covering-path-component-domain-39,
+      :kind :reusable-theorem,
+      :depends-on [],
+      :current-residual
+      "Prove a covering over a locally path-connected base has locally path-connected total space, restrict each evenly covered chart to the selected open component sheets, and prove the component restriction surjective by lifting base paths.",
+      :other-consumers []},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd "lake env lean /tmp/covering-path-component-domain.lean",
+       :exit 0}
+      {:cmd "sha256sum /tmp/covering-path-component-domain.lean",
+       :exit 0}
+      {:cmd
+       "rg -n \"\\b(sorry|admit)\\b\" /tmp/covering-path-component-domain.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+      {:cmd "git status --short", :exit 0, :finding "clean"}],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/covering-path-component-domain.lean",
+       :exit 1,
+       :finding
+       "Rewriting the PathConnectedSpace goal through the iff did not unfold the Component abbreviation; applying isPathConnected_iff_pathConnectedSpace.mp directly compiled."}],
+     :fixture
+     {:path "/tmp/covering-path-component-domain.lean",
+      :sha256
+      "bfbaa5c5a73005f4a652f205a6c36ba557c81bb56a68252dd4b2d98c512333a8",
+      :interface
+      "Component e is the Joined path-component subtype; component_isOpen and componentPathConnectedSpace expose the open and path-connected domain needed for restriction."},
+     :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component",
@@ -95871,7 +95969,8 @@
    :id :routes-2026-10-10-iscoveringmap-restrict-path-component-38,
    :kind :reusable-theorem,
    :depends-on
-   [:routes-2026-10-10-checkpoint-topo1-after-klein-boundary-eqvgen-28],
+   [:routes-2026-10-10-checkpoint-topo1-after-klein-boundary-eqvgen-28
+    :routes-2026-10-10-covering-path-component-domain-39],
    :current-residual
    "Establish constant fiber cardinality and the induced subgroup image.",
    :other-consumers []}
@@ -96408,12 +96507,16 @@
     "theorem is true in ordinary covering-space theory, but its proof needs a component-restriction theorem not present in Mathlib or ConstructionTargets: theorem IsCoveringMap.restrictPathComponent {E B : Type*} [TopologicalSpace E] [TopologicalSpace B] [LocPathConnectedSpace B] [PathConnectedSpace B] {p : E → B} (hp : IsCoveringMap p) (e : E) : IsCoveringMap (fun x : {x : E // Joined e x} => p x.1). This cannot be obtained merely from openness of path components: each covering trivialization must be refined to a path-connected base neighborhood, its sheets classified by whether they meet the chos"},
    :lemma
    {:name "IsCoveringMap.restrictPathComponent",
-    :reported-by [:owner],
+    :reported-by
+    [:owner
+     :routes-2026-10-10-iscoveringmap-restrict-path-component-38],
     :type
     "theorem is true in ordinary covering-space theory, but its proof needs a component-restriction theorem not present in Mathlib or ConstructionTargets: theorem IsCoveringMap.restrictPathComponent {E B : Type*} [TopologicalSpace E] [TopologicalSpace B] [LocPathConnectedSpace B] [PathConnectedSpace B] {p : E → B} (hp : IsCoveringMap p) (e : E) : IsCoveringMap (fun x : {x : E // Joined e x} => p x.1). This cannot be obtained merely from openness of path components: each covering trivialization must be refined to a path-connected base neighborhood, its sheets classified by whether they meet the chos"},
    :id :lemma-iscoveringmap-restrictpathcomponent,
    :kind :lemma,
-   :depends-on [],
+   :depends-on
+   [:lemma-coveringpathcomponentdomain-component-isopen
+    :lemma-coveringpathcomponentdomain-componentpathconnectedspace],
    :other-consumers []}
   {:consumer :t99J01,
    :phase :lemma,
@@ -97288,6 +97391,31 @@
    {:name "CyclicThreeCirclesCollapse.collapse_firstCircle",
     :reported-by []},
    :id :lemma-cyclicthreecirclescollapse-collapse-firstcircle,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "CoveringPathComponentDomain.component_isOpen"},
+   :lemma
+   {:name "CoveringPathComponentDomain.component_isOpen",
+    :reported-by []},
+   :id :lemma-coveringpathcomponentdomain-component-isopen,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "CoveringPathComponentDomain.componentPathConnectedSpace"},
+   :lemma
+   {:name "CoveringPathComponentDomain.componentPathConnectedSpace",
+    :reported-by []},
+   :id :lemma-coveringpathcomponentdomain-componentpathconnectedspace,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}],
