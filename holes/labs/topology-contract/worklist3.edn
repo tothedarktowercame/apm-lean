@@ -1465,85 +1465,136 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :implements-lemma
+   :lemma-constructiontargets-manifoldfundamentalclass-localizationmap-naturality,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+   :dag-node
+   "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/canonical-localization-map-naturality",
+   :acceptance
+   {:implementation
+    "Promote the fixture's absoluteSingularMap, localizationMap, and localizationMap_naturality declarations. Define localizationMap exactly as homologyMap of relativeSingularProjection for the deleted-point pair. Prove the displayed naturality square by applying homologyMap to relativeSingularMap_projection_naturality. Do not replace the canonical projection with an abstract map, do not assert it is an isomorphism, and do not introduce orientation predicates.",
+    :declaration
+    "ConstructionTargets.ManifoldFundamentalClass.localizationMap_naturality",
+    :type
+    "forall {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y] (f : C(X,Y)) (x : X) (y : Y) (h : Set.MapsTo f (deletedPoint x) (deletedPoint y)) (n : Nat), homologyMap (absoluteSingularMap f) n ≫ localizationMap y n = localizationMap x n ≫ homologyMap (relativeSingularMap (deletedPoint x) (deletedPoint y) f h) n",
+    :supporting-declarations
+    ["ConstructionTargets.ManifoldFundamentalClass.absoluteSingularMap"
+     "ConstructionTargets.ManifoldFundamentalClass.localizationMap"],
+    :fixture "/tmp/manifold_fundamental_class_localization_map.lean",
+    :fixture-sha256
+    "46c7d72c856135f26c57e73987e8e4876a8927cabcf4c19fa577c855181835c0",
+    :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
+    :route-step
+    "define the canonical absolute-to-deleted-point relative localization morphism and prove its map-of-pairs naturality"},
+   :id
+   :routes-2026-10-10-manifold-localization-map-naturality-topo3-r1,
+   :kind :reusable-theorem,
+   :area "manifold-fundamental-class",
+   :depends-on
+   [:routes-2026-10-10-topo3-seed-checkpoint-1
+    :routes-2026-10-10-manifold-local-positive-excision-topo3-r1
+    :routes-2026-10-10-manifold-oriented-overlap-coherence-topo3-r1
+    :routes-2026-10-10-manifold-connected-overlap-unit-topo3-r1
+    :routes-2026-10-10-manifold-oriented-connected-overlap-topo3-r1
+    :routes-2026-10-10-manifold-integral-transition-sign-topo3-r1
+    :routes-2026-10-10-manifold-exclude-negative-transition-topo3-r1
+    :routes-2026-10-10-manifold-global-generator-topo3-r1
+    :routes-2026-10-10-manifold-localization-iso-generator-topo3-r1
+    :routes-2026-10-10-manifold-generator-map-isiso-topo3-r1],
+   :current-residual
+   "Prove that localizationMap x n sends the concrete globalGenerator to the orientation-coherent chart generator at a normalized basepoint, then transport that equality using localizationMap_naturality and the reviewed overlap results.",
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-closedorientedfundamentalclass,
    :evidence
    {:probe
     {:residual
-     "The remaining geometric core is the explicit equality between localization of globalGenerator and the orientation-coherent local chart generator.",
+     "The canonical localization map is now fixed and natural; its image of globalGenerator must be computed geometrically and its sign fixed by orientation.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
      [{:id
-       :lemma-constructiontargets-manifoldfundamentalclass-isiso-of-map-globalgenerator-eq-globalgenerator,
+       :lemma-constructiontargets-manifoldfundamentalclass-localizationmap-naturality,
        :name
-       "ConstructionTargets.ManifoldFundamentalClass.isIso_of_map_globalGenerator_eq_globalGenerator",
+       "ConstructionTargets.ManifoldFundamentalClass.localizationMap_naturality",
        :type
-       "forall (R : Type) [CommRing R] (G H : ModuleCat R) (eG : G ≅ ModuleCat.of R R) (eH : H ≅ ModuleCat.of R R) (f : G ⟶ H), f.hom (globalGenerator R G eG) = globalGenerator R H eH -> IsIso f",
+       "forall {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y] (f : C(X,Y)) (x : X) (y : Y) (h : Set.MapsTo f (deletedPoint x) (deletedPoint y)) (n : Nat), homologyMap (absoluteSingularMap f) n ≫ localizationMap y n = localizationMap x n ≫ homologyMap (relativeSingularMap (deletedPoint x) (deletedPoint y) f h) n",
        :status :proved,
        :consumers [:t00J02 :t98A02],
        :depends-on
-       ["ConstructionTargets.ManifoldFundamentalClass.globalGenerator_generates"
-        "ConstructionTargets.ManifoldFundamentalClass.mapGlobalGenerator_generates_of_isIso"],
+       ["ConstructionTargets.ManifoldFundamentalClass.isIso_of_map_globalGenerator_eq_globalGenerator"],
        :area "manifold-fundamental-class"}],
      :prerequisite
      {:consumer :t00J02,
       :implements-lemma
-      :lemma-constructiontargets-manifoldfundamentalclass-isiso-of-map-globalgenerator-eq-globalgenerator,
+      :lemma-constructiontargets-manifoldfundamentalclass-localizationmap-naturality,
       :phase :implementation,
       :state :open,
       :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
       :dag-node
-      "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/generator-image-localization-isomorphism",
+      "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/canonical-localization-map-naturality",
       :acceptance
       {:implementation
-       "Promote the exact fixture theorem. Given source and target module objects each explicitly isomorphic to the coefficient ring, prove that a morphism carrying the source globalGenerator to the target globalGenerator equals eG.hom ≫ eH.inv and hence has an IsIso instance. Use globalGenerator_generates and the supplied generator-image equality. Do not assert any manifold-specific localization equality or introduce orientation predicates.",
+       "Promote the fixture's absoluteSingularMap, localizationMap, and localizationMap_naturality declarations. Define localizationMap exactly as homologyMap of relativeSingularProjection for the deleted-point pair. Prove the displayed naturality square by applying homologyMap to relativeSingularMap_projection_naturality. Do not replace the canonical projection with an abstract map, do not assert it is an isomorphism, and do not introduce orientation predicates.",
        :declaration
-       "ConstructionTargets.ManifoldFundamentalClass.isIso_of_map_globalGenerator_eq_globalGenerator",
+       "ConstructionTargets.ManifoldFundamentalClass.localizationMap_naturality",
        :type
-       "forall (R : Type) [CommRing R] (G H : ModuleCat R) (eG : G ≅ ModuleCat.of R R) (eH : H ≅ ModuleCat.of R R) (f : G ⟶ H), f.hom (globalGenerator R G eG) = globalGenerator R H eH -> IsIso f",
+       "forall {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y] (f : C(X,Y)) (x : X) (y : Y) (h : Set.MapsTo f (deletedPoint x) (deletedPoint y)) (n : Nat), homologyMap (absoluteSingularMap f) n ≫ localizationMap y n = localizationMap x n ≫ homologyMap (relativeSingularMap (deletedPoint x) (deletedPoint y) f h) n",
+       :supporting-declarations
+       ["ConstructionTargets.ManifoldFundamentalClass.absoluteSingularMap"
+        "ConstructionTargets.ManifoldFundamentalClass.localizationMap"],
        :fixture
-       "/tmp/manifold_fundamental_class_generator_map_isiso.lean",
+       "/tmp/manifold_fundamental_class_localization_map.lean",
        :fixture-sha256
-       "699af5e4aaf443679e5c5c704127afe55b2ea75faa66feac9afa79bae581e9e0",
+       "46c7d72c856135f26c57e73987e8e4876a8927cabcf4c19fa577c855181835c0",
        :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
        :route-step
-       "reduce localization isomorphism to equality of the concrete global and local generators"},
-      :id :routes-2026-10-10-manifold-generator-map-isiso-topo3-r1,
+       "define the canonical absolute-to-deleted-point relative localization morphism and prove its map-of-pairs naturality"},
+      :id
+      :routes-2026-10-10-manifold-localization-map-naturality-topo3-r1,
       :kind :reusable-theorem,
       :area "manifold-fundamental-class",
       :depends-on
       [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
-       :routes-2026-10-10-manifold-localization-iso-generator-topo3-r1],
+       :routes-2026-10-10-manifold-generator-map-isiso-topo3-r1],
       :current-residual
-      "Prove that the actual absolute-to-local homology morphism sends the global top-homology generator to the chart-normalized local generator, using orientation to choose its sign. The compiled theorem then supplies IsIso and local generation.",
+      "Prove that localizationMap x n sends the concrete globalGenerator to the orientation-coherent chart generator at a normalized basepoint, then transport that equality using localizationMap_naturality and the reviewed overlap results.",
       :other-consumers [:t98A02]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake env lean /tmp/manifold_fundamental_class_generator_map_isiso.lean",
+       "lake env lean /tmp/manifold_fundamental_class_localization_map.lean",
        :exit 0,
        :output
-       "isIso_of_map_globalGenerator_eq_globalGenerator compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "localizationMap and localizationMap_naturality compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/manifold_fundamental_class_generator_map_isiso.lean",
+       "sha256sum /tmp/manifold_fundamental_class_localization_map.lean",
        :exit 0,
        :output
-       "699af5e4aaf443679e5c5c704127afe55b2ea75faa66feac9afa79bae581e9e0  /tmp/manifold_fundamental_class_generator_map_isiso.lean"}
+       "46c7d72c856135f26c57e73987e8e4876a8927cabcf4c19fa577c855181835c0  /tmp/manifold_fundamental_class_localization_map.lean"}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/manifold_fundamental_class_generator_map_isiso.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/manifold_fundamental_class_localization_map.lean || true)\"",
        :exit 0}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/manifold_fundamental_class_localization_map.lean",
+       :exit 1,
+       :finding
+       "The first draft omitted the LocalHomologyNeighborhoodExcision namespace for deletedPoint and attempted to name SingularExcision's private absoluteMap. Opening the correct namespace and defining the identical public absoluteSingularMap from singularChainComplexFunctor corrected the fixture; the naturality proof then compiled against the existing projection-naturality theorem."}],
      :fixture
-     {:path "/tmp/manifold_fundamental_class_generator_map_isiso.lean",
+     {:path "/tmp/manifold_fundamental_class_localization_map.lean",
       :sha256
-      "699af5e4aaf443679e5c5c704127afe55b2ea75faa66feac9afa79bae581e9e0"},
+      "46c7d72c856135f26c57e73987e8e4876a8927cabcf4c19fa577c855181835c0"},
      :finding
-     "The reviewed forward transport theorem is banked. The fixture proves the converse criterion needed to establish that a localization map is an isomorphism: when source and target module objects each carry a supplied isomorphism to the coefficient ring, any morphism sending source globalGenerator to target globalGenerator equals the explicit composite eG.hom followed by eH.inv and is therefore an isomorphism. This does not assume a manifold localization result. It reduces that result to one concrete equality between the localization image of the global top class and the chart-normalized local generator.",
+     "The reviewed generator-image criterion is banked. The fixture now exposes the actual absolute-to-local morphism used by singular homology: localizationMap x n is homologyMap of the canonical relativeSingularProjection for the deleted-point pair. It also proves the genuine naturality square for every continuous map of deleted-point pairs by applying homologyMap to the banked chain-level projection-naturality theorem. This removes the remaining representation ambiguity: the fundamental-class equality must be proved for this concrete localizationMap, and transport between points or charts can use localizationMap_naturality.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -1567,7 +1618,8 @@
     :routes-2026-10-10-manifold-exclude-negative-transition-topo3-r1
     :routes-2026-10-10-manifold-global-generator-topo3-r1
     :routes-2026-10-10-manifold-localization-iso-generator-topo3-r1
-    :routes-2026-10-10-manifold-generator-map-isiso-topo3-r1],
+    :routes-2026-10-10-manifold-generator-map-isiso-topo3-r1
+    :routes-2026-10-10-manifold-localization-map-naturality-topo3-r1],
    :current-residual
    "Local-degree counts and wild-ball complement homology remain.",
    :other-consumers [:t98A02]}
@@ -3075,6 +3127,30 @@
    :depends-on
    [:lemma-constructiontargets-manifoldfundamentalclass-globalgenerator-generates
     :lemma-constructiontargets-manifoldfundamentalclass-mapglobalgenerator-generates-of-isiso],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFundamentalClass.localizationMap_naturality",
+    :type
+    "forall {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y] (f : C(X,Y)) (x : X) (y : Y) (h : Set.MapsTo f (deletedPoint x) (deletedPoint y)) (n : Nat), homologyMap (absoluteSingularMap f) n ≫ localizationMap y n = localizationMap x n ≫ homologyMap (relativeSingularMap (deletedPoint x) (deletedPoint y) f h) n"},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFundamentalClass.localizationMap_naturality",
+    :reported-by
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    :type
+    "forall {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y] (f : C(X,Y)) (x : X) (y : Y) (h : Set.MapsTo f (deletedPoint x) (deletedPoint y)) (n : Nat), homologyMap (absoluteSingularMap f) n ≫ localizationMap y n = localizationMap x n ≫ homologyMap (relativeSingularMap (deletedPoint x) (deletedPoint y) f h) n",
+    :area "manifold-fundamental-class",
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+   :id
+   :lemma-constructiontargets-manifoldfundamentalclass-localizationmap-naturality,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-manifoldfundamentalclass-isiso-of-map-globalgenerator-eq-globalgenerator],
    :other-consumers [:t98A02]}],
  :consumer-baselines {},
  :statuses
