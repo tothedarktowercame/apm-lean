@@ -66586,6 +66586,8 @@
    :other-consumers [:t96J06]}
   {:consumer :t97A04,
    :stop-count 1,
+   :review-finding
+   "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma
    :lemma-constructiontargets-productionopencovermayervietoris-productionconnecting-natura,
    :evidence
@@ -66618,6 +66620,12 @@
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :output "131 registered statements match, 0 do not"}],
+    :review
+    {:outcome :fail,
+     :seat "codex-7",
+     :job "invoke-1791664645027-2931-5685cb18",
+     :finding
+     "extend Mathlib: state and prove the missing theorem in scope"},
     :fixture
     {:path "/tmp/production_cover_short_complex_map_contract.lean",
      :sha256
@@ -66625,8 +66633,8 @@
     :finding
     "Canonical δ naturality is parameterized by a particular ShortComplex.Hom and mentions homologyMap of its τ₁ and τ₃. The predecessor interface existentially erases that morphism behind Nonempty and supplies no equalities relating those components to the continuous map f. A zero witness satisfies it for every choice of covers, so no downstream proof may treat its components as the geometric induced maps.",
     :seat "topo-8"},
-   :phase :probe,
-   :state :done-unreviewed,
+   :phase :implementation,
+   :state :repair,
    :scope
    ["ConstructionTargets/ProductionOpenCoverMayerVietoris.lean"],
    :dag-node
@@ -66646,6 +66654,7 @@
    :id :routes-2026-10-10-production-connecting-naturality-topo2-r1,
    :kind :reusable-theorem,
    :area "mv-connecting-naturality",
+   :fail-count 1,
    :depends-on
    [:routes-2026-10-10-checkpoint-topo2-r7
     :routes-2026-10-10-subcomplex-mv-connecting-naturality-two-consumers-topo2-r1
