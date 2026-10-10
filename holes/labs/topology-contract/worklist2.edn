@@ -57805,50 +57805,63 @@
    "single-consumer common-core attachment geometry for the t02A03 tube complement",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/t02a03_geometric_tube_cover.lean",
-      :sha256
-      "12963cdffac347af224e065a832491c3f704367711107834b8c6c502c01e8586"},
-     :commands
-     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "common-core attachment facts compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
-       :exit 0}
-      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "12963cdffac347af224e065a832491c3f704367711107834b8c6c502c01e8586  /tmp/t02a03_geometric_tube_cover.lean"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :finding
-     "Both frozen core parametrizations evaluate to the Euclidean origin at parameter zero. Consequently the origin belongs to both core ranges and, by self_subset_cthickening, to both closed radius-1/4 tubes. These facts compile without placeholders and explicitly locate the attachment point removed by geometricY.",
-     :residual
-     "Construct a meridional replacement for the deleted common attachment, compatible deformations of the left core-complement tube and right tube, and glue them to the torus-wedge-circle model.",
-     :implementation
-     {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
-      :acceptance
-      {:source-fixture "/tmp/t02a03_geometric_tube_cover.lean",
-       :declarations
-       ["apm_t02a03_leftCore_zero"
-        "apm_t02a03_rightCore_zero"
-        "apm_t02a03_origin_mem_both_cores"
-        "apm_t02a03_origin_mem_both_tubes"],
-       :placeholder "the sole sorry in apm_t02a03",
-       :route-step
-       "t02A03 step 2, identify the shared core attachment point that is removed from geometricY",
-       :gates
-       ["lake env lean ConstructionTargets/T02A03GeometricTubeCover.lean"
-        "placeholder scan"
-        "statement registry check"]}}}},
+   {:placeholder-delta 0,
+    :residual
+    "Construct a meridional replacement for the deleted common attachment, compatible deformations of the left core-complement tube and right tube, and glue them to the torus-wedge-circle model.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+      :exit 0,
+      :output
+      "12963cdffac347af224e065a832491c3f704367711107834b8c6c502c01e8586  /tmp/t02a03_geometric_tube_cover.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeCover.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.T02A03GeometricTubeCover",
+      :exit 0,
+      :output "Build completed successfully (8240 jobs)."}
+     {:cmd "lake env lean /tmp/check_t02a03_attachment_axioms.lean",
+      :exit 0,
+      :output
+      "All four declarations depend on [propext, Classical.choice, Quot.sound]."}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeCover.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "comment-stripped placeholder census for problems/t02A03/lean/Main.lean",
+      :exit 0,
+      :output "1"}
+     {:cmd "sha256sum problems/t02A03/lean/Main.lean",
+      :exit 0,
+      :output
+      "b123eca388ab2858ca55daf538c1ddd645022b52f5196a15f0bb516d78323d7d  problems/t02A03/lean/Main.lean"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r 64ca0908b2383146f0da7f656f0e0bf4fc5885da",
+      :exit 0,
+      :output "ConstructionTargets/T02A03GeometricTubeCover.lean"}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "64ca0908b2383146f0da7f656f0e0bf4fc5885da",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
+    :fixture
+    {:path "/tmp/t02a03_geometric_tube_cover.lean",
+     :sha256
+     "12963cdffac347af224e065a832491c3f704367711107834b8c6c502c01e8586"},
+    :declarations
+    ["ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_leftCore_zero"
+     "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_rightCore_zero"
+     "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_origin_mem_both_cores"
+     "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_origin_mem_both_tubes"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/geometric-tube-common-attachment",
