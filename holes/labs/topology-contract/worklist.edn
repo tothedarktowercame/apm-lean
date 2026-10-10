@@ -93196,11 +93196,119 @@
    "Review the completed shared Schreier algebra route and determine whether t99J01 or t97A03 has a newly enabled adapter.",
    :other-consumers []}
   {:bounded-exception
+   "This single-consumer algebra declaration is the compiled first half of the elected normal-form lemma and is used immediately to prove its inverse laws.",
+   :consumer :t93J03,
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/KleinPresentedGroupCoordinateModel.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/presented-group-coordinate-normal-form/semidirect-forward-map",
+   :acceptance
+   {:implementation
+    "Bank the compiled integer-pair semidirect coordinate model for the frozen Klein presentation. Define the inversion action of Multiplicative Int on Multiplicative Int, Coordinates, generators A and B, prove B^-1*A*B*A=1, construct PresentedGroup.toGroup from T93J03.PresentedKleinGroup to Coordinates, and prove the exact images of generatorA and the b-generator. Do not claim bijectivity or unique normal forms in this prerequisite.",
+    :placeholder "the single sorry in apm_t93j03",
+    :route-step
+    "t93J03 step 1a.1, coordinate target and forward presentation map before proving the normal-form inverse",
+    :fixture "/tmp/klein-coordinate-model.lean",
+    :fixture-sha256
+    "3b55c1fb8dcc870e32c4c5b7b3fa47b0c664c418ef3ccb0da620ff66e60129c8",
+    :gates
+    ["canonical packages"
+     "fixture compiles"
+     "zero fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id
+   :routes-2026-10-10-klein-presented-group-coordinate-model-forward-map-20,
+   :kind :reusable-theorem,
+   :depends-on [],
+   :current-residual
+   "Prove every presented word equals a^m*b^n, construct the inverse Coordinates -> PresentedKleinGroup, and show the two maps are inverse.",
+   :other-consumers []}
+  {:bounded-exception
    "This single-consumer algebra lemma is the smallest dependency of the highest-ranked one-placeholder route and is required before the geometric orbit classification can be stated without opaque presented words.",
    :consumer :t93J03,
    :implements-lemma :lemma-kleinpresentedgroup-coordinatenormalform,
+   :evidence
+   {:probe
+    {:residual
+     "After banking the coordinate target and forward presentation map, the original row has one remaining algebraic obligation: normal-form reduction proving toCoordinates bijective and orienting its inverse as a MulEquiv.",
+     :outcome :revise,
+     :warnings [],
+     :missing-theorems
+     [{:name "kleinPresentedGroup_coordinateNormalForm",
+       :type
+       "MulEquiv from T93J03.PresentedKleinGroup to the inversion semidirect integer-pair coordinate group, with generator formulas and unique a^m*b^n coordinates",
+       :status :partial,
+       :consumers [:t93J03],
+       :depends-on
+       ["KleinPresentedGroupCoordinateModel.toCoordinates"]}],
+     :prerequisite
+     {:bounded-exception
+      "This single-consumer algebra declaration is the compiled first half of the elected normal-form lemma and is used immediately to prove its inverse laws.",
+      :consumer :t93J03,
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/KleinPresentedGroupCoordinateModel.lean"],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/presented-group-coordinate-normal-form/semidirect-forward-map",
+      :acceptance
+      {:implementation
+       "Bank the compiled integer-pair semidirect coordinate model for the frozen Klein presentation. Define the inversion action of Multiplicative Int on Multiplicative Int, Coordinates, generators A and B, prove B^-1*A*B*A=1, construct PresentedGroup.toGroup from T93J03.PresentedKleinGroup to Coordinates, and prove the exact images of generatorA and the b-generator. Do not claim bijectivity or unique normal forms in this prerequisite.",
+       :placeholder "the single sorry in apm_t93j03",
+       :route-step
+       "t93J03 step 1a.1, coordinate target and forward presentation map before proving the normal-form inverse",
+       :fixture "/tmp/klein-coordinate-model.lean",
+       :fixture-sha256
+       "3b55c1fb8dcc870e32c4c5b7b3fa47b0c664c418ef3ccb0da620ff66e60129c8",
+       :gates
+       ["canonical packages"
+        "fixture compiles"
+        "zero fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :id
+      :routes-2026-10-10-klein-presented-group-coordinate-model-forward-map-20,
+      :kind :reusable-theorem,
+      :depends-on [],
+      :current-residual
+      "Prove every presented word equals a^m*b^n, construct the inverse Coordinates -> PresentedKleinGroup, and show the two maps are inverse.",
+      :other-consumers []},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd "lake env lean /tmp/klein-coordinate-model.lean",
+       :exit 0,
+       :finding
+       "the semidirect coordinate group, inversion action, Klein relator, presented-group homomorphism, and exact generator images compile; relation uses propext and Quot.sound, toCoordinates additionally uses Classical.choice"}
+      {:cmd "sha256sum /tmp/klein-coordinate-model.lean",
+       :exit 0,
+       :finding
+       "3b55c1fb8dcc870e32c4c5b7b3fa47b0c664c418ef3ccb0da620ff66e60129c8"}
+      {:cmd
+       "rg -n \"\\b(sorry|admit)\\b\" /tmp/klein-coordinate-model.lean",
+       :exit 1,
+       :expected-exit 1,
+       :finding "no placeholders"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :finding "131 registered statements match, 0 do not"}
+      {:cmd "git status --short", :exit 0, :finding "clean"}],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/klein-coordinate-model.lean",
+       :exit 1,
+       :finding
+       "initial relator proof left raw semidirect-product inverse goals and the singleton relation was hidden behind an abbreviation; corrected using SemidirectProduct.inl_aut_inv and an explicit change of the relation membership"}],
+     :fixture
+     {:path "/tmp/klein-coordinate-model.lean",
+      :sha256
+      "3b55c1fb8dcc870e32c4c5b7b3fa47b0c664c418ef3ccb0da620ff66e60129c8",
+      :interface
+      "Coordinates := Multiplicative Int semidirect-product Multiplicative Int under inversion; generators A and B satisfy B^-1*A*B*A=1; toCoordinates maps the frozen presented generators to A and B."},
+     :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/presented-group-coordinate-normal-form",
@@ -93220,7 +93328,8 @@
    :routes-2026-10-10-klein-presented-group-coordinate-normal-form-19,
    :kind :reusable-theorem,
    :depends-on
-   [:routes-2026-10-10-checkpoint-topo1-after-schreier-type-valued-basis-16],
+   [:routes-2026-10-10-checkpoint-topo1-after-schreier-type-valued-basis-16
+    :routes-2026-10-10-klein-presented-group-coordinate-model-forward-map-20],
    :current-residual
    "Orient the frozen presentation relation into integer-pair coordinates and prove the normal-form inverse laws.",
    :other-consumers []}
@@ -93733,12 +93842,14 @@
    :lemma
    {:name "kleinPresentedGroup_coordinateNormalForm",
     :reported-by
-    [:routes-2026-10-10-checkpoint-topo1-after-schreier-type-valued-basis-16],
+    [:routes-2026-10-10-checkpoint-topo1-after-schreier-type-valued-basis-16
+     :routes-2026-10-10-klein-presented-group-coordinate-normal-form-19],
     :type
     "An explicit group equivalence from the presented Klein-bottle group to integer-pair coordinates with multiplication (m,n)*(p,q)=(m+(-1)^n*p,n+q), including generator coordinate formulas and uniqueness."},
    :id :lemma-kleinpresentedgroup-coordinatenormalform,
    :kind :lemma,
-   :depends-on [],
+   :depends-on
+   [:lemma-kleinpresentedgroupcoordinatemodel-tocoordinates],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -93775,6 +93886,19 @@
    :id :lemma-kleinsquareboundaryorbiteqvgen,
    :kind :lemma,
    :depends-on [:lemma-kleinplaneaction-squareorbitclassification],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "KleinPresentedGroupCoordinateModel.toCoordinates"},
+   :lemma
+   {:name "KleinPresentedGroupCoordinateModel.toCoordinates",
+    :reported-by []},
+   :id :lemma-kleinpresentedgroupcoordinatemodel-tocoordinates,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
