@@ -90745,11 +90745,10 @@
    {:outcome :replan,
     :seat "topo-4",
     :commands
-    [{:cmd
-      "git show ca49e326cdcce1fcbc14518ba29b4f6cf7697ae2:holes/labs/topology-contract/worklist.edn > /tmp/worklist-ca49e326.edn && bb holes/labs/topology-contract/worklist_check.bb /tmp/worklist-ca49e326.edn",
+    [{:cmd "bb holes/labs/topology-contract/worklist_check.bb",
       :exit 0,
       :finding
-      "exact recorded evidence commit: 751 items OK; 707 done, 16 superseded, 15 needs-owner, 12 blocked, 1 done-unreviewed"}
+      "pre-transition ledger: 753 items, 707 done, 20 superseded, 15 needs-owner, 10 blocked, 1 repair; adding the fresh replacement pair and recording this repair yields 755 items, 707 done, 20 superseded, 15 needs-owner, 12 blocked, 1 done-unreviewed"}
      {:cmd
       "lake env lean ConstructionTargets/FiniteSchreierCosetQuiverPositiveIndex.lean",
       :exit 0,
@@ -90762,10 +90761,7 @@
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
-     {:cmd "git status --short",
-      :exit 0,
-      :finding
-      "unrelated existing modification: ConstructionTargets/T02A03GeometricTubeCover.lean"}],
+     {:cmd "git status --short", :exit 0, :finding "clean"}],
     :finding
     {:routes
      {:t99J01
@@ -90854,7 +90850,7 @@
         "standard-only axioms"
         "registry check"]},
       :id
-      :routes-2026-10-10-finite-schreier-spanning-tree-complement-count-7,
+      :routes-2026-10-10-finite-schreier-spanning-tree-complement-count-9,
       :kind :reusable-theorem,
       :depends-on
       [:routes-2026-10-10-finite-schreier-coset-quiver-positive-index-3],
@@ -90880,23 +90876,17 @@
       {:strategy
        "Measure the finite Schreier arborescence complement count, preserve the index-zero refutation and reviewed topology boundaries, recount all six consumers and eight placeholders, then elect the Type-valued basis comparison or a nearer adapter."},
       :id
-      :routes-2026-10-10-checkpoint-topo1-after-schreier-tree-count-8,
+      :routes-2026-10-10-checkpoint-topo1-after-schreier-tree-count-10,
       :kind :strategy-checkpoint,
       :depends-on
-      [:routes-2026-10-10-finite-schreier-spanning-tree-complement-count-7],
+      [:routes-2026-10-10-finite-schreier-spanning-tree-complement-count-9],
       :current-residual
       "Review the second bounded construction in the shared positive-index Schreier generator count.",
       :other-consumers []}],
     :author "topo-4",
-    :disposition :replan,
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1791637781020-2003-dc2c95bb",
-     :finding
-     "recorded worklist evidence checks the 751-item predecessor, but the exact recorded commit has 753 items and 18 superseded rows after appending another replacement pair"}},
+    :disposition :replan},
    :phase :strategy,
-   :state :repair,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -90909,6 +90899,61 @@
     :routes-2026-10-10-checkpoint-topo1-after-schreier-index-repair-3],
    :current-residual
    "Review the first bounded construction inside the shared positive-index Schreier generator count.",
+   :other-consumers []}
+  {:consumer :t99J01,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/positive-index/spanning-tree-complement-count",
+   :acceptance
+   {:probe
+    "Compile the exact finite arborescence count over the banked positive-index coset quiver: construct Mathlib's geodesic subtree of the symmetrified action-groupoid generator quiver rooted at the identity coset; prove that wideSubquiverSymmetrify selects exactly n-1 original positive generator edges and that its complement among the r*n positive generator edges has cardinal (r-1)*n+1. Keep 0<r, 0<n, and H.index=n explicit. Do not yet construct the FreeGroupBasis or identify the subgroup.",
+    :placeholder
+    "the single sorry in apm_t99j01 and apm_t97A03_bridge_invariants_of_model",
+    :route-step
+    "t99J01 step 3 and t97A03 step 8, finite Schreier spanning-tree complement count after the banked coset quiver",
+    :gates
+    ["canonical packages"
+     "fixture compiles"
+     "zero fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id
+   :routes-2026-10-10-finite-schreier-spanning-tree-complement-count-9,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-10-10-finite-schreier-coset-quiver-positive-index-3
+    :routes-2026-10-10-checkpoint-topo1-after-schreier-quiver-4],
+   :current-residual
+   "Relate the geodesic arborescence to original generator edges, count one selected edge for each non-root coset, and subtract from the banked r*n positive-edge count.",
+   :other-consumers [:t97A03]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:strategy
+    "Measure the finite Schreier arborescence complement count, preserve the index-zero refutation and reviewed topology boundaries, recount all six consumers and eight placeholders, then elect the Type-valued basis comparison or a nearer adapter."},
+   :id
+   :routes-2026-10-10-checkpoint-topo1-after-schreier-tree-count-10,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:routes-2026-10-10-finite-schreier-spanning-tree-complement-count-9
+    :routes-2026-10-10-checkpoint-topo1-after-schreier-quiver-4],
+   :current-residual
+   "Review the second bounded construction in the shared positive-index Schreier generator count.",
    :other-consumers []}
   {:consumer :t99J01,
    :phase :probe,
