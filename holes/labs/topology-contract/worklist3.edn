@@ -780,6 +780,21 @@
       :exit 1,
       :finding
       "The newly rewritten post-promotion harness was run before rebuilding the imported module olean, so the two new identifiers were not yet visible. Rebuilding the module and rerunning the identical harness succeeded."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791673388436-3206-0253b6e2",
+     :commands
+     ["sha256sum /tmp/manifold_fundamental_class_oriented_connected_overlap.lean"
+      "git hash-object and git rev-parse source comparison"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"
+      "lake env lean /tmp/manifold_fundamental_class_oriented_connected_overlap.lean"
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean"
+      "rg placeholder and axiom census"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped placeholder census for t00J02 and t98A02"],
+     :finding
+     "PASS: implementation commit 319779cd changes exactly ConstructionTargets/ManifoldFundamentalClass.lean and its blob matches the reviewed source; post-promotion harness hash matches b6ce4a2d434afd9d7a713f0b4ca137264c01ffaa2049e95015c65d5b1ffd7cf8; the basepoint unit-one equality is propagated in the correct symmetric direction across the preconnected overlap and then supplied to the chart-generator equality theorem at each point; no opaque orientation predicate, unconditional unit-one claim, or global class is introduced; source and harness compile with zero placeholders and only propext, Classical.choice, and Quot.sound; 131 statements match and consumer counts remain t00J02=1, t98A02=1"},
     :commit "319779cd62f88de0475e649d581ddad8abd61077",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -797,7 +812,7 @@
      "Added propagation of transition unit one from a basepoint across a preconnected overlap, then derived equality of both normalized chart generators at every overlap point."},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/oriented-connected-overlap-coherence",
@@ -913,7 +928,7 @@
      "The reviewed connected-overlap constancy result is banked. The fixture now proves the exact propagation step: if one point of a preconnected chart overlap has transition unit one, every point does, and the previously banked generator-change theorem then makes the two chart generators equal throughout that overlap. This is not an orientation facade: the hypothesis is explicitly the concrete transitionUnit equality already defined from the relative-homology comparison, and the result does not introduce an opaque orientation predicate. The unproved geometric obligation remains visible: actual orientation data must establish that concrete equality at a basepoint, after which global fundamental-class gluing remains.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -2183,7 +2198,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -2200,7 +2215,10 @@
     "forall (R : Type) [CommRing R] (m : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (EuclideanSpace Real (Fin (m + 2))) M] (a b : M) (hconn : IsPreconnected (CoefficientOverlapPair.common m a b)) (x : CoefficientOverlapPair.common m a b), overlapTransitionUnit R m a b x = 1 -> forall (y : CoefficientOverlapPair.common m a b), CoefficientChartTransitionUnit.chartGenerator R m a y.1 y.2.1 = CoefficientChartTransitionUnit.chartGenerator R m b y.1 y.2.2",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-10-manifold-oriented-connected-overlap-topo3-r1},
+    :routes-2026-10-10-manifold-oriented-connected-overlap-topo3-r1,
+    :banked-by
+    :routes-2026-10-10-manifold-oriented-connected-overlap-topo3-r1,
+    :banked-commit "319779cd62f88de0475e649d581ddad8abd61077"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-chartgenerator-eq-on-preconnected-overlap-of-baseunit-eq-one,
    :kind :lemma,
@@ -2211,7 +2229,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -2227,7 +2245,10 @@
     "A transition-unit value equal to one at one point propagates to every point of a preconnected chart overlap.",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-10-manifold-oriented-connected-overlap-topo3-r1},
+    :routes-2026-10-10-manifold-oriented-connected-overlap-topo3-r1,
+    :banked-by
+    :routes-2026-10-10-manifold-oriented-connected-overlap-topo3-r1,
+    :banked-commit "319779cd62f88de0475e649d581ddad8abd61077"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-overlaptransitionunit-eq-one-of-isp,
    :kind :lemma,
