@@ -1,0 +1,53 @@
+{:baseline
+ {:git-sha "89bdf23d9809aef4c39d6aca42c5568edf635421",
+  :scope
+  "topo3 seed: HEAVY problems t00A02 t00A03 t00J02 t01A08 t01J01 t02A04 t03J02 t03J03 t91J05 t92J05 t94J04 t95J06 t96A01 t96A02 t96J06 t97A05 t97A06 t97J02 t98A02"},
+ :canonical-packages "/home/joe/code/apm-lean/.lake/packages",
+ :schema :topology/worklist-v1,
+ :canonical-root "/home/joe/code/apm-lean",
+ :edge-kinds
+ #{:representation-comparison
+   :strategy-checkpoint
+   :consumer-closure
+   :uptake
+   :documentation
+   :reusable-theorem
+   :final-adapter},
+ :campaign :topology-heavy-topo3-2026-10-10,
+ :items
+ [{:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only when every topo3 problem is closed or stopped with a compiled refutation. A missing theorem is backlog, never a stop.",
+   :phase :strategy,
+   :state :open,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:strategy
+    "First topo3 checkpoint. Reread TOPOLOGY-ROUTES.md (topo3 section and the Unassigned HEAVY table), holes/labs/topology-routes/routes-{1,2,3}.md for these problems, and run build_step.bb priorities/areas. Seed this ledger lemma DAG via :lemmas: for each problem, the chain of missing theorems from its route, tagged with :area (the routes shared tags), with :depends-on edges; import the non-BANKED nodes of TOPOLOGY-DEPENDENCY-DAG.md that lie on these problems. Then elect 1-5 rows from the highest-impact areas (surface-classification serves 7 open problems, mayer-vietoris-open-cover 5), one ConstructionTargets module per area. Problems: t00A02, t00A03, t00J02, t01A08, t01J01, t02A04, t03J02, t03J03, t91J05, t92J05, t94J04, t95J06, t96A01, t96A02, t96J06, t97A05, t97A06, t97J02, t98A02."},
+   :id :routes-2026-10-10-topo3-seed-checkpoint-1,
+   :kind :strategy-checkpoint,
+   :depends-on [],
+   :current-residual
+   "Joe 2026-10-10: third HEAVY loop over the 19 registered open problems no loop was allowed to work on.",
+   :other-consumers []}],
+ :consumer-baselines {},
+ :statuses
+ #{:open
+   :implementing
+   :done
+   :done-unreviewed
+   :probing
+   :repair
+   :needs-owner
+   :superseded
+   :probe-reviewed
+   :blocked}}

@@ -548,7 +548,7 @@
 (defn areas
   "Areas ranked by open registered problems served, over both ledgers."
   []
-  (let [ledgers (distinct [path (str here "/worklist.edn") (str here "/worklist2.edn")])
+  (let [ledgers (distinct [path (str here "/worklist.edn") (str here "/worklist2.edn") (str here "/worklist3.edn")])
         lemmas (for [l ledgers :when (.exists (io/file l))
                      i (:items (edn/read-string (slurp l))) :when (= :lemma (:kind i))]
                  (assoc i ::ledger (.getName (io/file l))))

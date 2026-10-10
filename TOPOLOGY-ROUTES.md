@@ -24,7 +24,7 @@ homotopy invariance (`AlgebraicTopology/SingularHomology/HomotopyInvariance*.lea
 ## Election rules (each strategy checkpoint)
 
 1. Only the problems in this loop's own list below (Joe, 2026-09-28: topo1 = the 12 DIRECT/ADAPTER
-   problems plus the eight-problem refill of 2026-09-29 and the six-problem refill of 2026-10-10, topo2 = the 15 FOUNDATION problems; the 33 HEAVY problems are not assigned to a loop).
+   problems plus the eight-problem refill of 2026-09-29 and the six-problem refill of 2026-10-10, topo2 = the 15 FOUNDATION problems; topo3 (Joe, 2026-10-10) = the 19 registered open HEAVY problems not taken by topo1's refills).
 2. topo1: DIRECT first, then ADAPTER, closing problems one at a time. topo2: infrastructure steps
    shared by two or more of its problems first (by the routes' shared tags), then each problem's
    remaining steps; build a step only at the generality its named problems use. Never elect generality beyond what the named
@@ -117,6 +117,14 @@ then each problem's adapter. The holds on the earlier twenty stay.
 | t96J02 | FOUNDATION | polygon-surface-open-cover, polygon-puncture-retract, wedge-of-circles-pi1, van-kampen-simply-connected-piece, polygon-boundary-word (all together = polygon-surface-pi1; shared with t97A01, t92J05, t94J04, t97A03) |
 | t97A04 | FOUNDATION | mv-connecting-naturality` (would also give induced maps on H₂ for t96J06-style torus and product problems), torus-pi1-winding-coordinates |
 | t98A03 | FOUNDATION | rp2-double-cover-and-pi1, wedge-covering-construction, wedge-van-kampen-instance (template: TorusCircleWedge), wedge-point-not-manifold, wedge-basepoint-homogeneity |
+
+### topo3 — HEAVY (Joe, 2026-10-10)
+
+A third loop (`worklist3.edn`, `runs3/`, seats topo-9..12) takes the 19 registered HEAVY
+problems with placeholders that no loop was allowed to work on: t00A02, t00A03, t00J02, t01A08, t01J01, t02A04, t03J02, t03J03, t91J05, t92J05, t94J04, t95J06, t96A01, t96A02, t96J06, t97A05, t97A06, t97J02, t98A02.
+Their shared tags are in the Unassigned table below. Elect by area reach first
+(`build_step.bb areas`: surface-classification serves 7 open problems, mayer-vietoris-open-cover
+5), one ConstructionTargets module per area, with at most one closure-directed row per checkpoint.
 
 ### Unassigned — HEAVY (33)
 
