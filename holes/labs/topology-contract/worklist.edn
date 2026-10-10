@@ -96851,90 +96851,72 @@
    :consumer :t99J01,
    :implements-lemma :lemma-iscoveringmap-restrictpathcomponent,
    :evidence
-   {:probe
-    {:residual
-     "Implement the compiled fixture in ConstructionTargets/RestrictPathComponent.lean; after review, t99J01 can use the surjective component-restricted covering before establishing its constant fiber cardinality and induced subgroup image.",
-     :outcome :go,
-     :warnings [],
-     :missing-theorems
-     [{:name "IsCoveringMap.restrictPathComponent",
-       :type
-       "For p : E -> B covering a locally path-connected path-connected base and e : E, the restriction p : {x // Joined e x} -> B is a surjective covering map.",
-       :status :proved,
-       :consumers [:t99J01],
-       :depends-on
-       ["CoveringPathComponentSurjective.componentProjection_surjective"
-        "CoveringRetainedSheetHomeomorph.retainedSheetHomeomorph"]}],
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd
-       "lake env lean /tmp/iscoveringmap-restrict-path-component.lean",
-       :exit 0,
-       :finding
-       "the clopen-domain covering restriction and surjective Joined-component specialization compile with standard axioms"}
-      {:cmd
-       "sha256sum /tmp/iscoveringmap-restrict-path-component.lean",
-       :exit 0,
-       :finding
-       "420a19c8155c5fdd8d826a3cdc28aef80383f97f61874aefa3671549fccc9ca4"}
-      {:cmd
-       "rg -n \"\\b(sorry|admit)\\b\" /tmp/iscoveringmap-restrict-path-component.lean",
-       :exit 1,
-       :expected-exit 1,
-       :finding "no placeholders"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :finding "131 registered statements match, 0 do not"}
-      {:cmd "git status --short", :exit 0, :finding "clean"}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/iscoveringmap-restrict-path-component.lean",
-       :exit 1,
-       :finding
-       "The first packaging attempt lacked an explicit topology and discreteness proof for the named RetainedIndex type, reversed the IsClopen fields, and incorrectly assumed covering maps are surjective; introduced the induced topology, used the locally path-connected path-component closed theorem, and derived surjectivity from the banked component projection."}
-      {:cmd
-       "lake env lean /tmp/iscoveringmap-restrict-path-component.lean",
-       :exit 1,
-       :finding
-       "Unfolding RetainedIndex alone did not synthesize discreteness under its explicitly induced topology; proved that induced topology is bottom from discreteness of the original covering fiber."}
-      {:cmd
-       "lake env lean /tmp/iscoveringmap-restrict-path-component.lean",
-       :exit 1,
-       :finding
-       "The first bottom-topology proof left the ambient fiber topology implicit in DiscreteTopology.eq_bot; specified the covering fiber topology explicitly."}
-      {:cmd
-       "lake env lean /tmp/iscoveringmap-restrict-path-component.lean",
-       :exit 1,
-       :finding
-       "TopologicalSpace.induced of the bottom topology was not definitionally bottom as a structure; switched to extensional equality of open-set predicates."}
-      {:cmd
-       "lake env lean /tmp/iscoveringmap-restrict-path-component.lean",
-       :exit 1,
-       :finding
-       "The first extensional proof introduced a set before reducing equality of the IsOpen functions; added function extensionality and propositional extensionality."}
-      {:cmd
-       "lake env lean /tmp/iscoveringmap-restrict-path-component.lean",
-       :exit 1,
-       :finding
-       "The open-set predicate proof initially used change before propositional extensionality; moved propext ahead of the explicit induced-open characterization."}
-      {:cmd
-       "lake env lean /tmp/iscoveringmap-restrict-path-component.lean",
-       :exit 1,
-       :finding
-       "The final IsEvenlyCovered conversion left its auxiliary fiber type ambiguous; supplied RetainedIndex explicitly."}],
-     :fixture
-     {:path "/tmp/iscoveringmap-restrict-path-component.lean",
-      :sha256
-      "420a19c8155c5fdd8d826a3cdc28aef80383f97f61874aefa3671549fccc9ca4",
-      :interface
-      "restrictClopen_isCoveringMap packages the retained-sheet homeomorphisms as evenly covered neighborhoods; IsCoveringMap.restrictPathComponent proves the Joined-component projection is both a covering map and surjective."},
-     :implementation
-     {:scope ["ConstructionTargets/RestrictPathComponent.lean"],
-      :acceptance
-      "Implement the compiled fixture declarations restrictClopen_isCoveringMap and IsCoveringMap.restrictPathComponent. Reuse the banked path-connected chart, retained-sheet homeomorphism, total-space local path connectedness, and component-projection surjectivity results. Do not specialize to ThreeCircles, count fibers, compute pi1, or close t99J01."},
-     :seat "topo-4"}},
+   {:placeholder-delta 0,
+    :residual
+    "Establish constant fiber cardinality and the induced subgroup image.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :missing-theorems
+    [{:name "IsCoveringMap.restrictPathComponent",
+      :type
+      "For p : E -> B covering a locally path-connected path-connected base and e : E, the restriction p : {x // Joined e x} -> B is a surjective covering map.",
+      :status :proved,
+      :consumers [:t99J01],
+      :depends-on
+      ["CoveringPathComponentSurjective.componentProjection_surjective"
+       "CoveringRetainedSheetHomeomorph.retainedSheetHomeomorph"]}],
+    :statement-hashes "131 registered statements match",
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :finding
+      "canonical package authority resolves to /home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "sha256sum /tmp/iscoveringmap-restrict-path-component.lean",
+      :exit 0,
+      :finding
+      "fixture hash matches 420a19c8155c5fdd8d826a3cdc28aef80383f97f61874aefa3671549fccc9ca4"}
+     {:cmd "lake build ConstructionTargets.RestrictPathComponent",
+      :exit 0,
+      :finding
+      "clopen restriction and surjective path-component covering specialization build"}
+     {:cmd
+      "lake env lean /tmp/iscoveringmap-restrict-path-component.lean",
+      :exit 0,
+      :finding "frozen fixture compiles with standard axioms"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" ConstructionTargets/RestrictPathComponent.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero source placeholders"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" /tmp/iscoveringmap-restrict-path-component.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero fixture placeholders"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short",
+      :exit 0,
+      :finding "clean worktree after commit"}],
+    :commit "86e7178f1875a32b4b904d90c2992e09cd25e70c",
+    :changed-paths ["ConstructionTargets/RestrictPathComponent.lean"],
+    :fixture
+    {:path "/tmp/iscoveringmap-restrict-path-component.lean",
+     :sha256
+     "420a19c8155c5fdd8d826a3cdc28aef80383f97f61874aefa3671549fccc9ca4",
+     :sorry-count 0},
+    :implementation
+    {:scope ["ConstructionTargets/RestrictPathComponent.lean"],
+     :declarations
+     ["ConstructionTargets.RestrictPathComponent.restrictClopen_isCoveringMap"
+      "ConstructionTargets.RestrictPathComponent.IsCoveringMap.restrictPathComponent"]},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/RestrictPathComponent.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component",
