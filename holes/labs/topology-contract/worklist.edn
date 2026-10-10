@@ -91894,6 +91894,19 @@
       :finding "131 registered statements match, 0 do not"}
      {:cmd "git diff --check HEAD^ HEAD", :exit 0}
      {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791640851792-2098-bb8d4e31",
+     :commands
+     ["git show 8acfb1fbf8899e573e7def5a87f87ce30c45fa50 --stat and recorded source inspection"
+      "lake env lean ConstructionTargets/FiniteArborescenceTotalEdgeCount.lean"
+      "sha256sum /tmp/finite-arborescence-edge-count.lean and recorded-source hash comparison"
+      "comment-stripped sorry/admit census for target and affected consumers"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show dc2a2ad8:holes/labs/topology-contract/worklist.edn)"],
+     :finding
+     "exact one-file scope and fixture hash reproduce; the generic total-arrow count and correctly oriented geodesic Schreier specialization compile with standard axioms and zero target placeholders, while complement arithmetic and basis construction remain downstream"},
     :commit "8acfb1fbf8899e573e7def5a87f87ce30c45fa50",
     :changed-paths
     ["ConstructionTargets/FiniteArborescenceTotalEdgeCount.lean"],
@@ -91916,7 +91929,7 @@
       "ConstructionTargets.FiniteSchreierChosenGeneratorEdgeCoordinates"]},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/FiniteArborescenceTotalEdgeCount.lean"],
    :dag-node
@@ -91968,7 +91981,7 @@
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
