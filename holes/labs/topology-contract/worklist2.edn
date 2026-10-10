@@ -65994,59 +65994,51 @@
    "single-consumer compactness witness for exact right-tube distance estimates",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:residual
-     "Derive rightTube_exists_near_rightCore from compactness, prove rightTubePlanarComplex_ne_zero, then construct the safe radial deformation.",
-     :outcome :go,
-     :warnings [],
-     :missing-theorems [],
-     :axioms [propext Classical.choice Quot.sound],
-     :commands
-     [{:cmd "lake env lean /tmp/t02a03_right_core_compact_probe.lean",
-       :exit 0,
-       :output
-       "isCompact_range_rightCore compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd "sha256sum /tmp/t02a03_right_core_compact_probe.lean",
-       :exit 0,
-       :output
-       "12abde2bc281f354ecf340f253e170273b1e810dd70cf0b470426fd0356fd861  /tmp/t02a03_right_core_compact_probe.lean"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_right_core_compact_probe.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :diagnostic-history
-     [{:cmd "lake env lean /tmp/t02a03_right_core_compact_probe.lean",
-       :exit 1,
-       :finding
-       "The first fixture imported T02A03GeometricTubeDeformation, whose olean is intentionally absent at probe time. Importing the banked GeometricTubeCover dependency directly makes the independent declaration compile."}],
-     :fixture
-     {:path "/tmp/t02a03_right_core_compact_probe.lean",
-      :sha256
-      "12abde2bc281f354ecf340f253e170273b1e810dd70cf0b470426fd0356fd861"},
-     :finding
-     "The right core has the same periodic Circle factorization as the banked left core, with first coordinate 1-re(z). Equality of its Circle image and real-parameter range follows from Complex.arg and Circle.exp; compactness then follows from continuity of the Circle map.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
-      :declarations
-      [{:name
-        "ConstructionTargets.T02A03GeometricTubeDeformation.rightCoreCircle",
-        :type "Circle -> apm_t02a03_E3"}
-       {:name
-        "ConstructionTargets.T02A03GeometricTubeDeformation.continuous_rightCoreCircle",
-        :type "Continuous rightCoreCircle"}
-       {:name
-        "ConstructionTargets.T02A03GeometricTubeDeformation.range_rightCoreCircle",
-        :type
-        "Set.range rightCoreCircle = Set.range apm_t02a03_rightCore"}
-       {:name
-        "ConstructionTargets.T02A03GeometricTubeDeformation.isCompact_range_rightCore",
-        :type "IsCompact (Set.range apm_t02a03_rightCore)"}]},
-     :seat "topo-8"}},
+   {:placeholder-delta {:before 0, :after 0},
+    :residual
+    "Derive rightTube_exists_near_rightCore from compactness, prove rightTubePlanarComplex_ne_zero, then construct the safe radial deformation.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["Lean reports the pre-existing unnecessarySimpa warning at module line 62; the new compactness declarations compile without additional warnings."],
+    :missing-theorems [],
+    :statement-hashes
+    {:registered "131 registered statements match, 0 do not",
+     :scoped-file-git-blob "ec85d66c86049767905364a78ce14b0f1fd9ad49"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd "lake env lean /tmp/t02a03_right_core_compact_probe.lean",
+      :exit 0}
+     {:cmd "sha256sum /tmp/t02a03_right_core_compact_probe.lean",
+      :exit 0,
+      :output
+      "12abde2bc281f354ecf340f253e170273b1e810dd70cf0b470426fd0356fd861  /tmp/t02a03_right_core_compact_probe.lean"}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeDeformation.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "cf0fb03ff36389ea75056b9bfa273cd897a43582",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+    :fixture
+    {:path "/tmp/t02a03_right_core_compact_probe.lean",
+     :sha256
+     "12abde2bc281f354ecf340f253e170273b1e810dd70cf0b470426fd0356fd861"},
+    :finding
+    "Factored the periodic right-core parametrization through Circle, proved its image equals the frozen real-parameter range using Complex.arg and Circle.exp, and obtained compactness as the continuous image of Circle.",
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/right-core-compact",
    :acceptance
