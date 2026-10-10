@@ -66091,66 +66091,59 @@
    :consumer :t02A03,
    :evidence
    {:probe
-    {:outcome :revise,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/t02a03_right_core_compact_contract.lean",
-      :sha256
-      "b7a72f3d0d451938ee56924269efba75a110cf340ec68a2c4468fac8da7a98b9"},
+    {:residual
+     "Define the polar-normal radial deformation and prove its endpoint equations, right-tube membership, and left-core avoidance.",
+     :outcome :go,
+     :warnings [],
+     :missing-theorems [],
+     :axioms [propext Classical.choice Quot.sound],
      :commands
-     [{:cmd
-       "lake env lean /tmp/t02a03_right_core_compact_contract.lean",
-       :exit 0,
-       :output "RightCoreCompact compiled."}
-      {:cmd "sha256sum /tmp/t02a03_right_core_compact_contract.lean",
+     [{:cmd "lake env lean /tmp/t02a03_right_core_compact_probe.lean",
        :exit 0,
        :output
-       "b7a72f3d0d451938ee56924269efba75a110cf340ec68a2c4468fac8da7a98b9  /tmp/t02a03_right_core_compact_contract.lean"}
+       "rightTubePlanarComplex_ne_zero compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd "sha256sum /tmp/t02a03_right_core_compact_probe.lean",
+       :exit 0,
+       :output
+       "2ded46b29051257282143a566df19fc5af7c4d2a344f70d25578291ee4896f18  /tmp/t02a03_right_core_compact_probe.lean"}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_right_core_compact_contract.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_right_core_compact_probe.lean || true)\"",
        :exit 0}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/t02a03_right_core_compact_probe.lean",
+       :exit 1,
+       :finding
+       "The initial contradiction compared algebraically equal but syntactically different square-root expressions; introducing the exact normalized distance inequality corrected the proof."}
+      {:cmd "lake env lean /tmp/t02a03_right_core_compact_probe.lean",
+       :exit 1,
+       :finding
+       "The first simplification retained p0 because the real-part equation had not been converted to p0=-1; deriving explicit coordinate equalities corrected the distance calculation."}],
+     :fixture
+     {:path "/tmp/t02a03_right_core_compact_probe.lean",
+      :sha256
+      "2ded46b29051257282143a566df19fc5af7c4d2a344f70d25578291ee4896f18"},
      :finding
-     "A zero planar coordinate forces p0=-1 and p1=0. Contradiction with right-tube membership needs an attained q in range rightCore with dist p q ≤ 1/4. The source has isCompact_range_leftCore and leftTube_exists_near_leftCore, but no symmetric compactness or witness theorem for rightCore. Compactness of the periodic right core is the single missing prerequisite; afterward the existing cthickening_eq_biUnion_closedBall argument produces q and the first coordinate gives distance at least one.",
-     :missing-theorems
-     [{:name
-       "ConstructionTargets.T02A03GeometricTubeDeformation.isCompact_range_rightCore",
-       :type "IsCompact (Set.range apm_t02a03_rightCore)",
-       :status :not-started,
-       :consumers [:t02A03],
-       :depends-on [],
-       :area "explicit-r3-tube-deformation-retraction"}],
-     :prerequisite
-     {:bounded-exception
-      "single-consumer compactness witness for exact right-tube distance estimates",
-      :consumer :t02A03,
-      :phase :probe,
-      :state :open,
-      :scope
+     "Compactness of the periodic right core turns closed-thickening membership into an attained point q=rightCore(t) at distance at most 1/4. If rightTubePlanarComplex p vanished, its real and imaginary parts would give p0=-1 and p1=0. The Euclidean distance from such p to q is at least 1 because q0=1-cos(t), contradicting the tube bound.",
+     :implementation
+     {:scope
       ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
-      :dag-node "TOPOLOGY-ROUTES.md/t02A03/right-core-compact",
-      :acceptance
-      {:probe
-       "Compile a proof that Set.range apm_t02a03_rightCore is compact by factoring the periodic parametrization through Circle, mirroring the banked left-core compactness construction. Do not claim any tube-coordinate or deformation result.",
-       :declaration
-       "ConstructionTargets.T02A03GeometricTubeDeformation.isCompact_range_rightCore",
-       :type "IsCompact (Set.range apm_t02a03_rightCore)",
-       :placeholder "the sole sorry in apm_t02a03",
-       :route-step
-       "supply attained right-core distance witnesses for the explicit tube geometry"},
-      :id :routes-2026-10-10-t02a03-right-core-compact-topo2-r1,
-      :kind :reusable-theorem,
-      :area "explicit-r3-tube-deformation-retraction",
-      :depends-on
-      [:routes-2026-10-10-t02a03-right-tube-meridian-coordinate-topo2-r1],
-      :current-residual
-      "Derive rightTube_exists_near_rightCore, prove rightTubePlanarComplex_ne_zero, then define the safe radial deformation.",
-      :other-consumers []},
-     :residual
-     "Use compactness to obtain a right-core point within 1/4 and contradict the planar singularity's first-coordinate distance."}},
-   :phase :probe,
+      :declarations
+      [{:name
+        "ConstructionTargets.T02A03GeometricTubeDeformation.rightTube_exists_near_rightCore",
+        :type
+        "forall p : apm_t02a03_E3, p ∈ apm_t02a03_rightTube -> exists q ∈ Set.range apm_t02a03_rightCore, dist p q ≤ (1 / 4 : ℝ)"}
+       {:name
+        "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubePlanarComplex",
+        :type "apm_t02a03_E3 -> ℂ"}
+       {:name
+        "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubePlanarComplex_ne_zero",
+        :type
+        "forall p : apm_t02a03_E3, p ∈ apm_t02a03_rightTube -> rightTubePlanarComplex p ≠ 0"}]},
+     :seat "topo-8"}},
+   :phase :implementation,
    :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
@@ -66169,6 +66162,18 @@
    :routes-2026-10-10-t02a03-right-tube-planar-coordinate-nonzero-topo2-r1,
    :kind :reusable-theorem,
    :area "explicit-r3-tube-deformation-retraction",
+   :declarations
+   [{:name
+     "ConstructionTargets.T02A03GeometricTubeDeformation.rightTube_exists_near_rightCore",
+     :type
+     "forall p : apm_t02a03_E3, p ∈ apm_t02a03_rightTube -> exists q ∈ Set.range apm_t02a03_rightCore, dist p q ≤ (1 / 4 : ℝ)"}
+    {:name
+     "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubePlanarComplex",
+     :type "apm_t02a03_E3 -> ℂ"}
+    {:name
+     "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubePlanarComplex_ne_zero",
+     :type
+     "forall p : apm_t02a03_E3, p ∈ apm_t02a03_rightTube -> rightTubePlanarComplex p ≠ 0"}],
    :depends-on
    [:routes-2026-10-10-t02a03-right-tube-meridian-coordinate-topo2-r1
     :routes-2026-10-10-t02a03-right-core-compact-topo2-r1],
