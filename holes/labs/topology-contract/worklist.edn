@@ -95227,6 +95227,20 @@
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791651552764-2463-535841df",
+     :commands
+     ["git show 0a14f98fbdd0e5216446907392ea597b60fdb5ba -- ConstructionTargets/KleinSquareCasesToEqvGen.lean"
+      "git diff --exit-code 0a14f98fbdd0e5216446907392ea597b60fdb5ba -- ConstructionTargets/KleinSquareCasesToEqvGen.lean"
+      "lake build ConstructionTargets.KleinSquareCasesToEqvGen"
+      "sha256sum /tmp/klein-square-cases-to-eqvgen.lean && lake env lean /tmp/klein-square-cases-to-eqvgen.lean"
+      "placeholder census on source, fixture, and problems/t93J03/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb on recorded ledger at 778b670f"],
+     :finding
+     "PASS: reviewer codex-3 verified recorded commit 0a14f98f changes only KleinSquareCasesToEqvGen.lean and the source equals that commit. Canonical packages resolve correctly; the frozen fixture hash is exact; target and fixture compile with zero placeholders; t93J03 retains exactly one placeholder; cases_eqvGen reports only propext, Classical.choice, and Quot.sound; all 131 registered statements and the recorded 826-item ledger validate. The proof covers every Cases alternative: forward and symmetric vertical-edge generators, forward and symmetric reflected horizontal-edge generators, reflexive equality, and four explicit two-generator corner paths, with interval bounds supplied by the square hypotheses. It correctly proves only Cases-to-EqvGen and leaves the reverse implication, disk-square homeomorphism, SurfaceRel transport, and quotient outside this representation boundary."},
     :commit "0a14f98fbdd0e5216446907392ea597b60fdb5ba",
     :changed-paths
     ["ConstructionTargets/KleinSquareCasesToEqvGen.lean"],
@@ -95240,7 +95254,7 @@
      :declarations ["KleinSquareCasesToEqvGen.cases_eqvGen"]},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/KleinSquareCasesToEqvGen.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/square-boundary-orbit-eqvgen/cases-to-eqvgen",
@@ -95355,7 +95369,7 @@
       "cases_eqvGen proves that, for two points in the closed unit square, every branch of the banked Cases disjunction belongs to Relation.EqvGen SquareRel, with explicit one-step, reverse, reflexive, and two-step corner witnesses."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/square-boundary-orbit-eqvgen",
@@ -96388,7 +96402,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "KleinSquareCasesToEqvGen.cases_eqvGen",
@@ -96399,7 +96413,9 @@
     :reported-by [:routes-2026-10-10-klein-square-cases-to-eqvgen-33],
     :type
     "For p and q in the closed unit square, Cases p q implies Relation.EqvGen SquareRel p q",
-    :proved-in :routes-2026-10-10-klein-square-cases-to-eqvgen-33},
+    :proved-in :routes-2026-10-10-klein-square-cases-to-eqvgen-33,
+    :banked-by :routes-2026-10-10-klein-square-cases-to-eqvgen-33,
+    :banked-commit "0a14f98fbdd0e5216446907392ea597b60fdb5ba"},
    :id :lemma-kleinsquarecasestoeqvgen-cases-eqvgen,
    :kind :lemma,
    :depends-on
