@@ -58612,53 +58612,66 @@
    "single-consumer compatibility of the two t02A03 meridian representations",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/t02a03_geometric_tube_cover.lean",
-      :sha256
-      "9bc68c8c1d5144bd2ed57807602550932e422488a96d1ca5714d59259b4517c8"},
-     :commands
-     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "apm_t02a03_circleMeridian_exp compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
-       :exit 0}
-      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "9bc68c8c1d5144bd2ed57807602550932e422488a96d1ca5714d59259b4517c8  /tmp/t02a03_geometric_tube_cover.lean"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :finding
-     "The compiled theorem identifies the two meridian models pointwise: the Circle-domain meridian evaluated at Circle.exp t is exactly the real-angle meridian at t. The proof is coordinatewise and uses Complex.exp_mul_I with the real/complex sine and cosine bridges.",
-     :residual
-     "Construct the attachment homotopy between the surviving right core and the Circle meridian, then extend to tube deformations and gluing.",
-     :implementation
-     {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"]},
-     :acceptance
-     {:source-fixture "/tmp/t02a03_geometric_tube_cover.lean",
-      :declaration "apm_t02a03_circleMeridian_exp",
-      :placeholder "the sole sorry in apm_t02a03",
-      :route-step
-      "t02A03 step 2, identify the real-angle and Circle-domain meridian representations",
-      :representation
-      {:source
-       "The Circle-domain frozen normal meridian evaluated at Circle.exp t",
-       :target "The frozen real-angle normal meridian evaluated at t",
-       :direction
-       "Exact point equality from the source Circle meridian representation to the target real-parameter meridian representation"},
-      :gates
-      ["fixture compiles"
-       "fixture contains no sorry token"
-       "fixture hash matches"
-       "statement registry matches"]}}},
+   {:placeholder-delta 0,
+    :residual
+    "Construct the attachment homotopy between the surviving right core and the Circle meridian, then extend to tube deformations and gluing.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+      :exit 0,
+      :output
+      "9bc68c8c1d5144bd2ed57807602550932e422488a96d1ca5714d59259b4517c8  /tmp/t02a03_geometric_tube_cover.lean"}
+     {:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+      :exit 0,
+      :output
+      "apm_t02a03_circleMeridian_exp compiled; axioms [propext, Classical.choice, Quot.sound]."}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeCover.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.T02A03GeometricTubeCover",
+      :exit 0,
+      :output "Build completed successfully (8240 jobs)."}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeCover.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "comment-stripped placeholder census for problems/t02A03/lean/Main.lean",
+      :exit 0,
+      :output "1"}
+     {:cmd "sha256sum problems/t02A03/lean/Main.lean",
+      :exit 0,
+      :output
+      "b123eca388ab2858ca55daf538c1ddd645022b52f5196a15f0bb516d78323d7d  problems/t02A03/lean/Main.lean"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r 50f30fa256fbc011a2f01e1f8b534fbffc2d2bbe",
+      :exit 0,
+      :output "ConstructionTargets/T02A03GeometricTubeCover.lean"}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :representation
+    {:source
+     "The Circle-domain frozen normal meridian evaluated at Circle.exp t",
+     :target "The frozen real-angle normal meridian evaluated at t",
+     :direction
+     "Exact point equality from the source Circle meridian representation to the target real-parameter meridian representation"},
+    :commit "50f30fa256fbc011a2f01e1f8b534fbffc2d2bbe",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
+    :fixture
+    {:path "/tmp/t02a03_geometric_tube_cover.lean",
+     :sha256
+     "9bc68c8c1d5144bd2ed57807602550932e422488a96d1ca5714d59259b4517c8"},
+    :declarations
+    ["ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_circleMeridian_exp"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/geometric-meridian-exp-compatibility",
