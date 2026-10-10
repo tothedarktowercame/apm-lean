@@ -88149,102 +88149,125 @@
    "Refine Mathlib's qualitative Nielsen-Schreier basis by counting the complement of a spanning tree in the finite Schreier coset quiver.",
    :other-consumers [:t97A03]}
   {:consumer :t99J01,
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/FiniteSchreierChosenGeneratorEdgeCoordinates.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/positive-index/chosen-generator-action-groupoid-coordinates/explicit-binder-repair",
+   :acceptance
+   {:implementation
+    "Make every r, n, and H parameter in edgeEquiv_left, edgeEquiv_right, edgeEquiv_label, labels_card, vertex_card, edges_card, forwardSymmEdge, reverseSymmEdge, and their orientation lemmas explicit so the module compiles with the repository's autoImplicit=false Lake option. Preserve all existing declaration meanings and standard-only axioms.",
+    :placeholder
+    "the single sorry in apm_t99j01 and apm_t97A03_bridge_invariants_of_model",
+    :route-step
+    "t99J01 step 3 and t97A03 step 8, make the banked chosen-generator coordinate prerequisite canonically importable before the shared rank equivalence is accepted",
+    :fixture
+    "/tmp/finite-schreier-chosen-generator-explicit-binders.lean",
+    :fixture-sha256
+    "f9f4560c4db2178d4a996445d78bea644cbaa8223ef8bf45618371b0d246e67c",
+    :gates
+    ["lake build ConstructionTargets.FiniteSchreierChosenGeneratorEdgeCoordinates"
+     "lake build ConstructionTargets.FiniteIndexFreeGroupSchreierRank"
+     "fixture compiles"
+     "zero fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id
+   :routes-2026-10-10-finite-schreier-chosen-generator-explicit-binders-repair-18,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-10-10-finite-schreier-chosen-generator-edge-coordinates-12],
+   :current-residual
+   "Apply the compiled explicit-binder patch, then rebuild the rank module and rerun its consumer-facing fixture from canonical oleans.",
+   :other-consumers [:t97A03]}
+  {:consumer :t99J01,
    :evidence
    {:probe
-    {:outcome :revise,
-     :seat "topo-4",
-     :fixture
-     {:path "/tmp/finite-index-free-group-schreier-rank-probe.lean",
-      :sha256
-      "5751d883226814d2b3eff08804f8c857dbe2a265f31c1c23d55aab24ab9b778a"},
-     :commands
-     [{:cmd "stat -c '%F %n' .lake/packages",
-       :exit 0,
-       :finding
-       "directory .lake/packages; canonical package authority is present"}
-      {:cmd
-       "lake env lean .lake/packages/mathlib/Mathlib/GroupTheory/FreeGroup/NielsenSchreier.lean",
-       :exit 0,
-       :finding
-       "pinned Mathlib's subgroup freeness and spanning-tree construction compile, but expose no finite-index generator-count theorem"}
-      {:cmd
-       "lake env lean /tmp/finite-index-free-group-schreier-rank-probe.lean",
-       :exit 0,
-       :finding
-       "the universal finite-index rank interface and both consumer specializations elaborate from one isolated rank-formula axiom"}
-      {:cmd
-       "sha256sum /tmp/finite-index-free-group-schreier-rank-probe.lean",
-       :exit 0,
-       :finding
-       "5751d883226814d2b3eff08804f8c857dbe2a265f31c1c23d55aab24ab9b778a"}
-      {:cmd
-       "Python comment-stripped placeholder census of /tmp/finite-index-free-group-schreier-rank-probe.lean",
-       :exit 0,
-       :finding "0"}
-      {:cmd
-       "rg -n -i \"schreier (rank|index)|rank formula|finite.index subgroup|subgroup.*rank\" .lake/packages/mathlib/Mathlib/GroupTheory/FreeGroup /home/joe/code/mathlib4-latest/Mathlib/GroupTheory/FreeGroup",
-       :exit 1,
-       :expected-exit 1,
-       :finding
-       "neither pinned nor current Mathlib contains the finite-index Schreier rank formula"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :finding "131 registered statements match, 0 do not"}
-      {:cmd "git status --short",
-       :exit 0,
-       :finding
-       "pre-existing unrelated modification: ConstructionTargets/T02A03GeometricTubeCover.lean; this read-only probe did not touch it"}],
-     :axioms
-     ["propext"
-      "Classical.choice"
-      "Quot.sound"
-      "FiniteIndexFreeGroupSchreierRankProbe.finiteIndexSubgroupEquiv"],
+    {:residual
+     "After the explicit-binder repair, rebuild the already-proved complement count and FiniteIndexFreeGroupSchreierRank modules, then compile the universal r,n equivalence and both requested specializations through a fresh import.",
+     :outcome :revise,
      :warnings
-     [{:kind :interface-axiom,
+     [{:kind :canonical-build-failure,
        :message
-       "The placeholder-free fixture uses exactly one nonstandard axiom for the finite-index Schreier rank formula; the two required specializations then compile by arithmetic reduction."}
-      {:kind :dirty-worktree,
-       :message
-       "ConstructionTargets/T02A03GeometricTubeCover.lean was already modified by another task. The probe remained read-only and did not alter or depend on that path."}],
+       "Direct lake env lean source checks accepted auto-implicit parameters, but the configured Lake library build correctly enforces autoImplicit=false. A GO would rely on stale dependency objects and is therefore refused."}],
+     :missing-theorems [],
      :prerequisite
      {:consumer :t99J01,
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/FiniteIndexFreeGroupSchreierRank.lean"],
+      ["ConstructionTargets/FiniteSchreierChosenGeneratorEdgeCoordinates.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/spanning-tree-count",
+      "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/positive-index/chosen-generator-action-groupoid-coordinates/explicit-binder-repair",
       :acceptance
-      {:placeholder
+      {:implementation
+       "Make every r, n, and H parameter in edgeEquiv_left, edgeEquiv_right, edgeEquiv_label, labels_card, vertex_card, edges_card, forwardSymmEdge, reverseSymmEdge, and their orientation lemmas explicit so the module compiles with the repository's autoImplicit=false Lake option. Preserve all existing declaration meanings and standard-only axioms.",
+       :placeholder
        "the single sorry in apm_t99j01 and apm_t97A03_bridge_invariants_of_model",
        :route-step
-       "t99J01 step 3 and t97A03 step 8, finite-index Schreier rank",
-       :declarations
-       ["finiteIndexSubgroupFreeGroupEquiv"
-        "indexSubgroupFreeGroupFinThreeEquiv"
-        "indexTwoSubgroupFreeGroupFinTwoEquiv"],
-       :implementation
-       "For H <= FreeGroup (Fin r) with H.index = n, use the coset action groupoid underlying Mathlib's NielsenSchreier construction. Its vertices are the n right cosets and its directed generator edges are Fin r times those cosets. Choose the existing geodesic spanning arborescence. Identify the vertex group at the root with H via endMulEquivSubgroup, and identify the free basis furnished by SpanningTree.endIsFree with the directed generator edges outside the tree. Prove the finite connected tree has n-1 edges, hence the complement has r*n-(n-1) = (r-1)*n+1 elements. Reindex the resulting FreeGroupBasis along an explicit finite equivalence to Fin ((r-1)*n+1), then compose its equiv with the subgroup/end-group equivalence. Export only the universal finite-rank theorem and the r=3 arbitrary-n and r=2 index-two specializations required by the two consumers.",
-       :axioms :standard-only,
+       "t99J01 step 3 and t97A03 step 8, make the banked chosen-generator coordinate prerequisite canonically importable before the shared rank equivalence is accepted",
        :fixture
-       "/tmp/finite-index-free-group-schreier-rank-probe.lean",
+       "/tmp/finite-schreier-chosen-generator-explicit-binders.lean",
        :fixture-sha256
-       "5751d883226814d2b3eff08804f8c857dbe2a265f31c1c23d55aab24ab9b778a",
-       :commands
-       ["lake env lean ConstructionTargets/FiniteIndexFreeGroupSchreierRank.lean"
-        "lake env lean /tmp/finite-index-free-group-schreier-rank-probe.lean"
-        "python3 scripts/statement-registry.py check"]},
+       "f9f4560c4db2178d4a996445d78bea644cbaa8223ef8bf45618371b0d246e67c",
+       :gates
+       ["lake build ConstructionTargets.FiniteSchreierChosenGeneratorEdgeCoordinates"
+        "lake build ConstructionTargets.FiniteIndexFreeGroupSchreierRank"
+        "fixture compiles"
+        "zero fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
       :id
-      :routes-2026-10-10-finite-index-schreier-spanning-tree-count-1,
+      :routes-2026-10-10-finite-schreier-chosen-generator-explicit-binders-repair-18,
       :kind :reusable-theorem,
-      :depends-on [],
+      :depends-on
+      [:routes-2026-10-10-finite-schreier-chosen-generator-edge-coordinates-12],
       :current-residual
-      "Refine Mathlib's qualitative Nielsen-Schreier basis by counting the complement of a spanning tree in the finite Schreier coset quiver.",
+      "Apply the compiled explicit-binder patch, then rebuild the rank module and rerun its consumer-facing fixture from canonical oleans.",
       :other-consumers [:t97A03]},
-     :residual
-     "Exactly one shared prerequisite remains: prove and orient the finite-index Schreier rank formula. Mathlib already proves subgroup freeness, while the two consumer ranks are direct specializations of the missing count."}},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd
+       "lake env lean /tmp/finite-schreier-chosen-generator-explicit-binders.lean",
+       :exit 0,
+       :finding
+       "explicit-binder repair compiles under autoImplicit false; edgeEquiv, labels_card, and edges_card use only propext, Classical.choice, and Quot.sound"}
+      {:cmd
+       "sha256sum /tmp/finite-schreier-chosen-generator-explicit-binders.lean",
+       :exit 0,
+       :finding
+       "f9f4560c4db2178d4a996445d78bea644cbaa8223ef8bf45618371b0d246e67c"}
+      {:cmd
+       "rg -n \"\\b(sorry|admit)\\b\" /tmp/finite-schreier-chosen-generator-explicit-binders.lean",
+       :exit 1,
+       :expected-exit 1,
+       :finding "no placeholders"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :finding "131 registered statements match, 0 do not"}
+      {:cmd "git status --short", :exit 0, :finding "clean"}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/finite-index-free-group-schreier-rank-final-probe.lean",
+       :exit 1,
+       :finding
+       "fresh consumer fixture could not import the rank module because no canonical olean exists"}
+      {:cmd
+       "lake build ConstructionTargets.FiniteIndexFreeGroupSchreierRank",
+       :exit 1,
+       :finding
+       "canonical build reached FiniteSchreierChosenGeneratorEdgeCoordinates and rejected its auto-implicit r, n, and H parameters under the project's autoImplicit=false option; this is the source-coherence failure masked by direct-file compilation"}],
+     :fixture
+     {:path
+      "/tmp/finite-schreier-chosen-generator-explicit-binders.lean",
+      :sha256
+      "f9f4560c4db2178d4a996445d78bea644cbaa8223ef8bf45618371b0d246e67c",
+      :interface
+      "The existing chosen-generator coordinate declarations with every r, n, and H parameter explicitly bound under set_option autoImplicit false."},
+     :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank",
@@ -88266,7 +88289,8 @@
    :kind :reusable-theorem,
    :depends-on
    [:routes-2026-10-10-checkpoint-topo1-covering-uptake-mv-repair-3
-    :routes-2026-10-10-finite-index-schreier-spanning-tree-count-1],
+    :routes-2026-10-10-finite-index-schreier-spanning-tree-count-1
+    :routes-2026-10-10-finite-schreier-chosen-generator-explicit-binders-repair-18],
    :current-residual
    "Count the non-tree edges in the finite Schreier coset quiver and orient Mathlib's Nielsen-Schreier freeness equivalence to the two required finite ranks.",
    :other-consumers [:t97A03]}
