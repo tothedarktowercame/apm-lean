@@ -95958,13 +95958,42 @@
    "Prove a covering over a locally path-connected base has locally path-connected total space, restrict each evenly covered chart to the selected open component sheets, and prove the component restriction surjective by lifting base paths.",
    :other-consumers []}
   {:bounded-exception
+   "This single-consumer transport lemma is the exact local chart fact needed to transfer local path-connectedness from each open base neighborhood to its selected covering sheet.",
+   :consumer :t99J01,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/HomeomorphLocPathConnected.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component/homeomorph-lpc",
+   :acceptance
+   {:implementation
+    "Prove that a homeomorphism X ≃ₜ Y transports LocPathConnectedSpace from Y to X, and expose the corresponding iff. Use the standard quotient-map preservation theorem. Do not construct covering charts, prove a covering total space locally path connected, restrict a path component, prove surjectivity, count fibers, or compute pi1.",
+    :placeholder "the single sorry in apm_t99j01",
+    :route-step
+    "t99J01 component-restriction step 2: transfer local path-connectedness across each covering-sheet homeomorphism",
+    :fixture "/tmp/homeomorph-loc-path-connected.lean",
+    :fixture-sha256
+    "d16687d9af908dfc7902542708a5955e71eb18e1297ac7867299ce12405e6973",
+    :gates
+    ["lake build ConstructionTargets.HomeomorphLocPathConnected"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-10-homeomorph-loc-path-connected-40,
+   :kind :reusable-theorem,
+   :depends-on [:routes-2026-10-10-covering-path-component-domain-39],
+   :current-residual
+   "Apply the transport on path-connected open base neighborhoods to prove the covering total space locally path connected, then build selected-sheet trivializations and path-lifting surjectivity.",
+   :other-consumers []}
+  {:bounded-exception
    "Single-consumer prerequisite first in the final ledger ranking.",
    :consumer :t99J01,
    :implements-lemma :lemma-iscoveringmap-restrictpathcomponent,
    :evidence
    {:probe
     {:residual
-     "The exact Joined component subtype is now compiled. The original theorem still needs inherited local path connectedness, selected-sheet local trivializations, and path-lifting surjectivity.",
+     "The component subtype is banked and homeomorphism invariance now compiles. The original theorem still needs the local covering-chart assembly, selected component sheets, and surjectivity by lifted paths.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
@@ -95974,64 +96003,65 @@
        :status :partial,
        :consumers [:t99J01],
        :depends-on
-       ["CoveringPathComponentDomain.component_isOpen"
-        "CoveringPathComponentDomain.componentPathConnectedSpace"]}],
+       ["CoveringPathComponentDomain.componentPathConnectedSpace"
+        "HomeomorphLocPathConnected.Homeomorph.locPathConnectedSpace"]}],
      :prerequisite
      {:bounded-exception
-      "This single-consumer subtype package fixes the exact Joined-based component used by T99J01ComponentSheets and supplies the openness and path-connectedness facts needed before restricting covering charts.",
+      "This single-consumer transport lemma is the exact local chart fact needed to transfer local path-connectedness from each open base neighborhood to its selected covering sheet.",
       :consumer :t99J01,
       :phase :implementation,
       :state :open,
-      :scope ["ConstructionTargets/CoveringPathComponentDomain.lean"],
+      :scope ["ConstructionTargets/HomeomorphLocPathConnected.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component/domain",
+      "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component/homeomorph-lpc",
       :acceptance
       {:implementation
-       "Define Component e as {x : E // Joined e x}. Identify its carrier with pathComponent e, prove it open when E is locally path connected, prove the carrier path connected, and install PathConnectedSpace (Component e). Do not restrict a covering map, prove local path connectedness of a covering total space, select sheets, prove surjectivity, count fibers, or compute pi1.",
+       "Prove that a homeomorphism X ≃ₜ Y transports LocPathConnectedSpace from Y to X, and expose the corresponding iff. Use the standard quotient-map preservation theorem. Do not construct covering charts, prove a covering total space locally path connected, restrict a path component, prove surjectivity, count fibers, or compute pi1.",
        :placeholder "the single sorry in apm_t99j01",
        :route-step
-       "t99J01 component-restriction step 1: package the exact Joined component as an open path-connected subtype",
-       :fixture "/tmp/covering-path-component-domain.lean",
+       "t99J01 component-restriction step 2: transfer local path-connectedness across each covering-sheet homeomorphism",
+       :fixture "/tmp/homeomorph-loc-path-connected.lean",
        :fixture-sha256
-       "bfbaa5c5a73005f4a652f205a6c36ba557c81bb56a68252dd4b2d98c512333a8",
+       "d16687d9af908dfc7902542708a5955e71eb18e1297ac7867299ce12405e6973",
        :gates
-       ["lake build ConstructionTargets.CoveringPathComponentDomain"
+       ["lake build ConstructionTargets.HomeomorphLocPathConnected"
         "fixture compiles"
         "zero source and fixture sorry"
         "standard-only axioms"
         "registry check"]},
-      :id :routes-2026-10-10-covering-path-component-domain-39,
+      :id :routes-2026-10-10-homeomorph-loc-path-connected-40,
       :kind :reusable-theorem,
-      :depends-on [],
+      :depends-on
+      [:routes-2026-10-10-covering-path-component-domain-39],
       :current-residual
-      "Prove a covering over a locally path-connected base has locally path-connected total space, restrict each evenly covered chart to the selected open component sheets, and prove the component restriction surjective by lifting base paths.",
+      "Apply the transport on path-connected open base neighborhoods to prove the covering total space locally path connected, then build selected-sheet trivializations and path-lifting surjectivity.",
       :other-consumers []},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
-     [{:cmd "lake env lean /tmp/covering-path-component-domain.lean",
+     [{:cmd "lake env lean /tmp/homeomorph-loc-path-connected.lean",
        :exit 0}
-      {:cmd "sha256sum /tmp/covering-path-component-domain.lean",
+      {:cmd "sha256sum /tmp/homeomorph-loc-path-connected.lean",
        :exit 0}
       {:cmd
-       "rg -n \"\\b(sorry|admit)\\b\" /tmp/covering-path-component-domain.lean",
+       "rg -n \"\\b(sorry|admit)\\b\" /tmp/homeomorph-loc-path-connected.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd "python3 scripts/statement-registry.py check", :exit 0}
       {:cmd "git status --short", :exit 0, :finding "clean"}],
      :diagnostic-history
-     [{:cmd "lake env lean /tmp/covering-path-component-domain.lean",
+     [{:cmd "lake env lean /tmp/homeomorph-loc-path-connected.lean",
        :exit 1,
        :finding
-       "Rewriting the PathConnectedSpace goal through the iff did not unfold the Component abbreviation; applying isPathConnected_iff_pathConnectedSpace.mp directly compiled."}],
+       "Dot notation did not resolve the newly namespaced theorem inside its companion iff; using its explicit Homeomorph namespace name compiled."}],
      :fixture
-     {:path "/tmp/covering-path-component-domain.lean",
+     {:path "/tmp/homeomorph-loc-path-connected.lean",
       :sha256
-      "bfbaa5c5a73005f4a652f205a6c36ba557c81bb56a68252dd4b2d98c512333a8",
+      "d16687d9af908dfc7902542708a5955e71eb18e1297ac7867299ce12405e6973",
       :interface
-      "Component e is the Joined path-component subtype; component_isOpen and componentPathConnectedSpace expose the open and path-connected domain needed for restriction."},
+      "Homeomorph.locPathConnectedSpace and its iff transport local path-connectedness across a homeomorphism."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component",
@@ -96051,7 +96081,8 @@
    :kind :reusable-theorem,
    :depends-on
    [:routes-2026-10-10-checkpoint-topo1-after-klein-boundary-eqvgen-28
-    :routes-2026-10-10-covering-path-component-domain-39],
+    :routes-2026-10-10-covering-path-component-domain-39
+    :routes-2026-10-10-homeomorph-loc-path-connected-40],
    :current-residual
    "Establish constant fiber cardinality and the induced subgroup image.",
    :other-consumers []}
@@ -96597,7 +96628,8 @@
    :kind :lemma,
    :depends-on
    [:lemma-coveringpathcomponentdomain-component-isopen
-    :lemma-coveringpathcomponentdomain-componentpathconnectedspace],
+    :lemma-coveringpathcomponentdomain-componentpathconnectedspace
+    :lemma-homeomorphlocpathconnected-homeomorph-locpathconnectedspace],
    :other-consumers []}
   {:consumer :t99J01,
    :phase :lemma,
@@ -97518,6 +97550,22 @@
     :banked-by :routes-2026-10-10-covering-path-component-domain-39,
     :banked-commit "3bc6577f0aa9f4dd45cf88977ec32481f857562a"},
    :id :lemma-coveringpathcomponentdomain-component,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "HomeomorphLocPathConnected.Homeomorph.locPathConnectedSpace"},
+   :lemma
+   {:name
+    "HomeomorphLocPathConnected.Homeomorph.locPathConnectedSpace",
+    :reported-by []},
+   :id
+   :lemma-homeomorphlocpathconnected-homeomorph-locpathconnectedspace,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}],
