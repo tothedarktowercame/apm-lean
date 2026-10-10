@@ -96198,87 +96198,108 @@
    "Pull back Circle.npow along collapse, prove exact n-sheet fibers, and prove path connectedness by using the firstCircle section to realize cyclic transitions between sheets.",
    :other-consumers []}
   {:bounded-exception
+   "This single-consumer construction instantiates the banked literal pullback API with the degree-n circle power map and the banked ThreeCircles collapse; it is the exact covering space whose connectedness the original row must prove.",
+   :consumer :t99J01,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/CyclicThreeCirclesPullbackCover.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/cyclic-three-circles-cover/literal-pullback",
+   :acceptance
+   {:implementation
+    "Define circlePower n : Circle -> Circle and prove it continuous. Define the literal pullback of circlePower n along the banked collapse, its projection to ThreeCircles, and prove that projection is a covering map for NeZero n using Circle.isQuotientCoveringMap_npow and LiteralCoveringPullback.covering. Expose the projection value formula. Do not count fibers, prove path connectedness, analyze monodromy, compute subgroup index, or close t99J01.",
+    :placeholder "the single sorry in apm_t99j01",
+    :route-step
+    "t99J01 cyclic-cover step 2: instantiate the literal degree-n pullback covering before fiber and connectedness proofs",
+    :fixture "/tmp/cyclic-three-circles-pullback-cover.lean",
+    :fixture-sha256
+    "def28e26cdf4dfa9d0de9f51fe83ec87a8b747228488f7a98892f2c888827c17",
+    :gates
+    ["lake build ConstructionTargets.CyclicThreeCirclesPullbackCover"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-10-cyclic-three-circles-pullback-cover-40,
+   :kind :reusable-theorem,
+   :depends-on [:routes-2026-10-10-cyclic-three-circles-collapse-39],
+   :current-residual
+   "Prove exact n-point fibers for the circle power map and its pullback, then prove the pullback path connected by cyclic transitions realized through the banked firstCircle section.",
+   :other-consumers []}
+  {:bounded-exception
    "Single-consumer prerequisite second in the final ledger ranking.",
    :consumer :t99J01,
    :implements-lemma :lemma-cyclicthreecirclespullback-pathconnected,
    :evidence
    {:probe
     {:residual
-     "The literal pullback and covering APIs are banked. After promoting the compiled collapse and section, the original row must construct the npow pullback, prove its n-sheet cardinality, and connect arbitrary pullback points using cyclic sheet transitions.",
+     "The literal positive-degree pullback is now a compiled covering. The original row still needs exact sheet cardinality and path connectedness via cyclic monodromy.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
      [{:name "cyclicThreeCirclesPullback_pathConnected",
        :type
-       "For every positive n, the literal pullback of the degree-n Circle power covering along CyclicThreeCirclesCollapse.collapse is path connected.",
+       "For every positive n, CyclicThreeCirclesPullbackCover.Pullback n is path connected.",
        :status :partial,
        :consumers [:t99J01],
        :depends-on
-       ["CyclicThreeCirclesCollapse.continuous_collapse"
+       ["CyclicThreeCirclesPullbackCover.covering"
         "CyclicThreeCirclesCollapse.collapse_firstCircle"]}],
      :prerequisite
      {:bounded-exception
-      "This single-consumer pointed collapse is the exact map required to pull the degree-n circle cover back to ThreeCircles; its right-circle section supplies the cyclic monodromy loop used in the next step.",
+      "This single-consumer construction instantiates the banked literal pullback API with the degree-n circle power map and the banked ThreeCircles collapse; it is the exact covering space whose connectedness the original row must prove.",
       :consumer :t99J01,
       :phase :implementation,
       :state :open,
-      :scope ["ConstructionTargets/CyclicThreeCirclesCollapse.lean"],
+      :scope
+      ["ConstructionTargets/CyclicThreeCirclesPullbackCover.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/cyclic-three-circles-collapse",
+      "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/cyclic-three-circles-cover/literal-pullback",
       :acceptance
       {:implementation
-       "Define collapse : ThreeCircles -> Circle by sending the TwoCircles summand constantly to 1 and the final Circle summand identically to Circle. Define firstCircle as the final-circle inclusion. Prove both maps continuous, their representative formulas, and collapse (firstCircle z) = z. Do not construct a pullback, prove covering or path connectedness, count sheets, or close t99J01.",
+       "Define circlePower n : Circle -> Circle and prove it continuous. Define the literal pullback of circlePower n along the banked collapse, its projection to ThreeCircles, and prove that projection is a covering map for NeZero n using Circle.isQuotientCoveringMap_npow and LiteralCoveringPullback.covering. Expose the projection value formula. Do not count fibers, prove path connectedness, analyze monodromy, compute subgroup index, or close t99J01.",
        :placeholder "the single sorry in apm_t99j01",
        :route-step
-       "t99J01 cyclic-cover step 1: construct the pointed collapse and final-circle section before pulling back the degree-n circle cover",
-       :fixture "/tmp/cyclic-three-circles-collapse.lean",
+       "t99J01 cyclic-cover step 2: instantiate the literal degree-n pullback covering before fiber and connectedness proofs",
+       :fixture "/tmp/cyclic-three-circles-pullback-cover.lean",
        :fixture-sha256
-       "9cc57221539ffbe10187cde732b9c42eec055f5be725612e0f01be7e638da0fd",
+       "def28e26cdf4dfa9d0de9f51fe83ec87a8b747228488f7a98892f2c888827c17",
        :gates
-       ["lake build ConstructionTargets.CyclicThreeCirclesCollapse"
+       ["lake build ConstructionTargets.CyclicThreeCirclesPullbackCover"
         "fixture compiles"
         "zero source and fixture sorry"
         "standard-only axioms"
         "registry check"]},
-      :id :routes-2026-10-10-cyclic-three-circles-collapse-39,
+      :id :routes-2026-10-10-cyclic-three-circles-pullback-cover-40,
       :kind :reusable-theorem,
-      :depends-on [],
+      :depends-on
+      [:routes-2026-10-10-cyclic-three-circles-collapse-39],
       :current-residual
-      "Pull back Circle.npow along collapse, prove exact n-sheet fibers, and prove path connectedness by using the firstCircle section to realize cyclic transitions between sheets.",
+      "Prove exact n-point fibers for the circle power map and its pullback, then prove the pullback path connected by cyclic transitions realized through the banked firstCircle section.",
       :other-consumers []},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake build ConstructionTargets.LiteralCoveringPullback ConstructionTargets.StatementSurfaceModels",
+       "lake env lean /tmp/cyclic-three-circles-pullback-cover.lean",
        :exit 0}
-      {:cmd "lake env lean /tmp/cyclic-three-circles-collapse.lean",
-       :exit 0}
-      {:cmd "sha256sum /tmp/cyclic-three-circles-collapse.lean",
+      {:cmd "sha256sum /tmp/cyclic-three-circles-pullback-cover.lean",
        :exit 0}
       {:cmd
-       "rg -n \"\\b(sorry|admit)\\b\" /tmp/cyclic-three-circles-collapse.lean",
+       "rg -n \"\\b(sorry|admit)\\b\" /tmp/cyclic-three-circles-pullback-cover.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd "python3 scripts/statement-registry.py check", :exit 0}
       {:cmd "git status --short", :exit 0, :finding "clean"}],
-     :diagnostic-history
-     [{:cmd "lake env lean /tmp/cyclic-three-circles-collapse.lean",
-       :exit 1,
-       :finding
-       "The quotient respects proof initially handled only the generator although WedgeSetoid is EqvGen; corrected by EqvGen induction."}
-      {:cmd "lake env lean /tmp/cyclic-three-circles-collapse.lean",
-       :exit 1,
-       :finding
-       "The first correction matched the generator constructor at the wrong induction layer; corrected with rel/refl/symm/trans cases."}],
+     :diagnostic-history [],
      :fixture
-     {:path "/tmp/cyclic-three-circles-collapse.lean",
+     {:path "/tmp/cyclic-three-circles-pullback-cover.lean",
       :sha256
-      "9cc57221539ffbe10187cde732b9c42eec055f5be725612e0f01be7e638da0fd",
+      "def28e26cdf4dfa9d0de9f51fe83ec87a8b747228488f7a98892f2c888827c17",
       :interface
-      "collapse : ThreeCircles -> Circle, firstCircle : Circle -> ThreeCircles, their continuity, representative formulas, and collapse_firstCircle."},
+      "circlePower, its continuity, the literal Pullback and projection, and covering for every nonzero degree."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/cyclic-three-circles-cover",
@@ -96299,7 +96320,8 @@
    :kind :reusable-theorem,
    :depends-on
    [:routes-2026-10-10-checkpoint-topo1-after-klein-boundary-eqvgen-28
-    :routes-2026-10-10-cyclic-three-circles-collapse-39],
+    :routes-2026-10-10-cyclic-three-circles-collapse-39
+    :routes-2026-10-10-cyclic-three-circles-pullback-cover-40],
    :current-residual
    "Combine the cyclic cover with component restriction and close t99J01.",
    :other-consumers []}
@@ -96732,7 +96754,8 @@
    :kind :lemma,
    :depends-on
    [:lemma-cyclicthreecirclescollapse-continuous-collapse
-    :lemma-cyclicthreecirclescollapse-collapse-firstcircle],
+    :lemma-cyclicthreecirclescollapse-collapse-firstcircle
+    :lemma-cyclicthreecirclespullbackcover-covering],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -97655,6 +97678,17 @@
     :reported-by []},
    :id
    :lemma-homeomorphlocpathconnected-homeomorph-locpathconnectedspace,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "CyclicThreeCirclesPullbackCover.covering"},
+   :lemma
+   {:name "CyclicThreeCirclesPullbackCover.covering", :reported-by []},
+   :id :lemma-cyclicthreecirclespullbackcover-covering,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}],
