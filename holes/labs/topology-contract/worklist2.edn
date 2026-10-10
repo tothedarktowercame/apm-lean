@@ -54526,11 +54526,88 @@
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
    {:probe
+    "Compile a placeholder-free inhabitant of RP2PositiveHemisphereTrivializationProbe.PositiveHemisphereTrivialization from /tmp/rp2_positive_hemisphere_trivialization_contract.lean. Build the homeomorphism from the full preimage of the positive-hemisphere image to that image times Fin 2, label the positive and antipodal sheets distinctly, and prove its first projection is exactly sphereProjection 2."},
+   :representation
+   {:source
+    "The subtype of Sphere 2 lying over the image of positiveHemisphere p under sphereProjection 2",
+    :target
+    "The product of that projective image subtype with the discrete two-element type Fin 2",
+    :direction
+    "Explicit homeomorphism from the full sphere preimage representation to the projective-image times sheet-label representation, with exact equality of the first projection to sphereProjection 2"},
+   :id
+   :routes-2026-10-10-rp2-positive-hemisphere-trivialization-topo2-r1,
+   :kind :representation-comparison,
+   :depends-on [:routes-2026-09-28-rp-smooth-atlas-topo2-r1],
+   :other-consumers [:t98A03]}
+  {:consumer :t00J07,
+   :evidence
+   {:probe
+    {:outcome :revise,
+     :seat "topo-8",
+     :fixture
+     {:path
+      "/tmp/rp2_positive_hemisphere_trivialization_contract.lean",
+      :sha256
+      "f190f179c1ac16008f07322b3605146a132707a6f3390eeec194224889eb3a82"},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/rp2_positive_hemisphere_trivialization_contract.lean",
+       :exit 0}
+      {:cmd
+       "sha256sum /tmp/rp2_positive_hemisphere_trivialization_contract.lean",
+       :exit 0,
+       :output
+       "f190f179c1ac16008f07322b3605146a132707a6f3390eeec194224889eb3a82  /tmp/rp2_positive_hemisphere_trivialization_contract.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp2_positive_hemisphere_trivialization_contract.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/rp2_positive_hemisphere_trivialization_contract.lean",
+       :exit 1,
+       :finding
+       "The first interface audit included #check IsEmbedding.homeomorphImage, but that lemma is not imported by the current module. Removing the nonessential audit line left the contract unchanged and compiled."}],
+     :finding
+     "The banked local-homeomorphism proof supplies the two component embeddings, but the exact object required by IsEvenlyCovered is a single homeomorphism from the full preimage subtype to the common image subtype times Fin 2, together with the projection equation. That comparison is now isolated in the compiled placeholder-free PositiveHemisphereTrivialization contract. It must label the positive sheet by one Fin value and the antipodal sheet by the other, use sphereProjection_preimage_image for exhaustiveness, and prove continuity in both directions from the disjoint open decomposition. Once banked, PositiveHemisphereEvenlyCovered is immediate from openness and membership already proved in RealProjectiveSmoothTarget.",
+     :residual
+     "Construct the explicit preimage-to-image-times-Fin2 homeomorphism with the stated orientation; then wrap it with positiveHemisphere_isOpen, sphereProjection_isOpenMap_of_authority, and self_mem_positiveHemisphere to inhabit PositiveHemisphereEvenlyCovered.",
+     :prerequisite
+     {:consumer :t00J07,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:probe
+       "Compile a placeholder-free inhabitant of RP2PositiveHemisphereTrivializationProbe.PositiveHemisphereTrivialization from /tmp/rp2_positive_hemisphere_trivialization_contract.lean. Build the homeomorphism from the full preimage of the positive-hemisphere image to that image times Fin 2, label the positive and antipodal sheets distinctly, and prove its first projection is exactly sphereProjection 2."},
+      :representation
+      {:source
+       "The subtype of Sphere 2 lying over the image of positiveHemisphere p under sphereProjection 2",
+       :target
+       "The product of that projective image subtype with the discrete two-element type Fin 2",
+       :direction
+       "Explicit homeomorphism from the full sphere preimage representation to the projective-image times sheet-label representation, with exact equality of the first projection to sphereProjection 2"},
+      :id
+      :routes-2026-10-10-rp2-positive-hemisphere-trivialization-topo2-r1,
+      :kind :representation-comparison,
+      :depends-on [:routes-2026-09-28-rp-smooth-atlas-topo2-r1],
+      :other-consumers [:t98A03]}}},
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:probe
     "Compile a placeholder-free inhabitant of RP2PositiveHemisphereCoveringProbe.PositiveHemisphereEvenlyCovered from /tmp/rp2_positive_hemisphere_evenly_covered_contract.lean. For each p, use U = sphereProjection 2 '' positiveHemisphere p; use sphereProjection_preimage_image to split its preimage into the positive and negative hemispheres, and construct the homeomorphism to U times Fin 2 from the banked open-embedding restriction and sphereAntipodal. Prove the projection equation required by IsEvenlyCovered."},
    :id
    :routes-2026-10-10-rp2-positive-hemisphere-evenly-covered-topo2-r1,
    :kind :reusable-theorem,
-   :depends-on [:routes-2026-09-28-rp-smooth-atlas-topo2-r1],
+   :depends-on
+   [:routes-2026-09-28-rp-smooth-atlas-topo2-r1
+    :routes-2026-10-10-rp2-positive-hemisphere-trivialization-topo2-r1],
    :other-consumers [:t98A03]}
   {:consumer :t00J07,
    :evidence
