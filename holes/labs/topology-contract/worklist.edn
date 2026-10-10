@@ -91169,6 +91169,8 @@
    :other-consumers []}
   {:consumer :t99J01,
    :stop-count 1,
+   :review-finding
+   "transport the subgroup and coset action through IsFreeGroup.toFreeGroup, or restate the source in IsFreeGroup.Generators coordinates, then compile the endpoint- and orientation-preserving edge comparison",
    :evidence
    {:residual
     "Restate the Schreier quiver directly in IsFreeGroup.Generators coordinates, or explicitly transport the subgroup and coset action through IsFreeGroup.toFreeGroup before requesting an endpoint-preserving comparison.",
@@ -91192,13 +91194,19 @@
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
      {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1791638707193-2035-4d209b31",
+     :finding
+     "transport the subgroup and coset action through IsFreeGroup.toFreeGroup, or restate the source in IsFreeGroup.Generators coordinates, then compile the endpoint- and orientation-preserving edge comparison"},
     :fixture
     {:path "/tmp/edgecomp.lean",
      :sha256
      "f6dd643332ba000c27b6cbcc241753aaee0b61e9cd5ffee9cb6b3bacd0ba12b4"},
     :seat "topo-4"},
-   :phase :probe,
-   :state :done-unreviewed,
+   :phase :implementation,
+   :state :repair,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/positive-index/action-groupoid-edge-comparison",
@@ -91225,6 +91233,7 @@
    :id
    :routes-2026-10-10-finite-schreier-action-groupoid-edge-comparison-11,
    :kind :representation-comparison,
+   :fail-count 1,
    :depends-on
    [:routes-2026-10-10-finite-schreier-coset-quiver-positive-index-3
     :routes-2026-10-10-checkpoint-topo1-after-schreier-tree-count-10],
