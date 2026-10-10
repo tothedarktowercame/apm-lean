@@ -55923,82 +55923,107 @@
    "After conjugacy is banked, derive the two winding-coordinate formulas for the induced map and combine them into the displayed integer matrix naturality equation.",
    :other-consumers []}
   {:consumer :t97A04,
+   :phase :probe,
+   :state :open,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/shared/torus-pi1-winding-coordinates/circle-pointwise-group-laws",
+   :acceptance
+   {:probe
+    "Compile and bank pointwiseMulPath, pointwiseInvPath, liftBasedLoop_pointwiseMulPath, liftBasedLoop_pointwiseInvPath, liftBasedLoopEndpointInteger_pointwiseMulPath, and liftBasedLoopEndpointInteger_pointwiseInvPath from /tmp/circle_winding_pointwise_group_laws.lean. Construct the actual pointwise product and inverse based Circle paths; use circleCover_isCoveringMap.eq_liftPath_iff' to identify their canonical lifts with the sum and negation of the original lifts; then prove the exact endpoint-integer addition and negation formulas via period_integer_unique. This supplies the winding arithmetic for t97A04 step 4 and the reusable endpoint arithmetic in t01A02 step 4.",
+    :declarations
+    ["pointwiseMulPath"
+     "pointwiseInvPath"
+     "liftBasedLoop_pointwiseMulPath"
+     "liftBasedLoop_pointwiseInvPath"
+     "liftBasedLoopEndpointInteger_pointwiseMulPath"
+     "liftBasedLoopEndpointInteger_pointwiseInvPath"],
+    :placeholder
+    "apm_t97A04_bridge_2 and apm_t01A02_bridge_fixedPoint_of_lift",
+    :route-step
+    "t97A04 step 4 winding arithmetic; t01A02 step 4 endpoint-coordinate arithmetic"},
+   :id
+   :routes-2026-10-10-circle-winding-pointwise-group-laws-two-consumers-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-10-10-checkpoint-topo2-r2
+    :routes-2026-10-10-torus-pi1-coordinate-equivalence-two-consumers-topo2-r1
+    :routes-2026-10-10-torus-pi1-projected-lift-endpoints-two-consumers-topo2-r1
+    :routes-2026-10-10-torus-addcircle-circle-coordinate-comparison-two-consumers-topo2-r1
+    :routes-2026-10-10-t97a04-frozen-torus-map-circle-conjugacy-topo2-r1],
+   :current-residual
+   "After these group laws are banked, specialize them to the two projections of circleMatrixMap and prove the final Fin-2 matrix naturality equation.",
+   :other-consumers [:t01A02]}
+  {:consumer :t97A04,
    :evidence
    {:probe
     {:outcome :revise,
      :seat "topo-8",
      :fixture
-     {:path "/tmp/torus_frozen_map_circle_conjugacy.lean",
+     {:path "/tmp/circle_winding_pointwise_group_laws.lean",
       :sha256
-      "98eecd6300a6627dfd561e51d2e9fb6fada8cb1b3772117e21e25ce351179e85"},
+      "5b287ab0d8fb95833f108950c7aa30ca5e2e6dbb7287ad85802b330b8e874db4"},
      :commands
      [{:cmd
-       "lake build ConstructionTargets.TorusPiOneWindingCoordinates",
-       :exit 0}
-      {:cmd
-       "lake env lean /tmp/torus_frozen_map_circle_conjugacy.lean",
+       "lake env lean /tmp/circle_winding_pointwise_group_laws.lean",
        :exit 0,
        :output
-       "exact frozen-map conjugacy compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "pointwise multiplication and inversion lift/endpoint laws compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/torus_frozen_map_circle_conjugacy.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/circle_winding_pointwise_group_laws.lean || true)\"",
        :exit 0}
-      {:cmd "sha256sum /tmp/torus_frozen_map_circle_conjugacy.lean",
+      {:cmd "sha256sum /tmp/circle_winding_pointwise_group_laws.lean",
        :exit 0,
        :output
-       "98eecd6300a6627dfd561e51d2e9fb6fada8cb1b3772117e21e25ce351179e85  /tmp/torus_frozen_map_circle_conjugacy.lean"}
+       "5b287ab0d8fb95833f108950c7aa30ca5e2e6dbb7287ad85802b330b8e874db4  /tmp/circle_winding_pointwise_group_laws.lean"}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
      :diagnostic-history
      [{:cmd
-       "lake env lean /tmp/torus_frozen_map_circle_conjugacy.lean",
+       "lake env lean /tmp/circle_winding_pointwise_group_laws.lean",
        :exit 1,
        :finding
-       "The first run used the stale olean predating FrozenTorus and then attempted a nonexistent Homeomorph.toContinuousMap projection. Building the canonical dependency and stating the same conjugacy pointwise removed both elaboration issues; the corrected theorem compiles."}],
+       "The first draft used inv0, which selected field inversion rather than continuous group inversion on Circle, and rewrote lift compositions in a syntactically mismatched form. Replacing continuity with fun_prop and applying the existing circleCover_comp_liftBasedLoop equations componentwise produced the compiled proofs."}],
      :finding
-     "The frozen AddCircle coordinate equivalence is now banked, but the full matrix-naturality theorem still needs to relate the concrete additive formula to the multiplicative Circle model on which torusPi1Coord is defined. The compiled fixture proves that exact conjugacy: (2*x+y,y-x) becomes (z0^2*z1,z1*z0^-1) under the banked product homeomorphism. This is an equality of the actual maps at every point, not an existence contract. Once banked, the remaining proof is algebra on the two circle winding homomorphisms and functoriality of FundamentalGroup.map.",
+     "The frozen-map conjugacy reduces matrix naturality to two universal-cover arithmetic laws that were not yet banked. The compiled placeholder-free fixture constructs actual pointwise product and inverse based paths, proves their canonical lifts are respectively the sum and negation of the original canonical lifts using covering-lift uniqueness, and concludes that liftBasedLoopEndpointInteger is additive and negating for those operations. These are the exact winding facts needed for z0^2*z1 and z1*z0^-1, and they also serve the general lift-coordinate component of t01A02.",
      :residual
-     "Bank the exact additive-to-multiplicative map conjugacy. Then prove circle winding under pointwise multiplication, square, and inverse on mapped loop classes, combine the two coordinates into the displayed [[2,1],[-1,1]] formula, and finish the original two-consumer packet.",
+     "Bank the pointwise Circle lift and endpoint-integer laws. Then specialize multiplication to gamma0 with itself and gamma1, specialize inversion to gamma0, rewrite the two projections of circleMatrixMap, and combine the results into frozenTorusPi1Coord matrix naturality.",
      :prerequisite
-     {:bounded-exception
-      "single-consumer conjugacy for the frozen t97A04 torus map",
-      :consumer :t97A04,
+     {:consumer :t97A04,
       :phase :probe,
       :state :open,
       :scope [],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t97A04/torus-pi1-winding-coordinates/frozen-map-conjugacy",
+      "TOPOLOGY-ROUTES.md/shared/torus-pi1-winding-coordinates/circle-pointwise-group-laws",
       :acceptance
       {:probe
-       "Compile and bank frozenLbar, circleMatrixMap, and frozenTorusHomeomorphCircleProd_frozenLbar from /tmp/torus_frozen_map_circle_conjugacy.lean. Define the exact additive frozen map (x,y) maps to (2*x+y,y-x), define its multiplicative Circle-coordinate map (z0,z1) maps to (z0^2*z1,z1*z0^-1), and prove pointwise that the banked AddCircle-to-Circle product homeomorphism conjugates the former to the latter. This supplies the representation equality used by t97A04 route step 4; do not claim induced fundamental-group matrix naturality in this prerequisite.",
+       "Compile and bank pointwiseMulPath, pointwiseInvPath, liftBasedLoop_pointwiseMulPath, liftBasedLoop_pointwiseInvPath, liftBasedLoopEndpointInteger_pointwiseMulPath, and liftBasedLoopEndpointInteger_pointwiseInvPath from /tmp/circle_winding_pointwise_group_laws.lean. Construct the actual pointwise product and inverse based Circle paths; use circleCover_isCoveringMap.eq_liftPath_iff' to identify their canonical lifts with the sum and negation of the original lifts; then prove the exact endpoint-integer addition and negation formulas via period_integer_unique. This supplies the winding arithmetic for t97A04 step 4 and the reusable endpoint arithmetic in t01A02 step 4.",
        :declarations
-       ["frozenLbar"
-        "circleMatrixMap"
-        "frozenTorusHomeomorphCircleProd_frozenLbar"],
-       :placeholder "apm_t97A04_bridge_2",
+       ["pointwiseMulPath"
+        "pointwiseInvPath"
+        "liftBasedLoop_pointwiseMulPath"
+        "liftBasedLoop_pointwiseInvPath"
+        "liftBasedLoopEndpointInteger_pointwiseMulPath"
+        "liftBasedLoopEndpointInteger_pointwiseInvPath"],
+       :placeholder
+       "apm_t97A04_bridge_2 and apm_t01A02_bridge_fixedPoint_of_lift",
        :route-step
-       "t97A04 step 4, exact conjugacy of the frozen torus map with its Circle-coordinate formula"},
-      :representation
-      {:source
-       "The frozen additive self-map (x,y) maps to (2*x+y,y-x) on AddCircle 1 x AddCircle 1",
-       :target
-       "The multiplicative self-map (z0,z1) maps to (z0^2*z1,z1*z0^-1) on Circle x Circle",
-       :direction
-       "Exact pointwise conjugacy from the source additive map to the target multiplicative map through frozenTorusHomeomorphCircleProd"},
+       "t97A04 step 4 winding arithmetic; t01A02 step 4 endpoint-coordinate arithmetic"},
       :id
-      :routes-2026-10-10-t97a04-frozen-torus-map-circle-conjugacy-topo2-r1,
-      :kind :representation-comparison,
+      :routes-2026-10-10-circle-winding-pointwise-group-laws-two-consumers-topo2-r1,
+      :kind :reusable-theorem,
       :depends-on
       [:routes-2026-10-10-checkpoint-topo2-r2
        :routes-2026-10-10-torus-pi1-coordinate-equivalence-two-consumers-topo2-r1
        :routes-2026-10-10-torus-pi1-projected-lift-endpoints-two-consumers-topo2-r1
-       :routes-2026-10-10-torus-addcircle-circle-coordinate-comparison-two-consumers-topo2-r1],
+       :routes-2026-10-10-torus-addcircle-circle-coordinate-comparison-two-consumers-topo2-r1
+       :routes-2026-10-10-t97a04-frozen-torus-map-circle-conjugacy-topo2-r1],
       :current-residual
-      "After conjugacy is banked, derive the two winding-coordinate formulas for the induced map and combine them into the displayed integer matrix naturality equation.",
-      :other-consumers []}}},
+      "After these group laws are banked, specialize them to the two projections of circleMatrixMap and prove the final Fin-2 matrix naturality equation.",
+      :other-consumers [:t01A02]}}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/shared/torus-pi1-winding-coordinates",
    :acceptance
@@ -56016,7 +56041,8 @@
     :routes-2026-10-10-torus-pi1-coordinate-equivalence-two-consumers-topo2-r1
     :routes-2026-10-10-torus-pi1-projected-lift-endpoints-two-consumers-topo2-r1
     :routes-2026-10-10-torus-addcircle-circle-coordinate-comparison-two-consumers-topo2-r1
-    :routes-2026-10-10-t97a04-frozen-torus-map-circle-conjugacy-topo2-r1],
+    :routes-2026-10-10-t97a04-frozen-torus-map-circle-conjugacy-topo2-r1
+    :routes-2026-10-10-circle-winding-pointwise-group-laws-two-consumers-topo2-r1],
    :current-residual
    "Exact Fin-2 endpoint-coordinate naturality is absent.",
    :other-consumers [:t01A02]}
