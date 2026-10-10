@@ -62255,44 +62255,75 @@
    "single-consumer affine planar-coordinate identity for the t02A03 complement interpolation",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:residual
-     "Implement the banked planar-coordinate interpolation identity in the scoped module; then evaluate the interpolated planar norm along the common angular ray and continue to the exact normal-coordinate formula and deleted-core exclusion.",
-     :outcome :go,
-     :warnings
-     ["/tmp/t02a03_geometric_tube_cover.lean:786:38: unnecessarySeqFocus linter warning"],
-     :acceptance
-     {:declaration "apm_t02a03_leftTubePlanarComplex_radialPoint",
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Evaluate the interpolated planar norm along the common angular direction, prove the exact normal-coordinate formula, deduce deleted-core exclusion, bundle the homotopy, and assemble the torus HomotopyEquiv.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["The source fixture has an unnecessarySeqFocus warning; the committed scoped module compiles without warnings after the proof was split into explicit coordinate branches."],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_leftTubePlanarComplex_radialPoint",
       :type
-      "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubePlanarComplex ⟨apm_t02a03_leftTubeRadialPoint tp, apm_t02a03_leftTubeRadialPoint_mem_leftTube tp⟩ = (1 - (tp.1 : Real)) • apm_t02a03_leftTubePlanarComplex ⟨(apm_t02a03_leftTubeTorusInverse (apm_t02a03_leftTubeTorusCoordinates tp.2)).1, (apm_t02a03_leftTubeTorusInverse (apm_t02a03_leftTubeTorusCoordinates tp.2)).2.1⟩ + (tp.1 : Real) • apm_t02a03_leftTubePlanarComplex ⟨tp.2.1, tp.2.2.1⟩"},
-     :commands
-     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "apm_t02a03_leftTubePlanarComplex_radialPoint compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
-       :exit 0}
-      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "3607b0dedf7784addfeced6d661ef5a5b2c8c1be34fd1de72ae3267efe85db67  /tmp/t02a03_geometric_tube_cover.lean"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :fixture
-     {:path "/tmp/t02a03_geometric_tube_cover.lean",
-      :sha256
-      "3607b0dedf7784addfeced6d661ef5a5b2c8c1be34fd1de72ae3267efe85db67"},
-     :finding
-     "The declared affine planar-coordinate identity is complete and placeholder-free. Expanding the shifted planar complex coordinate reduces both real and imaginary components to ring identities because the interpolation coefficients sum to one.",
-     :implementation
-     {:scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
-      :declarations
-      ["ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_leftTubePlanarComplex_radialPoint"]},
-     :seat "topo-8"}},
+      "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubePlanarComplex ⟨apm_t02a03_leftTubeRadialPoint tp, apm_t02a03_leftTubeRadialPoint_mem_leftTube tp⟩ = (1 - (tp.1 : Real)) • apm_t02a03_leftTubePlanarComplex ⟨(apm_t02a03_leftTubeTorusInverse (apm_t02a03_leftTubeTorusCoordinates tp.2)).1, (apm_t02a03_leftTubeTorusInverse (apm_t02a03_leftTubeTorusCoordinates tp.2)).2.1⟩ + (tp.1 : Real) • apm_t02a03_leftTubePlanarComplex ⟨tp.2.1, tp.2.2.1⟩",
+      :status :proved,
+      :consumers [:t02A03],
+      :depends-on
+      ["ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_leftTubeNormalComplex_torusInverse_coordinates"]}],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not",
+     :accepted-type-sha256
+     "3866280035ff59c0ab2dadb459f0ee84825ff2be49fe94b54c5bdd0d78429a6e"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+      :exit 0,
+      :output
+      "3607b0dedf7784addfeced6d661ef5a5b2c8c1be34fd1de72ae3267efe85db67  /tmp/t02a03_geometric_tube_cover.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03LeftTubePuncturedModel.lean",
+      :exit 0,
+      :output ""}
+     {:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+      :exit 0,
+      :output
+      "apm_t02a03_leftTubePlanarComplex_radialPoint depends on axioms: [propext, Classical.choice, Quot.sound]; fixture reports unnecessarySeqFocus at line 786"}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03LeftTubePuncturedModel.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "git diff --check -- ConstructionTargets/T02A03LeftTubePuncturedModel.lean",
+      :exit 0}],
+    :diagnostic-history
+    [{:cmd
+      "lake env lean ConstructionTargets/T02A03LeftTubePuncturedModel.lean",
+      :exit 1,
+      :output
+      "The attempted semicolon rewrite was syntactically invalid and left the real-coordinate ring goal open.",
+      :correction
+      "Split Complex.ext into explicit real and imaginary branches; the real branch uses ring and the imaginary branch closes by simp."}],
+    :commit "f287440c56e4fcf72f0ccdabc0a786ee29e7d963",
+    :changed-paths
+    ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
+    :fixture
+    {:path "/tmp/t02a03_geometric_tube_cover.lean",
+     :sha256
+     "3607b0dedf7784addfeced6d661ef5a5b2c8c1be34fd1de72ae3267efe85db67"},
+    :finding
+    "Banked the affine planar-coordinate identity; expanding the shifted complex coordinate reduces the real component to a ring identity and the imaginary component to simplification.",
+    :implementation
+    {:scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
+     :declarations
+     ["ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_leftTubePlanarComplex_radialPoint"],
+     :type
+     "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubePlanarComplex ⟨apm_t02a03_leftTubeRadialPoint tp, apm_t02a03_leftTubeRadialPoint_mem_leftTube tp⟩ = (1 - (tp.1 : Real)) • apm_t02a03_leftTubePlanarComplex ⟨(apm_t02a03_leftTubeTorusInverse (apm_t02a03_leftTubeTorusCoordinates tp.2)).1, (apm_t02a03_leftTubeTorusInverse (apm_t02a03_leftTubeTorusCoordinates tp.2)).2.1⟩ + (tp.1 : Real) • apm_t02a03_leftTubePlanarComplex ⟨tp.2.1, tp.2.2.1⟩"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/left-tube-planar-coordinate-interpolation",
@@ -63508,4 +63539,28 @@
    :kind :lemma,
    :depends-on
    [:lemma-apm-t02a03-lefttubenormalcomplex-torusinverse-coordinates],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_leftTubePlanarComplex_radialPoint",
+    :type
+    "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubePlanarComplex ⟨apm_t02a03_leftTubeRadialPoint tp, apm_t02a03_leftTubeRadialPoint_mem_leftTube tp⟩ = (1 - (tp.1 : Real)) • apm_t02a03_leftTubePlanarComplex ⟨(apm_t02a03_leftTubeTorusInverse (apm_t02a03_leftTubeTorusCoordinates tp.2)).1, (apm_t02a03_leftTubeTorusInverse (apm_t02a03_leftTubeTorusCoordinates tp.2)).2.1⟩ + (tp.1 : Real) • apm_t02a03_leftTubePlanarComplex ⟨tp.2.1, tp.2.2.1⟩"},
+   :lemma
+   {:name
+    "ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_leftTubePlanarComplex_radialPoint",
+    :reported-by
+    [:routes-2026-10-10-t02a03-left-tube-planar-coordinate-interpolation-topo2-r1],
+    :type
+    "forall tp : unitInterval × apm_t02a03_LeftTubeMinusCore, apm_t02a03_leftTubePlanarComplex ⟨apm_t02a03_leftTubeRadialPoint tp, apm_t02a03_leftTubeRadialPoint_mem_leftTube tp⟩ = (1 - (tp.1 : Real)) • apm_t02a03_leftTubePlanarComplex ⟨(apm_t02a03_leftTubeTorusInverse (apm_t02a03_leftTubeTorusCoordinates tp.2)).1, (apm_t02a03_leftTubeTorusInverse (apm_t02a03_leftTubeTorusCoordinates tp.2)).2.1⟩ + (tp.1 : Real) • apm_t02a03_leftTubePlanarComplex ⟨tp.2.1, tp.2.2.1⟩",
+    :proved-in
+    :routes-2026-10-10-t02a03-left-tube-planar-coordinate-interpolation-topo2-r1},
+   :id
+   :lemma-constructiontargets-t02a03lefttubepuncturedmodel-apm-t02a03-lefttubeplanarcomple,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t02a03lefttubepuncturedmodel-apm-t02a03-lefttubenormalcomple],
    :other-consumers []}]}
