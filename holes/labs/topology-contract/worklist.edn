@@ -87798,17 +87798,17 @@
    "Review one consumer uptake and one corrected two-consumer representation comparison.",
    :other-consumers []}
   {:consumer :t99J01,
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "No implementation commit was recorded and ConstructionTargets/T99J01PathComponentCoverRestriction.lean is absent. The fixture SHA-256 matches, but its only substantive restriction result is the nonstandard axiom pathComponentRestrictionPackage; none of the nine accepted t99j01 declarations has a frozen signature in the fixture or ConstructionTargets. Repair requires an owner-approved placeholder-free typed prerequisite fixing the chosen-component subtype/topology and basepoint, restricted map, sheet-count definition, ThreeCircles local/path-connected instance forms, IsKSheetedCover theorem, positivity and upper-bound orientations, the inclusion-induced FundamentalGroup bijection, and the MulEquiv direction from component pi1 to ambient pi1 before standard-only implementation.",
    :evidence
    {:residual
-    "Provide a placeholder-free typed prerequisite fixing the chosen-component subtype and topology, restricted cover map, sheet-count definition, ThreeCircles connectivity instances, component-cover theorem, bounds, induced-pi1 bijection, and MulEquiv orientation; then retry the final adapter.",
+    "Supply the reviewed placeholder-free typed prerequisite fixing the component representation, basepoint, restricted map, sheet-count equation, connectivity instance forms, cover and bound theorem orientations, pi1 bijection, and component-to-ambient MulEquiv; then retry implementation.",
     :outcome :stop,
     :warnings
     [{:kind :specification-boundary,
       :message
-      "The generic helper definitions in the fixture do not fix the accepted t99j01 API, and its only substantive result is axiomatized."}],
+      "The reviewed row still lacks exact types for every accepted declaration and replaces the restriction package with a nonstandard axiom."}],
     :disposition :stop,
     :axioms
     ["propext"
@@ -87817,33 +87817,26 @@
      "T99J01PathComponentRestrictionProbe.pathComponentRestrictionPackage"],
     :author "topo-2",
     :reason
-    "The frozen fixture is not a standard-only implementation specification for the accepted API. It defines generic probe-local componentAt, componentCoverMap, and componentSheets, then assumes the entire covering restriction and pi1-bijectivity result as pathComponentRestrictionPackage. None of the nine accepted t99j01 declarations has a Lean signature in the fixture or ConstructionTargets, including the orientation and type of t99j01ComponentFundamentalGroupEquiv and the instance form of the two ThreeCircles connectivity declarations. Implementing those names from prose would invent the public interface and conceal the nonstandard fixture axiom. A placeholder-free typed prerequisite must expose the restriction theorem and exact accepted signatures before this final adapter can be implemented.",
+    "Fresh repair verification confirms that the required prerequisite has not appeared. The scoped module is absent, none of the nine accepted declarations has a frozen or banked Lean signature, and the fixture still assumes all substantive mathematics as pathComponentRestrictionPackage. Without fixed types for the component subtype and basepoint, restricted map, sheet count, connectivity instances, bounds, induced FundamentalGroup bijection, and MulEquiv direction, implementing the prose would invent the consumer interface. Standard-only repair therefore requires the placeholder-free typed prerequisite identified by review.",
     :commands
     [{:cmd
       "sha256sum /tmp/t99j01-path-component-sheet-restriction-probe.lean",
       :exit 0,
-      :finding "The fixture hash matches the recorded hash."}
+      :finding "The fixture hash still matches the recorded hash."}
      {:cmd
       "rg for all nine accepted declaration signatures in ConstructionTargets and the fixture",
       :exit 1,
       :expected-exit 1,
-      :finding
-      "None of the nine accepted declarations has a frozen or banked signature."}
+      :finding "The required typed API remains absent."}
      {:cmd
       "lake env lean /tmp/t99j01-path-component-sheet-restriction-probe.lean",
       :exit 0,
       :finding
-      "The fixture compiles, but pathComponent_isKSheetedCover depends on pathComponentRestrictionPackage."}
+      "The fixture compiles only with pathComponentRestrictionPackage in the axiom set of its exported theorem."}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
      {:cmd "git status --short", :exit 0, :finding "clean"}],
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1791628086929-1654-5d3af386",
-     :finding
-     "No implementation commit was recorded and ConstructionTargets/T99J01PathComponentCoverRestriction.lean is absent. The fixture SHA-256 matches, but its only substantive restriction result is the nonstandard axiom pathComponentRestrictionPackage; none of the nine accepted t99j01 declarations has a frozen signature in the fixture or ConstructionTargets. Repair requires an owner-approved placeholder-free typed prerequisite fixing the chosen-component subtype/topology and basepoint, restricted map, sheet-count definition, ThreeCircles local/path-connected instance forms, IsKSheetedCover theorem, positivity and upper-bound orientations, the inclusion-induced FundamentalGroup bijection, and the MulEquiv direction from component pi1 to ambient pi1 before standard-only implementation."},
     :fixture
     {:path "/tmp/t99j01-path-component-sheet-restriction-probe.lean",
      :sha256
@@ -87853,7 +87846,7 @@
      :proof-placeholder-count 1},
     :seat "topo-2"},
    :phase :implementation,
-   :state :repair,
+   :state :needs-owner,
    :scope
    ["ConstructionTargets/T99J01PathComponentCoverRestriction.lean"],
    :dag-node
