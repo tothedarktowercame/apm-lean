@@ -253,6 +253,8 @@ theorem frozenLbarIntegralH1_map_commutes :
   exact congrArg Multiplicative.toAdd h
 
 set_option maxHeartbeats 800000 in
+/-- The frozen torus endomorphism acts by `frozenMatrixAddHom` in the aligned
+degree-one integral homology coordinates. -/
 theorem frozenLbarModuleH1_map_commutes :
     (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
         (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom frozenLbar)) ≫
