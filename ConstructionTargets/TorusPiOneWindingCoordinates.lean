@@ -195,4 +195,29 @@ theorem circleMatrixPi1Map_mk_coord_one
     ← torusPi1Coord_mk_apply_zero_eq_liftEndpoint,
     ← torusPi1Coord_mk_apply_one_eq_liftEndpoint]
 
+theorem circleMatrixPi1Map_coord_zero
+    (p : FundamentalGroup (Circle × Circle) ((1 : Circle), (1 : Circle))) :
+    (torusPi1Coord (circleMatrixPi1Map p)).toAdd 0 =
+      2 * (torusPi1Coord p).toAdd 0 + (torusPi1Coord p).toAdd 1 := by
+  induction p using Quotient.inductionOn with
+  | _ gamma => exact circleMatrixPi1Map_mk_coord_zero gamma
+
+theorem circleMatrixPi1Map_coord_one
+    (p : FundamentalGroup (Circle × Circle) ((1 : Circle), (1 : Circle))) :
+    (torusPi1Coord (circleMatrixPi1Map p)).toAdd 1 =
+      (torusPi1Coord p).toAdd 1 - (torusPi1Coord p).toAdd 0 := by
+  induction p using Quotient.inductionOn with
+  | _ gamma => exact circleMatrixPi1Map_mk_coord_one gamma
+
+theorem circleMatrixPi1Map_naturality
+    (p : FundamentalGroup (Circle × Circle) ((1 : Circle), (1 : Circle))) :
+    (torusPi1Coord (circleMatrixPi1Map p)).toAdd =
+      fun i => Fin.cases
+        (2 * (torusPi1Coord p).toAdd 0 + (torusPi1Coord p).toAdd 1)
+        (fun _ => (torusPi1Coord p).toAdd 1 - (torusPi1Coord p).toAdd 0) i := by
+  funext i
+  fin_cases i
+  · exact circleMatrixPi1Map_coord_zero p
+  · exact circleMatrixPi1Map_coord_one p
+
 end ConstructionTargets.TorusPiOneWindingCoordinates
