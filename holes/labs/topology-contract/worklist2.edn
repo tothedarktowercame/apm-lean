@@ -66483,7 +66483,51 @@
   {:bounded-exception
    "single-consumer right-core angular denominator required for a tube-preserving deformation",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:residual
+     "Normalize the right-core angular coordinate, construct its disk-normal coordinate and reconstruction, then express the meridian deformation inside the radius-1/4 tubular model.",
+     :outcome :go,
+     :warnings [],
+     :missing-theorems [],
+     :axioms [propext Classical.choice Quot.sound],
+     :commands
+     [{:cmd
+       "rg -n \"t02A03|explicit-r3-tube-deformation-retraction\" TOPOLOGY-ROUTES.md holes/labs/topology-routes/routes-{1,2,3}.md | head -120",
+       :exit 0}
+      {:cmd "lake env lean /tmp/t02a03_right_core_compact_probe.lean",
+       :exit 0,
+       :output
+       "rightTubeCorePlanarComplex_ne_zero compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd "sha256sum /tmp/t02a03_right_core_compact_probe.lean",
+       :exit 0,
+       :output
+       "683e9eada453ff5d4dad755b194c9a232af4264471300cb4c1fcbde43d673e15  /tmp/t02a03_right_core_compact_probe.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_right_core_compact_probe.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :fixture
+     {:path "/tmp/t02a03_right_core_compact_probe.lean",
+      :sha256
+      "683e9eada453ff5d4dad755b194c9a232af4264471300cb4c1fcbde43d673e15"},
+     :finding
+     "For a right-tube point, vanishing of (1-p0)+i*p1 forces p0=1 and p1=0. The attained right-core witness then has distance at least 1 by cos^2+sin^2=1, contradicting the radius-1/4 tube bound.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+      :declarations
+      [{:name
+        "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCorePlanarComplex",
+        :type "apm_t02a03_E3 -> Complex"}
+       {:name
+        "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCorePlanarComplex_ne_zero",
+        :type
+        "forall p : apm_t02a03_E3, p in apm_t02a03_rightTube -> rightTubeCorePlanarComplex p != 0"}]},
+     :seat "topo-8"}},
+   :phase :implementation,
    :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
@@ -66502,6 +66546,14 @@
    :routes-2026-10-10-t02a03-right-core-angular-denominator-topo2-r1,
    :kind :reusable-theorem,
    :area "explicit-r3-tube-deformation-retraction",
+   :declarations
+   [{:name
+     "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCorePlanarComplex",
+     :type "apm_t02a03_E3 -> Complex"}
+    {:name
+     "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCorePlanarComplex_ne_zero",
+     :type
+     "forall p : apm_t02a03_E3, p in apm_t02a03_rightTube -> rightTubeCorePlanarComplex p != 0"}],
    :depends-on
    [:routes-2026-10-10-t02a03-right-tube-polar-reconstruction-topo2-r1],
    :current-residual
