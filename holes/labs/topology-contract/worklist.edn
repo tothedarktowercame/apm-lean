@@ -88219,17 +88219,17 @@
   {:consumer :t99J01,
    :owner-reopen
    "Owner reopen 2026-10-10 (claude-14): both STOPs cite missing approved signatures for declarations the acceptance lists in prose. Under work-prompt.md WHAT IS FROZEN, only the registered statement and the fixture interface-axiom types are frozen; design the supporting signatures, discharge the frozen axiom type with standard axioms, and STOP only on a mathematical boundary.",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "No implementation commit was recorded and ConstructionTargets/T99J01ExplicitConnectedCyclicCover.lean is absent. The fixture SHA-256 matches, but it contains one nonstandard axiom, cyclicThreeCirclesCoverExists, from which the final existential is immediate; cyclicThreeCirclesCoverTotal, cyclicThreeCirclesCoverMap, cyclicThreeCirclesCover_pathConnected, and cyclicThreeCirclesCover_isKSheeted are absent from both the fixture and ConstructionTargets. Repair requires an owner-approved placeholder-free representation fixture fixing the cyclic graph quotient type and relation, its coinduced topology, the projection to ThreeCircles, away-from-wedge and wedge-point covering charts, exact Fin n fiber equivalence, and the four concrete declaration signatures before a standard-only implementation can be reviewed.",
    :evidence
    {:residual
-    "Add a placeholder-free typed prerequisite that fixes the cyclic edge quotient and relation, coinduced topology, projection to ThreeCircles, away-from-wedge and wedge-point charts, Fin n fiber equivalence, and all four concrete declaration signatures; then retry the standard-only implementation.",
+    "Implement the degree-n circle cover and the collapse ThreeCircles to Circle, then prove cyclicThreeCirclesPullback_pathConnected by lifted cyclic monodromy; the existing pullback API supplies the covering-map and fiber-cardinality parts.",
     :outcome :stop,
     :warnings
-    [{:kind :specification-boundary,
+    [{:kind :missing-mathematical-prerequisite,
       :message
-      "The accepted concrete declaration names have no Lean types, while the fixture replaces their entire construction with one axiom."}],
+      "Generic pullback covering and exact fibers are available; path-connectedness from cyclic monodromy is not."}],
     :disposition :stop,
     :axioms
     ["propext"
@@ -88238,28 +88238,26 @@
      "T99J01ExplicitConnectedCyclicCoverProbe.cyclicThreeCirclesCoverExists"],
     :author "topo-2",
     :reason
-    "Fresh verification confirms the reviewed specification boundary. The frozen fixture still derives only exists_connected_cyclic_cover from the nonstandard axiom cyclicThreeCirclesCoverExists. Neither the fixture nor ConstructionTargets fixes Lean signatures for cyclicThreeCirclesCoverTotal, cyclicThreeCirclesCoverMap, cyclicThreeCirclesCover_pathConnected, or cyclicThreeCirclesCover_isKSheeted, and the scoped module remains absent. Implementing the prose would require selecting an unapproved quotient relation, topology, projection, and covering-chart API. That would invent the representation contract, so this row cannot be repaired standard-only until a placeholder-free typed representation fixture or prerequisite row supplies it.",
+    "The helper interfaces are locally designable, but the standard library and banked targets stop before the mathematical theorem needed here. LiteralPullbackCover proves that pullbacks preserve IsCoveringMap and fiber cardinality, and Mathlib supplies circle covering maps, but neither supplies connectedness of the pullback from cyclic monodromy. A sufficient missing prerequisite is theorem cyclicThreeCirclesPullback_pathConnected (n : ℕ) (hn : 0 < n) : PathConnectedSpace (ConstructionTargets.LiteralPullbackCover.Pullback (circleDegreeMap n) threeCirclesFirstCircle), where circleDegreeMap is the standard degree-n circle cover and threeCirclesFirstCircle collapses the other two wedge circles. Proving this requires constructing those maps on the nested PointWedgeQuotient, calculating the lifted cyclic monodromy, and showing every pullback point is joined to the chosen sheet; no such monodromy-transitivity-to-path-connectedness theorem or explicit cyclic graph realization is banked. Without that theorem, generic pullback covering and fiber-cardinality results establish all requirements except the frozen PathConnectedSpace conjunct. Assuming connectedness or the final existential would violate standard-only acceptance.",
     :commands
     [{:cmd
       "sha256sum /tmp/t99j01-explicit-connected-cyclic-cover-probe.lean",
       :exit 0,
-      :finding
-      "The frozen fixture hash still matches d96931e1e28365b8b50d79de23a025047832474a1919caedb6f5aad459495442."}
-     {:cmd
-      "rg -n \"^(def|theorem|instance) (cyclicThreeCirclesCoverTotal|cyclicThreeCirclesCoverMap|cyclicThreeCirclesCover_pathConnected|cyclicThreeCirclesCover_isKSheeted)\" ConstructionTargets /tmp/t99j01-explicit-connected-cyclic-cover-probe.lean",
-      :exit 1,
-      :expected-exit 1,
-      :finding
-      "None of the four required concrete declarations has a frozen or banked signature."}
+      :finding "The frozen fixture hash matches."}
      {:cmd
       "lake env lean /tmp/t99j01-explicit-connected-cyclic-cover-probe.lean",
       :exit 0,
       :finding
-      "The fixture compiles, but its exported existential depends on cyclicThreeCirclesCoverExists."}
+      "The fixture compiles, and its exported theorem still depends on the nonstandard axiom cyclicThreeCirclesCoverExists."}
+     {:cmd
+      "rg -n \"pullback.*(PathConnected|Connected)|PathConnected.*pullback|monodromy.*transitive|transitive.*monodromy|Connected.*cover.*monodromy|cyclicThreeCirclesCover\" ConstructionTargets .lake/packages/mathlib/Mathlib -g '*.lean'",
+      :exit 1,
+      :expected-exit 1,
+      :finding
+      "No theorem connects cyclic/transitive monodromy to path-connectedness of the pullback, and no explicit cyclic ThreeCircles cover is banked."}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
-      :finding "131 registered statements match, 0 do not"}
-     {:cmd "git status --short", :exit 0, :finding "clean"}],
+      :finding "131 registered statements match, 0 do not"}],
     :fixture
     {:path "/tmp/t99j01-explicit-connected-cyclic-cover-probe.lean",
      :sha256
@@ -88269,7 +88267,7 @@
      :proof-placeholder-count 1},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/T99J01ExplicitConnectedCyclicCover.lean"],
    :dag-node
