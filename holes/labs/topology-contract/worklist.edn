@@ -98657,15 +98657,47 @@
    "Prove the homotopy respects EqvGen for relations supported on the radius-one boundary and descend it to the outer quotient piece; then construct the annulus comparison and the two boundary quotient-to-ThreeCircles identifications with vertex and inclusion formulas.",
    :other-consumers []}
   {:bounded-exception
+   "This single-consumer prerequisite proves the exact relation compatibility required to descend the banked outer radial deformation through the polygon quotient.",
+   :consumer :t97A01,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/PolygonOuterRadialRelation.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/outer-radial-relation",
+   :acceptance
+   {:implementation
+    "Promote the exact fixture. Restrict an arbitrary disk relation to the outer radial source. Assuming every related pair lies on radius one, prove each radial time slice preserves the restricted relation and its EqvGen closure, define the induced quotient time-slice function, prove its representative formula and identity-at-zero formula, and prove every canonical SurfaceRel is supported on radius one. Do not prove continuity of the quotient homotopy, identify the outer quotient with the open-piece subtype, construct boundary graph homeomorphisms, identify ThreeCircles or punctured disks, compute invariants, or close t97A01.",
+    :placeholder "the single sorry in apm_t97a01",
+    :route-step
+    "polygon radial open-cover step 4: prove radial time slices respect the edge relation before continuous quotient descent",
+    :fixture "/tmp/polygon-outer-radial-relation.lean",
+    :fixture-sha256
+    "7840236ab5ade64798a161a3925ff285cea0be5004a5022c6dc65c90ec0861ea",
+    :gates
+    ["lake build ConstructionTargets.PolygonOuterRadialRelation"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-10-polygon-outer-radial-relation-44,
+   :kind :reusable-theorem,
+   :area "polygon-surface-open-cover",
+   :depends-on
+   [:routes-2026-10-10-polygon-outer-radial-deformation-43],
+   :current-residual
+   "Use quotient-product continuity to assemble the descended continuous homotopy and compare the restricted-relation quotient with the outerOpen subtype; then build the annulus model and the two boundary quotient-to-ThreeCircles identifications with vertex and inclusion formulas.",
+   :other-consumers []}
+  {:bounded-exception
    "This single-consumer concrete quotient package is the other final backlog lemma on t97A01 and supplies the actual two polygon models required by its frozen statement.",
    :consumer :t97A01,
    :implements-lemma :lemma-polygonradialopencoverpackages,
    :evidence
    {:probe
     {:residual
-     "The continuous source deformation to the boundary is compiled. The remaining package needs quotient descent, the annular punctured-disk model, both boundary ThreeCircles identifications, vertex classes, and literal inclusion equations.",
+     "Radial time slices now preserve the polygon relation and EqvGen closure and induce quotient functions. The remaining package needs continuous quotient descent, outer-piece comparison, annular punctured-disk identification, boundary ThreeCircles models for both words, vertex classes, and literal inclusions.",
      :outcome :revise,
-     :warnings [],
+     :warnings
+     ["A concurrent unrelated modification exists at ConstructionTargets/SingularExcision.lean; this read-only probe did not modify or inspect its contents."],
      :missing-theorems
      [{:name "polygonRadialOpenCoverPackages",
        :type
@@ -98673,88 +98705,97 @@
        :status :partial,
        :consumers [:t97A01],
        :depends-on
-       ["PolygonRadialOpenCover.surfacePackage"
-        "PolygonOuterRadialDeformation.radialHomotopy"
+       ["PolygonOuterRadialRelation.radialHomotopy_eqvGen"
         "polygonRadialOuterQuotientDeformation"
         "polygonBoundaryThreeCircles"
         "polygonAnnulusPuncturedDisk"],
        :area "polygon-surface-open-cover"}
-      {:name "PolygonOuterRadialDeformation.radialHomotopy",
+      {:name "PolygonOuterRadialRelation.radialHomotopy_eqvGen",
        :type
-       "A continuous homotopy of the outer radial source, identity at zero, landing at radius one at time one, and fixed on radius-one points.",
+       "For a boundary-supported disk relation, every radial time slice preserves the EqvGen closure of its restriction to the outer radial source.",
        :status :proved,
        :consumers [:t97A01],
-       :depends-on ["PolygonRadialOpenCover.outerSource"],
+       :depends-on ["PolygonOuterRadialDeformation.radialHomotopy"],
+       :area "polygon-surface-open-cover"}
+      {:name "PolygonOuterRadialRelation.surfaceRel_boundary",
+       :type
+       "Every generating pair of SurfaceRel orientable genus consists of radius-one disk points.",
+       :status :proved,
+       :consumers [:t97A01],
+       :depends-on ["RadialQuotientOpenSets.norm_edgePoint"],
        :area "polygon-surface-open-cover"}],
      :prerequisite
      {:bounded-exception
-      "This single-consumer prerequisite supplies the continuous source-level radial homotopy whose boundary-fixing formula is required before it can descend through either six-edge quotient relation.",
+      "This single-consumer prerequisite proves the exact relation compatibility required to descend the banked outer radial deformation through the polygon quotient.",
       :consumer :t97A01,
       :phase :implementation,
       :state :open,
-      :scope
-      ["ConstructionTargets/PolygonOuterRadialDeformation.lean"],
+      :scope ["ConstructionTargets/PolygonOuterRadialRelation.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/outer-radial-deformation",
+      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/outer-radial-relation",
       :acceptance
       {:implementation
-       "Promote the exact fixture. On the banked outerSource radius > 1/4, define the straight radial scaling coefficient (1-t)+t/r and the resulting homotopy. Prove positivity, preservation of the closed disk and outer band, continuity, the identity formula at time zero, radius one at time one, and pointwise fixation of radius-one points. Do not descend the homotopy through a quotient, construct boundary graph quotients, identify ThreeCircles or punctured disks, compute invariants, or close t97A01.",
+       "Promote the exact fixture. Restrict an arbitrary disk relation to the outer radial source. Assuming every related pair lies on radius one, prove each radial time slice preserves the restricted relation and its EqvGen closure, define the induced quotient time-slice function, prove its representative formula and identity-at-zero formula, and prove every canonical SurfaceRel is supported on radius one. Do not prove continuity of the quotient homotopy, identify the outer quotient with the open-piece subtype, construct boundary graph homeomorphisms, identify ThreeCircles or punctured disks, compute invariants, or close t97A01.",
        :placeholder "the single sorry in apm_t97a01",
        :route-step
-       "polygon radial open-cover step 3: construct the boundary-fixing outer-band radial deformation before quotient descent",
-       :fixture "/tmp/polygon-outer-radial-deformation.lean",
+       "polygon radial open-cover step 4: prove radial time slices respect the edge relation before continuous quotient descent",
+       :fixture "/tmp/polygon-outer-radial-relation.lean",
        :fixture-sha256
-       "e27319b916d76ca7c4e5235ff298fecd838e3b557ebd38af6721f70de7c2ed37",
+       "7840236ab5ade64798a161a3925ff285cea0be5004a5022c6dc65c90ec0861ea",
        :gates
-       ["lake build ConstructionTargets.PolygonOuterRadialDeformation"
+       ["lake build ConstructionTargets.PolygonOuterRadialRelation"
         "fixture compiles"
         "zero source and fixture sorry"
         "standard-only axioms"
         "registry check"]},
-      :id :routes-2026-10-10-polygon-outer-radial-deformation-43,
+      :id :routes-2026-10-10-polygon-outer-radial-relation-44,
       :kind :reusable-theorem,
       :area "polygon-surface-open-cover",
-      :depends-on [:routes-2026-10-10-polygon-radial-open-cover-42],
+      :depends-on
+      [:routes-2026-10-10-polygon-outer-radial-deformation-43],
       :current-residual
-      "Prove the homotopy respects EqvGen for relations supported on the radius-one boundary and descend it to the outer quotient piece; then construct the annulus comparison and the two boundary quotient-to-ThreeCircles identifications with vertex and inclusion formulas.",
+      "Use quotient-product continuity to assemble the descended continuous homotopy and compare the restricted-relation quotient with the outerOpen subtype; then build the annulus model and the two boundary quotient-to-ThreeCircles identifications with vertex and inclusion formulas.",
       :other-consumers []},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
-     [{:cmd "lake env lean /tmp/polygon-outer-radial-deformation.lean",
+     [{:cmd "lake env lean /tmp/polygon-outer-radial-relation.lean",
        :exit 0,
        :finding
-       "The continuous outer-band radial homotopy and all endpoint and boundary-fixing formulas compile with standard axioms."}
-      {:cmd "sha256sum /tmp/polygon-outer-radial-deformation.lean",
+       "Relation and EqvGen preservation, quotient time slices, the zero endpoint, and canonical SurfaceRel boundary support compile with standard axioms."}
+      {:cmd "sha256sum /tmp/polygon-outer-radial-relation.lean",
        :exit 0,
        :finding
-       "e27319b916d76ca7c4e5235ff298fecd838e3b557ebd38af6721f70de7c2ed37"}
+       "7840236ab5ade64798a161a3925ff285cea0be5004a5022c6dc65c90ec0861ea"}
       {:cmd
-       "rg -n \"\\b(sorry|admit)\\b\" /tmp/polygon-outer-radial-deformation.lean",
+       "rg -n \"\\b(sorry|admit)\\b\" /tmp/polygon-outer-radial-relation.lean",
        :exit 1,
        :expected-exit 1,
        :finding "No fixture placeholders."}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :finding "131 registered statements match, 0 do not."}
-      {:cmd "git status --short", :exit 0, :finding "clean"}],
+      {:cmd "git status --short",
+       :exit 0,
+       :finding
+       "The worktree contains an unrelated concurrent modification: ConstructionTargets/SingularExcision.lean."}],
      :diagnostic-history
-     [{:cmd "lake env lean /tmp/polygon-outer-radial-deformation.lean",
+     [{:cmd "lake env lean /tmp/polygon-outer-radial-relation.lean",
        :exit 1,
        :finding
-       "The first draft used real scalar-action instances unavailable for Complex and simplified closed-ball membership too aggressively; expressing scaling as complex multiplication and exposing the disk distance inequality corrected the construction."}
-      {:cmd "lake env lean /tmp/polygon-outer-radial-deformation.lean",
+       "The initial EqvGen transitivity branch used dot notation that selected incompatible implicit universes; applying Relation.EqvGen.trans explicitly resolved the induction branch."}
+      {:cmd "lake env lean /tmp/polygon-outer-radial-relation.lean",
        :exit 1,
        :finding
-       "The time-one norm proof still contained the unreduced coefficient and complex norm; unfolding scale and rewriting real absolute value by positivity completed the endpoint calculation."}],
+       "The SurfaceRel boundary specialization initially omitted the namespace exporting norm_edgePoint; opening RadialQuotientOpenSets resolved the references."}],
      :fixture
-     {:path "/tmp/polygon-outer-radial-deformation.lean",
+     {:path "/tmp/polygon-outer-radial-relation.lean",
       :sha256
-      "e27319b916d76ca7c4e5235ff298fecd838e3b557ebd38af6721f70de7c2ed37",
+      "7840236ab5ade64798a161a3925ff285cea0be5004a5022c6dc65c90ec0861ea",
       :interface
-      "radialHomotopy continuously deforms the outer radial source to radius one, starts at the identity, lands on the boundary at time one, and fixes every boundary point for all times."},
+      "OuterRel restricts a disk-edge relation to the outer source; every radial time slice preserves boundary-supported generators and their EqvGen closure; quotientTimeSlice descends the set-level map; every canonical SurfaceRel is boundary-supported."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -98777,7 +98818,8 @@
    [:routes-2026-10-10-checkpoint-topo1-after-t99j01-covering-prerequisites-38
     :routes-2026-10-10-radial-quotient-open-sets-41
     :routes-2026-10-10-polygon-radial-open-cover-42
-    :routes-2026-10-10-polygon-outer-radial-deformation-43],
+    :routes-2026-10-10-polygon-outer-radial-deformation-43
+    :routes-2026-10-10-polygon-outer-radial-relation-44],
    :current-residual
    "Combine the concrete cover packages with the strict overlap squares, banked Smith normalization, and final t97A01 assembly.",
    :other-consumers []}
@@ -99283,7 +99325,8 @@
     :lemma-polygonboundarythreecircles
     :lemma-polygonannuluspunctureddisk
     :lemma-polygonouterradialdeformation-radialhomotopy
-    :lemma-polygonradialouterquotientdeformation],
+    :lemma-polygonradialouterquotientdeformation
+    :lemma-polygonouterradialrelation-radialhomotopy-eqvgen],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -100959,6 +101002,59 @@
    :lemma
    {:name "PolygonRadialOpenCover.outerSource", :reported-by []},
    :id :lemma-polygonradialopencover-outersource,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "PolygonOuterRadialRelation.radialHomotopy_eqvGen",
+    :type
+    "For a boundary-supported disk relation, every radial time slice preserves the EqvGen closure of its restriction to the outer radial source."},
+   :lemma
+   {:name "PolygonOuterRadialRelation.radialHomotopy_eqvGen",
+    :reported-by
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    :type
+    "For a boundary-supported disk relation, every radial time slice preserves the EqvGen closure of its restriction to the outer radial source.",
+    :area "polygon-surface-open-cover",
+    :proved-in
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+   :id :lemma-polygonouterradialrelation-radialhomotopy-eqvgen,
+   :kind :lemma,
+   :depends-on [:lemma-polygonouterradialdeformation-radialhomotopy],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "PolygonOuterRadialRelation.surfaceRel_boundary",
+    :type
+    "Every generating pair of SurfaceRel orientable genus consists of radius-one disk points."},
+   :lemma
+   {:name "PolygonOuterRadialRelation.surfaceRel_boundary",
+    :reported-by
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    :type
+    "Every generating pair of SurfaceRel orientable genus consists of radius-one disk points.",
+    :area "polygon-surface-open-cover",
+    :proved-in
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+   :id :lemma-polygonouterradialrelation-surfacerel-boundary,
+   :kind :lemma,
+   :depends-on [:lemma-radialquotientopensets-norm-edgepoint],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "RadialQuotientOpenSets.norm_edgePoint"},
+   :lemma
+   {:name "RadialQuotientOpenSets.norm_edgePoint", :reported-by []},
+   :id :lemma-radialquotientopensets-norm-edgepoint,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}],
