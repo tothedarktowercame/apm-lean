@@ -99780,8 +99780,72 @@
   {:bounded-exception
    "This single-consumer prerequisite transports arbitrary boundary relations and their honest quotient topologies across the banked Circle-to-boundary homeomorphism before specializing the two polygon words.",
    :consumer :t97A01,
+   :evidence
+   {:placeholder-delta {:source 0, :fixture 0},
+    :residual
+    "Specialize CircleRel to the two six-edge words, identify both Circle relation quotients with ThreeCircles, prove their common vertex classes and literal inclusion formulas, and assemble the packages.",
+    :gates
+    {:module-build :pass,
+     :fixture-compiles :pass,
+     :zero-source-and-fixture-sorry :pass,
+     :standard-only-axioms :pass,
+     :registry-check :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["The build replayed PolygonBoundaryCircleSource and reported its two existing unnecessarySimpa lints; the new module and fixture emitted no lints."],
+    :missing-theorems
+    [{:name
+      "PolygonBoundaryInducedQuotient.circleBoundaryQuotientHomeomorph",
+      :type
+      "For any disk relation R, the EqvGen quotient of its pullback to Circle is homeomorphic to the EqvGen quotient of its restriction to the radius-one Boundary, with literal representative formulas in both directions.",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on
+      ["PolygonBoundaryCircleSource.boundaryCircleHomeomorph"],
+      :area "polygon-surface-open-cover"}],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "sha256sum /tmp/polygon-boundary-induced-quotient.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.PolygonBoundaryInducedQuotient",
+      :exit 0}
+     {:cmd "lake env lean /tmp/polygon-boundary-induced-quotient.lean",
+      :exit 0}
+     {:cmd
+      "rg -n \\b(sorry|admit)\\b ConstructionTargets/PolygonBoundaryInducedQuotient.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "rg -n \\b(sorry|admit)\\b /tmp/polygon-boundary-induced-quotient.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "1018bc24ce8d728efcc91abcd351fd63c880c594",
+    :changed-paths
+    ["ConstructionTargets/PolygonBoundaryInducedQuotient.lean"],
+    :fixture
+    {:path "/tmp/polygon-boundary-induced-quotient.lean",
+     :sha256
+     "5fc86892e81e1b112d2838849ba49469050bef156506d43b36ab01cb9d4d1a9a",
+     :sorry-count 0},
+    :implementation
+    {:scope
+     ["ConstructionTargets/PolygonBoundaryInducedQuotient.lean"],
+     :summary
+     "Proved generic EqvGen mapping, transported arbitrary disk boundary relations to Circle, equipped both quotients with coinduced topologies, and constructed the induced homeomorphism with representative formulas."},
+    :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PolygonBoundaryInducedQuotient.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/boundary-induced-quotient",
@@ -102672,12 +102736,13 @@
    {:name
     "PolygonBoundaryInducedQuotient.circleBoundaryQuotientHomeomorph",
     :reported-by
-    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40
+     :routes-2026-10-10-polygon-boundary-induced-quotient-55],
     :type
     "For every disk relation, the EqvGen quotient of its pullback to Circle along boundaryCircleHomeomorph is homeomorphic to the EqvGen quotient of its restriction to the radius-one disk boundary, with literal maps on representatives.",
     :area "polygon-surface-open-cover",
     :proved-in
-    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+    :routes-2026-10-10-polygon-boundary-induced-quotient-55},
    :id
    :lemma-polygonboundaryinducedquotient-circleboundaryquotienthomeomorph,
    :kind :lemma,
