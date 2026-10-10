@@ -65991,85 +65991,107 @@
    "Use the coordinate to construct the deformation from inverse-forward to identity and the meridian retraction homotopy, then package rightTubeMinusLeftCoreMeridianHomotopyEquiv.",
    :other-consumers []}
   {:bounded-exception
+   "single-consumer space-side deformation needed to package the HomotopyEquiv",
+   :consumer :t02A03,
+   :phase :probe,
+   :state :open,
+   :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t02A03/right-tube-meridian-retraction-homotopy",
+   :acceptance
+   {:probe
+    "Compile an explicit ContinuousMap.Homotopy from the composite of the existing restricted circleMeridian inverse with rightTubeMeridianCoordinate to ContinuousMap.id RightTubeMinusLeftCore. Prove every intermediate point stays in the frozen rightTube and avoids Set.range leftCore. Do not package a HomotopyEquiv or alter the subtype.",
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeMeridianRetractionHomotopy",
+    :type
+    "ContinuousMap.Homotopy (rightTubeMeridianInverse.comp rightTubeMeridianCoordinate) (ContinuousMap.id RightTubeMinusLeftCore)",
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "construct the sole nonconstant homotopy required by the deleted-right-tube equivalence"},
+   :id
+   :routes-2026-10-10-t02a03-right-tube-meridian-retraction-homotopy-topo2-r1,
+   :kind :reusable-theorem,
+   :area "explicit-r3-tube-deformation-retraction",
+   :depends-on
+   [:routes-2026-10-10-t02a03-right-tube-meridian-coordinate-topo2-r1],
+   :current-residual
+   "Use the banked coordinate equation for the constant Circle-side homotopy and package rightTubeMinusLeftCoreMeridianHomotopyEquiv.",
+   :other-consumers []}
+  {:bounded-exception
    "single-consumer explicit deleted-right-tube deformation to its normal meridian circle",
    :consumer :t02A03,
    :evidence
    {:probe
     {:residual
-     "After the forward coordinate is banked, construct the two explicit homotopies and package the HomotopyEquiv.",
+     "After the space-side deformation is banked, the Circle-side homotopy is constant and the HomotopyEquiv packaging is bounded.",
      :outcome :revise,
      :missing-theorems
      [{:name
-       "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeMeridianCoordinate",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeMeridianRetractionHomotopy",
        :type
-       "exists forward : C(RightTubeMinusLeftCore, Circle), forall (z : Circle) (hz : apm_t02a03_circleMeridian z ∈ apm_t02a03_rightTube ∧ apm_t02a03_circleMeridian z ∉ Set.range apm_t02a03_leftCore), forward ⟨apm_t02a03_circleMeridian z, hz⟩ = z",
+       "exists (forward : C(RightTubeMinusLeftCore, Circle)) (inverse : C(Circle, RightTubeMinusLeftCore)), (forall z, (inverse z).1 = apm_t02a03_circleMeridian z) and Nonempty (ContinuousMap.Homotopy (inverse.comp forward) (ContinuousMap.id RightTubeMinusLeftCore))",
        :status :not-started,
        :consumers [:t02A03],
        :depends-on
-       ["ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_circleMeridian_mem_rightTubeMinusLeftCore"],
+       ["ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeMeridianCoordinate"],
        :area "explicit-r3-tube-deformation-retraction"}],
      :prerequisite
      {:bounded-exception
-      "single-consumer forward normal coordinate needed by both homotopies",
+      "single-consumer space-side deformation needed to package the HomotopyEquiv",
       :consumer :t02A03,
       :phase :probe,
       :state :open,
       :scope
       ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t02A03/right-tube-meridian-coordinate",
+      "TOPOLOGY-ROUTES.md/t02A03/right-tube-meridian-retraction-homotopy",
       :acceptance
       {:probe
-       "Compile a placeholder-free rightTubeMeridianCoordinate from the normalized left-core normal complex on RightTubeMinusLeftCore. Prove nonvanishing exactly from exclusion of the left core, continuity, and the displayed equality on the existing circleMeridian. Do not claim either homotopy or a HomotopyEquiv.",
+       "Compile an explicit ContinuousMap.Homotopy from the composite of the existing restricted circleMeridian inverse with rightTubeMeridianCoordinate to ContinuousMap.id RightTubeMinusLeftCore. Prove every intermediate point stays in the frozen rightTube and avoids Set.range leftCore. Do not package a HomotopyEquiv or alter the subtype.",
        :declaration
-       "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeMeridianCoordinate",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeMeridianRetractionHomotopy",
        :type
-       "exists forward : C(RightTubeMinusLeftCore, Circle), forall (z : Circle) (hz : apm_t02a03_circleMeridian z ∈ apm_t02a03_rightTube ∧ apm_t02a03_circleMeridian z ∉ Set.range apm_t02a03_leftCore), forward ⟨apm_t02a03_circleMeridian z, hz⟩ = z",
+       "ContinuousMap.Homotopy (rightTubeMeridianInverse.comp rightTubeMeridianCoordinate) (ContinuousMap.id RightTubeMinusLeftCore)",
        :placeholder "the sole sorry in apm_t02a03",
        :route-step
-       "define and validate the forward map used by the deleted-right-tube equivalence"},
+       "construct the sole nonconstant homotopy required by the deleted-right-tube equivalence"},
       :id
-      :routes-2026-10-10-t02a03-right-tube-meridian-coordinate-topo2-r1,
+      :routes-2026-10-10-t02a03-right-tube-meridian-retraction-homotopy-topo2-r1,
       :kind :reusable-theorem,
       :area "explicit-r3-tube-deformation-retraction",
       :depends-on
-      [:routes-2026-10-10-t02a03-circle-meridian-right-tube-membership-topo2-r1],
+      [:routes-2026-10-10-t02a03-right-tube-meridian-coordinate-topo2-r1],
       :current-residual
-      "Use the coordinate to construct the deformation from inverse-forward to identity and the meridian retraction homotopy, then package rightTubeMinusLeftCoreMeridianHomotopyEquiv.",
+      "Use the banked coordinate equation for the constant Circle-side homotopy and package rightTubeMinusLeftCoreMeridianHomotopyEquiv.",
       :other-consumers []},
      :commands
      [{:cmd
-       "lake env lean /tmp/t02a03_right_tube_forward_coordinate_contract.lean",
+       "lake env lean /tmp/t02a03_right_tube_retraction_homotopy_contract.lean",
        :exit 0,
-       :output "RightTubeMeridianCoordinateExists compiled."}
+       :output "RightTubeMeridianRetractionHomotopyExists compiled."}
       {:cmd
-       "sha256sum /tmp/t02a03_right_tube_forward_coordinate_contract.lean",
+       "sha256sum /tmp/t02a03_right_tube_retraction_homotopy_contract.lean",
        :exit 0,
        :output
-       "bfbdd3f7f6f03cd6202ba080792ea70b77793fde70bf90852e27831148496c95  /tmp/t02a03_right_tube_forward_coordinate_contract.lean"}
+       "fb2e3ce2fd04c05caba72480972464f502c5da5e2f449309f08365286aea5be6  /tmp/t02a03_right_tube_retraction_homotopy_contract.lean"}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
      :diagnostic-history
      [{:cmd
-       "lake env lean /tmp/t02a03_right_tube_forward_coordinate_contract.lean",
+       "lake env lean /tmp/t02a03_right_tube_retraction_homotopy_contract.lean",
        :exit 1,
        :finding
-       "The deformation module has no built olean, so the corrected contract imports the banked cover module and repeats only the transparent RightTubeMinusLeftCore abbreviation."}
-      {:cmd
-       "lake env lean /tmp/t02a03_right_tube_forward_coordinate_contract.lean",
-       :exit 1,
-       :finding
-       "The banked membership theorem is present in source but absent from the current olean; quantifying over its proof keeps the prerequisite interface exact and independently compilable."}],
+       "The source theorem for meridian membership is newer than the current olean; the corrected contract characterizes the inverse by equality of underlying E3 points, which is the exact observable identification needed."}],
      :fixture
-     {:path "/tmp/t02a03_right_tube_forward_coordinate_contract.lean",
+     {:path "/tmp/t02a03_right_tube_retraction_homotopy_contract.lean",
       :sha256
-      "bfbdd3f7f6f03cd6202ba080792ea70b77793fde70bf90852e27831148496c95"},
+      "fb2e3ce2fd04c05caba72480972464f502c5da5e2f449309f08365286aea5be6"},
      :finding
-     "The existing left-tube construction supplies the correct formula: normalize the complex normal coordinate with radial-defect real part and height imaginary part. Before either homotopy can be typed on RightTubeMinusLeftCore, that formula must be generalized to the frozen right-tube subtype, proved nonzero from exclusion of the left core, proved continuous, and shown to recover z on circleMeridian z. This is one coherent prerequisite and does not claim either homotopy.",
+     "The banked equation forward(circleMeridian z)=z makes the Circle-side composite definitionally pointwise equal to the identity, so its Homotopy is constant. The only independent geometric obligation is a homotopy inverse.comp forward ~ id on RightTubeMinusLeftCore, with the inverse's underlying map fixed to circleMeridian. This homotopy must prove at every time that points remain in rightTube and outside the left core.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/right-tube-meridian-homotopy-equivalence",
@@ -66091,7 +66113,8 @@
    [:routes-2026-10-10-checkpoint-topo2-r7
     :lemma-apm-t02a03-rightcorebasedattachmenthomotopy
     :routes-2026-10-10-t02a03-circle-meridian-right-tube-membership-topo2-r1
-    :routes-2026-10-10-t02a03-right-tube-meridian-coordinate-topo2-r1],
+    :routes-2026-10-10-t02a03-right-tube-meridian-coordinate-topo2-r1
+    :routes-2026-10-10-t02a03-right-tube-meridian-retraction-homotopy-topo2-r1],
    :current-residual
    "Package the constructed HomotopyEquiv in Nonempty to bank rightTubeMinusLeftCoreHomotopyEquivCircle, then assemble geometricYHomotopyEquivGenericWedge.",
    :other-consumers []}
@@ -68841,6 +68864,29 @@
     :banked-commit "8f38c73b0a085d9206c1cb84e1f28d2789baaa46"},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-righttubemeridiancoordinate-c,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t02a03geometrictubedeformation-righttubemeridiancoordinate],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeMeridianRetractionHomotopy",
+    :type
+    "exists (forward : C(RightTubeMinusLeftCore, Circle)) (inverse : C(Circle, RightTubeMinusLeftCore)), (forall z, (inverse z).1 = apm_t02a03_circleMeridian z) and Nonempty (ContinuousMap.Homotopy (inverse.comp forward) (ContinuousMap.id RightTubeMinusLeftCore))"},
+   :lemma
+   {:name
+    "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeMeridianRetractionHomotopy",
+    :reported-by
+    [:routes-2026-10-10-t02a03-right-tube-meridian-homotopy-equivalence-topo2-r1],
+    :type
+    "exists (forward : C(RightTubeMinusLeftCore, Circle)) (inverse : C(Circle, RightTubeMinusLeftCore)), (forall z, (inverse z).1 = apm_t02a03_circleMeridian z) and Nonempty (ContinuousMap.Homotopy (inverse.comp forward) (ContinuousMap.id RightTubeMinusLeftCore))",
+    :area "explicit-r3-tube-deformation-retraction"},
+   :id
+   :lemma-constructiontargets-t02a03geometrictubedeformation-righttubemeridianretractionho,
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-t02a03geometrictubedeformation-righttubemeridiancoordinate],
