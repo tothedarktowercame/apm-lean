@@ -87324,17 +87324,17 @@
   {:consumer :t97A01,
    :owner-reopen
    "Owner reopen 2026-10-10 (claude-14): both STOPs cite missing approved signatures for declarations the acceptance lists in prose. Under work-prompt.md WHAT IS FROZEN, only the registered statement and the fixture interface-axiom types are frozen; design the supporting signatures, discharge the frozen axiom type with standard axioms, and STOP only on a mathematical boundary.",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "No implementation commit was recorded and ConstructionTargets/GenericPointWedgeMayerVietorisPathConnectedCoordinates.lean is absent. The frozen fixture hash is correct, but it declares only GenericWedgeMVH0Coordinates and the nonstandard axiom generic_point_wedge_mv_pathconnected_coordinates; none of the ten accepted reusable declarations has a frozen Lean signature, and repaired_intersection_coordinates depends on that axiom. Repair requires an owner-approved placeholder-free typed fixture fixing GenericPointWedgeMVH0Coordinates, the overlap/left/right H0 isomorphisms, both literal-inclusion naturality equations, signed intersection and codiagonal reassembly equations, the ThreeCircles PathConnectedSpace instance, and its specialized package, with exact ModuleCat/AddCommGrpCat morphism directions; then implement the scoped module with standard-only axioms.",
    :evidence
    {:residual
-    "Provide the reviewed placeholder-free fixture fixing all ten declaration signatures and exact ModuleCat/AddCommGrpCat directions, then implement the scoped module against that interface.",
+    "Prove genericPointWedgeOverlapInclusionSquares on arbitrary quotient representatives, apply conjugated_homologyMap_of_strict_square in degree zero, and assemble GenericWedgeMVH0Coordinates.",
     :outcome :stop,
     :warnings
-    [{:kind :specification-defect,
+    [{:kind :missing-representation-comparison,
       :message
-      "Independent review agrees that an owner-approved typed fixture is required before implementation."}],
+      "The two strict overlap-inclusion squares through the chosen quotient homotopy equivalences are absent."}],
     :disposition :stop,
     :axioms
     ["propext"
@@ -87343,33 +87343,33 @@
      "Quot.sound"],
     :author "topo-2",
     :reason
-    "The independently reviewed specification boundary remains unchanged. No owner-approved placeholder-free fixture or scoped module exists, and the frozen fixture still provides only GenericWedgeMVH0Coordinates plus the nonstandard axiom generic_point_wedge_mv_pathconnected_coordinates. Acceptance requests ten differently named declarations without Lean signatures, including morphism equalities whose category and composition orientation cannot be inferred uniquely from prose. Implementing them would invent the public representation API and violate the frozen-interface invariant. The path-connected hypotheses repair the mathematics but do not repair the missing specification.",
+    "The owner correction removes the prior signature objection. The concrete mathematical gap is now isolated to the strict naturality comparison required before HomotopyEquivHomologySquare can transport the inclusion maps. GenericPointWedgeOpenCoverComparison supplies homotopy equivalences for the overlap and both pieces, but only proves representative equations for the factor inclusions; it does not prove strict squares for the actual overlap-to-piece maps. A sufficient single prerequisite is theorem genericPointWedgeOverlapInclusionSquares (x0 : X) (y0 : Y) (M : Set Y) (N : Set X) (hM : IsOpen M) (hN : IsOpen N) (hy : y0 ∈ M) (hx : x0 ∈ N) (cM : PointedContraction M ⟨y0,hy⟩) (cN : PointedContraction N ⟨x0,hx⟩) : leftEquiv.toFun.comp (overlapToLeft.comp overlapEquiv.invFun) = ContinuousMap.const _ x0 ∧ rightEquiv.toFun.comp (overlapToRight.comp overlapEquiv.invFun) = ContinuousMap.const _ y0, with the equivalences and inclusion maps instantiated from genericPointWedgeCoverPackage. The analogous TwiceSpiral development explicitly banks its strict-square lemmas before applying conjugated_homologyMap_of_strict_square; no generic point-wedge counterpart exists. Proving these equations requires expanding the nested quotient homeomorphisms and both pointed contractions on arbitrary representatives. Until they are compiled, the two literal inclusion maps cannot be identified with identity in integral H0, so neither the signed diagonal nor the codiagonal field of the frozen structure can be established standard-only.",
     :commands
     [{:cmd
       "sha256sum /tmp/generic-point-wedge-mv-pathconnected-probe.lean",
       :exit 0,
-      :finding
-      "a471b74db23e71f5112eaf625a6a969dc9203ba00c6582950b417d1d989fe82e"}
+      :finding "The frozen fixture hash matches."}
      {:cmd
-      "test -e ConstructionTargets/GenericPointWedgeMayerVietorisPathConnectedCoordinates.lean",
-      :exit 1,
-      :expected-exit 1,
-      :finding "The scoped implementation artifact remains absent."}
-     {:cmd
-      "rg -n \"GenericPointWedgeMVH0Coordinates|genericPointWedgeOverlapToLeft_H0_coordinates|threeCirclesMayerVietorisH0Coordinates\" ConstructionTargets /tmp/generic-point-wedge-mv-pathconnected-probe.lean",
-      :exit 1,
-      :expected-exit 1,
+      "rg -n \"IntersectionHomotopyEquiv.*(Left|Right)|overlap.*inclusion.*equiv|inclusion.*IntersectionHomotopyEquiv|strict_square|conjugated_homologyMap_of_strict_square\" ConstructionTargets -g '*.lean'",
+      :exit 0,
       :finding
-      "No accepted typed interface or replacement fixture has appeared."}
+      "Strict-square infrastructure exists for TwiceSpiral only; no generic point-wedge overlap inclusion square is banked."}
      {:cmd
       "lake env lean /tmp/generic-point-wedge-mv-pathconnected-probe.lean",
       :exit 0,
       :finding
-      "The fixture still compiles only through generic_point_wedge_mv_pathconnected_coordinates; repaired_intersection_coordinates retains that nonstandard axiom."}
+      "The fixture compiles, but repaired_intersection_coordinates depends on generic_point_wedge_mv_pathconnected_coordinates."}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
      {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :representation
+    {:source
+     "Literal overlap inclusions and production Mayer-Vietoris arrows for point wedges of path-connected factors",
+     :target
+     "Integer H0 coordinates on the overlap, pieces, and union",
+     :direction
+     "Exact conjugacy from each literal inclusion-induced H0 map to the identity of Z, yielding the signed diagonal and then the codiagonal for the production arrows"},
     :fixture
     {:path "/tmp/generic-point-wedge-mv-pathconnected-probe.lean",
      :sha256
@@ -87379,7 +87379,7 @@
      :proof-placeholder-count 1},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/GenericPointWedgeMayerVietorisPathConnectedCoordinates.lean"],
    :dag-node
