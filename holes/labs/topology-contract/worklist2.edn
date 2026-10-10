@@ -61855,46 +61855,68 @@
    "single-consumer nonzero normalized normal direction for the t02A03 complement interpolation",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:outcome :go,
-     :fixture
-     {:path "/tmp/t02a03_geometric_tube_cover.lean",
-      :sha256
-      "eae43e95c04bbd1b2f10ca7d062408cb9bebc328d9fdff96cd4b5ade42172d49"},
-     :commands
-     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "apm_t02a03_leftTubeNormalAngular_ne_zero compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
-       :exit 0}
-      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "eae43e95c04bbd1b2f10ca7d062408cb9bebc328d9fdff96cd4b5ade42172d49  /tmp/t02a03_geometric_tube_cover.lean"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :implementation
-     {:scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
-      :declaration
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Prove the exact interpolation normal-coordinate formula, deduce deleted-core exclusion, bundle the homotopy, and assemble the torus HomotopyEquiv.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :missing-theorems
+    [{:name
       "ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_leftTubeNormalAngular_ne_zero",
       :type
       "forall p : apm_t02a03_LeftTubeMinusCore, ((apm_t02a03_leftTubeNormalAngular p : Circle) : Complex) ≠ 0",
-      :acceptance
-      ["target module compiles"
-       "declaration has the frozen type"
-       "target module contains no sorry token"
-       "statement registry matches"]},
-     :finding
-     "The fixture proves the normalized complex normal direction is nonzero directly from its Circle membership. This supplies the direction-side factor needed with the positive interpolated radius.",
-     :residual
-     "Prove the exact interpolation normal-coordinate formula, deduce deleted-core exclusion, bundle the homotopy, and assemble the torus HomotopyEquiv."}},
+      :status :proved,
+      :consumers [:t02A03],
+      :depends-on
+      ["ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_leftTubeRadialNormalRadius_pos"]}],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not",
+     :accepted-type-sha256
+     "20c7c56b3a8dc405b1d9c0f923979a415b0e5c21db137806fc7904d65e6312c8"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+      :exit 0,
+      :output
+      "eae43e95c04bbd1b2f10ca7d062408cb9bebc328d9fdff96cd4b5ade42172d49  /tmp/t02a03_geometric_tube_cover.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03LeftTubePuncturedModel.lean",
+      :exit 0,
+      :output ""}
+     {:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+      :exit 0,
+      :output
+      "apm_t02a03_leftTubeNormalAngular_ne_zero depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03LeftTubePuncturedModel.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "git diff --check -- ConstructionTargets/T02A03LeftTubePuncturedModel.lean",
+      :exit 0}],
+    :commit "cb76b051da7d3c5b00525a2d0040c26a5b3bf2c2",
+    :changed-paths
+    ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
+    :fixture
+    {:path "/tmp/t02a03_geometric_tube_cover.lean",
+     :sha256
+     "eae43e95c04bbd1b2f10ca7d062408cb9bebc328d9fdff96cd4b5ade42172d49"},
+    :finding
+    "Banked nonvanishing of the normalized complex normal direction directly from its Circle membership.",
+    :implementation
+    {:scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
+     :declarations
+     ["ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_leftTubeNormalAngular_ne_zero"],
+     :type
+     "forall p : apm_t02a03_LeftTubeMinusCore, ((apm_t02a03_leftTubeNormalAngular p : Circle) : Complex) ≠ 0"},
+    :seat "topo-6"},
    :phase :implementation,
    :type
    "forall p : apm_t02a03_LeftTubeMinusCore, ((apm_t02a03_leftTubeNormalAngular p : Circle) : Complex) ≠ 0",
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/left-tube-normal-direction-nonzero",
@@ -62965,4 +62987,28 @@
    :id :lemma-apm-t02a03-lefttubenormalangular-ne-zero,
    :kind :lemma,
    :depends-on [:lemma-apm-t02a03-lefttuberadialnormalradius-pos],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_leftTubeNormalAngular_ne_zero",
+    :type
+    "forall p : apm_t02a03_LeftTubeMinusCore, ((apm_t02a03_leftTubeNormalAngular p : Circle) : Complex) ≠ 0"},
+   :lemma
+   {:name
+    "ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_leftTubeNormalAngular_ne_zero",
+    :reported-by
+    [:routes-2026-10-10-t02a03-left-tube-normal-direction-nonzero-topo2-r1],
+    :type
+    "forall p : apm_t02a03_LeftTubeMinusCore, ((apm_t02a03_leftTubeNormalAngular p : Circle) : Complex) ≠ 0",
+    :proved-in
+    :routes-2026-10-10-t02a03-left-tube-normal-direction-nonzero-topo2-r1},
+   :id
+   :lemma-constructiontargets-t02a03lefttubepuncturedmodel-apm-t02a03-lefttubenormalangula,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t02a03lefttubepuncturedmodel-apm-t02a03-lefttuberadialnormal],
    :other-consumers []}]}
