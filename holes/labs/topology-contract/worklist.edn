@@ -97618,8 +97618,73 @@
   {:bounded-exception
    "This single-consumer normalization theorem moves every ThreeCircles point into the final-circle section while preserving collapse, so a pullback point can be moved without changing its circle-power coordinate before the cyclic monodromy step.",
    :consumer :t99J01,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Lift the collapse-constant normalization paths to the literal pullback while holding each circle coordinate fixed, then connect the normalized points over firstCircle by a circle path whose nth power supplies the base path.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["lake build replayed pre-existing linter warnings from imported homology modules; the scoped module emitted none"],
+    :missing-theorems
+    [{:name "ThreeCirclesCollapseFiberPath.exists_collapseFiber_path",
+      :type
+      "For every y : ThreeCircles there exists a path from y to firstCircle (collapse y) along which collapse is constant",
+      :status :proved,
+      :consumers [:t99J01],
+      :depends-on
+      ["PointWedgePathConnected.wedgePathConnectedSpace"
+       "CyclicThreeCirclesCollapse.collapse_firstCircle"]}],
+    :statement-hashes "131 registered statements match",
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :finding
+      "canonical package authority resolves to /home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "sha256sum /tmp/three-circles-collapse-fiber-path.lean",
+      :exit 0,
+      :finding
+      "fixture hash matches cfc417d11180ad2a1c0c4ad388d2a0cd7f469dfb56b2ba05ab3a96bcb95a77d7"}
+     {:cmd
+      "lake build ConstructionTargets.ThreeCirclesCollapseFiberPath",
+      :exit 0,
+      :finding "collapse-fiber normalization path theorem builds"}
+     {:cmd "lake env lean /tmp/three-circles-collapse-fiber-path.lean",
+      :exit 0,
+      :finding "frozen fixture compiles with standard axioms"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" ConstructionTargets/ThreeCirclesCollapseFiberPath.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero source placeholders"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" /tmp/three-circles-collapse-fiber-path.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero fixture placeholders"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short",
+      :exit 0,
+      :finding "clean worktree after commit"}],
+    :commit "4cd7c59b456eee8000c04c564919990dc3f93b1e",
+    :changed-paths
+    ["ConstructionTargets/ThreeCirclesCollapseFiberPath.lean"],
+    :fixture
+    {:path "/tmp/three-circles-collapse-fiber-path.lean",
+     :sha256
+     "cfc417d11180ad2a1c0c4ad388d2a0cd7f469dfb56b2ba05ab3a96bcb95a77d7",
+     :sorry-count 0},
+    :implementation
+    {:scope ["ConstructionTargets/ThreeCirclesCollapseFiberPath.lean"],
+     :declarations
+     ["ConstructionTargets.ThreeCirclesCollapseFiberPath.exists_collapseFiber_path"]},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ThreeCirclesCollapseFiberPath.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/cyclic-three-circles-cover/collapse-fiber-path",
@@ -99383,18 +99448,27 @@
    :depends-on
    [:lemma-coveringpathcomponentsurjective-componentprojection-surjective],
    :other-consumers []}
-  {:consumer :portfolio,
+  {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
    :scope [],
    :acceptance
-   {:lemma "ThreeCirclesCollapseFiberPath.exists_collapseFiber_path"},
+   {:lemma "ThreeCirclesCollapseFiberPath.exists_collapseFiber_path",
+    :type
+    "For every y : ThreeCircles there exists a path from y to firstCircle (collapse y) along which collapse is constant"},
    :lemma
    {:name "ThreeCirclesCollapseFiberPath.exists_collapseFiber_path",
-    :reported-by []},
+    :reported-by
+    [:routes-2026-10-10-three-circles-collapse-fiber-path-45],
+    :type
+    "For every y : ThreeCircles there exists a path from y to firstCircle (collapse y) along which collapse is constant",
+    :proved-in
+    :routes-2026-10-10-three-circles-collapse-fiber-path-45},
    :id :lemma-threecirclescollapsefiberpath-exists-collapsefiber-path,
    :kind :lemma,
-   :depends-on [],
+   :depends-on
+   [:lemma-pointwedgepathconnected-wedgepathconnectedspace
+    :lemma-cyclicthreecirclescollapse-collapse-firstcircle],
    :other-consumers []}
   {:consumer :t99J01,
    :phase :lemma,
