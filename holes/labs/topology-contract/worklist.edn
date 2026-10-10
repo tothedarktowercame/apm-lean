@@ -91789,6 +91789,19 @@
       :finding "131 registered statements match, 0 do not"}
      {:cmd "git diff --check HEAD^ HEAD", :exit 0}
      {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791640190586-2079-a002f5f6",
+     :commands
+     ["git show 37e3546ab4ddd0304166557bc3ada76d28e5d722 --stat and recorded source inspection"
+      "lake env lean ConstructionTargets/FiniteArborescenceTotalArrowEquivalence.lean"
+      "sha256sum /tmp/arborescence-total-equivalence.lean and recorded-source hash comparison"
+      "comment-stripped sorry/admit census"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 209c1197:holes/labs/topology-contract/worklist.edn)"],
+     :finding
+     "exact one-file scope and fixture hash reproduce; the target-oriented total-arrow/non-root equivalence proves both inverse laws, uses only standard axioms, has zero placeholders, and respects the boundary excluding cardinal arithmetic and Schreier specialization"},
     :commit "37e3546ab4ddd0304166557bc3ada76d28e5d722",
     :changed-paths
     ["ConstructionTargets/FiniteArborescenceTotalArrowEquivalence.lean"],
@@ -91809,7 +91822,7 @@
      "Map every arrow to its target; rule out arrows into the root by path uniqueness, recover the final arrow of each nonempty root path, and prove injectivity using Path.cons.inj."},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :proof
    "Map every arrow to its target. An arrow into the root would extend the unique root path to a nonempty root-to-root path, contradicting uniqueness with Path.nil. Surjectivity extracts the final arrow from the unique nonempty root path to a non-root vertex. Injectivity follows by comparing the two extended root paths and applying Path.cons.inj.",
    :scope
@@ -91893,7 +91906,7 @@
      :residual
      "After the total-arrow/non-root equivalence is banked, Nat.card subtraction and the n-vertex geodesic-subtree specialization are bounded consequences."}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/positive-index/finite-arborescence-edge-count",
