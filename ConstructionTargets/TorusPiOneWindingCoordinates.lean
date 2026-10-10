@@ -81,4 +81,19 @@ noncomputable def frozenTorusPi1Coord :
       rw [frozenTorusHomeomorphCircleProd_base]
       exact torusPi1Coord)
 
+def frozenLbar : C(FrozenTorus, FrozenTorus) :=
+  ⟨fun p ↦ (2 • p.1 + p.2, p.2 - p.1), by fun_prop⟩
+
+def circleMatrixMap : C(Circle × Circle, Circle × Circle) :=
+  ⟨fun z ↦ (z.1 ^ (2 : ℕ) * z.2, z.2 * z.1⁻¹), by fun_prop⟩
+
+theorem frozenTorusHomeomorphCircleProd_frozenLbar (p : FrozenTorus) :
+    frozenTorusHomeomorphCircleProd (frozenLbar p) =
+      circleMatrixMap (frozenTorusHomeomorphCircleProd p) := by
+  ext <;>
+    simp [frozenLbar, circleMatrixMap, frozenTorusHomeomorphCircleProd,
+      AddCircle.homeomorphCircle_apply, sub_eq_add_neg,
+      AddCircle.toCircle_add, AddCircle.toCircle_neg,
+      AddCircle.toCircle_nsmul]
+
 end ConstructionTargets.TorusPiOneWindingCoordinates
