@@ -84734,8 +84734,139 @@
    "Owner refill 2026-10-10 (claude-14 overnight, Joe: progress by morning): topo1 checkpoint rp3-covering-1 found all eight 09-29 problems held by stop-after-two or reviewed STOPs. topo1 now takes six covering / van Kampen problems from the unassigned HEAVY list: t99J01, t92J06, t97A03, t93J03, t01A03, t97A01. All six statements are registered; 8 sorries in total.",
    :other-consumers []}
   {:consumer :t99J01,
-   :phase :probe,
+   :phase :implementation,
    :state :open,
+   :scope
+   ["ConstructionTargets/FiniteCircleWedgeFundamentalGroup.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/shared/finite-circle-wedge-fundamental-group/recursive-free-product",
+   :acceptance
+   {:placeholder
+    "the single sorries in apm_t99j01, apm_t01a03, and apm_t97a01, plus apm_t97A03_bridge_invariants_of_model",
+    :route-step
+    "t99J01 step 1; t01A03 step 2; t97A01 steps 3-4 pi1 input; t97A03 step 8; optional t92J06 alternative pi1 route",
+    :declarations
+    ["finiteCircleWedge"
+     "finiteCircleWedgeBase"
+     "finiteCircleWedgeInclusion"
+     "finiteCircleWedgeFundamentalGroupEquiv"
+     "finiteCircleWedgeFundamentalGroupEquiv_inclusion"
+     "twoCirclesFundamentalGroupEquiv"
+     "threeCirclesFundamentalGroupEquiv"],
+    :implementation
+    "Define the iterated pointed wedge of n circles and its indexed representative inclusions. Apply TwoOpenFreeProductMapping.chosenGroupEquivalence at each successor using the banked point-wedge open cover and contraction data, transport each circle factor through CircleUniversalCover.circleFundamentalGroupMulEquivInt, and construct an explicit multiplicative equivalence from the recursive Monoid.Coprod coordinates to FreeGroup (Fin (n+1)). Prove the equivalence sends every representative circle inclusion to the corresponding FreeGroup generator and record all basepoint equations. Specialize n=2 to StatementSurfaceModels.TwoCircles and n=3 to ThreeCircles, without proving any consumer-specific polygon or covering comparison.",
+    :axioms :standard-only,
+    :commands
+    ["lake env lean ConstructionTargets/FiniteCircleWedgeFundamentalGroup.lean"
+     "lake env lean /tmp/finite-circle-wedge-pi1-probe.lean"
+     "python3 scripts/statement-registry.py check"]},
+   :id :routes-2026-10-10-finite-circle-wedge-pi1-induction-1,
+   :kind :reusable-theorem,
+   :depends-on [],
+   :current-residual
+   "Prove the recursive free-product normalization with inclusion-generator equations, then expose the n=2 and n=3 specializations used by the five named routes.",
+   :other-consumers [:t01A03 :t97A01 :t97A03 :t92J06]}
+  {:consumer :t99J01,
+   :evidence
+   {:probe
+    {:residual
+     "Exactly one shared prerequisite remains: recursively specialize the banked free-product van Kampen theorem and normalize the result to FreeGroup (Fin n), preserving circle representatives. Consumer-specific comparisons remain downstream.",
+     :outcome :revise,
+     :warnings
+     [{:kind :interface-axiom,
+       :message
+       "The placeholder-free fixture uses exactly one nonstandard axiom for the n=2 and n=3 free-group equivalences. Representative inclusions and their basepoint equations are concrete and standard-only."}
+      {:kind :dirty-worktree,
+       :message
+       "ConstructionTargets/TorusPiOneWindingCoordinates.lean was already modified outside this read-only probe and was not touched."}],
+     :prerequisite
+     {:consumer :t99J01,
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/FiniteCircleWedgeFundamentalGroup.lean"],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/shared/finite-circle-wedge-fundamental-group/recursive-free-product",
+      :acceptance
+      {:placeholder
+       "the single sorries in apm_t99j01, apm_t01a03, and apm_t97a01, plus apm_t97A03_bridge_invariants_of_model",
+       :route-step
+       "t99J01 step 1; t01A03 step 2; t97A01 steps 3-4 pi1 input; t97A03 step 8; optional t92J06 alternative pi1 route",
+       :declarations
+       ["finiteCircleWedge"
+        "finiteCircleWedgeBase"
+        "finiteCircleWedgeInclusion"
+        "finiteCircleWedgeFundamentalGroupEquiv"
+        "finiteCircleWedgeFundamentalGroupEquiv_inclusion"
+        "twoCirclesFundamentalGroupEquiv"
+        "threeCirclesFundamentalGroupEquiv"],
+       :implementation
+       "Define the iterated pointed wedge of n circles and its indexed representative inclusions. Apply TwoOpenFreeProductMapping.chosenGroupEquivalence at each successor using the banked point-wedge open cover and contraction data, transport each circle factor through CircleUniversalCover.circleFundamentalGroupMulEquivInt, and construct an explicit multiplicative equivalence from the recursive Monoid.Coprod coordinates to FreeGroup (Fin (n+1)). Prove the equivalence sends every representative circle inclusion to the corresponding FreeGroup generator and record all basepoint equations. Specialize n=2 to StatementSurfaceModels.TwoCircles and n=3 to ThreeCircles, without proving any consumer-specific polygon or covering comparison.",
+       :axioms :standard-only,
+       :commands
+       ["lake env lean ConstructionTargets/FiniteCircleWedgeFundamentalGroup.lean"
+        "lake env lean /tmp/finite-circle-wedge-pi1-probe.lean"
+        "python3 scripts/statement-registry.py check"]},
+      :id :routes-2026-10-10-finite-circle-wedge-pi1-induction-1,
+      :kind :reusable-theorem,
+      :depends-on [],
+      :current-residual
+      "Prove the recursive free-product normalization with inclusion-generator equations, then expose the n=2 and n=3 specializations used by the five named routes.",
+      :other-consumers [:t01A03 :t97A01 :t97A03 :t92J06]},
+     :axioms
+     ["propext"
+      "Classical.choice"
+      "Quot.sound"
+      "FiniteCircleWedgePiOneProbe.finite_circle_wedge_fundamental_group_package"],
+     :commands
+     [{:cmd "stat -c '%F %n' .lake/packages",
+       :exit 0,
+       :finding
+       "directory .lake/packages; canonical package authority is present"}
+      {:cmd
+       "lake env lean ConstructionTargets/TwoOpenFreeProductMapping.lean",
+       :exit 0,
+       :finding
+       "the banked two-open simply-connected-overlap free-product equivalence compiles with standard axioms"}
+      {:cmd "lake env lean /tmp/finite-circle-wedge-pi1-probe.lean",
+       :exit 0,
+       :finding
+       "n=2 and n=3 fundamental-group targets plus all four representative basepoint equations elaborate from one isolated package axiom"}
+      {:cmd "sha256sum /tmp/finite-circle-wedge-pi1-probe.lean",
+       :exit 0,
+       :finding
+       "188c22abad2f0abc5a570ded8f1bd93013fac5e470230154cbdf5b676f5e300a"}
+      {:cmd
+       "Python comment-stripped placeholder census of /tmp/finite-circle-wedge-pi1-probe.lean",
+       :exit 0,
+       :finding "0"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :finding "131 registered statements match, 0 do not"}
+      {:cmd "git status --short",
+       :exit 0,
+       :finding
+       "pre-existing unrelated modification: ConstructionTargets/TorusPiOneWindingCoordinates.lean"}],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/finite-circle-wedge-pi1-probe.lean",
+       :exit 1,
+       :finding
+       "the first draft referred to a nonexistent WedgeRel.glue constructor",
+       :correction
+       "used PointWedgeQuotient.Rel.base; the next compile exposed that its point arguments are implicit"}
+      {:cmd "lake env lean /tmp/finite-circle-wedge-pi1-probe.lean",
+       :exit 1,
+       :finding
+       "Rel.base was incorrectly applied to explicit point arguments",
+       :correction
+       "allowed the expected relation type to infer the implicit basepoints; the successful compile is in commands"}],
+     :fixture
+     {:path "/tmp/finite-circle-wedge-pi1-probe.lean",
+      :sha256
+      "188c22abad2f0abc5a570ded8f1bd93013fac5e470230154cbdf5b676f5e300a"},
+     :seat "topo-4"}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/finite-circle-wedge-fundamental-group",
@@ -84756,7 +84887,7 @@
    :kind :reusable-theorem,
    :depends-on
    [:routes-2026-10-10-topo1-refill-covering-1
-    :routes-2026-10-10-topo1-refill-covering-1],
+    :routes-2026-10-10-finite-circle-wedge-pi1-induction-1],
    :current-residual
    "Specialize the banked two-open free-product theorem recursively to finite point wedges and normalize the result to FreeGroup (Fin n).",
    :other-consumers [:t01A03 :t97A01 :t97A03 :t92J06]}
