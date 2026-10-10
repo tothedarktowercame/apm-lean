@@ -96421,13 +96421,42 @@
    "Use the quotient-cover orbit description to identify every circlePower fiber with its n-element kernel, transfer the count through LiteralCoveringPullback.fiberEquiv, and prove cyclic monodromy makes the pullback path connected.",
    :other-consumers []}
   {:bounded-exception
+   "This single-consumer calculation transports the banked kernel cardinality to every circle-power fiber; it is the exact input needed by the literal pullback fiber equivalence and the t99J01 sheet certificate.",
+   :consumer :t99J01,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/CirclePowerFiberCard.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/cyclic-three-circles-cover/fiber-card",
+   :acceptance
+   {:implementation
+    "For NeZero n and every y : Circle, use surjectivity of Circle.isQuotientCoveringMap_npow, a chosen preimage, MonoidHom.fiberEquivKer, and the banked kernel theorem to prove that {z : Circle // z ^ n = y} is finite and has Nat.card n. Do not transport to the ThreeCircles pullback, prove path connectedness, construct monodromy paths, compute subgroup index, or close t99J01.",
+    :placeholder "the single sorry in apm_t99j01",
+    :route-step
+    "t99J01 cyclic-cover step 4: identify every circle-power fiber with the n-element kernel before literal-pullback transport",
+    :fixture "/tmp/circle-power-fiber-card.lean",
+    :fixture-sha256
+    "e0e18a9463c6bbfb3c23935a10fe439067961569e333e06ff57c4ceb2ae6a55b",
+    :gates
+    ["lake build ConstructionTargets.CirclePowerFiberCard"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-10-circle-power-fiber-card-42,
+   :kind :reusable-theorem,
+   :depends-on [:routes-2026-10-10-circle-power-kernel-card-41],
+   :current-residual
+   "Transport finiteness and cardinality through LiteralCoveringPullback.fiberEquiv to build the n-sheeted pullback certificate, then prove path connectedness via cyclic monodromy.",
+   :other-consumers []}
+  {:bounded-exception
    "Single-consumer prerequisite second in the final ledger ranking.",
    :consumer :t99J01,
    :implements-lemma :lemma-cyclicthreecirclespullback-pathconnected,
    :evidence
    {:probe
     {:residual
-     "The degree-n deck kernel now has a compiled exact cardinality. The original row still needs pullback fiber transport and the cyclic connectedness argument.",
+     "Every circle-power fiber now has compiled cardinality n. The original row still needs literal-pullback sheet transport and path connectedness.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
@@ -96438,71 +96467,61 @@
        :consumers [:t99J01],
        :depends-on
        ["CyclicThreeCirclesPullbackCover.covering"
-        "CirclePowerKernelCard.circlePower_kernel_card"]}],
+        "CirclePowerFiberCard.circlePower_fiber_card"]}],
      :prerequisite
      {:bounded-exception
-      "This single-consumer finite calculation supplies the exact n-element deck kernel used both for the pullback sheet count and for enumerating cyclic monodromy transitions.",
+      "This single-consumer calculation transports the banked kernel cardinality to every circle-power fiber; it is the exact input needed by the literal pullback fiber equivalence and the t99J01 sheet certificate.",
       :consumer :t99J01,
       :phase :implementation,
       :state :open,
-      :scope ["ConstructionTargets/CirclePowerKernelCard.lean"],
+      :scope ["ConstructionTargets/CirclePowerFiberCard.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/cyclic-three-circles-cover/kernel-card",
+      "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/cyclic-three-circles-cover/fiber-card",
       :acceptance
       {:implementation
-       "Construct an equivalence between the kernel of powMonoidHom n on Circle and rootsOfUnity n Circle. For NeZero n, prove the kernel is finite and has Nat.card n using Circle's HasEnoughRootsOfUnity instance. Do not count pullback fibers, prove path connectedness, construct monodromy paths, compute subgroup index, or close t99J01.",
+       "For NeZero n and every y : Circle, use surjectivity of Circle.isQuotientCoveringMap_npow, a chosen preimage, MonoidHom.fiberEquivKer, and the banked kernel theorem to prove that {z : Circle // z ^ n = y} is finite and has Nat.card n. Do not transport to the ThreeCircles pullback, prove path connectedness, construct monodromy paths, compute subgroup index, or close t99J01.",
        :placeholder "the single sorry in apm_t99j01",
        :route-step
-       "t99J01 cyclic-cover step 3: compute the degree-n circle-power kernel before transporting its cardinality and cyclic action to the pullback",
-       :fixture "/tmp/circle-power-kernel-card.lean",
+       "t99J01 cyclic-cover step 4: identify every circle-power fiber with the n-element kernel before literal-pullback transport",
+       :fixture "/tmp/circle-power-fiber-card.lean",
        :fixture-sha256
-       "eb87b29cbe38de29ae3497ad304b25e11382d838e03c15b38654b9e1dbcaef4d",
+       "e0e18a9463c6bbfb3c23935a10fe439067961569e333e06ff57c4ceb2ae6a55b",
        :gates
-       ["lake build ConstructionTargets.CirclePowerKernelCard"
+       ["lake build ConstructionTargets.CirclePowerFiberCard"
         "fixture compiles"
         "zero source and fixture sorry"
         "standard-only axioms"
         "registry check"]},
-      :id :routes-2026-10-10-circle-power-kernel-card-41,
+      :id :routes-2026-10-10-circle-power-fiber-card-42,
       :kind :reusable-theorem,
-      :depends-on
-      [:routes-2026-10-10-cyclic-three-circles-pullback-cover-40],
+      :depends-on [:routes-2026-10-10-circle-power-kernel-card-41],
       :current-residual
-      "Use the quotient-cover orbit description to identify every circlePower fiber with its n-element kernel, transfer the count through LiteralCoveringPullback.fiberEquiv, and prove cyclic monodromy makes the pullback path connected.",
+      "Transport finiteness and cardinality through LiteralCoveringPullback.fiberEquiv to build the n-sheeted pullback certificate, then prove path connectedness via cyclic monodromy.",
       :other-consumers []},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
-     [{:cmd "lake env lean /tmp/circle-power-kernel-card.lean",
-       :exit 0}
-      {:cmd "sha256sum /tmp/circle-power-kernel-card.lean", :exit 0}
+     [{:cmd "lake env lean /tmp/circle-power-fiber-card.lean", :exit 0}
+      {:cmd "sha256sum /tmp/circle-power-fiber-card.lean", :exit 0}
       {:cmd
-       "rg -n \"\\b(sorry|admit)\\b\" /tmp/circle-power-kernel-card.lean",
+       "rg -n \"\\b(sorry|admit)\\b\" /tmp/circle-power-fiber-card.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd "python3 scripts/statement-registry.py check", :exit 0}
       {:cmd "git status --short", :exit 0, :finding "clean"}],
      :diagnostic-history
-     [{:cmd "lake env lean /tmp/circle-power-kernel-card.lean",
+     [{:cmd "lake env lean /tmp/circle-power-fiber-card.lean",
        :exit 1,
        :finding
-       "rootsOfUnity n Circle is a subgroup of Units Circle, not definitionally the kernel subtype in Circle; introduced an explicit equivalence."}
-      {:cmd "lake env lean /tmp/circle-power-kernel-card.lean",
-       :exit 1,
-       :finding
-       "Initial simplification erased the subtype membership shape; changed explicit local hypotheses to power equalities."}
-      {:cmd "lake env lean /tmp/circle-power-kernel-card.lean",
-       :exit 1,
-       :finding
-       "Projection-field change syntax and the Units-to-Circle equality needed adjustment; copied the kernel hypothesis and applied congrArg Units.val."}],
+       "Finite.of_injective required an explicit Finite instance for the power-map kernel; installed it from the banked kernel-finiteness theorem."}],
      :fixture
-     {:path "/tmp/circle-power-kernel-card.lean",
+     {:path "/tmp/circle-power-fiber-card.lean",
       :sha256
-      "eb87b29cbe38de29ae3497ad304b25e11382d838e03c15b38654b9e1dbcaef4d",
+      "e0e18a9463c6bbfb3c23935a10fe439067961569e333e06ff57c4ceb2ae6a55b",
       :interface
-      "kernelEquivRoots identifies the Circle npow kernel with rootsOfUnity; circlePower_kernel_card proves cardinality n and circlePower_kernel_finite supplies finiteness."},
+      "circlePower_fiber_card and circlePower_fiber_finite prove every degree-n Circle power fiber is finite with Nat.card n."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/cyclic-three-circles-cover",
@@ -96525,7 +96544,8 @@
    [:routes-2026-10-10-checkpoint-topo1-after-klein-boundary-eqvgen-28
     :routes-2026-10-10-cyclic-three-circles-collapse-39
     :routes-2026-10-10-cyclic-three-circles-pullback-cover-40
-    :routes-2026-10-10-circle-power-kernel-card-41],
+    :routes-2026-10-10-circle-power-kernel-card-41
+    :routes-2026-10-10-circle-power-fiber-card-42],
    :current-residual
    "Combine the cyclic cover with component restriction and close t99J01.",
    :other-consumers []}
@@ -96960,7 +96980,8 @@
    [:lemma-cyclicthreecirclescollapse-continuous-collapse
     :lemma-cyclicthreecirclescollapse-collapse-firstcircle
     :lemma-cyclicthreecirclespullbackcover-covering
-    :lemma-circlepowerkernelcard-circlepower-kernel-card],
+    :lemma-circlepowerkernelcard-circlepower-kernel-card
+    :lemma-circlepowerfibercard-circlepower-fiber-card],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -97940,6 +97961,18 @@
    :id :lemma-circlepowerkernelcard-circlepower-kernel-card,
    :kind :lemma,
    :depends-on [:lemma-cyclicthreecirclespullbackcover-covering],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "CirclePowerFiberCard.circlePower_fiber_card"},
+   :lemma
+   {:name "CirclePowerFiberCard.circlePower_fiber_card",
+    :reported-by []},
+   :id :lemma-circlepowerfibercard-circlepower-fiber-card,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
