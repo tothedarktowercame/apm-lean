@@ -32,4 +32,34 @@ def torusPi1Coord :
       (circleFundamentalGroupMulEquivInt (Path.Homotopic.projRight p)).toAdd := by
   rfl
 
+/-- Coordinate zero is the endpoint integer of the lifted left projection
+of an explicit based product loop. -/
+theorem torusPi1Coord_mk_apply_zero_eq_liftEndpoint
+    (gamma : Path ((1 : Circle), (1 : Circle)) (1, 1)) :
+    (torusPi1Coord (Path.Homotopic.Quotient.mk gamma)).toAdd 0 =
+      liftBasedLoopEndpointInteger
+        (gamma.map continuous_fst) (gamma.map continuous_fst).source
+          (gamma.map continuous_fst).target := by
+  change (circleFundamentalGroupMulEquivInt
+      (Path.Homotopic.projLeft (Path.Homotopic.Quotient.mk gamma))).toAdd = _
+  rw [show Path.Homotopic.projLeft (Path.Homotopic.Quotient.mk gamma) =
+      Path.Homotopic.Quotient.mk (gamma.map continuous_fst) by
+    exact (Path.Homotopic.Quotient.mk_map gamma ⟨Prod.fst, continuous_fst⟩).symm]
+  rfl
+
+/-- Coordinate one is the endpoint integer of the lifted right projection
+of an explicit based product loop. -/
+theorem torusPi1Coord_mk_apply_one_eq_liftEndpoint
+    (gamma : Path ((1 : Circle), (1 : Circle)) (1, 1)) :
+    (torusPi1Coord (Path.Homotopic.Quotient.mk gamma)).toAdd 1 =
+      liftBasedLoopEndpointInteger
+        (gamma.map continuous_snd) (gamma.map continuous_snd).source
+          (gamma.map continuous_snd).target := by
+  change (circleFundamentalGroupMulEquivInt
+      (Path.Homotopic.projRight (Path.Homotopic.Quotient.mk gamma))).toAdd = _
+  rw [show Path.Homotopic.projRight (Path.Homotopic.Quotient.mk gamma) =
+      Path.Homotopic.Quotient.mk (gamma.map continuous_snd) by
+    exact (Path.Homotopic.Quotient.mk_map gamma ⟨Prod.snd, continuous_snd⟩).symm]
+  rfl
+
 end ConstructionTargets.TorusPiOneWindingCoordinates
