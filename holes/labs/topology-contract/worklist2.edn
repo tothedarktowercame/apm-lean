@@ -66889,6 +66889,19 @@
       :output "131 registered statements match, 0 do not"}
      {:cmd "git diff --check", :exit 0}
      {:cmd "git status --short", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791673747917-3226-11e42b57",
+     :commands
+     ["git show/diff-tree/check 49b610e8b3df308a706f90ad78d9fb9132e16f65"
+      "git rev-parse recorded blob; git hash-object current module; sha256sum fixture"
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean"
+      "lake env lean /tmp/t02a03_right_core_compact_probe.lean"
+      "python3 scripts/statement-registry.py check --rev 49b610e8b3df308a706f90ad78d9fb9132e16f65"
+      "statement fingerprints at commit and parent; comment-stripped placeholder census; clojure.edn/read-string worklist"],
+     :finding
+     "PASS: reviewer differs from author topo-6; commit changes only the scoped module and recorded/current blob a3a0f9f17c9cb66323de20cd08ac537fee54e80d matches. Fixture SHA-256 matches. Module and frozen fixture compile with only propext, Classical.choice, and Quot.sound; registry is 131/0, frozen t02A03 fingerprint remains d123afd5ae0ee067587b3ed3d7b9b6d2f075c3d95701e098ec357c7317cd34c3, and the sole frozen placeholder remains. The interpolation has the required orientation: at zero it is the normal coordinate of circleMeridian(m p), and at one it is the input point normal coordinate. Continuity crosses unitInterval and RightTubeMinusLeftCore through coercions and the banked normal-coordinate continuity. No ambient reconstruction, radius, tube, or deletion invariant is claimed."},
     :commit "49b610e8b3df308a706f90ad78d9fb9132e16f65",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
@@ -66900,7 +66913,7 @@
     "For any continuous meridian coordinate, the complex line segment from the meridian endpoint's disk-normal coordinate to the input point's disk-normal coordinate is continuous and has the required endpoint equations.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/right-core-normal-interpolation",
@@ -67012,7 +67025,7 @@
      "For any continuous Circle-valued meridian coordinate m, the complex segment (1-t) rightTubeCoreNormalComplex(circleMeridian(m p)) + t rightTubeCoreNormalComplex(p) is continuous and has the required zero and one endpoints. The compiled existential isolates the disk-normal component of H; radius control and the right-core angular interpolation remain separate obligations.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
