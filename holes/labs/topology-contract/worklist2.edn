@@ -61464,44 +61464,58 @@
    "single-consumer continuous ambient radial interpolation for the t02A03 punctured left tube",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/t02a03_geometric_tube_cover.lean",
-      :sha256
-      "bb97efb8827080715d55a33a7925d58c06a0fc81abffa0a6501cd13e95cf11df"},
-     :commands
-     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "apm_t02a03_leftTubeRadialPoint, apm_t02a03_continuous_leftTubeRadialPoint, apm_t02a03_leftTubeRadialPoint_zero, and apm_t02a03_leftTubeRadialPoint_one compiled without warnings; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
-       :exit 0}
-      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
-       :exit 0,
-       :output
-       "bb97efb8827080715d55a33a7925d58c06a0fc81abffa0a6501cd13e95cf11df  /tmp/t02a03_geometric_tube_cover.lean"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :finding
-     "The complete placeholder-free fixture defines the requested affine ambient interpolation from inverse-after-forward at time zero to the original punctured-tube point at time one. Its continuity is proved explicitly from the continuous forward coordinate map, bundled inverse, subtype inclusions, scalar multiplication, and addition; both endpoint identities compile definitionally. The fixture has no warnings and uses only propext, Classical.choice, and Quot.sound.",
-     :implementation
-     {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
-      :declarations
-      ["apm_t02a03_leftTubeRadialPoint"
-       "apm_t02a03_continuous_leftTubeRadialPoint"
-       "apm_t02a03_leftTubeRadialPoint_zero"
-       "apm_t02a03_leftTubeRadialPoint_one"],
-      :source-fixture "/tmp/t02a03_geometric_tube_cover.lean"},
-     :missing-theorems [],
-     :residual
-     "Prove the ambient interpolation stays inside the frozen left tube and outside the frozen core, bundle it as the inverse-after-forward homotopy in LeftTubeMinusCore, and assemble the torus HomotopyEquiv."}},
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Prove the ambient interpolation stays inside the frozen left tube and outside the frozen core, bundle it as the inverse-after-forward homotopy in LeftTubeMinusCore, and assemble the torus HomotopyEquiv.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :missing-theorems [],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not",
+     :declaration-packet-sha256
+     "8e15d9e094ec19f7a83552c669ce02a61d6922230cad906de19556ba8f4fb08c"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+      :exit 0,
+      :output
+      "bb97efb8827080715d55a33a7925d58c06a0fc81abffa0a6501cd13e95cf11df  /tmp/t02a03_geometric_tube_cover.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeCover.lean",
+      :exit 0,
+      :output ""}
+     {:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+      :exit 0,
+      :output
+      "apm_t02a03_continuous_leftTubeRadialPoint, apm_t02a03_leftTubeRadialPoint_zero, and apm_t02a03_leftTubeRadialPoint_one depend on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeCover.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}],
+    :commit "46197561d48639e2070b94655923a9bb549278b4",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
+    :fixture
+    {:path "/tmp/t02a03_geometric_tube_cover.lean",
+     :sha256
+     "bb97efb8827080715d55a33a7925d58c06a0fc81abffa0a6501cd13e95cf11df"},
+    :finding
+    "Banked the continuous affine ambient interpolation from inverse-after-forward at time zero to the original punctured-tube point at time one, together with both endpoint identities.",
+    :implementation
+    {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
+     :declarations
+     ["apm_t02a03_leftTubeRadialPoint"
+      "apm_t02a03_continuous_leftTubeRadialPoint"
+      "apm_t02a03_leftTubeRadialPoint_zero"
+      "apm_t02a03_leftTubeRadialPoint_one"]},
+    :seat "topo-6"},
    :source-fixture "/tmp/t02a03_geometric_tube_cover.lean",
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/left-tube-radial-ambient-interpolation",
