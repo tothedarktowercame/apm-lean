@@ -65674,58 +65674,69 @@
    "single-consumer frozen meridian membership needed to type the inverse map",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:residual
-     "After banking this membership theorem, define the restricted circleMeridian inverse and construct the forward normal coordinate and both homotopies for rightTubeMinusLeftCoreMeridianHomotopyEquiv.",
-     :outcome :go,
-     :warnings [],
-     :missing-theorems
-     [{:name
-       "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_circleMeridian_mem_rightTubeMinusLeftCore",
-       :type
-       "forall z : Circle, apm_t02a03_circleMeridian z ∈ apm_t02a03_rightTube ∧ apm_t02a03_circleMeridian z ∉ Set.range apm_t02a03_leftCore",
-       :status :proved,
-       :consumers [:t02A03],
-       :depends-on
-       ["ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_circleMeridian_mem_geometricY"
-        "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_origin_mem_both_cores"],
-       :area "explicit-r3-tube-deformation-retraction"}],
-     :commands
-     [{:cmd "lake env lean /tmp/t02a03_meridian_right_tube.lean",
-       :exit 0,
-       :output
-       "apm_t02a03_circleMeridian_mem_rightTubeMinusLeftCore compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd "sha256sum /tmp/t02a03_meridian_right_tube.lean",
-       :exit 0,
-       :output
-       "0936693afa3d55429cdc5145e13178759111b7f389335c4ce9aa466a1739a87b  /tmp/t02a03_meridian_right_tube.lean"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_meridian_right_tube.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :fixture
-     {:path "/tmp/t02a03_meridian_right_tube.lean",
-      :sha256
-      "0936693afa3d55429cdc5145e13178759111b7f389335c4ce9aa466a1739a87b"},
-     :finding
-     "The fixture proves the exact requested declaration directly. It combines the existing exclusion from the left core with a distance-to-origin estimate: the meridian has norm 1/8, the origin lies on the right core, and 1/8 ≤ 1/4, so every meridian point belongs to the frozen closed right tube.",
-     :implementation
-     {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
-      :declaration
+   {:placeholder-delta
+    {:before 0,
+     :after 0,
+     :delta 0,
+     :closed
+     "banked ConstructionTargets theorem; consumer placeholder unchanged"},
+    :residual
+    "Define the restricted circleMeridian inverse, construct the forward coordinate, and prove both homotopies before packaging rightTubeMinusLeftCoreMeridianHomotopyEquiv.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :missing-theorems
+    [{:name
       "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_circleMeridian_mem_rightTubeMinusLeftCore",
       :type
-      "forall z : Circle, apm_t02a03_circleMeridian z ∈ apm_t02a03_rightTube ∧ apm_t02a03_circleMeridian z ∉ Set.range apm_t02a03_leftCore",
-      :instructions
-      "Insert the compiled theorem after apm_t02a03_circleMeridian_mem_geometricY. Preserve all existing declarations and the frozen tube radius."},
-     :seat "topo-8"}},
+      "forall z : Circle, circleMeridian z belongs to rightTube and is outside range leftCore",
+      :status :proved,
+      :consumers [:t02A03],
+      :depends-on
+      ["ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_circleMeridian_mem_geometricY"
+       "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_origin_mem_both_cores"],
+      :area "explicit-r3-tube-deformation-retraction"}],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not",
+     :construction-file-git-blob
+     "2dd7361e6e9ed5c4b5c61eec7c96ca43dbf7fd95",
+     :fixture-sha256
+     "0936693afa3d55429cdc5145e13178759111b7f389335c4ce9aa466a1739a87b"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeCover.lean",
+      :exit 0}
+     {:cmd "lake env lean /tmp/t02a03_meridian_right_tube.lean",
+      :exit 0}
+     {:cmd "sha256sum /tmp/t02a03_meridian_right_tube.lean",
+      :exit 0,
+      :output
+      "0936693afa3d55429cdc5145e13178759111b7f389335c4ce9aa466a1739a87b  /tmp/t02a03_meridian_right_tube.lean"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git show --check --oneline 809eb291eb023b0295691f65de0a765c583d5bc3",
+      :exit 0,
+      :output "809eb291 Prove t02A03 meridian tube membership"}],
+    :commit "809eb291eb023b0295691f65de0a765c583d5bc3",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
+    :fixture
+    {:path "/tmp/t02a03_meridian_right_tube.lean",
+     :sha256
+     "0936693afa3d55429cdc5145e13178759111b7f389335c4ce9aa466a1739a87b"},
+    :finding
+    "The meridian has norm 1/8, the origin lies on the right core, and 1/8 is at most the frozen radius 1/4; the existing theorem supplies exclusion from the left core.",
+    :seat "topo-6"},
    :instructions
    "Insert the compiled theorem after apm_t02a03_circleMeridian_mem_geometricY. Preserve all existing declarations and the frozen tube radius.",
    :phase :implementation,
    :type
    "forall z : Circle, apm_t02a03_circleMeridian z ∈ apm_t02a03_rightTube ∧ apm_t02a03_circleMeridian z ∉ Set.range apm_t02a03_leftCore",
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/circle-meridian-right-tube-membership",
