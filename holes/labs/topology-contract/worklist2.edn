@@ -61175,26 +61175,74 @@
   {:bounded-exception
    "single-consumer exact forward-after-inverse identity for the t02A03 punctured left tube",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/t02a03_geometric_tube_cover.lean",
+      :sha256
+      "4732f68911b8e4d325678547ffcdae45c5488bf531414ac5392f4987b0fd314d"},
+     :commands
+     [{:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "4732f68911b8e4d325678547ffcdae45c5488bf531414ac5392f4987b0fd314d  /tmp/t02a03_geometric_tube_cover.lean"}
+      {:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "apm_t02a03_leftTubeAngular_torusInverse, apm_t02a03_leftTubeNormalAngular_torusInverse, and apm_t02a03_leftTubeTorusCoordinates_torusInverse compiled without warnings; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}
+      {:cmd
+       "rg -n \"apm_t02a03_leftTube(Angular_torusInverse|NormalAngular_torusInverse|TorusCoordinates_torusInverse|TorusInverse)\" ConstructionTargets/T02A03GeometricTubeCover.lean /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "The canonical module contains apm_t02a03_leftTubeTorusInverse; only the fixture contains the three forward-after-inverse identity declarations."}],
+     :finding
+     "The complete placeholder-free fixture proves both coordinate components and their product identity. The reconstructed planar coordinate is a strictly positive real multiple of the first Circle coordinate, so normalization returns that coordinate. Its normal displacement is the positive scalar 1/8 times the second Circle coordinate, so normal normalization returns the second coordinate. Consequently the forward coordinate map after the inverse reconstruction is pointwise exactly the torus identity.",
+     :implementation
+     {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
+      :declarations
+      ["apm_t02a03_leftTubeAngular_torusInverse"
+       "apm_t02a03_leftTubeNormalAngular_torusInverse"
+       "apm_t02a03_leftTubeTorusCoordinates_torusInverse"],
+      :acceptance
+      {:type
+       "forall u : Circle × Circle, apm_t02a03_leftTubeTorusCoordinates (apm_t02a03_leftTubeTorusInverse u) = u",
+       :axioms ["propext" "Classical.choice" "Quot.sound"],
+       :placement "Immediately after apm_t02a03_leftTubeTorusInverse",
+       :gates
+       ["module compiles without warnings"
+        "scoped file contains no sorry token"
+        "statement registry matches"]}},
+     :residual
+     "Promote the three compiled coordinate-identity declarations into ConstructionTargets/T02A03GeometricTubeCover.lean. Then construct the inverse-after-forward radial homotopy within LeftTubeMinusCore and assemble the HomotopyEquiv, using a constant homotopy on the torus side."}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/left-tube-forward-inverse-identity",
    :acceptance
-   {:probe
-    "Compile and bank apm_t02a03_leftTubeAngular_torusInverse, apm_t02a03_leftTubeNormalAngular_torusInverse, and apm_t02a03_leftTubeTorusCoordinates_torusInverse from /tmp/t02a03_geometric_tube_cover.lean. Prove that the planar angular coordinate of the fixed-radius reconstruction is its first Circle coordinate, its normalized complex normal coordinate is its second Circle coordinate, and consequently apm_t02a03_leftTubeTorusCoordinates (apm_t02a03_leftTubeTorusInverse u) = u. This supplies the torus-side comparison required by t02A03 route step 2; do not yet claim the complement-side radial homotopy, the HomotopyEquiv, or gluing.",
-    :declarations
-    ["apm_t02a03_leftTubeAngular_torusInverse"
-     "apm_t02a03_leftTubeNormalAngular_torusInverse"
-     "apm_t02a03_leftTubeTorusCoordinates_torusInverse"],
-    :type
+   {:type
     "forall u : Circle × Circle, apm_t02a03_leftTubeTorusCoordinates (apm_t02a03_leftTubeTorusInverse u) = u",
-    :placeholder "the sole sorry in apm_t02a03",
-    :route-step
-    "t02A03 step 2, identify the forward coordinate map after the inverse reconstruction exactly with the torus identity"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :placement "Immediately after apm_t02a03_leftTubeTorusInverse",
+    :gates
+    ["module compiles without warnings"
+     "scoped file contains no sorry token"
+     "statement registry matches"]},
    :id
    :routes-2026-10-10-t02a03-left-tube-forward-inverse-identity-topo2-r1,
    :kind :reusable-theorem,
+   :declarations
+   ["apm_t02a03_leftTubeAngular_torusInverse"
+    "apm_t02a03_leftTubeNormalAngular_torusInverse"
+    "apm_t02a03_leftTubeTorusCoordinates_torusInverse"],
    :depends-on
    [:routes-2026-10-10-checkpoint-topo2-r5
     :routes-2026-10-10-t02a03-left-tube-torus-inverse-map-topo2-r1],
