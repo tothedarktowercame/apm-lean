@@ -64855,8 +64855,176 @@
      :typed-residual-change
      :infrastructure-packets
      :review-outcomes]},
+   :evidence
+   {:outcome :replan,
+    :seat "topo-8",
+    :commands
+    [{:cmd
+      "bb holes/labs/topology-contract/build_step.bb priorities holes/labs/topology-contract/worklist2.edn",
+      :exit 0,
+      :output
+      "t02A03 placeholders=1 banked=23 backlog=2 route=open; t97A04 placeholders=3 banked=13 backlog=0 route=COMPLETE-elect-closure-adapter-now; top ready lemmas are apm_t02a03_leftTubeTorusCoordinates_torusInverse and apm_t02a03_rightCoreBasedAttachmentHomotopy"}
+     {:cmd
+      "comment-stripped placeholder census for all 15 topo2 consumers",
+      :exit 0,
+      :output
+      "t00J01 1; t00J07 3; t00J08 3; t01A02 3; t01A04 4; t02A02 1; t02A03 1; t91J03 1; t93A06 1; t94A08 1; t95A04 1; t96A07 1; t96J02 1; t97A04 3; t98A03 1"}
+     {:cmd
+      "rg -n 'theorem apm_t02a03_leftTubeTorusCoordinates_torusInverse|apm_t02a03_rightCoreBasedAttachmentHomotopy' ConstructionTargets -g '*.lean'",
+      :exit 0,
+      :output
+      "Both ready backlog declarations already exist in ConstructionTargets/T02A03GeometricTubeCover.lean."}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}],
+    :finding
+    {:measures
+     {:placeholder-delta {:t02A03 0, :shared-rp2-atlas 0, :t97A04 -1},
+      :typed-residual-change
+      {:t02A03
+       "Closure probe isolated one exact tube-wide homotopy equivalence; its two ready prerequisite nodes are already compiled but remain marked backlog.",
+       :shared-rp2-atlas
+       "RP2 atlas and sphere-projection local diffeomorphism are banked; consumer descent and immersion/transversality remain.",
+       :t97A04
+       "H1 bridge is closed; remaining placeholders are bridge_1, bridge_3, and final hcore assembly."},
+      :infrastructure-packets
+      {:t02A03 1, :shared-rp2-atlas 1, :t97A04 12},
+      :review-outcomes
+      {:t02A03 :revise, :shared-rp2-atlas :pass, :t97A04 :pass}},
+     :placeholder-census
+     {:t93A06 1,
+      :t01A02 3,
+      :t02A03 1,
+      :t91J03 1,
+      :t95A04 1,
+      :t01A04 4,
+      :t00J07 3,
+      :t98A03 1,
+      :t96J02 1,
+      :t00J01 1,
+      :t97A04 3,
+      :t02A02 1,
+      :t00J08 3,
+      :t94A08 1,
+      :t96A07 1},
+     :routes
+     {:t02A03
+      {:placeholder "the sole sorry in apm_t02a03",
+       :chain
+       ["banked closed-punctured-disk equivalence"
+        "bank the already-compiled leftTubeTorusCoordinates_torusInverse"
+        "bank the already-compiled rightCoreBasedAttachmentHomotopy"
+        "rightTubeMinusLeftCoreHomotopyEquivCircle"
+        "geometricYHomotopyEquivGenericWedge"
+        "consumer closure adapter"]},
+      :t97A04
+      {:placeholders
+       ["apm_t97A04_bridge_1"
+        "apm_t97A04_bridge_3"
+        "hcore in apm_t97a04"],
+       :chain
+       ["bridge_1 is a compiled direct CoefficientH0 adapter and is elected first"
+        "bridge_2 is banked"
+        "bridge_3 still follows productionConnecting_naturality -> torus_ycover_connecting_mono plus shearY_H1_overlap -> shearY_H2 -> bridge_3 assembly"
+        "hcore is one-line assembly after bridges 1 and 3"]}},
+     :priority
+     "Rule 0 overrides lemma ranking: elect t97A04 bridge_1 first because the ledger marks the t97A04 route complete. Then bank the first two ready t02A03 nodes in the exact order printed by priorities. The ledger currently under-models the documented t97A04 H2 chain despite reporting zero backlog; the next checkpoint must add those H2 lemma nodes after the H0 placeholder is closed."},
+    :replacement-items
+    [{:consumer :t97A04,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md/t97A04/bridge-1",
+      :acceptance
+      {:probe
+       "Compile a placeholder-free consumer fixture replacing only apm_t97A04_bridge_1 with the documented CoefficientH0.h0Iso and h0Augmentation_naturality proof. Preserve every registered statement and all other placeholders.",
+       :placeholder "apm_t97A04_bridge_1",
+       :route-step "t97A04 step 1, direct H0 closure adapter"},
+      :id :routes-2026-10-10-t97a04-h0-bridge-closure-topo2-r1,
+      :kind :final-adapter,
+      :depends-on [:routes-2026-10-10-checkpoint-topo2-r6],
+      :current-residual
+      "Three placeholders remain; close bridge_1 directly, leaving bridge_3 and the final hcore assembly.",
+      :other-consumers []}
+     {:bounded-exception
+      "single-consumer banking of an already-compiled coordinate inverse required by the t02A03 tube equivalence",
+      :consumer :t02A03,
+      :implements-lemma
+      :lemma-apm-t02a03-lefttubetoruscoordinates-torusinverse,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/t02A03/left-tube-coordinate-inverse",
+      :acceptance
+      {:probe
+       "Compile and bank the existing ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_leftTubeTorusCoordinates_torusInverse without changing its statement.",
+       :declaration
+       "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_leftTubeTorusCoordinates_torusInverse",
+       :placeholder "the sole sorry in apm_t02a03",
+       :route-step
+       "t02A03 geometric tube equivalence, discharge the ready coordinate-inverse DAG node"},
+      :id
+      :routes-2026-10-10-t02a03-bank-left-coordinate-inverse-topo2-r1,
+      :kind :reusable-theorem,
+      :depends-on [:routes-2026-10-10-checkpoint-topo2-r6],
+      :current-residual
+      "The declaration exists but its lemma node remains backlog; banking it removes one of t02A03's two ready prerequisites.",
+      :other-consumers []}
+     {:bounded-exception
+      "single-consumer banking of an already-compiled based attachment homotopy required by the t02A03 tube equivalence",
+      :consumer :t02A03,
+      :implements-lemma
+      :lemma-apm-t02a03-rightcorebasedattachmenthomotopy,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/t02A03/right-core-based-attachment-homotopy",
+      :acceptance
+      {:probe
+       "Compile and bank the existing ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_rightCoreBasedAttachmentHomotopy without changing its statement.",
+       :declaration
+       "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_rightCoreBasedAttachmentHomotopy",
+       :placeholder "the sole sorry in apm_t02a03",
+       :route-step
+       "t02A03 geometric tube equivalence, discharge the ready based-attachment DAG node"},
+      :id
+      :routes-2026-10-10-t02a03-bank-right-based-attachment-homotopy-topo2-r1,
+      :kind :reusable-theorem,
+      :depends-on [:routes-2026-10-10-checkpoint-topo2-r6],
+      :current-residual
+      "The declaration exists but its lemma node remains backlog; banking it readies rightTubeMinusLeftCoreHomotopyEquivCircle.",
+      :other-consumers []}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 3,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:strategy
+       "Recount topo2 placeholders; add the documented t97A04 H2 chain to the lemma DAG so zero backlog is not reported prematurely; rerun priorities; elect exactly one near-closure adapter first and then the top ready lemma rows."},
+      :id :routes-2026-10-10-checkpoint-topo2-r7,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:routes-2026-10-10-t97a04-h0-bridge-closure-topo2-r1
+       :routes-2026-10-10-t02a03-bank-left-coordinate-inverse-topo2-r1
+       :routes-2026-10-10-t02a03-bank-right-based-attachment-homotopy-topo2-r1],
+      :current-residual
+      "Measure the H0 closure and two t02A03 DAG corrections, then refill from the corrected complete route graph.",
+      :other-consumers []}],
+    :author "topo-8",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -64871,6 +65039,96 @@
     :routes-2026-10-10-checkpoint-topo2-r5],
    :current-residual
    "Measure one minimum-placeholder closure attempt, one two-consumer foundation, and one newly supported t97A04 adapter.",
+   :other-consumers []}
+  {:consumer :t97A04,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md/t97A04/bridge-1",
+   :acceptance
+   {:probe
+    "Compile a placeholder-free consumer fixture replacing only apm_t97A04_bridge_1 with the documented CoefficientH0.h0Iso and h0Augmentation_naturality proof. Preserve every registered statement and all other placeholders.",
+    :placeholder "apm_t97A04_bridge_1",
+    :route-step "t97A04 step 1, direct H0 closure adapter"},
+   :id :routes-2026-10-10-t97a04-h0-bridge-closure-topo2-r1,
+   :kind :final-adapter,
+   :depends-on [:routes-2026-10-10-checkpoint-topo2-r6],
+   :current-residual
+   "Three placeholders remain; close bridge_1 directly, leaving bridge_3 and the final hcore assembly.",
+   :other-consumers []}
+  {:bounded-exception
+   "single-consumer banking of an already-compiled coordinate inverse required by the t02A03 tube equivalence",
+   :consumer :t02A03,
+   :implements-lemma
+   :lemma-apm-t02a03-lefttubetoruscoordinates-torusinverse,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md/t02A03/left-tube-coordinate-inverse",
+   :acceptance
+   {:probe
+    "Compile and bank the existing ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_leftTubeTorusCoordinates_torusInverse without changing its statement.",
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_leftTubeTorusCoordinates_torusInverse",
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "t02A03 geometric tube equivalence, discharge the ready coordinate-inverse DAG node"},
+   :id :routes-2026-10-10-t02a03-bank-left-coordinate-inverse-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on [:routes-2026-10-10-checkpoint-topo2-r6],
+   :current-residual
+   "The declaration exists but its lemma node remains backlog; banking it removes one of t02A03's two ready prerequisites.",
+   :other-consumers []}
+  {:bounded-exception
+   "single-consumer banking of an already-compiled based attachment homotopy required by the t02A03 tube equivalence",
+   :consumer :t02A03,
+   :implements-lemma
+   :lemma-apm-t02a03-rightcorebasedattachmenthomotopy,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t02A03/right-core-based-attachment-homotopy",
+   :acceptance
+   {:probe
+    "Compile and bank the existing ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_rightCoreBasedAttachmentHomotopy without changing its statement.",
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_rightCoreBasedAttachmentHomotopy",
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "t02A03 geometric tube equivalence, discharge the ready based-attachment DAG node"},
+   :id
+   :routes-2026-10-10-t02a03-bank-right-based-attachment-homotopy-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on [:routes-2026-10-10-checkpoint-topo2-r6],
+   :current-residual
+   "The declaration exists but its lemma node remains backlog; banking it readies rightTubeMinusLeftCoreHomotopyEquivCircle.",
+   :other-consumers []}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 3,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:strategy
+    "Recount topo2 placeholders; add the documented t97A04 H2 chain to the lemma DAG so zero backlog is not reported prematurely; rerun priorities; elect exactly one near-closure adapter first and then the top ready lemma rows."},
+   :id :routes-2026-10-10-checkpoint-topo2-r7,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:routes-2026-10-10-t97a04-h0-bridge-closure-topo2-r1
+    :routes-2026-10-10-t02a03-bank-left-coordinate-inverse-topo2-r1
+    :routes-2026-10-10-t02a03-bank-right-based-attachment-homotopy-topo2-r1
+    :routes-2026-10-10-checkpoint-topo2-r6],
+   :current-residual
+   "Measure the H0 closure and two t02A03 DAG corrections, then refill from the corrected complete route graph.",
    :other-consumers []}
   {:consumer :t94A08,
    :phase :probe,
