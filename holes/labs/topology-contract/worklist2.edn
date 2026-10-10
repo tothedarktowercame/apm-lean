@@ -64513,23 +64513,61 @@
   {:bounded-exception
    "single-consumer frozen IntegralH1 commuting map square for t97A04",
    :consumer :t97A04,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/t97a04_frozen_h1_coordinate.lean",
+      :sha256
+      "ebc6d1023b77af5375de2ffd15282a7385949519c87590dc2e193b517492ba52"},
+     :commands
+     [{:cmd "sha256sum /tmp/t97a04_frozen_h1_coordinate.lean",
+       :exit 0,
+       :output
+       "ebc6d1023b77af5375de2ffd15282a7385949519c87590dc2e193b517492ba52  /tmp/t97a04_frozen_h1_coordinate.lean"}
+      {:cmd "lake env lean /tmp/t97a04_frozen_h1_coordinate.lean",
+       :exit 0,
+       :output
+       "frozenLbarIntegralH1_map_commutes compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t97a04_frozen_h1_coordinate.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :implementation
+     {:scope ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"],
+      :declarations
+      ["ConstructionTargets.T97A04FrozenH1Coordinate.frozenLbarIntegralH1_map_commutes"],
+      :acceptance
+      {:type
+       "(HomologicalComplex.homologyMap (ConstructionTargets.SingularSubdivision.singularPostcomposition frozenLbar) 1) ≫ frozenTorusAlignedH1GroupIsoFinTwo.hom = frozenTorusAlignedH1GroupIsoFinTwo.hom ≫ AddCommGrpCat.ofHom frozenMatrixAddHom",
+       :gates
+       ["scoped module compiles"
+        "scoped module contains no sorry token"
+        "statement registry matches"]}},
+     :finding
+     "The complete fixture packages the aligned IntegralH1 matrix calculation as an AddCommGrpCat commuting square suitable for direct composition with singularHomologyComparison_naturality.",
+     :residual
+     "Transfer this square through singularHomologyComparison_naturality using forgetIntModules faithfulness, obtain the aligned ModuleCat induced-map equation, and assemble apm_t97A04_bridge_2.",
+     :warnings []}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t97A04/frozen-integral-h1-map-square",
    :acceptance
-   {:probe
-    "Compile and bank frozenLbarIntegralH1_map_commutes from /tmp/t97a04_frozen_h1_coordinate.lean. Repackage the pointwise aligned IntegralH1 matrix equation as an equality of AddCommGrpCat morphisms, suitable for composition with singularHomologyComparison_naturality. Preserve the frozen matrix exactly; do not yet claim the ModuleCat induced-map equation or apm_t97A04_bridge_2.",
-    :declaration
-    "ConstructionTargets.T97A04FrozenH1Coordinate.frozenLbarIntegralH1_map_commutes",
-    :type
+   {:type
     "(HomologicalComplex.homologyMap (ConstructionTargets.SingularSubdivision.singularPostcomposition frozenLbar) 1) ≫ frozenTorusAlignedH1GroupIsoFinTwo.hom = frozenTorusAlignedH1GroupIsoFinTwo.hom ≫ AddCommGrpCat.ofHom frozenMatrixAddHom",
-    :placeholder "apm_t97A04_bridge_2",
-    :route-step
-    "t97A04 step 6, express the aligned IntegralH1 matrix calculation as the commuting square used by the comparison naturality proof"},
+    :gates
+    ["scoped module compiles"
+     "scoped module contains no sorry token"
+     "statement registry matches"]},
    :id
    :routes-2026-10-10-t97a04-frozen-integral-h1-map-square-topo2-r1,
    :kind :reusable-theorem,
+   :declarations
+   ["ConstructionTargets.T97A04FrozenH1Coordinate.frozenLbarIntegralH1_map_commutes"],
    :depends-on
    [:routes-2026-10-10-checkpoint-topo2-r5
     :routes-2026-10-10-t97a04-frozen-aligned-h1-module-coordinate-topo2-r1],
