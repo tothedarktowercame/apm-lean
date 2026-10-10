@@ -602,8 +602,90 @@
   {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-overlaptransitionunit-eq-of-ispreconnected,
+   :evidence
+   {:placeholder-delta {:source 0, :fixture 0},
+    :residual
+    "Construct orientation-compatible chart overlaps with preconnected common domains and transition unit one at one point; constancy then makes every overlap generator coherent. Glue those coherent local generators to an absolute top class.",
+    :gates
+    {:module-build :pass,
+     :fixture-compiles :pass,
+     :zero-source-and-fixture-sorry :pass,
+     :standard-only-axioms :pass,
+     :registry-check :pass,
+     :exact-scope :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["lake build replayed pre-existing linter warnings in dependencies; the target module emitted no warnings"],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.ManifoldFundamentalClass.overlapTransitionUnit",
+      :type
+      "The transition unit restricted to the subtype CoefficientOverlapPair.common m a b.",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on
+      ["ConstructionTargets.ManifoldFundamentalClass.chartGenerator_eq_of_transitionUnit_eq_one"],
+      :area "manifold-fundamental-class"}
+     {:name
+      "ConstructionTargets.ManifoldFundamentalClass.overlapTransitionUnit_isLocallyConstant",
+      :type "IsLocallyConstant (overlapTransitionUnit R m a b).",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on
+      ["ConstructionTargets.ManifoldFundamentalClass.overlapTransitionUnit"],
+      :area "manifold-fundamental-class"}
+     {:name
+      "ConstructionTargets.ManifoldFundamentalClass.overlapTransitionUnit_eq_of_isPreconnected",
+      :type
+      "For a preconnected chart overlap, overlapTransitionUnit takes equal values at every two points.",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on
+      ["ConstructionTargets.ManifoldFundamentalClass.overlapTransitionUnit_isLocallyConstant"],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-10",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/manifold_fundamental_class_connected_overlap.lean",
+      :exit 0,
+      :output
+      "5bdfa239ae19ce93a172e751eccdcf2bb233544bfccf7e38d4c423f4037fa470"}
+     {:cmd
+      "lake env lean /tmp/manifold_fundamental_class_connected_overlap.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd
+      "rg -n \\bsorry\\b|\\badmit\\b|^\\s*axiom\\b ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "eca25ba5955d3c1f92e8f65c168aa4196ffcc0fc",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path "/tmp/manifold_fundamental_class_connected_overlap.lean",
+     :sha256
+     "5bdfa239ae19ce93a172e751eccdcf2bb233544bfccf7e38d4c423f4037fa470",
+     :sorry-count 0},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :summary
+     "Added the overlap-subtype transition-unit function, proved its local constancy from CoefficientTransitionLocalConstancy.locally_constant, and proved equality of its values on preconnected overlaps."},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/connected-overlap-transition-unit",
@@ -1922,16 +2004,67 @@
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.overlapTransitionUnit_eq_of_isPreconnected",
     :reported-by
-    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+     :routes-2026-10-10-manifold-connected-overlap-unit-topo3-r1],
     :type
     "forall (R : Type) [CommRing R] (m : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (EuclideanSpace Real (Fin (m + 2))) M] (a b : M), IsPreconnected (CoefficientOverlapPair.common m a b) -> forall (x y : CoefficientOverlapPair.common m a b), overlapTransitionUnit R m a b x = overlapTransitionUnit R m a b y",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in
+    :routes-2026-10-10-manifold-connected-overlap-unit-topo3-r1},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-overlaptransitionunit-eq-of-ispreconnected,
    :kind :lemma,
    :depends-on
+   [:lemma-constructiontargets-manifoldfundamentalclass-chartgenerator-eq-of-transitionunit-eq-one
+    :lemma-constructiontargets-manifoldfundamentalclass-overlaptransitionunit-islocallycons],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFundamentalClass.overlapTransitionUnit",
+    :type
+    "The transition unit restricted to the subtype CoefficientOverlapPair.common m a b."},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFundamentalClass.overlapTransitionUnit",
+    :reported-by
+    [:routes-2026-10-10-manifold-connected-overlap-unit-topo3-r1],
+    :type
+    "The transition unit restricted to the subtype CoefficientOverlapPair.common m a b.",
+    :area "manifold-fundamental-class",
+    :proved-in
+    :routes-2026-10-10-manifold-connected-overlap-unit-topo3-r1},
+   :id
+   :lemma-constructiontargets-manifoldfundamentalclass-overlaptransitionunit,
+   :kind :lemma,
+   :depends-on
    [:lemma-constructiontargets-manifoldfundamentalclass-chartgenerator-eq-of-transitionunit-eq-one],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFundamentalClass.overlapTransitionUnit_isLocallyConstant",
+    :type "IsLocallyConstant (overlapTransitionUnit R m a b)."},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFundamentalClass.overlapTransitionUnit_isLocallyConstant",
+    :reported-by
+    [:routes-2026-10-10-manifold-connected-overlap-unit-topo3-r1],
+    :type "IsLocallyConstant (overlapTransitionUnit R m a b).",
+    :area "manifold-fundamental-class",
+    :proved-in
+    :routes-2026-10-10-manifold-connected-overlap-unit-topo3-r1},
+   :id
+   :lemma-constructiontargets-manifoldfundamentalclass-overlaptransitionunit-islocallycons,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-manifoldfundamentalclass-overlaptransitionunit],
    :other-consumers [:t98A02]}],
  :consumer-baselines {},
  :statuses
