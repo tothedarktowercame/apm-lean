@@ -84994,87 +84994,51 @@
    "Construct the quotient-glued total space and prove local triviality at the wedge point, then expose the fiber equivalence and the two bounded circle-cover demonstrations.",
    :other-consumers [:t99J01]}
   {:consumer :t92J06,
+   :stop-count 1,
    :evidence
-   {:probe
-    {:outcome :revise,
-     :seat "topo-4",
-     :fixture
-     {:path "/tmp/point-wedge-covering-gluing-probe.lean",
-      :sha256
-      "101f5af3cf428dd91f63c9f21ac2d566b478c9c61dff0a2c601475239c27eaf9"},
-     :commands
-     [{:cmd "stat -c '%F %n' .lake/packages",
-       :exit 0,
-       :finding
-       "directory .lake/packages; canonical package authority is present"}
-      {:cmd
-       "lake env lean ConstructionTargets/LiteralCoveringPullback.lean",
-       :exit 0,
-       :finding
-       "the banked covering local-homeomorphism and fiber-equivalence transport API compiles with standard axioms"}
-      {:cmd
-       "lake env lean /tmp/point-wedge-covering-gluing-probe.lean",
-       :exit 0,
-       :finding
-       "the generic gluing result, explicit wedge-base fiber equivalence, cardinality transport, and circle specialization elaborate from one isolated package axiom"}
-      {:cmd "sha256sum /tmp/point-wedge-covering-gluing-probe.lean",
-       :exit 0,
-       :finding
-       "101f5af3cf428dd91f63c9f21ac2d566b478c9c61dff0a2c601475239c27eaf9"}
-      {:cmd
-       "Python comment-stripped placeholder census of /tmp/point-wedge-covering-gluing-probe.lean",
-       :exit 0,
-       :finding "0"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :finding "131 registered statements match, 0 do not"}
-      {:cmd "git status --short", :exit 0, :finding "clean"}],
-     :axioms
-     ["propext"
-      "Classical.choice"
-      "Quot.sound"
-      "PointWedgeCoveringGluingProbe.point_wedge_covering_gluing_package"],
-     :warnings
-     [{:kind :interface-axiom,
-       :message
-       "The fixture is placeholder-free and uses exactly one nonstandard axiom: construction of the quotient-glued total space, its covering map, and its base-fiber equivalence. Cardinality transport and the circle specialization are proved."}],
-     :prerequisite
-     {:consumer :t92J06,
-      :phase :implementation,
-      :state :open,
-      :scope ["ConstructionTargets/PointWedgeCoveringGluing.lean"],
-      :dag-node
-      "TOPOLOGY-ROUTES.md/shared/point-wedge-covering-gluing/quotient-local-triviality",
-      :acceptance
-      {:placeholder "the single sorries in apm_t92j06 and apm_t99j01",
-       :route-step
-       "t92J06 step 1; t99J01 step 5 covering construction",
-       :declarations
-       ["GluedCoveringTotal"
-        "gluedCoveringMap"
-        "gluedCoveringMap_isCoveringMap"
-        "gluedCoveringFiberEquiv"
-        "gluedCovering_fiber_card"
-        "permutationCircleWedgeCover"
-        "cyclicThreeCircleWedgeCover"],
-       :implementation
-       "Given coverings p:E→X and q:F→Y and an equivalence between their fibers over x0 and y0, define the total space as the quotient of E⊔F identifying matched fiber points, with the coinduced topology, and descend the map to PointWedgeQuotient.Wedge x0 y0. Away from the wedge point reuse the original evenly covered neighborhoods. At the wedge point intersect evenly covered neighborhoods of x0 and y0, index the sheets using the supplied fiber equivalence, and glue corresponding local sections to obtain a disjoint union of open sheets mapped homeomorphically to the wedge neighborhood. Expose the resulting IsCoveringMap, an explicit equivalence from its wedge-point fiber to the source fiber, and Nat.card transport. Instantiate the construction for the two permutation-labeled circle covers used by t92J06 and iteratively for the cyclic n-sheet graph cover of ThreeCircles used by t99J01; leave connectedness and nonhomeomorphism proofs consumer-local.",
-       :axioms :standard-only,
-       :commands
-       ["lake env lean ConstructionTargets/PointWedgeCoveringGluing.lean"
-        "lake env lean /tmp/point-wedge-covering-gluing-probe.lean"
-        "python3 scripts/statement-registry.py check"]},
-      :id
-      :routes-2026-10-10-point-wedge-covering-gluing-local-triviality-1,
-      :kind :reusable-theorem,
-      :depends-on [],
-      :current-residual
-      "Construct the quotient-glued total space and prove local triviality at the wedge point, then expose the fiber equivalence and the two bounded circle-cover demonstrations.",
-      :other-consumers [:t99J01]},
-     :residual
-     "Exactly one shared prerequisite remains: the quotient gluing construction with an evenly covered wedge neighborhood and explicit fiber transport. Permutation-cover separation and covering classification remain downstream."}},
+   {:residual
+    "A future route must first prove a quotient-sheet theorem: matched evenly covered sheets have open disjoint images in the glued source and assemble into local homeomorphisms over the coinduced wedge neighborhood. Fiber equivalence and cardinality transport follow only after that construction.",
+    :outcome :stop,
+    :disposition :stop,
+    :axioms
+    ["propext"
+     "Classical.choice"
+     "Quot.sound"
+     "PointWedgeCoveringGluingProbe.point_wedge_covering_gluing_package"],
+    :author "topo-4",
+    :reason
+    "The reviewed prerequisite stopped at the exact quotient-local-triviality boundary. Defining the total space as a quotient of E⊔F does not by itself prove that matched local sheets have open, pairwise-disjoint images, nor does it provide the over-base inverse identities needed to assemble LocalHomeomorphs above the coinduced wedge neighborhood. The banked LiteralCoveringPullback API transports local trivializations and fibers only after an IsCoveringMap is available, so it cannot establish these quotient-sheet facts. The scoped module and all seven accepted declarations are absent, and the fixture still assumes the complete gluing package.",
+    :commands
+    [{:cmd
+      "test ! -e ConstructionTargets/PointWedgeCoveringGluing.lean",
+      :exit 0,
+      :finding
+      "the reviewed dependency produced no implementation module"}
+     {:cmd "lake env lean /tmp/point-wedge-covering-gluing-probe.lean",
+      :exit 0,
+      :finding
+      "fiber-cardinality transport compiles, but the covering construction still depends on point_wedge_covering_gluing_package"}
+     {:cmd "sha256sum /tmp/point-wedge-covering-gluing-probe.lean",
+      :exit 0,
+      :finding
+      "101f5af3cf428dd91f63c9f21ac2d566b478c9c61dff0a2c601475239c27eaf9"}
+     {:cmd
+      "rg -n 'GluedCoveringTotal|gluedCoveringMap_isCoveringMap|gluedCoveringFiberEquiv|permutationCircleWedgeCover|cyclicThreeCircleWedgeCover' ConstructionTargets --glob '*.lean'",
+      :exit 1,
+      :expected-exit 1,
+      :finding
+      "none of the required quotient-gluing, covering, fiber, or demonstration declarations exists"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}],
+    :fixture
+    {:path "/tmp/point-wedge-covering-gluing-probe.lean",
+     :sha256
+     "101f5af3cf428dd91f63c9f21ac2d566b478c9c61dff0a2c601475239c27eaf9",
+     :status :self-axiomatized},
+    :seat "topo-4"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/shared/point-wedge-covering-gluing",
    :acceptance
