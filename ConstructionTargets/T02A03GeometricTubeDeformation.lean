@@ -183,9 +183,27 @@ theorem rightTubePlanarComplex_ne_zero
   norm_num at hd'
   linarith
 
+theorem rightTubePlanarComplex_re_pos
+    (p : apm_t02a03_E3) (hp : p ∈ apm_t02a03_rightTube) :
+    0 < (rightTubePlanarComplex p).re := by
+  obtain ⟨q, ⟨t, rfl⟩, hd⟩ := rightTube_exists_near_rightCore p hp
+  have hcoord := PiLp.dist_apply_le p (apm_t02a03_rightCore t) 0
+  have hq0 : 0 ≤ apm_t02a03_rightCore t 0 := by
+    simp [apm_t02a03_rightCore]
+    exact Real.cos_le_one t
+  rw [Real.dist_eq] at hcoord
+  have habs : |p 0 - apm_t02a03_rightCore t 0| ≤ (1 / 4 : ℝ) :=
+    hcoord.trans hd
+  have hp0 : -(1 / 4 : ℝ) ≤ p 0 := by
+    have hlo := (abs_le.mp habs).1
+    linarith
+  simp [rightTubePlanarComplex]
+  linarith
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeMeridianCoordinate_circleMeridian
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.isCompact_range_rightCore
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubePlanarComplex_ne_zero
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubePlanarComplex_re_pos
