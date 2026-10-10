@@ -98359,8 +98359,61 @@
   {:bounded-exception
    "This single-consumer prerequisite is the first construction required by the concrete polygon cover: it proves that norm-defined saturated radial bands descend to genuinely open subsets of the EqvGen quotient.",
    :consumer :t97A01,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Use radial quotient openness to define the two open pieces and their overlap; then descend radial contractions and build the remaining polygon cover comparisons.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :missing-theorems
+    [{:name "RadialQuotientOpenSets.isOpen_radial_image",
+      :type
+      "For a continuous real coordinate preserved by R, every open radial band has open image in the EqvGen quotient; SurfaceRel preserves complex norm.",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on [],
+      :area "polygon-surface-open-cover"}],
+    :statement-hashes "131 registered statements match",
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd "sha256sum /tmp/radial-quotient-open-sets.lean",
+      :exit 0,
+      :finding "fixture hash matches"}
+     {:cmd "lake build ConstructionTargets.RadialQuotientOpenSets",
+      :exit 0}
+     {:cmd "lake env lean /tmp/radial-quotient-open-sets.lean",
+      :exit 0}
+     {:cmd "rg source for sorry or admit",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero source placeholders"}
+     {:cmd "rg fixture for sorry or admit",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero fixture placeholders"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short",
+      :exit 0,
+      :finding "clean worktree after commit"}],
+    :diagnostic-history
+    [{:cmd "lake build ConstructionTargets.RadialQuotientOpenSets",
+      :exit 1,
+      :finding
+      "Initial promotion used the wrong Unicode implicit-binder brackets at four sites; replaced them with Lean implicit binders and the rerun passed."}],
+    :commit "7f09758bc1369ca6fb8b7a9ae4ee3897b964d276",
+    :changed-paths ["ConstructionTargets/RadialQuotientOpenSets.lean"],
+    :fixture
+    {:path "/tmp/radial-quotient-open-sets.lean",
+     :sha256
+     "c8131021071a6a9be96d6364c5a7ccac8ff3e208a79080c021857bd3ce4740ce",
+     :sorry-count 0},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/RadialQuotientOpenSets.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/radial-quotient-openness",
@@ -100498,12 +100551,12 @@
    :lemma
    {:name "RadialQuotientOpenSets.isOpen_radial_image",
     :reported-by
-    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40
+     :routes-2026-10-10-radial-quotient-open-sets-41],
     :type
     "If R preserves a continuous real coordinate rho, then the image in Quotient (EqvGen.setoid R) of rho ⁻¹' I is open for every open I.",
     :area "polygon-surface-open-cover",
-    :proved-in
-    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+    :proved-in :routes-2026-10-10-radial-quotient-open-sets-41},
    :id :lemma-radialquotientopensets-isopen-radial-image,
    :kind :lemma,
    :depends-on
