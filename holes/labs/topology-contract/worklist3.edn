@@ -1157,6 +1157,21 @@
       "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
       :exit 0}
      {:cmd "git status --short", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791674373538-3258-f2e74ee4",
+     :commands
+     ["sha256sum /tmp/manifold_fundamental_class_global_generator.lean"
+      "git hash-object and git rev-parse source comparison"
+      "lake env lean /tmp/manifold_fundamental_class_global_generator.lean"
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"
+      "rg placeholder and axiom census"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped placeholder census for t00J02 and t98A02"],
+     :finding
+     "PASS: implementation commit 851a797d changes exactly ConstructionTargets/ManifoldFundamentalClass.lean and its blob matches the reviewed source; post-promotion harness hash matches 8ba906ac00303eac77516c96f816374f3776532fa8ec7d6fc0ff4929501b59cd; globalGenerator is concretely e.inv applied to one, and globalGenerator_generates chooses e.hom z as coefficient, transports scalar multiplication through e.inv, and uses the inverse law in the correct direction; no localization, orientation, or manifold claim is asserted; source and harness compile with zero placeholders and only propext and Quot.sound; 131 statements match and consumer counts remain t00J02=1, t98A02=1"},
     :commit "851a797da19633d689d0743200adae8894e78e45",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -1173,7 +1188,7 @@
      "Defined the concrete global generator as the inverse image of one under the supplied module isomorphism and proved every element is its scalar multiple using the isomorphism laws."},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/global-generator-from-top-homology-iso",
@@ -1287,7 +1302,7 @@
      "The concrete overlap-sign chain is reviewed and banked through reduction to the geometric not-negative-one fact. Independently, both consumers already assume their top homology is isomorphic to the integer coefficient module. The fixture turns exactly that existing assumption into the global class candidate: globalGenerator is the inverse image of one under the supplied module isomorphism, and globalGenerator_generates proves every top-homology class is a scalar multiple of it. This is not a facade or a new orientation axiom. The remaining fundamental-class theorem must compare the localization of this concrete global element with the banked concrete chart generators and use orientation to select the positive sign.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -2708,7 +2723,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -2724,7 +2739,9 @@
     :type
     "forall (R : Type) [CommRing R] (G : ModuleCat R) (e : G ≅ ModuleCat.of R R) (z : G), exists r : R, r • globalGenerator R G e = z",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-global-generator-topo3-r1},
+    :proved-in :routes-2026-10-10-manifold-global-generator-topo3-r1,
+    :banked-by :routes-2026-10-10-manifold-global-generator-topo3-r1,
+    :banked-commit "851a797da19633d689d0743200adae8894e78e45"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-globalgenerator-generates,
    :kind :lemma,
@@ -2734,7 +2751,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -2749,7 +2766,9 @@
     :type
     "For a module isomorphism G isomorphic to R, the inverse image of one in G.",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-global-generator-topo3-r1},
+    :proved-in :routes-2026-10-10-manifold-global-generator-topo3-r1,
+    :banked-by :routes-2026-10-10-manifold-global-generator-topo3-r1,
+    :banked-commit "851a797da19633d689d0743200adae8894e78e45"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-globalgenerator,
    :kind :lemma,
