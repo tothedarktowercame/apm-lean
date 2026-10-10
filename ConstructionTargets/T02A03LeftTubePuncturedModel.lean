@@ -1,4 +1,5 @@
 import ConstructionTargets.T02A03GeometricTubeCover
+import ConstructionTargets.TorusCircleWedgeOpenCover
 
 noncomputable section
 
@@ -353,5 +354,25 @@ noncomputable def apm_t02a03_leftTubeRadialHomotopy :
   toFun := apm_t02a03_leftTubeRadialMap
   map_zero_left p := (apm_t02a03_leftTubeRadialMap_endpoints p).1
   map_one_left p := (apm_t02a03_leftTubeRadialMap_endpoints p).2
+
+abbrev LeftTubeMinusCore := apm_t02a03_LeftTubeMinusCore
+
+noncomputable def apm_t02a03_leftTubeHomotopyEquivTorus :
+    ContinuousMap.HomotopyEquiv apm_t02a03_LeftTubeMinusCore
+      ConstructionTargets.TorusCircleWedgeOpenCover.Torus where
+  toFun := apm_t02a03_leftTubeTorusCoordinatesMap
+  invFun := apm_t02a03_leftTubeTorusInverse
+  left_inv := ⟨apm_t02a03_leftTubeRadialHomotopy⟩
+  right_inv := by
+    rw [show apm_t02a03_leftTubeTorusCoordinatesMap.comp
+        apm_t02a03_leftTubeTorusInverse = ContinuousMap.id _ by
+      apply ContinuousMap.ext
+      intro u
+      exact apm_t02a03_leftTubeTorusCoordinates_torusInverse u]
+
+theorem leftTubeMinusCoreHomotopyEquivTorus :
+    Nonempty (ContinuousMap.HomotopyEquiv LeftTubeMinusCore
+      ConstructionTargets.TorusCircleWedgeOpenCover.Torus) :=
+  ⟨apm_t02a03_leftTubeHomotopyEquivTorus⟩
 
 end ConstructionTargets.T02A03LeftTubePuncturedModel
