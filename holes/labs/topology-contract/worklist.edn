@@ -83216,8 +83216,63 @@
    "Supply the generic compact closed-equivalence separation theorem required by all three polygon consumers.",
    :other-consumers [:tunk01 :t91A02]}
   {:consumer :t94J09,
+   :stop-count 1,
+   :evidence
+   {:placeholder-after {:t94J09 1, :tunk01 1, :t91A02 1},
+    :residual
+    "Build and compile the edgePoint open-interval injectivity/intersection theorem and finite endpoint-reachability EqvGen classification before retrying the four closed-graph transports and quotient applications.",
+    :outcome :stop,
+    :warnings [],
+    :disposition :stop,
+    :axioms ["finite_polygon_eqvgen_classification"],
+    :author "topo-2",
+    :placeholder-before {:t94J09 1, :tunk01 1, :t91A02 1},
+    :reason
+    "The required source-to-target representation is not present in the supplied fixture or banked code. The fixture postulates only the final four-way IsClosed conjunction via the custom axiom finite_polygon_eqvgen_classification; it contains none of the five exact EqvGen iff declarations and no generic finitePolygonEqvGen_iff_classes theorem. Consequently its #print axioms depends on finite_polygon_eqvgen_classification, contradicting :axioms :standard-only. The exact missing representation layer is a proved classification of EqvGen chains: first prove that two edgePoint parameterizations intersect only on equal open-edge parameters or their shared endpoints, then compute endpoint reachability, and only then show by EqvGen induction that every chain lands in equality, one paired open-edge class, or one finite vertex class. Closedness cannot be transported back to the source EqvGen graphs until those exact iff statements exist.",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/finite-polygon-eqvgen-classification-probe.lean",
+      :exit 0,
+      :finding
+      "61cb12a3d34a4074623aef406e063e89e111ba23b3dcb6eca66fc19a15eadc7b"}
+     {:cmd
+      "LEAN_PATH=/tmp/polygon-eqvgen-probe lake env lean /tmp/finite-polygon-eqvgen-classification-probe.lean",
+      :exit 0,
+      :finding
+      "The fixture compiles, but #print axioms reports the custom axiom finite_polygon_eqvgen_classification."}
+     {:cmd
+      "rg -n \"^(axiom|theorem|def|structure)|finite_polygon_eqvgen_classification|finitePolygonEqvGen_iff_classes|apm_t94J09_polygonEqvGen_iff_finiteClasses|apm_tunk01_polygonEqvGen_iff_finiteClasses|surfaceRel_false(16|8)_eqvGen_iff_finiteClasses\" /tmp/finite-polygon-eqvgen-classification-probe.lean",
+      :exit 0,
+      :finding
+      "The only declaration is the final axiom at line 12; none of the requested exact iff declarations occurs."}
+     {:cmd
+      "Python union-find check of the fourteen endpoint generator pairs",
+      :exit 0,
+      :finding
+      "The two computed classes are [0,1,2,4,5,6,7,8,10,11,12,13] and [3,9], matching the intended vertexClass; this is not a mathematical refutation, but it is not a Lean proof of the EqvGen iff."}
+     {:cmd
+      "test ! -e ConstructionTargets/FinitePolygonEqvGenClassification.lean",
+      :exit 0,
+      :finding "The scoped generic target is absent."}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}],
+    :representation
+    {:source
+     "Relation.EqvGen closures of apm_t94J09_PolygonRel, apm_tunk01_PolygonRel, and SurfaceRel false at genera 16 and 8",
+     :target
+     "Finite-class disjunctions consisting of equality, explicitly paired open-edge points, and computed endpoint classes",
+     :direction
+     "Exact iff characterization from each source EqvGen relation to the finite-class target, then reverse rewriting of target closedness into source-graph closedness"},
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/finite-polygon-eqvgen-classification-probe.lean",
+     :sha256
+     "61cb12a3d34a4074623aef406e063e89e111ba23b3dcb6eca66fc19a15eadc7b",
+     :status :self-axiomatized},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/FinitePolygonEqvGenClassification.lean"
     "problems/t94J09/lean/Main.lean"
