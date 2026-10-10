@@ -61854,23 +61854,60 @@
   {:bounded-exception
    "single-consumer nonzero normalized normal direction for the t02A03 complement interpolation",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :fixture
+     {:path "/tmp/t02a03_geometric_tube_cover.lean",
+      :sha256
+      "eae43e95c04bbd1b2f10ca7d062408cb9bebc328d9fdff96cd4b5ade42172d49"},
+     :commands
+     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "apm_t02a03_leftTubeNormalAngular_ne_zero compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
+       :exit 0}
+      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "eae43e95c04bbd1b2f10ca7d062408cb9bebc328d9fdff96cd4b5ade42172d49  /tmp/t02a03_geometric_tube_cover.lean"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :implementation
+     {:scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
+      :declaration
+      "ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_leftTubeNormalAngular_ne_zero",
+      :type
+      "forall p : apm_t02a03_LeftTubeMinusCore, ((apm_t02a03_leftTubeNormalAngular p : Circle) : Complex) ≠ 0",
+      :acceptance
+      ["target module compiles"
+       "declaration has the frozen type"
+       "target module contains no sorry token"
+       "statement registry matches"]},
+     :finding
+     "The fixture proves the normalized complex normal direction is nonzero directly from its Circle membership. This supplies the direction-side factor needed with the positive interpolated radius.",
+     :residual
+     "Prove the exact interpolation normal-coordinate formula, deduce deleted-core exclusion, bundle the homotopy, and assemble the torus HomotopyEquiv."}},
+   :phase :implementation,
+   :type
+   "forall p : apm_t02a03_LeftTubeMinusCore, ((apm_t02a03_leftTubeNormalAngular p : Circle) : Complex) ≠ 0",
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/left-tube-normal-direction-nonzero",
    :acceptance
-   {:probe
-    "Compile and bank apm_t02a03_leftTubeNormalAngular_ne_zero from /tmp/t02a03_geometric_tube_cover.lean. Prove that the coerced normalized complex normal direction of every punctured-left-tube point is nonzero using its Circle membership. This supplies the direction-side nonvanishing needed with the positive radial coefficient; do not yet claim the interpolation normal-coordinate formula, deleted-core exclusion, bundled homotopy, HomotopyEquiv, or gluing.",
-    :declaration "apm_t02a03_leftTubeNormalAngular_ne_zero",
-    :type
-    "forall p : apm_t02a03_LeftTubeMinusCore, ((apm_t02a03_leftTubeNormalAngular p : Circle) : Complex) ≠ 0",
-    :placeholder "the sole sorry in apm_t02a03",
-    :route-step
-    "t02A03 step 2, prove the normalized normal direction used by the radial interpolation is nonzero"},
+   ["target module compiles"
+    "declaration has the frozen type"
+    "target module contains no sorry token"
+    "statement registry matches"],
    :id
    :routes-2026-10-10-t02a03-left-tube-normal-direction-nonzero-topo2-r1,
    :kind :reusable-theorem,
+   :declaration
+   "ConstructionTargets.T02A03LeftTubePuncturedModel.apm_t02a03_leftTubeNormalAngular_ne_zero",
    :depends-on
    [:routes-2026-10-10-checkpoint-topo2-r5
     :routes-2026-10-10-t02a03-left-tube-radial-normal-radius-positive-topo2-r1],
