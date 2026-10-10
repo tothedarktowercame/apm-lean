@@ -66061,25 +66061,82 @@
    "Instantiate the theorem with T95A04SphereMap and T96A07.sphereMap after proving continuity and antipodal invariance, then use the banked smooth local branches to prove the descended maps ContMDiff.",
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:residual
+     "Specialize the banked smooth descent to the two frozen quadratic maps after proving their coordinatewise antipodal invariance and ContMDiff properties.",
+     :outcome :go,
+     :warnings
+     ["Lean reports one unnecessarySimpa linter warning in the locally reproduced continuous-descent helper; the frozen smooth-descent theorem compiles and its axioms are unchanged."],
+     :missing-theorems
+     [{:name
+       "ConstructionTargets.RealProjectiveSmoothTarget.sphereProjectionEvenMapSmoothDescent",
+       :type
+       "forall (m : ℕ) (g : Sphere 2 → E m), (forall p : Sphere 2, g (sphereAntipodalN 2 p) = g p) -> ContMDiff (𝓡 2) (𝓡 m) ∞ g -> letI := rpSmoothAtlas.charts; letI := rpSmoothAtlas.smooth; exists f : Space ℝ 2 → E m, (forall p, f (sphereProjection 2 p) = g p) ∧ ContMDiff (𝓡 2) (𝓡 m) ∞ f",
+       :status :proved,
+       :consumers [:t95A04 :t96A07],
+       :depends-on
+       ["ConstructionTargets.RealProjectiveSmoothTarget.sphereProjectionEvenMapDescent"
+        "ConstructionTargets.RealProjectiveSmoothTarget.rpSmoothAtlas"],
+       :area "rp-smooth-atlas"}],
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd "lake env lean /tmp/rp_even_smooth_descent_proof.lean",
+       :exit 0,
+       :output
+       "evenSphereMapSmoothDescent compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd "sha256sum /tmp/rp_even_smooth_descent_proof.lean",
+       :exit 0,
+       :output
+       "0893b10b9594d2d3d0fb39591f27db655192fcbdec614fb9114b30f896f84f52  /tmp/rp_even_smooth_descent_proof.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_even_smooth_descent_proof.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/rp_even_smooth_descent_proof.lean",
+       :exit 1,
+       :finding
+       "The first scratch proof imported the newly banked source declaration through a stale compiled object; the final fixture includes the already-proved continuous descent locally so this read-only probe verifies the smooth theorem independently."}
+      {:cmd "lake env lean /tmp/rp_even_smooth_descent_proof.lean",
+       :exit 1,
+       :finding
+       "The first smoothness draft rewrote ContMDiff with the chart-level contMDiff_iff theorem; using ContMDiff's pointwise definition directly exposed the intended local goal."}
+      {:cmd "lake env lean /tmp/rp_even_smooth_descent_proof.lean",
+       :exit 1,
+       :finding
+       "A rewrite by the local-inverse right-inverse equality also rewrote inside the inverse argument; an explicit calc chain preserves the required argument and closes the proof."}],
+     :fixture
+     {:path "/tmp/rp_even_smooth_descent_proof.lean",
+      :sha256
+      "0893b10b9594d2d3d0fb39591f27db655192fcbdec614fb9114b30f896f84f52"},
+     :finding
+     "The frozen contract is inhabited. Continuous antipodal-even descent supplies f and its pullback equation. At each projective point, quotient surjectivity chooses p; rpSmoothAtlas.quotient_localDiffeomorph p supplies a smooth local inverse, and f is eventually equal to g composed with that inverse, proving ContMDiff locally and hence globally.",
+     :implementation
+     {:scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
+      :declaration
+      "ConstructionTargets.RealProjectiveSmoothTarget.sphereProjectionEvenMapSmoothDescent",
+      :type
+      "forall (m : ℕ) (g : Sphere 2 → E m), (forall p : Sphere 2, g (sphereAntipodalN 2 p) = g p) -> ContMDiff (𝓡 2) (𝓡 m) ∞ g -> letI := rpSmoothAtlas.charts; letI := rpSmoothAtlas.smooth; exists f : Space ℝ 2 → E m, (forall p, f (sphereProjection 2 p) = g p) ∧ ContMDiff (𝓡 2) (𝓡 m) ∞ f",
+      :acceptance
+      "Transfer evenSphereMapSmoothDescent from the fixture, replacing its local continuous-descent helper with the banked sphereProjectionEvenMapDescent theorem; preserve the exact frozen type and standard-only axioms."},
+     :seat "topo-8"}},
+   :phase :implementation,
+   :type
+   "forall (m : ℕ) (g : Sphere 2 → E m), (forall p : Sphere 2, g (sphereAntipodalN 2 p) = g p) -> ContMDiff (𝓡 2) (𝓡 m) ∞ g -> letI := rpSmoothAtlas.charts; letI := rpSmoothAtlas.smooth; exists f : Space ℝ 2 → E m, (forall p, f (sphereProjection 2 p) = g p) ∧ ContMDiff (𝓡 2) (𝓡 m) ∞ f",
    :state :open,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/rp2/even-map-smooth-descent",
    :acceptance
-   {:probe
-    "Compile a placeholder-free inhabitant of RPPolynomialSmoothDescentProbe.EvenSphereMapSmoothDescent from /tmp/rp_even_smooth_descent_contract.lean. Prove the descended map supplied by sphereProjectionEvenMapDescent is ContMDiff under rpSmoothAtlas by local inversion of the surjective local diffeomorphism rpSmoothAtlas.quotient_localDiffeomorph. Keep dimension two and codomain E m; do not instantiate either quadratic consumer.",
-    :declaration
-    "ConstructionTargets.RealProjectiveSmoothTarget.sphereProjectionEvenMapSmoothDescent",
-    :type
-    "forall (m : ℕ) (g : Sphere 2 → E m), (forall p : Sphere 2, g (sphereAntipodalN 2 p) = g p) -> ContMDiff (𝓡 2) (𝓡 m) ∞ g -> letI := rpSmoothAtlas.charts; letI := rpSmoothAtlas.smooth; exists f : Space ℝ 2 → E m, (forall p, f (sphereProjection 2 p) = g p) ∧ ContMDiff (𝓡 2) (𝓡 m) ∞ f",
-    :placeholders
-    ["the sole sorry in t95A04" "the sole sorry in t96A07"],
-    :route-step
-    "shared RP2 route, transfer smoothness through the banked quotient local diffeomorphism"},
+   "Transfer evenSphereMapSmoothDescent from the fixture, replacing its local continuous-descent helper with the banked sphereProjectionEvenMapDescent theorem; preserve the exact frozen type and standard-only axioms.",
    :id
    :routes-2026-10-10-rp2-even-map-smooth-descent-two-consumers-topo2-r2,
    :kind :reusable-theorem,
    :area "rp-smooth-atlas",
+   :declaration
+   "ConstructionTargets.RealProjectiveSmoothTarget.sphereProjectionEvenMapSmoothDescent",
    :depends-on
    [:routes-2026-10-10-rp2-even-map-continuous-descent-two-consumers-topo2-r1
     :routes-2026-10-10-rp2-smooth-atlas-two-consumers-topo2-r1],
@@ -68020,10 +68077,13 @@
    {:name
     "ConstructionTargets.RealProjectiveSmoothTarget.sphereProjectionEvenMapSmoothDescent",
     :reported-by
-    [:routes-2026-10-10-rp2-even-quadratic-descent-two-consumers-topo2-r1],
+    [:routes-2026-10-10-rp2-even-quadratic-descent-two-consumers-topo2-r1
+     :routes-2026-10-10-rp2-even-map-smooth-descent-two-consumers-topo2-r2],
     :type
     "forall (m : ℕ) (g : Sphere 2 → E m), (forall p : Sphere 2, g (sphereAntipodalN 2 p) = g p) -> ContMDiff (𝓡 2) (𝓡 m) ∞ g -> letI := rpSmoothAtlas.charts; letI := rpSmoothAtlas.smooth; exists f : Space ℝ 2 → E m, (forall p, f (sphereProjection 2 p) = g p) ∧ ContMDiff (𝓡 2) (𝓡 m) ∞ f",
-    :area "rp-smooth-atlas"},
+    :area "rp-smooth-atlas",
+    :proved-in
+    :routes-2026-10-10-rp2-even-map-smooth-descent-two-consumers-topo2-r2},
    :id
    :lemma-constructiontargets-realprojectivesmoothtarget-sphereprojectionevenmapsmoothdesc,
    :kind :lemma,
