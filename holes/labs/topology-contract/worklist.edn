@@ -96737,8 +96737,75 @@
   {:bounded-exception
    "This single-consumer theorem supplies the exact local product homeomorphism for the component-restricted projection; only its conversion to an evenly covered neighborhood and assembly with banked surjectivity remain.",
    :consumer :t99J01,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Instantiate C as the open Joined component, use retainedSheetHomeomorph to prove each refined chart is evenly covered for the component projection, assemble IsCoveringMap, and pair it with componentProjection_surjective.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :missing-theorems
+    [{:name "CoveringRetainedSheetHomeomorph.retainedSheetHomeomorph",
+      :type
+      "For a trivialization with path-connected base and clopen source subset C, RestrictedSource t C is homeomorphic to t.baseSet × RetainedIndex t C b hb",
+      :status :proved,
+      :consumers [:t99J01],
+      :depends-on
+      ["CoveringRetainedSheetIndices.invFun_mem_iff_retained"]}],
+    :statement-hashes "131 registered statements match",
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :finding
+      "canonical package authority resolves to /home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "sha256sum /tmp/covering-retained-sheet-homeomorph.lean",
+      :exit 0,
+      :finding
+      "fixture hash matches 2239151ab528fbb2c2327a7928045854ab4574292690dd517b13d7f8d366caf0"}
+     {:cmd
+      "lake build ConstructionTargets.CoveringRetainedSheetHomeomorph",
+      :exit 0,
+      :finding
+      "restricted retained-sheet product homeomorphism builds"}
+     {:cmd
+      "lake env lean /tmp/covering-retained-sheet-homeomorph.lean",
+      :exit 0,
+      :finding "frozen fixture compiles with standard axioms"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" ConstructionTargets/CoveringRetainedSheetHomeomorph.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero source placeholders"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" /tmp/covering-retained-sheet-homeomorph.lean",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero fixture placeholders"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short",
+      :exit 0,
+      :finding "clean worktree after commit"}],
+    :commit "2f1fb3708bd9167315907bd84adbbfb3d3790792",
+    :changed-paths
+    ["ConstructionTargets/CoveringRetainedSheetHomeomorph.lean"],
+    :fixture
+    {:path "/tmp/covering-retained-sheet-homeomorph.lean",
+     :sha256
+     "2239151ab528fbb2c2327a7928045854ab4574292690dd517b13d7f8d366caf0",
+     :sorry-count 0},
+    :implementation
+    {:scope
+     ["ConstructionTargets/CoveringRetainedSheetHomeomorph.lean"],
+     :declarations
+     ["ConstructionTargets.CoveringRetainedSheetHomeomorph.RestrictedSource"
+      "ConstructionTargets.CoveringRetainedSheetHomeomorph.retainedSheetHomeomorph"]},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/CoveringRetainedSheetHomeomorph.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/covering-subgroup-index/restrict-path-component/retained-sheet-homeomorph",
@@ -99394,18 +99461,26 @@
    [:lemma-preconnectedclopensheet-range-subset-or-disjoint-of-isclopen-pathconnected
     :lemma-coveringpathconnectedchart-iscoveringmap-exists-pathconnected-restrictedtriviali],
    :other-consumers []}
-  {:consumer :portfolio,
+  {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
    :scope [],
    :acceptance
-   {:lemma "CoveringRetainedSheetHomeomorph.retainedSheetHomeomorph"},
+   {:lemma "CoveringRetainedSheetHomeomorph.retainedSheetHomeomorph",
+    :type
+    "For a trivialization with path-connected base and clopen source subset C, RestrictedSource t C is homeomorphic to t.baseSet × RetainedIndex t C b hb"},
    :lemma
    {:name "CoveringRetainedSheetHomeomorph.retainedSheetHomeomorph",
-    :reported-by []},
+    :reported-by
+    [:routes-2026-10-10-covering-retained-sheet-homeomorph-47],
+    :type
+    "For a trivialization with path-connected base and clopen source subset C, RestrictedSource t C is homeomorphic to t.baseSet × RetainedIndex t C b hb",
+    :proved-in
+    :routes-2026-10-10-covering-retained-sheet-homeomorph-47},
    :id :lemma-coveringretainedsheethomeomorph-retainedsheethomeomorph,
    :kind :lemma,
-   :depends-on [],
+   :depends-on
+   [:lemma-coveringretainedsheetindices-invfun-mem-iff-retained],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
