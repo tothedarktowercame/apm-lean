@@ -460,6 +460,8 @@ theorem apm_t02a03_leftTubeNormalAngular_torusInverse
       (by norm_num : (0 : ℝ) < 1 / 8) (u.2 : ℂ)).trans
     (NormedSpace.normalize_eq_self_of_norm_eq_one (Circle.norm_coe u.2))
 
+/-- The explicit left-tube reconstruction is a right inverse of its two
+angular coordinates on the torus model. -/
 theorem apm_t02a03_leftTubeTorusCoordinates_torusInverse
     (u : Circle × Circle) :
     apm_t02a03_leftTubeTorusCoordinates
