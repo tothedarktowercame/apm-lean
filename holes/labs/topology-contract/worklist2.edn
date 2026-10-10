@@ -55923,28 +55923,67 @@
    "After conjugacy is banked, derive the two winding-coordinate formulas for the induced map and combine them into the displayed integer matrix naturality equation.",
    :other-consumers []}
   {:consumer :t97A04,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/circle_winding_pointwise_group_laws.lean",
+      :sha256
+      "5b287ab0d8fb95833f108950c7aa30ca5e2e6dbb7287ad85802b330b8e874db4"},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/circle_winding_pointwise_group_laws.lean",
+       :exit 0,
+       :output
+       "all six declarations compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/circle_winding_pointwise_group_laws.lean || true)\"",
+       :exit 0}
+      {:cmd
+       "rg -n '^(def pointwise(Mul|Inv)Path|theorem liftBasedLoop(_endpointInteger)?_pointwise(Mul|Inv)Path|theorem liftBasedLoopEndpointInteger_pointwise(Mul|Inv)Path)' /tmp/circle_winding_pointwise_group_laws.lean",
+       :exit 0,
+       :output
+       "six requested path, lift, and endpoint-integer declarations found at lines 8, 14, 20, 36, 50, and 64"}
+      {:cmd "sha256sum /tmp/circle_winding_pointwise_group_laws.lean",
+       :exit 0,
+       :output
+       "5b287ab0d8fb95833f108950c7aa30ca5e2e6dbb7287ad85802b330b8e874db4  /tmp/circle_winding_pointwise_group_laws.lean"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :implementation
+     {:scope ["ConstructionTargets/CircleUniversalCover.lean"],
+      :declarations
+      ["pointwiseMulPath"
+       "pointwiseInvPath"
+       "liftBasedLoop_pointwiseMulPath"
+       "liftBasedLoop_pointwiseInvPath"
+       "liftBasedLoopEndpointInteger_pointwiseMulPath"
+       "liftBasedLoopEndpointInteger_pointwiseInvPath"],
+      :acceptance
+      "Copy the six verified declarations into CircleUniversalCover, preserving the explicit paths, lift equalities proved through eq_liftPath_iff', and endpoint-integer formulas proved through period_integer_unique; compile the scoped module, confirm no new placeholders, and rerun the statement registry check."},
+     :finding
+     "The complete fixture compiles without placeholders. It constructs the actual pointwise product and inverse loops, identifies their canonical real lifts with addition and negation using covering-lift uniqueness, and proves the corresponding exact addition and negation laws for liftBasedLoopEndpointInteger. Both endpoint theorems use only propext, Classical.choice, and Quot.sound.",
+     :residual
+     "Specialize the banked laws to the two coordinate projections of circleMatrixMap and combine them with the frozen-map conjugacy to prove the final Fin-2 integer-matrix naturality equation."}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/CircleUniversalCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/torus-pi1-winding-coordinates/circle-pointwise-group-laws",
    :acceptance
-   {:probe
-    "Compile and bank pointwiseMulPath, pointwiseInvPath, liftBasedLoop_pointwiseMulPath, liftBasedLoop_pointwiseInvPath, liftBasedLoopEndpointInteger_pointwiseMulPath, and liftBasedLoopEndpointInteger_pointwiseInvPath from /tmp/circle_winding_pointwise_group_laws.lean. Construct the actual pointwise product and inverse based Circle paths; use circleCover_isCoveringMap.eq_liftPath_iff' to identify their canonical lifts with the sum and negation of the original lifts; then prove the exact endpoint-integer addition and negation formulas via period_integer_unique. This supplies the winding arithmetic for t97A04 step 4 and the reusable endpoint arithmetic in t01A02 step 4.",
-    :declarations
-    ["pointwiseMulPath"
-     "pointwiseInvPath"
-     "liftBasedLoop_pointwiseMulPath"
-     "liftBasedLoop_pointwiseInvPath"
-     "liftBasedLoopEndpointInteger_pointwiseMulPath"
-     "liftBasedLoopEndpointInteger_pointwiseInvPath"],
-    :placeholder
-    "apm_t97A04_bridge_2 and apm_t01A02_bridge_fixedPoint_of_lift",
-    :route-step
-    "t97A04 step 4 winding arithmetic; t01A02 step 4 endpoint-coordinate arithmetic"},
+   "Copy the six verified declarations into CircleUniversalCover, preserving the explicit paths, lift equalities proved through eq_liftPath_iff', and endpoint-integer formulas proved through period_integer_unique; compile the scoped module, confirm no new placeholders, and rerun the statement registry check.",
    :id
    :routes-2026-10-10-circle-winding-pointwise-group-laws-two-consumers-topo2-r1,
    :kind :reusable-theorem,
+   :declarations
+   ["pointwiseMulPath"
+    "pointwiseInvPath"
+    "liftBasedLoop_pointwiseMulPath"
+    "liftBasedLoop_pointwiseInvPath"
+    "liftBasedLoopEndpointInteger_pointwiseMulPath"
+    "liftBasedLoopEndpointInteger_pointwiseInvPath"],
    :depends-on
    [:routes-2026-10-10-checkpoint-topo2-r2
     :routes-2026-10-10-torus-pi1-coordinate-equivalence-two-consumers-topo2-r1
