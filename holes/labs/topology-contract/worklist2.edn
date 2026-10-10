@@ -59620,6 +59620,21 @@
      "The Circle-domain meridian map evaluated at Circle.exp (pi/2)",
      :direction
      "Exact subtype point equality from the source contracted-anchor representation to the target based Circle-meridian representation"},
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791631724799-1795-17a13178",
+     :commands
+     ["git show/diff-tree recorded implementation f0a72109 and transition 1e814616"
+      "sha256sum authenticated fixture"
+      "lake env lean fixture, recorded-identical target, and exact subtype endpoint probe"
+      "lake build ConstructionTargets.T02A03GeometricTubeCover"
+      "qualified #check, axiom audit, and forbidden-placeholder scan"
+      "frozen consumer hash and comment-stripped placeholder census"
+      "python3 scripts/statement-registry.py check --rev f0a72109"
+      "bb worklist_check.bb on committed transition ledger"],
+     :finding
+     "PASS: codex-7 independently reviewed topo-6 commit f0a72109bc672a7689a4ccf4bf86827c4cc42af7 against the fixture frozen type and registered statement. Its exact scope is ConstructionTargets/T02A03GeometricTubeCover.lean; transition 1e8146169279e98d1fdc5f5dd3a5baf5a5beace9 changes only the ledger; fixture SHA-256 is 65b4bf238aa8cd24732e4a97133c37b49c3271f7f1e0f88c6bbfac555e0009ce. The fixture, recorded-identical module, subtype endpoint probe, and module build pass. The declaration has exactly the frozen type: the geometricY anchor subtype point equals circleMeridianMap at Circle.exp (pi/2), oriented from contracted-anchor source to based Circle-meridian target. Subtype extensionality correctly lifts the banked ambient quarter-turn equality in the required symmetric direction. Composing with the contraction one-slice yields the intended attachment endpoint inside the same geometricY subtype. No right-tube extension, deformation data, or gluing equivalence is claimed. The declaration uses only propext, Classical.choice, and Quot.sound. Frozen t02A03 hash is b123eca388ab2858ca55daf538c1ddd645022b52f5196a15f0bb516d78323d7d with one executable placeholder; registry is 131/0 and the committed 424-row ledger validates with exactly one done-unreviewed row."},
     :commit "f0a72109bc672a7689a4ccf4bf86827c4cc42af7",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
@@ -59634,7 +59649,7 @@
    :phase :implementation,
    :type
    "(⟨apm_t02a03_meridianAnchor, apm_t02a03_meridianAnchor_mem_geometricY⟩ : apm_t02a03_geometricY_probe) = apm_t02a03_circleMeridianMap (Circle.exp (Real.pi / 2))",
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/geometric-anchor-circle-meridian-quarter-turn",
@@ -59724,7 +59739,7 @@
       "Extend the based attachment across the right tube, construct compatible tube-piece deformation data, and glue the geometricY-to-Y equivalence.",
       :other-consumers []}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/closure",
    :acceptance
