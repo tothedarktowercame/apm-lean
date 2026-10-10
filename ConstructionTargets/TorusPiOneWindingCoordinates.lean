@@ -305,4 +305,12 @@ theorem frozenTorusPi1Coord_factor
         frozenTorusHomeomorphCircleProd (0, 0)) p) := by
   rfl
 
+theorem frozenCircleImagePath_eq_mappedPath_cast
+    (gamma : Path ((0, 0) : FrozenTorus) (0, 0)) :
+    (gamma.map frozenTorusHomeomorphCircleProd.continuous).cast
+        frozenTorusHomeomorphCircleProd_base.symm
+        frozenTorusHomeomorphCircleProd_base.symm =
+      frozenCircleImagePath gamma := by
+  ext t <;> rfl
+
 end ConstructionTargets.TorusPiOneWindingCoordinates
