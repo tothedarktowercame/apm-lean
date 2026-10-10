@@ -55285,8 +55285,40 @@
   {:bounded-exception
    "single-consumer bounded homogeneous-to-affine conic normalization",
    :consumer :t94A08,
+   :stop-count 1,
+   :evidence
+   {:residual
+    "Correct the contract's pair-to-affine-coordinate insertion so index 1 receives z.1 and index 2 receives z.2, then re-elect the normalization probe with a fresh id and fixture hash.",
+    :outcome :stop,
+    :disposition :stop,
+    :author "topo-8",
+    :reason
+    "The elected contract is mathematically inconsistent. Its pairToCoordinates definition uses Fin.cases z.1 (fun _ => z.2), which maps both nonzero indices 1 and 2 of Fin 3 to z.2 and discards z.1. Consequently chartInverse_iff is false: for z=(0,I), the contract's right side 1+z.1^2+z.2^2=0 holds, while coordinates_chartInverse makes both affine coordinates I, so the actual normalized equation is 1+I^2+I^2=-1, not zero. The compiled no_inhabitant theorem proves that no ProjectiveConicNormalization satisfying the printed interface exists. Repair requires changing pairToCoordinates to distinguish indices 1 and 2 (for example by an explicit Fin-3 case split); that changes a definition used by the elected contract and cannot be done inside this probe.",
+    :commands
+    [{:cmd
+      "lake env lean /tmp/t94a08_projective_conic_normalization_refutation.lean",
+      :exit 0}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t94a08_projective_conic_normalization_refutation.lean || true)\"",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/t94a08_projective_conic_normalization_refutation.lean",
+      :exit 0,
+      :output
+      "3379f19920adef75b73deac78d8a93579218165674f1ac47dcd8477d89540a82  /tmp/t94a08_projective_conic_normalization_refutation.lean"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}],
+    :fixture
+    {:path
+     "/tmp/t94a08_projective_conic_normalization_refutation.lean",
+     :sha256
+     "3379f19920adef75b73deac78d8a93579218165674f1ac47dcd8477d89540a82"},
+    :finding
+    "The refutation imports the banked affine chart and proves the correct homogeneous-to-ratio normalization independently. Assuming the elected chartInverse_iff field at z=(0,I) yields the homogeneous equation for chartInverse of pairToCoordinates z. The correct normalization plus coordinates_chartInverse reduces this to 1+I^2+I^2=0, contradicted by Complex.I_sq. Thus the failure is the exact coordinate-insertion representation, not topology, continuity, or the frozen consumer statement.",
+    :seat "topo-8"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t94A08/smooth-conic-local-charts/projective-affine-identification/normalization",
