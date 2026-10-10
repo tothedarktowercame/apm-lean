@@ -56391,53 +56391,70 @@
    "single-consumer frozen-to-Circle mapped-path comparison for t97A04",
    :consumer :t97A04,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/torus_frozen_mapped_path_conjugacy.lean",
-      :sha256
-      "ef5aec23908fb939664d0638dfcbc634b6ac7f93744e4a85b03a6cf61128a55d"},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/torus_frozen_mapped_path_conjugacy.lean",
-       :exit 0,
-       :output
-       "exact frozen-to-Circle mapped-path conjugacy compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/torus_frozen_mapped_path_conjugacy.lean || true)\"",
-       :exit 0}
-      {:cmd "sha256sum /tmp/torus_frozen_mapped_path_conjugacy.lean",
-       :exit 0,
-       :output
-       "ef5aec23908fb939664d0638dfcbc634b6ac7f93744e4a85b03a6cf61128a55d  /tmp/torus_frozen_mapped_path_conjugacy.lean"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :finding
-     "The placeholder-free fixture constructs the actual Circle-product image of every explicit frozen-torus based path and its image after frozenLbar. The banked pointwise map conjugacy proves exact Path equality from the latter to circleMatrixMappedPath of the former, preserving the required orientation and avoiding any proposition-only facade.",
-     :representation
-     {:source
-      "The Circle-product image of an explicit frozen-torus based path after applying frozenLbar",
-      :target
-      "circleMatrixMappedPath applied to the Circle-product image of the original frozen-torus path",
-      :direction
-      "Exact Path equality from the source transported frozen-map representative to the target Circle-matrix representative"},
-     :implementation
-     {:scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
-      :declarations
-      ["frozenCircleImagePath"
-       "frozenLbarCircleImagePath"
-       "frozenLbarCircleImagePath_eq_circleMatrixMappedPath"],
-      :acceptance
-      {:compile
-       "lake build ConstructionTargets.TorusPiOneWindingCoordinates",
-       :placeholder-free true,
-       :statement-registry true}},
-     :residual
-     "Descend the exact path equality through the fundamental-group quotient, align the canonical basepoint transports, and rewrite the Circle naturality equation in frozenTorusPi1Coord coordinates."}},
+   {:placeholder-delta 0,
+    :residual
+    "Descend the exact path equality through the fundamental-group quotient, align the canonical basepoint transports, and rewrite the Circle naturality equation in frozenTorusPi1Coord coordinates.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["The focused Lake build replayed pre-existing linter warnings from dependency modules; the scoped module compiled without new warnings."],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd "sha256sum /tmp/torus_frozen_mapped_path_conjugacy.lean",
+      :exit 0,
+      :output
+      "ef5aec23908fb939664d0638dfcbc634b6ac7f93744e4a85b03a6cf61128a55d  /tmp/torus_frozen_mapped_path_conjugacy.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/TorusPiOneWindingCoordinates.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.TorusPiOneWindingCoordinates",
+      :exit 0,
+      :output "Build completed successfully (8290 jobs)."}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/TorusPiOneWindingCoordinates.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "lake env lean /tmp/check_frozen_mapped_path_axioms.lean",
+      :exit 0,
+      :output
+      "frozenLbarCircleImagePath_eq_circleMatrixMappedPath depends on [propext, Classical.choice, Quot.sound]."}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r b699414a4850c93b24af35d6f0aaa3b966821d3a",
+      :exit 0,
+      :output "ConstructionTargets/TorusPiOneWindingCoordinates.lean"}
+     {:cmd
+      "python3 -c 'import re; p=\"problems/t97A04/lean/Main.lean\"; t=open(p).read(); t=re.sub(r\"/-.*?-/\",\" \",t,flags=re.S); t=re.sub(r\"--[^\\n]*\",\" \",t); print(len(re.findall(r\"(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])\",t)))'",
+      :exit 0,
+      :output "4"}
+     {:cmd "sha256sum problems/t97A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "79ca854186b39183bf53490a20b5be92695e345a2c099fcf928b5ad3300ee4ec  problems/t97A04/lean/Main.lean"}],
+    :representation
+    {:source
+     "The Circle-product image of an explicit frozen-torus based path after applying frozenLbar",
+     :target
+     "circleMatrixMappedPath applied to the Circle-product image of the original frozen-torus path",
+     :direction
+     "Exact Path equality from the source transported frozen-map representative to the target Circle-matrix representative"},
+    :commit "b699414a4850c93b24af35d6f0aaa3b966821d3a",
+    :changed-paths
+    ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
+    :fixture
+    {:path "/tmp/torus_frozen_mapped_path_conjugacy.lean",
+     :sha256
+     "ef5aec23908fb939664d0638dfcbc634b6ac7f93744e4a85b03a6cf61128a55d"},
+    :declarations
+    ["ConstructionTargets.TorusPiOneWindingCoordinates.frozenCircleImagePath"
+     "ConstructionTargets.TorusPiOneWindingCoordinates.frozenLbarCircleImagePath"
+     "ConstructionTargets.TorusPiOneWindingCoordinates.frozenLbarCircleImagePath_eq_circleMatrixMappedPath"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A04/torus-pi1-winding-coordinates/frozen-mapped-path-conjugacy",
