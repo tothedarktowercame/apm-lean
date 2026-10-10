@@ -54589,7 +54589,7 @@
   {:consumer :t00J07,
    :stop-count 1,
    :review-finding
-   "Deterministic fixture-integrity defect: transition commit 1db409d6 deletes the evenly-covered fixture SHA-256 from the row and leaves only {:path \"/tmp/rp2_positive_hemisphere_evenly_covered_contract.lean\" :status :interface-only}. The current bytes hash to cf405c41483534c87da4bf715e92f64ea496554c8bc92d8a8725661ed18b0d80, matching the hash recorded in the parent probe, but that authentication is not preserved in the done-unreviewed evidence; once /tmp is cleared, the claimed interface-only artifact cannot be identified from the row. Repair by retaining :sha256 \"cf405c41483534c87da4bf715e92f64ea496554c8bc92d8a8725661ed18b0d80\" in :evidence :fixture (preferably move the fixture to a stable repository path), rerun hash verification and Lean compilation, and recommit the transition. Other fresh checks reproduce the intended boundary: the zero-placeholder fixture compiles and prints only PositiveHemisphereEvenlyCovered : Prop, no inhabitant is banked, 131 statements match, the 364-item ledger validates, and the commit changes only worklist2.edn.",
+   "Deterministic acceptance-state defect: the hash repair is correct—the fixture freshly hashes to cf405c41483534c87da4bf715e92f64ea496554c8bc92d8a8725661ed18b0d80 and compiles placeholder-free—but commit 68c2a79a replaces the prior honest STOP evidence with :outcome :done-unreviewed and :phase :implementation, removes :disposition :stop and the reason, and cites empty commit e66275fd as the implementation. The fixture still only defines PositiveHemisphereEvenlyCovered : Prop and prints helper signatures; it contains no inhabitant, and no inhabitant is banked. Thus the row now presents an unsatisfied probe acceptance as completed implementation, precisely the facade boundary its earlier reason rejected. Repair by retaining the authenticated fixture hash while restoring :outcome :stop, :disposition :stop, the representation-boundary reason, and probe phase (or actually bank a compiled inhabitant before claiming implementation completion). Fresh ancillary checks: exact implementation scope is empty, 131 statements match, and the 364-item ledger validates.",
    :evidence
    {:placeholder-delta 0,
     :residual
@@ -54622,6 +54622,12 @@
       "git diff-tree --no-commit-id --name-only -r e66275fd12dd67c37a136a75cbc2c23230239df2",
       :exit 0,
       :output ""}],
+    :review
+    {:outcome :fail,
+     :seat "codex-7",
+     :job "invoke-1791604875340-1020-56752be2",
+     :finding
+     "Deterministic acceptance-state defect: the hash repair is correct—the fixture freshly hashes to cf405c41483534c87da4bf715e92f64ea496554c8bc92d8a8725661ed18b0d80 and compiles placeholder-free—but commit 68c2a79a replaces the prior honest STOP evidence with :outcome :done-unreviewed and :phase :implementation, removes :disposition :stop and the reason, and cites empty commit e66275fd as the implementation. The fixture still only defines PositiveHemisphereEvenlyCovered : Prop and prints helper signatures; it contains no inhabitant, and no inhabitant is banked. Thus the row now presents an unsatisfied probe acceptance as completed implementation, precisely the facade boundary its earlier reason rejected. Repair by retaining the authenticated fixture hash while restoring :outcome :stop, :disposition :stop, the representation-boundary reason, and probe phase (or actually bank a compiled inhabitant before claiming implementation completion). Fresh ancillary checks: exact implementation scope is empty, 131 statements match, and the 364-item ledger validates."},
     :commit "e66275fd12dd67c37a136a75cbc2c23230239df2",
     :changed-paths [],
     :fixture
@@ -54630,7 +54636,7 @@
      "cf405c41483534c87da4bf715e92f64ea496554c8bc92d8a8725661ed18b0d80",
      :status :interface-only}},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -54639,7 +54645,7 @@
    :id
    :routes-2026-10-10-rp2-positive-hemisphere-evenly-covered-topo2-r1,
    :kind :reusable-theorem,
-   :fail-count 1,
+   :fail-count 2,
    :depends-on
    [:routes-2026-09-28-rp-smooth-atlas-topo2-r1
     :routes-2026-10-10-rp2-positive-hemisphere-trivialization-topo2-r1],
