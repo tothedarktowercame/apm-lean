@@ -98758,8 +98758,68 @@
   {:bounded-exception
    "This single-consumer prerequisite supplies the jointly continuous quotient homotopy needed before comparing the restricted-relation quotient with the actual outer open-piece subtype.",
    :consumer :t97A01,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Compare the restricted-relation quotient with the actual outerOpen subtype, then identify the annular overlap and both six-edge boundary quotients with their punctured-disk and ThreeCircles models.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["A concurrent writer modified ConstructionTargets/ProductionOpenCoverMayerVietoris.lean during this invocation; it was outside scope and was not inspected, staged, altered, or committed."],
+    :missing-theorems
+    [{:name
+      "PolygonOuterRadialQuotientDeformation.continuous_quotientHomotopy",
+      :type
+      "For any disk relation supported on radius one, the outer radial deformation descends to a jointly continuous quotient homotopy with representative, identity-at-zero, and radius-one endpoint formulas.",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on ["PolygonOuterRadialRelation.quotientTimeSlice"],
+      :area "polygon-surface-open-cover"}],
+    :statement-hashes "131 registered statements match",
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :finding "canonical package authority"}
+     {:cmd
+      "sha256sum /tmp/polygon-outer-radial-quotient-deformation.lean",
+      :exit 0,
+      :finding "fixture hash matches"}
+     {:cmd
+      "lake build ConstructionTargets.PolygonOuterRadialQuotientDeformation",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/polygon-outer-radial-quotient-deformation.lean",
+      :exit 0,
+      :finding "fixture compiles with standard axioms"}
+     {:cmd "rg source for sorry or admit",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero source placeholders"}
+     {:cmd "rg fixture for sorry or admit",
+      :exit 1,
+      :expected-exit 1,
+      :finding "zero fixture placeholders"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short",
+      :exit 0,
+      :finding
+      "scoped file committed; unrelated concurrent modification remains in ConstructionTargets/ProductionOpenCoverMayerVietoris.lean"}],
+    :diagnostic-history [],
+    :commit "f3f049c32c6083556eea2d0d2f577f298f19d25a",
+    :changed-paths
+    ["ConstructionTargets/PolygonOuterRadialQuotientDeformation.lean"],
+    :fixture
+    {:path "/tmp/polygon-outer-radial-quotient-deformation.lean",
+     :sha256
+     "0d8e5f27f831cc400a71593186d810e6758d8ef4984955b4a1f01b79b384a3e3",
+     :sorry-count 0},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonOuterRadialQuotientDeformation.lean"],
    :dag-node
@@ -101187,18 +101247,20 @@
    {:name
     "PolygonOuterRadialQuotientDeformation.continuous_quotientHomotopy",
     :reported-by
-    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40
+     :routes-2026-10-10-polygon-outer-radial-quotient-deformation-45],
     :type
     "For every boundary-supported relation on the closed disk, the outer radial homotopy descends to a jointly continuous map on the EqvGen quotient, beginning at the identity and ending with radius-one representatives.",
     :area "polygon-surface-open-cover",
     :proved-in
-    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+    :routes-2026-10-10-polygon-outer-radial-quotient-deformation-45},
    :id
    :lemma-polygonouterradialquotientdeformation-continuous-quotienthomotopy,
    :kind :lemma,
    :depends-on
    [:lemma-polygonouterradialrelation-radialhomotopy-eqvgen
-    :lemma-polygonouterradialdeformation-continuous-radialhomotopy],
+    :lemma-polygonouterradialdeformation-continuous-radialhomotopy
+    :lemma-polygonouterradialrelation-quotienttimeslice],
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
