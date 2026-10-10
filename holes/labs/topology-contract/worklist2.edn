@@ -55667,48 +55667,47 @@
    :other-consumers [:t01A02]}
   {:consumer :t97A04,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/torus_pi1_projected_endpoint_coordinates.lean",
-      :sha256
-      "873432f0adb9b7541c7cd21d00397867ff17a8cd1cc179240e48bee07bf141de"},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/torus_pi1_projected_endpoint_coordinates.lean",
-       :exit 0,
-       :output
-       "both declarations compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/torus_pi1_projected_endpoint_coordinates.lean || true)\"",
-       :exit 0}
-      {:cmd
-       "rg -n '^theorem torusPi1Coord_mk_apply_(zero|one)_eq_liftEndpoint' /tmp/torus_pi1_projected_endpoint_coordinates.lean",
-       :exit 0,
-       :output
-       "11:theorem torusPi1Coord_mk_apply_zero_eq_liftEndpoint; 26:theorem torusPi1Coord_mk_apply_one_eq_liftEndpoint"}
-      {:cmd
-       "sha256sum /tmp/torus_pi1_projected_endpoint_coordinates.lean",
-       :exit 0,
-       :output
-       "873432f0adb9b7541c7cd21d00397867ff17a8cd1cc179240e48bee07bf141de  /tmp/torus_pi1_projected_endpoint_coordinates.lean"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :implementation
-     {:scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
-      :declarations
-      ["torusPi1Coord_mk_apply_zero_eq_liftEndpoint"
-       "torusPi1Coord_mk_apply_one_eq_liftEndpoint"],
-      :acceptance
-      "Copy the two placeholder-free theorems from the verified fixture into the existing namespace, preserving their exact statements and proofs; compile the scoped module and rerun the statement registry check."},
-     :finding
-     "The fixture supplies both elected declarations as actual equalities for every explicit based product loop. Quotient.mk_map identifies each projected quotient class with the quotient of gamma.map continuous_fst or continuous_snd, after which circleFundamentalGroupMulEquivInt reduces definitionally to liftBasedLoopEndpointInteger. No additional theorem is needed to bank this row.",
-     :residual
-     "Integer-matrix naturality remains: identify the lift of each frozen torus matrix map with its linear R2 lift and derive the induced Fin-2 coordinate formula. The present packet supplies only the representative endpoint portion promised for t97A04 step 3 and t01A02 step 4."}},
+   {:placeholder-delta 0,
+    :residual
+    "Integer-matrix naturality remains: identify the lift of each frozen torus matrix map with its linear R2 lift and derive the induced Fin-2 coordinate formula. The present packet supplies only the representative endpoint portion promised for t97A04 step 3 and t01A02 step 4.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms [propext Classical.choice Quot.sound],
+    :author "topo-6",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/torus_pi1_projected_endpoint_coordinates.lean",
+      :exit 0,
+      :output
+      "873432f0adb9b7541c7cd21d00397867ff17a8cd1cc179240e48bee07bf141de  /tmp/torus_pi1_projected_endpoint_coordinates.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/TorusPiOneWindingCoordinates.lean",
+      :exit 0}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/TorusPiOneWindingCoordinates.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r 9033474ecc8bb26d6d8ed59f1f518029e35c27c8",
+      :exit 0,
+      :output
+      "ConstructionTargets/TorusPiOneWindingCoordinates.lean"}],
+    :commit "9033474ecc8bb26d6d8ed59f1f518029e35c27c8",
+    :changed-paths
+    ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
+    :fixture
+    {:path "/tmp/torus_pi1_projected_endpoint_coordinates.lean",
+     :sha256
+     "873432f0adb9b7541c7cd21d00397867ff17a8cd1cc179240e48bee07bf141de"},
+    :declarations
+    ["ConstructionTargets.TorusPiOneWindingCoordinates.torusPi1Coord_mk_apply_zero_eq_liftEndpoint"
+     "ConstructionTargets.TorusPiOneWindingCoordinates.torusPi1Coord_mk_apply_one_eq_liftEndpoint"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/torus-pi1-winding-coordinates/projected-endpoints",
