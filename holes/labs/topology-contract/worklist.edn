@@ -93362,6 +93362,20 @@
       :exit 0,
       :finding
       "A concurrent modification to ConstructionTargets/T02A03LeftTubePuncturedModel.lean appeared after the scoped commit and was preserved."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791645424282-2258-a46e7120",
+     :commands
+     ["git show c403d7a1be1c5690fa0cad25346d219857313889 -- ConstructionTargets/KleinPresentedGroupConjugation.lean"
+      "git diff --exit-code c403d7a1be1c5690fa0cad25346d219857313889 -- ConstructionTargets/KleinPresentedGroupConjugation.lean"
+      "lake build ConstructionTargets.KleinPresentedGroupConjugation"
+      "sha256sum /tmp/klein-presented-conjugation.lean && lake env lean /tmp/klein-presented-conjugation.lean"
+      "rg placeholder census on target and fixture"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb on recorded ledger at e62a6fe0"],
+     :finding
+     "PASS: commit c403d7a1 changes only the declared source; the checkout source equals the recorded commit; the fixture hash is exact and both target and fixture compile; source and fixture have zero proof placeholders; exported relator, generator conjugation, and integer-power conjugation have the required orientations and cross the PresentedGroup/FreeGroup representation boundary explicitly; only standard axioms are reported; registry and recorded-ledger checks pass."},
     :commit "c403d7a1be1c5690fa0cad25346d219857313889",
     :changed-paths
     ["ConstructionTargets/KleinPresentedGroupConjugation.lean"],
@@ -93383,7 +93397,7 @@
      "Use PresentedGroup.one_of_mem for the frozen relator, group cancellation for b^-1*a*b=a^-1, and conj_zpow to extend the rewrite to every integer power of a."},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/KleinPresentedGroupConjugation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/presented-group-coordinate-normal-form/conjugation-rewrite",
@@ -93498,7 +93512,7 @@
       "presented_relation proves the frozen relator in PresentedKleinGroup; conjugateA proves b^-1*a*b=a^-1; conjugateAPow proves b^-1*a^m*b=a^(-m) for every integer m."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action/presented-group-coordinate-normal-form",
