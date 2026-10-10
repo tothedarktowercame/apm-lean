@@ -63928,6 +63928,21 @@
       :exit 1,
       :finding
       "The initial promotion omitted the fixture's direct PathConnectedSpace instance and AddCircle.Real import; copying those exact fixture components corrected instance synthesis, and the successful rerun is recorded in commands."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791654798496-2599-b5e0b4d3",
+     :commands
+     ["git show/diff-tree/show --check 9017080b669f7525e9d82b8ee5b488b066c6d3cb"
+      "sha256sum /tmp/t97a04_frozen_h1_coordinate.lean"
+      "lake env lean /tmp/t97a04_frozen_h1_coordinate.lean"
+      "lake env lean ConstructionTargets/T97A04FrozenH1Coordinate.lean"
+      "lake build ConstructionTargets.T97A04FrozenH1Coordinate"
+      "python3 scripts/statement-registry.py check --rev 9017080b669f7525e9d82b8ee5b488b066c6d3cb"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "recompute recorded statement hash and comment-stripped placeholder counts"],
+     :finding
+     "PASS: reviewer codex-7 independently reviewed topo-6 commit 9017080b; exact scope is 31 inserted lines in ConstructionTargets/T97A04FrozenH1Coordinate.lean only. Fixture SHA-256 27220f9b2600be27f61c260ed07cf6c89e32cbac827bd4225f5b3e9dbd2be286 matches. Fixture and target compile with standard axioms [propext, Classical.choice, Quot.sound], focused build completes 8291 jobs, registry is 131/0, and worklist is 496 OK. The aligned H1 equivalence has the required IntegralH1-to-Fin-2 multiplicative orientation: raw H1 coordinates are postcomposed with the inverse Hurewicz-coordinate automorphism, making the registered Hurewicz coordinate definitionally reduce to symm_apply_apply. Statement SHA-256 is b495e36e0b1e2e02db9bea4cb4fa6ca0c0513858f83a5ec71209bb4878f3e0f8; target and fixture placeholders are 0, consumer placeholders remain 4, and consumer SHA-256 79ca854186b39183bf53490a20b5be92695e345a2c099fcf928b5ad3300ee4ec confirms the frozen matrix is unchanged."},
     :commit "9017080b669f7525e9d82b8ee5b488b066c6d3cb",
     :changed-paths
     ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"],
@@ -63946,7 +63961,7 @@
    :phase :implementation,
    :type
    "forall q : Multiplicative (Fin 2 → ℤ), finiteFreeHurewiczCoordinateMulEquiv frozenTorusPi1Coord frozenTorusAlignedH1MulEquivFinTwo q = q",
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t97A04/frozen-h1-hurewicz-alignment",
    :acceptance
@@ -64046,7 +64061,7 @@
      "The full apm_t97A04_bridge_2 proof remains absent. The compiled aligned coordinate postcomposes the raw H1 coordinate with the inverse finite-free Hurewicz automorphism and proves that the resulting Hurewicz coordinate is exactly the identity. Consequently h1_coordinate_eq_of_fundamentalGroup_coordinate_eq now yields the frozen matrix directly, without an unknown conjugation.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t97A04/h1-bridge-assembly",
    :acceptance
@@ -65051,7 +65066,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -65067,7 +65082,10 @@
     :type
     "forall q : Multiplicative (Fin 2 → ℤ), finiteFreeHurewiczCoordinateMulEquiv frozenTorusPi1Coord frozenTorusAlignedH1MulEquivFinTwo q = q",
     :proved-in
-    :routes-2026-10-10-t97a04-frozen-h1-hurewicz-alignment-topo2-r1},
+    :routes-2026-10-10-t97a04-frozen-h1-hurewicz-alignment-topo2-r1,
+    :banked-by
+    :routes-2026-10-10-t97a04-frozen-h1-hurewicz-alignment-topo2-r1,
+    :banked-commit "9017080b669f7525e9d82b8ee5b488b066c6d3cb"},
    :id
    :lemma-constructiontargets-t97a04frozenh1coordinate-frozentorusalignedhurewiczcoordinat,
    :kind :lemma,
