@@ -98556,13 +98556,43 @@
    "Use this actual open cover to descend the radial deformation of the outer piece to the boundary quotient and identify the annular overlap with the punctured-disk model; then prove both six-edge boundary quotients are ThreeCircles with the required vertex and inclusion equations.",
    :other-consumers []}
   {:bounded-exception
+   "This single-consumer prerequisite supplies the continuous source-level radial homotopy whose boundary-fixing formula is required before it can descend through either six-edge quotient relation.",
+   :consumer :t97A01,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/PolygonOuterRadialDeformation.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/outer-radial-deformation",
+   :acceptance
+   {:implementation
+    "Promote the exact fixture. On the banked outerSource radius > 1/4, define the straight radial scaling coefficient (1-t)+t/r and the resulting homotopy. Prove positivity, preservation of the closed disk and outer band, continuity, the identity formula at time zero, radius one at time one, and pointwise fixation of radius-one points. Do not descend the homotopy through a quotient, construct boundary graph quotients, identify ThreeCircles or punctured disks, compute invariants, or close t97A01.",
+    :placeholder "the single sorry in apm_t97a01",
+    :route-step
+    "polygon radial open-cover step 3: construct the boundary-fixing outer-band radial deformation before quotient descent",
+    :fixture "/tmp/polygon-outer-radial-deformation.lean",
+    :fixture-sha256
+    "e27319b916d76ca7c4e5235ff298fecd838e3b557ebd38af6721f70de7c2ed37",
+    :gates
+    ["lake build ConstructionTargets.PolygonOuterRadialDeformation"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-10-polygon-outer-radial-deformation-43,
+   :kind :reusable-theorem,
+   :area "polygon-surface-open-cover",
+   :depends-on [:routes-2026-10-10-polygon-radial-open-cover-42],
+   :current-residual
+   "Prove the homotopy respects EqvGen for relations supported on the radius-one boundary and descend it to the outer quotient piece; then construct the annulus comparison and the two boundary quotient-to-ThreeCircles identifications with vertex and inclusion formulas.",
+   :other-consumers []}
+  {:bounded-exception
    "This single-consumer concrete quotient package is the other final backlog lemma on t97A01 and supplies the actual two polygon models required by its frozen statement.",
    :consumer :t97A01,
    :implements-lemma :lemma-polygonradialopencoverpackages,
    :evidence
    {:probe
     {:residual
-     "The genuine radial quotient cover and overlap are compiled. The remaining package needs the descended outer-piece radial deformation, annulus/punctured-disk comparison, boundary quotient-to-ThreeCircles identifications for both words, vertex classes, and literal inclusion formulas.",
+     "The continuous source deformation to the boundary is compiled. The remaining package needs quotient descent, the annular punctured-disk model, both boundary ThreeCircles identifications, vertex classes, and literal inclusion equations.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
@@ -98573,70 +98603,62 @@
        :consumers [:t97A01],
        :depends-on
        ["PolygonRadialOpenCover.surfacePackage"
-        "PolygonRadialOpenCover.package"
-        "polygonRadialOuterDeformation"
+        "PolygonOuterRadialDeformation.radialHomotopy"
+        "polygonRadialOuterQuotientDeformation"
         "polygonBoundaryThreeCircles"
         "polygonAnnulusPuncturedDisk"],
        :area "polygon-surface-open-cover"}
-      {:name "PolygonRadialOpenCover.package",
+      {:name "PolygonOuterRadialDeformation.radialHomotopy",
        :type
-       "For every norm-preserving disk relation, the quotient images of radius < 3/4 and radius > 1/4 are open, cover the quotient, and intersect in the image of 1/4 < radius < 3/4.",
+       "A continuous homotopy of the outer radial source, identity at zero, landing at radius one at time one, and fixed on radius-one points.",
        :status :proved,
        :consumers [:t97A01],
-       :depends-on ["RadialQuotientOpenSets.isOpen_radial_image"],
-       :area "polygon-surface-open-cover"}
-      {:name "PolygonRadialOpenCover.surfacePackage",
-       :type
-       "The radial quotient open-cover package specialized to SurfaceRel orientable genus for all orientable flags and genera.",
-       :status :proved,
-       :consumers [:t97A01],
-       :depends-on
-       ["PolygonRadialOpenCover.package"
-        "RadialQuotientOpenSets.surfaceRel_norm_eq"],
+       :depends-on ["PolygonRadialOpenCover.outerSource"],
        :area "polygon-surface-open-cover"}],
      :prerequisite
      {:bounded-exception
-      "This single-consumer prerequisite constructs the actual radial open cover common to both six-edge polygon quotients, after the banked quotient-openness theorem and before contractions or boundary graph identifications.",
+      "This single-consumer prerequisite supplies the continuous source-level radial homotopy whose boundary-fixing formula is required before it can descend through either six-edge quotient relation.",
       :consumer :t97A01,
       :phase :implementation,
       :state :open,
-      :scope ["ConstructionTargets/PolygonRadialOpenCover.lean"],
+      :scope
+      ["ConstructionTargets/PolygonOuterRadialDeformation.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/open-cover",
+      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/outer-radial-deformation",
       :acceptance
       {:implementation
-       "Promote the exact fixture. For an arbitrary relation on the closed complex disk that preserves radius, define the inner source radius < 3/4, outer source radius > 1/4, annular overlap, their quotient images, and Package. Prove the two quotient images open, their union equal to univ, and the overlap image equal to their intersection. Instantiate Package for every canonical SurfaceRel. Do not descend radial homotopies, identify the boundary graph with ThreeCircles, identify the overlap with a punctured disk, prove polygon vertex classes, compute invariants, or close t97A01.",
+       "Promote the exact fixture. On the banked outerSource radius > 1/4, define the straight radial scaling coefficient (1-t)+t/r and the resulting homotopy. Prove positivity, preservation of the closed disk and outer band, continuity, the identity formula at time zero, radius one at time one, and pointwise fixation of radius-one points. Do not descend the homotopy through a quotient, construct boundary graph quotients, identify ThreeCircles or punctured disks, compute invariants, or close t97A01.",
        :placeholder "the single sorry in apm_t97a01",
        :route-step
-       "polygon radial open-cover step 2: define the genuine quotient cover and annular overlap",
-       :fixture "/tmp/polygon-radial-open-cover.lean",
+       "polygon radial open-cover step 3: construct the boundary-fixing outer-band radial deformation before quotient descent",
+       :fixture "/tmp/polygon-outer-radial-deformation.lean",
        :fixture-sha256
-       "3b7ebef9bd6f3acb1f52fd6fe188d7a1e8535e2e9f8d7953a21d9b8c7b626f53",
+       "e27319b916d76ca7c4e5235ff298fecd838e3b557ebd38af6721f70de7c2ed37",
        :gates
-       ["lake build ConstructionTargets.PolygonRadialOpenCover"
+       ["lake build ConstructionTargets.PolygonOuterRadialDeformation"
         "fixture compiles"
         "zero source and fixture sorry"
         "standard-only axioms"
         "registry check"]},
-      :id :routes-2026-10-10-polygon-radial-open-cover-42,
+      :id :routes-2026-10-10-polygon-outer-radial-deformation-43,
       :kind :reusable-theorem,
       :area "polygon-surface-open-cover",
-      :depends-on [:routes-2026-10-10-radial-quotient-open-sets-41],
+      :depends-on [:routes-2026-10-10-polygon-radial-open-cover-42],
       :current-residual
-      "Use this actual open cover to descend the radial deformation of the outer piece to the boundary quotient and identify the annular overlap with the punctured-disk model; then prove both six-edge boundary quotients are ThreeCircles with the required vertex and inclusion equations.",
+      "Prove the homotopy respects EqvGen for relations supported on the radius-one boundary and descend it to the outer quotient piece; then construct the annulus comparison and the two boundary quotient-to-ThreeCircles identifications with vertex and inclusion formulas.",
       :other-consumers []},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
-     [{:cmd "lake env lean /tmp/polygon-radial-open-cover.lean",
+     [{:cmd "lake env lean /tmp/polygon-outer-radial-deformation.lean",
        :exit 0,
        :finding
-       "The generic radial quotient cover, exact annular intersection, and canonical SurfaceRel specialization compile with standard axioms."}
-      {:cmd "sha256sum /tmp/polygon-radial-open-cover.lean",
+       "The continuous outer-band radial homotopy and all endpoint and boundary-fixing formulas compile with standard axioms."}
+      {:cmd "sha256sum /tmp/polygon-outer-radial-deformation.lean",
        :exit 0,
        :finding
-       "3b7ebef9bd6f3acb1f52fd6fe188d7a1e8535e2e9f8d7953a21d9b8c7b626f53"}
+       "e27319b916d76ca7c4e5235ff298fecd838e3b557ebd38af6721f70de7c2ed37"}
       {:cmd
-       "rg -n \"\\b(sorry|admit)\\b\" /tmp/polygon-radial-open-cover.lean",
+       "rg -n \"\\b(sorry|admit)\\b\" /tmp/polygon-outer-radial-deformation.lean",
        :exit 1,
        :expected-exit 1,
        :finding "No fixture placeholders."}
@@ -98645,19 +98667,23 @@
        :finding "131 registered statements match, 0 do not."}
       {:cmd "git status --short", :exit 0, :finding "clean"}],
      :diagnostic-history
-     [{:cmd "lake env lean /tmp/polygon-radial-open-cover.lean",
+     [{:cmd "lake env lean /tmp/polygon-outer-radial-deformation.lean",
        :exit 1,
        :finding
-       "The first SurfaceRel specialization exposed radius as a named definition while the banked theorem stated complex norms; an explicit surfaceRel_radius_eq adapter and eta-expanded proof argument resolved the dependent Package parameter."}],
+       "The first draft used real scalar-action instances unavailable for Complex and simplified closed-ball membership too aggressively; expressing scaling as complex multiplication and exposing the disk distance inequality corrected the construction."}
+      {:cmd "lake env lean /tmp/polygon-outer-radial-deformation.lean",
+       :exit 1,
+       :finding
+       "The time-one norm proof still contained the unreduced coefficient and complex norm; unfolding scale and rewriting real absolute value by positivity completed the endpoint calculation."}],
      :fixture
-     {:path "/tmp/polygon-radial-open-cover.lean",
+     {:path "/tmp/polygon-outer-radial-deformation.lean",
       :sha256
-      "3b7ebef9bd6f3acb1f52fd6fe188d7a1e8535e2e9f8d7953a21d9b8c7b626f53",
+      "e27319b916d76ca7c4e5235ff298fecd838e3b557ebd38af6721f70de7c2ed37",
       :interface
-      "PolygonRadialOpenCover.Package provides the inner and outer open quotient pieces, their cover equation, and their annular overlap equation for any norm-preserving disk-edge relation; surfacePackage instantiates every canonical SurfaceRel."},
+      "radialHomotopy continuously deforms the outer radial source to radius one, starts at the identity, lands on the boundary at time one, and fixes every boundary point for all times."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -98679,7 +98705,8 @@
    :depends-on
    [:routes-2026-10-10-checkpoint-topo1-after-t99j01-covering-prerequisites-38
     :routes-2026-10-10-radial-quotient-open-sets-41
-    :routes-2026-10-10-polygon-radial-open-cover-42],
+    :routes-2026-10-10-polygon-radial-open-cover-42
+    :routes-2026-10-10-polygon-outer-radial-deformation-43],
    :current-residual
    "Combine the concrete cover packages with the strict overlap squares, banked Smith normalization, and final t97A01 assembly.",
    :other-consumers []}
@@ -99183,7 +99210,9 @@
     :lemma-polygonradialopencover-package
     :lemma-polygonradialouterdeformation
     :lemma-polygonboundarythreecircles
-    :lemma-polygonannuluspunctureddisk],
+    :lemma-polygonannuluspunctureddisk
+    :lemma-polygonouterradialdeformation-radialhomotopy
+    :lemma-polygonradialouterquotientdeformation],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -100812,6 +100841,49 @@
    :acceptance {:lemma "polygonAnnulusPuncturedDisk"},
    :lemma {:name "polygonAnnulusPuncturedDisk", :reported-by []},
    :id :lemma-polygonannuluspunctureddisk,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "PolygonOuterRadialDeformation.radialHomotopy",
+    :type
+    "A continuous homotopy of the outer radial source, identity at zero, landing at radius one at time one, and fixed on radius-one points."},
+   :lemma
+   {:name "PolygonOuterRadialDeformation.radialHomotopy",
+    :reported-by
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    :type
+    "A continuous homotopy of the outer radial source, identity at zero, landing at radius one at time one, and fixed on radius-one points.",
+    :area "polygon-surface-open-cover",
+    :proved-in
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+   :id :lemma-polygonouterradialdeformation-radialhomotopy,
+   :kind :lemma,
+   :depends-on [:lemma-polygonradialopencover-outersource],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "polygonRadialOuterQuotientDeformation"},
+   :lemma
+   {:name "polygonRadialOuterQuotientDeformation", :reported-by []},
+   :id :lemma-polygonradialouterquotientdeformation,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "PolygonRadialOpenCover.outerSource"},
+   :lemma
+   {:name "PolygonRadialOpenCover.outerSource", :reported-by []},
+   :id :lemma-polygonradialopencover-outersource,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}],
