@@ -87,6 +87,16 @@ theorem apm_t02a03_isCompact_range_leftCore :
   rw [← apm_t02a03_range_leftCoreCircle]
   exact isCompact_range apm_t02a03_continuous_leftCoreCircle
 
+theorem apm_t02a03_leftTube_exists_near_leftCore
+    (p : apm_t02a03_E3) (hp : p ∈ apm_t02a03_leftTube) :
+    ∃ q ∈ Set.range apm_t02a03_leftCore, dist p q ≤ (1 / 4 : ℝ) := by
+  rw [apm_t02a03_leftTube,
+    apm_t02a03_isCompact_range_leftCore.cthickening_eq_biUnion_closedBall
+      (by norm_num)] at hp
+  simp only [Set.mem_iUnion, Metric.mem_closedBall] at hp
+  rcases hp with ⟨q, hq, hd⟩
+  exact ⟨q, hq, by simpa [dist_comm] using hd⟩
+
 theorem apm_t02a03_rightCore_zero :
     apm_t02a03_rightCore 0 = (0 : apm_t02a03_E3) := by
   ext i
