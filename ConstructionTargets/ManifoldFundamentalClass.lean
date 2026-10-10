@@ -86,9 +86,31 @@ theorem overlapTransitionUnit_eq_of_isPreconnected
   letI : PreconnectedSpace (common m a b) := Subtype.preconnectedSpace hconn
   exact (overlapTransitionUnit_isLocallyConstant R m a b).apply_eq_of_preconnectedSpace x y
 
+theorem overlapTransitionUnit_eq_one_of_isPreconnected
+    (R : Type) [CommRing R] (m : ℕ)
+    {M : Type} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (EuclideanSpace ℝ (Fin (m + 2))) M]
+    (a b : M) (hconn : IsPreconnected (common m a b))
+    (x : common m a b) (hx : overlapTransitionUnit R m a b x = 1)
+    (y : common m a b) : overlapTransitionUnit R m a b y = 1 := by
+  exact (overlapTransitionUnit_eq_of_isPreconnected R m a b hconn x y).symm.trans hx
+
+theorem chartGenerator_eq_on_preconnected_overlap_of_baseUnit_eq_one
+    (R : Type) [CommRing R] (m : ℕ)
+    {M : Type} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (EuclideanSpace ℝ (Fin (m + 2))) M]
+    (a b : M) (hconn : IsPreconnected (common m a b))
+    (x : common m a b) (hx : overlapTransitionUnit R m a b x = 1)
+    (y : common m a b) :
+    chartGenerator R m a y.1 y.2.1 = chartGenerator R m b y.1 y.2.2 := by
+  apply chartGenerator_eq_of_transitionUnit_eq_one R m a b y.1 y.2.1 y.2.2
+  exact overlapTransitionUnit_eq_one_of_isPreconnected R m a b hconn x hx y
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
 #print axioms ConstructionTargets.ManifoldFundamentalClass.chartGenerator_eq_of_transitionUnit_eq_one
 #print axioms ConstructionTargets.ManifoldFundamentalClass.overlapTransitionUnit_isLocallyConstant
 #print axioms ConstructionTargets.ManifoldFundamentalClass.overlapTransitionUnit_eq_of_isPreconnected
+#print axioms ConstructionTargets.ManifoldFundamentalClass.overlapTransitionUnit_eq_one_of_isPreconnected
+#print axioms ConstructionTargets.ManifoldFundamentalClass.chartGenerator_eq_on_preconnected_overlap_of_baseUnit_eq_one
