@@ -554,6 +554,43 @@ theorem apm_t02a03_leftTubeRadialPoint_one
     apm_t02a03_leftTubeRadialPoint (1, p) = p.1 := by
   simp [apm_t02a03_leftTubeRadialPoint]
 
+theorem apm_t02a03_dist_leftTubePoint_angularCore
+    (p : apm_t02a03_leftTubeSubtype) :
+    dist p.1 (apm_t02a03_leftCoreCircle (apm_t02a03_leftTubeAngular p)) =
+      ‖apm_t02a03_leftTubeNormalComplex p‖ := by
+  have hre : ((apm_t02a03_leftTubeAngular p : Circle) : ℂ).re =
+      (p.1 0 + 1) / ‖apm_t02a03_leftTubePlanarComplex p‖ := by
+    change (NormedSpace.normalize
+      (apm_t02a03_leftTubePlanarComplex p)).re = _
+    rw [show NormedSpace.normalize (apm_t02a03_leftTubePlanarComplex p) =
+      (‖apm_t02a03_leftTubePlanarComplex p‖⁻¹ : ℝ) •
+        apm_t02a03_leftTubePlanarComplex p by rfl, Complex.smul_re]
+    simp [apm_t02a03_leftTubePlanarComplex, div_eq_mul_inv]
+    ring
+  have him : ((apm_t02a03_leftTubeAngular p : Circle) : ℂ).im =
+      p.1 1 / ‖apm_t02a03_leftTubePlanarComplex p‖ := by
+    change (NormedSpace.normalize
+      (apm_t02a03_leftTubePlanarComplex p)).im = _
+    rw [show NormedSpace.normalize (apm_t02a03_leftTubePlanarComplex p) =
+      (‖apm_t02a03_leftTubePlanarComplex p‖⁻¹ : ℝ) •
+        apm_t02a03_leftTubePlanarComplex p by rfl, Complex.smul_im]
+    simp [apm_t02a03_leftTubePlanarComplex, div_eq_mul_inv]
+    ring
+  rw [dist_eq_norm, EuclideanSpace.norm_eq, Complex.norm_def]
+  simp [apm_t02a03_leftCoreCircle, hre, him,
+    apm_t02a03_leftTubePlanarComplex,
+    apm_t02a03_leftTubeNormalComplex, Fin.sum_univ_succ,
+    Complex.normSq_apply]
+  apply congrArg Real.sqrt
+  have hr : ‖apm_t02a03_leftTubePlanarComplex p‖ ≠ 0 :=
+    norm_ne_zero_iff.mpr (apm_t02a03_leftTubePlanarComplex_ne_zero p)
+  have hsq := Complex.sq_norm (apm_t02a03_leftTubePlanarComplex p)
+  simp [Complex.normSq_apply, apm_t02a03_leftTubePlanarComplex] at hsq
+  have hr' : ‖((p.1 0 + 1 : ℂ) + (p.1 1 : ℂ) * Complex.I)‖ ≠ 0 := by
+    simpa [apm_t02a03_leftTubePlanarComplex] using hr
+  field_simp [hr']
+  nlinarith
+
 theorem apm_t02a03_rightCore_zero :
     apm_t02a03_rightCore 0 = (0 : apm_t02a03_E3) := by
   ext i
