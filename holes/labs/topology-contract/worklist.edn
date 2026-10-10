@@ -82933,6 +82933,23 @@
       :exit 0,
       :finding "d0a03bd353f44c5fcf6d64c9cfc0a6b230de6bd4"}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791608016697-1141-a5fe03ac",
+     :commands
+     ["git show/stat/diff recorded implementation commit d0a03bd353f44c5fcf6d64c9cfc0a6b230de6bd4"
+      "lake env lean problems/t99J05/lean/Main.lean"
+      "lake env lean /tmp/t99j05-arbitrary-affine-charts-complete.lean"
+      "sha256sum /tmp/t99j05-arbitrary-affine-charts-complete.lean"
+      "comment-stripped placeholder census of consumer and fixture"
+      "python3 scripts/statement-registry.py check"
+      "python3 scripts/statement-registry.py fingerprint t99J05"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "inspect fixture and consumer OpenPartialHomeomorph field orientations"
+      "git diff --check d0a03bd^ d0a03bd and confirm recorded file equals current content"],
+     :finding
+     "PASS: reviewer codex-3 differs from author topo-2. Recorded implementation commit d0a03bd353f44c5fcf6d64c9cfc0a6b230de6bd4 changes exactly problems/t99J05/lean/Main.lean, adding the continuity-package import and T99J05_affineChartConstruction without changing the registered theorem statement. The frozen completed-fixture hash reproduces as 49b6c7fb9db8380597dbc413f0cd6eee55f1fa8c98ada830e9fc497a6838029f. Both consumer and fixture compile; the fixture has zero sorry, admit, or axiom declarations, and its AffineChartConstruction theorem audits to only propext, Classical.choice, and Quot.sound. The consumer retains exactly its pre-existing single sorry, as required by the scoped step, and its frozen statement fingerprint remains cf42ee31318a9e37fde5e4e923ca60cbe51d483ebd813588efc9492359e37db6. Registry is 131/131 and all 688 worklist rows validate. The representation and theorem orientations are correct: coordinates is the forward map from the open nonzero-i projective patch to the full affine target, chartInverse is the inverse map, affineSource_preimage establishes inverse-image membership, chartInverse_coordinates supplies the left inverse, coordinates_chartInverse supplies the right inverse, and the coordinate line is proved to be the chart center. The new theorem claims only arbitrary-n AffineChartConstruction; fixed points, differentiability, determinant, local index, rational homology, Lefschetz, and Euler characteristic remain downstream."},
     :commit "d0a03bd353f44c5fcf6d64c9cfc0a6b230de6bd4",
     :infrastructure-packets 0,
     :changed-paths ["problems/t99J05/lean/Main.lean"],
@@ -82945,7 +82962,7 @@
    :instructions
    "Import ConstructionTargets.T99J05ArbitraryAffineChartContinuity. Add a proved theorem T99J05_affineChartConstruction (n : Nat) : AffineChartConstruction n immediately before apm_t99j05, following the completed fixture. Assemble the OpenPartialHomeomorph from affineSource_isOpen, the banked inverse laws, t99J05_coordinates_continuousOn, and t99J05_chartInverse_continuous, including the coordinate-line source and normalization proofs. Do not alter the registered theorem or address its remaining conjuncts.",
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["problems/t99J05/lean/Main.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J05/arbitrary-n-affine-quotient-charts",
