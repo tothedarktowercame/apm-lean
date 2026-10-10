@@ -66187,7 +66187,48 @@
   {:bounded-exception
    "single-consumer half-plane bound needed to contract the planar angle without crossing zero",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:residual
+     "Normalize the positive-half-plane interpolation to rotate the planar direction to 1, interpolate the normal radius to 1/8, and prove the ambient deformation's endpoint, right-tube, and left-core-avoidance properties.",
+     :outcome :go,
+     :warnings [],
+     :missing-theorems [],
+     :axioms [propext Classical.choice Quot.sound],
+     :commands
+     [{:cmd
+       "rg -n \"right-tube-planar-coordinate-positive|explicit-r3-tube-deformation-retraction|t02A03\" TOPOLOGY-ROUTES.md holes/labs/topology-routes/routes-{1,2,3}.md | head -120",
+       :exit 0}
+      {:cmd "lake env lean /tmp/t02a03_right_core_compact_probe.lean",
+       :exit 0,
+       :output
+       "rightTubePlanarComplex_re_pos compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd "sha256sum /tmp/t02a03_right_core_compact_probe.lean",
+       :exit 0,
+       :output
+       "3baf51cc452b17b2d88afa50952c716a07d50858849581c71641b0377ba2d247  /tmp/t02a03_right_core_compact_probe.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_right_core_compact_probe.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :fixture
+     {:path "/tmp/t02a03_right_core_compact_probe.lean",
+      :sha256
+      "3baf51cc452b17b2d88afa50952c716a07d50858849581c71641b0377ba2d247"},
+     :finding
+     "For p in the closed radius-1/4 right tube, compactness supplies q=rightCore(t) with dist p q≤1/4. Coordinate evaluation is 1-Lipschitz, q0=1-cos(t)≥0, and therefore p0≥-1/4. Since re(rightTubePlanarComplex p)=p0+1, it is at least 3/4 and hence strictly positive. This puts the planar coordinate in the positive half-plane needed for the subsequent normalized interpolation.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+      :declarations
+      [{:name
+        "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubePlanarComplex_re_pos",
+        :type
+        "forall p : apm_t02a03_E3, p ∈ apm_t02a03_rightTube -> 0 < (rightTubePlanarComplex p).re"}]},
+     :seat "topo-8"}},
+   :phase :implementation,
    :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
@@ -66206,6 +66247,11 @@
    :routes-2026-10-10-t02a03-right-tube-planar-coordinate-positive-topo2-r1,
    :kind :reusable-theorem,
    :area "explicit-r3-tube-deformation-retraction",
+   :declarations
+   [{:name
+     "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubePlanarComplex_re_pos",
+     :type
+     "forall p : apm_t02a03_E3, p ∈ apm_t02a03_rightTube -> 0 < (rightTubePlanarComplex p).re"}],
    :depends-on
    [:routes-2026-10-10-t02a03-right-tube-planar-coordinate-nonzero-topo2-r1],
    :current-residual
