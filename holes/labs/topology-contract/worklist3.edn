@@ -1096,8 +1096,84 @@
   {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-globalgenerator-generates,
+   :evidence
+   {:placeholder-delta {:source 0, :fixture 0},
+    :residual
+    "Compare localization of the concrete globalGenerator with the concrete ambient chart generator at one point, propagate the orientation-selected sign through connected overlaps, and prove every point localization is a generator.",
+    :gates
+    {:module-build :pass,
+     :fixture-compiles-against-promoted-module :pass,
+     :exact-declaration-type :pass,
+     :zero-source-and-fixture-sorry :pass,
+     :standard-only-axioms :pass,
+     :registry-check :pass,
+     :exact-scope :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["lake build replayed pre-existing linter warnings in dependencies; the target module emitted no warnings"],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.ManifoldFundamentalClass.globalGenerator",
+      :type
+      "For a module isomorphism G isomorphic to R, the inverse image of one in G.",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on [],
+      :area "manifold-fundamental-class"}
+     {:name
+      "ConstructionTargets.ManifoldFundamentalClass.globalGenerator_generates",
+      :type
+      "Every element of G is a scalar multiple of globalGenerator R G e.",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on
+      ["ConstructionTargets.ManifoldFundamentalClass.globalGenerator"],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Quot.sound"],
+    :author "topo-10",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/manifold_fundamental_class_global_generator.lean",
+      :exit 0,
+      :output
+      "8ba906ac00303eac77516c96f816374f3776532fa8ec7d6fc0ff4929501b59cd"}
+     {:cmd
+      "lake env lean /tmp/manifold_fundamental_class_global_generator.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^\\s*axiom\\b' ConstructionTargets/ManifoldFundamentalClass.lean /tmp/manifold_fundamental_class_global_generator.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "851a797da19633d689d0743200adae8894e78e45",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path "/tmp/manifold_fundamental_class_global_generator.lean",
+     :sha256
+     "8ba906ac00303eac77516c96f816374f3776532fa8ec7d6fc0ff4929501b59cd",
+     :original-sha256
+     "4a0718a506d885fefd9bb0c3f0a8b40c38447fa4f47308e018a52eb12e3afaf1",
+     :sorry-count 0},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :summary
+     "Defined the concrete global generator as the inverse image of one under the supplied module isomorphism and proved every element is its scalar multiple using the isomorphism laws."},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/global-generator-from-top-homology-iso",
@@ -2643,16 +2719,41 @@
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.globalGenerator_generates",
     :reported-by
-    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+     :routes-2026-10-10-manifold-global-generator-topo3-r1],
     :type
     "forall (R : Type) [CommRing R] (G : ModuleCat R) (e : G ≅ ModuleCat.of R R) (z : G), exists r : R, r • globalGenerator R G e = z",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in :routes-2026-10-10-manifold-global-generator-topo3-r1},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-globalgenerator-generates,
    :kind :lemma,
    :depends-on
-   [:lemma-constructiontargets-manifoldfundamentalclass-integralchartgenerator-eq-on-preconnected-overlap-of-ne-neg-one],
+   [:lemma-constructiontargets-manifoldfundamentalclass-integralchartgenerator-eq-on-preconnected-overlap-of-ne-neg-one
+    :lemma-constructiontargets-manifoldfundamentalclass-globalgenerator],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFundamentalClass.globalGenerator",
+    :type
+    "For a module isomorphism G isomorphic to R, the inverse image of one in G."},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFundamentalClass.globalGenerator",
+    :reported-by
+    [:routes-2026-10-10-manifold-global-generator-topo3-r1],
+    :type
+    "For a module isomorphism G isomorphic to R, the inverse image of one in G.",
+    :area "manifold-fundamental-class",
+    :proved-in :routes-2026-10-10-manifold-global-generator-topo3-r1},
+   :id
+   :lemma-constructiontargets-manifoldfundamentalclass-globalgenerator,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers [:t98A02]}],
  :consumer-baselines {},
  :statuses
