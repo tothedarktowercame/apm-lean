@@ -58819,21 +58819,74 @@
   {:bounded-exception
    "single-consumer deleted-origin attachment collar for the t02A03 geometric complement",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/t02a03_geometric_tube_cover.lean",
+      :sha256
+      "932c393580fec51dacf4a94037b638f20f07458b0ac0cef86b86dc720b3ebfdb"},
+     :commands
+     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "apm_t02a03_attachmentCollarPoint, apm_t02a03_attachmentCollarPoint_mem_geometricY, apm_t02a03_attachmentCollarMap, and apm_t02a03_attachmentCollarMap_zero compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
+       :exit 0}
+      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "932c393580fec51dacf4a94037b638f20f07458b0ac0cef86b86dc720b3ebfdb  /tmp/t02a03_geometric_tube_cover.lean"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}
+      {:cmd
+       "rg -n '^((noncomputable )?def|theorem) apm_t02a03_attachmentCollar(Point|Point_mem_geometricY|Map|Map_zero)' /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "290:noncomputable def apm_t02a03_attachmentCollarPoint\n294:theorem apm_t02a03_attachmentCollarPoint_mem_geometricY\n318:noncomputable def apm_t02a03_attachmentCollarMap :\n330:theorem apm_t02a03_attachmentCollarMap_zero :"}],
+     :finding
+     "A complete placeholder-free consumer-facing fixture compiles for this bounded row. The map u ↦ (0,0,(1-u)/8) on Set.Ico 0 1 stays in the frozen geometric complement: its norm is at most 1/8, placing it in the left radius-1/4 tube, and its strictly positive third coordinate prevents membership in the planar left core. The bundled map is continuous and its value at u=0 is exactly the previously banked meridian anchor. The proof does not assert an attachment homotopy or deformation of either tube piece.",
+     :residual
+     "Promote the four compiled collar declarations into the geometric tube-cover module. The next consumer residual is to connect the surviving right-core end to this collar and the based Circle meridian, then extend the construction over the tube pieces and glue the final homotopy equivalence.",
+     :implementation
+     {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
+      :acceptance
+      {:declarations
+       ["apm_t02a03_attachmentCollarPoint"
+        "apm_t02a03_attachmentCollarPoint_mem_geometricY"
+        "apm_t02a03_attachmentCollarMap"
+        "apm_t02a03_attachmentCollarMap_zero"],
+       :fixture-sha256
+       "932c393580fec51dacf4a94037b638f20f07458b0ac0cef86b86dc720b3ebfdb",
+       :gates
+       ["lake env lean ConstructionTargets/T02A03GeometricTubeCover.lean"
+        "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeCover.lean || true)\""
+        "python3 scripts/statement-registry.py check"],
+       :axioms ["propext" "Classical.choice" "Quot.sound"],
+       :consumer-residual
+       "Connect the surviving right-core end to the attachment collar and based Circle meridian; no tube deformation or gluing equivalence is claimed by this packet."}}}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/geometric-attachment-collar",
    :acceptance
-   {:probe
-    "Compile and bank apm_t02a03_attachmentCollarPoint, apm_t02a03_attachmentCollarPoint_mem_geometricY, apm_t02a03_attachmentCollarMap, and apm_t02a03_attachmentCollarMap_zero from /tmp/t02a03_geometric_tube_cover.lean. Define the vertical collar u in [0,1) by (0,0,(1-u)/8), prove it lies in W and avoids the frozen left core, bundle it as a continuous map into the exact geometricY subtype, and prove its u=0 endpoint is the banked meridian anchor. This supplies the deleted-origin attachment collar required by t02A03 route step 2; do not yet claim the full attachment homotopy, deformation data, or gluing equivalence.",
-    :declarations
+   {:declarations
     ["apm_t02a03_attachmentCollarPoint"
      "apm_t02a03_attachmentCollarPoint_mem_geometricY"
      "apm_t02a03_attachmentCollarMap"
      "apm_t02a03_attachmentCollarMap_zero"],
-    :placeholder "the sole sorry in apm_t02a03",
-    :route-step
-    "t02A03 step 2, construct a continuous collar from the based meridian anchor toward the deleted common origin"},
+    :fixture-sha256
+    "932c393580fec51dacf4a94037b638f20f07458b0ac0cef86b86dc720b3ebfdb",
+    :gates
+    ["lake env lean ConstructionTargets/T02A03GeometricTubeCover.lean"
+     "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeCover.lean || true)\""
+     "python3 scripts/statement-registry.py check"],
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :consumer-residual
+    "Connect the surviving right-core end to the attachment collar and based Circle meridian; no tube deformation or gluing equivalence is claimed by this packet."},
    :id :routes-2026-10-10-t02a03-geometric-attachment-collar-topo2-r1,
    :kind :reusable-theorem,
    :depends-on
