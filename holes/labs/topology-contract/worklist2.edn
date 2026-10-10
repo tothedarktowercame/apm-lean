@@ -65377,7 +65377,8 @@
      :review-outcomes]},
    :evidence
    {:outcome :replan,
-    :seat "topo-8",
+    :disposition :replan,
+    :author "topo-8",
     :commands
     [{:cmd
       "bb holes/labs/topology-contract/build_step.bb priorities holes/labs/topology-contract/worklist2.edn",
@@ -65390,6 +65391,131 @@
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :output "131 registered statements match, 0 do not"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791660861833-2813-b407def5",
+     :commands
+     ["git show/diff-tree/show --check 3431ed36"
+      "bb worklist_check.bb and build_step.bb priorities"
+      "python3 statement registry check --rev 3431ed36"
+      "comment-stripped affected-consumer placeholder and fingerprint census at 3431ed36"
+      "checkpoint dependency-review and H2 DAG audit"],
+     :finding
+     "PASS: topo-8 checkpoint r7 is recorded by ledger-only commit 3431ed36; strategy rows have no implementation fixture or theorem orientation to check. The 533-item ledger validates and registry is 131/0. All four dependencies are reviewed PASS/done. Frozen fingerprints and counts reproduce, including t02A03=1, t97A04=2, t95A04=1, t96A07=1, and t96J06=2; the measured changes are t97A04 3-to-2 and t02A03 unchanged. The formerly omitted six-node t97A04 H2 chain is explicit with coherent dependencies. Recomputed priorities support exactly one closure-directed t02A03 row first, followed by the two balanced two-consumer rows for RP2 descent and Mayer-Vietoris connecting naturality."},
+    :replacement-items
+    [{:bounded-exception
+      "single-consumer final geometric prerequisite for the sole t02A03 placeholder",
+      :consumer :t02A03,
+      :implements-lemma
+      :lemma-righttubeminusleftcorehomotopyequivcircle,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/t02A03/right-tube-circle-equivalence",
+      :acceptance
+      {:probe
+       "Compile a placeholder-free fixture for rightTubeMinusLeftCoreHomotopyEquivCircle from the banked based attachment homotopy.",
+       :declaration
+       "ConstructionTargets.T02A03GeometricTubeCover.rightTubeMinusLeftCoreHomotopyEquivCircle",
+       :type
+       "Nonempty (ContinuousMap.HomotopyEquiv ConstructionTargets.T02A03GeometricTubeDeformation.RightTubeMinusLeftCore Circle)",
+       :placeholder "the sole sorry in apm_t02a03",
+       :route-step
+       "t02A03 geometric tube equivalence, right tube minus left core to Circle"},
+      :id
+      :routes-2026-10-10-t02a03-right-tube-circle-equivalence-topo2-r1,
+      :kind :reusable-theorem,
+      :area "explicit-r3-tube-deformation-retraction",
+      :depends-on
+      [:routes-2026-10-10-checkpoint-topo2-r7
+       :lemma-apm-t02a03-rightcorebasedattachmenthomotopy],
+      :current-residual
+      "Use this equivalence in the geometricY gluing equivalence, then close the consumer.",
+      :other-consumers []}
+     {:consumer :t95A04,
+      :implements-lemma
+      :lemma-constructiontargets-realprojectiveevenquadraticdescent-evenquadraticdescents,
+      :phase :probe,
+      :state :open,
+      :scope
+      ["ConstructionTargets/RealProjectiveEvenQuadraticDescent.lean"],
+      :dag-node "TOPOLOGY-ROUTES.md/rp2/even-quadratic-descent",
+      :acceptance
+      {:probe
+       "Compile one placeholder-free module defining the quotient descents and smoothness of exactly the even quadratic coordinate maps used by t95A04 and t96A07. Prove their pullbacks along sphereProjection are the original sphere maps.",
+       :declarations
+       ["ConstructionTargets.RealProjectiveEvenQuadraticDescent.veroneseDescended"
+        "ConstructionTargets.RealProjectiveEvenQuadraticDescent.crossTermDescended"],
+       :placeholders
+       ["the sole sorry in t95A04" "the sole sorry in t96A07"],
+       :route-step
+       "shared RP2 atlas route, descend the consumers' even quadratic maps and prove smoothness"},
+      :id
+      :routes-2026-10-10-rp2-even-quadratic-descent-two-consumers-topo2-r1,
+      :kind :reusable-theorem,
+      :area "rp-smooth-atlas",
+      :depends-on
+      [:routes-2026-10-10-checkpoint-topo2-r7
+       :routes-2026-10-10-rp2-smooth-atlas-two-consumers-topo2-r1],
+      :current-residual
+      "t95A04 still needs embedding; t96A07 still needs the transversality argument.",
+      :other-consumers [:t96A07]}
+     {:consumer :t97A04,
+      :implements-lemma
+      :lemma-constructiontargets-productionopencovermayervietoris-productionconnecting-natura,
+      :phase :probe,
+      :state :open,
+      :scope
+      ["ConstructionTargets/ProductionOpenCoverMayerVietoris.lean"],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/mayer-vietoris/production-connecting-naturality",
+      :acceptance
+      {:probe
+       "Compile a placeholder-free naturality theorem for the production Mayer-Vietoris connecting morphism under a continuous map preserving both named cover members.",
+       :declaration
+       "ConstructionTargets.ProductionOpenCoverMayerVietoris.productionConnecting_naturality",
+       :type
+       "Naturality of the production Mayer-Vietoris connecting morphism for a continuous map carrying each source cover member into the corresponding target cover member",
+       :placeholders
+       ["apm_t97A04_bridge_3"
+        "the H2 Mayer-Vietoris placeholder in t96J06"],
+       :route-step
+       "t97A04 H2 step 7 and the shared t96J06 Mayer-Vietoris naturality step"},
+      :id :routes-2026-10-10-production-connecting-naturality-topo2-r1,
+      :kind :reusable-theorem,
+      :area "mv-connecting-naturality",
+      :depends-on [:routes-2026-10-10-checkpoint-topo2-r7],
+      :current-residual
+      "Specialize to the frozen torus y-cover, prove connecting injectivity, compute overlap H1, and derive shearY_H2.",
+      :other-consumers [:t96J06]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 3,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:strategy
+       "Review the three rows, recount placeholders, rerun priorities and AREAS, and elect at most one closure-directed row before balanced area work."},
+      :id :routes-2026-10-10-checkpoint-topo2-r8,
+      :kind :strategy-checkpoint,
+      :area "portfolio",
+      :depends-on
+      [:routes-2026-10-10-t02a03-right-tube-circle-equivalence-topo2-r1
+       :routes-2026-10-10-rp2-even-quadratic-descent-two-consumers-topo2-r1
+       :routes-2026-10-10-production-connecting-naturality-topo2-r1],
+      :current-residual
+      "Refill from the corrected H2-aware DAG and cross-loop area ranking.",
+      :other-consumers []}],
     :finding
     {:placeholder-delta
      {:t97A04 {:before 3, :after 2}, :t02A03 {:before 1, :after 1}},
@@ -65526,123 +65652,9 @@
       :consumers [:t97A04],
       :depends-on ["ConstructionTargets.T97A04TorusH2.bridge_3"],
       :area "torus-homology-matrix"}],
-    :replacement-items
-    [{:bounded-exception
-      "single-consumer final geometric prerequisite for the sole t02A03 placeholder",
-      :consumer :t02A03,
-      :implements-lemma
-      :lemma-righttubeminusleftcorehomotopyequivcircle,
-      :phase :probe,
-      :state :open,
-      :scope [],
-      :dag-node
-      "TOPOLOGY-ROUTES.md/t02A03/right-tube-circle-equivalence",
-      :acceptance
-      {:probe
-       "Compile a placeholder-free fixture for rightTubeMinusLeftCoreHomotopyEquivCircle from the banked based attachment homotopy.",
-       :declaration
-       "ConstructionTargets.T02A03GeometricTubeCover.rightTubeMinusLeftCoreHomotopyEquivCircle",
-       :type
-       "Nonempty (ContinuousMap.HomotopyEquiv ConstructionTargets.T02A03GeometricTubeDeformation.RightTubeMinusLeftCore Circle)",
-       :placeholder "the sole sorry in apm_t02a03",
-       :route-step
-       "t02A03 geometric tube equivalence, right tube minus left core to Circle"},
-      :id
-      :routes-2026-10-10-t02a03-right-tube-circle-equivalence-topo2-r1,
-      :kind :reusable-theorem,
-      :area "explicit-r3-tube-deformation-retraction",
-      :depends-on
-      [:routes-2026-10-10-checkpoint-topo2-r7
-       :lemma-apm-t02a03-rightcorebasedattachmenthomotopy],
-      :current-residual
-      "Use this equivalence in the geometricY gluing equivalence, then close the consumer.",
-      :other-consumers []}
-     {:consumer :t95A04,
-      :implements-lemma
-      :lemma-constructiontargets-realprojectiveevenquadraticdescent-evenquadraticdescents,
-      :phase :probe,
-      :state :open,
-      :scope
-      ["ConstructionTargets/RealProjectiveEvenQuadraticDescent.lean"],
-      :dag-node "TOPOLOGY-ROUTES.md/rp2/even-quadratic-descent",
-      :acceptance
-      {:probe
-       "Compile one placeholder-free module defining the quotient descents and smoothness of exactly the even quadratic coordinate maps used by t95A04 and t96A07. Prove their pullbacks along sphereProjection are the original sphere maps.",
-       :declarations
-       ["ConstructionTargets.RealProjectiveEvenQuadraticDescent.veroneseDescended"
-        "ConstructionTargets.RealProjectiveEvenQuadraticDescent.crossTermDescended"],
-       :placeholders
-       ["the sole sorry in t95A04" "the sole sorry in t96A07"],
-       :route-step
-       "shared RP2 atlas route, descend the consumers' even quadratic maps and prove smoothness"},
-      :id
-      :routes-2026-10-10-rp2-even-quadratic-descent-two-consumers-topo2-r1,
-      :kind :reusable-theorem,
-      :area "rp-smooth-atlas",
-      :depends-on
-      [:routes-2026-10-10-checkpoint-topo2-r7
-       :routes-2026-10-10-rp2-smooth-atlas-two-consumers-topo2-r1],
-      :current-residual
-      "t95A04 still needs embedding; t96A07 still needs the transversality argument.",
-      :other-consumers [:t96A07]}
-     {:consumer :t97A04,
-      :implements-lemma
-      :lemma-constructiontargets-productionopencovermayervietoris-productionconnecting-natura,
-      :phase :probe,
-      :state :open,
-      :scope
-      ["ConstructionTargets/ProductionOpenCoverMayerVietoris.lean"],
-      :dag-node
-      "TOPOLOGY-ROUTES.md/mayer-vietoris/production-connecting-naturality",
-      :acceptance
-      {:probe
-       "Compile a placeholder-free naturality theorem for the production Mayer-Vietoris connecting morphism under a continuous map preserving both named cover members.",
-       :declaration
-       "ConstructionTargets.ProductionOpenCoverMayerVietoris.productionConnecting_naturality",
-       :type
-       "Naturality of the production Mayer-Vietoris connecting morphism for a continuous map carrying each source cover member into the corresponding target cover member",
-       :placeholders
-       ["apm_t97A04_bridge_3"
-        "the H2 Mayer-Vietoris placeholder in t96J06"],
-       :route-step
-       "t97A04 H2 step 7 and the shared t96J06 Mayer-Vietoris naturality step"},
-      :id :routes-2026-10-10-production-connecting-naturality-topo2-r1,
-      :kind :reusable-theorem,
-      :area "mv-connecting-naturality",
-      :depends-on [:routes-2026-10-10-checkpoint-topo2-r7],
-      :current-residual
-      "Specialize to the frozen torus y-cover, prove connecting injectivity, compute overlap H1, and derive shearY_H2.",
-      :other-consumers [:t96J06]}
-     {:consumer :portfolio,
-      :checkpoint
-      {:after-problems 3,
-       :may-supersede-future true,
-       :required-measures
-       [:placeholder-delta
-        :typed-residual-change
-        :infrastructure-packets
-        :review-outcomes]},
-      :phase :strategy,
-      :state :blocked,
-      :scope [],
-      :dag-node "TOPOLOGY-ROUTES.md",
-      :acceptance
-      {:strategy
-       "Review the three rows, recount placeholders, rerun priorities and AREAS, and elect at most one closure-directed row before balanced area work."},
-      :id :routes-2026-10-10-checkpoint-topo2-r8,
-      :kind :strategy-checkpoint,
-      :area "portfolio",
-      :depends-on
-      [:routes-2026-10-10-t02a03-right-tube-circle-equivalence-topo2-r1
-       :routes-2026-10-10-rp2-even-quadratic-descent-two-consumers-topo2-r1
-       :routes-2026-10-10-production-connecting-naturality-topo2-r1],
-      :current-residual
-      "Refill from the corrected H2-aware DAG and cross-loop area ranking.",
-      :other-consumers []}],
-    :author "topo-8",
-    :disposition :replan},
+    :seat "topo-8"},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -65663,7 +65675,7 @@
    :consumer :t02A03,
    :implements-lemma :lemma-righttubeminusleftcorehomotopyequivcircle,
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/right-tube-circle-equivalence",
    :acceptance
@@ -65690,7 +65702,7 @@
    :implements-lemma
    :lemma-constructiontargets-realprojectiveevenquadraticdescent-evenquadraticdescents,
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope
    ["ConstructionTargets/RealProjectiveEvenQuadraticDescent.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/rp2/even-quadratic-descent",
@@ -65718,7 +65730,7 @@
    :implements-lemma
    :lemma-constructiontargets-productionopencovermayervietoris-productionconnecting-natura,
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope
    ["ConstructionTargets/ProductionOpenCoverMayerVietoris.lean"],
    :dag-node
