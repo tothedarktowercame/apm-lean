@@ -88341,6 +88341,19 @@
       :finding "131 registered statements match, 0 do not"}
      {:cmd "git status --short", :exit 0, :finding "clean"}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791643586419-2191-bf560630",
+     :commands
+     ["git show 983453e07912c8ce026078bcfe356b1d9e1c32eb --stat and recorded source inspection"
+      "lake build ConstructionTargets.FiniteIndexFreeGroupSchreierRank"
+      "sha256sum /tmp/finite-index-free-group-schreier-rank-final-probe.lean && lake env lean /tmp/finite-index-free-group-schreier-rank-final-probe.lean"
+      "comment-stripped sorry/admit census for implementation, fixture, and affected consumers"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 702df51e:holes/labs/topology-contract/worklist.edn)"],
+     :finding
+     "exact reused one-file scope and final fixture hash reproduce; the canonical dependency chain builds, the complement-indexed basis is transported in the required H-to-FreeGroup direction, and the universal positive-rank equivalence plus both consumer specializations use standard axioms with zero implementation or fixture placeholders"},
     :commit "983453e07912c8ce026078bcfe356b1d9e1c32eb",
     :changed-paths
     ["ConstructionTargets/FiniteIndexFreeGroupSchreierRank.lean"],
@@ -88366,7 +88379,7 @@
       "IsFreeGroupoid.endMulEquivSubgroup"]},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/FiniteIndexFreeGroupSchreierRank.lean"],
    :reuse
@@ -93218,7 +93231,7 @@
    :other-consumers [:t97A03]}
   {:consumer :t99J01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -93233,7 +93246,10 @@
     :type
     "(r n : Nat) -> 0 < r -> 0 < n -> (H : Subgroup (FreeGroup (Fin r))) -> H.index = n -> H ≃* FreeGroup (Fin ((r - 1) * n + 1))",
     :proved-in
-    :routes-2026-10-10-finite-index-free-group-schreier-rank-shared-4},
+    :routes-2026-10-10-finite-index-free-group-schreier-rank-shared-4,
+    :banked-by
+    :routes-2026-10-10-finite-index-free-group-schreier-rank-shared-4,
+    :banked-commit "983453e07912c8ce026078bcfe356b1d9e1c32eb"},
    :id
    :lemma-finiteindexfreegroupschreierrank-finiteindexsubgroupfreegroupequiv,
    :kind :lemma,
@@ -93256,7 +93272,7 @@
    :other-consumers []}
   {:consumer :t99J01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -93271,7 +93287,10 @@
     :type
     "positive-index subgroup of FreeGroup (Fin 3) is equivalent to FreeGroup (Fin (2*n+1))",
     :proved-in
-    :routes-2026-10-10-finite-index-free-group-schreier-rank-shared-4},
+    :routes-2026-10-10-finite-index-free-group-schreier-rank-shared-4,
+    :banked-by
+    :routes-2026-10-10-finite-index-free-group-schreier-rank-shared-4,
+    :banked-commit "983453e07912c8ce026078bcfe356b1d9e1c32eb"},
    :id
    :lemma-finiteindexfreegroupschreierrank-indexsubgroupfreegroupfinthreeequiv,
    :kind :lemma,
@@ -93280,7 +93299,7 @@
    :other-consumers []}
   {:consumer :t97A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -93295,7 +93314,10 @@
     :type
     "index-two subgroup of FreeGroup (Fin 2) is equivalent to FreeGroup (Fin 3)",
     :proved-in
-    :routes-2026-10-10-finite-index-free-group-schreier-rank-shared-4},
+    :routes-2026-10-10-finite-index-free-group-schreier-rank-shared-4,
+    :banked-by
+    :routes-2026-10-10-finite-index-free-group-schreier-rank-shared-4,
+    :banked-commit "983453e07912c8ce026078bcfe356b1d9e1c32eb"},
    :id
    :lemma-finiteindexfreegroupschreierrank-indextwosubgroupfreegroupfintwoequiv,
    :kind :lemma,
