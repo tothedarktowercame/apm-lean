@@ -100758,6 +100758,21 @@
       :output "131 registered statements match, 0 do not"}
      {:cmd "git diff --check", :exit 0}
      {:cmd "git status --short", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791675236369-3307-d5858d58",
+     :commands
+     ["git show and diff-tree 2023abb3a5842d227d8ae441f7f9c125ef9c12d3"
+      "sha256sum /tmp/polygon-six-edge-circle-cover.lean"
+      "lake build ConstructionTargets.PolygonSixEdgeCircleCover"
+      "lake env lean /tmp/polygon-six-edge-circle-cover.lean"
+      "lake env lean /dev/stdin with fresh axiom checks"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped placeholder and SHA-256 recomputation"
+      "git diff-tree --check 2023abb3a5842d227d8ae441f7f9c125ef9c12d3^ 2023abb3a5842d227d8ae441f7f9c125ef9c12d3"],
+     :finding
+     "Recorded one-file commit is authored by topo-2 and is byte-identical to the frozen fixture; the canonical representative in [0,6) is exhaustively split into six unit sectors, reconstructed parameters lie in [0,1], edge equalities have the required orientation, and both surjectivity results follow from the cover; all frozen declarations use only standard axioms, placeholder counts are zero, and the registry reports 131 matched and 0 mismatched."},
     :commit "2023abb3a5842d227d8ae441f7f9c125ef9c12d3",
     :changed-paths
     ["ConstructionTargets/PolygonSixEdgeCircleCover.lean"],
@@ -100772,7 +100787,7 @@
      "Identified every canonical edge parameterization with AddCircle.toCircle at coordinate j+t, split the canonical Ico representative into six unit intervals to cover Circle, and proved both three-loop maps surjective."},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/PolygonSixEdgeCircleCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/six-edge-circle-cover",
@@ -100923,7 +100938,7 @@
       "The six canonical polygon edge arcs cover Circle via the canonical AddCircle 6 representative, and both specialized three-loop comparison maps are consequently surjective."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -104097,7 +104112,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "PolygonSixEdgeCircleCover.sixEdgeCircleCover",
@@ -104111,7 +104126,9 @@
     :type
     "For every z : Circle there are j : Fin 6 and t : Set.Icc (0 : Real) 1 such that circleEdgePoint j t = z.",
     :area "polygon-surface-open-cover",
-    :proved-in :routes-2026-10-10-polygon-six-edge-circle-cover-63},
+    :proved-in :routes-2026-10-10-polygon-six-edge-circle-cover-63,
+    :banked-by :routes-2026-10-10-polygon-six-edge-circle-cover-63,
+    :banked-commit "2023abb3a5842d227d8ae441f7f9c125ef9c12d3"},
    :id :lemma-polygonsixedgecirclecover-sixedgecirclecover,
    :kind :lemma,
    :depends-on
@@ -104120,7 +104137,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "PolygonSixEdgeCircleCover.surjective_n3ThreeLoops",
@@ -104134,7 +104151,9 @@
     :type
     "Function.Surjective PolygonBoundaryThreeLoopMaps.n3ThreeLoops.",
     :area "polygon-surface-open-cover",
-    :proved-in :routes-2026-10-10-polygon-six-edge-circle-cover-63},
+    :proved-in :routes-2026-10-10-polygon-six-edge-circle-cover-63,
+    :banked-by :routes-2026-10-10-polygon-six-edge-circle-cover-63,
+    :banked-commit "2023abb3a5842d227d8ae441f7f9c125ef9c12d3"},
    :id :lemma-polygonsixedgecirclecover-surjective-n3threeloops,
    :kind :lemma,
    :depends-on
@@ -104143,7 +104162,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -104159,7 +104178,9 @@
     :type
     "Function.Surjective PolygonBoundaryThreeLoopMaps.torusCrosscapThreeLoops.",
     :area "polygon-surface-open-cover",
-    :proved-in :routes-2026-10-10-polygon-six-edge-circle-cover-63},
+    :proved-in :routes-2026-10-10-polygon-six-edge-circle-cover-63,
+    :banked-by :routes-2026-10-10-polygon-six-edge-circle-cover-63,
+    :banked-commit "2023abb3a5842d227d8ae441f7f9c125ef9c12d3"},
    :id
    :lemma-polygonsixedgecirclecover-surjective-toruscrosscapthreeloops,
    :kind :lemma,
