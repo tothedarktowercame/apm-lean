@@ -66577,56 +66577,51 @@
    "single-consumer right-core tubular reconstruction identity needed for a tube-preserving deformation",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:residual
-     "Interpolate the disk-normal coordinate inside the radius-1/4 disk, reconstruct the ambient path, and prove its meridian endpoint and left-core avoidance.",
-     :outcome :go,
-     :warnings [],
-     :missing-theorems [],
-     :axioms [propext Classical.choice Quot.sound],
-     :commands
-     [{:cmd "lake env lean /tmp/t02a03_right_core_compact_probe.lean",
-       :exit 0,
-       :output
-       "rightTubeCorePolarReconstruction_self compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd "sha256sum /tmp/t02a03_right_core_compact_probe.lean",
-       :exit 0,
-       :output
-       "1ba9cb7efd6e58202154c18b83e75b8ab78caed28188ee18eaaa60ef6a09c691  /tmp/t02a03_right_core_compact_probe.lean"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_right_core_compact_probe.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}
-      {:cmd
-       "rg -n \"rightTubeCore(NormalComplex|PolarReconstruction|PolarReconstruction_self)\" /tmp/t02a03_right_core_compact_probe.lean",
-       :exit 0,
-       :output
-       "Definitions and reconstruction theorem occur at lines 230-269."}],
-     :fixture
-     {:path "/tmp/t02a03_right_core_compact_probe.lean",
-      :sha256
-      "1ba9cb7efd6e58202154c18b83e75b8ab78caed28188ee18eaaa60ef6a09c691"},
-     :finding
-     "The compiled package defines the right-core disk-normal coordinate n=(1-norm((1-p0)+i*p1))+i*p2 and reconstructs from angular direction u by (1-(1-n.re)u.re,(1-n.re)u.im,n.im). The norm-times-normalize identity proves exact reconstruction for every right-tube point.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
-      :declarations
-      [{:name
-        "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreNormalComplex",
-        :type "apm_t02a03_E3 -> Complex"}
-       {:name
-        "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCorePolarReconstruction",
-        :type "Circle -> Complex -> apm_t02a03_E3"}
-       {:name
-        "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCorePolarReconstruction_self",
-        :type
-        "forall (p : apm_t02a03_E3) (hp : p ∈ apm_t02a03_rightTube), rightTubeCorePolarReconstruction ⟨NormedSpace.normalize (rightTubeCorePlanarComplex p), by exact mem_sphere_zero_iff_norm.mpr (NormedSpace.norm_normalize (rightTubeCorePlanarComplex_ne_zero p hp))⟩ (rightTubeCoreNormalComplex p) = p"}]},
-     :seat "topo-8"}},
+   {:placeholder-delta {:before 0, :after 0},
+    :residual
+    "Interpolate the disk-normal coordinate inside the radius-1/4 disk, reconstruct the ambient path, and prove its meridian endpoint and left-core avoidance.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["Lean reports the pre-existing unnecessarySimpa warning at module line 62; the core polar reconstruction declarations compile without additional warnings."],
+    :missing-theorems [],
+    :statement-hashes
+    {:registered "131 registered statements match, 0 do not",
+     :scoped-file-git-blob "f2218dec121262ba50227e567e91743d14eb0b10"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd "lake env lean /tmp/t02a03_right_core_compact_probe.lean",
+      :exit 0}
+     {:cmd "sha256sum /tmp/t02a03_right_core_compact_probe.lean",
+      :exit 0,
+      :output
+      "1ba9cb7efd6e58202154c18b83e75b8ab78caed28188ee18eaaa60ef6a09c691  /tmp/t02a03_right_core_compact_probe.lean"}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeDeformation.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "ad0149165927874fd995ccd827555551cc027463",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+    :fixture
+    {:path "/tmp/t02a03_right_core_compact_probe.lean",
+     :sha256
+     "1ba9cb7efd6e58202154c18b83e75b8ab78caed28188ee18eaaa60ef6a09c691"},
+    :finding
+    "The disk-normal coordinate records one minus the core-centered planar radius and the height. Multiplying the normalized angular coordinate by that recovered radius reconstructs the first two coordinates, while the imaginary component reconstructs height.",
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/right-core-polar-reconstruction",
