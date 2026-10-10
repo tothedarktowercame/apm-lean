@@ -230,4 +230,51 @@ noncomputable def apm_t02a03_meridianMap :
     intro i
     fin_cases i <;> simp <;> fun_prop
 
+noncomputable def apm_t02a03_circleMeridian (z : Circle) : apm_t02a03_E3 :=
+  WithLp.toLp 2 ![(1 / 8 : ℝ) * (z : ℂ).re, 0,
+    (1 / 8 : ℝ) * (z : ℂ).im]
+
+theorem apm_t02a03_circleMeridian_mem_geometricY (z : Circle) :
+    apm_t02a03_circleMeridian z ∈ apm_t02a03_W ∧
+      apm_t02a03_circleMeridian z ∉ Set.range apm_t02a03_leftCore := by
+  have hzsq : (z : ℂ).re ^ 2 + (z : ℂ).im ^ 2 = 1 := by
+    simpa [Complex.normSq_apply, pow_two] using Circle.normSq_coe z
+  constructor
+  · rw [apm_t02a03_W_eq_leftTube_union_rightTube]
+    apply Set.mem_union_left
+    apply Metric.mem_cthickening_of_dist_le (apm_t02a03_circleMeridian z) 0
+      (1 / 4 : ℝ) (Set.range apm_t02a03_leftCore)
+      apm_t02a03_origin_mem_both_cores.1
+    rw [dist_zero_right, EuclideanSpace.norm_eq]
+    have hsq : ((1 / 8 : ℝ) * (z : ℂ).re) ^ 2 +
+        ((1 / 8 : ℝ) * (z : ℂ).im) ^ 2 = 1 / 64 := by
+      nlinarith
+    simp [apm_t02a03_circleMeridian, Fin.sum_univ_succ]
+    rw [show (8⁻¹ * (z : ℂ).re) ^ 2 + (8⁻¹ * (z : ℂ).im) ^ 2 =
+        (1 / 64 : ℝ) by norm_num at hsq ⊢; exact hsq]
+    norm_num
+  · rintro ⟨s, hs⟩
+    have hx := congrArg (fun q : apm_t02a03_E3 => q 0) hs
+    have hy := congrArg (fun q : apm_t02a03_E3 => q 1) hs
+    have hz := congrArg (fun q : apm_t02a03_E3 => q 2) hs
+    simp [apm_t02a03_leftCore, apm_t02a03_circleMeridian] at hx hy hz
+    have hcos : Real.cos s ^ 2 = 1 := by
+      nlinarith [Real.sin_sq_add_cos_sq s]
+    have hre : (z : ℂ).re ^ 2 = 1 := by
+      nlinarith
+    nlinarith [sq_nonneg (Real.cos s - 1),
+      sq_nonneg ((z : ℂ).re - 1), sq_nonneg ((z : ℂ).re + 1)]
+
+noncomputable def apm_t02a03_circleMeridianMap :
+    C(Circle, apm_t02a03_geometricY_probe) where
+  toFun z := ⟨apm_t02a03_circleMeridian z,
+    apm_t02a03_circleMeridian_mem_geometricY z⟩
+  continuous_toFun := by
+    apply Continuous.subtype_mk
+    unfold apm_t02a03_circleMeridian
+    apply (PiLp.continuous_toLp 2 _).comp
+    apply continuous_pi
+    intro i
+    fin_cases i <;> simp <;> fun_prop
+
 end ConstructionTargets.T02A03GeometricTubeCover
