@@ -67037,7 +67037,50 @@
   {:bounded-exception
    "single-consumer reverse-triangle estimate for the right-core tubular radius",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:residual
+     "Combine the planar radial bound with the unchanged height coordinate and an attained right-core witness to prove norm(rightTubeCoreNormalComplex p) ≤ 1/4.",
+     :outcome :go,
+     :warnings [],
+     :missing-theorems [],
+     :axioms [propext Classical.choice Quot.sound],
+     :commands
+     [{:cmd "lake env lean /tmp/t02a03_right_core_compact_probe.lean",
+       :exit 0,
+       :output
+       "rightTubeCore_radial_error_le compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd "sha256sum /tmp/t02a03_right_core_compact_probe.lean",
+       :exit 0,
+       :output
+       "cd85a3cbd352f84b2f6edf1e206cb44f684a907ece28b25f639aab8f2f5405c8  /tmp/t02a03_right_core_compact_probe.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_right_core_compact_probe.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}
+      {:cmd
+       "rg -n \"rightTubeCore_radial_error_le|abs_norm_sub_norm_le\" /tmp/t02a03_right_core_compact_probe.lean",
+       :exit 0,
+       :output
+       "The theorem begins at line 364 and applies abs_norm_sub_norm_le at line 377."}],
+     :fixture
+     {:path "/tmp/t02a03_right_core_compact_probe.lean",
+      :sha256
+      "cd85a3cbd352f84b2f6edf1e206cb44f684a907ece28b25f639aab8f2f5405c8"},
+     :finding
+     "After proving each right-core direction has complex norm one, abs_norm_sub_norm_le directly bounds the absolute radial error by planar distance to that direction.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+      :declarations
+      [{:name
+        "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCore_radial_error_le",
+        :type
+        "forall (p : apm_t02a03_E3) (t : Real), abs (1 - norm (rightTubeCorePlanarComplex p)) ≤ norm (rightTubeCorePlanarComplex p - ((Real.cos t : Complex) + (Real.sin t : Complex) * Complex.I))"}]},
+     :seat "topo-8"}},
+   :phase :implementation,
    :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/right-core-radial-error-bound",
@@ -67055,6 +67098,11 @@
    :routes-2026-10-10-t02a03-right-core-radial-error-bound-topo2-r1,
    :kind :reusable-theorem,
    :area "explicit-r3-tube-deformation-retraction",
+   :declarations
+   [{:name
+     "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCore_radial_error_le",
+     :type
+     "forall (p : apm_t02a03_E3) (t : Real), abs (1 - norm (rightTubeCorePlanarComplex p)) ≤ norm (rightTubeCorePlanarComplex p - ((Real.cos t : Complex) + (Real.sin t : Complex) * Complex.I))"}],
    :depends-on
    [:routes-2026-10-10-t02a03-right-core-meridian-normal-radius-topo2-r1],
    :current-residual
