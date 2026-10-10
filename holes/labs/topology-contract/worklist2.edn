@@ -64613,22 +64613,62 @@
   {:bounded-exception
    "single-consumer aligned frozen-torus ModuleCat H1 commuting square for t97A04",
    :consumer :t97A04,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/t97a04_frozen_h1_coordinate.lean",
+      :sha256
+      "c10c17e87cff020bbe16a848d4b5a64c4425661e0186333f15742f23ede500fd"},
+     :commands
+     [{:cmd "sha256sum /tmp/t97a04_frozen_h1_coordinate.lean",
+       :exit 0,
+       :output
+       "c10c17e87cff020bbe16a848d4b5a64c4425661e0186333f15742f23ede500fd  /tmp/t97a04_frozen_h1_coordinate.lean"}
+      {:cmd "lake env lean /tmp/t97a04_frozen_h1_coordinate.lean",
+       :exit 0,
+       :output
+       "frozenLbarModuleH1_map_commutes compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t97a04_frozen_h1_coordinate.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :implementation
+     {:scope ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"],
+      :declarations
+      ["ConstructionTargets.T97A04FrozenH1Coordinate.frozenLbarModuleH1_map_commutes"],
+      :acceptance
+      {:type
+       "(((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom frozenLbar)) ≫ frozenTorusAlignedH1ModuleIsoFinTwo.hom = frozenTorusAlignedH1ModuleIsoFinTwo.hom ≫ ModuleCat.ofHom frozenMatrixAddHom.toIntLinearMap",
+       :axioms ["propext" "Classical.choice" "Quot.sound"],
+       :gates
+       ["scoped module compiles"
+        "scoped module contains no sorry token"
+        "statement registry matches"]}},
+     :finding
+     "The compiled theorem transfers frozenLbarIntegralH1_map_commutes through singularHomologyComparison_naturality. The proof exposes singularHomologyModuleIsoOfGroupIso through forgetIntModules.map_preimage, applies the additive-group commuting square, and uses forgetIntModules faithfulness to obtain the canonical ModuleCat equation.",
+     :residual
+     "Identify frozenLbar with apm_t97a04_Lbar and frozenMatrixAddHom.toIntLinearMap with apm_t97a04_matrix.mulVec in the consumer fixture, then use frozenTorusAlignedH1ModuleIsoFinTwo to close apm_t97A04_bridge_2.",
+     :warnings []}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t97A04/frozen-module-h1-map-square",
    :acceptance
-   {:probe
-    "Compile and bank frozenLbarModuleH1_map_commutes from /tmp/t97a04_frozen_h1_coordinate.lean. Transfer frozenLbarIntegralH1_map_commutes through singularHomologyComparison_naturality and forgetIntModules faithfulness to the canonical ModuleCat degree-one homology map and the aligned module coordinate. Preserve the frozen matrix exactly; do not yet claim apm_t97A04_bridge_2.",
-    :declaration
-    "ConstructionTargets.T97A04FrozenH1Coordinate.frozenLbarModuleH1_map_commutes",
-    :type
+   {:type
     "(((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom frozenLbar)) ≫ frozenTorusAlignedH1ModuleIsoFinTwo.hom = frozenTorusAlignedH1ModuleIsoFinTwo.hom ≫ ModuleCat.ofHom frozenMatrixAddHom.toIntLinearMap",
-    :placeholder "apm_t97A04_bridge_2",
-    :route-step
-    "t97A04 step 6, transfer the aligned IntegralH1 matrix square through the singular-homology comparison into ModuleCat"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :gates
+    ["scoped module compiles"
+     "scoped module contains no sorry token"
+     "statement registry matches"]},
    :id :routes-2026-10-10-t97a04-frozen-module-h1-map-square-topo2-r1,
    :kind :reusable-theorem,
+   :declarations
+   ["ConstructionTargets.T97A04FrozenH1Coordinate.frozenLbarModuleH1_map_commutes"],
    :depends-on
    [:routes-2026-10-10-checkpoint-topo2-r5
     :routes-2026-10-10-t97a04-frozen-integral-h1-map-square-topo2-r1],
