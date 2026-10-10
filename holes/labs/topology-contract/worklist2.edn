@@ -57185,41 +57185,65 @@
    "single-consumer dependent coordinate-equivalence transport needed by the frozen t97A04 matrix",
    :consumer :t97A04,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/fundamental_group_coordinate_transport_apply.lean",
-      :sha256
-      "5c21fec271f790bac2a0108368ba11d379e9ec7e1d9fc5eca3fe02b63423e8b9"},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/fundamental_group_coordinate_transport_apply.lean",
-       :exit 0,
-       :output
-       "fundamentalGroupCoordinateTransport_apply and frozenNativeCoord_eq_torusPi1Coord_cast compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/fundamental_group_coordinate_transport_apply.lean || true)\"",
-       :exit 0}
-      {:cmd
-       "sha256sum /tmp/fundamental_group_coordinate_transport_apply.lean",
-       :exit 0,
-       :output
-       "5c21fec271f790bac2a0108368ba11d379e9ec7e1d9fc5eca3fe02b63423e8b9  /tmp/fundamental_group_coordinate_transport_apply.lean"}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :finding
-     "The fixture proves by equality induction that transporting a fundamental-group coordinate MulEquiv across a basepoint equality evaluates a class after the corresponding endpoint cast. Its frozen specialization uses frozenTorusHomeomorphCircleProd_base and torusPi1Coord exactly, with no proof-term identification or separately defined equivalence.",
-     :implementation
-     {:scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
-      :declarations
-      ["fundamentalGroupCoordinateTransport_apply"
-       "frozenNativeCoord_eq_torusPi1Coord_cast"]},
-     :residual
-     "Compose the frozen transport evaluation with frozenCircleImageQuotient_eq_mappedQuotient_cast and frozenTorusPi1Coord_mk_native, then prove representative and all-class frozen matrix naturality."}},
+   {:placeholder-delta 0,
+    :residual
+    "Compose the transport evaluation with the quotient-cast equality to derive frozenTorusPi1Coord_mk, then prove representative and all-class matrix naturality.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["The focused Lake build replayed pre-existing linter warnings from dependency modules; the scoped module compiled without new warnings."
+     "An unrelated untracked ledger temp file appeared during validation and disappeared before commit; it was neither read for evidence nor modified, staged, or committed by this row."],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/fundamental_group_coordinate_transport_apply.lean",
+      :exit 0,
+      :output
+      "5c21fec271f790bac2a0108368ba11d379e9ec7e1d9fc5eca3fe02b63423e8b9  /tmp/fundamental_group_coordinate_transport_apply.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/TorusPiOneWindingCoordinates.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.TorusPiOneWindingCoordinates",
+      :exit 0,
+      :output "Build completed successfully (8290 jobs)."}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/TorusPiOneWindingCoordinates.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "lake env lean /tmp/check_coord_transport_axioms.lean",
+      :exit 0,
+      :output
+      "fundamentalGroupCoordinateTransport_apply and frozenNativeCoord_eq_torusPi1Coord_cast each depend on [propext, Classical.choice, Quot.sound]."}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r c4351fa5630707902ef2da7572126704b4cdde47",
+      :exit 0,
+      :output "ConstructionTargets/TorusPiOneWindingCoordinates.lean"}
+     {:cmd
+      "python3 -c 'import re; p=\"problems/t97A04/lean/Main.lean\"; t=open(p).read(); t=re.sub(r\"/-.*?-/\",\" \",t,flags=re.S); t=re.sub(r\"--[^\\n]*\",\" \",t); print(len(re.findall(r\"(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])\",t)))'",
+      :exit 0,
+      :output "4"}
+     {:cmd "sha256sum problems/t97A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "79ca854186b39183bf53490a20b5be92695e345a2c099fcf928b5ad3300ee4ec  problems/t97A04/lean/Main.lean"}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "c4351fa5630707902ef2da7572126704b4cdde47",
+    :changed-paths
+    ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
+    :fixture
+    {:path "/tmp/fundamental_group_coordinate_transport_apply.lean",
+     :sha256
+     "5c21fec271f790bac2a0108368ba11d379e9ec7e1d9fc5eca3fe02b63423e8b9"},
+    :declarations
+    ["ConstructionTargets.TorusPiOneWindingCoordinates.fundamentalGroupCoordinateTransport_apply"
+     "ConstructionTargets.TorusPiOneWindingCoordinates.frozenNativeCoord_eq_torusPi1Coord_cast"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A04/torus-pi1-winding-coordinates/frozen-coordinate-transport-apply",
