@@ -82127,8 +82127,61 @@
   {:bounded-exception
    "Consumer-specific arbitrary-n adapter coupling the chart coordinates to the printed diagonal local-index calculation.",
    :consumer :t99J05,
+   :stop-count 1,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "First prove arbitrary-n affine quotient-coordinate compatibility and construct AffineChartConstruction n without axioms. Then separately prove the canonical diagonal map's fixed-point classification, coordinate localMap formula, real determinant positivity, and localIndex = 1 before assembling the package.",
+    :outcome :stop,
+    :warnings
+    [{:kind :invalid-probe-evidence,
+      :message
+      "Zero sorry does not make this fixture placeholder-free under the standard-only invariant because its sole package declaration is an axiom."}],
+    :statement-hashes {:status :match, :count 131},
+    :disposition :stop,
+    :axioms
+    ["propext"
+     "t99J05_affine_local_diagonal_package"
+     "Classical.choice"
+     "Quot.sound"],
+    :author "topo-2",
+    :reason
+    "The elected implementation packet's fixture does not prove the requested arbitrary-n package: it introduces t99J05_affine_local_diagonal_package with axiom, and #print axioms reports the declaration itself among its dependencies. This contradicts the row's :axioms :standard-only acceptance condition. The only banked affine compatibility and OpenPartialHomeomorph construction is concretely specialized to Fin 3 and CP 2, so it cannot supply AffineChartConstruction n for arbitrary n by elaboration or reuse. The missing representation is an arbitrary-n theorem proving quotient-coordinate compatibility (open nonzero-coordinate patch, continuous ratios, and inverse laws); after that, the local diagonal derivative and determinant calculation remain additional proofs.",
+    :commands
+    [{:cmd "sha256sum /tmp/t99j05-affine-local-diagonal-probe.lean",
+      :exit 0,
+      :finding
+      "b55704ee516bc4c04ab54c486d2cc148fad120bed408abaf73af79314eeec3d9"}
+     {:cmd
+      "lake env lean /tmp/t99j05-affine-local-diagonal-probe.lean",
+      :exit 0,
+      :finding
+      "#print axioms includes t99J05_affine_local_diagonal_package itself"}
+     {:cmd
+      "rg -n '^axiom t99J05_affine_local_diagonal_package' /tmp/t99j05-affine-local-diagonal-probe.lean",
+      :exit 0,
+      :finding "line 10 declares the requested package as an axiom"}
+     {:cmd
+      "rg -n 'Fin 3|CP 2|AffineChartConstruction 2' in the banked T94A08 affine construction",
+      :exit 0,
+      :finding
+      "all reusable chart compatibility declarations are specialized to CP 2"}
+     {:cmd "comment-stripped fixture census",
+      :exit 0,
+      :finding {:sorries 0, :axioms 1}}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}],
+    :diagnostic-history [],
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/t99j05-affine-local-diagonal-probe.lean",
+     :sha256
+     "b55704ee516bc4c04ab54c486d2cc148fad120bed408abaf73af79314eeec3d9",
+     :status :self-axiomatized},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T99J05AffineLocalDiagonal.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J05/affine-charts-local-diagonal/package",
