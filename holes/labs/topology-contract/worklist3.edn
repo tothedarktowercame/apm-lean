@@ -964,8 +964,87 @@
   {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-integralchartgenerator-eq-on-preconnected-overlap-of-ne-neg-one,
+   :evidence
+   {:placeholder-delta {:source 0, :fixture 0},
+    :residual
+    "Prove from actual manifold orientation data that a normalized overlap transition cannot equal negative one. The compiled theorem then supplies overlap generator coherence; construction and localization of the absolute top class remain.",
+    :gates
+    {:module-build :pass,
+     :fixture-compiles-against-promoted-module :pass,
+     :exact-declaration-type :pass,
+     :zero-source-and-fixture-sorry :pass,
+     :standard-only-axioms :pass,
+     :registry-check :pass,
+     :exact-scope :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["lake build replayed pre-existing linter warnings in dependencies; the target module emitted no warnings"],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.ManifoldFundamentalClass.integralOverlapTransitionUnit_eq_one_of_ne_neg_one",
+      :type
+      "An integral overlap transition unit unequal to negative one equals one.",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on
+      ["ConstructionTargets.ManifoldFundamentalClass.integralOverlapTransitionUnit_eq_one_or_neg_one"],
+      :area "manifold-fundamental-class"}
+     {:name
+      "ConstructionTargets.ManifoldFundamentalClass.integralChartGenerator_eq_on_preconnected_overlap_of_ne_neg_one",
+      :type
+      "On a preconnected chart overlap, an integral transition unit unequal to negative one at one point makes the two normalized integral chart generators equal at every point.",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on
+      ["ConstructionTargets.ManifoldFundamentalClass.integralOverlapTransitionUnit_eq_one_of_ne_neg_one"
+       "ConstructionTargets.ManifoldFundamentalClass.chartGenerator_eq_on_preconnected_overlap_of_baseUnit_eq_one"],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-10",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/manifold_fundamental_class_exclude_negative_transition.lean",
+      :exit 0,
+      :output
+      "ae379fef663016e5557525e11d40c7d07c6835b8eded1157fe9467e8acb2af71"}
+     {:cmd
+      "lake env lean /tmp/manifold_fundamental_class_exclude_negative_transition.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^\\s*axiom\\b' ConstructionTargets/ManifoldFundamentalClass.lean /tmp/manifold_fundamental_class_exclude_negative_transition.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "d7bb8ab7b0828739d27357b4d72834d7ef5cab69",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path
+     "/tmp/manifold_fundamental_class_exclude_negative_transition.lean",
+     :sha256
+     "ae379fef663016e5557525e11d40c7d07c6835b8eded1157fe9467e8acb2af71",
+     :original-sha256
+     "5c4979271dfef57bf647341afeb21478319668a820f7c6316cf1ee8e44fe39a7",
+     :sorry-count 0},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :summary
+     "Added the integral transition-unit one theorem under an explicit not-negative-one hypothesis and propagated it across preconnected overlaps to equality of the integral chart generators."},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/exclude-negative-transition",
@@ -2456,17 +2535,45 @@
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.integralChartGenerator_eq_on_preconnected_overlap_of_ne_neg_one",
     :reported-by
-    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+     :routes-2026-10-10-manifold-exclude-negative-transition-topo3-r1],
     :type
     "forall (m : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (EuclideanSpace Real (Fin (m + 2))) M] (a b : M) (hconn : IsPreconnected (CoefficientOverlapPair.common m a b)) (x : CoefficientOverlapPair.common m a b), overlapTransitionUnit Int m a b x != -1 -> forall (y : CoefficientOverlapPair.common m a b), CoefficientChartTransitionUnit.chartGenerator Int m a y.1 y.2.1 = CoefficientChartTransitionUnit.chartGenerator Int m b y.1 y.2.2",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in
+    :routes-2026-10-10-manifold-exclude-negative-transition-topo3-r1},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-integralchartgenerator-eq-on-preconnected-overlap-of-ne-neg-one,
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-manifoldfundamentalclass-integraloverlaptransitionunit-eq-one-or-neg-one
-    :lemma-constructiontargets-manifoldfundamentalclass-chartgenerator-eq-on-preconnected-overlap-of-baseunit-eq-one],
+    :lemma-constructiontargets-manifoldfundamentalclass-chartgenerator-eq-on-preconnected-overlap-of-baseunit-eq-one
+    :lemma-constructiontargets-manifoldfundamentalclass-integraloverlaptransitionunit-eq-on],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFundamentalClass.integralOverlapTransitionUnit_eq_one_of_ne_neg_one",
+    :type
+    "An integral overlap transition unit unequal to negative one equals one."},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFundamentalClass.integralOverlapTransitionUnit_eq_one_of_ne_neg_one",
+    :reported-by
+    [:routes-2026-10-10-manifold-exclude-negative-transition-topo3-r1],
+    :type
+    "An integral overlap transition unit unequal to negative one equals one.",
+    :area "manifold-fundamental-class",
+    :proved-in
+    :routes-2026-10-10-manifold-exclude-negative-transition-topo3-r1},
+   :id
+   :lemma-constructiontargets-manifoldfundamentalclass-integraloverlaptransitionunit-eq-on,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-manifoldfundamentalclass-integraloverlaptransitionunit-eq-one-or-neg-one],
    :other-consumers [:t98A02]}],
  :consumer-baselines {},
  :statuses
