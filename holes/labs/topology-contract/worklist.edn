@@ -92878,6 +92878,20 @@
       :finding "131 registered statements match, 0 do not"}
      {:cmd "git diff --check", :exit 0}
      {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791644254186-2220-c63bd1ca",
+     :commands
+     ["git show 983453e07912c8ce026078bcfe356b1d9e1c32eb --stat and recorded source inspection"
+      "lake build ConstructionTargets.FiniteIndexFreeGroupSchreierRank"
+      "sha256sum /tmp/finite-index-free-group-schreier-rank-final-probe.lean && lake env lean /tmp/finite-index-free-group-schreier-rank-final-probe.lean"
+      "representation audit for complement_card_formula, Finite.equivFinOfCardEq, endMulEquivSubgroup, and absence of FreeGroup.of identification"
+      "comment-stripped sorry/admit census for source, fixture, and affected consumers"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show bd28f287:holes/labs/topology-contract/worklist.edn)"],
+     :finding
+     "exact reused one-file scope and fixture hash reproduce; the complement cardinality precedes Fin reindexing, subgroup transport has the required H-to-FreeGroup orientation, chosen generators remain distinct from canonical generators, and all universal and specialized results build with standard axioms and zero scoped placeholders"},
     :commit "983453e07912c8ce026078bcfe356b1d9e1c32eb",
     :changed-paths
     ["ConstructionTargets/FiniteIndexFreeGroupSchreierRank.lean"],
@@ -92904,7 +92918,7 @@
       "calls Finite.equivFinOfCardEq only after complement_card_formula establishes the exact cardinality"]},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/FiniteIndexFreeGroupSchreierRank.lean"],
    :dag-node
@@ -92961,7 +92975,7 @@
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -93347,7 +93361,7 @@
    :other-consumers [:t97A03]}
   {:consumer :t99J01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "TreePositiveSelection.Schreier.complement_card_formula",
@@ -93360,7 +93374,10 @@
     :type
     "Nat.card of the selected-positive-arrow complement equals (r-1)*n+1",
     :proved-in
-    :routes-2026-10-10-finite-index-schreier-type-valued-basis-positive-index-16},
+    :routes-2026-10-10-finite-index-schreier-type-valued-basis-positive-index-16,
+    :banked-by
+    :routes-2026-10-10-finite-index-schreier-type-valued-basis-positive-index-16,
+    :banked-commit "983453e07912c8ce026078bcfe356b1d9e1c32eb"},
    :id :lemma-treepositiveselection-schreier-complement-card-formula,
    :kind :lemma,
    :depends-on
