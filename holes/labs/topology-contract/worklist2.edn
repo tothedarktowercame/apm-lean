@@ -58317,9 +58317,51 @@
   {:bounded-exception
    "single-consumer concrete meridian anchor for the t02A03 geometric complement",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/t02a03_geometric_tube_cover.lean",
+      :sha256
+      "b1ec81acb3d60233325ff478246addd0f6b8ee49e9af5843062b142a0208abe6"},
+     :commands
+     [{:cmd "lake env lean /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "apm_t02a03_meridianAnchor and apm_t02a03_meridianAnchor_mem_geometricY compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_geometric_tube_cover.lean || true)\"",
+       :exit 0}
+      {:cmd "sha256sum /tmp/t02a03_geometric_tube_cover.lean",
+       :exit 0,
+       :output
+       "b1ec81acb3d60233325ff478246addd0f6b8ee49e9af5843062b142a0208abe6  /tmp/t02a03_geometric_tube_cover.lean"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :finding
+     "The point (0,0,1/8) is a compiled explicit inhabitant of the frozen geometric complement. Its distance from the common origin places it in the radius-1/4 left tube and hence W, while its third coordinate excludes membership in the planar left core.",
+     :residual
+     "Construct the normal meridian through the anchor, attach the surviving right-core map to it, and extend to compatible tube deformations and gluing.",
+     :implementation
+     {:scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"]},
+     :acceptance
+     {:source-fixture "/tmp/t02a03_geometric_tube_cover.lean",
+      :declarations
+      ["apm_t02a03_meridianAnchor"
+       "apm_t02a03_meridianAnchor_mem_geometricY"],
+      :placeholder "the sole sorry in apm_t02a03",
+      :route-step
+      "t02A03 step 2, construct a concrete geometricY anchor above the deleted common attachment",
+      :gates
+      ["fixture compiles"
+       "fixture contains no sorry token"
+       "fixture hash matches"
+       "statement registry matches"]}}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/geometric-meridian-anchor",
    :acceptance
    {:probe
