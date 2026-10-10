@@ -88635,8 +88635,139 @@
    "Relate the explicit plane deck action to the frozen aabb disk quotient with generator and basepoint equations.",
    :other-consumers []}
   {:consumer :t97A03,
-   :phase :probe,
+   :phase :implementation,
    :state :open,
+   :scope
+   ["ConstructionTargets/T97A03ConnectedDoubleCoverClassification.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t97A03/connected-double-cover-classification/monodromy-model-homeomorphism",
+   :acceptance
+   {:placeholder "apm_t97A03_bridge_classify_connected_double_cover",
+    :route-step "t97A03 bridge 1, explicit classification steps 1-5",
+    :declarations ["connectedDoubleCoverHomeomorphism"],
+    :implementation
+    "For the concrete quotient base apm_t97A03_BaseSpace A B with A != B, restrict the two-sheeted covering over the sphere and circle strata. Use lifting uniqueness and the fiber equivalence with Fin 2 to label the two lifted sphere sheets. Compute the lifted circle monodromy between the north and south attachment fibers; split into the two possible permutations. Rule out the permutation pattern whose total space is disconnected using ConnectedSpace Y. In each remaining pattern, construct mutually inverse continuous maps between Y and respectively apm_t97A03_OneCircleCover or apm_t97A03_TwoCircleCover by quotient induction, prove the attachment relations, and package the result as the stated disjunction of homeomorphisms. Do not compute homology or fundamental groups.",
+    :axioms :standard-only,
+    :fixture
+    "/tmp/t97a03-connected-double-cover-classification-probe.lean",
+    :fixture-sha256
+    "2715145a07053eba3f69a7c3e864880f00317476b2f43b6bc87f551cbec1f1b5",
+    :commands
+    ["lake env lean ConstructionTargets/T97A03ConnectedDoubleCoverClassification.lean"
+     "lake env lean -o /tmp/Main.olean problems/t97A03/lean/Main.lean"
+     "lake env bash -c 'export LEAN_PATH=\"/tmp:$LEAN_PATH\"; lean /tmp/t97a03-connected-double-cover-classification-probe.lean'"
+     "python3 scripts/statement-registry.py check"]},
+   :id
+   :routes-2026-10-10-t97a03-double-cover-monodromy-model-homeomorphism-1,
+   :kind :uptake,
+   :depends-on [],
+   :current-residual
+   "Construct the two explicit quotient-model homeomorphisms from the two-element circle monodromy classification; lift restriction and exact fiber cardinality are already banked.",
+   :other-consumers []}
+  {:consumer :t97A03,
+   :evidence
+   {:probe
+    {:residual
+     "Exactly one consumer-specific geometric prerequisite remains: turn the two-sheet fiber labels and lifted-circle monodromy into a homeomorphism with one of the two frozen quotient models. Homology and fundamental-group invariants remain downstream.",
+     :outcome :revise,
+     :warnings
+     [{:kind :interface-axiom,
+       :message
+       "The placeholder-free fixture uses exactly one nonstandard axiom for the global monodromy-to-quotient-model homeomorphism; the frozen source definitions and banked lift-restriction API otherwise compile unchanged."}],
+     :prerequisite
+     {:consumer :t97A03,
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/T97A03ConnectedDoubleCoverClassification.lean"],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/t97A03/connected-double-cover-classification/monodromy-model-homeomorphism",
+      :acceptance
+      {:placeholder
+       "apm_t97A03_bridge_classify_connected_double_cover",
+       :route-step
+       "t97A03 bridge 1, explicit classification steps 1-5",
+       :declarations ["connectedDoubleCoverHomeomorphism"],
+       :implementation
+       "For the concrete quotient base apm_t97A03_BaseSpace A B with A != B, restrict the two-sheeted covering over the sphere and circle strata. Use lifting uniqueness and the fiber equivalence with Fin 2 to label the two lifted sphere sheets. Compute the lifted circle monodromy between the north and south attachment fibers; split into the two possible permutations. Rule out the permutation pattern whose total space is disconnected using ConnectedSpace Y. In each remaining pattern, construct mutually inverse continuous maps between Y and respectively apm_t97A03_OneCircleCover or apm_t97A03_TwoCircleCover by quotient induction, prove the attachment relations, and package the result as the stated disjunction of homeomorphisms. Do not compute homology or fundamental groups.",
+       :axioms :standard-only,
+       :fixture
+       "/tmp/t97a03-connected-double-cover-classification-probe.lean",
+       :fixture-sha256
+       "2715145a07053eba3f69a7c3e864880f00317476b2f43b6bc87f551cbec1f1b5",
+       :commands
+       ["lake env lean ConstructionTargets/T97A03ConnectedDoubleCoverClassification.lean"
+        "lake env lean -o /tmp/Main.olean problems/t97A03/lean/Main.lean"
+        "lake env bash -c 'export LEAN_PATH=\"/tmp:$LEAN_PATH\"; lean /tmp/t97a03-connected-double-cover-classification-probe.lean'"
+        "python3 scripts/statement-registry.py check"]},
+      :id
+      :routes-2026-10-10-t97a03-double-cover-monodromy-model-homeomorphism-1,
+      :kind :uptake,
+      :depends-on [],
+      :current-residual
+      "Construct the two explicit quotient-model homeomorphisms from the two-element circle monodromy classification; lift restriction and exact fiber cardinality are already banked.",
+      :other-consumers []},
+     :axioms
+     ["propext"
+      "Classical.choice"
+      "Quot.sound"
+      "T97A03ConnectedDoubleCoverClassificationProbe.connectedDoubleCoverHomeomorphism"],
+     :commands
+     [{:cmd "stat -c '%F %n' .lake/packages",
+       :exit 0,
+       :finding
+       "directory .lake/packages; canonical package authority is present"}
+      {:cmd
+       "lake env lean ConstructionTargets/CoveringLiftRestriction.lean",
+       :exit 0,
+       :finding
+       "the banked lift restriction, evaluation bijection, and lift-cardinality results compile with standard axioms"}
+      {:cmd
+       "lake env lean -o /tmp/Main.olean problems/t97A03/lean/Main.lean",
+       :exit 0,
+       :finding
+       "the frozen t97A03 source compiles to a throwaway import artifact; its three recorded placeholders remain warnings"}
+      {:cmd
+       "lake env bash -c 'export LEAN_PATH=\"/tmp:$LEAN_PATH\"; lean /tmp/t97a03-connected-double-cover-classification-probe.lean'",
+       :exit 0,
+       :finding
+       "the exact frozen classification signature elaborates from one isolated geometric axiom"}
+      {:cmd
+       "sha256sum /tmp/t97a03-connected-double-cover-classification-probe.lean",
+       :exit 0,
+       :finding
+       "2715145a07053eba3f69a7c3e864880f00317476b2f43b6bc87f551cbec1f1b5"}
+      {:cmd
+       "Python comment-stripped placeholder census of /tmp/t97a03-connected-double-cover-classification-probe.lean",
+       :exit 0,
+       :finding "0"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :finding "131 registered statements match, 0 do not"}
+      {:cmd "git status --short", :exit 0, :finding "clean"}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/t97a03-connected-double-cover-classification-probe.lean",
+       :exit 1,
+       :finding
+       "The first draft imported the lowercase problems path, which is not a registered Lean library prefix.",
+       :correction
+       "Compiled the frozen source to /tmp/Main.olean and imported Main through a temporary LEAN_PATH; the successful rerun is in commands."}
+      {:cmd
+       "lake env bash -c 'export LEAN_PATH=\"/home/joe/code/apm-lean/problems/t97A03/lean:$LEAN_PATH\"; lean /tmp/t97a03-connected-double-cover-classification-probe.lean'",
+       :exit 1,
+       :finding
+       "Lean import resolution requires an olean and does not compile Main.lean merely because its source directory is on LEAN_PATH.",
+       :correction
+       "Produced /tmp/Main.olean read-only from the frozen source, then compiled the fixture successfully."}],
+     :fixture
+     {:path
+      "/tmp/t97a03-connected-double-cover-classification-probe.lean",
+      :sha256
+      "2715145a07053eba3f69a7c3e864880f00317476b2f43b6bc87f551cbec1f1b5"},
+     :seat "topo-4"}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A03/connected-double-cover-classification",
@@ -88655,7 +88786,8 @@
    :routes-2026-10-10-t97a03-connected-double-cover-classification-5,
    :kind :uptake,
    :depends-on
-   [:routes-2026-10-10-checkpoint-topo1-covering-schreier-components-4],
+   [:routes-2026-10-10-checkpoint-topo1-covering-schreier-components-4
+    :routes-2026-10-10-t97a03-double-cover-monodromy-model-homeomorphism-1],
    :current-residual
    "Turn the banked lift/monodromy data into one of the two explicit quotient-model homeomorphisms.",
    :other-consumers []}
