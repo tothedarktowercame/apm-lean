@@ -42,6 +42,56 @@ theorem subcomplexMayerVietorisConnecting_naturality
     (subcomplexMayerVietorisShortComplex_shortExact P' Q')
     (n + 1) n rfl
 
+/-- A chosen restriction of an ambient continuous map to the simplicial
+range of a subspace.  Its defining square is recorded separately below. -/
+noncomputable def coverRangeMap
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (A : Set X) (B : Set Y) (f : C(X, Y)) (hf : Set.MapsTo f A B) :
+    (ambientSubspaceRange A : SSet) ⟶ (ambientSubspaceRange B : SSet) :=
+  Classical.choose (ambientSubspaceRangeMap A B f hf)
+
+theorem coverRangeMap_comp_ι
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (A : Set X) (B : Set Y) (f : C(X, Y)) (hf : Set.MapsTo f A B) :
+    coverRangeMap A B f hf ≫ (ambientSubspaceRange B).ι =
+      (ambientSubspaceRange A).ι ≫ TopCat.toSSet.map (TopCat.ofHom f) :=
+  Classical.choose_spec (ambientSubspaceRangeMap A B f hf)
+
+/-- The range maps induced on an intersection commute with the left member
+map. -/
+theorem coverRangeMap_inter_left
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (U V : Set X) (U' V' : Set Y) (f : C(X, Y))
+    (hU : Set.MapsTo f U U') (hV : Set.MapsTo f V V') :
+    coverRangeMap (U ∩ V) (U' ∩ V') f (fun _ hx ↦ ⟨hU hx.1, hV hx.2⟩) ≫
+        ambientSubspaceRangeInclusion Set.inter_subset_left =
+      ambientSubspaceRangeInclusion Set.inter_subset_left ≫
+        coverRangeMap U U' f hU := by
+  apply (cancel_mono (ambientSubspaceRange U').ι).1
+  simp only [Category.assoc]
+  rw [show ambientSubspaceRangeInclusion Set.inter_subset_left ≫
+      (ambientSubspaceRange U').ι = (ambientSubspaceRange (U' ∩ V')).ι by rfl]
+  rw [coverRangeMap_comp_ι, coverRangeMap_comp_ι]
+  rw [← Category.assoc]
+  rfl
+
+/-- The analogous intersection square for the right member. -/
+theorem coverRangeMap_inter_right
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (U V : Set X) (U' V' : Set Y) (f : C(X, Y))
+    (hU : Set.MapsTo f U U') (hV : Set.MapsTo f V V') :
+    coverRangeMap (U ∩ V) (U' ∩ V') f (fun _ hx ↦ ⟨hU hx.1, hV hx.2⟩) ≫
+        ambientSubspaceRangeInclusion Set.inter_subset_right =
+      ambientSubspaceRangeInclusion Set.inter_subset_right ≫
+        coverRangeMap V V' f hV := by
+  apply (cancel_mono (ambientSubspaceRange V').ι).1
+  simp only [Category.assoc]
+  rw [show ambientSubspaceRangeInclusion Set.inter_subset_right ≫
+      (ambientSubspaceRange V').ι = (ambientSubspaceRange (U' ∩ V')).ι by rfl]
+  rw [coverRangeMap_comp_ι, coverRangeMap_comp_ι]
+  rw [← Category.assoc]
+  rfl
+
 /-- Homology of an ambient range subcomplex as the production singular
 homology of its underlying topological subspace. -/
 noncomputable def ambientRangeProductionHomologyIso
@@ -629,6 +679,68 @@ noncomputable def productionConnecting
     subcomplexMayerVietorisConnecting (leftRange U) (rightRange V) n ≫
     (booleanIntersectionProductionHomologyIso U V n).hom
 
+/-- The map on the production intersection term represented by the left
+component of a morphism of the canonical cover short complexes. -/
+noncomputable def productionIntersectionMap
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (U V : Set X) (U' V' : Set Y)
+    (φ : shortComplex U V ⟶ shortComplex U' V') (n : ℕ) :
+    (SingularChains (TopCat.of (U ∩ V : Set X))).homology n ⟶
+      (SingularChains (TopCat.of (U' ∩ V' : Set Y))).homology n :=
+  (booleanIntersectionProductionHomologyIso U V n).inv ≫
+    HomologicalComplex.homologyMap φ.τ₁ n ≫
+    (booleanIntersectionProductionHomologyIso U' V' n).hom
+
+/-- The map on the production union term represented by the right component
+of a morphism of canonical cover short complexes. -/
+noncomputable def productionUnionMap
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (U V : Set X) (U' V' : Set Y)
+    (hU : IsOpen U) (hV : IsOpen V) (hcover : U ∪ V = Set.univ)
+    (hU' : IsOpen U') (hV' : IsOpen V') (hcover' : U' ∪ V' = Set.univ)
+    (φ : shortComplex U V ⟶ shortComplex U' V') (n : ℕ) :
+    (SingularChains (TopCat.of X)).homology n ⟶
+      (SingularChains (TopCat.of Y)).homology n :=
+  (booleanUnionProductionHomologyIso U V hU hV hcover n).inv ≫
+    HomologicalComplex.homologyMap φ.τ₃ n ≫
+    (booleanUnionProductionHomologyIso U' V' hU' hV' hcover' n).hom
+
+/-- Naturality of the production Mayer--Vietoris connecting morphism.  The
+specified short-complex morphism retains the actual cover-preserving map;
+`productionIntersectionMap` and `productionUnionMap` are its endpoint maps
+transported to production singular homology. -/
+theorem productionConnecting_naturality
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (U V : Set X) (U' V' : Set Y)
+    (hU : IsOpen U) (hV : IsOpen V) (hcover : U ∪ V = Set.univ)
+    (hU' : IsOpen U') (hV' : IsOpen V') (hcover' : U' ∪ V' = Set.univ)
+    (φ : shortComplex U V ⟶ shortComplex U' V') (n : ℕ) :
+    productionConnecting U V hU hV hcover n ≫
+        productionIntersectionMap U V U' V' φ n =
+      productionUnionMap U V U' V' hU hV hcover hU' hV' hcover' φ (n + 1) ≫
+        productionConnecting U' V' hU' hV' hcover' n := by
+  calc
+    _ = (booleanUnionProductionHomologyIso U V hU hV hcover (n + 1)).inv ≫
+        (subcomplexMayerVietorisConnecting (leftRange U) (rightRange V) n ≫
+          HomologicalComplex.homologyMap φ.τ₁ n) ≫
+        (booleanIntersectionProductionHomologyIso U' V' n).hom := by
+          simp only [productionConnecting, productionIntersectionMap]
+          slice_lhs 3 5 => exact
+            (booleanIntersectionProductionHomologyIso U V n).hom_inv_id_assoc _
+          simp only [Category.assoc]
+    _ = (booleanUnionProductionHomologyIso U V hU hV hcover (n + 1)).inv ≫
+        (HomologicalComplex.homologyMap φ.τ₃ (n + 1) ≫
+          subcomplexMayerVietorisConnecting (leftRange U') (rightRange V') n) ≫
+        (booleanIntersectionProductionHomologyIso U' V' n).hom := by
+          exact congrArg
+            (fun k ↦ (booleanUnionProductionHomologyIso U V hU hV hcover
+                (n + 1)).inv ≫ k ≫
+              (booleanIntersectionProductionHomologyIso U' V' n).hom)
+            (subcomplexMayerVietorisConnecting_naturality
+              (leftRange U) (rightRange V) (leftRange U') (rightRange V') φ n)
+    _ = _ := by
+      simp [productionConnecting, productionUnionMap]
+
 /-- Exactness at the two cover pieces in the production presentation. -/
 theorem productionMayerVietoris_exact_pieces
     {X : Type} [TopologicalSpace X] (U V : Set X)
@@ -848,3 +960,9 @@ end ConstructionTargets.ProductionOpenCoverMayerVietoris
 #print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.productionMayerVietoris_exact_intersection
 #print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.booleanUnionProductionHomologyIso
 #print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow
+#print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.coverRangeMap_comp_ι
+#print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.coverRangeMap_inter_left
+#print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.coverRangeMap_inter_right
+#print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.productionIntersectionMap
+#print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.productionUnionMap
+#print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.productionConnecting_naturality
