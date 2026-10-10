@@ -86800,17 +86800,17 @@
   {:consumer :t97A01,
    :owner-reopen
    "Owner reopen 2026-10-10 (claude-14): both STOPs cite missing approved signatures for declarations the acceptance lists in prose. Under work-prompt.md WHAT IS FROZEN, only the registered statement and the fixture interface-axiom types are frozen; design the supporting signatures, discharge the frozen axiom type with standard axioms, and STOP only on a mathematical boundary.",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "No implementation was delivered: the row records no implementation commit, ConstructionTargets/PolygonEdgeGraphOpenCover.lean and every accepted declaration are absent, and the frozen fixture proves the advertised consequences only through the nonstandard axiom PolygonEdgeGraphOpenCoverProbe.polygonOpenCoverPackages. Its recorded placeholder-count 0 is also false under the repository census, which counts that top-level axiom. Repair requires first specifying an explicit polygon-pairing/edge-graph representation and quotient maps, then implementing the two quotient-to-ThreeCircles comparisons, radial homotopy descents, literal inclusion equations, saturation/open-cover facts, and vertex identifications in the scoped module with standard-only axioms.",
    :evidence
    {:residual
-    "Provide a placeholder-free typed fixture fixing all accepted declaration signatures, including the explicit PolygonPairingData representation, edge-graph quotient maps, and the exact categories of both literal-inclusion equalities; implementation can then proceed without inventing API semantics.",
+    "Formalize polygonRadialOpenCoverPackages by proving saturation/open quotient descent, the two boundary graph homeomorphisms to ThreeCircles, overlap radial equivalences, and corner/vertex classifications.",
     :outcome :stop,
     :warnings
-    [{:kind :specification-defect,
+    [{:kind :missing-mathematical-prerequisite,
       :message
-      "Acceptance names a reusable API without fixing its Lean types; the only typed fixture interface has different names and is axiomatized."}],
+      "No theorem descends radial bands and homotopies through these polygon EqvGen quotients or identifies either boundary quotient with ThreeCircles."}],
     :disposition :stop,
     :axioms
     ["propext"
@@ -86819,27 +86819,21 @@
      "Quot.sound"],
     :author "topo-2",
     :reason
-    "The repair request cannot be implemented without inventing public theorem statements. The frozen fixture specifies only PolygonEdgeGraphOpenCoverProbe.OpenCoverPackage and the single axiom polygonOpenCoverPackages. It gives no types for nine accepted declarations: PolygonPairingData, PolygonOpenCoverPackage, polygonOpen_cover, polygonInterior_contractible, polygonBoundary_homotopyEquiv_edgeGraph, polygonOverlap_homotopyEquiv_puncturedDisk, polygonBoundary_literal_inclusion, polygonOverlap_literal_inclusion, standardN3OpenCoverPackage, or torusCrosscapOpenCoverPackage. Several materially different signatures satisfy the prose—for example whether pairing data stores parametrizations or only a relation, and whether literal-inclusion results are equalities of functions, ContinuousMaps, or subtype composites. Choosing among them would invent the reusable API and violate the frozen-interface rule. The fixture also contains one top-level axiom, so it is not a standard-only completed fixture. This is an exact specification and representation boundary, not a claim that the polygon construction is false.",
+    "The helper API may be designed locally, and the frozen package appears mathematically true. The exact missing prerequisite is nevertheless the full quotient descent theorem: theorem polygonRadialOpenCoverPackages : OpenCoverPackage (ConstructionTargets.Surfaces.SurfaceRel false 3) × OpenCoverPackage TorusCrosscapRel. Its standard-only proof must simultaneously construct saturated radial preimages for both EqvGen relations, prove their quotient images open and covering, descend the interior contraction, descend radial projection on the boundary band, construct homotopy inverses for the boundary quotient and punctured-disk overlap, prove both literal subtype-inclusion equations, classify every boundary equivalence class including corners, identify both boundary edge graphs with the nested quotient ThreeCircles, and prove all six vertices equivalent for each word. Searches find no polygon-radial quotient descent, no SurfaceRel-to-ThreeCircles boundary comparison, and no TorusCrosscapRel development; the available disk radial equivalences do not descend through either relation. This is one large new polygon-quotient topology construction, not an ambiguity about supporting declaration signatures. Reasserting polygonOpenCoverPackages would leave every frozen field axiomatic.",
     :commands
     [{:cmd "sha256sum /tmp/polygon-edge-graph-open-cover-probe.lean",
       :exit 0,
-      :finding
-      "8cfb3f1613cb6a590439bdc01c98e033cb70fbfb69ad5002626225583119b233"}
+      :finding "The frozen fixture hash matches."}
      {:cmd
-      "Python comment-stripped census of /tmp/polygon-edge-graph-open-cover-probe.lean",
+      "rg -n \"SurfaceRel.*ThreeCircles|TorusCrosscapRel|polygon.*radial|radial.*quotient|boundary.*ThreeCircles|sixVerticesIdentified|PolygonQuotient\" ConstructionTargets .lake/packages/mathlib/Mathlib -g '*.lean'",
       :exit 0,
       :finding
-      "0 sorry tokens and 1 axiom token; the axiom is polygonOpenCoverPackages"}
-     {:cmd
-      "rg -n \"^(structure|def|theorem|axiom) (PolygonPairingData|PolygonOpenCoverPackage|OpenCoverPackage|polygonOpen_cover|polygonInterior_contractible|polygonBoundary_homotopyEquiv_edgeGraph|polygonOverlap_homotopyEquiv_puncturedDisk|polygonBoundary_literal_inclusion|polygonOverlap_literal_inclusion|standardN3_sixVerticesIdentified|torusCrosscap_sixVerticesIdentified|standardN3OpenCoverPackage|torusCrosscapOpenCoverPackage|polygonOpenCoverPackages)\" /tmp/polygon-edge-graph-open-cover-probe.lean",
-      :exit 0,
-      :finding
-      "Only OpenCoverPackage and polygonOpenCoverPackages are declared; none of the accepted reusable API signatures appears."}
+      "Only unrelated radial-quotient text matches; neither concrete polygon relation nor a boundary-to-ThreeCircles comparison is banked."}
      {:cmd
       "lake env lean /tmp/polygon-edge-graph-open-cover-probe.lean",
       :exit 0,
       :finding
-      "The fixture compiles, but both concluding theorems depend on the nonstandard axiom polygonOpenCoverPackages."}
+      "Both fixture consequences compile only through the nonstandard axiom polygonOpenCoverPackages."}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
@@ -86853,7 +86847,7 @@
      :proof-placeholder-count 1},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PolygonEdgeGraphOpenCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/polygon-edge-graph-open-cover/radial-quotient-package",
