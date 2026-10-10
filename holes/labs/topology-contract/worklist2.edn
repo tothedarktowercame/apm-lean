@@ -64193,47 +64193,75 @@
    "single-consumer equality-transported Hurewicz coordinate for t97A04",
    :consumer :t97A04,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/t97a04_frozen_h1_coordinate.lean",
-      :sha256
-      "16e975e990678de6328bd0306dcf805f85587fb433414306a1d9ac7adc04f0a1"},
-     :commands
-     [{:cmd "sha256sum /tmp/t97a04_frozen_h1_coordinate.lean",
-       :exit 0,
-       :output
-       "16e975e990678de6328bd0306dcf805f85587fb433414306a1d9ac7adc04f0a1  /tmp/t97a04_frozen_h1_coordinate.lean"}
-      {:cmd "lake env lean /tmp/t97a04_frozen_h1_coordinate.lean",
-       :exit 0,
-       :output
-       "finiteFreeHurewiczCoordinateMulEquiv_eqToIso_conj and frozenTorusAlignedHurewiczCoordinateAtLbarBase_apply compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t97a04_frozen_h1_coordinate.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :implementation
-     {:scope ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"],
-      :declarations
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Apply h1_coordinate_eq_of_fundamentalGroup_coordinate_eq using the raw-map pi1 equation and both aligned Hurewicz identities, then transport the resulting IntegralH1 matrix equation through singularHomologyComparison_naturality into the ModuleCat bridge.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.T97A04FrozenH1Coordinate.finiteFreeHurewiczCoordinateMulEquiv_eqToIso_conj",
+      :type
+      "forall {X : Type} [TopologicalSpace X] [PathConnectedSpace X] {x y : X} (h : x = y) {n : ℕ} (piCoordY : FundamentalGroup X y ≃* Multiplicative (Fin n → ℤ)) (h1Coord : Multiplicative (ConstructionTargets.DegreeOneHurewiczMap.IntegralH1 X) ≃* Multiplicative (Fin n → ℤ)) (q : Multiplicative (Fin n → ℤ)), finiteFreeHurewiczCoordinateMulEquiv (((eqToIso (congr_arg FundamentalGroupoid.mk h)).conj).trans piCoordY) h1Coord q = finiteFreeHurewiczCoordinateMulEquiv piCoordY h1Coord q",
+      :status :proved,
+      :consumers [:t97A04],
+      :depends-on []}
+     {:name
+      "ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusAlignedHurewiczCoordinateAtLbarBase_apply",
+      :type
+      "forall q : Multiplicative (Fin 2 → ℤ), finiteFreeHurewiczCoordinateMulEquiv frozenTorusPi1CoordAtLbarBase frozenTorusAlignedH1MulEquivFinTwo q = q",
+      :status :proved,
+      :consumers [:t97A04],
+      :depends-on
       ["ConstructionTargets.T97A04FrozenH1Coordinate.finiteFreeHurewiczCoordinateMulEquiv_eqToIso_conj"
-       "ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusAlignedHurewiczCoordinateAtLbarBase_apply"],
-      :acceptance
-      {:type
-       "forall q : Multiplicative (Fin 2 → ℤ), finiteFreeHurewiczCoordinateMulEquiv frozenTorusPi1CoordAtLbarBase frozenTorusAlignedH1MulEquivFinTwo q = q",
-       :gates
-       ["scoped module compiles"
-        "scoped module contains no sorry token"
-        "statement registry matches"]}},
-     :finding
-     "The complete fixture proves generally that equality-induced categorical conjugation of a fundamental-group coordinate leaves finiteFreeHurewiczCoordinateMulEquiv unchanged. Specializing along frozenLbar_base and using the banked aligned coordinate proves the transported frozen-torus Hurewicz coordinate is exactly the identity.",
-     :residual
-     "Apply h1_coordinate_eq_of_fundamentalGroup_coordinate_eq with the raw-map pi1 equation and the two aligned Hurewicz identities, then transport the IntegralH1 matrix equation through singularHomologyComparison_naturality into apm_t97A04_bridge_2.",
-     :warnings []}},
+       "ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusAlignedHurewiczCoordinate_apply"]}],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not",
+     :scoped-file-git-blob "95565000074f048d367d1d0cb1c06d9714c81edc",
+     :fixture-sha256
+     "16e975e990678de6328bd0306dcf805f85587fb433414306a1d9ac7adc04f0a1"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd "sha256sum /tmp/t97a04_frozen_h1_coordinate.lean",
+      :exit 0,
+      :output
+      "16e975e990678de6328bd0306dcf805f85587fb433414306a1d9ac7adc04f0a1  /tmp/t97a04_frozen_h1_coordinate.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/T97A04FrozenH1Coordinate.lean",
+      :exit 0}
+     {:cmd "lake env lean /tmp/t97a04_frozen_h1_coordinate.lean",
+      :exit 0,
+      :output
+      "finiteFreeHurewiczCoordinateMulEquiv_eqToIso_conj and frozenTorusAlignedHurewiczCoordinateAtLbarBase_apply compiled; axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T97A04FrozenH1Coordinate.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git show --check --oneline HEAD",
+      :exit 0,
+      :output "d75bb981 Bank t97A04 Hurewicz basepoint transport"}],
+    :diagnostic-history [],
+    :commit "d75bb981592224445974c3c1d9aae91c793d5e9c",
+    :changed-paths
+    ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"],
+    :fixture
+    {:path "/tmp/t97a04_frozen_h1_coordinate.lean",
+     :sha256
+     "16e975e990678de6328bd0306dcf805f85587fb433414306a1d9ac7adc04f0a1"},
+    :finding
+    "The scoped module proves that equality-induced categorical conjugation of a fundamental-group coordinate leaves finiteFreeHurewiczCoordinateMulEquiv unchanged, then specializes this along frozenLbar_base to recover the identity-aligned Hurewicz coordinate at the literal codomain basepoint.",
+    :implementation
+    {:scope ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"],
+     :declarations
+     ["ConstructionTargets.T97A04FrozenH1Coordinate.finiteFreeHurewiczCoordinateMulEquiv_eqToIso_conj"
+      "ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusAlignedHurewiczCoordinateAtLbarBase_apply"]},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A04/frozen-hurewicz-basepoint-transport",
@@ -65364,7 +65392,8 @@
     "ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusAlignedHurewiczCoordinate_apply",
     :reported-by
     [:routes-2026-10-10-t97a04-h1-bridge-assembly-topo2-r1
-     :routes-2026-10-10-t97a04-frozen-h1-hurewicz-alignment-topo2-r1],
+     :routes-2026-10-10-t97a04-frozen-h1-hurewicz-alignment-topo2-r1
+     :routes-2026-10-10-t97a04-frozen-hurewicz-basepoint-transport-topo2-r1],
     :type
     "forall q : Multiplicative (Fin 2 → ℤ), finiteFreeHurewiczCoordinateMulEquiv frozenTorusPi1Coord frozenTorusAlignedH1MulEquivFinTwo q = q",
     :proved-in
@@ -65376,7 +65405,8 @@
    :lemma-constructiontargets-t97a04frozenh1coordinate-frozentorusalignedhurewiczcoordinat,
    :kind :lemma,
    :depends-on
-   [:lemma-constructiontargets-t97a04frozenh1coordinate-frozentorush1mulequivfintwo],
+   [:lemma-constructiontargets-t97a04frozenh1coordinate-frozentorush1mulequivfintwo
+    :lemma-constructiontargets-t97a04frozenh1coordinate-finitefreehurewiczcoordinatemulequi],
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
@@ -65450,4 +65480,27 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-t97a04frozenh1coordinate-frozenlbarpi1map-coordinatemap],
+   :other-consumers []}
+  {:consumer :t97A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T97A04FrozenH1Coordinate.finiteFreeHurewiczCoordinateMulEquiv_eqToIso_conj",
+    :type
+    "forall {X : Type} [TopologicalSpace X] [PathConnectedSpace X] {x y : X} (h : x = y) {n : ℕ} (piCoordY : FundamentalGroup X y ≃* Multiplicative (Fin n → ℤ)) (h1Coord : Multiplicative (ConstructionTargets.DegreeOneHurewiczMap.IntegralH1 X) ≃* Multiplicative (Fin n → ℤ)) (q : Multiplicative (Fin n → ℤ)), finiteFreeHurewiczCoordinateMulEquiv (((eqToIso (congr_arg FundamentalGroupoid.mk h)).conj).trans piCoordY) h1Coord q = finiteFreeHurewiczCoordinateMulEquiv piCoordY h1Coord q"},
+   :lemma
+   {:name
+    "ConstructionTargets.T97A04FrozenH1Coordinate.finiteFreeHurewiczCoordinateMulEquiv_eqToIso_conj",
+    :reported-by
+    [:routes-2026-10-10-t97a04-frozen-hurewicz-basepoint-transport-topo2-r1],
+    :type
+    "forall {X : Type} [TopologicalSpace X] [PathConnectedSpace X] {x y : X} (h : x = y) {n : ℕ} (piCoordY : FundamentalGroup X y ≃* Multiplicative (Fin n → ℤ)) (h1Coord : Multiplicative (ConstructionTargets.DegreeOneHurewiczMap.IntegralH1 X) ≃* Multiplicative (Fin n → ℤ)) (q : Multiplicative (Fin n → ℤ)), finiteFreeHurewiczCoordinateMulEquiv (((eqToIso (congr_arg FundamentalGroupoid.mk h)).conj).trans piCoordY) h1Coord q = finiteFreeHurewiczCoordinateMulEquiv piCoordY h1Coord q",
+    :proved-in
+    :routes-2026-10-10-t97a04-frozen-hurewicz-basepoint-transport-topo2-r1},
+   :id
+   :lemma-constructiontargets-t97a04frozenh1coordinate-finitefreehurewiczcoordinatemulequi,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}]}
