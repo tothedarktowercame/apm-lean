@@ -552,7 +552,14 @@
                                                  (assoc % :state :superseded)
                                                  %)))
                           replacements (mapv #(-> %
-                                                    (update :depends-on (fnil conj []) id)
+                                                    ;; A strategy receipt may already name its
+                                                    ;; checkpoint in :depends-on.  Append the
+                                                    ;; completed checkpoint idempotently so the
+                                                    ;; writer cannot create duplicate edges.
+                                                    (update :depends-on
+                                                            (fn [dependencies]
+                                                              (vec (distinct
+                                                                    (conj (or dependencies []) id)))))
                                                     (assoc :state :blocked))
                                               (:replacement-items receipt))]
                       (vec (mapcat #(if (= id (:id %))
