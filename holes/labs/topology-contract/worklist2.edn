@@ -65309,6 +65309,20 @@
       "git show --check --oneline d24786bd6d29e9d6058bf729f8974e3fffe20e87",
       :exit 0,
       :output "d24786bd Bank t02A03 right based attachment homotopy"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791660409693-2798-e246a6e4",
+     :commands
+     ["git show/diff-tree/show --check d24786bd"
+      "sha256sum exact-type fixture"
+      "git blob, placeholder, and declaration-hash checks"
+      "python3 scripts/statement-registry.py check --rev d24786bd"
+      "lake env lean canonical module and fixture"
+      "homotopy orientation and subtype-boundary inspection"
+      "bb worklist_check.bb"],
+     :finding
+     "PASS: topo-6 commit d24786bd has exact one-module scope and only documents the existing proved declaration, as this banking row requires; recorded/current blobs and fixture SHA-256 match. The declaration signature and proof are unchanged, module and fixture contain zero placeholders, registry is 131/0, both compile, and axioms are exactly propext/Classical.choice/Quot.sound. The homotopy is oriented from rightCoreAttachmentMap to the constant quarter-turn meridian and composes the lifted-map and anchor-contraction homotopies across the geometricY subtype without representation mismatch."},
     :commit "d24786bd6d29e9d6058bf729f8974e3fffe20e87",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
@@ -65326,7 +65340,7 @@
      :lemma-apm-t02a03-rightcorebasedattachmenthomotopy},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/right-core-based-attachment-homotopy",
@@ -65362,7 +65376,7 @@
      :infrastructure-packets
      :review-outcomes]},
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -66211,12 +66225,15 @@
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance {:lemma "apm_t02a03_rightCoreBasedAttachmentHomotopy"},
    :lemma
    {:name "apm_t02a03_rightCoreBasedAttachmentHomotopy",
-    :reported-by []},
+    :reported-by [],
+    :banked-by
+    :routes-2026-10-10-t02a03-bank-right-based-attachment-homotopy-topo2-r1,
+    :banked-commit "d24786bd6d29e9d6058bf729f8974e3fffe20e87"},
    :id :lemma-apm-t02a03-rightcorebasedattachmenthomotopy,
    :kind :lemma,
    :depends-on [],
@@ -66716,7 +66733,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -66732,7 +66749,10 @@
     "ContinuousMap.Homotopy apm_t02a03_rightCoreAttachmentMap (ContinuousMap.const (Set.Ioc (0 : ℝ) 1) (apm_t02a03_circleMeridianMap (Circle.exp (Real.pi / 2))))",
     :proved-in
     :routes-2026-10-10-t02a03-bank-right-based-attachment-homotopy-topo2-r1,
-    :area "explicit-r3-tube-deformation-retraction"},
+    :area "explicit-r3-tube-deformation-retraction",
+    :banked-by
+    :routes-2026-10-10-t02a03-bank-right-based-attachment-homotopy-topo2-r1,
+    :banked-commit "d24786bd6d29e9d6058bf729f8974e3fffe20e87"},
    :id
    :lemma-constructiontargets-t02a03geometrictubecover-apm-t02a03-rightcorebasedattachment,
    :kind :lemma,
