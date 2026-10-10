@@ -66853,76 +66853,113 @@
    "Construct the angular and disk-normal interpolation to the meridian endpoint, then prove the radius-1/4 and left-core-avoidance invariants.",
    :other-consumers []}
   {:bounded-exception
+   "single-consumer continuous disk-normal interpolation underlying the ambient deformation",
+   :consumer :t02A03,
+   :phase :probe,
+   :state :open,
+   :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t02A03/right-core-normal-interpolation",
+   :acceptance
+   {:probe
+    "Compile rightTubeCoreNormalInterpolation_exists. For any continuous Circle-valued meridian coordinate m, construct the continuous linear interpolation from rightTubeCoreNormalComplex(circleMeridian(m p)) to rightTubeCoreNormalComplex(p), and prove both endpoint equations. Do not reconstruct an ambient point or claim radius, tube, or deletion invariants.",
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreNormalInterpolation_exists",
+    :type
+    "forall m : C(RightTubeMinusLeftCore, Circle), exists N : C(unitInterval × RightTubeMinusLeftCore, Complex), (forall p, N (0,p) = rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (m p))) and (forall p, N (1,p) = rightTubeCoreNormalComplex p.1)",
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "construct the continuous disk-normal component of the deleted-right-tube deformation"},
+   :id
+   :routes-2026-10-10-t02a03-right-core-normal-interpolation-topo2-r1,
+   :kind :reusable-theorem,
+   :area "explicit-r3-tube-deformation-retraction",
+   :depends-on
+   [:routes-2026-10-10-t02a03-right-core-angular-coordinate-topo2-r1],
+   :current-residual
+   "Construct the right-core angular interpolation, prove the interpolated normal coordinate stays within radius 1/4 and avoids the left core after reconstruction, then package H.",
+   :other-consumers []}
+  {:bounded-exception
    "single-consumer explicit ambient deformation with frozen tube and deletion invariants",
    :consumer :t02A03,
    :evidence
    {:probe
     {:residual
-     "Bank the right-core angular coordinate, then construct its interpolation to the meridian endpoint together with the disk-normal radius bound.",
+     "Bank the disk-normal interpolation; next construct its compatible right-core angular interpolation and prove the safety bounds.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
      [{:name
-       "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreAngularCoordinate",
-       :type "C(RightTubeMinusLeftCore, Circle)",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreNormalInterpolation_exists",
+       :type
+       "forall m : C(RightTubeMinusLeftCore, Circle), exists N : C(unitInterval × RightTubeMinusLeftCore, Complex), (forall p, N (0,p) = rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (m p))) and (forall p, N (1,p) = rightTubeCoreNormalComplex p.1)",
        :status :proved,
        :consumers [:t02A03],
        :depends-on
-       ["ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCorePlanarComplex_ne_zero"
-        "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreTubularCoordinates_continuous"],
+       ["ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreTubularCoordinates_continuous"],
        :area "explicit-r3-tube-deformation-retraction"}],
      :prerequisite
      {:bounded-exception
-      "single-consumer continuous right-core angular coordinate for the tube-preserving deformation",
+      "single-consumer continuous disk-normal interpolation underlying the ambient deformation",
       :consumer :t02A03,
       :phase :probe,
       :state :open,
       :scope
       ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t02A03/right-core-angular-coordinate",
+      "TOPOLOGY-ROUTES.md/t02A03/right-core-normal-interpolation",
       :acceptance
       {:probe
-       "Compile rightTubeCoreAngularCoordinate as the normalization of rightTubeCorePlanarComplex on RightTubeMinusLeftCore, using the banked nonvanishing theorem and proving continuity. Do not define an angular interpolation, ambient deformation, or safety invariant.",
+       "Compile rightTubeCoreNormalInterpolation_exists. For any continuous Circle-valued meridian coordinate m, construct the continuous linear interpolation from rightTubeCoreNormalComplex(circleMeridian(m p)) to rightTubeCoreNormalComplex(p), and prove both endpoint equations. Do not reconstruct an ambient point or claim radius, tube, or deletion invariants.",
        :declaration
-       "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreAngularCoordinate",
-       :type "C(RightTubeMinusLeftCore, Circle)",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreNormalInterpolation_exists",
+       :type
+       "forall m : C(RightTubeMinusLeftCore, Circle), exists N : C(unitInterval × RightTubeMinusLeftCore, Complex), (forall p, N (0,p) = rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (m p))) and (forall p, N (1,p) = rightTubeCoreNormalComplex p.1)",
        :placeholder "the sole sorry in apm_t02a03",
        :route-step
-       "provide the continuous right-core angular input to the tubular reconstruction"},
+       "construct the continuous disk-normal component of the deleted-right-tube deformation"},
       :id
-      :routes-2026-10-10-t02a03-right-core-angular-coordinate-topo2-r1,
+      :routes-2026-10-10-t02a03-right-core-normal-interpolation-topo2-r1,
       :kind :reusable-theorem,
       :area "explicit-r3-tube-deformation-retraction",
       :depends-on
-      [:routes-2026-10-10-t02a03-right-core-tubular-coordinates-continuous-topo2-r1],
+      [:routes-2026-10-10-t02a03-right-core-angular-coordinate-topo2-r1],
       :current-residual
-      "Construct the angular and disk-normal interpolation to the meridian endpoint, then prove the radius-1/4 and left-core-avoidance invariants.",
+      "Construct the right-core angular interpolation, prove the interpolated normal coordinate stays within radius 1/4 and avoids the left core after reconstruction, then package H.",
       :other-consumers []},
      :commands
      [{:cmd "lake env lean /tmp/t02a03_right_core_compact_probe.lean",
        :exit 0,
        :output
-       "rightTubeCoreAngularCoordinate compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "rightTubeCoreNormalInterpolation_exists compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd "sha256sum /tmp/t02a03_right_core_compact_probe.lean",
        :exit 0,
        :output
-       "ff552e5ff1df705560fa644d283438d8010436001b3c14bcce6c5e08eae02554  /tmp/t02a03_right_core_compact_probe.lean"}
+       "9f475b05b4ccf62f44279a5935809668afd31f4c5d01f45e52a3e5820a8ebcb9  /tmp/t02a03_right_core_compact_probe.lean"}
       {:cmd
        "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_right_core_compact_probe.lean || true)\"",
        :exit 0}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/t02a03_right_core_compact_probe.lean",
+       :exit 1,
+       :finding
+       "The accumulated prerequisite fixture did not contain rightTubeMeridianCoordinate. Parameterizing the interpolation by the already banked Circle-valued meridian map made the dependency explicit."}
+      {:cmd "lake env lean /tmp/t02a03_right_core_compact_probe.lean",
+       :exit 1,
+       :finding
+       "Automation did not infer continuity of apm_t02a03_circleMeridian. Proving its coordinatewise continuity locally supplied the missing fact; the corrected fixture compiled."}],
      :fixture
      {:path "/tmp/t02a03_right_core_compact_probe.lean",
       :sha256
-      "ff552e5ff1df705560fa644d283438d8010436001b3c14bcce6c5e08eae02554"},
+      "9f475b05b4ccf62f44279a5935809668afd31f4c5d01f45e52a3e5820a8ebcb9"},
      :finding
-     "The continuous right-core reconstruction takes a Circle argument, so the parent still needs the normalized right-core planar coordinate as an actual ContinuousMap on RightTubeMinusLeftCore. The banked denominator theorem makes normalization defined, and the standard local inverse-of-norm proof establishes continuity. The compiled declaration supplies exactly that coordinate without choosing an angular interpolation or claiming either safety invariant.",
+     "For any continuous Circle-valued meridian coordinate m, the complex segment (1-t) rightTubeCoreNormalComplex(circleMeridian(m p)) + t rightTubeCoreNormalComplex(p) is continuous and has the required zero and one endpoints. The compiled existential isolates the disk-normal component of H; radius control and the right-core angular interpolation remain separate obligations.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
@@ -66949,7 +66986,8 @@
     :routes-2026-10-10-t02a03-right-core-angular-denominator-topo2-r1
     :routes-2026-10-10-t02a03-right-core-polar-reconstruction-topo2-r1
     :routes-2026-10-10-t02a03-right-core-tubular-coordinates-continuous-topo2-r1
-    :routes-2026-10-10-t02a03-right-core-angular-coordinate-topo2-r1],
+    :routes-2026-10-10-t02a03-right-core-angular-coordinate-topo2-r1
+    :routes-2026-10-10-t02a03-right-core-normal-interpolation-topo2-r1],
    :current-residual
    "Lift H to RightTubeMinusLeftCore, package rightTubeMeridianRetractionHomotopy, then use the coordinate equation for the Circle-side constant homotopy.",
    :other-consumers []}
@@ -70176,4 +70214,29 @@
    :depends-on
    [:lemma-constructiontargets-t02a03geometrictubedeformation-righttubecoreplanarcomplex-ne
     :lemma-constructiontargets-t02a03geometrictubedeformation-righttubecoretubularcoordinat],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreNormalInterpolation_exists",
+    :type
+    "forall m : C(RightTubeMinusLeftCore, Circle), exists N : C(unitInterval × RightTubeMinusLeftCore, Complex), (forall p, N (0,p) = rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (m p))) and (forall p, N (1,p) = rightTubeCoreNormalComplex p.1)"},
+   :lemma
+   {:name
+    "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreNormalInterpolation_exists",
+    :reported-by
+    [:routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1],
+    :type
+    "forall m : C(RightTubeMinusLeftCore, Circle), exists N : C(unitInterval × RightTubeMinusLeftCore, Complex), (forall p, N (0,p) = rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (m p))) and (forall p, N (1,p) = rightTubeCoreNormalComplex p.1)",
+    :area "explicit-r3-tube-deformation-retraction",
+    :proved-in
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+   :id
+   :lemma-constructiontargets-t02a03geometrictubedeformation-righttubecorenormalinterpolat,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t02a03geometrictubedeformation-righttubecoretubularcoordinat],
    :other-consumers []}]}
