@@ -57587,17 +57587,67 @@
   {:bounded-exception
    "single-consumer closed punctured disk product equivalence for t02A03",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/t02a03_closed_punctured_disk_torus.lean",
+      :sha256
+      "4d1f6aa7be1d0a86f9e9f479934f16af4198cdf80318eeca631cc6472589167a"},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/t02a03_closed_punctured_disk_torus.lean",
+       :exit 0,
+       :output
+       "t02a03_closed_punctured_disk_torus compiled; axioms [propext, Classical.choice, Quot.sound]; one unnecessarySimpa linter warning"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_closed_punctured_disk_torus.lean || true)\"",
+       :exit 0}
+      {:cmd "sha256sum /tmp/t02a03_closed_punctured_disk_torus.lean",
+       :exit 0,
+       :output
+       "4d1f6aa7be1d0a86f9e9f479934f16af4198cdf80318eeca631cc6472589167a  /tmp/t02a03_closed_punctured_disk_torus.lean"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/t02a03_closed_punctured_disk_torus.lean",
+       :exit 1,
+       :finding
+       "An exploratory exact-interface fixture attempted to import problems.t02A03.lean.Main, but the problems tree is not exposed as a Lake module and Lean rejected the module prefix. The corrected fixture reproduces the frozen three abbreviations verbatim under their consumer names and proves the exact requested type without importing the consumer theorem or its sorry."}],
+     :finding
+     "The exact consumer-shaped equivalence compiles. Radial normalization maps every nonzero closed-disk point to Circle; the inverse includes Circle at radius one; positive radial interpolation remains nonzero and its norm is a convex combination of one and the original norm, hence remains in the closed unit disk. Taking the second Circle coordinate unchanged yields the required HomotopyEquiv.",
+     :residual
+     "Bank this equivalence, then construct the concrete homotopy equivalence from apm_t02a03_geometricY to apm_t02a03_Y and assemble both with apm_t02a03_previous_encoding.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/T02A03ClosedPuncturedDiskTorus.lean"],
+      :acceptance
+      {:source-fixture "/tmp/t02a03_closed_punctured_disk_torus.lean",
+       :declaration "t02a03_closed_punctured_disk_torus",
+       :placeholder "the sole sorry in apm_t02a03",
+       :route-step
+       "t02A03 step 1, closed-punctured-disk times Circle homotopy equivalence",
+       :gates
+       ["lake env lean ConstructionTargets/T02A03ClosedPuncturedDiskTorus.lean"
+        "placeholder scan"
+        "statement registry check"]}}}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/T02A03ClosedPuncturedDiskTorus.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/closed-punctured-disk-torus",
    :acceptance
-   {:probe
-    "Compile and bank t02a03_closed_punctured_disk_torus from /tmp/t02a03_closed_punctured_disk_torus.lean. Construct the exact radial homotopy equivalence from apm_t02a03_X, the punctured closed unit disk times Circle, to apm_t02a03_Torus, preserving the closed-ball bound throughout the homotopy. This supplies t02A03 route step 1; do not yet claim the geometric tube deformation or final closure.",
+   {:source-fixture "/tmp/t02a03_closed_punctured_disk_torus.lean",
     :declaration "t02a03_closed_punctured_disk_torus",
     :placeholder "the sole sorry in apm_t02a03",
     :route-step
-    "t02A03 step 1, closed-punctured-disk times Circle homotopy equivalence"},
+    "t02A03 step 1, closed-punctured-disk times Circle homotopy equivalence",
+    :gates
+    ["lake env lean ConstructionTargets/T02A03ClosedPuncturedDiskTorus.lean"
+     "placeholder scan"
+     "statement registry check"]},
    :id :routes-2026-10-10-t02a03-closed-punctured-disk-torus-topo2-r1,
    :kind :reusable-theorem,
    :depends-on [:routes-2026-10-10-checkpoint-topo2-r5],
