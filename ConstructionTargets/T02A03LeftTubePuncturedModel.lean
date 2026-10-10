@@ -50,4 +50,30 @@ theorem apm_t02a03_leftTubeRadialPoint_mem_leftTube
   refine ⟨c, hc, ?_⟩
   simpa [apm_t02a03_leftTubeRadialPoint, x] using hcombo
 
+theorem apm_t02a03_leftTubeRadialNormalRadius_pos
+    (tp : unitInterval × apm_t02a03_LeftTubeMinusCore) :
+    0 < (1 - (tp.1 : ℝ)) * (1 / 8 : ℝ) +
+      (tp.1 : ℝ) *
+        ‖apm_t02a03_leftTubeNormalComplex ⟨tp.2.1, tp.2.2.1⟩‖ := by
+  have hz : apm_t02a03_leftTubeNormalComplex
+      ⟨tp.2.1, tp.2.2.1⟩ ≠ 0 := by
+    intro h
+    exact (tp.2.property).2
+      ((apm_t02a03_leftTubeNormalComplex_eq_zero_iff
+        ⟨tp.2.1, tp.2.2.1⟩).mp h)
+  have hn : 0 < ‖apm_t02a03_leftTubeNormalComplex
+      ⟨tp.2.1, tp.2.2.1⟩‖ := norm_pos_iff.mpr hz
+  have ht0 : 0 ≤ (tp.1 : ℝ) := tp.1.2.1
+  have ht1 : (tp.1 : ℝ) ≤ 1 := tp.1.2.2
+  by_cases ht : (tp.1 : ℝ) = 1
+  · simp [ht, hn]
+  · have hlt : (tp.1 : ℝ) < 1 := lt_of_le_of_ne ht1 ht
+    have hfirst : 0 < (1 - (tp.1 : ℝ)) * (1 / 8 : ℝ) :=
+      mul_pos (sub_pos.mpr hlt) (by norm_num)
+    have hsecond : 0 ≤ (tp.1 : ℝ) *
+        ‖apm_t02a03_leftTubeNormalComplex
+          ⟨tp.2.1, tp.2.2.1⟩‖ :=
+      mul_nonneg ht0 (norm_nonneg _)
+    exact add_pos_of_pos_of_nonneg hfirst hsecond
+
 end ConstructionTargets.T02A03LeftTubePuncturedModel
