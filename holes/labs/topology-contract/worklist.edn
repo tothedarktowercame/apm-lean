@@ -87321,6 +87321,8 @@
    :other-consumers []}
   {:consumer :t97A01,
    :stop-count 1,
+   :review-finding
+   "No implementation commit was recorded and ConstructionTargets/GenericPointWedgeMayerVietorisPathConnectedCoordinates.lean is absent. The frozen fixture hash is correct, but it declares only GenericWedgeMVH0Coordinates and the nonstandard axiom generic_point_wedge_mv_pathconnected_coordinates; none of the ten accepted reusable declarations has a frozen Lean signature, and repaired_intersection_coordinates depends on that axiom. Repair requires an owner-approved placeholder-free typed fixture fixing GenericPointWedgeMVH0Coordinates, the overlap/left/right H0 isomorphisms, both literal-inclusion naturality equations, signed intersection and codiagonal reassembly equations, the ThreeCircles PathConnectedSpace instance, and its specialized package, with exact ModuleCat/AddCommGrpCat morphism directions; then implement the scoped module with standard-only axioms.",
    :evidence
    {:residual
     "Provide a placeholder-free typed fixture fixing the exact signatures of GenericPointWedgeMVH0Coordinates, the three H0 isomorphisms, both literal-inclusion naturality equations, both production-arrow coordinate equations, the ThreeCircles path-connected instance, and its specialized package.",
@@ -87363,6 +87365,12 @@
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
      {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1791627027826-1612-8ba024fd",
+     :finding
+     "No implementation commit was recorded and ConstructionTargets/GenericPointWedgeMayerVietorisPathConnectedCoordinates.lean is absent. The frozen fixture hash is correct, but it declares only GenericWedgeMVH0Coordinates and the nonstandard axiom generic_point_wedge_mv_pathconnected_coordinates; none of the ten accepted reusable declarations has a frozen Lean signature, and repaired_intersection_coordinates depends on that axiom. Repair requires an owner-approved placeholder-free typed fixture fixing GenericPointWedgeMVH0Coordinates, the overlap/left/right H0 isomorphisms, both literal-inclusion naturality equations, signed intersection and codiagonal reassembly equations, the ThreeCircles PathConnectedSpace instance, and its specialized package, with exact ModuleCat/AddCommGrpCat morphism directions; then implement the scoped module with standard-only axioms."},
     :fixture
     {:path "/tmp/generic-point-wedge-mv-pathconnected-probe.lean",
      :sha256
@@ -87372,7 +87380,7 @@
      :proof-placeholder-count 1},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["ConstructionTargets/GenericPointWedgeMayerVietorisPathConnectedCoordinates.lean"],
    :dag-node
@@ -87412,6 +87420,7 @@
    :id
    :routes-2026-10-10-generic-point-wedge-h0-pathconnected-naturality-2,
    :kind :representation-comparison,
+   :fail-count 1,
    :depends-on [],
    :current-residual
    "Prove both literal-inclusion augmentation naturality squares under explicit path-connected hypotheses and instantiate the resulting production-arrow coordinates on ThreeCircles.",
