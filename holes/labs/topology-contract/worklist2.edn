@@ -66009,6 +66009,21 @@
       :exit 1,
       :finding
       "The initial transfer spelled continuous-map notation as C followed by a space before its parenthesized arguments, so Lean treated C as an unknown identifier. Restoring the fixture's exact C(...) spelling fixed the notation; the theorem type and proof were otherwise unchanged."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791661708751-2848-210fce21",
+     :commands
+     ["git show/diff-tree/show --check 2dee9874"
+      "sha256sum /tmp/rp2_even_map_descent.lean"
+      "git blob, placeholder, and forbidden-token checks"
+      "python3 scripts/statement-registry.py check --rev 2dee9874"
+      "lake env lean scoped module and exact-type fixture"
+      "fixture/module type-hash and quotient-orientation inspection"
+      "two-consumer placeholder and fingerprint census"
+      "bb worklist_check.bb"],
+     :finding
+     "PASS: topo-6 commit 2dee9874 has exact one-module scope, matches the recorded/current blob and fixture SHA-256, and the fixture/module theorem headers have the same hash. The scoped module stays placeholder-free with no new sorry/admit/axiom; registry is 131/0; module and fixture compile with exactly propext/Classical.choice/Quot.sound. The proof correctly turns sphereProjection_eq_iff plus antipodal invariance into FactorsThrough, lifts through the frozen quotient authority, and proves descended-map-after-projection equals the original map. It adds neither consumer instantiations nor smoothness claims; t95A04 and t96A07 each remain at one unchanged frozen placeholder/fingerprint."},
     :commit "2dee9874440881f5da1b087c2ab1a283d7756e70",
     :changed-paths
     ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
@@ -66028,7 +66043,7 @@
    :phase :implementation,
    :type
    "forall {Y : Type*} [TopologicalSpace Y] (f : C(Sphere 2, Y)), (forall p, f (sphereAntipodal p) = f p) -> exists g : C(ProjectiveSpaceTopology.Space ℝ 2, Y), forall p, g (sphereProjection 2 p) = f p",
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/rp2/even-map-continuous-descent",
    :acceptance
@@ -66129,7 +66144,7 @@
      "Both consumer formulas are antipodal-even maps on Sphere 2, but the shared quotient layer lacked a theorem descending an arbitrary continuous antipodal-even map through sphereProjection. The fixture proves exactly that theorem using sphereProjection_eq_iff and the established quotient authority. The consumer-specific coordinate continuity/evenness proofs and the transfer of smoothness through the banked local-diffeomorphism atlas remain, so the combined two-map packet is not yet a GO.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope
    ["ConstructionTargets/RealProjectiveEvenQuadraticDescent.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/rp2/even-quadratic-descent",
@@ -67923,7 +67938,7 @@
    :other-consumers [:t96J06]}
   {:consumer :t95A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -67940,7 +67955,10 @@
     "forall {Y : Type*} [TopologicalSpace Y] (f : C(Sphere 2, Y)), (forall p, f (sphereAntipodal p) = f p) -> exists g : C(ProjectiveSpaceTopology.Space ℝ 2, Y), forall p, g (sphereProjection 2 p) = f p",
     :area "rp-smooth-atlas",
     :proved-in
-    :routes-2026-10-10-rp2-even-map-continuous-descent-two-consumers-topo2-r1},
+    :routes-2026-10-10-rp2-even-map-continuous-descent-two-consumers-topo2-r1,
+    :banked-by
+    :routes-2026-10-10-rp2-even-map-continuous-descent-two-consumers-topo2-r1,
+    :banked-commit "2dee9874440881f5da1b087c2ab1a283d7756e70"},
    :id
    :lemma-constructiontargets-realprojectivesmoothtarget-sphereprojectionevenmapdescent,
    :kind :lemma,
