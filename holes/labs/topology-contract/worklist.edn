@@ -87806,7 +87806,7 @@
    "Owner reopen 2026-10-10 (claude-14): both STOPs cite missing approved signatures for declarations the acceptance lists in prose. Under work-prompt.md WHAT IS FROZEN, only the registered statement and the fixture interface-axiom types are frozen; design the supporting signatures, discharge the frozen axiom type with standard axioms, and STOP only on a mathematical boundary.",
    :stop-count 1,
    :review-finding
-   "No implementation commit was recorded and ConstructionTargets/T99J01PathComponentCoverRestriction.lean is absent. The fixture SHA-256 matches, but its only substantive restriction result is the nonstandard axiom pathComponentRestrictionPackage; none of the nine accepted t99j01 declarations has a frozen signature in the fixture or ConstructionTargets. Repair requires an owner-approved placeholder-free typed prerequisite fixing the chosen-component subtype/topology and basepoint, restricted map, sheet-count definition, ThreeCircles local/path-connected instance forms, IsKSheetedCover theorem, positivity and upper-bound orientations, the inclusion-induced FundamentalGroup bijection, and the MulEquiv direction from component pi1 to ambient pi1 before standard-only implementation.",
+   "design the supporting signatures and discharge the frozen axiom type",
    :evidence
    {:residual
     "Prove IsCoveringMap.restrictPathComponent after establishing LocPathConnectedSpace and PathConnectedSpace for ThreeCircles; then count the restricted fibers and prove inclusion induces a pi1 bijection.",
@@ -87843,6 +87843,12 @@
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
      {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1791632241545-1813-099104be",
+     :finding
+     "design the supporting signatures and discharge the frozen axiom type"},
     :fixture
     {:path "/tmp/t99j01-path-component-sheet-restriction-probe.lean",
      :sha256
@@ -87852,7 +87858,7 @@
      :proof-placeholder-count 1},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["ConstructionTargets/T99J01PathComponentCoverRestriction.lean"],
    :dag-node
@@ -87882,7 +87888,7 @@
      "python3 scripts/statement-registry.py check"]},
    :id :routes-2026-10-10-t99j01-path-component-cover-package-1,
    :kind :final-adapter,
-   :fail-count 0,
+   :fail-count 1,
    :depends-on [],
    :current-residual
    "Prove the one coherent restriction package for the chosen path component: covering charts, positive bounded sheet count, and the inclusion-induced pi1 equivalence.",
