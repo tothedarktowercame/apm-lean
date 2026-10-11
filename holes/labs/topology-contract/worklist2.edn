@@ -79337,11 +79337,23 @@
       :exit 1,
       :finding
       "Coordinate reassociation failed; retained compiled factors."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791742669894-5737-c3ab1af5",
+     :commands
+     ["git show/diff/check add74d593"
+      "lake env lean ConstructionTargets/t97A04Closure.lean"
+      "lake env lean problems/t97A04/lean/Main.lean"
+      "statement-registry check/fingerprint"
+      "git-show hash/placeholder checks"],
+     :finding
+     "PASS: add74d59 is new after history e5f0644a; scope/blob match. Applying covariant singular homology to the point-set factorizations correctly gives H1(left)=H1(fold)≫H1(inl) and the analogous right equation, preserving summand order. Lean gates compile with standard axioms only; registry 131/0; frozen hash unchanged ca1b2cb3; closure 0/Main 2 placeholders. Coordinate reassociation, folded degrees, and B6-B11 remain listed."},
     :commit "add74d5934dfc855b1220d3453c927ae4890ee8b",
     :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79452,6 +79464,9 @@
      :reason :program-progress-committed}
     {:job 3,
      :commit "e5f0644a20bae781df986057365dfd1cc942835d",
+     :reason :program-progress-committed}
+    {:job 4,
+     :commit "add74d5934dfc855b1220d3453c927ae4890ee8b",
      :reason :program-progress-committed}]}
   {:consumer :t96A07,
    :stop-count 3,
@@ -80480,7 +80495,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -80492,7 +80507,9 @@
     :reported-by [:program-2026-10-11-close-t97a04],
     :type "H1(left)=H1(fold)≫H1(inl)",
     :area "mv-connecting-naturality",
-    :proved-in :program-2026-10-11-close-t97a04},
+    :proved-in :program-2026-10-11-close-t97a04,
+    :banked-by :program-2026-10-11-close-t97a04,
+    :banked-commit "add74d5934dfc855b1220d3453c927ae4890ee8b"},
    :id
    :lemma-constructiontargets-t97a04closure-twocircleoverlapshearleft-h1-eq-fold-inl,
    :kind :lemma,
@@ -80501,7 +80518,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -80513,7 +80530,9 @@
     :reported-by [:program-2026-10-11-close-t97a04],
     :type "H1(right)=H1(fold)≫H1(inr)",
     :area "mv-connecting-naturality",
-    :proved-in :program-2026-10-11-close-t97a04},
+    :proved-in :program-2026-10-11-close-t97a04,
+    :banked-by :program-2026-10-11-close-t97a04,
+    :banked-commit "add74d5934dfc855b1220d3453c927ae4890ee8b"},
    :id
    :lemma-constructiontargets-t97a04closure-twocircleoverlapshearright-h1-eq-fold-inr,
    :kind :lemma,
