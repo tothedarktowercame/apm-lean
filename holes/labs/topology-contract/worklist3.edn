@@ -6227,6 +6227,23 @@
      "Inverse absolute homology preservation followed by homology of singularChainsComparison and the production relative projection",
      :direction
      "Exact homology-morphism equality from the packaged coefficient-relative projection composite to the production relative-homology projection composite"},
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791688209091-3930-63795bbf",
+     :commands
+     ["git show and git diff-tree recorded commit scope"
+      "git blob identity check"
+      "sha256sum frozen fixture"
+      "git diff --check recorded commit"
+      "lake env lean renamed frozen-fixture replay"
+      "lake env lean target module"
+      "lake build target module"
+      "placeholder and axiom scan"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped consumer placeholder census"],
+     :finding
+     "PASS: commit 294e4061 changes only ConstructionTargets/ManifoldFundamentalClass.lean and its recorded blob matches the reviewed tree; frozen fixture hash 04a86c3ac2468cc56635931a35c9945af5c05e63632bac470331095530c9b50d matches. The theorem has the frozen composition orientation from the forgotten coefficient projection through the packaged transport-explicit comparison to inverse absolute preservation, singularChainsComparison, and the production relative projection. Its proof expands the packaged hom, applies coefficientRelativeProjection_mapHomologyIso_naturality and integralRelativeChainsComparisonWithTransport_homology_projection at the intended representation boundaries, and uses explicit associativity. Fixture replay and target compile/build pass with only propext, Classical.choice, Quot.sound; registry is 131/0; source and fixture have no placeholders; consumer counts remain t00J02=1 and t98A02=1."},
     :commit "294e4061a47433229ac43afad3586b3635ae32c7",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -6241,7 +6258,7 @@
      "ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/packaged-corrected-homology-projection",
@@ -6415,7 +6432,7 @@
      "The three banked equations compose to give packaged projection naturality. Explicit calc steps reassociate the morphisms and apply congrArg to the preservation and raw projection equalities; the fixture compiles without a new representation choice. The remaining exact boundary is equality or a canonical comparison between the transport-explicit and earlier generator-facing homology comparison packages before the normalization square can be propagated.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -9201,7 +9218,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -9218,7 +9235,10 @@
     "forall {X : Type} [TopologicalSpace X] (A : Set X) (n : Nat), forgetIntModules.map (HomologicalComplex.homologyMap (cokernel.π (CoefficientRelativeSmall.subspaceMap Int A)) n) ≫ (integralRelativeHomologyComparisonWithTransport A n).hom = (((CoefficientH0.SingularChains Int (TopCat.of X)).sc n).mapHomologyIso forgetIntModules).inv ≫ HomologicalComplex.homologyMap (singularChainsComparison (TopCat.of X)).hom n ≫ HomologicalComplex.homologyMap (relativeSingularProjection A) n",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-packaged-homology-projection-topo3-r1},
+    :routes-2026-10-11-manifold-packaged-homology-projection-topo3-r1,
+    :banked-by
+    :routes-2026-10-11-manifold-packaged-homology-projection-topo3-r1,
+    :banked-commit "294e4061a47433229ac43afad3586b3635ae32c7"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-integralrelativehomologycomparisonwithtransport-projection,
    :kind :lemma,
