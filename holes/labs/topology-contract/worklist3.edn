@@ -14817,6 +14817,21 @@
       "git status --short -- ConstructionTargets/ManifoldFundamentalClass.lean",
       :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791724797217-5410-5ac7ea74",
+     :commands
+     ["git diff-tree --no-commit-id --name-status -r f188923b59b63ebe092235da9d716895f0ef1cde"
+      "git diff --check f188923b59b63ebe092235da9d716895f0ef1cde^ f188923b59b63ebe092235da9d716895f0ef1cde"
+      "sha256sum /tmp/manifold_fundamental_class_forget_snake_zero_squares.lean ConstructionTargets/ManifoldFundamentalClass.lean"
+      "lake env lean fixture-body-with-promoted-name-renamed"
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped placeholder counts for t00J02 t98A02"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"],
+     :finding
+     "PASS: commit f188923b59b63ebe092235da9d716895f0ef1cde has exact one-file scope and matching recorded blob; fixture and module hashes reproduce exactly; the theorem proves the two frozen mapped zero composites in the correct v01-v12 and v12-v23 order by componentwise functoriality and the source SnakeInput zero-square fields, without constructing kernel or cokernel witnesses, a mapped SnakeInput, or connecting preservation; fixture body, module, registry, and 8326-job build pass; axioms are exactly propext, Classical.choice, and Quot.sound; target placeholders are zero and consumer counts remain 1/1."},
     :commit "f188923b59b63ebe092235da9d716895f0ef1cde",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -14833,7 +14848,7 @@
     :routes-2026-10-11-manifold-forget-snake-zero-squares-topo3-r1,
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/integral-open-disk-connecting-naturality/snake-input-zero-squares",
@@ -15032,7 +15047,7 @@
      "The banked short-exact theorem supplies the mapped exact rows, but ShortComplex kernel and cokernel preservation is not available through a ready-made mapShortComplex equivalence instance. The compiled prerequisite supplies both zero composites needed to state those mapped kernel and cokernel forks. The next bounded representation theorem must compare each evaluation of those forks with the corresponding cone obtained by applying forgetIntModules to S.h₀ and S.h₃.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -21887,7 +21902,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -21904,7 +21919,10 @@
     "forall (S : ShortComplex.SnakeInput (ModuleCat ℤ)), forgetIntModules.mapShortComplex.map S.v₀₁ ≫ forgetIntModules.mapShortComplex.map S.v₁₂ = 0 ∧ forgetIntModules.mapShortComplex.map S.v₁₂ ≫ forgetIntModules.mapShortComplex.map S.v₂₃ = 0",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-forget-snake-zero-squares-topo3-r1},
+    :routes-2026-10-11-manifold-forget-snake-zero-squares-topo3-r1,
+    :banked-by
+    :routes-2026-10-11-manifold-forget-snake-zero-squares-topo3-r1,
+    :banked-commit "f188923b59b63ebe092235da9d716895f0ef1cde"},
    :id :lemma-mfclass-forget-snake-zero-squares,
    :kind :lemma,
    :depends-on [:lemma-mfclass-forget-short-exact],
