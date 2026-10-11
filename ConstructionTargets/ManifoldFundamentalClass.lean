@@ -1189,6 +1189,34 @@ noncomputable def forgetSnakeCokernelτ₂Limit
       rcases j with (_ | _) <;> rfl)
   exact (IsColimit.equivIsoColimit e).toFun ht
 
+abbrev ForgottenSnakeCokernelτ₃Limit
+    (S : ShortComplex.SnakeInput (ModuleCat ℤ)) :=
+  IsColimit ((CokernelCofork.ofπ
+    (forgetIntModules.mapShortComplex.map S.v₂₃)
+    (forgetIntModulesSnakeInput_zero_squares S).2).map ShortComplex.π₃)
+
+/-- The third component cokernel of the forgotten snake input is a colimit. -/
+noncomputable def forgetSnakeCokernelτ₃Limit
+    (S : ShortComplex.SnakeInput (ModuleCat ℤ)) :
+    ForgottenSnakeCokernelτ₃Limit S := by
+  letI := forgetIntModules_preservesParallelPairColimits
+  let c := forgetIntModules.mapCocone
+    (CokernelCofork.ofπ S.v₂₃.τ₃ S.w₁₃_τ₃)
+  let hp : IsColimit c := isColimitOfPreserves forgetIntModules S.h₃τ₃
+  let ht : IsColimit ((Cocone.precompose
+      (forgetIntModulesParallelPairZeroIso S.v₁₂.τ₃).inv).obj c) :=
+    (IsColimit.precomposeInvEquiv
+      (forgetIntModulesParallelPairZeroIso S.v₁₂.τ₃) c).symm hp
+  let e : ((Cocone.precompose
+      (forgetIntModulesParallelPairZeroIso S.v₁₂.τ₃).inv).obj c) ≅
+      (CokernelCofork.ofπ
+        (forgetIntModules.mapShortComplex.map S.v₂₃)
+        (forgetIntModulesSnakeInput_zero_squares S).2).map ShortComplex.π₃ :=
+    Cocone.ext (Iso.refl _) (by
+      intro j
+      rcases j with (_ | _) <;> rfl)
+  exact (IsColimit.equivIsoColimit e).toFun ht
+
 /-- The corrected relative-homology comparison intertwines the coefficient
 absolute-to-relative map with the production relative projection. -/
 theorem integralRelativeHomologyComparisonWithTransport_projection
@@ -2168,6 +2196,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetSnakeCokernelτ₁Preserved
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetSnakeCokernelτ₁Limit
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetSnakeCokernelτ₂Limit
+#print axioms ConstructionTargets.ManifoldFundamentalClass.forgetSnakeCokernelτ₃Limit
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
