@@ -113903,6 +113903,19 @@
       :exit 1,
       :finding
       "Rejected false identity normalization; exposed transported object instead."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791760341120-5964-cceb0ed9",
+     :commands
+     ["git show/diff-tree f57bca18"
+      "sha256/diff/placeholder checks"
+      "statement-registry.py check"
+      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "PASS: new compiled sorry-free B6 progress evaluates the whiskered middle reverse-transport factor as coordinate glue at the overlap-equivalence image. This is the correct isoWhiskerLeft direction and leaves both outer comparisons explicit; no false identity normalization is used. Exact two-file scope and frozen hashes match; 0 placeholders; registry 131/131; standard axioms. Coordinate glue, outer factors, literal lifts, and B12 remain listed; absent final target is a valid program STOP."},
     :commit "f57bca18accb73a805062db2ec5985d44070f618",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113913,7 +113926,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113934,7 +113947,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Actual span and right-base glue now expose the literal inverse coordinate transport.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Whiskered middle factor is evaluated at the overlap-equivalence image.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114064,7 +114077,11 @@
     {:job 9,
      :commit "f17e01a984af1fadb7c1bcce69163ed911adcca0",
      :reason
-     "Actual span and right-base glue now expose the literal inverse coordinate transport."}]}
+     "Actual span and right-base glue now expose the literal inverse coordinate transport."}
+    {:job 1,
+     :commit "f57bca18accb73a805062db2ec5985d44070f618",
+     :reason
+     "Whiskered middle factor is evaluated at the overlap-equivalence image."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
