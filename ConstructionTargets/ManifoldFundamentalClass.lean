@@ -629,6 +629,23 @@ theorem cokernelProjection_comp_relativeSingularChainsIso_inv
   rw [← relativeProjection_comp_cokernelIso_hom]
   simp
 
+/-- The complete integral comparison carries the forgotten coefficient
+projection to the production relative singular-chain projection. -/
+theorem integralCompositeRelativeProjection_naturality
+    {X : Type} [TopologicalSpace X] (A : Set X) :
+    (forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ)).map
+        (cokernel.π (CoefficientRelativeSmall.subspaceMap ℤ A)) ≫
+      (forgetIntegralRelativeCokernelComparison A).hom ≫
+      (coefficientIntegralCokernelTransport A).hom ≫
+      (integralMappedRelativeCokernelComparison A).hom ≫
+      (relativeSingularChainsIsoCokernelSubspaceMap A).inv =
+    (singularChainsComparison (TopCat.of X)).hom ≫
+      relativeSingularProjection A := by
+  slice_lhs 1 4 => rw [integralCompositeCokernelComparison_projection]
+  simpa only [Category.assoc] using congrArg
+    (fun k => (singularChainsComparison (TopCat.of X)).hom ≫ k)
+    (cokernelProjection_comp_relativeSingularChainsIso_inv A)
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -669,3 +686,4 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientIntegralCokernelTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralCompositeCokernelComparison_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.cokernelProjection_comp_relativeSingularChainsIso_inv
+#print axioms ConstructionTargets.ManifoldFundamentalClass.integralCompositeRelativeProjection_naturality
