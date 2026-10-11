@@ -13426,6 +13426,21 @@
       "git status --short -- ConstructionTargets/ManifoldFundamentalClass.lean",
       :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791718376849-5267-8ce85de3",
+     :commands
+     ["git diff-tree --no-commit-id --name-status -r d44d771f2bf2925f78bb0bf1f645c7d36396d475"
+      "git diff --check d44d771f2bf2925f78bb0bf1f645c7d36396d475^ d44d771f2bf2925f78bb0bf1f645c7d36396d475"
+      "sha256sum /tmp/manifold_fundamental_class_coefficient_inclusion_homology_preservation.lean ConstructionTargets/ManifoldFundamentalClass.lean"
+      "lake env lean fixture-body-with-promoted-name-renamed"
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped placeholder counts for t00J02 t98A02"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"],
+     :finding
+     "PASS: commit d44d771f2bf2925f78bb0bf1f645c7d36396d475 has exact one-file scope and matching recorded blob; fixture and module SHA-256 values reproduce; the theorem faithfully states inverse mapHomologyIso naturality for the coefficient subspace inclusion in the frozen orientation, using ShortComplex.mapHomologyIso_inv_naturality without asserting connecting-morphism, radial, sphere, or sign compatibility; fixture body, module, registry, and 8326-job build pass; axioms are exactly propext, Classical.choice, and Quot.sound; target placeholders are zero and consumer counts remain 1/1."},
     :commit "d44d771f2bf2925f78bb0bf1f645c7d36396d475",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -13442,7 +13457,7 @@
     :routes-2026-10-11-manifold-coefficient-pair-inclusion-homology-preservation-topo3-r1,
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/integral-open-disk-connecting-naturality/inclusion-homology-preservation",
@@ -13632,7 +13647,7 @@
      "The direct connecting equation normalizes to a genuine preservation-of-delta obligation. The compiled prerequisite supplies its previously unnamed adjacent inclusion square by applying ShortComplex.mapHomologyIso_inv_naturality to the coefficient subspace map. Together with the banked projection square, the next prerequisite can address the snake-lemma delta itself rather than another endpoint representation.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -20285,7 +20300,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -20302,7 +20317,10 @@
     "forall {X : Type} [TopologicalSpace X] (A : Set X) (n : ℕ), forgetIntModules.map (HomologicalComplex.homologyMap (CoefficientRelativeSmall.subspaceMap ℤ A) n) ≫ (((CoefficientH0.SingularChains ℤ (TopCat.of X)).sc n).mapHomologyIso forgetIntModules).inv = (((CoefficientH0.SingularChains ℤ (TopCat.of A)).sc n).mapHomologyIso forgetIntModules).inv ≫ HomologicalComplex.homologyMap ((forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ)).map (CoefficientRelativeSmall.subspaceMap ℤ A)) n",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-coefficient-pair-inclusion-homology-preservation-topo3-r1},
+    :routes-2026-10-11-manifold-coefficient-pair-inclusion-homology-preservation-topo3-r1,
+    :banked-by
+    :routes-2026-10-11-manifold-coefficient-pair-inclusion-homology-preservation-topo3-r1,
+    :banked-commit "d44d771f2bf2925f78bb0bf1f645c7d36396d475"},
    :id :lemma-mfclass-coefficient-pair-inclusion-homology-preservation,
    :kind :lemma,
    :depends-on
