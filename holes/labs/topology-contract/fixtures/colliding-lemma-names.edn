@@ -1,0 +1,8 @@
+[{:name "ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport"
+  :status :not-started
+  :consumers [:t00J02]
+  :area "manifold-fundamental-class"}
+ {:name "ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport_homologyMap_eq_composite"
+  :status :not-started
+  :consumers [:t00J02]
+  :area "manifold-fundamental-class"}]

@@ -120,6 +120,20 @@ bb "$HERE/build_step.bb" row "$checkpoint_lemma" qualified-lemma-work \
   | grep -q ':implements-lemma :lemma-short-explicit-id'
 rm -f "$checkpoint_lemma"
 
+# Long qualified theorem names may share the first 80 normalized characters.
+# They must become distinct lemma nodes rather than making the second upsert
+# look like an attempt to rename the first node.
+checkpoint_collision="$(mktemp)"
+cp "$HERE/fixtures/checkpoint-ledger.edn" "$checkpoint_collision"
+bb "$HERE/build_step.bb" add-lemmas "$checkpoint_collision" \
+  "$HERE/fixtures/colliding-lemma-names.edn"
+bb "$HERE/worklist_check.bb" "$checkpoint_collision"
+[ "$(bb "$HERE/build_step.bb" row "$checkpoint_collision" \
+      lemma-constructiontargets-manifoldfundamentalclass-integralrelativechainscomparisonwit \
+      | grep -c 'integralRelativeChainsComparisonWithTransport')" = 1 ]
+[ "$(grep -c ':kind :lemma' "$checkpoint_collision")" = 2 ]
+rm -f "$checkpoint_collision"
+
 checkpoint_stop="$(mktemp)"
 cp "$HERE/fixtures/checkpoint-ledger.edn" "$checkpoint_stop"
 bb "$HERE/build_step.bb" apply-result "$checkpoint_stop" checkpoint "$HERE/fixtures/stop-receipt.edn"

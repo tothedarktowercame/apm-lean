@@ -402,6 +402,14 @@
                  (str/replace #"^-+|-+$" ""))]
     (keyword (str "lemma-" (subs slug 0 (min 80 (count slug)))))))
 
+(defn- lemma-collision-id [nm]
+  (let [slug (-> (str nm) str/lower-case (str/replace #"[^a-z0-9]+" "-")
+                 (str/replace #"^-+|-+$" ""))
+        digest (.digest (java.security.MessageDigest/getInstance "SHA-256")
+                        (.getBytes (str nm) java.nio.charset.StandardCharsets/UTF_8))
+        suffix (subs (apply str (map #(format "%02x" (bit-and (int %) 0xff)) digest)) 0 12)]
+    (keyword (str "lemma-" (subs slug 0 (min 60 (count slug))) "-" suffix))))
+
 (defn- reaches?
   "Does `from` reach `to` along :depends-on in idx?"
   [idx from to]
@@ -435,7 +443,19 @@
                                                            (= (str nm) (get-in row [:lemma :name])))
                                                   id))
                                               @idx)
-                            lid (or existing-id requested-id (lemma-id nm))
+                            generated-id (lemma-id nm)
+                            generated-row (@idx generated-id)
+                            ;; Keep every existing stable id.  Only a newly
+                            ;; generated id whose 80-character prefix is
+                            ;; already occupied gets a content-derived suffix.
+                            ;; Qualified theorem names commonly share prefixes
+                            ;; much longer than 80 characters.
+                            lid (or existing-id requested-id
+                                    (if (and generated-row
+                                             (= :lemma (:kind generated-row))
+                                             (not= (str nm) (get-in generated-row [:lemma :name])))
+                                      (lemma-collision-id nm)
+                                      generated-id))
                             cur (@idx lid)]
                         (when (and cur (not= :lemma (:kind cur)))
                           (throw (ex-info "lemma id collides with a work row" {:id lid})))
