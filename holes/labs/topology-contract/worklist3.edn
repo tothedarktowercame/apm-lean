@@ -9321,111 +9321,199 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :implements-lemma
+   :lemma-constructiontargets-manifoldfundamentalclass-correctedlocalnormalizationautomorphism-hom-eq-neg-iff-coefficient-factors,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+   :dag-node
+   "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/negative-equation-coefficient-factorization",
+   :acceptance
+   {:implementation
+    "Promote coefficientLocalForwardComposite, coefficientLocalIso_hom_eq_forwardComposite, and the exact fixture theorem. Define the forward composite from the coefficient neighborhood inclusion inverse, source transport inverse, pointed-chart homology map, target transport, punctured-neighborhood inclusion homology map, and CoefficientModelLocal.localIso; identify CoefficientChartLocal.localIso.hom with it using CoefficientChartLocal.forward_composite, then rewrite the banked endpoint equation. Do not expand the corrected comparison, compare the coefficient and production factors, exclude the negative equality, select a sign, or construct a fundamental class.",
+    :declaration
+    "ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_coefficient_factors",
+    :supporting-declarations
+    ["ConstructionTargets.ManifoldFundamentalClass.coefficientLocalForwardComposite"
+     "ConstructionTargets.ManifoldFundamentalClass.coefficientLocalIso_hom_eq_forwardComposite"],
+    :type
+    "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), (correctedLocalNormalizationAutomorphism k x).hom = -𝟙 _ <-> (integralRelativeHomologyComparisonWithTransport (deletedPoint x) (k + 2)).hom ≫ (ambientChartHomologyIso k x).inv ≫ (HigherModelLocalHomology.localIsoInt k).hom = forgetIntModules.map (coefficientLocalForwardComposite k x) ≫ (-𝟙 _)",
+    :fixture
+    "/tmp/manifold_fundamental_class_negative_equation_coefficient_factors.lean",
+    :fixture-sha256
+    "b5a7283c8259e029175cb66f031ac15e38914aa18110b0c511fe33b74d8c4191",
+    :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
+    :route-step
+    "replace the coefficient endpoint of the forbidden negative-sign equation by its concrete chart, transport, punctured-neighborhood, and model-normalization composite"},
+   :representation
+   {:source
+    "The forbidden negative-sign endpoint equation whose coefficient side is forgetIntModules.map of CoefficientChartLocal.localIso.hom",
+    :target
+    "The same equation whose coefficient side is the forgotten six-factor coefficientLocalForwardComposite followed by negative identity",
+    :direction
+    "Logical equivalence from the packaged coefficient-normalization representation to its exact inclusion-chart-transport-model composite representation"},
+   :id
+   :routes-2026-10-11-manifold-negative-equation-coefficient-factors-topo3-r1,
+   :kind :representation-comparison,
+   :area "manifold-fundamental-class",
+   :depends-on
+   [:routes-2026-10-10-topo3-seed-checkpoint-1
+    :routes-2026-10-10-manifold-local-positive-excision-topo3-r1
+    :routes-2026-10-10-manifold-oriented-overlap-coherence-topo3-r1
+    :routes-2026-10-10-manifold-connected-overlap-unit-topo3-r1
+    :routes-2026-10-10-manifold-oriented-connected-overlap-topo3-r1
+    :routes-2026-10-10-manifold-integral-transition-sign-topo3-r1
+    :routes-2026-10-10-manifold-exclude-negative-transition-topo3-r1
+    :routes-2026-10-10-manifold-global-generator-topo3-r1
+    :routes-2026-10-10-manifold-localization-iso-generator-topo3-r1
+    :routes-2026-10-10-manifold-generator-map-isiso-topo3-r1
+    :routes-2026-10-10-manifold-localization-map-naturality-topo3-r1
+    :routes-2026-10-10-manifold-localization-apply-naturality-topo3-r1
+    :routes-2026-10-10-manifold-group-global-generator-topo3-r1
+    :routes-2026-10-10-manifold-group-generator-naturality-topo3-r1
+    :routes-2026-10-10-manifold-global-local-generator-transport-topo3-r1
+    :routes-2026-10-11-manifold-basepoint-localization-coefficient-topo3-r1
+    :routes-2026-10-11-manifold-local-generator-coefficient-unique-topo3-r1
+    :routes-2026-10-11-manifold-localization-coefficient-one-topo3-r1
+    :routes-2026-10-11-manifold-distinguished-chart-generator-topo3-r1
+    :routes-2026-10-11-manifold-integral-subtype-chain-naturality-topo3-r1
+    :routes-2026-10-11-manifold-integral-mapped-relative-cokernel-topo3-r1
+    :routes-2026-10-11-manifold-forget-relative-cokernel-topo3-r1
+    :routes-2026-10-11-manifold-integral-relative-chains-comparison-topo3-r1
+    :routes-2026-10-11-manifold-integral-relative-homology-comparison-topo3-r1
+    :routes-2026-10-11-manifold-ambient-local-normalization-topo3-r1
+    :routes-2026-10-11-manifold-generator-transport-of-normalization-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-subspace-map-equality-topo3-r1
+    :routes-2026-10-11-manifold-integral-direct-cokernel-projection-topo3-r1
+    :routes-2026-10-11-manifold-forget-cokernel-projection-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-integral-cokernel-transport-topo3-r1
+    :routes-2026-10-11-manifold-integral-composite-cokernel-projection-topo3-r1
+    :routes-2026-10-11-manifold-production-cokernel-projection-topo3-r1
+    :routes-2026-10-11-manifold-integral-composite-relative-projection-topo3-r1
+    :routes-2026-10-11-manifold-relative-chains-comparison-with-transport-topo3-r1
+    :routes-2026-10-11-manifold-relative-homology-comparison-with-transport-topo3-r1
+    :routes-2026-10-11-manifold-corrected-homology-projection-topo3-r1
+    :routes-2026-10-11-manifold-corrected-homology-comparison-hom-topo3-r1
+    :routes-2026-10-11-manifold-relative-projection-homology-preservation-topo3-r1
+    :routes-2026-10-11-manifold-packaged-homology-projection-topo3-r1
+    :routes-2026-10-11-manifold-corrected-generator-normalization-topo3-r1
+    :routes-2026-10-11-manifold-normalization-from-corrected-generator-topo3-r1
+    :routes-2026-10-11-manifold-corrected-local-generator-coefficient-topo3-r1
+    :routes-2026-10-11-manifold-corrected-local-generator-unit-topo3-r1
+    :routes-2026-10-11-manifold-corrected-local-generator-sign-topo3-r1
+    :routes-2026-10-11-manifold-corrected-local-generator-nonnegative-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-one-from-corrected-normalization-topo3-r1
+    :routes-2026-10-11-manifold-corrected-generator-of-coefficient-one-topo3-r1
+    :routes-2026-10-11-manifold-corrected-normalization-of-coefficient-one-topo3-r1
+    :routes-2026-10-11-manifold-corrected-normalization-of-nonnegative-topo3-r1
+    :routes-2026-10-11-manifold-corrected-coefficient-one-of-ne-neg-one-topo3-r1
+    :routes-2026-10-11-manifold-corrected-coefficient-automorphism-one-topo3-r1
+    :routes-2026-10-11-manifold-corrected-automorphism-neg-iff-topo3-r1
+    :routes-2026-10-11-manifold-corrected-automorphism-hom-topo3-r1
+    :routes-2026-10-11-manifold-ambient-local-normalization-hom-topo3-r1
+    :routes-2026-10-11-manifold-corrected-automorphism-neg-cancel-coefficient-topo3-r1
+    :routes-2026-10-11-manifold-negative-equation-endpoint-factors-topo3-r1],
+   :current-residual
+   "Expose the corrected relative comparison factorization on the left, then align it and the ambient chart inverse/model normalization with coefficientLocalForwardComposite to prove the displayed equality cannot hold.",
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-closedorientedfundamentalclass,
    :evidence
    {:probe
     {:residual
-     "Expand CoefficientChartLocal.forward_composite and the corrected relative comparison, align their chart, connecting, radial, and sphere factors with the production endpoint, and exclude the negative equation.",
+     "Factor the corrected relative comparison, align it and the production ambient chart/model normalization with coefficientLocalForwardComposite, and prove the negative equation impossible.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
      [{:id
-       :lemma-constructiontargets-manifoldfundamentalclass-correctedlocalnormalizationautomorphism-hom-eq-neg-iff-endpoint-factors,
+       :lemma-constructiontargets-manifoldfundamentalclass-correctedlocalnormalizationautomorphism-hom-eq-neg-iff-coefficient-factors,
        :name
-       "ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_endpoint_factors",
+       "ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_coefficient_factors",
        :type
-       "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), (correctedLocalNormalizationAutomorphism k x).hom = -𝟙 _ <-> (integralRelativeHomologyComparisonWithTransport (deletedPoint x) (k + 2)).hom ≫ (ambientChartHomologyIso k x).inv ≫ (HigherModelLocalHomology.localIsoInt k).hom = forgetIntModules.map (CoefficientChartLocal.localIso Int k x).hom ≫ (-𝟙 _)",
+       "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), (correctedLocalNormalizationAutomorphism k x).hom = -𝟙 _ <-> (integralRelativeHomologyComparisonWithTransport (deletedPoint x) (k + 2)).hom ≫ (ambientChartHomologyIso k x).inv ≫ (HigherModelLocalHomology.localIsoInt k).hom = forgetIntModules.map (coefficientLocalForwardComposite k x) ≫ (-𝟙 _)",
        :status :proved,
        :consumers [:t00J02 :t98A02],
        :depends-on
-       ["ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_after_coefficient"
-        "ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization_hom"],
+       ["ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_endpoint_factors"
+        "ConstructionTargets.ManifoldFundamentalClass.coefficientLocalIso_hom_eq_forwardComposite"],
        :area "manifold-fundamental-class"}],
      :prerequisite
      {:consumer :t00J02,
       :implements-lemma
-      :lemma-constructiontargets-manifoldfundamentalclass-correctedlocalnormalizationautomorphism-hom-eq-neg-iff-endpoint-factors,
+      :lemma-constructiontargets-manifoldfundamentalclass-correctedlocalnormalizationautomorphism-hom-eq-neg-iff-coefficient-factors,
       :phase :implementation,
       :state :open,
       :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
       :dag-node
-      "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/negative-equation-endpoint-factorization",
+      "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/negative-equation-coefficient-factorization",
       :acceptance
       {:implementation
-       "Promote the exact fixture theorem. Rewrite the banked coefficient-cancelled negative-automorphism equivalence with ambientLocalNormalization_hom and Functor.mapIso_hom, exposing the ambient chart inverse, higher-model normalization, and the forward coefficient local isomorphism. Do not expand CoefficientChartLocal.forward_composite or the corrected comparison internally, prove the equality impossible, select a sign, or construct a fundamental class.",
+       "Promote coefficientLocalForwardComposite, coefficientLocalIso_hom_eq_forwardComposite, and the exact fixture theorem. Define the forward composite from the coefficient neighborhood inclusion inverse, source transport inverse, pointed-chart homology map, target transport, punctured-neighborhood inclusion homology map, and CoefficientModelLocal.localIso; identify CoefficientChartLocal.localIso.hom with it using CoefficientChartLocal.forward_composite, then rewrite the banked endpoint equation. Do not expand the corrected comparison, compare the coefficient and production factors, exclude the negative equality, select a sign, or construct a fundamental class.",
        :declaration
-       "ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_endpoint_factors",
+       "ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_coefficient_factors",
+       :supporting-declarations
+       ["ConstructionTargets.ManifoldFundamentalClass.coefficientLocalForwardComposite"
+        "ConstructionTargets.ManifoldFundamentalClass.coefficientLocalIso_hom_eq_forwardComposite"],
        :type
-       "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), (correctedLocalNormalizationAutomorphism k x).hom = -𝟙 _ <-> (integralRelativeHomologyComparisonWithTransport (deletedPoint x) (k + 2)).hom ≫ (ambientChartHomologyIso k x).inv ≫ (HigherModelLocalHomology.localIsoInt k).hom = forgetIntModules.map (CoefficientChartLocal.localIso Int k x).hom ≫ (-𝟙 _)",
+       "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), (correctedLocalNormalizationAutomorphism k x).hom = -𝟙 _ <-> (integralRelativeHomologyComparisonWithTransport (deletedPoint x) (k + 2)).hom ≫ (ambientChartHomologyIso k x).inv ≫ (HigherModelLocalHomology.localIsoInt k).hom = forgetIntModules.map (coefficientLocalForwardComposite k x) ≫ (-𝟙 _)",
        :fixture
-       "/tmp/manifold_fundamental_class_negative_equation_endpoints.lean",
+       "/tmp/manifold_fundamental_class_negative_equation_coefficient_factors.lean",
        :fixture-sha256
-       "36a4715a41cd045626d8b55cdb598be79ba36f842718c947638b7f6b2144866c",
+       "b5a7283c8259e029175cb66f031ac15e38914aa18110b0c511fe33b74d8c4191",
        :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
        :route-step
-       "put both normalization endpoints of the forbidden negative-sign equation into their explicit chart and model-normalization representations"},
+       "replace the coefficient endpoint of the forbidden negative-sign equation by its concrete chart, transport, punctured-neighborhood, and model-normalization composite"},
       :representation
       {:source
-       "The coefficient-normalization-cancelled negative corrected-automorphism equation with packaged ambient normalization and mapped coefficient isomorphism",
+       "The forbidden negative-sign endpoint equation whose coefficient side is forgetIntModules.map of CoefficientChartLocal.localIso.hom",
        :target
-       "The same equation with inverse ambient chart homology followed by HigherModelLocalHomology.localIsoInt on the left and the functor image of CoefficientChartLocal.localIso.hom on the right",
+       "The same equation whose coefficient side is the forgotten six-factor coefficientLocalForwardComposite followed by negative identity",
        :direction
-       "Logical equivalence from the packaged endpoint equation to its explicit ambient-chart and model-normalization endpoint factorization"},
+       "Logical equivalence from the packaged coefficient-normalization representation to its exact inclusion-chart-transport-model composite representation"},
       :id
-      :routes-2026-10-11-manifold-negative-equation-endpoint-factors-topo3-r1,
+      :routes-2026-10-11-manifold-negative-equation-coefficient-factors-topo3-r1,
       :kind :representation-comparison,
       :area "manifold-fundamental-class",
       :depends-on
       [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
-       :routes-2026-10-11-manifold-corrected-automorphism-neg-cancel-coefficient-topo3-r1
-       :routes-2026-10-11-manifold-ambient-local-normalization-hom-topo3-r1],
+       :routes-2026-10-11-manifold-negative-equation-endpoint-factors-topo3-r1],
       :current-residual
-      "Rewrite the forward coefficient endpoint with CoefficientChartLocal.forward_composite and expose the corrected comparison factorization; then align the coefficient and production chart, connecting, radial, and sphere maps to rule out the displayed equality.",
+      "Expose the corrected relative comparison factorization on the left, then align it and the ambient chart inverse/model normalization with coefficientLocalForwardComposite to prove the displayed equality cannot hold.",
       :other-consumers [:t98A02]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake env lean /tmp/manifold_fundamental_class_negative_equation_endpoints.lean",
+       "lake env lean /tmp/manifold_fundamental_class_negative_equation_coefficient_factors.lean",
        :exit 0,
        :output
-       "correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_endpoint_factors compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "coefficientLocalIso_hom_eq_forwardComposite and correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_coefficient_factors compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/manifold_fundamental_class_negative_equation_endpoints.lean",
+       "sha256sum /tmp/manifold_fundamental_class_negative_equation_coefficient_factors.lean",
        :exit 0,
        :output
-       "36a4715a41cd045626d8b55cdb598be79ba36f842718c947638b7f6b2144866c  /tmp/manifold_fundamental_class_negative_equation_endpoints.lean"}
+       "b5a7283c8259e029175cb66f031ac15e38914aa18110b0c511fe33b74d8c4191  /tmp/manifold_fundamental_class_negative_equation_coefficient_factors.lean"}
       {:cmd
-       "if rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/manifold_fundamental_class_negative_equation_endpoints.lean; then exit 1; else exit 0; fi",
+       "if rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/manifold_fundamental_class_negative_equation_coefficient_factors.lean; then exit 1; else exit 0; fi",
        :exit 0}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
      :diagnostic-history
      [{:cmd
-       "lake env lean /tmp/manifold_fundamental_class_coefficient_normalization_forward.lean",
+       "lake env lean /tmp/manifold_fundamental_class_negative_equation_coefficient_factors.lean",
        :exit 1,
        :finding
-       "An attempted direct mapped six-factor coefficient expansion exposed proof-dependent chart arguments that did not elaborate as a stable theorem statement; the corrected endpoint theorem leaves CoefficientChartLocal.forward_composite intact for the next comparison."}
-      {:cmd
-       "lake env lean /tmp/manifold_fundamental_class_negative_equation_endpoints.lean",
-       :exit 1,
-       :finding
-       "The first endpoint proof included a final simp after both rewrites had already closed the goal; removing the no-progress tactic exposed the remaining mapIso representation mismatch."}
-      {:cmd
-       "lake env lean /tmp/manifold_fundamental_class_negative_equation_endpoints.lean",
-       :exit 1,
-       :finding
-       "The mapped isomorphism hom is propositionally exposed by Functor.mapIso_hom rather than definitionally identical; adding that exact rewrite completed the theorem."}],
+       "After rewriting both representations, Lean left a reflexive iff goal rather than closing it automatically. Adding the explicit reflexivity proof completed the fixture without changing the statement."}],
      :fixture
      {:path
-      "/tmp/manifold_fundamental_class_negative_equation_endpoints.lean",
+      "/tmp/manifold_fundamental_class_negative_equation_coefficient_factors.lean",
       :sha256
-      "36a4715a41cd045626d8b55cdb598be79ba36f842718c947638b7f6b2144866c"},
+      "b5a7283c8259e029175cb66f031ac15e38914aa18110b0c511fe33b74d8c4191"},
      :finding
-     "The forbidden negative sign now has a compiled endpoint-factor equation: corrected comparison followed by inverse ambient chart homology and the production model normalization equals the forgotten coefficient local normalization followed by negation. The next prerequisite can rewrite CoefficientChartLocal.forward_composite on the right and expose the corrected comparison on the left, after which the connecting, radial, and sphere factors can be compared directly.",
+     "The coefficient endpoint is now the concrete six-factor morphism already implicit in CoefficientChartLocal.forward_composite: neighborhood inclusion inverse, source transport inverse, pointed-chart homology, target transport, punctured-neighborhood inclusion homology, and the coefficient model normalization. The remaining comparison is concentrated on the corrected relative comparison and the production ambient chart/model factors; those must be exposed and aligned to exclude negation.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -9495,7 +9583,8 @@
     :routes-2026-10-11-manifold-corrected-automorphism-hom-topo3-r1
     :routes-2026-10-11-manifold-ambient-local-normalization-hom-topo3-r1
     :routes-2026-10-11-manifold-corrected-automorphism-neg-cancel-coefficient-topo3-r1
-    :routes-2026-10-11-manifold-negative-equation-endpoint-factors-topo3-r1],
+    :routes-2026-10-11-manifold-negative-equation-endpoint-factors-topo3-r1
+    :routes-2026-10-11-manifold-negative-equation-coefficient-factors-topo3-r1],
    :current-residual
    "Local-degree counts and wild-ball complement homology remain.",
    :other-consumers [:t98A02]}
@@ -12931,7 +13020,48 @@
    :depends-on
    [:lemma-constructiontargets-manifoldfundamentalclass-correctedlocalnormalizationautomorphism-hom-eq-neg-iff-after-coefficient
     :lemma-constructiontargets-manifoldfundamentalclass-ambientlocalnormalization-hom],
-   :other-consumers [:t98A02]}],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_coefficient_factors",
+    :type
+    "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), (correctedLocalNormalizationAutomorphism k x).hom = -𝟙 _ <-> (integralRelativeHomologyComparisonWithTransport (deletedPoint x) (k + 2)).hom ≫ (ambientChartHomologyIso k x).inv ≫ (HigherModelLocalHomology.localIsoInt k).hom = forgetIntModules.map (coefficientLocalForwardComposite k x) ≫ (-𝟙 _)"},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_coefficient_factors",
+    :reported-by
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    :type
+    "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), (correctedLocalNormalizationAutomorphism k x).hom = -𝟙 _ <-> (integralRelativeHomologyComparisonWithTransport (deletedPoint x) (k + 2)).hom ≫ (ambientChartHomologyIso k x).inv ≫ (HigherModelLocalHomology.localIsoInt k).hom = forgetIntModules.map (coefficientLocalForwardComposite k x) ≫ (-𝟙 _)",
+    :area "manifold-fundamental-class",
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+   :id
+   :lemma-constructiontargets-manifoldfundamentalclass-correctedlocalnormalizationautomorphism-hom-eq-neg-iff-coefficient-factors,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-manifoldfundamentalclass-correctedlocalnormalizationautomorphism-hom-eq-neg-iff-endpoint-factors
+    :lemma-constructiontargets-manifoldfundamentalclass-coefficientlocaliso-hom-eq-forwardc],
+   :other-consumers [:t98A02]}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFundamentalClass.coefficientLocalIso_hom_eq_forwardComposite"},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFundamentalClass.coefficientLocalIso_hom_eq_forwardComposite",
+    :reported-by []},
+   :id
+   :lemma-constructiontargets-manifoldfundamentalclass-coefficientlocaliso-hom-eq-forwardc,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}],
  :consumer-baselines {},
  :statuses
  #{:open
