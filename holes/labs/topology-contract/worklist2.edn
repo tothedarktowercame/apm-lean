@@ -54374,7 +54374,9 @@
      :status :interface-only},
     :seat "topo-6"},
    :phase :implementation,
-   :state :needs-owner,
+   :owner-repair
+   "codex-71 2026-10-11: stale. The smooth descent it waits on is banked at ConstructionTargets/RealProjectiveSmoothTarget.lean:1403 and specialised in RealProjectiveEvenQuadraticDescent.lean:67-86. t95A04 now needs veroneseDescended_isEmbedding and _isImmersion (lemma DAG).",
+   :state :superseded,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -54438,7 +54440,9 @@
       :depends-on [:routes-2026-09-28-rp-smooth-atlas-topo2-r1],
       :other-consumers [:t96A07]}}},
    :phase :probe,
-   :state :blocked,
+   :owner-repair
+   "codex-71 2026-10-11: stale. The smooth descent it waits on is banked at ConstructionTargets/RealProjectiveSmoothTarget.lean:1403 and specialised in RealProjectiveEvenQuadraticDescent.lean:67-86. t95A04 now needs veroneseDescended_isEmbedding and _isImmersion (lemma DAG).",
+   :state :superseded,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -54936,7 +54940,6 @@
    :kind :strategy-checkpoint,
    :depends-on
    [:routes-2026-10-10-t96a07-closure-after-rp-atlas-topo2-r2
-    :routes-2026-10-10-rp-even-polynomial-smooth-descent-topo2-r2
     :routes-2026-10-10-polygon-quotient-topology-two-consumers-topo2-r2
     :routes-2026-10-10-rp2-double-cover-pi1-two-consumers-topo2-r2
     :routes-2026-09-28-checkpoint-topo2-r1]}
@@ -71693,7 +71696,9 @@
    "Prove that the intersection and union components of this morphism commute with booleanIntersectionProductionHomologyIso and booleanUnionProductionHomologyIso, then conjugate subcomplex connecting naturality.",
    :other-consumers [:t96J06]}
   {:consumer :t97A04,
-   :stop-count 2,
+   :owner-reopen
+   "reopened: a lemma this row reported missing is now banked",
+   :stop-count 0,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma
@@ -71756,7 +71761,7 @@
     "Fresh compilation verifies the committed conjugation theorem and the continuous-map range/intersection compatibility helpers. The earlier receipt defect is removed: it no longer invents a second theorem name for the existing coverPreservingShortComplexMap lemma node.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/ProductionOpenCoverMayerVietoris.lean"],
    :dag-node
@@ -71776,7 +71781,7 @@
    :id :routes-2026-10-10-production-connecting-naturality-topo2-r1,
    :kind :reusable-theorem,
    :area "mv-connecting-naturality",
-   :fail-count 1,
+   :fail-count 0,
    :depends-on
    [:routes-2026-10-10-checkpoint-topo2-r7
     :routes-2026-10-10-subcomplex-mv-connecting-naturality-two-consumers-topo2-r1
@@ -72704,13 +72709,15 @@
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance {:lemma "frozenTorusHomeomorphBoundaryTorus"},
    :lemma
    {:area "mv-connecting-naturality",
     :name "frozenTorusHomeomorphBoundaryTorus",
-    :reported-by []},
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"]},
    :id :lemma-frozentorushomeomorphboundarytorus,
    :kind :lemma,
    :area "mv-connecting-naturality",
@@ -72767,7 +72774,7 @@
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -72776,7 +72783,9 @@
    {:area "mv-connecting-naturality",
     :name
     "ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusH1GroupIsoFinTwo",
-    :reported-by []},
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"]},
    :id
    :lemma-constructiontargets-t97a04frozenh1coordinate-frozentorush1groupisofintwo,
    :kind :lemma,
@@ -72844,7 +72853,7 @@
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -72853,7 +72862,10 @@
    {:area "mv-connecting-naturality",
     :name
     "ConstructionTargets.TorusPiOneWindingCoordinates.frozenLbarPi1Map_naturality",
-    :reported-by []},
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"]},
    :id
    :lemma-constructiontargets-toruspionewindingcoordinates-frozenlbarpi1map-naturality,
    :kind :lemma,
@@ -72975,7 +72987,7 @@
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -72984,7 +72996,9 @@
    {:area "mv-connecting-naturality",
     :name
     "ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusAlignedH1MulEquivFinTwo",
-    :reported-by []},
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"]},
    :id
    :lemma-constructiontargets-t97a04frozenh1coordinate-frozentorusalignedh1mulequivfintwo,
    :kind :lemma,
@@ -73080,7 +73094,7 @@
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -73089,7 +73103,10 @@
    {:area "mv-connecting-naturality",
     :name
     "ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison_naturality",
-    :reported-by []},
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/IntegralSingularHomologyComparison.lean"]},
    :id
    :lemma-constructiontargets-integralsingularhomologycomparison-singularhomologycompariso,
    :kind :lemma,
@@ -73223,7 +73240,7 @@
    :other-consumers [:t96A07]}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -73240,7 +73257,10 @@
     "Naturality of the production Mayer-Vietoris connecting morphism for a continuous map carrying each source cover member into the corresponding target cover member",
     :area "mv-connecting-naturality",
     :proved-in
-    :routes-2026-10-10-production-connecting-naturality-topo2-r1},
+    :routes-2026-10-10-production-connecting-naturality-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/ProductionOpenCoverMayerVietoris.lean"]},
    :id
    :lemma-constructiontargets-productionopencovermayervietoris-productionconnecting-natura,
    :kind :lemma,
@@ -73399,7 +73419,7 @@
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -73408,7 +73428,9 @@
    {:area "geometric-tube-deformation",
     :name
     "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_circleMeridian_mem_geometricY",
-    :reported-by []},
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/T02A03GeometricTubeCover.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubecover-apm-t02a03-circlemeridian-mem-geome,
    :kind :lemma,
@@ -73417,7 +73439,7 @@
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -73426,7 +73448,9 @@
    {:area "geometric-tube-deformation",
     :name
     "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_origin_mem_both_cores",
-    :reported-by []},
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/T02A03GeometricTubeCover.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubecover-apm-t02a03-origin-mem-both-cores,
    :kind :lemma,
@@ -73493,7 +73517,7 @@
    :other-consumers [:t96A07]}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -73502,7 +73526,9 @@
    {:area "rp-smooth-atlas",
     :name
     "ConstructionTargets.RealProjectiveSmoothTarget.sphereProjectionQuotientAuthority",
-    :reported-by []},
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/RealProjectiveSmoothTarget.lean"]},
    :id
    :lemma-constructiontargets-realprojectivesmoothtarget-sphereprojectionquotientauthority,
    :kind :lemma,
@@ -73511,7 +73537,7 @@
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -73520,7 +73546,9 @@
    {:area "rp-smooth-atlas",
     :name
     "ConstructionTargets.RealProjectiveSmoothTarget.sphereProjection_eq_iff",
-    :reported-by []},
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/RealProjectiveSmoothTarget.lean"]},
    :id
    :lemma-constructiontargets-realprojectivesmoothtarget-sphereprojection-eq-iff,
    :kind :lemma,
@@ -73559,7 +73587,7 @@
    :other-consumers [:t96A07]}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -73568,7 +73596,9 @@
    {:area "rp-smooth-atlas",
     :name
     "ConstructionTargets.RealProjectiveSmoothTarget.rpSmoothAtlas",
-    :reported-by []},
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/RealProjectiveSmoothTarget.lean"]},
    :id
    :lemma-constructiontargets-realprojectivesmoothtarget-rpsmoothatlas,
    :kind :lemma,
@@ -73777,7 +73807,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -73791,7 +73821,10 @@
     [:routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1],
     :type
     "forall p : apm_t02a03_E3, p ∈ apm_t02a03_rightTube -> rightTubePlanarComplex p ≠ 0",
-    :area "explicit-r3-tube-deformation-retraction"},
+    :area "explicit-r3-tube-deformation-retraction",
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-righttubeplanarcomplex-ne-zer,
    :kind :lemma,
@@ -73799,7 +73832,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -73811,7 +73844,10 @@
     :reported-by
     [:routes-2026-10-10-t02a03-right-tube-planar-coordinate-nonzero-topo2-r1],
     :type "IsCompact (Set.range apm_t02a03_rightCore)",
-    :area "explicit-r3-tube-deformation-retraction"},
+    :area "explicit-r3-tube-deformation-retraction",
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-iscompact-range-rightcore,
    :kind :lemma,
@@ -73819,7 +73855,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -73835,7 +73871,10 @@
     "forall p : apm_t02a03_E3, p ∈ apm_t02a03_rightTube -> 0 < (rightTubePlanarComplex p).re",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-righttubeplanarcomplex-re-pos,
    :kind :lemma,
@@ -73844,7 +73883,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -73860,7 +73899,10 @@
     "exists R : C(unitInterval × RightTubeMinusLeftCore, Circle), (forall p, (R (0,p) : ℂ) = 1) and (forall p, (R (1,p) : ℂ) = NormedSpace.normalize (rightTubePlanarComplex p.1))",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-righttubeplanarrotation-exist,
    :kind :lemma,
@@ -73869,7 +73911,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -73885,7 +73927,10 @@
     "forall (p : apm_t02a03_E3) (hp : p ∈ apm_t02a03_rightTube), rightTubePolarReconstruction ⟨NormedSpace.normalize (rightTubePlanarComplex p), by exact mem_sphere_zero_iff_norm.mpr (NormedSpace.norm_normalize (rightTubePlanarComplex_ne_zero p hp))⟩ (rightTubeNormalComplex p) = p",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-righttubepolarreconstruction-,
    :kind :lemma,
@@ -73894,7 +73939,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -73910,7 +73955,10 @@
     "forall p : apm_t02a03_E3, p ∈ apm_t02a03_rightTube -> rightTubeCorePlanarComplex p ≠ 0",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-righttubecoreplanarcomplex-ne,
    :kind :lemma,
@@ -73919,7 +73967,7 @@
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -73928,7 +73976,10 @@
    {:area "geometric-tube-deformation",
     :name
     "ConstructionTargets.T02A03GeometricTubeDeformation.rightTube_exists_near_rightCore",
-    :reported-by []},
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-righttube-exists-near-rightco,
    :kind :lemma,
@@ -73937,7 +73988,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -73953,7 +74004,10 @@
     "forall (p : apm_t02a03_E3) (hp : p ∈ apm_t02a03_rightTube), rightTubeCorePolarReconstruction ⟨NormedSpace.normalize (rightTubeCorePlanarComplex p), by exact mem_sphere_zero_iff_norm.mpr (NormedSpace.norm_normalize (rightTubeCorePlanarComplex_ne_zero p hp))⟩ (rightTubeCoreNormalComplex p) = p",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-righttubecorepolarreconstruct,
    :kind :lemma,
@@ -73962,7 +74016,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -73978,7 +74032,10 @@
     "Continuous rightTubeCoreNormalComplex ∧ Continuous (Function.uncurry rightTubeCorePolarReconstruction)",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-righttubecoretubularcoordinat,
    :kind :lemma,
@@ -73987,7 +74044,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -74001,7 +74058,10 @@
     :type "C(RightTubeMinusLeftCore, Circle)",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-righttubecoreangularcoordinat,
    :kind :lemma,
@@ -74011,7 +74071,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -74027,7 +74087,10 @@
     "forall m : C(RightTubeMinusLeftCore, Circle), exists N : C(unitInterval × RightTubeMinusLeftCore, Complex), (forall p, N (0,p) = rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (m p))) and (forall p, N (1,p) = rightTubeCoreNormalComplex p.1)",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-righttubecorenormalinterpolat,
    :kind :lemma,
@@ -74036,7 +74099,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -74052,7 +74115,10 @@
     "forall z : Circle, norm (rightTubeCoreNormalComplex (apm_t02a03_circleMeridian z)) = (1 / 8 : Real)",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-norm-righttubecorenormalcompl,
    :kind :lemma,
@@ -74061,7 +74127,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -74077,7 +74143,10 @@
     "forall (p : apm_t02a03_E3) (t : Real), abs (1 - norm (rightTubeCorePlanarComplex p)) ≤ norm (rightTubeCorePlanarComplex p - ((Real.cos t : Complex) + (Real.sin t : Complex) * Complex.I))",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-righttubecore-radial-error-le,
    :kind :lemma,
@@ -74086,7 +74155,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -74102,7 +74171,10 @@
     "forall (p : apm_t02a03_E3) (hp : p ∈ apm_t02a03_rightTube), norm (rightTubeCoreNormalComplex p) ≤ (1 / 4 : Real)",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-righttubecoreinputnormalradiu,
    :kind :lemma,
@@ -74112,7 +74184,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -74128,7 +74200,10 @@
     "forall (m : C(RightTubeMinusLeftCore, Circle)) (tp : unitInterval × RightTubeMinusLeftCore), norm (rightTubeCoreNormalInterpolation m tp) ≤ (1 / 4 : Real)",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-righttubecoreinterpolatednorm,
    :kind :lemma,
@@ -74138,7 +74213,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -74154,7 +74229,10 @@
     "forall z : Circle, NormedSpace.normalize (rightTubeCorePlanarComplex (apm_t02a03_circleMeridian z)) = (1 : Complex)",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-normalizedrightcoreplanar-cir,
    :kind :lemma,
@@ -74163,7 +74241,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -74179,7 +74257,10 @@
     "forall z : Circle, rightTubeCorePolarReconstruction (1 : Circle) (rightTubeCoreNormalComplex (apm_t02a03_circleMeridian z)) = apm_t02a03_circleMeridian z",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-rightcorepolarreconstruction-,
    :kind :lemma,
@@ -74188,7 +74269,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -74204,7 +74285,10 @@
     "forall (t : unitInterval) (n : Complex), n ≠ 0 -> 0 < (1 - (t : Real)) * (1 / 8 : Real) + (t : Real) * norm n",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-righttuberadialcoefficient-po,
    :kind :lemma,
@@ -74213,7 +74297,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -74229,7 +74313,10 @@
     "forall (n : C(RightTubeMinusLeftCore, Complex)) (m : C(RightTubeMinusLeftCore, Circle)), (forall p, (m p : Complex) = NormedSpace.normalize (n p)) -> (forall p, n p ≠ 0) -> exists N : C(unitInterval × RightTubeMinusLeftCore, Complex), (forall p, N (0,p) = ((1/8 : Real) : Complex) * (m p : Complex)) and (forall p, N (1,p) = n p) and (forall tp, N tp ≠ 0)",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-righttuberadialnormalinterpol,
    :kind :lemma,
@@ -74238,7 +74325,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -74254,7 +74341,10 @@
     "exists N : C(unitInterval × RightTubeMinusLeftCore, Complex), (forall p, N (0,p) = ((1/8 : Real) : Complex) * (rightTubeMeridianCoordinate p : Complex)) and (forall p, N (1,p) = rightTubeNormalComplex p.1) and (forall tp, N tp ≠ 0)",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-specializedrighttuberadialnor,
    :kind :lemma,
@@ -74263,7 +74353,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -74279,7 +74369,10 @@
     "(forall p, rightTubeRadialAmbientDeformation (0,p) = apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)) and (forall p, rightTubeRadialAmbientDeformation (1,p) = p.1)",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-righttuberadialambientdeforma,
    :kind :lemma,
@@ -74290,7 +74383,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -74306,7 +74399,10 @@
     "forall tp : unitInterval × RightTubeMinusLeftCore, 0 < 1 + (rightTubeRadialNormalInterpolation rightTubeNormalCoordinate rightTubeMeridianCoordinate tp).re",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-positivereconstructionradius-,
    :kind :lemma,
@@ -74315,7 +74411,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -74331,7 +74427,10 @@
     "forall tp : unitInterval × RightTubeMinusLeftCore, rightTubeNormalComplex (rightTubeRadialAmbientDeformation tp) = rightTubeRadialNormalInterpolation rightTubeNormalCoordinate rightTubeMeridianCoordinate tp",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-recoverednormal-righttuberadi,
    :kind :lemma,
@@ -74340,7 +74439,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -74356,7 +74455,10 @@
     "forall tp : unitInterval × RightTubeMinusLeftCore, rightTubeRadialAmbientDeformation tp ∉ Set.range apm_t02a03_leftCore",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-avoidsleftcore-righttuberadia,
    :kind :lemma,
@@ -74365,7 +74467,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -74381,7 +74483,10 @@
     "forall (u : Circle) (n : Complex), norm n <= (1 / 4 : Real) -> rightTubeCorePolarReconstruction u n ∈ apm_t02a03_rightTube",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-reconstructionmemrighttube-ri,
    :kind :lemma,
@@ -74391,7 +74496,7 @@
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -74400,7 +74505,10 @@
    {:area "geometric-tube-deformation",
     :name
     "ConstructionTargets.T02A03GeometricTubeDeformation.range_rightCoreCircle",
-    :reported-by []},
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-range-rightcorecircle,
    :kind :lemma,
@@ -74463,7 +74571,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -74479,7 +74587,10 @@
     "exists H : C(unitInterval × RightTubeMinusLeftCore, apm_t02a03_E3), (forall p, H (0,p) = rightTubeCorePolarReconstruction (rightTubeCoreAngularCoordinate p) (rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)))) and (forall p, H (1,p) = p.1) and (forall tp, H tp ∈ apm_t02a03_rightTube)",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-righttubecoreradialambientdef,
    :kind :lemma,
@@ -74490,7 +74601,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -74506,7 +74617,10 @@
     "forall (u : Circle) (n : Complex), n.im != 0 -> rightTubeCorePolarReconstruction u n ∉ Set.range apm_t02a03_leftCore",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-reconstructionavoidsleftcore-,
    :kind :lemma,
@@ -74514,7 +74628,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -74530,7 +74644,10 @@
     "forall (u : Circle) (n : Complex), rightTubeCorePolarReconstruction u n ∈ Set.range apm_t02a03_leftCore -> (1 - n.re)^2 - 4*(1 - n.re)*(u : Complex).re + 3 = 0",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-corepolar-leftcore-collision-,
    :kind :lemma,
@@ -74538,7 +74655,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -74554,7 +74671,10 @@
     "forall (u : Circle) (n : Complex), ((1 - n.re)^2 - 4*(1 - n.re)*(u : Complex).re + 3 != 0) -> rightTubeCorePolarReconstruction u n ∉ Set.range apm_t02a03_leftCore",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-collisionpolynomial-ne-implie,
    :kind :lemma,
@@ -74563,7 +74683,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -74579,7 +74699,10 @@
     "forall (u : Circle) (n : Complex), norm n <= (1 / 4 : Real) -> 0 < n.re -> 0 < (1 - n.re)^2 - 4*(1 - n.re)*(u : Complex).re + 3",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-collisionpolynomial-pos-of-no,
    :kind :lemma,
@@ -74587,7 +74710,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -74603,7 +74726,10 @@
     "forall (u : Circle) (n : Complex), norm n <= (1 / 4 : Real) -> n.re <= 0 -> (u : Complex).re <= (9 / 10 : Real) -> 0 < (1 - n.re)^2 - 4*(1-n.re)*(u : Complex).re + 3",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-nonpositivenormalsafecorridor,
    :kind :lemma,
@@ -74611,7 +74737,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -74627,7 +74753,10 @@
     "forall (u : Circle) (n : Complex), n.im = 0 -> (1 - n.re)^2 - 4*(1-n.re)*(u : Complex).re + 3 = 0 -> rightTubeCorePolarReconstruction u n ∈ Set.range apm_t02a03_leftCore",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-zeroheightcollisionpolynomial,
    :kind :lemma,
@@ -74635,7 +74764,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -74651,7 +74780,10 @@
     "forall (p : RightTubeMinusLeftCore), (rightTubeCoreNormalComplex p.1).im = 0 -> (1 - (rightTubeCoreNormalComplex p.1).re)^2 - 4*(1-(rightTubeCoreNormalComplex p.1).re)*(rightTubeCoreAngularCoordinate p : Complex).re + 3 != 0",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-inputzeroheight-collisionpoly,
    :kind :lemma,
@@ -74661,7 +74793,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -74677,7 +74809,10 @@
     "forall (z : Circle), let n := rightTubeCoreNormalComplex (apm_t02a03_circleMeridian z); (1-n.re)^2 - 4*(1-n.re)*((1 : Circle) : Complex).re + 3 = ((z : Complex).re/8)*(2+(z : Complex).re/8)",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-meridianstart-collisionpolyno,
    :kind :lemma,
@@ -74685,7 +74820,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -74701,7 +74836,10 @@
     "forall (p : RightTubeMinusLeftCore), (1 - (rightTubeCoreNormalComplex p.1).re)^2 - 4*(1-(rightTubeCoreNormalComplex p.1).re)*(rightTubeCoreAngularCoordinate p : Complex).re + 3 = (rightTubeNormalComplex p.1).re * ((rightTubeNormalComplex p.1).re + 2)",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-inputcollisionpolynomial-fact,
    :kind :lemma,
@@ -74710,7 +74848,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -74726,7 +74864,10 @@
     "forall (p : RightTubeMinusLeftCore), exists c : Real, 0 < c and ((1 - (rightTubeCoreNormalComplex p.1).re)^2 - 4*(1-(rightTubeCoreNormalComplex p.1).re)*(rightTubeCoreAngularCoordinate p : Complex).re + 3 = c * (rightTubeMeridianCoordinate p : Complex).re)",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-inputcollisionpolynomial-posi,
    :kind :lemma,
@@ -74735,7 +74876,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -74751,7 +74892,10 @@
     "forall (p : RightTubeMinusLeftCore), let m : Complex := rightTubeMeridianCoordinate p; let n0 := rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)); exists a b : Real, 0 < a and 0 < b and ((1-n0.re)^2 - 4*(1-n0.re)*((1 : Circle) : Complex).re + 3 = a*m.re) and ((1-(rightTubeCoreNormalComplex p.1).re)^2 - 4*(1-(rightTubeCoreNormalComplex p.1).re)*(rightTubeCoreAngularCoordinate p : Complex).re + 3 = b*m.re)",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-collisionendpoint-positivefac,
    :kind :lemma,
@@ -74761,7 +74905,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -74777,7 +74921,10 @@
     "forall (p : RightTubeMinusLeftCore), exists c : Real, 0 < c and (rightTubeMeridianCoordinate p : Complex).im = c * p.1 2",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-righttubemeridiancoordinate-i,
    :kind :lemma,
@@ -74786,7 +74933,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -74802,7 +74949,10 @@
     "forall (tp : unitInterval × RightTubeMinusLeftCore), tp.2.1 2 != 0 -> (rightTubeCoreNormalInterpolation rightTubeMeridianCoordinate tp).im != 0",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-nonzeroheight-im-ne-zero-righ,
    :kind :lemma,
@@ -74811,7 +74961,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -74827,7 +74977,10 @@
     "forall (tp : unitInterval × RightTubeMinusLeftCore), tp.2.1 2 != 0 -> rightTubeCorePolarReconstruction (rightTubeCoreAngularCoordinate tp.2) (rightTubeCoreNormalInterpolation rightTubeMeridianCoordinate tp) ∉ Set.range apm_t02a03_leftCore",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-nonzeroheight-avoidsleftcore-,
    :kind :lemma,
@@ -74837,7 +74990,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -74853,7 +75006,10 @@
     "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> (rightTubeMeridianCoordinate p : Complex).re ^ 2 = 1",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-zeroheight-righttubemeridianc,
    :kind :lemma,
@@ -74862,7 +75018,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -74878,7 +75034,10 @@
     "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> (rightTubeMeridianCoordinate p : Complex).re = 1 ∨ (rightTubeMeridianCoordinate p : Complex).re = -1",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-signcases-zeroheight-righttub,
    :kind :lemma,
@@ -74887,7 +75046,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -74903,7 +75062,10 @@
     "forall (p : RightTubeMinusLeftCore), (rightTubeMeridianCoordinate p : Complex).re = 1 -> 0 < (rightTubeNormalComplex p.1).re",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-positivesign-righttubenormalc,
    :kind :lemma,
@@ -74912,7 +75074,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -74928,7 +75090,10 @@
     "forall (p : RightTubeMinusLeftCore), (rightTubeMeridianCoordinate p : Complex).re = 1 -> let n := rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)); 0 < (1 - n.re)^2 - 4*(1-n.re)*(rightTubeCoreAngularCoordinate p : Complex).re + 3",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-positivesign-radialstart-coll,
    :kind :lemma,
@@ -74938,7 +75103,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -74954,7 +75119,10 @@
     "forall (p : RightTubeMinusLeftCore), (rightTubeMeridianCoordinate p : Complex).re = 1 -> 0 < (1 - (rightTubeCoreNormalComplex p.1).re)^2 - 4*(1-(rightTubeCoreNormalComplex p.1).re)*(rightTubeCoreAngularCoordinate p : Complex).re + 3",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-positivesign-input-collisionp,
    :kind :lemma,
@@ -74963,7 +75131,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -74979,7 +75147,10 @@
     "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> (rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p))).im = 0 ∧ (rightTubeCoreNormalComplex p.1).im = 0",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-realendpoints-zeroheight-righ,
    :kind :lemma,
@@ -74988,7 +75159,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -75004,7 +75175,10 @@
     "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> ‖zeroHeightSignedImaginaryWaypoint p‖ = (1 / 8 : ℝ) ∧ (zeroHeightSignedImaginaryWaypoint p).im ≠ 0",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-zeroheight-signedimaginaryway,
    :kind :lemma,
@@ -75013,7 +75187,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -75029,7 +75203,10 @@
     "forall (t : unitInterval) (n w : ℂ), n.im = 0 -> w.im ≠ 0 -> (t : ℝ) ≠ 0 -> ‖n‖ ≤ (1 / 4 : ℝ) -> ‖w‖ ≤ (1 / 4 : ℝ) -> ‖coreNormalAffineLeg t n w‖ ≤ (1 / 4 : ℝ) ∧ (coreNormalAffineLeg t n w).im ≠ 0",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-corenormalaffineleg-radius-an,
    :kind :lemma,
@@ -75038,7 +75215,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -75054,7 +75231,10 @@
     "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> forall (t : unitInterval), (t : ℝ) ≠ 0 -> let n₀ := rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)); let n₁ := rightTubeCoreNormalComplex p.1; let w := zeroHeightSignedImaginaryWaypoint p; (‖coreNormalAffineLeg t n₀ w‖ ≤ (1 / 4 : ℝ) ∧ (coreNormalAffineLeg t n₀ w).im ≠ 0) ∧ (‖coreNormalAffineLeg t n₁ w‖ ≤ (1 / 4 : ℝ) ∧ (coreNormalAffineLeg t n₁ w).im ≠ 0)",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-zeroheight-specializedcorenor,
    :kind :lemma,
@@ -75062,4 +75242,119 @@
    [:lemma-constructiontargets-t02a03geometrictubedeformation-corenormalaffineleg-radius-an
     :lemma-constructiontargets-t02a03geometrictubedeformation-realendpoints-zeroheight-righ
     :lemma-constructiontargets-t02a03geometrictubedeformation-zeroheight-signedimaginaryway],
+   :other-consumers []}
+  {:consumer :t95A04,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "RealProjectiveVeroneseFibers.veroneseDescended_injective",
+    :type
+    "theorem veroneseDescended_injective : Function.Injective veroneseDescended  (codex-71 5ff76f9a0)"},
+   :lemma
+   {:name "RealProjectiveVeroneseFibers.veroneseDescended_injective",
+    :reported-by [:owner],
+    :type
+    "theorem veroneseDescended_injective : Function.Injective veroneseDescended  (codex-71 5ff76f9a0)",
+    :area "rp-smooth-atlas",
+    :proved-in :owner,
+    :banked-by :owner,
+    :banked-commit "5ff76f9a0"},
+   :id :lemma-realprojectiveveronesefibers-veronesedescended-injective,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t95A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "realProjectiveSpace_compact_t2",
+    :type
+    "instance : CompactSpace (Space ℝ 2); instance : T2Space (Space ℝ 2)  (frozen projective quotient; 80-180 lines with the embedding)"},
+   :lemma
+   {:name "realProjectiveSpace_compact_t2",
+    :reported-by [:owner],
+    :type
+    "instance : CompactSpace (Space ℝ 2); instance : T2Space (Space ℝ 2)  (frozen projective quotient; 80-180 lines with the embedding)",
+    :area "rp-smooth-atlas"},
+   :id :lemma-realprojectivespace-compact-t2,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t96A07]}
+  {:consumer :t95A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "veroneseDescended_isEmbedding",
+    :type
+    "theorem veroneseDescended_isEmbedding : Topology.IsEmbedding veroneseDescended"},
+   :lemma
+   {:name "veroneseDescended_isEmbedding",
+    :reported-by [:owner],
+    :type
+    "theorem veroneseDescended_isEmbedding : Topology.IsEmbedding veroneseDescended",
+    :area "rp-smooth-atlas"},
+   :id :lemma-veronesedescended-isembedding,
+   :kind :lemma,
+   :depends-on
+   [:lemma-realprojectivespace-compact-t2
+    :lemma-realprojectiveveronesefibers-veronesedescended-injective],
+   :other-consumers []}
+  {:consumer :t95A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "veroneseDescended_mfderiv_injective",
+    :type
+    "theorem veroneseDescended_mfderiv_injective (x : Space ℝ 2) : Function.Injective (mfderiv (𝓁 2) (𝓁 6) veroneseDescended x)  (150-300 lines)"},
+   :lemma
+   {:name "veroneseDescended_mfderiv_injective",
+    :reported-by [:owner],
+    :type
+    "theorem veroneseDescended_mfderiv_injective (x : Space ℝ 2) : Function.Injective (mfderiv (𝓁 2) (𝓁 6) veroneseDescended x)  (150-300 lines)",
+    :area "rp-smooth-atlas"},
+   :id :lemma-veronesedescended-mfderiv-injective,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t95A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "Manifold.isImmersion_of_injective_mfderiv",
+    :type
+    "finite-dimensional: a smooth map whose mfderiv is injective at every point is Manifold.IsImmersion I J ∞ f (Mathlib Geometry/Manifold/Immersion.lean lists this as TODO; needs the constant-rank / immersion local normal form; 300-800 lines). Alternative: an explicit Veronese local normal form."},
+   :lemma
+   {:name "Manifold.isImmersion_of_injective_mfderiv",
+    :reported-by [:owner],
+    :type
+    "finite-dimensional: a smooth map whose mfderiv is injective at every point is Manifold.IsImmersion I J ∞ f (Mathlib Geometry/Manifold/Immersion.lean lists this as TODO; needs the constant-rank / immersion local normal form; 300-800 lines). Alternative: an explicit Veronese local normal form.",
+    :area "immersion-from-injective-mfderiv"},
+   :id :lemma-manifold-isimmersion-of-injective-mfderiv,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t95A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "veroneseDescended_isImmersion",
+    :type
+    "theorem veroneseDescended_isImmersion : Manifold.IsImmersion (𝓁 2) (𝓁 6) ∞ veroneseDescended"},
+   :lemma
+   {:name "veroneseDescended_isImmersion",
+    :reported-by [:owner],
+    :type
+    "theorem veroneseDescended_isImmersion : Manifold.IsImmersion (𝓁 2) (𝓁 6) ∞ veroneseDescended",
+    :area "immersion-from-injective-mfderiv"},
+   :id :lemma-veronesedescended-isimmersion,
+   :kind :lemma,
+   :depends-on
+   [:lemma-manifold-isimmersion-of-injective-mfderiv
+    :lemma-veronesedescended-mfderiv-injective],
    :other-consumers []}]}

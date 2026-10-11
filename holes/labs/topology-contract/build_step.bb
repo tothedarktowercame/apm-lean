@@ -505,6 +505,48 @@
                 row)))
           items)))
 
+;; Backlog lemmas whose declaration already exists. codex-71 found
+;; (2026-10-11) the DAG listing rpSmoothAtlas and the smooth sphere descent
+;; as missing although both were banked in RealProjectiveSmoothTarget.lean:
+;; nodes are added from receipts' prose and nothing checks them against the
+;; code. A :backlog lemma is banked here when its last name segment is
+;; declared (theorem/lemma/def/instance/abbrev/structure) in a committed
+;; ConstructionTargets/*.lean file that has no sorry/admit/axiom.
+(defn- declared-in-targets [root]
+  (let [{:keys [out]} (shell/sh "git" "grep" "-n" "-E"
+                                "^[[:space:]]*(noncomputable[[:space:]]+)?(private[[:space:]]+|protected[[:space:]]+)?(theorem|lemma|def|instance|abbrev|structure)[[:space:]]+[^[:space:]:({]+"
+                                "HEAD" "--" "ConstructionTargets/*.lean" :dir root)
+        dirty (->> (:out (shell/sh "git" "grep" "-l" "-E" "(^|[^A-Za-z0-9_.])(sorry|admit)([^A-Za-z0-9_.]|$)|^[[:space:]]*axiom[[:space:]]"
+                                   "HEAD" "--" "ConstructionTargets/*.lean" :dir root))
+                   str/split-lines (map #(str/replace % #"^HEAD:" "")) set)]
+    (reduce (fn [m line]
+              (if-let [[_ f nm] (re-find #"^HEAD:([^:]+):\d+:.*?(?:theorem|lemma|def|instance|abbrev|structure)\s+([^\s:({]+)" line)]
+                (if (dirty f) m (update m (last (str/split nm #"\.")) (fnil conj #{}) f))
+                m))
+            {} (str/split-lines out))))
+(defn sync-banked [items]
+  (let [decl (delay (declared-in-targets (:canonical-root data)))]
+    (mapv #(if (and (= :lemma (:kind %)) (= :backlog (:state %)))
+             ;; Qualified names (Mod.decl, ConstructionTargets.Mod.decl) must
+             ;; be found in Mod.lean; an unqualified name must be declared in
+             ;; exactly one file. A bare last-segment match banked
+             ;; "normalization" from seven unrelated files.
+             (let [segs (remove #{"ConstructionTargets"}
+                                (str/split (str/trim (str (get-in % [:lemma :name]))) #"\."))
+                   nm (last segs)
+                   qual (when (< 1 (count segs)) (nth segs (- (count segs) 2)))
+                   cands (when (re-matches #"[A-Za-z_][A-Za-z0-9_']*" (str nm)) (get @decl nm))
+                   files (if qual
+                           (filter (fn [f] (= (str qual ".lean") (last (str/split f #"/")))) cands)
+                           (when (= 1 (count cands)) cands))]
+               (if (seq files)
+                 (-> % (assoc :state :banked)
+                     (assoc-in [:lemma :banked-by] :declaration-found)
+                     (assoc-in [:lemma :found-in] (vec (sort files))))
+                 %))
+             %)
+          items)))
+
 ;; A row parked (:needs-owner) because it named a missing theorem is never
 ;; looked at again once someone else proves that theorem. On 2026-10-11
 ;; codex-71 found t99j01-path-component-cover-package-1 still parked on
@@ -902,7 +944,10 @@
                                       (upsert-lemmas new-items
                                                       (concat (:missing-theorems receipt) (:lemmas receipt))
                                                       id))
-                               (= :pass outcome) (bank-lemmas id)))))
+                               (= :pass outcome) (bank-lemmas id)
+                               ;; after any PASS, also bank backlog lemmas
+                               ;; whose declarations the commit just added
+                               (= :pass outcome) (-> sync-banked reopen-for-banked)))))
       (println "applied" (name outcome) "to" (name id)))))
 
 (defn repair-dependencies! []
@@ -1017,6 +1062,10 @@
                    (println ";; AREAS across both loops (open problems served, lemmas, modules):")
                    (doseq [a (take 25 as)] (prn a))))
   "areas" (doseq [a (areas)] (prn a))
+  "sync-banked" (let [xs (reopen-for-banked (sync-banked items))
+                      n (- (count (filter #(= :banked (:state %)) xs)) (count (filter #(= :banked (:state %)) items)))]
+                  (write-ledger! (assoc data :items (unblock-ready xs)))
+                  (println "sync-banked:" n "backlog lemmas found declared and banked"))
   ;; Owner edits to the lemma DAG go through the same upsert and validation as
   ;; receipts: `add-lemmas LEDGER FILE`, FILE holding a vector of entries.
   "add-lemmas" (let [entries (edn/read-string (slurp (nth *command-line-args* 2)))]

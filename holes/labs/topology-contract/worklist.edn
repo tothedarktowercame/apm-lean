@@ -103833,7 +103833,9 @@
   {:bounded-exception
    "This single-consumer prerequisite supplies the exact carrier compatibility missing between the frozen aabb disk polygon and the banked square classification.",
    :consumer :t93J03,
-   :stop-count 2,
+   :owner-reopen
+   "reopened: a lemma this row reported missing is now banked",
+   :stop-count 0,
    :review-finding
    "The STOP supplies neither committed compiled progress nor a compiled refutation. ConstructionTargets/KleinDiskClosedSquareCompatibleCarrier.lean is absent, lake build ConstructionTargets.KleinDiskClosedSquareCompatibleCarrier fails with no such file, and the frozen fixture compiles only by declaring compatibleCarrierPackage as an axiom. The prose cyclic-adjacency argument is not the compiled refutation required for a correct STOP. State and prove the obstruction theorem in scope, compile it with standard axioms, and record that compiled refutation.",
    :implements-lemma
@@ -103917,7 +103919,7 @@
      :status :self-axiomatized},
     :seat "topo-2"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/KleinDiskClosedSquareCompatibleCarrier.lean"],
    :dag-node
@@ -103948,7 +103950,7 @@
    :routes-2026-10-11-klein-disk-closed-square-compatible-carrier-87,
    :kind :representation-comparison,
    :area "polygon-quotient-identification",
-   :fail-count 1,
+   :fail-count 0,
    :depends-on [:lemma-kleinsquareeqvgencasesiff-eqvgen-iff-cases],
    :current-residual
    "Use the compatible carrier package to descend the compiled quotient homeomorphism, then prove the Klein orbit quotient comparison.",
@@ -107275,7 +107277,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -107285,7 +107287,10 @@
     "GenericPointWedgeOpenCoverComparison.genericPointWedgeCoverPackage",
     :reported-by
     [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
-    :area "van-kampen-two-open-group"},
+    :area "van-kampen-two-open-group",
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/GenericPointWedgeOpenCoverComparison.lean"]},
    :id
    :lemma-genericpointwedgeopencovercomparison-genericpointwedgecoverpackage,
    :kind :lemma,
@@ -107342,7 +107347,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -107352,7 +107357,9 @@
     "RadialQuotientOpenSets.preimage_image_eq_of_eqvGen_invariant",
     :reported-by
     [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
-    :area "polygon-surface-open-cover"},
+    :area "polygon-surface-open-cover",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/RadialQuotientOpenSets.lean"]},
    :id
    :lemma-radialquotientopensets-preimage-image-eq-of-eqvgen-invariant,
    :kind :lemma,
@@ -107360,7 +107367,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "RadialQuotientOpenSets.eqvGen_preserves_of_rel_preserves"},
@@ -107368,7 +107375,9 @@
    {:name "RadialQuotientOpenSets.eqvGen_preserves_of_rel_preserves",
     :reported-by
     [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
-    :area "polygon-surface-open-cover"},
+    :area "polygon-surface-open-cover",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/RadialQuotientOpenSets.lean"]},
    :id :lemma-radialquotientopensets-eqvgen-preserves-of-rel-preserves,
    :kind :lemma,
    :depends-on [],
@@ -107537,14 +107546,16 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance {:lemma "PolygonRadialOpenCover.outerSource"},
    :lemma
    {:name "PolygonRadialOpenCover.outerSource",
     :reported-by
     [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
-    :area "polygon-surface-open-cover"},
+    :area "polygon-surface-open-cover",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/PolygonRadialOpenCover.lean"]},
    :id :lemma-polygonradialopencover-outersource,
    :kind :lemma,
    :depends-on [],
@@ -107599,14 +107610,16 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance {:lemma "RadialQuotientOpenSets.norm_edgePoint"},
    :lemma
    {:name "RadialQuotientOpenSets.norm_edgePoint",
     :reported-by
     [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
-    :area "polygon-surface-open-cover"},
+    :area "polygon-surface-open-cover",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/RadialQuotientOpenSets.lean"]},
    :id :lemma-radialquotientopensets-norm-edgepoint,
    :kind :lemma,
    :depends-on [],
@@ -107679,7 +107692,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "PolygonOuterRadialDeformation.continuous_radialHomotopy"},
@@ -107687,7 +107700,10 @@
    {:name "PolygonOuterRadialDeformation.continuous_radialHomotopy",
     :reported-by
     [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
-    :area "polygon-surface-open-cover"},
+    :area "polygon-surface-open-cover",
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/PolygonOuterRadialDeformation.lean"]},
    :id :lemma-polygonouterradialdeformation-continuous-radialhomotopy,
    :kind :lemma,
    :depends-on [],
@@ -107744,14 +107760,16 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance {:lemma "PolygonRadialOpenCover.outerOpen_isOpen"},
    :lemma
    {:name "PolygonRadialOpenCover.outerOpen_isOpen",
     :reported-by
     [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
-    :area "polygon-surface-open-cover"},
+    :area "polygon-surface-open-cover",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/PolygonRadialOpenCover.lean"]},
    :id :lemma-polygonradialopencover-outeropen-isopen,
    :kind :lemma,
    :depends-on [],
@@ -107860,14 +107878,16 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance {:lemma "PolygonRadialOpenCover.overlapOpen_eq_inter"},
    :lemma
    {:name "PolygonRadialOpenCover.overlapOpen_eq_inter",
     :reported-by
     [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
-    :area "polygon-surface-open-cover"},
+    :area "polygon-surface-open-cover",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/PolygonRadialOpenCover.lean"]},
    :id :lemma-polygonradialopencover-overlapopen-eq-inter,
    :kind :lemma,
    :depends-on [],
@@ -108273,7 +108293,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "TorusCircleWedgeOpenCover.pointedWedgeHomeomorph"},
@@ -108281,7 +108301,9 @@
    {:name "TorusCircleWedgeOpenCover.pointedWedgeHomeomorph",
     :reported-by
     [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
-    :area "van-kampen-two-open-group"},
+    :area "van-kampen-two-open-group",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/TorusCircleWedgeOpenCover.lean"]},
    :id :lemma-toruscirclewedgeopencover-pointedwedgehomeomorph,
    :kind :lemma,
    :depends-on [],
@@ -108633,7 +108655,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -108643,7 +108665,10 @@
     "IntervalEndpointQuotientCircle.intervalQuotientMap_zero_eq_one",
     :reported-by
     [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
-    :area "polygon-surface-open-cover"},
+    :area "polygon-surface-open-cover",
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/IntervalEndpointQuotientCircle.lean"]},
    :id
    :lemma-intervalendpointquotientcircle-intervalquotientmap-zero-eq-one,
    :kind :lemma,
@@ -109411,7 +109436,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -109421,7 +109446,10 @@
     "PolygonBoundaryVertexClasses.circleEdgePoint_one_eq_succ_zero",
     :reported-by
     [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
-    :area "polygon-surface-open-cover"},
+    :area "polygon-surface-open-cover",
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/PolygonBoundaryVertexClasses.lean"]},
    :id
    :lemma-polygonboundaryvertexclasses-circleedgepoint-one-eq-succ-zero,
    :kind :lemma,
@@ -109449,7 +109477,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "PolygonSixEdgeCircleCover.circleEdgePoint_eq_toCircle"},
@@ -109457,7 +109485,9 @@
    {:name "PolygonSixEdgeCircleCover.circleEdgePoint_eq_toCircle",
     :reported-by
     [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
-    :area "polygon-surface-open-cover"},
+    :area "polygon-surface-open-cover",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/PolygonSixEdgeCircleCover.lean"]},
    :id :lemma-polygonsixedgecirclecover-circleedgepoint-eq-tocircle,
    :kind :lemma,
    :depends-on [],
@@ -109772,7 +109802,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -109782,7 +109812,10 @@
     "PolygonBoundaryCircleDecoderWellDefined.n3CircleDecode_edge",
     :reported-by
     [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
-    :area "polygon-surface-open-cover"},
+    :area "polygon-surface-open-cover",
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/PolygonBoundaryCircleDecoderWellDefined.lean"]},
    :id
    :lemma-polygonboundarycircledecoderwelldefined-n3circledecode-edge,
    :kind :lemma,
@@ -109790,7 +109823,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -109800,7 +109833,10 @@
     "PolygonBoundaryCircleDecoderWellDefined.torusCrosscapCircleDecode_edge",
     :reported-by
     [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
-    :area "polygon-surface-open-cover"},
+    :area "polygon-surface-open-cover",
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/PolygonBoundaryCircleDecoderWellDefined.lean"]},
    :id
    :lemma-polygonboundarycircledecoderwelldefined-toruscrosscapcircledecode-edge,
    :kind :lemma,
@@ -110020,7 +110056,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "polygonBoundaryCompactHausdorffInstances",
@@ -110032,7 +110068,10 @@
     [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
     :type
     "CompactSpace ThreeEndpointLoops ∧ T2Space (CircleQuotient (SurfaceRel false 3)) ∧ T2Space (CircleQuotient TorusCrosscapRel)",
-    :area "polygon-surface-open-cover"},
+    :area "polygon-surface-open-cover",
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/PolygonBoundaryCompactHausdorffInstances.lean"]},
    :id :lemma-polygonboundarycompacthausdorffinstances,
    :kind :lemma,
    :depends-on
@@ -110152,21 +110191,23 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance {:lemma "frozenTorusHomeomorphBoundaryTorus"},
    :lemma
    {:name "frozenTorusHomeomorphBoundaryTorus",
     :reported-by
     [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
-    :area "mv-connecting-naturality"},
+    :area "mv-connecting-naturality",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"]},
    :id :lemma-frozentorushomeomorphboundarytorus,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -110176,7 +110217,9 @@
     "ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusH1GroupIsoFinTwo",
     :reported-by
     [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
-    :area "mv-connecting-naturality"},
+    :area "mv-connecting-naturality",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"]},
    :id
    :lemma-constructiontargets-t97a04frozenh1coordinate-frozentorush1groupisofintwo,
    :kind :lemma,
@@ -110184,7 +110227,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -110194,7 +110237,10 @@
     "ConstructionTargets.TorusPiOneWindingCoordinates.frozenLbarPi1Map_naturality",
     :reported-by
     [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
-    :area "mv-connecting-naturality"},
+    :area "mv-connecting-naturality",
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/TorusPiOneWindingCoordinates.lean"]},
    :id
    :lemma-constructiontargets-toruspionewindingcoordinates-frozenlbarpi1map-naturality,
    :kind :lemma,
@@ -110202,7 +110248,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -110212,7 +110258,9 @@
     "ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusAlignedH1MulEquivFinTwo",
     :reported-by
     [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
-    :area "mv-connecting-naturality"},
+    :area "mv-connecting-naturality",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/T97A04FrozenH1Coordinate.lean"]},
    :id
    :lemma-constructiontargets-t97a04frozenh1coordinate-frozentorusalignedh1mulequivfintwo,
    :kind :lemma,
@@ -110220,7 +110268,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -110230,7 +110278,10 @@
     "ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison_naturality",
     :reported-by
     [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
-    :area "mv-connecting-naturality"},
+    :area "mv-connecting-naturality",
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/IntegralSingularHomologyComparison.lean"]},
    :id
    :lemma-constructiontargets-integralsingularhomologycomparison-singularhomologycompariso,
    :kind :lemma,
@@ -110238,7 +110289,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -110248,7 +110299,9 @@
     "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_circleMeridian_mem_geometricY",
     :reported-by
     [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
-    :area "geometric-tube-deformation"},
+    :area "geometric-tube-deformation",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/T02A03GeometricTubeCover.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubecover-apm-t02a03-circlemeridian-mem-geome,
    :kind :lemma,
@@ -110256,7 +110309,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -110266,7 +110319,9 @@
     "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_origin_mem_both_cores",
     :reported-by
     [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
-    :area "geometric-tube-deformation"},
+    :area "geometric-tube-deformation",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/T02A03GeometricTubeCover.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubecover-apm-t02a03-origin-mem-both-cores,
    :kind :lemma,
@@ -110274,7 +110329,7 @@
    :other-consumers []}
   {:consumer :t95A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -110284,7 +110339,9 @@
     "ConstructionTargets.RealProjectiveSmoothTarget.sphereProjectionQuotientAuthority",
     :reported-by
     [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
-    :area "rp-smooth-atlas"},
+    :area "rp-smooth-atlas",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/RealProjectiveSmoothTarget.lean"]},
    :id
    :lemma-constructiontargets-realprojectivesmoothtarget-sphereprojectionquotientauthority,
    :kind :lemma,
@@ -110292,7 +110349,7 @@
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -110302,7 +110359,9 @@
     "ConstructionTargets.RealProjectiveSmoothTarget.sphereProjection_eq_iff",
     :reported-by
     [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
-    :area "rp-smooth-atlas"},
+    :area "rp-smooth-atlas",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/RealProjectiveSmoothTarget.lean"]},
    :id
    :lemma-constructiontargets-realprojectivesmoothtarget-sphereprojection-eq-iff,
    :kind :lemma,
@@ -110310,7 +110369,7 @@
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -110320,7 +110379,9 @@
     "ConstructionTargets.RealProjectiveSmoothTarget.rpSmoothAtlas",
     :reported-by
     [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
-    :area "rp-smooth-atlas"},
+    :area "rp-smooth-atlas",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/RealProjectiveSmoothTarget.lean"]},
    :id
    :lemma-constructiontargets-realprojectivesmoothtarget-rpsmoothatlas,
    :kind :lemma,
@@ -110345,7 +110406,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -110355,7 +110416,10 @@
     "ConstructionTargets.T02A03GeometricTubeDeformation.rightTube_exists_near_rightCore",
     :reported-by
     [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
-    :area "geometric-tube-deformation"},
+    :area "geometric-tube-deformation",
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-righttube-exists-near-rightco,
    :kind :lemma,
@@ -110363,7 +110427,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -110373,7 +110437,10 @@
     "ConstructionTargets.T02A03GeometricTubeDeformation.range_rightCoreCircle",
     :reported-by
     [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
-    :area "geometric-tube-deformation"},
+    :area "geometric-tube-deformation",
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-range-rightcorecircle,
    :kind :lemma,
@@ -110381,7 +110448,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -110391,7 +110458,10 @@
     "ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison",
     :reported-by
     [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
-    :area "manifold-fundamental-class"},
+    :area "manifold-fundamental-class",
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/IntegralSingularHomologyComparison.lean"]},
    :id
    :lemma-constructiontargets-integralsingularhomologycomparison-singularhomologycomparison-full,
    :kind :lemma,
@@ -110399,7 +110469,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t97J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -110409,7 +110479,9 @@
     "ConstructionTargets.SurfaceNestedTriangleCover.finite_nested",
     :reported-by
     [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
-    :area "surface-classification"},
+    :area "surface-classification",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/SurfaceNestedTriangleCover.lean"]},
    :id
    :lemma-constructiontargets-surfacenestedtrianglecover-finite-nested,
    :kind :lemma,
@@ -110417,7 +110489,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -110427,7 +110499,9 @@
     "ConstructionTargets.HigherChartLocalGenerator.ambientChartMap_Hn_isIso",
     :reported-by
     [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
-    :area "manifold-fundamental-class"},
+    :area "manifold-fundamental-class",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/HigherChartLocalGenerator.lean"]},
    :id
    :lemma-constructiontargets-higherchartlocalgenerator-ambientchartmap-hn-isiso,
    :kind :lemma,
@@ -110435,7 +110509,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -110444,7 +110518,9 @@
    {:name "ConstructionTargets.HigherModelLocalHomology.normalization",
     :reported-by
     [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
-    :area "manifold-fundamental-class"},
+    :area "manifold-fundamental-class",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/HigherModelLocalHomology.lean"]},
    :id
    :lemma-constructiontargets-highermodellocalhomology-normalization,
    :kind :lemma,
@@ -110452,7 +110528,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -110462,7 +110538,10 @@
     "ConstructionTargets.CoefficientDistinguishedNormalization.distinguished",
     :reported-by
     [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
-    :area "manifold-fundamental-class"},
+    :area "manifold-fundamental-class",
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/CoefficientDistinguishedNormalization.lean"]},
    :id
    :lemma-constructiontargets-coefficientdistinguishednormalization-distinguished,
    :kind :lemma,
@@ -110470,7 +110549,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -110480,7 +110559,10 @@
     "ConstructionTargets.IntegralSingularHomologyComparison.singularChainsComparison_naturality",
     :reported-by
     [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
-    :area "manifold-fundamental-class"},
+    :area "manifold-fundamental-class",
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/IntegralSingularHomologyComparison.lean"]},
    :id
    :lemma-constructiontargets-integralsingularhomologycomparison-singularchainscomparison-,
    :kind :lemma,
@@ -110502,7 +110584,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -110512,7 +110594,9 @@
     "ConstructionTargets.SingularHomologyConcrete.relativeSingularChainsIsoCokernelSubspaceMap",
     :reported-by
     [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
-    :area "manifold-fundamental-class"},
+    :area "manifold-fundamental-class",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/SingularHomologyConcrete.lean"]},
    :id
    :lemma-constructiontargets-singularhomologyconcrete-relativesingularchainsisocokernelsu,
    :kind :lemma,
@@ -110538,7 +110622,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -110548,7 +110632,9 @@
     "ConstructionTargets.CoefficientChartLocal.generator_normalization",
     :reported-by
     [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
-    :area "manifold-fundamental-class"},
+    :area "manifold-fundamental-class",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/CoefficientChartLocal.lean"]},
    :id
    :lemma-constructiontargets-coefficientchartlocal-generator-normalization,
    :kind :lemma,
@@ -110556,7 +110642,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -110566,7 +110652,9 @@
     "ConstructionTargets.SingularExcision.relativeProjection_comp_cokernelIso_hom",
     :reported-by
     [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
-    :area "manifold-fundamental-class"},
+    :area "manifold-fundamental-class",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/SingularExcision.lean"]},
    :id
    :lemma-constructiontargets-singularexcision-relativeprojection-comp-cokerneliso-hom,
    :kind :lemma,
@@ -110592,7 +110680,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -110602,7 +110690,9 @@
     "ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport",
     :reported-by
     [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
-    :area "manifold-fundamental-class"},
+    :area "manifold-fundamental-class",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/ManifoldFundamentalClass.lean"]},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-integralrelativechainscomparisonwit,
    :kind :lemma,
@@ -110632,7 +110722,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -110648,7 +110738,10 @@
     "No function Disk -> ClosedSquare satisfies all four corresponding edgePoint-to-squareEdge coordinate formulas",
     :area "polygon-quotient-identification",
     :proved-in
-    :routes-2026-10-11-klein-disk-closed-square-compatible-carrier-87},
+    :routes-2026-10-11-klein-disk-closed-square-compatible-carrier-87,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/KleinDiskClosedSquareCompatibleCarrier.lean"]},
    :id
    :lemma-kleindiskclosedsquarecompatiblecarrier-no-carrier-with-required-boundary-formula,
    :kind :lemma,
@@ -110820,7 +110913,7 @@
    :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -110830,7 +110923,10 @@
     "ConstructionTargets.IntegralSingularHomologyComparison.moduleIsoOfUnderlyingIso",
     :reported-by
     [:routes-2026-10-11-checkpoint-topo1-after-klein-and-wedge-coordinates-86],
-    :area "manifold-fundamental-class"},
+    :area "manifold-fundamental-class",
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/IntegralSingularHomologyComparison.lean"]},
    :id
    :lemma-constructiontargets-integralsingularhomologycomparison-moduleisoofunderlyingiso,
    :kind :lemma,
@@ -110838,7 +110934,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -110848,7 +110944,10 @@
     "ConstructionTargets.CoefficientChartTransitionUnit.isoUnit_action",
     :reported-by
     [:routes-2026-10-11-checkpoint-topo1-after-klein-and-wedge-coordinates-86],
-    :area "manifold-fundamental-class"},
+    :area "manifold-fundamental-class",
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/CoefficientChartTransitionUnit.lean"]},
    :id
    :lemma-constructiontargets-coefficientcharttransitionunit-isounit-action,
    :kind :lemma,
@@ -110856,7 +110955,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -110866,7 +110965,9 @@
     "ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient",
     :reported-by
     [:routes-2026-10-11-checkpoint-topo1-after-klein-and-wedge-coordinates-86],
-    :area "manifold-fundamental-class"},
+    :area "manifold-fundamental-class",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/ManifoldFundamentalClass.lean"]},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-correctedlocalgeneratorcoefficient,
    :kind :lemma,
@@ -110874,7 +110975,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -110884,7 +110985,9 @@
     "ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism",
     :reported-by
     [:routes-2026-10-11-checkpoint-topo1-after-klein-and-wedge-coordinates-86],
-    :area "manifold-fundamental-class"},
+    :area "manifold-fundamental-class",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/ManifoldFundamentalClass.lean"]},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-correctedlocalnormalizationautomorp,
    :kind :lemma,
@@ -110892,7 +110995,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -110902,7 +111005,9 @@
     "ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorUnit",
     :reported-by
     [:routes-2026-10-11-checkpoint-topo1-after-klein-and-wedge-coordinates-86],
-    :area "manifold-fundamental-class"},
+    :area "manifold-fundamental-class",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/ManifoldFundamentalClass.lean"]},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-correctedlocalgeneratorunit,
    :kind :lemma,
