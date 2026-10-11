@@ -104379,6 +104379,38 @@
    "After boundary-cycle transport, prove that relation compatibility conjugates diskPaired to squarePaired, yielding the full cyclic component obstruction.",
    :other-consumers []}
   {:bounded-exception
+   "This single-consumer classification is the next missing geometric input after the banked generic connected-component transport.",
+   :consumer :t93J03,
+   :implements-lemma :lemma-relationlocushasfourcomponents,
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/KleinCompatibleCarrierComponentBridge.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t93J03/relation-locus-four-components",
+   :acceptance
+   {:implementation
+    "Define the disk and square intrinsic loci of points whose generated-relation class contains a distinct point. Prove that each locus has exactly four connected components by explicit equivalences ConnectedComponents DiskRelationLocus ≃ Fin 4 and ConnectedComponents SquareRelationLocus ≃ Fin 4. Use the concrete boundary stratifications; do not yet prove cyclic-incidence preservation, pairing conjugacy, quotient comparison, or close t93J03.",
+    :placeholder "the single sorry in apm_t93j03",
+    :route-step
+    "identify the four intrinsic open-boundary components on both carrier models",
+    :fixture "/tmp/klein-relation-locus-four-components-probe.lean",
+    :fixture-sha256
+    "31c9bacd79d7cd7c879cdc782bcc02318446b80645a33f70ac14a54f5aa65fdc",
+    :gates
+    ["lake build ConstructionTargets.KleinCompatibleCarrierComponentBridge"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-11-klein-relation-locus-four-components-108,
+   :kind :reusable-theorem,
+   :area "polygon-quotient-identification",
+   :depends-on [],
+   :current-residual
+   "Use relation compatibility to restrict the carrier homeomorphism to these loci, transport their four components, and prove cyclic incidence and pairing conjugacy.",
+   :other-consumers []}
+  {:bounded-exception
    "This single-consumer comparison is the nearer of the two remaining t93J03 lemmas.",
    :consumer :t93J03,
    :owner-reopen
@@ -104391,103 +104423,111 @@
    :evidence
    {:probe
     {:residual
-     "Prove intrinsic boundary-cycle transport, then establish pairing conjugacy and compile the standard-only carrier refutation.",
+     "Classify both intrinsic relation loci into four components, then transport cyclic incidence and pairing before constructing the quotient presentation comparison.",
      :outcome :revise,
      :warnings
-     [{:kind :ledger-source-incoherence,
+     [{:kind :partial-banked-predecessor,
        :message
-       "The ledger marks compatibleCarrierHomeomorphInducesCyclicComponentEquiv banked, but scoped source object 80f4f77dbe413fef4f246b1ea5fcfb99ebac8d2e exports neither that theorem nor no_relation_compatible_carrier."}],
+       "The scoped source now banks connectedComponentsEquivOfHomeomorph, but still exports neither compatibleCarrierHomeomorphInducesBoundaryCycleEquiv nor the stronger cyclic component bridge."}
+      {:kind :dirty-worktree,
+       :message
+       "ConstructionTargets/T02A03GeometricTubeDeformation.lean has an unrelated concurrent modification and was left untouched."}],
      :missing-theorems
-     [{:name "compatibleCarrierHomeomorphInducesBoundaryCycleEquiv",
+     [{:name "relationLocusHasFourComponents",
        :type
-       "Every homeomorphism h : Disk ≃ₜ ClosedSquare that preserves and reflects EqvGen (SurfaceRel false 2) and EqvGen ClosedSquareRel induces e : Fin 4 ≃ Fin 4 preserving diskAdjacent and squareAdjacent.",
+       "The intrinsic nontrivial generated-relation loci in Disk and ClosedSquare each have connected-component quotient equivalent to Fin 4.",
        :status :not-started,
        :consumers [:t93J03],
-       :depends-on
-       ["ConstructionTargets.KleinCompatibleCarrierComponentBridge.image_diskClass_eq_squareClass"
-        "ConstructionTargets.KleinCompatibleCarrierComponentBridge.exists_distinct_related_iff"],
+       :depends-on [],
        :area "polygon-quotient-identification"}],
      :prerequisite
      {:bounded-exception
-      "This single-consumer theorem isolates the first geometric implication absent from the scoped source despite the stronger ledger lemma being marked banked.",
+      "This single-consumer classification is the next missing geometric input after the banked generic connected-component transport.",
       :consumer :t93J03,
-      :implements-lemma
-      :lemma-compatiblecarrierhomeomorphinducesboundarycycleequiv,
+      :implements-lemma :lemma-relationlocushasfourcomponents,
       :phase :implementation,
       :state :open,
       :scope
       ["ConstructionTargets/KleinCompatibleCarrierComponentBridge.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t93J03/compatible-carrier-boundary-cycle-equiv",
+      "TOPOLOGY-ROUTES.md/t93J03/relation-locus-four-components",
       :acceptance
       {:implementation
-       "Prove that every relation-compatible homeomorphism from Disk to ClosedSquare induces an equivalence of Fin 4 preserving diskAdjacent and squareAdjacent. Build this from intrinsic open-boundary-component characterizations and the existing relation-class transport lemmas; do not assume fixed edge formulas, assert the full pairing conjugacy, construct quotient maps, or close t93J03.",
+       "Define the disk and square intrinsic loci of points whose generated-relation class contains a distinct point. Prove that each locus has exactly four connected components by explicit equivalences ConnectedComponents DiskRelationLocus ≃ Fin 4 and ConnectedComponents SquareRelationLocus ≃ Fin 4. Use the concrete boundary stratifications; do not yet prove cyclic-incidence preservation, pairing conjugacy, quotient comparison, or close t93J03.",
        :placeholder "the single sorry in apm_t93j03",
        :route-step
-       "transport the cyclic incidence graph of the four open boundary components",
-       :fixture
-       "/tmp/klein-compatible-carrier-boundary-cycle-equiv-probe.lean",
+       "identify the four intrinsic open-boundary components on both carrier models",
+       :fixture "/tmp/klein-relation-locus-four-components-probe.lean",
        :fixture-sha256
-       "27e9795c2084cf79d25410bcf238ad301a7bb361c84626e9c5aa805ce5a5b9a4",
+       "31c9bacd79d7cd7c879cdc782bcc02318446b80645a33f70ac14a54f5aa65fdc",
        :gates
        ["lake build ConstructionTargets.KleinCompatibleCarrierComponentBridge"
         "fixture compiles"
         "zero source and fixture sorry"
         "standard-only axioms"
         "registry check"]},
-      :id
-      :routes-2026-10-11-compatible-carrier-boundary-cycle-equiv-107,
+      :id :routes-2026-10-11-klein-relation-locus-four-components-108,
       :kind :reusable-theorem,
       :area "polygon-quotient-identification",
       :depends-on [],
       :current-residual
-      "After boundary-cycle transport, prove that relation compatibility conjugates diskPaired to squarePaired, yielding the full cyclic component obstruction.",
+      "Use relation compatibility to restrict the carrier homeomorphism to these loci, transport their four components, and prove cyclic incidence and pairing conjugacy.",
       :other-consumers []},
      :axioms
      ["propext"
       "Classical.choice"
       "Quot.sound"
-      "KleinCompatibleCarrierBoundaryCycleEquivProbe.compatibleCarrierHomeomorphInducesBoundaryCycleEquiv"],
+      "KleinRelationLocusFourComponentsProbe.relationLocusHasFourComponents"],
      :commands
      [{:cmd
-       "lake env lean /tmp/klein-compatible-carrier-boundary-cycle-equiv-probe.lean",
+       "lake env lean /tmp/klein-relation-locus-four-components-probe.lean",
        :exit 0,
        :finding
-       "The isolated boundary-cycle prerequisite compiles and its only nonstandard axiom is compatibleCarrierHomeomorphInducesBoundaryCycleEquiv."}
+       "The exact four-component classification interface compiles with one isolated nonstandard axiom."}
       {:cmd
-       "sha256sum /tmp/klein-compatible-carrier-boundary-cycle-equiv-probe.lean",
+       "sha256sum /tmp/klein-relation-locus-four-components-probe.lean",
        :exit 0,
        :finding
-       "Fixture hash is 27e9795c2084cf79d25410bcf238ad301a7bb361c84626e9c5aa805ce5a5b9a4."}
+       "Fixture hash is 31c9bacd79d7cd7c879cdc782bcc02318446b80645a33f70ac14a54f5aa65fdc."}
       {:cmd
        "git hash-object ConstructionTargets/KleinCompatibleCarrierComponentBridge.lean",
        :exit 0,
        :finding
-       "Scoped source remains object 80f4f77dbe413fef4f246b1ea5fcfb99ebac8d2e."}
-      {:cmd
-       "rg -n '^(theorem|def) (image_diskClass_eq_squareClass|exists_distinct_related_iff|compatibleCarrierHomeomorphInducesCyclicComponentEquiv|no_relation_compatible_carrier)' ConstructionTargets/KleinCompatibleCarrierComponentBridge.lean",
-       :exit 0,
-       :finding
-       "Only image_diskClass_eq_squareClass and exists_distinct_related_iff are exported; the ledger-banked bridge is absent."}
+       "Scoped source object is a587a0762da2ed087ad66411ce4d1cb734543e0f."}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :finding "131 registered statements match, 0 do not."}
-      {:cmd
-       "sed -n '1,240p' TOPOLOGY-ROUTES.md >/dev/null && sed -n '1,240p' holes/labs/topology-routes/routes-1.md >/dev/null && sed -n '1,240p' holes/labs/topology-routes/routes-2.md >/dev/null && sed -n '1,240p' holes/labs/topology-routes/routes-3.md >/dev/null && sed -n '1,220p' docs/TN-topology-build-loop-design.md >/dev/null",
+      {:cmd "sed route guides and build-loop design",
        :exit 0,
-       :finding "Required route and probe documents were reread."}
+       :finding
+       "TOPOLOGY-ROUTES.md, all three route files, and the build-loop design were reread."}
       {:cmd "git status --short",
        :exit 0,
-       :finding "Clean worktree; probe was read-only."}],
-     :diagnostic-history [],
+       :finding
+       "ConstructionTargets/T02A03GeometricTubeDeformation.lean is modified by concurrent work; this probe changed no repository file."}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/klein-relation-locus-four-components-probe.lean",
+       :exit 1,
+       :finding
+       "Opaque def aliases did not expose subtype TopologicalSpace instances to synthesis.",
+       :correction
+       "Changed the fixture-only locus aliases to abbrev; the successful compile is recorded in commands."}],
      :fixture
-     {:path
-      "/tmp/klein-compatible-carrier-boundary-cycle-equiv-probe.lean",
+     {:path "/tmp/klein-relation-locus-four-components-probe.lean",
       :sha256
-      "27e9795c2084cf79d25410bcf238ad301a7bb361c84626e9c5aa805ce5a5b9a4"},
+      "31c9bacd79d7cd7c879cdc782bcc02318446b80645a33f70ac14a54f5aa65fdc"},
+     :lemmas
+     [{:name "relationLocusHasFourComponents",
+       :type
+       "The intrinsic nontrivial generated-relation loci in Disk and ClosedSquare each have connected-component quotient equivalent to Fin 4.",
+       :status :not-started,
+       :consumers [:t93J03],
+       :depends-on [],
+       :area "polygon-quotient-identification"}],
      :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-aabb-square-polygon-presentation-equivalence",
@@ -104518,7 +104558,8 @@
     :routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40
     :routes-2026-10-11-klein-disk-closed-square-relation-compatible-carrier-101
     :routes-2026-10-11-compatible-carrier-component-bridge-103
-    :routes-2026-10-11-compatible-carrier-boundary-cycle-equiv-107],
+    :routes-2026-10-11-compatible-carrier-boundary-cycle-equiv-107
+    :routes-2026-10-11-klein-relation-locus-four-components-108],
    :current-residual
    "Use the presentation comparison in the Klein orbit quotient homeomorphism, then close t93J03.",
    :other-consumers []}
@@ -112701,6 +112742,25 @@
    :id :lemma-kleinboundarycomponentclosureincidence,
    :kind :lemma,
    :depends-on [:lemma-kleinpuncturedboundarycomponentsequivfinfour],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "relationLocusHasFourComponents",
+    :type
+    "The intrinsic nontrivial generated-relation loci in Disk and ClosedSquare each have connected-component quotient equivalent to Fin 4."},
+   :lemma
+   {:name "relationLocusHasFourComponents",
+    :reported-by
+    [:routes-2026-10-11-klein-aabb-square-polygon-presentation-equivalence-83],
+    :type
+    "The intrinsic nontrivial generated-relation loci in Disk and ClosedSquare each have connected-component quotient equivalent to Fin 4.",
+    :area "polygon-quotient-identification"},
+   :id :lemma-relationlocushasfourcomponents,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
