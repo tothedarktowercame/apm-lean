@@ -79332,11 +79332,23 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "Main placeholder count", :exit 0, :output "2"}
      {:cmd "git show --check c9b1ad24a", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791747459779-5827-4a984448",
+     :commands
+     ["git show/diff/check c9b1ad24"
+      "lake env lean ConstructionTargets/t97A04Closure.lean"
+      "lake env lean problems/t97A04/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "fingerprint, placeholder, ancestry, fixture checks"],
+     :finding
+     "PASS: c9b1ad24 is new after history 2f947655; its sole changed path is scoped and closure/blueprint blobs match. Forward/inverse continuous maps, cover and intersection MapsTo proofs, and inverse identities faithfully expose the existing frozen-boundary homeomorphism for blueprint B7; domain and codomain representations are correct. Lean gates pass with standard axioms; registry 131/0; frozen hash ca1b2cb3c6594276811618321d5c0604c2f38fc4594a6b21ae161a711a923a34 unchanged; closure/Main placeholders 0/2. This is new compiled progress; short-complex iso, K monicity/cancellation, then B8-B11 remain listed."},
     :commit "c9b1ad24a4a4cb149ffeaf672a728febefee879b",
     :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79462,6 +79474,9 @@
      :reason :program-progress-committed}
     {:job 8,
      :commit "2f947655861eac141828e5fb9b5eb7cca4e74de6",
+     :reason :program-progress-committed}
+    {:job 9,
+     :commit "c9b1ad24a4a4cb149ffeaf672a728febefee879b",
      :reason :program-progress-committed}]}
   {:consumer :t96A07,
    :stop-count 3,
@@ -80699,7 +80714,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -80711,7 +80726,9 @@
     :reported-by [:program-2026-10-11-close-t97a04],
     :type "ambient inverse maps transport U,V,and intersection",
     :area "mv-connecting-naturality",
-    :proved-in :program-2026-10-11-close-t97a04},
+    :proved-in :program-2026-10-11-close-t97a04,
+    :banked-by :program-2026-10-11-close-t97a04,
+    :banked-commit "c9b1ad24a4a4cb149ffeaf672a728febefee879b"},
    :id
    :lemma-constructiontargets-t97a04closure-frozenboundarycovertransport,
    :kind :lemma,
