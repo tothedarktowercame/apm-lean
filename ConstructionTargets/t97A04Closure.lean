@@ -210,6 +210,36 @@ theorem twoCircleOverlapShear_eq_transport (a b : ℤ) :
         ((boundaryOverlapShear a b).comp
           overlapHomotopyEquivTwoCircles.invFun) := rfl
 
+/-- The integer power map which remains on either overlap component after
+the constant translation in the shear is removed. -/
+def circleZPow (a : ℤ) : C(Circle, Circle) :=
+  ⟨fun z ↦ z ^ a, by fun_prop⟩
+
+/-- A translated integer power map on the circle. -/
+def circleAffine (a : ℤ) (c : Circle) : C(Circle, Circle) :=
+  ⟨fun z ↦ c * z ^ a, by fun_prop⟩
+
+/-- Translation does not affect the degree of an integer power map. -/
+def circleAffineHomotopy (a : ℤ) (c : Circle) :
+    ContinuousMap.Homotopy (circleZPow a) (circleAffine a c) where
+  toFun tz := Circle.exp ((tz.1 : ℝ) * Complex.arg (c : ℂ)) * tz.2 ^ a
+  continuous_toFun := by fun_prop
+  map_zero_left z := by simp [circleZPow]
+  map_one_left z := by simp [circleAffine, Circle.exp_arg]
+
+theorem circleAffine_H1_eq_zpow (a : ℤ) (c : Circle) :
+    HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularSubdivision.singularPostcomposition
+          (circleAffine a c)) 1 =
+      HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularSubdivision.singularPostcomposition
+          (circleZPow a)) 1 := by
+  let H := circleAffineHomotopy a c
+  exact (singularHomology_map_eq_of_topCatHomotopy
+    (continuousMapHomotopyCylinder H)
+    (continuousMapHomotopyCylinder_zero H)
+    (continuousMapHomotopyCylinder_one H) 1).symm
+
 private noncomputable def shearYIntersectionMap (a b : ℤ) :=
   (ambientIntersectionRangeChainsIso frozenYCover.U frozenYCover.V).inv ≫
     closureChains.map
@@ -604,6 +634,10 @@ theorem shearY_overlap_coordinate_of_degree_components (a b : ℤ)
 #print axioms overlapScalar
 #print axioms boundaryOverlapShear
 #print axioms twoCircleOverlapShear
+#print axioms circleZPow
+#print axioms circleAffine
+#print axioms circleAffineHomotopy
+#print axioms circleAffine_H1_eq_zpow
 #print axioms shearYOverlapCoordinateMap
 #print axioms shearY_overlap_coordinate_of_injections
 #print axioms inl_comp_overlapScalar
