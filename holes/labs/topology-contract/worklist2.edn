@@ -79331,13 +79331,24 @@
       :exit 1,
       :finding
       "Direct expansion failed; reused leftOverlapComposite_eq_fold."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791730452616-5522-7c34eb79",
+     :commands
+     ["git show/check/diff-tree 677eac44b"
+      "lake env lean ConstructionTargets/t97A04Closure.lean"
+      "lake env lean problems/t97A04/lean/Main.lean"
+      "statement-registry check/fingerprint and placeholder counts"],
+     :finding
+     "PASS: new compiled progress after the latest history entry. Commit changes only the scoped closure and correctly identifies the first circle coordinate of the inverse two-circle overlap model with twoCircleFold by specializing the established left-overlap composite equality. Blob matches 0e2e1094. Closure is sorry-free with standard axioms; Main compiles with unchanged 2 placeholders. Registry is 131/0 and frozen statement SHA-256 remains ca1b2cb3c6594276811618321d5c0604c2f38fc4594a6b21ae161a711a923a34. Forward fold, affine components, and B6-B11 remain listed."},
     :commit "677eac44b59c75bf4f64b3fe140388cc44652f2d",
     :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
     :finding
     "Inverse overlap first coordinate equals the two-circle fold.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79415,6 +79426,9 @@
      :reason :program-progress-committed}
     {:job 1,
      :commit "2183b2339d8032982ee991ca2d92e8f58494d853",
+     :reason :program-progress-committed}
+    {:job 2,
+     :commit "677eac44b59c75bf4f64b3fe140388cc44652f2d",
      :reason :program-progress-committed}]}
   {:consumer :t96A07,
    :stop-count 2,
@@ -80021,7 +80035,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -80035,7 +80049,9 @@
     :type
     "inverse overlap model preserves folded first circle coordinate",
     :area "mv-connecting-naturality",
-    :proved-in :program-2026-10-11-close-t97a04},
+    :proved-in :program-2026-10-11-close-t97a04,
+    :banked-by :program-2026-10-11-close-t97a04,
+    :banked-commit "677eac44b59c75bf4f64b3fe140388cc44652f2d"},
    :id
    :lemma-constructiontargets-t97a04closure-overlaphomotopyequivtwocircles-inv-fst,
    :kind :lemma,
