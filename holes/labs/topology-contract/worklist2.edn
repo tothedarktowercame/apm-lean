@@ -67713,6 +67713,19 @@
       "git diff --check -- ConstructionTargets/T02A03GeometricTubeDeformation.lean",
       :exit 0}
      {:cmd "git status --short", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791678537994-3469-f928faa4",
+     :commands
+     ["git show/diff-tree/check e613cc31386fadb667585296049a35343423017d"
+      "git rev-parse recorded blob; git hash-object current module; sha256sum fixture"
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean"
+      "lake env lean /tmp/t02a03_specialized_radial_probe.lean"
+      "python3 scripts/statement-registry.py check --rev e613cc31386fadb667585296049a35343423017d"
+      "statement fingerprints at commit and parent; comment-stripped placeholder census; clojure.edn/read-string worklist"],
+     :finding
+     "PASS: reviewer differs from author topo-6; commit changes only the scoped module and recorded/current blob 52a9d5e5b7b1443ea931bdd7dacce4e7a2c0a475 matches. Fixture SHA-256 matches. Module and frozen fixture compile with only propext, Classical.choice, and Quot.sound; registry is 131/0, frozen t02A03 fingerprint remains d123afd5ae0ee067587b3ed3d7b9b6d2f075c3d95701e098ec357c7317cd34c3, and the sole frozen placeholder remains. rightTubeNormalCoordinate is the continuous restriction of rightTubeNormalComplex. The generic interpolation is instantiated with rightTubeMeridianCoordinate; its normalization premise is definitional, while deleted-left-core membership and rightTubeNormalComplex_eq_zero_iff establish pointwise nonzero input. The resulting existential has the exact zero and one endpoints and nonvanishing, without ambient reconstruction or tube membership."},
     :commit "e613cc31386fadb667585296049a35343423017d",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
@@ -67729,7 +67742,7 @@
    :phase :implementation,
    :type
    "exists N : C(unitInterval × RightTubeMinusLeftCore, Complex), (forall p, N (0,p) = ((1/8 : Real) : Complex) * (rightTubeMeridianCoordinate p : Complex)) and (forall p, N (1,p) = rightTubeNormalComplex p.1) and (forall tp, N tp ≠ 0)",
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/right-tube-radial-normal-interpolation-specialized",
@@ -67833,7 +67846,7 @@
      "The generic nonzero radial interpolation now specializes cleanly to rightTubeNormalComplex and rightTubeMeridianCoordinate. This supplies exactly the continuous normal component needed by the ambient reconstruction, with both endpoints and deletion-preserving nonvanishing, but does not yet combine it with rightTubePlanarRotation or prove right-tube membership.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
