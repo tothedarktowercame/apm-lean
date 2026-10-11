@@ -79287,68 +79287,45 @@
    :review-finding
    "program STOP commits nothing new since the last :program-history entry: evidence commit bb0f0f77d8953dc78dd564e000f3d4a5b29d0894 exactly equals history job 5",
    :evidence
-   {:placeholder-delta 0,
-    :residual "Build B10 bridge3; B11 closes both placeholders.",
-    :outcome :stop,
-    :warnings ["Main: 2 placeholders."],
+   {:placeholder-delta -2,
+    :residual
+    "Closed: B10 bridge3 and B11 discharge both placeholders.",
+    :outcome :done-unreviewed,
+    :warnings ["Lean lint only." "Unrelated t97A07 edits preserved."],
     :missing-theorems
-    [{:name "ConstructionTargets.T97A04Closure.lowerShear_H2",
-      :type "lowerShear coordinate=id",
-      :status :proved,
-      :consumers [:t97A04],
-      :depends-on
-      ["ConstructionTargets.T97A04Closure.frozenH2Coordinate_comp"
-       "ConstructionTargets.T97A04Closure.shearY_H2"
-       "ConstructionTargets.T97A04Closure.swapH2Coordinate_square"],
-      :area "mv-connecting-naturality"}
-     {:name "ConstructionTargets.T97A04Closure.frozenLbar_H2",
-      :type "frozenLbar coordinate=3*id",
-      :status :proved,
-      :consumers [:t97A04],
-      :depends-on
-      ["ConstructionTargets.T97A04Closure.lowerShear_H2"
-       "ConstructionTargets.T97A04Closure.frozenLbar_H2_map"],
-      :area "mv-connecting-naturality"}
-     {:name "ConstructionTargets.T97A04Closure.bridge3",
+    [{:name "ConstructionTargets.T97A04Closure.bridge3",
       :type "B10 bridge3",
-      :status :not-started,
+      :status :proved,
       :consumers [:t97A04],
       :depends-on ["ConstructionTargets.T97A04Closure.frozenLbar_H2"],
       :area "mv-connecting-naturality"}],
     :statement-hashes
     {:registry "131/0",
-     :closure "c593684e04ec45d9a96590a47a63e978596dcf30",
+     :closure "381376fb5d0e3e685723d953a1f31f9229356f80",
      :blueprint "c419a895cb4ede2acc1cb6bc5c7536344ba63df4"},
-    :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason :program-milestone-complete,
     :commands
-    [{:cmd "closure compile", :exit 0}
+    [{:cmd "lake env lean ConstructionTargets/t97A04Closure.lean",
+      :exit 0}
+     {:cmd "lake env lean problems/t97A04/lean/Main.lean", :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "closure no-sorry scan", :exit 1, :expected-exit 1}
-     {:cmd "Main compile", :exit 0}
-     {:cmd "registry check", :exit 0}
-     {:cmd "placeholder count", :exit 0, :output "2"}
-     {:cmd "git show --check a58fb4403", :exit 0}],
-    :diagnostic-history
-    [{:cmd "closure compile", :exit 1, :finding "Fixed association."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791757869038-5922-f0ae4088",
-     :commands
-     ["git show/diff/check a58fb440"
-      "lake env lean ConstructionTargets/t97A04Closure.lean"
-      "lake env lean problems/t97A04/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "fingerprint, placeholders, ancestry, fixture, blueprint checks"],
-     :finding
-     "PASS: a58fb440 is new after history bb86cd3b; its sole changed path is scoped and closure/blueprint blobs match. lowerShear_H2 uses swap-coordinate square and shearY(1,-1)=id without choosing a swap sign; frozenLbar_H2 then composes lower=id with shearY(3,1)=3id. Orientations and B9 representation boundaries are correct. Lean gates pass with only propext, Classical.choice, Quot.sound; registry 131/0; frozen hash ca1b2cb3c6594276811618321d5c0604c2f38fc4594a6b21ae161a711a923a34 unchanged; closure/Main placeholders 0/2. B9 is complete; B10 bridge and B11 assembly remain listed."},
-    :commit "a58fb4403475f91ca2b7f45699abba30dbe50339",
-    :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
-    :seat "topo-6"},
+     {:cmd "Main placeholder count", :exit 0, :output "0"}
+     {:cmd "git show --check 1f33738c4", :exit 0}],
+    :commit "1f33738c4a05849574345224852d462ce293ec0c",
+    :commits
+    ["a58fb4403475f91ca2b7f45699abba30dbe50339"
+     "1f33738c4a05849574345224852d462ce293ec0c"],
+    :changed-paths
+    ["ConstructionTargets/t97A04Closure.lean"
+     "problems/t97A04/lean/Main.lean"],
+    :fixture
+    {:path "problems/t97A04/lean/Main.lean",
+     :sha256
+     "11fd62daf8ddb00a3eea7a567671476102f84add525b8481f36d256b0db54d9e"}},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -81020,7 +80997,8 @@
    {:name "ConstructionTargets.T97A04Closure.bridge3",
     :reported-by [:program-2026-10-11-close-t97a04],
     :type "B10 bridge3",
-    :area "mv-connecting-naturality"},
+    :area "mv-connecting-naturality",
+    :proved-in :program-2026-10-11-close-t97a04},
    :id :lemma-constructiontargets-t97a04closure-bridge3,
    :kind :lemma,
    :depends-on
