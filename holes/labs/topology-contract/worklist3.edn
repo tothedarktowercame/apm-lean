@@ -3164,6 +3164,23 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git status --porcelain", :exit 0, :stdout ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791679462693-3518-e379d8a8",
+     :commands
+     ["git diff-tree recorded commit scope"
+      "sha256sum promoted fixture"
+      "source blob comparison"
+      "lake env lean promoted fixture"
+      "lake env lean target module"
+      "lake build target module"
+      "placeholder and axiom scan"
+      "statement registry check"
+      "consumer placeholder census"
+      "git diff --check recorded commit"],
+     :finding
+     "PASS: implementation commit b30fd064 changes exactly ConstructionTargets/ManifoldFundamentalClass.lean and its blob matches the reviewed source; promoted fixture hash 1aa7cb9313c39652234c753069eaee8404da40e89310ccecf94aff627b34d581 matches recorded evidence and preserves the frozen theorem type from the original fixture; integralSubtypeInclusion is the actual continuous subtype map, and integralSingularChainsComparison_subtype_naturality specializes the reviewed singularChainsComparison_naturality square in the required direction: forgotten ModuleCat integral subtype chains followed by comparison on X equal comparison on A followed by AddCommGrp integral subtype chains; it does not assert a relative cokernel isomorphism, generator transport, orientation normalization, or localization equality; fixture, module, and target build pass with zero source/fixture placeholders and only propext, Classical.choice, and Quot.sound; 131 statements match and consumer placeholders remain t00J02=1 and t98A02=1."},
     :commit "b30fd0643e5b3ecd36d9f5d02ab935f181b6cc93",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -3189,7 +3206,7 @@
       "Exact chain-map equality from the forgotten module-valued subtype-inclusion representation to the additive-group-valued subtype-inclusion representation"}},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/integral-relative-comparison-subtype-square",
@@ -3333,7 +3350,7 @@
      "The coefficient local generator and the production ambient generator live in relative homology objects formed as cokernels of subtype-inclusion chain maps in different coefficient categories. The reviewed IntegralSingularHomologyComparison already gives objectwise chain isomorphisms and naturality for every continuous map, but no relative comparison is packaged. The compiled fixture specializes that genuine naturality theorem to the exact subtype inclusion defining the pair. This is the commutative square required to induce a map between the relative cokernels; it does not identify the relative objects definitionally or choose an arbitrary isomorphism.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -5407,7 +5424,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -5424,7 +5441,10 @@
     "forall {X : Type} [TopologicalSpace X] (A : Set X), ((forgetIntModules.mapHomologicalComplex (ComplexShape.down Nat)).map ((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat Int)).obj (ModuleCat.of Int Int)).map (integralSubtypeInclusion A)))) ≫ (singularChainsComparison (TopCat.of X)).hom = (singularChainsComparison (TopCat.of A)).hom ≫ (((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj (AddCommGrpCat.of Int)).map (integralSubtypeInclusion A))",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-integral-subtype-chain-naturality-topo3-r1},
+    :routes-2026-10-11-manifold-integral-subtype-chain-naturality-topo3-r1,
+    :banked-by
+    :routes-2026-10-11-manifold-integral-subtype-chain-naturality-topo3-r1,
+    :banked-commit "b30fd0643e5b3ecd36d9f5d02ab935f181b6cc93"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-integralsingularchainscomparison-subtype-naturality,
    :kind :lemma,
