@@ -361,9 +361,127 @@
    :other-consumers [:t00A03 :t91J05 :t92J05 :t94J04 :t96A01 :t97J02]}
   {:consumer :t00A03,
    :implements-lemma
-   :lemma-constructiontargets-surfaceschoenflies-embeddedcirclecollar,
-   :phase :probe,
+   :lemma-constructiontargets-surfaceschoenflies-embeddedcircle-closedrange-and-homeomorph,
+   :phase :implementation,
    :state :open,
+   :scope ["ConstructionTargets/SurfaceSchoenflies.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/topo3/schoenflies-2d/embedded-circle-closed-range",
+   :acceptance
+   {:implementation
+    "Create SurfaceSchoenflies.lean and promote the fixture's embeddedCircle_isClosed_range, embeddedCircleHomeomorphRange, and embeddedCircle_closedRange_and_homeomorph declarations. For a continuous embedded Circle in any Hausdorff target, prove its range closed and package the embedding as a homeomorphism onto that exact range. Do not assert local flatness, a collar, two-sidedness, or orientability.",
+    :declaration
+    "ConstructionTargets.SurfaceSchoenflies.embeddedCircle_closedRange_and_homeomorph",
+    :type
+    "forall {M : Type} [TopologicalSpace M] [T2Space M] (j : C(Circle,M)), Topology.IsEmbedding j -> IsClosed (Set.range j) ∧ Nonempty (Circle ≃ₜ Set.range j)",
+    :supporting-declarations
+    ["ConstructionTargets.SurfaceSchoenflies.embeddedCircle_isClosed_range"
+     "ConstructionTargets.SurfaceSchoenflies.embeddedCircleHomeomorphRange"],
+    :fixture "/tmp/surface_schoenflies_closed_range.lean",
+    :fixture-sha256
+    "3c833fa2d9a116d82bcae615720a136db801542fe3e8d6b3815b26ac603cd8c0",
+    :placeholders
+    ["t00A03 bridge_1" "t01J01 bridges" "t03J02 bridge_1"],
+    :route-step
+    "fix the embedded circle as a closed subspace homeomorphic to Circle before chartwise planar Schoenflies and collar gluing"},
+   :id
+   :routes-2026-10-11-surface-embedded-circle-closed-range-topo3-r1,
+   :kind :reusable-theorem,
+   :area "embedded-circle-collar-surface",
+   :depends-on [:routes-2026-10-10-topo3-seed-checkpoint-1],
+   :current-residual
+   "Prove planar Jordan-Schoenflies local flatness for arcs and simple closed curves, apply it in surface charts, glue the local product neighborhoods around the compact range, and use the consumers' orientability data to select an annulus rather than a Möbius band.",
+   :other-consumers [:t01J01 :t03J02]}
+  {:consumer :t00A03,
+   :implements-lemma
+   :lemma-constructiontargets-surfaceschoenflies-embeddedcirclecollar,
+   :evidence
+   {:probe
+    {:residual
+     "After the closed-range homeomorphism package, planar Jordan-Schoenflies local flatness, chartwise collar gluing, and the annulus-versus-Mobius orientation choice remain.",
+     :outcome :revise,
+     :warnings
+     ["embeddedCircle_isClosed_range retains the embedding argument for the bundled interface although closedness uses only continuity and compactness; Lean reports that argument unused"],
+     :missing-theorems
+     [{:id
+       :lemma-constructiontargets-surfaceschoenflies-embeddedcircle-closedrange-and-homeomorph,
+       :name
+       "ConstructionTargets.SurfaceSchoenflies.embeddedCircle_closedRange_and_homeomorph",
+       :type
+       "forall {M : Type} [TopologicalSpace M] [T2Space M] (j : C(Circle,M)), Topology.IsEmbedding j -> IsClosed (Set.range j) ∧ Nonempty (Circle ≃ₜ Set.range j)",
+       :status :proved,
+       :consumers [:t00A03 :t01J01 :t03J02],
+       :depends-on [],
+       :area "embedded-circle-collar-surface"}],
+     :prerequisite
+     {:consumer :t00A03,
+      :implements-lemma
+      :lemma-constructiontargets-surfaceschoenflies-embeddedcircle-closedrange-and-homeomorph,
+      :phase :implementation,
+      :state :open,
+      :scope ["ConstructionTargets/SurfaceSchoenflies.lean"],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/topo3/schoenflies-2d/embedded-circle-closed-range",
+      :acceptance
+      {:implementation
+       "Create SurfaceSchoenflies.lean and promote the fixture's embeddedCircle_isClosed_range, embeddedCircleHomeomorphRange, and embeddedCircle_closedRange_and_homeomorph declarations. For a continuous embedded Circle in any Hausdorff target, prove its range closed and package the embedding as a homeomorphism onto that exact range. Do not assert local flatness, a collar, two-sidedness, or orientability.",
+       :declaration
+       "ConstructionTargets.SurfaceSchoenflies.embeddedCircle_closedRange_and_homeomorph",
+       :type
+       "forall {M : Type} [TopologicalSpace M] [T2Space M] (j : C(Circle,M)), Topology.IsEmbedding j -> IsClosed (Set.range j) ∧ Nonempty (Circle ≃ₜ Set.range j)",
+       :supporting-declarations
+       ["ConstructionTargets.SurfaceSchoenflies.embeddedCircle_isClosed_range"
+        "ConstructionTargets.SurfaceSchoenflies.embeddedCircleHomeomorphRange"],
+       :fixture "/tmp/surface_schoenflies_closed_range.lean",
+       :fixture-sha256
+       "3c833fa2d9a116d82bcae615720a136db801542fe3e8d6b3815b26ac603cd8c0",
+       :placeholders
+       ["t00A03 bridge_1" "t01J01 bridges" "t03J02 bridge_1"],
+       :route-step
+       "fix the embedded circle as a closed subspace homeomorphic to Circle before chartwise planar Schoenflies and collar gluing"},
+      :id
+      :routes-2026-10-11-surface-embedded-circle-closed-range-topo3-r1,
+      :kind :reusable-theorem,
+      :area "embedded-circle-collar-surface",
+      :depends-on
+      [:routes-2026-10-10-surface-schoenflies-collar-topo3-r2],
+      :current-residual
+      "Prove planar Jordan-Schoenflies local flatness for arcs and simple closed curves, apply it in surface charts, glue the local product neighborhoods around the compact range, and use the consumers' orientability data to select an annulus rather than a Möbius band.",
+      :other-consumers [:t01J01 :t03J02]},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd "lake env lean /tmp/surface_schoenflies_closed_range.lean",
+       :exit 0,
+       :output
+       "embeddedCircle_closedRange_and_homeomorph compiled; axioms [propext, Classical.choice, Quot.sound]; warning: embeddedCircle_isClosed_range has unused embedding argument"}
+      {:cmd "sha256sum /tmp/surface_schoenflies_closed_range.lean",
+       :exit 0,
+       :output
+       "3c833fa2d9a116d82bcae615720a136db801542fe3e8d6b3815b26ac603cd8c0  /tmp/surface_schoenflies_closed_range.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/surface_schoenflies_closed_range.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/surface_schoenflies_closed_range.lean",
+       :exit 1,
+       :finding
+       "The first fixture imported Mathlib.Topology.Instances.Circle directly, whose object file is not built in this workspace. Reusing the compiled ConstructionTargets.CircleHomology import supplied the same Circle topology without rebuilding Mathlib."}
+      {:cmd "lake env lean /tmp/surface_schoenflies_closed_range.lean",
+       :exit 1,
+       :finding
+       "The second fixture used the unqualified obsolete IsEmbedding name and passed a continuous map where isCompact_range expects its continuity proof. Using Topology.IsEmbedding and j.continuous corrected both exact APIs."}],
+     :fixture
+     {:path "/tmp/surface_schoenflies_closed_range.lean",
+      :sha256
+      "3c833fa2d9a116d82bcae615720a136db801542fe3e8d6b3815b26ac603cd8c0"},
+     :finding
+     "The target SurfaceSchoenflies module is absent. The route audit and a fresh repository search find no Jordan curve, planar Schoenflies, or embedded-circle collar theorem in ConstructionTargets or the available Mathlib build. The fixture establishes the first necessary point-set package without assuming tameness: compactness of Circle makes the continuous image closed in every Hausdorff target, and Topology.IsEmbedding supplies the genuine homeomorphism from Circle onto that closed range. This fixes the embedded subspace to which local planar Schoenflies charts must be applied. It does not assert local flatness, two-sidedness, orientability, or an annular neighborhood.",
+     :seat "topo-12"}},
+   :phase :probe,
+   :state :blocked,
    :scope ["ConstructionTargets/SurfaceSchoenflies.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/topo3/schoenflies-2d/embedded-circle-collar",
@@ -378,7 +496,9 @@
    :id :routes-2026-10-10-surface-schoenflies-collar-topo3-r2,
    :kind :reusable-theorem,
    :area "embedded-circle-collar-surface",
-   :depends-on [:routes-2026-10-10-topo3-seed-checkpoint-1],
+   :depends-on
+   [:routes-2026-10-10-topo3-seed-checkpoint-1
+    :routes-2026-10-11-surface-embedded-circle-closed-range-topo3-r1],
    :current-residual
    "Surface cutting, intersection separation, van Kampen and classification remain.",
    :other-consumers [:t01J01 :t03J02]}
@@ -4109,7 +4229,30 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-manifoldfundamentalclass-groupglobalgenerator-generates],
-   :other-consumers [:t98A02]}],
+   :other-consumers [:t98A02]}
+  {:consumer :t00A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SurfaceSchoenflies.embeddedCircle_closedRange_and_homeomorph",
+    :type
+    "forall {M : Type} [TopologicalSpace M] [T2Space M] (j : C(Circle,M)), Topology.IsEmbedding j -> IsClosed (Set.range j) ∧ Nonempty (Circle ≃ₜ Set.range j)"},
+   :lemma
+   {:name
+    "ConstructionTargets.SurfaceSchoenflies.embeddedCircle_closedRange_and_homeomorph",
+    :reported-by
+    [:routes-2026-10-10-surface-schoenflies-collar-topo3-r2],
+    :type
+    "forall {M : Type} [TopologicalSpace M] [T2Space M] (j : C(Circle,M)), Topology.IsEmbedding j -> IsClosed (Set.range j) ∧ Nonempty (Circle ≃ₜ Set.range j)",
+    :area "embedded-circle-collar-surface",
+    :proved-in :routes-2026-10-10-surface-schoenflies-collar-topo3-r2},
+   :id
+   :lemma-constructiontargets-surfaceschoenflies-embeddedcircle-closedrange-and-homeomorph,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t01J01 :t03J02]}],
  :consumer-baselines {},
  :statuses
  #{:open
