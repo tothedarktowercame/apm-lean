@@ -543,6 +543,29 @@ theorem shearY_productionUnionMap (a b : ℤ) (n : ℕ) :
             (shearY a b)) n) := congrArg (fun k ↦ unionIso.inv ≫ k) hnat
     _ = _ := unionIso.inv_hom_id_assoc _
 
+/-- The production overlap endpoint written in the fixed integral
+two-component coordinate. -/
+noncomputable def shearYOverlapCoordinateMap (a b : ℤ) :
+    ((AddCommGrpCat.of ℤ) ⊞ (AddCommGrpCat.of ℤ)) ⟶
+      ((AddCommGrpCat.of ℤ) ⊞ (AddCommGrpCat.of ℤ)) :=
+  frozenOverlapH1IsoIntBiprod.inv ≫
+    productionIntersectionMap
+      frozenYCover.U frozenYCover.V frozenYCover.U frozenYCover.V
+      (shearYShortComplexHom a b) 1 ≫
+    frozenOverlapH1IsoIntBiprod.hom
+
+/-- B6 reduces exactly to the degree calculation on the two overlap
+components. -/
+theorem shearY_overlap_coordinate_of_injections (a b : ℤ)
+    (hleft : biprod.inl ≫ shearYOverlapCoordinateMap a b =
+      biprod.inl ≫ overlapScalar a)
+    (hright : biprod.inr ≫ shearYOverlapCoordinateMap a b =
+      biprod.inr ≫ overlapScalar a) :
+    shearYOverlapCoordinateMap a b = overlapScalar a := by
+  apply biprod.hom_ext'
+  · exact hleft
+  · exact hright
+
 #print axioms frozenTorusH2GroupIsoInt
 #print axioms frozenYCover
 #print axioms frozenYCoverUHomeomorph
@@ -559,5 +582,7 @@ theorem shearY_productionUnionMap (a b : ℤ) (n : ℕ) :
 #print axioms overlapScalar
 #print axioms boundaryOverlapShear
 #print axioms twoCircleOverlapShear
+#print axioms shearYOverlapCoordinateMap
+#print axioms shearY_overlap_coordinate_of_injections
 
 end ConstructionTargets.T97A04Closure
