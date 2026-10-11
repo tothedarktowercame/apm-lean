@@ -116059,14 +116059,14 @@
    :depends-on [],
    :other-consumers []}
   {:consumer :t95J02,
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "B6 names a nonexistent Lean declaration: reflectionMap is ConstructionTargets.CoefficientCoordinateReflections.reflectionMap, not ConstructionTargets.CoefficientFirstReflection.reflectionMap. A fresh Lean check reports the latter as an unknown identifier. Correct the B6 type and B7 prose/dependencies to use CoefficientCoordinateReflections.reflectionMap (1 : Fin 2), while retaining CoefficientFirstReflection.integral_circle for its homology action.",
    :evidence
    {:blueprint
     {:path "ConstructionTargets/t95J02Closure.blueprint.md",
      :sha256
-     "a08e515eb7d1ea663c20c731e35663f9b94cb22b52e544782628435c7f17feb1",
+     "3f917aac1b2315ca3a47972b2bcfced3b188a7e20e498241a955fc5cf2f39fdc",
      :nodes
      [{:id :B1, :status :planned}
       {:id :B2, :status :planned}
@@ -116098,7 +116098,7 @@
       :area "klein-bottle-homology"}
      {:name "t95J02Closure.t95J02_beta_homotopic_beta_reflection",
       :type
-      "For beta defined by t95J02CircleB_homeo followed by t95J02InclusionB, ContinuousMap.Homotopic beta (beta.comp (CoefficientFirstReflection.reflectionMap (1 : Fin 2)))",
+      "For beta defined by t95J02CircleB_homeo followed by t95J02InclusionB, ContinuousMap.Homotopic beta (beta.comp (CoefficientCoordinateReflections.reflectionMap (1 : Fin 2)))",
       :status :not-started,
       :consumers [:t95J02],
       :depends-on ["t95J02Closure.t95J02CircleB_homeo"],
@@ -116120,53 +116120,47 @@
       :area "klein-bottle-homology"}],
     :statement-hashes
     {:blueprint-sha256
-     "a08e515eb7d1ea663c20c731e35663f9b94cb22b52e544782628435c7f17feb1",
+     "3f917aac1b2315ca3a47972b2bcfced3b188a7e20e498241a955fc5cf2f39fdc",
      :registry "131 registered statements match, 0 do not"},
     :disposition :stop,
     :axioms [],
     :author "topo-2",
     :reason
-    "Blueprint repaired. B6 now uses reflectionMap (1 : Fin 2), matching the endpoint [(1,y)] = [(0,-y)] under the cosine/sine coordinates, and B7 explicitly invokes integral_circle at coordinate 1. Independent blueprint re-review is required before Lean formalization begins.",
+    "Blueprint repaired. B6 and B7 now name CoefficientCoordinateReflections.reflectionMap (1 : Fin 2), while CoefficientFirstReflection.integral_circle remains the theorem proving its integral H1 action is negative. Fresh Lean checks validate both declarations. Independent blueprint re-review remains required before formalization.",
     :commands
-    [{:cmd "python3 B6-B7 reflection-coordinate validation",
+    [{:cmd
+      "lake env lean /dev/stdin with checks for CoefficientCoordinateReflections.reflectionMap 1 and CoefficientFirstReflection.integral_circle 1",
       :exit 0,
       :finding
-      "B6 and B7 consistently use coordinate 1, and B6 states that the endpoint fixes cosine and negates sine."}
-     {:cmd
-      "rg -n reflection-coordinate declarations ConstructionTargets/t95J02Closure.blueprint.md ConstructionTargets/CoefficientFirstReflection.lean",
+      "Lean confirms the map is a continuous sphere self-map and integral_circle 1 identifies its induced H1 map with negative identity."}
+     {:cmd "python3 blueprint namespace validation",
       :exit 0,
       :finding
-      "The blueprint uses reflectionMap (1 : Fin 2), while integral_circle is the all-coordinate theorem and accepts coordinate 1."}
+      "No invalid CoefficientFirstReflection.reflectionMap reference remains; B6 and B7 use the correct map namespace and retain the correct homology theorem namespace."}
      {:cmd
       "git diff --check -- ConstructionTargets/t95J02Closure.blueprint.md",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131 registered statements match, 0 do not."}
-     {:cmd "git commit -m Correct-t95J02-reflection-coordinate",
+     {:cmd "git commit -m Qualify-t95J02-reflection-map-correctly",
       :exit 0,
       :finding
-      "Committed only the scoped blueprint repair as 60b856adb68fe7885a96b5f90b620292b991c336."}
+      "Committed only the scoped blueprint repair as 01528924a68a337ed7718cd30daa4cd0e88299c3."}
      {:cmd "sha256sum ConstructionTargets/t95J02Closure.blueprint.md",
       :exit 0,
       :finding
-      "a08e515eb7d1ea663c20c731e35663f9b94cb22b52e544782628435c7f17feb1"}],
+      "3f917aac1b2315ca3a47972b2bcfced3b188a7e20e498241a955fc5cf2f39fdc"}],
     :diagnostic-history [],
     :continue-from
-    {:commit "60b856adb68fe7885a96b5f90b620292b991c336",
+    {:commit "01528924a68a337ed7718cd30daa4cd0e88299c3",
      :next
-     "Obtain independent review of the corrected reflection orientation; after approval formalize B1 and B2 in ConstructionTargets/t95J02Closure.lean."},
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1791717589636-5237-15844959",
-     :finding
-     "B6 names a nonexistent Lean declaration: reflectionMap is ConstructionTargets.CoefficientCoordinateReflections.reflectionMap, not ConstructionTargets.CoefficientFirstReflection.reflectionMap. A fresh Lean check reports the latter as an unknown identifier. Correct the B6 type and B7 prose/dependencies to use CoefficientCoordinateReflections.reflectionMap (1 : Fin 2), while retaining CoefficientFirstReflection.integral_circle for its homology action."},
-    :commit "60b856adb68fe7885a96b5f90b620292b991c336",
+     "Obtain independent review of the corrected declaration qualification; after approval formalize B1 and B2 in ConstructionTargets/t95J02Closure.lean."},
+    :commit "01528924a68a337ed7718cd30daa4cd0e88299c3",
     :changed-paths ["ConstructionTargets/t95J02Closure.blueprint.md"],
     :seat "topo-2"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t95J02/lean/Main.lean"
     "problems/t95J02/status.json"
