@@ -79333,11 +79333,23 @@
       :exit 1,
       :finding
       "Normalized categorical associativity and iso cancellation."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791750579344-5863-c3e13816",
+     :commands
+     ["git show/diff/check 6888a8a6"
+      "lake env lean ConstructionTargets/t97A04Closure.lean"
+      "lake env lean problems/t97A04/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "fingerprint, placeholders, ancestry, fixture, blueprint checks"],
+     :finding
+     "PASS: 6888a8a6 is new after history c9b1ad24; its sole changed path is scoped and closure/blueprint blobs match. Functoriality proves H2(swap) squared is identity, and conjugation yields the coordinate square with correct composition order. This exactly matches B8, which deliberately does not choose the swap sign. Lean gates pass with standard axioms; registry 131/0; frozen hash ca1b2cb3c6594276811618321d5c0604c2f38fc4594a6b21ae161a711a923a34 unchanged; closure/Main placeholders 0/2. B8 is compiled progress; Lbar factorization/B9 then B10-B11 remain listed."},
     :commit "6888a8a6c97535d970505577fad7fc9ddd0d168a",
     :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79353,7 +79365,7 @@
     ["lake env lean problems/t97A04/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: :program-progress-committed",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: :program-milestone-complete",
    :id :program-2026-10-11-close-t97a04,
    :kind :final-adapter,
    :campaign-priority 43,
@@ -79466,7 +79478,10 @@
      :reason :program-progress-committed}
     {:job 9,
      :commit "c9b1ad24a4a4cb149ffeaf672a728febefee879b",
-     :reason :program-progress-committed}]}
+     :reason :program-progress-committed}
+    {:job 1,
+     :commit "6888a8a6c97535d970505577fad7fc9ddd0d168a",
+     :reason :program-milestone-complete}]}
   {:consumer :t96A07,
    :stop-count 4,
    :evidence
@@ -80575,7 +80590,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "ConstructionTargets.T97A04Closure.shearY_H2",
@@ -80585,7 +80600,9 @@
     :reported-by [:program-2026-10-11-close-t97a04],
     :type "frozen H2 coordinate of shearY a b is a·id",
     :area "mv-connecting-naturality",
-    :proved-in :program-2026-10-11-close-t97a04},
+    :proved-in :program-2026-10-11-close-t97a04,
+    :banked-by :program-2026-10-11-close-t97a04,
+    :banked-commit "6888a8a6c97535d970505577fad7fc9ddd0d168a"},
    :id :lemma-constructiontargets-t97a04closure-sheary-h2,
    :kind :lemma,
    :depends-on
@@ -80689,7 +80706,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -80701,7 +80718,9 @@
     :reported-by [:program-2026-10-11-close-t97a04],
     :type "Mono frozenConnectingCoordinate",
     :area "mv-connecting-naturality",
-    :proved-in :program-2026-10-11-close-t97a04},
+    :proved-in :program-2026-10-11-close-t97a04,
+    :banked-by :program-2026-10-11-close-t97a04,
+    :banked-commit "6888a8a6c97535d970505577fad7fc9ddd0d168a"},
    :id
    :lemma-constructiontargets-t97a04closure-frozenconnectingcoordinate-mono,
    :kind :lemma,
@@ -80753,7 +80772,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "ConstructionTargets.T97A04Closure.frozenH2Pieces_isZero",
@@ -80763,7 +80782,9 @@
     :reported-by [:program-2026-10-11-close-t97a04],
     :type "IsZero(H2(U)⊞H2(V))",
     :area "mv-connecting-naturality",
-    :proved-in :program-2026-10-11-close-t97a04},
+    :proved-in :program-2026-10-11-close-t97a04,
+    :banked-by :program-2026-10-11-close-t97a04,
+    :banked-commit "6888a8a6c97535d970505577fad7fc9ddd0d168a"},
    :id :lemma-constructiontargets-t97a04closure-frozenh2pieces-iszero,
    :kind :lemma,
    :depends-on
@@ -80788,7 +80809,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "ConstructionTargets.T97A04Closure.swap_H2_square",
@@ -80798,14 +80819,16 @@
     :reported-by [:program-2026-10-11-close-t97a04],
     :type "H2(swap)≫H2(swap)=𝟙",
     :area "mv-connecting-naturality",
-    :proved-in :program-2026-10-11-close-t97a04},
+    :proved-in :program-2026-10-11-close-t97a04,
+    :banked-by :program-2026-10-11-close-t97a04,
+    :banked-commit "6888a8a6c97535d970505577fad7fc9ddd0d168a"},
    :id :lemma-constructiontargets-t97a04closure-swap-h2-square,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "ConstructionTargets.T97A04Closure.swapH2Coordinate_square",
@@ -80815,7 +80838,9 @@
     :reported-by [:program-2026-10-11-close-t97a04],
     :type "coordinate swap scalar squares to identity",
     :area "mv-connecting-naturality",
-    :proved-in :program-2026-10-11-close-t97a04},
+    :proved-in :program-2026-10-11-close-t97a04,
+    :banked-by :program-2026-10-11-close-t97a04,
+    :banked-commit "6888a8a6c97535d970505577fad7fc9ddd0d168a"},
    :id
    :lemma-constructiontargets-t97a04closure-swaph2coordinate-square,
    :kind :lemma,
