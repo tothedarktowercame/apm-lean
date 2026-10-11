@@ -68995,6 +68995,33 @@
    "Classify the endpoint polynomial sign and construct continuous entry and exit paths that stay in the matching nonzero component, then combine them with the safe corridor, nonzero-height criterion, and radial stage.",
    :other-consumers []}
   {:bounded-exception
+   "single-consumer exact collision-polynomial factorization at the meridian start",
+   :consumer :t02A03,
+   :phase :probe,
+   :state :open,
+   :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t02A03/meridian-start-collision-factor",
+   :acceptance
+   {:probe
+    "Compile meridianStart_collisionPolynomial_factor. Compute the collision polynomial at angular coordinate 1 with the right-core normal coordinate of circleMeridian z and prove its exact factorization through z.re. Do not choose a sign branch and do not construct a path.",
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.meridianStart_collisionPolynomial_factor",
+    :type
+    "forall (z : Circle), let n := rightTubeCoreNormalComplex (apm_t02a03_circleMeridian z); (1-n.re)^2 - 4*(1-n.re)*((1 : Circle) : Complex).re + 3 = ((z : Complex).re/8)*(2+(z : Complex).re/8)",
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "identify the continuous sign datum at the corrected angular-stage start"},
+   :id
+   :routes-2026-10-11-t02a03-meridian-start-collision-factor-topo2-r1,
+   :kind :reusable-theorem,
+   :area "explicit-r3-tube-deformation-retraction",
+   :depends-on
+   [:routes-2026-10-11-t02a03-input-zero-height-collision-nonzero-topo2-r1],
+   :current-residual
+   "Relate the recovered input collision-polynomial sign to rightTubeMeridianCoordinate.re, then construct entry and exit paths within their matching nonzero-sign component and assemble the safe angular and radial stages.",
+   :other-consumers []}
+  {:bounded-exception
    "single-consumer explicit ambient deformation with frozen tube and deletion invariants",
    :consumer :t02A03,
    :evidence
@@ -69003,86 +69030,84 @@
      :warnings [],
      :missing-theorems
      [{:name
-       "ConstructionTargets.T02A03GeometricTubeDeformation.inputZeroHeight_collisionPolynomial_ne",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.meridianStart_collisionPolynomial_factor",
        :type
-       "forall (p : RightTubeMinusLeftCore), (rightTubeCoreNormalComplex p.1).im = 0 -> (1 - (rightTubeCoreNormalComplex p.1).re)^2 - 4*(1-(rightTubeCoreNormalComplex p.1).re)*(rightTubeCoreAngularCoordinate p : Complex).re + 3 != 0",
+       "forall (z : Circle), let n := rightTubeCoreNormalComplex (apm_t02a03_circleMeridian z); (1-n.re)^2 - 4*(1-n.re)*((1 : Circle) : Complex).re + 3 = ((z : Complex).re/8)*(2+(z : Complex).re/8)",
        :status :proved,
        :consumers [:t02A03],
-       :depends-on
-       ["ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCollisionPolynomial_eq_zero_implies_leftCore"
-        "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCorePolarReconstruction_self"],
+       :depends-on [],
        :area "explicit-r3-tube-deformation-retraction"}],
      :prerequisite
      {:bounded-exception
-      "single-consumer collision-polynomial nonvanishing at deleted zero-height inputs",
+      "single-consumer exact collision-polynomial factorization at the meridian start",
       :consumer :t02A03,
       :phase :probe,
       :state :open,
       :scope
       ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t02A03/input-zero-height-collision-nonzero",
+      "TOPOLOGY-ROUTES.md/t02A03/meridian-start-collision-factor",
       :acceptance
       {:probe
-       "Compile inputZeroHeight_collisionPolynomial_ne. For a RightTubeMinusLeftCore input whose right-core normal imaginary part is zero, use zero-height collision sufficiency, reconstruction-self, and the deletion hypothesis to prove its recovered collision polynomial is nonzero. Do not choose its sign and do not construct a path.",
+       "Compile meridianStart_collisionPolynomial_factor. Compute the collision polynomial at angular coordinate 1 with the right-core normal coordinate of circleMeridian z and prove its exact factorization through z.re. Do not choose a sign branch and do not construct a path.",
        :declaration
-       "ConstructionTargets.T02A03GeometricTubeDeformation.inputZeroHeight_collisionPolynomial_ne",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.meridianStart_collisionPolynomial_factor",
        :type
-       "forall (p : RightTubeMinusLeftCore), (rightTubeCoreNormalComplex p.1).im = 0 -> (1 - (rightTubeCoreNormalComplex p.1).re)^2 - 4*(1-(rightTubeCoreNormalComplex p.1).re)*(rightTubeCoreAngularCoordinate p : Complex).re + 3 != 0",
+       "forall (z : Circle), let n := rightTubeCoreNormalComplex (apm_t02a03_circleMeridian z); (1-n.re)^2 - 4*(1-n.re)*((1 : Circle) : Complex).re + 3 = ((z : Complex).re/8)*(2+(z : Complex).re/8)",
        :placeholder "the sole sorry in apm_t02a03",
        :route-step
-       "certify the nonzero endpoint collision value for the zero-height exit path"},
+       "identify the continuous sign datum at the corrected angular-stage start"},
       :id
-      :routes-2026-10-11-t02a03-input-zero-height-collision-nonzero-topo2-r1,
+      :routes-2026-10-11-t02a03-meridian-start-collision-factor-topo2-r1,
       :kind :reusable-theorem,
       :area "explicit-r3-tube-deformation-retraction",
       :depends-on
-      [:routes-2026-10-11-t02a03-zero-height-collision-sufficiency-topo2-r1],
+      [:routes-2026-10-11-t02a03-input-zero-height-collision-nonzero-topo2-r1],
       :current-residual
-      "Classify the endpoint polynomial sign and construct continuous entry and exit paths that stay in the matching nonzero component, then combine them with the safe corridor, nonzero-height criterion, and radial stage.",
+      "Relate the recovered input collision-polynomial sign to rightTubeMeridianCoordinate.re, then construct entry and exit paths within their matching nonzero-sign component and assemble the safe angular and radial stages.",
       :other-consumers []},
      :commands
      [{:cmd
-       "lake env lean /tmp/t02a03_input_zero_height_poly_ne_probe.lean",
+       "lake env lean /tmp/t02a03_meridian_start_poly_factor_probe.lean",
        :exit 0,
        :output
-       "inputZeroHeight_collisionPolynomial_ne compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "meridianStart_collisionPolynomial_factor compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/t02a03_input_zero_height_poly_ne_probe.lean",
+       "sha256sum /tmp/t02a03_meridian_start_poly_factor_probe.lean",
        :exit 0,
        :output
-       "2d90596595a349838c6a82123c3406ef3bca34b8794427586fbb8b204a7d6084  /tmp/t02a03_input_zero_height_poly_ne_probe.lean"}
+       "df4916dc1696e927e46d9e671c0e968d417974a26618b593e5602715cef683f4  /tmp/t02a03_meridian_start_poly_factor_probe.lean"}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_input_zero_height_poly_ne_probe.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_meridian_start_poly_factor_probe.lean || true)\"",
        :exit 0}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}
       {:cmd
-       "rg -n 'inputZeroHeight_collisionPolynomial_ne' /tmp/t02a03_input_zero_height_poly_ne_probe.lean",
+       "rg -n 'meridianStart_collisionPolynomial_factor' /tmp/t02a03_meridian_start_poly_factor_probe.lean",
        :exit 0,
        :output
-       "41:theorem inputZeroHeight_collisionPolynomial_ne\n58:#print axioms inputZeroHeight_collisionPolynomial_ne"}],
+       "7:theorem meridianStart_collisionPolynomial_factor\n26:#print axioms meridianStart_collisionPolynomial_factor"}],
      :diagnostic-history
      [{:cmd
-       "lake env lean /tmp/t02a03_input_zero_height_poly_ne_probe.lean",
+       "lake env lean /tmp/t02a03_meridian_start_poly_factor_probe.lean",
        :exit 1,
        :finding
-       "The installed olean predates the reviewed zero-height sufficiency source declaration. Restating that reviewed prerequisite inside the read-only fixture exposed the new theorem to the probe without changing repository source."}
+       "The first fixture omitted the geometric-cover namespace opening; adding the namespace made the frozen meridian visible."}
       {:cmd
-       "lake env lean /tmp/t02a03_input_zero_height_poly_ne_probe.lean",
+       "lake env lean /tmp/t02a03_meridian_start_poly_factor_probe.lean",
        :exit 1,
        :finding
-       "The first reconstruction-self rewrite did not unfold rightTubeCoreAngularCoordinate. An explicit equality proved by simpa with that definition supplied the endpoint rewrite, and the corrected fixture compiled."}],
+       "The initial square-root rewrite mixed 1/8 with inverse notation. Stating the nonnegativity bound with the expression's exact inverse notation allowed Real.sqrt_sq to close the normalization."}],
      :fixture
-     {:path "/tmp/t02a03_input_zero_height_poly_ne_probe.lean",
+     {:path "/tmp/t02a03_meridian_start_poly_factor_probe.lean",
       :sha256
-      "2d90596595a349838c6a82123c3406ef3bca34b8794427586fbb8b204a7d6084"},
+      "df4916dc1696e927e46d9e671c0e968d417974a26618b593e5602715cef683f4"},
      :finding
-     "For a deleted right-tube input at zero core-normal height, the collision polynomial at its recovered angular and normal coordinates cannot vanish. Otherwise the banked zero-height sufficiency theorem places its polar reconstruction on the left core, while reconstruction-self identifies that point with the input, contradicting the subtype deletion hypothesis. This provides the exact nonzero endpoint value needed to choose and preserve its sign component during the exit path.",
+     "At the angular-stage start, with u = 1 and n the right-core normal coordinate of circleMeridian z, the collision polynomial factors exactly as (z.re/8)*(2+z.re/8). The second factor is strictly positive because a Circle real coordinate lies in [-1,1], so the starting polynomial has precisely the sign of z.re. This is the continuous sign datum needed to match the later endpoint component without introducing a discontinuous sign choice.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
@@ -69132,7 +69157,8 @@
     :routes-2026-10-11-t02a03-collision-polynomial-positive-normal-real-topo2-r1
     :routes-2026-10-11-t02a03-nonpositive-normal-safe-angular-corridor-topo2-r1
     :routes-2026-10-11-t02a03-zero-height-collision-sufficiency-topo2-r1
-    :routes-2026-10-11-t02a03-input-zero-height-collision-nonzero-topo2-r1],
+    :routes-2026-10-11-t02a03-input-zero-height-collision-nonzero-topo2-r1
+    :routes-2026-10-11-t02a03-meridian-start-collision-factor-topo2-r1],
    :current-residual
    "Lift H to RightTubeMinusLeftCore, package rightTubeMeridianRetractionHomotopy, then use the coordinate equation for the Circle-side constant homotopy.",
    :other-consumers []}
@@ -73007,4 +73033,28 @@
    :depends-on
    [:lemma-constructiontargets-t02a03geometrictubedeformation-zeroheightcollisionpolynomial
     :lemma-constructiontargets-t02a03geometrictubedeformation-righttubecorepolarreconstruct],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T02A03GeometricTubeDeformation.meridianStart_collisionPolynomial_factor",
+    :type
+    "forall (z : Circle), let n := rightTubeCoreNormalComplex (apm_t02a03_circleMeridian z); (1-n.re)^2 - 4*(1-n.re)*((1 : Circle) : Complex).re + 3 = ((z : Complex).re/8)*(2+(z : Complex).re/8)"},
+   :lemma
+   {:name
+    "ConstructionTargets.T02A03GeometricTubeDeformation.meridianStart_collisionPolynomial_factor",
+    :reported-by
+    [:routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1],
+    :type
+    "forall (z : Circle), let n := rightTubeCoreNormalComplex (apm_t02a03_circleMeridian z); (1-n.re)^2 - 4*(1-n.re)*((1 : Circle) : Complex).re + 3 = ((z : Complex).re/8)*(2+(z : Complex).re/8)",
+    :area "explicit-r3-tube-deformation-retraction",
+    :proved-in
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+   :id
+   :lemma-constructiontargets-t02a03geometrictubedeformation-meridianstart-collisionpolyno,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}]}
