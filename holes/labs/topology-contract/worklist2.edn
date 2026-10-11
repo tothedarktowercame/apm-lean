@@ -71967,25 +71967,66 @@
   {:bounded-exception
    "single-consumer positive-real certificate for the departure affine leg",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:residual
+     "Choose a continuous waypoint with positive real part and prove its affine arrival leg to rightTubeCorePlanarComplex avoids zero; then invoke the banked waypoint, normalization, and ambient adapters.",
+     :outcome :go,
+     :warnings [],
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd
+       "lake env lean /tmp/t02a03_departure_leg_positive_real_probe.lean",
+       :exit 0,
+       :output
+       "coupledAngularDepartureLeg_ne_zero_of_waypoint_re_pos compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "sha256sum /tmp/t02a03_departure_leg_positive_real_probe.lean",
+       :exit 0,
+       :output
+       "275992381317c2c17de75f1b825eb591402c698e5555ffb4096a306412443d02  /tmp/t02a03_departure_leg_positive_real_probe.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_departure_leg_positive_real_probe.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}
+      {:cmd
+       "rg -n 'coupledAngularDepartureLeg_ne_zero_of_waypoint_re_pos' /tmp/t02a03_departure_leg_positive_real_probe.lean",
+       :exit 0,
+       :output
+       "9:theorem coupledAngularDepartureLeg_ne_zero_of_waypoint_re_pos\n29:#print axioms coupledAngularDepartureLeg_ne_zero_of_waypoint_re_pos"}],
+     :fixture
+     {:path "/tmp/t02a03_departure_leg_positive_real_probe.lean",
+      :sha256
+      "275992381317c2c17de75f1b825eb591402c698e5555ffb4096a306412443d02"},
+     :finding
+     "The fixture proves the exact frozen declaration without placeholders. Taking real parts reduces a hypothetical zero to a scalar sum. At time zero that sum is one; at positive times through one half, the first coefficient is nonnegative and the positive-real waypoint contribution is strictly positive.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+      :declaration
+      "ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularDepartureLeg_ne_zero_of_waypoint_re_pos",
+      :type
+      "forall (W : C(RightTubeMinusLeftCore, ℂ)), (forall p, 0 < (W p).re) -> forall (t : unitInterval) (p : RightTubeMinusLeftCore), (t : ℝ) <= 1/2 -> (((1-2*(t:ℝ):ℝ):ℂ) + ((2*(t:ℝ):ℝ):ℂ)*W p) != 0",
+      :acceptance
+      "Add the compiled theorem from the fixture unchanged in mathematical content; preserve the registered statements and introduce no placeholders or nonstandard axioms."},
+     :seat "topo-8"}},
+   :phase :implementation,
+   :type
+   "forall (W : C(RightTubeMinusLeftCore, ℂ)), (forall p, 0 < (W p).re) -> forall (t : unitInterval) (p : RightTubeMinusLeftCore), (t : ℝ) <= 1/2 -> (((1-2*(t:ℝ):ℝ):ℂ) + ((2*(t:ℝ):ℝ):ℂ)*W p) != 0",
    :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/coupled-angular-departure-positive-real",
    :acceptance
-   {:probe
-    "Compile coupledAngularDepartureLeg_ne_zero_of_waypoint_re_pos. Prove that any continuous waypoint with strictly positive real part makes the first affine leg from 1 to that waypoint nonzero for every time at most 1/2. Do not choose the waypoint, prove the arrival leg, normalize to Circle, or assemble the ambient deformation.",
-    :declaration
-    "ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularDepartureLeg_ne_zero_of_waypoint_re_pos",
-    :type
-    "forall (W : C(RightTubeMinusLeftCore, ℂ)), (forall p, 0 < (W p).re) -> forall (t : unitInterval) (p : RightTubeMinusLeftCore), (t : ℝ) <= 1/2 -> (((1-2*(t:ℝ):ℝ):ℂ) + ((2*(t:ℝ):ℝ):ℂ)*W p) != 0",
-    :placeholder "the sole sorry in apm_t02a03",
-    :route-step
-    "certify the departure half of the banked two-leg waypoint construction from a positive-real waypoint invariant"},
+   "Add the compiled theorem from the fixture unchanged in mathematical content; preserve the registered statements and introduce no placeholders or nonstandard axioms.",
    :id
    :routes-2026-10-11-t02a03-coupled-angular-departure-positive-real-topo2-r1,
    :kind :reusable-theorem,
    :area "explicit-r3-tube-deformation-retraction",
+   :declaration
+   "ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularDepartureLeg_ne_zero_of_waypoint_re_pos",
    :depends-on
    [:routes-2026-10-11-t02a03-coupled-angular-waypoint-adapter-topo2-r1],
    :current-residual
