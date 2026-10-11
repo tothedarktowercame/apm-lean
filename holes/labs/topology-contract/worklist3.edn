@@ -2547,8 +2547,85 @@
   {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-localizationmap-groupglobalgenerator-eq-zsmul-ambientlocalgenerator,
+   :evidence
+   {:placeholder-delta {:source 0, :fixture 0},
+    :residual
+    "Use actual orientation normalization to prove the explicit basepoint localization coefficient is one, and verify the module and relative chart transport equations required by localizationMap_groupGlobalGenerator_transport.",
+    :gates
+    {:module-build :pass,
+     :fixture-compiles-against-promoted-module :pass,
+     :exact-declaration-type :pass,
+     :explicit-integer-coefficient-only :pass,
+     :zero-source-and-fixture-sorry :pass,
+     :standard-only-axioms :pass,
+     :registry-check :pass,
+     :exact-scope :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["lake build replayed pre-existing informational axiom reports from dependencies; the target module emitted no warnings"],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.ManifoldFundamentalClass.localizationMap_groupGlobalGenerator_eq_zsmul_ambientLocalGenerator",
+      :type
+      "For every dimension k plus 2 and point x, the canonical localization of groupGlobalGenerator is an explicit integer multiple of HigherChartLocalGenerator.ambientLocalGenerator x.",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on
+      ["ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator"
+       "ConstructionTargets.ManifoldFundamentalClass.localizationMap"],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-10",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/manifold_fundamental_class_localization_coefficient.lean",
+      :exit 0,
+      :output
+      "0c9daf41c756e7ac28a29ec93a40fb5a2643fd4a702785cea9a352db420d534b"}
+     {:cmd
+      "lake env lean /tmp/manifold_fundamental_class_localization_coefficient.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^\\s*axiom\\b' ConstructionTargets/ManifoldFundamentalClass.lean /tmp/manifold_fundamental_class_localization_coefficient.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :diagnostic-history
+    [{:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 1,
+      :finding
+      "Opening HigherChartLocalGenerator made E ambiguous with CoefficientOverlapPair.E and disrupted earlier declarations; removing that broad open and fully qualifying HigherChartLocalGenerator.E and its generator declarations corrected the source, and the final rerun exits zero."}],
+    :commit "ca6ef15250c7e5ca930633522ebd7cdff575e2f5",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path
+     "/tmp/manifold_fundamental_class_localization_coefficient.lean",
+     :sha256
+     "0c9daf41c756e7ac28a29ec93a40fb5a2643fd4a702785cea9a352db420d534b",
+     :original-sha256
+     "48adb920db61f95bcee7c5b5682aa6528ae0bc1d6c3a78bda4361b17fbbe87dc",
+     :sorry-count 0},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :summary
+     "Imported HigherChartLocalGenerator and proved that the canonical localization of groupGlobalGenerator is an explicit integer multiple of the concrete ambient chart generator in every consumer dimension k plus 2."},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/basepoint-localization-coefficient",
@@ -4485,16 +4562,20 @@
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.localizationMap_groupGlobalGenerator_eq_zsmul_ambientLocalGenerator",
     :reported-by
-    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+     :routes-2026-10-11-manifold-basepoint-localization-coefficient-topo3-r1],
     :type
     "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (e : (((AlgebraicTopology.singularHomologyFunctor (ModuleCat Int) (k+2)).obj (ModuleCat.of Int Int)).obj (TopCat.of M)) ≅ ModuleCat.of Int Int) (x : M), exists r : Int, r • HigherChartLocalGenerator.ambientLocalGenerator (k := k) x = localizationMap x (k+2) (groupGlobalGenerator (TopCat.of M) (k+2) e)",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in
+    :routes-2026-10-11-manifold-basepoint-localization-coefficient-topo3-r1},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-localizationmap-groupglobalgenerator-eq-zsmul-ambientlocalgenerator,
    :kind :lemma,
    :depends-on
-   [:lemma-constructiontargets-manifoldfundamentalclass-groupglobalgenerator-generates],
+   [:lemma-constructiontargets-manifoldfundamentalclass-groupglobalgenerator-generates
+    :lemma-constructiontargets-manifoldfundamentalclass-groupglobalgenerator
+    :lemma-constructiontargets-manifoldfundamentalclass-localizationmap],
    :other-consumers [:t98A02]}
   {:consumer :t00A03,
    :phase :lemma,
