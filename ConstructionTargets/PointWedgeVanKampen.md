@@ -144,3 +144,11 @@ of the identity under the full B3 composite.  The map rewrite and
 boundary onto that object.  The residual is therefore the evaluation of this
 explicit inverse composite on the two literal legs, through B3's successive
 span and representation equivalences.
+
+The last inverse stage is now computed explicitly.
+`genericPointWedgeIdentityRepresentation` is the representation obtained by
+applying the inverse representation/`SingleObj` equivalence to the identity,
+and its action on both coproduct injections is definitionally the respective
+injection.  Thus no coordinate defect occurs at B3's final representation
+stage; the remaining calculation lies in the preceding point-span and open
+cover inverse transports.

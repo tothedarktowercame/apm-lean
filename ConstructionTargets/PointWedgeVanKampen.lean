@@ -373,6 +373,32 @@ def genericPointWedgeSingleObjMappingEquivalence
       (representationSingleObjEquivalence
         (C := C) (genericPointWedgeLeftGroup x₀) (genericPointWedgeRightGroup y₀))
 
+/-- The first object encountered when evaluating the inverse of the full B3
+equivalence at the identity functor. -/
+def genericPointWedgeIdentityRepresentation :
+    FreeProductRepresentation
+      (C := SingleObj (genericPointWedgeFreeProduct x₀ y₀))
+      (genericPointWedgeLeftGroup x₀) (genericPointWedgeRightGroup y₀) :=
+  (representationSingleObjEquivalence
+    (C := SingleObj (genericPointWedgeFreeProduct x₀ y₀))
+    (genericPointWedgeLeftGroup x₀)
+    (genericPointWedgeRightGroup y₀)).inverse.obj
+      (𝟭 (SingleObj (genericPointWedgeFreeProduct x₀ y₀)))
+
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+@[simp] theorem genericPointWedgeIdentityRepresentation_inl
+    (g : genericPointWedgeLeftGroup x₀) :
+    (genericPointWedgeIdentityRepresentation x₀ y₀).action
+        (Monoid.Coprod.inl g) = Monoid.Coprod.inl g := by
+  rfl
+
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+@[simp] theorem genericPointWedgeIdentityRepresentation_inr
+    (g : genericPointWedgeRightGroup y₀) :
+    (genericPointWedgeIdentityRepresentation x₀ y₀).action
+        (Monoid.Coprod.inr g) = Monoid.Coprod.inr g := by
+  rfl
+
 variable {C D : Type} [Category C] [Category D]
 
 private abbrev genericSpanPostcompose (K : C ⥤ D) :=
@@ -1225,6 +1251,9 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeCoordinatePointSpanEquivalence
 #print axioms genericPointWedgeCoordinatePointSpanPostcomposeIso
 #print axioms genericPointWedgeSingleObjMappingEquivalence
+#print axioms genericPointWedgeIdentityRepresentation
+#print axioms genericPointWedgeIdentityRepresentation_inl
+#print axioms genericPointWedgeIdentityRepresentation_inr
 #print axioms genericPointWedgeSingleObjPostcomposeIso
 #print axioms genericPointWedgeSourceEquivalence
 #print axioms genericPointWedgeInverseIdentityFunctor
