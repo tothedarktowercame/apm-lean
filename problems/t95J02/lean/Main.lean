@@ -127,6 +127,69 @@ private lemma t95J02RetractionA_comp_inclusion :
   rcases z with ⟨z, ⟨x, rfl⟩⟩
   rfl
 
+namespace t95J02Closure
+
+/-- A quotient-invariant pair of trigonometric coordinates.  On the vertical
+core this is the usual cosine-sine parametrization of the circle. -/
+def separatingRaw (p : ℝ × ℝ) : EuclideanSpace ℝ (Fin 2) :=
+  WithLp.toLp 2 ![Real.cos (2 * Real.pi * p.2),
+    Real.sin (2 * Real.pi * p.2) * Real.cos (Real.pi * p.1)]
+
+theorem separatingRaw_generator {p q : ℝ × ℝ} (h : t95J02KleinRel p q) :
+    separatingRaw p = separatingRaw q := by
+  cases h with
+  | glide x y =>
+      ext i
+      fin_cases i
+      · change Real.cos (2 * Real.pi * y) = Real.cos (2 * Real.pi * -y)
+        rw [show 2 * Real.pi * -y = -(2 * Real.pi * y) by ring, Real.cos_neg]
+      · change Real.sin (2 * Real.pi * y) * Real.cos (Real.pi * x) =
+          Real.sin (2 * Real.pi * -y) * Real.cos (Real.pi * (x + 1))
+        have hy : 2 * Real.pi * -y = -(2 * Real.pi * y) := by ring
+        have hx : Real.pi * (x + 1) = Real.pi * x + Real.pi := by ring
+        rw [hy, Real.sin_neg, hx, Real.cos_add_pi]
+        simp
+  | vertical x y =>
+      ext i
+      fin_cases i
+      · change Real.cos (2 * Real.pi * y) = Real.cos (2 * Real.pi * (y + 1))
+        have hy : 2 * Real.pi * (y + 1) = 2 * Real.pi * y + 2 * Real.pi := by ring
+        rw [hy, Real.cos_add_two_pi]
+      · change Real.sin (2 * Real.pi * y) * Real.cos (Real.pi * x) =
+          Real.sin (2 * Real.pi * (y + 1)) * Real.cos (Real.pi * x)
+        have hy : 2 * Real.pi * (y + 1) = 2 * Real.pi * y + 2 * Real.pi := by ring
+        rw [hy, Real.sin_add_two_pi]
+
+theorem separatingRaw_eqvGen {p q : ℝ × ℝ}
+    (h : Relation.EqvGen t95J02KleinRel p q) : separatingRaw p = separatingRaw q := by
+  exact Relation.EqvGen.rec
+    (fun _ _ hrel => separatingRaw_generator hrel)
+    (fun _ => rfl)
+    (fun _ _ _ ih => ih.symm)
+    (fun _ _ _ _ _ ih₁ ih₂ => ih₁.trans ih₂) h
+
+theorem separatingRaw_continuous : Continuous separatingRaw := by
+  apply (PiLp.continuous_toLp 2 (fun _ : Fin 2 => ℝ)).comp
+  rw [continuous_pi_iff]
+  intro i
+  fin_cases i
+  · change Continuous (fun p : ℝ × ℝ => Real.cos (2 * Real.pi * p.2))
+    fun_prop
+  · change Continuous (fun p : ℝ × ℝ =>
+      Real.sin (2 * Real.pi * p.2) * Real.cos (Real.pi * p.1))
+    fun_prop
+
+/-- The separating coordinates descended to the concrete Klein-bottle
+quotient. -/
+def separatingMap : C(t95J02KleinBottleType, EuclideanSpace ℝ (Fin 2)) where
+  toFun := Quotient.lift separatingRaw (fun _ _ h => separatingRaw_eqvGen h)
+  continuous_toFun := separatingRaw_continuous.quotient_lift _
+
+@[simp] theorem separatingMap_quotientPoint (p : ℝ × ℝ) :
+    separatingMap (t95J02QuotientPoint p) = separatingRaw p := rfl
+
+end t95J02Closure
+
 /-- Integral first singular homology, used only to state the missing invariant
 without assuming a presentation for the quotient's fundamental group. -/
 abbrev apm_t95J02_H1 (X : Type) [TopologicalSpace X] :=

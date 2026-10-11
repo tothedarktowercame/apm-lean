@@ -25,7 +25,7 @@ lean: `t95J02Closure.separatingRaw` : `ℝ × ℝ → EuclideanSpace ℝ (Fin 2)
 
 uses: real continuity and trigonometric periodicity lemmas
 
-status: planned
+status: proved
 
 Set
 `separatingRaw (x,y) = ![Real.cos (2 * π * y),
@@ -44,7 +44,7 @@ lean: `t95J02Closure.separatingMap` :
 
 uses: B1, `Relation.EqvGen.rec`, `Continuous.quotient_lift`
 
-status: planned
+status: proved
 
 Extend B1 from generators through reflexivity, symmetry, and transitivity of
 `Relation.EqvGen`.  Use `Quotient.lift separatingRaw` for the function.  Its
