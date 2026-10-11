@@ -2686,8 +2686,76 @@
   {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-ambientlocalgenerator-zsmul-injective,
+   :evidence
+   {:placeholder-delta {:source 0, :fixture 0},
+    :residual
+    "Use actual orientation data to prove that localizationMap of groupGlobalGenerator equals one times the concrete ambientLocalGenerator at a normalized basepoint; coefficient uniqueness then yields r = 1, after which the two concrete chart-transport equations remain.",
+    :gates
+    {:module-build :pass,
+     :exact-declaration-type :pass,
+     :standard-axioms-only :pass,
+     :coefficient-injectivity-through-concrete-isomorphisms :pass,
+     :exact-scope :pass,
+     :statement-registry :pass,
+     :zero-placeholders :pass,
+     :clean-tree :pass,
+     :fixture-compiles :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["lake build replayed pre-existing warnings from dependency modules; the target module emitted informational axiom reports and no warnings"],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.ManifoldFundamentalClass.ambientLocalGenerator_zsmul_injective",
+      :type
+      "Integer multiples of HigherChartLocalGenerator.ambientLocalGenerator have unique coefficients.",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on
+      ["ConstructionTargets.HigherChartLocalGenerator.ambientChartMap_Hn_isIso"
+       "ConstructionTargets.HigherModelLocalHomology.normalization"],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-10",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/manifold_fundamental_class_local_generator_coefficient_unique.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/manifold_fundamental_class_local_generator_coefficient_unique.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^\\s*axiom\\b' ConstructionTargets/ManifoldFundamentalClass.lean /tmp/manifold_fundamental_class_local_generator_coefficient_unique.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git status --porcelain", :exit 0, :stdout ""}],
+    :commit "0d578a28d0c0c6fef4f4e3107e5084a8b74e6a1c",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path
+     "/tmp/manifold_fundamental_class_local_generator_coefficient_unique.lean",
+     :sha256
+     "a36997905d4263f428a3a4df3eddd716174d1b54e77b094c6d815d0750b96d36",
+     :original-sha256
+     "89d8a99560487e857d130ad179e947adc25ef40851c00631383f1b5c889b6b70",
+     :sorry-count 0},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :declaration
+     "ConstructionTargets.ManifoldFundamentalClass.ambientLocalGenerator_zsmul_injective"},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/local-generator-coefficient-uniqueness",
@@ -4768,11 +4836,13 @@
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.ambientLocalGenerator_zsmul_injective",
     :reported-by
-    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+     :routes-2026-10-11-manifold-local-generator-coefficient-unique-topo3-r1],
     :type
     "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), Function.Injective (fun r : Int => r • HigherChartLocalGenerator.ambientLocalGenerator (k := k) x)",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in
+    :routes-2026-10-11-manifold-local-generator-coefficient-unique-topo3-r1},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-ambientlocalgenerator-zsmul-injective,
    :kind :lemma,
