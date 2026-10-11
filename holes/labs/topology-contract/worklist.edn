@@ -116188,6 +116188,18 @@
     {:commit "0f91a562d38e8d6dea370234c9e989247758764e",
      :next
      "Implement B6, the homotopy between the vertical inclusion parametrization and its precomposition with CoefficientCoordinateReflections.reflectionMap (1 : Fin 2)."},
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791721737570-5335-4cc84d69",
+     :commands
+     ["git show/diff-tree 0f91a562d38e8d6dea370234c9e989247758764e"
+      "recorded-tree SHA-256, scope, diff-check, and placeholder verification"
+      "python3 scripts/statement-registry.py check"
+      "lake env lean problems/t95J02/lean/Main.lean"
+      "lake env lean recorded source plus #print axioms"],
+     :finding
+     "PASS: commit 0f91a562 adds new B5 progress since program history; exact source and blueprint hashes match, scope is exact, B5 compiles without new placeholders, uses only standard axioms, and its sphere-to-CircleB orientation and representation transports are correct. B6-B9 are explicitly listed as remaining milestones."},
     :commit "0f91a562d38e8d6dea370234c9e989247758764e",
     :changed-paths
     ["problems/t95J02/lean/Main.lean"
@@ -116208,7 +116220,7 @@
       {:id :B9, :status :planned}]},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t95J02/lean/Main.lean"
     "problems/t95J02/status.json"
@@ -116224,7 +116236,7 @@
     ["lake env lean problems/t95J02/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Program milestone completed. Blueprint node B4 is proved: two vertical parameters represent the same CircleB point exactly when they differ by an integer. The forward proof uses the descended separating coordinate and Circle.exp_eq_exp; the reverse proof uses B3 periodicity. B5-B9 remain.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Program milestone completed. Blueprint node B5 is proved: the integer-periodic vertical parametrization descends to a continuous bijection from AddCircle 1; the restricted separating coordinate makes CircleB Hausdorff; compact-to-Hausdorff upgrades the bijection to a homeomorphism; and the standard circle identifications produce t95J02CircleB_homeo. B6-B9 remain for later jobs.",
    :id :program-2026-10-11-close-t95j02,
    :kind :final-adapter,
    :campaign-priority 41,
@@ -116248,7 +116260,11 @@
     {:job 7,
      :commit "a60f6f09130debe9f8f2ef78b705c27b251ce4a4",
      :reason
-     "Program milestone completed. Blueprint node B4 is proved: two vertical parameters represent the same CircleB point exactly when they differ by an integer. The forward proof uses the descended separating coordinate and Circle.exp_eq_exp; the reverse proof uses B3 periodicity. B5-B9 remain."}]}
+     "Program milestone completed. Blueprint node B4 is proved: two vertical parameters represent the same CircleB point exactly when they differ by an integer. The forward proof uses the descended separating coordinate and Circle.exp_eq_exp; the reverse proof uses B3 periodicity. B5-B9 remain."}
+    {:job 8,
+     :commit "0f91a562d38e8d6dea370234c9e989247758764e",
+     :reason
+     "Program milestone completed. Blueprint node B5 is proved: the integer-periodic vertical parametrization descends to a continuous bijection from AddCircle 1; the restricted separating coordinate makes CircleB Hausdorff; compact-to-Hausdorff upgrades the bijection to a homeomorphism; and the standard circle identifications produce t95J02CircleB_homeo. B6-B9 remain for later jobs."}]}
   {:consumer :t92J08,
    :phase :implementation,
    :state :open,
@@ -117035,7 +117051,7 @@
    :other-consumers []}
   {:consumer :t95J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t95J02Closure.t95J02CircleB_homeo",
@@ -117045,7 +117061,9 @@
     :reported-by [:program-2026-10-11-close-t95j02],
     :type "euclideanUnitSphere 2 ≃ₜ t95J02CircleB",
     :area "klein-bottle-homology",
-    :proved-in :program-2026-10-11-close-t95j02},
+    :proved-in :program-2026-10-11-close-t95j02,
+    :banked-by :program-2026-10-11-close-t95j02,
+    :banked-commit "0f91a562d38e8d6dea370234c9e989247758764e"},
    :id :lemma-t95j02closure-t95j02circleb-homeo,
    :kind :lemma,
    :depends-on
