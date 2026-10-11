@@ -70424,7 +70424,59 @@
   {:bounded-exception
    "single-consumer shared affine-leg radius and nonzero-imaginary invariant",
    :consumer :t02A03,
-   :phase :probe,
+   :supporting-declarations
+   [{:name
+     "ConstructionTargets.T02A03GeometricTubeDeformation.coreNormalAffineLeg",
+     :type "unitInterval -> ℂ -> ℂ -> ℂ"}],
+   :evidence
+   {:probe
+    {:residual
+     "Implement the generic affine leg and invariant, then specialize it to both zero-height endpoints, reverse the arrival leg, and concatenate the certified detour.",
+     :outcome :go,
+     :warnings [],
+     :axioms [propext Classical.choice Quot.sound],
+     :commands
+     [{:cmd
+       "lake env lean /tmp/t02a03_affine_leg_invariants_probe.lean",
+       :exit 0,
+       :output
+       "coreNormalAffineLeg_radius_and_im_ne_zero compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd "sha256sum /tmp/t02a03_affine_leg_invariants_probe.lean",
+       :exit 0,
+       :output
+       "37d99cc42a0e38d974ebe478da72cfa1db289cc6ad80a5742287357925844afa  /tmp/t02a03_affine_leg_invariants_probe.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_affine_leg_invariants_probe.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}
+      {:cmd
+       "rg -n 'coreNormalAffineLeg' /tmp/t02a03_affine_leg_invariants_probe.lean",
+       :exit 0,
+       :output
+       "5:noncomputable def coreNormalAffineLeg\n9:theorem coreNormalAffineLeg_radius_and_im_ne_zero\n32:#print axioms coreNormalAffineLeg_radius_and_im_ne_zero"}],
+     :fixture
+     {:path "/tmp/t02a03_affine_leg_invariants_probe.lean",
+      :sha256
+      "37d99cc42a0e38d974ebe478da72cfa1db289cc6ad80a5742287357925844afa"},
+     :finding
+     "The fixture proves the shared affine-leg invariant without placeholders: convex interpolation preserves the closed quarter-radius disk, while a real starting endpoint and nonreal waypoint give imaginary coordinate t*w.im, nonzero at every noninitial time.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+      :declaration
+      "ConstructionTargets.T02A03GeometricTubeDeformation.coreNormalAffineLeg_radius_and_im_ne_zero",
+      :type
+      "forall (t : unitInterval) (n w : ℂ), n.im = 0 -> w.im ≠ 0 -> (t : ℝ) ≠ 0 -> ‖n‖ ≤ (1 / 4 : ℝ) -> ‖w‖ ≤ (1 / 4 : ℝ) -> ‖coreNormalAffineLeg t n w‖ ≤ (1 / 4 : ℝ) ∧ (coreNormalAffineLeg t n w).im ≠ 0",
+      :supporting-declarations
+      [{:name
+        "ConstructionTargets.T02A03GeometricTubeDeformation.coreNormalAffineLeg",
+        :type "unitInterval -> ℂ -> ℂ -> ℂ"}]},
+     :seat "topo-8"}},
+   :phase :implementation,
+   :type
+   "forall (t : unitInterval) (n w : ℂ), n.im = 0 -> w.im ≠ 0 -> (t : ℝ) ≠ 0 -> ‖n‖ ≤ (1 / 4 : ℝ) -> ‖w‖ ≤ (1 / 4 : ℝ) -> ‖coreNormalAffineLeg t n w‖ ≤ (1 / 4 : ℝ) ∧ (coreNormalAffineLeg t n w).im ≠ 0",
    :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
@@ -70447,6 +70499,8 @@
    :routes-2026-10-11-t02a03-core-normal-affine-leg-radius-im-topo2-r1,
    :kind :reusable-theorem,
    :area "explicit-r3-tube-deformation-retraction",
+   :declaration
+   "ConstructionTargets.T02A03GeometricTubeDeformation.coreNormalAffineLeg_radius_and_im_ne_zero",
    :depends-on
    [:routes-2026-10-11-t02a03-zero-height-signed-imaginary-waypoint-properties-topo2-r1],
    :current-residual
