@@ -105321,6 +105321,19 @@
       :exit 0,
       :finding "131 registered statements match, 0 do not"}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791696988876-4375-8a646449",
+     :commands
+     ["git show, git diff-tree, and git diff-tree --check 29ead8ffdf682408855cd12480e2a89868bb472b"
+      "sha256sum recorded source and /tmp/klein-orbit-quotient-homeomorph-probe.lean"
+      "lake build ConstructionTargets.KleinOrbitQuotientHomeomorph"
+      "lake env lean /tmp/klein-orbit-quotient-homeomorph-probe.lean"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped placeholder census for problems/t93J03/lean/Main.lean"],
+     :finding
+     "PASS: valid STOP after committed compiled progress; the sole changed path matches the recorded blob, source hash 67228015a1a962d50a60b8cfc81cd3678ff6bedd18f57bd4b3b87f35677c5985 and fixture hash 92520bb0ff1e978b0e5f9bd0e276d81d560bd11136f75a683e1bd8c8cb4f17b1 reproduce, forward continuity from the closed-square orbit quotient to the plane orbit quotient compiles with standard axioms, the fixture custom axiom has the exact PlaneOrbitQuotient-to-KleinBottle homeomorphism type, t93J03 retains one placeholder, all 131 statements match, and inverse continuity plus the quotient-level square-to-surface homeomorphism are explicitly listed"},
     :commit "29ead8ffdf682408855cd12480e2a89868bb472b",
     :changed-paths
     ["ConstructionTargets/KleinOrbitQuotientHomeomorph.lean"],
@@ -105331,7 +105344,7 @@
      :status :self-axiomatized},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/KleinOrbitQuotientHomeomorph.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-orbit-quotient-homeomorph",
@@ -105470,7 +105483,7 @@
       "With the plane orbit quotient carrying the coinduced topology, the exact missing declaration is a homeomorphism to the frozen KleinBottle."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-orbit-quotient-homeomorph",
@@ -106315,7 +106328,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "kleinOrbitQuotient_homeomorph",
@@ -106330,7 +106343,9 @@
      :routes-2026-10-11-klein-orbit-quotient-homeomorph-96],
     :type
     "theorem is absent: after defining kleinPlaneAction from PresentedGroup.toGroup and orbitSetoid by existence of a group element, one still must prove theorem kleinOrbitQuotient_homeomorph : Quotient orbitSetoid ≃ₜ ConstructionTargets.StatementSurfaceModels.KleinBottle, with orbitSetoid x y ↔ ∃ g : T93J03.PresentedKleinGroup, kleinPlaneAction g x = y. This theorem entails a complete classification of every orbit intersection with the closed square, all edge and corner identifications, equivalence with the disk-boundary EqvGen relation used by Surface false 2, and continuity of both quotient maps",
-    :area "deck-group-fundamental-group"},
+    :area "deck-group-fundamental-group",
+    :banked-by :routes-2026-10-11-klein-orbit-quotient-homeomorph-102,
+    :banked-commit "29ead8ffdf682408855cd12480e2a89868bb472b"},
    :id :lemma-kleinorbitquotient-homeomorph,
    :kind :lemma,
    :depends-on
