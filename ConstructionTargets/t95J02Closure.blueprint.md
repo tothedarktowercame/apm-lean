@@ -171,7 +171,7 @@ lean: `t95J02Closure.apm_t95J02_bridge_retraction_injective` :
 
 uses: Mathlib `Functor.map_comp`, `Functor.map_id`
 
-status: planned
+status: proved
 
 Unpack a retraction `r` and the equality
 `t95J02InclusionB ≫ r = 𝟙 _`.  Apply the singular-homology functor to this

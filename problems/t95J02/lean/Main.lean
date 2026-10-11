@@ -493,7 +493,25 @@ theorem apm_t95J02_bridge_retraction_injective
     (hret : HasT95J02Retraction t95J02InclusionB) :
     Function.Injective
       (apm_t95J02_H1Map t95J02InclusionB) := by
-  sorry
+  rcases hret with ⟨r, hr⟩
+  let F := (AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+    (ModuleCat.of ℤ ℤ)
+  have hcomp :
+      apm_t95J02_H1Map t95J02InclusionB ≫ apm_t95J02_H1Map r =
+        𝟙 (apm_t95J02_H1 t95J02CircleB) := by
+    change F.map t95J02InclusionB ≫ F.map r = 𝟙 _
+    rw [← F.map_comp, hr]
+    exact F.map_id _
+  intro x y hxy
+  have hxy' := congrArg (fun z ↦ apm_t95J02_H1Map r z) hxy
+  have hx := congrArg
+    (fun q : apm_t95J02_H1 t95J02CircleB ⟶
+        apm_t95J02_H1 t95J02CircleB ↦ q x) hcomp
+  have hy := congrArg
+    (fun q : apm_t95J02_H1 t95J02CircleB ⟶
+        apm_t95J02_H1 t95J02CircleB ↦ q y) hcomp
+  simpa only [CategoryTheory.comp_apply, CategoryTheory.id_apply] using
+    hx.symm.trans (hxy'.trans hy)
 
 theorem apm_t95j02 :
     HasT95J02Retraction t95J02InclusionA ∧
