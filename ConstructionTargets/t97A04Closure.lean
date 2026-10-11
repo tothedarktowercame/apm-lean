@@ -999,6 +999,74 @@ theorem shearY_productionIntersectionMap_range (a b : ℤ) :
         (frozenYCover.U ∩ frozenYCover.V) 1).hom)
     (shearYIntersectionHomology_conjugation a b)
 
+/-- The chosen range restriction of the shear is the actual restricted map
+after passing through the canonical range presentation. -/
+theorem shearY_coverRangeMap_naturality (a b : ℤ) :
+    (ambientSubspaceRangeChainsIso
+        (frozenYCover.U ∩ frozenYCover.V)).hom ≫
+      ConstructionTargets.SingularSubdivision.singularPostcomposition
+        (shearYOverlap a b) =
+    closureChains.map
+        (coverRangeMap
+          (frozenYCover.U ∩ frozenYCover.V)
+          (frozenYCover.U ∩ frozenYCover.V)
+          (shearY a b) (shearY_mapsTo_inter a b)) ≫
+      (ambientSubspaceRangeChainsIso
+        (frozenYCover.U ∩ frozenYCover.V)).hom := by
+  change closureChains.map _ ≫ closureChains.map _ =
+    closureChains.map _ ≫ closureChains.map _
+  rw [← Functor.map_comp, ← Functor.map_comp]
+  apply congrArg closureChains.map
+  apply (cancel_mono (TopCat.toSSet.map
+    (subspaceInclusion (frozenYCover.U ∩ frozenYCover.V)))).1
+  simp only [Category.assoc]
+  have hrange :
+      (asIso (Subfunctor.toRange (TopCat.toSSet.map
+        (subspaceInclusion (frozenYCover.U ∩ frozenYCover.V))))).symm.hom ≫
+          TopCat.toSSet.map
+            (subspaceInclusion (frozenYCover.U ∩ frozenYCover.V)) =
+        (ambientSubspaceRange
+          (frozenYCover.U ∩ frozenYCover.V)).ι := by
+    exact rangeIso_hom_comp _
+  slice_rhs 2 3 => exact hrange
+  have hcover := coverRangeMap_comp_ι
+    (frozenYCover.U ∩ frozenYCover.V)
+    (frozenYCover.U ∩ frozenYCover.V)
+    (shearY a b) (shearY_mapsTo_inter a b)
+  slice_rhs 1 2 => exact hcover
+  rw [← TopCat.toSSet.map_comp]
+  have htop :
+      TopCat.ofHom (shearYOverlap a b) ≫
+          subspaceInclusion (frozenYCover.U ∩ frozenYCover.V) =
+        subspaceInclusion (frozenYCover.U ∩ frozenYCover.V) ≫
+          TopCat.ofHom (shearY a b) := by
+    rfl
+  rw [htop, TopCat.toSSet.map_comp, ← Category.assoc]
+  exact congrArg (fun k ↦ k ≫ TopCat.toSSet.map
+    (TopCat.ofHom (shearY a b))) hrange
+
+/-- Thus the production intersection endpoint is the homology map of the
+actual overlap restriction. -/
+theorem shearY_productionIntersectionMap_eq_overlap (a b : ℤ) :
+    productionIntersectionMap
+        frozenYCover.U frozenYCover.V frozenYCover.U frozenYCover.V
+        (shearYShortComplexHom a b) 1 =
+      HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularSubdivision.singularPostcomposition
+          (shearYOverlap a b)) 1 := by
+  rw [shearY_productionIntersectionMap_range]
+  have hnat := congrArg
+    (fun k ↦ HomologicalComplex.homologyMap k 1)
+    (shearY_coverRangeMap_naturality a b)
+  simp only [HomologicalComplex.homologyMap_comp] at hnat
+  rw [ambientRangeProductionHomologyIso_inv,
+    ambientRangeProductionHomologyIso_hom]
+  rw [← hnat, ← Category.assoc]
+  rw [← HomologicalComplex.homologyMap_comp,
+    (ambientSubspaceRangeChainsIso
+      (frozenYCover.U ∩ frozenYCover.V)).inv_hom_id,
+    HomologicalComplex.homologyMap_id, Category.id_comp]
+
 /-- The production overlap endpoint written in the fixed integral
 two-component coordinate. -/
 noncomputable def shearYOverlapCoordinateMap (a b : ℤ) :
@@ -1099,6 +1167,8 @@ theorem shearY_overlap_coordinate_of_degree_components (a b : ℤ)
 #print axioms circleZPow_H1_coordinate
 #print axioms twoCircleOverlapShearLeftFold_H1_coordinate
 #print axioms twoCircleOverlapShearRightFold_H1_coordinate
+#print axioms shearY_coverRangeMap_naturality
+#print axioms shearY_productionIntersectionMap_eq_overlap
 #print axioms shearYOverlapCoordinateMap
 #print axioms shearY_overlap_coordinate_of_injections
 #print axioms inl_comp_overlapScalar
