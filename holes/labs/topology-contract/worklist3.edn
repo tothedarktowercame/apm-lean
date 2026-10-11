@@ -14562,8 +14562,80 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :implements-lemma :lemma-mfclass-forget-short-exact,
+   :evidence
+   {:placeholder-delta
+    {:t00J02 {:before 1, :after 1, :delta 0},
+     :t98A02 {:before 1, :after 1, :delta 0}},
+    :residual
+    "Construct the mapped snake input using preserved kernel and cokernel universal properties together with the now-explicit exact rows, then assemble its comparison with forgottenCoefficientOpenDiskSnakeInput and apply naturality_δ.",
+    :gates
+    {:module-compile :pass,
+     :target-build :pass,
+     :statement-registry "131 registered statements match, 0 do not",
+     :scoped-diff :pass,
+     :forbidden-placeholder-scan :pass,
+     :scoped-worktree-clean true},
+    :outcome :done-unreviewed,
+    :warnings
+    ["The target build replayed pre-existing linter warnings outside this scoped change."
+     "Unrelated existing edits to ConstructionTargets/t95J02Closure.blueprint.md, problems/t95J02/lean/Main.lean, and problems/t95J02/status.json remain untouched."],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.ManifoldFundamentalClass.forgetIntModules_shortExact",
+      :type
+      "forall {S : ShortComplex (ModuleCat ℤ)}, S.ShortExact -> (S.map forgetIntModules).ShortExact",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on [],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes
+    {:module
+     "67f03ad56b9f17b6e579c22eaefff24cf5436f8293aadd20297e100e4f407725",
+     :fixture
+     "1b86ab5cdf0f216cb6c18636ebdc9086d611f1dfa83ccac3c568585955431769"},
+    :disposition :done-unreviewed,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :topo-10,
+    :reason
+    "Proved that the exact forgetful functor sends every short exact sequence of integral modules to a short exact sequence of additive commutative groups via ShortComplex.ShortExact.map_of_exact.",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/manifold_fundamental_class_forget_short_exact.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "git diff --check HEAD^ HEAD -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "comment-stripped placeholder counts for t00J02 t98A02",
+      :exit 0}
+     {:cmd
+      "forbidden placeholder scan in ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "git status --short -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}],
+    :diagnostic-history [],
+    :commit "2e50c9fb20fc21ff7666000bd78038c31ac5ae89",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path "/tmp/manifold_fundamental_class_forget_short_exact.lean",
+     :sha256
+     "1b86ab5cdf0f216cb6c18636ebdc9086d611f1dfa83ccac3c568585955431769"},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :declaration
+     "ConstructionTargets.ManifoldFundamentalClass.forgetIntModules_shortExact"},
+    :row :routes-2026-10-11-manifold-forget-short-exact-topo3-r1,
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/integral-open-disk-connecting-naturality/snake-input-exact-rows",
@@ -21592,11 +21664,13 @@
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.forgetIntModules_shortExact",
     :reported-by
-    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+     :routes-2026-10-11-manifold-forget-short-exact-topo3-r1],
     :type
     "forall {S : ShortComplex (ModuleCat ℤ)}, S.ShortExact -> (S.map forgetIntModules).ShortExact",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in
+    :routes-2026-10-11-manifold-forget-short-exact-topo3-r1},
    :id :lemma-mfclass-forget-short-exact,
    :kind :lemma,
    :depends-on
