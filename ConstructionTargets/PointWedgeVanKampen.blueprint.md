@@ -56,11 +56,23 @@ left and right basepoint representatives, then use B1's right formula.
 
 ### B3. Target-natural point-wedge mapping equivalence
 
-lean: `PointWedgeVanKampen.genericPointWedgeSingleObjMappingEquivalence` :
-for every category `C`, an equivalence
+lean: `PointWedgeVanKampen.genericPointWedgeSingleObjMappingEquivalence` and
+`PointWedgeVanKampen.genericPointWedgeSingleObjPostcomposeIso`, with the full
+shared context
+`{X Y} [TopologicalSpace X] [TopologicalSpace Y]
+[PathConnectedSpace X] [PathConnectedSpace Y]
+(x₀ : X) (y₀ : Y) (M : Set Y) (N : Set X)
+(hM : IsOpen M) (hN : IsOpen N) (hy : y₀ ∈ M) (hx : x₀ ∈ N)
+(cM : PointedContraction M ⟨y₀, hy⟩)
+(cN : PointedContraction N ⟨x₀, hx⟩)`.
+For every `(C) [Category C]`, the first declaration has type
 `(FundamentalGroupoid (Wedge x₀ y₀) ⥤ C) ≌
  (SingleObj (Monoid.Coprod (FundamentalGroup X x₀)
-   (FundamentalGroup Y y₀)) ⥤ C)`, natural under postcomposition in `C`.
+   (FundamentalGroup Y y₀)) ⥤ C)`.
+For `{C D} [Category C] [Category D] (K : C ⥤ D)`, the second declaration is
+the natural isomorphism between postcomposing by `K` before and after the
+first equivalence, in the same orientation as
+`TwoOpenFreeProductMapping.postcomposeIso`.
 
 uses: B1, B2,
 `twoOpenFundamentalGroupoidPseudopushoutEquivalence`,
@@ -92,7 +104,13 @@ identity.
 
 ### B4. Reconstruct the source groupoid equivalence
 
-lean: `PointWedgeVanKampen.genericPointWedgeSourceEquivalence` :
+lean: `PointWedgeVanKampen.genericPointWedgeSourceEquivalence`, with
+`{X Y} [TopologicalSpace X] [TopologicalSpace Y]
+[PathConnectedSpace X] [PathConnectedSpace Y]
+(x₀ : X) (y₀ : Y) (M : Set Y) (N : Set X)
+(hM : IsOpen M) (hN : IsOpen N) (hy : y₀ ∈ M) (hx : x₀ ∈ N)
+(cM : PointedContraction M ⟨y₀, hy⟩)
+(cN : PointedContraction N ⟨x₀, hx⟩)` :
 `FundamentalGroupoid (Wedge x₀ y₀) ≌
  SingleObj (Monoid.Coprod (FundamentalGroup X x₀)
    (FundamentalGroup Y y₀))`.
@@ -124,10 +142,27 @@ orientation from endomorphisms to `G`.
 
 ### B6. Literal left and right leg coordinates
 
-lean: `PointWedgeVanKampen.genericPointWedgeLegCoordinates_vanKampen` :
-the B5 equivalence obtained from B4 maps the fundamental-group homomorphism
-of the canonical left wedge inclusion to `Monoid.Coprod.inl`, and maps that
-of the canonical right wedge inclusion to `Monoid.Coprod.inr`.
+lean: `PointWedgeVanKampen.genericPointWedgeLegCoordinates_vanKampen`, with
+`{X Y} [TopologicalSpace X] [TopologicalSpace Y]
+[PathConnectedSpace X] [PathConnectedSpace Y]
+(x₀ : X) (y₀ : Y) (M : Set Y) (N : Set X)
+(hM : IsOpen M) (hN : IsOpen N) (hy : y₀ ∈ M) (hx : x₀ ∈ N)
+(cM : PointedContraction M ⟨y₀, hy⟩)
+(cN : PointedContraction N ⟨x₀, hx⟩)` : the conjunction consisting of
+
+1. `e (FundamentalGroup.map (includeLeft x₀ y₀) x₀ g) =
+   Monoid.Coprod.inl g` for every `g : FundamentalGroup X x₀`; and
+2. `e (FundamentalGroup.mapOfEq
+   ⟨fun y => quotientMap x₀ y₀ (.inr y),
+     (continuous_quotientMap x₀ y₀).comp continuous_inr⟩
+   (Quotient.sound (Relation.EqvGen.rel _ _ Rel.base)) g) =
+   Monoid.Coprod.inr g` for every `g : FundamentalGroup Y y₀`,
+
+where `e : FundamentalGroup (Wedge x₀ y₀)
+(quotientMap x₀ y₀ (.inl x₀)) ≃*
+Monoid.Coprod (FundamentalGroup X x₀) (FundamentalGroup Y y₀)` is B5 applied
+to B4.  The `mapOfEq` proof explicitly changes the right basepoint image to
+the chosen left representative of the wedge point.
 
 uses: B1, B2, B3, B4, B5
 
