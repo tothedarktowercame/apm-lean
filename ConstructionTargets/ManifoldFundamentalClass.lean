@@ -923,6 +923,21 @@ noncomputable def forgetIntModulesSnakeInput_transportedKernelτ₁
       (KernelFork.ofι S.v₀₁.τ₁ S.w₀₂_τ₁))).symm
         (forgetIntModulesSnakeInput_preservedKernelτ₁ S)
 
+/-- The transported first component kernel cone agrees with the first
+component of the kernel fork formed after forgetting coefficients. -/
+noncomputable def forgetIntModulesSnakeInput_kernelτ₁ConeIso
+    (S : ShortComplex.SnakeInput (ModuleCat ℤ)) :
+    (Cone.postcompose
+      (forgetIntModulesParallelPairZeroIso S.v₁₂.τ₁).hom).obj
+        (forgetIntModules.mapCone
+          (KernelFork.ofι S.v₀₁.τ₁ S.w₀₂_τ₁)) ≅
+      (KernelFork.ofι
+        (forgetIntModules.mapShortComplex.map S.v₀₁)
+        (forgetIntModulesSnakeInput_zero_squares S).1).map ShortComplex.π₁ :=
+  Cone.ext (Iso.refl _) (by
+    intro j
+    rcases j with (_ | _) <;> rfl)
+
 /-- The corrected relative-homology comparison intertwines the coefficient
 absolute-to-relative map with the production relative projection. -/
 theorem integralRelativeHomologyComparisonWithTransport_projection
@@ -1891,6 +1906,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetIntModulesSnakeInput_preservedKernelτ₁
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetIntModulesParallelPairZeroIso
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetIntModulesSnakeInput_transportedKernelτ₁
+#print axioms ConstructionTargets.ManifoldFundamentalClass.forgetIntModulesSnakeInput_kernelτ₁ConeIso
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
