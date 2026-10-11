@@ -994,6 +994,25 @@ theorem correctedLocalGeneratorCoefficient_eq_automorphism_one
     correctedLocalNormalizationAutomorphism CoefficientChartLocal.generator
   rfl
 
+/-- The corrected normalization automorphism is negation exactly when its
+extracted local-generator coefficient is negative one. -/
+theorem correctedLocalNormalizationAutomorphism_hom_eq_neg_iff
+    (k : ℕ) {M : Type} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M) :
+    (correctedLocalNormalizationAutomorphism k x).hom = -𝟙 _ ↔
+      correctedLocalGeneratorCoefficient k x = -1 := by
+  constructor
+  · intro h
+    rw [correctedLocalGeneratorCoefficient_eq_automorphism_one, h]
+    rfl
+  · intro h
+    apply AddCommGrpCat.hom_ext
+    apply AddMonoidHom.ext_int
+    change (correctedLocalNormalizationAutomorphism k x).hom.hom 1 =
+      ((-𝟙 _ : AddCommGrpCat.of ℤ ⟶ AddCommGrpCat.of ℤ)).hom 1
+    rw [← correctedLocalGeneratorCoefficient_eq_automorphism_one]
+    exact h
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -1057,3 +1076,4 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_nonnegative
 #print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient_eq_one_of_ne_neg_one
 #print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient_eq_automorphism_one
+#print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_iff
