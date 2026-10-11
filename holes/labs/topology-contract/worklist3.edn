@@ -3112,8 +3112,84 @@
   {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-integralsingularchainscomparison-subtype-naturality,
+   :evidence
+   {:placeholder-delta {:source 0, :fixture 0},
+    :residual
+    "Use this commuting square and preservation of cokernels by forgetIntModules to construct the relative chain-complex isomorphism; pass it to homology and prove it transports CoefficientChartLocal.generator to HigherChartLocalGenerator.ambientLocalGenerator.",
+    :gates
+    {:module-build :pass,
+     :exact-declaration-type :pass,
+     :standard-axioms-only :pass,
+     :explicit-chain-square :pass,
+     :exact-scope :pass,
+     :statement-registry :pass,
+     :zero-placeholders :pass,
+     :actual-subtype-inclusion :pass,
+     :clean-tree :pass,
+     :fixture-compiles :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["lake build replayed pre-existing warnings from dependency modules; the target module emitted informational axiom reports and no warnings"],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.ManifoldFundamentalClass.integralSingularChainsComparison_subtype_naturality",
+      :type
+      "The integral singular-chain comparison commutes with the actual continuous subtype inclusion from A to X.",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on
+      ["ConstructionTargets.IntegralSingularHomologyComparison.singularChainsComparison_naturality"],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-10",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/manifold_fundamental_class_integral_subtype_chain_naturality.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/manifold_fundamental_class_integral_subtype_chain_naturality.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^\\s*axiom\\b' ConstructionTargets/ManifoldFundamentalClass.lean /tmp/manifold_fundamental_class_integral_subtype_chain_naturality.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git status --porcelain", :exit 0, :stdout ""}],
+    :commit "b30fd0643e5b3ecd36d9f5d02ab935f181b6cc93",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path
+     "/tmp/manifold_fundamental_class_integral_subtype_chain_naturality.lean",
+     :sha256
+     "1aa7cb9313c39652234c753069eaee8404da40e89310ccecf94aff627b34d581",
+     :original-sha256
+     "615e4ab642476f46475d7f505e011cd5d585faf6e3fc6ed644f5ba24cf62815d",
+     :sorry-count 0},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :declarations
+     ["ConstructionTargets.ManifoldFundamentalClass.integralSubtypeInclusion"
+      "ConstructionTargets.ManifoldFundamentalClass.integralSingularChainsComparison_subtype_naturality"],
+     :representation
+     {:source
+      "The forgotten ModuleCat Int singular-chain map induced by the subtype inclusion A to X, followed by the absolute integral chain comparison on X",
+      :target
+      "The absolute integral chain comparison on A, followed by the AddCommGrpCat singular-chain map induced by the same subtype inclusion",
+      :direction
+      "Exact chain-map equality from the forgotten module-valued subtype-inclusion representation to the additive-group-valued subtype-inclusion representation"}},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/integral-relative-comparison-subtype-square",
@@ -5342,11 +5418,13 @@
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.integralSingularChainsComparison_subtype_naturality",
     :reported-by
-    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+     :routes-2026-10-11-manifold-integral-subtype-chain-naturality-topo3-r1],
     :type
     "forall {X : Type} [TopologicalSpace X] (A : Set X), ((forgetIntModules.mapHomologicalComplex (ComplexShape.down Nat)).map ((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat Int)).obj (ModuleCat.of Int Int)).map (integralSubtypeInclusion A)))) ≫ (singularChainsComparison (TopCat.of X)).hom = (singularChainsComparison (TopCat.of A)).hom ≫ (((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj (AddCommGrpCat.of Int)).map (integralSubtypeInclusion A))",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in
+    :routes-2026-10-11-manifold-integral-subtype-chain-naturality-topo3-r1},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-integralsingularchainscomparison-subtype-naturality,
    :kind :lemma,
