@@ -67961,7 +67961,62 @@
   {:bounded-exception
    "single-consumer exact recovery of the radial normal coordinate from the ambient reconstruction",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:residual
+     "Combine exact recovery with interpolation nonvanishing and rightTubeNormalComplex_eq_zero_iff to prove left-core avoidance, then prove right-tube membership.",
+     :outcome :go,
+     :warnings [],
+     :acceptance
+     {:declaration
+      "ConstructionTargets.T02A03GeometricTubeDeformation.recoveredNormal_rightTubeRadialAmbientDeformation",
+      :type
+      "forall tp : unitInterval × RightTubeMinusLeftCore, rightTubeNormalComplex (rightTubeRadialAmbientDeformation tp) = rightTubeRadialNormalInterpolation rightTubeNormalCoordinate rightTubeMeridianCoordinate tp",
+      :gates
+      ["Compile the scoped module after inserting the fixture theorem"
+       "Confirm only propext, Classical.choice, and Quot.sound axioms"
+       "Confirm no new sorry in the scoped module"
+       "Run python3 scripts/statement-registry.py check"]},
+     :commands
+     [{:cmd "lake env lean /tmp/t02a03_normal_recovery_probe.lean",
+       :exit 0,
+       :output
+       "recoveredNormal_rightTubeRadialAmbientDeformation compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd "sha256sum /tmp/t02a03_normal_recovery_probe.lean",
+       :exit 0,
+       :output
+       "ebcd2f80dc0ed65301667d129bf3797eb487e6d61a8ab7c1bff9115474dc82ae  /tmp/t02a03_normal_recovery_probe.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_normal_recovery_probe.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}
+      {:cmd
+       "rg -n 'recoveredNormal_rightTubeRadialAmbientDeformation' /tmp/t02a03_normal_recovery_probe.lean",
+       :exit 0,
+       :output
+       "9:theorem recoveredNormal_rightTubeRadialAmbientDeformation\n38:#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.recoveredNormal_rightTubeRadialAmbientDeformation"}],
+     :fixture
+     {:path "/tmp/t02a03_normal_recovery_probe.lean",
+      :sha256
+      "ebcd2f80dc0ed65301667d129bf3797eb487e6d61a8ab7c1bff9115474dc82ae"},
+     :finding
+     "The placeholder-free fixture uses positive reconstructed radius and the unit Circle direction to calculate that rightTubeNormalComplex of the ambient deformation is exactly the radial normal interpolation.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+      :declaration
+      "ConstructionTargets.T02A03GeometricTubeDeformation.recoveredNormal_rightTubeRadialAmbientDeformation",
+      :type
+      "forall tp : unitInterval × RightTubeMinusLeftCore, rightTubeNormalComplex (rightTubeRadialAmbientDeformation tp) = rightTubeRadialNormalInterpolation rightTubeNormalCoordinate rightTubeMeridianCoordinate tp",
+      :proof-plan
+      "Name the interpolated normal n and rotation u. Use positiveReconstructionRadius_rightTubeRadialNormalInterpolation and Circle.norm_coe to compute the reconstructed planar norm as 1+n.re, prove the planar complex coordinate by Complex.ext, and finish both normal-coordinate components directly.",
+      :axioms [propext Classical.choice Quot.sound]},
+     :seat "topo-8"}},
+   :phase :implementation,
+   :type
+   "forall tp : unitInterval × RightTubeMinusLeftCore, rightTubeNormalComplex (rightTubeRadialAmbientDeformation tp) = rightTubeRadialNormalInterpolation rightTubeNormalCoordinate rightTubeMeridianCoordinate tp",
    :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
@@ -67976,15 +68031,20 @@
     :placeholder "the sole sorry in apm_t02a03",
     :route-step
     "identify the ambient path's frozen left-core normal coordinate exactly"},
+   :axioms [propext Classical.choice Quot.sound],
    :id
    :routes-2026-10-11-t02a03-recovered-normal-radial-ambient-topo2-r1,
    :kind :reusable-theorem,
    :area "explicit-r3-tube-deformation-retraction",
+   :declaration
+   "ConstructionTargets.T02A03GeometricTubeDeformation.recoveredNormal_rightTubeRadialAmbientDeformation",
    :depends-on
    [:routes-2026-10-11-t02a03-positive-reconstruction-radius-topo2-r1],
    :current-residual
    "Combine exact recovery with radial-interpolation nonvanishing and rightTubeNormalComplex_eq_zero_iff to prove left-core avoidance; then prove right-tube membership.",
-   :other-consumers []}
+   :other-consumers [],
+   :proof-plan
+   "Name the interpolated normal n and rotation u. Use positiveReconstructionRadius_rightTubeRadialNormalInterpolation and Circle.norm_coe to compute the reconstructed planar norm as 1+n.re, prove the planar complex coordinate by Complex.ext, and finish both normal-coordinate components directly."}
   {:bounded-exception
    "single-consumer explicit ambient deformation with frozen tube and deletion invariants",
    :consumer :t02A03,
