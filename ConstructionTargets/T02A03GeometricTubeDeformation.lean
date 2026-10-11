@@ -1211,6 +1211,27 @@ theorem signCases_zeroHeight_rightTubeMeridianCoordinate_re
   rw [sq_eq_one_iff] at hs
   exact hs
 
+theorem positiveSign_rightTubeNormalComplex_re_pos
+    (p : RightTubeMinusLeftCore)
+    (hm : (rightTubeMeridianCoordinate p : Complex).re = 1) :
+    0 < (rightTubeNormalComplex p.1).re := by
+  let n : Complex := rightTubeNormalComplex p.1
+  have hn0 : n ≠ 0 := by
+    intro hn
+    exact p.2.2 ((rightTubeNormalComplex_eq_zero_iff p.1).mp hn)
+  have hnorm : 0 < ‖n‖ := norm_pos_iff.mpr hn0
+  have hscale := NormedSpace.norm_smul_normalize n
+  have hre : ‖n‖ * (NormedSpace.normalize n).re = n.re := by
+    have h := congrArg Complex.re hscale
+    exact (RCLike.smul_re ‖n‖ (NormedSpace.normalize n)).symm.trans h
+  have hm' : (NormedSpace.normalize n).re = 1 := by
+    simpa [n, rightTubeMeridianCoordinate] using hm
+  rw [hm'] at hre
+  simp only [mul_one] at hre
+  change 0 < n.re
+  rw [← hre]
+  exact hnorm
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -1256,3 +1277,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.nonzeroHeight_avoidsLeftCore_rightTubeCoreRadialAmbient
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeight_rightTubeMeridianCoordinate_re_sq
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.signCases_zeroHeight_rightTubeMeridianCoordinate_re
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.positiveSign_rightTubeNormalComplex_re_pos
