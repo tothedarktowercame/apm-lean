@@ -94,3 +94,9 @@ The two equations are also solved algebraically for the mapped actions:
 literal coproduct injections by the single explicit counit element.  Thus the
 remaining literal-coordinate step is exactly the computation eliminating
 that element from B3's concrete inverse representation.
+
+`genericPointWedgeCounitNormalization` is the inner automorphism by that
+counit element.  The left and right normalization theorems prove that it
+sends both computed actions to the literal coproduct injections.  The
+remaining B6 step is to install this normalization in the source equivalence
+and connect those actions to the two topological inclusion maps.

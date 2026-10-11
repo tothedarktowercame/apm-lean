@@ -690,6 +690,31 @@ theorem genericPointWedgeMappedRight_eq_conj (g : FundamentalGroup Y y₀) :
   rw [h]
   simp [mul_assoc]
 
+/-- Inner normalization by the counit element.  Composing the reconstructed
+source functor with this automorphism removes exactly the conjugation exposed
+by the two preceding theorems. -/
+def genericPointWedgeCounitNormalization :
+    genericPointWedgeFreeProduct x₀ y₀ ≃*
+      genericPointWedgeFreeProduct x₀ y₀ :=
+  MulAut.conj
+    (genericPointWedgeCounitElement x₀ y₀ M N hM hN hy hx cM cN)
+
+theorem genericPointWedgeCounitNormalization_left
+    (g : FundamentalGroup X x₀) :
+    genericPointWedgeCounitNormalization x₀ y₀ M N hM hN hy hx cM cN
+        (genericPointWedgeMappedLeft x₀ y₀ M N hM hN hy hx cM cN g) =
+      Monoid.Coprod.inl g := by
+  rw [genericPointWedgeMappedLeft_eq_conj]
+  simp [genericPointWedgeCounitNormalization, MulAut.conj_apply, mul_assoc]
+
+theorem genericPointWedgeCounitNormalization_right
+    (g : FundamentalGroup Y y₀) :
+    genericPointWedgeCounitNormalization x₀ y₀ M N hM hN hy hx cM cN
+        (genericPointWedgeMappedRight x₀ y₀ M N hM hN hy hx cM cN g) =
+      Monoid.Coprod.inr g := by
+  rw [genericPointWedgeMappedRight_eq_conj]
+  simp [genericPointWedgeCounitNormalization, MulAut.conj_apply, mul_assoc]
+
 end GenericFundamentalGroupEquivalence
 
 /-- The three-circle model is locally path connected. -/
@@ -981,5 +1006,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeSourceCounit_right
 #print axioms genericPointWedgeMappedLeft_eq_conj
 #print axioms genericPointWedgeMappedRight_eq_conj
+#print axioms genericPointWedgeCounitNormalization_left
+#print axioms genericPointWedgeCounitNormalization_right
 
 end ConstructionTargets.PointWedgeVanKampen
