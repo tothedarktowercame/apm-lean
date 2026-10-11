@@ -17719,7 +17719,7 @@
    :depends-on [],
    :other-consumers [:t92J05 :t93J03 :t99J01 :t00J07]}
   {:consumer :t00A02,
-   :stop-count 5,
+   :stop-count 6,
    :review-finding
    "Blueprint B9 claims every final hypothesis is used, but LocPathConnectedSpace X is unused: B1 does not assume it, B7 derives PathConnectedSpace from SimplyConnectedSpace, B8 uses simple-connected path homotopy, and no other node cites or uses local path-connectedness. Repair the blueprint and frozen Lean interface by either removing LocPathConnectedSpace X or adding a concrete node whose statement and proof genuinely require it, with the dependency recorded in uses:.",
    :implements-lemma
@@ -17729,7 +17729,7 @@
     {:path
      "ConstructionTargets/DeckGroupQuotientFundamentalGroup.blueprint.md",
      :sha256
-     "bdb7c0b467d5baada4d1d128aade0535b95f3c44fbb045de3e1d694f5f1d67f2",
+     "f1d74207903f683985266f7ebbb50b2280d87ec873331c3889dfdc12fbe66aa6",
      :nodes
      [{:id :B1, :status :proved}
       {:id :B2, :status :proved}
@@ -17740,7 +17740,8 @@
       {:id :B7, :status :planned}
       {:id :B8, :status :planned}
       {:id :B9, :status :planned}
-      {:id :B10, :status :planned}]},
+      {:id :B10, :status :planned}
+      {:id :B11, :status :planned}]},
     :placeholder-delta
     {:t00A02 {:before 2, :after 2, :delta 0},
      :t92J05 {:before 3, :after 3, :delta 0},
@@ -17748,31 +17749,41 @@
      :t99J01 {:before 1, :after 1, :delta 0},
      :t00J07 {:before 3, :after 3, :delta 0}},
     :residual
-    "Blueprint requires independent mathematical review; after PASS, resume at B4 orbitMonodromy_deck_equivariant and enter B4-B10 into the lemma DAG.",
+    "Obtain independent review of repaired blueprint B4-B11; after PASS, resume Lean implementation at B4 orbitProjection_existsUnique_lift, followed by B5 deck-equivariance and B6-B10.",
     :gates
     {:blueprint-schema :pass,
      :target-build :pass,
      :statement-registry "131 registered statements match, 0 do not",
      :scoped-diff :pass,
-     :worktree-clean true},
+     :scoped-worktree-clean true},
     :outcome :stop,
     :warnings
-    ["The supervisor committed an unrelated ledger transition after the blueprint commit; 173536950864bf17cba34f5615371a5d9b76b233 remains the exact scoped author commit."],
+    ["The supervisor advanced HEAD after the scoped author commit; 1555d1066cb82639f109c14613a04c839e94e56a remains the exact blueprint repair commit, and the scoped files are clean."],
     :missing-theorems
     [{:name
-      "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitMonodromy_deck_equivariant",
+      "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitProjection_existsUnique_lift",
       :type
-      "Blueprint B4: monodromy of an orbit-covering loop commutes with the deck action on its fiber",
+      "Under the repaired final hypotheses, for every g : G there exists a unique continuous F : C(X,X) with F x = g • x and quotientMk ∘ F = quotientMk",
       :status :not-started,
       :consumers [:t00A02 :t92J05 :t93J03 :t99J01 :t00J07],
       :depends-on
-      ["ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromyRaw"
+      ["ConstructionTargets.DeckGroupQuotientFundamentalGroup.quotientMk_isCoveringMap"],
+      :area "deck-group-quotient-pi1"}
+     {:name
+      "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitMonodromy_deck_equivariant",
+      :type
+      "Blueprint B5: monodromy of an orbit-covering loop commutes with the deck action on its fiber",
+      :status :not-started,
+      :consumers [:t00A02 :t92J05 :t93J03 :t99J01 :t00J07],
+      :depends-on
+      ["ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitProjection_existsUnique_lift"
+       "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromyRaw"
        "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitQuotientFiberEquiv"],
       :area "deck-group-quotient-pi1"}
      {:name
       "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromyRaw_mul",
       :type
-      "Blueprint B5: raw endpoint coordinates reverse FundamentalGroup multiplication",
+      "Blueprint B6: raw endpoint coordinates reverse FundamentalGroup multiplication",
       :status :not-started,
       :consumers [:t00A02 :t92J05 :t93J03 :t99J01 :t00J07],
       :depends-on
@@ -17781,7 +17792,7 @@
      {:name
       "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromy",
       :type
-      "Blueprint B6: the inverse raw endpoint coordinate as a homomorphism to G",
+      "Blueprint B7: the inverse raw endpoint coordinate as a homomorphism to G",
       :status :not-started,
       :consumers [:t00A02 :t92J05 :t93J03 :t99J01 :t00J07],
       :depends-on
@@ -17790,7 +17801,7 @@
      {:name
       "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromy_surjective",
       :type
-      "Blueprint B7: endpoint monodromy is surjective when the total space is simply connected",
+      "Blueprint B8: endpoint monodromy is surjective when the total space is simply connected",
       :status :not-started,
       :consumers [:t00A02 :t92J05 :t93J03 :t99J01 :t00J07],
       :depends-on
@@ -17799,7 +17810,7 @@
      {:name
       "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromy_injective",
       :type
-      "Blueprint B8: endpoint monodromy is injective when the total space is simply connected",
+      "Blueprint B9: endpoint monodromy is injective when the total space is simply connected",
       :status :not-started,
       :consumers [:t00A02 :t92J05 :t93J03 :t99J01 :t00J07],
       :depends-on
@@ -17807,24 +17818,28 @@
       :area "deck-group-quotient-pi1"}
      {:name
       "ConstructionTargets.DeckGroupQuotientFundamentalGroup.freeProperlyDiscontinuousQuotient_fundamentalGroupEquiv",
-      :type "Blueprint B9: the repaired fixed final theorem",
+      :type "Blueprint B10: the repaired fixed final theorem",
       :status :not-started,
       :consumers [:t00A02 :t92J05 :t93J03 :t99J01 :t00J07],
       :depends-on
-      ["ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromy_surjective"
+      ["ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitProjection_existsUnique_lift"
+       "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromy_surjective"
        "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromy_injective"],
       :area "deck-group-quotient-pi1"}],
+    :statement-hashes
+    {:blueprint
+     "f1d74207903f683985266f7ebbb50b2280d87ec873331c3889dfdc12fbe66aa6"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Blueprint written as required by the newly added blueprint gate; this invocation made no Lean implementation changes. The document fixes the representation and gives ten reviewed-ready nodes from the already banked covering, fiber-coordinate, and raw-monodromy declarations through deck-equivariance, anti-multiplicativity, the endpoint homomorphism, bijectivity, the final MulEquiv, and consumer adapters.",
+    "Repaired the blueprint review failure by adding B4, orbitProjection_existsUnique_lift. B4 applies Mathlib IsCoveringMap.existsUnique_continuousMap_lifts to the orbit projection and genuinely requires the frozen LocPathConnectedSpace X hypothesis together with SimplyConnectedSpace X. Deck-equivariance now depends on B4, and the downstream nodes were renumbered B5-B11. This blueprint-only repair is committed and awaits independent mathematical review before Lean implementation resumes.",
     :commands
     [{:cmd
-      "rg -n blueprint node fields ConstructionTargets/DeckGroupQuotientFundamentalGroup.blueprint.md",
+      "rg blueprint fields and existsUnique_continuousMap_lifts in ConstructionTargets/DeckGroupQuotientFundamentalGroup.blueprint.md",
       :exit 0}
      {:cmd
-      "git diff --check HEAD^ HEAD -- ConstructionTargets/DeckGroupQuotientFundamentalGroup.blueprint.md",
+      "git diff --check 1555d1066^ 1555d1066 -- ConstructionTargets/DeckGroupQuotientFundamentalGroup.blueprint.md",
       :exit 0}
      {:cmd
       "lake build ConstructionTargets.DeckGroupQuotientFundamentalGroup",
@@ -17833,15 +17848,14 @@
      {:cmd
       "comment-stripped placeholder counts for t00A02 t92J05 t93J03 t99J01 t00J07",
       :exit 0}
-     {:cmd "git status --short", :exit 0}],
+     {:cmd
+      "git status --short -- ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean ConstructionTargets/DeckGroupQuotientFundamentalGroup.md ConstructionTargets/DeckGroupQuotientFundamentalGroup.blueprint.md",
+      :exit 0}
+     {:cmd
+      "git show 1555d1066:ConstructionTargets/DeckGroupQuotientFundamentalGroup.blueprint.md | sha256sum",
+      :exit 0}],
     :diagnostic-history [],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1791713895509-5013-c979a41f",
-     :finding
-     "Blueprint B9 claims every final hypothesis is used, but LocPathConnectedSpace X is unused: B1 does not assume it, B7 derives PathConnectedSpace from SimplyConnectedSpace, B8 uses simple-connected path homotopy, and no other node cites or uses local path-connectedness. Repair the blueprint and frozen Lean interface by either removing LocPathConnectedSpace X or adding a concrete node whose statement and proof genuinely require it, with the dependency recorded in uses:."},
-    :commit "173536950864bf17cba34f5615371a5d9b76b233",
+    :commit "1555d1066cb82639f109c14613a04c839e94e56a",
     :changed-paths
     ["ConstructionTargets/DeckGroupQuotientFundamentalGroup.blueprint.md"],
     :fixture nil,
@@ -17850,13 +17864,13 @@
     {:scope
      ["ConstructionTargets/DeckGroupQuotientFundamentalGroup.blueprint.md"],
      :declaration
-     "DeckGroupQuotientFundamentalGroup blueprint B1-B10"},
+     "DeckGroupQuotientFundamentalGroup blueprint B1-B11"},
     :row :program-2026-10-11-deck-group-quotient-pi1,
     :seat :topo-10},
    :phase :implementation,
    :owner-repair
    "2026-10-11 claude-14: final type gains [T2Space X] [LocallyCompactSpace X] (Mathlib quotient-covering needs them; every consumer, the plane and spheres, has them). Do not prove covering under weaker hypotheses.",
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean"
     "ConstructionTargets/DeckGroupQuotientFundamentalGroup.md"
@@ -17992,7 +18006,8 @@
    [:lemma-constructiontargets-deckgroupquotientfundamentalgroup-quotientmk-iscoveringmap-w
     :lemma-constructiontargets-deckgroupquotientfundamentalgroup-orbitendpointmonodromy
     :lemma-constructiontargets-deckgroupquotientfundamentalgroup-orbitendpointmonodromy-sur
-    :lemma-constructiontargets-deckgroupquotientfundamentalgroup-orbitendpointmonodromy-inj],
+    :lemma-constructiontargets-deckgroupquotientfundamentalgroup-orbitendpointmonodromy-inj
+    :lemma-constructiontargets-deckgroupquotientfundamentalgroup-orbitprojection-existsuniq],
    :other-consumers [:t92J05 :t93J03 :t99J01 :t00J07]}
   {:consumer :t00A02,
    :phase :lemma,
@@ -18879,7 +18894,8 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-deckgroupquotientfundamentalgroup-orbitendpointmonodromyraw
-    :lemma-constructiontargets-deckgroupquotientfundamentalgroup-orbitquotientfiberequiv],
+    :lemma-constructiontargets-deckgroupquotientfundamentalgroup-orbitquotientfiberequiv
+    :lemma-constructiontargets-deckgroupquotientfundamentalgroup-orbitprojection-existsuniq],
    :other-consumers [:t92J05 :t93J03 :t99J01 :t00J07]}
   {:consumer :t00A02,
    :phase :lemma,
@@ -19166,7 +19182,29 @@
    [:lemma-smooth-compact-surface-classification
     :lemma-surface-homology-determines-type
     :lemma-fundamentalgroup-polygon-surface-genustwo],
-   :other-consumers []}],
+   :other-consumers []}
+  {:consumer :t00A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitProjection_existsUnique_lift",
+    :type
+    "Under the repaired final hypotheses, for every g : G there exists a unique continuous F : C(X,X) with F x = g • x and quotientMk ∘ F = quotientMk"},
+   :lemma
+   {:name
+    "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitProjection_existsUnique_lift",
+    :reported-by [:program-2026-10-11-deck-group-quotient-pi1],
+    :type
+    "Under the repaired final hypotheses, for every g : G there exists a unique continuous F : C(X,X) with F x = g • x and quotientMk ∘ F = quotientMk",
+    :area "deck-group-quotient-pi1"},
+   :id
+   :lemma-constructiontargets-deckgroupquotientfundamentalgroup-orbitprojection-existsuniq,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-deckgroupquotientfundamentalgroup-quotientmk-iscoveringmap],
+   :other-consumers [:t92J05 :t93J03 :t99J01 :t00J07]}],
  :consumer-baselines {},
  :statuses
  #{:open
