@@ -462,6 +462,39 @@ noncomputable def integralRelativeHomologyComparison
     (HomologicalComplex.homologyFunctor AddCommGrpCat
       (ComplexShape.down ℕ) n).mapIso (integralRelativeChainsComparison A)
 
+/-- Normalize production ambient local homology by pulling back through the
+actual ambient chart map and then applying the concrete model normalization. -/
+noncomputable def ambientLocalNormalization
+    (k : ℕ) {M : Type} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M) :
+    (RelativeSingularChains (deletedPoint x)).homology (k + 2) ≅
+      AddCommGrpCat.of ℤ := by
+  let f := HomologicalComplex.homologyMap
+    (relativeSingularMap (HigherChartLocalGenerator.P k) (deletedPoint x)
+      (HigherChartLocalGenerator.ambientChartMap (k := k) x)
+      (HigherChartLocalGenerator.ambientChartMap_mapsTo (k := k) x)) (k + 2)
+  letI := HigherChartLocalGenerator.ambientChartMap_Hn_isIso (k := k) x
+  exact (asIso f).symm ≪≫ HigherModelLocalHomology.localIsoInt k
+
+theorem ambientLocalNormalization_generator
+    (k : ℕ) {M : Type} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M) :
+    (ambientLocalNormalization k x).hom.hom
+        (HigherChartLocalGenerator.ambientLocalGenerator (k := k) x) = 1 := by
+  let f := HomologicalComplex.homologyMap
+    (relativeSingularMap (HigherChartLocalGenerator.P k) (deletedPoint x)
+      (HigherChartLocalGenerator.ambientChartMap (k := k) x)
+      (HigherChartLocalGenerator.ambientChartMap_mapsTo (k := k) x)) (k + 2)
+  letI := HigherChartLocalGenerator.ambientChartMap_Hn_isIso (k := k) x
+  change (HigherModelLocalHomology.localIsoInt k).hom.hom
+    ((asIso f).inv.hom (f (HigherModelLocalHomology.generator k))) = 1
+  have h := ConcreteCategory.congr_hom (asIso f).hom_inv_id
+    (HigherModelLocalHomology.generator k)
+  change (asIso f).inv.hom (f (HigherModelLocalHomology.generator k)) =
+    HigherModelLocalHomology.generator k at h
+  rw [h]
+  exact HigherModelLocalHomology.normalization k
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -492,3 +525,5 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetIntegralRelativeCokernelComparison
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparison
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparison
+#print axioms ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization
+#print axioms ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization_generator
