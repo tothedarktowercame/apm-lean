@@ -103343,6 +103343,23 @@
      {:cmd
       "git diff --check -- ConstructionTargets/PolygonInnerOpenPointedContraction.lean",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791687050082-3876-40be404e",
+     :commands
+     ["git show and git diff-tree on recorded commit 775b7addf9b3dabd8443615fc1eeeedea9a18951"
+      "git diff --exit-code between recorded blob and checkout"
+      "sha256sum on committed source, recorded blob, and frozen fixture"
+      "diff -u frozen fixture against committed proof promotion"
+      "lake build ConstructionTargets.PolygonInnerOpenPointedContraction"
+      "lake env lean /tmp/polygon-inner-open-pointed-contraction.lean"
+      "fresh axiom checks for the generic contraction and both concrete specializations"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped placeholder recount on source and fixture"
+      "git diff-tree --check on recorded commit"],
+     :finding
+     "Recorded one-file commit is authored by topo-2 and the checkout equals its blob. The frozen fixture hash is exactly 3ef0009241e6fa4a9800d6795bb530113b97ecc379ec2dc8638bf860c7e7394c; its single interface axiom is discharged by the promoted source. The proof identifies the restricted inner quotient with its disk preimage, applies continuous scalar contraction there, and transports it back with the correct PointedContraction orientation: time zero is identity, time one is innerBase, and innerBase is fixed. The generic theorem and N3 and torus-crosscap specializations compile with only propext, Classical.choice, and Quot.sound; source placeholders and fixture sorry/admit counts are zero; the registry reports 131 matched and 0 mismatched; final package assembly remains outside scope."},
     :commit "775b7addf9b3dabd8443615fc1eeeedea9a18951",
     :changed-paths
     ["ConstructionTargets/PolygonInnerOpenPointedContraction.lean"],
@@ -103352,7 +103369,7 @@
      "3ef0009241e6fa4a9800d6795bb530113b97ecc379ec2dc8638bf860c7e7394c"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/PolygonInnerOpenPointedContraction.lean"],
    :dag-node
@@ -103477,7 +103494,7 @@
       "A generic pointed contraction of the inner quotient open for boundary-supported radius-preserving relations specializes to both polygon relations."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -108298,7 +108315,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -108314,7 +108331,10 @@
     "For any radius-preserving disk relation whose generators have radius one, PointedContraction (innerOpen R) (innerBase R).",
     :area "polygon-surface-open-cover",
     :proved-in
-    :routes-2026-10-11-polygon-inner-open-pointed-contraction-82},
+    :routes-2026-10-11-polygon-inner-open-pointed-contraction-82,
+    :banked-by
+    :routes-2026-10-11-polygon-inner-open-pointed-contraction-82,
+    :banked-commit "775b7addf9b3dabd8443615fc1eeeedea9a18951"},
    :id
    :lemma-polygoninneropenpointedcontraction-inneropenpointedcontraction,
    :kind :lemma,
