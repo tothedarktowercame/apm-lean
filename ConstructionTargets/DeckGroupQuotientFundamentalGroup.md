@@ -10,7 +10,22 @@ action supplies IsCancelSMul; proper discontinuity then makes the orbit
 projection a covering map when the total space is locally compact and
 Hausdorff.
 
-## Remaining work
+## Refutation of the frozen final statement
+
+The fixed theorem omits every separation hypothesis. This is not merely a gap
+between its assumptions and Mathlib's covering API: the statement is false.
+Take the two-element group acting on itself by left multiplication and equip
+the underlying set with the indiscrete topology. The action is free; because
+the group is finite it is properly discontinuous; every self-map is
+continuous; the space is contractible and locally path-connected. The action
+is transitive, so its orbit quotient is a singleton. Its fundamental group is
+therefore trivial and cannot be isomorphic to the two-element group.
+
+`indiscreteRegularAction_no_fundamentalGroupEquiv` formalizes the concrete
+counterexample. `freeProperlyDiscontinuousQuotient_fundamentalGroupEquiv_refuted`
+negates the exact universal proposition of the program's frozen final type.
+
+## Work that would remain for a repaired statement
 
 1. Build monodromy from loops in the quotient to the endpoint deck
    transformation of their lifts.
@@ -19,10 +34,8 @@ Hausdorff.
 3. Specialize to a simply connected total space.
 4. Supply the plane/Klein-group and finite-action adapters.
 
-The program's fixed final type currently assumes neither LocallyCompactSpace X
-nor T2Space X, while Mathlib's construction of local evenly covered
-neighborhoods from ProperlyDiscontinuousSMul G X requires both. The next job
-must either prove a stronger quotient-covering theorem from the weaker
-hypotheses or exhibit the precise counterexample showing that one of these
-assumptions is necessary; it must not silently add them to the fixed final
-theorem.
+Mathlib's construction of local evenly covered neighborhoods from
+`ProperlyDiscontinuousSMul G X` assumes both `LocallyCompactSpace X` and
+`T2Space X`. Adding suitable separation/local compactness hypotheses would
+exclude the counterexample and make the previously listed monodromy program
+meaningful, but changing the registered final type is outside this program.
