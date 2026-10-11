@@ -273,3 +273,8 @@ The central factor is now computed by
 representation's point-span glue remains the free-product unit after
 whiskering through the Unit equivalence.  Only the two connector comparisons
 inside this coordinate stage and the two original outer comparisons remain.
+
+`genericPointWedgeIdentityCoordinateSpan_glue_unitBase_eq_comparisons`
+then removes that unit in the correct `SingleObj` multiplication order.  The
+coordinate glue is now exactly the inverse left connector comparison followed
+by the right connector comparison.  Evaluating those two components remains.

@@ -541,6 +541,30 @@ theorem genericPointWedgeIdentityPointSpan_whiskeredGlue_eq_one :
       (1 : genericPointWedgeFreeProduct x₀ y₀) := by
   rfl
 
+/-- After evaluating the point-span glue, the coordinate glue consists only
+of the two connector comparison components. -/
+theorem genericPointWedgeIdentityCoordinateSpan_glue_unitBase_eq_comparisons :
+    let l := genericPointWedgeCoordinateLeft x₀
+    let r := genericPointWedgeCoordinateRight y₀
+    let l' := pointLeg (FundamentalGroup X x₀)
+    let r' := pointLeg (FundamentalGroup Y y₀)
+    let eK := genericPointWedgeUnitSingleObjEquivalence
+    let eL := genericPointWedgeSingleObjEquivalence x₀
+    let eR := genericPointWedgeSingleObjEquivalence y₀
+    let aL := genericPointWedgeCoordinateLeftPointIso x₀
+    let aR := genericPointWedgeCoordinateRightPointIso y₀
+    let Q := genericPointWedgeIdentityPointSpan x₀ y₀
+    let z : FundamentalGroupoid Unit := FundamentalGroupoid.mk ()
+    (genericPointWedgeIdentityCoordinateSpan x₀ y₀).glue.hom.app z =
+      (reverseLeftComparison l l' eK eL aL Q.left).inv.app z ≫
+        (reverseRightComparison r r' eK eR aR Q.right).hom.app z := by
+  dsimp only
+  rw [genericPointWedgeIdentityCoordinateSpan_glue_unitBase,
+    genericPointWedgeIdentityPointSpan_whiskeredGlue_eq_one]
+  rw [SingleObj.comp_as_mul, SingleObj.comp_as_mul,
+    SingleObj.comp_as_mul]
+  simp
+
 /-- The penultimate inverse stage of B3, now expressed as the literal
 pseudococone on the two open pieces. -/
 def genericPointWedgeIdentityPseudoCocone :
@@ -1884,6 +1908,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeIdentityCoordinateWhiskeredGlue_app_eq_unitBase
 #print axioms genericPointWedgeIdentityCoordinateSpan_glue_unitBase
 #print axioms genericPointWedgeIdentityPointSpan_whiskeredGlue_eq_one
+#print axioms genericPointWedgeIdentityCoordinateSpan_glue_unitBase_eq_comparisons
 #print axioms genericPointWedgeIdentityGlobalRightRestriction_map
 #print axioms genericPointWedgeIdentityGlobalRightBase_map
 #print axioms genericPointWedgeIdentityRepresentation_inl
