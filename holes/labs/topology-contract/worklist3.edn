@@ -3783,6 +3783,23 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git status --porcelain", :exit 0, :stdout ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791681058245-3597-e09a9a7d",
+     :commands
+     ["git diff-tree recorded commit scope"
+      "sha256sum promoted fixture"
+      "source blob comparison"
+      "lake env lean promoted fixture"
+      "lake env lean target module"
+      "lake build target module"
+      "placeholder and axiom scan"
+      "statement registry check"
+      "consumer placeholder census"
+      "git diff --check recorded commit"],
+     :finding
+     "PASS: implementation commit 088fae34 changes exactly ConstructionTargets/ManifoldFundamentalClass.lean and its blob matches the reviewed source; promoted fixture hash 4b13723643c2de7b793e3f3f5d51bdeb9e8d4bcc09cd9876a086a3c6a6151c8a matches recorded evidence and preserves the frozen theorem type from the original fixture; integralRelativeHomologyComparison composes the inverse canonical mapHomologyIso for forgetIntModules with homologyFunctor.mapIso of integralRelativeChainsComparison, producing the required isomorphism from forgotten ModuleCat integral coefficient-relative homology to production AddCommGrp relative singular homology; it does not identify the homology objects definitionally, transport a generator, or assert orientation or localization normalization; fixture, module, and target build pass with zero source/fixture placeholders and only propext, Classical.choice, and Quot.sound; 131 statements match and consumer placeholders remain t00J02=1 and t98A02=1."},
     :commit "088fae34202bbd6938d2671437f75e17be8343e9",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -3807,7 +3824,7 @@
       "Canonical homology isomorphism from forgotten coefficient-relative homology to production relative singular homology, obtained by preservation of homology followed by homology of integralRelativeChainsComparison"}},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/integral-relative-homology-comparison",
@@ -3951,7 +3968,7 @@
      "The reviewed relative chain comparison can be passed to homology without another geometric assumption. The fixture first uses the canonical mapHomologyIso for forgetIntModules, then applies the AddCommGrpCat homology functor to integralRelativeChainsComparison. This produces the exact homology objects inhabited by the coefficient and production chart generators. The remaining comparison is now an element-level normalization calculation rather than a category mismatch.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -6207,7 +6224,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -6224,7 +6241,10 @@
     "forall {X : Type} [TopologicalSpace X] (A : Set X) (n : Nat), forgetIntModules.obj ((CoefficientRelativeSmall.relativeChains Int A).homology n) ≅ (RelativeSingularChains A).homology n",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-integral-relative-homology-comparison-topo3-r1},
+    :routes-2026-10-11-manifold-integral-relative-homology-comparison-topo3-r1,
+    :banked-by
+    :routes-2026-10-11-manifold-integral-relative-homology-comparison-topo3-r1,
+    :banked-commit "088fae34202bbd6938d2671437f75e17be8343e9"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-integralrelativehomologycomparison,
    :kind :lemma,
