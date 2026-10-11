@@ -903,6 +903,13 @@ theorem corePolar_leftCore_collision_equation
     show Real.sin t = (1 - n.re) * (u : Complex).im by linarith] at htrig
   nlinarith
 
+theorem collisionPolynomial_ne_implies_avoidsLeftCore_rightTubeCorePolar
+    (u : Circle) (n : Complex)
+    (hpoly : (1 - n.re) ^ 2 - 4 * (1 - n.re) * (u : Complex).re + 3 ≠ 0) :
+    rightTubeCorePolarReconstruction u n ∉ Set.range apm_t02a03_leftCore := by
+  intro hmem
+  exact hpoly (corePolar_leftCore_collision_equation u n hmem)
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -934,3 +941,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreRadialAmbientDeformation_exists
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.reconstructionAvoidsLeftCore_rightTubeCorePolar_of_im_ne_zero
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.corePolar_leftCore_collision_equation
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.collisionPolynomial_ne_implies_avoidsLeftCore_rightTubeCorePolar
