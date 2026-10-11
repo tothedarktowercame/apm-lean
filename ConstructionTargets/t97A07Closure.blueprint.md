@@ -29,7 +29,7 @@ uses: Mathlib `ContinuousLinearMap.exists_right_inverse_of_surjective`,
 continuity of `ContinuousLinearMap.comp`, and openness of the units in the
 Banach algebra `F →L[ℝ] F`
 
-status: planned
+status: proved
 
 Fix a surjective `L` and choose a continuous right inverse `R`, so
 `L.comp R = id`.  The map `L' ↦ L'.comp R` is continuous.  The invertible
