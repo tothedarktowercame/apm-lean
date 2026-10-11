@@ -316,6 +316,21 @@ theorem orbitEndpointMonodromy_injective
       _ = Path.Homotopic.Quotient.refl (q x) := rfl
   · exact fun ha ↦ ha.symm ▸ map_one (orbitEndpointMonodromy free x)
 
+/-- The fundamental group of the quotient of a simply connected space by a
+free properly discontinuous action is the acting group. -/
+theorem freeProperlyDiscontinuousQuotient_fundamentalGroupEquiv
+    {G X : Type*} [Group G] [TopologicalSpace X] [MulAction G X]
+    [ContinuousConstSMul G X] [ProperlyDiscontinuousSMul G X]
+    (free : ∀ g : G, ∀ x : X, g • x = x → g = 1)
+    [T2Space X] [LocallyCompactSpace X] [SimplyConnectedSpace X]
+    [LocPathConnectedSpace X] (x : X) :
+    Nonempty
+      (FundamentalGroup (MulAction.orbitRel.Quotient G X)
+        (Quotient.mk _ x) ≃* G) :=
+  ⟨MulEquiv.ofBijective (orbitEndpointMonodromy free x)
+    ⟨orbitEndpointMonodromy_injective free x,
+      orbitEndpointMonodromy_surjective free x⟩⟩
+
 private abbrev CounterexampleGroup := Multiplicative (ZMod 2)
 
 private instance : TopologicalSpace CounterexampleGroup := ⊤
@@ -383,6 +398,7 @@ theorem freeProperlyDiscontinuousQuotient_fundamentalGroupEquiv_refuted :
 #print axioms orbitEndpointMonodromy
 #print axioms orbitEndpointMonodromy_surjective
 #print axioms orbitEndpointMonodromy_injective
+#print axioms freeProperlyDiscontinuousQuotient_fundamentalGroupEquiv
 #print axioms indiscreteRegularAction_no_fundamentalGroupEquiv
 #print axioms freeProperlyDiscontinuousQuotient_fundamentalGroupEquiv_refuted
 

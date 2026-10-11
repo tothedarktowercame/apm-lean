@@ -58,6 +58,11 @@ That lifted loop has the unique path-homotopy class supplied by simple
 connectedness. Projecting this equality and using the path-lift equation
 identifies the original quotient loop with the constant loop.
 
+`freeProperlyDiscontinuousQuotient_fundamentalGroupEquiv` implements
+blueprint B10 and the repaired final interface. It packages
+`orbitEndpointMonodromy` with B8 surjectivity and B9 injectivity using
+`MulEquiv.ofBijective`.
+
 ## Refutation of the frozen final statement
 
 The fixed theorem omits every separation hypothesis. This is not merely a gap
@@ -75,8 +80,9 @@ negates the exact universal proposition of the program's frozen final type.
 
 ## Remaining work for the repaired statement
 
-1. Package endpoint monodromy as the resulting group equivalence.
-2. Supply the plane/Klein-group and finite-action adapters.
+The reusable repaired theorem is complete. Blueprint B11 remains as bounded
+consumer work: supply the plane/Klein-group and finite-action adapters where
+their quotient representations and basepoints are available.
 
 Mathlib's construction of local evenly covered neighborhoods from
 `ProperlyDiscontinuousSMul G X` assumes both `LocallyCompactSpace X` and
