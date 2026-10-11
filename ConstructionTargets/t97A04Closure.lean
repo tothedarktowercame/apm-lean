@@ -184,6 +184,32 @@ noncomputable def overlapScalar (a : ℤ) :
       ((AddCommGrpCat.of ℤ) ⊞ (AddCommGrpCat.of ℤ)) :=
   biprod.map (a • 𝟙 (AddCommGrpCat.of ℤ)) (a • 𝟙 (AddCommGrpCat.of ℤ))
 
+/-- The restricted shear transported to the boundary-torus overlap. -/
+noncomputable def boundaryOverlapShear (a b : ℤ) :
+    C(Overlap, Overlap) :=
+  (⟨frozenYCoverInterHomeomorph,
+      frozenYCoverInterHomeomorph.continuous⟩ :
+    C((frozenYCover.U ∩ frozenYCover.V : Set FrozenTorus), Overlap)).comp
+    ((shearYOverlap a b).comp
+      (⟨frozenYCoverInterHomeomorph.symm,
+          frozenYCoverInterHomeomorph.symm.continuous⟩ :
+        C(Overlap,
+          (frozenYCover.U ∩ frozenYCover.V : Set FrozenTorus))))
+
+/-- The overlap shear in the fixed disjoint-two-circle model used by the
+Mayer--Vietoris coordinate. -/
+noncomputable def twoCircleOverlapShear (a b : ℤ) :
+    C(Circle ⊕ Circle, Circle ⊕ Circle) :=
+  overlapHomotopyEquivTwoCircles.toFun.comp
+    ((boundaryOverlapShear a b).comp
+      overlapHomotopyEquivTwoCircles.invFun)
+
+theorem twoCircleOverlapShear_eq_transport (a b : ℤ) :
+    twoCircleOverlapShear a b =
+      overlapHomotopyEquivTwoCircles.toFun.comp
+        ((boundaryOverlapShear a b).comp
+          overlapHomotopyEquivTwoCircles.invFun) := rfl
+
 private noncomputable def shearYIntersectionMap (a b : ℤ) :=
   (ambientIntersectionRangeChainsIso frozenYCover.U frozenYCover.V).inv ≫
     closureChains.map
@@ -531,5 +557,7 @@ theorem shearY_productionUnionMap (a b : ℤ) (n : ℕ) :
 #print axioms frozenOverlapH1IsoIntBiprod
 #print axioms shearYOverlap
 #print axioms overlapScalar
+#print axioms boundaryOverlapShear
+#print axioms twoCircleOverlapShear
 
 end ConstructionTargets.T97A04Closure
