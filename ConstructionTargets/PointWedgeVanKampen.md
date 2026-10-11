@@ -220,3 +220,10 @@ wedge-point object, it is exactly the original pseudococone glue morphism;
 the theorem keeps the direction from the strictified right restriction back
 to the supplied right functor.  The residual computation is the preceding
 descent-counit factor and then the two literal wedge-leg lifts.
+
+The remaining descent-counit factor is now named and proved equal to the
+identity: it is only the inverse `eqToHom` transport between objects of the
+one-object target.  Consequently the full fixed right restriction element,
+not just its strictification component, is exactly the overlap glue morphism.
+B6 now only needs to evaluate that already-constructed glue through the span
+transport and align the two literal wedge-leg lifts.

@@ -661,6 +661,75 @@ theorem genericPointWedgeStrictificationRightBaseElement_eq_glue :
   simp
   congr 2
 
+/-- The separate right-base factor contributed by the descent reconstruction
+counit in the composite open-cover equivalence. -/
+def genericPointWedgeDescentRightBaseElement :
+    genericPointWedgeFreeProduct x₀ y₀ :=
+  let hcover :=
+    (genericPointWedgePackage x₀ y₀ M N hM hN hy hx cM cN).union_eq_univ
+  let E := TwoOpenPseudoCoconeStrictification.twoOpenDescentPseudoCoconeEquivalence
+    (C := SingleObj (genericPointWedgeFreeProduct x₀ y₀)) hcover
+  let D := E.inverse.obj (genericPointWedgeIdentityPseudoCocone
+    x₀ y₀ M N hM hN hy hx cM cN)
+  (E.functor.map
+    ((TwoOpenDescentCategory.twoOpenDescentEquivalence
+      (genericPointWedgePackage x₀ y₀ M N hM hN hy hx cM cN).leftOpen_isOpen
+      (genericPointWedgePackage x₀ y₀ M N hM hN hy hx cM cN).rightOpen_isOpen
+      hcover).counitIso.hom.app D)).right.app
+        (genericPointWedgeRightBase x₀ y₀ N)
+
+private theorem singleObj_eqToHom_eq_one_descent
+    (G : Type) [Group G] {a b : SingleObj G} (h : a = b) :
+    (eqToHom h : a ⟶ b) = (1 : G) := by
+  subst b
+  rfl
+
+theorem genericPointWedgeDescentRightBaseElement_eq_one :
+    genericPointWedgeDescentRightBaseElement
+        x₀ y₀ M N hM hN hy hx cM cN = 1 := by
+  dsimp [genericPointWedgeDescentRightBaseElement,
+    TwoOpenPseudoCoconeStrictification.twoOpenDescentPseudoCoconeEquivalence,
+    TwoOpenDescentCategory.twoOpenDescentEquivalence,
+    TwoOpenDescentCategory.descentReconstructionIso,
+    TwoOpenDescentCategory.descentReconstructionAppIso,
+    TwoOpenDescentCategory.descentReconstructionHom,
+    TwoOpenDescentRestriction.pieceRestrictionIso,
+    TwoOpenDescentRestriction.restrictionAppIso,
+    TwoOpenFundamentalGroupoidSpan.descentToPseudoCoconeFunctor,
+    TwoOpenFundamentalGroupoidSpan.descentPseudoCoconeMap,
+    CategoryTheory.Equivalence.mk]
+  apply singleObj_eqToHom_eq_one_descent
+
+theorem genericPointWedgeIdentityGlobalRightBaseElement_eq_strictification :
+    genericPointWedgeIdentityGlobalRightBaseElement
+        x₀ y₀ M N hM hN hy hx cM cN =
+      genericPointWedgeStrictificationRightBaseElement
+        x₀ y₀ M N hM hN hy hx cM cN := by
+  simp [genericPointWedgeIdentityGlobalRightBaseElement,
+    genericPointWedgeIdentityGlobalRightRestrictionElement,
+    genericPointWedgeIdentityGlobalRightRestrictionIso,
+    genericPointWedgeOpenCoverEquivalence,
+    twoOpenFundamentalGroupoidPseudopushoutEquivalence,
+    genericPointWedgeStrictificationRightBaseElement]
+  change genericPointWedgeStrictificationRightBaseElement
+      x₀ y₀ M N hM hN hy hx cM cN *
+      genericPointWedgeDescentRightBaseElement
+        x₀ y₀ M N hM hN hy hx cM cN = _
+  rw [genericPointWedgeDescentRightBaseElement_eq_one]
+  simp
+  rfl
+
+theorem genericPointWedgeIdentityGlobalRightBaseElement_eq_glue :
+    genericPointWedgeIdentityGlobalRightBaseElement
+        x₀ y₀ M N hM hN hy hx cM cN =
+      (genericPointWedgeIdentityPseudoCocone
+        x₀ y₀ M N hM hN hy hx cM cN).glue.hom.app
+          (genericPointWedgeOverlapBase x₀ y₀ M N) :=
+  (genericPointWedgeIdentityGlobalRightBaseElement_eq_strictification
+    x₀ y₀ M N hM hN hy hx cM cN).trans
+      (genericPointWedgeStrictificationRightBaseElement_eq_glue
+        x₀ y₀ M N hM hN hy hx cM cN)
+
 /-- Naturality solved for the reconstructed right-piece map.  The two
 endpoint restriction components are deliberately visible. -/
 theorem genericPointWedgeIdentityGlobalRightRestriction_map
@@ -1661,6 +1730,8 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeIdentityGlobalLeftBase_map
 #print axioms genericPointWedgeIdentityGlobalRightRestrictionElement
 #print axioms genericPointWedgeStrictificationRightBaseElement_eq_glue
+#print axioms genericPointWedgeDescentRightBaseElement_eq_one
+#print axioms genericPointWedgeIdentityGlobalRightBaseElement_eq_glue
 #print axioms genericPointWedgeIdentityGlobalRightRestriction_map
 #print axioms genericPointWedgeIdentityGlobalRightBase_map
 #print axioms genericPointWedgeIdentityRepresentation_inl
