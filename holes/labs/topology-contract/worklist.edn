@@ -113855,30 +113855,21 @@
    :depends-on [],
    :other-consumers [:t98A02]}
   {:consumer :t99J01,
-   :stop-count 8,
+   :stop-count 9,
    :review-finding
    "B10 cannot apply B6: its uses list supplies no open neighborhoods and pointed contractions for the circle basepoint and the TwoCircles basepoint; B9 provides only path-connectedness. Add nodes constructing those concrete neighborhoods and contractions, and list them in B10 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
-    :residual "B8 is banked; B3, B4, B6, B10, B11, and B12 remain.",
+    :residual
+    "B3, B4, B6, B11, and B12 remain. Next implement B11 by taking the restricted open wedge of two copies of circleBaseNeighborhood and transporting the product pointed contraction through restrictedOpenHomeomorphWedge.",
     :outcome :stop,
     :warnings
     [{:kind :upstream-lint,
       :message
-      "The full build replayed warnings from imported modules; the changed module introduced none."}
-     {:kind :concurrent-worktree-change,
-      :message
-      "ConstructionTargets/T02A03GeometricTubeDeformation.lean was modified by another process and was preserved unmodified and uncommitted."}],
+      "The full build replayed warnings from imported modules; the changed module introduced none."}],
     :missing-theorems
     [{:name
-      "PointWedgeVanKampen.multiplicativeIntEquivFreeGroupFinOne",
-      :type "Multiplicative Int ≃* FreeGroup (Fin 1)",
-      :status :proved,
-      :consumers [:t99J01],
-      :depends-on [],
-      :area "fundamental-group-wedge-of-circles"}
-     {:name
       "PointWedgeVanKampen.genericPointWedgeSingleObjMappingEquivalence",
       :type
       "The postcomposition-natural point-wedge mapping equivalence under the blueprint B3 hypotheses",
@@ -113898,7 +113889,7 @@
      {:name "PointWedgeVanKampen.circleBaseNeighborhood_contraction",
       :type
       "A pointed contraction of the open punctured-circle neighborhood of 1",
-      :status :not-started,
+      :status :proved,
       :consumers [:t99J01],
       :depends-on [],
       :area "fundamental-group-wedge-of-circles"}
@@ -113924,75 +113915,60 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source-sha256
-     "64deb38394faced3cd50415548a74c60298f6d9abb995ff25721452e3500b677",
+     "331633dfc2ad170b3e2a092f68241c419289d139382149636dd32dbd60a6733b",
      :documentation-sha256
-     "eadc49002883e856f636a4289552b1c28d50a989a0cc9ba83ffe6697e14782bb",
+     "1fbf97290c32c8ed402f3970e3614952af43f1d9f94f2bfcdb4f81c37276225d",
      :blueprint-sha256
-     "568a9157278b8872567ba631d117623c6bcba53deb4af98d00d42494f5e0a8cd",
+     "360307889cbd11a0155cb2103ea22a60d583417e8e4b1e618b6c0ed23296582b",
      :registry "131 registered statements match, 0 do not"},
     :disposition :stop,
-    :axioms ["propext" "Quot.sound"],
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Program job completed blueprint node B8: multiplicativeIntEquivFreeGroupFinOne is the symmetric Mathlib rank-one free-group integer equivalence, in the orientation required after the circle winding coordinate. The compiled declaration is recorded as proved in the reviewed blueprint; B3, B4, B6, B10, B11, and B12 remain.",
+    "Program milestone completed. Blueprint node B10 is proved: circleBaseNeighborhood is the circle with antipode -1 removed, it is open and contains 1, and circleBaseNeighborhood_contraction is the existing stereographic pointed contraction at exactly that subtype and basepoint. B3, B4, B6, B11, and B12 remain.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
       :exit 0,
       :finding
-      "All declarations compile; the new B8 declaration uses propext and Quot.sound only"}
-     {:cmd "python3 comment-stripped placeholder scan",
-      :exit 0,
-      :finding
-      "Zero sorry, admit, or axiom tokens in changed source and documentation"}
-     {:cmd "git diff --check", :exit 0}
-     {:cmd "git commit -m Prove-rank-one-free-group-coordinate",
-      :exit 0,
-      :finding
-      "Implementation commit 94d19bb61b8e0629afa2c1070246515757d5f0b1"}
-     {:cmd "git commit -m Record-proved-rank-one-blueprint-node",
-      :exit 0,
-      :finding
-      "Blueprint receipt commit 66ccbdbaf3d033149dc50b69a165546b41439189"}
+      "All declarations compile; circleBaseNeighborhood_contraction uses only propext, Classical.choice, and Quot.sound."}
      {:cmd "lake build ConstructionTargets.PointWedgeVanKampen",
       :exit 0,
-      :finding "Build completed successfully (8347 jobs)"}
+      :finding
+      "Build completed successfully (8347 jobs); imported-module lint warnings were replayed and the changed module introduced none."}
+     {:cmd
+      "python3 comment-stripped placeholder and blueprint validation",
+      :exit 0,
+      :finding
+      "Zero sorry, admit, or axiom tokens in changed source and documentation; blueprint B10 is proved."}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
-      :finding "131 registered statements match, 0 do not"}
-     {:cmd "sha256sum scoped files", :exit 0}],
+      :finding "131 registered statements match, 0 do not."}
+     {:cmd
+      "git diff --check -- ConstructionTargets/PointWedgeVanKampen.lean ConstructionTargets/PointWedgeVanKampen.md ConstructionTargets/PointWedgeVanKampen.blueprint.md",
+      :exit 0}
+     {:cmd "git commit -m Prove-circle-base-neighborhood-contraction",
+      :exit 0,
+      :finding
+      "Committed the three scoped milestone files as b69997ebbc56a4762f2d38a9aa9dda1f0c580d97."}
+     {:cmd
+      "sha256sum ConstructionTargets/PointWedgeVanKampen.lean ConstructionTargets/PointWedgeVanKampen.md ConstructionTargets/PointWedgeVanKampen.blueprint.md",
+      :exit 0,
+      :finding
+      "Hashes are 331633dfc2ad170b3e2a092f68241c419289d139382149636dd32dbd60a6733b, 1fbf97290c32c8ed402f3970e3614952af43f1d9f94f2bfcdb4f81c37276225d, and 360307889cbd11a0155cb2103ea22a60d583417e8e4b1e618b6c0ed23296582b."}],
     :diagnostic-history [],
     :continue-from
-    {:commit "66ccbdbaf3d033149dc50b69a165546b41439189",
+    {:commit "b69997ebbc56a4762f2d38a9aa9dda1f0c580d97",
      :next
-     "Implement the next ready reviewed-blueprint node, preferably B10 circleBaseNeighborhood and its contraction, before B11."},
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791716719291-5193-8b875afb",
-     :commands
-     ["git show 94d19bb61b8e0629afa2c1070246515757d5f0b1 and 66ccbdbaf3d033149dc50b69a165546b41439189"
-      "git diff-tree --name-status for both commits"
-      "sha256sum recorded scoped files"
-      "git diff --check across both commits"
-      "comment-stripped placeholder scan"
-      "python3 scripts/statement-registry.py check"
-      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected residual target absent)"],
-     :finding
-     "PASS: the program STOP adds new compiled, sorry-free B8 progress after the last program-history entry. multiplicativeIntEquivFreeGroupFinOne has the frozen type Multiplicative Int ≃* FreeGroup (Fin 1), uses the symmetric orientation of FreeGroup.mulEquivIntOfUnique, and depends only on propext and Quot.sound. Scope and all three recorded hashes reproduce, registry reports 131 matches, and PointWedgeVanKampen builds. The final ThreeCircles target remains absent exactly as listed among the unfinished milestones."},
-    :commit "66ccbdbaf3d033149dc50b69a165546b41439189",
-    :commits
-    ["94d19bb61b8e0629afa2c1070246515757d5f0b1"
-     "66ccbdbaf3d033149dc50b69a165546b41439189"],
+     "Implement blueprint B11 twoCirclesBaseNeighborhood and its pointed contraction from B10 and PointWedgeRestrictedOpenQuotient."},
+    :commit "b69997ebbc56a4762f2d38a9aa9dda1f0c580d97",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"
      "ConstructionTargets/PointWedgeVanKampen.blueprint.md"],
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -115507,7 +115483,8 @@
     :reported-by [:program-2026-10-11-point-wedge-van-kampen],
     :type
     "A pointed contraction of the open punctured-circle neighborhood of 1",
-    :area "fundamental-group-wedge-of-circles"},
+    :area "fundamental-group-wedge-of-circles",
+    :proved-in :program-2026-10-11-point-wedge-van-kampen},
    :id :lemma-pointwedgevankampen-circlebaseneighborhood-contraction,
    :kind :lemma,
    :depends-on [],
