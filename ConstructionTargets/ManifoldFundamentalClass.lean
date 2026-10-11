@@ -1599,6 +1599,25 @@ theorem integralOpenDiskComparison_component_homology_maps (k : ℕ) :
           (integralOpenDiskPairShortComplexComparison k).τ₃ (k + 2) := by
   constructor <;> rfl
 
+/-- The coefficient connecting map with its target moved to homology of the
+forgotten puncture chain complex. -/
+noncomputable def coefficientOpenDiskConnectingTransport (k : ℕ) :=
+  forgetIntModules.map
+      (CoefficientPairSequence.connecting ℤ
+        (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2)) (k + 1)) ≫
+    (((CoefficientH0.SingularChains ℤ
+        (TopCat.of (T02A06HemisphereExcision.puncturedOpenDiskSet
+          (k + 2)))).sc (k + 1)).mapHomologyIso forgetIntModules).inv
+
+theorem coefficientOpenDiskConnectingTransport_eq (k : ℕ) :
+    coefficientOpenDiskConnectingTransport k =
+      forgetIntModules.map
+          (CoefficientPairSequence.connecting ℤ
+            (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2)) (k + 1)) ≫
+        (((CoefficientH0.SingularChains ℤ
+            (TopCat.of (T02A06HemisphereExcision.puncturedOpenDiskSet
+              (k + 2)))).sc (k + 1)).mapHomologyIso forgetIntModules).inv := rfl
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -1696,5 +1715,6 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralOpenDiskCoefficientPairShortExact
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralOpenDiskConnecting_naturality_raw
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralOpenDiskComparison_component_homology_maps
+#print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientOpenDiskConnectingTransport_eq
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport_homologyMap_eq_composite
 #print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_transport_homology_factors
