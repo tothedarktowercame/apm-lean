@@ -79283,35 +79283,34 @@
   {:consumer :t97A04,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "program STOP commits nothing new since the last :program-history entry: evidence commit bb0f0f77d8953dc78dd564e000f3d4a5b29d0894 exactly equals history job 5",
    :evidence
    {:placeholder-delta 0,
-    :residual "Prove folded affine formulas; then B6-B11.",
+    :residual "Transport through overlap branches; then B6-B11.",
     :outcome :stop,
     :warnings ["Main retains two placeholders."],
     :missing-theorems
     [{:name
-      "ConstructionTargets.T97A04Closure.twoCircleOverlapShearFold_H1",
-      :type "folded circle maps and H1 factorizations",
+      "ConstructionTargets.T97A04Closure.frozenTorusCircleProd_shearY",
+      :type "circle coordinate of shearY is (x^a*y^b,y)",
       :status :proved,
       :consumers [:t97A04],
       :depends-on [],
       :area "mv-connecting-naturality"}
      {:name
       "ConstructionTargets.T97A04Closure.shearY_overlap_coordinate_components",
-      :type
-      "folded maps are affine, yielding inl/inr degree-a equations",
+      :type "branch transport gives affine and degree-a equations",
       :status :partial,
       :consumers [:t97A04],
       :depends-on
-      ["ConstructionTargets.T97A04Closure.twoCircleOverlapShearFold_H1"
+      ["ConstructionTargets.T97A04Closure.frozenTorusCircleProd_shearY"
        "ConstructionTargets.T97A04Closure.circleZPow_H1_coordinate"],
       :area "mv-connecting-naturality"}],
     :statement-hashes
     {:registry "131/0",
-     :closure "8f9bb068221c45811c6ad0c1fb291a529ecdc818",
+     :closure "6e3d09556692acae58d83a9e0640f16413220e3c",
      :blueprint "c419a895cb4ede2acc1cb6bc5c7536344ba63df4"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
@@ -79324,19 +79323,20 @@
      {:cmd "lake env lean problems/t97A04/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "Main placeholder count", :exit 0, :output "2"}
-     {:cmd "git show --check 3d32079d0", :exit 0}],
+     {:cmd "git show --check 2183b2339", :exit 0}],
     :diagnostic-history
     [{:cmd "closure compile",
       :exit 1,
-      :finding "Affine rfl failed; proved fold factorization."}],
-    :continue-from "Expand overlap equivalence for affine formulas.",
-    :commit "3d32079d0c2c546e38de9c2ded26b1c1d365a768",
+      :finding
+      "Affine expansion exposed branch transport; proved circle formula."}],
+    :continue-from
+    "Show branch transport preserves first circle coordinate.",
+    :commit "2183b2339d8032982ee991ca2d92e8f58494d853",
     :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
-    :finding
-    "Each restriction now folds to a circle map with proved H1 factorization.",
+    :finding "In circle coordinates, shearY is (x^a*y^b,y).",
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79802,7 +79802,8 @@
     :lemma-constructiontargets-t97a04closure-circlezpow-h1-coordinate
     :lemma-constructiontargets-t97a04closure-twocircleoverlapshearleftright
     :lemma-constructiontargets-t97a04closure-twocircleoverlapshear-component-h1
-    :lemma-constructiontargets-t97a04closure-twocircleoverlapshearfold-h1],
+    :lemma-constructiontargets-t97a04closure-twocircleoverlapshearfold-h1
+    :lemma-constructiontargets-t97a04closure-frozentoruscircleprod-sheary],
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
@@ -79986,6 +79987,26 @@
     :type "ContMDiff (𝓡 2) (𝓡 3) ∞ T96A07.sphereMap",
     :area "projective-smooth-descent"},
    :id :lemma-constructiontargets-t96a07closure-spheremap-contmdiff,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T97A04Closure.frozenTorusCircleProd_shearY",
+    :type "circle coordinate of shearY is (x^a*y^b,y)"},
+   :lemma
+   {:name
+    "ConstructionTargets.T97A04Closure.frozenTorusCircleProd_shearY",
+    :reported-by [:program-2026-10-11-close-t97a04],
+    :type "circle coordinate of shearY is (x^a*y^b,y)",
+    :area "mv-connecting-naturality",
+    :proved-in :program-2026-10-11-close-t97a04},
+   :id
+   :lemma-constructiontargets-t97a04closure-frozentoruscircleprod-sheary,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}]}
