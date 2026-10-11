@@ -3111,99 +3111,153 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :implements-lemma
+   :lemma-constructiontargets-manifoldfundamentalclass-integralsingularchainscomparison-subtype-naturality,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+   :dag-node
+   "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/integral-relative-comparison-subtype-square",
+   :acceptance
+   {:implementation
+    "Promote the fixture's integralSubtypeInclusion and integralSingularChainsComparison_subtype_naturality declarations. Specialize the reviewed singularChainsComparison_naturality theorem to the actual continuous subtype inclusion A to X. Preserve the explicit chain-map square in ModuleCat Int after forgetting and in AddCommGrpCat. Do not yet assert a relative cokernel isomorphism, generator transport, orientation normalization, or localization equality.",
+    :declaration
+    "ConstructionTargets.ManifoldFundamentalClass.integralSingularChainsComparison_subtype_naturality",
+    :type
+    "forall {X : Type} [TopologicalSpace X] (A : Set X), ((forgetIntModules.mapHomologicalComplex (ComplexShape.down Nat)).map ((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat Int)).obj (ModuleCat.of Int Int)).map (integralSubtypeInclusion A)))) ≫ (singularChainsComparison (TopCat.of X)).hom = (singularChainsComparison (TopCat.of A)).hom ≫ (((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj (AddCommGrpCat.of Int)).map (integralSubtypeInclusion A))",
+    :supporting-declarations
+    ["ConstructionTargets.ManifoldFundamentalClass.integralSubtypeInclusion"],
+    :fixture
+    "/tmp/manifold_fundamental_class_integral_subtype_chain_naturality.lean",
+    :fixture-sha256
+    "615e4ab642476f46475d7f505e011cd5d585faf6e3fc6ed644f5ba24cf62815d",
+    :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
+    :route-step
+    "supply the commuting absolute chain square needed to induce the natural integral comparison on relative cokernels"},
+   :representation
+   {:source
+    "The forgotten ModuleCat Int singular-chain map induced by the subtype inclusion A to X, followed by the absolute integral chain comparison on X",
+    :target
+    "The absolute integral chain comparison on A, followed by the AddCommGrpCat singular-chain map induced by the same subtype inclusion",
+    :direction
+    "Exact chain-map equality from the forgotten module-valued subtype-inclusion representation to the additive-group-valued subtype-inclusion representation"},
+   :id
+   :routes-2026-10-11-manifold-integral-subtype-chain-naturality-topo3-r1,
+   :kind :representation-comparison,
+   :area "manifold-fundamental-class",
+   :depends-on
+   [:routes-2026-10-10-topo3-seed-checkpoint-1
+    :routes-2026-10-10-manifold-local-positive-excision-topo3-r1
+    :routes-2026-10-10-manifold-oriented-overlap-coherence-topo3-r1
+    :routes-2026-10-10-manifold-connected-overlap-unit-topo3-r1
+    :routes-2026-10-10-manifold-oriented-connected-overlap-topo3-r1
+    :routes-2026-10-10-manifold-integral-transition-sign-topo3-r1
+    :routes-2026-10-10-manifold-exclude-negative-transition-topo3-r1
+    :routes-2026-10-10-manifold-global-generator-topo3-r1
+    :routes-2026-10-10-manifold-localization-iso-generator-topo3-r1
+    :routes-2026-10-10-manifold-generator-map-isiso-topo3-r1
+    :routes-2026-10-10-manifold-localization-map-naturality-topo3-r1
+    :routes-2026-10-10-manifold-localization-apply-naturality-topo3-r1
+    :routes-2026-10-10-manifold-group-global-generator-topo3-r1
+    :routes-2026-10-10-manifold-group-generator-naturality-topo3-r1
+    :routes-2026-10-10-manifold-global-local-generator-transport-topo3-r1
+    :routes-2026-10-11-manifold-basepoint-localization-coefficient-topo3-r1
+    :routes-2026-10-11-manifold-local-generator-coefficient-unique-topo3-r1
+    :routes-2026-10-11-manifold-localization-coefficient-one-topo3-r1
+    :routes-2026-10-11-manifold-distinguished-chart-generator-topo3-r1],
+   :current-residual
+   "Use this commuting square and preservation of cokernels by forgetIntModules to construct the relative chain-complex isomorphism; pass it to homology and prove it transports CoefficientChartLocal.generator to HigherChartLocalGenerator.ambientLocalGenerator.",
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-closedorientedfundamentalclass,
    :evidence
    {:probe
     {:residual
-     "Build the natural integral relative-homology comparison from CoefficientRelativeSmall at R = Int to RelativeSingularChains in AddCommGrpCat, prove exact generator transport from CoefficientChartLocal.generator to ambientLocalGenerator, then use orientation transition units to establish the normalized localization equality.",
+     "Construct the induced relative chain-complex isomorphism from the subtype naturality square and cokernel preservation, derive its homology isomorphism, and prove exact transport from the coefficient-local generator to the production ambientLocalGenerator.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
      [{:id
-       :lemma-constructiontargets-manifoldfundamentalclass-distinguishedchartgenerator-eq-coefficientgenerator,
+       :lemma-constructiontargets-manifoldfundamentalclass-integralsingularchainscomparison-subtype-naturality,
        :name
-       "ConstructionTargets.ManifoldFundamentalClass.distinguishedChartGenerator_eq_coefficientGenerator",
+       "ConstructionTargets.ManifoldFundamentalClass.integralSingularChainsComparison_subtype_naturality",
        :type
-       "forall (R : Type) [CommRing R] (m : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (EuclideanSpace Real (Fin (m+2))) M] (x : M), CoefficientChartTransitionUnit.chartGenerator R m x x (mem_chart_source _ x) = CoefficientChartLocal.generator R m x",
+       "forall {X : Type} [TopologicalSpace X] (A : Set X), ((forgetIntModules.mapHomologicalComplex (ComplexShape.down Nat)).map ((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat Int)).obj (ModuleCat.of Int Int)).map (integralSubtypeInclusion A)))) ≫ (singularChainsComparison (TopCat.of X)).hom = (singularChainsComparison (TopCat.of A)).hom ≫ (((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj (AddCommGrpCat.of Int)).map (integralSubtypeInclusion A))",
        :status :proved,
        :consumers [:t00J02 :t98A02],
        :depends-on
-       ["ConstructionTargets.CoefficientDistinguishedNormalization.distinguished"],
+       ["ConstructionTargets.IntegralSingularHomologyComparison.singularChainsComparison_naturality"],
        :area "manifold-fundamental-class"}],
      :prerequisite
      {:consumer :t00J02,
       :implements-lemma
-      :lemma-constructiontargets-manifoldfundamentalclass-distinguishedchartgenerator-eq-coefficientgenerator,
+      :lemma-constructiontargets-manifoldfundamentalclass-integralsingularchainscomparison-subtype-naturality,
       :phase :implementation,
       :state :open,
       :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
       :dag-node
-      "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/distinguished-chart-generator-recovery",
+      "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/integral-relative-comparison-subtype-square",
       :acceptance
       {:implementation
-       "Promote the exact fixture theorem and import CoefficientDistinguishedNormalization. Unfold the actual chartGenerator, chartNormalization, and CoefficientChartLocal.generator definitions and use the reviewed distinguished normalization equality to identify their inverse images of one. Do not compare either class to HigherChartLocalGenerator.ambientLocalGenerator yet, do not introduce an orientation predicate, and do not claim localization normalization.",
+       "Promote the fixture's integralSubtypeInclusion and integralSingularChainsComparison_subtype_naturality declarations. Specialize the reviewed singularChainsComparison_naturality theorem to the actual continuous subtype inclusion A to X. Preserve the explicit chain-map square in ModuleCat Int after forgetting and in AddCommGrpCat. Do not yet assert a relative cokernel isomorphism, generator transport, orientation normalization, or localization equality.",
        :declaration
-       "ConstructionTargets.ManifoldFundamentalClass.distinguishedChartGenerator_eq_coefficientGenerator",
+       "ConstructionTargets.ManifoldFundamentalClass.integralSingularChainsComparison_subtype_naturality",
        :type
-       "forall (R : Type) [CommRing R] (m : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (EuclideanSpace Real (Fin (m+2))) M] (x : M), CoefficientChartTransitionUnit.chartGenerator R m x x (mem_chart_source _ x) = CoefficientChartLocal.generator R m x",
+       "forall {X : Type} [TopologicalSpace X] (A : Set X), ((forgetIntModules.mapHomologicalComplex (ComplexShape.down Nat)).map ((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat Int)).obj (ModuleCat.of Int Int)).map (integralSubtypeInclusion A)))) ≫ (singularChainsComparison (TopCat.of X)).hom = (singularChainsComparison (TopCat.of A)).hom ≫ (((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj (AddCommGrpCat.of Int)).map (integralSubtypeInclusion A))",
+       :supporting-declarations
+       ["ConstructionTargets.ManifoldFundamentalClass.integralSubtypeInclusion"],
        :fixture
-       "/tmp/manifold_fundamental_class_distinguished_chart_generator.lean",
+       "/tmp/manifold_fundamental_class_integral_subtype_chain_naturality.lean",
        :fixture-sha256
-       "afb2936b828507a7d44a282cbd9ec55542643170e7da201e90437433def35bb6",
+       "615e4ab642476f46475d7f505e011cd5d585faf6e3fc6ed644f5ba24cf62815d",
        :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
        :route-step
-       "identify the distinguished transition-unit generator with the concrete coefficient-local generator before comparing coefficient-relative homology to the AddCommGrp local homology used by localizationMap"},
+       "supply the commuting absolute chain square needed to induce the natural integral comparison on relative cokernels"},
       :representation
       {:source
-       "The transition-unit chartGenerator for the distinguished chart indexed by the basepoint itself",
+       "The forgotten ModuleCat Int singular-chain map induced by the subtype inclusion A to X, followed by the absolute integral chain comparison on X",
        :target
-       "The concrete CoefficientChartLocal.generator defined by the full pointed-chart normalization",
+       "The absolute integral chain comparison on A, followed by the AddCommGrpCat singular-chain map induced by the same subtype inclusion",
        :direction
-       "Exact equality from the distinguished transition-unit chart generator to the coefficient-local pointed-chart generator through CoefficientDistinguishedNormalization.distinguished"},
+       "Exact chain-map equality from the forgotten module-valued subtype-inclusion representation to the additive-group-valued subtype-inclusion representation"},
       :id
-      :routes-2026-10-11-manifold-distinguished-chart-generator-topo3-r1,
+      :routes-2026-10-11-manifold-integral-subtype-chain-naturality-topo3-r1,
       :kind :representation-comparison,
       :area "manifold-fundamental-class",
       :depends-on
       [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
-       :routes-2026-10-11-manifold-localization-coefficient-one-topo3-r1],
+       :routes-2026-10-11-manifold-distinguished-chart-generator-topo3-r1],
       :current-residual
-      "Construct the natural integral relative-homology comparison from the coefficient ModuleCat model to production AddCommGrp relative singular homology and prove it sends the coefficient-local generator to HigherChartLocalGenerator.ambientLocalGenerator.",
+      "Use this commuting square and preservation of cokernels by forgetIntModules to construct the relative chain-complex isomorphism; pass it to homology and prove it transports CoefficientChartLocal.generator to HigherChartLocalGenerator.ambientLocalGenerator.",
       :other-consumers [:t98A02]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake env lean /tmp/manifold_fundamental_class_distinguished_chart_generator.lean",
+       "lake env lean /tmp/manifold_fundamental_class_integral_subtype_chain_naturality.lean",
        :exit 0,
        :output
-       "distinguishedChartGenerator_eq_coefficientGenerator compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "integralSubtypeInclusion and integralSingularChainsComparison_subtype_naturality compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/manifold_fundamental_class_distinguished_chart_generator.lean",
+       "sha256sum /tmp/manifold_fundamental_class_integral_subtype_chain_naturality.lean",
        :exit 0,
        :output
-       "afb2936b828507a7d44a282cbd9ec55542643170e7da201e90437433def35bb6  /tmp/manifold_fundamental_class_distinguished_chart_generator.lean"}
+       "615e4ab642476f46475d7f505e011cd5d585faf6e3fc6ed644f5ba24cf62815d  /tmp/manifold_fundamental_class_integral_subtype_chain_naturality.lean"}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/manifold_fundamental_class_distinguished_chart_generator.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/manifold_fundamental_class_integral_subtype_chain_naturality.lean || true)\"",
        :exit 0}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/manifold_fundamental_class_distinguished_chart_generator.lean",
-       :exit 1,
-       :finding
-       "After rewriting by the reviewed distinguished-normalization equality, Lean left a reflexive equality under the concrete inverse homomorphism. Closing it with rfl produced the successful compile."}],
      :fixture
      {:path
-      "/tmp/manifold_fundamental_class_distinguished_chart_generator.lean",
+      "/tmp/manifold_fundamental_class_integral_subtype_chain_naturality.lean",
       :sha256
-      "afb2936b828507a7d44a282cbd9ec55542643170e7da201e90437433def35bb6"},
+      "615e4ab642476f46475d7f505e011cd5d585faf6e3fc6ed644f5ba24cf62815d"},
      :finding
-     "The orientation-coherence results act on CoefficientChartTransitionUnit.chartGenerator, while localizationMap lands in the production AddCommGrp relative singular-homology object containing HigherChartLocalGenerator.ambientLocalGenerator. No theorem currently identifies those representations. The compiled fixture completes the first exact comparison already justified by reviewed geometry: at the distinguished chart indexed by x, the transition-unit generator is exactly CoefficientChartLocal.generator. It does not pretend that the coefficient-relative and production-relative categories are definitionally equal. The next required comparison must be a natural integral relative-chain/homology equivalence and must prove the direction in which the coefficient generator maps to the production ambient generator.",
+     "The coefficient local generator and the production ambient generator live in relative homology objects formed as cokernels of subtype-inclusion chain maps in different coefficient categories. The reviewed IntegralSingularHomologyComparison already gives objectwise chain isomorphisms and naturality for every continuous map, but no relative comparison is packaged. The compiled fixture specializes that genuine naturality theorem to the exact subtype inclusion defining the pair. This is the commutative square required to induce a map between the relative cokernels; it does not identify the relative objects definitionally or choose an arbitrary isomorphism.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -3236,7 +3290,8 @@
     :routes-2026-10-11-manifold-basepoint-localization-coefficient-topo3-r1
     :routes-2026-10-11-manifold-local-generator-coefficient-unique-topo3-r1
     :routes-2026-10-11-manifold-localization-coefficient-one-topo3-r1
-    :routes-2026-10-11-manifold-distinguished-chart-generator-topo3-r1],
+    :routes-2026-10-11-manifold-distinguished-chart-generator-topo3-r1
+    :routes-2026-10-11-manifold-integral-subtype-chain-naturality-topo3-r1],
    :current-residual
    "Local-degree counts and wild-ball complement homology remain.",
    :other-consumers [:t98A02]}
@@ -5271,6 +5326,46 @@
     :reported-by []},
    :id
    :lemma-constructiontargets-coefficientdistinguishednormalization-distinguished,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFundamentalClass.integralSingularChainsComparison_subtype_naturality",
+    :type
+    "forall {X : Type} [TopologicalSpace X] (A : Set X), ((forgetIntModules.mapHomologicalComplex (ComplexShape.down Nat)).map ((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat Int)).obj (ModuleCat.of Int Int)).map (integralSubtypeInclusion A)))) ≫ (singularChainsComparison (TopCat.of X)).hom = (singularChainsComparison (TopCat.of A)).hom ≫ (((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj (AddCommGrpCat.of Int)).map (integralSubtypeInclusion A))"},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFundamentalClass.integralSingularChainsComparison_subtype_naturality",
+    :reported-by
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    :type
+    "forall {X : Type} [TopologicalSpace X] (A : Set X), ((forgetIntModules.mapHomologicalComplex (ComplexShape.down Nat)).map ((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat Int)).obj (ModuleCat.of Int Int)).map (integralSubtypeInclusion A)))) ≫ (singularChainsComparison (TopCat.of X)).hom = (singularChainsComparison (TopCat.of A)).hom ≫ (((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj (AddCommGrpCat.of Int)).map (integralSubtypeInclusion A))",
+    :area "manifold-fundamental-class",
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+   :id
+   :lemma-constructiontargets-manifoldfundamentalclass-integralsingularchainscomparison-subtype-naturality,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-integralsingularhomologycomparison-singularchainscomparison-],
+   :other-consumers [:t98A02]}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.IntegralSingularHomologyComparison.singularChainsComparison_naturality"},
+   :lemma
+   {:name
+    "ConstructionTargets.IntegralSingularHomologyComparison.singularChainsComparison_naturality",
+    :reported-by []},
+   :id
+   :lemma-constructiontargets-integralsingularhomologycomparison-singularchainscomparison-,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}],
