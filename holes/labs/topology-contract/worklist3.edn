@@ -3882,93 +3882,176 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :implements-lemma
+   :lemma-constructiontargets-manifoldfundamentalclass-ambientlocalnormalization-generator,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+   :dag-node
+   "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/production-ambient-normalization",
+   :acceptance
+   {:implementation
+    "Promote the fixture's ambientLocalNormalization definition and ambientLocalNormalization_generator theorem. Define the normalization by the inverse of the actual homology map induced by HigherChartLocalGenerator.ambientChartMap followed by HigherModelLocalHomology.localIsoInt, and prove the concrete ambientLocalGenerator maps to one using the categorical inverse law and HigherModelLocalHomology.normalization. Do not mention integralRelativeHomologyComparison in the definition, do not assert its compatibility with the coefficient normalization yet, and do not claim generator transport or localization equality.",
+    :declaration
+    "ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization_generator",
+    :type
+    "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), (ambientLocalNormalization k x).hom.hom (HigherChartLocalGenerator.ambientLocalGenerator (k := k) x) = 1",
+    :supporting-declarations
+    ["ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization"],
+    :fixture
+    "/tmp/manifold_fundamental_class_ambient_local_normalization.lean",
+    :fixture-sha256
+    "b9cc061a6963a76fd168d76215eb68bcc27c60525a782a1010c6128ee5ff985f",
+    :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
+    :route-step
+    "package the actual production ambient normalization and prove its value on the concrete ambient local generator before comparing it to the coefficient chart normalization"},
+   :representation
+   {:source
+    "Production ambient local homology with HigherChartLocalGenerator.ambientLocalGenerator",
+    :target
+    "The concrete AddCommGrpCat integer normalization supplied by HigherModelLocalHomology.localIsoInt",
+    :direction
+    "Canonical normalization isomorphism from ambient local homology to the integer model, obtained by pulling back through the actual ambientChartMap homology isomorphism and then applying localIsoInt; the ambient generator maps exactly to one"},
+   :id
+   :routes-2026-10-11-manifold-ambient-local-normalization-topo3-r1,
+   :kind :representation-comparison,
+   :area "manifold-fundamental-class",
+   :depends-on
+   [:routes-2026-10-10-topo3-seed-checkpoint-1
+    :routes-2026-10-10-manifold-local-positive-excision-topo3-r1
+    :routes-2026-10-10-manifold-oriented-overlap-coherence-topo3-r1
+    :routes-2026-10-10-manifold-connected-overlap-unit-topo3-r1
+    :routes-2026-10-10-manifold-oriented-connected-overlap-topo3-r1
+    :routes-2026-10-10-manifold-integral-transition-sign-topo3-r1
+    :routes-2026-10-10-manifold-exclude-negative-transition-topo3-r1
+    :routes-2026-10-10-manifold-global-generator-topo3-r1
+    :routes-2026-10-10-manifold-localization-iso-generator-topo3-r1
+    :routes-2026-10-10-manifold-generator-map-isiso-topo3-r1
+    :routes-2026-10-10-manifold-localization-map-naturality-topo3-r1
+    :routes-2026-10-10-manifold-localization-apply-naturality-topo3-r1
+    :routes-2026-10-10-manifold-group-global-generator-topo3-r1
+    :routes-2026-10-10-manifold-group-generator-naturality-topo3-r1
+    :routes-2026-10-10-manifold-global-local-generator-transport-topo3-r1
+    :routes-2026-10-11-manifold-basepoint-localization-coefficient-topo3-r1
+    :routes-2026-10-11-manifold-local-generator-coefficient-unique-topo3-r1
+    :routes-2026-10-11-manifold-localization-coefficient-one-topo3-r1
+    :routes-2026-10-11-manifold-distinguished-chart-generator-topo3-r1
+    :routes-2026-10-11-manifold-integral-subtype-chain-naturality-topo3-r1
+    :routes-2026-10-11-manifold-integral-mapped-relative-cokernel-topo3-r1
+    :routes-2026-10-11-manifold-forget-relative-cokernel-topo3-r1
+    :routes-2026-10-11-manifold-integral-relative-chains-comparison-topo3-r1
+    :routes-2026-10-11-manifold-integral-relative-homology-comparison-topo3-r1],
+   :current-residual
+   "Prove the explicit normalization square: integralRelativeHomologyComparison at deletedPoint x followed by ambientLocalNormalization k x equals forgetIntModules.map of CoefficientChartLocal.localIso Int k x. This square and the two normalization equations imply exact generator transport by injectivity.",
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-closedorientedfundamentalclass,
    :evidence
    {:probe
     {:residual
-     "Prove exact transport of CoefficientChartLocal.generator Int to HigherChartLocalGenerator.ambientLocalGenerator under integralRelativeHomologyComparison.",
+     "Prove the exact coefficient-to-production normalization square; then generator transport follows by injectivity of ambientLocalNormalization.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
      [{:id
-       :lemma-constructiontargets-manifoldfundamentalclass-integralrelativehomologycomparison,
+       :lemma-constructiontargets-manifoldfundamentalclass-ambientlocalnormalization-generator,
        :name
-       "ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparison",
+       "ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization_generator",
        :type
-       "forall {X : Type} [TopologicalSpace X] (A : Set X) (n : Nat), forgetIntModules.obj ((CoefficientRelativeSmall.relativeChains Int A).homology n) ≅ (RelativeSingularChains A).homology n",
+       "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), (ambientLocalNormalization k x).hom.hom (HigherChartLocalGenerator.ambientLocalGenerator (k := k) x) = 1",
        :status :proved,
        :consumers [:t00J02 :t98A02],
        :depends-on
-       ["ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparison"],
+       ["ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparison"
+        "ConstructionTargets.HigherChartLocalGenerator.ambientChartMap_Hn_isIso"
+        "ConstructionTargets.HigherModelLocalHomology.normalization"],
        :area "manifold-fundamental-class"}],
      :prerequisite
      {:consumer :t00J02,
       :implements-lemma
-      :lemma-constructiontargets-manifoldfundamentalclass-integralrelativehomologycomparison,
+      :lemma-constructiontargets-manifoldfundamentalclass-ambientlocalnormalization-generator,
       :phase :implementation,
       :state :open,
       :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
       :dag-node
-      "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/integral-relative-homology-comparison",
+      "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/production-ambient-normalization",
       :acceptance
       {:implementation
-       "Promote the exact fixture definition. Compose the inverse mapHomologyIso for forgetIntModules on CoefficientRelativeSmall.relativeChains with homologyFunctor.mapIso applied to integralRelativeChainsComparison. Do not identify the homology objects definitionally and do not yet assert generator transport, orientation normalization, or localization equality.",
+       "Promote the fixture's ambientLocalNormalization definition and ambientLocalNormalization_generator theorem. Define the normalization by the inverse of the actual homology map induced by HigherChartLocalGenerator.ambientChartMap followed by HigherModelLocalHomology.localIsoInt, and prove the concrete ambientLocalGenerator maps to one using the categorical inverse law and HigherModelLocalHomology.normalization. Do not mention integralRelativeHomologyComparison in the definition, do not assert its compatibility with the coefficient normalization yet, and do not claim generator transport or localization equality.",
        :declaration
-       "ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparison",
+       "ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization_generator",
        :type
-       "forall {X : Type} [TopologicalSpace X] (A : Set X) (n : Nat), forgetIntModules.obj ((CoefficientRelativeSmall.relativeChains Int A).homology n) ≅ (RelativeSingularChains A).homology n",
+       "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), (ambientLocalNormalization k x).hom.hom (HigherChartLocalGenerator.ambientLocalGenerator (k := k) x) = 1",
+       :supporting-declarations
+       ["ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization"],
        :fixture
-       "/tmp/manifold_fundamental_class_integral_relative_homology_comparison.lean",
+       "/tmp/manifold_fundamental_class_ambient_local_normalization.lean",
        :fixture-sha256
-       "6fe70e61fc027080cf9ce130a8ba8da1b5d09065b1a86a3b92e6e86a9560ede3",
+       "b9cc061a6963a76fd168d76215eb68bcc27c60525a782a1010c6128ee5ff985f",
        :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
        :route-step
-       "derive the exact relative homology representation isomorphism from the reviewed relative chain comparison and canonical homology preservation"},
+       "package the actual production ambient normalization and prove its value on the concrete ambient local generator before comparing it to the coefficient chart normalization"},
       :representation
       {:source
-       "The ModuleCat Int coefficient-relative homology object after applying forgetIntModules",
+       "Production ambient local homology with HigherChartLocalGenerator.ambientLocalGenerator",
        :target
-       "The production AddCommGrpCat homology of RelativeSingularChains for the same pair",
+       "The concrete AddCommGrpCat integer normalization supplied by HigherModelLocalHomology.localIsoInt",
        :direction
-       "Canonical homology isomorphism from forgotten coefficient-relative homology to production relative singular homology, obtained by preservation of homology followed by homology of integralRelativeChainsComparison"},
+       "Canonical normalization isomorphism from ambient local homology to the integer model, obtained by pulling back through the actual ambientChartMap homology isomorphism and then applying localIsoInt; the ambient generator maps exactly to one"},
       :id
-      :routes-2026-10-11-manifold-integral-relative-homology-comparison-topo3-r1,
+      :routes-2026-10-11-manifold-ambient-local-normalization-topo3-r1,
       :kind :representation-comparison,
       :area "manifold-fundamental-class",
       :depends-on
       [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
-       :routes-2026-10-11-manifold-integral-relative-chains-comparison-topo3-r1],
+       :routes-2026-10-11-manifold-integral-relative-homology-comparison-topo3-r1],
       :current-residual
-      "Prove that integralRelativeHomologyComparison at the deleted point sends CoefficientChartLocal.generator Int to HigherChartLocalGenerator.ambientLocalGenerator, by unfolding both normalization chains and the canonical cokernel comparisons.",
+      "Prove the explicit normalization square: integralRelativeHomologyComparison at deletedPoint x followed by ambientLocalNormalization k x equals forgetIntModules.map of CoefficientChartLocal.localIso Int k x. This square and the two normalization equations imply exact generator transport by injectivity.",
       :other-consumers [:t98A02]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake env lean /tmp/manifold_fundamental_class_integral_relative_homology_comparison.lean",
+       "lake env lean /tmp/manifold_fundamental_class_ambient_local_normalization.lean",
        :exit 0,
        :output
-       "integralRelativeHomologyComparison compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "ambientLocalNormalization and ambientLocalNormalization_generator compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/manifold_fundamental_class_integral_relative_homology_comparison.lean",
+       "sha256sum /tmp/manifold_fundamental_class_ambient_local_normalization.lean",
        :exit 0,
        :output
-       "6fe70e61fc027080cf9ce130a8ba8da1b5d09065b1a86a3b92e6e86a9560ede3  /tmp/manifold_fundamental_class_integral_relative_homology_comparison.lean"}
+       "b9cc061a6963a76fd168d76215eb68bcc27c60525a782a1010c6128ee5ff985f  /tmp/manifold_fundamental_class_ambient_local_normalization.lean"}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/manifold_fundamental_class_integral_relative_homology_comparison.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/manifold_fundamental_class_ambient_local_normalization.lean || true)\"",
        :exit 0}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/manifold_fundamental_class_ambient_local_normalization.lean",
+       :exit 1,
+       :finding
+       "The first draft had not opened the namespaces containing deletedPoint and relativeSingularMap. Opening the existing concrete namespaces exposed the intended maps without defining substitutes."}
+      {:cmd
+       "lake env lean /tmp/manifold_fundamental_class_ambient_local_normalization.lean",
+       :exit 1,
+       :finding
+       "The normalization proof initially left the ambient homology map implicit, preventing elaboration of the inverse morphism application. Naming the concrete map and its IsIso instance fixed the representation."}
+      {:cmd
+       "lake env lean /tmp/manifold_fundamental_class_ambient_local_normalization.lean",
+       :exit 1,
+       :finding
+       "The categorical inverse law did not rewrite beneath concrete homomorphism applications automatically. Extracting its elementwise consequence with ConcreteCategory.congr_hom produced the successful proof."}],
      :fixture
      {:path
-      "/tmp/manifold_fundamental_class_integral_relative_homology_comparison.lean",
+      "/tmp/manifold_fundamental_class_ambient_local_normalization.lean",
       :sha256
-      "6fe70e61fc027080cf9ce130a8ba8da1b5d09065b1a86a3b92e6e86a9560ede3"},
+      "b9cc061a6963a76fd168d76215eb68bcc27c60525a782a1010c6128ee5ff985f"},
      :finding
-     "The reviewed relative chain comparison can be passed to homology without another geometric assumption. The fixture first uses the canonical mapHomologyIso for forgetIntModules, then applies the AddCommGrpCat homology functor to integralRelativeChainsComparison. This produces the exact homology objects inhabited by the coefficient and production chart generators. The remaining comparison is now an element-level normalization calculation rather than a category mismatch.",
+     "The desired generator equality cannot be justified merely because both classes generate cyclic groups: their signs are the orientation-sensitive content. The fixture packages the actual production normalization, using the inverse of the ambient chart homology map and the reviewed model normalization, and proves that ambientLocalGenerator maps to one. The remaining prerequisite is now the precise naturality and geometry equation comparing this normalization after integralRelativeHomologyComparison with the forgotten coefficient chart localIso; no orientation predicate or arbitrary isomorphism is introduced.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -4006,7 +4089,8 @@
     :routes-2026-10-11-manifold-integral-mapped-relative-cokernel-topo3-r1
     :routes-2026-10-11-manifold-forget-relative-cokernel-topo3-r1
     :routes-2026-10-11-manifold-integral-relative-chains-comparison-topo3-r1
-    :routes-2026-10-11-manifold-integral-relative-homology-comparison-topo3-r1],
+    :routes-2026-10-11-manifold-integral-relative-homology-comparison-topo3-r1
+    :routes-2026-10-11-manifold-ambient-local-normalization-topo3-r1],
    :current-residual
    "Local-degree counts and wild-ball complement homology remain.",
    :other-consumers [:t98A02]}
@@ -6250,6 +6334,32 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-manifoldfundamentalclass-integralrelativechainscomparison],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization_generator",
+    :type
+    "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), (ambientLocalNormalization k x).hom.hom (HigherChartLocalGenerator.ambientLocalGenerator (k := k) x) = 1"},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization_generator",
+    :reported-by
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    :type
+    "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), (ambientLocalNormalization k x).hom.hom (HigherChartLocalGenerator.ambientLocalGenerator (k := k) x) = 1",
+    :area "manifold-fundamental-class",
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+   :id
+   :lemma-constructiontargets-manifoldfundamentalclass-ambientlocalnormalization-generator,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-manifoldfundamentalclass-integralrelativehomologycomparison
+    :lemma-constructiontargets-higherchartlocalgenerator-ambientchartmap-hn-isiso
+    :lemma-constructiontargets-highermodellocalhomology-normalization],
    :other-consumers [:t98A02]}],
  :consumer-baselines {},
  :statuses
