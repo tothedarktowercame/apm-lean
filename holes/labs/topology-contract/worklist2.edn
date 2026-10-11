@@ -75260,7 +75260,7 @@
    :lemma
    {:name "apm_t97A04_bridge_2",
     :reported-by
-    [:routes-2026-10-10-t97a04-h1-bridge-assembly-topo2-r1],
+    [:routes-2026-10-10-t97a04-h1-bridge-assembly-topo2-r1 :owner],
     :type
     "∃ h1 : T97A04Homology 1 ≅ ModuleCat.of ℤ apm_t97a04_IntPlane, ∀ a : T97A04Homology 1, h1.hom (t97A04HomologyMap 1 apm_t97a04_Lbar a) = apm_t97a04_matrix.mulVec (h1.hom a)",
     :proved-in :routes-2026-10-10-t97a04-h1-bridge-assembly-topo2-r1,
@@ -75282,7 +75282,7 @@
    :lemma
    {:name "apm_t97A04_bridge_1",
     :reported-by
-    [:routes-2026-10-10-t97a04-h0-bridge-closure-topo2-r1],
+    [:routes-2026-10-10-t97a04-h0-bridge-closure-topo2-r1 :owner],
     :type
     "∃ h0 : T97A04Homology 0 ≅ ModuleCat.of ℤ ℤ, ∀ a : T97A04Homology 0, h0.hom (t97A04HomologyMap 0 apm_t97a04_Lbar a) = h0.hom a",
     :proved-in :routes-2026-10-10-t97a04-h0-bridge-closure-topo2-r1,
@@ -75453,7 +75453,7 @@
     "The frozen shear acts as the identity on degree-two integral homology of the torus"},
    :lemma
    {:name "ConstructionTargets.T97A04TorusH2.shearY_H2",
-    :reported-by [:routes-2026-10-10-checkpoint-topo2-r7],
+    :reported-by [:routes-2026-10-10-checkpoint-topo2-r7 :owner],
     :type
     "The frozen shear acts as the identity on degree-two integral homology of the torus",
     :area "mv-connecting-naturality"},
@@ -75463,7 +75463,7 @@
    [:lemma-constructiontargets-productionopencovermayervietoris-productionconnecting-natura
     :lemma-t97a04-torus-ycover-connecting-mono
     :lemma-t97a04-sheary-h1-overlap],
-   :other-consumers []}
+   :other-consumers [:t03J05 :t96J06]}
   {:consumer :t97A04,
    :phase :lemma,
    :state :backlog,
@@ -75707,7 +75707,8 @@
     "ConstructionTargets.RealProjectiveSmoothTarget.sphereProjectionEvenMapSmoothDescent",
     :reported-by
     [:routes-2026-10-10-rp2-even-quadratic-descent-two-consumers-topo2-r1
-     :routes-2026-10-10-rp2-even-map-smooth-descent-two-consumers-topo2-r2],
+     :routes-2026-10-10-rp2-even-map-smooth-descent-two-consumers-topo2-r2
+     :owner],
     :type
     "forall (m : ℕ) (g : Sphere 2 → E m), (forall p : Sphere 2, g (sphereAntipodalN 2 p) = g p) -> ContMDiff (𝓡 2) (𝓡 m) ∞ g -> letI := rpSmoothAtlas.charts; letI := rpSmoothAtlas.smooth; exists f : Space ℝ 2 → E m, (forall p, f (sphereProjection 2 p) = g p) ∧ ContMDiff (𝓡 2) (𝓡 m) ∞ f",
     :area "rp-smooth-atlas",
@@ -75723,20 +75724,24 @@
    [:lemma-constructiontargets-realprojectivesmoothtarget-sphereprojectionevenmapdescent
     :lemma-constructiontargets-realprojectivesmoothtarget-rpsmoothatlas],
    :other-consumers [:t96A07]}
-  {:consumer :portfolio,
+  {:consumer :t96A07,
    :phase :lemma,
    :state :banked,
    :scope [],
    :acceptance
    {:lemma
-    "ConstructionTargets.RealProjectiveSmoothTarget.rpSmoothAtlas"},
+    "ConstructionTargets.RealProjectiveSmoothTarget.rpSmoothAtlas",
+    :type
+    "  (found in ConstructionTargets/RealProjectiveSmoothTarget.lean:1363)"},
    :lemma
    {:area "rp-smooth-atlas",
     :name
     "ConstructionTargets.RealProjectiveSmoothTarget.rpSmoothAtlas",
-    :reported-by [],
+    :reported-by [:owner],
     :banked-by :declaration-found,
-    :found-in ["ConstructionTargets/RealProjectiveSmoothTarget.lean"]},
+    :found-in ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
+    :type
+    "  (found in ConstructionTargets/RealProjectiveSmoothTarget.lean:1363)"},
    :id
    :lemma-constructiontargets-realprojectivesmoothtarget-rpsmoothatlas,
    :kind :lemma,
@@ -78858,4 +78863,249 @@
    :depends-on
    [:lemma-constructiontargets-t02a03geometrictubedeformation-rotateden-cc5638eb6aa7
     :lemma-constructiontargets-t02a03geometrictubedeformation-rotateden-d25af5109240],
+   :other-consumers []}
+  {:consumer :t96A07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A07_descendedSphereMap",
+    :type
+    "∃ f : Space ℝ 2 → E 3, (∀ p : Sphere 2, f (sphereProjection 2 p) = T96A07.sphereMap p) ∧ ContMDiff (𝓡 2) (𝓡 3) ∞ f  (size: 80-160 lines / 1-3 days)"},
+   :lemma
+   {:name "t96A07_descendedSphereMap",
+    :reported-by [:owner],
+    :type
+    "∃ f : Space ℝ 2 → E 3, (∀ p : Sphere 2, f (sphereProjection 2 p) = T96A07.sphereMap p) ∧ ContMDiff (𝓡 2) (𝓡 3) ∞ f  (size: 80-160 lines / 1-3 days)",
+    :area "rp-smooth-atlas"},
+   :id :lemma-t96a07-descendedspheremap,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t96A07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A07_not_transverse_zAxis_at_e0",
+    :type
+    "¬ T96A07.Transverse f T96A07.axis  (size: 160-300 lines / 3-6 days)"},
+   :lemma
+   {:name "t96A07_not_transverse_zAxis_at_e0",
+    :reported-by [:owner],
+    :type
+    "¬ T96A07.Transverse f T96A07.axis  (size: 160-300 lines / 3-6 days)",
+    :area "rp-smooth-atlas"},
+   :id :lemma-t96a07-not-transverse-zaxis-at-e0-8f9b60acc227,
+   :kind :lemma,
+   :depends-on [:lemma-t96a07-descendedspheremap],
+   :other-consumers []}
+  {:consumer :t96A07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A07_horizontal_levels_regular",
+    :type
+    "{z : ℝ | T96A07.Transverse T96A07.sphereMap (T96A07.plane z) ∧ ∃ p : Sphere 2, T96A07.sphereMap p 2 = z}.Infinite  (size: 220-400 lines / 4-8 days)"},
+   :lemma
+   {:name "t96A07_horizontal_levels_regular",
+    :reported-by [:owner],
+    :type
+    "{z : ℝ | T96A07.Transverse T96A07.sphereMap (T96A07.plane z) ∧ ∃ p : Sphere 2, T96A07.sphereMap p 2 = z}.Infinite  (size: 220-400 lines / 4-8 days)",
+    :area "rp-smooth-atlas"},
+   :id :lemma-t96a07-horizontal-levels-regular-9670b0de064b,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t96J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "polygonSurface_pi1_presentation",
+    :type
+    "FundamentalGroup KleinBottle (surfacePoint false 2) ≃* PresentedGroup ({boundaryWord false 2} : Set (FreeGroup (Fin 2)))  (size: 1500-3000 lines / 1-3 months)"},
+   :lemma
+   {:name "polygonSurface_pi1_presentation",
+    :reported-by [:owner],
+    :type
+    "FundamentalGroup KleinBottle (surfacePoint false 2) ≃* PresentedGroup ({boundaryWord false 2} : Set (FreeGroup (Fin 2)))  (size: 1500-3000 lines / 1-3 months)",
+    :area "polygon-surface-pi1"},
+   :id :lemma-polygonsurface-pi1-presentation,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t97A01 :t92J05 :t94J04 :t97A03]}
+  {:consumer :t96J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "kleinPresented_equiv_semidirect",
+    :type
+    "PresentedGroup ({boundaryWord false 2} : Set (FreeGroup (Fin 2))) ≃* Multiplicative ℤ ⋊[inversion] Multiplicative ℤ  (size: 250-500 lines / 1-2 weeks)"},
+   :lemma
+   {:name "kleinPresented_equiv_semidirect",
+    :reported-by [:owner],
+    :type
+    "PresentedGroup ({boundaryWord false 2} : Set (FreeGroup (Fin 2))) ≃* Multiplicative ℤ ⋊[inversion] Multiplicative ℤ  (size: 250-500 lines / 1-2 weeks)",
+    :area "polygon-boundary-word"},
+   :id :lemma-kleinpresented-equiv-semidirect,
+   :kind :lemma,
+   :depends-on [:lemma-polygonsurface-pi1-presentation],
+   :other-consumers []}
+  {:consumer :t96J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "kleinSemidirect_finiteIndex_classify",
+    :type
+    "∀ H : Subgroup KleinSemidirect, H.FiniteIndex → Nonempty (H ≃* KleinSemidirect) ∨ Nonempty (H ≃* Multiplicative (ℤ × ℤ))  (size: 400-800 lines / 2-3 weeks)"},
+   :lemma
+   {:name "kleinSemidirect_finiteIndex_classify",
+    :reported-by [:owner],
+    :type
+    "∀ H : Subgroup KleinSemidirect, H.FiniteIndex → Nonempty (H ≃* KleinSemidirect) ∨ Nonempty (H ≃* Multiplicative (ℤ × ℤ))  (size: 400-800 lines / 2-3 weeks)",
+    :area "covering-subgroup-correspondence"},
+   :id :lemma-kleinsemidirect-finiteindex-classify,
+   :kind :lemma,
+   :depends-on [:lemma-kleinpresented-equiv-semidirect],
+   :other-consumers []}
+  {:consumer :t96J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "kleinSemidirect_index_two_torus",
+    :type
+    "∃ H : Subgroup KleinSemidirect, H.FiniteIndex ∧ Nonempty (H ≃* Multiplicative (ℤ × ℤ))  (size: 100-220 lines / 2-5 days)"},
+   :lemma
+   {:name "kleinSemidirect_index_two_torus",
+    :reported-by [:owner],
+    :type
+    "∃ H : Subgroup KleinSemidirect, H.FiniteIndex ∧ Nonempty (H ≃* Multiplicative (ℤ × ℤ))  (size: 100-220 lines / 2-5 days)",
+    :area "covering-subgroup-correspondence"},
+   :id :lemma-kleinsemidirect-index-two-torus,
+   :kind :lemma,
+   :depends-on [:lemma-kleinpresented-equiv-semidirect],
+   :other-consumers []}
+  {:consumer :t96J06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ProjectivePlaneMod2Homology.degreeOneGenerator",
+    :type
+    "A mod-two H¹ detector pairing nontrivially with the standard RP¹ in RP²  (size: 300-700 lines / 1-3 weeks)"},
+   :lemma
+   {:name
+    "ConstructionTargets.ProjectivePlaneMod2Homology.degreeOneGenerator",
+    :reported-by [:owner],
+    :type
+    "A mod-two H¹ detector pairing nontrivially with the standard RP¹ in RP²  (size: 300-700 lines / 1-3 weeks)",
+    :area "projective-plane-homology-mod2"},
+   :id
+   :lemma-constructiontargets-projectiveplanemod2homology-degreeonegenerator,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t96J06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "ConstructionTargets.SingularCrossProduct.eilenbergZilber",
+    :type
+    "A natural singular-chain cross product and homology product over ZMod 2 detecting [RP¹] × [RP¹]  (size: 1000-2500 lines / 1-2 months)"},
+   :lemma
+   {:name "ConstructionTargets.SingularCrossProduct.eilenbergZilber",
+    :reported-by [:owner],
+    :type
+    "A natural singular-chain cross product and homology product over ZMod 2 detecting [RP¹] × [RP¹]  (size: 1000-2500 lines / 1-2 months)",
+    :area "kunneth-cross-product"},
+   :id :lemma-constructiontargets-singularcrossproduct-eilenbergzilber,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-projectiveplanemod2homology-degreeonegenerator],
+   :other-consumers [:t97A04 :t03J05]}
+  {:consumer :t96J06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldBoundaryFundamentalClass.mod2BoundaryClass",
+    :type
+    "For compact W with IsManifold (𝓡∂ 3), the ambient image of the mod-two fundamental class of ∂W is zero  (size: 1500-3500 lines / 2-4 months)"},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldBoundaryFundamentalClass.mod2BoundaryClass",
+    :reported-by [:owner],
+    :type
+    "For compact W with IsManifold (𝓡∂ 3), the ambient image of the mod-two fundamental class of ∂W is zero  (size: 1500-3500 lines / 2-4 months)",
+    :area "manifold-fundamental-class-mod2-with-boundary"},
+   :id
+   :lemma-constructiontargets-manifoldboundaryfundamentalclass-mod2boundaryclass,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-singularcrossproduct-eilenbergzilber],
+   :other-consumers []}
+  {:consumer :t96J06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ProjectivePlaneProductPairing.boundaryObstruction",
+    :type
+    "Subtype.val '' boundary W ≠ apm_t96j06_ProductSubspace  (size: 250-600 lines / 1-3 weeks)"},
+   :lemma
+   {:name
+    "ConstructionTargets.ProjectivePlaneProductPairing.boundaryObstruction",
+    :reported-by [:owner],
+    :type
+    "Subtype.val '' boundary W ≠ apm_t96j06_ProductSubspace  (size: 250-600 lines / 1-3 weeks)",
+    :area "intersection-pairing"},
+   :id
+   :lemma-constructiontargets-projectiveplaneproductpairing-boundaryobstruction,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-projectiveplanemod2homology-degreeonegenerator
+    :lemma-constructiontargets-manifoldboundaryfundamentalclass-mod2boundaryclass],
+   :other-consumers []}
+  {:consumer :t96J06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t96j06_mk_pair_mem_ProductSubspace_iff",
+    :type "  (found in problems/t96J06/lean/Main.lean:125)"},
+   :lemma
+   {:name "apm_t96j06_mk_pair_mem_ProductSubspace_iff",
+    :reported-by [:owner],
+    :type "  (found in problems/t96J06/lean/Main.lean:125)",
+    :proved-in :owner},
+   :id :lemma-apm-t96j06-mk-pair-mem-productsubspace-iff,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t97A04_bridge_3",
+    :type
+    "∃ h2 : T97A04Homology 2 ≅ ModuleCat.of ℤ ℤ, ∀ a, h2.hom (t97A04HomologyMap 2 apm_t97a04_Lbar a) = 3 * h2.hom a  (size: 180-350 lines / 3-7 days)"},
+   :lemma
+   {:name "apm_t97A04_bridge_3",
+    :reported-by [:owner],
+    :type
+    "∃ h2 : T97A04Homology 2 ≅ ModuleCat.of ℤ ℤ, ∀ a, h2.hom (t97A04HomologyMap 2 apm_t97a04_Lbar a) = 3 * h2.hom a  (size: 180-350 lines / 3-7 days)",
+    :area "torus-homology-matrix"},
+   :id :lemma-apm-t97a04-bridge-3,
+   :kind :lemma,
+   :depends-on [:lemma-t97a04-sheary-h2],
    :other-consumers []}]}

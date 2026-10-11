@@ -115734,6 +115734,183 @@
    :id :lemma-t96a06-polynomialmap-descends,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "polygon_openCover_retract_wedge3",
+    :type
+    "For each frozen six-edge polygon quotient, an open cover whose punctured piece deformation-retracts to a boundary graph homeomorphic to a wedge of three circles  (size: 900-1800 lines / 3-7 weeks)"},
+   :lemma
+   {:name "polygon_openCover_retract_wedge3",
+    :reported-by [:owner],
+    :type
+    "For each frozen six-edge polygon quotient, an open cover whose punctured piece deformation-retracts to a boundary graph homeomorphic to a wedge of three circles  (size: 900-1800 lines / 3-7 weeks)",
+    :area "polygon-surface-open-cover"},
+   :id :lemma-polygon-opencover-retract-wedge3,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t96J02 :t92J05 :t94J04]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "polygon_boundaryWord_pi1",
+    :type
+    "FundamentalGroup apm_t97a01_TorusRP2 apm_t97a01_baseTorusRP2 ≃* PresentedGroup ({apm_t97a01_relator} : Set (FreeGroup (Fin 3)))  (size: 600-1200 lines / 2-5 weeks)"},
+   :lemma
+   {:name "polygon_boundaryWord_pi1",
+    :reported-by [:owner],
+    :type
+    "FundamentalGroup apm_t97a01_TorusRP2 apm_t97a01_baseTorusRP2 ≃* PresentedGroup ({apm_t97a01_relator} : Set (FreeGroup (Fin 3)))  (size: 600-1200 lines / 2-5 weeks)",
+    :area "polygon-boundary-word"},
+   :id :lemma-polygon-boundaryword-pi1,
+   :kind :lemma,
+   :depends-on [:lemma-polygon-opencover-retract-wedge3],
+   :other-consumers [:t96J02]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "wedge3_circles_homology",
+    :type
+    "H₀(wedge3;ℤ) ≅ ℤ ∧ H₁(wedge3;ℤ) ≅ ℤ³ ∧ ∀ k ≥ 2, IsZero (H_k(wedge3;ℤ))  (size: 250-500 lines / 1-2 weeks)"},
+   :lemma
+   {:name "wedge3_circles_homology",
+    :reported-by [:owner],
+    :type
+    "H₀(wedge3;ℤ) ≅ ℤ ∧ H₁(wedge3;ℤ) ≅ ℤ³ ∧ ∀ k ≥ 2, IsZero (H_k(wedge3;ℤ))  (size: 250-500 lines / 1-2 weeks)",
+    :area "wedge-of-circles-homology"},
+   :id :lemma-wedge3-circles-homology,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t97A03]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "polygon_surface_mv_homology",
+    :type
+    "The polygon Mayer-Vietoris boundary map is the abelianized boundary word for X and TorusRP2  (size: 800-1600 lines / 3-6 weeks)"},
+   :lemma
+   {:name "polygon_surface_mv_homology",
+    :reported-by [:owner],
+    :type
+    "The polygon Mayer-Vietoris boundary map is the abelianized boundary word for X and TorusRP2  (size: 800-1600 lines / 3-6 weeks)",
+    :area "polygon-surface-mv-homology"},
+   :id :lemma-polygon-surface-mv-homology,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polygon-opencover-retract-wedge3
+    :lemma-wedge3-circles-homology],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "polygon_word_smith_quotients",
+    :type
+    "coker(2,2,2) ≅ ℤ² × ZMod 2 ∧ coker(0,0,2) ≅ ℤ² × ZMod 2, with both maps injective  (size: 120-250 lines / 2-5 days)"},
+   :lemma
+   {:name "polygon_word_smith_quotients",
+    :reported-by [:owner],
+    :type
+    "coker(2,2,2) ≅ ℤ² × ZMod 2 ∧ coker(0,0,2) ≅ ℤ² × ZMod 2, with both maps injective  (size: 120-250 lines / 2-5 days)",
+    :area "polygon-surface-mv-homology"},
+   :id :lemma-polygon-word-smith-quotients,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t97a01_X_homeomorph_standardN3",
+    :type "  (found in problems/t97A01/lean/Main.lean:189)"},
+   :lemma
+   {:name "apm_t97a01_X_homeomorph_standardN3",
+    :reported-by [:owner],
+    :type "  (found in problems/t97A01/lean/Main.lean:189)",
+    :proved-in :owner},
+   :id :lemma-apm-t97a01-x-homeomorph-standardn3,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t97A03_bridge_classify_connected_double_cover",
+    :type
+    "Nonempty (Y ≃ₜ apm_t97A03_OneCircleCover) ∨ Nonempty (Y ≃ₜ apm_t97A03_TwoCircleCover)  (size: 800-1600 lines / 3-7 weeks)"},
+   :lemma
+   {:name "apm_t97A03_bridge_classify_connected_double_cover",
+    :reported-by [:owner],
+    :type
+    "Nonempty (Y ≃ₜ apm_t97A03_OneCircleCover) ∨ Nonempty (Y ≃ₜ apm_t97A03_TwoCircleCover)  (size: 800-1600 lines / 3-7 weeks)",
+    :area "covering-classification-explicit"},
+   :id :lemma-apm-t97a03-bridge-classify-connected-double-cover,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t97A03_bridge_invariants_of_model",
+    :type
+    "H₀(Y) ≅ ℤ ∧ H₁(Y) ≅ ℤ³ ∧ H₂(Y) ≅ ℤ² ∧ H_{≥3}(Y)=0 ∧ FundamentalGroup Y y ≃* FreeGroup (Fin 3)  (size: 1500-3000 lines / 1-3 months)"},
+   :lemma
+   {:name "apm_t97A03_bridge_invariants_of_model",
+    :reported-by [:owner],
+    :type
+    "H₀(Y) ≅ ℤ ∧ H₁(Y) ≅ ℤ³ ∧ H₂(Y) ≅ ℤ² ∧ H_{≥3}(Y)=0 ∧ FundamentalGroup Y y ≃* FreeGroup (Fin 3)  (size: 1500-3000 lines / 1-3 months)",
+    :area "quotient-space-mayer-vietoris"},
+   :id :lemma-apm-t97a03-bridge-invariants-of-model,
+   :kind :lemma,
+   :depends-on
+   [:lemma-apm-t97a03-bridge-classify-connected-double-cover],
+   :other-consumers []}
+  {:consumer :t97A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t97A03_surjective_of_fiber_card_two",
+    :type "  (found in problems/t97A03/lean/Main.lean:116)"},
+   :lemma
+   {:name "apm_t97A03_surjective_of_fiber_card_two",
+    :reported-by [:owner],
+    :type "  (found in problems/t97A03/lean/Main.lean:116)",
+    :proved-in :owner},
+   :id :lemma-apm-t97a03-surjective-of-fiber-card-two,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t97A03_fiber_equiv_fin_two",
+    :type "  (found in problems/t97A03/lean/Main.lean:132)"},
+   :lemma
+   {:name "apm_t97A03_fiber_equiv_fin_two",
+    :reported-by [:owner],
+    :type "  (found in problems/t97A03/lean/Main.lean:132)",
+    :proved-in :owner},
+   :id :lemma-apm-t97a03-fiber-equiv-fin-two,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01

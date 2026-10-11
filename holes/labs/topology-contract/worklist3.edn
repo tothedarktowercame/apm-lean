@@ -18500,7 +18500,7 @@
    :other-consumers [:t92J05 :t93J03 :t99J01 :t00J07]}
   {:consumer :t00A02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -18513,7 +18513,10 @@
     :reported-by [:program-2026-10-11-deck-group-quotient-pi1],
     :type
     "A group homomorphism from the quotient fundamental group to G obtained from IsCoveringMap.monodromy and orbitQuotientFiberEquiv, with orientation fixed by the fundamental-group multiplication convention",
-    :area "deck-group-quotient-pi1"},
+    :area "deck-group-quotient-pi1",
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean"]},
    :id
    :lemma-constructiontargets-deckgroupquotientfundamentalgroup-orbitendpointmonodromy,
    :kind :lemma,
