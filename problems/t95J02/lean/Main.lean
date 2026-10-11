@@ -231,6 +231,37 @@ theorem verticalParam_add_int (y : ℝ) (n : ℤ) :
           push_cast
           ring
 
+theorem verticalParam_eq_iff (y y' : ℝ) :
+    verticalParam y = verticalParam y' ↔ ∃ n : ℤ, y' = y + n := by
+  constructor
+  · intro h
+    have hq : t95J02QuotientPoint (0, y) = t95J02QuotientPoint (0, y') := by
+      exact congrArg Subtype.val h
+    have hs : separatingRaw (0, y) = separatingRaw (0, y') := by
+      have := congrArg separatingMap hq
+      simpa using this
+    have hcos : Real.cos (2 * Real.pi * y) = Real.cos (2 * Real.pi * y') := by
+      have h0 := congrArg (fun v : EuclideanSpace ℝ (Fin 2) => v 0) hs
+      simpa [separatingRaw] using h0
+    have hsin : Real.sin (2 * Real.pi * y) = Real.sin (2 * Real.pi * y') := by
+      have h1 := congrArg (fun v : EuclideanSpace ℝ (Fin 2) => v 1) hs
+      simpa [separatingRaw] using h1
+    have hexp : Circle.exp (2 * Real.pi * y') = Circle.exp (2 * Real.pi * y) := by
+      apply Subtype.ext
+      simp only [Circle.coe_exp, Complex.exp_mul_I]
+      rw [← Complex.ofReal_cos, ← Complex.ofReal_sin,
+        ← Complex.ofReal_cos, ← Complex.ofReal_sin, hcos, hsin]
+    obtain ⟨n, hn⟩ := Circle.exp_eq_exp.mp hexp
+    refine ⟨n, ?_⟩
+    have hpi : (2 * Real.pi : ℝ) ≠ 0 := by positivity
+    apply mul_left_cancel₀ hpi
+    calc
+      (2 * Real.pi) * y' = 2 * Real.pi * y' := rfl
+      _ = 2 * Real.pi * y + (n : ℝ) * (2 * Real.pi) := hn
+      _ = (2 * Real.pi) * (y + (n : ℝ)) := by ring
+  · rintro ⟨n, rfl⟩
+    exact (verticalParam_add_int y n).symm
+
 end t95J02Closure
 
 /-- Integral first singular homology, used only to state the missing invariant

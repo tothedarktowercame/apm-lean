@@ -74,7 +74,7 @@ lean: `t95J02Closure.verticalParam_eq_iff` :
 
 uses: B2, B3, `Real.cos_eq_cos`, `Real.sin_eq_sin`
 
-status: planned
+status: proved
 
 The reverse implication is B3.  For the forward implication, apply B2 to the
 subtype equality.  At representatives `(0,y)` and `(0,y')`, B1's second
