@@ -103551,30 +103551,32 @@
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :evidence
    {:outcome :replan,
+    :warnings
+    [{:kind :dirty-worktree,
+      :message
+      "An unrelated concurrent modification to ConstructionTargets/ManifoldFundamentalClass.lean was left untouched."}],
     :disposition :replan,
     :author "topo-4",
     :commands
-    [{:cmd
+    [{:cmd "clojure -M -e canonical-ledger-edn-and-untagged-scan",
+      :exit 0,
+      :finding
+      "All three ledgers parse; no backlog lemma lacks [:lemma :area]."}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
       "bb holes/labs/topology-contract/build_step.bb priorities holes/labs/topology-contract/worklist.edn",
       :exit 0,
       :finding
-      "Fresh audit: topo1 routes have backlog counts 3, 3, 2, 35, 6, and 5; the cross-loop AREAS report has 26 untagged backlog lemmas and polygon-surface-open-cover has 166 banked and 60 backlog."}
-     {:cmd
-      "clojure -M -e '(require (quote clojure.edn)) (doseq [f [\"holes/labs/topology-contract/worklist2.edn\" \"holes/labs/topology-contract/worklist3.edn\"] :let [x (clojure.edn/read-string (slurp f))] i (:items x) :when (and (= :lemma (:kind i)) (= :backlog (:state i)) (nil? (or (:area i) (get-in i [:lemma :area]))))] (prn (select-keys i [:id :consumer :other-consumers :depends-on :lemma])))'",
+      "Committed cross-ledger audit reports untagged backlog 0; polygon-surface-open-cover is 166 banked and 60 backlog."}
+     {:cmd "rg -n 'area \"untagged\"' /tmp/topo-priorities-final2.log",
       :exit 0,
       :finding
-      "Enumerated exactly 26 untagged backlog lemma nodes: 13 in worklist2 and 13 in worklist3."}
-     {:cmd
-      "python3 -c 'import re\nids=[\"t01A03\",\"t92J06\",\"t93J03\",\"t97A01\",\"t97A03\",\"t99J01\"]\nfor i in ids:\n p=f\"problems/{i}/lean/Main.lean\"; t=open(p).read(); t=re.sub(r\"/-.*?-/\",\" \",t,flags=re.S); t=re.sub(r\"--[^\\n]*\",\" \",t); print(i,len(re.findall(r\"(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])\",t)))'",
+      "The only untagged remainder is 9 already-banked historical nodes and 0 backlog nodes."}
+     {:cmd "git status --short",
       :exit 0,
       :finding
-      "Comment-stripped counts remain t01A03 1, t92J06 1, t93J03 1, t97A01 1, t97A03 3, and t99J01 1."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1791688755404-3959-6fa4f9b9",
-     :finding
-     "The retry records proposed area assignments only inside checkpoint evidence and does not tag the 26 canonical lemma nodes in worklist2.edn and worklist3.edn; commit 5d25acd945ec1a5d72297d263c903836676b0829 changes only worklist.edn. Fresh build_step.bb priorities output at that exact commit still reports area untagged with 26 backlog nodes, contradicting the recorded cross-loop-untagged-after count of 0. Apply the area fields to the canonical lemma rows in worklist2.edn and worklist3.edn, then rerun and record the checkpoint audit."},
+      "Only the unrelated ConstructionTargets/ManifoldFundamentalClass.lean modification remains."}],
+    :commit "e2b9c858209875778ae0798ab9948b9fcab060ca",
     :replacement-items
     [{:bounded-exception
       "This single-consumer comparison is the nearer of the two remaining t93J03 lemmas.",
@@ -103695,6 +103697,9 @@
        :routes-2026-10-11-three-circles-fundamental-group-coordinates-85],
       :current-residual "Refill after the elected rows are reviewed.",
       :other-consumers []}],
+    :changed-paths
+    ["holes/labs/topology-contract/worklist2.edn"
+     "holes/labs/topology-contract/worklist3.edn"],
     :finding
     {:placeholder-delta 0,
      :placeholder-counts
@@ -103731,19 +103736,21 @@
        "path-component restriction"
        "adapter"]},
      :typed-residual-change
-     ["The rejected checkpoint understated t97A01 at 16 backlog; the current ledger has 35."
-      "The cross-loop polygon-surface-open-cover total is 166 banked and 60 backlog."
-      "All 26 untagged backlog nodes are assigned existing route-area spellings below."],
+     ["The 26 canonical backlog nodes now carry row-level and lemma-metadata area fields."
+      "The untagged backlog count changed from 26 to 0."
+      "The authoritative polygon-surface-open-cover measure remains 166 banked and 60 backlog."],
      :infrastructure-packets
      {:topo1-banked 148,
       :topo1-backlog 54,
-      :cross-loop-untagged-before 26,
-      :cross-loop-untagged-after 0,
+      :canonical-area-tags-added 26,
+      :cross-loop-untagged-backlog-before 26,
+      :cross-loop-untagged-backlog-after 0,
       :elected 3,
       :placeholder-changing 0,
       :compiled-refutations 0},
      :review-outcomes
-     {:prior-checkpoint :fail,
+     {:previous-retry :fail,
+      :canonical-tag-repair :committed,
       :t99J01 :revise,
       :generic-overlap-squares :pass,
       :polygon-radial-packages :go,
@@ -103753,169 +103760,16 @@
       "GenericPointWedgeFundamentalGroupCoordinates.genericPointWedgeGroupEquivalence_coordinates, five consumers"
       "GenericPointWedgeFundamentalGroupCoordinates.threeCirclesGroupEquivalence_coordinates, five consumers"],
      :areas
-     ["fundamental-group-wedge-of-circles: 0 banked, 8 backlog, five open problems"
-      "polygon-surface-open-cover: 166 banked, 60 backlog, two open problems"
-      "untagged: 9 banked, 0 backlog after the 26 tag updates"]},
-    :lemmas
-    [{:name "frozenTorusHomeomorphBoundaryTorus",
-      :status :not-started,
-      :consumers [:t97A04],
-      :depends-on [],
-      :area "mv-connecting-naturality"}
-     {:name
-      "ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusH1GroupIsoFinTwo",
-      :status :not-started,
-      :consumers [:t97A04],
-      :depends-on [],
-      :area "mv-connecting-naturality"}
-     {:name
-      "ConstructionTargets.TorusPiOneWindingCoordinates.frozenLbarPi1Map_naturality",
-      :status :not-started,
-      :consumers [:t97A04],
-      :depends-on [],
-      :area "mv-connecting-naturality"}
-     {:name
-      "ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusAlignedH1MulEquivFinTwo",
-      :status :not-started,
-      :consumers [:t97A04],
-      :depends-on [],
-      :area "mv-connecting-naturality"}
-     {:name
-      "ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison_naturality",
-      :status :not-started,
-      :consumers [:t97A04],
-      :depends-on [],
-      :area "mv-connecting-naturality"}
-     {:name
-      "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_circleMeridian_mem_geometricY",
-      :status :not-started,
-      :consumers [:t02A03],
-      :depends-on [],
-      :area "geometric-tube-deformation"}
-     {:name
-      "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_origin_mem_both_cores",
-      :status :not-started,
-      :consumers [:t02A03],
-      :depends-on [],
-      :area "geometric-tube-deformation"}
-     {:name
-      "ConstructionTargets.RealProjectiveSmoothTarget.sphereProjectionQuotientAuthority",
-      :status :not-started,
-      :consumers [:t95A04 :t96A07],
-      :depends-on [],
-      :area "rp-smooth-atlas"}
-     {:name
-      "ConstructionTargets.RealProjectiveSmoothTarget.sphereProjection_eq_iff",
-      :status :not-started,
-      :consumers [:t95A04 :t96A07],
-      :depends-on [],
-      :area "rp-smooth-atlas"}
-     {:name
-      "ConstructionTargets.RealProjectiveSmoothTarget.rpSmoothAtlas",
-      :status :not-started,
-      :consumers [:t95A04 :t96A07],
-      :depends-on [],
-      :area "rp-smooth-atlas"}
-     {:name
-      "ConstructionTargets.SingularExcision.subspaceMap_inclusion",
-      :status :not-started,
-      :consumers [:t97A04],
-      :depends-on [],
-      :area "mv-connecting-naturality"}
-     {:name
-      "ConstructionTargets.T02A03GeometricTubeDeformation.rightTube_exists_near_rightCore",
-      :status :not-started,
-      :consumers [:t02A03],
-      :depends-on [],
-      :area "geometric-tube-deformation"}
-     {:name
-      "ConstructionTargets.T02A03GeometricTubeDeformation.range_rightCoreCircle",
-      :status :not-started,
-      :consumers [:t02A03],
-      :depends-on [],
-      :area "geometric-tube-deformation"}
-     {:id
-      :lemma-constructiontargets-integralsingularhomologycomparison-singularhomologycomparison-full,
-      :name
-      "ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison",
-      :status :not-started,
-      :consumers [:t00J02 :t98A02],
-      :depends-on [],
-      :area "manifold-fundamental-class"}
-     {:name
-      "ConstructionTargets.SurfaceNestedTriangleCover.finite_nested",
-      :status :not-started,
-      :consumers [:t97J02],
-      :depends-on [],
-      :area "surface-classification"}
-     {:name
-      "ConstructionTargets.HigherChartLocalGenerator.ambientChartMap_Hn_isIso",
-      :status :not-started,
-      :consumers [:t00J02 :t98A02],
-      :depends-on [],
-      :area "manifold-fundamental-class"}
-     {:name
-      "ConstructionTargets.HigherModelLocalHomology.normalization",
-      :status :not-started,
-      :consumers [:t00J02 :t98A02],
-      :depends-on [],
-      :area "manifold-fundamental-class"}
-     {:name
-      "ConstructionTargets.CoefficientDistinguishedNormalization.distinguished",
-      :status :not-started,
-      :consumers [:t00J02 :t98A02],
-      :depends-on [],
-      :area "manifold-fundamental-class"}
-     {:name
-      "ConstructionTargets.IntegralSingularHomologyComparison.singularChainsComparison_naturality",
-      :status :not-started,
-      :consumers [:t00J02 :t98A02],
-      :depends-on [],
-      :area "manifold-fundamental-class"}
-     {:name "forgetIntModules.asEquivalence",
-      :status :not-started,
-      :consumers [:t00J02 :t98A02],
-      :depends-on [],
-      :area "manifold-fundamental-class"}
-     {:name
-      "ConstructionTargets.SingularHomologyConcrete.relativeSingularChainsIsoCokernelSubspaceMap",
-      :status :not-started,
-      :consumers [:t00J02 :t98A02],
-      :depends-on [],
-      :area "manifold-fundamental-class"}
-     {:name
-      "ConstructionTargets.SingularExcision.relativeSingularChainsIsoCokernelSubspaceMap",
-      :status :not-started,
-      :consumers [:t00J02 :t98A02],
-      :depends-on [],
-      :area "manifold-fundamental-class"}
-     {:name
-      "ConstructionTargets.CoefficientChartLocal.generator_normalization",
-      :status :not-started,
-      :consumers [:t00J02 :t98A02],
-      :depends-on [],
-      :area "manifold-fundamental-class"}
-     {:name
-      "ConstructionTargets.SingularExcision.relativeProjection_comp_cokernelIso_hom",
-      :status :not-started,
-      :consumers [:t00J02 :t98A02],
-      :depends-on [],
-      :area "manifold-fundamental-class"}
-     {:name
-      "ConstructionTargets.SingularHomologyConcrete.relativeProjection_comp_cokernelIso_hom",
-      :status :not-started,
-      :consumers [:t00J02 :t98A02],
-      :depends-on [],
-      :area "manifold-fundamental-class"}
-     {:name
-      "ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport",
-      :status :not-started,
-      :consumers [:t00J02 :t98A02],
-      :depends-on [],
-      :area "manifold-fundamental-class"}],
+     ["surface-classification: 0 banked, 8 backlog"
+      "fundamental-group-wedge-of-circles: 0 banked, 8 backlog"
+      "polygon-surface-open-cover: 166 banked, 60 backlog"
+      "manifold-fundamental-class: 47 banked, 38 backlog"
+      "mv-connecting-naturality: 2 banked, 22 backlog"
+      "rp-smooth-atlas: 3 banked, 12 backlog"
+      "untagged: 9 banked historical nodes, 0 backlog"]},
     :seat "topo-4"},
    :phase :strategy,
-   :state :repair,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -103938,7 +103792,7 @@
    :implements-lemma
    :lemma-kleinaabbsquarepolygonpresentationequivalence,
    :phase :probe,
-   :state :superseded,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-aabb-square-polygon-presentation-equivalence",
@@ -103973,7 +103827,7 @@
    :implements-lemma
    :lemma-genericpointwedgefundamentalgroupcoordinates-genericpointwedgegroupequivalence-c,
    :phase :probe,
-   :state :superseded,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/generic-point-wedge-fundamental-group-coordinates",
@@ -104002,7 +103856,7 @@
    :implements-lemma
    :lemma-genericpointwedgefundamentalgroupcoordinates-threecirclesgroupequivalence-coordi,
    :phase :probe,
-   :state :superseded,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/three-circles-fundamental-group-coordinates",
@@ -104039,7 +103893,7 @@
    :stop-condition
    "End only when every topo1 problem is closed or a row is genuinely refuted.",
    :phase :strategy,
-   :state :superseded,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
