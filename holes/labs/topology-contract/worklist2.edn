@@ -71851,91 +71851,122 @@
    "Construct the endpoint-fixed jointly continuous nonvanishing complex perturbation. The banked normalization adapter then yields the coupled angular map, and the banked ambient adapter yields the zero-height stage.",
    :other-consumers []}
   {:bounded-exception
+   "single-consumer two-leg waypoint adapter for an endpoint-correct nonvanishing complex path",
+   :consumer :t02A03,
+   :phase :probe,
+   :state :open,
+   :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t02A03/coupled-angular-waypoint-adapter",
+   :acceptance
+   {:probe
+    "Compile nonvanishingComplexPath_of_waypoint. Given a continuous complex waypoint and pointwise nonvanishing certificates for the affine leg from 1 to the waypoint and the affine leg from the waypoint to rightTubeCorePlanarComplex p.1, paste the legs continuously at time 1/2 and prove the resulting complex path is nonvanishing with the exact endpoints. Do not choose the waypoint, normalize to Circle, or assemble the ambient deformation.",
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.nonvanishingComplexPath_of_waypoint",
+    :type
+    "∀ (W : C(RightTubeMinusLeftCore, ℂ)), (∀ t p, (t : ℝ) ≤ 1/2 → ((1-2*(t:ℝ):ℝ):ℂ) + ((2*(t:ℝ):ℝ):ℂ)*W p ≠ 0) → (∀ t p, ¬(t : ℝ) ≤ 1/2 → ((2-2*(t:ℝ):ℝ):ℂ)*W p + ((2*(t:ℝ)-1:ℝ):ℂ)*rightTubeCorePlanarComplex p.1 ≠ 0) → ∃ Z : C(unitInterval × RightTubeMinusLeftCore, ℂ), (∀ tp, Z tp ≠ 0) ∧ (∀ p, Z (0,p)=1) ∧ (∀ p, Z (1,p)=rightTubeCorePlanarComplex p.1)",
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "reduce construction of the nonvanishing endpoint-correct complex path to choosing one continuous waypoint with two affine-leg avoidance proofs"},
+   :id
+   :routes-2026-10-11-t02a03-coupled-angular-waypoint-adapter-topo2-r1,
+   :kind :reusable-theorem,
+   :area "explicit-r3-tube-deformation-retraction",
+   :depends-on
+   [:routes-2026-10-11-t02a03-coupled-angular-normalization-adapter-topo2-r1],
+   :current-residual
+   "Choose a continuous complex waypoint over RightTubeMinusLeftCore and prove both affine legs avoid zero. The banked waypoint adapter constructs the nonvanishing path, normalization supplies the Circle path, and ambient reconstruction supplies the zero-height stage.",
+   :other-consumers []}
+  {:bounded-exception
    "single-consumer explicit ambient deformation with frozen tube and deletion invariants",
    :consumer :t02A03,
    :evidence
    {:probe
     {:residual
-     "Bank the normalization adapter; then construct the endpoint-correct nonvanishing complex perturbation and feed its normalized map to the ambient reconstruction adapter.",
+     "Bank the two-leg waypoint adapter; then choose the continuous waypoint and prove its departure and arrival affine legs never hit zero.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
      [{:name
-       "ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngular_of_nonvanishingComplexPath",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.nonvanishingComplexPath_of_waypoint",
        :type
-       "∀ (Z : C(unitInterval × RightTubeMinusLeftCore, ℂ)), (∀ tp, Z tp ≠ 0) → (∀ p, Z (0,p)=1) → (∀ p, Z (1,p)=rightTubeCorePlanarComplex p.1) → ∃ A : C(unitInterval × RightTubeMinusLeftCore, Circle), (∀ p, A (0,p)=1) ∧ (∀ p, A (1,p)=rightTubeCoreAngularCoordinate p)",
+       "∀ (W : C(RightTubeMinusLeftCore, ℂ)), (∀ t p, (t : ℝ) ≤ 1/2 → ((1-2*(t:ℝ):ℝ):ℂ) + ((2*(t:ℝ):ℝ):ℂ)*W p ≠ 0) → (∀ t p, ¬(t : ℝ) ≤ 1/2 → ((2-2*(t:ℝ):ℝ):ℂ)*W p + ((2*(t:ℝ)-1:ℝ):ℂ)*rightTubeCorePlanarComplex p.1 ≠ 0) → ∃ Z : C(unitInterval × RightTubeMinusLeftCore, ℂ), (∀ tp, Z tp ≠ 0) ∧ (∀ p, Z (0,p)=1) ∧ (∀ p, Z (1,p)=rightTubeCorePlanarComplex p.1)",
        :status :proved,
        :consumers [:t02A03],
        :depends-on
-       ["ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularComplexInterpolation_zero_interior"],
+       ["ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngular_of_nonvanishingComplexPath"],
        :area "explicit-r3-tube-deformation-retraction"}],
      :prerequisite
      {:bounded-exception
-      "single-consumer normalization adapter from a nonvanishing endpoint-correct complex path",
+      "single-consumer two-leg waypoint adapter for an endpoint-correct nonvanishing complex path",
       :consumer :t02A03,
       :phase :probe,
       :state :open,
       :scope
       ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t02A03/coupled-angular-normalization-adapter",
+      "TOPOLOGY-ROUTES.md/t02A03/coupled-angular-waypoint-adapter",
       :acceptance
       {:probe
-       "Compile coupledAngular_of_nonvanishingComplexPath. Given a jointly continuous complex path that is pointwise nonzero and has endpoints 1 and rightTubeCorePlanarComplex p.1, normalize it to a jointly continuous Circle-valued map and prove the endpoint values 1 and rightTubeCoreAngularCoordinate p. Do not construct the nonvanishing complex path or assemble the ambient deformation.",
+       "Compile nonvanishingComplexPath_of_waypoint. Given a continuous complex waypoint and pointwise nonvanishing certificates for the affine leg from 1 to the waypoint and the affine leg from the waypoint to rightTubeCorePlanarComplex p.1, paste the legs continuously at time 1/2 and prove the resulting complex path is nonvanishing with the exact endpoints. Do not choose the waypoint, normalize to Circle, or assemble the ambient deformation.",
        :declaration
-       "ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngular_of_nonvanishingComplexPath",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.nonvanishingComplexPath_of_waypoint",
        :type
-       "∀ (Z : C(unitInterval × RightTubeMinusLeftCore, ℂ)), (∀ tp, Z tp ≠ 0) → (∀ p, Z (0,p)=1) → (∀ p, Z (1,p)=rightTubeCorePlanarComplex p.1) → ∃ A : C(unitInterval × RightTubeMinusLeftCore, Circle), (∀ p, A (0,p)=1) ∧ (∀ p, A (1,p)=rightTubeCoreAngularCoordinate p)",
+       "∀ (W : C(RightTubeMinusLeftCore, ℂ)), (∀ t p, (t : ℝ) ≤ 1/2 → ((1-2*(t:ℝ):ℝ):ℂ) + ((2*(t:ℝ):ℝ):ℂ)*W p ≠ 0) → (∀ t p, ¬(t : ℝ) ≤ 1/2 → ((2-2*(t:ℝ):ℝ):ℂ)*W p + ((2*(t:ℝ)-1:ℝ):ℂ)*rightTubeCorePlanarComplex p.1 ≠ 0) → ∃ Z : C(unitInterval × RightTubeMinusLeftCore, ℂ), (∀ tp, Z tp ≠ 0) ∧ (∀ p, Z (0,p)=1) ∧ (∀ p, Z (1,p)=rightTubeCorePlanarComplex p.1)",
        :placeholder "the sole sorry in apm_t02a03",
        :route-step
-       "separate normalization and Circle endpoint certification from the construction of the nonvanishing perturbed complex path"},
+       "reduce construction of the nonvanishing endpoint-correct complex path to choosing one continuous waypoint with two affine-leg avoidance proofs"},
       :id
-      :routes-2026-10-11-t02a03-coupled-angular-normalization-adapter-topo2-r1,
+      :routes-2026-10-11-t02a03-coupled-angular-waypoint-adapter-topo2-r1,
       :kind :reusable-theorem,
       :area "explicit-r3-tube-deformation-retraction",
       :depends-on
-      [:routes-2026-10-11-t02a03-coupled-angular-zero-interior-topo2-r1],
+      [:routes-2026-10-11-t02a03-coupled-angular-normalization-adapter-topo2-r1],
       :current-residual
-      "Construct the endpoint-fixed jointly continuous nonvanishing complex perturbation. The banked normalization adapter then yields the coupled angular map, and the banked ambient adapter yields the zero-height stage.",
+      "Choose a continuous complex waypoint over RightTubeMinusLeftCore and prove both affine legs avoid zero. The banked waypoint adapter constructs the nonvanishing path, normalization supplies the Circle path, and ambient reconstruction supplies the zero-height stage.",
       :other-consumers []},
      :commands
      [{:cmd
-       "lake env lean /tmp/t02a03_coupled_angular_normalization_adapter_probe.lean",
+       "lake env lean /tmp/t02a03_coupled_angular_waypoint_adapter_probe.lean",
        :exit 0,
        :output
-       "coupledAngular_of_nonvanishingComplexPath compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "nonvanishingComplexPath_of_waypoint compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/t02a03_coupled_angular_normalization_adapter_probe.lean",
+       "sha256sum /tmp/t02a03_coupled_angular_waypoint_adapter_probe.lean",
        :exit 0,
        :output
-       "639dabd24d5950b57fcdb2fde6676a7712e2616e13db98c1fcca3a396fe6cb62  /tmp/t02a03_coupled_angular_normalization_adapter_probe.lean"}
+       "696fc5c0faaa90d5cbeacce50c0e89f6c8bee0de0cbe2eb1167fb3a0da45e391  /tmp/t02a03_coupled_angular_waypoint_adapter_probe.lean"}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_coupled_angular_normalization_adapter_probe.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_coupled_angular_waypoint_adapter_probe.lean || true)\"",
        :exit 0}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}
       {:cmd
-       "rg -n 'coupledAngular_of_nonvanishingComplexPath' /tmp/t02a03_coupled_angular_normalization_adapter_probe.lean",
+       "rg -n 'nonvanishingComplexPath_of_waypoint' /tmp/t02a03_coupled_angular_waypoint_adapter_probe.lean",
        :exit 0,
        :output
-       "5:theorem coupledAngular_of_nonvanishingComplexPath\n30:#print axioms coupledAngular_of_nonvanishingComplexPath"}],
+       "16:theorem nonvanishingComplexPath_of_waypoint\n62:#print axioms nonvanishingComplexPath_of_waypoint"}],
      :diagnostic-history
      [{:cmd
-       "lake env lean /tmp/t02a03_coupled_angular_normalization_adapter_probe.lean",
+       "lake env lean /tmp/t02a03_coupled_angular_waypoint_adapter_probe.lean",
        :exit 1,
        :finding
-       "Simplification did not automatically reduce normalize 1. Applying normalize_eq_self_of_norm_eq_one with the explicit unit norm closed the time-zero endpoint."}],
+       "The initial generic continuity proof exceeded the default heartbeat limit; raising the fixture budget exposed the specific missing continuity facts."}
+      {:cmd
+       "lake env lean /tmp/t02a03_coupled_angular_waypoint_adapter_probe.lean",
+       :exit 1,
+       :finding
+       "Supplying continuity of the waypoint composition and the explicit core-planar coordinate made continuous_if_le deterministic. Changing the nonvanishing goal through the ContinuousMap coercion exposed the piecewise definition for split_ifs."}],
      :fixture
-     {:path
-      "/tmp/t02a03_coupled_angular_normalization_adapter_probe.lean",
+     {:path "/tmp/t02a03_coupled_angular_waypoint_adapter_probe.lean",
       :sha256
-      "639dabd24d5950b57fcdb2fde6676a7712e2616e13db98c1fcca3a396fe6cb62"},
+      "696fc5c0faaa90d5cbeacce50c0e89f6c8bee0de0cbe2eb1167fb3a0da45e391"},
      :finding
-     "Normalization is no longer part of the geometric residual. Any jointly continuous nonvanishing complex path with endpoints 1 and rightTubeCorePlanarComplex normalizes continuously to Circle and has exactly the required angular endpoint values. The sole remaining angular task is the endpoint-fixed nonvanishing complex perturbation itself.",
+     "The path assembly is now separated from waypoint geometry. Any continuous waypoint whose two affine legs avoid zero produces a jointly continuous nonvanishing path with the exact raw angular endpoints; the two formulas agree exactly at time 1/2. The remaining task is only to choose and certify that waypoint.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
@@ -72012,7 +72043,8 @@
     :routes-2026-10-11-t02a03-coupled-angular-complex-interpolation-topo2-r1
     :routes-2026-10-11-t02a03-coupled-angular-interpolation-zero-locus-topo2-r1
     :routes-2026-10-11-t02a03-coupled-angular-zero-interior-topo2-r1
-    :routes-2026-10-11-t02a03-coupled-angular-normalization-adapter-topo2-r1],
+    :routes-2026-10-11-t02a03-coupled-angular-normalization-adapter-topo2-r1
+    :routes-2026-10-11-t02a03-coupled-angular-waypoint-adapter-topo2-r1],
    :current-residual
    "Lift H to RightTubeMinusLeftCore, package rightTubeMeridianRetractionHomotopy, then use the coordinate equation for the Circle-side constant homotopy.",
    :other-consumers []}
@@ -76957,4 +76989,29 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-t02a03geometrictubedeformation-coupledan-8641ce833df6],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T02A03GeometricTubeDeformation.nonvanishingComplexPath_of_waypoint",
+    :type
+    "∀ (W : C(RightTubeMinusLeftCore, ℂ)), (∀ t p, (t : ℝ) ≤ 1/2 → ((1-2*(t:ℝ):ℝ):ℂ) + ((2*(t:ℝ):ℝ):ℂ)*W p ≠ 0) → (∀ t p, ¬(t : ℝ) ≤ 1/2 → ((2-2*(t:ℝ):ℝ):ℂ)*W p + ((2*(t:ℝ)-1:ℝ):ℂ)*rightTubeCorePlanarComplex p.1 ≠ 0) → ∃ Z : C(unitInterval × RightTubeMinusLeftCore, ℂ), (∀ tp, Z tp ≠ 0) ∧ (∀ p, Z (0,p)=1) ∧ (∀ p, Z (1,p)=rightTubeCorePlanarComplex p.1)"},
+   :lemma
+   {:name
+    "ConstructionTargets.T02A03GeometricTubeDeformation.nonvanishingComplexPath_of_waypoint",
+    :reported-by
+    [:routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1],
+    :type
+    "∀ (W : C(RightTubeMinusLeftCore, ℂ)), (∀ t p, (t : ℝ) ≤ 1/2 → ((1-2*(t:ℝ):ℝ):ℂ) + ((2*(t:ℝ):ℝ):ℂ)*W p ≠ 0) → (∀ t p, ¬(t : ℝ) ≤ 1/2 → ((2-2*(t:ℝ):ℝ):ℂ)*W p + ((2*(t:ℝ)-1:ℝ):ℂ)*rightTubeCorePlanarComplex p.1 ≠ 0) → ∃ Z : C(unitInterval × RightTubeMinusLeftCore, ℂ), (∀ tp, Z tp ≠ 0) ∧ (∀ p, Z (0,p)=1) ∧ (∀ p, Z (1,p)=rightTubeCorePlanarComplex p.1)",
+    :area "explicit-r3-tube-deformation-retraction",
+    :proved-in
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+   :id
+   :lemma-constructiontargets-t02a03geometrictubedeformation-nonvanishingcomplexpath-of-wa,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t02a03geometrictubedeformation-coupledangular-of-nonvanishin],
    :other-consumers []}]}
