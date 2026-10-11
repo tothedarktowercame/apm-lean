@@ -582,6 +582,26 @@ theorem circleZPow_H1_coordinate (a : ℤ) :
   rw [Preadditive.comp_zsmul, Preadditive.zsmul_comp,
     Category.comp_id, Iso.inv_hom_id]
 
+theorem twoCircleOverlapShearLeftFold_H1_coordinate (a b : ℤ) :
+    circleH1GroupIsoInt.inv ≫
+        HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularSubdivision.singularPostcomposition
+            (twoCircleOverlapShearLeftFold a b)) 1 ≫
+        circleH1GroupIsoInt.hom =
+      a • 𝟙 (AddCommGrpCat.of ℤ) := by
+  rw [twoCircleOverlapShearLeftFold_H1_eq_zpow,
+    circleZPow_H1_coordinate]
+
+theorem twoCircleOverlapShearRightFold_H1_coordinate (a b : ℤ) :
+    circleH1GroupIsoInt.inv ≫
+        HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularSubdivision.singularPostcomposition
+            (twoCircleOverlapShearRightFold a b)) 1 ≫
+        circleH1GroupIsoInt.hom =
+      a • 𝟙 (AddCommGrpCat.of ℤ) := by
+  rw [twoCircleOverlapShearRightFold_H1_eq_zpow,
+    circleZPow_H1_coordinate]
+
 private noncomputable def shearYIntersectionMap (a b : ℤ) :=
   (ambientIntersectionRangeChainsIso frozenYCover.U frozenYCover.V).inv ≫
     closureChains.map
@@ -1012,6 +1032,8 @@ theorem shearY_overlap_coordinate_of_degree_components (a b : ℤ)
 #print axioms circleZPow_H1_apply
 #print axioms circleZPow_H1
 #print axioms circleZPow_H1_coordinate
+#print axioms twoCircleOverlapShearLeftFold_H1_coordinate
+#print axioms twoCircleOverlapShearRightFold_H1_coordinate
 #print axioms shearYOverlapCoordinateMap
 #print axioms shearY_overlap_coordinate_of_injections
 #print axioms inl_comp_overlapScalar
