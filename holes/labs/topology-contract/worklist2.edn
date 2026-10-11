@@ -79281,28 +79281,26 @@
    :depends-on [],
    :other-consumers []}
   {:consumer :t97A04,
-   :stop-count 6,
+   :stop-count 7,
    :evidence
    {:placeholder-delta 0,
-    :residual
-    "B5-B11 remain; next prove B5 shearY_productionUnionMap.",
+    :residual "B6-B11 remain; next prove B6 intersection endpoint.",
     :outcome :stop,
-    :warnings
-    ["Main retains its two existing placeholders and warnings."],
+    :warnings ["Main retains two existing placeholders and warnings."],
     :missing-theorems
-    [{:name "ConstructionTargets.T97A04Closure.shearYShortComplexHom",
+    [{:name
+      "ConstructionTargets.T97A04Closure.shearY_productionUnionMap",
       :type
-      "∀ a b : ℤ, shortComplex frozenYCover.U frozenYCover.V ⟶ shortComplex frozenYCover.U frozenYCover.V",
+      "forall a b : Int, forall n : Nat, productionUnionMap for shearYShortComplexHom equals homologyMap of singularPostcomposition (shearY a b)",
       :status :proved,
       :consumers [:t97A04],
       :depends-on
-      ["ConstructionTargets.T97A04Closure.frozenYCover"
-       "ConstructionTargets.T97A04Closure.shearY"],
+      ["ConstructionTargets.T97A04Closure.shearYShortComplexHom"],
       :area "mv-connecting-naturality"}],
     :statement-hashes
     {:registry "131/0",
-     :closure "0e94f16da5bf18180d7bbd4f62cc18aaf12ed50f",
-     :blueprint "1aff23af881a5a9480f04726de92642b7f946ad2"},
+     :closure "0557a9712bcf4873741c132226f63ea7a28c0caa",
+     :blueprint "c419a895cb4ede2acc1cb6bc5c7536344ba63df4"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
@@ -79312,37 +79310,27 @@
       :exit 0}
      {:cmd "lake env lean problems/t97A04/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd
-      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/t97A04Closure.lean || true)\"",
-      :exit 0}
-     {:cmd
-      "git show --check --oneline acc3b3933802f522e684623214073cf74a937e18",
-      :exit 0}],
-    :diagnostic-history [],
-    :continue-from
-    "Prove B5 by expanding productionUnionMap and using coverRangeMap_comp_ι.",
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791721084321-5326-85455a7e",
-     :commands
-     ["git show/check/diff-tree 45d5168ab,acc3b3933"
-      "lake env lean ConstructionTargets/t97A04Closure.lean"
-      "lake env lean problems/t97A04/lean/Main.lean"
-      "python3 scripts/statement-registry.py check; fingerprint t97A04 at acc3b3933 and 3aed25dcb"
-      "git-show placeholder counts at acc3b3933 and 3aed25dcb"],
-     :finding
-     "PASS: new progress after program-history job 5. Recorded commits add only B4 and its blueprint status; closure/blueprint blobs match 0e94f16d/1aff23af. shearYShortComplexHom has correctly oriented intersection-to-pieces and pieces-to-union squares, compiles sorry-free with only propext/Classical.choice/Quot.sound, and lists B5-B11 milestones. Main compiles with its unchanged 2 placeholders; registry 131/0 and frozen statement SHA-256 ca1b2cb3c6594276811618321d5c0604c2f38fc4594a6b21ae161a711a923a34 are unchanged."},
-    :commit "acc3b3933802f522e684623214073cf74a937e18",
+     {:cmd "closure no-sorry scan", :exit 0}
+     {:cmd "comment-stripped Main placeholder count",
+      :exit 0,
+      :output "2"}
+     {:cmd "git show --check 8ac5066de 8e4ffac03", :exit 0}],
+    :diagnostic-history
+    [{:cmd "lake env lean ConstructionTargets/t97A04Closure.lean",
+      :exit 1,
+      :finding
+      "Exploration corrected association and private-functor elaboration; final rerun passed."}],
+    :continue-from "Prove blueprint B6 only.",
+    :commit "8e4ffac03b94225a189962c90fa969e8e1fff8fe",
     :changed-paths
     ["ConstructionTargets/t97A04Closure.lean"
      "ConstructionTargets/t97A04Closure.blueprint.md"],
     :finding
-    "B4 proved: shearYShortComplexHom packages the intersection, piece, and union maps; both short-complex squares compile.",
-    :milestone-commit "45d5168ab9cb0197ff93b2a0d724a495a29772a9",
+    "B5 proved: the union endpoint equals shear postcomposition on production homology.",
+    :milestone-commit "8ac5066deb2d78e47ac00e5a13fa8a7b3b932d86",
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79522,4 +79510,27 @@
    :depends-on
    [:lemma-constructiontargets-t97a04closure-frozenycover
     :lemma-constructiontargets-t97a04closure-sheary],
+   :other-consumers []}
+  {:consumer :t97A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T97A04Closure.shearY_productionUnionMap",
+    :type
+    "forall a b : Int, forall n : Nat, productionUnionMap for shearYShortComplexHom equals homologyMap of singularPostcomposition (shearY a b)"},
+   :lemma
+   {:name
+    "ConstructionTargets.T97A04Closure.shearY_productionUnionMap",
+    :reported-by [:program-2026-10-11-close-t97a04],
+    :type
+    "forall a b : Int, forall n : Nat, productionUnionMap for shearYShortComplexHom equals homologyMap of singularPostcomposition (shearY a b)",
+    :area "mv-connecting-naturality",
+    :proved-in :program-2026-10-11-close-t97a04},
+   :id
+   :lemma-constructiontargets-t97a04closure-sheary-productionunionmap,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t97a04closure-shearyshortcomplexhom],
    :other-consumers []}]}
