@@ -104381,7 +104381,7 @@
   {:bounded-exception
    "This single-consumer classification is the next missing geometric input after the banked generic connected-component transport.",
    :consumer :t93J03,
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-relationlocushasfourcomponents,
@@ -104389,43 +104389,41 @@
    {:placeholder-delta
     {:source-before 0, :source-after 0, :fixture-sorry 0},
     :residual
-    "Repair .lake/packages through the canonical workspace lifecycle, then define both intrinsic relation loci, identify their four concrete boundary strata, construct the two ConnectedComponents equivalences, and run every acceptance gate.",
+    "Revise the frozen interface to remove the four vertices or select exactly the generic two-point relation-class stratum; only that punctured boundary has four open-edge connected components.",
     :outcome :stop,
     :warnings
-    [{:kind :lean-workspace-invalid,
+    [{:kind :upstream-lint,
       :message
-      ".lake/packages is drwxrwxr-x rather than a symlink; no Lake command was run."}],
-    :missing-theorems
-    [{:name
-      "KleinCompatibleCarrierComponentBridge.relationLocusHasFourComponents",
-      :type
-      "Nonempty (ConnectedComponents DiskRelationLocus ≃ Fin 4) ∧ Nonempty (ConnectedComponents SquareRelationLocus ≃ Fin 4)",
-      :status :not-started,
-      :consumers [:t93J03],
-      :depends-on [],
-      :area "polygon-quotient-identification"}],
+      "The successful build replayed existing unnecessarySimpa, unreachableTactic, unusedTactic, and unnecessarySeqFocus warnings; none originate in the unchanged scoped file."}],
+    :missing-theorems [],
     :statement-hashes
     {:source-sha256
      "be9a7acee9d3e0ee55de0dc5e07795635fad956a8344d6c8babc06acda4ba3b5",
      :registry "131 registered statements match, 0 do not"},
     :disposition :stop,
-    :axioms [],
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Lean implementation and verification are prohibited in this checkout because .lake/packages remains a real directory rather than the required symlink to the canonical APM package authority. The frozen fixture is intact, but no source edit can be safely compiled until the workspace lifecycle repairs that link.",
+    "The frozen theorem is false for the stated intrinsic loci. The predicate exists y != x with EqvGen includes every boundary vertex: SquareRel is parameterized by Icc 0 1, so its endpoint pairs witness distinct related points at the corners, and the analogous SurfaceRel endpoint pairs do the same on Disk. Consequently adjacent edge images meet at locus points; the locus is the connected full boundary rather than four open-edge connected components. The exact missing hypothesis is exclusion of the four vertex strata, equivalently an intrinsic predicate selecting the generic two-point relation classes instead of all non-singleton classes.",
     :commands
-    [{:cmd "ls -ld .lake/packages",
+    [{:cmd "stat -c '%F %N' .lake/packages",
       :exit 0,
       :finding
-      ".lake/packages is a real directory, not a symbolic link."}
+      "This canonical checkout owns a real package-authority directory; the frame-worktree symlink rule does not apply."}
      {:cmd
       "sha256sum /tmp/klein-relation-locus-four-components-probe.lean ConstructionTargets/KleinCompatibleCarrierComponentBridge.lean",
       :exit 0,
       :finding
-      "Fixture hash matches the frozen hash; scoped source hash is be9a7acee9d3e0ee55de0dc5e07795635fad956a8344d6c8babc06acda4ba3b5."}
-     {:cmd "git status --short",
+      "Fixture hash matches; source hash is be9a7acee9d3e0ee55de0dc5e07795635fad956a8344d6c8babc06acda4ba3b5."}
+     {:cmd
+      "lake env lean ConstructionTargets/KleinCompatibleCarrierComponentBridge.lean && lake env lean /tmp/klein-relation-locus-four-components-probe.lean",
       :exit 0,
-      :finding "Worktree is clean."}
+      :finding
+      "Source and self-axiomatized fixture compile; the fixture reports its custom relationLocusHasFourComponents axiom."}
+     {:cmd
+      "lake build ConstructionTargets.KleinCompatibleCarrierComponentBridge",
+      :exit 0,
+      :finding "Build completed successfully (8261 jobs)."}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
@@ -104433,26 +104431,23 @@
       :exit 0,
       :finding
       "The scoped source contains zero sorry, admit, or axiom tokens."}
-     {:cmd
-      "git diff --quiet -- ConstructionTargets/KleinCompatibleCarrierComponentBridge.lean",
+     {:cmd "git status --short",
       :exit 0,
-      :finding "The scoped source is unchanged."}],
-    :diagnostic-history [],
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1791706460532-4728-0da56d52",
-     :finding
-     "extend Mathlib: state and prove the missing theorem in scope"},
+      :finding "Worktree is clean."}],
+    :diagnostic-history
+    [{:cmd "Prior frame-worktree package-link diagnosis",
+      :exit 0,
+      :finding
+      "Corrected this invocation: /home/joe/code/apm-lean is the canonical package authority, not a frame worktree."}],
     :changed-paths [],
     :fixture
     {:path "/tmp/klein-relation-locus-four-components-probe.lean",
      :sha256
      "31c9bacd79d7cd7c879cdc782bcc02318446b80645a33f70ac14a54f5aa65fdc",
-     :status :unverified-workspace-invalid},
+     :status :self-axiomatized},
     :seat "topo-2"},
    :phase :implementation,
-   :state :repair,
+   :state :needs-owner,
    :scope
    ["ConstructionTargets/KleinCompatibleCarrierComponentBridge.lean"],
    :dag-node
