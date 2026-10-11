@@ -71743,7 +71743,53 @@
   {:bounded-exception
    "single-consumer normalization adapter from a nonvanishing endpoint-correct complex path",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:residual
+     "Construct the endpoint-fixed jointly continuous nonvanishing complex perturbation; then use this adapter and the banked ambient reconstruction adapter to produce the zero-height ambient stage.",
+     :outcome :go,
+     :warnings [],
+     :axioms [propext Classical.choice Quot.sound],
+     :commands
+     [{:cmd
+       "lake env lean /tmp/t02a03_coupled_angular_normalization_adapter_probe.lean",
+       :exit 0,
+       :output
+       "coupledAngular_of_nonvanishingComplexPath compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "sha256sum /tmp/t02a03_coupled_angular_normalization_adapter_probe.lean",
+       :exit 0,
+       :output
+       "639dabd24d5950b57fcdb2fde6676a7712e2616e13db98c1fcca3a396fe6cb62  /tmp/t02a03_coupled_angular_normalization_adapter_probe.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_coupled_angular_normalization_adapter_probe.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}
+      {:cmd
+       "rg -n 'coupledAngular_of_nonvanishingComplexPath' /tmp/t02a03_coupled_angular_normalization_adapter_probe.lean",
+       :exit 0,
+       :output
+       "5:theorem coupledAngular_of_nonvanishingComplexPath\n30:#print axioms coupledAngular_of_nonvanishingComplexPath"}],
+     :fixture
+     {:path
+      "/tmp/t02a03_coupled_angular_normalization_adapter_probe.lean",
+      :sha256
+      "639dabd24d5950b57fcdb2fde6676a7712e2616e13db98c1fcca3a396fe6cb62"},
+     :finding
+     "Every jointly continuous, pointwise nonvanishing complex path with the specified raw endpoints normalizes jointly continuously to Circle. Its normalized endpoints are exactly 1 and rightTubeCoreAngularCoordinate.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+      :declaration
+      "ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngular_of_nonvanishingComplexPath",
+      :type
+      "∀ (Z : C(unitInterval × RightTubeMinusLeftCore, ℂ)), (∀ tp, Z tp ≠ 0) → (∀ p, Z (0,p)=1) → (∀ p, Z (1,p)=rightTubeCorePlanarComplex p.1) → ∃ A : C(unitInterval × RightTubeMinusLeftCore, Circle), (∀ p, A (0,p)=1) ∧ (∀ p, A (1,p)=rightTubeCoreAngularCoordinate p)"},
+     :seat "topo-8"}},
+   :phase :implementation,
+   :type
+   "∀ (Z : C(unitInterval × RightTubeMinusLeftCore, ℂ)), (∀ tp, Z tp ≠ 0) → (∀ p, Z (0,p)=1) → (∀ p, Z (1,p)=rightTubeCorePlanarComplex p.1) → ∃ A : C(unitInterval × RightTubeMinusLeftCore, Circle), (∀ p, A (0,p)=1) ∧ (∀ p, A (1,p)=rightTubeCoreAngularCoordinate p)",
    :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
@@ -71762,6 +71808,8 @@
    :routes-2026-10-11-t02a03-coupled-angular-normalization-adapter-topo2-r1,
    :kind :reusable-theorem,
    :area "explicit-r3-tube-deformation-retraction",
+   :declaration
+   "ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngular_of_nonvanishingComplexPath",
    :depends-on
    [:routes-2026-10-11-t02a03-coupled-angular-zero-interior-topo2-r1],
    :current-residual
