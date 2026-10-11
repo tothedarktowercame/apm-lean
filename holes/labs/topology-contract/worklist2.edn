@@ -79281,26 +79281,43 @@
    :depends-on [],
    :other-consumers []}
   {:consumer :t97A04,
-   :stop-count 1,
+   :stop-count 2,
    :evidence
    {:placeholder-delta 0,
-    :residual
-    "Blueprint review is required before its nodes may enter the lemma DAG or formalisation may begin.",
+    :residual "B2 through B11 remain; the next job is B2 only.",
     :outcome :stop,
     :warnings
-    ["The consumer retains its two expected placeholders at apm_t97A04_bridge_3 and hcore; this job was limited by BLUEPRINTS.md to writing the blueprint."
-     "Existing Main.lean linter warnings are unchanged."
-     "Unrelated untracked ConstructionTargets/t95J02Closure.blueprint.md was preserved untouched."],
-    :missing-theorems [],
+    ["The consumer retains its two expected placeholders while the closure program advances node by node."
+     "Existing Main.lean linter and sorry warnings are unchanged."],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.T97A04Closure.frozenTorusH2GroupIsoInt",
+      :type
+      "SingularHomology 2 (TopCat.of (AddCircle (1 : Real) × AddCircle (1 : Real))) ≅ AddCommGrpCat.of Int",
+      :status :proved,
+      :consumers [:t97A04],
+      :depends-on [],
+      :area "mv-connecting-naturality"}],
     :statement-hashes
     {:registry "131 registered statements match, 0 do not",
-     :blueprint-blob "09f1cd6883bed85bb99d248138889bbe053850a4"},
+     :closure-lean-blob "fb39c91b96d1167d6cf95eef0c51909406d2318b",
+     :blueprint-blob "8db964621a51c880c35890c042c5ce54bf8434cc"},
     :disposition :stop,
-    :axioms [],
+    :axioms [propext Classical.choice Quot.sound],
     :author "topo-6",
-    :reason :blueprint-written,
+    :reason :program-milestone-complete,
     :commands
-    [{:cmd
+    [{:cmd "lake env lean ConstructionTargets/t97A04Closure.lean",
+      :exit 0,
+      :output
+      "frozenTorusH2GroupIsoInt compiled; axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/t97A04Closure.lean || true)\"",
+      :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/t97A04Closure.lean",
+      :exit 0}
+     {:cmd
       "git diff --check -- ConstructionTargets/t97A04Closure.blueprint.md",
       :exit 0}
      {:cmd "lake env lean problems/t97A04/lean/Main.lean",
@@ -79311,38 +79328,28 @@
       :exit 0,
       :output "131 registered statements match, 0 do not"}
      {:cmd
-      "python3 -c 'import re; p=\"problems/t97A04/lean/Main.lean\"; t=open(p).read(); t=re.sub(r\"/-.*?-/\",\" \",t,flags=re.S); t=re.sub(r\"--[^\\n]*\",\" \",t); print(len(re.findall(r\"(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])\",t)))'",
+      "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/t97A04Closure.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git show --check --oneline 964e5f8dc",
       :exit 0,
-      :output "2"}
-     {:cmd
-      "rg -n '^### B[0-9]+\\.' ConstructionTargets/t97A04Closure.blueprint.md",
+      :output "964e5f8dc Prove t97A04 frozen torus H2 coordinate"}
+     {:cmd "git show --check --oneline 0922066b0",
       :exit 0,
-      :output "11 numbered blueprint nodes"}
-     {:cmd "git show --check --oneline 461f5ca7e",
-      :exit 0,
-      :output "461f5ca7e Blueprint t97A04 H2 closure"}],
+      :output "0922066b0 Record t97A04 blueprint B1 milestone"}],
     :diagnostic-history [],
     :continue-from
-    "After independent mathematical review of ConstructionTargets/t97A04Closure.blueprint.md, formalise B1 frozenTorusH2GroupIsoInt in ConstructionTargets/t97A04Closure.lean, then proceed node by node in dependency order.",
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791717180611-5214-932ec57b",
-     :commands
-     ["git show/diff-tree/show --check 461f5ca7e37a5b2967853dbea957756974500d59"
-      "git rev-parse blueprint blob and inspect recorded blueprint"
-      "lake env lean problems/t97A04/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "statement fingerprints at commit and parent; placeholder recount"],
-     :finding
-     "PASS: independent author topo-6 committed a new 11-node closure blueprint within the declared scope, matching recorded blob 09f1cd6883bed85bb99d248138889bbe053850a4. The mathematics is coherent: the frozen H2 coordinate and transported vertical cover align; the upper-triangular shear preserves the cover; Mayer-Vietoris naturality plus the monic connecting map gives scalar a; swap squares to the identity and cancels in the pair; and shearY 3 1 composed with g(x,y)=(x,y-x) is exactly Lbar(x,y)=(2x+y,y-x), yielding scalar 3. Each node uses only listed predecessors and compiled API, B10 faithfully transports the AddCommGrp computation to the frozen ModuleCat type, and B11 consumes the three bridge witnesses. Main compiles; its two pre-existing placeholders remain 2 at commit and parent, as expected for a blueprint STOP. Registry is 131/0 and the frozen t97A04 fingerprint is unchanged at commit and parent. No counterexample, missing hypothesis, representation mismatch, or unlisted dependency was found."},
-    :commit "461f5ca7e37a5b2967853dbea957756974500d59",
-    :changed-paths ["ConstructionTargets/t97A04Closure.blueprint.md"],
+    "Formalise blueprint node B2 frozenYCover in ConstructionTargets/t97A04Closure.lean, recording the transported vertical cover, its openness and union proof, and its exact identification with BoundaryTorusOpenCover.",
+    :commit "0922066b0b2ba0edb3ff369117fb523828fdde64",
+    :changed-paths
+    ["ConstructionTargets/t97A04Closure.lean"
+     "ConstructionTargets/t97A04Closure.blueprint.md"],
     :finding
-    "The audit's proposed production connecting-map naturality prerequisite is already compiled. The blueprint fixes eleven remaining nodes: transport the Mayer-Vietoris top-class coordinate to AddCircle squared; define the transported vertical cover and upper-triangular shear; build and identify its short-complex endpoint maps; compute the overlap H1 scalar; cancel the monic connecting map to obtain shearY_H2; handle swap pairs and the explicit factorization of Lbar; transfer to ModuleCat; then fill bridge 3 and hcore.",
+    "Blueprint node B1 is proved. The frozen AddCircle-squared H2 coordinate is the banked boundary-torus Mayer-Vietoris coordinate transported through the same product homeomorphism already used for the aligned H1 coordinate.",
+    :milestone-commit "964e5f8dcba178009d7e61c5c61f018300079733",
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79418,4 +79425,25 @@
    :campaign-priority 46,
    :depends-on [],
    :program true,
+   :other-consumers []}
+  {:consumer :t97A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T97A04Closure.frozenTorusH2GroupIsoInt",
+    :type
+    "SingularHomology 2 (TopCat.of (AddCircle (1 : Real) × AddCircle (1 : Real))) ≅ AddCommGrpCat.of Int"},
+   :lemma
+   {:name "ConstructionTargets.T97A04Closure.frozenTorusH2GroupIsoInt",
+    :reported-by [:program-2026-10-11-close-t97a04],
+    :type
+    "SingularHomology 2 (TopCat.of (AddCircle (1 : Real) × AddCircle (1 : Real))) ≅ AddCommGrpCat.of Int",
+    :area "mv-connecting-naturality",
+    :proved-in :program-2026-10-11-close-t97a04},
+   :id
+   :lemma-constructiontargets-t97a04closure-frozentorush2groupisoint,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}]}
