@@ -679,6 +679,64 @@ theorem specializedRightTubeRadialNormalInterpolation_exists :
   · intro p hp
     exact p.2.2 ((rightTubeNormalComplex_eq_zero_iff p.1).mp hp)
 
+noncomputable def rightTubeRadialAmbientDeformation :
+    C(unitInterval × RightTubeMinusLeftCore, apm_t02a03_E3) where
+  toFun tp := rightTubePolarReconstruction (rightTubePlanarRotation tp)
+    (rightTubeRadialNormalInterpolation rightTubeNormalCoordinate
+      rightTubeMeridianCoordinate tp)
+  continuous_toFun := by
+    have hR : Continuous (fun tp : unitInterval × RightTubeMinusLeftCore =>
+        (rightTubePlanarRotation tp : ℂ)) :=
+      (ContinuousMap.continuous rightTubePlanarRotation).subtype_val
+    have hN : Continuous (fun tp : unitInterval × RightTubeMinusLeftCore =>
+        rightTubeRadialNormalInterpolation rightTubeNormalCoordinate
+          rightTubeMeridianCoordinate tp) :=
+      ContinuousMap.continuous _
+    unfold rightTubePolarReconstruction
+    apply (PiLp.continuous_toLp 2 _).comp
+    apply continuous_pi
+    intro i
+    fin_cases i
+    · exact continuous_const.add
+        ((continuous_const.add (Complex.continuous_re.comp hN)).mul
+          (Complex.continuous_re.comp hR))
+    · exact (continuous_const.add (Complex.continuous_re.comp hN)).mul
+        (Complex.continuous_im.comp hR)
+    · exact Complex.continuous_im.comp hN
+
+theorem rightTubeRadialAmbientDeformation_endpoints :
+    (∀ p, rightTubeRadialAmbientDeformation (0, p) =
+      apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)) ∧
+    (∀ p, rightTubeRadialAmbientDeformation (1, p) = p.1) := by
+  constructor
+  · intro p
+    ext i
+    fin_cases i <;>
+      simp [rightTubeRadialAmbientDeformation, rightTubePolarReconstruction,
+        rightTubeRadialNormalInterpolation, rightTubePlanarRotation_zero,
+        apm_t02a03_circleMeridian]
+  · intro p
+    change rightTubePolarReconstruction (rightTubePlanarRotation (1, p))
+      (rightTubeRadialNormalInterpolation rightTubeNormalCoordinate
+        rightTubeMeridianCoordinate (1, p)) = p.1
+    rw [show rightTubeRadialNormalInterpolation rightTubeNormalCoordinate
+        rightTubeMeridianCoordinate (1, p) = rightTubeNormalComplex p.1 by
+      norm_num [rightTubeRadialNormalInterpolation, rightTubeNormalCoordinate]
+      change ‖rightTubeNormalComplex p.1‖ •
+          NormedSpace.normalize (rightTubeNormalComplex p.1) =
+        rightTubeNormalComplex p.1
+      exact NormedSpace.norm_smul_normalize _]
+    have hrot : rightTubePlanarRotation (1, p) =
+        ⟨NormedSpace.normalize (rightTubePlanarComplex p.1),
+          mem_sphere_zero_iff_norm.mpr
+            (NormedSpace.norm_normalize
+              (rightTubePlanarComplex_ne_zero p.1 p.2.1))⟩ := by
+      apply Subtype.ext
+      exact rightTubePlanarRotation_one p
+    rw [hrot]
+    apply rightTubePolarReconstruction_self
+    exact p.2.1
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -702,3 +760,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeRadialCoefficient_pos
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeRadialNormalInterpolation_exists
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.specializedRightTubeRadialNormalInterpolation_exists
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeRadialAmbientDeformation_endpoints
