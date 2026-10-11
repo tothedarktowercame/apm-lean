@@ -70649,56 +70649,71 @@
      "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCoreNormalDetour",
      :type "unitInterval -> RightTubeMinusLeftCore -> ℂ"}],
    :evidence
-   {:probe
-    {:residual
-     "Implement the detour and seam equations, then prove continuity and transfer the specialized radius and nonzero-imaginary invariants across both halves.",
-     :outcome :go,
-     :warnings [],
-     :axioms [propext Classical.choice Quot.sound],
-     :commands
-     [{:cmd
-       "lake env lean /tmp/t02a03_core_normal_detour_endpoints_probe.lean",
-       :exit 0,
-       :output
-       "zeroHeightCoreNormalDetour_endpoints_midpoint compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "sha256sum /tmp/t02a03_core_normal_detour_endpoints_probe.lean",
-       :exit 0,
-       :output
-       "8c23f5a0c05d15b0c7671d5f9b7655e3ccf5ce34ef21c252da8c39defa633a63  /tmp/t02a03_core_normal_detour_endpoints_probe.lean"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_core_normal_detour_endpoints_probe.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}
-      {:cmd
-       "rg -n 'zeroHeightCoreNormalDetour' /tmp/t02a03_core_normal_detour_endpoints_probe.lean",
-       :exit 0,
-       :output
-       "7:noncomputable def zeroHeightCoreNormalDetour\n18:theorem zeroHeightCoreNormalDetour_endpoints_midpoint\n27:#print axioms zeroHeightCoreNormalDetour_endpoints_midpoint"}],
-     :fixture
-     {:path "/tmp/t02a03_core_normal_detour_endpoints_probe.lean",
-      :sha256
-      "8c23f5a0c05d15b0c7671d5f9b7655e3ccf5ce34ef21c252da8c39defa633a63"},
-     :finding
-     "The placeholder-free fixture defines the two affine halves and proves their exact t=0, t=1, and shared t=1/2 values. The common signed-waypoint value supplies the seam equation required for the subsequent continuity proof.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
-      :declaration
-      "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCoreNormalDetour_endpoints_midpoint",
-      :type
-      "forall (p : RightTubeMinusLeftCore), zeroHeightCoreNormalDetour 0 p = rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)) ∧ zeroHeightCoreNormalDetour 1 p = rightTubeCoreNormalComplex p.1 ∧ zeroHeightCoreNormalDetour ⟨1 / 2, by constructor <;> norm_num⟩ p = zeroHeightSignedImaginaryWaypoint p",
-      :supporting-declarations
-      [{:name
-        "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCoreNormalDetour",
-        :type "unitInterval -> RightTubeMinusLeftCore -> ℂ"}]},
-     :seat "topo-8"}},
+   {:placeholder-delta {:before 0, :after 0, :change 0},
+    :residual
+    "Prove continuity of the piecewise detour across the midpoint seam, transfer the specialized leg radius and nonzero-imaginary invariants to each open half, and combine them with endpoint collision certificates.",
+    :supporting-declarations
+    [{:name
+      "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCoreNormalDetour",
+      :type "unitInterval -> RightTubeMinusLeftCore -> ℂ"}],
+    :outcome :done-unreviewed,
+    :warnings
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean:62:6: unnecessarySimpa (pre-existing)"
+     "The canonical checkout's .lake/packages is a real directory, so the frame-worktree symlink diagnostic does not apply cleanly here."],
+    :missing-theorems [],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms [propext Classical.choice Quot.sound],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :scope-blob "cea45e0bc8cb2595a7cdd8d33d3c094bd0f23799",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0,
+      :output
+      "compiled; declaration axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "lake env lean /tmp/t02a03_core_normal_detour_endpoints_probe.lean",
+      :exit 0,
+      :output
+      "zeroHeightCoreNormalDetour_endpoints_midpoint compiled; axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "sha256sum /tmp/t02a03_core_normal_detour_endpoints_probe.lean",
+      :exit 0,
+      :output
+      "8c23f5a0c05d15b0c7671d5f9b7655e3ccf5ce34ef21c252da8c39defa633a63  /tmp/t02a03_core_normal_detour_endpoints_probe.lean"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "git diff --check -- ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd
+      "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :diagnostic-history
+    [{:cmd
+      "test -L .lake/packages && test \"$(readlink -f .lake/packages)\" = /home/joe/code/apm-lean/.lake/packages",
+      :exit 1,
+      :finding
+      "This canonical checkout has a real .lake/packages directory; no package-authority mutation was made during the scoped theorem row."}],
+    :commit "8a737f72be28386828c8e1e87a210a31252f9f69",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCoreNormalDetour_endpoints_midpoint",
+    :fixture
+    {:path "/tmp/t02a03_core_normal_detour_endpoints_probe.lean",
+     :sha256
+     "8c23f5a0c05d15b0c7671d5f9b7655e3ccf5ce34ef21c252da8c39defa633a63"},
+    :finding
+    "The piecewise formula traverses the meridian-normal-to-waypoint affine leg on the first half and the waypoint-to-input-normal affine leg on the second. Direct normalization proves the source endpoint, target endpoint, and common midpoint value exactly.",
+    :seat "topo-6"},
    :phase :implementation,
    :type
    "forall (p : RightTubeMinusLeftCore), zeroHeightCoreNormalDetour 0 p = rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)) ∧ zeroHeightCoreNormalDetour 1 p = rightTubeCoreNormalComplex p.1 ∧ zeroHeightCoreNormalDetour ⟨1 / 2, by constructor <;> norm_num⟩ p = zeroHeightSignedImaginaryWaypoint p",
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/zero-height-core-normal-detour-endpoints",
