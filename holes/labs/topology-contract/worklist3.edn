@@ -17719,7 +17719,7 @@
    :depends-on [],
    :other-consumers [:t92J05 :t93J03 :t99J01 :t00J07]}
   {:consumer :t00A02,
-   :stop-count 1,
+   :stop-count 2,
    :implements-lemma
    :lemma-freeproperlydiscontinuousquotient-fundamentalgroupequiv,
    :evidence
@@ -17730,11 +17730,13 @@
      :t99J01 {:before 1, :after 1, :delta 0},
      :t00J07 {:before 3, :after 3, :delta 0}},
     :residual
-    "Resolve whether the fixed weak hypotheses suffice for an orbit covering; then prove monodromy surjectivity, identify its kernel, derive the simply connected equivalence, and add the Klein-plane and finite-action specializations.",
+    "The registered theorem needs a hypothesis repair, such as the locally compact Hausdorff assumptions used by the banked quotient-covering theorem; monodromy and consumer specializations should not proceed against the false frozen type.",
     :gates
     {:module-compile :pass,
      :target-build :pass,
      :statement-registry "131 registered statements match, 0 do not",
+     :scoped-diff :pass,
+     :forbidden-placeholder-scan :pass,
      :worktree-clean true},
     :outcome :stop,
     :warnings [],
@@ -17748,71 +17750,69 @@
       :depends-on [],
       :area "deck-group-quotient-pi1"}
      {:name
-      "ConstructionTargets.DeckGroupQuotientFundamentalGroup.quotientMk_isCoveringMap_without_separation",
+      "ConstructionTargets.DeckGroupQuotientFundamentalGroup.indiscreteRegularAction_no_fundamentalGroupEquiv",
       :type
-      "The orbit projection is a covering map from only the hypotheses in the fixed final theorem, or this type is refuted by a compiled counterexample",
-      :status :not-started,
+      "not Nonempty (FundamentalGroup (MulAction.orbitRel.Quotient (Multiplicative (ZMod 2)) (Multiplicative (ZMod 2))) (Quotient.mk _ 1) ≃* Multiplicative (ZMod 2))",
+      :status :proved,
       :consumers [:t00A02 :t92J05 :t93J03 :t99J01 :t00J07],
       :depends-on [],
       :area "deck-group-quotient-pi1"}
      {:name
-      "ConstructionTargets.DeckGroupQuotientFundamentalGroup.freeProperlyDiscontinuousQuotient_fundamentalGroupEquiv",
+      "ConstructionTargets.DeckGroupQuotientFundamentalGroup.freeProperlyDiscontinuousQuotient_fundamentalGroupEquiv_refuted",
       :type
-      "forall {G X : Type*} [Group G] [TopologicalSpace X] [MulAction G X] [ContinuousConstSMul G X] [ProperlyDiscontinuousSMul G X] (free : forall g : G, forall x : X, g • x = x -> g = 1) [SimplyConnectedSpace X] [LocPathConnectedSpace X] (x : X), Nonempty (FundamentalGroup (MulAction.orbitRel.Quotient G X) (Quotient.mk _ x) ≃* G)",
-      :status :not-started,
+      "The negation of the frozen universal theorem specialized to Type 0",
+      :status :proved,
       :consumers [:t00A02 :t92J05 :t93J03 :t99J01 :t00J07],
       :depends-on
-      ["ConstructionTargets.DeckGroupQuotientFundamentalGroup.quotientMk_isCoveringMap_without_separation"],
+      ["ConstructionTargets.DeckGroupQuotientFundamentalGroup.indiscreteRegularAction_no_fundamentalGroupEquiv"],
       :area "deck-group-quotient-pi1"}],
     :statement-hashes
     {:module
-     "bcc346a26aab74947a69bb92c8aebc866ab3378394a8469f785d67dbbcdb0607"},
+     "c0c5f913a1c12fd328e2691bfe607b35a330911a2be7be338afd0258e3f4b691"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "First program milestone compiled and committed; the fixed final theorem remains open. Mathlib's properly-discontinuous quotient-covering construction requires LocallyCompactSpace X and T2Space X, which the fixed final type omits, so the next job must prove the covering result under the weaker hypotheses or compile an exact counterexample before building monodromy.",
+    "The frozen final theorem is false. Let Multiplicative (ZMod 2) act on itself by left multiplication and give the underlying set the indiscrete topology. The action is free, finite and therefore properly discontinuous, and continuous; the total space is contractible (hence simply connected) and locally path-connected. The action is transitive, so the orbit quotient is a singleton and its fundamental group is subsingleton, which cannot be isomorphic to the two-element group. The compiled theorem freeProperlyDiscontinuousQuotient_fundamentalGroupEquiv_refuted negates the universe-zero instance of the exact frozen universal proposition.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean",
       :exit 0}
      {:cmd
-      "lake build ConstructionTargets.DeckGroupQuotientFundamentalGroup",
+      "lake build ConstructionTargets/DeckGroupQuotientFundamentalGroup",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd
       "git diff --check -- ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean ConstructionTargets/DeckGroupQuotientFundamentalGroup.md",
       :exit 0}
      {:cmd
-      "rg forbidden placeholders and axioms in ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean",
+      "rg -n '\\bsorry\\b|\\badmit\\b|^\\s*axiom\\b' ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean",
       :exit 1,
       :expected-exit 1}
      {:cmd
       "comment-stripped placeholder counts for t00A02 t92J05 t93J03 t99J01 t00J07",
       :exit 0}
      {:cmd "git status --short", :exit 0}],
-    :diagnostic-history [],
-    :continue-from
-    {:commit "d8ae72972f6621f135d22e9053de496cedf2e908",
-     :next
-     "Resolve the missing LocallyCompactSpace/T2Space boundary, then construct endpoint monodromy and its kernel exactness."},
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791712142229-4926-0ee2e665",
-     :commands
-     ["rg program row and program history"
-      "git show and git diff-tree recorded commit"
-      "git blob identity and git diff --check"
-      "sha256sum program module"
-      "lake env lean ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean"
-      "lake build ConstructionTargets.DeckGroupQuotientFundamentalGroup"
-      "python3 scripts/statement-registry.py check"
-      "forbidden placeholder and axiom scan"
-      "consumer placeholder census"],
-     :finding
-     "PASS: program STOP correctly commits new progress in d8ae7297, the first program-history entry; scope is exactly the new DeckGroupQuotientFundamentalGroup Lean module and milestone document, and both recorded blobs match the checkout; the banked theorem derives the orbit projection covering map from freeness plus Mathlib required LocallyCompactSpace and T2Space hypotheses without changing the fixed final theorem; module SHA-256 matches bcc346a26aab74947a69bb92c8aebc866ab3378394a8469f785d67dbbcdb0607; module replay and 1682-job build pass with no forbidden placeholders and exactly propext, Classical.choice, Quot.sound; registry is 131/0 and consumer counts reproduce as 2/3/1/1/3; the STOP explicitly lists the weaker-hypothesis or counterexample boundary, monodromy surjectivity and kernel, simply-connected equivalence, and Klein-plane and finite-action adapters as remaining milestones."},
-    :commit "d8ae72972f6621f135d22e9053de496cedf2e908",
+    :diagnostic-history
+    [{:cmd "lake env lean /tmp/deck_counterexample.lean",
+      :exit 1,
+      :finding
+      "Initial Homotopy structure syntax was corrected; subsequent scratch compilation passed."}
+     {:cmd "lake env lean /tmp/deck_counterexample.lean",
+      :exit 1,
+      :finding
+      "The nontriviality contradiction initially selected the wrong one_ne_zero instance; replaced by the decidable ZMod 2 inequality."}
+     {:cmd
+      "lake env lean ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean",
+      :exit 1,
+      :finding
+      "The first universal-negation formulation generalized a universe that could not be instantiated by the concrete Type-0 counterexample; specialized the refutation proposition to Type, which is sufficient to refute the polymorphic frozen theorem."}
+     {:cmd
+      "lake env lean ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean",
+      :exit 1,
+      :finding
+      "Lean inferred the counterexample basepoint from the target, leaving an extra tactic bullet; removed it and reran successfully."}],
+    :commit "5bc7414c9dc1af69e0ceeb3bf02bad80a1587f60",
     :changed-paths
     ["ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean"
      "ConstructionTargets/DeckGroupQuotientFundamentalGroup.md"],
@@ -17823,13 +17823,13 @@
      ["ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean"
       "ConstructionTargets/DeckGroupQuotientFundamentalGroup.md"],
      :declaration
-     "ConstructionTargets.DeckGroupQuotientFundamentalGroup.quotientMk_isCoveringMap"},
+     "ConstructionTargets.DeckGroupQuotientFundamentalGroup.freeProperlyDiscontinuousQuotient_fundamentalGroupEquiv_refuted"},
     :row :program-2026-10-11-deck-group-quotient-pi1,
     :seat :topo-10},
    :phase :implementation,
    :owner-repair
    "2026-10-11 claude-14: final type gains [T2Space X] [LocallyCompactSpace X] (Mathlib quotient-covering needs them; every consumer, the plane and spheres, has them). Do not prove covering under weaker hypotheses.",
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean"
     "ConstructionTargets/DeckGroupQuotientFundamentalGroup.md"],
@@ -18328,7 +18328,52 @@
    :kind :lemma,
    :depends-on
    [:lemma-vankampen-attachdisk :lemma-mayervietoris-attachdisk],
-   :other-consumers []}],
+   :other-consumers []}
+  {:consumer :t00A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.DeckGroupQuotientFundamentalGroup.indiscreteRegularAction_no_fundamentalGroupEquiv",
+    :type
+    "not Nonempty (FundamentalGroup (MulAction.orbitRel.Quotient (Multiplicative (ZMod 2)) (Multiplicative (ZMod 2))) (Quotient.mk _ 1) ≃* Multiplicative (ZMod 2))"},
+   :lemma
+   {:name
+    "ConstructionTargets.DeckGroupQuotientFundamentalGroup.indiscreteRegularAction_no_fundamentalGroupEquiv",
+    :reported-by [:program-2026-10-11-deck-group-quotient-pi1],
+    :type
+    "not Nonempty (FundamentalGroup (MulAction.orbitRel.Quotient (Multiplicative (ZMod 2)) (Multiplicative (ZMod 2))) (Quotient.mk _ 1) ≃* Multiplicative (ZMod 2))",
+    :area "deck-group-quotient-pi1",
+    :proved-in :program-2026-10-11-deck-group-quotient-pi1},
+   :id
+   :lemma-constructiontargets-deckgroupquotientfundamentalgroup-indiscreteregularaction-no,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t92J05 :t93J03 :t99J01 :t00J07]}
+  {:consumer :t00A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.DeckGroupQuotientFundamentalGroup.freeProperlyDiscontinuousQuotient_fundamentalGroupEquiv_refuted",
+    :type
+    "The negation of the frozen universal theorem specialized to Type 0"},
+   :lemma
+   {:name
+    "ConstructionTargets.DeckGroupQuotientFundamentalGroup.freeProperlyDiscontinuousQuotient_fundamentalGroupEquiv_refuted",
+    :reported-by [:program-2026-10-11-deck-group-quotient-pi1],
+    :type
+    "The negation of the frozen universal theorem specialized to Type 0",
+    :area "deck-group-quotient-pi1",
+    :proved-in :program-2026-10-11-deck-group-quotient-pi1},
+   :id
+   :lemma-constructiontargets-deckgroupquotientfundamentalgroup-freepr-e53c1cfa8ae8,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-deckgroupquotientfundamentalgroup-indiscreteregularaction-no],
+   :other-consumers [:t92J05 :t93J03 :t99J01 :t00J07]}],
  :consumer-baselines {},
  :statuses
  #{:open
