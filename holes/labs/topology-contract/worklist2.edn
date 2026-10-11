@@ -68618,7 +68618,52 @@
   {:bounded-exception
    "single-consumer positive-real-normal sign criterion for the planar collision polynomial",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:residual
+     "Implement the compiled positive-real-normal collision-polynomial sign lemma in the scoped module; afterward analyze the complementary zero-height region along the selected angular trajectory.",
+     :outcome :go,
+     :warnings [],
+     :acceptance
+     {:declaration
+      "ConstructionTargets.T02A03GeometricTubeDeformation.collisionPolynomial_pos_of_normal_re_pos",
+      :type
+      "forall (u : Circle) (n : Complex), norm n <= (1 / 4 : Real) -> 0 < n.re -> 0 < (1 - n.re)^2 - 4*(1-n.re)*(u : Complex).re + 3",
+      :proof-obligations
+      ["derive n.re <= norm n"
+       "show 0 < 1-n.re and 1-n.re < 1"
+       "bound (u : Complex).re <= 1 from Circle.norm_coe"
+       "deduce strict polynomial positivity by nonlinear arithmetic"],
+      :forbidden-claims
+      ["nonpositive-real normal region"
+       "angular homotopy construction"]},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd
+       "lake env lean /tmp/t02a03_collision_poly_positive_re_probe.lean",
+       :exit 0,
+       :output
+       "collisionPolynomial_pos_of_normal_re_pos compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "sha256sum /tmp/t02a03_collision_poly_positive_re_probe.lean",
+       :exit 0,
+       :output
+       "e0ecc5d9accacab03cb2f96fb99a3d0746c2e8e5b5031c24711fab24c1e586dc  /tmp/t02a03_collision_poly_positive_re_probe.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_collision_poly_positive_re_probe.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :fixture
+     {:path "/tmp/t02a03_collision_poly_positive_re_probe.lean",
+      :sha256
+      "e0ecc5d9accacab03cb2f96fb99a3d0746c2e8e5b5031c24711fab24c1e586dc"},
+     :implementation
+     {:scope
+      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
+     :seat "topo-8"}},
+   :phase :implementation,
    :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
