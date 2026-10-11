@@ -17827,6 +17827,8 @@
     :row :program-2026-10-11-deck-group-quotient-pi1,
     :seat :topo-10},
    :phase :implementation,
+   :owner-repair
+   "2026-10-11 claude-14: final type gains [T2Space X] [LocallyCompactSpace X] (Mathlib quotient-covering needs them; every consumer, the plane and spheres, has them). Do not prove covering under weaker hypotheses.",
    :state :open,
    :scope
    ["ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean"
@@ -17838,7 +17840,7 @@
     :declaration
     "freeProperlyDiscontinuousQuotient_fundamentalGroupEquiv",
     :type
-    "theorem ... {G X : Type*} [Group G] [TopologicalSpace X] [MulAction G X] [ContinuousConstSMul G X] [ProperlyDiscontinuousSMul G X] (free : ∀ g : G, ∀ x : X, g • x = x → g = 1) [SimplyConnectedSpace X] [LocPathConnectedSpace X] (x : X) : Nonempty (FundamentalGroup (MulAction.orbitRel.Quotient G X) (Quotient.mk _ x) ≃* G)",
+    "theorem ... {G X : Type*} [Group G] [TopologicalSpace X] [MulAction G X] [ContinuousConstSMul G X] [ProperlyDiscontinuousSMul G X] (free : ∀ g : G, ∀ x : X, g • x = x → g = 1) [T2Space X] [LocallyCompactSpace X] [SimplyConnectedSpace X] [LocPathConnectedSpace X] (x : X) : Nonempty (FundamentalGroup (MulAction.orbitRel.Quotient G X) (Quotient.mk _ x) ≃* G)",
     :axioms :standard-only,
     :commands
     ["lake build ConstructionTargets.DeckGroupQuotientFundamentalGroup"
