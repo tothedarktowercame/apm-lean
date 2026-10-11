@@ -123,7 +123,7 @@ lean: `PointWedgeVanKampen.genericPointWedgeSourceEquivalence`, with
 uses: B3,
 `GenericTargetNaturalSourceReconstruction.sourceEquivalence`
 
-status: planned
+status: proved
 
 Instantiate target-natural source reconstruction with the family and
 postcomposition isomorphisms from B3.  Its forward functor is obtained by

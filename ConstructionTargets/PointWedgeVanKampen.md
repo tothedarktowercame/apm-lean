@@ -64,3 +64,8 @@ the point-span free-product representation, and the representation-to-single-
 object equivalence. `genericPointWedgeSingleObjPostcomposeIso` composes their
 comparison squares, proving naturality under target postcomposition without
 using a counit-identity normalization.
+
+B4 is implemented by `genericPointWedgeSourceEquivalence`.  It applies
+`GenericTargetNaturalSourceReconstruction.sourceEquivalence` directly to the
+B3 mapping equivalences and their postcomposition isomorphisms, producing the
+fundamental-groupoid equivalence with the free-product one-object groupoid.

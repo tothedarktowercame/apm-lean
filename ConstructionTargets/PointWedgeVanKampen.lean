@@ -496,6 +496,28 @@ def genericPointWedgeSingleObjPostcomposeIso (K : C ⥤ D) :=
 
 end GenericSingleObjMapping
 
+section GenericSourceEquivalence
+
+variable {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+variable [PathConnectedSpace X] [PathConnectedSpace Y]
+variable (x₀ : X) (y₀ : Y) (M : Set Y) (N : Set X)
+variable (hM : IsOpen M) (hN : IsOpen N) (hy : y₀ ∈ M) (hx : x₀ ∈ N)
+variable (cM : PointedContraction M ⟨y₀, hy⟩)
+variable (cN : PointedContraction N ⟨x₀, hx⟩)
+
+/-- The source groupoid equivalence reconstructed from the target-natural
+point-wedge mapping equivalences. -/
+def genericPointWedgeSourceEquivalence :
+    FundamentalGroupoid (Wedge x₀ y₀) ≌
+      SingleObj (genericPointWedgeFreeProduct x₀ y₀) :=
+  GenericTargetNaturalSourceReconstruction.sourceEquivalence
+    (fun C _ => genericPointWedgeSingleObjMappingEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN C)
+    (fun K => genericPointWedgeSingleObjPostcomposeIso
+      x₀ y₀ M N hM hN hy hx cM cN K)
+
+end GenericSourceEquivalence
+
 /-- An equivalence from a connected groupoid to a one-object groupoid induces
 the expected equivalence on the automorphism group at any chosen object.  This
 is the final, representation-independent step in the point-wedge van Kampen
@@ -791,5 +813,6 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeCoordinatePointSpanPostcomposeIso
 #print axioms genericPointWedgeSingleObjMappingEquivalence
 #print axioms genericPointWedgeSingleObjPostcomposeIso
+#print axioms genericPointWedgeSourceEquivalence
 
 end ConstructionTargets.PointWedgeVanKampen
