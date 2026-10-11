@@ -564,6 +564,11 @@ theorem genericPointWedgeIdentityGlobalLeftRestriction_hom_app
       x₀ y₀ M N hM hN hy hx cM cN).hom.app z = 𝟙 _ := by
   rfl
 
+def genericPointWedgeLeftBase :
+    FundamentalGroupoid (genericPointWedgeLeftPiece x₀ y₀ M) :=
+  FundamentalGroupoid.mk
+    ⟨quotientMap x₀ y₀ (.inl x₀), ⟨.inl x₀, by trivial, rfl⟩⟩
+
 theorem genericPointWedgeIdentityGlobalLeftRestriction_map
     {a b : FundamentalGroupoid (genericPointWedgeLeftPiece x₀ y₀ M)}
     (f : a ⟶ b) :
@@ -584,6 +589,19 @@ theorem genericPointWedgeIdentityGlobalLeftRestriction_map
     _ = 𝟙 _ ≫ _ := h
     _ = _ := Category.id_comp _
 
+theorem genericPointWedgeIdentityGlobalLeftBase_map
+    (f : End (genericPointWedgeLeftBase x₀ y₀ M)) :
+    (genericPointWedgeIdentityGlobalFunctor
+        x₀ y₀ M N hM hN hy hx cM cN).map
+          ((FundamentalGroupoid.map
+            (TwoOpenDescentRestriction.coverPieceInclusion
+              (U := genericLeftOpen x₀ y₀ M)
+              (V := genericRightOpen x₀ y₀ N) true)).map f) =
+      (genericPointWedgeIdentityActualSpan
+        x₀ y₀ M N hM hN hy hx cM cN).left.map f :=
+  genericPointWedgeIdentityGlobalLeftRestriction_map
+    x₀ y₀ M N hM hN hy hx cM cN f
+
 /-- The right restriction component, retained as an explicit element because
 it contains the overlap glue comparison. -/
 def genericPointWedgeIdentityGlobalRightRestrictionElement
@@ -591,6 +609,21 @@ def genericPointWedgeIdentityGlobalRightRestrictionElement
     genericPointWedgeFreeProduct x₀ y₀ :=
   (genericPointWedgeIdentityGlobalRightRestrictionIso
     x₀ y₀ M N hM hN hy hx cM cN).hom.app z
+
+/-- The right cover-piece presentation of the chosen (left) wedge-point
+representative. -/
+def genericPointWedgeRightBase :
+    FundamentalGroupoid (genericPointWedgeRightPiece x₀ y₀ N) :=
+  FundamentalGroupoid.mk
+    ⟨quotientMap x₀ y₀ (.inl x₀), ⟨.inr y₀, by trivial,
+      (Quotient.sound (Relation.EqvGen.rel _ _ Rel.base)).symm⟩⟩
+
+/-- The single right restriction element relevant to based loops. -/
+def genericPointWedgeIdentityGlobalRightBaseElement :
+    genericPointWedgeFreeProduct x₀ y₀ :=
+  genericPointWedgeIdentityGlobalRightRestrictionElement
+    x₀ y₀ M N hM hN hy hx cM cN
+      (genericPointWedgeRightBase x₀ y₀ N)
 
 /-- Naturality solved for the reconstructed right-piece map.  The two
 endpoint restriction components are deliberately visible. -/
@@ -620,6 +653,25 @@ theorem genericPointWedgeIdentityGlobalRightRestriction_map
       x₀ y₀ M N hM hN hy hx cM cN b)
   rw [h]
   simp [mul_assoc]
+
+/-- At the wedge point the endpoint-dependent right restriction formula is
+one inner conjugation. -/
+theorem genericPointWedgeIdentityGlobalRightBase_map
+    (f : End (genericPointWedgeRightBase x₀ y₀ N)) :
+    (genericPointWedgeIdentityGlobalFunctor
+        x₀ y₀ M N hM hN hy hx cM cN).map
+          ((FundamentalGroupoid.map
+            (TwoOpenDescentRestriction.coverPieceInclusion
+              (U := genericLeftOpen x₀ y₀ M)
+              (V := genericRightOpen x₀ y₀ N) false)).map f) =
+      (genericPointWedgeIdentityGlobalRightBaseElement
+          x₀ y₀ M N hM hN hy hx cM cN)⁻¹ *
+        (genericPointWedgeIdentityActualSpan
+          x₀ y₀ M N hM hN hy hx cM cN).right.map f *
+        genericPointWedgeIdentityGlobalRightBaseElement
+          x₀ y₀ M N hM hN hy hx cM cN :=
+  genericPointWedgeIdentityGlobalRightRestriction_map
+    x₀ y₀ M N hM hN hy hx cM cN f
 
 omit [PathConnectedSpace X] [PathConnectedSpace Y] in
 @[simp] theorem genericPointWedgeIdentityRepresentation_inl
@@ -1570,8 +1622,10 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeIdentityGlobalRightRestriction_naturality
 #print axioms genericPointWedgeIdentityGlobalLeftRestriction_hom_app
 #print axioms genericPointWedgeIdentityGlobalLeftRestriction_map
+#print axioms genericPointWedgeIdentityGlobalLeftBase_map
 #print axioms genericPointWedgeIdentityGlobalRightRestrictionElement
 #print axioms genericPointWedgeIdentityGlobalRightRestriction_map
+#print axioms genericPointWedgeIdentityGlobalRightBase_map
 #print axioms genericPointWedgeIdentityRepresentation_inl
 #print axioms genericPointWedgeIdentityRepresentation_inr
 #print axioms genericPointWedgeIdentityPointSpan_left

@@ -205,3 +205,11 @@ every reconstructed right-piece map as the actual-span map conjugated by its
 two endpoint components.  The order is the one induced by `SingleObj`
 composition.  The remaining calculation is to evaluate those components at
 the wedge-point representative and align the literal leg lifts.
+
+Both cover-piece representatives of the chosen wedge point are now explicit
+as `genericPointWedgeLeftBase` and `genericPointWedgeRightBase`.  The left
+based restriction is literal, while the right based restriction is an inner
+conjugation by the single named
+`genericPointWedgeIdentityGlobalRightBaseElement`.  The remaining B6 work is
+to compute that element from the overlap glue and identify the lifted
+left/right fundamental-group morphisms with the literal wedge-leg maps.
