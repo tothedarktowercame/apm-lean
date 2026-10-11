@@ -12367,8 +12367,78 @@
   {:consumer :t00J02,
    :implements-lemma
    :lemma-mfclass-integral-open-disk-pair-short-complex-comparison,
+   :evidence
+   {:placeholder-delta
+    {:t00J02 {:before 1, :after 1, :delta 0},
+     :t98A02 {:before 1, :after 1, :delta 0}},
+    :residual
+    "Use preservation of the coefficient short exact sequence under forgetIntModules and HomologySequence.δ_naturality on integralOpenDiskPairShortComplexComparison to prove the open-disk connecting square; then prove radial and sphere compatibility.",
+    :gates
+    {:fixture-hash :pass,
+     :fixture-compile :pass,
+     :module-compile :pass,
+     :target-build :pass,
+     :statement-registry "131 registered statements match, 0 do not",
+     :worktree-clean true},
+    :outcome :done-unreviewed,
+    :warnings
+    ["lake build replayed pre-existing linter warnings in dependencies"],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.ManifoldFundamentalClass.integralOpenDiskPairShortComplexComparison",
+      :type
+      "forall (k : Nat), (CoefficientPairSequence.sequence Int (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2))).map (forgetIntModules.mapHomologicalComplex (ComplexShape.down Nat)) ⟶ SingularHomologyConcrete.singularPairShortComplex (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2))",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on
+      ["ConstructionTargets.ManifoldFundamentalClass.integralSingularChainsComparison_subtype_naturality"
+       "ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport_projection"],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes
+    {:fixture
+     "226f5c263b92b49291533d2113a2310957a34fd0913d051908ecea4c6f04d5b7",
+     :declaration
+     "4b5e9a45f9b6522d47b2296e4ce7e3e054bf1f1eb7a781e90e22e92b967bfd9f"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/manifold_fundamental_class_integral_open_disk_pair_short_complex_comparison.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "git status --porcelain", :exit 0}],
+    :diagnostic-history
+    [{:cmd "previous receipt fixture path",
+      :exit 1,
+      :explanation
+      "Receipt misspelled integral_open_disk as integral_open-disk; the committed implementation and fixture were unchanged."}],
+    :representation
+    {:source
+     "The coefficient short exact sequence for the punctured unit disk after forgetting integer-module structure",
+     :target
+     "The production singular-chain short exact sequence for the same punctured unit-disk pair",
+     :direction
+     "Morphism of short complexes from the forgotten coefficient sequence to the production sequence, commuting by exact equality with both the subtype inclusion and relative projection maps"},
+    :commit "4002cce6fb3be8f2098298f8f37a893fdbc0dfd8",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path
+     "/tmp/manifold_fundamental_class_integral_open_disk_pair_short_complex_comparison.lean",
+     :sha256
+     "226f5c263b92b49291533d2113a2310957a34fd0913d051908ecea4c6f04d5b7"},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :declaration
+     "ConstructionTargets.ManifoldFundamentalClass.integralOpenDiskPairShortComplexComparison"},
+    :row
+    :routes-2026-10-11-manifold-integral-open-disk-pair-short-complex-comparison-topo3-r1,
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/integral-open-disk-connecting-naturality/short-complex-comparison",
@@ -16747,11 +16817,13 @@
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.integralOpenDiskPairShortComplexComparison",
     :reported-by
-    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+     :routes-2026-10-11-manifold-integral-open-disk-pair-short-complex-comparison-topo3-r1],
     :type
     "forall (k : ℕ), (CoefficientPairSequence.sequence ℤ (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2))).map (forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ)) ⟶ SingularHomologyConcrete.singularPairShortComplex (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2))",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in
+    :routes-2026-10-11-manifold-integral-open-disk-pair-short-complex-comparison-topo3-r1},
    :id :lemma-mfclass-integral-open-disk-pair-short-complex-comparison,
    :kind :lemma,
    :depends-on
