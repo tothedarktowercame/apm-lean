@@ -938,6 +938,17 @@ noncomputable def forgetIntModulesSnakeInput_kernelτ₁ConeIso
     intro j
     rcases j with (_ | _) <;> rfl)
 
+/-- The first component of the kernel fork formed after forgetting
+coefficients is a limit cone. -/
+noncomputable def forgetIntModulesSnakeInput_kernelτ₁IsLimit
+    (S : ShortComplex.SnakeInput (ModuleCat ℤ)) :
+    IsLimit ((KernelFork.ofι
+      (forgetIntModules.mapShortComplex.map S.v₀₁)
+      (forgetIntModulesSnakeInput_zero_squares S).1).map ShortComplex.π₁) :=
+  (IsLimit.equivIsoLimit
+    (forgetIntModulesSnakeInput_kernelτ₁ConeIso S)).toFun
+      (forgetIntModulesSnakeInput_transportedKernelτ₁ S)
+
 /-- The corrected relative-homology comparison intertwines the coefficient
 absolute-to-relative map with the production relative projection. -/
 theorem integralRelativeHomologyComparisonWithTransport_projection
@@ -1907,6 +1918,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetIntModulesParallelPairZeroIso
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetIntModulesSnakeInput_transportedKernelτ₁
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetIntModulesSnakeInput_kernelτ₁ConeIso
+#print axioms ConstructionTargets.ManifoldFundamentalClass.forgetIntModulesSnakeInput_kernelτ₁IsLimit
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
