@@ -30,7 +30,7 @@ uses: Mathlib `IsPicardLindelof.of_contDiffAt_one`,
 `IsPicardLindelof.exists_shrink_radius`,
 `IsPicardLindelof.exists_forall_mem_closedBall_eq_hasDerivWithinAt_continuousOn`
 
-status: planned
+status: proved
 
 Choose `a' > 0` with `closedBall x₀ a' ⊆ s` using `s ∈ 𝓝 x₀`.  Apply
 `of_contDiffAt_one` to obtain Picard–Lindelöf data, then shrink its state radius
