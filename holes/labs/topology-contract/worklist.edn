@@ -103296,8 +103296,63 @@
   {:bounded-exception
    "This single-consumer prerequisite supplies the only contraction field still absent from the concrete two-piece radial packages.",
    :consumer :t97A01,
+   :evidence
+   {:placeholder-delta
+    {:source-before 0,
+     :source-after 0,
+     :fixture-before 0,
+     :fixture-after 0,
+     :consumer-before 1,
+     :consumer-after 1},
+    :residual
+    "Combine the inner contractions with the banked outer deformation, overlap Circle equivalence, boundary ThreeCircles homeomorphisms, literal edge formulas, and vertex classes in the two final concrete package records.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["Lake replayed pre-existing warnings in imported modules; the scoped module emitted no warnings."],
+    :missing-theorems
+    [{:name
+      "PolygonInnerOpenPointedContraction.innerOpenPointedContraction",
+      :type
+      "For any radius-preserving disk relation whose generators have radius one, PointedContraction (innerOpen R) (innerBase R).",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on [],
+      :area "polygon-surface-open-cover"}],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/polygon-inner-open-pointed-contraction.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.PolygonInnerOpenPointedContraction",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/polygon-inner-open-pointed-contraction.lean",
+      :exit 0}
+     {:cmd
+      "rg -n \"\\bsorry\\b\" ConstructionTargets/PolygonInnerOpenPointedContraction.lean /tmp/polygon-inner-open-pointed-contraction.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "lake env lean /tmp/polygon-inner-axioms.lean", :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd
+      "git diff --check -- ConstructionTargets/PolygonInnerOpenPointedContraction.lean",
+      :exit 0}],
+    :commit "775b7addf9b3dabd8443615fc1eeeedea9a18951",
+    :changed-paths
+    ["ConstructionTargets/PolygonInnerOpenPointedContraction.lean"],
+    :fixture
+    {:path "/tmp/polygon-inner-open-pointed-contraction.lean",
+     :sha256
+     "3ef0009241e6fa4a9800d6795bb530113b97ecc379ec2dc8638bf860c7e7394c"},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonInnerOpenPointedContraction.lean"],
    :dag-node
@@ -108238,6 +108293,30 @@
     "For every radius-preserving disk relation whose generators lie on radius one, innerOpen R has a PointedContraction at the quotient class of zero.",
     :area "polygon-surface-open-cover"},
    :id :lemma-polygoninneropenpointedcontraction,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "PolygonInnerOpenPointedContraction.innerOpenPointedContraction",
+    :type
+    "For any radius-preserving disk relation whose generators have radius one, PointedContraction (innerOpen R) (innerBase R)."},
+   :lemma
+   {:name
+    "PolygonInnerOpenPointedContraction.innerOpenPointedContraction",
+    :reported-by
+    [:routes-2026-10-11-polygon-inner-open-pointed-contraction-82],
+    :type
+    "For any radius-preserving disk relation whose generators have radius one, PointedContraction (innerOpen R) (innerBase R).",
+    :area "polygon-surface-open-cover",
+    :proved-in
+    :routes-2026-10-11-polygon-inner-open-pointed-contraction-82},
+   :id
+   :lemma-polygoninneropenpointedcontraction-inneropenpointedcontraction,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}],
