@@ -1134,6 +1134,33 @@ noncomputable def forgetSnakeCokernelτ₁Preserved
   letI := forgetIntModules_preservesParallelPairColimits
   exact isColimitOfPreserves forgetIntModules S.h₃τ₁
 
+abbrev ForgottenSnakeCokernelτ₁Limit
+    (S : ShortComplex.SnakeInput (ModuleCat ℤ)) :=
+  IsColimit ((CokernelCofork.ofπ
+    (forgetIntModules.mapShortComplex.map S.v₂₃)
+    (forgetIntModulesSnakeInput_zero_squares S).2).map ShortComplex.π₁)
+
+/-- The first component cokernel of the forgotten snake input is a colimit. -/
+noncomputable def forgetSnakeCokernelτ₁Limit
+    (S : ShortComplex.SnakeInput (ModuleCat ℤ)) :
+    ForgottenSnakeCokernelτ₁Limit S := by
+  let c := forgetIntModules.mapCocone
+    (CokernelCofork.ofπ S.v₂₃.τ₁ S.w₁₃_τ₁)
+  let ht : IsColimit ((Cocone.precompose
+      (forgetIntModulesParallelPairZeroIso S.v₁₂.τ₁).inv).obj c) :=
+    (IsColimit.precomposeInvEquiv
+      (forgetIntModulesParallelPairZeroIso S.v₁₂.τ₁) c).symm
+        (forgetSnakeCokernelτ₁Preserved S)
+  let e : ((Cocone.precompose
+      (forgetIntModulesParallelPairZeroIso S.v₁₂.τ₁).inv).obj c) ≅
+      (CokernelCofork.ofπ
+        (forgetIntModules.mapShortComplex.map S.v₂₃)
+        (forgetIntModulesSnakeInput_zero_squares S).2).map ShortComplex.π₁ :=
+    Cocone.ext (Iso.refl _) (by
+      intro j
+      rcases j with (_ | _) <;> rfl)
+  exact (IsColimit.equivIsoColimit e).toFun ht
+
 /-- The corrected relative-homology comparison intertwines the coefficient
 absolute-to-relative map with the production relative projection. -/
 theorem integralRelativeHomologyComparisonWithTransport_projection
@@ -2111,6 +2138,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.scPairZeroπ₃Iso
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetSnakeKernelLimit
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetSnakeCokernelτ₁Preserved
+#print axioms ConstructionTargets.ManifoldFundamentalClass.forgetSnakeCokernelτ₁Limit
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
