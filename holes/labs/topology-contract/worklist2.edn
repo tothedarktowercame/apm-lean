@@ -68281,6 +68281,18 @@
       "git diff --check -- ConstructionTargets/T02A03GeometricTubeDeformation.lean",
       :exit 0}
      {:cmd "git status --short", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791681732644-3636-ded5993d",
+     :commands
+     ["git show/diff-tree --check 5605673"
+      "fixture SHA-256 and recorded blob verification"
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean"
+      "lake env lean /tmp/t02a03_core_radial_ambient_probe.lean"
+      "statement registry fingerprint/check and placeholder/worklist EDN checks"],
+     :finding
+     "Recorded commit has the exact one-file scope and matching fixture/blob hashes. The module and frozen probe compile with only the expected standard axioms. The existential continuous map uses the right-core angular coordinate and specialized normal interpolation; its zero endpoint is exactly the frozen radial-stage reconstruction, its one endpoint is the ambient input, and the quarter-radius bound feeds the reconstruction membership theorem in the correct direction. It adds no placeholder and correctly makes neither the stronger circle-meridian endpoint claim nor a left-core-avoidance claim."},
     :commit "5605673137bed4561a6f53a92fbfba8be777bbbc",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
@@ -68296,7 +68308,7 @@
    :phase :implementation,
    :type
    "exists H : C(unitInterval × RightTubeMinusLeftCore, apm_t02a03_E3), (forall p, H (0,p) = rightTubeCorePolarReconstruction (rightTubeCoreAngularCoordinate p) (rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)))) and (forall p, H (1,p) = p.1) and (forall tp, H tp ∈ apm_t02a03_rightTube)",
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/right-tube-core-radial-ambient",
@@ -68404,7 +68416,7 @@
      "The compiled continuous right-core radial deformation holds rightTubeCoreAngularCoordinate fixed while interpolating the right-core normal coordinate from the meridian image to the input. It ends exactly at the input by rightTubeCorePolarReconstruction_self, and every point remains in apm_t02a03_rightTube by the quarter-radius bound and reconstruction membership criterion. The remaining step is the initial angular deformation from rightTubeCoreAngularCoordinate p to 1, followed by deletion avoidance for the combined path.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",

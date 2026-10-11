@@ -33,12 +33,12 @@ def threeNew (z : Circle) : ThreeCircles :=
 @[simp] theorem twoLeft_base : twoLeft 1 = twoBase := rfl
 
 @[simp] theorem twoRight_base : twoRight 1 = twoBase := by
-  exact Quotient.sound (Relation.EqvGen.rel _ _ Rel.base)
+  exact (Quotient.sound (Relation.EqvGen.rel _ _ Rel.base)).symm
 
 @[simp] theorem threeOld_base : threeOld twoCirclesPoint = threeBase := rfl
 
 @[simp] theorem threeNew_base : threeNew 1 = threeBase := by
-  exact Quotient.sound (Relation.EqvGen.rel _ _ Rel.base)
+  exact (Quotient.sound (Relation.EqvGen.rel _ _ Rel.base)).symm
 
 #print axioms twoRight_base
 #print axioms threeNew_base
