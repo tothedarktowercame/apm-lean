@@ -103116,6 +103116,21 @@
       :finding "axioms propext, Classical.choice, Quot.sound"}
      {:cmd "git status --short", :exit 0, :finding "clean"}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791685147434-3783-5ac56831",
+     :commands
+     ["git show and git diff-tree on recorded commit 17b0179c8aab579c63995c61d604e67a4c7b249c"
+      "git diff --exit-code recorded commit against source checkout"
+      "SHA-256 and comment-stripped placeholder and axiom recomputation for source and fixture"
+      "lake build ConstructionTargets.PolygonBoundaryThreeLoopHomeomorphisms"
+      "lake env lean /tmp/polygon-boundary-three-loop-homeomorphisms.lean"
+      "lake env lean /dev/stdin with fresh axiom checks"
+      "python3 scripts/statement-registry.py check"
+      "git diff-tree --check recorded parent and commit"],
+     :finding
+     "Recorded one-file commit is authored by topo-2; source equals the recorded blob and the fixture hash matches; each specialized forward homeomorphism promotes the corresponding continuous bijection using the compact source and correct Hausdorff quotient target, each quotient-to-ThreeCircles map is oriented as the inverse specialized homeomorphism followed by the fixed ThreeEndpointLoops homeomorphism, and the forward functions are definitionally the existing three-loop maps; all frozen results compile with only standard axioms, source and fixture placeholder and axiom counts are zero, the registry reports 131 matched and 0 mismatched, and literal canonical-edge formulas remain outside scope."},
     :commit "17b0179c8aab579c63995c61d604e67a4c7b249c",
     :changed-paths
     ["ConstructionTargets/PolygonBoundaryThreeLoopHomeomorphisms.lean"],
@@ -103139,7 +103154,7 @@
      "Each specialized CircleQuotient maps to ThreeCircles via the inverse of its ThreeEndpointLoops-to-quotient homeomorphism followed by threeEndpointLoopsHomeomorphThreeCircles."},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/PolygonBoundaryThreeLoopHomeomorphisms.lean"],
    :dag-node
@@ -103270,7 +103285,7 @@
       "The two continuous bijections are promoted to homeomorphisms, and their inverse composites identify both boundary quotients with ThreeCircles."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
