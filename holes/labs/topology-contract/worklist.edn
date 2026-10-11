@@ -105552,8 +105552,149 @@
   {:consumer :t99J01,
    :implements-lemma
    :lemma-connectedgroupoidsingleobjequivalence-connectorsingleobjequivalence-counit-base-,
-   :phase :probe,
+   :phase :implementation,
    :state :open,
+   :scope
+   ["ConstructionTargets/ConnectorSingleObjectCounitBaseIdentity.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/shared/connector-single-object-counit-base-identity",
+   :acceptance
+   {:implementation
+    "For an arbitrary groupoid and ConnectorSystem S, unfold connectorSingleObjEquivalence, Functor.asEquivalence, objObjPreimageIso, and the normalFormFunctor_essSurj witness. Use proof irrelevance to identify the chosen essential-image proof with the explicit witness whose preimage is S.base and whose target isomorphism is Iso.refl. Prove that the counit hom component at SingleObj.star (End S.base) is identity. Export connectorSingleObjEquivalence_counit_base_identity with the exact fixture type. Do not assemble the five-factor counit, specialize to point wedges, or close a consumer.",
+    :placeholder
+    "the remaining fundamental-group coordinate steps for t01A03, t92J06, t97A01, t97A03, and t99J01",
+    :route-step
+    "normalize the connector/single-object constituent counit at its base object",
+    :fixture "/tmp/connector-single-object-counit-base-identity.lean",
+    :fixture-sha256
+    "473138e897d3663a3afd075c36a571eb01c5e271c31f142d1a29768d0d0f5b98",
+    :gates
+    ["lake build ConstructionTargets.ConnectorSingleObjectCounitBaseIdentity"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id
+   :routes-2026-10-11-connector-single-object-counit-base-identity-105,
+   :kind :reusable-theorem,
+   :area "fundamental-group-wedge-of-circles",
+   :depends-on [],
+   :current-residual
+   "Combine this identity with the other constituent counit normalizations in the five-factor mapping equivalence, then specialize through the generic point-wedge comparison.",
+   :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
+  {:consumer :t99J01,
+   :implements-lemma
+   :lemma-connectedgroupoidsingleobjequivalence-connectorsingleobjequivalence-counit-base-,
+   :evidence
+   {:probe
+    {:residual
+     "Prove the choice-generated counit component is the explicit identity; afterward assemble it with the remaining constituent normalizations.",
+     :outcome :revise,
+     :warnings
+     [{:kind :choice-normalization,
+       :message
+       "The target category has one object, but its endomorphisms are not subsingleton; identity of the counit component must be proved from the explicit essential-surjectivity witness, not from object uniqueness alone."}],
+     :missing-theorems
+     [{:name
+       "ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence_counit_base_identity",
+       :type
+       "For every groupoid G and S : ConnectorSystem G, (connectorSingleObjEquivalence S).counitIso.hom.app (SingleObj.star (End S.base)) = 𝟙 _.",
+       :status :not-started,
+       :consumers [:t99J01 :t01A03 :t92J06 :t97A01 :t97A03],
+       :depends-on [],
+       :area "fundamental-group-wedge-of-circles"}],
+     :prerequisite
+     {:consumer :t99J01,
+      :implements-lemma
+      :lemma-connectedgroupoidsingleobjequivalence-connectorsingleobjequivalence-counit-base-,
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/ConnectorSingleObjectCounitBaseIdentity.lean"],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/shared/connector-single-object-counit-base-identity",
+      :acceptance
+      {:implementation
+       "For an arbitrary groupoid and ConnectorSystem S, unfold connectorSingleObjEquivalence, Functor.asEquivalence, objObjPreimageIso, and the normalFormFunctor_essSurj witness. Use proof irrelevance to identify the chosen essential-image proof with the explicit witness whose preimage is S.base and whose target isomorphism is Iso.refl. Prove that the counit hom component at SingleObj.star (End S.base) is identity. Export connectorSingleObjEquivalence_counit_base_identity with the exact fixture type. Do not assemble the five-factor counit, specialize to point wedges, or close a consumer.",
+       :placeholder
+       "the remaining fundamental-group coordinate steps for t01A03, t92J06, t97A01, t97A03, and t99J01",
+       :route-step
+       "normalize the connector/single-object constituent counit at its base object",
+       :fixture
+       "/tmp/connector-single-object-counit-base-identity.lean",
+       :fixture-sha256
+       "473138e897d3663a3afd075c36a571eb01c5e271c31f142d1a29768d0d0f5b98",
+       :gates
+       ["lake build ConstructionTargets.ConnectorSingleObjectCounitBaseIdentity"
+        "fixture compiles"
+        "zero source and fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :id
+      :routes-2026-10-11-connector-single-object-counit-base-identity-105,
+      :kind :reusable-theorem,
+      :area "fundamental-group-wedge-of-circles",
+      :depends-on [],
+      :current-residual
+      "Combine this identity with the other constituent counit normalizations in the five-factor mapping equivalence, then specialize through the generic point-wedge comparison.",
+      :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]},
+     :axioms
+     ["propext"
+      "Classical.choice"
+      "Quot.sound"
+      "ConnectorSingleObjectCounitBaseIdentityProbe.connectorSingleObjEquivalence_counit_base_identity"],
+     :commands
+     [{:cmd
+       "lake build ConstructionTargets.ConnectedGroupoidSingleObjEquivalence",
+       :exit 0,
+       :finding
+       "The connector normal-form equivalence and its asEquivalence-generated counit compile with standard axioms."}
+      {:cmd
+       "lake env lean /tmp/connector-single-object-counit-base-identity.lean",
+       :exit 0,
+       :finding
+       "The exact counit-base identity interface elaborates for an arbitrary groupoid connector system from one isolated axiom."}
+      {:cmd
+       "sha256sum /tmp/connector-single-object-counit-base-identity.lean",
+       :exit 0,
+       :finding
+       "473138e897d3663a3afd075c36a571eb01c5e271c31f142d1a29768d0d0f5b98"}
+      {:cmd
+       "python3 comment-stripped placeholder census /tmp/connector-single-object-counit-base-identity.lean",
+       :exit 0,
+       :finding "0"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :finding "131 registered statements match, 0 do not."}
+      {:cmd "sed route guides and build-loop design",
+       :exit 0,
+       :finding
+       "TOPOLOGY-ROUTES.md, all three route files, and the build-loop design were read."}
+      {:cmd "git status --short",
+       :exit 0,
+       :finding "Clean worktree; this probe was read-only."}],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/connector-counit-attempt.lean",
+       :exit 1,
+       :finding
+       "simp [connectorSingleObjEquivalence] leaves the asEquivalence counit component as an unresolved objObjPreimageIso equality.",
+       :correction
+       "Isolated that exact normalization as the prerequisite interface; the successful interface compile is recorded in commands."}
+      {:cmd "lake env lean /tmp/connector-counit-attempt.lean",
+       :exit 1,
+       :finding
+       "Neither rfl nor unfolding objObjPreimageIso and objPreimage reduces the Classical.choose witness to the explicit refl witness.",
+       :correction
+       "The prerequisite explicitly proves this choice normalization using the concrete essential-surjectivity witness and proof irrelevance."}],
+     :fixture
+     {:path "/tmp/connector-single-object-counit-base-identity.lean",
+      :sha256
+      "473138e897d3663a3afd075c36a571eb01c5e271c31f142d1a29768d0d0f5b98",
+      :interface
+      "For every connector system, the counit of connectorSingleObjEquivalence at the unique target object has identity hom component."},
+     :seat "topo-4"}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/connector-single-object-counit-base-identity",
@@ -105574,7 +105715,8 @@
    :kind :reusable-theorem,
    :area "fundamental-group-wedge-of-circles",
    :depends-on
-   [:routes-2026-10-11-checkpoint-topo1-after-klein-and-wedge-coordinates-86],
+   [:routes-2026-10-11-checkpoint-topo1-after-klein-and-wedge-coordinates-86
+    :routes-2026-10-11-connector-single-object-counit-base-identity-105],
    :current-residual
    "Combine this identity with the remaining constituent counit normalizations in the five-factor composite.",
    :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
@@ -111361,7 +111503,8 @@
    {:name
     "ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence_counit_base_identity",
     :reported-by
-    [:routes-2026-10-11-composite-counit-component-identity-91],
+    [:routes-2026-10-11-composite-counit-component-identity-91
+     :routes-2026-10-11-connector-single-object-counit-base-identity-97],
     :type
     "For every connector system used by TwoOpenPointSpanComparison, the counit of connectorSingleObjEquivalence at the identity target functor has identity component at SingleObj.star.",
     :area "fundamental-group-wedge-of-circles"},
