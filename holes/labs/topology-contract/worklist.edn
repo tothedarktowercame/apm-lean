@@ -113857,7 +113857,7 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
@@ -113912,7 +113912,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -116495,6 +116495,19 @@
     :diagnostic-history
     [{:cmd "lean", :exit 1, :finding "Qualified range membership."}
      {:cmd "lean", :exit 1, :finding "Fixed extChartAt coercion."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791747370360-5825-b7f10777",
+     :commands
+     ["git show/diff-tree c217ef5d"
+      "hash/diff/placeholder checks"
+      "statement-registry.py check"
+      "lake env lean t97A07Closure.lean"
+      "lake env lean t97A07/Main.lean"
+      "lake build t97A07Closure"],
+     :finding
+     "PASS: new compiled, sorry-free B2 progress derives fixed-chart fderivWithin continuity at the chart centre from smoothness, within the model-corners range. It does not identify varying tangent fibers; the mfderiv transport equality remains listed. Exact two-file scope and all recorded hashes match; target placeholders 0, consumer remains 1; registry 131/131; standard axioms. B2 remainder and B3-B9 make this a valid program STOP."},
     :commit "c217ef5dd8cfbcb428b89ec86580ef7720c47db4",
     :changed-paths
     ["ConstructionTargets/t97A07Closure.lean"
@@ -116505,7 +116518,7 @@
      "4cef09e04edd995cfef4136d1b9af42352abc1b2c01ee0973c0c534394c9f7e7"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A07/lean/Main.lean"
     "problems/t97A07/status.json"
@@ -116521,7 +116534,7 @@
     ["lake env lean problems/t97A07/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B1 proved; B2-B9 remain.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B2 partial: chart fderivWithin continuity proved.",
    :id :program-2026-10-11-close-t97a07,
    :kind :final-adapter,
    :campaign-priority 44,
@@ -116535,7 +116548,10 @@
      "Blueprint written. Nine planned nodes separate finite-dimensional surjectivity stability, fixed-chart derivative continuity, openness of regular points, compactness of critical values, the coordinate-maximum criticality argument, positive-dimensional nonemptiness, local image openness at regular points, the connected-complement infinitude argument, and the frozen adapter. Formalization waits for independent mathematical review."}
     {:job 2,
      :commit "9ee1208d447a1e4a90b80d6e525694cd161aced6",
-     :reason "B1 proved; B2-B9 remain."}]}
+     :reason "B1 proved; B2-B9 remain."}
+    {:job 3,
+     :commit "c217ef5dd8cfbcb428b89ec86580ef7720c47db4",
+     :reason "B2 partial: chart fderivWithin continuity proved."}]}
   {:consumer :t91J06,
    :phase :implementation,
    :state :open,
