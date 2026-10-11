@@ -70698,6 +70698,19 @@
       :exit 1,
       :finding
       "This canonical checkout has a real .lake/packages directory; no package-authority mutation was made during the scoped theorem row."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791696695293-4363-bc5e4ae8",
+     :commands
+     ["git show/diff-tree/show --check 8a737f72be28386828c8e1e87a210a31252f9f69"
+      "git rev-parse recorded scope blob; sha256sum frozen fixture"
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean"
+      "lake env lean /tmp/t02a03_core_normal_detour_endpoints_probe.lean"
+      "python3 scripts/statement-registry.py check and fingerprint commit/parent"
+      "python3 placeholder recount at commit/parent"],
+     :finding
+     "PASS: independent author topo-6; exact one-file scope, blob, and fixture hash match; target and frozen probe compile; theorem has the frozen endpoint/midpoint orientation, with the two affine formulas staying in the complex normal representation and selecting meridian normal, waypoint, then recovered input normal; axioms are exactly propext, Classical.choice, Quot.sound; registry is 131/0, frozen t02A03 fingerprint is unchanged at commit and parent, fixture has no placeholders, and Main placeholder count is 1 at commit and parent."},
     :commit "8a737f72be28386828c8e1e87a210a31252f9f69",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
@@ -70713,7 +70726,7 @@
    :phase :implementation,
    :type
    "forall (p : RightTubeMinusLeftCore), zeroHeightCoreNormalDetour 0 p = rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)) ∧ zeroHeightCoreNormalDetour 1 p = rightTubeCoreNormalComplex p.1 ∧ zeroHeightCoreNormalDetour ⟨1 / 2, by constructor <;> norm_num⟩ p = zeroHeightSignedImaginaryWaypoint p",
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/zero-height-core-normal-detour-endpoints",
@@ -70830,7 +70843,7 @@
      "The piecewise normal detour runs linearly from the meridian core normal to the signed imaginary waypoint on the first half and from that waypoint to the recovered input core normal on the second half. Both formulas agree exactly at t=1/2, and the path has the required t=0 and t=1 endpoint values.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
@@ -75526,7 +75539,7 @@
    :other-consumers [:t96J06]}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -75542,7 +75555,10 @@
     "forall (p : RightTubeMinusLeftCore), zeroHeightCoreNormalDetour 0 p = rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)) ∧ zeroHeightCoreNormalDetour 1 p = rightTubeCoreNormalComplex p.1 ∧ zeroHeightCoreNormalDetour ⟨1 / 2, by constructor <;> norm_num⟩ p = zeroHeightSignedImaginaryWaypoint p",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-zeroheightcorenormaldetour-en,
    :kind :lemma,
