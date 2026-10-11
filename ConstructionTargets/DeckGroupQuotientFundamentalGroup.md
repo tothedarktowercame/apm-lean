@@ -46,6 +46,12 @@ inverse of its raw endpoint coordinate. The raw identity law proves `map_one`,
 and B6 together with `mul_inv_rev` restores the ordinary multiplication order
 for `map_mul`.
 
+`orbitEndpointMonodromy_surjective` implements blueprint B8. For an acting
+group element `g`, it chooses a path from `x` to `g⁻¹ • x` and projects it
+to a based loop in the orbit quotient. `monodromy_map` computes the lifted
+endpoint, the orbit-fiber equivalence identifies its raw coordinate as `g⁻¹`,
+and the inversion in B7 sends the loop to `g`.
+
 ## Refutation of the frozen final statement
 
 The fixed theorem omits every separation hypothesis. This is not merely a gap
@@ -63,9 +69,9 @@ negates the exact universal proposition of the program's frozen final type.
 
 ## Remaining work for the repaired statement
 
-1. Prove surjectivity and identify its kernel with the image of the total
-   space's fundamental group.
-2. Specialize to a simply connected total space.
+1. Prove injectivity of endpoint monodromy in the simply connected total
+   space.
+2. Package the resulting group equivalence.
 3. Supply the plane/Klein-group and finite-action adapters.
 
 Mathlib's construction of local evenly covered neighborhoods from

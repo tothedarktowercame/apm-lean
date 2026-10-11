@@ -240,6 +240,34 @@ noncomputable def orbitEndpointMonodromy
     (a : FundamentalGroup (MulAction.orbitRel.Quotient G X) (Quotient.mk _ x)) :
     orbitEndpointMonodromy free x a = (orbitEndpointMonodromyRaw free x a)⁻¹ := rfl
 
+/-- Every acting-group element is realized by endpoint monodromy.  A path to
+the inverse translate projects to a loop, and inversion in the definition of
+`orbitEndpointMonodromy` restores the requested group element. -/
+theorem orbitEndpointMonodromy_surjective
+    {G X : Type*} [Group G] [TopologicalSpace X] [MulAction G X]
+    [ContinuousConstSMul G X] [ProperlyDiscontinuousSMul G X]
+    [LocallyCompactSpace X] [T2Space X] [SimplyConnectedSpace X]
+    [LocPathConnectedSpace X]
+    (free : ∀ g : G, ∀ x : X, g • x = x → g = 1) (x : X) :
+    Function.Surjective (orbitEndpointMonodromy free x) := by
+  intro g
+  let q : C(X, MulAction.orbitRel.Quotient G X) :=
+    ⟨Quotient.mk (MulAction.orbitRel G X), continuous_quotient_mk'⟩
+  let cov := quotientMk_isCoveringMap free
+  let δ := PathConnectedSpace.somePath x (g⁻¹ • x)
+  have hend : q (g⁻¹ • x) = q x := Quotient.sound ⟨g⁻¹, rfl⟩
+  let γ : Path.Homotopic.Quotient (q x) (q x) :=
+    ((Path.Homotopic.Quotient.mk δ).map q).cast rfl hend.symm
+  refine ⟨FundamentalGroup.fromPath γ, ?_⟩
+  rw [orbitEndpointMonodromy_apply]
+  have hraw : orbitEndpointMonodromyRaw free x (FundamentalGroup.fromPath γ) = g⁻¹ := by
+    apply (orbitQuotientFiberEquiv free x).injective
+    rw [orbitEndpointMonodromyRaw, Equiv.apply_symm_apply]
+    apply Subtype.ext
+    simpa [γ, IsCoveringMap.monodromy, Path.Homotopic.Quotient.cast] using
+      congrArg Subtype.val (cov.monodromy_map (Path.Homotopic.Quotient.mk δ))
+  rw [hraw, inv_inv]
+
 private abbrev CounterexampleGroup := Multiplicative (ZMod 2)
 
 private instance : TopologicalSpace CounterexampleGroup := ⊤
@@ -305,6 +333,7 @@ theorem freeProperlyDiscontinuousQuotient_fundamentalGroupEquiv_refuted :
 #print axioms orbitEndpointMonodromyRaw_one
 #print axioms orbitEndpointMonodromyRaw_mul
 #print axioms orbitEndpointMonodromy
+#print axioms orbitEndpointMonodromy_surjective
 #print axioms indiscreteRegularAction_no_fundamentalGroupEquiv
 #print axioms freeProperlyDiscontinuousQuotient_fundamentalGroupEquiv_refuted
 
