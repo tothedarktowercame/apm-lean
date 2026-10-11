@@ -70310,7 +70310,60 @@
   {:bounded-exception
    "single-consumer continuous signed imaginary waypoint inside the core-normal radius bound",
    :consumer :t02A03,
-   :phase :probe,
+   :supporting-declarations
+   [{:name
+     "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightSignedImaginaryWaypoint",
+     :type "RightTubeMinusLeftCore -> ℂ"}],
+   :evidence
+   {:probe
+    {:residual
+     "Implement the signed waypoint and its properties in scope, then construct the two radius-bounded affine legs and certify their nonzero-imaginary interiors.",
+     :outcome :go,
+     :warnings [],
+     :axioms [propext Classical.choice Quot.sound],
+     :commands
+     [{:cmd
+       "lake env lean /tmp/t02a03_signed_imaginary_waypoint_probe.lean",
+       :exit 0,
+       :output
+       "zeroHeight_signedImaginaryWaypoint_properties compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "sha256sum /tmp/t02a03_signed_imaginary_waypoint_probe.lean",
+       :exit 0,
+       :output
+       "72ad9b0394c560265a88553254dcead6892aa46d25b92de68db7989fced31991  /tmp/t02a03_signed_imaginary_waypoint_probe.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_signed_imaginary_waypoint_probe.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}
+      {:cmd
+       "rg -n 'zeroHeightSignedImaginaryWaypoint|zeroHeight_signedImaginaryWaypoint_properties' /tmp/t02a03_signed_imaginary_waypoint_probe.lean",
+       :exit 0,
+       :output
+       "5:noncomputable def zeroHeightSignedImaginaryWaypoint\n9:theorem zeroHeight_signedImaginaryWaypoint_properties\n26:#print axioms zeroHeight_signedImaginaryWaypoint_properties"}],
+     :fixture
+     {:path "/tmp/t02a03_signed_imaginary_waypoint_probe.lean",
+      :sha256
+      "72ad9b0394c560265a88553254dcead6892aa46d25b92de68db7989fced31991"},
+     :finding
+     "The placeholder-free fixture defines the waypoint continuously from meridian.re and proves that every zero-height input sends it to one of the two points ±i/8. Hence its norm is exactly 1/8 and its imaginary coordinate is nonzero, with no discontinuous sign selector.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+      :declaration
+      "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeight_signedImaginaryWaypoint_properties",
+      :type
+      "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> ‖zeroHeightSignedImaginaryWaypoint p‖ = (1 / 8 : ℝ) ∧ (zeroHeightSignedImaginaryWaypoint p).im ≠ 0",
+      :supporting-declarations
+      [{:name
+        "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightSignedImaginaryWaypoint",
+        :type "RightTubeMinusLeftCore -> ℂ"}]},
+     :seat "topo-8"}},
+   :phase :implementation,
+   :type
+   "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> ‖zeroHeightSignedImaginaryWaypoint p‖ = (1 / 8 : ℝ) ∧ (zeroHeightSignedImaginaryWaypoint p).im ≠ 0",
    :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
@@ -70333,6 +70386,8 @@
    :routes-2026-10-11-t02a03-zero-height-signed-imaginary-waypoint-properties-topo2-r1,
    :kind :reusable-theorem,
    :area "explicit-r3-tube-deformation-retraction",
+   :declaration
+   "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeight_signedImaginaryWaypoint_properties",
    :depends-on
    [:routes-2026-10-11-t02a03-real-endpoints-zero-height-core-normals-topo2-r1],
    :current-residual
