@@ -1521,6 +1521,33 @@ theorem shearY_productionConnecting_naturality (a b : ℤ) :
   rw [productionConnecting_naturality]
   rw [shearY_productionUnionMap]
 
+noncomputable def frozenConnectingCoordinate :
+    AddCommGrpCat.of ℤ ⟶
+      ((AddCommGrpCat.of ℤ) ⊞ (AddCommGrpCat.of ℤ)) :=
+  frozenTorusH2GroupIsoInt.inv ≫
+    productionConnecting frozenYCover.U frozenYCover.V
+      frozenYCover.U_isOpen frozenYCover.V_isOpen
+      frozenYCover.union_eq_univ 1 ≫
+    frozenOverlapH1IsoIntBiprod.hom
+
+theorem shearY_frozenConnectingCoordinate_naturality (a b : ℤ) :
+    (frozenTorusH2GroupIsoInt.inv ≫
+        HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularSubdivision.singularPostcomposition
+            (shearY a b)) 2 ≫
+        frozenTorusH2GroupIsoInt.hom) ≫ frozenConnectingCoordinate =
+      frozenConnectingCoordinate ≫ overlapScalar a := by
+  rw [frozenConnectingCoordinate, ← shearY_overlap_coordinate,
+    shearYOverlapCoordinateMap]
+  slice_lhs 3 5 =>
+    erw [frozenTorusH2GroupIsoInt.hom_inv_id_assoc]
+  slice_rhs 3 5 =>
+    erw [frozenOverlapH1IsoIntBiprod.hom_inv_id_assoc]
+  simpa only [Category.assoc] using congrArg
+    (fun k ↦ frozenTorusH2GroupIsoInt.inv ≫ k ≫
+      frozenOverlapH1IsoIntBiprod.hom)
+    (shearY_productionConnecting_naturality a b).symm
+
 #print axioms frozenTorusH2GroupIsoInt
 #print axioms frozenYCover
 #print axioms frozenYCoverUHomeomorph
@@ -1608,5 +1635,7 @@ theorem shearY_productionConnecting_naturality (a b : ℤ) :
 #print axioms shearY_overlap_coordinate_of_degree_components
 #print axioms shearY_overlap_coordinate
 #print axioms shearY_productionConnecting_naturality
+#print axioms frozenConnectingCoordinate
+#print axioms shearY_frozenConnectingCoordinate_naturality
 
 end ConstructionTargets.T97A04Closure
