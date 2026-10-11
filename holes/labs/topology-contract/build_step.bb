@@ -16,8 +16,12 @@
 (def items (:items data))
 (def ids (map :id items))
 (def by-id (into {} (map (juxt :id identity) items)))
-(def priority {:uptake 0 :final-adapter 1 :representation-comparison 2
-               :reusable-theorem 3 :consumer-closure 4 :documentation 5})
+;; Closure first (Joe, 2026-10-10: "lemma work should lead to closures").
+;; :consumer-closure ranked 4, below :reusable-theorem, so on 2026-10-11 the
+;; t99J01 closure probe sat open behind a stream of polygon lemma rows after
+;; its route was complete.
+(def priority {:consumer-closure -1 :uptake 0 :final-adapter 1 :representation-comparison 2
+               :reusable-theorem 3 :documentation 5})
 (def max-stops (parse-long (or (System/getenv "TOPOLOGY_MAX_ROW_STOPS") "2")))
 (def max-fails (parse-long (or (System/getenv "TOPOLOGY_MAX_ROW_FAILS") "4")))
 (defn owner-blocked? [idx dependency seen]
