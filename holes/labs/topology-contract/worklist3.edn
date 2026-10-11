@@ -10305,99 +10305,190 @@
    "Use the banked cokernel projection naturalities to align integralTransportHomologyComposite with coefficientLocalForwardComposite and the ambient chart/model endpoint, then compare the connecting, radial, and sphere normalizations to exclude negation.",
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
+   :implements-lemma :lemma-mfclass-transport-projection-align-v2,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+   :dag-node
+   "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/transport-projection-alignment",
+   :acceptance
+   {:implementation
+    "Promote the exact fixture theorem. Rewrite integralTransportHomologyComposite back to homology of the transported chain comparison and apply integralRelativeHomologyComparisonWithTransport_projection. Do not expand coefficientLocalForwardComposite, cancel the remaining chart or model factors, exclude negation, select a sign, or construct a fundamental class.",
+    :declaration
+    "ConstructionTargets.ManifoldFundamentalClass.coefficientProjection_comp_integralTransportHomologyComposite",
+    :type
+    "forall {X : Type} [TopologicalSpace X] (A : Set X) (n : Nat), forgetIntModules.map (HomologicalComplex.homologyMap (cokernel.π (CoefficientRelativeSmall.subspaceMap Int A)) n) ≫ (((CoefficientRelativeSmall.relativeChains Int A).sc n).mapHomologyIso forgetIntModules).inv ≫ integralTransportHomologyComposite A n = (((CoefficientH0.SingularChains Int (TopCat.of X)).sc n).mapHomologyIso forgetIntModules).inv ≫ HomologicalComplex.homologyMap (singularChainsComparison (TopCat.of X)).hom n ≫ HomologicalComplex.homologyMap (relativeSingularProjection A) n",
+    :fixture
+    "/tmp/manifold_fundamental_class_transport_composite_projection.lean",
+    :fixture-sha256
+    "3a2614952432e17aaacca0a063a1567c6d6c2cd18a22e980eea8ae7a676300e3",
+    :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
+    :route-step
+    "cancel the coefficient relative projection and inverse homology-preservation prefix against the transported comparison, exposing the production singular-chain comparison and relative projection"},
+   :representation
+   {:source
+    "The coefficient relative cokernel projection followed by inverse coefficient homology preservation and the explicit transported-comparison homology composite",
+    :target
+    "Inverse absolute-chain homology preservation followed by the integral singular-chain comparison and the production relative singular projection",
+    :direction
+    "Exact morphism equality from the coefficient cokernel-and-transport representation to the production absolute-comparison-and-relative-projection representation"},
+   :id
+   :routes-2026-10-11-manifold-transport-projection-alignment-topo3-r3,
+   :kind :representation-comparison,
+   :area "manifold-fundamental-class",
+   :depends-on
+   [:routes-2026-10-10-topo3-seed-checkpoint-1
+    :routes-2026-10-10-manifold-local-positive-excision-topo3-r1
+    :routes-2026-10-10-manifold-oriented-overlap-coherence-topo3-r1
+    :routes-2026-10-10-manifold-connected-overlap-unit-topo3-r1
+    :routes-2026-10-10-manifold-oriented-connected-overlap-topo3-r1
+    :routes-2026-10-10-manifold-integral-transition-sign-topo3-r1
+    :routes-2026-10-10-manifold-exclude-negative-transition-topo3-r1
+    :routes-2026-10-10-manifold-global-generator-topo3-r1
+    :routes-2026-10-10-manifold-localization-iso-generator-topo3-r1
+    :routes-2026-10-10-manifold-generator-map-isiso-topo3-r1
+    :routes-2026-10-10-manifold-localization-map-naturality-topo3-r1
+    :routes-2026-10-10-manifold-localization-apply-naturality-topo3-r1
+    :routes-2026-10-10-manifold-group-global-generator-topo3-r1
+    :routes-2026-10-10-manifold-group-generator-naturality-topo3-r1
+    :routes-2026-10-10-manifold-global-local-generator-transport-topo3-r1
+    :routes-2026-10-11-manifold-basepoint-localization-coefficient-topo3-r1
+    :routes-2026-10-11-manifold-local-generator-coefficient-unique-topo3-r1
+    :routes-2026-10-11-manifold-localization-coefficient-one-topo3-r1
+    :routes-2026-10-11-manifold-distinguished-chart-generator-topo3-r1
+    :routes-2026-10-11-manifold-integral-subtype-chain-naturality-topo3-r1
+    :routes-2026-10-11-manifold-integral-mapped-relative-cokernel-topo3-r1
+    :routes-2026-10-11-manifold-forget-relative-cokernel-topo3-r1
+    :routes-2026-10-11-manifold-integral-relative-chains-comparison-topo3-r1
+    :routes-2026-10-11-manifold-integral-relative-homology-comparison-topo3-r1
+    :routes-2026-10-11-manifold-ambient-local-normalization-topo3-r1
+    :routes-2026-10-11-manifold-generator-transport-of-normalization-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-subspace-map-equality-topo3-r1
+    :routes-2026-10-11-manifold-integral-direct-cokernel-projection-topo3-r1
+    :routes-2026-10-11-manifold-forget-cokernel-projection-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-integral-cokernel-transport-topo3-r1
+    :routes-2026-10-11-manifold-integral-composite-cokernel-projection-topo3-r1
+    :routes-2026-10-11-manifold-production-cokernel-projection-topo3-r1
+    :routes-2026-10-11-manifold-integral-composite-relative-projection-topo3-r1
+    :routes-2026-10-11-manifold-relative-chains-comparison-with-transport-topo3-r1
+    :routes-2026-10-11-manifold-relative-homology-comparison-with-transport-topo3-r1
+    :routes-2026-10-11-manifold-corrected-homology-projection-topo3-r1
+    :routes-2026-10-11-manifold-corrected-homology-comparison-hom-topo3-r1
+    :routes-2026-10-11-manifold-relative-projection-homology-preservation-topo3-r1
+    :routes-2026-10-11-manifold-packaged-homology-projection-topo3-r1
+    :routes-2026-10-11-manifold-corrected-generator-normalization-topo3-r1
+    :routes-2026-10-11-manifold-normalization-from-corrected-generator-topo3-r1
+    :routes-2026-10-11-manifold-corrected-local-generator-coefficient-topo3-r1
+    :routes-2026-10-11-manifold-corrected-local-generator-unit-topo3-r1
+    :routes-2026-10-11-manifold-corrected-local-generator-sign-topo3-r1
+    :routes-2026-10-11-manifold-corrected-local-generator-nonnegative-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-one-from-corrected-normalization-topo3-r1
+    :routes-2026-10-11-manifold-corrected-generator-of-coefficient-one-topo3-r1
+    :routes-2026-10-11-manifold-corrected-normalization-of-coefficient-one-topo3-r1
+    :routes-2026-10-11-manifold-corrected-normalization-of-nonnegative-topo3-r1
+    :routes-2026-10-11-manifold-corrected-coefficient-one-of-ne-neg-one-topo3-r1
+    :routes-2026-10-11-manifold-corrected-coefficient-automorphism-one-topo3-r1
+    :routes-2026-10-11-manifold-corrected-automorphism-neg-iff-topo3-r1
+    :routes-2026-10-11-manifold-corrected-automorphism-hom-topo3-r1
+    :routes-2026-10-11-manifold-ambient-local-normalization-hom-topo3-r1
+    :routes-2026-10-11-manifold-corrected-automorphism-neg-cancel-coefficient-topo3-r1
+    :routes-2026-10-11-manifold-negative-equation-endpoint-factors-topo3-r1
+    :routes-2026-10-11-manifold-negative-equation-coefficient-factors-topo3-r1
+    :routes-2026-10-11-manifold-negative-equation-corrected-comparison-topo3-r1
+    :routes-2026-10-11-manifold-integral-relative-chains-transport-hom-topo3-r1
+    :routes-2026-10-11-manifold-integral-relative-chains-transport-homology-topo3-r1
+    :routes-2026-10-11-manifold-negative-equation-transport-homology-factors-topo3-r1],
+   :current-residual
+   "Use this projection equality inside the forbidden negative-sign equation, then align the chart, connecting, radial, sphere, and model-normalization factors to rule out negation.",
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-closedorientedfundamentalclass,
    :evidence
    {:probe
     {:residual
-     "Align and cancel the explicit cokernel/presentation factors against the coefficient and ambient chart chains, then compare the connecting, radial, and sphere normalizations to rule out the negative identity.",
+     "Substitute the projection alignment into the forbidden-sign equation and compare the remaining chart, connecting, radial, sphere, and model-normalization factors.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
-     [{:id
-       :lemma-constructiontargets-manifoldfundamentalclass-correctedlocalnormalizationautomorphism-hom-eq-neg-iff-transport-homology-factors,
+     [{:id :lemma-mfclass-transport-projection-align-v2,
        :name
-       "ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_transport_homology_factors",
+       "ConstructionTargets.ManifoldFundamentalClass.coefficientProjection_comp_integralTransportHomologyComposite",
        :type
-       "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), (correctedLocalNormalizationAutomorphism k x).hom = -𝟙 _ <-> (((CoefficientRelativeSmall.relativeChains Int (deletedPoint x)).sc (k + 2)).mapHomologyIso forgetIntModules).inv ≫ integralTransportHomologyComposite (deletedPoint x) (k + 2) ≫ (ambientChartHomologyIso k x).inv ≫ (HigherModelLocalHomology.localIsoInt k).hom = forgetIntModules.map (coefficientLocalForwardComposite k x) ≫ (-𝟙 _)",
+       "forall {X : Type} [TopologicalSpace X] (A : Set X) (n : Nat), forgetIntModules.map (HomologicalComplex.homologyMap (cokernel.π (CoefficientRelativeSmall.subspaceMap Int A)) n) ≫ (((CoefficientRelativeSmall.relativeChains Int A).sc n).mapHomologyIso forgetIntModules).inv ≫ integralTransportHomologyComposite A n = (((CoefficientH0.SingularChains Int (TopCat.of X)).sc n).mapHomologyIso forgetIntModules).inv ≫ HomologicalComplex.homologyMap (singularChainsComparison (TopCat.of X)).hom n ≫ HomologicalComplex.homologyMap (relativeSingularProjection A) n",
        :status :proved,
        :consumers [:t00J02 :t98A02],
        :depends-on
-       ["ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_corrected_comparison_factors"
-        "ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport_homologyMap"],
+       ["ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection"],
        :area "manifold-fundamental-class"}],
      :prerequisite
      {:consumer :t00J02,
-      :implements-lemma
-      :lemma-constructiontargets-manifoldfundamentalclass-correctedlocalnormalizationautomorphism-hom-eq-neg-iff-transport-homology-factors,
+      :implements-lemma :lemma-mfclass-transport-projection-align-v2,
       :phase :implementation,
       :state :open,
       :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
       :dag-node
-      "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/negative-equation-transport-homology-factors",
+      "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/transport-projection-alignment",
       :acceptance
       {:implementation
-       "Promote integralTransportHomologyComposite, integralRelativeChainsComparisonWithTransport_homologyMap_eq_composite, and the exact fixture theorem. Define the composite from the homology maps of the forgotten cokernel comparison, coefficient cokernel transport, mapped cokernel comparison, and inverse production presentation; identify homology of integralRelativeChainsComparisonWithTransport with it using the banked homologyMap theorem, then substitute it into the forbidden-sign equation. Do not expand the four individual factors, compare them with the coefficient/ambient chains, exclude negation, or construct a fundamental class.",
+       "Promote the exact fixture theorem. Rewrite integralTransportHomologyComposite back to homology of the transported chain comparison and apply integralRelativeHomologyComparisonWithTransport_projection. Do not expand coefficientLocalForwardComposite, cancel the remaining chart or model factors, exclude negation, select a sign, or construct a fundamental class.",
        :declaration
-       "ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_transport_homology_factors",
-       :supporting-declarations
-       ["ConstructionTargets.ManifoldFundamentalClass.integralTransportHomologyComposite"
-        "ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport_homologyMap_eq_composite"],
+       "ConstructionTargets.ManifoldFundamentalClass.coefficientProjection_comp_integralTransportHomologyComposite",
        :type
-       "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), (correctedLocalNormalizationAutomorphism k x).hom = -𝟙 _ <-> (((CoefficientRelativeSmall.relativeChains Int (deletedPoint x)).sc (k + 2)).mapHomologyIso forgetIntModules).inv ≫ integralTransportHomologyComposite (deletedPoint x) (k + 2) ≫ (ambientChartHomologyIso k x).inv ≫ (HigherModelLocalHomology.localIsoInt k).hom = forgetIntModules.map (coefficientLocalForwardComposite k x) ≫ (-𝟙 _)",
+       "forall {X : Type} [TopologicalSpace X] (A : Set X) (n : Nat), forgetIntModules.map (HomologicalComplex.homologyMap (cokernel.π (CoefficientRelativeSmall.subspaceMap Int A)) n) ≫ (((CoefficientRelativeSmall.relativeChains Int A).sc n).mapHomologyIso forgetIntModules).inv ≫ integralTransportHomologyComposite A n = (((CoefficientH0.SingularChains Int (TopCat.of X)).sc n).mapHomologyIso forgetIntModules).inv ≫ HomologicalComplex.homologyMap (singularChainsComparison (TopCat.of X)).hom n ≫ HomologicalComplex.homologyMap (relativeSingularProjection A) n",
        :fixture
-       "/tmp/manifold_fundamental_class_negative_equation_transport_homology_factors.lean",
+       "/tmp/manifold_fundamental_class_transport_composite_projection.lean",
        :fixture-sha256
-       "f72fef7e0392622c220370a6f4d4c6b71ccf258190830c67f7a4add2c717aa26",
+       "3a2614952432e17aaacca0a063a1567c6d6c2cd18a22e980eea8ae7a676300e3",
        :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
        :route-step
-       "substitute the four-factor transported-comparison homology composite into the forbidden negative-sign equation"},
+       "cancel the coefficient relative projection and inverse homology-preservation prefix against the transported comparison, exposing the production singular-chain comparison and relative projection"},
       :representation
       {:source
-       "The forbidden negative-sign equation containing homologyMap of the packaged transported integral chain comparison",
+       "The coefficient relative cokernel projection followed by inverse coefficient homology preservation and the explicit transported-comparison homology composite",
        :target
-       "The same equation containing integralTransportHomologyComposite between inverse homology preservation and the ambient chart/model normalization",
+       "Inverse absolute-chain homology preservation followed by the integral singular-chain comparison and the production relative singular projection",
        :direction
-       "Logical equivalence from the packaged transported-comparison homology representation to the explicit four-factor cokernel-and-presentation homology representation"},
+       "Exact morphism equality from the coefficient cokernel-and-transport representation to the production absolute-comparison-and-relative-projection representation"},
       :id
-      :routes-2026-10-11-manifold-negative-equation-transport-homology-factors-topo3-r1,
+      :routes-2026-10-11-manifold-transport-projection-alignment-topo3-r3,
       :kind :representation-comparison,
       :area "manifold-fundamental-class",
       :depends-on
       [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
-       :routes-2026-10-11-manifold-negative-equation-corrected-comparison-topo3-r1
-       :routes-2026-10-11-manifold-integral-relative-chains-transport-homology-topo3-r1],
+       :routes-2026-10-11-manifold-negative-equation-transport-homology-factors-topo3-r1
+       :routes-2026-10-11-manifold-integral-composite-relative-projection-topo3-r1],
       :current-residual
-      "Use the banked cokernel projection naturalities to align integralTransportHomologyComposite with coefficientLocalForwardComposite and the ambient chart/model endpoint, then compare the connecting, radial, and sphere normalizations to exclude negation.",
+      "Use this projection equality inside the forbidden negative-sign equation, then align the chart, connecting, radial, sphere, and model-normalization factors to rule out negation.",
       :other-consumers [:t98A02]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake env lean /tmp/manifold_fundamental_class_negative_equation_transport_homology_factors.lean",
+       "lake env lean /tmp/manifold_fundamental_class_transport_composite_projection.lean",
        :exit 0,
        :output
-       "integralRelativeChainsComparisonWithTransport_homologyMap_eq_composite and correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_transport_homology_factors compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "coefficientProjection_comp_integralTransportHomologyComposite compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/manifold_fundamental_class_negative_equation_transport_homology_factors.lean",
+       "sha256sum /tmp/manifold_fundamental_class_transport_composite_projection.lean",
        :exit 0,
        :output
-       "f72fef7e0392622c220370a6f4d4c6b71ccf258190830c67f7a4add2c717aa26  /tmp/manifold_fundamental_class_negative_equation_transport_homology_factors.lean"}
+       "3a2614952432e17aaacca0a063a1567c6d6c2cd18a22e980eea8ae7a676300e3  /tmp/manifold_fundamental_class_transport_composite_projection.lean"}
       {:cmd
-       "if rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/manifold_fundamental_class_negative_equation_transport_homology_factors.lean; then exit 1; else exit 0; fi",
+       "! rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/manifold_fundamental_class_transport_composite_projection.lean",
        :exit 0}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
      :fixture
      {:path
-      "/tmp/manifold_fundamental_class_negative_equation_transport_homology_factors.lean",
+      "/tmp/manifold_fundamental_class_transport_composite_projection.lean",
       :sha256
-      "f72fef7e0392622c220370a6f4d4c6b71ccf258190830c67f7a4add2c717aa26"},
+      "3a2614952432e17aaacca0a063a1567c6d6c2cd18a22e980eea8ae7a676300e3"},
      :finding
-     "The forbidden negative-sign equation now has no packaged relative comparison remaining: its production side is inverse homology preservation, the explicit four-factor cokernel/presentation homology composite, inverse ambient chart homology, and the higher-model normalization. Its coefficient side is the concrete six-factor coefficient chart composite followed by negation. The next work must use the established projection naturalities to cancel the presentation machinery and expose the actual connecting, radial, and sphere normalization discrepancy.",
+     "The compiled prerequisite cancels the first presentation layer of the explicit transported comparison against the coefficient projection. The previous admission failure was an identifier collision caused by a truncated generated ID for a supporting theorem; this receipt uses the short unique lemma ID lemma-mfclass-transport-projection-align-v2 and records only the already-banked projection theorem as its DAG dependency.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -10472,7 +10563,8 @@
     :routes-2026-10-11-manifold-negative-equation-corrected-comparison-topo3-r1
     :routes-2026-10-11-manifold-integral-relative-chains-transport-hom-topo3-r1
     :routes-2026-10-11-manifold-integral-relative-chains-transport-homology-topo3-r1
-    :routes-2026-10-11-manifold-negative-equation-transport-homology-factors-topo3-r1],
+    :routes-2026-10-11-manifold-negative-equation-transport-homology-factors-topo3-r1
+    :routes-2026-10-11-manifold-transport-projection-alignment-topo3-r3],
    :current-residual
    "Local-degree counts and wild-ball complement homology remain.",
    :other-consumers [:t98A02]}
@@ -14093,6 +14185,29 @@
    :depends-on
    [:lemma-constructiontargets-manifoldfundamentalclass-correctedlocalnormalizationautomorphism-hom-eq-neg-iff-corrected-comparison-factors
     :lemma-constructiontargets-manifoldfundamentalclass-integralrelativechainscomparisonwithtransport-homologymap],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFundamentalClass.coefficientProjection_comp_integralTransportHomologyComposite",
+    :type
+    "forall {X : Type} [TopologicalSpace X] (A : Set X) (n : Nat), forgetIntModules.map (HomologicalComplex.homologyMap (cokernel.π (CoefficientRelativeSmall.subspaceMap Int A)) n) ≫ (((CoefficientRelativeSmall.relativeChains Int A).sc n).mapHomologyIso forgetIntModules).inv ≫ integralTransportHomologyComposite A n = (((CoefficientH0.SingularChains Int (TopCat.of X)).sc n).mapHomologyIso forgetIntModules).inv ≫ HomologicalComplex.homologyMap (singularChainsComparison (TopCat.of X)).hom n ≫ HomologicalComplex.homologyMap (relativeSingularProjection A) n"},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFundamentalClass.coefficientProjection_comp_integralTransportHomologyComposite",
+    :reported-by
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    :type
+    "forall {X : Type} [TopologicalSpace X] (A : Set X) (n : Nat), forgetIntModules.map (HomologicalComplex.homologyMap (cokernel.π (CoefficientRelativeSmall.subspaceMap Int A)) n) ≫ (((CoefficientRelativeSmall.relativeChains Int A).sc n).mapHomologyIso forgetIntModules).inv ≫ integralTransportHomologyComposite A n = (((CoefficientH0.SingularChains Int (TopCat.of X)).sc n).mapHomologyIso forgetIntModules).inv ≫ HomologicalComplex.homologyMap (singularChainsComparison (TopCat.of X)).hom n ≫ HomologicalComplex.homologyMap (relativeSingularProjection A) n",
+    :area "manifold-fundamental-class",
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+   :id :lemma-mfclass-transport-projection-align-v2,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-manifoldfundamentalclass-integralrelativehomologycomparisonwithtransport-projection],
    :other-consumers [:t98A02]}],
  :consumer-baselines {},
  :statuses
