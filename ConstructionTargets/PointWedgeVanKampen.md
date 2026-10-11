@@ -255,3 +255,9 @@ The middle component is now evaluated at the object level by
 coordinate-span glue component at the image of the explicit overlap base
 under the overlap equivalence.  The remaining calculation is that coordinate
 glue and the two outer comparison components, followed by the literal lifts.
+
+At the explicit overlap representative this transported object is now reduced
+to the unique object of `FundamentalGroupoid Unit` by
+`genericPointWedgeIdentityCoordinateWhiskeredGlue_app_eq_unitBase`.  Thus the
+middle calculation has a fixed unit-base component; its connector expansion
+and the two outer comparison components remain.
