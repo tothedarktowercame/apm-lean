@@ -813,6 +813,23 @@ theorem coefficientPairInclusion_mapLeftHomologyIso_naturality
   dsimp only
   exact ShortComplex.mapLeftHomologyIso_inv_naturality _ _
 
+/-- Inverse right-homology preservation is natural for the coefficient
+subspace inclusion. -/
+theorem coefficientPairInclusion_mapRightHomologyIso_naturality
+    {X : Type} [TopologicalSpace X] (A : Set X) (n : ℕ) :
+    let φ := CoefficientRelativeSmall.subspaceMap ℤ A
+    let ψ := (HomologicalComplex.shortComplexFunctor (ModuleCat ℤ)
+      (ComplexShape.down ℕ) n).map φ
+    forgetIntModules.map (ShortComplex.rightHomologyMap ψ) ≫
+        (((CoefficientH0.SingularChains ℤ (TopCat.of X)).sc n).mapRightHomologyIso
+          forgetIntModules).inv =
+      (((CoefficientH0.SingularChains ℤ (TopCat.of A)).sc n).mapRightHomologyIso
+          forgetIntModules).inv ≫
+        ShortComplex.rightHomologyMap
+          (forgetIntModules.mapShortComplex.map ψ) := by
+  dsimp only
+  exact ShortComplex.mapRightHomologyIso_inv_naturality _ _
+
 /-- The corrected relative-homology comparison intertwines the coefficient
 absolute-to-relative map with the production relative projection. -/
 theorem integralRelativeHomologyComparisonWithTransport_projection
@@ -1773,6 +1790,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientPairInclusion_mapCyclesIso_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientPairInclusion_mapOpcyclesIso_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientPairInclusion_mapLeftHomologyIso_naturality
+#print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientPairInclusion_mapRightHomologyIso_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
