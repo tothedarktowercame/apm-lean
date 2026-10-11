@@ -1325,6 +1325,39 @@ noncomputable def forgetHomologyRowHom
     comm₁₂ := forgetHomologyMap_naturality K.f i
     comm₂₃ := forgetHomologyMap_naturality K.g i }
 
+/-- Naturality of the comparison from forgotten coefficient opcycles to the
+opcycles of the forgotten complex. -/
+theorem forgetOpcyclesMap_naturality
+    {ι : Type} {c : ComplexShape ι}
+    {K₁ K₂ : HomologicalComplex (ModuleCat ℤ) c} (f : K₁ ⟶ K₂) (i : ι) :
+    ((K₁.sc i).mapOpcyclesIso forgetIntModules).inv ≫
+        HomologicalComplex.opcyclesMap
+          ((forgetIntModules.mapHomologicalComplex c).map f) i =
+      forgetIntModules.map (HomologicalComplex.opcyclesMap f i) ≫
+        ((K₂.sc i).mapOpcyclesIso forgetIntModules).inv :=
+  (ShortComplex.mapOpcyclesIso_inv_naturality
+    ((HomologicalComplex.shortComplexFunctor (ModuleCat ℤ) c i).map f)
+      forgetIntModules).symm
+
+abbrev ForgottenOpcyclesRowHom
+    {ι : Type} {c : ComplexShape ι}
+    (K : ShortComplex (HomologicalComplex (ModuleCat ℤ) c)) (i : ι) : Type _ :=
+    ((HomologicalComplex.opcyclesFunctor (ModuleCat ℤ) c i).mapShortComplex.obj K).map
+        forgetIntModules ⟶
+      (HomologicalComplex.opcyclesFunctor AddCommGrpCat c i).mapShortComplex.obj
+        (K.map (forgetIntModules.mapHomologicalComplex c))
+
+/-- The three component opcycles comparisons form a morphism of rows. -/
+noncomputable def forgetOpcyclesRowHom
+    {ι : Type} {c : ComplexShape ι}
+    (K : ShortComplex (HomologicalComplex (ModuleCat ℤ) c)) (i : ι) :
+    ForgottenOpcyclesRowHom K i :=
+  { τ₁ := ((K.X₁.sc i).mapOpcyclesIso forgetIntModules).inv
+    τ₂ := ((K.X₂.sc i).mapOpcyclesIso forgetIntModules).inv
+    τ₃ := ((K.X₃.sc i).mapOpcyclesIso forgetIntModules).inv
+    comm₁₂ := forgetOpcyclesMap_naturality K.f i
+    comm₂₃ := forgetOpcyclesMap_naturality K.g i }
+
 /-- The corrected relative-homology comparison intertwines the coefficient
 absolute-to-relative map with the production relative projection. -/
 theorem integralRelativeHomologyComparisonWithTransport_projection
@@ -2308,6 +2341,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetSnakeCokernelLimit
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetSnakeInput
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetHomologyRowHom
+#print axioms ConstructionTargets.ManifoldFundamentalClass.forgetOpcyclesRowHom
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
