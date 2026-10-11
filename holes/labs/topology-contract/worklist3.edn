@@ -11407,6 +11407,23 @@
      "The same equality with the production and coefficient connecting maps, radial-normalization homology maps, and sphere normalizations exposed in order",
      :direction
      "Forward implication from the packaged prefix/model forbidden-sign equality to its exact connecting-radial-sphere factor representation"},
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791705621031-4691-a249ae9e",
+     :commands
+     ["rg ledger row and frozen contract"
+      "git show and git diff-tree recorded commit"
+      "git blob identity and git diff --check"
+      "sha256sum frozen fixture"
+      "lake env lean collision-renamed frozen-fixture replay"
+      "lake env lean target module"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"
+      "python3 scripts/statement-registry.py check"
+      "placeholder and axiom scan"
+      "consumer placeholder census"],
+     :finding
+     "PASS: independent review of commit 4f403786; scope is exactly ConstructionTargets/ManifoldFundamentalClass.lean and the recorded blob matches the checkout; fixture SHA-256 and registered statement hash match; the supporting declarations expose and identify the forgotten coefficient connecting-radial-sphere normalization, and the frozen theorem has the required packaged-to-factorized forward orientation without identifying chart prefixes, comparing individual model maps, excluding negation, selecting a sign, or constructing a fundamental class; fixture replay, module check, and 8326-job build pass; axioms are exactly propext, Classical.choice, Quot.sound; registry is 131/0; target placeholders are 0 and consumer counts remain 1/1."},
     :commit "4f40378625b7024b7b247c23e78a013660853bca",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -11425,7 +11442,7 @@
     :row :routes-2026-10-11-manifold-negative-model-factors-topo3-r1,
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/negative-model-factorization",
@@ -11627,7 +11644,7 @@
      "The earlier suggestion that the chart prefixes could be equated directly was type-incorrect: they end in different local-model homology objects. The compiled theorem now exposes the required correction. A model comparison between Euclidean punctured local homology and punctured open-disk homology must intertwine the two prefixes and their connecting and radial maps; both sides then reach the same sphere homology normalization, where negation can be excluded.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -15510,7 +15527,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -15527,7 +15544,10 @@
     "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), (correctedLocalNormalizationAutomorphism k x).hom = -𝟙 _ -> productionProjectedChartPrefix k x ≫ singularPairConnecting (puncturedOpenDiskSet (k + 2)) (k + 1) ≫ ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat (k + 1)).obj (AddCommGrpCat.of Int)).map (TopCat.ofHom (radialNormalizeMap (k + 2))) ≫ (SphereHomology.sphereTopHomologyIsoInt (k + 1) (by omega)).hom = coefficientProjectedChartPrefix k x ≫ coefficientModelNormalizationComposite k ≫ (-𝟙 _)",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-negative-model-factors-topo3-r1},
+    :routes-2026-10-11-manifold-negative-model-factors-topo3-r1,
+    :banked-by
+    :routes-2026-10-11-manifold-negative-model-factors-topo3-r1,
+    :banked-commit "4f40378625b7024b7b247c23e78a013660853bca"},
    :id :lemma-mfclass-negative-model-factors,
    :kind :lemma,
    :depends-on
@@ -15538,20 +15558,22 @@
    :other-consumers [:t98A02]}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "ConstructionTargets.HigherModelLocalHomology.comparison"},
    :lemma
    {:name "ConstructionTargets.HigherModelLocalHomology.comparison",
-    :reported-by []},
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/HigherModelLocalHomology.lean"]},
    :id :lemma-constructiontargets-highermodellocalhomology-comparison,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -15559,7 +15581,9 @@
    :lemma
    {:name
     "ConstructionTargets.CoefficientModelLocal.forward_composite",
-    :reported-by []},
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/CoefficientModelLocal.lean"]},
    :id
    :lemma-constructiontargets-coefficientmodellocal-forward-composite,
    :kind :lemma,
@@ -15567,11 +15591,14 @@
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance {:lemma "HigherModelLocalHomology.comparison"},
    :lemma
-   {:name "HigherModelLocalHomology.comparison", :reported-by []},
+   {:name "HigherModelLocalHomology.comparison",
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/HigherModelLocalHomology.lean"]},
    :id :lemma-highermodellocalhomology-comparison,
    :kind :lemma,
    :depends-on [],
