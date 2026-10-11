@@ -1111,6 +1111,68 @@ noncomputable def twoCircleH1IsoIntBiprod :
       Circle Circle 1 ≪≫
     biprod.mapIso circleH1GroupIsoInt circleH1GroupIsoInt
 
+/-- The left topological summand inclusion is the left injection in the
+integral two-circle coordinate. -/
+theorem circleSumInl_H1_coordinate :
+    circleH1GroupIsoInt.inv ≫
+        HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularSubdivision.singularPostcomposition
+            circleSumInl) 1 ≫
+        twoCircleH1IsoIntBiprod.hom = biprod.inl := by
+  rw [twoCircleH1IsoIntBiprod, Iso.trans_hom]
+  have h := ConstructionTargets.TopologicalSumSingularHomology.sumInl_homologyMap_comp_iso_hom
+    Circle Circle 1
+  change HomologicalComplex.homologyMap
+      (closureChains.map (TopCat.toSSet.map
+        (ConstructionTargets.TopologicalSumSingularHomology.sumInl
+          Circle Circle))) 1 ≫ _ = _ at h
+  have hmap : HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularSubdivision.singularPostcomposition
+          circleSumInl) 1 =
+      HomologicalComplex.homologyMap
+        (closureChains.map (TopCat.toSSet.map
+          (ConstructionTargets.TopologicalSumSingularHomology.sumInl
+            Circle Circle))) 1 := by rfl
+  change circleH1GroupIsoInt.inv ≫ _ ≫ _ ≫ _ = _
+  rw [hmap]
+  calc
+    _ = circleH1GroupIsoInt.inv ≫ biprod.inl ≫
+        (biprod.mapIso circleH1GroupIsoInt circleH1GroupIsoInt).hom :=
+      congrArg (fun k ↦ circleH1GroupIsoInt.inv ≫ k ≫
+        (biprod.mapIso circleH1GroupIsoInt circleH1GroupIsoInt).hom) h
+    _ = _ := by simp
+
+/-- The right topological summand inclusion is the right injection in the
+integral two-circle coordinate. -/
+theorem circleSumInr_H1_coordinate :
+    circleH1GroupIsoInt.inv ≫
+        HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularSubdivision.singularPostcomposition
+            circleSumInr) 1 ≫
+        twoCircleH1IsoIntBiprod.hom = biprod.inr := by
+  rw [twoCircleH1IsoIntBiprod, Iso.trans_hom]
+  have h := ConstructionTargets.TopologicalSumSingularHomology.sumInr_homologyMap_comp_iso_hom
+    Circle Circle 1
+  change HomologicalComplex.homologyMap
+      (closureChains.map (TopCat.toSSet.map
+        (ConstructionTargets.TopologicalSumSingularHomology.sumInr
+          Circle Circle))) 1 ≫ _ = _ at h
+  have hmap : HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularSubdivision.singularPostcomposition
+          circleSumInr) 1 =
+      HomologicalComplex.homologyMap
+        (closureChains.map (TopCat.toSSet.map
+          (ConstructionTargets.TopologicalSumSingularHomology.sumInr
+            Circle Circle))) 1 := by rfl
+  change circleH1GroupIsoInt.inv ≫ _ ≫ _ ≫ _ = _
+  rw [hmap]
+  calc
+    _ = circleH1GroupIsoInt.inv ≫ biprod.inr ≫
+        (biprod.mapIso circleH1GroupIsoInt circleH1GroupIsoInt).hom :=
+      congrArg (fun k ↦ circleH1GroupIsoInt.inv ≫ k ≫
+        (biprod.mapIso circleH1GroupIsoInt circleH1GroupIsoInt).hom) h
+    _ = _ := by simp
+
 /-- The production overlap endpoint written in the fixed integral
 two-component coordinate. -/
 noncomputable def shearYOverlapCoordinateMap (a b : ℤ) :
@@ -1243,6 +1305,8 @@ theorem shearY_overlap_coordinate_of_degree_components (a b : ℤ)
 #print axioms shearYOverlap_H1_boundary_transport
 #print axioms boundaryOverlapShear_H1_twoCircle_transport
 #print axioms twoCircleH1IsoIntBiprod
+#print axioms circleSumInl_H1_coordinate
+#print axioms circleSumInr_H1_coordinate
 #print axioms shearYOverlapCoordinateMap
 #print axioms shearYOverlapCoordinateMap_eq_twoCircle
 #print axioms shearY_overlap_coordinate_of_injections
