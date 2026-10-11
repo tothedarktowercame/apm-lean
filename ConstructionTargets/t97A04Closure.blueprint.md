@@ -67,7 +67,7 @@ transport of `BoundaryTorusOpenCover.leftOpen/rightOpen`
 uses: B1, `BoundaryTorusOpenCover.leftOpen`,
 `BoundaryTorusOpenCover.rightOpen`
 
-status: planned
+status: proved f02c84291c365d962ac52edce7e34b0ea744f3f1
 
 Take the cover in the second coordinate: under the canonical AddCircle-to-
 Circle homeomorphism it is exactly the banked boundary-torus cover.  Record
