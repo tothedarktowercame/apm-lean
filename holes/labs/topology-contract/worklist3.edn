@@ -9973,6 +9973,24 @@
      "The composite of the homology maps of the forgotten relative cokernel comparison, coefficient cokernel transport, mapped relative cokernel comparison, and inverse production presentation",
      :direction
      "Exact morphism equality from homology of the packaged chain comparison to the ordered composite of homology maps of its four concrete factors"},
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791700548831-4503-76bcc13b",
+     :commands
+     ["git show and git diff-tree recorded commit scope"
+      "git blob identity check"
+      "sha256sum frozen fixture"
+      "recompute frozen statement sha256"
+      "git diff --check recorded commit"
+      "lake env lean renamed frozen-fixture replay"
+      "lake env lean target module"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"
+      "placeholder and axiom scan"
+      "python3 scripts/statement-registry.py check"
+      "consumer placeholder census"],
+     :finding
+     "PASS: recorded commit d6a16302 changes only the target module and its blob matches the reviewed checkout; frozen fixture hash 07c1e7fcaae57213d5103c415e64b9ad3365f72623d4b48f32df63116e826c6e and frozen statement hash a6b2880973aed8c4f68a375afc16d5d806110763c5ef8c18dc7bcc02b4b2c8e0 both match. The theorem proves the exact registered equality from homology of the packaged transported chain comparison to the ordered composite of homology maps of its four concrete factors, using the banked hom factorization and homologyMap_comp. It preserves factor order and does not expand individual factors, compare them with coefficientLocalForwardComposite, exclude negation, or construct a fundamental class. Renamed fixture replay, target elaboration, and Lake build pass; axioms are exactly propext, Classical.choice, Quot.sound; registry is 131/0; target placeholders are 0 and consumer baselines t00J02/t98A02 remain 1/1."},
     :commit "d6a1630220e70b304b0e845d5d3dc08e0af9a9b0",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -9991,7 +10009,7 @@
     :routes-2026-10-11-manifold-integral-relative-chains-transport-homology-topo3-r1,
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/transported-chain-comparison-homology-factorization",
@@ -10177,7 +10195,7 @@
      "The transported chain comparison has now been distributed through homology into four separately addressable maps. The next prerequisite can substitute this theorem into the negative-sign equation and use the banked projection naturalities to align the cokernel maps with the coefficient chart and production relative chains. The remaining sign is then confined to the concrete connecting, radial, and sphere normalizations.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -13816,7 +13834,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -13833,7 +13851,10 @@
     "forall {X : Type} [TopologicalSpace X] (A : Set X) (n : Nat), HomologicalComplex.homologyMap (integralRelativeChainsComparisonWithTransport A).hom n = HomologicalComplex.homologyMap (forgetIntegralRelativeCokernelComparison A).hom n ≫ HomologicalComplex.homologyMap (coefficientIntegralCokernelTransport A).hom n ≫ HomologicalComplex.homologyMap (integralMappedRelativeCokernelComparison A).hom n ≫ HomologicalComplex.homologyMap (relativeSingularChainsIsoCokernelSubspaceMap A).inv n",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-integral-relative-chains-transport-homology-topo3-r1},
+    :routes-2026-10-11-manifold-integral-relative-chains-transport-homology-topo3-r1,
+    :banked-by
+    :routes-2026-10-11-manifold-integral-relative-chains-transport-homology-topo3-r1,
+    :banked-commit "d6a1630220e70b304b0e845d5d3dc08e0af9a9b0"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-integralrelativechainscomparisonwithtransport-homologymap,
    :kind :lemma,
