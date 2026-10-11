@@ -7071,6 +7071,23 @@
       :result
       "unrelated holes/labs/topology-contract/worklist.edn.tmp untracked; scoped file clean"}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791690591474-4058-669a03df",
+     :commands
+     ["git show and git diff-tree recorded commit scope"
+      "git blob identity check"
+      "sha256sum frozen fixture"
+      "git diff --check recorded commit"
+      "lake env lean renamed frozen-fixture replay"
+      "lake env lean target module"
+      "lake build target module"
+      "placeholder and axiom scan"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped consumer placeholder census"],
+     :finding
+     "PASS: commit edf41fe0 changes only ConstructionTargets/ManifoldFundamentalClass.lean and its recorded blob matches the reviewed tree; frozen fixture hash 1bac6871767bca63b099ee1d609de0c9a5666869d20a3cc8f4ee73a767818667 matches. The theorem has the frozen exhaustive sign-disjunction orientation. It rewrites correctedLocalGeneratorCoefficient through correctedLocalGeneratorCoefficient_eq_unit and applies Int.isUnit_eq_one_or to correctedLocalGeneratorUnit.isUnit, without selecting the positive branch or asserting orientation compatibility, generator transport, or normalization compatibility. Fixture replay and target compile/build pass with only propext, Classical.choice, Quot.sound; registry is 131/0; source and fixture have no placeholders; consumer counts remain t00J02=1 and t98A02=1."},
     :commit "edf41fe0b3251c1dd875d8a21615d5512c7ef5a2",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -7085,7 +7102,7 @@
      "ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient_eq_one_or_neg_one"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/corrected-local-generator-sign",
@@ -7235,7 +7252,7 @@
      "The banked unit representation and Int.isUnit_eq_one_or give a complete sign dichotomy for the corrected local-generator coefficient. This compiles with no additional geometric assumptions. The sole unresolved normalization issue is now exclusion of the negative branch; that requires an orientation-sensitive comparison of the coefficient and production model normalization chains and cannot follow from invertibility or projection naturality alone.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -10291,7 +10308,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -10308,7 +10325,10 @@
     "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), correctedLocalGeneratorCoefficient k x = 1 ∨ correctedLocalGeneratorCoefficient k x = -1",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-corrected-local-generator-sign-topo3-r1},
+    :routes-2026-10-11-manifold-corrected-local-generator-sign-topo3-r1,
+    :banked-by
+    :routes-2026-10-11-manifold-corrected-local-generator-sign-topo3-r1,
+    :banked-commit "edf41fe0b3251c1dd875d8a21615d5512c7ef5a2"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-correctedlocalgeneratorcoefficient-eq-one-or-neg-one,
    :kind :lemma,
