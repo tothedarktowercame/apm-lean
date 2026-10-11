@@ -116,3 +116,10 @@ basepoint.  `genericPointWedgeLegCoordinates_of_mapped` proves that the two
 remaining B3-to-topology comparison equations imply both B6 coordinates.
 Consequently the residual is exactly those two comparison equations, with no
 further normalization or basepoint transport left implicit.
+
+`genericPointWedgeLegCoordinates_iff_mapped` proves the converse as well:
+the two literal B6 equations hold if and only if the unnormalized B5 images
+of the literal legs equal B3's mapped actions.  Injectivity of the explicit
+inner automorphism supplies the reverse direction.  A direct `rfl` check
+confirms this is not definitional; the remaining work must expose the
+comparison isomorphisms in the composed B3 transport.

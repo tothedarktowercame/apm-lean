@@ -795,6 +795,46 @@ theorem genericPointWedgeLegCoordinates_of_mapped
     exact genericPointWedgeCounitNormalization_right
       x₀ y₀ M N hM hN hy hx cM cN g
 
+/-- The literal B6 coordinate equations are equivalent to the two remaining
+B3 mapped-action comparisons; normalization introduces no further condition. -/
+theorem genericPointWedgeLegCoordinates_iff_mapped :
+    ((∀ g : FundamentalGroup X x₀,
+      genericPointWedgeNormalizedFundamentalGroupEquiv
+          x₀ y₀ M N hM hN hy hx cM cN
+          (genericPointWedgeLeftLegMap x₀ y₀ g) =
+        Monoid.Coprod.inl g) ∧
+     (∀ g : FundamentalGroup Y y₀,
+      genericPointWedgeNormalizedFundamentalGroupEquiv
+          x₀ y₀ M N hM hN hy hx cM cN
+          (genericPointWedgeRightLegMap x₀ y₀ g) =
+        Monoid.Coprod.inr g)) ↔
+    ((∀ g : FundamentalGroup X x₀,
+      genericPointWedgeFundamentalGroupEquiv
+          x₀ y₀ M N hM hN hy hx cM cN
+          (genericPointWedgeLeftLegMap x₀ y₀ g) =
+        genericPointWedgeMappedLeft x₀ y₀ M N hM hN hy hx cM cN g) ∧
+     (∀ g : FundamentalGroup Y y₀,
+      genericPointWedgeFundamentalGroupEquiv
+          x₀ y₀ M N hM hN hy hx cM cN
+          (genericPointWedgeRightLegMap x₀ y₀ g) =
+        genericPointWedgeMappedRight x₀ y₀ M N hM hN hy hx cM cN g)) := by
+  constructor
+  · rintro ⟨hleft, hright⟩
+    constructor
+    · intro g
+      apply (genericPointWedgeCounitNormalization
+        x₀ y₀ M N hM hN hy hx cM cN).injective
+      rw [genericPointWedgeCounitNormalization_left]
+      exact hleft g
+    · intro g
+      apply (genericPointWedgeCounitNormalization
+        x₀ y₀ M N hM hN hy hx cM cN).injective
+      rw [genericPointWedgeCounitNormalization_right]
+      exact hright g
+  · rintro ⟨hleft, hright⟩
+    exact genericPointWedgeLegCoordinates_of_mapped
+      x₀ y₀ M N hM hN hy hx cM cN hleft hright
+
 end GenericFundamentalGroupEquivalence
 
 /-- The three-circle model is locally path connected. -/
@@ -1093,5 +1133,6 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeLeftLegMap
 #print axioms genericPointWedgeRightLegMap
 #print axioms genericPointWedgeLegCoordinates_of_mapped
+#print axioms genericPointWedgeLegCoordinates_iff_mapped
 
 end ConstructionTargets.PointWedgeVanKampen
