@@ -195,6 +195,18 @@ names and signatures of supporting declarations -- is yours to design. Pick
 types that make the frozen axiom's type provable, state them in the receipt,
 and implement them. Choosing those signatures is NOT inventing the public API.
 
+FOUNDATION PROGRAMS (Joe, 2026-10-11). A row with `:program true` is a
+multi-job construction of one foundation many problems need. It has no frozen
+fixture: you design every supporting declaration; only the final theorem's
+type in `:acceptance` is fixed. Each job: read `:continue-from` and
+`:program-history`, build on the last commit (never restart), commit what
+compiles (no sorry, standard axioms only), and list each milestone in
+`:missing-theorems` with `:status :proved` once it compiles -- that banks it.
+Return DONE-UNREVIEWED only when the final theorem compiles; otherwise STOP
+with the commit. A reviewed program STOP reopens the row, so stopping is how
+a program job ends, not a failure. Strategy checkpoints may not supersede
+program rows; they may elect rows that consume banked milestones.
+
 EXTEND MATHLIB; DO NOT STOP FOR A MISSING THEOREM (Joe, 2026-10-10). When the
 proof needs a theorem that Mathlib and `ConstructionTargets/` lack -- a
 covering restricted to a path component, a fundamental-domain homeomorphism,

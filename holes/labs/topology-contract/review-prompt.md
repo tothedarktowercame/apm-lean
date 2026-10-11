@@ -26,3 +26,7 @@ End with one single-line `TOPOLOGY_RECEIPT_EDN` map. PASS uses
 `{:outcome :pass :seat "codex-N" :job "invoke-..." :commands [...] :finding "..."}`;
 FAIL uses `{:outcome :fail :seat "codex-N" :job "invoke-..." :finding "exact deterministic defect"}`.
 The supervisor applies and commits the ledger transition.
+
+Program rows (`:program true`): PASS a STOP that commits compiled, sorry-free,
+standard-axiom progress toward the final theorem and lists its milestones;
+FAIL one that commits nothing new since the last `:program-history` entry.

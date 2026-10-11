@@ -113847,7 +113847,34 @@
    :lemma-constructiontargets-singularhomologyconcrete-singularpairshortcomplex-shortexact,
    :kind :lemma,
    :depends-on [],
-   :other-consumers [:t98A02]}],
+   :other-consumers [:t98A02]}
+  {:consumer :t99J01,
+   :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/PointWedgeVanKampen.lean"
+    "ConstructionTargets/PointWedgeVanKampen.md"
+    "ConstructionTargets/ThreeCirclesFundamentalGroup.lean"],
+   :dag-node
+   "notes/closer/pattern-2026-10-11.md: point-wedge van Kampen",
+   :acceptance
+   {:implementation
+    "FOUNDATION PROGRAM (owner, 2026-10-11, from codex-71 closer audits of t99J01). Milestones, each banked by :missing-theorems :status :proved: (1) genericPointWedgeLegCoordinates_vanKampen -- for a point wedge of two path-connected spaces each with a contractible-to-basepoint open neighbourhood of the wedge point, FundamentalGroup ≃* Monoid.Coprod of the pieces (use Mathlib van Kampen if present, else the banked GenericPointWedge*/TwoOpenFreeProduct* modules; do NOT depend on the unproved counit-identity normalisation of row composite-counit-component-identity-91, which is refuted as stated); (2) coprodFreeGroupFinTwoFinOne_equiv : Monoid.Coprod (FreeGroup (Fin 2)) (FreeGroup (Fin 1)) ≃* FreeGroup (Fin 3); (3) threeCircles_locPathConnected (PathConnectedSpace and LocPathConnectedSpace ThreeCircles); (4) final threeCirclesFundamentalGroupEquiv. Expected 300-600 lines over several jobs.",
+    :declaration "threeCirclesFundamentalGroupEquiv",
+    :type
+    "noncomputable def threeCirclesFundamentalGroupEquiv : FundamentalGroup ThreeCircles threeBase ≃* FreeGroup (Fin 3)",
+    :axioms :standard-only,
+    :commands
+    ["lake build ConstructionTargets.PointWedgeVanKampen"
+     "lake build ConstructionTargets.ThreeCirclesFundamentalGroup"
+     "python3 scripts/statement-registry.py check"]},
+   :id :program-2026-10-11-point-wedge-van-kampen,
+   :kind :reusable-theorem,
+   :campaign-priority 50,
+   :depends-on [],
+   :program true,
+   :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",

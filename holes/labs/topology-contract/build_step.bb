@@ -23,6 +23,7 @@
 (def priority {:consumer-closure -1 :uptake 0 :final-adapter 1 :representation-comparison 2
                :reusable-theorem 3 :documentation 5})
 (def max-stops (parse-long (or (System/getenv "TOPOLOGY_MAX_ROW_STOPS") "2")))
+(def program-max-stops (parse-long (or (System/getenv "TOPOLOGY_PROGRAM_MAX_STOPS") "10")))
 (def max-fails (parse-long (or (System/getenv "TOPOLOGY_MAX_ROW_FAILS") "4")))
 (defn owner-blocked? [idx dependency seen]
   (when-not (seen dependency)
@@ -879,15 +880,20 @@
             ;; needed was a ledger edit outside its scope, the reviewer failed
             ;; the stop because there was no commit to review, and :fail sent
             ;; the row back to the same author.
+            ;; Foundation programs (Joe, 2026-10-11: "let's do both"): a row
+            ;; with :program true is a multi-job construction. Its STOPs are
+            ;; checkpoints of progress, not reasons to park: it continues
+            ;; from its last commit up to program-max-stops jobs.
             :stop (replace-item items id #(let [n (inc (or (:stop-count %) 0))]
                                             (-> % (assoc :stop-count n)
-                                                (assoc :state (if (<= max-stops n)
+                                                (assoc :state (if (<= (if (:program %) program-max-stops max-stops) n)
                                                                 :needs-owner
                                                                 :done-unreviewed))
                                                 (assoc :evidence (assoc receipt
                                                                   :author (:seat receipt)
                                                                   :disposition :stop)))))
-            :replan (let [supersede (set (:supersede receipt))
+            ;; program rows are the owner's; a checkpoint cannot supersede them
+            :replan (let [supersede (set (remove #(:program (by-id %)) (:supersede receipt)))
                           replacement-ids (map :id (:replacement-items receipt))
                           conflicts (keep by-id replacement-ids)
                           _ (when (some #(not= :superseded (:state %)) conflicts)
@@ -951,10 +957,21 @@
                                         (< 1 (count all)) (assoc :commits all)))))))
             :pass (replace-item items id #(-> %
                                                 (assoc :state
-                                                       (if (and (= :strategy-checkpoint (:kind %))
-                                                                (= :stop (get-in % [:evidence :outcome])))
+                                                       (cond
+                                                         (and (= :strategy-checkpoint (:kind %))
+                                                              (= :stop (get-in % [:evidence :outcome])))
                                                          :needs-owner
-                                                         :done))
+                                                         ;; a reviewed program STOP continues
+                                                         (and (:program %)
+                                                              (= :stop (get-in % [:evidence :outcome])))
+                                                         :open
+                                                         :else :done))
+                                                (cond-> (and (:program %) (= :stop (get-in % [:evidence :outcome])))
+                                                  (-> (update :program-history (fnil conj [])
+                                                              {:job (:stop-count %) :commit (get-in % [:evidence :commit])
+                                                               :reason (get-in % [:evidence :reason])})
+                                                      (assoc :continue-from (str "Continue this program from its last commit; earlier jobs: :program-history. Last stop: "
+                                                                                 (get-in % [:evidence :reason])))))
                                                 (assoc-in [:evidence :review] receipt)))
             :fail (if (= :strategy-checkpoint (:kind item))
                     (let [rejected-ids (set (map :id
