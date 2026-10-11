@@ -558,6 +558,51 @@ theorem forgetIntegralRelativeCokernelComparison_projection
   unfold forgetIntegralRelativeCokernelComparison
   rw [PreservesCokernel.π_iso_hom]
 
+private abbrev forgottenCoefficientSubtypeMap
+    {X : Type} [TopologicalSpace X] (A : Set X) :=
+  (forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ)).map
+    (CoefficientRelativeSmall.subspaceMap ℤ A)
+
+private abbrev forgottenIntegralSubtypeMap
+    {X : Type} [TopologicalSpace X] (A : Set X) :=
+  (forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ)).map
+    (((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+      (ModuleCat.of ℤ ℤ)).map (integralSubtypeInclusion A))
+
+/-- Canonical transport between the two equal presentations of the forgotten
+integral subtype map at the level of direct cokernels. -/
+noncomputable def coefficientIntegralCokernelTransport
+    {X : Type} [TopologicalSpace X] (A : Set X) :
+    cokernel ((forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ)).map
+      (CoefficientRelativeSmall.subspaceMap ℤ A)) ≅
+    cokernel ((forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ)).map
+      (((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+        (ModuleCat.of ℤ ℤ)).map (integralSubtypeInclusion A))) :=
+  cokernel.mapIso
+    (forgottenCoefficientSubtypeMap A)
+    (forgottenIntegralSubtypeMap A)
+    (Iso.refl _)
+    (Iso.refl _)
+    (by
+      change forgottenCoefficientSubtypeMap A = forgottenIntegralSubtypeMap A
+      exact congrArg
+        (forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ)).map
+        (coefficientSubspaceMap_eq_integralSubtypeChainMap A))
+
+theorem coefficientIntegralCokernelTransport_projection
+    {X : Type} [TopologicalSpace X] (A : Set X) :
+    cokernel.π ((forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ)).map
+      (CoefficientRelativeSmall.subspaceMap ℤ A)) ≫
+      (coefficientIntegralCokernelTransport A).hom =
+    cokernel.π ((forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ)).map
+      (((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+        (ModuleCat.of ℤ ℤ)).map (integralSubtypeInclusion A))) := by
+  unfold coefficientIntegralCokernelTransport
+  rw [cokernel.mapIso_hom]
+  unfold cokernel.map
+  rw [cokernel.π_desc]
+  simp
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -594,3 +639,5 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparison_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralDirectCokernelComparison_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetIntegralRelativeCokernelComparison_projection
+#print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientIntegralCokernelTransport
+#print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientIntegralCokernelTransport_projection
