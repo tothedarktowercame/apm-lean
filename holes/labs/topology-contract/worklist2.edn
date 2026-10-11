@@ -68246,7 +68246,50 @@
   {:bounded-exception
    "single-consumer continuous right-core radial ambient stage with endpoint and frozen tube invariant",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:residual
+     "Implement rightTubeCoreRadialAmbientDeformation_exists in the scoped module; afterward construct the angular stage from circleMeridian(rightTubeMeridianCoordinate p) to its initial endpoint with left-core avoidance, then concatenate the stages.",
+     :outcome :go,
+     :warnings [],
+     :missing-theorems [],
+     :commands
+     [{:cmd "lake env lean /tmp/t02a03_core_radial_ambient_probe.lean",
+       :exit 0,
+       :output
+       "rightTubeCoreRadialAmbientDeformation_exists compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd "sha256sum /tmp/t02a03_core_radial_ambient_probe.lean",
+       :exit 0,
+       :output
+       "fd3ddf402b93e8c42ff3e324d678184b97aeca09f0ed0e84d716f971f66e024e  /tmp/t02a03_core_radial_ambient_probe.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_core_radial_ambient_probe.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}
+      {:cmd
+       "rg -n 'rightTubeCoreRadialAmbientDeformation_exists' /tmp/t02a03_core_radial_ambient_probe.lean",
+       :exit 0,
+       :output
+       "9:theorem rightTubeCoreRadialAmbientDeformation_exists :\n39:#print axioms rightTubeCoreRadialAmbientDeformation_exists"}],
+     :fixture
+     {:path "/tmp/t02a03_core_radial_ambient_probe.lean",
+      :sha256
+      "fd3ddf402b93e8c42ff3e324d678184b97aeca09f0ed0e84d716f971f66e024e"},
+     :finding
+     "The complete placeholder-free fixture constructs the continuous right-core radial stage, proves its specified initial endpoint and final input endpoint, and proves pointwise membership in the frozen right tube using the interpolated-normal radius bound and the banked polar-reconstruction membership criterion.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+      :declaration
+      "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreRadialAmbientDeformation_exists",
+      :type
+      "exists H : C(unitInterval × RightTubeMinusLeftCore, apm_t02a03_E3), (forall p, H (0,p) = rightTubeCorePolarReconstruction (rightTubeCoreAngularCoordinate p) (rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)))) and (forall p, H (1,p) = p.1) and (forall tp, H tp ∈ apm_t02a03_rightTube)"},
+     :seat "topo-8"}},
+   :phase :implementation,
+   :type
+   "exists H : C(unitInterval × RightTubeMinusLeftCore, apm_t02a03_E3), (forall p, H (0,p) = rightTubeCorePolarReconstruction (rightTubeCoreAngularCoordinate p) (rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)))) and (forall p, H (1,p) = p.1) and (forall tp, H tp ∈ apm_t02a03_rightTube)",
    :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
@@ -68265,6 +68308,8 @@
    :routes-2026-10-11-t02a03-right-tube-core-radial-ambient-topo2-r1,
    :kind :reusable-theorem,
    :area "explicit-r3-tube-deformation-retraction",
+   :declaration
+   "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreRadialAmbientDeformation_exists",
    :depends-on
    [:routes-2026-10-11-t02a03-reconstruction-mem-right-tube-core-polar-topo2-r1],
    :current-residual
