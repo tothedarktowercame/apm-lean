@@ -4834,8 +4834,86 @@
   {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-integralcompositecokernelcomparison-projection,
+   :evidence
+   {:placeholder-delta {:source 0, :fixture 0},
+    :residual
+    "Compose the direct-cokernel comparison with the inverse production relativeSingularChainsIsoCokernelSubspaceMap, prove the corresponding absolute-to-RelativeSingularChains projection equation, then pass that naturality through homology and the normalization chain.",
+    :gates
+    {:exact-type :pass,
+     :module-build :pass,
+     :module-compile :pass,
+     :direct-cokernel-boundary-only :pass,
+     :exact-scope :pass,
+     :statement-registry :pass,
+     :zero-placeholders :pass,
+     :scoped-tree-clean :pass,
+     :successive-rewrites :pass,
+     :fixture-compile :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["lake build replayed pre-existing dependency warnings only"
+     "pre-existing unrelated untracked ConstructionTargets/PolygonBoundaryCompactHausdorffInstances.lean remains untouched"],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.ManifoldFundamentalClass.integralCompositeCokernelComparison_projection",
+      :type
+      "forall {X : Type} [TopologicalSpace X] (A : Set X), (forgetIntModules.mapHomologicalComplex (ComplexShape.down Nat)).map (cokernel.π (CoefficientRelativeSmall.subspaceMap Int A)) ≫ (forgetIntegralRelativeCokernelComparison A).hom ≫ (coefficientIntegralCokernelTransport A).hom ≫ (integralMappedRelativeCokernelComparison A).hom = (singularChainsComparison (TopCat.of X)).hom ≫ cokernel.π (singularSubspaceMap A)",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on
+      ["ConstructionTargets.ManifoldFundamentalClass.forgetIntegralRelativeCokernelComparison_projection"
+       "ConstructionTargets.ManifoldFundamentalClass.coefficientIntegralCokernelTransport_projection"
+       "ConstructionTargets.ManifoldFundamentalClass.integralDirectCokernelComparison_projection"],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :topo-10,
+    :commands
+    [{:cmd
+      "sha256sum /tmp/manifold_fundamental_class_integral_composite_cokernel_projection.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/manifold_fundamental_class_integral_composite_cokernel_projection.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^\\s*axiom\\b' ConstructionTargets/ManifoldFundamentalClass.lean /tmp/manifold_fundamental_class_integral_composite_cokernel_projection.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git status --porcelain", :exit 0}],
+    :diagnostic-history [],
+    :commit "035774a35bdea017e8fa3e3afd5b70f082d17174",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path
+     "/tmp/manifold_fundamental_class_integral_composite_cokernel_projection.lean",
+     :original-sha256
+     "acfa56241ac5b1bf5989a4790bf79d3f0fe0cee22ccb4895fdf57484df9d753a",
+     :sha256
+     "a341585eb9b1a1e73f66d463c05ccfe664ee068eb208ef1a8e1bcee8ed0584a7",
+     :placeholders 0},
+    :implementation
+    {:declaration
+     "ConstructionTargets.ManifoldFundamentalClass.integralCompositeCokernelComparison_projection",
+     :representation
+     {:source
+      "The forgotten coefficient absolute-to-relative projection followed successively by cokernel preservation, coefficient-to-explicit-map transport, and the integral direct-cokernel comparison",
+      :target
+      "The production absolute singularChainsComparison followed by the AddCommGrpCat direct relative-cokernel projection",
+      :direction
+      "Exact chain-map equality from the full forgotten coefficient direct-cokernel composite to the production additive-group direct-cokernel composite, obtained by concatenating the three reviewed projection equations"}},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/integral-composite-cokernel-projection",
@@ -7497,11 +7575,13 @@
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.integralCompositeCokernelComparison_projection",
     :reported-by
-    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+     :routes-2026-10-11-manifold-integral-composite-cokernel-projection-topo3-r1],
     :type
     "forall {X : Type} [TopologicalSpace X] (A : Set X), (forgetIntModules.mapHomologicalComplex (ComplexShape.down Nat)).map (cokernel.π (CoefficientRelativeSmall.subspaceMap Int A)) ≫ (forgetIntegralRelativeCokernelComparison A).hom ≫ (coefficientIntegralCokernelTransport A).hom ≫ (integralMappedRelativeCokernelComparison A).hom = (singularChainsComparison (TopCat.of X)).hom ≫ cokernel.π (singularSubspaceMap A)",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in
+    :routes-2026-10-11-manifold-integral-composite-cokernel-projection-topo3-r1},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-integralcompositecokernelcomparison-projection,
    :kind :lemma,
