@@ -69384,95 +69384,117 @@
    :proof-plan
    "Use the banked endpoint positive-factor theorem for b. Define a as one eighth times (2 plus the meridian real part divided by eight), prove it positive from the Circle real-part lower bound, and rewrite the banked meridian-start factorization by ring normalization."}
   {:bounded-exception
+   "single-consumer positive-factor relation between meridian imaginary part and ambient height",
+   :consumer :t02A03,
+   :phase :probe,
+   :state :open,
+   :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t02A03/meridian-im-positive-factor-height",
+   :acceptance
+   {:probe
+    "Compile rightTubeMeridianCoordinate_im_positiveFactor_height. Express the imaginary part of rightTubeMeridianCoordinate as a strictly positive scalar multiple of the input height, using deletion to justify normalization. Do not prove interpolation nonvanishing or construct an angular path.",
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeMeridianCoordinate_im_positiveFactor_height",
+    :type
+    "forall (p : RightTubeMinusLeftCore), exists c : Real, 0 < c and (rightTubeMeridianCoordinate p : Complex).im = c * p.1 2",
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "supply the height-sign identity for the radial-stage deletion proof"},
+   :id
+   :routes-2026-10-11-t02a03-meridian-im-positive-factor-height-topo2-r1,
+   :kind :reusable-theorem,
+   :area "explicit-r3-tube-deformation-retraction",
+   :depends-on
+   [:routes-2026-10-11-t02a03-collision-endpoint-positive-factor-sign-bridge-topo2-r1],
+   :current-residual
+   "Use this identity to prove the core-normal interpolation has nonzero imaginary part for nonzero-height inputs; handle zero height with the common collision-sign component and safe angular corridor, then assemble both stages.",
+   :other-consumers []}
+  {:bounded-exception
    "single-consumer explicit ambient deformation with frozen tube and deletion invariants",
    :consumer :t02A03,
    :evidence
    {:probe
     {:residual
-     "Bank the common-sign endpoint certificate, then construct and certify the continuous angular path before concatenating it with the radial stage.",
+     "Bank the meridian-height positive-factor identity, then prove nonzero imaginary part throughout the radial interpolation for nonzero-height inputs.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
      [{:name
-       "ConstructionTargets.T02A03GeometricTubeDeformation.collisionEndpoint_positiveFactor_signBridge",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeMeridianCoordinate_im_positiveFactor_height",
        :type
-       "forall (p : RightTubeMinusLeftCore), let m : Complex := rightTubeMeridianCoordinate p; let n0 := rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)); exists a b : Real, 0 < a and 0 < b and ((1-n0.re)^2 - 4*(1-n0.re)*((1 : Circle) : Complex).re + 3 = a*m.re) and ((1-(rightTubeCoreNormalComplex p.1).re)^2 - 4*(1-(rightTubeCoreNormalComplex p.1).re)*(rightTubeCoreAngularCoordinate p : Complex).re + 3 = b*m.re)",
+       "forall (p : RightTubeMinusLeftCore), exists c : Real, 0 < c and (rightTubeMeridianCoordinate p : Complex).im = c * p.1 2",
        :status :proved,
        :consumers [:t02A03],
        :depends-on
-       ["ConstructionTargets.T02A03GeometricTubeDeformation.meridianStart_collisionPolynomial_factor"
-        "ConstructionTargets.T02A03GeometricTubeDeformation.inputCollisionPolynomial_positiveFactor_meridianReal"],
+       ["ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff"],
        :area "explicit-r3-tube-deformation-retraction"}],
      :prerequisite
      {:bounded-exception
-      "single-consumer common-sign certificate for both angular-stage collision endpoints",
+      "single-consumer positive-factor relation between meridian imaginary part and ambient height",
       :consumer :t02A03,
       :phase :probe,
       :state :open,
       :scope
       ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t02A03/collision-endpoint-positive-factor-sign-bridge",
+      "TOPOLOGY-ROUTES.md/t02A03/meridian-im-positive-factor-height",
       :acceptance
       {:probe
-       "Compile collisionEndpoint_positiveFactor_signBridge. Express both the meridian-start and recovered-input collision polynomials as strictly positive scalar multiples of the real part of rightTubeMeridianCoordinate p. Do not choose a sign branch or construct an angular path.",
+       "Compile rightTubeMeridianCoordinate_im_positiveFactor_height. Express the imaginary part of rightTubeMeridianCoordinate as a strictly positive scalar multiple of the input height, using deletion to justify normalization. Do not prove interpolation nonvanishing or construct an angular path.",
        :declaration
-       "ConstructionTargets.T02A03GeometricTubeDeformation.collisionEndpoint_positiveFactor_signBridge",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeMeridianCoordinate_im_positiveFactor_height",
        :type
-       "forall (p : RightTubeMinusLeftCore), let m : Complex := rightTubeMeridianCoordinate p; let n0 := rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)); exists a b : Real, 0 < a and 0 < b and ((1-n0.re)^2 - 4*(1-n0.re)*((1 : Circle) : Complex).re + 3 = a*m.re) and ((1-(rightTubeCoreNormalComplex p.1).re)^2 - 4*(1-(rightTubeCoreNormalComplex p.1).re)*(rightTubeCoreAngularCoordinate p : Complex).re + 3 = b*m.re)",
+       "forall (p : RightTubeMinusLeftCore), exists c : Real, 0 < c and (rightTubeMeridianCoordinate p : Complex).im = c * p.1 2",
        :placeholder "the sole sorry in apm_t02a03",
        :route-step
-       "certify that both angular-stage endpoints occupy the same collision-polynomial sign component"},
+       "supply the height-sign identity for the radial-stage deletion proof"},
       :id
-      :routes-2026-10-11-t02a03-collision-endpoint-positive-factor-sign-bridge-topo2-r1,
+      :routes-2026-10-11-t02a03-meridian-im-positive-factor-height-topo2-r1,
       :kind :reusable-theorem,
       :area "explicit-r3-tube-deformation-retraction",
       :depends-on
-      [:routes-2026-10-11-t02a03-input-collision-positive-factor-meridian-real-topo2-r1],
+      [:routes-2026-10-11-t02a03-collision-endpoint-positive-factor-sign-bridge-topo2-r1],
       :current-residual
-      "Construct a continuous angular path within that common sign component, prove its collision polynomial remains nonzero using the safe corridor and nonzero-height criterion, then concatenate it with the radial stage.",
+      "Use this identity to prove the core-normal interpolation has nonzero imaginary part for nonzero-height inputs; handle zero height with the common collision-sign component and safe angular corridor, then assemble both stages.",
       :other-consumers []},
      :commands
      [{:cmd
-       "lake build ConstructionTargets.T02A03GeometricTubeDeformation",
-       :exit 0,
-       :output "Build completed successfully (8249 jobs)."}
-      {:cmd
-       "lake env lean /tmp/t02a03_collision_endpoint_sign_bridge_probe.lean",
+       "lake env lean /tmp/t02a03_meridian_im_height_factor_probe.lean",
        :exit 0,
        :output
-       "collisionEndpoint_positiveFactor_signBridge compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "rightTubeMeridianCoordinate_im_positiveFactor_height compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/t02a03_collision_endpoint_sign_bridge_probe.lean",
+       "sha256sum /tmp/t02a03_meridian_im_height_factor_probe.lean",
        :exit 0,
        :output
-       "ec8a9877c6025a3f562a749b4ebf7587273f91b3a03b1ec96ea9eb4120739f18  /tmp/t02a03_collision_endpoint_sign_bridge_probe.lean"}
+       "d913e66bc62a669d2d8e0d5a2bac683a12cf63479044cb8adf5e09df1cfcdf1f  /tmp/t02a03_meridian_im_height_factor_probe.lean"}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_collision_endpoint_sign_bridge_probe.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_meridian_im_height_factor_probe.lean || true)\"",
        :exit 0}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}
       {:cmd
-       "rg -n 'collisionEndpoint_positiveFactor_signBridge' /tmp/t02a03_collision_endpoint_sign_bridge_probe.lean",
+       "rg -n 'rightTubeMeridianCoordinate_im_positiveFactor_height' /tmp/t02a03_meridian_im_height_factor_probe.lean",
        :exit 0,
        :output
-       "7:theorem collisionEndpoint_positiveFactor_signBridge\n60:#print axioms collisionEndpoint_positiveFactor_signBridge"}],
+       "5:theorem rightTubeMeridianCoordinate_im_positiveFactor_height\n26:#print axioms rightTubeMeridianCoordinate_im_positiveFactor_height"}],
      :diagnostic-history
      [{:cmd
-       "lake env lean /tmp/t02a03_collision_endpoint_sign_bridge_probe.lean",
+       "lake env lean /tmp/t02a03_meridian_im_height_factor_probe.lean",
        :exit 1,
        :finding
-       "The compiled module artifact initially predated the reviewed dependency receipts. Rebuilding the scoped module exposed those declarations; replacing an over-ambitious positivity invocation with the explicit Circle lower bound then produced the compiled fixture."}],
+       "The first proof used an unavailable inverse-multiplication lemma name. Rewriting with the normalization identity and closing the nonzero denominator by field_simp produced the compiled proof."}],
      :fixture
-     {:path "/tmp/t02a03_collision_endpoint_sign_bridge_probe.lean",
+     {:path "/tmp/t02a03_meridian_im_height_factor_probe.lean",
       :sha256
-      "ec8a9877c6025a3f562a749b4ebf7587273f91b3a03b1ec96ea9eb4120739f18"},
+      "d913e66bc62a669d2d8e0d5a2bac683a12cf63479044cb8adf5e09df1cfcdf1f"},
      :finding
-     "Both collision-polynomial endpoint values are strictly positive scalar multiples of the same real number, namely the real part of rightTubeMeridianCoordinate p. The start multiplier follows from the exact meridian factorization and the Circle real-part bound; the recovered endpoint multiplier is the banked positive-factor comparison. This certifies that the endpoints lie in the same positive or negative component, while the zero case is handled by nonzero height.",
+     "The imaginary part of rightTubeMeridianCoordinate is a strictly positive multiple of the ambient height coordinate. The multiplier is the inverse norm of the nonzero deleted left-core normal coordinate. Consequently the meridian-start core normal and the recovered core normal have compatible height signs, which is the scalar fact needed to prove that their radial interpolation has nonzero imaginary part whenever the input height is nonzero.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
@@ -69526,7 +69548,8 @@
     :routes-2026-10-11-t02a03-meridian-start-collision-factor-topo2-r1
     :routes-2026-10-11-t02a03-input-collision-factor-normal-real-topo2-r1
     :routes-2026-10-11-t02a03-input-collision-positive-factor-meridian-real-topo2-r1
-    :routes-2026-10-11-t02a03-collision-endpoint-positive-factor-sign-bridge-topo2-r1],
+    :routes-2026-10-11-t02a03-collision-endpoint-positive-factor-sign-bridge-topo2-r1
+    :routes-2026-10-11-t02a03-meridian-im-positive-factor-height-topo2-r1],
    :current-residual
    "Lift H to RightTubeMinusLeftCore, package rightTubeMeridianRetractionHomotopy, then use the coordinate equation for the Circle-side constant homotopy.",
    :other-consumers []}
@@ -73501,4 +73524,29 @@
    :depends-on
    [:lemma-constructiontargets-t02a03geometrictubedeformation-meridianstart-collisionpolyno
     :lemma-constructiontargets-t02a03geometrictubedeformation-inputcollisionpolynomial-posi],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeMeridianCoordinate_im_positiveFactor_height",
+    :type
+    "forall (p : RightTubeMinusLeftCore), exists c : Real, 0 < c and (rightTubeMeridianCoordinate p : Complex).im = c * p.1 2"},
+   :lemma
+   {:name
+    "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeMeridianCoordinate_im_positiveFactor_height",
+    :reported-by
+    [:routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1],
+    :type
+    "forall (p : RightTubeMinusLeftCore), exists c : Real, 0 < c and (rightTubeMeridianCoordinate p : Complex).im = c * p.1 2",
+    :area "explicit-r3-tube-deformation-retraction",
+    :proved-in
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+   :id
+   :lemma-constructiontargets-t02a03geometrictubedeformation-righttubemeridiancoordinate-i,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t02a03geometrictubedeformation-righttubenormalcomplex-eq-zer],
    :other-consumers []}]}
