@@ -11957,8 +11957,87 @@
   {:consumer :t00J02,
    :implements-lemma
    :lemma-mfclass-integral-open-disk-relative-homology-comparison,
+   :evidence
+   {:placeholder-delta
+    {:t00J02 {:before 1, :after 1, :delta 0},
+     :t98A02 {:before 1, :after 1, :delta 0}},
+    :residual
+    "Prove naturality of integralOpenDiskRelativeHomologyComparison with the coefficient and production connecting morphisms, then with radial normalization and the terminal sphere normalization.",
+    :gates
+    {:fixture-compile :pass,
+     :module-compile :pass,
+     :target-build :pass,
+     :statement-registry "131 registered statements match, 0 do not",
+     :worktree-clean true},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.ManifoldFundamentalClass.integralOpenDiskRelativeHomologyComparison_hom",
+      :type
+      "forall (k : Nat), (integralOpenDiskRelativeHomologyComparison k).hom = (integralRelativeHomologyComparisonWithTransport (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2)) (k + 2)).hom",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on
+      ["ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport"],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes
+    {:fixture
+     "af41687407f554e33c9600e133058de8bacf478c8e33ccfbbe8a9bba7a862d84",
+     :declaration
+     "d14e459a4df1449ddda0a222db838c3e7eafe810c245498bed09b86e6f675da3"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/manifold_fundamental_class_integral_open_disk_relative_homology_comparison.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/manifold_fundamental_class_integral_open_disk_relative_homology_comparison.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "comment-stripped placeholder count for t00J02 and t98A02",
+      :exit 0}
+     {:cmd "source theorem sha256", :exit 0}
+     {:cmd "rg forbidden placeholders and axioms in scope and fixture",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git status --porcelain", :exit 0}],
+    :diagnostic-history [],
+    :representation
+    {:source
+     "Forgotten integral coefficient relative homology of the unit open disk relative to its puncture",
+     :target
+     "Production relative singular homology of the identical unit-open-disk pair in degree k+2",
+     :direction
+     "Canonical isomorphism from the coefficient relative-homology representation to the production relative-homology representation, obtained by exact specialization of the transport-corrected integral comparison"},
+    :commit "2f126a59be7e33c1a64b0772c93f4541c3c7fb78",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path
+     "/tmp/manifold_fundamental_class_integral_open_disk_relative_homology_comparison.lean",
+     :sha256
+     "af41687407f554e33c9600e133058de8bacf478c8e33ccfbbe8a9bba7a862d84"},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :declaration
+     "ConstructionTargets.ManifoldFundamentalClass.integralOpenDiskRelativeHomologyComparison_hom",
+     :supporting-declarations
+     ["ConstructionTargets.ManifoldFundamentalClass.integralOpenDiskRelativeHomologyComparison"]},
+    :row
+    :routes-2026-10-11-manifold-integral-open-disk-relative-homology-comparison-topo3-r1,
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/integral-open-disk-relative-homology-comparison",
@@ -16233,6 +16312,31 @@
     :area "manifold-fundamental-class",
     :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
    :id :lemma-mfclass-integral-open-disk-relative-homology-comparison,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-manifoldfundamentalclass-integralrelativehomologycomparisonwithtransport],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFundamentalClass.integralOpenDiskRelativeHomologyComparison_hom",
+    :type
+    "forall (k : Nat), (integralOpenDiskRelativeHomologyComparison k).hom = (integralRelativeHomologyComparisonWithTransport (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2)) (k + 2)).hom"},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFundamentalClass.integralOpenDiskRelativeHomologyComparison_hom",
+    :reported-by
+    [:routes-2026-10-11-manifold-integral-open-disk-relative-homology-comparison-topo3-r1],
+    :type
+    "forall (k : Nat), (integralOpenDiskRelativeHomologyComparison k).hom = (integralRelativeHomologyComparisonWithTransport (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2)) (k + 2)).hom",
+    :area "manifold-fundamental-class",
+    :proved-in
+    :routes-2026-10-11-manifold-integral-open-disk-relative-homology-comparison-topo3-r1},
+   :id
+   :lemma-constructiontargets-manifoldfundamentalclass-integralopendiskrelativehomologycom,
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-manifoldfundamentalclass-integralrelativehomologycomparisonwithtransport],
