@@ -101875,90 +101875,123 @@
    "Combine common endpoint values with half-open interior uniqueness to prove presentation independence and construct the total Circle decoders.",
    :other-consumers []}
   {:bounded-exception
+   "This single-consumer prerequisite proves the interior half of decoder presentation independence, complementary to the already banked common endpoint theorem.",
+   :consumer :t97A01,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/PolygonBoundaryDecoderInteriors.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/boundary-decoder-interiors",
+   :acceptance
+   {:implementation
+    "Promote the exact fixture. Define the literal conversion from half-open to closed unit-interval parameters. For each specialized decoder table, prove that equal Circle points given by two half-open canonical edge presentations have equal decoder values, by applying the banked exact edge-index and parameter uniqueness theorem. Do not handle parameter one or shared vertices, define total Circle decoders, classify EqvGen fibers, prove boundary-map injectivity or homeomorphism, derive final formulas, compute invariants, or close t97A01.",
+    :placeholder "the single sorry in apm_t97a01",
+    :route-step
+    "polygon radial open-cover step 32: prove decoder independence on half-open edge interiors",
+    :fixture "/tmp/polygon-boundary-decoder-interiors.lean",
+    :fixture-sha256
+    "0869250f442076623800a9eacd7f0d7fdad5e359817cba1b6c2dcbf4c0be7887",
+    :gates
+    ["lake build ConstructionTargets.PolygonBoundaryDecoderInteriors"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-11-polygon-boundary-decoder-interiors-72,
+   :kind :reusable-theorem,
+   :area "polygon-surface-open-cover",
+   :depends-on
+   [:routes-2026-10-11-polygon-boundary-decoder-vertices-71],
+   :current-residual
+   "Split arbitrary closed parameters into half-open or endpoint-one cases and combine the interior and vertex theorems to obtain full presentation independence.",
+   :other-consumers []}
+  {:bounded-exception
    "This single-consumer concrete quotient package is the other final backlog lemma on t97A01 and supplies the actual two polygon models required by its frozen statement.",
    :consumer :t97A01,
    :implements-lemma :lemma-polygonradialopencoverpackages,
    :evidence
    {:probe
     {:residual
-     "Use endpoint agreement plus half-open interior uniqueness to prove both decoder tables are independent of every Circle edge presentation, then define the total Circle decoders and prove their relation invariance and left-inverse formulas.",
+     "Combine the compiled interior presentation independence with the common endpoint theorem to prove full closed-edge presentation independence, then use the six-edge cover to define total Circle decoders.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
-     [{:name "PolygonBoundaryDecoderVertices.n3EdgeDecode_endpoints",
+     [{:name
+       "PolygonBoundaryDecoderInteriors.n3EdgeDecode_interior_wellDefined",
        :type
-       "For every one of the six edges, both endpoint parameters map under n3EdgeDecode to the common ThreeEndpointLoops wedge vertex.",
+       "Equal half-open canonical edge presentations have equal N3 decoder values.",
        :status :proved,
        :consumers [:t97A01],
        :depends-on
-       ["PolygonBoundaryEdgeDecoders.n3EdgeDecode_generators"],
+       ["PolygonSixEdgeInteriorUniqueness.circleEdgePoint_interior_injective"],
        :area "polygon-surface-open-cover"}
       {:name
-       "PolygonBoundaryDecoderVertices.torusCrosscapEdgeDecode_endpoints",
+       "PolygonBoundaryDecoderInteriors.torusCrosscapEdgeDecode_interior_wellDefined",
        :type
-       "For every one of the six edges, both endpoint parameters map under torusCrosscapEdgeDecode to the common ThreeEndpointLoops wedge vertex.",
+       "Equal half-open canonical edge presentations have equal torus-crosscap decoder values.",
        :status :proved,
        :consumers [:t97A01],
        :depends-on
-       ["PolygonBoundaryEdgeDecoders.torusCrosscapEdgeDecode_generators"],
+       ["PolygonSixEdgeInteriorUniqueness.circleEdgePoint_interior_injective"],
        :area "polygon-surface-open-cover"}
       {:name "polygonBoundaryCircleDecoderWellDefined",
        :type
-       "The two edge decoder tables agree on every pair of presentations of one Circle point and therefore define total Circle decoders with literal edge formulas.",
-       :status :not-started,
+       "Combine interior uniqueness and common endpoint values to prove both decoder tables agree on all closed-edge presentations and define total Circle decoders.",
+       :status :partial,
        :consumers [:t97A01],
        :depends-on
-       ["PolygonBoundaryDecoderVertices.n3EdgeDecode_endpoints"
+       ["PolygonBoundaryDecoderInteriors.n3EdgeDecode_interior_wellDefined"
+        "PolygonBoundaryDecoderInteriors.torusCrosscapEdgeDecode_interior_wellDefined"
+        "PolygonBoundaryDecoderVertices.n3EdgeDecode_endpoints"
         "PolygonBoundaryDecoderVertices.torusCrosscapEdgeDecode_endpoints"
-        "PolygonSixEdgeCircleCover.sixEdgeCircleCover"
-        "PolygonSixEdgeInteriorUniqueness.circleEdgePoint_interior_injective"],
+        "PolygonSixEdgeCircleCover.sixEdgeCircleCover"],
        :area "polygon-surface-open-cover"}],
      :prerequisite
      {:bounded-exception
-      "This single-consumer prerequisite proves the endpoint compatibility needed to descend both six-edge decoder tables through overlapping Circle edge presentations.",
+      "This single-consumer prerequisite proves the interior half of decoder presentation independence, complementary to the already banked common endpoint theorem.",
       :consumer :t97A01,
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/PolygonBoundaryDecoderVertices.lean"],
+      ["ConstructionTargets/PolygonBoundaryDecoderInteriors.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/boundary-decoder-vertices",
+      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/boundary-decoder-interiors",
       :acceptance
       {:implementation
-       "Promote the exact fixture. Define the common decoder vertex. Prove the zero and one endpoints on each of the three source loops equal it, using endpointQuotient zero-equals-one and the nested wedge generators. Prove that both endpoints of every N3 and torus-crosscap decoder edge map to this common vertex, including the reversed torus partner edges. Do not prove full edge-presentation independence, define total Circle decoders, classify EqvGen fibers, prove boundary-map injectivity or homeomorphism, derive final formulas, compute invariants, or close t97A01.",
+       "Promote the exact fixture. Define the literal conversion from half-open to closed unit-interval parameters. For each specialized decoder table, prove that equal Circle points given by two half-open canonical edge presentations have equal decoder values, by applying the banked exact edge-index and parameter uniqueness theorem. Do not handle parameter one or shared vertices, define total Circle decoders, classify EqvGen fibers, prove boundary-map injectivity or homeomorphism, derive final formulas, compute invariants, or close t97A01.",
        :placeholder "the single sorry in apm_t97a01",
        :route-step
-       "polygon radial open-cover step 31: prove common decoder values at every shared edge vertex",
-       :fixture "/tmp/polygon-boundary-decoder-vertices.lean",
+       "polygon radial open-cover step 32: prove decoder independence on half-open edge interiors",
+       :fixture "/tmp/polygon-boundary-decoder-interiors.lean",
        :fixture-sha256
-       "6f898dae3c9a952ef25ecc17f0db5f3a04ca3454966fb4b748b77ffc97c938ce",
+       "0869250f442076623800a9eacd7f0d7fdad5e359817cba1b6c2dcbf4c0be7887",
        :gates
-       ["lake build ConstructionTargets.PolygonBoundaryDecoderVertices"
+       ["lake build ConstructionTargets.PolygonBoundaryDecoderInteriors"
         "fixture compiles"
         "zero source and fixture sorry"
         "standard-only axioms"
         "registry check"]},
-      :id :routes-2026-10-11-polygon-boundary-decoder-vertices-71,
+      :id :routes-2026-10-11-polygon-boundary-decoder-interiors-72,
       :kind :reusable-theorem,
       :area "polygon-surface-open-cover",
       :depends-on
-      [:routes-2026-10-11-polygon-boundary-edge-decoders-70],
+      [:routes-2026-10-11-polygon-boundary-decoder-vertices-71],
       :current-residual
-      "Combine common endpoint values with half-open interior uniqueness to prove presentation independence and construct the total Circle decoders.",
+      "Split arbitrary closed parameters into half-open or endpoint-one cases and combine the interior and vertex theorems to obtain full presentation independence.",
       :other-consumers []},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake env lean /tmp/polygon-boundary-decoder-vertices.lean",
+       "lake env lean /tmp/polygon-boundary-decoder-interiors.lean",
        :exit 0,
        :finding
-       "The common decoder vertex, all six loop-endpoint equalities, and both twelve-case decoder endpoint theorems compile."}
-      {:cmd "sha256sum /tmp/polygon-boundary-decoder-vertices.lean",
+       "The half-open-to-closed conversion and both interior decoder presentation-independence theorems compile."}
+      {:cmd "sha256sum /tmp/polygon-boundary-decoder-interiors.lean",
        :exit 0,
        :finding
-       "6f898dae3c9a952ef25ecc17f0db5f3a04ca3454966fb4b748b77ffc97c938ce"}
+       "0869250f442076623800a9eacd7f0d7fdad5e359817cba1b6c2dcbf4c0be7887"}
       {:cmd
-       "rg -n \"\\b(sorry|admit)\\b\" /tmp/polygon-boundary-decoder-vertices.lean",
+       "rg -n \"\\b(sorry|admit)\\b\" /tmp/polygon-boundary-decoder-interiors.lean",
        :exit 1,
        :expected-exit 1,
        :finding "No fixture placeholders."}
@@ -101970,26 +102003,16 @@
        :exit 0,
        :finding
        "The route guide, per-problem routes, and probe definitions were read."}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/polygon-boundary-decoder-vertices.lean",
-       :exit 1,
-       :finding
-       "The first draft omitted the namespace containing zeroIcc and oneIcc, applied the inner wedge generator at the outer level, and used recursive simp sets; opening the namespace, transporting the inner equality through the outer left injection, and stating the finite cases explicitly corrected the proofs."}
-      {:cmd
-       "lake env lean /tmp/polygon-boundary-decoder-vertices.lean",
-       :exit 1,
-       :finding
-       "The reversed edge-two endpoint at parameter one was not definitionally reduced by rfl; explicitly simplifying the decoder and reverse definitions proved it is the zero endpoint."}],
+     :diagnostic-history [],
      :fixture
-     {:path "/tmp/polygon-boundary-decoder-vertices.lean",
+     {:path "/tmp/polygon-boundary-decoder-interiors.lean",
       :sha256
-      "6f898dae3c9a952ef25ecc17f0db5f3a04ca3454966fb4b748b77ffc97c938ce",
+      "0869250f442076623800a9eacd7f0d7fdad5e359817cba1b6c2dcbf4c0be7887",
       :interface
-      "All zero and one endpoints of all six edges map under both specialized decoder tables to one common ThreeEndpointLoops wedge vertex."},
+      "For both specialized tables, equal Circle points represented at half-open edge parameters have equal decoder values."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -102040,7 +102063,8 @@
     :routes-2026-10-11-relation-quotient-left-inverse-68
     :routes-2026-10-11-polygon-boundary-generator-normal-forms-69
     :routes-2026-10-11-polygon-boundary-edge-decoders-70
-    :routes-2026-10-11-polygon-boundary-decoder-vertices-71],
+    :routes-2026-10-11-polygon-boundary-decoder-vertices-71
+    :routes-2026-10-11-polygon-boundary-decoder-interiors-72],
    :current-residual
    "Combine the concrete cover packages with the strict overlap squares, banked Smith normalization, and final t97A01 assembly.",
    :other-consumers []}
@@ -105962,7 +105986,9 @@
     :lemma-polygonsixedgecirclecover-sixedgecirclecover
     :lemma-polygonsixedgeinterioruniqueness-circleedgepoint-interior-injective
     :lemma-polygonboundarydecodervertices-n3edgedecode-endpoints
-    :lemma-polygonboundarydecodervertices-toruscrosscapedgedecode-endpoints],
+    :lemma-polygonboundarydecodervertices-toruscrosscapedgedecode-endpoints
+    :lemma-polygonboundarydecoderinteriors-n3edgedecode-interior-welldefined
+    :lemma-polygonboundarydecoderinteriors-toruscrosscapedgedecode-interior-welldefined],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -106014,6 +106040,56 @@
    :kind :lemma,
    :depends-on
    [:lemma-polygonboundaryedgedecoders-toruscrosscapedgedecode-generators],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "PolygonBoundaryDecoderInteriors.n3EdgeDecode_interior_wellDefined",
+    :type
+    "Equal half-open canonical edge presentations have equal N3 decoder values."},
+   :lemma
+   {:name
+    "PolygonBoundaryDecoderInteriors.n3EdgeDecode_interior_wellDefined",
+    :reported-by
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    :type
+    "Equal half-open canonical edge presentations have equal N3 decoder values.",
+    :area "polygon-surface-open-cover",
+    :proved-in
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+   :id
+   :lemma-polygonboundarydecoderinteriors-n3edgedecode-interior-welldefined,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polygonsixedgeinterioruniqueness-circleedgepoint-interior-injective],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "PolygonBoundaryDecoderInteriors.torusCrosscapEdgeDecode_interior_wellDefined",
+    :type
+    "Equal half-open canonical edge presentations have equal torus-crosscap decoder values."},
+   :lemma
+   {:name
+    "PolygonBoundaryDecoderInteriors.torusCrosscapEdgeDecode_interior_wellDefined",
+    :reported-by
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    :type
+    "Equal half-open canonical edge presentations have equal torus-crosscap decoder values.",
+    :area "polygon-surface-open-cover",
+    :proved-in
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+   :id
+   :lemma-polygonboundarydecoderinteriors-toruscrosscapedgedecode-interior-welldefined,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polygonsixedgeinterioruniqueness-circleedgepoint-interior-injective],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
