@@ -77661,7 +77661,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -77677,10 +77677,219 @@
     "exists W : C(RightTubeMinusLeftCore, ℂ), forall (t : unitInterval) (p : RightTubeMinusLeftCore), not ((t : ℝ) <= 1/2) -> (((2-2*(t:ℝ):ℝ):ℂ)*W p + ((2*(t:ℝ)-1:ℝ):ℂ)*rightTubeCorePlanarComplex p.1) != 0",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-rotatedendpointwaypoint-arriv,
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-t02a03geometrictubedeformation-coupledan-235e9676926c],
+   :other-consumers []}
+  {:consumer :t00J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t00j01_sphere_identity_bridge",
+    :type "  (found in problems/t00J01/lean/Main.lean:154)"},
+   :lemma
+   {:name "apm_t00j01_sphere_identity_bridge",
+    :reported-by [:owner],
+    :type "  (found in problems/t00J01/lean/Main.lean:154)",
+    :proved-in :owner},
+   :id :lemma-apm-t00j01-sphere-identity-bridge,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t00j01_fold_continuous",
+    :type "  (found in problems/t00J01/lean/Main.lean:117)"},
+   :lemma
+   {:name "apm_t00j01_fold_continuous",
+    :reported-by [:owner],
+    :type "  (found in problems/t00J01/lean/Main.lean:117)",
+    :proved-in :owner},
+   :id :lemma-apm-t00j01-fold-continuous,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t00j01_fold_fibers_bridge",
+    :type
+    "foldRegular at exp pi and 1, with fiber Nat.card values 3 and 1  (size: 180-350 lines / 1-2 days)"},
+   :lemma
+   {:name "apm_t00j01_fold_fibers_bridge",
+    :reported-by [:owner],
+    :type
+    "foldRegular at exp pi and 1, with fiber Nat.card values 3 and 1  (size: 180-350 lines / 1-2 days)",
+    :area "circle-fold-fiber-classification"},
+   :id :lemma-apm-t00j01-fold-fibers-bridge,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t00j01_klein_quotient_charts",
+    :type
+    "apm_t00j01_isThreeManifold apm_t00j01_nonorientable3  (size: 250-500 lines / 2-4 days)"},
+   :lemma
+   {:name "apm_t00j01_klein_quotient_charts",
+    :reported-by [:owner],
+    :type
+    "apm_t00j01_isThreeManifold apm_t00j01_nonorientable3  (size: 250-500 lines / 2-4 days)",
+    :area "quotient-surface-charts"},
+   :id :lemma-apm-t00j01-klein-quotient-charts,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t00A02]}
+  {:consumer :t00J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t00j01_klein_product_H3_zero",
+    :type
+    "Limits.IsZero (apm_t00j01_H 3 apm_t00j01_nonorientable3)  (size: 350-700 lines / 3-6 days)"},
+   :lemma
+   {:name "apm_t00j01_klein_product_H3_zero",
+    :reported-by [:owner],
+    :type
+    "Limits.IsZero (apm_t00j01_H 3 apm_t00j01_nonorientable3)  (size: 350-700 lines / 3-6 days)",
+    :area "klein-bottle-homology"},
+   :id :lemma-apm-t00j01-klein-product-h3-zero,
+   :kind :lemma,
+   :depends-on [:lemma-apm-t00j01-klein-quotient-charts],
+   :other-consumers []}
+  {:consumer :t00J08,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "FiniteIndexFreeGroupSchreierRank.finiteIndexSubgroupFreeGroupEquiv",
+    :type
+    "  (found in ConstructionTargets/FiniteIndexFreeGroupSchreierRank.lean:76)"},
+   :lemma
+   {:name
+    "FiniteIndexFreeGroupSchreierRank.finiteIndexSubgroupFreeGroupEquiv",
+    :reported-by [:owner],
+    :type
+    "  (found in ConstructionTargets/FiniteIndexFreeGroupSchreierRank.lean:76)",
+    :proved-in :owner,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/FiniteIndexFreeGroupSchreierRank.lean"]},
+   :id
+   :lemma-finiteindexfreegroupschreierrank-finiteindexsubgroupfreegroupequiv,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J08,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "FiniteSchreierTreePositiveSelectionComplementCount.complement_card_formula",
+    :type
+    "  (found in ConstructionTargets/FiniteSchreierTreePositiveSelectionComplementCount.lean:79)"},
+   :lemma
+   {:name
+    "FiniteSchreierTreePositiveSelectionComplementCount.complement_card_formula",
+    :reported-by [:owner],
+    :type
+    "  (found in ConstructionTargets/FiniteSchreierTreePositiveSelectionComplementCount.lean:79)",
+    :proved-in :owner,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/FiniteSchreierTreePositiveSelectionComplementCount.lean"]},
+   :id
+   :lemma-finiteschreiertreepositiveselectioncomplementcount-complement-card-formula,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t00j08_two_le_of_realizable",
+    :type "  (found in problems/t00J08/lean/Main.lean:66)"},
+   :lemma
+   {:name "apm_t00j08_two_le_of_realizable",
+    :reported-by [:owner],
+    :type "  (found in problems/t00J08/lean/Main.lean:66)",
+    :proved-in :owner},
+   :id :lemma-apm-t00j08-two-le-of-realizable,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t00J08_bridge_rank_formula",
+    :type
+    "For finite-index G <= FreeGroup (Fin n) with G ~=* FreeGroup (Fin 7), 6 = G.index * (n - 1)  (size: 50-100 lines / 3-6 hours)"},
+   :lemma
+   {:name "apm_t00J08_bridge_rank_formula",
+    :reported-by [:owner],
+    :type
+    "For finite-index G <= FreeGroup (Fin n) with G ~=* FreeGroup (Fin 7), 6 = G.index * (n - 1)  (size: 50-100 lines / 3-6 hours)",
+    :area "nielsen-schreier-rank-formula"},
+   :id :lemma-apm-t00j08-bridge-rank-formula,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t00J08_bridge_subgroup_of_index",
+    :type
+    "For positive n,d, construct an index-d subgroup of FreeGroup (Fin n) equivalent to FreeGroup (Fin (1 + d * (n - 1)))  (size: 100-180 lines / 6-10 hours)"},
+   :lemma
+   {:name "apm_t00J08_bridge_subgroup_of_index",
+    :reported-by [:owner],
+    :type
+    "For positive n,d, construct an index-d subgroup of FreeGroup (Fin n) equivalent to FreeGroup (Fin (1 + d * (n - 1)))  (size: 100-180 lines / 6-10 hours)",
+    :area "nielsen-schreier-rank-formula"},
+   :id :lemma-apm-t00j08-bridge-subgroup-of-index,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t97A03]}
+  {:consumer :t00J08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t00j08",
+    :type
+    "forall n, finite-index rank-seven subgroup realizability iff n in {2,3,4,7}  (size: 25-50 lines / 2-4 hours)"},
+   :lemma
+   {:name "apm_t00j08",
+    :reported-by [:owner],
+    :type
+    "forall n, finite-index rank-seven subgroup realizability iff n in {2,3,4,7}  (size: 25-50 lines / 2-4 hours)",
+    :area "nielsen-schreier-rank-formula"},
+   :id :lemma-apm-t00j08,
+   :kind :lemma,
+   :depends-on
+   [:lemma-apm-t00j08-bridge-rank-formula
+    :lemma-apm-t00j08-bridge-subgroup-of-index],
    :other-consumers []}]}

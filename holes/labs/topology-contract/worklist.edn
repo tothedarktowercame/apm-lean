@@ -105267,7 +105267,7 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 0,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma
@@ -105341,7 +105341,7 @@
      :status :self-axiomatized},
     :seat "topo-2"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/TwoOpenFreeProductMappingCompositeCounitIdentity.lean"],
    :dag-node
@@ -105365,7 +105365,7 @@
    :id :routes-2026-10-11-composite-counit-component-identity-91,
    :kind :reusable-theorem,
    :area "fundamental-group-wedge-of-circles",
-   :fail-count 1,
+   :fail-count 0,
    :depends-on
    [:routes-2026-10-11-inverse-identity-counit-component-identity-90],
    :current-residual
@@ -112914,7 +112914,7 @@
    :other-consumers [:t97A03]}
   {:consumer :t99J01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "threeCircles_locPathConnected",
@@ -112925,7 +112925,9 @@
     :reported-by [:owner],
     :type
     "noncomputable instance : PathConnectedSpace ThreeCircles; instance : LocPathConnectedSpace ThreeCircles  (30-100 lines)",
-    :area "fundamental-group-wedge-of-circles"},
+    :area "fundamental-group-wedge-of-circles",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/PointWedgeVanKampen.lean"]},
    :id :lemma-threecircles-locpathconnected,
    :kind :lemma,
    :depends-on [],
@@ -113996,7 +113998,7 @@
    :other-consumers []}
   {:consumer :t99J01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "PointWedgeVanKampen.threeCircles_locPathConnected",
@@ -114008,7 +114010,9 @@
     :type
     "LocPathConnectedSpace ThreeCircles, together with PointWedgeVanKampen.threeCircles_pathConnected : PathConnectedSpace ThreeCircles",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-11-point-wedge-van-kampen},
+    :proved-in :program-2026-10-11-point-wedge-van-kampen,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/PointWedgeVanKampen.lean"]},
    :id :lemma-pointwedgevankampen-threecircles-locpathconnected,
    :kind :lemma,
    :depends-on [],
@@ -114032,6 +114036,154 @@
    :depends-on
    [:lemma-pointwedgevankampen-genericpointwedgelegcoordinates-vankampen
     :lemma-pointwedgevankampen-coprodfreegroupfintwofinone-equiv],
+   :other-consumers []}
+  {:consumer :t00A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t00a03_component_isOpen",
+    :type "  (found in problems/t00A03/lean/Main.lean:77)"},
+   :lemma
+   {:name "apm_t00a03_component_isOpen",
+    :reported-by [:owner],
+    :type "  (found in problems/t00A03/lean/Main.lean:77)",
+    :proved-in :owner},
+   :id :lemma-apm-t00a03-component-isopen,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t00A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t00a03_parallel_of_range_subset_component",
+    :type "  (found in problems/t00A03/lean/Main.lean:109)"},
+   :lemma
+   {:name "apm_t00a03_parallel_of_range_subset_component",
+    :reported-by [:owner],
+    :type "  (found in problems/t00A03/lean/Main.lean:109)",
+    :proved-in :owner},
+   :id :lemma-apm-t00a03-parallel-of-range-subset-component,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t00A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "embeddedCircle_annulusNeighborhood",
+    :type
+    "Every Topology.IsEmbedding c : Circle -> F in the frozen orientable surface has a two-sided annular neighborhood  (size: 300-700 lines / several days)"},
+   :lemma
+   {:name "embeddedCircle_annulusNeighborhood",
+    :reported-by [:owner],
+    :type
+    "Every Topology.IsEmbedding c : Circle -> F in the frozen orientable surface has a two-sided annular neighborhood  (size: 300-700 lines / several days)",
+    :area "embedded-circle-collar-surface"},
+   :id :lemma-embeddedcircle-annulusneighborhood,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t01J01 :t03J02]}
+  {:consumer :t00A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "nullHomotopic_iff_boundsEmbeddedDisk_and_parallel_iff_coboundsAnnulus",
+    :type
+    "Equivalence of the frozen nullHomotopic/parallel predicates with bounding an embedded disk/co-bounding an annulus  (size: 500-1000 lines / 1-2 weeks)"},
+   :lemma
+   {:name
+    "nullHomotopic_iff_boundsEmbeddedDisk_and_parallel_iff_coboundsAnnulus",
+    :reported-by [:owner],
+    :type
+    "Equivalence of the frozen nullHomotopic/parallel predicates with bounding an embedded disk/co-bounding an annulus  (size: 500-1000 lines / 1-2 weeks)",
+    :area "simple-curve-homotopy-isotopy"},
+   :id
+   :lemma-nullhomotopic-iff-boundsembeddeddisk-and-parallel-iff-coboundsannulus,
+   :kind :lemma,
+   :depends-on [:lemma-embeddedcircle-annulusneighborhood],
+   :other-consumers []}
+  {:consumer :t00A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "compactOrientableSurfaceWithBoundary_classification",
+    :type
+    "Classification of compact connected orientable surfaces with boundary by genus and boundary count  (size: 800-1500 lines / multiple weeks)"},
+   :lemma
+   {:name "compactOrientableSurfaceWithBoundary_classification",
+    :reported-by [:owner],
+    :type
+    "Classification of compact connected orientable surfaces with boundary by genus and boundary count  (size: 800-1500 lines / multiple weeks)",
+    :area "surface-classification"},
+   :id :lemma-compactorientablesurfacewithboundary-classification,
+   :kind :lemma,
+   :depends-on
+   [:lemma-embeddedcircle-annulusneighborhood
+    :lemma-nullhomotopic-iff-boundsembeddeddisk-and-parallel-iff-coboundsannulus],
+   :other-consumers [:t91J05 :t92J05 :t94J04 :t96A01 :t97J02]}
+  {:consumer :t00A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t00A03_bridge_1",
+    :type
+    "Under the frozen maximal-family hypotheses, every connectedComponentIn (apm_t00a03_cut curves) x is homeomorphic to apm_t00a03_Pants  (size: 150-300 lines / 1-2 days after foundations)"},
+   :lemma
+   {:name "apm_t00A03_bridge_1",
+    :reported-by [:owner],
+    :type
+    "Under the frozen maximal-family hypotheses, every connectedComponentIn (apm_t00a03_cut curves) x is homeomorphic to apm_t00a03_Pants  (size: 150-300 lines / 1-2 days after foundations)",
+    :area "surface-classification"},
+   :id :lemma-apm-t00a03-bridge-1,
+   :kind :lemma,
+   :depends-on
+   [:lemma-compactorientablesurfacewithboundary-classification],
+   :other-consumers []}
+  {:consumer :t00A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "eulerCharacteristic_cut_additivity",
+    :type
+    "Euler characteristic is additive for the finite cut decomposition and every cutting circle contributes two boundary sides  (size: 250-500 lines / 2-4 days)"},
+   :lemma
+   {:name "eulerCharacteristic_cut_additivity",
+    :reported-by [:owner],
+    :type
+    "Euler characteristic is additive for the finite cut decomposition and every cutting circle contributes two boundary sides  (size: 250-500 lines / 2-4 days)",
+    :area "euler-characteristic-cut-additivity"},
+   :id :lemma-eulercharacteristic-cut-additivity,
+   :kind :lemma,
+   :depends-on [:lemma-embeddedcircle-annulusneighborhood],
+   :other-consumers []}
+  {:consumer :t00A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t00A03_bridge_2",
+    :type
+    "Under the frozen hypotheses, n = 3 * g - 3  (size: 60-120 lines / 4-8 hours after prerequisites)"},
+   :lemma
+   {:name "apm_t00A03_bridge_2",
+    :reported-by [:owner],
+    :type
+    "Under the frozen hypotheses, n = 3 * g - 3  (size: 60-120 lines / 4-8 hours after prerequisites)",
+    :area "euler-characteristic-cut-additivity"},
+   :id :lemma-apm-t00a03-bridge-2,
+   :kind :lemma,
+   :depends-on
+   [:lemma-apm-t00a03-bridge-1
+    :lemma-eulercharacteristic-cut-additivity],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01

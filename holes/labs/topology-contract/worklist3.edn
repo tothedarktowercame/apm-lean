@@ -17945,7 +17945,388 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-deckgroupquotientfundamentalgroup-quotientmk-iscoveringmap-w],
-   :other-consumers [:t92J05 :t93J03 :t99J01 :t00J07]}],
+   :other-consumers [:t92J05 :t93J03 :t99J01 :t00J07]}
+  {:consumer :t00A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t00A02_antipodalCover_eq_iff",
+    :type "  (found in problems/t00A02/lean/Main.lean:91)"},
+   :lemma
+   {:name "apm_t00A02_antipodalCover_eq_iff",
+    :reported-by [:owner],
+    :type "  (found in problems/t00A02/lean/Main.lean:91)",
+    :proved-in :owner},
+   :id :lemma-apm-t00a02-antipodalcover-eq-iff,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t00A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t00A02_antipodalCover_fiber_card",
+    :type "  (found in problems/t00A02/lean/Main.lean:109)"},
+   :lemma
+   {:name "apm_t00A02_antipodalCover_fiber_card",
+    :reported-by [:owner],
+    :type "  (found in problems/t00A02/lean/Main.lean:109)",
+    :proved-in :owner},
+   :id :lemma-apm-t00a02-antipodalcover-fiber-card,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t00A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t00A02_bridge_antipodalCover_isCoveringMap",
+    :type
+    "IsCoveringMap apm_t00A02_antipodalCover  (size: 60-120 lines / 4-8 hours)"},
+   :lemma
+   {:name "apm_t00A02_bridge_antipodalCover_isCoveringMap",
+    :reported-by [:owner],
+    :type
+    "IsCoveringMap apm_t00A02_antipodalCover  (size: 60-120 lines / 4-8 hours)",
+    :area "quotient-by-finite-free-action-covering"},
+   :id :lemma-apm-t00a02-bridge-antipodalcover-iscoveringmap,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t00J07 :t92J05]}
+  {:consumer :t00A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t00A02_regular_irregular_wedge_covers",
+    :type
+    "forall r0 : apm_t00A02_RP2, Nonempty (apm_t00A02_coverWitness (apm_t00A02_wedge r0) 4 true) and Nonempty (apm_t00A02_coverWitness (apm_t00A02_wedge r0) 4 false)  (size: 250-450 lines / 2-4 days)"},
+   :lemma
+   {:name "apm_t00A02_regular_irregular_wedge_covers",
+    :reported-by [:owner],
+    :type
+    "forall r0 : apm_t00A02_RP2, Nonempty (apm_t00A02_coverWitness (apm_t00A02_wedge r0) 4 true) and Nonempty (apm_t00A02_coverWitness (apm_t00A02_wedge r0) 4 false)  (size: 250-450 lines / 2-4 days)",
+    :area "wedge-cover-gluing"},
+   :id :lemma-apm-t00a02-regular-irregular-wedge-covers,
+   :kind :lemma,
+   :depends-on [:lemma-apm-t00a02-bridge-antipodalcover-iscoveringmap],
+   :other-consumers []}
+  {:consumer :t00A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t00A02_connected_ten_cover_homeomorph",
+    :type
+    "Any two path-connected 10-sheeted covers of a compact connected smooth surface with apm_t00A02_hasGenusFiveHomology are homeomorphic  (size: 800-1500 lines / multiple weeks)"},
+   :lemma
+   {:name "apm_t00A02_connected_ten_cover_homeomorph",
+    :reported-by [:owner],
+    :type
+    "Any two path-connected 10-sheeted covers of a compact connected smooth surface with apm_t00A02_hasGenusFiveHomology are homeomorphic  (size: 800-1500 lines / multiple weeks)",
+    :area "surface-classification"},
+   :id :lemma-apm-t00a02-connected-ten-cover-homeomorph,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t00A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t00A02_bridge_global_cover_classification_and_wedge",
+    :type
+    "The conjunction of connected-ten-cover classification and regular/irregular wedge-cover existence  (size: 10-25 lines / under 2 hours after prerequisites)"},
+   :lemma
+   {:name "apm_t00A02_bridge_global_cover_classification_and_wedge",
+    :reported-by [:owner],
+    :type
+    "The conjunction of connected-ten-cover classification and regular/irregular wedge-cover existence  (size: 10-25 lines / under 2 hours after prerequisites)",
+    :area "surface-classification"},
+   :id :lemma-apm-t00a02-bridge-global-cover-classification-and-wedge,
+   :kind :lemma,
+   :depends-on
+   [:lemma-apm-t00a02-regular-irregular-wedge-covers
+    :lemma-apm-t00a02-connected-ten-cover-homeomorph],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t00j02_exists_component_lift_homologyMap_eq_zero",
+    :type "  (found in problems/t00J02/lean/Main.lean:298)"},
+   :lemma
+   {:name "apm_t00j02_exists_component_lift_homologyMap_eq_zero",
+    :reported-by [:owner],
+    :type "  (found in problems/t00J02/lean/Main.lean:298)",
+    :proved-in :owner},
+   :id :lemma-apm-t00j02-exists-component-lift-homologymap-eq-zero,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFundamentalClass.puncturedDiskRelative",
+    :type
+    "  (found in ConstructionTargets/ManifoldFundamentalClass.lean:1508)"},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFundamentalClass.puncturedDiskRelative",
+    :reported-by [:owner],
+    :type
+    "  (found in ConstructionTargets/ManifoldFundamentalClass.lean:1508)",
+    :proved-in :owner},
+   :id
+   :lemma-constructiontargets-manifoldfundamentalclass-punctureddiskrelative,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "surfaceTopHomology_localFundamentalClassIso",
+    :type
+    "For a compact oriented surface S and y : S, H_2(S;Z) -> H_2(S,S\\{y};Z) is an isomorphism and the local group is Z, naturally in maps  (size: 250-500 lines / 2-4 days residual)"},
+   :lemma
+   {:name "surfaceTopHomology_localFundamentalClassIso",
+    :reported-by [:owner],
+    :type
+    "For a compact oriented surface S and y : S, H_2(S;Z) -> H_2(S,S\\{y};Z) is an isomorphism and the local group is Z, naturally in maps  (size: 250-500 lines / 2-4 days residual)",
+    :area "manifold-fundamental-class"},
+   :id :lemma-surfacetophomology-localfundamentalclassiso,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "regularValue_topHomologyMap_signedCount",
+    :type
+    "For a regular value y of a smooth surface map f, H_2(f) is multiplication by the finite signed local-degree sum over f^-1(y)  (size: 500-900 lines / 1-2 weeks)"},
+   :lemma
+   {:name "regularValue_topHomologyMap_signedCount",
+    :reported-by [:owner],
+    :type
+    "For a regular value y of a smooth surface map f, H_2(f) is multiplication by the finite signed local-degree sum over f^-1(y)  (size: 500-900 lines / 1-2 weeks)",
+    :area "local-degree-signed-count"},
+   :id :lemma-regularvalue-tophomologymap-signedcount,
+   :kind :lemma,
+   :depends-on [:lemma-surfacetophomology-localfundamentalclassiso],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "transverseCircle_preimage_component_signedCount",
+    :type
+    "For f transverse to an embedded smooth circle, group the signed local-degree count by compact one-manifold preimage components, each equal to plus-or-minus the circle degree  (size: 350-700 lines / 3-6 days)"},
+   :lemma
+   {:name "transverseCircle_preimage_component_signedCount",
+    :reported-by [:owner],
+    :type
+    "For f transverse to an embedded smooth circle, group the signed local-degree count by compact one-manifold preimage components, each equal to plus-or-minus the circle degree  (size: 350-700 lines / 3-6 days)",
+    :area "transverse-preimage-submanifold"},
+   :id :lemma-transversecircle-preimage-component-signedcount,
+   :kind :lemma,
+   :depends-on [:lemma-regularvalue-tophomologymap-signedcount],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "circleDegree_eq_homologyMap",
+    :type
+    "The signed degree of a smooth circle map equals the integer represented by its induced H_1 morphism  (size: 180-350 lines / 1-2 days)"},
+   :lemma
+   {:name "circleDegree_eq_homologyMap",
+    :reported-by [:owner],
+    :type
+    "The signed degree of a smooth circle map equals the integer represented by its induced H_1 morphism  (size: 180-350 lines / 1-2 days)",
+    :area "circle-degree-signed-count"},
+   :id :lemma-circledegree-eq-homologymap,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t00J02_bridge_1",
+    :type
+    "Under the frozen hypotheses, apm_t00j02_homologyMap 2 f = 0  (size: 80-160 lines / 1 day after prerequisites)"},
+   :lemma
+   {:name "apm_t00J02_bridge_1",
+    :reported-by [:owner],
+    :type
+    "Under the frozen hypotheses, apm_t00j02_homologyMap 2 f = 0  (size: 80-160 lines / 1 day after prerequisites)",
+    :area "local-degree-signed-count"},
+   :id :lemma-apm-t00j02-bridge-1,
+   :kind :lemma,
+   :depends-on
+   [:lemma-transversecircle-preimage-component-signedcount
+    :lemma-circledegree-eq-homologymap],
+   :other-consumers []}
+  {:consumer :t00J07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "ConstructionTargets.DeckGroupQuotientFundamentalGroup",
+    :type
+    "  (found in ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean:1)"},
+   :lemma
+   {:name "ConstructionTargets.DeckGroupQuotientFundamentalGroup",
+    :reported-by [:owner],
+    :type
+    "  (found in ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean:1)",
+    :proved-in :owner},
+   :id :lemma-constructiontargets-deckgroupquotientfundamentalgroup,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t00j07_attach_glue",
+    :type "  (found in problems/t00J07/lean/Main.lean:75)"},
+   :lemma
+   {:name "apm_t00j07_attach_glue",
+    :reported-by [:owner],
+    :type "  (found in problems/t00J07/lean/Main.lean:75)",
+    :proved-in :owner},
+   :id :lemma-apm-t00j07-attach-glue,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "rp2_antipodal_cover_and_pi1",
+    :type
+    "forall x : apm_t00j07_RP2, Nonempty (FundamentalGroup apm_t00j07_RP2 x ~=* Multiplicative (ZMod 2))  (size: 250-450 lines / 2-4 days)"},
+   :lemma
+   {:name "rp2_antipodal_cover_and_pi1",
+    :reported-by [:owner],
+    :type
+    "forall x : apm_t00j07_RP2, Nonempty (FundamentalGroup apm_t00j07_RP2 x ~=* Multiplicative (ZMod 2))  (size: 250-450 lines / 2-4 days)",
+    :area "rp2-fundamental-group"},
+   :id :lemma-rp2-antipodal-cover-and-pi1,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t92J05]}
+  {:consumer :t00J07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "rp2_integral_homology",
+    :type
+    "Integral singular homology of apm_t00j07_RP2: H0=Z, H1=ZMod 2, Hk=0 for k>=2  (size: 350-700 lines / 3-6 days)"},
+   :lemma
+   {:name "rp2_integral_homology",
+    :reported-by [:owner],
+    :type
+    "Integral singular homology of apm_t00j07_RP2: H0=Z, H1=ZMod 2, Hk=0 for k>=2  (size: 350-700 lines / 3-6 days)",
+    :area "rp2-homology"},
+   :id :lemma-rp2-integral-homology,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t92J05]}
+  {:consumer :t00J07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "attachDisk_openCoverPackage",
+    :type
+    "For the exact attachDisk quotient, U is homotopy equivalent to RP2, V contractible, intersection homotopy equivalent to Circle, with attaching leg identified  (size: 250-500 lines / 2-4 days)"},
+   :lemma
+   {:name "attachDisk_openCoverPackage",
+    :reported-by [:owner],
+    :type
+    "For the exact attachDisk quotient, U is homotopy equivalent to RP2, V contractible, intersection homotopy equivalent to Circle, with attaching leg identified  (size: 250-500 lines / 2-4 days)",
+    :area "disk-attachment-punctured-retraction"},
+   :id :lemma-attachdisk-opencoverpackage,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "vanKampen_attachDisk",
+    :type
+    "FundamentalGroup of apm_t00j07_attachDisk f is pi1(RP2) modulo the normal closure of the attaching class, at apm_t00j07_basepoint f  (size: 500-900 lines / 1-2 weeks)"},
+   :lemma
+   {:name "vanKampen_attachDisk",
+    :reported-by [:owner],
+    :type
+    "FundamentalGroup of apm_t00j07_attachDisk f is pi1(RP2) modulo the normal closure of the attaching class, at apm_t00j07_basepoint f  (size: 500-900 lines / 1-2 weeks)",
+    :area "van-kampen-two-open-cover"},
+   :id :lemma-vankampen-attachdisk,
+   :kind :lemma,
+   :depends-on
+   [:lemma-rp2-antipodal-cover-and-pi1
+    :lemma-attachdisk-opencoverpackage],
+   :other-consumers []}
+  {:consumer :t00J07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "mayerVietoris_attachDisk",
+    :type
+    "Compute all integral homology groups of the exact attachDisk quotient in the null and essential attaching cases  (size: 250-500 lines / 2-4 days)"},
+   :lemma
+   {:name "mayerVietoris_attachDisk",
+    :reported-by [:owner],
+    :type
+    "Compute all integral homology groups of the exact attachDisk quotient in the null and essential attaching cases  (size: 250-500 lines / 2-4 days)",
+    :area "mayer-vietoris-open-cover"},
+   :id :lemma-mayervietoris-attachdisk,
+   :kind :lemma,
+   :depends-on
+   [:lemma-rp2-integral-homology :lemma-attachdisk-opencoverpackage],
+   :other-consumers []}
+  {:consumer :t00J07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t00J07_attachment_bridges",
+    :type
+    "Both frozen apm_t00J07_bridge_*_attachment_invariants declarations  (size: 100-200 lines / 1-2 days after prerequisites)"},
+   :lemma
+   {:name "apm_t00J07_attachment_bridges",
+    :reported-by [:owner],
+    :type
+    "Both frozen apm_t00J07_bridge_*_attachment_invariants declarations  (size: 100-200 lines / 1-2 days after prerequisites)",
+    :area "van-kampen-two-open-cover"},
+   :id :lemma-apm-t00j07-attachment-bridges,
+   :kind :lemma,
+   :depends-on
+   [:lemma-vankampen-attachdisk :lemma-mayervietoris-attachdisk],
+   :other-consumers []}],
  :consumer-baselines {},
  :statuses
  #{:open
