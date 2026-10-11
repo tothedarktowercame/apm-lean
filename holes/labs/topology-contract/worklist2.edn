@@ -67618,6 +67618,19 @@
      {:cmd "git status --short",
       :exit 0,
       :output " M ConstructionTargets/ManifoldFundamentalClass.lean"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791677827096-3432-45b8e4df",
+     :commands
+     ["git show/diff-tree/check 788cb170213f48397e1ad0f600acc0ecddf246f3"
+      "git rev-parse recorded blob; git hash-object current module; sha256sum fixture"
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean"
+      "lake env lean /tmp/t02a03_right_core_compact_probe.lean"
+      "python3 scripts/statement-registry.py check --rev 788cb170213f48397e1ad0f600acc0ecddf246f3"
+      "statement fingerprints at commit and parent; comment-stripped placeholder census; clojure.edn/read-string worklist"],
+     :finding
+     "PASS: reviewer differs from author topo-6; commit changes only the scoped module and recorded/current blob 53e21e31ff8b585656f052970e0e59292ddd0d5c matches. Fixture SHA-256 matches. Module and frozen fixture compile with only propext, Classical.choice, and Quot.sound; registry is 131/0, frozen t02A03 fingerprint remains d123afd5ae0ee067587b3ed3d7b9b6d2f075c3d95701e098ec357c7317cd34c3, and the sole frozen placeholder remains. The ContinuousMap scales the Circle direction m by the Real convex radius embedded in Complex. Its zero endpoint is (1/8)m; its one endpoint is n because m equals normalize n and norm_smul_normalize restores n. Pointwise nonvanishing follows from strict coefficient positivity and Circle.coe_ne_zero. No ambient reconstruction or tube-membership claim was added."},
     :commit "788cb170213f48397e1ad0f600acc0ecddf246f3",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
@@ -67634,7 +67647,7 @@
    :phase :implementation,
    :type
    "forall (n : C(RightTubeMinusLeftCore, Complex)) (m : C(RightTubeMinusLeftCore, Circle)), (forall p, (m p : Complex) = NormedSpace.normalize (n p)) -> (forall p, n p ≠ 0) -> exists N : C(unitInterval × RightTubeMinusLeftCore, Complex), (forall p, N (0,p) = ((1/8 : Real) : Complex) * (m p : Complex)) and (forall p, N (1,p) = n p) and (forall tp, N tp ≠ 0)",
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/right-tube-radial-normal-interpolation",
@@ -67743,7 +67756,7 @@
      "For a continuous nonzero complex coordinate n and its normalized Circle direction m, the compiled ContinuousMap multiplies m by the positive radius (1-t)/8+t*norm(n). It starts at (1/8)m, ends at n by norm_smul_normalize, and never vanishes by rightTubeRadialCoefficient_pos. Instantiating n with the left-core normal coordinate and m with rightTubeMeridianCoordinate gives the deletion-preserving normal component compatible with the already banked rightTubePlanarRotation.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
