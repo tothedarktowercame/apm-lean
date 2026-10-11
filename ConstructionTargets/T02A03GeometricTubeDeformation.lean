@@ -1269,6 +1269,27 @@ theorem realEndpoints_zeroHeight_rightTubeCoreNormals
     simp [rightTubeCoreNormalComplex, apm_t02a03_circleMeridian, him, hheight]
   · simp [rightTubeCoreNormalComplex, hheight]
 
+noncomputable def zeroHeightSignedImaginaryWaypoint
+    (p : RightTubeMinusLeftCore) : ℂ :=
+  (((1 / 8 : ℝ) * (rightTubeMeridianCoordinate p : ℂ).re : ℝ) : ℂ) * Complex.I
+
+theorem zeroHeight_signedImaginaryWaypoint_properties
+    (p : RightTubeMinusLeftCore) (hheight : p.1 2 = 0) :
+    ‖zeroHeightSignedImaginaryWaypoint p‖ = (1 / 8 : ℝ) ∧
+      (zeroHeightSignedImaginaryWaypoint p).im ≠ 0 := by
+  obtain ⟨c, hc, him⟩ :=
+    rightTubeMeridianCoordinate_im_positiveFactor_height p
+  have him0 : (rightTubeMeridianCoordinate p : ℂ).im = 0 := by
+    rw [him, hheight]
+    ring
+  have hs : (rightTubeMeridianCoordinate p : ℂ).re ^ 2 = 1 := by
+    have hnorm := Circle.normSq_coe (rightTubeMeridianCoordinate p)
+    simpa only [Complex.normSq_apply, him0, zero_mul, add_zero, pow_two]
+      using hnorm
+  rcases (sq_eq_one_iff.mp hs) with hm | hm
+  · simp [zeroHeightSignedImaginaryWaypoint, hm, Complex.norm_def]
+  · simp [zeroHeightSignedImaginaryWaypoint, hm, Complex.norm_def]
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -1318,3 +1339,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.positiveSign_radialStart_collisionPolynomial_pos
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.positiveSign_input_collisionPolynomial_pos
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.realEndpoints_zeroHeight_rightTubeCoreNormals
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeight_signedImaginaryWaypoint_properties
