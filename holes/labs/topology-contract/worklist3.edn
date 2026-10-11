@@ -17137,6 +17137,31 @@
    :current-residual "Assemble the mapped h₃ colimit.",
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
+   :implements-lemma :lemma-mfclass-forget-snake-cokernel-limit,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/manifold-fundamental-class/mapped-snake-cokernel",
+   :acceptance
+   {:declaration
+    "ConstructionTargets.ManifoldFundamentalClass.forgetSnakeCokernelLimit",
+    :type
+    "∀ S : ShortComplex.SnakeInput (ModuleCat ℤ), ForgottenSnakeCokernelLimit S",
+    :fixture "/tmp/h3.lean",
+    :fixture-sha256
+    "a0f9dbeb380c1a3f32cb9373bab6ed65eaafbc3fcf5d19891f5d05800e4f81ef",
+    :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
+    :route-step "assemble mapped cokernel colimit",
+    :implementation "Promote only; exclude mapped SnakeInput."},
+   :id :routes-2026-10-11-mfclass-forget-snake-cokernel-limit-r1,
+   :kind :reusable-theorem,
+   :area "manifold-fundamental-class",
+   :depends-on
+   [:routes-2026-10-11-mfclass-forget-cokernel-pi3-limit-r1],
+   :current-residual "Package the mapped SnakeInput.",
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-closedorientedfundamentalclass,
    :evidence
@@ -17144,51 +17169,51 @@
     {:outcome :revise,
      :seat "topo-12",
      :fixture
-     {:path "/tmp/q3.lean",
+     {:path "/tmp/h3.lean",
       :sha256
-      "4d0214aae753f988c061e38a1fb39d6ed49f384efbdf6cde24d293c6dedd75e4"},
-     :commands [{:cmd "lake env lean /tmp/q3.lean", :exit 0}],
+      "a0f9dbeb380c1a3f32cb9373bab6ed65eaafbc3fcf5d19891f5d05800e4f81ef"},
+     :commands [{:cmd "lake env lean /tmp/h3.lean", :exit 0}],
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :missing-theorems
-     [{:id :lemma-mfclass-forget-cokernel-pi3-limit,
+     [{:id :lemma-mfclass-forget-snake-cokernel-limit,
        :name
-       "ConstructionTargets.ManifoldFundamentalClass.forgetSnakeCokernelτ₃Limit",
+       "ConstructionTargets.ManifoldFundamentalClass.forgetSnakeCokernelLimit",
        :type
-       "∀ S : ShortComplex.SnakeInput (ModuleCat ℤ), ForgottenSnakeCokernelτ₃Limit S",
+       "∀ S : ShortComplex.SnakeInput (ModuleCat ℤ), ForgottenSnakeCokernelLimit S",
        :status :proved,
        :consumers [:t00J02 :t98A02],
        :depends-on
-       ["ConstructionTargets.ManifoldFundamentalClass.forgetSnakeCokernelτ₂Limit"],
+       ["ConstructionTargets.ManifoldFundamentalClass.forgetSnakeCokernelτ₃Limit"],
        :area "manifold-fundamental-class"}],
      :prerequisite
      {:consumer :t00J02,
-      :implements-lemma :lemma-mfclass-forget-cokernel-pi3-limit,
+      :implements-lemma :lemma-mfclass-forget-snake-cokernel-limit,
       :phase :implementation,
       :state :open,
       :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/manifold-fundamental-class/cokernel-pi3-limit",
+      "TOPOLOGY-ROUTES.md/manifold-fundamental-class/mapped-snake-cokernel",
       :acceptance
       {:declaration
-       "ConstructionTargets.ManifoldFundamentalClass.forgetSnakeCokernelτ₃Limit",
+       "ConstructionTargets.ManifoldFundamentalClass.forgetSnakeCokernelLimit",
        :type
-       "∀ S : ShortComplex.SnakeInput (ModuleCat ℤ), ForgottenSnakeCokernelτ₃Limit S",
-       :fixture "/tmp/q3.lean",
+       "∀ S : ShortComplex.SnakeInput (ModuleCat ℤ), ForgottenSnakeCokernelLimit S",
+       :fixture "/tmp/h3.lean",
        :fixture-sha256
-       "4d0214aae753f988c061e38a1fb39d6ed49f384efbdf6cde24d293c6dedd75e4",
+       "a0f9dbeb380c1a3f32cb9373bab6ed65eaafbc3fcf5d19891f5d05800e4f81ef",
        :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
-       :route-step "mapped τ₃ cokernel limit",
-       :implementation "Promote only; exclude h₃ assembly."},
-      :id :routes-2026-10-11-mfclass-forget-cokernel-pi3-limit-r1,
+       :route-step "assemble mapped cokernel colimit",
+       :implementation "Promote only; exclude mapped SnakeInput."},
+      :id :routes-2026-10-11-mfclass-forget-snake-cokernel-limit-r1,
       :kind :reusable-theorem,
       :area "manifold-fundamental-class",
       :depends-on
-      [:routes-2026-10-11-mfclass-forget-cokernel-pi2-limit-r1],
-      :current-residual "Assemble the mapped h₃ colimit.",
+      [:routes-2026-10-11-mfclass-forget-cokernel-pi3-limit-r1],
+      :current-residual "Package the mapped SnakeInput.",
       :other-consumers [:t98A02]},
-     :residual "Promote τ₃ limit; then assemble h₃."}},
+     :residual "Promote h₃; then package mapped SnakeInput."}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -17303,7 +17328,8 @@
     :routes-2026-10-11-mfclass-forget-cokernel-pi1-r1
     :routes-2026-10-11-mfclass-forget-cokernel-pi1-limit-r1
     :routes-2026-10-11-mfclass-forget-cokernel-pi2-limit-r1
-    :routes-2026-10-11-mfclass-forget-cokernel-pi3-limit-r1],
+    :routes-2026-10-11-mfclass-forget-cokernel-pi3-limit-r1
+    :routes-2026-10-11-mfclass-forget-snake-cokernel-limit-r1],
    :current-residual
    "Local-degree counts and wild-ball complement homology remain.",
    :other-consumers [:t98A02]}
@@ -24688,6 +24714,28 @@
    :id :lemma-mfclass-forget-cokernel-pi3-limit,
    :kind :lemma,
    :depends-on [:lemma-mfclass-forget-cokernel-pi2-limit],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFundamentalClass.forgetSnakeCokernelLimit",
+    :type
+    "∀ S : ShortComplex.SnakeInput (ModuleCat ℤ), ForgottenSnakeCokernelLimit S"},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFundamentalClass.forgetSnakeCokernelLimit",
+    :reported-by
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    :type
+    "∀ S : ShortComplex.SnakeInput (ModuleCat ℤ), ForgottenSnakeCokernelLimit S",
+    :area "manifold-fundamental-class",
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+   :id :lemma-mfclass-forget-snake-cokernel-limit,
+   :kind :lemma,
+   :depends-on [:lemma-mfclass-forget-cokernel-pi3-limit],
    :other-consumers [:t98A02]}],
  :consumer-baselines {},
  :statuses
