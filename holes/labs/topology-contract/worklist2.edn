@@ -68055,62 +68055,59 @@
    "single-consumer left-core avoidance for the explicit radial ambient path",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:residual
-     "Prove every point of rightTubeRadialAmbientDeformation lies in apm_t02a03_rightTube, then package safeRightTubeMeridianDeformation.",
-     :outcome :go,
-     :warnings [],
-     :acceptance
-     {:declaration
-      "ConstructionTargets.T02A03GeometricTubeDeformation.avoidsLeftCore_rightTubeRadialAmbientDeformation",
-      :type
-      "forall tp : unitInterval × RightTubeMinusLeftCore, rightTubeRadialAmbientDeformation tp ∉ Set.range apm_t02a03_leftCore",
-      :gates
-      ["Compile the scoped module after inserting the fixture theorem"
-       "Confirm only propext, Classical.choice, and Quot.sound axioms"
-       "Confirm no new sorry in the scoped module"
-       "Run python3 scripts/statement-registry.py check"]},
-     :commands
-     [{:cmd "lake env lean /tmp/t02a03_leftcore_avoidance_probe.lean",
-       :exit 0,
-       :output
-       "avoidsLeftCore_rightTubeRadialAmbientDeformation compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd "sha256sum /tmp/t02a03_leftcore_avoidance_probe.lean",
-       :exit 0,
-       :output
-       "dfe009b25fce192c056a326ee3444bdb492d62bf048aa1716e9ed3a5feee1b7f  /tmp/t02a03_leftcore_avoidance_probe.lean"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_leftcore_avoidance_probe.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}
-      {:cmd
-       "rg -n 'avoidsLeftCore_rightTubeRadialAmbientDeformation' /tmp/t02a03_leftcore_avoidance_probe.lean",
-       :exit 0,
-       :output
-       "9:theorem avoidsLeftCore_rightTubeRadialAmbientDeformation\n32:#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.avoidsLeftCore_rightTubeRadialAmbientDeformation"}],
-     :fixture
-     {:path "/tmp/t02a03_leftcore_avoidance_probe.lean",
-      :sha256
-      "dfe009b25fce192c056a326ee3444bdb492d62bf048aa1716e9ed3a5feee1b7f"},
-     :finding
-     "The placeholder-free fixture turns hypothetical left-core membership into a zero recovered normal coordinate, then contradicts it using the positive radial coefficient and nonzero Circle factor.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
-      :declaration
-      "ConstructionTargets.T02A03GeometricTubeDeformation.avoidsLeftCore_rightTubeRadialAmbientDeformation",
-      :type
-      "forall tp : unitInterval × RightTubeMinusLeftCore, rightTubeRadialAmbientDeformation tp ∉ Set.range apm_t02a03_leftCore",
-      :proof-plan
-      "Assume left-core membership, convert it to vanishing with rightTubeNormalComplex_eq_zero_iff, rewrite by recoveredNormal_rightTubeRadialAmbientDeformation, and contradict the explicit product's nonvanishing using rightTubeRadialCoefficient_pos and Circle.coe_ne_zero.",
-      :axioms [propext Classical.choice Quot.sound]},
-     :seat "topo-8"}},
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Prove every point of rightTubeRadialAmbientDeformation lies in apm_t02a03_rightTube, then package the endpoints and both invariants as safeRightTubeMeridianDeformation.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["Existing linter warning at line 62: unnecessarySimpa; no new warnings"
+     "Concurrent staged modification in holes/labs/topology-contract/worklist3.edn appeared after verification and was preserved outside the scoped commit"],
+    :missing-theorems [],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms [propext Classical.choice Quot.sound],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :scope-blob "40d037b13a38b075cd3cc64361a5fb955ce33262",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd "lake env lean /tmp/t02a03_leftcore_avoidance_probe.lean",
+      :exit 0}
+     {:cmd "sha256sum /tmp/t02a03_leftcore_avoidance_probe.lean",
+      :exit 0,
+      :output
+      "dfe009b25fce192c056a326ee3444bdb492d62bf048aa1716e9ed3a5feee1b7f  /tmp/t02a03_leftcore_avoidance_probe.lean"}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeDeformation.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "git diff --check -- ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd "git status --short",
+      :exit 0,
+      :output "M  holes/labs/topology-contract/worklist3.edn"}],
+    :commit "8bd31cf17e23f8788cfe6da1eb33aa13dd24c69c",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.avoidsLeftCore_rightTubeRadialAmbientDeformation",
+    :fixture
+    {:path "/tmp/t02a03_leftcore_avoidance_probe.lean",
+     :sha256
+     "dfe009b25fce192c056a326ee3444bdb492d62bf048aa1716e9ed3a5feee1b7f"},
+    :finding
+    "Hypothetical left-core membership forces the recovered normal coordinate to vanish. Exact normal recovery rewrites this as vanishing of the radial interpolation, contradicting its positive scalar coefficient and nonzero Circle direction.",
+    :seat "topo-6"},
    :phase :implementation,
    :type
    "forall tp : unitInterval × RightTubeMinusLeftCore, rightTubeRadialAmbientDeformation tp ∉ Set.range apm_t02a03_leftCore",
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/avoids-left-core-radial-ambient",
