@@ -8194,8 +8194,97 @@
   {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-correctedlocalgeneratorcoefficient-eq-automorphism-one,
+   :evidence
+   {:placeholder-delta {:t00J02 0, :t98A02 0},
+    :residual
+    "Expand correctedLocalNormalizationAutomorphism into the coefficient normalization inverse, corrected relative comparison, and ambient normalization, then compare the concrete connecting, radial, and sphere conventions to prove its value at one is not negative one.",
+    :gates
+    {:exact-type :pass,
+     :scoped-commit-clean :pass,
+     :module-compile :pass,
+     :fixture-hash :pass,
+     :definitional-equality :pass,
+     :scope :pass,
+     :statement-registry :pass,
+     :placeholder-scan :pass,
+     :model-comparison-excluded :pass,
+     :target-build :pass,
+     :global-worktree :concurrent-dirty,
+     :sign-claims-excluded :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["lake build replayed pre-existing linter warnings"
+     "After the scoped commit, another writer modified holes/labs/topology-contract/build_step.bb and worklist.edn; this row did not touch or stage them."],
+    :missing-theorems
+    [{:id
+      :lemma-constructiontargets-manifoldfundamentalclass-correctedlocalgeneratorcoefficient-eq-automorphism-one,
+      :name
+      "ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient_eq_automorphism_one",
+      :type
+      "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), correctedLocalGeneratorCoefficient k x = (correctedLocalNormalizationAutomorphism k x).hom.hom 1",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on
+      ["ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient"
+       "ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism"],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes
+    {:fixture-sha256
+     "d0cc76053cbceebfe3c6c0dfc8b3a27a9bdceeee65e02b1bc7dab886dc2fa5f9"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/manifold_fundamental_class_corrected_coefficient_automorphism_one.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^\\s*axiom\\b' ConstructionTargets/ManifoldFundamentalClass.lean /tmp/manifold_fundamental_class_corrected_coefficient_automorphism_one.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd
+      "comment-stripped placeholder counts for problems/t00J02/lean/Main.lean and problems/t98A02/lean/Main.lean",
+      :exit 0,
+      :output "1 1"}
+     {:cmd "git status --short",
+      :exit 0,
+      :output
+      "M holes/labs/topology-contract/build_step.bb; M holes/labs/topology-contract/worklist.edn"}],
+    :representation
+    {:source
+     "The integer correctedLocalGeneratorCoefficient obtained by applying ambientLocalNormalization to the corrected comparison's coefficient chart generator",
+     :target
+     "The value at one of correctedLocalNormalizationAutomorphism, the coefficient normalization inverse followed by the corrected comparison and ambient normalization",
+     :direction
+     "Exact integer equality from the extracted corrected-generator coordinate representation to evaluation at one of the normalization-conjugated automorphism"},
+    :commit "c0e69e90c1a1633f5b3e0583e21df325e359cdee",
+    :commits ["c0e69e90c1a1633f5b3e0583e21df325e359cdee"],
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path
+     "/tmp/manifold_fundamental_class_corrected_coefficient_automorphism_one.lean",
+     :sha256
+     "d0cc76053cbceebfe3c6c0dfc8b3a27a9bdceeee65e02b1bc7dab886dc2fa5f9"},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :declaration
+     "ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient_eq_automorphism_one",
+     :type
+     "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), correctedLocalGeneratorCoefficient k x = (correctedLocalNormalizationAutomorphism k x).hom.hom 1"},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/corrected-coefficient-as-normalization-automorphism-coordinate",
@@ -11653,11 +11742,13 @@
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient_eq_automorphism_one",
     :reported-by
-    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+     :routes-2026-10-11-manifold-corrected-coefficient-automorphism-one-topo3-r1],
     :type
     "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), correctedLocalGeneratorCoefficient k x = (correctedLocalNormalizationAutomorphism k x).hom.hom 1",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in
+    :routes-2026-10-11-manifold-corrected-coefficient-automorphism-one-topo3-r1},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-correctedlocalgeneratorcoefficient-eq-automorphism-one,
    :kind :lemma,
