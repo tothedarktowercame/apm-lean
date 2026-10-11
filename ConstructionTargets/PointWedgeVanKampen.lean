@@ -532,6 +532,31 @@ def fundamentalGroupMulEquivOfSingleObjEquivalence
       (E.functor.obj (FundamentalGroupoid.mk x)) (SingleObj.star G)))).trans
       (SingleObj.toEnd G).symm)
 
+private theorem singleObj_eqToHom_eq_one
+    {G : Type u} [Group G] {A B : SingleObj G} (h : A = B) :
+    (eqToHom h : A ⟶ B) = (1 : G) := by
+  cases A
+  cases B
+  have hh : h = rfl := Subsingleton.elim _ _
+  rw [hh]
+  rfl
+
+/-- Evaluation of the representation-independent B5 extraction is the map
+on endomorphisms of the underlying equivalence functor. -/
+theorem fundamentalGroupMulEquivOfSingleObjEquivalence_apply
+    {X : Type u} [TopologicalSpace X] (x : X) (G : Type u) [Group G]
+    (E : FundamentalGroupoid X ≌ SingleObj G) (g : FundamentalGroup X x) :
+    fundamentalGroupMulEquivOfSingleObjEquivalence x G E g = E.functor.map g := by
+  change (eqToIso (Subsingleton.elim
+      (E.functor.obj (FundamentalGroupoid.mk x)) (SingleObj.star G))).inv ≫
+      E.functor.map g ≫
+      (eqToIso (Subsingleton.elim
+        (E.functor.obj (FundamentalGroupoid.mk x)) (SingleObj.star G))).hom = _
+  rw [eqToIso.inv, eqToIso.hom, singleObj_eqToHom_eq_one,
+    singleObj_eqToHom_eq_one]
+  rw [SingleObj.comp_as_mul, SingleObj.comp_as_mul]
+  simp
+
 section GenericFundamentalGroupEquivalence
 
 variable {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
@@ -550,6 +575,15 @@ def genericPointWedgeFundamentalGroupEquiv :
     (quotientMap x₀ y₀ (.inl x₀))
     (genericPointWedgeFreeProduct x₀ y₀)
     (genericPointWedgeSourceEquivalence x₀ y₀ M N hM hN hy hx cM cN)
+
+theorem genericPointWedgeFundamentalGroupEquiv_apply
+    (g : FundamentalGroup (Wedge x₀ y₀)
+      (quotientMap x₀ y₀ (.inl x₀))) :
+    genericPointWedgeFundamentalGroupEquiv
+        x₀ y₀ M N hM hN hy hx cM cN g =
+      (genericPointWedgeSourceEquivalence
+        x₀ y₀ M N hM hN hy hx cM cN).functor.map g :=
+  fundamentalGroupMulEquivOfSingleObjEquivalence_apply _ _ _ g
 
 private abbrev genericPointWedgeTarget :=
   SingleObj (genericPointWedgeFreeProduct x₀ y₀)
@@ -1121,6 +1155,8 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeSingleObjPostcomposeIso
 #print axioms genericPointWedgeSourceEquivalence
 #print axioms genericPointWedgeFundamentalGroupEquiv
+#print axioms fundamentalGroupMulEquivOfSingleObjEquivalence_apply
+#print axioms genericPointWedgeFundamentalGroupEquiv_apply
 #print axioms genericPointWedgeSourceCounit_naturality
 #print axioms genericPointWedgeSourceCounit_left
 #print axioms genericPointWedgeSourceCounit_right

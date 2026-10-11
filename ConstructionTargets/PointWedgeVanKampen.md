@@ -123,3 +123,11 @@ of the literal legs equal B3's mapped actions.  Injectivity of the explicit
 inner automorphism supplies the reverse direction.  A direct `rfl` check
 confirms this is not definitional; the remaining work must expose the
 comparison isomorphisms in the composed B3 transport.
+
+The B5 extraction layer has now been eliminated from that residual.
+`fundamentalGroupMulEquivOfSingleObjEquivalence_apply` proves that extraction
+into a `SingleObj` group evaluates exactly as the underlying equivalence
+functor on endomorphisms; its proof explicitly reduces the two `eqToIso`
+morphisms to the unit of the one-object group.  The specialized
+`genericPointWedgeFundamentalGroupEquiv_apply` therefore rewrites both
+remaining comparisons directly to maps of the reconstructed B4 functor.
