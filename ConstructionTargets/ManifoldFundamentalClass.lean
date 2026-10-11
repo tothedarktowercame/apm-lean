@@ -1165,6 +1165,24 @@ theorem integralRelativeChainsComparisonWithTransport_hom
       (relativeSingularChainsIsoCokernelSubspaceMap A).inv := by
   rfl
 
+/-- Homology of the transported integral relative-chain comparison factors as
+the ordered composite of the homology maps of its four defining factors. -/
+theorem integralRelativeChainsComparisonWithTransport_homologyMap
+    {X : Type} [TopologicalSpace X] (A : Set X) (n : ℕ) :
+    HomologicalComplex.homologyMap
+        (integralRelativeChainsComparisonWithTransport A).hom n =
+      HomologicalComplex.homologyMap
+          (forgetIntegralRelativeCokernelComparison A).hom n ≫
+      HomologicalComplex.homologyMap
+          (coefficientIntegralCokernelTransport A).hom n ≫
+      HomologicalComplex.homologyMap
+          (integralMappedRelativeCokernelComparison A).hom n ≫
+      HomologicalComplex.homologyMap
+          (relativeSingularChainsIsoCokernelSubspaceMap A).inv n := by
+  rw [integralRelativeChainsComparisonWithTransport_hom]
+  simp only [HomologicalComplex.homologyMap_comp]
+  rfl
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -1239,3 +1257,4 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_coefficient_factors
 #print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_corrected_comparison_factors
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport_hom
+#print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport_homologyMap
