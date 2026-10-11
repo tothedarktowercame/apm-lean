@@ -14224,6 +14224,21 @@
       "git status --short -- ConstructionTargets/ManifoldFundamentalClass.lean",
       :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791722405209-5352-eedaee9c",
+     :commands
+     ["git diff-tree --no-commit-id --name-status -r 5dd47928c7a39d76011835a2ffdf0d9a2bb7cfdd"
+      "git diff --check 5dd47928c7a39d76011835a2ffdf0d9a2bb7cfdd^ 5dd47928c7a39d76011835a2ffdf0d9a2bb7cfdd"
+      "sha256sum /tmp/manifold_fundamental_class_coefficient_inclusion_left_homology_preservation.lean ConstructionTargets/ManifoldFundamentalClass.lean"
+      "lake env lean fixture-body-with-promoted-name-renamed"
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped placeholder counts for t00J02 t98A02"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"],
+     :finding
+     "PASS: commit 5dd47928c7a39d76011835a2ffdf0d9a2bb7cfdd has exact one-file scope and matching recorded blob; fixture and module hashes reproduce exactly; the theorem faithfully states inverse mapLeftHomologyIso naturality for the coefficient subspace inclusion in the frozen orientation, directly using ShortComplex.mapLeftHomologyIso_inv_naturality without asserting the right-homology face, a snake-input comparison, connecting preservation, or later sign claims; fixture body, module, registry, and 8326-job build pass; axioms are exactly propext, Classical.choice, and Quot.sound; target placeholders are zero and consumer counts remain 1/1."},
     :commit "5dd47928c7a39d76011835a2ffdf0d9a2bb7cfdd",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -14240,7 +14255,7 @@
     :routes-2026-10-11-manifold-coefficient-pair-inclusion-left-homology-preservation-topo3-r1,
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/integral-open-disk-connecting-naturality/snake-input-left-homology",
@@ -14428,7 +14443,7 @@
      "The snake-input comparison requires preservation of the intermediate left- and right-homology objects as well as cycles and opcycles. The compiled theorem supplies left-homology naturality for the coefficient inclusion. The right-homology face and assembled SnakeInput.Hom remain before naturality_δ can prove connecting preservation.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -21196,7 +21211,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -21213,7 +21228,10 @@
     "forall {X : Type} [TopologicalSpace X] (A : Set X) (n : ℕ), let φ := CoefficientRelativeSmall.subspaceMap ℤ A; let ψ := (HomologicalComplex.shortComplexFunctor (ModuleCat ℤ) (ComplexShape.down ℕ) n).map φ; forgetIntModules.map (ShortComplex.leftHomologyMap ψ) ≫ (((CoefficientH0.SingularChains ℤ (TopCat.of X)).sc n).mapLeftHomologyIso forgetIntModules).inv = (((CoefficientH0.SingularChains ℤ (TopCat.of A)).sc n).mapLeftHomologyIso forgetIntModules).inv ≫ ShortComplex.leftHomologyMap (forgetIntModules.mapShortComplex.map ψ)",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-coefficient-pair-inclusion-left-homology-preservation-topo3-r1},
+    :routes-2026-10-11-manifold-coefficient-pair-inclusion-left-homology-preservation-topo3-r1,
+    :banked-by
+    :routes-2026-10-11-manifold-coefficient-pair-inclusion-left-homology-preservation-topo3-r1,
+    :banked-commit "5dd47928c7a39d76011835a2ffdf0d9a2bb7cfdd"},
    :id
    :lemma-mfclass-coefficient-pair-inclusion-left-homology-preservation,
    :kind :lemma,
