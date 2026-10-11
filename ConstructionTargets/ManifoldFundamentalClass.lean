@@ -1218,6 +1218,25 @@ theorem correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_transport_homolog
   rw [correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_corrected_comparison_factors]
   rw [integralRelativeChainsComparisonWithTransport_homologyMap_eq_composite]
 
+/-- The coefficient relative projection cancels the preservation prefix of the
+explicit transported-comparison homology composite. -/
+theorem coefficientProjection_comp_integralTransportHomologyComposite
+    {X : Type} [TopologicalSpace X] (A : Set X) (n : ℕ) :
+    forgetIntModules.map
+        (HomologicalComplex.homologyMap
+          (cokernel.π (CoefficientRelativeSmall.subspaceMap ℤ A)) n) ≫
+      (((CoefficientRelativeSmall.relativeChains ℤ A).sc n).mapHomologyIso
+        forgetIntModules).inv ≫
+      integralTransportHomologyComposite A n =
+    (((CoefficientH0.SingularChains ℤ (TopCat.of X)).sc n).mapHomologyIso
+        forgetIntModules).inv ≫
+      HomologicalComplex.homologyMap
+        (singularChainsComparison (TopCat.of X)).hom n ≫
+      HomologicalComplex.homologyMap (relativeSingularProjection A) n := by
+  rw [← integralRelativeChainsComparisonWithTransport_homologyMap_eq_composite]
+  simpa only [← Category.assoc] using
+    integralRelativeHomologyComparisonWithTransport_projection A n
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -1294,5 +1313,6 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport_hom
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport_homologyMap
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralTransportHomologyComposite
+#print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientProjection_comp_integralTransportHomologyComposite
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport_homologyMap_eq_composite
 #print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_transport_homology_factors
