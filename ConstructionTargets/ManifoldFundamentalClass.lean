@@ -1323,6 +1323,29 @@ theorem correctedLocalNormalizationAutomorphism_hom_eq_neg_implies_projected_fac
           simpa only [Category.assoc] using halignTail.symm
     _ = _ := hq
 
+/-- The projected forbidden-sign equation with its coefficient endpoint
+replaced by the concrete seven-factor composite. -/
+theorem correctedLocalNormalizationAutomorphism_hom_eq_neg_implies_concrete_endpoints
+    (k : ℕ) {M : Type} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M) :
+    (correctedLocalNormalizationAutomorphism k x).hom = -𝟙 _ →
+      (((CoefficientH0.SingularChains ℤ (TopCat.of M)).sc (k + 2)).mapHomologyIso
+          forgetIntModules).inv ≫
+        HomologicalComplex.homologyMap
+          (singularChainsComparison (TopCat.of M)).hom (k + 2) ≫
+        HomologicalComplex.homologyMap
+          (relativeSingularProjection (deletedPoint x)) (k + 2) ≫
+        (ambientChartHomologyIso k x).inv ≫
+        (HigherModelLocalHomology.localIsoInt k).hom =
+      coefficientProjectedForwardComposite k x ≫ (-𝟙 _) := by
+  intro hneg
+  have h :=
+    correctedLocalNormalizationAutomorphism_hom_eq_neg_implies_projected_factors
+      k x hneg
+  have he := coefficientProjection_comp_coefficientLocalForwardComposite k x
+  have heneg := congrArg (fun f => f ≫ (-𝟙 _)) he
+  exact h.trans (by simpa only [Category.assoc] using heneg)
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -1403,5 +1426,6 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralTransportHomologyComposite
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientProjection_comp_integralTransportHomologyComposite
 #print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_implies_projected_factors
+#print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_implies_concrete_endpoints
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport_homologyMap_eq_composite
 #print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_transport_homology_factors
