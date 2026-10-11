@@ -102611,86 +102611,132 @@
    "Use the two total Circle decoders to prove specialized relation invariance and left-inverse formulas, then derive injectivity.",
    :other-consumers []}
   {:bounded-exception
+   "This single-consumer prerequisite proves that the two total Circle decoders respect the exact specialized generating relations, enabling quotient descent.",
+   :consumer :t97A01,
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/PolygonBoundaryCircleDecoderRelationInvariant.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/boundary-circle-decoder-relation-invariant",
+   :acceptance
+   {:implementation
+    "Promote the exact fixture. Use the explicit three-case normal forms for N3CircleRel and TorusCrosscapCircleRel, rewrite both total decoders by their literal edge formulas, and discharge each generator case with the corresponding decoder-table equality. Do not descend through EqvGen, prove left-inverse formulas, prove boundary-map injectivity or homeomorphism, derive ThreeCircles or outer-piece formulas, compute invariants, or close t97A01.",
+    :placeholder "the single sorry in apm_t97a01",
+    :route-step
+    "polygon radial open-cover step 36: prove both total Circle decoders respect their specialized boundary generators",
+    :fixture
+    "/tmp/polygon-boundary-circle-decoder-relation-invariant.lean",
+    :fixture-sha256
+    "7c7a9d670cfab455183df96ce7e545e58c4e61cb4fac52f52163ef573584d22b",
+    :gates
+    ["lake build ConstructionTargets.PolygonBoundaryCircleDecoderRelationInvariant"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id
+   :routes-2026-10-11-polygon-boundary-circle-decoder-relation-invariant-76,
+   :kind :reusable-theorem,
+   :area "polygon-surface-open-cover",
+   :depends-on
+   [:routes-2026-10-11-polygon-boundary-circle-decoder-well-defined-75],
+   :current-residual
+   "Descend the relation-invariant decoders through EqvGen and prove their left-inverse formulas on the three canonical loops; then apply the banked injectivity reduction.",
+   :other-consumers []}
+  {:bounded-exception
    "This single-consumer concrete quotient package is the other final backlog lemma on t97A01 and supplies the actual two polygon models required by its frozen statement.",
    :consumer :t97A01,
    :implements-lemma :lemma-polygonradialopencoverpackages,
    :evidence
    {:probe
     {:residual
-     "Prove full closed-edge decoder presentation independence and descend both tables to total Circle decoders; then establish relation invariance and left-inverse formulas for the two quotient maps.",
+     "Descend both decoders through the generated relations, prove the three-loop left-inverse formulas, and apply the quotient left-inverse theorem to obtain injectivity.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
-     [{:name "polygonBoundaryCircleDecoderWellDefined",
+     [{:name
+       "PolygonBoundaryCircleDecoderRelationInvariant.n3CircleDecode_respects",
        :type
-       "For j k : Fin 6 and t u : Set.Icc (0 : Real) 1, equality circleEdgePoint j t = circleEdgePoint k u implies equality of both n3EdgeDecode values and both torusCrosscapEdgeDecode values; consequently both tables descend to total functions Circle → ThreeEndpointLoops satisfying their literal edge formulas.",
+       "For z w : Circle, N3CircleRel z w implies n3CircleDecode z = n3CircleDecode w.",
+       :status :proved,
+       :consumers [:t97A01],
+       :depends-on
+       ["PolygonBoundaryGeneratorNormalForms.n3CircleRel_iff"
+        "polygonBoundaryCircleDecoderWellDefined"],
+       :area "polygon-surface-open-cover"}
+      {:name
+       "PolygonBoundaryCircleDecoderRelationInvariant.torusCrosscapCircleDecode_respects",
+       :type
+       "For z w : Circle, TorusCrosscapCircleRel z w implies torusCrosscapCircleDecode z = torusCrosscapCircleDecode w.",
+       :status :proved,
+       :consumers [:t97A01],
+       :depends-on
+       ["PolygonBoundaryGeneratorNormalForms.torusCrosscapCircleRel_iff"
+        "polygonBoundaryCircleDecoderWellDefined"],
+       :area "polygon-surface-open-cover"}
+      {:name "polygonBoundaryThreeLoopDecoderLeftInverse",
+       :type
+       "The descended N3 and torus-crosscap Circle decoders are left inverses of the respective representative functions from ThreeEndpointLoops on all three canonical loop forms.",
        :status :not-started,
        :consumers [:t97A01],
        :depends-on
-       ["PolygonSixEdgeFinalEndpointWrap.final_endpoint_has_halfOpen_presentation"
-        "PolygonSixEdgeEndpointNormalization.nonfinal_endpoint_has_halfOpen_presentation"
-        "PolygonBoundaryDecoderInteriors.n3EdgeDecode_interior_wellDefined"
-        "PolygonBoundaryDecoderInteriors.torusCrosscapEdgeDecode_interior_wellDefined"
-        "PolygonBoundaryDecoderVertices.n3EdgeDecode_endpoints"
-        "PolygonBoundaryDecoderVertices.torusCrosscapEdgeDecode_endpoints"
-        "PolygonSixEdgeCircleCover.sixEdgeCircleCover"],
+       ["PolygonBoundaryCircleDecoderRelationInvariant.n3CircleDecode_respects"
+        "PolygonBoundaryCircleDecoderRelationInvariant.torusCrosscapCircleDecode_respects"
+        "PolygonThreeLoopHalfOpenNormalForm.threeEndpointLoops_halfOpen_rep"],
        :area "polygon-surface-open-cover"}],
      :prerequisite
      {:bounded-exception
-      "This single-consumer prerequisite completes decoder descent from six closed edge presentations to Circle before relation invariance and left-inverse proofs.",
+      "This single-consumer prerequisite proves that the two total Circle decoders respect the exact specialized generating relations, enabling quotient descent.",
       :consumer :t97A01,
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/PolygonBoundaryCircleDecoderWellDefined.lean"],
+      ["ConstructionTargets/PolygonBoundaryCircleDecoderRelationInvariant.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/boundary-circle-decoder-well-defined",
+      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/boundary-circle-decoder-relation-invariant",
       :acceptance
       {:implementation
-       "Promote the exact fixture. Split each closed parameter into a half-open parameter or parameter one. Normalize all parameter-one cases using the five successor endpoint theorems and the final period wrap. Apply half-open interior presentation independence in the remaining case to prove both decoder tables agree on every pair of presentations. Use the six-edge Circle cover to define total N3 and torus-crosscap Circle decoders and prove their literal formulas on all six edges. Do not prove relation invariance, quotient descent, boundary-map injectivity or homeomorphism, ThreeCircles formulas, outer-piece formulas, invariants, or t97A01.",
+       "Promote the exact fixture. Use the explicit three-case normal forms for N3CircleRel and TorusCrosscapCircleRel, rewrite both total decoders by their literal edge formulas, and discharge each generator case with the corresponding decoder-table equality. Do not descend through EqvGen, prove left-inverse formulas, prove boundary-map injectivity or homeomorphism, derive ThreeCircles or outer-piece formulas, compute invariants, or close t97A01.",
        :placeholder "the single sorry in apm_t97a01",
        :route-step
-       "polygon radial open-cover step 35: descend both closed-edge decoder tables to total Circle decoders",
+       "polygon radial open-cover step 36: prove both total Circle decoders respect their specialized boundary generators",
        :fixture
-       "/tmp/polygon-boundary-circle-decoder-well-defined.lean",
+       "/tmp/polygon-boundary-circle-decoder-relation-invariant.lean",
        :fixture-sha256
-       "982179e5b1179237ae93c4c1a89a3022533eeb169f1ed5a3a1ea76c9eb42bfbc",
+       "7c7a9d670cfab455183df96ce7e545e58c4e61cb4fac52f52163ef573584d22b",
        :gates
-       ["lake build ConstructionTargets.PolygonBoundaryCircleDecoderWellDefined"
+       ["lake build ConstructionTargets.PolygonBoundaryCircleDecoderRelationInvariant"
         "fixture compiles"
         "zero source and fixture sorry"
         "standard-only axioms"
         "registry check"]},
       :id
-      :routes-2026-10-11-polygon-boundary-circle-decoder-well-defined-75,
+      :routes-2026-10-11-polygon-boundary-circle-decoder-relation-invariant-76,
       :kind :reusable-theorem,
       :area "polygon-surface-open-cover",
       :depends-on
-      [:routes-2026-10-11-polygon-six-edge-final-endpoint-wrap-74],
+      [:routes-2026-10-11-polygon-boundary-circle-decoder-well-defined-75],
       :current-residual
-      "Use the two total Circle decoders to prove specialized relation invariance and left-inverse formulas, then derive injectivity.",
+      "Descend the relation-invariant decoders through EqvGen and prove their left-inverse formulas on the three canonical loops; then apply the banked injectivity reduction.",
       :other-consumers []},
-     :axioms
-     ["propext"
-      "Classical.choice"
-      "Quot.sound"
-      "PolygonBoundaryCircleDecoderWellDefinedProbe.edgeDecoderPresentationIndependent"],
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake env lean /tmp/polygon-boundary-circle-decoder-well-defined.lean",
+       "lake env lean /tmp/polygon-boundary-circle-decoder-relation-invariant.lean",
        :exit 0,
        :finding
-       "The full presentation-independence interface, chosen total decoders, and both literal edge formulas compile from one isolated interface axiom."}
+       "Both specialized decoder relation-invariance theorems compile from the explicit generator normal forms and literal decoder edge formulas."}
       {:cmd
-       "sha256sum /tmp/polygon-boundary-circle-decoder-well-defined.lean",
+       "sha256sum /tmp/polygon-boundary-circle-decoder-relation-invariant.lean",
        :exit 0,
        :finding
-       "982179e5b1179237ae93c4c1a89a3022533eeb169f1ed5a3a1ea76c9eb42bfbc"}
+       "7c7a9d670cfab455183df96ce7e545e58c4e61cb4fac52f52163ef573584d22b"}
       {:cmd
-       "rg -n \"\\b(sorry|admit)\\b\" /tmp/polygon-boundary-circle-decoder-well-defined.lean",
+       "rg -n \"\\b(sorry|admit|axiom)\\b\" /tmp/polygon-boundary-circle-decoder-relation-invariant.lean",
        :exit 1,
        :expected-exit 1,
-       :finding "No fixture placeholders."}
+       :finding "No fixture placeholders or custom axioms."}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :finding "131 registered statements match, 0 do not."}
@@ -102700,23 +102746,17 @@
        :exit 0,
        :finding
        "The route guide, per-problem routes, and probe definitions were read."}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/polygon-boundary-circle-decoder-well-defined.lean",
-       :exit 1,
-       :finding
-       "The first fixture draft selected an unrelated unqualified ThreeEndpointLoops alias and did not unfold the decoder definitions before applying presentation independence.",
-       :correction
-       "Opened ThreeEndpointLoopsHomeomorph and unfolded each total decoder; the successful rerun is recorded in commands."}],
+     :diagnostic-history [],
      :fixture
-     {:path "/tmp/polygon-boundary-circle-decoder-well-defined.lean",
+     {:path
+      "/tmp/polygon-boundary-circle-decoder-relation-invariant.lean",
       :sha256
-      "982179e5b1179237ae93c4c1a89a3022533eeb169f1ed5a3a1ea76c9eb42bfbc",
+      "7c7a9d670cfab455183df96ce7e545e58c4e61cb4fac52f52163ef573584d22b",
       :interface
-      "Both six-edge decoder tables are presentation-independent on closed canonical edges and therefore descend to total Circle decoders with literal edge formulas."},
+      "The total N3 and torus-crosscap Circle decoders respect their respective generating boundary relations."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -102771,7 +102811,8 @@
     :routes-2026-10-11-polygon-boundary-decoder-interiors-72
     :routes-2026-10-11-polygon-six-edge-nonfinal-endpoint-normalization-73
     :routes-2026-10-11-polygon-six-edge-final-endpoint-wrap-74
-    :routes-2026-10-11-polygon-boundary-circle-decoder-well-defined-75],
+    :routes-2026-10-11-polygon-boundary-circle-decoder-well-defined-75
+    :routes-2026-10-11-polygon-boundary-circle-decoder-relation-invariant-76],
    :current-residual
    "Combine the concrete cover packages with the strict overlap squares, banked Smith normalization, and final t97A01 assembly.",
    :other-consumers []}
@@ -107110,6 +107151,80 @@
     :lemma-polygonboundarydecoderinteriors-toruscrosscapedgedecode-interior-welldefined
     :lemma-polygonsixedgeendpointnormalization-nonfinal-endpoint-has-halfopen-presentation
     :lemma-polygonsixedgefinalendpointwrap-final-endpoint-has-halfopen-presentation],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "PolygonBoundaryCircleDecoderRelationInvariant.n3CircleDecode_respects",
+    :type
+    "For z w : Circle, N3CircleRel z w implies n3CircleDecode z = n3CircleDecode w."},
+   :lemma
+   {:name
+    "PolygonBoundaryCircleDecoderRelationInvariant.n3CircleDecode_respects",
+    :reported-by
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    :type
+    "For z w : Circle, N3CircleRel z w implies n3CircleDecode z = n3CircleDecode w.",
+    :area "polygon-surface-open-cover",
+    :proved-in
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+   :id
+   :lemma-polygonboundarycircledecoderrelationinvariant-n3circledecode-respects,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polygonboundarygeneratornormalforms-n3circlerel-iff
+    :lemma-polygonboundarycircledecoderwelldefined],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "PolygonBoundaryCircleDecoderRelationInvariant.torusCrosscapCircleDecode_respects",
+    :type
+    "For z w : Circle, TorusCrosscapCircleRel z w implies torusCrosscapCircleDecode z = torusCrosscapCircleDecode w."},
+   :lemma
+   {:name
+    "PolygonBoundaryCircleDecoderRelationInvariant.torusCrosscapCircleDecode_respects",
+    :reported-by
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    :type
+    "For z w : Circle, TorusCrosscapCircleRel z w implies torusCrosscapCircleDecode z = torusCrosscapCircleDecode w.",
+    :area "polygon-surface-open-cover",
+    :proved-in
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+   :id
+   :lemma-polygonboundarycircledecoderrelationinvariant-toruscrosscapcircledecode-respects,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polygonboundarygeneratornormalforms-toruscrosscapcirclerel-iff
+    :lemma-polygonboundarycircledecoderwelldefined],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "polygonBoundaryThreeLoopDecoderLeftInverse",
+    :type
+    "The descended N3 and torus-crosscap Circle decoders are left inverses of the respective representative functions from ThreeEndpointLoops on all three canonical loop forms."},
+   :lemma
+   {:name "polygonBoundaryThreeLoopDecoderLeftInverse",
+    :reported-by
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    :type
+    "The descended N3 and torus-crosscap Circle decoders are left inverses of the respective representative functions from ThreeEndpointLoops on all three canonical loop forms.",
+    :area "polygon-surface-open-cover"},
+   :id :lemma-polygonboundarythreeloopdecoderleftinverse,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polygonboundarycircledecoderrelationinvariant-n3circledecode-respects
+    :lemma-polygonboundarycircledecoderrelationinvariant-toruscrosscapcircledecode-respects
+    :lemma-polygonthreeloophalfopennormalform-threeendpointloops-halfopen-rep],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
