@@ -101348,91 +101348,116 @@
    "Classify equality of the N3 and torus-crosscap quotient images of the three now-canonical half-open loop forms, then deduce injectivity.",
    :other-consumers []}
   {:bounded-exception
+   "This single-consumer prerequisite reduces both pending boundary-map injectivity proofs to constructing relation-invariant decoders with explicit left-inverse formulas.",
+   :consumer :t97A01,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/RelationQuotientLeftInverse.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/relation-quotient-left-inverse",
+   :acceptance
+   {:implementation
+    "Promote the exact fixture. Prove that a function respecting a generating relation respects EqvGen and therefore descends to its quotient. Prove that a representative map into this quotient is injective whenever a relation-invariant decoder is a left inverse of its representative function, including the variant with a separately stated quotient formula. Do not construct polygon decoders, classify specialized boundary fibers, prove the two boundary maps injective or homeomorphic, derive ThreeCircles or outer-piece formulas, compute invariants, or close t97A01.",
+    :placeholder "the single sorry in apm_t97a01",
+    :route-step
+    "polygon radial open-cover step 28: reduce boundary quotient injectivity to a relation-invariant decoder",
+    :fixture "/tmp/relation-quotient-left-inverse.lean",
+    :fixture-sha256
+    "a39392e3a36d8362f9b7303e5d3dcdd1253af6d04c5d3684493fe387aff6aaab",
+    :gates
+    ["lake build ConstructionTargets.RelationQuotientLeftInverse"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-11-relation-quotient-left-inverse-68,
+   :kind :reusable-theorem,
+   :area "polygon-surface-open-cover",
+   :depends-on
+   [:routes-2026-10-11-polygon-three-loop-half-open-equality-67],
+   :current-residual
+   "Build the two specialized decoders from canonical half-open six-edge coordinates, prove relation invariance and left-inverse formulas, and derive injectivity.",
+   :other-consumers []}
+  {:bounded-exception
    "This single-consumer concrete quotient package is the other final backlog lemma on t97A01 and supplies the actual two polygon models required by its frozen statement.",
    :consumer :t97A01,
    :implements-lemma :lemma-polygonradialopencoverpackages,
    :evidence
    {:probe
     {:residual
-     "Use the exact half-open source equality classification to classify equality of N3 and torus-crosscap quotient images, prove both three-loop maps injective and homeomorphic, then finish the ThreeCircles formulas and radial packages.",
+     "Construct relation-invariant decoders for N3CircleRel and TorusCrosscapCircleRel on the six canonical half-open edge coordinates, prove their left-inverse formulas on the three selected loops, and apply the compiled quotient reduction to obtain injectivity.",
      :outcome :revise,
-     :warnings
-     ["Lean reports two unnecessarySimpa style warnings in the explicit Ico carrier conversions; they do not affect theorem statements, proof terms, or axioms."],
+     :warnings [],
      :missing-theorems
-     [{:name
-       "PolygonThreeLoopHalfOpenEquality.endpoint_halfOpen_injective",
+     [{:name "RelationQuotientLeftInverse.eqvGen_respects",
        :type
-       "The endpoint-quotient map is injective on half-open unit-interval representatives.",
+       "A function respecting a generating relation also respects its generated equivalence relation.",
        :status :proved,
        :consumers [:t97A01],
-       :depends-on
-       ["PointWedgeExactEquality.quotientMap_inl_injective"],
+       :depends-on [],
        :area "polygon-surface-open-cover"}
       {:name
-       "PolygonThreeLoopHalfOpenEquality.three_loop_half_open_equalities",
+       "RelationQuotientLeftInverse.injective_of_quotient_formula",
        :type
-       "Same-loop half-open representatives are equal exactly at equal parameters, and representatives on distinct loops are equal exactly when both parameters are zero.",
+       "A map into an EqvGen quotient is injective when its representative formula admits a relation-invariant left-inverse decoder.",
        :status :proved,
        :consumers [:t97A01],
-       :depends-on
-       ["PolygonThreeLoopHalfOpenEquality.endpoint_halfOpen_injective"
-        "PointWedgeExactEquality.quotientMap_inl_eq_inr_iff"],
+       :depends-on ["RelationQuotientLeftInverse.eqvGen_respects"],
        :area "polygon-surface-open-cover"}
       {:name "polygonBoundaryThreeLoopFiberClassification",
        :type
-       "Classify equality of N3 and torus-crosscap quotient images for the three canonical half-open loop forms, including the common zero endpoint.",
+       "Construct relation-invariant decoders for the N3 and torus-crosscap boundary relations on canonical half-open edge coordinates and prove their left-inverse formulas on ThreeEndpointLoops.",
        :status :not-started,
        :consumers [:t97A01],
        :depends-on
-       ["PolygonThreeLoopHalfOpenEquality.three_loop_half_open_equalities"
+       ["RelationQuotientLeftInverse.injective_of_quotient_formula"
+        "PolygonThreeLoopHalfOpenEquality.three_loop_half_open_equalities"
         "PolygonSixEdgeInteriorUniqueness.circleEdgePoint_interior_injective"],
        :area "polygon-surface-open-cover"}],
      :prerequisite
      {:bounded-exception
-      "This single-consumer prerequisite gives the exact source equality classification needed to turn the pending target fiber classifications into injectivity.",
+      "This single-consumer prerequisite reduces both pending boundary-map injectivity proofs to constructing relation-invariant decoders with explicit left-inverse formulas.",
       :consumer :t97A01,
       :phase :implementation,
       :state :open,
-      :scope
-      ["ConstructionTargets/PolygonThreeLoopHalfOpenEquality.lean"],
+      :scope ["ConstructionTargets/RelationQuotientLeftInverse.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/three-loop-half-open-equality",
+      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/relation-quotient-left-inverse",
       :acceptance
       {:implementation
-       "Promote the exact fixture. Prove injectivity of EndpointQuotient on half-open representatives and characterize equality with endpointBase. For each of the three nested loop embeddings, prove equality exactly when parameters agree. For each distinct pair of loops, prove equality exactly when both half-open parameters are zero. Do not classify N3CircleRel or TorusCrosscapCircleRel quotient fibers, prove injectivity or homeomorphism of the boundary comparison maps, derive ThreeCircles or outer-piece formulas, compute invariants, or close t97A01.",
+       "Promote the exact fixture. Prove that a function respecting a generating relation respects EqvGen and therefore descends to its quotient. Prove that a representative map into this quotient is injective whenever a relation-invariant decoder is a left inverse of its representative function, including the variant with a separately stated quotient formula. Do not construct polygon decoders, classify specialized boundary fibers, prove the two boundary maps injective or homeomorphic, derive ThreeCircles or outer-piece formulas, compute invariants, or close t97A01.",
        :placeholder "the single sorry in apm_t97a01",
        :route-step
-       "polygon radial open-cover step 27: classify equality of all three half-open source loop forms",
-       :fixture "/tmp/polygon-three-loop-half-open-equality.lean",
+       "polygon radial open-cover step 28: reduce boundary quotient injectivity to a relation-invariant decoder",
+       :fixture "/tmp/relation-quotient-left-inverse.lean",
        :fixture-sha256
-       "395e53ac2cdb4bf16c34e30888369806b57ece320d38f47675ee8a94ecc26a43",
+       "a39392e3a36d8362f9b7303e5d3dcdd1253af6d04c5d3684493fe387aff6aaab",
        :gates
-       ["lake build ConstructionTargets.PolygonThreeLoopHalfOpenEquality"
+       ["lake build ConstructionTargets.RelationQuotientLeftInverse"
         "fixture compiles"
         "zero source and fixture sorry"
         "standard-only axioms"
         "registry check"]},
-      :id :routes-2026-10-11-polygon-three-loop-half-open-equality-67,
+      :id :routes-2026-10-11-relation-quotient-left-inverse-68,
       :kind :reusable-theorem,
       :area "polygon-surface-open-cover",
-      :depends-on [:routes-2026-10-10-point-wedge-exact-equality-66],
+      :depends-on
+      [:routes-2026-10-11-polygon-three-loop-half-open-equality-67],
       :current-residual
-      "Classify equality of the N3 and torus-crosscap quotient images of the three now-canonical half-open loop forms, then deduce injectivity.",
+      "Build the two specialized decoders from canonical half-open six-edge coordinates, prove relation invariance and left-inverse formulas, and derive injectivity.",
       :other-consumers []},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :axioms [],
      :commands
-     [{:cmd
-       "lake env lean /tmp/polygon-three-loop-half-open-equality.lean",
+     [{:cmd "lake env lean /tmp/relation-quotient-left-inverse.lean",
        :exit 0,
        :finding
-       "Endpoint half-open injectivity, equality with the basepoint, three same-loop equality criteria, and all three cross-loop equality criteria compile."}
-      {:cmd
-       "sha256sum /tmp/polygon-three-loop-half-open-equality.lean",
+       "EqvGen relation preservation, quotient descent, and both left-inverse injectivity reductions compile without axioms."}
+      {:cmd "sha256sum /tmp/relation-quotient-left-inverse.lean",
        :exit 0,
        :finding
-       "395e53ac2cdb4bf16c34e30888369806b57ece320d38f47675ee8a94ecc26a43"}
+       "a39392e3a36d8362f9b7303e5d3dcdd1253af6d04c5d3684493fe387aff6aaab"}
       {:cmd
-       "rg -n \"\\b(sorry|admit)\\b\" /tmp/polygon-three-loop-half-open-equality.lean",
+       "rg -n \"\\b(sorry|admit)\\b\" /tmp/relation-quotient-left-inverse.lean",
        :exit 1,
        :expected-exit 1,
        :finding "No fixture placeholders."}
@@ -101445,30 +101470,23 @@
        :finding
        "The route guide, per-problem routes, and probe definitions were read."}],
      :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/polygon-three-loop-half-open-equality.lean",
+     [{:cmd "lake env lean /tmp/relation-quotient-left-inverse.lean",
        :exit 1,
        :finding
-       "The first draft did not unfold intervalQuotientMap before applying its homeomorphism formula and used ill-typed subtype transports; explicitly changing and unfolding the expression and comparing with the zero half-open subtype corrected those goals."}
-      {:cmd
-       "lake env lean /tmp/polygon-three-loop-half-open-equality.lean",
+       "The first draft used invalid implicit-binder brackets; replacing them with Lean implicit binders corrected parsing."}
+      {:cmd "lake env lean /tmp/relation-quotient-left-inverse.lean",
        :exit 1,
        :finding
-       "The second draft oriented the inner cross-summand equality incorrectly for the second-versus-third loop case; applying the banked cross equality theorem to the symmetric equation corrected it."}
-      {:cmd
-       "lake env lean /tmp/polygon-three-loop-half-open-equality.lean",
-       :exit 1,
-       :finding
-       "The AddCircle representative theorem required its upper endpoint in the literal zero-plus-one spelling; supplying the basepoint parameter and converted Ico proofs corrected elaboration."}],
+       "The first quotient-formula proof tried to rewrite beneath an unreduced lambda; composing the two formula equalities with the assumed map equality produced the required representative equality directly."}],
      :fixture
-     {:path "/tmp/polygon-three-loop-half-open-equality.lean",
+     {:path "/tmp/relation-quotient-left-inverse.lean",
       :sha256
-      "395e53ac2cdb4bf16c34e30888369806b57ece320d38f47675ee8a94ecc26a43",
+      "a39392e3a36d8362f9b7303e5d3dcdd1253af6d04c5d3684493fe387aff6aaab",
       :interface
-      "EndpointQuotient is injective on half-open representatives; same-loop equality is parameter equality, and cross-loop equality occurs exactly at the common zero endpoint."},
+      "A relation-respecting decoder descends through EqvGen; if it is a left inverse of representatives, the induced map into the relation quotient is injective."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -101515,7 +101533,8 @@
     :routes-2026-10-10-polygon-six-edge-interior-uniqueness-64
     :routes-2026-10-10-polygon-three-loop-half-open-normal-form-65
     :routes-2026-10-10-point-wedge-exact-equality-66
-    :routes-2026-10-11-polygon-three-loop-half-open-equality-67],
+    :routes-2026-10-11-polygon-three-loop-half-open-equality-67
+    :routes-2026-10-11-relation-quotient-left-inverse-68],
    :current-residual
    "Combine the concrete cover packages with the strict overlap squares, banked Smith normalization, and final t97A01 assembly.",
    :other-consumers []}
@@ -104774,7 +104793,8 @@
     :lemma-pointwedgeexactequality-quotientmap-inl-injective
     :lemma-pointwedgeexactequality-quotientmap-inr-injective
     :lemma-pointwedgeexactequality-quotientmap-inl-eq-inr-iff
-    :lemma-polygonthreeloophalfopenequality-three-loop-half-open-equalities],
+    :lemma-polygonthreeloophalfopenequality-three-loop-half-open-equalities
+    :lemma-relationquotientleftinverse-injective-of-quotient-formula],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -105163,6 +105183,49 @@
    :kind :lemma,
    :depends-on
    [:lemma-polygonthreeloophalfopenequality-endpoint-halfopen-eq-base-iff],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "RelationQuotientLeftInverse.eqvGen_respects",
+    :type
+    "A function respecting a generating relation also respects its generated equivalence relation."},
+   :lemma
+   {:name "RelationQuotientLeftInverse.eqvGen_respects",
+    :reported-by
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    :type
+    "A function respecting a generating relation also respects its generated equivalence relation.",
+    :area "polygon-surface-open-cover",
+    :proved-in
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+   :id :lemma-relationquotientleftinverse-eqvgen-respects,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "RelationQuotientLeftInverse.injective_of_quotient_formula",
+    :type
+    "A map into an EqvGen quotient is injective when its representative formula admits a relation-invariant left-inverse decoder."},
+   :lemma
+   {:name "RelationQuotientLeftInverse.injective_of_quotient_formula",
+    :reported-by
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    :type
+    "A map into an EqvGen quotient is injective when its representative formula admits a relation-invariant left-inverse decoder.",
+    :area "polygon-surface-open-cover",
+    :proved-in
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+   :id
+   :lemma-relationquotientleftinverse-injective-of-quotient-formula,
+   :kind :lemma,
+   :depends-on [:lemma-relationquotientleftinverse-eqvgen-respects],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
