@@ -16867,6 +16867,17 @@
       :exit 1,
       :reason
       "declaration inserted between kernel proof bullets; moved after proof"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791742131227-5729-61913a9b",
+     :commands
+     ["git scope/diff/hash checks at 58fa1968b4af97b4f5699887fae29055621bae9c"
+      "renamed fixture and module: lake env lean"
+      "registry and placeholder scans"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"],
+     :finding
+     "One-file scope, recorded blob, and frozen hashes match. The proof applies parallel-pair colimit preservation to S.h₃τ₁, yielding IsColimit of the forgotten τ₁ cokernel cofork; no transport, other component, or assembly is added. Fixture/module compile; registry 131/0; build 8326 jobs; standard axioms only; placeholders 0; consumers 1/1."},
     :commit "58fa1968b4af97b4f5699887fae29055621bae9c",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -16881,7 +16892,7 @@
     :row :routes-2026-10-11-mfclass-forget-cokernel-pi1-r1,
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/cokernel-pi1",
@@ -16958,7 +16969,7 @@
       "83f3e4f6d50156adcc27d494c8f65749c409fe7934ec31f246490b3df0ebd959"},
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -24341,7 +24352,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -24356,14 +24367,16 @@
     :type
     "∀ S : ShortComplex.SnakeInput (ModuleCat ℤ), ForgottenSnakeCokernelτ₁Preserved S",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2,
+    :banked-by :routes-2026-10-11-mfclass-forget-cokernel-pi1-r1,
+    :banked-commit "58fa1968b4af97b4f5699887fae29055621bae9c"},
    :id :lemma-mfclass-forget-cokernel-pi1,
    :kind :lemma,
    :depends-on [:lemma-mfclass-forget-snake-kernel-limit],
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "forgetSnakeCokernelτ₁Preserved",
@@ -24375,7 +24388,9 @@
     :type
     "∀ S : ShortComplex.SnakeInput (ModuleCat ℤ), ForgottenSnakeCokernelτ₁Preserved S",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-11-mfclass-forget-cokernel-pi1-r1},
+    :proved-in :routes-2026-10-11-mfclass-forget-cokernel-pi1-r1,
+    :banked-by :routes-2026-10-11-mfclass-forget-cokernel-pi1-r1,
+    :banked-commit "58fa1968b4af97b4f5699887fae29055621bae9c"},
    :id :lemma-forgetsnakecokernel-preserved,
    :kind :lemma,
    :depends-on [:lemma-forgetsnakekernellimit],
