@@ -408,6 +408,18 @@ def genericPointWedgeIdentityCoordinateSpan :
     (SingleObj (genericPointWedgeFreeProduct x₀ y₀))).inverse.obj
       (genericPointWedgeIdentityPointSpan x₀ y₀)
 
+/-- The B3 inverse object after transporting the coordinate span back across
+the three homotopy equivalences of the literal cover span. -/
+def genericPointWedgeIdentityActualSpan :
+    SpanPseudoCocone
+      (genericPointWedgeActualLeft x₀ y₀ M N)
+      (genericPointWedgeActualRight x₀ y₀ M N)
+      (SingleObj (genericPointWedgeFreeProduct x₀ y₀)) :=
+  (genericPointWedgeCoordinateSpanEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN
+    (SingleObj (genericPointWedgeFreeProduct x₀ y₀))).inverse.obj
+      (genericPointWedgeIdentityCoordinateSpan x₀ y₀)
+
 omit [PathConnectedSpace X] [PathConnectedSpace Y] in
 @[simp] theorem genericPointWedgeIdentityRepresentation_inl
     (g : genericPointWedgeLeftGroup x₀) :
@@ -463,6 +475,26 @@ omit [PathConnectedSpace X] [PathConnectedSpace Y] in
     simp [genericPointWedgeSingleObjEquivalence, genericPointWedgeConnectors,
       ConnectorSystem.normalForm]]
   exact genericPointWedgeIdentityPointSpan_right x₀ y₀ g
+
+theorem genericPointWedgeIdentityActualSpan_left_map
+    {a b : FundamentalGroupoid (genericPointWedgeLeftPiece x₀ y₀ M)}
+    (f : a ⟶ b) :
+    (genericPointWedgeIdentityActualSpan
+      x₀ y₀ M N hM hN hy hx cM cN).left.map f =
+      (genericPointWedgeIdentityCoordinateSpan x₀ y₀).left.map
+        ((genericPointWedgeLeftGroupoidEquivalence
+          x₀ y₀ M N hM hN hy hx cM cN).functor.map f) := by
+  rfl
+
+theorem genericPointWedgeIdentityActualSpan_right_map
+    {a b : FundamentalGroupoid (genericPointWedgeRightPiece x₀ y₀ N)}
+    (f : a ⟶ b) :
+    (genericPointWedgeIdentityActualSpan
+      x₀ y₀ M N hM hN hy hx cM cN).right.map f =
+      (genericPointWedgeIdentityCoordinateSpan x₀ y₀).right.map
+        ((genericPointWedgeRightGroupoidEquivalence
+          x₀ y₀ M N hM hN hy hx cM cN).functor.map f) := by
+  rfl
 
 variable {C D : Type} [Category C] [Category D]
 
@@ -1319,12 +1351,15 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeIdentityRepresentation
 #print axioms genericPointWedgeIdentityPointSpan
 #print axioms genericPointWedgeIdentityCoordinateSpan
+#print axioms genericPointWedgeIdentityActualSpan
 #print axioms genericPointWedgeIdentityRepresentation_inl
 #print axioms genericPointWedgeIdentityRepresentation_inr
 #print axioms genericPointWedgeIdentityPointSpan_left
 #print axioms genericPointWedgeIdentityPointSpan_right
 #print axioms genericPointWedgeIdentityCoordinateSpan_left
 #print axioms genericPointWedgeIdentityCoordinateSpan_right
+#print axioms genericPointWedgeIdentityActualSpan_left_map
+#print axioms genericPointWedgeIdentityActualSpan_right_map
 #print axioms genericPointWedgeSingleObjPostcomposeIso
 #print axioms genericPointWedgeSourceEquivalence
 #print axioms genericPointWedgeInverseIdentityFunctor

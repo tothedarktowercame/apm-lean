@@ -164,3 +164,10 @@ chosen base objects, the connector normal forms reduce to identity
 conjugations, so its left and right maps again evaluate to the literal
 coproduct injections.  B6 therefore remains only at the earlier open-cover
 and homotopy-equivalence transports.
+
+`genericPointWedgeIdentityActualSpan` now exposes the inverse homotopy
+transport over the literal cover span.  Its two map formulas are definitional:
+each cover-piece morphism is first mapped by the corresponding B1 groupoid
+equivalence and then evaluated by the coordinate-span object.  The remaining
+B6 calculation is therefore the identification of the literal wedge legs
+through the open-cover pseudopushout with these two cover-piece maps.
