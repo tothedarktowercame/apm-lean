@@ -105653,10 +105653,82 @@
   {:bounded-exception
    "This single-consumer theorem supplies the one missing continuity direction needed to upgrade the fundamental-domain quotient equivalence to a homeomorphism.",
    :consumer :t93J03,
+   :stop-count 1,
    :implements-lemma
    :lemma-closedsquareorbitquotientequiv-continuous-symm,
+   :evidence
+   {:placeholder-delta
+    {:source-before 0, :source-after 0, :fixture-sorry 0},
+    :residual
+    "Prove the explicit affine action orbit relation closed and its quotient map open (or directly establish T2Space PlaneOrbitQuotient); then apply closedSquareOrbitQuotientEquiv_continuous_symm_of_t2 and package the homeomorphism.",
+    :outcome :stop,
+    :warnings [],
+    :missing-theorems
+    [{:name "KleinPlaneOrbitQuotient.t2Space",
+      :type
+      "T2Space (Quotient KleinClosedSquareOrbitQuotientEquiv.orbitSetoid) for the coinduced topology from Quotient.mk orbitSetoid : ℝ × ℝ → Quotient orbitSetoid",
+      :status :not-started,
+      :consumers [:t93J03],
+      :depends-on
+      ["KleinPlaneOrbitQuotient.sameOrbit_isClosed"
+       "KleinPlaneOrbitQuotient.quotientMap_isOpen"],
+      :area "deck-group-fundamental-group"}
+     {:name "closedSquareOrbitQuotientEquiv_continuous_symm",
+      :type
+      "Continuous (closedSquareOrbitQuotientEquiv.symm : PlaneOrbitQuotient → ClosedSquareOrbitQuotient)",
+      :status :partial,
+      :consumers [:t93J03],
+      :depends-on ["KleinPlaneOrbitQuotient.t2Space"],
+      :area "deck-group-fundamental-group"}],
+    :statement-hashes
+    {:source-sha256
+     "9063584c1295a87c9b0adb366f163c053758efef59fe5a07c85bb64dd9c3968b",
+     :registry "131 registered statements match, 0 do not"},
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :reason
+    "Compiled the compactness of the closed fundamental square and its orbit quotient, and proved that the requested inverse is continuous as soon as the coinduced plane-orbit quotient is Hausdorff. The remaining theorem is not available in Mathlib or ConstructionTargets: the explicit Klein affine action orbit quotient must be proved Hausdorff, via closedness of SameOrbit together with an open quotient map (or an equivalent properly-discontinuous-action theorem). The square-boundary orbit classification alone classifies pairs inside the compact fundamental square; it does not establish closedness of the full plane orbit relation or the quotient-open property.",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/klein-closed-square-orbit-inverse-continuity-probe.lean",
+      :exit 0,
+      :finding
+      "13940d7755ac8e1c1072f48beb95f1c653185796cdaf9860955c9c12eebd5317"}
+     {:cmd
+      "lake build ConstructionTargets.KleinClosedSquareOrbitInverseContinuity",
+      :exit 0,
+      :finding "Build completed successfully (8260 jobs)."}
+     {:cmd
+      "lake env lean /tmp/klein-closed-square-orbit-inverse-continuity-probe.lean",
+      :exit 0,
+      :finding
+      "Fixture still uses continuous_closedSquareOrbitQuotientEquiv_symm as its custom frozen axiom."}
+     {:cmd
+      "rg -n \"\\b(sorry|admit|axiom)\\b\" ConstructionTargets/KleinClosedSquareOrbitInverseContinuity.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}],
+    :diagnostic-history
+    [{:cmd
+      "lake env lean ConstructionTargets/KleinClosedSquareOrbitInverseContinuity.lean",
+      :exit 1,
+      :finding
+      "Initial compact-square proof did not unfold the product order and used the compact-subtype equivalence with incorrect projection syntax; corrected with an explicit four-inequality equivalence and isCompact_iff_compactSpace.mp."}],
+    :commit "42b893185",
+    :changed-paths
+    ["ConstructionTargets/KleinClosedSquareOrbitInverseContinuity.lean"],
+    :fixture
+    {:path
+     "/tmp/klein-closed-square-orbit-inverse-continuity-probe.lean",
+     :sha256
+     "13940d7755ac8e1c1072f48beb95f1c653185796cdaf9860955c9c12eebd5317",
+     :status :self-axiomatized},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/KleinClosedSquareOrbitInverseContinuity.lean"],
    :dag-node
@@ -112478,13 +112550,16 @@
    {:name "closedSquareOrbitQuotientEquiv_continuous_symm",
     :reported-by
     [:routes-2026-10-11-klein-orbit-quotient-homeomorph-102
-     :routes-2026-10-11-klein-orbit-quotient-homeomorph-96],
+     :routes-2026-10-11-klein-orbit-quotient-homeomorph-96
+     :routes-2026-10-11-klein-closed-square-orbit-inverse-continuity-104],
     :type
     "Continuous (closedSquareOrbitQuotientEquiv.symm : PlaneOrbitQuotient → ClosedSquareOrbitQuotient) for the coinduced quotient topologies",
     :area "deck-group-fundamental-group"},
    :id :lemma-closedsquareorbitquotientequiv-continuous-symm,
    :kind :lemma,
-   :depends-on [:lemma-kleinsquareboundaryorbiteqvgen],
+   :depends-on
+   [:lemma-kleinsquareboundaryorbiteqvgen
+    :lemma-kleinplaneorbitquotient-t2space],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -112769,6 +112844,51 @@
     "The intrinsic nontrivial generated-relation loci in Disk and ClosedSquare each have connected-component quotient equivalent to Fin 4.",
     :area "polygon-quotient-identification"},
    :id :lemma-relationlocushasfourcomponents,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "KleinPlaneOrbitQuotient.t2Space",
+    :type
+    "T2Space (Quotient KleinClosedSquareOrbitQuotientEquiv.orbitSetoid) for the coinduced topology from Quotient.mk orbitSetoid : ℝ × ℝ → Quotient orbitSetoid"},
+   :lemma
+   {:name "KleinPlaneOrbitQuotient.t2Space",
+    :reported-by
+    [:routes-2026-10-11-klein-closed-square-orbit-inverse-continuity-104],
+    :type
+    "T2Space (Quotient KleinClosedSquareOrbitQuotientEquiv.orbitSetoid) for the coinduced topology from Quotient.mk orbitSetoid : ℝ × ℝ → Quotient orbitSetoid",
+    :area "deck-group-fundamental-group"},
+   :id :lemma-kleinplaneorbitquotient-t2space,
+   :kind :lemma,
+   :depends-on
+   [:lemma-kleinplaneorbitquotient-sameorbit-isclosed
+    :lemma-kleinplaneorbitquotient-quotientmap-isopen],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "KleinPlaneOrbitQuotient.sameOrbit_isClosed"},
+   :lemma
+   {:name "KleinPlaneOrbitQuotient.sameOrbit_isClosed",
+    :reported-by []},
+   :id :lemma-kleinplaneorbitquotient-sameorbit-isclosed,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "KleinPlaneOrbitQuotient.quotientMap_isOpen"},
+   :lemma
+   {:name "KleinPlaneOrbitQuotient.quotientMap_isOpen",
+    :reported-by []},
+   :id :lemma-kleinplaneorbitquotient-quotientmap-isopen,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}],
