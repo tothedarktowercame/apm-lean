@@ -113955,12 +113955,25 @@
     {:commit "e8cbe896fe154e6fa9b5796b1e0581b0726f3886",
      :next
      "Obtain independent review of B10-B12; after blueprint approval implement the next ready planned node."},
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791715670216-5135-8baf4385",
+     :commands
+     ["git show e8cbe896fe154e6fa9b5796b1e0581b0726f3886 --stat and diff"
+      "git show recorded blueprint | sha256sum"
+      "git diff --check recorded commit"
+      "python3 scripts/statement-registry.py check"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "git show recorded Lean source | placeholder scan"],
+     :finding
+     "PASS: recorded commit changes only the blueprint and matches hash b56003194b5599a5fe7ae38add5ea4a756931ceb09c7519ac42a0d742027683c. B10 constructs the punctured-circle pointed contraction, B11 constructs the restricted-open TwoCircles pointed contraction, and B12 explicitly uses both for the two B6 applications. The dependency chain, basepoint orientations, and representation transports are mathematically coherent; the existing module builds and its recorded source has no placeholders."},
     :commit "e8cbe896fe154e6fa9b5796b1e0581b0726f3886",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.blueprint.md"],
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113981,7 +113994,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: This program job proved a generic bridge from any fundamental-groupoid equivalence with a one-object groupoid to the corresponding fundamental-group equivalence. The generic point-wedge target-natural equivalence and final ThreeCircles specialization remain.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Blueprint repaired. New B10 specifies the punctured-circle neighborhood and pointed contraction; new B11 constructs the restricted-open neighborhood of the TwoCircles wedge point and its quotient-descended pointed contraction. The final specialization is now B12 and explicitly uses both nodes.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 50,
@@ -114001,7 +114014,11 @@
     {:job 3,
      :commit "72d1fcaf0745652ecbc75095af242ae860341027",
      :reason
-     "This program job proved a generic bridge from any fundamental-groupoid equivalence with a one-object groupoid to the corresponding fundamental-group equivalence. The generic point-wedge target-natural equivalence and final ThreeCircles specialization remain."}]}
+     "This program job proved a generic bridge from any fundamental-groupoid equivalence with a one-object groupoid to the corresponding fundamental-group equivalence. The generic point-wedge target-natural equivalence and final ThreeCircles specialization remain."}
+    {:job 7,
+     :commit "e8cbe896fe154e6fa9b5796b1e0581b0726f3886",
+     :reason
+     "Blueprint repaired. New B10 specifies the punctured-circle neighborhood and pointed contraction; new B11 constructs the restricted-open neighborhood of the TwoCircles wedge point and its quotient-descended pointed contraction. The final specialization is now B12 and explicitly uses both nodes."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
