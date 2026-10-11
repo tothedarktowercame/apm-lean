@@ -116148,6 +116148,18 @@
     {:commit "8d5fbc66d1a48854a8f15fbfadb4a2eff88887de",
      :next
      "Implement B7 with the type-correct order H1(reflectionMap 1) followed by H1(beta), then use proved B8 to close B9."},
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791723441764-5382-35b238ce",
+     :commands
+     ["git show/diff-tree 8d5fbc66d1a48854a8f15fbfadb4a2eff88887de"
+      "recorded-tree SHA-256, exact-scope, diff-check, and placeholder-delta verification"
+      "python3 scripts/statement-registry.py check"
+      "lake env lean problems/t95J02/lean/Main.lean"
+      "lake env lean recorded source plus #print axioms apm_t95J02_bridge_retraction_injective"],
+     :finding
+     "PASS: commit 8d5fbc66 proves the new B8 milestone and reduces the source from three placeholders to two. The retraction identity is mapped in the correct order to H1(inclusion) followed by H1(retraction) = identity, which gives injectivity of the inclusion-induced map. Scope and hashes match, the module and registry gates pass, only standard axioms occur, and B7/B9 are explicitly retained as the remaining milestones."},
     :commit "8d5fbc66d1a48854a8f15fbfadb4a2eff88887de",
     :changed-paths
     ["problems/t95J02/lean/Main.lean"
@@ -116168,7 +116180,7 @@
       {:id :B9, :status :planned}]},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t95J02/lean/Main.lean"
     "problems/t95J02/status.json"
@@ -116184,7 +116196,7 @@
     ["lake env lean problems/t95J02/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Program milestone advanced. B6 is partial: verticalSweep descends the continuous map (t,y) ↦ [(t,y)] through AddCircle 1, and verticalSweepHomotopy proves its endpoints are the vertical core map and that map precomposed with additive negation. The remaining B6 step is the representation transport identifying additive negation through t95J02CircleB_homeo with coordinate-1 Euclidean reflection.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Program milestone completed. Blueprint node B8 is proved: a retraction identity maps under integral H1 to a left inverse for the inclusion map, so the inclusion-induced H1 map is injective. B7 and B9 remain.",
    :id :program-2026-10-11-close-t95j02,
    :kind :final-adapter,
    :campaign-priority 41,
@@ -116216,7 +116228,11 @@
     {:job 9,
      :commit "5ad0b052e235a1a01be0035c81b870751f40215a",
      :reason
-     "Program milestone advanced. B6 is partial: verticalSweep descends the continuous map (t,y) ↦ [(t,y)] through AddCircle 1, and verticalSweepHomotopy proves its endpoints are the vertical core map and that map precomposed with additive negation. The remaining B6 step is the representation transport identifying additive negation through t95J02CircleB_homeo with coordinate-1 Euclidean reflection."}]}
+     "Program milestone advanced. B6 is partial: verticalSweep descends the continuous map (t,y) ↦ [(t,y)] through AddCircle 1, and verticalSweepHomotopy proves its endpoints are the vertical core map and that map precomposed with additive negation. The remaining B6 step is the representation transport identifying additive negation through t95J02CircleB_homeo with coordinate-1 Euclidean reflection."}
+    {:job 1,
+     :commit "8d5fbc66d1a48854a8f15fbfadb4a2eff88887de",
+     :reason
+     "Program milestone completed. Blueprint node B8 is proved: a retraction identity maps under integral H1 to a left inverse for the inclusion map, so the inclusion-induced H1 map is injective. B7 and B9 remain."}]}
   {:consumer :t92J08,
    :stop-count 1,
    :evidence
@@ -117161,7 +117177,7 @@
    :other-consumers []}
   {:consumer :t95J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t95J02Closure.t95J02_beta_homotopic_beta_reflection",
@@ -117173,7 +117189,9 @@
     :type
     "For beta defined by t95J02CircleB_homeo followed by t95J02InclusionB, ContinuousMap.Homotopic beta (beta.comp (CoefficientFirstReflection.reflectionMap 0))",
     :area "klein-bottle-homology",
-    :proved-in :program-2026-10-11-close-t95j02},
+    :proved-in :program-2026-10-11-close-t95j02,
+    :banked-by :program-2026-10-11-close-t95j02,
+    :banked-commit "8d5fbc66d1a48854a8f15fbfadb4a2eff88887de"},
    :id :lemma-t95j02closure-t95j02-beta-homotopic-beta-reflection,
    :kind :lemma,
    :depends-on
@@ -117201,7 +117219,7 @@
    :other-consumers []}
   {:consumer :t95J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t95J02Closure.apm_t95J02_bridge_retraction_injective",
@@ -117213,7 +117231,9 @@
     :type
     "HasT95J02Retraction t95J02InclusionB implies injectivity of the induced integral H1 map",
     :area "klein-bottle-homology",
-    :proved-in :program-2026-10-11-close-t95j02},
+    :proved-in :program-2026-10-11-close-t95j02,
+    :banked-by :program-2026-10-11-close-t95j02,
+    :banked-commit "8d5fbc66d1a48854a8f15fbfadb4a2eff88887de"},
    :id :lemma-t95j02closure-apm-t95j02-bridge-retraction-injective,
    :kind :lemma,
    :depends-on [],
