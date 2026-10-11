@@ -17511,58 +17511,82 @@
    :current-residual "Build terminal row, Hom and δ.",
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
+   :implements-lemma :lemma-mfclass-forget-terminal-row,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/manifold-fundamental-class/snake-hom-row3",
+   :acceptance
+   {:declaration
+    "ConstructionTargets.ManifoldFundamentalClass.forgetTerminalHomologyRowHom",
+    :type
+    "∀ {ι} {c : ComplexShape ι} (K : ShortComplex (HomologicalComplex (ModuleCat ℤ) c)) (j : ι), ForgottenHomologyRowHom K j",
+    :fixture "/tmp/trow.lean",
+    :fixture-sha256
+    "a466839cf5d077bb58af7b277bd9a9e5b7fadb16c3877385a83acc4141dc2d15",
+    :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
+    :route-step "SnakeInput.Hom row 3",
+    :implementation "Promote fixture only."},
+   :id :routes-2026-10-11-mfclass-forget-terminal-row-r1,
+   :kind :reusable-theorem,
+   :area "manifold-fundamental-class",
+   :depends-on [:routes-2026-10-11-mfclass-forget-cycles-row-r1],
+   :current-residual "Prove row squares; assemble Hom.",
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-closedorientedfundamentalclass,
    :evidence
    {:probe
-    {:residual "Promote row 2; build terminal row, Hom and δ.",
+    {:residual "Promote row 3; prove squares and Hom.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
-     [{:id :lemma-mfclass-forget-cycles-row,
+     [{:id :lemma-mfclass-forget-terminal-row,
        :name
-       "ConstructionTargets.ManifoldFundamentalClass.forgetCyclesRowHom",
+       "ConstructionTargets.ManifoldFundamentalClass.forgetTerminalHomologyRowHom",
        :type
-       "∀ {ι} {c : ComplexShape ι} (K : ShortComplex (HomologicalComplex (ModuleCat ℤ) c)) (i : ι), ForgottenCyclesRowHom K i",
+       "∀ {ι} {c : ComplexShape ι} (K : ShortComplex (HomologicalComplex (ModuleCat ℤ) c)) (j : ι), ForgottenHomologyRowHom K j",
        :status :proved,
        :consumers [:t00J02 :t98A02],
        :depends-on
-       ["ConstructionTargets.ManifoldFundamentalClass.forgetOpcyclesRowHom"],
+       ["ConstructionTargets.ManifoldFundamentalClass.forgetCyclesRowHom"],
        :area "manifold-fundamental-class"}],
      :prerequisite
      {:consumer :t00J02,
-      :implements-lemma :lemma-mfclass-forget-cycles-row,
+      :implements-lemma :lemma-mfclass-forget-terminal-row,
       :phase :implementation,
       :state :open,
       :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/manifold-fundamental-class/snake-hom-row2",
+      "TOPOLOGY-ROUTES.md/manifold-fundamental-class/snake-hom-row3",
       :acceptance
       {:declaration
-       "ConstructionTargets.ManifoldFundamentalClass.forgetCyclesRowHom",
+       "ConstructionTargets.ManifoldFundamentalClass.forgetTerminalHomologyRowHom",
        :type
-       "∀ {ι} {c : ComplexShape ι} (K : ShortComplex (HomologicalComplex (ModuleCat ℤ) c)) (i : ι), ForgottenCyclesRowHom K i",
-       :fixture "/tmp/crow.lean",
+       "∀ {ι} {c : ComplexShape ι} (K : ShortComplex (HomologicalComplex (ModuleCat ℤ) c)) (j : ι), ForgottenHomologyRowHom K j",
+       :fixture "/tmp/trow.lean",
        :fixture-sha256
-       "e4d8a59ac63e8d02f61646ccef4112dee3415133672567fb3afd542e204620f4",
+       "a466839cf5d077bb58af7b277bd9a9e5b7fadb16c3877385a83acc4141dc2d15",
        :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
-       :route-step "SnakeInput.Hom row 2",
+       :route-step "SnakeInput.Hom row 3",
        :implementation "Promote fixture only."},
-      :id :routes-2026-10-11-mfclass-forget-cycles-row-r1,
+      :id :routes-2026-10-11-mfclass-forget-terminal-row-r1,
       :kind :reusable-theorem,
       :area "manifold-fundamental-class",
-      :depends-on [:routes-2026-10-11-mfclass-forget-opcycles-row-r1],
-      :current-residual "Build terminal row, Hom and δ.",
+      :depends-on [:routes-2026-10-11-mfclass-forget-cycles-row-r1],
+      :current-residual "Prove row squares; assemble Hom.",
       :other-consumers [:t98A02]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands [{:cmd "lake env lean /tmp/crow.lean", :exit 0}],
+     :commands [{:cmd "lake env lean /tmp/trow.lean", :exit 0}],
      :fixture
-     {:path "/tmp/crow.lean",
+     {:path "/tmp/trow.lean",
       :sha256
-      "e4d8a59ac63e8d02f61646ccef4112dee3415133672567fb3afd542e204620f4"},
+      "a466839cf5d077bb58af7b277bd9a9e5b7fadb16c3877385a83acc4141dc2d15"},
      :seat "topo-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -17682,7 +17706,8 @@
     :routes-2026-10-11-mfclass-forget-snake-input-r1
     :routes-2026-10-11-mfclass-forget-homology-row-r1
     :routes-2026-10-11-mfclass-forget-opcycles-row-r1
-    :routes-2026-10-11-mfclass-forget-cycles-row-r1],
+    :routes-2026-10-11-mfclass-forget-cycles-row-r1
+    :routes-2026-10-11-mfclass-forget-terminal-row-r1],
    :current-residual
    "Local-degree counts and wild-ball complement homology remain.",
    :other-consumers [:t98A02]}
@@ -25188,6 +25213,28 @@
    :id :lemma-mfclass-forget-cycles-row,
    :kind :lemma,
    :depends-on [:lemma-mfclass-forget-opcycles-row],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFundamentalClass.forgetTerminalHomologyRowHom",
+    :type
+    "∀ {ι} {c : ComplexShape ι} (K : ShortComplex (HomologicalComplex (ModuleCat ℤ) c)) (j : ι), ForgottenHomologyRowHom K j"},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFundamentalClass.forgetTerminalHomologyRowHom",
+    :reported-by
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    :type
+    "∀ {ι} {c : ComplexShape ι} (K : ShortComplex (HomologicalComplex (ModuleCat ℤ) c)) (j : ι), ForgottenHomologyRowHom K j",
+    :area "manifold-fundamental-class",
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+   :id :lemma-mfclass-forget-terminal-row,
+   :kind :lemma,
+   :depends-on [:lemma-mfclass-forget-cycles-row],
    :other-consumers [:t98A02]}],
  :consumer-baselines {},
  :statuses
