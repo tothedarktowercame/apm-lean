@@ -14958,8 +14958,81 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :implements-lemma :lemma-mfclass-forget-parallel-pair-limits,
+   :evidence
+   {:placeholder-delta
+    {:t00J02 {:before 1, :after 1, :delta 0},
+     :t98A02 {:before 1, :after 1, :delta 0}},
+    :residual
+    "Prove the dual preservation of parallel-pair colimits, then compare the preserved component kernel and cokernel cones with evaluations of the mapped short-complex forks and package the mapped SnakeInput.",
+    :gates
+    {:module-compile :pass,
+     :target-build :pass,
+     :statement-registry "131 registered statements match, 0 do not",
+     :scoped-diff :pass,
+     :forbidden-placeholder-scan :pass,
+     :scoped-worktree-clean true},
+    :outcome :done-unreviewed,
+    :warnings
+    ["The target build replayed pre-existing linter warnings outside this scoped change."],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.ManifoldFundamentalClass.forgetIntModules_preservesParallelPairLimits",
+      :type
+      "PreservesLimitsOfShape WalkingParallelPair forgetIntModules",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on [],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes
+    {:module
+     "728bd7f3e2f1169c91523af18b8fd1998240a8af1dbc1c29ed5077f40067854f",
+     :fixture
+     "c2514b8c95d40a3104e5e70719ca5059b1139697a39945cfd0f8af937f2e0372"},
+    :disposition :done-unreviewed,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :topo-10,
+    :reason
+    "Exposed preservation of parallel-pair limits by identifying forgetIntModules with the functor of its underlying equivalence, supplying preservation for the component kernel forks.",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/manifold_fundamental_class_forget_parallel_pair_limits.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "git diff --check HEAD^ HEAD -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "comment-stripped placeholder counts for t00J02 t98A02",
+      :exit 0}
+     {:cmd
+      "forbidden placeholder scan in ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "git status --short -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}],
+    :diagnostic-history [],
+    :commit "beb845d0e2a2ea52ece04e1aea651e9bcecc0d11",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path
+     "/tmp/manifold_fundamental_class_forget_parallel_pair_limits.lean",
+     :sha256
+     "c2514b8c95d40a3104e5e70719ca5059b1139697a39945cfd0f8af937f2e0372"},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :declaration
+     "ConstructionTargets.ManifoldFundamentalClass.forgetIntModules_preservesParallelPairLimits"},
+    :row
+    :routes-2026-10-11-manifold-forget-parallel-pair-limits-topo3-r1,
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/integral-open-disk-connecting-naturality/snake-input-kernel-preservation",
@@ -22043,11 +22116,13 @@
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.forgetIntModules_preservesParallelPairLimits",
     :reported-by
-    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+     :routes-2026-10-11-manifold-forget-parallel-pair-limits-topo3-r1],
     :type
     "PreservesLimitsOfShape WalkingParallelPair forgetIntModules",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in
+    :routes-2026-10-11-manifold-forget-parallel-pair-limits-topo3-r1},
    :id :lemma-mfclass-forget-parallel-pair-limits,
    :kind :lemma,
    :depends-on [:lemma-mfclass-forget-snake-zero-squares],
