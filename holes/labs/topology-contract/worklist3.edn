@@ -17540,43 +17540,6 @@
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
-  {:consumer :t98A02,
-   :phase :lemma,
-   :state :backlog,
-   :scope [],
-   :acceptance
-   {:lemma "ConstructionTargets.WildBallComplement.homologyComparison",
-    :type
-    "The frozen wild-ball complements have the required ambient homology comparison."},
-   :lemma
-   {:name "ConstructionTargets.WildBallComplement.homologyComparison",
-    :reported-by [:routes-2026-10-10-topo3-seed-checkpoint-1],
-    :type
-    "The frozen wild-ball complements have the required ambient homology comparison.",
-    :area "wild-embedding-anr"},
-   :id :lemma-wild-ball-complement,
-   :kind :lemma,
-   :depends-on
-   [:lemma-constructiontargets-manifoldfundamentalclass-closedorientedfundamentalclass],
-   :other-consumers []}
-  {:consumer :t98A02,
-   :phase :lemma,
-   :state :backlog,
-   :scope [],
-   :acceptance
-   {:lemma "ConstructionTargets.ConnectedSumMayerVietoris.homology",
-    :type
-    "The frozen quotient gluing has the claimed connected-sum homology."},
-   :lemma
-   {:name "ConstructionTargets.ConnectedSumMayerVietoris.homology",
-    :reported-by [:routes-2026-10-10-topo3-seed-checkpoint-1],
-    :type
-    "The frozen quotient gluing has the claimed connected-sum homology.",
-    :area "mayer-vietoris-open-cover"},
-   :id :lemma-connected-sum-mv,
-   :kind :lemma,
-   :depends-on [:lemma-wild-ball-complement],
-   :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
    :state :banked,
@@ -22938,13 +22901,13 @@
    :acceptance
    {:lemma "closedManifold_homology_localToGlobal",
     :type
-    "Closed 4-manifold homology vanishes above dimension four and carries compatible local fundamental classes  (size: 1500-3500 lines / 2-4 months)"},
+    "For a closed connected 4-manifold X with H₄(X) ≅ ℤ and a collared ball φ, H₄(X ∖ φ(int D⁴)) = 0 (noncompact/punctured top homology vanishes; ManifoldFundamentalClass excision pieces are banked)  (size: 800-2000 lines / 1-2 months)"},
    :lemma
    {:name "closedManifold_homology_localToGlobal",
     :reported-by [:owner],
     :type
-    "Closed 4-manifold homology vanishes above dimension four and carries compatible local fundamental classes  (size: 1500-3500 lines / 2-4 months)",
-    :area "manifold-homology-local-to-global"},
+    "For a closed connected 4-manifold X with H₄(X) ≅ ℤ and a collared ball φ, H₄(X ∖ φ(int D⁴)) = 0 (noncompact/punctured top homology vanishes; ManifoldFundamentalClass excision pieces are banked)  (size: 800-2000 lines / 1-2 months)",
+    :area "manifold-fundamental-class"},
    :id :lemma-closedmanifold-homology-localtoglobal,
    :kind :lemma,
    :depends-on [],
@@ -22954,56 +22917,20 @@
    :state :backlog,
    :scope [],
    :acceptance
-   {:lemma "wildBallComplement_homology",
-    :type
-    "For every topological embedding φ : D⁴ → X, H_k(X \\ φ(int D⁴)) ≅ H_k(X) for k≤3 and H₄ of the complement vanishes  (size: 2000-5000 lines / 2-5 months)"},
-   :lemma
-   {:name "wildBallComplement_homology",
-    :reported-by [:owner],
-    :type
-    "For every topological embedding φ : D⁴ → X, H_k(X \\ φ(int D⁴)) ≅ H_k(X) for k≤3 and H₄ of the complement vanishes  (size: 2000-5000 lines / 2-5 months)",
-    :area "wild-embedding-anr"},
-   :id :lemma-wildballcomplement-homology,
-   :kind :lemma,
-   :depends-on [:lemma-closedmanifold-homology-localtoglobal],
-   :other-consumers []}
-  {:consumer :t98A02,
-   :phase :lemma,
-   :state :backlog,
-   :scope [],
-   :acceptance
-   {:lemma "wildConnectedSum_mayerVietoris",
-    :type
-    "An open-cover Mayer-Vietoris sequence computes the frozen quotient from its two wild ball complements and glued S³  (size: 1500-3500 lines / 2-4 months)"},
-   :lemma
-   {:name "wildConnectedSum_mayerVietoris",
-    :reported-by [:owner],
-    :type
-    "An open-cover Mayer-Vietoris sequence computes the frozen quotient from its two wild ball complements and glued S³  (size: 1500-3500 lines / 2-4 months)",
-    :area "mayer-vietoris-open-cover"},
-   :id :lemma-wildconnectedsum-mayervietoris,
-   :kind :lemma,
-   :depends-on [:lemma-wildballcomplement-homology],
-   :other-consumers []}
-  {:consumer :t98A02,
-   :phase :lemma,
-   :state :backlog,
-   :scope [],
-   :acceptance
    {:lemma "connectedSum_topConnecting",
     :type
-    "The degree-four connecting map H₄(Y) → H₃(S³) is an isomorphism and yields the frozen homology formulas  (size: 500-1200 lines / 2-5 weeks)"},
+    "Assemble apm_t98a02 from the Y sequence: H₁,H₂ split; H₃ splits since H₃(S³) → H₃(Xᵢ') is zero; H₄(Y) ≅ H₃(S³) ≅ ℤ; higher vanish; H₀ ≅ ℤ  (size: 300-800 lines / 1-2 weeks)"},
    :lemma
    {:name "connectedSum_topConnecting",
     :reported-by [:owner],
     :type
-    "The degree-four connecting map H₄(Y) → H₃(S³) is an isomorphism and yields the frozen homology formulas  (size: 500-1200 lines / 2-5 weeks)",
+    "Assemble apm_t98a02 from the Y sequence: H₁,H₂ split; H₃ splits since H₃(S³) → H₃(Xᵢ') is zero; H₄(Y) ≅ H₃(S³) ≅ ℤ; higher vanish; H₀ ≅ ℤ  (size: 300-800 lines / 1-2 weeks)",
     :area "manifold-fundamental-class"},
    :id :lemma-connectedsum-topconnecting,
    :kind :lemma,
    :depends-on
-   [:lemma-closedmanifold-homology-localtoglobal
-    :lemma-wildconnectedsum-mayervietoris],
+   [:lemma-t98a02-collaredballcomplement-homology
+    :lemma-t98a02-collaredconnectedsum-mayervietoris],
    :other-consumers []}
   {:consumer :t98A02,
    :phase :lemma,
@@ -23430,7 +23357,63 @@
    :id :lemma-mfclass-forget-snake-kernel-tau1-islimit,
    :kind :lemma,
    :depends-on [:lemma-mfclass-forget-snake-kernel-tau1-cone-iso],
-   :other-consumers [:t98A02]}],
+   :other-consumers [:t98A02]}
+  {:consumer :t98A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t98A02_productionHomology_bridge",
+    :type
+    "Repository production integral singular homology (ProductionOpenCoverMayerVietoris, AddCommGrpCat) ≅ t98A02H k X (Mathlib singularHomologyFunctor (ModuleCat ℤ)), naturally in X  (size: 100-400 lines / 1-3 days)"},
+   :lemma
+   {:name "t98A02_productionHomology_bridge",
+    :reported-by [:owner],
+    :type
+    "Repository production integral singular homology (ProductionOpenCoverMayerVietoris, AddCommGrpCat) ≅ t98A02H k X (Mathlib singularHomologyFunctor (ModuleCat ℤ)), naturally in X  (size: 100-400 lines / 1-3 days)",
+    :area "mayer-vietoris-open-cover"},
+   :id :lemma-t98a02-productionhomology-bridge,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t98A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t98A02_collaredBallComplement_homology",
+    :type
+    "With ψ the radius-2 collar extension of φ and X' := X ∖ φ(int D⁴): X' path-connected; H_k(X') ≅ H_k(X) for 1≤k≤3; H_k(X') = 0 for k≥4; H₃(S³) → H₃(X') is zero. Proof: productionMayerVietoris on X = ψ(open radius-2 ball) ∪ (X ∖ φ(closed ½-ball)), radial deformation retractions, H₄(X) → H₃(S³) iso  (size: 400-900 lines / 1-2 weeks)"},
+   :lemma
+   {:name "t98A02_collaredBallComplement_homology",
+    :reported-by [:owner],
+    :type
+    "With ψ the radius-2 collar extension of φ and X' := X ∖ φ(int D⁴): X' path-connected; H_k(X') ≅ H_k(X) for 1≤k≤3; H_k(X') = 0 for k≥4; H₃(S³) → H₃(X') is zero. Proof: productionMayerVietoris on X = ψ(open radius-2 ball) ∪ (X ∖ φ(closed ½-ball)), radial deformation retractions, H₄(X) → H₃(S³) iso  (size: 400-900 lines / 1-2 weeks)",
+    :area "mayer-vietoris-open-cover"},
+   :id :lemma-t98a02-collaredballcomplement-homology,
+   :kind :lemma,
+   :depends-on
+   [:lemma-closedmanifold-homology-localtoglobal
+    :lemma-t98a02-productionhomology-bridge],
+   :other-consumers []}
+  {:consumer :t98A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t98A02_collaredConnectedSum_mayerVietoris",
+    :type
+    "T98A02ConnectedSum φ₁ φ₂ is covered by two opens (X₁' plus ψ₂'s outer collar, X₂' plus ψ₁'s outer collar) deformation-retracting onto X₁', X₂', with intersection ≃ S³; productionMayerVietoris then gives the long exact sequence of Y  (size: 500-1200 lines / 1-3 weeks)"},
+   :lemma
+   {:name "t98A02_collaredConnectedSum_mayerVietoris",
+    :reported-by [:owner],
+    :type
+    "T98A02ConnectedSum φ₁ φ₂ is covered by two opens (X₁' plus ψ₂'s outer collar, X₂' plus ψ₁'s outer collar) deformation-retracting onto X₁', X₂', with intersection ≃ S³; productionMayerVietoris then gives the long exact sequence of Y  (size: 500-1200 lines / 1-3 weeks)",
+    :area "mayer-vietoris-open-cover"},
+   :id :lemma-t98a02-collaredconnectedsum-mayervietoris,
+   :kind :lemma,
+   :depends-on [:lemma-t98a02-productionhomology-bridge],
+   :other-consumers []}],
  :consumer-baselines {},
  :statuses
  #{:open
