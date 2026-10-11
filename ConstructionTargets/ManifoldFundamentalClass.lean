@@ -758,6 +758,33 @@ theorem integralRelativeHomologyComparisonWithTransport_projection
       (integralRelativeChainsComparisonWithTransport_homology_projection A n)
     _ = (_ ≫ _) ≫ _ := (Category.assoc _ _ _).symm
 
+/-- A supplied normalization square sends the coefficient generator through
+the corrected relative-homology comparison to the ambient local generator. -/
+theorem integralRelativeHomologyComparisonWithTransport_generator_of_normalization
+    (k : ℕ) {M : Type} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M)
+    (hcompat :
+      (integralRelativeHomologyComparisonWithTransport
+          (deletedPoint x) (k + 2)).hom ≫
+          (ambientLocalNormalization k x).hom =
+        forgetIntModules.map (CoefficientChartLocal.localIso ℤ k x).hom) :
+    (integralRelativeHomologyComparisonWithTransport
+        (deletedPoint x) (k + 2)).hom.hom
+        (CoefficientChartLocal.generator ℤ k x) =
+      HigherChartLocalGenerator.ambientLocalGenerator (k := k) x := by
+  apply (ConcreteCategory.bijective_of_isIso
+    (ambientLocalNormalization k x).hom).1
+  have h := ConcreteCategory.congr_hom hcompat
+    (CoefficientChartLocal.generator ℤ k x)
+  change (ambientLocalNormalization k x).hom.hom
+      ((integralRelativeHomologyComparisonWithTransport
+          (deletedPoint x) (k + 2)).hom.hom
+        (CoefficientChartLocal.generator ℤ k x)) =
+    (CoefficientChartLocal.localIso ℤ k x).hom.hom
+      (CoefficientChartLocal.generator ℤ k x) at h
+  rw [h, CoefficientChartLocal.generator_normalization,
+    ambientLocalNormalization_generator]
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -806,3 +833,4 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_hom
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientRelativeProjection_mapHomologyIso_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
+#print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
