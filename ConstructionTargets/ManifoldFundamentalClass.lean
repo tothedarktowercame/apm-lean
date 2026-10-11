@@ -1450,6 +1450,36 @@ theorem forgetHomologyι_naturality
       simp only [Category.assoc]
       rfl
 
+abbrev ForgottenPOpcyclesNaturality
+    {ι : Type} {c : ComplexShape ι}
+    (K : HomologicalComplex (ModuleCat ℤ) c) (i : ι) : Prop :=
+  forgetIntModules.map (K.pOpcycles i) ≫
+      ((K.sc i).mapOpcyclesIso forgetIntModules).inv =
+    ((forgetIntModules.mapHomologicalComplex c).obj K).pOpcycles i
+
+/-- The projection to opcycles commutes with forgetting coefficients. -/
+theorem forgetPOpcycles_naturality
+    {ι : Type} {c : ComplexShape ι}
+    (K : HomologicalComplex (ModuleCat ℤ) c) (i : ι) :
+    ForgottenPOpcyclesNaturality K i := by
+  dsimp [ForgottenPOpcyclesNaturality]
+  rw [(K.sc i).rightHomologyData.mapOpcyclesIso_eq forgetIntModules]
+  dsimp only [Iso.trans, Iso.symm, Functor.mapIso]
+  calc
+    _ = forgetIntModules.map
+          ((K.sc i).pOpcycles ≫ (K.sc i).rightHomologyData.opcyclesIso.hom) ≫
+          ((K.sc i).rightHomologyData.map forgetIntModules).opcyclesIso.inv := by
+        rw [forgetIntModules.map_comp]
+        simp only [Category.assoc]
+        rfl
+    _ = forgetIntModules.map (K.sc i).rightHomologyData.p ≫
+          ((K.sc i).rightHomologyData.map forgetIntModules).opcyclesIso.inv := by
+        rw [(K.sc i).rightHomologyData.pOpcycles_comp_opcyclesIso_hom]
+    _ = ((K.sc i).rightHomologyData.map forgetIntModules).p ≫
+          ((K.sc i).rightHomologyData.map forgetIntModules).opcyclesIso.inv := by
+        rfl
+    _ = _ := (K.sc i).rightHomologyData.map forgetIntModules |>.p_comp_opcyclesIso_inv
+
 /-- The corrected relative-homology comparison intertwines the coefficient
 absolute-to-relative map with the production relative projection. -/
 theorem integralRelativeHomologyComparisonWithTransport_projection
@@ -2438,6 +2468,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetTerminalHomologyRowHom
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetMapHomologyIsoRight_eq
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetHomologyι_naturality
+#print axioms ConstructionTargets.ManifoldFundamentalClass.forgetPOpcycles_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
