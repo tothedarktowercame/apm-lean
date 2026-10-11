@@ -116169,6 +116169,19 @@
       :exit 1,
       :finding
       "The canonical apm-lean checkout has a real .lake/packages authority rather than a frame-worktree symlink, so the frame-only precondition test stopped before lake build; corrected by using direct Lean compilation without altering package state."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791724216861-5400-9697daab",
+     :commands
+     ["git show/diff-tree 8d5fbc66, 45cd2fe32, and e97399181"
+      "recorded-tree four-file SHA-256, exact scope-union, diff-check, JSON, and zero-placeholder verification"
+      "python3 scripts/statement-registry.py check"
+      "lake env lean -o .lake/build/lib/lean/ConstructionTargets/t95J02Closure.olean ConstructionTargets/t95J02Closure.lean"
+      "lake env lean problems/t95J02/lean/Main.lean"
+      "lake env lean recorded source plus #print axioms for the H1 bridge and frozen theorem"],
+     :finding
+     "PASS: t95J02 is fully closed. The three implementation commits cover exactly the four scoped paths; all hashes match; source and closure module have zero placeholders; B1-B9 and status are complete. B7 uses the type-correct H1(reflection) followed by H1(beta) order, transports the doubled nonzero circle generator through the sphere-to-CircleB homeomorphism, and proves its inclusion image zero; B8 supplies injectivity under a retraction, so B9 proves the frozen statement. Compilation, registry, and standard-axiom checks all pass."},
     :commit "e97399181d3e8d03f6104c0b8503fabf98a9015f",
     :commits
     ["8d5fbc66d1a48854a8f15fbfadb4a2eff88887de"
@@ -116194,7 +116207,7 @@
       {:id :B8, :status :proved}
       {:id :B9, :status :proved}]}},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["problems/t95J02/lean/Main.lean"
     "problems/t95J02/status.json"
@@ -117214,7 +117227,7 @@
    :other-consumers []}
   {:consumer :t95J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t95J02Closure.apm_t95J02_bridge_vertical_H1_kernel",
@@ -117226,7 +117239,9 @@
     :type
     "There is a nonzero integral H1 class of t95J02CircleB killed by t95J02InclusionB",
     :area "klein-bottle-homology",
-    :proved-in :program-2026-10-11-close-t95j02},
+    :proved-in :program-2026-10-11-close-t95j02,
+    :banked-by :program-2026-10-11-close-t95j02,
+    :banked-commit "e97399181d3e8d03f6104c0b8503fabf98a9015f"},
    :id :lemma-t95j02closure-apm-t95j02-bridge-vertical-h1-kernel,
    :kind :lemma,
    :depends-on
@@ -117418,7 +117433,7 @@
    :other-consumers []}
   {:consumer :t95J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -117432,7 +117447,9 @@
     :type
     "The coordinate-1 reflection of the Euclidean unit circle induces negative identity on integral H1",
     :area "klein-bottle-homology",
-    :proved-in :program-2026-10-11-close-t95j02},
+    :proved-in :program-2026-10-11-close-t95j02,
+    :banked-by :program-2026-10-11-close-t95j02,
+    :banked-commit "e97399181d3e8d03f6104c0b8503fabf98a9015f"},
    :id
    :lemma-constructiontargets-t95j02closure-integral-circle-coordinate-one,
    :kind :lemma,
