@@ -1154,6 +1154,17 @@ theorem correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_corrected_compari
   rw [integralRelativeHomologyComparisonWithTransport_hom]
   constructor <;> intro h <;> simpa only [← Category.assoc] using h
 
+/-- The hom of the transported integral relative-chain comparison is its
+defining four-isomorphism composite. -/
+theorem integralRelativeChainsComparisonWithTransport_hom
+    {X : Type} [TopologicalSpace X] (A : Set X) :
+    (integralRelativeChainsComparisonWithTransport A).hom =
+      (forgetIntegralRelativeCokernelComparison A).hom ≫
+      (coefficientIntegralCokernelTransport A).hom ≫
+      (integralMappedRelativeCokernelComparison A).hom ≫
+      (relativeSingularChainsIsoCokernelSubspaceMap A).inv := by
+  rfl
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -1227,3 +1238,4 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientLocalIso_hom_eq_forwardComposite
 #print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_coefficient_factors
 #print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_corrected_comparison_factors
+#print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport_hom
