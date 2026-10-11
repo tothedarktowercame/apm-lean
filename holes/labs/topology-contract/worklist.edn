@@ -116390,6 +116390,18 @@
     {:commit "3675d325b5e3207a26eee3601ca0810b874bfbe1",
      :next
      "Implement B3 exists_chart_nhds_uniform_isMIntegralCurveOn using B1 target control and the chart-transport calculation from Mathlib's local integral-curve proof."},
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791725662278-5425-2c1ddc06",
+     :commands
+     ["git show/diff-tree 3675d325b5e3207a26eee3601ca0810b874bfbe1"
+      "recorded-tree SHA-256, exact-scope, diff-check, and placeholder-delta verification"
+      "python3 scripts/statement-registry.py check"
+      "lake env lean ConstructionTargets/t92J08Closure.lean"
+      "lake env lean problems/t92J08/lean/Main.lean"],
+     :finding
+     "PASS: commit 3675d325 adds new compiled, placeholder-free B2 progress. localCoordinateField faithfully retains the varying tangent-space transport in one fixed extChartAt; contMDiffAt_iff supplies that exact product-valued chart expression, its second component gives the field, and boundarylessness justifies converting within-C1 regularity on range I to ordinary C1 regularity at the chart centre. Scope and hashes match, only standard axioms occur, the consumer's one old placeholder is unchanged, and B3-B6 remain explicit."},
     :commit "3675d325b5e3207a26eee3601ca0810b874bfbe1",
     :changed-paths
     ["ConstructionTargets/t92J08Closure.lean"
@@ -116407,7 +116419,7 @@
       {:id :B6, :status :planned}]},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t92J08/lean/Main.lean"
     "problems/t92J08/status.json"
@@ -116423,7 +116435,7 @@
     ["lake env lean problems/t92J08/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Program milestone completed. Blueprint node B1 is proved: the C1 Euclidean vector field admits one positive time and initial radius for a closed-ball family of solutions, and every solution remains in an arbitrary prescribed neighbourhood of the centre. B2-B6 remain.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Program milestone completed. Blueprint node B2 is proved: localCoordinateField is the exact fixed-extChartAt representative with varying tangent-space transport, and global C1 manifold regularity implies ordinary C1 regularity at the chart centre. B3-B6 remain.",
    :id :program-2026-10-11-close-t92j08,
    :kind :final-adapter,
    :campaign-priority 42,
@@ -116438,7 +116450,11 @@
     {:job 2,
      :commit "adb92f63dae858c369c9eb9e67f31277a678950e",
      :reason
-     "Program milestone completed. Blueprint node B1 is proved: the C1 Euclidean vector field admits one positive time and initial radius for a closed-ball family of solutions, and every solution remains in an arbitrary prescribed neighbourhood of the centre. B2-B6 remain."}]}
+     "Program milestone completed. Blueprint node B1 is proved: the C1 Euclidean vector field admits one positive time and initial radius for a closed-ball family of solutions, and every solution remains in an arbitrary prescribed neighbourhood of the centre. B2-B6 remain."}
+    {:job 3,
+     :commit "3675d325b5e3207a26eee3601ca0810b874bfbe1",
+     :reason
+     "Program milestone completed. Blueprint node B2 is proved: localCoordinateField is the exact fixed-extChartAt representative with varying tangent-space transport, and global C1 manifold regularity implies ordinary C1 regularity at the chart centre. B3-B6 remain."}]}
   {:consumer :t97A07,
    :phase :implementation,
    :state :open,
@@ -117374,7 +117390,7 @@
    :other-consumers []}
   {:consumer :t92J08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t92J08Closure.localCoordinateField_contDiffAt",
@@ -117386,7 +117402,9 @@
     :type
     "The fixed-extChartAt coordinate representative of the manifold vector field is C1 at the chart centre",
     :area "manifold-uniform-local-flow",
-    :proved-in :program-2026-10-11-close-t92j08},
+    :proved-in :program-2026-10-11-close-t92j08,
+    :banked-by :program-2026-10-11-close-t92j08,
+    :banked-commit "3675d325b5e3207a26eee3601ca0810b874bfbe1"},
    :id :lemma-t92j08closure-localcoordinatefield-contdiffat,
    :kind :lemma,
    :depends-on [],
