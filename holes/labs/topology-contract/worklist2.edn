@@ -69528,6 +69528,20 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git status --short", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791688877332-3967-f51e6df0",
+     :commands
+     ["git show --format=fuller --stat f9c51e526b48d6991fd4ad247508ce57859bbd60; git diff-tree --no-commit-id --name-status -r f9c51e526b48d6991fd4ad247508ce57859bbd60; git show --check --oneline f9c51e526b48d6991fd4ad247508ce57859bbd60"
+      "git rev-parse f9c51e526b48d6991fd4ad247508ce57859bbd60:ConstructionTargets/T02A03GeometricTubeDeformation.lean; sha256sum /tmp/t02a03_core_normal_interpolation_im_ne_probe.lean"
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean"
+      "lake env lean /tmp/t02a03_core_normal_interpolation_im_ne_probe.lean"
+      "python3 scripts/statement-registry.py check; python3 scripts/statement-registry.py fingerprint t02A03 --rev f9c51e526b48d6991fd4ad247508ce57859bbd60; python3 scripts/statement-registry.py fingerprint t02A03 --rev f9c51e526b48d6991fd4ad247508ce57859bbd60^"
+      "python3 placeholder recount on problems/t02A03/lean/Main.lean at commit and parent"
+      "clojure.edn/read-string holes/labs/topology-contract/worklist2.edn"],
+     :finding
+     "PASS: independent author confirmed; recorded commit changes only the scoped construction target and its blob and frozen fixture hash match. The target and fixture compile, the declaration has exactly the frozen orientation, and its proof rewrites the interpolation imaginary part as a strictly positive coefficient times the assumed nonzero input height, without crossing representation boundaries. Axioms are exactly propext, Classical.choice, and Quot.sound; registry is 131/0; the t02A03 statement hash is unchanged at commit and parent; and the sole Main.lean placeholder remains 1 at both revisions."},
     :commit "f9c51e526b48d6991fd4ad247508ce57859bbd60",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
@@ -69543,7 +69557,7 @@
    :phase :implementation,
    :type
    "forall (tp : unitInterval × RightTubeMinusLeftCore), tp.2.1 2 != 0 -> (rightTubeCoreNormalInterpolation rightTubeMeridianCoordinate tp).im != 0",
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/nonzero-height-core-normal-interpolation-im",
@@ -69654,7 +69668,7 @@
      "The declaration was renamed so the distinguishing nonzero-height phrase precedes the shared interpolation wording and cannot truncate onto rightTubeCoreNormalInterpolation_exists. Mathematically, every specialized core-normal interpolation value has nonzero imaginary part when the input height is nonzero: its height is the input height times a strictly positive convex coefficient.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
