@@ -17138,8 +17138,46 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :implements-lemma :lemma-mfclass-forget-snake-cokernel-limit,
+   :evidence
+   {:placeholder-delta
+    {:t00J02 0, :t98A02 0, :remaining {:t00J02 1, :t98A02 1}},
+    :residual "Package the mapped SnakeInput.",
+    :outcome :done-unreviewed,
+    :warnings ["pre-existing unnecessarySimpa lints"],
+    :missing-theorems [],
+    :statement-hashes {:status :match, :count 131},
+    :axioms [propext Classical.choice Quot.sound],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd "sha256sum /tmp/h3.lean", :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "rg -n '\\b(sorry|admit|axiom)\\b' ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git commit -m 'Assemble forgotten snake cokernel limit'",
+      :exit 0}],
+    :commit "424293ee4e7cae5c5f1ab49f8bf64d42c4308283",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path "/tmp/h3.lean",
+     :sha256
+     "a0f9dbeb380c1a3f32cb9373bab6ed65eaafbc3fcf5d19891f5d05800e4f81ef"},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :declaration
+     "ConstructionTargets.ManifoldFundamentalClass.forgetSnakeCokernelLimit"},
+    :row :routes-2026-10-11-mfclass-forget-snake-cokernel-limit-r1,
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/mapped-snake-cokernel",
