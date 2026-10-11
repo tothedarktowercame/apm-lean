@@ -1,4 +1,5 @@
 import Mathlib
+import ConstructionTargets.FiniteIndexFreeGroupCyclicKernel
 
 /-!
 # APM t00J08
@@ -83,7 +84,22 @@ theorem apm_t00J08_bridge_rank_formula
     (hfinite : G.FiniteIndex)
     (hfree : Nonempty (G ≃* FreeGroup (Fin 7))) :
     6 = G.index * (n - 1) := by
-  sorry
+  letI : G.FiniteIndex := hfinite
+  have hindex : 0 < G.index :=
+    Nat.pos_of_ne_zero Subgroup.index_ne_zero_of_finite
+  have hn : 0 < n := by
+    have htwo := apm_t00j08_two_le_of_realizable ⟨G, hfinite, hfree⟩
+    omega
+  obtain ⟨e⟩ := hfree
+  let s :=
+    FiniteIndexFreeGroupSchreierRank.finiteIndexSubgroupFreeGroupEquiv
+      n G.index hn hindex G rfl
+  let ranks : Fin 7 ≃ Fin ((n - 1) * G.index + 1) :=
+    Equiv.ofFreeGroupEquiv (e.symm.trans s)
+  have hcard := Fintype.card_congr ranks
+  simp only [Fintype.card_fin] at hcard
+  have hmul : (n - 1) * G.index = 6 := by omega
+  simpa [Nat.mul_comm] using hmul.symm
 
 /-- Why this unblocks `apm_t00j08`: this is the constructive companion to
 the rank formula. It produces an index-`d` subgroup of a nontrivial
@@ -96,7 +112,8 @@ theorem apm_t00J08_bridge_subgroup_of_index
       G.index = d ∧
       Nonempty
         (G ≃* FreeGroup (Fin (1 + d * (n - 1)))) := by
-  sorry
+  exact ConstructionTargets.FiniteIndexFreeGroupCyclicKernel.exists_subgroup_of_index
+    n d hn hd
 
 theorem apm_t00j08 :
     ∀ n : ℕ,
@@ -145,4 +162,36 @@ theorem apm_t00j08 :
   Hence construction of ranks `2,3,4` and exclusion of all other ranks at
   least two remain open.
   -/
-  sorry
+  intro n
+  constructor
+  · intro h
+    have hn : 2 ≤ n := apm_t00j08_two_le_of_realizable h
+    obtain ⟨G, hfinite, hfree⟩ := h
+    have hrank := apm_t00J08_bridge_rank_formula G hfinite hfree
+    have hbound : n ≤ 7 := by
+      by_contra hnot
+      have : 7 < n := by omega
+      have hi : 0 < G.index := by
+        letI : G.FiniteIndex := hfinite
+        exact Nat.pos_of_ne_zero Subgroup.index_ne_zero_of_finite
+      have hle : n - 1 ≤ G.index * (n - 1) :=
+        Nat.le_mul_of_pos_left _ hi
+      omega
+    interval_cases n
+    all_goals simp only [Set.mem_insert_iff, Set.mem_singleton_iff]
+    all_goals norm_num at hrank ⊢ <;> omega
+  · intro hn
+    simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hn
+    rcases hn with rfl | rfl | rfl | rfl
+    · obtain ⟨G, hfin, -, hfree⟩ :=
+        apm_t00J08_bridge_subgroup_of_index 2 6 (by decide) (by decide)
+      exact ⟨G, hfin, by simpa using hfree⟩
+    · obtain ⟨G, hfin, -, hfree⟩ :=
+        apm_t00J08_bridge_subgroup_of_index 3 3 (by decide) (by decide)
+      exact ⟨G, hfin, by simpa using hfree⟩
+    · obtain ⟨G, hfin, -, hfree⟩ :=
+        apm_t00J08_bridge_subgroup_of_index 4 2 (by decide) (by decide)
+      exact ⟨G, hfin, by simpa using hfree⟩
+    · exact hseven
+
+#print axioms apm_t00j08
