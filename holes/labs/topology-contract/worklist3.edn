@@ -6156,101 +6156,183 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :implements-lemma
+   :lemma-constructiontargets-manifoldfundamentalclass-integralrelativehomologycomparisonwithtransport-projection,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+   :dag-node
+   "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/packaged-corrected-homology-projection",
+   :acceptance
+   {:implementation
+    "Promote the exact fixture theorem. Expand integralRelativeHomologyComparisonWithTransport.hom, use coefficientRelativeProjection_mapHomologyIso_naturality, and then use integralRelativeChainsComparisonWithTransport_homology_projection, with explicit associativity. Do not compare with integralRelativeHomologyComparison or claim normalization, generator transport, orientation normalization, or localization equality.",
+    :declaration
+    "ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection",
+    :type
+    "forall {X : Type} [TopologicalSpace X] (A : Set X) (n : Nat), forgetIntModules.map (HomologicalComplex.homologyMap (cokernel.π (CoefficientRelativeSmall.subspaceMap Int A)) n) ≫ (integralRelativeHomologyComparisonWithTransport A n).hom = (((CoefficientH0.SingularChains Int (TopCat.of X)).sc n).mapHomologyIso forgetIntModules).inv ≫ HomologicalComplex.homologyMap (singularChainsComparison (TopCat.of X)).hom n ≫ HomologicalComplex.homologyMap (relativeSingularProjection A) n",
+    :fixture
+    "/tmp/manifold_fundamental_class_packaged_homology_projection.lean",
+    :fixture-sha256
+    "04a86c3ac2468cc56635931a35c9945af5c05e63632bac470331095530c9b50d",
+    :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
+    :route-step
+    "express the complete homology projection square using the packaged transport-explicit relative homology comparison"},
+   :representation
+   {:source
+    "The forgotten coefficient absolute-to-relative homology map followed by the packaged transport-explicit relative homology comparison",
+    :target
+    "Inverse absolute homology preservation followed by homology of singularChainsComparison and the production relative projection",
+    :direction
+    "Exact homology-morphism equality from the packaged coefficient-relative projection composite to the production relative-homology projection composite"},
+   :id
+   :routes-2026-10-11-manifold-packaged-homology-projection-topo3-r1,
+   :kind :representation-comparison,
+   :area "manifold-fundamental-class",
+   :depends-on
+   [:routes-2026-10-10-topo3-seed-checkpoint-1
+    :routes-2026-10-10-manifold-local-positive-excision-topo3-r1
+    :routes-2026-10-10-manifold-oriented-overlap-coherence-topo3-r1
+    :routes-2026-10-10-manifold-connected-overlap-unit-topo3-r1
+    :routes-2026-10-10-manifold-oriented-connected-overlap-topo3-r1
+    :routes-2026-10-10-manifold-integral-transition-sign-topo3-r1
+    :routes-2026-10-10-manifold-exclude-negative-transition-topo3-r1
+    :routes-2026-10-10-manifold-global-generator-topo3-r1
+    :routes-2026-10-10-manifold-localization-iso-generator-topo3-r1
+    :routes-2026-10-10-manifold-generator-map-isiso-topo3-r1
+    :routes-2026-10-10-manifold-localization-map-naturality-topo3-r1
+    :routes-2026-10-10-manifold-localization-apply-naturality-topo3-r1
+    :routes-2026-10-10-manifold-group-global-generator-topo3-r1
+    :routes-2026-10-10-manifold-group-generator-naturality-topo3-r1
+    :routes-2026-10-10-manifold-global-local-generator-transport-topo3-r1
+    :routes-2026-10-11-manifold-basepoint-localization-coefficient-topo3-r1
+    :routes-2026-10-11-manifold-local-generator-coefficient-unique-topo3-r1
+    :routes-2026-10-11-manifold-localization-coefficient-one-topo3-r1
+    :routes-2026-10-11-manifold-distinguished-chart-generator-topo3-r1
+    :routes-2026-10-11-manifold-integral-subtype-chain-naturality-topo3-r1
+    :routes-2026-10-11-manifold-integral-mapped-relative-cokernel-topo3-r1
+    :routes-2026-10-11-manifold-forget-relative-cokernel-topo3-r1
+    :routes-2026-10-11-manifold-integral-relative-chains-comparison-topo3-r1
+    :routes-2026-10-11-manifold-integral-relative-homology-comparison-topo3-r1
+    :routes-2026-10-11-manifold-ambient-local-normalization-topo3-r1
+    :routes-2026-10-11-manifold-generator-transport-of-normalization-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-subspace-map-equality-topo3-r1
+    :routes-2026-10-11-manifold-integral-direct-cokernel-projection-topo3-r1
+    :routes-2026-10-11-manifold-forget-cokernel-projection-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-integral-cokernel-transport-topo3-r1
+    :routes-2026-10-11-manifold-integral-composite-cokernel-projection-topo3-r1
+    :routes-2026-10-11-manifold-production-cokernel-projection-topo3-r1
+    :routes-2026-10-11-manifold-integral-composite-relative-projection-topo3-r1
+    :routes-2026-10-11-manifold-relative-chains-comparison-with-transport-topo3-r1
+    :routes-2026-10-11-manifold-relative-homology-comparison-with-transport-topo3-r1
+    :routes-2026-10-11-manifold-corrected-homology-projection-topo3-r1
+    :routes-2026-10-11-manifold-corrected-homology-comparison-hom-topo3-r1
+    :routes-2026-10-11-manifold-relative-projection-homology-preservation-topo3-r1],
+   :current-residual
+   "Compare integralRelativeHomologyComparisonWithTransport with integralRelativeHomologyComparison and prove coefficient-to-production normalization compatibility.",
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-closedorientedfundamentalclass,
    :evidence
    {:probe
     {:residual
-     "Compose homology preservation naturality, the packaged hom expansion, and the raw projection square; then reconcile the two homology comparisons and prove coefficient-to-production normalization compatibility.",
+     "Compare the transport-explicit and earlier relative homology comparisons, then prove coefficient-to-production normalization compatibility.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
      [{:id
-       :lemma-constructiontargets-manifoldfundamentalclass-coefficientrelativeprojection-maphomologyiso-naturality,
+       :lemma-constructiontargets-manifoldfundamentalclass-integralrelativehomologycomparisonwithtransport-projection,
        :name
-       "ConstructionTargets.ManifoldFundamentalClass.coefficientRelativeProjection_mapHomologyIso_naturality",
+       "ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection",
        :type
-       "forall {X : Type} [TopologicalSpace X] (A : Set X) (n : Nat), forgetIntModules.map (HomologicalComplex.homologyMap (cokernel.π (CoefficientRelativeSmall.subspaceMap Int A)) n) ≫ (((CoefficientRelativeSmall.relativeChains Int A).sc n).mapHomologyIso forgetIntModules).inv = (((CoefficientH0.SingularChains Int (TopCat.of X)).sc n).mapHomologyIso forgetIntModules).inv ≫ HomologicalComplex.homologyMap ((forgetIntModules.mapHomologicalComplex (ComplexShape.down Nat)).map (cokernel.π (CoefficientRelativeSmall.subspaceMap Int A))) n",
+       "forall {X : Type} [TopologicalSpace X] (A : Set X) (n : Nat), forgetIntModules.map (HomologicalComplex.homologyMap (cokernel.π (CoefficientRelativeSmall.subspaceMap Int A)) n) ≫ (integralRelativeHomologyComparisonWithTransport A n).hom = (((CoefficientH0.SingularChains Int (TopCat.of X)).sc n).mapHomologyIso forgetIntModules).inv ≫ HomologicalComplex.homologyMap (singularChainsComparison (TopCat.of X)).hom n ≫ HomologicalComplex.homologyMap (relativeSingularProjection A) n",
        :status :proved,
        :consumers [:t00J02 :t98A02],
        :depends-on
        ["ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_hom"
+        "ConstructionTargets.ManifoldFundamentalClass.coefficientRelativeProjection_mapHomologyIso_naturality"
         "ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport_homology_projection"],
        :area "manifold-fundamental-class"}],
      :prerequisite
      {:consumer :t00J02,
       :implements-lemma
-      :lemma-constructiontargets-manifoldfundamentalclass-coefficientrelativeprojection-maphomologyiso-naturality,
+      :lemma-constructiontargets-manifoldfundamentalclass-integralrelativehomologycomparisonwithtransport-projection,
       :phase :implementation,
       :state :open,
       :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
       :dag-node
-      "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/relative-projection-homology-preservation",
+      "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/packaged-corrected-homology-projection",
       :acceptance
       {:implementation
-       "Promote the exact fixture theorem. Define the coefficient projection chain map and its image under shortComplexFunctor locally, specialize ShortComplex.mapHomologyIso_inv_naturality to that map and forgetIntModules, and expose the resulting homological-complex equation. Do not yet compose with integralRelativeHomologyComparisonWithTransport_hom, the raw projection square, or compare the two relative homology packages; do not claim normalization or generator transport.",
+       "Promote the exact fixture theorem. Expand integralRelativeHomologyComparisonWithTransport.hom, use coefficientRelativeProjection_mapHomologyIso_naturality, and then use integralRelativeChainsComparisonWithTransport_homology_projection, with explicit associativity. Do not compare with integralRelativeHomologyComparison or claim normalization, generator transport, orientation normalization, or localization equality.",
        :declaration
-       "ConstructionTargets.ManifoldFundamentalClass.coefficientRelativeProjection_mapHomologyIso_naturality",
+       "ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection",
        :type
-       "forall {X : Type} [TopologicalSpace X] (A : Set X) (n : Nat), forgetIntModules.map (HomologicalComplex.homologyMap (cokernel.π (CoefficientRelativeSmall.subspaceMap Int A)) n) ≫ (((CoefficientRelativeSmall.relativeChains Int A).sc n).mapHomologyIso forgetIntModules).inv = (((CoefficientH0.SingularChains Int (TopCat.of X)).sc n).mapHomologyIso forgetIntModules).inv ≫ HomologicalComplex.homologyMap ((forgetIntModules.mapHomologicalComplex (ComplexShape.down Nat)).map (cokernel.π (CoefficientRelativeSmall.subspaceMap Int A))) n",
+       "forall {X : Type} [TopologicalSpace X] (A : Set X) (n : Nat), forgetIntModules.map (HomologicalComplex.homologyMap (cokernel.π (CoefficientRelativeSmall.subspaceMap Int A)) n) ≫ (integralRelativeHomologyComparisonWithTransport A n).hom = (((CoefficientH0.SingularChains Int (TopCat.of X)).sc n).mapHomologyIso forgetIntModules).inv ≫ HomologicalComplex.homologyMap (singularChainsComparison (TopCat.of X)).hom n ≫ HomologicalComplex.homologyMap (relativeSingularProjection A) n",
        :fixture
-       "/tmp/manifold_fundamental_class_relative_projection_preservation.lean",
+       "/tmp/manifold_fundamental_class_packaged_homology_projection.lean",
        :fixture-sha256
-       "bff770f8d40d961ef4c2dd3d7c8d98b4bcd5aa8dbb7810b2bbb79d0584848c90",
+       "04a86c3ac2468cc56635931a35c9945af5c05e63632bac470331095530c9b50d",
        :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
        :route-step
-       "specialize canonical homology-preservation naturality to the coefficient absolute-to-relative projection"},
+       "express the complete homology projection square using the packaged transport-explicit relative homology comparison"},
       :representation
       {:source
-       "The forgetIntModules image of the coefficient absolute-to-relative homology map followed by inverse homology preservation on the coefficient-relative complex",
+       "The forgotten coefficient absolute-to-relative homology map followed by the packaged transport-explicit relative homology comparison",
        :target
-       "Inverse homology preservation on the coefficient absolute complex followed by homology of the forgotten absolute-to-relative chain map",
+       "Inverse absolute homology preservation followed by homology of singularChainsComparison and the production relative projection",
        :direction
-       "Exact homology-morphism equality from the forget-after-homology representation to the homology-after-forgetting representation, specialized from ShortComplex.mapHomologyIso_inv_naturality"},
+       "Exact homology-morphism equality from the packaged coefficient-relative projection composite to the production relative-homology projection composite"},
       :id
-      :routes-2026-10-11-manifold-relative-projection-homology-preservation-topo3-r1,
+      :routes-2026-10-11-manifold-packaged-homology-projection-topo3-r1,
       :kind :representation-comparison,
       :area "manifold-fundamental-class",
       :depends-on
       [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
        :routes-2026-10-11-manifold-corrected-homology-projection-topo3-r1
-       :routes-2026-10-11-manifold-corrected-homology-comparison-hom-topo3-r1],
+       :routes-2026-10-11-manifold-corrected-homology-comparison-hom-topo3-r1
+       :routes-2026-10-11-manifold-relative-projection-homology-preservation-topo3-r1],
       :current-residual
-      "Compose this preservation equation with integralRelativeHomologyComparisonWithTransport_hom and the raw homology projection square to obtain packaged projection naturality; then compare with integralRelativeHomologyComparison and prove the normalization square.",
+      "Compare integralRelativeHomologyComparisonWithTransport with integralRelativeHomologyComparison and prove coefficient-to-production normalization compatibility.",
       :other-consumers [:t98A02]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake env lean /tmp/manifold_fundamental_class_relative_projection_preservation.lean",
+       "lake env lean /tmp/manifold_fundamental_class_packaged_homology_projection.lean",
        :exit 0,
        :output
-       "coefficientRelativeProjection_mapHomologyIso_naturality compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "integralRelativeHomologyComparisonWithTransport_projection compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/manifold_fundamental_class_relative_projection_preservation.lean",
+       "sha256sum /tmp/manifold_fundamental_class_packaged_homology_projection.lean",
        :exit 0,
        :output
-       "bff770f8d40d961ef4c2dd3d7c8d98b4bcd5aa8dbb7810b2bbb79d0584848c90  /tmp/manifold_fundamental_class_relative_projection_preservation.lean"}
+       "04a86c3ac2468cc56635931a35c9945af5c05e63632bac470331095530c9b50d  /tmp/manifold_fundamental_class_packaged_homology_projection.lean"}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/manifold_fundamental_class_relative_projection_preservation.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/manifold_fundamental_class_packaged_homology_projection.lean || true)\"",
        :exit 0}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
      :diagnostic-history
      [{:cmd
-       "lake env lean /tmp/manifold_fundamental_class_relative_projection_preservation.lean",
+       "lake env lean /tmp/manifold_fundamental_class_packaged_homology_projection.lean",
        :exit 1,
        :finding
-       "The first statement used pipeline notation on mapHomologyIso before composition, which parsed at the wrong precedence and gave the forward isomorphism where its inverse was required. Parenthesizing mapHomologyIso and selecting .inv produced the intended typed equation."}],
+       "A broad associativity rewrite selected the wrong composite, so the preservation equation was not exposed on the left-hand side."}
+      {:cmd
+       "lake env lean /tmp/manifold_fundamental_class_packaged_homology_projection.lean",
+       :exit 1,
+       :finding
+       "A scoped associativity rewrite still did not elaborate against the nested composite. Replacing rewriting with explicit calc steps using Category.assoc and congrArg fixed the proof."}],
      :fixture
      {:path
-      "/tmp/manifold_fundamental_class_relative_projection_preservation.lean",
+      "/tmp/manifold_fundamental_class_packaged_homology_projection.lean",
       :sha256
-      "bff770f8d40d961ef4c2dd3d7c8d98b4bcd5aa8dbb7810b2bbb79d0584848c90"},
+      "04a86c3ac2468cc56635931a35c9945af5c05e63632bac470331095530c9b50d"},
      :finding
-     "The required preservation bridge is exactly the existing ShortComplex.mapHomologyIso_inv_naturality theorem specialized to the coefficient cokernel projection. The compiled fixture identifies its short-complex homology map definitionally with HomologicalComplex.homologyMap, giving the precise equation needed to prepend the packaged transport-explicit comparison to the raw homology projection square. No generator or orientation choice is involved.",
+     "The three banked equations compose to give packaged projection naturality. Explicit calc steps reassociate the morphisms and apply congrArg to the preservation and raw projection equalities; the fixture compiles without a new representation choice. The remaining exact boundary is equality or a canonical comparison between the transport-explicit and earlier generator-facing homology comparison packages before the normalization square can be propagated.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -6302,7 +6384,8 @@
     :routes-2026-10-11-manifold-relative-homology-comparison-with-transport-topo3-r1
     :routes-2026-10-11-manifold-corrected-homology-projection-topo3-r1
     :routes-2026-10-11-manifold-corrected-homology-comparison-hom-topo3-r1
-    :routes-2026-10-11-manifold-relative-projection-homology-preservation-topo3-r1],
+    :routes-2026-10-11-manifold-relative-projection-homology-preservation-topo3-r1
+    :routes-2026-10-11-manifold-packaged-homology-projection-topo3-r1],
    :current-residual
    "Local-degree counts and wild-ball complement homology remain.",
    :other-consumers [:t98A02]}
@@ -9031,6 +9114,32 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-manifoldfundamentalclass-integralrelativehomologycomparisonwithtransport-hom
+    :lemma-constructiontargets-manifoldfundamentalclass-integralrelativechainscomparisonwithtransport-homology-projection],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection",
+    :type
+    "forall {X : Type} [TopologicalSpace X] (A : Set X) (n : Nat), forgetIntModules.map (HomologicalComplex.homologyMap (cokernel.π (CoefficientRelativeSmall.subspaceMap Int A)) n) ≫ (integralRelativeHomologyComparisonWithTransport A n).hom = (((CoefficientH0.SingularChains Int (TopCat.of X)).sc n).mapHomologyIso forgetIntModules).inv ≫ HomologicalComplex.homologyMap (singularChainsComparison (TopCat.of X)).hom n ≫ HomologicalComplex.homologyMap (relativeSingularProjection A) n"},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection",
+    :reported-by
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    :type
+    "forall {X : Type} [TopologicalSpace X] (A : Set X) (n : Nat), forgetIntModules.map (HomologicalComplex.homologyMap (cokernel.π (CoefficientRelativeSmall.subspaceMap Int A)) n) ≫ (integralRelativeHomologyComparisonWithTransport A n).hom = (((CoefficientH0.SingularChains Int (TopCat.of X)).sc n).mapHomologyIso forgetIntModules).inv ≫ HomologicalComplex.homologyMap (singularChainsComparison (TopCat.of X)).hom n ≫ HomologicalComplex.homologyMap (relativeSingularProjection A) n",
+    :area "manifold-fundamental-class",
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+   :id
+   :lemma-constructiontargets-manifoldfundamentalclass-integralrelativehomologycomparisonwithtransport-projection,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-manifoldfundamentalclass-integralrelativehomologycomparisonwithtransport-hom
+    :lemma-constructiontargets-manifoldfundamentalclass-coefficientrelativeprojection-maphomologyiso-naturality
     :lemma-constructiontargets-manifoldfundamentalclass-integralrelativechainscomparisonwithtransport-homology-projection],
    :other-consumers [:t98A02]}],
  :consumer-baselines {},
