@@ -79333,11 +79333,23 @@
     [{:cmd "compile",
       :exit 1,
       :finding "Normalized three-factor associativity."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791753694615-5894-f0ecf9dc",
+     :commands
+     ["git show/diff/check 8b97cb1a"
+      "lake env lean ConstructionTargets/t97A04Closure.lean"
+      "lake env lean problems/t97A04/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "fingerprint, placeholders, ancestry, fixture, blueprint checks"],
+     :finding
+     "PASS: 8b97cb1a is new after history 2e3b1711; its sole changed path is scoped and closure/blueprint blobs match. frozenH2Map_comp correctly states H2(g after f)=H2(f) then H2(g); both lowerShear and frozenLbar specializations preserve that order and faithfully advance B9. Lean gates pass with standard axioms; registry 131/0; frozen hash ca1b2cb3c6594276811618321d5c0604c2f38fc4594a6b21ae161a711a923a34 unchanged; closure/Main placeholders 0/2. This is new compiled progress; coordinate cancellation and B9-B11 remain listed."},
     :commit "8b97cb1ad0ea2a5f6b44dcce02c38e9457e88df8",
     :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79472,6 +79484,9 @@
      :reason :program-milestone-complete}
     {:job 2,
      :commit "2e3b1711b2b8c4fb424157c63690c69b18be4de9",
+     :reason :program-progress-committed}
+    {:job 3,
+     :commit "8b97cb1ad0ea2a5f6b44dcce02c38e9457e88df8",
      :reason :program-progress-committed}]}
   {:consumer :t96A07,
    :stop-count 4,
@@ -80905,7 +80920,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "ConstructionTargets.T97A04Closure.lowerShear_H2_map",
@@ -80915,7 +80930,9 @@
     :reported-by [:program-2026-10-11-close-t97a04],
     :type "H2(lower)=H2(swap)≫H2(shear)≫H2(swap)",
     :area "mv-connecting-naturality",
-    :proved-in :program-2026-10-11-close-t97a04},
+    :proved-in :program-2026-10-11-close-t97a04,
+    :banked-by :program-2026-10-11-close-t97a04,
+    :banked-commit "8b97cb1ad0ea2a5f6b44dcce02c38e9457e88df8"},
    :id :lemma-constructiontargets-t97a04closure-lowershear-h2-map,
    :kind :lemma,
    :depends-on
@@ -80923,7 +80940,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "ConstructionTargets.T97A04Closure.frozenLbar_H2_map",
@@ -80933,7 +80950,9 @@
     :reported-by [:program-2026-10-11-close-t97a04],
     :type "H2(Lbar)=H2(lower)≫H2(shearY 3 1)",
     :area "mv-connecting-naturality",
-    :proved-in :program-2026-10-11-close-t97a04},
+    :proved-in :program-2026-10-11-close-t97a04,
+    :banked-by :program-2026-10-11-close-t97a04,
+    :banked-commit "8b97cb1ad0ea2a5f6b44dcce02c38e9457e88df8"},
    :id :lemma-constructiontargets-t97a04closure-frozenlbar-h2-map,
    :kind :lemma,
    :depends-on
