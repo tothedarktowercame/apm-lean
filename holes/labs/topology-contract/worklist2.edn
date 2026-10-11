@@ -79329,11 +79329,23 @@
       :exit 1,
       :finding
       "Fixed iso cancellation with slices and postcomposition equalities."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791744399069-5766-cf866ef1",
+     :commands
+     ["git show/diff/check cc9c9fdad"
+      "lake env lean ConstructionTargets/t97A04Closure.lean"
+      "lake env lean problems/t97A04/lean/Main.lean"
+      "statement-registry check/fingerprint"
+      "git-show hash/placeholder checks"],
+     :finding
+     "PASS: cc9c9fda is new after history add74d59; scope/blob match. Coordinate-iso cancellation, branch H1 factorization, folded degree-a equations, and injection reconstruction correctly give both summand equations and hence overlapScalar a, with no orientation swap. Lean gates compile with standard axioms only; registry 131/0; frozen hash unchanged ca1b2cb3; closure 0/Main 2 placeholders. B6 use and B7-B11 remain listed."},
     :commit "cc9c9fdadd0b167ea1791e56ab12859c95041a99",
     :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79447,6 +79459,9 @@
      :reason :program-progress-committed}
     {:job 4,
      :commit "add74d5934dfc855b1220d3453c927ae4890ee8b",
+     :reason :program-progress-committed}
+    {:job 5,
+     :commit "cc9c9fdadd0b167ea1791e56ab12859c95041a99",
      :reason :program-progress-committed}]}
   {:consumer :t96A07,
    :stop-count 3,
@@ -79684,7 +79699,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -79698,7 +79713,9 @@
     :type
     "overlap-coordinate conjugate of productionIntersectionMap (shearYShortComplexHom a b) 1 equals overlapScalar a",
     :area "mv-connecting-naturality",
-    :proved-in :program-2026-10-11-close-t97a04},
+    :proved-in :program-2026-10-11-close-t97a04,
+    :banked-by :program-2026-10-11-close-t97a04,
+    :banked-commit "cc9c9fdadd0b167ea1791e56ab12859c95041a99"},
    :id
    :lemma-constructiontargets-t97a04closure-sheary-overlap-coordinate,
    :kind :lemma,
@@ -79820,7 +79837,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -79832,7 +79849,9 @@
     :reported-by [:program-2026-10-11-close-t97a04],
     :type "the normalized inl and inr degree-a equations",
     :area "mv-connecting-naturality",
-    :proved-in :program-2026-10-11-close-t97a04},
+    :proved-in :program-2026-10-11-close-t97a04,
+    :banked-by :program-2026-10-11-close-t97a04,
+    :banked-commit "cc9c9fdadd0b167ea1791e56ab12859c95041a99"},
    :id
    :lemma-constructiontargets-t97a04closure-sheary-overlap-coordinate-components,
    :kind :lemma,
