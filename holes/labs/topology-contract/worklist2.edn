@@ -70308,91 +70308,130 @@
    "Construct norm-preserving departure and arrival arcs whose imaginary sign varies continuously with the meridian coordinate, join them through a nonzero-imaginary radius-bounded corridor, then treat the angular stage.",
    :other-consumers []}
   {:bounded-exception
+   "single-consumer continuous signed imaginary waypoint inside the core-normal radius bound",
+   :consumer :t02A03,
+   :phase :probe,
+   :state :open,
+   :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t02A03/zero-height-signed-imaginary-waypoint-properties",
+   :acceptance
+   {:probe
+    "Compile zeroHeightSignedImaginaryWaypoint and zeroHeight_signedImaginaryWaypoint_properties. Define the waypoint continuously as ((1/8) * meridian.re) * I and prove that at zero height it has norm 1/8 and nonzero imaginary part. Do not construct the endpoint legs, concatenate a path, or define the ambient deformation.",
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeight_signedImaginaryWaypoint_properties",
+    :type
+    "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> ‖zeroHeightSignedImaginaryWaypoint p‖ = (1 / 8 : ℝ) ∧ (zeroHeightSignedImaginaryWaypoint p).im ≠ 0",
+    :supporting-declarations
+    [{:name
+      "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightSignedImaginaryWaypoint",
+      :type "RightTubeMinusLeftCore -> ℂ"}],
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "choose a continuous branch-signed interior waypoint for the zero-height radial detour"},
+   :id
+   :routes-2026-10-11-t02a03-zero-height-signed-imaginary-waypoint-properties-topo2-r1,
+   :kind :reusable-theorem,
+   :area "explicit-r3-tube-deformation-retraction",
+   :depends-on
+   [:routes-2026-10-11-t02a03-real-endpoints-zero-height-core-normals-topo2-r1],
+   :current-residual
+   "Construct radius-bounded affine legs from each real endpoint to the signed imaginary waypoint, prove their interiors have nonzero imaginary part and their endpoints retain the banked collision certificates, then concatenate.",
+   :other-consumers []}
+  {:bounded-exception
    "single-consumer explicit ambient deformation with frozen tube and deletion invariants",
    :consumer :t02A03,
    :evidence
    {:probe
     {:residual
-     "Bank the zero-height real-diameter endpoint certificate; then construct the radius-bounded signed imaginary detour and certify its left-core avoidance.",
+     "Bank the continuous signed imaginary waypoint; then construct and certify the two radius-bounded affine detour legs.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
      [{:name
-       "ConstructionTargets.T02A03GeometricTubeDeformation.realEndpoints_zeroHeight_rightTubeCoreNormals",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeight_signedImaginaryWaypoint_properties",
        :type
-       "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> (rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p))).im = 0 ∧ (rightTubeCoreNormalComplex p.1).im = 0",
+       "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> ‖zeroHeightSignedImaginaryWaypoint p‖ = (1 / 8 : ℝ) ∧ (zeroHeightSignedImaginaryWaypoint p).im ≠ 0",
        :status :proved,
        :consumers [:t02A03],
        :depends-on
-       ["ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeMeridianCoordinate_im_positiveFactor_height"],
+       ["ConstructionTargets.T02A03GeometricTubeDeformation.signCases_zeroHeight_rightTubeMeridianCoordinate_re"],
        :area "explicit-r3-tube-deformation-retraction"}],
      :prerequisite
      {:bounded-exception
-      "single-consumer zero-height real-diameter endpoint certificate for the signed imaginary detour",
+      "single-consumer continuous signed imaginary waypoint inside the core-normal radius bound",
       :consumer :t02A03,
       :phase :probe,
       :state :open,
       :scope
       ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t02A03/real-endpoints-zero-height-core-normals",
+      "TOPOLOGY-ROUTES.md/t02A03/zero-height-signed-imaginary-waypoint-properties",
       :acceptance
       {:probe
-       "Compile realEndpoints_zeroHeight_rightTubeCoreNormals. For a zero-height input, prove that both the meridian core normal and recovered input core normal have zero imaginary part. Do not define the detour path, choose a discontinuous sign, or claim straight radial interpolation avoidance.",
+       "Compile zeroHeightSignedImaginaryWaypoint and zeroHeight_signedImaginaryWaypoint_properties. Define the waypoint continuously as ((1/8) * meridian.re) * I and prove that at zero height it has norm 1/8 and nonzero imaginary part. Do not construct the endpoint legs, concatenate a path, or define the ambient deformation.",
        :declaration
-       "ConstructionTargets.T02A03GeometricTubeDeformation.realEndpoints_zeroHeight_rightTubeCoreNormals",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeight_signedImaginaryWaypoint_properties",
        :type
-       "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> (rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p))).im = 0 ∧ (rightTubeCoreNormalComplex p.1).im = 0",
+       "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> ‖zeroHeightSignedImaginaryWaypoint p‖ = (1 / 8 : ℝ) ∧ (zeroHeightSignedImaginaryWaypoint p).im ≠ 0",
+       :supporting-declarations
+       [{:name
+         "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightSignedImaginaryWaypoint",
+         :type "RightTubeMinusLeftCore -> ℂ"}],
        :placeholder "the sole sorry in apm_t02a03",
        :route-step
-       "identify both zero-height radial endpoints on the real diameter before constructing a norm-preserving signed imaginary detour"},
+       "choose a continuous branch-signed interior waypoint for the zero-height radial detour"},
       :id
-      :routes-2026-10-11-t02a03-real-endpoints-zero-height-core-normals-topo2-r1,
+      :routes-2026-10-11-t02a03-zero-height-signed-imaginary-waypoint-properties-topo2-r1,
       :kind :reusable-theorem,
       :area "explicit-r3-tube-deformation-retraction",
       :depends-on
-      [:routes-2026-10-11-t02a03-positive-sign-input-collision-topo2-r1],
+      [:routes-2026-10-11-t02a03-real-endpoints-zero-height-core-normals-topo2-r1],
       :current-residual
-      "Construct norm-preserving departure and arrival arcs whose imaginary sign varies continuously with the meridian coordinate, join them through a nonzero-imaginary radius-bounded corridor, then treat the angular stage.",
+      "Construct radius-bounded affine legs from each real endpoint to the signed imaginary waypoint, prove their interiors have nonzero imaginary part and their endpoints retain the banked collision certificates, then concatenate.",
       :other-consumers []},
      :commands
      [{:cmd
-       "lake env lean /tmp/t02a03_zero_height_core_normal_real_endpoints_probe.lean",
+       "lake env lean /tmp/t02a03_signed_imaginary_waypoint_probe.lean",
        :exit 0,
        :output
-       "realEndpoints_zeroHeight_rightTubeCoreNormals compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "zeroHeight_signedImaginaryWaypoint_properties compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/t02a03_zero_height_core_normal_real_endpoints_probe.lean",
+       "sha256sum /tmp/t02a03_signed_imaginary_waypoint_probe.lean",
        :exit 0,
        :output
-       "eb5d82b7511a862112a5efaa346c36c5d8b1abb61f24d9add5604af26c04174f  /tmp/t02a03_zero_height_core_normal_real_endpoints_probe.lean"}
+       "72ad9b0394c560265a88553254dcead6892aa46d25b92de68db7989fced31991  /tmp/t02a03_signed_imaginary_waypoint_probe.lean"}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_zero_height_core_normal_real_endpoints_probe.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_signed_imaginary_waypoint_probe.lean || true)\"",
        :exit 0}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}
       {:cmd
-       "rg -n 'realEndpoints_zeroHeight_rightTubeCoreNormals' /tmp/t02a03_zero_height_core_normal_real_endpoints_probe.lean",
+       "rg -n 'zeroHeightSignedImaginaryWaypoint|zeroHeight_signedImaginaryWaypoint_properties' /tmp/t02a03_signed_imaginary_waypoint_probe.lean",
        :exit 0,
        :output
-       "7:theorem realEndpoints_zeroHeight_rightTubeCoreNormals\n18:#print axioms realEndpoints_zeroHeight_rightTubeCoreNormals"}],
+       "5:noncomputable def zeroHeightSignedImaginaryWaypoint\n9:theorem zeroHeight_signedImaginaryWaypoint_properties\n26:#print axioms zeroHeight_signedImaginaryWaypoint_properties"}],
      :diagnostic-history
      [{:cmd
-       "lake env lean /tmp/t02a03_zero_height_core_normal_real_endpoints_probe.lean",
+       "lake env lean /tmp/t02a03_signed_imaginary_waypoint_probe.lean",
        :exit 1,
        :finding
-       "The first fixture omitted the namespace opening that exports apm_t02a03_circleMeridian. Opening ConstructionTargets.T02A03GeometricTubeCover resolved the intended frozen definition."}],
+       "The imported olean predates the newly banked sign-cases theorem. The fixture derived the identical square-one split directly from the already compiled positive-factor height identity and Circle norm equation."}
+      {:cmd
+       "lake env lean /tmp/t02a03_signed_imaginary_waypoint_probe.lean",
+       :exit 1,
+       :finding
+       "Branch-local simp closed both goals completely, so the trailing norm_num calls reported no goals. Removing those redundant calls yielded the clean fixture."}],
      :fixture
-     {:path
-      "/tmp/t02a03_zero_height_core_normal_real_endpoints_probe.lean",
+     {:path "/tmp/t02a03_signed_imaginary_waypoint_probe.lean",
       :sha256
-      "eb5d82b7511a862112a5efaa346c36c5d8b1abb61f24d9add5604af26c04174f"},
+      "72ad9b0394c560265a88553254dcead6892aa46d25b92de68db7989fced31991"},
      :finding
-     "At zero height, both the meridian core normal and the recovered input core normal have imaginary part zero. This identifies the endpoints as points of the real diameter; a subsequent construction can rotate them into a consistently signed nonzero-imaginary corridor while preserving their norms, instead of assuming the unsafe straight radial interpolation remains collision-free.",
+     "The continuous formula ((1/8) * meridian.re) * I provides a signed imaginary waypoint without a discontinuous branch selector. On the zero-height locus the meridian real coordinate is 1 or -1, so the waypoint has exact norm 1/8 and nonzero imaginary part; it is therefore strictly inside the quarter-radius tube-normal disk and outside the left-core collision locus.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
@@ -70455,7 +70494,8 @@
     :routes-2026-10-11-t02a03-positive-sign-left-normal-real-topo2-r1
     :routes-2026-10-11-t02a03-positive-sign-radial-start-collision-topo2-r1
     :routes-2026-10-11-t02a03-positive-sign-input-collision-topo2-r1
-    :routes-2026-10-11-t02a03-real-endpoints-zero-height-core-normals-topo2-r1],
+    :routes-2026-10-11-t02a03-real-endpoints-zero-height-core-normals-topo2-r1
+    :routes-2026-10-11-t02a03-zero-height-signed-imaginary-waypoint-properties-topo2-r1],
    :current-residual
    "Lift H to RightTubeMinusLeftCore, package rightTubeMeridianRetractionHomotopy, then use the coordinate equation for the Circle-side constant homotopy.",
    :other-consumers []}
@@ -74684,4 +74724,29 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-t02a03geometrictubedeformation-righttubemeridiancoordinate-i],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeight_signedImaginaryWaypoint_properties",
+    :type
+    "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> ‖zeroHeightSignedImaginaryWaypoint p‖ = (1 / 8 : ℝ) ∧ (zeroHeightSignedImaginaryWaypoint p).im ≠ 0"},
+   :lemma
+   {:name
+    "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeight_signedImaginaryWaypoint_properties",
+    :reported-by
+    [:routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1],
+    :type
+    "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> ‖zeroHeightSignedImaginaryWaypoint p‖ = (1 / 8 : ℝ) ∧ (zeroHeightSignedImaginaryWaypoint p).im ≠ 0",
+    :area "explicit-r3-tube-deformation-retraction",
+    :proved-in
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+   :id
+   :lemma-constructiontargets-t02a03geometrictubedeformation-zeroheight-signedimaginaryway,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t02a03geometrictubedeformation-signcases-zeroheight-righttub],
    :other-consumers []}]}
