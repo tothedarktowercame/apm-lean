@@ -989,6 +989,25 @@ theorem inputZeroHeight_collisionPolynomial_ne
   rw [hself] at hmem
   exact p.2.2 hmem
 
+theorem meridianStart_collisionPolynomial_factor
+    (z : Circle) :
+    let n := rightTubeCoreNormalComplex (apm_t02a03_circleMeridian z)
+    (1 - n.re) ^ 2 - 4 * (1 - n.re) * ((1 : Circle) : Complex).re + 3 =
+      ((z : Complex).re / 8) * (2 + (z : Complex).re / 8) := by
+  dsimp
+  have habs : |(z : Complex).re| ≤ 1 := by
+    simpa [Circle.norm_coe z] using RCLike.abs_re_le_norm (z : Complex)
+  have hpos : 0 ≤ 1 - (8⁻¹ : Real) * (z : Complex).re := by
+    have hhi : (z : Complex).re ≤ 1 := (abs_le.mp habs).2
+    linarith
+  simp [rightTubeCoreNormalComplex, rightTubeCorePlanarComplex,
+    apm_t02a03_circleMeridian, Complex.norm_def, Complex.normSq_apply]
+  rw [show (1 - 8⁻¹ * (z : Complex).re) *
+      (1 - 8⁻¹ * (z : Complex).re) =
+      (1 - 8⁻¹ * (z : Complex).re) ^ 2 by ring]
+  rw [Real.sqrt_sq hpos]
+  ring
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -1025,3 +1044,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.nonpositiveNormalSafeCorridor_collisionPolynomial_pos
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCollisionPolynomial_eq_zero_implies_leftCore
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.inputZeroHeight_collisionPolynomial_ne
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.meridianStart_collisionPolynomial_factor
