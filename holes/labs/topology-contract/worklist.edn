@@ -102002,92 +102002,125 @@
    "Split arbitrary closed parameters into half-open or endpoint-one cases and combine the interior and vertex theorems to obtain full presentation independence.",
    :other-consumers []}
   {:bounded-exception
+   "This single-consumer prerequisite normalizes the five nonfinal closed-edge endpoints into half-open successor-edge coordinates before the separate period-wrap case.",
+   :consumer :t97A01,
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/PolygonSixEdgeEndpointNormalization.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/six-edge-nonfinal-endpoint-normalization",
+   :acceptance
+   {:implementation
+    "Promote the exact fixture. For each natural edge index j less than five, exhibit the successor Fin 6 edge and zero half-open parameter whose Circle point equals edge j at parameter one, using the banked consecutive-edge endpoint theorem. Do not prove the edge-five period wrap, full presentation independence, total Circle decoders, relation invariance, boundary-map injectivity or homeomorphism, final formulas, invariants, or t97A01.",
+    :placeholder "the single sorry in apm_t97a01",
+    :route-step
+    "polygon radial open-cover step 33: normalize parameter-one endpoints for edges zero through four",
+    :fixture "/tmp/polygon-six-edge-endpoint-normalization.lean",
+    :fixture-sha256
+    "5e165bb0c3832af2e71b211a27b3bcd38ca4625f5521d215bc4ea7dd5ebe685b",
+    :gates
+    ["lake build ConstructionTargets.PolygonSixEdgeEndpointNormalization"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id
+   :routes-2026-10-11-polygon-six-edge-nonfinal-endpoint-normalization-73,
+   :kind :reusable-theorem,
+   :area "polygon-surface-open-cover",
+   :depends-on
+   [:routes-2026-10-11-polygon-boundary-decoder-interiors-72],
+   :current-residual
+   "Prove the edge-five-to-edge-zero period wrap, then combine all endpoint and interior cases into full decoder presentation independence.",
+   :other-consumers []}
+  {:bounded-exception
    "This single-consumer concrete quotient package is the other final backlog lemma on t97A01 and supplies the actual two polygon models required by its frozen statement.",
    :consumer :t97A01,
    :implements-lemma :lemma-polygonradialopencoverpackages,
    :evidence
    {:probe
     {:residual
-     "Combine the compiled interior presentation independence with the common endpoint theorem to prove full closed-edge presentation independence, then use the six-edge cover to define total Circle decoders.",
+     "Prove the final wrap equality from edge five at one to edge zero at zero, combine it with the compiled nonfinal endpoint normalization and interior uniqueness, and finish full decoder presentation independence.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
      [{:name
-       "PolygonBoundaryDecoderInteriors.n3EdgeDecode_interior_wellDefined",
+       "PolygonSixEdgeEndpointNormalization.nonfinal_endpoint_has_halfOpen_presentation",
        :type
-       "Equal half-open canonical edge presentations have equal N3 decoder values.",
+       "For each canonical edge zero through four, its parameter-one endpoint has the successor-edge parameter-zero half-open presentation.",
        :status :proved,
        :consumers [:t97A01],
        :depends-on
-       ["PolygonSixEdgeInteriorUniqueness.circleEdgePoint_interior_injective"],
+       ["PolygonBoundaryVertexClasses.circleEdgePoint_one_eq_succ_zero"],
        :area "polygon-surface-open-cover"}
-      {:name
-       "PolygonBoundaryDecoderInteriors.torusCrosscapEdgeDecode_interior_wellDefined",
+      {:name "polygonSixEdgeFinalEndpointWrap",
        :type
-       "Equal half-open canonical edge presentations have equal torus-crosscap decoder values.",
-       :status :proved,
+       "circleEdgePoint 5 oneIcc equals circleEdgePoint 0 zeroIcc, giving the remaining half-open endpoint normalization.",
+       :status :not-started,
        :consumers [:t97A01],
        :depends-on
-       ["PolygonSixEdgeInteriorUniqueness.circleEdgePoint_interior_injective"],
+       ["PolygonSixEdgeCircleCover.circleEdgePoint_eq_toCircle"],
        :area "polygon-surface-open-cover"}
       {:name "polygonBoundaryCircleDecoderWellDefined",
        :type
-       "Combine interior uniqueness and common endpoint values to prove both decoder tables agree on all closed-edge presentations and define total Circle decoders.",
+       "Combine half-open interior uniqueness and all six endpoint normalizations to prove both decoder tables agree on every closed-edge presentation and define total Circle decoders.",
        :status :partial,
        :consumers [:t97A01],
        :depends-on
-       ["PolygonBoundaryDecoderInteriors.n3EdgeDecode_interior_wellDefined"
-        "PolygonBoundaryDecoderInteriors.torusCrosscapEdgeDecode_interior_wellDefined"
-        "PolygonBoundaryDecoderVertices.n3EdgeDecode_endpoints"
-        "PolygonBoundaryDecoderVertices.torusCrosscapEdgeDecode_endpoints"
-        "PolygonSixEdgeCircleCover.sixEdgeCircleCover"],
+       ["PolygonSixEdgeEndpointNormalization.nonfinal_endpoint_has_halfOpen_presentation"
+        "polygonSixEdgeFinalEndpointWrap"
+        "PolygonBoundaryDecoderInteriors.n3EdgeDecode_interior_wellDefined"
+        "PolygonBoundaryDecoderVertices.n3EdgeDecode_endpoints"],
        :area "polygon-surface-open-cover"}],
      :prerequisite
      {:bounded-exception
-      "This single-consumer prerequisite proves the interior half of decoder presentation independence, complementary to the already banked common endpoint theorem.",
+      "This single-consumer prerequisite normalizes the five nonfinal closed-edge endpoints into half-open successor-edge coordinates before the separate period-wrap case.",
       :consumer :t97A01,
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/PolygonBoundaryDecoderInteriors.lean"],
+      ["ConstructionTargets/PolygonSixEdgeEndpointNormalization.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/boundary-decoder-interiors",
+      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/six-edge-nonfinal-endpoint-normalization",
       :acceptance
       {:implementation
-       "Promote the exact fixture. Define the literal conversion from half-open to closed unit-interval parameters. For each specialized decoder table, prove that equal Circle points given by two half-open canonical edge presentations have equal decoder values, by applying the banked exact edge-index and parameter uniqueness theorem. Do not handle parameter one or shared vertices, define total Circle decoders, classify EqvGen fibers, prove boundary-map injectivity or homeomorphism, derive final formulas, compute invariants, or close t97A01.",
+       "Promote the exact fixture. For each natural edge index j less than five, exhibit the successor Fin 6 edge and zero half-open parameter whose Circle point equals edge j at parameter one, using the banked consecutive-edge endpoint theorem. Do not prove the edge-five period wrap, full presentation independence, total Circle decoders, relation invariance, boundary-map injectivity or homeomorphism, final formulas, invariants, or t97A01.",
        :placeholder "the single sorry in apm_t97a01",
        :route-step
-       "polygon radial open-cover step 32: prove decoder independence on half-open edge interiors",
-       :fixture "/tmp/polygon-boundary-decoder-interiors.lean",
+       "polygon radial open-cover step 33: normalize parameter-one endpoints for edges zero through four",
+       :fixture "/tmp/polygon-six-edge-endpoint-normalization.lean",
        :fixture-sha256
-       "0869250f442076623800a9eacd7f0d7fdad5e359817cba1b6c2dcbf4c0be7887",
+       "5e165bb0c3832af2e71b211a27b3bcd38ca4625f5521d215bc4ea7dd5ebe685b",
        :gates
-       ["lake build ConstructionTargets.PolygonBoundaryDecoderInteriors"
+       ["lake build ConstructionTargets.PolygonSixEdgeEndpointNormalization"
         "fixture compiles"
         "zero source and fixture sorry"
         "standard-only axioms"
         "registry check"]},
-      :id :routes-2026-10-11-polygon-boundary-decoder-interiors-72,
+      :id
+      :routes-2026-10-11-polygon-six-edge-nonfinal-endpoint-normalization-73,
       :kind :reusable-theorem,
       :area "polygon-surface-open-cover",
       :depends-on
-      [:routes-2026-10-11-polygon-boundary-decoder-vertices-71],
+      [:routes-2026-10-11-polygon-boundary-decoder-interiors-72],
       :current-residual
-      "Split arbitrary closed parameters into half-open or endpoint-one cases and combine the interior and vertex theorems to obtain full presentation independence.",
+      "Prove the edge-five-to-edge-zero period wrap, then combine all endpoint and interior cases into full decoder presentation independence.",
       :other-consumers []},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake env lean /tmp/polygon-boundary-decoder-interiors.lean",
+       "lake env lean /tmp/polygon-six-edge-endpoint-normalization.lean",
        :exit 0,
        :finding
-       "The half-open-to-closed conversion and both interior decoder presentation-independence theorems compile."}
-      {:cmd "sha256sum /tmp/polygon-boundary-decoder-interiors.lean",
-       :exit 0,
-       :finding
-       "0869250f442076623800a9eacd7f0d7fdad5e359817cba1b6c2dcbf4c0be7887"}
+       "The five nonfinal endpoint-to-successor half-open normalizations compile."}
       {:cmd
-       "rg -n \"\\b(sorry|admit)\\b\" /tmp/polygon-boundary-decoder-interiors.lean",
+       "sha256sum /tmp/polygon-six-edge-endpoint-normalization.lean",
+       :exit 0,
+       :finding
+       "5e165bb0c3832af2e71b211a27b3bcd38ca4625f5521d215bc4ea7dd5ebe685b"}
+      {:cmd
+       "rg -n \"\\b(sorry|admit)\\b\" /tmp/polygon-six-edge-endpoint-normalization.lean",
        :exit 1,
        :expected-exit 1,
        :finding "No fixture placeholders."}
@@ -102099,16 +102132,21 @@
        :exit 0,
        :finding
        "The route guide, per-problem routes, and probe definitions were read."}],
-     :diagnostic-history [],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/polygon-six-edge-endpoint-normalization.lean",
+       :exit 1,
+       :finding
+       "The first draft attempted the edge-five period wrap together with successor normalization, but coercion normalization in AddCircle did not reduce the period equality; the compiled prerequisite was bounded to the five nonfinal successor cases, leaving the exact wrap theorem as the next named step."}],
      :fixture
-     {:path "/tmp/polygon-boundary-decoder-interiors.lean",
+     {:path "/tmp/polygon-six-edge-endpoint-normalization.lean",
       :sha256
-      "0869250f442076623800a9eacd7f0d7fdad5e359817cba1b6c2dcbf4c0be7887",
+      "5e165bb0c3832af2e71b211a27b3bcd38ca4625f5521d215bc4ea7dd5ebe685b",
       :interface
-      "For both specialized tables, equal Circle points represented at half-open edge parameters have equal decoder values."},
+      "Every parameter-one endpoint on edges zero through four has the literal successor-edge parameter-zero half-open presentation."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -102160,7 +102198,8 @@
     :routes-2026-10-11-polygon-boundary-generator-normal-forms-69
     :routes-2026-10-11-polygon-boundary-edge-decoders-70
     :routes-2026-10-11-polygon-boundary-decoder-vertices-71
-    :routes-2026-10-11-polygon-boundary-decoder-interiors-72],
+    :routes-2026-10-11-polygon-boundary-decoder-interiors-72
+    :routes-2026-10-11-polygon-six-edge-nonfinal-endpoint-normalization-73],
    :current-residual
    "Combine the concrete cover packages with the strict overlap squares, banked Smith normalization, and final t97A01 assembly.",
    :other-consumers []}
@@ -106084,7 +106123,9 @@
     :lemma-polygonboundarydecodervertices-n3edgedecode-endpoints
     :lemma-polygonboundarydecodervertices-toruscrosscapedgedecode-endpoints
     :lemma-polygonboundarydecoderinteriors-n3edgedecode-interior-welldefined
-    :lemma-polygonboundarydecoderinteriors-toruscrosscapedgedecode-interior-welldefined],
+    :lemma-polygonboundarydecoderinteriors-toruscrosscapedgedecode-interior-welldefined
+    :lemma-polygonsixedgeendpointnormalization-nonfinal-endpoint-has-halfopen-presentation
+    :lemma-polygonsixedgefinalendpointwrap],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -106194,6 +106235,80 @@
    :kind :lemma,
    :depends-on
    [:lemma-polygonsixedgeinterioruniqueness-circleedgepoint-interior-injective],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "PolygonSixEdgeEndpointNormalization.nonfinal_endpoint_has_halfOpen_presentation",
+    :type
+    "For each canonical edge zero through four, its parameter-one endpoint has the successor-edge parameter-zero half-open presentation."},
+   :lemma
+   {:name
+    "PolygonSixEdgeEndpointNormalization.nonfinal_endpoint_has_halfOpen_presentation",
+    :reported-by
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    :type
+    "For each canonical edge zero through four, its parameter-one endpoint has the successor-edge parameter-zero half-open presentation.",
+    :area "polygon-surface-open-cover",
+    :proved-in
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+   :id
+   :lemma-polygonsixedgeendpointnormalization-nonfinal-endpoint-has-halfopen-presentation,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polygonboundaryvertexclasses-circleedgepoint-one-eq-succ-zero],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "PolygonBoundaryVertexClasses.circleEdgePoint_one_eq_succ_zero"},
+   :lemma
+   {:name
+    "PolygonBoundaryVertexClasses.circleEdgePoint_one_eq_succ_zero",
+    :reported-by []},
+   :id
+   :lemma-polygonboundaryvertexclasses-circleedgepoint-one-eq-succ-zero,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "polygonSixEdgeFinalEndpointWrap",
+    :type
+    "circleEdgePoint 5 oneIcc equals circleEdgePoint 0 zeroIcc, giving the remaining half-open endpoint normalization."},
+   :lemma
+   {:name "polygonSixEdgeFinalEndpointWrap",
+    :reported-by
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    :type
+    "circleEdgePoint 5 oneIcc equals circleEdgePoint 0 zeroIcc, giving the remaining half-open endpoint normalization.",
+    :area "polygon-surface-open-cover"},
+   :id :lemma-polygonsixedgefinalendpointwrap,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polygonsixedgecirclecover-circleedgepoint-eq-tocircle],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "PolygonSixEdgeCircleCover.circleEdgePoint_eq_toCircle"},
+   :lemma
+   {:name "PolygonSixEdgeCircleCover.circleEdgePoint_eq_toCircle",
+    :reported-by []},
+   :id :lemma-polygonsixedgecirclecover-circleedgepoint-eq-tocircle,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
