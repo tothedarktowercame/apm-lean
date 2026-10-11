@@ -68522,52 +68522,63 @@
    "single-consumer polynomial noncollision criterion for left-core avoidance",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:residual
-     "Implement collisionPolynomial_ne_implies_avoidsLeftCore_rightTubeCorePolar in the scoped module, then establish polynomial nonvanishing along the selected angular trajectory and combine it with the height split.",
-     :outcome :go,
-     :warnings [],
-     :missing-theorems [],
-     :commands
-     [{:cmd
-       "lake env lean /tmp/t02a03_core_polar_polynomial_avoidance_probe.lean",
-       :exit 0,
-       :output
-       "collisionPolynomial_ne_implies_avoidsLeftCore_rightTubeCorePolar compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "sha256sum /tmp/t02a03_core_polar_polynomial_avoidance_probe.lean",
-       :exit 0,
-       :output
-       "b54389cfaef4c29f9a16062988de609eb4a2838d46d129d7706ff7efd3acbfc4  /tmp/t02a03_core_polar_polynomial_avoidance_probe.lean"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_core_polar_polynomial_avoidance_probe.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}
-      {:cmd
-       "rg -n 'collisionPolynomial_ne_implies_avoidsLeftCore_rightTubeCorePolar' /tmp/t02a03_core_polar_polynomial_avoidance_probe.lean",
-       :exit 0,
-       :output
-       "7:theorem collisionPolynomial_ne_implies_avoidsLeftCore_rightTubeCorePolar\n14:#print axioms collisionPolynomial_ne_implies_avoidsLeftCore_rightTubeCorePolar"}],
-     :fixture
-     {:path "/tmp/t02a03_core_polar_polynomial_avoidance_probe.lean",
-      :sha256
-      "b54389cfaef4c29f9a16062988de609eb4a2838d46d129d7706ff7efd3acbfc4"},
-     :finding
-     "The complete placeholder-free fixture proves the requested contrapositive adapter from the banked collision equation. The renamed declaration has a distinct leading phrase and no longer collides with the height-avoidance lemma's DAG identity.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
-      :declaration
-      "ConstructionTargets.T02A03GeometricTubeDeformation.collisionPolynomial_ne_implies_avoidsLeftCore_rightTubeCorePolar",
-      :type
-      "forall (u : Circle) (n : Complex), ((1 - n.re)^2 - 4*(1 - n.re)*(u : Complex).re + 3 != 0) -> rightTubeCorePolarReconstruction u n ∉ Set.range apm_t02a03_leftCore"},
-     :seat "topo-8"}},
+   {:placeholder-delta {:before 0, :after 0, :change 0},
+    :residual
+    "Construct the right-core angular trajectory and prove its collision polynomial is nonzero on the zero-height slice; use this theorem there and the height criterion elsewhere, then certify and concatenate both ambient stages.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean:62:6: unnecessarySimpa (pre-existing)"],
+    :missing-theorems [],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms [propext Classical.choice Quot.sound],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :scope-blob "e94f29209c14453eb25b78d860e2965678d3bf14",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0,
+      :output
+      "compiled; declaration axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "lake env lean /tmp/t02a03_core_polar_polynomial_avoidance_probe.lean",
+      :exit 0,
+      :output
+      "collisionPolynomial_ne_implies_avoidsLeftCore_rightTubeCorePolar compiled; axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "sha256sum /tmp/t02a03_core_polar_polynomial_avoidance_probe.lean",
+      :exit 0,
+      :output
+      "b54389cfaef4c29f9a16062988de609eb4a2838d46d129d7706ff7efd3acbfc4  /tmp/t02a03_core_polar_polynomial_avoidance_probe.lean"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "git diff --check -- ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd
+      "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "79bd6c245153d9f6f6fd1cf38680bb7ef9fec26b",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.collisionPolynomial_ne_implies_avoidsLeftCore_rightTubeCorePolar",
+    :fixture
+    {:path "/tmp/t02a03_core_polar_polynomial_avoidance_probe.lean",
+     :sha256
+     "b54389cfaef4c29f9a16062988de609eb4a2838d46d129d7706ff7efd3acbfc4"},
+    :finding
+    "The contrapositive adapter applies the banked necessary collision equation: a nonzero collision polynomial contradicts any hypothetical left-core membership.",
+    :seat "topo-6"},
    :phase :implementation,
    :type
    "forall (u : Circle) (n : Complex), ((1 - n.re)^2 - 4*(1 - n.re)*(u : Complex).re + 3 != 0) -> rightTubeCorePolarReconstruction u n ∉ Set.range apm_t02a03_leftCore",
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/collision-polynomial-implies-left-core-avoidance",
