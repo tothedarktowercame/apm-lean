@@ -8577,8 +8577,74 @@
   {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-correctedlocalnormalizationautomorphism-hom,
+   :evidence
+   {:placeholder-delta {:t00J02 0, :t98A02 0},
+    :residual
+    "Expand the inverse coefficient normalization, corrected comparison, and ambient normalization into their concrete connecting, radial, and sphere components, and prove their composite is not the negative identity.",
+    :gates
+    {:exact-type :pass,
+     :worktree-clean :pass,
+     :module-compile :pass,
+     :fixture-hash :pass,
+     :definitional-equality :pass,
+     :scope :pass,
+     :statement-registry :pass,
+     :factor-internals-unexpanded :pass,
+     :sign-claims-excluded :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :missing-theorems
+    [{:id
+      :lemma-constructiontargets-manifoldfundamentalclass-correctedlocalnormalizationautomorphism-hom,
+      :name
+      "ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on
+      ["ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism"],
+      :area "manifold-fundamental-class"}],
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/manifold_fundamental_class_corrected_automorphism_hom.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "rg placeholder scan", :exit 1, :expected-exit 1}
+     {:cmd
+      "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "comment-stripped consumer placeholder counts",
+      :exit 0,
+      :output "1 1"}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :representation
+    {:source
+     "The hom morphism of correctedLocalNormalizationAutomorphism",
+     :target
+     "The composite of inverse forgotten coefficient chart normalization, integralRelativeHomologyComparisonWithTransport.hom, and ambientLocalNormalization.hom",
+     :direction
+     "Definitional morphism equality from the packaged normalization-conjugated automorphism to its explicit three-factor composite"},
+    :commit "8943335be271094e2f52b101bbc2c062761afbb3",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path
+     "/tmp/manifold_fundamental_class_corrected_automorphism_hom.lean",
+     :sha256
+     "146776640446969566289306bcd8ad156c93033ca58acce02769945e995a444a"},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :declaration
+     "ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom"},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/corrected-normalization-automorphism-factorization",
@@ -12131,11 +12197,13 @@
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom",
     :reported-by
-    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+     :routes-2026-10-11-manifold-corrected-automorphism-hom-topo3-r1],
     :type
     "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), (correctedLocalNormalizationAutomorphism k x).hom = (forgetIntModules.mapIso (CoefficientChartLocal.localIso Int k x)).inv ≫ (integralRelativeHomologyComparisonWithTransport (deletedPoint x) (k + 2)).hom ≫ (ambientLocalNormalization k x).hom",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in
+    :routes-2026-10-11-manifold-corrected-automorphism-hom-topo3-r1},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-correctedlocalnormalizationautomorphism-hom,
    :kind :lemma,
