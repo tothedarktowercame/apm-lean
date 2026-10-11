@@ -79283,34 +79283,36 @@
   {:consumer :t97A04,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "program STOP commits nothing new since the last :program-history entry: evidence commit bb0f0f77d8953dc78dd564e000f3d4a5b29d0894 exactly equals history job 5",
    :evidence
    {:placeholder-delta 0,
-    :residual "Transport through overlap branches; then B6-B11.",
+    :residual "Prove forward fold; then affine components and B6-B11.",
     :outcome :stop,
     :warnings ["Main retains two placeholders."],
     :missing-theorems
     [{:name
-      "ConstructionTargets.T97A04Closure.frozenTorusCircleProd_shearY",
-      :type "circle coordinate of shearY is (x^a*y^b,y)",
+      "ConstructionTargets.T97A04Closure.overlapHomotopyEquivTwoCircles_inv_fst",
+      :type
+      "inverse overlap model preserves folded first circle coordinate",
       :status :proved,
       :consumers [:t97A04],
       :depends-on [],
       :area "mv-connecting-naturality"}
      {:name
       "ConstructionTargets.T97A04Closure.shearY_overlap_coordinate_components",
-      :type "branch transport gives affine and degree-a equations",
+      :type
+      "forward transport and circle shear give affine degree-a components",
       :status :partial,
       :consumers [:t97A04],
       :depends-on
-      ["ConstructionTargets.T97A04Closure.frozenTorusCircleProd_shearY"
-       "ConstructionTargets.T97A04Closure.circleZPow_H1_coordinate"],
+      ["ConstructionTargets.T97A04Closure.overlapHomotopyEquivTwoCircles_inv_fst"
+       "ConstructionTargets.T97A04Closure.frozenTorusCircleProd_shearY"],
       :area "mv-connecting-naturality"}],
     :statement-hashes
     {:registry "131/0",
-     :closure "6e3d09556692acae58d83a9e0640f16413220e3c",
+     :closure "0e2e10940aa44f0dd5aa43ae33bf5c85e6954888",
      :blueprint "c419a895cb4ede2acc1cb6bc5c7536344ba63df4"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
@@ -79323,31 +79325,19 @@
      {:cmd "lake env lean problems/t97A04/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "Main placeholder count", :exit 0, :output "2"}
-     {:cmd "git show --check 2183b2339", :exit 0}],
+     {:cmd "git show --check 677eac44b", :exit 0}],
     :diagnostic-history
     [{:cmd "closure compile",
       :exit 1,
       :finding
-      "Affine expansion exposed branch transport; proved circle formula."}],
-    :continue-from
-    "Show branch transport preserves first circle coordinate.",
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791729720813-5510-e7c73fd1",
-     :commands
-     ["git show/check/diff-tree 2183b2339"
-      "lake env lean ConstructionTargets/t97A04Closure.lean"
-      "lake env lean problems/t97A04/lean/Main.lean"
-      "statement-registry check/fingerprint and placeholder counts"],
-     :finding
-     "PASS: new compiled progress after history job 9. Commit changes only the scoped closure and proves the frozen additive-torus shear becomes (x^a*y^b,y) under the product circle homeomorphism; coordinate order, integer-power signs, and conjugation direction are correct. Blob matches 6e3d0955. Closure is sorry-free with standard axioms; Main compiles with unchanged 2 placeholders. Registry is 131/0 and frozen statement SHA-256 remains ca1b2cb3c6594276811618321d5c0604c2f38fc4594a6b21ae161a711a923a34. Branch transport and B6-B11 remain listed."},
-    :commit "2183b2339d8032982ee991ca2d92e8f58494d853",
+      "Direct expansion failed; reused leftOverlapComposite_eq_fold."}],
+    :commit "677eac44b59c75bf4f64b3fe140388cc44652f2d",
     :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
-    :finding "In circle coordinates, shearY is (x^a*y^b,y).",
+    :finding
+    "Inverse overlap first coordinate equals the two-circle fold.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79817,7 +79807,8 @@
     :lemma-constructiontargets-t97a04closure-twocircleoverlapshearleftright
     :lemma-constructiontargets-t97a04closure-twocircleoverlapshear-component-h1
     :lemma-constructiontargets-t97a04closure-twocircleoverlapshearfold-h1
-    :lemma-constructiontargets-t97a04closure-frozentoruscircleprod-sheary],
+    :lemma-constructiontargets-t97a04closure-frozentoruscircleprod-sheary
+    :lemma-constructiontargets-t97a04closure-overlaphomotopyequivtwocircles-inv-fst],
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
@@ -80025,6 +80016,28 @@
     :banked-commit "2183b2339d8032982ee991ca2d92e8f58494d853"},
    :id
    :lemma-constructiontargets-t97a04closure-frozentoruscircleprod-sheary,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T97A04Closure.overlapHomotopyEquivTwoCircles_inv_fst",
+    :type
+    "inverse overlap model preserves folded first circle coordinate"},
+   :lemma
+   {:name
+    "ConstructionTargets.T97A04Closure.overlapHomotopyEquivTwoCircles_inv_fst",
+    :reported-by [:program-2026-10-11-close-t97a04],
+    :type
+    "inverse overlap model preserves folded first circle coordinate",
+    :area "mv-connecting-naturality",
+    :proved-in :program-2026-10-11-close-t97a04},
+   :id
+   :lemma-constructiontargets-t97a04closure-overlaphomotopyequivtwocircles-inv-fst,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}]}
