@@ -79331,11 +79331,23 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "Main placeholder count", :exit 0, :output "2"}
      {:cmd "git show --check be98ab333", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791740811085-5704-28f28cf0",
+     :commands
+     ["git show/diff/check be98ab333"
+      "lake env lean ConstructionTargets/t97A04Closure.lean"
+      "lake env lean problems/t97A04/lean/Main.lean"
+      "statement-registry check/fingerprint"
+      "git-show hash/placeholder checks"],
+     :finding
+     "PASS: be98ab33 is new after history f73089d5; scope/blob match. It transports the orthogonal coordinate through the overlap/two-circle models, uses exact retraction plus shear invariance, and proves the Boolean branch unchanged without swapping summands. Lean gates compile with standard axioms only; registry 131/0; frozen hash unchanged ca1b2cb3; closure 0/Main 2 placeholders. Folded-degree combination and B6-B11 remain listed."},
     :commit "be98ab333b5d35e1c03a1af470a52d5a705f14d8",
     :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79440,6 +79452,9 @@
      :reason :program-progress-committed}
     {:job 1,
      :commit "f73089d531b006667bcd3cf40089c7d20b8028c0",
+     :reason :program-progress-committed}
+    {:job 2,
+     :commit "be98ab333b5d35e1c03a1af470a52d5a705f14d8",
      :reason :program-progress-committed}]}
   {:consumer :t96A07,
    :stop-count 3,
@@ -80394,7 +80409,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -80406,7 +80421,9 @@
     :reported-by [:program-2026-10-11-close-t97a04],
     :type "shear preserves summand",
     :area "mv-connecting-naturality",
-    :proved-in :program-2026-10-11-close-t97a04},
+    :proved-in :program-2026-10-11-close-t97a04,
+    :banked-by :program-2026-10-11-close-t97a04,
+    :banked-commit "be98ab333b5d35e1c03a1af470a52d5a705f14d8"},
    :id
    :lemma-constructiontargets-t97a04closure-twocircleoverlapshear-branch,
    :kind :lemma,
