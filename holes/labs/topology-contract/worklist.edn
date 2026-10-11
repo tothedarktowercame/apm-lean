@@ -113854,7 +113854,7 @@
   {:consumer :t99J01,
    :stop-count 6,
    :review-finding
-   "Blueprint missing hypotheses: B3 invokes twoOpenFundamentalGroupoidPseudopushoutEquivalence but its intended Lean type omits PathConnectedSpace X, PathConnectedSpace Y, and the open-neighborhood membership and pointed-contraction data needed to instantiate B1; B4 and B6 inherit this unbound context, so their Lean types are not faithful statements.",
+   "B10 cannot apply B6: its uses list supplies no open neighborhoods and pointed contractions for the circle basepoint and the TwoCircles basepoint; B9 provides only path-connectedness. Add nodes constructing those concrete neighborhoods and contractions, and list them in B10 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:blueprint
@@ -113952,12 +113952,18 @@
     {:commit "e0845da715595e5a8dd576a8553a721acbda8092",
      :next
      "Obtain independent review of the hypothesis-complete blueprint; after approval implement B3 with exactly its stated binders."},
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1791715175296-5100-6f3d6192",
+     :finding
+     "B10 cannot apply B6: its uses list supplies no open neighborhoods and pointed contractions for the circle basepoint and the TwoCircles basepoint; B9 provides only path-connectedness. Add nodes constructing those concrete neighborhoods and contractions, and list them in B10 uses."},
     :commit "e0845da715595e5a8dd576a8553a721acbda8092",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.blueprint.md"],
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113982,7 +113988,7 @@
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 50,
-   :fail-count 2,
+   :fail-count 3,
    :depends-on [],
    :program true,
    :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03],
