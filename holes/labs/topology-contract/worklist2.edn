@@ -79283,7 +79283,7 @@
   {:consumer :t97A04,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "program STOP commits nothing new since the last :program-history entry: evidence commit bb0f0f77d8953dc78dd564e000f3d4a5b29d0894 exactly equals history job 5",
    :evidence
@@ -79340,7 +79340,7 @@
     :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
     :seat "topo-6"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79487,13 +79487,25 @@
     [{:cmd "closure/Main compile",
       :exit 1,
       :finding "Fixed notation and rebuilt stale import."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791738649873-5662-e4ccac86",
+     :commands
+     ["git show/diff/check 840d18bfb"
+      "lake build ConstructionTargets.t96A07Closure"
+      "lake env lean ConstructionTargets/t96A07Closure.lean"
+      "lake env lean problems/t96A07/lean/Main.lean"
+      "statement-registry check/fingerprint; placeholder/hash checks"],
+     :finding
+     "PASS: 840d18bf is new after history 7d950a98; both changed paths are scoped and blobs match. Smooth sphere coercion, coordinate projections, products, and PiLp assembly faithfully prove the frozen sphereMap smoothness adapter. Build/Lean pass with standard axioms only; registry 131/0; frozen hash unchanged 2ba67b04; closure 0/Main 1 placeholders. B3 descendedSphereMap is listed next."},
     :commit "840d18bfb8f4cd4ed1efd12d265781516cde390f",
     :changed-paths
     ["ConstructionTargets/t96A07Closure.lean"
      "problems/t96A07/lean/Main.lean"],
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t96A07/lean/Main.lean"
     "problems/t96A07/status.json"
@@ -79522,6 +79534,9 @@
      :reason :blueprint-written}
     {:job 2,
      :commit "7d950a98183dcfc044bd7f5c8f592f91241ea62f",
+     :reason :program-milestone-complete}
+    {:job 3,
+     :commit "840d18bfb8f4cd4ed1efd12d265781516cde390f",
      :reason :program-milestone-complete}]}
   {:consumer :t94A10,
    :phase :implementation,
@@ -80006,7 +80021,7 @@
    :other-consumers []}
   {:consumer :t96A07,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "ConstructionTargets.T96A07Closure.sphereMap_contMDiff",
@@ -80016,7 +80031,9 @@
     :reported-by [:program-2026-10-11-close-t96a07],
     :type "ContMDiff (𝓡 2) (𝓡 3) ∞ T96A07.sphereMap",
     :area "projective-smooth-descent",
-    :proved-in :program-2026-10-11-close-t96a07},
+    :proved-in :program-2026-10-11-close-t96a07,
+    :banked-by :program-2026-10-11-close-t96a07,
+    :banked-commit "840d18bfb8f4cd4ed1efd12d265781516cde390f"},
    :id :lemma-constructiontargets-t96a07closure-spheremap-contmdiff,
    :kind :lemma,
    :depends-on [],
