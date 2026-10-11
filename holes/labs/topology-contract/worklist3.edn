@@ -2817,8 +2817,84 @@
   {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-localizationcoefficient-eq-one-of-normalized,
+   :evidence
+   {:placeholder-delta {:source 0, :fixture 0},
+    :residual
+    "Construct the normalized basepoint equality itself from concrete orientation compatibility, then prove the module-valued global-generator and relative chart-generator equations required for propagation.",
+    :gates
+    {:module-build :pass,
+     :exact-declaration-type :pass,
+     :normalized-equality-explicit :pass,
+     :standard-axioms-only :pass,
+     :exact-scope :pass,
+     :statement-registry :pass,
+     :zero-placeholders :pass,
+     :reviewed-injectivity-reused :pass,
+     :clean-tree :pass,
+     :fixture-compiles :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["lake build replayed pre-existing warnings from dependency modules; the target module emitted informational axiom reports and no warnings"],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.ManifoldFundamentalClass.localizationCoefficient_eq_one_of_normalized",
+      :type
+      "The explicit localization coefficient equals one when the canonical localization is normalized to the concrete ambient local generator.",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on
+      ["ConstructionTargets.ManifoldFundamentalClass.ambientLocalGenerator_zsmul_injective"],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-10",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/manifold_fundamental_class_localization_coefficient_one.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/manifold_fundamental_class_localization_coefficient_one.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^\\s*axiom\\b' ConstructionTargets/ManifoldFundamentalClass.lean /tmp/manifold_fundamental_class_localization_coefficient_one.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git status --porcelain", :exit 0, :stdout ""}],
+    :diagnostic-history
+    [{:cmd
+      "lake env lean /tmp/manifold_fundamental_class_localization_coefficient_one.lean",
+      :exit 1,
+      :diagnostic
+      "The first promoted-fixture check preceded regeneration of the module olean, so the newly added declaration was unknown.",
+      :correction
+      "Built ConstructionTargets.ManifoldFundamentalClass, then reran the identical fixture command successfully."}],
+    :commit "af1e452fa07ce47d7f6bf52492c90831b58e8676",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path
+     "/tmp/manifold_fundamental_class_localization_coefficient_one.lean",
+     :sha256
+     "c3d75d6a239d6870a8851f21791df2adf7b4de340aa873f2d350c8ba1ddec3e6",
+     :original-sha256
+     "9ea249820af1160795e2171c3df24bf1e27b7d81496b686b93b297e0436e6ba0",
+     :sorry-count 0},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :declaration
+     "ConstructionTargets.ManifoldFundamentalClass.localizationCoefficient_eq_one_of_normalized"},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/positive-normalization-determines-coefficient",
@@ -4958,11 +5034,13 @@
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.localizationCoefficient_eq_one_of_normalized",
     :reported-by
-    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+     :routes-2026-10-11-manifold-localization-coefficient-one-topo3-r1],
     :type
     "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (e : (((AlgebraicTopology.singularHomologyFunctor (ModuleCat Int) (k+2)).obj (ModuleCat.of Int Int)).obj (TopCat.of M)) ≅ ModuleCat.of Int Int) (x : M) (r : Int), r • HigherChartLocalGenerator.ambientLocalGenerator (k := k) x = localizationMap x (k+2) (groupGlobalGenerator (TopCat.of M) (k+2) e) -> localizationMap x (k+2) (groupGlobalGenerator (TopCat.of M) (k+2) e) = HigherChartLocalGenerator.ambientLocalGenerator (k := k) x -> r = 1",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in
+    :routes-2026-10-11-manifold-localization-coefficient-one-topo3-r1},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-localizationcoefficient-eq-one-of-normalized,
    :kind :lemma,
