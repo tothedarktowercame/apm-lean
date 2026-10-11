@@ -104125,6 +104125,22 @@
       :exit 1,
       :finding
       "Expanded simp unfolded the reconstructed equivalence but left both coordinate equations unsolved."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791690579971-4056-46e61532",
+     :commands
+     ["git show and git diff-tree on recorded commit 1bcaedf608b18ec318267fdea5cb640605523a3e"
+      "git diff --exit-code between recorded blob and checkout"
+      "sha256sum on committed source, recorded blob, and frozen fixture"
+      "lake build ConstructionTargets.TwoOpenFreeProductGroupEquivalenceCoordinates"
+      "lake env lean /tmp/generic-point-wedge-fundamental-group-coordinates.lean"
+      "fresh type and axiom checks for the coordinate interface and both inclusion maps"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped source and fixture placeholder recount"
+      "git diff-tree --check on recorded commit"],
+     :finding
+     "PASS as a compiled-progress STOP. The one-file commit is authored by topo-2 and the checkout equals its recorded blob. The frozen fixture hash is exactly 20f5ed4324eaf3882bbdafb16140c7a5b35d8fdd7b9250bc92669b9ce93bd256. The committed axiom-free TwoOpenGroupEquivalenceCoordinates interface fixes the representation boundary at the common overlap basepoint and orients the left and right FundamentalGroup.map equations to Monoid.Coprod.inl and Monoid.Coprod.inr respectively. The module and fixture compile, source placeholders and fixture sorry/admit counts are zero, only standard axioms occur in the supporting inclusions, and the registry reports 131 matched and 0 mismatched. The remaining GenericTargetNaturalSourceReconstruction.sourceEquivalence_leg_coordinates coherence theorem is explicitly listed as partial in missing-theorems, so the STOP satisfies the permitted real-progress condition."},
     :commit "1bcaedf608b18ec318267fdea5cb640605523a3e",
     :changed-paths
     ["ConstructionTargets/TwoOpenFreeProductGroupEquivalenceCoordinates.lean"],
@@ -104135,7 +104151,7 @@
      "20f5ed4324eaf3882bbdafb16140c7a5b35d8fdd7b9250bc92669b9ce93bd256"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/TwoOpenFreeProductGroupEquivalenceCoordinates.lean"],
    :dag-node
@@ -104255,7 +104271,7 @@
       "The general two-open free-product equivalence carries the two inclusion-induced fundamental-group maps to Monoid.Coprod.inl and Monoid.Coprod.inr."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/generic-point-wedge-fundamental-group-coordinates",
