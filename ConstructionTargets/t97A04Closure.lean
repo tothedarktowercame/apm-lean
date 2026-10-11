@@ -1548,6 +1548,23 @@ theorem shearY_frozenConnectingCoordinate_naturality (a b : ℤ) :
       frozenOverlapH1IsoIntBiprod.hom)
     (shearY_productionConnecting_naturality a b).symm
 
+theorem frozenConnectingCoordinate_comp_overlapScalar (a : ℤ) :
+    frozenConnectingCoordinate ≫ overlapScalar a =
+      (a • 𝟙 (AddCommGrpCat.of ℤ)) ≫ frozenConnectingCoordinate := by
+  apply biprod.hom_ext
+  · simp [overlapScalar]
+  · simp [overlapScalar]
+
+theorem shearY_frozenConnectingCoordinate_scalar (a b : ℤ) :
+    (frozenTorusH2GroupIsoInt.inv ≫
+        HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularSubdivision.singularPostcomposition
+            (shearY a b)) 2 ≫
+        frozenTorusH2GroupIsoInt.hom) ≫ frozenConnectingCoordinate =
+      (a • 𝟙 (AddCommGrpCat.of ℤ)) ≫ frozenConnectingCoordinate := by
+  rw [shearY_frozenConnectingCoordinate_naturality,
+    frozenConnectingCoordinate_comp_overlapScalar]
+
 #print axioms frozenTorusH2GroupIsoInt
 #print axioms frozenYCover
 #print axioms frozenYCoverUHomeomorph
@@ -1637,5 +1654,7 @@ theorem shearY_frozenConnectingCoordinate_naturality (a b : ℤ) :
 #print axioms shearY_productionConnecting_naturality
 #print axioms frozenConnectingCoordinate
 #print axioms shearY_frozenConnectingCoordinate_naturality
+#print axioms frozenConnectingCoordinate_comp_overlapScalar
+#print axioms shearY_frozenConnectingCoordinate_scalar
 
 end ConstructionTargets.T97A04Closure
