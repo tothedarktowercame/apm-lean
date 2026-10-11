@@ -104066,8 +104066,76 @@
    "Use the presentation comparison in the Klein orbit quotient homeomorphism, then close t93J03.",
    :other-consumers []}
   {:consumer :t99J01,
+   :stop-count 1,
+   :evidence
+   {:placeholder-delta
+    {:source-before 0, :source-after 0, :fixture-sorry 0},
+    :residual
+    "Prove a coherence theorem connecting Yoneda source reconstruction to the forward mapping-equivalence restriction legs, then instantiate it to fill TwoOpenGroupEquivalenceCoordinates.",
+    :outcome :stop,
+    :warnings
+    [{:kind :dirty-worktree,
+      :message
+      "Unrelated pre-existing modification ConstructionTargets/ManifoldFundamentalClass.lean was not touched or committed."}],
+    :missing-theorems
+    [{:name
+      "GenericTargetNaturalSourceReconstruction.sourceEquivalence_leg_coordinates",
+      :type
+      "For the TwoOpenFreeProductMapping mapping family, the reconstructed source equivalence maps the left and right cover-piece inclusion morphisms at the overlap basepoint to Monoid.Coprod.inl and Monoid.Coprod.inr respectively.",
+      :status :partial,
+      :consumers [:t99J01 :t01A03 :t92J06 :t97A01 :t97A03],
+      :depends-on [],
+      :area "fundamental-group-wedge-of-circles"}],
+    :statement-hashes
+    {:source-sha256
+     "5b9ef6f9f3072a2d56d843b1dd3aeac2090ff7b522593abd8f49f239d8c0dc2d",
+     :registry "131 registered statements match, 0 do not"},
+    :disposition :stop,
+    :axioms [],
+    :author "topo-2",
+    :reason
+    "Compiled axiom-free interface progress is committed, but the coordinate theorem remains unproved: the existing GenericTargetNaturalSourceReconstruction.sourceEquivalence is defined by preimage of the identity functor, and the repository has no coherence theorem identifying its action on either cover inclusion with the corresponding forward mapping-equivalence leg. Unfolding and simplification leaves exactly both requested coordinate equations.",
+    :commands
+    [{:cmd
+      "lake build ConstructionTargets.TwoOpenFreeProductGroupEquivalenceCoordinates",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/TwoOpenFreeProductGroupEquivalenceCoordinates.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/generic-point-wedge-fundamental-group-coordinates.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/generic-point-wedge-fundamental-group-coordinates.lean",
+      :exit 0}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" ConstructionTargets/TwoOpenFreeProductGroupEquivalenceCoordinates.lean /tmp/generic-point-wedge-fundamental-group-coordinates.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}],
+    :diagnostic-history
+    [{:cmd
+      "lake env lean ConstructionTargets/TwoOpenFreeProductGroupEquivalenceCoordinates.lean",
+      :exit 1,
+      :finding "An rfl proof left both coordinate equations unsolved."}
+     {:cmd
+      "lake env lean ConstructionTargets/TwoOpenFreeProductGroupEquivalenceCoordinates.lean",
+      :exit 1,
+      :finding
+      "Expanded simp unfolded the reconstructed equivalence but left both coordinate equations unsolved."}],
+    :commit "1bcaedf608b18ec318267fdea5cb640605523a3e",
+    :changed-paths
+    ["ConstructionTargets/TwoOpenFreeProductGroupEquivalenceCoordinates.lean"],
+    :fixture
+    {:path
+     "/tmp/generic-point-wedge-fundamental-group-coordinates.lean",
+     :sha256
+     "20f5ed4324eaf3882bbdafb16140c7a5b35d8fdd7b9250bc92669b9ce93bd256"},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/TwoOpenFreeProductGroupEquivalenceCoordinates.lean"],
    :dag-node
@@ -109633,6 +109701,28 @@
     "For a path-connected two-open cover with simply connected overlap, groupEquivalence maps FundamentalGroup.map of the left and right subtype inclusions at the common overlap basepoint to Monoid.Coprod.inl and Monoid.Coprod.inr respectively.",
     :area "fundamental-group-wedge-of-circles"},
    :id :lemma-twoopenfreeproductmapping-groupequivalence-coordinates,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
+  {:consumer :t99J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "GenericTargetNaturalSourceReconstruction.sourceEquivalence_leg_coordinates",
+    :type
+    "For the TwoOpenFreeProductMapping mapping family, the reconstructed source equivalence maps the left and right cover-piece inclusion morphisms at the overlap basepoint to Monoid.Coprod.inl and Monoid.Coprod.inr respectively."},
+   :lemma
+   {:name
+    "GenericTargetNaturalSourceReconstruction.sourceEquivalence_leg_coordinates",
+    :reported-by
+    [:routes-2026-10-11-two-open-free-product-group-equivalence-coordinates-87],
+    :type
+    "For the TwoOpenFreeProductMapping mapping family, the reconstructed source equivalence maps the left and right cover-piece inclusion morphisms at the overlap basepoint to Monoid.Coprod.inl and Monoid.Coprod.inr respectively.",
+    :area "fundamental-group-wedge-of-circles"},
+   :id
+   :lemma-generictargetnaturalsourcereconstruction-sourceequivalence-leg-coordinates,
    :kind :lemma,
    :depends-on [],
    :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}],
