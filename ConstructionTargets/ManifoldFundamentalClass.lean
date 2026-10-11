@@ -1408,6 +1408,48 @@ theorem forgetMapHomologyIsoRight_eq
       (K.sc i).mapHomologyIso forgetIntModules :=
   (K.sc i).mapHomologyIso'_eq_mapHomologyIso forgetIntModules
 
+abbrev ForgottenHomologyιNaturality
+    {ι : Type} {c : ComplexShape ι}
+    (K : HomologicalComplex (ModuleCat ℤ) c) (i : ι) : Prop :=
+    ((K.sc i).mapHomologyIso forgetIntModules).inv ≫
+        ((forgetIntModules.mapHomologicalComplex c).obj K).homologyι i =
+      forgetIntModules.map (K.homologyι i) ≫
+        ((K.sc i).mapOpcyclesIso forgetIntModules).inv
+
+/-- The homology-to-opcycles map commutes with forgetting coefficients. -/
+theorem forgetHomologyι_naturality
+    {ι : Type} {c : ComplexShape ι}
+    (K : HomologicalComplex (ModuleCat ℤ) c) (i : ι) :
+    ForgottenHomologyιNaturality K i := by
+  change ((K.sc i).mapHomologyIso forgetIntModules).inv ≫
+      ((K.sc i).map forgetIntModules).homologyι =
+    forgetIntModules.map ((K.sc i).homologyι) ≫
+      ((K.sc i).mapOpcyclesIso forgetIntModules).inv
+  rw [← forgetMapHomologyIsoRight_eq K i]
+  rw [(K.sc i).rightHomologyData.mapHomologyIso'_eq forgetIntModules]
+  rw [(K.sc i).rightHomologyData.mapOpcyclesIso_eq forgetIntModules]
+  dsimp only [Iso.trans, Iso.symm, Functor.mapIso]
+  simp only [Category.assoc,
+    ShortComplex.RightHomologyData.homologyIso_inv_comp_homologyι,
+    ShortComplex.RightHomologyData.map_ι]
+  calc
+    _ = forgetIntModules.map
+          ((K.sc i).rightHomologyData.homologyIso.hom ≫
+            (K.sc i).rightHomologyData.ι) ≫
+          ((K.sc i).rightHomologyData.map forgetIntModules).opcyclesIso.inv := by
+        rw [forgetIntModules.map_comp]
+        simp only [Category.assoc]
+        rfl
+    _ = forgetIntModules.map
+          ((K.sc i).homologyι ≫
+            (K.sc i).rightHomologyData.opcyclesIso.hom) ≫
+          ((K.sc i).rightHomologyData.map forgetIntModules).opcyclesIso.inv := by
+        rw [(K.sc i).rightHomologyData.homologyIso_hom_comp_ι]
+    _ = _ := by
+      rw [forgetIntModules.map_comp]
+      simp only [Category.assoc]
+      rfl
+
 /-- The corrected relative-homology comparison intertwines the coefficient
 absolute-to-relative map with the production relative projection. -/
 theorem integralRelativeHomologyComparisonWithTransport_projection
@@ -2395,6 +2437,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetCyclesRowHom
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetTerminalHomologyRowHom
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetMapHomologyIsoRight_eq
+#print axioms ConstructionTargets.ManifoldFundamentalClass.forgetHomologyι_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
