@@ -6053,6 +6053,23 @@
      "Inverse homology preservation on the coefficient absolute complex followed by homology of the forgotten absolute-to-relative chain map",
      :direction
      "Exact homology-morphism equality from the forget-after-homology representation to the homology-after-forgetting representation, specialized from ShortComplex.mapHomologyIso_inv_naturality"},
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791687696184-3906-047a7de2",
+     :commands
+     ["git show and git diff-tree recorded commit scope"
+      "git blob identity check"
+      "sha256sum frozen fixture"
+      "git diff --check recorded commit"
+      "lake env lean renamed frozen-fixture replay"
+      "lake env lean target module"
+      "lake build target module"
+      "placeholder and axiom scan"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped consumer placeholder census"],
+     :finding
+     "PASS: commit 996721a8 changes only ConstructionTargets/ManifoldFundamentalClass.lean and its recorded blob matches the reviewed tree; frozen fixture hash bff770f8d40d961ef4c2dd3d7c8d98b4bcd5aa8dbb7810b2bbb79d0584848c90 matches. The theorem has the frozen inverse mapHomologyIso naturality orientation, specializes ShortComplex.mapHomologyIso_inv_naturality to the coefficient cokernel projection through shortComplexFunctor, and stays at the required representation boundary. Fixture replay and target compile/build pass with only propext, Classical.choice, Quot.sound; registry is 131/0; source and fixture have no placeholders; consumer counts remain t00J02=1 and t98A02=1."},
     :commit "996721a8d962803ede038a4f5d237430303b612d",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -6067,7 +6084,7 @@
      "ConstructionTargets.ManifoldFundamentalClass.coefficientRelativeProjection_mapHomologyIso_naturality"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/relative-projection-homology-preservation",
@@ -6233,7 +6250,7 @@
      "The required preservation bridge is exactly the existing ShortComplex.mapHomologyIso_inv_naturality theorem specialized to the coefficient cokernel projection. The compiled fixture identifies its short-complex homology map definitionally with HomologicalComplex.homologyMap, giving the precise equation needed to prepend the packaged transport-explicit comparison to the raw homology projection square. No generator or orientation choice is involved.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -8988,7 +9005,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -9005,7 +9022,10 @@
     "forall {X : Type} [TopologicalSpace X] (A : Set X) (n : Nat), forgetIntModules.map (HomologicalComplex.homologyMap (cokernel.π (CoefficientRelativeSmall.subspaceMap Int A)) n) ≫ (((CoefficientRelativeSmall.relativeChains Int A).sc n).mapHomologyIso forgetIntModules).inv = (((CoefficientH0.SingularChains Int (TopCat.of X)).sc n).mapHomologyIso forgetIntModules).inv ≫ HomologicalComplex.homologyMap ((forgetIntModules.mapHomologicalComplex (ComplexShape.down Nat)).map (cokernel.π (CoefficientRelativeSmall.subspaceMap Int A))) n",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-relative-projection-homology-preservation-topo3-r1},
+    :routes-2026-10-11-manifold-relative-projection-homology-preservation-topo3-r1,
+    :banked-by
+    :routes-2026-10-11-manifold-relative-projection-homology-preservation-topo3-r1,
+    :banked-commit "996721a8d962803ede038a4f5d237430303b612d"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-coefficientrelativeprojection-maphomologyiso-naturality,
    :kind :lemma,
