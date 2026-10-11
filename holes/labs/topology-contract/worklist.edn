@@ -113906,6 +113906,19 @@
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
       :exit 1,
       :finding "Made SingleObj endpoints explicit."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791745704289-5796-dbb825ea",
+     :commands
+     ["git show/diff-tree 3aff57e7"
+      "hash/diff/placeholder checks"
+      "statement-registry.py check"
+      "lake env lean PointWedgeVanKampen.lean"
+      "lake build PointWedgeVanKampen"
+      "lake build ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "PASS: new compiled, sorry-free B6 progress exposes the inverse free-product/point-span object and proves both leg functors map generators definitionally to the corresponding coproduct injections. Representation orientation is correct. Exact two-file scope/frozen hashes match; zero placeholders; registry 131/131; standard axioms. Coordinate-to-point/open-cover transports and B12 remain listed; absent final target is valid STOP."},
     :commit "3aff57e7eeab25beb873a6560fa4c4afe800fa43",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113916,7 +113929,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113937,7 +113950,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B6 final representation inverse now computes literally on both injections.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B6 point-span inverse now computes literally on both generators.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114024,7 +114037,11 @@
     {:job 7,
      :commit "324553b3030f1c4763b0c17b6f27f16a79d1a723",
      :reason
-     "B6 final representation inverse now computes literally on both injections."}]}
+     "B6 final representation inverse now computes literally on both injections."}
+    {:job 8,
+     :commit "3aff57e7eeab25beb873a6560fa4c4afe800fa43",
+     :reason
+     "B6 point-span inverse now computes literally on both generators."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
