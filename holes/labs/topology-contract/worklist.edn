@@ -116062,35 +116062,18 @@
    :depends-on [],
    :other-consumers []}
   {:consumer :t95J02,
-   :stop-count 7,
+   :stop-count 8,
    :review-finding
    "B7 reverses the functorial composition. Because beta.comp reflection is beta after reflection, homotopy invariance gives H1(beta) = H1(reflection) ≫ H1(beta), not H1(beta) ≫ H1(reflection). The written composite is ill-typed: H1(beta) lands in Klein-bottle homology, while H1(reflection) is an endomorphism of sphere homology. Reverse the factors, then use integral_circle 1 to derive H1(beta)(g) = H1(beta)(-g).",
    :evidence
-   {:blueprint
-    {:path "ConstructionTargets/t95J02Closure.blueprint.md",
-     :sha256
-     "cfe2fad21523dea7ee50c348c0591228bfb5e1c5ba20c26e1bc1d05e49b554d7",
-     :nodes
-     [{:id :B1, :status :proved}
-      {:id :B2, :status :proved}
-      {:id :B3, :status :proved}
-      {:id :B4, :status :proved}
-      {:id :B5, :status :planned}
-      {:id :B6, :status :planned}
-      {:id :B7, :status :planned}
-      {:id :B8, :status :planned}
-      {:id :B9, :status :planned}]},
-    :placeholder-delta {:source-before 3, :source-after 3},
+   {:placeholder-delta {:source-before 3, :source-after 3},
     :residual
-    "B5-B9 remain; next construct t95J02CircleB_homeo, then the coordinate-1 reflection homotopy.",
+    "B6-B9 remain; next prove the coordinate-1 reflection homotopy using t95J02CircleB_homeo, then discharge the two homology bridges and the frozen adapter.",
     :outcome :stop,
     :warnings
     [{:kind :existing-placeholders,
       :message
-      "The compiler reports the three pre-existing sorries in B7-B9; this bounded B4 job introduced none."}
-     {:kind :concurrent-worktree-change,
-      :message
-      "ConstructionTargets/ManifoldFundamentalClass.lean and holes/labs/topology-contract/topology-build-loop.sh were modified by another process and were preserved unmodified and uncommitted."}],
+      "The compiler reports the three pre-existing sorries in B7-B9; this bounded B5 job introduced none."}],
     :missing-theorems
     [{:name "t95J02Closure.separatingMap",
       :type
@@ -116116,8 +116099,8 @@
        "t95J02Closure.verticalParam_add_int"],
       :area "klein-bottle-homology"}
      {:name "t95J02Closure.t95J02CircleB_homeo",
-      :type "euclideanUnitSphere 2 ≃ₜ t95J02CircleB",
-      :status :not-started,
+      :type "T02A06.euclideanUnitSphere 2 ≃ₜ t95J02CircleB",
+      :status :proved,
       :consumers [:t95J02],
       :depends-on ["t95J02Closure.verticalParam_eq_iff"],
       :area "klein-bottle-homology"}
@@ -116145,25 +116128,25 @@
       :area "klein-bottle-homology"}],
     :statement-hashes
     {:source-sha256
-     "2bccd73a93c7ae3a356b794f92b926cc2c6a789e759172c664b97fb285bc8ba6",
+     "1aa2c1792c034ef449eb57893ecb1a452b93f4f7a2bed211159a731334909e42",
      :blueprint-sha256
-     "cfe2fad21523dea7ee50c348c0591228bfb5e1c5ba20c26e1bc1d05e49b554d7",
+     "bc179810a0d4e5678063ccd6cf4ff4c04cb9820337d2ff1536e5d070cc74a6c7",
      :registry "131 registered statements match, 0 do not"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Program milestone completed. Blueprint node B4 is proved: two vertical parameters represent the same CircleB point exactly when they differ by an integer. The forward proof uses the descended separating coordinate and Circle.exp_eq_exp; the reverse proof uses B3 periodicity. B5-B9 remain.",
+    "Program milestone completed. Blueprint node B5 is proved: the integer-periodic vertical parametrization descends to a continuous bijection from AddCircle 1; the restricted separating coordinate makes CircleB Hausdorff; compact-to-Hausdorff upgrades the bijection to a homeomorphism; and the standard circle identifications produce t95J02CircleB_homeo. B6-B9 remain for later jobs.",
     :commands
     [{:cmd "lake env lean problems/t95J02/lean/Main.lean",
       :exit 0,
       :finding
-      "The module compiles; B4 is placeholder-free and the three pre-existing program placeholders remain."}
+      "The module compiles; B5 is placeholder-free and the three pre-existing program placeholders remain."}
      {:cmd
-      "python3 comment-stripped B4 and source placeholder validation",
+      "python3 comment-stripped B5 and source placeholder validation",
       :exit 0,
       :finding
-      "B4 contains zero sorry, admit, or axiom tokens; the whole source remains at three sorries; blueprint marks B4 proved."}
+      "B5 contains zero sorry, admit, or axiom tokens; the whole source remains at three sorries; blueprint marks B5 proved."}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131 registered statements match, 0 do not."}
@@ -116171,50 +116154,61 @@
       "git diff --check -- problems/t95J02/lean/Main.lean ConstructionTargets/t95J02Closure.blueprint.md",
       :exit 0}
      {:cmd
-      "git commit -m Classify-t95J02-vertical-parametrization-fibers",
+      "git commit -m Construct-t95J02-vertical-core-homeomorphism",
       :exit 0,
       :finding
-      "Committed the two scoped files as a60f6f09130debe9f8f2ef78b705c27b251ce4a4."}
+      "Committed the two scoped files as 0f91a562d38e8d6dea370234c9e989247758764e."}
      {:cmd
       "sha256sum problems/t95J02/lean/Main.lean ConstructionTargets/t95J02Closure.blueprint.md",
       :exit 0,
       :finding
-      "Hashes are 2bccd73a93c7ae3a356b794f92b926cc2c6a789e759172c664b97fb285bc8ba6 and cfe2fad21523dea7ee50c348c0591228bfb5e1c5ba20c26e1bc1d05e49b554d7."}],
+      "Hashes are 1aa2c1792c034ef449eb57893ecb1a452b93f4f7a2bed211159a731334909e42 and bc179810a0d4e5678063ccd6cf4ff4c04cb9820337d2ff1536e5d070cc74a6c7."}],
     :diagnostic-history
     [{:cmd "lake env lean problems/t95J02/lean/Main.lean",
       :exit 1,
       :finding
-      "Initial B4 proof tried to rewrite real sine and cosine equalities directly inside complex trigonometric expressions and used B3 in the wrong equality orientation; corrected with explicit ofReal rewrites and symmetry."}
+      "Initial B5 draft left the AddCircle period numeral ambiguous, so Lean inferred Nat; corrected by annotating the period as real."}
      {:cmd "lake env lean problems/t95J02/lean/Main.lean",
       :exit 1,
       :finding
-      "Intermediate Complex.ext proof did not normalize complex sine and cosine on real arguments; corrected by rewriting through Complex.ofReal_cos and Complex.ofReal_sin before applying the coordinate equalities."}],
+      "Intermediate injectivity proof rewrote a zsmul form that the membership theorem had not exposed; corrected by supplying the integer witness directly and simplifying."}
+     {:cmd "lake env lean problems/t95J02/lean/Main.lean",
+      :exit 1,
+      :finding
+      "Intermediate homeomorphism construction supplied the equivalence positionally although homeoOfEquivCompactToT2 takes it implicitly; corrected with the named f argument."}
+     {:cmd "lake env lean problems/t95J02/lean/Main.lean",
+      :exit 1,
+      :finding
+      "Intermediate final declaration used an unqualified euclideanUnitSphere; corrected to T02A06.euclideanUnitSphere."}
+     {:cmd "lake env lean /dev/stdin for an additional axiom print",
+      :exit 1,
+      :finding
+      "The exploratory import used a nonexistent module prefix for the problem file; the authoritative direct source compilation and placeholder scan had already succeeded, so this check was omitted from acceptance commands."}],
     :continue-from
-    {:commit "a60f6f09130debe9f8f2ef78b705c27b251ce4a4",
+    {:commit "0f91a562d38e8d6dea370234c9e989247758764e",
      :next
-     "Implement B5 by descending verticalParam to AddCircle 1, transporting through AddCircle.homeomorphCircle and CircleHomology.circleHomeomorphSphereOne, and using B4 for injectivity."},
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791720925634-5318-7a41f136",
-     :commands
-     ["git show a60f6f09130debe9f8f2ef78b705c27b251ce4a4 --stat and scoped diff"
-      "git diff-tree --name-status a60f6f09130debe9f8f2ef78b705c27b251ce4a4"
-      "git diff --quiet recorded commit against scoped working files"
-      "sha256sum recorded source and blueprint"
-      "git diff --check recorded commit"
-      "comment-stripped placeholder count"
-      "python3 scripts/statement-registry.py check"
-      "lake env lean problems/t95J02/lean/Main.lean"],
-     :finding
-     "PASS: this STOP adds compiled, placeholder-free B4 progress after program-history commit e718d3d5477de7d1630ef32995973fbd8e996aa7. verticalParam_eq_iff projects subtype equality through the frozen quotient and separatingMap, uses both cosine-sine coordinates to invoke Circle.exp_eq_exp, and derives the correctly oriented y-prime = y + n classification; its reverse uses B3 periodicity in the correct symmetric direction. Scope and hashes reproduce, registry reports 131 matches, and the module compiles with standard axioms. The three existing B7-B9 placeholders remain exactly the declared residual."},
-    :commit "a60f6f09130debe9f8f2ef78b705c27b251ce4a4",
+     "Implement B6, the homotopy between the vertical inclusion parametrization and its precomposition with CoefficientCoordinateReflections.reflectionMap (1 : Fin 2)."},
+    :commit "0f91a562d38e8d6dea370234c9e989247758764e",
     :changed-paths
     ["problems/t95J02/lean/Main.lean"
      "ConstructionTargets/t95J02Closure.blueprint.md"],
+    :fixture
+    {:path "ConstructionTargets/t95J02Closure.blueprint.md",
+     :sha256
+     "bc179810a0d4e5678063ccd6cf4ff4c04cb9820337d2ff1536e5d070cc74a6c7",
+     :nodes
+     [{:id :B1, :status :proved}
+      {:id :B2, :status :proved}
+      {:id :B3, :status :proved}
+      {:id :B4, :status :proved}
+      {:id :B5, :status :proved}
+      {:id :B6, :status :planned}
+      {:id :B7, :status :planned}
+      {:id :B8, :status :planned}
+      {:id :B9, :status :planned}]},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t95J02/lean/Main.lean"
     "problems/t95J02/status.json"
@@ -117050,7 +117044,8 @@
    {:name "t95J02Closure.t95J02CircleB_homeo",
     :reported-by [:program-2026-10-11-close-t95j02],
     :type "euclideanUnitSphere 2 ≃ₜ t95J02CircleB",
-    :area "klein-bottle-homology"},
+    :area "klein-bottle-homology",
+    :proved-in :program-2026-10-11-close-t95j02},
    :id :lemma-t95j02closure-t95j02circleb-homeo,
    :kind :lemma,
    :depends-on
