@@ -68905,50 +68905,61 @@
    "single-consumer collision-polynomial nonvanishing at deleted zero-height inputs",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:residual
-     "Implement the compiled endpoint nonvanishing theorem; then classify its sign and construct sign-preserving entry and exit paths.",
-     :outcome :go,
-     :warnings [],
-     :acceptance
-     {:declaration
-      "ConstructionTargets.T02A03GeometricTubeDeformation.inputZeroHeight_collisionPolynomial_ne",
-      :type
-      "forall (p : RightTubeMinusLeftCore), (rightTubeCoreNormalComplex p.1).im = 0 -> (1 - (rightTubeCoreNormalComplex p.1).re)^2 - 4*(1-(rightTubeCoreNormalComplex p.1).re)*(rightTubeCoreAngularCoordinate p : Complex).re + 3 != 0",
-      :proof-obligations
-      ["apply zero-height collision sufficiency contrapositively"
-       "identify the polar reconstruction with the input via reconstruction-self"
-       "contradict the subtype deletion hypothesis"],
-      :forbidden-claims
-      ["a choice of polynomial sign" "path construction"]},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd
-       "lake env lean /tmp/t02a03_input_zero_height_poly_ne_probe.lean",
-       :exit 0,
-       :output
-       "inputZeroHeight_collisionPolynomial_ne compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "sha256sum /tmp/t02a03_input_zero_height_poly_ne_probe.lean",
-       :exit 0,
-       :output
-       "2d90596595a349838c6a82123c3406ef3bca34b8794427586fbb8b204a7d6084  /tmp/t02a03_input_zero_height_poly_ne_probe.lean"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_input_zero_height_poly_ne_probe.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :fixture
-     {:path "/tmp/t02a03_input_zero_height_poly_ne_probe.lean",
-      :sha256
-      "2d90596595a349838c6a82123c3406ef3bca34b8794427586fbb8b204a7d6084"},
-     :implementation
-     {:scope
-      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
-     :seat "topo-8"}},
+   {:placeholder-delta {:before 0, :after 0, :change 0},
+    :residual
+    "Classify the endpoint polynomial sign and construct continuous entry and exit paths that stay in the matching nonzero component, then combine them with the safe corridor, nonzero-height criterion, and radial stage.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean:62:6: unnecessarySimpa (pre-existing)"],
+    :missing-theorems [],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms [propext Classical.choice Quot.sound],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :scope-blob "8659412dc1073b9049baa631929322b28a1d7893",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0,
+      :output
+      "compiled; declaration axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "lake env lean /tmp/t02a03_input_zero_height_poly_ne_probe.lean",
+      :exit 0,
+      :output
+      "inputZeroHeight_collisionPolynomial_ne compiled; axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "sha256sum /tmp/t02a03_input_zero_height_poly_ne_probe.lean",
+      :exit 0,
+      :output
+      "2d90596595a349838c6a82123c3406ef3bca34b8794427586fbb8b204a7d6084  /tmp/t02a03_input_zero_height_poly_ne_probe.lean"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "git diff --check -- ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd
+      "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "089ca4db15cf7a3b898bf0997deb521f024ac6ee",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.inputZeroHeight_collisionPolynomial_ne",
+    :fixture
+    {:path "/tmp/t02a03_input_zero_height_poly_ne_probe.lean",
+     :sha256
+     "2d90596595a349838c6a82123c3406ef3bca34b8794427586fbb8b204a7d6084"},
+    :finding
+    "If the recovered collision polynomial vanished at a zero-height deleted input, zero-height sufficiency would put its polar reconstruction on the left core; reconstruction-self identifies that point with the input, contradicting the subtype deletion hypothesis.",
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/input-zero-height-collision-nonzero",
