@@ -300,6 +300,59 @@ theorem circleZPow_fundamentalGroup_coordinate (a : ℤ)
       simpa [circleZPowBasedPath] using
         liftBasedLoopEndpointInteger_circleZPow a gamma
 
+theorem circleZPowPi1Map_eq_zpow (a : ℤ)
+    (p : FundamentalGroup Circle 1) : circleZPowPi1Map a p = p ^ a := by
+  apply circleFundamentalGroupMulEquivInt.injective
+  apply Multiplicative.toAdd.injective
+  rw [circleZPow_fundamentalGroup_coordinate]
+  simp
+
+open ConstructionTargets.DegreeOneHurewiczMap
+
+theorem fundamentalGroupH1Hom_circleZPowPi1Map (a : ℤ)
+    (p : FundamentalGroup Circle 1) :
+    fundamentalGroupH1Hom 1 (circleZPowPi1Map a p) =
+      fundamentalGroupH1Hom (circleZPow a 1)
+        (FundamentalGroup.map (circleZPow a) 1 p) := by
+  induction p using Path.Homotopic.Quotient.ind with
+  | _ gamma =>
+      rw [circleZPowPi1Map_mk]
+      change Multiplicative.ofAdd
+          (basedLoopH1Element (circleZPowBasedPath a gamma)) =
+        Multiplicative.ofAdd
+          (basedLoopH1Element (gamma.map (circleZPow a).continuous))
+      congr 2
+
+open ConstructionTargets.DegreeOneHurewiczSurjective
+
+theorem circleZPow_H1_apply (a : ℤ)
+    (x : ConstructionTargets.DegreeOneHurewiczMap.IntegralH1 Circle) :
+    HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularSubdivision.singularPostcomposition
+          (circleZPow a)) 1 x = a • x := by
+  letI : PathConnectedSpace Circle :=
+    pathConnectedSpace_iff_univ.mpr (by
+      have h : IsPathConnected
+          (ConstructionTargets.CircleHomology.circleHomeomorphSphereOne ⁻¹'
+            (Set.univ : Set (ConstructionTargets.SphereHomology.Sphere 1))) :=
+        ConstructionTargets.CircleHomology.circleHomeomorphSphereOne.isPathConnected_preimage.mpr
+          isPathConnected_univ
+      simpa using h)
+  obtain ⟨p, hp⟩ := fundamentalGroupH1Hom_surjective (1 : Circle)
+    (Multiplicative.ofAdd x)
+  have hnat := fundamentalGroupH1Hom_naturality (circleZPow a) 1 p
+  rw [← fundamentalGroupH1Hom_circleZPowPi1Map,
+    circleZPowPi1Map_eq_zpow, map_zpow, hp] at hnat
+  exact Multiplicative.ofAdd.injective hnat
+
+theorem circleZPow_H1 (a : ℤ) :
+    HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularSubdivision.singularPostcomposition
+          (circleZPow a)) 1 =
+      a • 𝟙 (SingularHomology 1 (TopCat.of Circle)) := by
+  ext x
+  exact circleZPow_H1_apply a x
+
 private noncomputable def shearYIntersectionMap (a b : ℤ) :=
   (ambientIntersectionRangeChainsIso frozenYCover.U frozenYCover.V).inv ≫
     closureChains.map
@@ -702,6 +755,10 @@ theorem shearY_overlap_coordinate_of_degree_components (a b : ℤ)
 #print axioms liftBasedLoopEndpointInteger_circleZPow
 #print axioms circleZPowPi1Map
 #print axioms circleZPow_fundamentalGroup_coordinate
+#print axioms circleZPowPi1Map_eq_zpow
+#print axioms fundamentalGroupH1Hom_circleZPowPi1Map
+#print axioms circleZPow_H1_apply
+#print axioms circleZPow_H1
 #print axioms shearYOverlapCoordinateMap
 #print axioms shearY_overlap_coordinate_of_injections
 #print axioms inl_comp_overlapScalar
