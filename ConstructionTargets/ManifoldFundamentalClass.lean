@@ -735,6 +735,29 @@ theorem coefficientRelativeProjection_mapHomologyIso_naturality
         ((forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ)).map φ) n
   exact hpres
 
+/-- The corrected relative-homology comparison intertwines the coefficient
+absolute-to-relative map with the production relative projection. -/
+theorem integralRelativeHomologyComparisonWithTransport_projection
+    {X : Type} [TopologicalSpace X] (A : Set X) (n : ℕ) :
+    forgetIntModules.map
+        (HomologicalComplex.homologyMap
+          (cokernel.π (CoefficientRelativeSmall.subspaceMap ℤ A)) n) ≫
+      (integralRelativeHomologyComparisonWithTransport A n).hom =
+    (((CoefficientH0.SingularChains ℤ (TopCat.of X)).sc n).mapHomologyIso
+        forgetIntModules).inv ≫
+      HomologicalComplex.homologyMap
+        (singularChainsComparison (TopCat.of X)).hom n ≫
+      HomologicalComplex.homologyMap (relativeSingularProjection A) n := by
+  rw [integralRelativeHomologyComparisonWithTransport_hom]
+  calc
+    _ = (_ ≫ _) ≫ _ := (Category.assoc _ _ _).symm
+    _ = (_ ≫ _) ≫ _ := congrArg (fun f => f ≫ _)
+      (coefficientRelativeProjection_mapHomologyIso_naturality A n)
+    _ = _ ≫ (_ ≫ _) := Category.assoc _ _ _
+    _ = _ ≫ (_ ≫ _) := congrArg (fun f => _ ≫ f)
+      (integralRelativeChainsComparisonWithTransport_homology_projection A n)
+    _ = (_ ≫ _) ≫ _ := (Category.assoc _ _ _).symm
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -782,3 +805,4 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport_homology_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_hom
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientRelativeProjection_mapHomologyIso_naturality
+#print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
