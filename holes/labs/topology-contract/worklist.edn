@@ -112898,7 +112898,7 @@
    :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
   {:consumer :t99J01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "coprodFreeGroupFinTwoFinOne_equiv",
@@ -112909,7 +112909,9 @@
     :reported-by [:owner],
     :type
     "Monoid.Coprod (FreeGroup (Fin 2)) (FreeGroup (Fin 1)) ≃* FreeGroup (Fin 3)",
-    :area "fundamental-group-wedge-of-circles"},
+    :area "fundamental-group-wedge-of-circles",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/PointWedgeVanKampen.lean"]},
    :id :lemma-coprodfreegroupfintwofinone-equiv,
    :kind :lemma,
    :depends-on [],
@@ -113934,13 +113936,24 @@
     {:commit "bb465e3f2c88b3e4f0a9c20ef891e5da1de81bf4",
      :next
      "Implement genericPointWedgeLegCoordinates_vanKampen in PointWedgeVanKampen.lean from the banked generic cover and groupoid modules, without using composite-counit-component-identity-91."},
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791712918373-4955-8c6d64c1",
+     :commands
+     ["git show and diff-tree bb465e3f2c88b3e4f0a9c20ef891e5da1de81bf4"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped sorry admit axiom census"],
+     :finding
+     "New since program-history: the committed generic free-group coproduct equivalence and Fin 2 plus Fin 1 specialization compile in the required direction with standard axioms and zero placeholders; two milestones remain listed."},
     :commit "bb465e3f2c88b3e4f0a9c20ef891e5da1de81bf4",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113959,7 +113972,7 @@
      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup"
      "python3 scripts/statement-registry.py check"]},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: This program job banked the ThreeCircles topology milestone and committed a stable foundation entry point. The remaining generic van Kampen equivalence, free-group coproduct equivalence, and final ThreeCircles equivalence require subsequent program jobs.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: This program job proved and banked the free-group coproduct milestone, including a reusable equivalence Monoid.Coprod (FreeGroup α) (FreeGroup β) ≃* FreeGroup (α ⊕ β) and its Fin 2, Fin 1 specialization. The generic point-wedge van Kampen equivalence and final ThreeCircles specialization remain.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 50,
@@ -113970,7 +113983,11 @@
    [{:job 1,
      :commit "a542e9e21442ca62b32c7858468526423d70e5a9",
      :reason
-     "This program job banked the ThreeCircles topology milestone and committed a stable foundation entry point. The remaining generic van Kampen equivalence, free-group coproduct equivalence, and final ThreeCircles equivalence require subsequent program jobs."}]}
+     "This program job banked the ThreeCircles topology milestone and committed a stable foundation entry point. The remaining generic van Kampen equivalence, free-group coproduct equivalence, and final ThreeCircles equivalence require subsequent program jobs."}
+    {:job 2,
+     :commit "bb465e3f2c88b3e4f0a9c20ef891e5da1de81bf4",
+     :reason
+     "This program job proved and banked the free-group coproduct milestone, including a reusable equivalence Monoid.Coprod (FreeGroup α) (FreeGroup β) ≃* FreeGroup (α ⊕ β) and its Fin 2, Fin 1 specialization. The generic point-wedge van Kampen equivalence and final ThreeCircles specialization remain."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
@@ -113994,7 +114011,7 @@
    :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
   {:consumer :t99J01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "PointWedgeVanKampen.coprodFreeGroupFinTwoFinOne_equiv",
@@ -114006,7 +114023,9 @@
     :type
     "Monoid.Coprod (FreeGroup (Fin 2)) (FreeGroup (Fin 1)) ≃* FreeGroup (Fin 3)",
     :area "fundamental-group-wedge-of-circles",
-    :proved-in :program-2026-10-11-point-wedge-van-kampen},
+    :proved-in :program-2026-10-11-point-wedge-van-kampen,
+    :banked-by :program-2026-10-11-point-wedge-van-kampen,
+    :banked-commit "bb465e3f2c88b3e4f0a9c20ef891e5da1de81bf4"},
    :id :lemma-pointwedgevankampen-coprodfreegroupfintwofinone-equiv,
    :kind :lemma,
    :depends-on [],
