@@ -70976,7 +70976,52 @@
   {:bounded-exception
    "single-consumer interior nonzero-imaginary invariant for the zero-height core-normal detour",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:residual
+     "Implement the interior imaginary-coordinate theorem, then combine it with the meridian-start and recovered-input endpoint collision certificates to prove left-core avoidance for the complete zero-height detour.",
+     :outcome :go,
+     :warnings [],
+     :axioms [propext Classical.choice Quot.sound],
+     :commands
+     [{:cmd
+       "lake env lean /tmp/t02a03_core_normal_detour_interior_im_probe.lean",
+       :exit 0,
+       :output
+       "zeroHeightCoreNormalDetour_im_ne_zero_of_interior compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "sha256sum /tmp/t02a03_core_normal_detour_interior_im_probe.lean",
+       :exit 0,
+       :output
+       "26b5eef37943d833a9d9702ba05b75a25618af3b5d4e309d3ae45ef9cc52dfcd  /tmp/t02a03_core_normal_detour_interior_im_probe.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_core_normal_detour_interior_im_probe.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}
+      {:cmd
+       "rg -n 'zeroHeightCoreNormalDetour_im_ne_zero_of_interior' /tmp/t02a03_core_normal_detour_interior_im_probe.lean",
+       :exit 0,
+       :output
+       "5:theorem zeroHeightCoreNormalDetour_im_ne_zero_of_interior\n26:#print axioms zeroHeightCoreNormalDetour_im_ne_zero_of_interior"}],
+     :fixture
+     {:path "/tmp/t02a03_core_normal_detour_interior_im_probe.lean",
+      :sha256
+      "26b5eef37943d833a9d9702ba05b75a25618af3b5d4e309d3ae45ef9cc52dfcd"},
+     :finding
+     "The placeholder-free fixture proves the detour normal has nonzero imaginary part at every time distinct from 0 and 1. Each branch reduces to a nonzero scalar multiple of the signed waypoint imaginary coordinate because both endpoint normals are real.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+      :declaration
+      "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCoreNormalDetour_im_ne_zero_of_interior",
+      :type
+      "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> forall (t : unitInterval), (t : ℝ) ≠ 0 -> (t : ℝ) ≠ 1 -> (zeroHeightCoreNormalDetour t p).im ≠ 0"},
+     :seat "topo-8"}},
+   :phase :implementation,
+   :type
+   "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> forall (t : unitInterval), (t : ℝ) ≠ 0 -> (t : ℝ) ≠ 1 -> (zeroHeightCoreNormalDetour t p).im ≠ 0",
    :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
@@ -70995,6 +71040,8 @@
    :routes-2026-10-11-t02a03-zero-height-core-normal-detour-interior-im-topo2-r1,
    :kind :reusable-theorem,
    :area "explicit-r3-tube-deformation-retraction",
+   :declaration
+   "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCoreNormalDetour_im_ne_zero_of_interior",
    :depends-on
    [:routes-2026-10-11-t02a03-zero-height-core-normal-detour-radius-topo2-r1],
    :current-residual
