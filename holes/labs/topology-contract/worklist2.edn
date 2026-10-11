@@ -79483,68 +79483,62 @@
      :commit "a58fb4403475f91ca2b7f45699abba30dbe50339",
      :reason :program-milestone-complete}]}
   {:consumer :t96A07,
-   :stop-count 9,
+   :stop-count 10,
    :evidence
    {:placeholder-delta 0,
-    :residual
-    "Differentiate the descent equation and cancel the surjective projection derivative to finish B6; then B7-B13.",
+    :residual "Prove B7; then B8-B13.",
     :outcome :stop,
-    :warnings ["Main: 1 placeholder." "Lean style lint only."],
+    :warnings ["Main: 1 placeholder." "Style lint only."],
     :missing-theorems
     [{:name
-      "ConstructionTargets.T96A07Closure.sphereProjection_mfderiv_surjective",
-      :type
-      "frozen quotient projection mfderiv is surjective at every sphere point",
-      :status :proved,
-      :consumers [:t96A07],
-      :depends-on [],
-      :area "projective-smooth-descent"}
-     {:name
       "ConstructionTargets.T96A07Closure.descended_mfderiv_range_at_e0",
       :type
       "descended derivative range at projection e0 equals yz-plane",
-      :status :partial,
+      :status :proved,
       :consumers [:t96A07],
       :depends-on
       ["ConstructionTargets.T96A07Closure.sphereProjection_mfderiv_surjective"
        "ConstructionTargets.T96A07Closure.sphereMap_mfderiv_e0_range"],
+      :area "projective-smooth-descent"}
+     {:name
+      "ConstructionTargets.T96A07Closure.descended_not_transverse_axis",
+      :type "B7 nontransversality to z-axis",
+      :status :not-started,
+      :consumers [:t96A07],
+      :depends-on
+      ["ConstructionTargets.T96A07Closure.descended_mfderiv_range_at_e0"],
       :area "projective-smooth-descent"}],
     :statement-hashes
     {:registry "131/0",
-     :closure "89c9c897ecbccac656a1b242787bb20a420ea743",
+     :closure "f6a40ba28b194b467bde135a0ff9e770b66b561c",
      :blueprint "69b59fb622dd62fc82a1fe100b353eaabc2c948d"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason :program-progress-committed,
+    :reason :program-milestone-complete,
     :commands
-    [{:cmd "closure compile", :exit 0}
-     {:cmd "closure no-sorry scan", :exit 1, :expected-exit 1}
+    [{:cmd "lake build closure", :exit 0}
+     {:cmd "closure compile", :exit 0}
+     {:cmd "closure no-sorry", :exit 1, :expected-exit 1}
      {:cmd "Main compile", :exit 0}
      {:cmd "registry check", :exit 0}
-     {:cmd "git show --check 1ac8a7376", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791762369004-6006-f2b88bc1",
-     :commands
-     ["git show/check/diff-tree 1ac8a7376"
-      "verify blobs, fixture SHA256, prior-history ancestry"
-      "lake build ConstructionTargets.t96A07Closure"
-      "lake env lean ConstructionTargets/t96A07Closure.lean"
-      "lake env lean problems/t96A07/lean/Main.lean"
-      "statement-registry check/fingerprint; placeholder counts"],
-     :finding
-     "PASS: recorded commit 1ac8a737622f7dd092b03b2336589fec7870768f changes only t96A07Closure.lean; blobs 89c9c897/69b59fb6 and fixture d7862ad0 match. It adds new compiled, sorry-free progress since a8575f32: quotient local-diffeomorphism derivative equivalence gives sphereProjection mfderiv surjectivity in the needed forward orientation, preserving the B6 representation boundary. Standard axioms only; registry 131/0, frozen hash 2ba67b04 unchanged, placeholders closure/Main 0/1. STOP correctly lists B6 derivative-range cancellation then B7-B13."},
-    :commit "1ac8a7376",
-    :changed-paths ["ConstructionTargets/t96A07Closure.lean"],
+     {:cmd "placeholder count", :exit 0, :output "1"}
+     {:cmd "git show --check 331996b95", :exit 0}],
+    :diagnostic-history
+    [{:cmd "compile",
+      :exit 1,
+      :finding "Fixed binder, equality, orientation; rebuilt olean."}],
+    :commit "331996b95f673630e9781af065e3d811d751ed13",
+    :changed-paths
+    ["ConstructionTargets/t96A07Closure.lean"
+     "problems/t96A07/lean/Main.lean"],
     :fixture
     {:path "ConstructionTargets/t96A07Closure.lean",
      :sha256
-     "d7862ad090bfdeee32223bc2b836cf83ba29c760ae2a732a3c702eb4a8c569c9"},
+     "9024211f8575c9d7d6c387c287750ffcbea84dc339e06c3c87ddbc04fb5d6395"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["problems/t96A07/lean/Main.lean"
     "problems/t96A07/status.json"
@@ -81134,7 +81128,8 @@
     :reported-by [:program-2026-10-11-close-t96a07],
     :type
     "descended map derivative range at projection e0 equals yz-plane",
-    :area "projective-smooth-descent"},
+    :area "projective-smooth-descent",
+    :proved-in :program-2026-10-11-close-t96a07},
    :id
    :lemma-constructiontargets-t96a07closure-descended-mfderiv-range-at-e0,
    :kind :lemma,
@@ -81166,4 +81161,24 @@
    :lemma-constructiontargets-t96a07closure-sphereprojection-mfderiv-surjective,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t96A07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T96A07Closure.descended_not_transverse_axis",
+    :type "B7 nontransversality to z-axis"},
+   :lemma
+   {:name
+    "ConstructionTargets.T96A07Closure.descended_not_transverse_axis",
+    :reported-by [:program-2026-10-11-close-t96a07],
+    :type "B7 nontransversality to z-axis",
+    :area "projective-smooth-descent"},
+   :id
+   :lemma-constructiontargets-t96a07closure-descended-not-transverse-axis,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t96a07closure-descended-mfderiv-range-at-e0],
    :other-consumers []}]}
