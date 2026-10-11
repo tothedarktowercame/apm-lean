@@ -79281,10 +79281,10 @@
    :depends-on [],
    :other-consumers []}
   {:consumer :t97A04,
-   :stop-count 8,
+   :stop-count 9,
    :evidence
    {:placeholder-delta 0,
-    :residual "Finish B6 degree equality; then B7-B11.",
+    :residual "B6 degree equality remains; then B7-B11.",
     :outcome :stop,
     :warnings
     ["Main retains two placeholders; unrelated dirty file preserved."],
@@ -79296,12 +79296,12 @@
       :status :partial,
       :consumers [:t97A04],
       :depends-on
-      ["ConstructionTargets.T97A04Closure.frozenOverlapH1IsoIntBiprod"
+      ["ConstructionTargets.T97A04Closure.twoCircleOverlapShear"
        "ConstructionTargets.T97A04Closure.shearYShortComplexHom"],
       :area "mv-connecting-naturality"}],
     :statement-hashes
     {:registry "131/0",
-     :closure "11614885a95d71ff4f072b689d7406f26625f039",
+     :closure "06d9533d54729851159e4b51e481d96c23c1ad97",
      :blueprint "c419a895cb4ede2acc1cb6bc5c7536344ba63df4"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
@@ -79314,28 +79314,21 @@
      {:cmd "lake env lean problems/t97A04/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "Main placeholder count", :exit 0, :output "2"}
-     {:cmd "git show --check 67c54b45f", :exit 0}],
-    :diagnostic-history [],
+     {:cmd "git show --check 10ee26c5c", :exit 0}],
+    :diagnostic-history
+    [{:cmd "lake env lean ConstructionTargets/t97A04Closure.lean",
+      :exit 1,
+      :finding
+      "Replaced unavailable Homeomorph projection with explicit continuous maps; rerun passed."}],
     :continue-from
-    "Prove circle H1 degree a on both overlap components.",
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791722347719-5349-4a4100a9",
-     :commands
-     ["git show/check/diff-tree 67c54b45f"
-      "lake env lean ConstructionTargets/t97A04Closure.lean"
-      "lake env lean problems/t97A04/lean/Main.lean"
-      "statement-registry check/fingerprint and placeholder counts"],
-     :finding
-     "PASS: new compiled progress after history job 7. Commit changes only the scoped closure and adds the overlap H1 coordinate, restricted shear, and biproduct scalar normal form needed for B6; their types and transport direction match the blueprint. Blob matches 11614885. Closure is sorry-free with standard axioms; Main compiles with unchanged 2 placeholders. Registry is 131/0 and frozen statement SHA-256 remains ca1b2cb3c6594276811618321d5c0604c2f38fc4594a6b21ae161a711a923a34. Residual B6 equality and B7-B11 are listed."},
-    :commit "67c54b45fa96fe6870a461cdc6b9d35ecc6f9547",
+    "Homotope twoCircleOverlapShear to degree-a maps on both summands and apply circle H1 degree.",
+    :commit "10ee26c5c34ab7a0b17a5f64aace67853578d4c4",
     :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
     :finding
-    "Compiled the overlap H1 coordinate, restricted shear, and scalar normal form.",
+    "B6 now has the restricted shear transported through the fixed overlap and two-circle models.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79568,7 +79561,8 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-t97a04closure-frozenoverlaph1isointbiprod
-    :lemma-constructiontargets-t97a04closure-shearyshortcomplexhom],
+    :lemma-constructiontargets-t97a04closure-shearyshortcomplexhom
+    :lemma-constructiontargets-t97a04closure-twocircleoverlapshear],
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
@@ -79583,6 +79577,19 @@
     :reported-by []},
    :id
    :lemma-constructiontargets-t97a04closure-frozenoverlaph1isointbiprod,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "ConstructionTargets.T97A04Closure.twoCircleOverlapShear"},
+   :lemma
+   {:name "ConstructionTargets.T97A04Closure.twoCircleOverlapShear",
+    :reported-by []},
+   :id :lemma-constructiontargets-t97a04closure-twocircleoverlapshear,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}]}
