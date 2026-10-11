@@ -72738,6 +72738,19 @@
       :output
       "b07bee059 Add t02A03 rotated departure support positivity"}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791716665362-5189-068108d6",
+     :commands
+     ["git show/diff-tree/show --check b07bee0598963958c70dac3591cfbbb186e61356"
+      "git rev-parse scoped blob; sha256sum frozen fixture"
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean"
+      "lake env lean /tmp/t02a03_rotated_waypoint_departure_zero_support_pos_probe.lean"
+      "python3 scripts/statement-registry.py check"
+      "statement fingerprints at commit and parent; scoped placeholder scans"],
+     :finding
+     "PASS: independent author topo-6; the recorded commit changes exactly the declared file, is clean, and matches the recorded scoped blob and fixture hash. The module and exact frozen probe compile. The committed theorem uses canonical rotatedEndpointWaypoint, excludes t = 0 because the departure value is one, excludes t = 1/2 through rightTubeCorePlanarComplex_ne_zero, and combines 0 < t with t < 1/2 to prove 0 < t * (1 - 2*t). Its orientation and representation boundary are exact: it supplies only positivity of the scalar support on the stated bounded zero locus, without constructing a transverse correction, changing the waypoint, normalizing to Circle, or assembling the ambient deformation. Axioms are exactly propext, Classical.choice, Quot.sound; registry is 131/0, the t02A03 fingerprint is unchanged at commit and parent, and the scoped file and fixture have no placeholders."},
     :commit "b07bee0598963958c70dac3591cfbbb186e61356",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
@@ -72752,7 +72765,7 @@
    :phase :implementation,
    :type
    "forall (t : unitInterval) (p : RightTubeMinusLeftCore), (t : ℝ) <= 1/2 -> (((1-2*(t:ℝ):ℝ):ℂ) + ((2*(t:ℝ):ℝ):ℂ)*rotatedEndpointWaypoint p) = 0 -> 0 < (t : ℝ)*(1-2*(t:ℝ))",
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/rotated-waypoint-departure-zero-support-positive",
@@ -72852,7 +72865,7 @@
      "The endpoint-vanishing scalar t*(1-2t) is strictly positive at every zero of the rotated departure half: zero time contradicts the affine value one, and time one-half contradicts nonvanishing of the right-core planar endpoint. This supplies the exact support certificate for a transverse correction.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
