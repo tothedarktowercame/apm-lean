@@ -68853,6 +68853,18 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git status --short", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791685001143-3777-b350b594",
+     :commands
+     ["git show/diff-tree --check 7a6adf7"
+      "fixture SHA-256 and recorded blob verification"
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean"
+      "lake env lean /tmp/t02a03_zero_height_collision_sufficiency_probe.lean"
+      "statement registry fingerprint/check and placeholder/worklist EDN checks"],
+     :finding
+     "Recorded commit has the exact one-file scope and matching fixture/blob hashes. The module and frozen probe compile with only the expected standard axioms. Under n.im = 0 and polynomial equality, the proof constructs the planar displacement w, derives norm w = 1, uses Complex.arg to recover its cosine and sine, and verifies all three Euclidean coordinates against apm_t02a03_leftCore. This is the frozen sufficiency direction only; it adds no placeholder and makes no nonzero-height or angular-path claim."},
     :commit "7a6adf72a1e153667e245cfb4abf841b9c5b1280",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
@@ -68866,7 +68878,7 @@
     "On the zero-height slice, the collision equation makes the planar displacement from the left-core center have norm one; Complex.arg supplies a parameter whose cosine and sine recover that displacement, yielding exact equality with a frozen left-core point.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/zero-height-collision-sufficiency",
@@ -68970,7 +68982,7 @@
      "On the zero-height slice, the scalar collision equation is also sufficient: it says that the planar vector from the left-core center has norm one, so its complex argument supplies an explicit left-core parameter. Together with the banked necessity theorem this characterizes deletion exactly by polynomial nonvanishing when n.im = 0, allowing later path arguments to track connected sign regions rather than rely only on one-way estimates.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
