@@ -105630,10 +105630,77 @@
    "Use the quotient homeomorphism in the deck-group fundamental-group computation and finish the t93J03 route.",
    :other-consumers []}
   {:consumer :t99J01,
+   :stop-count 1,
    :implements-lemma
    :lemma-connectedgroupoidsingleobjequivalence-connectorsingleobjequivalence-counit-base-,
+   :evidence
+   {:placeholder-delta
+    {:source-before 0, :source-after 0, :fixture-sorry 0},
+    :residual
+    "Replace Functor.asEquivalence here by an equivalence constructed with the explicit base witness and Iso.refl counit, then normalize the connector constituent and resume the five-factor counit calculation.",
+    :outcome :stop,
+    :warnings [],
+    :missing-theorems
+    [{:name "connectorSingleObjEquivalence_counit_base_identity",
+      :type
+      "(S : ConnectorSystem G) → (connectorSingleObjEquivalence S).counitIso.hom.app (SingleObj.star (End S.base)) = 𝟙 _",
+      :status :not-started,
+      :consumers [:t99J01 :t01A03 :t92J06 :t97A01 :t97A03],
+      :depends-on
+      ["Functor.asEquivalence normalized essential-surjectivity witness retaining Iso.refl, or the hypothesis (normalFormFunctor S).objObjPreimageIso(...).hom = 𝟙"],
+      :area "fundamental-group-wedge-of-circles"}],
+    :statement-hashes
+    {:source-sha256
+     "847425f0b616775e147ce3946d25674f3a5d2fa299dd593f8b1918b852e3dbff",
+     :registry "131 registered statements match, 0 do not"},
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :reason
+    "The frozen identity does not follow from the current Functor.asEquivalence representation. EssSurj.mem_essImage stores the target isomorphism under Nonempty; Functor.essImage.getIso then applies Classical.choice to that Nonempty proof. Proof irrelevance identifies the proposition-valued essential-image proof and its preimage object, but cannot identify the chosen SingleObj automorphism with Iso.refl. The compiled reduction proves the counit component is exactly objObjPreimageIso.hom and that the requested result is equivalent to the missing hypothesis objObjPreimageIso.hom = 𝟙. A normalized equivalence constructor retaining the explicit isomorphism, or that identity hypothesis, is required.",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/connector-single-object-counit-base-identity.lean",
+      :exit 0,
+      :finding
+      "473138e897d3663a3afd075c36a571eb01c5e271c31f142d1a29768d0d0f5b98"}
+     {:cmd
+      "lake build ConstructionTargets.ConnectorSingleObjectCounitBaseIdentity",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/connector-single-object-counit-base-identity.lean",
+      :exit 0,
+      :finding
+      "Fixture compiles only with connectorSingleObjEquivalence_counit_base_identity as a custom axiom."}
+     {:cmd
+      "rg -n \"\\b(sorry|admit|axiom)\\b\" ConstructionTargets/ConnectorSingleObjectCounitBaseIdentity.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}],
+    :diagnostic-history
+    [{:cmd
+      "lake env lean ConstructionTargets/ConnectorSingleObjectCounitBaseIdentity.lean",
+      :exit 1,
+      :finding
+      "rfl failed because the asEquivalence counit is an opaque chosen essential-image isomorphism."}
+     {:cmd
+      "lake env lean ConstructionTargets/ConnectorSingleObjectCounitBaseIdentity.lean",
+      :exit 1,
+      :finding
+      "After proof-irrelevance rewriting, the goal reduced to explicit.getIso.hom = 𝟙, exposing that Classical.choice from Nonempty does not reduce to Iso.refl."}],
+    :commit "0b57754390072b29734bc3c22a5cdd2489a566da",
+    :changed-paths
+    ["ConstructionTargets/ConnectorSingleObjectCounitBaseIdentity.lean"],
+    :fixture
+    {:path "/tmp/connector-single-object-counit-base-identity.lean",
+     :sha256
+     "473138e897d3663a3afd075c36a571eb01c5e271c31f142d1a29768d0d0f5b98",
+     :status :self-axiomatized},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/ConnectorSingleObjectCounitBaseIdentity.lean"],
    :dag-node
@@ -112375,6 +112442,42 @@
     :reported-by []},
    :id
    :lemma-constructiontargets-kleincompatiblecarriercomponentbridge-exists-distinct-relate,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t99J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "connectorSingleObjEquivalence_counit_base_identity",
+    :type
+    "(S : ConnectorSystem G) → (connectorSingleObjEquivalence S).counitIso.hom.app (SingleObj.star (End S.base)) = 𝟙 _"},
+   :lemma
+   {:name "connectorSingleObjEquivalence_counit_base_identity",
+    :reported-by
+    [:routes-2026-10-11-connector-single-object-counit-base-identity-105],
+    :type
+    "(S : ConnectorSystem G) → (connectorSingleObjEquivalence S).counitIso.hom.app (SingleObj.star (End S.base)) = 𝟙 _",
+    :area "fundamental-group-wedge-of-circles"},
+   :id :lemma-connectorsingleobjequivalence-counit-base-identity,
+   :kind :lemma,
+   :depends-on
+   [:lemma-functor-asequivalence-normalized-essential-surjectivity-witness-retaining-iso-re],
+   :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "Functor.asEquivalence normalized essential-surjectivity witness retaining Iso.refl, or the hypothesis (normalFormFunctor S).objObjPreimageIso(...).hom = 𝟙"},
+   :lemma
+   {:name
+    "Functor.asEquivalence normalized essential-surjectivity witness retaining Iso.refl, or the hypothesis (normalFormFunctor S).objObjPreimageIso(...).hom = 𝟙",
+    :reported-by []},
+   :id
+   :lemma-functor-asequivalence-normalized-essential-surjectivity-witness-retaining-iso-re,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}],
