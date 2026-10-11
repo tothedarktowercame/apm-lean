@@ -69787,95 +69787,111 @@
    "Use the square-one certificate to analyze the positive and negative meridian-real branches, prove the radial collision polynomial stays nonzero, then construct the safe angular stage and concatenate.",
    :other-consumers []}
   {:bounded-exception
+   "single-consumer exhaustive zero-height meridian sign cases with collision-free ledger name",
+   :consumer :t02A03,
+   :phase :probe,
+   :state :open,
+   :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t02A03/sign-cases-zero-height-meridian-real",
+   :acceptance
+   {:probe
+    "Compile signCases_zeroHeight_rightTubeMeridianCoordinate_re. Convert the zero-height square-one identity into the exhaustive disjunction that the meridian real coordinate equals 1 or -1. Keep signCases at the beginning of the declaration name so the ledger identifier remains distinct. Do not define a sign-selection function, prove radial collision avoidance, or construct an angular path.",
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.signCases_zeroHeight_rightTubeMeridianCoordinate_re",
+    :type
+    "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> (rightTubeMeridianCoordinate p : Complex).re = 1 ∨ (rightTubeMeridianCoordinate p : Complex).re = -1",
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "split the zero-height radial collision proof into its exhaustive positive and negative meridian components"},
+   :id
+   :routes-2026-10-11-t02a03-sign-cases-zero-height-meridian-real-topo2-r1,
+   :kind :reusable-theorem,
+   :area "explicit-r3-tube-deformation-retraction",
+   :depends-on
+   [:routes-2026-10-11-t02a03-zero-height-meridian-real-sq-topo2-r1],
+   :current-residual
+   "Prove the radial collision polynomial stays nonzero in each sign case, combine the branches into zero-height radial left-core avoidance, then construct and concatenate the safe angular stage.",
+   :other-consumers []}
+  {:bounded-exception
    "single-consumer explicit ambient deformation with frozen tube and deletion invariants",
    :consumer :t02A03,
    :evidence
    {:probe
     {:residual
-     "Bank the zero-height meridian square-one certificate; then prove radial collision avoidance in its two sign components before constructing the angular stage.",
+     "Bank the renamed exhaustive zero-height sign cases, then prove radial collision nonvanishing separately for meridian real coordinate 1 and -1.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
      [{:name
-       "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeight_rightTubeMeridianCoordinate_re_sq",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.signCases_zeroHeight_rightTubeMeridianCoordinate_re",
        :type
-       "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> (rightTubeMeridianCoordinate p : Complex).re ^ 2 = 1",
+       "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> (rightTubeMeridianCoordinate p : Complex).re = 1 ∨ (rightTubeMeridianCoordinate p : Complex).re = -1",
        :status :proved,
        :consumers [:t02A03],
        :depends-on
-       ["ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeMeridianCoordinate_im_positiveFactor_height"],
+       ["ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeight_rightTubeMeridianCoordinate_re_sq"],
        :area "explicit-r3-tube-deformation-retraction"}],
      :prerequisite
      {:bounded-exception
-      "single-consumer zero-height meridian sign-component certificate",
+      "single-consumer exhaustive zero-height meridian sign cases with collision-free ledger name",
       :consumer :t02A03,
       :phase :probe,
       :state :open,
       :scope
       ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t02A03/zero-height-meridian-real-sq",
+      "TOPOLOGY-ROUTES.md/t02A03/sign-cases-zero-height-meridian-real",
       :acceptance
       {:probe
-       "Compile zeroHeight_rightTubeMeridianCoordinate_re_sq. For a zero-height input, use the positive-factor height identity and the Circle norm-square equation to prove the meridian coordinate real part has square one. Do not select either sign branch, prove radial interpolation avoidance, or construct an angular path.",
+       "Compile signCases_zeroHeight_rightTubeMeridianCoordinate_re. Convert the zero-height square-one identity into the exhaustive disjunction that the meridian real coordinate equals 1 or -1. Keep signCases at the beginning of the declaration name so the ledger identifier remains distinct. Do not define a sign-selection function, prove radial collision avoidance, or construct an angular path.",
        :declaration
-       "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeight_rightTubeMeridianCoordinate_re_sq",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.signCases_zeroHeight_rightTubeMeridianCoordinate_re",
        :type
-       "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> (rightTubeMeridianCoordinate p : Complex).re ^ 2 = 1",
+       "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> (rightTubeMeridianCoordinate p : Complex).re = 1 ∨ (rightTubeMeridianCoordinate p : Complex).re = -1",
        :placeholder "the sole sorry in apm_t02a03",
        :route-step
-       "identify the two zero-height meridian sign components needed for radial collision control"},
+       "split the zero-height radial collision proof into its exhaustive positive and negative meridian components"},
       :id
-      :routes-2026-10-11-t02a03-zero-height-meridian-real-sq-topo2-r1,
+      :routes-2026-10-11-t02a03-sign-cases-zero-height-meridian-real-topo2-r1,
       :kind :reusable-theorem,
       :area "explicit-r3-tube-deformation-retraction",
       :depends-on
-      [:routes-2026-10-11-t02a03-nonzero-height-avoids-left-core-radial-ambient-topo2-r1],
+      [:routes-2026-10-11-t02a03-zero-height-meridian-real-sq-topo2-r1],
       :current-residual
-      "Use the square-one certificate to analyze the positive and negative meridian-real branches, prove the radial collision polynomial stays nonzero, then construct the safe angular stage and concatenate.",
+      "Prove the radial collision polynomial stays nonzero in each sign case, combine the branches into zero-height radial left-core avoidance, then construct and concatenate the safe angular stage.",
       :other-consumers []},
      :commands
      [{:cmd
-       "lake env lean /tmp/t02a03_zero_height_meridian_real_sq_probe.lean",
+       "lake env lean /tmp/t02a03_zero_height_meridian_sign_cases_probe.lean",
        :exit 0,
        :output
-       "zeroHeight_rightTubeMeridianCoordinate_re_sq compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "signCases_zeroHeight_rightTubeMeridianCoordinate_re compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/t02a03_zero_height_meridian_real_sq_probe.lean",
+       "sha256sum /tmp/t02a03_zero_height_meridian_sign_cases_probe.lean",
        :exit 0,
        :output
-       "5e1778bda97829b4ca9fa88e8e20cc656c0e94dab320a32019f256623ef69c9c  /tmp/t02a03_zero_height_meridian_real_sq_probe.lean"}
+       "d9d857309a12a14a222c523a87c649eefa553aa996d73e1ea5649ef1db19e8da  /tmp/t02a03_zero_height_meridian_sign_cases_probe.lean"}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_zero_height_meridian_real_sq_probe.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_zero_height_meridian_sign_cases_probe.lean || true)\"",
        :exit 0}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}
       {:cmd
-       "rg -n 'zeroHeight_rightTubeMeridianCoordinate_re_sq' /tmp/t02a03_zero_height_meridian_real_sq_probe.lean",
+       "rg -n 'signCases_zeroHeight_rightTubeMeridianCoordinate_re' /tmp/t02a03_zero_height_meridian_sign_cases_probe.lean",
        :exit 0,
        :output
-       "5:theorem zeroHeight_rightTubeMeridianCoordinate_re_sq\n17:#print axioms zeroHeight_rightTubeMeridianCoordinate_re_sq"}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/t02a03_zero_height_meridian_real_sq_probe.lean",
-       :exit 1,
-       :finding
-       "The initial unrestricted simp used the target square equation as a branch proposition. Restricting normalization to the complex norm-square coordinate formula preserves the requested polynomial equality."}
-      {:cmd
-       "lake env lean /tmp/t02a03_zero_height_meridian_real_sq_probe.lean",
-       :exit 1,
-       :finding
-       "The restricted simp list included a nonexistent zero_sq lemma. Removing it left zero multiplication and addition normalization sufficient."}],
+       "5:theorem signCases_zeroHeight_rightTubeMeridianCoordinate_re\n13:#print axioms signCases_zeroHeight_rightTubeMeridianCoordinate_re"}],
      :fixture
-     {:path "/tmp/t02a03_zero_height_meridian_real_sq_probe.lean",
+     {:path "/tmp/t02a03_zero_height_meridian_sign_cases_probe.lean",
       :sha256
-      "5e1778bda97829b4ca9fa88e8e20cc656c0e94dab320a32019f256623ef69c9c"},
+      "d9d857309a12a14a222c523a87c649eefa553aa996d73e1ea5649ef1db19e8da"},
      :finding
-     "If the input height is zero, the banked positive-factor height identity makes the imaginary part of rightTubeMeridianCoordinate zero. Its Circle norm-square equation then gives meridianReal^2 = 1. This records the two zero-height sign components without making a discontinuous branch choice.",
+     "The declaration now begins with signCases, so its ledger identifier cannot truncate onto the banked square-one theorem. It proves the same exhaustive result: on the zero-height locus, the meridian real coordinate equals 1 or -1, obtained from sq_eq_one_iff without defining a discontinuous sign-selection function.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
@@ -69933,7 +69949,8 @@
     :routes-2026-10-11-t02a03-meridian-im-positive-factor-height-topo2-r1
     :routes-2026-10-11-t02a03-nonzero-height-core-normal-interpolation-im-topo2-r1
     :routes-2026-10-11-t02a03-nonzero-height-avoids-left-core-radial-ambient-topo2-r1
-    :routes-2026-10-11-t02a03-zero-height-meridian-real-sq-topo2-r1],
+    :routes-2026-10-11-t02a03-zero-height-meridian-real-sq-topo2-r1
+    :routes-2026-10-11-t02a03-sign-cases-zero-height-meridian-real-topo2-r1],
    :current-residual
    "Lift H to RightTubeMinusLeftCore, package rightTubeMeridianRetractionHomotopy, then use the coordinate equation for the Circle-side constant homotopy.",
    :other-consumers []}
@@ -74036,4 +74053,29 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-t02a03geometrictubedeformation-righttubemeridiancoordinate-i],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T02A03GeometricTubeDeformation.signCases_zeroHeight_rightTubeMeridianCoordinate_re",
+    :type
+    "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> (rightTubeMeridianCoordinate p : Complex).re = 1 ∨ (rightTubeMeridianCoordinate p : Complex).re = -1"},
+   :lemma
+   {:name
+    "ConstructionTargets.T02A03GeometricTubeDeformation.signCases_zeroHeight_rightTubeMeridianCoordinate_re",
+    :reported-by
+    [:routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1],
+    :type
+    "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> (rightTubeMeridianCoordinate p : Complex).re = 1 ∨ (rightTubeMeridianCoordinate p : Complex).re = -1",
+    :area "explicit-r3-tube-deformation-retraction",
+    :proved-in
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+   :id
+   :lemma-constructiontargets-t02a03geometrictubedeformation-signcases-zeroheight-righttub,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t02a03geometrictubedeformation-zeroheight-righttubemeridianc],
    :other-consumers []}]}
