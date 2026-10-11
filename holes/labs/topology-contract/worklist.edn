@@ -113857,22 +113857,19 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "B10 cannot apply B6: its uses list supplies no open neighborhoods and pointed contractions for the circle basepoint and the TwoCircles basepoint; B9 provides only path-connectedness. Add nodes constructing those concrete neighborhoods and contractions, and list them in B10 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "B3 remains partial; B4, B6, and B12 remain. Next compose the two-open pseudopushout equivalence with the new coordinate-span transport, then transport FundamentalGroupoid X and Y to their based SingleObj groups and finish the free-product representation composite.",
+    "B3 remains partial; B4, B6, and B12 remain. The two internal span transports and their postcomposition squares are banked. Next wrap them with the two-open pseudopushout, pseudo-to-span conversion, freeProductPointSpanEquivalence, and representationSingleObjEquivalence to finish B3.",
     :outcome :stop,
     :warnings
     [{:kind :upstream-lint,
       :message
-      "The full build replayed warnings from imported modules; the changed module introduced none."}
-     {:kind :concurrent-worktree-change,
-      :message
-      "ConstructionTargets/t97A04Closure.lean was modified by another process and was preserved unmodified and uncommitted."}],
+      "The full build replayed warnings from imported modules; the changed module introduced none."}],
     :missing-theorems
     [{:name
       "PointWedgeVanKampen.genericPointWedgeCoordinateSpanEquivalence",
@@ -113892,6 +113889,24 @@
       ["PointWedgeVanKampen.genericPointWedgeCoordinateSpanEquivalence"],
       :area "fundamental-group-wedge-of-circles"}
      {:name
+      "PointWedgeVanKampen.genericPointWedgeCoordinatePointSpanEquivalence",
+      :type
+      "Equivalence from the fixed Unit-to-X/Y coordinate span to the literal point span on FundamentalGroup X x0 and FundamentalGroup Y y0",
+      :status :proved,
+      :consumers [:t99J01 :t01A03 :t92J06 :t97A01 :t97A03],
+      :depends-on
+      ["PointWedgeVanKampen.genericPointWedgeCoordinateSpanEquivalence"],
+      :area "fundamental-group-wedge-of-circles"}
+     {:name
+      "PointWedgeVanKampen.genericPointWedgeCoordinatePointSpanPostcomposeIso",
+      :type
+      "The coordinate-to-point-span equivalence commutes with target postcomposition",
+      :status :proved,
+      :consumers [:t99J01 :t01A03 :t92J06 :t97A01 :t97A03],
+      :depends-on
+      ["PointWedgeVanKampen.genericPointWedgeCoordinatePointSpanEquivalence"],
+      :area "fundamental-group-wedge-of-circles"}
+     {:name
       "PointWedgeVanKampen.genericPointWedgeSingleObjMappingEquivalence",
       :type
       "The postcomposition-natural point-wedge mapping equivalence under the blueprint B3 hypotheses",
@@ -113899,7 +113914,9 @@
       :consumers [:t99J01 :t01A03 :t92J06 :t97A01 :t97A03],
       :depends-on
       ["PointWedgeVanKampen.genericPointWedgeCoordinateSpanEquivalence"
-       "PointWedgeVanKampen.genericPointWedgeCoordinateSpanPostcomposeIso"],
+       "PointWedgeVanKampen.genericPointWedgeCoordinateSpanPostcomposeIso"
+       "PointWedgeVanKampen.genericPointWedgeCoordinatePointSpanEquivalence"
+       "PointWedgeVanKampen.genericPointWedgeCoordinatePointSpanPostcomposeIso"],
       :area "fundamental-group-wedge-of-circles"}
      {:name
       "PointWedgeVanKampen.genericPointWedgeLegCoordinates_vanKampen",
@@ -113923,9 +113940,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source-sha256
-     "417aad70f0b4dac298a3d2ab9df4fe5f0bf6f5d66c4ec73a2586486d3df2ef09",
+     "a4b2339b552c36018ff7d58dedb9cc84eb2170b9f82eb06c737ba56abd20c341",
      :documentation-sha256
-     "69daeb8f5535c3a2b7d2c2abaa9bee4be068a830374e6cc849d12c6609262fbd",
+     "c5879e0fb5c8523c7dfae11c87a55dea96c7e870339f9931bef80cd640c20e8e",
      :blueprint-sha256
      "c2486da5a8c6e1fa7452e7a31d494e8e2f961f5c209d37c664c7eb56acbab0d4",
      :registry "131 registered statements match, 0 do not"},
@@ -113933,13 +113950,13 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Program job made compiled partial progress on blueprint B3. The literal point-wedge cover span is now transported through the B1 homotopy equivalences to the fixed Unit-to-X/Y coordinate span, B2 supplies the strict comparison isomorphisms, and the resulting equivalence is proved natural under target postcomposition. The remaining B3 composite from the two-open pseudopushout through point-span free-product representations is not yet implemented.",
+    "Program job made further compiled partial progress on blueprint B3. Connector systems based exactly at x0 and y0 now transport the fixed FundamentalGroupoid Unit-to-X/Y coordinate span to the literal point span on FundamentalGroup X x0 and FundamentalGroup Y y0. Both transported legs are compared to the point-leg functors without normalizing an arbitrary counit, and this second span equivalence is proved natural under target postcomposition. The outer pseudopushout and representation composites remain.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
       :exit 0,
       :finding
-      "The coordinate-span equivalence and postcomposition isomorphism compile; #print axioms reports only propext, Classical.choice, and Quot.sound."}
+      "The based connector systems, coordinate-to-point-span equivalence, and postcomposition isomorphism compile; #print axioms reports only propext, Classical.choice, and Quot.sound."}
      {:cmd "lake build ConstructionTargets.PointWedgeVanKampen",
       :exit 0,
       :finding
@@ -113954,52 +113971,36 @@
      {:cmd
       "git diff --check -- ConstructionTargets/PointWedgeVanKampen.lean ConstructionTargets/PointWedgeVanKampen.md",
       :exit 0}
-     {:cmd
-      "git commit -m Transport-generic-point-wedge-coordinate-span",
+     {:cmd "git commit -m Transport-generic-point-wedge-to-point-span",
       :exit 0,
-      :finding "Committed the two scoped progress files as 6124de960."}
+      :finding "Committed the two scoped progress files as 9fed3ac3c."}
      {:cmd
       "sha256sum ConstructionTargets/PointWedgeVanKampen.lean ConstructionTargets/PointWedgeVanKampen.md ConstructionTargets/PointWedgeVanKampen.blueprint.md",
       :exit 0,
       :finding
-      "Hashes are 417aad70f0b4dac298a3d2ab9df4fe5f0bf6f5d66c4ec73a2586486d3df2ef09, 69daeb8f5535c3a2b7d2c2abaa9bee4be068a830374e6cc849d12c6609262fbd, and c2486da5a8c6e1fa7452e7a31d494e8e2f961f5c209d37c664c7eb56acbab0d4."}],
+      "Hashes are a4b2339b552c36018ff7d58dedb9cc84eb2170b9f82eb06c737ba56abd20c341, c5879e0fb5c8523c7dfae11c87a55dea96c7e870339f9931bef80cd640c20e8e, and c2486da5a8c6e1fa7452e7a31d494e8e2f961f5c209d37c664c7eb56acbab0d4."}],
     :diagnostic-history
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
       :exit 1,
       :finding
-      "The first coordinate-span draft used the categorical morphism arrow where Lean required the functor arrow and retained unnecessary universe-polymorphic source spaces; corrected to functor types over Type."}
+      "The first trivial-source comparison attempted to eliminate a SingleObj PUnit morphism directly; Lean retained the categorical coercion and rejected the eliminator. Replaced it by a named PUnit value before elimination."}
      {:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
       :exit 1,
       :finding
-      "The intermediate span comparison exposed the opposite association of ContinuousMap.comp from B2's strict formula; reassociated explicitly with ContinuousMap.comp_assoc, after which the module compiled."}],
+      "An intermediate replacement asked typeclass search for Subsingleton on the categorical hom type and exhausted the deterministic heartbeat limit; replaced it with the explicit PUnit coercion and case split, after which the module compiled."}],
     :continue-from
-    {:commit "6124de960",
+    {:commit "9fed3ac3c",
      :next
-     "Continue B3 from genericPointWedgeCoordinateSpanEquivalence and genericPointWedgeCoordinateSpanPostcomposeIso; build the remaining target-natural composite to genericPointWedgeSingleObjMappingEquivalence."},
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791730346223-5519-aca6d13d",
-     :commands
-     ["git show --format=fuller --stat 6124de960f5d521b6f9d303cb7d2dafba3422129"
-      "git diff-tree --no-commit-id --name-only -r 6124de960f5d521b6f9d303cb7d2dafba3422129"
-      "git show 6124de960f5d521b6f9d303cb7d2dafba3422129:<scoped-file> | sha256sum"
-      "git diff --check 6124de960^ 6124de960 -- ConstructionTargets/PointWedgeVanKampen.lean ConstructionTargets/PointWedgeVanKampen.md"
-      "python3 scripts/statement-registry.py check"
-      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup"],
-     :finding
-     "PASS: commit adds compiled, sorry-free B3 progress after reviewed B10/B11: the literal cover span is transported to the fixed Unit-to-X/Y span and the postcomposition isomorphism has the blueprint-required orientation. Scope and three frozen hashes match, placeholders remain zero, and axioms are standard-only. Registry and milestone build pass; the absent final target remains the explicitly listed B12 program milestone."},
-    :commit "6124de960",
+     "Finish B3 by composing the pseudopushout and pseudo-span stages before the two banked span transports, then the free-product representation and SingleObj stages after them; paste the corresponding postcomposition squares."},
+    :commit "9fed3ac3c",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -115180,7 +115181,9 @@
    :kind :lemma,
    :depends-on
    [:lemma-pointwedgevankampen-genericpointwedgecoordinatespanequivalence
-    :lemma-pointwedgevankampen-genericpointwedgecoordinatespanpostcomposeiso],
+    :lemma-pointwedgevankampen-genericpointwedgecoordinatespanpostcomposeiso
+    :lemma-pointwedgevankampen-genericpointwedgecoordinatepointspanequivalence
+    :lemma-pointwedgevankampen-genericpointwedgecoordinatepointspanpostcomposeiso],
    :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
   {:consumer :t02A05,
    :phase :lemma,
@@ -117899,6 +117902,52 @@
    :kind :lemma,
    :depends-on
    [:lemma-pointwedgevankampen-genericpointwedgecoordinatespanequivalence],
+   :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
+  {:consumer :t99J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "PointWedgeVanKampen.genericPointWedgeCoordinatePointSpanEquivalence",
+    :type
+    "Equivalence from the fixed Unit-to-X/Y coordinate span to the literal point span on FundamentalGroup X x0 and FundamentalGroup Y y0"},
+   :lemma
+   {:name
+    "PointWedgeVanKampen.genericPointWedgeCoordinatePointSpanEquivalence",
+    :reported-by [:program-2026-10-11-point-wedge-van-kampen],
+    :type
+    "Equivalence from the fixed Unit-to-X/Y coordinate span to the literal point span on FundamentalGroup X x0 and FundamentalGroup Y y0",
+    :area "fundamental-group-wedge-of-circles",
+    :proved-in :program-2026-10-11-point-wedge-van-kampen},
+   :id
+   :lemma-pointwedgevankampen-genericpointwedgecoordinatepointspanequivalence,
+   :kind :lemma,
+   :depends-on
+   [:lemma-pointwedgevankampen-genericpointwedgecoordinatespanequivalence],
+   :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
+  {:consumer :t99J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "PointWedgeVanKampen.genericPointWedgeCoordinatePointSpanPostcomposeIso",
+    :type
+    "The coordinate-to-point-span equivalence commutes with target postcomposition"},
+   :lemma
+   {:name
+    "PointWedgeVanKampen.genericPointWedgeCoordinatePointSpanPostcomposeIso",
+    :reported-by [:program-2026-10-11-point-wedge-van-kampen],
+    :type
+    "The coordinate-to-point-span equivalence commutes with target postcomposition",
+    :area "fundamental-group-wedge-of-circles",
+    :proved-in :program-2026-10-11-point-wedge-van-kampen},
+   :id
+   :lemma-pointwedgevankampen-genericpointwedgecoordinatepointspanpostcomposeiso,
+   :kind :lemma,
+   :depends-on
+   [:lemma-pointwedgevankampen-genericpointwedgecoordinatepointspanequivalence],
    :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}],
  :consumer-baselines
  {:t00A01
