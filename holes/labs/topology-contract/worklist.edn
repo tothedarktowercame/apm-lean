@@ -113978,13 +113978,28 @@
     {:commit "6124de960",
      :next
      "Continue B3 from genericPointWedgeCoordinateSpanEquivalence and genericPointWedgeCoordinateSpanPostcomposeIso; build the remaining target-natural composite to genericPointWedgeSingleObjMappingEquivalence."},
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791730346223-5519-aca6d13d",
+     :commands
+     ["git show --format=fuller --stat 6124de960f5d521b6f9d303cb7d2dafba3422129"
+      "git diff-tree --no-commit-id --name-only -r 6124de960f5d521b6f9d303cb7d2dafba3422129"
+      "git show 6124de960f5d521b6f9d303cb7d2dafba3422129:<scoped-file> | sha256sum"
+      "git diff --check 6124de960^ 6124de960 -- ConstructionTargets/PointWedgeVanKampen.lean ConstructionTargets/PointWedgeVanKampen.md"
+      "python3 scripts/statement-registry.py check"
+      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup"],
+     :finding
+     "PASS: commit adds compiled, sorry-free B3 progress after reviewed B10/B11: the literal cover span is transported to the fixed Unit-to-X/Y span and the postcomposition isomorphism has the blueprint-required orientation. Scope and three frozen hashes match, placeholders remain zero, and axioms are standard-only. Registry and milestone build pass; the absent final target remains the explicitly listed B12 program milestone."},
     :commit "6124de960",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -114005,7 +114020,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Program milestone completed. Blueprint node B10 is proved: circleBaseNeighborhood is the circle with antipode -1 removed, it is open and contains 1, and circleBaseNeighborhood_contraction is the existing stereographic pointed contraction at exactly that subtype and basepoint. B3, B4, B6, B11, and B12 remain.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Program job made compiled partial progress on blueprint B3. The literal point-wedge cover span is now transported through the B1 homotopy equivalences to the fixed Unit-to-X/Y coordinate span, B2 supplies the strict comparison isomorphisms, and the resulting equivalence is proved natural under target postcomposition. The remaining B3 composite from the two-open pseudopushout through point-span free-product representations is not yet implemented.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114037,7 +114052,11 @@
     {:job 9,
      :commit "b69997ebbc56a4762f2d38a9aa9dda1f0c580d97",
      :reason
-     "Program milestone completed. Blueprint node B10 is proved: circleBaseNeighborhood is the circle with antipode -1 removed, it is open and contains 1, and circleBaseNeighborhood_contraction is the existing stereographic pointed contraction at exactly that subtype and basepoint. B3, B4, B6, B11, and B12 remain."}]}
+     "Program milestone completed. Blueprint node B10 is proved: circleBaseNeighborhood is the circle with antipode -1 removed, it is open and contains 1, and circleBaseNeighborhood_contraction is the existing stereographic pointed contraction at exactly that subtype and basepoint. B3, B4, B6, B11, and B12 remain."}
+    {:job 1,
+     :commit "6124de960",
+     :reason
+     "Program job made compiled partial progress on blueprint B3. The literal point-wedge cover span is now transported through the B1 homotopy equivalences to the fixed Unit-to-X/Y coordinate span, B2 supplies the strict comparison isomorphisms, and the resulting equivalence is proved natural under target postcomposition. The remaining B3 composite from the two-open pseudopushout through point-span free-product representations is not yet implemented."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
@@ -117834,7 +117853,7 @@
    :other-consumers []}
   {:consumer :t99J01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -117848,7 +117867,9 @@
     :type
     "Equivalence from pseudococones on the literal point-wedge cover span to pseudococones on the fixed FundamentalGroupoid Unit to FundamentalGroupoid X/Y span",
     :area "fundamental-group-wedge-of-circles",
-    :proved-in :program-2026-10-11-point-wedge-van-kampen},
+    :proved-in :program-2026-10-11-point-wedge-van-kampen,
+    :banked-by :program-2026-10-11-point-wedge-van-kampen,
+    :banked-commit "6124de960"},
    :id
    :lemma-pointwedgevankampen-genericpointwedgecoordinatespanequivalence,
    :kind :lemma,
@@ -117856,7 +117877,7 @@
    :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
   {:consumer :t99J01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -117870,7 +117891,9 @@
     :type
     "The generic point-wedge coordinate-span equivalence commutes with target postcomposition",
     :area "fundamental-group-wedge-of-circles",
-    :proved-in :program-2026-10-11-point-wedge-van-kampen},
+    :proved-in :program-2026-10-11-point-wedge-van-kampen,
+    :banked-by :program-2026-10-11-point-wedge-van-kampen,
+    :banked-commit "6124de960"},
    :id
    :lemma-pointwedgevankampen-genericpointwedgecoordinatespanpostcomposeiso,
    :kind :lemma,
