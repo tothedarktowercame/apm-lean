@@ -1664,6 +1664,57 @@ theorem shearY_H2 (a b : ℤ) :
   apply (cancel_mono frozenConnectingCoordinate).1
   exact shearY_frozenConnectingCoordinate_scalar a b
 
+/-- Exchange the two circle coordinates of the frozen torus. -/
+def swapTorus : C(FrozenTorus, FrozenTorus) :=
+  ⟨fun p ↦ (p.2, p.1), by fun_prop⟩
+
+@[simp] theorem swapTorus_comp_swapTorus :
+    swapTorus.comp swapTorus = ContinuousMap.id FrozenTorus := by
+  ext p <;> rfl
+
+/-- Applying the coordinate swap twice acts trivially on degree-two
+singular homology. -/
+theorem swap_H2_square :
+    HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularSubdivision.singularPostcomposition
+            swapTorus) 2 ≫
+        HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularSubdivision.singularPostcomposition
+            swapTorus) 2 = 𝟙 _ := by
+  rw [← HomologicalComplex.homologyMap_comp,
+    ConstructionTargets.SingularSubdivision.singularPostcomposition_comp,
+    swapTorus_comp_swapTorus]
+  exact ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 2).obj
+    (AddCommGrpCat.of ℤ)).map_id (TopCat.of FrozenTorus)
+
+noncomputable def swapH2Coordinate :
+    AddCommGrpCat.of ℤ ⟶ AddCommGrpCat.of ℤ :=
+  frozenTorusH2GroupIsoInt.inv ≫
+    HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularSubdivision.singularPostcomposition
+        swapTorus) 2 ≫
+    frozenTorusH2GroupIsoInt.hom
+
+theorem swapH2Coordinate_square :
+    swapH2Coordinate ≫ swapH2Coordinate = 𝟙 _ := by
+  rw [swapH2Coordinate]
+  calc
+    _ = frozenTorusH2GroupIsoInt.inv ≫
+        (HomologicalComplex.homologyMap
+            (ConstructionTargets.SingularSubdivision.singularPostcomposition
+              swapTorus) 2 ≫
+          HomologicalComplex.homologyMap
+            (ConstructionTargets.SingularSubdivision.singularPostcomposition
+              swapTorus) 2) ≫ frozenTorusH2GroupIsoInt.hom := by
+      simp only [Category.assoc]
+      slice_lhs 3 4 => exact frozenTorusH2GroupIsoInt.hom_inv_id
+      slice_lhs 3 4 => exact Category.id_comp _
+    _ = frozenTorusH2GroupIsoInt.inv ≫ 𝟙 _ ≫
+        frozenTorusH2GroupIsoInt.hom := congrArg
+      (fun k ↦ frozenTorusH2GroupIsoInt.inv ≫ k ≫
+        frozenTorusH2GroupIsoInt.hom) swap_H2_square
+    _ = 𝟙 _ := frozenTorusH2GroupIsoInt.inv_hom_id
+
 #print axioms frozenTorusH2GroupIsoInt
 #print axioms frozenYCover
 #print axioms frozenYCoverUHomeomorph
