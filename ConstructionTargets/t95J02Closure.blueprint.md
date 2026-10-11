@@ -149,7 +149,7 @@ uses: B5, B6, `CoefficientFirstReflection.topIso`,
 `SingularHomologyHomotopy.singularHomology_map_eq_of_homotopic`,
 Mathlib `Functor.map_comp`
 
-status: planned
+status: proved
 
 Let `g` be the inverse image of `1 : ℤ` under the integral H1 isomorphism of
 the Euclidean circle and let `gamma` be the image of `2 • g` under the H1
@@ -187,7 +187,7 @@ type unchanged and no `sorry`.
 uses: B7, B8, the existing `t95J02RetractionA` and
 `t95J02RetractionA_comp_inclusion`
 
-status: planned
+status: proved
 
 The positive conjunct is the existing explicit retraction.  For the negative
 conjunct, assume a retraction onto `CircleB`, obtain the nonzero `gamma` from

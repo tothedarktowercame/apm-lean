@@ -1,6 +1,8 @@
 import Mathlib
 import ConstructionTargets.CircleHomology
 import ConstructionTargets.CoefficientCoordinateReflections
+import ConstructionTargets.CoefficientFirstReflection
+import ConstructionTargets.SingularHomologyHomotopy
 
 /-! # APM t95J02: retractions of the Klein bottle onto its core circles
 
@@ -483,7 +485,85 @@ theorem apm_t95J02_bridge_vertical_H1_kernel :
     ∃ gamma : apm_t95J02_H1 t95J02CircleB,
       gamma ≠ 0 ∧
       apm_t95J02_H1Map t95J02InclusionB gamma = 0 := by
-  sorry
+  let F := (AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+    (ModuleCat.of ℤ ℤ)
+  let e := ConstructionTargets.CoefficientFirstReflection.topIso ℤ 0
+  let g := e.inv.hom (1 : ℤ)
+  let c : C(T02A06.euclideanUnitSphere 2, t95J02CircleB) :=
+    ⟨t95J02Closure.t95J02CircleB_homeo,
+      t95J02Closure.t95J02CircleB_homeo.continuous⟩
+  let cInv : C(t95J02CircleB, T02A06.euclideanUnitSphere 2) :=
+    ⟨t95J02Closure.t95J02CircleB_homeo.symm,
+      t95J02Closure.t95J02CircleB_homeo.symm.continuous⟩
+  let h := F.map (TopCat.ofHom c)
+  refine ⟨h.hom (2 • g), ?_, ?_⟩
+  · intro hzero
+    have hleft :
+        F.map (TopCat.ofHom c) ≫ F.map (TopCat.ofHom cInv) =
+          𝟙 _ := by
+      have hc : TopCat.ofHom c ≫ TopCat.ofHom cInv =
+          𝟙 (TopCat.of (T02A06.euclideanUnitSphere 2)) := by
+        ext x
+        simp [c, cInv]
+      rw [← F.map_comp, hc, F.map_id]
+    have hz := congrArg
+      (fun z ↦ (F.map
+        (TopCat.ofHom cInv)).hom z)
+      hzero
+    have hg : 2 • g ≠ 0 := by
+      intro hgzero
+      have := congrArg e.hom.hom hgzero
+      simp [g] at this
+    apply hg
+    have hpoint := congrArg
+      (fun q : (F.obj (TopCat.of (T02A06.euclideanUnitSphere 2)) ⟶
+          F.obj (TopCat.of (T02A06.euclideanUnitSphere 2))) ↦ q.hom (2 • g)) hleft
+    have hz' :
+        (F.map (TopCat.ofHom cInv)).hom (h.hom (2 • g)) = 0 := by
+      simpa using hz
+    simpa [h, CategoryTheory.comp_apply] using hpoint.symm.trans hz'
+  · have hhom :=
+      ConstructionTargets.SingularHomologyHomotopy.singularHomology_map_eq_of_homotopic
+        (ModuleCat ℤ) (ModuleCat.of ℤ ℤ)
+        t95J02Closure.t95J02_beta_homotopic_beta_reflection 1
+    have href := ConstructionTargets.CoefficientFirstReflection.integral_circle
+      (1 : Fin 2)
+    have hbeta :
+        (F.map (TopCat.ofHom t95J02Closure.beta)).hom g =
+          (F.map (TopCat.ofHom t95J02Closure.beta)).hom (-g) := by
+      have hcomp :
+          F.map (TopCat.ofHom (t95J02Closure.beta.comp
+              (ConstructionTargets.CoefficientCoordinateReflections.reflectionMap
+                (1 : Fin 2)))) =
+            F.map (TopCat.ofHom
+              (ConstructionTargets.CoefficientCoordinateReflections.reflectionMap
+                (1 : Fin 2))) ≫ F.map (TopCat.ofHom t95J02Closure.beta) := by
+        rw [← F.map_comp]
+        rfl
+      calc
+        _ = (F.map (TopCat.ofHom (t95J02Closure.beta.comp
+              (ConstructionTargets.CoefficientCoordinateReflections.reflectionMap
+                (1 : Fin 2))))).hom g := congrArg (fun q ↦ q.hom g) hhom
+        _ = _ := by
+          rw [hcomp, href]
+          change (F.map (TopCat.ofHom t95J02Closure.beta)).hom (-g) =
+            (F.map (TopCat.ofHom t95J02Closure.beta)).hom (-g)
+          rfl
+    have htwo : (F.map (TopCat.ofHom t95J02Closure.beta)).hom (2 • g) = 0 := by
+      have := congrArg
+        (fun z ↦ z + (F.map (TopCat.ofHom t95J02Closure.beta)).hom g) hbeta
+      simpa [two_smul] using this
+    change (F.map t95J02InclusionB).hom (h.hom (2 • g)) = 0
+    have hfactor :
+        F.map (TopCat.ofHom c) ≫
+            F.map t95J02InclusionB =
+          F.map (TopCat.ofHom t95J02Closure.beta) := by
+      rw [← F.map_comp]
+      congr 1
+    have hpoint := congrArg
+      (fun q : F.obj (TopCat.of (T02A06.euclideanUnitSphere 2)) ⟶
+          F.obj (TopCat.of t95J02KleinBottleType) ↦ q.hom (2 • g)) hfactor
+    simpa [h, CategoryTheory.comp_apply] using hpoint.trans htwo
 
 /-- Why this unblocks `apm_t95j02`: functoriality makes the first-homology map
 of any retract inclusion injective. Combined with
@@ -518,46 +598,8 @@ theorem apm_t95j02 :
     ¬HasT95J02Retraction t95J02InclusionB := by
   constructor
   · exact ⟨t95J02RetractionA, t95J02RetractionA_comp_inclusion⟩
-  · /-
-    PARTIAL boundary (closer hop 1).
-
-    New progress: the positive half is closed constructively.  The raw map
-    `t95J02CollapseARaw (x,y) = [(x,0)]` respects both generating Klein-bottle
-    identifications.  `t95J02CollapseARaw_eqvGen` extends this through the
-    equivalence closure using `Relation.EqvGen.rec`; quotient continuity then
-    follows from `Continuous.quotient_lift`.  The descended map
-    `t95J02RetractionA` restricts definitionally to the identity on circle A.
-
-    The negative half requires detecting that circle B represents the
-    order-two class in the Klein bottle's abelianized fundamental group.  A
-    retraction would split its induced map to `H₁(B) ≃ ℤ`, contradicting that
-    torsion.  Searches of `LEMMA-INDEX.md`, `ConstructionTargets/`, all closed
-    artifacts, Mathlib's quotient/fundamental-group/singular-homology APIs,
-    and git history found no computation of the fundamental group or integral
-    first homology of this custom `Relation.EqvGen` quotient.  In particular,
-    the quotient has not been related to a packaged mapping torus or CW
-    complex, so the presentation `⟨a,b | bab⁻¹ = a⁻¹⟩` cannot yet be used by
-    the formal proof.  The remaining bridge is precisely that invariant
-    computation and identification of the B inclusion with its torsion
-    generator.
-
-    Closer hop 2 exposes the two defining quotient identities as public
-    compiled lemmas `t95J02QuotientPoint_vertical` and
-    `t95J02QuotientPoint_glide`. In particular the latter is the concrete
-    point-set identification from which the inversion conjugacy relation must
-    eventually be derived. These equalities do not themselves compute the
-    induced loop or homology classes, so the invariant bridge remains open.
-
-    Closer hop 3 compiles two derived presentation identities.
-    `t95J02QuotientPoint_glide_twice` proves the horizontal period-two
-    equality obtained by applying the glide twice, while
-    `t95J02QuotientPoint_glide_vertical_inverse` proves directly that the
-    glide carries a positive vertical translate to a negative translate.
-    The latter is the concrete endpoint equality behind the inversion
-    conjugacy relation. Searches of the quotient, mapping-torus,
-    fundamental-group, and singular-homology APIs still found no mechanism
-    transporting these endpoint equalities to the required loop or `H₁`
-    calculation, so the no-retraction invariant remains open and the frozen
-    statement is unchanged.
-    -/
-    sorry
+  · intro hret
+    obtain ⟨gamma, hgamma, hzero⟩ := apm_t95J02_bridge_vertical_H1_kernel
+    apply hgamma
+    apply apm_t95J02_bridge_retraction_injective hret
+    simpa using hzero
