@@ -17291,6 +17291,30 @@
    :current-residual "Build SnakeInput.Hom and preserve δ.",
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
+   :implements-lemma :lemma-mfclass-forget-homology-row,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/manifold-fundamental-class/snake-hom-row0",
+   :acceptance
+   {:declaration
+    "ConstructionTargets.ManifoldFundamentalClass.forgetHomologyRowHom",
+    :type
+    "∀ {ι} {c : ComplexShape ι} (K : ShortComplex (HomologicalComplex (ModuleCat ℤ) c)) (i : ι), ForgottenHomologyRowHom K i",
+    :fixture "/tmp/hrow.lean",
+    :fixture-sha256
+    "5e573b51e8c35431ee3186d318754a7eb6ce71c0528a193e6b0db38458b0de4c",
+    :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
+    :route-step "SnakeInput.Hom row 0",
+    :implementation "Promote fixture only."},
+   :id :routes-2026-10-11-mfclass-forget-homology-row-r1,
+   :kind :reusable-theorem,
+   :area "manifold-fundamental-class",
+   :depends-on [:routes-2026-10-11-mfclass-forget-snake-input-r1],
+   :current-residual "Build remaining Hom and δ naturality.",
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-closedorientedfundamentalclass,
    :evidence
@@ -17298,53 +17322,50 @@
     {:outcome :revise,
      :seat "topo-12",
      :fixture
-     {:path "/tmp/snake.lean",
+     {:path "/tmp/hrow.lean",
       :sha256
-      "a255786c959b151568180d355345d2f460f360b3f01ff24d65e8d793eccdb235"},
-     :commands [{:cmd "lake env lean /tmp/snake.lean", :exit 0}],
+      "5e573b51e8c35431ee3186d318754a7eb6ce71c0528a193e6b0db38458b0de4c"},
+     :commands [{:cmd "lake env lean /tmp/hrow.lean", :exit 0}],
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :missing-theorems
-     [{:id :lemma-mfclass-forget-snake-input,
+     [{:id :lemma-mfclass-forget-homology-row,
        :name
-       "ConstructionTargets.ManifoldFundamentalClass.forgetSnakeInput",
+       "ConstructionTargets.ManifoldFundamentalClass.forgetHomologyRowHom",
        :type
-       "∀ S : ShortComplex.SnakeInput (ModuleCat ℤ), ShortComplex.SnakeInput AddCommGrpCat",
+       "∀ {ι} {c : ComplexShape ι} (K : ShortComplex (HomologicalComplex (ModuleCat ℤ) c)) (i : ι), ForgottenHomologyRowHom K i",
        :status :proved,
        :consumers [:t00J02 :t98A02],
        :depends-on
-       ["ConstructionTargets.ManifoldFundamentalClass.forgetSnakeCokernelLimit"],
+       ["ConstructionTargets.ManifoldFundamentalClass.forgetSnakeInput"],
        :area "manifold-fundamental-class"}],
      :prerequisite
      {:consumer :t00J02,
-      :implements-lemma :lemma-mfclass-forget-snake-input,
+      :implements-lemma :lemma-mfclass-forget-homology-row,
       :phase :implementation,
       :state :open,
       :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/manifold-fundamental-class/mapped-snake-input",
+      "TOPOLOGY-ROUTES.md/manifold-fundamental-class/snake-hom-row0",
       :acceptance
       {:declaration
-       "ConstructionTargets.ManifoldFundamentalClass.forgetSnakeInput",
+       "ConstructionTargets.ManifoldFundamentalClass.forgetHomologyRowHom",
        :type
-       "∀ S : ShortComplex.SnakeInput (ModuleCat ℤ), ShortComplex.SnakeInput AddCommGrpCat",
-       :fixture "/tmp/snake.lean",
+       "∀ {ι} {c : ComplexShape ι} (K : ShortComplex (HomologicalComplex (ModuleCat ℤ) c)) (i : ι), ForgottenHomologyRowHom K i",
+       :fixture "/tmp/hrow.lean",
        :fixture-sha256
-       "a255786c959b151568180d355345d2f460f360b3f01ff24d65e8d793eccdb235",
+       "5e573b51e8c35431ee3186d318754a7eb6ce71c0528a193e6b0db38458b0de4c",
        :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
-       :route-step "package mapped SnakeInput",
-       :implementation
-       "Promote only; exclude SnakeInput.Hom and δ naturality."},
-      :id :routes-2026-10-11-mfclass-forget-snake-input-r1,
+       :route-step "SnakeInput.Hom row 0",
+       :implementation "Promote fixture only."},
+      :id :routes-2026-10-11-mfclass-forget-homology-row-r1,
       :kind :reusable-theorem,
       :area "manifold-fundamental-class",
-      :depends-on
-      [:routes-2026-10-11-mfclass-forget-snake-cokernel-limit-r1],
-      :current-residual "Build SnakeInput.Hom and preserve δ.",
+      :depends-on [:routes-2026-10-11-mfclass-forget-snake-input-r1],
+      :current-residual "Build remaining Hom and δ naturality.",
       :other-consumers [:t98A02]},
-     :residual
-     "Promote mapped SnakeInput; then build Hom and δ naturality."}},
+     :residual "Then build remaining Hom and δ."}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -17461,7 +17482,8 @@
     :routes-2026-10-11-mfclass-forget-cokernel-pi2-limit-r1
     :routes-2026-10-11-mfclass-forget-cokernel-pi3-limit-r1
     :routes-2026-10-11-mfclass-forget-snake-cokernel-limit-r1
-    :routes-2026-10-11-mfclass-forget-snake-input-r1],
+    :routes-2026-10-11-mfclass-forget-snake-input-r1
+    :routes-2026-10-11-mfclass-forget-homology-row-r1],
    :current-residual
    "Local-degree counts and wild-ball complement homology remain.",
    :other-consumers [:t98A02]}
@@ -24895,6 +24917,28 @@
    :id :lemma-mfclass-forget-snake-input,
    :kind :lemma,
    :depends-on [:lemma-mfclass-forget-snake-cokernel-limit],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFundamentalClass.forgetHomologyRowHom",
+    :type
+    "∀ {ι} {c : ComplexShape ι} (K : ShortComplex (HomologicalComplex (ModuleCat ℤ) c)) (i : ι), ForgottenHomologyRowHom K i"},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFundamentalClass.forgetHomologyRowHom",
+    :reported-by
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    :type
+    "∀ {ι} {c : ComplexShape ι} (K : ShortComplex (HomologicalComplex (ModuleCat ℤ) c)) (i : ι), ForgottenHomologyRowHom K i",
+    :area "manifold-fundamental-class",
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+   :id :lemma-mfclass-forget-homology-row,
+   :kind :lemma,
+   :depends-on [:lemma-mfclass-forget-snake-input],
    :other-consumers [:t98A02]}],
  :consumer-baselines {},
  :statuses
