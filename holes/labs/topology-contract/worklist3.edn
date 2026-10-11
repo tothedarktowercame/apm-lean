@@ -17657,8 +17657,47 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :implements-lemma :lemma-mfclass-hi-square,
+   :evidence
+   {:placeholder-delta
+    {:t00J02 0, :t98A02 0, :remaining {:t00J02 1, :t98A02 1}},
+    :residual "Prove two remaining squares; assemble SnakeInput.Hom.",
+    :outcome :done-unreviewed,
+    :warnings ["pre-existing unnecessarySimpa lints"],
+    :missing-theorems [],
+    :statement-hashes {:status :match, :count 131},
+    :axioms [propext Classical.choice Quot.sound],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd "sha256sum /tmp/hi.lean", :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "rg -n '\\b(sorry|admit|axiom)\\b' ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "git commit -m 'Prove forgotten homology inclusion naturality'",
+      :exit 0}],
+    :commit "0be35204611338cac23070fbeb981631efc443b1",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path "/tmp/hi.lean",
+     :sha256
+     "87c14133f754ba568d176e75ca901e6583ed28cc08d21dada9a0a306ebaf7687"},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :declaration
+     "ConstructionTargets.ManifoldFundamentalClass.forgetHomologyι_naturality"},
+    :row :routes-2026-10-11-mfclass-hi-square-r1,
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class/square01",
    :acceptance
