@@ -103,6 +103,58 @@ noncomputable def frozenYCoverInterHomeomorph :
     (homeomorphPreimageRestrict frozenTorusHomeomorphBoundaryTorus
       (leftOpen ∩ rightOpen))
 
+/-- The ambient map carrying the frozen cover to the boundary-torus cover. -/
+noncomputable def frozenToBoundary : C(FrozenTorus, BoundaryTorus) :=
+  ⟨frozenTorusHomeomorphBoundaryTorus,
+    frozenTorusHomeomorphBoundaryTorus.continuous⟩
+
+/-- The inverse ambient map carrying the boundary-torus cover back to the
+frozen cover. -/
+noncomputable def boundaryToFrozen : C(BoundaryTorus, FrozenTorus) :=
+  ⟨frozenTorusHomeomorphBoundaryTorus.symm,
+    frozenTorusHomeomorphBoundaryTorus.symm.continuous⟩
+
+theorem frozenToBoundary_mapsTo_U :
+    Set.MapsTo frozenToBoundary frozenYCover.U leftOpen :=
+  fun _ hx ↦ hx
+
+theorem frozenToBoundary_mapsTo_V :
+    Set.MapsTo frozenToBoundary frozenYCover.V rightOpen :=
+  fun _ hx ↦ hx
+
+theorem frozenToBoundary_mapsTo_inter :
+    Set.MapsTo frozenToBoundary (frozenYCover.U ∩ frozenYCover.V)
+      (leftOpen ∩ rightOpen) :=
+  fun _ hx ↦ hx
+
+theorem boundaryToFrozen_mapsTo_U :
+    Set.MapsTo boundaryToFrozen leftOpen frozenYCover.U := by
+  intro x hx
+  change frozenTorusHomeomorphBoundaryTorus
+      (frozenTorusHomeomorphBoundaryTorus.symm x) ∈ leftOpen
+  simpa using hx
+
+theorem boundaryToFrozen_mapsTo_V :
+    Set.MapsTo boundaryToFrozen rightOpen frozenYCover.V := by
+  intro x hx
+  change frozenTorusHomeomorphBoundaryTorus
+      (frozenTorusHomeomorphBoundaryTorus.symm x) ∈ rightOpen
+  simpa using hx
+
+theorem boundaryToFrozen_mapsTo_inter :
+    Set.MapsTo boundaryToFrozen (leftOpen ∩ rightOpen)
+      (frozenYCover.U ∩ frozenYCover.V) := by
+  intro x hx
+  exact ⟨boundaryToFrozen_mapsTo_U hx.1, boundaryToFrozen_mapsTo_V hx.2⟩
+
+@[simp] theorem frozenToBoundary_boundaryToFrozen (x : BoundaryTorus) :
+    frozenToBoundary (boundaryToFrozen x) = x :=
+  frozenTorusHomeomorphBoundaryTorus.apply_symm_apply x
+
+@[simp] theorem boundaryToFrozen_frozenToBoundary (x : FrozenTorus) :
+    boundaryToFrozen (frozenToBoundary x) = x :=
+  frozenTorusHomeomorphBoundaryTorus.symm_apply_apply x
+
 /-- The upper-triangular shear of the frozen torus.  Its second coordinate is
 fixed, so it preserves the vertical cover literally. -/
 def shearY (a b : ℤ) : C(FrozenTorus, FrozenTorus) where
