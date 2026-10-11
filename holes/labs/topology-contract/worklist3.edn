@@ -6393,6 +6393,23 @@
       :exit 0,
       :result "clean after commit"}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791688672157-3954-9fa62bfd",
+     :commands
+     ["git show and git diff-tree recorded commit scope"
+      "git blob identity check"
+      "sha256sum frozen fixture"
+      "git diff --check recorded commit"
+      "lake env lean renamed frozen-fixture replay"
+      "lake env lean target module"
+      "lake build target module"
+      "placeholder and axiom scan"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped consumer placeholder census"],
+     :finding
+     "PASS: commit a48c4f5f changes only ConstructionTargets/ManifoldFundamentalClass.lean and its recorded blob matches the reviewed tree; frozen fixture hash 02b8cb92dd14844a278cbbe9c5ad69020496072319b411ac606d987e64aaf91c matches. The theorem has the frozen direction from a supplied corrected-comparison normalization square to the corrected comparison mapping the coefficient generator to the ambient local generator. The proof applies injectivity of ambientLocalNormalization.hom, evaluates only the supplied compatibility equation at the coefficient generator, and uses the coefficient and ambient generator normalization equations without identifying the corrected and older comparisons. Fixture replay and target compile/build pass with only propext, Classical.choice, Quot.sound; registry is 131/0; source and fixture have no placeholders; consumer counts remain t00J02=1 and t98A02=1."},
     :commit "a48c4f5f87ec3e1672d947697be0e28f02dda075",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -6407,7 +6424,7 @@
      "ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/corrected-generator-normalization",
@@ -6568,7 +6585,7 @@
      "The old and corrected homology comparisons should not be equated: the inserted coefficientIntegralCokernelTransport reconciles canonical projections selected by distinct indexed cokernel witnesses and is not definitionally the identity. The compiled prerequisite moves the existing generator-normalization argument onto the corrected comparison directly. The next exact obligation is therefore the normalization compatibility equation for integralRelativeHomologyComparisonWithTransport, not an equality with the earlier package.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -9386,7 +9403,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -9403,7 +9420,10 @@
     "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), ((integralRelativeHomologyComparisonWithTransport (deletedPoint x) (k + 2)).hom ≫ (ambientLocalNormalization k x).hom = forgetIntModules.map (CoefficientChartLocal.localIso Int k x).hom) -> (integralRelativeHomologyComparisonWithTransport (deletedPoint x) (k + 2)).hom.hom (CoefficientChartLocal.generator Int k x) = HigherChartLocalGenerator.ambientLocalGenerator (k := k) x",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-corrected-generator-normalization-topo3-r1},
+    :routes-2026-10-11-manifold-corrected-generator-normalization-topo3-r1,
+    :banked-by
+    :routes-2026-10-11-manifold-corrected-generator-normalization-topo3-r1,
+    :banked-commit "a48c4f5f87ec3e1672d947697be0e28f02dda075"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-integralrelativehomologycomparisonwithtransport-generator-of-normalization,
    :kind :lemma,
