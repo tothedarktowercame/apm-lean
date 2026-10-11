@@ -4250,6 +4250,23 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git status --porcelain", :exit 0, :stdout ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791682612307-3670-6b2116e8",
+     :commands
+     ["git diff-tree recorded commit scope"
+      "git blob identity check"
+      "sha256sum promoted fixture"
+      "git diff --check recorded commit"
+      "lake env lean promoted fixture"
+      "lake env lean target module"
+      "lake build target module"
+      "placeholder and axiom scan"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped consumer placeholder census"],
+     :finding
+     "PASS: implementation commit 89ef0ad7 changes exactly ConstructionTargets/ManifoldFundamentalClass.lean and its recorded blob matches the reviewed source; promoted fixture hash d7390c74f0be0d20bc2062610097fbe3982f16a9e30915b59f834a93383a7c35 matches recorded evidence and preserves the registered frozen theorem type; coefficientSubspaceMap_eq_integralSubtypeChainMap proves by definitional reduction the exact equality from CoefficientRelativeSmall.subspaceMap Int A to the ModuleCat Int singular-chain map induced by integralSubtypeInclusion A, with the requested representation direction; the commit leaves the existing private abbreviations unchanged and asserts no cokernel projection naturality, normalization square, generator transport, or localization equality; fixture, module, and target build pass with zero source/fixture placeholders and only propext, Classical.choice, and Quot.sound; 131 statements match with zero mismatches and consumer placeholders remain t00J02=1 and t98A02=1."},
     :commit "89ef0ad768df190ef33ae7d8adcb0a2ece908aea",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -4274,7 +4291,7 @@
       "Exact chain-map equality from the coefficient-relative simplicial-functor representation to the module-valued topological singular-chain representation"}},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/coefficient-subspace-map-representation",
@@ -4421,7 +4438,7 @@
      "Expanding the normalization square reaches a prior unrecorded representation boundary. CoefficientRelativeSmall.subspaceMap is presented via the simplicial-chain functor, while integralMappedRelativeCokernelComparison is presented via singularChainComplexFunctor and hides its helper abbreviation privately. Lean does not rewrite the cokernel projection equation through that boundary automatically. The compiled theorem records their exact definitional equality, enabling the next projection-naturality proof without replacing either map or exposing private implementation names.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -6787,7 +6804,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -6804,7 +6821,10 @@
     "forall {X : Type} [TopologicalSpace X] (A : Set X), CoefficientRelativeSmall.subspaceMap Int A = (((AlgebraicTopology.singularChainComplexFunctor (ModuleCat Int)).obj (ModuleCat.of Int Int)).map (integralSubtypeInclusion A))",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-coefficient-subspace-map-equality-topo3-r1},
+    :routes-2026-10-11-manifold-coefficient-subspace-map-equality-topo3-r1,
+    :banked-by
+    :routes-2026-10-11-manifold-coefficient-subspace-map-equality-topo3-r1,
+    :banked-commit "89ef0ad768df190ef33ae7d8adcb0a2ece908aea"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-coefficientsubspacemap-eq-integralsubtypechainmap,
    :kind :lemma,
