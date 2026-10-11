@@ -8372,7 +8372,7 @@
    {:lemma
     "ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison"},
    :lemma
-   {:name
+   {:area "manifold-fundamental-class", :name
     "ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison",
     :reported-by []},
    :id
@@ -8555,7 +8555,7 @@
    {:lemma
     "ConstructionTargets.SurfaceNestedTriangleCover.finite_nested"},
    :lemma
-   {:name
+   {:area "surface-classification", :name
     "ConstructionTargets.SurfaceNestedTriangleCover.finite_nested",
     :reported-by []},
    :id
@@ -8646,7 +8646,7 @@
    {:lemma
     "ConstructionTargets.HigherChartLocalGenerator.ambientChartMap_Hn_isIso"},
    :lemma
-   {:name
+   {:area "manifold-fundamental-class", :name
     "ConstructionTargets.HigherChartLocalGenerator.ambientChartMap_Hn_isIso",
     :reported-by []},
    :id
@@ -8663,7 +8663,7 @@
    {:lemma
     "ConstructionTargets.HigherModelLocalHomology.normalization"},
    :lemma
-   {:name "ConstructionTargets.HigherModelLocalHomology.normalization",
+   {:area "manifold-fundamental-class", :name "ConstructionTargets.HigherModelLocalHomology.normalization",
     :reported-by []},
    :id
    :lemma-constructiontargets-highermodellocalhomology-normalization,
@@ -8738,7 +8738,7 @@
    {:lemma
     "ConstructionTargets.CoefficientDistinguishedNormalization.distinguished"},
    :lemma
-   {:name
+   {:area "manifold-fundamental-class", :name
     "ConstructionTargets.CoefficientDistinguishedNormalization.distinguished",
     :reported-by []},
    :id
@@ -8784,7 +8784,7 @@
    {:lemma
     "ConstructionTargets.IntegralSingularHomologyComparison.singularChainsComparison_naturality"},
    :lemma
-   {:name
+   {:area "manifold-fundamental-class", :name
     "ConstructionTargets.IntegralSingularHomologyComparison.singularChainsComparison_naturality",
     :reported-by []},
    :id
@@ -8857,7 +8857,7 @@
    :state :backlog,
    :scope [],
    :acceptance {:lemma "forgetIntModules.asEquivalence"},
-   :lemma {:name "forgetIntModules.asEquivalence", :reported-by []},
+   :lemma {:area "manifold-fundamental-class", :name "forgetIntModules.asEquivalence", :reported-by []},
    :id :lemma-forgetintmodules-asequivalence,
    :kind :lemma,
    :area "manifold-fundamental-class",
@@ -8903,7 +8903,7 @@
    {:lemma
     "ConstructionTargets.SingularHomologyConcrete.relativeSingularChainsIsoCokernelSubspaceMap"},
    :lemma
-   {:name
+   {:area "manifold-fundamental-class", :name
     "ConstructionTargets.SingularHomologyConcrete.relativeSingularChainsIsoCokernelSubspaceMap",
     :reported-by []},
    :id
@@ -8920,7 +8920,7 @@
    {:lemma
     "ConstructionTargets.SingularExcision.relativeSingularChainsIsoCokernelSubspaceMap"},
    :lemma
-   {:name
+   {:area "manifold-fundamental-class", :name
     "ConstructionTargets.SingularExcision.relativeSingularChainsIsoCokernelSubspaceMap",
     :reported-by []},
    :id
@@ -9028,7 +9028,7 @@
    {:lemma
     "ConstructionTargets.CoefficientChartLocal.generator_normalization"},
    :lemma
-   {:name
+   {:area "manifold-fundamental-class", :name
     "ConstructionTargets.CoefficientChartLocal.generator_normalization",
     :reported-by []},
    :id
@@ -9227,7 +9227,7 @@
    {:lemma
     "ConstructionTargets.SingularExcision.relativeProjection_comp_cokernelIso_hom"},
    :lemma
-   {:name
+   {:area "manifold-fundamental-class", :name
     "ConstructionTargets.SingularExcision.relativeProjection_comp_cokernelIso_hom",
     :reported-by []},
    :id
@@ -9244,7 +9244,7 @@
    {:lemma
     "ConstructionTargets.SingularHomologyConcrete.relativeProjection_comp_cokernelIso_hom"},
    :lemma
-   {:name
+   {:area "manifold-fundamental-class", :name
     "ConstructionTargets.SingularHomologyConcrete.relativeProjection_comp_cokernelIso_hom",
     :reported-by []},
    :id
@@ -9349,7 +9349,7 @@
    {:lemma
     "ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport"},
    :lemma
-   {:name
+   {:area "manifold-fundamental-class", :name
     "ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport",
     :reported-by []},
    :id
