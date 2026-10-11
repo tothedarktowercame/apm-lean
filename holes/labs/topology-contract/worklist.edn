@@ -104326,6 +104326,19 @@
       :exit 1,
       :finding
       "The initial connected-components inverse laws used rfl; corrected by exposing the point representatives and simplifying the homeomorphism inverse laws."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791702080918-4557-525c0194",
+     :commands
+     ["git show, git diff-tree, and git diff-tree --check 48f1ba0e73cd8833c7390ac5feaf9fc500e2c925"
+      "sha256sum recorded source and /tmp/klein-compatible-carrier-boundary-cycle-equiv-probe.lean"
+      "lake build ConstructionTargets.KleinCompatibleCarrierComponentBridge"
+      "lake env lean /tmp/klein-compatible-carrier-boundary-cycle-equiv-probe.lean"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped placeholder census for problems/t93J03/lean/Main.lean"],
+     :finding
+     "PASS: valid STOP after committed compiled progress; the sole changed path is the scoped bridge module, source hash be9a7acee9d3e0ee55de0dc5e07795635fad956a8344d6c8babc06acda4ba3b5 and fixture hash 27e9795c2084cf79d25410bcf238ad301a7bb361c84626e9c5aa805ce5a5b9a4 reproduce, connectedComponentsEquivOfHomeomorph compiles with standard axioms and transports points in the source-to-target direction, the fixture custom axiom is exactly the frozen Fin 4 adjacency-preserving boundary-cycle equivalence, t93J03 retains one placeholder, all 131 statements match, and the punctured-boundary classifications plus closure-incidence theorem are explicitly listed"},
     :commit "48f1ba0e73cd8833c7390ac5feaf9fc500e2c925",
     :changed-paths
     ["ConstructionTargets/KleinCompatibleCarrierComponentBridge.lean"],
@@ -104337,7 +104350,7 @@
      :status :self-axiomatized},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/KleinCompatibleCarrierComponentBridge.lean"],
    :dag-node
@@ -104474,7 +104487,7 @@
       "27e9795c2084cf79d25410bcf238ad301a7bb361c84626e9c5aa805ce5a5b9a4"},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-aabb-square-polygon-presentation-equivalence",
@@ -112609,7 +112622,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "compatibleCarrierHomeomorphInducesBoundaryCycleEquiv",
@@ -112622,7 +112635,10 @@
      :routes-2026-10-11-compatible-carrier-boundary-cycle-equiv-107],
     :type
     "Every homeomorphism h : Disk ≃ₜ ClosedSquare that preserves and reflects EqvGen (SurfaceRel false 2) and EqvGen ClosedSquareRel induces e : Fin 4 ≃ Fin 4 preserving diskAdjacent and squareAdjacent.",
-    :area "polygon-quotient-identification"},
+    :area "polygon-quotient-identification",
+    :banked-by
+    :routes-2026-10-11-compatible-carrier-boundary-cycle-equiv-107,
+    :banked-commit "48f1ba0e73cd8833c7390ac5feaf9fc500e2c925"},
    :id :lemma-compatiblecarrierhomeomorphinducesboundarycycleequiv,
    :kind :lemma,
    :depends-on
@@ -112654,11 +112670,15 @@
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance {:lemma "connectedComponentsEquivOfHomeomorph"},
    :lemma
-   {:name "connectedComponentsEquivOfHomeomorph", :reported-by []},
+   {:name "connectedComponentsEquivOfHomeomorph",
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/KleinCompatibleCarrierComponentBridge.lean"]},
    :id :lemma-connectedcomponentsequivofhomeomorph,
    :kind :lemma,
    :depends-on [],
