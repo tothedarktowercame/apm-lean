@@ -13226,6 +13226,21 @@
      "That morphism followed by inverse absolute mapHomologyIso, targeting homology of the forgotten puncture complex",
      :direction
      "Exact definitional equality from the named transported connecting arrow to the forgotten connecting map followed by target homology-preservation transport"},
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791716326543-5172-c19801bd",
+     :commands
+     ["git diff-tree --no-commit-id --name-status -r 1881aad975dae19f220fe8e433f3b17ba575b806"
+      "git diff --check 1881aad975dae19f220fe8e433f3b17ba575b806^ 1881aad975dae19f220fe8e433f3b17ba575b806"
+      "sha256sum /tmp/manifold_fundamental_class_coefficient_open_disk_connecting_transport.lean ConstructionTargets/ManifoldFundamentalClass.lean"
+      "lake env lean fixture-body-with-promoted-names-renamed"
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean"
+      "python3 scripts/statement-registry.py check"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"
+      "comment-stripped placeholder counts for t00J02 t98A02"],
+     :finding
+     "PASS: commit 1881aad975dae19f220fe8e433f3b17ba575b806 has exact one-file scope and matching recorded blob; fixture SHA-256 and module SHA-256 reproduce; the promoted definition and theorem faithfully state the forgotten coefficient connecting map followed by inverse puncture mapHomologyIso in the required forward orientation, with definitional proof and no crossing into later short-complex or sign comparisons; fixture body, module, registry, and 8326-job build pass; axioms are exactly propext, Classical.choice, and Quot.sound; target placeholders are zero and consumer counts remain 1/1."},
     :commit "1881aad975dae19f220fe8e433f3b17ba575b806",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -13244,7 +13259,7 @@
     :routes-2026-10-11-manifold-coefficient-open-disk-connecting-transport-topo3-r1,
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/integral-open-disk-connecting-naturality/coefficient-connecting-transport",
@@ -13455,7 +13470,7 @@
      "The direct connecting-preservation equation is well typed but neither rfl nor extensionality closes it: the original coefficient delta and the reconstructed delta after forgetting use distinct short-exact witnesses. The compiled prerequisite names the transported left side exactly. The next theorem must prove its equality with the inverse relative mapHomologyIso followed by the forgotten sequence delta using preservation of the snake-lemma connecting morphism.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
