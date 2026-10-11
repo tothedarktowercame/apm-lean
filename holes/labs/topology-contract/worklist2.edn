@@ -68563,6 +68563,18 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git status --short", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791683458318-3709-8e01cf65",
+     :commands
+     ["git show/diff-tree --check 79bd6c2"
+      "fixture SHA-256 and recorded blob verification"
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean"
+      "lake env lean /tmp/t02a03_core_polar_polynomial_avoidance_probe.lean"
+      "statement registry fingerprint/check and placeholder/worklist EDN checks"],
+     :finding
+     "Recorded commit has the exact one-file scope and matching fixture/blob hashes. The module and frozen probe compile with only the expected standard axioms. The theorem applies the necessary collision equation contrapositively in the frozen direction: a nonzero polynomial contradicts hypothetical left-core membership of the right-core polar reconstruction. It adds no placeholder and does not establish polynomial nonvanishing for any particular path."},
     :commit "79bd6c245153d9f6f6fd1cf38680bb7ef9fec26b",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
@@ -68578,7 +68590,7 @@
    :phase :implementation,
    :type
    "forall (u : Circle) (n : Complex), ((1 - n.re)^2 - 4*(1 - n.re)*(u : Complex).re + 3 != 0) -> rightTubeCorePolarReconstruction u n ∉ Set.range apm_t02a03_leftCore",
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/collision-polynomial-implies-left-core-avoidance",
@@ -68681,7 +68693,7 @@
      "The renamed compiled theorem is the direct contrapositive of corePolar_leftCore_collision_equation: nonvanishing of the scalar collision polynomial rules out membership in the frozen left-core range. Its distinguishing phrase now precedes the shared reconstruction wording, avoiding the prior DAG-id collision.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
