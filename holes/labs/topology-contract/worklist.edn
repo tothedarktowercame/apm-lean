@@ -101819,6 +101819,21 @@
       :exit 0}
      {:cmd "test -z \"$(git status --porcelain)\"", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791679229117-3508-c86fc032",
+     :commands
+     ["git show and git diff-tree on recorded commit 531f1c513fa7be91d64c1714731a4871418dbe2d"
+      "git diff --exit-code recorded commit against source checkout"
+      "SHA-256 and comment-stripped placeholder recomputation for source and fixture"
+      "lake build ConstructionTargets.PolygonBoundaryDecoderVertices"
+      "lake env lean /tmp/polygon-boundary-decoder-vertices.lean"
+      "lake env lean /dev/stdin with fresh axiom checks"
+      "python3 scripts/statement-registry.py check"
+      "git diff-tree --check recorded parent and commit"],
+     :finding
+     "Recorded one-file commit is authored by topo-2; source equals the recorded blob and recomputed implementation and fixture hashes match; all three nested source-loop endpoints equal one common decoder vertex, and both endpoints of every N3 and torus-crosscap edge, including both orientations of reversed edges 2 and 3, equal that vertex; both frozen endpoint theorem types compile with only standard axioms, placeholder counts are zero, the registry reports 131 matched and 0 mismatched, and no out-of-scope total decoder or presentation-independence result was added."},
     :commit "531f1c513fa7be91d64c1714731a4871418dbe2d",
     :changed-paths
     ["ConstructionTargets/PolygonBoundaryDecoderVertices.lean"],
@@ -101833,7 +101848,7 @@
      "Defined the common decoder vertex, proved the zero and one endpoints of all three nested source loops equal it, and proved both endpoints of every N3 and torus-crosscap decoded edge equal it."},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/PolygonBoundaryDecoderVertices.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/boundary-decoder-vertices",
@@ -101974,7 +101989,7 @@
       "All zero and one endpoints of all six edges map under both specialized decoder tables to one common ThreeEndpointLoops wedge vertex."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -105951,7 +105966,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "PolygonBoundaryDecoderVertices.n3EdgeDecode_endpoints",
@@ -105965,8 +105980,9 @@
     :type
     "For every one of the six edges, both endpoint parameters map under n3EdgeDecode to the common ThreeEndpointLoops wedge vertex.",
     :area "polygon-surface-open-cover",
-    :proved-in
-    :routes-2026-10-11-polygon-boundary-decoder-vertices-71},
+    :proved-in :routes-2026-10-11-polygon-boundary-decoder-vertices-71,
+    :banked-by :routes-2026-10-11-polygon-boundary-decoder-vertices-71,
+    :banked-commit "531f1c513fa7be91d64c1714731a4871418dbe2d"},
    :id :lemma-polygonboundarydecodervertices-n3edgedecode-endpoints,
    :kind :lemma,
    :depends-on
@@ -105974,7 +105990,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -105990,8 +106006,9 @@
     :type
     "For every one of the six edges, both endpoint parameters map under torusCrosscapEdgeDecode to the common ThreeEndpointLoops wedge vertex.",
     :area "polygon-surface-open-cover",
-    :proved-in
-    :routes-2026-10-11-polygon-boundary-decoder-vertices-71},
+    :proved-in :routes-2026-10-11-polygon-boundary-decoder-vertices-71,
+    :banked-by :routes-2026-10-11-polygon-boundary-decoder-vertices-71,
+    :banked-commit "531f1c513fa7be91d64c1714731a4871418dbe2d"},
    :id
    :lemma-polygonboundarydecodervertices-toruscrosscapedgedecode-endpoints,
    :kind :lemma,
