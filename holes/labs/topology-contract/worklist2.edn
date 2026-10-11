@@ -71304,52 +71304,74 @@
    "single-consumer ambient reconstruction adapter from a coupled angular path",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:residual
-     "Implement the ambient reconstruction adapter; then construct the continuous coupled angular coordinate itself and assemble it with the nonzero-height stage.",
-     :outcome :go,
-     :warnings [],
-     :axioms [propext Classical.choice Quot.sound],
-     :commands
-     [{:cmd
-       "lake env lean /tmp/t02a03_zero_height_ambient_from_angular_probe.lean",
-       :exit 0,
-       :output
-       "zeroHeightAmbientDetour_of_coupledAngular compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "sha256sum /tmp/t02a03_zero_height_ambient_from_angular_probe.lean",
-       :exit 0,
-       :output
-       "97f31e12c8e778bd2327e4bbd304dab74fa5ea9184f264d81d2d6476c12c2325  /tmp/t02a03_zero_height_ambient_from_angular_probe.lean"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_zero_height_ambient_from_angular_probe.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}
-      {:cmd
-       "rg -n 'zeroHeightAmbientDetour_of_coupledAngular' /tmp/t02a03_zero_height_ambient_from_angular_probe.lean",
-       :exit 0,
-       :output
-       "7:theorem zeroHeightAmbientDetour_of_coupledAngular\n52:#print axioms zeroHeightAmbientDetour_of_coupledAngular"}],
-     :fixture
-     {:path "/tmp/t02a03_zero_height_ambient_from_angular_probe.lean",
-      :sha256
-      "97f31e12c8e778bd2327e4bbd304dab74fa5ea9184f264d81d2d6476c12c2325"},
-     :finding
-     "The placeholder-free fixture packages any continuous coupled angular map with the required endpoint values into a continuous ambient core-polar detour. It proves both ambient endpoints and, on zero-height inputs, right-tube membership and left-core avoidance.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
-      :declaration
-      "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightAmbientDetour_of_coupledAngular",
-      :type
-      "forall (A : C(unitInterval × RightTubeMinusLeftCore, Circle)), (forall p, A (0,p)=1) -> (forall p, A (1,p)=rightTubeCoreAngularCoordinate p) -> exists H : C(unitInterval × RightTubeMinusLeftCore, apm_t02a03_E3), (forall p, H (0,p)=apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)) ∧ (forall p, H (1,p)=p.1) ∧ (forall tp, tp.2.1 2=0 -> H tp ∈ apm_t02a03_rightTube) ∧ (forall tp, tp.2.1 2=0 -> H tp ∉ Set.range apm_t02a03_leftCore)"},
-     :seat "topo-8"}},
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Construct the continuous coupled angular coordinate itself, with value 1 at time zero and rightTubeCoreAngularCoordinate p at time one, in a form compatible with the nonzero-height radial stage; then assemble the full deformation.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["Pre-existing unnecessarySimpa linter warning at ConstructionTargets/T02A03GeometricTubeDeformation.lean:62:6."
+     "The canonical .lake/packages symlink invariant check failed because this checkout has a real package directory."],
+    :missing-theorems [],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not",
+     :construction-file-git-blob
+     "0a75f2e20b88ca8a6742b4610750de7730000f70",
+     :fixture-sha256
+     "97f31e12c8e778bd2327e4bbd304dab74fa5ea9184f264d81d2d6476c12c2325"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/t02a03_zero_height_ambient_from_angular_probe.lean",
+      :exit 0,
+      :output
+      "97f31e12c8e778bd2327e4bbd304dab74fa5ea9184f264d81d2d6476c12c2325  /tmp/t02a03_zero_height_ambient_from_angular_probe.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/t02a03_zero_height_ambient_from_angular_probe.lean",
+      :exit 0,
+      :output
+      "zeroHeightAmbientDetour_of_coupledAngular axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "git diff --check -- ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd
+      "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "git show --format= --unified=0 HEAD -- ConstructionTargets/T02A03GeometricTubeDeformation.lean | rg '^\\+.*(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' --pcre2",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git show --check --oneline HEAD",
+      :exit 0,
+      :output "1fe3e8fb8 Add t02A03 ambient detour adapter"}
+     {:cmd "git status --porcelain", :exit 0}],
+    :diagnostic-history
+    [{:cmd
+      "test -L .lake/packages && test \"$(readlink -f .lake/packages)\" = /home/joe/code/apm-lean/.lake/packages",
+      :exit 1,
+      :explanation
+      ".lake/packages is a real directory rather than the required canonical symlink; no package state was modified and compilation succeeded on the existing substrate."}],
+    :commit "1fe3e8fb841ce9238ea5d8c780c09e7e47d5dfe0",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+    :fixture
+    {:path "/tmp/t02a03_zero_height_ambient_from_angular_probe.lean",
+     :sha256
+     "97f31e12c8e778bd2327e4bbd304dab74fa5ea9184f264d81d2d6476c12c2325"},
+    :finding
+    "Any continuous coupled angular map with the two required endpoint values now yields a continuous ambient core-polar detour with the exact ambient endpoints and, for zero-height inputs, right-tube membership and left-core avoidance.",
+    :seat "topo-6"},
    :phase :implementation,
    :type
    "forall (A : C(unitInterval × RightTubeMinusLeftCore, Circle)), (forall p, A (0,p)=1) -> (forall p, A (1,p)=rightTubeCoreAngularCoordinate p) -> exists H : C(unitInterval × RightTubeMinusLeftCore, apm_t02a03_E3), (forall p, H (0,p)=apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)) ∧ (forall p, H (1,p)=p.1) ∧ (forall tp, tp.2.1 2=0 -> H tp ∈ apm_t02a03_rightTube) ∧ (forall tp, tp.2.1 2=0 -> H tp ∉ Set.range apm_t02a03_leftCore)",
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/zero-height-ambient-detour-from-angular",
