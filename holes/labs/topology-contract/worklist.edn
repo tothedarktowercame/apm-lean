@@ -105870,7 +105870,7 @@
   {:bounded-exception
    "This single-consumer theorem is the remaining ready direct dependency of the plane-orbit quotient Hausdorff lemma.",
    :consumer :t93J03,
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-kleinplaneorbitquotient-sameorbit-isclosed,
@@ -105878,12 +105878,15 @@
    {:placeholder-delta
     {:source-before 0, :source-after 0, :fixture-sorry 0},
     :residual
-    "Repair the canonical .lake/packages authority link through the workspace lifecycle, then prove SameOrbit closed from the even/odd integer-coordinate normal form and run every acceptance gate.",
+    "Repair .lake/packages through the canonical workspace lifecycle; then implement the even/odd integer-coordinate characterization of SameOrbit, prove both branches closed, and run all Lake gates.",
     :outcome :stop,
     :warnings
     [{:kind :lean-workspace-invalid,
       :message
-      ".lake/packages is a real directory, so no Lake command was run."}],
+      ".lake/packages remains a real directory; no Lake command was run."}
+     {:kind :dirty-worktree,
+      :message
+      "Unrelated tracked modification ConstructionTargets/ManifoldFundamentalClass.lean was not touched."}],
     :missing-theorems
     [{:name "KleinPlaneOrbitQuotient.sameOrbit_isClosed",
       :type "IsClosed {pq : (ℝ × ℝ) × (ℝ × ℝ) | SameOrbit pq.1 pq.2}",
@@ -105899,37 +105902,27 @@
     :axioms [],
     :author "topo-2",
     :reason
-    "Lean verification is prohibited in this checkout: .lake/packages is a real directory, while workspace policy requires it to be a symlink to /home/joe/code/apm-lean/.lake/packages canonical authority before any Lake command. The sameOrbit closedness proof cannot be safely implemented or checked until the canonical workspace lifecycle repairs that link.",
+    "The same workspace invariant still blocks implementation: .lake/packages is a real directory, not the required symlink to the canonical APM package authority. Workspace policy prohibits Lake commands until the canonical lifecycle repairs it, so the requested theorem cannot be safely implemented or verified in this checkout.",
     :commands
-    [{:cmd "sha256sum /tmp/klein-plane-same-orbit-closed-probe.lean",
-      :exit 0,
-      :finding "Fixture hash matches the frozen hash."}
-     {:cmd "ls -ld .lake/packages",
+    [{:cmd "ls -ld .lake/packages",
       :exit 0,
       :finding ".lake/packages is drwxrwxr-x, not a symbolic link."}
+     {:cmd
+      "sha256sum /tmp/klein-plane-same-orbit-closed-probe.lean ConstructionTargets/KleinPlaneOrbitQuotientTopology.lean",
+      :exit 0,
+      :finding "Fixture and scoped source hashes are unchanged."}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
-     {:cmd "git status --short",
-      :exit 0,
-      :finding
-      "Worktree is clean after removing the unverified exploratory edit."}
      {:cmd "python3 comment-stripped placeholder scan",
       :exit 0,
       :finding
-      "The scoped source contains zero sorry, admit, or axiom tokens."}],
-    :diagnostic-history
-    [{:cmd
-      "test -L .lake/packages && readlink -f .lake/packages && lake env lean ConstructionTargets/KleinPlaneOrbitQuotientTopology.lean",
-      :exit 1,
-      :finding
-      "The mandatory symlink precheck failed before Lake was invoked."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1791705957732-4707-bfee6cb6",
-     :finding
-     "extend Mathlib: state and prove the missing theorem in scope"},
+      "The scoped source contains zero sorry, admit, or axiom tokens."}
+     {:cmd
+      "git diff --quiet -- ConstructionTargets/KleinPlaneOrbitQuotientTopology.lean",
+      :exit 0,
+      :finding "The scoped source is unchanged."}],
+    :diagnostic-history [],
     :changed-paths [],
     :fixture
     {:path "/tmp/klein-plane-same-orbit-closed-probe.lean",
@@ -105938,7 +105931,7 @@
      :status :unverified-workspace-invalid},
     :seat "topo-2"},
    :phase :implementation,
-   :state :repair,
+   :state :needs-owner,
    :scope ["ConstructionTargets/KleinPlaneOrbitQuotientTopology.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t93J03/klein-plane-same-orbit-closed",
    :acceptance
