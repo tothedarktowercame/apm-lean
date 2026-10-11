@@ -79344,11 +79344,23 @@
       :exit 1,
       :finding
       "Proved scalar action componentwise by biproduct extensionality."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791746718199-5813-4b727b66",
+     :commands
+     ["git show/diff/check 2f947655"
+      "lake env lean ConstructionTargets/t97A04Closure.lean"
+      "lake env lean problems/t97A04/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "fingerprint, placeholder, ancestry, fixture checks"],
+     :finding
+     "PASS: 2f947655 is new after history 25062c7b; its sole changed path is scoped and closure/blueprint blobs match. Biproduct extensionality proves K then overlapScalar a = scalar a then K on both projections; rewriting the transported naturality square has the correct B7 orientation. Lean gates pass with only propext, Classical.choice, Quot.sound; registry 131/0; frozen hash ca1b2cb3c6594276811618321d5c0604c2f38fc4594a6b21ae161a711a923a34 unchanged; closure/Main placeholders 0/2. This is new compiled program progress; identifying K as monic, cancellation, then B8-B11 remain listed."},
     :commit "2f947655861eac141828e5fb9b5eb7cca4e74de6",
     :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79471,6 +79483,9 @@
      :reason :program-progress-committed}
     {:job 7,
      :commit "25062c7ba289215ae417cb5f24fb5cc16219db97",
+     :reason :program-progress-committed}
+    {:job 8,
+     :commit "2f947655861eac141828e5fb9b5eb7cca4e74de6",
      :reason :program-progress-committed}]}
   {:consumer :t96A07,
    :stop-count 3,
@@ -80642,7 +80657,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -80654,7 +80669,9 @@
     :reported-by [:program-2026-10-11-close-t97a04],
     :type "K≫overlapScalar a=(a·id)≫K",
     :area "mv-connecting-naturality",
-    :proved-in :program-2026-10-11-close-t97a04},
+    :proved-in :program-2026-10-11-close-t97a04,
+    :banked-by :program-2026-10-11-close-t97a04,
+    :banked-commit "2f947655861eac141828e5fb9b5eb7cca4e74de6"},
    :id
    :lemma-constructiontargets-t97a04closure-frozenconnectingcoordinate-comp-overlapscalar,
    :kind :lemma,
@@ -80663,7 +80680,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -80675,7 +80692,9 @@
     :reported-by [:program-2026-10-11-close-t97a04],
     :type "H2-coordinate shear≫K=(a·id)≫K",
     :area "mv-connecting-naturality",
-    :proved-in :program-2026-10-11-close-t97a04},
+    :proved-in :program-2026-10-11-close-t97a04,
+    :banked-by :program-2026-10-11-close-t97a04,
+    :banked-commit "2f947655861eac141828e5fb9b5eb7cca4e74de6"},
    :id
    :lemma-constructiontargets-t97a04closure-sheary-frozenconnectingcoordinate-scalar,
    :kind :lemma,
