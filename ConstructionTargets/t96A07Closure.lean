@@ -88,9 +88,21 @@ theorem sphereMapAmbient_fderiv (p v : E 3) :
   ext i
   fin_cases i <;> simp [sphereMapAmbientDerivative, mul_comm]
 
+/-- The ambient representative of the first coordinate point of the sphere. -/
+def sphereFirstAxis : E 3 := WithLp.toLp 2 ![1, 0, 0]
+
+/-- At the first coordinate point the ambient derivative swaps the two free
+tangent coordinates and has zero first coordinate. -/
+theorem sphereMapAmbientDerivative_firstAxis (v : E 3) :
+    sphereMapAmbientDerivative sphereFirstAxis v =
+      WithLp.toLp 2 ![0, v 2, v 1] := by
+  ext i
+  fin_cases i <;> simp [sphereMapAmbientDerivative, sphereFirstAxis]
+
 #print axioms crossTermSphereMap_antipodal
 #print axioms crossTermSphereMap_contMDiff
 #print axioms crossTermSphereMap_descends
 #print axioms sphereMapAmbient_fderiv
+#print axioms sphereMapAmbientDerivative_firstAxis
 
 end ConstructionTargets.T96A07Closure
