@@ -16326,90 +16326,87 @@
    "Repeat the transported-cone and cone-isomorphism construction for τ₂ and τ₃, combine the three witnesses with ShortComplex.isLimitOfIsLimitπ, then construct the dual cokernel witnesses and package the mapped SnakeInput.",
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
+   :implements-lemma :lemma-mfclass-forget-snake-kernel-tau2-islimit,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/manifold-fundamental-class/kernel-tau2",
+   :acceptance
+   {:declaration
+    "ConstructionTargets.ManifoldFundamentalClass.forgetSnakeKernelτ₂Limit",
+    :type
+    "∀ S : ShortComplex.SnakeInput (ModuleCat ℤ), ForgottenSnakeKernelτ₂Limit S",
+    :fixture "/tmp/k2.lean",
+    :fixture-sha256
+    "b34989a980302ae1d77142bccf58ec7033c5967c5a2870f04228706ce044f7e2",
+    :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
+    :route-step "mapped τ₂ kernel IsLimit",
+    :implementation "Promote fixture only; exclude later components."},
+   :id
+   :routes-2026-10-11-manifold-forget-snake-kernel-tau2-islimit-topo3-r1,
+   :kind :reusable-theorem,
+   :area "manifold-fundamental-class",
+   :depends-on
+   [:routes-2026-10-11-manifold-forget-snake-kernel-tau1-islimit-topo3-r1],
+   :current-residual "Build τ₃ and cokernels.",
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-closedorientedfundamentalclass,
    :evidence
    {:probe
-    {:residual
-     "Promote the exact τ₁ IsLimit witness, then repeat the uniform transported-cone comparison for τ₂ and τ₃ and construct the dual cokernel witnesses before packaging the mapped SnakeInput.",
-     :outcome :revise,
-     :warnings [],
+    {:outcome :revise,
+     :seat "topo-12",
+     :fixture
+     {:path "/tmp/k2.lean",
+      :sha256
+      "b34989a980302ae1d77142bccf58ec7033c5967c5a2870f04228706ce044f7e2"},
+     :commands [{:cmd "lake env lean /tmp/k2.lean", :exit 0}],
      :missing-theorems
-     [{:id :lemma-mfclass-forget-snake-kernel-tau1-islimit,
+     [{:id :lemma-mfclass-forget-snake-kernel-tau2-islimit,
        :name
-       "ConstructionTargets.ManifoldFundamentalClass.forgetIntModulesSnakeInput_kernelτ₁IsLimit",
+       "ConstructionTargets.ManifoldFundamentalClass.forgetSnakeKernelτ₂Limit",
        :type
-       "forall (S : ShortComplex.SnakeInput (ModuleCat ℤ)), IsLimit ((KernelFork.ofι (forgetIntModules.mapShortComplex.map S.v₀₁) (forgetIntModulesSnakeInput_zero_squares S).1).map ShortComplex.π₁)",
+       "∀ S : ShortComplex.SnakeInput (ModuleCat ℤ), ForgottenSnakeKernelτ₂Limit S",
        :status :proved,
        :consumers [:t00J02 :t98A02],
        :depends-on
-       ["ConstructionTargets.ManifoldFundamentalClass.forgetIntModulesSnakeInput_kernelτ₁ConeIso"],
+       ["ConstructionTargets.ManifoldFundamentalClass.forgetIntModulesSnakeInput_kernelτ₁IsLimit"],
        :area "manifold-fundamental-class"}],
      :prerequisite
      {:consumer :t00J02,
       :implements-lemma
-      :lemma-mfclass-forget-snake-kernel-tau1-islimit,
+      :lemma-mfclass-forget-snake-kernel-tau2-islimit,
       :phase :implementation,
       :state :open,
       :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/manifold-fundamental-class/integral-open-disk-connecting-naturality/snake-input-kernel-tau1-islimit",
+      "TOPOLOGY-ROUTES.md/manifold-fundamental-class/kernel-tau2",
       :acceptance
-      {:implementation
-       "Promote the exact fixture definition. Transfer forgetIntModulesSnakeInput_transportedKernelτ₁ across forgetIntModulesSnakeInput_kernelτ₁ConeIso using IsLimit.equivIsoLimit, producing the τ₁ component witness consumed by ShortComplex.isLimitOfIsLimitπ. Do not package the τ₂ or τ₃ kernel components, construct the cokernel components or mapped SnakeInput, assemble SnakeInput.Hom, prove connecting preservation, rewrite the raw production square, prove radial or sphere compatibility, exclude negation, select a sign, or construct a fundamental class.",
-       :declaration
-       "ConstructionTargets.ManifoldFundamentalClass.forgetIntModulesSnakeInput_kernelτ₁IsLimit",
+      {:declaration
+       "ConstructionTargets.ManifoldFundamentalClass.forgetSnakeKernelτ₂Limit",
        :type
-       "forall (S : ShortComplex.SnakeInput (ModuleCat ℤ)), IsLimit ((KernelFork.ofι (forgetIntModules.mapShortComplex.map S.v₀₁) (forgetIntModulesSnakeInput_zero_squares S).1).map ShortComplex.π₁)",
-       :fixture
-       "/tmp/manifold_fundamental_class_forget_snake_kernel_tau1_islimit.lean",
+       "∀ S : ShortComplex.SnakeInput (ModuleCat ℤ), ForgottenSnakeKernelτ₂Limit S",
+       :fixture "/tmp/k2.lean",
        :fixture-sha256
-       "7f7c318a04eef0c23a7480b31ddaef46c24180c3c30732975263e3d36973d398",
+       "b34989a980302ae1d77142bccf58ec7033c5967c5a2870f04228706ce044f7e2",
        :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
-       :route-step
-       "transfer the transported first component kernel limit across the banked cone isomorphism to obtain the evaluated mapped-fork IsLimit witness"},
+       :route-step "mapped τ₂ kernel IsLimit",
+       :implementation
+       "Promote fixture only; exclude later components."},
       :id
-      :routes-2026-10-11-manifold-forget-snake-kernel-tau1-islimit-topo3-r1,
+      :routes-2026-10-11-manifold-forget-snake-kernel-tau2-islimit-topo3-r1,
       :kind :reusable-theorem,
       :area "manifold-fundamental-class",
       :depends-on
-      [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
-       :routes-2026-10-11-manifold-forget-snake-kernel-tau1-cone-iso-topo3-r1],
-      :current-residual
-      "Repeat the transported-cone and cone-isomorphism construction for τ₂ and τ₃, combine the three witnesses with ShortComplex.isLimitOfIsLimitπ, then construct the dual cokernel witnesses and package the mapped SnakeInput.",
+      [:routes-2026-10-11-manifold-forget-snake-kernel-tau1-islimit-topo3-r1],
+      :current-residual "Build τ₃ and cokernels.",
       :other-consumers [:t98A02]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd
-       "lake env lean /tmp/manifold_fundamental_class_forget_snake_kernel_tau1_islimit.lean",
-       :exit 0,
-       :output
-       "forgetIntModulesSnakeInput_kernelτ₁IsLimit compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "sha256sum /tmp/manifold_fundamental_class_forget_snake_kernel_tau1_islimit.lean",
-       :exit 0,
-       :output
-       "7f7c318a04eef0c23a7480b31ddaef46c24180c3c30732975263e3d36973d398  /tmp/manifold_fundamental_class_forget_snake_kernel_tau1_islimit.lean"}
-      {:cmd
-       "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/manifold_fundamental_class_forget_snake_kernel_tau1_islimit.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}
-      {:cmd
-       "test -r TOPOLOGY-ROUTES.md -a -r holes/labs/topology-routes/routes-1.md -a -r holes/labs/topology-routes/routes-2.md -a -r holes/labs/topology-routes/routes-3.md",
-       :exit 0}],
-     :fixture
-     {:path
-      "/tmp/manifold_fundamental_class_forget_snake_kernel_tau1_islimit.lean",
-      :sha256
-      "7f7c318a04eef0c23a7480b31ddaef46c24180c3c30732975263e3d36973d398"},
-     :finding
-     "The compiled definition transfers the transported τ₁ limit across the banked cone isomorphism with IsLimit.equivIsoLimit. It has exactly the evaluated mapped-fork type required as one input to ShortComplex.isLimitOfIsLimitπ; τ₂ and τ₃ and the dual cokernel components remain.",
-     :seat "topo-12"}},
+     :residual "Promote τ₂; build τ₃/cokernels."}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -16514,7 +16511,8 @@
     :routes-2026-10-11-manifold-forget-parallel-pair-zero-iso-topo3-r1
     :routes-2026-10-11-manifold-forget-snake-transported-kernel-tau1-topo3-r1
     :routes-2026-10-11-manifold-forget-snake-kernel-tau1-cone-iso-topo3-r1
-    :routes-2026-10-11-manifold-forget-snake-kernel-tau1-islimit-topo3-r1],
+    :routes-2026-10-11-manifold-forget-snake-kernel-tau1-islimit-topo3-r1
+    :routes-2026-10-11-manifold-forget-snake-kernel-tau2-islimit-topo3-r1],
    :current-residual
    "Local-degree counts and wild-ball complement homology remain.",
    :other-consumers [:t98A02]}
@@ -23515,7 +23513,29 @@
    :id :lemma-forgetintmodulessnakeinput-kernel-coneiso,
    :kind :lemma,
    :depends-on [],
-   :other-consumers []}],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFundamentalClass.forgetSnakeKernelτ₂Limit",
+    :type
+    "∀ S : ShortComplex.SnakeInput (ModuleCat ℤ), ForgottenSnakeKernelτ₂Limit S"},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFundamentalClass.forgetSnakeKernelτ₂Limit",
+    :reported-by
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    :type
+    "∀ S : ShortComplex.SnakeInput (ModuleCat ℤ), ForgottenSnakeKernelτ₂Limit S",
+    :area "manifold-fundamental-class",
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+   :id :lemma-mfclass-forget-snake-kernel-tau2-islimit,
+   :kind :lemma,
+   :depends-on [:lemma-mfclass-forget-snake-kernel-tau1-islimit],
+   :other-consumers [:t98A02]}],
  :consumer-baselines {},
  :statuses
  #{:open
