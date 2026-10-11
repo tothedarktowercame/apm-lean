@@ -4890,6 +4890,23 @@
       :expected-exit 1}
      {:cmd "git status --porcelain", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791684406723-3748-2dde74b8",
+     :commands
+     ["git diff-tree recorded commit scope"
+      "git blob identity check"
+      "sha256sum promoted fixture"
+      "git diff --check recorded commit"
+      "lake env lean promoted fixture"
+      "lake env lean target module"
+      "lake build target module"
+      "placeholder and axiom scan"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped consumer placeholder census"],
+     :finding
+     "PASS: implementation commit 035774a3 changes exactly ConstructionTargets/ManifoldFundamentalClass.lean and its recorded blob matches the reviewed source; promoted fixture hash a341585eb9b1a1e73f66d463c05ccfe664ee068eb208ef1a8e1bcee8ed0584a7 matches recorded evidence and preserves the registered frozen theorem type; integralCompositeCokernelComparison_projection has the required direction from the forgotten coefficient projection followed successively by forgetIntegralRelativeCokernelComparison, coefficientIntegralCokernelTransport, and integralMappedRelativeCokernelComparison to singularChainsComparison followed by the production direct-cokernel projection; the proof reassociates in the direction required by the right-associated term and applies the three reviewed projection equations in order, without rewriting an indexed witness; it does not pass through relativeSingularChainsIsoCokernelSubspaceMap, alter integralRelativeChainsComparison, apply homology, or claim normalization, generator transport, or localization equality; fixture, module, and 8326-job target build pass with zero source/fixture placeholders and only propext, Classical.choice, and Quot.sound; 131 statements match with zero mismatches and consumer placeholders remain t00J02=1 and t98A02=1."},
     :commit "035774a35bdea017e8fa3e3afd5b70f082d17174",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -4913,7 +4930,7 @@
       "Exact chain-map equality from the full forgotten coefficient direct-cokernel composite to the production additive-group direct-cokernel composite, obtained by concatenating the three reviewed projection equations"}},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/integral-composite-cokernel-projection",
@@ -5074,7 +5091,7 @@
      "The three independently reviewed projection equations now concatenate without rewriting any indexed cokernel witness. The compiled theorem gives the complete absolute-to-direct-relative commuting square for the corrected composite containing coefficientIntegralCokernelTransport. The remaining categorical boundary is the production presentation of RelativeSingularChains as the cokernel of singularSubspaceMap; after its projection equation is recorded, the comparison can be taken to homology and evaluated along the normalization maps.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -7564,7 +7581,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -7581,7 +7598,10 @@
     "forall {X : Type} [TopologicalSpace X] (A : Set X), (forgetIntModules.mapHomologicalComplex (ComplexShape.down Nat)).map (cokernel.π (CoefficientRelativeSmall.subspaceMap Int A)) ≫ (forgetIntegralRelativeCokernelComparison A).hom ≫ (coefficientIntegralCokernelTransport A).hom ≫ (integralMappedRelativeCokernelComparison A).hom = (singularChainsComparison (TopCat.of X)).hom ≫ cokernel.π (singularSubspaceMap A)",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-integral-composite-cokernel-projection-topo3-r1},
+    :routes-2026-10-11-manifold-integral-composite-cokernel-projection-topo3-r1,
+    :banked-by
+    :routes-2026-10-11-manifold-integral-composite-cokernel-projection-topo3-r1,
+    :banked-commit "035774a35bdea017e8fa3e3afd5b70f082d17174"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-integralcompositecokernelcomparison-projection,
    :kind :lemma,
