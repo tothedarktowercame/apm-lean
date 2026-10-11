@@ -16495,6 +16495,35 @@
    :current-residual "Combine kernels; build cokernels.",
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
+   :implements-lemma :lemma-mfclass-sc-pair-pi1-iso,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/manifold-fundamental-class/kernel-pi1",
+   :acceptance
+   {:declaration
+    "ConstructionTargets.ManifoldFundamentalClass.scPairZeroπ₁Iso",
+    :type "∀ f : X ⟶ Y, ParallelPairZeroπ₁Comparison f",
+    :fixture "/tmp/p1.lean",
+    :fixture-sha256
+    "5a042f5b3cff13b6012319eb5ba566fcf7ba61094a0671db349f72ec95b7c44c",
+    :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
+    :route-step "compare π₁ diagrams",
+    :implementation
+    "Promote only; exclude transport and other components."},
+   :representation
+   {:source "parallelPair f 0 ⋙ π₁",
+    :target "parallelPair f.τ₁ 0",
+    :direction "Natural isomorphism source-to-target."},
+   :id :routes-2026-10-11-mfclass-sc-pair-pi1-r1,
+   :kind :representation-comparison,
+   :area "manifold-fundamental-class",
+   :depends-on
+   [:routes-2026-10-11-manifold-forget-snake-kernel-tau3-islimit-topo3-r1],
+   :current-residual "Transport π₁; compare π₂/π₃.",
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-closedorientedfundamentalclass,
    :evidence
@@ -16502,54 +16531,54 @@
     {:outcome :revise,
      :seat "topo-12",
      :fixture
-     {:path "/tmp/k3.lean",
+     {:path "/tmp/p1.lean",
       :sha256
-      "3f4a0a595a38e2f017c0d0b4437785c5298b92df1c47e10e63ac420306164522"},
-     :commands [{:cmd "lake env lean /tmp/k3.lean", :exit 0}],
+      "5a042f5b3cff13b6012319eb5ba566fcf7ba61094a0671db349f72ec95b7c44c"},
+     :commands [{:cmd "lake env lean /tmp/p1.lean", :exit 0}],
      :missing-theorems
-     [{:id :lemma-mfclass-forget-snake-kernel-tau3-islimit,
+     [{:id :lemma-mfclass-sc-pair-pi1-iso,
        :name
-       "ConstructionTargets.ManifoldFundamentalClass.forgetSnakeKernelτ₃Limit",
-       :type
-       "∀ S : ShortComplex.SnakeInput (ModuleCat ℤ), ForgottenSnakeKernelτ₃Limit S",
+       "ConstructionTargets.ManifoldFundamentalClass.scPairZeroπ₁Iso",
+       :type "∀ f : X ⟶ Y, ParallelPairZeroπ₁Comparison f",
        :status :proved,
        :consumers [:t00J02 :t98A02],
        :depends-on
-       ["ConstructionTargets.ManifoldFundamentalClass.forgetSnakeKernelτ₂Limit"],
+       ["ConstructionTargets.ManifoldFundamentalClass.forgetSnakeKernelτ₃Limit"],
        :area "manifold-fundamental-class"}],
      :prerequisite
      {:consumer :t00J02,
-      :implements-lemma
-      :lemma-mfclass-forget-snake-kernel-tau3-islimit,
+      :implements-lemma :lemma-mfclass-sc-pair-pi1-iso,
       :phase :implementation,
       :state :open,
       :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/manifold-fundamental-class/kernel-tau3",
+      "TOPOLOGY-ROUTES.md/manifold-fundamental-class/kernel-pi1",
       :acceptance
       {:declaration
-       "ConstructionTargets.ManifoldFundamentalClass.forgetSnakeKernelτ₃Limit",
-       :type
-       "∀ S : ShortComplex.SnakeInput (ModuleCat ℤ), ForgottenSnakeKernelτ₃Limit S",
-       :fixture "/tmp/k3.lean",
+       "ConstructionTargets.ManifoldFundamentalClass.scPairZeroπ₁Iso",
+       :type "∀ f : X ⟶ Y, ParallelPairZeroπ₁Comparison f",
+       :fixture "/tmp/p1.lean",
        :fixture-sha256
-       "3f4a0a595a38e2f017c0d0b4437785c5298b92df1c47e10e63ac420306164522",
+       "5a042f5b3cff13b6012319eb5ba566fcf7ba61094a0671db349f72ec95b7c44c",
        :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
-       :route-step "mapped τ₃ kernel IsLimit",
+       :route-step "compare π₁ diagrams",
        :implementation
-       "Promote only; exclude combined kernel and cokernels."},
-      :id
-      :routes-2026-10-11-manifold-forget-snake-kernel-tau3-islimit-topo3-r1,
-      :kind :reusable-theorem,
+       "Promote only; exclude transport and other components."},
+      :representation
+      {:source "parallelPair f 0 ⋙ π₁",
+       :target "parallelPair f.τ₁ 0",
+       :direction "Natural isomorphism source-to-target."},
+      :id :routes-2026-10-11-mfclass-sc-pair-pi1-r1,
+      :kind :representation-comparison,
       :area "manifold-fundamental-class",
       :depends-on
-      [:routes-2026-10-11-manifold-forget-snake-kernel-tau2-islimit-topo3-r1],
-      :current-residual "Combine kernels; build cokernels.",
+      [:routes-2026-10-11-manifold-forget-snake-kernel-tau3-islimit-topo3-r1],
+      :current-residual "Transport π₁; compare π₂/π₃.",
       :other-consumers [:t98A02]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :residual "Promote τ₃; combine kernels/build cokernels."}},
+     :residual "Promote π₁ iso; transport limits."}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -16656,7 +16685,8 @@
     :routes-2026-10-11-manifold-forget-snake-kernel-tau1-cone-iso-topo3-r1
     :routes-2026-10-11-manifold-forget-snake-kernel-tau1-islimit-topo3-r1
     :routes-2026-10-11-manifold-forget-snake-kernel-tau2-islimit-topo3-r1
-    :routes-2026-10-11-manifold-forget-snake-kernel-tau3-islimit-topo3-r1],
+    :routes-2026-10-11-manifold-forget-snake-kernel-tau3-islimit-topo3-r1
+    :routes-2026-10-11-mfclass-sc-pair-pi1-r1],
    :current-residual
    "Local-degree counts and wild-ball complement homology remain.",
    :other-consumers [:t98A02]}
@@ -23755,6 +23785,26 @@
    :id :lemma-forgetsnakekernel-limit-fb6e8698b082,
    :kind :lemma,
    :depends-on [:lemma-forgetsnakekernel-limit],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFundamentalClass.scPairZeroπ₁Iso",
+    :type "∀ f : X ⟶ Y, ParallelPairZeroπ₁Comparison f"},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFundamentalClass.scPairZeroπ₁Iso",
+    :reported-by
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    :type "∀ f : X ⟶ Y, ParallelPairZeroπ₁Comparison f",
+    :area "manifold-fundamental-class",
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+   :id :lemma-mfclass-sc-pair-pi1-iso,
+   :kind :lemma,
+   :depends-on [:lemma-mfclass-forget-snake-kernel-tau3-islimit],
    :other-consumers [:t98A02]}],
  :consumer-baselines {},
  :statuses
