@@ -79582,8 +79582,63 @@
      :commit "1ac8a7376",
      :reason :program-progress-committed}]}
   {:consumer :t94A10,
+   :stop-count 1,
+   :evidence
+   {:placeholder-delta 0,
+    :residual "Formalize B1-B4; then B5-B11.",
+    :outcome :stop,
+    :warnings
+    ["Main: 2 placeholders." "Unrelated dirty file preserved."],
+    :missing-theorems
+    [{:name "ConstructionTargets.T94A10Closure.solidAngleAmbient",
+      :type "determinant radial ambient two-form",
+      :status :not-started,
+      :consumers [:t94A10],
+      :depends-on [],
+      :area "periodic-stokes-square"}
+     {:name
+      "ConstructionTargets.T94A10Closure.hasFDerivAt_radialInvCube",
+      :type "derivative of norm inverse cube off zero",
+      :status :not-started,
+      :consumers [:t94A10],
+      :depends-on [],
+      :area "periodic-stokes-square"}
+     {:name
+      "ConstructionTargets.T94A10Closure.solidAngleAmbient_closed",
+      :type "solid-angle extDeriv vanishes off zero",
+      :status :not-started,
+      :consumers [:t94A10],
+      :depends-on
+      ["ConstructionTargets.T94A10Closure.solidAngleAmbient"
+       "ConstructionTargets.T94A10Closure.hasFDerivAt_radialInvCube"],
+      :area "periodic-stokes-square"}],
+    :statement-hashes
+    {:registry "131/0",
+     :blueprint "968e5ee95f529b6c0f3da2fe3988a8b993dafd0b"},
+    :disposition :stop,
+    :axioms [],
+    :author "topo-6",
+    :reason :blueprint-written,
+    :commands
+    [{:cmd "Main compile", :exit 0}
+     {:cmd "registry check", :exit 0}
+     {:cmd "placeholder count", :exit 0, :output "2"}
+     {:cmd "blueprint node check", :exit 0}
+     {:cmd "git show --check 94c8f5c63", :exit 0}],
+    :diagnostic-history
+    [{:cmd "package-link check",
+      :exit 1,
+      :finding
+      "Canonical authority is not a frame; symlink rule inapplicable."}],
+    :commit "94c8f5c63c4c72026a506d1b7bbdf8addd48f5e4",
+    :changed-paths ["ConstructionTargets/t94A10Closure.blueprint.md"],
+    :fixture
+    {:path "ConstructionTargets/t94A10Closure.blueprint.md",
+     :sha256
+     "583bff9e8bec3437e623c82dbbaeadb1e1cb7bf6f9efd26227de5750e3d01c88"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94A10/lean/Main.lean"
     "problems/t94A10/status.json"
@@ -81181,4 +81236,59 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-t96a07closure-descended-mfderiv-range-at-e0],
+   :other-consumers []}
+  {:consumer :t94A10,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "ConstructionTargets.T94A10Closure.solidAngleAmbient",
+    :type "determinant radial ambient two-form"},
+   :lemma
+   {:name "ConstructionTargets.T94A10Closure.solidAngleAmbient",
+    :reported-by [:program-2026-10-11-close-t94a10],
+    :type "determinant radial ambient two-form",
+    :area "periodic-stokes-square"},
+   :id :lemma-constructiontargets-t94a10closure-solidangleambient,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t94A10,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T94A10Closure.hasFDerivAt_radialInvCube",
+    :type "derivative of norm inverse cube off zero"},
+   :lemma
+   {:name
+    "ConstructionTargets.T94A10Closure.hasFDerivAt_radialInvCube",
+    :reported-by [:program-2026-10-11-close-t94a10],
+    :type "derivative of norm inverse cube off zero",
+    :area "periodic-stokes-square"},
+   :id
+   :lemma-constructiontargets-t94a10closure-hasfderivat-radialinvcube,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t94A10,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T94A10Closure.solidAngleAmbient_closed",
+    :type "solid-angle extDeriv vanishes off zero"},
+   :lemma
+   {:name "ConstructionTargets.T94A10Closure.solidAngleAmbient_closed",
+    :reported-by [:program-2026-10-11-close-t94a10],
+    :type "solid-angle extDeriv vanishes off zero",
+    :area "periodic-stokes-square"},
+   :id
+   :lemma-constructiontargets-t94a10closure-solidangleambient-closed,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t94a10closure-solidangleambient
+    :lemma-constructiontargets-t94a10closure-hasfderivat-radialinvcube],
    :other-consumers []}]}
