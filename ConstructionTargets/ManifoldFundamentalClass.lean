@@ -906,6 +906,17 @@ theorem correctedLocalGeneratorCoefficient_eq_one_or_neg_one
   rw [correctedLocalGeneratorCoefficient_eq_unit]
   exact Int.isUnit_eq_one_or (correctedLocalGeneratorUnit k x).isUnit
 
+/-- Nonnegativity selects the positive value of the corrected local-generator
+coefficient. -/
+theorem correctedLocalGeneratorCoefficient_eq_one_of_nonneg
+    (k : ℕ) {M : Type} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M)
+    (hnonneg : 0 ≤ correctedLocalGeneratorCoefficient k x) :
+    correctedLocalGeneratorCoefficient k x = 1 := by
+  rcases correctedLocalGeneratorCoefficient_eq_one_or_neg_one k x with h | h
+  · exact h
+  · omega
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -962,3 +973,4 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorUnit
 #print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient_eq_unit
 #print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient_eq_one_or_neg_one
+#print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient_eq_one_of_nonneg
