@@ -79413,51 +79413,58 @@
      :commit "6150a402c247424c1891c64a4d92e5b505009668",
      :reason :program-progress-committed}]}
   {:consumer :t96A07,
-   :stop-count 1,
+   :stop-count 2,
    :evidence
    {:placeholder-delta 0,
-    :residual "Blueprint review is required before B1 formalization.",
+    :residual "Formalize B2 sphereMap_contMDiff.",
     :outcome :stop,
-    :warnings ["Main retains its one existing placeholder."],
-    :missing-theorems [],
+    :warnings ["Main retains one placeholder."],
+    :missing-theorems
+    [{:name "ConstructionTargets.T96A07Closure.sphereMap_antipodal",
+      :type
+      "∀ p, T96A07.sphereMap (sphereAntipodalN 2 p) = T96A07.sphereMap p",
+      :status :proved,
+      :consumers [:t96A07],
+      :depends-on [],
+      :area "projective-smooth-descent"}
+     {:name "ConstructionTargets.T96A07Closure.sphereMap_contMDiff",
+      :type "ContMDiff (𝓡 2) (𝓡 3) ∞ T96A07.sphereMap",
+      :status :not-started,
+      :consumers [:t96A07],
+      :depends-on [],
+      :area "projective-smooth-descent"}],
     :statement-hashes
     {:registry "131/0",
+     :closure "fdc8d70b6ea5ae490dcdc3c8df7b45fd06c7ab5e",
      :blueprint "69b59fb622dd62fc82a1fe100b353eaabc2c948d"},
     :disposition :stop,
-    :axioms [],
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason :blueprint-written,
+    :reason :program-milestone-complete,
     :commands
-    [{:cmd
-      "git diff --check -- ConstructionTargets/t96A07Closure.blueprint.md",
+    [{:cmd "lake build ConstructionTargets.t96A07Closure", :exit 0}
+     {:cmd "lake env lean ConstructionTargets/t96A07Closure.lean",
       :exit 0}
+     {:cmd "closure no-sorry scan", :exit 1, :expected-exit 1}
      {:cmd "lake env lean problems/t96A07/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "comment-stripped Main placeholder count",
-      :exit 0,
-      :output "1"}
-     {:cmd "rg numbered blueprint nodes", :exit 0, :output "13"}
-     {:cmd "git show --check --oneline 6d48023b5", :exit 0}],
-    :diagnostic-history [],
-    :continue-from
-    "After review, formalize B1 sphereMap_antipodal only.",
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791723263043-5376-7d6872d1",
-     :commands
-     ["git show/check/diff-tree 6d48023b5"
-      "lake env lean problems/t96A07/lean/Main.lean"
-      "statement-registry check/fingerprint; placeholder/node counts"],
-     :finding
-     "PASS: topo-6 committed a new 13-node blueprint; scope and blob 69b59fb6 match the ledger. Mathematical review passes: antipodal descent, derivative transport through the local diffeomorphism, axis nontransversality, horizontal-plane transversality for 0<z<1/2, attainment, infinitude, and final assembly are true with stated dependencies; Lean representations match the frozen theorem, and its existential/conjunctive requirements all appear in B3/B7/B12/B13. Main compiles with its unchanged 1 placeholder; registry is 131/0 and frozen statement SHA-256 is 2ba67b040c1c1e31b8529d758a90765d8251ba3798983f6956674918a77fd520. B1 is the listed next milestone."},
-    :commit "6d48023b5bdac0f3da4ba7ffdd824a9e841a8e08",
-    :changed-paths ["ConstructionTargets/t96A07Closure.blueprint.md"],
+     {:cmd "Main placeholder count", :exit 0, :output "1"}
+     {:cmd "git show --check 7d950a981", :exit 0}],
+    :diagnostic-history
+    [{:cmd "closure/Main compile",
+      :exit 1,
+      :finding
+      "Unavailable unbuilt import replaced by direct scoped map; build and rerun passed."}],
+    :continue-from "Formalize B2 smoothness coordinatewise.",
+    :commit "7d950a98183dcfc044bd7f5c8f592f91241ea62f",
+    :changed-paths
+    ["ConstructionTargets/t96A07Closure.lean"
+     "problems/t96A07/lean/Main.lean"],
     :finding
-    "The reviewed audit expands to 13 nodes: smooth even descent; explicit sphere/descended derivatives; axis failure; horizontal-plane derivative, regularity and attainment; infinitude; final adapter.",
+    "B1 proves the frozen quadratic sphere map is antipodal-invariant.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A07/lean/Main.lean"
     "problems/t96A07/status.json"
@@ -79927,6 +79934,41 @@
     :proved-in :program-2026-10-11-close-t97a04},
    :id
    :lemma-constructiontargets-t97a04closure-twocircleoverlapshearfold-h1,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t96A07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "ConstructionTargets.T96A07Closure.sphereMap_antipodal",
+    :type
+    "∀ p, T96A07.sphereMap (sphereAntipodalN 2 p) = T96A07.sphereMap p"},
+   :lemma
+   {:name "ConstructionTargets.T96A07Closure.sphereMap_antipodal",
+    :reported-by [:program-2026-10-11-close-t96a07],
+    :type
+    "∀ p, T96A07.sphereMap (sphereAntipodalN 2 p) = T96A07.sphereMap p",
+    :area "projective-smooth-descent",
+    :proved-in :program-2026-10-11-close-t96a07},
+   :id :lemma-constructiontargets-t96a07closure-spheremap-antipodal,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t96A07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "ConstructionTargets.T96A07Closure.sphereMap_contMDiff",
+    :type "ContMDiff (𝓡 2) (𝓡 3) ∞ T96A07.sphereMap"},
+   :lemma
+   {:name "ConstructionTargets.T96A07Closure.sphereMap_contMDiff",
+    :reported-by [:program-2026-10-11-close-t96a07],
+    :type "ContMDiff (𝓡 2) (𝓡 3) ∞ T96A07.sphereMap",
+    :area "projective-smooth-descent"},
+   :id :lemma-constructiontargets-t96a07closure-spheremap-contmdiff,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}]}
