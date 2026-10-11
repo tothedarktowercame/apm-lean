@@ -71744,53 +71744,75 @@
    "single-consumer normalization adapter from a nonvanishing endpoint-correct complex path",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:residual
-     "Construct the endpoint-fixed jointly continuous nonvanishing complex perturbation; then use this adapter and the banked ambient reconstruction adapter to produce the zero-height ambient stage.",
-     :outcome :go,
-     :warnings [],
-     :axioms [propext Classical.choice Quot.sound],
-     :commands
-     [{:cmd
-       "lake env lean /tmp/t02a03_coupled_angular_normalization_adapter_probe.lean",
-       :exit 0,
-       :output
-       "coupledAngular_of_nonvanishingComplexPath compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "sha256sum /tmp/t02a03_coupled_angular_normalization_adapter_probe.lean",
-       :exit 0,
-       :output
-       "639dabd24d5950b57fcdb2fde6676a7712e2616e13db98c1fcca3a396fe6cb62  /tmp/t02a03_coupled_angular_normalization_adapter_probe.lean"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_coupled_angular_normalization_adapter_probe.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}
-      {:cmd
-       "rg -n 'coupledAngular_of_nonvanishingComplexPath' /tmp/t02a03_coupled_angular_normalization_adapter_probe.lean",
-       :exit 0,
-       :output
-       "5:theorem coupledAngular_of_nonvanishingComplexPath\n30:#print axioms coupledAngular_of_nonvanishingComplexPath"}],
-     :fixture
-     {:path
-      "/tmp/t02a03_coupled_angular_normalization_adapter_probe.lean",
-      :sha256
-      "639dabd24d5950b57fcdb2fde6676a7712e2616e13db98c1fcca3a396fe6cb62"},
-     :finding
-     "Every jointly continuous, pointwise nonvanishing complex path with the specified raw endpoints normalizes jointly continuously to Circle. Its normalized endpoints are exactly 1 and rightTubeCoreAngularCoordinate.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
-      :declaration
-      "ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngular_of_nonvanishingComplexPath",
-      :type
-      "∀ (Z : C(unitInterval × RightTubeMinusLeftCore, ℂ)), (∀ tp, Z tp ≠ 0) → (∀ p, Z (0,p)=1) → (∀ p, Z (1,p)=rightTubeCorePlanarComplex p.1) → ∃ A : C(unitInterval × RightTubeMinusLeftCore, Circle), (∀ p, A (0,p)=1) ∧ (∀ p, A (1,p)=rightTubeCoreAngularCoordinate p)"},
-     :seat "topo-8"}},
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Construct the endpoint-fixed jointly continuous nonvanishing complex perturbation. The banked normalization adapter then yields the coupled angular map, and the banked ambient adapter yields the zero-height stage.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["Pre-existing unnecessarySimpa linter warning at ConstructionTargets/T02A03GeometricTubeDeformation.lean:62:6."
+     "The canonical .lake/packages symlink invariant check failed because this checkout has a real package directory."],
+    :missing-theorems [],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not",
+     :construction-file-git-blob
+     "c85f5452982276b089cceb5d8b65ac9bc82e3d63",
+     :fixture-sha256
+     "639dabd24d5950b57fcdb2fde6676a7712e2616e13db98c1fcca3a396fe6cb62"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/t02a03_coupled_angular_normalization_adapter_probe.lean",
+      :exit 0,
+      :output
+      "639dabd24d5950b57fcdb2fde6676a7712e2616e13db98c1fcca3a396fe6cb62  /tmp/t02a03_coupled_angular_normalization_adapter_probe.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/t02a03_coupled_angular_normalization_adapter_probe.lean",
+      :exit 0,
+      :output
+      "coupledAngular_of_nonvanishingComplexPath axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "git diff --check -- ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd
+      "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "git show --format= --unified=0 HEAD -- ConstructionTargets/T02A03GeometricTubeDeformation.lean | rg '^\\+.*(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' --pcre2",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git show --check --oneline HEAD",
+      :exit 0,
+      :output "de4bc4272 Add t02A03 angular normalization adapter"}
+     {:cmd "git status --porcelain", :exit 0}],
+    :diagnostic-history
+    [{:cmd
+      "test -L .lake/packages && test \"$(readlink -f .lake/packages)\" = /home/joe/code/apm-lean/.lake/packages",
+      :exit 1,
+      :explanation
+      ".lake/packages is a real directory rather than the required canonical symlink; no package state was modified and compilation succeeded on the existing substrate."}],
+    :commit "de4bc427239801fecfee6f9c0b034a03be489c2c",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+    :fixture
+    {:path
+     "/tmp/t02a03_coupled_angular_normalization_adapter_probe.lean",
+     :sha256
+     "639dabd24d5950b57fcdb2fde6676a7712e2616e13db98c1fcca3a396fe6cb62"},
+    :finding
+    "Every jointly continuous pointwise-nonzero complex path with endpoints 1 and rightTubeCorePlanarComplex p.1 normalizes jointly continuously to Circle, with normalized endpoints exactly 1 and rightTubeCoreAngularCoordinate p.",
+    :seat "topo-6"},
    :phase :implementation,
    :type
    "∀ (Z : C(unitInterval × RightTubeMinusLeftCore, ℂ)), (∀ tp, Z tp ≠ 0) → (∀ p, Z (0,p)=1) → (∀ p, Z (1,p)=rightTubeCorePlanarComplex p.1) → ∃ A : C(unitInterval × RightTubeMinusLeftCore, Circle), (∀ p, A (0,p)=1) ∧ (∀ p, A (1,p)=rightTubeCoreAngularCoordinate p)",
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/coupled-angular-normalization-adapter",
