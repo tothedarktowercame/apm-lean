@@ -2092,6 +2092,23 @@
       "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
       :exit 0}
      {:cmd "git status --short", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791676898949-3390-fe683cc4",
+     :commands
+     ["git diff-tree recorded commit scope"
+      "sha256sum promoted fixture"
+      "source blob comparison"
+      "lake env lean promoted fixture"
+      "lake env lean target module"
+      "lake build target module"
+      "placeholder and axiom scan"
+      "statement registry check"
+      "consumer placeholder census"
+      "git diff --check recorded commit"],
+     :finding
+     "PASS: implementation commit 73bc58bb changes exactly ConstructionTargets/ManifoldFundamentalClass.lean and its blob matches the reviewed source; promoted fixture hash 6a4c52da48c656d8cb42ca4a5bbed57af4096490406291628dea8219d4a6d9ac matches recorded evidence and preserves the frozen theorem type from the original fixture; localizationMap_groupGlobalGenerator_transport first uses the actual module-valued generator equation through absoluteSingularMap_groupGlobalGenerator_naturality, then applies elementwise localization naturality and the explicit source-localization and relativeSingularMap equations to obtain the target equality in the required direction; it assumes neither orientation nor a normalized basepoint equality and introduces no abstract maps; fixture, module, and target build pass with zero source/fixture placeholders and only propext, Classical.choice, and Quot.sound; 131 statements match and consumer placeholders remain t00J02=1 and t98A02=1."},
     :commit "73bc58bba946d5c58bcb744796b6ff3784e119a9",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -2109,7 +2126,7 @@
      "Composed transported group-global-generator naturality with elementwise localization naturality while retaining explicit hypotheses for the module generator equation, source localization equality, and relative local-generator equation."},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/global-local-generator-transport",
@@ -2243,7 +2260,7 @@
      "The transported global-generator naturality result and elementwise canonical localization naturality are reviewed and banked. The fixture composes them without introducing a facade: a concrete continuous map of deleted-point pairs, an explicit module-level equation preserving the chosen global generator, a verified source localization equality, and an explicit relative-homology equation carrying the source chart generator to the target chart generator imply the target localization equality. Thus propagation is complete once those actual geometric equations are supplied. The remaining fundamental-class core is now sharply separated into one normalized basepoint calculation plus proofs that the chosen oriented chart transports satisfy the displayed module and relative equations.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -4001,7 +4018,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -4018,7 +4035,10 @@
     "forall {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y] (f : C(X,Y)) (x : X) (y : Y) (h : Set.MapsTo f (deletedPoint x) (deletedPoint y)) (n : Nat) (eX : (((AlgebraicTopology.singularHomologyFunctor (ModuleCat Int) n).obj (ModuleCat.of Int Int)).obj (TopCat.of X)) ≅ ModuleCat.of Int Int) (eY : (((AlgebraicTopology.singularHomologyFunctor (ModuleCat Int) n).obj (ModuleCat.of Int Int)).obj (TopCat.of Y)) ≅ ModuleCat.of Int Int) (gx : (RelativeSingularChains (deletedPoint x)).homology n) (gy : (RelativeSingularChains (deletedPoint y)).homology n), ((((AlgebraicTopology.singularHomologyFunctor (ModuleCat Int) n).obj (ModuleCat.of Int Int)).map (TopCat.ofHom f)).hom (globalGenerator Int _ eX) = globalGenerator Int _ eY) -> localizationMap x n (groupGlobalGenerator (TopCat.of X) n eX) = gx -> HomologicalComplex.homologyMap (relativeSingularMap (deletedPoint x) (deletedPoint y) f h) n gx = gy -> localizationMap y n (groupGlobalGenerator (TopCat.of Y) n eY) = gy",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-10-manifold-global-local-generator-transport-topo3-r1},
+    :routes-2026-10-10-manifold-global-local-generator-transport-topo3-r1,
+    :banked-by
+    :routes-2026-10-10-manifold-global-local-generator-transport-topo3-r1,
+    :banked-commit "73bc58bba946d5c58bcb744796b6ff3784e119a9"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-localizationmap-groupglobalgenerator-transport,
    :kind :lemma,
