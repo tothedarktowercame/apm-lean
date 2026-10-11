@@ -545,6 +545,19 @@ theorem integralDirectCokernelComparison_projection
   rw [cokernel.π_desc]
   rfl
 
+/-- The canonical preservation isomorphism carries the forgotten coefficient
+relative projection to the cokernel projection formed after forgetting. -/
+theorem forgetIntegralRelativeCokernelComparison_projection
+    {X : Type} [TopologicalSpace X] (A : Set X) :
+    (forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ)).map
+        (cokernel.π (CoefficientRelativeSmall.subspaceMap ℤ A)) ≫
+      (forgetIntegralRelativeCokernelComparison A).hom =
+    cokernel.π
+      ((forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ)).map
+        (CoefficientRelativeSmall.subspaceMap ℤ A)) := by
+  unfold forgetIntegralRelativeCokernelComparison
+  rw [PreservesCokernel.π_iso_hom]
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -580,3 +593,4 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization_generator
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparison_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralDirectCokernelComparison_projection
+#print axioms ConstructionTargets.ManifoldFundamentalClass.forgetIntegralRelativeCokernelComparison_projection
