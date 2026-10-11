@@ -318,6 +318,36 @@ theorem localizationMap_groupGlobalGenerator_eq_zsmul_ambientLocalGenerator
   exact HigherChartLocalGenerator.ambientLocalGenerator_generates (k := k) x
     (localizationMap x (k + 2) (groupGlobalGenerator (TopCat.of M) (k + 2) e))
 
+theorem ambientLocalGenerator_zsmul_injective
+    (k : ℕ) {M : Type} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M) :
+    Function.Injective (fun r : ℤ =>
+      r • HigherChartLocalGenerator.ambientLocalGenerator (k := k) x) := by
+  let f := HomologicalComplex.homologyMap
+    (relativeSingularMap (HigherChartLocalGenerator.P k) (deletedPoint x)
+      (HigherChartLocalGenerator.ambientChartMap (k := k) x)
+      (HigherChartLocalGenerator.ambientChartMap_mapsTo (k := k) x)) (k + 2)
+  letI := HigherChartLocalGenerator.ambientChartMap_Hn_isIso (k := k) x
+  intro r s hrs
+  have hrs' := congrArg
+    (fun z => (ConstructionTargets.HigherModelLocalHomology.localIsoInt k).hom
+      ((asIso f).inv.hom z)) hrs
+  change (ConstructionTargets.HigherModelLocalHomology.localIsoInt k).hom
+      ((asIso f).inv.hom
+        (r • f (ConstructionTargets.HigherModelLocalHomology.generator k))) =
+    (ConstructionTargets.HigherModelLocalHomology.localIsoInt k).hom
+      ((asIso f).inv.hom
+        (s • f (ConstructionTargets.HigherModelLocalHomology.generator k))) at hrs'
+  simp only [map_zsmul] at hrs'
+  have hinv : (asIso f).inv.hom
+      (f.hom (ConstructionTargets.HigherModelLocalHomology.generator k)) =
+      ConstructionTargets.HigherModelLocalHomology.generator k :=
+    ConcreteCategory.congr_hom (asIso f).hom_inv_id _
+  rw [hinv,
+    ConstructionTargets.HigherModelLocalHomology.normalization,
+    smul_eq_mul, mul_one, smul_eq_mul, mul_one] at hrs'
+  exact hrs'
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -340,3 +370,4 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.absoluteSingularMap_groupGlobalGenerator_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.localizationMap_groupGlobalGenerator_transport
 #print axioms ConstructionTargets.ManifoldFundamentalClass.localizationMap_groupGlobalGenerator_eq_zsmul_ambientLocalGenerator
+#print axioms ConstructionTargets.ManifoldFundamentalClass.ambientLocalGenerator_zsmul_injective
