@@ -15804,6 +15804,20 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git commit -m Transport-forgotten-kernel-cone", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791729359586-5501-730d9e52",
+     :commands
+     ["git show/diff-tree/diff --check at cb058a69d2e21c2f5506e52582e69d24faf6ad62"
+      "sha256sum fixture and module plus recorded-blob comparison"
+      "renamed fixture: lake env lean"
+      "python3 scripts/statement-registry.py check"
+      "placeholder scans for module, t00J02, t98A02"
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"],
+     :finding
+     "Exact one-file scope and recorded blob match; frozen hashes and exact definition type reproduce. The implementation uses the inverse direction of IsLimit.postcomposeHomEquiv to carry the preserved τ₁ kernel-cone limit witness onto the postcomposed AddCommGrp parallel-pair diagram, and does not perform the deferred identification with the mapped kernel fork. Fixture and module compile, registry is 131/0, build completes 8326 jobs, axioms are exactly propext/Classical.choice/Quot.sound, module has no placeholders, and consumer counts remain 1/1."},
     :commit "cb058a69d2e21c2f5506e52582e69d24faf6ad62",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -15820,7 +15834,7 @@
     :routes-2026-10-11-manifold-forget-snake-transported-kernel-tau1-topo3-r1,
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/integral-open-disk-connecting-naturality/snake-input-transported-kernel-tau1",
@@ -16029,7 +16043,7 @@
      "The compiled definition moves the preserved τ₁ kernel limit across the banked diagram isomorphism with the standard postcomposeHomEquiv, so both cones now lie over the same AddCommGrp parallel-pair diagram. The remaining τ₁ step is a cone isomorphism with identity cone-point component; after that IsLimit.equivIsoLimit supplies exactly the component witness required by ShortComplex.isLimitOfIsLimitπ.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -23026,7 +23040,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -23043,7 +23057,10 @@
     "forall (S : ShortComplex.SnakeInput (ModuleCat ℤ)), IsLimit ((Cone.postcompose (forgetIntModulesParallelPairZeroIso S.v₁₂.τ₁).hom).obj (forgetIntModules.mapCone (KernelFork.ofι S.v₀₁.τ₁ S.w₀₂_τ₁)))",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-forget-snake-transported-kernel-tau1-topo3-r1},
+    :routes-2026-10-11-manifold-forget-snake-transported-kernel-tau1-topo3-r1,
+    :banked-by
+    :routes-2026-10-11-manifold-forget-snake-transported-kernel-tau1-topo3-r1,
+    :banked-commit "cb058a69d2e21c2f5506e52582e69d24faf6ad62"},
    :id :lemma-mfclass-forget-snake-transported-kernel-tau1,
    :kind :lemma,
    :depends-on
