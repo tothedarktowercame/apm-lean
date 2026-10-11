@@ -17464,6 +17464,17 @@
       :expected-exit 1}
      {:cmd "git commit -m 'Add forgotten cycles row morphism'",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791755875522-5906-62b638e4",
+     :commands
+     ["git scope/diff/hash checks at 634d1645bc1d6da4d884f4fff66844d59121f00b"
+      "renamed fixture and module: lake env lean"
+      "statement registry and placeholder scans"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"],
+     :finding
+     "Recorded one-file scope, blob, and frozen fixture hash match. The row is oriented from forgotten cycles to cycles after forgetting, so mapCyclesIso.inv is correct; both squares use inverse naturality for K.f and K.g in the required composition order. Fixture/module compile; registry 131/0; build 8326 jobs; axioms propext, choice, Quot.sound; module placeholders 0; consumer sorries 1/1."},
     :commit "634d1645bc1d6da4d884f4fff66844d59121f00b",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -17478,7 +17489,7 @@
     :row :routes-2026-10-11-mfclass-forget-cycles-row-r1,
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/snake-hom-row2",
@@ -17551,7 +17562,7 @@
       "e4d8a59ac63e8d02f61646ccef4112dee3415133672567fb3afd542e204620f4"},
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -25156,7 +25167,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -25171,7 +25182,9 @@
     :type
     "∀ {ι} {c : ComplexShape ι} (K : ShortComplex (HomologicalComplex (ModuleCat ℤ) c)) (i : ι), ForgottenCyclesRowHom K i",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2,
+    :banked-by :routes-2026-10-11-mfclass-forget-cycles-row-r1,
+    :banked-commit "634d1645bc1d6da4d884f4fff66844d59121f00b"},
    :id :lemma-mfclass-forget-cycles-row,
    :kind :lemma,
    :depends-on [:lemma-mfclass-forget-opcycles-row],
