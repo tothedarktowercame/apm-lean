@@ -14561,88 +14561,199 @@
    "Assemble the four-row SnakeInput.Hom comparing the exact-functor image of coefficientOpenDiskSnakeInput with forgottenCoefficientOpenDiskSnakeInput, then apply naturality_δ.",
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
+   :implements-lemma :lemma-mfclass-forget-short-exact,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/manifold-fundamental-class/integral-open-disk-connecting-naturality/snake-input-exact-rows",
+   :acceptance
+   {:implementation
+    "Promote the exact fixture theorem. Prove that the exact forgetful functor sends every short exact sequence of integral modules to a short exact sequence of additive commutative groups, supplying the L₁ and L₂ exact-row fields needed by the mapped snake input. Do not construct the mapped SnakeInput, identify its kernel or cokernel witnesses, assemble SnakeInput.Hom, prove connecting preservation, rewrite the raw production square, prove radial or sphere compatibility, exclude negation, select a sign, or construct a fundamental class.",
+    :declaration
+    "ConstructionTargets.ManifoldFundamentalClass.forgetIntModules_shortExact",
+    :type
+    "forall {S : ShortComplex (ModuleCat ℤ)}, S.ShortExact -> (S.map forgetIntModules).ShortExact",
+    :fixture "/tmp/manifold_fundamental_class_forget_short_exact.lean",
+    :fixture-sha256
+    "1b86ab5cdf0f216cb6c18636ebdc9086d611f1dfa83ccac3c568585955431769",
+    :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
+    :route-step
+    "preserve the two short-exact rows required to transport the coefficient snake input through forgetIntModules"},
+   :id :routes-2026-10-11-manifold-forget-short-exact-topo3-r1,
+   :kind :reusable-theorem,
+   :area "manifold-fundamental-class",
+   :depends-on
+   [:routes-2026-10-10-topo3-seed-checkpoint-1
+    :routes-2026-10-10-manifold-local-positive-excision-topo3-r1
+    :routes-2026-10-10-manifold-oriented-overlap-coherence-topo3-r1
+    :routes-2026-10-10-manifold-connected-overlap-unit-topo3-r1
+    :routes-2026-10-10-manifold-oriented-connected-overlap-topo3-r1
+    :routes-2026-10-10-manifold-integral-transition-sign-topo3-r1
+    :routes-2026-10-10-manifold-exclude-negative-transition-topo3-r1
+    :routes-2026-10-10-manifold-global-generator-topo3-r1
+    :routes-2026-10-10-manifold-localization-iso-generator-topo3-r1
+    :routes-2026-10-10-manifold-generator-map-isiso-topo3-r1
+    :routes-2026-10-10-manifold-localization-map-naturality-topo3-r1
+    :routes-2026-10-10-manifold-localization-apply-naturality-topo3-r1
+    :routes-2026-10-10-manifold-group-global-generator-topo3-r1
+    :routes-2026-10-10-manifold-group-generator-naturality-topo3-r1
+    :routes-2026-10-10-manifold-global-local-generator-transport-topo3-r1
+    :routes-2026-10-11-manifold-basepoint-localization-coefficient-topo3-r1
+    :routes-2026-10-11-manifold-local-generator-coefficient-unique-topo3-r1
+    :routes-2026-10-11-manifold-localization-coefficient-one-topo3-r1
+    :routes-2026-10-11-manifold-distinguished-chart-generator-topo3-r1
+    :routes-2026-10-11-manifold-integral-subtype-chain-naturality-topo3-r1
+    :routes-2026-10-11-manifold-integral-mapped-relative-cokernel-topo3-r1
+    :routes-2026-10-11-manifold-forget-relative-cokernel-topo3-r1
+    :routes-2026-10-11-manifold-integral-relative-chains-comparison-topo3-r1
+    :routes-2026-10-11-manifold-integral-relative-homology-comparison-topo3-r1
+    :routes-2026-10-11-manifold-ambient-local-normalization-topo3-r1
+    :routes-2026-10-11-manifold-generator-transport-of-normalization-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-subspace-map-equality-topo3-r1
+    :routes-2026-10-11-manifold-integral-direct-cokernel-projection-topo3-r1
+    :routes-2026-10-11-manifold-forget-cokernel-projection-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-integral-cokernel-transport-topo3-r1
+    :routes-2026-10-11-manifold-integral-composite-cokernel-projection-topo3-r1
+    :routes-2026-10-11-manifold-production-cokernel-projection-topo3-r1
+    :routes-2026-10-11-manifold-integral-composite-relative-projection-topo3-r1
+    :routes-2026-10-11-manifold-relative-chains-comparison-with-transport-topo3-r1
+    :routes-2026-10-11-manifold-relative-homology-comparison-with-transport-topo3-r1
+    :routes-2026-10-11-manifold-corrected-homology-projection-topo3-r1
+    :routes-2026-10-11-manifold-corrected-homology-comparison-hom-topo3-r1
+    :routes-2026-10-11-manifold-relative-projection-homology-preservation-topo3-r1
+    :routes-2026-10-11-manifold-packaged-homology-projection-topo3-r1
+    :routes-2026-10-11-manifold-corrected-generator-normalization-topo3-r1
+    :routes-2026-10-11-manifold-normalization-from-corrected-generator-topo3-r1
+    :routes-2026-10-11-manifold-corrected-local-generator-coefficient-topo3-r1
+    :routes-2026-10-11-manifold-corrected-local-generator-unit-topo3-r1
+    :routes-2026-10-11-manifold-corrected-local-generator-sign-topo3-r1
+    :routes-2026-10-11-manifold-corrected-local-generator-nonnegative-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-one-from-corrected-normalization-topo3-r1
+    :routes-2026-10-11-manifold-corrected-generator-of-coefficient-one-topo3-r1
+    :routes-2026-10-11-manifold-corrected-normalization-of-coefficient-one-topo3-r1
+    :routes-2026-10-11-manifold-corrected-normalization-of-nonnegative-topo3-r1
+    :routes-2026-10-11-manifold-corrected-coefficient-one-of-ne-neg-one-topo3-r1
+    :routes-2026-10-11-manifold-corrected-coefficient-automorphism-one-topo3-r1
+    :routes-2026-10-11-manifold-corrected-automorphism-neg-iff-topo3-r1
+    :routes-2026-10-11-manifold-corrected-automorphism-hom-topo3-r1
+    :routes-2026-10-11-manifold-ambient-local-normalization-hom-topo3-r1
+    :routes-2026-10-11-manifold-corrected-automorphism-neg-cancel-coefficient-topo3-r1
+    :routes-2026-10-11-manifold-negative-equation-endpoint-factors-topo3-r1
+    :routes-2026-10-11-manifold-negative-equation-coefficient-factors-topo3-r1
+    :routes-2026-10-11-manifold-negative-equation-corrected-comparison-topo3-r1
+    :routes-2026-10-11-manifold-integral-relative-chains-transport-hom-topo3-r1
+    :routes-2026-10-11-manifold-integral-relative-chains-transport-homology-topo3-r1
+    :routes-2026-10-11-manifold-negative-equation-transport-homology-factors-topo3-r1
+    :routes-2026-10-11-manifold-transport-projection-alignment-topo3-r3
+    :routes-2026-10-11-manifold-negative-equation-projected-factors-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-projected-forward-topo3-r1
+    :routes-2026-10-11-manifold-negative-equation-concrete-endpoints-topo3-r1
+    :routes-2026-10-11-manifold-negative-prefix-model-topo3-r1
+    :routes-2026-10-11-manifold-negative-model-factors-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-open-disk-normalization-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-open-disk-model-factors-topo3-r1
+    :routes-2026-10-11-manifold-integral-open-disk-relative-homology-comparison-topo3-r1
+    :routes-2026-10-11-manifold-integral-open-disk-puncture-homology-comparison-topo3-r1
+    :routes-2026-10-11-manifold-integral-open-disk-pair-short-complex-comparison-topo3-r1
+    :routes-2026-10-11-manifold-integral-open-disk-coefficient-pair-short-exact-topo3-r1
+    :routes-2026-10-11-manifold-integral-open-disk-connecting-naturality-raw-topo3-r1
+    :routes-2026-10-11-manifold-integral-open-disk-component-homology-maps-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-open-disk-connecting-transport-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-pair-inclusion-homology-preservation-topo3-r1
+    :routes-2026-10-11-manifold-open-disk-snake-inputs-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-pair-inclusion-cycles-preservation-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-pair-inclusion-opcycles-preservation-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-pair-inclusion-left-homology-preservation-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-pair-inclusion-right-homology-preservation-topo3-r1],
+   :current-residual
+   "Construct the mapped snake input using preserved kernel and cokernel universal properties together with the now-explicit exact rows, then assemble its comparison with forgottenCoefficientOpenDiskSnakeInput and apply naturality_δ.",
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-closedorientedfundamentalclass,
    :evidence
    {:probe
     {:residual
-     "Assemble the forgotten snake-input comparison and apply naturality_δ, then continue with radial and sphere compatibility.",
+     "Promote forgetIntModules_shortExact, then package preserved kernel and cokernel witnesses into the mapped coefficient snake input, assemble SnakeInput.Hom, and apply naturality_δ; radial and sphere compatibility remain downstream.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
-     [{:id
-       :lemma-mfclass-coefficient-pair-inclusion-right-homology-preservation,
+     [{:id :lemma-mfclass-forget-short-exact,
        :name
-       "ConstructionTargets.ManifoldFundamentalClass.coefficientPairInclusion_mapRightHomologyIso_naturality",
+       "ConstructionTargets.ManifoldFundamentalClass.forgetIntModules_shortExact",
        :type
-       "forall {X : Type} [TopologicalSpace X] (A : Set X) (n : ℕ), let φ := CoefficientRelativeSmall.subspaceMap ℤ A; let ψ := (HomologicalComplex.shortComplexFunctor (ModuleCat ℤ) (ComplexShape.down ℕ) n).map φ; forgetIntModules.map (ShortComplex.rightHomologyMap ψ) ≫ (((CoefficientH0.SingularChains ℤ (TopCat.of X)).sc n).mapRightHomologyIso forgetIntModules).inv = (((CoefficientH0.SingularChains ℤ (TopCat.of A)).sc n).mapRightHomologyIso forgetIntModules).inv ≫ ShortComplex.rightHomologyMap (forgetIntModules.mapShortComplex.map ψ)",
+       "forall {S : ShortComplex (ModuleCat ℤ)}, S.ShortExact -> (S.map forgetIntModules).ShortExact",
        :status :proved,
        :consumers [:t00J02 :t98A02],
        :depends-on
-       ["ConstructionTargets.ManifoldFundamentalClass.coefficientPairInclusion_mapLeftHomologyIso_naturality"],
+       ["ConstructionTargets.ManifoldFundamentalClass.coefficientPairInclusion_mapRightHomologyIso_naturality"],
        :area "manifold-fundamental-class"}],
      :prerequisite
      {:consumer :t00J02,
-      :implements-lemma
-      :lemma-mfclass-coefficient-pair-inclusion-right-homology-preservation,
+      :implements-lemma :lemma-mfclass-forget-short-exact,
       :phase :implementation,
       :state :open,
       :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/manifold-fundamental-class/integral-open-disk-connecting-naturality/snake-input-right-homology",
+      "TOPOLOGY-ROUTES.md/manifold-fundamental-class/integral-open-disk-connecting-naturality/snake-input-exact-rows",
       :acceptance
       {:implementation
-       "Promote the exact fixture theorem. Specialize ShortComplex.mapRightHomologyIso_inv_naturality to the integral coefficient subspace inclusion, proving that the right-homology comparison commutes with forgetting coefficients. Do not assemble a snake-input comparison, prove connecting preservation, rewrite the raw production square, prove radial or sphere compatibility, exclude negation, select a sign, or construct a fundamental class.",
+       "Promote the exact fixture theorem. Prove that the exact forgetful functor sends every short exact sequence of integral modules to a short exact sequence of additive commutative groups, supplying the L₁ and L₂ exact-row fields needed by the mapped snake input. Do not construct the mapped SnakeInput, identify its kernel or cokernel witnesses, assemble SnakeInput.Hom, prove connecting preservation, rewrite the raw production square, prove radial or sphere compatibility, exclude negation, select a sign, or construct a fundamental class.",
        :declaration
-       "ConstructionTargets.ManifoldFundamentalClass.coefficientPairInclusion_mapRightHomologyIso_naturality",
+       "ConstructionTargets.ManifoldFundamentalClass.forgetIntModules_shortExact",
        :type
-       "forall {X : Type} [TopologicalSpace X] (A : Set X) (n : ℕ), let φ := CoefficientRelativeSmall.subspaceMap ℤ A; let ψ := (HomologicalComplex.shortComplexFunctor (ModuleCat ℤ) (ComplexShape.down ℕ) n).map φ; forgetIntModules.map (ShortComplex.rightHomologyMap ψ) ≫ (((CoefficientH0.SingularChains ℤ (TopCat.of X)).sc n).mapRightHomologyIso forgetIntModules).inv = (((CoefficientH0.SingularChains ℤ (TopCat.of A)).sc n).mapRightHomologyIso forgetIntModules).inv ≫ ShortComplex.rightHomologyMap (forgetIntModules.mapShortComplex.map ψ)",
+       "forall {S : ShortComplex (ModuleCat ℤ)}, S.ShortExact -> (S.map forgetIntModules).ShortExact",
        :fixture
-       "/tmp/manifold_fundamental_class_coefficient_inclusion_right_homology_preservation.lean",
+       "/tmp/manifold_fundamental_class_forget_short_exact.lean",
        :fixture-sha256
-       "939a42c8c1308df1033dfca38f635aaae25edcea054e9f9ad4ccfd793d9ec1cd",
+       "1b86ab5cdf0f216cb6c18636ebdc9086d611f1dfa83ccac3c568585955431769",
        :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
        :route-step
-       "supply the right-homology preservation face needed to compare the coefficient and forgotten snake inputs"},
-      :id
-      :routes-2026-10-11-manifold-coefficient-pair-inclusion-right-homology-preservation-topo3-r1,
+       "preserve the two short-exact rows required to transport the coefficient snake input through forgetIntModules"},
+      :id :routes-2026-10-11-manifold-forget-short-exact-topo3-r1,
       :kind :reusable-theorem,
       :area "manifold-fundamental-class",
       :depends-on
       [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
-       :routes-2026-10-11-manifold-coefficient-pair-inclusion-left-homology-preservation-topo3-r1],
+       :routes-2026-10-11-manifold-coefficient-pair-inclusion-right-homology-preservation-topo3-r1],
       :current-residual
-      "Assemble the four-row SnakeInput.Hom comparing the exact-functor image of coefficientOpenDiskSnakeInput with forgottenCoefficientOpenDiskSnakeInput, then apply naturality_δ.",
+      "Construct the mapped snake input using preserved kernel and cokernel universal properties together with the now-explicit exact rows, then assemble its comparison with forgottenCoefficientOpenDiskSnakeInput and apply naturality_δ.",
       :other-consumers [:t98A02]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake env lean /tmp/manifold_fundamental_class_coefficient_inclusion_right_homology_preservation.lean",
+       "lake env lean /tmp/manifold_fundamental_class_forget_short_exact.lean",
        :exit 0,
        :output
-       "coefficientPairInclusion_mapRightHomologyIso_naturality compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "forgetIntModules_shortExact compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/manifold_fundamental_class_coefficient_inclusion_right_homology_preservation.lean",
+       "sha256sum /tmp/manifold_fundamental_class_forget_short_exact.lean",
        :exit 0,
        :output
-       "939a42c8c1308df1033dfca38f635aaae25edcea054e9f9ad4ccfd793d9ec1cd  /tmp/manifold_fundamental_class_coefficient_inclusion_right_homology_preservation.lean"}
+       "1b86ab5cdf0f216cb6c18636ebdc9086d611f1dfa83ccac3c568585955431769  /tmp/manifold_fundamental_class_forget_short_exact.lean"}
       {:cmd
-       "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/manifold_fundamental_class_coefficient_inclusion_right_homology_preservation.lean",
+       "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/manifold_fundamental_class_forget_short_exact.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/manifold_fundamental_class_forget_snake_input.lean",
+       :exit 1,
+       :finding
+       "The direct mapped SnakeInput construction exposed separate obligations: w₀₂ and w₁₃ did not simplify, preserved kernel and cokernel witnesses did not match the required shapes, and the mapped exact-row and epi/mono fields were not inferred. The corrected fixture isolates and proves preservation of the two short-exact rows first."}],
      :fixture
-     {:path
-      "/tmp/manifold_fundamental_class_coefficient_inclusion_right_homology_preservation.lean",
+     {:path "/tmp/manifold_fundamental_class_forget_short_exact.lean",
       :sha256
-      "939a42c8c1308df1033dfca38f635aaae25edcea054e9f9ad4ccfd793d9ec1cd"},
+      "1b86ab5cdf0f216cb6c18636ebdc9086d611f1dfa83ccac3c568585955431769"},
      :finding
-     "The canonical internal preservation data is complete: homology, cycles, opcycles, left homology, and right homology naturality are all banked or supplied by this compiled theorem. The next prerequisite must assemble these maps into the four commuting rows of a SnakeInput.Hom; naturality_δ will then prove preservation of the connecting morphism.",
+     "A direct construction of the exact-functor image of coefficientOpenDiskSnakeInput does not elaborate merely from the five banked naturality faces: its structure also demands preserved short-exact rows and kernel/cokernel witnesses. The compiled prerequisite proves the row-exactness obligation uniformly via ShortExact.map_of_exact. After it is banked, the bounded remaining representation step is to package the preserved kernel/cokernel data into the mapped SnakeInput and assemble the four-row comparison before applying naturality_δ.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -14738,7 +14849,8 @@
     :routes-2026-10-11-manifold-coefficient-pair-inclusion-cycles-preservation-topo3-r1
     :routes-2026-10-11-manifold-coefficient-pair-inclusion-opcycles-preservation-topo3-r1
     :routes-2026-10-11-manifold-coefficient-pair-inclusion-left-homology-preservation-topo3-r1
-    :routes-2026-10-11-manifold-coefficient-pair-inclusion-right-homology-preservation-topo3-r1],
+    :routes-2026-10-11-manifold-coefficient-pair-inclusion-right-homology-preservation-topo3-r1
+    :routes-2026-10-11-manifold-forget-short-exact-topo3-r1],
    :current-residual
    "Local-degree counts and wild-ball complement homology remain.",
    :other-consumers [:t98A02]}
@@ -21466,6 +21578,29 @@
    :kind :lemma,
    :depends-on
    [:lemma-mfclass-coefficient-pair-inclusion-left-homology-preservation],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFundamentalClass.forgetIntModules_shortExact",
+    :type
+    "forall {S : ShortComplex (ModuleCat ℤ)}, S.ShortExact -> (S.map forgetIntModules).ShortExact"},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFundamentalClass.forgetIntModules_shortExact",
+    :reported-by
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    :type
+    "forall {S : ShortComplex (ModuleCat ℤ)}, S.ShortExact -> (S.map forgetIntModules).ShortExact",
+    :area "manifold-fundamental-class",
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+   :id :lemma-mfclass-forget-short-exact,
+   :kind :lemma,
+   :depends-on
+   [:lemma-mfclass-coefficient-pair-inclusion-right-homology-preservation],
    :other-consumers [:t98A02]}],
  :consumer-baselines {},
  :statuses
