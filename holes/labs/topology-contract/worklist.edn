@@ -105267,7 +105267,7 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 0,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma
@@ -105347,7 +105347,7 @@
      :status :self-axiomatized},
     :seat "topo-2"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/TwoOpenFreeProductMappingCompositeCounitIdentity.lean"],
    :dag-node
@@ -105371,7 +105371,7 @@
    :id :routes-2026-10-11-composite-counit-component-identity-91,
    :kind :reusable-theorem,
    :area "fundamental-group-wedge-of-circles",
-   :fail-count 1,
+   :fail-count 0,
    :depends-on
    [:routes-2026-10-11-inverse-identity-counit-component-identity-90],
    :current-residual
@@ -106581,7 +106581,9 @@
    "Combine this identity with the remaining constituent counit normalizations in the five-factor composite.",
    :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
   {:consumer :t99J01,
-   :stop-count 2,
+   :owner-reopen
+   "reopened: a lemma this row reported missing is now banked",
+   :stop-count 0,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma
@@ -106649,7 +106651,7 @@
      :status :self-axiomatized},
     :seat "topo-2"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/TwoOpenPseudopushoutCounitBaseIdentity.lean"],
    :dag-node
@@ -106674,7 +106676,7 @@
    :routes-2026-10-11-two-open-pseudopushout-counit-base-identity-106,
    :kind :reusable-theorem,
    :area "fundamental-group-wedge-of-circles",
-   :fail-count 1,
+   :fail-count 0,
    :depends-on [],
    :current-residual
    "Combine this two-leg identity with the pseudo-span, connector, free-product representation, and single-object constituent normalizations to prove the composite counit component is identity.",
@@ -106824,11 +106826,12 @@
    :stop-condition
    "End only when every topo1 problem is closed or a row is genuinely refuted.",
    :evidence
-   {:outcome :stop,
-    :seat "topo-4",
+   {:residual
+    "Retag lemma-constructiontargets-singularhomologyconcrete-singularpairshortcomplex-shortexact in worklist3.edn as manifold-fundamental-class, then rerun this checkpoint.",
+    :outcome :stop,
+    :disposition :stop,
+    :author "topo-4",
     :reason :cross-ledger-retag-unrepresentable,
-    :finding
-    "The strategy receipt is applied only to worklist.edn, while the sole untagged backlog node is owned by worklist3.edn. upsert-lemmas therefore creates a tagged duplicate in worklist.edn and leaves the original worklist3.edn node untagged. The frozen checkpoint acceptance cannot be satisfied without a supervisor transition that updates the owning ledger or contract support for cross-ledger lemma updates.",
     :commands
     [{:cmd
       "bb holes/labs/topology-contract/build_step.bb priorities holes/labs/topology-contract/worklist.edn",
@@ -106847,12 +106850,21 @@
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131 registered statements match, 0 do not."}],
-    :residual
-    "Retag lemma-constructiontargets-singularhomologyconcrete-singularpairshortcomplex-shortexact in worklist3.edn as manifold-fundamental-class, then rerun this checkpoint.",
-    :author "topo-4",
-    :disposition :stop},
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791711128817-4896-030166d3",
+     :commands
+     ["bb holes/labs/topology-contract/build_step.bb priorities holes/labs/topology-contract/worklist.edn"
+      "python3 scripts/statement-registry.py check"
+      "clojure.edn/read-string checkpoint evidence audit"],
+     :finding
+     "PASS: the recorded STOP includes a tested cross-ledger transition refutation with an exact owning-ledger repair; fresh priorities now report untagged backlog 0 and the registry reports 131 matches."},
+    :finding
+    "The strategy receipt is applied only to worklist.edn, while the sole untagged backlog node is owned by worklist3.edn. upsert-lemmas therefore creates a tagged duplicate in worklist.edn and leaves the original worklist3.edn node untagged. The frozen checkpoint acceptance cannot be satisfied without a supervisor transition that updates the owning ledger or contract support for cross-ledger lemma updates.",
+    :seat "topo-4"},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :needs-owner,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -113817,7 +113829,7 @@
    :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -113831,7 +113843,9 @@
     [:routes-2026-10-11-checkpoint-topo1-after-orbit-and-counit-components-99],
     :type
     "forall {X : Type} [TopologicalSpace X] (A : Set X), (singularPairShortComplex A).ShortExact",
-    :area "manifold-fundamental-class"},
+    :area "manifold-fundamental-class",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/SingularHomologyConcrete.lean"]},
    :id
    :lemma-constructiontargets-singularhomologyconcrete-singularpairshortcomplex-shortexact,
    :kind :lemma,
