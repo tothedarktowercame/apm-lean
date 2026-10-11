@@ -102004,8 +102004,81 @@
   {:bounded-exception
    "This single-consumer prerequisite normalizes the five nonfinal closed-edge endpoints into half-open successor-edge coordinates before the separate period-wrap case.",
    :consumer :t97A01,
+   :evidence
+   {:placeholder-delta
+    {:source-before 0,
+     :source-after 0,
+     :fixture-before 0,
+     :fixture-after 0,
+     :consumer-before 1,
+     :consumer-after 1},
+    :residual
+    "Prove the edge-five-to-edge-zero period wrap, then combine all endpoint and interior cases into full decoder presentation independence.",
+    :gates
+    {:module-build :pass,
+     :fixture-compiles :pass,
+     :zero-source-and-fixture-sorry :pass,
+     :standard-only-axioms :pass,
+     :registry-check :pass,
+     :scoped-diff-check :pass,
+     :clean-worktree :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["The scoped module emitted no warnings; replayed dependencies emitted pre-existing linter warnings."],
+    :missing-theorems
+    [{:name
+      "PolygonSixEdgeEndpointNormalization.nonfinal_endpoint_has_halfOpen_presentation",
+      :type
+      "∀ (j : ℕ) (hj : j < 5), ∃ (k : Fin 6) (u : Set.Ico (0 : ℝ) 1), circleEdgePoint ⟨j, by omega⟩ oneIcc = circleEdgePoint k ⟨u.1, u.2.1, u.2.2.le⟩",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on [],
+      :area "polygon-surface-open-cover"}],
+    :statement-hashes
+    {"fixture"
+     "5e165bb0c3832af2e71b211a27b3bcd38ca4625f5521d215bc4ea7dd5ebe685b",
+     "implementation"
+     "6d15151c463188d7b06bf54609bf9688d86194a374c7a43eebd43cb85bb6f69e"},
+    :axioms
+    {"nonfinal_endpoint_has_halfOpen_presentation"
+     ["propext" "Classical.choice" "Quot.sound"]},
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd
+      "sha256sum /tmp/polygon-six-edge-endpoint-normalization.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.PolygonSixEdgeEndpointNormalization",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/polygon-six-edge-endpoint-normalization.lean",
+      :exit 0}
+     {:cmd
+      "rg -n \\b(sorry|admit)\\b ConstructionTargets/PolygonSixEdgeEndpointNormalization.lean /tmp/polygon-six-edge-endpoint-normalization.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "git diff --check cd730ce5^ cd730ce5 -- ConstructionTargets/PolygonSixEdgeEndpointNormalization.lean",
+      :exit 0}
+     {:cmd "git status --porcelain", :exit 0}],
+    :diagnostic-history [],
+    :commit "cd730ce531e0a3d81851fd53d8f019588166069c",
+    :changed-paths
+    ["ConstructionTargets/PolygonSixEdgeEndpointNormalization.lean"],
+    :fixture
+    {:path "/tmp/polygon-six-edge-endpoint-normalization.lean",
+     :sha256
+     "5e165bb0c3832af2e71b211a27b3bcd38ca4625f5521d215bc4ea7dd5ebe685b"},
+    :implementation
+    {:scope
+     ["ConstructionTargets/PolygonSixEdgeEndpointNormalization.lean"],
+     :summary
+     "For each natural edge index below five, exhibited its successor Fin 6 edge at half-open parameter zero and proved equality with the original edge at parameter one."},
+    :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSixEdgeEndpointNormalization.lean"],
    :dag-node
@@ -106249,12 +106322,13 @@
    {:name
     "PolygonSixEdgeEndpointNormalization.nonfinal_endpoint_has_halfOpen_presentation",
     :reported-by
-    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40
+     :routes-2026-10-11-polygon-six-edge-nonfinal-endpoint-normalization-73],
     :type
     "For each canonical edge zero through four, its parameter-one endpoint has the successor-edge parameter-zero half-open presentation.",
     :area "polygon-surface-open-cover",
     :proved-in
-    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+    :routes-2026-10-11-polygon-six-edge-nonfinal-endpoint-normalization-73},
    :id
    :lemma-polygonsixedgeendpointnormalization-nonfinal-endpoint-has-halfopen-presentation,
    :kind :lemma,
