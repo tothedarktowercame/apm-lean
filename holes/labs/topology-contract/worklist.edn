@@ -113857,14 +113857,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 9,
+   :stop-count 10,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Evaluate homotopy/open-cover inverse transports on literal legs; then B12.",
+    "Identify literal wedge legs through open-cover pseudopushout; then B12.",
     :outcome :stop,
     :warnings [{:kind :upstream-lint}],
     :missing-theorems
@@ -113878,9 +113878,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "e1a075edef18a3cc2d350a157abb84f2f67f48468a306d9be0f53cba60d6914e",
+     "047d23e0060d680b4a08bbc9140ee43e692bc090f998e6d3b4f67312e530182d",
      :documentation
-     "d6ecf7473332ed561c96d955beb111517ed7d5f629375d8006735d77866fb60b",
+     "df7e8a6aeafd32c3169c75237c58809cb821f839e0f176d473f1d9163b2aaab3",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113888,7 +113888,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "B6 coordinate-to-point inverse now preserves both generators.",
+    "B6 homotopy inverse maps now reduce definitionally to coordinate-span maps.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113901,27 +113901,8 @@
      {:cmd "placeholder/diff validation",
       :exit 0,
       :finding "zero placeholders"}],
-    :diagnostic-history
-    [{:cmd "lean",
-      :exit 1,
-      :finding "rfl exposed connector transport."}
-     {:cmd "lean",
-      :exit 1,
-      :finding "Reused point-span equations explicitly."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791746261903-5807-4c0afb85",
-     :commands
-     ["git show/diff-tree fc3c70a3"
-      "hash/diff/placeholder checks"
-      "statement-registry.py check"
-      "lake env lean PointWedgeVanKampen.lean"
-      "lake build PointWedgeVanKampen"
-      "lake build ThreeCirclesFundamentalGroup (expected absent)"],
-     :finding
-     "PASS: new compiled, sorry-free B6 progress exposes the coordinate-to-point inverse span and proves both generator actions are literal injections after explicit connector normal-form reduction at the chosen bases. Boundary orientation is correct. Exact two-file scope/frozen hashes match; zero placeholders; registry 131/131; standard axioms. Homotopy/open-cover transports and B12 remain listed; absent final target is valid STOP."},
-    :commit "fc3c70a320bb645b9e0eb2b55bf87446847ee7ad",
+    :diagnostic-history [],
+    :commit "084e407533a910296898ac44211faba197ffa63a",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113931,7 +113912,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
