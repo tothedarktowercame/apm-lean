@@ -79330,12 +79330,23 @@
     [{:cmd "lake env lean ConstructionTargets/t97A04Closure.lean",
       :exit 1,
       :finding "Corrected zsmul, casts, and quotient induction."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791725365005-5421-de8f46b0",
+     :commands
+     ["git show/check/diff-tree 01c62dfc5"
+      "lake env lean ConstructionTargets/t97A04Closure.lean"
+      "lake env lean problems/t97A04/lean/Main.lean"
+      "statement-registry check/fingerprint and placeholder counts"],
+     :finding
+     "PASS: new compiled progress after the latest history entry. Commit changes only the scoped closure and proves that z↦z^a multiplies lifted endpoints and the π1 winding coordinate by a, with correct handling of negative integer powers and based-loop casts. Blob matches 92d905a6. Closure is sorry-free with standard axioms; Main compiles with unchanged 2 placeholders. Registry is 131/0 and frozen statement SHA-256 remains ca1b2cb3c6594276811618321d5c0604c2f38fc4594a6b21ae161a711a923a34. Hurewicz transfer, overlap components, and B6-B11 remain listed."},
     :commit "01c62dfc5a7368191aaa1a3d97dac4c7fc1b1e6d",
     :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
     :finding "zpow multiplies lifted endpoints and pi1 winding by a.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79395,6 +79406,9 @@
      :reason :program-progress-committed}
     {:job 3,
      :commit "eefa03a7443988ed6a43c6601588073266789c30",
+     :reason :program-progress-committed}
+    {:job 4,
+     :commit "01c62dfc5a7368191aaa1a3d97dac4c7fc1b1e6d",
      :reason :program-progress-committed}]}
   {:consumer :t96A07,
    :stop-count 1,
@@ -79801,7 +79815,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -79813,7 +79827,9 @@
     :reported-by [:program-2026-10-11-close-t97a04],
     :type "pi1 winding scales by a",
     :area "mv-connecting-naturality",
-    :proved-in :program-2026-10-11-close-t97a04},
+    :proved-in :program-2026-10-11-close-t97a04,
+    :banked-by :program-2026-10-11-close-t97a04,
+    :banked-commit "01c62dfc5a7368191aaa1a3d97dac4c7fc1b1e6d"},
    :id
    :lemma-constructiontargets-t97a04closure-circlezpow-fundamentalgroup-coordinate,
    :kind :lemma,
