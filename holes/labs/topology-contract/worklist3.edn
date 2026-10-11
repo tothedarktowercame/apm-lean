@@ -5320,8 +5320,88 @@
   {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-integralrelativechainscomparisonwithtransport-projection,
+   :evidence
+   {:placeholder-delta {:source 0, :fixture 0},
+    :residual
+    "Apply homology to integralRelativeChainsComparisonWithTransport and its projection equation; then compare that homology isomorphism with the earlier integralRelativeHomologyComparison and propagate the result through the chart and model normalizations.",
+    :gates
+    {:exact-type :pass,
+     :module-build :pass,
+     :four-reviewed-isomorphisms :pass,
+     :earlier-comparison-unchanged :pass,
+     :projection-naturality :pass,
+     :module-compile :pass,
+     :clean-worktree :pass,
+     :exact-scope :pass,
+     :statement-registry :pass,
+     :zero-placeholders :pass,
+     :fixture-compile :pass,
+     :chain-level-only :pass,
+     :transport-included :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["lake build replayed pre-existing dependency warnings only"],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport_projection",
+      :type
+      "forall {X : Type} [TopologicalSpace X] (A : Set X), (forgetIntModules.mapHomologicalComplex (ComplexShape.down Nat)).map (cokernel.π (CoefficientRelativeSmall.subspaceMap Int A)) ≫ (integralRelativeChainsComparisonWithTransport A).hom = (singularChainsComparison (TopCat.of X)).hom ≫ relativeSingularProjection A",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on
+      ["ConstructionTargets.ManifoldFundamentalClass.integralCompositeRelativeProjection_naturality"],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :topo-10,
+    :commands
+    [{:cmd
+      "sha256sum /tmp/manifold_fundamental_class_corrected_relative_comparison.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/manifold_fundamental_class_corrected_relative_comparison.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^\\s*axiom\\b' ConstructionTargets/ManifoldFundamentalClass.lean /tmp/manifold_fundamental_class_corrected_relative_comparison.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git status --porcelain", :exit 0}],
+    :diagnostic-history [],
+    :commit "2fc7db4aadbc429a617c340bd0f078ebd1f6b736",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path
+     "/tmp/manifold_fundamental_class_corrected_relative_comparison.lean",
+     :original-sha256
+     "c69f448d7d251361e51e4b370ba1ea5f6d9d47a4959d038ca5117519b7343b79",
+     :sha256
+     "8fdb5ab042c007163b7f36d3ec63ae120454936452ca1e967497313804f92010",
+     :placeholders 0},
+    :implementation
+    {:declaration
+     "ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport_projection",
+     :supporting-declarations
+     ["ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport"],
+     :representation
+     {:source
+      "The forgotten coefficient-relative chain complex equipped with the canonical comparison that explicitly composes cokernel preservation, coefficient-to-integral-map transport, the integral direct-cokernel comparison, and the inverse production presentation",
+      :target
+      "The production RelativeSingularChains complex with its absolute-to-relative projection after singularChainsComparison",
+      :direction
+      "Canonical chain-complex isomorphism from forgotten coefficient-relative chains to production RelativeSingularChains; its hom satisfies the exact absolute-projection naturality equality from source to target"}},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/corrected-integral-relative-comparison",
@@ -8107,11 +8187,13 @@
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport_projection",
     :reported-by
-    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+     :routes-2026-10-11-manifold-relative-chains-comparison-with-transport-topo3-r1],
     :type
     "forall {X : Type} [TopologicalSpace X] (A : Set X), (forgetIntModules.mapHomologicalComplex (ComplexShape.down Nat)).map (cokernel.π (CoefficientRelativeSmall.subspaceMap Int A)) ≫ (integralRelativeChainsComparisonWithTransport A).hom = (singularChainsComparison (TopCat.of X)).hom ≫ relativeSingularProjection A",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in
+    :routes-2026-10-11-manifold-relative-chains-comparison-with-transport-topo3-r1},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-integralrelativechainscomparisonwithtransport-projection,
    :kind :lemma,
