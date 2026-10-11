@@ -113859,7 +113859,7 @@
    "reopened: a lemma this row reported missing is now banked",
    :stop-count 3,
    :review-finding
-   "B10 cannot apply B6: its uses list supplies no open neighborhoods and pointed contractions for the circle basepoint and the TwoCircles basepoint; B9 provides only path-connectedness. Add nodes constructing those concrete neighborhoods and contractions, and list them in B10 uses.",
+   "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
@@ -113905,6 +113905,12 @@
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
       :exit 1,
       :finding "Corrected arrow and identity-functor elaboration."}],
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1791731968228-5553-37a8c65b",
+     :finding
+     "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses."},
     :commit "709c9e1d1e66e2495965122640b8a792c108f177",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113912,7 +113918,7 @@
      "ConstructionTargets/PointWedgeVanKampen.blueprint.md"],
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113937,7 +113943,7 @@
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
-   :fail-count 0,
+   :fail-count 1,
    :depends-on [],
    :program true,
    :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03],
