@@ -17848,7 +17848,8 @@
    :state :open,
    :scope
    ["ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean"
-    "ConstructionTargets/DeckGroupQuotientFundamentalGroup.md"],
+    "ConstructionTargets/DeckGroupQuotientFundamentalGroup.md"
+    "ConstructionTargets/DeckGroupQuotientFundamentalGroup.blueprint.md"],
    :dag-node "notes/closer/pattern-2026-10-11.md: deck-group pi1",
    :acceptance
    {:implementation
@@ -17860,9 +17861,11 @@
     :axioms :standard-only,
     :commands
     ["lake build ConstructionTargets.DeckGroupQuotientFundamentalGroup"
-     "python3 scripts/statement-registry.py check"]},
+     "python3 scripts/statement-registry.py check"],
+    :blueprint
+    "ConstructionTargets/DeckGroupQuotientFundamentalGroup.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The repaired program remains incomplete, but this job compiled and committed the next monodromy prerequisite: a canonical equivalence between the acting group and each quotient-covering fiber, plus its specialization to the repaired properly-discontinuous orbit projection. The next job must turn Mathlib's monodromy functor into an endpoint group homomorphism in these coordinates, prove bijectivity when the total space is simply connected, and then provide the consumer specializations.",
+   "NEXT JOB: write the blueprint ConstructionTargets/DeckGroupQuotientFundamentalGroup.blueprint.md per holes/labs/topology-contract/BLUEPRINTS.md, following the route audits ~/notes/closer/audits/{t93J03 t00A02 t00J07 t99J01}.md and ~/notes/closer/{t99j01,t93j03}-report.md and what this program already committed; commit it and STOP \"blueprint written\". After its review, formalise node by node. Continue this program from its last commit; earlier jobs: :program-history. Last stop: The repaired program remains incomplete, but this job compiled and committed the next monodromy prerequisite: a canonical equivalence between the acting group and each quotient-covering fiber, plus its specialization to the repaired properly-discontinuous orbit projection. The next job must turn Mathlib's monodromy functor into an endpoint group homomorphism in these coordinates, prove bijectivity when the total space is simply connected, and then provide the consumer specializations.",
    :id :program-2026-10-11-deck-group-quotient-pi1,
    :kind :reusable-theorem,
    :campaign-priority 50,

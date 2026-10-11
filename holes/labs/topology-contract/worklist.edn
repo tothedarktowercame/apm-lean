@@ -113957,7 +113957,8 @@
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
-    "ConstructionTargets/ThreeCirclesFundamentalGroup.lean"],
+    "ConstructionTargets/ThreeCirclesFundamentalGroup.lean"
+    "ConstructionTargets/PointWedgeVanKampen.blueprint.md"],
    :dag-node
    "notes/closer/pattern-2026-10-11.md: point-wedge van Kampen",
    :acceptance
@@ -113970,9 +113971,10 @@
     :commands
     ["lake build ConstructionTargets.PointWedgeVanKampen"
      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup"
-     "python3 scripts/statement-registry.py check"]},
+     "python3 scripts/statement-registry.py check"],
+    :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: This program job proved and banked the free-group coproduct milestone, including a reusable equivalence Monoid.Coprod (FreeGroup α) (FreeGroup β) ≃* FreeGroup (α ⊕ β) and its Fin 2, Fin 1 specialization. The generic point-wedge van Kampen equivalence and final ThreeCircles specialization remain.",
+   "NEXT JOB: write the blueprint ConstructionTargets/PointWedgeVanKampen.blueprint.md per holes/labs/topology-contract/BLUEPRINTS.md, following the route audits ~/notes/closer/audits/{t99J01 t01A03 t01A04 t92J06 t97A01 t97A03}.md and ~/notes/closer/{t99j01,t93j03}-report.md and what this program already committed; commit it and STOP \"blueprint written\". After its review, formalise node by node. Continue this program from its last commit; earlier jobs: :program-history. Last stop: This program job proved and banked the free-group coproduct milestone, including a reusable equivalence Monoid.Coprod (FreeGroup α) (FreeGroup β) ≃* FreeGroup (α ⊕ β) and its Fin 2, Fin 1 specialization. The generic point-wedge van Kampen equivalence and final ThreeCircles specialization remain.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 50,

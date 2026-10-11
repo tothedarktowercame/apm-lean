@@ -30,3 +30,9 @@ The supervisor applies and commits the ledger transition.
 Program rows (`:program true`): PASS a STOP that commits compiled, sorry-free,
 standard-axiom progress toward the final theorem and lists its milestones;
 FAIL one that commits nothing new since the last `:program-history` entry.
+
+Blueprints (`*.blueprint.md`, see BLUEPRINTS.md): review the MATHEMATICS.
+Check each node's statement is true as written, its proof uses only its
+`uses:` nodes and stated hypotheses, every hypothesis of the final theorem
+is used somewhere, and each Lean type is a faithful form of its statement.
+FAIL with the counterexample or the missing hypothesis.

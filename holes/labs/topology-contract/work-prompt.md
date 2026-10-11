@@ -207,6 +207,16 @@ with the commit. A reviewed program STOP reopens the row, so stopping is how
 a program job ends, not a failure. Strategy checkpoints may not supersede
 program rows; they may elect rows that consume banked milestones.
 
+BLUEPRINTS (Joe, 2026-10-11; holes/labs/topology-contract/BLUEPRINTS.md).
+A foundation is formalised from a reviewed blueprint
+`ConstructionTargets/<Foundation>.blueprint.md`, written after the route
+audits that name it (~/notes/closer/audits/). A program or row whose
+acceptance names a blueprint that does not exist yet writes it first, as its
+whole job (commit the .md, STOP "blueprint written"); a reviewed blueprint's
+nodes are the program's milestones, and a STOP names the node it is stuck on.
+A strategy checkpoint may elect a multi-day foundation row only when a
+reviewed blueprint backs it; otherwise it elects the blueprint.
+
 EXTEND MATHLIB; DO NOT STOP FOR A MISSING THEOREM (Joe, 2026-10-10). When the
 proof needs a theorem that Mathlib and `ConstructionTargets/` lack -- a
 covering restricted to a path component, a fundamental-domain homeomorphism,
