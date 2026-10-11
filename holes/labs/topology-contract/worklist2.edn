@@ -79283,32 +79283,32 @@
   {:consumer :t97A04,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :evidence
    {:placeholder-delta 0,
-    :residual "Prove two degree equations, then B6-B11.",
+    :residual "Prove the two circle-degree equations, then B6-B11.",
     :outcome :stop,
-    :warnings ["Main retains two placeholders."],
+    :warnings ["Main retains two placeholders and existing warnings."],
     :missing-theorems
     [{:name
-      "ConstructionTargets.T97A04Closure.shearY_overlap_coordinate_inl",
-      :type "inl then coordinate map equals a times inl",
-      :status :not-started,
+      "ConstructionTargets.T97A04Closure.shearY_overlap_coordinate_of_degree_components",
+      :type
+      "the two normalized component equations imply shearYOverlapCoordinateMap a b = overlapScalar a",
+      :status :proved,
       :consumers [:t97A04],
-      :depends-on
-      ["ConstructionTargets.T97A04Closure.twoCircleOverlapShear"],
+      :depends-on [],
       :area "mv-connecting-naturality"}
      {:name
-      "ConstructionTargets.T97A04Closure.shearY_overlap_coordinate_inr",
-      :type "inr then coordinate map equals a times inr",
-      :status :not-started,
+      "ConstructionTargets.T97A04Closure.shearY_overlap_coordinate_components",
+      :type "the normalized inl and inr degree-a equations",
+      :status :partial,
       :consumers [:t97A04],
       :depends-on
       ["ConstructionTargets.T97A04Closure.twoCircleOverlapShear"],
       :area "mv-connecting-naturality"}],
     :statement-hashes
     {:registry "131/0",
-     :closure "10ef39e6724c8ec9afed6df60aeb232559c0f3c7",
+     :closure "3a32d8fd53b6245037ee67eecd6a00a0116477f4",
      :blueprint "c419a895cb4ede2acc1cb6bc5c7536344ba63df4"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
@@ -79318,30 +79318,23 @@
     [{:cmd "lake env lean ConstructionTargets/t97A04Closure.lean",
       :exit 0}
      {:cmd "closure no-sorry scan", :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/t97A04Closure.lean",
+      :exit 0}
      {:cmd "lake env lean problems/t97A04/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "Main placeholder count", :exit 0, :output "2"}
-     {:cmd "git show --check ca53a3ddd", :exit 0}],
+     {:cmd "git show --check 2412fe180", :exit 0}],
     :diagnostic-history [],
-    :continue-from "Prove shearY_overlap_coordinate_inl and _inr.",
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791723897699-5389-71fa6786",
-     :commands
-     ["git show/check/diff-tree ca53a3ddd"
-      "lake env lean ConstructionTargets/t97A04Closure.lean"
-      "lake env lean problems/t97A04/lean/Main.lean"
-      "statement-registry check/fingerprint and placeholder counts"],
-     :finding
-     "PASS: new compiled progress after history job 9. Commit changes only the scoped closure and proves the two correctly oriented biproduct-injection normal forms for overlapScalar, advancing the two remaining B6 component equations. Blob matches 10ef39e6. Closure is sorry-free with standard axioms; Main compiles with unchanged 2 placeholders. Registry is 131/0 and frozen statement SHA-256 remains ca1b2cb3c6594276811618321d5c0604c2f38fc4594a6b21ae161a711a923a34. The two degree equations and B6-B11 are listed."},
-    :commit "ca53a3ddd90dc833a58ac5a32e2db12b9add8764",
+    :continue-from
+    "Prove the inl/inr equations using twoCircleOverlapShear.",
+    :commit "2412fe180baf98133a8bcdb748eaa009ff1d6734",
     :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
     :finding
-    "B6 scalar targets normalize on both biproduct injections.",
+    "B6 assembly from its two normalized degree equations now compiles.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79713,6 +79706,48 @@
     :area "mv-connecting-naturality"},
    :id
    :lemma-constructiontargets-t97a04closure-sheary-overlap-coordinate-inr,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t97a04closure-twocircleoverlapshear],
+   :other-consumers []}
+  {:consumer :t97A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T97A04Closure.shearY_overlap_coordinate_of_degree_components",
+    :type
+    "the two normalized component equations imply shearYOverlapCoordinateMap a b = overlapScalar a"},
+   :lemma
+   {:name
+    "ConstructionTargets.T97A04Closure.shearY_overlap_coordinate_of_degree_components",
+    :reported-by [:program-2026-10-11-close-t97a04],
+    :type
+    "the two normalized component equations imply shearYOverlapCoordinateMap a b = overlapScalar a",
+    :area "mv-connecting-naturality",
+    :proved-in :program-2026-10-11-close-t97a04},
+   :id
+   :lemma-constructiontargets-t97a04closure-sheary-overlap-coordinate-of-degree-components,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T97A04Closure.shearY_overlap_coordinate_components",
+    :type "the normalized inl and inr degree-a equations"},
+   :lemma
+   {:name
+    "ConstructionTargets.T97A04Closure.shearY_overlap_coordinate_components",
+    :reported-by [:program-2026-10-11-close-t97a04],
+    :type "the normalized inl and inr degree-a equations",
+    :area "mv-connecting-naturality"},
+   :id
+   :lemma-constructiontargets-t97a04closure-sheary-overlap-coordinate-components,
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-t97a04closure-twocircleoverlapshear],
