@@ -82,7 +82,7 @@ lean: `ConstructionTargets.T97A04Closure.shearY` :
 
 uses: B2
 
-status: planned
+status: proved a09ba300fab26381c636b4a7aea7e2dc1687913b
 
 Define `shearY a b (x,y) = (a • x + b • y, y)`.  Prove it maps each member of
 `frozenYCover` to itself, because its second coordinate is literally `y`.
