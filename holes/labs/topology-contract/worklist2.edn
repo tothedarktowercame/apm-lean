@@ -69288,47 +69288,63 @@
    "single-consumer common-sign certificate for both angular-stage collision endpoints",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/t02a03_collision_endpoint_sign_bridge_probe.lean",
-      :sha256
-      "ec8a9877c6025a3f562a749b4ebf7587273f91b3a03b1ec96ea9eb4120739f18"},
-     :implementation
-     {:scope
-      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
-      :declaration
-      "ConstructionTargets.T02A03GeometricTubeDeformation.collisionEndpoint_positiveFactor_signBridge",
-      :type
-      "forall (p : RightTubeMinusLeftCore), let m : Complex := rightTubeMeridianCoordinate p; let n0 := rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)); exists a b : Real, 0 < a and 0 < b and ((1-n0.re)^2 - 4*(1-n0.re)*((1 : Circle) : Complex).re + 3 = a*m.re) and ((1-(rightTubeCoreNormalComplex p.1).re)^2 - 4*(1-(rightTubeCoreNormalComplex p.1).re)*(rightTubeCoreAngularCoordinate p : Complex).re + 3 = b*m.re)",
-      :proof-plan
-      "Use the banked endpoint positive-factor theorem for b. Define a as one eighth times (2 plus the meridian real part divided by eight), prove it positive from the Circle real-part lower bound, and rewrite the banked meridian-start factorization by ring normalization."},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/t02a03_collision_endpoint_sign_bridge_probe.lean",
-       :exit 0,
-       :output
-       "collisionEndpoint_positiveFactor_signBridge compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "sha256sum /tmp/t02a03_collision_endpoint_sign_bridge_probe.lean",
-       :exit 0,
-       :output
-       "ec8a9877c6025a3f562a749b4ebf7587273f91b3a03b1ec96ea9eb4120739f18  /tmp/t02a03_collision_endpoint_sign_bridge_probe.lean"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_collision_endpoint_sign_bridge_probe.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :residual
-     "Implement the compiled common-sign certificate; then construct a continuous angular path in that sign component and certify it using the safe corridor and nonzero-height criterion before concatenating the radial stage."}},
+   {:placeholder-delta {:before 0, :after 0, :change 0},
+    :residual
+    "Construct a continuous angular path within that common sign component, prove its collision polynomial remains nonzero using the safe corridor and nonzero-height criterion, then concatenate it with the radial stage.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean:62:6: unnecessarySimpa (pre-existing)"],
+    :missing-theorems [],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms [propext Classical.choice Quot.sound],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :scope-blob "fc59c96bf789024c5d3b8c17e441686c49b73cf5",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0,
+      :output
+      "compiled; declaration axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "lake env lean /tmp/t02a03_collision_endpoint_sign_bridge_probe.lean",
+      :exit 0,
+      :output
+      "collisionEndpoint_positiveFactor_signBridge compiled; axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "sha256sum /tmp/t02a03_collision_endpoint_sign_bridge_probe.lean",
+      :exit 0,
+      :output
+      "ec8a9877c6025a3f562a749b4ebf7587273f91b3a03b1ec96ea9eb4120739f18  /tmp/t02a03_collision_endpoint_sign_bridge_probe.lean"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "git diff --check -- ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd
+      "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "ea87ed2ebf6afa9c6e679f5380c58a9f21c86be0",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.collisionEndpoint_positiveFactor_signBridge",
+    :fixture
+    {:path "/tmp/t02a03_collision_endpoint_sign_bridge_probe.lean",
+     :sha256
+     "ec8a9877c6025a3f562a749b4ebf7587273f91b3a03b1ec96ea9eb4120739f18"},
+    :finding
+    "The meridian-start factor has a positive coefficient from the Circle real-coordinate lower bound, while the recovered-input factor has a positive coefficient from deletion and radial positivity; hence both collision endpoint values are positive multiples of the same meridian real coordinate.",
+    :seat "topo-6"},
    :phase :implementation,
    :type
    "forall (p : RightTubeMinusLeftCore), let m : Complex := rightTubeMeridianCoordinate p; let n0 := rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)); exists a b : Real, 0 < a and 0 < b and ((1-n0.re)^2 - 4*(1-n0.re)*((1 : Circle) : Complex).re + 3 = a*m.re) and ((1-(rightTubeCoreNormalComplex p.1).re)^2 - 4*(1-(rightTubeCoreNormalComplex p.1).re)*(rightTubeCoreAngularCoordinate p : Complex).re + 3 = b*m.re)",
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/collision-endpoint-positive-factor-sign-bridge",
