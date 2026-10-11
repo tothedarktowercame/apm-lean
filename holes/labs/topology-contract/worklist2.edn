@@ -70868,52 +70868,74 @@
    "single-consumer global quarter-radius invariant for the zero-height core-normal detour",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:residual
-     "Implement the global radius bound, then prove nonzero imaginary part at every interior time and combine it with endpoint collision certificates for full left-core avoidance.",
-     :outcome :go,
-     :warnings [],
-     :axioms [propext Classical.choice Quot.sound],
-     :commands
-     [{:cmd
-       "lake env lean /tmp/t02a03_core_normal_detour_radius_probe.lean",
-       :exit 0,
-       :output
-       "zeroHeightCoreNormalDetour_radius_le compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "sha256sum /tmp/t02a03_core_normal_detour_radius_probe.lean",
-       :exit 0,
-       :output
-       "1dd416108a90f6811902d51fbad245c0bd6044c7e7d52ef10b7df391d1984635  /tmp/t02a03_core_normal_detour_radius_probe.lean"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_core_normal_detour_radius_probe.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}
-      {:cmd
-       "rg -n 'zeroHeightCoreNormalDetour_radius_le' /tmp/t02a03_core_normal_detour_radius_probe.lean",
-       :exit 0,
-       :output
-       "5:theorem zeroHeightCoreNormalDetour_radius_le\n53:#print axioms zeroHeightCoreNormalDetour_radius_le"}],
-     :fixture
-     {:path "/tmp/t02a03_core_normal_detour_radius_probe.lean",
-      :sha256
-      "1dd416108a90f6811902d51fbad245c0bd6044c7e7d52ef10b7df391d1984635"},
-     :finding
-     "The placeholder-free fixture proves every zero-height detour normal remains in the closed quarter-radius disk. The first half combines two radius-1/8 normals; the second combines the radius-1/8 waypoint with the recovered input normal bounded by 1/4.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
-      :declaration
-      "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCoreNormalDetour_radius_le",
-      :type
-      "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> forall (t : unitInterval), ‖zeroHeightCoreNormalDetour t p‖ ≤ (1 / 4 : ℝ)"},
-     :seat "topo-8"}},
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Prove nonzero imaginary part at every interior detour time, combine that with the banked endpoint collision certificates to obtain left-core avoidance for all times, then reconstruct the ambient zero-height radial stage.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["Pre-existing unnecessarySimpa linter warning at ConstructionTargets/T02A03GeometricTubeDeformation.lean:62:6."
+     "The canonical .lake/packages symlink invariant check failed because this checkout has a real package directory."],
+    :missing-theorems [],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not",
+     :construction-file-git-blob
+     "65eadbdaa01d71c82670ae9999dfe07d81008d47",
+     :fixture-sha256
+     "1dd416108a90f6811902d51fbad245c0bd6044c7e7d52ef10b7df391d1984635"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/t02a03_core_normal_detour_radius_probe.lean",
+      :exit 0,
+      :output
+      "1dd416108a90f6811902d51fbad245c0bd6044c7e7d52ef10b7df391d1984635  /tmp/t02a03_core_normal_detour_radius_probe.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/t02a03_core_normal_detour_radius_probe.lean",
+      :exit 0,
+      :output
+      "zeroHeightCoreNormalDetour_radius_le axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "git diff --check -- ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd
+      "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "git show --format= --unified=0 HEAD -- ConstructionTargets/T02A03GeometricTubeDeformation.lean | rg '^\\+.*(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' --pcre2",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git show --check --oneline HEAD",
+      :exit 0,
+      :output "31968cf61 Add t02A03 detour radius bound"}
+     {:cmd "git status --porcelain", :exit 0}],
+    :diagnostic-history
+    [{:cmd
+      "test -L .lake/packages && test \"$(readlink -f .lake/packages)\" = /home/joe/code/apm-lean/.lake/packages",
+      :exit 1,
+      :explanation
+      ".lake/packages is a real directory rather than the required canonical symlink; no package state was modified and the established workspace substrate compiled successfully."}],
+    :commit "31968cf611e9c2463058bf07b9712a6f67ff4a55",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+    :fixture
+    {:path "/tmp/t02a03_core_normal_detour_radius_probe.lean",
+     :sha256
+     "1dd416108a90f6811902d51fbad245c0bd6044c7e7d52ef10b7df391d1984635"},
+    :finding
+    "Every zero-height detour normal remains in the closed quarter-radius disk: the first affine half combines two radius-1/8 normals, and the second combines the radius-1/8 waypoint with the recovered input normal bounded by 1/4.",
+    :seat "topo-6"},
    :phase :implementation,
    :type
    "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> forall (t : unitInterval), ‖zeroHeightCoreNormalDetour t p‖ ≤ (1 / 4 : ℝ)",
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/zero-height-core-normal-detour-radius",
