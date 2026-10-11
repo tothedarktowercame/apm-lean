@@ -68715,52 +68715,65 @@
    "single-consumer safe angular corridor for nonpositive real normal coordinate",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:residual
-     "Implement the compiled nonpositive-normal safe-corridor inequality; then construct continuous entry and exit stages without crossing the collision zero set.",
-     :outcome :go,
-     :warnings [],
-     :acceptance
-     {:declaration
-      "ConstructionTargets.T02A03GeometricTubeDeformation.nonpositiveNormalSafeCorridor_collisionPolynomial_pos",
-      :type
-      "forall (u : Circle) (n : Complex), norm n <= (1 / 4 : Real) -> n.re <= 0 -> (u : Complex).re <= (9 / 10 : Real) -> 0 < (1 - n.re)^2 - 4*(1-n.re)*(u : Complex).re + 3",
-      :proof-obligations
-      ["derive -1/4 <= n.re from abs_re_le_norm"
-       "bound 1-n.re in [1,5/4]"
-       "use angular real-part bound to control the mixed term"
-       "prove strict positivity by nonlinear arithmetic"],
-      :forbidden-claims
-      ["safety outside angular real coordinate <= 9/10"
-       "angular homotopy construction"]},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd
-       "lake env lean /tmp/t02a03_collision_poly_nonpos_re_corridor_probe.lean",
-       :exit 0,
-       :output
-       "nonpositiveNormalSafeCorridor_collisionPolynomial_pos compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "sha256sum /tmp/t02a03_collision_poly_nonpos_re_corridor_probe.lean",
-       :exit 0,
-       :output
-       "a0962d48c4bfae6f64ec37ea3dbeca974ea8433b65b1c0651be4c24b0d97c444  /tmp/t02a03_collision_poly_nonpos_re_corridor_probe.lean"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_collision_poly_nonpos_re_corridor_probe.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :fixture
-     {:path "/tmp/t02a03_collision_poly_nonpos_re_corridor_probe.lean",
-      :sha256
-      "a0962d48c4bfae6f64ec37ea3dbeca974ea8433b65b1c0651be4c24b0d97c444"},
-     :implementation
-     {:scope
-      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
-     :seat "topo-8"}},
+   {:placeholder-delta {:before 0, :after 0, :change 0},
+    :residual
+    "Construct continuous entry and exit stages connecting the endpoint angular coordinates to the safe corridor without crossing the polynomial zero set, using the nonzero-height criterion when available; then assemble the corrected angular stage and concatenate it with the radial stage.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean:62:6: unnecessarySimpa (pre-existing)"
+     "Unrelated pre-existing untracked ConstructionTargets/PolygonBoundaryCompactHausdorffInstances.lean was preserved and not committed."],
+    :missing-theorems [],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms [propext Classical.choice Quot.sound],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :scope-blob "c2a42a484c81854fabe25b7225a66aa55df136ec",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0,
+      :output
+      "compiled; declaration axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "lake env lean /tmp/t02a03_collision_poly_nonpos_re_corridor_probe.lean",
+      :exit 0,
+      :output
+      "nonpositiveNormalSafeCorridor_collisionPolynomial_pos compiled; axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "sha256sum /tmp/t02a03_collision_poly_nonpos_re_corridor_probe.lean",
+      :exit 0,
+      :output
+      "a0962d48c4bfae6f64ec37ea3dbeca974ea8433b65b1c0651be4c24b0d97c444  /tmp/t02a03_collision_poly_nonpos_re_corridor_probe.lean"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "git diff --check -- ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd
+      "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git status --short",
+      :exit 0,
+      :output
+      "?? ConstructionTargets/PolygonBoundaryCompactHausdorffInstances.lean"}],
+    :commit "97d707cd57abd895c048d6eb7a91aca6374847e1",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.nonpositiveNormalSafeCorridor_collisionPolynomial_pos",
+    :fixture
+    {:path "/tmp/t02a03_collision_poly_nonpos_re_corridor_probe.lean",
+     :sha256
+     "a0962d48c4bfae6f64ec37ea3dbeca974ea8433b65b1c0651be4c24b0d97c444"},
+    :finding
+    "The norm bound yields -1/4 <= n.re, while nonpositivity gives 1 <= 1-n.re <= 5/4; the angular real-part ceiling controls the mixed term, and nonlinear arithmetic proves strict polynomial positivity.",
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/nonpositive-normal-safe-angular-corridor",
