@@ -102906,6 +102906,21 @@
      {:cmd "git diff --check", :exit 0}
      {:cmd "git status --short", :exit 0, :finding "clean"}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791683571852-3715-24e82cf8",
+     :commands
+     ["git show and git diff-tree on recorded commit fd66b527243961010c396ddc40cff3f42d57da42"
+      "git diff --exit-code recorded commit against source checkout"
+      "SHA-256 and comment-stripped placeholder and axiom recomputation for source and fixture"
+      "lake build ConstructionTargets.PolygonBoundaryThreeLoopBijections"
+      "lake env lean /tmp/polygon-boundary-three-loop-bijections.lean"
+      "lake env lean /dev/stdin with fresh axiom checks"
+      "python3 scripts/statement-registry.py check"
+      "git diff-tree --check recorded parent and commit"],
+     :finding
+     "Recorded one-file commit is authored by topo-2; source equals the recorded blob and is byte-identical to the frozen fixture; injectivity of each specialized three-loop map is derived from its correctly oriented decoder left inverse, and each bijectivity theorem pairs that injectivity with the matching banked surjectivity result; all four frozen theorem types compile with only standard axioms, placeholder and axiom counts are zero, the registry reports 131 matched and 0 mismatched, and inverse continuity and homeomorphism remain outside scope."},
     :commit "fd66b527243961010c396ddc40cff3f42d57da42",
     :changed-paths
     ["ConstructionTargets/PolygonBoundaryThreeLoopBijections.lean"],
@@ -102922,7 +102937,7 @@
       "bijective_n3ThreeLoops"
       "bijective_torusCrosscapThreeLoops"]}},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/PolygonBoundaryThreeLoopBijections.lean"],
    :dag-node
@@ -103062,7 +103077,7 @@
       "Both three-loop boundary maps are injective by their compiled decoder left inverses and bijective by the banked six-edge surjectivity reductions."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -107724,7 +107739,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "PolygonBoundaryThreeLoopBijections.bijective_n3ThreeLoops",
@@ -107736,7 +107751,10 @@
     :type "Function.Bijective n3ThreeLoops",
     :area "polygon-surface-open-cover",
     :proved-in
-    :routes-2026-10-11-polygon-boundary-three-loop-bijections-78},
+    :routes-2026-10-11-polygon-boundary-three-loop-bijections-78,
+    :banked-by
+    :routes-2026-10-11-polygon-boundary-three-loop-bijections-78,
+    :banked-commit "fd66b527243961010c396ddc40cff3f42d57da42"},
    :id
    :lemma-polygonboundarythreeloopbijections-bijective-n3threeloops,
    :kind :lemma,
@@ -107746,7 +107764,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -107760,7 +107778,10 @@
     :type "Function.Bijective torusCrosscapThreeLoops",
     :area "polygon-surface-open-cover",
     :proved-in
-    :routes-2026-10-11-polygon-boundary-three-loop-bijections-78},
+    :routes-2026-10-11-polygon-boundary-three-loop-bijections-78,
+    :banked-by
+    :routes-2026-10-11-polygon-boundary-three-loop-bijections-78,
+    :banked-commit "fd66b527243961010c396ddc40cff3f42d57da42"},
    :id
    :lemma-polygonboundarythreeloopbijections-bijective-toruscrosscapthreeloops,
    :kind :lemma,
