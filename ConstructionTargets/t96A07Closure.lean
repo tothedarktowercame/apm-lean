@@ -160,6 +160,19 @@ theorem crossTermSphereMap_mfderiv_firstPoint_range :
     ext i
     fin_cases i <;> simp [v, sphereMapAmbientDerivative, sphereFirstAxis, hy0]
 
+/-- The fixed quotient projection has a surjective derivative at every sphere
+point, since it is a local diffeomorphism for the frozen atlas. -/
+theorem sphereProjection_mfderiv_surjective (p : Sphere 2) :
+    letI := rpSmoothAtlas.charts
+    letI := rpSmoothAtlas.smooth
+    Function.Surjective
+      (mfderiv (𝓡 2) (𝓡 2) (sphereProjection 2) p) := by
+  letI := rpSmoothAtlas.charts
+  letI := rpSmoothAtlas.smooth
+  have h := rpSmoothAtlas.quotient_localDiffeomorph
+  rw [← h.mfderivToContinuousLinearEquiv_coe (by simp) p]
+  exact (h.mfderivToContinuousLinearEquiv (by simp) p).surjective
+
 /-- At the first coordinate point the ambient derivative swaps the two free
 tangent coordinates and has zero first coordinate. -/
 theorem sphereMapAmbientDerivative_firstAxis (v : E 3) :
@@ -173,5 +186,6 @@ theorem sphereMapAmbientDerivative_firstAxis (v : E 3) :
 #print axioms crossTermSphereMap_descends
 #print axioms sphereMapAmbient_fderiv
 #print axioms sphereMapAmbientDerivative_firstAxis
+#print axioms sphereProjection_mfderiv_surjective
 
 end ConstructionTargets.T96A07Closure
