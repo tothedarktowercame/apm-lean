@@ -113095,7 +113095,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "freeProperlyDiscontinuousQuotient_fundamentalGroupEquiv",
@@ -113106,7 +113106,10 @@
     :reported-by [:owner],
     :type
     "for a simply connected, locally path-connected space with a free properly discontinuous action of G, π₁ of the quotient ≃* G (deck-group theorem; reusable; 250-500 lines with the Klein specialisation)",
-    :area "deck-group-fundamental-group"},
+    :area "deck-group-fundamental-group",
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean"]},
    :id :lemma-freeproperlydiscontinuousquotient-fundamentalgroupequiv,
    :kind :lemma,
    :depends-on [],
@@ -116156,11 +116159,25 @@
     {:commit "6461d9295ff33499139569f43b4605c21ab88258",
      :next
      "Obtain independent review of the corrected functorial composition; after approval formalize B1 and B2 in ConstructionTargets/t95J02Closure.lean."},
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791718436116-5269-3f7ecae7",
+     :commands
+     ["git show 6461d9295ff33499139569f43b4605c21ab88258 --stat and diff"
+      "git diff-tree --name-status 6461d9295ff33499139569f43b4605c21ab88258"
+      "git show recorded blueprint | sha256sum"
+      "git diff --check recorded commit"
+      "python3 scripts/statement-registry.py check"
+      "lake env lean direct reflection map_comp and integral_circle checks"
+      "lake env lean problems/t95J02/lean/Main.lean"],
+     :finding
+     "PASS: recorded commit changes only the scoped blueprint and reproduces hash 26284f315609ccfbaef18b9a1db46411f318de9462a6ab8cd30bdec6a7f1d906. B6 uses the correct coordinate-1 reflection and declaration namespace. B7 now has the type-correct order H1(reflection) followed by H1(beta), and integral_circle 1 supplies negative identity. All nine node statements, dependencies, orientations, and representation transports are coherent; registry has 131 matches. The three existing placeholders are accurately retained as the declared residual before formalization."},
     :commit "6461d9295ff33499139569f43b4605c21ab88258",
     :changed-paths ["ConstructionTargets/t95J02Closure.blueprint.md"],
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t95J02/lean/Main.lean"
     "problems/t95J02/status.json"
@@ -116176,14 +116193,19 @@
     ["lake env lean problems/t95J02/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
    :continue-from
-   "NEXT JOB: write the blueprint ConstructionTargets/t95J02Closure.blueprint.md (BLUEPRINTS.md) for the remaining chain in ~/notes/closer/audits/t95J02.md, then formalise node by node.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Blueprint repaired. B7 now uses the type-correct functorial order H1(reflectionMap 1) followed by H1(beta), derives H1(beta)(g) = H1(beta)(-g), and uses additivity to kill 2 times g. A fresh Lean map_comp check confirms the source and target order. Independent blueprint re-review remains required.",
    :id :program-2026-10-11-close-t95j02,
    :kind :final-adapter,
    :campaign-priority 41,
    :fail-count 3,
    :depends-on [],
    :program true,
-   :other-consumers []}
+   :other-consumers [],
+   :program-history
+   [{:job 4,
+     :commit "6461d9295ff33499139569f43b4605c21ab88258",
+     :reason
+     "Blueprint repaired. B7 now uses the type-correct functorial order H1(reflectionMap 1) followed by H1(beta), derives H1(beta)(g) = H1(beta)(-g), and uses additivity to kill 2 times g. A fresh Lean map_comp check confirms the source and target order. Independent blueprint re-review remains required."}]}
   {:consumer :t92J08,
    :phase :implementation,
    :state :open,
