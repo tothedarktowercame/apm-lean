@@ -71853,7 +71853,62 @@
   {:bounded-exception
    "single-consumer two-leg waypoint adapter for an endpoint-correct nonvanishing complex path",
    :consumer :t02A03,
-   :phase :probe,
+   :supporting-declarations
+   [{:name
+     "ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularWaypointPath",
+     :type
+     "C(RightTubeMinusLeftCore, ℂ) → unitInterval → RightTubeMinusLeftCore → ℂ"}],
+   :evidence
+   {:probe
+    {:residual
+     "Choose a continuous complex waypoint over RightTubeMinusLeftCore and prove both affine legs avoid zero; then normalize the constructed path and invoke the ambient reconstruction adapter.",
+     :outcome :go,
+     :warnings [],
+     :axioms [propext Classical.choice Quot.sound],
+     :commands
+     [{:cmd
+       "lake env lean /tmp/t02a03_coupled_angular_waypoint_adapter_probe.lean",
+       :exit 0,
+       :output
+       "nonvanishingComplexPath_of_waypoint compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "sha256sum /tmp/t02a03_coupled_angular_waypoint_adapter_probe.lean",
+       :exit 0,
+       :output
+       "696fc5c0faaa90d5cbeacce50c0e89f6c8bee0de0cbe2eb1167fb3a0da45e391  /tmp/t02a03_coupled_angular_waypoint_adapter_probe.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_coupled_angular_waypoint_adapter_probe.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}
+      {:cmd
+       "rg -n 'nonvanishingComplexPath_of_waypoint' /tmp/t02a03_coupled_angular_waypoint_adapter_probe.lean",
+       :exit 0,
+       :output
+       "16:theorem nonvanishingComplexPath_of_waypoint\n62:#print axioms nonvanishingComplexPath_of_waypoint"}],
+     :fixture
+     {:path "/tmp/t02a03_coupled_angular_waypoint_adapter_probe.lean",
+      :sha256
+      "696fc5c0faaa90d5cbeacce50c0e89f6c8bee0de0cbe2eb1167fb3a0da45e391"},
+     :finding
+     "The fixture continuously pastes the affine leg from 1 to a supplied waypoint with the leg from that waypoint to the core-planar endpoint. Exact agreement at time 1/2 gives joint continuity; the supplied leg certificates give global nonvanishing and the formulas give both required endpoints.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+      :declaration
+      "ConstructionTargets.T02A03GeometricTubeDeformation.nonvanishingComplexPath_of_waypoint",
+      :supporting-declarations
+      [{:name
+        "ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularWaypointPath",
+        :type
+        "C(RightTubeMinusLeftCore, ℂ) → unitInterval → RightTubeMinusLeftCore → ℂ"}],
+      :type
+      "∀ (W : C(RightTubeMinusLeftCore, ℂ)), (∀ t p, (t : ℝ) ≤ 1/2 → ((1-2*(t:ℝ):ℝ):ℂ) + ((2*(t:ℝ):ℝ):ℂ)*W p ≠ 0) → (∀ t p, ¬(t : ℝ) ≤ 1/2 → ((2-2*(t:ℝ):ℝ):ℂ)*W p + ((2*(t:ℝ)-1:ℝ):ℂ)*rightTubeCorePlanarComplex p.1 ≠ 0) → ∃ Z : C(unitInterval × RightTubeMinusLeftCore, ℂ), (∀ tp, Z tp ≠ 0) ∧ (∀ p, Z (0,p)=1) ∧ (∀ p, Z (1,p)=rightTubeCorePlanarComplex p.1)"},
+     :seat "topo-8"}},
+   :phase :implementation,
+   :type
+   "∀ (W : C(RightTubeMinusLeftCore, ℂ)), (∀ t p, (t : ℝ) ≤ 1/2 → ((1-2*(t:ℝ):ℝ):ℂ) + ((2*(t:ℝ):ℝ):ℂ)*W p ≠ 0) → (∀ t p, ¬(t : ℝ) ≤ 1/2 → ((2-2*(t:ℝ):ℝ):ℂ)*W p + ((2*(t:ℝ)-1:ℝ):ℂ)*rightTubeCorePlanarComplex p.1 ≠ 0) → ∃ Z : C(unitInterval × RightTubeMinusLeftCore, ℂ), (∀ tp, Z tp ≠ 0) ∧ (∀ p, Z (0,p)=1) ∧ (∀ p, Z (1,p)=rightTubeCorePlanarComplex p.1)",
    :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
@@ -71872,6 +71927,8 @@
    :routes-2026-10-11-t02a03-coupled-angular-waypoint-adapter-topo2-r1,
    :kind :reusable-theorem,
    :area "explicit-r3-tube-deformation-retraction",
+   :declaration
+   "ConstructionTargets.T02A03GeometricTubeDeformation.nonvanishingComplexPath_of_waypoint",
    :depends-on
    [:routes-2026-10-11-t02a03-coupled-angular-normalization-adapter-topo2-r1],
    :current-residual
