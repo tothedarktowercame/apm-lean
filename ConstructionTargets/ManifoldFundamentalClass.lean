@@ -1519,6 +1519,33 @@ theorem integralOpenDiskPunctureHomologyComparison_hom (k : ℕ) :
           (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2)))
         (k + 1)).hom := rfl
 
+/-- The chain-level comparison of the coefficient and production short exact
+sequences for the punctured unit disk. -/
+noncomputable def integralOpenDiskPairShortComplexComparison (k : ℕ) :
+    (CoefficientPairSequence.sequence ℤ
+      (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2))).map
+        (forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ)) ⟶
+      singularPairShortComplex
+        (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2)) where
+  τ₁ := (singularChainsComparison
+    (TopCat.of (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2)))).hom
+  τ₂ := (singularChainsComparison
+    (TopCat.of (T02A06HemisphereExcision.euclideanOpenDisk (k + 2)))).hom
+  τ₃ := (integralRelativeChainsComparisonWithTransport
+    (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2))).hom
+  comm₁₂ := by
+    simpa only [CoefficientPairSequence.sequence,
+      CoefficientCokernelComparison.cokernelShortComplex,
+      CoefficientPairSequence.inclusion,
+      coefficientSubspaceMap_eq_integralSubtypeChainMap] using
+      (integralSingularChainsComparison_subtype_naturality
+        (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2))).symm
+  comm₂₃ := by
+    simpa only [CoefficientPairSequence.sequence,
+      CoefficientCokernelComparison.cokernelShortComplex] using
+      (integralRelativeChainsComparisonWithTransport_projection
+        (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2))).symm
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -1612,5 +1639,6 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralOpenDiskRelativeHomologyComparison_hom
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralOpenDiskPunctureHomologyComparison
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralOpenDiskPunctureHomologyComparison_hom
+#print axioms ConstructionTargets.ManifoldFundamentalClass.integralOpenDiskPairShortComplexComparison
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport_homologyMap_eq_composite
 #print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_transport_homology_factors
