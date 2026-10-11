@@ -113902,6 +113902,20 @@
      {:cmd "git diff --check -- scoped files", :exit 0}
      {:cmd "python3 comment-stripped placeholder scan", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791734588071-5589-01985c15",
+     :commands
+     ["git show/diff-tree 5441ee4e4"
+      "sha256sum scoped files"
+      "placeholder scan"
+      "statement-registry.py check"
+      "lake env lean PointWedgeVanKampen.lean"
+      "lake build PointWedgeVanKampen"
+      "lake build ThreeCirclesFundamentalGroup"],
+     :finding
+     "PASS: new compiled sorry-free B6 progress defines the exact based equivalence at the literal left wedge representative, oriented from FundamentalGroup of the wedge to the coproduct of the two based groups. Scope/hashes match, placeholders are zero, and axioms standard. Both leg equations and B12 remain listed; absent final target is valid STOP state."},
     :commit "5441ee4e4022fabe8bc58b1a5653bf17545d0853",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113912,7 +113926,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113933,7 +113947,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B4 proved: target-natural B3 reconstructs the source groupoid equivalence. B6 and B12 remain.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B6 partial: the exact based free-product equivalence is proved at the literal left wedge representative; its two leg equations remain.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -113981,7 +113995,11 @@
     {:job 5,
      :commit "4fcef0d6c26d43243e5a7b53d0c97c873aa5f6ac",
      :reason
-     "B4 proved: target-natural B3 reconstructs the source groupoid equivalence. B6 and B12 remain."}]}
+     "B4 proved: target-natural B3 reconstructs the source groupoid equivalence. B6 and B12 remain."}
+    {:job 6,
+     :commit "5441ee4e4022fabe8bc58b1a5653bf17545d0853",
+     :reason
+     "B6 partial: the exact based free-product equivalence is proved at the literal left wedge representative; its two leg equations remain."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
