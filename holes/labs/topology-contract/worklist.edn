@@ -104260,12 +104260,12 @@
    :evidence
    {:probe
     {:residual
-     "Fresh verification finds the same single prerequisite: the carrier-to-cyclic-component bridge remains partial, so the frozen existential carrier cannot yet be reported as compiled-refuted.",
+     "Fresh grep and axiom audits confirm exactly one compiled prerequisite remains: compatibleCarrierHomeomorphInducesCyclicComponentEquiv.",
      :outcome :revise,
      :warnings
      [{:kind :pending-frozen-type-refutation,
        :message
-       "The finite pairing obstruction is compiled, but the implication from a relation-compatible carrier to a cyclic boundary-component equivalence remains unproved."}],
+       "The compiled finite obstruction does not yet refute the frozen carrier type because the carrier-to-component bridge remains axiomatic."}],
      :missing-theorems
      [{:name "compatibleCarrierHomeomorphInducesCyclicComponentEquiv",
        :type
@@ -104291,7 +104291,7 @@
       "TOPOLOGY-ROUTES.md/t93J03/compatible-carrier-component-bridge",
       :acceptance
       {:implementation
-       "Extend the existing class-image and nontrivial-related-locus lemmas. Prove that a relation-compatible disk-to-square homeomorphism permutes the four open boundary components, that the induced permutation preserves or reverses cyclic adjacency, and that it conjugates diskPaired to squarePaired. Export compatibleCarrierHomeomorphInducesCyclicComponentEquiv with the exact fixture type, then compile no_relation_compatible_carrier using no_cyclic_relation_compatible_component_equiv. Do not assume fixed edge formulas, construct quotient maps, prove the orbit quotient comparison, or close t93J03.",
+       "Extend the existing class-image and nontrivial-related-locus lemmas to prove that a relation-compatible disk-to-square homeomorphism permutes the four open boundary components, preserves or reverses cyclic adjacency, and conjugates diskPaired to squarePaired. Export compatibleCarrierHomeomorphInducesCyclicComponentEquiv with the exact fixture type and compile no_relation_compatible_carrier using no_cyclic_relation_compatible_component_equiv. Do not assume fixed edge formulas, construct quotient maps, prove the orbit quotient comparison, or close t93J03.",
        :placeholder "the single sorry in apm_t93j03",
        :route-step
        "derive the forbidden cyclic boundary-component equivalence from the frozen relation-compatible carrier interface",
@@ -104311,7 +104311,7 @@
       :depends-on
       [:lemma-no-cyclic-relation-compatible-component-equiv],
       :current-residual
-      "Complete the boundary-component permutation and pairing-conjugacy proof; completion yields a compiled refutation of the frozen carrier type.",
+      "Complete the boundary-component permutation and pairing-conjugacy proof, after which the frozen carrier type is compiled-refuted.",
       :other-consumers []},
      :axioms
      ["propext"
@@ -104320,15 +104320,20 @@
       "KleinCompatibleCarrierComponentBridgeProbe.compatibleCarrierHomeomorphInducesCyclicComponentEquiv"],
      :commands
      [{:cmd
+       "rg -n 'theorem compatibleCarrierHomeomorphInducesCyclicComponentEquiv|axiom compatibleCarrierHomeomorphInducesCyclicComponentEquiv' ConstructionTargets/KleinCompatibleCarrierComponentBridge.lean /tmp/klein-compatible-carrier-component-bridge-probe.lean",
+       :exit 0,
+       :finding
+       "The name occurs only as the fixture axiom; the scoped source still has no theorem of that type."}
+      {:cmd
        "lake env lean ConstructionTargets/KleinCompatibleCarrierComponentBridge.lean",
        :exit 0,
        :finding
-       "The source still exports only class-image preservation and preservation of the nontrivial-related locus, both with standard axioms; the cyclic component equivalence is absent."}
+       "The partial source compiles its two relation-class lemmas with standard axioms."}
       {:cmd
        "lake env lean /tmp/klein-compatible-carrier-component-bridge-probe.lean",
        :exit 0,
        :finding
-       "The fixture derives nonexistence only through the isolated compatibleCarrierHomeomorphInducesCyclicComponentEquiv axiom."}
+       "The nonexistence consequence compiles only with compatibleCarrierHomeomorphInducesCyclicComponentEquiv as a nonstandard axiom."}
       {:cmd
        "sha256sum /tmp/klein-compatible-carrier-component-bridge-probe.lean",
        :exit 0,
@@ -104340,11 +104345,10 @@
       {:cmd
        "sed -n '1,240p' TOPOLOGY-ROUTES.md >/dev/null && sed -n '1,240p' holes/labs/topology-routes/routes-1.md >/dev/null && sed -n '1,240p' holes/labs/topology-routes/routes-2.md >/dev/null && sed -n '1,240p' holes/labs/topology-routes/routes-3.md >/dev/null && sed -n '1,220p' docs/TN-topology-build-loop-design.md >/dev/null",
        :exit 0,
-       :finding
-       "The route guide, per-problem routes, probe rules, and dependency evidence were reread."}
+       :finding "The required route and probe documents were reread."}
       {:cmd "git status --short",
        :exit 0,
-       :finding "Clean worktree; this probe was read-only."}],
+       :finding "Clean worktree; no repository files changed."}],
      :diagnostic-history [],
      :fixture
      {:path
