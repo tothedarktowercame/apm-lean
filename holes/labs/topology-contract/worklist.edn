@@ -113857,73 +113857,62 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 5,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "B4, B6, B12 remain; next derive literal leg coordinates from B3.",
+    "B6 and B12 remain; next prove literal left/right leg coordinates.",
     :outcome :stop,
-    :warnings [],
+    :warnings [{:kind :upstream-lint}],
     :missing-theorems
-    [{:name
-      "PointWedgeVanKampen.genericPointWedgeSingleObjMappingEquivalence",
-      :type "Target-natural point-wedge mapping equivalence",
+    [{:name "PointWedgeVanKampen.genericPointWedgeSourceEquivalence",
+      :type
+      "FundamentalGroupoid (Wedge x0 y0) equivalent to SingleObj of the free product",
       :status :proved,
       :consumers [:t99J01 :t01A03 :t92J06 :t97A01 :t97A03],
-      :depends-on [],
+      :depends-on
+      ["PointWedgeVanKampen.genericPointWedgeSingleObjMappingEquivalence"],
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "871ad82b9850511a52af00a4e718237897954fee1f3e70905acb0afff7f70503",
+     "725745d0a8b00222adc30988d92d2701b374b9eb277bef9415fbdec14da0a5ac",
      :documentation
-     "e9364598a0739932617814c49683e85d8680df613650f9bc095b652947b6fda3",
+     "c9c032fd00d1d5917cabb14dcf9374b30a22c6e2456ba12a8114dfb1b1a3bc40",
      :blueprint
-     "e0044518bc017ab3c3e1ba58643f1e0c2ac39e874de929d90b9f900dde357218",
+     "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Repair complete: B3 now declares the connector-system dependency and exact based transport route; B4, B6 and B12 remain.",
+    "B4 proved: target-natural B3 reconstructs the source groupoid equivalence. B6 and B12 remain.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
       :exit 0}
+     {:cmd "lake build ConstructionTargets.PointWedgeVanKampen",
+      :exit 0}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131/131"}
-     {:cmd
-      "git diff --check -- ConstructionTargets/PointWedgeVanKampen.blueprint.md",
-      :exit 0}
+     {:cmd "git diff --check -- scoped files", :exit 0}
      {:cmd "python3 comment-stripped placeholder scan", :exit 0}],
     :diagnostic-history [],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791732254336-5564-6a2b6c8f",
-     :commands
-     ["git show/diff-tree f083a1df5"
-      "sha256sum scoped files"
-      "placeholder scan"
-      "statement-registry.py check"
-      "lake env lean PointWedgeVanKampen.lean"
-      "lake build PointWedgeVanKampen"
-      "lake build ThreeCirclesFundamentalGroup"],
-     :finding
-     "PASS: repair adds the actual ConnectorSystem/connectorSingleObjEquivalence dependency and based Unit/x0/y0 route to B3. Scope and hashes match; source, docs and blueprint have zero placeholders; B3 elaborates with standard axioms and the milestone build passes. B4/B6/B12 remain listed, so the absent final target is valid program STOP state."},
-    :commit "f083a1df57e92cd08896e521dcd9c52bca6bb10e",
+    :commit "4fcef0d6c26d43243e5a7b53d0c97c873aa5f6ac",
     :changed-paths
-    ["ConstructionTargets/PointWedgeVanKampen.blueprint.md"],
+    ["ConstructionTargets/PointWedgeVanKampen.lean"
+     "ConstructionTargets/PointWedgeVanKampen.md"
+     "ConstructionTargets/PointWedgeVanKampen.blueprint.md"],
     :fixture
     {:path "ConstructionTargets/PointWedgeVanKampen.blueprint.md",
      :sha256
-     "e0044518bc017ab3c3e1ba58643f1e0c2ac39e874de929d90b9f900dde357218"},
+     "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -117886,6 +117875,26 @@
    :kind :lemma,
    :depends-on
    [:lemma-pointwedgevankampen-genericpointwedgecoordinatepointspanequivalence],
+   :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
+  {:consumer :t99J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "PointWedgeVanKampen.genericPointWedgeSourceEquivalence",
+    :type
+    "FundamentalGroupoid (Wedge x0 y0) equivalent to SingleObj of the free product"},
+   :lemma
+   {:name "PointWedgeVanKampen.genericPointWedgeSourceEquivalence",
+    :reported-by [:program-2026-10-11-point-wedge-van-kampen],
+    :type
+    "FundamentalGroupoid (Wedge x0 y0) equivalent to SingleObj of the free product",
+    :area "fundamental-group-wedge-of-circles",
+    :proved-in :program-2026-10-11-point-wedge-van-kampen},
+   :id :lemma-pointwedgevankampen-genericpointwedgesourceequivalence,
+   :kind :lemma,
+   :depends-on
+   [:lemma-pointwedgevankampen-genericpointwedgesingleobjmappingequivalence],
    :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}],
  :consumer-baselines
  {:t00A01
