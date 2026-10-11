@@ -869,6 +869,14 @@ theorem forgetIntModules_preservesParallelPairLimits :
     forgetIntModules.asEquivalence.functor
   infer_instance
 
+/-- Forgetting the integer-module structure preserves colimits of parallel
+pairs. -/
+theorem forgetIntModules_preservesParallelPairColimits :
+    PreservesColimitsOfShape WalkingParallelPair forgetIntModules := by
+  change PreservesColimitsOfShape WalkingParallelPair
+    forgetIntModules.asEquivalence.functor
+  infer_instance
+
 /-- The corrected relative-homology comparison intertwines the coefficient
 absolute-to-relative map with the production relative projection. -/
 theorem integralRelativeHomologyComparisonWithTransport_projection
@@ -1833,6 +1841,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetIntModules_shortExact
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetIntModulesSnakeInput_zero_squares
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetIntModules_preservesParallelPairLimits
+#print axioms ConstructionTargets.ManifoldFundamentalClass.forgetIntModules_preservesParallelPairColimits
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
