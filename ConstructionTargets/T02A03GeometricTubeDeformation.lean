@@ -612,6 +612,22 @@ theorem rightCorePolarReconstruction_circleMeridian
   rw [Real.sqrt_sq hpos]
   ring
 
+theorem rightTubeRadialCoefficient_pos
+    (t : unitInterval) (n : ℂ) (hn : n ≠ 0) :
+    0 < (1 - (t : ℝ)) * (1 / 8 : ℝ) + (t : ℝ) * ‖n‖ := by
+  have ht0 : 0 ≤ (t : ℝ) := t.2.1
+  have ht1 : (t : ℝ) ≤ 1 := t.2.2
+  have hnpos : 0 < ‖n‖ := norm_pos_iff.mpr hn
+  by_cases ht : (t : ℝ) = 1
+  · rw [ht]
+    simpa using hnpos
+  · have hleft : 0 < 1 - (t : ℝ) := sub_pos.mpr (lt_of_le_of_ne ht1 ht)
+    have hfirst : 0 < (1 - (t : ℝ)) * (1 / 8 : ℝ) :=
+      mul_pos hleft (by norm_num)
+    have hsecond : 0 ≤ (t : ℝ) * ‖n‖ :=
+      mul_nonneg ht0 (norm_nonneg n)
+    exact add_pos_of_pos_of_nonneg hfirst hsecond
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -632,3 +648,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreInterpolatedNormalRadiusBound
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.normalizedRightCorePlanar_circleMeridian
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightCorePolarReconstruction_circleMeridian
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeRadialCoefficient_pos
