@@ -69484,90 +69484,117 @@
    :proof-plan
    "Choose c as the inverse norm of rightTubeNormalComplex p. Deletion makes this norm nonzero and positive; take imaginary parts of norm times normalize equals the original vector, unfold the normal coordinate height, and cancel the norm."}
   {:bounded-exception
+   "single-consumer nonzero-height certificate throughout the core-normal interpolation",
+   :consumer :t02A03,
+   :phase :probe,
+   :state :open,
+   :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t02A03/nonzero-height-core-normal-interpolation-im",
+   :acceptance
+   {:probe
+    "Compile nonzeroHeight_im_ne_zero_rightTubeCoreNormalInterpolation. For a nonzero-height input, prove every specialized core-normal interpolation value has nonzero imaginary part by factoring it as the input height times a positive convex coefficient. Do not handle zero-height inputs or construct an angular path.",
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.nonzeroHeight_im_ne_zero_rightTubeCoreNormalInterpolation",
+    :type
+    "forall (tp : unitInterval × RightTubeMinusLeftCore), tp.2.1 2 != 0 -> (rightTubeCoreNormalInterpolation rightTubeMeridianCoordinate tp).im != 0",
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "certify radial-stage deletion avoidance on the nonzero-height branch"},
+   :id
+   :routes-2026-10-11-t02a03-nonzero-height-core-normal-interpolation-im-topo2-r1,
+   :kind :reusable-theorem,
+   :area "explicit-r3-tube-deformation-retraction",
+   :depends-on
+   [:routes-2026-10-11-t02a03-meridian-im-positive-factor-height-topo2-r1],
+   :current-residual
+   "Apply the nonzero-height avoidance theorem to certify the radial stage for nonzero-height inputs; handle zero height with collision-sign control and construct the safe angular stage, then concatenate.",
+   :other-consumers []}
+  {:bounded-exception
    "single-consumer explicit ambient deformation with frozen tube and deletion invariants",
    :consumer :t02A03,
    :evidence
    {:probe
     {:residual
-     "Bank the meridian-height positive-factor identity, then prove nonzero imaginary part throughout the radial interpolation for nonzero-height inputs.",
+     "Bank the renamed nonzero-height interpolation theorem, then certify the radial ambient stage outside the left core.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
      [{:name
-       "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeMeridianCoordinate_im_positiveFactor_height",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.nonzeroHeight_im_ne_zero_rightTubeCoreNormalInterpolation",
        :type
-       "forall (p : RightTubeMinusLeftCore), exists c : Real, 0 < c and (rightTubeMeridianCoordinate p : Complex).im = c * p.1 2",
+       "forall (tp : unitInterval × RightTubeMinusLeftCore), tp.2.1 2 != 0 -> (rightTubeCoreNormalInterpolation rightTubeMeridianCoordinate tp).im != 0",
        :status :proved,
        :consumers [:t02A03],
        :depends-on
-       ["ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff"],
+       ["ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeMeridianCoordinate_im_positiveFactor_height"],
        :area "explicit-r3-tube-deformation-retraction"}],
      :prerequisite
      {:bounded-exception
-      "single-consumer positive-factor relation between meridian imaginary part and ambient height",
+      "single-consumer nonzero-height certificate throughout the core-normal interpolation",
       :consumer :t02A03,
       :phase :probe,
       :state :open,
       :scope
       ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t02A03/meridian-im-positive-factor-height",
+      "TOPOLOGY-ROUTES.md/t02A03/nonzero-height-core-normal-interpolation-im",
       :acceptance
       {:probe
-       "Compile rightTubeMeridianCoordinate_im_positiveFactor_height. Express the imaginary part of rightTubeMeridianCoordinate as a strictly positive scalar multiple of the input height, using deletion to justify normalization. Do not prove interpolation nonvanishing or construct an angular path.",
+       "Compile nonzeroHeight_im_ne_zero_rightTubeCoreNormalInterpolation. For a nonzero-height input, prove every specialized core-normal interpolation value has nonzero imaginary part by factoring it as the input height times a positive convex coefficient. Do not handle zero-height inputs or construct an angular path.",
        :declaration
-       "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeMeridianCoordinate_im_positiveFactor_height",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.nonzeroHeight_im_ne_zero_rightTubeCoreNormalInterpolation",
        :type
-       "forall (p : RightTubeMinusLeftCore), exists c : Real, 0 < c and (rightTubeMeridianCoordinate p : Complex).im = c * p.1 2",
+       "forall (tp : unitInterval × RightTubeMinusLeftCore), tp.2.1 2 != 0 -> (rightTubeCoreNormalInterpolation rightTubeMeridianCoordinate tp).im != 0",
        :placeholder "the sole sorry in apm_t02a03",
        :route-step
-       "supply the height-sign identity for the radial-stage deletion proof"},
+       "certify radial-stage deletion avoidance on the nonzero-height branch"},
       :id
-      :routes-2026-10-11-t02a03-meridian-im-positive-factor-height-topo2-r1,
+      :routes-2026-10-11-t02a03-nonzero-height-core-normal-interpolation-im-topo2-r1,
       :kind :reusable-theorem,
       :area "explicit-r3-tube-deformation-retraction",
       :depends-on
-      [:routes-2026-10-11-t02a03-collision-endpoint-positive-factor-sign-bridge-topo2-r1],
+      [:routes-2026-10-11-t02a03-meridian-im-positive-factor-height-topo2-r1],
       :current-residual
-      "Use this identity to prove the core-normal interpolation has nonzero imaginary part for nonzero-height inputs; handle zero height with the common collision-sign component and safe angular corridor, then assemble both stages.",
+      "Apply the nonzero-height avoidance theorem to certify the radial stage for nonzero-height inputs; handle zero height with collision-sign control and construct the safe angular stage, then concatenate.",
       :other-consumers []},
      :commands
      [{:cmd
-       "lake env lean /tmp/t02a03_meridian_im_height_factor_probe.lean",
+       "lake env lean /tmp/t02a03_core_normal_interpolation_im_ne_probe.lean",
        :exit 0,
        :output
-       "rightTubeMeridianCoordinate_im_positiveFactor_height compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "nonzeroHeight_im_ne_zero_rightTubeCoreNormalInterpolation compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/t02a03_meridian_im_height_factor_probe.lean",
+       "sha256sum /tmp/t02a03_core_normal_interpolation_im_ne_probe.lean",
        :exit 0,
        :output
-       "d913e66bc62a669d2d8e0d5a2bac683a12cf63479044cb8adf5e09df1cfcdf1f  /tmp/t02a03_meridian_im_height_factor_probe.lean"}
+       "925785faecd1742541c0b8b25de927a573d8abb49da9a345a8730bc2f36b8644  /tmp/t02a03_core_normal_interpolation_im_ne_probe.lean"}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_meridian_im_height_factor_probe.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_core_normal_interpolation_im_ne_probe.lean || true)\"",
        :exit 0}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}
       {:cmd
-       "rg -n 'rightTubeMeridianCoordinate_im_positiveFactor_height' /tmp/t02a03_meridian_im_height_factor_probe.lean",
+       "rg -n 'nonzeroHeight_im_ne_zero_rightTubeCoreNormalInterpolation' /tmp/t02a03_core_normal_interpolation_im_ne_probe.lean",
        :exit 0,
        :output
-       "5:theorem rightTubeMeridianCoordinate_im_positiveFactor_height\n26:#print axioms rightTubeMeridianCoordinate_im_positiveFactor_height"}],
+       "7:theorem nonzeroHeight_im_ne_zero_rightTubeCoreNormalInterpolation\n35:#print axioms nonzeroHeight_im_ne_zero_rightTubeCoreNormalInterpolation"}],
      :diagnostic-history
      [{:cmd
-       "lake env lean /tmp/t02a03_meridian_im_height_factor_probe.lean",
+       "lake env lean /tmp/t02a03_core_normal_interpolation_im_ne_probe.lean",
        :exit 1,
        :finding
-       "The first proof used an unavailable inverse-multiplication lemma name. Rewriting with the normalization identity and closing the nonzero denominator by field_simp produced the compiled proof."}],
+       "The first simplification did not unfold the core-normal coordinate inside the meridian endpoint. Adding that definition exposed the affine height expression."}],
      :fixture
-     {:path "/tmp/t02a03_meridian_im_height_factor_probe.lean",
+     {:path "/tmp/t02a03_core_normal_interpolation_im_ne_probe.lean",
       :sha256
-      "d913e66bc62a669d2d8e0d5a2bac683a12cf63479044cb8adf5e09df1cfcdf1f"},
+      "925785faecd1742541c0b8b25de927a573d8abb49da9a345a8730bc2f36b8644"},
      :finding
-     "The imaginary part of rightTubeMeridianCoordinate is a strictly positive multiple of the ambient height coordinate. The multiplier is the inverse norm of the nonzero deleted left-core normal coordinate. Consequently the meridian-start core normal and the recovered core normal have compatible height signs, which is the scalar fact needed to prove that their radial interpolation has nonzero imaginary part whenever the input height is nonzero.",
+     "The declaration was renamed so the distinguishing nonzero-height phrase precedes the shared interpolation wording and cannot truncate onto rightTubeCoreNormalInterpolation_exists. Mathematically, every specialized core-normal interpolation value has nonzero imaginary part when the input height is nonzero: its height is the input height times a strictly positive convex coefficient.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
@@ -69622,7 +69649,8 @@
     :routes-2026-10-11-t02a03-input-collision-factor-normal-real-topo2-r1
     :routes-2026-10-11-t02a03-input-collision-positive-factor-meridian-real-topo2-r1
     :routes-2026-10-11-t02a03-collision-endpoint-positive-factor-sign-bridge-topo2-r1
-    :routes-2026-10-11-t02a03-meridian-im-positive-factor-height-topo2-r1],
+    :routes-2026-10-11-t02a03-meridian-im-positive-factor-height-topo2-r1
+    :routes-2026-10-11-t02a03-nonzero-height-core-normal-interpolation-im-topo2-r1],
    :current-residual
    "Lift H to RightTubeMinusLeftCore, package rightTubeMeridianRetractionHomotopy, then use the coordinate equation for the Circle-side constant homotopy.",
    :other-consumers []}
@@ -73622,4 +73650,29 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-t02a03geometrictubedeformation-righttubenormalcomplex-eq-zer],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T02A03GeometricTubeDeformation.nonzeroHeight_im_ne_zero_rightTubeCoreNormalInterpolation",
+    :type
+    "forall (tp : unitInterval × RightTubeMinusLeftCore), tp.2.1 2 != 0 -> (rightTubeCoreNormalInterpolation rightTubeMeridianCoordinate tp).im != 0"},
+   :lemma
+   {:name
+    "ConstructionTargets.T02A03GeometricTubeDeformation.nonzeroHeight_im_ne_zero_rightTubeCoreNormalInterpolation",
+    :reported-by
+    [:routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1],
+    :type
+    "forall (tp : unitInterval × RightTubeMinusLeftCore), tp.2.1 2 != 0 -> (rightTubeCoreNormalInterpolation rightTubeMeridianCoordinate tp).im != 0",
+    :area "explicit-r3-tube-deformation-retraction",
+    :proved-in
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+   :id
+   :lemma-constructiontargets-t02a03geometrictubedeformation-nonzeroheight-im-ne-zero-righ,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t02a03geometrictubedeformation-righttubemeridiancoordinate-i],
    :other-consumers []}]}
