@@ -70477,6 +70477,19 @@
       :exit 1,
       :finding
       "This canonical checkout has a real .lake/packages directory; no package-authority mutation was made during the scoped theorem row."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791694208176-4253-85f6e881",
+     :commands
+     ["git show/diff-tree/show --check 1d629ad9dfc0ab195b05ab411998794c2349591a"
+      "git rev-parse recorded scope blob; sha256sum frozen fixture"
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean"
+      "lake env lean /tmp/t02a03_affine_leg_invariants_probe.lean"
+      "python3 scripts/statement-registry.py check and fingerprint commit/parent"
+      "python3 placeholder recount at commit/parent"],
+     :finding
+     "PASS: topo-6 is independent from codex-7; the recorded commit changes only the scoped target, and its blob and frozen fixture hash match. Target and probe compile with exactly propext, Classical.choice, and Quot.sound. The affine leg is oriented from n at t=0 to w at t=1. Convex norm estimation preserves the quarter-radius bound, and under n.im=0 its imaginary part reduces to t*w.im, so the explicit noninitial-time hypothesis and nonzero waypoint imaginary part give the frozen nonvanishing conclusion. No endpoint specialization, concatenation, or ambient path is claimed. Registry is 131/0, the t02A03 statement fingerprint is unchanged at commit and parent, and the sole Main.lean placeholder remains 1 at both revisions."},
     :commit "1d629ad9dfc0ab195b05ab411998794c2349591a",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
@@ -70492,7 +70505,7 @@
    :phase :implementation,
    :type
    "forall (t : unitInterval) (n w : ℂ), n.im = 0 -> w.im ≠ 0 -> (t : ℝ) ≠ 0 -> ‖n‖ ≤ (1 / 4 : ℝ) -> ‖w‖ ≤ (1 / 4 : ℝ) -> ‖coreNormalAffineLeg t n w‖ ≤ (1 / 4 : ℝ) ∧ (coreNormalAffineLeg t n w).im ≠ 0",
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/core-normal-affine-leg-radius-im",
@@ -70608,7 +70621,7 @@
      "For any real endpoint n and nonreal waypoint w in the closed quarter-radius disk, the affine leg (1-t)n+t w remains in that disk by convexity. At every t nonzero its imaginary part is t*w.im, hence nonzero. The single lemma applies to both departure and reversed arrival legs.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
