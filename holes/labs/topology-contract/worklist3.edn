@@ -14027,6 +14027,21 @@
       "git status --short -- ConstructionTargets/ManifoldFundamentalClass.lean",
       :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791721741728-5336-7a7a1d2d",
+     :commands
+     ["git diff-tree --no-commit-id --name-status -r adeb599e5959856ec3b55ff881f4118467a52f39"
+      "git diff --check adeb599e5959856ec3b55ff881f4118467a52f39^ adeb599e5959856ec3b55ff881f4118467a52f39"
+      "sha256sum /tmp/manifold_fundamental_class_coefficient_inclusion_opcycles_preservation.lean ConstructionTargets/ManifoldFundamentalClass.lean"
+      "lake env lean fixture-body-with-promoted-name-renamed"
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped placeholder counts for t00J02 t98A02"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"],
+     :finding
+     "PASS: commit adeb599e5959856ec3b55ff881f4118467a52f39 has exact one-file scope and matching recorded blob; fixture and module hashes reproduce exactly; the theorem faithfully states inverse mapOpcyclesIso naturality for the coefficient subspace inclusion in the frozen orientation, directly using ShortComplex.mapOpcyclesIso_inv_naturality without assembling a snake-input comparison, proving connecting preservation, or asserting later sign claims; fixture body, module, registry, and 8326-job build pass; axioms are exactly propext, Classical.choice, and Quot.sound; target placeholders are zero and consumer counts remain 1/1."},
     :commit "adeb599e5959856ec3b55ff881f4118467a52f39",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -14043,7 +14058,7 @@
     :routes-2026-10-11-manifold-coefficient-pair-inclusion-opcycles-preservation-topo3-r1,
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/integral-open-disk-connecting-naturality/snake-input-opcycles",
@@ -14230,7 +14245,7 @@
      "Both internal preservation faces needed by the snake construction are now explicit: the prior row supplies cycles naturality and this compiled theorem supplies opcycles naturality. The next prerequisite should assemble the comparison of snake data itself; its delta naturality will identify coefficientOpenDiskConnectingTransport with the reconstructed forgotten delta.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -20969,7 +20984,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -20986,7 +21001,10 @@
     "forall {X : Type} [TopologicalSpace X] (A : Set X) (n : ℕ), let φ := CoefficientRelativeSmall.subspaceMap ℤ A; let ψ := (HomologicalComplex.shortComplexFunctor (ModuleCat ℤ) (ComplexShape.down ℕ) n).map φ; forgetIntModules.map (ShortComplex.opcyclesMap ψ) ≫ (((CoefficientH0.SingularChains ℤ (TopCat.of X)).sc n).mapOpcyclesIso forgetIntModules).inv = (((CoefficientH0.SingularChains ℤ (TopCat.of A)).sc n).mapOpcyclesIso forgetIntModules).inv ≫ ShortComplex.opcyclesMap (forgetIntModules.mapShortComplex.map ψ)",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-coefficient-pair-inclusion-opcycles-preservation-topo3-r1},
+    :routes-2026-10-11-manifold-coefficient-pair-inclusion-opcycles-preservation-topo3-r1,
+    :banked-by
+    :routes-2026-10-11-manifold-coefficient-pair-inclusion-opcycles-preservation-topo3-r1,
+    :banked-commit "adeb599e5959856ec3b55ff881f4118467a52f39"},
    :id :lemma-mfclass-coefficient-pair-inclusion-opcycles-preservation,
    :kind :lemma,
    :depends-on
