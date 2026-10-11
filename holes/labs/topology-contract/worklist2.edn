@@ -79351,6 +79351,19 @@
       "The third compile isolated the scalar-three mismatch: the displayed right-hand numeral had inferred the natural-number scalar action. Annotating it as (3 : ℤ) produced the successful acceptance compile."}],
     :continue-from
     "Formalise blueprint node B4 shearYShortComplexHom in ConstructionTargets/t97A04Closure.lean using the B2 cover, B3 preservation theorems, and ProductionOpenCoverMayerVietoris.coverRangeMap with its intersection-left, intersection-right, and inclusion compatibility equations.",
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791718345818-5265-50d66aaa",
+     :commands
+     ["git show/diff-tree/show --check a09ba300fab26381c636b4a7aea7e2dc1687913b and 2a6df176426727c93ff5546f04fe0970a5081348"
+      "git rev-parse closure and blueprint blobs at recorded commit"
+      "lake env lean ConstructionTargets/t97A04Closure.lean"
+      "lake env lean problems/t97A04/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "statement fingerprints and placeholder counts at recorded commit and prior program-history commit"],
+     :finding
+     "PASS: independent author topo-6 committed new compiled progress after program-history job 3. Milestone a09ba300f defines the sorry-free B3 upper-triangular shear and 2a6df1764 records B3 as proved while listing B4 through B11 and the next B4 milestone. The recorded closure and blueprint blobs match. B3 is mathematically faithful and stays within the frozen torus representation: shearY a b is exactly (x,y) maps to (a*x+b*y,y); its unchanged second coordinate proves literal preservation of both transported cover members; composition has parameters (a*c,a*d+b); and the required (3,1), (1,-1), and (1,0) formulas are compiled. The closure and Main files compile; B3 uses exactly propext, Classical.choice, Quot.sound and the closure file has no placeholders. Main retains the same two acknowledged placeholders as program-history job 3; registry is 131/0 and the frozen t97A04 fingerprint is unchanged. This is a correct program STOP with substantive compiled progress and explicit remaining milestones."},
     :commit "2a6df176426727c93ff5546f04fe0970a5081348",
     :changed-paths
     ["ConstructionTargets/t97A04Closure.lean"
@@ -79360,7 +79373,7 @@
     :milestone-commit "a09ba300fab26381c636b4a7aea7e2dc1687913b",
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79392,6 +79405,9 @@
      :reason :program-milestone-complete}
     {:job 3,
      :commit "dcc11d7549630f758be71faa6f35beef6fc7f0d3",
+     :reason :program-milestone-complete}
+    {:job 4,
+     :commit "2a6df176426727c93ff5546f04fe0970a5081348",
      :reason :program-milestone-complete}]}
   {:consumer :t96A07,
    :phase :implementation,
@@ -79490,7 +79506,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "ConstructionTargets.T97A04Closure.shearY",
@@ -79502,7 +79518,9 @@
     :type
     "ℤ → ℤ → C(FrozenTorus, FrozenTorus), with compiled cover-preservation, composition, and required specialized pointwise theorems",
     :area "mv-connecting-naturality",
-    :proved-in :program-2026-10-11-close-t97a04},
+    :proved-in :program-2026-10-11-close-t97a04,
+    :banked-by :program-2026-10-11-close-t97a04,
+    :banked-commit "2a6df176426727c93ff5546f04fe0970a5081348"},
    :id :lemma-constructiontargets-t97a04closure-sheary,
    :kind :lemma,
    :depends-on [:lemma-constructiontargets-t97a04closure-frozenycover],
