@@ -102482,8 +102482,91 @@
   {:bounded-exception
    "This single-consumer prerequisite completes decoder descent from six closed edge presentations to Circle before relation invariance and left-inverse proofs.",
    :consumer :t97A01,
+   :evidence
+   {:placeholder-delta
+    {:source-before :absent,
+     :source-after 0,
+     :fixture-before 0,
+     :fixture-after 0},
+    :residual
+    "Use the two total Circle decoders to prove specialized relation invariance and left-inverse formulas, then derive injectivity.",
+    :outcome :done-unreviewed,
+    :warnings
+    [{:kind :fixture-interface-axiom,
+      :message
+      "The frozen fixture intentionally declares edgeDecoderPresentationIndependent; the scoped implementation discharges that type with a standard-only theorem."}],
+    :missing-theorems
+    [{:name
+      "PolygonBoundaryCircleDecoderWellDefined.edgeDecoderPresentationIndependent",
+      :type
+      "For both specialized decoder tables, any two closed canonical edge presentations of the same Circle point have equal decoder values.",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on
+      ["PolygonBoundaryDecoderInteriors.n3EdgeDecode_interior_wellDefined"
+       "PolygonBoundaryDecoderInteriors.torusCrosscapEdgeDecode_interior_wellDefined"
+       "PolygonSixEdgeEndpointNormalization.nonfinal_endpoint_has_halfOpen_presentation"
+       "PolygonSixEdgeFinalEndpointWrap.final_endpoint_has_halfOpen_presentation"],
+      :area "polygon-surface-open-cover"}],
+    :statement-hashes {:registry "131/131 match"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/polygon-boundary-circle-decoder-well-defined.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.PolygonBoundaryCircleDecoderWellDefined",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/polygon-boundary-circle-decoder-well-defined.lean",
+      :exit 0}
+     {:cmd
+      "python3 comment-stripped source placeholder and axiom census",
+      :exit 0,
+      :finding "0"}
+     {:cmd "python3 comment-stripped fixture placeholder census",
+      :exit 0,
+      :finding "0"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :diagnostic-history
+    [{:cmd
+      "first lake build ConstructionTargets.PolygonBoundaryCircleDecoderWellDefined",
+      :exit 1,
+      :finding
+      "The initial direct endpoint case incorrectly replaced an interior decoder by the common vertex; corrected by proving half-open normal forms for both presentations."}
+     {:cmd
+      "second lake build ConstructionTargets.PolygonBoundaryCircleDecoderWellDefined",
+      :exit 1,
+      :finding
+      "Corrected two indentation errors and made successor/final zero parameters literal so decoder endpoint equations elaborated."}],
+    :commit "e885df8d64ff9355326f065c707cea3cbce66f41",
+    :changed-paths
+    ["ConstructionTargets/PolygonBoundaryCircleDecoderWellDefined.lean"],
+    :fixture
+    {:path "/tmp/polygon-boundary-circle-decoder-well-defined.lean",
+     :sha256
+     "982179e5b1179237ae93c4c1a89a3022533eeb169f1ed5a3a1ea76c9eb42bfbc"},
+    :implementation
+    {:scope
+     ["ConstructionTargets/PolygonBoundaryCircleDecoderWellDefined.lean"],
+     :declarations
+     ["n3EdgeDecode_halfOpen_normalForm"
+      "torusCrosscapEdgeDecode_halfOpen_normalForm"
+      "edgeDecoderPresentationIndependent"
+      "chosenEdge"
+      "chosenParameter"
+      "chosenEdge_spec"
+      "n3CircleDecode"
+      "torusCrosscapCircleDecode"
+      "n3CircleDecode_edge"
+      "torusCrosscapCircleDecode_edge"]}},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonBoundaryCircleDecoderWellDefined.lean"],
    :dag-node
@@ -106981,7 +107064,35 @@
    :kind :lemma,
    :depends-on
    [:lemma-genericpointwedgefundamentalgroupcoordinates-genericpointwedgegroupequivalence-c],
-   :other-consumers [:t01A03 :t97A01 :t97A03 :t92J06]}],
+   :other-consumers [:t01A03 :t97A01 :t97A03 :t92J06]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "PolygonBoundaryCircleDecoderWellDefined.edgeDecoderPresentationIndependent",
+    :type
+    "For both specialized decoder tables, any two closed canonical edge presentations of the same Circle point have equal decoder values."},
+   :lemma
+   {:name
+    "PolygonBoundaryCircleDecoderWellDefined.edgeDecoderPresentationIndependent",
+    :reported-by
+    [:routes-2026-10-11-polygon-boundary-circle-decoder-well-defined-75],
+    :type
+    "For both specialized decoder tables, any two closed canonical edge presentations of the same Circle point have equal decoder values.",
+    :area "polygon-surface-open-cover",
+    :proved-in
+    :routes-2026-10-11-polygon-boundary-circle-decoder-well-defined-75},
+   :id
+   :lemma-polygonboundarycircledecoderwelldefined-edgedecoderpresentationindependent,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polygonboundarydecoderinteriors-n3edgedecode-interior-welldefined
+    :lemma-polygonboundarydecoderinteriors-toruscrosscapedgedecode-interior-welldefined
+    :lemma-polygonsixedgeendpointnormalization-nonfinal-endpoint-has-halfopen-presentation
+    :lemma-polygonsixedgefinalendpointwrap-final-endpoint-has-halfopen-presentation],
+   :other-consumers []}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",
