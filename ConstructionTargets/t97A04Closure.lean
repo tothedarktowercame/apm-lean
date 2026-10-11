@@ -268,6 +268,33 @@ theorem boundaryOverlapShear_fst (a b : ℤ) (p : Overlap) :
     circleShearY, frozenYCoverInterHomeomorph,
     homeomorphPreimageRestrict] using h
 
+/-- The boundary-overlap shear fixes the second boundary-torus coordinate,
+which determines the overlap component. -/
+theorem boundaryOverlapShear_snd (a b : ℤ) (p : Overlap) :
+    (boundaryOverlapShear a b p).1.2 = p.1.2 := by
+  have h := congrArg (fun q : Overlap ↦ q.1.2)
+    (frozenYCoverInterHomeomorph.apply_symm_apply p)
+  simpa [boundaryOverlapShear, shearYOverlap, shearY,
+    frozenYCoverInterHomeomorph, homeomorphPreimageRestrict,
+    frozenTorusHomeomorphBoundaryTorus] using h
+
+/-- Consequently the orthogonal-sphere component used to split the overlap
+into two circles is unchanged by the shear. -/
+theorem overlapOrthogonalCoordinate_shear (a b : ℤ) (p : Overlap) :
+    (overlapHomotopyEquivOrthogonalSphereTimesCircle.toFun
+      (boundaryOverlapShear a b p)).1 =
+    (overlapHomotopyEquivOrthogonalSphereTimesCircle.toFun p).1 := by
+  dsimp [overlapHomotopyEquivOrthogonalSphereTimesCircle,
+    overlapProductHomeomorph]
+  change (ConstructionTargets.PuncturedNormedSpaceRadialEquivalence.twoPoleComplementHomotopyEquivOrthogonalSphere
+      northPoleVector norm_northPoleVector).toFun
+        ⟨(boundaryOverlapShear a b p).1.2, _⟩ =
+    (ConstructionTargets.PuncturedNormedSpaceRadialEquivalence.twoPoleComplementHomotopyEquivOrthogonalSphere
+      northPoleVector norm_northPoleVector).toFun ⟨p.1.2, _⟩
+  apply congrArg
+  apply Subtype.ext
+  exact boundaryOverlapShear_snd a b p
+
 theorem twoCircleOverlapShear_fold_apply (a b : ℤ) (q : Circle ⊕ Circle) :
     twoCircleFold (twoCircleOverlapShear a b q) =
       twoCircleFold q ^ a *
@@ -1280,6 +1307,8 @@ theorem shearY_overlap_coordinate_of_degree_components (a b : ℤ)
 #print axioms overlapHomotopyEquivTwoCircles_fold
 #print axioms overlapCircleProd_fst
 #print axioms boundaryOverlapShear_fst
+#print axioms boundaryOverlapShear_snd
+#print axioms overlapOrthogonalCoordinate_shear
 #print axioms twoCircleOverlapShear_fold_apply
 #print axioms twoCircleOverlapShearLeftFold_eq_affine
 #print axioms twoCircleOverlapShearRightFold_eq_affine
