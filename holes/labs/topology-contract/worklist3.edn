@@ -14758,8 +14758,82 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :implements-lemma :lemma-mfclass-forget-snake-zero-squares,
+   :evidence
+   {:placeholder-delta
+    {:t00J02 {:before 1, :after 1, :delta 0},
+     :t98A02 {:before 1, :after 1, :delta 0}},
+    :residual
+    "Construct explicit componentwise cone identifications showing that the forgotten kernel and cokernel witnesses give the h₀ and h₃ fields of the mapped snake input; then package exactness, epi/mono fields, assemble SnakeInput.Hom, and apply naturality_δ.",
+    :gates
+    {:module-compile :pass,
+     :target-build :pass,
+     :statement-registry "131 registered statements match, 0 do not",
+     :scoped-diff :pass,
+     :forbidden-placeholder-scan :pass,
+     :scoped-worktree-clean true},
+    :outcome :done-unreviewed,
+    :warnings
+    ["The target build replayed pre-existing linter warnings outside this scoped change."
+     "Unrelated existing changes to ConstructionTargets/t92J08Closure.blueprint.md and ConstructionTargets/t92J08Closure.lean remain untouched."],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.ManifoldFundamentalClass.forgetIntModulesSnakeInput_zero_squares",
+      :type
+      "forall (S : ShortComplex.SnakeInput (ModuleCat ℤ)), forgetIntModules.mapShortComplex.map S.v₀₁ ≫ forgetIntModules.mapShortComplex.map S.v₁₂ = 0 ∧ forgetIntModules.mapShortComplex.map S.v₁₂ ≫ forgetIntModules.mapShortComplex.map S.v₂₃ = 0",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on [],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes
+    {:module
+     "c8dff5035b5cc4e2c089bd6d19dc2c656b9e76b7fdbc6e040765e484da660c84",
+     :fixture
+     "04d4989b46304afc44630c29ed5680310acf5ba74136b51ecc476b20cdc68507"},
+    :disposition :done-unreviewed,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :topo-10,
+    :reason
+    "Proved componentwise that forgetting coefficients preserves both zero composites in an arbitrary integral-module SnakeInput, supplying the mapped w₀₂ and w₁₃ fields.",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/manifold_fundamental_class_forget_snake_zero_squares.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "git diff --check HEAD^ HEAD -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "comment-stripped placeholder counts for t00J02 t98A02",
+      :exit 0}
+     {:cmd
+      "forbidden placeholder scan in ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "git status --short -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}],
+    :diagnostic-history [],
+    :commit "f188923b59b63ebe092235da9d716895f0ef1cde",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path
+     "/tmp/manifold_fundamental_class_forget_snake_zero_squares.lean",
+     :sha256
+     "04d4989b46304afc44630c29ed5680310acf5ba74136b51ecc476b20cdc68507"},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :declaration
+     "ConstructionTargets.ManifoldFundamentalClass.forgetIntModulesSnakeInput_zero_squares"},
+    :row
+    :routes-2026-10-11-manifold-forget-snake-zero-squares-topo3-r1,
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/integral-open-disk-connecting-naturality/snake-input-zero-squares",
@@ -21824,11 +21898,13 @@
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.forgetIntModulesSnakeInput_zero_squares",
     :reported-by
-    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+     :routes-2026-10-11-manifold-forget-snake-zero-squares-topo3-r1],
     :type
     "forall (S : ShortComplex.SnakeInput (ModuleCat ℤ)), forgetIntModules.mapShortComplex.map S.v₀₁ ≫ forgetIntModules.mapShortComplex.map S.v₁₂ = 0 ∧ forgetIntModules.mapShortComplex.map S.v₁₂ ≫ forgetIntModules.mapShortComplex.map S.v₂₃ = 0",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in
+    :routes-2026-10-11-manifold-forget-snake-zero-squares-topo3-r1},
    :id :lemma-mfclass-forget-snake-zero-squares,
    :kind :lemma,
    :depends-on [:lemma-mfclass-forget-short-exact],
