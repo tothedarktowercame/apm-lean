@@ -68760,6 +68760,18 @@
       :exit 0,
       :output
       "?? ConstructionTargets/PolygonBoundaryCompactHausdorffInstances.lean"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791684464731-3750-ceabd18d",
+     :commands
+     ["git show/diff-tree --check 97d707c"
+      "fixture SHA-256 and recorded blob verification"
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean"
+      "lake env lean /tmp/t02a03_collision_poly_nonpos_re_corridor_probe.lean"
+      "statement registry fingerprint/check and placeholder/worklist EDN checks"],
+     :finding
+     "Recorded commit has the exact one-file scope and matching fixture/blob hashes. The module and frozen probe compile with only the expected standard axioms. The norm and nonpositive-real hypotheses give the required range for 1-n.re, and the angular ceiling u.re <= 9/10 is multiplied using its nonnegative factor in the correct direction; nonlinear arithmetic proves the frozen strict positivity conclusion. It adds no placeholder and makes no claim outside the corridor or constructs an angular homotopy."},
     :commit "97d707cd57abd895c048d6eb7a91aca6374847e1",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
@@ -68773,7 +68785,7 @@
     "The norm bound yields -1/4 <= n.re, while nonpositivity gives 1 <= 1-n.re <= 5/4; the angular real-part ceiling controls the mixed term, and nonlinear arithmetic proves strict polynomial positivity.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/nonpositive-normal-safe-angular-corridor",
@@ -68877,7 +68889,7 @@
      "For n.re <= 0 and norm n <= 1/4, the reconstruction radius 1-n.re lies in [1,5/4]. If the angular real coordinate is at most 9/10, direct minimization gives strict positivity of the collision polynomial, with margin 1/16 at the worst corner. This supplies a uniform deletion-safe angular corridor. It deliberately does not claim safety while entering or leaving that corridor, since the polynomial can be negative at angular coordinate 1.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
