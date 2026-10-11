@@ -104201,6 +104201,19 @@
       :exit 0,
       :finding "131 registered statements match, 0 do not"}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791698180552-4412-07479410",
+     :commands
+     ["git show, git diff-tree, and git diff-tree --check f9e03983a39d748797647e330e0ef7bdd68599d6"
+      "sha256sum recorded source and /tmp/klein-compatible-carrier-component-bridge-probe.lean"
+      "lake build ConstructionTargets.KleinCompatibleCarrierComponentBridge"
+      "lake env lean /tmp/klein-compatible-carrier-component-bridge-probe.lean"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped placeholder census for problems/t93J03/lean/Main.lean"],
+     :finding
+     "PASS: valid STOP after committed compiled progress; the sole scoped file matches the recorded blob, source hash 0a0694ad0940e91997b09f0976cd8a590aa07193b38d4b6b1dce76b2005358d6 and fixture hash 9c7a282a44b4894670dcafbfde89dde71f914faa2a8e75a21671e46c13ef470c reproduce, full EqvGen classes and the distinct-related locus are transported in both directions with standard axioms, the fixture custom axiom is exactly the frozen carrier-to-cyclic-component bridge and yields the correctly oriented refutation, t93J03 retains one placeholder, all 131 statements match, and the remaining boundary-locus and cyclic-order theorems are explicitly listed"},
     :commit "f9e03983a39d748797647e330e0ef7bdd68599d6",
     :changed-paths
     ["ConstructionTargets/KleinCompatibleCarrierComponentBridge.lean"],
@@ -104211,7 +104224,7 @@
      :status :self-axiomatized},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/KleinCompatibleCarrierComponentBridge.lean"],
    :dag-node
@@ -104342,7 +104355,7 @@
       "Any relation-compatible disk-to-square homeomorphism induces a cyclic component equivalence conjugating the pairings; the banked obstruction then refutes the frozen carrier package."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-aabb-square-polygon-presentation-equivalence",
@@ -112166,7 +112179,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "compatibleCarrierHomeomorphInducesCyclicComponentEquiv",
@@ -112180,7 +112193,10 @@
      :routes-2026-10-11-compatible-carrier-component-bridge-103],
     :type
     "Any Disk-to-ClosedSquare homeomorphism preserving and reflecting the two EqvGen relations induces a cyclic-order preserving or reversing equivalence of the four boundary components that conjugates diskPaired to squarePaired",
-    :area "polygon-quotient-identification"},
+    :area "polygon-quotient-identification",
+    :banked-by
+    :routes-2026-10-11-compatible-carrier-component-bridge-103,
+    :banked-commit "f9e03983a39d748797647e330e0ef7bdd68599d6"},
    :id :lemma-compatiblecarrierhomeomorphinducescycliccomponentequiv,
    :kind :lemma,
    :depends-on
@@ -112287,20 +112303,30 @@
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance {:lemma "image_diskClass_eq_squareClass"},
-   :lemma {:name "image_diskClass_eq_squareClass", :reported-by []},
+   :lemma
+   {:name "image_diskClass_eq_squareClass",
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/KleinCompatibleCarrierComponentBridge.lean"]},
    :id :lemma-image-diskclass-eq-squareclass,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance {:lemma "exists_distinct_related_iff"},
-   :lemma {:name "exists_distinct_related_iff", :reported-by []},
+   :lemma
+   {:name "exists_distinct_related_iff",
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/KleinCompatibleCarrierComponentBridge.lean"]},
    :id :lemma-exists-distinct-related-iff,
    :kind :lemma,
    :depends-on [],
