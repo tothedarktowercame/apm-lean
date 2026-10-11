@@ -1183,6 +1183,41 @@ theorem integralRelativeChainsComparisonWithTransport_homologyMap
   simp only [HomologicalComplex.homologyMap_comp]
   rfl
 
+/-- The four homology factors of the transported integral relative-chain
+comparison, packaged as a single composite. -/
+noncomputable def integralTransportHomologyComposite
+    {X : Type} [TopologicalSpace X] (A : Set X) (n : ℕ) :=
+  HomologicalComplex.homologyMap
+      (forgetIntegralRelativeCokernelComparison A).hom n ≫
+  HomologicalComplex.homologyMap
+      (coefficientIntegralCokernelTransport A).hom n ≫
+  HomologicalComplex.homologyMap
+      (integralMappedRelativeCokernelComparison A).hom n ≫
+  HomologicalComplex.homologyMap
+      (relativeSingularChainsIsoCokernelSubspaceMap A).inv n
+
+theorem integralRelativeChainsComparisonWithTransport_homologyMap_eq_composite
+    {X : Type} [TopologicalSpace X] (A : Set X) (n : ℕ) :
+    HomologicalComplex.homologyMap
+        (integralRelativeChainsComparisonWithTransport A).hom n =
+      integralTransportHomologyComposite A n := by
+  exact integralRelativeChainsComparisonWithTransport_homologyMap A n
+
+/-- The negative-automorphism equation with the transported comparison's four
+homology factors represented by `integralTransportHomologyComposite`. -/
+theorem correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_transport_homology_factors
+    (k : ℕ) {M : Type} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M) :
+    (correctedLocalNormalizationAutomorphism k x).hom = -𝟙 _ ↔
+      (((CoefficientRelativeSmall.relativeChains ℤ (deletedPoint x)).sc (k + 2)).mapHomologyIso
+          forgetIntModules).inv ≫
+        integralTransportHomologyComposite (deletedPoint x) (k + 2) ≫
+        (ambientChartHomologyIso k x).inv ≫
+        (HigherModelLocalHomology.localIsoInt k).hom =
+      forgetIntModules.map (coefficientLocalForwardComposite k x) ≫ (-𝟙 _) := by
+  rw [correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_corrected_comparison_factors]
+  rw [integralRelativeChainsComparisonWithTransport_homologyMap_eq_composite]
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -1258,3 +1293,6 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_corrected_comparison_factors
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport_hom
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport_homologyMap
+#print axioms ConstructionTargets.ManifoldFundamentalClass.integralTransportHomologyComposite
+#print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport_homologyMap_eq_composite
+#print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_transport_homology_factors
