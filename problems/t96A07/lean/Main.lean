@@ -41,7 +41,13 @@ theorem sphereMap_antipodal (p : Sphere 2) :
     crossTermSphereMap] using
     crossTermSphereMap_antipodal p
 
+theorem sphereMap_contMDiff :
+    ContMDiff (𝓡 2) (𝓡 3) ∞ T96A07.sphereMap := by
+  simpa [T96A07.sphereMap, crossTermSphereMap] using
+    crossTermSphereMap_contMDiff
+
 #print axioms sphereMap_antipodal
+#print axioms sphereMap_contMDiff
 
 end ConstructionTargets.T96A07Closure
 
