@@ -101625,90 +101625,119 @@
    "Define each decoder on canonical half-open edge coordinates, use the three generator cases to prove relation invariance, and prove its left-inverse formulas.",
    :other-consumers []}
   {:bounded-exception
+   "This single-consumer prerequisite fixes the concrete six-edge decoder tables and verifies every boundary-word generator before the tables are descended to Circle.",
+   :consumer :t97A01,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/PolygonBoundaryEdgeDecoders.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/boundary-edge-decoders",
+   :acceptance
+   {:implementation
+    "Promote the exact fixture. Define the N3 edge decoder by sending edges 0 and 1 to loop one, 2 and 3 to loop two, and 4 and 5 to loop three at the same parameter. Define the torus-crosscap decoder using edges 0 and 2 for loop one and edges 1 and 3 for loop two with reversed partner parameters, and edges 4 and 5 for loop three. Prove all twelve literal edge formulas and equality on all six generator pairs. Do not prove shared-vertex presentation independence, define a total Circle decoder, classify EqvGen fibers, prove boundary-map injectivity or homeomorphism, derive final formulas, compute invariants, or close t97A01.",
+    :placeholder "the single sorry in apm_t97a01",
+    :route-step
+    "polygon radial open-cover step 30: define the two six-edge decoder tables and verify their paired generators",
+    :fixture "/tmp/polygon-boundary-edge-decoders.lean",
+    :fixture-sha256
+    "b56c3634ce831540d4bfc5c5f8a67b6cd77643a5d07f194e9931e69e5f0143ec",
+    :gates
+    ["lake build ConstructionTargets.PolygonBoundaryEdgeDecoders"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-11-polygon-boundary-edge-decoders-70,
+   :kind :reusable-theorem,
+   :area "polygon-surface-open-cover",
+   :depends-on
+   [:routes-2026-10-11-polygon-boundary-generator-normal-forms-69],
+   :current-residual
+   "Prove decoder-table independence at the six shared vertices and use the canonical six-edge cover to define total Circle decoders.",
+   :other-consumers []}
+  {:bounded-exception
    "This single-consumer concrete quotient package is the other final backlog lemma on t97A01 and supplies the actual two polygon models required by its frozen statement.",
    :consumer :t97A01,
    :implements-lemma :lemma-polygonradialopencoverpackages,
    :evidence
    {:probe
     {:residual
-     "Use the exact generator normal forms to define the N3 and torus-crosscap decoders on the six half-open edge coordinates, prove relation invariance and left-inverse formulas, and derive injectivity.",
+     "Prove the six-edge decoder tables are independent of canonical edge presentation at shared vertices, descend them to total Circle decoders using the six-edge cover, then prove relation invariance and left-inverse formulas.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
-     [{:name "PolygonBoundaryGeneratorNormalForms.n3CircleRel_iff",
+     [{:name "PolygonBoundaryEdgeDecoders.n3EdgeDecode_generators",
        :type
-       "N3CircleRel holds exactly in one of the three same-parameter paired-edge cases 0-1, 2-3, or 4-5.",
+       "The N3 six-edge decoder sends each of the three same-parameter paired-edge generators to equal ThreeEndpointLoops points.",
        :status :proved,
        :consumers [:t97A01],
-       :depends-on [],
+       :depends-on
+       ["PolygonBoundaryGeneratorNormalForms.n3CircleRel_iff"],
        :area "polygon-surface-open-cover"}
       {:name
-       "PolygonBoundaryGeneratorNormalForms.torusCrosscapCircleRel_iff",
+       "PolygonBoundaryEdgeDecoders.torusCrosscapEdgeDecode_generators",
        :type
-       "TorusCrosscapCircleRel holds exactly in paired-edge cases 0-2 reversed, 1-3 reversed, or 4-5 same-parameter.",
+       "The torus-crosscap six-edge decoder sends the two reversed and one same-parameter paired-edge generators to equal ThreeEndpointLoops points.",
        :status :proved,
        :consumers [:t97A01],
-       :depends-on [],
+       :depends-on
+       ["PolygonBoundaryGeneratorNormalForms.torusCrosscapCircleRel_iff"],
        :area "polygon-surface-open-cover"}
-      {:name "polygonBoundaryThreeLoopFiberClassification",
+      {:name "polygonBoundaryCircleDecoderWellDefined",
        :type
-       "Construct relation-invariant decoders for the N3 and torus-crosscap boundary relations and prove their left-inverse formulas on ThreeEndpointLoops.",
+       "The N3 and torus-crosscap edge decoder tables agree on all presentations of a Circle point, including shared vertices, and therefore define total Circle decoders.",
        :status :not-started,
        :consumers [:t97A01],
        :depends-on
-       ["PolygonBoundaryGeneratorNormalForms.n3CircleRel_iff"
-        "PolygonBoundaryGeneratorNormalForms.torusCrosscapCircleRel_iff"
-        "RelationQuotientLeftInverse.injective_of_quotient_formula"
-        "PolygonThreeLoopHalfOpenEquality.three_loop_half_open_equalities"],
+       ["PolygonBoundaryEdgeDecoders.n3EdgeDecode_generators"
+        "PolygonBoundaryEdgeDecoders.torusCrosscapEdgeDecode_generators"
+        "PolygonSixEdgeCircleCover.sixEdgeCircleCover"
+        "PolygonSixEdgeInteriorUniqueness.circleEdgePoint_interior_injective"],
        :area "polygon-surface-open-cover"}],
      :prerequisite
      {:bounded-exception
-      "This single-consumer prerequisite exposes the exact three generator cases each specialized decoder must respect.",
+      "This single-consumer prerequisite fixes the concrete six-edge decoder tables and verifies every boundary-word generator before the tables are descended to Circle.",
       :consumer :t97A01,
       :phase :implementation,
       :state :open,
-      :scope
-      ["ConstructionTargets/PolygonBoundaryGeneratorNormalForms.lean"],
+      :scope ["ConstructionTargets/PolygonBoundaryEdgeDecoders.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/boundary-generator-normal-forms",
+      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/boundary-edge-decoders",
       :acceptance
       {:implementation
-       "Promote the exact fixture. Prove that N3CircleRel is equivalent to the disjunction of its 0-1, 2-3, and 4-5 same-parameter edge pairs. Prove that TorusCrosscapCircleRel is equivalent to its 0-2 reversed, 1-3 reversed, and 4-5 same-parameter edge pairs. Include the underlying TorusCrosscapRel disk normal form. Do not construct decoders, classify EqvGen fibers, prove boundary-map injectivity or homeomorphism, derive ThreeCircles or outer-piece formulas, compute invariants, or close t97A01.",
+       "Promote the exact fixture. Define the N3 edge decoder by sending edges 0 and 1 to loop one, 2 and 3 to loop two, and 4 and 5 to loop three at the same parameter. Define the torus-crosscap decoder using edges 0 and 2 for loop one and edges 1 and 3 for loop two with reversed partner parameters, and edges 4 and 5 for loop three. Prove all twelve literal edge formulas and equality on all six generator pairs. Do not prove shared-vertex presentation independence, define a total Circle decoder, classify EqvGen fibers, prove boundary-map injectivity or homeomorphism, derive final formulas, compute invariants, or close t97A01.",
        :placeholder "the single sorry in apm_t97a01",
        :route-step
-       "polygon radial open-cover step 29: expose exact generator normal forms for both specialized boundary relations",
-       :fixture "/tmp/polygon-boundary-generator-normal-forms.lean",
+       "polygon radial open-cover step 30: define the two six-edge decoder tables and verify their paired generators",
+       :fixture "/tmp/polygon-boundary-edge-decoders.lean",
        :fixture-sha256
-       "2ed83a033b900b2a6b435a65c5de810ef73b4c3617df9524083e93278ecd7863",
+       "b56c3634ce831540d4bfc5c5f8a67b6cd77643a5d07f194e9931e69e5f0143ec",
        :gates
-       ["lake build ConstructionTargets.PolygonBoundaryGeneratorNormalForms"
+       ["lake build ConstructionTargets.PolygonBoundaryEdgeDecoders"
         "fixture compiles"
         "zero source and fixture sorry"
         "standard-only axioms"
         "registry check"]},
-      :id
-      :routes-2026-10-11-polygon-boundary-generator-normal-forms-69,
+      :id :routes-2026-10-11-polygon-boundary-edge-decoders-70,
       :kind :reusable-theorem,
       :area "polygon-surface-open-cover",
       :depends-on
-      [:routes-2026-10-11-relation-quotient-left-inverse-68],
+      [:routes-2026-10-11-polygon-boundary-generator-normal-forms-69],
       :current-residual
-      "Define each decoder on canonical half-open edge coordinates, use the three generator cases to prove relation invariance, and prove its left-inverse formulas.",
+      "Prove decoder-table independence at the six shared vertices and use the canonical six-edge cover to define total Circle decoders.",
       :other-consumers []},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
-     [{:cmd
-       "lake env lean /tmp/polygon-boundary-generator-normal-forms.lean",
+     [{:cmd "lake env lean /tmp/polygon-boundary-edge-decoders.lean",
        :exit 0,
        :finding
-       "The N3 and torus-crosscap Circle generator normal forms compile with all three paired-edge cases and the required reversed parameters."}
-      {:cmd
-       "sha256sum /tmp/polygon-boundary-generator-normal-forms.lean",
+       "Both six-edge decoder tables, all twelve edge formulas, and equality on the six paired generators compile."}
+      {:cmd "sha256sum /tmp/polygon-boundary-edge-decoders.lean",
        :exit 0,
        :finding
-       "2ed83a033b900b2a6b435a65c5de810ef73b4c3617df9524083e93278ecd7863"}
+       "b56c3634ce831540d4bfc5c5f8a67b6cd77643a5d07f194e9931e69e5f0143ec"}
       {:cmd
-       "rg -n \"\\b(sorry|admit)\\b\" /tmp/polygon-boundary-generator-normal-forms.lean",
+       "rg -n \"\\b(sorry|admit)\\b\" /tmp/polygon-boundary-edge-decoders.lean",
        :exit 1,
        :expected-exit 1,
        :finding "No fixture placeholders."}
@@ -101720,26 +101749,16 @@
        :exit 0,
        :finding
        "The route guide, per-problem routes, and probe definitions were read."}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/polygon-boundary-generator-normal-forms.lean",
-       :exit 1,
-       :finding
-       "The first draft omitted the boundary-circle source namespace, leaving circleToBoundary unresolved."}
-      {:cmd
-       "lake env lean /tmp/polygon-boundary-generator-normal-forms.lean",
-       :exit 1,
-       :finding
-       "Direct simplification could not transport equality of boundary values back to Circle points and dependent elimination on the specialized torus relation failed; an explicit boundary-homeomorphism transport lemma plus a disk-level relation normal form corrected both proofs."}],
+     :diagnostic-history [],
      :fixture
-     {:path "/tmp/polygon-boundary-generator-normal-forms.lean",
+     {:path "/tmp/polygon-boundary-edge-decoders.lean",
       :sha256
-      "2ed83a033b900b2a6b435a65c5de810ef73b4c3617df9524083e93278ecd7863",
+      "b56c3634ce831540d4bfc5c5f8a67b6cd77643a5d07f194e9931e69e5f0143ec",
       :interface
-      "Each specialized Circle generator relation is equivalent to the explicit disjunction of its three paired-edge cases, including both reversed torus-crosscap pairs."},
+      "Concrete N3 and torus-crosscap six-edge decoder tables have literal formulas on every edge and send every specialized paired-edge generator to equal three-loop points."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -101788,7 +101807,8 @@
     :routes-2026-10-10-point-wedge-exact-equality-66
     :routes-2026-10-11-polygon-three-loop-half-open-equality-67
     :routes-2026-10-11-relation-quotient-left-inverse-68
-    :routes-2026-10-11-polygon-boundary-generator-normal-forms-69],
+    :routes-2026-10-11-polygon-boundary-generator-normal-forms-69
+    :routes-2026-10-11-polygon-boundary-edge-decoders-70],
    :current-residual
    "Combine the concrete cover packages with the strict overlap squares, banked Smith normalization, and final t97A01 assembly.",
    :other-consumers []}
@@ -105635,6 +105655,76 @@
    :id :lemma-polygonboundarygeneratornormalforms-toruscrosscaprel-iff,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "PolygonBoundaryEdgeDecoders.n3EdgeDecode_generators",
+    :type
+    "The N3 six-edge decoder sends each of the three same-parameter paired-edge generators to equal ThreeEndpointLoops points."},
+   :lemma
+   {:name "PolygonBoundaryEdgeDecoders.n3EdgeDecode_generators",
+    :reported-by
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    :type
+    "The N3 six-edge decoder sends each of the three same-parameter paired-edge generators to equal ThreeEndpointLoops points.",
+    :area "polygon-surface-open-cover",
+    :proved-in
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+   :id :lemma-polygonboundaryedgedecoders-n3edgedecode-generators,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polygonboundarygeneratornormalforms-n3circlerel-iff],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "PolygonBoundaryEdgeDecoders.torusCrosscapEdgeDecode_generators",
+    :type
+    "The torus-crosscap six-edge decoder sends the two reversed and one same-parameter paired-edge generators to equal ThreeEndpointLoops points."},
+   :lemma
+   {:name
+    "PolygonBoundaryEdgeDecoders.torusCrosscapEdgeDecode_generators",
+    :reported-by
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    :type
+    "The torus-crosscap six-edge decoder sends the two reversed and one same-parameter paired-edge generators to equal ThreeEndpointLoops points.",
+    :area "polygon-surface-open-cover",
+    :proved-in
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+   :id
+   :lemma-polygonboundaryedgedecoders-toruscrosscapedgedecode-generators,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polygonboundarygeneratornormalforms-toruscrosscapcirclerel-iff],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "polygonBoundaryCircleDecoderWellDefined",
+    :type
+    "The N3 and torus-crosscap edge decoder tables agree on all presentations of a Circle point, including shared vertices, and therefore define total Circle decoders."},
+   :lemma
+   {:name "polygonBoundaryCircleDecoderWellDefined",
+    :reported-by
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    :type
+    "The N3 and torus-crosscap edge decoder tables agree on all presentations of a Circle point, including shared vertices, and therefore define total Circle decoders.",
+    :area "polygon-surface-open-cover"},
+   :id :lemma-polygonboundarycircledecoderwelldefined,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polygonboundaryedgedecoders-n3edgedecode-generators
+    :lemma-polygonboundaryedgedecoders-toruscrosscapedgedecode-generators
+    :lemma-polygonsixedgecirclecover-sixedgecirclecover
+    :lemma-polygonsixedgeinterioruniqueness-circleedgepoint-interior-injective],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
