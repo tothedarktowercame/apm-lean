@@ -81,7 +81,7 @@ uses: B1, B2, Mathlib `continuousAt_extChartAt_symm''`,
 `hasFDerivWithinAt_tangentCoordChange`, `tangentCoordChange_comp`, and
 `isMIntegralCurveAt_iff`
 
-status: planned
+status: proved
 
 Apply B1 to `localCoordinateField I v x₀` with prescribed neighbourhood
 `interior (extChartAt I x₀).target`.  Let `U` be the chart-source points whose

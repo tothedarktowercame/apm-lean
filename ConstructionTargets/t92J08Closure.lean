@@ -110,9 +110,69 @@ theorem localCoordinateField_contDiffAt
       (BoundarylessManifold.isInteriorPoint (I := I) : I.IsInteriorPoint x₀))).snd
   simpa [localCoordinateField, tangentCoordChange_def] using h
 
+theorem exists_chart_nhds_uniform_isMIntegralCurveOn
+    [CompleteSpace E] [T2Space M] [IsManifold I 1 M]
+    [BoundarylessManifold I M]
+    (v : (x : M) → TangentSpace I x)
+    (hv : ContMDiff I I.tangent 1
+      (fun x ↦ (⟨x, v x⟩ : TangentBundle I M))) (x₀ : M) :
+    ∃ U ∈ nhds x₀, ∃ ε : ℝ, 0 < ε ∧ ∀ y ∈ U,
+      ∃ γ : ℝ → M, γ 0 = y ∧ IsMIntegralCurveOn γ v (Ioo (-ε) ε) := by
+  let c := extChartAt I x₀
+  let z₀ := c x₀
+  have htarget : interior c.target ∈ nhds z₀ :=
+    isOpen_interior.mem_nhds ((I.isInteriorPoint_iff).mp
+      (BoundarylessManifold.isInteriorPoint (I := I) : I.IsInteriorPoint x₀))
+  obtain ⟨ε, hε, r, hr, α, hα⟩ := exists_uniform_local_flow_in_nhds
+    (localCoordinateField I v x₀) z₀
+    (localCoordinateField_contDiffAt I v hv x₀) _ htarget
+  let U := c.source ∩ c ⁻¹' Metric.ball z₀ r
+  have hU : U ∈ nhds x₀ := by
+    apply Filter.inter_mem (extChartAt_source_mem_nhds x₀)
+    apply (continuousAt_extChartAt x₀).preimage_mem_nhds
+    exact Metric.ball_mem_nhds _ hr
+  refine ⟨U, hU, ε, hε, ?_⟩
+  intro y hy
+  have hy_source : y ∈ c.source := hy.1
+  have hy_ball : c y ∈ Metric.closedBall z₀ r :=
+    Metric.ball_subset_closedBall hy.2
+  obtain ⟨hα0, hαtarget, hαderiv⟩ := hα (c y) hy_ball
+  let γ : ℝ → M := c.symm ∘ α (c y)
+  refine ⟨γ, ?_, ?_⟩
+  · change c.symm (α (c y) 0) = y
+    rw [hα0]
+    exact c.left_inv hy_source
+  · intro t ht
+    let xₜ : M := c.symm (α (c y) t)
+    have hcoord : HasDerivAt (α (c y))
+        (fderivWithin ℝ (c ∘ (extChartAt I xₜ).symm) (Set.range I)
+          (extChartAt I xₜ xₜ) (v xₜ)) t := by
+      simpa [localCoordinateField, c, xₜ] using hαderiv t ht
+    rw [← tangentCoordChange_def] at hcoord
+    have hinside : α (c y) t ∈ interior c.target := hαtarget ⟨t, ht, rfl⟩
+    have htarget' : α (c y) t ∈ c.target := interior_subset hinside
+    have hsource : xₜ ∈ c.source := c.map_target htarget'
+    have hxsource : xₜ ∈ (extChartAt I xₜ).source := mem_extChartAt_source (I := I) xₜ
+    apply HasMFDerivAt.hasMFDerivWithinAt
+    refine ⟨(continuousAt_extChartAt_symm'' htarget').comp hcoord.continuousAt,
+      HasDerivWithinAt.hasFDerivWithinAt ?_⟩
+    simp only [mfld_simps, hasDerivWithinAt_univ]
+    change HasDerivAt (((extChartAt I xₜ) ∘ c.symm) ∘ α (c y)) (v xₜ) t
+    rw [← tangentCoordChange_self (I := I) (x := xₜ) (z := xₜ)
+        (v := v xₜ) hxsource,
+      ← tangentCoordChange_comp (x := x₀) ⟨⟨hxsource, hsource⟩, hxsource⟩]
+    apply HasFDerivAt.comp_hasDerivAt _ _ hcoord
+    apply HasFDerivWithinAt.hasFDerivAt (s := Set.range I) _ <|
+      mem_nhds_iff.mpr ⟨interior c.target,
+        Set.Subset.trans interior_subset (extChartAt_target_subset_range ..),
+        isOpen_interior, hinside⟩
+    rw [← c.right_inv htarget']
+    exact hasFDerivWithinAt_tangentCoordChange (I := I) ⟨hsource, hxsource⟩
+
 end ManifoldCoordinates
 
 end t92J08Closure
 
 #print axioms t92J08Closure.exists_uniform_local_flow_in_nhds
 #print axioms t92J08Closure.localCoordinateField_contDiffAt
+#print axioms t92J08Closure.exists_chart_nhds_uniform_isMIntegralCurveOn
