@@ -528,6 +528,23 @@ theorem integralRelativeHomologyComparison_generator_of_normalization
   rw [h, CoefficientChartLocal.generator_normalization,
     ambientLocalNormalization_generator]
 
+/-- The canonical integral direct-cokernel comparison intertwines the two
+absolute-to-relative cokernel projections. -/
+theorem integralDirectCokernelComparison_projection
+    {X : Type} [TopologicalSpace X] (A : Set X) :
+    cokernel.π
+        ((forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ)).map
+          (((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+            (ModuleCat.of ℤ ℤ)).map (integralSubtypeInclusion A))) ≫
+      (integralMappedRelativeCokernelComparison A).hom =
+    (singularChainsComparison (TopCat.of X)).hom ≫
+      cokernel.π (singularSubspaceMap A) := by
+  unfold integralMappedRelativeCokernelComparison
+  rw [cokernel.mapIso_hom]
+  unfold cokernel.map
+  rw [cokernel.π_desc]
+  rfl
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -562,3 +579,4 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization_generator
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparison_generator_of_normalization
+#print axioms ConstructionTargets.ManifoldFundamentalClass.integralDirectCokernelComparison_projection
