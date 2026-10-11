@@ -12562,8 +12562,79 @@
   {:consumer :t00J02,
    :implements-lemma
    :lemma-mfclass-integral-open-disk-coefficient-pair-short-exact,
+   :evidence
+   {:placeholder-delta
+    {:t00J02 {:before 1, :after 1, :delta 0},
+     :t98A02 {:before 1, :after 1, :delta 0}},
+    :residual
+    "Apply HomologySequence.δ_naturality to integralOpenDiskPairShortComplexComparison using integralOpenDiskCoefficientPairShortExact and singularPairShortComplex_shortExact, then identify component homology maps with the named open-disk comparison isomorphisms.",
+    :gates
+    {:fixture-compile :pass,
+     :module-compile :pass,
+     :target-build :pass,
+     :statement-registry "131 registered statements match, 0 do not",
+     :worktree-clean true},
+    :outcome :done-unreviewed,
+    :warnings
+    ["lake build replayed pre-existing linter warnings in dependencies"],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.ManifoldFundamentalClass.integralOpenDiskCoefficientPairShortExact",
+      :type
+      "forall (k : Nat), ((CoefficientPairSequence.sequence Int (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2))).map (forgetIntModules.mapHomologicalComplex (ComplexShape.down Nat))).ShortExact",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on
+      ["ConstructionTargets.CoefficientPairSequence.shortExact"],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes
+    {:fixture
+     "0fcc352f128d82b54a132603006492d7b42dbaeb267094167e31b5cf6e2823cf",
+     :declaration
+     "558d499027695b4d0bf15f059d4446c94d908704007af945d566ecc3836e3fff"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/manifold_fundamental_class_integral_open_disk_coefficient_pair_short_exact.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/manifold_fundamental_class_integral_open_disk_coefficient_pair_short_exact.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "comment-stripped placeholder count for t00J02 and t98A02",
+      :exit 0}
+     {:cmd "source theorem sha256", :exit 0}
+     {:cmd "rg forbidden placeholders and axioms in scope and fixture",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git status --porcelain", :exit 0}],
+    :diagnostic-history [],
+    :commit "c043f9d2b4e322c0259a5e3d74c6d3fd7f6da125",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path
+     "/tmp/manifold_fundamental_class_integral_open_disk_coefficient_pair_short_exact.lean",
+     :sha256
+     "0fcc352f128d82b54a132603006492d7b42dbaeb267094167e31b5cf6e2823cf"},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :declaration
+     "ConstructionTargets.ManifoldFundamentalClass.integralOpenDiskCoefficientPairShortExact"},
+    :row
+    :routes-2026-10-11-manifold-integral-open-disk-coefficient-pair-short-exact-topo3-r1,
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/integral-open-disk-connecting-naturality/forgotten-short-exact",
@@ -16967,11 +17038,13 @@
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.integralOpenDiskCoefficientPairShortExact",
     :reported-by
-    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+     :routes-2026-10-11-manifold-integral-open-disk-coefficient-pair-short-exact-topo3-r1],
     :type
     "forall (k : ℕ), ((CoefficientPairSequence.sequence ℤ (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2))).map (forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ))).ShortExact",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in
+    :routes-2026-10-11-manifold-integral-open-disk-coefficient-pair-short-exact-topo3-r1},
    :id :lemma-mfclass-integral-open-disk-coefficient-pair-short-exact,
    :kind :lemma,
    :depends-on
