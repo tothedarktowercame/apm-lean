@@ -16751,8 +16751,54 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :implements-lemma :lemma-mfclass-forget-snake-kernel-limit,
+   :evidence
+   {:placeholder-delta {:t00J02 [1 1], :t98A02 [1 1]},
+    :residual "Build mapped cokernel, then SnakeInput.",
+    :outcome :done-unreviewed,
+    :warnings ["simpa style lints in π comparisons"],
+    :missing-theorems
+    [{:name "forgetSnakeKernelLimit",
+      :type
+      "∀ S : ShortComplex.SnakeInput (ModuleCat ℤ), ForgottenSnakeKernelLimit S",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on ["scPairZeroπ₃Iso"],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes
+    {:registry "131/131",
+     :module
+     "d6500d2094e846dc52b733c2d2f65bfc92e2a27e3f618eb773d08b481a29fa0d"},
+    :axioms [:propext :Classical.choice :Quot.sound],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd "sha256sum /tmp/h0.lean", :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "placeholder counts t00J02,t98A02", :exit 0}
+     {:cmd "rg forbidden tokens scoped-file",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git commit", :exit 0}],
+    :commit "ecb7cbc5420b5f51f2b2c656c6d5ce497bad6795",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path "/tmp/h0.lean",
+     :sha256
+     "4ca15d6da01cc59239ac6d9b551387e6e5f537b2473fdff2a7d1de22c0247007"},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :declaration
+     "ConstructionTargets.ManifoldFundamentalClass.forgetSnakeKernelLimit"},
+    :row :routes-2026-10-11-mfclass-forget-snake-kernel-limit-r1,
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/mapped-snake-kernel",
@@ -24182,6 +24228,27 @@
    :id :lemma-mfclass-forget-snake-kernel-limit,
    :kind :lemma,
    :depends-on [:lemma-mfclass-sc-pair-pi3-iso],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "forgetSnakeKernelLimit",
+    :type
+    "∀ S : ShortComplex.SnakeInput (ModuleCat ℤ), ForgottenSnakeKernelLimit S"},
+   :lemma
+   {:name "forgetSnakeKernelLimit",
+    :reported-by
+    [:routes-2026-10-11-mfclass-forget-snake-kernel-limit-r1],
+    :type
+    "∀ S : ShortComplex.SnakeInput (ModuleCat ℤ), ForgottenSnakeKernelLimit S",
+    :area "manifold-fundamental-class",
+    :proved-in
+    :routes-2026-10-11-mfclass-forget-snake-kernel-limit-r1},
+   :id :lemma-forgetsnakekernellimit,
+   :kind :lemma,
+   :depends-on [:lemma-scpairzero-iso-30f0f76e10cb],
    :other-consumers [:t98A02]}],
  :consumer-baselines {},
  :statuses
