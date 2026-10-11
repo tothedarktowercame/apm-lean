@@ -113961,6 +113961,19 @@
     {:commit "b69997ebbc56a4762f2d38a9aa9dda1f0c580d97",
      :next
      "Implement blueprint B11 twoCirclesBaseNeighborhood and its pointed contraction from B10 and PointWedgeRestrictedOpenQuotient."},
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791728848590-5488-c3f30dac",
+     :commands
+     ["git show --format=fuller --stat b69997ebbc56a4762f2d38a9aa9dda1f0c580d97"
+      "git diff-tree --no-commit-id --name-only -r b69997ebbc56a4762f2d38a9aa9dda1f0c580d97"
+      "git show b69997ebbc56a4762f2d38a9aa9dda1f0c580d97:<scoped-file> | sha256sum"
+      "python3 scripts/statement-registry.py check"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup"],
+     :finding
+     "PASS: commit adds new compiled sorry-free B10 progress since program-history; frozen hashes and three-file scope match, literal subtype/basepoint and contraction orientation are faithful, and axioms are standard-only. Registry and milestone build pass; the absent final target is an explicitly outstanding B12 program milestone."},
     :commit "b69997ebbc56a4762f2d38a9aa9dda1f0c580d97",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113968,7 +113981,7 @@
      "ConstructionTargets/PointWedgeVanKampen.blueprint.md"],
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113989,7 +114002,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Program job completed blueprint node B8: multiplicativeIntEquivFreeGroupFinOne is the symmetric Mathlib rank-one free-group integer equivalence, in the orientation required after the circle winding coordinate. The compiled declaration is recorded as proved in the reviewed blueprint; B3, B4, B6, B10, B11, and B12 remain.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Program milestone completed. Blueprint node B10 is proved: circleBaseNeighborhood is the circle with antipode -1 removed, it is open and contains 1, and circleBaseNeighborhood_contraction is the existing stereographic pointed contraction at exactly that subtype and basepoint. B3, B4, B6, B11, and B12 remain.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114017,7 +114030,11 @@
     {:job 8,
      :commit "66ccbdbaf3d033149dc50b69a165546b41439189",
      :reason
-     "Program job completed blueprint node B8: multiplicativeIntEquivFreeGroupFinOne is the symmetric Mathlib rank-one free-group integer equivalence, in the orientation required after the circle winding coordinate. The compiled declaration is recorded as proved in the reviewed blueprint; B3, B4, B6, B10, B11, and B12 remain."}]}
+     "Program job completed blueprint node B8: multiplicativeIntEquivFreeGroupFinOne is the symmetric Mathlib rank-one free-group integer equivalence, in the orientation required after the circle winding coordinate. The compiled declaration is recorded as proved in the reviewed blueprint; B3, B4, B6, B10, B11, and B12 remain."}
+    {:job 9,
+     :commit "b69997ebbc56a4762f2d38a9aa9dda1f0c580d97",
+     :reason
+     "Program milestone completed. Blueprint node B10 is proved: circleBaseNeighborhood is the circle with antipode -1 removed, it is open and contains 1, and circleBaseNeighborhood_contraction is the existing stereographic pointed contraction at exactly that subtype and basepoint. B3, B4, B6, B11, and B12 remain."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
@@ -115472,7 +115489,7 @@
    :other-consumers []}
   {:consumer :t99J01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "PointWedgeVanKampen.circleBaseNeighborhood_contraction",
@@ -115484,7 +115501,9 @@
     :type
     "A pointed contraction of the open punctured-circle neighborhood of 1",
     :area "fundamental-group-wedge-of-circles",
-    :proved-in :program-2026-10-11-point-wedge-van-kampen},
+    :proved-in :program-2026-10-11-point-wedge-van-kampen,
+    :banked-by :program-2026-10-11-point-wedge-van-kampen,
+    :banked-commit "b69997ebbc56a4762f2d38a9aa9dda1f0c580d97"},
    :id :lemma-pointwedgevankampen-circlebaseneighborhood-contraction,
    :kind :lemma,
    :depends-on [],
