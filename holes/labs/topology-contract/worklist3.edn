@@ -17719,142 +17719,136 @@
    :depends-on [],
    :other-consumers [:t92J05 :t93J03 :t99J01 :t00J07]}
   {:consumer :t00A02,
-   :stop-count 4,
+   :stop-count 5,
    :implements-lemma
    :lemma-freeproperlydiscontinuousquotient-fundamentalgroupequiv,
    :evidence
-   {:placeholder-delta
+   {:blueprint
+    {:path
+     "ConstructionTargets/DeckGroupQuotientFundamentalGroup.blueprint.md",
+     :sha256
+     "bdb7c0b467d5baada4d1d128aade0535b95f3c44fbb045de3e1d694f5f1d67f2",
+     :nodes
+     [{:id :B1, :status :proved}
+      {:id :B2, :status :proved}
+      {:id :B3, :status :proved}
+      {:id :B4, :status :planned}
+      {:id :B5, :status :planned}
+      {:id :B6, :status :planned}
+      {:id :B7, :status :planned}
+      {:id :B8, :status :planned}
+      {:id :B9, :status :planned}
+      {:id :B10, :status :planned}]},
+    :placeholder-delta
     {:t00A02 {:before 2, :after 2, :delta 0},
      :t92J05 {:before 3, :after 3, :delta 0},
      :t93J03 {:before 1, :after 1, :delta 0},
      :t99J01 {:before 1, :after 1, :delta 0},
      :t00J07 {:before 3, :after 3, :delta 0}},
     :residual
-    "Prove deck-equivariance of monodromy and raw anti-multiplicativity; package the inverted endpoint coordinate as a homomorphism, prove its bijectivity under simple connectedness, then add consumer adapters.",
+    "Blueprint requires independent mathematical review; after PASS, resume at B4 orbitMonodromy_deck_equivariant and enter B4-B10 into the lemma DAG.",
     :gates
-    {:module-compile :pass,
+    {:blueprint-schema :pass,
      :target-build :pass,
      :statement-registry "131 registered statements match, 0 do not",
      :scoped-diff :pass,
-     :forbidden-placeholder-scan :pass,
-     :scoped-worktree-clean true},
+     :worktree-clean true},
     :outcome :stop,
-    :warnings [],
+    :warnings
+    ["The supervisor committed an unrelated ledger transition after the blueprint commit; 173536950864bf17cba34f5615371a5d9b76b233 remains the exact scoped author commit."],
     :missing-theorems
     [{:name
-      "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromyRaw",
-      :type
-      "forall repaired orbit coverings and x, FundamentalGroup (X/G) [x] -> G, sending a loop to the unique group coordinate of its lifted endpoint",
-      :status :proved,
-      :consumers [:t00A02 :t92J05 :t93J03 :t99J01 :t00J07],
-      :depends-on
-      ["ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitQuotientFiberEquiv"],
-      :area "deck-group-quotient-pi1"}
-     {:name
-      "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromyRaw_one",
-      :type "orbitEndpointMonodromyRaw free x 1 = 1",
-      :status :proved,
-      :consumers [:t00A02 :t92J05 :t93J03 :t99J01 :t00J07],
-      :depends-on
-      ["ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromyRaw"],
-      :area "deck-group-quotient-pi1"}
-     {:name
       "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitMonodromy_deck_equivariant",
       :type
-      "Lifting a quotient loop from g • x ends at g acting on the endpoint of its lift from x",
+      "Blueprint B4: monodromy of an orbit-covering loop commutes with the deck action on its fiber",
       :status :not-started,
       :consumers [:t00A02 :t92J05 :t93J03 :t99J01 :t00J07],
       :depends-on
-      ["ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromyRaw"],
+      ["ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromyRaw"
+       "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitQuotientFiberEquiv"],
       :area "deck-group-quotient-pi1"}
      {:name
-      "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromy",
+      "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromyRaw_mul",
       :type
-      "FundamentalGroup (X/G) [x] ->* G obtained by inversion of raw endpoint coordinates",
+      "Blueprint B5: raw endpoint coordinates reverse FundamentalGroup multiplication",
       :status :not-started,
       :consumers [:t00A02 :t92J05 :t93J03 :t99J01 :t00J07],
       :depends-on
       ["ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitMonodromy_deck_equivariant"],
       :area "deck-group-quotient-pi1"}
      {:name
-      "ConstructionTargets.DeckGroupQuotientFundamentalGroup.freeProperlyDiscontinuousQuotient_fundamentalGroupEquiv",
+      "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromy",
       :type
-      "The repaired fixed final theorem with T2Space and LocallyCompactSpace hypotheses",
+      "Blueprint B6: the inverse raw endpoint coordinate as a homomorphism to G",
+      :status :not-started,
+      :consumers [:t00A02 :t92J05 :t93J03 :t99J01 :t00J07],
+      :depends-on
+      ["ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromyRaw_mul"],
+      :area "deck-group-quotient-pi1"}
+     {:name
+      "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromy_surjective",
+      :type
+      "Blueprint B7: endpoint monodromy is surjective when the total space is simply connected",
       :status :not-started,
       :consumers [:t00A02 :t92J05 :t93J03 :t99J01 :t00J07],
       :depends-on
       ["ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromy"],
+      :area "deck-group-quotient-pi1"}
+     {:name
+      "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromy_injective",
+      :type
+      "Blueprint B8: endpoint monodromy is injective when the total space is simply connected",
+      :status :not-started,
+      :consumers [:t00A02 :t92J05 :t93J03 :t99J01 :t00J07],
+      :depends-on
+      ["ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromy"],
+      :area "deck-group-quotient-pi1"}
+     {:name
+      "ConstructionTargets.DeckGroupQuotientFundamentalGroup.freeProperlyDiscontinuousQuotient_fundamentalGroupEquiv",
+      :type "Blueprint B9: the repaired fixed final theorem",
+      :status :not-started,
+      :consumers [:t00A02 :t92J05 :t93J03 :t99J01 :t00J07],
+      :depends-on
+      ["ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromy_surjective"
+       "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromy_injective"],
       :area "deck-group-quotient-pi1"}],
-    :statement-hashes
-    {:module
-     "be526d6f3dcfe64f50a5aec8506f69dd499586c9b8a137db149db209e932872c"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Compiled and committed raw endpoint monodromy in the acting-group fiber coordinates, including the identity-loop law. The final theorem remains incomplete: because FundamentalGroup multiplication reverses categorical composition, the next milestone must prove deck-equivariance of lifted paths and raw anti-multiplicativity, then invert the raw coordinate to obtain a homomorphism into G.",
+    "Blueprint written as required by the newly added blueprint gate; this invocation made no Lean implementation changes. The document fixes the representation and gives ten reviewed-ready nodes from the already banked covering, fiber-coordinate, and raw-monodromy declarations through deck-equivariance, anti-multiplicativity, the endpoint homomorphism, bijectivity, the final MulEquiv, and consumer adapters.",
     :commands
     [{:cmd
-      "lake env lean ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean",
+      "rg -n blueprint node fields ConstructionTargets/DeckGroupQuotientFundamentalGroup.blueprint.md",
+      :exit 0}
+     {:cmd
+      "git diff --check HEAD^ HEAD -- ConstructionTargets/DeckGroupQuotientFundamentalGroup.blueprint.md",
       :exit 0}
      {:cmd
       "lake build ConstructionTargets.DeckGroupQuotientFundamentalGroup",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd
-      "git diff --check -- ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean ConstructionTargets/DeckGroupQuotientFundamentalGroup.md",
-      :exit 0}
-     {:cmd
-      "rg -n '\\bsorry\\b|\\badmit\\b|^\\s*axiom\\b' ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean",
-      :exit 1,
-      :expected-exit 1}
-     {:cmd
       "comment-stripped placeholder counts for t00A02 t92J05 t93J03 t99J01 t00J07",
       :exit 0}
-     {:cmd
-      "git status --short -- ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean ConstructionTargets/DeckGroupQuotientFundamentalGroup.md",
-      :exit 0}],
-    :diagnostic-history
-    [{:cmd
-      "lake env lean ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean",
-      :exit 1,
-      :finding
-      "The initial identity proof needed Equiv.apply_symm_apply before exposing monodromy_refl; the corrected proof compiles."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791713520238-4993-1ff1bcc5",
-     :commands
-     ["rg current program row and program-history"
-      "git show and git diff-tree recorded commit"
-      "git blob identity and git diff --check"
-      "sha256sum program module"
-      "lake env lean ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean"
-      "lake build ConstructionTargets.DeckGroupQuotientFundamentalGroup"
-      "python3 scripts/statement-registry.py check"
-      "forbidden placeholder and axiom scan"
-      "consumer placeholder census"
-      "blueprint path existence check"],
-     :finding
-     "PASS: program STOP commits new progress in 3f64958a after three program-history entries; exact changed scope is the DeckGroupQuotientFundamentalGroup Lean module and milestone document, both blobs match the recorded commit, and module SHA-256 matches be526d6f3dcfe64f50a5aec8506f69dd499586c9b8a137db149db209e932872c; orbitEndpointMonodromyRaw correctly sends a quotient fundamental-group element to the unique acting-group coordinate of its lifted endpoint, and orbitEndpointMonodromyRaw_one proves the identity-loop law; the implementation correctly leaves inversion and multiplicativity until deck-equivariance resolves the categorical-composition orientation; no blueprint file exists in the recorded commit, so no blueprint nodes were available to review; module replay and 1743-job build pass with no forbidden placeholders and exactly propext, Classical.choice, Quot.sound; registry is 131/0 and consumer counts are 2/3/1/1/3; deck-equivariance, anti-multiplicativity, the homomorphism, bijectivity, and consumer adapters remain explicit milestones."},
-    :commit "3f64958a92525bd9c45cf1efd531c539e61e1713",
+     {:cmd "git status --short", :exit 0}],
+    :diagnostic-history [],
+    :commit "173536950864bf17cba34f5615371a5d9b76b233",
     :changed-paths
-    ["ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean"
-     "ConstructionTargets/DeckGroupQuotientFundamentalGroup.md"],
+    ["ConstructionTargets/DeckGroupQuotientFundamentalGroup.blueprint.md"],
     :fixture nil,
     :program true,
     :implementation
     {:scope
-     ["ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean"
-      "ConstructionTargets/DeckGroupQuotientFundamentalGroup.md"],
+     ["ConstructionTargets/DeckGroupQuotientFundamentalGroup.blueprint.md"],
      :declaration
-     "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromyRaw"},
+     "DeckGroupQuotientFundamentalGroup blueprint B1-B10"},
     :row :program-2026-10-11-deck-group-quotient-pi1,
     :seat :topo-10},
    :phase :implementation,
    :owner-repair
    "2026-10-11 claude-14: final type gains [T2Space X] [LocallyCompactSpace X] (Mathlib quotient-covering needs them; every consumer, the plane and spheres, has them). Do not prove covering under weaker hypotheses.",
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean"
     "ConstructionTargets/DeckGroupQuotientFundamentalGroup.md"
@@ -17987,7 +17981,9 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-deckgroupquotientfundamentalgroup-quotientmk-iscoveringmap-w
-    :lemma-constructiontargets-deckgroupquotientfundamentalgroup-orbitendpointmonodromy],
+    :lemma-constructiontargets-deckgroupquotientfundamentalgroup-orbitendpointmonodromy
+    :lemma-constructiontargets-deckgroupquotientfundamentalgroup-orbitendpointmonodromy-sur
+    :lemma-constructiontargets-deckgroupquotientfundamentalgroup-orbitendpointmonodromy-inj],
    :other-consumers [:t92J05 :t93J03 :t99J01 :t00J07]}
   {:consumer :t00A02,
    :phase :lemma,
@@ -18490,7 +18486,8 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-deckgroupquotientfundamentalgroup-orbitquotientfiberequiv
-    :lemma-constructiontargets-deckgroupquotientfundamentalgroup-orbitmonodromy-deck-equiva],
+    :lemma-constructiontargets-deckgroupquotientfundamentalgroup-orbitmonodromy-deck-equiva
+    :lemma-constructiontargets-deckgroupquotientfundamentalgroup-orbite-dfb98a9a7bee],
    :other-consumers [:t92J05 :t93J03 :t99J01 :t00J07]}
   {:consumer :t02A04,
    :phase :lemma,
@@ -18872,7 +18869,74 @@
    :lemma-constructiontargets-deckgroupquotientfundamentalgroup-orbitmonodromy-deck-equiva,
    :kind :lemma,
    :depends-on
-   [:lemma-constructiontargets-deckgroupquotientfundamentalgroup-orbitendpointmonodromyraw],
+   [:lemma-constructiontargets-deckgroupquotientfundamentalgroup-orbitendpointmonodromyraw
+    :lemma-constructiontargets-deckgroupquotientfundamentalgroup-orbitquotientfiberequiv],
+   :other-consumers [:t92J05 :t93J03 :t99J01 :t00J07]}
+  {:consumer :t00A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromyRaw_mul",
+    :type
+    "Blueprint B5: raw endpoint coordinates reverse FundamentalGroup multiplication"},
+   :lemma
+   {:name
+    "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromyRaw_mul",
+    :reported-by [:program-2026-10-11-deck-group-quotient-pi1],
+    :type
+    "Blueprint B5: raw endpoint coordinates reverse FundamentalGroup multiplication",
+    :area "deck-group-quotient-pi1"},
+   :id
+   :lemma-constructiontargets-deckgroupquotientfundamentalgroup-orbite-dfb98a9a7bee,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-deckgroupquotientfundamentalgroup-orbitmonodromy-deck-equiva],
+   :other-consumers [:t92J05 :t93J03 :t99J01 :t00J07]}
+  {:consumer :t00A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromy_surjective",
+    :type
+    "Blueprint B7: endpoint monodromy is surjective when the total space is simply connected"},
+   :lemma
+   {:name
+    "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromy_surjective",
+    :reported-by [:program-2026-10-11-deck-group-quotient-pi1],
+    :type
+    "Blueprint B7: endpoint monodromy is surjective when the total space is simply connected",
+    :area "deck-group-quotient-pi1"},
+   :id
+   :lemma-constructiontargets-deckgroupquotientfundamentalgroup-orbitendpointmonodromy-sur,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-deckgroupquotientfundamentalgroup-orbitendpointmonodromy],
+   :other-consumers [:t92J05 :t93J03 :t99J01 :t00J07]}
+  {:consumer :t00A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromy_injective",
+    :type
+    "Blueprint B8: endpoint monodromy is injective when the total space is simply connected"},
+   :lemma
+   {:name
+    "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromy_injective",
+    :reported-by [:program-2026-10-11-deck-group-quotient-pi1],
+    :type
+    "Blueprint B8: endpoint monodromy is injective when the total space is simply connected",
+    :area "deck-group-quotient-pi1"},
+   :id
+   :lemma-constructiontargets-deckgroupquotientfundamentalgroup-orbitendpointmonodromy-inj,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-deckgroupquotientfundamentalgroup-orbitendpointmonodromy],
    :other-consumers [:t92J05 :t93J03 :t99J01 :t00J07]}],
  :consumer-baselines {},
  :statuses
