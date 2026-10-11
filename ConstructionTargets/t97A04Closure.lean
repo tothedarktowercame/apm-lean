@@ -262,6 +262,14 @@ theorem twoCircleOverlapShearRight_H1 (a b : ℤ) :
   rw [← Functor.map_comp]
   rfl
 
+/-- The circle coordinate of the transported left overlap summand. -/
+def twoCircleOverlapShearLeftFold (a b : ℤ) : C(Circle, Circle) :=
+  twoCircleFold.comp (twoCircleOverlapShearLeft a b)
+
+/-- The circle coordinate of the transported right overlap summand. -/
+def twoCircleOverlapShearRightFold (a b : ℤ) : C(Circle, Circle) :=
+  twoCircleFold.comp (twoCircleOverlapShearRight a b)
+
 /-- The integer power map which remains on either overlap component after
 the constant translation in the shear is removed. -/
 def circleZPow (a : ℤ) : C(Circle, Circle) :=
@@ -270,6 +278,36 @@ def circleZPow (a : ℤ) : C(Circle, Circle) :=
 /-- A translated integer power map on the circle. -/
 def circleAffine (a : ℤ) (c : Circle) : C(Circle, Circle) :=
   ⟨fun z ↦ c * z ^ a, by fun_prop⟩
+
+theorem twoCircleOverlapShearLeftFold_H1 (a b : ℤ) :
+    HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularSubdivision.singularPostcomposition
+          (twoCircleOverlapShearLeft a b)) 1 ≫
+      HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularSubdivision.singularPostcomposition
+          twoCircleFold) 1 =
+    HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularSubdivision.singularPostcomposition
+        (twoCircleOverlapShearLeftFold a b)) 1 := by
+  rw [← HomologicalComplex.homologyMap_comp]
+  dsimp only [ConstructionTargets.SingularSubdivision.singularPostcomposition]
+  rw [← Functor.map_comp]
+  rfl
+
+theorem twoCircleOverlapShearRightFold_H1 (a b : ℤ) :
+    HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularSubdivision.singularPostcomposition
+          (twoCircleOverlapShearRight a b)) 1 ≫
+      HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularSubdivision.singularPostcomposition
+          twoCircleFold) 1 =
+    HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularSubdivision.singularPostcomposition
+        (twoCircleOverlapShearRightFold a b)) 1 := by
+  rw [← HomologicalComplex.homologyMap_comp]
+  dsimp only [ConstructionTargets.SingularSubdivision.singularPostcomposition]
+  rw [← Functor.map_comp]
+  rfl
 
 /-- Translation does not affect the degree of an integer power map. -/
 def circleAffineHomotopy (a : ℤ) (c : Circle) :
@@ -822,6 +860,10 @@ theorem shearY_overlap_coordinate_of_degree_components (a b : ℤ)
 #print axioms twoCircleOverlapShearRight_apply
 #print axioms twoCircleOverlapShearLeft_H1
 #print axioms twoCircleOverlapShearRight_H1
+#print axioms twoCircleOverlapShearLeftFold
+#print axioms twoCircleOverlapShearRightFold
+#print axioms twoCircleOverlapShearLeftFold_H1
+#print axioms twoCircleOverlapShearRightFold_H1
 #print axioms circleZPow
 #print axioms circleAffine
 #print axioms circleAffineHomotopy
