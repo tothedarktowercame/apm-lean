@@ -113905,6 +113905,19 @@
       :exit 0,
       :finding "zero placeholders; scoped diff clean"}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791747949247-5834-e5439d7d",
+     :commands
+     ["git show/diff-tree c88ed26e"
+      "hash/diff/placeholder checks"
+      "statement-registry.py check"
+      "lake env lean PointWedgeVanKampen.lean"
+      "lake build PointWedgeVanKampen"
+      "lake build ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "PASS: new compiled, sorry-free B6 progress exposes the literal open-cover pseudococone and glued global functor, identifies its two components with the computed actual-span legs, and definitionally matches the full B3 inverse. Representation boundaries/orientation are correct. Exact two-file scope/frozen hashes match; zero placeholders; registry 131/131; standard axioms. Restriction formulas and B12 remain listed; absent final target is valid STOP."},
     :commit "c88ed26ef93266f0d7c19fa50cf48e361e55e732",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113915,7 +113928,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113936,7 +113949,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B6 coordinate-to-point inverse now preserves both generators.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B3 inverse now reaches a named open-cover pseudococone and global functor.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114031,7 +114044,11 @@
     {:job 9,
      :commit "fc3c70a320bb645b9e0eb2b55bf87446847ee7ad",
      :reason
-     "B6 coordinate-to-point inverse now preserves both generators."}]}
+     "B6 coordinate-to-point inverse now preserves both generators."}
+    {:job 1,
+     :commit "c88ed26ef93266f0d7c19fa50cf48e361e55e732",
+     :reason
+     "B3 inverse now reaches a named open-cover pseudococone and global functor."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
