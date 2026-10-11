@@ -1074,6 +1074,51 @@ noncomputable def scPairZeroπ₃Iso
     · simpa using ShortComplex.π₃.map_zero X Y
     · simpa using ShortComplex.π₃.map_id Y)
 
+abbrev ForgottenSnakeKernelLimit (S : ShortComplex.SnakeInput (ModuleCat ℤ)) :=
+  IsLimit (KernelFork.ofι (forgetIntModules.mapShortComplex.map S.v₀₁)
+    (forgetIntModulesSnakeInput_zero_squares S).1)
+
+/-- The kernel fork of the first mapped snake-input morphism is a limit. -/
+noncomputable def forgetSnakeKernelLimit
+    (S : ShortComplex.SnakeInput (ModuleCat ℤ)) :
+    ForgottenSnakeKernelLimit S := by
+  let c := KernelFork.ofι (forgetIntModules.mapShortComplex.map S.v₀₁)
+    (forgetIntModulesSnakeInput_zero_squares S).1
+  apply ShortComplex.isLimitOfIsLimitπ
+  · let k := c.map ShortComplex.π₁
+    let ht : IsLimit ((Cone.postcompose
+        (scPairZeroπ₁Iso (forgetIntModules.mapShortComplex.map S.v₁₂)).inv).obj k) :=
+      (IsLimit.postcomposeHomEquiv
+        (scPairZeroπ₁Iso (forgetIntModules.mapShortComplex.map S.v₁₂)).symm k).symm
+          (forgetIntModulesSnakeInput_kernelτ₁IsLimit S)
+    let e : (Cone.postcompose
+        (scPairZeroπ₁Iso (forgetIntModules.mapShortComplex.map S.v₁₂)).inv).obj k ≅
+        ShortComplex.π₁.mapCone c :=
+      Cone.ext (Iso.refl _) (by intro j; rcases j with (_ | _) <;> rfl)
+    exact (IsLimit.equivIsoLimit e).toFun ht
+  · let k := c.map ShortComplex.π₂
+    let ht : IsLimit ((Cone.postcompose
+        (scPairZeroπ₂Iso (forgetIntModules.mapShortComplex.map S.v₁₂)).inv).obj k) :=
+      (IsLimit.postcomposeHomEquiv
+        (scPairZeroπ₂Iso (forgetIntModules.mapShortComplex.map S.v₁₂)).symm k).symm
+          (forgetSnakeKernelτ₂Limit S)
+    let e : (Cone.postcompose
+        (scPairZeroπ₂Iso (forgetIntModules.mapShortComplex.map S.v₁₂)).inv).obj k ≅
+        ShortComplex.π₂.mapCone c :=
+      Cone.ext (Iso.refl _) (by intro j; rcases j with (_ | _) <;> rfl)
+    exact (IsLimit.equivIsoLimit e).toFun ht
+  · let k := c.map ShortComplex.π₃
+    let ht : IsLimit ((Cone.postcompose
+        (scPairZeroπ₃Iso (forgetIntModules.mapShortComplex.map S.v₁₂)).inv).obj k) :=
+      (IsLimit.postcomposeHomEquiv
+        (scPairZeroπ₃Iso (forgetIntModules.mapShortComplex.map S.v₁₂)).symm k).symm
+          (forgetSnakeKernelτ₃Limit S)
+    let e : (Cone.postcompose
+        (scPairZeroπ₃Iso (forgetIntModules.mapShortComplex.map S.v₁₂)).inv).obj k ≅
+        ShortComplex.π₃.mapCone c :=
+      Cone.ext (Iso.refl _) (by intro j; rcases j with (_ | _) <;> rfl)
+    exact (IsLimit.equivIsoLimit e).toFun ht
+
 /-- The corrected relative-homology comparison intertwines the coefficient
 absolute-to-relative map with the production relative projection. -/
 theorem integralRelativeHomologyComparisonWithTransport_projection
@@ -2049,6 +2094,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.scPairZeroπ₁Iso
 #print axioms ConstructionTargets.ManifoldFundamentalClass.scPairZeroπ₂Iso
 #print axioms ConstructionTargets.ManifoldFundamentalClass.scPairZeroπ₃Iso
+#print axioms ConstructionTargets.ManifoldFundamentalClass.forgetSnakeKernelLimit
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
