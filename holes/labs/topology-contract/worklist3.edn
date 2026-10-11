@@ -5049,6 +5049,23 @@
       :expected-exit 1}
      {:cmd "git status --porcelain", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791684847057-3768-afb76b6a",
+     :commands
+     ["git diff-tree recorded commit scope"
+      "git blob identity check"
+      "sha256sum promoted fixture"
+      "git diff --check recorded commit"
+      "lake env lean promoted fixture"
+      "lake env lean target module"
+      "lake build target module"
+      "placeholder and axiom scan"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped consumer placeholder census"],
+     :finding
+     "PASS: implementation commit f7bdb704 changes exactly ConstructionTargets/ManifoldFundamentalClass.lean and its recorded blob matches the reviewed source; promoted fixture hash 60dc77470e03a29edef287e8a7b8e32384cf22f7fdd8c076f3394c506a11d9e2 matches recorded evidence and preserves the registered frozen theorem type; cokernelProjection_comp_relativeSingularChainsIso_inv has the required direction from the direct cokernel projection followed by the inverse production cokernel-presentation isomorphism to relativeSingularProjection; the proof reverses relativeProjection_comp_cokernelIso_hom and cancels the reviewed isomorphism with its inverse, introducing no new relative-chain model or arbitrary isomorphism; it does not compose with integralCompositeCokernelComparison_projection, define another comparison, apply homology, or claim normalization, generator transport, or localization equality; fixture, module, and 8326-job target build pass with zero source/fixture placeholders and only propext, Classical.choice, and Quot.sound; 131 statements match with zero mismatches and consumer placeholders remain t00J02=1 and t98A02=1."},
     :commit "f7bdb704577068982232b48b6382f7838247ef30",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -5072,7 +5089,7 @@
       "Exact chain-map equality from the direct-cokernel projection representation to the production RelativeSingularChains projection representation, obtained by inverting relativeProjection_comp_cokernelIso_hom"}},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/production-cokernel-projection",
@@ -5225,7 +5242,7 @@
      "The production boundary already has the forward projection equation relativeProjection_comp_cokernelIso_hom. The compiled fixture derives the precisely oriented inverse equation by postcomposing with the inverse isomorphism and cancelling. This supplies the final categorical edge needed to turn the banked direct-cokernel square into a square landing in the actual RelativeSingularChains object. No new relative-chain model or arbitrary isomorphism is introduced.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -7747,7 +7764,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -7764,7 +7781,10 @@
     "forall {X : Type} [TopologicalSpace X] (A : Set X), cokernel.π (singularSubspaceMap A) ≫ (relativeSingularChainsIsoCokernelSubspaceMap A).inv = relativeSingularProjection A",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-production-cokernel-projection-topo3-r1},
+    :routes-2026-10-11-manifold-production-cokernel-projection-topo3-r1,
+    :banked-by
+    :routes-2026-10-11-manifold-production-cokernel-projection-topo3-r1,
+    :banked-commit "f7bdb704577068982232b48b6382f7838247ef30"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-cokernelprojection-comp-relativesingularchainsiso-inv,
    :kind :lemma,
