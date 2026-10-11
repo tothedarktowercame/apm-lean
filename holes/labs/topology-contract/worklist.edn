@@ -102204,6 +102204,21 @@
       :exit 0}
      {:cmd "git status --porcelain", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791680470142-3568-5ca1e376",
+     :commands
+     ["git show and git diff-tree on recorded commit 7590f4008bb5a4932de8f4578d49370cfd0c58b7"
+      "git diff --exit-code recorded commit against source checkout"
+      "SHA-256 and comment-stripped placeholder recomputation for source and fixture"
+      "lake build ConstructionTargets.PolygonSixEdgeFinalEndpointWrap"
+      "lake env lean /tmp/polygon-six-edge-final-endpoint-wrap.lean"
+      "lake env lean /dev/stdin with fresh axiom checks"
+      "python3 scripts/statement-registry.py check"
+      "git diff-tree --check recorded parent and commit"],
+     :finding
+     "Recorded one-file commit is authored by topo-2; source equals the recorded blob and recomputed implementation and fixture hashes match; the proof rewrites both canonical edge points through the literal AddCircle coordinate formula, establishes that real coordinate six is zero in AddCircle 6, orients edge five at parameter one to edge zero at parameter zero, and packages that target as a half-open presentation; all three frozen results compile with only standard axioms, placeholder counts are zero, the registry reports 131 matched and 0 mismatched, and downstream decoder independence remains outside scope."},
     :commit "7590f4008bb5a4932de8f4578d49370cfd0c58b7",
     :changed-paths
     ["ConstructionTargets/PolygonSixEdgeFinalEndpointWrap.lean"],
@@ -102218,7 +102233,7 @@
      "Proved six equals zero in AddCircle 6, derived the literal equality between edge five at one and edge zero at zero, and packaged the remaining half-open endpoint presentation."},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/PolygonSixEdgeFinalEndpointWrap.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/six-edge-final-endpoint-wrap",
@@ -102351,7 +102366,7 @@
       "Edge five at parameter one wraps to edge zero at parameter zero in Circle, yielding the sixth half-open endpoint normalization."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -106523,7 +106538,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -106540,7 +106555,10 @@
     "The parameter-one endpoint of canonical edge five equals the parameter-zero endpoint of canonical edge zero.",
     :area "polygon-surface-open-cover",
     :proved-in
-    :routes-2026-10-11-polygon-six-edge-final-endpoint-wrap-74},
+    :routes-2026-10-11-polygon-six-edge-final-endpoint-wrap-74,
+    :banked-by
+    :routes-2026-10-11-polygon-six-edge-final-endpoint-wrap-74,
+    :banked-commit "7590f4008bb5a4932de8f4578d49370cfd0c58b7"},
    :id
    :lemma-polygonsixedgefinalendpointwrap-circleedgepoint-five-one-eq-zero-zero,
    :kind :lemma,
@@ -106550,7 +106568,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -106567,7 +106585,10 @@
     "The final edge endpoint has the edge-zero parameter-zero half-open presentation.",
     :area "polygon-surface-open-cover",
     :proved-in
-    :routes-2026-10-11-polygon-six-edge-final-endpoint-wrap-74},
+    :routes-2026-10-11-polygon-six-edge-final-endpoint-wrap-74,
+    :banked-by
+    :routes-2026-10-11-polygon-six-edge-final-endpoint-wrap-74,
+    :banked-commit "7590f4008bb5a4932de8f4578d49370cfd0c58b7"},
    :id
    :lemma-polygonsixedgefinalendpointwrap-final-endpoint-has-halfopen-presentation,
    :kind :lemma,
@@ -106576,7 +106597,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "PolygonSixEdgeFinalEndpointWrap.addCircle_six_eq_zero",
@@ -106588,7 +106609,10 @@
     :type "((6 : ℝ) : AddCircle (6 : ℝ)) = 0",
     :area "polygon-surface-open-cover",
     :proved-in
-    :routes-2026-10-11-polygon-six-edge-final-endpoint-wrap-74},
+    :routes-2026-10-11-polygon-six-edge-final-endpoint-wrap-74,
+    :banked-by
+    :routes-2026-10-11-polygon-six-edge-final-endpoint-wrap-74,
+    :banked-commit "7590f4008bb5a4932de8f4578d49370cfd0c58b7"},
    :id :lemma-polygonsixedgefinalendpointwrap-addcircle-six-eq-zero,
    :kind :lemma,
    :depends-on [],
