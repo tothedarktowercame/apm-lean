@@ -1465,6 +1465,27 @@ theorem coefficientIntegralBall_forget_hom (k : ℕ) :
     CoefficientNeighborhoodLocal.modelNormalization
   exact forgetIntModules.map_comp _ _
 
+/-- The forgotten coefficient normalization from the unit open disk, with
+the terminal Euclidean model normalization exposed into its three factors. -/
+theorem coefficientIntegralBall_forget_hom_eq_model_factors (k : ℕ) :
+    forgetIntModules.map
+        (CoefficientNeighborhoodLocal.integral_ball k).hom =
+      forgetIntModules.map
+          (HomologicalComplex.homologyMap
+            (CoefficientNeighborhoodLocal.inclusionMap ℤ
+              (Metric.ball (0 : CoefficientModelLocal.E (k + 2)) 1) 0)
+            (k + 2)) ≫
+        coefficientModelNormalizationComposite k := by
+  rw [coefficientIntegralBall_forget_hom]
+  exact congrArg
+    (fun f =>
+      forgetIntModules.map
+          (HomologicalComplex.homologyMap
+            (CoefficientNeighborhoodLocal.inclusionMap ℤ
+              (Metric.ball (0 : CoefficientModelLocal.E (k + 2)) 1) 0)
+            (k + 2)) ≫ f)
+    (coefficientModelLocalIso_forget_hom k)
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -1553,5 +1574,6 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientModelLocalIso_forget_hom
 #print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_implies_model_factors
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientIntegralBall_forget_hom
+#print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientIntegralBall_forget_hom_eq_model_factors
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport_homologyMap_eq_composite
 #print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_transport_homology_factors
