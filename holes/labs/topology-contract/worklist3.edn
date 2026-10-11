@@ -6716,6 +6716,23 @@
       :exit 0,
       :result "clean after commit"}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791689612615-4002-1c051bb0",
+     :commands
+     ["git show and git diff-tree recorded commit scope"
+      "git blob identity check"
+      "sha256sum frozen fixture"
+      "git diff --check recorded commit"
+      "lake env lean renamed frozen-fixture replay"
+      "lake env lean target module"
+      "lake build target module"
+      "placeholder and axiom scan"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped consumer placeholder census"],
+     :finding
+     "PASS: commit b9a6e888 changes only ConstructionTargets/ManifoldFundamentalClass.lean and its recorded blob matches the reviewed tree; frozen fixture hash 1ea1767c7ea87d8b9e6c6883577f7ec07726593ff2d12ffbfca6d4e24377d3b5 matches. correctedLocalGeneratorCoefficient is exactly the ambientLocalNormalization coordinate of the corrected comparison image, and the theorem has the frozen direction expressing that image as this integer multiple of the ambient local generator. The proof uses injectivity of ambientLocalNormalization.hom and ambientLocalNormalization_generator, without claiming the coefficient is one or a unit or proving normalization compatibility. Fixture replay and target compile/build pass with only propext, Classical.choice, Quot.sound; registry is 131/0; source and fixture have no placeholders; consumer counts remain t00J02=1 and t98A02=1."},
     :commit "b9a6e888b85cf746c05e787e45579088097803a5",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -6732,7 +6749,7 @@
      ["ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient"]},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/corrected-local-generator-coefficient",
@@ -6885,7 +6902,7 @@
      "The corrected comparison's generator image has a canonical integer coordinate under ambientLocalNormalization. The compiled theorem expresses it exactly as that scalar multiple of ambientLocalGenerator. This separates the formal cyclic-group argument from the remaining orientation-sensitive comparison: the coefficient and production model normalizations must be shown to assign the same sign, equivalently correctedLocalGeneratorCoefficient = 1. Packaged projection naturality does not by itself determine this scalar.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -9795,7 +9812,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -9812,7 +9829,10 @@
     "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), (integralRelativeHomologyComparisonWithTransport (deletedPoint x) (k + 2)).hom.hom (CoefficientChartLocal.generator Int k x) = correctedLocalGeneratorCoefficient k x • HigherChartLocalGenerator.ambientLocalGenerator (k := k) x",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-corrected-local-generator-coefficient-topo3-r1},
+    :routes-2026-10-11-manifold-corrected-local-generator-coefficient-topo3-r1,
+    :banked-by
+    :routes-2026-10-11-manifold-corrected-local-generator-coefficient-topo3-r1,
+    :banked-commit "b9a6e888b85cf746c05e787e45579088097803a5"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-integralrelativehomologycomparisonwithtransport-generator-eq-zsmul,
    :kind :lemma,
