@@ -113852,49 +113852,50 @@
    :depends-on [],
    :other-consumers [:t98A02]}
   {:consumer :t99J01,
-   :stop-count 3,
+   :stop-count 4,
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
-   {:placeholder-delta {:source-before 0, :source-after 0},
+   {:blueprint
+    {:path "ConstructionTargets/PointWedgeVanKampen.blueprint.md",
+     :sha256
+     "e7858853bfd65235a9452c2de7c31d88e400b786ec8e04832c50f7b13e739a02",
+     :nodes
+     [{:id :B1, :status :proved}
+      {:id :B2, :status :proved}
+      {:id :B3, :status :planned}
+      {:id :B4, :status :planned}
+      {:id :B5, :status :proved}
+      {:id :B6, :status :planned}
+      {:id :B7, :status :proved}
+      {:id :B8, :status :proved}
+      {:id :B9, :status :planned}]},
+    :placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Construct the generic target-natural point-wedge equivalence with literal leg coordinates, then specialize and compose with coprodFreeGroupFinTwoFinOne_equiv.",
+    "Blueprint review, followed by B3 target-natural mapping equivalence, B4 source reconstruction, B6 literal leg laws, and B9 ThreeCircles specialization.",
     :outcome :stop,
     :warnings
-    [{:kind :upstream-lint,
+    [{:kind :concurrent-worktree-change,
       :message
-      "The full build replayed existing warnings from imported modules; the changed module introduced none."}],
+      "holes/labs/topology-contract/worklist.edn changed concurrently and was preserved unmodified and uncommitted."}],
     :missing-theorems
     [{:name
-      "PointWedgeVanKampen.fundamentalGroupMulEquivOfSingleObjEquivalence",
+      "PointWedgeVanKampen.genericPointWedgeSingleObjMappingEquivalence",
       :type
-      "For E : FundamentalGroupoid X ≌ SingleObj G, FundamentalGroup X x ≃* G",
-      :status :proved,
+      "A postcomposition-natural equivalence from functors out of the point-wedge fundamental groupoid to functors out of the single-object coproduct groupoid",
+      :status :not-started,
       :consumers [:t99J01 :t01A03 :t92J06 :t97A01 :t97A03],
       :depends-on [],
       :area "fundamental-group-wedge-of-circles"}
      {:name
       "PointWedgeVanKampen.genericPointWedgeLegCoordinates_vanKampen",
       :type
-      "For a point wedge of two path-connected spaces with contractible-to-basepoint open neighbourhoods, the wedge fundamental group is the coproduct of the piece fundamental groups, with literal leg coordinates.",
+      "The point-wedge fundamental group is the coproduct of the piece fundamental groups, with literal left and right leg coordinates",
       :status :not-started,
       :consumers [:t99J01 :t01A03 :t92J06 :t97A01 :t97A03],
       :depends-on
-      ["PointWedgeVanKampen.fundamentalGroupMulEquivOfSingleObjEquivalence"],
+      ["PointWedgeVanKampen.genericPointWedgeSingleObjMappingEquivalence"
+       "PointWedgeVanKampen.fundamentalGroupMulEquivOfSingleObjEquivalence"],
       :area "fundamental-group-wedge-of-circles"}
-     {:name "PointWedgeVanKampen.coprodFreeGroupFinTwoFinOne_equiv",
-      :type
-      "Monoid.Coprod (FreeGroup (Fin 2)) (FreeGroup (Fin 1)) ≃* FreeGroup (Fin 3)",
-      :status :proved,
-      :consumers [:t99J01],
-      :depends-on [],
-      :area "fundamental-group-wedge-of-circles"}
-     {:name "PointWedgeVanKampen.threeCircles_locPathConnected",
-      :type
-      "LocPathConnectedSpace ThreeCircles, together with PathConnectedSpace ThreeCircles",
-      :status :proved,
-      :consumers [:t99J01],
-      :depends-on [],
-      :area "covering-subgroup-correspondence"}
      {:name "PointWedgeVanKampen.threeCirclesFundamentalGroupEquiv",
       :type
       "FundamentalGroup ThreeCircles threeBase ≃* FreeGroup (Fin 3)",
@@ -113905,59 +113906,46 @@
        "PointWedgeVanKampen.coprodFreeGroupFinTwoFinOne_equiv"],
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
-    {:source-sha256
-     "3830eb38a95e0f6c8a2992ef59bbd2a2db585735c754ba11c4893ec5a23e2746",
-     :documentation-sha256
-     "7d3cedf9ec51bbdc8ac11dfa8192ef0fd2b10fc8333f9e232d3cc0355fe3f75e",
+    {:blueprint-sha256
+     "e7858853bfd65235a9452c2de7c31d88e400b786ec8e04832c50f7b13e739a02",
      :registry "131 registered statements match, 0 do not"},
     :disposition :stop,
-    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :axioms [],
     :author "topo-2",
     :reason
-    "This program job proved a generic bridge from any fundamental-groupoid equivalence with a one-object groupoid to the corresponding fundamental-group equivalence. The generic point-wedge target-natural equivalence and final ThreeCircles specialization remain.",
+    "Blueprint written. Per the blueprint gate, this job formalized no new Lean node; the nine-node mathematical route now requires independent review before B3 formalization continues.",
     :commands
-    [{:cmd
-      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
+    [{:cmd "sed -n 1,260p holes/labs/topology-contract/BLUEPRINTS.md",
       :exit 0}
-     {:cmd "lake build ConstructionTargets.PointWedgeVanKampen",
+     {:cmd "rg point-wedge-route-and-audit-sources",
+      :exit 0,
+      :finding
+      "t99J01 audit route step 1 requires the three-circle fundamental-group computation by iterated point-wedge van Kampen"}
+     {:cmd "python3 blueprint node-field validation",
+      :exit 0,
+      :finding "9 blueprint nodes; each has lean, uses, and status"}
+     {:cmd
+      "git diff --check -- ConstructionTargets/PointWedgeVanKampen.blueprint.md",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
-     {:cmd "python3 comment-stripped placeholder scan",
-      :exit 0,
-      :finding "Zero sorry, admit, or axiom tokens"}
-     {:cmd "git diff --check", :exit 0}
-     {:cmd
-      "git commit -m Add-generic-single-object-fundamental-group-bridge",
+     {:cmd "git commit -m Write-point-wedge-van-Kampen-blueprint",
       :exit 0}
-     {:cmd "git status --short",
+     {:cmd "git show --stat --oneline --no-renames HEAD",
       :exit 0,
-      :finding "Worktree is clean"}],
+      :finding "Only the scoped blueprint was committed"}],
     :diagnostic-history [],
     :continue-from
-    {:commit "72d1fcaf0745652ecbc75095af242ae860341027",
+    {:commit "33033fb07c2f454ffc2bb91d7183af156d0cd531",
      :next
-     "Construct the generic target-natural point-wedge mapping equivalence and feed its reconstructed source equivalence to fundamentalGroupMulEquivOfSingleObjEquivalence; then specialize to ThreeCircles."},
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791713561147-4999-c595c39d",
-     :commands
-     ["git show and diff-tree 72d1fcaf0745652ecbc75095af242ae860341027"
-      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
-      "python3 scripts/statement-registry.py check"
-      "comment-stripped sorry admit axiom census"
-      "git diff --check 72d1fcaf^ 72d1fcaf"],
-     :finding
-     "New since program-history: the committed single-object groupoid bridge has the correct End-to-G orientation, compiles with standard axioms and zero placeholders, and the generic van Kampen and final specialization milestones remain listed."},
-    :commit "72d1fcaf0745652ecbc75095af242ae860341027",
+     "Obtain independent mathematical review of PointWedgeVanKampen.blueprint.md; after review, implement B3, the target-natural point-wedge mapping equivalence."},
+    :commit "33033fb07c2f454ffc2bb91d7183af156d0cd531",
     :changed-paths
-    ["ConstructionTargets/PointWedgeVanKampen.lean"
-     "ConstructionTargets/PointWedgeVanKampen.md"],
+    ["ConstructionTargets/PointWedgeVanKampen.blueprint.md"],
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -114018,7 +114006,8 @@
    :lemma-pointwedgevankampen-genericpointwedgelegcoordinates-vankampen,
    :kind :lemma,
    :depends-on
-   [:lemma-pointwedgevankampen-fundamentalgroupmulequivofsingleobjequivalence],
+   [:lemma-pointwedgevankampen-fundamentalgroupmulequivofsingleobjequivalence
+    :lemma-pointwedgevankampen-genericpointwedgesingleobjmappingequivalence],
    :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
   {:consumer :t99J01,
    :phase :lemma,
@@ -115093,7 +115082,28 @@
    :id :lemma-cayleytree-simplyconnected,
    :kind :lemma,
    :depends-on [:lemma-cayleytree-cover],
-   :other-consumers []}],
+   :other-consumers []}
+  {:consumer :t99J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "PointWedgeVanKampen.genericPointWedgeSingleObjMappingEquivalence",
+    :type
+    "A postcomposition-natural equivalence from functors out of the point-wedge fundamental groupoid to functors out of the single-object coproduct groupoid"},
+   :lemma
+   {:name
+    "PointWedgeVanKampen.genericPointWedgeSingleObjMappingEquivalence",
+    :reported-by [:program-2026-10-11-point-wedge-van-kampen],
+    :type
+    "A postcomposition-natural equivalence from functors out of the point-wedge fundamental groupoid to functors out of the single-object coproduct groupoid",
+    :area "fundamental-group-wedge-of-circles"},
+   :id
+   :lemma-pointwedgevankampen-genericpointwedgesingleobjmappingequivalence,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",
