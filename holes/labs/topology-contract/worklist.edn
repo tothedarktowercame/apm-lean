@@ -115286,7 +115286,8 @@
     :reported-by [:owner :program-2026-10-11-close-t92j08],
     :type
     "∃ ε>0, ∀ x, ∃ γ, γ 0=x ∧ IsMIntegralCurveOn γ v (Ioo (-ε) ε)  (size: 100-180 lines / 1-2 days)",
-    :area "manifold-uniform-local-flow"},
+    :area "manifold-uniform-local-flow",
+    :proved-in :program-2026-10-11-close-t92j08},
    :id :lemma-apm-t92j08-bridge-1,
    :kind :lemma,
    :depends-on
@@ -116263,17 +116264,11 @@
   {:consumer :t92J08,
    :stop-count 6,
    :evidence
-   {:placeholder-delta {:source-before 1, :source-after 1},
+   {:placeholder-delta {:source-before 1, :source-after 0},
     :residual
-    "Only B6 remains: import the closure module into the consumer, apply B5 to the exact frozen bridge statement, mark the blueprint complete, and verify the registered final theorem without placeholders.",
-    :outcome :stop,
-    :warnings
-    [{:kind :existing-placeholder,
-      :message
-      "The consumer still reports its sole pre-existing bridge_1 placeholder; this bounded B5 milestone introduced none."}
-     {:kind :concurrent-worktree-change,
-      :message
-      "ConstructionTargets/ManifoldFundamentalClass.lean was modified by another process and was preserved unmodified and uncommitted."}],
+    "None. The sole consumer placeholder is removed, all six blueprint nodes are proved, status is complete, and the registered theorem compiles under standard axioms.",
+    :outcome :done-unreviewed,
+    :warnings [],
     :missing-theorems
     [{:name "t92J08Closure.exists_uniform_local_flow_in_nhds",
       :type
@@ -116319,92 +116314,80 @@
      {:name "apm_t92J08_bridge_1",
       :type
       "The exact frozen uniform local-existence bridge in problems/t92J08/lean/Main.lean",
-      :status :not-started,
+      :status :proved,
       :consumers [:t92J08],
       :depends-on
       ["t92J08Closure.exists_uniform_isMIntegralCurveOn_of_compact"],
       :area "manifold-uniform-local-flow"}],
     :statement-hashes
     {:source-sha256
-     "192da922aa40f0e39a64e154a23a20d9db436cb9aad9f958a76f19ca50ffc21c",
+     "de807fe46ad3898b33c88fba8148d8bff49aef5b40f053977ad6e33ba0669b75",
+     :status-sha256
+     "47bcc9e50a3eeb152479711a6999a5a021a50fc56246ade60da4914b97c8b027",
      :closure-sha256
      "e38a6f20d36a2bd5d18e543b0595b5e58db0bbb7bb6b26b8a53c7fbdb2259453",
      :blueprint-sha256
-     "c5dd89b4aa3b8a1d6c046869756631181ef46bd7faa22c256afbe7203fcbbd08",
+     "6af9f9198c1ad4f01fc0bde5b34af2a18273ce21a51cd991bb203b3c492a3cd7",
      :registry "131 registered statements match, 0 do not"},
-    :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
-    :reason
-    "Program milestone completed. Blueprint node B5 is proved: compactness selects finitely many B4 neighbourhoods, the minimum of their positive local times is positive, and every selected curve restricts to that common interval. Only B6 remains.",
     :commands
-    [{:cmd "lake env lean ConstructionTargets/t92J08Closure.lean",
+    [{:cmd "lake build ConstructionTargets.t92J08Closure",
       :exit 0,
       :finding
-      "B1-B5 compile placeholder-free; #print axioms reports only propext, Classical.choice, and Quot.sound."}
+      "Built the closure module object required by the consumer import; all five reusable theorems report only standard axioms."}
      {:cmd "lake env lean problems/t92J08/lean/Main.lean",
       :exit 0,
       :finding
-      "The consumer compiles with exactly its one pre-existing bridge_1 placeholder."}
-     {:cmd
-      "python3 comment-stripped B5, source-placeholder, and blueprint validation",
+      "The consumer compiles without placeholders; apm_t92J08_bridge_1 and registered apm_t92j08 report only propext, Classical.choice, and Quot.sound."}
+     {:cmd "lake env lean ConstructionTargets/t92J08Closure.lean",
       :exit 0,
       :finding
-      "The closure module contains no sorry, admit, or axiom tokens; the consumer remains at one sorry; the blueprint marks B5 proved."}
+      "B1-B5 compile placeholder-free and use only standard axioms."}
+     {:cmd
+      "python3 comment-stripped source, closure, blueprint, and status validation",
+      :exit 0,
+      :finding
+      "The source and closure contain zero sorry, admit, or axiom tokens; all blueprint nodes are proved; status is complete with zero sorries."}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131 registered statements match, 0 do not."}
      {:cmd
-      "git diff --check -- ConstructionTargets/t92J08Closure.lean ConstructionTargets/t92J08Closure.blueprint.md",
+      "git diff --check -- problems/t92J08/lean/Main.lean problems/t92J08/status.json ConstructionTargets/t92J08Closure.lean ConstructionTargets/t92J08Closure.blueprint.md",
       :exit 0}
-     {:cmd "git commit -m Extract-t92J08-compact-uniform-flow-time",
+     {:cmd "git commit -m Close-t92J08-uniform-integral-curves",
       :exit 0,
       :finding
-      "Committed the two scoped milestone files as 97d745a41."}
+      "Committed the final adapter, completed blueprint, and status update as d22c0576c7fe6d6157710f36136f94c1dc5cc053."}
      {:cmd
-      "sha256sum ConstructionTargets/t92J08Closure.lean ConstructionTargets/t92J08Closure.blueprint.md problems/t92J08/lean/Main.lean",
+      "sha256sum problems/t92J08/lean/Main.lean problems/t92J08/status.json ConstructionTargets/t92J08Closure.lean ConstructionTargets/t92J08Closure.blueprint.md",
       :exit 0,
       :finding
-      "Hashes are e38a6f20d36a2bd5d18e543b0595b5e58db0bbb7bb6b26b8a53c7fbdb2259453, c5dd89b4aa3b8a1d6c046869756631181ef46bd7faa22c256afbe7203fcbbd08, and 192da922aa40f0e39a64e154a23a20d9db436cb9aad9f958a76f19ca50ffc21c."}],
+      "Hashes are de807fe46ad3898b33c88fba8148d8bff49aef5b40f053977ad6e33ba0669b75, 47bcc9e50a3eeb152479711a6999a5a021a50fc56246ade60da4914b97c8b027, e38a6f20d36a2bd5d18e543b0595b5e58db0bbb7bb6b26b8a53c7fbdb2259453, and 6af9f9198c1ad4f01fc0bde5b34af2a18273ce21a51cd991bb203b3c492a3cd7."}],
     :diagnostic-history
-    [{:cmd "lake env lean ConstructionTargets/t92J08Closure.lean",
+    [{:cmd "lake env lean problems/t92J08/lean/Main.lean",
       :exit 1,
       :finding
-      "The initial positivity proof tried to substitute an image-membership equality oriented as epsilon x = delta; corrected by rewriting delta backward to epsilon x before applying the stored local positivity proof."}],
-    :continue-from
-    {:commit "97d745a41",
-     :next
-     "Implement B6 by replacing apm_t92J08_bridge_1's placeholder with exists_uniform_isMIntegralCurveOn_of_compact and importing ConstructionTargets.t92J08Closure."},
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791727673055-5463-33be19fb",
-     :commands
-     ["git show/diff-tree 97d745a418688ccc59159874929fdccd519c0b9a"
-      "recorded-tree SHA-256, exact-scope, diff-check, and placeholder-delta verification"
-      "python3 scripts/statement-registry.py check"
-      "lake env lean ConstructionTargets/t92J08Closure.lean"
-      "lake env lean problems/t92J08/lean/Main.lean"],
-     :finding
-     "PASS: commit 97d745a41 adds new compiled, placeholder-free B5 progress. In the nonempty case the compact subcover is proved nonempty, the finite minimum of its positive local times is positive, and delta <= epsilon_x gives the correctly oriented restriction Ioo(-delta,delta) subset Ioo(-epsilon_x,epsilon_x); the empty case is handled vacuously with delta=1. Scope and hashes match, standard axioms only are used, the consumer's old placeholder is unchanged, and only B6 remains."},
-    :commit "97d745a41",
+      "The first consumer compile found that the newly imported closure module had no built object file; corrected by building ConstructionTargets.t92J08Closure through Lake, then rerunning the consumer successfully."}],
+    :commit "d22c0576c7fe6d6157710f36136f94c1dc5cc053",
+    :commits ["97d745a41" "d22c0576c7fe6d6157710f36136f94c1dc5cc053"],
     :changed-paths
-    ["ConstructionTargets/t92J08Closure.lean"
+    ["problems/t92J08/lean/Main.lean"
+     "problems/t92J08/status.json"
      "ConstructionTargets/t92J08Closure.blueprint.md"],
     :fixture
     {:path "ConstructionTargets/t92J08Closure.blueprint.md",
      :sha256
-     "c5dd89b4aa3b8a1d6c046869756631181ef46bd7faa22c256afbe7203fcbbd08",
+     "6af9f9198c1ad4f01fc0bde5b34af2a18273ce21a51cd991bb203b3c492a3cd7",
      :nodes
      [{:id :B1, :status :proved}
       {:id :B2, :status :proved}
       {:id :B3, :status :proved}
       {:id :B4, :status :proved}
       {:id :B5, :status :proved}
-      {:id :B6, :status :planned}]},
-    :seat "topo-2"},
+      {:id :B6, :status :proved}]}},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t92J08/lean/Main.lean"
     "problems/t92J08/status.json"
