@@ -103294,78 +103294,109 @@
    "Assemble the N3 and torus-crosscap radial open-cover packages using the banked outer deformation and overlap equivalence declarations with their exact registered theorem names.",
    :other-consumers []}
   {:bounded-exception
+   "This single-consumer prerequisite supplies the only contraction field still absent from the concrete two-piece radial packages.",
+   :consumer :t97A01,
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/PolygonInnerOpenPointedContraction.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/inner-open-pointed-contraction",
+   :acceptance
+   {:implementation
+    "Promote the exact fixture. Define innerBase as the quotient class of disk zero in innerOpen. For an arbitrary radius-preserving relation whose generators lie on radius one, construct the scalar radial homotopy on inner representatives, prove it respects EqvGen, descends continuously to innerOpen, starts at the identity, ends at innerBase, and fixes innerBase for all times; package it as PointedContraction (innerOpen R) (innerBase R). Instantiate it for SurfaceRel false 3 and TorusCrosscapRel. Do not assemble the final radial package records, alter the outer deformation or overlap equivalence, compute invariants, or close t97A01.",
+    :placeholder "the single sorry in apm_t97a01",
+    :route-step
+    "polygon radial open-cover step 42: contract the inner quotient open to the disk-center class",
+    :fixture "/tmp/polygon-inner-open-pointed-contraction.lean",
+    :fixture-sha256
+    "3ef0009241e6fa4a9800d6795bb530113b97ecc379ec2dc8638bf860c7e7394c",
+    :gates
+    ["lake build ConstructionTargets.PolygonInnerOpenPointedContraction"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-11-polygon-inner-open-pointed-contraction-82,
+   :kind :reusable-theorem,
+   :area "polygon-surface-open-cover",
+   :depends-on
+   [:routes-2026-10-11-polygon-boundary-three-circles-literal-formulas-81],
+   :current-residual
+   "Combine the new inner contractions with the banked outer deformation, overlap Circle equivalence, boundary ThreeCircles homeomorphisms, literal edge formulas, and vertex classes in the two final concrete package records.",
+   :other-consumers []}
+  {:bounded-exception
    "This single-consumer concrete quotient package is the other final backlog lemma on t97A01 and supplies the actual two polygon models required by its frozen statement.",
    :consumer :t97A01,
    :implements-lemma :lemma-polygonradialopencoverpackages,
    :evidence
    {:probe
     {:residual
-     "Assemble the N3 and torus-crosscap radial open-cover packages from the banked open-cover, deformation, overlap, boundary-homeomorphism, and literal-coordinate components.",
+     "Prove the generic inner-open pointed contraction, then assemble the N3 and torus-crosscap radial open-cover packages.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
-     [{:name "polygonBoundaryThreeCirclesLiteralFormulas",
+     [{:name "polygonInnerOpenPointedContraction",
        :type
-       "The N3 boundary homeomorphism sends quotient images of canonical edges 0, 2, and 4 to the first, second, and third circle summands, and the torus-crosscap boundary homeomorphism does the same for canonical edges 0, 1, and 4, at every interval parameter.",
-       :status :proved,
+       "For every radius-preserving disk relation whose generators lie on radius one, innerOpen R has a PointedContraction at the quotient class of zero.",
+       :status :not-started,
        :consumers [:t97A01],
-       :depends-on
-       ["polygonBoundaryThreeLoopHomeomorphisms"
-        "ThreeEndpointLoopsHomeomorph.threeEndpointLoopsHomeomorphThreeCircles_first"
-        "ThreeEndpointLoopsHomeomorph.threeEndpointLoopsHomeomorphThreeCircles_second"],
+       :depends-on [],
        :area "polygon-surface-open-cover"}],
      :prerequisite
      {:bounded-exception
-      "This single-consumer prerequisite supplies the exact six boundary-coordinate equations needed by the two concrete radial packages.",
+      "This single-consumer prerequisite supplies the only contraction field still absent from the concrete two-piece radial packages.",
       :consumer :t97A01,
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/PolygonBoundaryThreeCirclesLiteralFormulas.lean"],
+      ["ConstructionTargets/PolygonInnerOpenPointedContraction.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/boundary-three-circles-literal-formulas",
+      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/inner-open-pointed-contraction",
       :acceptance
       {:implementation
-       "Promote the exact fixture. Prove that each quotient-to-ThreeCircles homeomorphism composed with its three-loop map equals threeEndpointLoopsHomeomorphThreeCircles. Specialize this identity to interval representatives to prove the N3 edge 0, 2, and 4 formulas and torus-crosscap edge 0, 1, and 4 formulas, with literal nested wedge injections into the first, second, and third circle summands. Do not construct radial package records, prove outer-piece formulas, compute invariants, or close t97A01.",
+       "Promote the exact fixture. Define innerBase as the quotient class of disk zero in innerOpen. For an arbitrary radius-preserving relation whose generators lie on radius one, construct the scalar radial homotopy on inner representatives, prove it respects EqvGen, descends continuously to innerOpen, starts at the identity, ends at innerBase, and fixes innerBase for all times; package it as PointedContraction (innerOpen R) (innerBase R). Instantiate it for SurfaceRel false 3 and TorusCrosscapRel. Do not assemble the final radial package records, alter the outer deformation or overlap equivalence, compute invariants, or close t97A01.",
        :placeholder "the single sorry in apm_t97a01",
        :route-step
-       "polygon radial open-cover step 41: prove the six literal boundary-to-ThreeCircles coordinate formulas",
-       :fixture
-       "/tmp/polygon-boundary-three-circles-literal-formulas.lean",
+       "polygon radial open-cover step 42: contract the inner quotient open to the disk-center class",
+       :fixture "/tmp/polygon-inner-open-pointed-contraction.lean",
        :fixture-sha256
-       "bb2862aa670f0e00c4bd279eff5be0439da496c6592b057caaf112225df64577",
+       "3ef0009241e6fa4a9800d6795bb530113b97ecc379ec2dc8638bf860c7e7394c",
        :gates
-       ["lake build ConstructionTargets.PolygonBoundaryThreeCirclesLiteralFormulas"
+       ["lake build ConstructionTargets.PolygonInnerOpenPointedContraction"
         "fixture compiles"
         "zero source and fixture sorry"
         "standard-only axioms"
         "registry check"]},
-      :id
-      :routes-2026-10-11-polygon-boundary-three-circles-literal-formulas-81,
+      :id :routes-2026-10-11-polygon-inner-open-pointed-contraction-82,
       :kind :reusable-theorem,
       :area "polygon-surface-open-cover",
       :depends-on
-      [:routes-2026-10-11-polygon-boundary-three-loop-homeomorphisms-80],
+      [:routes-2026-10-11-polygon-boundary-three-circles-literal-formulas-81],
       :current-residual
-      "Assemble the N3 and torus-crosscap radial open-cover packages using the banked outer deformation and overlap equivalence declarations with their exact registered theorem names.",
+      "Combine the new inner contractions with the banked outer deformation, overlap Circle equivalence, boundary ThreeCircles homeomorphisms, literal edge formulas, and vertex classes in the two final concrete package records.",
       :other-consumers []},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :axioms
+     ["propext"
+      "Classical.choice"
+      "Quot.sound"
+      "PolygonInnerOpenPointedContractionProbe.innerOpenPointedContraction"],
      :commands
      [{:cmd
-       "lake env lean /tmp/polygon-boundary-three-circles-literal-formulas.lean",
+       "lake env lean /tmp/polygon-inner-open-pointed-contraction.lean",
        :exit 0,
        :finding
-       "Fresh rerun: both conjugacy identities and the six literal edge formulas compile."}
+       "The generic inner-open contraction interface and both N3 and torus-crosscap specializations compile."}
       {:cmd
-       "sha256sum /tmp/polygon-boundary-three-circles-literal-formulas.lean",
+       "sha256sum /tmp/polygon-inner-open-pointed-contraction.lean",
        :exit 0,
        :finding
-       "bb2862aa670f0e00c4bd279eff5be0439da496c6592b057caaf112225df64577"}
+       "3ef0009241e6fa4a9800d6795bb530113b97ecc379ec2dc8638bf860c7e7394c"}
       {:cmd
-       "rg -n \"\\b(sorry|admit|axiom)\\b\" /tmp/polygon-boundary-three-circles-literal-formulas.lean",
+       "rg -n \"\\b(sorry|admit)\\b\" /tmp/polygon-inner-open-pointed-contraction.lean",
        :exit 1,
        :expected-exit 1,
-       :finding "No fixture placeholders or custom axioms."}
+       :finding "No fixture placeholders."}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :finding "131 registered statements match, 0 do not."}
@@ -103377,22 +103408,21 @@
        "The route guide, per-problem routes, and probe definitions were read."}],
      :diagnostic-history
      [{:cmd
-       "lake env lean /tmp/polygon-boundary-three-circles-literal-formulas.lean",
+       "lake env lean /tmp/polygon-inner-open-pointed-contraction.lean",
        :exit 1,
        :finding
-       "The initial conjugacy proofs left inverse-evaluation goals because simplification did not rewrite the underlying homeomorphism forward maps.",
+       "The first specialization passed polymorphic theorems directly and Lean did not infer the implicit relation endpoints at the packaged binder.",
        :correction
-       "Changed explicitly to the inverse composite, rewrote with the compiled forward-map formulas, and applied symm_apply_apply; the successful rerun is recorded in commands."}],
+       "Eta-expanded the radius and boundary proofs with explicit implicit binders; the successful rerun is recorded in commands."}],
      :fixture
-     {:path
-      "/tmp/polygon-boundary-three-circles-literal-formulas.lean",
+     {:path "/tmp/polygon-inner-open-pointed-contraction.lean",
       :sha256
-      "bb2862aa670f0e00c4bd279eff5be0439da496c6592b057caaf112225df64577",
+      "3ef0009241e6fa4a9800d6795bb530113b97ecc379ec2dc8638bf860c7e7394c",
       :interface
-      "The two quotient-to-ThreeCircles homeomorphisms satisfy conjugacy with the three-loop maps and six literal canonical-edge formulas."},
+      "A generic pointed contraction of the inner quotient open for boundary-supported radius-preserving relations specializes to both polygon relations."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -103453,7 +103483,8 @@
     :routes-2026-10-11-polygon-boundary-three-loop-bijections-78
     :routes-2026-10-11-polygon-boundary-compact-hausdorff-instances-79
     :routes-2026-10-11-polygon-boundary-three-loop-homeomorphisms-80
-    :routes-2026-10-11-polygon-boundary-three-circles-literal-formulas-81],
+    :routes-2026-10-11-polygon-boundary-three-circles-literal-formulas-81
+    :routes-2026-10-11-polygon-inner-open-pointed-contraction-82],
    :current-residual
    "Combine the concrete cover packages with the strict overlap squares, banked Smith normalization, and final t97A01 assembly.",
    :other-consumers []}
@@ -108188,6 +108219,25 @@
     :reported-by []},
    :id
    :lemma-threeendpointloopshomeomorph-threeendpointloopshomeomorphthreecircles-second,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "polygonInnerOpenPointedContraction",
+    :type
+    "For every radius-preserving disk relation whose generators lie on radius one, innerOpen R has a PointedContraction at the quotient class of zero."},
+   :lemma
+   {:name "polygonInnerOpenPointedContraction",
+    :reported-by
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    :type
+    "For every radius-preserving disk relation whose generators lie on radius one, innerOpen R has a PointedContraction at the quotient class of zero.",
+    :area "polygon-surface-open-cover"},
+   :id :lemma-polygoninneropenpointedcontraction,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}],
