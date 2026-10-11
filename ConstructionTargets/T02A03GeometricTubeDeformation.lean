@@ -910,6 +910,20 @@ theorem collisionPolynomial_ne_implies_avoidsLeftCore_rightTubeCorePolar
   intro hmem
   exact hpoly (corePolar_leftCore_collision_equation u n hmem)
 
+theorem collisionPolynomial_pos_of_normal_re_pos
+    (u : Circle) (n : Complex)
+    (hnorm : ‖n‖ ≤ (1 / 4 : Real)) (hre : 0 < n.re) :
+    0 < (1 - n.re) ^ 2 - 4 * (1 - n.re) * (u : Complex).re + 3 := by
+  have hnre : n.re ≤ ‖n‖ := RCLike.re_le_norm n
+  have hrpos : 0 < 1 - n.re := by
+    linarith
+  have hrlt : 1 - n.re < 1 := by linarith
+  have hua : (u : Complex).re ≤ 1 := by
+    simpa [Circle.norm_coe u] using RCLike.re_le_norm (u : Complex)
+  have hmul : (1 - n.re) * (u : Complex).re ≤ 1 - n.re :=
+    by simpa using mul_le_mul_of_nonneg_left hua hrpos.le
+  nlinarith [sq_nonneg ((1 - n.re) - 2)]
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -942,3 +956,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.reconstructionAvoidsLeftCore_rightTubeCorePolar_of_im_ne_zero
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.corePolar_leftCore_collision_equation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.collisionPolynomial_ne_implies_avoidsLeftCore_rightTubeCorePolar
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.collisionPolynomial_pos_of_normal_re_pos
