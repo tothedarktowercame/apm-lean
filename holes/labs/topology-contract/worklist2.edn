@@ -79523,6 +79523,19 @@
      {:cmd "Main compile", :exit 0}
      {:cmd "registry check", :exit 0}
      {:cmd "git show --check 1ac8a7376", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791762369004-6006-f2b88bc1",
+     :commands
+     ["git show/check/diff-tree 1ac8a7376"
+      "verify blobs, fixture SHA256, prior-history ancestry"
+      "lake build ConstructionTargets.t96A07Closure"
+      "lake env lean ConstructionTargets/t96A07Closure.lean"
+      "lake env lean problems/t96A07/lean/Main.lean"
+      "statement-registry check/fingerprint; placeholder counts"],
+     :finding
+     "PASS: recorded commit 1ac8a737622f7dd092b03b2336589fec7870768f changes only t96A07Closure.lean; blobs 89c9c897/69b59fb6 and fixture d7862ad0 match. It adds new compiled, sorry-free progress since a8575f32: quotient local-diffeomorphism derivative equivalence gives sphereProjection mfderiv surjectivity in the needed forward orientation, preserving the B6 representation boundary. Standard axioms only; registry 131/0, frozen hash 2ba67b04 unchanged, placeholders closure/Main 0/1. STOP correctly lists B6 derivative-range cancellation then B7-B13."},
     :commit "1ac8a7376",
     :changed-paths ["ConstructionTargets/t96A07Closure.lean"],
     :fixture
@@ -79531,7 +79544,7 @@
      "d7862ad090bfdeee32223bc2b836cf83ba29c760ae2a732a3c702eb4a8c569c9"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t96A07/lean/Main.lean"
     "problems/t96A07/status.json"
@@ -79547,7 +79560,7 @@
     ["lake env lean problems/t96A07/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: :program-milestone-complete",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: :program-progress-committed",
    :id :program-2026-10-11-close-t96a07,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -79570,9 +79583,10 @@
     {:job 5, :commit "2b9189afd", :reason :program-milestone-complete}
     {:job 6, :commit "47c44c303", :reason :program-progress-committed}
     {:job 7, :commit "fac75be59", :reason :program-progress-committed}
-    {:job 8,
-     :commit "a8575f32c",
-     :reason :program-milestone-complete}]}
+    {:job 8, :commit "a8575f32c", :reason :program-milestone-complete}
+    {:job 9,
+     :commit "1ac8a7376",
+     :reason :program-progress-committed}]}
   {:consumer :t94A10,
    :phase :implementation,
    :state :open,
@@ -81131,7 +81145,7 @@
    :other-consumers []}
   {:consumer :t96A07,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -81145,7 +81159,9 @@
     :type
     "frozen quotient projection mfderiv is surjective at every sphere point",
     :area "projective-smooth-descent",
-    :proved-in :program-2026-10-11-close-t96a07},
+    :proved-in :program-2026-10-11-close-t96a07,
+    :banked-by :program-2026-10-11-close-t96a07,
+    :banked-commit "1ac8a7376"},
    :id
    :lemma-constructiontargets-t96a07closure-sphereprojection-mfderiv-surjective,
    :kind :lemma,
