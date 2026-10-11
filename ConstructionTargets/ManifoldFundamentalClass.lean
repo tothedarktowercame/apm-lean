@@ -378,6 +378,21 @@ theorem distinguishedChartGenerator_eq_coefficientGenerator
   rw [CoefficientDistinguishedNormalization.distinguished R m x]
   rfl
 
+def integralSubtypeInclusion {X : Type} [TopologicalSpace X] (A : Set X) :
+    TopCat.of A ⟶ TopCat.of X :=
+  TopCat.ofHom ⟨Subtype.val, continuous_subtype_val⟩
+
+theorem integralSingularChainsComparison_subtype_naturality
+    {X : Type} [TopologicalSpace X] (A : Set X) :
+    ((forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ)).map
+        (((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+          (ModuleCat.of ℤ ℤ)).map (integralSubtypeInclusion A))) ≫
+        (singularChainsComparison (TopCat.of X)).hom =
+      (singularChainsComparison (TopCat.of A)).hom ≫
+        (((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj
+          (AddCommGrpCat.of ℤ)).map (integralSubtypeInclusion A)) := by
+  exact singularChainsComparison_naturality (integralSubtypeInclusion A)
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -403,3 +418,4 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.ambientLocalGenerator_zsmul_injective
 #print axioms ConstructionTargets.ManifoldFundamentalClass.localizationCoefficient_eq_one_of_normalized
 #print axioms ConstructionTargets.ManifoldFundamentalClass.distinguishedChartGenerator_eq_coefficientGenerator
+#print axioms ConstructionTargets.ManifoldFundamentalClass.integralSingularChainsComparison_subtype_naturality
