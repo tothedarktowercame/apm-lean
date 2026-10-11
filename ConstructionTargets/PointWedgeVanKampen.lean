@@ -398,6 +398,16 @@ def genericPointWedgeIdentityPointSpan :
     (SingleObj (genericPointWedgeFreeProduct x₀ y₀))).inverse.obj
       (genericPointWedgeIdentityRepresentation x₀ y₀)
 
+/-- The coordinate-span object one inverse stage earlier in B3. -/
+def genericPointWedgeIdentityCoordinateSpan :
+    SpanPseudoCocone
+      (genericPointWedgeCoordinateLeft x₀)
+      (genericPointWedgeCoordinateRight y₀)
+      (SingleObj (genericPointWedgeFreeProduct x₀ y₀)) :=
+  (genericPointWedgeCoordinatePointSpanEquivalence x₀ y₀
+    (SingleObj (genericPointWedgeFreeProduct x₀ y₀))).inverse.obj
+      (genericPointWedgeIdentityPointSpan x₀ y₀)
+
 omit [PathConnectedSpace X] [PathConnectedSpace Y] in
 @[simp] theorem genericPointWedgeIdentityRepresentation_inl
     (g : genericPointWedgeLeftGroup x₀) :
@@ -429,6 +439,30 @@ omit [PathConnectedSpace X] [PathConnectedSpace Y] in
         (Y := SingleObj.star (genericPointWedgeRightGroup y₀)) g =
       Monoid.Coprod.inr g := by
   rfl
+
+@[simp] theorem genericPointWedgeIdentityCoordinateSpan_left
+    (g : FundamentalGroup X x₀) :
+    (genericPointWedgeIdentityCoordinateSpan x₀ y₀).left.map
+        (X := FundamentalGroupoid.mk x₀)
+        (Y := FundamentalGroupoid.mk x₀) g = Monoid.Coprod.inl g := by
+  change (genericPointWedgeIdentityPointSpan x₀ y₀).left.map
+      ((genericPointWedgeSingleObjEquivalence x₀).functor.map g) = _
+  rw [show (genericPointWedgeSingleObjEquivalence x₀).functor.map g = g by
+    simp [genericPointWedgeSingleObjEquivalence, genericPointWedgeConnectors,
+      ConnectorSystem.normalForm]]
+  exact genericPointWedgeIdentityPointSpan_left x₀ y₀ g
+
+@[simp] theorem genericPointWedgeIdentityCoordinateSpan_right
+    (g : FundamentalGroup Y y₀) :
+    (genericPointWedgeIdentityCoordinateSpan x₀ y₀).right.map
+        (X := FundamentalGroupoid.mk y₀)
+        (Y := FundamentalGroupoid.mk y₀) g = Monoid.Coprod.inr g := by
+  change (genericPointWedgeIdentityPointSpan x₀ y₀).right.map
+      ((genericPointWedgeSingleObjEquivalence y₀).functor.map g) = _
+  rw [show (genericPointWedgeSingleObjEquivalence y₀).functor.map g = g by
+    simp [genericPointWedgeSingleObjEquivalence, genericPointWedgeConnectors,
+      ConnectorSystem.normalForm]]
+  exact genericPointWedgeIdentityPointSpan_right x₀ y₀ g
 
 variable {C D : Type} [Category C] [Category D]
 
@@ -1284,10 +1318,13 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeSingleObjMappingEquivalence
 #print axioms genericPointWedgeIdentityRepresentation
 #print axioms genericPointWedgeIdentityPointSpan
+#print axioms genericPointWedgeIdentityCoordinateSpan
 #print axioms genericPointWedgeIdentityRepresentation_inl
 #print axioms genericPointWedgeIdentityRepresentation_inr
 #print axioms genericPointWedgeIdentityPointSpan_left
 #print axioms genericPointWedgeIdentityPointSpan_right
+#print axioms genericPointWedgeIdentityCoordinateSpan_left
+#print axioms genericPointWedgeIdentityCoordinateSpan_right
 #print axioms genericPointWedgeSingleObjPostcomposeIso
 #print axioms genericPointWedgeSourceEquivalence
 #print axioms genericPointWedgeInverseIdentityFunctor

@@ -158,3 +158,9 @@ The inverse free-product/point-span stage is now explicit as
 group elements definitionally to the corresponding coproduct injections.
 Thus the final two B3 inverse stages preserve both generators literally; the
 remaining comparison begins with the coordinate-to-point span inverse.
+
+That inverse is now named `genericPointWedgeIdentityCoordinateSpan`.  At the
+chosen base objects, the connector normal forms reduce to identity
+conjugations, so its left and right maps again evaluate to the literal
+coproduct injections.  B6 therefore remains only at the earlier open-cover
+and homotopy-equivalence transports.
