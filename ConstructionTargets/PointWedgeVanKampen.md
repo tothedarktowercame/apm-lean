@@ -87,3 +87,10 @@ is an identity; B6 must cancel that conjugation by the explicit leg data.
 coproduct injections.  They fix the orientation of both remaining B6
 calculations: the mapped leg action occurs before the counit component and
 the literal injection occurs after it.
+
+The two equations are also solved algebraically for the mapped actions:
+`genericPointWedgeMappedLeft_eq_conj` and
+`genericPointWedgeMappedRight_eq_conj` express them as conjugates of the
+literal coproduct injections by the single explicit counit element.  Thus the
+remaining literal-coordinate step is exactly the computation eliminating
+that element from B3's concrete inverse representation.

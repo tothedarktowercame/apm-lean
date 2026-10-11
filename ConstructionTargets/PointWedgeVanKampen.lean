@@ -631,6 +631,65 @@ theorem genericPointWedgeSourceCounit_right
   genericPointWedgeSourceCounit_naturality
     x₀ y₀ M N hM hN hy hx cM cN (Monoid.Coprod.inr g)
 
+def genericPointWedgeCounitElement : genericPointWedgeFreeProduct x₀ y₀ :=
+  (genericPointWedgeSourceCounit
+    x₀ y₀ M N hM hN hy hx cM cN).hom.app
+      (SingleObj.star (genericPointWedgeFreeProduct x₀ y₀))
+
+def genericPointWedgeMappedLeft (g : FundamentalGroup X x₀) :
+    genericPointWedgeFreeProduct x₀ y₀ :=
+  ((genericPointWedgeSingleObjMappingEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN
+    (genericPointWedgeTarget x₀ y₀)).functor.obj
+      (genericPointWedgeSourceEquivalence
+        x₀ y₀ M N hM hN hy hx cM cN).functor).map
+          (X := SingleObj.star (genericPointWedgeFreeProduct x₀ y₀))
+          (Y := SingleObj.star (genericPointWedgeFreeProduct x₀ y₀))
+          (Monoid.Coprod.inl g)
+
+def genericPointWedgeMappedRight (g : FundamentalGroup Y y₀) :
+    genericPointWedgeFreeProduct x₀ y₀ :=
+  ((genericPointWedgeSingleObjMappingEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN
+    (genericPointWedgeTarget x₀ y₀)).functor.obj
+      (genericPointWedgeSourceEquivalence
+        x₀ y₀ M N hM hN hy hx cM cN).functor).map
+          (X := SingleObj.star (genericPointWedgeFreeProduct x₀ y₀))
+          (Y := SingleObj.star (genericPointWedgeFreeProduct x₀ y₀))
+          (Monoid.Coprod.inr g)
+
+theorem genericPointWedgeMappedLeft_eq_conj (g : FundamentalGroup X x₀) :
+    genericPointWedgeMappedLeft x₀ y₀ M N hM hN hy hx cM cN g =
+      (genericPointWedgeCounitElement x₀ y₀ M N hM hN hy hx cM cN)⁻¹ *
+        Monoid.Coprod.inl g *
+          genericPointWedgeCounitElement x₀ y₀ M N hM hN hy hx cM cN := by
+  have h := genericPointWedgeSourceCounit_left
+    x₀ y₀ M N hM hN hy hx cM cN g
+  change genericPointWedgeCounitElement x₀ y₀ M N hM hN hy hx cM cN *
+      genericPointWedgeMappedLeft x₀ y₀ M N hM hN hy hx cM cN g =
+    Monoid.Coprod.inl g *
+      genericPointWedgeCounitElement x₀ y₀ M N hM hN hy hx cM cN at h
+  apply mul_left_cancel (a :=
+    genericPointWedgeCounitElement x₀ y₀ M N hM hN hy hx cM cN)
+  rw [h]
+  simp [mul_assoc]
+
+theorem genericPointWedgeMappedRight_eq_conj (g : FundamentalGroup Y y₀) :
+    genericPointWedgeMappedRight x₀ y₀ M N hM hN hy hx cM cN g =
+      (genericPointWedgeCounitElement x₀ y₀ M N hM hN hy hx cM cN)⁻¹ *
+        Monoid.Coprod.inr g *
+          genericPointWedgeCounitElement x₀ y₀ M N hM hN hy hx cM cN := by
+  have h := genericPointWedgeSourceCounit_right
+    x₀ y₀ M N hM hN hy hx cM cN g
+  change genericPointWedgeCounitElement x₀ y₀ M N hM hN hy hx cM cN *
+      genericPointWedgeMappedRight x₀ y₀ M N hM hN hy hx cM cN g =
+    Monoid.Coprod.inr g *
+      genericPointWedgeCounitElement x₀ y₀ M N hM hN hy hx cM cN at h
+  apply mul_left_cancel (a :=
+    genericPointWedgeCounitElement x₀ y₀ M N hM hN hy hx cM cN)
+  rw [h]
+  simp [mul_assoc]
+
 end GenericFundamentalGroupEquivalence
 
 /-- The three-circle model is locally path connected. -/
@@ -920,5 +979,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeSourceCounit_naturality
 #print axioms genericPointWedgeSourceCounit_left
 #print axioms genericPointWedgeSourceCounit_right
+#print axioms genericPointWedgeMappedLeft_eq_conj
+#print axioms genericPointWedgeMappedRight_eq_conj
 
 end ConstructionTargets.PointWedgeVanKampen
