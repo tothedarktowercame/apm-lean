@@ -115387,6 +115387,60 @@
    :id :lemma-manifold-integralcurve-uniform-local-existence,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t94A10,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t94A10_form_closed",
+    :type
+    "explicit extDeriv closedness of the t94A10 form (140-240 lines; Mathlib extDeriv_pullback available, spherical pullback coefficient is not)"},
+   :lemma
+   {:name "t94A10_form_closed",
+    :reported-by [:owner],
+    :type
+    "explicit extDeriv closedness of the t94A10 form (140-240 lines; Mathlib extDeriv_pullback available, spherical pullback coefficient is not)",
+    :area "periodic-stokes-square"},
+   :id :lemma-t94a10-form-closed,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t94A10,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "periodicSquare_green_period",
+    :type
+    "reusable periodic-square Stokes/Green package: spherical-coordinate pullback coefficient, bundled differentiability, boundary cancellation on the periodic square, period evaluation"},
+   :lemma
+   {:name "periodicSquare_green_period",
+    :reported-by [:owner],
+    :type
+    "reusable periodic-square Stokes/Green package: spherical-coordinate pullback coefficient, bundled differentiability, boundary cancellation on the periodic square, period evaluation",
+    :area "periodic-stokes-square"},
+   :id :lemma-periodicsquare-green-period,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t93A06]}
+  {:consumer :t94A10,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t94A10_form_not_exact",
+    :type
+    "spherical pullback plus periodic Green obstruction to exactness (250-450 lines)"},
+   :lemma
+   {:name "t94A10_form_not_exact",
+    :reported-by [:owner],
+    :type
+    "spherical pullback plus periodic Green obstruction to exactness (250-450 lines)",
+    :area "periodic-stokes-square"},
+   :id :lemma-t94a10-form-not-exact,
+   :kind :lemma,
+   :depends-on [:lemma-periodicsquare-green-period],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
