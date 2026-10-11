@@ -82,6 +82,8 @@ uses: B1, B2,
 and `GenericSpanPseudoCoconeTransport.equivalenceFunctorPostcomposeIso`,
 `TwoOpenPointSpanComparison.comparison` and
 `TwoOpenPointSpanComparison.postcomposeIso`,
+`ConnectedGroupoidSingleObjEquivalence.ConnectorSystem` and
+`ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence`,
 `FreeProductPointSpanRepresentations.freeProductPointSpanEquivalence` and
 `FreeProductPointSpanRepresentations.equivalenceFunctorPostcomposeIso`, and
 `FreeProductRepresentationSingleObjEquivalence.representationSingleObjEquivalence`
@@ -94,7 +96,10 @@ status: proved
 Apply two-open groupoid van Kampen to the B1 cover.  Transport its left,
 right, and overlap functor categories along the fundamental-groupoid
 equivalences induced by B1.  B2 identifies both transported overlap functors
-with the constant functors at `x₀` and `y₀`.  Since `Unit` has trivial
+with the constant functors at `x₀` and `y₀`.  Use connector systems based
+literally at `x₀` and `y₀` (and at `()` for `Unit`) with
+`connectorSingleObjEquivalence` to transport the coordinate span to the
+point span on the based fundamental groups.  Since `Unit` has trivial
 fundamental groupoid, pseudococones over that span are exactly
 representations of the coproduct of the two endomorphism groups.  Compose
 with the representation/single-object equivalence.  At every stage prove a
