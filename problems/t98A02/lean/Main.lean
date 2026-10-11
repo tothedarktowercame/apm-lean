@@ -34,9 +34,11 @@ hypotheses, the two consequences of it that the intended solution uses
   triangulation is bicollared by its PL regular neighbourhood.  Every
   parametrisation `φᵢ` of the simplex then extends radially along the outer
   collar.
-* *Dimension.*  `Hₖ(Xᵢ) = 0` for `k ≥ 5`.  For a compact triangulated
-  4-manifold this is immediate: the simplicial chain complex vanishes above
-  degree four, and simplicial homology agrees with singular homology.
+* *Dimension.*  `Hₖ(Xᵢ) = 0` for `k ≥ 5`.  This holds for every closed
+  4-manifold (Hatcher, Prop. 3.29); with the source's triangulation it is
+  immediate, since the simplicial chain complex vanishes above degree four.
+  Mathlib cannot yet derive it, so it is supplied like the source's
+  `H₄ ≅ ℤ` fact, and it excludes no case.
 
 Both hypotheses hold whenever the source's assumption does, so the theorem
 remains at least as strong as the source asks.  It no longer covers wild
