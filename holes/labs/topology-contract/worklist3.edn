@@ -10169,6 +10169,24 @@
      "The same equation containing integralTransportHomologyComposite between inverse homology preservation and the ambient chart/model normalization",
      :direction
      "Logical equivalence from the packaged transported-comparison homology representation to the explicit four-factor cokernel-and-presentation homology representation"},
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791701121013-4523-fd7770eb",
+     :commands
+     ["git show and git diff-tree recorded commit scope"
+      "git blob identity check"
+      "sha256sum frozen fixture"
+      "recompute frozen statement sha256"
+      "git diff --check recorded commit"
+      "lake env lean renamed frozen-fixture replay"
+      "lake env lean target module"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"
+      "placeholder and axiom scan"
+      "python3 scripts/statement-registry.py check"
+      "consumer placeholder census"],
+     :finding
+     "PASS: recorded commit 544cc9c5 changes only the target module and its blob matches the reviewed checkout; frozen fixture hash f72fef7e0392622c220370a6f4d4c6b71ccf258190830c67f7a4add2c717aa26 and frozen statement hash b00359934817277043cf46bf704e6f084c12c21bd13fc635e9b0c75570de354e both match. The support composite preserves the ordered four homology factors, the support theorem identifies homology of the packaged transported comparison with that composite, and the frozen equivalence substitutes it in the registered direction between inverse homology preservation and the ambient endpoint. It does not expand or compare the individual factors, exclude negation, or construct a fundamental class. Renamed fixture replay, target elaboration, and Lake build pass; axioms are exactly propext, Classical.choice, Quot.sound; registry is 131/0; target placeholders are 0 and consumer baselines t00J02/t98A02 remain 1/1."},
     :commit "544cc9c5a0a65af7d9f52a59d8a9b5e12e76c329",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -10190,7 +10208,7 @@
     :routes-2026-10-11-manifold-negative-equation-transport-homology-factors-topo3-r1,
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/negative-equation-transport-homology-factors",
@@ -10379,7 +10397,7 @@
      "The forbidden negative-sign equation now has no packaged relative comparison remaining: its production side is inverse homology preservation, the explicit four-factor cokernel/presentation homology composite, inverse ambient chart homology, and the higher-model normalization. Its coefficient side is the concrete six-factor coefficient chart composite followed by negation. The next work must use the established projection naturalities to cancel the presentation machinery and expose the actual connecting, radial, and sphere normalization discrepancy.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -14048,7 +14066,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -14065,7 +14083,10 @@
     "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), (correctedLocalNormalizationAutomorphism k x).hom = -𝟙 _ <-> (((CoefficientRelativeSmall.relativeChains Int (deletedPoint x)).sc (k + 2)).mapHomologyIso forgetIntModules).inv ≫ integralTransportHomologyComposite (deletedPoint x) (k + 2) ≫ (ambientChartHomologyIso k x).inv ≫ (HigherModelLocalHomology.localIsoInt k).hom = forgetIntModules.map (coefficientLocalForwardComposite k x) ≫ (-𝟙 _)",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-negative-equation-transport-homology-factors-topo3-r1},
+    :routes-2026-10-11-manifold-negative-equation-transport-homology-factors-topo3-r1,
+    :banked-by
+    :routes-2026-10-11-manifold-negative-equation-transport-homology-factors-topo3-r1,
+    :banked-commit "544cc9c5a0a65af7d9f52a59d8a9b5e12e76c329"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-correctedlocalnormalizationautomorphism-hom-eq-neg-iff-transport-homology-factors,
    :kind :lemma,
