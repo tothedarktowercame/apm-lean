@@ -72114,6 +72114,19 @@
       :exit 1,
       :reason
       "The first scoped compile exposed that the imported module did not open the ComplexConjugate scoped notation used by the reviewed fixture. Added open scoped ComplexConjugate, then the recorded acceptance compile succeeded."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791707187200-4755-cc039a3a",
+     :commands
+     ["git show/diff-tree/show --check 9e8b7ec18865f40a87232ae79999f5d4897d21c0"
+      "git rev-parse scope blob; sha256sum fixture"
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean"
+      "lake env lean /tmp/t02a03_arrival_leg_cross_im_probe.lean"
+      "statement registry check and commit/parent fingerprints"
+      "placeholder recount at commit/parent"],
+     :finding
+     "PASS: independent author topo-6; exact one-file scope, blob, and fixture hash match. Target and frozen probe compile. The frozen arrival-leg theorem has the correct second-leg orientation and strict range: t>1/2 makes 2*t-1 positive; eliminating the waypoint coefficient from a hypothetical complex zero forces that positive coefficient times Im(conj(W)*endpoint) to vanish, contradicting the supplied invariant. It does not choose W or assert the departure leg. Axioms are exactly propext, Classical.choice, Quot.sound; registry is 131/0, t02A03 fingerprint is unchanged at commit and parent, fixture has no placeholders, and Main has 1 placeholder at commit and parent."},
     :commit "9e8b7ec18865f40a87232ae79999f5d4897d21c0",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
@@ -72127,7 +72140,7 @@
    :phase :implementation,
    :type
    "forall (W : C(RightTubeMinusLeftCore, ℂ)), (forall p, (conj (W p) * rightTubeCorePlanarComplex p.1).im != 0) -> forall (t : unitInterval) (p : RightTubeMinusLeftCore), not ((t : ℝ) <= 1/2) -> (((2-2*(t:ℝ):ℝ):ℂ)*W p + ((2*(t:ℝ)-1:ℝ):ℂ)*rightTubeCorePlanarComplex p.1) != 0",
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/coupled-angular-arrival-cross-im",
@@ -72238,7 +72251,7 @@
      "The arrival leg is nonvanishing whenever the waypoint and right-core planar endpoint have nonzero oriented cross product. A hypothetical affine zero gives two scalar coordinate equations; eliminating the common waypoint coefficient shows the positive arrival coefficient times that cross product is zero, contradicting the hypothesis. This leaves only the geometric choice of a continuous waypoint satisfying positive real part and nonzero cross product.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
@@ -77322,7 +77335,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -77338,7 +77351,10 @@
     "forall (W : C(RightTubeMinusLeftCore, ℂ)), (forall p, (conj (W p) * rightTubeCorePlanarComplex p.1).im != 0) -> forall (t : unitInterval) (p : RightTubeMinusLeftCore), not ((t : ℝ) <= 1/2) -> (((2-2*(t:ℝ):ℝ):ℂ)*W p + ((2*(t:ℝ)-1:ℝ):ℂ)*rightTubeCorePlanarComplex p.1) != 0",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-coupledangulararrivalleg-ne-z,
    :kind :lemma,
