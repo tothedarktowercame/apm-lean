@@ -69835,6 +69835,19 @@
       :exit 0,
       :output
       " M ConstructionTargets/ManifoldFundamentalClass.lean\n?? ConstructionTargets/TwoOpenFreeProductGroupEquivalenceCoordinates.lean"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791690554909-4054-ecdb8285",
+     :commands
+     ["git show/diff-tree/show --check 632d9ead7525106005ee227eb2abc63e1c370561"
+      "git rev-parse recorded scope blob; sha256sum frozen fixture"
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean"
+      "lake env lean /tmp/t02a03_zero_height_meridian_sign_cases_probe.lean"
+      "python3 scripts/statement-registry.py check and fingerprint commit/parent"
+      "python3 placeholder recount at commit/parent"],
+     :finding
+     "PASS: topo-6 is independent from codex-7; the recorded commit changes only the scoped target, and its blob and frozen fixture hash match. Target and probe compile with exactly propext, Classical.choice, and Quot.sound. The theorem preserves the frozen disjunction orientation and converts the prior real-square-equals-one certificate via sq_eq_one_iff into exactly real equals 1 or real equals -1, without defining a sign selector or crossing representation boundaries incorrectly. Registry is 131/0, the t02A03 statement fingerprint is unchanged at commit and parent, and the sole Main.lean placeholder remains 1 at both revisions."},
     :commit "632d9ead7525106005ee227eb2abc63e1c370561",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
@@ -69850,7 +69863,7 @@
    :phase :implementation,
    :type
    "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> (rightTubeMeridianCoordinate p : Complex).re = 1 ∨ (rightTubeMeridianCoordinate p : Complex).re = -1",
-   :state :done-unreviewed,
+   :state :done,
    :proof
    "Obtain zeroHeight_rightTubeMeridianCoordinate_re_sq p hheight, rewrite it with sq_eq_one_iff, and return the resulting disjunction.",
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
@@ -69956,7 +69969,7 @@
      "The declaration now begins with signCases, so its ledger identifier cannot truncate onto the banked square-one theorem. It proves the same exhaustive result: on the zero-height locus, the meridian real coordinate equals 1 or -1, obtained from sq_eq_one_iff without defining a discontinuous sign-selection function.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
