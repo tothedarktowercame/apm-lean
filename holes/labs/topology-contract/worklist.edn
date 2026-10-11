@@ -116064,7 +116064,9 @@
    :depends-on [],
    :other-consumers []}
   {:consumer :t95J02,
-   :stop-count 10,
+   :owner-reopen
+   "reopened: a lemma this row reported missing is now banked",
+   :stop-count 0,
    :review-finding
    "B7 reverses the functorial composition. Because beta.comp reflection is beta after reflection, homotopy invariance gives H1(beta) = H1(reflection) ≫ H1(beta), not H1(beta) ≫ H1(reflection). The written composite is ill-typed: H1(beta) lands in Klein-bottle homology, while H1(reflection) is an endomorphism of sphere homology. Reverse the factors, then use integral_circle 1 to derive H1(beta)(g) = H1(beta)(-g).",
    :evidence
@@ -116187,7 +116189,7 @@
       {:id :B9, :status :planned}]},
     :seat "topo-2"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t95J02/lean/Main.lean"
     "problems/t95J02/status.json"
@@ -116207,7 +116209,7 @@
    :id :program-2026-10-11-close-t95j02,
    :kind :final-adapter,
    :campaign-priority 41,
-   :fail-count 3,
+   :fail-count 0,
    :depends-on [],
    :program true,
    :other-consumers [],
@@ -116342,6 +116344,18 @@
     {:commit "d2e9004ddfdbd5b6d3296376ece3955558ed7ce2",
      :next
      "Obtain independent review of t92J08Closure.blueprint.md; after approval implement B1, the prescribed-target closed-ball Picard-Lindelöf theorem."},
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791723075380-5369-6546c3d9",
+     :commands
+     ["git show/diff-tree d2e9004ddfdbd5b6d3296376ece3955558ed7ce2"
+      "recorded-tree SHA-256, exact-scope, diff-check, and placeholder verification"
+      "python3 blueprint node/dependency validation"
+      "python3 scripts/statement-registry.py check"
+      "lake env lean problems/t92J08/lean/Main.lean"],
+     :finding
+     "PASS: commit d2e9004 adds the new six-node t92J08 closure blueprint with exact scope and matching fixture/source hashes. The mathematical route correctly separates uniform Euclidean Picard-Lindelof control, fixed-chart tangent-coordinate transport, neighbourhood-uniform manifold curves, compact finite-subcover extraction, and the frozen adapter; node dependencies are sufficient and non-circular, representation boundaries and derivative orientations are faithful, all milestones are listed, and the consumer still compiles with its sole pre-existing placeholder."},
     :commit "d2e9004ddfdbd5b6d3296376ece3955558ed7ce2",
     :changed-paths ["ConstructionTargets/t92J08Closure.blueprint.md"],
     :fixture
@@ -116357,7 +116371,7 @@
       {:id :B6, :status :planned}]},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t92J08/lean/Main.lean"
     "problems/t92J08/status.json"
@@ -116373,13 +116387,18 @@
     ["lake env lean problems/t92J08/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
    :continue-from
-   "NEXT JOB: write the blueprint ConstructionTargets/t92J08Closure.blueprint.md (BLUEPRINTS.md) for the remaining chain in ~/notes/closer/t92j08-report.md, then formalise node by node.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Blueprint written. The six-node route separates prescribed-target Euclidean Picard-Lindelöf control, the exact varying-tangent-space coordinate field, uniform chart transport, public neighbourhood uniformity, compact finite-subcover extraction, and the frozen bridge adapter. Per the blueprint gate, formalization waits for independent mathematical review.",
    :id :program-2026-10-11-close-t92j08,
    :kind :final-adapter,
    :campaign-priority 42,
    :depends-on [],
    :program true,
-   :other-consumers []}
+   :other-consumers [],
+   :program-history
+   [{:job 1,
+     :commit "d2e9004ddfdbd5b6d3296376ece3955558ed7ce2",
+     :reason
+     "Blueprint written. The six-node route separates prescribed-target Euclidean Picard-Lindelöf control, the exact varying-tangent-space coordinate field, uniform chart transport, public neighbourhood uniformity, compact finite-subcover extraction, and the frozen bridge adapter. Per the blueprint gate, formalization waits for independent mathematical review."}]}
   {:consumer :t97A07,
    :phase :implementation,
    :state :open,
