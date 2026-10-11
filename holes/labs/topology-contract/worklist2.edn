@@ -72340,54 +72340,61 @@
    "single-consumer explicit quarter-turn waypoint with globally nonvanishing arrival leg",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:residual
-     "Construct a nonvanishing departure from 1 to the quarter-turn waypoint, then invoke the banked waypoint, normalization, and ambient adapters.",
-     :outcome :go,
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd
-       "lake env lean /tmp/t02a03_rotated_endpoint_waypoint_probe.lean",
-       :exit 0,
-       :output
-       "rotatedEndpointWaypoint_arrival_ne_zero_exists compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "sha256sum /tmp/t02a03_rotated_endpoint_waypoint_probe.lean",
-       :exit 0,
-       :output
-       "279382e86c17ce355f7d8e758954b88985194adb3796a95c3a1d3cf82d34568e  /tmp/t02a03_rotated_endpoint_waypoint_probe.lean"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_rotated_endpoint_waypoint_probe.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}
-      {:cmd
-       "rg -n 'rotatedEndpointWaypoint_arrival_ne_zero_exists' /tmp/t02a03_rotated_endpoint_waypoint_probe.lean",
-       :exit 0,
-       :output
-       "9:theorem rotatedEndpointWaypoint_arrival_ne_zero_exists :\n39:#print axioms rotatedEndpointWaypoint_arrival_ne_zero_exists"}],
-     :fixture
-     {:path "/tmp/t02a03_rotated_endpoint_waypoint_probe.lean",
-      :sha256
-      "279382e86c17ce355f7d8e758954b88985194adb3796a95c3a1d3cf82d34568e"},
-     :finding
-     "The placeholder-free fixture constructs the continuous quarter-turn waypoint W(p) = -i * rightTubeCorePlanarComplex(p.1). Its arrival leg factors as ((2t-1) - (2-2t)i) times the nonzero endpoint; after time 1/2 the coefficient has positive real part and cannot vanish.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
-      :declaration
-      "ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_arrival_ne_zero_exists",
-      :type
-      "exists W : C(RightTubeMinusLeftCore, ℂ), forall (t : unitInterval) (p : RightTubeMinusLeftCore), not ((t : ℝ) <= 1/2) -> (((2-2*(t:ℝ):ℝ):ℂ)*W p + ((2*(t:ℝ)-1:ℝ):ℂ)*rightTubeCorePlanarComplex p.1) != 0",
-      :acceptance
-      "Add the compiled theorem from the fixture unchanged in mathematical content; preserve registered statements and introduce no placeholders or nonstandard axioms."},
-     :seat "topo-8"}},
+   {:placeholder-delta 0,
+    :residual
+    "Prove or endpoint-fix a nonvanishing departure from 1 to the quarter-turn waypoint -i * rightTubeCorePlanarComplex; then invoke the waypoint, normalization, and ambient adapters.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["Existing linter warning at ConstructionTargets/T02A03GeometricTubeDeformation.lean:64:6 recommends simp instead of simpa."
+     "Unrelated untracked ConstructionTargets/TwoOpenPseudopushoutCounitBaseIdentity.lean was preserved untouched."],
+    :missing-theorems [],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not",
+     :scoped-file-blob "94fee2763571ef13f65339bb769e702ebcf221fe"},
+    :axioms [propext Classical.choice Quot.sound],
+    :author "topo-6",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/t02a03_rotated_endpoint_waypoint_probe.lean",
+      :exit 0,
+      :output
+      "279382e86c17ce355f7d8e758954b88985194adb3796a95c3a1d3cf82d34568e  /tmp/t02a03_rotated_endpoint_waypoint_probe.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/t02a03_rotated_endpoint_waypoint_probe.lean",
+      :exit 0,
+      :output
+      "rotatedEndpointWaypoint_arrival_ne_zero_exists compiled; axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "git diff --check -- ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd
+      "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git show --check --oneline 712f8d241",
+      :exit 0,
+      :output "712f8d241 Add t02A03 rotated endpoint waypoint"}],
+    :diagnostic-history [],
+    :commit "712f8d241a8067a25fba3772471ee4bb0cf6a69e",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+    :fixture
+    {:path "/tmp/t02a03_rotated_endpoint_waypoint_probe.lean",
+     :sha256
+     "279382e86c17ce355f7d8e758954b88985194adb3796a95c3a1d3cf82d34568e"},
+    :finding
+    "The continuous quarter-turn waypoint W(p) = -i * rightTubeCorePlanarComplex(p.1) makes the arrival leg factor as ((2t-1) - (2-2t)i) times the nonzero endpoint. After time one half the coefficient has positive real part and cannot vanish.",
+    :seat "topo-6"},
    :phase :implementation,
    :type
    "exists W : C(RightTubeMinusLeftCore, ℂ), forall (t : unitInterval) (p : RightTubeMinusLeftCore), not ((t : ℝ) <= 1/2) -> (((2-2*(t:ℝ):ℝ):ℂ)*W p + ((2*(t:ℝ)-1:ℝ):ℂ)*rightTubeCorePlanarComplex p.1) != 0",
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/rotated-endpoint-waypoint-arrival",
