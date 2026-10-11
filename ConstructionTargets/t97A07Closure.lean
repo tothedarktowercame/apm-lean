@@ -61,7 +61,30 @@ theorem continuousWithinAt_coordinate_fderivWithin
         Set.range 𝓘(ℝ, EuclideanModel m)
       exact Set.mem_range_self _)
 
+/-- At the chart centre, the fixed-coordinate derivative is exactly the
+manifold derivative.  The equality is well typed because the target is its
+model vector space; no tangent spaces at distinct points are identified. -/
+theorem coordinate_fderivWithin_eq_mfderiv
+    {m n : ℕ} {X : Type*} [TopologicalSpace X]
+    [ChartedSpace (EuclideanModel m) X]
+    [IsManifold 𝓘(ℝ, EuclideanModel m) ∞ X]
+    (f : X → EuclideanModel n)
+    (hf : ContMDiff 𝓘(ℝ, EuclideanModel m) 𝓘(ℝ, EuclideanModel n) ∞ f)
+    (x : X) :
+    fderivWithin ℝ
+        (extChartAt 𝓘(ℝ, EuclideanModel n) (f x) ∘ f ∘
+          (extChartAt 𝓘(ℝ, EuclideanModel m) x).symm)
+        (Set.range 𝓘(ℝ, EuclideanModel m))
+        (extChartAt 𝓘(ℝ, EuclideanModel m) x x) =
+      mfderiv 𝓘(ℝ, EuclideanModel m) 𝓘(ℝ, EuclideanModel n) f x := by
+  have hd : MDifferentiableAt 𝓘(ℝ, EuclideanModel m)
+      𝓘(ℝ, EuclideanModel n) f x :=
+    hf.contMDiffAt.mdifferentiableAt (by simp)
+  rw [mfderiv]
+  simp only [hd, if_pos, writtenInExtChartAt]
+
 end t97A07Closure
 
 #print axioms t97A07Closure.isOpen_setOf_surjective_clm
 #print axioms t97A07Closure.continuousWithinAt_coordinate_fderivWithin
+#print axioms t97A07Closure.coordinate_fderivWithin_eq_mfderiv

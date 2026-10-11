@@ -65,8 +65,12 @@ comparing tangent maps whose fibers vary with `y`.
 
 Compiled progress: `continuousWithinAt_coordinate_fderivWithin` extracts from
 `hf.contMDiffAt` the continuity, within the model-with-corners range, of the
-fixed-chart representative's `fderivWithin` at the chart centre.  Remaining
-in B2 is the nearby chart-transport equality with `mfderiv`.
+fixed-chart representative's `fderivWithin` at the chart centre.
+`coordinate_fderivWithin_eq_mfderiv` identifies its value at that centre
+exactly with `mfderiv`; this follows from Mathlib's definition after proving
+manifold differentiability, and does not identify tangent fibers at distinct
+points.  Remaining in B2 is the nearby chart-transport equality with
+`mfderiv`.
 
 ### B3. Regular points are open
 
