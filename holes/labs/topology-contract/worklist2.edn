@@ -79336,11 +79336,23 @@
     [{:cmd "closure compile",
       :exit 1,
       :finding "Used injection coordinates."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791737113132-5626-e6beed86",
+     :commands
+     ["git show/diff/check 36cd0baac"
+      "lake env lean ConstructionTargets/t97A04Closure.lean"
+      "lake env lean problems/t97A04/lean/Main.lean"
+      "statement-registry check/fingerprint"
+      "git-show hash/placeholder checks"],
+     :finding
+     "PASS: 36cd0baa is new after history bab182b9; scope/blob match. It correctly identifies topological left/right summand inclusions as biprod.inl/inr under the fixed H1 coordinates, without swapping branches. Lean gates compile with standard axioms only; registry 131/0; frozen hash unchanged ca1b2cb3; closure 0/Main 2 placeholders. Shear summand preservation, folded degrees, and B6-B11 remain listed."},
     :commit "36cd0baac5cde95309a63dab0408b58e96aca93e",
     :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79439,6 +79451,9 @@
      :reason :program-progress-committed}
     {:job 8,
      :commit "bab182b9607d09eb3d7609f996f46090ee86fb11",
+     :reason :program-progress-committed}
+    {:job 9,
+     :commit "36cd0baac5cde95309a63dab0408b58e96aca93e",
      :reason :program-progress-committed}]}
   {:consumer :t96A07,
    :stop-count 2,
@@ -80259,7 +80274,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -80271,7 +80286,9 @@
     :reported-by [:program-2026-10-11-close-t97a04],
     :type "left inclusion is biprod.inl",
     :area "mv-connecting-naturality",
-    :proved-in :program-2026-10-11-close-t97a04},
+    :proved-in :program-2026-10-11-close-t97a04,
+    :banked-by :program-2026-10-11-close-t97a04,
+    :banked-commit "36cd0baac5cde95309a63dab0408b58e96aca93e"},
    :id
    :lemma-constructiontargets-t97a04closure-circlesuminl-h1-coordinate,
    :kind :lemma,
@@ -80279,7 +80296,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -80291,7 +80308,9 @@
     :reported-by [:program-2026-10-11-close-t97a04],
     :type "right inclusion is biprod.inr",
     :area "mv-connecting-naturality",
-    :proved-in :program-2026-10-11-close-t97a04},
+    :proved-in :program-2026-10-11-close-t97a04,
+    :banked-by :program-2026-10-11-close-t97a04,
+    :banked-commit "36cd0baac5cde95309a63dab0408b58e96aca93e"},
    :id
    :lemma-constructiontargets-t97a04closure-circlesuminr-h1-coordinate,
    :kind :lemma,
