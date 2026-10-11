@@ -1026,6 +1026,28 @@ theorem correctedLocalNormalizationAutomorphism_hom
       (ambientLocalNormalization k x).hom := by
   rfl
 
+/-- The ambient chart map induces the isomorphism on local homology used by
+the production normalization. -/
+noncomputable def ambientChartHomologyIso
+    (k : ℕ) {M : Type} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M) := by
+  letI := HigherChartLocalGenerator.ambientChartMap_Hn_isIso (k := k) x
+  exact asIso (HomologicalComplex.homologyMap
+        (relativeSingularMap (HigherChartLocalGenerator.P k) (deletedPoint x)
+          (HigherChartLocalGenerator.ambientChartMap (k := k) x)
+          (HigherChartLocalGenerator.ambientChartMap_mapsTo (k := k) x))
+        (k + 2))
+
+/-- The hom of the ambient local normalization is chart pullback followed by
+the concrete model normalization. -/
+theorem ambientLocalNormalization_hom
+    (k : ℕ) {M : Type} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M) :
+    (ambientLocalNormalization k x).hom =
+      (ambientChartHomologyIso k x).inv ≫
+      (HigherModelLocalHomology.localIsoInt k).hom := by
+  rfl
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -1091,3 +1113,5 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient_eq_automorphism_one
 #print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_iff
 #print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom
+#print axioms ConstructionTargets.ManifoldFundamentalClass.ambientChartHomologyIso
+#print axioms ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization_hom
