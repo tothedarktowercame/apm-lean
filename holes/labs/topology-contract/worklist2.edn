@@ -79281,44 +79281,41 @@
    :depends-on [],
    :other-consumers []}
   {:consumer :t97A04,
-   :stop-count 2,
+   :stop-count 3,
    :evidence
    {:placeholder-delta 0,
-    :residual "B2 through B11 remain; the next job is B2 only.",
+    :residual "B3 through B11 remain; the next job is B3 only.",
     :outcome :stop,
     :warnings
     ["The consumer retains its two expected placeholders while the closure program advances node by node."
      "Existing Main.lean linter and sorry warnings are unchanged."],
     :missing-theorems
-    [{:name
-      "ConstructionTargets.T97A04Closure.frozenTorusH2GroupIsoInt",
+    [{:name "ConstructionTargets.T97A04Closure.frozenYCover",
       :type
-      "SingularHomology 2 (TopCat.of (AddCircle (1 : Real) × AddCircle (1 : Real))) ≅ AddCommGrpCat.of Int",
+      "ConstructionTargets.T97A04Closure.FrozenYCover, with exact preimage fields for BoundaryTorusOpenCover.leftOpen and rightOpen and restricted homeomorphisms for U, V, and U intersection V",
       :status :proved,
       :consumers [:t97A04],
-      :depends-on [],
+      :depends-on
+      ["ConstructionTargets.T97A04Closure.frozenTorusH2GroupIsoInt"],
       :area "mv-connecting-naturality"}],
     :statement-hashes
     {:registry "131 registered statements match, 0 do not",
-     :closure-lean-blob "fb39c91b96d1167d6cf95eef0c51909406d2318b",
-     :blueprint-blob "8db964621a51c880c35890c042c5ce54bf8434cc"},
+     :closure-lean-blob "bb7b1986257645292bf578ef3d7c6bbb2f242d5e",
+     :blueprint-blob "4d501fef08a8bbbe76b424c8098ad6ebddb75b43"},
     :disposition :stop,
-    :axioms [propext Classical.choice Quot.sound],
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
     :reason :program-milestone-complete,
     :commands
     [{:cmd "lake env lean ConstructionTargets/t97A04Closure.lean",
       :exit 0,
       :output
-      "frozenTorusH2GroupIsoInt compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      "B1 and B2 compiled; B2 declarations use [propext, Classical.choice, Quot.sound]"}
      {:cmd
       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/t97A04Closure.lean || true)\"",
       :exit 0}
      {:cmd
-      "git diff --check -- ConstructionTargets/t97A04Closure.lean",
-      :exit 0}
-     {:cmd
-      "git diff --check -- ConstructionTargets/t97A04Closure.blueprint.md",
+      "git diff --check -- ConstructionTargets/t97A04Closure.lean ConstructionTargets/t97A04Closure.blueprint.md",
       :exit 0}
      {:cmd "lake env lean problems/t97A04/lean/Main.lean",
       :exit 0,
@@ -79328,41 +79325,34 @@
       :exit 0,
       :output "131 registered statements match, 0 do not"}
      {:cmd
-      "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/t97A04Closure.lean",
+      "python3 -c 'comment-stripped placeholder count for problems/t97A04/lean/Main.lean'",
+      :exit 0,
+      :output "2"}
+     {:cmd
+      "git show --check --oneline f02c84291c365d962ac52edce7e34b0ea744f3f1",
+      :exit 0,
+      :output "f02c84291 Define t97A04 frozen vertical cover"}
+     {:cmd
+      "git show --check --oneline dcc11d7549630f758be71faa6f35beef6fc7f0d3",
+      :exit 0,
+      :output "dcc11d754 Record t97A04 blueprint B2 milestone"}],
+    :diagnostic-history
+    [{:cmd "lake env lean ConstructionTargets/t97A04Closure.lean",
       :exit 1,
-      :expected-exit 1}
-     {:cmd "git show --check --oneline 964e5f8dc",
-      :exit 0,
-      :output "964e5f8dc Prove t97A04 frozen torus H2 coordinate"}
-     {:cmd "git show --check --oneline 0922066b0",
-      :exit 0,
-      :output "0922066b0 Record t97A04 blueprint B1 milestone"}],
-    :diagnostic-history [],
+      :finding
+      "The first compile parsed parenthesized set intersections in the subtype homeomorphism type as intersections of types. Adding explicit Set FrozenTorus and Set BoundaryTorus annotations corrected the notation; the successful rerun is recorded in commands."}],
     :continue-from
-    "Formalise blueprint node B2 frozenYCover in ConstructionTargets/t97A04Closure.lean, recording the transported vertical cover, its openness and union proof, and its exact identification with BoundaryTorusOpenCover.",
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791717503458-5232-3d462382",
-     :commands
-     ["git show/diff-tree/show --check 964e5f8dcba178009d7e61c5c61f018300079733 and 0922066b0b2ba0edb3ff369117fb523828fdde64"
-      "git rev-parse closure and blueprint blobs at recorded commit"
-      "lake env lean ConstructionTargets/t97A04Closure.lean"
-      "lake env lean problems/t97A04/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "statement fingerprints and placeholder counts at recorded commit and prior program-history commit"],
-     :finding
-     "PASS: independent author topo-6 committed new compiled progress after program-history commit 461f5ca7e. Milestone 964e5f8dc adds the sorry-free declaration frozenTorusH2GroupIsoInt, and 0922066b0 records B1 as proved while listing B2 through B11 and the next B2 milestone. The recorded closure and blueprint blobs match. B1 has the faithful blueprint type and correct representation orientation: it transports the banked boundary-torus H2 coordinate through frozenTorusHomeomorphBoundaryTorus.toHomotopyEquiv, the same fixed homeomorphism used for the aligned frozen-torus coordinates. The closure file compiles with exactly propext, Classical.choice, Quot.sound and no placeholders. Main compiles with its two acknowledged placeholders unchanged from the prior program-history commit; registry is 131/0 and the frozen t97A04 fingerprint is unchanged. This is a correct program STOP with substantive compiled progress and explicit remaining milestones."},
-    :commit "0922066b0b2ba0edb3ff369117fb523828fdde64",
+    "Formalise blueprint node B3 shearY in ConstructionTargets/t97A04Closure.lean, prove preservation of both frozenYCover members from the unchanged second coordinate, and prove only the composition and pointwise formulas listed by the blueprint.",
+    :commit "dcc11d7549630f758be71faa6f35beef6fc7f0d3",
     :changed-paths
     ["ConstructionTargets/t97A04Closure.lean"
      "ConstructionTargets/t97A04Closure.blueprint.md"],
     :finding
-    "Blueprint node B1 is proved. The frozen AddCircle-squared H2 coordinate is the banked boundary-torus Mayer-Vietoris coordinate transported through the same product homeomorphism already used for the aligned H1 coordinate.",
-    :milestone-commit "964e5f8dcba178009d7e61c5c61f018300079733",
+    "Blueprint node B2 is proved. frozenYCover is the exact preimage of BoundaryTorusOpenCover.leftOpen/rightOpen under the fixed frozen-torus homeomorphism used by B1; its fields prove openness and coverage, and restricted homeomorphisms identify both members and their intersection with the boundary-torus cover.",
+    :milestone-commit "f02c84291c365d962ac52edce7e34b0ea744f3f1",
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79464,4 +79454,24 @@
    :lemma-constructiontargets-t97a04closure-frozentorush2groupisoint,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "ConstructionTargets.T97A04Closure.frozenYCover",
+    :type
+    "ConstructionTargets.T97A04Closure.FrozenYCover, with exact preimage fields for BoundaryTorusOpenCover.leftOpen and rightOpen and restricted homeomorphisms for U, V, and U intersection V"},
+   :lemma
+   {:name "ConstructionTargets.T97A04Closure.frozenYCover",
+    :reported-by [:program-2026-10-11-close-t97a04],
+    :type
+    "ConstructionTargets.T97A04Closure.FrozenYCover, with exact preimage fields for BoundaryTorusOpenCover.leftOpen and rightOpen and restricted homeomorphisms for U, V, and U intersection V",
+    :area "mv-connecting-naturality",
+    :proved-in :program-2026-10-11-close-t97a04},
+   :id :lemma-constructiontargets-t97a04closure-frozenycover,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t97a04closure-frozentorush2groupisoint],
    :other-consumers []}]}
