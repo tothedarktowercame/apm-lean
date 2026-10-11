@@ -960,11 +960,23 @@
                      probs (sort (set (mapcat #(filter @registered-problems (open-problems %)) lem)))]
                  (doseq [p probs
                          :let [mine (filter #((set (map problem-of (cons (:consumer %) (:other-consumers %)))) p) lem)
-                               waiting (count (filter #(= :backlog (:state %)) mine))]]
+                               waiting (count (filter #(= :backlog (:state %)) mine))
+                               ;; A closure row that STOPped and passed review is
+                               ;; :done, which reads like a closure. Name it, so a
+                               ;; zero backlog is checked against what it said was
+                               ;; missing (t96A07, 2026-10-11: its STOP named three
+                               ;; packets that never entered the DAG).
+                               stopped (->> items
+                                            (filter #(and (#{:final-adapter :consumer-closure} (:kind %))
+                                                          (= :stop (get-in % [:evidence :outcome]))
+                                                          (not= :superseded (:state %))
+                                                          (= p (problem-of (:consumer %)))))
+                                            (map :id) vec)]]
                    (prn {:problem p :placeholders (placeholder-count p)
                          :banked (count (filter #(= :banked (:state %)) mine))
                          :backlog waiting
-                         :route (if (zero? waiting) :COMPLETE-elect-closure-adapter-now :open)}))
+                         :route (if (zero? waiting) :COMPLETE-elect-closure-adapter-now :open)
+                         :closure-stopped stopped}))
                  ;; Within the ready lemmas, a lemma in a wider area ranks
                  ;; first: building it advances that area for every problem
                  ;; it serves, in either loop.

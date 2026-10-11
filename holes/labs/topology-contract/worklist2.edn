@@ -71971,4 +71971,58 @@
    :lemma-constructiontargets-t02a03geometrictubedeformation-range-rightcorecircle,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t96A07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A07.evenQuadraticMap_contMDiff",
+    :type
+    "The map RP^2 -> R^3 descended from (x,y,z) |-> (yz,xz,xy) on the frozen quotient is ContMDiff (via the banked RealProjectiveEvenQuadraticDescent / rpSmoothAtlas)."},
+   :lemma
+   {:name "t96A07.evenQuadraticMap_contMDiff",
+    :reported-by [:owner],
+    :type
+    "The map RP^2 -> R^3 descended from (x,y,z) |-> (yz,xz,xy) on the frozen quotient is ContMDiff (via the banked RealProjectiveEvenQuadraticDescent / rpSmoothAtlas).",
+    :area "rp-smooth-atlas"},
+   :id :lemma-t96a07-evenquadraticmap-contmdiff,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t96A07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A07.not_transverse_zAxis_at_e0",
+    :type
+    "At [e0] the range of the projective mfderiv of the descended map, joined with the tangent of the z-axis, is a proper subspace of R^3 (failure of transversality)."},
+   :lemma
+   {:name "t96A07.not_transverse_zAxis_at_e0",
+    :reported-by [:owner],
+    :type
+    "At [e0] the range of the projective mfderiv of the descended map, joined with the tangent of the z-axis, is a proper subspace of R^3 (failure of transversality).",
+    :area "rp-smooth-atlas"},
+   :id :lemma-t96a07-not-transverse-zaxis-at-e0,
+   :kind :lemma,
+   :depends-on [:lemma-t96a07-evenquadraticmap-contmdiff],
+   :other-consumers []}
+  {:consumer :t96A07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A07.horizontal_levels_regular",
+    :type
+    "For every z in (0,1/2) the descended map is transverse to the plane {w3 = z}, each fibre xy = z on the sphere is nonempty, and the family of such levels is infinite, as the frozen conjunction states."},
+   :lemma
+   {:name "t96A07.horizontal_levels_regular",
+    :reported-by [:owner],
+    :type
+    "For every z in (0,1/2) the descended map is transverse to the plane {w3 = z}, each fibre xy = z on the sphere is nonempty, and the family of such levels is infinite, as the frozen conjunction states.",
+    :area "rp-smooth-atlas"},
+   :id :lemma-t96a07-horizontal-levels-regular,
+   :kind :lemma,
+   :depends-on [:lemma-t96a07-evenquadraticmap-contmdiff],
    :other-consumers []}]}
