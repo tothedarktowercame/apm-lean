@@ -1113,6 +1113,47 @@ noncomputable def coefficientLocalForwardComposite
       (CoefficientChartLocal.pointedTarget k x) 0) (k + 2) ≫
   (CoefficientModelLocal.localIso ℤ k).hom
 
+/-- The coefficient projection followed by the concrete coefficient-chart
+normalization, exposed as its ordered seven factors. -/
+noncomputable def coefficientProjectedForwardComposite
+    (k : ℕ) {M : Type} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (CoefficientChartLocal.E k) M] (x : M) :=
+  forgetIntModules.map
+      (HomologicalComplex.homologyMap
+        (cokernel.π (CoefficientRelativeSmall.subspaceMap ℤ (deletedPoint x)))
+        (k + 2)) ≫
+  forgetIntModules.map
+      (CoefficientNeighborhoodLocal.inclusionIso ℤ
+        (chartAt (CoefficientChartLocal.E k) x).source x
+        (chartAt (CoefficientChartLocal.E k) x).open_source
+        (CoefficientChartPair.source_member (k + 2) x) (k + 2)).inv ≫
+  forgetIntModules.map
+      (CoefficientChartLocal.sourceTransport ℤ k x (k + 2)).inv ≫
+  forgetIntModules.map
+      (HomologicalComplex.homologyMap
+        (CoefficientChartPair.deletedMap ℤ
+          (CoefficientChartLocal.pointedChart k x)
+          (CoefficientChartPair.sourcePoint (k + 2) x)) (k + 2)) ≫
+  forgetIntModules.map
+      (CoefficientChartLocal.targetTransport ℤ k x (k + 2)).hom ≫
+  forgetIntModules.map
+      (HomologicalComplex.homologyMap
+        (CoefficientNeighborhoodLocal.inclusionMap ℤ
+          (CoefficientChartLocal.pointedTarget k x) 0) (k + 2)) ≫
+  forgetIntModules.map (CoefficientModelLocal.localIso ℤ k).hom
+
+theorem coefficientProjection_comp_coefficientLocalForwardComposite
+    (k : ℕ) {M : Type} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (CoefficientChartLocal.E k) M] (x : M) :
+    forgetIntModules.map
+        (HomologicalComplex.homologyMap
+          (cokernel.π (CoefficientRelativeSmall.subspaceMap ℤ (deletedPoint x)))
+          (k + 2)) ≫
+      forgetIntModules.map (coefficientLocalForwardComposite k x) =
+    coefficientProjectedForwardComposite k x := by
+  unfold coefficientProjectedForwardComposite coefficientLocalForwardComposite
+  rfl
+
 /-- The coefficient-chart local isomorphism has the concrete forward
 factorization used by the normalization comparison. -/
 theorem coefficientLocalIso_hom_eq_forwardComposite
@@ -1352,6 +1393,8 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_after_coefficient
 #print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_endpoint_factors
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientLocalForwardComposite
+#print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientProjectedForwardComposite
+#print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientProjection_comp_coefficientLocalForwardComposite
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientLocalIso_hom_eq_forwardComposite
 #print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_coefficient_factors
 #print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_corrected_comparison_factors
