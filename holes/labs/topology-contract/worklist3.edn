@@ -7008,8 +7008,84 @@
   {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-correctedlocalgeneratorcoefficient-eq-one-or-neg-one,
+   :evidence
+   {:placeholder-delta {:t00J02 0, :t98A02 0, :construction-target 0},
+    :residual
+    "Exclude correctedLocalGeneratorCoefficient k x = -1 by comparing the coefficient and production connecting, radial, and sphere normalization conventions; then deduce coefficient one, generator transport, and normalization compatibility.",
+    :gates
+    {:scoped-worktree :clean,
+     :exact-type :pass,
+     :orientation-excluded :pass,
+     :unit-rewrite :pass,
+     :module-compile :pass,
+     :fixture-hash :pass,
+     :scope :pass,
+     :statement-registry :pass,
+     :placeholder-scan :pass,
+     :target-build :pass,
+     :integer-unit-classification :pass,
+     :positive-branch-unselected :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["lake build replayed pre-existing dependency warnings; no warning was emitted for the promoted theorem"
+     "An unrelated supervisor temporary file holes/labs/topology-contract/worklist.edn.tmp remains untracked and was not modified."],
+    :missing-theorems
+    [{:id
+      :lemma-constructiontargets-manifoldfundamentalclass-correctedlocalgeneratorcoefficient-eq-one-or-neg-one,
+      :name
+      "ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient_eq_one_or_neg_one",
+      :type
+      "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), correctedLocalGeneratorCoefficient k x = 1 ∨ correctedLocalGeneratorCoefficient k x = -1",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on
+      ["ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient_eq_unit"],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :topo-10,
+    :commands
+    [{:cmd
+      "sha256sum /tmp/manifold_fundamental_class_corrected_generator_sign.lean",
+      :exit 0,
+      :result
+      "1bac6871767bca63b099ee1d609de0c9a5666869d20a3cc8f4ee73a767818667"}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0,
+      :result "Build completed successfully (8326 jobs)"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :result "131 registered statements match, 0 do not"}
+     {:cmd
+      "rg -n \"\\bsorry\\b|\\badmit\\b|^\\s*axiom\\b\" ConstructionTargets/ManifoldFundamentalClass.lean /tmp/manifold_fundamental_class_corrected_generator_sign.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "git status --short",
+      :exit 0,
+      :result
+      "unrelated holes/labs/topology-contract/worklist.edn.tmp untracked; scoped file clean"}],
+    :diagnostic-history [],
+    :commit "edf41fe0b3251c1dd875d8a21615d5512c7ef5a2",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path
+     "/tmp/manifold_fundamental_class_corrected_generator_sign.lean",
+     :sha256
+     "1bac6871767bca63b099ee1d609de0c9a5666869d20a3cc8f4ee73a767818667"},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :declaration
+     "ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient_eq_one_or_neg_one"},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/corrected-local-generator-sign",
@@ -10226,11 +10302,13 @@
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient_eq_one_or_neg_one",
     :reported-by
-    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+     :routes-2026-10-11-manifold-corrected-local-generator-sign-topo3-r1],
     :type
     "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), correctedLocalGeneratorCoefficient k x = 1 ∨ correctedLocalGeneratorCoefficient k x = -1",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in
+    :routes-2026-10-11-manifold-corrected-local-generator-sign-topo3-r1},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-correctedlocalgeneratorcoefficient-eq-one-or-neg-one,
    :kind :lemma,
