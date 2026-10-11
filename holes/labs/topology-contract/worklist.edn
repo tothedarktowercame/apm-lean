@@ -103576,6 +103576,18 @@
       :exit 0,
       :finding
       "Only the unrelated ConstructionTargets/ManifoldFundamentalClass.lean modification remains."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791689199749-3983-db6d6837",
+     :commands
+     ["git show and git diff-tree on recorded repair commit e2b9c858209875778ae0798ab9948b9fcab060ca"
+      "git archive recorded commit and rerun build_step.bb priorities on its exact three-ledger snapshot"
+      "parse all three recorded EDN ledgers with clojure.edn/read-string"
+      "recompute comment-stripped placeholder counts for the six topo1 consumers"
+      "git diff-tree --check on recorded repair commit"],
+     :finding
+     "Recorded repair commit is authored by topo-4 and changes only worklist2.edn and worklist3.edn, placing area metadata on the 26 canonical backlog lemma rows identified by the failed reviews. The exact recorded-commit priority audit now reports untagged with 9 historical banked nodes and 0 backlog nodes, polygon-surface-open-cover with 166 banked and 60 backlog, and the expected high-impact fundamental-group and nearest-closure priorities. All three ledgers parse, the six topo1 placeholder counts reproduce as 1, 1, 1, 1, 3, and 1, and the four required checkpoint measure categories and representation directions are present. No fixture, theorem orientation, or frozen statement hash applies to this strategy-only checkpoint."},
     :commit "e2b9c858209875778ae0798ab9948b9fcab060ca",
     :replacement-items
     [{:bounded-exception
@@ -103769,7 +103781,7 @@
       "untagged: 9 banked historical nodes, 0 backlog"]},
     :seat "topo-4"},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -103792,7 +103804,7 @@
    :implements-lemma
    :lemma-kleinaabbsquarepolygonpresentationequivalence,
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-aabb-square-polygon-presentation-equivalence",
@@ -103827,7 +103839,7 @@
    :implements-lemma
    :lemma-genericpointwedgefundamentalgroupcoordinates-genericpointwedgegroupequivalence-c,
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/generic-point-wedge-fundamental-group-coordinates",
