@@ -98224,8 +98224,59 @@
    "Review both covering constructions and close t99J01 when banked.",
    :other-consumers []}
   {:consumer :t99J01,
+   :stop-count 1,
+   :evidence
+   {:residual
+    "Restore or implement the reviewed generic point-wedge inclusion-coordinate artifact, then recursively normalize the coproduct and export the TwoCircles and ThreeCircles equivalences.",
+    :outcome :stop,
+    :missing-theorems
+    [{:name
+      "GenericPointWedgeFundamentalGroupCoordinates.threeCirclesGroupEquivalence_coordinates",
+      :type
+      "A generic point-wedge fundamental-group equivalence whose two representative inclusions map to the corresponding Monoid.Coprod injections, specialized recursively to ThreeCircles and normalized to FreeGroup (Fin 3).",
+      :status :not-started,
+      :consumers [:t99J01 :t01A03 :t97A01 :t97A03 :t92J06],
+      :depends-on [],
+      :area "fundamental-group-wedge-of-circles"}],
+    :disposition :stop,
+    :axioms
+    ["propext"
+     "Classical.choice"
+     "Quot.sound"
+     "FiniteCircleWedgePiOneProbe.finite_circle_wedge_fundamental_group_package"],
+    :author "topo-2",
+    :reason
+    "The reviewed generic point-wedge fundamental-group coordinate dependency is absent: ConstructionTargets/GenericPointWedgeFundamentalGroupCoordinates.lean does not exist, although the ledger names GenericPointWedgeFundamentalGroupCoordinates.threeCirclesGroupEquivalence_coordinates as the prerequisite. The supplied fixture only postulates the desired finite-circle-wedge equivalences with a custom axiom. This row cannot derive the recursive FreeGroup normalization and inclusion-generator equations without first restoring or implementing that directed inclusion-coordinate theorem; doing so here would exceed the single-file scope and erase the declared representation boundary.",
+    :commands
+    [{:cmd "sha256sum /tmp/finite-circle-wedge-pi1-probe.lean",
+      :exit 0}
+     {:cmd "lake env lean /tmp/finite-circle-wedge-pi1-probe.lean",
+      :exit 0,
+      :finding
+      "Fixture compiles, but finite_circle_wedge_fundamental_group_package is a custom axiom."}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd
+      "test ! -e ConstructionTargets/GenericPointWedgeFundamentalGroupCoordinates.lean",
+      :exit 0}
+     {:cmd
+      "test ! -e ConstructionTargets/FiniteCircleWedgeFundamentalGroup.lean",
+      :exit 0}
+     {:cmd
+      "rg -n threeCirclesGroupEquivalence_coordinates holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :finding
+      "The ledger records the absent coordinate theorem as this row's prerequisite."}],
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/finite-circle-wedge-pi1-probe.lean",
+     :sha256
+     "188c22abad2f0abc5a570ded8f1bd93013fac5e470230154cbdf5b676f5e300a",
+     :status :self-axiomatized},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/FiniteCircleWedgeFundamentalGroup.lean"],
    :dag-node
@@ -106792,22 +106843,28 @@
    :depends-on
    [:lemma-genericpointwedgefundamentalgroupcoordinates-threecirclesgroupequivalence-coordi],
    :other-consumers []}
-  {:consumer :portfolio,
+  {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
    :scope [],
    :acceptance
    {:lemma
-    "GenericPointWedgeFundamentalGroupCoordinates.threeCirclesGroupEquivalence_coordinates"},
+    "GenericPointWedgeFundamentalGroupCoordinates.threeCirclesGroupEquivalence_coordinates",
+    :type
+    "A generic point-wedge fundamental-group equivalence whose two representative inclusions map to the corresponding Monoid.Coprod injections, specialized recursively to ThreeCircles and normalized to FreeGroup (Fin 3)."},
    :lemma
    {:name
     "GenericPointWedgeFundamentalGroupCoordinates.threeCirclesGroupEquivalence_coordinates",
-    :reported-by []},
+    :reported-by
+    [:routes-2026-10-11-finite-circle-wedge-pi1-induction-74],
+    :type
+    "A generic point-wedge fundamental-group equivalence whose two representative inclusions map to the corresponding Monoid.Coprod injections, specialized recursively to ThreeCircles and normalized to FreeGroup (Fin 3).",
+    :area "fundamental-group-wedge-of-circles"},
    :id
    :lemma-genericpointwedgefundamentalgroupcoordinates-threecirclesgroupequivalence-coordi,
    :kind :lemma,
    :depends-on [],
-   :other-consumers []}
+   :other-consumers [:t01A03 :t97A01 :t97A03 :t92J06]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
