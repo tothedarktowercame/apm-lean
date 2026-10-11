@@ -2143,19 +2143,21 @@
    "decls": [
     "apm_t98a02"
    ],
-   "sha256": "643dd3c5aff5f6bc369fa50cfea7f52618d75cbecfb85a3fa986a74ebd34675a",
+   "sha256": "e38948956db4c19aacf6ef61cd39a7dde54da984580a82d29060817e5717a121",
    "defs": [
+    "T98A02CollarBall",
     "T98A02Disk",
     "T98A02E4",
     "T98A02I4",
+    "t98A02DiskInCollarBall",
     "t98A02H"
    ],
-   "grade": "stronger",
-   "grader": "claude read-only grader (doubt re-grade)",
-   "evidence": "holes/labs/statement-registry/doubt-grades.md",
+   "grade": "faithful",
+   "grader": "claude read-only grader (simplex revision, 2026-10-11)",
+   "evidence": "holes/labs/statement-registry/t98A02-simplex-grade.md",
    "prelim_defect": null,
-   "rev": "b8cd293a",
-   "approved_at": "2026-09-28T20:02:26Z"
+   "rev": "3c6bd81a7",
+   "approved_at": "2026-10-11T14:59:17Z"
   },
   "t98A03": {
    "decls": [
