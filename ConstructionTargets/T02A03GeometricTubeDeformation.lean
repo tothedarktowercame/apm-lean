@@ -1132,6 +1132,27 @@ theorem collisionEndpoint_positiveFactor_signBridge
   dsimp [a]
   ring
 
+theorem rightTubeMeridianCoordinate_im_positiveFactor_height
+    (p : RightTubeMinusLeftCore) :
+    ∃ c : ℝ, 0 < c ∧
+      (rightTubeMeridianCoordinate p : Complex).im = c * p.1 2 := by
+  let n : ℂ := rightTubeNormalComplex p.1
+  have hn0 : n ≠ 0 := by
+    intro hn
+    exact p.2.2 ((rightTubeNormalComplex_eq_zero_iff p.1).mp hn)
+  have hnorm : 0 < ‖n‖ := norm_pos_iff.mpr hn0
+  refine ⟨(‖n‖)⁻¹, inv_pos.mpr hnorm, ?_⟩
+  have hscale := NormedSpace.norm_smul_normalize n
+  have him : ‖n‖ * (NormedSpace.normalize n).im = n.im := by
+    have h := congrArg Complex.im hscale
+    exact (RCLike.smul_im ‖n‖ (NormedSpace.normalize n)).symm.trans h
+  have hn_im : n.im = p.1 2 := by
+    simp [n, rightTubeNormalComplex]
+  change (NormedSpace.normalize n).im = ‖n‖⁻¹ * p.1 2
+  rw [← hn_im]
+  rw [← him]
+  field_simp
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -1172,3 +1193,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.inputCollisionPolynomial_factor_rightTubeNormalReal
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.inputCollisionPolynomial_positiveFactor_meridianReal
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.collisionEndpoint_positiveFactor_signBridge
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeMeridianCoordinate_im_positiveFactor_height
