@@ -79332,13 +79332,24 @@
      {:cmd "git show --check eefa03a74", :exit 0}],
     :continue-from
     "Prove circleZPow_H1 by winding/Hurewicz naturality.",
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791724749339-5408-edcdecda",
+     :commands
+     ["git show/check/diff-tree eefa03a74"
+      "lake env lean ConstructionTargets/t97A04Closure.lean"
+      "lake env lean problems/t97A04/lean/Main.lean"
+      "statement-registry check/fingerprint and placeholder counts"],
+     :finding
+     "PASS: new compiled progress after the latest history entry. Commit changes only the scoped closure; circleAffineHomotopy runs from z↦z^a to z↦c*z^a, and the induced-H1 equality has the claimed affine-to-power orientation, correctly removing translation before the degree calculation. Blob matches 1b8b7ca6. Closure is sorry-free with standard axioms; Main compiles with unchanged 2 placeholders. Registry is 131/0 and frozen statement SHA-256 remains ca1b2cb3c6594276811618321d5c0604c2f38fc4594a6b21ae161a711a923a34. circleZPow_H1, component equations, and B6-B11 remain listed."},
     :commit "eefa03a7443988ed6a43c6601588073266789c30",
     :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
     :finding
     "Translation removal for circle-power H1 maps now compiles.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79395,6 +79406,9 @@
      :reason :program-progress-committed}
     {:job 2,
      :commit "2412fe180baf98133a8bcdb748eaa009ff1d6734",
+     :reason :program-progress-committed}
+    {:job 3,
+     :commit "eefa03a7443988ed6a43c6601588073266789c30",
      :reason :program-progress-committed}]}
   {:consumer :t96A07,
    :stop-count 1,
@@ -79764,7 +79778,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "ConstructionTargets.T97A04Closure.circleAffine_H1_eq_zpow",
@@ -79774,7 +79788,9 @@
     :reported-by [:program-2026-10-11-close-t97a04],
     :type "H1(affine)=H1(zpow)",
     :area "mv-connecting-naturality",
-    :proved-in :program-2026-10-11-close-t97a04},
+    :proved-in :program-2026-10-11-close-t97a04,
+    :banked-by :program-2026-10-11-close-t97a04,
+    :banked-commit "eefa03a7443988ed6a43c6601588073266789c30"},
    :id
    :lemma-constructiontargets-t97a04closure-circleaffine-h1-eq-zpow,
    :kind :lemma,
