@@ -566,6 +566,16 @@ theorem shearY_overlap_coordinate_of_injections (a b : ℤ)
   · exact hleft
   · exact hright
 
+theorem inl_comp_overlapScalar (a : ℤ) :
+    biprod.inl ≫ overlapScalar a =
+      (a • 𝟙 (AddCommGrpCat.of ℤ)) ≫ biprod.inl := by
+  simp [overlapScalar]
+
+theorem inr_comp_overlapScalar (a : ℤ) :
+    biprod.inr ≫ overlapScalar a =
+      (a • 𝟙 (AddCommGrpCat.of ℤ)) ≫ biprod.inr := by
+  simp [overlapScalar]
+
 #print axioms frozenTorusH2GroupIsoInt
 #print axioms frozenYCover
 #print axioms frozenYCoverUHomeomorph
@@ -584,5 +594,7 @@ theorem shearY_overlap_coordinate_of_injections (a b : ℤ)
 #print axioms twoCircleOverlapShear
 #print axioms shearYOverlapCoordinateMap
 #print axioms shearY_overlap_coordinate_of_injections
+#print axioms inl_comp_overlapScalar
+#print axioms inr_comp_overlapScalar
 
 end ConstructionTargets.T97A04Closure
