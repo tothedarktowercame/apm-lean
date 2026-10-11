@@ -113963,6 +113963,22 @@
     {:commit "66ccbdbaf3d033149dc50b69a165546b41439189",
      :next
      "Implement the next ready reviewed-blueprint node, preferably B10 circleBaseNeighborhood and its contraction, before B11."},
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791716719291-5193-8b875afb",
+     :commands
+     ["git show 94d19bb61b8e0629afa2c1070246515757d5f0b1 and 66ccbdbaf3d033149dc50b69a165546b41439189"
+      "git diff-tree --name-status for both commits"
+      "sha256sum recorded scoped files"
+      "git diff --check across both commits"
+      "comment-stripped placeholder scan"
+      "python3 scripts/statement-registry.py check"
+      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected residual target absent)"],
+     :finding
+     "PASS: the program STOP adds new compiled, sorry-free B8 progress after the last program-history entry. multiplicativeIntEquivFreeGroupFinOne has the frozen type Multiplicative Int ≃* FreeGroup (Fin 1), uses the symmetric orientation of FreeGroup.mulEquivIntOfUnique, and depends only on propext and Quot.sound. Scope and all three recorded hashes reproduce, registry reports 131 matches, and PointWedgeVanKampen builds. The final ThreeCircles target remains absent exactly as listed among the unfinished milestones."},
     :commit "66ccbdbaf3d033149dc50b69a165546b41439189",
     :commits
     ["94d19bb61b8e0629afa2c1070246515757d5f0b1"
@@ -113973,7 +113989,7 @@
      "ConstructionTargets/PointWedgeVanKampen.blueprint.md"],
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113994,7 +114010,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Blueprint repaired. New B10 specifies the punctured-circle neighborhood and pointed contraction; new B11 constructs the restricted-open neighborhood of the TwoCircles wedge point and its quotient-descended pointed contraction. The final specialization is now B12 and explicitly uses both nodes.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Program job completed blueprint node B8: multiplicativeIntEquivFreeGroupFinOne is the symmetric Mathlib rank-one free-group integer equivalence, in the orientation required after the circle winding coordinate. The compiled declaration is recorded as proved in the reviewed blueprint; B3, B4, B6, B10, B11, and B12 remain.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114018,7 +114034,11 @@
     {:job 7,
      :commit "e8cbe896fe154e6fa9b5796b1e0581b0726f3886",
      :reason
-     "Blueprint repaired. New B10 specifies the punctured-circle neighborhood and pointed contraction; new B11 constructs the restricted-open neighborhood of the TwoCircles wedge point and its quotient-descended pointed contraction. The final specialization is now B12 and explicitly uses both nodes."}]}
+     "Blueprint repaired. New B10 specifies the punctured-circle neighborhood and pointed contraction; new B11 constructs the restricted-open neighborhood of the TwoCircles wedge point and its quotient-descended pointed contraction. The final specialization is now B12 and explicitly uses both nodes."}
+    {:job 8,
+     :commit "66ccbdbaf3d033149dc50b69a165546b41439189",
+     :reason
+     "Program job completed blueprint node B8: multiplicativeIntEquivFreeGroupFinOne is the symmetric Mathlib rank-one free-group integer equivalence, in the orientation required after the circle winding coordinate. The compiled declaration is recorded as proved in the reviewed blueprint; B3, B4, B6, B10, B11, and B12 remain."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
