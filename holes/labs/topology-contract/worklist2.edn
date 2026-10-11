@@ -68337,53 +68337,59 @@
    "single-consumer height criterion for left-core avoidance by right-core polar reconstruction",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:residual
-     "Implement the height-based deletion criterion in the scoped module, then analyze the zero-height planar intersection locus needed to certify the corrected angular and radial stages.",
-     :outcome :go,
-     :warnings [],
-     :missing-theorems [],
-     :commands
-     [{:cmd
-       "lake env lean /tmp/t02a03_core_reconstruction_height_avoidance_probe.lean",
-       :exit 0,
-       :output
-       "reconstructionAvoidsLeftCore_rightTubeCorePolar_of_im_ne_zero compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "sha256sum /tmp/t02a03_core_reconstruction_height_avoidance_probe.lean",
-       :exit 0,
-       :output
-       "a229ee17509ec4112f59fc5a43ea071da9cc2216f87fc27a7627ee023113374f  /tmp/t02a03_core_reconstruction_height_avoidance_probe.lean"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_core_reconstruction_height_avoidance_probe.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}
-      {:cmd
-       "rg -n 'reconstructionAvoidsLeftCore_rightTubeCorePolar_of_im_ne_zero' /tmp/t02a03_core_reconstruction_height_avoidance_probe.lean",
-       :exit 0,
-       :output
-       "7:theorem reconstructionAvoidsLeftCore_rightTubeCorePolar_of_im_ne_zero\n15:#print axioms reconstructionAvoidsLeftCore_rightTubeCorePolar_of_im_ne_zero"}],
-     :fixture
-     {:path
-      "/tmp/t02a03_core_reconstruction_height_avoidance_probe.lean",
-      :sha256
-      "a229ee17509ec4112f59fc5a43ea071da9cc2216f87fc27a7627ee023113374f"},
-     :finding
-     "The complete placeholder-free fixture proves the requested deletion criterion directly from the third coordinate: every frozen left-core point has height zero, whereas rightTubeCorePolarReconstruction u n has height n.im.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
-      :declaration
-      "ConstructionTargets.T02A03GeometricTubeDeformation.reconstructionAvoidsLeftCore_rightTubeCorePolar_of_im_ne_zero",
-      :type
-      "forall (u : Circle) (n : Complex), n.im != 0 -> rightTubeCorePolarReconstruction u n ∉ Set.range apm_t02a03_leftCore"},
-     :seat "topo-8"}},
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Analyze the zero-height planar slice of rightTubeCorePolarReconstruction against the left-core circle, then construct the angular stage so its planar trajectory avoids the exact intersection locus; combine that result with this height criterion and concatenate with the radial stage.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["Existing linter warning at line 62: unnecessarySimpa; no new warnings"],
+    :missing-theorems [],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms [propext Classical.choice Quot.sound],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :scope-blob "ccd5f794786221073d2cb6af1bff11a6feb1c144",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/t02a03_core_reconstruction_height_avoidance_probe.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/t02a03_core_reconstruction_height_avoidance_probe.lean",
+      :exit 0,
+      :output
+      "a229ee17509ec4112f59fc5a43ea071da9cc2216f87fc27a7627ee023113374f  /tmp/t02a03_core_reconstruction_height_avoidance_probe.lean"}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeDeformation.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "git diff --check -- ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "5666f5f842e5b1633055333318c58fd3e46d473f",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.reconstructionAvoidsLeftCore_rightTubeCorePolar_of_im_ne_zero",
+    :fixture
+    {:path
+     "/tmp/t02a03_core_reconstruction_height_avoidance_probe.lean",
+     :sha256
+     "a229ee17509ec4112f59fc5a43ea071da9cc2216f87fc27a7627ee023113374f"},
+    :finding
+    "Every point in the frozen left-core range has third coordinate zero, while rightTubeCorePolarReconstruction u n has third coordinate n.im. Thus a nonzero imaginary normal component rules out left-core membership directly.",
+    :seat "topo-6"},
    :phase :implementation,
    :type
    "forall (u : Circle) (n : Complex), n.im != 0 -> rightTubeCorePolarReconstruction u n ∉ Set.range apm_t02a03_leftCore",
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/core-polar-height-left-core-avoidance",
