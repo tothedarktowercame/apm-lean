@@ -79313,6 +79313,18 @@
      {:cmd "closure no-sorry scan", :exit 1, :expected-exit 1}
      {:cmd "Main placeholder count", :exit 0, :output "0"}
      {:cmd "git show --check 1f33738c4", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791759586337-5950-3799266b",
+     :commands
+     ["git show/diff/check 1f33738c"
+      "verify committed fixture SHA-256 and blobs"
+      "lake env lean ConstructionTargets/t97A04Closure.lean"
+      "lake env lean problems/t97A04/lean/Main.lean"
+      "registry fingerprint, placeholders, ancestry, blueprint checks"],
+     :finding
+     "PASS: 1f33738c is new after history a58fb440; both changed paths are scoped, closure/blueprint blobs match, and fixture SHA-256 is 11fd62daf8ddb00a3eea7a567671476102f84add525b8481f36d256b0db54d9e. Group-to-module comparison naturality correctly transports H2=3id; Main evaluates it pointwise and assembles H0/H1/H2 in the frozen order. Both Lean gates pass with only propext, Classical.choice, Quot.sound; registry 131/0; frozen hash ca1b2cb3c6594276811618321d5c0604c2f38fc4594a6b21ae161a711a923a34 unchanged; closure/Main placeholders 0/0. B10-B11 and the registered theorem are complete."},
     :commit "1f33738c4a05849574345224852d462ce293ec0c",
     :commits
     ["a58fb4403475f91ca2b7f45699abba30dbe50339"
@@ -79325,7 +79337,7 @@
      :sha256
      "11fd62daf8ddb00a3eea7a567671476102f84add525b8481f36d256b0db54d9e"}},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -80988,7 +81000,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "ConstructionTargets.T97A04Closure.bridge3",
@@ -80998,7 +81010,9 @@
     :reported-by [:program-2026-10-11-close-t97a04],
     :type "B10 bridge3",
     :area "mv-connecting-naturality",
-    :proved-in :program-2026-10-11-close-t97a04},
+    :proved-in :program-2026-10-11-close-t97a04,
+    :banked-by :program-2026-10-11-close-t97a04,
+    :banked-commit "1f33738c4a05849574345224852d462ce293ec0c"},
    :id :lemma-constructiontargets-t97a04closure-bridge3,
    :kind :lemma,
    :depends-on
