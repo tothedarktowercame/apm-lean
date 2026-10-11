@@ -78528,7 +78528,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -78544,10 +78544,137 @@
     "forall (t : unitInterval) (p : RightTubeMinusLeftCore), (((1-2*(t:ℝ):ℝ):ℂ) + ((2*(t:ℝ):ℝ):ℂ)*rotatedEndpointWaypoint p) = 0 -> 0 < (t : ℝ)",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-rotateden-cc5638eb6aa7,
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-t02a03geometrictubedeformation-rotatedendpointwaypoint-depar],
+   :other-consumers []}
+  {:consumer :t94A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t94a08_regularLevelSet_quadratic1",
+    :type "  (found in problems/t94A08/lean/Main.lean:88)"},
+   :lemma
+   {:name "apm_t94a08_regularLevelSet_quadratic1",
+    :reported-by [:owner],
+    :type "  (found in problems/t94A08/lean/Main.lean:88)",
+    :proved-in :owner},
+   :id :lemma-apm-t94a08-regularlevelset-quadratic1,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t94A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "affineChart_homeomorph",
+    :type
+    "The nonzero-i projective patch is open and homeomorphic to ℂ²  (size: 250-450 lines / 1-2 weeks)"},
+   :lemma
+   {:name "affineChart_homeomorph",
+    :reported-by [:owner],
+    :type
+    "The nonzero-i projective patch is open and homeomorphic to ℂ²  (size: 250-450 lines / 1-2 weeks)",
+    :area "projective-affine-chart-homeomorph"},
+   :id :lemma-affinechart-homeomorph,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t95A04 :t96A07 :t99J05]}
+  {:consumer :t94A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "sigma1_local_plane_charts",
+    :type
+    "apm_t94a08_IsRealTwoManifold apm_t94a08_sigma1  (size: 120-220 lines / 2-4 days)"},
+   :lemma
+   {:name "sigma1_local_plane_charts",
+    :reported-by [:owner],
+    :type
+    "apm_t94a08_IsRealTwoManifold apm_t94a08_sigma1  (size: 120-220 lines / 2-4 days)",
+    :area "projective-affine-chart-homeomorph"},
+   :id :lemma-sigma1-local-plane-charts,
+   :kind :lemma,
+   :depends-on [:lemma-affinechart-homeomorph],
+   :other-consumers []}
+  {:consumer :t94A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "nodal_punctured_neighborhood_disconnected",
+    :type
+    "Every sufficiently small punctured neighborhood of the sigma2 node is disconnected  (size: 150-300 lines / 3-7 days)"},
+   :lemma
+   {:name "nodal_punctured_neighborhood_disconnected",
+    :reported-by [:owner],
+    :type
+    "Every sufficiently small punctured neighborhood of the sigma2 node is disconnected  (size: 150-300 lines / 3-7 days)",
+    :area "projective-affine-chart-homeomorph"},
+   :id :lemma-nodal-punctured-neighborhood-disconnected,
+   :kind :lemma,
+   :depends-on [:lemma-affinechart-homeomorph],
+   :other-consumers []}
+  {:consumer :t94A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t94a08_nodal_not_manifold_at",
+    :type
+    "¬ apm_t94a08_IsRealTwoManifoldAt apm_t94a08_sigma2 apm_t94a08_node  (size: 80-140 lines / 1-2 days)"},
+   :lemma
+   {:name "apm_t94a08_nodal_not_manifold_at",
+    :reported-by [:owner],
+    :type
+    "¬ apm_t94a08_IsRealTwoManifoldAt apm_t94a08_sigma2 apm_t94a08_node  (size: 80-140 lines / 1-2 days)",
+    :area "projective-affine-chart-homeomorph"},
+   :id :lemma-apm-t94a08-nodal-not-manifold-at,
+   :kind :lemma,
+   :depends-on [:lemma-nodal-punctured-neighborhood-disconnected],
+   :other-consumers []}
+  {:consumer :t94A10,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t94A10_bridge_solidAngle_closed",
+    :type
+    "∀ x≠0, DifferentiableAt ℝ ambientExtension x ∧ extDeriv ambientExtension x = 0  (size: 100-180 lines / 1-2 days)"},
+   :lemma
+   {:name "apm_t94A10_bridge_solidAngle_closed",
+    :reported-by [:owner],
+    :type
+    "∀ x≠0, DifferentiableAt ℝ ambientExtension x ∧ extDeriv ambientExtension x = 0  (size: 100-180 lines / 1-2 days)",
+    :area "manifold-form-calculus"},
+   :id :lemma-apm-t94a10-bridge-solidangle-closed,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t94A10,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t94A10_bridge_solidAngle_not_exact",
+    :type
+    "¬∃ eta, differentiable ambient extension etaTilde ∧ extDeriv etaTilde = omega  (size: 180-300 lines / 3-7 days)"},
+   :lemma
+   {:name "apm_t94A10_bridge_solidAngle_not_exact",
+    :reported-by [:owner],
+    :type
+    "¬∃ eta, differentiable ambient extension etaTilde ∧ extDeriv etaTilde = omega  (size: 180-300 lines / 3-7 days)",
+    :area "periodic-stokes-square"},
+   :id :lemma-apm-t94a10-bridge-solidangle-not-exact,
+   :kind :lemma,
+   :depends-on [:lemma-apm-t94a10-bridge-solidangle-closed],
    :other-consumers []}]}

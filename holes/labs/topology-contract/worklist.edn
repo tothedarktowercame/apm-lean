@@ -115208,6 +115208,94 @@
    :lemma-pointwedgevankampen-multiplicativeintequivfreegroupfinone,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t92J08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t92J08_blowupCurve_isMIntegralCurveOn",
+    :type "  (found in problems/t92J08/lean/Main.lean:44)"},
+   :lemma
+   {:name "apm_t92J08_blowupCurve_isMIntegralCurveOn",
+    :reported-by [:owner],
+    :type "  (found in problems/t92J08/lean/Main.lean:44)",
+    :proved-in :owner},
+   :id :lemma-apm-t92j08-blowupcurve-ismintegralcurveon,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t92J08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t92J08_bridge_1",
+    :type
+    "∃ ε>0, ∀ x, ∃ γ, γ 0=x ∧ IsMIntegralCurveOn γ v (Ioo (-ε) ε)  (size: 100-180 lines / 1-2 days)"},
+   :lemma
+   {:name "apm_t92J08_bridge_1",
+    :reported-by [:owner],
+    :type
+    "∃ ε>0, ∀ x, ∃ γ, γ 0=x ∧ IsMIntegralCurveOn γ v (Ioo (-ε) ε)  (size: 100-180 lines / 1-2 days)",
+    :area "manifold-uniform-local-flow"},
+   :id :lemma-apm-t92j08-bridge-1,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t98A06]}
+  {:consumer :t92J08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t92J08_bridge_2",
+    :type
+    "¬∃ δ, IsMIntegralCurve δ quadraticField ∧ EqOn blowupCurve δ (Iio 1)  (size: 30-60 lines / 4-8 hours)"},
+   :lemma
+   {:name "apm_t92J08_bridge_2",
+    :reported-by [:owner],
+    :type
+    "¬∃ δ, IsMIntegralCurve δ quadraticField ∧ EqOn blowupCurve δ (Iio 1)  (size: 30-60 lines / 4-8 hours)",
+    :area "manifold-uniform-local-flow"},
+   :id :lemma-apm-t92j08-bridge-2,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t94A07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t94a07_local_fixed_point_packet",
+    :type
+    "At every p in fixedPoints: tangent=span basis, DhalfTurn basis=-basis, det localMatrix=4, local index=1, and IsLefschetzFixedPoint  (size: 100-180 lines / 1-2 days)"},
+   :lemma
+   {:name "apm_t94a07_local_fixed_point_packet",
+    :reported-by [:owner],
+    :type
+    "At every p in fixedPoints: tangent=span basis, DhalfTurn basis=-basis, det localMatrix=4, local index=1, and IsLefschetzFixedPoint  (size: 100-180 lines / 1-2 days)",
+    :area "lefschetz-local-index"},
+   :id :lemma-apm-t94a07-local-fixed-point-packet,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t94A07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t94a07_halfTurn_not_homotopic",
+    :type
+    "¬ apm_t94a07_IsHomotopyToIdentity R r  (size: 80-140 lines / 1-2 days)"},
+   :lemma
+   {:name "apm_t94a07_halfTurn_not_homotopic",
+    :reported-by [:owner],
+    :type
+    "¬ apm_t94a07_IsHomotopyToIdentity R r  (size: 80-140 lines / 1-2 days)",
+    :area "circle-map-degree"},
+   :id :lemma-apm-t94a07-halfturn-not-homotopic,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01

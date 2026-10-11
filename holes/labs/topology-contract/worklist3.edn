@@ -19206,7 +19206,7 @@
    :other-consumers []}
   {:consumer :t00A02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -19219,13 +19219,197 @@
     :reported-by [:program-2026-10-11-deck-group-quotient-pi1],
     :type
     "Under the repaired final hypotheses, for every g : G there exists a unique continuous F : C(X,X) with F x = g • x and quotientMk ∘ F = quotientMk",
-    :area "deck-group-quotient-pi1"},
+    :area "deck-group-quotient-pi1",
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean"]},
    :id
    :lemma-constructiontargets-deckgroupquotientfundamentalgroup-orbitprojection-existsuniq,
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-deckgroupquotientfundamentalgroup-quotientmk-iscoveringmap],
-   :other-consumers [:t92J05 :t93J03 :t99J01 :t00J07]}],
+   :other-consumers [:t92J05 :t93J03 :t99J01 :t00J07]}
+  {:consumer :t93A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "torusAtlas",
+    :type
+    "SmoothAtlas whose charts make projection : Plane → Torus a local diffeomorphism  (size: 300-600 lines / 2-5 weeks)"},
+   :lemma
+   {:name "torusAtlas",
+    :reported-by [:owner],
+    :type
+    "SmoothAtlas whose charts make projection : Plane → Torus a local diffeomorphism  (size: 300-600 lines / 2-5 weeks)",
+    :area "torus-quotient-smooth-atlas"},
+   :id :lemma-torusatlas,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t97A05 :t97A06 :t98J06]}
+  {:consumer :t93A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "torus_projection_fibers",
+    :type
+    "projection x = projection y ↔ ∃ k : Fin 2 → ℤ, ∀ i, y i = x i + k i  (size: 40-80 lines / 4-8 hours)"},
+   :lemma
+   {:name "torus_projection_fibers",
+    :reported-by [:owner],
+    :type
+    "projection x = projection y ↔ ∃ k : Fin 2 → ℤ, ∀ i, y i = x i + k i  (size: 40-80 lines / 4-8 hours)",
+    :area "torus-quotient-smooth-atlas"},
+   :id :lemma-torus-projection-fibers,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t93A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "periodic_form_descent",
+    :type
+    "Existence and uniqueness of a smooth torus 2-form whose pullback is sourceForm  (size: 180-300 lines / 3-7 days)"},
+   :lemma
+   {:name "periodic_form_descent",
+    :reported-by [:owner],
+    :type
+    "Existence and uniqueness of a smooth torus 2-form whose pullback is sourceForm  (size: 180-300 lines / 3-7 days)",
+    :area "torus-quotient-smooth-atlas"},
+   :id :lemma-periodic-form-descent,
+   :kind :lemma,
+   :depends-on [:lemma-torusatlas :lemma-torus-projection-fibers],
+   :other-consumers [:t97A06 :t98J06]}
+  {:consumer :t93A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "torus_form_integral_quarter",
+    :type "torusIntegral form = 1/4  (size: 80-140 lines / 1-2 days)"},
+   :lemma
+   {:name "torus_form_integral_quarter",
+    :reported-by [:owner],
+    :type "torusIntegral form = 1/4  (size: 80-140 lines / 1-2 days)",
+    :area "periodic-stokes-square"},
+   :id :lemma-torus-form-integral-quarter,
+   :kind :lemma,
+   :depends-on [:lemma-periodic-form-descent],
+   :other-consumers []}
+  {:consumer :t93A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "periodic_form_not_exact",
+    :type "¬ IsExact form  (size: 200-400 lines / 1-2 weeks)"},
+   :lemma
+   {:name "periodic_form_not_exact",
+    :reported-by [:owner],
+    :type "¬ IsExact form  (size: 200-400 lines / 1-2 weeks)",
+    :area "periodic-stokes-square"},
+   :id :lemma-periodic-form-not-exact,
+   :kind :lemma,
+   :depends-on [:lemma-periodic-form-descent],
+   :other-consumers []}
+  {:consumer :t93A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "primitive_calculus_packet",
+    :type
+    "IsSmooth primitive ∧ exteriorDerivative primitive = sourceForm ∧ parallelogramIntegral primitive = 1/4  (size: 150-250 lines / 2-4 days)"},
+   :lemma
+   {:name "primitive_calculus_packet",
+    :reported-by [:owner],
+    :type
+    "IsSmooth primitive ∧ exteriorDerivative primitive = sourceForm ∧ parallelogramIntegral primitive = 1/4  (size: 150-250 lines / 2-4 days)",
+    :area "periodic-stokes-square"},
+   :id :lemma-primitive-calculus-packet,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t94J04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "surface_recognition_genus_two",
+    :type
+    "The frozen H1/H2 signature implies Nonempty (F ≃ₜ Surface true 2)  (size: 800+ lines / 1-3 months)"},
+   :lemma
+   {:name "surface_recognition_genus_two",
+    :reported-by [:owner],
+    :type
+    "The frozen H1/H2 signature implies Nonempty (F ≃ₜ Surface true 2)  (size: 800+ lines / 1-3 months)",
+    :area "surface-classification"},
+   :id :lemma-surface-recognition-genus-two,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t92J05]}
+  {:consumer :t94J04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "surface_subgroup_connected_cover",
+    :type
+    "An index-k subgroup H ≤ FundamentalGroup F p yields a connected k-sheet cover with fundamental group isomorphic to H  (size: 400+ lines / 2-5 weeks)"},
+   :lemma
+   {:name "surface_subgroup_connected_cover",
+    :reported-by [:owner],
+    :type
+    "An index-k subgroup H ≤ FundamentalGroup F p yields a connected k-sheet cover with fundamental group isomorphic to H  (size: 400+ lines / 2-5 weeks)",
+    :area "covering-subgroup-correspondence"},
+   :id :lemma-surface-subgroup-connected-cover,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t96A01 :t97A03 :t99J01]}
+  {:consumer :t94J04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "finite_surface_cover_genus",
+    :type
+    "A connected k-sheet cover of Sigma2 is homeomorphic to Surface true (k+1)  (size: 400+ lines / 2-5 weeks)"},
+   :lemma
+   {:name "finite_surface_cover_genus",
+    :reported-by [:owner],
+    :type
+    "A connected k-sheet cover of Sigma2 is homeomorphic to Surface true (k+1)  (size: 400+ lines / 2-5 weeks)",
+    :area "euler-characteristic-covers"},
+   :id :lemma-finite-surface-cover-genus,
+   :kind :lemma,
+   :depends-on
+   [:lemma-surface-recognition-genus-two
+    :lemma-surface-subgroup-connected-cover],
+   :other-consumers [:t91J05 :t96A01 :t97J02]}
+  {:consumer :t94J04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t94J04_bridge_equal_index_subgroups",
+    :type
+    "For equal finite index k≥2 subgroups H K of pi1(F), Nonempty (H ≃* K)  (size: 50-100 lines / 1 day)"},
+   :lemma
+   {:name "apm_t94J04_bridge_equal_index_subgroups",
+    :reported-by [:owner],
+    :type
+    "For equal finite index k≥2 subgroups H K of pi1(F), Nonempty (H ≃* K)  (size: 50-100 lines / 1 day)",
+    :area "surface-classification"},
+   :id :lemma-apm-t94j04-bridge-equal-index-subgroups,
+   :kind :lemma,
+   :depends-on
+   [:lemma-surface-recognition-genus-two
+    :lemma-surface-subgroup-connected-cover
+    :lemma-finite-surface-cover-genus],
+   :other-consumers []}],
  :consumer-baselines {},
  :statuses
  #{:open
