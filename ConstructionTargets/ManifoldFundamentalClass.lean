@@ -1013,6 +1013,19 @@ theorem correctedLocalNormalizationAutomorphism_hom_eq_neg_iff
     rw [← correctedLocalGeneratorCoefficient_eq_automorphism_one]
     exact h
 
+/-- The hom of the corrected normalization automorphism is its defining
+three-factor normalization composite. -/
+theorem correctedLocalNormalizationAutomorphism_hom
+    (k : ℕ) {M : Type} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M) :
+    (correctedLocalNormalizationAutomorphism k x).hom =
+      (forgetIntModules.mapIso
+        (CoefficientChartLocal.localIso ℤ k x)).inv ≫
+      (integralRelativeHomologyComparisonWithTransport
+        (deletedPoint x) (k + 2)).hom ≫
+      (ambientLocalNormalization k x).hom := by
+  rfl
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -1077,3 +1090,4 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient_eq_one_of_ne_neg_one
 #print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient_eq_automorphism_one
 #print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_iff
+#print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom
