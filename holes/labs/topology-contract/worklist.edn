@@ -116380,6 +116380,18 @@
     {:commit "adb92f63dae858c369c9eb9e67f31277a678950e",
      :next
      "Implement B2 localCoordinateField and localCoordinateField_contDiffAt in ConstructionTargets/t92J08Closure.lean."},
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791724887721-5414-0b18448e",
+     :commands
+     ["git show/diff-tree adb92f63dae858c369c9eb9e67f31277a678950e"
+      "recorded-tree SHA-256, exact-scope, diff-check, and placeholder-delta verification"
+      "python3 scripts/statement-registry.py check"
+      "lake env lean ConstructionTargets/t92J08Closure.lean"
+      "lake env lean problems/t92J08/lean/Main.lean"],
+     :finding
+     "PASS: commit adb92f63 adds new compiled, placeholder-free B1 progress after the blueprint milestone. The proof correctly shrinks the Picard state radius inside an arbitrary prescribed neighbourhood, retains positive time and initial radii, constructs one closed-ball family, proves target containment, and converts within-derivatives to ordinary derivatives only on the open interval. Scope and hashes match, only the consumer's pre-existing placeholder remains, standard axioms are used, and B2-B6 are explicitly listed as remaining."},
     :commit "adb92f63dae858c369c9eb9e67f31277a678950e",
     :changed-paths
     ["ConstructionTargets/t92J08Closure.lean"
@@ -116397,7 +116409,7 @@
       {:id :B6, :status :planned}]},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t92J08/lean/Main.lean"
     "problems/t92J08/status.json"
@@ -116413,7 +116425,7 @@
     ["lake env lean problems/t92J08/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Blueprint written. The six-node route separates prescribed-target Euclidean Picard-Lindelöf control, the exact varying-tangent-space coordinate field, uniform chart transport, public neighbourhood uniformity, compact finite-subcover extraction, and the frozen bridge adapter. Per the blueprint gate, formalization waits for independent mathematical review.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Program milestone completed. Blueprint node B1 is proved: the C1 Euclidean vector field admits one positive time and initial radius for a closed-ball family of solutions, and every solution remains in an arbitrary prescribed neighbourhood of the centre. B2-B6 remain.",
    :id :program-2026-10-11-close-t92j08,
    :kind :final-adapter,
    :campaign-priority 42,
@@ -116424,7 +116436,11 @@
    [{:job 1,
      :commit "d2e9004ddfdbd5b6d3296376ece3955558ed7ce2",
      :reason
-     "Blueprint written. The six-node route separates prescribed-target Euclidean Picard-Lindelöf control, the exact varying-tangent-space coordinate field, uniform chart transport, public neighbourhood uniformity, compact finite-subcover extraction, and the frozen bridge adapter. Per the blueprint gate, formalization waits for independent mathematical review."}]}
+     "Blueprint written. The six-node route separates prescribed-target Euclidean Picard-Lindelöf control, the exact varying-tangent-space coordinate field, uniform chart transport, public neighbourhood uniformity, compact finite-subcover extraction, and the frozen bridge adapter. Per the blueprint gate, formalization waits for independent mathematical review."}
+    {:job 2,
+     :commit "adb92f63dae858c369c9eb9e67f31277a678950e",
+     :reason
+     "Program milestone completed. Blueprint node B1 is proved: the C1 Euclidean vector field admits one positive time and initial radius for a closed-ball family of solutions, and every solution remains in an arbitrary prescribed neighbourhood of the centre. B2-B6 remain."}]}
   {:consumer :t97A07,
    :phase :implementation,
    :state :open,
@@ -117339,7 +117355,7 @@
    :other-consumers []}
   {:consumer :t92J08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t92J08Closure.exists_uniform_local_flow_in_nhds",
@@ -117351,7 +117367,9 @@
     :type
     "A C1 vector field on a complete real normed space has one positive existence time for every initial point in a positive closed ball, with every solution remaining in a prescribed neighbourhood",
     :area "manifold-uniform-local-flow",
-    :proved-in :program-2026-10-11-close-t92j08},
+    :proved-in :program-2026-10-11-close-t92j08,
+    :banked-by :program-2026-10-11-close-t92j08,
+    :banked-commit "adb92f63dae858c369c9eb9e67f31277a678950e"},
    :id :lemma-t92j08closure-exists-uniform-local-flow-in-nhds,
    :kind :lemma,
    :depends-on [],
