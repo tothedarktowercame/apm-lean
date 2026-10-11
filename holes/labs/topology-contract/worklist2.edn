@@ -79329,13 +79329,24 @@
       :exit 1,
       :finding
       "Removed a solved tactic and supplied Circle path-connectedness."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791726245142-5433-17fdf1f3",
+     :commands
+     ["git show/check/diff-tree bb0f0f77d"
+      "lake env lean ConstructionTargets/t97A04Closure.lean"
+      "lake env lean problems/t97A04/lean/Main.lean"
+      "statement-registry check/fingerprint and placeholder counts"],
+     :finding
+     "PASS: new compiled progress after the latest history entry. Commit changes only the scoped closure and correctly transfers the π1 power formula through degree-one Hurewicz naturality and surjectivity, yielding H1(circleZPow a)=a times identity with the claimed orientation. Blob matches 3da36251. Closure is sorry-free with standard axioms; Main compiles with unchanged 2 placeholders. Registry is 131/0 and frozen statement SHA-256 remains ca1b2cb3c6594276811618321d5c0604c2f38fc4594a6b21ae161a711a923a34. Transported overlap summands and B6-B11 remain listed."},
     :commit "bb0f0f77d8953dc78dd564e000f3d4a5b29d0894",
     :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
     :finding
     "Hurewicz transfer proves H1(circleZPow a)=a times identity.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79398,6 +79409,9 @@
      :reason :program-progress-committed}
     {:job 4,
      :commit "01c62dfc5a7368191aaa1a3d97dac4c7fc1b1e6d",
+     :reason :program-progress-committed}
+    {:job 5,
+     :commit "bb0f0f77d8953dc78dd564e000f3d4a5b29d0894",
      :reason :program-progress-committed}]}
   {:consumer :t96A07,
    :stop-count 1,
@@ -79787,7 +79801,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "ConstructionTargets.T97A04Closure.circleZPow_H1",
@@ -79797,7 +79811,9 @@
     :reported-by [:program-2026-10-11-close-t97a04],
     :type "zpow a acts by a on H1",
     :area "mv-connecting-naturality",
-    :proved-in :program-2026-10-11-close-t97a04},
+    :proved-in :program-2026-10-11-close-t97a04,
+    :banked-by :program-2026-10-11-close-t97a04,
+    :banked-commit "bb0f0f77d8953dc78dd564e000f3d4a5b29d0894"},
    :id :lemma-constructiontargets-t97a04closure-circlezpow-h1,
    :kind :lemma,
    :depends-on
