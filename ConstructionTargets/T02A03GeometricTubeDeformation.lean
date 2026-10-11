@@ -1365,6 +1365,43 @@ theorem zeroHeightCoreNormalDetour_endpoints_midpoint
         zeroHeightSignedImaginaryWaypoint p := by
   norm_num [zeroHeightCoreNormalDetour]
 
+theorem continuous_zeroHeightCoreNormalDetour :
+    Continuous (fun tp : unitInterval × RightTubeMinusLeftCore =>
+      zeroHeightCoreNormalDetour tp.1 tp.2) := by
+  have hn := rightTubeCoreTubularCoordinates_continuous.1
+  have hc : Continuous
+      ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_circleMeridian := by
+    unfold ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_circleMeridian
+    apply (PiLp.continuous_toLp 2 _).comp
+    apply continuous_pi
+    intro i
+    fin_cases i <;> simp <;> fun_prop
+  have hn₀ : Continuous (fun p : RightTubeMinusLeftCore =>
+      rightTubeCoreNormalComplex
+        (ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_circleMeridian
+          (rightTubeMeridianCoordinate p))) :=
+    hn.comp (hc.comp rightTubeMeridianCoordinate.continuous)
+  have hn₁ : Continuous (fun p : RightTubeMinusLeftCore =>
+      rightTubeCoreNormalComplex p.1) :=
+    hn.comp continuous_subtype_val
+  have hm : Continuous (fun p : RightTubeMinusLeftCore =>
+      (rightTubeMeridianCoordinate p : ℂ).re) :=
+    Complex.continuous_re.comp
+      (continuous_subtype_val.comp rightTubeMeridianCoordinate.continuous)
+  have hw : Continuous zeroHeightSignedImaginaryWaypoint := by
+    unfold zeroHeightSignedImaginaryWaypoint
+    fun_prop
+  unfold zeroHeightCoreNormalDetour
+  apply continuous_if_le
+  · fun_prop
+  · fun_prop
+  · fun_prop
+  · fun_prop
+  · intro tp h
+    simp only at h
+    rw [h]
+    norm_num
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -1418,3 +1455,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.coreNormalAffineLeg_radius_and_im_ne_zero
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeight_specializedCoreNormalAffineLegs_radius_and_im_ne_zero
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCoreNormalDetour_endpoints_midpoint
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.continuous_zeroHeightCoreNormalDetour
