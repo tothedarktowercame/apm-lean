@@ -374,6 +374,27 @@ theorem twoCircleOverlapShear_branch (a b : ℤ) (q : Circle ⊕ Circle) :
       (twoCircleBranch_overlap_toFun _).symm
     _ = _ := twoCircleBranch_retraction q
 
+theorem twoCircleBranch_inl (z : Circle) :
+    twoCircleBranch (Sum.inl z) = false := by
+  dsimp [twoCircleBranch, boolTimesCircleHomeomorphTwoCircles]
+  change Equiv.boolEquivPUnitSumPUnit.symm (Sum.inl PUnit.unit) = false
+  rfl
+
+theorem twoCircleBranch_inr (z : Circle) :
+    twoCircleBranch (Sum.inr z) = true := by
+  dsimp [twoCircleBranch, boolTimesCircleHomeomorphTwoCircles]
+  change Equiv.boolEquivPUnitSumPUnit.symm (Sum.inr PUnit.unit) = true
+  rfl
+
+theorem twoCircleBranchFold_reconstruct (q : Circle ⊕ Circle) :
+    boolTimesCircleHomeomorphTwoCircles
+      (twoCircleBranch q, twoCircleFold q) = q := by
+  let p := boolTimesCircleHomeomorphTwoCircles.symm q
+  have hq : boolTimesCircleHomeomorphTwoCircles p = q :=
+    boolTimesCircleHomeomorphTwoCircles.apply_symm_apply q
+  rw [← hq, twoCircleBranch_boolTimesCircle,
+    twoCircleFold_boolTimesCircle]
+
 theorem twoCircleOverlapShear_fold_apply (a b : ℤ) (q : Circle ⊕ Circle) :
     twoCircleFold (twoCircleOverlapShear a b q) =
       twoCircleFold q ^ a *
@@ -460,6 +481,34 @@ def twoCircleOverlapShearLeftFold (a b : ℤ) : C(Circle, Circle) :=
 /-- The circle coordinate of the transported right overlap summand. -/
 def twoCircleOverlapShearRightFold (a b : ℤ) : C(Circle, Circle) :=
   twoCircleFold.comp (twoCircleOverlapShearRight a b)
+
+theorem twoCircleOverlapShearLeft_eq_inl_fold (a b : ℤ) :
+    twoCircleOverlapShearLeft a b =
+      circleSumInl.comp (twoCircleOverlapShearLeftFold a b) := by
+  ext z
+  let q := twoCircleOverlapShear a b (Sum.inl z)
+  have hb : twoCircleBranch q = false := by
+    exact (twoCircleOverlapShear_branch a b (Sum.inl z)).trans
+      (twoCircleBranch_inl z)
+  have hq := twoCircleBranchFold_reconstruct q
+  rw [hb] at hq
+  have hi := twoCircleBranchFold_reconstruct (Sum.inl (twoCircleFold q))
+  rw [twoCircleBranch_inl, twoCircleFold_inl] at hi
+  exact hq.symm.trans hi
+
+theorem twoCircleOverlapShearRight_eq_inr_fold (a b : ℤ) :
+    twoCircleOverlapShearRight a b =
+      circleSumInr.comp (twoCircleOverlapShearRightFold a b) := by
+  ext z
+  let q := twoCircleOverlapShear a b (Sum.inr z)
+  have hb : twoCircleBranch q = true := by
+    exact (twoCircleOverlapShear_branch a b (Sum.inr z)).trans
+      (twoCircleBranch_inr z)
+  have hq := twoCircleBranchFold_reconstruct q
+  rw [hb] at hq
+  have hi := twoCircleBranchFold_reconstruct (Sum.inr (twoCircleFold q))
+  rw [twoCircleBranch_inr, twoCircleFold_inr] at hi
+  exact hq.symm.trans hi
 
 /-- The integer power map which remains on either overlap component after
 the constant translation in the shear is removed. -/
@@ -1379,6 +1428,8 @@ theorem shearY_overlap_coordinate_of_degree_components (a b : ℤ)
 #print axioms twoCircleOverlapShearRight_H1
 #print axioms twoCircleOverlapShearLeftFold
 #print axioms twoCircleOverlapShearRightFold
+#print axioms twoCircleOverlapShearLeft_eq_inl_fold
+#print axioms twoCircleOverlapShearRight_eq_inr_fold
 #print axioms twoCircleOverlapShearLeftFold_H1
 #print axioms twoCircleOverlapShearRightFold_H1
 #print axioms overlapHomotopyEquivTwoCircles_inv_fst
@@ -1395,6 +1446,9 @@ theorem shearY_overlap_coordinate_of_degree_components (a b : ℤ)
 #print axioms overlapTwoCircles_inv_model
 #print axioms twoCircleBranch_retraction
 #print axioms twoCircleOverlapShear_branch
+#print axioms twoCircleBranch_inl
+#print axioms twoCircleBranch_inr
+#print axioms twoCircleBranchFold_reconstruct
 #print axioms twoCircleOverlapShear_fold_apply
 #print axioms twoCircleOverlapShearLeftFold_eq_affine
 #print axioms twoCircleOverlapShearRightFold_eq_affine
