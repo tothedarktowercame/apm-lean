@@ -70208,53 +70208,68 @@
    "single-consumer zero-height real-diameter endpoint certificate for the signed imaginary detour",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:residual
-     "Implement the banked endpoint certificate in scope, then construct norm-preserving departure and arrival arcs and a radius-bounded nonzero-imaginary corridor.",
-     :outcome :go,
-     :warnings [],
-     :axioms [propext Classical.choice Quot.sound],
-     :commands
-     [{:cmd
-       "lake env lean /tmp/t02a03_zero_height_core_normal_real_endpoints_probe.lean",
-       :exit 0,
-       :output
-       "realEndpoints_zeroHeight_rightTubeCoreNormals compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "sha256sum /tmp/t02a03_zero_height_core_normal_real_endpoints_probe.lean",
-       :exit 0,
-       :output
-       "eb5d82b7511a862112a5efaa346c36c5d8b1abb61f24d9add5604af26c04174f  /tmp/t02a03_zero_height_core_normal_real_endpoints_probe.lean"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_zero_height_core_normal_real_endpoints_probe.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}
-      {:cmd
-       "rg -n 'realEndpoints_zeroHeight_rightTubeCoreNormals' /tmp/t02a03_zero_height_core_normal_real_endpoints_probe.lean",
-       :exit 0,
-       :output
-       "7:theorem realEndpoints_zeroHeight_rightTubeCoreNormals\n18:#print axioms realEndpoints_zeroHeight_rightTubeCoreNormals"}],
-     :fixture
-     {:path
-      "/tmp/t02a03_zero_height_core_normal_real_endpoints_probe.lean",
-      :sha256
-      "eb5d82b7511a862112a5efaa346c36c5d8b1abb61f24d9add5604af26c04174f"},
-     :finding
-     "The placeholder-free fixture proves both zero-height core-normal endpoints have imaginary part zero. The meridian endpoint follows from the positive-factor height identity; the recovered input endpoint reduces directly to the frozen height coordinate.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
-      :declaration
-      "ConstructionTargets.T02A03GeometricTubeDeformation.realEndpoints_zeroHeight_rightTubeCoreNormals",
-      :type
-      "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> (rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p))).im = 0 ∧ (rightTubeCoreNormalComplex p.1).im = 0"},
-     :seat "topo-8"}},
+   {:placeholder-delta {:before 0, :after 0, :change 0},
+    :residual
+    "Construct norm-preserving departure and arrival arcs whose imaginary sign varies continuously with the meridian coordinate, join them through a nonzero-imaginary radius-bounded corridor, then treat the angular stage.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean:62:6: unnecessarySimpa (pre-existing)"
+     "The canonical checkout's .lake/packages is a real directory, so the frame-worktree symlink diagnostic does not apply cleanly here."],
+    :missing-theorems [],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms [propext Classical.choice Quot.sound],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :scope-blob "b129c633ae96c93491536098e0bbbe31750097a9",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0,
+      :output
+      "compiled; declaration axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "lake env lean /tmp/t02a03_zero_height_core_normal_real_endpoints_probe.lean",
+      :exit 0,
+      :output
+      "realEndpoints_zeroHeight_rightTubeCoreNormals compiled; axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "sha256sum /tmp/t02a03_zero_height_core_normal_real_endpoints_probe.lean",
+      :exit 0,
+      :output
+      "eb5d82b7511a862112a5efaa346c36c5d8b1abb61f24d9add5604af26c04174f  /tmp/t02a03_zero_height_core_normal_real_endpoints_probe.lean"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "git diff --check -- ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd
+      "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :diagnostic-history
+    [{:cmd
+      "test -L .lake/packages && test \"$(readlink -f .lake/packages)\" = /home/joe/code/apm-lean/.lake/packages",
+      :exit 1,
+      :finding
+      "This canonical checkout has a real .lake/packages directory; no package-authority mutation was made during the scoped theorem row."}],
+    :commit "c27acae4476bcd0f9e6ca7c051f2ffe80af668ff",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.realEndpoints_zeroHeight_rightTubeCoreNormals",
+    :fixture
+    {:path
+     "/tmp/t02a03_zero_height_core_normal_real_endpoints_probe.lean",
+     :sha256
+     "eb5d82b7511a862112a5efaa346c36c5d8b1abb61f24d9add5604af26c04174f"},
+    :finding
+    "For a zero-height input, the positive-factor height identity makes the meridian coordinate imaginary part zero, hence the meridian core normal is real; unfolding the recovered core normal makes its imaginary part the frozen height coordinate and therefore zero as well.",
+    :seat "topo-6"},
    :phase :implementation,
    :type
    "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> (rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p))).im = 0 ∧ (rightTubeCoreNormalComplex p.1).im = 0",
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/real-endpoints-zero-height-core-normals",
