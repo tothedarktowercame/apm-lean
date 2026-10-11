@@ -106582,6 +106582,8 @@
    :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
   {:consumer :t99J01,
    :stop-count 1,
+   :review-finding
+   "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma
    :lemma-twoopenfundamentalgroupoidpseudopushout-counit-base-component-identity,
    :evidence
@@ -106644,6 +106646,12 @@
       :exit 1,
       :finding
       "The attempted exact theorem proved the left conjunct by rfl; the right conjunct remained. Isolating inverseIdentityPseudoCocone.glue.hom.app at the overlap basepoint showed that even this glue-is-identity equation is not definitional after unfolding the four downstream inverse equivalences."}],
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1791709474230-4858-6695334c",
+     :finding
+     "extend Mathlib: state and prove the missing theorem in scope"},
     :commit nil,
     :changed-paths [],
     :fixture
@@ -106653,7 +106661,7 @@
      :status :self-axiomatized},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["ConstructionTargets/TwoOpenPseudopushoutCounitBaseIdentity.lean"],
    :dag-node
@@ -106678,6 +106686,7 @@
    :routes-2026-10-11-two-open-pseudopushout-counit-base-identity-106,
    :kind :reusable-theorem,
    :area "fundamental-group-wedge-of-circles",
+   :fail-count 1,
    :depends-on [],
    :current-residual
    "Combine this two-leg identity with the pseudo-span, connector, free-product representation, and single-object constituent normalizations to prove the composite counit component is identity.",
