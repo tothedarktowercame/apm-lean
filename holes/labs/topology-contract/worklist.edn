@@ -102730,8 +102730,83 @@
   {:bounded-exception
    "This single-consumer prerequisite descends both relation-invariant decoders and proves the exact left inverses needed for boundary-map injectivity.",
    :consumer :t97A01,
+   :evidence
+   {:placeholder-delta
+    {:source-before :absent,
+     :source-after 0,
+     :fixture-before 0,
+     :fixture-after 0},
+    :residual
+    "Apply the two left inverses to obtain injectivity, combine with banked surjectivity and continuity to form homeomorphisms, and prove literal ThreeCircles boundary formulas.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :missing-theorems
+    [{:name
+      "PolygonBoundaryThreeLoopDecoderLeftInverse.n3QuotientDecode_leftInverse",
+      :type "Function.LeftInverse n3QuotientDecode n3ThreeLoops",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on
+      ["PolygonBoundaryCircleDecoderRelationInvariant.n3CircleDecode_respects"
+       "PolygonThreeLoopHalfOpenNormalForm.threeEndpointLoops_halfOpen_rep"],
+      :area "polygon-surface-open-cover"}
+     {:name
+      "PolygonBoundaryThreeLoopDecoderLeftInverse.torusCrosscapQuotientDecode_leftInverse",
+      :type
+      "Function.LeftInverse torusCrosscapQuotientDecode torusCrosscapThreeLoops",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on
+      ["PolygonBoundaryCircleDecoderRelationInvariant.torusCrosscapCircleDecode_respects"
+       "PolygonThreeLoopHalfOpenNormalForm.threeEndpointLoops_halfOpen_rep"],
+      :area "polygon-surface-open-cover"}],
+    :statement-hashes {:registry "131/131 match"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/polygon-boundary-three-loop-decoder-left-inverse.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.PolygonBoundaryThreeLoopDecoderLeftInverse",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/polygon-boundary-three-loop-decoder-left-inverse.lean",
+      :exit 0}
+     {:cmd
+      "python3 comment-stripped source and fixture placeholder/axiom census",
+      :exit 0,
+      :finding "source 0; fixture 0"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :diagnostic-history [],
+    :commit "a7df601c50e742a452ea0d59b5157477cd1fe147",
+    :changed-paths
+    ["ConstructionTargets/PolygonBoundaryThreeLoopDecoderLeftInverse.lean"],
+    :fixture
+    {:path
+     "/tmp/polygon-boundary-three-loop-decoder-left-inverse.lean",
+     :sha256
+     "b448f4e1578f6d3d74b6a43e4ddf0470123b5f939cea6c3f59787cce5d876abf"},
+    :implementation
+    {:scope
+     ["ConstructionTargets/PolygonBoundaryThreeLoopDecoderLeftInverse.lean"],
+     :declarations
+     ["n3QuotientDecode"
+      "torusCrosscapQuotientDecode"
+      "n3QuotientDecode_first"
+      "n3QuotientDecode_second"
+      "n3QuotientDecode_third"
+      "torusCrosscapQuotientDecode_first"
+      "torusCrosscapQuotientDecode_second"
+      "torusCrosscapQuotientDecode_third"
+      "n3QuotientDecode_leftInverse"
+      "torusCrosscapQuotientDecode_leftInverse"]}},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonBoundaryThreeLoopDecoderLeftInverse.lean"],
    :dag-node
@@ -107409,11 +107484,12 @@
    {:name
     "PolygonBoundaryThreeLoopDecoderLeftInverse.n3QuotientDecode_leftInverse",
     :reported-by
-    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40
+     :routes-2026-10-11-polygon-boundary-three-loop-decoder-left-inverse-77],
     :type "Function.LeftInverse n3QuotientDecode n3ThreeLoops.",
     :area "polygon-surface-open-cover",
     :proved-in
-    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+    :routes-2026-10-11-polygon-boundary-three-loop-decoder-left-inverse-77},
    :id
    :lemma-polygonboundarythreeloopdecoderleftinverse-n3quotientdecode-leftinverse,
    :kind :lemma,
@@ -107434,12 +107510,13 @@
    {:name
     "PolygonBoundaryThreeLoopDecoderLeftInverse.torusCrosscapQuotientDecode_leftInverse",
     :reported-by
-    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40
+     :routes-2026-10-11-polygon-boundary-three-loop-decoder-left-inverse-77],
     :type
     "Function.LeftInverse torusCrosscapQuotientDecode torusCrosscapThreeLoops.",
     :area "polygon-surface-open-cover",
     :proved-in
-    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+    :routes-2026-10-11-polygon-boundary-three-loop-decoder-left-inverse-77},
    :id
    :lemma-polygonboundarythreeloopdecoderleftinverse-toruscrosscapquotientdecode-leftinver,
    :kind :lemma,
