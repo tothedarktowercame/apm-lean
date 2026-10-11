@@ -1,5 +1,6 @@
 import Mathlib
 import ConstructionTargets.RealProjectiveSmoothTarget
+import ConstructionTargets.t96A07Closure
 
 /-! # t96A07: transversality of the quadratic sphere/projective-plane map
 
@@ -31,6 +32,18 @@ def Transverse {M V : Type*} [TopologicalSpace M] [ChartedSpace (E 2) M]
       LinearMap.range (fderiv ℝ g y).toLinearMap = ⊤
 
 end T96A07
+
+namespace ConstructionTargets.T96A07Closure
+
+theorem sphereMap_antipodal (p : Sphere 2) :
+    T96A07.sphereMap (sphereAntipodalN 2 p) = T96A07.sphereMap p := by
+  simpa [T96A07.sphereMap,
+    crossTermSphereMap] using
+    crossTermSphereMap_antipodal p
+
+#print axioms sphereMap_antipodal
+
+end ConstructionTargets.T96A07Closure
 
 theorem apm_t96a07 :
     ∃ atlas : SmoothAtlas 2,
