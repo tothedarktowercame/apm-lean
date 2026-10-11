@@ -170,6 +170,53 @@ noncomputable def orbitEndpointMonodromyRaw
   rw [IsCoveringMap.monodromy_refl]
   exact Subtype.ext (one_smul G x).symm
 
+/-- Raw endpoint coordinates reverse fundamental-group multiplication because
+the endomorphism group multiplies in the order opposite categorical
+composition. -/
+theorem orbitEndpointMonodromyRaw_mul
+    {G X : Type*} [Group G] [TopologicalSpace X] [MulAction G X]
+    [ContinuousConstSMul G X] [ProperlyDiscontinuousSMul G X]
+    [LocallyCompactSpace X] [T2Space X] [SimplyConnectedSpace X]
+    [LocPathConnectedSpace X]
+    (free : ∀ g : G, ∀ x : X, g • x = x → g = 1) (x : X)
+    (a b : FundamentalGroup (MulAction.orbitRel.Quotient G X) (Quotient.mk _ x)) :
+    orbitEndpointMonodromyRaw free x (a * b) =
+      orbitEndpointMonodromyRaw free x b * orbitEndpointMonodromyRaw free x a := by
+  let E := orbitQuotientFiberEquiv free x
+  let cov := quotientMk_isCoveringMap free
+  apply E.injective
+  rw [orbitEndpointMonodromyRaw, Equiv.apply_symm_apply]
+  change cov.monodromy (FundamentalGroup.toPath (a * b)) ⟨x, rfl⟩ =
+    E (orbitEndpointMonodromyRaw free x b * orbitEndpointMonodromyRaw free x a)
+  change cov.monodromy ((FundamentalGroup.toPath b).trans
+      (FundamentalGroup.toPath a)) ⟨x, rfl⟩ = _
+  rw [IsCoveringMap.monodromy_trans_apply]
+  apply Subtype.ext
+  have hb : E (orbitEndpointMonodromyRaw free x b) =
+      cov.monodromy (FundamentalGroup.toPath b) ⟨x, rfl⟩ := by
+    rw [orbitEndpointMonodromyRaw, Equiv.apply_symm_apply]
+  rw [← hb]
+  calc
+    ((cov.monodromy (FundamentalGroup.toPath a)
+        (E (orbitEndpointMonodromyRaw free x b)) :
+          (Quotient.mk (MulAction.orbitRel G X) :
+            X → MulAction.orbitRel.Quotient G X) ⁻¹' {Quotient.mk _ x}) : X) =
+        orbitEndpointMonodromyRaw free x b •
+          (((cov.monodromy (FundamentalGroup.toPath a) ⟨x, rfl⟩ :
+            (Quotient.mk (MulAction.orbitRel G X) :
+              X → MulAction.orbitRel.Quotient G X) ⁻¹' {Quotient.mk _ x}) : X)) :=
+      orbitMonodromy_deck_equivariant free x a
+        (orbitEndpointMonodromyRaw free x b)
+    _ = orbitEndpointMonodromyRaw free x b •
+        (orbitEndpointMonodromyRaw free x a • x) := by
+      congr 1
+      change _ = (E (orbitEndpointMonodromyRaw free x a) : X)
+      rw [orbitEndpointMonodromyRaw, Equiv.apply_symm_apply]
+    _ = (orbitEndpointMonodromyRaw free x b *
+        orbitEndpointMonodromyRaw free x a) • x := (mul_smul _ _ _).symm
+    _ = (E (orbitEndpointMonodromyRaw free x b *
+        orbitEndpointMonodromyRaw free x a) : X) := rfl
+
 private abbrev CounterexampleGroup := Multiplicative (ZMod 2)
 
 private instance : TopologicalSpace CounterexampleGroup := ⊤
@@ -233,6 +280,7 @@ theorem freeProperlyDiscontinuousQuotient_fundamentalGroupEquiv_refuted :
 #print axioms orbitMonodromy_deck_equivariant
 #print axioms orbitEndpointMonodromyRaw
 #print axioms orbitEndpointMonodromyRaw_one
+#print axioms orbitEndpointMonodromyRaw_mul
 #print axioms indiscreteRegularAction_no_fundamentalGroupEquiv
 #print axioms freeProperlyDiscontinuousQuotient_fundamentalGroupEquiv_refuted
 

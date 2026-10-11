@@ -36,6 +36,11 @@ uniqueness clause to identify the selected global lift with translation by
 of path lifts. Evaluating at the endpoint proves that monodromy from `g • x`
 is the `g`-translate of monodromy from `x`.
 
+`orbitEndpointMonodromyRaw_mul` implements blueprint B6. Fundamental-group
+multiplication represents the path for the second factor followed by the
+first. `monodromy_trans_apply` and B5 therefore identify the composite lifted
+endpoint with the product of raw coordinates in the reversed order.
+
 ## Refutation of the frozen final statement
 
 The fixed theorem omits every separation hypothesis. This is not merely a gap
@@ -53,8 +58,7 @@ negates the exact universal proposition of the program's frozen final type.
 
 ## Remaining work for the repaired statement
 
-1. Use deck-equivariance to prove that raw endpoint coordinates reverse
-   multiplication; invert the raw coordinate to package
+1. Invert the raw coordinate to package
    `orbitEndpointMonodromy : FundamentalGroup _ _ →* G`.
 2. Prove surjectivity and identify its kernel with the image of the total
    space's fundamental group.
