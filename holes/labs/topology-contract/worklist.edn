@@ -113857,23 +113857,20 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
-    :residual
-    "Compare B3 actions with the literal wedge leg maps; then B12.",
+    :residual "Prove both B3 mapped-leg comparisons; then B12.",
     :outcome :stop,
     :warnings
-    [{:kind :upstream-lint}
-     {:kind :concurrent-worktree-change,
-      :path "ConstructionTargets/t97A04Closure.lean"}],
+    [{:kind :upstream-lint} {:kind :concurrent-worktree-change}],
     :missing-theorems
     [{:name
       "PointWedgeVanKampen.genericPointWedgeLegCoordinates_vanKampen",
-      :type "Free-product equivalence with literal leg coordinates",
+      :type "Literal-leg free-product equivalence",
       :status :partial,
       :consumers [:t99J01 :t01A03 :t92J06 :t97A01 :t97A03],
       :depends-on
@@ -113881,43 +113878,28 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "014de5773b7874c736a6d4817816ba5390f095f376c7887e8cb3d9a9f3f3fb70",
+     "f8f3093d1b988265e1d99c1ce60bb9740ce772e1f52a1b98be28ff2f49b5eba4",
      :documentation
-     "a6ee847dbc992ea30316e81e6609fa05bc8bc7dfa0920e4d0d09cefb8de9b592",
+     "3dff7a76d09b95b5d5cbfb3e35f464fc95a23fb1a699d72740fffb1a361ac446",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
-    :reason "B6 partial: normalization installed in B4/B5.",
+    :reason "B6 reduced to two mapped-leg equations.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
-      :exit 0,
-      :finding "Compiles; standard axioms."}
+      :exit 0}
      {:cmd "lake build ConstructionTargets.PointWedgeVanKampen",
       :exit 0}
-     {:cmd "python3 scripts/statement-registry.py check",
-      :exit 0,
-      :finding "131/131"}
-     {:cmd "placeholder/diff validation",
-      :exit 0,
-      :finding "Zero placeholders."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791739802127-5679-a696c618",
-     :commands
-     ["git show/diff-tree 71f8161b"
-      "hash/diff/placeholder checks"
-      "statement-registry.py check"
-      "lake env lean PointWedgeVanKampen.lean"
-      "lake build PointWedgeVanKampen"
-      "lake build ThreeCirclesFundamentalGroup (expected absent)"],
-     :finding
-     "PASS: new compiled, sorry-free B6 progress installs the proved counit inner-automorphism normalization consistently in the groupoid equivalence and based group coordinate. It changes only the target free-product coordinate; literal wedge-leg comparison and B12 remain listed. Exact two-file scope/frozen hashes match; zero placeholders; registry 131/131; standard axioms. Absent final target is a valid program STOP."},
-    :commit "71f8161b3d363e92c05b8831a5b63fd4dabc8ed5",
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "placeholder/diff validation", :exit 0}],
+    :diagnostic-history
+    [{:cmd "lean", :exit 1, :finding "Fixed names/equality."}
+     {:cmd "lean", :exit 1, :finding "Added implicits."}],
+    :commit "97451f233e6b5439afb8b858a4e34492b0250c56",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113927,7 +113909,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
