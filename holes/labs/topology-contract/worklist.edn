@@ -113857,7 +113857,7 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
@@ -113913,7 +113913,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -116527,6 +116527,19 @@
     [{:cmd "lake env lean ConstructionTargets/t97A07Closure.lean",
       :exit 1,
       :finding "Corrected syntax and differentiability degree."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791759639128-5952-13386690",
+     :commands
+     ["git show/diff-tree 563c5cf0"
+      "sha256/diff/placeholder checks"
+      "statement-registry.py check"
+      "lake env lean ConstructionTargets/t97A07Closure.lean"
+      "lake build ConstructionTargets.t97A07Closure"
+      "lake env lean problems/t97A07/lean/Main.lean"],
+     :finding
+     "PASS: new compiled sorry-free B2 progress proves the center fixed-chart fderivWithin equals mfderiv after smoothness supplies MDifferentiableAt; types stay in Euclidean model fibers and no distinct tangent fibers are identified. Exact two-file scope and frozen hashes match; reusable source has 0 placeholders; target retains its listed 1 existing sorry; registry 131/131; standard axioms. Nearby chart-transition equality and B3-B9 remain listed, so this is a valid program STOP."},
     :commit "563c5cf0a2d89c943ca8bf2dedff96864f5096bc",
     :changed-paths
     ["ConstructionTargets/t97A07Closure.lean"
@@ -116537,7 +116550,7 @@
      "5422728000d61d5c16d5d19b5d0236e3bc8ac440b307994163c40de15eddb6a8"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A07/lean/Main.lean"
     "problems/t97A07/status.json"
@@ -116553,7 +116566,7 @@
     ["lake env lean problems/t97A07/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B2 partial: chart fderivWithin continuity proved.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B2 centre coordinate derivative now equals mfderiv definitionally after smoothness supplies differentiability.",
    :id :program-2026-10-11-close-t97a07,
    :kind :final-adapter,
    :campaign-priority 44,
@@ -116570,7 +116583,11 @@
      :reason "B1 proved; B2-B9 remain."}
     {:job 3,
      :commit "c217ef5dd8cfbcb428b89ec86580ef7720c47db4",
-     :reason "B2 partial: chart fderivWithin continuity proved."}]}
+     :reason "B2 partial: chart fderivWithin continuity proved."}
+    {:job 4,
+     :commit "563c5cf0a2d89c943ca8bf2dedff96864f5096bc",
+     :reason
+     "B2 centre coordinate derivative now equals mfderiv definitionally after smoothness supplies differentiability."}]}
   {:consumer :t91J06,
    :phase :implementation,
    :state :open,
