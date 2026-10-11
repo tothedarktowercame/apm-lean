@@ -1,5 +1,6 @@
 import ConstructionTargets.T97A04FrozenH1Coordinate
 import ConstructionTargets.BoundaryTorusOpenCover
+import ConstructionTargets.BoundaryTorusMayerVietoris
 import ConstructionTargets.ProductionOpenCoverMayerVietoris
 
 open CategoryTheory CategoryTheory.Limits
@@ -12,6 +13,7 @@ open ConstructionTargets.SingularHomologyConcrete
 open ConstructionTargets.BoundaryTorusH2ConnectingIso
 open ConstructionTargets.T97A04FrozenH1Coordinate
 open ConstructionTargets.BoundaryTorusOpenCover
+open ConstructionTargets.BoundaryTorusMayerVietoris
 open ConstructionTargets.BooleanTwoCoverScaffold
 open ConstructionTargets.ProductionOpenCoverMayerVietoris
 open ConstructionTargets.SingularExcision
@@ -152,6 +154,35 @@ private theorem shearY_mapsTo_inter (a b : ℤ) :
       (frozenYCover.U ∩ frozenYCover.V)
       (frozenYCover.U ∩ frozenYCover.V) :=
   fun _ hp ↦ ⟨shearY_mem_U a b hp.1, shearY_mem_V a b hp.2⟩
+
+/-- The transported two-circle integral coordinate on the frozen vertical
+cover overlap. -/
+noncomputable def frozenOverlapH1IsoIntBiprod :
+    SingularHomology 1
+        (TopCat.of (frozenYCover.U ∩ frozenYCover.V : Set FrozenTorus)) ≅
+      (AddCommGrpCat.of ℤ) ⊞ (AddCommGrpCat.of ℤ) :=
+  singularHomologyIsoOfHomotopyEquiv
+      frozenYCoverInterHomeomorph.toHomotopyEquiv 1 ≪≫
+    overlapH1IsoIntBiprod
+
+/-- The restriction of the shear to the frozen cover overlap. -/
+def shearYOverlap (a b : ℤ) :
+    C((frozenYCover.U ∩ frozenYCover.V : Set FrozenTorus),
+      (frozenYCover.U ∩ frozenYCover.V : Set FrozenTorus)) where
+  toFun p := ⟨shearY a b p.1, shearY_mapsTo_inter a b p.2⟩
+  continuous_toFun :=
+    (shearY a b).continuous.comp continuous_subtype_val |>.subtype_mk _
+
+@[simp] theorem shearYOverlap_apply (a b : ℤ)
+    (p : (frozenYCover.U ∩ frozenYCover.V : Set FrozenTorus)) :
+    (shearYOverlap a b p : FrozenTorus) = shearY a b p.1 := rfl
+
+/-- Multiplication by the same integer on the two overlap-circle
+coordinates; this is the target normal form for blueprint node B6. -/
+noncomputable def overlapScalar (a : ℤ) :
+    ((AddCommGrpCat.of ℤ) ⊞ (AddCommGrpCat.of ℤ)) ⟶
+      ((AddCommGrpCat.of ℤ) ⊞ (AddCommGrpCat.of ℤ)) :=
+  biprod.map (a • 𝟙 (AddCommGrpCat.of ℤ)) (a • 𝟙 (AddCommGrpCat.of ℤ))
 
 private noncomputable def shearYIntersectionMap (a b : ℤ) :=
   (ambientIntersectionRangeChainsIso frozenYCover.U frozenYCover.V).inv ≫
@@ -497,5 +528,8 @@ theorem shearY_productionUnionMap (a b : ℤ) (n : ℕ) :
 #print axioms shearY_comp
 #print axioms shearYShortComplexHom
 #print axioms shearY_productionUnionMap
+#print axioms frozenOverlapH1IsoIntBiprod
+#print axioms shearYOverlap
+#print axioms overlapScalar
 
 end ConstructionTargets.T97A04Closure
