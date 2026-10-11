@@ -113857,16 +113857,16 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
-    :residual "Prove both B3 mapped-leg comparisons; then B12.",
+    :residual
+    "Expose B3 comparison isomorphisms to prove both mapped-leg equalities; then B12.",
     :outcome :stop,
-    :warnings
-    [{:kind :upstream-lint} {:kind :concurrent-worktree-change}],
+    :warnings [{:kind :upstream-lint}],
     :missing-theorems
     [{:name
       "PointWedgeVanKampen.genericPointWedgeLegCoordinates_vanKampen",
@@ -113878,16 +113878,16 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "f8f3093d1b988265e1d99c1ce60bb9740ce772e1f52a1b98be28ff2f49b5eba4",
+     "bf4f2fd8655d6ad7d5b30968cf08db3a0e48b82d2e24a746224d6a37c0c9484b",
      :documentation
-     "3dff7a76d09b95b5d5cbfb3e35f464fc95a23fb1a699d72740fffb1a361ac446",
+     "0c55c8c8271db8235b493bdc132993678517e2511251be8c0b4cae3ad584261b",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
-    :reason "B6 reduced to two mapped-leg equations.",
+    :reason "B6 goal is now iff the two B3 mapped-leg comparisons.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113897,22 +113897,12 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
     :diagnostic-history
-    [{:cmd "lean", :exit 1, :finding "Fixed names/equality."}
-     {:cmd "lean", :exit 1, :finding "Added implicits."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791740323860-5695-0b614671",
-     :commands
-     ["git show/diff-tree 97451f23"
-      "hash/diff/placeholder checks"
-      "statement-registry.py check"
-      "lake env lean PointWedgeVanKampen.lean"
-      "lake build PointWedgeVanKampen"
-      "lake build ThreeCirclesFundamentalGroup (expected absent)"],
-     :finding
-     "PASS: new compiled, sorry-free B6 progress fixes literal left/right leg maps and proves the normalized coordinate goal from exactly two mapped-leg comparisons. The right quotient equality is correctly reversed to change right representative to the chosen left basepoint. Exact two-file scope/frozen hashes match; zero placeholders; registry 131/131; standard axioms. Two comparisons and B12 remain listed; absent final target is valid STOP."},
-    :commit "97451f233e6b5439afb8b858a4e34492b0250c56",
+    [{:cmd
+      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
+      :exit 1,
+      :finding
+      "rfl disproved; exposed B3 isomorphisms are required."}],
+    :commit "a203120a672410d62eb74944ab258073bdf8b04a",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113922,7 +113912,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
