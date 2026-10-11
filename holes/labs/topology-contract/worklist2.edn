@@ -69387,47 +69387,64 @@
    "single-consumer positive-factor relation between meridian imaginary part and ambient height",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/t02a03_meridian_im_height_factor_probe.lean",
-      :sha256
-      "d913e66bc62a669d2d8e0d5a2bac683a12cf63479044cb8adf5e09df1cfcdf1f"},
-     :implementation
-     {:scope
-      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
-      :declaration
-      "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeMeridianCoordinate_im_positiveFactor_height",
-      :type
-      "forall (p : RightTubeMinusLeftCore), exists c : Real, 0 < c and (rightTubeMeridianCoordinate p : Complex).im = c * p.1 2",
-      :proof-plan
-      "Choose c as the inverse norm of rightTubeNormalComplex p. Deletion makes this norm nonzero and positive; take imaginary parts of norm times normalize equals the original vector, unfold the normal coordinate height, and cancel the norm."},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/t02a03_meridian_im_height_factor_probe.lean",
-       :exit 0,
-       :output
-       "rightTubeMeridianCoordinate_im_positiveFactor_height compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "sha256sum /tmp/t02a03_meridian_im_height_factor_probe.lean",
-       :exit 0,
-       :output
-       "d913e66bc62a669d2d8e0d5a2bac683a12cf63479044cb8adf5e09df1cfcdf1f  /tmp/t02a03_meridian_im_height_factor_probe.lean"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_meridian_im_height_factor_probe.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :residual
-     "Implement the compiled meridian-height factor identity; then prove nonzero imaginary part throughout the core-normal interpolation for nonzero-height inputs."}},
+   {:placeholder-delta {:before 0, :after 0, :change 0},
+    :residual
+    "Use this identity to prove the core-normal interpolation has nonzero imaginary part for nonzero-height inputs; handle zero height with the common collision-sign component and safe angular corridor, then assemble both stages.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean:62:6: unnecessarySimpa (pre-existing)"
+     "An unrelated transient holes/labs/topology-contract/worklist.edn.tmp was observed before editing and was absent after commit; it was not staged or modified by this row."],
+    :missing-theorems [],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms [propext Classical.choice Quot.sound],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :scope-blob "365ae8f9bc2a1a97b7c3e151ac11b9e76aab254f",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0,
+      :output
+      "compiled; declaration axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "lake env lean /tmp/t02a03_meridian_im_height_factor_probe.lean",
+      :exit 0,
+      :output
+      "rightTubeMeridianCoordinate_im_positiveFactor_height compiled; axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "sha256sum /tmp/t02a03_meridian_im_height_factor_probe.lean",
+      :exit 0,
+      :output
+      "d913e66bc62a669d2d8e0d5a2bac683a12cf63479044cb8adf5e09df1cfcdf1f  /tmp/t02a03_meridian_im_height_factor_probe.lean"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "git diff --check -- ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd
+      "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "08ad2b61e02e283aa1d4b21dbb2c786ff68cf461",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeMeridianCoordinate_im_positiveFactor_height",
+    :fixture
+    {:path "/tmp/t02a03_meridian_im_height_factor_probe.lean",
+     :sha256
+     "d913e66bc62a669d2d8e0d5a2bac683a12cf63479044cb8adf5e09df1cfcdf1f"},
+    :finding
+    "Deletion makes the normal coordinate norm positive. Taking imaginary parts of norm times normalize equals the original normal, then dividing by that positive norm, expresses the meridian imaginary part as a positive scalar multiple of ambient height.",
+    :seat "topo-6"},
    :phase :implementation,
    :type
    "forall (p : RightTubeMinusLeftCore), exists c : Real, 0 < c and (rightTubeMeridianCoordinate p : Complex).im = c * p.1 2",
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/meridian-im-positive-factor-height",
