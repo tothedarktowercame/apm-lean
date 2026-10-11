@@ -188,6 +188,49 @@ def separatingMap : C(t95J02KleinBottleType, EuclideanSpace ℝ (Fin 2)) where
 @[simp] theorem separatingMap_quotientPoint (p : ℝ × ℝ) :
     separatingMap (t95J02QuotientPoint p) = separatingRaw p := rfl
 
+/-- The real-line parametrization of the vertical core circle. -/
+def verticalParam : C(ℝ, t95J02CircleB) where
+  toFun y := ⟨t95J02QuotientPoint (0, y), ⟨y, rfl⟩⟩
+  continuous_toFun := by
+    exact (continuous_coinduced_rng.comp
+      (continuous_const.prodMk continuous_id)).subtype_mk _
+
+@[simp] theorem verticalParam_apply (y : ℝ) :
+    (verticalParam y).1 = t95J02QuotientPoint (0, y) := rfl
+
+theorem verticalParam_add_nat (y : ℝ) (n : ℕ) :
+    verticalParam (y + (n : ℝ)) = verticalParam y := by
+  induction n with
+  | zero => simp
+  | succ n ih =>
+      calc
+        verticalParam (y + ((n + 1 : ℕ) : ℝ)) =
+            verticalParam ((y + (n : ℝ)) + 1) := by
+          apply congrArg verticalParam
+          push_cast
+          ring
+        _ = verticalParam (y + (n : ℝ)) := by
+          apply Subtype.ext
+          exact (t95J02QuotientPoint_vertical 0 (y + (n : ℝ))).symm
+        _ = verticalParam y := ih
+
+theorem verticalParam_add_int (y : ℝ) (n : ℤ) :
+    verticalParam (y + (n : ℝ)) = verticalParam y := by
+  cases n with
+  | ofNat n => simpa using verticalParam_add_nat y n
+  | negSucc n =>
+      have h := verticalParam_add_nat (y - (n + 1 : ℕ)) (n + 1)
+      rw [Int.cast_negSucc]
+      have hleft : y + -((n + 1 : ℕ) : ℝ) = y - (n + 1 : ℕ) := by ring
+      rw [hleft]
+      calc
+        verticalParam (y - (n + 1 : ℕ)) =
+            verticalParam (y - (n + 1 : ℕ) + (n + 1 : ℕ)) := h.symm
+        _ = verticalParam y := by
+          congr 1
+          push_cast
+          ring
+
 end t95J02Closure
 
 /-- Integral first singular homology, used only to state the missing invariant

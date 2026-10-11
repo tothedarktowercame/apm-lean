@@ -60,7 +60,7 @@ lean: `t95J02Closure.verticalParam` : `C(ℝ, t95J02CircleB)` with
 
 uses: `t95J02QuotientPoint_vertical`, continuity of the quotient map
 
-status: planned
+status: proved
 
 Continuity is the quotient map composed with `y ↦ (0,y)`, followed by the
 subtype constructor.  Prove integer periodicity first for natural numbers by
