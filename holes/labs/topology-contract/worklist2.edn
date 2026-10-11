@@ -67774,62 +67774,57 @@
    "single-consumer continuous ambient reconstruction with both endpoint equations",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:residual
-     "Prove right-tube membership and left-core avoidance for the reconstructed ambient path, then package safeRightTubeMeridianDeformation.",
-     :outcome :go,
-     :warnings [],
-     :acceptance
-     {:declaration
-      "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeRadialAmbientDeformation_endpoints",
-      :type
-      "(forall p, rightTubeRadialAmbientDeformation (0,p) = apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)) and (forall p, rightTubeRadialAmbientDeformation (1,p) = p.1)",
-      :gates
-      ["Compile the scoped module after inserting the fixture declarations"
-       "Confirm only propext, Classical.choice, and Quot.sound axioms"
-       "Confirm no new sorry in the scoped module"
-       "Run python3 scripts/statement-registry.py check"]},
-     :commands
-     [{:cmd "lake env lean /tmp/t02a03_ambient_endpoints_probe.lean",
-       :exit 0,
-       :output
-       "rightTubeRadialAmbientDeformation_endpoints compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd "sha256sum /tmp/t02a03_ambient_endpoints_probe.lean",
-       :exit 0,
-       :output
-       "e20fd016bf24c80780266f1eb42f173f05a247ce71d46cf3b4e103ec253e72fa  /tmp/t02a03_ambient_endpoints_probe.lean"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_ambient_endpoints_probe.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}
-      {:cmd
-       "rg -n 'rightTubeRadialAmbientDeformation_endpoints' /tmp/t02a03_ambient_endpoints_probe.lean",
-       :exit 0,
-       :output
-       "34:theorem rightTubeRadialAmbientDeformation_endpoints :\n69:#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeRadialAmbientDeformation_endpoints"}],
-     :fixture
-     {:path "/tmp/t02a03_ambient_endpoints_probe.lean",
-      :sha256
-      "e20fd016bf24c80780266f1eb42f173f05a247ce71d46cf3b4e103ec253e72fa"},
-     :finding
-     "The placeholder-free fixture combines rightTubePlanarRotation and the specialized radial normal interpolation through rightTubePolarReconstruction. It proves continuity and identifies the zero endpoint with circleMeridian(rightTubeMeridianCoordinate p) and the one endpoint with p.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
-      :declaration
-      "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeRadialAmbientDeformation_endpoints",
-      :type
-      "(forall p, rightTubeRadialAmbientDeformation (0,p) = apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)) and (forall p, rightTubeRadialAmbientDeformation (1,p) = p.1)",
-      :proof-plan
-      "Define rightTubeRadialAmbientDeformation by feeding rightTubePlanarRotation and rightTubeRadialNormalInterpolation into rightTubePolarReconstruction. Prove continuity coordinatewise. At zero simplify coordinates; at one use norm_smul_normalize, Subtype.ext with rightTubePlanarRotation_one, and rightTubePolarReconstruction_self.",
-      :axioms [propext Classical.choice Quot.sound]},
-     :seat "topo-8"}},
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Prove the reconstructed path lies in apm_t02a03_rightTube and that its nonzero radial normal coordinate excludes Set.range apm_t02a03_leftCore, then package safeRightTubeMeridianDeformation.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["Existing linter warning at line 62: unnecessarySimpa; no new warnings"],
+    :missing-theorems [],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms [propext Classical.choice Quot.sound],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :scope-blob "4e4435c07cf0532b565ca7fec8c1cd8d22282379",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd "lake env lean /tmp/t02a03_ambient_endpoints_probe.lean",
+      :exit 0}
+     {:cmd "sha256sum /tmp/t02a03_ambient_endpoints_probe.lean",
+      :exit 0,
+      :output
+      "e20fd016bf24c80780266f1eb42f173f05a247ce71d46cf3b4e103ec253e72fa  /tmp/t02a03_ambient_endpoints_probe.lean"}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeDeformation.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "git diff --check -- ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "ed4b98818bad7404847a097ab6341235bcea842b",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+    :fixture
+    {:path "/tmp/t02a03_ambient_endpoints_probe.lean",
+     :sha256
+     "e20fd016bf24c80780266f1eb42f173f05a247ce71d46cf3b4e103ec253e72fa"},
+    :finding
+    "The continuous ambient map feeds rightTubePlanarRotation and the specialized radial normal interpolation into rightTubePolarReconstruction. Coordinate simplification gives the meridian endpoint at time zero, while the rotation endpoint and norm-times-normalize identity recover the original point at time one.",
+    :declarations
+    ["ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeRadialAmbientDeformation"
+     "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeRadialAmbientDeformation_endpoints"],
+    :seat "topo-6"},
    :phase :implementation,
    :type
    "(forall p, rightTubeRadialAmbientDeformation (0,p) = apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)) and (forall p, rightTubeRadialAmbientDeformation (1,p) = p.1)",
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/right-tube-radial-ambient-endpoints",
