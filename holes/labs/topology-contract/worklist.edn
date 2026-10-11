@@ -102852,96 +102852,125 @@
    "Apply the two left inverses to obtain injectivity, combine with banked surjectivity and continuity to form homeomorphisms, and prove literal ThreeCircles boundary formulas.",
    :other-consumers []}
   {:bounded-exception
+   "This single-consumer prerequisite closes the set-theoretic part of both boundary comparisons before the topological promotion.",
+   :consumer :t97A01,
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/PolygonBoundaryThreeLoopBijections.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/boundary-three-loop-bijections",
+   :acceptance
+   {:implementation
+    "Promote the exact fixture. Apply each compiled decoder left inverse to prove injectivity of n3ThreeLoops and torusCrosscapThreeLoops. Pair those results with the banked six-edge surjectivity theorems to prove both maps bijective. Do not prove inverse continuity or homeomorphisms, derive ThreeCircles or outer-piece formulas, compute invariants, or close t97A01.",
+    :placeholder "the single sorry in apm_t97a01",
+    :route-step
+    "polygon radial open-cover step 38: prove both three-loop boundary maps bijective",
+    :fixture "/tmp/polygon-boundary-three-loop-bijections.lean",
+    :fixture-sha256
+    "f02ffae406026eb690350dbcc239101d72b35c8b89c5882e342897a3391e69ef",
+    :gates
+    ["lake build ConstructionTargets.PolygonBoundaryThreeLoopBijections"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-11-polygon-boundary-three-loop-bijections-78,
+   :kind :reusable-theorem,
+   :area "polygon-surface-open-cover",
+   :depends-on
+   [:routes-2026-10-11-polygon-boundary-three-loop-decoder-left-inverse-77],
+   :current-residual
+   "Promote the two continuous bijections to homeomorphisms, then prove their literal ThreeCircles boundary formulas and finish the radial packages.",
+   :other-consumers []}
+  {:bounded-exception
    "This single-consumer concrete quotient package is the other final backlog lemma on t97A01 and supplies the actual two polygon models required by its frozen statement.",
    :consumer :t97A01,
    :implements-lemma :lemma-polygonradialopencoverpackages,
    :evidence
    {:probe
     {:residual
-     "Use the compiled left inverses to prove both three-loop maps injective, promote the continuous bijections to homeomorphisms, and derive the literal boundary formulas.",
+     "Promote both continuous bijections to homeomorphisms, derive their literal ThreeCircles formulas, and finish the concrete radial open-cover packages.",
      :outcome :revise,
      :warnings
      [{:kind :dirty-worktree,
        :message
-       "The untracked worklist2.edn.tmp is outside this probe and was left untouched."}],
+       "The unrelated T02A03GeometricTubeDeformation.lean modification was not touched."}],
      :missing-theorems
      [{:name
-       "PolygonBoundaryThreeLoopDecoderLeftInverse.n3QuotientDecode_leftInverse",
-       :type "Function.LeftInverse n3QuotientDecode n3ThreeLoops.",
+       "PolygonBoundaryThreeLoopBijections.injective_n3ThreeLoops",
+       :type "Function.Injective n3ThreeLoops.",
        :status :proved,
        :consumers [:t97A01],
        :depends-on
-       ["PolygonBoundaryCircleDecoderRelationInvariant.n3CircleDecode_respects"
-        "PolygonThreeLoopHalfOpenNormalForm.threeEndpointLoops_halfOpen_rep"],
+       ["PolygonBoundaryThreeLoopDecoderLeftInverse.n3QuotientDecode_leftInverse"],
        :area "polygon-surface-open-cover"}
       {:name
-       "PolygonBoundaryThreeLoopDecoderLeftInverse.torusCrosscapQuotientDecode_leftInverse",
-       :type
-       "Function.LeftInverse torusCrosscapQuotientDecode torusCrosscapThreeLoops.",
+       "PolygonBoundaryThreeLoopBijections.injective_torusCrosscapThreeLoops",
+       :type "Function.Injective torusCrosscapThreeLoops.",
        :status :proved,
        :consumers [:t97A01],
        :depends-on
-       ["PolygonBoundaryCircleDecoderRelationInvariant.torusCrosscapCircleDecode_respects"
-        "PolygonThreeLoopHalfOpenNormalForm.threeEndpointLoops_halfOpen_rep"],
+       ["PolygonBoundaryThreeLoopDecoderLeftInverse.torusCrosscapQuotientDecode_leftInverse"],
        :area "polygon-surface-open-cover"}
-      {:name "polygonBoundaryThreeLoopInjective",
+      {:name "polygonBoundaryThreeLoopHomeomorphisms",
        :type
-       "The maps n3ThreeLoops and torusCrosscapThreeLoops are injective.",
+       "Promote the continuous bijections n3ThreeLoops and torusCrosscapThreeLoops to homeomorphisms from ThreeEndpointLoops onto their boundary relation quotients.",
        :status :not-started,
        :consumers [:t97A01],
        :depends-on
-       ["PolygonBoundaryThreeLoopDecoderLeftInverse.n3QuotientDecode_leftInverse"
-        "PolygonBoundaryThreeLoopDecoderLeftInverse.torusCrosscapQuotientDecode_leftInverse"],
+       ["PolygonBoundaryThreeLoopBijections.injective_n3ThreeLoops"
+        "PolygonBoundaryThreeLoopBijections.injective_torusCrosscapThreeLoops"
+        "PolygonBoundaryThreeLoopContinuity.continuous_n3ThreeLoops"
+        "PolygonBoundaryThreeLoopContinuity.continuous_torusCrosscapThreeLoops"],
        :area "polygon-surface-open-cover"}],
      :prerequisite
      {:bounded-exception
-      "This single-consumer prerequisite descends both relation-invariant decoders and proves the exact left inverses needed for boundary-map injectivity.",
+      "This single-consumer prerequisite closes the set-theoretic part of both boundary comparisons before the topological promotion.",
       :consumer :t97A01,
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/PolygonBoundaryThreeLoopDecoderLeftInverse.lean"],
+      ["ConstructionTargets/PolygonBoundaryThreeLoopBijections.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/boundary-three-loop-decoder-left-inverse",
+      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/boundary-three-loop-bijections",
       :acceptance
       {:implementation
-       "Promote the exact fixture. Descend the N3 and torus-crosscap Circle decoders through their generated relations. Prove the decoder composite is the identity on each of the three canonical loop forms using literal edge formulas. Use the banked half-open normal form to prove both global left-inverse statements. Do not prove injectivity or homeomorphism of the boundary maps, derive ThreeCircles or outer-piece formulas, compute invariants, or close t97A01.",
+       "Promote the exact fixture. Apply each compiled decoder left inverse to prove injectivity of n3ThreeLoops and torusCrosscapThreeLoops. Pair those results with the banked six-edge surjectivity theorems to prove both maps bijective. Do not prove inverse continuity or homeomorphisms, derive ThreeCircles or outer-piece formulas, compute invariants, or close t97A01.",
        :placeholder "the single sorry in apm_t97a01",
        :route-step
-       "polygon radial open-cover step 37: descend both decoders and prove their global left-inverse formulas",
-       :fixture
-       "/tmp/polygon-boundary-three-loop-decoder-left-inverse.lean",
+       "polygon radial open-cover step 38: prove both three-loop boundary maps bijective",
+       :fixture "/tmp/polygon-boundary-three-loop-bijections.lean",
        :fixture-sha256
-       "b448f4e1578f6d3d74b6a43e4ddf0470123b5f939cea6c3f59787cce5d876abf",
+       "f02ffae406026eb690350dbcc239101d72b35c8b89c5882e342897a3391e69ef",
        :gates
-       ["lake build ConstructionTargets.PolygonBoundaryThreeLoopDecoderLeftInverse"
+       ["lake build ConstructionTargets.PolygonBoundaryThreeLoopBijections"
         "fixture compiles"
         "zero source and fixture sorry"
         "standard-only axioms"
         "registry check"]},
-      :id
-      :routes-2026-10-11-polygon-boundary-three-loop-decoder-left-inverse-77,
+      :id :routes-2026-10-11-polygon-boundary-three-loop-bijections-78,
       :kind :reusable-theorem,
       :area "polygon-surface-open-cover",
       :depends-on
-      [:routes-2026-10-11-polygon-boundary-circle-decoder-relation-invariant-76],
+      [:routes-2026-10-11-polygon-boundary-three-loop-decoder-left-inverse-77],
       :current-residual
-      "Apply the two left inverses to obtain injectivity, combine with banked surjectivity and continuity to form homeomorphisms, and prove literal ThreeCircles boundary formulas.",
+      "Promote the two continuous bijections to homeomorphisms, then prove their literal ThreeCircles boundary formulas and finish the radial packages.",
       :other-consumers []},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake env lean /tmp/polygon-boundary-three-loop-decoder-left-inverse.lean",
+       "lake env lean /tmp/polygon-boundary-three-loop-bijections.lean",
        :exit 0,
        :finding
-       "Both quotient decoders, all six canonical loop formulas, and both global left-inverse theorems compile with standard axioms."}
+       "Injectivity and bijectivity of both specialized three-loop maps compile with standard axioms."}
       {:cmd
-       "sha256sum /tmp/polygon-boundary-three-loop-decoder-left-inverse.lean",
+       "sha256sum /tmp/polygon-boundary-three-loop-bijections.lean",
        :exit 0,
        :finding
-       "b448f4e1578f6d3d74b6a43e4ddf0470123b5f939cea6c3f59787cce5d876abf"}
+       "f02ffae406026eb690350dbcc239101d72b35c8b89c5882e342897a3391e69ef"}
       {:cmd
-       "rg -n \"\\b(sorry|admit|axiom)\\b\" /tmp/polygon-boundary-three-loop-decoder-left-inverse.lean",
+       "rg -n \"\\b(sorry|admit|axiom)\\b\" /tmp/polygon-boundary-three-loop-bijections.lean",
        :exit 1,
        :expected-exit 1,
        :finding "No fixture placeholders or custom axioms."}
@@ -102951,30 +102980,22 @@
       {:cmd "git status --short",
        :exit 0,
        :finding
-       "An unrelated untracked holes/labs/topology-contract/worklist2.edn.tmp is present; the read-only probe did not create or modify it."}
+       "An unrelated modification to ConstructionTargets/T02A03GeometricTubeDeformation.lean is present and was left untouched."}
       {:cmd
        "sed -n '1,240p' TOPOLOGY-ROUTES.md >/dev/null && sed -n '1,240p' holes/labs/topology-routes/routes-1.md >/dev/null && sed -n '1,240p' holes/labs/topology-routes/routes-2.md >/dev/null && sed -n '1,240p' holes/labs/topology-routes/routes-3.md >/dev/null && sed -n '1,220p' docs/TN-topology-build-loop-design.md >/dev/null",
        :exit 0,
        :finding
        "The route guide, per-problem routes, and probe definitions were read."}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/polygon-boundary-three-loop-decoder-left-inverse.lean",
-       :exit 1,
-       :finding
-       "The first draft omitted the namespace exporting CircleQuotient, so the quotient decoder result types did not elaborate.",
-       :correction
-       "Opened PolygonBoundaryInducedQuotient; the successful fixture compile is recorded in commands."}],
+     :diagnostic-history [],
      :fixture
-     {:path
-      "/tmp/polygon-boundary-three-loop-decoder-left-inverse.lean",
+     {:path "/tmp/polygon-boundary-three-loop-bijections.lean",
       :sha256
-      "b448f4e1578f6d3d74b6a43e4ddf0470123b5f939cea6c3f59787cce5d876abf",
+      "f02ffae406026eb690350dbcc239101d72b35c8b89c5882e342897a3391e69ef",
       :interface
-      "The two relation-invariant Circle decoders descend to the specialized relation quotients, satisfy six canonical loop formulas, and are global left inverses of the two three-loop maps."},
+      "Both three-loop boundary maps are injective by their compiled decoder left inverses and bijective by the banked six-edge surjectivity reductions."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -103031,7 +103052,8 @@
     :routes-2026-10-11-polygon-six-edge-final-endpoint-wrap-74
     :routes-2026-10-11-polygon-boundary-circle-decoder-well-defined-75
     :routes-2026-10-11-polygon-boundary-circle-decoder-relation-invariant-76
-    :routes-2026-10-11-polygon-boundary-three-loop-decoder-left-inverse-77],
+    :routes-2026-10-11-polygon-boundary-three-loop-decoder-left-inverse-77
+    :routes-2026-10-11-polygon-boundary-three-loop-bijections-78],
    :current-residual
    "Combine the concrete cover packages with the strict overlap squares, banked Smith normalization, and final t97A01 assembly.",
    :other-consumers []}
@@ -107565,6 +107587,73 @@
    :depends-on
    [:lemma-polygonboundarythreeloopdecoderleftinverse-n3quotientdecode-leftinverse
     :lemma-polygonboundarythreeloopdecoderleftinverse-toruscrosscapquotientdecode-leftinver],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "PolygonBoundaryThreeLoopBijections.injective_n3ThreeLoops",
+    :type "Function.Injective n3ThreeLoops."},
+   :lemma
+   {:name "PolygonBoundaryThreeLoopBijections.injective_n3ThreeLoops",
+    :reported-by
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    :type "Function.Injective n3ThreeLoops.",
+    :area "polygon-surface-open-cover",
+    :proved-in
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+   :id
+   :lemma-polygonboundarythreeloopbijections-injective-n3threeloops,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polygonboundarythreeloopdecoderleftinverse-n3quotientdecode-leftinverse],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "PolygonBoundaryThreeLoopBijections.injective_torusCrosscapThreeLoops",
+    :type "Function.Injective torusCrosscapThreeLoops."},
+   :lemma
+   {:name
+    "PolygonBoundaryThreeLoopBijections.injective_torusCrosscapThreeLoops",
+    :reported-by
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    :type "Function.Injective torusCrosscapThreeLoops.",
+    :area "polygon-surface-open-cover",
+    :proved-in
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+   :id
+   :lemma-polygonboundarythreeloopbijections-injective-toruscrosscapthreeloops,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polygonboundarythreeloopdecoderleftinverse-toruscrosscapquotientdecode-leftinver],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "polygonBoundaryThreeLoopHomeomorphisms",
+    :type
+    "Promote the continuous bijections n3ThreeLoops and torusCrosscapThreeLoops to homeomorphisms from ThreeEndpointLoops onto their boundary relation quotients."},
+   :lemma
+   {:name "polygonBoundaryThreeLoopHomeomorphisms",
+    :reported-by
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    :type
+    "Promote the continuous bijections n3ThreeLoops and torusCrosscapThreeLoops to homeomorphisms from ThreeEndpointLoops onto their boundary relation quotients.",
+    :area "polygon-surface-open-cover"},
+   :id :lemma-polygonboundarythreeloophomeomorphisms,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polygonboundarythreeloopbijections-injective-n3threeloops
+    :lemma-polygonboundarythreeloopbijections-injective-toruscrosscapthreeloops
+    :lemma-polygonboundarythreeloopcontinuity-continuous-n3threeloops
+    :lemma-polygonboundarythreeloopcontinuity-continuous-toruscrosscapthreeloops],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
