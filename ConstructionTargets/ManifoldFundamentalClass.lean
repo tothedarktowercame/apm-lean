@@ -5,7 +5,7 @@ import ConstructionTargets.CoefficientDistinguishedNormalization
 import ConstructionTargets.IntegralSingularHomologyComparison
 import ConstructionTargets.HigherChartLocalGenerator
 
-open CategoryTheory
+open CategoryTheory CategoryTheory.Limits
 noncomputable section
 set_option autoImplicit false
 
@@ -393,6 +393,31 @@ theorem integralSingularChainsComparison_subtype_naturality
           (AddCommGrpCat.of ℤ)).map (integralSubtypeInclusion A)) := by
   exact singularChainsComparison_naturality (integralSubtypeInclusion A)
 
+private abbrev moduleSubtypeChainMap {X : Type} [TopologicalSpace X]
+    (A : Set X) :=
+  (((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+    (ModuleCat.of ℤ ℤ)).map (integralSubtypeInclusion A))
+
+private abbrev groupSubtypeChainMap {X : Type} [TopologicalSpace X]
+    (A : Set X) :=
+  (((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj
+    (AddCommGrpCat.of ℤ)).map (integralSubtypeInclusion A))
+
+/-- The absolute integral chain comparison induces the canonical comparison
+between the direct relative cokernels of the same subtype inclusion. -/
+noncomputable def integralMappedRelativeCokernelComparison
+    {X : Type} [TopologicalSpace X] (A : Set X) :
+    cokernel ((forgetIntModules.mapHomologicalComplex
+      (ComplexShape.down ℕ)).map (moduleSubtypeChainMap A)) ≅
+      cokernel (groupSubtypeChainMap A) :=
+  cokernel.mapIso
+    ((forgetIntModules.mapHomologicalComplex
+      (ComplexShape.down ℕ)).map (moduleSubtypeChainMap A))
+    (groupSubtypeChainMap A)
+    (singularChainsComparison (TopCat.of A))
+    (singularChainsComparison (TopCat.of X))
+    (integralSingularChainsComparison_subtype_naturality A)
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -419,3 +444,4 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.localizationCoefficient_eq_one_of_normalized
 #print axioms ConstructionTargets.ManifoldFundamentalClass.distinguishedChartGenerator_eq_coefficientGenerator
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralSingularChainsComparison_subtype_naturality
+#print axioms ConstructionTargets.ManifoldFundamentalClass.integralMappedRelativeCokernelComparison
