@@ -10585,6 +10585,23 @@
      "Its consequence after precomposition, with the transported comparison replaced by the absolute singular-chain comparison followed by the production relative projection",
      :direction
      "Forward implication from the forbidden negative automorphism equation to the exactly projected morphism equality; no converse is asserted because only this consequence is needed to derive the contradiction"},
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791702743586-4580-a7c3747c",
+     :commands
+     ["rg ledger row and frozen contract"
+      "git show and git diff-tree recorded commit"
+      "git blob identity and git diff --check"
+      "sha256sum frozen fixture"
+      "lake env lean renamed frozen-fixture replay"
+      "lake env lean target module"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"
+      "python3 scripts/statement-registry.py check"
+      "placeholder and axiom scan"
+      "consumer placeholder census"],
+     :finding
+     "PASS: independent review of commit aa1666523; scope is exactly ConstructionTargets/ManifoldFundamentalClass.lean and the recorded blob matches the checkout; fixture SHA-256 and registered statement hash match; the proof has the frozen forward-implication orientation, precomposes the banked transported-factor equation by the coefficient projection, and rewrites via coefficientProjection_comp_integralTransportHomologyComposite without crossing excluded chart/model, contradiction, sign-selection, or fundamental-class boundaries; fixture replay, module check, and 8326-job build pass; axioms are exactly propext, Classical.choice, Quot.sound; registry is 131/0; target placeholders are 0 and consumer counts remain 1/1."},
     :commit "aa16665238d66eefff57667f6c246ba99d0d0f26",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -10601,7 +10618,7 @@
     :routes-2026-10-11-manifold-negative-equation-projected-factors-topo3-r1,
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/negative-equation-projected-factors",
@@ -10795,7 +10812,7 @@
      "The banked projection theorem now rewrites the forbidden-sign equation after one lawful precomposition: all four transported cokernel and presentation factors disappear, leaving the production absolute singular comparison and relative projection on the left. The right still contains the coefficient projection followed by the six-factor coefficient chart normalization and negation. The next prerequisite must compare those remaining chart and model normalization chains.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -14543,7 +14560,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -14560,7 +14577,10 @@
     "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), (correctedLocalNormalizationAutomorphism k x).hom = -𝟙 _ -> (((CoefficientH0.SingularChains Int (TopCat.of M)).sc (k + 2)).mapHomologyIso forgetIntModules).inv ≫ HomologicalComplex.homologyMap (singularChainsComparison (TopCat.of M)).hom (k + 2) ≫ HomologicalComplex.homologyMap (relativeSingularProjection (deletedPoint x)) (k + 2) ≫ (ambientChartHomologyIso k x).inv ≫ (HigherModelLocalHomology.localIsoInt k).hom = forgetIntModules.map (HomologicalComplex.homologyMap (cokernel.π (CoefficientRelativeSmall.subspaceMap Int (deletedPoint x))) (k + 2)) ≫ forgetIntModules.map (coefficientLocalForwardComposite k x) ≫ (-𝟙 _)",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-negative-equation-projected-factors-topo3-r1},
+    :routes-2026-10-11-manifold-negative-equation-projected-factors-topo3-r1,
+    :banked-by
+    :routes-2026-10-11-manifold-negative-equation-projected-factors-topo3-r1,
+    :banked-commit "aa16665238d66eefff57667f6c246ba99d0d0f26"},
    :id :lemma-mfclass-negative-projected-factors,
    :kind :lemma,
    :depends-on
