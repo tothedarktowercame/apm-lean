@@ -879,6 +879,14 @@ theorem rightTubeCoreRadialAmbientDeformation_exists :
     apply reconstructionMemRightTube_rightTubeCorePolar
     exact rightTubeCoreInterpolatedNormalRadiusBound rightTubeMeridianCoordinate tp
 
+theorem reconstructionAvoidsLeftCore_rightTubeCorePolar_of_im_ne_zero
+    (u : Circle) (n : Complex) (hn : n.im ≠ 0) :
+    rightTubeCorePolarReconstruction u n ∉ Set.range apm_t02a03_leftCore := by
+  rintro ⟨t, ht⟩
+  have hcoord := congrArg (fun p : apm_t02a03_E3 => p 2) ht
+  simp [rightTubeCorePolarReconstruction, apm_t02a03_leftCore] at hcoord
+  exact hn hcoord.symm
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -908,3 +916,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.avoidsLeftCore_rightTubeRadialAmbientDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.reconstructionMemRightTube_rightTubeCorePolar
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreRadialAmbientDeformation_exists
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.reconstructionAvoidsLeftCore_rightTubeCorePolar_of_im_ne_zero
