@@ -8387,8 +8387,93 @@
   {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-correctedlocalnormalizationautomorphism-hom-eq-neg-iff,
+   :evidence
+   {:placeholder-delta {:t00J02 0, :t98A02 0},
+    :residual
+    "Expand correctedLocalNormalizationAutomorphism.hom into its coefficient-normalization inverse, corrected comparison, and ambient normalization factors and prove that composite is not the negative identity using the connecting, radial, and sphere conventions.",
+    :gates
+    {:reverse-extensionality :pass,
+     :exact-type :pass,
+     :negative-condition-not-refuted :pass,
+     :forward-evaluation :pass,
+     :worktree-clean :pass,
+     :module-compile :pass,
+     :fixture-hash :pass,
+     :scope :pass,
+     :statement-registry :pass,
+     :model-constructions-excluded :pass,
+     :placeholder-scan :pass,
+     :target-build :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["lake build replayed pre-existing linter warnings"
+     "A concurrent untracked worklist temporary file was observed before implementation and disappeared independently before commit; this row did not modify or stage it."],
+    :missing-theorems
+    [{:id
+      :lemma-constructiontargets-manifoldfundamentalclass-correctedlocalnormalizationautomorphism-hom-eq-neg-iff,
+      :name
+      "ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_iff",
+      :type
+      "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), (correctedLocalNormalizationAutomorphism k x).hom = -𝟙 _ <-> correctedLocalGeneratorCoefficient k x = -1",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on
+      ["ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient_eq_automorphism_one"],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes
+    {:fixture-sha256
+     "2749db65cb67850a0f5ee4af7bb854df4ff5587e818e0d038637b860c7bdea7a"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/manifold_fundamental_class_corrected_automorphism_eq_neg_iff.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^\\s*axiom\\b' ConstructionTargets/ManifoldFundamentalClass.lean /tmp/manifold_fundamental_class_corrected_automorphism_eq_neg_iff.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd
+      "comment-stripped placeholder counts for problems/t00J02/lean/Main.lean and problems/t98A02/lean/Main.lean",
+      :exit 0,
+      :output "1 1"}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :representation
+    {:source
+     "Equality of correctedLocalNormalizationAutomorphism.hom with the negative identity endomorphism of AddCommGrpCat.of Int",
+     :target
+     "Equality of correctedLocalGeneratorCoefficient with the integer negative one",
+     :direction
+     "Logical equivalence from the concrete negative-automorphism representation to the extracted negative-coordinate representation, with the reverse direction proved by extensionality from evaluation at one"},
+    :commit "1db7f3546bb4c474b35a8481362f2d88db53237d",
+    :commits ["1db7f3546bb4c474b35a8481362f2d88db53237d"],
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path
+     "/tmp/manifold_fundamental_class_corrected_automorphism_eq_neg_iff.lean",
+     :sha256
+     "2749db65cb67850a0f5ee4af7bb854df4ff5587e818e0d038637b860c7bdea7a"},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :declaration
+     "ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_iff",
+     :type
+     "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), (correctedLocalNormalizationAutomorphism k x).hom = -𝟙 _ <-> correctedLocalGeneratorCoefficient k x = -1"},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/corrected-negative-sign-as-negative-automorphism",
@@ -11917,11 +12002,13 @@
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_iff",
     :reported-by
-    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+     :routes-2026-10-11-manifold-corrected-automorphism-neg-iff-topo3-r1],
     :type
     "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), (correctedLocalNormalizationAutomorphism k x).hom = -𝟙 _ <-> correctedLocalGeneratorCoefficient k x = -1",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in
+    :routes-2026-10-11-manifold-corrected-automorphism-neg-iff-topo3-r1},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-correctedlocalnormalizationautomorphism-hom-eq-neg-iff,
    :kind :lemma,
