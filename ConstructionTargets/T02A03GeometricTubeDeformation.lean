@@ -1008,6 +1008,48 @@ theorem meridianStart_collisionPolynomial_factor
   rw [Real.sqrt_sq hpos]
   ring
 
+theorem inputCollisionPolynomial_factor_rightTubeNormalReal
+    (p : RightTubeMinusLeftCore) :
+    (1 - (rightTubeCoreNormalComplex p.1).re) ^ 2 -
+      4 * (1 - (rightTubeCoreNormalComplex p.1).re) *
+        (rightTubeCoreAngularCoordinate p : Complex).re + 3 =
+      (rightTubeNormalComplex p.1).re *
+        ((rightTubeNormalComplex p.1).re + 2) := by
+  let v := rightTubeCorePlanarComplex p.1
+  have hv0 : v ≠ 0 := rightTubeCorePlanarComplex_ne_zero p.1 p.2.1
+  have hscale := NormedSpace.norm_smul_normalize v
+  have hre : ‖v‖ * (NormedSpace.normalize v).re = v.re := by
+    have h := congrArg Complex.re hscale
+    exact (RCLike.smul_re ‖v‖ (NormedSpace.normalize v)).symm.trans h
+  have hleft : ‖rightTubePlanarComplex p.1‖ ^ 2 =
+      (rightTubePlanarComplex p.1).re ^ 2 +
+        (rightTubePlanarComplex p.1).im ^ 2 := by
+    simpa [Complex.normSq_apply, pow_two] using
+      (Complex.sq_norm (rightTubePlanarComplex p.1))
+  have hncore : (rightTubeCoreNormalComplex p.1).re = 1 - ‖v‖ := by
+    simp [rightTubeCoreNormalComplex, v]
+  have hang : (rightTubeCoreAngularCoordinate p : Complex).re =
+      (NormedSpace.normalize v).re := by
+    rfl
+  have hnleft : (rightTubeNormalComplex p.1).re =
+      ‖rightTubePlanarComplex p.1‖ - 1 := by
+    simp [rightTubeNormalComplex, rightTubePlanarComplex]
+  rw [hncore, hang, hnleft]
+  ring_nf
+  rw [hre]
+  have hvre : v.re = 1 - p.1 0 := by
+    simp [v, rightTubeCorePlanarComplex]
+  have hvnorm : ‖v‖ ^ 2 = (1 - p.1 0) ^ 2 + (p.1 1) ^ 2 := by
+    rw [Complex.sq_norm]
+    simp [v, rightTubeCorePlanarComplex, Complex.normSq_apply]
+    ring
+  have hlre : (rightTubePlanarComplex p.1).re = p.1 0 + 1 := by
+    simp [rightTubePlanarComplex]
+  have hlim : (rightTubePlanarComplex p.1).im = p.1 1 := by
+    simp [rightTubePlanarComplex]
+  rw [hvre, hvnorm, hleft, hlre, hlim]
+  ring
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -1045,3 +1087,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCollisionPolynomial_eq_zero_implies_leftCore
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.inputZeroHeight_collisionPolynomial_ne
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.meridianStart_collisionPolynomial_factor
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.inputCollisionPolynomial_factor_rightTubeNormalReal
