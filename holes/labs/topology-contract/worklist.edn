@@ -116062,54 +116062,40 @@
    :depends-on [],
    :other-consumers []}
   {:consumer :t95J02,
-   :stop-count 8,
+   :stop-count 9,
    :review-finding
    "B7 reverses the functorial composition. Because beta.comp reflection is beta after reflection, homotopy invariance gives H1(beta) = H1(reflection) ≫ H1(beta), not H1(beta) ≫ H1(reflection). The written composite is ill-typed: H1(beta) lands in Klein-bottle homology, while H1(reflection) is an endomorphism of sphere homology. Reverse the factors, then use integral_circle 1 to derive H1(beta)(g) = H1(beta)(-g).",
    :evidence
    {:placeholder-delta {:source-before 3, :source-after 3},
     :residual
-    "B6-B9 remain; next prove the coordinate-1 reflection homotopy using t95J02CircleB_homeo, then discharge the two homology bridges and the frozen adapter.",
+    "Complete B6 by proving that the sphere-to-AddCircle component of t95J02CircleB_homeo conjugates CoefficientCoordinateReflections.reflectionMap (1 : Fin 2) to addCircleNeg; then transport verticalSweepHomotopy and proceed to B7-B9.",
     :outcome :stop,
     :warnings
     [{:kind :existing-placeholders,
       :message
-      "The compiler reports the three pre-existing sorries in B7-B9; this bounded B5 job introduced none."}],
+      "The compiler reports the same three pre-existing sorries in B7-B9; the new B6 declarations are placeholder-free."}],
     :missing-theorems
-    [{:name "t95J02Closure.separatingMap",
-      :type
-      "A continuous quotient-descended map from t95J02KleinBottleType to EuclideanSpace R (Fin 2) separating the vertical core by its cosine-sine coordinate",
-      :status :proved,
-      :consumers [:t95J02],
-      :depends-on [],
-      :area "klein-bottle-homology"}
-     {:name "t95J02Closure.verticalParam_add_int",
-      :type
-      "For every real y and integer n, verticalParam (y + n) = verticalParam y",
-      :status :proved,
-      :consumers [:t95J02],
-      :depends-on [],
-      :area "klein-bottle-homology"}
-     {:name "t95J02Closure.verticalParam_eq_iff",
-      :type
-      "verticalParam y = verticalParam y' iff there is an integer n with y' = y + n",
-      :status :proved,
-      :consumers [:t95J02],
-      :depends-on
-      ["t95J02Closure.separatingMap"
-       "t95J02Closure.verticalParam_add_int"],
-      :area "klein-bottle-homology"}
-     {:name "t95J02Closure.t95J02CircleB_homeo",
+    [{:name "t95J02Closure.t95J02CircleB_homeo",
       :type "T02A06.euclideanUnitSphere 2 ≃ₜ t95J02CircleB",
       :status :proved,
       :consumers [:t95J02],
       :depends-on ["t95J02Closure.verticalParam_eq_iff"],
       :area "klein-bottle-homology"}
+     {:name "t95J02Closure.verticalSweepHomotopy",
+      :type
+      "A homotopy from the AddCircle vertical core map to its precomposition with additive negation",
+      :status :proved,
+      :consumers [:t95J02],
+      :depends-on ["t95J02Closure.t95J02CircleB_homeo"],
+      :area "klein-bottle-homology"}
      {:name "t95J02Closure.t95J02_beta_homotopic_beta_reflection",
       :type
       "For beta defined by t95J02CircleB_homeo followed by t95J02InclusionB, ContinuousMap.Homotopic beta (beta.comp (CoefficientCoordinateReflections.reflectionMap (1 : Fin 2)))",
-      :status :not-started,
+      :status :partial,
       :consumers [:t95J02],
-      :depends-on ["t95J02Closure.t95J02CircleB_homeo"],
+      :depends-on
+      ["t95J02Closure.t95J02CircleB_homeo"
+       "t95J02Closure.verticalSweepHomotopy"],
       :area "klein-bottle-homology"}
      {:name "t95J02Closure.apm_t95J02_bridge_vertical_H1_kernel",
       :type
@@ -116128,99 +116114,78 @@
       :area "klein-bottle-homology"}],
     :statement-hashes
     {:source-sha256
-     "1aa2c1792c034ef449eb57893ecb1a452b93f4f7a2bed211159a731334909e42",
+     "f968f5fbd27e1894a6fb81955aa73cece054cdbff0743718b4aa8ab2d7f64303",
      :blueprint-sha256
-     "bc179810a0d4e5678063ccd6cf4ff4c04cb9820337d2ff1536e5d070cc74a6c7",
+     "3c0dc595b5df01192f057bda6f5f557b43e1847a024e41e9b845fc3e1b917307",
      :registry "131 registered statements match, 0 do not"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Program milestone completed. Blueprint node B5 is proved: the integer-periodic vertical parametrization descends to a continuous bijection from AddCircle 1; the restricted separating coordinate makes CircleB Hausdorff; compact-to-Hausdorff upgrades the bijection to a homeomorphism; and the standard circle identifications produce t95J02CircleB_homeo. B6-B9 remain for later jobs.",
+    "Program milestone advanced. B6 is partial: verticalSweep descends the continuous map (t,y) ↦ [(t,y)] through AddCircle 1, and verticalSweepHomotopy proves its endpoints are the vertical core map and that map precomposed with additive negation. The remaining B6 step is the representation transport identifying additive negation through t95J02CircleB_homeo with coordinate-1 Euclidean reflection.",
     :commands
     [{:cmd "lake env lean problems/t95J02/lean/Main.lean",
       :exit 0,
       :finding
-      "The module compiles; B5 is placeholder-free and the three pre-existing program placeholders remain."}
+      "The module compiles; verticalSweepHomotopy is placeholder-free and the three pre-existing placeholders remain."}
      {:cmd
-      "python3 comment-stripped B5 and source placeholder validation",
+      "python3 comment-stripped B6 partial and source placeholder validation",
       :exit 0,
       :finding
-      "B5 contains zero sorry, admit, or axiom tokens; the whole source remains at three sorries; blueprint marks B5 proved."}
+      "The new B6 block contains zero sorry, admit, or axiom tokens; the whole source remains at three sorries."}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131 registered statements match, 0 do not."}
      {:cmd
       "git diff --check -- problems/t95J02/lean/Main.lean ConstructionTargets/t95J02Closure.blueprint.md",
       :exit 0}
-     {:cmd
-      "git commit -m Construct-t95J02-vertical-core-homeomorphism",
+     {:cmd "git commit -m Descend-t95J02-vertical-glide-homotopy",
       :exit 0,
       :finding
-      "Committed the two scoped files as 0f91a562d38e8d6dea370234c9e989247758764e."}
+      "Committed the two scoped files as 5ad0b052e235a1a01be0035c81b870751f40215a."}
      {:cmd
       "sha256sum problems/t95J02/lean/Main.lean ConstructionTargets/t95J02Closure.blueprint.md",
       :exit 0,
       :finding
-      "Hashes are 1aa2c1792c034ef449eb57893ecb1a452b93f4f7a2bed211159a731334909e42 and bc179810a0d4e5678063ccd6cf4ff4c04cb9820337d2ff1536e5d070cc74a6c7."}],
+      "Hashes are f968f5fbd27e1894a6fb81955aa73cece054cdbff0743718b4aa8ab2d7f64303 and 3c0dc595b5df01192f057bda6f5f557b43e1847a024e41e9b845fc3e1b917307."}],
     :diagnostic-history
     [{:cmd "lake env lean problems/t95J02/lean/Main.lean",
       :exit 1,
       :finding
-      "Initial B5 draft left the AddCircle period numeral ambiguous, so Lean inferred Nat; corrected by annotating the period as real."}
+      "The first sweep draft used I without opening unitInterval, so Lean treated I as an implicit type; corrected by opening unitInterval and adding explicit real coercions."}
      {:cmd "lake env lean problems/t95J02/lean/Main.lean",
       :exit 1,
       :finding
-      "Intermediate injectivity proof rewrote a zsmul form that the membership theorem had not exposed; corrected by supplying the integer witness directly and simplifying."}
+      "The endpoint proof did not unfold the TopCat inclusion coercion; corrected by exposing the subtype value and applying the compiled vertical and glide equalities."}
      {:cmd "lake env lean problems/t95J02/lean/Main.lean",
       :exit 1,
       :finding
-      "Intermediate homeomorphism construction supplied the equivalence positionally although homeoOfEquivCompactToT2 takes it implicitly; corrected with the named f argument."}
-     {:cmd "lake env lean problems/t95J02/lean/Main.lean",
-      :exit 1,
-      :finding
-      "Intermediate final declaration used an unqualified euclideanUnitSphere; corrected to T02A06.euclideanUnitSphere."}
-     {:cmd "lake env lean /dev/stdin for an additional axiom print",
-      :exit 1,
-      :finding
-      "The exploratory import used a nonexistent module prefix for the problem file; the authoritative direct source compilation and placeholder scan had already succeeded, so this check was omitted from acceptance commands."}],
+      "The intermediate core map tried ContinuousMap.comp directly on a TopCat morph; corrected by bundling its coerced function with the composed continuity proof."}],
     :continue-from
-    {:commit "0f91a562d38e8d6dea370234c9e989247758764e",
+    {:commit "5ad0b052e235a1a01be0035c81b870751f40215a",
      :next
-     "Implement B6, the homotopy between the vertical inclusion parametrization and its precomposition with CoefficientCoordinateReflections.reflectionMap (1 : Fin 2)."},
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791721737570-5335-4cc84d69",
-     :commands
-     ["git show/diff-tree 0f91a562d38e8d6dea370234c9e989247758764e"
-      "recorded-tree SHA-256, scope, diff-check, and placeholder verification"
-      "python3 scripts/statement-registry.py check"
-      "lake env lean problems/t95J02/lean/Main.lean"
-      "lake env lean recorded source plus #print axioms"],
-     :finding
-     "PASS: commit 0f91a562 adds new B5 progress since program history; exact source and blueprint hashes match, scope is exact, B5 compiles without new placeholders, uses only standard axioms, and its sphere-to-CircleB orientation and representation transports are correct. B6-B9 are explicitly listed as remaining milestones."},
-    :commit "0f91a562d38e8d6dea370234c9e989247758764e",
+     "Prove the coordinate representation lemma conjugating reflectionMap 1 to additive negation, then package the transported t95J02_beta_homotopic_beta_reflection."},
+    :commit "5ad0b052e235a1a01be0035c81b870751f40215a",
     :changed-paths
     ["problems/t95J02/lean/Main.lean"
      "ConstructionTargets/t95J02Closure.blueprint.md"],
     :fixture
     {:path "ConstructionTargets/t95J02Closure.blueprint.md",
      :sha256
-     "bc179810a0d4e5678063ccd6cf4ff4c04cb9820337d2ff1536e5d070cc74a6c7",
+     "3c0dc595b5df01192f057bda6f5f557b43e1847a024e41e9b845fc3e1b917307",
      :nodes
      [{:id :B1, :status :proved}
       {:id :B2, :status :proved}
       {:id :B3, :status :proved}
       {:id :B4, :status :proved}
       {:id :B5, :status :proved}
-      {:id :B6, :status :planned}
+      {:id :B6, :status :partial}
       {:id :B7, :status :planned}
       {:id :B8, :status :planned}
       {:id :B9, :status :planned}]},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t95J02/lean/Main.lean"
     "problems/t95J02/status.json"
@@ -117087,7 +117052,9 @@
     :area "klein-bottle-homology"},
    :id :lemma-t95j02closure-t95j02-beta-homotopic-beta-reflection,
    :kind :lemma,
-   :depends-on [:lemma-t95j02closure-t95j02circleb-homeo],
+   :depends-on
+   [:lemma-t95j02closure-t95j02circleb-homeo
+    :lemma-t95j02closure-verticalsweephomotopy],
    :other-consumers []}
   {:consumer :t95J02,
    :phase :lemma,
@@ -117169,6 +117136,25 @@
    :depends-on
    [:lemma-t95j02closure-separatingmap
     :lemma-t95j02closure-verticalparam-add-int],
+   :other-consumers []}
+  {:consumer :t95J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t95J02Closure.verticalSweepHomotopy",
+    :type
+    "A homotopy from the AddCircle vertical core map to its precomposition with additive negation"},
+   :lemma
+   {:name "t95J02Closure.verticalSweepHomotopy",
+    :reported-by [:program-2026-10-11-close-t95j02],
+    :type
+    "A homotopy from the AddCircle vertical core map to its precomposition with additive negation",
+    :area "klein-bottle-homology",
+    :proved-in :program-2026-10-11-close-t95j02},
+   :id :lemma-t95j02closure-verticalsweephomotopy,
+   :kind :lemma,
+   :depends-on [:lemma-t95j02closure-t95j02circleb-homeo],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
