@@ -68334,89 +68334,117 @@
    "Construct the right-core angular stage from circleMeridian(rightTubeMeridianCoordinate p) to this radial stage's initial endpoint while retaining right-tube membership and left-core avoidance, then concatenate the stages and package safeRightTubeMeridianDeformation.",
    :other-consumers []}
   {:bounded-exception
+   "single-consumer height criterion for left-core avoidance by right-core polar reconstruction",
+   :consumer :t02A03,
+   :phase :probe,
+   :state :open,
+   :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t02A03/core-polar-height-left-core-avoidance",
+   :acceptance
+   {:probe
+    "Compile reconstructionAvoidsLeftCore_rightTubeCorePolar_of_im_ne_zero. Prove that a rightTubeCorePolarReconstruction with nonzero imaginary normal component avoids Set.range apm_t02a03_leftCore by comparing the frozen third coordinate. Do not claim avoidance when the imaginary component is zero and do not construct an angular homotopy.",
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.reconstructionAvoidsLeftCore_rightTubeCorePolar_of_im_ne_zero",
+    :type
+    "forall (u : Circle) (n : Complex), n.im != 0 -> rightTubeCorePolarReconstruction u n ∉ Set.range apm_t02a03_leftCore",
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "certify deletion avoidance off the zero-height slice for the corrected right-core tubular path"},
+   :id
+   :routes-2026-10-11-t02a03-core-polar-height-left-core-avoidance-topo2-r2,
+   :kind :reusable-theorem,
+   :area "explicit-r3-tube-deformation-retraction",
+   :depends-on
+   [:routes-2026-10-11-t02a03-right-tube-core-radial-ambient-topo2-r1],
+   :current-residual
+   "Analyze the zero-height planar slice of rightTubeCorePolarReconstruction against the left-core circle, then construct the angular stage so its planar trajectory avoids the exact intersection locus; combine that result with this height criterion and concatenate with the radial stage.",
+   :other-consumers []}
+  {:bounded-exception
    "single-consumer explicit ambient deformation with frozen tube and deletion invariants",
    :consumer :t02A03,
    :evidence
    {:probe
     {:residual
-     "Bank the right-core radial ambient stage, then build the right-core angular stage with deletion avoidance and concatenate it to obtain the safe ambient deformation.",
+     "Bank the nonzero-height deletion criterion, then isolate and avoid the planar intersection locus during the right-core angular and radial stages before concatenating the safe deformation.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
      [{:name
-       "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreRadialAmbientDeformation_exists",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.reconstructionAvoidsLeftCore_rightTubeCorePolar_of_im_ne_zero",
        :type
-       "exists H : C(unitInterval × RightTubeMinusLeftCore, apm_t02a03_E3), (forall p, H (0,p) = rightTubeCorePolarReconstruction (rightTubeCoreAngularCoordinate p) (rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)))) and (forall p, H (1,p) = p.1) and (forall tp, H tp ∈ apm_t02a03_rightTube)",
+       "forall (u : Circle) (n : Complex), n.im != 0 -> rightTubeCorePolarReconstruction u n ∉ Set.range apm_t02a03_leftCore",
        :status :proved,
        :consumers [:t02A03],
-       :depends-on
-       ["ConstructionTargets.T02A03GeometricTubeDeformation.reconstructionMemRightTube_rightTubeCorePolar"
-        "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreInterpolatedNormalRadiusBound"
-        "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCorePolarReconstruction_self"],
+       :depends-on [],
        :area "explicit-r3-tube-deformation-retraction"}],
      :prerequisite
      {:bounded-exception
-      "single-consumer continuous right-core radial ambient stage with endpoint and frozen tube invariant",
+      "single-consumer height criterion for left-core avoidance by right-core polar reconstruction",
       :consumer :t02A03,
       :phase :probe,
       :state :open,
       :scope
       ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t02A03/right-tube-core-radial-ambient",
+      "TOPOLOGY-ROUTES.md/t02A03/core-polar-height-left-core-avoidance",
       :acceptance
       {:probe
-       "Compile rightTubeCoreRadialAmbientDeformation_exists. Reconstruct from rightTubeCoreAngularCoordinate and rightTubeCoreNormalInterpolation specialized to rightTubeMeridianCoordinate; prove continuity, the initial radial-stage endpoint, the final input endpoint, and pointwise right-tube membership. Do not claim the initial endpoint is circleMeridian and do not claim left-core avoidance.",
+       "Compile reconstructionAvoidsLeftCore_rightTubeCorePolar_of_im_ne_zero. Prove that a rightTubeCorePolarReconstruction with nonzero imaginary normal component avoids Set.range apm_t02a03_leftCore by comparing the frozen third coordinate. Do not claim avoidance when the imaginary component is zero and do not construct an angular homotopy.",
        :declaration
-       "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreRadialAmbientDeformation_exists",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.reconstructionAvoidsLeftCore_rightTubeCorePolar_of_im_ne_zero",
        :type
-       "exists H : C(unitInterval × RightTubeMinusLeftCore, apm_t02a03_E3), (forall p, H (0,p) = rightTubeCorePolarReconstruction (rightTubeCoreAngularCoordinate p) (rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)))) and (forall p, H (1,p) = p.1) and (forall tp, H tp ∈ apm_t02a03_rightTube)",
+       "forall (u : Circle) (n : Complex), n.im != 0 -> rightTubeCorePolarReconstruction u n ∉ Set.range apm_t02a03_leftCore",
        :placeholder "the sole sorry in apm_t02a03",
        :route-step
-       "construct the right-tube-preserving radial stage of the corrected ambient deformation"},
+       "certify deletion avoidance off the zero-height slice for the corrected right-core tubular path"},
       :id
-      :routes-2026-10-11-t02a03-right-tube-core-radial-ambient-topo2-r1,
+      :routes-2026-10-11-t02a03-core-polar-height-left-core-avoidance-topo2-r2,
       :kind :reusable-theorem,
       :area "explicit-r3-tube-deformation-retraction",
       :depends-on
-      [:routes-2026-10-11-t02a03-reconstruction-mem-right-tube-core-polar-topo2-r1],
+      [:routes-2026-10-11-t02a03-right-tube-core-radial-ambient-topo2-r1],
       :current-residual
-      "Construct the right-core angular stage from circleMeridian(rightTubeMeridianCoordinate p) to this radial stage's initial endpoint while retaining right-tube membership and left-core avoidance, then concatenate the stages and package safeRightTubeMeridianDeformation.",
+      "Analyze the zero-height planar slice of rightTubeCorePolarReconstruction against the left-core circle, then construct the angular stage so its planar trajectory avoids the exact intersection locus; combine that result with this height criterion and concatenate with the radial stage.",
       :other-consumers []},
      :commands
-     [{:cmd "lake env lean /tmp/t02a03_core_radial_ambient_probe.lean",
+     [{:cmd
+       "lake env lean /tmp/t02a03_core_reconstruction_height_avoidance_probe.lean",
        :exit 0,
        :output
-       "rightTubeCoreRadialAmbientDeformation_exists compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd "sha256sum /tmp/t02a03_core_radial_ambient_probe.lean",
-       :exit 0,
-       :output
-       "fd3ddf402b93e8c42ff3e324d678184b97aeca09f0ed0e84d716f971f66e024e  /tmp/t02a03_core_radial_ambient_probe.lean"}
+       "reconstructionAvoidsLeftCore_rightTubeCorePolar_of_im_ne_zero compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_core_radial_ambient_probe.lean || true)\"",
+       "sha256sum /tmp/t02a03_core_reconstruction_height_avoidance_probe.lean",
+       :exit 0,
+       :output
+       "a229ee17509ec4112f59fc5a43ea071da9cc2216f87fc27a7627ee023113374f  /tmp/t02a03_core_reconstruction_height_avoidance_probe.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_core_reconstruction_height_avoidance_probe.lean || true)\"",
        :exit 0}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}
       {:cmd
-       "rg -n 'rightTubeCoreRadialAmbientDeformation_exists' /tmp/t02a03_core_radial_ambient_probe.lean",
+       "rg -n 'reconstructionAvoidsLeftCore_rightTubeCorePolar_of_im_ne_zero' /tmp/t02a03_core_reconstruction_height_avoidance_probe.lean",
        :exit 0,
        :output
-       "9:theorem rightTubeCoreRadialAmbientDeformation_exists :\n39:#print axioms rightTubeCoreRadialAmbientDeformation_exists"}],
+       "7:theorem reconstructionAvoidsLeftCore_rightTubeCorePolar_of_im_ne_zero\n15:#print axioms reconstructionAvoidsLeftCore_rightTubeCorePolar_of_im_ne_zero"}],
      :diagnostic-history
-     [{:cmd "lake env lean /tmp/t02a03_core_radial_ambient_probe.lean",
+     [{:cmd
+       "lake env lean /tmp/t02a03_core_reconstruction_height_avoidance_probe.lean",
        :exit 1,
        :finding
-       "The first continuity proof unfolded through the coordinate definitions, preventing fun_prop from using the banked tubular-coordinate continuity theorem; composing that theorem with the angular and normal maps corrected continuity, and explicitly simplifying the local ContinuousMap corrected the endpoint elaboration."}],
+       "The coordinate equality obtained from hypothetical range membership was oriented as 0 = n.im; taking its symmetry supplied the contradiction to n.im != 0, and the corrected fixture compiled."}],
      :fixture
-     {:path "/tmp/t02a03_core_radial_ambient_probe.lean",
+     {:path
+      "/tmp/t02a03_core_reconstruction_height_avoidance_probe.lean",
       :sha256
-      "fd3ddf402b93e8c42ff3e324d678184b97aeca09f0ed0e84d716f971f66e024e"},
+      "a229ee17509ec4112f59fc5a43ea071da9cc2216f87fc27a7627ee023113374f"},
      :finding
-     "The compiled continuous right-core radial deformation holds rightTubeCoreAngularCoordinate fixed while interpolating the right-core normal coordinate from the meridian image to the input. It ends exactly at the input by rightTubeCorePolarReconstruction_self, and every point remains in apm_t02a03_rightTube by the quarter-radius bound and reconstruction membership criterion. The remaining step is the initial angular deformation from rightTubeCoreAngularCoordinate p to 1, followed by deletion avoidance for the combined path.",
+     "Every frozen left-core point has third coordinate zero, while rightTubeCorePolarReconstruction u n has third coordinate n.im. Therefore a nonzero imaginary normal component is a sufficient, angle-independent deletion invariant. This isolates the remaining planar zero-height case for the angular and radial stages.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
@@ -68459,7 +68487,8 @@
     :routes-2026-10-11-t02a03-recovered-normal-radial-ambient-topo2-r1
     :routes-2026-10-11-t02a03-avoids-left-core-radial-ambient-topo2-r1
     :routes-2026-10-11-t02a03-reconstruction-mem-right-tube-core-polar-topo2-r1
-    :routes-2026-10-11-t02a03-right-tube-core-radial-ambient-topo2-r1],
+    :routes-2026-10-11-t02a03-right-tube-core-radial-ambient-topo2-r1
+    :routes-2026-10-11-t02a03-core-polar-height-left-core-avoidance-topo2-r2],
    :current-residual
    "Lift H to RightTubeMinusLeftCore, package rightTubeMeridianRetractionHomotopy, then use the coordinate equation for the Circle-side constant homotopy.",
    :other-consumers []}
@@ -72163,4 +72192,28 @@
    [:lemma-constructiontargets-t02a03geometrictubedeformation-reconstructionmemrighttube-ri
     :lemma-constructiontargets-t02a03geometrictubedeformation-righttubecoreinterpolatednorm
     :lemma-constructiontargets-t02a03geometrictubedeformation-righttubecorepolarreconstruct],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T02A03GeometricTubeDeformation.reconstructionAvoidsLeftCore_rightTubeCorePolar_of_im_ne_zero",
+    :type
+    "forall (u : Circle) (n : Complex), n.im != 0 -> rightTubeCorePolarReconstruction u n ∉ Set.range apm_t02a03_leftCore"},
+   :lemma
+   {:name
+    "ConstructionTargets.T02A03GeometricTubeDeformation.reconstructionAvoidsLeftCore_rightTubeCorePolar_of_im_ne_zero",
+    :reported-by
+    [:routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1],
+    :type
+    "forall (u : Circle) (n : Complex), n.im != 0 -> rightTubeCorePolarReconstruction u n ∉ Set.range apm_t02a03_leftCore",
+    :area "explicit-r3-tube-deformation-retraction",
+    :proved-in
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+   :id
+   :lemma-constructiontargets-t02a03geometrictubedeformation-reconstructionavoidsleftcore-,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}]}
