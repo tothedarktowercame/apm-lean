@@ -69894,8 +69894,60 @@
   {:bounded-exception
    "single-consumer positive meridian-sign conversion to the unnormalized deleted left-core normal",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/t02a03_positive_sign_left_normal_probe.lean",
+      :sha256
+      "514acce785d9854ae5db674128c19b7135dede3c9e7103eb9036119e8b3c8ddd"},
+     :commands
+     [{:cmd
+       "test -L .lake/packages && test \"$(readlink -f .lake/packages)\" = /home/joe/code/apm-lean/.lake/packages",
+       :exit 0}
+      {:cmd
+       "lake env lean /tmp/t02a03_positive_sign_left_normal_probe.lean",
+       :exit 0,
+       :output
+       "positiveSign_rightTubeNormalComplex_re_pos compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "sha256sum /tmp/t02a03_positive_sign_left_normal_probe.lean",
+       :exit 0,
+       :output
+       "514acce785d9854ae5db674128c19b7135dede3c9e7103eb9036119e8b3c8ddd  /tmp/t02a03_positive_sign_left_normal_probe.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_positive_sign_left_normal_probe.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}
+      {:cmd
+       "rg -n 'positiveSign_rightTubeNormalComplex_re_pos' /tmp/t02a03_positive_sign_left_normal_probe.lean",
+       :exit 0,
+       :output
+       "5:theorem positiveSign_rightTubeNormalComplex_re_pos\n26:#print axioms positiveSign_rightTubeNormalComplex_re_pos"}],
+     :warnings [],
+     :finding
+     "The positive normalized meridian sign forces the unnormalized deleted left-core normal real coordinate to equal its strictly positive norm. Deletion supplies nonzeroness, and NormedSpace.norm_smul_normalize supplies the exact normalization equation.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+      :declaration
+      "ConstructionTargets.T02A03GeometricTubeDeformation.positiveSign_rightTubeNormalComplex_re_pos",
+      :type
+      "forall (p : RightTubeMinusLeftCore), (rightTubeMeridianCoordinate p : Complex).re = 1 -> 0 < (rightTubeNormalComplex p.1).re",
+      :proof
+      "Let n be rightTubeNormalComplex p.1; use deletion and rightTubeNormalComplex_eq_zero_iff to prove n nonzero, take real parts in norm_smul_normalize n, rewrite normalize n real to 1 using the hypothesis, and conclude from norm_pos_iff.",
+      :axioms [propext Classical.choice Quot.sound]},
+     :residual
+     "Implement and bank the positive-sign input-normal inequality; then translate it to the core-normal interpolation and prove the positive radial collision branch."}},
+   :phase :implementation,
+   :type
+   "forall (p : RightTubeMinusLeftCore), (rightTubeMeridianCoordinate p : Complex).re = 1 -> 0 < (rightTubeNormalComplex p.1).re",
    :state :open,
+   :proof
+   "Let n be rightTubeNormalComplex p.1; use deletion and rightTubeNormalComplex_eq_zero_iff to prove n nonzero, take real parts in norm_smul_normalize n, rewrite normalize n real to 1 using the hypothesis, and conclude from norm_pos_iff.",
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/positive-sign-left-normal-real",
@@ -69909,10 +69961,13 @@
     :placeholder "the sole sorry in apm_t02a03",
     :route-step
     "translate the positive zero-height meridian component into an unnormalized input-coordinate inequality for radial collision control"},
+   :axioms [propext Classical.choice Quot.sound],
    :id
    :routes-2026-10-11-t02a03-positive-sign-left-normal-real-topo2-r1,
    :kind :reusable-theorem,
    :area "explicit-r3-tube-deformation-retraction",
+   :declaration
+   "ConstructionTargets.T02A03GeometricTubeDeformation.positiveSign_rightTubeNormalComplex_re_pos",
    :depends-on
    [:routes-2026-10-11-t02a03-sign-cases-zero-height-meridian-real-topo2-r1],
    :current-residual
