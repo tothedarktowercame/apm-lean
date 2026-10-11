@@ -17719,7 +17719,7 @@
    :depends-on [],
    :other-consumers [:t92J05 :t93J03 :t99J01 :t00J07]}
   {:consumer :t00A02,
-   :stop-count 9,
+   :stop-count 10,
    :review-finding
    "Blueprint B9 claims every final hypothesis is used, but LocPathConnectedSpace X is unused: B1 does not assume it, B7 derives PathConnectedSpace from SimplyConnectedSpace, B8 uses simple-connected path homotopy, and no other node cites or uses local path-connectedness. Repair the blueprint and frozen Lean interface by either removing LocPathConnectedSpace X or adding a concrete node whose statement and proof genuinely require it, with the dependency recorded in uses:.",
    :implements-lemma
@@ -17730,7 +17730,7 @@
      "ConstructionTargets/DeckGroupQuotientFundamentalGroup.blueprint.md",
      :sha256
      "f1d74207903f683985266f7ebbb50b2280d87ec873331c3889dfdc12fbe66aa6",
-     :implemented-node :B6},
+     :implemented-node :B7},
     :placeholder-delta
     {:t00A02 {:before 2, :after 2, :delta 0},
      :t92J05 {:before 3, :after 3, :delta 0},
@@ -17738,7 +17738,7 @@
      :t99J01 {:before 1, :after 1, :delta 0},
      :t00J07 {:before 3, :after 3, :delta 0}},
     :residual
-    "Implement reviewed blueprint B7 orbitEndpointMonodromy by sending a to (orbitEndpointMonodromyRaw free x a) inverse; prove map_one from raw_one and map_mul from B6 plus mul_inv_rev. Then implement B8-B11.",
+    "Implement reviewed blueprint B8 orbitEndpointMonodromy_surjective: for g choose a path from x to g inverse acting on x, project it to a quotient loop, use monodromy_map to identify its raw endpoint coordinate with g inverse, and conclude the inverted coordinate maps to g. Then implement B9-B11.",
     :gates
     {:module-compile :pass,
      :target-build :pass,
@@ -17750,19 +17750,10 @@
     :warnings [],
     :missing-theorems
     [{:name
-      "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromyRaw_mul",
-      :type
-      "forall repaired orbit coverings, x and a b in the quotient fundamental group, orbitEndpointMonodromyRaw free x (a*b) = orbitEndpointMonodromyRaw free x b * orbitEndpointMonodromyRaw free x a",
-      :status :proved,
-      :consumers [:t00A02 :t92J05 :t93J03 :t99J01 :t00J07],
-      :depends-on
-      ["ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitMonodromy_deck_equivariant"],
-      :area "deck-group-quotient-pi1"}
-     {:name
       "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromy",
       :type
-      "Blueprint B7: the inverse raw endpoint coordinate as a homomorphism to G",
-      :status :not-started,
+      "forall repaired orbit coverings and x, FundamentalGroup (X/G) [x] ->* G, sending a to the inverse of its raw lifted-endpoint coordinate",
+      :status :proved,
       :consumers [:t00A02 :t92J05 :t93J03 :t99J01 :t00J07],
       :depends-on
       ["ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromyRaw_mul"],
@@ -17796,16 +17787,16 @@
       :area "deck-group-quotient-pi1"}],
     :statement-hashes
     {:module
-     "ec12d9f5812eb8e2e442e6cdd4169e390b0ab960f10a6c0429c3810f4d79bb1f",
+     "b92dd8dc634578572e8e76a4e8f776db218bbf0f362e4a55b1113d250675f375",
      :milestones
-     "cb2a3cefd411e91f71d7167bf2433a672f2de886b23f3267294b6c14b51142f4",
+     "9d297eaa5365ab8349c88566266b081420b72dc2bfb82896a3c9b56c39820520",
      :blueprint
      "f1d74207903f683985266f7ebbb50b2280d87ec873331c3889dfdc12fbe66aa6"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Implemented and committed reviewed blueprint B6. orbitEndpointMonodromyRaw_mul proves raw(a*b)=raw(b)*raw(a): the proof exposes fundamental-group multiplication as the path for b followed by a, applies monodromy_trans_apply, rewrites the intermediate endpoint through the fiber-coordinate equivalence, and applies B5 deck-equivariance. The final theorem remains incomplete; B7 packages the inverse raw coordinate as a homomorphism.",
+    "Implemented and committed reviewed blueprint B7. orbitEndpointMonodromy is the group homomorphism sending a loop a to the inverse of orbitEndpointMonodromyRaw free x a. map_one follows from the raw identity law, and map_mul follows directly from B6 followed by mul_inv_rev, preserving the reviewed orientation. The final theorem remains incomplete; B8 surjectivity is next.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean",
@@ -17815,7 +17806,7 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd
-      "git diff --check dce631bb0^ dce631bb0 -- ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean ConstructionTargets/DeckGroupQuotientFundamentalGroup.md",
+      "git diff --check 1646dfed8^ 1646dfed8 -- ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean ConstructionTargets/DeckGroupQuotientFundamentalGroup.md",
       :exit 0}
      {:cmd
       "rg -n '\\bsorry\\b|\\badmit\\b|^\\s*axiom\\b' ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean",
@@ -17827,26 +17818,8 @@
      {:cmd
       "git status --short -- ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean ConstructionTargets/DeckGroupQuotientFundamentalGroup.md ConstructionTargets/DeckGroupQuotientFundamentalGroup.blueprint.md",
       :exit 0}],
-    :diagnostic-history
-    [{:cmd
-      "lake env lean ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean",
-      :exit 1,
-      :finding
-      "Rewriting CategoryTheory.End.mul_def did not unfold through the FundamentalGroup.toPath abbreviation. Changing the monodromy argument explicitly to toPath(b).trans(toPath(a)) exposed the reviewed composition order; the successful rerun is recorded in commands."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791715665742-5134-2aaab4de",
-     :commands
-     ["git diff-tree --no-commit-id --name-status -r dce631bb064fcdb2668997b82b6dbd096f9f2831"
-      "git diff --check dce631bb064fcdb2668997b82b6dbd096f9f2831^ dce631bb064fcdb2668997b82b6dbd096f9f2831"
-      "sha256sum ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean ConstructionTargets/DeckGroupQuotientFundamentalGroup.blueprint.md"
-      "lake env lean ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean"
-      "python3 scripts/statement-registry.py check"
-      "lake build ConstructionTargets.DeckGroupQuotientFundamentalGroup"],
-     :finding
-     "PASS: commit dce631bb064fcdb2668997b82b6dbd096f9f2831 adds new compiled, sorry-free B6 progress after program-history commit 2b65123e4ac796b51a40121a9ea4717dfda4866f; exact scope and blobs match, hashes reproduce, raw endpoint coordinates have the reviewed reversed multiplication orientation, the proof uses only B3/B5 and the permitted monodromy composition machinery, only standard axioms occur, and the milestone note lists B7-B11 work remaining."},
-    :commit "dce631bb064fcdb2668997b82b6dbd096f9f2831",
+    :diagnostic-history [],
+    :commit "1646dfed8b40cdbe7ffec964d9c0f4382da3e7fb",
     :changed-paths
     ["ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean"
      "ConstructionTargets/DeckGroupQuotientFundamentalGroup.md"],
@@ -17857,13 +17830,13 @@
      ["ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean"
       "ConstructionTargets/DeckGroupQuotientFundamentalGroup.md"],
      :declaration
-     "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromyRaw_mul"},
+     "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromy"},
     :row :program-2026-10-11-deck-group-quotient-pi1,
     :seat :topo-10},
    :phase :implementation,
    :owner-repair
    "2026-10-11 claude-14: final type gains [T2Space X] [LocallyCompactSpace X] (Mathlib quotient-covering needs them; every consumer, the plane and spheres, has them). Do not prove covering under weaker hypotheses.",
-   :state :open,
+   :state :needs-owner,
    :scope
    ["ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean"
     "ConstructionTargets/DeckGroupQuotientFundamentalGroup.md"
