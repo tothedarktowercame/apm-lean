@@ -70149,6 +70149,19 @@
       :exit 1,
       :finding
       "This canonical checkout has a real .lake/packages directory; no package-authority mutation was made during the scoped theorem row."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791692317049-4146-a938a15e",
+     :commands
+     ["git show/diff-tree/show --check 06df937840e7917be33e170cb7162f5ef645e56e"
+      "git rev-parse recorded scope blob; sha256sum frozen fixture"
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean"
+      "lake env lean /tmp/t02a03_positive_sign_input_poly_probe.lean"
+      "python3 scripts/statement-registry.py check and fingerprint commit/parent"
+      "python3 placeholder recount at commit/parent"],
+     :finding
+     "PASS: topo-6 is independent from codex-7; the recorded commit changes only the scoped target, and its blob and frozen fixture hash match. Target and probe compile with exactly propext, Classical.choice, and Quot.sound. The theorem has the frozen endpoint orientation: the banked factorization identifies the recovered input collision polynomial with a positive scalar times the meridian real coordinate, and rewriting the positive branch to one proves strict positivity without asserting a connecting path or interpolation-interior safety. Registry is 131/0, the t02A03 statement fingerprint is unchanged at commit and parent, and the sole Main.lean placeholder remains 1 at both revisions."},
     :commit "06df937840e7917be33e170cb7162f5ef645e56e",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
@@ -70164,7 +70177,7 @@
    :phase :implementation,
    :type
    "forall (p : RightTubeMinusLeftCore), (rightTubeMeridianCoordinate p : Complex).re = 1 -> 0 < (1 - (rightTubeCoreNormalComplex p.1).re)^2 - 4*(1-(rightTubeCoreNormalComplex p.1).re)*(rightTubeCoreAngularCoordinate p : Complex).re + 3",
-   :state :done-unreviewed,
+   :state :done,
    :proof
    "Obtain c, its positivity, and the polynomial factorization from inputCollisionPolynomial_positiveFactor_meridianReal p; rewrite the factorization and the branch hypothesis, simplify c times one, and return c's positivity.",
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
@@ -70269,7 +70282,7 @@
      "The recovered input collision polynomial is strictly positive in the meridian-real-equals-one branch. The banked positive-factor theorem writes it as c times the meridian real coordinate with c positive, so rewriting the branch value to one closes the inequality exactly.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
