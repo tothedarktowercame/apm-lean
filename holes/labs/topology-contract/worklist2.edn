@@ -71798,6 +71798,19 @@
       :exit 1,
       :explanation
       ".lake/packages is a real directory rather than the required canonical symlink; no package state was modified and compilation succeeded on the existing substrate."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791704368533-4638-f8ead3fc",
+     :commands
+     ["git show/diff-tree/show --check de4bc427239801fecfee6f9c0b034a03be489c2c"
+      "git rev-parse scope blob; sha256sum fixture"
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean"
+      "lake env lean /tmp/t02a03_coupled_angular_normalization_adapter_probe.lean"
+      "statement registry check and commit/parent fingerprints"
+      "placeholder recount at commit/parent"],
+     :finding
+     "PASS: independent author topo-6; exact one-file scope, blob, and fixture hash match. Target and frozen probe compile. The frozen adapter crosses representations correctly: pointwise nonvanishing gives continuous complex normalization and unit-sphere membership, then subtype extensionality identifies the normalized source with Circle 1 and the normalized target with rightTubeCoreAngularCoordinate. It assumes rather than invents the nonvanishing path and makes no ambient claim. Axioms are exactly propext, Classical.choice, Quot.sound; registry is 131/0, t02A03 fingerprint is unchanged at commit and parent, fixture has no placeholders, and Main has 1 placeholder at commit and parent."},
     :commit "de4bc427239801fecfee6f9c0b034a03be489c2c",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
@@ -71812,7 +71825,7 @@
    :phase :implementation,
    :type
    "∀ (Z : C(unitInterval × RightTubeMinusLeftCore, ℂ)), (∀ tp, Z tp ≠ 0) → (∀ p, Z (0,p)=1) → (∀ p, Z (1,p)=rightTubeCorePlanarComplex p.1) → ∃ A : C(unitInterval × RightTubeMinusLeftCore, Circle), (∀ p, A (0,p)=1) ∧ (∀ p, A (1,p)=rightTubeCoreAngularCoordinate p)",
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/coupled-angular-normalization-adapter",
@@ -71922,7 +71935,7 @@
      "Normalization is no longer part of the geometric residual. Any jointly continuous nonvanishing complex path with endpoints 1 and rightTubeCorePlanarComplex normalizes continuously to Circle and has exactly the required angular endpoint values. The sole remaining angular task is the endpoint-fixed nonvanishing complex perturbation itself.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
@@ -76919,7 +76932,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -76935,7 +76948,10 @@
     "∀ (Z : C(unitInterval × RightTubeMinusLeftCore, ℂ)), (∀ tp, Z tp ≠ 0) → (∀ p, Z (0,p)=1) → (∀ p, Z (1,p)=rightTubeCorePlanarComplex p.1) → ∃ A : C(unitInterval × RightTubeMinusLeftCore, Circle), (∀ p, A (0,p)=1) ∧ (∀ p, A (1,p)=rightTubeCoreAngularCoordinate p)",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-coupledangular-of-nonvanishin,
    :kind :lemma,
