@@ -16001,6 +16001,20 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git commit -m Identify-forgotten-kernel-cone", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791730350000-5520-df285ce9",
+     :commands
+     ["git show/diff-tree/diff --check at 8b6b45cebde725616e57c7f8addf699994b77eb4"
+      "sha256sum fixture and module plus recorded-blob comparison"
+      "renamed fixture: lake env lean"
+      "python3 scripts/statement-registry.py check"
+      "placeholder scans for module, t00J02, t98A02"
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"],
+     :finding
+     "Exact one-file scope and recorded blob match; frozen hashes and exact definition type reproduce. The cone isomorphism has the required direction from the transported forgotten τ₁ kernel cone to the evaluated mapped kernel fork, uses the identity isomorphism on their shared cone point, and verifies both diagram legs definitionally; it does not transfer the IsLimit witness or package further components. Fixture and module compile, registry is 131/0, build completes 8326 jobs, axioms are exactly propext/Classical.choice/Quot.sound, module has no placeholders, and consumer counts remain 1/1."},
     :commit "8b6b45cebde725616e57c7f8addf699994b77eb4",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -16017,7 +16031,7 @@
     :routes-2026-10-11-manifold-forget-snake-kernel-tau1-cone-iso-topo3-r1,
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/integral-open-disk-connecting-naturality/snake-input-kernel-tau1-cone-iso",
@@ -16227,7 +16241,7 @@
      "After transport, the forgotten cone and evaluated mapped fork share both their parallel-pair diagram and cone point. The compiled comparison is therefore an identity-point Cone.ext isomorphism, with both legs definitionally equal. The next bounded theorem applies IsLimit.equivIsoLimit to obtain the exact τ₁ component witness consumed by ShortComplex.isLimitOfIsLimitπ.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -23254,7 +23268,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -23271,7 +23285,10 @@
     "forall (S : ShortComplex.SnakeInput (ModuleCat ℤ)), (Cone.postcompose (forgetIntModulesParallelPairZeroIso S.v₁₂.τ₁).hom).obj (forgetIntModules.mapCone (KernelFork.ofι S.v₀₁.τ₁ S.w₀₂_τ₁)) ≅ (KernelFork.ofι (forgetIntModules.mapShortComplex.map S.v₀₁) (forgetIntModulesSnakeInput_zero_squares S).1).map ShortComplex.π₁",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-forget-snake-kernel-tau1-cone-iso-topo3-r1},
+    :routes-2026-10-11-manifold-forget-snake-kernel-tau1-cone-iso-topo3-r1,
+    :banked-by
+    :routes-2026-10-11-manifold-forget-snake-kernel-tau1-cone-iso-topo3-r1,
+    :banked-commit "8b6b45cebde725616e57c7f8addf699994b77eb4"},
    :id :lemma-mfclass-forget-snake-kernel-tau1-cone-iso,
    :kind :lemma,
    :depends-on [:lemma-mfclass-forget-snake-transported-kernel-tau1],
