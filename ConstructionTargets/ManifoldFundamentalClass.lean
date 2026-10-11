@@ -603,6 +603,22 @@ theorem coefficientIntegralCokernelTransport_projection
   rw [cokernel.π_desc]
   simp
 
+/-- The three canonical integral cokernel comparisons intertwine the complete
+forgotten coefficient projection with the production direct-cokernel projection. -/
+theorem integralCompositeCokernelComparison_projection
+    {X : Type} [TopologicalSpace X] (A : Set X) :
+    (forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ)).map
+        (cokernel.π (CoefficientRelativeSmall.subspaceMap ℤ A)) ≫
+      (forgetIntegralRelativeCokernelComparison A).hom ≫
+      (coefficientIntegralCokernelTransport A).hom ≫
+      (integralMappedRelativeCokernelComparison A).hom =
+    (singularChainsComparison (TopCat.of X)).hom ≫
+      cokernel.π (singularSubspaceMap A) := by
+  rw [← Category.assoc,
+    forgetIntegralRelativeCokernelComparison_projection]
+  rw [← Category.assoc, coefficientIntegralCokernelTransport_projection]
+  exact integralDirectCokernelComparison_projection A
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -641,3 +657,4 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetIntegralRelativeCokernelComparison_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientIntegralCokernelTransport
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientIntegralCokernelTransport_projection
+#print axioms ConstructionTargets.ManifoldFundamentalClass.integralCompositeCokernelComparison_projection
