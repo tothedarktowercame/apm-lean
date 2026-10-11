@@ -116376,6 +116376,18 @@
     {:commit "2ed42033c",
      :next
      "Implement B4 exists_nhds_uniform_isMIntegralCurveOn by specializing B3 to the consumer's Euclidean manifold model."},
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791726363616-5438-edd1e818",
+     :commands
+     ["git show/diff-tree 2ed42033cac16e283a1571210f5ca5100c404239"
+      "recorded-tree SHA-256, exact-scope, diff-check, and placeholder-delta verification"
+      "python3 scripts/statement-registry.py check"
+      "lake env lean ConstructionTargets/t92J08Closure.lean"
+      "lake env lean problems/t92J08/lean/Main.lean"],
+     :finding
+     "PASS: commit 2ed42033c adds new compiled, placeholder-free B3 progress. The initial neighbourhood lies in the fixed chart source and maps into the Euclidean initial ball; B1 target control keeps every trajectory in the chart target; the inverse-chart initial value uses the left inverse; and the tangentCoordChange composition has the correct fixed-chart-to-pointwise-chart orientation for IsMIntegralCurveOn. Scope and hashes match, standard axioms only are used, the consumer's old placeholder is unchanged, and B4-B6 remain explicit."},
     :commit "2ed42033c",
     :changed-paths
     ["ConstructionTargets/t92J08Closure.lean"
@@ -116393,7 +116405,7 @@
       {:id :B6, :status :planned}]},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t92J08/lean/Main.lean"
     "problems/t92J08/status.json"
@@ -116409,7 +116421,7 @@
     ["lake env lean problems/t92J08/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Program milestone completed. Blueprint node B2 is proved: localCoordinateField is the exact fixed-extChartAt representative with varying tangent-space transport, and global C1 manifold regularity implies ordinary C1 regularity at the chart centre. B3-B6 remain.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Program milestone completed. Blueprint node B3 is proved: B1's uniform Euclidean solution family is transported through one fixed extended chart, with target containment keeping every time-point inside the chart and the tangent-coordinate derivative calculation proving the manifold integral-curve property. B4-B6 remain.",
    :id :program-2026-10-11-close-t92j08,
    :kind :final-adapter,
    :campaign-priority 42,
@@ -116428,7 +116440,11 @@
     {:job 3,
      :commit "3675d325b5e3207a26eee3601ca0810b874bfbe1",
      :reason
-     "Program milestone completed. Blueprint node B2 is proved: localCoordinateField is the exact fixed-extChartAt representative with varying tangent-space transport, and global C1 manifold regularity implies ordinary C1 regularity at the chart centre. B3-B6 remain."}]}
+     "Program milestone completed. Blueprint node B2 is proved: localCoordinateField is the exact fixed-extChartAt representative with varying tangent-space transport, and global C1 manifold regularity implies ordinary C1 regularity at the chart centre. B3-B6 remain."}
+    {:job 4,
+     :commit "2ed42033c",
+     :reason
+     "Program milestone completed. Blueprint node B3 is proved: B1's uniform Euclidean solution family is transported through one fixed extended chart, with target containment keeping every time-point inside the chart and the tangent-coordinate derivative calculation proving the manifold integral-curve property. B4-B6 remain."}]}
   {:consumer :t97A07,
    :phase :implementation,
    :state :open,
@@ -117385,7 +117401,7 @@
    :other-consumers []}
   {:consumer :t92J08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -117398,7 +117414,9 @@
     :type
     "At every point of a boundaryless manifold there is a neighbourhood and one positive time on which all its initial points admit integral curves",
     :area "manifold-uniform-local-flow",
-    :proved-in :program-2026-10-11-close-t92j08},
+    :proved-in :program-2026-10-11-close-t92j08,
+    :banked-by :program-2026-10-11-close-t92j08,
+    :banked-commit "2ed42033c"},
    :id
    :lemma-t92j08closure-exists-chart-nhds-uniform-ismintegralcurveon,
    :kind :lemma,
