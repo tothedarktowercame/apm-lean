@@ -8940,8 +8940,89 @@
   {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-correctedlocalnormalizationautomorphism-hom-eq-neg-iff-after-coefficient,
+   :evidence
+   {:placeholder-delta
+    {:t00J02 {:before 1, :after 1, :delta 0},
+     :t98A02 {:before 1, :after 1, :delta 0}},
+    :residual
+    "Rewrite the exposed forward coefficient normalization with CoefficientChartLocal.forward_composite, expand the ambient endpoint with ambientLocalNormalization_hom, and expose the corrected comparison factorization; then align the connecting, radial, and sphere maps to exclude the displayed equality.",
+    :gates
+    {:fixture-hash :pass,
+     :lean :pass,
+     :lake-build :pass,
+     :statement-registry :pass,
+     :placeholder-scan :pass,
+     :diff-check :pass,
+     :worktree-clean :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["lake build replayed pre-existing linter warnings in dependencies; the changed theorem emitted no warnings"],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_after_coefficient",
+      :type
+      "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), (correctedLocalNormalizationAutomorphism k x).hom = -𝟙 _ <-> (integralRelativeHomologyComparisonWithTransport (deletedPoint x) (k + 2)).hom ≫ (ambientLocalNormalization k x).hom = (forgetIntModules.mapIso (CoefficientChartLocal.localIso Int k x)).hom ≫ (-𝟙 _)",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on
+      ["ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom"],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes
+    {"ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_after_coefficient"
+     "6ef5b364c09bd15fc2dfe8e7961c14491ef1977fd5ac6fd3c7c8d028a629669b"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/manifold_fundamental_class_corrected_automorphism_neg_cancel_coefficient.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^\\s*axiom\\b' ConstructionTargets/ManifoldFundamentalClass.lean /tmp/manifold_fundamental_class_corrected_automorphism_neg_cancel_coefficient.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd
+      "comment-stripped placeholder count for problems/t00J02/lean/Main.lean and problems/t98A02/lean/Main.lean",
+      :exit 0,
+      :output
+      {"problems/t00J02/lean/Main.lean" 1,
+       "problems/t98A02/lean/Main.lean" 1}}],
+    :representation
+    {:source
+     "Equality of correctedLocalNormalizationAutomorphism.hom with the negative identity",
+     :target
+     "Equality of the corrected relative comparison followed by ambient normalization with the forward coefficient chart normalization followed by negative identity",
+     :direction
+     "Logical equivalence from the packaged negative-automorphism equation to the coefficient-normalization-cancelled composite equation, with the reverse direction recovered by the inverse isomorphism"},
+    :commit "5913191fc8276bd79971c0bfb17fcebb20eb7688",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path
+     "/tmp/manifold_fundamental_class_corrected_automorphism_neg_cancel_coefficient.lean",
+     :sha256
+     "179576c3e09cade46208e63e00320ccc41533cdf151300bba796d7419254a96c"},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :declaration
+     "ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_after_coefficient",
+     :type
+     "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), (correctedLocalNormalizationAutomorphism k x).hom = -𝟙 _ <-> (integralRelativeHomologyComparisonWithTransport (deletedPoint x) (k + 2)).hom ≫ (ambientLocalNormalization k x).hom = (forgetIntModules.mapIso (CoefficientChartLocal.localIso Int k x)).hom ≫ (-𝟙 _)"},
+    :row
+    :routes-2026-10-11-manifold-corrected-automorphism-neg-cancel-coefficient-topo3-r1,
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/cancel-coefficient-normalization-from-negative-automorphism",
@@ -12588,11 +12669,13 @@
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_after_coefficient",
     :reported-by
-    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+     :routes-2026-10-11-manifold-corrected-automorphism-neg-cancel-coefficient-topo3-r1],
     :type
     "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), (correctedLocalNormalizationAutomorphism k x).hom = -𝟙 _ <-> (integralRelativeHomologyComparisonWithTransport (deletedPoint x) (k + 2)).hom ≫ (ambientLocalNormalization k x).hom = (forgetIntModules.mapIso (CoefficientChartLocal.localIso Int k x)).hom ≫ (-𝟙 _)",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in
+    :routes-2026-10-11-manifold-corrected-automorphism-neg-cancel-coefficient-topo3-r1},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-correctedlocalnormalizationautomorphism-hom-eq-neg-iff-after-coefficient,
    :kind :lemma,
