@@ -3938,6 +3938,24 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git status --porcelain", :exit 0, :stdout ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791681680020-3634-02bd3da1",
+     :commands
+     ["git diff-tree recorded commit scope"
+      "sha256sum promoted fixture"
+      "source blob comparison"
+      "lake env lean promoted fixture"
+      "lake env lean target module"
+      "lake build target module"
+      "placeholder and axiom scan"
+      "definition dependency scan"
+      "statement registry check"
+      "consumer placeholder census"
+      "git diff --check recorded commit"],
+     :finding
+     "PASS: implementation commit 967e6cb2 changes exactly ConstructionTargets/ManifoldFundamentalClass.lean and its blob matches the reviewed source; promoted fixture hash c7be4a0c7f6423517565487943fde4ca37d8f09294463afa1b5be0bdd7c432a2 matches recorded evidence and preserves the frozen declaration types from the original fixture; ambientLocalNormalization is the inverse of the actual homology map induced by HigherChartLocalGenerator.ambientChartMap followed by HigherModelLocalHomology.localIsoInt, and ambientLocalNormalization_generator applies the categorical inverse law plus the reviewed model normalization to prove the concrete ambient generator maps to one; the definition does not depend on integralRelativeHomologyComparison and asserts no compatibility, generator transport, orientation, or localization equality; fixture, module, and target build pass with zero source/fixture placeholders and only propext, Classical.choice, and Quot.sound; 131 statements match and consumer placeholders remain t00J02=1 and t98A02=1."},
     :commit "967e6cb2e2f974d5af7f81a266e92423985980ed",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -3963,7 +3981,7 @@
       "Canonical normalization isomorphism from ambient local homology to the integer model, obtained by pulling back through the actual ambientChartMap homology isomorphism and then applying localIsoInt; the ambient generator maps exactly to one"}},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/production-ambient-normalization",
@@ -4130,7 +4148,7 @@
      "The desired generator equality cannot be justified merely because both classes generate cyclic groups: their signs are the orientation-sensitive content. The fixture packages the actual production normalization, using the inverse of the ambient chart homology map and the reviewed model normalization, and proves that ambientLocalGenerator maps to one. The remaining prerequisite is now the precise naturality and geometry equation comparing this normalization after integralRelativeHomologyComparison with the forgotten coefficient chart localIso; no orientation predicate or arbitrary isomorphism is introduced.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -6416,7 +6434,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -6433,7 +6451,10 @@
     "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), (ambientLocalNormalization k x).hom.hom (HigherChartLocalGenerator.ambientLocalGenerator (k := k) x) = 1",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-ambient-local-normalization-topo3-r1},
+    :routes-2026-10-11-manifold-ambient-local-normalization-topo3-r1,
+    :banked-by
+    :routes-2026-10-11-manifold-ambient-local-normalization-topo3-r1,
+    :banked-commit "967e6cb2e2f974d5af7f81a266e92423985980ed"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-ambientlocalnormalization-generator,
    :kind :lemma,
