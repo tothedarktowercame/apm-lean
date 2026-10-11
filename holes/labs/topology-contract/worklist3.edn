@@ -17855,6 +17855,23 @@
       "git show 1555d1066:ConstructionTargets/DeckGroupQuotientFundamentalGroup.blueprint.md | sha256sum",
       :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791714199362-5037-065f3d98",
+     :commands
+     ["rg current program row, repair finding, and program-history"
+      "read BLUEPRINTS.md and recorded B1-B11 blueprint"
+      "inspect Mathlib IsCoveringMap.existsUnique_continuousMap_lifts signature"
+      "git diff prior and repaired blueprint commits"
+      "git blob identity and git diff --check"
+      "sha256sum repaired blueprint"
+      "blueprint node schema and dependency scan"
+      "lake build ConstructionTargets.DeckGroupQuotientFundamentalGroup"
+      "python3 scripts/statement-registry.py check"
+      "consumer placeholder census"],
+     :finding
+     "PASS: independent mathematical review of blueprint repair commit 1555d106; it is new after program-history commit 3f64958a, changes exactly DeckGroupQuotientFundamentalGroup.blueprint.md, and its blob and SHA-256 f1d74207903f683985266f7ebbb50b2280d87ec873331c3889dfdc12fbe66aa6 match; new B4 faithfully applies Mathlib IsCoveringMap.existsUnique_continuousMap_lifts to the orbit projection with domain X, basepoint x, and lift g acting on x, genuinely using both SimplyConnectedSpace X and LocPathConnectedSpace X; B5 depends on B4, B6 has the correct reversed raw multiplication, B7 inversion restores homomorphism order, B8 and B9 establish bijectivity under simple connectedness, B10 packages the repaired fixed theorem, and B11 keeps representation-specific consumer adapters separate; every final hypothesis is now used, each node uses only stated hypotheses and dependencies, and the Lean forms are faithful; registry is 131/0, consumer counts are 2/3/1/1/3, and the 1743-job target build passes with standard axioms."},
     :commit "1555d1066cb82639f109c14613a04c839e94e56a",
     :changed-paths
     ["ConstructionTargets/DeckGroupQuotientFundamentalGroup.blueprint.md"],
@@ -17870,7 +17887,7 @@
    :phase :implementation,
    :owner-repair
    "2026-10-11 claude-14: final type gains [T2Space X] [LocallyCompactSpace X] (Mathlib quotient-covering needs them; every consumer, the plane and spheres, has them). Do not prove covering under weaker hypotheses.",
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean"
     "ConstructionTargets/DeckGroupQuotientFundamentalGroup.md"
@@ -17890,7 +17907,7 @@
     :blueprint
     "ConstructionTargets/DeckGroupQuotientFundamentalGroup.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Compiled and committed raw endpoint monodromy in the acting-group fiber coordinates, including the identity-loop law. The final theorem remains incomplete: because FundamentalGroup multiplication reverses categorical composition, the next milestone must prove deck-equivariance of lifted paths and raw anti-multiplicativity, then invert the raw coordinate to obtain a homomorphism into G.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Repaired the blueprint review failure by adding B4, orbitProjection_existsUnique_lift. B4 applies Mathlib IsCoveringMap.existsUnique_continuousMap_lifts to the orbit projection and genuinely requires the frozen LocPathConnectedSpace X hypothesis together with SimplyConnectedSpace X. Deck-equivariance now depends on B4, and the downstream nodes were renumbered B5-B11. This blueprint-only repair is committed and awaits independent mathematical review before Lean implementation resumes.",
    :id :program-2026-10-11-deck-group-quotient-pi1,
    :kind :reusable-theorem,
    :campaign-priority 50,
@@ -17914,7 +17931,11 @@
     {:job 4,
      :commit "3f64958a92525bd9c45cf1efd531c539e61e1713",
      :reason
-     "Compiled and committed raw endpoint monodromy in the acting-group fiber coordinates, including the identity-loop law. The final theorem remains incomplete: because FundamentalGroup multiplication reverses categorical composition, the next milestone must prove deck-equivariance of lifted paths and raw anti-multiplicativity, then invert the raw coordinate to obtain a homomorphism into G."}]}
+     "Compiled and committed raw endpoint monodromy in the acting-group fiber coordinates, including the identity-loop law. The final theorem remains incomplete: because FundamentalGroup multiplication reverses categorical composition, the next milestone must prove deck-equivariance of lifted paths and raw anti-multiplicativity, then invert the raw coordinate to obtain a homomorphism into G."}
+    {:job 6,
+     :commit "1555d1066cb82639f109c14613a04c839e94e56a",
+     :reason
+     "Repaired the blueprint review failure by adding B4, orbitProjection_existsUnique_lift. B4 applies Mathlib IsCoveringMap.existsUnique_continuousMap_lifts to the orbit projection and genuinely requires the frozen LocPathConnectedSpace X hypothesis together with SimplyConnectedSpace X. Deck-equivariance now depends on B4, and the downstream nodes were renumbered B5-B11. This blueprint-only repair is committed and awaits independent mathematical review before Lean implementation resumes."}]}
   {:consumer :t00J02,
    :phase :lemma,
    :state :backlog,
