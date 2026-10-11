@@ -16,6 +16,13 @@ covering over `f e` with its acting group by `g ↦ g • e`. Its specialization
 program's orbit projection. This is the target coordinate system for endpoint
 monodromy in the next milestone.
 
+`orbitEndpointMonodromyRaw` now sends a based loop to the unique group element
+whose translate of the chosen lift is the lifted loop's endpoint, and
+`orbitEndpointMonodromyRaw_one` verifies the constant loop endpoint. Since
+`CategoryTheory.End.mul_def` reverses categorical composition, the production
+homomorphism should invert this raw coordinate after proving that lifting
+commutes with the deck action.
+
 ## Refutation of the frozen final statement
 
 The fixed theorem omits every separation hypothesis. This is not merely a gap
@@ -33,8 +40,9 @@ negates the exact universal proposition of the program's frozen final type.
 
 ## Work that would remain for a repaired statement
 
-1. Build monodromy from loops in the quotient to the endpoint deck
-   transformation of their lifts, expressed through `orbitQuotientFiberEquiv`.
+1. Prove that monodromy commutes with the deck action and that raw endpoint
+   coordinates reverse multiplication; invert the raw coordinate to package
+   `orbitEndpointMonodromy : FundamentalGroup _ _ →* G`.
 2. Prove surjectivity and identify its kernel with the image of the total
    space's fundamental group.
 3. Specialize to a simply connected total space.

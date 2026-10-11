@@ -72,6 +72,34 @@ noncomputable def orbitQuotientFiberEquiv
     (free : ∀ g : G, ∀ x : X, g • x = x → g = 1) (x : X) (g : G) :
     (orbitQuotientFiberEquiv free x g : X) = g • x := rfl
 
+/-- Endpoint monodromy for the repaired orbit covering, expressed as the
+unique acting-group element carrying the chosen lift `x` to the endpoint of
+the lifted loop. The inverse needed to obtain a homomorphism into `G` is left
+to the subsequent orientation lemma. -/
+noncomputable def orbitEndpointMonodromyRaw
+    {G X : Type*} [Group G] [TopologicalSpace X] [MulAction G X]
+    [ContinuousConstSMul G X] [ProperlyDiscontinuousSMul G X]
+    [LocallyCompactSpace X] [T2Space X]
+    (free : ∀ g : G, ∀ x : X, g • x = x → g = 1) (x : X) :
+    FundamentalGroup (MulAction.orbitRel.Quotient G X) (Quotient.mk _ x) → G :=
+  fun γ ↦ (orbitQuotientFiberEquiv free x).symm
+    ((quotientMk_isCoveringMap free).monodromy
+      (FundamentalGroup.toPath γ) ⟨x, rfl⟩)
+
+@[simp] theorem orbitEndpointMonodromyRaw_one
+    {G X : Type*} [Group G] [TopologicalSpace X] [MulAction G X]
+    [ContinuousConstSMul G X] [ProperlyDiscontinuousSMul G X]
+    [LocallyCompactSpace X] [T2Space X]
+    (free : ∀ g : G, ∀ x : X, g • x = x → g = 1) (x : X) :
+    orbitEndpointMonodromyRaw free x 1 = 1 := by
+  apply (orbitQuotientFiberEquiv free x).injective
+  rw [orbitEndpointMonodromyRaw, Equiv.apply_symm_apply]
+  change
+    (quotientMk_isCoveringMap free).monodromy (.refl (Quotient.mk _ x)) ⟨x, rfl⟩ =
+      orbitQuotientFiberEquiv free x 1
+  rw [IsCoveringMap.monodromy_refl]
+  exact Subtype.ext (one_smul G x).symm
+
 private abbrev CounterexampleGroup := Multiplicative (ZMod 2)
 
 private instance : TopologicalSpace CounterexampleGroup := ⊤
@@ -131,6 +159,8 @@ theorem freeProperlyDiscontinuousQuotient_fundamentalGroupEquiv_refuted :
 #print axioms quotientMk_isCoveringMap
 #print axioms quotientCoveringOrbitFiberEquiv
 #print axioms orbitQuotientFiberEquiv
+#print axioms orbitEndpointMonodromyRaw
+#print axioms orbitEndpointMonodromyRaw_one
 #print axioms indiscreteRegularAction_no_fundamentalGroupEquiv
 #print axioms freeProperlyDiscontinuousQuotient_fundamentalGroupEquiv_refuted
 
