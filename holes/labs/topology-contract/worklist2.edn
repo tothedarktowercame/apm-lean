@@ -79283,25 +79283,18 @@
   {:consumer :t97A04,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 5,
    :review-finding
    "program STOP commits nothing new since the last :program-history entry: evidence commit bb0f0f77d8953dc78dd564e000f3d4a5b29d0894 exactly equals history job 5",
    :evidence
    {:placeholder-delta 0,
-    :residual "Instantiate composition lemma; finish B9-B11.",
+    :residual "Build B10 bridge3; B11 closes both placeholders.",
     :outcome :stop,
     :warnings ["Main: 2 placeholders."],
     :missing-theorems
-    [{:name
-      "ConstructionTargets.T97A04Closure.frozenH2Coordinate_comp",
-      :type "coordinate composite law",
-      :status :proved,
-      :consumers [:t97A04],
-      :depends-on [],
-      :area "mv-connecting-naturality"}
-     {:name "ConstructionTargets.T97A04Closure.lowerShear_H2",
+    [{:name "ConstructionTargets.T97A04Closure.lowerShear_H2",
       :type "lowerShear coordinate=id",
-      :status :partial,
+      :status :proved,
       :consumers [:t97A04],
       :depends-on
       ["ConstructionTargets.T97A04Closure.frozenH2Coordinate_comp"
@@ -79310,48 +79303,40 @@
       :area "mv-connecting-naturality"}
      {:name "ConstructionTargets.T97A04Closure.frozenLbar_H2",
       :type "frozenLbar coordinate=3*id",
-      :status :partial,
+      :status :proved,
       :consumers [:t97A04],
       :depends-on
       ["ConstructionTargets.T97A04Closure.lowerShear_H2"
        "ConstructionTargets.T97A04Closure.frozenLbar_H2_map"],
+      :area "mv-connecting-naturality"}
+     {:name "ConstructionTargets.T97A04Closure.bridge3",
+      :type "B10 bridge3",
+      :status :not-started,
+      :consumers [:t97A04],
+      :depends-on ["ConstructionTargets.T97A04Closure.frozenLbar_H2"],
       :area "mv-connecting-naturality"}],
     :statement-hashes
     {:registry "131/0",
-     :closure "9b1990c5878817eec52d0d501834d97d2c9de7e0",
+     :closure "c593684e04ec45d9a96590a47a63e978596dcf30",
      :blueprint "c419a895cb4ede2acc1cb6bc5c7536344ba63df4"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason :program-progress-committed,
+    :reason :program-milestone-complete,
     :commands
     [{:cmd "closure compile", :exit 0}
      {:cmd "closure no-sorry scan", :exit 1, :expected-exit 1}
      {:cmd "Main compile", :exit 0}
      {:cmd "registry check", :exit 0}
      {:cmd "placeholder count", :exit 0, :output "2"}
-     {:cmd "git show --check bb86cd3b3", :exit 0}],
+     {:cmd "git show --check a58fb4403", :exit 0}],
     :diagnostic-history
-    [{:cmd "expanded coordinate compile",
-      :exit 1,
-      :finding "kernel timeout; extracted compact lemma"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791756758399-5910-b6b6f384",
-     :commands
-     ["git show/diff/check bb86cd3b"
-      "lake env lean ConstructionTargets/t97A04Closure.lean"
-      "lake env lean problems/t97A04/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "fingerprint, placeholders, ancestry, fixture, blueprint checks"],
-     :finding
-     "PASS: bb86cd3b is new after history 8b97cb1a; its sole changed path is scoped and closure/blueprint blobs match. frozenH2Coordinate_comp correctly cancels the middle coordinate iso and identifies the composite of conjugated maps with the conjugate of f then g, providing the exact representation bridge for B9. Lean gates pass with standard axioms; registry 131/0; frozen hash ca1b2cb3c6594276811618321d5c0604c2f38fc4594a6b21ae161a711a923a34 unchanged; closure/Main placeholders 0/2. This is compiled progress; instantiate the lemma and finish B9-B11 as listed."},
-    :commit "bb86cd3b3e30153d1794295706985afd4710fd65",
+    [{:cmd "closure compile", :exit 1, :finding "Fixed association."}],
+    :commit "a58fb4403475f91ca2b7f45699abba30dbe50339",
     :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -80869,7 +80854,8 @@
    {:name "ConstructionTargets.T97A04Closure.frozenLbar_H2",
     :reported-by [:program-2026-10-11-close-t97a04],
     :type "H2(Lbar)=3·id in frozen coordinate",
-    :area "mv-connecting-naturality"},
+    :area "mv-connecting-naturality",
+    :proved-in :program-2026-10-11-close-t97a04},
    :id :lemma-constructiontargets-t97a04closure-frozenlbar-h2,
    :kind :lemma,
    :depends-on
@@ -80995,11 +80981,29 @@
    {:name "ConstructionTargets.T97A04Closure.lowerShear_H2",
     :reported-by [:program-2026-10-11-close-t97a04],
     :type "lowerShear coordinate=id",
-    :area "mv-connecting-naturality"},
+    :area "mv-connecting-naturality",
+    :proved-in :program-2026-10-11-close-t97a04},
    :id :lemma-constructiontargets-t97a04closure-lowershear-h2,
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-t97a04closure-frozenh2coordinate-comp
     :lemma-constructiontargets-t97a04closure-sheary-h2
     :lemma-constructiontargets-t97a04closure-swaph2coordinate-square],
+   :other-consumers []}
+  {:consumer :t97A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "ConstructionTargets.T97A04Closure.bridge3",
+    :type "B10 bridge3"},
+   :lemma
+   {:name "ConstructionTargets.T97A04Closure.bridge3",
+    :reported-by [:program-2026-10-11-close-t97a04],
+    :type "B10 bridge3",
+    :area "mv-connecting-naturality"},
+   :id :lemma-constructiontargets-t97a04closure-bridge3,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t97a04closure-frozenlbar-h2],
    :other-consumers []}]}
