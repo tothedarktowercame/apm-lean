@@ -116070,16 +116070,30 @@
    :review-finding
    "B7 reverses the functorial composition. Because beta.comp reflection is beta after reflection, homotopy invariance gives H1(beta) = H1(reflection) ≫ H1(beta), not H1(beta) ≫ H1(reflection). The written composite is ill-typed: H1(beta) lands in Klein-bottle homology, while H1(reflection) is an endomorphism of sphere homology. Reverse the factors, then use integral_circle 1 to derive H1(beta)(g) = H1(beta)(-g).",
    :evidence
-   {:placeholder-delta {:source-before 3, :source-after 2},
+   {:placeholder-delta {:source-before 2, :source-after 0},
     :residual
-    "B7 and B9 remain; next use the proved reflection homotopy, homotopy invariance, and CoefficientFirstReflection.integral_circle 1 to construct the nonzero vertical H1 kernel class, then close the frozen adapter with B8.",
-    :outcome :stop,
+    "None. t95J02 is placeholder-free, and the implementation commit path union now equals the exact four-path program scope.",
+    :outcome :done-unreviewed,
     :warnings
-    [{:kind :existing-placeholders,
+    [{:kind :concurrent-worktree-change,
       :message
-      "The compiler reports the two pre-existing sorries in B7 and B9; the new B8 proof is placeholder-free."}],
+      "ConstructionTargets/t97A04Closure.lean was modified by another process and was preserved unmodified and uncommitted."}],
     :missing-theorems
-    [{:name "t95J02Closure.t95J02_beta_homotopic_beta_reflection",
+    [{:name
+      "ConstructionTargets.t95J02Closure.integral_circle_coordinate_one",
+      :type
+      "The coordinate-1 reflection of the Euclidean unit circle induces negative identity on integral H1",
+      :status :proved,
+      :consumers [:t95J02],
+      :depends-on [],
+      :area "klein-bottle-homology"}
+     {:name "t95J02Closure.t95J02CircleB_homeo",
+      :type "T02A06.euclideanUnitSphere 2 ≃ₜ t95J02CircleB",
+      :status :proved,
+      :consumers [:t95J02],
+      :depends-on ["t95J02Closure.verticalParam_eq_iff"],
+      :area "klein-bottle-homology"}
+     {:name "t95J02Closure.t95J02_beta_homotopic_beta_reflection",
       :type
       "ContinuousMap.Homotopic beta (beta.comp (CoefficientCoordinateReflections.reflectionMap (1 : Fin 2)))",
       :status :proved,
@@ -116091,7 +116105,7 @@
      {:name "t95J02Closure.apm_t95J02_bridge_vertical_H1_kernel",
       :type
       "There is a nonzero integral H1 class of t95J02CircleB killed by t95J02InclusionB",
-      :status :not-started,
+      :status :proved,
       :consumers [:t95J02],
       :depends-on
       ["t95J02Closure.t95J02_beta_homotopic_beta_reflection"],
@@ -116105,69 +116119,70 @@
       :area "klein-bottle-homology"}],
     :statement-hashes
     {:source-sha256
-     "bbaff048c038f12db303a2b97022a1baf5c0c174926c9aa68fa830bf9eeb586c",
+     "833a6de5cbebe0b3300ead9a53660799f0f35138da37d1eae6c1ba60d88e5308",
+     :status-sha256
+     "41953d65d9c95ad7d4bf4777114e54717f95febe26ce51a74a0a3f96a22aa5cd",
+     :closure-sha256
+     "e3f1dec239ccecd5ee4e7d7c5e0b5b1d3a768ef0c69cd5a26263d3eed35efd3d",
      :blueprint-sha256
-     "d3257c75adb669938d0fef00ebc953e41692f5499ac9c8d10bc3fb753a0f5717",
+     "7a177e3e7aa02bf826fbc1dc45bed9819bdd3d779dbf1ff5793738484dbb5f35",
      :registry "131 registered statements match, 0 do not"},
-    :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
-    :reason
-    "Program milestone completed. Blueprint node B8 is proved: a retraction identity maps under integral H1 to a left inverse for the inclusion map, so the inclusion-induced H1 map is injective. B7 and B9 remain.",
     :commands
-    [{:cmd "lake env lean problems/t95J02/lean/Main.lean",
+    [{:cmd
+      "lake env lean -o .lake/build/lib/lean/ConstructionTargets/t95J02Closure.olean ConstructionTargets/t95J02Closure.lean",
       :exit 0,
       :finding
-      "The module compiles; B8 is placeholder-free and only the two pre-existing B7 and B9 placeholders remain."}
+      "The new scoped closure module compiles and reports only propext, Classical.choice, and Quot.sound for integral_circle_coordinate_one."}
+     {:cmd "lake env lean problems/t95J02/lean/Main.lean",
+      :exit 0,
+      :finding
+      "The registered problem compiles after importing and using the closure module, with zero placeholders."}
      {:cmd
-      "python3 comment-stripped B8 and source placeholder validation",
+      "python3 comment-stripped source, closure, blueprint, and status validation",
       :exit 0,
       :finding
-      "B8 contains zero sorry, admit, or axiom tokens; the whole source now has two sorries; the blueprint marks B8 proved."}
+      "The source and closure module contain no sorry, admit, or axiom tokens; all B1-B9 nodes are proved; status.json parses and records completion."}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131 registered statements match, 0 do not."}
      {:cmd
-      "git diff --check -- problems/t95J02/lean/Main.lean ConstructionTargets/t95J02Closure.blueprint.md",
+      "git diff --check -- problems/t95J02/lean/Main.lean problems/t95J02/status.json ConstructionTargets/t95J02Closure.lean ConstructionTargets/t95J02Closure.blueprint.md",
       :exit 0}
-     {:cmd "git commit -m Prove-t95J02-retraction-H1-injectivity",
+     {:cmd "git commit -m Add-t95J02-closure-homology-module",
       :exit 0,
       :finding
-      "Committed the two scoped files as 8d5fbc66d1a48854a8f15fbfadb4a2eff88887de."}
+      "Committed the remaining scoped module and its consumer import as e97399181d3e8d03f6104c0b8503fabf98a9015f; the three implementation commits now cover exactly the four scoped paths."}
      {:cmd
-      "sha256sum problems/t95J02/lean/Main.lean ConstructionTargets/t95J02Closure.blueprint.md",
+      "sha256sum problems/t95J02/lean/Main.lean problems/t95J02/status.json ConstructionTargets/t95J02Closure.lean ConstructionTargets/t95J02Closure.blueprint.md",
       :exit 0,
       :finding
-      "Hashes are bbaff048c038f12db303a2b97022a1baf5c0c174926c9aa68fa830bf9eeb586c and d3257c75adb669938d0fef00ebc953e41692f5499ac9c8d10bc3fb753a0f5717."}],
+      "Hashes are 833a6de5cbebe0b3300ead9a53660799f0f35138da37d1eae6c1ba60d88e5308, 41953d65d9c95ad7d4bf4777114e54717f95febe26ce51a74a0a3f96a22aa5cd, e3f1dec239ccecd5ee4e7d7c5e0b5b1d3a768ef0c69cd5a26263d3eed35efd3d, and 7a177e3e7aa02bf826fbc1dc45bed9819bdd3d779dbf1ff5793738484dbb5f35."}],
     :diagnostic-history
     [{:cmd "lake env lean problems/t95J02/lean/Main.lean",
       :exit 1,
       :finding
-      "The initial B8 proof used an unsupported subscripted module-hom arrow token; corrected to the ordinary categorical morphism notation, after which the proof compiled."}],
-    :continue-from
-    {:commit "8d5fbc66d1a48854a8f15fbfadb4a2eff88887de",
-     :next
-     "Implement B7 with the type-correct order H1(reflectionMap 1) followed by H1(beta), then use proved B8 to close B9."},
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791723441764-5382-35b238ce",
-     :commands
-     ["git show/diff-tree 8d5fbc66d1a48854a8f15fbfadb4a2eff88887de"
-      "recorded-tree SHA-256, exact-scope, diff-check, and placeholder-delta verification"
-      "python3 scripts/statement-registry.py check"
-      "lake env lean problems/t95J02/lean/Main.lean"
-      "lake env lean recorded source plus #print axioms apm_t95J02_bridge_retraction_injective"],
-     :finding
-     "PASS: commit 8d5fbc66 proves the new B8 milestone and reduces the source from three placeholders to two. The retraction identity is mapped in the correct order to H1(inclusion) followed by H1(retraction) = identity, which gives injectivity of the inclusion-induced map. Scope and hashes match, the module and registry gates pass, only standard axioms occur, and B7/B9 are explicitly retained as the remaining milestones."},
-    :commit "8d5fbc66d1a48854a8f15fbfadb4a2eff88887de",
+      "The first consumer compile followed direct closure-source checking before an olean existed; corrected by compiling the closure module to its build path, after which the unchanged consumer compiled."}
+     {:cmd
+      "readlink -f .lake/packages && test -L .lake/packages && lake build ConstructionTargets.t95J02Closure",
+      :exit 1,
+      :finding
+      "The canonical apm-lean checkout has a real .lake/packages authority rather than a frame-worktree symlink, so the frame-only precondition test stopped before lake build; corrected by using direct Lean compilation without altering package state."}],
+    :commit "e97399181d3e8d03f6104c0b8503fabf98a9015f",
+    :commits
+    ["8d5fbc66d1a48854a8f15fbfadb4a2eff88887de"
+     "e97399181d3e8d03f6104c0b8503fabf98a9015f"
+     "45cd2fe32b0b5b592edee08a61f62b89299ebd92"],
     :changed-paths
     ["problems/t95J02/lean/Main.lean"
+     "problems/t95J02/status.json"
+     "ConstructionTargets/t95J02Closure.lean"
      "ConstructionTargets/t95J02Closure.blueprint.md"],
     :fixture
     {:path "ConstructionTargets/t95J02Closure.blueprint.md",
      :sha256
-     "d3257c75adb669938d0fef00ebc953e41692f5499ac9c8d10bc3fb753a0f5717",
+     "7a177e3e7aa02bf826fbc1dc45bed9819bdd3d779dbf1ff5793738484dbb5f35",
      :nodes
      [{:id :B1, :status :proved}
       {:id :B2, :status :proved}
@@ -116175,12 +116190,11 @@
       {:id :B4, :status :proved}
       {:id :B5, :status :proved}
       {:id :B6, :status :proved}
-      {:id :B7, :status :planned}
+      {:id :B7, :status :proved}
       {:id :B8, :status :proved}
-      {:id :B9, :status :planned}]},
-    :seat "topo-2"},
+      {:id :B9, :status :proved}]}},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t95J02/lean/Main.lean"
     "problems/t95J02/status.json"
@@ -117211,7 +117225,8 @@
     :reported-by [:program-2026-10-11-close-t95j02],
     :type
     "There is a nonzero integral H1 class of t95J02CircleB killed by t95J02InclusionB",
-    :area "klein-bottle-homology"},
+    :area "klein-bottle-homology",
+    :proved-in :program-2026-10-11-close-t95j02},
    :id :lemma-t95j02closure-apm-t95j02-bridge-vertical-h1-kernel,
    :kind :lemma,
    :depends-on
@@ -117400,6 +117415,28 @@
    :kind :lemma,
    :depends-on
    [:lemma-t92j08closure-exists-nhds-uniform-ismintegralcurveon],
+   :other-consumers []}
+  {:consumer :t95J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.t95J02Closure.integral_circle_coordinate_one",
+    :type
+    "The coordinate-1 reflection of the Euclidean unit circle induces negative identity on integral H1"},
+   :lemma
+   {:name
+    "ConstructionTargets.t95J02Closure.integral_circle_coordinate_one",
+    :reported-by [:program-2026-10-11-close-t95j02],
+    :type
+    "The coordinate-1 reflection of the Euclidean unit circle induces negative identity on integral H1",
+    :area "klein-bottle-homology",
+    :proved-in :program-2026-10-11-close-t95j02},
+   :id
+   :lemma-constructiontargets-t95j02closure-integral-circle-coordinate-one,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
