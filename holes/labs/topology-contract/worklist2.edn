@@ -79379,8 +79379,41 @@
      :commit "10ee26c5c34ab7a0b17a5f64aace67853578d4c4",
      :reason :program-progress-committed}]}
   {:consumer :t96A07,
+   :stop-count 1,
+   :evidence
+   {:placeholder-delta 0,
+    :residual "Blueprint review is required before B1 formalization.",
+    :outcome :stop,
+    :warnings ["Main retains its one existing placeholder."],
+    :missing-theorems [],
+    :statement-hashes
+    {:registry "131/0",
+     :blueprint "69b59fb622dd62fc82a1fe100b353eaabc2c948d"},
+    :disposition :stop,
+    :axioms [],
+    :author "topo-6",
+    :reason :blueprint-written,
+    :commands
+    [{:cmd
+      "git diff --check -- ConstructionTargets/t96A07Closure.blueprint.md",
+      :exit 0}
+     {:cmd "lake env lean problems/t96A07/lean/Main.lean", :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "comment-stripped Main placeholder count",
+      :exit 0,
+      :output "1"}
+     {:cmd "rg numbered blueprint nodes", :exit 0, :output "13"}
+     {:cmd "git show --check --oneline 6d48023b5", :exit 0}],
+    :diagnostic-history [],
+    :continue-from
+    "After review, formalize B1 sphereMap_antipodal only.",
+    :commit "6d48023b5bdac0f3da4ba7ffdd824a9e841a8e08",
+    :changed-paths ["ConstructionTargets/t96A07Closure.blueprint.md"],
+    :finding
+    "The reviewed audit expands to 13 nodes: smooth even descent; explicit sphere/descended derivatives; axis failure; horizontal-plane derivative, regularity and attainment; infinitude; final adapter.",
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A07/lean/Main.lean"
     "problems/t96A07/status.json"
