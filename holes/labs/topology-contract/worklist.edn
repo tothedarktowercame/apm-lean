@@ -87934,8 +87934,95 @@
    "This topology package is required only by the t99J01 component-cover restriction route.",
    :consumer :t99J01,
    :implements-lemma :lemma-threecircles-locpathconnectedspace,
+   :evidence
+   {:placeholder-delta
+    {:source-before 0, :source-after 0, :fixture-sorry 0},
+    :residual
+    "Use these instances with the restricted component cover to prove constant component sheet count and the inclusion-induced fundamental-group bijection.",
+    :outcome :done-unreviewed,
+    :warnings
+    [{:kind :upstream-lint,
+      :message
+      "The build replayed existing warnings in imported modules; the new module emitted none."}
+     {:kind :dirty-worktree,
+      :message
+      "Unrelated untracked holes/labs/topology-contract/worklist2.edn.tmp appeared after the scoped commit and was not touched."}],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.ThreeCirclesPathTopology.threeCirclesLocPathConnectedSpace",
+      :type "LocPathConnectedSpace ThreeCircles",
+      :status :proved,
+      :consumers [:t99J01],
+      :depends-on [],
+      :area "covering-subgroup-correspondence"}
+     {:name
+      "ConstructionTargets.ThreeCirclesPathTopology.threeCirclesPathConnectedSpace",
+      :type "PathConnectedSpace ThreeCircles",
+      :status :proved,
+      :consumers [:t99J01],
+      :depends-on [],
+      :area "covering-subgroup-correspondence"}
+     {:name
+      "ConstructionTargets.ThreeCirclesPathTopology.restrictPathComponent_threeCircles",
+      :type
+      "Every IsKSheetedCover p n over ThreeCircles restricts at e to a covering map from Component e and that restricted map is surjective",
+      :status :proved,
+      :consumers [:t99J01],
+      :depends-on
+      ["ConstructionTargets.ThreeCirclesPathTopology.threeCirclesLocPathConnectedSpace"
+       "ConstructionTargets.ThreeCirclesPathTopology.threeCirclesPathConnectedSpace"],
+      :area "covering-subgroup-correspondence"}],
+    :statement-hashes
+    {:source-sha256
+     "392b6fdef6d6934cc77ede4ad255310672ddf2b8239174bee699439f5ecd6aae",
+     :registry "131 registered statements match, 0 do not"},
+    :disposition :pass,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/ThreeCirclesPathTopology.lean",
+      :exit 0,
+      :finding
+      "All three exported declarations use only propext, Classical.choice, and Quot.sound."}
+     {:cmd "lake build ConstructionTargets.ThreeCirclesPathTopology",
+      :exit 0,
+      :finding "Build completed successfully (8271 jobs)."}
+     {:cmd
+      "lake env lean /tmp/t99j01-threecircles-locpathconnected-probe.lean",
+      :exit 0,
+      :finding "Frozen fixture compiles."}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "python3 comment-stripped sorry scan",
+      :exit 0,
+      :finding "Source and fixture each contain zero sorry tokens."}
+     {:cmd "git show --stat --oneline --no-renames HEAD",
+      :exit 0,
+      :finding
+      "Commit changes only ConstructionTargets/ThreeCirclesPathTopology.lean."}],
+    :diagnostic-history
+    [{:cmd
+      "lake env lean ConstructionTargets/ThreeCirclesPathTopology.lean",
+      :exit 1,
+      :finding
+      "Initial direct inferInstance attempt exposed that Circle has no registered path-topology instances; corrected by transporting sphere topology and explicitly applying the wedge quotient maps."}
+     {:cmd "lake env lean /tmp/check-three.lean",
+      :exit 1,
+      :finding
+      "Exploration confirmed Sphere 1 has PathConnectedSpace but Circle and the wedges lacked registered instances; this selected the explicit transport proof."}],
+    :commit "585311b0442822e9bf2837eeb0e3f6bcbb143102",
+    :changed-paths
+    ["ConstructionTargets/ThreeCirclesPathTopology.lean"],
+    :fixture
+    {:path "/tmp/t99j01-threecircles-locpathconnected-probe.lean",
+     :sha256
+     "15fd4c049222f82d61d134054a0f8d6252c3133d49a081cbd3ea4f04b3b6eacb",
+     :status :compiled},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ThreeCirclesPathTopology.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t99J01/three-circles-path-topology",
    :acceptance
@@ -113239,6 +113326,70 @@
    :lemma-kleincompatiblecarriercomponentbridge-relationlocushasfourcomponents,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t99J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ThreeCirclesPathTopology.threeCirclesLocPathConnectedSpace",
+    :type "LocPathConnectedSpace ThreeCircles"},
+   :lemma
+   {:name
+    "ConstructionTargets.ThreeCirclesPathTopology.threeCirclesLocPathConnectedSpace",
+    :reported-by [:routes-2026-10-11-three-circles-path-topology-100],
+    :type "LocPathConnectedSpace ThreeCircles",
+    :area "covering-subgroup-correspondence",
+    :proved-in :routes-2026-10-11-three-circles-path-topology-100},
+   :id
+   :lemma-constructiontargets-threecirclespathtopology-threecircleslocpathconnectedspace,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t99J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ThreeCirclesPathTopology.threeCirclesPathConnectedSpace",
+    :type "PathConnectedSpace ThreeCircles"},
+   :lemma
+   {:name
+    "ConstructionTargets.ThreeCirclesPathTopology.threeCirclesPathConnectedSpace",
+    :reported-by [:routes-2026-10-11-three-circles-path-topology-100],
+    :type "PathConnectedSpace ThreeCircles",
+    :area "covering-subgroup-correspondence",
+    :proved-in :routes-2026-10-11-three-circles-path-topology-100},
+   :id
+   :lemma-constructiontargets-threecirclespathtopology-threecirclespathconnectedspace,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t99J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ThreeCirclesPathTopology.restrictPathComponent_threeCircles",
+    :type
+    "Every IsKSheetedCover p n over ThreeCircles restricts at e to a covering map from Component e and that restricted map is surjective"},
+   :lemma
+   {:name
+    "ConstructionTargets.ThreeCirclesPathTopology.restrictPathComponent_threeCircles",
+    :reported-by [:routes-2026-10-11-three-circles-path-topology-100],
+    :type
+    "Every IsKSheetedCover p n over ThreeCircles restricts at e to a covering map from Component e and that restricted map is surjective",
+    :area "covering-subgroup-correspondence",
+    :proved-in :routes-2026-10-11-three-circles-path-topology-100},
+   :id
+   :lemma-constructiontargets-threecirclespathtopology-restrictpathcomponent-threecircles,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-threecirclespathtopology-threecircleslocpathconnectedspace
+    :lemma-constructiontargets-threecirclespathtopology-threecirclespathconnectedspace],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
