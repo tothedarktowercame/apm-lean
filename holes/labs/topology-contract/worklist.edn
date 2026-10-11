@@ -103801,10 +103801,68 @@
   {:bounded-exception
    "This single-consumer prerequisite supplies the exact carrier compatibility missing between the frozen aabb disk polygon and the banked square classification.",
    :consumer :t93J03,
+   :stop-count 1,
    :implements-lemma
    :lemma-kleindiskclosedsquarecompatiblecarrierpackage,
+   :evidence
+   {:residual
+    "Replace the false carrier-descent route with a quotient-level cut-and-reglue polygon comparison between the aabb and square presentations.",
+    :outcome :stop,
+    :warnings [],
+    :missing-theorems
+    [{:name "kleinDiskClosedSquareCompatibleCarrierPackage",
+      :type
+      "Exists a homeomorphism from Disk to ClosedSquare preserving and reflecting the two generated relations",
+      :status :not-started,
+      :consumers [:t93J03],
+      :depends-on ["KleinSquareEqvGenCasesIff.eqvGen_iff_cases"],
+      :area "polygon-quotient-identification",
+      :finding "refuted by the cyclic adjacency invariant"}],
+    :disposition :stop,
+    :axioms
+    ["propext"
+     "Classical.choice"
+     "KleinAabbSquarePolygonPresentationEquivalenceProbe.compatibleCarrierPackage"
+     "Quot.sound"],
+    :author "topo-2",
+    :reason
+    "The frozen compatibleCarrierPackage type is false. EqvGen (SurfaceRel false 2) has one four-point boundary class (the four quarter-circle vertices); away from it, its two-point classes pair the interiors of adjacent cyclic arcs 0 with 1 and 2 with 3. EqvGen ClosedSquareRel likewise has one four-corner class, but away from it SquareRel pairs left with right and bottom with top. In the cyclic side order bottom, right, top, left, both paired side pairs are nonadjacent. Any disk-to-square homeomorphism preserving and reflecting EqvGen must carry the unique four-point class to the unique four-point class and therefore induce a cyclic-order-preserving or cyclic-order-reversing permutation of the four complementary boundary arcs. Such a permutation preserves adjacency, so it cannot send the disk's adjacent arc pairing to the square's opposite-side pairing. The aabb and square quotient presentations may still be homeomorphic, but not by descent of a relation-compatible carrier homeomorphism of the frozen type; a quotient-level polygon transformation is required.",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/klein-aabb-square-polygon-presentation-equivalence.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/klein-aabb-square-polygon-presentation-equivalence.lean",
+      :exit 0,
+      :finding
+      "The fixture compiles only by assuming compatibleCarrierPackage; presentationHomeomorph reports that custom axiom."}
+     {:cmd
+      "rg -n \"axiom compatibleCarrierPackage|surfaceRel_false_two_iff|def squareEdge|def SquareRel\" /tmp/klein-aabb-square-polygon-presentation-equivalence.lean ConstructionTargets/KleinSurfaceRelNormalForm.lean ConstructionTargets/KleinSquareEdgeOrientation.lean ConstructionTargets/KleinSquareBoundaryRelation.lean",
+      :exit 0,
+      :finding
+      "The frozen disk relation pairs adjacent quarter-circle arcs, while SquareRel pairs opposite sides in the square boundary's cyclic order."}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd
+      "sed -n '1,180p' TOPOLOGY-ROUTES.md >/dev/null && sed -n '1,180p' holes/labs/topology-routes/routes-1.md >/dev/null && sed -n '1,180p' holes/labs/topology-routes/routes-2.md >/dev/null && sed -n '1,180p' holes/labs/topology-routes/routes-3.md >/dev/null",
+      :exit 0}],
+    :representation
+    {:source
+     "The frozen unit-disk aabb presentation with SurfaceRel false 2",
+     :target "The closed unit square presentation with SquareRel",
+     :direction
+     "The requested carrier-level exact relation conjugacy is obstructed by adjacent versus opposite cyclic arc pairings."},
+    :changed-paths [],
+    :fixture
+    {:path
+     "/tmp/klein-aabb-square-polygon-presentation-equivalence.lean",
+     :sha256
+     "5559b09de6fc844fbd239e297e4b3ea5710533a9267a4aae9d46cc30424b520a",
+     :status :self-axiomatized},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/KleinDiskClosedSquareCompatibleCarrier.lean"],
    :dag-node
@@ -109381,7 +109439,8 @@
    :lemma
    {:name "kleinDiskClosedSquareCompatibleCarrierPackage",
     :reported-by
-    [:routes-2026-10-11-klein-aabb-square-polygon-presentation-equivalence-83],
+    [:routes-2026-10-11-klein-aabb-square-polygon-presentation-equivalence-83
+     :routes-2026-10-11-klein-disk-closed-square-compatible-carrier-87],
     :type
     "There exists a homeomorphism h from ConstructionTargets.Surfaces.Disk to the subtype of points p : Real × Real satisfying InSquare p such that, for every disk points x y, Relation.EqvGen (SurfaceRel false 2) x y if and only if Relation.EqvGen ClosedSquareRel (h x) (h y).",
     :area "polygon-quotient-identification"},
