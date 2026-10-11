@@ -11749,92 +11749,210 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :implements-lemma
+   :lemma-mfclass-coefficient-integral-ball-model-factors,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/manifold-fundamental-class/coefficient-open-disk-model-factors",
+   :acceptance
+   {:implementation
+    "Promote the exact fixture theorem. Rewrite the forgotten integral coefficient normalization based in the unit open disk using coefficientIntegralBall_forget_hom, then replace its terminal full-Euclidean coefficient local isomorphism by coefficientModelNormalizationComposite using coefficientModelLocalIso_forget_hom under the fixed inclusion prefix. Do not construct the production-to-coefficient relative-homology comparison, prove connecting or radial naturality, compare sphere normalizations, exclude negation, select a sign, or construct a fundamental class.",
+    :declaration
+    "ConstructionTargets.ManifoldFundamentalClass.coefficientIntegralBall_forget_hom_eq_model_factors",
+    :type
+    "forall (k : ℕ), forgetIntModules.map (CoefficientNeighborhoodLocal.integral_ball k).hom = forgetIntModules.map (HomologicalComplex.homologyMap (CoefficientNeighborhoodLocal.inclusionMap ℤ (Metric.ball (0 : CoefficientModelLocal.E (k + 2)) 1) 0) (k + 2)) ≫ coefficientModelNormalizationComposite k",
+    :fixture
+    "/tmp/manifold_fundamental_class_coefficient_open_disk_model_factors.lean",
+    :fixture-sha256
+    "3fd125da7e5862c69ead84e658ab485c0b10e4fe7f56502e898bede02087a605",
+    :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
+    :route-step
+    "expose the coefficient connecting, radial, and sphere-normalization factors at the same unit-open-disk neighborhood used by the production model"},
+   :representation
+   {:source
+    "The forgotten coefficient integral_ball normalization with its terminal full-Euclidean coefficient local isomorphism still packaged",
+    :target
+    "The forgotten coefficient open-disk inclusion homology map followed by coefficientModelNormalizationComposite, which exposes connecting, radial, and sphere normalization",
+    :direction
+    "Exact morphism equality from the packaged unit-open-disk coefficient normalization to its open-disk-inclusion and explicit model-factor representation"},
+   :id
+   :routes-2026-10-11-manifold-coefficient-open-disk-model-factors-topo3-r1,
+   :kind :representation-comparison,
+   :area "manifold-fundamental-class",
+   :depends-on
+   [:routes-2026-10-10-topo3-seed-checkpoint-1
+    :routes-2026-10-10-manifold-local-positive-excision-topo3-r1
+    :routes-2026-10-10-manifold-oriented-overlap-coherence-topo3-r1
+    :routes-2026-10-10-manifold-connected-overlap-unit-topo3-r1
+    :routes-2026-10-10-manifold-oriented-connected-overlap-topo3-r1
+    :routes-2026-10-10-manifold-integral-transition-sign-topo3-r1
+    :routes-2026-10-10-manifold-exclude-negative-transition-topo3-r1
+    :routes-2026-10-10-manifold-global-generator-topo3-r1
+    :routes-2026-10-10-manifold-localization-iso-generator-topo3-r1
+    :routes-2026-10-10-manifold-generator-map-isiso-topo3-r1
+    :routes-2026-10-10-manifold-localization-map-naturality-topo3-r1
+    :routes-2026-10-10-manifold-localization-apply-naturality-topo3-r1
+    :routes-2026-10-10-manifold-group-global-generator-topo3-r1
+    :routes-2026-10-10-manifold-group-generator-naturality-topo3-r1
+    :routes-2026-10-10-manifold-global-local-generator-transport-topo3-r1
+    :routes-2026-10-11-manifold-basepoint-localization-coefficient-topo3-r1
+    :routes-2026-10-11-manifold-local-generator-coefficient-unique-topo3-r1
+    :routes-2026-10-11-manifold-localization-coefficient-one-topo3-r1
+    :routes-2026-10-11-manifold-distinguished-chart-generator-topo3-r1
+    :routes-2026-10-11-manifold-integral-subtype-chain-naturality-topo3-r1
+    :routes-2026-10-11-manifold-integral-mapped-relative-cokernel-topo3-r1
+    :routes-2026-10-11-manifold-forget-relative-cokernel-topo3-r1
+    :routes-2026-10-11-manifold-integral-relative-chains-comparison-topo3-r1
+    :routes-2026-10-11-manifold-integral-relative-homology-comparison-topo3-r1
+    :routes-2026-10-11-manifold-ambient-local-normalization-topo3-r1
+    :routes-2026-10-11-manifold-generator-transport-of-normalization-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-subspace-map-equality-topo3-r1
+    :routes-2026-10-11-manifold-integral-direct-cokernel-projection-topo3-r1
+    :routes-2026-10-11-manifold-forget-cokernel-projection-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-integral-cokernel-transport-topo3-r1
+    :routes-2026-10-11-manifold-integral-composite-cokernel-projection-topo3-r1
+    :routes-2026-10-11-manifold-production-cokernel-projection-topo3-r1
+    :routes-2026-10-11-manifold-integral-composite-relative-projection-topo3-r1
+    :routes-2026-10-11-manifold-relative-chains-comparison-with-transport-topo3-r1
+    :routes-2026-10-11-manifold-relative-homology-comparison-with-transport-topo3-r1
+    :routes-2026-10-11-manifold-corrected-homology-projection-topo3-r1
+    :routes-2026-10-11-manifold-corrected-homology-comparison-hom-topo3-r1
+    :routes-2026-10-11-manifold-relative-projection-homology-preservation-topo3-r1
+    :routes-2026-10-11-manifold-packaged-homology-projection-topo3-r1
+    :routes-2026-10-11-manifold-corrected-generator-normalization-topo3-r1
+    :routes-2026-10-11-manifold-normalization-from-corrected-generator-topo3-r1
+    :routes-2026-10-11-manifold-corrected-local-generator-coefficient-topo3-r1
+    :routes-2026-10-11-manifold-corrected-local-generator-unit-topo3-r1
+    :routes-2026-10-11-manifold-corrected-local-generator-sign-topo3-r1
+    :routes-2026-10-11-manifold-corrected-local-generator-nonnegative-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-one-from-corrected-normalization-topo3-r1
+    :routes-2026-10-11-manifold-corrected-generator-of-coefficient-one-topo3-r1
+    :routes-2026-10-11-manifold-corrected-normalization-of-coefficient-one-topo3-r1
+    :routes-2026-10-11-manifold-corrected-normalization-of-nonnegative-topo3-r1
+    :routes-2026-10-11-manifold-corrected-coefficient-one-of-ne-neg-one-topo3-r1
+    :routes-2026-10-11-manifold-corrected-coefficient-automorphism-one-topo3-r1
+    :routes-2026-10-11-manifold-corrected-automorphism-neg-iff-topo3-r1
+    :routes-2026-10-11-manifold-corrected-automorphism-hom-topo3-r1
+    :routes-2026-10-11-manifold-ambient-local-normalization-hom-topo3-r1
+    :routes-2026-10-11-manifold-corrected-automorphism-neg-cancel-coefficient-topo3-r1
+    :routes-2026-10-11-manifold-negative-equation-endpoint-factors-topo3-r1
+    :routes-2026-10-11-manifold-negative-equation-coefficient-factors-topo3-r1
+    :routes-2026-10-11-manifold-negative-equation-corrected-comparison-topo3-r1
+    :routes-2026-10-11-manifold-integral-relative-chains-transport-hom-topo3-r1
+    :routes-2026-10-11-manifold-integral-relative-chains-transport-homology-topo3-r1
+    :routes-2026-10-11-manifold-negative-equation-transport-homology-factors-topo3-r1
+    :routes-2026-10-11-manifold-transport-projection-alignment-topo3-r3
+    :routes-2026-10-11-manifold-negative-equation-projected-factors-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-projected-forward-topo3-r1
+    :routes-2026-10-11-manifold-negative-equation-concrete-endpoints-topo3-r1
+    :routes-2026-10-11-manifold-negative-prefix-model-topo3-r1
+    :routes-2026-10-11-manifold-negative-model-factors-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-open-disk-normalization-topo3-r1],
+   :current-residual
+   "Construct the integral comparison between production and coefficient relative homology of the unit open disk; prove it intertwines the two connecting maps and radial-normalization maps, then identify the sphere normalizations and exclude negation.",
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-closedorientedfundamentalclass,
    :evidence
    {:probe
     {:residual
-     "Compare production and coefficient relative homology on the unit open disk, establish connecting/radial/sphere naturality, then rule out the terminal negative identity.",
+     "Prove the unit-open-disk production/coefficient relative-homology comparison and connecting/radial/sphere naturality, then rule out the terminal negative identity.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
-     [{:id :lemma-mfclass-coefficient-integral-ball-forget-hom,
+     [{:id :lemma-mfclass-coefficient-integral-ball-model-factors,
        :name
-       "ConstructionTargets.ManifoldFundamentalClass.coefficientIntegralBall_forget_hom",
+       "ConstructionTargets.ManifoldFundamentalClass.coefficientIntegralBall_forget_hom_eq_model_factors",
        :type
-       "forall (k : ℕ), forgetIntModules.map (CoefficientNeighborhoodLocal.integral_ball k).hom = forgetIntModules.map (HomologicalComplex.homologyMap (CoefficientNeighborhoodLocal.inclusionMap ℤ (Metric.ball (0 : CoefficientModelLocal.E (k + 2)) 1) 0) (k + 2)) ≫ forgetIntModules.map (CoefficientModelLocal.localIso ℤ k).hom",
+       "forall (k : ℕ), forgetIntModules.map (CoefficientNeighborhoodLocal.integral_ball k).hom = forgetIntModules.map (HomologicalComplex.homologyMap (CoefficientNeighborhoodLocal.inclusionMap ℤ (Metric.ball (0 : CoefficientModelLocal.E (k + 2)) 1) 0) (k + 2)) ≫ coefficientModelNormalizationComposite k",
        :status :proved,
        :consumers [:t00J02 :t98A02],
        :depends-on
-       ["ConstructionTargets.CoefficientNeighborhoodLocal.model_forward"],
+       ["ConstructionTargets.ManifoldFundamentalClass.coefficientIntegralBall_forget_hom"
+        "ConstructionTargets.ManifoldFundamentalClass.coefficientModelLocalIso_forget_hom"],
        :area "manifold-fundamental-class"}],
      :prerequisite
      {:consumer :t00J02,
       :implements-lemma
-      :lemma-mfclass-coefficient-integral-ball-forget-hom,
+      :lemma-mfclass-coefficient-integral-ball-model-factors,
       :phase :implementation,
       :state :open,
       :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/manifold-fundamental-class/coefficient-open-disk-normalization",
+      "TOPOLOGY-ROUTES.md/manifold-fundamental-class/coefficient-open-disk-model-factors",
       :acceptance
       {:implementation
-       "Promote the exact fixture theorem. Expose the forgotten integral coefficient normalization based in the unit open disk as the coefficient open-disk inclusion homology map followed by CoefficientModelLocal.localIso. Do not construct the production-to-coefficient relative-homology comparison, prove connecting or radial naturality, compare sphere normalizations, exclude negation, select a sign, or construct a fundamental class.",
+       "Promote the exact fixture theorem. Rewrite the forgotten integral coefficient normalization based in the unit open disk using coefficientIntegralBall_forget_hom, then replace its terminal full-Euclidean coefficient local isomorphism by coefficientModelNormalizationComposite using coefficientModelLocalIso_forget_hom under the fixed inclusion prefix. Do not construct the production-to-coefficient relative-homology comparison, prove connecting or radial naturality, compare sphere normalizations, exclude negation, select a sign, or construct a fundamental class.",
        :declaration
-       "ConstructionTargets.ManifoldFundamentalClass.coefficientIntegralBall_forget_hom",
+       "ConstructionTargets.ManifoldFundamentalClass.coefficientIntegralBall_forget_hom_eq_model_factors",
        :type
-       "forall (k : ℕ), forgetIntModules.map (CoefficientNeighborhoodLocal.integral_ball k).hom = forgetIntModules.map (HomologicalComplex.homologyMap (CoefficientNeighborhoodLocal.inclusionMap ℤ (Metric.ball (0 : CoefficientModelLocal.E (k + 2)) 1) 0) (k + 2)) ≫ forgetIntModules.map (CoefficientModelLocal.localIso ℤ k).hom",
+       "forall (k : ℕ), forgetIntModules.map (CoefficientNeighborhoodLocal.integral_ball k).hom = forgetIntModules.map (HomologicalComplex.homologyMap (CoefficientNeighborhoodLocal.inclusionMap ℤ (Metric.ball (0 : CoefficientModelLocal.E (k + 2)) 1) 0) (k + 2)) ≫ coefficientModelNormalizationComposite k",
        :fixture
-       "/tmp/manifold_fundamental_class_coefficient_open_disk_normalization.lean",
+       "/tmp/manifold_fundamental_class_coefficient_open_disk_model_factors.lean",
        :fixture-sha256
-       "3102739d0323a2aa58d8ce5bfb64e45a75d5c74e5c5c563fe641b515ad09feaa",
+       "3fd125da7e5862c69ead84e658ab485c0b10e4fe7f56502e898bede02087a605",
        :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
        :route-step
-       "put the coefficient model normalization at the unit open-disk neighborhood boundary needed for comparison with the production punctured-open-disk model"},
+       "expose the coefficient connecting, radial, and sphere-normalization factors at the same unit-open-disk neighborhood used by the production model"},
       :representation
       {:source
-       "The forgotten coefficient integral_ball local normalization packaged as a composite isomorphism",
+       "The forgotten coefficient integral_ball normalization with its terminal full-Euclidean coefficient local isomorphism still packaged",
        :target
-       "The forgotten coefficient open-disk inclusion homology map followed by the full Euclidean coefficient model normalization",
+       "The forgotten coefficient open-disk inclusion homology map followed by coefficientModelNormalizationComposite, which exposes connecting, radial, and sphere normalization",
        :direction
-       "Exact morphism equality from the packaged unit-open-disk coefficient normalization to its neighborhood-inclusion-and-model-normalization factorization"},
+       "Exact morphism equality from the packaged unit-open-disk coefficient normalization to its open-disk-inclusion and explicit model-factor representation"},
       :id
-      :routes-2026-10-11-manifold-coefficient-open-disk-normalization-topo3-r1,
+      :routes-2026-10-11-manifold-coefficient-open-disk-model-factors-topo3-r1,
       :kind :representation-comparison,
       :area "manifold-fundamental-class",
       :depends-on
       [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+       :routes-2026-10-11-manifold-coefficient-open-disk-normalization-topo3-r1
        :routes-2026-10-11-manifold-negative-model-factors-topo3-r1],
       :current-residual
-      "Construct the integral production-to-coefficient relative-homology comparison on the unit open disk, prove its naturality with the connecting and radial-normalization maps, and identify the terminal sphere normalizations to exclude negation.",
+      "Construct the integral comparison between production and coefficient relative homology of the unit open disk; prove it intertwines the two connecting maps and radial-normalization maps, then identify the sphere normalizations and exclude negation.",
       :other-consumers [:t98A02]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake env lean /tmp/manifold_fundamental_class_coefficient_open_disk_normalization.lean",
+       "lake env lean /tmp/manifold_fundamental_class_coefficient_open_disk_model_factors.lean",
        :exit 0,
        :output
-       "coefficientIntegralBall_forget_hom compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "coefficientIntegralBall_forget_hom_eq_model_factors compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/manifold_fundamental_class_coefficient_open_disk_normalization.lean",
+       "sha256sum /tmp/manifold_fundamental_class_coefficient_open_disk_model_factors.lean",
        :exit 0,
        :output
-       "3102739d0323a2aa58d8ce5bfb64e45a75d5c74e5c5c563fe641b515ad09feaa  /tmp/manifold_fundamental_class_coefficient_open_disk_normalization.lean"}
+       "3fd125da7e5862c69ead84e658ab485c0b10e4fe7f56502e898bede02087a605  /tmp/manifold_fundamental_class_coefficient_open_disk_model_factors.lean"}
       {:cmd
-       "! rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/manifold_fundamental_class_coefficient_open_disk_normalization.lean",
+       "! rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/manifold_fundamental_class_coefficient_open_disk_model_factors.lean",
        :exit 0}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/manifold_fundamental_class_coefficient_open_disk_normalization.lean",
+       :exit 1,
+       :finding
+       "The prior fixture now redeclared its theorem because the prerequisite had been promoted into ManifoldFundamentalClass; the new fixture imports and uses that banked declaration instead."}
+      {:cmd
+       "lake env lean /tmp/manifold_fundamental_class_coefficient_open_disk_model_factors.lean",
+       :exit 1,
+       :finding
+       "A direct rewrite of the terminal model normalization did not match under left composition. Congruence under the fixed open-disk inclusion prefix supplied the exact reassociated equality."}],
      :fixture
      {:path
-      "/tmp/manifold_fundamental_class_coefficient_open_disk_normalization.lean",
+      "/tmp/manifold_fundamental_class_coefficient_open_disk_model_factors.lean",
       :sha256
-      "3102739d0323a2aa58d8ce5bfb64e45a75d5c74e5c5c563fe641b515ad09feaa"},
+      "3fd125da7e5862c69ead84e658ab485c0b10e4fe7f56502e898bede02087a605"},
      :finding
-     "The production model already uses the punctured unit open disk, while CoefficientNeighborhoodLocal.integral_ball supplies the coefficient normalization from that same neighborhood into full Euclidean local homology. The compiled factorization exposes its inclusion and model-normalization factors. The next prerequisite can therefore compare the two coefficient systems on the open disk before proving connecting, radial, and sphere naturality; directly equating the earlier chart prefixes remains ill-typed because their codomains differ.",
+     "Both normalization chains are now exposed at the unit-open-disk boundary. The production chain begins with singularPairConnecting on the punctured open disk, while the coefficient chain begins with the forgotten coefficient open-disk inclusion followed by the coefficient connecting, radial, and sphere factors. The next prerequisite must be a genuine naturality theorem for the integral production-to-coefficient comparison on this pair; packaging or direct prefix equality cannot bridge their different homology objects.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -11916,7 +12034,8 @@
     :routes-2026-10-11-manifold-negative-equation-concrete-endpoints-topo3-r1
     :routes-2026-10-11-manifold-negative-prefix-model-topo3-r1
     :routes-2026-10-11-manifold-negative-model-factors-topo3-r1
-    :routes-2026-10-11-manifold-coefficient-open-disk-normalization-topo3-r1],
+    :routes-2026-10-11-manifold-coefficient-open-disk-normalization-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-open-disk-model-factors-topo3-r1],
    :current-residual
    "Local-degree counts and wild-ball complement homology remain.",
    :other-consumers [:t98A02]}
@@ -15838,6 +15957,46 @@
     ["ConstructionTargets/CoefficientNeighborhoodLocal.lean"]},
    :id
    :lemma-constructiontargets-coefficientneighborhoodlocal-model-forward,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFundamentalClass.coefficientIntegralBall_forget_hom_eq_model_factors",
+    :type
+    "forall (k : ℕ), forgetIntModules.map (CoefficientNeighborhoodLocal.integral_ball k).hom = forgetIntModules.map (HomologicalComplex.homologyMap (CoefficientNeighborhoodLocal.inclusionMap ℤ (Metric.ball (0 : CoefficientModelLocal.E (k + 2)) 1) 0) (k + 2)) ≫ coefficientModelNormalizationComposite k"},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFundamentalClass.coefficientIntegralBall_forget_hom_eq_model_factors",
+    :reported-by
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    :type
+    "forall (k : ℕ), forgetIntModules.map (CoefficientNeighborhoodLocal.integral_ball k).hom = forgetIntModules.map (HomologicalComplex.homologyMap (CoefficientNeighborhoodLocal.inclusionMap ℤ (Metric.ball (0 : CoefficientModelLocal.E (k + 2)) 1) 0) (k + 2)) ≫ coefficientModelNormalizationComposite k",
+    :area "manifold-fundamental-class",
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+   :id :lemma-mfclass-coefficient-integral-ball-model-factors,
+   :kind :lemma,
+   :depends-on
+   [:lemma-mfclass-coefficient-integral-ball-forget-hom
+    :lemma-constructiontargets-manifoldfundamentalclass-coefficientmodellocaliso-forget-hom],
+   :other-consumers [:t98A02]}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFundamentalClass.coefficientModelLocalIso_forget_hom"},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFundamentalClass.coefficientModelLocalIso_forget_hom",
+    :reported-by []},
+   :id
+   :lemma-constructiontargets-manifoldfundamentalclass-coefficientmodellocaliso-forget-hom,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}],
