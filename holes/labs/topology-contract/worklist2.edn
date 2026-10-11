@@ -79283,35 +79283,35 @@
   {:consumer :t97A04,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 9,
+   :stop-count 10,
    :review-finding
    "program STOP commits nothing new since the last :program-history entry: evidence commit bb0f0f77d8953dc78dd564e000f3d4a5b29d0894 exactly equals history job 5",
    :evidence
    {:placeholder-delta 0,
-    :residual "Identify restrictions as circle-affine; then B6-B11.",
+    :residual "Prove folded affine formulas; then B6-B11.",
     :outcome :stop,
-    :warnings
-    ["Main has 2 placeholders; unrelated dirty file preserved."],
+    :warnings ["Main retains two placeholders."],
     :missing-theorems
     [{:name
-      "ConstructionTargets.T97A04Closure.twoCircleOverlapShear_component_H1",
-      :type "restriction H1 equals injection H1 then shear H1",
+      "ConstructionTargets.T97A04Closure.twoCircleOverlapShearFold_H1",
+      :type "folded circle maps and H1 factorizations",
       :status :proved,
       :consumers [:t97A04],
       :depends-on [],
       :area "mv-connecting-naturality"}
      {:name
       "ConstructionTargets.T97A04Closure.shearY_overlap_coordinate_components",
-      :type "inl/inr degree-a equations",
+      :type
+      "folded maps are affine, yielding inl/inr degree-a equations",
       :status :partial,
       :consumers [:t97A04],
       :depends-on
-      ["ConstructionTargets.T97A04Closure.twoCircleOverlapShear_component_H1"
+      ["ConstructionTargets.T97A04Closure.twoCircleOverlapShearFold_H1"
        "ConstructionTargets.T97A04Closure.circleZPow_H1_coordinate"],
       :area "mv-connecting-naturality"}],
     :statement-hashes
     {:registry "131/0",
-     :closure "779e8c25984dce84d27ab7a37769b734ea78abd2",
+     :closure "8f9bb068221c45811c6ad0c1fb291a529ecdc818",
      :blueprint "c419a895cb4ede2acc1cb6bc5c7536344ba63df4"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
@@ -79324,30 +79324,19 @@
      {:cmd "lake env lean problems/t97A04/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "Main placeholder count", :exit 0, :output "2"}
-     {:cmd "git show --check 6150a402c", :exit 0}],
+     {:cmd "git show --check 3d32079d0", :exit 0}],
     :diagnostic-history
     [{:cmd "closure compile",
       :exit 1,
-      :finding "Expanded postcomposition; rerun passed."}],
-    :continue-from "Identify restrictions as circle-affine.",
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791728539113-5481-51c4d7a4",
-     :commands
-     ["git show/check/diff-tree 6150a402c"
-      "lake env lean ConstructionTargets/t97A04Closure.lean"
-      "lake env lean problems/t97A04/lean/Main.lean"
-      "statement-registry check/fingerprint and placeholder counts"],
-     :finding
-     "PASS: new compiled progress after history job 8. Commit changes only the scoped closure and factors each restricted overlap shear H1 map as circle-summand injection followed by the transported shear; functorial composition and direction agree with twoCircleOverlapShearLeft/Right. Blob matches 779e8c25. Closure is sorry-free with standard axioms; Main compiles with unchanged 2 placeholders. Registry is 131/0 and frozen statement SHA-256 remains ca1b2cb3c6594276811618321d5c0604c2f38fc4594a6b21ae161a711a923a34. Affine identification and B6-B11 remain listed."},
-    :commit "6150a402c247424c1891c64a4d92e5b505009668",
+      :finding "Affine rfl failed; proved fold factorization."}],
+    :continue-from "Expand overlap equivalence for affine formulas.",
+    :commit "3d32079d0c2c546e38de9c2ded26b1c1d365a768",
     :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
     :finding
-    "Restricted overlap shears now factor through circle injections on H1.",
+    "Each restriction now folds to a circle map with proved H1 factorization.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79790,7 +79779,8 @@
     :lemma-constructiontargets-t97a04closure-circlezpow-h1
     :lemma-constructiontargets-t97a04closure-circlezpow-h1-coordinate
     :lemma-constructiontargets-t97a04closure-twocircleoverlapshearleftright
-    :lemma-constructiontargets-t97a04closure-twocircleoverlapshear-component-h1],
+    :lemma-constructiontargets-t97a04closure-twocircleoverlapshear-component-h1
+    :lemma-constructiontargets-t97a04closure-twocircleoverlapshearfold-h1],
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
@@ -79917,6 +79907,26 @@
     :banked-commit "6150a402c247424c1891c64a4d92e5b505009668"},
    :id
    :lemma-constructiontargets-t97a04closure-twocircleoverlapshear-component-h1,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T97A04Closure.twoCircleOverlapShearFold_H1",
+    :type "folded circle maps and H1 factorizations"},
+   :lemma
+   {:name
+    "ConstructionTargets.T97A04Closure.twoCircleOverlapShearFold_H1",
+    :reported-by [:program-2026-10-11-close-t97a04],
+    :type "folded circle maps and H1 factorizations",
+    :area "mv-connecting-naturality",
+    :proved-in :program-2026-10-11-close-t97a04},
+   :id
+   :lemma-constructiontargets-t97a04closure-twocircleoverlapshearfold-h1,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}]}
