@@ -68712,6 +68712,33 @@
    "Analyze the complementary zero-height region with nonpositive real normal coordinate along the selected right-core angular trajectory; combine that path-specific result with this sign criterion and the nonzero-height criterion, then concatenate and certify the ambient stages.",
    :other-consumers []}
   {:bounded-exception
+   "single-consumer safe angular corridor for nonpositive real normal coordinate",
+   :consumer :t02A03,
+   :phase :probe,
+   :state :open,
+   :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t02A03/nonpositive-normal-safe-angular-corridor",
+   :acceptance
+   {:probe
+    "Compile nonpositiveNormalSafeCorridor_collisionPolynomial_pos. Under norm n <= 1/4 and n.re <= 0, prove strict positivity of the collision polynomial whenever the Circle angular real coordinate is at most 9/10. Do not claim safety outside this corridor and do not construct the angular homotopy.",
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.nonpositiveNormalSafeCorridor_collisionPolynomial_pos",
+    :type
+    "forall (u : Circle) (n : Complex), norm n <= (1 / 4 : Real) -> n.re <= 0 -> (u : Complex).re <= (9 / 10 : Real) -> 0 < (1 - n.re)^2 - 4*(1-n.re)*(u : Complex).re + 3",
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "certify a deletion-safe angular corridor in the complementary normal-real region"},
+   :id
+   :routes-2026-10-11-t02a03-nonpositive-normal-safe-angular-corridor-topo2-r1,
+   :kind :reusable-theorem,
+   :area "explicit-r3-tube-deformation-retraction",
+   :depends-on
+   [:routes-2026-10-11-t02a03-collision-polynomial-positive-normal-real-topo2-r1],
+   :current-residual
+   "Construct continuous entry and exit stages connecting the endpoint angular coordinates to the safe corridor without crossing the polynomial zero set, using the nonzero-height criterion when available; then assemble the corrected angular stage and concatenate it with the radial stage.",
+   :other-consumers []}
+  {:bounded-exception
    "single-consumer explicit ambient deformation with frozen tube and deletion invariants",
    :consumer :t02A03,
    :evidence
@@ -68720,79 +68747,79 @@
      :warnings [],
      :missing-theorems
      [{:name
-       "ConstructionTargets.T02A03GeometricTubeDeformation.collisionPolynomial_pos_of_normal_re_pos",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.nonpositiveNormalSafeCorridor_collisionPolynomial_pos",
        :type
-       "forall (u : Circle) (n : Complex), norm n <= (1 / 4 : Real) -> 0 < n.re -> 0 < (1 - n.re)^2 - 4*(1 - n.re)*(u : Complex).re + 3",
+       "forall (u : Circle) (n : Complex), norm n <= (1 / 4 : Real) -> n.re <= 0 -> (u : Complex).re <= (9 / 10 : Real) -> 0 < (1 - n.re)^2 - 4*(1-n.re)*(u : Complex).re + 3",
        :status :proved,
        :consumers [:t02A03],
        :depends-on [],
        :area "explicit-r3-tube-deformation-retraction"}],
      :prerequisite
      {:bounded-exception
-      "single-consumer positive-real-normal sign criterion for the planar collision polynomial",
+      "single-consumer safe angular corridor for nonpositive real normal coordinate",
       :consumer :t02A03,
       :phase :probe,
       :state :open,
       :scope
       ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t02A03/collision-polynomial-positive-normal-real",
+      "TOPOLOGY-ROUTES.md/t02A03/nonpositive-normal-safe-angular-corridor",
       :acceptance
       {:probe
-       "Compile collisionPolynomial_pos_of_normal_re_pos. For any Circle angular coordinate and complex normal coordinate of norm at most 1/4 with positive real part, prove the collision polynomial is strictly positive. Do not claim the nonpositive-real region and do not construct an angular homotopy.",
+       "Compile nonpositiveNormalSafeCorridor_collisionPolynomial_pos. Under norm n <= 1/4 and n.re <= 0, prove strict positivity of the collision polynomial whenever the Circle angular real coordinate is at most 9/10. Do not claim safety outside this corridor and do not construct the angular homotopy.",
        :declaration
-       "ConstructionTargets.T02A03GeometricTubeDeformation.collisionPolynomial_pos_of_normal_re_pos",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.nonpositiveNormalSafeCorridor_collisionPolynomial_pos",
        :type
-       "forall (u : Circle) (n : Complex), norm n <= (1 / 4 : Real) -> 0 < n.re -> 0 < (1 - n.re)^2 - 4*(1-n.re)*(u : Complex).re + 3",
+       "forall (u : Circle) (n : Complex), norm n <= (1 / 4 : Real) -> n.re <= 0 -> (u : Complex).re <= (9 / 10 : Real) -> 0 < (1 - n.re)^2 - 4*(1-n.re)*(u : Complex).re + 3",
        :placeholder "the sole sorry in apm_t02a03",
        :route-step
-       "certify uniform scalar noncollision in the positive-real-normal region"},
+       "certify a deletion-safe angular corridor in the complementary normal-real region"},
       :id
-      :routes-2026-10-11-t02a03-collision-polynomial-positive-normal-real-topo2-r1,
+      :routes-2026-10-11-t02a03-nonpositive-normal-safe-angular-corridor-topo2-r1,
       :kind :reusable-theorem,
       :area "explicit-r3-tube-deformation-retraction",
       :depends-on
-      [:routes-2026-10-11-t02a03-collision-polynomial-implies-left-core-avoidance-topo2-r2],
+      [:routes-2026-10-11-t02a03-collision-polynomial-positive-normal-real-topo2-r1],
       :current-residual
-      "Analyze the complementary zero-height region with nonpositive real normal coordinate along the selected right-core angular trajectory; combine that path-specific result with this sign criterion and the nonzero-height criterion, then concatenate and certify the ambient stages.",
+      "Construct continuous entry and exit stages connecting the endpoint angular coordinates to the safe corridor without crossing the polynomial zero set, using the nonzero-height criterion when available; then assemble the corrected angular stage and concatenate it with the radial stage.",
       :other-consumers []},
      :commands
      [{:cmd
-       "lake env lean /tmp/t02a03_collision_poly_positive_re_probe.lean",
+       "lake env lean /tmp/t02a03_collision_poly_nonpos_re_corridor_probe.lean",
        :exit 0,
        :output
-       "collisionPolynomial_pos_of_normal_re_pos compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "nonpositiveNormalSafeCorridor_collisionPolynomial_pos compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/t02a03_collision_poly_positive_re_probe.lean",
+       "sha256sum /tmp/t02a03_collision_poly_nonpos_re_corridor_probe.lean",
        :exit 0,
        :output
-       "e0ecc5d9accacab03cb2f96fb99a3d0746c2e8e5b5031c24711fab24c1e586dc  /tmp/t02a03_collision_poly_positive_re_probe.lean"}
+       "a0962d48c4bfae6f64ec37ea3dbeca974ea8433b65b1c0651be4c24b0d97c444  /tmp/t02a03_collision_poly_nonpos_re_corridor_probe.lean"}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_collision_poly_positive_re_probe.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_collision_poly_nonpos_re_corridor_probe.lean || true)\"",
        :exit 0}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}
       {:cmd
-       "rg -n 'collisionPolynomial_pos_of_normal_re_pos' /tmp/t02a03_collision_poly_positive_re_probe.lean",
+       "rg -n 'nonpositiveNormalSafeCorridor_collisionPolynomial_pos' /tmp/t02a03_collision_poly_nonpos_re_corridor_probe.lean",
        :exit 0,
        :output
-       "5:theorem collisionPolynomial_pos_of_normal_re_pos\n19:#print axioms collisionPolynomial_pos_of_normal_re_pos"}],
+       "5:theorem nonpositiveNormalSafeCorridor_collisionPolynomial_pos\n19:#print axioms nonpositiveNormalSafeCorridor_collisionPolynomial_pos"}],
      :diagnostic-history
      [{:cmd
-       "lake env lean /tmp/t02a03_collision_poly_positive_re_probe.lean",
+       "lake env lean /tmp/t02a03_collision_poly_nonpos_re_corridor_probe.lean",
        :exit 1,
        :finding
-       "The first fixture used the unavailable theorem spelling mul_le_iff₀; replacing that multiplication step with mul_le_mul_of_nonneg_left preserved the proof and compiled."}],
+       "The first proof asked linarith to extract the lower real-part bound through an absolute value. Applying abs_le.mp to the transitive norm bound supplied the exact bound and the corrected proof compiled."}],
      :fixture
-     {:path "/tmp/t02a03_collision_poly_positive_re_probe.lean",
+     {:path "/tmp/t02a03_collision_poly_nonpos_re_corridor_probe.lean",
       :sha256
-      "e0ecc5d9accacab03cb2f96fb99a3d0746c2e8e5b5031c24711fab24c1e586dc"},
+      "a0962d48c4bfae6f64ec37ea3dbeca974ea8433b65b1c0651be4c24b0d97c444"},
      :finding
-     "Under norm n <= 1/4 and 0 < n.re, the reconstruction radius 1-n.re lies strictly between zero and one. Since every Circle coordinate has real part at most one, the collision polynomial is strictly positive for every angular coordinate. This supplies deletion avoidance through the banked contrapositive adapter throughout the positive-real-normal region; the complementary zero-height region still requires path-specific angular control.",
+     "For n.re <= 0 and norm n <= 1/4, the reconstruction radius 1-n.re lies in [1,5/4]. If the angular real coordinate is at most 9/10, direct minimization gives strict positivity of the collision polynomial, with margin 1/16 at the worst corner. This supplies a uniform deletion-safe angular corridor. It deliberately does not claim safety while entering or leaving that corridor, since the polynomial can be negative at angular coordinate 1.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
@@ -68839,7 +68866,8 @@
     :routes-2026-10-11-t02a03-core-polar-height-left-core-avoidance-topo2-r2
     :routes-2026-10-11-t02a03-core-polar-left-core-collision-equation-topo2-r1
     :routes-2026-10-11-t02a03-collision-polynomial-implies-left-core-avoidance-topo2-r2
-    :routes-2026-10-11-t02a03-collision-polynomial-positive-normal-real-topo2-r1],
+    :routes-2026-10-11-t02a03-collision-polynomial-positive-normal-real-topo2-r1
+    :routes-2026-10-11-t02a03-nonpositive-normal-safe-angular-corridor-topo2-r1],
    :current-residual
    "Lift H to RightTubeMinusLeftCore, package rightTubeMeridianRetractionHomotopy, then use the coordinate equation for the Circle-side constant homotopy.",
    :other-consumers []}
@@ -72638,6 +72666,30 @@
     :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-collisionpolynomial-pos-of-no,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T02A03GeometricTubeDeformation.nonpositiveNormalSafeCorridor_collisionPolynomial_pos",
+    :type
+    "forall (u : Circle) (n : Complex), norm n <= (1 / 4 : Real) -> n.re <= 0 -> (u : Complex).re <= (9 / 10 : Real) -> 0 < (1 - n.re)^2 - 4*(1-n.re)*(u : Complex).re + 3"},
+   :lemma
+   {:name
+    "ConstructionTargets.T02A03GeometricTubeDeformation.nonpositiveNormalSafeCorridor_collisionPolynomial_pos",
+    :reported-by
+    [:routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1],
+    :type
+    "forall (u : Circle) (n : Complex), norm n <= (1 / 4 : Real) -> n.re <= 0 -> (u : Complex).re <= (9 / 10 : Real) -> 0 < (1 - n.re)^2 - 4*(1-n.re)*(u : Complex).re + 3",
+    :area "explicit-r3-tube-deformation-retraction",
+    :proved-in
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+   :id
+   :lemma-constructiontargets-t02a03geometrictubedeformation-nonpositivenormalsafecorridor,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}]}
