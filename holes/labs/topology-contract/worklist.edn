@@ -113852,7 +113852,7 @@
    :depends-on [],
    :other-consumers [:t98A02]}
   {:consumer :t99J01,
-   :stop-count 4,
+   :stop-count 5,
    :review-finding
    "Blueprint dependency gap: B3 omits the pseudo-span, point-span comparison, free-product representation, and representation-to-SingleObj equivalences and their postcomposition naturality from uses; B9 also lacks an equivalence Multiplicative Int ≃* FreeGroup (Fin 1), so the stated proofs do not follow from their uses nodes.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
@@ -113860,7 +113860,7 @@
    {:blueprint
     {:path "ConstructionTargets/PointWedgeVanKampen.blueprint.md",
      :sha256
-     "e7858853bfd65235a9452c2de7c31d88e400b786ec8e04832c50f7b13e739a02",
+     "0d620a01dda99d9c034883969889c81103f63a0711227cb4177239bdcb45e4e1",
      :nodes
      [{:id :B1, :status :proved}
       {:id :B2, :status :proved}
@@ -113869,16 +113869,17 @@
       {:id :B5, :status :proved}
       {:id :B6, :status :planned}
       {:id :B7, :status :proved}
-      {:id :B8, :status :proved}
-      {:id :B9, :status :planned}]},
+      {:id :B8, :status :planned}
+      {:id :B9, :status :proved}
+      {:id :B10, :status :planned}]},
     :placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Blueprint review, followed by B3 target-natural mapping equivalence, B4 source reconstruction, B6 literal leg laws, and B9 ThreeCircles specialization.",
+    "Blueprint re-review, then B3 target-natural mapping equivalence, B4 source reconstruction, B6 leg laws, B8 rank-one coordinate, and B10 ThreeCircles specialization.",
     :outcome :stop,
     :warnings
     [{:kind :concurrent-worktree-change,
       :message
-      "holes/labs/topology-contract/worklist.edn changed concurrently and was preserved unmodified and uncommitted."}],
+      "holes/labs/topology-contract/worklist.edn remained modified by another process and was preserved unmodified and uncommitted."}],
     :missing-theorems
     [{:name
       "PointWedgeVanKampen.genericPointWedgeSingleObjMappingEquivalence",
@@ -113886,6 +113887,13 @@
       "A postcomposition-natural equivalence from functors out of the point-wedge fundamental groupoid to functors out of the single-object coproduct groupoid",
       :status :not-started,
       :consumers [:t99J01 :t01A03 :t92J06 :t97A01 :t97A03],
+      :depends-on [],
+      :area "fundamental-group-wedge-of-circles"}
+     {:name
+      "PointWedgeVanKampen.multiplicativeIntEquivFreeGroupFinOne",
+      :type "Multiplicative Int ≃* FreeGroup (Fin 1)",
+      :status :not-started,
+      :consumers [:t99J01],
       :depends-on [],
       :area "fundamental-group-wedge-of-circles"}
      {:name
@@ -113905,55 +113913,50 @@
       :consumers [:t99J01],
       :depends-on
       ["PointWedgeVanKampen.genericPointWedgeLegCoordinates_vanKampen"
-       "PointWedgeVanKampen.coprodFreeGroupFinTwoFinOne_equiv"],
+       "PointWedgeVanKampen.coprodFreeGroupFinTwoFinOne_equiv"
+       "PointWedgeVanKampen.multiplicativeIntEquivFreeGroupFinOne"],
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:blueprint-sha256
-     "e7858853bfd65235a9452c2de7c31d88e400b786ec8e04832c50f7b13e739a02",
+     "0d620a01dda99d9c034883969889c81103f63a0711227cb4177239bdcb45e4e1",
      :registry "131 registered statements match, 0 do not"},
     :disposition :stop,
     :axioms [],
     :author "topo-2",
     :reason
-    "Blueprint written. Per the blueprint gate, this job formalized no new Lean node; the nine-node mathematical route now requires independent review before B3 formalization continues.",
+    "Blueprint repaired. B3 now names every equivalence and postcomposition-naturality result used by its five-stage composite, and new node B8 supplies the missing Multiplicative Int to FreeGroup (Fin 1) equivalence required by the final specialization. Independent blueprint review is required before formalization resumes.",
     :commands
-    [{:cmd "sed -n 1,260p holes/labs/topology-contract/BLUEPRINTS.md",
-      :exit 0}
-     {:cmd "rg point-wedge-route-and-audit-sources",
+    [{:cmd
+      "rg exact blueprint dependency APIs in ConstructionTargets and Mathlib",
       :exit 0,
-      :finding
-      "t99J01 audit route step 1 requires the three-circle fundamental-group computation by iterated point-wedge van Kampen"}
+      :finding "All named B3 and B8 APIs exist"}
      {:cmd "python3 blueprint node-field validation",
       :exit 0,
-      :finding "9 blueprint nodes; each has lean, uses, and status"}
+      :finding "10 blueprint nodes; each has lean, uses, and status"}
      {:cmd
       "git diff --check -- ConstructionTargets/PointWedgeVanKampen.blueprint.md",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
-     {:cmd "git commit -m Write-point-wedge-van-Kampen-blueprint",
+     {:cmd "git commit -m Repair-point-wedge-blueprint-dependencies",
       :exit 0}
-     {:cmd "git show --stat --oneline --no-renames HEAD",
+     {:cmd
+      "sha256sum ConstructionTargets/PointWedgeVanKampen.blueprint.md",
       :exit 0,
-      :finding "Only the scoped blueprint was committed"}],
+      :finding
+      "0d620a01dda99d9c034883969889c81103f63a0711227cb4177239bdcb45e4e1"}],
     :diagnostic-history [],
     :continue-from
-    {:commit "33033fb07c2f454ffc2bb91d7183af156d0cd531",
+    {:commit "317829fadd7e9ad4f1d6b6d32135e53cd51d5853",
      :next
-     "Obtain independent mathematical review of PointWedgeVanKampen.blueprint.md; after review, implement B3, the target-natural point-wedge mapping equivalence."},
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1791713957414-5020-f32bc4c2",
-     :finding
-     "Blueprint dependency gap: B3 omits the pseudo-span, point-span comparison, free-product representation, and representation-to-SingleObj equivalences and their postcomposition naturality from uses; B9 also lacks an equivalence Multiplicative Int ≃* FreeGroup (Fin 1), so the stated proofs do not follow from their uses nodes."},
-    :commit "33033fb07c2f454ffc2bb91d7183af156d0cd531",
+     "Obtain independent review of the repaired blueprint; after approval implement B3, using exactly the named five-stage equivalences and naturality isomorphisms."},
+    :commit "317829fadd7e9ad4f1d6b6d32135e53cd51d5853",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.blueprint.md"],
     :seat "topo-2"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -114078,7 +114081,8 @@
    :kind :lemma,
    :depends-on
    [:lemma-pointwedgevankampen-genericpointwedgelegcoordinates-vankampen
-    :lemma-pointwedgevankampen-coprodfreegroupfintwofinone-equiv],
+    :lemma-pointwedgevankampen-coprodfreegroupfintwofinone-equiv
+    :lemma-pointwedgevankampen-multiplicativeintequivfreegroupfinone],
    :other-consumers []}
   {:consumer :t00A03,
    :phase :lemma,
@@ -115185,6 +115189,23 @@
     "continuous injective t : Icc 0 1 → Icc 0 1 with image in Ioo 0 1 and prescribed coordinates on its image extend to a homeomorphism of Icc 0 1 by affine pieces on the two complementary end intervals",
     :area "interval-exhaustion-coordinates"},
    :id :lemma-extend-interval-embedding-coordinates,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t99J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "PointWedgeVanKampen.multiplicativeIntEquivFreeGroupFinOne",
+    :type "Multiplicative Int ≃* FreeGroup (Fin 1)"},
+   :lemma
+   {:name "PointWedgeVanKampen.multiplicativeIntEquivFreeGroupFinOne",
+    :reported-by [:program-2026-10-11-point-wedge-van-kampen],
+    :type "Multiplicative Int ≃* FreeGroup (Fin 1)",
+    :area "fundamental-group-wedge-of-circles"},
+   :id
+   :lemma-pointwedgevankampen-multiplicativeintequivfreegroupfinone,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}],
