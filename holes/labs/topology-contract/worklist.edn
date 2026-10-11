@@ -113899,6 +113899,19 @@
     :diagnostic-history
     [{:cmd "lean", :exit 1, :finding "Fixed names/equality."}
      {:cmd "lean", :exit 1, :finding "Added implicits."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791740323860-5695-0b614671",
+     :commands
+     ["git show/diff-tree 97451f23"
+      "hash/diff/placeholder checks"
+      "statement-registry.py check"
+      "lake env lean PointWedgeVanKampen.lean"
+      "lake build PointWedgeVanKampen"
+      "lake build ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "PASS: new compiled, sorry-free B6 progress fixes literal left/right leg maps and proves the normalized coordinate goal from exactly two mapped-leg comparisons. The right quotient equality is correctly reversed to change right representative to the chosen left basepoint. Exact two-file scope/frozen hashes match; zero placeholders; registry 131/131; standard axioms. Two comparisons and B12 remain listed; absent final target is valid STOP."},
     :commit "97451f233e6b5439afb8b858a4e34492b0250c56",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113909,7 +113922,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113930,7 +113943,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B6 partial: normalization installed in B4/B5.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B6 reduced to two mapped-leg equations.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -113997,7 +114010,10 @@
      "B6 partial: both leg actions are explicit counit conjugates of the coproduct injections."}
     {:job 1,
      :commit "71f8161b3d363e92c05b8831a5b63fd4dabc8ed5",
-     :reason "B6 partial: normalization installed in B4/B5."}]}
+     :reason "B6 partial: normalization installed in B4/B5."}
+    {:job 2,
+     :commit "97451f233e6b5439afb8b858a4e34492b0250c56",
+     :reason "B6 reduced to two mapped-leg equations."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
