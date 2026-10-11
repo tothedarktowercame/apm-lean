@@ -102966,118 +102966,147 @@
    "Promote the two continuous bijections to homeomorphisms, then prove their literal ThreeCircles boundary formulas and finish the radial packages.",
    :other-consumers []}
   {:bounded-exception
+   "This single-consumer prerequisite supplies exactly the compact-source and Hausdorff-target facts needed to promote the two already compiled continuous bijections.",
+   :consumer :t97A01,
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/PolygonBoundaryCompactHausdorffInstances.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/boundary-compact-hausdorff-instances",
+   :acceptance
+   {:implementation
+    "Prove CompactSpace ThreeEndpointLoops using the existing homeomorphism with ThreeCircles and the compactness of the constituent circle wedges. Prove T2Space for CircleQuotient (SurfaceRel false 3) and CircleQuotient TorusCrosscapRel from the explicit finite edge-identification relations, establishing the required closed equivalence relations without assuming the desired boundary homeomorphisms. Export the conjunction polygonBoundaryCompactHausdorffInstances with the exact fixture type. Do not define the specialized three-loop homeomorphisms, prove their ThreeCircles formulas, construct outer-piece formulas, compute invariants, or close t97A01.",
+    :placeholder "the single sorry in apm_t97a01",
+    :route-step
+    "polygon radial open-cover step 39: establish compactness of the three-loop source and Hausdorffness of both specialized boundary quotients",
+    :fixture "/tmp/polygon-boundary-compact-hausdorff-instances.lean",
+    :fixture-sha256
+    "18063cd3f1a0e8aa55258b6985ccf6cf0ad4a397233e6ec6c1f8005d62515e62",
+    :gates
+    ["lake build ConstructionTargets.PolygonBoundaryCompactHausdorffInstances"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id
+   :routes-2026-10-11-polygon-boundary-compact-hausdorff-instances-79,
+   :kind :reusable-theorem,
+   :area "polygon-surface-open-cover",
+   :depends-on
+   [:routes-2026-10-11-polygon-boundary-three-loop-bijections-78],
+   :current-residual
+   "Use the compact/Hausdorff instances to promote both continuous bijections to homeomorphisms, then derive literal ThreeCircles formulas and finish the radial packages.",
+   :other-consumers []}
+  {:bounded-exception
    "This single-consumer concrete quotient package is the other final backlog lemma on t97A01 and supplies the actual two polygon models required by its frozen statement.",
    :consumer :t97A01,
    :implements-lemma :lemma-polygonradialopencoverpackages,
    :evidence
    {:probe
     {:residual
-     "Promote both continuous bijections to homeomorphisms, derive their literal ThreeCircles formulas, and finish the concrete radial open-cover packages.",
+     "After compactness and Hausdorffness are banked, promote the two continuous bijections with Continuous.homeoOfEquivCompactToT2, derive their literal ThreeCircles boundary formulas, and assemble the concrete radial open-cover packages.",
      :outcome :revise,
      :warnings
      [{:kind :dirty-worktree,
        :message
-       "The unrelated T02A03GeometricTubeDeformation.lean modification was not touched."}],
+       "The unrelated untracked worklist2.edn.tmp was not touched."}],
      :missing-theorems
-     [{:name
-       "PolygonBoundaryThreeLoopBijections.injective_n3ThreeLoops",
-       :type "Function.Injective n3ThreeLoops.",
-       :status :proved,
-       :consumers [:t97A01],
-       :depends-on
-       ["PolygonBoundaryThreeLoopDecoderLeftInverse.n3QuotientDecode_leftInverse"],
-       :area "polygon-surface-open-cover"}
-      {:name
-       "PolygonBoundaryThreeLoopBijections.injective_torusCrosscapThreeLoops",
-       :type "Function.Injective torusCrosscapThreeLoops.",
-       :status :proved,
-       :consumers [:t97A01],
-       :depends-on
-       ["PolygonBoundaryThreeLoopDecoderLeftInverse.torusCrosscapQuotientDecode_leftInverse"],
-       :area "polygon-surface-open-cover"}
-      {:name "polygonBoundaryThreeLoopHomeomorphisms",
+     [{:name "polygonBoundaryCompactHausdorffInstances",
        :type
-       "Promote the continuous bijections n3ThreeLoops and torusCrosscapThreeLoops to homeomorphisms from ThreeEndpointLoops onto their boundary relation quotients.",
+       "CompactSpace ThreeEndpointLoops ∧ T2Space (CircleQuotient (SurfaceRel false 3)) ∧ T2Space (CircleQuotient TorusCrosscapRel)",
        :status :not-started,
        :consumers [:t97A01],
        :depends-on
-       ["PolygonBoundaryThreeLoopBijections.injective_n3ThreeLoops"
-        "PolygonBoundaryThreeLoopBijections.injective_torusCrosscapThreeLoops"
+       ["PolygonBoundaryThreeLoopBijections.bijective_n3ThreeLoops"
+        "PolygonBoundaryThreeLoopBijections.bijective_torusCrosscapThreeLoops"
         "PolygonBoundaryThreeLoopContinuity.continuous_n3ThreeLoops"
         "PolygonBoundaryThreeLoopContinuity.continuous_torusCrosscapThreeLoops"],
        :area "polygon-surface-open-cover"}],
      :prerequisite
      {:bounded-exception
-      "This single-consumer prerequisite closes the set-theoretic part of both boundary comparisons before the topological promotion.",
+      "This single-consumer prerequisite supplies exactly the compact-source and Hausdorff-target facts needed to promote the two already compiled continuous bijections.",
       :consumer :t97A01,
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/PolygonBoundaryThreeLoopBijections.lean"],
+      ["ConstructionTargets/PolygonBoundaryCompactHausdorffInstances.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/boundary-three-loop-bijections",
+      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/boundary-compact-hausdorff-instances",
       :acceptance
       {:implementation
-       "Promote the exact fixture. Apply each compiled decoder left inverse to prove injectivity of n3ThreeLoops and torusCrosscapThreeLoops. Pair those results with the banked six-edge surjectivity theorems to prove both maps bijective. Do not prove inverse continuity or homeomorphisms, derive ThreeCircles or outer-piece formulas, compute invariants, or close t97A01.",
+       "Prove CompactSpace ThreeEndpointLoops using the existing homeomorphism with ThreeCircles and the compactness of the constituent circle wedges. Prove T2Space for CircleQuotient (SurfaceRel false 3) and CircleQuotient TorusCrosscapRel from the explicit finite edge-identification relations, establishing the required closed equivalence relations without assuming the desired boundary homeomorphisms. Export the conjunction polygonBoundaryCompactHausdorffInstances with the exact fixture type. Do not define the specialized three-loop homeomorphisms, prove their ThreeCircles formulas, construct outer-piece formulas, compute invariants, or close t97A01.",
        :placeholder "the single sorry in apm_t97a01",
        :route-step
-       "polygon radial open-cover step 38: prove both three-loop boundary maps bijective",
-       :fixture "/tmp/polygon-boundary-three-loop-bijections.lean",
+       "polygon radial open-cover step 39: establish compactness of the three-loop source and Hausdorffness of both specialized boundary quotients",
+       :fixture
+       "/tmp/polygon-boundary-compact-hausdorff-instances.lean",
        :fixture-sha256
-       "f02ffae406026eb690350dbcc239101d72b35c8b89c5882e342897a3391e69ef",
+       "18063cd3f1a0e8aa55258b6985ccf6cf0ad4a397233e6ec6c1f8005d62515e62",
        :gates
-       ["lake build ConstructionTargets.PolygonBoundaryThreeLoopBijections"
+       ["lake build ConstructionTargets.PolygonBoundaryCompactHausdorffInstances"
         "fixture compiles"
         "zero source and fixture sorry"
         "standard-only axioms"
         "registry check"]},
-      :id :routes-2026-10-11-polygon-boundary-three-loop-bijections-78,
+      :id
+      :routes-2026-10-11-polygon-boundary-compact-hausdorff-instances-79,
       :kind :reusable-theorem,
       :area "polygon-surface-open-cover",
       :depends-on
-      [:routes-2026-10-11-polygon-boundary-three-loop-decoder-left-inverse-77],
+      [:routes-2026-10-11-polygon-boundary-three-loop-bijections-78],
       :current-residual
-      "Promote the two continuous bijections to homeomorphisms, then prove their literal ThreeCircles boundary formulas and finish the radial packages.",
+      "Use the compact/Hausdorff instances to promote both continuous bijections to homeomorphisms, then derive literal ThreeCircles formulas and finish the radial packages.",
       :other-consumers []},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :axioms
+     ["propext"
+      "Classical.choice"
+      "Quot.sound"
+      "PolygonBoundaryCompactHausdorffInstancesProbe.polygonBoundaryCompactHausdorffInstances"],
      :commands
      [{:cmd
-       "lake env lean /tmp/polygon-boundary-three-loop-bijections.lean",
+       "lake env lean /tmp/polygon-boundary-compact-hausdorff-instances.lean",
        :exit 0,
        :finding
-       "Injectivity and bijectivity of both specialized three-loop maps compile with standard axioms."}
+       "Both specialized three-loop homeomorphisms compile from the single packaged compact/Hausdorff interface."}
       {:cmd
-       "sha256sum /tmp/polygon-boundary-three-loop-bijections.lean",
+       "sha256sum /tmp/polygon-boundary-compact-hausdorff-instances.lean",
        :exit 0,
        :finding
-       "f02ffae406026eb690350dbcc239101d72b35c8b89c5882e342897a3391e69ef"}
+       "18063cd3f1a0e8aa55258b6985ccf6cf0ad4a397233e6ec6c1f8005d62515e62"}
       {:cmd
-       "rg -n \"\\b(sorry|admit|axiom)\\b\" /tmp/polygon-boundary-three-loop-bijections.lean",
+       "rg -n \"\\b(sorry|admit)\\b\" /tmp/polygon-boundary-compact-hausdorff-instances.lean",
        :exit 1,
        :expected-exit 1,
-       :finding "No fixture placeholders or custom axioms."}
+       :finding "No fixture placeholders."}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :finding "131 registered statements match, 0 do not."}
       {:cmd "git status --short",
        :exit 0,
        :finding
-       "An unrelated modification to ConstructionTargets/T02A03GeometricTubeDeformation.lean is present and was left untouched."}
+       "The unrelated untracked holes/labs/topology-contract/worklist2.edn.tmp was left untouched."}
       {:cmd
        "sed -n '1,240p' TOPOLOGY-ROUTES.md >/dev/null && sed -n '1,240p' holes/labs/topology-routes/routes-1.md >/dev/null && sed -n '1,240p' holes/labs/topology-routes/routes-2.md >/dev/null && sed -n '1,240p' holes/labs/topology-routes/routes-3.md >/dev/null && sed -n '1,220p' docs/TN-topology-build-loop-design.md >/dev/null",
        :exit 0,
        :finding
        "The route guide, per-problem routes, and probe definitions were read."}],
-     :diagnostic-history [],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/check-polygon-homeo-instances.lean",
+       :exit 1,
+       :finding
+       "Lean could not synthesize CompactSpace ThreeEndpointLoops or T2Space for either specialized CircleQuotient.",
+       :correction
+       "A single explicit compact/Hausdorff package was isolated; assuming exactly that package, the successful fixture compiles both homeomorphisms."}],
      :fixture
-     {:path "/tmp/polygon-boundary-three-loop-bijections.lean",
+     {:path "/tmp/polygon-boundary-compact-hausdorff-instances.lean",
       :sha256
-      "f02ffae406026eb690350dbcc239101d72b35c8b89c5882e342897a3391e69ef",
+      "18063cd3f1a0e8aa55258b6985ccf6cf0ad4a397233e6ec6c1f8005d62515e62",
       :interface
-      "Both three-loop boundary maps are injective by their compiled decoder left inverses and bijective by the banked six-edge surjectivity reductions."},
+      "One packaged compact/Hausdorff interface suffices to promote both compiled continuous bijections to homeomorphisms."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -103135,7 +103164,8 @@
     :routes-2026-10-11-polygon-boundary-circle-decoder-well-defined-75
     :routes-2026-10-11-polygon-boundary-circle-decoder-relation-invariant-76
     :routes-2026-10-11-polygon-boundary-three-loop-decoder-left-inverse-77
-    :routes-2026-10-11-polygon-boundary-three-loop-bijections-78],
+    :routes-2026-10-11-polygon-boundary-three-loop-bijections-78
+    :routes-2026-10-11-polygon-boundary-compact-hausdorff-instances-79],
    :current-residual
    "Combine the concrete cover packages with the strict overlap squares, banked Smith normalization, and final t97A01 assembly.",
    :other-consumers []}
@@ -107788,6 +107818,29 @@
    :depends-on
    [:lemma-polygonboundarythreeloopdecoderleftinverse-toruscrosscapquotientdecode-leftinver
     :lemma-polygonsixedgecirclecover-surjective-toruscrosscapthreeloops],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "polygonBoundaryCompactHausdorffInstances",
+    :type
+    "CompactSpace ThreeEndpointLoops ∧ T2Space (CircleQuotient (SurfaceRel false 3)) ∧ T2Space (CircleQuotient TorusCrosscapRel)"},
+   :lemma
+   {:name "polygonBoundaryCompactHausdorffInstances",
+    :reported-by
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    :type
+    "CompactSpace ThreeEndpointLoops ∧ T2Space (CircleQuotient (SurfaceRel false 3)) ∧ T2Space (CircleQuotient TorusCrosscapRel)",
+    :area "polygon-surface-open-cover"},
+   :id :lemma-polygonboundarycompacthausdorffinstances,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polygonboundarythreeloopbijections-bijective-n3threeloops
+    :lemma-polygonboundarythreeloopbijections-bijective-toruscrosscapthreeloops
+    :lemma-polygonboundarythreeloopcontinuity-continuous-n3threeloops
+    :lemma-polygonboundarythreeloopcontinuity-continuous-toruscrosscapthreeloops],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
