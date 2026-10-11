@@ -69790,57 +69790,67 @@
    "single-consumer exhaustive zero-height meridian sign cases with collision-free ledger name",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/t02a03_zero_height_meridian_sign_cases_probe.lean",
-      :sha256
-      "d9d857309a12a14a222c523a87c649eefa553aa996d73e1ea5649ef1db19e8da"},
-     :commands
-     [{:cmd
-       "test -L .lake/packages && test \"$(readlink -f .lake/packages)\" = /home/joe/code/apm-lean/.lake/packages",
-       :exit 0}
-      {:cmd
-       "lake env lean /tmp/t02a03_zero_height_meridian_sign_cases_probe.lean",
-       :exit 0,
-       :output
-       "signCases_zeroHeight_rightTubeMeridianCoordinate_re compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "sha256sum /tmp/t02a03_zero_height_meridian_sign_cases_probe.lean",
-       :exit 0,
-       :output
-       "d9d857309a12a14a222c523a87c649eefa553aa996d73e1ea5649ef1db19e8da  /tmp/t02a03_zero_height_meridian_sign_cases_probe.lean"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_zero_height_meridian_sign_cases_probe.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}
-      {:cmd
-       "rg -n 'signCases_zeroHeight_rightTubeMeridianCoordinate_re' /tmp/t02a03_zero_height_meridian_sign_cases_probe.lean",
-       :exit 0,
-       :output
-       "5:theorem signCases_zeroHeight_rightTubeMeridianCoordinate_re\n13:#print axioms signCases_zeroHeight_rightTubeMeridianCoordinate_re"}],
-     :warnings [],
-     :finding
-     "The renamed theorem compiles and its distinguishing signCases prefix prevents collision with the banked square-one theorem. It converts the square-one equality into the exhaustive real-coordinate alternatives 1 and -1 without defining a sign-selection function.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
-      :declaration
-      "ConstructionTargets.T02A03GeometricTubeDeformation.signCases_zeroHeight_rightTubeMeridianCoordinate_re",
-      :type
-      "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> (rightTubeMeridianCoordinate p : Complex).re = 1 ∨ (rightTubeMeridianCoordinate p : Complex).re = -1",
-      :proof
-      "Obtain zeroHeight_rightTubeMeridianCoordinate_re_sq p hheight, rewrite it with sq_eq_one_iff, and return the resulting disjunction.",
-      :axioms [propext Classical.choice Quot.sound]},
-     :residual
-     "Implement and bank the distinctly named sign-case theorem; then prove zero-height radial collision nonvanishing in each branch."}},
+   {:placeholder-delta {:before 0, :after 0, :change 0},
+    :residual
+    "Prove the radial collision polynomial stays nonzero in each sign case, combine the branches into zero-height radial left-core avoidance, then construct and concatenate the safe angular stage.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean:62:6: unnecessarySimpa (pre-existing)"
+     "Unrelated concurrent changes in ConstructionTargets/ManifoldFundamentalClass.lean and ConstructionTargets/TwoOpenFreeProductGroupEquivalenceCoordinates.lean were preserved and not committed."],
+    :missing-theorems [],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms [propext Classical.choice Quot.sound],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :scope-blob "e8daf401b84add393dd0b9d26f8755297604cf9f",
+    :commands
+    [{:cmd
+      "test -L .lake/packages && test \"$(readlink -f .lake/packages)\" = /home/joe/code/apm-lean/.lake/packages",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0,
+      :output
+      "compiled; declaration axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "lake env lean /tmp/t02a03_zero_height_meridian_sign_cases_probe.lean",
+      :exit 0,
+      :output
+      "signCases_zeroHeight_rightTubeMeridianCoordinate_re compiled; axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "sha256sum /tmp/t02a03_zero_height_meridian_sign_cases_probe.lean",
+      :exit 0,
+      :output
+      "d9d857309a12a14a222c523a87c649eefa553aa996d73e1ea5649ef1db19e8da  /tmp/t02a03_zero_height_meridian_sign_cases_probe.lean"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "git diff --check -- ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd
+      "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git status --short",
+      :exit 0,
+      :output
+      " M ConstructionTargets/ManifoldFundamentalClass.lean\n?? ConstructionTargets/TwoOpenFreeProductGroupEquivalenceCoordinates.lean"}],
+    :commit "632d9ead7525106005ee227eb2abc63e1c370561",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.signCases_zeroHeight_rightTubeMeridianCoordinate_re",
+    :fixture
+    {:path "/tmp/t02a03_zero_height_meridian_sign_cases_probe.lean",
+     :sha256
+     "d9d857309a12a14a222c523a87c649eefa553aa996d73e1ea5649ef1db19e8da"},
+    :finding
+    "Rewriting the zero-height meridian real-part square-one certificate by sq_eq_one_iff yields the exhaustive alternatives 1 and -1 without defining a sign-selection function.",
+    :seat "topo-6"},
    :phase :implementation,
    :type
    "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> (rightTubeMeridianCoordinate p : Complex).re = 1 ∨ (rightTubeMeridianCoordinate p : Complex).re = -1",
-   :state :open,
+   :state :done-unreviewed,
    :proof
    "Obtain zeroHeight_rightTubeMeridianCoordinate_re_sq p hheight, rewrite it with sq_eq_one_iff, and return the resulting disjunction.",
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
