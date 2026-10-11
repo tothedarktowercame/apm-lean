@@ -70429,55 +70429,70 @@
      "ConstructionTargets.T02A03GeometricTubeDeformation.coreNormalAffineLeg",
      :type "unitInterval -> ℂ -> ℂ -> ℂ"}],
    :evidence
-   {:probe
-    {:residual
-     "Implement the generic affine leg and invariant, then specialize it to both zero-height endpoints, reverse the arrival leg, and concatenate the certified detour.",
-     :outcome :go,
-     :warnings [],
-     :axioms [propext Classical.choice Quot.sound],
-     :commands
-     [{:cmd
-       "lake env lean /tmp/t02a03_affine_leg_invariants_probe.lean",
-       :exit 0,
-       :output
-       "coreNormalAffineLeg_radius_and_im_ne_zero compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd "sha256sum /tmp/t02a03_affine_leg_invariants_probe.lean",
-       :exit 0,
-       :output
-       "37d99cc42a0e38d974ebe478da72cfa1db289cc6ad80a5742287357925844afa  /tmp/t02a03_affine_leg_invariants_probe.lean"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_affine_leg_invariants_probe.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}
-      {:cmd
-       "rg -n 'coreNormalAffineLeg' /tmp/t02a03_affine_leg_invariants_probe.lean",
-       :exit 0,
-       :output
-       "5:noncomputable def coreNormalAffineLeg\n9:theorem coreNormalAffineLeg_radius_and_im_ne_zero\n32:#print axioms coreNormalAffineLeg_radius_and_im_ne_zero"}],
-     :fixture
-     {:path "/tmp/t02a03_affine_leg_invariants_probe.lean",
-      :sha256
-      "37d99cc42a0e38d974ebe478da72cfa1db289cc6ad80a5742287357925844afa"},
-     :finding
-     "The fixture proves the shared affine-leg invariant without placeholders: convex interpolation preserves the closed quarter-radius disk, while a real starting endpoint and nonreal waypoint give imaginary coordinate t*w.im, nonzero at every noninitial time.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
-      :declaration
-      "ConstructionTargets.T02A03GeometricTubeDeformation.coreNormalAffineLeg_radius_and_im_ne_zero",
-      :type
-      "forall (t : unitInterval) (n w : ℂ), n.im = 0 -> w.im ≠ 0 -> (t : ℝ) ≠ 0 -> ‖n‖ ≤ (1 / 4 : ℝ) -> ‖w‖ ≤ (1 / 4 : ℝ) -> ‖coreNormalAffineLeg t n w‖ ≤ (1 / 4 : ℝ) ∧ (coreNormalAffineLeg t n w).im ≠ 0",
-      :supporting-declarations
-      [{:name
-        "ConstructionTargets.T02A03GeometricTubeDeformation.coreNormalAffineLeg",
-        :type "unitInterval -> ℂ -> ℂ -> ℂ"}]},
-     :seat "topo-8"}},
+   {:placeholder-delta {:before 0, :after 0, :change 0},
+    :residual
+    "Specialize the leg to the meridian and recovered-input endpoints, certify endpoint collision avoidance, reverse the arrival leg, and concatenate the two legs into the zero-height radial stage.",
+    :supporting-declarations
+    [{:name
+      "ConstructionTargets.T02A03GeometricTubeDeformation.coreNormalAffineLeg",
+      :type "unitInterval -> ℂ -> ℂ -> ℂ"}],
+    :outcome :done-unreviewed,
+    :warnings
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean:62:6: unnecessarySimpa (pre-existing)"
+     "The canonical checkout's .lake/packages is a real directory, so the frame-worktree symlink diagnostic does not apply cleanly here."],
+    :missing-theorems [],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms [propext Classical.choice Quot.sound],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :scope-blob "98e86e14a1f2f7051ef9f67fefd685cfa681b083",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0,
+      :output
+      "compiled; declaration axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "lake env lean /tmp/t02a03_affine_leg_invariants_probe.lean",
+      :exit 0,
+      :output
+      "coreNormalAffineLeg_radius_and_im_ne_zero compiled; axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd "sha256sum /tmp/t02a03_affine_leg_invariants_probe.lean",
+      :exit 0,
+      :output
+      "37d99cc42a0e38d974ebe478da72cfa1db289cc6ad80a5742287357925844afa  /tmp/t02a03_affine_leg_invariants_probe.lean"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "git diff --check -- ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd
+      "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :diagnostic-history
+    [{:cmd
+      "test -L .lake/packages && test \"$(readlink -f .lake/packages)\" = /home/joe/code/apm-lean/.lake/packages",
+      :exit 1,
+      :finding
+      "This canonical checkout has a real .lake/packages directory; no package-authority mutation was made during the scoped theorem row."}],
+    :commit "1d629ad9dfc0ab195b05ab411998794c2349591a",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.coreNormalAffineLeg_radius_and_im_ne_zero",
+    :fixture
+    {:path "/tmp/t02a03_affine_leg_invariants_probe.lean",
+     :sha256
+     "37d99cc42a0e38d974ebe478da72cfa1db289cc6ad80a5742287357925844afa"},
+    :finding
+    "Convex interpolation preserves the closed quarter-radius disk by the triangle inequality and the unit-interval bounds. Because the starting endpoint is real, the leg imaginary coordinate simplifies to t times the waypoint imaginary coordinate, which is nonzero whenever t is nonzero.",
+    :seat "topo-6"},
    :phase :implementation,
    :type
    "forall (t : unitInterval) (n w : ℂ), n.im = 0 -> w.im ≠ 0 -> (t : ℝ) ≠ 0 -> ‖n‖ ≤ (1 / 4 : ℝ) -> ‖w‖ ≤ (1 / 4 : ℝ) -> ‖coreNormalAffineLeg t n w‖ ≤ (1 / 4 : ℝ) ∧ (coreNormalAffineLeg t n w).im ≠ 0",
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/core-normal-affine-leg-radius-im",
