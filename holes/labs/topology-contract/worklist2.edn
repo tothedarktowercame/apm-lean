@@ -79321,6 +79321,17 @@
       :finding
       "Exploration corrected association and private-functor elaboration; final rerun passed."}],
     :continue-from "Prove blueprint B6 only.",
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791721854025-5338-c953ed3b",
+     :commands
+     ["git show/check/diff-tree 8ac5066de,8e4ffac03"
+      "lake env lean ConstructionTargets/t97A04Closure.lean"
+      "lake env lean problems/t97A04/lean/Main.lean"
+      "statement-registry check/fingerprint and placeholder counts"],
+     :finding
+     "PASS: topo-6 committed new B5 progress after history job 6. Scope is exactly closure+blueprint; blobs match 0557a971/c419a895. shearY_productionUnionMap correctly transports the union endpoint through the Boolean-small/production isomorphism and identifies it with singular postcomposition. Closure compiles sorry-free with standard axioms; Main compiles with unchanged 2 placeholders. Registry is 131/0 and frozen statement SHA-256 remains ca1b2cb3c6594276811618321d5c0604c2f38fc4594a6b21ae161a711a923a34. B6-B11 are listed."},
     :commit "8e4ffac03b94225a189962c90fa969e8e1fff8fe",
     :changed-paths
     ["ConstructionTargets/t97A04Closure.lean"
@@ -79330,7 +79341,7 @@
     :milestone-commit "8ac5066deb2d78e47ac00e5a13fa8a7b3b932d86",
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79371,6 +79382,9 @@
      :reason :program-progress-committed}
     {:job 6,
      :commit "acc3b3933802f522e684623214073cf74a937e18",
+     :reason :program-milestone-complete}
+    {:job 7,
+     :commit "8e4ffac03b94225a189962c90fa969e8e1fff8fe",
      :reason :program-milestone-complete}]}
   {:consumer :t96A07,
    :phase :implementation,
@@ -79513,7 +79527,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -79527,7 +79541,9 @@
     :type
     "forall a b : Int, forall n : Nat, productionUnionMap for shearYShortComplexHom equals homologyMap of singularPostcomposition (shearY a b)",
     :area "mv-connecting-naturality",
-    :proved-in :program-2026-10-11-close-t97a04},
+    :proved-in :program-2026-10-11-close-t97a04,
+    :banked-by :program-2026-10-11-close-t97a04,
+    :banked-commit "8e4ffac03b94225a189962c90fa969e8e1fff8fe"},
    :id
    :lemma-constructiontargets-t97a04closure-sheary-productionunionmap,
    :kind :lemma,
