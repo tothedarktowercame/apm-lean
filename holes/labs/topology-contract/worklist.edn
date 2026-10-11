@@ -104265,10 +104265,7 @@
      :warnings
      [{:kind :pending-frozen-type-refutation,
        :message
-       "The standard-only finite obstruction cannot refute the frozen carrier interface until the carrier-to-component implication is proved."}
-      {:kind :dirty-worktree,
-       :message
-       "ConstructionTargets/ManifoldFundamentalClass.lean is modified by concurrent work and was left untouched."}],
+       "The standard-only finite obstruction cannot refute the frozen carrier interface until the carrier-to-component implication is proved."}],
      :missing-theorems
      [{:name "compatibleCarrierHomeomorphInducesCyclicComponentEquiv",
        :type
@@ -104341,8 +104338,7 @@
        :finding "The required route and probe documents were reread."}
       {:cmd "git status --short",
        :exit 0,
-       :finding
-       "ConstructionTargets/ManifoldFundamentalClass.lean has an unrelated concurrent modification; this read-only invocation did not touch it."}],
+       :finding "Clean worktree; this invocation was read-only."}],
      :diagnostic-history [],
      :fixture
      {:path
