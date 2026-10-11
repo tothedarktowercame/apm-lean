@@ -70644,7 +70644,60 @@
   {:bounded-exception
    "single-consumer two-leg zero-height core-normal detour definition and seam equations",
    :consumer :t02A03,
-   :phase :probe,
+   :supporting-declarations
+   [{:name
+     "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCoreNormalDetour",
+     :type "unitInterval -> RightTubeMinusLeftCore -> ℂ"}],
+   :evidence
+   {:probe
+    {:residual
+     "Implement the detour and seam equations, then prove continuity and transfer the specialized radius and nonzero-imaginary invariants across both halves.",
+     :outcome :go,
+     :warnings [],
+     :axioms [propext Classical.choice Quot.sound],
+     :commands
+     [{:cmd
+       "lake env lean /tmp/t02a03_core_normal_detour_endpoints_probe.lean",
+       :exit 0,
+       :output
+       "zeroHeightCoreNormalDetour_endpoints_midpoint compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "sha256sum /tmp/t02a03_core_normal_detour_endpoints_probe.lean",
+       :exit 0,
+       :output
+       "8c23f5a0c05d15b0c7671d5f9b7655e3ccf5ce34ef21c252da8c39defa633a63  /tmp/t02a03_core_normal_detour_endpoints_probe.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_core_normal_detour_endpoints_probe.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}
+      {:cmd
+       "rg -n 'zeroHeightCoreNormalDetour' /tmp/t02a03_core_normal_detour_endpoints_probe.lean",
+       :exit 0,
+       :output
+       "7:noncomputable def zeroHeightCoreNormalDetour\n18:theorem zeroHeightCoreNormalDetour_endpoints_midpoint\n27:#print axioms zeroHeightCoreNormalDetour_endpoints_midpoint"}],
+     :fixture
+     {:path "/tmp/t02a03_core_normal_detour_endpoints_probe.lean",
+      :sha256
+      "8c23f5a0c05d15b0c7671d5f9b7655e3ccf5ce34ef21c252da8c39defa633a63"},
+     :finding
+     "The placeholder-free fixture defines the two affine halves and proves their exact t=0, t=1, and shared t=1/2 values. The common signed-waypoint value supplies the seam equation required for the subsequent continuity proof.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+      :declaration
+      "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCoreNormalDetour_endpoints_midpoint",
+      :type
+      "forall (p : RightTubeMinusLeftCore), zeroHeightCoreNormalDetour 0 p = rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)) ∧ zeroHeightCoreNormalDetour 1 p = rightTubeCoreNormalComplex p.1 ∧ zeroHeightCoreNormalDetour ⟨1 / 2, by constructor <;> norm_num⟩ p = zeroHeightSignedImaginaryWaypoint p",
+      :supporting-declarations
+      [{:name
+        "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCoreNormalDetour",
+        :type "unitInterval -> RightTubeMinusLeftCore -> ℂ"}]},
+     :seat "topo-8"}},
+   :phase :implementation,
+   :type
+   "forall (p : RightTubeMinusLeftCore), zeroHeightCoreNormalDetour 0 p = rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)) ∧ zeroHeightCoreNormalDetour 1 p = rightTubeCoreNormalComplex p.1 ∧ zeroHeightCoreNormalDetour ⟨1 / 2, by constructor <;> norm_num⟩ p = zeroHeightSignedImaginaryWaypoint p",
    :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
@@ -70667,6 +70720,8 @@
    :routes-2026-10-11-t02a03-zero-height-core-normal-detour-endpoints-topo2-r1,
    :kind :reusable-theorem,
    :area "explicit-r3-tube-deformation-retraction",
+   :declaration
+   "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCoreNormalDetour_endpoints_midpoint",
    :depends-on
    [:routes-2026-10-11-t02a03-specialized-zero-height-affine-legs-topo2-r1],
    :current-residual
