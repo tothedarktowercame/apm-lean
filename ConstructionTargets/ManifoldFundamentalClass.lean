@@ -646,6 +646,27 @@ theorem integralCompositeRelativeProjection_naturality
     (fun k => (singularChainsComparison (TopCat.of X)).hom ≫ k)
     (cokernelProjection_comp_relativeSingularChainsIso_inv A)
 
+/-- The corrected integral relative-chain comparison includes the canonical
+transport between the coefficient and explicit integral subtype-map cokernels. -/
+noncomputable def integralRelativeChainsComparisonWithTransport
+    {X : Type} [TopologicalSpace X] (A : Set X) :
+    (forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ)).obj
+        (CoefficientRelativeSmall.relativeChains ℤ A) ≅
+      RelativeSingularChains A :=
+  forgetIntegralRelativeCokernelComparison A ≪≫
+    coefficientIntegralCokernelTransport A ≪≫
+    integralMappedRelativeCokernelComparison A ≪≫
+    (relativeSingularChainsIsoCokernelSubspaceMap A).symm
+
+theorem integralRelativeChainsComparisonWithTransport_projection
+    {X : Type} [TopologicalSpace X] (A : Set X) :
+    (forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ)).map
+        (cokernel.π (CoefficientRelativeSmall.subspaceMap ℤ A)) ≫
+      (integralRelativeChainsComparisonWithTransport A).hom =
+    (singularChainsComparison (TopCat.of X)).hom ≫
+      relativeSingularProjection A := by
+  exact integralCompositeRelativeProjection_naturality A
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -687,3 +708,5 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralCompositeCokernelComparison_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.cokernelProjection_comp_relativeSingularChainsIso_inv
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralCompositeRelativeProjection_naturality
+#print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport
+#print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport_projection
