@@ -72425,85 +72425,119 @@
    "Prove or endpoint-fix a nonvanishing departure from 1 to the quarter-turn waypoint -i * rightTubeCorePlanarComplex; then invoke the waypoint, normalization, and ambient adapters.",
    :other-consumers []}
   {:bounded-exception
+   "single-consumer exact zero-locus characterization for the rotated waypoint departure leg",
+   :consumer :t02A03,
+   :phase :probe,
+   :state :open,
+   :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t02A03/rotated-waypoint-departure-zero-locus",
+   :acceptance
+   {:probe
+    "Compile rotatedEndpointWaypoint_departure_eq_zero_iff. Name rotatedEndpointWaypoint p = -i * rightTubeCorePlanarComplex p.1 and prove its affine departure from 1 vanishes exactly when the endpoint core-planar real part is zero and the affine real coordinate 1-2t+2t times the endpoint imaginary part is zero. Do not modify the waypoint, prove a detour nonzero, normalize to Circle, or assemble the ambient deformation.",
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_departure_eq_zero_iff",
+    :type
+    "forall (t : unitInterval) (p : RightTubeMinusLeftCore), (((1-2*(t:ℝ):ℝ):ℂ) + ((2*(t:ℝ):ℝ):ℂ)*rotatedEndpointWaypoint p) = 0 iff (rightTubeCorePlanarComplex p.1).re = 0 and 1-2*(t:ℝ)+2*(t:ℝ)*(rightTubeCorePlanarComplex p.1).im = 0",
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "isolate exactly where the rotated waypoint departure needs a continuous transverse perturbation while retaining its safe arrival leg"},
+   :id
+   :routes-2026-10-11-t02a03-rotated-waypoint-departure-zero-locus-topo2-r1,
+   :kind :reusable-theorem,
+   :area "explicit-r3-tube-deformation-retraction",
+   :depends-on
+   [:routes-2026-10-11-t02a03-rotated-endpoint-waypoint-arrival-topo2-r1],
+   :current-residual
+   "Use the imaginary-axis zero-locus equations to add an endpoint-fixed transverse detour to the departure leg, then combine it with the banked safe arrival leg and downstream adapters.",
+   :other-consumers []}
+  {:bounded-exception
    "single-consumer explicit ambient deformation with frozen tube and deletion invariants",
    :consumer :t02A03,
    :evidence
    {:probe
     {:residual
-     "Bank the explicit rotated waypoint and its safe arrival leg; then construct the nonvanishing departure leg from 1 to that waypoint.",
+     "Bank the rotated departure zero-locus characterization; then construct a supported transverse detour of that departure leg without changing the waypoint arrival endpoint.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
      [{:name
-       "ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_arrival_ne_zero_exists",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_departure_eq_zero_iff",
        :type
-       "exists W : C(RightTubeMinusLeftCore, ℂ), forall (t : unitInterval) (p : RightTubeMinusLeftCore), not ((t : ℝ) <= 1/2) -> (((2-2*(t:ℝ):ℝ):ℂ)*W p + ((2*(t:ℝ)-1:ℝ):ℂ)*rightTubeCorePlanarComplex p.1) != 0",
+       "forall (t : unitInterval) (p : RightTubeMinusLeftCore), (((1-2*(t:ℝ):ℝ):ℂ) + ((2*(t:ℝ):ℝ):ℂ)*rotatedEndpointWaypoint p) = 0 iff (rightTubeCorePlanarComplex p.1).re = 0 and 1-2*(t:ℝ)+2*(t:ℝ)*(rightTubeCorePlanarComplex p.1).im = 0",
        :status :proved,
        :consumers [:t02A03],
        :depends-on
-       ["ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularArrivalLeg_ne_zero_of_negative_endpoint_cross"],
+       ["ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_arrival_ne_zero_exists"],
        :area "explicit-r3-tube-deformation-retraction"}],
      :prerequisite
      {:bounded-exception
-      "single-consumer explicit quarter-turn waypoint with globally nonvanishing arrival leg",
+      "single-consumer exact zero-locus characterization for the rotated waypoint departure leg",
       :consumer :t02A03,
       :phase :probe,
       :state :open,
       :scope
       ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t02A03/rotated-endpoint-waypoint-arrival",
+      "TOPOLOGY-ROUTES.md/t02A03/rotated-waypoint-departure-zero-locus",
       :acceptance
       {:probe
-       "Compile rotatedEndpointWaypoint_arrival_ne_zero_exists. Define the continuous waypoint W(p) = -i * rightTubeCorePlanarComplex(p.1) and prove its affine arrival leg is nonzero for every time after 1/2 by factoring out the nonzero endpoint and showing the complex coefficient has positive real part. Do not prove the departure leg, normalize to Circle, or assemble the ambient deformation.",
+       "Compile rotatedEndpointWaypoint_departure_eq_zero_iff. Name rotatedEndpointWaypoint p = -i * rightTubeCorePlanarComplex p.1 and prove its affine departure from 1 vanishes exactly when the endpoint core-planar real part is zero and the affine real coordinate 1-2t+2t times the endpoint imaginary part is zero. Do not modify the waypoint, prove a detour nonzero, normalize to Circle, or assemble the ambient deformation.",
        :declaration
-       "ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_arrival_ne_zero_exists",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_departure_eq_zero_iff",
        :type
-       "exists W : C(RightTubeMinusLeftCore, ℂ), forall (t : unitInterval) (p : RightTubeMinusLeftCore), not ((t : ℝ) <= 1/2) -> (((2-2*(t:ℝ):ℝ):ℂ)*W p + ((2*(t:ℝ)-1:ℝ):ℂ)*rightTubeCorePlanarComplex p.1) != 0",
+       "forall (t : unitInterval) (p : RightTubeMinusLeftCore), (((1-2*(t:ℝ):ℝ):ℂ) + ((2*(t:ℝ):ℝ):ℂ)*rotatedEndpointWaypoint p) = 0 iff (rightTubeCorePlanarComplex p.1).re = 0 and 1-2*(t:ℝ)+2*(t:ℝ)*(rightTubeCorePlanarComplex p.1).im = 0",
        :placeholder "the sole sorry in apm_t02a03",
        :route-step
-       "supply an explicit continuous waypoint and completely discharge the arrival-leg hypothesis of the banked two-leg adapter"},
+       "isolate exactly where the rotated waypoint departure needs a continuous transverse perturbation while retaining its safe arrival leg"},
       :id
-      :routes-2026-10-11-t02a03-rotated-endpoint-waypoint-arrival-topo2-r1,
+      :routes-2026-10-11-t02a03-rotated-waypoint-departure-zero-locus-topo2-r1,
       :kind :reusable-theorem,
       :area "explicit-r3-tube-deformation-retraction",
       :depends-on
-      [:routes-2026-10-11-t02a03-coupled-angular-arrival-localized-cross-topo2-r1],
+      [:routes-2026-10-11-t02a03-rotated-endpoint-waypoint-arrival-topo2-r1],
       :current-residual
-      "Prove or endpoint-fix a nonvanishing departure from 1 to the quarter-turn waypoint -i * rightTubeCorePlanarComplex; then invoke the waypoint, normalization, and ambient adapters.",
+      "Use the imaginary-axis zero-locus equations to add an endpoint-fixed transverse detour to the departure leg, then combine it with the banked safe arrival leg and downstream adapters.",
       :other-consumers []},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake env lean /tmp/t02a03_rotated_endpoint_waypoint_probe.lean",
+       "lake env lean /tmp/t02a03_rotated_waypoint_departure_zero_locus_probe.lean",
        :exit 0,
        :output
-       "rotatedEndpointWaypoint_arrival_ne_zero_exists compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "rotatedEndpointWaypoint_departure_eq_zero_iff compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/t02a03_rotated_endpoint_waypoint_probe.lean",
+       "sha256sum /tmp/t02a03_rotated_waypoint_departure_zero_locus_probe.lean",
        :exit 0,
        :output
-       "279382e86c17ce355f7d8e758954b88985194adb3796a95c3a1d3cf82d34568e  /tmp/t02a03_rotated_endpoint_waypoint_probe.lean"}
+       "663a2e2c5acca18e688c79f2e1cdba51d91d00a4826d1ce1a9a3124c01d64670  /tmp/t02a03_rotated_waypoint_departure_zero_locus_probe.lean"}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_rotated_endpoint_waypoint_probe.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_rotated_waypoint_departure_zero_locus_probe.lean || true)\"",
        :exit 0}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}
       {:cmd
-       "rg -n 'rotatedEndpointWaypoint_arrival_ne_zero_exists' /tmp/t02a03_rotated_endpoint_waypoint_probe.lean",
+       "rg -n 'rotatedEndpointWaypoint_departure_eq_zero_iff' /tmp/t02a03_rotated_waypoint_departure_zero_locus_probe.lean",
        :exit 0,
        :output
-       "9:theorem rotatedEndpointWaypoint_arrival_ne_zero_exists :\n39:#print axioms rotatedEndpointWaypoint_arrival_ne_zero_exists"}],
+       "13:theorem rotatedEndpointWaypoint_departure_eq_zero_iff\n36:#print axioms rotatedEndpointWaypoint_departure_eq_zero_iff"}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/t02a03_rotated_waypoint_departure_zero_locus_probe.lean",
+       :exit 1,
+       :finding
+       "The initial conjecture incorrectly specialized every departure zero to endpoint -i and time 1/4. Compiler goals exposed the actual one-parameter locus: the endpoint real part is zero and the affine real coordinate vanishes. Replacing the false specialization by this exact pair of coordinate equations compiled."}],
      :fixture
-     {:path "/tmp/t02a03_rotated_endpoint_waypoint_probe.lean",
+     {:path
+      "/tmp/t02a03_rotated_waypoint_departure_zero_locus_probe.lean",
       :sha256
-      "279382e86c17ce355f7d8e758954b88985194adb3796a95c3a1d3cf82d34568e"},
+      "663a2e2c5acca18e688c79f2e1cdba51d91d00a4826d1ce1a9a3124c01d64670"},
      :finding
-     "The positive-real waypoint condition is not needed for a globally safe arrival leg. The continuous quarter-turn waypoint W(p) = -i * rightTubeCorePlanarComplex(p.1) makes every arrival expression factor as ((2t-1) - (2-2t)i) times the nonzero endpoint. After time 1/2 the factor has strictly positive real part, so the arrival leg never vanishes. This replaces the difficult positive-real/transverse conjunction by one explicit waypoint and leaves only its departure leg to certify or detour.",
+     "The rotated waypoint departure can vanish precisely on an explicitly described locus: rightTubeCorePlanarComplex has zero real part and 1 - 2t + 2t times its imaginary part is zero. This is broader than the single endpoint -i, but it remains confined to the imaginary-axis endpoint slice and supplies the exact equations needed for a supported transverse detour while preserving the already safe arrival leg.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
@@ -72586,7 +72620,8 @@
     :routes-2026-10-11-t02a03-coupled-angular-arrival-cross-im-topo2-r1
     :routes-2026-10-11-t02a03-coupled-angular-arrival-collision-negative-slice-topo2-r1
     :routes-2026-10-11-t02a03-coupled-angular-arrival-localized-cross-topo2-r1
-    :routes-2026-10-11-t02a03-rotated-endpoint-waypoint-arrival-topo2-r1],
+    :routes-2026-10-11-t02a03-rotated-endpoint-waypoint-arrival-topo2-r1
+    :routes-2026-10-11-t02a03-rotated-waypoint-departure-zero-locus-topo2-r1],
    :current-residual
    "Lift H to RightTubeMinusLeftCore, package rightTubeMeridianRetractionHomotopy, then use the coordinate equation for the Circle-side constant homotopy.",
    :other-consumers []}
@@ -77905,4 +77940,29 @@
    :depends-on
    [:lemma-apm-t00j08-bridge-rank-formula
     :lemma-apm-t00j08-bridge-subgroup-of-index],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_departure_eq_zero_iff",
+    :type
+    "forall (t : unitInterval) (p : RightTubeMinusLeftCore), (((1-2*(t:ℝ):ℝ):ℂ) + ((2*(t:ℝ):ℝ):ℂ)*rotatedEndpointWaypoint p) = 0 iff (rightTubeCorePlanarComplex p.1).re = 0 and 1-2*(t:ℝ)+2*(t:ℝ)*(rightTubeCorePlanarComplex p.1).im = 0"},
+   :lemma
+   {:name
+    "ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_departure_eq_zero_iff",
+    :reported-by
+    [:routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1],
+    :type
+    "forall (t : unitInterval) (p : RightTubeMinusLeftCore), (((1-2*(t:ℝ):ℝ):ℂ) + ((2*(t:ℝ):ℝ):ℂ)*rotatedEndpointWaypoint p) = 0 iff (rightTubeCorePlanarComplex p.1).re = 0 and 1-2*(t:ℝ)+2*(t:ℝ)*(rightTubeCorePlanarComplex p.1).im = 0",
+    :area "explicit-r3-tube-deformation-retraction",
+    :proved-in
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+   :id
+   :lemma-constructiontargets-t02a03geometrictubedeformation-rotatedendpointwaypoint-depar,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t02a03geometrictubedeformation-rotatedendpointwaypoint-arriv],
    :other-consumers []}]}
