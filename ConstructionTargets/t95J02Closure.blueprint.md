@@ -115,7 +115,7 @@ by `CircleB` through the separating inverse.
 lean: `t95J02Closure.t95J02_beta_homotopic_beta_reflection` :
 for `β := t95J02InclusionB.comp t95J02CircleB_homeo.toContinuousMap`,
 `ContinuousMap.Homotopic β
-  (β.comp (CoefficientFirstReflection.reflectionMap (0 : Fin 2)))`.
+  (β.comp (CoefficientFirstReflection.reflectionMap (1 : Fin 2)))`.
 
 uses: B3, B4, B5, `t95J02QuotientPoint_glide`,
 `AddCircle.homeomorphCircle (T := 1) one_ne_zero`,
@@ -128,8 +128,9 @@ periodic quotient construction used in B5.  Define the homotopy by
 `H(t,u) = t95J02QuotientPoint (t,y)`.  Changing `y` by an integer does not
 change the quotient point by the vertical identity, so the formula descends
 continuously.  At `t=0` it is `β`.  At `t=1`, the glide equality identifies
-`[(1,y)]` with `[(0,-y)]`, which is the first-coordinate reflection of the
-Euclidean circle under B5's sine/cosine coordinate.
+`[(1,y)]` with `[(0,-y)]`, which is the second-coordinate reflection of the
+Euclidean circle under B5's cosine/sine coordinate: it fixes `cos (2πy)` and
+negates `sin (2πy)`, hence is `reflectionMap (1 : Fin 2)`.
 
 ### B7. Nonzero vertical class killed in the Klein bottle
 
@@ -148,8 +149,10 @@ Let `g` be the inverse image of `1 : ℤ` under the integral H1 isomorphism of
 the Euclidean circle and let `gamma` be the image of `2 • g` under the H1
 isomorphism induced by B5.  It is nonzero because its integer coordinate is
 `2`.  B6 and homotopy invariance give
-`H₁(β) = H₁(β) ≫ H₁(reflection)`.  The reflection theorem replaces the last
-factor by `-𝟙`, so `H₁(β)(g) = -H₁(β)(g)`, hence `H₁(β)(2 • g)=0`.
+`H₁(β) = H₁(β) ≫ H₁(reflectionMap (1 : Fin 2))`.  Instantiate
+`CoefficientFirstReflection.integral_circle` at coordinate `1`; it replaces
+the last factor by `-𝟙`, so `H₁(β)(g) = -H₁(β)(g)`, hence
+`H₁(β)(2 • g)=0`.
 Rewrite `β` as B5 followed by `t95J02InclusionB` and cancel the B5
 isomorphism to obtain the required equation.
 
