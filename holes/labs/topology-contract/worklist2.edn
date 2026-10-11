@@ -72070,53 +72070,64 @@
    "single-consumer oriented-cross-product certificate for the arrival affine leg",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:residual
-     "Construct a continuous waypoint W whose real part is positive and whose oriented cross product with rightTubeCorePlanarComplex is everywhere nonzero; then invoke the banked departure, arrival, waypoint, normalization, and ambient adapters.",
-     :outcome :go,
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd
-       "lake env lean /tmp/t02a03_arrival_leg_cross_im_probe.lean",
-       :exit 0,
-       :output
-       "coupledAngularArrivalLeg_ne_zero_of_cross_im_ne_zero compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd "sha256sum /tmp/t02a03_arrival_leg_cross_im_probe.lean",
-       :exit 0,
-       :output
-       "8918437e344c070b4e10f7ea1434fc95ede0a9036fa434831306439cd92add9f  /tmp/t02a03_arrival_leg_cross_im_probe.lean"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_arrival_leg_cross_im_probe.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}
-      {:cmd
-       "rg -n 'coupledAngularArrivalLeg_ne_zero_of_cross_im_ne_zero' /tmp/t02a03_arrival_leg_cross_im_probe.lean",
-       :exit 0,
-       :output
-       "9:theorem coupledAngularArrivalLeg_ne_zero_of_cross_im_ne_zero\n37:#print axioms coupledAngularArrivalLeg_ne_zero_of_cross_im_ne_zero"}],
-     :fixture
-     {:path "/tmp/t02a03_arrival_leg_cross_im_probe.lean",
-      :sha256
-      "8918437e344c070b4e10f7ea1434fc95ede0a9036fa434831306439cd92add9f"},
-     :finding
-     "The placeholder-free fixture proves the frozen arrival-leg certificate. A hypothetical affine zero yields real and imaginary coordinate equations; eliminating the waypoint coefficient forces the positive arrival coefficient times the oriented cross product to vanish, contradicting the supplied nonzero-cross-product invariant.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
-      :declaration
-      "ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularArrivalLeg_ne_zero_of_cross_im_ne_zero",
-      :type
-      "forall (W : C(RightTubeMinusLeftCore, ℂ)), (forall p, (conj (W p) * rightTubeCorePlanarComplex p.1).im != 0) -> forall (t : unitInterval) (p : RightTubeMinusLeftCore), not ((t : ℝ) <= 1/2) -> (((2-2*(t:ℝ):ℝ):ℂ)*W p + ((2*(t:ℝ)-1:ℝ):ℂ)*rightTubeCorePlanarComplex p.1) != 0",
-      :acceptance
-      "Add the compiled theorem from the fixture unchanged in mathematical content; preserve registered statements and introduce no placeholders or nonstandard axioms."},
-     :seat "topo-8"}},
+   {:placeholder-delta 0,
+    :residual
+    "Choose a continuous waypoint W with positive real part and with (conj (W p) * rightTubeCorePlanarComplex p.1).im nonzero everywhere; then the banked departure and arrival certificates feed the waypoint, normalization, and ambient adapters.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["Existing linter warning at ConstructionTargets/T02A03GeometricTubeDeformation.lean:64:6 recommends simp instead of simpa."
+     "Unrelated untracked ConstructionTargets/ThreeCirclesPathTopology.lean was preserved untouched."],
+    :missing-theorems [],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not",
+     :scoped-file-blob "e08ce8d753d3716a0ac0f9ca8d9eb3fede11a28d"},
+    :axioms [propext Classical.choice Quot.sound],
+    :author "topo-6",
+    :commands
+    [{:cmd "sha256sum /tmp/t02a03_arrival_leg_cross_im_probe.lean",
+      :exit 0,
+      :output
+      "8918437e344c070b4e10f7ea1434fc95ede0a9036fa434831306439cd92add9f  /tmp/t02a03_arrival_leg_cross_im_probe.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd "lake env lean /tmp/t02a03_arrival_leg_cross_im_probe.lean",
+      :exit 0,
+      :output
+      "coupledAngularArrivalLeg_ne_zero_of_cross_im_ne_zero compiled; axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "git diff --check -- ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd
+      "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git show --check --oneline 9e8b7ec18",
+      :exit 0,
+      :output "9e8b7ec18 Add t02A03 arrival-leg certificate"}],
+    :diagnostic-history
+    [{:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 1,
+      :reason
+      "The first scoped compile exposed that the imported module did not open the ComplexConjugate scoped notation used by the reviewed fixture. Added open scoped ComplexConjugate, then the recorded acceptance compile succeeded."}],
+    :commit "9e8b7ec18865f40a87232ae79999f5d4897d21c0",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+    :fixture
+    {:path "/tmp/t02a03_arrival_leg_cross_im_probe.lean",
+     :sha256
+     "8918437e344c070b4e10f7ea1434fc95ede0a9036fa434831306439cd92add9f"},
+    :finding
+    "A hypothetical affine arrival zero yields real and imaginary coordinate equations. Eliminating the waypoint coefficient forces the strictly positive arrival coefficient times the oriented cross product to vanish, contradicting the supplied nonzero-cross-product invariant.",
+    :seat "topo-6"},
    :phase :implementation,
    :type
    "forall (W : C(RightTubeMinusLeftCore, ℂ)), (forall p, (conj (W p) * rightTubeCorePlanarComplex p.1).im != 0) -> forall (t : unitInterval) (p : RightTubeMinusLeftCore), not ((t : ℝ) <= 1/2) -> (((2-2*(t:ℝ):ℝ):ℂ)*W p + ((2*(t:ℝ)-1:ℝ):ℂ)*rightTubeCorePlanarComplex p.1) != 0",
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/coupled-angular-arrival-cross-im",
