@@ -71690,6 +71690,19 @@
       :exit 1,
       :explanation
       ".lake/packages is a real directory rather than the required canonical symlink; no package state was modified and compilation succeeded on the existing substrate."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791703689457-4616-e4bcfa13",
+     :commands
+     ["git show/diff-tree/show --check becbe74123979fa2d5d4621b311afb6d6ebe9a26"
+      "git rev-parse scope blob; sha256sum fixture"
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean"
+      "lake env lean /tmp/t02a03_coupled_angular_zero_interior_probe.lean"
+      "statement registry check and commit/parent fingerprints"
+      "placeholder recount at commit/parent"],
+     :finding
+     "PASS: independent author topo-6; exact one-file scope, blob, and fixture hash match. Target and frozen probe compile. The frozen implication has the correct orientation: the real zero equation excludes t=0, t=1 would contradict rightTubeCorePlanarComplex_ne_zero using both coordinate equations, and the remaining affine equation with 0<t<1 forces the endpoint planar real coordinate negative. It makes no perturbation, Circle-normalization, or ambient claim. Axioms are exactly propext, Classical.choice, Quot.sound; registry is 131/0, t02A03 fingerprint is unchanged at commit and parent, fixture has no placeholders, and Main has 1 placeholder at commit and parent."},
     :commit "becbe74123979fa2d5d4621b311afb6d6ebe9a26",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
@@ -71703,7 +71716,7 @@
    :phase :implementation,
    :type
    "∀ tp : unitInterval × RightTubeMinusLeftCore, coupledAngularComplexInterpolation tp = 0 → 0 < (tp.1 : ℝ) ∧ (tp.1 : ℝ) < 1 ∧ (rightTubeCorePlanarComplex tp.2.1).re < 0",
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/coupled-angular-zero-interior",
    :acceptance
@@ -71816,7 +71829,7 @@
      "Every zero of the raw affine angular interpolation is strictly separated from times 0 and 1, and its endpoint core-planar coordinate lies on the negative real axis. Time zero contradicts the affine real equation; time one would force the nonzero core-planar coordinate to have both components zero. The remaining perturbation may therefore be endpoint-fixed and targeted at this interior negative-real locus.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
@@ -76784,7 +76797,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -76800,7 +76813,10 @@
     "∀ tp : unitInterval × RightTubeMinusLeftCore, coupledAngularComplexInterpolation tp = 0 → 0 < (tp.1 : ℝ) ∧ (tp.1 : ℝ) < 1 ∧ (rightTubeCorePlanarComplex tp.2.1).re < 0",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-coupledan-8641ce833df6,
    :kind :lemma,
