@@ -1402,6 +1402,54 @@ theorem continuous_zeroHeightCoreNormalDetour :
     rw [h]
     norm_num
 
+theorem zeroHeightCoreNormalDetour_radius_le
+    (p : RightTubeMinusLeftCore) (hheight : p.1 2 = 0)
+    (t : unitInterval) :
+    ‖zeroHeightCoreNormalDetour t p‖ ≤ (1 / 4 : ℝ) := by
+  have ht0 : 0 ≤ (t : ℝ) := t.2.1
+  have ht1 : (t : ℝ) ≤ 1 := t.2.2
+  obtain ⟨hwnorm, hwim⟩ :=
+    zeroHeight_signedImaginaryWaypoint_properties p hheight
+  unfold zeroHeightCoreNormalDetour
+  split_ifs with hhalf
+  · have ha : 0 ≤ 1 - 2 * (t : ℝ) := by linarith
+    have hb : 0 ≤ 2 * (t : ℝ) := by positivity
+    calc
+      ‖((1 - 2 * (t : ℝ) : ℝ) : ℂ) *
+            rightTubeCoreNormalComplex
+              (ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_circleMeridian
+                (rightTubeMeridianCoordinate p)) +
+          ((2 * (t : ℝ) : ℝ) : ℂ) * zeroHeightSignedImaginaryWaypoint p‖
+          ≤ ‖((1 - 2 * (t : ℝ) : ℝ) : ℂ) *
+                rightTubeCoreNormalComplex
+                  (ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_circleMeridian
+                    (rightTubeMeridianCoordinate p))‖ +
+              ‖((2 * (t : ℝ) : ℝ) : ℂ) *
+                zeroHeightSignedImaginaryWaypoint p‖ := norm_add_le _ _
+      _ = (1 - 2 * (t : ℝ)) * (1 / 8 : ℝ) +
+            (2 * (t : ℝ)) * (1 / 8 : ℝ) := by
+        rw [norm_mul, norm_mul,
+          norm_rightTubeCoreNormalComplex_circleMeridian, hwnorm]
+        simp only [Complex.norm_real]
+        rw [Real.norm_of_nonneg ha, Real.norm_of_nonneg hb]
+      _ ≤ (1 / 4 : ℝ) := by ring_nf; norm_num
+  · have ha : 0 ≤ 2 - 2 * (t : ℝ) := by linarith
+    have hb : 0 ≤ 2 * (t : ℝ) - 1 := by linarith
+    have hn1 := rightTubeCoreInputNormalRadiusBound p.1 p.2.1
+    calc
+      ‖((2 - 2 * (t : ℝ) : ℝ) : ℂ) * zeroHeightSignedImaginaryWaypoint p +
+          ((2 * (t : ℝ) - 1 : ℝ) : ℂ) * rightTubeCoreNormalComplex p.1‖
+          ≤ ‖((2 - 2 * (t : ℝ) : ℝ) : ℂ) *
+                zeroHeightSignedImaginaryWaypoint p‖ +
+              ‖((2 * (t : ℝ) - 1 : ℝ) : ℂ) *
+                rightTubeCoreNormalComplex p.1‖ := norm_add_le _ _
+      _ = (2 - 2 * (t : ℝ)) * (1 / 8 : ℝ) +
+            (2 * (t : ℝ) - 1) * ‖rightTubeCoreNormalComplex p.1‖ := by
+        rw [norm_mul, norm_mul, hwnorm]
+        simp only [Complex.norm_real]
+        rw [Real.norm_of_nonneg ha, Real.norm_of_nonneg hb]
+      _ ≤ (1 / 4 : ℝ) := by nlinarith
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -1456,3 +1504,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeight_specializedCoreNormalAffineLegs_radius_and_im_ne_zero
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCoreNormalDetour_endpoints_midpoint
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.continuous_zeroHeightCoreNormalDetour
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCoreNormalDetour_radius_le
