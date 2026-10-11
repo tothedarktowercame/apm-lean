@@ -2,6 +2,7 @@
 (require '[clojure.edn :as edn]
          '[clojure.java.io :as io]
          '[clojure.java.shell :as shell]
+         '[clojure.set :as set]
          '[clojure.string :as str])
 
 (def here (.getParentFile (.getAbsoluteFile (io/file *file*))))
@@ -115,10 +116,11 @@
           ;; correct as written.
           ;;
           ;; :commits records every commit belonging to the row and the scope
-          ;; check runs over their union, so the guarantee stays what it was --
-          ;; every declared path written, nothing outside it -- rather than
-          ;; being weakened to a subset test, which would let a row declare
-          ;; paths it never writes. :commit alone remains valid; 58 rows use it.
+          ;; check runs over their union.  Scope is the row's write permission,
+          ;; not a promise that every permitted file changes: program rows
+          ;; routinely name their Main, status, closure, and blueprint while a
+          ;; milestone changes only the files needed for that milestone.
+          ;; :commit alone remains valid; 58 rows use it.
           commits (or (seq (:commits e)) (when commit [commit]))]
       (if (#{:stop :replan} (:outcome e))
         (when-not (and (:author e) (seq (:commands e)))
@@ -127,9 +129,9 @@
           (when-not (seq commits) (die (:id i) "completed without an evidence commit"))
           (doseq [c commits]
             (when-not (commit-exists? c) (die (:id i) "evidence commit absent" c)))
-          (when-not (= (set (:scope i))
-                       (reduce into #{} (map commit-paths commits)))
-            (die (:id i) "commit paths differ from exact scope"))
+          (when-not (set/subset? (reduce into #{} (map commit-paths commits))
+                                 (set (:scope i)))
+            (die (:id i) "commit paths exceed scope"))
           (when-not (and (map? fixture) (:path fixture) (:sha256 fixture))
             (die (:id i) "completed without fixture path and hash"))
           ;; The fixture records the file as the row's evidence commit left

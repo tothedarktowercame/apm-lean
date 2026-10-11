@@ -27,6 +27,28 @@ bb "$HERE/build_step.bb" apply-result "$transition" edge "$HERE/fixtures/pass-re
 bb "$HERE/worklist_check.bb" "$transition"
 rm -f "$transition"
 
+# Scope is a write permission, not a requirement to touch every permitted
+# path. Program rows name Main, status, closure, and blueprint even when one
+# milestone changes only a subset. The real completion commit must pass with
+# an additional permitted path, while the same commit remains rejected when
+# its changed path is outside scope.
+scope_subset="$(mktemp)"
+sed 's#:scope \["problems/t02A03/lean/Main.lean"\]#:scope ["problems/t02A03/lean/Main.lean" "problems/t02A03/status.json"]#' \
+  "$HERE/fixtures/transition-ledger.edn" > "$scope_subset"
+bb "$HERE/build_step.bb" apply-result "$scope_subset" edge "$HERE/fixtures/done-receipt.edn"
+bb "$HERE/worklist_check.bb" "$scope_subset"
+rm -f "$scope_subset"
+
+scope_violation="$(mktemp)"
+sed 's#problems/t02A03/lean/Main.lean#problems/t02A03/status.json#' \
+  "$HERE/fixtures/transition-ledger.edn" > "$scope_violation"
+if bb "$HERE/build_step.bb" apply-result "$scope_violation" edge \
+    "$HERE/fixtures/done-receipt.edn" >/dev/null 2>&1; then
+  echo "expected out-of-scope commit rejection" >&2
+  exit 1
+fi
+rm -f "$scope_violation"
+
 stopped="$(mktemp)"
 cp "$HERE/fixtures/transition-ledger.edn" "$stopped"
 bb "$HERE/build_step.bb" apply-result "$stopped" edge "$HERE/fixtures/stop-receipt.edn"

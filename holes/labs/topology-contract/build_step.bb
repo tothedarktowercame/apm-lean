@@ -743,7 +743,7 @@
           (when-not (get receipt k)
             (throw (ex-info "implementation receipt lacks field" {:field k}))))
         ;; Refuse a completion before it can replace the row's evidence when
-        ;; its commits do not implement that row's exact scope.  Include prior
+        ;; any commit writes outside the row's permitted scope. Include prior
         ;; commits for a genuine repair, matching worklist_check's union rule.
         (let [prior (concat (get-in item [:evidence :commits])
                             (when-let [c (get-in item [:evidence :commit])] [c]))
@@ -765,8 +765,8 @@
             (when-let [p (seq (filter protected-path? paths))]
               (throw (ex-info "implementation commit touches the statement registry, which loop rows may not write"
                               {:id id :paths (vec p)})))
-            (when-not (= (set (:scope item)) paths)
-              (throw (ex-info "implementation commit paths differ from exact scope"
+            (when-not (set/subset? paths (set (:scope item)))
+              (throw (ex-info "implementation commit paths exceed scope"
                               {:id id :scope (set (:scope item))
                                :commit-paths paths :commits commits})))))
         (stash-fixture! (:fixture receipt)))
