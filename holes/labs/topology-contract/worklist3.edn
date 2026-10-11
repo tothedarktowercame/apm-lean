@@ -8456,6 +8456,23 @@
      "Equality of correctedLocalGeneratorCoefficient with the integer negative one",
      :direction
      "Logical equivalence from the concrete negative-automorphism representation to the extracted negative-coordinate representation, with the reverse direction proved by extensionality from evaluation at one"},
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791695609736-4313-cda0b030",
+     :commands
+     ["git show and git diff-tree recorded commit scope"
+      "git blob identity check"
+      "sha256sum frozen fixture"
+      "git diff --check recorded commit"
+      "lake env lean renamed frozen-fixture replay"
+      "lake env lean target module"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"
+      "placeholder and axiom scan"
+      "python3 scripts/statement-registry.py check"
+      "consumer placeholder census"],
+     :finding
+     "PASS: recorded commit 1db7f354 changes only the target module and its blob matches the reviewed checkout; frozen fixture hash 2749db65cb67850a0f5ee4af7bb854df4ff5587e818e0d038637b860c7bdea7a matches. The theorem proves the exact frozen equivalence in the registered direction: forward evaluation at one converts negative identity to coefficient -1, and reverse integer additive-hom extensionality reconstructs negative identity from that coordinate. It neither refutes a negative condition nor unfolds the forbidden geometric constructions. Renamed fixture replay, target elaboration, and Lake build pass; axioms are exactly propext, Classical.choice, Quot.sound; registry is 131/0; target placeholders are 0 and consumer baselines t00J02/t98A02 remain 1/1."},
     :commit "1db7f3546bb4c474b35a8481362f2d88db53237d",
     :commits ["1db7f3546bb4c474b35a8481362f2d88db53237d"],
     :changed-paths
@@ -8473,7 +8490,7 @@
      "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), (correctedLocalNormalizationAutomorphism k x).hom = -𝟙 _ <-> correctedLocalGeneratorCoefficient k x = -1"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/corrected-negative-sign-as-negative-automorphism",
@@ -8651,7 +8668,7 @@
      "For endomorphisms of the additive group of integers, evaluation at one determines the morphism. The compiled equivalence therefore identifies the forbidden scalar negative one exactly with correctedLocalNormalizationAutomorphism.hom being negative identity. The next prerequisite can work entirely with the explicit normalization composite and prove it is not negation; the banked equivalence then transfers the result back to the coefficient.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -11991,7 +12008,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -12008,7 +12025,10 @@
     "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), (correctedLocalNormalizationAutomorphism k x).hom = -𝟙 _ <-> correctedLocalGeneratorCoefficient k x = -1",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-corrected-automorphism-neg-iff-topo3-r1},
+    :routes-2026-10-11-manifold-corrected-automorphism-neg-iff-topo3-r1,
+    :banked-by
+    :routes-2026-10-11-manifold-corrected-automorphism-neg-iff-topo3-r1,
+    :banked-commit "1db7f3546bb4c474b35a8481362f2d88db53237d"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-correctedlocalnormalizationautomorphism-hom-eq-neg-iff,
    :kind :lemma,
