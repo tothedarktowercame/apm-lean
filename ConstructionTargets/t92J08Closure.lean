@@ -195,9 +195,57 @@ theorem exists_nhds_uniform_isMIntegralCurveOn
   exact exists_chart_nhds_uniform_isMIntegralCurveOn
     (euclideanModel n) v hv x
 
+/-- Compactness replaces the neighbourhood-dependent positive existence
+times by the minimum of finitely many of them. -/
+theorem exists_uniform_isMIntegralCurveOn_of_compact
+    (n : ℕ) (M : Type*)
+    [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
+    [CompactSpace M] [ChartedSpace (EuclideanSpace ℝ (Fin n)) M]
+    [IsManifold (euclideanModel n) ∞ M]
+    [BoundarylessManifold (euclideanModel n) M]
+    (v : (x : M) → TangentSpace (euclideanModel n) x)
+    (hv : ContMDiff (euclideanModel n) (euclideanModel n).tangent 1
+      (fun x ↦ (⟨x, v x⟩ : TangentBundle (euclideanModel n) M))) :
+    ∃ ε : ℝ, 0 < ε ∧ ∀ x : M,
+      ∃ γ : ℝ → M, γ 0 = x ∧ IsMIntegralCurveOn γ v (Ioo (-ε) ε) := by
+  classical
+  by_cases hM : Nonempty M
+  · letI := hM
+    choose U hU ε hε hlocal using
+      exists_nhds_uniform_isMIntegralCurveOn n M v hv
+    obtain ⟨s, hcover⟩ := CompactSpace.elim_nhds_subcover U hU
+    have hs : s.Nonempty := by
+      obtain ⟨x₀⟩ := hM
+      have hx₀ : x₀ ∈ ⋃ x ∈ s, U x := by rw [hcover]; trivial
+      simp only [mem_iUnion] at hx₀
+      obtain ⟨x, hx, _⟩ := hx₀
+      exact ⟨x, hx⟩
+    let times : Finset ℝ := s.image ε
+    have htimes : times.Nonempty := hs.image ε
+    let δ : ℝ := times.min' htimes
+    have hδ : 0 < δ := by
+      have hmem : δ ∈ times := times.min'_mem htimes
+      obtain ⟨x, _, hxδ⟩ := Finset.mem_image.mp hmem
+      rw [← hxδ]
+      exact hε x
+    refine ⟨δ, hδ, ?_⟩
+    intro y
+    have hy : y ∈ ⋃ x ∈ s, U x := by rw [hcover]; trivial
+    simp only [mem_iUnion] at hy
+    obtain ⟨x, hx, hyU⟩ := hy
+    obtain ⟨γ, hγ0, hγ⟩ := hlocal x y hyU
+    refine ⟨γ, hγ0, hγ.mono ?_⟩
+    have hδε : δ ≤ ε x := times.min'_le (ε x) (Finset.mem_image.mpr ⟨x, hx, rfl⟩)
+    intro t ht
+    constructor <;> linarith [ht.1, ht.2]
+  · refine ⟨1, by positivity, ?_⟩
+    intro x
+    exact (hM ⟨x⟩).elim
+
 end t92J08Closure
 
 #print axioms t92J08Closure.exists_uniform_local_flow_in_nhds
 #print axioms t92J08Closure.localCoordinateField_contDiffAt
 #print axioms t92J08Closure.exists_chart_nhds_uniform_isMIntegralCurveOn
 #print axioms t92J08Closure.exists_nhds_uniform_isMIntegralCurveOn
+#print axioms t92J08Closure.exists_uniform_isMIntegralCurveOn_of_compact

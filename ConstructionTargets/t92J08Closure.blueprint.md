@@ -123,7 +123,7 @@ the exact hypotheses and conclusion family of B4, plus `CompactSpace M`,
 
 uses: B4, Mathlib `CompactSpace.elim_nhds_subcover`, `Finset.min'`
 
-status: planned
+status: proved
 
 Choose for each `x` an open neighbourhood contained in its B4 neighbourhood
 and its positive time `εₓ`.  Compactness gives a finite nonempty set of chosen
