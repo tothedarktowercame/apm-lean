@@ -101174,36 +101174,66 @@
    "Specialize the exact wedge equality criteria to the three half-open endpoint loops, then classify their N3 and torus-crosscap quotient fibers.",
    :other-consumers []}
   {:bounded-exception
+   "This single-consumer prerequisite gives the exact source equality classification needed to turn the pending target fiber classifications into injectivity.",
+   :consumer :t97A01,
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/PolygonThreeLoopHalfOpenEquality.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/three-loop-half-open-equality",
+   :acceptance
+   {:implementation
+    "Promote the exact fixture. Prove injectivity of EndpointQuotient on half-open representatives and characterize equality with endpointBase. For each of the three nested loop embeddings, prove equality exactly when parameters agree. For each distinct pair of loops, prove equality exactly when both half-open parameters are zero. Do not classify N3CircleRel or TorusCrosscapCircleRel quotient fibers, prove injectivity or homeomorphism of the boundary comparison maps, derive ThreeCircles or outer-piece formulas, compute invariants, or close t97A01.",
+    :placeholder "the single sorry in apm_t97a01",
+    :route-step
+    "polygon radial open-cover step 27: classify equality of all three half-open source loop forms",
+    :fixture "/tmp/polygon-three-loop-half-open-equality.lean",
+    :fixture-sha256
+    "395e53ac2cdb4bf16c34e30888369806b57ece320d38f47675ee8a94ecc26a43",
+    :gates
+    ["lake build ConstructionTargets.PolygonThreeLoopHalfOpenEquality"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-11-polygon-three-loop-half-open-equality-67,
+   :kind :reusable-theorem,
+   :area "polygon-surface-open-cover",
+   :depends-on [:routes-2026-10-10-point-wedge-exact-equality-66],
+   :current-residual
+   "Classify equality of the N3 and torus-crosscap quotient images of the three now-canonical half-open loop forms, then deduce injectivity.",
+   :other-consumers []}
+  {:bounded-exception
    "This single-consumer concrete quotient package is the other final backlog lemma on t97A01 and supplies the actual two polygon models required by its frozen statement.",
    :consumer :t97A01,
    :implements-lemma :lemma-polygonradialopencoverpackages,
    :evidence
    {:probe
     {:residual
-     "Use exact point-wedge equality to classify equality of the three half-open source loop forms, then classify their images in the N3 and torus-crosscap relation quotients, prove injectivity and homeomorphisms, and finish the boundary formulas and packages.",
+     "Use the exact half-open source equality classification to classify equality of N3 and torus-crosscap quotient images, prove both three-loop maps injective and homeomorphic, then finish the ThreeCircles formulas and radial packages.",
      :outcome :revise,
-     :warnings [],
+     :warnings
+     ["Lean reports two unnecessarySimpa style warnings in the explicit Ico carrier conversions; they do not affect theorem statements, proof terms, or axioms."],
      :missing-theorems
-     [{:name "PointWedgeExactEquality.quotientMap_inl_injective",
+     [{:name
+       "PolygonThreeLoopHalfOpenEquality.endpoint_halfOpen_injective",
        :type
-       "For a point wedge, the canonical map restricted to the left summand is injective.",
+       "The endpoint-quotient map is injective on half-open unit-interval representatives.",
        :status :proved,
        :consumers [:t97A01],
-       :depends-on [],
+       :depends-on
+       ["PointWedgeExactEquality.quotientMap_inl_injective"],
        :area "polygon-surface-open-cover"}
-      {:name "PointWedgeExactEquality.quotientMap_inr_injective",
+      {:name
+       "PolygonThreeLoopHalfOpenEquality.three_loop_half_open_equalities",
        :type
-       "For a point wedge, the canonical map restricted to the right summand is injective.",
+       "Same-loop half-open representatives are equal exactly at equal parameters, and representatives on distinct loops are equal exactly when both parameters are zero.",
        :status :proved,
        :consumers [:t97A01],
-       :depends-on [],
-       :area "polygon-surface-open-cover"}
-      {:name "PointWedgeExactEquality.quotientMap_inl_eq_inr_iff",
-       :type
-       "In a point wedge, a left representative equals a right representative exactly when both are their designated wedge points.",
-       :status :proved,
-       :consumers [:t97A01],
-       :depends-on [],
+       :depends-on
+       ["PolygonThreeLoopHalfOpenEquality.endpoint_halfOpen_injective"
+        "PointWedgeExactEquality.quotientMap_inl_eq_inr_iff"],
        :area "polygon-surface-open-cover"}
       {:name "polygonBoundaryThreeLoopFiberClassification",
        :type
@@ -101211,56 +101241,55 @@
        :status :not-started,
        :consumers [:t97A01],
        :depends-on
-       ["PointWedgeExactEquality.quotientMap_inl_injective"
-        "PointWedgeExactEquality.quotientMap_inr_injective"
-        "PointWedgeExactEquality.quotientMap_inl_eq_inr_iff"
-        "PolygonThreeLoopHalfOpenNormalForm.threeEndpointLoops_halfOpen_rep"
+       ["PolygonThreeLoopHalfOpenEquality.three_loop_half_open_equalities"
         "PolygonSixEdgeInteriorUniqueness.circleEdgePoint_interior_injective"],
        :area "polygon-surface-open-cover"}],
      :prerequisite
      {:bounded-exception
-      "This single-consumer prerequisite supplies the exact source point-wedge equality criteria needed by the pending three-loop fiber classifications.",
+      "This single-consumer prerequisite gives the exact source equality classification needed to turn the pending target fiber classifications into injectivity.",
       :consumer :t97A01,
       :phase :implementation,
       :state :open,
-      :scope ["ConstructionTargets/PointWedgeExactEquality.lean"],
+      :scope
+      ["ConstructionTargets/PolygonThreeLoopHalfOpenEquality.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/point-wedge-exact-equality",
+      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/three-loop-half-open-equality",
       :acceptance
       {:implementation
-       "Promote the exact fixture. Define left and right coordinate invariants for the generated point-wedge relation. Prove injectivity of the quotient map on each summand and prove that a left representative equals a right representative exactly when both are the chosen wedge points. Do not classify endpoint-quotient half-open parameters, specialize to the nested three-loop source, classify either polygon relation quotient, prove boundary-map injectivity or homeomorphisms, derive outer-piece formulas, compute invariants, or close t97A01.",
+       "Promote the exact fixture. Prove injectivity of EndpointQuotient on half-open representatives and characterize equality with endpointBase. For each of the three nested loop embeddings, prove equality exactly when parameters agree. For each distinct pair of loops, prove equality exactly when both half-open parameters are zero. Do not classify N3CircleRel or TorusCrosscapCircleRel quotient fibers, prove injectivity or homeomorphism of the boundary comparison maps, derive ThreeCircles or outer-piece formulas, compute invariants, or close t97A01.",
        :placeholder "the single sorry in apm_t97a01",
        :route-step
-       "polygon radial open-cover step 26: establish exact equality criteria for point-wedge representatives",
-       :fixture "/tmp/point-wedge-exact-equality.lean",
+       "polygon radial open-cover step 27: classify equality of all three half-open source loop forms",
+       :fixture "/tmp/polygon-three-loop-half-open-equality.lean",
        :fixture-sha256
-       "c4c1cfdecd0e84b73974f94c9017bdbc2c0d5a876f0077fbe1297103fe48b19b",
+       "395e53ac2cdb4bf16c34e30888369806b57ece320d38f47675ee8a94ecc26a43",
        :gates
-       ["lake build ConstructionTargets.PointWedgeExactEquality"
+       ["lake build ConstructionTargets.PolygonThreeLoopHalfOpenEquality"
         "fixture compiles"
         "zero source and fixture sorry"
         "standard-only axioms"
         "registry check"]},
-      :id :routes-2026-10-10-point-wedge-exact-equality-66,
+      :id :routes-2026-10-11-polygon-three-loop-half-open-equality-67,
       :kind :reusable-theorem,
       :area "polygon-surface-open-cover",
-      :depends-on
-      [:routes-2026-10-10-polygon-three-loop-half-open-normal-form-65],
+      :depends-on [:routes-2026-10-10-point-wedge-exact-equality-66],
       :current-residual
-      "Specialize the exact wedge equality criteria to the three half-open endpoint loops, then classify their N3 and torus-crosscap quotient fibers.",
+      "Classify equality of the N3 and torus-crosscap quotient images of the three now-canonical half-open loop forms, then deduce injectivity.",
       :other-consumers []},
-     :axioms ["propext" "Quot.sound"],
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
-     [{:cmd "lake env lean /tmp/point-wedge-exact-equality.lean",
+     [{:cmd
+       "lake env lean /tmp/polygon-three-loop-half-open-equality.lean",
        :exit 0,
        :finding
-       "The two summand-injectivity theorems and the exact cross-summand equality theorem compile with standard axioms."}
-      {:cmd "sha256sum /tmp/point-wedge-exact-equality.lean",
-       :exit 0,
-       :finding
-       "c4c1cfdecd0e84b73974f94c9017bdbc2c0d5a876f0077fbe1297103fe48b19b"}
+       "Endpoint half-open injectivity, equality with the basepoint, three same-loop equality criteria, and all three cross-loop equality criteria compile."}
       {:cmd
-       "rg -n \"\\b(sorry|admit)\\b\" /tmp/point-wedge-exact-equality.lean",
+       "sha256sum /tmp/polygon-three-loop-half-open-equality.lean",
+       :exit 0,
+       :finding
+       "395e53ac2cdb4bf16c34e30888369806b57ece320d38f47675ee8a94ecc26a43"}
+      {:cmd
+       "rg -n \"\\b(sorry|admit)\\b\" /tmp/polygon-three-loop-half-open-equality.lean",
        :exit 1,
        :expected-exit 1,
        :finding "No fixture placeholders."}
@@ -101271,21 +101300,32 @@
        "sed -n '1,240p' TOPOLOGY-ROUTES.md >/dev/null && sed -n '1,240p' holes/labs/topology-routes/routes-1.md >/dev/null && sed -n '1,240p' holes/labs/topology-routes/routes-2.md >/dev/null && sed -n '1,240p' holes/labs/topology-routes/routes-3.md >/dev/null && sed -n '1,220p' docs/TN-topology-build-loop-design.md >/dev/null",
        :exit 0,
        :finding
-       "The route guide, per-problem routes, and probe rules were read."}],
+       "The route guide, per-problem routes, and probe definitions were read."}],
      :diagnostic-history
-     [{:cmd "lake env lean /tmp/point-wedge-exact-equality.lean",
+     [{:cmd
+       "lake env lean /tmp/polygon-three-loop-half-open-equality.lean",
        :exit 1,
        :finding
-       "The first proof applied the nullary Rel.base constructor as a function; using Rel.base directly corrected the generated-relation witness."}],
+       "The first draft did not unfold intervalQuotientMap before applying its homeomorphism formula and used ill-typed subtype transports; explicitly changing and unfolding the expression and comparing with the zero half-open subtype corrected those goals."}
+      {:cmd
+       "lake env lean /tmp/polygon-three-loop-half-open-equality.lean",
+       :exit 1,
+       :finding
+       "The second draft oriented the inner cross-summand equality incorrectly for the second-versus-third loop case; applying the banked cross equality theorem to the symmetric equation corrected it."}
+      {:cmd
+       "lake env lean /tmp/polygon-three-loop-half-open-equality.lean",
+       :exit 1,
+       :finding
+       "The AddCircle representative theorem required its upper endpoint in the literal zero-plus-one spelling; supplying the basepoint parameter and converted Ico proofs corrected elaboration."}],
      :fixture
-     {:path "/tmp/point-wedge-exact-equality.lean",
+     {:path "/tmp/polygon-three-loop-half-open-equality.lean",
       :sha256
-      "c4c1cfdecd0e84b73974f94c9017bdbc2c0d5a876f0077fbe1297103fe48b19b",
+      "395e53ac2cdb4bf16c34e30888369806b57ece320d38f47675ee8a94ecc26a43",
       :interface
-      "The point-wedge quotient map is injective on each summand, and cross-summand representatives are equal exactly at the two chosen wedge points."},
+      "EndpointQuotient is injective on half-open representatives; same-loop equality is parameter equality, and cross-loop equality occurs exactly at the common zero endpoint."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -101331,7 +101371,8 @@
     :routes-2026-10-10-polygon-six-edge-circle-cover-63
     :routes-2026-10-10-polygon-six-edge-interior-uniqueness-64
     :routes-2026-10-10-polygon-three-loop-half-open-normal-form-65
-    :routes-2026-10-10-point-wedge-exact-equality-66],
+    :routes-2026-10-10-point-wedge-exact-equality-66
+    :routes-2026-10-11-polygon-three-loop-half-open-equality-67],
    :current-residual
    "Combine the concrete cover packages with the strict overlap squares, banked Smith normalization, and final t97A01 assembly.",
    :other-consumers []}
@@ -104589,7 +104630,8 @@
     :lemma-polygonthreeloophalfopennormalform-threeendpointloops-halfopen-rep
     :lemma-pointwedgeexactequality-quotientmap-inl-injective
     :lemma-pointwedgeexactequality-quotientmap-inr-injective
-    :lemma-pointwedgeexactequality-quotientmap-inl-eq-inr-iff],
+    :lemma-pointwedgeexactequality-quotientmap-inl-eq-inr-iff
+    :lemma-polygonthreeloophalfopenequality-three-loop-half-open-equalities],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -104736,6 +104778,57 @@
    :depends-on
    [:lemma-pointwedgeexactequality-quotientmap-inl-injective
     :lemma-pointwedgeexactequality-quotientmap-inr-injective],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "PolygonThreeLoopHalfOpenEquality.endpoint_halfOpen_injective",
+    :type
+    "The endpoint-quotient map is injective on half-open unit-interval representatives."},
+   :lemma
+   {:name
+    "PolygonThreeLoopHalfOpenEquality.endpoint_halfOpen_injective",
+    :reported-by
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    :type
+    "The endpoint-quotient map is injective on half-open unit-interval representatives.",
+    :area "polygon-surface-open-cover",
+    :proved-in
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+   :id
+   :lemma-polygonthreeloophalfopenequality-endpoint-halfopen-injective,
+   :kind :lemma,
+   :depends-on
+   [:lemma-pointwedgeexactequality-quotientmap-inl-injective],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "PolygonThreeLoopHalfOpenEquality.three_loop_half_open_equalities",
+    :type
+    "Same-loop half-open representatives are equal exactly at equal parameters, and representatives on distinct loops are equal exactly when both parameters are zero."},
+   :lemma
+   {:name
+    "PolygonThreeLoopHalfOpenEquality.three_loop_half_open_equalities",
+    :reported-by
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    :type
+    "Same-loop half-open representatives are equal exactly at equal parameters, and representatives on distinct loops are equal exactly when both parameters are zero.",
+    :area "polygon-surface-open-cover",
+    :proved-in
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+   :id
+   :lemma-polygonthreeloophalfopenequality-three-loop-half-open-equalities,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polygonthreeloophalfopenequality-endpoint-halfopen-injective
+    :lemma-pointwedgeexactequality-quotientmap-inl-eq-inr-iff],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
