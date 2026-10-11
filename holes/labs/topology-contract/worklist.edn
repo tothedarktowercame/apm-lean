@@ -116261,16 +116261,16 @@
      :reason
      "Program milestone completed. Blueprint node B8 is proved: a retraction identity maps under integral H1 to a left inverse for the inclusion map, so the inclusion-induced H1 map is injective. B7 and B9 remain."}]}
   {:consumer :t92J08,
-   :stop-count 4,
+   :stop-count 5,
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "B4-B6 remain; next specialize B3 to the Euclidean model used by t92J08, then extract one global time from compactness and discharge the frozen bridge.",
+    "B5-B6 remain; next use compactness to choose a finite neighbourhood subcover and the minimum of its positive local times, then apply that theorem to the frozen bridge.",
     :outcome :stop,
     :warnings
     [{:kind :existing-placeholder,
       :message
-      "The consumer still reports its sole pre-existing bridge_1 placeholder; this bounded B3 milestone introduced none."}],
+      "The consumer still reports its sole pre-existing bridge_1 placeholder; this bounded B4 milestone introduced none."}],
     :missing-theorems
     [{:name "t92J08Closure.exists_uniform_local_flow_in_nhds",
       :type
@@ -116299,7 +116299,7 @@
      {:name "t92J08Closure.exists_nhds_uniform_isMIntegralCurveOn",
       :type
       "The neighbourhood-uniform manifold integral-curve theorem specialized to the Euclidean model used by t92J08",
-      :status :not-started,
+      :status :proved,
       :consumers [:t92J08],
       :depends-on
       ["t92J08Closure.exists_chart_nhds_uniform_isMIntegralCurveOn"],
@@ -116325,87 +116325,84 @@
     {:source-sha256
      "192da922aa40f0e39a64e154a23a20d9db436cb9aad9f958a76f19ca50ffc21c",
      :closure-sha256
-     "02f1e95cfe6a9432d5040c8458423e0c844d3db5f8f0c296f727056c74a85635",
+     "02c531827082a328381d2908b958e7baa51c68486cee61b3dc4faa0d75cb5b94",
      :blueprint-sha256
-     "aab3cf12bc84060c6d480971c7a3d3614ad8172d764d0e7b4decc645f59f6293",
+     "5b9defd7ccbf842192a95184d33e5453845c69cac7566324e21ebe928d12dec7",
      :registry "131 registered statements match, 0 do not"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Program milestone completed. Blueprint node B3 is proved: B1's uniform Euclidean solution family is transported through one fixed extended chart, with target containment keeping every time-point inside the chart and the tangent-coordinate derivative calculation proving the manifold integral-curve property. B4-B6 remain.",
+    "Program milestone completed. Blueprint node B4 is proved: the chart-neighbourhood theorem is specialized to the consumer's Euclidean model and exact manifold hypotheses, yielding a neighbourhood and common positive existence time around every centre. B5-B6 remain.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t92J08Closure.lean",
       :exit 0,
       :finding
-      "B1-B3 compile placeholder-free; #print axioms for all three reports only propext, Classical.choice, and Quot.sound."}
+      "B1-B4 compile placeholder-free; #print axioms reports only propext, Classical.choice, and Quot.sound."}
      {:cmd "lake env lean problems/t92J08/lean/Main.lean",
       :exit 0,
       :finding
       "The consumer compiles with exactly its one pre-existing bridge_1 placeholder."}
      {:cmd
-      "python3 comment-stripped B3, source-placeholder, and blueprint validation",
+      "python3 comment-stripped B4, source-placeholder, and blueprint validation",
       :exit 0,
       :finding
-      "The closure module contains no sorry, admit, or axiom tokens; the consumer remains at one sorry; the blueprint marks B3 proved."}
+      "The closure module contains no sorry, admit, or axiom tokens; the consumer remains at one sorry; the blueprint marks B4 proved."}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131 registered statements match, 0 do not."}
      {:cmd
       "git diff --check -- ConstructionTargets/t92J08Closure.lean ConstructionTargets/t92J08Closure.blueprint.md",
       :exit 0}
-     {:cmd "git commit -m Prove-t92J08-uniform-chart-local-flow",
+     {:cmd
+      "git commit -m Specialize-t92J08-neighbourhood-uniform-flow",
       :exit 0,
       :finding
-      "Committed the two scoped milestone files as 2ed42033c."}
+      "Committed the two scoped milestone files as f6c54ca0a."}
      {:cmd
       "sha256sum ConstructionTargets/t92J08Closure.lean ConstructionTargets/t92J08Closure.blueprint.md problems/t92J08/lean/Main.lean",
       :exit 0,
       :finding
-      "Hashes are 02f1e95cfe6a9432d5040c8458423e0c844d3db5f8f0c296f727056c74a85635, aab3cf12bc84060c6d480971c7a3d3614ad8172d764d0e7b4decc645f59f6293, and 192da922aa40f0e39a64e154a23a20d9db436cb9aad9f958a76f19ca50ffc21c."}],
+      "Hashes are 02c531827082a328381d2908b958e7baa51c68486cee61b3dc4faa0d75cb5b94, 5b9defd7ccbf842192a95184d33e5453845c69cac7566324e21ebe928d12dec7, and 192da922aa40f0e39a64e154a23a20d9db436cb9aad9f958a76f19ca50ffc21c."}],
     :diagnostic-history
     [{:cmd "lake env lean ConstructionTargets/t92J08Closure.lean",
       :exit 1,
       :finding
-      "The first B3 compile applied mem_extChartAt_source positionally and attempted to obtain the final coordinate-change derivative from boundarylessness at the wrong base point; corrected with the named model argument and Mathlib's chart-target interior neighbourhood calculation."}
+      "The first B4 draft used the nested self-model notation directly in theorem binders, which the parser did not accept; corrected by introducing the scoped euclideanModel abbreviation."}
      {:cmd "lake env lean ConstructionTargets/t92J08Closure.lean",
       :exit 1,
       :finding
-      "The intermediate target-range proof supplied explicit arguments in the wrong order; corrected with inferred extChartAt_target_subset_range arguments, after which B3 compiled."}],
+      "The abbreviation was initially outside the Manifold notation scope; corrected by opening the scope at the declaration site."}
+     {:cmd "lake env lean ConstructionTargets/t92J08Closure.lean",
+      :exit 1,
+      :finding
+      "The first scope placement separated a doc comment from its theorem declaration; moved the scope command before the comment."}
+     {:cmd "lake env lean ConstructionTargets/t92J08Closure.lean",
+      :exit 1,
+      :finding
+      "The infinity differentiability notation also required the ContDiff scope at the B4 declaration site; opening it there completed the specialization."}],
     :continue-from
-    {:commit "2ed42033c",
+    {:commit "f6c54ca0a",
      :next
-     "Implement B4 exists_nhds_uniform_isMIntegralCurveOn by specializing B3 to the consumer's Euclidean manifold model."},
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791726363616-5438-edd1e818",
-     :commands
-     ["git show/diff-tree 2ed42033cac16e283a1571210f5ca5100c404239"
-      "recorded-tree SHA-256, exact-scope, diff-check, and placeholder-delta verification"
-      "python3 scripts/statement-registry.py check"
-      "lake env lean ConstructionTargets/t92J08Closure.lean"
-      "lake env lean problems/t92J08/lean/Main.lean"],
-     :finding
-     "PASS: commit 2ed42033c adds new compiled, placeholder-free B3 progress. The initial neighbourhood lies in the fixed chart source and maps into the Euclidean initial ball; B1 target control keeps every trajectory in the chart target; the inverse-chart initial value uses the left inverse; and the tangentCoordChange composition has the correct fixed-chart-to-pointwise-chart orientation for IsMIntegralCurveOn. Scope and hashes match, standard axioms only are used, the consumer's old placeholder is unchanged, and B4-B6 remain explicit."},
-    :commit "2ed42033c",
+     "Implement B5 exists_uniform_isMIntegralCurveOn_of_compact using B4, CompactSpace.elim_nhds_subcover, and a positive finite minimum."},
+    :commit "f6c54ca0a",
     :changed-paths
     ["ConstructionTargets/t92J08Closure.lean"
      "ConstructionTargets/t92J08Closure.blueprint.md"],
     :fixture
     {:path "ConstructionTargets/t92J08Closure.blueprint.md",
      :sha256
-     "aab3cf12bc84060c6d480971c7a3d3614ad8172d764d0e7b4decc645f59f6293",
+     "5b9defd7ccbf842192a95184d33e5453845c69cac7566324e21ebe928d12dec7",
      :nodes
      [{:id :B1, :status :proved}
       {:id :B2, :status :proved}
       {:id :B3, :status :proved}
-      {:id :B4, :status :planned}
+      {:id :B4, :status :proved}
       {:id :B5, :status :planned}
       {:id :B6, :status :planned}]},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t92J08/lean/Main.lean"
     "problems/t92J08/status.json"
@@ -117437,7 +117434,8 @@
     :reported-by [:program-2026-10-11-close-t92j08],
     :type
     "The neighbourhood-uniform manifold integral-curve theorem specialized to the Euclidean model used by t92J08",
-    :area "manifold-uniform-local-flow"},
+    :area "manifold-uniform-local-flow",
+    :proved-in :program-2026-10-11-close-t92j08},
    :id :lemma-t92j08closure-exists-nhds-uniform-ismintegralcurveon,
    :kind :lemma,
    :depends-on
