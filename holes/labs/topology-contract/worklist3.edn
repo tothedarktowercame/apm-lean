@@ -7849,94 +7849,166 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :implements-lemma
+   :lemma-constructiontargets-manifoldfundamentalclass-integralrelativehomologycomparisonwithtransport-normalization-of-nonnegative,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+   :dag-node
+   "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/corrected-normalization-from-nonnegative",
+   :acceptance
+   {:implementation
+    "Promote the exact fixture theorem. Apply integralRelativeHomologyComparisonWithTransport_normalization_of_coefficient_one and discharge coefficient one with correctedLocalGeneratorCoefficient_eq_one_of_nonneg using the supplied nonnegativity hypothesis. Do not prove nonnegativity, unfold the model normalization chains, assume the normalization square, or construct a fundamental class.",
+    :declaration
+    "ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_nonnegative",
+    :type
+    "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), 0 <= correctedLocalGeneratorCoefficient k x -> (integralRelativeHomologyComparisonWithTransport (deletedPoint x) (k + 2)).hom ≫ (ambientLocalNormalization k x).hom = forgetIntModules.map (CoefficientChartLocal.localIso Int k x).hom",
+    :fixture
+    "/tmp/manifold_fundamental_class_corrected_normalization_of_nonnegative.lean",
+    :fixture-sha256
+    "45fb5eb9f5f2af09baafbfb652077da8d2763bec9ebf966e935ca503d5f5b73e",
+    :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
+    :route-step
+    "turn orientation-preserving nonnegativity of the corrected local coefficient directly into the complete coefficient-to-production normalization square"},
+   :id
+   :routes-2026-10-11-manifold-corrected-normalization-of-nonnegative-topo3-r1,
+   :kind :reusable-theorem,
+   :area "manifold-fundamental-class",
+   :depends-on
+   [:routes-2026-10-10-topo3-seed-checkpoint-1
+    :routes-2026-10-10-manifold-local-positive-excision-topo3-r1
+    :routes-2026-10-10-manifold-oriented-overlap-coherence-topo3-r1
+    :routes-2026-10-10-manifold-connected-overlap-unit-topo3-r1
+    :routes-2026-10-10-manifold-oriented-connected-overlap-topo3-r1
+    :routes-2026-10-10-manifold-integral-transition-sign-topo3-r1
+    :routes-2026-10-10-manifold-exclude-negative-transition-topo3-r1
+    :routes-2026-10-10-manifold-global-generator-topo3-r1
+    :routes-2026-10-10-manifold-localization-iso-generator-topo3-r1
+    :routes-2026-10-10-manifold-generator-map-isiso-topo3-r1
+    :routes-2026-10-10-manifold-localization-map-naturality-topo3-r1
+    :routes-2026-10-10-manifold-localization-apply-naturality-topo3-r1
+    :routes-2026-10-10-manifold-group-global-generator-topo3-r1
+    :routes-2026-10-10-manifold-group-generator-naturality-topo3-r1
+    :routes-2026-10-10-manifold-global-local-generator-transport-topo3-r1
+    :routes-2026-10-11-manifold-basepoint-localization-coefficient-topo3-r1
+    :routes-2026-10-11-manifold-local-generator-coefficient-unique-topo3-r1
+    :routes-2026-10-11-manifold-localization-coefficient-one-topo3-r1
+    :routes-2026-10-11-manifold-distinguished-chart-generator-topo3-r1
+    :routes-2026-10-11-manifold-integral-subtype-chain-naturality-topo3-r1
+    :routes-2026-10-11-manifold-integral-mapped-relative-cokernel-topo3-r1
+    :routes-2026-10-11-manifold-forget-relative-cokernel-topo3-r1
+    :routes-2026-10-11-manifold-integral-relative-chains-comparison-topo3-r1
+    :routes-2026-10-11-manifold-integral-relative-homology-comparison-topo3-r1
+    :routes-2026-10-11-manifold-ambient-local-normalization-topo3-r1
+    :routes-2026-10-11-manifold-generator-transport-of-normalization-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-subspace-map-equality-topo3-r1
+    :routes-2026-10-11-manifold-integral-direct-cokernel-projection-topo3-r1
+    :routes-2026-10-11-manifold-forget-cokernel-projection-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-integral-cokernel-transport-topo3-r1
+    :routes-2026-10-11-manifold-integral-composite-cokernel-projection-topo3-r1
+    :routes-2026-10-11-manifold-production-cokernel-projection-topo3-r1
+    :routes-2026-10-11-manifold-integral-composite-relative-projection-topo3-r1
+    :routes-2026-10-11-manifold-relative-chains-comparison-with-transport-topo3-r1
+    :routes-2026-10-11-manifold-relative-homology-comparison-with-transport-topo3-r1
+    :routes-2026-10-11-manifold-corrected-homology-projection-topo3-r1
+    :routes-2026-10-11-manifold-corrected-homology-comparison-hom-topo3-r1
+    :routes-2026-10-11-manifold-relative-projection-homology-preservation-topo3-r1
+    :routes-2026-10-11-manifold-packaged-homology-projection-topo3-r1
+    :routes-2026-10-11-manifold-corrected-generator-normalization-topo3-r1
+    :routes-2026-10-11-manifold-normalization-from-corrected-generator-topo3-r1
+    :routes-2026-10-11-manifold-corrected-local-generator-coefficient-topo3-r1
+    :routes-2026-10-11-manifold-corrected-local-generator-unit-topo3-r1
+    :routes-2026-10-11-manifold-corrected-local-generator-sign-topo3-r1
+    :routes-2026-10-11-manifold-corrected-local-generator-nonnegative-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-one-from-corrected-normalization-topo3-r1
+    :routes-2026-10-11-manifold-corrected-generator-of-coefficient-one-topo3-r1
+    :routes-2026-10-11-manifold-corrected-normalization-of-coefficient-one-topo3-r1],
+   :current-residual
+   "Prove 0 <= correctedLocalGeneratorCoefficient k x from the concrete orientation conventions in the coefficient and production connecting, radial, and sphere normalization chains; this theorem then supplies normalization compatibility.",
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-closedorientedfundamentalclass,
    :evidence
    {:probe
     {:residual
-     "Prove correctedLocalGeneratorCoefficient k x = 1 independently from the concrete connecting, radial, and sphere normalization comparison; then use this theorem for normalization compatibility and continue the fundamental-class construction.",
+     "Prove nonnegativity of correctedLocalGeneratorCoefficient from the concrete connecting, radial, and sphere normalization comparison; then apply this theorem and continue the fundamental-class construction.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
      [{:id
-       :lemma-constructiontargets-manifoldfundamentalclass-integralrelativehomologycomparisonwithtransport-normalization-of-coefficient-one,
+       :lemma-constructiontargets-manifoldfundamentalclass-integralrelativehomologycomparisonwithtransport-normalization-of-nonnegative,
        :name
-       "ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_coefficient_one",
+       "ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_nonnegative",
        :type
-       "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), correctedLocalGeneratorCoefficient k x = 1 -> (integralRelativeHomologyComparisonWithTransport (deletedPoint x) (k + 2)).hom ≫ (ambientLocalNormalization k x).hom = forgetIntModules.map (CoefficientChartLocal.localIso Int k x).hom",
+       "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), 0 <= correctedLocalGeneratorCoefficient k x -> (integralRelativeHomologyComparisonWithTransport (deletedPoint x) (k + 2)).hom ≫ (ambientLocalNormalization k x).hom = forgetIntModules.map (CoefficientChartLocal.localIso Int k x).hom",
        :status :proved,
        :consumers [:t00J02 :t98A02],
        :depends-on
-       ["ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_coefficient_one"
-        "ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator"],
+       ["ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient_eq_one_of_nonneg"
+        "ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_coefficient_one"],
        :area "manifold-fundamental-class"}],
      :prerequisite
      {:consumer :t00J02,
       :implements-lemma
-      :lemma-constructiontargets-manifoldfundamentalclass-integralrelativehomologycomparisonwithtransport-normalization-of-coefficient-one,
+      :lemma-constructiontargets-manifoldfundamentalclass-integralrelativehomologycomparisonwithtransport-normalization-of-nonnegative,
       :phase :implementation,
       :state :open,
       :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
       :dag-node
-      "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/corrected-normalization-from-coefficient-one",
+      "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/corrected-normalization-from-nonnegative",
       :acceptance
       {:implementation
-       "Promote the exact fixture theorem. Apply integralRelativeHomologyComparisonWithTransport_normalization_of_generator and discharge its generator premise with integralRelativeHomologyComparisonWithTransport_generator_of_coefficient_one using the supplied coefficient-one equality. Do not prove coefficient one, assume the normalization square, unfold the model normalization chains, or construct a fundamental class.",
+       "Promote the exact fixture theorem. Apply integralRelativeHomologyComparisonWithTransport_normalization_of_coefficient_one and discharge coefficient one with correctedLocalGeneratorCoefficient_eq_one_of_nonneg using the supplied nonnegativity hypothesis. Do not prove nonnegativity, unfold the model normalization chains, assume the normalization square, or construct a fundamental class.",
        :declaration
-       "ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_coefficient_one",
+       "ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_nonnegative",
        :type
-       "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), correctedLocalGeneratorCoefficient k x = 1 -> (integralRelativeHomologyComparisonWithTransport (deletedPoint x) (k + 2)).hom ≫ (ambientLocalNormalization k x).hom = forgetIntModules.map (CoefficientChartLocal.localIso Int k x).hom",
+       "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), 0 <= correctedLocalGeneratorCoefficient k x -> (integralRelativeHomologyComparisonWithTransport (deletedPoint x) (k + 2)).hom ≫ (ambientLocalNormalization k x).hom = forgetIntModules.map (CoefficientChartLocal.localIso Int k x).hom",
        :fixture
-       "/tmp/manifold_fundamental_class_corrected_normalization_of_coefficient_one.lean",
+       "/tmp/manifold_fundamental_class_corrected_normalization_of_nonnegative.lean",
        :fixture-sha256
-       "acca630036d6400d762699e5d8a1fb194517c915d7343f0691c8641c03ccc3dc",
+       "45fb5eb9f5f2af09baafbfb652077da8d2763bec9ebf966e935ca503d5f5b73e",
        :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
        :route-step
-       "derive the complete corrected coefficient-to-production normalization square from the independently established positive local coefficient"},
+       "turn orientation-preserving nonnegativity of the corrected local coefficient directly into the complete coefficient-to-production normalization square"},
       :id
-      :routes-2026-10-11-manifold-corrected-normalization-of-coefficient-one-topo3-r1,
+      :routes-2026-10-11-manifold-corrected-normalization-of-nonnegative-topo3-r1,
       :kind :reusable-theorem,
       :area "manifold-fundamental-class",
       :depends-on
       [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
-       :routes-2026-10-11-manifold-normalization-from-corrected-generator-topo3-r1
-       :routes-2026-10-11-manifold-corrected-generator-of-coefficient-one-topo3-r1],
+       :routes-2026-10-11-manifold-corrected-local-generator-nonnegative-topo3-r1
+       :routes-2026-10-11-manifold-corrected-normalization-of-coefficient-one-topo3-r1],
       :current-residual
-      "Prove correctedLocalGeneratorCoefficient k x = 1 independently by comparing the coefficient and production connecting, radial, and sphere normalization conventions; this theorem then supplies normalization compatibility directly.",
+      "Prove 0 <= correctedLocalGeneratorCoefficient k x from the concrete orientation conventions in the coefficient and production connecting, radial, and sphere normalization chains; this theorem then supplies normalization compatibility.",
       :other-consumers [:t98A02]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake env lean /tmp/manifold_fundamental_class_corrected_normalization_of_coefficient_one.lean",
+       "lake env lean /tmp/manifold_fundamental_class_corrected_normalization_of_nonnegative.lean",
        :exit 0,
        :output
-       "integralRelativeHomologyComparisonWithTransport_normalization_of_coefficient_one compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "integralRelativeHomologyComparisonWithTransport_normalization_of_nonnegative compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/manifold_fundamental_class_corrected_normalization_of_coefficient_one.lean",
+       "sha256sum /tmp/manifold_fundamental_class_corrected_normalization_of_nonnegative.lean",
        :exit 0,
        :output
-       "acca630036d6400d762699e5d8a1fb194517c915d7343f0691c8641c03ccc3dc  /tmp/manifold_fundamental_class_corrected_normalization_of_coefficient_one.lean"}
+       "45fb5eb9f5f2af09baafbfb652077da8d2763bec9ebf966e935ca503d5f5b73e  /tmp/manifold_fundamental_class_corrected_normalization_of_nonnegative.lean"}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/manifold_fundamental_class_corrected_normalization_of_coefficient_one.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/manifold_fundamental_class_corrected_normalization_of_nonnegative.lean || true)\"",
        :exit 0}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/manifold_fundamental_class_corrected_normalization_of_coefficient_one.lean",
-       :exit 1,
-       :finding
-       "The first fixture omitted CategoryTheory, so the composition token was unavailable. Opening CategoryTheory fixed parsing and the theorem compiled."}],
      :fixture
      {:path
-      "/tmp/manifold_fundamental_class_corrected_normalization_of_coefficient_one.lean",
+      "/tmp/manifold_fundamental_class_corrected_normalization_of_nonnegative.lean",
       :sha256
-      "acca630036d6400d762699e5d8a1fb194517c915d7343f0691c8641c03ccc3dc"},
+      "45fb5eb9f5f2af09baafbfb652077da8d2763bec9ebf966e935ca503d5f5b73e"},
      :finding
-     "The compiled theorem closes the formal normalization step from one non-circular premise: correctedLocalGeneratorCoefficient equals one. It composes the banked generator-from-coefficient-one theorem with normalization-from-generator. Therefore the remaining model work must establish coefficient one independently; the earlier normalization-square-to-coefficient-one implication is diagnostic only and must not be used in this direction.",
+     "The compiled prerequisite completes every formal step after the geometric sign comparison: nonnegativity selects coefficient one, and coefficient one yields the corrected normalization square. Thus the exact remaining boundary is a theorem proving nonnegativity from the concrete coefficient and production normalization chains; invertibility, cyclicity, and the plus-or-minus-one dichotomy are already exhausted.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -7998,7 +8070,8 @@
     :routes-2026-10-11-manifold-corrected-local-generator-nonnegative-topo3-r1
     :routes-2026-10-11-manifold-coefficient-one-from-corrected-normalization-topo3-r1
     :routes-2026-10-11-manifold-corrected-generator-of-coefficient-one-topo3-r1
-    :routes-2026-10-11-manifold-corrected-normalization-of-coefficient-one-topo3-r1],
+    :routes-2026-10-11-manifold-corrected-normalization-of-coefficient-one-topo3-r1
+    :routes-2026-10-11-manifold-corrected-normalization-of-nonnegative-topo3-r1],
    :current-residual
    "Local-degree counts and wild-ball complement homology remain.",
    :other-consumers [:t98A02]}
@@ -11140,6 +11213,31 @@
    :depends-on
    [:lemma-constructiontargets-manifoldfundamentalclass-integralrelativehomologycomparisonwithtransport-generator-of-coefficient-one
     :lemma-constructiontargets-manifoldfundamentalclass-integralrelativehomologycomparisonwithtransport-normalization-of-generator],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_nonnegative",
+    :type
+    "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), 0 <= correctedLocalGeneratorCoefficient k x -> (integralRelativeHomologyComparisonWithTransport (deletedPoint x) (k + 2)).hom ≫ (ambientLocalNormalization k x).hom = forgetIntModules.map (CoefficientChartLocal.localIso Int k x).hom"},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_nonnegative",
+    :reported-by
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    :type
+    "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), 0 <= correctedLocalGeneratorCoefficient k x -> (integralRelativeHomologyComparisonWithTransport (deletedPoint x) (k + 2)).hom ≫ (ambientLocalNormalization k x).hom = forgetIntModules.map (CoefficientChartLocal.localIso Int k x).hom",
+    :area "manifold-fundamental-class",
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+   :id
+   :lemma-constructiontargets-manifoldfundamentalclass-integralrelativehomologycomparisonwithtransport-normalization-of-nonnegative,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-manifoldfundamentalclass-correctedlocalgeneratorcoefficient-eq-one-of-nonneg
+    :lemma-constructiontargets-manifoldfundamentalclass-integralrelativehomologycomparisonwithtransport-normalization-of-coefficient-one],
    :other-consumers [:t98A02]}],
  :consumer-baselines {},
  :statuses
