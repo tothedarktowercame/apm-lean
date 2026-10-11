@@ -79283,29 +79283,30 @@
   {:consumer :t97A04,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 9,
+   :stop-count 10,
    :review-finding
    "program STOP commits nothing new since the last :program-history entry: evidence commit bb0f0f77d8953dc78dd564e000f3d4a5b29d0894 exactly equals history job 5",
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Prove two-circle shear preserves summands; apply folded degrees; then B6-B11.",
+    "Transfer branch equality through homotopy inverse; apply folded degrees; then B6-B11.",
     :outcome :stop,
     :warnings ["Main: 2 placeholders."],
     :missing-theorems
     [{:name
-      "ConstructionTargets.T97A04Closure.circleSumInl_H1_coordinate",
-      :type "left inclusion is biprod.inl",
+      "ConstructionTargets.T97A04Closure.boundaryOverlapShear_snd",
+      :type "shear fixes overlap second coordinate",
       :status :proved,
       :consumers [:t97A04],
       :depends-on [],
       :area "mv-connecting-naturality"}
      {:name
-      "ConstructionTargets.T97A04Closure.circleSumInr_H1_coordinate",
-      :type "right inclusion is biprod.inr",
+      "ConstructionTargets.T97A04Closure.overlapOrthogonalCoordinate_shear",
+      :type "shear fixes overlap component coordinate",
       :status :proved,
       :consumers [:t97A04],
-      :depends-on [],
+      :depends-on
+      ["ConstructionTargets.T97A04Closure.boundaryOverlapShear_snd"],
       :area "mv-connecting-naturality"}
      {:name
       "ConstructionTargets.T97A04Closure.shearY_overlap_coordinate_components",
@@ -79313,12 +79314,11 @@
       :status :partial,
       :consumers [:t97A04],
       :depends-on
-      ["ConstructionTargets.T97A04Closure.circleSumInl_H1_coordinate"
-       "ConstructionTargets.T97A04Closure.circleSumInr_H1_coordinate"],
+      ["ConstructionTargets.T97A04Closure.overlapOrthogonalCoordinate_shear"],
       :area "mv-connecting-naturality"}],
     :statement-hashes
     {:registry "131/0",
-     :closure "cf793ead75eb9a7bf7da9bef94181f9857af4251",
+     :closure "77afae8e8fdb9c2fda15326942fe7db49a9c5fd2",
      :blueprint "c419a895cb4ede2acc1cb6bc5c7536344ba63df4"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
@@ -79331,28 +79331,16 @@
      {:cmd "lake env lean problems/t97A04/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "Main placeholder count", :exit 0, :output "2"}
-     {:cmd "git show --check 36cd0baac", :exit 0}],
+     {:cmd "git show --check 76582a0a4", :exit 0}],
     :diagnostic-history
     [{:cmd "closure compile",
       :exit 1,
-      :finding "Used injection coordinates."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791737113132-5626-e6beed86",
-     :commands
-     ["git show/diff/check 36cd0baac"
-      "lake env lean ConstructionTargets/t97A04Closure.lean"
-      "lake env lean problems/t97A04/lean/Main.lean"
-      "statement-registry check/fingerprint"
-      "git-show hash/placeholder checks"],
-     :finding
-     "PASS: 36cd0baa is new after history bab182b9; scope/blob match. It correctly identifies topological left/right summand inclusions as biprod.inl/inr under the fixed H1 coordinates, without swapping branches. Lean gates compile with standard axioms only; registry 131/0; frozen hash unchanged ca1b2cb3; closure 0/Main 2 placeholders. Shear summand preservation, folded degrees, and B6-B11 remain listed."},
-    :commit "36cd0baac5cde95309a63dab0408b58e96aca93e",
+      :finding "Exposed radial coordinate."}],
+    :commit "76582a0a4b6eff1c197fc14393d6e6360e63fa5a",
     :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79856,7 +79844,8 @@
     :lemma-constructiontargets-t97a04closure-sheary-productionintersectionmap-eq-overlap
     :lemma-constructiontargets-t97a04closure-shearyoverlapcoordinatemap-eq-twocircle
     :lemma-constructiontargets-t97a04closure-circlesuminl-h1-coordinate
-    :lemma-constructiontargets-t97a04closure-circlesuminr-h1-coordinate],
+    :lemma-constructiontargets-t97a04closure-circlesuminr-h1-coordinate
+    :lemma-constructiontargets-t97a04closure-overlaporthogonalcoordinate-shear],
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
@@ -80315,4 +80304,44 @@
    :lemma-constructiontargets-t97a04closure-circlesuminr-h1-coordinate,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T97A04Closure.boundaryOverlapShear_snd",
+    :type "shear fixes overlap second coordinate"},
+   :lemma
+   {:name "ConstructionTargets.T97A04Closure.boundaryOverlapShear_snd",
+    :reported-by [:program-2026-10-11-close-t97a04],
+    :type "shear fixes overlap second coordinate",
+    :area "mv-connecting-naturality",
+    :proved-in :program-2026-10-11-close-t97a04},
+   :id
+   :lemma-constructiontargets-t97a04closure-boundaryoverlapshear-snd,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T97A04Closure.overlapOrthogonalCoordinate_shear",
+    :type "shear fixes overlap component coordinate"},
+   :lemma
+   {:name
+    "ConstructionTargets.T97A04Closure.overlapOrthogonalCoordinate_shear",
+    :reported-by [:program-2026-10-11-close-t97a04],
+    :type "shear fixes overlap component coordinate",
+    :area "mv-connecting-naturality",
+    :proved-in :program-2026-10-11-close-t97a04},
+   :id
+   :lemma-constructiontargets-t97a04closure-overlaporthogonalcoordinate-shear,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t97a04closure-boundaryoverlapshear-snd],
    :other-consumers []}]}
