@@ -1153,6 +1153,34 @@ theorem rightTubeMeridianCoordinate_im_positiveFactor_height
   rw [← him]
   field_simp
 
+theorem nonzeroHeight_im_ne_zero_rightTubeCoreNormalInterpolation
+    (tp : unitInterval × RightTubeMinusLeftCore)
+    (hheight : tp.2.1 2 ≠ 0) :
+    (rightTubeCoreNormalInterpolation rightTubeMeridianCoordinate tp).im ≠ 0 := by
+  let t : ℝ := tp.1
+  let p : RightTubeMinusLeftCore := tp.2
+  obtain ⟨c, hc, hm⟩ :=
+    rightTubeMeridianCoordinate_im_positiveFactor_height p
+  have ht0 : 0 ≤ t := tp.1.2.1
+  have ht1 : t ≤ 1 := tp.1.2.2
+  have hcoeff : 0 < (1 - t) * (c / 8) + t := by
+    by_cases ht : t = 1
+    · rw [ht]
+      norm_num
+    · have hlt : t < 1 := lt_of_le_of_ne ht1 ht
+      have hleft : 0 < (1 - t) * (c / 8) :=
+        mul_pos (sub_pos.mpr hlt) (div_pos hc (by norm_num))
+      exact add_pos_of_pos_of_nonneg hleft ht0
+  have him :
+      (rightTubeCoreNormalInterpolation rightTubeMeridianCoordinate tp).im =
+        ((1 - t) * (c / 8) + t) * p.1 2 := by
+    simp [rightTubeCoreNormalInterpolation, rightTubeCoreNormalComplex,
+      apm_t02a03_circleMeridian, t, p]
+    rw [hm]
+    ring
+  rw [him]
+  exact mul_ne_zero hcoeff.ne' hheight
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -1194,3 +1222,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.inputCollisionPolynomial_positiveFactor_meridianReal
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.collisionEndpoint_positiveFactor_signBridge
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeMeridianCoordinate_im_positiveFactor_height
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.nonzeroHeight_im_ne_zero_rightTubeCoreNormalInterpolation
