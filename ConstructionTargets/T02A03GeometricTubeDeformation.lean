@@ -1756,6 +1756,45 @@ theorem coupledAngularArrivalLeg_ne_zero_of_cross_im_ne_zero
       neg_mul, add_comm] using hdet
   exact (hcross p) hzero
 
+theorem coupledAngularArrivalCollision_negative_endpoint
+    (W : C(RightTubeMinusLeftCore, ℂ))
+    (hW : ∀ p, 0 < (W p).re)
+    (t : unitInterval) (p : RightTubeMinusLeftCore)
+    (ht : ¬ (t : ℝ) ≤ 1 / 2)
+    (hz : (((2 - 2 * (t : ℝ) : ℝ) : ℂ) * W p +
+        ((2 * (t : ℝ) - 1 : ℝ) : ℂ) *
+          rightTubeCorePlanarComplex p.1) = 0) :
+    (rightTubeCorePlanarComplex p.1).re < 0 ∧
+      (conj (W p) * rightTubeCorePlanarComplex p.1).im = 0 := by
+  have ht_half : 1 / 2 < (t : ℝ) := lt_of_not_ge ht
+  have ht_one : (t : ℝ) < 1 := by
+    apply lt_of_le_of_ne t.2.2
+    intro ht1
+    have hz1 := hz
+    rw [ht1] at hz1
+    norm_num at hz1
+    exact rightTubeCorePlanarComplex_ne_zero p.1 p.2.1 hz1
+  have ha : 0 < 2 - 2 * (t : ℝ) := by linarith
+  have hb : 0 < 2 * (t : ℝ) - 1 := by linarith
+  have hre := congrArg Complex.re hz
+  have him := congrArg Complex.im hz
+  norm_num [Complex.mul_re, Complex.mul_im] at hre him
+  constructor
+  · have hapos : 0 < (2 - 2 * (t : ℝ)) * (W p).re :=
+      mul_pos ha (hW p)
+    nlinarith
+  · have hre' := congrArg (fun x : ℝ => x * (W p).im) hre
+    have him' := congrArg (fun x : ℝ => x * (W p).re) him
+    have hdet : (W p).re * (rightTubeCorePlanarComplex p.1).im -
+        (W p).im * (rightTubeCorePlanarComplex p.1).re = 0 := by
+      have hprod : (2 * (t : ℝ) - 1) *
+          ((W p).re * (rightTubeCorePlanarComplex p.1).im -
+            (W p).im * (rightTubeCorePlanarComplex p.1).re) = 0 := by
+        nlinarith [hre', him']
+      exact (mul_eq_zero.mp hprod).resolve_left hb.ne'
+    simpa only [Complex.mul_im, Complex.conj_re, Complex.conj_im,
+      neg_mul, add_comm] using hdet
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -1822,3 +1861,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.nonvanishingComplexPath_of_waypoint
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularDepartureLeg_ne_zero_of_waypoint_re_pos
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularArrivalLeg_ne_zero_of_cross_im_ne_zero
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularArrivalCollision_negative_endpoint
