@@ -13166,8 +13166,85 @@
   {:consumer :t00J02,
    :implements-lemma
    :lemma-mfclass-coefficient-open-disk-connecting-transport,
+   :evidence
+   {:placeholder-delta
+    {:t00J02 {:before 1, :after 1, :delta 0},
+     :t98A02 {:before 1, :after 1, :delta 0}},
+    :residual
+    "Prove coefficientOpenDiskConnectingTransport equals the inverse relative mapHomologyIso followed by the delta of integralOpenDiskCoefficientPairShortExact; then rewrite the raw connecting square and prove radial and sphere compatibility.",
+    :gates
+    {:fixture-hash :pass,
+     :fixture-compile :pass,
+     :module-compile :pass,
+     :target-build :pass,
+     :statement-registry "131 registered statements match, 0 do not",
+     :scoped-diff :pass,
+     :forbidden-placeholder-scan :pass,
+     :scoped-worktree-clean true},
+    :outcome :done-unreviewed,
+    :warnings
+    ["The full target build replayed 8326 jobs and emitted pre-existing linter warnings in dependencies; no warning was emitted for the new declarations."
+     "The supervisor worklist files worklist.edn, worklist2.edn, and worklist3.edn were modified concurrently and were not touched or committed by this row."],
+    :missing-theorems [],
+    :statement-hashes
+    {:module
+     "b7dc7db56253bb85d301c029c70c5d78f73f3f739f6c055623dbd5bc73418f88"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :topo-10,
+    :reason
+    "Promoted coefficientOpenDiskConnectingTransport and coefficientOpenDiskConnectingTransport_eq exactly from the frozen fixture. The named arrow is the forgotten coefficient pair connecting morphism followed by the inverse absolute mapHomologyIso for the punctured open disk; the required comparison theorem is definitional equality.",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/manifold_fundamental_class_coefficient_open_disk_connecting_transport.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/manifold_fundamental_class_coefficient_open_disk_connecting_transport.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "git diff --check 1881aad97^ 1881aad97 -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^\\s*axiom\\b' ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "comment-stripped placeholder counts for t00J02 t98A02",
+      :exit 0}
+     {:cmd
+      "git status --short -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}],
+    :diagnostic-history [],
+    :representation
+    {:source
+     "The forgotten coefficient open-disk connecting morphism with target in forgotten coefficient homology",
+     :target
+     "That morphism followed by inverse absolute mapHomologyIso, targeting homology of the forgotten puncture complex",
+     :direction
+     "Exact definitional equality from the named transported connecting arrow to the forgotten connecting map followed by target homology-preservation transport"},
+    :commit "1881aad975dae19f220fe8e433f3b17ba575b806",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path
+     "/tmp/manifold_fundamental_class_coefficient_open_disk_connecting_transport.lean",
+     :sha256
+     "35ec1cc50280c9e903dc06b12d219ab6f50836d6207309fd64afd6cb27aaf4d6"},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :declaration
+     "ConstructionTargets.ManifoldFundamentalClass.coefficientOpenDiskConnectingTransport_eq",
+     :supporting-declarations
+     ["ConstructionTargets.ManifoldFundamentalClass.coefficientOpenDiskConnectingTransport"]},
+    :row
+    :routes-2026-10-11-manifold-coefficient-open-disk-connecting-transport-topo3-r1,
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/integral-open-disk-connecting-naturality/coefficient-connecting-transport",
