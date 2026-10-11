@@ -72381,6 +72381,19 @@
       :exit 0,
       :output "712f8d241 Add t02A03 rotated endpoint waypoint"}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791709399457-4856-9f196c50",
+     :commands
+     ["git show/diff-tree/show --check 712f8d241a8067a25fba3772471ee4bb0cf6a69e"
+      "git rev-parse scoped blob; sha256sum frozen fixture"
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean"
+      "lake env lean /tmp/t02a03_rotated_endpoint_waypoint_probe.lean"
+      "python3 scripts/statement-registry.py check"
+      "statement fingerprints at commit and parent; placeholder scans"],
+     :finding
+     "PASS: independent author topo-6; the recorded commit changes exactly the declared file, is clean, and matches the recorded scoped blob and fixture hash. The target and exact frozen probe compile. The theorem supplies the continuous waypoint W(p) = -i * rightTubeCorePlanarComplex(p.1), factors the frozen arrival leg as a coefficient times the endpoint, excludes the coefficient by its positive real part for t > 1/2, and excludes the endpoint through rightTubeCorePlanarComplex_ne_zero. Its orientation and representation boundaries are exact: it proves only existential waypoint plus arrival nonvanishing, not departure, normalization, or ambient assembly. Axioms are exactly propext, Classical.choice, Quot.sound; registry is 131/0, the t02A03 fingerprint is unchanged at commit and parent, and the scoped file and fixture have no placeholders."},
     :commit "712f8d241a8067a25fba3772471ee4bb0cf6a69e",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
@@ -72394,7 +72407,7 @@
    :phase :implementation,
    :type
    "exists W : C(RightTubeMinusLeftCore, ℂ), forall (t : unitInterval) (p : RightTubeMinusLeftCore), not ((t : ℝ) <= 1/2) -> (((2-2*(t:ℝ):ℝ):ℂ)*W p + ((2*(t:ℝ)-1:ℝ):ℂ)*rightTubeCorePlanarComplex p.1) != 0",
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/rotated-endpoint-waypoint-arrival",
@@ -72490,7 +72503,7 @@
      "The positive-real waypoint condition is not needed for a globally safe arrival leg. The continuous quarter-turn waypoint W(p) = -i * rightTubeCorePlanarComplex(p.1) makes every arrival expression factor as ((2t-1) - (2-2t)i) times the nonzero endpoint. After time 1/2 the factor has strictly positive real part, so the arrival leg never vanishes. This replaces the difficult positive-real/transverse conjunction by one explicit waypoint and leaves only its departure leg to certify or detour.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
