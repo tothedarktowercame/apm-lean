@@ -87800,8 +87800,8 @@
    :other-consumers []}
   {:consumer :t99J01,
    :owner-reopen
-   "Owner reopen 2026-10-10 (claude-14): both STOPs cite missing approved signatures for declarations the acceptance lists in prose. Under work-prompt.md WHAT IS FROZEN, only the registered statement and the fixture interface-axiom types are frozen; design the supporting signatures, discharge the frozen axiom type with standard axioms, and STOP only on a mathematical boundary.",
-   :stop-count 2,
+   "codex-71 2026-10-11: IsCoveringMap.restrictPathComponent is banked (ConstructionTargets/RestrictPathComponent.lean:57); remaining: componentCover_isKSheeted, componentInclusion_pi1_bijective",
+   :stop-count 0,
    :review-finding
    "design the supporting signatures and discharge the frozen axiom type",
    :evidence
@@ -87850,7 +87850,7 @@
      :proof-placeholder-count 1},
     :seat "topo-2"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/T99J01PathComponentCoverRestriction.lean"],
    :dag-node
@@ -87880,7 +87880,7 @@
      "python3 scripts/statement-registry.py check"]},
    :id :routes-2026-10-10-t99j01-path-component-cover-package-1,
    :kind :final-adapter,
-   :fail-count 1,
+   :fail-count 0,
    :depends-on [],
    :current-residual
    "Prove the one coherent restriction package for the chosen path component: covering charts, positive bounded sheet count, and the inclusion-induced pi1 equivalence.",
@@ -110875,7 +110875,156 @@
    :lemma-constructiontargets-manifoldfundamentalclass-correctedlocalgeneratorunit,
    :kind :lemma,
    :depends-on [],
-   :other-consumers [:t98A02]}],
+   :other-consumers [:t98A02]}
+  {:consumer :t99J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "threeCirclesFundamentalGroupEquiv",
+    :type
+    "noncomputable def threeCirclesFundamentalGroupEquiv : FundamentalGroup ThreeCircles threeBase ≃* FreeGroup (Fin 3)  -- codex-71 2026-10-11: 300-600 lines, the dominant foundation"},
+   :lemma
+   {:name "threeCirclesFundamentalGroupEquiv",
+    :reported-by [:owner],
+    :type
+    "noncomputable def threeCirclesFundamentalGroupEquiv : FundamentalGroup ThreeCircles threeBase ≃* FreeGroup (Fin 3)  -- codex-71 2026-10-11: 300-600 lines, the dominant foundation",
+    :area "fundamental-group-wedge-of-circles"},
+   :id :lemma-threecirclesfundamentalgroupequiv,
+   :kind :lemma,
+   :depends-on
+   [:lemma-genericpointwedgelegcoordinates-vankampen
+    :lemma-coprodfreegroupfintwofinone-equiv],
+   :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
+  {:consumer :t99J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "genericPointWedgeLegCoordinates_vanKampen",
+    :type
+    "standard-only point-wedge van Kampen leg-coordinate theorem: pi1 of a point wedge of two path-connected, locally contractible-at-basepoint spaces ≃* Monoid.Coprod of the pieces' pi1 (current coordinate stack stops at interface declarations and an unfinished counit normalization)"},
+   :lemma
+   {:name "genericPointWedgeLegCoordinates_vanKampen",
+    :reported-by [:owner],
+    :type
+    "standard-only point-wedge van Kampen leg-coordinate theorem: pi1 of a point wedge of two path-connected, locally contractible-at-basepoint spaces ≃* Monoid.Coprod of the pieces' pi1 (current coordinate stack stops at interface declarations and an unfinished counit normalization)",
+    :area "fundamental-group-wedge-of-circles"},
+   :id :lemma-genericpointwedgelegcoordinates-vankampen,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
+  {:consumer :t99J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "coprodFreeGroupFinTwoFinOne_equiv",
+    :type
+    "Monoid.Coprod (FreeGroup (Fin 2)) (FreeGroup (Fin 1)) ≃* FreeGroup (Fin 3)"},
+   :lemma
+   {:name "coprodFreeGroupFinTwoFinOne_equiv",
+    :reported-by [:owner],
+    :type
+    "Monoid.Coprod (FreeGroup (Fin 2)) (FreeGroup (Fin 1)) ≃* FreeGroup (Fin 3)",
+    :area "fundamental-group-wedge-of-circles"},
+   :id :lemma-coprodfreegroupfintwofinone-equiv,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t97A03]}
+  {:consumer :t99J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "threeCircles_locPathConnected",
+    :type
+    "noncomputable instance : PathConnectedSpace ThreeCircles; instance : LocPathConnectedSpace ThreeCircles  (30-100 lines)"},
+   :lemma
+   {:name "threeCircles_locPathConnected",
+    :reported-by [:owner],
+    :type
+    "noncomputable instance : PathConnectedSpace ThreeCircles; instance : LocPathConnectedSpace ThreeCircles  (30-100 lines)",
+    :area "fundamental-group-wedge-of-circles"},
+   :id :lemma-threecircles-locpathconnected,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t99J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "componentCover_isKSheeted",
+    :type
+    "theorem componentCover_isKSheeted (hp : IsKSheetedCover p n) (e : E) : IsKSheetedCover (fun z : {x : E // Joined e x} => p z.1) (Nat.card {x : E // p x = p e ∧ Joined e x})  (60-120 lines)"},
+   :lemma
+   {:name "componentCover_isKSheeted",
+    :reported-by [:owner],
+    :type
+    "theorem componentCover_isKSheeted (hp : IsKSheetedCover p n) (e : E) : IsKSheetedCover (fun z : {x : E // Joined e x} => p z.1) (Nat.card {x : E // p x = p e ∧ Joined e x})  (60-120 lines)",
+    :area "covering-subgroup-correspondence"},
+   :id :lemma-componentcover-isksheeted,
+   :kind :lemma,
+   :depends-on [:lemma-threecircles-locpathconnected],
+   :other-consumers []}
+  {:consumer :t99J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "componentInclusion_pi1_bijective",
+    :type
+    "Function.Bijective (FundamentalGroup.map (⟨Subtype.val, continuous_subtype_val⟩ : C({x : E // Joined e x}, E)) ⟨e, Joined.refl e⟩) and its MulEquiv  (100-200 lines)"},
+   :lemma
+   {:name "componentInclusion_pi1_bijective",
+    :reported-by [:owner],
+    :type
+    "Function.Bijective (FundamentalGroup.map (⟨Subtype.val, continuous_subtype_val⟩ : C({x : E // Joined e x}, E)) ⟨e, Joined.refl e⟩) and its MulEquiv  (100-200 lines)",
+    :area "covering-subgroup-correspondence"},
+   :id :lemma-componentinclusion-pi1-bijective,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t99J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "connectedCoverFundamentalGroupEquiv",
+    :type
+    "theorem connectedCoverFundamentalGroupEquiv {E} [TopologicalSpace E] [PathConnectedSpace E] (n : ℕ) (p : E → ThreeCircles) (hp : IsKSheetedCover p n) (hn : 0 < n) (e : E) : Nonempty (FundamentalGroup E e ≃* FreeGroup (Fin (2 * n + 1)))  (60-120 lines)"},
+   :lemma
+   {:name "connectedCoverFundamentalGroupEquiv",
+    :reported-by [:owner],
+    :type
+    "theorem connectedCoverFundamentalGroupEquiv {E} [TopologicalSpace E] [PathConnectedSpace E] (n : ℕ) (p : E → ThreeCircles) (hp : IsKSheetedCover p n) (hn : 0 < n) (e : E) : Nonempty (FundamentalGroup E e ≃* FreeGroup (Fin (2 * n + 1)))  (60-120 lines)",
+    :area "covering-subgroup-correspondence"},
+   :id :lemma-connectedcoverfundamentalgroupequiv,
+   :kind :lemma,
+   :depends-on [:lemma-threecirclesfundamentalgroupequiv],
+   :other-consumers []}
+  {:consumer :t99J01,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "T99J01ComponentSheetBounds.componentFiberCard_pos_le",
+    :type
+    "0 < Nat.card {x // p x = p e ∧ Joined e x} ≤ n  (codex-71 319ac5ced, ConstructionTargets/T99J01ComponentSheetBounds.lean)"},
+   :lemma
+   {:name "T99J01ComponentSheetBounds.componentFiberCard_pos_le",
+    :reported-by [:owner],
+    :type
+    "0 < Nat.card {x // p x = p e ∧ Joined e x} ≤ n  (codex-71 319ac5ced, ConstructionTargets/T99J01ComponentSheetBounds.lean)",
+    :area "covering-subgroup-correspondence",
+    :proved-in :owner,
+    :banked-by :owner,
+    :banked-commit "319ac5ced"},
+   :id :lemma-t99j01componentsheetbounds-componentfibercard-pos-le,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",

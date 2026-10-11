@@ -505,6 +505,25 @@
                 row)))
           items)))
 
+;; A row parked (:needs-owner) because it named a missing theorem is never
+;; looked at again once someone else proves that theorem. On 2026-10-11
+;; codex-71 found t99j01-path-component-cover-package-1 still parked on
+;; IsCoveringMap.restrictPathComponent, which was banked hours earlier
+;; (ConstructionTargets/RestrictPathComponent.lean). So: a :needs-owner row
+;; named in a banked lemma's :reported-by goes back to :open with its stop
+;; and fail counts reset.
+(defn reopen-for-banked [items]
+  (let [banked-reporters (set (mapcat #(get-in % [:lemma :reported-by])
+                                      (filter #(and (= :lemma (:kind %)) (= :banked (:state %))) items)))]
+    (mapv #(if (and (= :needs-owner (:state %)) (banked-reporters (:id %))
+                    (not= :strategy-checkpoint (:kind %)))
+             ;; :blocked, so unblock-ready opens it only once its own
+             ;; dependencies are satisfied
+             (assoc % :state :blocked :stop-count 0 :fail-count 0
+                    :owner-reopen "reopened: a lemma this row reported missing is now banked")
+             %)
+          items)))
+
 (defn bank-lemmas
   "On a PASS for row id: bank the lemma it implements and any lemma whose
    author reported it proved in this row."
@@ -512,13 +531,14 @@
   (let [row (some #(when (= id (:id %)) %) items)
         target (:implements-lemma row)
         commit (or (get-in row [:evidence :commit]) (last (get-in row [:evidence :commits])))]
-    (mapv #(if (and (= :lemma (:kind %)) (= :backlog (:state %))
-                    (or (= target (:id %)) (= id (get-in % [:lemma :proved-in]))))
-             (-> % (assoc :state :banked)
-                 (assoc-in [:lemma :banked-by] id)
-                 (cond-> commit (assoc-in [:lemma :banked-commit] commit)))
-             %)
-          items)))
+    (reopen-for-banked
+     (mapv #(if (and (= :lemma (:kind %)) (= :backlog (:state %))
+                     (or (= target (:id %)) (= id (get-in % [:lemma :proved-in]))))
+              (-> % (assoc :state :banked)
+                  (assoc-in [:lemma :banked-by] id)
+                  (cond-> commit (assoc-in [:lemma :banked-commit] commit)))
+              %)
+           items))))
 
 (defn priorities
   "Backlog lemmas ranked for election: ready ones (every dependency banked or
