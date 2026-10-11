@@ -104135,10 +104135,83 @@
   {:bounded-exception
    "This single-consumer bridge is the sole unproved implication between the frozen carrier interface and the compiled component-incidence obstruction.",
    :consumer :t93J03,
+   :stop-count 1,
    :implements-lemma
    :lemma-compatiblecarrierhomeomorphinducescycliccomponentequiv,
+   :evidence
+   {:placeholder-delta
+    {:source-before 0, :source-after 0, :fixture-sorry 0},
+    :residual
+    "Prove the two boundary-locus normal forms and the four-component cyclic-order theorem, then assemble the exact bridge and apply the banked finite obstruction.",
+    :outcome :stop,
+    :warnings [],
+    :missing-theorems
+    [{:name "kleinDiskSquareNontrivialClassLocus",
+      :type
+      "The non-singleton EqvGen locus for SurfaceRel false 2 is the disk boundary, and the non-singleton EqvGen locus for ClosedSquareRel is the square boundary; in each case the unique class of cardinality four is exactly the four vertices",
+      :status :not-started,
+      :consumers [:t93J03],
+      :depends-on
+      ["image_diskClass_eq_squareClass" "exists_distinct_related_iff"],
+      :area "polygon-quotient-identification"}
+     {:name "boundaryFourComponentCyclicPermutation",
+      :type
+      "A homeomorphism from the disk boundary to the square boundary carrying the four disk vertices onto the four square corners induces an equivalence of the four complementary connected components preserving or reversing cyclic adjacency",
+      :status :not-started,
+      :consumers [:t93J03],
+      :depends-on ["kleinDiskSquareNontrivialClassLocus"],
+      :area "polygon-quotient-identification"}
+     {:name "compatibleCarrierHomeomorphInducesCyclicComponentEquiv",
+      :type
+      "For h : Disk ≃ₜ ClosedSquare preserving and reflecting EqvGen, there exists e : Fin 4 ≃ Fin 4 preserving cyclic adjacency and conjugating diskPaired to squarePaired",
+      :status :partial,
+      :consumers [:t93J03],
+      :depends-on
+      ["boundaryFourComponentCyclicPermutation"
+       "no_cyclic_relation_compatible_component_equiv"],
+      :area "polygon-quotient-identification"}],
+    :statement-hashes
+    {:source-sha256
+     "0a0694ad0940e91997b09f0976cd8a590aa07193b38d4b6b1dce76b2005358d6",
+     :registry "131 registered statements match, 0 do not"},
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :reason
+    "Compiled relation-class transport now shows that h maps every full disk EqvGen class exactly to its square EqvGen class and preserves the non-singleton locus. The remaining bridge requires formal boundary-stratification and cyclic-order theorems not currently banked: identify the non-singleton loci with the two boundaries, identify the unique four-point class with vertices/corners, classify the four connected components after removing it, and prove a boundary homeomorphism preserves or reverses their cyclic adjacency.",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/klein-compatible-carrier-component-bridge-probe.lean",
+      :exit 0,
+      :finding
+      "9c7a282a44b4894670dcafbfde89dde71f914faa2a8e75a21671e46c13ef470c"}
+     {:cmd
+      "lake build ConstructionTargets.KleinCompatibleCarrierComponentBridge",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/klein-compatible-carrier-component-bridge-probe.lean",
+      :exit 0,
+      :finding
+      "Fixture compiles only with compatibleCarrierHomeomorphInducesCyclicComponentEquiv as a custom axiom."}
+     {:cmd
+      "rg -n \"\\b(sorry|admit|axiom)\\b\" ConstructionTargets/KleinCompatibleCarrierComponentBridge.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}],
+    :diagnostic-history [],
+    :commit "f9e03983a39d748797647e330e0ef7bdd68599d6",
+    :changed-paths
+    ["ConstructionTargets/KleinCompatibleCarrierComponentBridge.lean"],
+    :fixture
+    {:path "/tmp/klein-compatible-carrier-component-bridge-probe.lean",
+     :sha256
+     "9c7a282a44b4894670dcafbfde89dde71f914faa2a8e75a21671e46c13ef470c",
+     :status :self-axiomatized},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/KleinCompatibleCarrierComponentBridge.lean"],
    :dag-node
@@ -112103,13 +112176,16 @@
    {:name "compatibleCarrierHomeomorphInducesCyclicComponentEquiv",
     :reported-by
     [:routes-2026-10-11-klein-disk-closed-square-relation-compatible-carrier-101
-     :routes-2026-10-11-klein-aabb-square-polygon-presentation-equivalence-83],
+     :routes-2026-10-11-klein-aabb-square-polygon-presentation-equivalence-83
+     :routes-2026-10-11-compatible-carrier-component-bridge-103],
     :type
     "Any Disk-to-ClosedSquare homeomorphism preserving and reflecting the two EqvGen relations induces a cyclic-order preserving or reversing equivalence of the four boundary components that conjugates diskPaired to squarePaired",
     :area "polygon-quotient-identification"},
    :id :lemma-compatiblecarrierhomeomorphinducescycliccomponentequiv,
    :kind :lemma,
-   :depends-on [:lemma-no-cyclic-relation-compatible-component-equiv],
+   :depends-on
+   [:lemma-no-cyclic-relation-compatible-component-equiv
+    :lemma-boundaryfourcomponentcyclicpermutation],
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
@@ -112187,7 +112263,67 @@
    :lemma-twoopenfundamentalgroupoidpseudopushout-counit-overlap-base-identity,
    :kind :lemma,
    :depends-on [],
-   :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}],
+   :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "kleinDiskSquareNontrivialClassLocus",
+    :type
+    "The non-singleton EqvGen locus for SurfaceRel false 2 is the disk boundary, and the non-singleton EqvGen locus for ClosedSquareRel is the square boundary; in each case the unique class of cardinality four is exactly the four vertices"},
+   :lemma
+   {:name "kleinDiskSquareNontrivialClassLocus",
+    :reported-by
+    [:routes-2026-10-11-compatible-carrier-component-bridge-103],
+    :type
+    "The non-singleton EqvGen locus for SurfaceRel false 2 is the disk boundary, and the non-singleton EqvGen locus for ClosedSquareRel is the square boundary; in each case the unique class of cardinality four is exactly the four vertices",
+    :area "polygon-quotient-identification"},
+   :id :lemma-kleindisksquarenontrivialclasslocus,
+   :kind :lemma,
+   :depends-on
+   [:lemma-image-diskclass-eq-squareclass
+    :lemma-exists-distinct-related-iff],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "image_diskClass_eq_squareClass"},
+   :lemma {:name "image_diskClass_eq_squareClass", :reported-by []},
+   :id :lemma-image-diskclass-eq-squareclass,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "exists_distinct_related_iff"},
+   :lemma {:name "exists_distinct_related_iff", :reported-by []},
+   :id :lemma-exists-distinct-related-iff,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "boundaryFourComponentCyclicPermutation",
+    :type
+    "A homeomorphism from the disk boundary to the square boundary carrying the four disk vertices onto the four square corners induces an equivalence of the four complementary connected components preserving or reversing cyclic adjacency"},
+   :lemma
+   {:name "boundaryFourComponentCyclicPermutation",
+    :reported-by
+    [:routes-2026-10-11-compatible-carrier-component-bridge-103],
+    :type
+    "A homeomorphism from the disk boundary to the square boundary carrying the four disk vertices onto the four square corners induces an equivalence of the four complementary connected components preserving or reversing cyclic adjacency",
+    :area "polygon-quotient-identification"},
+   :id :lemma-boundaryfourcomponentcyclicpermutation,
+   :kind :lemma,
+   :depends-on [:lemma-kleindisksquarenontrivialclasslocus],
+   :other-consumers []}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",
