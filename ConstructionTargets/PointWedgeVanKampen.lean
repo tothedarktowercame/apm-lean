@@ -599,6 +599,24 @@ theorem genericPointWedgeSourceFunctor_eq_inverse_identity :
           (𝟭 (genericPointWedgeTarget x₀ y₀)) :=
   rfl
 
+/-- The exact B3 inverse object whose action on the two literal wedge legs is
+the remaining B6 computation. -/
+def genericPointWedgeInverseIdentityFunctor :
+    FundamentalGroupoid (Wedge x₀ y₀) ⥤ genericPointWedgeTarget x₀ y₀ :=
+  (genericPointWedgeSingleObjMappingEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN
+    (genericPointWedgeTarget x₀ y₀)).inverse.obj
+      (𝟭 (genericPointWedgeTarget x₀ y₀))
+
+theorem genericPointWedgeSourceFunctor_map_eq_inverseIdentity
+    {a b : FundamentalGroupoid (Wedge x₀ y₀)} (g : a ⟶ b) :
+    (genericPointWedgeSourceEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN).functor.map g =
+      (genericPointWedgeInverseIdentityFunctor
+        x₀ y₀ M N hM hN hy hx cM cN).map g := by
+  rw [genericPointWedgeSourceFunctor_eq_inverse_identity]
+  rfl
+
 /-- The counit available for the B6 coordinate calculation.  Its naturality,
 rather than an invalid identity normalization, controls the generator maps. -/
 def genericPointWedgeSourceCounit :
@@ -897,6 +915,33 @@ theorem genericPointWedgeLegCoordinates_iff_sourceFunctor :
     genericPointWedgeLegCoordinates_iff_mapped
       x₀ y₀ M N hM hN hy hx cM cN
 
+/-- B6 expressed solely as the action of the explicit B3 inverse object on
+the two literal topological legs. -/
+theorem genericPointWedgeLegCoordinates_iff_inverseIdentity :
+    ((∀ g : FundamentalGroup X x₀,
+      genericPointWedgeNormalizedFundamentalGroupEquiv
+          x₀ y₀ M N hM hN hy hx cM cN
+          (genericPointWedgeLeftLegMap x₀ y₀ g) =
+        Monoid.Coprod.inl g) ∧
+     (∀ g : FundamentalGroup Y y₀,
+      genericPointWedgeNormalizedFundamentalGroupEquiv
+          x₀ y₀ M N hM hN hy hx cM cN
+          (genericPointWedgeRightLegMap x₀ y₀ g) =
+        Monoid.Coprod.inr g)) ↔
+    ((∀ g : FundamentalGroup X x₀,
+      (genericPointWedgeInverseIdentityFunctor
+          x₀ y₀ M N hM hN hy hx cM cN).map
+          (genericPointWedgeLeftLegMap x₀ y₀ g) =
+        genericPointWedgeMappedLeft x₀ y₀ M N hM hN hy hx cM cN g) ∧
+     (∀ g : FundamentalGroup Y y₀,
+      (genericPointWedgeInverseIdentityFunctor
+          x₀ y₀ M N hM hN hy hx cM cN).map
+          (genericPointWedgeRightLegMap x₀ y₀ g) =
+        genericPointWedgeMappedRight x₀ y₀ M N hM hN hy hx cM cN g)) := by
+  simpa only [genericPointWedgeSourceFunctor_map_eq_inverseIdentity] using
+    genericPointWedgeLegCoordinates_iff_sourceFunctor
+      x₀ y₀ M N hM hN hy hx cM cN
+
 end GenericFundamentalGroupEquivalence
 
 /-- The three-circle model is locally path connected. -/
@@ -1182,6 +1227,8 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeSingleObjMappingEquivalence
 #print axioms genericPointWedgeSingleObjPostcomposeIso
 #print axioms genericPointWedgeSourceEquivalence
+#print axioms genericPointWedgeInverseIdentityFunctor
+#print axioms genericPointWedgeSourceFunctor_map_eq_inverseIdentity
 #print axioms genericPointWedgeFundamentalGroupEquiv
 #print axioms fundamentalGroupMulEquivOfSingleObjEquivalence_apply
 #print axioms genericPointWedgeFundamentalGroupEquiv_apply
@@ -1199,5 +1246,6 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeLegCoordinates_of_mapped
 #print axioms genericPointWedgeLegCoordinates_iff_mapped
 #print axioms genericPointWedgeLegCoordinates_iff_sourceFunctor
+#print axioms genericPointWedgeLegCoordinates_iff_inverseIdentity
 
 end ConstructionTargets.PointWedgeVanKampen

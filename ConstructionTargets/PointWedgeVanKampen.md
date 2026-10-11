@@ -137,3 +137,10 @@ the full B6 boundary: the literal normalized leg equations are equivalent to
 the two direct B4 functor-map equations.  The remaining proof must now expose
 the B3 comparison isomorphisms and evaluate the reconstructed functor on the
 literal left and right legs; no based-group extraction remains in the goal.
+
+`genericPointWedgeInverseIdentityFunctor` now names the actual inverse image
+of the identity under the full B3 composite.  The map rewrite and
+`genericPointWedgeLegCoordinates_iff_inverseIdentity` move the entire B6
+boundary onto that object.  The residual is therefore the evaluation of this
+explicit inverse composite on the two literal legs, through B3's successive
+span and representation equivalences.
