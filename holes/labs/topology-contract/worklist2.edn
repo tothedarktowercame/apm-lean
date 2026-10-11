@@ -69689,8 +69689,60 @@
   {:bounded-exception
    "single-consumer zero-height meridian sign-component certificate",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/t02a03_zero_height_meridian_real_sq_probe.lean",
+      :sha256
+      "5e1778bda97829b4ca9fa88e8e20cc656c0e94dab320a32019f256623ef69c9c"},
+     :commands
+     [{:cmd
+       "test -L .lake/packages && test \"$(readlink -f .lake/packages)\" = /home/joe/code/apm-lean/.lake/packages",
+       :exit 0}
+      {:cmd
+       "lake env lean /tmp/t02a03_zero_height_meridian_real_sq_probe.lean",
+       :exit 0,
+       :output
+       "zeroHeight_rightTubeMeridianCoordinate_re_sq compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "sha256sum /tmp/t02a03_zero_height_meridian_real_sq_probe.lean",
+       :exit 0,
+       :output
+       "5e1778bda97829b4ca9fa88e8e20cc656c0e94dab320a32019f256623ef69c9c  /tmp/t02a03_zero_height_meridian_real_sq_probe.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_zero_height_meridian_real_sq_probe.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}
+      {:cmd
+       "rg -n 'zeroHeight_rightTubeMeridianCoordinate_re_sq' /tmp/t02a03_zero_height_meridian_real_sq_probe.lean",
+       :exit 0,
+       :output
+       "5:theorem zeroHeight_rightTubeMeridianCoordinate_re_sq\n17:#print axioms zeroHeight_rightTubeMeridianCoordinate_re_sq"}],
+     :warnings [],
+     :finding
+     "For a zero-height input, rightTubeMeridianCoordinate_im_positiveFactor_height makes the meridian imaginary coordinate zero; Circle.normSq_coe then reduces exactly to the square-one real-coordinate identity. The proof does not select a sign branch.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+      :declaration
+      "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeight_rightTubeMeridianCoordinate_re_sq",
+      :type
+      "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> (rightTubeMeridianCoordinate p : Complex).re ^ 2 = 1",
+      :proof
+      "Obtain the positive height multiplier, rewrite the meridian imaginary coordinate to zero using the input-height hypothesis, and simplify Circle.normSq_coe with Complex.normSq_apply and pow_two.",
+      :axioms [propext Classical.choice Quot.sound]},
+     :residual
+     "Implement and bank the square-one certificate; then analyze the two meridian-real sign components to prove zero-height radial collision avoidance."}},
+   :phase :implementation,
+   :type
+   "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> (rightTubeMeridianCoordinate p : Complex).re ^ 2 = 1",
    :state :open,
+   :proof
+   "Obtain the positive height multiplier, rewrite the meridian imaginary coordinate to zero using the input-height hypothesis, and simplify Circle.normSq_coe with Complex.normSq_apply and pow_two.",
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/zero-height-meridian-real-sq",
    :acceptance
@@ -69703,9 +69755,12 @@
     :placeholder "the sole sorry in apm_t02a03",
     :route-step
     "identify the two zero-height meridian sign components needed for radial collision control"},
+   :axioms [propext Classical.choice Quot.sound],
    :id :routes-2026-10-11-t02a03-zero-height-meridian-real-sq-topo2-r1,
    :kind :reusable-theorem,
    :area "explicit-r3-tube-deformation-retraction",
+   :declaration
+   "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeight_rightTubeMeridianCoordinate_re_sq",
    :depends-on
    [:routes-2026-10-11-t02a03-nonzero-height-avoids-left-core-radial-ambient-topo2-r1],
    :current-residual
