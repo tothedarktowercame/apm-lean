@@ -71410,106 +71410,112 @@
    "Construct the continuous coupled angular coordinate itself, with value 1 at time zero and rightTubeCoreAngularCoordinate p at time one, in a form compatible with the nonzero-height radial stage; then assemble the full deformation.",
    :other-consumers []}
   {:bounded-exception
+   "single-consumer continuous raw complex interpolation underlying the coupled angular path",
+   :consumer :t02A03,
+   :phase :probe,
+   :state :open,
+   :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t02A03/coupled-angular-complex-interpolation",
+   :acceptance
+   {:probe
+    "Compile continuousCoupledAngularComplexInterpolation_exists. Construct the affine complex interpolation from 1 to rightTubeCorePlanarComplex p.1, prove joint continuity and both endpoint equations. Do not claim it is nonzero, normalize it to Circle, or assemble the ambient deformation.",
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.continuousCoupledAngularComplexInterpolation_exists",
+    :type
+    "∃ Z : C(unitInterval × RightTubeMinusLeftCore, ℂ), (∀ p, Z (0, p) = 1) ∧ (∀ p, Z (1, p) = rightTubeCorePlanarComplex p.1)",
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "supply the continuous raw complex endpoint interpolation that the coupled angular detour must modify away from zero"},
+   :id
+   :routes-2026-10-11-t02a03-coupled-angular-complex-interpolation-topo2-r1,
+   :kind :reusable-theorem,
+   :area "explicit-r3-tube-deformation-retraction",
+   :depends-on
+   [:routes-2026-10-11-t02a03-zero-height-ambient-detour-from-angular-topo2-r1],
+   :current-residual
+   "Modify the raw interpolation continuously near its possible zero locus, prove the modified complex path never vanishes, normalize it to Circle, and feed that coupled angular map to the banked ambient adapter.",
+   :other-consumers []}
+  {:bounded-exception
    "single-consumer explicit ambient deformation with frozen tube and deletion invariants",
    :consumer :t02A03,
    :evidence
    {:probe
     {:residual
-     "Bank the ambient reconstruction adapter; the remaining geometric construction is the continuous coupled angular coordinate, followed by assembly with the nonzero-height stage.",
+     "Bank the raw complex interpolation; then construct and certify a nonvanishing modification whose normalization is the required coupled angular map.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
      [{:name
-       "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightAmbientDetour_of_coupledAngular",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.continuousCoupledAngularComplexInterpolation_exists",
        :type
-       "forall (A : C(unitInterval × RightTubeMinusLeftCore, Circle)), (forall p, A (0,p)=1) -> (forall p, A (1,p)=rightTubeCoreAngularCoordinate p) -> exists H : C(unitInterval × RightTubeMinusLeftCore, apm_t02a03_E3), (forall p, H (0,p)=apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)) ∧ (forall p, H (1,p)=p.1) ∧ (forall tp, tp.2.1 2=0 -> H tp ∈ apm_t02a03_rightTube) ∧ (forall tp, tp.2.1 2=0 -> H tp ∉ Set.range apm_t02a03_leftCore)",
+       "∃ Z : C(unitInterval × RightTubeMinusLeftCore, ℂ), (∀ p, Z (0, p) = 1) ∧ (∀ p, Z (1, p) = rightTubeCorePlanarComplex p.1)",
        :status :proved,
        :consumers [:t02A03],
        :depends-on
-       ["ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCoupledDetour_avoidsLeftCore"
-        "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCoreNormalDetour_radius_le"
-        "ConstructionTargets.T02A03GeometricTubeDeformation.continuous_zeroHeightCoreNormalDetour"],
+       ["ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreTubularCoordinates_continuous"],
        :area "explicit-r3-tube-deformation-retraction"}],
      :prerequisite
      {:bounded-exception
-      "single-consumer ambient reconstruction adapter from a coupled angular path",
+      "single-consumer continuous raw complex interpolation underlying the coupled angular path",
       :consumer :t02A03,
       :phase :probe,
       :state :open,
       :scope
       ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t02A03/zero-height-ambient-detour-from-angular",
+      "TOPOLOGY-ROUTES.md/t02A03/coupled-angular-complex-interpolation",
       :acceptance
       {:probe
-       "Compile zeroHeightAmbientDetour_of_coupledAngular. Given a continuous Circle-valued angular map with value 1 at time zero and the recovered input angle at time one, reconstruct it with zeroHeightCoreNormalDetour and prove joint continuity, both ambient endpoint equations, and pointwise right-tube membership and left-core avoidance for zero-height inputs. Do not construct the angular map or define the full deformation across nonzero heights.",
+       "Compile continuousCoupledAngularComplexInterpolation_exists. Construct the affine complex interpolation from 1 to rightTubeCorePlanarComplex p.1, prove joint continuity and both endpoint equations. Do not claim it is nonzero, normalize it to Circle, or assemble the ambient deformation.",
        :declaration
-       "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightAmbientDetour_of_coupledAngular",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.continuousCoupledAngularComplexInterpolation_exists",
        :type
-       "forall (A : C(unitInterval × RightTubeMinusLeftCore, Circle)), (forall p, A (0,p)=1) -> (forall p, A (1,p)=rightTubeCoreAngularCoordinate p) -> exists H : C(unitInterval × RightTubeMinusLeftCore, apm_t02a03_E3), (forall p, H (0,p)=apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)) ∧ (forall p, H (1,p)=p.1) ∧ (forall tp, tp.2.1 2=0 -> H tp ∈ apm_t02a03_rightTube) ∧ (forall tp, tp.2.1 2=0 -> H tp ∉ Set.range apm_t02a03_leftCore)",
+       "∃ Z : C(unitInterval × RightTubeMinusLeftCore, ℂ), (∀ p, Z (0, p) = 1) ∧ (∀ p, Z (1, p) = rightTubeCorePlanarComplex p.1)",
        :placeholder "the sole sorry in apm_t02a03",
        :route-step
-       "package continuity, endpoints, tube membership, and deletion avoidance once a coupled angular path is supplied"},
+       "supply the continuous raw complex endpoint interpolation that the coupled angular detour must modify away from zero"},
       :id
-      :routes-2026-10-11-t02a03-zero-height-ambient-detour-from-angular-topo2-r1,
+      :routes-2026-10-11-t02a03-coupled-angular-complex-interpolation-topo2-r1,
       :kind :reusable-theorem,
       :area "explicit-r3-tube-deformation-retraction",
       :depends-on
-      [:routes-2026-10-11-t02a03-zero-height-coupled-detour-avoidance-topo2-r1],
+      [:routes-2026-10-11-t02a03-zero-height-ambient-detour-from-angular-topo2-r1],
       :current-residual
-      "Construct the continuous coupled angular coordinate itself, with value 1 at time zero and rightTubeCoreAngularCoordinate p at time one, in a form compatible with the nonzero-height radial stage; then assemble the full deformation.",
+      "Modify the raw interpolation continuously near its possible zero locus, prove the modified complex path never vanishes, normalize it to Circle, and feed that coupled angular map to the banked ambient adapter.",
       :other-consumers []},
      :commands
      [{:cmd
-       "lake build ConstructionTargets.T02A03GeometricTubeDeformation",
-       :exit 0,
-       :output "Build completed successfully (8249 jobs)."}
-      {:cmd
-       "lake env lean /tmp/t02a03_zero_height_ambient_from_angular_probe.lean",
+       "lake env lean /tmp/t02a03_coupled_angular_complex_interpolation_probe.lean",
        :exit 0,
        :output
-       "zeroHeightAmbientDetour_of_coupledAngular compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "continuousCoupledAngularComplexInterpolation_exists compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/t02a03_zero_height_ambient_from_angular_probe.lean",
+       "sha256sum /tmp/t02a03_coupled_angular_complex_interpolation_probe.lean",
        :exit 0,
        :output
-       "97f31e12c8e778bd2327e4bbd304dab74fa5ea9184f264d81d2d6476c12c2325  /tmp/t02a03_zero_height_ambient_from_angular_probe.lean"}
+       "a1e63cbbbf29714e2361c7679e049c0e8e55b76832f43eed47773d8fdd1402e6  /tmp/t02a03_coupled_angular_complex_interpolation_probe.lean"}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_zero_height_ambient_from_angular_probe.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_coupled_angular_complex_interpolation_probe.lean || true)\"",
        :exit 0}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}
       {:cmd
-       "rg -n 'zeroHeightAmbientDetour_of_coupledAngular' /tmp/t02a03_zero_height_ambient_from_angular_probe.lean",
+       "rg -n 'continuousCoupledAngularComplexInterpolation_exists' /tmp/t02a03_coupled_angular_complex_interpolation_probe.lean",
        :exit 0,
        :output
-       "7:theorem zeroHeightAmbientDetour_of_coupledAngular\n52:#print axioms zeroHeightAmbientDetour_of_coupledAngular"}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/t02a03_zero_height_ambient_from_angular_probe.lean",
-       :exit 1,
-       :finding
-       "The initial fixture omitted the tube-cover namespace opening and ran before the newly banked coupled-avoidance theorem was rebuilt into the module olean. Opening the frozen namespace and rebuilding resolved both names."}
-      {:cmd
-       "lake env lean /tmp/t02a03_zero_height_ambient_from_angular_probe.lean",
-       :exit 1,
-       :finding
-       "The continuity combinator is Continuous.prodMk, not prod_mk. Correcting the API spelling exposed the intended product-valued continuous map."}
-      {:cmd
-       "lake env lean /tmp/t02a03_zero_height_ambient_from_angular_probe.lean",
-       :exit 1,
-       :finding
-       "Rewriting only the first component did not rewrite the dependent pair argument to A. Establishing the full product equalities tp=(0,tp.2) and tp=(1,tp.2) made the endpoint hypotheses apply exactly."}],
+       "5:theorem continuousCoupledAngularComplexInterpolation_exists :\n20:#print axioms continuousCoupledAngularComplexInterpolation_exists"}],
      :fixture
-     {:path "/tmp/t02a03_zero_height_ambient_from_angular_probe.lean",
+     {:path
+      "/tmp/t02a03_coupled_angular_complex_interpolation_probe.lean",
       :sha256
-      "97f31e12c8e778bd2327e4bbd304dab74fa5ea9184f264d81d2d6476c12c2325"},
+      "a1e63cbbbf29714e2361c7679e049c0e8e55b76832f43eed47773d8fdd1402e6"},
      :finding
-     "Any continuous coupled angular map with the two endpoint equations now yields a continuous ambient core-polar detour. Its endpoints are the meridian point and the input point; on zero-height inputs the banked normal radius bound gives right-tube membership and angle-parametric deletion avoidance gives left-core avoidance.",
+     "The ambient reconstruction adapter is banked, but it requires a Circle-valued homotopy from the constant angle 1 to rightTubeCoreAngularCoordinate. The compiled prerequisite supplies the joint continuous affine complex interpolation with exactly those unnormalized endpoints. It deliberately does not assert nonvanishing: the remaining geometric step is to detour its possible zero locus continuously, then normalize.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
@@ -71582,7 +71588,8 @@
     :routes-2026-10-11-t02a03-zero-height-core-normal-detour-interior-im-topo2-r1
     :routes-2026-10-11-t02a03-zero-height-endpoint-deletion-certificates-topo2-r1
     :routes-2026-10-11-t02a03-zero-height-coupled-detour-avoidance-topo2-r1
-    :routes-2026-10-11-t02a03-zero-height-ambient-detour-from-angular-topo2-r1],
+    :routes-2026-10-11-t02a03-zero-height-ambient-detour-from-angular-topo2-r1
+    :routes-2026-10-11-t02a03-coupled-angular-complex-interpolation-topo2-r1],
    :current-residual
    "Lift H to RightTubeMinusLeftCore, package rightTubeMeridianRetractionHomotopy, then use the coordinate equation for the Circle-side constant homotopy.",
    :other-consumers []}
@@ -76415,4 +76422,29 @@
    [:lemma-constructiontargets-t02a03geometrictubedeformation-zeroheightcoupleddetour-avoid
     :lemma-constructiontargets-t02a03geometrictubedeformation-zeroheightcorenormaldetour-ra
     :lemma-constructiontargets-t02a03geometrictubedeformation-continuous-zeroheightcorenorm],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T02A03GeometricTubeDeformation.continuousCoupledAngularComplexInterpolation_exists",
+    :type
+    "∃ Z : C(unitInterval × RightTubeMinusLeftCore, ℂ), (∀ p, Z (0, p) = 1) ∧ (∀ p, Z (1, p) = rightTubeCorePlanarComplex p.1)"},
+   :lemma
+   {:name
+    "ConstructionTargets.T02A03GeometricTubeDeformation.continuousCoupledAngularComplexInterpolation_exists",
+    :reported-by
+    [:routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1],
+    :type
+    "∃ Z : C(unitInterval × RightTubeMinusLeftCore, ℂ), (∀ p, Z (0, p) = 1) ∧ (∀ p, Z (1, p) = rightTubeCorePlanarComplex p.1)",
+    :area "explicit-r3-tube-deformation-retraction",
+    :proved-in
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+   :id
+   :lemma-constructiontargets-t02a03geometrictubedeformation-continuouscoupledangularcompl,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t02a03geometrictubedeformation-righttubecoretubularcoordinat],
    :other-consumers []}]}
