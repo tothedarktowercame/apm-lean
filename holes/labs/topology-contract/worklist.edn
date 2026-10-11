@@ -102783,6 +102783,21 @@
      {:cmd "git diff --check", :exit 0}
      {:cmd "git status --short", :exit 0, :finding "clean"}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791683133133-3693-df19620a",
+     :commands
+     ["git show and git diff-tree on recorded commit a7df601c50e742a452ea0d59b5157477cd1fe147"
+      "git diff --exit-code recorded commit against source checkout"
+      "SHA-256 and comment-stripped placeholder and axiom recomputation for source and fixture"
+      "lake build ConstructionTargets.PolygonBoundaryThreeLoopDecoderLeftInverse"
+      "lake env lean /tmp/polygon-boundary-three-loop-decoder-left-inverse.lean"
+      "lake env lean /dev/stdin with fresh axiom checks for six loop formulas and two left inverses"
+      "python3 scripts/statement-registry.py check"
+      "git diff-tree --check recorded parent and commit"],
+     :finding
+     "Recorded one-file commit is authored by topo-2; source equals the recorded blob and is byte-identical to the frozen fixture; both decoders descend through the correct generated relation, the N3 formulas use representative edges 0/2/4, the torus-crosscap formulas use 0/1/4, and the global statements have the required Function.LeftInverse decoder threeLoops orientation after exhausting all three half-open loop forms; every frozen result compiles with only standard axioms, placeholder and axiom counts are zero, the registry reports 131 matched and 0 mismatched, and injectivity and homeomorphism remain outside scope."},
     :commit "a7df601c50e742a452ea0d59b5157477cd1fe147",
     :changed-paths
     ["ConstructionTargets/PolygonBoundaryThreeLoopDecoderLeftInverse.lean"],
@@ -102806,7 +102821,7 @@
       "n3QuotientDecode_leftInverse"
       "torusCrosscapQuotientDecode_leftInverse"]}},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/PolygonBoundaryThreeLoopDecoderLeftInverse.lean"],
    :dag-node
@@ -102959,7 +102974,7 @@
       "The two relation-invariant Circle decoders descend to the specialized relation quotients, satisfy six canonical loop formulas, and are global left inverses of the two three-loop maps."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -107474,7 +107489,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -107489,7 +107504,10 @@
     :type "Function.LeftInverse n3QuotientDecode n3ThreeLoops.",
     :area "polygon-surface-open-cover",
     :proved-in
-    :routes-2026-10-11-polygon-boundary-three-loop-decoder-left-inverse-77},
+    :routes-2026-10-11-polygon-boundary-three-loop-decoder-left-inverse-77,
+    :banked-by
+    :routes-2026-10-11-polygon-boundary-three-loop-decoder-left-inverse-77,
+    :banked-commit "a7df601c50e742a452ea0d59b5157477cd1fe147"},
    :id
    :lemma-polygonboundarythreeloopdecoderleftinverse-n3quotientdecode-leftinverse,
    :kind :lemma,
@@ -107499,7 +107517,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -107516,7 +107534,10 @@
     "Function.LeftInverse torusCrosscapQuotientDecode torusCrosscapThreeLoops.",
     :area "polygon-surface-open-cover",
     :proved-in
-    :routes-2026-10-11-polygon-boundary-three-loop-decoder-left-inverse-77},
+    :routes-2026-10-11-polygon-boundary-three-loop-decoder-left-inverse-77,
+    :banked-by
+    :routes-2026-10-11-polygon-boundary-three-loop-decoder-left-inverse-77,
+    :banked-commit "a7df601c50e742a452ea0d59b5157477cd1fe147"},
    :id
    :lemma-polygonboundarythreeloopdecoderleftinverse-toruscrosscapquotientdecode-leftinver,
    :kind :lemma,
