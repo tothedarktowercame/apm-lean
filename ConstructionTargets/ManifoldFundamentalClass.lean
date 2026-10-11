@@ -1093,6 +1093,50 @@ theorem correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_endpoint_factors
   rw [ambientLocalNormalization_hom]
   simp only [Functor.mapIso_hom]
 
+/-- The concrete forward composite underlying the coefficient-chart local
+normalization. -/
+noncomputable def coefficientLocalForwardComposite
+    (k : ℕ) {M : Type} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (CoefficientChartLocal.E k) M] (x : M) :=
+  (CoefficientNeighborhoodLocal.inclusionIso ℤ
+      (chartAt (CoefficientChartLocal.E k) x).source x
+      (chartAt (CoefficientChartLocal.E k) x).open_source
+      (CoefficientChartPair.source_member (k + 2) x) (k + 2)).inv ≫
+  (CoefficientChartLocal.sourceTransport ℤ k x (k + 2)).inv ≫
+  HomologicalComplex.homologyMap
+    (CoefficientChartPair.deletedMap ℤ
+      (CoefficientChartLocal.pointedChart k x)
+      (CoefficientChartPair.sourcePoint (k + 2) x)) (k + 2) ≫
+  (CoefficientChartLocal.targetTransport ℤ k x (k + 2)).hom ≫
+  HomologicalComplex.homologyMap
+    (CoefficientNeighborhoodLocal.inclusionMap ℤ
+      (CoefficientChartLocal.pointedTarget k x) 0) (k + 2) ≫
+  (CoefficientModelLocal.localIso ℤ k).hom
+
+/-- The coefficient-chart local isomorphism has the concrete forward
+factorization used by the normalization comparison. -/
+theorem coefficientLocalIso_hom_eq_forwardComposite
+    (k : ℕ) {M : Type} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (CoefficientChartLocal.E k) M] (x : M) :
+    (CoefficientChartLocal.localIso ℤ k x).hom =
+      coefficientLocalForwardComposite k x := by
+  exact CoefficientChartLocal.forward_composite ℤ k x
+
+/-- The negative-automorphism equation with its coefficient endpoint replaced
+by the concrete forward factorization. -/
+theorem correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_coefficient_factors
+    (k : ℕ) {M : Type} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M) :
+    (correctedLocalNormalizationAutomorphism k x).hom = -𝟙 _ ↔
+      (integralRelativeHomologyComparisonWithTransport
+          (deletedPoint x) (k + 2)).hom ≫
+          (ambientChartHomologyIso k x).inv ≫
+          (HigherModelLocalHomology.localIsoInt k).hom =
+        forgetIntModules.map (coefficientLocalForwardComposite k x) ≫ (-𝟙 _) := by
+  rw [correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_endpoint_factors]
+  rw [coefficientLocalIso_hom_eq_forwardComposite]
+  rfl
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -1162,3 +1206,6 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization_hom
 #print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_after_coefficient
 #print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_endpoint_factors
+#print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientLocalForwardComposite
+#print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientLocalIso_hom_eq_forwardComposite
+#print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_coefficient_factors
