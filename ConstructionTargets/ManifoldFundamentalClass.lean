@@ -1217,6 +1217,54 @@ noncomputable def forgetSnakeCokernelτ₃Limit
       rcases j with (_ | _) <;> rfl)
   exact (IsColimit.equivIsoColimit e).toFun ht
 
+abbrev ForgottenSnakeCokernelLimit
+    (S : ShortComplex.SnakeInput (ModuleCat ℤ)) :=
+  IsColimit (CokernelCofork.ofπ
+    (forgetIntModules.mapShortComplex.map S.v₂₃)
+    (forgetIntModulesSnakeInput_zero_squares S).2)
+
+/-- The cokernel cofork of the forgotten snake input is a colimit. -/
+noncomputable def forgetSnakeCokernelLimit
+    (S : ShortComplex.SnakeInput (ModuleCat ℤ)) :
+    ForgottenSnakeCokernelLimit S := by
+  let c := CokernelCofork.ofπ
+    (forgetIntModules.mapShortComplex.map S.v₂₃)
+    (forgetIntModulesSnakeInput_zero_squares S).2
+  apply ShortComplex.isColimitOfIsColimitπ c
+  · let k := c.map ShortComplex.π₁
+    let ht : IsColimit ((Cocone.precompose
+        (scPairZeroπ₁Iso (forgetIntModules.mapShortComplex.map S.v₁₂)).hom).obj k) :=
+      (IsColimit.precomposeHomEquiv
+        (scPairZeroπ₁Iso (forgetIntModules.mapShortComplex.map S.v₁₂)) k).symm
+          (forgetSnakeCokernelτ₁Limit S)
+    let e : (Cocone.precompose
+        (scPairZeroπ₁Iso (forgetIntModules.mapShortComplex.map S.v₁₂)).hom).obj k ≅
+        ShortComplex.π₁.mapCocone c :=
+      Cocone.ext (Iso.refl _) (by intro j; rcases j with (_ | _) <;> rfl)
+    exact (IsColimit.equivIsoColimit e).toFun ht
+  · let k := c.map ShortComplex.π₂
+    let ht : IsColimit ((Cocone.precompose
+        (scPairZeroπ₂Iso (forgetIntModules.mapShortComplex.map S.v₁₂)).hom).obj k) :=
+      (IsColimit.precomposeHomEquiv
+        (scPairZeroπ₂Iso (forgetIntModules.mapShortComplex.map S.v₁₂)) k).symm
+          (forgetSnakeCokernelτ₂Limit S)
+    let e : (Cocone.precompose
+        (scPairZeroπ₂Iso (forgetIntModules.mapShortComplex.map S.v₁₂)).hom).obj k ≅
+        ShortComplex.π₂.mapCocone c :=
+      Cocone.ext (Iso.refl _) (by intro j; rcases j with (_ | _) <;> rfl)
+    exact (IsColimit.equivIsoColimit e).toFun ht
+  · let k := c.map ShortComplex.π₃
+    let ht : IsColimit ((Cocone.precompose
+        (scPairZeroπ₃Iso (forgetIntModules.mapShortComplex.map S.v₁₂)).hom).obj k) :=
+      (IsColimit.precomposeHomEquiv
+        (scPairZeroπ₃Iso (forgetIntModules.mapShortComplex.map S.v₁₂)) k).symm
+          (forgetSnakeCokernelτ₃Limit S)
+    let e : (Cocone.precompose
+        (scPairZeroπ₃Iso (forgetIntModules.mapShortComplex.map S.v₁₂)).hom).obj k ≅
+        ShortComplex.π₃.mapCocone c :=
+      Cocone.ext (Iso.refl _) (by intro j; rcases j with (_ | _) <;> rfl)
+    exact (IsColimit.equivIsoColimit e).toFun ht
+
 /-- The corrected relative-homology comparison intertwines the coefficient
 absolute-to-relative map with the production relative projection. -/
 theorem integralRelativeHomologyComparisonWithTransport_projection
@@ -2197,6 +2245,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetSnakeCokernelτ₁Limit
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetSnakeCokernelτ₂Limit
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetSnakeCokernelτ₃Limit
+#print axioms ConstructionTargets.ManifoldFundamentalClass.forgetSnakeCokernelLimit
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
