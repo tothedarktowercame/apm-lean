@@ -104520,18 +104520,51 @@
    :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
   {:consumer :t99J01,
    :implements-lemma
+   :lemma-twoopenfreeproductmapping-compositecounit-component-identity,
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/TwoOpenFreeProductMappingCompositeCounitIdentity.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/shared/composite-counit-component-identity",
+   :acceptance
+   {:implementation
+    "Unfold the composite TwoOpenFreeProductMapping.mapping equivalence and prove that, at SingleObj.star of FreeProductTarget, the composite of the transported counit components from the two-open pseudopushout equivalence, pseudo-span equivalence, point-span comparison, free-product point-span equivalence, and representation/single-object equivalence is the identity morphism. Export the resulting inverseIdentityCounit component equation. Do not specialize to point wedges or finite circle wedges and do not close a consumer.",
+    :placeholder
+    "the remaining fundamental-group coordinate steps for t01A03, t92J06, t97A01, t97A03, and t99J01",
+    :route-step
+    "normalize the five-factor composite counit at the unique free-product object",
+    :fixture "/tmp/composite-counit-component-identity.lean",
+    :fixture-sha256
+    "acdc06369d70b171b3c2c1f70a56ad199e7b7f72be274a4ce3930f77b5d84c0f",
+    :gates
+    ["lake build ConstructionTargets.TwoOpenFreeProductMappingCompositeCounitIdentity"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-11-composite-counit-component-identity-91,
+   :kind :reusable-theorem,
+   :area "fundamental-group-wedge-of-circles",
+   :depends-on
+   [:routes-2026-10-11-inverse-identity-counit-component-identity-90],
+   :current-residual
+   "Apply the composite counit identity to inverseIdentityCounit_naturality, derive literal inl/inr leg equations, fill TwoOpenGroupEquivalenceCoordinates, and specialize to the generic point wedge.",
+   :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
+  {:consumer :t99J01,
+   :implements-lemma
    :lemma-genericpointwedgefundamentalgroupcoordinates-genericpointwedgegroupequivalence-c,
    :evidence
    {:probe
     {:residual
-     "The inverse-identity map is only conjugate to the target morphism; normalize the counit component before literal coproduct coordinates can be derived.",
+     "The reviewed dependency proves only the conditional removal of conjugation; the five constituent counit components still require an identity normalization.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
      [{:name
-       "TwoOpenFreeProductMapping.inverseIdentityCounit_component_identity",
+       "TwoOpenFreeProductMapping.compositeCounit_component_identity",
        :type
-       "For the mapping equivalence at FreeProductTarget, the hom component at SingleObj.star of the counit isomorphism from mapping.functor.obj (mapping.inverse.obj (Functor.id FreeProductTarget)) to Functor.id FreeProductTarget is the identity morphism.",
+       "At SingleObj.star of the free-product target, the composite of the transported counit components of the two-open pseudopushout equivalence, pseudo-span equivalence, point-span comparison, free-product point-span equivalence, and representation/single-object equivalence is the identity morphism.",
        :status :not-started,
        :consumers [:t99J01 :t01A03 :t92J06 :t97A01 :t97A03],
        :depends-on [],
@@ -104539,56 +104572,54 @@
      :prerequisite
      {:consumer :t99J01,
       :implements-lemma
-      :lemma-twoopenfreeproductmapping-inverseidentitycounit-component-identity,
+      :lemma-twoopenfreeproductmapping-compositecounit-component-identity,
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/TwoOpenFreeProductMappingCounitComponentIdentity.lean"],
+      ["ConstructionTargets/TwoOpenFreeProductMappingCompositeCounitIdentity.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/shared/inverse-identity-counit-component-identity",
+      "TOPOLOGY-ROUTES.md/shared/composite-counit-component-identity",
       :acceptance
       {:implementation
-       "Prove that the hom component at SingleObj.star of inverseIdentityCounit is the identity morphism; equivalently, prove a normalization strong enough to make its conjugation action trivial on both coproduct injections. Then combine this with inverseIdentityCounit_naturality to obtain literal left and right leg equations. Do not specialize to point wedges or finite circle wedges and do not close a consumer.",
+       "Unfold the composite TwoOpenFreeProductMapping.mapping equivalence and prove that, at SingleObj.star of FreeProductTarget, the composite of the transported counit components from the two-open pseudopushout equivalence, pseudo-span equivalence, point-span comparison, free-product point-span equivalence, and representation/single-object equivalence is the identity morphism. Export the resulting inverseIdentityCounit component equation. Do not specialize to point wedges or finite circle wedges and do not close a consumer.",
        :placeholder
        "the remaining fundamental-group coordinate steps for t01A03, t92J06, t97A01, t97A03, and t99J01",
        :route-step
-       "remove the counit conjugation from both inverse-identity leg computations",
-       :fixture "/tmp/inverse-identity-counit-component-identity.lean",
+       "normalize the five-factor composite counit at the unique free-product object",
+       :fixture "/tmp/composite-counit-component-identity.lean",
        :fixture-sha256
-       "c5badebac45156c1b08d838291ab02e5ca04b4385d6f143451bb8b75f64c38a5",
+       "acdc06369d70b171b3c2c1f70a56ad199e7b7f72be274a4ce3930f77b5d84c0f",
        :gates
-       ["lake build ConstructionTargets.TwoOpenFreeProductMappingCounitComponentIdentity"
+       ["lake build ConstructionTargets.TwoOpenFreeProductMappingCompositeCounitIdentity"
         "fixture compiles"
         "zero source and fixture sorry"
         "standard-only axioms"
         "registry check"]},
-      :id
-      :routes-2026-10-11-inverse-identity-counit-component-identity-90,
+      :id :routes-2026-10-11-composite-counit-component-identity-91,
       :kind :reusable-theorem,
       :area "fundamental-group-wedge-of-circles",
       :depends-on
-      [:routes-2026-10-11-mapping-inverse-identity-leg-coordinates-89],
+      [:routes-2026-10-11-inverse-identity-counit-component-identity-90],
       :current-residual
-      "Use counit naturality and the identity component to prove the literal inl/inr leg equations, fill TwoOpenGroupEquivalenceCoordinates, and specialize to the generic point wedge.",
+      "Apply the composite counit identity to inverseIdentityCounit_naturality, derive literal inl/inr leg equations, fill TwoOpenGroupEquivalenceCoordinates, and specialize to the generic point wedge.",
       :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]},
      :axioms
      ["propext"
       "Classical.choice"
       "Quot.sound"
-      "TwoOpenFreeProductMappingCounitComponentIdentityProbe.inverseIdentityCounit_component_identity"],
+      "TwoOpenFreeProductMappingCompositeCounitIdentityProbe.compositeCounit_component_identity"],
      :commands
      [{:cmd
-       "lake env lean /tmp/inverse-identity-counit-component-identity.lean",
+       "lake env lean /tmp/composite-counit-component-identity.lean",
        :exit 0,
        :finding
-       "The exact counit-component normalization type compiles against the reviewed inverse-identity functor and counit definitions."}
-      {:cmd
-       "sha256sum /tmp/inverse-identity-counit-component-identity.lean",
+       "The exact five-factor counit normalization interface compiles against the reviewed composite equivalence definitions."}
+      {:cmd "sha256sum /tmp/composite-counit-component-identity.lean",
        :exit 0,
        :finding
-       "c5badebac45156c1b08d838291ab02e5ca04b4385d6f143451bb8b75f64c38a5"}
+       "acdc06369d70b171b3c2c1f70a56ad199e7b7f72be274a4ce3930f77b5d84c0f"}
       {:cmd
-       "rg -n \"\\b(sorry|admit)\\b\" /tmp/inverse-identity-counit-component-identity.lean",
+       "rg -n \"\\b(sorry|admit)\\b\" /tmp/composite-counit-component-identity.lean",
        :exit 1,
        :expected-exit 1,
        :finding "No fixture placeholders."}
@@ -104603,14 +104634,14 @@
        "The route guide, per-problem routes, probe definitions, and reviewed dependency receipts were read."}],
      :diagnostic-history [],
      :fixture
-     {:path "/tmp/inverse-identity-counit-component-identity.lean",
+     {:path "/tmp/composite-counit-component-identity.lean",
       :sha256
-      "c5badebac45156c1b08d838291ab02e5ca04b4385d6f143451bb8b75f64c38a5",
+      "acdc06369d70b171b3c2c1f70a56ad199e7b7f72be274a4ce3930f77b5d84c0f",
       :interface
-      "The counit component at the unique free-product object is the identity morphism, eliminating the conjugation in the inverse-identity leg computation."},
+      "The five transported counit components in the composite two-open mapping equivalence multiply to the identity at the free-product target object."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/generic-point-wedge-fundamental-group-coordinates",
@@ -104635,7 +104666,8 @@
     :routes-2026-10-11-two-open-free-product-group-equivalence-coordinates-87
     :routes-2026-10-11-source-equivalence-leg-coordinates-88
     :routes-2026-10-11-mapping-inverse-identity-leg-coordinates-89
-    :routes-2026-10-11-inverse-identity-counit-component-identity-90],
+    :routes-2026-10-11-inverse-identity-counit-component-identity-90
+    :routes-2026-10-11-composite-counit-component-identity-91],
    :current-residual
    "Induct over finite circle wedges and specialize to ThreeCircles.",
    :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
@@ -110153,7 +110185,8 @@
    {:name
     "TwoOpenFreeProductMapping.compositeCounit_component_identity",
     :reported-by
-    [:routes-2026-10-11-inverse-identity-counit-component-identity-90],
+    [:routes-2026-10-11-inverse-identity-counit-component-identity-90
+     :routes-2026-10-11-generic-point-wedge-fundamental-group-coordinates-84],
     :type
     "At SingleObj.star of the free-product target, the composite of the transported counit components of the two-open pseudopushout equivalence, pseudo-span equivalence, point-span comparison, free-product point-span equivalence, and representation/single-object equivalence is the identity morphism.",
     :area "fundamental-group-wedge-of-circles"},
