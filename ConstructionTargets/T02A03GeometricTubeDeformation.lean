@@ -737,6 +737,48 @@ theorem rightTubeRadialAmbientDeformation_endpoints :
     apply rightTubePolarReconstruction_self
     exact p.2.1
 
+theorem positiveReconstructionRadius_rightTubeRadialNormalInterpolation
+    (tp : unitInterval × RightTubeMinusLeftCore) :
+    0 < 1 + (rightTubeRadialNormalInterpolation rightTubeNormalCoordinate
+      rightTubeMeridianCoordinate tp).re := by
+  let t : ℝ := tp.1
+  let p : RightTubeMinusLeftCore := tp.2
+  let n : ℂ := rightTubeNormalComplex p.1
+  let m : ℂ := rightTubeMeridianCoordinate p
+  have ht0 : 0 ≤ t := tp.1.2.1
+  have ht1 : t ≤ 1 := tp.1.2.2
+  have hmnorm : ‖m‖ = 1 := Circle.norm_coe (rightTubeMeridianCoordinate p)
+  have hmre : -1 ≤ m.re := by
+    have h := RCLike.abs_re_le_norm m
+    rw [hmnorm] at h
+    exact (abs_le.mp h).1
+  have hn0 : n ≠ 0 := by
+    intro hn
+    exact p.2.2 ((rightTubeNormalComplex_eq_zero_iff p.1).mp hn)
+  have hscale := NormedSpace.norm_smul_normalize n
+  have hmn : ‖n‖ * m.re = n.re := by
+    have h := congrArg Complex.re hscale
+    have h' : ‖n‖ * (NormedSpace.normalize n).re = n.re :=
+      (RCLike.smul_re ‖n‖ (NormedSpace.normalize n)).symm.trans h
+    simpa [m, n, rightTubeMeridianCoordinate] using h'
+  have hplanar : 0 < 1 + n.re := by
+    have hp := norm_pos_iff.mpr (rightTubePlanarComplex_ne_zero p.1 p.2.1)
+    simpa [n, rightTubeNormalComplex, rightTubePlanarComplex] using hp
+  change 0 < 1 + (((((1 - t) * (1 / 8 : ℝ) + t * ‖n‖ : ℝ) : ℂ) * m).re)
+  simp only [Complex.mul_re, Complex.ofReal_re, Complex.ofReal_im,
+    zero_mul, sub_zero]
+  have hfirst : 0 < 1 + (1 / 8 : ℝ) * m.re := by nlinarith
+  rw [show 1 + ((1 - t) * (1 / 8 : ℝ) + t * ‖n‖) * m.re =
+      (1 - t) * (1 + (1 / 8 : ℝ) * m.re) + t * (1 + n.re) by
+    rw [← hmn]
+    ring]
+  by_cases ht : t = 1
+  · rw [ht]
+    simpa using hplanar
+  · have hleft : 0 < 1 - t := sub_pos.mpr (lt_of_le_of_ne ht1 ht)
+    exact add_pos_of_pos_of_nonneg (mul_pos hleft hfirst)
+      (mul_nonneg ht0 hplanar.le)
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -761,3 +803,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeRadialNormalInterpolation_exists
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.specializedRightTubeRadialNormalInterpolation_exists
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeRadialAmbientDeformation_endpoints
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.positiveReconstructionRadius_rightTubeRadialNormalInterpolation
