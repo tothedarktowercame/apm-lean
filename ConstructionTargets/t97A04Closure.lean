@@ -510,6 +510,38 @@ theorem twoCircleOverlapShearRight_eq_inr_fold (a b : ℤ) :
   rw [twoCircleBranch_inr, twoCircleFold_inr] at hi
   exact hq.symm.trans hi
 
+/-- Homology of the left restricted shear factors through its circle fold. -/
+theorem twoCircleOverlapShearLeft_H1_eq_fold_inl (a b : ℤ) :
+    HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularSubdivision.singularPostcomposition
+          (twoCircleOverlapShearLeft a b)) 1 =
+      HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularSubdivision.singularPostcomposition
+            (twoCircleOverlapShearLeftFold a b)) 1 ≫
+        HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularSubdivision.singularPostcomposition
+            circleSumInl) 1 := by
+  rw [twoCircleOverlapShearLeft_eq_inl_fold, ← HomologicalComplex.homologyMap_comp]
+  dsimp only [ConstructionTargets.SingularSubdivision.singularPostcomposition]
+  rw [← Functor.map_comp]
+  rfl
+
+/-- Homology of the right restricted shear factors through its circle fold. -/
+theorem twoCircleOverlapShearRight_H1_eq_fold_inr (a b : ℤ) :
+    HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularSubdivision.singularPostcomposition
+          (twoCircleOverlapShearRight a b)) 1 =
+      HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularSubdivision.singularPostcomposition
+            (twoCircleOverlapShearRightFold a b)) 1 ≫
+        HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularSubdivision.singularPostcomposition
+            circleSumInr) 1 := by
+  rw [twoCircleOverlapShearRight_eq_inr_fold, ← HomologicalComplex.homologyMap_comp]
+  dsimp only [ConstructionTargets.SingularSubdivision.singularPostcomposition]
+  rw [← Functor.map_comp]
+  rfl
+
 /-- The integer power map which remains on either overlap component after
 the constant translation in the shear is removed. -/
 def circleZPow (a : ℤ) : C(Circle, Circle) :=
@@ -1430,6 +1462,8 @@ theorem shearY_overlap_coordinate_of_degree_components (a b : ℤ)
 #print axioms twoCircleOverlapShearRightFold
 #print axioms twoCircleOverlapShearLeft_eq_inl_fold
 #print axioms twoCircleOverlapShearRight_eq_inr_fold
+#print axioms twoCircleOverlapShearLeft_H1_eq_fold_inl
+#print axioms twoCircleOverlapShearRight_H1_eq_fold_inr
 #print axioms twoCircleOverlapShearLeftFold_H1
 #print axioms twoCircleOverlapShearRightFold_H1
 #print axioms overlapHomotopyEquivTwoCircles_inv_fst
