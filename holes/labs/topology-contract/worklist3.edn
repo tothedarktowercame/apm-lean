@@ -17585,8 +17585,46 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :implements-lemma :lemma-mfclass-hiso-right,
+   :evidence
+   {:placeholder-delta
+    {:t00J02 0, :t98A02 0, :remaining {:t00J02 1, :t98A02 1}},
+    :residual "Prove row squares and assemble SnakeInput.Hom.",
+    :outcome :done-unreviewed,
+    :warnings ["pre-existing unnecessarySimpa lints"],
+    :missing-theorems [],
+    :statement-hashes {:status :match, :count 131},
+    :axioms [propext Classical.choice Quot.sound],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd "sha256sum /tmp/hiso.lean", :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "rg -n '\\b(sorry|admit|axiom)\\b' ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git commit -m 'Identify forgotten homology iso'",
+      :exit 0}],
+    :commit "a231d7bafca939715268dd2cedc8f057ec7098a4",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path "/tmp/hiso.lean",
+     :sha256
+     "1df792da3b231883bf06b54503680808563d6dcb75db9b1e6fa9993e6b021941"},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :declaration
+     "ConstructionTargets.ManifoldFundamentalClass.forgetMapHomologyIsoRight_eq"},
+    :row :routes-2026-10-11-mfclass-hiso-r1,
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class/hiso",
    :acceptance
