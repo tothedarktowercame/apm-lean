@@ -115283,13 +115283,15 @@
     "∃ ε>0, ∀ x, ∃ γ, γ 0=x ∧ IsMIntegralCurveOn γ v (Ioo (-ε) ε)  (size: 100-180 lines / 1-2 days)"},
    :lemma
    {:name "apm_t92J08_bridge_1",
-    :reported-by [:owner],
+    :reported-by [:owner :program-2026-10-11-close-t92j08],
     :type
     "∃ ε>0, ∀ x, ∃ γ, γ 0=x ∧ IsMIntegralCurveOn γ v (Ioo (-ε) ε)  (size: 100-180 lines / 1-2 days)",
     :area "manifold-uniform-local-flow"},
    :id :lemma-apm-t92j08-bridge-1,
    :kind :lemma,
-   :depends-on [:lemma-manifold-integralcurve-uniform-local-existence],
+   :depends-on
+   [:lemma-manifold-integralcurve-uniform-local-existence
+    :lemma-t92j08closure-exists-uniform-ismintegralcurveon-of-compact],
    :other-consumers [:t98A06]}
   {:consumer :t92J08,
    :phase :lemma,
@@ -116235,8 +116237,127 @@
      :reason
      "Program milestone advanced. B6 is partial: verticalSweep descends the continuous map (t,y) ↦ [(t,y)] through AddCircle 1, and verticalSweepHomotopy proves its endpoints are the vertical core map and that map precomposed with additive negation. The remaining B6 step is the representation transport identifying additive negation through t95J02CircleB_homeo with coordinate-1 Euclidean reflection."}]}
   {:consumer :t92J08,
+   :stop-count 1,
+   :evidence
+   {:placeholder-delta {:source-before 1, :source-after 1},
+    :residual
+    "Independent blueprint review, then formalize B1 through B6 and remove the sole placeholder from problems/t92J08/lean/Main.lean.",
+    :outcome :stop,
+    :warnings
+    [{:kind :concurrent-worktree-change,
+      :message
+      "ConstructionTargets/ManifoldFundamentalClass.lean and ConstructionTargets/t97A04Closure.lean were modified by other processes and were preserved unmodified and uncommitted."}],
+    :missing-theorems
+    [{:name "t92J08Closure.exists_uniform_local_flow_in_nhds",
+      :type
+      "A C1 vector field on a complete real normed space has one positive existence time for every initial point in a positive closed ball, with every solution remaining in a prescribed neighbourhood",
+      :status :not-started,
+      :consumers [:t92J08],
+      :depends-on [],
+      :area "manifold-uniform-local-flow"}
+     {:name "t92J08Closure.localCoordinateField_contDiffAt",
+      :type
+      "The fixed-extChartAt coordinate representative of the manifold vector field is C1 at the chart centre",
+      :status :not-started,
+      :consumers [:t92J08],
+      :depends-on [],
+      :area "manifold-uniform-local-flow"}
+     {:name
+      "t92J08Closure.exists_chart_nhds_uniform_isMIntegralCurveOn",
+      :type
+      "At every point of a boundaryless manifold there is a neighbourhood and one positive time on which all its initial points admit integral curves",
+      :status :not-started,
+      :consumers [:t92J08],
+      :depends-on
+      ["t92J08Closure.exists_uniform_local_flow_in_nhds"
+       "t92J08Closure.localCoordinateField_contDiffAt"],
+      :area "manifold-uniform-local-flow"}
+     {:name "t92J08Closure.exists_nhds_uniform_isMIntegralCurveOn",
+      :type
+      "The neighbourhood-uniform manifold integral-curve theorem specialized to the Euclidean model used by t92J08",
+      :status :not-started,
+      :consumers [:t92J08],
+      :depends-on
+      ["t92J08Closure.exists_chart_nhds_uniform_isMIntegralCurveOn"],
+      :area "manifold-uniform-local-flow"}
+     {:name
+      "t92J08Closure.exists_uniform_isMIntegralCurveOn_of_compact",
+      :type
+      "Compactness turns neighbourhood-uniform positive existence times into one positive existence time for all initial points",
+      :status :not-started,
+      :consumers [:t92J08],
+      :depends-on
+      ["t92J08Closure.exists_nhds_uniform_isMIntegralCurveOn"],
+      :area "manifold-uniform-local-flow"}
+     {:name "apm_t92J08_bridge_1",
+      :type
+      "The exact frozen uniform local-existence bridge in problems/t92J08/lean/Main.lean",
+      :status :not-started,
+      :consumers [:t92J08],
+      :depends-on
+      ["t92J08Closure.exists_uniform_isMIntegralCurveOn_of_compact"],
+      :area "manifold-uniform-local-flow"}],
+    :statement-hashes
+    {:source-sha256
+     "192da922aa40f0e39a64e154a23a20d9db436cb9aad9f958a76f19ca50ffc21c",
+     :blueprint-sha256
+     "a08aa74d25a3fcd249f0959d55c0485c547c4da6ffb60a6f2993e3a2780c5c5d",
+     :registry "131 registered statements match, 0 do not"},
+    :disposition :stop,
+    :axioms [],
+    :author "topo-2",
+    :reason
+    "Blueprint written. The six-node route separates prescribed-target Euclidean Picard-Lindelöf control, the exact varying-tangent-space coordinate field, uniform chart transport, public neighbourhood uniformity, compact finite-subcover extraction, and the frozen bridge adapter. Per the blueprint gate, formalization waits for independent mathematical review.",
+    :commands
+    [{:cmd
+      "rg exact Picard-Lindelof, chart-transport, and compact-subcover declarations in pinned Mathlib",
+      :exit 0,
+      :finding
+      "Verified exists_shrink_radius, closed-ball family solutions, continuous target control, tangent-coordinate transport, and CompactSpace.elim_nhds_subcover."}
+     {:cmd "python3 blueprint node and dependency validation",
+      :exit 0,
+      :finding
+      "Six nodes each contain lean, uses, and status fields, and B6 depends on the complete B1-B5 chain."}
+     {:cmd
+      "git diff --check -- ConstructionTargets/t92J08Closure.blueprint.md",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not."}
+     {:cmd "lake env lean problems/t92J08/lean/Main.lean",
+      :exit 0,
+      :finding
+      "The consumer compiles with exactly its one pre-existing bridge_1 placeholder."}
+     {:cmd "git commit -m Write-t92J08-uniform-flow-blueprint",
+      :exit 0,
+      :finding
+      "Committed only the scoped blueprint as d2e9004ddfdbd5b6d3296376ece3955558ed7ce2."}
+     {:cmd
+      "sha256sum problems/t92J08/lean/Main.lean ConstructionTargets/t92J08Closure.blueprint.md",
+      :exit 0,
+      :finding
+      "Hashes are 192da922aa40f0e39a64e154a23a20d9db436cb9aad9f958a76f19ca50ffc21c and a08aa74d25a3fcd249f0959d55c0485c547c4da6ffb60a6f2993e3a2780c5c5d."}],
+    :diagnostic-history [],
+    :continue-from
+    {:commit "d2e9004ddfdbd5b6d3296376ece3955558ed7ce2",
+     :next
+     "Obtain independent review of t92J08Closure.blueprint.md; after approval implement B1, the prescribed-target closed-ball Picard-Lindelöf theorem."},
+    :commit "d2e9004ddfdbd5b6d3296376ece3955558ed7ce2",
+    :changed-paths ["ConstructionTargets/t92J08Closure.blueprint.md"],
+    :fixture
+    {:path "ConstructionTargets/t92J08Closure.blueprint.md",
+     :sha256
+     "a08aa74d25a3fcd249f0959d55c0485c547c4da6ffb60a6f2993e3a2780c5c5d",
+     :nodes
+     [{:id :B1, :status :planned}
+      {:id :B2, :status :planned}
+      {:id :B3, :status :planned}
+      {:id :B4, :status :planned}
+      {:id :B5, :status :planned}
+      {:id :B6, :status :planned}]},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t92J08/lean/Main.lean"
     "problems/t92J08/status.json"
@@ -117162,6 +117283,104 @@
    :id :lemma-t95j02closure-verticalsweephomotopy,
    :kind :lemma,
    :depends-on [:lemma-t95j02closure-t95j02circleb-homeo],
+   :other-consumers []}
+  {:consumer :t92J08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t92J08Closure.exists_uniform_local_flow_in_nhds",
+    :type
+    "A C1 vector field on a complete real normed space has one positive existence time for every initial point in a positive closed ball, with every solution remaining in a prescribed neighbourhood"},
+   :lemma
+   {:name "t92J08Closure.exists_uniform_local_flow_in_nhds",
+    :reported-by [:program-2026-10-11-close-t92j08],
+    :type
+    "A C1 vector field on a complete real normed space has one positive existence time for every initial point in a positive closed ball, with every solution remaining in a prescribed neighbourhood",
+    :area "manifold-uniform-local-flow"},
+   :id :lemma-t92j08closure-exists-uniform-local-flow-in-nhds,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t92J08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t92J08Closure.localCoordinateField_contDiffAt",
+    :type
+    "The fixed-extChartAt coordinate representative of the manifold vector field is C1 at the chart centre"},
+   :lemma
+   {:name "t92J08Closure.localCoordinateField_contDiffAt",
+    :reported-by [:program-2026-10-11-close-t92j08],
+    :type
+    "The fixed-extChartAt coordinate representative of the manifold vector field is C1 at the chart centre",
+    :area "manifold-uniform-local-flow"},
+   :id :lemma-t92j08closure-localcoordinatefield-contdiffat,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t92J08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t92J08Closure.exists_chart_nhds_uniform_isMIntegralCurveOn",
+    :type
+    "At every point of a boundaryless manifold there is a neighbourhood and one positive time on which all its initial points admit integral curves"},
+   :lemma
+   {:name "t92J08Closure.exists_chart_nhds_uniform_isMIntegralCurveOn",
+    :reported-by [:program-2026-10-11-close-t92j08],
+    :type
+    "At every point of a boundaryless manifold there is a neighbourhood and one positive time on which all its initial points admit integral curves",
+    :area "manifold-uniform-local-flow"},
+   :id
+   :lemma-t92j08closure-exists-chart-nhds-uniform-ismintegralcurveon,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t92j08closure-exists-uniform-local-flow-in-nhds
+    :lemma-t92j08closure-localcoordinatefield-contdiffat],
+   :other-consumers []}
+  {:consumer :t92J08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t92J08Closure.exists_nhds_uniform_isMIntegralCurveOn",
+    :type
+    "The neighbourhood-uniform manifold integral-curve theorem specialized to the Euclidean model used by t92J08"},
+   :lemma
+   {:name "t92J08Closure.exists_nhds_uniform_isMIntegralCurveOn",
+    :reported-by [:program-2026-10-11-close-t92j08],
+    :type
+    "The neighbourhood-uniform manifold integral-curve theorem specialized to the Euclidean model used by t92J08",
+    :area "manifold-uniform-local-flow"},
+   :id :lemma-t92j08closure-exists-nhds-uniform-ismintegralcurveon,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t92j08closure-exists-chart-nhds-uniform-ismintegralcurveon],
+   :other-consumers []}
+  {:consumer :t92J08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t92J08Closure.exists_uniform_isMIntegralCurveOn_of_compact",
+    :type
+    "Compactness turns neighbourhood-uniform positive existence times into one positive existence time for all initial points"},
+   :lemma
+   {:name "t92J08Closure.exists_uniform_isMIntegralCurveOn_of_compact",
+    :reported-by [:program-2026-10-11-close-t92j08],
+    :type
+    "Compactness turns neighbourhood-uniform positive existence times into one positive existence time for all initial points",
+    :area "manifold-uniform-local-flow"},
+   :id
+   :lemma-t92j08closure-exists-uniform-ismintegralcurveon-of-compact,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t92j08closure-exists-nhds-uniform-ismintegralcurveon],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
