@@ -1317,6 +1317,34 @@ theorem coreNormalAffineLeg_radius_and_im_ne_zero
       mul_zero, zero_add]
     exact mul_ne_zero ht hwim
 
+theorem zeroHeight_specializedCoreNormalAffineLegs_radius_and_im_ne_zero
+    (p : RightTubeMinusLeftCore) (hheight : p.1 2 = 0)
+    (t : unitInterval) (ht : (t : ℝ) ≠ 0) :
+    let n₀ := rightTubeCoreNormalComplex
+      (apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p))
+    let n₁ := rightTubeCoreNormalComplex p.1
+    let w := zeroHeightSignedImaginaryWaypoint p
+    (‖coreNormalAffineLeg t n₀ w‖ ≤ (1 / 4 : ℝ) ∧
+        (coreNormalAffineLeg t n₀ w).im ≠ 0) ∧
+      (‖coreNormalAffineLeg t n₁ w‖ ≤ (1 / 4 : ℝ) ∧
+        (coreNormalAffineLeg t n₁ w).im ≠ 0) := by
+  dsimp only
+  obtain ⟨hn0im, hn1im⟩ :=
+    realEndpoints_zeroHeight_rightTubeCoreNormals p hheight
+  obtain ⟨hwnorm, hwim⟩ :=
+    zeroHeight_signedImaginaryWaypoint_properties p hheight
+  have hwquarter : ‖zeroHeightSignedImaginaryWaypoint p‖ ≤ (1 / 4 : ℝ) := by
+    rw [hwnorm]
+    norm_num
+  constructor
+  · apply coreNormalAffineLeg_radius_and_im_ne_zero t _ _ hn0im hwim ht
+    · rw [norm_rightTubeCoreNormalComplex_circleMeridian]
+      norm_num
+    · exact hwquarter
+  · apply coreNormalAffineLeg_radius_and_im_ne_zero t _ _ hn1im hwim ht
+    · exact rightTubeCoreInputNormalRadiusBound p.1 p.2.1
+    · exact hwquarter
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -1368,3 +1396,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.realEndpoints_zeroHeight_rightTubeCoreNormals
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeight_signedImaginaryWaypoint_properties
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.coreNormalAffineLeg_radius_and_im_ne_zero
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeight_specializedCoreNormalAffineLegs_radius_and_im_ne_zero
