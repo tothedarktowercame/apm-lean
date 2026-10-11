@@ -909,6 +909,20 @@ noncomputable def forgetIntModulesParallelPairZeroIso
         Iso.refl_hom, Category.comp_id, Category.id_comp]
         using forgetIntModules.map_id Y)
 
+/-- Transport the preserved first component kernel cone to the parallel-pair
+diagram formed after forgetting the integer-module structure. -/
+noncomputable def forgetIntModulesSnakeInput_transportedKernelτ₁
+    (S : ShortComplex.SnakeInput (ModuleCat ℤ)) :
+    IsLimit ((Cone.postcompose
+      (forgetIntModulesParallelPairZeroIso S.v₁₂.τ₁).hom).obj
+        (forgetIntModules.mapCone
+          (KernelFork.ofι S.v₀₁.τ₁ S.w₀₂_τ₁))) :=
+  (IsLimit.postcomposeHomEquiv
+    (forgetIntModulesParallelPairZeroIso S.v₁₂.τ₁)
+    (forgetIntModules.mapCone
+      (KernelFork.ofι S.v₀₁.τ₁ S.w₀₂_τ₁))).symm
+        (forgetIntModulesSnakeInput_preservedKernelτ₁ S)
+
 /-- The corrected relative-homology comparison intertwines the coefficient
 absolute-to-relative map with the production relative projection. -/
 theorem integralRelativeHomologyComparisonWithTransport_projection
@@ -1876,6 +1890,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetIntModules_preservesParallelPairColimits
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetIntModulesSnakeInput_preservedKernelτ₁
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetIntModulesParallelPairZeroIso
+#print axioms ConstructionTargets.ManifoldFundamentalClass.forgetIntModulesSnakeInput_transportedKernelτ₁
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
