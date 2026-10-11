@@ -1290,6 +1290,33 @@ theorem zeroHeight_signedImaginaryWaypoint_properties
   · simp [zeroHeightSignedImaginaryWaypoint, hm, Complex.norm_def]
   · simp [zeroHeightSignedImaginaryWaypoint, hm, Complex.norm_def]
 
+noncomputable def coreNormalAffineLeg
+    (t : unitInterval) (n w : ℂ) : ℂ :=
+  ((1 - (t : ℝ) : ℝ) : ℂ) * n + ((t : ℝ) : ℂ) * w
+
+theorem coreNormalAffineLeg_radius_and_im_ne_zero
+    (t : unitInterval) (n w : ℂ)
+    (hnim : n.im = 0) (hwim : w.im ≠ 0) (ht : (t : ℝ) ≠ 0)
+    (hnorm : ‖n‖ ≤ (1 / 4 : ℝ)) (hwnorm : ‖w‖ ≤ (1 / 4 : ℝ)) :
+    ‖coreNormalAffineLeg t n w‖ ≤ (1 / 4 : ℝ) ∧
+      (coreNormalAffineLeg t n w).im ≠ 0 := by
+  have ht0 : 0 ≤ (t : ℝ) := t.2.1
+  have ht1 : (t : ℝ) ≤ 1 := t.2.2
+  constructor
+  · calc
+      ‖coreNormalAffineLeg t n w‖
+          ≤ ‖((1 - (t : ℝ) : ℝ) : ℂ) * n‖ +
+              ‖((t : ℝ) : ℂ) * w‖ := norm_add_le _ _
+      _ = (1 - (t : ℝ)) * ‖n‖ + (t : ℝ) * ‖w‖ := by
+        rw [norm_mul, norm_mul]
+        simp only [Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg ht0,
+          abs_of_nonneg (sub_nonneg.mpr ht1)]
+      _ ≤ (1 / 4 : ℝ) := by nlinarith
+  · simp only [coreNormalAffineLeg, Complex.add_im, Complex.mul_im,
+      Complex.ofReal_re, Complex.ofReal_im, zero_mul, add_zero, hnim,
+      mul_zero, zero_add]
+    exact mul_ne_zero ht hwim
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -1340,3 +1367,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.positiveSign_input_collisionPolynomial_pos
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.realEndpoints_zeroHeight_rightTubeCoreNormals
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeight_signedImaginaryWaypoint_properties
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.coreNormalAffineLeg_radius_and_im_ne_zero
