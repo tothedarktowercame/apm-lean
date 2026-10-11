@@ -1480,6 +1480,23 @@ theorem forgetPOpcycles_naturality
         rfl
     _ = _ := (K.sc i).rightHomologyData.map forgetIntModules |>.p_comp_opcyclesIso_inv
 
+abbrev ForgottenICyclesNaturality
+    {ι : Type} {c : ComplexShape ι}
+    (K : HomologicalComplex (ModuleCat ℤ) c) (i : ι) : Prop :=
+  ((K.sc i).mapCyclesIso forgetIntModules).inv ≫
+      ((forgetIntModules.mapHomologicalComplex c).obj K).iCycles i =
+    forgetIntModules.map (K.iCycles i)
+
+/-- The inclusion of cycles commutes with forgetting coefficients. -/
+theorem forgetICycles_naturality
+    {ι : Type} {c : ComplexShape ι}
+    (K : HomologicalComplex (ModuleCat ℤ) c) (i : ι) :
+    ForgottenICyclesNaturality K i := by
+  dsimp [ForgottenICyclesNaturality]
+  apply (cancel_epi ((K.sc i).mapCyclesIso forgetIntModules).hom).1
+  simp only [Iso.hom_inv_id_assoc]
+  exact ((K.sc i).mapCyclesIso_hom_iCycles forgetIntModules).symm
+
 /-- The corrected relative-homology comparison intertwines the coefficient
 absolute-to-relative map with the production relative projection. -/
 theorem integralRelativeHomologyComparisonWithTransport_projection
@@ -2469,6 +2486,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetMapHomologyIsoRight_eq
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetHomologyι_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetPOpcycles_naturality
+#print axioms ConstructionTargets.ManifoldFundamentalClass.forgetICycles_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
