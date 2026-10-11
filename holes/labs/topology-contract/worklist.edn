@@ -105267,9 +105267,71 @@
   {:bounded-exception
    "This single-consumer comparison is the exact remaining quotient identification needed by the one-placeholder t93J03 route.",
    :consumer :t93J03,
+   :stop-count 1,
    :implements-lemma :lemma-kleinorbitquotient-homeomorph,
+   :evidence
+   {:placeholder-delta
+    {:source-before 0, :source-after 0, :fixture-sorry 0},
+    :residual
+    "Prove inverse continuity for the closed-square fundamental-domain quotient, then construct the quotient-level square-to-aabb cut-and-paste homeomorphism and compose them.",
+    :outcome :stop,
+    :warnings [],
+    :missing-theorems
+    [{:name "closedSquareOrbitQuotientEquiv_continuous_symm",
+      :type
+      "Continuous (closedSquareOrbitQuotientEquiv.symm : PlaneOrbitQuotient → ClosedSquareOrbitQuotient) for the coinduced quotient topologies",
+      :status :not-started,
+      :consumers [:t93J03],
+      :depends-on ["kleinSquareBoundaryOrbitEqvGen"],
+      :area "deck-group-fundamental-group"}
+     {:name "closedSquareRelationQuotientHomeomorphSurfaceFalseTwo",
+      :type
+      "A quotient-level cut-and-paste homeomorphism from Quotient (EqvGen.setoid ClosedSquareRel) to Surface false 2, with continuous descended map and inverse",
+      :status :not-started,
+      :consumers [:t93J03],
+      :depends-on ["kleinSquareBoundaryOrbitEqvGen"],
+      :area "deck-group-fundamental-group"}],
+    :statement-hashes
+    {:source-sha256
+     "67228015a1a962d50a60b8cfc81cd3678ff6bedd18f57bd4b3b87f35677c5985",
+     :registry "131 registered statements match, 0 do not"},
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :reason
+    "The standard-axiom forward continuity of closedSquareOrbitQuotientEquiv is now compiled. Completion requires two substantive quotient-level results not present in the banked API: inverse continuity for the closed fundamental-domain orbit equivalence, and a cut-and-paste homeomorphism from the closed-square relation quotient to Surface false 2. The previously refuted disk-to-square carrier cannot supply the latter.",
+    :commands
+    [{:cmd "sha256sum /tmp/klein-orbit-quotient-homeomorph-probe.lean",
+      :exit 0,
+      :finding
+      "92520bb0ff1e978b0e5f9bd0e276d81d560bd11136f75a683e1bd8c8cb4f17b1"}
+     {:cmd
+      "lake build ConstructionTargets.KleinOrbitQuotientHomeomorph",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/klein-orbit-quotient-homeomorph-probe.lean",
+      :exit 0,
+      :finding
+      "Fixture compiles only with kleinOrbitQuotient_homeomorph as a custom axiom."}
+     {:cmd
+      "rg -n \"\\b(sorry|admit|axiom)\\b\" ConstructionTargets/KleinOrbitQuotientHomeomorph.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}],
+    :diagnostic-history [],
+    :commit "29ead8ffdf682408855cd12480e2a89868bb472b",
+    :changed-paths
+    ["ConstructionTargets/KleinOrbitQuotientHomeomorph.lean"],
+    :fixture
+    {:path "/tmp/klein-orbit-quotient-homeomorph-probe.lean",
+     :sha256
+     "92520bb0ff1e978b0e5f9bd0e276d81d560bd11136f75a683e1bd8c8cb4f17b1",
+     :status :self-axiomatized},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/KleinOrbitQuotientHomeomorph.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-orbit-quotient-homeomorph",
@@ -111739,6 +111801,44 @@
    :id :lemma-no-cyclic-relation-compatible-component-equiv,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "closedSquareOrbitQuotientEquiv_continuous_symm",
+    :type
+    "Continuous (closedSquareOrbitQuotientEquiv.symm : PlaneOrbitQuotient → ClosedSquareOrbitQuotient) for the coinduced quotient topologies"},
+   :lemma
+   {:name "closedSquareOrbitQuotientEquiv_continuous_symm",
+    :reported-by
+    [:routes-2026-10-11-klein-orbit-quotient-homeomorph-102],
+    :type
+    "Continuous (closedSquareOrbitQuotientEquiv.symm : PlaneOrbitQuotient → ClosedSquareOrbitQuotient) for the coinduced quotient topologies",
+    :area "deck-group-fundamental-group"},
+   :id :lemma-closedsquareorbitquotientequiv-continuous-symm,
+   :kind :lemma,
+   :depends-on [:lemma-kleinsquareboundaryorbiteqvgen],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "closedSquareRelationQuotientHomeomorphSurfaceFalseTwo",
+    :type
+    "A quotient-level cut-and-paste homeomorphism from Quotient (EqvGen.setoid ClosedSquareRel) to Surface false 2, with continuous descended map and inverse"},
+   :lemma
+   {:name "closedSquareRelationQuotientHomeomorphSurfaceFalseTwo",
+    :reported-by
+    [:routes-2026-10-11-klein-orbit-quotient-homeomorph-102],
+    :type
+    "A quotient-level cut-and-paste homeomorphism from Quotient (EqvGen.setoid ClosedSquareRel) to Surface false 2, with continuous descended map and inverse",
+    :area "deck-group-fundamental-group"},
+   :id :lemma-closedsquarerelationquotienthomeomorphsurfacefalsetwo,
+   :kind :lemma,
+   :depends-on [:lemma-kleinsquareboundaryorbiteqvgen],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
