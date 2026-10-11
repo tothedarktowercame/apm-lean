@@ -896,6 +896,16 @@ theorem correctedLocalGeneratorCoefficient_eq_unit
       CoefficientChartTransitionUnit.isoUnit_action ℤ _ 1
     _ = _ := mul_one _
 
+/-- The corrected local-generator coefficient is one of the two integer
+units; no orientation sign is selected here. -/
+theorem correctedLocalGeneratorCoefficient_eq_one_or_neg_one
+    (k : ℕ) {M : Type} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M) :
+    correctedLocalGeneratorCoefficient k x = 1 ∨
+      correctedLocalGeneratorCoefficient k x = -1 := by
+  rw [correctedLocalGeneratorCoefficient_eq_unit]
+  exact Int.isUnit_eq_one_or (correctedLocalGeneratorUnit k x).isUnit
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -951,3 +961,4 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism
 #print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorUnit
 #print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient_eq_unit
+#print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient_eq_one_or_neg_one
