@@ -104812,6 +104812,18 @@
       :exit 0,
       :finding
       "Clean worktree after commit 929a15335ee5fc7142ccedcc2e51275f6874960c."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791694147663-4247-a497df37",
+     :commands
+     ["git show and git diff-tree --check 929a15335ee5fc7142ccedcc2e51275f6874960c"
+      "archive recorded commit and parse all three ledgers with clojure.edn/read-string; audit canonical untagged backlog"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist3.edn"
+      "bb holes/labs/topology-contract/build_step.bb priorities holes/labs/topology-contract/worklist.edn"
+      "python3 scripts/statement-registry.py check in detached recorded-commit worktree"],
+     :finding
+     "PASS: recorded commit changes only worklist3.edn, adds manifold-fundamental-class metadata to the five canonical backlog lemma records, leaves zero untagged backlog lemmas, reproduces placeholder counts t01A03=1 t92J06=1 t93J03=1 t97A01=1 t97A03=3 t99J01=1, preserves the stated route priorities and representation direction, and matches all 131 registered statements; no fixture hash applies to this strategy checkpoint"},
     :commit "929a15335ee5fc7142ccedcc2e51275f6874960c",
     :replacement-items
     [{:bounded-exception
@@ -104999,7 +105011,7 @@
       "untagged has zero backlog after canonical repair"]},
     :seat "topo-4"},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -105020,7 +105032,7 @@
    :consumer :t93J03,
    :implements-lemma :lemma-kleinorbitquotient-homeomorph,
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-orbit-quotient-homeomorph",
@@ -105056,7 +105068,7 @@
    :implements-lemma
    :lemma-connectedgroupoidsingleobjequivalence-connectorsingleobjequivalence-counit-base-,
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/connector-single-object-counit-base-identity",
@@ -105085,7 +105097,7 @@
    :implements-lemma
    :lemma-twoopenfundamentalgroupoidpseudopushout-counit-base-component-identity,
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/two-open-pseudopushout-counit-base-identity",
