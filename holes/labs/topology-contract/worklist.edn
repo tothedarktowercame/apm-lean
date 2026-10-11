@@ -115242,7 +115242,7 @@
     :area "manifold-uniform-local-flow"},
    :id :lemma-apm-t92j08-bridge-1,
    :kind :lemma,
-   :depends-on [],
+   :depends-on [:lemma-manifold-integralcurve-uniform-local-existence],
    :other-consumers [:t98A06]}
   {:consumer :t92J08,
    :phase :lemma,
@@ -115367,6 +115367,24 @@
     "explicit longitude projection turns the ambient torus homotopy into a homotopy from id to a reflection of the circle, which is impossible (degree)",
     :area "torus-fixed-point-index"},
    :id :lemma-t94a07-longitude-projection-obstruction,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t92J08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "manifold_integralCurve_uniform_local_existence",
+    :type
+    "parameter-uniform Picard–Lindelöf on a manifold: for a C¹ vector field, every point has a neighbourhood U and ε > 0 such that every initial point in U has an integral curve on (-ε, ε) (180-350 lines; Mathlib has only pointwise local existence)"},
+   :lemma
+   {:name "manifold_integralCurve_uniform_local_existence",
+    :reported-by [:owner],
+    :type
+    "parameter-uniform Picard–Lindelöf on a manifold: for a C¹ vector field, every point has a neighbourhood U and ε > 0 such that every initial point in U has an integral curve on (-ε, ε) (180-350 lines; Mathlib has only pointwise local existence)",
+    :area "manifold-flow-picard-lindelof"},
+   :id :lemma-manifold-integralcurve-uniform-local-existence,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}],
