@@ -67678,7 +67678,62 @@
   {:bounded-exception
    "single-consumer specialization of the nonzero radial normal interpolation to the frozen right-tube coordinates",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:residual
+     "Combine the specialized nonzero normal path with rightTubePlanarRotation through rightTubePolarReconstruction, then prove endpoints, right-tube membership, and left-core avoidance.",
+     :outcome :go,
+     :warnings [],
+     :acceptance
+     {:declaration
+      "ConstructionTargets.T02A03GeometricTubeDeformation.specializedRightTubeRadialNormalInterpolation_exists",
+      :type
+      "exists N : C(unitInterval × RightTubeMinusLeftCore, Complex), (forall p, N (0,p) = ((1/8 : Real) : Complex) * (rightTubeMeridianCoordinate p : Complex)) and (forall p, N (1,p) = rightTubeNormalComplex p.1) and (forall tp, N tp ≠ 0)",
+      :gates
+      ["Compile the scoped module after inserting the fixture declarations"
+       "Confirm only propext, Classical.choice, and Quot.sound axioms"
+       "Confirm no new sorry in the scoped module"
+       "Run python3 scripts/statement-registry.py check"]},
+     :commands
+     [{:cmd "lake env lean /tmp/t02a03_specialized_radial_probe.lean",
+       :exit 0,
+       :output
+       "specializedRightTubeRadialNormalInterpolation_exists compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd "sha256sum /tmp/t02a03_specialized_radial_probe.lean",
+       :exit 0,
+       :output
+       "d710311a4f287266ff1e912ea7b5e595b9af59a1c9998ebb17046f1310641f4c  /tmp/t02a03_specialized_radial_probe.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_specialized_radial_probe.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}
+      {:cmd
+       "rg -n 'specializedRightTubeRadialNormalInterpolation_exists' /tmp/t02a03_specialized_radial_probe.lean",
+       :exit 0,
+       :output
+       "15:theorem specializedRightTubeRadialNormalInterpolation_exists :\n30:#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.specializedRightTubeRadialNormalInterpolation_exists"}],
+     :fixture
+     {:path "/tmp/t02a03_specialized_radial_probe.lean",
+      :sha256
+      "d710311a4f287266ff1e912ea7b5e595b9af59a1c9998ebb17046f1310641f4c"},
+     :finding
+     "The placeholder-free fixture specializes the banked generic radial interpolation to rightTubeNormalComplex and rightTubeMeridianCoordinate. The continuous normal path has the required 1/8 meridian endpoint, the original normal-coordinate endpoint, and pointwise nonvanishing.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+      :declaration
+      "ConstructionTargets.T02A03GeometricTubeDeformation.specializedRightTubeRadialNormalInterpolation_exists",
+      :type
+      "exists N : C(unitInterval × RightTubeMinusLeftCore, Complex), (forall p, N (0,p) = ((1/8 : Real) : Complex) * (rightTubeMeridianCoordinate p : Complex)) and (forall p, N (1,p) = rightTubeNormalComplex p.1) and (forall tp, N tp ≠ 0)",
+      :proof-plan
+      "Define the continuous map p ↦ rightTubeNormalComplex p.1, apply rightTubeRadialNormalInterpolation_exists with rightTubeMeridianCoordinate, discharge the normalization equation definitionally, and derive nonzero input normals from rightTubeNormalComplex_eq_zero_iff and the deleted-left-core subtype condition.",
+      :axioms [propext Classical.choice Quot.sound]},
+     :seat "topo-8"}},
+   :phase :implementation,
+   :type
+   "exists N : C(unitInterval × RightTubeMinusLeftCore, Complex), (forall p, N (0,p) = ((1/8 : Real) : Complex) * (rightTubeMeridianCoordinate p : Complex)) and (forall p, N (1,p) = rightTubeNormalComplex p.1) and (forall tp, N tp ≠ 0)",
    :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
@@ -67693,15 +67748,20 @@
     :placeholder "the sole sorry in apm_t02a03",
     :route-step
     "instantiate the nonzero left-core normal component used with rightTubePlanarRotation"},
+   :axioms [propext Classical.choice Quot.sound],
    :id
    :routes-2026-10-11-t02a03-right-tube-radial-normal-interpolation-specialized-topo2-r1,
    :kind :reusable-theorem,
    :area "explicit-r3-tube-deformation-retraction",
+   :declaration
+   "ConstructionTargets.T02A03GeometricTubeDeformation.specializedRightTubeRadialNormalInterpolation_exists",
    :depends-on
    [:routes-2026-10-11-t02a03-right-tube-radial-normal-interpolation-topo2-r1],
    :current-residual
    "Combine this specialized normal interpolation with rightTubePlanarRotation through rightTubePolarReconstruction, then prove endpoint equations and right-tube membership; nonvanishing supplies left-core avoidance.",
-   :other-consumers []}
+   :other-consumers [],
+   :proof-plan
+   "Define the continuous map p ↦ rightTubeNormalComplex p.1, apply rightTubeRadialNormalInterpolation_exists with rightTubeMeridianCoordinate, discharge the normalization equation definitionally, and derive nonzero input normals from rightTubeNormalComplex_eq_zero_iff and the deleted-left-core subtype condition."}
   {:bounded-exception
    "single-consumer explicit ambient deformation with frozen tube and deletion invariants",
    :consumer :t02A03,
