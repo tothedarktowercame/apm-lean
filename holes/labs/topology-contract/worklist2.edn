@@ -69486,7 +69486,47 @@
   {:bounded-exception
    "single-consumer nonzero-height certificate throughout the core-normal interpolation",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/t02a03_core_normal_interpolation_im_ne_probe.lean",
+      :sha256
+      "925785faecd1742541c0b8b25de927a573d8abb49da9a345a8730bc2f36b8644"},
+     :implementation
+     {:scope
+      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+      :declaration
+      "ConstructionTargets.T02A03GeometricTubeDeformation.nonzeroHeight_im_ne_zero_rightTubeCoreNormalInterpolation",
+      :type
+      "forall (tp : unitInterval × RightTubeMinusLeftCore), tp.2.1 2 != 0 -> (rightTubeCoreNormalInterpolation rightTubeMeridianCoordinate tp).im != 0",
+      :proof-plan
+      "Use the banked positive-factor identity for the meridian imaginary part, compute the interpolation imaginary part as the input height times ((1-t)*(c/8)+t), prove that coefficient positive on the unit interval, and cancel the nonzero input height."},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/t02a03_core_normal_interpolation_im_ne_probe.lean",
+       :exit 0,
+       :output
+       "nonzeroHeight_im_ne_zero_rightTubeCoreNormalInterpolation compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "sha256sum /tmp/t02a03_core_normal_interpolation_im_ne_probe.lean",
+       :exit 0,
+       :output
+       "925785faecd1742541c0b8b25de927a573d8abb49da9a345a8730bc2f36b8644  /tmp/t02a03_core_normal_interpolation_im_ne_probe.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_core_normal_interpolation_im_ne_probe.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :warnings [],
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :residual
+     "Implement the compiled nonzero-height interpolation theorem; then apply the core-polar height criterion to certify radial-stage left-core avoidance."}},
+   :phase :implementation,
+   :type
+   "forall (tp : unitInterval × RightTubeMinusLeftCore), tp.2.1 2 != 0 -> (rightTubeCoreNormalInterpolation rightTubeMeridianCoordinate tp).im != 0",
    :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
@@ -69505,11 +69545,15 @@
    :routes-2026-10-11-t02a03-nonzero-height-core-normal-interpolation-im-topo2-r1,
    :kind :reusable-theorem,
    :area "explicit-r3-tube-deformation-retraction",
+   :declaration
+   "ConstructionTargets.T02A03GeometricTubeDeformation.nonzeroHeight_im_ne_zero_rightTubeCoreNormalInterpolation",
    :depends-on
    [:routes-2026-10-11-t02a03-meridian-im-positive-factor-height-topo2-r1],
    :current-residual
    "Apply the nonzero-height avoidance theorem to certify the radial stage for nonzero-height inputs; handle zero height with collision-sign control and construct the safe angular stage, then concatenate.",
-   :other-consumers []}
+   :other-consumers [],
+   :proof-plan
+   "Use the banked positive-factor identity for the meridian imaginary part, compute the interpolation imaginary part as the input height times ((1-t)*(c/8)+t), prove that coefficient positive on the unit interval, and cancel the nonzero input height."}
   {:bounded-exception
    "single-consumer explicit ambient deformation with frozen tube and deletion invariants",
    :consumer :t02A03,
