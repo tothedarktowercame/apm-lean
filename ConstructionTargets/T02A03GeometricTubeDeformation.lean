@@ -1556,6 +1556,21 @@ theorem zeroHeightAmbientDetour_of_coupledAngular
       rw [htp]
       exact hA1 tp.2
 
+theorem continuousCoupledAngularComplexInterpolation_exists :
+    ∃ Z : C(unitInterval × RightTubeMinusLeftCore, ℂ),
+      (∀ p, Z (0, p) = 1) ∧
+      (∀ p, Z (1, p) = rightTubeCorePlanarComplex p.1) := by
+  let Z : C(unitInterval × RightTubeMinusLeftCore, ℂ) :=
+    ⟨fun tp => ((1 - (tp.1 : ℝ) : ℝ) : ℂ) +
+        ((tp.1 : ℝ) : ℂ) * rightTubeCorePlanarComplex tp.2.1, by
+      unfold rightTubeCorePlanarComplex
+      fun_prop⟩
+  refine ⟨Z, ?_, ?_⟩
+  · intro p
+    simp [Z]
+  · intro p
+    simp [Z]
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -1615,3 +1630,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightEndpointAvoidance_coreNormalDetour
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCoupledDetour_avoidsLeftCore
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightAmbientDetour_of_coupledAngular
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.continuousCoupledAngularComplexInterpolation_exists
