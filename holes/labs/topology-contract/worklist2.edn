@@ -67771,82 +67771,124 @@
    :proof-plan
    "Define the continuous map p ↦ rightTubeNormalComplex p.1, apply rightTubeRadialNormalInterpolation_exists with rightTubeMeridianCoordinate, discharge the normalization equation definitionally, and derive nonzero input normals from rightTubeNormalComplex_eq_zero_iff and the deleted-left-core subtype condition."}
   {:bounded-exception
+   "single-consumer continuous ambient reconstruction with both endpoint equations",
+   :consumer :t02A03,
+   :phase :probe,
+   :state :open,
+   :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t02A03/right-tube-radial-ambient-endpoints",
+   :acceptance
+   {:probe
+    "Compile rightTubeRadialAmbientDeformation_endpoints. Combine rightTubePlanarRotation and the specialized radial normal interpolation through rightTubePolarReconstruction, prove continuity and both endpoint equations. Do not claim right-tube membership or left-core avoidance.",
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeRadialAmbientDeformation_endpoints",
+    :type
+    "(forall p, rightTubeRadialAmbientDeformation (0,p) = apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)) and (forall p, rightTubeRadialAmbientDeformation (1,p) = p.1)",
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "construct the continuous ambient path and prove its endpoint equations before certifying its invariants"},
+   :id
+   :routes-2026-10-11-t02a03-right-tube-radial-ambient-endpoints-topo2-r1,
+   :kind :reusable-theorem,
+   :area "explicit-r3-tube-deformation-retraction",
+   :depends-on
+   [:routes-2026-10-11-t02a03-right-tube-radial-normal-interpolation-specialized-topo2-r1],
+   :current-residual
+   "Prove the reconstructed path lies in apm_t02a03_rightTube and that its nonzero radial normal coordinate excludes Set.range apm_t02a03_leftCore, then package safeRightTubeMeridianDeformation.",
+   :other-consumers []}
+  {:bounded-exception
    "single-consumer explicit ambient deformation with frozen tube and deletion invariants",
    :consumer :t02A03,
    :evidence
    {:probe
     {:residual
-     "Bank the specialized radial normal interpolation, then combine it with rightTubePlanarRotation in rightTubePolarReconstruction and certify the ambient path.",
+     "Bank the continuous ambient reconstruction and endpoint equations, then prove right-tube membership and left-core avoidance for that path.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
      [{:name
-       "ConstructionTargets.T02A03GeometricTubeDeformation.specializedRightTubeRadialNormalInterpolation_exists",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeRadialAmbientDeformation_endpoints",
        :type
-       "exists N : C(unitInterval × RightTubeMinusLeftCore, Complex), (forall p, N (0,p) = ((1/8 : Real) : Complex) * (rightTubeMeridianCoordinate p : Complex)) and (forall p, N (1,p) = rightTubeNormalComplex p.1) and (forall tp, N tp ≠ 0)",
+       "(forall p, rightTubeRadialAmbientDeformation (0,p) = apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)) and (forall p, rightTubeRadialAmbientDeformation (1,p) = p.1)",
        :status :proved,
        :consumers [:t02A03],
        :depends-on
-       ["ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeRadialNormalInterpolation_exists"],
+       ["ConstructionTargets.T02A03GeometricTubeDeformation.specializedRightTubeRadialNormalInterpolation_exists"
+        "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubePlanarRotation_exists"
+        "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubePolarReconstruction_self"],
        :area "explicit-r3-tube-deformation-retraction"}],
      :prerequisite
      {:bounded-exception
-      "single-consumer specialization of the nonzero radial normal interpolation to the frozen right-tube coordinates",
+      "single-consumer continuous ambient reconstruction with both endpoint equations",
       :consumer :t02A03,
       :phase :probe,
       :state :open,
       :scope
       ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t02A03/right-tube-radial-normal-interpolation-specialized",
+      "TOPOLOGY-ROUTES.md/t02A03/right-tube-radial-ambient-endpoints",
       :acceptance
       {:probe
-       "Compile specializedRightTubeRadialNormalInterpolation_exists by instantiating rightTubeRadialNormalInterpolation_exists with the continuous map rightTubeNormalComplex and rightTubeMeridianCoordinate. Prove the two endpoint equations and pointwise nonvanishing. Do not reconstruct an ambient point or claim tube membership.",
+       "Compile rightTubeRadialAmbientDeformation_endpoints. Combine rightTubePlanarRotation and the specialized radial normal interpolation through rightTubePolarReconstruction, prove continuity and both endpoint equations. Do not claim right-tube membership or left-core avoidance.",
        :declaration
-       "ConstructionTargets.T02A03GeometricTubeDeformation.specializedRightTubeRadialNormalInterpolation_exists",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeRadialAmbientDeformation_endpoints",
        :type
-       "exists N : C(unitInterval × RightTubeMinusLeftCore, Complex), (forall p, N (0,p) = ((1/8 : Real) : Complex) * (rightTubeMeridianCoordinate p : Complex)) and (forall p, N (1,p) = rightTubeNormalComplex p.1) and (forall tp, N tp ≠ 0)",
+       "(forall p, rightTubeRadialAmbientDeformation (0,p) = apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)) and (forall p, rightTubeRadialAmbientDeformation (1,p) = p.1)",
        :placeholder "the sole sorry in apm_t02a03",
        :route-step
-       "instantiate the nonzero left-core normal component used with rightTubePlanarRotation"},
+       "construct the continuous ambient path and prove its endpoint equations before certifying its invariants"},
       :id
-      :routes-2026-10-11-t02a03-right-tube-radial-normal-interpolation-specialized-topo2-r1,
+      :routes-2026-10-11-t02a03-right-tube-radial-ambient-endpoints-topo2-r1,
       :kind :reusable-theorem,
       :area "explicit-r3-tube-deformation-retraction",
       :depends-on
-      [:routes-2026-10-11-t02a03-right-tube-radial-normal-interpolation-topo2-r1],
+      [:routes-2026-10-11-t02a03-right-tube-radial-normal-interpolation-specialized-topo2-r1],
       :current-residual
-      "Combine this specialized normal interpolation with rightTubePlanarRotation through rightTubePolarReconstruction, then prove endpoint equations and right-tube membership; nonvanishing supplies left-core avoidance.",
+      "Prove the reconstructed path lies in apm_t02a03_rightTube and that its nonzero radial normal coordinate excludes Set.range apm_t02a03_leftCore, then package safeRightTubeMeridianDeformation.",
       :other-consumers []},
      :commands
-     [{:cmd "lake env lean /tmp/t02a03_specialized_radial_probe.lean",
+     [{:cmd "lake env lean /tmp/t02a03_ambient_endpoints_probe.lean",
        :exit 0,
        :output
-       "specializedRightTubeRadialNormalInterpolation_exists compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd "sha256sum /tmp/t02a03_specialized_radial_probe.lean",
+       "rightTubeRadialAmbientDeformation_endpoints compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd "sha256sum /tmp/t02a03_ambient_endpoints_probe.lean",
        :exit 0,
        :output
-       "d710311a4f287266ff1e912ea7b5e595b9af59a1c9998ebb17046f1310641f4c  /tmp/t02a03_specialized_radial_probe.lean"}
+       "e20fd016bf24c80780266f1eb42f173f05a247ce71d46cf3b4e103ec253e72fa  /tmp/t02a03_ambient_endpoints_probe.lean"}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_specialized_radial_probe.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_ambient_endpoints_probe.lean || true)\"",
        :exit 0}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}
       {:cmd
-       "rg -n 'specializedRightTubeRadialNormalInterpolation_exists' /tmp/t02a03_specialized_radial_probe.lean",
+       "rg -n 'rightTubeRadialAmbientDeformation_endpoints' /tmp/t02a03_ambient_endpoints_probe.lean",
        :exit 0,
        :output
-       "15:theorem specializedRightTubeRadialNormalInterpolation_exists :\n30:#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.specializedRightTubeRadialNormalInterpolation_exists"}],
+       "34:theorem rightTubeRadialAmbientDeformation_endpoints :\n69:#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeRadialAmbientDeformation_endpoints"}],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/t02a03_ambient_endpoints_probe.lean",
+       :exit 1,
+       :finding
+       "The first continuity proof asked fun_prop to unfold normalized continuous maps; using the ContinuousMap continuity fields explicitly corrected it."}
+      {:cmd "lake env lean /tmp/t02a03_ambient_endpoints_probe.lean",
+       :exit 1,
+       :finding
+       "The first explicit continuity expression needed parentheses around multiplication before adding the constant; the corrected expression compiled."}
+      {:cmd "lake env lean /tmp/t02a03_ambient_endpoints_probe.lean",
+       :exit 1,
+       :finding
+       "The endpoint proof initially rewrote below an unreduced ContinuousMap application and then below a Circle subtype. Exposing the application and proving the Circle equality by Subtype.ext corrected both representation mismatches."}],
      :fixture
-     {:path "/tmp/t02a03_specialized_radial_probe.lean",
+     {:path "/tmp/t02a03_ambient_endpoints_probe.lean",
       :sha256
-      "d710311a4f287266ff1e912ea7b5e595b9af59a1c9998ebb17046f1310641f4c"},
+      "e20fd016bf24c80780266f1eb42f173f05a247ce71d46cf3b4e103ec253e72fa"},
      :finding
-     "The generic nonzero radial interpolation now specializes cleanly to rightTubeNormalComplex and rightTubeMeridianCoordinate. This supplies exactly the continuous normal component needed by the ambient reconstruction, with both endpoints and deletion-preserving nonvanishing, but does not yet combine it with rightTubePlanarRotation or prove right-tube membership.",
+     "Combining rightTubePlanarRotation with the specialized radial normal interpolation through rightTubePolarReconstruction gives a continuous ambient path. Direct coordinates identify time zero with circleMeridian(rightTubeMeridianCoordinate p), while rightTubePolarReconstruction_self identifies time one with p. This compiles independently of right-tube membership and left-core avoidance.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
@@ -67883,7 +67925,8 @@
     :routes-2026-10-10-t02a03-meridian-right-core-reconstruction-topo2-r1
     :routes-2026-10-11-t02a03-right-tube-radial-coefficient-positive-topo2-r1
     :routes-2026-10-11-t02a03-right-tube-radial-normal-interpolation-topo2-r1
-    :routes-2026-10-11-t02a03-right-tube-radial-normal-interpolation-specialized-topo2-r1],
+    :routes-2026-10-11-t02a03-right-tube-radial-normal-interpolation-specialized-topo2-r1
+    :routes-2026-10-11-t02a03-right-tube-radial-ambient-endpoints-topo2-r1],
    :current-residual
    "Lift H to RightTubeMinusLeftCore, package rightTubeMeridianRetractionHomotopy, then use the coordinate equation for the Circle-side constant homotopy.",
    :other-consumers []}
@@ -71362,4 +71405,31 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-t02a03geometrictubedeformation-righttuberadialnormalinterpol],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeRadialAmbientDeformation_endpoints",
+    :type
+    "(forall p, rightTubeRadialAmbientDeformation (0,p) = apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)) and (forall p, rightTubeRadialAmbientDeformation (1,p) = p.1)"},
+   :lemma
+   {:name
+    "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeRadialAmbientDeformation_endpoints",
+    :reported-by
+    [:routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1],
+    :type
+    "(forall p, rightTubeRadialAmbientDeformation (0,p) = apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)) and (forall p, rightTubeRadialAmbientDeformation (1,p) = p.1)",
+    :area "explicit-r3-tube-deformation-retraction",
+    :proved-in
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+   :id
+   :lemma-constructiontargets-t02a03geometrictubedeformation-righttuberadialambientdeforma,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t02a03geometrictubedeformation-specializedrighttuberadialnor
+    :lemma-constructiontargets-t02a03geometrictubedeformation-righttubeplanarrotation-exist
+    :lemma-constructiontargets-t02a03geometrictubedeformation-righttubepolarreconstruction-],
    :other-consumers []}]}
