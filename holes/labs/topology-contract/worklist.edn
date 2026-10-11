@@ -116062,18 +116062,18 @@
    :depends-on [],
    :other-consumers []}
   {:consumer :t95J02,
-   :stop-count 9,
+   :stop-count 10,
    :review-finding
    "B7 reverses the functorial composition. Because beta.comp reflection is beta after reflection, homotopy invariance gives H1(beta) = H1(reflection) ≫ H1(beta), not H1(beta) ≫ H1(reflection). The written composite is ill-typed: H1(beta) lands in Klein-bottle homology, while H1(reflection) is an endomorphism of sphere homology. Reverse the factors, then use integral_circle 1 to derive H1(beta)(g) = H1(beta)(-g).",
    :evidence
    {:placeholder-delta {:source-before 3, :source-after 3},
     :residual
-    "Complete B6 by proving that the sphere-to-AddCircle component of t95J02CircleB_homeo conjugates CoefficientCoordinateReflections.reflectionMap (1 : Fin 2) to addCircleNeg; then transport verticalSweepHomotopy and proceed to B7-B9.",
+    "B7-B9 remain; next use B6, homotopy invariance, and CoefficientFirstReflection.integral_circle 1 to construct the nonzero vertical H1 kernel class.",
     :outcome :stop,
     :warnings
     [{:kind :existing-placeholders,
       :message
-      "The compiler reports the same three pre-existing sorries in B7-B9; the new B6 declarations are placeholder-free."}],
+      "The compiler reports the same three pre-existing sorries in B7-B9; the completed B6 block is placeholder-free."}],
     :missing-theorems
     [{:name "t95J02Closure.t95J02CircleB_homeo",
       :type "T02A06.euclideanUnitSphere 2 ≃ₜ t95J02CircleB",
@@ -116091,7 +116091,7 @@
      {:name "t95J02Closure.t95J02_beta_homotopic_beta_reflection",
       :type
       "For beta defined by t95J02CircleB_homeo followed by t95J02InclusionB, ContinuousMap.Homotopic beta (beta.comp (CoefficientCoordinateReflections.reflectionMap (1 : Fin 2)))",
-      :status :partial,
+      :status :proved,
       :consumers [:t95J02],
       :depends-on
       ["t95J02Closure.t95J02CircleB_homeo"
@@ -116114,90 +116114,78 @@
       :area "klein-bottle-homology"}],
     :statement-hashes
     {:source-sha256
-     "f968f5fbd27e1894a6fb81955aa73cece054cdbff0743718b4aa8ab2d7f64303",
+     "daaabe68f4eb86ac6b32a000528b5f2b3f2f06b5c7a17ba3fe11a6cdece2203d",
      :blueprint-sha256
-     "3c0dc595b5df01192f057bda6f5f557b43e1847a024e41e9b845fc3e1b917307",
+     "006eec5a6a150bcbfd64edfc4299728db15aee0ac2a4069644f9a90416d90e1b",
      :registry "131 registered statements match, 0 do not"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Program milestone advanced. B6 is partial: verticalSweep descends the continuous map (t,y) ↦ [(t,y)] through AddCircle 1, and verticalSweepHomotopy proves its endpoints are the vertical core map and that map precomposed with additive negation. The remaining B6 step is the representation transport identifying additive negation through t95J02CircleB_homeo with coordinate-1 Euclidean reflection.",
+    "Program milestone completed. B6 is proved: sphereToAddCircle_reflection identifies coordinate-1 Euclidean reflection with additive negation on AddCircle 1, and verticalSweepHomotopy transports through that equality to prove t95J02_beta_homotopic_beta_reflection. B7-B9 remain.",
     :commands
     [{:cmd "lake env lean problems/t95J02/lean/Main.lean",
       :exit 0,
       :finding
-      "The module compiles; verticalSweepHomotopy is placeholder-free and the three pre-existing placeholders remain."}
+      "The module compiles; the completed B6 block is placeholder-free and the three pre-existing placeholders remain."}
      {:cmd
-      "python3 comment-stripped B6 partial and source placeholder validation",
+      "python3 comment-stripped B6 completion and source placeholder validation",
       :exit 0,
       :finding
-      "The new B6 block contains zero sorry, admit, or axiom tokens; the whole source remains at three sorries."}
+      "B6 contains zero sorry, admit, or axiom tokens; the whole source remains at three sorries."}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131 registered statements match, 0 do not."}
      {:cmd
       "git diff --check -- problems/t95J02/lean/Main.lean ConstructionTargets/t95J02Closure.blueprint.md",
       :exit 0}
-     {:cmd "git commit -m Descend-t95J02-vertical-glide-homotopy",
+     {:cmd "git commit -m Complete-t95J02-reflection-homotopy",
       :exit 0,
       :finding
-      "Committed the two scoped files as 5ad0b052e235a1a01be0035c81b870751f40215a."}
+      "Committed the two scoped files as 8e373f0d382ebc4efd4fd329bb908b9be20e4d6d."}
      {:cmd
       "sha256sum problems/t95J02/lean/Main.lean ConstructionTargets/t95J02Closure.blueprint.md",
       :exit 0,
       :finding
-      "Hashes are f968f5fbd27e1894a6fb81955aa73cece054cdbff0743718b4aa8ab2d7f64303 and 3c0dc595b5df01192f057bda6f5f557b43e1847a024e41e9b845fc3e1b917307."}],
+      "Hashes are daaabe68f4eb86ac6b32a000528b5f2b3f2f06b5c7a17ba3fe11a6cdece2203d and 006eec5a6a150bcbfd64edfc4299728db15aee0ac2a4069644f9a90416d90e1b."}],
     :diagnostic-history
     [{:cmd "lake env lean problems/t95J02/lean/Main.lean",
       :exit 1,
       :finding
-      "The first sweep draft used I without opening unitInterval, so Lean treated I as an implicit type; corrected by opening unitInterval and adding explicit real coercions."}
+      "Initial representation proof left the inverse of a unit complex number unsimplified; corrected by rewriting Circle.coe_inv_eq_conj before expanding the orthonormal-basis coordinates."}
      {:cmd "lake env lean problems/t95J02/lean/Main.lean",
       :exit 1,
       :finding
-      "The endpoint proof did not unfold the TopCat inclusion coercion; corrected by exposing the subtype value and applying the compiled vertical and glide equalities."}
+      "Intermediate transport used a nonexistent Homeomorph.toContinuousMap field; corrected by explicitly bundling sphereToAddCircle with its continuity proof."}
      {:cmd "lake env lean problems/t95J02/lean/Main.lean",
       :exit 1,
       :finding
-      "The intermediate core map tried ContinuousMap.comp directly on a TopCat morph; corrected by bundling its coerced function with the composed continuity proof."}],
+      "Rewriting beta changed the syntactic left side of the reflection equality; corrected by rewriting beta_eq_verticalCoreMap into a local copy of beta_reflection_eq before applying it."}],
     :continue-from
-    {:commit "5ad0b052e235a1a01be0035c81b870751f40215a",
+    {:commit "8e373f0d382ebc4efd4fd329bb908b9be20e4d6d",
      :next
-     "Prove the coordinate representation lemma conjugating reflectionMap 1 to additive negation, then package the transported t95J02_beta_homotopic_beta_reflection."},
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791722352251-5350-b61a6f41",
-     :commands
-     ["git show/diff-tree 5ad0b052e235a1a01be0035c81b870751f40215a"
-      "recorded-tree SHA-256, exact-scope, diff-check, and placeholder verification"
-      "python3 scripts/statement-registry.py check"
-      "lake env lean problems/t95J02/lean/Main.lean"
-      "lake env lean recorded source plus #print axioms"],
-     :finding
-     "PASS: commit 5ad0b052 adds new compiled, placeholder-free B6 progress after the B5 program-history entry. The descended vertical sweep is continuous, its zero endpoint is the vertical core map, and its one endpoint is that map after additive negation with the glide equality in the correct orientation. Scope and fixture hashes match, only standard axioms occur, and the blueprint faithfully marks B6 partial with the reflection/negation representation transport remaining."},
-    :commit "5ad0b052e235a1a01be0035c81b870751f40215a",
+     "Implement B7 with the type-correct order H1(reflectionMap 1) followed by H1(beta), then prove the retraction injectivity bridge B8 and close B9."},
+    :commit "8e373f0d382ebc4efd4fd329bb908b9be20e4d6d",
     :changed-paths
     ["problems/t95J02/lean/Main.lean"
      "ConstructionTargets/t95J02Closure.blueprint.md"],
     :fixture
     {:path "ConstructionTargets/t95J02Closure.blueprint.md",
      :sha256
-     "3c0dc595b5df01192f057bda6f5f557b43e1847a024e41e9b845fc3e1b917307",
+     "006eec5a6a150bcbfd64edfc4299728db15aee0ac2a4069644f9a90416d90e1b",
      :nodes
      [{:id :B1, :status :proved}
       {:id :B2, :status :proved}
       {:id :B3, :status :proved}
       {:id :B4, :status :proved}
       {:id :B5, :status :proved}
-      {:id :B6, :status :partial}
+      {:id :B6, :status :proved}
       {:id :B7, :status :planned}
       {:id :B8, :status :planned}
       {:id :B9, :status :planned}]},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["problems/t95J02/lean/Main.lean"
     "problems/t95J02/status.json"
@@ -117065,7 +117053,8 @@
     :reported-by [:program-2026-10-11-close-t95j02],
     :type
     "For beta defined by t95J02CircleB_homeo followed by t95J02InclusionB, ContinuousMap.Homotopic beta (beta.comp (CoefficientFirstReflection.reflectionMap 0))",
-    :area "klein-bottle-homology"},
+    :area "klein-bottle-homology",
+    :proved-in :program-2026-10-11-close-t95j02},
    :id :lemma-t95j02closure-t95j02-beta-homotopic-beta-reflection,
    :kind :lemma,
    :depends-on
