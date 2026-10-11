@@ -1599,6 +1599,32 @@ theorem coupledAngularComplexInterpolation_eq_zero_iff
     · simpa [coupledAngularComplexInterpolation] using hre
     · simp [coupledAngularComplexInterpolation, him]
 
+theorem coupledAngularComplexInterpolation_zero_interior
+    (tp : unitInterval × RightTubeMinusLeftCore)
+    (hz : coupledAngularComplexInterpolation tp = 0) :
+    0 < (tp.1 : ℝ) ∧ (tp.1 : ℝ) < 1 ∧
+      (rightTubeCorePlanarComplex tp.2.1).re < 0 := by
+  have hzero := (coupledAngularComplexInterpolation_eq_zero_iff tp).mp hz
+  rcases hzero with ⟨him, hre⟩
+  have ht0 : 0 < (tp.1 : ℝ) := by
+    have hnonneg := tp.1.2.1
+    apply lt_of_le_of_ne hnonneg
+    intro ht
+    rw [ht.symm] at hre
+    norm_num at hre
+  have ht1 : (tp.1 : ℝ) < 1 := by
+    have hle := tp.1.2.2
+    apply lt_of_le_of_ne hle
+    intro ht
+    rw [ht] at hre
+    norm_num at hre
+    apply rightTubeCorePlanarComplex_ne_zero tp.2.1 tp.2.2.1
+    apply Complex.ext
+    · simpa using hre
+    · simpa using him
+  refine ⟨ht0, ht1, ?_⟩
+  nlinarith
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -1660,3 +1686,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightAmbientDetour_of_coupledAngular
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.continuousCoupledAngularComplexInterpolation_exists
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularComplexInterpolation_eq_zero_iff
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularComplexInterpolation_zero_interior
