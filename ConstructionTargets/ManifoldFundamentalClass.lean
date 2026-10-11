@@ -886,6 +886,29 @@ noncomputable def forgetIntModulesSnakeInput_preservedKernelτ₁
   letI := forgetIntModules_preservesParallelPairLimits
   exact isLimitOfPreserves forgetIntModules S.h₀τ₁
 
+/-- The parallel-pair diagram formed before forgetting integer-module
+structure agrees with the parallel-pair diagram formed afterwards. -/
+noncomputable def forgetIntModulesParallelPairZeroIso
+    {X Y : ModuleCat ℤ} (f : X ⟶ Y) :
+    parallelPair f 0 ⋙ forgetIntModules ≅
+      parallelPair (forgetIntModules.map f) 0 :=
+  NatIso.ofComponents (fun j ↦ match j with
+    | WalkingParallelPair.zero => Iso.refl _
+    | WalkingParallelPair.one => Iso.refl _) (by
+    intro i j g
+    rcases i <;> rcases j <;> rcases g
+    · simpa only [Functor.comp_obj, Functor.comp_map, parallelPair_obj_zero,
+        Iso.refl_hom, Category.comp_id, Category.id_comp]
+        using forgetIntModules.map_id X
+    · simp
+    · simpa only [Functor.comp_obj, Functor.comp_map, parallelPair_obj_zero,
+        parallelPair_obj_one, parallelPair_map_right, Iso.refl_hom,
+        Category.comp_id, Category.id_comp]
+        using forgetIntModules.map_zero X Y
+    · simpa only [Functor.comp_obj, Functor.comp_map, parallelPair_obj_one,
+        Iso.refl_hom, Category.comp_id, Category.id_comp]
+        using forgetIntModules.map_id Y)
+
 /-- The corrected relative-homology comparison intertwines the coefficient
 absolute-to-relative map with the production relative projection. -/
 theorem integralRelativeHomologyComparisonWithTransport_projection
@@ -1852,6 +1875,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetIntModules_preservesParallelPairLimits
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetIntModules_preservesParallelPairColimits
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetIntModulesSnakeInput_preservedKernelτ₁
+#print axioms ConstructionTargets.ManifoldFundamentalClass.forgetIntModulesParallelPairZeroIso
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
