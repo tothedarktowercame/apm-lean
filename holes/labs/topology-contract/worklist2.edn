@@ -79335,11 +79335,23 @@
     [{:cmd "expanded coordinate compile",
       :exit 1,
       :finding "kernel timeout; extracted compact lemma"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791756758399-5910-b6b6f384",
+     :commands
+     ["git show/diff/check bb86cd3b"
+      "lake env lean ConstructionTargets/t97A04Closure.lean"
+      "lake env lean problems/t97A04/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "fingerprint, placeholders, ancestry, fixture, blueprint checks"],
+     :finding
+     "PASS: bb86cd3b is new after history 8b97cb1a; its sole changed path is scoped and closure/blueprint blobs match. frozenH2Coordinate_comp correctly cancels the middle coordinate iso and identifies the composite of conjugated maps with the conjugate of f then g, providing the exact representation bridge for B9. Lean gates pass with standard axioms; registry 131/0; frozen hash ca1b2cb3c6594276811618321d5c0604c2f38fc4594a6b21ae161a711a923a34 unchanged; closure/Main placeholders 0/2. This is compiled progress; instantiate the lemma and finish B9-B11 as listed."},
     :commit "bb86cd3b3e30153d1794295706985afd4710fd65",
     :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79477,6 +79489,9 @@
      :reason :program-progress-committed}
     {:job 3,
      :commit "8b97cb1ad0ea2a5f6b44dcce02c38e9457e88df8",
+     :reason :program-progress-committed}
+    {:job 4,
+     :commit "bb86cd3b3e30153d1794295706985afd4710fd65",
      :reason :program-progress-committed}]}
   {:consumer :t96A07,
    :stop-count 4,
@@ -80951,7 +80966,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "ConstructionTargets.T97A04Closure.frozenH2Coordinate_comp",
@@ -80961,7 +80976,9 @@
     :reported-by [:program-2026-10-11-close-t97a04],
     :type "coordinate composite law",
     :area "mv-connecting-naturality",
-    :proved-in :program-2026-10-11-close-t97a04},
+    :proved-in :program-2026-10-11-close-t97a04,
+    :banked-by :program-2026-10-11-close-t97a04,
+    :banked-commit "bb86cd3b3e30153d1794295706985afd4710fd65"},
    :id
    :lemma-constructiontargets-t97a04closure-frozenh2coordinate-comp,
    :kind :lemma,
