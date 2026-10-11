@@ -917,6 +917,21 @@ theorem correctedLocalGeneratorCoefficient_eq_one_of_nonneg
   · exact h
   · omega
 
+/-- A compatible corrected normalization sends the corrected local-generator
+coefficient to one. -/
+theorem correctedLocalGeneratorCoefficient_eq_one_of_normalization
+    (k : ℕ) {M : Type} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M)
+    (hcompat :
+      (integralRelativeHomologyComparisonWithTransport
+          (deletedPoint x) (k + 2)).hom ≫
+          (ambientLocalNormalization k x).hom =
+        forgetIntModules.map (CoefficientChartLocal.localIso ℤ k x).hom) :
+    correctedLocalGeneratorCoefficient k x = 1 := by
+  unfold correctedLocalGeneratorCoefficient
+  rw [integralRelativeHomologyComparisonWithTransport_generator_of_normalization
+    k x hcompat, ambientLocalNormalization_generator]
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -974,3 +989,4 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient_eq_unit
 #print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient_eq_one_or_neg_one
 #print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient_eq_one_of_nonneg
+#print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient_eq_one_of_normalization
