@@ -101350,8 +101350,106 @@
   {:bounded-exception
    "This single-consumer prerequisite reduces both pending boundary-map injectivity proofs to constructing relation-invariant decoders with explicit left-inverse formulas.",
    :consumer :t97A01,
+   :evidence
+   {:placeholder-delta
+    {:source-before 0,
+     :source-after 0,
+     :fixture-before 0,
+     :fixture-after 0,
+     :consumer-before 1,
+     :consumer-after 1},
+    :residual
+    "Build the two specialized decoders from canonical half-open six-edge coordinates, prove relation invariance and left-inverse formulas, and derive injectivity.",
+    :gates
+    {:module-build :pass,
+     :fixture-compiles :pass,
+     :zero-source-and-fixture-sorry :pass,
+     :standard-only-axioms :pass,
+     :registry-check :pass,
+     :clean-worktree :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["The scoped module emitted no warnings; replayed dependencies emitted pre-existing linter warnings. An unrelated untracked SardGeneralModel.lean was observed before the scoped commit and disappeared independently before final verification; it was not staged or changed by this row."],
+    :missing-theorems
+    [{:name "RelationQuotientLeftInverse.eqvGen_respects",
+      :type
+      "∀ (g : A → X), (∀ ⦃a b⦄, R a b → g a = g b) → ∀ ⦃a b⦄, Relation.EqvGen R a b → g a = g b",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on [],
+      :area "polygon-surface-open-cover"}
+     {:name "RelationQuotientLeftInverse.descend",
+      :type
+      "(g : A → X) → (∀ ⦃a b⦄, R a b → g a = g b) → Quotient (Relation.EqvGen.setoid R) → X",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on ["RelationQuotientLeftInverse.eqvGen_respects"],
+      :area "polygon-surface-open-cover"}
+     {:name "RelationQuotientLeftInverse.descend_mk",
+      :type
+      "∀ (g : A → X) (hg : ∀ ⦃a b⦄, R a b → g a = g b) (a : A), descend R g hg (Quotient.mk _ a) = g a",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on ["RelationQuotientLeftInverse.descend"],
+      :area "polygon-surface-open-cover"}
+     {:name
+      "RelationQuotientLeftInverse.quotient_mk_comp_injective_of_decoder",
+      :type
+      "∀ (f : X → A) (g : A → X), (∀ ⦃a b⦄, R a b → g a = g b) → Function.LeftInverse g f → Function.Injective (fun x : X => Quotient.mk (Relation.EqvGen.setoid R) (f x))",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on ["RelationQuotientLeftInverse.descend_mk"],
+      :area "polygon-surface-open-cover"}
+     {:name
+      "RelationQuotientLeftInverse.injective_of_quotient_formula",
+      :type
+      "∀ (F : X → Quotient (Relation.EqvGen.setoid R)) (f : X → A) (g : A → X), (∀ x, F x = Quotient.mk _ (f x)) → (∀ ⦃a b⦄, R a b → g a = g b) → Function.LeftInverse g f → Function.Injective F",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on
+      ["RelationQuotientLeftInverse.quotient_mk_comp_injective_of_decoder"],
+      :area "polygon-surface-open-cover"}],
+    :statement-hashes
+    {"fixture"
+     "a39392e3a36d8362f9b7303e5d3dcdd1253af6d04c5d3684493fe387aff6aaab",
+     "implementation"
+     "97d65f58179292019ccba0d913bf9b444648462ed91b03cfadf633e558de4428"},
+    :axioms
+    {"eqvGen_respects" [],
+     "quotient_mk_comp_injective_of_decoder" [],
+     "injective_of_quotient_formula" []},
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd "sha256sum /tmp/relation-quotient-left-inverse.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.RelationQuotientLeftInverse",
+      :exit 0}
+     {:cmd "lake env lean /tmp/relation-quotient-left-inverse.lean",
+      :exit 0}
+     {:cmd
+      "rg -n \\b(sorry|admit)\\b ConstructionTargets/RelationQuotientLeftInverse.lean /tmp/relation-quotient-left-inverse.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "git diff --check HEAD^ HEAD", :exit 0}
+     {:cmd "test -z \"$(git status --porcelain)\"", :exit 0}],
+    :diagnostic-history [],
+    :commit "57f9c4f59edb70e5344e1ca7602680f7bf0f5453",
+    :changed-paths
+    ["ConstructionTargets/RelationQuotientLeftInverse.lean"],
+    :fixture
+    {:path "/tmp/relation-quotient-left-inverse.lean",
+     :sha256
+     "a39392e3a36d8362f9b7303e5d3dcdd1253af6d04c5d3684493fe387aff6aaab"},
+    :implementation
+    {:scope ["ConstructionTargets/RelationQuotientLeftInverse.lean"],
+     :summary
+     "Proved generator-respecting maps respect EqvGen, defined their quotient descent and representative formula, and derived two left-inverse criteria for injectivity into a relation quotient."},
+    :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/RelationQuotientLeftInverse.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/relation-quotient-left-inverse",
@@ -105195,12 +105293,12 @@
    :lemma
    {:name "RelationQuotientLeftInverse.eqvGen_respects",
     :reported-by
-    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40
+     :routes-2026-10-11-relation-quotient-left-inverse-68],
     :type
     "A function respecting a generating relation also respects its generated equivalence relation.",
     :area "polygon-surface-open-cover",
-    :proved-in
-    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+    :proved-in :routes-2026-10-11-relation-quotient-left-inverse-68},
    :id :lemma-relationquotientleftinverse-eqvgen-respects,
    :kind :lemma,
    :depends-on [],
@@ -105216,16 +105314,81 @@
    :lemma
    {:name "RelationQuotientLeftInverse.injective_of_quotient_formula",
     :reported-by
-    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40
+     :routes-2026-10-11-relation-quotient-left-inverse-68],
     :type
     "A map into an EqvGen quotient is injective when its representative formula admits a relation-invariant left-inverse decoder.",
     :area "polygon-surface-open-cover",
-    :proved-in
-    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+    :proved-in :routes-2026-10-11-relation-quotient-left-inverse-68},
    :id
    :lemma-relationquotientleftinverse-injective-of-quotient-formula,
    :kind :lemma,
+   :depends-on
+   [:lemma-relationquotientleftinverse-eqvgen-respects
+    :lemma-relationquotientleftinverse-quotient-mk-comp-injective-of-decoder],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "RelationQuotientLeftInverse.descend",
+    :type
+    "(g : A → X) → (∀ ⦃a b⦄, R a b → g a = g b) → Quotient (Relation.EqvGen.setoid R) → X"},
+   :lemma
+   {:name "RelationQuotientLeftInverse.descend",
+    :reported-by
+    [:routes-2026-10-11-relation-quotient-left-inverse-68],
+    :type
+    "(g : A → X) → (∀ ⦃a b⦄, R a b → g a = g b) → Quotient (Relation.EqvGen.setoid R) → X",
+    :area "polygon-surface-open-cover",
+    :proved-in :routes-2026-10-11-relation-quotient-left-inverse-68},
+   :id :lemma-relationquotientleftinverse-descend,
+   :kind :lemma,
    :depends-on [:lemma-relationquotientleftinverse-eqvgen-respects],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "RelationQuotientLeftInverse.descend_mk",
+    :type
+    "∀ (g : A → X) (hg : ∀ ⦃a b⦄, R a b → g a = g b) (a : A), descend R g hg (Quotient.mk _ a) = g a"},
+   :lemma
+   {:name "RelationQuotientLeftInverse.descend_mk",
+    :reported-by
+    [:routes-2026-10-11-relation-quotient-left-inverse-68],
+    :type
+    "∀ (g : A → X) (hg : ∀ ⦃a b⦄, R a b → g a = g b) (a : A), descend R g hg (Quotient.mk _ a) = g a",
+    :area "polygon-surface-open-cover",
+    :proved-in :routes-2026-10-11-relation-quotient-left-inverse-68},
+   :id :lemma-relationquotientleftinverse-descend-mk,
+   :kind :lemma,
+   :depends-on [:lemma-relationquotientleftinverse-descend],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "RelationQuotientLeftInverse.quotient_mk_comp_injective_of_decoder",
+    :type
+    "∀ (f : X → A) (g : A → X), (∀ ⦃a b⦄, R a b → g a = g b) → Function.LeftInverse g f → Function.Injective (fun x : X => Quotient.mk (Relation.EqvGen.setoid R) (f x))"},
+   :lemma
+   {:name
+    "RelationQuotientLeftInverse.quotient_mk_comp_injective_of_decoder",
+    :reported-by
+    [:routes-2026-10-11-relation-quotient-left-inverse-68],
+    :type
+    "∀ (f : X → A) (g : A → X), (∀ ⦃a b⦄, R a b → g a = g b) → Function.LeftInverse g f → Function.Injective (fun x : X => Quotient.mk (Relation.EqvGen.setoid R) (f x))",
+    :area "polygon-surface-open-cover",
+    :proved-in :routes-2026-10-11-relation-quotient-left-inverse-68},
+   :id
+   :lemma-relationquotientleftinverse-quotient-mk-comp-injective-of-decoder,
+   :kind :lemma,
+   :depends-on [:lemma-relationquotientleftinverse-descend-mk],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
