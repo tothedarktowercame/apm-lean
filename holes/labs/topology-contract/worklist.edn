@@ -115302,6 +115302,78 @@
    :id :lemma-apm-t94a07-halfturn-not-homotopic,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t94A07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t94A07_torusConstraint_derivative",
+    :type
+    "derivative of the square-root torus constraint, four sign cases"},
+   :lemma
+   {:name "t94A07_torusConstraint_derivative",
+    :reported-by [:owner],
+    :type
+    "derivative of the square-root torus constraint, four sign cases",
+    :area "torus-fixed-point-index"},
+   :id :lemma-t94a07-torusconstraint-derivative,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t94A07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t94A07_torusConstraint_kernel_eq_yz",
+    :type
+    "kernel of the constraint derivative at the fixed points is the yz-plane"},
+   :lemma
+   {:name "t94A07_torusConstraint_kernel_eq_yz",
+    :reported-by [:owner],
+    :type
+    "kernel of the constraint derivative at the fixed points is the yz-plane",
+    :area "torus-fixed-point-index"},
+   :id :lemma-t94a07-torusconstraint-kernel-eq-yz,
+   :kind :lemma,
+   :depends-on [:lemma-t94a07-torusconstraint-derivative],
+   :other-consumers []}
+  {:consumer :t94A07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t94A07_local_index_assembly",
+    :type
+    "local determinant / fixed-point index assembly using the banked half-turn derivative"},
+   :lemma
+   {:name "t94A07_local_index_assembly",
+    :reported-by [:owner],
+    :type
+    "local determinant / fixed-point index assembly using the banked half-turn derivative",
+    :area "torus-fixed-point-index"},
+   :id :lemma-t94a07-local-index-assembly,
+   :kind :lemma,
+   :depends-on [:lemma-t94a07-torusconstraint-kernel-eq-yz],
+   :other-consumers []}
+  {:consumer :t94A07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t94A07_longitude_projection_obstruction",
+    :type
+    "explicit longitude projection turns the ambient torus homotopy into a homotopy from id to a reflection of the circle, which is impossible (degree)"},
+   :lemma
+   {:name "t94A07_longitude_projection_obstruction",
+    :reported-by [:owner],
+    :type
+    "explicit longitude projection turns the ambient torus homotopy into a homotopy from id to a reflection of the circle, which is impossible (degree)",
+    :area "torus-fixed-point-index"},
+   :id :lemma-t94a07-longitude-projection-obstruction,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
