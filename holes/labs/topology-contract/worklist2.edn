@@ -69895,57 +69895,67 @@
    "single-consumer positive meridian-sign conversion to the unnormalized deleted left-core normal",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/t02a03_positive_sign_left_normal_probe.lean",
-      :sha256
-      "514acce785d9854ae5db674128c19b7135dede3c9e7103eb9036119e8b3c8ddd"},
-     :commands
-     [{:cmd
-       "test -L .lake/packages && test \"$(readlink -f .lake/packages)\" = /home/joe/code/apm-lean/.lake/packages",
-       :exit 0}
-      {:cmd
-       "lake env lean /tmp/t02a03_positive_sign_left_normal_probe.lean",
-       :exit 0,
-       :output
-       "positiveSign_rightTubeNormalComplex_re_pos compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "sha256sum /tmp/t02a03_positive_sign_left_normal_probe.lean",
-       :exit 0,
-       :output
-       "514acce785d9854ae5db674128c19b7135dede3c9e7103eb9036119e8b3c8ddd  /tmp/t02a03_positive_sign_left_normal_probe.lean"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_positive_sign_left_normal_probe.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}
-      {:cmd
-       "rg -n 'positiveSign_rightTubeNormalComplex_re_pos' /tmp/t02a03_positive_sign_left_normal_probe.lean",
-       :exit 0,
-       :output
-       "5:theorem positiveSign_rightTubeNormalComplex_re_pos\n26:#print axioms positiveSign_rightTubeNormalComplex_re_pos"}],
-     :warnings [],
-     :finding
-     "The positive normalized meridian sign forces the unnormalized deleted left-core normal real coordinate to equal its strictly positive norm. Deletion supplies nonzeroness, and NormedSpace.norm_smul_normalize supplies the exact normalization equation.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
-      :declaration
-      "ConstructionTargets.T02A03GeometricTubeDeformation.positiveSign_rightTubeNormalComplex_re_pos",
-      :type
-      "forall (p : RightTubeMinusLeftCore), (rightTubeMeridianCoordinate p : Complex).re = 1 -> 0 < (rightTubeNormalComplex p.1).re",
-      :proof
-      "Let n be rightTubeNormalComplex p.1; use deletion and rightTubeNormalComplex_eq_zero_iff to prove n nonzero, take real parts in norm_smul_normalize n, rewrite normalize n real to 1 using the hypothesis, and conclude from norm_pos_iff.",
-      :axioms [propext Classical.choice Quot.sound]},
-     :residual
-     "Implement and bank the positive-sign input-normal inequality; then translate it to the core-normal interpolation and prove the positive radial collision branch."}},
+   {:placeholder-delta {:before 0, :after 0, :change 0},
+    :residual
+    "Translate the positive branch into a core-normal interpolation inequality and prove its radial collision polynomial positive; establish the corresponding negative-branch inequalities, combine both branches, then construct the angular stage.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean:62:6: unnecessarySimpa (pre-existing)"
+     "Unrelated concurrent untracked ConstructionTargets/GenericTargetNaturalSourceReconstructionLegCoordinates.lean was preserved and not committed."],
+    :missing-theorems [],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms [propext Classical.choice Quot.sound],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :scope-blob "ffc481bd663b1ed2f83b34f5f7dbee7531b5441b",
+    :commands
+    [{:cmd
+      "test -L .lake/packages && test \"$(readlink -f .lake/packages)\" = /home/joe/code/apm-lean/.lake/packages",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0,
+      :output
+      "compiled; declaration axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "lake env lean /tmp/t02a03_positive_sign_left_normal_probe.lean",
+      :exit 0,
+      :output
+      "positiveSign_rightTubeNormalComplex_re_pos compiled; axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "sha256sum /tmp/t02a03_positive_sign_left_normal_probe.lean",
+      :exit 0,
+      :output
+      "514acce785d9854ae5db674128c19b7135dede3c9e7103eb9036119e8b3c8ddd  /tmp/t02a03_positive_sign_left_normal_probe.lean"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "git diff --check -- ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd
+      "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git status --short",
+      :exit 0,
+      :output
+      "?? ConstructionTargets/GenericTargetNaturalSourceReconstructionLegCoordinates.lean"}],
+    :commit "d8fc01af90aff23ba5f3083eebf770975d547fba",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.positiveSign_rightTubeNormalComplex_re_pos",
+    :fixture
+    {:path "/tmp/t02a03_positive_sign_left_normal_probe.lean",
+     :sha256
+     "514acce785d9854ae5db674128c19b7135dede3c9e7103eb9036119e8b3c8ddd"},
+    :finding
+    "Deletion makes rightTubeNormalComplex nonzero. Taking real parts of norm times normalize equals the original normal and rewriting the normalized real part to one identifies the original real part with its strictly positive norm.",
+    :seat "topo-6"},
    :phase :implementation,
    :type
    "forall (p : RightTubeMinusLeftCore), (rightTubeMeridianCoordinate p : Complex).re = 1 -> 0 < (rightTubeNormalComplex p.1).re",
-   :state :open,
+   :state :done-unreviewed,
    :proof
    "Let n be rightTubeNormalComplex p.1; use deletion and rightTubeNormalComplex_eq_zero_iff to prove n nonzero, take real parts in norm_smul_normalize n, rewrite normalize n real to 1 using the hypothesis, and conclude from norm_pos_iff.",
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
