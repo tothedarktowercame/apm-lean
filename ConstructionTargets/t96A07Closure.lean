@@ -2,6 +2,7 @@ import ConstructionTargets.RealProjectiveSmoothTarget
 
 open scoped Manifold ContDiff
 open ConstructionTargets.RealProjectiveSmoothTarget
+open ConstructionTargets.ProjectiveSpaceTopology
 
 noncomputable section
 
@@ -32,7 +33,19 @@ theorem crossTermSphereMap_contMDiff :
   · exact (hc 0).mul (hc 2)
   · exact (hc 0).mul (hc 1)
 
+/-- The cross-term map descends smoothly through the fixed smooth atlas on
+real projective two-space. -/
+theorem crossTermSphereMap_descends :
+    letI := rpSmoothAtlas.charts
+    letI := rpSmoothAtlas.smooth
+    ∃ f : Space ℝ 2 → E 3,
+      (∀ p : Sphere 2, f (sphereProjection 2 p) = crossTermSphereMap p) ∧
+      ContMDiff (𝓡 2) (𝓡 3) ∞ f :=
+  sphereProjectionEvenMapSmoothDescent 3 crossTermSphereMap
+    crossTermSphereMap_antipodal crossTermSphereMap_contMDiff
+
 #print axioms crossTermSphereMap_antipodal
 #print axioms crossTermSphereMap_contMDiff
+#print axioms crossTermSphereMap_descends
 
 end ConstructionTargets.T96A07Closure

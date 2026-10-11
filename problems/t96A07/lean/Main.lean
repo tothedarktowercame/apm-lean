@@ -46,8 +46,18 @@ theorem sphereMap_contMDiff :
   simpa [T96A07.sphereMap, crossTermSphereMap] using
     crossTermSphereMap_contMDiff
 
+theorem descendedSphereMap :
+    letI := rpSmoothAtlas.charts
+    letI := rpSmoothAtlas.smooth
+    ∃ f : Space ℝ 2 → E 3,
+      (∀ p : Sphere 2, f (sphereProjection 2 p) = T96A07.sphereMap p) ∧
+      ContMDiff (𝓡 2) (𝓡 3) ∞ f := by
+  simpa [T96A07.sphereMap, crossTermSphereMap] using
+    crossTermSphereMap_descends
+
 #print axioms sphereMap_antipodal
 #print axioms sphereMap_contMDiff
+#print axioms descendedSphereMap
 
 end ConstructionTargets.T96A07Closure
 
