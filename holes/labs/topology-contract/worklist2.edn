@@ -79341,13 +79341,26 @@
       "Final wrapper attempts showed the remaining categorical elaboration boundary across imported private chain-functor abbreviations. The incomplete wrapper was removed and the successful supporting declarations were committed."}],
     :continue-from
     "Package shearYIntersectionMap, shearYPiecesMap, and shearYUnionMap into shearYShortComplexHom. Add typed local equalities exposing the imported SingularExcision chain functor before applying the biproduct projection and injection lemmas. Do not rebuild the compiled maps.",
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791719402926-5290-c623d3e4",
+     :commands
+     ["git show/diff-tree/show --check 3aed25dcb4a853e886922111f17b9ec6f5ea2d14"
+      "git rev-parse recorded closure blob and inspect commit diff"
+      "lake env lean ConstructionTargets/t97A04Closure.lean"
+      "lake env lean problems/t97A04/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "statement fingerprints and placeholder counts at recorded commit and prior program-history commit"],
+     :finding
+     "PASS: independent author topo-6 committed substantive compiled progress after program-history job 4. Commit 3aed25dcb adds sorry-free B4 supporting results: the exact intersection map, biproduct pieces map, and pushout-defined union map induced by shearY, together with the intersection-left, intersection-right, and pushout compatibility equations. Their orientations match the Boolean-cover short complex and stay within the B2/B3 representations. The reported residual is exact: only packaging these compiled maps into shearYShortComplexHom comm12 and comm23 remains, and that partial theorem is listed in :missing-theorems. The recorded closure blob matches; closure and Main compile; the new support uses standard axioms only and the closure file has no placeholders. Main retains the same two acknowledged placeholders as program-history job 4; registry is 131/0 and the frozen t97A04 fingerprint is unchanged. This is a correct program STOP after real progress, not a missing-interface refusal."},
     :commit "3aed25dcb4a853e886922111f17b9ec6f5ea2d14",
     :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
     :finding
     "B4 has substantive compiled progress but is not complete. The exact intersection, two-piece, and pushout-defined union chain maps induced by shearY compile. Their intersection/member naturality equations and the pushout compatibility are proved without placeholders. Only packaging the maps into ShortComplex.Hom remains.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79363,7 +79376,7 @@
     ["lake env lean problems/t97A04/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: :program-milestone-complete",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: :program-progress-committed",
    :id :program-2026-10-11-close-t97a04,
    :kind :final-adapter,
    :campaign-priority 43,
@@ -79382,7 +79395,10 @@
      :reason :program-milestone-complete}
     {:job 4,
      :commit "2a6df176426727c93ff5546f04fe0970a5081348",
-     :reason :program-milestone-complete}]}
+     :reason :program-milestone-complete}
+    {:job 5,
+     :commit "3aed25dcb4a853e886922111f17b9ec6f5ea2d14",
+     :reason :program-progress-committed}]}
   {:consumer :t96A07,
    :phase :implementation,
    :state :open,
