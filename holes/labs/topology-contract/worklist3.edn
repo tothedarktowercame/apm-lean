@@ -17833,6 +17833,19 @@
       :exit 1,
       :finding
       "Rewriting CategoryTheory.End.mul_def did not unfold through the FundamentalGroup.toPath abbreviation. Changing the monodromy argument explicitly to toPath(b).trans(toPath(a)) exposed the reviewed composition order; the successful rerun is recorded in commands."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791715665742-5134-2aaab4de",
+     :commands
+     ["git diff-tree --no-commit-id --name-status -r dce631bb064fcdb2668997b82b6dbd096f9f2831"
+      "git diff --check dce631bb064fcdb2668997b82b6dbd096f9f2831^ dce631bb064fcdb2668997b82b6dbd096f9f2831"
+      "sha256sum ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean ConstructionTargets/DeckGroupQuotientFundamentalGroup.blueprint.md"
+      "lake env lean ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean"
+      "python3 scripts/statement-registry.py check"
+      "lake build ConstructionTargets.DeckGroupQuotientFundamentalGroup"],
+     :finding
+     "PASS: commit dce631bb064fcdb2668997b82b6dbd096f9f2831 adds new compiled, sorry-free B6 progress after program-history commit 2b65123e4ac796b51a40121a9ea4717dfda4866f; exact scope and blobs match, hashes reproduce, raw endpoint coordinates have the reviewed reversed multiplication orientation, the proof uses only B3/B5 and the permitted monodromy composition machinery, only standard axioms occur, and the milestone note lists B7-B11 work remaining."},
     :commit "dce631bb064fcdb2668997b82b6dbd096f9f2831",
     :changed-paths
     ["ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean"
@@ -17850,7 +17863,7 @@
    :phase :implementation,
    :owner-repair
    "2026-10-11 claude-14: final type gains [T2Space X] [LocallyCompactSpace X] (Mathlib quotient-covering needs them; every consumer, the plane and spheres, has them). Do not prove covering under weaker hypotheses.",
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean"
     "ConstructionTargets/DeckGroupQuotientFundamentalGroup.md"
@@ -17870,7 +17883,7 @@
     :blueprint
     "ConstructionTargets/DeckGroupQuotientFundamentalGroup.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Implemented and committed reviewed blueprint B5. orbitMonodromy_deck_equivariant uses B4's uniqueness clause to identify its global lift with the continuous deck translation y ↦ g • y, composes that lift with the path lifted from x, applies uniqueness of path lifts, and evaluates at 1. The theorem proves exact equality of the underlying points in the orbit fiber. The final theorem remains incomplete; B6 raw anti-multiplicativity is next.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Implemented and committed reviewed blueprint B6. orbitEndpointMonodromyRaw_mul proves raw(a*b)=raw(b)*raw(a): the proof exposes fundamental-group multiplication as the path for b followed by a, applies monodromy_trans_apply, rewrites the intermediate endpoint through the fiber-coordinate equivalence, and applies B5 deck-equivariance. The final theorem remains incomplete; B7 packages the inverse raw coordinate as a homomorphism.",
    :id :program-2026-10-11-deck-group-quotient-pi1,
    :kind :reusable-theorem,
    :campaign-priority 50,
@@ -17906,7 +17919,11 @@
     {:job 8,
      :commit "2b65123e4ac796b51a40121a9ea4717dfda4866f",
      :reason
-     "Implemented and committed reviewed blueprint B5. orbitMonodromy_deck_equivariant uses B4's uniqueness clause to identify its global lift with the continuous deck translation y ↦ g • y, composes that lift with the path lifted from x, applies uniqueness of path lifts, and evaluates at 1. The theorem proves exact equality of the underlying points in the orbit fiber. The final theorem remains incomplete; B6 raw anti-multiplicativity is next."}]}
+     "Implemented and committed reviewed blueprint B5. orbitMonodromy_deck_equivariant uses B4's uniqueness clause to identify its global lift with the continuous deck translation y ↦ g • y, composes that lift with the path lifted from x, applies uniqueness of path lifts, and evaluates at 1. The theorem proves exact equality of the underlying points in the orbit fiber. The final theorem remains incomplete; B6 raw anti-multiplicativity is next."}
+    {:job 9,
+     :commit "dce631bb064fcdb2668997b82b6dbd096f9f2831",
+     :reason
+     "Implemented and committed reviewed blueprint B6. orbitEndpointMonodromyRaw_mul proves raw(a*b)=raw(b)*raw(a): the proof exposes fundamental-group multiplication as the path for b followed by a, applies monodromy_trans_apply, rewrites the intermediate endpoint through the fiber-coordinate equivalence, and applies B5 deck-equivariance. The final theorem remains incomplete; B7 packages the inverse raw coordinate as a homomorphism."}]}
   {:consumer :t00J02,
    :phase :lemma,
    :state :backlog,
