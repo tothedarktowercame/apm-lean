@@ -7400,6 +7400,23 @@
       :exit 0,
       :output "1 1"}
      {:cmd "git status --short", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791691780638-4119-fe09931b",
+     :commands
+     ["git show and git diff-tree recorded commit scope"
+      "git blob identity check"
+      "sha256sum frozen fixture"
+      "git diff --check recorded commit"
+      "lake env lean renamed frozen-fixture replay"
+      "lake env lean target module"
+      "lake build target module"
+      "placeholder and axiom scan"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped consumer placeholder census"],
+     :finding
+     "PASS: commit 1b0c137d changes only ConstructionTargets/ManifoldFundamentalClass.lean and its recorded blob matches the reviewed tree; frozen fixture hash fccc4483ba1792e0a392fddeba14a2b1f25bd6a3d69aa84c10403897f0f30c7c matches. The theorem has the frozen conditional direction from the supplied corrected normalization square to correctedLocalGeneratorCoefficient = 1. It unfolds only the coordinate definition, applies integralRelativeHomologyComparisonWithTransport_generator_of_normalization to the supplied square, and finishes with ambientLocalNormalization_generator; it does not prove the square or assert orientation compatibility. Fixture replay and target compile/build pass with only propext, Classical.choice, Quot.sound; registry is 131/0; source and fixture have no placeholders; consumer counts remain t00J02=1 and t98A02=1."},
     :commit "1b0c137dab4f1dd3c6e6cc370aed03fdb4d6dbc4",
     :commits ["1b0c137dab4f1dd3c6e6cc370aed03fdb4d6dbc4"],
     :changed-paths
@@ -7417,7 +7434,7 @@
      "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), ((integralRelativeHomologyComparisonWithTransport (deletedPoint x) (k + 2)).hom ≫ (ambientLocalNormalization k x).hom = forgetIntModules.map (CoefficientChartLocal.localIso Int k x).hom) -> correctedLocalGeneratorCoefficient k x = 1"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/coefficient-one-from-corrected-normalization",
@@ -7571,7 +7588,7 @@
      "The prior receipt's theorem compiled, but its prerequisite map omitted the required row id. With that schema defect corrected, the theorem isolates the exact remaining geometry: the coefficient and production sphere normalizations are independently recursive, and the concrete connecting-radial-sphere normalization composites must be proved equal. That equality immediately forces correctedLocalGeneratorCoefficient to be one.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -10687,7 +10704,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -10704,7 +10721,10 @@
     "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), ((integralRelativeHomologyComparisonWithTransport (deletedPoint x) (k + 2)).hom ≫ (ambientLocalNormalization k x).hom = forgetIntModules.map (CoefficientChartLocal.localIso Int k x).hom) -> correctedLocalGeneratorCoefficient k x = 1",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-coefficient-one-from-corrected-normalization-topo3-r1},
+    :routes-2026-10-11-manifold-coefficient-one-from-corrected-normalization-topo3-r1,
+    :banked-by
+    :routes-2026-10-11-manifold-coefficient-one-from-corrected-normalization-topo3-r1,
+    :banked-commit "1b0c137dab4f1dd3c6e6cc370aed03fdb4d6dbc4"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-correctedlocalgeneratorcoefficient-eq-one-of-normalization,
    :kind :lemma,
