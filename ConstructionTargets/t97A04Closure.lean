@@ -1582,6 +1582,41 @@ noncomputable def frozenConnectingCoordinate :
       frozenYCover.union_eq_univ 1 ≫
     frozenOverlapH1IsoIntBiprod.hom
 
+/-- The degree-two homology of each frozen-cover member vanishes, because
+the fixed cover homeomorphisms identify them with the two solid-torus
+members of the boundary cover. -/
+theorem frozenH2Pieces_isZero : IsZero
+    (SingularHomology 2 (TopCat.of frozenYCover.U) ⊞
+      SingularHomology 2 (TopCat.of frozenYCover.V)) := by
+  rw [biprod_isZero_iff]
+  exact ⟨
+    IsZero.of_iso (leftHomology_isZero_of_one_lt 2 (by omega))
+      (singularHomologyIsoOfHomotopyEquiv
+        frozenYCoverUHomeomorph.toHomotopyEquiv 2),
+    IsZero.of_iso (rightHomology_isZero_of_one_lt 2 (by omega))
+      (singularHomologyIsoOfHomotopyEquiv
+        frozenYCoverVHomeomorph.toHomotopyEquiv 2)⟩
+
+instance frozenProductionConnecting_mono : Mono
+    (productionConnecting frozenYCover.U frozenYCover.V
+      frozenYCover.U_isOpen frozenYCover.V_isOpen
+      frozenYCover.union_eq_univ 1) := by
+  exact (productionMayerVietoris_exact_union frozenYCover.U frozenYCover.V
+    frozenYCover.U_isOpen frozenYCover.V_isOpen
+    frozenYCover.union_eq_univ 1).mono_g
+      (frozenH2Pieces_isZero.eq_of_src _ _)
+
+instance frozenConnectingCoordinate_mono : Mono frozenConnectingCoordinate := by
+  dsimp only [frozenConnectingCoordinate]
+  constructor
+  intro Z f g hfg
+  apply (cancel_mono frozenTorusH2GroupIsoInt.inv).1
+  apply (cancel_mono (productionConnecting frozenYCover.U frozenYCover.V
+    frozenYCover.U_isOpen frozenYCover.V_isOpen
+    frozenYCover.union_eq_univ 1)).1
+  apply (cancel_mono frozenOverlapH1IsoIntBiprod.hom).1
+  simpa only [Category.assoc] using hfg
+
 theorem shearY_frozenConnectingCoordinate_naturality (a b : ℤ) :
     (frozenTorusH2GroupIsoInt.inv ≫
         HomologicalComplex.homologyMap
@@ -1616,6 +1651,18 @@ theorem shearY_frozenConnectingCoordinate_scalar (a b : ℤ) :
       (a • 𝟙 (AddCommGrpCat.of ℤ)) ≫ frozenConnectingCoordinate := by
   rw [shearY_frozenConnectingCoordinate_naturality,
     frozenConnectingCoordinate_comp_overlapScalar]
+
+/-- In the fixed integral top-class coordinate, the upper-triangular shear
+acts on degree-two homology by multiplication by its first coefficient. -/
+theorem shearY_H2 (a b : ℤ) :
+    frozenTorusH2GroupIsoInt.inv ≫
+        HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularSubdivision.singularPostcomposition
+            (shearY a b)) 2 ≫
+        frozenTorusH2GroupIsoInt.hom =
+      a • 𝟙 (AddCommGrpCat.of ℤ) := by
+  apply (cancel_mono frozenConnectingCoordinate).1
+  exact shearY_frozenConnectingCoordinate_scalar a b
 
 #print axioms frozenTorusH2GroupIsoInt
 #print axioms frozenYCover
