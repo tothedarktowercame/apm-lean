@@ -115,7 +115,7 @@ by `CircleB` through the separating inverse.
 lean: `t95J02Closure.t95J02_beta_homotopic_beta_reflection` :
 for `β := t95J02InclusionB.comp t95J02CircleB_homeo.toContinuousMap`,
 `ContinuousMap.Homotopic β
-  (β.comp (CoefficientFirstReflection.reflectionMap (1 : Fin 2)))`.
+  (β.comp (CoefficientCoordinateReflections.reflectionMap (1 : Fin 2)))`.
 
 uses: B3, B4, B5, `t95J02QuotientPoint_glide`,
 `AddCircle.homeomorphCircle (T := 1) one_ne_zero`,
@@ -140,6 +140,7 @@ lean: `t95J02Closure.apm_t95J02_bridge_vertical_H1_kernel` :
 
 uses: B5, B6, `CoefficientFirstReflection.topIso`,
 `CoefficientFirstReflection.integral_circle`,
+`CoefficientCoordinateReflections.reflectionMap`,
 `SingularHomologyHomotopy.singularHomology_map_eq_of_homotopic`,
 Mathlib `Functor.map_comp`
 
@@ -149,7 +150,8 @@ Let `g` be the inverse image of `1 : ℤ` under the integral H1 isomorphism of
 the Euclidean circle and let `gamma` be the image of `2 • g` under the H1
 isomorphism induced by B5.  It is nonzero because its integer coordinate is
 `2`.  B6 and homotopy invariance give
-`H₁(β) = H₁(β) ≫ H₁(reflectionMap (1 : Fin 2))`.  Instantiate
+`H₁(β) = H₁(β) ≫
+H₁(CoefficientCoordinateReflections.reflectionMap (1 : Fin 2))`.  Instantiate
 `CoefficientFirstReflection.integral_circle` at coordinate `1`; it replaces
 the last factor by `-𝟙`, so `H₁(β)(g) = -H₁(β)(g)`, hence
 `H₁(β)(2 • g)=0`.
