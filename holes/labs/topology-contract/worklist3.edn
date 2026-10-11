@@ -12366,95 +12366,209 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :implements-lemma
+   :lemma-mfclass-integral-open-disk-pair-short-complex-comparison,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/manifold-fundamental-class/integral-open-disk-connecting-naturality/short-complex-comparison",
+   :acceptance
+   {:implementation
+    "Promote integralOpenDiskPairShortComplexComparison and the exact fixture declaration. Define the morphism from the forgotten coefficient pair short complex of the punctured unit disk to the production singular pair short complex. Use singularChainsComparison on the puncture and ambient disk, integralRelativeChainsComparisonWithTransport on the relative term, integralSingularChainsComparison_subtype_naturality for the inclusion square, and integralRelativeChainsComparisonWithTransport_projection for the projection square. Do not apply connecting-map naturality, prove radial-map naturality, compare sphere normalizations, exclude negation, select a sign, or construct a fundamental class.",
+    :declaration
+    "ConstructionTargets.ManifoldFundamentalClass.integralOpenDiskPairShortComplexComparison",
+    :type
+    "forall (k : ℕ), (CoefficientPairSequence.sequence ℤ (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2))).map (forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ)) ⟶ SingularHomologyConcrete.singularPairShortComplex (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2))",
+    :fixture
+    "/tmp/manifold_fundamental_class_integral_open_disk_pair_short_complex_comparison.lean",
+    :fixture-sha256
+    "226f5c263b92b49291533d2113a2310957a34fd0913d051908ecea4c6f04d5b7",
+    :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
+    :route-step
+    "construct the chain-level morphism of short exact pair sequences whose induced connecting square compares coefficient and production open-disk boundary maps"},
+   :representation
+   {:source
+    "The coefficient short exact sequence for the punctured unit disk after forgetting integer-module structure",
+    :target
+    "The production singular-chain short exact sequence for the same punctured unit-disk pair",
+    :direction
+    "Morphism of short complexes from the forgotten coefficient sequence to the production sequence, commuting by exact equality with both the subtype inclusion and relative projection maps"},
+   :id
+   :routes-2026-10-11-manifold-integral-open-disk-pair-short-complex-comparison-topo3-r1,
+   :kind :representation-comparison,
+   :area "manifold-fundamental-class",
+   :depends-on
+   [:routes-2026-10-10-topo3-seed-checkpoint-1
+    :routes-2026-10-10-manifold-local-positive-excision-topo3-r1
+    :routes-2026-10-10-manifold-oriented-overlap-coherence-topo3-r1
+    :routes-2026-10-10-manifold-connected-overlap-unit-topo3-r1
+    :routes-2026-10-10-manifold-oriented-connected-overlap-topo3-r1
+    :routes-2026-10-10-manifold-integral-transition-sign-topo3-r1
+    :routes-2026-10-10-manifold-exclude-negative-transition-topo3-r1
+    :routes-2026-10-10-manifold-global-generator-topo3-r1
+    :routes-2026-10-10-manifold-localization-iso-generator-topo3-r1
+    :routes-2026-10-10-manifold-generator-map-isiso-topo3-r1
+    :routes-2026-10-10-manifold-localization-map-naturality-topo3-r1
+    :routes-2026-10-10-manifold-localization-apply-naturality-topo3-r1
+    :routes-2026-10-10-manifold-group-global-generator-topo3-r1
+    :routes-2026-10-10-manifold-group-generator-naturality-topo3-r1
+    :routes-2026-10-10-manifold-global-local-generator-transport-topo3-r1
+    :routes-2026-10-11-manifold-basepoint-localization-coefficient-topo3-r1
+    :routes-2026-10-11-manifold-local-generator-coefficient-unique-topo3-r1
+    :routes-2026-10-11-manifold-localization-coefficient-one-topo3-r1
+    :routes-2026-10-11-manifold-distinguished-chart-generator-topo3-r1
+    :routes-2026-10-11-manifold-integral-subtype-chain-naturality-topo3-r1
+    :routes-2026-10-11-manifold-integral-mapped-relative-cokernel-topo3-r1
+    :routes-2026-10-11-manifold-forget-relative-cokernel-topo3-r1
+    :routes-2026-10-11-manifold-integral-relative-chains-comparison-topo3-r1
+    :routes-2026-10-11-manifold-integral-relative-homology-comparison-topo3-r1
+    :routes-2026-10-11-manifold-ambient-local-normalization-topo3-r1
+    :routes-2026-10-11-manifold-generator-transport-of-normalization-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-subspace-map-equality-topo3-r1
+    :routes-2026-10-11-manifold-integral-direct-cokernel-projection-topo3-r1
+    :routes-2026-10-11-manifold-forget-cokernel-projection-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-integral-cokernel-transport-topo3-r1
+    :routes-2026-10-11-manifold-integral-composite-cokernel-projection-topo3-r1
+    :routes-2026-10-11-manifold-production-cokernel-projection-topo3-r1
+    :routes-2026-10-11-manifold-integral-composite-relative-projection-topo3-r1
+    :routes-2026-10-11-manifold-relative-chains-comparison-with-transport-topo3-r1
+    :routes-2026-10-11-manifold-relative-homology-comparison-with-transport-topo3-r1
+    :routes-2026-10-11-manifold-corrected-homology-projection-topo3-r1
+    :routes-2026-10-11-manifold-corrected-homology-comparison-hom-topo3-r1
+    :routes-2026-10-11-manifold-relative-projection-homology-preservation-topo3-r1
+    :routes-2026-10-11-manifold-packaged-homology-projection-topo3-r1
+    :routes-2026-10-11-manifold-corrected-generator-normalization-topo3-r1
+    :routes-2026-10-11-manifold-normalization-from-corrected-generator-topo3-r1
+    :routes-2026-10-11-manifold-corrected-local-generator-coefficient-topo3-r1
+    :routes-2026-10-11-manifold-corrected-local-generator-unit-topo3-r1
+    :routes-2026-10-11-manifold-corrected-local-generator-sign-topo3-r1
+    :routes-2026-10-11-manifold-corrected-local-generator-nonnegative-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-one-from-corrected-normalization-topo3-r1
+    :routes-2026-10-11-manifold-corrected-generator-of-coefficient-one-topo3-r1
+    :routes-2026-10-11-manifold-corrected-normalization-of-coefficient-one-topo3-r1
+    :routes-2026-10-11-manifold-corrected-normalization-of-nonnegative-topo3-r1
+    :routes-2026-10-11-manifold-corrected-coefficient-one-of-ne-neg-one-topo3-r1
+    :routes-2026-10-11-manifold-corrected-coefficient-automorphism-one-topo3-r1
+    :routes-2026-10-11-manifold-corrected-automorphism-neg-iff-topo3-r1
+    :routes-2026-10-11-manifold-corrected-automorphism-hom-topo3-r1
+    :routes-2026-10-11-manifold-ambient-local-normalization-hom-topo3-r1
+    :routes-2026-10-11-manifold-corrected-automorphism-neg-cancel-coefficient-topo3-r1
+    :routes-2026-10-11-manifold-negative-equation-endpoint-factors-topo3-r1
+    :routes-2026-10-11-manifold-negative-equation-coefficient-factors-topo3-r1
+    :routes-2026-10-11-manifold-negative-equation-corrected-comparison-topo3-r1
+    :routes-2026-10-11-manifold-integral-relative-chains-transport-hom-topo3-r1
+    :routes-2026-10-11-manifold-integral-relative-chains-transport-homology-topo3-r1
+    :routes-2026-10-11-manifold-negative-equation-transport-homology-factors-topo3-r1
+    :routes-2026-10-11-manifold-transport-projection-alignment-topo3-r3
+    :routes-2026-10-11-manifold-negative-equation-projected-factors-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-projected-forward-topo3-r1
+    :routes-2026-10-11-manifold-negative-equation-concrete-endpoints-topo3-r1
+    :routes-2026-10-11-manifold-negative-prefix-model-topo3-r1
+    :routes-2026-10-11-manifold-negative-model-factors-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-open-disk-normalization-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-open-disk-model-factors-topo3-r1
+    :routes-2026-10-11-manifold-integral-open-disk-relative-homology-comparison-topo3-r1
+    :routes-2026-10-11-manifold-integral-open-disk-puncture-homology-comparison-topo3-r1],
+   :current-residual
+   "Use preservation of the coefficient short exact sequence under forgetIntModules and HomologySequence.δ_naturality on integralOpenDiskPairShortComplexComparison to prove the open-disk connecting square; then prove radial and sphere compatibility.",
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-closedorientedfundamentalclass,
    :evidence
    {:probe
     {:residual
-     "Prove the open-disk connecting naturality square, followed by radial and sphere compatibility and exclusion of the negative identity.",
+     "Apply connecting-map naturality to the open-disk short-complex comparison, then establish radial and sphere compatibility and exclude the negative identity.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
      [{:id
-       :lemma-mfclass-integral-open-disk-puncture-homology-comparison,
+       :lemma-mfclass-integral-open-disk-pair-short-complex-comparison,
        :name
-       "ConstructionTargets.ManifoldFundamentalClass.integralOpenDiskPunctureHomologyComparison",
+       "ConstructionTargets.ManifoldFundamentalClass.integralOpenDiskPairShortComplexComparison",
        :type
-       "forall (k : ℕ), forgetIntModules.obj ((((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) (k + 1)).obj (ModuleCat.of ℤ ℤ)).obj (TopCat.of (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2)))) ≅ (((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat (k + 1)).obj (AddCommGrpCat.of ℤ)).obj (TopCat.of (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2))))",
+       "forall (k : ℕ), (CoefficientPairSequence.sequence ℤ (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2))).map (forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ)) ⟶ SingularHomologyConcrete.singularPairShortComplex (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2))",
        :status :proved,
        :consumers [:t00J02 :t98A02],
        :depends-on
-       ["ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison"],
+       ["ConstructionTargets.ManifoldFundamentalClass.integralSingularChainsComparison_subtype_naturality"
+        "ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport_projection"],
        :area "manifold-fundamental-class"}],
      :prerequisite
      {:consumer :t00J02,
       :implements-lemma
-      :lemma-mfclass-integral-open-disk-puncture-homology-comparison,
+      :lemma-mfclass-integral-open-disk-pair-short-complex-comparison,
       :phase :implementation,
       :state :open,
       :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/manifold-fundamental-class/integral-open-disk-connecting-naturality/subspace-comparison",
+      "TOPOLOGY-ROUTES.md/manifold-fundamental-class/integral-open-disk-connecting-naturality/short-complex-comparison",
       :acceptance
       {:implementation
-       "Promote integralOpenDiskPunctureHomologyComparison, integralOpenDiskPunctureHomologyComparison_hom, and the exact fixture theorem. Specialize the banked absolute integral singular-homology comparison to the punctured unit disk in degree k+1, which is the target degree of the pair connecting morphisms. Do not prove the connecting naturality square, radial-map naturality, compare sphere normalizations, exclude negation, select a sign, or construct a fundamental class.",
+       "Promote integralOpenDiskPairShortComplexComparison and the exact fixture declaration. Define the morphism from the forgotten coefficient pair short complex of the punctured unit disk to the production singular pair short complex. Use singularChainsComparison on the puncture and ambient disk, integralRelativeChainsComparisonWithTransport on the relative term, integralSingularChainsComparison_subtype_naturality for the inclusion square, and integralRelativeChainsComparisonWithTransport_projection for the projection square. Do not apply connecting-map naturality, prove radial-map naturality, compare sphere normalizations, exclude negation, select a sign, or construct a fundamental class.",
        :declaration
-       "ConstructionTargets.ManifoldFundamentalClass.integralOpenDiskPunctureHomologyComparison_hom",
-       :supporting-declarations
-       ["ConstructionTargets.ManifoldFundamentalClass.integralOpenDiskPunctureHomologyComparison"],
+       "ConstructionTargets.ManifoldFundamentalClass.integralOpenDiskPairShortComplexComparison",
        :type
-       "forall (k : ℕ), (integralOpenDiskPunctureHomologyComparison k).hom = (singularHomologyComparison (TopCat.of (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2))) (k + 1)).hom",
+       "forall (k : ℕ), (CoefficientPairSequence.sequence ℤ (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2))).map (forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ)) ⟶ SingularHomologyConcrete.singularPairShortComplex (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2))",
        :fixture
-       "/tmp/manifold_fundamental_class_integral_open_disk_puncture_homology_comparison.lean",
+       "/tmp/manifold_fundamental_class_integral_open_disk_pair_short_complex_comparison.lean",
        :fixture-sha256
-       "047950714fd0f243053da8814dbd0ff15b6b94096f3f0d57dd83de1bc5457ded",
+       "226f5c263b92b49291533d2113a2310957a34fd0913d051908ecea4c6f04d5b7",
        :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
        :route-step
-       "instantiate the absolute integral coefficient-to-production homology comparison on the punctured unit disk, completing the four corners needed for connecting-map naturality"},
+       "construct the chain-level morphism of short exact pair sequences whose induced connecting square compares coefficient and production open-disk boundary maps"},
       :representation
       {:source
-       "Forgotten integral coefficient absolute homology of the punctured unit disk in degree k+1",
+       "The coefficient short exact sequence for the punctured unit disk after forgetting integer-module structure",
        :target
-       "Production integral singular homology of the identical punctured unit disk in degree k+1",
+       "The production singular-chain short exact sequence for the same punctured unit-disk pair",
        :direction
-       "Canonical isomorphism from the coefficient absolute-homology representation to the production absolute-homology representation, by specialization of singularHomologyComparison"},
+       "Morphism of short complexes from the forgotten coefficient sequence to the production sequence, commuting by exact equality with both the subtype inclusion and relative projection maps"},
       :id
-      :routes-2026-10-11-manifold-integral-open-disk-puncture-homology-comparison-topo3-r1,
+      :routes-2026-10-11-manifold-integral-open-disk-pair-short-complex-comparison-topo3-r1,
       :kind :representation-comparison,
       :area "manifold-fundamental-class",
       :depends-on
       [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
-       :routes-2026-10-11-manifold-integral-open-disk-relative-homology-comparison-topo3-r1],
+       :routes-2026-10-11-manifold-integral-open-disk-relative-homology-comparison-topo3-r1
+       :routes-2026-10-11-manifold-integral-open-disk-puncture-homology-comparison-topo3-r1],
       :current-residual
-      "Prove that integralOpenDiskRelativeHomologyComparison followed by production singularPairConnecting equals the forgotten coefficient connecting followed by integralOpenDiskPunctureHomologyComparison; then establish radial and sphere compatibility.",
+      "Use preservation of the coefficient short exact sequence under forgetIntModules and HomologySequence.δ_naturality on integralOpenDiskPairShortComplexComparison to prove the open-disk connecting square; then prove radial and sphere compatibility.",
       :other-consumers [:t98A02]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake env lean /tmp/manifold_fundamental_class_integral_open_disk_puncture_homology_comparison.lean",
+       "lake env lean /tmp/manifold_fundamental_class_integral_open_disk_pair_short_complex_comparison.lean",
        :exit 0,
        :output
-       "integralOpenDiskPunctureHomologyComparison and integralOpenDiskPunctureHomologyComparison_hom compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "integralOpenDiskPairShortComplexComparison compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/manifold_fundamental_class_integral_open_disk_puncture_homology_comparison.lean",
+       "sha256sum /tmp/manifold_fundamental_class_integral_open_disk_pair_short_complex_comparison.lean",
        :exit 0,
        :output
-       "047950714fd0f243053da8814dbd0ff15b6b94096f3f0d57dd83de1bc5457ded  /tmp/manifold_fundamental_class_integral_open_disk_puncture_homology_comparison.lean"}
+       "226f5c263b92b49291533d2113a2310957a34fd0913d051908ecea4c6f04d5b7  /tmp/manifold_fundamental_class_integral_open_disk_pair_short_complex_comparison.lean"}
       {:cmd
-       "! rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/manifold_fundamental_class_integral_open_disk_puncture_homology_comparison.lean",
+       "! rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/manifold_fundamental_class_integral_open_disk_pair_short_complex_comparison.lean",
        :exit 0}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/manifold_fundamental_class_integral_open_disk_pair_short_complex_comparison.lean",
+       :exit 1,
+       :finding
+       "The relative projection theorem has the source-projection-first orientation, while ShortComplex.Hom.comm₂₃ requests the target-projection-first orientation. Taking the proved equality symmetrically and unfolding the cokernel short complex supplied the required field."}],
      :fixture
      {:path
-      "/tmp/manifold_fundamental_class_integral_open_disk_puncture_homology_comparison.lean",
+      "/tmp/manifold_fundamental_class_integral_open_disk_pair_short_complex_comparison.lean",
       :sha256
-      "047950714fd0f243053da8814dbd0ff15b6b94096f3f0d57dd83de1bc5457ded"},
+      "226f5c263b92b49291533d2113a2310957a34fd0913d051908ecea4c6f04d5b7"},
      :finding
-     "The connecting naturality square needs two comparison isomorphisms: the relative comparison at degree k+2 and the puncture absolute comparison at degree k+1. The former is banked; this compiled prerequisite supplies the latter by specializing singularHomologyComparison. All four objects and both horizontal comparison maps are now named, so the next row can state and prove the actual connecting square without inventing another ambient-space transport.",
+     "The compiled short-complex morphism supplies the structure previously missing from the two named homology isomorphisms. Its first component is the puncture singular-chain comparison, its second is the ambient open-disk comparison, and its third is the transport-corrected relative-chain comparison. Both chain squares compile from banked naturality theorems. The next prerequisite is now a direct application of connecting-map naturality after identifying the homology maps of these three components with the named comparison isomorphisms.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -12539,7 +12653,8 @@
     :routes-2026-10-11-manifold-coefficient-open-disk-normalization-topo3-r1
     :routes-2026-10-11-manifold-coefficient-open-disk-model-factors-topo3-r1
     :routes-2026-10-11-manifold-integral-open-disk-relative-homology-comparison-topo3-r1
-    :routes-2026-10-11-manifold-integral-open-disk-puncture-homology-comparison-topo3-r1],
+    :routes-2026-10-11-manifold-integral-open-disk-puncture-homology-comparison-topo3-r1
+    :routes-2026-10-11-manifold-integral-open-disk-pair-short-complex-comparison-topo3-r1],
    :current-residual
    "Local-degree counts and wild-ball complement homology remain.",
    :other-consumers [:t98A02]}
@@ -16618,6 +16733,30 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-integralsingularhomologycomparison-singularhomologycompariso],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFundamentalClass.integralOpenDiskPairShortComplexComparison",
+    :type
+    "forall (k : ℕ), (CoefficientPairSequence.sequence ℤ (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2))).map (forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ)) ⟶ SingularHomologyConcrete.singularPairShortComplex (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2))"},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFundamentalClass.integralOpenDiskPairShortComplexComparison",
+    :reported-by
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    :type
+    "forall (k : ℕ), (CoefficientPairSequence.sequence ℤ (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2))).map (forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ)) ⟶ SingularHomologyConcrete.singularPairShortComplex (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2))",
+    :area "manifold-fundamental-class",
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+   :id :lemma-mfclass-integral-open-disk-pair-short-complex-comparison,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-manifoldfundamentalclass-integralsingularchainscomparison-subtype-naturality
+    :lemma-constructiontargets-manifoldfundamentalclass-integralrelativechainscomparisonwithtransport-projection],
    :other-consumers [:t98A02]}],
  :consumer-baselines {},
  :statuses
