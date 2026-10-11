@@ -16530,6 +16530,17 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git commit", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791736938653-5622-c50f65ca",
+     :commands
+     ["git scope/diff/hash checks at 632df970b316c93268e0c35e13f33ea0b283d5f1"
+      "renamed fixture and module: lake env lean"
+      "registry and placeholder scans"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"],
+     :finding
+     "One-file scope, recorded blob, and frozen hashes match. The natural iso is correctly oriented from parallelPair f 0 composed with π₁ to parallelPair f.τ₁ 0, with identity components and valid map_id/map_zero naturality. Fixture/module compile; registry 131/0; build 8326 jobs; standard axioms only; placeholders 0; consumers 1/1. Only unnecessary-simpa lints."},
     :commit "632df970b316c93268e0c35e13f33ea0b283d5f1",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -16544,7 +16555,7 @@
     :row :routes-2026-10-11-mfclass-sc-pair-pi1-r1,
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/kernel-pi1",
@@ -16625,7 +16636,7 @@
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :residual "Promote π₁ iso; transport limits."}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -23835,7 +23846,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -23848,14 +23859,16 @@
     [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
     :type "∀ f : X ⟶ Y, ParallelPairZeroπ₁Comparison f",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2,
+    :banked-by :routes-2026-10-11-mfclass-sc-pair-pi1-r1,
+    :banked-commit "632df970b316c93268e0c35e13f33ea0b283d5f1"},
    :id :lemma-mfclass-sc-pair-pi1-iso,
    :kind :lemma,
    :depends-on [:lemma-mfclass-forget-snake-kernel-tau3-islimit],
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "scPairZeroπ₁Iso",
@@ -23865,7 +23878,9 @@
     :reported-by [:routes-2026-10-11-mfclass-sc-pair-pi1-r1],
     :type "∀ f : X ⟶ Y, ParallelPairZeroπ₁Comparison f",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-11-mfclass-sc-pair-pi1-r1},
+    :proved-in :routes-2026-10-11-mfclass-sc-pair-pi1-r1,
+    :banked-by :routes-2026-10-11-mfclass-sc-pair-pi1-r1,
+    :banked-commit "632df970b316c93268e0c35e13f33ea0b283d5f1"},
    :id :lemma-scpairzero-iso,
    :kind :lemma,
    :depends-on [:lemma-forgetsnakekernel-limit-fb6e8698b082],
