@@ -38,3 +38,13 @@ of the circle neighbourhood. `wedgePointedContraction` descends the two
 simultaneous pointed contractions through the wedge quotient, and
 `twoCirclesBaseNeighborhood_contraction` transports the result back through
 `twoCirclesBaseNeighborhoodHomeomorph`.
+
+The generic mapping construction now has its first target-natural transport
+stage. `genericPointWedgeCoordinateSpanEquivalence` transports pseudococones
+from the literal two-open-cover fundamental-groupoid span to the fixed span
+`FundamentalGroupoid Unit ⇒ FundamentalGroupoid X/Y`.  The comparison
+isomorphisms use the strict overlap formulas from the reviewed blueprint, and
+`genericPointWedgeCoordinateSpanPostcomposeIso` proves that this transport
+commutes with postcomposition in the target category.  The remaining B3 work
+composes this stage with the two-open pseudopushout and the point-span
+free-product representation stages.

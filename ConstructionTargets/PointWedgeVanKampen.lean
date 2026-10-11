@@ -2,6 +2,9 @@ import ConstructionTargets.ThreeCirclesPathTopology
 import ConstructionTargets.GenericTargetNaturalSourceReconstruction
 import ConstructionTargets.PointedPuncturedCircleContraction
 import ConstructionTargets.PointWedgeRestrictedOpenQuotient
+import ConstructionTargets.GenericPointWedgeOverlapInclusionSquares
+import ConstructionTargets.GenericSpanPseudoCoconeTransport
+import ConstructionTargets.TwoOpenFundamentalGroupoidSpan
 import Mathlib.GroupTheory.Coprod.Basic
 import Mathlib.GroupTheory.FreeGroup.Basic
 
@@ -24,8 +27,157 @@ namespace ConstructionTargets.PointWedgeVanKampen
 open CategoryTheory
 open PointedPuncturedCircleContraction
 open PointWedgeQuotient PointWedgeRestrictedOpenQuotient
+open GenericPointWedgeOpenCoverComparison
+open GenericPointWedgeOverlapInclusionSquares
+open GenericSpanPseudoCoconeTransport
+open TwoOpenFundamentalGroupoidSpan
 
 universe u
+
+section GenericMappingCoordinates
+
+variable {X : Type} {Y : Type}
+variable [TopologicalSpace X] [TopologicalSpace Y]
+
+abbrev genericPointWedgeLeftPiece (x₀ : X) (y₀ : Y) (M : Set Y) :=
+  {z // z ∈ leftOpen x₀ y₀ M}
+
+abbrev genericPointWedgeRightPiece (x₀ : X) (y₀ : Y) (N : Set X) :=
+  {z // z ∈ rightOpen x₀ y₀ N}
+
+abbrev genericPointWedgeOverlapPiece
+    (x₀ : X) (y₀ : Y) (M : Set Y) (N : Set X) :=
+  {z // z ∈ leftOpen x₀ y₀ M ∩ rightOpen x₀ y₀ N}
+
+def genericPointWedgeActualLeft
+    (x₀ : X) (y₀ : Y) (M : Set Y) (N : Set X) :
+    FundamentalGroupoid (genericPointWedgeOverlapPiece x₀ y₀ M N) ⥤
+      FundamentalGroupoid (genericPointWedgeLeftPiece x₀ y₀ M) :=
+  FundamentalGroupoid.map (overlapToLeft x₀ y₀ M N)
+
+def genericPointWedgeActualRight
+    (x₀ : X) (y₀ : Y) (M : Set Y) (N : Set X) :
+    FundamentalGroupoid (genericPointWedgeOverlapPiece x₀ y₀ M N) ⥤
+      FundamentalGroupoid (genericPointWedgeRightPiece x₀ y₀ N) :=
+  FundamentalGroupoid.map (overlapToRight x₀ y₀ M N)
+
+def genericPointWedgeCoordinateLeft (x₀ : X) :
+    FundamentalGroupoid Unit ⥤ FundamentalGroupoid X :=
+  FundamentalGroupoid.map (ContinuousMap.const Unit x₀)
+
+def genericPointWedgeCoordinateRight (y₀ : Y) :
+    FundamentalGroupoid Unit ⥤ FundamentalGroupoid Y :=
+  FundamentalGroupoid.map (ContinuousMap.const Unit y₀)
+
+variable (x₀ : X) (y₀ : Y) (M : Set Y) (N : Set X)
+variable (hM : IsOpen M) (hN : IsOpen N) (hy : y₀ ∈ M) (hx : x₀ ∈ N)
+variable (cM : PointedContraction M ⟨y₀, hy⟩)
+variable (cN : PointedContraction N ⟨x₀, hx⟩)
+
+private abbrev genericPointWedgePackage :=
+  genericPointWedgeCoverPackage x₀ y₀ M N hM hN hy hx cM cN
+
+def genericPointWedgeOverlapGroupoidEquivalence :
+    FundamentalGroupoid (genericPointWedgeOverlapPiece x₀ y₀ M N) ≌
+      FundamentalGroupoid Unit :=
+  FundamentalGroupoidFunctor.equivOfHomotopyEquiv
+    (genericPointWedgePackage x₀ y₀ M N hM hN hy hx cM cN).intersectionEquiv
+
+def genericPointWedgeLeftGroupoidEquivalence :
+    FundamentalGroupoid (genericPointWedgeLeftPiece x₀ y₀ M) ≌
+      FundamentalGroupoid X :=
+  FundamentalGroupoidFunctor.equivOfHomotopyEquiv
+    (genericPointWedgePackage x₀ y₀ M N hM hN hy hx cM cN).leftEquiv
+
+def genericPointWedgeRightGroupoidEquivalence :
+    FundamentalGroupoid (genericPointWedgeRightPiece x₀ y₀ N) ≌
+      FundamentalGroupoid Y :=
+  FundamentalGroupoidFunctor.equivOfHomotopyEquiv
+    (genericPointWedgePackage x₀ y₀ M N hM hN hy hx cM cN).rightEquiv
+
+def genericPointWedgeLeftSpanIso :
+    (genericPointWedgeOverlapGroupoidEquivalence x₀ y₀ M N hM hN hy hx cM cN).inverse ⋙
+        genericPointWedgeActualLeft x₀ y₀ M N ⋙
+        (genericPointWedgeLeftGroupoidEquivalence x₀ y₀ M N hM hN hy hx cM cN).functor ≅
+      genericPointWedgeCoordinateLeft x₀ := by
+  change FundamentalGroupoid.map
+        (genericPointWedgePackage x₀ y₀ M N hM hN hy hx cM cN).intersectionEquiv.invFun ⋙
+      FundamentalGroupoid.map (overlapToLeft x₀ y₀ M N) ⋙
+      FundamentalGroupoid.map
+        (genericPointWedgePackage x₀ y₀ M N hM hN hy hx cM cN).leftEquiv.toFun ≅
+      FundamentalGroupoid.map (ContinuousMap.const Unit x₀)
+  rw [← FundamentalGroupoid.map_comp, ← FundamentalGroupoid.map_comp]
+  have h := (genericPointWedgeOverlapInclusionSquares
+    x₀ y₀ M N hM hN hy hx cM cN).1
+  have h' :
+      ((genericPointWedgePackage x₀ y₀ M N hM hN hy hx cM cN).leftEquiv.toFun.comp
+        (overlapToLeft x₀ y₀ M N)).comp
+          (genericPointWedgePackage x₀ y₀ M N hM hN hy hx cM cN).intersectionEquiv.invFun =
+        ContinuousMap.const Unit x₀ := by
+    simpa only [ContinuousMap.comp_assoc] using h
+  rw [h']
+
+def genericPointWedgeRightSpanIso :
+    (genericPointWedgeOverlapGroupoidEquivalence x₀ y₀ M N hM hN hy hx cM cN).inverse ⋙
+        genericPointWedgeActualRight x₀ y₀ M N ⋙
+        (genericPointWedgeRightGroupoidEquivalence x₀ y₀ M N hM hN hy hx cM cN).functor ≅
+      genericPointWedgeCoordinateRight y₀ := by
+  change FundamentalGroupoid.map
+        (genericPointWedgePackage x₀ y₀ M N hM hN hy hx cM cN).intersectionEquiv.invFun ⋙
+      FundamentalGroupoid.map (overlapToRight x₀ y₀ M N) ⋙
+      FundamentalGroupoid.map
+        (genericPointWedgePackage x₀ y₀ M N hM hN hy hx cM cN).rightEquiv.toFun ≅
+      FundamentalGroupoid.map (ContinuousMap.const Unit y₀)
+  rw [← FundamentalGroupoid.map_comp, ← FundamentalGroupoid.map_comp]
+  have h := (genericPointWedgeOverlapInclusionSquares
+    x₀ y₀ M N hM hN hy hx cM cN).2
+  have h' :
+      ((genericPointWedgePackage x₀ y₀ M N hM hN hy hx cM cN).rightEquiv.toFun.comp
+        (overlapToRight x₀ y₀ M N)).comp
+          (genericPointWedgePackage x₀ y₀ M N hM hN hy hx cM cN).intersectionEquiv.invFun =
+        ContinuousMap.const Unit y₀ := by
+    simpa only [ContinuousMap.comp_assoc] using h
+  rw [h']
+
+def genericPointWedgeCoordinateSpanEquivalence
+    (C : Type u) [Category C] :
+    SpanPseudoCocone
+        (genericPointWedgeActualLeft x₀ y₀ M N)
+        (genericPointWedgeActualRight x₀ y₀ M N) C ≌
+      SpanPseudoCocone
+        (genericPointWedgeCoordinateLeft x₀)
+        (genericPointWedgeCoordinateRight y₀) C :=
+  pseudoCoconeEquivalenceOfSpanEquivalences
+    (genericPointWedgeActualLeft x₀ y₀ M N)
+    (genericPointWedgeActualRight x₀ y₀ M N)
+    (genericPointWedgeCoordinateLeft x₀)
+    (genericPointWedgeCoordinateRight y₀)
+    (genericPointWedgeOverlapGroupoidEquivalence x₀ y₀ M N hM hN hy hx cM cN)
+    (genericPointWedgeLeftGroupoidEquivalence x₀ y₀ M N hM hN hy hx cM cN)
+    (genericPointWedgeRightGroupoidEquivalence x₀ y₀ M N hM hN hy hx cM cN)
+    (genericPointWedgeLeftSpanIso x₀ y₀ M N hM hN hy hx cM cN)
+    (genericPointWedgeRightSpanIso x₀ y₀ M N hM hN hy hx cM cN)
+
+def genericPointWedgeCoordinateSpanPostcomposeIso
+    {C D : Type u} [Category C] [Category D] (K : C ⥤ D) :
+    postcomposeFunctor K ⋙
+        (genericPointWedgeCoordinateSpanEquivalence
+          x₀ y₀ M N hM hN hy hx cM cN D).functor ≅
+      (genericPointWedgeCoordinateSpanEquivalence
+          x₀ y₀ M N hM hN hy hx cM cN C).functor ⋙
+        postcomposeFunctor K :=
+  equivalenceFunctorPostcomposeIso
+    (genericPointWedgeActualLeft x₀ y₀ M N)
+    (genericPointWedgeActualRight x₀ y₀ M N)
+    (genericPointWedgeCoordinateLeft x₀)
+    (genericPointWedgeCoordinateRight y₀)
+    (genericPointWedgeOverlapGroupoidEquivalence x₀ y₀ M N hM hN hy hx cM cN)
+    (genericPointWedgeLeftGroupoidEquivalence x₀ y₀ M N hM hN hy hx cM cN)
+    (genericPointWedgeRightGroupoidEquivalence x₀ y₀ M N hM hN hy hx cM cN)
+    (genericPointWedgeLeftSpanIso x₀ y₀ M N hM hN hy hx cM cN)
+    (genericPointWedgeRightSpanIso x₀ y₀ M N hM hN hy hx cM cN) K
+
+end GenericMappingCoordinates
 
 /-- An equivalence from a connected groupoid to a one-object groupoid induces
 the expected equivalence on the automorphism group at any chosen object.  This
@@ -316,5 +468,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms multiplicativeIntEquivFreeGroupFinOne
 #print axioms circleBaseNeighborhood_contraction
 #print axioms twoCirclesBaseNeighborhood_contraction
+#print axioms genericPointWedgeCoordinateSpanEquivalence
+#print axioms genericPointWedgeCoordinateSpanPostcomposeIso
 
 end ConstructionTargets.PointWedgeVanKampen
