@@ -69386,7 +69386,47 @@
   {:bounded-exception
    "single-consumer positive-factor relation between meridian imaginary part and ambient height",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/t02a03_meridian_im_height_factor_probe.lean",
+      :sha256
+      "d913e66bc62a669d2d8e0d5a2bac683a12cf63479044cb8adf5e09df1cfcdf1f"},
+     :implementation
+     {:scope
+      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+      :declaration
+      "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeMeridianCoordinate_im_positiveFactor_height",
+      :type
+      "forall (p : RightTubeMinusLeftCore), exists c : Real, 0 < c and (rightTubeMeridianCoordinate p : Complex).im = c * p.1 2",
+      :proof-plan
+      "Choose c as the inverse norm of rightTubeNormalComplex p. Deletion makes this norm nonzero and positive; take imaginary parts of norm times normalize equals the original vector, unfold the normal coordinate height, and cancel the norm."},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/t02a03_meridian_im_height_factor_probe.lean",
+       :exit 0,
+       :output
+       "rightTubeMeridianCoordinate_im_positiveFactor_height compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "sha256sum /tmp/t02a03_meridian_im_height_factor_probe.lean",
+       :exit 0,
+       :output
+       "d913e66bc62a669d2d8e0d5a2bac683a12cf63479044cb8adf5e09df1cfcdf1f  /tmp/t02a03_meridian_im_height_factor_probe.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_meridian_im_height_factor_probe.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :warnings [],
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :residual
+     "Implement the compiled meridian-height factor identity; then prove nonzero imaginary part throughout the core-normal interpolation for nonzero-height inputs."}},
+   :phase :implementation,
+   :type
+   "forall (p : RightTubeMinusLeftCore), exists c : Real, 0 < c and (rightTubeMeridianCoordinate p : Complex).im = c * p.1 2",
    :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
@@ -69405,11 +69445,15 @@
    :routes-2026-10-11-t02a03-meridian-im-positive-factor-height-topo2-r1,
    :kind :reusable-theorem,
    :area "explicit-r3-tube-deformation-retraction",
+   :declaration
+   "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeMeridianCoordinate_im_positiveFactor_height",
    :depends-on
    [:routes-2026-10-11-t02a03-collision-endpoint-positive-factor-sign-bridge-topo2-r1],
    :current-residual
    "Use this identity to prove the core-normal interpolation has nonzero imaginary part for nonzero-height inputs; handle zero height with the common collision-sign component and safe angular corridor, then assemble both stages.",
-   :other-consumers []}
+   :other-consumers [],
+   :proof-plan
+   "Choose c as the inverse norm of rightTubeNormalComplex p. Deletion makes this norm nonzero and positive; take imaginary parts of norm times normalize equals the original vector, unfold the normal coordinate height, and cancel the norm."}
   {:bounded-exception
    "single-consumer explicit ambient deformation with frozen tube and deletion invariants",
    :consumer :t02A03,
