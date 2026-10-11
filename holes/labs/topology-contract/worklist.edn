@@ -115217,7 +115217,7 @@
    :other-consumers []}
   {:consumer :t99J01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "PointWedgeVanKampen.multiplicativeIntEquivFreeGroupFinOne",
@@ -115226,7 +115226,9 @@
    {:name "PointWedgeVanKampen.multiplicativeIntEquivFreeGroupFinOne",
     :reported-by [:program-2026-10-11-point-wedge-van-kampen],
     :type "Multiplicative Int ≃* FreeGroup (Fin 1)",
-    :area "fundamental-group-wedge-of-circles"},
+    :area "fundamental-group-wedge-of-circles",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/PointWedgeVanKampen.lean"]},
    :id
    :lemma-pointwedgevankampen-multiplicativeintequivfreegroupfinone,
    :kind :lemma,
@@ -116160,6 +116162,524 @@
    :campaign-priority 48,
    :depends-on [],
    :program true,
+   :other-consumers []}
+  {:consumer :t98A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "submersion_local_smooth_rightInverse",
+    :type
+    "Locally, a smooth submersion admits a smooth tangent lift of any smooth target vector field  (size: 250-500 lines / 1-2 weeks)"},
+   :lemma
+   {:name "submersion_local_smooth_rightInverse",
+    :reported-by [:owner],
+    :type
+    "Locally, a smooth submersion admits a smooth tangent lift of any smooth target vector field  (size: 250-500 lines / 1-2 weeks)",
+    :area "submersion-local-right-inverse"},
+   :id :lemma-submersion-local-smooth-rightinverse,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t98A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "submersion_global_vectorField_lift",
+    :type
+    "∃ w, SmoothVectorField w ∧ ∀ x, mfderiv f x (w x) = v (f x)  (size: 80-160 lines / 1-3 days)"},
+   :lemma
+   {:name "submersion_global_vectorField_lift",
+    :reported-by [:owner],
+    :type
+    "∃ w, SmoothVectorField w ∧ ∀ x, mfderiv f x (w x) = v (f x)  (size: 80-160 lines / 1-3 days)",
+    :area "submersion-local-right-inverse"},
+   :id :lemma-submersion-global-vectorfield-lift,
+   :kind :lemma,
+   :depends-on [:lemma-submersion-local-smooth-rightinverse],
+   :other-consumers []}
+  {:consumer :t98A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "compactManifold_completeSmoothFlow",
+    :type
+    "A smooth vector field on a compact boundaryless manifold has a global flow satisfying the group law  (size: 300-700 lines / 1-3 weeks after uniform-time foundation)"},
+   :lemma
+   {:name "compactManifold_completeSmoothFlow",
+    :reported-by [:owner],
+    :type
+    "A smooth vector field on a compact boundaryless manifold has a global flow satisfying the group law  (size: 300-700 lines / 1-3 weeks after uniform-time foundation)",
+    :area "compact-manifold-complete-flow"},
+   :id :lemma-compactmanifold-completesmoothflow,
+   :kind :lemma,
+   :depends-on [:lemma-submersion-global-vectorfield-lift],
+   :other-consumers [:t92J08]}
+  {:consumer :t98A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "smoothFlow_initialCondition",
+    :type
+    "The global flow of a smooth manifold vector field is smooth in initial condition and time  (size: 1200-3000 lines / 1-3 months)"},
+   :lemma
+   {:name "smoothFlow_initialCondition",
+    :reported-by [:owner],
+    :type
+    "The global flow of a smooth manifold vector field is smooth in initial condition and time  (size: 1200-3000 lines / 1-3 months)",
+    :area "smooth-flow-initial-condition-dependence"},
+   :id :lemma-smoothflow-initialcondition,
+   :kind :lemma,
+   :depends-on [:lemma-compactmanifold-completesmoothflow],
+   :other-consumers []}
+  {:consumer :t98A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "fiberFlow_diffeomorph",
+    :type
+    "Nonempty (Diffeomorph ... {x // f x = 1} {x // f x = minusOne} ∞)  (size: 180-350 lines / 3-7 days)"},
+   :lemma
+   {:name "fiberFlow_diffeomorph",
+    :reported-by [:owner],
+    :type
+    "Nonempty (Diffeomorph ... {x // f x = 1} {x // f x = minusOne} ∞)  (size: 180-350 lines / 3-7 days)",
+    :area "smooth-flow-initial-condition-dependence"},
+   :id :lemma-fiberflow-diffeomorph,
+   :kind :lemma,
+   :depends-on [:lemma-smoothflow-initialcondition],
+   :other-consumers []}
+  {:consumer :t98J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "circle_reflection_degree_neg_one",
+    :type
+    "¬ ContinuousMap.Homotopic T98J01.h (ContinuousMap.id T98J01.ProductSpace)  (size: 250-500 lines / 1-2 weeks)"},
+   :lemma
+   {:name "circle_reflection_degree_neg_one",
+    :reported-by [:owner],
+    :type
+    "¬ ContinuousMap.Homotopic T98J01.h (ContinuousMap.id T98J01.ProductSpace)  (size: 250-500 lines / 1-2 weeks)",
+    :area "circle-map-degree"},
+   :id :lemma-circle-reflection-degree-neg-one,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t98J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "rational_circle_product_mayerVietoris",
+    :type
+    "A map-natural short exact sequence 0 → H_k(Y;ℚ) → H_k(Y×S¹;ℚ) → H_{k-1}(Y;ℚ) → 0  (size: 800-1800 lines / 3-7 weeks)"},
+   :lemma
+   {:name "rational_circle_product_mayerVietoris",
+    :reported-by [:owner],
+    :type
+    "A map-natural short exact sequence 0 → H_k(Y;ℚ) → H_k(Y×S¹;ℚ) → H_{k-1}(Y;ℚ) → 0  (size: 800-1800 lines / 3-7 weeks)",
+    :area "circle-product-mayer-vietoris"},
+   :id :lemma-rational-circle-product-mayervietoris,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t99J05]}
+  {:consumer :t98J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "trace_additivity_shortExact",
+    :type
+    "Trace of a compatible endomorphism of a finite-dimensional short exact sequence is additive  (size: 120-250 lines / 2-5 days)"},
+   :lemma
+   {:name "trace_additivity_shortExact",
+    :reported-by [:owner],
+    :type
+    "Trace of a compatible endomorphism of a finite-dimensional short exact sequence is additive  (size: 120-250 lines / 2-5 days)",
+    :area "trace-additivity-short-exact"},
+   :id :lemma-trace-additivity-shortexact,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t96A06 :t99J05]}
+  {:consumer :t98J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "productSphereCircle_homology_traces",
+    :type
+    "HasLefschetzNumber T98J01.h 8  (size: 400-900 lines / 2-4 weeks)"},
+   :lemma
+   {:name "productSphereCircle_homology_traces",
+    :reported-by [:owner],
+    :type
+    "HasLefschetzNumber T98J01.h 8  (size: 400-900 lines / 2-4 weeks)",
+    :area "rational-sphere-homology-with-reflections"},
+   :id :lemma-productspherecircle-homology-traces,
+   :kind :lemma,
+   :depends-on
+   [:lemma-rational-circle-product-mayervietoris
+    :lemma-trace-additivity-shortexact],
+   :other-consumers []}
+  {:consumer :t98J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "torus_trivialCover_separatingLift",
+    :type
+    "The second existential counterexample conjunct of apm_t98j02  (size: 180-350 lines / 3-7 days)"},
+   :lemma
+   {:name "torus_trivialCover_separatingLift",
+    :reported-by [:owner],
+    :type
+    "The second existential counterexample conjunct of apm_t98j02  (size: 180-350 lines / 3-7 days)",
+    :area "surface-charts-from-covering-quotient"},
+   :id :lemma-torus-trivialcover-separatinglift,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t98J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "kleinQuotient_closedSurface",
+    :type
+    "A ClosedSurface quotient of T² by (z,w) ↦ (-z,conj w), with a two-sheeted covering map  (size: 350-700 lines / 1-3 weeks)"},
+   :lemma
+   {:name "kleinQuotient_closedSurface",
+    :reported-by [:owner],
+    :type
+    "A ClosedSurface quotient of T² by (z,w) ↦ (-z,conj w), with a two-sheeted covering map  (size: 350-700 lines / 1-3 weeks)",
+    :area "surface-charts-from-covering-quotient"},
+   :id :lemma-kleinquotient-closedsurface,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t98J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "kleinSeparatingCurve_nonseparatingLift",
+    :type
+    "The third existential counterexample conjunct of apm_t98j02  (size: 180-350 lines / 3-7 days)"},
+   :lemma
+   {:name "kleinSeparatingCurve_nonseparatingLift",
+    :reported-by [:owner],
+    :type
+    "The third existential counterexample conjunct of apm_t98j02  (size: 180-350 lines / 3-7 days)",
+    :area "surface-charts-from-covering-quotient"},
+   :id :lemma-kleinseparatingcurve-nonseparatinglift,
+   :kind :lemma,
+   :depends-on [:lemma-kleinquotient-closedsurface],
+   :other-consumers []}
+  {:consumer :t98J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "surfaceCurve_collar",
+    :type
+    "Every Topology.IsEmbedding c : Circle → F into a topological surface has an annulus or Möbius-band neighborhood  (size: 1500-3500 lines / 2-4 months)"},
+   :lemma
+   {:name "surfaceCurve_collar",
+    :reported-by [:owner],
+    :type
+    "Every Topology.IsEmbedding c : Circle → F into a topological surface has an annulus or Möbius-band neighborhood  (size: 1500-3500 lines / 2-4 months)",
+    :area "surface-curve-collar"},
+   :id :lemma-surfacecurve-collar,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t00A03]}
+  {:consumer :t98J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "nonseparating_lift_connectedCover",
+    :type
+    "In a connected finite-sheeted surface cover, an embedded degree-one lift of a nonseparating circle is nonseparating  (size: 300-700 lines / 1-3 weeks)"},
+   :lemma
+   {:name "nonseparating_lift_connectedCover",
+    :reported-by [:owner],
+    :type
+    "In a connected finite-sheeted surface cover, an embedded degree-one lift of a nonseparating circle is nonseparating  (size: 300-700 lines / 1-3 weeks)",
+    :area "surface-curve-collar"},
+   :id :lemma-nonseparating-lift-connectedcover,
+   :kind :lemma,
+   :depends-on [:lemma-surfacecurve-collar],
+   :other-consumers []}
+  {:consumer :t99J04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "euclidean_partialDiffeomorph_of_contDiffAt",
+    :type
+    "ContDiffAt ℝ ∞ g a → Bijective (fderiv ℝ g a) → a smooth PartialDiffeomorph locally agreeing with g  (size: 100-180 lines / 2-4 days)"},
+   :lemma
+   {:name "euclidean_partialDiffeomorph_of_contDiffAt",
+    :reported-by [:owner],
+    :type
+    "ContDiffAt ℝ ∞ g a → Bijective (fderiv ℝ g a) → a smooth PartialDiffeomorph locally agreeing with g  (size: 100-180 lines / 2-4 days)",
+    :area "manifold-inverse-function-theorem"},
+   :id :lemma-euclidean-partialdiffeomorph-of-contdiffat,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t95A04]}
+  {:consumer :t99J04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t99J04_bridge_local_inverse_function",
+    :type
+    "ContMDiffAt 𝓘(ℝ,E) 𝓘(ℝ,E') ∞ f x → Bijective (mfderiv 𝓘(ℝ,E) 𝓘(ℝ,E') f x) → IsLocalDiffeomorphAt 𝓘(ℝ,E) 𝓘(ℝ,E') ∞ f x  (size: 140-260 lines / 3-6 days)"},
+   :lemma
+   {:name "apm_t99J04_bridge_local_inverse_function",
+    :reported-by [:owner],
+    :type
+    "ContMDiffAt 𝓘(ℝ,E) 𝓘(ℝ,E') ∞ f x → Bijective (mfderiv 𝓘(ℝ,E) 𝓘(ℝ,E') f x) → IsLocalDiffeomorphAt 𝓘(ℝ,E) 𝓘(ℝ,E') ∞ f x  (size: 140-260 lines / 3-6 days)",
+    :area "manifold-inverse-function-theorem"},
+   :id :lemma-apm-t99j04-bridge-local-inverse-function,
+   :kind :lemma,
+   :depends-on [:lemma-euclidean-partialdiffeomorph-of-contdiffat],
+   :other-consumers [:t95A04]}
+  {:consumer :t99J04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t99J04_bridge_coordinateMap_mfderiv_bijective",
+    :type
+    "LinearIndependent coordinate covectors → Bijective (mfderiv ... (apm_t99J04_coordinateMap f) x)  (size: 100-200 lines / 2-4 days)"},
+   :lemma
+   {:name "apm_t99J04_bridge_coordinateMap_mfderiv_bijective",
+    :reported-by [:owner],
+    :type
+    "LinearIndependent coordinate covectors → Bijective (mfderiv ... (apm_t99J04_coordinateMap f) x)  (size: 100-200 lines / 2-4 days)",
+    :area "manifold-inverse-function-theorem"},
+   :id :lemma-apm-t99j04-bridge-coordinatemap-mfderiv-bijective,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t99J04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t99J04_dualCoordinates_bijective",
+    :type "  (found in problems/t99J04/lean/Main.lean:35)"},
+   :lemma
+   {:name "apm_t99J04_dualCoordinates_bijective",
+    :reported-by [:owner],
+    :type "  (found in problems/t99J04/lean/Main.lean:35)",
+    :proved-in :owner},
+   :id :lemma-apm-t99j04-dualcoordinates-bijective,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t99J04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t99J04_surjective_of_bijective_mfderiv_of_localIFT",
+    :type "  (found in problems/t99J04/lean/Main.lean:95)"},
+   :lemma
+   {:name "apm_t99J04_surjective_of_bijective_mfderiv_of_localIFT",
+    :reported-by [:owner],
+    :type "  (found in problems/t99J04/lean/Main.lean:95)",
+    :proved-in :owner},
+   :id :lemma-apm-t99j04-surjective-of-bijective-mfderiv-of-localift,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_fixedPoints",
+    :type
+    "∀ p : CP n, f p = p ↔ ∃ i : Fin (n+1), p = coordinateLine ℂ n i  (size: 100-220 lines / 2-5 days)"},
+   :lemma
+   {:name "t99J05_fixedPoints",
+    :reported-by [:owner],
+    :type
+    "∀ p : CP n, f p = p ↔ ∃ i : Fin (n+1), p = coordinateLine ℂ n i  (size: 100-220 lines / 2-5 days)",
+    :area "projective-quotient-charts"},
+   :id :lemma-t99j05-fixedpoints,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_localIndices_one",
+    :type
+    "∀ i, ContDiffAt ℝ 1 (localMap f i) 0 ∧ fixedPointDeterminant f i ≠ 0 ∧ localIndex f i = 1  (size: 220-450 lines / 4-9 days)"},
+   :lemma
+   {:name "t99J05_localIndices_one",
+    :reported-by [:owner],
+    :type
+    "∀ i, ContDiffAt ℝ 1 (localMap f i) 0 ∧ fixedPointDeterminant f i ≠ 0 ∧ localIndex f i = 1  (size: 220-450 lines / 4-9 days)",
+    :area "projective-quotient-charts"},
+   :id :lemma-t99j05-localindices-one,
+   :kind :lemma,
+   :depends-on [:lemma-t99j05-fixedpoints],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "cpn_rationalHomology",
+    :type
+    "H_{2k}(CP n;ℚ) ≅ ℚ for k≤n, all other rational homology vanishes, with finite-dimensional certificates  (size: 1500-3500 lines / 2-4 months)"},
+   :lemma
+   {:name "cpn_rationalHomology",
+    :reported-by [:owner],
+    :type
+    "H_{2k}(CP n;ℚ) ≅ ℚ for k≤n, all other rational homology vanishes, with finite-dimensional certificates  (size: 1500-3500 lines / 2-4 months)",
+    :area "rational-homology-cpn"},
+   :id :lemma-cpn-rationalhomology,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "diagonal_homotopy_lefschetz",
+    :type
+    "HasLefschetzNumber f (n+1) ∧ HasEulerCharacteristic (CP n) (n+1)  (size: 250-500 lines / 1-2 weeks)"},
+   :lemma
+   {:name "diagonal_homotopy_lefschetz",
+    :reported-by [:owner],
+    :type
+    "HasLefschetzNumber f (n+1) ∧ HasEulerCharacteristic (CP n) (n+1)  (size: 250-500 lines / 1-2 weeks)",
+    :area "lefschetz-trace-bookkeeping"},
+   :id :lemma-diagonal-homotopy-lefschetz,
+   :kind :lemma,
+   :depends-on [:lemma-cpn-rationalhomology],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "T99J05Diagonal_homotopy_descends",
+    :type "  (found in problems/t99J05/lean/Main.lean:34)"},
+   :lemma
+   {:name "T99J05Diagonal_homotopy_descends",
+    :reported-by [:owner],
+    :type "  (found in problems/t99J05/lean/Main.lean:34)",
+    :proved-in :owner},
+   :id :lemma-t99j05diagonal-homotopy-descends,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "T99J05_affineChartConstruction",
+    :type "  (found in problems/t99J05/lean/Main.lean:48)"},
+   :lemma
+   {:name "T99J05_affineChartConstruction",
+    :reported-by [:owner],
+    :type "  (found in problems/t99J05/lean/Main.lean:48)",
+    :proved-in :owner},
+   :id :lemma-t99j05-affinechartconstruction,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t99J06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J06_extDeriv_alpha",
+    :type
+    "extDeriv alpha = fun p => (2 * p 2 + 1) • volumeForm  (size: 120-220 lines / 2-5 days)"},
+   :lemma
+   {:name "t99J06_extDeriv_alpha",
+    :reported-by [:owner],
+    :type
+    "extDeriv alpha = fun p => (2 * p 2 + 1) • volumeForm  (size: 120-220 lines / 2-5 days)",
+    :area "none"},
+   :id :lemma-t99j06-extderiv-alpha,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t99J06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J06_parametrization_geometry",
+    :type
+    "parametrization '' parameters = cone ∧ Set.InjOn parametrization interiorParameters ∧ ∀ p ∈ interiorParameters, Function.Injective (fderiv ℝ parametrization p)  (size: 140-280 lines / 3-6 days)"},
+   :lemma
+   {:name "t99J06_parametrization_geometry",
+    :reported-by [:owner],
+    :type
+    "parametrization '' parameters = cone ∧ Set.InjOn parametrization interiorParameters ∧ ∀ p ∈ interiorParameters, Function.Injective (fderiv ℝ parametrization p)  (size: 140-280 lines / 3-6 days)",
+    :area "none"},
+   :id :lemma-t99j06-parametrization-geometry,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t99J06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J06_rectangleIntegral_dxdy",
+    :type
+    "0 < rectangleIntegral (fun _ => coordinateWedge 0 1) parametrization 0 (2*Real.pi) 0 1  (size: 80-160 lines / 1-3 days)"},
+   :lemma
+   {:name "t99J06_rectangleIntegral_dxdy",
+    :reported-by [:owner],
+    :type
+    "0 < rectangleIntegral (fun _ => coordinateWedge 0 1) parametrization 0 (2*Real.pi) 0 1  (size: 80-160 lines / 1-3 days)",
+    :area "none"},
+   :id :lemma-t99j06-rectangleintegral-dxdy,
+   :kind :lemma,
+   :depends-on [:lemma-t99j06-parametrization-geometry],
+   :other-consumers []}
+  {:consumer :t99J06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J06_rectangleIntegral_alpha",
+    :type
+    "rectangleIntegral alpha parametrization 0 (2*Real.pi) 0 1 = 9*Real.pi/2  (size: 150-300 lines / 3-7 days)"},
+   :lemma
+   {:name "t99J06_rectangleIntegral_alpha",
+    :reported-by [:owner],
+    :type
+    "rectangleIntegral alpha parametrization 0 (2*Real.pi) 0 1 = 9*Real.pi/2  (size: 150-300 lines / 3-7 days)",
+    :area "none"},
+   :id :lemma-t99j06-rectangleintegral-alpha,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j06-extderiv-alpha
+    :lemma-t99j06-parametrization-geometry],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
