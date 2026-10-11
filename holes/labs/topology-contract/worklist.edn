@@ -113905,6 +113905,19 @@
       :exit 0,
       :finding "zero placeholders"}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791745068002-5783-5807b147",
+     :commands
+     ["git show/diff-tree 324553b3"
+      "hash/diff/placeholder checks"
+      "statement-registry.py check"
+      "lake env lean PointWedgeVanKampen.lean"
+      "lake build PointWedgeVanKampen"
+      "lake build ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "PASS: new compiled, sorry-free B6 progress computes the final B3 representation inverse on both coproduct injections, definitionally yielding the literal injections. This correctly crosses the representation/SingleObj boundary and leaves earlier point-span/open-cover transports. Exact two-file scope/frozen hashes match; zero placeholders; registry 131/131; standard axioms. Remaining transports and B12 are listed; absent final target is valid STOP."},
     :commit "324553b3030f1c4763b0c17b6f27f16a79d1a723",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113915,7 +113928,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113936,7 +113949,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B6 reduced to the explicit B3 inverse-identity functor on both literal legs.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B6 final representation inverse now computes literally on both injections.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114019,7 +114032,11 @@
     {:job 6,
      :commit "786d0b9a7ecf86c13e60382176bdf91a0b2fed05",
      :reason
-     "B6 reduced to the explicit B3 inverse-identity functor on both literal legs."}]}
+     "B6 reduced to the explicit B3 inverse-identity functor on both literal legs."}
+    {:job 7,
+     :commit "324553b3030f1c4763b0c17b6f27f16a79d1a723",
+     :reason
+     "B6 final representation inverse now computes literally on both injections."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
