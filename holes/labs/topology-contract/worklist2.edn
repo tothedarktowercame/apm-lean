@@ -71083,86 +71083,119 @@
    "Combine the interior imaginary-coordinate certificate with the banked meridian-start and input endpoint collision certificates to prove left-core avoidance for every detour time, then reconstruct the zero-height ambient radial stage.",
    :other-consumers []}
   {:bounded-exception
+   "single-consumer endpoint deletion certificates for the zero-height core-normal detour",
+   :consumer :t02A03,
+   :phase :probe,
+   :state :open,
+   :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t02A03/zero-height-endpoint-deletion-certificates",
+   :acceptance
+   {:probe
+    "Compile zeroHeightEndpointAvoidance_coreNormalDetour. Prove that the time-zero normal reconstructed at angular coordinate 1 and the time-one normal reconstructed at the recovered input angular coordinate both avoid the left core, using the exact detour endpoints and frozen reconstruction equations. Do not define the intermediate angular path, reconstruct the full ambient detour, or define the deformation.",
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightEndpointAvoidance_coreNormalDetour",
+    :type
+    "forall (p : RightTubeMinusLeftCore), rightTubeCorePolarReconstruction (1 : Circle) (zeroHeightCoreNormalDetour 0 p) ∉ Set.range apm_t02a03_leftCore ∧ rightTubeCorePolarReconstruction (rightTubeCoreAngularCoordinate p) (zeroHeightCoreNormalDetour 1 p) ∉ Set.range apm_t02a03_leftCore",
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "certify deletion avoidance at both endpoints using their distinct correct angular coordinates"},
+   :id
+   :routes-2026-10-11-t02a03-zero-height-endpoint-deletion-certificates-topo2-r1,
+   :kind :reusable-theorem,
+   :area "explicit-r3-tube-deformation-retraction",
+   :depends-on
+   [:routes-2026-10-11-t02a03-zero-height-core-normal-detour-interior-im-topo2-r1],
+   :current-residual
+   "Construct a continuous angular coordinate coupled to the normal detour: it must start at 1 and finish at rightTubeCoreAngularCoordinate p, while every nonendpoint time remains safe by the banked nonzero-imaginary normal invariant; then reconstruct the zero-height ambient stage.",
+   :other-consumers []}
+  {:bounded-exception
    "single-consumer explicit ambient deformation with frozen tube and deletion invariants",
    :consumer :t02A03,
    :evidence
    {:probe
     {:residual
-     "Bank the interior nonzero-imaginary invariant; then combine it with both endpoint collision certificates to obtain full zero-height detour avoidance before ambient reconstruction.",
+     "Bank both endpoint deletion certificates; then construct the coupled angular path and reconstruct the continuous zero-height ambient detour, using nonzero imaginary normal coordinate at every interior time.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
      [{:name
-       "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCoreNormalDetour_im_ne_zero_of_interior",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightEndpointAvoidance_coreNormalDetour",
        :type
-       "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> forall (t : unitInterval), (t : ℝ) ≠ 0 -> (t : ℝ) ≠ 1 -> (zeroHeightCoreNormalDetour t p).im ≠ 0",
+       "forall (p : RightTubeMinusLeftCore), rightTubeCorePolarReconstruction (1 : Circle) (zeroHeightCoreNormalDetour 0 p) ∉ Set.range apm_t02a03_leftCore ∧ rightTubeCorePolarReconstruction (rightTubeCoreAngularCoordinate p) (zeroHeightCoreNormalDetour 1 p) ∉ Set.range apm_t02a03_leftCore",
        :status :proved,
        :consumers [:t02A03],
        :depends-on
-       ["ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCoreNormalDetour_radius_le"
-        "ConstructionTargets.T02A03GeometricTubeDeformation.realEndpoints_zeroHeight_rightTubeCoreNormals"
-        "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeight_signedImaginaryWaypoint_properties"],
+       ["ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCoreNormalDetour_endpoints_midpoint"
+        "ConstructionTargets.T02A03GeometricTubeDeformation.rightCorePolarReconstruction_circleMeridian"
+        "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCorePolarReconstruction_self"],
        :area "explicit-r3-tube-deformation-retraction"}],
      :prerequisite
      {:bounded-exception
-      "single-consumer interior nonzero-imaginary invariant for the zero-height core-normal detour",
+      "single-consumer endpoint deletion certificates for the zero-height core-normal detour",
       :consumer :t02A03,
       :phase :probe,
       :state :open,
       :scope
       ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t02A03/zero-height-core-normal-detour-interior-im",
+      "TOPOLOGY-ROUTES.md/t02A03/zero-height-endpoint-deletion-certificates",
       :acceptance
       {:probe
-       "Compile zeroHeightCoreNormalDetour_im_ne_zero_of_interior. For zero-height input and every time distinct from both endpoints, prove the detour core normal has nonzero imaginary part by splitting at the midpoint and using the signed waypoint together with the real endpoint normals. Do not prove endpoint collision avoidance, reconstruct an ambient path, or define the full deformation.",
+       "Compile zeroHeightEndpointAvoidance_coreNormalDetour. Prove that the time-zero normal reconstructed at angular coordinate 1 and the time-one normal reconstructed at the recovered input angular coordinate both avoid the left core, using the exact detour endpoints and frozen reconstruction equations. Do not define the intermediate angular path, reconstruct the full ambient detour, or define the deformation.",
        :declaration
-       "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCoreNormalDetour_im_ne_zero_of_interior",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightEndpointAvoidance_coreNormalDetour",
        :type
-       "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> forall (t : unitInterval), (t : ℝ) ≠ 0 -> (t : ℝ) ≠ 1 -> (zeroHeightCoreNormalDetour t p).im ≠ 0",
+       "forall (p : RightTubeMinusLeftCore), rightTubeCorePolarReconstruction (1 : Circle) (zeroHeightCoreNormalDetour 0 p) ∉ Set.range apm_t02a03_leftCore ∧ rightTubeCorePolarReconstruction (rightTubeCoreAngularCoordinate p) (zeroHeightCoreNormalDetour 1 p) ∉ Set.range apm_t02a03_leftCore",
        :placeholder "the sole sorry in apm_t02a03",
        :route-step
-       "certify nonzero imaginary core-normal coordinate throughout the open zero-height detour"},
+       "certify deletion avoidance at both endpoints using their distinct correct angular coordinates"},
       :id
-      :routes-2026-10-11-t02a03-zero-height-core-normal-detour-interior-im-topo2-r1,
+      :routes-2026-10-11-t02a03-zero-height-endpoint-deletion-certificates-topo2-r1,
       :kind :reusable-theorem,
       :area "explicit-r3-tube-deformation-retraction",
       :depends-on
-      [:routes-2026-10-11-t02a03-zero-height-core-normal-detour-radius-topo2-r1],
+      [:routes-2026-10-11-t02a03-zero-height-core-normal-detour-interior-im-topo2-r1],
       :current-residual
-      "Combine the interior imaginary-coordinate certificate with the banked meridian-start and input endpoint collision certificates to prove left-core avoidance for every detour time, then reconstruct the zero-height ambient radial stage.",
+      "Construct a continuous angular coordinate coupled to the normal detour: it must start at 1 and finish at rightTubeCoreAngularCoordinate p, while every nonendpoint time remains safe by the banked nonzero-imaginary normal invariant; then reconstruct the zero-height ambient stage.",
       :other-consumers []},
      :commands
      [{:cmd
-       "lake env lean /tmp/t02a03_core_normal_detour_interior_im_probe.lean",
+       "lake env lean /tmp/t02a03_zero_height_detour_endpoint_avoidance_probe.lean",
        :exit 0,
        :output
-       "zeroHeightCoreNormalDetour_im_ne_zero_of_interior compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "zeroHeightEndpointAvoidance_coreNormalDetour compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/t02a03_core_normal_detour_interior_im_probe.lean",
+       "sha256sum /tmp/t02a03_zero_height_detour_endpoint_avoidance_probe.lean",
        :exit 0,
        :output
-       "26b5eef37943d833a9d9702ba05b75a25618af3b5d4e309d3ae45ef9cc52dfcd  /tmp/t02a03_core_normal_detour_interior_im_probe.lean"}
+       "bdb9057cd8a479b5f2d7c45b9841a73687a29d967b21fec533dc8c8b78966d3c  /tmp/t02a03_zero_height_detour_endpoint_avoidance_probe.lean"}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_core_normal_detour_interior_im_probe.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_zero_height_detour_endpoint_avoidance_probe.lean || true)\"",
        :exit 0}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}
       {:cmd
-       "rg -n 'zeroHeightCoreNormalDetour_im_ne_zero_of_interior' /tmp/t02a03_core_normal_detour_interior_im_probe.lean",
+       "rg -n 'zeroHeightEndpointAvoidance_coreNormalDetour' /tmp/t02a03_zero_height_detour_endpoint_avoidance_probe.lean",
        :exit 0,
        :output
-       "5:theorem zeroHeightCoreNormalDetour_im_ne_zero_of_interior\n26:#print axioms zeroHeightCoreNormalDetour_im_ne_zero_of_interior"}],
+       "5:theorem zeroHeightEndpointAvoidance_coreNormalDetour\n25:#print axioms zeroHeightEndpointAvoidance_coreNormalDetour"}],
+     :diagnostic-history
+     [{:cmd "prior receipt admission",
+       :exit 1,
+       :finding
+       "The generated lemma key for zeroHeightCoreNormalDetour_endpoint_avoidance collided with the banked zeroHeightCoreNormalDetour_endpoints_midpoint key. Renaming the declaration to put EndpointAvoidance before coreNormalDetour gives a distinct registry key without changing its type or proof."}],
      :fixture
-     {:path "/tmp/t02a03_core_normal_detour_interior_im_probe.lean",
+     {:path
+      "/tmp/t02a03_zero_height_detour_endpoint_avoidance_probe.lean",
       :sha256
-      "26b5eef37943d833a9d9702ba05b75a25618af3b5d4e309d3ae45ef9cc52dfcd"},
+      "bdb9057cd8a479b5f2d7c45b9841a73687a29d967b21fec533dc8c8b78966d3c"},
      :finding
-     "For zero-height input, every strict interior detour time has nonzero imaginary core-normal coordinate. On the departure half it is (2*t)*w.im, and on the arrival half it is (2-2*t)*w.im; the real endpoint normals contribute zero imaginary part, while t != 0 and t != 1 keep the respective coefficients nonzero.",
+     "The two detour endpoint reconstructions avoid the frozen left core at their geometrically correct angular coordinates. At time zero, angle 1 reconstructs the frozen circle-meridian point, whose tube-cover certificate includes left-core avoidance. At time one, the recovered core angle and input normal reconstruct the original deleted-tube point.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
@@ -71232,7 +71265,8 @@
     :routes-2026-10-11-t02a03-zero-height-core-normal-detour-endpoints-topo2-r1
     :routes-2026-10-11-t02a03-zero-height-core-normal-detour-continuous-topo2-r1
     :routes-2026-10-11-t02a03-zero-height-core-normal-detour-radius-topo2-r1
-    :routes-2026-10-11-t02a03-zero-height-core-normal-detour-interior-im-topo2-r1],
+    :routes-2026-10-11-t02a03-zero-height-core-normal-detour-interior-im-topo2-r1
+    :routes-2026-10-11-t02a03-zero-height-endpoint-deletion-certificates-topo2-r1],
    :current-residual
    "Lift H to RightTubeMinusLeftCore, package rightTubeMeridianRetractionHomotopy, then use the coordinate equation for the Circle-side constant homotopy.",
    :other-consumers []}
@@ -75975,4 +76009,31 @@
    [:lemma-constructiontargets-t02a03geometrictubedeformation-zeroheightcorenormaldetour-ra
     :lemma-constructiontargets-t02a03geometrictubedeformation-realendpoints-zeroheight-righ
     :lemma-constructiontargets-t02a03geometrictubedeformation-zeroheight-signedimaginaryway],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightEndpointAvoidance_coreNormalDetour",
+    :type
+    "forall (p : RightTubeMinusLeftCore), rightTubeCorePolarReconstruction (1 : Circle) (zeroHeightCoreNormalDetour 0 p) ∉ Set.range apm_t02a03_leftCore ∧ rightTubeCorePolarReconstruction (rightTubeCoreAngularCoordinate p) (zeroHeightCoreNormalDetour 1 p) ∉ Set.range apm_t02a03_leftCore"},
+   :lemma
+   {:name
+    "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightEndpointAvoidance_coreNormalDetour",
+    :reported-by
+    [:routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1],
+    :type
+    "forall (p : RightTubeMinusLeftCore), rightTubeCorePolarReconstruction (1 : Circle) (zeroHeightCoreNormalDetour 0 p) ∉ Set.range apm_t02a03_leftCore ∧ rightTubeCorePolarReconstruction (rightTubeCoreAngularCoordinate p) (zeroHeightCoreNormalDetour 1 p) ∉ Set.range apm_t02a03_leftCore",
+    :area "explicit-r3-tube-deformation-retraction",
+    :proved-in
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+   :id
+   :lemma-constructiontargets-t02a03geometrictubedeformation-zeroheightendpointavoidance-c,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t02a03geometrictubedeformation-zeroheightcorenormaldetour-en
+    :lemma-constructiontargets-t02a03geometrictubedeformation-rightcorepolarreconstruction-
+    :lemma-constructiontargets-t02a03geometrictubedeformation-righttubecorepolarreconstruct],
    :other-consumers []}]}
