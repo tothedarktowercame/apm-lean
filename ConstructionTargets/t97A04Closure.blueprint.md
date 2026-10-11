@@ -99,7 +99,7 @@ uses: B2, B3,
 `ProductionOpenCoverMayerVietoris.coverRangeMap_inter_left`,
 `ProductionOpenCoverMayerVietoris.coverRangeMap_inter_right`
 
-status: planned
+status: proved 45d5168ab9cb0197ff93b2a0d724a495a29772a9
 
 Use `coverRangeMap` for the intersection, the two cover members, and the
 union.  The left and right intersection squares prove compatibility with the
