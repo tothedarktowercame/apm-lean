@@ -1137,6 +1137,23 @@ theorem correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_coefficient_facto
   rw [coefficientLocalIso_hom_eq_forwardComposite]
   rfl
 
+/-- The negative-automorphism equation with the corrected relative-homology
+comparison exposed as homology preservation followed by the chain comparison. -/
+theorem correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_corrected_comparison_factors
+    (k : ℕ) {M : Type} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M) :
+    (correctedLocalNormalizationAutomorphism k x).hom = -𝟙 _ ↔
+      (((CoefficientRelativeSmall.relativeChains ℤ (deletedPoint x)).sc (k + 2)).mapHomologyIso
+          forgetIntModules).inv ≫
+        HomologicalComplex.homologyMap
+          (integralRelativeChainsComparisonWithTransport (deletedPoint x)).hom (k + 2) ≫
+        (ambientChartHomologyIso k x).inv ≫
+        (HigherModelLocalHomology.localIsoInt k).hom =
+      forgetIntModules.map (coefficientLocalForwardComposite k x) ≫ (-𝟙 _) := by
+  rw [correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_coefficient_factors]
+  rw [integralRelativeHomologyComparisonWithTransport_hom]
+  constructor <;> intro h <;> simpa only [← Category.assoc] using h
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -1209,3 +1226,4 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientLocalForwardComposite
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientLocalIso_hom_eq_forwardComposite
 #print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_coefficient_factors
+#print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_corrected_comparison_factors
