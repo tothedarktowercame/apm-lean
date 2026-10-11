@@ -106581,10 +106581,79 @@
    "Combine this identity with the remaining constituent counit normalizations in the five-factor composite.",
    :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
   {:consumer :t99J01,
+   :stop-count 1,
    :implements-lemma
    :lemma-twoopenfundamentalgroupoidpseudopushout-counit-base-component-identity,
+   :evidence
+   {:placeholder-delta
+    {:source-before 0, :source-after 0, :fixture-sorry 0},
+    :residual
+    "First normalize the connector equivalences or prove their selected counit components are identity; then prove the induced inverse pseudococone glue identity and replay the right pseudopushout counit component.",
+    :outcome :stop,
+    :warnings [],
+    :missing-theorems
+    [{:name
+      "ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence_counit_base_identity",
+      :type
+      "For each connector system used by TwoOpenPointSpanComparison, the counit hom component of connectorSingleObjEquivalence at SingleObj.star (End S.base) is identity.",
+      :status :not-started,
+      :consumers [:t99J01 :t01A03 :t92J06 :t97A01 :t97A03],
+      :depends-on [],
+      :area "fundamental-group-wedge-of-circles"}
+     {:name
+      "TwoOpenPseudopushoutCounitBaseIdentity.inverseIdentityPseudoCocone_glue_base_identity",
+      :type
+      "(inverseIdentityPseudoCocone hU hV hcover w).glue.hom.app (FundamentalGroupoid.mk w) = 𝟙 _",
+      :status :not-started,
+      :consumers [:t99J01 :t01A03 :t92J06 :t97A01 :t97A03],
+      :depends-on
+      ["ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence_counit_base_identity"],
+      :area "fundamental-group-wedge-of-circles"}],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not"},
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :reason
+    "The left counit component is definitionally identity, but the right component reduces to the glue component of inverseIdentityPseudoCocone at the overlap basepoint. That glue passes through TwoOpenPointSpanComparison.comparison, whose leftEquivalence and rightEquivalence are connectorSingleObjEquivalence values built with Functor.asEquivalence. Their counit components contain Classical.choice-selected objObjPreimageIso values and are not constrained to be identity. The exact missing hypothesis is identity of the selected connector counit components at both connector base objects, together with the induced proof that inverseIdentityPseudoCocone.glue.hom.app (FundamentalGroupoid.mk w) is identity.",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/two-open-pseudopushout-counit-base-identity.lean",
+      :exit 0,
+      :finding "Fixture hash matches the frozen hash."}
+     {:cmd
+      "lake env lean ConstructionTargets/TwoOpenFundamentalGroupoidPseudopushout.lean",
+      :exit 0,
+      :finding
+      "The banked pseudopushout equivalence compiles with standard axioms."}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not."}
+     {:cmd
+      "rg -n connectorSingleObjEquivalence_counit_base_identity ConstructionTargets -g *.lean",
+      :exit 0,
+      :finding
+      "Only connectorSingleObjEquivalence_counit_base_identity_iff exists; no identity theorem is banked."}
+     {:cmd "git status --short",
+      :exit 0,
+      :finding
+      "Worktree is clean after removing the unsuccessful exploratory source."}],
+    :diagnostic-history
+    [{:cmd
+      "lake env lean ConstructionTargets/TwoOpenPseudopushoutCounitBaseIdentity.lean",
+      :exit 1,
+      :finding
+      "The attempted exact theorem proved the left conjunct by rfl; the right conjunct remained. Isolating inverseIdentityPseudoCocone.glue.hom.app at the overlap basepoint showed that even this glue-is-identity equation is not definitional after unfolding the four downstream inverse equivalences."}],
+    :commit nil,
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/two-open-pseudopushout-counit-base-identity.lean",
+     :sha256
+     "7c4e6027b3f7e74420c4528245d404d8df178b21af0ea07d00dda073e8bcaa5e",
+     :status :self-axiomatized},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/TwoOpenPseudopushoutCounitBaseIdentity.lean"],
    :dag-node
@@ -112498,7 +112567,8 @@
     "ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence_counit_base_identity",
     :reported-by
     [:routes-2026-10-11-composite-counit-component-identity-91
-     :routes-2026-10-11-connector-single-object-counit-base-identity-97],
+     :routes-2026-10-11-connector-single-object-counit-base-identity-97
+     :routes-2026-10-11-two-open-pseudopushout-counit-base-identity-106],
     :type
     "For every connector system used by TwoOpenPointSpanComparison, the counit of connectorSingleObjEquivalence at the identity target functor has identity component at SingleObj.star.",
     :area "fundamental-group-wedge-of-circles",
@@ -113547,7 +113617,30 @@
    :lemma-t99j01pathcomponentcoverrestriction-t99j01componentcover-isksheeted,
    :kind :lemma,
    :depends-on [:lemma-threecirclespathtopologycore-instances],
-   :other-consumers []}],
+   :other-consumers []}
+  {:consumer :t99J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "TwoOpenPseudopushoutCounitBaseIdentity.inverseIdentityPseudoCocone_glue_base_identity",
+    :type
+    "(inverseIdentityPseudoCocone hU hV hcover w).glue.hom.app (FundamentalGroupoid.mk w) = 𝟙 _"},
+   :lemma
+   {:name
+    "TwoOpenPseudopushoutCounitBaseIdentity.inverseIdentityPseudoCocone_glue_base_identity",
+    :reported-by
+    [:routes-2026-10-11-two-open-pseudopushout-counit-base-identity-106],
+    :type
+    "(inverseIdentityPseudoCocone hU hV hcover w).glue.hom.app (FundamentalGroupoid.mk w) = 𝟙 _",
+    :area "fundamental-group-wedge-of-circles"},
+   :id
+   :lemma-twoopenpseudopushoutcounitbaseidentity-inverseidentitypseudococone-glue-base-ide,
+   :kind :lemma,
+   :depends-on
+   [:lemma-connectedgroupoidsingleobjequivalence-connectorsingleobjequivalence-counit-base-],
+   :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",
