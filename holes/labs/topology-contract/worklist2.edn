@@ -68519,89 +68519,111 @@
    "Prove the chosen right-core angular trajectory keeps this collision polynomial nonzero whenever the normal height vanishes; combine with the nonzero-height criterion to certify deletion avoidance, then concatenate the angular and radial stages.",
    :other-consumers []}
   {:bounded-exception
+   "single-consumer polynomial noncollision criterion for left-core avoidance",
+   :consumer :t02A03,
+   :phase :probe,
+   :state :open,
+   :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t02A03/collision-polynomial-implies-left-core-avoidance",
+   :acceptance
+   {:probe
+    "Compile collisionPolynomial_ne_implies_avoidsLeftCore_rightTubeCorePolar. Use corePolar_leftCore_collision_equation contrapositively to prove that nonvanishing of the collision polynomial implies rightTubeCorePolarReconstruction u n avoids Set.range apm_t02a03_leftCore. Do not establish polynomial nonvanishing for any particular path.",
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.collisionPolynomial_ne_implies_avoidsLeftCore_rightTubeCorePolar",
+    :type
+    "forall (u : Circle) (n : Complex), ((1 - n.re)^2 - 4*(1 - n.re)*(u : Complex).re + 3 != 0) -> rightTubeCorePolarReconstruction u n ∉ Set.range apm_t02a03_leftCore",
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "turn scalar noncollision into the deletion invariant"},
+   :id
+   :routes-2026-10-11-t02a03-collision-polynomial-implies-left-core-avoidance-topo2-r2,
+   :kind :reusable-theorem,
+   :area "explicit-r3-tube-deformation-retraction",
+   :depends-on
+   [:routes-2026-10-11-t02a03-core-polar-left-core-collision-equation-topo2-r1],
+   :current-residual
+   "Construct the right-core angular trajectory and prove its collision polynomial is nonzero on the zero-height slice; use this theorem there and the height criterion elsewhere, then certify and concatenate both ambient stages.",
+   :other-consumers []}
+  {:bounded-exception
    "single-consumer explicit ambient deformation with frozen tube and deletion invariants",
    :consumer :t02A03,
    :evidence
    {:probe
     {:residual
-     "Bank the planar collision equation, then construct an angular trajectory avoiding its zero set and use the height split to certify the complete corrected deformation.",
+     "Bank the collision-polynomial avoidance adapter, then prove polynomial nonvanishing for the selected angular trajectory and assemble the height-split deletion proof.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
      [{:name
-       "ConstructionTargets.T02A03GeometricTubeDeformation.corePolar_leftCore_collision_equation",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.collisionPolynomial_ne_implies_avoidsLeftCore_rightTubeCorePolar",
        :type
-       "forall (u : Circle) (n : Complex), rightTubeCorePolarReconstruction u n ∈ Set.range apm_t02a03_leftCore -> (1 - n.re)^2 - 4*(1 - n.re)*(u : Complex).re + 3 = 0",
+       "forall (u : Circle) (n : Complex), ((1 - n.re)^2 - 4*(1 - n.re)*(u : Complex).re + 3 != 0) -> rightTubeCorePolarReconstruction u n ∉ Set.range apm_t02a03_leftCore",
        :status :proved,
        :consumers [:t02A03],
-       :depends-on [],
+       :depends-on
+       ["ConstructionTargets.T02A03GeometricTubeDeformation.corePolar_leftCore_collision_equation"],
        :area "explicit-r3-tube-deformation-retraction"}],
      :prerequisite
      {:bounded-exception
-      "single-consumer scalar characterization necessary for planar left-core collision",
+      "single-consumer polynomial noncollision criterion for left-core avoidance",
       :consumer :t02A03,
       :phase :probe,
       :state :open,
       :scope
       ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t02A03/core-polar-left-core-collision-equation",
+      "TOPOLOGY-ROUTES.md/t02A03/collision-polynomial-implies-left-core-avoidance",
       :acceptance
       {:probe
-       "Compile corePolar_leftCore_collision_equation. From hypothetical membership of rightTubeCorePolarReconstruction u n in Set.range apm_t02a03_leftCore, equate the planar coordinates and derive (1-n.re)^2 - 4(1-n.re)(u:Complex).re + 3 = 0 using the Circle and trigonometric unit identities. Prove only necessity, not sufficiency, and do not construct a homotopy.",
+       "Compile collisionPolynomial_ne_implies_avoidsLeftCore_rightTubeCorePolar. Use corePolar_leftCore_collision_equation contrapositively to prove that nonvanishing of the collision polynomial implies rightTubeCorePolarReconstruction u n avoids Set.range apm_t02a03_leftCore. Do not establish polynomial nonvanishing for any particular path.",
        :declaration
-       "ConstructionTargets.T02A03GeometricTubeDeformation.corePolar_leftCore_collision_equation",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.collisionPolynomial_ne_implies_avoidsLeftCore_rightTubeCorePolar",
        :type
-       "forall (u : Circle) (n : Complex), rightTubeCorePolarReconstruction u n ∈ Set.range apm_t02a03_leftCore -> (1 - n.re)^2 - 4*(1 - n.re)*(u : Complex).re + 3 = 0",
+       "forall (u : Circle) (n : Complex), ((1 - n.re)^2 - 4*(1 - n.re)*(u : Complex).re + 3 != 0) -> rightTubeCorePolarReconstruction u n ∉ Set.range apm_t02a03_leftCore",
        :placeholder "the sole sorry in apm_t02a03",
        :route-step
-       "identify the exact planar forbidden equation for deletion avoidance"},
+       "turn scalar noncollision into the deletion invariant"},
       :id
-      :routes-2026-10-11-t02a03-core-polar-left-core-collision-equation-topo2-r1,
+      :routes-2026-10-11-t02a03-collision-polynomial-implies-left-core-avoidance-topo2-r2,
       :kind :reusable-theorem,
       :area "explicit-r3-tube-deformation-retraction",
       :depends-on
-      [:routes-2026-10-11-t02a03-core-polar-height-left-core-avoidance-topo2-r2],
+      [:routes-2026-10-11-t02a03-core-polar-left-core-collision-equation-topo2-r1],
       :current-residual
-      "Prove the chosen right-core angular trajectory keeps this collision polynomial nonzero whenever the normal height vanishes; combine with the nonzero-height criterion to certify deletion avoidance, then concatenate the angular and radial stages.",
+      "Construct the right-core angular trajectory and prove its collision polynomial is nonzero on the zero-height slice; use this theorem there and the height criterion elsewhere, then certify and concatenate both ambient stages.",
       :other-consumers []},
      :commands
      [{:cmd
-       "lake env lean /tmp/t02a03_core_polar_planar_collision_probe.lean",
+       "lake env lean /tmp/t02a03_core_polar_polynomial_avoidance_probe.lean",
        :exit 0,
        :output
-       "corePolar_leftCore_collision_equation compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "collisionPolynomial_ne_implies_avoidsLeftCore_rightTubeCorePolar compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/t02a03_core_polar_planar_collision_probe.lean",
+       "sha256sum /tmp/t02a03_core_polar_polynomial_avoidance_probe.lean",
        :exit 0,
        :output
-       "4702922afd55aa3473b9ff64b85101dbf20b0e74f813207d372c4dd9620abcbf  /tmp/t02a03_core_polar_planar_collision_probe.lean"}
+       "b54389cfaef4c29f9a16062988de609eb4a2838d46d129d7706ff7efd3acbfc4  /tmp/t02a03_core_polar_polynomial_avoidance_probe.lean"}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_core_polar_planar_collision_probe.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_core_polar_polynomial_avoidance_probe.lean || true)\"",
        :exit 0}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}
       {:cmd
-       "rg -n 'corePolar_leftCore_collision_equation' /tmp/t02a03_core_polar_planar_collision_probe.lean",
+       "rg -n 'collisionPolynomial_ne_implies_avoidsLeftCore_rightTubeCorePolar' /tmp/t02a03_core_polar_polynomial_avoidance_probe.lean",
        :exit 0,
        :output
-       "7:theorem corePolar_leftCore_collision_equation\n23:#print axioms corePolar_leftCore_collision_equation"}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/t02a03_core_polar_planar_collision_probe.lean",
-       :exit 1,
-       :finding
-       "The initial unit-circle identity mixed multiplication and squared notation, and nonlinear arithmetic did not substitute the coordinate equalities automatically. Normalizing with pow_two and rewriting sine and cosine explicitly produced the compiled equation."}],
+       "7:theorem collisionPolynomial_ne_implies_avoidsLeftCore_rightTubeCorePolar\n14:#print axioms collisionPolynomial_ne_implies_avoidsLeftCore_rightTubeCorePolar"}],
      :fixture
-     {:path "/tmp/t02a03_core_polar_planar_collision_probe.lean",
+     {:path "/tmp/t02a03_core_polar_polynomial_avoidance_probe.lean",
       :sha256
-      "4702922afd55aa3473b9ff64b85101dbf20b0e74f813207d372c4dd9620abcbf"},
+      "b54389cfaef4c29f9a16062988de609eb4a2838d46d129d7706ff7efd3acbfc4"},
      :finding
-     "For rightTubeCorePolarReconstruction u n, hypothetical membership in the planar left core forces the scalar equation (1-n.re)^2 - 4(1-n.re)u.re + 3 = 0. It follows by equating the first two coordinates and applying both unit-circle identities. Together with the banked nonzero-height criterion, this exactly isolates the planar collision locus.",
+     "The renamed compiled theorem is the direct contrapositive of corePolar_leftCore_collision_equation: nonvanishing of the scalar collision polynomial rules out membership in the frozen left-core range. Its distinguishing phrase now precedes the shared reconstruction wording, avoiding the prior DAG-id collision.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
@@ -68646,7 +68668,8 @@
     :routes-2026-10-11-t02a03-reconstruction-mem-right-tube-core-polar-topo2-r1
     :routes-2026-10-11-t02a03-right-tube-core-radial-ambient-topo2-r1
     :routes-2026-10-11-t02a03-core-polar-height-left-core-avoidance-topo2-r2
-    :routes-2026-10-11-t02a03-core-polar-left-core-collision-equation-topo2-r1],
+    :routes-2026-10-11-t02a03-core-polar-left-core-collision-equation-topo2-r1
+    :routes-2026-10-11-t02a03-collision-polynomial-implies-left-core-avoidance-topo2-r2],
    :current-residual
    "Lift H to RightTubeMinusLeftCore, package rightTubeMeridianRetractionHomotopy, then use the coordinate equation for the Circle-side constant homotopy.",
    :other-consumers []}
@@ -72398,4 +72421,29 @@
    :lemma-constructiontargets-t02a03geometrictubedeformation-corepolar-leftcore-collision-,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T02A03GeometricTubeDeformation.collisionPolynomial_ne_implies_avoidsLeftCore_rightTubeCorePolar",
+    :type
+    "forall (u : Circle) (n : Complex), ((1 - n.re)^2 - 4*(1 - n.re)*(u : Complex).re + 3 != 0) -> rightTubeCorePolarReconstruction u n ∉ Set.range apm_t02a03_leftCore"},
+   :lemma
+   {:name
+    "ConstructionTargets.T02A03GeometricTubeDeformation.collisionPolynomial_ne_implies_avoidsLeftCore_rightTubeCorePolar",
+    :reported-by
+    [:routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1],
+    :type
+    "forall (u : Circle) (n : Complex), ((1 - n.re)^2 - 4*(1 - n.re)*(u : Complex).re + 3 != 0) -> rightTubeCorePolarReconstruction u n ∉ Set.range apm_t02a03_leftCore",
+    :area "explicit-r3-tube-deformation-retraction",
+    :proved-in
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+   :id
+   :lemma-constructiontargets-t02a03geometrictubedeformation-collisionpolynomial-ne-implie,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t02a03geometrictubedeformation-corepolar-leftcore-collision-],
    :other-consumers []}]}
