@@ -105769,8 +105769,62 @@
    "This single-consumer theorem is a ready direct dependency of the plane-orbit quotient Hausdorff lemma.",
    :consumer :t93J03,
    :implements-lemma :lemma-kleinplaneorbitquotient-quotientmap-isopen,
+   :evidence
+   {:placeholder-delta
+    {:source-before 0, :source-after 0, :fixture-sorry 0},
+    :residual
+    "Use quotientMap_isOpen with a proof that SameOrbit is closed to obtain T2Space PlaneOrbitQuotient, then apply the banked compact-to-Hausdorff inverse-continuity reduction.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :missing-theorems [],
+    :statement-hashes
+    {:source-sha256
+     "eb1d7d83e14e385b096ed52d9481ab7c4826b1b62e494a72a3ae2a325f2cdfc7",
+     :registry "131 registered statements match, 0 do not"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/klein-plane-orbit-quotient-map-open-probe.lean",
+      :exit 0,
+      :finding
+      "b80a11fa24c83886b50a4527aad8273eb76df245c2e951857143ccaaa0ad2b7c"}
+     {:cmd
+      "lake build ConstructionTargets.KleinPlaneOrbitQuotientTopology",
+      :exit 0,
+      :finding "Build completed successfully (8260 jobs)."}
+     {:cmd
+      "lake env lean ConstructionTargets/KleinPlaneOrbitQuotientTopology.lean",
+      :exit 0,
+      :finding
+      "quotientMap_isOpen uses only propext, Classical.choice, and Quot.sound."}
+     {:cmd
+      "lake env lean /tmp/klein-plane-orbit-quotient-map-open-probe.lean",
+      :exit 0}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" ConstructionTargets/KleinPlaneOrbitQuotientTopology.lean /tmp/klein-plane-orbit-quotient-map-open-probe.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}],
+    :diagnostic-history [],
+    :commit "19f3b838ca1d190f6164a196332b3fb37ada5f2a",
+    :changed-paths
+    ["ConstructionTargets/KleinPlaneOrbitQuotientTopology.lean"],
+    :fixture
+    {:path "/tmp/klein-plane-orbit-quotient-map-open-probe.lean",
+     :sha256
+     "b80a11fa24c83886b50a4527aad8273eb76df245c2e951857143ccaaa0ad2b7c"},
+    :implementation
+    {:declarations
+     ["ConstructionTargets.KleinPlaneOrbitQuotient.continuous_smul"
+      "ConstructionTargets.KleinPlaneOrbitQuotient.isOpen_image_smul"
+      "ConstructionTargets.KleinPlaneOrbitQuotient.quotient_preimage_image"
+      "ConstructionTargets.KleinPlaneOrbitQuotient.quotientMap_isOpen"]},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/KleinPlaneOrbitQuotientTopology.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-plane-orbit-quotient-map-open",
