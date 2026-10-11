@@ -79283,37 +79283,31 @@
   {:consumer :t97A04,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 5,
    :evidence
    {:placeholder-delta 0,
-    :residual "Pass through Hurewicz and overlap; then B6-B11.",
+    :residual
+    "Identify both transported overlap summands; then finish B6-B11.",
     :outcome :stop,
     :warnings ["Main retains two placeholders."],
     :missing-theorems
-    [{:name
-      "ConstructionTargets.T97A04Closure.circleZPow_fundamentalGroup_coordinate",
-      :type "pi1 winding scales by a",
+    [{:name "ConstructionTargets.T97A04Closure.circleZPow_H1",
+      :type "H1(zpow a)=a times identity",
       :status :proved,
-      :consumers [:t97A04],
-      :depends-on [],
-      :area "mv-connecting-naturality"}
-     {:name "ConstructionTargets.T97A04Closure.circleZPow_H1",
-      :type "zpow acts by a on H1",
-      :status :partial,
       :consumers [:t97A04],
       :depends-on
       ["ConstructionTargets.T97A04Closure.circleZPow_fundamentalGroup_coordinate"],
       :area "mv-connecting-naturality"}
      {:name
       "ConstructionTargets.T97A04Closure.shearY_overlap_coordinate_components",
-      :type "inl/inr equations",
+      :type "inl/inr degree-a equations",
       :status :partial,
       :consumers [:t97A04],
       :depends-on ["ConstructionTargets.T97A04Closure.circleZPow_H1"],
       :area "mv-connecting-naturality"}],
     :statement-hashes
     {:registry "131/0",
-     :closure "92d905a6fddc9065fd3388f4d8bf33c9c63f1535",
+     :closure "3da362518bbdac3511bdca619ab393b9f0be80b9",
      :blueprint "c419a895cb4ede2acc1cb6bc5c7536344ba63df4"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
@@ -79322,31 +79316,26 @@
     :commands
     [{:cmd "lake env lean ConstructionTargets/t97A04Closure.lean",
       :exit 0}
+     {:cmd "closure no-sorry scan", :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/t97A04Closure.lean",
+      :exit 0}
      {:cmd "lake env lean problems/t97A04/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "Main placeholder count", :exit 0, :output "2"}
-     {:cmd "git show --check 01c62dfc5", :exit 0}],
+     {:cmd "git show --check bb0f0f77d", :exit 0}],
     :diagnostic-history
     [{:cmd "lake env lean ConstructionTargets/t97A04Closure.lean",
       :exit 1,
-      :finding "Corrected zsmul, casts, and quotient induction."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791725365005-5421-de8f46b0",
-     :commands
-     ["git show/check/diff-tree 01c62dfc5"
-      "lake env lean ConstructionTargets/t97A04Closure.lean"
-      "lake env lean problems/t97A04/lean/Main.lean"
-      "statement-registry check/fingerprint and placeholder counts"],
-     :finding
-     "PASS: new compiled progress after the latest history entry. Commit changes only the scoped closure and proves that z↦z^a multiplies lifted endpoints and the π1 winding coordinate by a, with correct handling of negative integer powers and based-loop casts. Blob matches 92d905a6. Closure is sorry-free with standard axioms; Main compiles with unchanged 2 placeholders. Registry is 131/0 and frozen statement SHA-256 remains ca1b2cb3c6594276811618321d5c0604c2f38fc4594a6b21ae161a711a923a34. Hurewicz transfer, overlap components, and B6-B11 remain listed."},
-    :commit "01c62dfc5a7368191aaa1a3d97dac4c7fc1b1e6d",
+      :finding
+      "Removed a solved tactic and supplied Circle path-connectedness."}],
+    :commit "bb0f0f77d8953dc78dd564e000f3d4a5b29d0894",
     :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
-    :finding "zpow multiplies lifted endpoints and pi1 winding by a.",
+    :finding
+    "Hurewicz transfer proves H1(circleZPow a)=a times identity.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79807,7 +79796,8 @@
    {:name "ConstructionTargets.T97A04Closure.circleZPow_H1",
     :reported-by [:program-2026-10-11-close-t97a04],
     :type "zpow a acts by a on H1",
-    :area "mv-connecting-naturality"},
+    :area "mv-connecting-naturality",
+    :proved-in :program-2026-10-11-close-t97a04},
    :id :lemma-constructiontargets-t97a04closure-circlezpow-h1,
    :kind :lemma,
    :depends-on
