@@ -68619,52 +68619,64 @@
    "single-consumer positive-real-normal sign criterion for the planar collision polynomial",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:residual
-     "Implement the compiled positive-real-normal collision-polynomial sign lemma in the scoped module; afterward analyze the complementary zero-height region along the selected angular trajectory.",
-     :outcome :go,
-     :warnings [],
-     :acceptance
-     {:declaration
-      "ConstructionTargets.T02A03GeometricTubeDeformation.collisionPolynomial_pos_of_normal_re_pos",
-      :type
-      "forall (u : Circle) (n : Complex), norm n <= (1 / 4 : Real) -> 0 < n.re -> 0 < (1 - n.re)^2 - 4*(1-n.re)*(u : Complex).re + 3",
-      :proof-obligations
-      ["derive n.re <= norm n"
-       "show 0 < 1-n.re and 1-n.re < 1"
-       "bound (u : Complex).re <= 1 from Circle.norm_coe"
-       "deduce strict polynomial positivity by nonlinear arithmetic"],
-      :forbidden-claims
-      ["nonpositive-real normal region"
-       "angular homotopy construction"]},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd
-       "lake env lean /tmp/t02a03_collision_poly_positive_re_probe.lean",
-       :exit 0,
-       :output
-       "collisionPolynomial_pos_of_normal_re_pos compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "sha256sum /tmp/t02a03_collision_poly_positive_re_probe.lean",
-       :exit 0,
-       :output
-       "e0ecc5d9accacab03cb2f96fb99a3d0746c2e8e5b5031c24711fab24c1e586dc  /tmp/t02a03_collision_poly_positive_re_probe.lean"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_collision_poly_positive_re_probe.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :fixture
-     {:path "/tmp/t02a03_collision_poly_positive_re_probe.lean",
-      :sha256
-      "e0ecc5d9accacab03cb2f96fb99a3d0746c2e8e5b5031c24711fab24c1e586dc"},
-     :implementation
-     {:scope
-      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
-     :seat "topo-8"}},
+   {:placeholder-delta {:before 0, :after 0, :change 0},
+    :residual
+    "Analyze the complementary zero-height region with nonpositive real normal coordinate along the selected right-core angular trajectory; combine that path-specific result with this sign criterion and the nonzero-height criterion, then concatenate and certify the ambient stages.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean:62:6: unnecessarySimpa (pre-existing)"
+     "Unrelated pre-existing modification in ConstructionTargets/ManifoldFundamentalClass.lean was preserved and not committed."],
+    :missing-theorems [],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms [propext Classical.choice Quot.sound],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :scope-blob "040a45b5459b5104f7bf71345ee4b18caac68c9b",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0,
+      :output
+      "compiled; declaration axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "lake env lean /tmp/t02a03_collision_poly_positive_re_probe.lean",
+      :exit 0,
+      :output
+      "collisionPolynomial_pos_of_normal_re_pos compiled; axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "sha256sum /tmp/t02a03_collision_poly_positive_re_probe.lean",
+      :exit 0,
+      :output
+      "e0ecc5d9accacab03cb2f96fb99a3d0746c2e8e5b5031c24711fab24c1e586dc  /tmp/t02a03_collision_poly_positive_re_probe.lean"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "git diff --check -- ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd
+      "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git status --short",
+      :exit 0,
+      :output " M ConstructionTargets/ManifoldFundamentalClass.lean"}],
+    :commit "91fac140b165ae0c9b984667f0e2a39a2bae661b",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.collisionPolynomial_pos_of_normal_re_pos",
+    :fixture
+    {:path "/tmp/t02a03_collision_poly_positive_re_probe.lean",
+     :sha256
+     "e0ecc5d9accacab03cb2f96fb99a3d0746c2e8e5b5031c24711fab24c1e586dc"},
+    :finding
+    "The norm bound gives n.re at most one quarter, hence 0 < 1-n.re < 1; the Circle real coordinate is at most one, and nonlinear arithmetic makes the collision polynomial strictly positive.",
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/collision-polynomial-positive-normal-real",
