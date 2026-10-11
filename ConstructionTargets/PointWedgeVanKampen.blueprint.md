@@ -205,7 +205,7 @@ status: planned
 The type `Fin 1` has a `Unique` instance, so Mathlib gives
 `FreeGroup (Fin 1) ≃* Multiplicative ℤ`.  Take its symmetric equivalence.
 This fixes the orientation needed after applying
-`CircleUniversalCover.circleFundamentalGroupMulEquivInt` in B10.
+`CircleUniversalCover.circleFundamentalGroupMulEquivInt` in B12.
 
 ### B9. Three-circle topology
 
@@ -222,20 +222,66 @@ Transport the standard circle instances through the two nested point-wedge
 constructions.  These instances also support the later covering restriction
 route, independently of the fundamental-group calculation.
 
-### B10. Fundamental group of three circles
+### B10. Contractible circle neighborhood
+
+lean: `PointWedgeVanKampen.circleBaseNeighborhood` : `Set Circle`, together
+with `circleBaseNeighborhood_isOpen : IsOpen circleBaseNeighborhood`,
+`circleBase_mem : (1 : Circle) ∈ circleBaseNeighborhood`, and
+`circleBaseNeighborhood_contraction :
+PointedContraction circleBaseNeighborhood ⟨1, circleBase_mem⟩`.
+
+uses: `PointedPuncturedCircleContraction.PuncturedCircle`,
+`puncturedCirclePointedContraction`
+
+status: planned
+
+Take `circleBaseNeighborhood = {z : Circle | (z : ℂ) ≠ -1}`.  Its complement
+is the closed singleton `{-1}`, hence it is open, and `1 ≠ -1`.  Its subtype
+is definitionally `PuncturedCircle`; transport
+`puncturedCirclePointedContraction` across the resulting basepoint equality.
+
+### B11. Contractible two-circle wedge neighborhood
+
+lean: `PointWedgeVanKampen.twoCirclesBaseNeighborhood` : `Set TwoCircles`,
+together with
+`twoCirclesBaseNeighborhood_isOpen : IsOpen twoCirclesBaseNeighborhood`,
+`twoCirclesBase_mem : twoCirclesPoint ∈ twoCirclesBaseNeighborhood`, and
+`twoCirclesBaseNeighborhood_contraction :
+PointedContraction twoCirclesBaseNeighborhood
+  ⟨twoCirclesPoint, twoCirclesBase_mem⟩`.
+
+uses: B10,
+`PointWedgeRestrictedOpenQuotient.restrictedOpen`,
+`restrictedOpen_isOpen`, `restrictedOpenHomeomorphWedge`
+
+status: planned
+
+Let the neighborhood be
+`restrictedOpen 1 1 circleBaseNeighborhood circleBaseNeighborhood` in
+`Wedge 1 1 = TwoCircles`.  B10 and `restrictedOpen_isOpen` prove openness and
+membership of the wedge point.  The homeomorphism
+`restrictedOpenHomeomorphWedge` identifies its subtype with the wedge of two
+copies of `circleBaseNeighborhood`.  Define a simultaneous wedge contraction
+by applying B10's pointed contraction on each summand at time `t`; the two
+formulas agree at the identified basepoints, so `Quotient.lift` descends the
+homotopy.  Its zero, one, and fixed-basepoint laws follow from the corresponding
+B10 laws.  Transport this pointed contraction back through the homeomorphism.
+
+### B12. Fundamental group of three circles
 
 lean: `PointWedgeVanKampen.threeCirclesFundamentalGroupEquiv` :
 `FundamentalGroup ThreeCircles threeBase ≃* FreeGroup (Fin 3)`.
 
-uses: B6, B7, B8, B9,
+uses: B6, B7, B8, B9, B10, B11,
 `CircleUniversalCover.circleFundamentalGroupMulEquivInt`
 
 status: planned
 
 View `ThreeCircles` as the point wedge of the two-circle point wedge and one
-circle.  Apply B6 first to the inner two-circle wedge and then to the outer
-wedge.  Replace each circle fundamental group by `FreeGroup (Fin 1)` (via the
-standard equivalence with `Multiplicative ℤ`) and combine the first two
-generators as `FreeGroup (Fin 2)`.  Finally compose with B7.  The representative
-formulas in B6 ensure that the chosen `threeBase` is the basepoint expected by
-both applications.
+circle.  Apply B6 to the inner wedge using B10 on both circle factors.  Apply
+B6 to the outer wedge using B11 for the old `TwoCircles` factor and B10 for
+the new circle factor.  Replace each circle fundamental group by
+`FreeGroup (Fin 1)` using the circle integer coordinate followed by B8, and
+combine the first two generators as `FreeGroup (Fin 2)`.  Finally compose
+with B7.  The representative formulas in B6 ensure that `threeBase` is the
+basepoint expected by both applications.
