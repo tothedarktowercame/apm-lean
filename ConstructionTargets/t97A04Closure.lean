@@ -320,6 +320,60 @@ theorem overlapOrthogonalRetraction (s :
   rw [Homeomorph.apply_symm_apply]
   exact ConstructionTargets.PuncturedNormedSpaceRadialEquivalence.radialNormalize_unitSphereInclusion _ s
 
+/-- The overlap equivalence followed by its chosen inverse preserves the
+orthogonal-sphere coordinate exactly. -/
+theorem overlapModelOrthogonalRetraction
+    (s : ConstructionTargets.PuncturedNormedSpaceRadialEquivalence.UnitSphere
+      ((ℝ ∙ northPoleVector)ᗮ)) (z : Circle) :
+    (overlapHomotopyEquivOrthogonalSphereTimesCircle.toFun
+      (overlapHomotopyEquivOrthogonalSphereTimesCircle.invFun (s, z))).1 = s := by
+  change (ConstructionTargets.PuncturedNormedSpaceRadialEquivalence.twoPoleComplementHomotopyEquivOrthogonalSphere
+      northPoleVector norm_northPoleVector).toFun
+    ((ConstructionTargets.PuncturedNormedSpaceRadialEquivalence.twoPoleComplementHomotopyEquivOrthogonalSphere
+      northPoleVector norm_northPoleVector).invFun s) = s
+  exact overlapOrthogonalRetraction s
+
+theorem twoCircleBranch_overlap_toFun (p : Overlap) :
+    twoCircleBranch (overlapHomotopyEquivTwoCircles.toFun p) =
+      orthogonalSphereHomeomorphBool
+        (overlapHomotopyEquivOrthogonalSphereTimesCircle.toFun p).1 := by
+  change twoCircleBranch (boolTimesCircleHomeomorphTwoCircles
+      ((orthogonalSphereHomeomorphBool.prodCongr (Homeomorph.refl Circle))
+        (overlapHomotopyEquivOrthogonalSphereTimesCircle.toFun p))) = _
+  rw [twoCircleBranch_boolTimesCircle]
+  rfl
+
+theorem overlapTwoCircles_inv_model (q : Circle ⊕ Circle) :
+    overlapHomotopyEquivTwoCircles.invFun q =
+      overlapHomotopyEquivOrthogonalSphereTimesCircle.invFun
+        ((orthogonalSphereHomeomorphBool.prodCongr (Homeomorph.refl Circle)).symm
+          (boolTimesCircleHomeomorphTwoCircles.symm q)) := rfl
+
+theorem twoCircleBranch_retraction (q : Circle ⊕ Circle) :
+    twoCircleBranch (overlapHomotopyEquivTwoCircles.toFun
+      (overlapHomotopyEquivTwoCircles.invFun q)) = twoCircleBranch q := by
+  rw [twoCircleBranch_overlap_toFun, overlapTwoCircles_inv_model]
+  rw [overlapModelOrthogonalRetraction]
+  simp [twoCircleBranch]
+
+/-- The transported overlap shear preserves the discrete circle summand. -/
+theorem twoCircleOverlapShear_branch (a b : ℤ) (q : Circle ⊕ Circle) :
+    twoCircleBranch (twoCircleOverlapShear a b q) = twoCircleBranch q := by
+  rw [twoCircleOverlapShear, ContinuousMap.comp_apply,
+    ContinuousMap.comp_apply, twoCircleBranch_overlap_toFun]
+  calc
+    _ = orthogonalSphereHomeomorphBool
+        (overlapHomotopyEquivOrthogonalSphereTimesCircle.toFun
+          (overlapHomotopyEquivTwoCircles.invFun q)).1 := by
+      exact congrArg orthogonalSphereHomeomorphBool
+        (overlapOrthogonalCoordinate_shear a b
+          (overlapHomotopyEquivTwoCircles.invFun q))
+    _ = twoCircleBranch
+        (overlapHomotopyEquivTwoCircles.toFun
+          (overlapHomotopyEquivTwoCircles.invFun q)) :=
+      (twoCircleBranch_overlap_toFun _).symm
+    _ = _ := twoCircleBranch_retraction q
+
 theorem twoCircleOverlapShear_fold_apply (a b : ℤ) (q : Circle ⊕ Circle) :
     twoCircleFold (twoCircleOverlapShear a b q) =
       twoCircleFold q ^ a *
@@ -1336,6 +1390,11 @@ theorem shearY_overlap_coordinate_of_degree_components (a b : ℤ)
 #print axioms overlapOrthogonalCoordinate_shear
 #print axioms twoCircleBranch_boolTimesCircle
 #print axioms overlapOrthogonalRetraction
+#print axioms overlapModelOrthogonalRetraction
+#print axioms twoCircleBranch_overlap_toFun
+#print axioms overlapTwoCircles_inv_model
+#print axioms twoCircleBranch_retraction
+#print axioms twoCircleOverlapShear_branch
 #print axioms twoCircleOverlapShear_fold_apply
 #print axioms twoCircleOverlapShearLeftFold_eq_affine
 #print axioms twoCircleOverlapShearRightFold_eq_affine
