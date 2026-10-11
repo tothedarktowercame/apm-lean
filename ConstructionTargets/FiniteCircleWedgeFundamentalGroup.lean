@@ -16,6 +16,9 @@ def twoBase : TwoCircles := quotientMap 1 1 (.inl 1)
 def threeBase : ThreeCircles :=
   quotientMap twoCirclesPoint 1 (.inl twoCirclesPoint)
 
+abbrev twoCirclesBase : TwoCircles := twoBase
+abbrev threeCirclesBase : ThreeCircles := threeBase
+
 /-- The first representative circle in `TwoCircles`. -/
 def twoLeft (z : Circle) : TwoCircles := quotientMap 1 1 (.inl z)
 
