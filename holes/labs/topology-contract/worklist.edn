@@ -104381,9 +104381,70 @@
   {:bounded-exception
    "This single-consumer classification is the next missing geometric input after the banked generic connected-component transport.",
    :consumer :t93J03,
+   :stop-count 1,
    :implements-lemma :lemma-relationlocushasfourcomponents,
+   :evidence
+   {:placeholder-delta
+    {:source-before 0, :source-after 0, :fixture-sorry 0},
+    :residual
+    "Repair .lake/packages through the canonical workspace lifecycle, then define both intrinsic relation loci, identify their four concrete boundary strata, construct the two ConnectedComponents equivalences, and run every acceptance gate.",
+    :outcome :stop,
+    :warnings
+    [{:kind :lean-workspace-invalid,
+      :message
+      ".lake/packages is drwxrwxr-x rather than a symlink; no Lake command was run."}],
+    :missing-theorems
+    [{:name
+      "KleinCompatibleCarrierComponentBridge.relationLocusHasFourComponents",
+      :type
+      "Nonempty (ConnectedComponents DiskRelationLocus ≃ Fin 4) ∧ Nonempty (ConnectedComponents SquareRelationLocus ≃ Fin 4)",
+      :status :not-started,
+      :consumers [:t93J03],
+      :depends-on [],
+      :area "polygon-quotient-identification"}],
+    :statement-hashes
+    {:source-sha256
+     "be9a7acee9d3e0ee55de0dc5e07795635fad956a8344d6c8babc06acda4ba3b5",
+     :registry "131 registered statements match, 0 do not"},
+    :disposition :stop,
+    :axioms [],
+    :author "topo-2",
+    :reason
+    "Lean implementation and verification are prohibited in this checkout because .lake/packages remains a real directory rather than the required symlink to the canonical APM package authority. The frozen fixture is intact, but no source edit can be safely compiled until the workspace lifecycle repairs that link.",
+    :commands
+    [{:cmd "ls -ld .lake/packages",
+      :exit 0,
+      :finding
+      ".lake/packages is a real directory, not a symbolic link."}
+     {:cmd
+      "sha256sum /tmp/klein-relation-locus-four-components-probe.lean ConstructionTargets/KleinCompatibleCarrierComponentBridge.lean",
+      :exit 0,
+      :finding
+      "Fixture hash matches the frozen hash; scoped source hash is be9a7acee9d3e0ee55de0dc5e07795635fad956a8344d6c8babc06acda4ba3b5."}
+     {:cmd "git status --short",
+      :exit 0,
+      :finding "Worktree is clean."}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "python3 comment-stripped placeholder scan",
+      :exit 0,
+      :finding
+      "The scoped source contains zero sorry, admit, or axiom tokens."}
+     {:cmd
+      "git diff --quiet -- ConstructionTargets/KleinCompatibleCarrierComponentBridge.lean",
+      :exit 0,
+      :finding "The scoped source is unchanged."}],
+    :diagnostic-history [],
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/klein-relation-locus-four-components-probe.lean",
+     :sha256
+     "31c9bacd79d7cd7c879cdc782bcc02318446b80645a33f70ac14a54f5aa65fdc",
+     :status :unverified-workspace-invalid},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/KleinCompatibleCarrierComponentBridge.lean"],
    :dag-node
@@ -113152,7 +113213,29 @@
    :kind :lemma,
    :depends-on
    [:lemma-connectedgroupoidsingleobjequivalence-connectorsingleobjequivalence-counit-base-],
-   :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}],
+   :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "KleinCompatibleCarrierComponentBridge.relationLocusHasFourComponents",
+    :type
+    "Nonempty (ConnectedComponents DiskRelationLocus ≃ Fin 4) ∧ Nonempty (ConnectedComponents SquareRelationLocus ≃ Fin 4)"},
+   :lemma
+   {:name
+    "KleinCompatibleCarrierComponentBridge.relationLocusHasFourComponents",
+    :reported-by
+    [:routes-2026-10-11-klein-relation-locus-four-components-108],
+    :type
+    "Nonempty (ConnectedComponents DiskRelationLocus ≃ Fin 4) ∧ Nonempty (ConnectedComponents SquareRelationLocus ≃ Fin 4)",
+    :area "polygon-quotient-identification"},
+   :id
+   :lemma-kleincompatiblecarriercomponentbridge-relationlocushasfourcomponents,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",
