@@ -113899,6 +113899,19 @@
     :diagnostic-history
     [{:cmd "lean", :exit 1, :finding "rfl left transports."}
      {:cmd "lean", :exit 1, :finding "Reduced transports to units."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791742572794-5734-95335eae",
+     :commands
+     ["git show/diff-tree 58bcbccd"
+      "hash/diff/placeholder checks"
+      "statement-registry.py check"
+      "lake env lean PointWedgeVanKampen.lean"
+      "lake build PointWedgeVanKampen"
+      "lake build ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "PASS: new compiled, sorry-free B6 progress proves B5 extraction evaluates as the underlying source-equivalence functor map; SingleObj equality transports reduce to unit morphisms, so the groupoid/group boundary is explicit and correctly oriented. Exact two-file scope/frozen hashes match; zero placeholders; registry 131/131; standard axioms. Direct B4 leg-map comparisons and B12 remain listed; absent final target is valid STOP."},
     :commit "58bcbccd633722f9c7b9f2694f684f6791a2badc",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113909,7 +113922,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113930,7 +113943,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B6 goal is now iff the two B3 mapped-leg comparisons.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B6 reduced to direct B4 functor maps.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114003,7 +114016,10 @@
      :reason "B6 reduced to two mapped-leg equations."}
     {:job 3,
      :commit "a203120a672410d62eb74944ab258073bdf8b04a",
-     :reason "B6 goal is now iff the two B3 mapped-leg comparisons."}]}
+     :reason "B6 goal is now iff the two B3 mapped-leg comparisons."}
+    {:job 4,
+     :commit "58bcbccd633722f9c7b9f2694f684f6791a2badc",
+     :reason "B6 reduced to direct B4 functor maps."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
