@@ -73,7 +73,25 @@ theorem apm_t92J08_bridge_2 :
     ¬∃ δ : ℝ → ℝ,
       IsMIntegralCurve δ apm_t92J08_quadraticField ∧
       EqOn apm_t92J08_blowupCurve δ (Iio 1) := by
-  sorry
+  rintro ⟨δ, hδ, heq⟩
+  let u : ℕ → ℝ := fun n => 1 - 1 / (n + 1 : ℝ)
+  have hu : Filter.Tendsto u Filter.atTop (nhds 1) := by
+    simpa [u] using
+      ((tendsto_const_nhds : Filter.Tendsto (fun _ : ℕ => (1 : ℝ))
+          Filter.atTop (nhds 1)).sub tendsto_one_div_add_atTop_nhds_zero_nat)
+  have hfinite : Filter.Tendsto (fun n => δ (u n)) Filter.atTop (nhds (δ 1)) :=
+    hδ.continuous.continuousAt.tendsto.comp hu
+  apply (not_tendsto_atTop_of_tendsto_nhds hfinite)
+  have hevent : ∀ᶠ n : ℕ in Filter.atTop,
+      δ (u n) = (n + 1 : ℝ) := by
+    filter_upwards with n
+    have hn : (0 : ℝ) < n + 1 := by positivity
+    have hul : u n < 1 := by simp [u, hn]
+    rw [← heq hul]
+    simp [u, apm_t92J08_blowupCurve]
+  exact Filter.Tendsto.congr' (hevent.mono fun _ h => h.symm)
+    (Filter.tendsto_atTop_add_const_right Filter.atTop 1
+      (tendsto_natCast_atTop_atTop (R := ℝ)))
 
 theorem apm_t92j08 :
     (∀ (n : ℕ) (M : Type)
@@ -93,45 +111,13 @@ theorem apm_t92j08 :
     ¬∃ δ : ℝ → ℝ,
       IsMIntegralCurve δ apm_t92J08_quadraticField ∧
       EqOn apm_t92J08_blowupCurve δ (Iio 1) := by
-  /-
-  Boundary (closer hop 1): Mathlib's imported `UniformTime.lean` contains
-  `exists_isMIntegralCurve_of_isMIntegralCurveOn`, which globalizes curves
-  once one uniform positive local-existence radius works at every point.
-  The remaining compact-manifold step is to extract that uniform radius from
-  `exists_isMIntegralCurveAt_of_contMDiffAt_boundaryless` using a finite
-  subcover; searches of `LEMMA-INDEX.md`, closed siblings,
-  `ConstructionTargets/`, git history, and the manifold integral-curve APIs
-  found no packaged compactness-to-uniform-time theorem.
-
-  For the explicit counterexample, ordinary calculus proves
-  `(1/(1-t))' = (1/(1-t))^2` on `Iio 1`.  Attempts using
-  `hasMFDerivWithinAt_iff_hasFDerivWithinAt`, `HasDerivAt.inv`, and
-  `hasDerivWithinAt_iff_hasFDerivWithinAt` reach an instance mismatch between
-  the tangent-space module structures of the self-model on `ℝ` and the
-  ordinary real normed-space derivative.  After that conversion, exclusion of
-  a global extension can use continuity at `1` against the divergence of the
-  frozen curve (or ODE uniqueness plus the same limit contradiction).
-
-  Closer hop 2 now compiles the ordinary analytic identity as
-  `apm_t92J08_blowupCurve_hasDerivAt`, avoiding the earlier derivative-rule
-  elaboration issue. The remaining counterexample bridge is specifically its
-  transport into `HasMFDerivWithinAt` with the tangent-space presentation,
-  followed by the endpoint contradiction; the independent compact uniform-
-  time construction remains open.
-
-  CLOSER HOP 3 closes the derivative-transport bridge itself.
-  `apm_t92J08_blowupCurve_isMIntegralCurveOn` unfolds the native integral-
-  curve predicate pointwise, applies
-  `hasMFDerivWithinAt_iff_hasFDerivWithinAt`, and transports the hop-2
-  `HasDerivAt` proof through `hasFDerivAt` and restriction. Consequently the
-  frozen theorem's entire middle conjunct is now available as a proved lemma,
-  with no tangent-space instance mismatch remaining. The explicit
-  counterexample now only needs the endpoint contradiction: a global integral
-  curve is continuous, while agreement on `Iio 1` forces values
-  `1/(1-t)` to be unbounded near `1`. Separately, the compact-manifold conjunct
-  still needs extraction of a uniform local-existence radius. Searches of
-  compact-image boundedness, sequential endpoint limits, and uniform-time
-  integral-curve APIs found ingredients but no packaged combination. The
-  frozen statement is unchanged.
-  -/
-  sorry
+  refine ⟨?_, apm_t92J08_blowupCurve_isMIntegralCurveOn,
+    apm_t92J08_bridge_2⟩
+  intro n M _ _ _ _ _ _ _ v hv a b γ ha hb hγ
+  obtain ⟨ε, hε, hlocal⟩ := apm_t92J08_bridge_1 n M v hv
+  obtain ⟨δ, hδ0, hδ⟩ :=
+    exists_isMIntegralCurve_of_isMIntegralCurveOn hv hε hlocal (γ 0)
+  refine ⟨δ, hδ, ?_⟩
+  apply isMIntegralCurveOn_Ioo_eqOn_of_contMDiff_boundaryless
+    (show 0 ∈ Ioo a b from ⟨ha, hb⟩) hv hγ (hδ.isMIntegralCurveOn _)
+  exact hδ0.symm
