@@ -114218,6 +114218,501 @@
    :depends-on
    [:lemma-apm-t00a03-bridge-1
     :lemma-eulercharacteristic-cut-additivity],
+   :other-consumers []}
+  {:consumer :t01A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "projQuot_isOpenQuotientMap",
+    :type
+    "IsOpenQuotientMap (Projectivization.mk' ℝ (Fin 3 → ℝ))  (size: 60-100 lines / 4-8 hours)"},
+   :lemma
+   {:name "projQuot_isOpenQuotientMap",
+    :reported-by [:owner],
+    :type
+    "IsOpenQuotientMap (Projectivization.mk' ℝ (Fin 3 → ℝ))  (size: 60-100 lines / 4-8 hours)",
+    :area "projective-quotient-descent"},
+   :id :lemma-projquot-isopenquotientmap,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t01A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "punctured_rp2_retract",
+    :type
+    "A deformation retraction of {x : apm_t01A01_RP2 // x ≠ q} onto a projective line  (size: 150-250 lines / 2-4 days)"},
+   :lemma
+   {:name "punctured_rp2_retract",
+    :reported-by [:owner],
+    :type
+    "A deformation retraction of {x : apm_t01A01_RP2 // x ≠ q} onto a projective line  (size: 150-250 lines / 2-4 days)",
+    :area "projective-quotient-descent"},
+   :id :lemma-punctured-rp2-retract,
+   :kind :lemma,
+   :depends-on [:lemma-projquot-isopenquotientmap],
+   :other-consumers []}
+  {:consumer :t01A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "rp2_to_projectiveLine_nullhomotopic",
+    :type
+    "∀ h : C(apm_t01A01_RP2, Projectivization ℝ (Fin 2 → ℝ)), ∃ p, ContinuousMap.Homotopic h (ContinuousMap.const _ p)  (size: 120-200 lines / 1-3 days)"},
+   :lemma
+   {:name "rp2_to_projectiveLine_nullhomotopic",
+    :reported-by [:owner],
+    :type
+    "∀ h : C(apm_t01A01_RP2, Projectivization ℝ (Fin 2 → ℝ)), ∃ p, ContinuousMap.Homotopic h (ContinuousMap.const _ p)  (size: 120-200 lines / 1-3 days)",
+    :area "sphere-lift-to-circle"},
+   :id :lemma-rp2-to-projectiveline-nullhomotopic,
+   :kind :lemma,
+   :depends-on [:lemma-projquot-isopenquotientmap],
+   :other-consumers []}
+  {:consumer :t01A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t01A01_bridge_1",
+    :type
+    "∀ q g, ∃ p, ContinuousMap.Homotopic g (ContinuousMap.const apm_t01A01_RP2 p)  (size: 20-40 lines / 2-4 hours)"},
+   :lemma
+   {:name "apm_t01A01_bridge_1",
+    :reported-by [:owner],
+    :type
+    "∀ q g, ∃ p, ContinuousMap.Homotopic g (ContinuousMap.const apm_t01A01_RP2 p)  (size: 20-40 lines / 2-4 hours)",
+    :area "projective-quotient-descent"},
+   :id :lemma-apm-t01a01-bridge-1,
+   :kind :lemma,
+   :depends-on
+   [:lemma-punctured-rp2-retract
+    :lemma-rp2-to-projectiveline-nullhomotopic],
+   :other-consumers []}
+  {:consumer :t01A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "fundamentalGroup_map_eq_one_of_homotopic_const",
+    :type
+    "ContinuousMap.Homotopic f (ContinuousMap.const X p) → ∀ x γ, FundamentalGroup.map f x γ = 1  (size: 30-60 lines / 4-8 hours)"},
+   :lemma
+   {:name "fundamentalGroup_map_eq_one_of_homotopic_const",
+    :reported-by [:owner],
+    :type
+    "ContinuousMap.Homotopic f (ContinuousMap.const X p) → ∀ x γ, FundamentalGroup.map f x γ = 1  (size: 30-60 lines / 4-8 hours)",
+    :area "nullhomotopic-trivial-pi1"},
+   :id :lemma-fundamentalgroup-map-eq-one-of-homotopic-const,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t01A03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.FundamentalGroupProduct.fundamentalGroupProdMulEquiv",
+    :type
+    "  (found in ConstructionTargets/FundamentalGroupProduct.lean:22)"},
+   :lemma
+   {:name
+    "ConstructionTargets.FundamentalGroupProduct.fundamentalGroupProdMulEquiv",
+    :reported-by [:owner],
+    :type
+    "  (found in ConstructionTargets/FundamentalGroupProduct.lean:22)",
+    :proved-in :owner,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/FundamentalGroupProduct.lean"]},
+   :id
+   :lemma-constructiontargets-fundamentalgroupproduct-fundamentalgroupprodmulequiv,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t01A03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.CircleSingularHomology.circleSingularH1Generator_ne_zero",
+    :type
+    "  (found in ConstructionTargets/CircleSingularHomology.lean:46)"},
+   :lemma
+   {:name
+    "ConstructionTargets.CircleSingularHomology.circleSingularH1Generator_ne_zero",
+    :reported-by [:owner],
+    :type
+    "  (found in ConstructionTargets/CircleSingularHomology.lean:46)",
+    :proved-in :owner,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/CircleSingularHomology.lean"]},
+   :id
+   :lemma-constructiontargets-circlesingularhomology-circlesingularh1generator-ne-zero,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t01A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "circleWedge_pi1_noncommutative",
+    :type
+    "∃ a b : FundamentalGroup apm_t01a03_Wedge apm_t01a03_wedgeBase, a * b ≠ b * a  (size: 100-180 lines / 1-2 days)"},
+   :lemma
+   {:name "circleWedge_pi1_noncommutative",
+    :reported-by [:owner],
+    :type
+    "∃ a b : FundamentalGroup apm_t01a03_Wedge apm_t01a03_wedgeBase, a * b ≠ b * a  (size: 100-180 lines / 1-2 days)",
+    :area "circle-wedge-van-kampen"},
+   :id :lemma-circlewedge-pi1-noncommutative,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t01A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "typicalWedge_fundamentalGroupMap_not_injective",
+    :type
+    "apm_t01a03_IsTypicalWedge wedge → ¬ Function.Injective (FundamentalGroup.map wedge apm_t01a03_wedgeBase)  (size: 30-60 lines / 4-8 hours)"},
+   :lemma
+   {:name "typicalWedge_fundamentalGroupMap_not_injective",
+    :reported-by [:owner],
+    :type
+    "apm_t01a03_IsTypicalWedge wedge → ¬ Function.Injective (FundamentalGroup.map wedge apm_t01a03_wedgeBase)  (size: 30-60 lines / 4-8 hours)",
+    :area "torus-pi1-abelian"},
+   :id :lemma-typicalwedge-fundamentalgroupmap-not-injective,
+   :kind :lemma,
+   :depends-on [:lemma-circlewedge-pi1-noncommutative],
+   :other-consumers []}
+  {:consumer :t01A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "separating_circle_H1_zero",
+    :type
+    "apm_t01a03_IsMiddleCircle middle → apm_t01a03_H1map middle = 0  (size: 300+ lines / 1-3 weeks)"},
+   :lemma
+   {:name "separating_circle_H1_zero",
+    :reported-by [:owner],
+    :type
+    "apm_t01a03_IsMiddleCircle middle → apm_t01a03_H1map middle = 0  (size: 300+ lines / 1-3 weeks)",
+    :area "surface-curve-collar"},
+   :id :lemma-separating-circle-h1-zero,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t01J01 :t00A03 :t98A02]}
+  {:consumer :t01A04,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.GenericTargetNaturalSourceReconstruction.wedgeFundamentalGroupMulEquiv",
+    :type
+    "  (found in ConstructionTargets/GenericTargetNaturalSourceReconstruction.lean:98)"},
+   :lemma
+   {:name
+    "ConstructionTargets.GenericTargetNaturalSourceReconstruction.wedgeFundamentalGroupMulEquiv",
+    :reported-by [:owner],
+    :type
+    "  (found in ConstructionTargets/GenericTargetNaturalSourceReconstruction.lean:98)",
+    :proved-in :owner,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/GenericTargetNaturalSourceReconstruction.lean"]},
+   :id
+   :lemma-constructiontargets-generictargetnaturalsourcereconstruction-wedgefundamentalgro,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t01A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t01a04_piOneEquiv",
+    :type
+    "apm_t01a04_piOne ≃* Monoid.Coprod (Multiplicative (ℤ × ℤ)) (Multiplicative ℤ)  (size: 40-80 lines / 4-8 hours)"},
+   :lemma
+   {:name "apm_t01a04_piOneEquiv",
+    :reported-by [:owner],
+    :type
+    "apm_t01a04_piOne ≃* Monoid.Coprod (Multiplicative (ℤ × ℤ)) (Multiplicative ℤ)  (size: 40-80 lines / 4-8 hours)",
+    :area "wedge-pi1-inclusion-naturality"},
+   :id :lemma-apm-t01a04-pioneequiv,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t01A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t01a04_piOneEquiv_inclusions",
+    :type
+    "The transported wedge equivalence sends torus and circle inclusion loops to Coprod.inl and Coprod.inr  (size: 120-220 lines / 2-4 days)"},
+   :lemma
+   {:name "apm_t01a04_piOneEquiv_inclusions",
+    :reported-by [:owner],
+    :type
+    "The transported wedge equivalence sends torus and circle inclusion loops to Coprod.inl and Coprod.inr  (size: 120-220 lines / 2-4 days)",
+    :area "wedge-pi1-inclusion-naturality"},
+   :id :lemma-apm-t01a04-pioneequiv-inclusions,
+   :kind :lemma,
+   :depends-on [:lemma-apm-t01a04-pioneequiv],
+   :other-consumers []}
+  {:consumer :t01A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t01A04_bridge_quotient_maps_are_coverings",
+    :type
+    "IsCoveringMap apm_t01a04_circleCoverMap ∧ IsCoveringMap apm_t01a04_torusCoverMap  (size: 200-400 lines / 1-2 weeks)"},
+   :lemma
+   {:name "apm_t01A04_bridge_quotient_maps_are_coverings",
+    :reported-by [:owner],
+    :type
+    "IsCoveringMap apm_t01a04_circleCoverMap ∧ IsCoveringMap apm_t01a04_torusCoverMap  (size: 200-400 lines / 1-2 weeks)",
+    :area "eqvgen-quotient-covering-map"},
+   :id :lemma-apm-t01a04-bridge-quotient-maps-are-coverings,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t00A02 :t98A03 :t97A03]}
+  {:consumer :t01A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "two_sheet_monodromy_character_range",
+    :type
+    "For a two-sheet covering p, ker χ_p = MonoidHom.range (FundamentalGroup.map p e₀)  (size: 120-220 lines / 2-4 days)"},
+   :lemma
+   {:name "two_sheet_monodromy_character_range",
+    :reported-by [:owner],
+    :type
+    "For a two-sheet covering p, ker χ_p = MonoidHom.range (FundamentalGroup.map p e₀)  (size: 120-220 lines / 2-4 days)",
+    :area "two-sheet-monodromy-character"},
+   :id :lemma-two-sheet-monodromy-character-range,
+   :kind :lemma,
+   :depends-on [:lemma-apm-t01a04-bridge-quotient-maps-are-coverings],
+   :other-consumers [:t97A03]}
+  {:consumer :t01A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t01A04_bridge_piOne_presentation_and_ranges",
+    :type
+    "The exact existential presentation-and-ranges theorem in problems/t01A04/lean/Main.lean  (size: 120-220 lines / 2-4 days)"},
+   :lemma
+   {:name "apm_t01A04_bridge_piOne_presentation_and_ranges",
+    :reported-by [:owner],
+    :type
+    "The exact existential presentation-and-ranges theorem in problems/t01A04/lean/Main.lean  (size: 120-220 lines / 2-4 days)",
+    :area "wedge-pi1-inclusion-naturality"},
+   :id :lemma-apm-t01a04-bridge-pione-presentation-and-ranges,
+   :kind :lemma,
+   :depends-on
+   [:lemma-apm-t01a04-pioneequiv-inclusions
+    :lemma-two-sheet-monodromy-character-range],
+   :other-consumers []}
+  {:consumer :t01A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t01A04_bridge_total_spaces_not_homeomorphic",
+    :type
+    "¬ Nonempty (apm_t01a04_CircleCover ≃ₜ apm_t01a04_TorusCover)  (size: 200-350 lines / 4-8 days)"},
+   :lemma
+   {:name "apm_t01A04_bridge_total_spaces_not_homeomorphic",
+    :reported-by [:owner],
+    :type
+    "¬ Nonempty (apm_t01a04_CircleCover ≃ₜ apm_t01a04_TorusCover)  (size: 200-350 lines / 4-8 days)",
+    :area "cut-point-count-invariant"},
+   :id :lemma-apm-t01a04-bridge-total-spaces-not-homeomorphic,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SardGeneralModel.linearTargetTransport",
+    :type "  (found in ConstructionTargets/SardGeneralModel.lean:17)"},
+   :lemma
+   {:name "ConstructionTargets.SardGeneralModel.linearTargetTransport",
+    :reported-by [:owner],
+    :type "  (found in ConstructionTargets/SardGeneralModel.lean:17)",
+    :proved-in :owner,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/SardGeneralModel.lean"]},
+   :id
+   :lemma-constructiontargets-sardgeneralmodel-lineartargettransport,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "ConstructionTargets.SardGeneralModel.modelRange_geometry",
+    :type
+    "Geometry and fderivWithin/mfderiv facts for the range of an arbitrary finite-dimensional ModelWithCorners  (size: 40-100 lines / 1 day)"},
+   :lemma
+   {:name "ConstructionTargets.SardGeneralModel.modelRange_geometry",
+    :reported-by [:owner],
+    :type
+    "Geometry and fderivWithin/mfderiv facts for the range of an arbitrary finite-dimensional ModelWithCorners  (size: 40-100 lines / 1 day)",
+    :area "manifold-sard-general-model"},
+   :id :lemma-constructiontargets-sardgeneralmodel-modelrange-geometry,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t01J04 :t96J05]}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "ConstructionTargets.SardConvexDomain.criticalImageNull",
+    :type
+    "The image of the nonsurjective mfderiv locus of a smooth map on a finite-dimensional model-with-corners domain has add-Haar measure zero  (size: 500+ lines / 2-6 weeks)"},
+   :lemma
+   {:name "ConstructionTargets.SardConvexDomain.criticalImageNull",
+    :reported-by [:owner],
+    :type
+    "The image of the nonsurjective mfderiv locus of a smooth map on a finite-dimensional model-with-corners domain has add-Haar measure zero  (size: 500+ lines / 2-6 weeks)",
+    :area "sard-convex-domain"},
+   :id :lemma-constructiontargets-sardconvexdomain-criticalimagenull,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-sardgeneralmodel-modelrange-geometry],
+   :other-consumers [:t01J04 :t96J05]}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t01a08_regular_value_adapter",
+    :type
+    "∃ p : Fin 2 → ℝ, ∀ x, f x ∈ apm_t01a08_line p → Function.Surjective (mfderiv I apm_t01a08_I2 (fun z => apm_t01a08_projection (f z)) x)  (size: 50-100 lines / 1 day)"},
+   :lemma
+   {:name "apm_t01a08_regular_value_adapter",
+    :reported-by [:owner],
+    :type
+    "∃ p : Fin 2 → ℝ, ∀ x, f x ∈ apm_t01a08_line p → Function.Surjective (mfderiv I apm_t01a08_I2 (fun z => apm_t01a08_projection (f z)) x)  (size: 50-100 lines / 1 day)",
+    :area "manifold-sard-general-model"},
+   :id :lemma-apm-t01a08-regular-value-adapter,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-sardconvexdomain-criticalimagenull],
+   :other-consumers []}
+  {:consumer :t01J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "embeddedCircle_has_annular_neighborhood",
+    :type
+    "Topology.IsEmbedding γ → ∃ N, Nonempty (N ≃ₜ Circle × Set.Icc (0:ℝ) 1) with the expected core/frontier properties  (size: 500+ lines / 2-6 weeks)"},
+   :lemma
+   {:name "embeddedCircle_has_annular_neighborhood",
+    :reported-by [:owner],
+    :type
+    "Topology.IsEmbedding γ → ∃ N, Nonempty (N ≃ₜ Circle × Set.Icc (0:ℝ) 1) with the expected core/frontier properties  (size: 500+ lines / 2-6 weeks)",
+    :area "surface-schoenflies-tameness"},
+   :id :lemma-embeddedcircle-has-annular-neighborhood,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t01A03 :t00A03 :t98A02]}
+  {:consumer :t01J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t01J01_bridge_separates_of_nullHomologous",
+    :type
+    "apm_t01j01_IsNullHomologous γ → ¬ IsPreconnected ((Set.range γ)ᶜ : Set S)  (size: 200-400 lines / 1-2 weeks)"},
+   :lemma
+   {:name "apm_t01J01_bridge_separates_of_nullHomologous",
+    :reported-by [:owner],
+    :type
+    "apm_t01j01_IsNullHomologous γ → ¬ IsPreconnected ((Set.range γ)ᶜ : Set S)  (size: 200-400 lines / 1-2 weeks)",
+    :area "surface-mod2-intersection-pairing"},
+   :id :lemma-apm-t01j01-bridge-separates-of-nullhomologous,
+   :kind :lemma,
+   :depends-on [:lemma-embeddedcircle-has-annular-neighborhood],
+   :other-consumers [:t01A03]}
+  {:consumer :t01J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "surface_cut_genus_bookkeeping",
+    :type
+    "Cutting a genus-two closed orientable surface along an essential separating circle gives two one-holed tori  (size: 300+ lines / 2-4 weeks)"},
+   :lemma
+   {:name "surface_cut_genus_bookkeeping",
+    :reported-by [:owner],
+    :type
+    "Cutting a genus-two closed orientable surface along an essential separating circle gives two one-holed tori  (size: 300+ lines / 2-4 weeks)",
+    :area "surface-cut-and-classify"},
+   :id :lemma-surface-cut-genus-bookkeeping,
+   :kind :lemma,
+   :depends-on [:lemma-embeddedcircle-has-annular-neighborhood],
+   :other-consumers []}
+  {:consumer :t01J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "oneHoledTorus_parallel_separating_curves",
+    :type
+    "An essential separating circle in a one-holed torus cobounds an annulus with its boundary  (size: 300+ lines / 2-4 weeks)"},
+   :lemma
+   {:name "oneHoledTorus_parallel_separating_curves",
+    :reported-by [:owner],
+    :type
+    "An essential separating circle in a one-holed torus cobounds an annulus with its boundary  (size: 300+ lines / 2-4 weeks)",
+    :area "surface-cut-and-classify"},
+   :id :lemma-oneholedtorus-parallel-separating-curves,
+   :kind :lemma,
+   :depends-on [:lemma-surface-cut-genus-bookkeeping],
+   :other-consumers []}
+  {:consumer :t01J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t01J01_bridge_annulus_of_separating",
+    :type
+    "Under the exact frozen hypotheses, ∃ A : Set S, apm_t01j01_IsAnnulusBetween A γ₁ γ₂  (size: 100-200 lines / 2-4 days)"},
+   :lemma
+   {:name "apm_t01J01_bridge_annulus_of_separating",
+    :reported-by [:owner],
+    :type
+    "Under the exact frozen hypotheses, ∃ A : Set S, apm_t01j01_IsAnnulusBetween A γ₁ γ₂  (size: 100-200 lines / 2-4 days)",
+    :area "invariance-of-domain-dim2"},
+   :id :lemma-apm-t01j01-bridge-annulus-of-separating,
+   :kind :lemma,
+   :depends-on
+   [:lemma-embeddedcircle-has-annular-neighborhood
+    :lemma-surface-cut-genus-bookkeeping
+    :lemma-oneholedtorus-parallel-separating-curves],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01

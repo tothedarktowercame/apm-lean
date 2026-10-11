@@ -77965,4 +77965,120 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-t02a03geometrictubedeformation-rotatedendpointwaypoint-arriv],
+   :other-consumers []}
+  {:consumer :t01A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T01A02PuncturedTorus.puncturedTorus_H2_isZero",
+    :type
+    "  (found in ConstructionTargets/T01A02PuncturedTorusH2.lean:16)"},
+   :lemma
+   {:name
+    "ConstructionTargets.T01A02PuncturedTorus.puncturedTorus_H2_isZero",
+    :reported-by [:owner],
+    :type
+    "  (found in ConstructionTargets/T01A02PuncturedTorusH2.lean:16)",
+    :proved-in :owner},
+   :id
+   :lemma-constructiontargets-t01a02puncturedtorus-puncturedtorus-h2-iszero,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t01A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T01A02PuncturedTorus.H2map_eq_zero_of_factor",
+    :type
+    "  (found in ConstructionTargets/T01A02PuncturedTorusH2.lean:47)"},
+   :lemma
+   {:name
+    "ConstructionTargets.T01A02PuncturedTorus.H2map_eq_zero_of_factor",
+    :reported-by [:owner],
+    :type
+    "  (found in ConstructionTargets/T01A02PuncturedTorusH2.lean:47)",
+    :proved-in :owner},
+   :id
+   :lemma-constructiontargets-t01a02puncturedtorus-h2map-eq-zero-of-factor,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t01A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t01A02_bridge_H2map_eq_zero",
+    :type
+    "∀ f : C(apm_t01A02_Torus, apm_t01A02_Torus), ¬ Function.Surjective f → apm_t01A02_H2map f = 0  (size: 50-90 lines / 4-8 hours)"},
+   :lemma
+   {:name "apm_t01A02_bridge_H2map_eq_zero",
+    :reported-by [:owner],
+    :type
+    "∀ f : C(apm_t01A02_Torus, apm_t01A02_Torus), ¬ Function.Surjective f → apm_t01A02_H2map f = 0  (size: 50-90 lines / 4-8 hours)",
+    :area "punctured-torus-H2-vanishing"},
+   :id :lemma-apm-t01a02-bridge-h2map-eq-zero,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t01A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "torus_map_integer_lift",
+    :type
+    "Every h : C(T²,T²) has a lift F : ℝ² → ℝ² and A : Matrix (Fin 2) (Fin 2) ℤ with F(x+m)=F(x)+A*m  (size: 120-220 lines / 1-3 days)"},
+   :lemma
+   {:name "torus_map_integer_lift",
+    :reported-by [:owner],
+    :type
+    "Every h : C(T²,T²) has a lift F : ℝ² → ℝ² and A : Matrix (Fin 2) (Fin 2) ℤ with F(x+m)=F(x)+A*m  (size: 120-220 lines / 1-3 days)",
+    :area "torus-map-integer-matrix-lift"},
+   :id :lemma-torus-map-integer-lift,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t97A04]}
+  {:consumer :t01A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "planar_bounded_perturbation_surjective",
+    :type
+    "Continuous Φ → IsBounded (Set.range (Φ-L)) → IsUnit (LinearMap.det L) → Function.Surjective Φ  (size: 150-300 lines / 3-7 days)"},
+   :lemma
+   {:name "planar_bounded_perturbation_surjective",
+    :reported-by [:owner],
+    :type
+    "Continuous Φ → IsBounded (Set.range (Φ-L)) → IsUnit (LinearMap.det L) → Function.Surjective Φ  (size: 150-300 lines / 3-7 days)",
+    :area "planar-bounded-perturbation-surjective"},
+   :id :lemma-planar-bounded-perturbation-surjective,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t01A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t01A02_bridge_fixedPoint_of_lift",
+    :type
+    "¬ Surjective f → (∃ g, ∀ x, f x = apm_t01A02_cover (g x)) → ∃ x, f x = x  (size: 80-140 lines / 1-2 days)"},
+   :lemma
+   {:name "apm_t01A02_bridge_fixedPoint_of_lift",
+    :reported-by [:owner],
+    :type
+    "¬ Surjective f → (∃ g, ∀ x, f x = apm_t01A02_cover (g x)) → ∃ x, f x = x  (size: 80-140 lines / 1-2 days)",
+    :area "torus-map-integer-matrix-lift"},
+   :id :lemma-apm-t01a02-bridge-fixedpoint-of-lift,
+   :kind :lemma,
+   :depends-on
+   [:lemma-torus-map-integer-lift
+    :lemma-planar-bounded-perturbation-surjective],
    :other-consumers []}]}
