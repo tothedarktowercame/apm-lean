@@ -449,6 +449,19 @@ noncomputable def integralRelativeChainsComparison
     integralMappedRelativeCokernelComparison A ≪≫
     (relativeSingularChainsIsoCokernelSubspaceMap A).symm
 
+/-- The relative-chain comparison induces the canonical comparison from
+forgotten integral coefficient-relative homology to production relative
+singular homology. -/
+noncomputable def integralRelativeHomologyComparison
+    {X : Type} [TopologicalSpace X] (A : Set X) (n : ℕ) :
+    forgetIntModules.obj
+        ((CoefficientRelativeSmall.relativeChains ℤ A).homology n) ≅
+      (RelativeSingularChains A).homology n := by
+  let K := CoefficientRelativeSmall.relativeChains ℤ A
+  exact ((K.sc n).mapHomologyIso forgetIntModules).symm ≪≫
+    (HomologicalComplex.homologyFunctor AddCommGrpCat
+      (ComplexShape.down ℕ) n).mapIso (integralRelativeChainsComparison A)
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -478,3 +491,4 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralMappedRelativeCokernelComparison
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetIntegralRelativeCokernelComparison
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparison
+#print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparison
