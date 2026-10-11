@@ -107,7 +107,7 @@ of `apm_t92J08_bridge_1`,
 
 uses: B3
 
-status: planned
+status: proved
 
 Instantiate B3 at every `x`.  The Euclidean model is complete, and
 `hv.contMDiffAt` supplies B3’s pointwise hypothesis.  This node performs only

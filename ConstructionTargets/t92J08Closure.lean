@@ -80,7 +80,7 @@ theorem exists_uniform_local_flow_in_nhds
 
 section ManifoldCoordinates
 
-open scoped Manifold
+open scoped ContDiff Manifold
 
 variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
   {H : Type*} [TopologicalSpace H] (I : ModelWithCorners ℝ E H)
@@ -171,8 +171,33 @@ theorem exists_chart_nhds_uniform_isMIntegralCurveOn
 
 end ManifoldCoordinates
 
+open scoped ContDiff Manifold
+
+abbrev euclideanModel (n : ℕ) := 𝓘(ℝ, EuclideanSpace ℝ (Fin n))
+
+/-- The chart-local construction specialized to the Euclidean model used by
+the consumer.  This formulation exposes one neighbourhood and one common
+positive time around every centre. -/
+theorem exists_nhds_uniform_isMIntegralCurveOn
+    (n : ℕ) (M : Type*)
+    [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
+    [ChartedSpace (EuclideanSpace ℝ (Fin n)) M]
+    [IsManifold (euclideanModel n) ∞ M]
+    [BoundarylessManifold (euclideanModel n) M]
+    (v : (x : M) → TangentSpace (euclideanModel n) x)
+    (hv : ContMDiff (euclideanModel n)
+      (euclideanModel n).tangent 1
+      (fun x ↦ (⟨x, v x⟩ :
+        TangentBundle (euclideanModel n) M))) :
+    ∀ x : M, ∃ U ∈ nhds x, ∃ ε : ℝ, 0 < ε ∧ ∀ y ∈ U,
+      ∃ γ : ℝ → M, γ 0 = y ∧ IsMIntegralCurveOn γ v (Ioo (-ε) ε) := by
+  intro x
+  exact exists_chart_nhds_uniform_isMIntegralCurveOn
+    (euclideanModel n) v hv x
+
 end t92J08Closure
 
 #print axioms t92J08Closure.exists_uniform_local_flow_in_nhds
 #print axioms t92J08Closure.localCoordinateField_contDiffAt
 #print axioms t92J08Closure.exists_chart_nhds_uniform_isMIntegralCurveOn
+#print axioms t92J08Closure.exists_nhds_uniform_isMIntegralCurveOn
