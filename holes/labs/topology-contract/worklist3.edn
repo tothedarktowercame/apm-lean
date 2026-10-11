@@ -4097,6 +4097,23 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git status --porcelain", :exit 0, :stdout ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791682044264-3648-b396df98",
+     :commands
+     ["git diff-tree recorded commit scope"
+      "git blob identity check"
+      "sha256sum promoted fixture"
+      "git diff --check recorded commit"
+      "lake env lean promoted fixture"
+      "lake env lean target module"
+      "lake build target module"
+      "placeholder and axiom scan"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped consumer placeholder census"],
+     :finding
+     "PASS: implementation commit 442371d7 changes exactly ConstructionTargets/ManifoldFundamentalClass.lean and its recorded blob matches the reviewed source; promoted fixture hash e350d6dc2438ba5460924ad50e2ab4c193d6aff1eb3c95377227b002f07d304a matches recorded evidence and preserves the registered frozen theorem type; integralRelativeHomologyComparison_generator_of_normalization keeps the concrete normalization square as an explicit hypothesis, evaluates it on CoefficientChartLocal.generator, rewrites both reviewed normalization equations to one, and uses injectivity of ambientLocalNormalization to prove the required coefficient-to-production generator equality; it does not assume or define the compatibility square, add an orientation predicate, or claim localization equality; fixture, module, and target build pass with zero source/fixture placeholders and only propext, Classical.choice, and Quot.sound; 131 statements match with zero mismatches and consumer placeholders remain t00J02=1 and t98A02=1."},
     :commit "442371d7fdaea5f68f83fdd7b65443b966ea2b4a",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -4121,7 +4138,7 @@
       "Exact generator equality from the coefficient-relative representation to the production ambient representation, conditional only on the displayed equality of their two concrete normalization composites"}},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/generator-transport-from-normalization-square",
@@ -4269,7 +4286,7 @@
      "The exact compatibility square has now been checked as the sufficient and correctly oriented geometric obligation. The fixture leaves that square explicit, evaluates it on CoefficientChartLocal.generator, rewrites both concrete normalizations to one, and uses injectivity of ambientLocalNormalization to obtain equality with ambientLocalGenerator. Thus no cyclic-generator or sign argument is being assumed. What remains is the actual naturality calculation identifying the two long normalization composites.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -6587,7 +6604,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -6604,7 +6621,10 @@
     "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), ((integralRelativeHomologyComparison (deletedPoint x) (k+2)).hom ≫ (ambientLocalNormalization k x).hom = forgetIntModules.map (CoefficientChartLocal.localIso Int k x).hom) -> (integralRelativeHomologyComparison (deletedPoint x) (k+2)).hom.hom (CoefficientChartLocal.generator Int k x) = HigherChartLocalGenerator.ambientLocalGenerator (k := k) x",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-generator-transport-of-normalization-topo3-r1},
+    :routes-2026-10-11-manifold-generator-transport-of-normalization-topo3-r1,
+    :banked-by
+    :routes-2026-10-11-manifold-generator-transport-of-normalization-topo3-r1,
+    :banked-commit "442371d7fdaea5f68f83fdd7b65443b966ea2b4a"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-integralrelativehomologycomparison-generator-of-normalization,
    :kind :lemma,
