@@ -116061,7 +116061,7 @@
   {:consumer :t95J02,
    :stop-count 3,
    :review-finding
-   "B6 names a nonexistent Lean declaration: reflectionMap is ConstructionTargets.CoefficientCoordinateReflections.reflectionMap, not ConstructionTargets.CoefficientFirstReflection.reflectionMap. A fresh Lean check reports the latter as an unknown identifier. Correct the B6 type and B7 prose/dependencies to use CoefficientCoordinateReflections.reflectionMap (1 : Fin 2), while retaining CoefficientFirstReflection.integral_circle for its homology action.",
+   "B7 reverses the functorial composition. Because beta.comp reflection is beta after reflection, homotopy invariance gives H1(beta) = H1(reflection) ≫ H1(beta), not H1(beta) ≫ H1(reflection). The written composite is ill-typed: H1(beta) lands in Klein-bottle homology, while H1(reflection) is an endomorphism of sphere homology. Reverse the factors, then use integral_circle 1 to derive H1(beta)(g) = H1(beta)(-g).",
    :evidence
    {:blueprint
     {:path "ConstructionTargets/t95J02Closure.blueprint.md",
@@ -116156,11 +116156,17 @@
     {:commit "01528924a68a337ed7718cd30daa4cd0e88299c3",
      :next
      "Obtain independent review of the corrected declaration qualification; after approval formalize B1 and B2 in ConstructionTargets/t95J02Closure.lean."},
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1791717939367-5255-6d6e29ec",
+     :finding
+     "B7 reverses the functorial composition. Because beta.comp reflection is beta after reflection, homotopy invariance gives H1(beta) = H1(reflection) ≫ H1(beta), not H1(beta) ≫ H1(reflection). The written composite is ill-typed: H1(beta) lands in Klein-bottle homology, while H1(reflection) is an endomorphism of sphere homology. Reverse the factors, then use integral_circle 1 to derive H1(beta)(g) = H1(beta)(-g)."},
     :commit "01528924a68a337ed7718cd30daa4cd0e88299c3",
     :changed-paths ["ConstructionTargets/t95J02Closure.blueprint.md"],
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["problems/t95J02/lean/Main.lean"
     "problems/t95J02/status.json"
@@ -116180,7 +116186,7 @@
    :id :program-2026-10-11-close-t95j02,
    :kind :final-adapter,
    :campaign-priority 41,
-   :fail-count 2,
+   :fail-count 3,
    :depends-on [],
    :program true,
    :other-consumers []}
