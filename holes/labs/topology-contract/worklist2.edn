@@ -79330,13 +79330,24 @@
       :exit 1,
       :finding "Expanded postcomposition; rerun passed."}],
     :continue-from "Identify restrictions as circle-affine.",
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791728539113-5481-51c4d7a4",
+     :commands
+     ["git show/check/diff-tree 6150a402c"
+      "lake env lean ConstructionTargets/t97A04Closure.lean"
+      "lake env lean problems/t97A04/lean/Main.lean"
+      "statement-registry check/fingerprint and placeholder counts"],
+     :finding
+     "PASS: new compiled progress after history job 8. Commit changes only the scoped closure and factors each restricted overlap shear H1 map as circle-summand injection followed by the transported shear; functorial composition and direction agree with twoCircleOverlapShearLeft/Right. Blob matches 779e8c25. Closure is sorry-free with standard axioms; Main compiles with unchanged 2 placeholders. Registry is 131/0 and frozen statement SHA-256 remains ca1b2cb3c6594276811618321d5c0604c2f38fc4594a6b21ae161a711a923a34. Affine identification and B6-B11 remain listed."},
     :commit "6150a402c247424c1891c64a4d92e5b505009668",
     :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
     :finding
     "Restricted overlap shears now factor through circle injections on H1.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79408,6 +79419,9 @@
      :reason :program-progress-committed}
     {:job 8,
      :commit "3bff735cc6b4b6da238c4dbdd605c169c8bdaf0d",
+     :reason :program-progress-committed}
+    {:job 9,
+     :commit "6150a402c247424c1891c64a4d92e5b505009668",
      :reason :program-progress-committed}]}
   {:consumer :t96A07,
    :stop-count 1,
@@ -79886,7 +79900,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -79898,7 +79912,9 @@
     :reported-by [:program-2026-10-11-close-t97a04],
     :type "restriction H1 equals injection H1 then shear H1",
     :area "mv-connecting-naturality",
-    :proved-in :program-2026-10-11-close-t97a04},
+    :proved-in :program-2026-10-11-close-t97a04,
+    :banked-by :program-2026-10-11-close-t97a04,
+    :banked-commit "6150a402c247424c1891c64a4d92e5b505009668"},
    :id
    :lemma-constructiontargets-t97a04closure-twocircleoverlapshear-component-h1,
    :kind :lemma,
