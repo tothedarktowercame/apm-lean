@@ -7570,6 +7570,23 @@
       :exit 0,
       :output "1 1"}
      {:cmd "git status --short", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791692278585-4144-9b2b0fe1",
+     :commands
+     ["git show and git diff-tree recorded commit scope"
+      "git blob identity check"
+      "sha256sum frozen fixture"
+      "git diff --check recorded commit"
+      "lake env lean renamed frozen-fixture replay"
+      "lake env lean target module"
+      "lake build target module"
+      "placeholder and axiom scan"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped consumer placeholder census"],
+     :finding
+     "PASS: commit cea27f88 changes only ConstructionTargets/ManifoldFundamentalClass.lean and its recorded blob matches the reviewed tree; frozen fixture hash 7f38215d67cb26ae44edcb7e9d3b378fc016b73b932860db095e6eb97f66d055 matches. The theorem has the frozen conditional direction from correctedLocalGeneratorCoefficient = 1 to exact transport of the coefficient chart generator to the ambient local generator. It rewrites integralRelativeHomologyComparisonWithTransport_generator_eq_zsmul using the supplied equality and simplifies one_zsmul; it does not prove coefficient one, assume the normalization square, or unfold model normalizations. Fixture replay and target compile/build pass with only propext, Classical.choice, Quot.sound; registry is 131/0; source and fixture have no placeholders; consumer counts remain t00J02=1 and t98A02=1."},
     :commit "cea27f88dfcc3f8bfed1128e86422503def53f80",
     :commits ["cea27f88dfcc3f8bfed1128e86422503def53f80"],
     :changed-paths
@@ -7587,7 +7604,7 @@
      "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), correctedLocalGeneratorCoefficient k x = 1 -> (integralRelativeHomologyComparisonWithTransport (deletedPoint x) (k + 2)).hom.hom (CoefficientChartLocal.generator Int k x) = HigherChartLocalGenerator.ambientLocalGenerator (k := k) x"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/corrected-generator-from-coefficient-one",
@@ -7741,7 +7758,7 @@
      "The scalar-image theorem already contains exact generator transport once the corrected coefficient is one. The compiled prerequisite performs precisely that rewrite. The previous normalization-square-to-coefficient-one bridge is valid but cannot be used to prove the normalization square without circularity, because generator transport reconstructs that same square. The remaining model comparison must therefore prove coefficient one independently, for example via the banked sign dichotomy plus an orientation-sensitive exclusion of the negative branch.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -10888,7 +10905,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -10905,7 +10922,10 @@
     "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), correctedLocalGeneratorCoefficient k x = 1 -> (integralRelativeHomologyComparisonWithTransport (deletedPoint x) (k + 2)).hom.hom (CoefficientChartLocal.generator Int k x) = HigherChartLocalGenerator.ambientLocalGenerator (k := k) x",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-corrected-generator-of-coefficient-one-topo3-r1},
+    :routes-2026-10-11-manifold-corrected-generator-of-coefficient-one-topo3-r1,
+    :banked-by
+    :routes-2026-10-11-manifold-corrected-generator-of-coefficient-one-topo3-r1,
+    :banked-commit "cea27f88dfcc3f8bfed1128e86422503def53f80"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-integralrelativehomologycomparisonwithtransport-generator-of-coefficient-one,
    :kind :lemma,
