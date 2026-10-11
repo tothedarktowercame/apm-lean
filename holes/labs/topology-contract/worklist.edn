@@ -106818,286 +106818,41 @@
      :typed-residual-change
      :infrastructure-packets
      :review-outcomes]},
+   :stop-count 1,
    :review-finding
    "retag the remaining untagged backlog lemma; priorities reports area untagged with backlog 1, violating checkpoint acceptance",
    :stop-condition
    "End only when every topo1 problem is closed or a row is genuinely refuted.",
    :evidence
-   {:outcome :replan,
-    :disposition :replan,
-    :author "topo-4",
+   {:outcome :stop,
+    :seat "topo-4",
+    :reason :cross-ledger-retag-unrepresentable,
+    :finding
+    "The strategy receipt is applied only to worklist.edn, while the sole untagged backlog node is owned by worklist3.edn. upsert-lemmas therefore creates a tagged duplicate in worklist.edn and leaves the original worklist3.edn node untagged. The frozen checkpoint acceptance cannot be satisfied without a supervisor transition that updates the owning ledger or contract support for cross-ledger lemma updates.",
     :commands
     [{:cmd
       "bb holes/labs/topology-contract/build_step.bb priorities holes/labs/topology-contract/worklist.edn",
       :exit 0,
       :finding
-      "Fresh priorities reports exactly one untagged backlog lemma: ConstructionTargets.SingularHomologyConcrete.singularPairShortComplex_shortExact; its consumers are t00J02 and t98A02 through the integral-open-disk connecting-naturality route."}
+      "The only untagged backlog node is lemma-constructiontargets-singularhomologyconcrete-singularpairshortcomplex-shortexact in worklist3.edn."}
      {:cmd
-      "rg singularPairShortComplex_shortExact in ConstructionTargets/SingularHomologyConcrete.lean and route ledgers",
+      "apply the proposed replan to an isolated three-ledger copy, then rerun priorities",
       :exit 0,
       :finding
-      "The declaration has type forall {X : Type} [TopologicalSpace X] (A : Set X), (singularPairShortComplex A).ShortExact and is a dependency of the manifold-fundamental-class route."}
+      "apply-result adds the tagged node to worklist.edn, but priorities still reports area untagged with backlog 1 from worklist3.edn."}
+     {:cmd "inspect the transitioned worklist node",
+      :exit 0,
+      :finding
+      "The new worklist.edn node has area manifold-fundamental-class, proving the update itself is accepted but does not mutate the owning ledger."}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
-      :finding "131 registered statements match, 0 do not."}
-     {:cmd "git status --short",
-      :exit 0,
-      :finding
-      "ConstructionTargets/ManifoldFundamentalClass.lean has a pre-existing unrelated modification; this repair was read-only."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1791710776229-4886-9f9e2b6d",
-     :finding
-     "retag the remaining untagged backlog lemma; priorities reports area untagged with backlog 1, violating checkpoint acceptance"},
-    :replacement-items
-    [{:consumer :t02A03,
-      :phase :implementation,
-      :state :open,
-      :scope ["problems/t02A03/lean/Main.lean"],
-      :dag-node "TOPOLOGY-ROUTES.md/t02A03/closure",
-      :acceptance
-      {:implementation
-       "Replace the single remaining sorry in apm_t02a03 using the banked punctured-disk product equivalence, geometric tube deformation data, and apm_t02a03_previous_encoding. Preserve the registered theorem and all definitions; compile Main with zero placeholders and standard axioms.",
-       :placeholder "the single sorry in apm_t02a03",
-       :route-step
-       "assemble the complete banked route and close t02A03",
-       :gates
-       ["lake env lean problems/t02A03/lean/Main.lean"
-        "zero source sorry"
-        "standard-only axioms"
-        "registry check"]},
-      :id :routes-2026-10-11-t02a03-closure-adapter-112,
-      :kind :final-adapter,
-      :depends-on
-      [:lemma-constructiontargets-t02a03geometrictubecover-apm-t02a03-circlemeridian-mem-geome
-       :lemma-constructiontargets-t02a03geometrictubecover-apm-t02a03-origin-mem-both-cores
-       :lemma-constructiontargets-t02a03geometrictubedeformation-righttube-exists-near-rightco
-       :lemma-constructiontargets-t02a03geometrictubedeformation-range-rightcorecircle],
-      :current-residual "Close t02A03.",
-      :other-consumers []}
-     {:consumer :t93J03,
-      :implements-lemma
-      :lemma-freeproperlydiscontinuousquotient-fundamentalgroupequiv,
-      :phase :implementation,
-      :state :open,
-      :scope
-      ["ConstructionTargets/FreeProperlyDiscontinuousQuotientFundamentalGroup.lean"],
-      :dag-node
-      "TOPOLOGY-ROUTES.md/shared/free-properly-discontinuous-quotient-pi1",
-      :acceptance
-      {:implementation
-       "Prove the reusable deck-group theorem identifying the fundamental group of a quotient of a simply connected locally path-connected space by a free properly discontinuous action with the acting group, at the exact generality of its five consumers. Include the Klein specialization needed by t93J03; do not close any consumer.",
-       :placeholder
-       "the fundamental-group/deck-group route steps for t93J03, t99J01, t00A02, t00J07, and t92J05",
-       :route-step "identify quotient pi1 with the deck group",
-       :gates
-       ["lake build ConstructionTargets.FreeProperlyDiscontinuousQuotientFundamentalGroup"
-        "zero source sorry"
-        "standard-only axioms"
-        "registry check"]},
-      :id
-      :routes-2026-10-11-free-properly-discontinuous-quotient-pi1-113,
-      :kind :reusable-theorem,
-      :area "deck-group-fundamental-group",
-      :depends-on [],
-      :current-residual
-      "Specialize the quotient theorem in each consumer route.",
-      :other-consumers [:t99J01 :t00A02 :t00J07 :t92J05]}
-     {:consumer :t01A03,
-      :implements-lemma
-      :lemma-genericpointwedgefundamentalgroupcoordinates-genericpointwedgegroupequivalence-c,
-      :phase :implementation,
-      :state :open,
-      :scope
-      ["ConstructionTargets/GenericPointWedgeFundamentalGroupCoordinates.lean"],
-      :dag-node
-      "TOPOLOGY-ROUTES.md/shared/generic-point-wedge-pi1-coordinates",
-      :acceptance
-      {:implementation
-       "Compile the generic point-wedge fundamental-group equivalence with both representative leg inclusions mapped to their corresponding Monoid.Coprod injections. Use the banked target-natural reconstruction and pseudopushout infrastructure; do not specialize to ThreeCircles or close a consumer.",
-       :placeholder
-       "the remaining fundamental-group coordinate steps for six consumers",
-       :route-step
-       "normalize the generic point-wedge pi1 equivalence on both legs",
-       :gates
-       ["lake build ConstructionTargets.GenericPointWedgeFundamentalGroupCoordinates"
-        "zero source sorry"
-        "standard-only axioms"
-        "registry check"]},
-      :id :routes-2026-10-11-generic-point-wedge-pi1-coordinates-114,
-      :kind :reusable-theorem,
-      :area "fundamental-group-wedge-of-circles",
-      :depends-on [],
-      :current-residual
-      "Specialize recursively to finite circle wedges and the five-factor consumer mappings.",
-      :other-consumers [:t92J06 :t93J03 :t97A01 :t97A03 :t99J01]}
-     {:consumer :t00J02,
-      :implements-lemma
-      :lemma-constructiontargets-singularexcision-relativesingularchainsisocokernelsubspacema,
-      :phase :implementation,
-      :state :open,
-      :scope ["ConstructionTargets/SingularExcision.lean"],
-      :dag-node
-      "TOPOLOGY-ROUTES.md/shared/relative-singular-chains-excision-comparison",
-      :acceptance
-      {:implementation
-       "Prove the relative singular-chain isomorphism to the cokernel of the subspace map in the excision package, with the naturality required by t00J02 and t98A02. Reuse SingularHomologyConcrete and do not close either consumer.",
-       :placeholder
-       "the relative fundamental-class comparison steps for t00J02 and t98A02",
-       :route-step
-       "identify relative chains with the subspace-map cokernel under excision",
-       :gates
-       ["lake build ConstructionTargets.SingularExcision"
-        "zero source sorry"
-        "standard-only axioms"
-        "registry check"]},
-      :id
-      :routes-2026-10-11-relative-singular-chains-excision-comparison-115,
-      :kind :reusable-theorem,
-      :area "manifold-fundamental-class",
-      :depends-on [],
-      :current-residual
-      "Compose with relative projection and forgetful equivalence in both consumers.",
-      :other-consumers [:t98A02]}
-     {:consumer :portfolio,
-      :checkpoint
-      {:after-problems 1,
-       :may-supersede-future true,
-       :required-measures
-       [:placeholder-delta
-        :typed-residual-change
-        :infrastructure-packets
-        :review-outcomes]},
-      :stop-condition
-      "End only when every topo1 problem is closed or a row is genuinely refuted.",
-      :phase :strategy,
-      :state :open,
-      :scope [],
-      :dag-node "TOPOLOGY-ROUTES.md",
-      :acceptance
-      {:strategy
-       "Review the t02A03 closure and three shared foundations, rerun priorities and AREAS, recount placeholders, and refill with one closure-first row plus balanced high-impact ready lemmas."},
-      :id
-      :routes-2026-10-11-checkpoint-topo1-after-closure-and-shared-foundations-116,
-      :kind :strategy-checkpoint,
-      :depends-on
-      [:routes-2026-10-11-t02a03-closure-adapter-112
-       :routes-2026-10-11-free-properly-discontinuous-quotient-pi1-113
-       :routes-2026-10-11-generic-point-wedge-pi1-coordinates-114
-       :routes-2026-10-11-relative-singular-chains-excision-comparison-115],
-      :current-residual "Refill after this portfolio is reviewed.",
-      :other-consumers []}],
-    :finding
-    {:placeholder-delta
-     "No consumer placeholder changed at this checkpoint; five complete routes now await adapters.",
-     :typed-residual-change
-     ["t02A03 has zero backlog lemmas and one placeholder, so its closure adapter is elected first under rule 0."
-      "The Klein quotient route banked quotient-map openness; SameOrbit closedness remains ready before its T2 quotient node."
-      "The connector counit identity exposed an untagged normalized-choice prerequisite; it is retagged fundamental-group-wedge-of-circles."
-      "The wedge-coordinate theorem is ready across six consumers; the free properly-discontinuous quotient theorem is ready across five consumers."
-      "The manifold comparison area has three ready lemmas shared by t00J02 and t98A02."],
-     :routes
-     {:t00J02
-      {:placeholders 1,
-       :chain
-       [:lemma-constructiontargets-singularexcision-relativesingularchainsisocokernelsubspacema
-        :lemma-constructiontargets-singularhomologyconcrete-relativeprojection-comp-cokerneliso
-        :lemma-forgetintmodules-asequivalence]},
-      :t92J06
-      {:placeholders 1,
-       :chain
-       [:lemma-genericpointwedgefundamentalgroupcoordinates-genericpointwedgegroupequivalence-c
-        :lemma-connectorsingleobjequivalence-counit-base-identity]},
-      :t02A03 {:placeholders 1, :chain [], :route :complete},
-      :t96A02 {:placeholders 1, :chain [], :route :complete},
-      :t99J01
-      {:placeholders 1,
-       :chain
-       [:lemma-genericpointwedgefundamentalgroupcoordinates-genericpointwedgegroupequivalence-c
-        :lemma-t99j01componentcover-isksheeted
-        :lemma-t99j01componentinclusion-pi1-bijective]},
-      :t97A01
-      {:placeholders 1,
-       :chain
-       [:lemma-genericpointwedgefundamentalgroupcoordinates-genericpointwedgegroupequivalence-c
-        :lemma-polygonradialopencoverpackages]},
-      :t97J02 {:placeholders 3, :chain [], :route :complete},
-      :t97A03
-      {:placeholders 3,
-       :chain
-       [:lemma-genericpointwedgefundamentalgroupcoordinates-genericpointwedgegroupequivalence-c
-        :lemma-onecirclecover-homotopyequiv-modelbouquet]},
-      :t95A04 {:placeholders 1, :chain [], :route :complete},
-      :t93J03
-      {:placeholders 1,
-       :chain
-       [:lemma-kleinplaneorbitquotient-sameorbit-isclosed
-        :lemma-kleinplaneorbitquotient-t2space
-        :lemma-kleinorbitquotient-homeomorph
-        :lemma-freeproperlydiscontinuousquotient-fundamentalgroupequiv
-        :lemma-kleinfundamentalgroupequiv]},
-      :t00J07
-      {:placeholders 3,
-       :chain
-       [:lemma-freeproperlydiscontinuousquotient-fundamentalgroupequiv]},
-      :t97A04
-      {:placeholders 2,
-       :chain
-       [:lemma-constructiontargets-singularexcision-subspacemap-inclusion]},
-      :t98A02
-      {:placeholders 1,
-       :chain
-       [:lemma-constructiontargets-singularexcision-relativesingularchainsisocokernelsubspacema
-        :lemma-forgetintmodules-asequivalence]},
-      :t00A02
-      {:placeholders 2,
-       :chain
-       [:lemma-freeproperlydiscontinuousquotient-fundamentalgroupequiv]},
-      :t96A07 {:placeholders 1, :chain [], :route :complete},
-      :t01A03
-      {:placeholders 1,
-       :chain
-       [:lemma-genericpointwedgefundamentalgroupcoordinates-genericpointwedgegroupequivalence-c
-        :lemma-connectorsingleobjequivalence-counit-base-identity]},
-      :t92J05
-      {:placeholders 3,
-       :chain
-       [:lemma-freeproperlydiscontinuousquotient-fundamentalgroupequiv]}},
-     :top-ranking
-     [:lemma-freeproperlydiscontinuousquotient-fundamentalgroupequiv
-      :lemma-kleinplaneorbitquotient-sameorbit-isclosed
-      :lemma-closedsquarerelationquotienthomeomorphsurfacefalsetwo],
-     :infrastructure-packets
-     {:banked-this-checkpoint 3,
-      :supporting-modules-since-prior-checkpoint 3,
-      :placeholder-changing 0},
-     :review-outcomes {:pass 3, :stop 2, :closed-problems 0},
-     :deferred
-     ["Other complete-route adapters are deferred because rule 0 permits exactly one closure-directed row per checkpoint."
-      "SameOrbit closedness remains ready but follows the higher-impact deck-group theorem in this balanced portfolio."],
-     :untagged-backlog-repair
-     "Retag singularPairShortComplex_shortExact as manifold-fundamental-class; after ledger application no backlog lemma remains untagged."},
-    :lemmas
-    [{:name
-      "Functor.asEquivalence normalized essential-surjectivity witness retaining Iso.refl, or the hypothesis (normalFormFunctor S).objObjPreimageIso(...).hom = 𝟙",
-      :type
-      "A normalized asEquivalence construction retaining the explicit essential-surjectivity Iso.refl witness, or the exact chosen-isomorphism identity hypothesis.",
-      :status :not-started,
-      :consumers [:t01A03 :t92J06 :t97A01 :t97A03 :t99J01],
-      :depends-on [],
-      :area "fundamental-group-wedge-of-circles"}
-     {:name
-      "ConstructionTargets.SingularHomologyConcrete.singularPairShortComplex_shortExact",
-      :type
-      "forall {X : Type} [TopologicalSpace X] (A : Set X), (singularPairShortComplex A).ShortExact",
-      :status :not-started,
-      :consumers [:t00J02 :t98A02],
-      :depends-on [],
-      :area "manifold-fundamental-class"}],
-    :seat "topo-4"},
+      :finding "131 registered statements match, 0 do not."}],
+    :residual
+    "Retag lemma-constructiontargets-singularhomologyconcrete-singularpairshortcomplex-shortexact in worklist3.edn as manifold-fundamental-class, then rerun this checkpoint.",
+    :author "topo-4",
+    :disposition :stop},
    :phase :strategy,
-   :state :repair,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
