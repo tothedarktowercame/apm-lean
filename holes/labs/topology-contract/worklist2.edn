@@ -71665,6 +71665,7 @@
    {:name "frozenTorusHomeomorphBoundaryTorus", :reported-by []},
    :id :lemma-frozentorushomeomorphboundarytorus,
    :kind :lemma,
+   :area "mv-connecting-naturality",
    :depends-on [],
    :other-consumers []}
   {:consumer :t97A04,
@@ -71730,6 +71731,7 @@
    :id
    :lemma-constructiontargets-t97a04frozenh1coordinate-frozentorush1groupisofintwo,
    :kind :lemma,
+   :area "mv-connecting-naturality",
    :depends-on [],
    :other-consumers []}
   {:consumer :t97A04,
@@ -71805,6 +71807,7 @@
    :id
    :lemma-constructiontargets-toruspionewindingcoordinates-frozenlbarpi1map-naturality,
    :kind :lemma,
+   :area "mv-connecting-naturality",
    :depends-on [],
    :other-consumers []}
   {:consumer :t97A04,
@@ -71934,6 +71937,7 @@
    :id
    :lemma-constructiontargets-t97a04frozenh1coordinate-frozentorusalignedh1mulequivfintwo,
    :kind :lemma,
+   :area "mv-connecting-naturality",
    :depends-on [],
    :other-consumers []}
   {:consumer :t97A04,
@@ -72037,6 +72041,7 @@
    :id
    :lemma-constructiontargets-integralsingularhomologycomparison-singularhomologycompariso,
    :kind :lemma,
+   :area "mv-connecting-naturality",
    :depends-on [],
    :other-consumers []}
   {:consumer :t97A04,
@@ -72354,6 +72359,7 @@
    :id
    :lemma-constructiontargets-t02a03geometrictubecover-apm-t02a03-circlemeridian-mem-geome,
    :kind :lemma,
+   :area "geometric-tube-deformation",
    :depends-on [],
    :other-consumers []}
   {:consumer :portfolio,
@@ -72370,6 +72376,7 @@
    :id
    :lemma-constructiontargets-t02a03geometrictubecover-apm-t02a03-origin-mem-both-cores,
    :kind :lemma,
+   :area "geometric-tube-deformation",
    :depends-on [],
    :other-consumers []}
   {:consumer :t97A04,
@@ -72444,6 +72451,7 @@
    :id
    :lemma-constructiontargets-realprojectivesmoothtarget-sphereprojectionquotientauthority,
    :kind :lemma,
+   :area "rp-smooth-atlas",
    :depends-on [],
    :other-consumers []}
   {:consumer :portfolio,
@@ -72460,6 +72468,7 @@
    :id
    :lemma-constructiontargets-realprojectivesmoothtarget-sphereprojection-eq-iff,
    :kind :lemma,
+   :area "rp-smooth-atlas",
    :depends-on [],
    :other-consumers []}
   {:consumer :t95A04,
@@ -72506,6 +72515,7 @@
    :id
    :lemma-constructiontargets-realprojectivesmoothtarget-rpsmoothatlas,
    :kind :lemma,
+   :area "rp-smooth-atlas",
    :depends-on [],
    :other-consumers []}
   {:consumer :t97A04,
@@ -72572,6 +72582,7 @@
    :id
    :lemma-constructiontargets-singularexcision-subspacemap-inclusion,
    :kind :lemma,
+   :area "mv-connecting-naturality",
    :depends-on [],
    :other-consumers []}
   {:consumer :t02A03,
@@ -72862,6 +72873,7 @@
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-righttube-exists-near-rightco,
    :kind :lemma,
+   :area "geometric-tube-deformation",
    :depends-on [],
    :other-consumers []}
   {:consumer :t02A03,
@@ -73332,6 +73344,7 @@
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-range-rightcorecircle,
    :kind :lemma,
+   :area "geometric-tube-deformation",
    :depends-on [],
    :other-consumers []}
   {:consumer :t96A07,

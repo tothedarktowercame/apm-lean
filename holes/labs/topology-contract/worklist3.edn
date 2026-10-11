@@ -8313,6 +8313,7 @@
    :id
    :lemma-constructiontargets-integralsingularhomologycomparison-singularhomologycompariso,
    :kind :lemma,
+   :area "manifold-fundamental-class",
    :depends-on [],
    :other-consumers []}
   {:consumer :t00J02,
@@ -8495,6 +8496,7 @@
    :id
    :lemma-constructiontargets-surfacenestedtrianglecover-finite-nested,
    :kind :lemma,
+   :area "surface-classification",
    :depends-on [],
    :other-consumers []}
   {:consumer :t01A08,
@@ -8585,6 +8587,7 @@
    :id
    :lemma-constructiontargets-higherchartlocalgenerator-ambientchartmap-hn-isiso,
    :kind :lemma,
+   :area "manifold-fundamental-class",
    :depends-on [],
    :other-consumers []}
   {:consumer :portfolio,
@@ -8600,6 +8603,7 @@
    :id
    :lemma-constructiontargets-highermodellocalhomology-normalization,
    :kind :lemma,
+   :area "manifold-fundamental-class",
    :depends-on [],
    :other-consumers []}
   {:consumer :t00J02,
@@ -8675,6 +8679,7 @@
    :id
    :lemma-constructiontargets-coefficientdistinguishednormalization-distinguished,
    :kind :lemma,
+   :area "manifold-fundamental-class",
    :depends-on [],
    :other-consumers []}
   {:consumer :t00J02,
@@ -8720,6 +8725,7 @@
    :id
    :lemma-constructiontargets-integralsingularhomologycomparison-singularchainscomparison-,
    :kind :lemma,
+   :area "manifold-fundamental-class",
    :depends-on [],
    :other-consumers []}
   {:consumer :t00J02,
@@ -8789,6 +8795,7 @@
    :lemma {:name "forgetIntModules.asEquivalence", :reported-by []},
    :id :lemma-forgetintmodules-asequivalence,
    :kind :lemma,
+   :area "manifold-fundamental-class",
    :depends-on [],
    :other-consumers []}
   {:consumer :t00J02,
@@ -8837,6 +8844,7 @@
    :id
    :lemma-constructiontargets-singularhomologyconcrete-relativesingularchainsisocokernelsu,
    :kind :lemma,
+   :area "manifold-fundamental-class",
    :depends-on [],
    :other-consumers []}
   {:consumer :portfolio,
@@ -8853,6 +8861,7 @@
    :id
    :lemma-constructiontargets-singularexcision-relativesingularchainsisocokernelsubspacema,
    :kind :lemma,
+   :area "manifold-fundamental-class",
    :depends-on [],
    :other-consumers []}
   {:consumer :t00J02,
@@ -8960,6 +8969,7 @@
    :id
    :lemma-constructiontargets-coefficientchartlocal-generator-normalization,
    :kind :lemma,
+   :area "manifold-fundamental-class",
    :depends-on [],
    :other-consumers []}
   {:consumer :t00J02,
@@ -9158,6 +9168,7 @@
    :id
    :lemma-constructiontargets-singularexcision-relativeprojection-comp-cokerneliso-hom,
    :kind :lemma,
+   :area "manifold-fundamental-class",
    :depends-on [],
    :other-consumers []}
   {:consumer :portfolio,
@@ -9174,6 +9185,7 @@
    :id
    :lemma-constructiontargets-singularhomologyconcrete-relativeprojection-comp-cokerneliso,
    :kind :lemma,
+   :area "manifold-fundamental-class",
    :depends-on [],
    :other-consumers []}
   {:consumer :t00J02,
@@ -9278,6 +9290,7 @@
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-integralrelativechainscomparisonwit,
    :kind :lemma,
+   :area "manifold-fundamental-class",
    :depends-on [],
    :other-consumers []}
   {:consumer :t00J02,
