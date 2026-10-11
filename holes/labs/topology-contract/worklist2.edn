@@ -70207,7 +70207,53 @@
   {:bounded-exception
    "single-consumer zero-height real-diameter endpoint certificate for the signed imaginary detour",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:residual
+     "Implement the banked endpoint certificate in scope, then construct norm-preserving departure and arrival arcs and a radius-bounded nonzero-imaginary corridor.",
+     :outcome :go,
+     :warnings [],
+     :axioms [propext Classical.choice Quot.sound],
+     :commands
+     [{:cmd
+       "lake env lean /tmp/t02a03_zero_height_core_normal_real_endpoints_probe.lean",
+       :exit 0,
+       :output
+       "realEndpoints_zeroHeight_rightTubeCoreNormals compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "sha256sum /tmp/t02a03_zero_height_core_normal_real_endpoints_probe.lean",
+       :exit 0,
+       :output
+       "eb5d82b7511a862112a5efaa346c36c5d8b1abb61f24d9add5604af26c04174f  /tmp/t02a03_zero_height_core_normal_real_endpoints_probe.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_zero_height_core_normal_real_endpoints_probe.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}
+      {:cmd
+       "rg -n 'realEndpoints_zeroHeight_rightTubeCoreNormals' /tmp/t02a03_zero_height_core_normal_real_endpoints_probe.lean",
+       :exit 0,
+       :output
+       "7:theorem realEndpoints_zeroHeight_rightTubeCoreNormals\n18:#print axioms realEndpoints_zeroHeight_rightTubeCoreNormals"}],
+     :fixture
+     {:path
+      "/tmp/t02a03_zero_height_core_normal_real_endpoints_probe.lean",
+      :sha256
+      "eb5d82b7511a862112a5efaa346c36c5d8b1abb61f24d9add5604af26c04174f"},
+     :finding
+     "The placeholder-free fixture proves both zero-height core-normal endpoints have imaginary part zero. The meridian endpoint follows from the positive-factor height identity; the recovered input endpoint reduces directly to the frozen height coordinate.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+      :declaration
+      "ConstructionTargets.T02A03GeometricTubeDeformation.realEndpoints_zeroHeight_rightTubeCoreNormals",
+      :type
+      "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> (rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p))).im = 0 ∧ (rightTubeCoreNormalComplex p.1).im = 0"},
+     :seat "topo-8"}},
+   :phase :implementation,
+   :type
+   "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> (rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p))).im = 0 ∧ (rightTubeCoreNormalComplex p.1).im = 0",
    :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
@@ -70226,6 +70272,8 @@
    :routes-2026-10-11-t02a03-real-endpoints-zero-height-core-normals-topo2-r1,
    :kind :reusable-theorem,
    :area "explicit-r3-tube-deformation-retraction",
+   :declaration
+   "ConstructionTargets.T02A03GeometricTubeDeformation.realEndpoints_zeroHeight_rightTubeCoreNormals",
    :depends-on
    [:routes-2026-10-11-t02a03-positive-sign-input-collision-topo2-r1],
    :current-residual
