@@ -79483,67 +79483,60 @@
      :commit "a58fb4403475f91ca2b7f45699abba30dbe50339",
      :reason :program-milestone-complete}]}
   {:consumer :t96A07,
-   :stop-count 7,
+   :stop-count 8,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Identify the composite range with the yz-plane; then B6-B13.",
+    "Transfer the range through the local-diffeomorphism projection for B6; then B7-B13.",
     :outcome :stop,
-    :warnings ["Main: 1 placeholder."],
+    :warnings ["Lean style lint only."],
     :missing-theorems
     [{:name
-      "ConstructionTargets.T96A07Closure.crossTermSphereMap_mfderiv_firstPoint",
+      "ConstructionTargets.T96A07Closure.sphereMap_mfderiv_e0_range",
       :type
-      "sphere mfderiv at e0 = ambient derivative after tangent inclusion",
+      "sphereMap mfderiv range at e0 equals the yz coordinate plane",
       :status :proved,
       :consumers [:t96A07],
       :depends-on
-      ["ConstructionTargets.T96A07Closure.sphereFirstPoint_tangent_range"
-       "ConstructionTargets.T96A07Closure.sphereMapAmbientDerivative_firstAxis"],
+      ["ConstructionTargets.T96A07Closure.crossTermSphereMap_mfderiv_firstPoint"],
       :area "projective-smooth-descent"}
      {:name
-      "ConstructionTargets.T96A07Closure.sphereMap_mfderiv_e0_range",
-      :type "sphereMap mfderiv range at e0 is yz-plane",
-      :status :partial,
+      "ConstructionTargets.T96A07Closure.descended_mfderiv_range_at_e0",
+      :type
+      "descended map derivative range at projection e0 equals yz-plane",
+      :status :not-started,
       :consumers [:t96A07],
       :depends-on
-      ["ConstructionTargets.T96A07Closure.crossTermSphereMap_mfderiv_firstPoint"],
+      ["ConstructionTargets.T96A07Closure.sphereMap_mfderiv_e0_range"
+       "ConstructionTargets.T96A07Closure.descendedSphereMap"],
       :area "projective-smooth-descent"}],
     :statement-hashes
     {:registry "131/0",
-     :closure "f37bc99f7265dbe9ec02fefe680ff8e7b626817f",
+     :closure "76269dc65f37288d97aa844e3fac8d02e7ba4986",
      :blueprint "69b59fb622dd62fc82a1fe100b353eaabc2c948d"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason :program-progress-committed,
+    :reason :program-milestone-complete,
     :commands
-    [{:cmd "closure compile", :exit 0}
+    [{:cmd "lake build ConstructionTargets.t96A07Closure", :exit 0}
+     {:cmd "closure compile", :exit 0}
      {:cmd "closure no-sorry scan", :exit 1, :expected-exit 1}
      {:cmd "Main compile", :exit 0}
      {:cmd "registry check", :exit 0}
-     {:cmd "git show --check fac75be59", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791761244997-5982-3bd0327b",
-     :commands
-     ["git show/diff/check fac75be59"
-      "verify committed fixture SHA-256 and blobs"
-      "lake build ConstructionTargets.t96A07Closure"
-      "lake env lean closure and Main"
-      "registry fingerprint, placeholders, ancestry, blueprint checks"],
-     :finding
-     "PASS: fac75be59 is new after history 47c44c303; its sole changed path is scoped, closure/blueprint blobs match, and fixture SHA-256 is aee7450d617e5420bfea589e9c09a80148789dc11127baa1744342a1a37558bc. It correctly constructs e0 on Sphere 2, identifies the tangent inclusion range, and applies the manifold chain rule so the sphere derivative is ambient derivative after inclusion; representations and order match B5. Build/Lean pass with standard axioms; registry 131/0; frozen hash 2ba67b040c1c1e31b8529d758a90765d8251ba3798983f6956674918a77fd520 unchanged; closure/Main placeholders 0/1. The yz-plane range equality then B6-B13 remain listed."},
-    :commit "fac75be59",
-    :changed-paths ["ConstructionTargets/t96A07Closure.lean"],
+     {:cmd "Main placeholder count", :exit 0, :output "1"}
+     {:cmd "git show --check a8575f32c", :exit 0}],
+    :commit "a8575f32c",
+    :changed-paths
+    ["ConstructionTargets/t96A07Closure.lean"
+     "problems/t96A07/lean/Main.lean"],
     :fixture
     {:path "ConstructionTargets/t96A07Closure.lean",
      :sha256
-     "aee7450d617e5420bfea589e9c09a80148789dc11127baa1744342a1a37558bc"},
+     "65250cfcb9c48b1a789ab1a76a6637528e764d7924da72f0c3e21ed166923b5e"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A07/lean/Main.lean"
     "problems/t96A07/status.json"
@@ -81039,7 +81032,8 @@
     "ConstructionTargets.T96A07Closure.sphereMap_mfderiv_e0_range",
     :reported-by [:program-2026-10-11-close-t96a07],
     :type "range of sphereMap mfderiv at e0 is yz-plane",
-    :area "projective-smooth-descent"},
+    :area "projective-smooth-descent",
+    :proved-in :program-2026-10-11-close-t96a07},
    :id
    :lemma-constructiontargets-t96a07closure-spheremap-mfderiv-e0-range,
    :kind :lemma,
@@ -81112,4 +81106,27 @@
    :lemma-constructiontargets-t96a07closure-spherefirstpoint-tangent-range,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t96A07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T96A07Closure.descended_mfderiv_range_at_e0",
+    :type
+    "descended map derivative range at projection e0 equals yz-plane"},
+   :lemma
+   {:name
+    "ConstructionTargets.T96A07Closure.descended_mfderiv_range_at_e0",
+    :reported-by [:program-2026-10-11-close-t96a07],
+    :type
+    "descended map derivative range at projection e0 equals yz-plane",
+    :area "projective-smooth-descent"},
+   :id
+   :lemma-constructiontargets-t96a07closure-descended-mfderiv-range-at-e0,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t96a07closure-spheremap-mfderiv-e0-range
+    :lemma-constructiontargets-t96a07closure-descendedspheremap],
    :other-consumers []}]}
