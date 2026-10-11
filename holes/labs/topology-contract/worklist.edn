@@ -113902,6 +113902,19 @@
       :exit 0,
       :finding "zero placeholders"}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791744598235-5772-4a9bd2f3",
+     :commands
+     ["git show/diff-tree 786d0b9a"
+      "hash/diff/placeholder checks"
+      "statement-registry.py check"
+      "lake env lean PointWedgeVanKampen.lean"
+      "lake build PointWedgeVanKampen"
+      "lake build ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "PASS: new compiled, sorry-free B6 progress names B3's exact inverse-at-identity functor, proves its map equals the reconstructed source-functor map, and transports the B6 iff to that explicit representation object. Orientation is unchanged; no false definitional identity. Exact two-file scope/frozen hashes match; zero placeholders; registry 131/131; standard axioms. Explicit leg evaluation and B12 remain listed; absent final target is valid STOP."},
     :commit "786d0b9a7ecf86c13e60382176bdf91a0b2fed05",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113912,7 +113925,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113933,7 +113946,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B6 reduced to two direct B4 functor-map equations.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B6 reduced to the explicit B3 inverse-identity functor on both literal legs.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114012,7 +114025,11 @@
      :reason "B6 reduced to direct B4 functor maps."}
     {:job 5,
      :commit "c95c0c98699f080624aac915d51e83ded95f0113",
-     :reason "B6 reduced to two direct B4 functor-map equations."}]}
+     :reason "B6 reduced to two direct B4 functor-map equations."}
+    {:job 6,
+     :commit "786d0b9a7ecf86c13e60382176bdf91a0b2fed05",
+     :reason
+     "B6 reduced to the explicit B3 inverse-identity functor on both literal legs."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
