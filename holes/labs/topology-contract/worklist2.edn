@@ -79468,31 +79468,31 @@
      :commit "c9b1ad24a4a4cb149ffeaf672a728febefee879b",
      :reason :program-progress-committed}]}
   {:consumer :t96A07,
-   :stop-count 3,
+   :stop-count 4,
    :evidence
    {:placeholder-delta 0,
-    :residual "Formalize B3 descendedSphereMap.",
+    :residual "Formalize B4 ambient derivative; then B5-B13.",
     :outcome :stop,
-    :warnings
-    ["Main: 1 placeholder." "Unrelated dirty file preserved."],
+    :warnings ["Main: 1 placeholder."],
     :missing-theorems
-    [{:name "ConstructionTargets.T96A07Closure.sphereMap_contMDiff",
-      :type "ContMDiff (𝓡 2) (𝓡 3) ∞ T96A07.sphereMap",
+    [{:name "ConstructionTargets.T96A07Closure.descendedSphereMap",
+      :type "smooth frozen sphereMap descent with projection equation",
       :status :proved,
-      :consumers [:t96A07],
-      :depends-on [],
-      :area "projective-smooth-descent"}
-     {:name "ConstructionTargets.T96A07Closure.descendedSphereMap",
-      :type "smooth descent with projection equation",
-      :status :not-started,
       :consumers [:t96A07],
       :depends-on
       ["ConstructionTargets.T96A07Closure.sphereMap_antipodal"
        "ConstructionTargets.T96A07Closure.sphereMap_contMDiff"],
+      :area "projective-smooth-descent"}
+     {:name
+      "ConstructionTargets.T96A07Closure.sphereMapAmbient_fderiv",
+      :type "explicit ambient quadratic derivative",
+      :status :not-started,
+      :consumers [:t96A07],
+      :depends-on [],
       :area "projective-smooth-descent"}],
     :statement-hashes
     {:registry "131/0",
-     :closure "cc75ae6e078d547cb622327a1ca55e68e1e9a957",
+     :closure "e31614d08e43eba2cbc23cdfd6fb470751e9e96a",
      :blueprint "69b59fb622dd62fc82a1fe100b353eaabc2c948d"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
@@ -79500,36 +79500,23 @@
     :reason :program-milestone-complete,
     :commands
     [{:cmd "lake build ConstructionTargets.t96A07Closure", :exit 0}
-     {:cmd "lake env lean ConstructionTargets/t96A07Closure.lean",
-      :exit 0}
+     {:cmd "closure compile", :exit 0}
      {:cmd "closure no-sorry scan", :exit 1, :expected-exit 1}
-     {:cmd "lake env lean problems/t96A07/lean/Main.lean", :exit 0}
-     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "Main placeholder count", :exit 0, :output "1"}
-     {:cmd "git show --check 840d18bfb", :exit 0}],
+     {:cmd "Main compile", :exit 0}
+     {:cmd "registry check", :exit 0}
+     {:cmd "placeholder count", :exit 0, :output "1"}
+     {:cmd "git show --check d3bf91c37", :exit 0}],
     :diagnostic-history
-    [{:cmd "closure/Main compile",
+    [{:cmd "compile",
       :exit 1,
-      :finding "Fixed notation and rebuilt stale import."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791738649873-5662-e4ccac86",
-     :commands
-     ["git show/diff/check 840d18bfb"
-      "lake build ConstructionTargets.t96A07Closure"
-      "lake env lean ConstructionTargets/t96A07Closure.lean"
-      "lake env lean problems/t96A07/lean/Main.lean"
-      "statement-registry check/fingerprint; placeholder/hash checks"],
-     :finding
-     "PASS: 840d18bf is new after history 7d950a98; both changed paths are scoped and blobs match. Smooth sphere coercion, coordinate projections, products, and PiLp assembly faithfully prove the frozen sphereMap smoothness adapter. Build/Lean pass with standard axioms only; registry 131/0; frozen hash unchanged 2ba67b04; closure 0/Main 1 placeholders. B3 descendedSphereMap is listed next."},
-    :commit "840d18bfb8f4cd4ed1efd12d265781516cde390f",
+      :finding "Opened projective namespace; rebuilt import."}],
+    :commit "d3bf91c37871b1955e959ef64a641b7f4b214c4b",
     :changed-paths
     ["ConstructionTargets/t96A07Closure.lean"
      "problems/t96A07/lean/Main.lean"],
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A07/lean/Main.lean"
     "problems/t96A07/status.json"
@@ -80400,7 +80387,8 @@
    {:name "ConstructionTargets.T96A07Closure.descendedSphereMap",
     :reported-by [:program-2026-10-11-close-t96a07],
     :type "smooth descent with projection equation",
-    :area "projective-smooth-descent"},
+    :area "projective-smooth-descent",
+    :proved-in :program-2026-10-11-close-t96a07},
    :id :lemma-constructiontargets-t96a07closure-descendedspheremap,
    :kind :lemma,
    :depends-on
@@ -80763,4 +80751,21 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-t97a04closure-frozenboundarycovertransport],
+   :other-consumers []}
+  {:consumer :t96A07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "ConstructionTargets.T96A07Closure.sphereMapAmbient_fderiv",
+    :type "explicit ambient quadratic derivative"},
+   :lemma
+   {:name "ConstructionTargets.T96A07Closure.sphereMapAmbient_fderiv",
+    :reported-by [:program-2026-10-11-close-t96a07],
+    :type "explicit ambient quadratic derivative",
+    :area "projective-smooth-descent"},
+   :id
+   :lemma-constructiontargets-t96a07closure-spheremapambient-fderiv,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}]}
