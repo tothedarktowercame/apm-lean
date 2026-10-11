@@ -295,6 +295,31 @@ theorem overlapOrthogonalCoordinate_shear (a b : ℤ) (p : Overlap) :
   apply Subtype.ext
   exact boundaryOverlapShear_snd a b p
 
+/-- The discrete component label of the disjoint two-circle model. -/
+def twoCircleBranch (q : Circle ⊕ Circle) : Bool :=
+  (boolTimesCircleHomeomorphTwoCircles.symm q).1
+
+theorem twoCircleBranch_boolTimesCircle (p : Bool × Circle) :
+    twoCircleBranch (boolTimesCircleHomeomorphTwoCircles p) = p.1 := by
+  exact congrArg Prod.fst
+    (boolTimesCircleHomeomorphTwoCircles.symm_apply_apply p)
+
+theorem overlapOrthogonalRetraction (s :
+    ConstructionTargets.PuncturedNormedSpaceRadialEquivalence.UnitSphere
+      ((ℝ ∙ northPoleVector)ᗮ)) :
+    (ConstructionTargets.PuncturedNormedSpaceRadialEquivalence.twoPoleComplementHomotopyEquivOrthogonalSphere
+        northPoleVector norm_northPoleVector).toFun
+      ((ConstructionTargets.PuncturedNormedSpaceRadialEquivalence.twoPoleComplementHomotopyEquivOrthogonalSphere
+        northPoleVector norm_northPoleVector).invFun s) = s := by
+  change ConstructionTargets.PuncturedNormedSpaceRadialEquivalence.radialNormalize _
+      ((ConstructionTargets.PuncturedNormedSpaceRadialEquivalence.twoPoleComplementHomeomorphPuncturedOrthogonal
+        northPoleVector norm_northPoleVector)
+        ((ConstructionTargets.PuncturedNormedSpaceRadialEquivalence.twoPoleComplementHomeomorphPuncturedOrthogonal
+          northPoleVector norm_northPoleVector).symm
+          (ConstructionTargets.PuncturedNormedSpaceRadialEquivalence.unitSphereInclusion _ s))) = s
+  rw [Homeomorph.apply_symm_apply]
+  exact ConstructionTargets.PuncturedNormedSpaceRadialEquivalence.radialNormalize_unitSphereInclusion _ s
+
 theorem twoCircleOverlapShear_fold_apply (a b : ℤ) (q : Circle ⊕ Circle) :
     twoCircleFold (twoCircleOverlapShear a b q) =
       twoCircleFold q ^ a *
@@ -1309,6 +1334,8 @@ theorem shearY_overlap_coordinate_of_degree_components (a b : ℤ)
 #print axioms boundaryOverlapShear_fst
 #print axioms boundaryOverlapShear_snd
 #print axioms overlapOrthogonalCoordinate_shear
+#print axioms twoCircleBranch_boolTimesCircle
+#print axioms overlapOrthogonalRetraction
 #print axioms twoCircleOverlapShear_fold_apply
 #print axioms twoCircleOverlapShearLeftFold_eq_affine
 #print axioms twoCircleOverlapShearRightFold_eq_affine
