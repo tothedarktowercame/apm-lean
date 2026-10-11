@@ -15562,8 +15562,67 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :implements-lemma :lemma-mfclass-forget-parallel-pair-zero-iso,
+   :evidence
+   {:placeholder-delta {:t00J02 [1 1], :t98A02 [1 1]},
+    :residual
+    "Transport forgetIntModulesSnakeInput_preservedKernelτ₁ along forgetIntModulesParallelPairZeroIso and identify its cone with the τ₁ evaluation of the mapped short-complex kernel fork; then repeat for the other components.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["The target build replayed pre-existing linter warnings outside the scoped declaration."],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.ManifoldFundamentalClass.forgetIntModulesParallelPairZeroIso",
+      :type
+      "forall {X Y : ModuleCat ℤ} (f : X ⟶ Y), parallelPair f 0 ⋙ forgetIntModules ≅ parallelPair (forgetIntModules.map f) 0",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on [],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not",
+     :module-sha256
+     "8d600066486328959ef87f03fe09a5debed96826e3bd448cc64cd10eb78ea1bb"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/manifold_fundamental_class_forget_parallel_pair_zero_iso.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "comment-stripped placeholder count for t00J02 and t98A02",
+      :exit 0,
+      :output "t00J02 1; t98A02 1"}
+     {:cmd
+      "rg forbidden proof tokens in ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git commit -m Add-forgotten-parallel-pair-zero-comparison",
+      :exit 0}],
+    :commit "9ce580992",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path
+     "/tmp/manifold_fundamental_class_forget_parallel_pair_zero_iso.lean",
+     :sha256
+     "23b927f0e254f997f8f77d7f627bea8da3c544e8301e62febd17369c4ff924df"},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :declaration
+     "ConstructionTargets.ManifoldFundamentalClass.forgetIntModulesParallelPairZeroIso"},
+    :row
+    :routes-2026-10-11-manifold-forget-parallel-pair-zero-iso-topo3-r1,
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/integral-open-disk-connecting-naturality/parallel-pair-diagram-comparison",
@@ -22756,11 +22815,13 @@
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.forgetIntModulesParallelPairZeroIso",
     :reported-by
-    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+     :routes-2026-10-11-manifold-forget-parallel-pair-zero-iso-topo3-r1],
     :type
     "forall {X Y : ModuleCat ℤ} (f : X ⟶ Y), parallelPair f 0 ⋙ forgetIntModules ≅ parallelPair (forgetIntModules.map f) 0",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in
+    :routes-2026-10-11-manifold-forget-parallel-pair-zero-iso-topo3-r1},
    :id :lemma-mfclass-forget-parallel-pair-zero-iso,
    :kind :lemma,
    :depends-on [:lemma-mfclass-forget-snake-preserved-kernel-tau1],
