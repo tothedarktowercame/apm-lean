@@ -68427,90 +68427,116 @@
    "Analyze the zero-height planar slice of rightTubeCorePolarReconstruction against the left-core circle, then construct the angular stage so its planar trajectory avoids the exact intersection locus; combine that result with this height criterion and concatenate with the radial stage.",
    :other-consumers []}
   {:bounded-exception
+   "single-consumer scalar characterization necessary for planar left-core collision",
+   :consumer :t02A03,
+   :phase :probe,
+   :state :open,
+   :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t02A03/core-polar-left-core-collision-equation",
+   :acceptance
+   {:probe
+    "Compile corePolar_leftCore_collision_equation. From hypothetical membership of rightTubeCorePolarReconstruction u n in Set.range apm_t02a03_leftCore, equate the planar coordinates and derive (1-n.re)^2 - 4(1-n.re)(u:Complex).re + 3 = 0 using the Circle and trigonometric unit identities. Prove only necessity, not sufficiency, and do not construct a homotopy.",
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.corePolar_leftCore_collision_equation",
+    :type
+    "forall (u : Circle) (n : Complex), rightTubeCorePolarReconstruction u n ∈ Set.range apm_t02a03_leftCore -> (1 - n.re)^2 - 4*(1 - n.re)*(u : Complex).re + 3 = 0",
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "identify the exact planar forbidden equation for deletion avoidance"},
+   :id
+   :routes-2026-10-11-t02a03-core-polar-left-core-collision-equation-topo2-r1,
+   :kind :reusable-theorem,
+   :area "explicit-r3-tube-deformation-retraction",
+   :depends-on
+   [:routes-2026-10-11-t02a03-core-polar-height-left-core-avoidance-topo2-r2],
+   :current-residual
+   "Prove the chosen right-core angular trajectory keeps this collision polynomial nonzero whenever the normal height vanishes; combine with the nonzero-height criterion to certify deletion avoidance, then concatenate the angular and radial stages.",
+   :other-consumers []}
+  {:bounded-exception
    "single-consumer explicit ambient deformation with frozen tube and deletion invariants",
    :consumer :t02A03,
    :evidence
    {:probe
     {:residual
-     "Bank the nonzero-height deletion criterion, then isolate and avoid the planar intersection locus during the right-core angular and radial stages before concatenating the safe deformation.",
+     "Bank the planar collision equation, then construct an angular trajectory avoiding its zero set and use the height split to certify the complete corrected deformation.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
      [{:name
-       "ConstructionTargets.T02A03GeometricTubeDeformation.reconstructionAvoidsLeftCore_rightTubeCorePolar_of_im_ne_zero",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.corePolar_leftCore_collision_equation",
        :type
-       "forall (u : Circle) (n : Complex), n.im != 0 -> rightTubeCorePolarReconstruction u n ∉ Set.range apm_t02a03_leftCore",
+       "forall (u : Circle) (n : Complex), rightTubeCorePolarReconstruction u n ∈ Set.range apm_t02a03_leftCore -> (1 - n.re)^2 - 4*(1 - n.re)*(u : Complex).re + 3 = 0",
        :status :proved,
        :consumers [:t02A03],
        :depends-on [],
        :area "explicit-r3-tube-deformation-retraction"}],
      :prerequisite
      {:bounded-exception
-      "single-consumer height criterion for left-core avoidance by right-core polar reconstruction",
+      "single-consumer scalar characterization necessary for planar left-core collision",
       :consumer :t02A03,
       :phase :probe,
       :state :open,
       :scope
       ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t02A03/core-polar-height-left-core-avoidance",
+      "TOPOLOGY-ROUTES.md/t02A03/core-polar-left-core-collision-equation",
       :acceptance
       {:probe
-       "Compile reconstructionAvoidsLeftCore_rightTubeCorePolar_of_im_ne_zero. Prove that a rightTubeCorePolarReconstruction with nonzero imaginary normal component avoids Set.range apm_t02a03_leftCore by comparing the frozen third coordinate. Do not claim avoidance when the imaginary component is zero and do not construct an angular homotopy.",
+       "Compile corePolar_leftCore_collision_equation. From hypothetical membership of rightTubeCorePolarReconstruction u n in Set.range apm_t02a03_leftCore, equate the planar coordinates and derive (1-n.re)^2 - 4(1-n.re)(u:Complex).re + 3 = 0 using the Circle and trigonometric unit identities. Prove only necessity, not sufficiency, and do not construct a homotopy.",
        :declaration
-       "ConstructionTargets.T02A03GeometricTubeDeformation.reconstructionAvoidsLeftCore_rightTubeCorePolar_of_im_ne_zero",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.corePolar_leftCore_collision_equation",
        :type
-       "forall (u : Circle) (n : Complex), n.im != 0 -> rightTubeCorePolarReconstruction u n ∉ Set.range apm_t02a03_leftCore",
+       "forall (u : Circle) (n : Complex), rightTubeCorePolarReconstruction u n ∈ Set.range apm_t02a03_leftCore -> (1 - n.re)^2 - 4*(1 - n.re)*(u : Complex).re + 3 = 0",
        :placeholder "the sole sorry in apm_t02a03",
        :route-step
-       "certify deletion avoidance off the zero-height slice for the corrected right-core tubular path"},
+       "identify the exact planar forbidden equation for deletion avoidance"},
       :id
-      :routes-2026-10-11-t02a03-core-polar-height-left-core-avoidance-topo2-r2,
+      :routes-2026-10-11-t02a03-core-polar-left-core-collision-equation-topo2-r1,
       :kind :reusable-theorem,
       :area "explicit-r3-tube-deformation-retraction",
       :depends-on
-      [:routes-2026-10-11-t02a03-right-tube-core-radial-ambient-topo2-r1],
+      [:routes-2026-10-11-t02a03-core-polar-height-left-core-avoidance-topo2-r2],
       :current-residual
-      "Analyze the zero-height planar slice of rightTubeCorePolarReconstruction against the left-core circle, then construct the angular stage so its planar trajectory avoids the exact intersection locus; combine that result with this height criterion and concatenate with the radial stage.",
+      "Prove the chosen right-core angular trajectory keeps this collision polynomial nonzero whenever the normal height vanishes; combine with the nonzero-height criterion to certify deletion avoidance, then concatenate the angular and radial stages.",
       :other-consumers []},
      :commands
      [{:cmd
-       "lake env lean /tmp/t02a03_core_reconstruction_height_avoidance_probe.lean",
+       "lake env lean /tmp/t02a03_core_polar_planar_collision_probe.lean",
        :exit 0,
        :output
-       "reconstructionAvoidsLeftCore_rightTubeCorePolar_of_im_ne_zero compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "corePolar_leftCore_collision_equation compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/t02a03_core_reconstruction_height_avoidance_probe.lean",
+       "sha256sum /tmp/t02a03_core_polar_planar_collision_probe.lean",
        :exit 0,
        :output
-       "a229ee17509ec4112f59fc5a43ea071da9cc2216f87fc27a7627ee023113374f  /tmp/t02a03_core_reconstruction_height_avoidance_probe.lean"}
+       "4702922afd55aa3473b9ff64b85101dbf20b0e74f813207d372c4dd9620abcbf  /tmp/t02a03_core_polar_planar_collision_probe.lean"}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_core_reconstruction_height_avoidance_probe.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_core_polar_planar_collision_probe.lean || true)\"",
        :exit 0}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}
       {:cmd
-       "rg -n 'reconstructionAvoidsLeftCore_rightTubeCorePolar_of_im_ne_zero' /tmp/t02a03_core_reconstruction_height_avoidance_probe.lean",
+       "rg -n 'corePolar_leftCore_collision_equation' /tmp/t02a03_core_polar_planar_collision_probe.lean",
        :exit 0,
        :output
-       "7:theorem reconstructionAvoidsLeftCore_rightTubeCorePolar_of_im_ne_zero\n15:#print axioms reconstructionAvoidsLeftCore_rightTubeCorePolar_of_im_ne_zero"}],
+       "7:theorem corePolar_leftCore_collision_equation\n23:#print axioms corePolar_leftCore_collision_equation"}],
      :diagnostic-history
      [{:cmd
-       "lake env lean /tmp/t02a03_core_reconstruction_height_avoidance_probe.lean",
+       "lake env lean /tmp/t02a03_core_polar_planar_collision_probe.lean",
        :exit 1,
        :finding
-       "The coordinate equality obtained from hypothetical range membership was oriented as 0 = n.im; taking its symmetry supplied the contradiction to n.im != 0, and the corrected fixture compiled."}],
+       "The initial unit-circle identity mixed multiplication and squared notation, and nonlinear arithmetic did not substitute the coordinate equalities automatically. Normalizing with pow_two and rewriting sine and cosine explicitly produced the compiled equation."}],
      :fixture
-     {:path
-      "/tmp/t02a03_core_reconstruction_height_avoidance_probe.lean",
+     {:path "/tmp/t02a03_core_polar_planar_collision_probe.lean",
       :sha256
-      "a229ee17509ec4112f59fc5a43ea071da9cc2216f87fc27a7627ee023113374f"},
+      "4702922afd55aa3473b9ff64b85101dbf20b0e74f813207d372c4dd9620abcbf"},
      :finding
-     "Every frozen left-core point has third coordinate zero, while rightTubeCorePolarReconstruction u n has third coordinate n.im. Therefore a nonzero imaginary normal component is a sufficient, angle-independent deletion invariant. This isolates the remaining planar zero-height case for the angular and radial stages.",
+     "For rightTubeCorePolarReconstruction u n, hypothetical membership in the planar left core forces the scalar equation (1-n.re)^2 - 4(1-n.re)u.re + 3 = 0. It follows by equating the first two coordinates and applying both unit-circle identities. Together with the banked nonzero-height criterion, this exactly isolates the planar collision locus.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
@@ -68554,7 +68580,8 @@
     :routes-2026-10-11-t02a03-avoids-left-core-radial-ambient-topo2-r1
     :routes-2026-10-11-t02a03-reconstruction-mem-right-tube-core-polar-topo2-r1
     :routes-2026-10-11-t02a03-right-tube-core-radial-ambient-topo2-r1
-    :routes-2026-10-11-t02a03-core-polar-height-left-core-avoidance-topo2-r2],
+    :routes-2026-10-11-t02a03-core-polar-height-left-core-avoidance-topo2-r2
+    :routes-2026-10-11-t02a03-core-polar-left-core-collision-equation-topo2-r1],
    :current-residual
    "Lift H to RightTubeMinusLeftCore, package rightTubeMeridianRetractionHomotopy, then use the coordinate equation for the Circle-side constant homotopy.",
    :other-consumers []}
@@ -72280,6 +72307,30 @@
     :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-reconstructionavoidsleftcore-,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T02A03GeometricTubeDeformation.corePolar_leftCore_collision_equation",
+    :type
+    "forall (u : Circle) (n : Complex), rightTubeCorePolarReconstruction u n ∈ Set.range apm_t02a03_leftCore -> (1 - n.re)^2 - 4*(1 - n.re)*(u : Complex).re + 3 = 0"},
+   :lemma
+   {:name
+    "ConstructionTargets.T02A03GeometricTubeDeformation.corePolar_leftCore_collision_equation",
+    :reported-by
+    [:routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1],
+    :type
+    "forall (u : Circle) (n : Complex), rightTubeCorePolarReconstruction u n ∈ Set.range apm_t02a03_leftCore -> (1 - n.re)^2 - 4*(1 - n.re)*(u : Complex).re + 3 = 0",
+    :area "explicit-r3-tube-deformation-retraction",
+    :proved-in
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+   :id
+   :lemma-constructiontargets-t02a03geometrictubedeformation-corepolar-leftcore-collision-,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}]}
