@@ -17829,6 +17829,17 @@
      {:cmd
       "git commit -m 'Prove forgotten cycles inclusion naturality'",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791762633017-6009-405d82b1",
+     :commands
+     ["git scope/diff/hash checks at 468ba1c727bfc63eb36d5a8f3e38226269e2be7b"
+      "renamed fixture and module: lake env lean"
+      "statement registry and placeholder scans"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"],
+     :finding
+     "Recorded one-file scope, blob, and frozen fixture hash match. The left route uses mapCyclesIso.inv then inclusion into the forgotten complex; the right forgets the original inclusion. Canceling the iso reduces to mapCyclesIso_hom_iCycles in the required symmetric orientation. Fixture/module compile; registry 131/0; build 8326 jobs; axioms propext, choice, Quot.sound; module placeholders 0; consumer sorries 1/1."},
     :commit "468ba1c727bfc63eb36d5a8f3e38226269e2be7b",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -17843,7 +17854,7 @@
     :row :routes-2026-10-11-mfclass-icycles-square-r1,
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class/icycles",
    :acceptance
@@ -17914,7 +17925,7 @@
       :other-consumers [:t98A02]},
      :residual "Promote inclusion; finish squares."}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -25644,7 +25655,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -25659,7 +25670,9 @@
     :type
     "∀ {ι} {c : ComplexShape ι} (K : HomologicalComplex (ModuleCat ℤ) c) (i : ι), ForgottenICyclesNaturality K i",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2,
+    :banked-by :routes-2026-10-11-mfclass-icycles-square-r1,
+    :banked-commit "468ba1c727bfc63eb36d5a8f3e38226269e2be7b"},
    :id :lemma-mfclass-icycles-square,
    :kind :lemma,
    :depends-on [:lemma-mfclass-pop-square],
