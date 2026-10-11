@@ -224,8 +224,77 @@
    "Single-consumer first prerequisite for the rule-0 t01A08 closure adapter; it discharges the target-norm mismatch before the independent corners-domain Sard theorem.",
    :consumer :t01A08,
    :implements-lemma :lemma-sard-linear-target-transport,
+   :evidence
+   {:placeholder-delta {:source 0, :fixture 0},
+    :residual
+    "Prove critical-image nullity for the arbitrary ModelWithCorners source using within-derivatives on convex chart ranges, then instantiate it for projection composed with f and choose a point outside the null critical image.",
+    :gates
+    {:module-build :pass,
+     :fixture-compiles-against-promoted-module :pass,
+     :exact-declaration-type :pass,
+     :target-norm-transport-only :pass,
+     :zero-source-and-fixture-sorry :pass,
+     :standard-only-axioms :pass,
+     :registry-check :pass,
+     :exact-scope :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["lake build replayed pre-existing informational axiom reports from dependencies; the target module emitted no warnings"],
+    :missing-theorems
+    [{:name "ConstructionTargets.SardGeneralModel.targetEquiv",
+      :type
+      "A continuous linear equivalence from Fin 2 to Real with the sup norm to EuclideanSpace Real (Fin 2).",
+      :status :proved,
+      :consumers [:t01A08],
+      :depends-on [],
+      :area "manifold-sard-general-model"}
+     {:name
+      "ConstructionTargets.SardGeneralModel.linearTargetTransport",
+      :type
+      "For every continuous linear map D into the frozen sup-norm plane, postcomposition with targetEquiv is surjective if and only if D is surjective.",
+      :status :proved,
+      :consumers [:t01A08],
+      :depends-on ["ConstructionTargets.SardGeneralModel.targetEquiv"],
+      :area "manifold-sard-general-model"}],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-10",
+    :commands
+    [{:cmd "sha256sum /tmp/t01a08_target_transport.lean",
+      :exit 0,
+      :output
+      "2c012eafeadba29df275e80da9e6b90b6b6c669734f53e882bc1a1a8284ae11b"}
+     {:cmd "lake env lean /tmp/t01a08_target_transport.lean", :exit 0}
+     {:cmd "lake env lean ConstructionTargets/SardGeneralModel.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.SardGeneralModel", :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^\\s*axiom\\b' ConstructionTargets/SardGeneralModel.lean /tmp/t01a08_target_transport.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "git diff --check -- ConstructionTargets/SardGeneralModel.lean",
+      :exit 0}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "f4ef226f7d24f7821c6b1463130d63a93f3e2fba",
+    :changed-paths ["ConstructionTargets/SardGeneralModel.lean"],
+    :fixture
+    {:path "/tmp/t01a08_target_transport.lean",
+     :sha256
+     "2c012eafeadba29df275e80da9e6b90b6b6c669734f53e882bc1a1a8284ae11b",
+     :original-sha256
+     "b38570e62aa5611aab0a8e091d67277116c6e3a92dd7e3c35a5a4b797a543265",
+     :sorry-count 0},
+    :implementation
+    {:scope ["ConstructionTargets/SardGeneralModel.lean"],
+     :summary
+     "Created SardGeneralModel with the continuous-linear equivalence from the frozen sup-norm plane to EuclideanSpace Real (Fin 2) and proved that postcomposition with it preserves and reflects surjectivity."},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SardGeneralModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t01A08/target-transport",
    :acceptance
@@ -2945,13 +3014,18 @@
     "Transport criticality and nullity to Euclidean target coordinates."},
    :lemma
    {:name "ConstructionTargets.SardGeneralModel.linearTargetTransport",
-    :reported-by [:routes-2026-10-10-topo3-seed-checkpoint-1],
+    :reported-by
+    [:routes-2026-10-10-topo3-seed-checkpoint-1
+     :routes-2026-10-10-t01a08-linear-target-transport-topo3-r1],
     :type
     "Transport criticality and nullity to Euclidean target coordinates.",
-    :area "manifold-sard-general-model"},
+    :area "manifold-sard-general-model",
+    :proved-in
+    :routes-2026-10-10-t01a08-linear-target-transport-topo3-r1},
    :id :lemma-sard-linear-target-transport,
    :kind :lemma,
-   :depends-on [],
+   :depends-on
+   [:lemma-constructiontargets-sardgeneralmodel-targetequiv],
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
@@ -4415,6 +4489,27 @@
     :reported-by []},
    :id
    :lemma-constructiontargets-surfacenestedtrianglecover-finite-nested,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "ConstructionTargets.SardGeneralModel.targetEquiv",
+    :type
+    "A continuous linear equivalence from Fin 2 to Real with the sup norm to EuclideanSpace Real (Fin 2)."},
+   :lemma
+   {:name "ConstructionTargets.SardGeneralModel.targetEquiv",
+    :reported-by
+    [:routes-2026-10-10-t01a08-linear-target-transport-topo3-r1],
+    :type
+    "A continuous linear equivalence from Fin 2 to Real with the sup norm to EuclideanSpace Real (Fin 2).",
+    :area "manifold-sard-general-model",
+    :proved-in
+    :routes-2026-10-10-t01a08-linear-target-transport-topo3-r1},
+   :id :lemma-constructiontargets-sardgeneralmodel-targetequiv,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}],
