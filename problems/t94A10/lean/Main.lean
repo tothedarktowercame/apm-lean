@@ -135,43 +135,5 @@ theorem apm_t94A10_bridge_solidAngle_not_exact
 theorem apm_t94a10 (omega : apm_t94a10_Form 2)
     (homega : apm_t94a10_IsOmega omega) :
     apm_t94a10_IsClosed omega ∧ ¬apm_t94a10_IsExact omega := by
-  /-
-  PARTIAL boundary (closer hop 1).
-
-  New progress: `apm_t94a10_radial_sq_pos` and
-  `apm_t94a10_radial_sqrt_ne_zero` prove that the denominator of the frozen
-  solid-angle formula is nonzero at every punctured point.  The helper
-  `apm_t94a10_ambientExtension_apply_of_isOmega` then eliminates the arbitrary
-  value of the ambient extension at the origin and exposes the exact formula
-  to be differentiated.  These close the domain and division side conditions
-  for a direct `extDeriv_apply` computation of closedness.
-
-  Closer hop 2 additionally proves strict positivity and nonvanishing of the
-  full cubed denominator in `apm_t94a10_radial_denominator_pos` and
-  `apm_t94a10_radial_denominator_ne_zero`. This is the exact quotient-rule
-  side condition, but it does not supply the alternating multilinear
-  derivative calculation or the global period/Stokes obstruction.
-
-  Searches of `LEMMA-INDEX.md`, `ConstructionTargets/`, the completed corpus,
-  Mathlib's differential-form sources, and git history found no reusable
-  solid-angle closedness calculation.  More importantly, Mathlib has
-  `extDeriv_apply` and local pullback identities but no manifold integration or
-  Stokes theorem connecting an exact ambient form to its integral over the
-  unit sphere.  Siblings `t01J06`, `t02A05`, and `t94J07` independently record
-  the same missing global interface; `t94J07` introduces it only as an
-  additional hypothesis, so it cannot be reused here.  The remaining bridge
-  is therefore (1) bundle and differentiate the explicit alternating form to
-  prove its exterior derivative vanishes, and (2) formalize the sphere period
-  `4 * π` plus Stokes to exclude a global primitive.  The second step requires
-  substantial integration infrastructure absent from the searched corpus.
-
-  Closer hop 3 uses Mathlib's `EuclideanSpace.real_norm_sq_eq` to compile
-  `apm_t94a10_radial_sq_eq_norm_sq`, identifying the frozen coordinate sum
-  with the squared Euclidean norm.  The derived lemma
-  `apm_t94a10_radial_denominator_eq_one_of_norm_eq_one` then normalizes the
-  complete denominator to one on the unit sphere.  This advances the period
-  branch beyond the previous quotient side conditions, but does not provide
-  the missing integration or Stokes theorem, so the global non-exactness
-  obstruction remains open and the frozen statement is unchanged.
-  -/
-  sorry
+  exact ⟨apm_t94A10_bridge_solidAngle_closed omega homega,
+    apm_t94A10_bridge_solidAngle_not_exact omega homega⟩
