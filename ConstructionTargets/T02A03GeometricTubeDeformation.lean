@@ -1079,6 +1079,59 @@ theorem inputCollisionPolynomial_positiveFactor_meridianReal
   rw [← hmn]
   ring
 
+theorem collisionEndpoint_positiveFactor_signBridge
+    (p : RightTubeMinusLeftCore) :
+    let m : ℂ := rightTubeMeridianCoordinate p
+    let n₀ := rightTubeCoreNormalComplex
+      (apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p))
+    ∃ a b : ℝ, 0 < a ∧ 0 < b ∧
+      ((1 - n₀.re) ^ 2 - 4 * (1 - n₀.re) *
+          ((1 : Circle) : Complex).re + 3 = a * m.re) ∧
+      ((1 - (rightTubeCoreNormalComplex p.1).re) ^ 2 -
+          4 * (1 - (rightTubeCoreNormalComplex p.1).re) *
+            (rightTubeCoreAngularCoordinate p : Complex).re + 3 = b * m.re) := by
+  dsimp only
+  let n : ℂ := rightTubeNormalComplex p.1
+  have hn0 : n ≠ 0 := by
+    intro hn
+    exact p.2.2 ((rightTubeNormalComplex_eq_zero_iff p.1).mp hn)
+  have hnorm : 0 < ‖n‖ := norm_pos_iff.mpr hn0
+  have hsecond : 0 < n.re + 2 := by
+    simp [n, rightTubeNormalComplex]
+    linarith [norm_nonneg
+      (((p.1 0 : ℂ) + 1) + (p.1 1 : ℂ) * Complex.I)]
+  let m : ℂ := rightTubeMeridianCoordinate p
+  let b : ℝ := ‖n‖ * (n.re + 2)
+  have hb : 0 < b := mul_pos hnorm hsecond
+  have hscale := NormedSpace.norm_smul_normalize n
+  have hmn : ‖n‖ * m.re = n.re := by
+    have h := congrArg Complex.re hscale
+    have h' : ‖n‖ * (NormedSpace.normalize n).re = n.re :=
+      (RCLike.smul_re ‖n‖ (NormedSpace.normalize n)).symm.trans h
+    simpa [m, n, rightTubeMeridianCoordinate] using h'
+  have hend :
+      (1 - (rightTubeCoreNormalComplex p.1).re) ^ 2 -
+          4 * (1 - (rightTubeCoreNormalComplex p.1).re) *
+            (rightTubeCoreAngularCoordinate p : Complex).re + 3 = b * m.re := by
+    rw [inputCollisionPolynomial_factor_rightTubeNormalReal]
+    change n.re * (n.re + 2) = (‖n‖ * (n.re + 2)) * m.re
+    rw [← hmn]
+    ring
+  let a : ℝ := (1 / 8 : ℝ) * (2 + m.re / 8)
+  have hmabs : |m.re| ≤ 1 := by
+    simpa [m, Circle.norm_coe (rightTubeMeridianCoordinate p)] using
+      RCLike.abs_re_le_norm m
+  have ha : 0 < a := by
+    have hmlo : -1 ≤ m.re := (abs_le.mp hmabs).1
+    dsimp [a]
+    have hfactor : 0 < 2 + m.re / 8 := by linarith
+    exact mul_pos (by norm_num) hfactor
+  refine ⟨a, b, ha, hb, ?_, hend⟩
+  rw [meridianStart_collisionPolynomial_factor]
+  change m.re / 8 * (2 + m.re / 8) = a * m.re
+  dsimp [a]
+  ring
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -1118,3 +1171,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.meridianStart_collisionPolynomial_factor
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.inputCollisionPolynomial_factor_rightTubeNormalReal
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.inputCollisionPolynomial_positiveFactor_meridianReal
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.collisionEndpoint_positiveFactor_signBridge
