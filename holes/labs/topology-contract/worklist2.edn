@@ -70045,6 +70045,19 @@
       :exit 1,
       :finding
       "This canonical checkout has a real .lake/packages directory; no package-authority mutation was made during the scoped theorem row."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791691709607-4116-054a14d8",
+     :commands
+     ["git show/diff-tree/show --check ee6f5faea71d64f1a3938ebde4793e88ed6f9889"
+      "git rev-parse recorded scope blob; sha256sum frozen fixture"
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean"
+      "lake env lean /tmp/t02a03_positive_sign_radial_start_poly_probe.lean"
+      "python3 scripts/statement-registry.py check and fingerprint commit/parent"
+      "python3 placeholder recount at commit/parent"],
+     :finding
+     "PASS: topo-6 is independent from codex-7; the recorded commit changes only the scoped target, and its blob and frozen fixture hash match. Target and probe compile with exactly propext, Classical.choice, and Quot.sound. The frozen endpoint-only inequality is oriented correctly: the meridian core normal is used at the recovered input angle, its norm and positive real part reduce to the exact one-eighth data, and the existing positive-normal bound yields strict positivity without claiming safety of the interpolation interior. Registry is 131/0, the t02A03 statement fingerprint is unchanged at commit and parent, and the sole Main.lean placeholder remains 1 at both revisions."},
     :commit "ee6f5faea71d64f1a3938ebde4793e88ed6f9889",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
@@ -70060,7 +70073,7 @@
    :phase :implementation,
    :type
    "forall (p : RightTubeMinusLeftCore), (rightTubeMeridianCoordinate p : Complex).re = 1 -> let n := rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)); 0 < (1 - n.re)^2 - 4*(1-n.re)*(rightTubeCoreAngularCoordinate p : Complex).re + 3",
-   :state :done-unreviewed,
+   :state :done,
    :proof
    "Apply collisionPolynomial_pos_of_normal_re_pos at the recovered input angle; discharge the radius bound with norm_rightTubeCoreNormalComplex_circleMeridian and unfold the meridian core normal to show its real part is 1/8.",
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
@@ -70173,7 +70186,7 @@
      "In the positive meridian component, the core normal of the meridian point has real part 1/8 and norm 1/8. Therefore collisionPolynomial_pos_of_normal_re_pos proves that its collision polynomial is positive at the recovered input angle. This certifies the radial stage's meridian-normal endpoint only; it deliberately makes no claim about the linear interpolation interior.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
