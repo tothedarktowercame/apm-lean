@@ -72160,25 +72160,66 @@
   {:bounded-exception
    "single-consumer localization of positive-real waypoint arrival collisions",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:residual
+     "Construct a continuous positive-real waypoint whose oriented cross product is nonzero on the negative-real endpoint region; then use the collision localization and banked adapters to complete the angular and ambient stages.",
+     :outcome :go,
+     :warnings [],
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd
+       "lake env lean /tmp/t02a03_arrival_collision_negative_slice_probe.lean",
+       :exit 0,
+       :output
+       "coupledAngularArrivalCollision_negative_endpoint compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "sha256sum /tmp/t02a03_arrival_collision_negative_slice_probe.lean",
+       :exit 0,
+       :output
+       "96c2dc30d404a609a791ac136dcdae17543e425b435d95c516642b93e47f79aa  /tmp/t02a03_arrival_collision_negative_slice_probe.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_arrival_collision_negative_slice_probe.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}
+      {:cmd
+       "rg -n 'coupledAngularArrivalCollision_negative_endpoint' /tmp/t02a03_arrival_collision_negative_slice_probe.lean",
+       :exit 0,
+       :output
+       "9:theorem coupledAngularArrivalCollision_negative_endpoint\n48:#print axioms coupledAngularArrivalCollision_negative_endpoint"}],
+     :fixture
+     {:path "/tmp/t02a03_arrival_collision_negative_slice_probe.lean",
+      :sha256
+      "96c2dc30d404a609a791ac136dcdae17543e425b435d95c516642b93e47f79aa"},
+     :finding
+     "The placeholder-free fixture proves the frozen collision-localization declaration. Endpoint nonvanishing excludes time one; positivity of both affine coefficients then forces a colliding endpoint to have negative real part, while elimination of the coordinate equations forces zero oriented cross product.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+      :declaration
+      "ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularArrivalCollision_negative_endpoint",
+      :type
+      "forall (W : C(RightTubeMinusLeftCore, ℂ)), (forall p, 0 < (W p).re) -> forall (t : unitInterval) (p : RightTubeMinusLeftCore), not ((t : ℝ) <= 1/2) -> (((2-2*(t:ℝ):ℝ):ℂ)*W p + ((2*(t:ℝ)-1:ℝ):ℂ)*rightTubeCorePlanarComplex p.1) = 0 -> (rightTubeCorePlanarComplex p.1).re < 0 and (conj (W p) * rightTubeCorePlanarComplex p.1).im = 0",
+      :acceptance
+      "Add the compiled theorem from the fixture unchanged in mathematical content; preserve registered statements and introduce no placeholders or nonstandard axioms."},
+     :seat "topo-8"}},
+   :phase :implementation,
+   :type
+   "forall (W : C(RightTubeMinusLeftCore, ℂ)), (forall p, 0 < (W p).re) -> forall (t : unitInterval) (p : RightTubeMinusLeftCore), not ((t : ℝ) <= 1/2) -> (((2-2*(t:ℝ):ℝ):ℂ)*W p + ((2*(t:ℝ)-1:ℝ):ℂ)*rightTubeCorePlanarComplex p.1) = 0 -> (rightTubeCorePlanarComplex p.1).re < 0 and (conj (W p) * rightTubeCorePlanarComplex p.1).im = 0",
    :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/coupled-angular-arrival-collision-negative-slice",
    :acceptance
-   {:probe
-    "Compile coupledAngularArrivalCollision_negative_endpoint. For any waypoint with positive real part, prove that a zero on its affine arrival leg after time 1/2 forces the endpoint rightTubeCorePlanarComplex real part to be strictly negative and the waypoint-endpoint oriented cross product to vanish. Use endpoint nonvanishing to exclude time one. Do not choose the waypoint, normalize to Circle, or assemble the ambient deformation.",
-    :declaration
-    "ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularArrivalCollision_negative_endpoint",
-    :type
-    "forall (W : C(RightTubeMinusLeftCore, ℂ)), (forall p, 0 < (W p).re) -> forall (t : unitInterval) (p : RightTubeMinusLeftCore), not ((t : ℝ) <= 1/2) -> (((2-2*(t:ℝ):ℝ):ℂ)*W p + ((2*(t:ℝ)-1:ℝ):ℂ)*rightTubeCorePlanarComplex p.1) = 0 -> (rightTubeCorePlanarComplex p.1).re < 0 and (conj (W p) * rightTubeCorePlanarComplex p.1).im = 0",
-    :placeholder "the sole sorry in apm_t02a03",
-    :route-step
-    "localize any remaining arrival collision to the negative-real endpoint region where the waypoint must supply a signed transverse component"},
+   "Add the compiled theorem from the fixture unchanged in mathematical content; preserve registered statements and introduce no placeholders or nonstandard axioms.",
    :id
    :routes-2026-10-11-t02a03-coupled-angular-arrival-collision-negative-slice-topo2-r1,
    :kind :reusable-theorem,
    :area "explicit-r3-tube-deformation-retraction",
+   :declaration
+   "ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularArrivalCollision_negative_endpoint",
    :depends-on
    [:routes-2026-10-11-t02a03-coupled-angular-arrival-cross-im-topo2-r1],
    :current-residual
