@@ -150,11 +150,11 @@ Let `g` be the inverse image of `1 : ℤ` under the integral H1 isomorphism of
 the Euclidean circle and let `gamma` be the image of `2 • g` under the H1
 isomorphism induced by B5.  It is nonzero because its integer coordinate is
 `2`.  B6 and homotopy invariance give
-`H₁(β) = H₁(β) ≫
-H₁(CoefficientCoordinateReflections.reflectionMap (1 : Fin 2))`.  Instantiate
+`H₁(β) = H₁(CoefficientCoordinateReflections.reflectionMap (1 : Fin 2)) ≫
+H₁(β)`.  Instantiate
 `CoefficientFirstReflection.integral_circle` at coordinate `1`; it replaces
-the last factor by `-𝟙`, so `H₁(β)(g) = -H₁(β)(g)`, hence
-`H₁(β)(2 • g)=0`.
+the first factor by `-𝟙`, so `H₁(β)(g) = H₁(β)(-g)`.  By additivity this is
+`H₁(β)(g) = -H₁(β)(g)`, hence `H₁(β)(2 • g)=0`.
 Rewrite `β` as B5 followed by `t95J02InclusionB` and cancel the B5
 isomorphism to obtain the required equation.
 
