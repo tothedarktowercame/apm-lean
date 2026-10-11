@@ -105723,8 +105723,141 @@
   {:consumer :t99J01,
    :implements-lemma
    :lemma-twoopenfundamentalgroupoidpseudopushout-counit-base-component-identity,
-   :phase :probe,
+   :phase :implementation,
    :state :open,
+   :scope
+   ["ConstructionTargets/TwoOpenPseudopushoutCounitBaseIdentity.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/shared/two-open-pseudopushout-counit-base-identity",
+   :acceptance
+   {:implementation
+    "Define the inverse-identity pseudococone by pulling Functor.id FreeProductTarget backward through the four equivalences following the two-open pseudopushout equivalence. Prove that both the left and right components of the pseudopushout counit hom at the common overlap basepoint are identity morphisms, and export the exact conjunction compiled by the fixture. Do not assemble the five-factor counit, specialize to point wedges or finite circle wedges, or close a consumer.",
+    :placeholder
+    "the remaining fundamental-group coordinate steps for t01A03, t92J06, t97A01, t97A03, and t99J01",
+    :route-step
+    "normalize both cover-leg components of the two-open pseudopushout counit at the overlap basepoint",
+    :fixture "/tmp/two-open-pseudopushout-counit-base-identity.lean",
+    :fixture-sha256
+    "7c4e6027b3f7e74420c4528245d404d8df178b21af0ea07d00dda073e8bcaa5e",
+    :gates
+    ["lake build ConstructionTargets.TwoOpenPseudopushoutCounitBaseIdentity"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id
+   :routes-2026-10-11-two-open-pseudopushout-counit-base-identity-106,
+   :kind :reusable-theorem,
+   :area "fundamental-group-wedge-of-circles",
+   :depends-on [],
+   :current-residual
+   "Combine this two-leg identity with the pseudo-span, connector, free-product representation, and single-object constituent normalizations to prove the composite counit component is identity.",
+   :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
+  {:consumer :t99J01,
+   :implements-lemma
+   :lemma-twoopenfundamentalgroupoidpseudopushout-counit-base-component-identity,
+   :evidence
+   {:probe
+    {:residual
+     "The exact downstream inverse-identity pseudococone is now fixed; prove both cover-leg counit components at w, then assemble the remaining constituent normalizations.",
+     :outcome :revise,
+     :warnings
+     [{:kind :fixture-linter,
+       :message
+       "The downstream inverse-identity pseudococone is independent of hU, hV, and hcover; Lean reports those three arguments unused in its helper definition, while the counit being normalized still depends on them."}],
+     :missing-theorems
+     [{:name
+       "TwoOpenFundamentalGroupoidPseudopushout.counit_overlap_base_identity",
+       :type
+       "For the pseudococone obtained by applying pseudoSpanEquivalence.inverse, TwoOpenPointSpanComparison.comparison.inverse, freeProductPointSpanEquivalence.inverse, and representationSingleObjEquivalence.inverse to Functor.id FreeProductTarget, the left and right natural-transformation components of twoOpenFundamentalGroupoidPseudopushoutEquivalence.counitIso.hom at the two images of the overlap basepoint w are both categorical identities.",
+       :status :not-started,
+       :consumers [:t99J01 :t01A03 :t92J06 :t97A01 :t97A03],
+       :depends-on [],
+       :area "fundamental-group-wedge-of-circles"}],
+     :prerequisite
+     {:consumer :t99J01,
+      :implements-lemma
+      :lemma-twoopenfundamentalgroupoidpseudopushout-counit-base-component-identity,
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/TwoOpenPseudopushoutCounitBaseIdentity.lean"],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/shared/two-open-pseudopushout-counit-base-identity",
+      :acceptance
+      {:implementation
+       "Define the inverse-identity pseudococone by pulling Functor.id FreeProductTarget backward through the four equivalences following the two-open pseudopushout equivalence. Prove that both the left and right components of the pseudopushout counit hom at the common overlap basepoint are identity morphisms, and export the exact conjunction compiled by the fixture. Do not assemble the five-factor counit, specialize to point wedges or finite circle wedges, or close a consumer.",
+       :placeholder
+       "the remaining fundamental-group coordinate steps for t01A03, t92J06, t97A01, t97A03, and t99J01",
+       :route-step
+       "normalize both cover-leg components of the two-open pseudopushout counit at the overlap basepoint",
+       :fixture
+       "/tmp/two-open-pseudopushout-counit-base-identity.lean",
+       :fixture-sha256
+       "7c4e6027b3f7e74420c4528245d404d8df178b21af0ea07d00dda073e8bcaa5e",
+       :gates
+       ["lake build ConstructionTargets.TwoOpenPseudopushoutCounitBaseIdentity"
+        "fixture compiles"
+        "zero source and fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :id
+      :routes-2026-10-11-two-open-pseudopushout-counit-base-identity-106,
+      :kind :reusable-theorem,
+      :area "fundamental-group-wedge-of-circles",
+      :depends-on [],
+      :current-residual
+      "Combine this two-leg identity with the pseudo-span, connector, free-product representation, and single-object constituent normalizations to prove the composite counit component is identity.",
+      :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]},
+     :axioms
+     ["propext"
+      "Classical.choice"
+      "Quot.sound"
+      "TwoOpenPseudopushoutCounitBaseIdentityProbe.pseudopushout_counit_overlap_base_identity"],
+     :commands
+     [{:cmd
+       "lake env lean /tmp/two-open-pseudopushout-counit-base-identity.lean",
+       :exit 0,
+       :finding
+       "The exact two-leg overlap-base counit normalization interface compiles; its axiom audit contains only standard axioms plus the isolated interface axiom."}
+      {:cmd
+       "sha256sum /tmp/two-open-pseudopushout-counit-base-identity.lean",
+       :exit 0,
+       :finding
+       "7c4e6027b3f7e74420c4528245d404d8df178b21af0ea07d00dda073e8bcaa5e"}
+      {:cmd
+       "rg -n '\\b(sorry|admit)\\b' /tmp/two-open-pseudopushout-counit-base-identity.lean",
+       :exit 1,
+       :expected-exit 1,
+       :finding "No fixture placeholders."}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :finding "131 registered statements match, 0 do not."}
+      {:cmd
+       "sed -n '1,240p' TOPOLOGY-ROUTES.md >/dev/null && sed -n '1,240p' holes/labs/topology-routes/routes-1.md >/dev/null && sed -n '1,240p' holes/labs/topology-routes/routes-2.md >/dev/null && sed -n '1,240p' holes/labs/topology-routes/routes-3.md >/dev/null && sed -n '1,220p' docs/TN-topology-build-loop-design.md >/dev/null",
+       :exit 0,
+       :finding
+       "The route guide, all three per-problem route files, and probe rules were read."}
+      {:cmd "git status --short",
+       :exit 0,
+       :finding "Clean worktree; the probe was read-only."}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/two-open-pseudopushout-counit-base-identity.lean",
+       :exit 1,
+       :finding
+       "The first fixture draft accidentally used the numeral 1 as though it were the categorical identity constructor.",
+       :correction
+       "Replaced it with the categorical identity notation; the successful compile is recorded in commands."}],
+     :fixture
+     {:path "/tmp/two-open-pseudopushout-counit-base-identity.lean",
+      :sha256
+      "7c4e6027b3f7e74420c4528245d404d8df178b21af0ea07d00dda073e8bcaa5e",
+      :interface
+      "For the pseudococone obtained by pulling the free-product identity functor backward through the four downstream equivalences, both cover-leg components of the two-open pseudopushout counit at the common overlap basepoint are identity morphisms."},
+     :seat "topo-4"}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/two-open-pseudopushout-counit-base-identity",
@@ -105745,7 +105878,8 @@
    :kind :reusable-theorem,
    :area "fundamental-group-wedge-of-circles",
    :depends-on
-   [:routes-2026-10-11-checkpoint-topo1-after-klein-and-wedge-coordinates-86],
+   [:routes-2026-10-11-checkpoint-topo1-after-klein-and-wedge-coordinates-86
+    :routes-2026-10-11-two-open-pseudopushout-counit-base-identity-106],
    :current-residual
    "Combine this identity with the remaining constituent counit normalizations in the five-factor composite.",
    :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
@@ -112031,7 +112165,29 @@
    :id :lemma-closedsquarerelationquotienthomeomorphsurfacefalsetwo,
    :kind :lemma,
    :depends-on [:lemma-kleinsquareboundaryorbiteqvgen],
-   :other-consumers []}],
+   :other-consumers []}
+  {:consumer :t99J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "TwoOpenFundamentalGroupoidPseudopushout.counit_overlap_base_identity",
+    :type
+    "For the pseudococone obtained by applying pseudoSpanEquivalence.inverse, TwoOpenPointSpanComparison.comparison.inverse, freeProductPointSpanEquivalence.inverse, and representationSingleObjEquivalence.inverse to Functor.id FreeProductTarget, the left and right natural-transformation components of twoOpenFundamentalGroupoidPseudopushoutEquivalence.counitIso.hom at the two images of the overlap basepoint w are both categorical identities."},
+   :lemma
+   {:name
+    "TwoOpenFundamentalGroupoidPseudopushout.counit_overlap_base_identity",
+    :reported-by
+    [:routes-2026-10-11-two-open-pseudopushout-counit-base-identity-98],
+    :type
+    "For the pseudococone obtained by applying pseudoSpanEquivalence.inverse, TwoOpenPointSpanComparison.comparison.inverse, freeProductPointSpanEquivalence.inverse, and representationSingleObjEquivalence.inverse to Functor.id FreeProductTarget, the left and right natural-transformation components of twoOpenFundamentalGroupoidPseudopushoutEquivalence.counitIso.hom at the two images of the overlap basepoint w are both categorical identities.",
+    :area "fundamental-group-wedge-of-circles"},
+   :id
+   :lemma-twoopenfundamentalgroupoidpseudopushout-counit-overlap-base-identity,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",
