@@ -13561,8 +13561,88 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :implements-lemma :lemma-mfclass-open-disk-snake-inputs-delta,
+   :evidence
+   {:placeholder-delta
+    {:t00J02 {:before 1, :after 1, :delta 0},
+     :t98A02 {:before 1, :after 1, :delta 0}},
+    :residual
+    "Construct preservation of coefficientOpenDiskSnakeInput by forgetIntModules and identify it with forgottenCoefficientOpenDiskSnakeInput through the mapHomologyIso, mapCyclesIso, and mapOpcyclesIso comparisons; naturality_δ will then prove the connecting square.",
+    :gates
+    {:module-compile :pass,
+     :target-build :pass,
+     :statement-registry "131 registered statements match, 0 do not",
+     :scoped-diff :pass,
+     :forbidden-placeholder-scan :pass,
+     :scoped-worktree-clean true},
+    :outcome :done-unreviewed,
+    :warnings
+    ["The target build replayed pre-existing linter warnings outside this scoped change."],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.ManifoldFundamentalClass.openDiskSnakeInputs_delta",
+      :type
+      "forall (k : ℕ), (coefficientOpenDiskSnakeInput k).δ = CoefficientPairSequence.connecting ℤ (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2)) (k + 1) ∧ (forgottenCoefficientOpenDiskSnakeInput k).δ = (integralOpenDiskCoefficientPairShortExact k).δ (k + 2) (k + 1) rfl",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on [],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes
+    {:module
+     "777c8308c28e2af33856c2388abac3dce091595d579fd929b59e816e75f82a7e",
+     :fixture
+     "5f895af1917916b1867b0edd3419763a552febd39d6aa4dc0bc0cc8c808ad82f"},
+    :disposition :done-unreviewed,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :topo-10,
+    :reason
+    "Promoted the two HomologySequence.snakeInput objects for the coefficient and forgotten punctured-open-disk short exact sequences. The exact theorem identifies both delta fields definitionally with the required connecting morphisms.",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/manifold_fundamental_class_open_disk_snake_inputs.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "git diff --check HEAD^ HEAD -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "comment-stripped placeholder counts for t00J02 t98A02",
+      :exit 0}
+     {:cmd
+      "forbidden placeholder scan in ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "git status --short -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}],
+    :diagnostic-history
+    [{:cmd
+      "test -L .lake/packages && readlink -f .lake/packages && lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 1,
+      :finding
+      "The symlink precheck applies to APM frame worktrees; this invocation runs in the canonical apm-lean checkout, whose .lake/packages directory is itself the canonical package authority. Lean was then run separately and succeeded."}],
+    :commit "a789359c33cdb074cd11cf59392b4eea7b44b702",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path
+     "/tmp/manifold_fundamental_class_open_disk_snake_inputs.lean",
+     :sha256
+     "5f895af1917916b1867b0edd3419763a552febd39d6aa4dc0bc0cc8c808ad82f"},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :declaration
+     "ConstructionTargets.ManifoldFundamentalClass.openDiskSnakeInputs_delta",
+     :supporting-declarations
+     ["ConstructionTargets.ManifoldFundamentalClass.coefficientOpenDiskSnakeInput"
+      "ConstructionTargets.ManifoldFundamentalClass.forgottenCoefficientOpenDiskSnakeInput"]},
+    :row :routes-2026-10-11-manifold-open-disk-snake-inputs-topo3-r1,
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/integral-open-disk-connecting-naturality/snake-inputs",
@@ -20456,11 +20536,13 @@
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.openDiskSnakeInputs_delta",
     :reported-by
-    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+     :routes-2026-10-11-manifold-open-disk-snake-inputs-topo3-r1],
     :type
     "forall (k : ℕ), (coefficientOpenDiskSnakeInput k).δ = CoefficientPairSequence.connecting ℤ (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2)) (k + 1) ∧ (forgottenCoefficientOpenDiskSnakeInput k).δ = (integralOpenDiskCoefficientPairShortExact k).δ (k + 2) (k + 1) rfl",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in
+    :routes-2026-10-11-manifold-open-disk-snake-inputs-topo3-r1},
    :id :lemma-mfclass-open-disk-snake-inputs-delta,
    :kind :lemma,
    :depends-on
