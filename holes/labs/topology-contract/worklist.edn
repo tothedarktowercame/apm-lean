@@ -105167,11 +105167,150 @@
    :current-residual "Refill after the elected rows are reviewed.",
    :other-consumers []}
   {:bounded-exception
+   "This single-consumer comparison is the exact remaining quotient identification needed by the one-placeholder t93J03 route.",
+   :consumer :t93J03,
+   :implements-lemma :lemma-kleinorbitquotient-homeomorph,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/KleinOrbitQuotientHomeomorph.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t93J03/klein-orbit-quotient-homeomorph",
+   :acceptance
+   {:implementation
+    "Equip the explicit plane-action orbit quotient with the coinduced topology. Upgrade KleinClosedSquareOrbitQuotientEquiv.closedSquareOrbitQuotientEquiv to the topological quotient comparison, and identify the closed-square orbit quotient with the frozen Surface false 2 quotient by a quotient-level polygon cut-and-paste whose fiber theorem is kleinSquareBoundaryOrbitEqvGen. Prove continuity of the descended map and inverse and export kleinOrbitQuotient_homeomorph with the exact fixture type. Do not impose the refuted edgewise disk-to-square carrier formulas, prove the deck-group fundamental-group theorem, subgroup classification, annulus-cover embedding, or close t93J03.",
+    :placeholder "the single sorry in apm_t93j03",
+    :route-step
+    "identify the explicit Klein deck-action orbit quotient with the frozen polygon Klein bottle",
+    :fixture "/tmp/klein-orbit-quotient-homeomorph-probe.lean",
+    :fixture-sha256
+    "92520bb0ff1e978b0e5f9bd0e276d81d560bd11136f75a683e1bd8c8cb4f17b1",
+    :gates
+    ["lake build ConstructionTargets.KleinOrbitQuotientHomeomorph"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :representation
+   {:source
+    "The quotient of Real × Real by the explicit PresentedKleinGroup plane-action orbit setoid, with coinduced quotient topology",
+    :target
+    "ConstructionTargets.StatementSurfaceModels.KleinBottle, the frozen Surface false 2 disk-polygon quotient",
+    :direction
+    "Homeomorphism from the plane-action orbit quotient to the frozen polygon quotient, obtained by upgrading the closed-square orbit equivalence and descending an exact quotient-level polygon cut-and-paste fiber identification"},
+   :id :routes-2026-10-11-klein-orbit-quotient-homeomorph-102,
+   :kind :representation-comparison,
+   :area "deck-group-fundamental-group",
+   :depends-on [:lemma-kleinsquareboundaryorbiteqvgen],
+   :current-residual
+   "Use the proved orbit-quotient homeomorphism in the deck-group fundamental-group computation and finish the remaining t93J03 route.",
+   :other-consumers []}
+  {:bounded-exception
    "This single-consumer quotient identification is the nearest ready t93J03 route step after the explicit disk-to-square carrier route was blocked.",
    :consumer :t93J03,
    :implements-lemma :lemma-kleinorbitquotient-homeomorph,
+   :evidence
+   {:probe
+    {:residual
+     "Implement the exact topological quotient comparison; the current banked result is only an algebraic quotient equivalence.",
+     :outcome :revise,
+     :warnings
+     [{:kind :banked-interface-gap,
+       :message
+       "KleinClosedSquareOrbitQuotientEquiv exports an Equiv only; it neither equips the orbit quotient with the required topology nor compares it to the frozen disk quotient."}],
+     :missing-theorems
+     [{:name "kleinOrbitQuotient_homeomorph",
+       :type
+       "Let orbitSetoid on Real × Real be the explicit PresentedKleinGroup plane-action orbit relation and equip Quotient orbitSetoid with the coinduced quotient topology. Then Quotient orbitSetoid ≃ₜ ConstructionTargets.StatementSurfaceModels.KleinBottle.",
+       :status :not-started,
+       :consumers [:t93J03],
+       :depends-on
+       ["KleinClosedSquareOrbitQuotientEquiv.closedSquareOrbitQuotientEquiv"
+        "kleinSquareBoundaryOrbitEqvGen"],
+       :area "deck-group-fundamental-group"}],
+     :prerequisite
+     {:bounded-exception
+      "This single-consumer comparison is the exact remaining quotient identification needed by the one-placeholder t93J03 route.",
+      :consumer :t93J03,
+      :implements-lemma :lemma-kleinorbitquotient-homeomorph,
+      :phase :implementation,
+      :state :open,
+      :scope ["ConstructionTargets/KleinOrbitQuotientHomeomorph.lean"],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/t93J03/klein-orbit-quotient-homeomorph",
+      :acceptance
+      {:implementation
+       "Equip the explicit plane-action orbit quotient with the coinduced topology. Upgrade KleinClosedSquareOrbitQuotientEquiv.closedSquareOrbitQuotientEquiv to the topological quotient comparison, and identify the closed-square orbit quotient with the frozen Surface false 2 quotient by a quotient-level polygon cut-and-paste whose fiber theorem is kleinSquareBoundaryOrbitEqvGen. Prove continuity of the descended map and inverse and export kleinOrbitQuotient_homeomorph with the exact fixture type. Do not impose the refuted edgewise disk-to-square carrier formulas, prove the deck-group fundamental-group theorem, subgroup classification, annulus-cover embedding, or close t93J03.",
+       :placeholder "the single sorry in apm_t93j03",
+       :route-step
+       "identify the explicit Klein deck-action orbit quotient with the frozen polygon Klein bottle",
+       :fixture "/tmp/klein-orbit-quotient-homeomorph-probe.lean",
+       :fixture-sha256
+       "92520bb0ff1e978b0e5f9bd0e276d81d560bd11136f75a683e1bd8c8cb4f17b1",
+       :gates
+       ["lake build ConstructionTargets.KleinOrbitQuotientHomeomorph"
+        "fixture compiles"
+        "zero source and fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :representation
+      {:source
+       "The quotient of Real × Real by the explicit PresentedKleinGroup plane-action orbit setoid, with coinduced quotient topology",
+       :target
+       "ConstructionTargets.StatementSurfaceModels.KleinBottle, the frozen Surface false 2 disk-polygon quotient",
+       :direction
+       "Homeomorphism from the plane-action orbit quotient to the frozen polygon quotient, obtained by upgrading the closed-square orbit equivalence and descending an exact quotient-level polygon cut-and-paste fiber identification"},
+      :id :routes-2026-10-11-klein-orbit-quotient-homeomorph-102,
+      :kind :representation-comparison,
+      :area "deck-group-fundamental-group",
+      :depends-on [:lemma-kleinsquareboundaryorbiteqvgen],
+      :current-residual
+      "Use the proved orbit-quotient homeomorphism in the deck-group fundamental-group computation and finish the remaining t93J03 route.",
+      :other-consumers []},
+     :axioms
+     ["propext"
+      "Classical.choice"
+      "Quot.sound"
+      "KleinOrbitQuotientHomeomorphProbe.kleinOrbitQuotient_homeomorph"],
+     :commands
+     [{:cmd
+       "lake build ConstructionTargets.KleinClosedSquareOrbitQuotientEquiv",
+       :exit 0,
+       :finding
+       "The banked module compiles the algebraic equivalence between the closed-square orbit quotient and the plane orbit quotient with standard axioms."}
+      {:cmd
+       "lake env lean /tmp/klein-orbit-quotient-homeomorph-probe.lean",
+       :exit 0,
+       :finding
+       "The exact plane-orbit-quotient to frozen-KleinBottle homeomorphism interface elaborates from one isolated axiom."}
+      {:cmd
+       "sha256sum /tmp/klein-orbit-quotient-homeomorph-probe.lean",
+       :exit 0,
+       :finding
+       "92520bb0ff1e978b0e5f9bd0e276d81d560bd11136f75a683e1bd8c8cb4f17b1"}
+      {:cmd
+       "python3 comment-stripped placeholder census /tmp/klein-orbit-quotient-homeomorph-probe.lean",
+       :exit 0,
+       :finding "0"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :finding "131 registered statements match, 0 do not."}
+      {:cmd "sed route guides and build-loop design",
+       :exit 0,
+       :finding
+       "TOPOLOGY-ROUTES.md, all three route files, the build-loop design, and dependency receipts were read."}
+      {:cmd "git status --short",
+       :exit 0,
+       :finding "Clean worktree; this probe was read-only."}],
+     :diagnostic-history [],
+     :fixture
+     {:path "/tmp/klein-orbit-quotient-homeomorph-probe.lean",
+      :sha256
+      "92520bb0ff1e978b0e5f9bd0e276d81d560bd11136f75a683e1bd8c8cb4f17b1",
+      :interface
+      "With the plane orbit quotient carrying the coinduced topology, the exact missing declaration is a homeomorphism to the frozen KleinBottle."},
+     :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-orbit-quotient-homeomorph",
@@ -105199,7 +105338,8 @@
    :area "deck-group-fundamental-group",
    :depends-on
    [:lemma-kleinsquareboundaryorbiteqvgen
-    :routes-2026-10-11-checkpoint-topo1-after-klein-and-wedge-coordinates-86],
+    :routes-2026-10-11-checkpoint-topo1-after-klein-and-wedge-coordinates-86
+    :routes-2026-10-11-klein-orbit-quotient-homeomorph-102],
    :current-residual
    "Use the quotient homeomorphism in the deck-group fundamental-group computation and finish the t93J03 route.",
    :other-consumers []}
@@ -106026,7 +106166,8 @@
     :reported-by
     [:owner
      :routes-2026-10-10-checkpoint-topo1-after-schreier-type-valued-basis-16
-     :routes-2026-10-10-checkpoint-topo1-after-t99j01-covering-prerequisites-38],
+     :routes-2026-10-10-checkpoint-topo1-after-t99j01-covering-prerequisites-38
+     :routes-2026-10-11-klein-orbit-quotient-homeomorph-96],
     :type
     "theorem is absent: after defining kleinPlaneAction from PresentedGroup.toGroup and orbitSetoid by existence of a group element, one still must prove theorem kleinOrbitQuotient_homeomorph : Quotient orbitSetoid ≃ₜ ConstructionTargets.StatementSurfaceModels.KleinBottle, with orbitSetoid x y ↔ ∃ g : T93J03.PresentedKleinGroup, kleinPlaneAction g x = y. This theorem entails a complete classification of every orbit intersection with the closed square, all edge and corner identifications, equivalence with the disk-boundary EqvGen relation used by Surface false 2, and continuity of both quotient maps",
     :area "deck-group-fundamental-group"},
