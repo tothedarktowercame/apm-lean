@@ -69585,90 +69585,116 @@
    :proof-plan
    "Use the banked positive-factor identity for the meridian imaginary part, compute the interpolation imaginary part as the input height times ((1-t)*(c/8)+t), prove that coefficient positive on the unit interval, and cancel the nonzero input height."}
   {:bounded-exception
+   "single-consumer nonzero-height left-core avoidance certificate for the core-polar radial ambient stage",
+   :consumer :t02A03,
+   :phase :probe,
+   :state :open,
+   :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t02A03/nonzero-height-avoids-left-core-radial-ambient",
+   :acceptance
+   {:probe
+    "Compile nonzeroHeight_avoidsLeftCore_rightTubeCoreRadialAmbient. For a nonzero-height input, apply the specialized interpolation imaginary-part certificate and the existing core-polar height criterion to prove every radial ambient value lies outside the left core. Do not handle zero-height inputs or construct an angular path.",
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.nonzeroHeight_avoidsLeftCore_rightTubeCoreRadialAmbient",
+    :type
+    "forall (tp : unitInterval × RightTubeMinusLeftCore), tp.2.1 2 != 0 -> rightTubeCorePolarReconstruction (rightTubeCoreAngularCoordinate tp.2) (rightTubeCoreNormalInterpolation rightTubeMeridianCoordinate tp) ∉ Set.range apm_t02a03_leftCore",
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "certify the core-polar radial ambient stage outside the left core on the nonzero-height branch"},
+   :id
+   :routes-2026-10-11-t02a03-nonzero-height-avoids-left-core-radial-ambient-topo2-r1,
+   :kind :reusable-theorem,
+   :area "explicit-r3-tube-deformation-retraction",
+   :depends-on
+   [:routes-2026-10-11-t02a03-nonzero-height-core-normal-interpolation-im-topo2-r1],
+   :current-residual
+   "Handle zero-height radial-stage avoidance using collision-sign control, construct the safe angular stage, and concatenate the certified stages.",
+   :other-consumers []}
+  {:bounded-exception
    "single-consumer explicit ambient deformation with frozen tube and deletion invariants",
    :consumer :t02A03,
    :evidence
    {:probe
     {:residual
-     "Bank the renamed nonzero-height interpolation theorem, then certify the radial ambient stage outside the left core.",
+     "Bank the nonzero-height radial-stage avoidance theorem; then handle the zero-height radial branch and construct the collision-safe angular stage before concatenation.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
      [{:name
-       "ConstructionTargets.T02A03GeometricTubeDeformation.nonzeroHeight_im_ne_zero_rightTubeCoreNormalInterpolation",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.nonzeroHeight_avoidsLeftCore_rightTubeCoreRadialAmbient",
        :type
-       "forall (tp : unitInterval × RightTubeMinusLeftCore), tp.2.1 2 != 0 -> (rightTubeCoreNormalInterpolation rightTubeMeridianCoordinate tp).im != 0",
+       "forall (tp : unitInterval × RightTubeMinusLeftCore), tp.2.1 2 != 0 -> rightTubeCorePolarReconstruction (rightTubeCoreAngularCoordinate tp.2) (rightTubeCoreNormalInterpolation rightTubeMeridianCoordinate tp) ∉ Set.range apm_t02a03_leftCore",
        :status :proved,
        :consumers [:t02A03],
        :depends-on
-       ["ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeMeridianCoordinate_im_positiveFactor_height"],
+       ["ConstructionTargets.T02A03GeometricTubeDeformation.nonzeroHeight_im_ne_zero_rightTubeCoreNormalInterpolation"
+        "ConstructionTargets.T02A03GeometricTubeDeformation.reconstructionAvoidsLeftCore_rightTubeCorePolar_of_im_ne_zero"],
        :area "explicit-r3-tube-deformation-retraction"}],
      :prerequisite
      {:bounded-exception
-      "single-consumer nonzero-height certificate throughout the core-normal interpolation",
+      "single-consumer nonzero-height left-core avoidance certificate for the core-polar radial ambient stage",
       :consumer :t02A03,
       :phase :probe,
       :state :open,
       :scope
       ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t02A03/nonzero-height-core-normal-interpolation-im",
+      "TOPOLOGY-ROUTES.md/t02A03/nonzero-height-avoids-left-core-radial-ambient",
       :acceptance
       {:probe
-       "Compile nonzeroHeight_im_ne_zero_rightTubeCoreNormalInterpolation. For a nonzero-height input, prove every specialized core-normal interpolation value has nonzero imaginary part by factoring it as the input height times a positive convex coefficient. Do not handle zero-height inputs or construct an angular path.",
+       "Compile nonzeroHeight_avoidsLeftCore_rightTubeCoreRadialAmbient. For a nonzero-height input, apply the specialized interpolation imaginary-part certificate and the existing core-polar height criterion to prove every radial ambient value lies outside the left core. Do not handle zero-height inputs or construct an angular path.",
        :declaration
-       "ConstructionTargets.T02A03GeometricTubeDeformation.nonzeroHeight_im_ne_zero_rightTubeCoreNormalInterpolation",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.nonzeroHeight_avoidsLeftCore_rightTubeCoreRadialAmbient",
        :type
-       "forall (tp : unitInterval × RightTubeMinusLeftCore), tp.2.1 2 != 0 -> (rightTubeCoreNormalInterpolation rightTubeMeridianCoordinate tp).im != 0",
+       "forall (tp : unitInterval × RightTubeMinusLeftCore), tp.2.1 2 != 0 -> rightTubeCorePolarReconstruction (rightTubeCoreAngularCoordinate tp.2) (rightTubeCoreNormalInterpolation rightTubeMeridianCoordinate tp) ∉ Set.range apm_t02a03_leftCore",
        :placeholder "the sole sorry in apm_t02a03",
        :route-step
-       "certify radial-stage deletion avoidance on the nonzero-height branch"},
+       "certify the core-polar radial ambient stage outside the left core on the nonzero-height branch"},
       :id
-      :routes-2026-10-11-t02a03-nonzero-height-core-normal-interpolation-im-topo2-r1,
+      :routes-2026-10-11-t02a03-nonzero-height-avoids-left-core-radial-ambient-topo2-r1,
       :kind :reusable-theorem,
       :area "explicit-r3-tube-deformation-retraction",
       :depends-on
-      [:routes-2026-10-11-t02a03-meridian-im-positive-factor-height-topo2-r1],
+      [:routes-2026-10-11-t02a03-nonzero-height-core-normal-interpolation-im-topo2-r1],
       :current-residual
-      "Apply the nonzero-height avoidance theorem to certify the radial stage for nonzero-height inputs; handle zero height with collision-sign control and construct the safe angular stage, then concatenate.",
+      "Handle zero-height radial-stage avoidance using collision-sign control, construct the safe angular stage, and concatenate the certified stages.",
       :other-consumers []},
      :commands
      [{:cmd
-       "lake env lean /tmp/t02a03_core_normal_interpolation_im_ne_probe.lean",
+       "lake build ConstructionTargets.T02A03GeometricTubeDeformation",
+       :exit 0,
+       :output "Build completed successfully (8249 jobs)."}
+      {:cmd
+       "lake env lean /tmp/t02a03_nonzero_height_radial_avoidance_probe.lean",
        :exit 0,
        :output
-       "nonzeroHeight_im_ne_zero_rightTubeCoreNormalInterpolation compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "nonzeroHeight_avoidsLeftCore_rightTubeCoreRadialAmbient compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/t02a03_core_normal_interpolation_im_ne_probe.lean",
+       "sha256sum /tmp/t02a03_nonzero_height_radial_avoidance_probe.lean",
        :exit 0,
        :output
-       "925785faecd1742541c0b8b25de927a573d8abb49da9a345a8730bc2f36b8644  /tmp/t02a03_core_normal_interpolation_im_ne_probe.lean"}
+       "1f349f8de44f95f4910d9ea19895de41ba160dd4fce17ca6f122bd74b791fb00  /tmp/t02a03_nonzero_height_radial_avoidance_probe.lean"}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_core_normal_interpolation_im_ne_probe.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_nonzero_height_radial_avoidance_probe.lean || true)\"",
        :exit 0}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}
       {:cmd
-       "rg -n 'nonzeroHeight_im_ne_zero_rightTubeCoreNormalInterpolation' /tmp/t02a03_core_normal_interpolation_im_ne_probe.lean",
+       "rg -n 'nonzeroHeight_avoidsLeftCore_rightTubeCoreRadialAmbient' /tmp/t02a03_nonzero_height_radial_avoidance_probe.lean",
        :exit 0,
        :output
-       "7:theorem nonzeroHeight_im_ne_zero_rightTubeCoreNormalInterpolation\n35:#print axioms nonzeroHeight_im_ne_zero_rightTubeCoreNormalInterpolation"}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/t02a03_core_normal_interpolation_im_ne_probe.lean",
-       :exit 1,
-       :finding
-       "The first simplification did not unfold the core-normal coordinate inside the meridian endpoint. Adding that definition exposed the affine height expression."}],
+       "7:theorem nonzeroHeight_avoidsLeftCore_rightTubeCoreRadialAmbient\n17:#print axioms nonzeroHeight_avoidsLeftCore_rightTubeCoreRadialAmbient"}],
      :fixture
-     {:path "/tmp/t02a03_core_normal_interpolation_im_ne_probe.lean",
+     {:path "/tmp/t02a03_nonzero_height_radial_avoidance_probe.lean",
       :sha256
-      "925785faecd1742541c0b8b25de927a573d8abb49da9a345a8730bc2f36b8644"},
+      "1f349f8de44f95f4910d9ea19895de41ba160dd4fce17ca6f122bd74b791fb00"},
      :finding
-     "The declaration was renamed so the distinguishing nonzero-height phrase precedes the shared interpolation wording and cannot truncate onto rightTubeCoreNormalInterpolation_exists. Mathematically, every specialized core-normal interpolation value has nonzero imaginary part when the input height is nonzero: its height is the input height times a strictly positive convex coefficient.",
+     "For every nonzero-height input and every radial-stage time, the specialized core-normal interpolation has nonzero imaginary part; the existing core-polar height criterion therefore proves that its ambient reconstruction lies outside the left core.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
@@ -69724,7 +69750,8 @@
     :routes-2026-10-11-t02a03-input-collision-positive-factor-meridian-real-topo2-r1
     :routes-2026-10-11-t02a03-collision-endpoint-positive-factor-sign-bridge-topo2-r1
     :routes-2026-10-11-t02a03-meridian-im-positive-factor-height-topo2-r1
-    :routes-2026-10-11-t02a03-nonzero-height-core-normal-interpolation-im-topo2-r1],
+    :routes-2026-10-11-t02a03-nonzero-height-core-normal-interpolation-im-topo2-r1
+    :routes-2026-10-11-t02a03-nonzero-height-avoids-left-core-radial-ambient-topo2-r1],
    :current-residual
    "Lift H to RightTubeMinusLeftCore, package rightTubeMeridianRetractionHomotopy, then use the coordinate equation for the Circle-side constant homotopy.",
    :other-consumers []}
@@ -71676,7 +71703,9 @@
    :scope [],
    :acceptance {:lemma "frozenTorusHomeomorphBoundaryTorus"},
    :lemma
-   {:area "mv-connecting-naturality", :name "frozenTorusHomeomorphBoundaryTorus", :reported-by []},
+   {:area "mv-connecting-naturality",
+    :name "frozenTorusHomeomorphBoundaryTorus",
+    :reported-by []},
    :id :lemma-frozentorushomeomorphboundarytorus,
    :kind :lemma,
    :area "mv-connecting-naturality",
@@ -71739,7 +71768,8 @@
    {:lemma
     "ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusH1GroupIsoFinTwo"},
    :lemma
-   {:area "mv-connecting-naturality", :name
+   {:area "mv-connecting-naturality",
+    :name
     "ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusH1GroupIsoFinTwo",
     :reported-by []},
    :id
@@ -71815,7 +71845,8 @@
    {:lemma
     "ConstructionTargets.TorusPiOneWindingCoordinates.frozenLbarPi1Map_naturality"},
    :lemma
-   {:area "mv-connecting-naturality", :name
+   {:area "mv-connecting-naturality",
+    :name
     "ConstructionTargets.TorusPiOneWindingCoordinates.frozenLbarPi1Map_naturality",
     :reported-by []},
    :id
@@ -71945,7 +71976,8 @@
    {:lemma
     "ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusAlignedH1MulEquivFinTwo"},
    :lemma
-   {:area "mv-connecting-naturality", :name
+   {:area "mv-connecting-naturality",
+    :name
     "ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusAlignedH1MulEquivFinTwo",
     :reported-by []},
    :id
@@ -72049,7 +72081,8 @@
    {:lemma
     "ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison_naturality"},
    :lemma
-   {:area "mv-connecting-naturality", :name
+   {:area "mv-connecting-naturality",
+    :name
     "ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison_naturality",
     :reported-by []},
    :id
@@ -72367,7 +72400,8 @@
    {:lemma
     "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_circleMeridian_mem_geometricY"},
    :lemma
-   {:area "geometric-tube-deformation", :name
+   {:area "geometric-tube-deformation",
+    :name
     "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_circleMeridian_mem_geometricY",
     :reported-by []},
    :id
@@ -72384,7 +72418,8 @@
    {:lemma
     "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_origin_mem_both_cores"},
    :lemma
-   {:area "geometric-tube-deformation", :name
+   {:area "geometric-tube-deformation",
+    :name
     "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_origin_mem_both_cores",
     :reported-by []},
    :id
@@ -72459,7 +72494,8 @@
    {:lemma
     "ConstructionTargets.RealProjectiveSmoothTarget.sphereProjectionQuotientAuthority"},
    :lemma
-   {:area "rp-smooth-atlas", :name
+   {:area "rp-smooth-atlas",
+    :name
     "ConstructionTargets.RealProjectiveSmoothTarget.sphereProjectionQuotientAuthority",
     :reported-by []},
    :id
@@ -72476,7 +72512,8 @@
    {:lemma
     "ConstructionTargets.RealProjectiveSmoothTarget.sphereProjection_eq_iff"},
    :lemma
-   {:area "rp-smooth-atlas", :name
+   {:area "rp-smooth-atlas",
+    :name
     "ConstructionTargets.RealProjectiveSmoothTarget.sphereProjection_eq_iff",
     :reported-by []},
    :id
@@ -72523,7 +72560,8 @@
    {:lemma
     "ConstructionTargets.RealProjectiveSmoothTarget.rpSmoothAtlas"},
    :lemma
-   {:area "rp-smooth-atlas", :name
+   {:area "rp-smooth-atlas",
+    :name
     "ConstructionTargets.RealProjectiveSmoothTarget.rpSmoothAtlas",
     :reported-by []},
    :id
@@ -72591,7 +72629,8 @@
    {:lemma
     "ConstructionTargets.SingularExcision.subspaceMap_inclusion"},
    :lemma
-   {:area "mv-connecting-naturality", :name "ConstructionTargets.SingularExcision.subspaceMap_inclusion",
+   {:area "mv-connecting-naturality",
+    :name "ConstructionTargets.SingularExcision.subspaceMap_inclusion",
     :reported-by []},
    :id
    :lemma-constructiontargets-singularexcision-subspacemap-inclusion,
@@ -72881,7 +72920,8 @@
    {:lemma
     "ConstructionTargets.T02A03GeometricTubeDeformation.rightTube_exists_near_rightCore"},
    :lemma
-   {:area "geometric-tube-deformation", :name
+   {:area "geometric-tube-deformation",
+    :name
     "ConstructionTargets.T02A03GeometricTubeDeformation.rightTube_exists_near_rightCore",
     :reported-by []},
    :id
@@ -73352,7 +73392,8 @@
    {:lemma
     "ConstructionTargets.T02A03GeometricTubeDeformation.range_rightCoreCircle"},
    :lemma
-   {:area "geometric-tube-deformation", :name
+   {:area "geometric-tube-deformation",
+    :name
     "ConstructionTargets.T02A03GeometricTubeDeformation.range_rightCoreCircle",
     :reported-by []},
    :id
@@ -73762,4 +73803,30 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-t02a03geometrictubedeformation-righttubemeridiancoordinate-i],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T02A03GeometricTubeDeformation.nonzeroHeight_avoidsLeftCore_rightTubeCoreRadialAmbient",
+    :type
+    "forall (tp : unitInterval × RightTubeMinusLeftCore), tp.2.1 2 != 0 -> rightTubeCorePolarReconstruction (rightTubeCoreAngularCoordinate tp.2) (rightTubeCoreNormalInterpolation rightTubeMeridianCoordinate tp) ∉ Set.range apm_t02a03_leftCore"},
+   :lemma
+   {:name
+    "ConstructionTargets.T02A03GeometricTubeDeformation.nonzeroHeight_avoidsLeftCore_rightTubeCoreRadialAmbient",
+    :reported-by
+    [:routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1],
+    :type
+    "forall (tp : unitInterval × RightTubeMinusLeftCore), tp.2.1 2 != 0 -> rightTubeCorePolarReconstruction (rightTubeCoreAngularCoordinate tp.2) (rightTubeCoreNormalInterpolation rightTubeMeridianCoordinate tp) ∉ Set.range apm_t02a03_leftCore",
+    :area "explicit-r3-tube-deformation-retraction",
+    :proved-in
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+   :id
+   :lemma-constructiontargets-t02a03geometrictubedeformation-nonzeroheight-avoidsleftcore-,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t02a03geometrictubedeformation-nonzeroheight-im-ne-zero-righ
+    :lemma-constructiontargets-t02a03geometrictubedeformation-reconstructionavoidsleftcore-],
    :other-consumers []}]}
