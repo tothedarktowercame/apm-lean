@@ -79332,11 +79332,23 @@
      {:cmd "git show --check a58fb4403", :exit 0}],
     :diagnostic-history
     [{:cmd "closure compile", :exit 1, :finding "Fixed association."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791757869038-5922-f0ae4088",
+     :commands
+     ["git show/diff/check a58fb440"
+      "lake env lean ConstructionTargets/t97A04Closure.lean"
+      "lake env lean problems/t97A04/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "fingerprint, placeholders, ancestry, fixture, blueprint checks"],
+     :finding
+     "PASS: a58fb440 is new after history bb86cd3b; its sole changed path is scoped and closure/blueprint blobs match. lowerShear_H2 uses swap-coordinate square and shearY(1,-1)=id without choosing a swap sign; frozenLbar_H2 then composes lower=id with shearY(3,1)=3id. Orientations and B9 representation boundaries are correct. Lean gates pass with only propext, Classical.choice, Quot.sound; registry 131/0; frozen hash ca1b2cb3c6594276811618321d5c0604c2f38fc4594a6b21ae161a711a923a34 unchanged; closure/Main placeholders 0/2. B9 is complete; B10 bridge and B11 assembly remain listed."},
     :commit "a58fb4403475f91ca2b7f45699abba30dbe50339",
     :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79352,7 +79364,7 @@
     ["lake env lean problems/t97A04/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: :program-progress-committed",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: :program-milestone-complete",
    :id :program-2026-10-11-close-t97a04,
    :kind :final-adapter,
    :campaign-priority 43,
@@ -79477,7 +79489,10 @@
      :reason :program-progress-committed}
     {:job 4,
      :commit "bb86cd3b3e30153d1794295706985afd4710fd65",
-     :reason :program-progress-committed}]}
+     :reason :program-progress-committed}
+    {:job 5,
+     :commit "a58fb4403475f91ca2b7f45699abba30dbe50339",
+     :reason :program-milestone-complete}]}
   {:consumer :t96A07,
    :stop-count 4,
    :evidence
@@ -80845,7 +80860,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "ConstructionTargets.T97A04Closure.frozenLbar_H2",
@@ -80855,7 +80870,9 @@
     :reported-by [:program-2026-10-11-close-t97a04],
     :type "H2(Lbar)=3·id in frozen coordinate",
     :area "mv-connecting-naturality",
-    :proved-in :program-2026-10-11-close-t97a04},
+    :proved-in :program-2026-10-11-close-t97a04,
+    :banked-by :program-2026-10-11-close-t97a04,
+    :banked-commit "a58fb4403475f91ca2b7f45699abba30dbe50339"},
    :id :lemma-constructiontargets-t97a04closure-frozenlbar-h2,
    :kind :lemma,
    :depends-on
@@ -80972,7 +80989,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "ConstructionTargets.T97A04Closure.lowerShear_H2",
@@ -80982,7 +80999,9 @@
     :reported-by [:program-2026-10-11-close-t97a04],
     :type "lowerShear coordinate=id",
     :area "mv-connecting-naturality",
-    :proved-in :program-2026-10-11-close-t97a04},
+    :proved-in :program-2026-10-11-close-t97a04,
+    :banked-by :program-2026-10-11-close-t97a04,
+    :banked-commit "a58fb4403475f91ca2b7f45699abba30dbe50339"},
    :id :lemma-constructiontargets-t97a04closure-lowershear-h2,
    :kind :lemma,
    :depends-on
