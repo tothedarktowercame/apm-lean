@@ -949,6 +949,37 @@ noncomputable def forgetIntModulesSnakeInput_kernelτ₁IsLimit
     (forgetIntModulesSnakeInput_kernelτ₁ConeIso S)).toFun
       (forgetIntModulesSnakeInput_transportedKernelτ₁ S)
 
+abbrev ForgottenSnakeKernelτ₂Limit
+    (S : ShortComplex.SnakeInput (ModuleCat ℤ)) :=
+    IsLimit ((KernelFork.ofι (forgetIntModules.mapShortComplex.map S.v₀₁)
+      (forgetIntModulesSnakeInput_zero_squares S).1).map ShortComplex.π₂)
+
+/-- The second component of the kernel fork formed after forgetting
+coefficients is a limit cone. -/
+noncomputable def forgetSnakeKernelτ₂Limit
+    (S : ShortComplex.SnakeInput (ModuleCat ℤ)) :
+    ForgottenSnakeKernelτ₂Limit S := by
+  letI := forgetIntModules_preservesParallelPairLimits
+  let hp : IsLimit (forgetIntModules.mapCone
+      (KernelFork.ofι S.v₀₁.τ₂ S.w₀₂_τ₂)) :=
+    isLimitOfPreserves forgetIntModules S.h₀τ₂
+  let ht : IsLimit ((Cone.postcompose
+      (forgetIntModulesParallelPairZeroIso S.v₁₂.τ₂).hom).obj
+        (forgetIntModules.mapCone
+          (KernelFork.ofι S.v₀₁.τ₂ S.w₀₂_τ₂))) :=
+    (IsLimit.postcomposeHomEquiv
+      (forgetIntModulesParallelPairZeroIso S.v₁₂.τ₂)
+      (forgetIntModules.mapCone
+        (KernelFork.ofι S.v₀₁.τ₂ S.w₀₂_τ₂))).symm hp
+  let e : (Cone.postcompose
+      (forgetIntModulesParallelPairZeroIso S.v₁₂.τ₂).hom).obj
+        (forgetIntModules.mapCone
+          (KernelFork.ofι S.v₀₁.τ₂ S.w₀₂_τ₂)) ≅
+      (KernelFork.ofι (forgetIntModules.mapShortComplex.map S.v₀₁)
+        (forgetIntModulesSnakeInput_zero_squares S).1).map ShortComplex.π₂ :=
+    Cone.ext (Iso.refl _) (by intro j; rcases j with (_ | _) <;> rfl)
+  exact (IsLimit.equivIsoLimit e).toFun ht
+
 /-- The corrected relative-homology comparison intertwines the coefficient
 absolute-to-relative map with the production relative projection. -/
 theorem integralRelativeHomologyComparisonWithTransport_projection
@@ -1919,6 +1950,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetIntModulesSnakeInput_transportedKernelτ₁
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetIntModulesSnakeInput_kernelτ₁ConeIso
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetIntModulesSnakeInput_kernelτ₁IsLimit
+#print axioms ConstructionTargets.ManifoldFundamentalClass.forgetSnakeKernelτ₂Limit
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
