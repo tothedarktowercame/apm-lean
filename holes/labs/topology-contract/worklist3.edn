@@ -4199,8 +4199,82 @@
   {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-coefficientsubspacemap-eq-integralsubtypechainmap,
+   :evidence
+   {:placeholder-delta {:source 0, :fixture 0},
+    :residual
+    "Use this equality to prove that the composed preservation and direct-cokernel comparisons intertwine the absolute-to-relative projections; then derive naturality of integralRelativeHomologyComparison through the chart and model normalization maps.",
+    :gates
+    {:private-abbreviations-unchanged :pass,
+     :module-build :pass,
+     :exact-declaration-type :pass,
+     :standard-axioms-only :pass,
+     :exact-scope :pass,
+     :statement-registry :pass,
+     :zero-placeholders :pass,
+     :clean-tree :pass,
+     :definitional-reduction-only :pass,
+     :fixture-compiles :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["lake build replayed pre-existing warnings from dependency modules; the target module emitted informational axiom reports and no warnings"],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.ManifoldFundamentalClass.coefficientSubspaceMap_eq_integralSubtypeChainMap",
+      :type
+      "CoefficientRelativeSmall.subspaceMap Int A equals the ModuleCat Int singular-chain map induced by integralSubtypeInclusion A.",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on [],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-10",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/manifold_fundamental_class_coefficient_subspace_map_eq.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/manifold_fundamental_class_coefficient_subspace_map_eq.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^\\s*axiom\\b' ConstructionTargets/ManifoldFundamentalClass.lean /tmp/manifold_fundamental_class_coefficient_subspace_map_eq.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git status --porcelain", :exit 0, :stdout ""}],
+    :commit "89ef0ad768df190ef33ae7d8adcb0a2ece908aea",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path
+     "/tmp/manifold_fundamental_class_coefficient_subspace_map_eq.lean",
+     :sha256
+     "d7390c74f0be0d20bc2062610097fbe3982f16a9e30915b59f834a93383a7c35",
+     :original-sha256
+     "b8fdcb85f72ee24f0664dae5a3d94972051cc9fb681d69485ee79a139381f9af",
+     :sorry-count 0},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :declaration
+     "ConstructionTargets.ManifoldFundamentalClass.coefficientSubspaceMap_eq_integralSubtypeChainMap",
+     :representation
+     {:source
+      "CoefficientRelativeSmall.subspaceMap Int A expressed through the simplicial singular-chain functor",
+      :target
+      "The ModuleCat Int topological singular-chain map induced by integralSubtypeInclusion A and used by the integral comparison",
+      :direction
+      "Exact chain-map equality from the coefficient-relative simplicial-functor representation to the module-valued topological singular-chain representation"}},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/coefficient-subspace-map-representation",
@@ -6724,11 +6798,13 @@
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.coefficientSubspaceMap_eq_integralSubtypeChainMap",
     :reported-by
-    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+     :routes-2026-10-11-manifold-coefficient-subspace-map-equality-topo3-r1],
     :type
     "forall {X : Type} [TopologicalSpace X] (A : Set X), CoefficientRelativeSmall.subspaceMap Int A = (((AlgebraicTopology.singularChainComplexFunctor (ModuleCat Int)).obj (ModuleCat.of Int Int)).map (integralSubtypeInclusion A))",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in
+    :routes-2026-10-11-manifold-coefficient-subspace-map-equality-topo3-r1},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-coefficientsubspacemap-eq-integralsubtypechainmap,
    :kind :lemma,
