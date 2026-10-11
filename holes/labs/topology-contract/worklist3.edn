@@ -4565,6 +4565,23 @@
       :expected-exit 1}
      {:cmd "git status --porcelain", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791683520521-3712-f62d4881",
+     :commands
+     ["git diff-tree recorded commit scope"
+      "git blob identity check"
+      "sha256sum promoted fixture"
+      "git diff --check recorded commit"
+      "lake env lean promoted fixture"
+      "lake env lean target module"
+      "lake build target module"
+      "placeholder and axiom scan"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped consumer placeholder census"],
+     :finding
+     "PASS: implementation commit 3ee626fe changes exactly ConstructionTargets/ManifoldFundamentalClass.lean and its recorded blob matches the reviewed source; promoted fixture hash 9247da6f5402b97743ca83e032948b3bdc0836b523ec85c3577854f5908c5fe4 matches recorded evidence and preserves the registered frozen theorem type; forgetIntegralRelativeCokernelComparison_projection has the required direction from the forgotten coefficient-relative projection followed by the preservation comparison to the cokernel projection formed after forgetting; its proof unfolds only forgetIntegralRelativeCokernelComparison and applies PreservesCokernel.π_iso_hom while retaining CoefficientRelativeSmall.subspaceMap on both sides, so the indexed HasCokernel witness is unchanged; it does not rewrite to integralSubtypeInclusion, compose with integralMappedRelativeCokernelComparison, cross the production cokernel presentation, apply homology, or claim generator transport or normalization; fixture, module, and 8326-job target build pass with zero source/fixture placeholders and only propext, Classical.choice, and Quot.sound; 131 statements match with zero mismatches and consumer placeholders remain t00J02=1 and t98A02=1."},
     :commit "3ee626fe5ced811c2960007524364f8e3137633f",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -4588,7 +4605,7 @@
       "Exact chain-map equality from the forgotten coefficient-relative projection representation to the after-forgetting cokernel projection representation, supplied by PreservesCokernel.π_iso_hom"}},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/forget-cokernel-projection",
@@ -4743,7 +4760,7 @@
      "The preservation half of the desired composite is independently canonical and compiles directly from PreservesCokernel.π_iso_hom. Keeping CoefficientRelativeSmall.subspaceMap fixed avoids changing the map indexing the selected HasCokernel witness. The banked direct-cokernel equation uses the definitionally equal explicit integral subtype map, but its cokernel object carries a separately elaborated witness. The next prerequisite must state the explicit transport between those two presentations before the equations can be composed; rewriting underneath the indexed witness is not valid.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -7171,7 +7188,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -7188,7 +7205,10 @@
     "forall {X : Type} [TopologicalSpace X] (A : Set X), (forgetIntModules.mapHomologicalComplex (ComplexShape.down Nat)).map (cokernel.π (CoefficientRelativeSmall.subspaceMap Int A)) ≫ (forgetIntegralRelativeCokernelComparison A).hom = cokernel.π ((forgetIntModules.mapHomologicalComplex (ComplexShape.down Nat)).map (CoefficientRelativeSmall.subspaceMap Int A))",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-forget-cokernel-projection-topo3-r1},
+    :routes-2026-10-11-manifold-forget-cokernel-projection-topo3-r1,
+    :banked-by
+    :routes-2026-10-11-manifold-forget-cokernel-projection-topo3-r1,
+    :banked-commit "3ee626fe5ced811c2960007524364f8e3137633f"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-forgetintegralrelativecokernelcomparison-projection,
    :kind :lemma,
