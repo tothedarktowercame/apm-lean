@@ -79321,6 +79321,18 @@
     :diagnostic-history [],
     :continue-from
     "Prove B5 by expanding productionUnionMap and using coverRangeMap_comp_ι.",
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791721084321-5326-85455a7e",
+     :commands
+     ["git show/check/diff-tree 45d5168ab,acc3b3933"
+      "lake env lean ConstructionTargets/t97A04Closure.lean"
+      "lake env lean problems/t97A04/lean/Main.lean"
+      "python3 scripts/statement-registry.py check; fingerprint t97A04 at acc3b3933 and 3aed25dcb"
+      "git-show placeholder counts at acc3b3933 and 3aed25dcb"],
+     :finding
+     "PASS: new progress after program-history job 5. Recorded commits add only B4 and its blueprint status; closure/blueprint blobs match 0e94f16d/1aff23af. shearYShortComplexHom has correctly oriented intersection-to-pieces and pieces-to-union squares, compiles sorry-free with only propext/Classical.choice/Quot.sound, and lists B5-B11 milestones. Main compiles with its unchanged 2 placeholders; registry 131/0 and frozen statement SHA-256 ca1b2cb3c6594276811618321d5c0604c2f38fc4594a6b21ae161a711a923a34 are unchanged."},
     :commit "acc3b3933802f522e684623214073cf74a937e18",
     :changed-paths
     ["ConstructionTargets/t97A04Closure.lean"
@@ -79330,7 +79342,7 @@
     :milestone-commit "45d5168ab9cb0197ff93b2a0d724a495a29772a9",
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79346,7 +79358,7 @@
     ["lake env lean problems/t97A04/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: :program-progress-committed",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: :program-milestone-complete",
    :id :program-2026-10-11-close-t97a04,
    :kind :final-adapter,
    :campaign-priority 43,
@@ -79368,7 +79380,10 @@
      :reason :program-milestone-complete}
     {:job 5,
      :commit "3aed25dcb4a853e886922111f17b9ec6f5ea2d14",
-     :reason :program-progress-committed}]}
+     :reason :program-progress-committed}
+    {:job 6,
+     :commit "acc3b3933802f522e684623214073cf74a937e18",
+     :reason :program-milestone-complete}]}
   {:consumer :t96A07,
    :phase :implementation,
    :state :open,
@@ -79487,7 +79502,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "ConstructionTargets.T97A04Closure.shearYShortComplexHom",
@@ -79499,7 +79514,9 @@
     :type
     "forall a b : Int, shortComplex frozenYCover.U frozenYCover.V maps to itself",
     :area "mv-connecting-naturality",
-    :proved-in :program-2026-10-11-close-t97a04},
+    :proved-in :program-2026-10-11-close-t97a04,
+    :banked-by :program-2026-10-11-close-t97a04,
+    :banked-commit "acc3b3933802f522e684623214073cf74a937e18"},
    :id :lemma-constructiontargets-t97a04closure-shearyshortcomplexhom,
    :kind :lemma,
    :depends-on
