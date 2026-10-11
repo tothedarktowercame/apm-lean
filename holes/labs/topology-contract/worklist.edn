@@ -103545,6 +103545,8 @@
      :typed-residual-change
      :infrastructure-packets
      :review-outcomes]},
+   :review-finding
+   "The recorded checkpoint fails its explicit requirement to tag every remaining untagged lemma: rerunning build_step.bb priorities against commit d8955ca38c3b0167ccd7be30b3a82f1252b0ae68 reports area untagged with 26 backlog lemmas. Its stored polygon-surface-open-cover measure is also stale after the inserted rows, recording 166 banked and 26 backlog while the recorded-commit audit reports 166 banked and 60 backlog. Tag the remaining 26 lemmas and recompute all checkpoint measures after inserting replacement and lemma rows.",
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :evidence
@@ -103570,6 +103572,12 @@
       "The first shell spelling passed literal backslash-n tokens to Python.",
       :correction
       "Used actual newlines in the successful command recorded above."}],
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1791688205788-3929-5a7d5397",
+     :finding
+     "The recorded checkpoint fails its explicit requirement to tag every remaining untagged lemma: rerunning build_step.bb priorities against commit d8955ca38c3b0167ccd7be30b3a82f1252b0ae68 reports area untagged with 26 backlog lemmas. Its stored polygon-surface-open-cover measure is also stale after the inserted rows, recording 166 banked and 26 backlog while the recorded-commit audit reports 166 banked and 60 backlog. Tag the remaining 26 lemmas and recompute all checkpoint measures after inserting replacement and lemma rows."},
     :replacement-items
     [{:bounded-exception
       "This single-consumer comparison is the nearer of the two remaining t93J03 lemmas.",
@@ -103861,7 +103869,7 @@
       :area "polygon-surface-open-cover"}],
     :seat "topo-4"},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :repair,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -103884,7 +103892,7 @@
    :implements-lemma
    :lemma-kleinaabbsquarepolygonpresentationequivalence,
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-aabb-square-polygon-presentation-equivalence",
@@ -103919,7 +103927,7 @@
    :implements-lemma
    :lemma-genericpointwedgefundamentalgroupcoordinates-genericpointwedgegroupequivalence-c,
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/generic-point-wedge-fundamental-group-coordinates",
@@ -103948,7 +103956,7 @@
    :implements-lemma
    :lemma-genericpointwedgefundamentalgroupcoordinates-threecirclesgroupequivalence-coordi,
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/three-circles-fundamental-group-coordinates",
@@ -103985,7 +103993,7 @@
    :stop-condition
    "End only when every topo1 problem is closed or a row is genuinely refuted.",
    :phase :strategy,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
