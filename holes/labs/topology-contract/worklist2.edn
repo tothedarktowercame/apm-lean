@@ -79333,11 +79333,23 @@
      {:cmd "git show --check a649c7e8d", :exit 0}],
     :diagnostic-history
     [{:cmd "closure compile", :exit 1, :finding "Fixed association."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791735189329-5595-443284ed",
+     :commands
+     ["git show/diff/check a649c7e8d"
+      "lake env lean ConstructionTargets/t97A04Closure.lean"
+      "lake env lean problems/t97A04/lean/Main.lean"
+      "statement-registry check/fingerprint"
+      "git-show hash/placeholder checks"],
+     :finding
+     "PASS: a649c7e8 is new after history 1acae3d6; scope/blob match. Its chain-level range square and homology transport correctly identify the production intersection endpoint with the overlap restriction; ambient/subspace and iso orientations agree. Lean gates compile with standard axioms only; registry 131/0; frozen hash unchanged ca1b2cb3; closure 0/Main 2 placeholders. Overlap H1 combination and B6-B11 remain listed."},
     :commit "a649c7e8d6e17ba105e016297daf5c824b9c777a",
     :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79430,6 +79442,9 @@
      :reason :program-progress-committed}
     {:job 6,
      :commit "1acae3d6b96d54bb2675c5be7648264386e31c24",
+     :reason :program-progress-committed}
+    {:job 7,
+     :commit "a649c7e8d6e17ba105e016297daf5c824b9c777a",
      :reason :program-progress-committed}]}
   {:consumer :t96A07,
    :stop-count 2,
@@ -80179,7 +80194,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -80191,7 +80206,9 @@
     :reported-by [:program-2026-10-11-close-t97a04],
     :type "range/overlap chain square",
     :area "mv-connecting-naturality",
-    :proved-in :program-2026-10-11-close-t97a04},
+    :proved-in :program-2026-10-11-close-t97a04,
+    :banked-by :program-2026-10-11-close-t97a04,
+    :banked-commit "a649c7e8d6e17ba105e016297daf5c824b9c777a"},
    :id
    :lemma-constructiontargets-t97a04closure-sheary-coverrangemap-naturality,
    :kind :lemma,
@@ -80199,7 +80216,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -80211,7 +80228,9 @@
     :reported-by [:program-2026-10-11-close-t97a04],
     :type "production endpoint=overlap H1",
     :area "mv-connecting-naturality",
-    :proved-in :program-2026-10-11-close-t97a04},
+    :proved-in :program-2026-10-11-close-t97a04,
+    :banked-by :program-2026-10-11-close-t97a04,
+    :banked-commit "a649c7e8d6e17ba105e016297daf5c824b9c777a"},
    :id
    :lemma-constructiontargets-t97a04closure-sheary-productionintersectionmap-eq-overlap,
    :kind :lemma,
