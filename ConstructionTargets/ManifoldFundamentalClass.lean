@@ -1237,6 +1237,51 @@ theorem coefficientProjection_comp_integralTransportHomologyComposite
   simpa only [← Category.assoc] using
     integralRelativeHomologyComparisonWithTransport_projection A n
 
+/-- Precomposing the forbidden negative-sign equation by the coefficient
+absolute-to-relative projection exposes the production projection factors. -/
+theorem correctedLocalNormalizationAutomorphism_hom_eq_neg_implies_projected_factors
+    (k : ℕ) {M : Type} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M) :
+    (correctedLocalNormalizationAutomorphism k x).hom = -𝟙 _ →
+      (((CoefficientH0.SingularChains ℤ (TopCat.of M)).sc (k + 2)).mapHomologyIso
+          forgetIntModules).inv ≫
+        HomologicalComplex.homologyMap
+          (singularChainsComparison (TopCat.of M)).hom (k + 2) ≫
+        HomologicalComplex.homologyMap
+          (relativeSingularProjection (deletedPoint x)) (k + 2) ≫
+        (ambientChartHomologyIso k x).inv ≫
+        (HigherModelLocalHomology.localIsoInt k).hom =
+      forgetIntModules.map
+          (HomologicalComplex.homologyMap
+            (cokernel.π (CoefficientRelativeSmall.subspaceMap ℤ (deletedPoint x)))
+            (k + 2)) ≫
+        forgetIntModules.map (coefficientLocalForwardComposite k x) ≫
+        (-𝟙 _) := by
+  intro hneg
+  have h :=
+    (correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_transport_homology_factors
+      k x).mp hneg
+  let q := forgetIntModules.map
+    (HomologicalComplex.homologyMap
+      (cokernel.π (CoefficientRelativeSmall.subspaceMap ℤ (deletedPoint x)))
+      (k + 2))
+  have hq := congrArg (fun f => q ≫ f) h
+  dsimp [q] at hq
+  have halign := coefficientProjection_comp_integralTransportHomologyComposite
+    (deletedPoint x) (k + 2)
+  have halignTail := congrArg
+    (fun f => f ≫ (ambientChartHomologyIso k x).inv ≫
+      (HigherModelLocalHomology.localIsoInt k).hom) halign
+  calc
+    _ = q ≫
+        (((CoefficientRelativeSmall.relativeChains ℤ (deletedPoint x)).sc
+          (k + 2)).mapHomologyIso forgetIntModules).inv ≫
+        integralTransportHomologyComposite (deletedPoint x) (k + 2) ≫
+        (ambientChartHomologyIso k x).inv ≫
+        (HigherModelLocalHomology.localIsoInt k).hom := by
+          simpa only [Category.assoc] using halignTail.symm
+    _ = _ := hq
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -1314,5 +1359,6 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport_homologyMap
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralTransportHomologyComposite
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientProjection_comp_integralTransportHomologyComposite
+#print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_implies_projected_factors
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport_homologyMap_eq_composite
 #print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_transport_homology_factors
