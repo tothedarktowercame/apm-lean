@@ -68150,7 +68150,52 @@
   {:bounded-exception
    "single-consumer right-tube membership criterion for the frozen right-core polar reconstruction",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:residual
+     "Implement reconstructionMemRightTube_rightTubeCorePolar in the scoped module, then use it with rightTubeCoreInterpolatedNormalRadiusBound when constructing the corrected right-core tubular ambient deformation.",
+     :outcome :go,
+     :warnings [],
+     :missing-theorems [],
+     :commands
+     [{:cmd
+       "lake env lean /tmp/t02a03_core_reconstruction_membership_probe.lean",
+       :exit 0,
+       :output
+       "reconstructionMemRightTube_rightTubeCorePolar compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "sha256sum /tmp/t02a03_core_reconstruction_membership_probe.lean",
+       :exit 0,
+       :output
+       "e27a30bf75767f686c9ed8af64258cc91dd913f9d888a9e718b7169ac3d8d492  /tmp/t02a03_core_reconstruction_membership_probe.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_core_reconstruction_membership_probe.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}
+      {:cmd
+       "rg -n 'reconstructionMemRightTube_rightTubeCorePolar' /tmp/t02a03_core_reconstruction_membership_probe.lean",
+       :exit 0,
+       :output
+       "10:theorem reconstructionMemRightTube_rightTubeCorePolar\n32:#print axioms reconstructionMemRightTube_rightTubeCorePolar"}],
+     :fixture
+     {:path "/tmp/t02a03_core_reconstruction_membership_probe.lean",
+      :sha256
+      "e27a30bf75767f686c9ed8af64258cc91dd913f9d888a9e718b7169ac3d8d492"},
+     :finding
+     "The complete placeholder-free fixture proves the frozen membership criterion. It selects rightCoreCircle u in the frozen core range and computes the Euclidean distance from rightTubeCorePolarReconstruction u n to that point as norm n, so the assumed quarter-radius bound gives membership in the closed cthickening.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+      :declaration
+      "ConstructionTargets.T02A03GeometricTubeDeformation.reconstructionMemRightTube_rightTubeCorePolar",
+      :type
+      "forall (u : Circle) (n : Complex), norm n <= (1 / 4 : Real) -> rightTubeCorePolarReconstruction u n ∈ apm_t02a03_rightTube"},
+     :seat "topo-8"}},
+   :phase :implementation,
+   :type
+   "forall (u : Circle) (n : Complex), norm n <= (1 / 4 : Real) -> rightTubeCorePolarReconstruction u n ∈ apm_t02a03_rightTube",
    :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
@@ -68169,6 +68214,8 @@
    :routes-2026-10-11-t02a03-reconstruction-mem-right-tube-core-polar-topo2-r1,
    :kind :reusable-theorem,
    :area "explicit-r3-tube-deformation-retraction",
+   :declaration
+   "ConstructionTargets.T02A03GeometricTubeDeformation.reconstructionMemRightTube_rightTubeCorePolar",
    :depends-on
    [:routes-2026-10-11-t02a03-avoids-left-core-radial-ambient-topo2-r1],
    :current-residual
