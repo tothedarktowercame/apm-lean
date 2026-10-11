@@ -1,5 +1,6 @@
 import ConstructionTargets.ThreeCirclesPathTopology
 import ConstructionTargets.GenericTargetNaturalSourceReconstruction
+import ConstructionTargets.PointedPuncturedCircleContraction
 import Mathlib.GroupTheory.Coprod.Basic
 import Mathlib.GroupTheory.FreeGroup.Basic
 
@@ -20,6 +21,7 @@ noncomputable section
 namespace ConstructionTargets.PointWedgeVanKampen
 
 open CategoryTheory
+open PointedPuncturedCircleContraction
 
 universe u
 
@@ -114,11 +116,32 @@ def multiplicativeIntEquivFreeGroupFinOne :
     Multiplicative ℤ ≃* FreeGroup (Fin 1) :=
   (FreeGroup.mulEquivIntOfUnique (α := Fin 1)).symm
 
+/-- The standard open neighbourhood of the circle basepoint, obtained by
+removing the antipodal point. -/
+def circleBaseNeighborhood : Set Circle :=
+  {z | (z : ℂ) ≠ -1}
+
+theorem circleBaseNeighborhood_isOpen : IsOpen circleBaseNeighborhood := by
+  have hclosed : IsClosed {z : Circle | (z : ℂ) = -1} := by
+    exact isClosed_singleton.preimage continuous_subtype_val
+  simpa [circleBaseNeighborhood, Set.compl_setOf] using hclosed.isOpen_compl
+
+theorem circleBase_mem : (1 : Circle) ∈ circleBaseNeighborhood := by
+  norm_num [circleBaseNeighborhood]
+
+/-- The stereographic straight-line contraction of the punctured circle,
+viewed as a contraction of the literal open neighbourhood above. -/
+def circleBaseNeighborhood_contraction :
+    PointedContraction circleBaseNeighborhood ⟨1, circleBase_mem⟩ := by
+  simpa only [circleBaseNeighborhood, puncturedCircleBase] using
+    puncturedCirclePointedContraction
+
 #print axioms threeCircles_locPathConnected
 #print axioms fundamentalGroupMulEquivOfSingleObjEquivalence
 #print axioms threeCircles_pathConnected
 #print axioms coprodFreeGroupEquivFreeGroupSum
 #print axioms coprodFreeGroupFinTwoFinOne_equiv
 #print axioms multiplicativeIntEquivFreeGroupFinOne
+#print axioms circleBaseNeighborhood_contraction
 
 end ConstructionTargets.PointWedgeVanKampen

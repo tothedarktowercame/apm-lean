@@ -233,7 +233,7 @@ PointedContraction circleBaseNeighborhood ⟨1, circleBase_mem⟩`.
 uses: `PointedPuncturedCircleContraction.PuncturedCircle`,
 `puncturedCirclePointedContraction`
 
-status: planned
+status: proved
 
 Take `circleBaseNeighborhood = {z : Circle | (z : ℂ) ≠ -1}`.  Its complement
 is the closed singleton `{-1}`, hence it is open, and `1 ≠ -1`.  Its subtype
