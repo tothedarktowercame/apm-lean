@@ -628,6 +628,38 @@ theorem rightTubeRadialCoefficient_pos
       mul_nonneg ht0 (norm_nonneg n)
     exact add_pos_of_pos_of_nonneg hfirst hsecond
 
+noncomputable def rightTubeRadialNormalInterpolation
+    (n : C(RightTubeMinusLeftCore, ℂ))
+    (m : C(RightTubeMinusLeftCore, Circle)) :
+    C(unitInterval × RightTubeMinusLeftCore, ℂ) where
+  toFun tp := (((1 - (tp.1 : ℝ)) * (1 / 8 : ℝ) +
+    (tp.1 : ℝ) * ‖n tp.2‖ : ℝ) : ℂ) * (m tp.2 : ℂ)
+  continuous_toFun := by fun_prop
+
+theorem rightTubeRadialNormalInterpolation_exists
+    (n : C(RightTubeMinusLeftCore, ℂ))
+    (m : C(RightTubeMinusLeftCore, Circle))
+    (hm : ∀ p, (m p : ℂ) = NormedSpace.normalize (n p))
+    (hn : ∀ p, n p ≠ 0) :
+    ∃ N : C(unitInterval × RightTubeMinusLeftCore, ℂ),
+      (∀ p, N (0, p) = ((1 / 8 : ℝ) : ℂ) * (m p : ℂ)) ∧
+      (∀ p, N (1, p) = n p) ∧
+      (∀ tp, N tp ≠ 0) := by
+  refine ⟨rightTubeRadialNormalInterpolation n m, ?_, ?_, ?_⟩
+  · intro p
+    simp [rightTubeRadialNormalInterpolation]
+  · intro p
+    norm_num [rightTubeRadialNormalInterpolation]
+    rw [hm]
+    change ‖n p‖ • NormedSpace.normalize (n p) = n p
+    exact NormedSpace.norm_smul_normalize (n p)
+  · intro tp
+    change (((1 - (tp.1 : ℝ)) * (1 / 8 : ℝ) +
+      (tp.1 : ℝ) * ‖n tp.2‖ : ℝ) : ℂ) * (m tp.2 : ℂ) ≠ 0
+    apply mul_ne_zero
+    · exact_mod_cast (rightTubeRadialCoefficient_pos tp.1 (n tp.2) (hn tp.2)).ne'
+    · exact Circle.coe_ne_zero (m tp.2)
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -649,3 +681,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.normalizedRightCorePlanar_circleMeridian
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightCorePolarReconstruction_circleMeridian
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeRadialCoefficient_pos
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeRadialNormalInterpolation_exists
