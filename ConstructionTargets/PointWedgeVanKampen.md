@@ -242,3 +242,10 @@ equivalences and the two span comparison isomorphisms.  The actual-span object
 is definitionally this reverse transport, so the full right restriction
 element is its glue component at the overlap base.  Expanding that component
 into its three comparison factors is the remaining coordinate calculation.
+
+The reverse-transport glue is now expanded at that base in
+`genericPointWedgeIdentityCoordinateReverseSpan_glue_app`.  In categorical
+order it is the inverse left comparison, then the coordinate glue whiskered
+along the overlap equivalence, then the right comparison.  The remaining B6
+calculation is to evaluate these three components in the one-object target
+and match the resulting cover morphisms with the literal wedge-leg lifts.

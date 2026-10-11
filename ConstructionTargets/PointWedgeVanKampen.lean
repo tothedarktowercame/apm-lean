@@ -448,6 +448,35 @@ theorem genericPointWedgeIdentityActualSpan_eq_coordinateReverseSpan :
       genericPointWedgeIdentityCoordinateReverseSpan
         x₀ y₀ M N hM hN hy hx cM cN := rfl
 
+theorem genericPointWedgeIdentityCoordinateReverseSpan_glue_app :
+    let l := genericPointWedgeActualLeft x₀ y₀ M N
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let l' := genericPointWedgeCoordinateLeft x₀
+    let r' := genericPointWedgeCoordinateRight y₀
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eL := genericPointWedgeLeftGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aL := genericPointWedgeLeftSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aR := genericPointWedgeRightSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let Q := genericPointWedgeIdentityCoordinateSpan x₀ y₀
+    let z : FundamentalGroupoid (genericPointWedgeOverlapPiece x₀ y₀ M N) :=
+      FundamentalGroupoid.mk
+        ⟨quotientMap x₀ y₀ (.inl x₀),
+          ⟨⟨.inl x₀, by trivial, rfl⟩,
+            ⟨.inr y₀, by trivial,
+              (Quotient.sound (Relation.EqvGen.rel _ _ Rel.base)).symm⟩⟩⟩
+    (genericPointWedgeIdentityCoordinateReverseSpan
+      x₀ y₀ M N hM hN hy hx cM cN).glue.hom.app z =
+      (reverseLeftComparison l l' eK eL aL Q.left).inv.app z ≫
+        (Functor.isoWhiskerLeft eK.functor Q.glue).hom.app z ≫
+          (reverseRightComparison r r' eK eR aR Q.right).hom.app z := by
+  rfl
+
 /-- The penultimate inverse stage of B3, now expressed as the literal
 pseudococone on the two open pieces. -/
 def genericPointWedgeIdentityPseudoCocone :
@@ -1786,6 +1815,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeIdentityGlobalRightBaseElement_eq_glue
 #print axioms genericPointWedgeIdentityGlobalRightBaseElement_eq_actualGlue
 #print axioms genericPointWedgeIdentityGlobalRightBaseElement_eq_coordinateReverseGlue
+#print axioms genericPointWedgeIdentityCoordinateReverseSpan_glue_app
 #print axioms genericPointWedgeIdentityGlobalRightRestriction_map
 #print axioms genericPointWedgeIdentityGlobalRightBase_map
 #print axioms genericPointWedgeIdentityRepresentation_inl
