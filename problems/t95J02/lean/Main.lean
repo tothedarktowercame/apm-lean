@@ -1,8 +1,7 @@
 import Mathlib
 import ConstructionTargets.CircleHomology
 import ConstructionTargets.CoefficientCoordinateReflections
-import ConstructionTargets.CoefficientFirstReflection
-import ConstructionTargets.SingularHomologyHomotopy
+import ConstructionTargets.t95J02Closure
 
 /-! # APM t95J02: retractions of the Klein bottle onto its core circles
 
@@ -526,8 +525,7 @@ theorem apm_t95J02_bridge_vertical_H1_kernel :
       ConstructionTargets.SingularHomologyHomotopy.singularHomology_map_eq_of_homotopic
         (ModuleCat ℤ) (ModuleCat.of ℤ ℤ)
         t95J02Closure.t95J02_beta_homotopic_beta_reflection 1
-    have href := ConstructionTargets.CoefficientFirstReflection.integral_circle
-      (1 : Fin 2)
+    have href := ConstructionTargets.t95J02Closure.integral_circle_coordinate_one
     have hbeta :
         (F.map (TopCat.ofHom t95J02Closure.beta)).hom g =
           (F.map (TopCat.ofHom t95J02Closure.beta)).hom (-g) := by
