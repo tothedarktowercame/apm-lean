@@ -105267,7 +105267,7 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma
@@ -105276,12 +105276,15 @@
    {:placeholder-delta
     {:source-before 0, :source-after 0, :fixture-sorry 0},
     :residual
-    "Apply stop-after-two and reroute through upstream-scoped normalization and mapping-coherence rows; do not reopen this downstream adapter until both declarations compile and are banked.",
+    "Reroute through upstream-scoped normalization and mapping-coherence rows, and redispatch this adapter only after both declarations compile and are genuinely banked.",
     :outcome :stop,
     :warnings
-    [{:kind :ledger-reopen-mismatch,
+    [{:kind :stop-after-two,
       :message
-      "The row claims a missing lemma is banked, but neither prerequisite is present."}],
+      "Redispatching this downstream adapter cannot progress until upstream normalization and coherence rows are banked."}
+     {:kind :ledger-reopen-mismatch,
+      :message
+      "owner-reopen claims a banked missing lemma, but exact source search finds neither prerequisite."}],
     :missing-theorems
     [{:name
       "ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence_counit_base_identity",
@@ -105308,20 +105311,20 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Fresh exact-name verification again disproves the owner-reopen premise: neither connectorSingleObjEquivalence_counit_base_identity nor mapping_normalized_counit_coherence exists. The scoped module compiles only the reduction of the requested equality to the frozen composite counit component. Its connector constituents still use Functor.asEquivalence with an unconstrained Classical.choice-selected objObjPreimageIso, so the required identity is not derivable in this downstream scope. Exact missing hypotheses are identity of each selected connector counit component at SingleObj.star and coherence transporting those identities through the frozen five-factor mapping.",
+    "The stop-after-two audit confirms the row was reopened without either prerequisite. Exact declaration search finds no connector counit identity and no normalized-mapping coherence theorem. The scoped module only reduces the requested statement to the frozen five-factor counit component. Because its connector equivalences retain Functor.asEquivalence and an unconstrained Classical.choice-selected objObjPreimageIso, this downstream scope cannot prove the component is identity. The exact required hypotheses remain identity of the selected connector counit components at SingleObj.star and coherence transporting that normalization to TwoOpenFreeProductMapping.mapping.",
     :commands
     [{:cmd "rg -n exact-prerequisite-declarations ConstructionTargets",
       :exit 1,
       :expected-exit 1,
-      :finding "Neither required prerequisite declaration exists."}
-     {:cmd
-      "sha256sum /tmp/composite-counit-component-identity.lean ConstructionTargets/TwoOpenFreeProductMappingCompositeCounitIdentity.lean",
-      :exit 0,
-      :finding "Fixture and source hashes are unchanged."}
+      :finding "Neither prerequisite exists."}
      {:cmd
       "lake env lean ConstructionTargets/TwoOpenFreeProductMappingCompositeCounitIdentity.lean",
       :exit 0,
-      :finding "The scoped reduction compiles with standard axioms."}
+      :finding
+      "The unchanged scoped reduction compiles with standard axioms."}
+     {:cmd "sha256sum /tmp/composite-counit-component-identity.lean",
+      :exit 0,
+      :finding "Fixture hash matches."}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131 registered statements match, 0 do not."}
@@ -105329,12 +105332,6 @@
       :exit 0,
       :finding "Worktree is clean."}],
     :diagnostic-history [],
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1791711607061-4906-2b4b2647",
-     :finding
-     "extend Mathlib: state and prove the missing theorem in scope"},
     :commit nil,
     :changed-paths [],
     :fixture
@@ -105344,7 +105341,7 @@
      :status :self-axiomatized},
     :seat "topo-2"},
    :phase :implementation,
-   :state :repair,
+   :state :needs-owner,
    :scope
    ["ConstructionTargets/TwoOpenFreeProductMappingCompositeCounitIdentity.lean"],
    :dag-node
