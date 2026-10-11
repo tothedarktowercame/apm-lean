@@ -1706,6 +1706,26 @@ theorem nonvanishingComplexPath_of_waypoint
   · intro p
     norm_num [Z, coupledAngularWaypointPath]
 
+theorem coupledAngularDepartureLeg_ne_zero_of_waypoint_re_pos
+    (W : C(RightTubeMinusLeftCore, ℂ))
+    (hW : ∀ p, 0 < (W p).re)
+    (t : unitInterval) (p : RightTubeMinusLeftCore)
+    (ht : (t : ℝ) ≤ 1 / 2) :
+    (((1 - 2 * (t : ℝ) : ℝ) : ℂ) +
+        ((2 * (t : ℝ) : ℝ) : ℂ) * W p) ≠ 0 := by
+  intro hz
+  have hre := congrArg Complex.re hz
+  norm_num [Complex.mul_re] at hre
+  have ht0 : 0 ≤ (t : ℝ) := t.2.1
+  by_cases htzero : (t : ℝ) = 0
+  · rw [htzero] at hre
+    norm_num at hre
+  · have htpos : 0 < (t : ℝ) := lt_of_le_of_ne ht0 (Ne.symm htzero)
+    have hfirst : 0 ≤ 1 - 2 * (t : ℝ) := by linarith
+    have hsecond : 0 < 2 * (t : ℝ) * (W p).re :=
+      mul_pos (mul_pos (by norm_num) htpos) (hW p)
+    linarith
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -1770,3 +1790,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularComplexInterpolation_zero_interior
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngular_of_nonvanishingComplexPath
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.nonvanishingComplexPath_of_waypoint
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularDepartureLeg_ne_zero_of_waypoint_re_pos
