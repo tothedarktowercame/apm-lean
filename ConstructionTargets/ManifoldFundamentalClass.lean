@@ -861,6 +861,14 @@ theorem forgetIntModulesSnakeInput_zero_squares
     · change forgetIntModules.map S.v₁₂.τ₃ ≫ forgetIntModules.map S.v₂₃.τ₃ = 0
       rw [← forgetIntModules.map_comp, S.w₁₃_τ₃, forgetIntModules.map_zero]
 
+/-- Forgetting the integer-module structure preserves limits of parallel
+pairs. -/
+theorem forgetIntModules_preservesParallelPairLimits :
+    PreservesLimitsOfShape WalkingParallelPair forgetIntModules := by
+  change PreservesLimitsOfShape WalkingParallelPair
+    forgetIntModules.asEquivalence.functor
+  infer_instance
+
 /-- The corrected relative-homology comparison intertwines the coefficient
 absolute-to-relative map with the production relative projection. -/
 theorem integralRelativeHomologyComparisonWithTransport_projection
@@ -1824,6 +1832,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientPairInclusion_mapRightHomologyIso_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetIntModules_shortExact
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetIntModulesSnakeInput_zero_squares
+#print axioms ConstructionTargets.ManifoldFundamentalClass.forgetIntModules_preservesParallelPairLimits
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
