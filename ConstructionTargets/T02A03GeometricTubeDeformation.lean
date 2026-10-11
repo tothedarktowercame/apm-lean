@@ -938,6 +938,40 @@ theorem nonpositiveNormalSafeCorridor_collisionPolynomial_pos
     mul_le_mul_of_nonneg_left hure hrpos
   nlinarith [sq_nonneg (n.re + 1 / 4)]
 
+theorem zeroHeightCollisionPolynomial_eq_zero_implies_leftCore
+    (u : Circle) (n : Complex) (him : n.im = 0)
+    (hpoly : (1 - n.re) ^ 2 -
+      4 * (1 - n.re) * (u : Complex).re + 3 = 0) :
+    rightTubeCorePolarReconstruction u n ∈ Set.range apm_t02a03_leftCore := by
+  let w : Complex :=
+    ((2 - (1 - n.re) * (u : Complex).re : Real) : Complex) +
+      (((1 - n.re) * (u : Complex).im : Real) : Complex) * Complex.I
+  have hu : (u : Complex).re ^ 2 + (u : Complex).im ^ 2 = 1 := by
+    simpa [Complex.normSq_apply, pow_two] using Circle.normSq_coe u
+  have hwsq : Complex.normSq w = 1 := by
+    simp [w, Complex.normSq_apply]
+    nlinarith
+  have hwnorm : ‖w‖ = 1 := by
+    rw [Complex.norm_def, hwsq]
+    norm_num
+  have hw0 : w ≠ 0 := by
+    intro hw
+    simp [hw] at hwnorm
+  refine ⟨Complex.arg w, ?_⟩
+  ext i
+  fin_cases i
+  · have hc := Complex.cos_arg hw0
+    rw [hwnorm, div_one] at hc
+    change -1 + Real.cos (Complex.arg w) =
+      1 - (1 - n.re) * (u : Complex).re
+    rw [hc]
+    simp [w]
+    ring
+  · have hs := Complex.sin_arg w
+    rw [hwnorm, div_one] at hs
+    simpa [rightTubeCorePolarReconstruction, apm_t02a03_leftCore, w] using hs
+  · simp [rightTubeCorePolarReconstruction, apm_t02a03_leftCore, him]
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -972,3 +1006,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.collisionPolynomial_ne_implies_avoidsLeftCore_rightTubeCorePolar
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.collisionPolynomial_pos_of_normal_re_pos
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.nonpositiveNormalSafeCorridor_collisionPolynomial_pos
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCollisionPolynomial_eq_zero_implies_leftCore
