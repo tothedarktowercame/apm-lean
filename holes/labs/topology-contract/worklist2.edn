@@ -79523,6 +79523,18 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "Main placeholder count", :exit 0, :output "1"}
      {:cmd "git show --check 47c44c303", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791760481997-5970-ac2e3a7c",
+     :commands
+     ["git show/diff/check 47c44c303"
+      "verify committed fixture SHA-256 and blobs"
+      "lake build ConstructionTargets.t96A07Closure"
+      "lake env lean closure and Main"
+      "registry fingerprint, placeholders, ancestry, blueprint checks"],
+     :finding
+     "PASS: 47c44c303 is new after history 2b9189afd; its sole changed path is scoped, closure/blueprint blobs match, and fixture SHA-256 is 3694f2f30164445e613468585adde1278fcac64917daa08e94adfdbb9cf986d4. Substituting the first-axis ambient vector into B4 correctly gives derivative (0,v2,v1); the ambient E 3 boundary is preserved and sphere/mfderiv transfer remains explicit. Build/Lean pass with only propext, Classical.choice, Quot.sound; registry 131/0; frozen hash 2ba67b040c1c1e31b8529d758a90765d8251ba3798983f6956674918a77fd520 unchanged; closure/Main placeholders 0/1. This is compiled progress toward B5; B6-B13 remain listed."},
     :commit "47c44c303",
     :changed-paths ["ConstructionTargets/t96A07Closure.lean"],
     :fixture
@@ -79531,7 +79543,7 @@
      "3694f2f30164445e613468585adde1278fcac64917daa08e94adfdbb9cf986d4"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t96A07/lean/Main.lean"
     "problems/t96A07/status.json"
@@ -79547,7 +79559,7 @@
     ["lake env lean problems/t96A07/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: :program-milestone-complete",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: :program-progress-committed",
    :id :program-2026-10-11-close-t96a07,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -79567,9 +79579,10 @@
     {:job 4,
      :commit "d3bf91c37871b1955e959ef64a641b7f4b214c4b",
      :reason :program-milestone-complete}
-    {:job 5,
-     :commit "2b9189afd",
-     :reason :program-milestone-complete}]}
+    {:job 5, :commit "2b9189afd", :reason :program-milestone-complete}
+    {:job 6,
+     :commit "47c44c303",
+     :reason :program-progress-committed}]}
   {:consumer :t94A10,
    :phase :implementation,
    :state :open,
@@ -81035,7 +81048,7 @@
    :other-consumers []}
   {:consumer :t96A07,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -81047,7 +81060,9 @@
     :reported-by [:program-2026-10-11-close-t96a07],
     :type "ambient derivative at (1,0,0) sends v to (0,v2,v1)",
     :area "projective-smooth-descent",
-    :proved-in :program-2026-10-11-close-t96a07},
+    :proved-in :program-2026-10-11-close-t96a07,
+    :banked-by :program-2026-10-11-close-t96a07,
+    :banked-commit "47c44c303"},
    :id
    :lemma-constructiontargets-t96a07closure-spheremapambientderivative-firstaxis,
    :kind :lemma,
