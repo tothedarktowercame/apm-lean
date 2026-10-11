@@ -877,6 +877,15 @@ theorem forgetIntModules_preservesParallelPairColimits :
     forgetIntModules.asEquivalence.functor
   infer_instance
 
+/-- The image of the first component kernel fork of a snake input remains a
+limit cone after forgetting the integer-module structure. -/
+noncomputable def forgetIntModulesSnakeInput_preservedKernelτ₁
+    (S : ShortComplex.SnakeInput (ModuleCat ℤ)) :
+    IsLimit (forgetIntModules.mapCone
+      (KernelFork.ofι S.v₀₁.τ₁ S.w₀₂_τ₁)) := by
+  letI := forgetIntModules_preservesParallelPairLimits
+  exact isLimitOfPreserves forgetIntModules S.h₀τ₁
+
 /-- The corrected relative-homology comparison intertwines the coefficient
 absolute-to-relative map with the production relative projection. -/
 theorem integralRelativeHomologyComparisonWithTransport_projection
@@ -1842,6 +1851,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetIntModulesSnakeInput_zero_squares
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetIntModules_preservesParallelPairLimits
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetIntModules_preservesParallelPairColimits
+#print axioms ConstructionTargets.ManifoldFundamentalClass.forgetIntModulesSnakeInput_preservedKernelτ₁
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
