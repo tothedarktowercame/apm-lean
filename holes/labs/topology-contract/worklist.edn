@@ -102064,6 +102064,21 @@
       :exit 0}
      {:cmd "git status --porcelain", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791680021671-3547-89badb2e",
+     :commands
+     ["git show and git diff-tree on recorded commit cd730ce531e0a3d81851fd53d8f019588166069c"
+      "git diff --exit-code recorded commit against source checkout"
+      "SHA-256 and comment-stripped placeholder recomputation for source and fixture"
+      "lake build ConstructionTargets.PolygonSixEdgeEndpointNormalization"
+      "lake env lean /tmp/polygon-six-edge-endpoint-normalization.lean"
+      "lake env lean /dev/stdin with fresh axiom check"
+      "python3 scripts/statement-registry.py check"
+      "git diff-tree --check recorded parent and commit"],
+     :finding
+     "Recorded one-file commit is authored by topo-2; source equals the recorded blob and recomputed implementation and fixture hashes match; for every natural edge index j below five the theorem exhibits successor edge j+1 and half-open parameter zero, with equality oriented from edge j at parameter one to that successor presentation via the banked consecutive-edge theorem; the frozen theorem compiles with only standard axioms, placeholder counts are zero, the registry reports 131 matched and 0 mismatched, and the excluded edge-five period wrap and downstream total-decoder results remain outside scope."},
     :commit "cd730ce531e0a3d81851fd53d8f019588166069c",
     :changed-paths
     ["ConstructionTargets/PolygonSixEdgeEndpointNormalization.lean"],
@@ -102078,7 +102093,7 @@
      "For each natural edge index below five, exhibited its successor Fin 6 edge at half-open parameter zero and proved equality with the original edge at parameter one."},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/PolygonSixEdgeEndpointNormalization.lean"],
    :dag-node
@@ -102219,7 +102234,7 @@
       "Every parameter-one endpoint on edges zero through four has the literal successor-edge parameter-zero half-open presentation."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -106311,7 +106326,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -106328,7 +106343,10 @@
     "For each canonical edge zero through four, its parameter-one endpoint has the successor-edge parameter-zero half-open presentation.",
     :area "polygon-surface-open-cover",
     :proved-in
-    :routes-2026-10-11-polygon-six-edge-nonfinal-endpoint-normalization-73},
+    :routes-2026-10-11-polygon-six-edge-nonfinal-endpoint-normalization-73,
+    :banked-by
+    :routes-2026-10-11-polygon-six-edge-nonfinal-endpoint-normalization-73,
+    :banked-commit "cd730ce531e0a3d81851fd53d8f019588166069c"},
    :id
    :lemma-polygonsixedgeendpointnormalization-nonfinal-endpoint-has-halfopen-presentation,
    :kind :lemma,
