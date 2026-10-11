@@ -98224,8 +98224,126 @@
    "Review both covering constructions and close t99J01 when banked.",
    :other-consumers []}
   {:consumer :t99J01,
-   :phase :probe,
+   :phase :implementation,
    :state :open,
+   :scope
+   ["ConstructionTargets/FiniteCircleWedgeFundamentalGroup.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/shared/finite-circle-wedge-fundamental-group/recursive-free-product",
+   :acceptance
+   {:placeholder "the single sorry in apm_t99j01",
+    :route-step
+    "t99J01 step 1: identify the fundamental group of ThreeCircles with FreeGroup (Fin 3)",
+    :implementation
+    "Promote the exact compiled fixture. Define iterated finite circle wedges, their basepoints and indexed representative inclusions. Recursively apply the banked two-open free-product comparison, normalize the coproduct to FreeGroup coordinates, prove the inclusion-generator equations, and export the TwoCircles and ThreeCircles specializations. Do not construct covers, restrict path components, apply subgroup index or Schreier rank, or close t99J01.",
+    :fixture "/tmp/finite-circle-wedge-pi1-probe.lean",
+    :fixture-sha256
+    "188c22abad2f0abc5a570ded8f1bd93013fac5e470230154cbdf5b676f5e300a",
+    :gates
+    ["lake build ConstructionTargets.FiniteCircleWedgeFundamentalGroup"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-11-finite-circle-wedge-pi1-induction-74,
+   :kind :reusable-theorem,
+   :depends-on [],
+   :current-residual
+   "After the ThreeCircles equivalence is banked, build the frozen-facing component sheet and pi1 restriction package, then assemble all three conjuncts.",
+   :other-consumers [:t01A03 :t97A01 :t97A03 :t92J06]}
+  {:consumer :t99J01,
+   :evidence
+   {:probe
+    {:residual
+     "The closure cannot compile from the claimed banked surface: the canonical ThreeCircles fundamental-group equivalence is absent. Bank that exact recursive wedge theorem first; the component sheet/pi1 restriction package remains the next consumer prerequisite.",
+     :outcome :revise,
+     :warnings
+     [{:kind :missing-banked-artifact,
+       :message
+       "The closure acceptance calls the ThreeCircles fundamental-group equivalence banked, but ConstructionTargets/FiniteCircleWedgeFundamentalGroup.lean and threeCirclesFundamentalGroupEquiv are absent from the checkout."}],
+     :missing-theorems
+     [{:name
+       "FiniteCircleWedgeFundamentalGroup.threeCirclesFundamentalGroupEquiv",
+       :type
+       "For the canonical ThreeCircles wedge basepoint, FundamentalGroup ThreeCircles basepoint is multiplicatively equivalent to FreeGroup (Fin 3), with the three representative circle inclusions sent to the indexed free generators.",
+       :status :not-started,
+       :consumers [:t99J01],
+       :depends-on
+       ["GenericPointWedgeFundamentalGroupCoordinates.threeCirclesGroupEquivalence_coordinates"],
+       :area "fundamental-group-wedge-of-circles"}
+      {:name
+       "T99J01PathComponentCoverRestriction.pathComponentRestrictionPackage",
+       :type
+       "For an n-sheeted cover p : E → ThreeCircles and e : E, the Joined component restriction is an m-sheeted cover for m = Nat.card {x : E // p x = p e ∧ Joined e x}, with 0 < m, m ≤ n, and inclusion inducing a fundamental-group equivalence.",
+       :status :not-started,
+       :consumers [:t99J01],
+       :depends-on
+       ["IsCoveringMap.restrictPathComponent"
+        "FiniteCircleWedgeFundamentalGroup.threeCirclesFundamentalGroupEquiv"],
+       :area "covering-subgroup-correspondence"}],
+     :prerequisite
+     {:consumer :t99J01,
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/FiniteCircleWedgeFundamentalGroup.lean"],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/shared/finite-circle-wedge-fundamental-group/recursive-free-product",
+      :acceptance
+      {:placeholder "the single sorry in apm_t99j01",
+       :route-step
+       "t99J01 step 1: identify the fundamental group of ThreeCircles with FreeGroup (Fin 3)",
+       :implementation
+       "Promote the exact compiled fixture. Define iterated finite circle wedges, their basepoints and indexed representative inclusions. Recursively apply the banked two-open free-product comparison, normalize the coproduct to FreeGroup coordinates, prove the inclusion-generator equations, and export the TwoCircles and ThreeCircles specializations. Do not construct covers, restrict path components, apply subgroup index or Schreier rank, or close t99J01.",
+       :fixture "/tmp/finite-circle-wedge-pi1-probe.lean",
+       :fixture-sha256
+       "188c22abad2f0abc5a570ded8f1bd93013fac5e470230154cbdf5b676f5e300a",
+       :gates
+       ["lake build ConstructionTargets.FiniteCircleWedgeFundamentalGroup"
+        "fixture compiles"
+        "zero source and fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :id :routes-2026-10-11-finite-circle-wedge-pi1-induction-74,
+      :kind :reusable-theorem,
+      :depends-on [],
+      :current-residual
+      "After the ThreeCircles equivalence is banked, build the frozen-facing component sheet and pi1 restriction package, then assemble all three conjuncts.",
+      :other-consumers [:t01A03 :t97A01 :t97A03 :t92J06]},
+     :axioms
+     ["propext"
+      "Classical.choice"
+      "Quot.sound"
+      "FiniteCircleWedgePiOneProbe.finite_circle_wedge_fundamental_group_package"],
+     :commands
+     [{:cmd "lake env lean /tmp/finite-circle-wedge-pi1-probe.lean",
+       :exit 0,
+       :finding
+       "The finite-circle-wedge interface fixture compiles; its only nonstandard axiom is the isolated recursive fundamental-group package."}
+      {:cmd "sha256sum /tmp/finite-circle-wedge-pi1-probe.lean",
+       :exit 0,
+       :finding
+       "188c22abad2f0abc5a570ded8f1bd93013fac5e470230154cbdf5b676f5e300a"}
+      {:cmd
+       "rg -n \"\\b(sorry|admit)\\b\" /tmp/finite-circle-wedge-pi1-probe.lean",
+       :exit 1,
+       :expected-exit 1,
+       :finding "No fixture placeholders."}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :finding "131 registered statements match, 0 do not."}
+      {:cmd "git status --short",
+       :exit 0,
+       :finding "Clean worktree."}],
+     :fixture
+     {:path "/tmp/finite-circle-wedge-pi1-probe.lean",
+      :sha256
+      "188c22abad2f0abc5a570ded8f1bd93013fac5e470230154cbdf5b676f5e300a",
+      :interface
+      "Recursive finite-circle-wedge fundamental-group equivalences, specialized to ThreeCircles, with representative inclusion coordinates."},
+     :seat "topo-4"}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t99J01/closure",
    :acceptance
@@ -98244,7 +98362,8 @@
    :kind :consumer-closure,
    :area "covering-subgroup-correspondence",
    :depends-on
-   [:routes-2026-10-10-checkpoint-topo1-after-t99j01-covering-prerequisites-38],
+   [:routes-2026-10-10-checkpoint-topo1-after-t99j01-covering-prerequisites-38
+    :routes-2026-10-11-finite-circle-wedge-pi1-induction-74],
    :current-residual
    "Replace the single frozen placeholder and close t99J01.",
    :other-consumers []}
@@ -106616,6 +106735,67 @@
    :id :lemma-polygonsixedgefinalendpointwrap-addcircle-six-eq-zero,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t99J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "FiniteCircleWedgeFundamentalGroup.threeCirclesFundamentalGroupEquiv",
+    :type
+    "For the canonical ThreeCircles wedge basepoint, FundamentalGroup ThreeCircles basepoint is multiplicatively equivalent to FreeGroup (Fin 3), with the three representative circle inclusions sent to the indexed free generators."},
+   :lemma
+   {:name
+    "FiniteCircleWedgeFundamentalGroup.threeCirclesFundamentalGroupEquiv",
+    :reported-by [:routes-2026-10-10-t99j01-closure-probe-40],
+    :type
+    "For the canonical ThreeCircles wedge basepoint, FundamentalGroup ThreeCircles basepoint is multiplicatively equivalent to FreeGroup (Fin 3), with the three representative circle inclusions sent to the indexed free generators.",
+    :area "fundamental-group-wedge-of-circles"},
+   :id
+   :lemma-finitecirclewedgefundamentalgroup-threecirclesfundamentalgroupequiv,
+   :kind :lemma,
+   :depends-on
+   [:lemma-genericpointwedgefundamentalgroupcoordinates-threecirclesgroupequivalence-coordi],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "GenericPointWedgeFundamentalGroupCoordinates.threeCirclesGroupEquivalence_coordinates"},
+   :lemma
+   {:name
+    "GenericPointWedgeFundamentalGroupCoordinates.threeCirclesGroupEquivalence_coordinates",
+    :reported-by []},
+   :id
+   :lemma-genericpointwedgefundamentalgroupcoordinates-threecirclesgroupequivalence-coordi,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t99J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "T99J01PathComponentCoverRestriction.pathComponentRestrictionPackage",
+    :type
+    "For an n-sheeted cover p : E → ThreeCircles and e : E, the Joined component restriction is an m-sheeted cover for m = Nat.card {x : E // p x = p e ∧ Joined e x}, with 0 < m, m ≤ n, and inclusion inducing a fundamental-group equivalence."},
+   :lemma
+   {:name
+    "T99J01PathComponentCoverRestriction.pathComponentRestrictionPackage",
+    :reported-by [:routes-2026-10-10-t99j01-closure-probe-40],
+    :type
+    "For an n-sheeted cover p : E → ThreeCircles and e : E, the Joined component restriction is an m-sheeted cover for m = Nat.card {x : E // p x = p e ∧ Joined e x}, with 0 < m, m ≤ n, and inclusion inducing a fundamental-group equivalence.",
+    :area "covering-subgroup-correspondence"},
+   :id
+   :lemma-t99j01pathcomponentcoverrestriction-pathcomponentrestrictionpackage,
+   :kind :lemma,
+   :depends-on
+   [:lemma-iscoveringmap-restrictpathcomponent
+    :lemma-finitecirclewedgefundamentalgroup-threecirclesfundamentalgroupequiv],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
