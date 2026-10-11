@@ -68997,7 +68997,49 @@
   {:bounded-exception
    "single-consumer exact collision-polynomial factorization at the meridian start",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:residual
+     "Implement the compiled meridian-start factorization; then relate the recovered input polynomial sign to rightTubeMeridianCoordinate.re and build matching-component paths.",
+     :outcome :go,
+     :warnings [],
+     :acceptance
+     {:declaration
+      "ConstructionTargets.T02A03GeometricTubeDeformation.meridianStart_collisionPolynomial_factor",
+      :type
+      "forall (z : Circle), let n := rightTubeCoreNormalComplex (apm_t02a03_circleMeridian z); (1-n.re)^2 - 4*(1-n.re)*((1 : Circle) : Complex).re + 3 = ((z : Complex).re/8)*(2+(z : Complex).re/8)",
+      :proof-obligations
+      ["expand the right-core normal coordinate of circleMeridian"
+       "use the Circle real-coordinate bound to resolve the square root"
+       "normalize the polynomial to the stated factorization"],
+      :forbidden-claims ["a sign-branch choice" "path construction"]},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd
+       "lake env lean /tmp/t02a03_meridian_start_poly_factor_probe.lean",
+       :exit 0,
+       :output
+       "meridianStart_collisionPolynomial_factor compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "sha256sum /tmp/t02a03_meridian_start_poly_factor_probe.lean",
+       :exit 0,
+       :output
+       "df4916dc1696e927e46d9e671c0e968d417974a26618b593e5602715cef683f4  /tmp/t02a03_meridian_start_poly_factor_probe.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_meridian_start_poly_factor_probe.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :fixture
+     {:path "/tmp/t02a03_meridian_start_poly_factor_probe.lean",
+      :sha256
+      "df4916dc1696e927e46d9e671c0e968d417974a26618b593e5602715cef683f4"},
+     :implementation
+     {:scope
+      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
+     :seat "topo-8"}},
+   :phase :implementation,
    :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
