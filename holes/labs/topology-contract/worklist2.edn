@@ -67808,6 +67808,18 @@
       "git diff --check -- ConstructionTargets/T02A03GeometricTubeDeformation.lean",
       :exit 0}
      {:cmd "git status --short", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791679146367-3504-e6cfc4eb",
+     :commands
+     ["git show/diff-tree --check ed4b988"
+      "sha256sum fixture and git blob verification"
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean"
+      "lake env lean /tmp/t02a03_ambient_endpoints_probe.lean"
+      "statement-registry fingerprint/status and placeholder/worklist EDN checks"],
+     :finding
+     "Recorded commit has exact one-file scope and fixture/blob hashes; module and frozen probe compile; endpoints have the frozen 0-to-meridian and 1-to-input orientations across the subtype/ambient boundary; continuity is assembled from the angular and normal paths through polar reconstruction; only standard axioms are reported, with no added placeholder or overclaim."},
     :commit "ed4b98818bad7404847a097ab6341235bcea842b",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
@@ -67824,7 +67836,7 @@
    :phase :implementation,
    :type
    "(forall p, rightTubeRadialAmbientDeformation (0,p) = apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)) and (forall p, rightTubeRadialAmbientDeformation (1,p) = p.1)",
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/right-tube-radial-ambient-endpoints",
@@ -67943,7 +67955,7 @@
      "Combining rightTubePlanarRotation with the specialized radial normal interpolation through rightTubePolarReconstruction gives a continuous ambient path. Direct coordinates identify time zero with circleMeridian(rightTubeMeridianCoordinate p), while rightTubePolarReconstruction_self identifies time one with p. This compiles independently of right-tube membership and left-core avoidance.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
