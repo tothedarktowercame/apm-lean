@@ -1358,6 +1358,39 @@ noncomputable def forgetOpcyclesRowHom
     comm₁₂ := forgetOpcyclesMap_naturality K.f i
     comm₂₃ := forgetOpcyclesMap_naturality K.g i }
 
+/-- Naturality of the comparison from forgotten coefficient cycles to the
+cycles of the forgotten complex. -/
+theorem forgetCyclesMap_naturality
+    {ι : Type} {c : ComplexShape ι}
+    {K₁ K₂ : HomologicalComplex (ModuleCat ℤ) c} (f : K₁ ⟶ K₂) (i : ι) :
+    ((K₁.sc i).mapCyclesIso forgetIntModules).inv ≫
+        HomologicalComplex.cyclesMap
+          ((forgetIntModules.mapHomologicalComplex c).map f) i =
+      forgetIntModules.map (HomologicalComplex.cyclesMap f i) ≫
+        ((K₂.sc i).mapCyclesIso forgetIntModules).inv :=
+  (ShortComplex.mapCyclesIso_inv_naturality
+    ((HomologicalComplex.shortComplexFunctor (ModuleCat ℤ) c i).map f)
+      forgetIntModules).symm
+
+abbrev ForgottenCyclesRowHom
+    {ι : Type} {c : ComplexShape ι}
+    (K : ShortComplex (HomologicalComplex (ModuleCat ℤ) c)) (i : ι) : Type _ :=
+    ((HomologicalComplex.cyclesFunctor (ModuleCat ℤ) c i).mapShortComplex.obj K).map
+        forgetIntModules ⟶
+      (HomologicalComplex.cyclesFunctor AddCommGrpCat c i).mapShortComplex.obj
+        (K.map (forgetIntModules.mapHomologicalComplex c))
+
+/-- The three component cycles comparisons form a morphism of rows. -/
+noncomputable def forgetCyclesRowHom
+    {ι : Type} {c : ComplexShape ι}
+    (K : ShortComplex (HomologicalComplex (ModuleCat ℤ) c)) (i : ι) :
+    ForgottenCyclesRowHom K i :=
+  { τ₁ := ((K.X₁.sc i).mapCyclesIso forgetIntModules).inv
+    τ₂ := ((K.X₂.sc i).mapCyclesIso forgetIntModules).inv
+    τ₃ := ((K.X₃.sc i).mapCyclesIso forgetIntModules).inv
+    comm₁₂ := forgetCyclesMap_naturality K.f i
+    comm₂₃ := forgetCyclesMap_naturality K.g i }
+
 /-- The corrected relative-homology comparison intertwines the coefficient
 absolute-to-relative map with the production relative projection. -/
 theorem integralRelativeHomologyComparisonWithTransport_projection
@@ -2342,6 +2375,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetSnakeInput
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetHomologyRowHom
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetOpcyclesRowHom
+#print axioms ConstructionTargets.ManifoldFundamentalClass.forgetCyclesRowHom
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
