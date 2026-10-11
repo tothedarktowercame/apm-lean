@@ -2168,99 +2168,138 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :implements-lemma
+   :lemma-constructiontargets-manifoldfundamentalclass-localizationmap-groupglobalgenerator-eq-zsmul-ambientlocalgenerator,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+   :dag-node
+   "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/basepoint-localization-coefficient",
+   :acceptance
+   {:implementation
+    "Promote the exact fixture theorem and import HigherChartLocalGenerator. For every consumer dimension k+2, apply ambientLocalGenerator_generates to the canonical localizationMap image of groupGlobalGenerator and obtain an explicit integer coefficient expressing that image as a multiple of the concrete ambient chart generator. Do not claim the coefficient is one, do not assert localization is an isomorphism, and do not introduce an orientation predicate.",
+    :declaration
+    "ConstructionTargets.ManifoldFundamentalClass.localizationMap_groupGlobalGenerator_eq_zsmul_ambientLocalGenerator",
+    :type
+    "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (e : (((AlgebraicTopology.singularHomologyFunctor (ModuleCat Int) (k+2)).obj (ModuleCat.of Int Int)).obj (TopCat.of M)) ≅ ModuleCat.of Int Int) (x : M), exists r : Int, r • HigherChartLocalGenerator.ambientLocalGenerator (k := k) x = localizationMap x (k+2) (groupGlobalGenerator (TopCat.of M) (k+2) e)",
+    :fixture
+    "/tmp/manifold_fundamental_class_localization_coefficient.lean",
+    :fixture-sha256
+    "48adb920db61f95bcee7c5b5682aa6528ae0bc1d6c3a78bda4361b17fbbe87dc",
+    :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
+    :route-step
+    "express localization of the concrete global generator as an explicit integer multiple of the actual ambient chart generator before orientation proves the coefficient is one"},
+   :id
+   :routes-2026-10-11-manifold-basepoint-localization-coefficient-topo3-r1,
+   :kind :reusable-theorem,
+   :area "manifold-fundamental-class",
+   :depends-on
+   [:routes-2026-10-10-topo3-seed-checkpoint-1
+    :routes-2026-10-10-manifold-local-positive-excision-topo3-r1
+    :routes-2026-10-10-manifold-oriented-overlap-coherence-topo3-r1
+    :routes-2026-10-10-manifold-connected-overlap-unit-topo3-r1
+    :routes-2026-10-10-manifold-oriented-connected-overlap-topo3-r1
+    :routes-2026-10-10-manifold-integral-transition-sign-topo3-r1
+    :routes-2026-10-10-manifold-exclude-negative-transition-topo3-r1
+    :routes-2026-10-10-manifold-global-generator-topo3-r1
+    :routes-2026-10-10-manifold-localization-iso-generator-topo3-r1
+    :routes-2026-10-10-manifold-generator-map-isiso-topo3-r1
+    :routes-2026-10-10-manifold-localization-map-naturality-topo3-r1
+    :routes-2026-10-10-manifold-localization-apply-naturality-topo3-r1
+    :routes-2026-10-10-manifold-group-global-generator-topo3-r1
+    :routes-2026-10-10-manifold-group-generator-naturality-topo3-r1
+    :routes-2026-10-10-manifold-global-local-generator-transport-topo3-r1],
+   :current-residual
+   "Use actual orientation normalization to prove the explicit basepoint localization coefficient is one, and verify the module and relative chart transport equations required by localizationMap_groupGlobalGenerator_transport.",
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-closedorientedfundamentalclass,
    :evidence
    {:probe
     {:residual
-     "After the compiled global-to-local transport theorem, prove one normalized basepoint localization equality and the two concrete oriented-chart transport equations.",
+     "Prove from actual orientation data that the explicit localization coefficient is one; then discharge the two concrete chart-transport equations and apply the banked propagation theorem.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
      [{:id
-       :lemma-constructiontargets-manifoldfundamentalclass-localizationmap-groupglobalgenerator-transport,
+       :lemma-constructiontargets-manifoldfundamentalclass-localizationmap-groupglobalgenerator-eq-zsmul-ambientlocalgenerator,
        :name
-       "ConstructionTargets.ManifoldFundamentalClass.localizationMap_groupGlobalGenerator_transport",
+       "ConstructionTargets.ManifoldFundamentalClass.localizationMap_groupGlobalGenerator_eq_zsmul_ambientLocalGenerator",
        :type
-       "forall {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y] (f : C(X,Y)) (x : X) (y : Y) (h : Set.MapsTo f (deletedPoint x) (deletedPoint y)) (n : Nat) (eX : (((AlgebraicTopology.singularHomologyFunctor (ModuleCat Int) n).obj (ModuleCat.of Int Int)).obj (TopCat.of X)) ≅ ModuleCat.of Int Int) (eY : (((AlgebraicTopology.singularHomologyFunctor (ModuleCat Int) n).obj (ModuleCat.of Int Int)).obj (TopCat.of Y)) ≅ ModuleCat.of Int Int) (gx : (RelativeSingularChains (deletedPoint x)).homology n) (gy : (RelativeSingularChains (deletedPoint y)).homology n), ((((AlgebraicTopology.singularHomologyFunctor (ModuleCat Int) n).obj (ModuleCat.of Int Int)).map (TopCat.ofHom f)).hom (globalGenerator Int _ eX) = globalGenerator Int _ eY) -> localizationMap x n (groupGlobalGenerator (TopCat.of X) n eX) = gx -> HomologicalComplex.homologyMap (relativeSingularMap (deletedPoint x) (deletedPoint y) f h) n gx = gy -> localizationMap y n (groupGlobalGenerator (TopCat.of Y) n eY) = gy",
+       "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (e : (((AlgebraicTopology.singularHomologyFunctor (ModuleCat Int) (k+2)).obj (ModuleCat.of Int Int)).obj (TopCat.of M)) ≅ ModuleCat.of Int Int) (x : M), exists r : Int, r • HigherChartLocalGenerator.ambientLocalGenerator (k := k) x = localizationMap x (k+2) (groupGlobalGenerator (TopCat.of M) (k+2) e)",
        :status :proved,
        :consumers [:t00J02 :t98A02],
        :depends-on
-       ["ConstructionTargets.ManifoldFundamentalClass.absoluteSingularMap_groupGlobalGenerator_naturality"
-        "ConstructionTargets.ManifoldFundamentalClass.localizationMap_apply_naturality"],
+       ["ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator_generates"],
        :area "manifold-fundamental-class"}],
      :prerequisite
      {:consumer :t00J02,
       :implements-lemma
-      :lemma-constructiontargets-manifoldfundamentalclass-localizationmap-groupglobalgenerator-transport,
+      :lemma-constructiontargets-manifoldfundamentalclass-localizationmap-groupglobalgenerator-eq-zsmul-ambientlocalgenerator,
       :phase :implementation,
       :state :open,
       :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
       :dag-node
-      "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/global-local-generator-transport",
+      "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/basepoint-localization-coefficient",
       :acceptance
       {:implementation
-       "Promote the exact fixture theorem. Compose absoluteSingularMap_groupGlobalGenerator_naturality with localizationMap_apply_naturality to transport a verified source localization equality to a target point. Retain as explicit hypotheses the actual module-valued global-generator equation and the actual relativeSingularMap equation between the chosen local generators. Do not introduce an orientation predicate, do not assume those equations automatically, and do not assert the normalized basepoint equality.",
+       "Promote the exact fixture theorem and import HigherChartLocalGenerator. For every consumer dimension k+2, apply ambientLocalGenerator_generates to the canonical localizationMap image of groupGlobalGenerator and obtain an explicit integer coefficient expressing that image as a multiple of the concrete ambient chart generator. Do not claim the coefficient is one, do not assert localization is an isomorphism, and do not introduce an orientation predicate.",
        :declaration
-       "ConstructionTargets.ManifoldFundamentalClass.localizationMap_groupGlobalGenerator_transport",
+       "ConstructionTargets.ManifoldFundamentalClass.localizationMap_groupGlobalGenerator_eq_zsmul_ambientLocalGenerator",
        :type
-       "forall {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y] (f : C(X,Y)) (x : X) (y : Y) (h : Set.MapsTo f (deletedPoint x) (deletedPoint y)) (n : Nat) (eX : (((AlgebraicTopology.singularHomologyFunctor (ModuleCat Int) n).obj (ModuleCat.of Int Int)).obj (TopCat.of X)) ≅ ModuleCat.of Int Int) (eY : (((AlgebraicTopology.singularHomologyFunctor (ModuleCat Int) n).obj (ModuleCat.of Int Int)).obj (TopCat.of Y)) ≅ ModuleCat.of Int Int) (gx : (RelativeSingularChains (deletedPoint x)).homology n) (gy : (RelativeSingularChains (deletedPoint y)).homology n), ((((AlgebraicTopology.singularHomologyFunctor (ModuleCat Int) n).obj (ModuleCat.of Int Int)).map (TopCat.ofHom f)).hom (globalGenerator Int _ eX) = globalGenerator Int _ eY) -> localizationMap x n (groupGlobalGenerator (TopCat.of X) n eX) = gx -> HomologicalComplex.homologyMap (relativeSingularMap (deletedPoint x) (deletedPoint y) f h) n gx = gy -> localizationMap y n (groupGlobalGenerator (TopCat.of Y) n eY) = gy",
+       "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (e : (((AlgebraicTopology.singularHomologyFunctor (ModuleCat Int) (k+2)).obj (ModuleCat.of Int Int)).obj (TopCat.of M)) ≅ ModuleCat.of Int Int) (x : M), exists r : Int, r • HigherChartLocalGenerator.ambientLocalGenerator (k := k) x = localizationMap x (k+2) (groupGlobalGenerator (TopCat.of M) (k+2) e)",
        :fixture
-       "/tmp/manifold_fundamental_class_localization_transport.lean",
+       "/tmp/manifold_fundamental_class_localization_coefficient.lean",
        :fixture-sha256
-       "8b890f2aa07c8db42d813b8172a8855e48c49c971002ed33d3fecd9d6c1362d1",
+       "48adb920db61f95bcee7c5b5682aa6528ae0bc1d6c3a78bda4361b17fbbe87dc",
        :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
        :route-step
-       "propagate the canonical localization equality for the transported global generator through actual absolute and relative singular-homology maps"},
+       "express localization of the concrete global generator as an explicit integer multiple of the actual ambient chart generator before orientation proves the coefficient is one"},
       :id
-      :routes-2026-10-10-manifold-global-local-generator-transport-topo3-r1,
+      :routes-2026-10-11-manifold-basepoint-localization-coefficient-topo3-r1,
       :kind :reusable-theorem,
       :area "manifold-fundamental-class",
       :depends-on
       [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
-       :routes-2026-10-10-manifold-group-generator-naturality-topo3-r1
-       :routes-2026-10-10-manifold-localization-apply-naturality-topo3-r1],
+       :routes-2026-10-10-manifold-group-global-generator-topo3-r1
+       :routes-2026-10-10-manifold-global-local-generator-transport-topo3-r1],
       :current-residual
-      "Prove the normalized basepoint localization equality and prove that actual orientation-compatible chart transports preserve the selected module global generator and carry the concrete relative chart generator as required.",
+      "Use actual orientation normalization to prove the explicit basepoint localization coefficient is one, and verify the module and relative chart transport equations required by localizationMap_groupGlobalGenerator_transport.",
       :other-consumers [:t98A02]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake env lean /tmp/manifold_fundamental_class_localization_transport.lean",
+       "lake env lean /tmp/manifold_fundamental_class_localization_coefficient.lean",
        :exit 0,
        :output
-       "localizationMap_groupGlobalGenerator_transport compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "localizationMap_groupGlobalGenerator_eq_zsmul_ambientLocalGenerator compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/manifold_fundamental_class_localization_transport.lean",
+       "sha256sum /tmp/manifold_fundamental_class_localization_coefficient.lean",
        :exit 0,
        :output
-       "8b890f2aa07c8db42d813b8172a8855e48c49c971002ed33d3fecd9d6c1362d1  /tmp/manifold_fundamental_class_localization_transport.lean"}
+       "48adb920db61f95bcee7c5b5682aa6528ae0bc1d6c3a78bda4361b17fbbe87dc  /tmp/manifold_fundamental_class_localization_coefficient.lean"}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/manifold_fundamental_class_localization_transport.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/manifold_fundamental_class_localization_coefficient.lean || true)\"",
        :exit 0}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
      :diagnostic-history
      [{:cmd
-       "lake env lean /tmp/manifold_fundamental_class_localization_transport.lean",
+       "lake env lean /tmp/manifold_fundamental_class_localization_coefficient.lean",
        :exit 1,
        :finding
-       "The first draft referenced the moduleSingularHomology abbreviations, which are intentionally private in the reviewed module. Expanding their exact canonical singular-homology types corrected the public fixture statement."}
-      {:cmd
-       "lake env lean /tmp/manifold_fundamental_class_localization_transport.lean",
-       :exit 1,
-       :finding
-       "The first expanded proof left the MapsTo proof implicit during rewriting. Supplying f, x, y, h, and n explicitly to localizationMap_apply_naturality removed the unresolved proof argument."}],
+       "The first compile showed that HigherChartLocalGenerator is not imported transitively by ManifoldFundamentalClass. Importing that existing concrete chart-generator module made the intended theorem and its Euclidean model available; no substitute definition was introduced."}],
      :fixture
      {:path
-      "/tmp/manifold_fundamental_class_localization_transport.lean",
+      "/tmp/manifold_fundamental_class_localization_coefficient.lean",
       :sha256
-      "8b890f2aa07c8db42d813b8172a8855e48c49c971002ed33d3fecd9d6c1362d1"},
+      "48adb920db61f95bcee7c5b5682aa6528ae0bc1d6c3a78bda4361b17fbbe87dc"},
      :finding
-     "The transported global-generator naturality result and elementwise canonical localization naturality are reviewed and banked. The fixture composes them without introducing a facade: a concrete continuous map of deleted-point pairs, an explicit module-level equation preserving the chosen global generator, a verified source localization equality, and an explicit relative-homology equation carrying the source chart generator to the target chart generator imply the target localization equality. Thus propagation is complete once those actual geometric equations are supplied. The remaining fundamental-class core is now sharply separated into one normalized basepoint calculation plus proofs that the chosen oriented chart transports satisfy the displayed module and relative equations.",
+     "The reviewed global-to-local transport theorem is banked. HigherChartLocalGenerator already constructs the concrete ambient local generator in every dimension k+2 and proves that it spans the actual deleted-point relative singular homology. Applying that theorem to localizationMap of groupGlobalGenerator yields a concrete integer coefficient r with r times the chart generator equal to the localized global class. This is not an orientation facade and does not assume localization is an isomorphism. It isolates the remaining basepoint geometry as the exact arithmetic claim r = 1 for the orientation-compatible normalization; after that, the reviewed transport theorem propagates the equality.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -2289,7 +2328,8 @@
     :routes-2026-10-10-manifold-localization-apply-naturality-topo3-r1
     :routes-2026-10-10-manifold-group-global-generator-topo3-r1
     :routes-2026-10-10-manifold-group-generator-naturality-topo3-r1
-    :routes-2026-10-10-manifold-global-local-generator-transport-topo3-r1],
+    :routes-2026-10-10-manifold-global-local-generator-transport-topo3-r1
+    :routes-2026-10-11-manifold-basepoint-localization-coefficient-topo3-r1],
    :current-residual
    "Local-degree counts and wild-ball complement homology remain.",
    :other-consumers [:t98A02]}
@@ -4045,6 +4085,30 @@
    :depends-on
    [:lemma-constructiontargets-manifoldfundamentalclass-absolutesingularmap-groupglobalgenerator-naturality
     :lemma-constructiontargets-manifoldfundamentalclass-localizationmap-apply-naturality],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFundamentalClass.localizationMap_groupGlobalGenerator_eq_zsmul_ambientLocalGenerator",
+    :type
+    "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (e : (((AlgebraicTopology.singularHomologyFunctor (ModuleCat Int) (k+2)).obj (ModuleCat.of Int Int)).obj (TopCat.of M)) ≅ ModuleCat.of Int Int) (x : M), exists r : Int, r • HigherChartLocalGenerator.ambientLocalGenerator (k := k) x = localizationMap x (k+2) (groupGlobalGenerator (TopCat.of M) (k+2) e)"},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFundamentalClass.localizationMap_groupGlobalGenerator_eq_zsmul_ambientLocalGenerator",
+    :reported-by
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    :type
+    "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (e : (((AlgebraicTopology.singularHomologyFunctor (ModuleCat Int) (k+2)).obj (ModuleCat.of Int Int)).obj (TopCat.of M)) ≅ ModuleCat.of Int Int) (x : M), exists r : Int, r • HigherChartLocalGenerator.ambientLocalGenerator (k := k) x = localizationMap x (k+2) (groupGlobalGenerator (TopCat.of M) (k+2) e)",
+    :area "manifold-fundamental-class",
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+   :id
+   :lemma-constructiontargets-manifoldfundamentalclass-localizationmap-groupglobalgenerator-eq-zsmul-ambientlocalgenerator,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-manifoldfundamentalclass-groupglobalgenerator-generates],
    :other-consumers [:t98A02]}],
  :consumer-baselines {},
  :statuses
