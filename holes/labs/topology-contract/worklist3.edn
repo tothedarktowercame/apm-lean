@@ -3316,6 +3316,23 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git status --porcelain", :exit 0, :stdout ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791679904654-3540-96160390",
+     :commands
+     ["git diff-tree recorded commit scope"
+      "sha256sum promoted fixture"
+      "source blob comparison"
+      "lake env lean promoted fixture"
+      "lake env lean target module"
+      "lake build target module"
+      "placeholder and axiom scan"
+      "statement registry check"
+      "consumer placeholder census"
+      "git diff --check recorded commit"],
+     :finding
+     "PASS: implementation commit f75c0539 changes exactly ConstructionTargets/ManifoldFundamentalClass.lean and its blob matches the reviewed source; promoted fixture hash 2481f55758b8a6e9dc23b6103620878758b0947c4a16f6e4e9e4c790942ede83 matches recorded evidence and preserves the frozen theorem type from the original fixture; integralMappedRelativeCokernelComparison applies cokernel.mapIso to the actual forgotten ModuleCat and AddCommGrp subtype chain maps, using singularChainsComparison on the subtype and ambient objects together with the reviewed naturality equality, and produces the canonical direct-cokernel isomorphism in the required direction; it does not identify a forgotten cokernel with a cokernel after forgetting, pass to homology, transport a generator, or assert localization normalization; fixture, module, and target build pass with zero source/fixture placeholders and only propext, Classical.choice, and Quot.sound; 131 statements match and consumer placeholders remain t00J02=1 and t98A02=1."},
     :commit "f75c053915335ac3b30c4c3a8fd9fa9941dd4a2b",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -3342,7 +3359,7 @@
       "Canonical cokernel isomorphism from the forgotten module-valued direct-cokernel presentation to the additive-group-valued direct-cokernel presentation, induced by the absolute integral chain comparisons and their subtype naturality equality"}},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/integral-relative-direct-cokernel-comparison",
@@ -3480,7 +3497,7 @@
      "The rejected receipt omitted the prerequisite row id. The theorem itself freshly recompiles. The reviewed subtype naturality equality has the orientation required by cokernel.mapIso, yielding the canonical direct-cokernel comparison. The next prerequisite is the preservation-of-cokernel comparison for forgetIntModules; homology and generator transport follow after composition.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -5600,7 +5617,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -5617,7 +5634,10 @@
     "forall {X : Type} [TopologicalSpace X] (A : Set X), cokernel ((forgetIntModules.mapHomologicalComplex (ComplexShape.down Nat)).map ((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat Int)).obj (ModuleCat.of Int Int)).map (integralSubtypeInclusion A)))) ≅ cokernel ((((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj (AddCommGrpCat.of Int)).map (integralSubtypeInclusion A)))",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-integral-mapped-relative-cokernel-topo3-r1},
+    :routes-2026-10-11-manifold-integral-mapped-relative-cokernel-topo3-r1,
+    :banked-by
+    :routes-2026-10-11-manifold-integral-mapped-relative-cokernel-topo3-r1,
+    :banked-commit "f75c053915335ac3b30c4c3a8fd9fa9941dd4a2b"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-integralmappedrelativecokernelcomparison,
    :kind :lemma,
