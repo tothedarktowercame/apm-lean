@@ -13372,8 +13372,77 @@
   {:consumer :t00J02,
    :implements-lemma
    :lemma-mfclass-coefficient-pair-inclusion-homology-preservation,
+   :evidence
+   {:placeholder-delta
+    {:t00J02 {:before 1, :after 1, :delta 0},
+     :t98A02 {:before 1, :after 1, :delta 0}},
+    :residual
+    "Use the now-banked projection and inclusion mapHomologyIso naturality squares to prove that the exact forgetful functor preserves the snake-lemma connecting morphism; specialize it to coefficientOpenDiskConnectingTransport, then rewrite the raw square.",
+    :gates
+    {:module-compile :pass,
+     :target-build :pass,
+     :statement-registry "131 registered statements match, 0 do not",
+     :scoped-diff :pass,
+     :forbidden-placeholder-scan :pass,
+     :scoped-worktree-clean true},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.ManifoldFundamentalClass.coefficientPairInclusion_mapHomologyIso_naturality",
+      :type
+      "forall X A n, the forgotten coefficient subspace homology map followed by inverse mapHomologyIso equals inverse mapHomologyIso followed by homology of the forgotten subspace chain map",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on [],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes
+    {:module
+     "5459e6a26d432183b3182211621fabcb070c5589bf4f9536b7641671b9ca57c6"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :topo-10,
+    :reason
+    "Promoted the exact fixture theorem coefficientPairInclusion_mapHomologyIso_naturality. The proof specializes ShortComplex.mapHomologyIso_inv_naturality to the short-complex map induced by CoefficientRelativeSmall.subspaceMap, establishing the inverse homology-preservation square without entering connecting-morphism or sign arguments.",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/manifold_fundamental_class_coefficient_inclusion_homology_preservation.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "git diff --check d44d771f2^ d44d771f2 -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd
+      "forbidden placeholder scan in ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "comment-stripped placeholder counts for t00J02 t98A02",
+      :exit 0}
+     {:cmd
+      "git status --short -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}],
+    :diagnostic-history [],
+    :commit "d44d771f2bf2925f78bb0bf1f645c7d36396d475",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path
+     "/tmp/manifold_fundamental_class_coefficient_inclusion_homology_preservation.lean",
+     :sha256
+     "b9a2d5b4fcec85c7a5bc9ad779fa98ab5cd326b066515d990f87a43a69928644"},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :declaration
+     "ConstructionTargets.ManifoldFundamentalClass.coefficientPairInclusion_mapHomologyIso_naturality"},
+    :row
+    :routes-2026-10-11-manifold-coefficient-pair-inclusion-homology-preservation-topo3-r1,
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/integral-open-disk-connecting-naturality/inclusion-homology-preservation",
@@ -20227,11 +20296,13 @@
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.coefficientPairInclusion_mapHomologyIso_naturality",
     :reported-by
-    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+     :routes-2026-10-11-manifold-coefficient-pair-inclusion-homology-preservation-topo3-r1],
     :type
     "forall {X : Type} [TopologicalSpace X] (A : Set X) (n : ℕ), forgetIntModules.map (HomologicalComplex.homologyMap (CoefficientRelativeSmall.subspaceMap ℤ A) n) ≫ (((CoefficientH0.SingularChains ℤ (TopCat.of X)).sc n).mapHomologyIso forgetIntModules).inv = (((CoefficientH0.SingularChains ℤ (TopCat.of A)).sc n).mapHomologyIso forgetIntModules).inv ≫ HomologicalComplex.homologyMap ((forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ)).map (CoefficientRelativeSmall.subspaceMap ℤ A)) n",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in
+    :routes-2026-10-11-manifold-coefficient-pair-inclusion-homology-preservation-topo3-r1},
    :id :lemma-mfclass-coefficient-pair-inclusion-homology-preservation,
    :kind :lemma,
    :depends-on
