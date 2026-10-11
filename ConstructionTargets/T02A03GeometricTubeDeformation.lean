@@ -1258,6 +1258,17 @@ theorem positiveSign_input_collisionPolynomial_pos
   rw [hpoly, hm, mul_one]
   exact hc
 
+theorem realEndpoints_zeroHeight_rightTubeCoreNormals
+    (p : RightTubeMinusLeftCore) (hheight : p.1 2 = 0) :
+    (rightTubeCoreNormalComplex
+          (apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p))).im = 0 ∧
+      (rightTubeCoreNormalComplex p.1).im = 0 := by
+  constructor
+  · obtain ⟨c, hc, him⟩ :=
+      rightTubeMeridianCoordinate_im_positiveFactor_height p
+    simp [rightTubeCoreNormalComplex, apm_t02a03_circleMeridian, him, hheight]
+  · simp [rightTubeCoreNormalComplex, hheight]
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -1306,3 +1317,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.positiveSign_rightTubeNormalComplex_re_pos
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.positiveSign_radialStart_collisionPolynomial_pos
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.positiveSign_input_collisionPolynomial_pos
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.realEndpoints_zeroHeight_rightTubeCoreNormals
