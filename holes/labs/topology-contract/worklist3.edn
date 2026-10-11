@@ -17854,6 +17854,19 @@
       :exit 1,
       :finding
       "The first statement used ContinuousMap.comp equality, while Mathlib's lifting theorem returns equality of underlying function compositions; restating the frozen blueprint notation as function composition made the types definitionally align, and the successful rerun is recorded in commands."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791714601215-5066-2eb24d21",
+     :commands
+     ["git diff-tree --no-commit-id --name-status -r 86bc907290495c45a2f498308e49b407b3e9f239"
+      "git diff --check 86bc907290495c45a2f498308e49b407b3e9f239^ 86bc907290495c45a2f498308e49b407b3e9f239"
+      "sha256sum ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean ConstructionTargets/DeckGroupQuotientFundamentalGroup.blueprint.md"
+      "lake env lean ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean"
+      "python3 scripts/statement-registry.py check"
+      "lake build ConstructionTargets.DeckGroupQuotientFundamentalGroup"],
+     :finding
+     "PASS: commit 86bc907290495c45a2f498308e49b407b3e9f239 adds new compiled, sorry-free B4 progress after the last program-history entry; exact scope and blobs match, hashes reproduce, the theorem faithfully implements the reviewed unique-lift orientation and representation boundary, uses the stated hypotheses through Mathlib covering-lift machinery, has only standard axioms, and the milestone note lists B5-B11 remaining."},
     :commit "86bc907290495c45a2f498308e49b407b3e9f239",
     :changed-paths
     ["ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean"
@@ -17871,7 +17884,7 @@
    :phase :implementation,
    :owner-repair
    "2026-10-11 claude-14: final type gains [T2Space X] [LocallyCompactSpace X] (Mathlib quotient-covering needs them; every consumer, the plane and spheres, has them). Do not prove covering under weaker hypotheses.",
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean"
     "ConstructionTargets/DeckGroupQuotientFundamentalGroup.md"
@@ -17891,7 +17904,7 @@
     :blueprint
     "ConstructionTargets/DeckGroupQuotientFundamentalGroup.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Repaired the blueprint review failure by adding B4, orbitProjection_existsUnique_lift. B4 applies Mathlib IsCoveringMap.existsUnique_continuousMap_lifts to the orbit projection and genuinely requires the frozen LocPathConnectedSpace X hypothesis together with SimplyConnectedSpace X. Deck-equivariance now depends on B4, and the downstream nodes were renumbered B5-B11. This blueprint-only repair is committed and awaits independent mathematical review before Lean implementation resumes.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Implemented and committed reviewed blueprint node B4. orbitProjection_existsUnique_lift applies IsCoveringMap.existsUnique_continuousMap_lifts to the orbit projection, with domain X, basepoint x, and chosen lift g • x; Quotient.sound supplies the orbit-class basepoint equality. Its type explicitly requires SimplyConnectedSpace X and LocPathConnectedSpace X, so the repaired final interface's local path-connectedness hypothesis is now genuinely used. The final theorem remains incomplete and the next program job starts at B5 deck-equivariance.",
    :id :program-2026-10-11-deck-group-quotient-pi1,
    :kind :reusable-theorem,
    :campaign-priority 50,
@@ -17919,7 +17932,11 @@
     {:job 6,
      :commit "1555d1066cb82639f109c14613a04c839e94e56a",
      :reason
-     "Repaired the blueprint review failure by adding B4, orbitProjection_existsUnique_lift. B4 applies Mathlib IsCoveringMap.existsUnique_continuousMap_lifts to the orbit projection and genuinely requires the frozen LocPathConnectedSpace X hypothesis together with SimplyConnectedSpace X. Deck-equivariance now depends on B4, and the downstream nodes were renumbered B5-B11. This blueprint-only repair is committed and awaits independent mathematical review before Lean implementation resumes."}]}
+     "Repaired the blueprint review failure by adding B4, orbitProjection_existsUnique_lift. B4 applies Mathlib IsCoveringMap.existsUnique_continuousMap_lifts to the orbit projection and genuinely requires the frozen LocPathConnectedSpace X hypothesis together with SimplyConnectedSpace X. Deck-equivariance now depends on B4, and the downstream nodes were renumbered B5-B11. This blueprint-only repair is committed and awaits independent mathematical review before Lean implementation resumes."}
+    {:job 7,
+     :commit "86bc907290495c45a2f498308e49b407b3e9f239",
+     :reason
+     "Implemented and committed reviewed blueprint node B4. orbitProjection_existsUnique_lift applies IsCoveringMap.existsUnique_continuousMap_lifts to the orbit projection, with domain X, basepoint x, and chosen lift g • x; Quotient.sound supplies the orbit-class basepoint equality. Its type explicitly requires SimplyConnectedSpace X and LocPathConnectedSpace X, so the repaired final interface's local path-connectedness hypothesis is now genuinely used. The final theorem remains incomplete and the next program job starts at B5 deck-equivariance."}]}
   {:consumer :t00J02,
    :phase :lemma,
    :state :backlog,
