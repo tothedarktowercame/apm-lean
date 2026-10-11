@@ -93,6 +93,55 @@ theorem orbitProjection_existsUnique_lift
         Quotient.mk (MulAction.orbitRel G X) x
       exact Quotient.sound ⟨g, rfl⟩)
 
+/-- Monodromy of an orbit-covering loop commutes with translation by a deck
+transformation. -/
+theorem orbitMonodromy_deck_equivariant
+    {G X : Type*} [Group G] [TopologicalSpace X] [MulAction G X]
+    [ContinuousConstSMul G X] [ProperlyDiscontinuousSMul G X]
+    [LocallyCompactSpace X] [T2Space X] [SimplyConnectedSpace X]
+    [LocPathConnectedSpace X]
+    (free : ∀ g : G, ∀ x : X, g • x = x → g = 1) (x : X)
+    (γ : FundamentalGroup (MulAction.orbitRel.Quotient G X) (Quotient.mk _ x))
+    (g : G) :
+    (((quotientMk_isCoveringMap free).monodromy
+        (FundamentalGroup.toPath γ) (orbitQuotientFiberEquiv free x g) :
+          (Quotient.mk (MulAction.orbitRel G X) :
+            X → MulAction.orbitRel.Quotient G X) ⁻¹' {Quotient.mk _ x}) : X) =
+      g • (((quotientMk_isCoveringMap free).monodromy
+        (FundamentalGroup.toPath γ) ⟨x, rfl⟩ :
+          (Quotient.mk (MulAction.orbitRel G X) :
+            X → MulAction.orbitRel.Quotient G X) ⁻¹' {Quotient.mk _ x}) : X) := by
+  let q : C(X, MulAction.orbitRel.Quotient G X) :=
+    ⟨Quotient.mk (MulAction.orbitRel G X), continuous_quotient_mk'⟩
+  let cov := quotientMk_isCoveringMap free
+  obtain ⟨F, hF, huniq⟩ := orbitProjection_existsUnique_lift free x g
+  let T : C(X, X) := ⟨fun y ↦ g • y, continuous_const_smul g⟩
+  have hT : T x = g • x ∧
+      Quotient.mk (MulAction.orbitRel G X) ∘ T =
+        Quotient.mk (MulAction.orbitRel G X) := by
+    refine ⟨rfl, funext fun y ↦ ?_⟩
+    exact Quotient.sound ⟨g, rfl⟩
+  have hFT : F = T := (huniq T hT).symm
+  have hxg : Quotient.mk (MulAction.orbitRel G X) x =
+      Quotient.mk (MulAction.orbitRel G X) (g • x) :=
+    (Quotient.sound (s := MulAction.orbitRel G X)
+      (show g • x ∈ MulAction.orbit G x from ⟨g, rfl⟩)).symm
+  obtain ⟨γ⟩ := γ
+  change cov.liftPath γ (g • x) (γ.source.trans hxg) 1 =
+    g • cov.liftPath γ x (by simp) 1
+  have hlift : F.comp (cov.liftPath γ x (by simp)) =
+      cov.liftPath γ (g • x) (γ.source.trans hxg) := by
+    apply (cov.eq_liftPath_iff' _).mpr
+    constructor
+    · funext t
+      exact (congr_fun hF.2 (cov.liftPath γ x (by simp) t)).trans
+        (congr_fun (cov.liftPath_lifts γ x (by simp)) t)
+    · change F (cov.liftPath γ x (by simp) 0) = g • x
+      rw [cov.liftPath_zero]
+      exact hF.1
+  rw [← hlift, hFT]
+  rfl
+
 /-- Endpoint monodromy for the repaired orbit covering, expressed as the
 unique acting-group element carrying the chosen lift `x` to the endpoint of
 the lifted loop. The inverse needed to obtain a homomorphism into `G` is left
@@ -181,6 +230,7 @@ theorem freeProperlyDiscontinuousQuotient_fundamentalGroupEquiv_refuted :
 #print axioms quotientCoveringOrbitFiberEquiv
 #print axioms orbitQuotientFiberEquiv
 #print axioms orbitProjection_existsUnique_lift
+#print axioms orbitMonodromy_deck_equivariant
 #print axioms orbitEndpointMonodromyRaw
 #print axioms orbitEndpointMonodromyRaw_one
 #print axioms indiscreteRegularAction_no_fundamentalGroupEquiv

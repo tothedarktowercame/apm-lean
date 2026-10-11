@@ -30,6 +30,12 @@ commutes with the deck action.
 directly. Blueprint B5 can now compare this lift with deck translation to
 prove monodromy equivariance.
 
+`orbitMonodromy_deck_equivariant` implements blueprint B5. It uses B4's
+uniqueness clause to identify the selected global lift with translation by
+`g`, composes that lift with the path lifted from `x`, and applies uniqueness
+of path lifts. Evaluating at the endpoint proves that monodromy from `g • x`
+is the `g`-translate of monodromy from `x`.
+
 ## Refutation of the frozen final statement
 
 The fixed theorem omits every separation hypothesis. This is not merely a gap
@@ -47,8 +53,8 @@ negates the exact universal proposition of the program's frozen final type.
 
 ## Remaining work for the repaired statement
 
-1. Prove that monodromy commutes with the deck action and that raw endpoint
-   coordinates reverse multiplication; invert the raw coordinate to package
+1. Use deck-equivariance to prove that raw endpoint coordinates reverse
+   multiplication; invert the raw coordinate to package
    `orbitEndpointMonodromy : FundamentalGroup _ _ →* G`.
 2. Prove surjectivity and identify its kernel with the image of the total
    space's fundamental group.
