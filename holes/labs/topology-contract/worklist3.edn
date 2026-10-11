@@ -14621,6 +14621,21 @@
       "git status --short -- ConstructionTargets/ManifoldFundamentalClass.lean",
       :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791723935167-5391-2d422f40",
+     :commands
+     ["git diff-tree --no-commit-id --name-status -r 2e50c9fb20fc21ff7666000bd78038c31ac5ae89"
+      "git diff --check 2e50c9fb20fc21ff7666000bd78038c31ac5ae89^ 2e50c9fb20fc21ff7666000bd78038c31ac5ae89"
+      "sha256sum /tmp/manifold_fundamental_class_forget_short_exact.lean ConstructionTargets/ManifoldFundamentalClass.lean"
+      "lake env lean fixture-body-with-promoted-name-renamed"
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped placeholder counts for t00J02 t98A02"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"],
+     :finding
+     "PASS: commit 2e50c9fb20fc21ff7666000bd78038c31ac5ae89 has exact one-file scope and matching recorded blob; fixture and module hashes reproduce exactly; the theorem faithfully maps any ShortExact sequence in ModuleCat Z to a ShortExact sequence under forgetIntModules using ShortComplex.ShortExact.map_of_exact, without constructing mapped snake inputs, identifying witnesses, or asserting connecting preservation; fixture body, module, registry, and 8326-job build pass; axioms are exactly propext, Classical.choice, and Quot.sound; target placeholders are zero and consumer counts remain 1/1."},
     :commit "2e50c9fb20fc21ff7666000bd78038c31ac5ae89",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -14635,7 +14650,7 @@
     :row :routes-2026-10-11-manifold-forget-short-exact-topo3-r1,
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/integral-open-disk-connecting-naturality/snake-input-exact-rows",
@@ -14825,7 +14840,7 @@
      "A direct construction of the exact-functor image of coefficientOpenDiskSnakeInput does not elaborate merely from the five banked naturality faces: its structure also demands preserved short-exact rows and kernel/cokernel witnesses. The compiled prerequisite proves the row-exactness obligation uniformly via ShortExact.map_of_exact. After it is banked, the bounded remaining representation step is to package the preserved kernel/cokernel data into the mapped SnakeInput and assemble the four-row comparison before applying naturality_δ.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -21653,7 +21668,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -21669,8 +21684,9 @@
     :type
     "forall {S : ShortComplex (ModuleCat ℤ)}, S.ShortExact -> (S.map forgetIntModules).ShortExact",
     :area "manifold-fundamental-class",
-    :proved-in
-    :routes-2026-10-11-manifold-forget-short-exact-topo3-r1},
+    :proved-in :routes-2026-10-11-manifold-forget-short-exact-topo3-r1,
+    :banked-by :routes-2026-10-11-manifold-forget-short-exact-topo3-r1,
+    :banked-commit "2e50c9fb20fc21ff7666000bd78038c31ac5ae89"},
    :id :lemma-mfclass-forget-short-exact,
    :kind :lemma,
    :depends-on
