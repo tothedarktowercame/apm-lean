@@ -1795,6 +1795,22 @@ theorem coupledAngularArrivalCollision_negative_endpoint
     simpa only [Complex.mul_im, Complex.conj_re, Complex.conj_im,
       neg_mul, add_comm] using hdet
 
+theorem coupledAngularArrivalLeg_ne_zero_of_negative_endpoint_cross
+    (W : C(RightTubeMinusLeftCore, ℂ))
+    (hW : ∀ p, 0 < (W p).re)
+    (hcross : ∀ p,
+      (rightTubeCorePlanarComplex p.1).re < 0 →
+        (conj (W p) * rightTubeCorePlanarComplex p.1).im ≠ 0)
+    (t : unitInterval) (p : RightTubeMinusLeftCore)
+    (ht : ¬ (t : ℝ) ≤ 1 / 2) :
+    (((2 - 2 * (t : ℝ) : ℝ) : ℂ) * W p +
+        ((2 * (t : ℝ) - 1 : ℝ) : ℂ) *
+          rightTubeCorePlanarComplex p.1) ≠ 0 := by
+  intro hz
+  obtain ⟨hneg, hzero⟩ :=
+    coupledAngularArrivalCollision_negative_endpoint W hW t p ht hz
+  exact hcross p hneg hzero
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -1862,3 +1878,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularDepartureLeg_ne_zero_of_waypoint_re_pos
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularArrivalLeg_ne_zero_of_cross_im_ne_zero
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularArrivalCollision_negative_endpoint
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularArrivalLeg_ne_zero_of_negative_endpoint_cross
