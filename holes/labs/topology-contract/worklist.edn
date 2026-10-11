@@ -101877,8 +101877,89 @@
   {:bounded-exception
    "This single-consumer prerequisite proves the interior half of decoder presentation independence, complementary to the already banked common endpoint theorem.",
    :consumer :t97A01,
+   :evidence
+   {:placeholder-delta
+    {:source-before 0,
+     :source-after 0,
+     :fixture-before 0,
+     :fixture-after 0,
+     :consumer-before 1,
+     :consumer-after 1},
+    :residual
+    "Split arbitrary closed parameters into half-open or endpoint-one cases and combine the interior and vertex theorems to obtain full presentation independence.",
+    :gates
+    {:module-build :pass,
+     :fixture-compiles :pass,
+     :zero-source-and-fixture-sorry :pass,
+     :standard-only-axioms :pass,
+     :registry-check :pass,
+     :scoped-diff-check :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["The scoped module emitted no warnings; replayed dependencies emitted pre-existing linter warnings. The shared worktree contains an unrelated concurrent modification to ConstructionTargets/T02A03GeometricTubeDeformation.lean; it was neither staged nor included in this row commit."],
+    :missing-theorems
+    [{:name
+      "PolygonBoundaryDecoderInteriors.n3EdgeDecode_interior_wellDefined",
+      :type
+      "∀ (j k : Fin 6) (t u : Set.Ico (0 : ℝ) 1), circleEdgePoint j (halfOpenToClosed t) = circleEdgePoint k (halfOpenToClosed u) → n3EdgeDecode j (halfOpenToClosed t) = n3EdgeDecode k (halfOpenToClosed u)",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on [],
+      :area "polygon-surface-open-cover"}
+     {:name
+      "PolygonBoundaryDecoderInteriors.torusCrosscapEdgeDecode_interior_wellDefined",
+      :type
+      "∀ (j k : Fin 6) (t u : Set.Ico (0 : ℝ) 1), circleEdgePoint j (halfOpenToClosed t) = circleEdgePoint k (halfOpenToClosed u) → torusCrosscapEdgeDecode j (halfOpenToClosed t) = torusCrosscapEdgeDecode k (halfOpenToClosed u)",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on [],
+      :area "polygon-surface-open-cover"}],
+    :statement-hashes
+    {"fixture"
+     "0869250f442076623800a9eacd7f0d7fdad5e359817cba1b6c2dcbf4c0be7887",
+     "implementation"
+     "4b66fc272e3b33c7ca0e380ec96b2b67153700e91958926071053739c27339b1"},
+    :axioms
+    {"n3EdgeDecode_interior_wellDefined"
+     ["propext" "Classical.choice" "Quot.sound"],
+     "torusCrosscapEdgeDecode_interior_wellDefined"
+     ["propext" "Classical.choice" "Quot.sound"]},
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd "sha256sum /tmp/polygon-boundary-decoder-interiors.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.PolygonBoundaryDecoderInteriors",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/polygon-boundary-decoder-interiors.lean",
+      :exit 0}
+     {:cmd
+      "rg -n \\b(sorry|admit)\\b ConstructionTargets/PolygonBoundaryDecoderInteriors.lean /tmp/polygon-boundary-decoder-interiors.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "git diff --check 8c4223fd^ 8c4223fd -- ConstructionTargets/PolygonBoundaryDecoderInteriors.lean",
+      :exit 0}
+     {:cmd "git status --porcelain", :exit 0}],
+    :diagnostic-history [],
+    :commit "8c4223fdf9a3bfe9889af99ef0705738fe786b92",
+    :changed-paths
+    ["ConstructionTargets/PolygonBoundaryDecoderInteriors.lean"],
+    :fixture
+    {:path "/tmp/polygon-boundary-decoder-interiors.lean",
+     :sha256
+     "0869250f442076623800a9eacd7f0d7fdad5e359817cba1b6c2dcbf4c0be7887"},
+    :implementation
+    {:scope
+     ["ConstructionTargets/PolygonBoundaryDecoderInteriors.lean"],
+     :summary
+     "Defined the literal half-open-to-closed unit-interval conversion and proved both decoder tables independent of equal half-open canonical edge presentations using six-edge interior uniqueness."},
+    :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PolygonBoundaryDecoderInteriors.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/boundary-decoder-interiors",
@@ -106054,12 +106135,13 @@
    {:name
     "PolygonBoundaryDecoderInteriors.n3EdgeDecode_interior_wellDefined",
     :reported-by
-    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40
+     :routes-2026-10-11-polygon-boundary-decoder-interiors-72],
     :type
     "Equal half-open canonical edge presentations have equal N3 decoder values.",
     :area "polygon-surface-open-cover",
     :proved-in
-    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+    :routes-2026-10-11-polygon-boundary-decoder-interiors-72},
    :id
    :lemma-polygonboundarydecoderinteriors-n3edgedecode-interior-welldefined,
    :kind :lemma,
@@ -106079,12 +106161,13 @@
    {:name
     "PolygonBoundaryDecoderInteriors.torusCrosscapEdgeDecode_interior_wellDefined",
     :reported-by
-    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40
+     :routes-2026-10-11-polygon-boundary-decoder-interiors-72],
     :type
     "Equal half-open canonical edge presentations have equal torus-crosscap decoder values.",
     :area "polygon-surface-open-cover",
     :proved-in
-    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+    :routes-2026-10-11-polygon-boundary-decoder-interiors-72},
    :id
    :lemma-polygonboundarydecoderinteriors-toruscrosscapedgedecode-interior-welldefined,
    :kind :lemma,
