@@ -103079,8 +103079,67 @@
   {:bounded-exception
    "This single-consumer prerequisite promotes the already compiled continuous bijections and fixes the orientation of both boundary identifications before their literal formulas are derived.",
    :consumer :t97A01,
+   :evidence
+   {:placeholder-delta
+    {:source-before 0, :source-after 0, :fixture-after 0},
+    :residual
+    "Prove the six literal canonical-circle formulas for the two quotient-to-ThreeCircles homeomorphisms, then use them in the concrete radial open-cover packages.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["Lake replayed unrelated pre-existing linter warnings from imported modules, including unused simp arguments in PolygonBoundaryCompactHausdorffInstances."],
+    :missing-theorems [],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/polygon-boundary-three-loop-homeomorphisms.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.PolygonBoundaryThreeLoopHomeomorphisms",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/polygon-boundary-three-loop-homeomorphisms.lean",
+      :exit 0}
+     {:cmd "python3 placeholder scan of source and fixture",
+      :exit 0,
+      :finding "source 0, fixture 0"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd
+      "git diff --check -- ConstructionTargets/PolygonBoundaryThreeLoopHomeomorphisms.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/PolygonBoundaryThreeLoopHomeomorphisms.lean",
+      :exit 0,
+      :finding "axioms propext, Classical.choice, Quot.sound"}
+     {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :diagnostic-history [],
+    :commit "17b0179c8aab579c63995c61d604e67a4c7b249c",
+    :changed-paths
+    ["ConstructionTargets/PolygonBoundaryThreeLoopHomeomorphisms.lean"],
+    :fixture
+    {:path "/tmp/polygon-boundary-three-loop-homeomorphisms.lean",
+     :sha256
+     "3b7b965286f3591d3fbc76a0e4e3fcb81d6a593d77e4df77d291ed90c38ad300",
+     :status :compiled},
+    :implementation
+    {:scope
+     ["ConstructionTargets/PolygonBoundaryThreeLoopHomeomorphisms.lean"],
+     :exports
+     ["n3ThreeLoopsHomeomorph"
+      "torusCrosscapThreeLoopsHomeomorph"
+      "n3BoundaryHomeomorphThreeCircles"
+      "torusCrosscapBoundaryHomeomorphThreeCircles"
+      "n3ThreeLoopsHomeomorph_apply"
+      "torusCrosscapThreeLoopsHomeomorph_apply"
+      "polygonBoundaryThreeLoopHomeomorphisms"],
+     :orientation
+     "Each specialized CircleQuotient maps to ThreeCircles via the inverse of its ThreeEndpointLoops-to-quotient homeomorphism followed by threeEndpointLoopsHomeomorphThreeCircles."},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonBoundaryThreeLoopHomeomorphisms.lean"],
    :dag-node
