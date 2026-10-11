@@ -70642,89 +70642,125 @@
    "Define the piecewise departure/arrival normal path, prove continuity and endpoints, use the specialized interior invariants plus banked endpoint collision certificates for deletion avoidance, then reconstruct the ambient radial stage.",
    :other-consumers []}
   {:bounded-exception
+   "single-consumer two-leg zero-height core-normal detour definition and seam equations",
+   :consumer :t02A03,
+   :phase :probe,
+   :state :open,
+   :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t02A03/zero-height-core-normal-detour-endpoints",
+   :acceptance
+   {:probe
+    "Compile zeroHeightCoreNormalDetour and zeroHeightCoreNormalDetour_endpoints_midpoint. Define the first half as the affine leg from the meridian core normal to the signed waypoint and the second half as the affine leg from the waypoint to the recovered input core normal; prove the two endpoints and midpoint seam equation. Do not prove continuity, radius bounds, or left-core avoidance.",
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCoreNormalDetour_endpoints_midpoint",
+    :type
+    "forall (p : RightTubeMinusLeftCore), zeroHeightCoreNormalDetour 0 p = rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)) ∧ zeroHeightCoreNormalDetour 1 p = rightTubeCoreNormalComplex p.1 ∧ zeroHeightCoreNormalDetour ⟨1 / 2, by constructor <;> norm_num⟩ p = zeroHeightSignedImaginaryWaypoint p",
+    :supporting-declarations
+    [{:name
+      "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCoreNormalDetour",
+      :type "unitInterval -> RightTubeMinusLeftCore -> ℂ"}],
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "define the piecewise two-leg normal detour and certify its endpoints and shared waypoint seam"},
+   :id
+   :routes-2026-10-11-t02a03-zero-height-core-normal-detour-endpoints-topo2-r1,
+   :kind :reusable-theorem,
+   :area "explicit-r3-tube-deformation-retraction",
+   :depends-on
+   [:routes-2026-10-11-t02a03-specialized-zero-height-affine-legs-topo2-r1],
+   :current-residual
+   "Prove continuity of the piecewise detour across the midpoint seam, transfer the specialized leg radius and nonzero-imaginary invariants to each open half, and combine them with endpoint collision certificates.",
+   :other-consumers []}
+  {:bounded-exception
    "single-consumer explicit ambient deformation with frozen tube and deletion invariants",
    :consumer :t02A03,
    :evidence
    {:probe
     {:residual
-     "Bank both specialized affine legs; then reverse and concatenate them into the certified zero-height core-normal detour.",
+     "Bank the piecewise detour and seam equations; then prove its continuity and pointwise radius/deletion invariants.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
      [{:name
-       "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeight_specializedCoreNormalAffineLegs_radius_and_im_ne_zero",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCoreNormalDetour_endpoints_midpoint",
        :type
-       "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> forall (t : unitInterval), (t : ℝ) ≠ 0 -> let n₀ := rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)); let n₁ := rightTubeCoreNormalComplex p.1; let w := zeroHeightSignedImaginaryWaypoint p; (‖coreNormalAffineLeg t n₀ w‖ ≤ (1 / 4 : ℝ) ∧ (coreNormalAffineLeg t n₀ w).im ≠ 0) ∧ (‖coreNormalAffineLeg t n₁ w‖ ≤ (1 / 4 : ℝ) ∧ (coreNormalAffineLeg t n₁ w).im ≠ 0)",
+       "forall (p : RightTubeMinusLeftCore), zeroHeightCoreNormalDetour 0 p = rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)) ∧ zeroHeightCoreNormalDetour 1 p = rightTubeCoreNormalComplex p.1 ∧ zeroHeightCoreNormalDetour ⟨1 / 2, by constructor <;> norm_num⟩ p = zeroHeightSignedImaginaryWaypoint p",
        :status :proved,
        :consumers [:t02A03],
        :depends-on
-       ["ConstructionTargets.T02A03GeometricTubeDeformation.coreNormalAffineLeg_radius_and_im_ne_zero"
-        "ConstructionTargets.T02A03GeometricTubeDeformation.realEndpoints_zeroHeight_rightTubeCoreNormals"
-        "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeight_signedImaginaryWaypoint_properties"],
+       ["ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeight_specializedCoreNormalAffineLegs_radius_and_im_ne_zero"],
        :area "explicit-r3-tube-deformation-retraction"}],
      :prerequisite
      {:bounded-exception
-      "single-consumer specialization of both zero-height affine legs to the frozen tube coordinates",
+      "single-consumer two-leg zero-height core-normal detour definition and seam equations",
       :consumer :t02A03,
       :phase :probe,
       :state :open,
       :scope
       ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t02A03/specialized-zero-height-affine-legs",
+      "TOPOLOGY-ROUTES.md/t02A03/zero-height-core-normal-detour-endpoints",
       :acceptance
       {:probe
-       "Compile zeroHeight_specializedCoreNormalAffineLegs_radius_and_im_ne_zero. Specialize the generic affine-leg invariant to both the meridian core normal and recovered-input core normal using their zero imaginary parts, their radius bounds, and the signed waypoint properties. Do not reverse or concatenate the legs or define an ambient path.",
+       "Compile zeroHeightCoreNormalDetour and zeroHeightCoreNormalDetour_endpoints_midpoint. Define the first half as the affine leg from the meridian core normal to the signed waypoint and the second half as the affine leg from the waypoint to the recovered input core normal; prove the two endpoints and midpoint seam equation. Do not prove continuity, radius bounds, or left-core avoidance.",
        :declaration
-       "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeight_specializedCoreNormalAffineLegs_radius_and_im_ne_zero",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCoreNormalDetour_endpoints_midpoint",
        :type
-       "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> forall (t : unitInterval), (t : ℝ) ≠ 0 -> let n₀ := rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)); let n₁ := rightTubeCoreNormalComplex p.1; let w := zeroHeightSignedImaginaryWaypoint p; (‖coreNormalAffineLeg t n₀ w‖ ≤ (1 / 4 : ℝ) ∧ (coreNormalAffineLeg t n₀ w).im ≠ 0) ∧ (‖coreNormalAffineLeg t n₁ w‖ ≤ (1 / 4 : ℝ) ∧ (coreNormalAffineLeg t n₁ w).im ≠ 0)",
+       "forall (p : RightTubeMinusLeftCore), zeroHeightCoreNormalDetour 0 p = rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)) ∧ zeroHeightCoreNormalDetour 1 p = rightTubeCoreNormalComplex p.1 ∧ zeroHeightCoreNormalDetour ⟨1 / 2, by constructor <;> norm_num⟩ p = zeroHeightSignedImaginaryWaypoint p",
+       :supporting-declarations
+       [{:name
+         "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCoreNormalDetour",
+         :type "unitInterval -> RightTubeMinusLeftCore -> ℂ"}],
        :placeholder "the sole sorry in apm_t02a03",
        :route-step
-       "instantiate the shared leg invariant at both zero-height radial endpoints"},
+       "define the piecewise two-leg normal detour and certify its endpoints and shared waypoint seam"},
       :id
-      :routes-2026-10-11-t02a03-specialized-zero-height-affine-legs-topo2-r1,
+      :routes-2026-10-11-t02a03-zero-height-core-normal-detour-endpoints-topo2-r1,
       :kind :reusable-theorem,
       :area "explicit-r3-tube-deformation-retraction",
       :depends-on
-      [:routes-2026-10-11-t02a03-core-normal-affine-leg-radius-im-topo2-r1],
+      [:routes-2026-10-11-t02a03-specialized-zero-height-affine-legs-topo2-r1],
       :current-residual
-      "Define the piecewise departure/arrival normal path, prove continuity and endpoints, use the specialized interior invariants plus banked endpoint collision certificates for deletion avoidance, then reconstruct the ambient radial stage.",
+      "Prove continuity of the piecewise detour across the midpoint seam, transfer the specialized leg radius and nonzero-imaginary invariants to each open half, and combine them with endpoint collision certificates.",
       :other-consumers []},
      :commands
      [{:cmd
-       "lake build ConstructionTargets.T02A03GeometricTubeDeformation",
-       :exit 0,
-       :output "Build completed successfully (8249 jobs)."}
-      {:cmd
-       "lake env lean /tmp/t02a03_specialized_affine_legs_probe.lean",
+       "lake env lean /tmp/t02a03_core_normal_detour_endpoints_probe.lean",
        :exit 0,
        :output
-       "zeroHeight_specializedCoreNormalAffineLegs_radius_and_im_ne_zero compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd "sha256sum /tmp/t02a03_specialized_affine_legs_probe.lean",
+       "zeroHeightCoreNormalDetour_endpoints_midpoint compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "sha256sum /tmp/t02a03_core_normal_detour_endpoints_probe.lean",
        :exit 0,
        :output
-       "a9ed0996d3b9ac3bf84123725a3c692b04c7bd4ae91b0aa906439ce3c84777ef  /tmp/t02a03_specialized_affine_legs_probe.lean"}
+       "8c23f5a0c05d15b0c7671d5f9b7655e3ccf5ce34ef21c252da8c39defa633a63  /tmp/t02a03_core_normal_detour_endpoints_probe.lean"}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_specialized_affine_legs_probe.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_core_normal_detour_endpoints_probe.lean || true)\"",
        :exit 0}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}
       {:cmd
-       "rg -n 'zeroHeight_specializedCoreNormalAffineLegs_radius_and_im_ne_zero' /tmp/t02a03_specialized_affine_legs_probe.lean",
+       "rg -n 'zeroHeightCoreNormalDetour' /tmp/t02a03_core_normal_detour_endpoints_probe.lean",
        :exit 0,
        :output
-       "7:theorem zeroHeight_specializedCoreNormalAffineLegs_radius_and_im_ne_zero\n35:#print axioms zeroHeight_specializedCoreNormalAffineLegs_radius_and_im_ne_zero"}],
+       "7:noncomputable def zeroHeightCoreNormalDetour\n18:theorem zeroHeightCoreNormalDetour_endpoints_midpoint\n27:#print axioms zeroHeightCoreNormalDetour_endpoints_midpoint"}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/t02a03_core_normal_detour_endpoints_probe.lean",
+       :exit 1,
+       :finding
+       "Plain simp did not normalize the numeric false branch condition at t=1. Replacing it with norm_num on the same definition discharged the exact endpoint arithmetic."}],
      :fixture
-     {:path "/tmp/t02a03_specialized_affine_legs_probe.lean",
+     {:path "/tmp/t02a03_core_normal_detour_endpoints_probe.lean",
       :sha256
-      "a9ed0996d3b9ac3bf84123725a3c692b04c7bd4ae91b0aa906439ce3c84777ef"},
+      "8c23f5a0c05d15b0c7671d5f9b7655e3ccf5ce34ef21c252da8c39defa633a63"},
      :finding
-     "At zero height, both the meridian core normal and recovered-input core normal satisfy the generic affine-leg hypotheses with the continuous signed waypoint. Consequently each leg remains within core-normal radius 1/4 and has nonzero imaginary coordinate at every noninitial parameter. Reversing the input leg will therefore provide the certified arrival half.",
+     "The piecewise normal detour runs linearly from the meridian core normal to the signed imaginary waypoint on the first half and from that waypoint to the recovered input core normal on the second half. Both formulas agree exactly at t=1/2, and the path has the required t=0 and t=1 endpoint values.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
@@ -70790,7 +70826,8 @@
     :routes-2026-10-11-t02a03-real-endpoints-zero-height-core-normals-topo2-r1
     :routes-2026-10-11-t02a03-zero-height-signed-imaginary-waypoint-properties-topo2-r1
     :routes-2026-10-11-t02a03-core-normal-affine-leg-radius-im-topo2-r1
-    :routes-2026-10-11-t02a03-specialized-zero-height-affine-legs-topo2-r1],
+    :routes-2026-10-11-t02a03-specialized-zero-height-affine-legs-topo2-r1
+    :routes-2026-10-11-t02a03-zero-height-core-normal-detour-endpoints-topo2-r1],
    :current-residual
    "Lift H to RightTubeMinusLeftCore, package rightTubeMeridianRetractionHomotopy, then use the coordinate equation for the Circle-side constant homotopy.",
    :other-consumers []}
@@ -75416,4 +75453,29 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-productionopencovermayervietoris-productionconnecting-natura],
-   :other-consumers [:t96J06]}]}
+   :other-consumers [:t96J06]}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCoreNormalDetour_endpoints_midpoint",
+    :type
+    "forall (p : RightTubeMinusLeftCore), zeroHeightCoreNormalDetour 0 p = rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)) ∧ zeroHeightCoreNormalDetour 1 p = rightTubeCoreNormalComplex p.1 ∧ zeroHeightCoreNormalDetour ⟨1 / 2, by constructor <;> norm_num⟩ p = zeroHeightSignedImaginaryWaypoint p"},
+   :lemma
+   {:name
+    "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCoreNormalDetour_endpoints_midpoint",
+    :reported-by
+    [:routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1],
+    :type
+    "forall (p : RightTubeMinusLeftCore), zeroHeightCoreNormalDetour 0 p = rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)) ∧ zeroHeightCoreNormalDetour 1 p = rightTubeCoreNormalComplex p.1 ∧ zeroHeightCoreNormalDetour ⟨1 / 2, by constructor <;> norm_num⟩ p = zeroHeightSignedImaginaryWaypoint p",
+    :area "explicit-r3-tube-deformation-retraction",
+    :proved-in
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+   :id
+   :lemma-constructiontargets-t02a03geometrictubedeformation-zeroheightcorenormaldetour-en,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t02a03geometrictubedeformation-zeroheight-specializedcorenor],
+   :other-consumers []}]}
