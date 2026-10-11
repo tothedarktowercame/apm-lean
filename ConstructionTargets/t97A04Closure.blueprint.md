@@ -116,7 +116,7 @@ lean: `ConstructionTargets.T97A04Closure.shearY_productionUnionMap` :
 
 uses: B4, `ProductionOpenCoverMayerVietoris.productionUnionMap`
 
-status: planned
+status: proved 8ac5066deb2d78e47ac00e5a13fa8a7b3b932d86
 
 Expand the union transport and use `coverRangeMap_comp_ι`.  Cancel the
 cover-small/production isomorphisms on both sides.  What remains is equality
