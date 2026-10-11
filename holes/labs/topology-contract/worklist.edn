@@ -105871,6 +105871,8 @@
    "This single-consumer theorem is the remaining ready direct dependency of the plane-orbit quotient Hausdorff lemma.",
    :consumer :t93J03,
    :stop-count 1,
+   :review-finding
+   "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-kleinplaneorbitquotient-sameorbit-isclosed,
    :evidence
    {:placeholder-delta
@@ -105922,6 +105924,12 @@
       :exit 1,
       :finding
       "The mandatory symlink precheck failed before Lake was invoked."}],
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1791705957732-4707-bfee6cb6",
+     :finding
+     "extend Mathlib: state and prove the missing theorem in scope"},
     :changed-paths [],
     :fixture
     {:path "/tmp/klein-plane-same-orbit-closed-probe.lean",
@@ -105930,7 +105938,7 @@
      :status :unverified-workspace-invalid},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope ["ConstructionTargets/KleinPlaneOrbitQuotientTopology.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t93J03/klein-plane-same-orbit-closed",
    :acceptance
@@ -105951,6 +105959,7 @@
    :id :routes-2026-10-11-klein-plane-same-orbit-closed-110,
    :kind :reusable-theorem,
    :area "deck-group-fundamental-group",
+   :fail-count 1,
    :depends-on [],
    :current-residual
    "Combine closedness with the banked open quotient projection to prove T2Space PlaneOrbitQuotient, then discharge inverse continuity and construct the polygon quotient comparison.",
