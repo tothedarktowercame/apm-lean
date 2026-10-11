@@ -70102,91 +70102,110 @@
    "Certify the recovered-normal endpoint has the same positive sign, replace or refine the unsafe straight radial interpolation by a path staying in that positive component, treat the negative component, then construct the angular stage.",
    :other-consumers []}
   {:bounded-exception
+   "single-consumer positive collision certificate at the recovered input endpoint",
+   :consumer :t02A03,
+   :phase :probe,
+   :state :open,
+   :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+   :dag-node "TOPOLOGY-ROUTES.md/t02A03/positive-sign-input-collision",
+   :acceptance
+   {:probe
+    "Compile positiveSign_input_collisionPolynomial_pos. In the meridian-real-equals-one branch, use the banked positive-factor identity to prove the recovered input collision polynomial is strictly positive. Do not construct a connecting normal path, analyze the negative branch, or claim the straight interpolation is safe.",
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.positiveSign_input_collisionPolynomial_pos",
+    :type
+    "forall (p : RightTubeMinusLeftCore), (rightTubeMeridianCoordinate p : Complex).re = 1 -> 0 < (1 - (rightTubeCoreNormalComplex p.1).re)^2 - 4*(1-(rightTubeCoreNormalComplex p.1).re)*(rightTubeCoreAngularCoordinate p : Complex).re + 3",
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "certify the positive collision sign at the recovered input endpoint"},
+   :id
+   :routes-2026-10-11-t02a03-positive-sign-input-collision-topo2-r1,
+   :kind :reusable-theorem,
+   :area "explicit-r3-tube-deformation-retraction",
+   :depends-on
+   [:routes-2026-10-11-t02a03-positive-sign-radial-start-collision-topo2-r1],
+   :current-residual
+   "Construct a continuous core-normal path between the two positive endpoints inside the positive collision component while preserving the tube radius bound; then treat the negative component and assemble the angular stage.",
+   :other-consumers []}
+  {:bounded-exception
    "single-consumer explicit ambient deformation with frozen tube and deletion invariants",
    :consumer :t02A03,
    :evidence
    {:probe
     {:residual
-     "Bank the positive radial-start endpoint certificate; then build a radial normal path inside the positive collision component rather than assuming the straight interpolation stays safe.",
+     "Bank the positive recovered-endpoint certificate; then construct a radius-bounded normal path within the positive collision component.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
      [{:name
-       "ConstructionTargets.T02A03GeometricTubeDeformation.positiveSign_radialStart_collisionPolynomial_pos",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.positiveSign_input_collisionPolynomial_pos",
        :type
-       "forall (p : RightTubeMinusLeftCore), (rightTubeMeridianCoordinate p : Complex).re = 1 -> let n := rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)); 0 < (1 - n.re)^2 - 4*(1-n.re)*(rightTubeCoreAngularCoordinate p : Complex).re + 3",
+       "forall (p : RightTubeMinusLeftCore), (rightTubeMeridianCoordinate p : Complex).re = 1 -> 0 < (1 - (rightTubeCoreNormalComplex p.1).re)^2 - 4*(1-(rightTubeCoreNormalComplex p.1).re)*(rightTubeCoreAngularCoordinate p : Complex).re + 3",
        :status :proved,
        :consumers [:t02A03],
        :depends-on
-       ["ConstructionTargets.T02A03GeometricTubeDeformation.collisionPolynomial_pos_of_normal_re_pos"
-        "ConstructionTargets.T02A03GeometricTubeDeformation.norm_rightTubeCoreNormalComplex_circleMeridian"],
+       ["ConstructionTargets.T02A03GeometricTubeDeformation.inputCollisionPolynomial_positiveFactor_meridianReal"],
        :area "explicit-r3-tube-deformation-retraction"}],
      :prerequisite
      {:bounded-exception
-      "single-consumer positive collision certificate at the radial stage meridian-normal endpoint",
+      "single-consumer positive collision certificate at the recovered input endpoint",
       :consumer :t02A03,
       :phase :probe,
       :state :open,
       :scope
       ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t02A03/positive-sign-radial-start-collision",
+      "TOPOLOGY-ROUTES.md/t02A03/positive-sign-input-collision",
       :acceptance
       {:probe
-       "Compile positiveSign_radialStart_collisionPolynomial_pos. In the meridian-real-equals-one branch, prove the collision polynomial at the recovered input angle and meridian core normal is strictly positive using the exact 1/8 normal and the positive-normal collision bound. Do not claim the linear radial interpolation interior is safe, analyze the negative branch, or construct a path.",
+       "Compile positiveSign_input_collisionPolynomial_pos. In the meridian-real-equals-one branch, use the banked positive-factor identity to prove the recovered input collision polynomial is strictly positive. Do not construct a connecting normal path, analyze the negative branch, or claim the straight interpolation is safe.",
        :declaration
-       "ConstructionTargets.T02A03GeometricTubeDeformation.positiveSign_radialStart_collisionPolynomial_pos",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.positiveSign_input_collisionPolynomial_pos",
        :type
-       "forall (p : RightTubeMinusLeftCore), (rightTubeMeridianCoordinate p : Complex).re = 1 -> let n := rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)); 0 < (1 - n.re)^2 - 4*(1-n.re)*(rightTubeCoreAngularCoordinate p : Complex).re + 3",
+       "forall (p : RightTubeMinusLeftCore), (rightTubeMeridianCoordinate p : Complex).re = 1 -> 0 < (1 - (rightTubeCoreNormalComplex p.1).re)^2 - 4*(1-(rightTubeCoreNormalComplex p.1).re)*(rightTubeCoreAngularCoordinate p : Complex).re + 3",
        :placeholder "the sole sorry in apm_t02a03",
        :route-step
-       "certify the positive collision sign at the radial stage meridian-normal endpoint"},
+       "certify the positive collision sign at the recovered input endpoint"},
       :id
-      :routes-2026-10-11-t02a03-positive-sign-radial-start-collision-topo2-r1,
+      :routes-2026-10-11-t02a03-positive-sign-input-collision-topo2-r1,
       :kind :reusable-theorem,
       :area "explicit-r3-tube-deformation-retraction",
       :depends-on
-      [:routes-2026-10-11-t02a03-positive-sign-left-normal-real-topo2-r1],
+      [:routes-2026-10-11-t02a03-positive-sign-radial-start-collision-topo2-r1],
       :current-residual
-      "Certify the recovered-normal endpoint has the same positive sign, replace or refine the unsafe straight radial interpolation by a path staying in that positive component, treat the negative component, then construct the angular stage.",
+      "Construct a continuous core-normal path between the two positive endpoints inside the positive collision component while preserving the tube radius bound; then treat the negative component and assemble the angular stage.",
       :other-consumers []},
      :commands
      [{:cmd
-       "lake env lean /tmp/t02a03_positive_sign_radial_start_poly_probe.lean",
+       "lake env lean /tmp/t02a03_positive_sign_input_poly_probe.lean",
        :exit 0,
        :output
-       "positiveSign_radialStart_collisionPolynomial_pos compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "positiveSign_input_collisionPolynomial_pos compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/t02a03_positive_sign_radial_start_poly_probe.lean",
+       "sha256sum /tmp/t02a03_positive_sign_input_poly_probe.lean",
        :exit 0,
        :output
-       "09d0fd0a871c6ec624f297b72f04e47dfca62b2bab1965e93a4bbeab7524d4d8  /tmp/t02a03_positive_sign_radial_start_poly_probe.lean"}
+       "d7cfa81e0653f00ea6e226b00a49adcdb9b64dfc7ea8c4bb36080285852edfba  /tmp/t02a03_positive_sign_input_poly_probe.lean"}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_positive_sign_radial_start_poly_probe.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_positive_sign_input_poly_probe.lean || true)\"",
        :exit 0}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}
       {:cmd
-       "rg -n 'positiveSign_radialStart_collisionPolynomial_pos' /tmp/t02a03_positive_sign_radial_start_poly_probe.lean",
+       "rg -n 'positiveSign_input_collisionPolynomial_pos' /tmp/t02a03_positive_sign_input_poly_probe.lean",
        :exit 0,
        :output
-       "7:theorem positiveSign_radialStart_collisionPolynomial_pos\n22:#print axioms positiveSign_radialStart_collisionPolynomial_pos"}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/t02a03_positive_sign_radial_start_poly_probe.lean",
-       :exit 1,
-       :finding
-       "After unfolding the meridian core normal, simplification left the elementary norm inequality norm(1 - 1/8) < 1. Adding exact real-norm normalization closed the bound."}],
+       "5:theorem positiveSign_input_collisionPolynomial_pos\n16:#print axioms positiveSign_input_collisionPolynomial_pos"}],
      :fixture
-     {:path "/tmp/t02a03_positive_sign_radial_start_poly_probe.lean",
+     {:path "/tmp/t02a03_positive_sign_input_poly_probe.lean",
       :sha256
-      "09d0fd0a871c6ec624f297b72f04e47dfca62b2bab1965e93a4bbeab7524d4d8"},
+      "d7cfa81e0653f00ea6e226b00a49adcdb9b64dfc7ea8c4bb36080285852edfba"},
      :finding
-     "In the positive meridian component, the core normal of the meridian point has real part 1/8 and norm 1/8. Therefore collisionPolynomial_pos_of_normal_re_pos proves that its collision polynomial is positive at the recovered input angle. This certifies the radial stage's meridian-normal endpoint only; it deliberately makes no claim about the linear interpolation interior.",
+     "The recovered input collision polynomial is strictly positive in the meridian-real-equals-one branch. The banked positive-factor theorem writes it as c times the meridian real coordinate with c positive, so rewriting the branch value to one closes the inequality exactly.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
@@ -70247,7 +70266,8 @@
     :routes-2026-10-11-t02a03-zero-height-meridian-real-sq-topo2-r1
     :routes-2026-10-11-t02a03-sign-cases-zero-height-meridian-real-topo2-r1
     :routes-2026-10-11-t02a03-positive-sign-left-normal-real-topo2-r1
-    :routes-2026-10-11-t02a03-positive-sign-radial-start-collision-topo2-r1],
+    :routes-2026-10-11-t02a03-positive-sign-radial-start-collision-topo2-r1
+    :routes-2026-10-11-t02a03-positive-sign-input-collision-topo2-r1],
    :current-residual
    "Lift H to RightTubeMinusLeftCore, package rightTubeMeridianRetractionHomotopy, then use the coordinate equation for the Circle-side constant homotopy.",
    :other-consumers []}
@@ -74426,4 +74446,29 @@
    :depends-on
    [:lemma-constructiontargets-t02a03geometrictubedeformation-collisionpolynomial-pos-of-no
     :lemma-constructiontargets-t02a03geometrictubedeformation-norm-righttubecorenormalcompl],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T02A03GeometricTubeDeformation.positiveSign_input_collisionPolynomial_pos",
+    :type
+    "forall (p : RightTubeMinusLeftCore), (rightTubeMeridianCoordinate p : Complex).re = 1 -> 0 < (1 - (rightTubeCoreNormalComplex p.1).re)^2 - 4*(1-(rightTubeCoreNormalComplex p.1).re)*(rightTubeCoreAngularCoordinate p : Complex).re + 3"},
+   :lemma
+   {:name
+    "ConstructionTargets.T02A03GeometricTubeDeformation.positiveSign_input_collisionPolynomial_pos",
+    :reported-by
+    [:routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1],
+    :type
+    "forall (p : RightTubeMinusLeftCore), (rightTubeMeridianCoordinate p : Complex).re = 1 -> 0 < (1 - (rightTubeCoreNormalComplex p.1).re)^2 - 4*(1-(rightTubeCoreNormalComplex p.1).re)*(rightTubeCoreAngularCoordinate p : Complex).re + 3",
+    :area "explicit-r3-tube-deformation-retraction",
+    :proved-in
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+   :id
+   :lemma-constructiontargets-t02a03geometrictubedeformation-positivesign-input-collisionp,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t02a03geometrictubedeformation-inputcollisionpolynomial-posi],
    :other-consumers []}]}
