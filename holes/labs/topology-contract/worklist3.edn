@@ -6332,8 +6332,82 @@
   {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-integralrelativehomologycomparisonwithtransport-generator-of-normalization,
+   :evidence
+   {:placeholder-delta {:t00J02 0, :t98A02 0, :construction-target 0},
+    :residual
+    "Prove the coefficient-to-production normalization compatibility equation for integralRelativeHomologyComparisonWithTransport, using its packaged projection naturality; then continue to the global fundamental class.",
+    :gates
+    {:exact-type :pass,
+     :module-compile :pass,
+     :fixture-hash :pass,
+     :scope :pass,
+     :statement-registry :pass,
+     :placeholder-scan :pass,
+     :target-build :pass,
+     :normalization-injectivity :pass,
+     :compatibility-retained-as-hypothesis :pass,
+     :worktree :clean,
+     :comparison-identification-excluded :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["lake build replayed pre-existing dependency warnings; no warning was emitted for the promoted theorem"],
+    :missing-theorems
+    [{:id
+      :lemma-constructiontargets-manifoldfundamentalclass-integralrelativehomologycomparisonwithtransport-generator-of-normalization,
+      :name
+      "ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization",
+      :type
+      "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), ((integralRelativeHomologyComparisonWithTransport (deletedPoint x) (k + 2)).hom ≫ (ambientLocalNormalization k x).hom = forgetIntModules.map (CoefficientChartLocal.localIso Int k x).hom) -> (integralRelativeHomologyComparisonWithTransport (deletedPoint x) (k + 2)).hom.hom (CoefficientChartLocal.generator Int k x) = HigherChartLocalGenerator.ambientLocalGenerator (k := k) x",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on
+      ["ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization_generator"
+       "ConstructionTargets.CoefficientChartLocal.generator_normalization"],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :topo-10,
+    :commands
+    [{:cmd
+      "sha256sum /tmp/manifold_fundamental_class_corrected_generator_normalization.lean",
+      :exit 0,
+      :result
+      "02b8cb92dd14844a278cbbe9c5ad69020496072319b411ac606d987e64aaf91c"}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0,
+      :result "Build completed successfully (8326 jobs)"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :result "131 registered statements match, 0 do not"}
+     {:cmd
+      "rg -n \"\\bsorry\\b|\\badmit\\b|^\\s*axiom\\b\" ConstructionTargets/ManifoldFundamentalClass.lean /tmp/manifold_fundamental_class_corrected_generator_normalization.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "git status --short",
+      :exit 0,
+      :result "clean after commit"}],
+    :diagnostic-history [],
+    :commit "a48c4f5f87ec3e1672d947697be0e28f02dda075",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path
+     "/tmp/manifold_fundamental_class_corrected_generator_normalization.lean",
+     :sha256
+     "02b8cb92dd14844a278cbbe9c5ad69020496072319b411ac606d987e64aaf91c"},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :declaration
+     "ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization"},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/corrected-generator-normalization",
@@ -9323,11 +9397,13 @@
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization",
     :reported-by
-    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+     :routes-2026-10-11-manifold-corrected-generator-normalization-topo3-r1],
     :type
     "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), ((integralRelativeHomologyComparisonWithTransport (deletedPoint x) (k + 2)).hom ≫ (ambientLocalNormalization k x).hom = forgetIntModules.map (CoefficientChartLocal.localIso Int k x).hom) -> (integralRelativeHomologyComparisonWithTransport (deletedPoint x) (k + 2)).hom.hom (CoefficientChartLocal.generator Int k x) = HigherChartLocalGenerator.ambientLocalGenerator (k := k) x",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in
+    :routes-2026-10-11-manifold-corrected-generator-normalization-topo3-r1},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-integralrelativehomologycomparisonwithtransport-generator-of-normalization,
    :kind :lemma,
