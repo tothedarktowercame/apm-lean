@@ -104519,7 +104519,7 @@
    "Use counit naturality and the identity component to prove the literal inl/inr leg equations, fill TwoOpenGroupEquivalenceCoordinates, and specialize to the generic point wedge.",
    :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
   {:consumer :t99J01,
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma
@@ -104528,17 +104528,17 @@
    {:placeholder-delta
     {:source-before 0, :source-after 0, :fixture-sorry 0},
     :residual
-    "Normalize the descent/pseudopushout counit at the overlap basepoint and prove connector asEquivalence counits are identity there; then simplify compositeCounitComponent to the identity.",
+    "Replace choice-generated connector equivalences with explicitly normalized equivalence data, or add the stated counit-component normalization hypothesis; then the five-factor composite can reduce to identity.",
     :outcome :stop,
     :warnings
     [{:kind :dirty-worktree,
       :message
-      "Unrelated modification ConstructionTargets/ManifoldFundamentalClass.lean was not touched or committed."}],
+      "Unrelated modification ConstructionTargets/ManifoldFundamentalClass.lean was not touched."}],
     :missing-theorems
     [{:name
-      "TwoOpenFundamentalGroupoidPseudopushout.counit_base_component_identity",
+      "ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence_counit_base_identity",
       :type
-      "At the overlap basepoint and for the inverse-reconstructed free-product identity cocone, the hom component of twoOpenFundamentalGroupoidPseudopushoutEquivalence.counitIso is the identity, compatibly with subsequent pseudo-span and connector transports.",
+      "For every connector system used by TwoOpenPointSpanComparison, the counit of connectorSingleObjEquivalence at the identity target functor has identity component at SingleObj.star.",
       :status :not-started,
       :consumers [:t99J01 :t01A03 :t92J06 :t97A01 :t97A03],
       :depends-on [],
@@ -104551,33 +104551,25 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "The composite component is now named and its exact standard-axiom identity with inverseIdentityCounit is compiled. The requested equality to the identity does not follow from the current APIs: the first unresolved factor is the counit of twoOpenFundamentalGroupoidPseudopushoutEquivalence at the inverse-reconstructed cocone. That equivalence is built from descent reconstruction, whose counit is an isomorphism assembled from restrictionAppIso rather than a registered identity normalization. The later connector equivalences also use Functor.asEquivalence, whose choice-generated counits have no base-component identity theorem.",
+    "The frozen identity statement needs a normalization hypothesis not present in the construction. TwoOpenPointSpanComparison uses connectorSingleObjEquivalence, defined with Functor.asEquivalence. Its inverse, unit, and counit are choice-generated; the Equivalence API guarantees only inverse laws and natural isomorphisms, not that the counit automorphism at SingleObj.star is the identity. At a one-object group category that component is an arbitrary invertible central morphism, so naturality yields conjugacy, not equality to 1. The exact missing hypothesis is that every connector asEquivalence counit component used by comparison is identity (together with the descent counit base normalization). Without it the requested literal composite identity does not follow.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/TwoOpenFreeProductMappingCompositeCounitIdentity.lean",
-      :exit 0}
-     {:cmd
-      "lake build ConstructionTargets.TwoOpenFreeProductMappingCompositeCounitIdentity",
-      :exit 0}
+      :exit 0,
+      :finding "The scoped reduction compiles with standard axioms."}
      {:cmd
       "lake env lean /tmp/composite-counit-component-identity.lean",
-      :exit 0}
-     {:cmd "sha256sum /tmp/composite-counit-component-identity.lean",
-      :exit 0}
-     {:cmd
-      "rg -n \"\\b(sorry|admit)\\b\" ConstructionTargets/TwoOpenFreeProductMappingCompositeCounitIdentity.lean /tmp/composite-counit-component-identity.lean",
-      :exit 1,
-      :expected-exit 1}
+      :exit 0,
+      :finding
+      "The fixture still requires its custom compositeCounit_component_identity axiom."}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
-      :finding "131 registered statements match, 0 do not"}],
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git status --short",
+      :exit 0,
+      :finding
+      "Only an unrelated existing worktree modification is present."}],
     :diagnostic-history [],
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1791692750925-4166-d1952425",
-     :finding
-     "extend Mathlib: state and prove the missing theorem in scope"},
     :commit "25b960ede466005c3d62bb6eedc8b367ba39886f",
     :changed-paths
     ["ConstructionTargets/TwoOpenFreeProductMappingCompositeCounitIdentity.lean"],
@@ -104587,7 +104579,7 @@
      "acdc06369d70b171b3c2c1f70a56ad199e7b7f72be274a4ce3930f77b5d84c0f"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :repair,
+   :state :needs-owner,
    :scope
    ["ConstructionTargets/TwoOpenFreeProductMappingCompositeCounitIdentity.lean"],
    :dag-node
@@ -110280,6 +110272,28 @@
     :area "fundamental-group-wedge-of-circles"},
    :id
    :lemma-twoopenfundamentalgroupoidpseudopushout-counit-base-component-identity,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
+  {:consumer :t99J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence_counit_base_identity",
+    :type
+    "For every connector system used by TwoOpenPointSpanComparison, the counit of connectorSingleObjEquivalence at the identity target functor has identity component at SingleObj.star."},
+   :lemma
+   {:name
+    "ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence_counit_base_identity",
+    :reported-by
+    [:routes-2026-10-11-composite-counit-component-identity-91],
+    :type
+    "For every connector system used by TwoOpenPointSpanComparison, the counit of connectorSingleObjEquivalence at the identity target functor has identity component at SingleObj.star.",
+    :area "fundamental-group-wedge-of-circles"},
+   :id
+   :lemma-connectedgroupoidsingleobjequivalence-connectorsingleobjequivalence-counit-base-,
    :kind :lemma,
    :depends-on [],
    :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}],
