@@ -12618,6 +12618,23 @@
       :expected-exit 1}
      {:cmd "git status --porcelain", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791710044886-4870-037efcd3",
+     :commands
+     ["rg ledger row and frozen contract"
+      "git show and git diff-tree recorded commit"
+      "git blob identity and git diff --check"
+      "sha256sum frozen fixture"
+      "lake env lean collision-renamed frozen-fixture replay"
+      "lake env lean target module"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"
+      "python3 scripts/statement-registry.py check"
+      "placeholder and axiom scan"
+      "consumer placeholder census"],
+     :finding
+     "PASS: independent review of commit c043f9d2; scope is exactly ConstructionTargets/ManifoldFundamentalClass.lean and the recorded blob matches the checkout; fixture SHA-256 matches and the frozen declaration type is unchanged; the implementation reconstructs the forgotten coefficient-pair short exact sequence degreewise by evaluating the original short exact sequence and mapping exactness through forgetIntModules, with the required orientation and representation boundary; it does not apply connecting or radial naturality, compare sphere normalizations, exclude negation, select a sign, or construct a fundamental class; fixture replay, module check, and 8326-job build pass; axioms are exactly propext, Classical.choice, Quot.sound; registry is 131/0; target placeholders are 0 and consumer counts remain 1/1."},
     :commit "c043f9d2b4e322c0259a5e3d74c6d3fd7f6da125",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -12634,7 +12651,7 @@
     :routes-2026-10-11-manifold-integral-open-disk-coefficient-pair-short-exact-topo3-r1,
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/integral-open-disk-connecting-naturality/forgotten-short-exact",
@@ -12829,7 +12846,7 @@
      "The coefficient pair sequence remains short exact after forgetting its integer-module structure. The proof avoids requiring a global finite-limit instance for mapHomologicalComplex: it maps the evaluated short exact sequence through the exact forgetful functor in each degree and reassembles degreewise short exactness. Together with the banked short-complex morphism and production short exactness, every structural input for δ_naturality is now available.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -17027,7 +17044,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -17044,7 +17061,10 @@
     "forall (k : ℕ), ((CoefficientPairSequence.sequence ℤ (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2))).map (forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ))).ShortExact",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-integral-open-disk-coefficient-pair-short-exact-topo3-r1},
+    :routes-2026-10-11-manifold-integral-open-disk-coefficient-pair-short-exact-topo3-r1,
+    :banked-by
+    :routes-2026-10-11-manifold-integral-open-disk-coefficient-pair-short-exact-topo3-r1,
+    :banked-commit "c043f9d2b4e322c0259a5e3d74c6d3fd7f6da125"},
    :id :lemma-mfclass-integral-open-disk-coefficient-pair-short-exact,
    :kind :lemma,
    :depends-on
@@ -17052,13 +17072,15 @@
    :other-consumers [:t98A02]}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "ConstructionTargets.CoefficientPairSequence.shortExact"},
    :lemma
    {:name "ConstructionTargets.CoefficientPairSequence.shortExact",
-    :reported-by []},
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/CoefficientPairSequence.lean"]},
    :id :lemma-constructiontargets-coefficientpairsequence-shortexact,
    :kind :lemma,
    :depends-on [],
