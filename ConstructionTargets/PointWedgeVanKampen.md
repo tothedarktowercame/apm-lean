@@ -108,3 +108,11 @@ induced `SingleObj` equivalence, while
 coordinate with the same inner automorphism.  The remaining B6 step is the
 comparison between B3's two mapped actions and the fundamental-group maps of
 the literal left and right wedge inclusions.
+
+Those literal maps are now fixed in Lean as `genericPointWedgeLeftLegMap` and
+`genericPointWedgeRightLegMap`; the latter records the symmetric quotient
+equality needed to change the right wedge representative to the chosen left
+basepoint.  `genericPointWedgeLegCoordinates_of_mapped` proves that the two
+remaining B3-to-topology comparison equations imply both B6 coordinates.
+Consequently the residual is exactly those two comparison equations, with no
+further normalization or basepoint transport left implicit.

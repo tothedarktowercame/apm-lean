@@ -30,6 +30,7 @@ namespace ConstructionTargets.PointWedgeVanKampen
 
 open CategoryTheory
 open PointedPuncturedCircleContraction
+open PointWedgePointedContractionDescent
 open PointWedgeQuotient PointWedgeRestrictedOpenQuotient
 open GenericPointWedgeOpenCoverComparison
 open GenericPointWedgeOverlapInclusionSquares
@@ -736,6 +737,64 @@ def genericPointWedgeNormalizedFundamentalGroupEquiv :
       (genericPointWedgeCounitNormalization
         x₀ y₀ M N hM hN hy hx cM cN)
 
+/-- The literal left wedge inclusion on based fundamental groups. -/
+def genericPointWedgeLeftLegMap (g : FundamentalGroup X x₀) :
+    FundamentalGroup (Wedge x₀ y₀) (quotientMap x₀ y₀ (.inl x₀)) :=
+  FundamentalGroup.map (includeLeft (x₀ := x₀) (y₀ := y₀)) x₀ g
+
+/-- The literal right wedge inclusion, with the quotient equality changing
+its right-hand basepoint representative to the chosen left representative. -/
+def genericPointWedgeRightLegMap (g : FundamentalGroup Y y₀) :
+    FundamentalGroup (Wedge x₀ y₀) (quotientMap x₀ y₀ (.inl x₀)) :=
+  FundamentalGroup.mapOfEq
+    ⟨fun y => quotientMap x₀ y₀ (.inr y),
+      (continuous_quotientMap x₀ y₀).comp continuous_inr⟩
+    (Quotient.sound (Relation.EqvGen.rel _ _ Rel.base)).symm g
+
+/-- Once B3's two mapped actions are identified with the images of the
+literal topological legs under B5, the normalized equivalence has exactly the
+two coproduct coordinates required by B6. -/
+theorem genericPointWedgeLegCoordinates_of_mapped
+    (hleft : ∀ g : FundamentalGroup X x₀,
+      genericPointWedgeFundamentalGroupEquiv
+          x₀ y₀ M N hM hN hy hx cM cN
+          (genericPointWedgeLeftLegMap x₀ y₀ g) =
+        genericPointWedgeMappedLeft x₀ y₀ M N hM hN hy hx cM cN g)
+    (hright : ∀ g : FundamentalGroup Y y₀,
+      genericPointWedgeFundamentalGroupEquiv
+          x₀ y₀ M N hM hN hy hx cM cN
+          (genericPointWedgeRightLegMap x₀ y₀ g) =
+        genericPointWedgeMappedRight x₀ y₀ M N hM hN hy hx cM cN g) :
+    (∀ g : FundamentalGroup X x₀,
+      genericPointWedgeNormalizedFundamentalGroupEquiv
+          x₀ y₀ M N hM hN hy hx cM cN
+          (genericPointWedgeLeftLegMap x₀ y₀ g) =
+        Monoid.Coprod.inl g) ∧
+    (∀ g : FundamentalGroup Y y₀,
+      genericPointWedgeNormalizedFundamentalGroupEquiv
+          x₀ y₀ M N hM hN hy hx cM cN
+          (genericPointWedgeRightLegMap x₀ y₀ g) =
+        Monoid.Coprod.inr g) := by
+  constructor
+  · intro g
+    change genericPointWedgeCounitNormalization
+        x₀ y₀ M N hM hN hy hx cM cN
+          (genericPointWedgeFundamentalGroupEquiv
+            x₀ y₀ M N hM hN hy hx cM cN
+              (genericPointWedgeLeftLegMap x₀ y₀ g)) = _
+    rw [hleft]
+    exact genericPointWedgeCounitNormalization_left
+      x₀ y₀ M N hM hN hy hx cM cN g
+  · intro g
+    change genericPointWedgeCounitNormalization
+        x₀ y₀ M N hM hN hy hx cM cN
+          (genericPointWedgeFundamentalGroupEquiv
+            x₀ y₀ M N hM hN hy hx cM cN
+              (genericPointWedgeRightLegMap x₀ y₀ g)) = _
+    rw [hright]
+    exact genericPointWedgeCounitNormalization_right
+      x₀ y₀ M N hM hN hy hx cM cN g
+
 end GenericFundamentalGroupEquivalence
 
 /-- The three-circle model is locally path connected. -/
@@ -1031,5 +1090,8 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeCounitNormalization_right
 #print axioms genericPointWedgeNormalizedSourceEquivalence
 #print axioms genericPointWedgeNormalizedFundamentalGroupEquiv
+#print axioms genericPointWedgeLeftLegMap
+#print axioms genericPointWedgeRightLegMap
+#print axioms genericPointWedgeLegCoordinates_of_mapped
 
 end ConstructionTargets.PointWedgeVanKampen
