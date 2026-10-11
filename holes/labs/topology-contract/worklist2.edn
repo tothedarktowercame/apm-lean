@@ -79256,4 +79256,79 @@
    :id :lemma-apm-t98a03-threefoldcover-fiber-equiv-fin-three,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A04,
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["problems/t97A04/lean/Main.lean"
+    "problems/t97A04/status.json"
+    "ConstructionTargets/t97A04Closure.lean"
+    "ConstructionTargets/t97A04Closure.blueprint.md"],
+   :dag-node "~/notes/closer/audits/t97A04.md",
+   :acceptance
+   {:implementation
+    "CLOSURE PROGRAM (Joe 2026-10-11: prioritise what closes quicker). Close t97A04: remove every sorry from problems/t97A04/lean/Main.lean without changing what problems/STATEMENTS.json pins (unregistered bridges may be corrected). Remaining: bridge 3: torus H2 naturality and degree calculation (180-350 lines each, 3-7 days). Reusable results go in ConstructionTargets/t97A04Closure.lean (add further files to :scope only via the receipt if needed).",
+    :blueprint "ConstructionTargets/t97A04Closure.blueprint.md",
+    :axioms :standard-only,
+    :commands
+    ["lake env lean problems/t97A04/lean/Main.lean"
+     "python3 scripts/statement-registry.py check"]},
+   :continue-from
+   "NEXT JOB: write the blueprint ConstructionTargets/t97A04Closure.blueprint.md (BLUEPRINTS.md) for the remaining chain in ~/notes/closer/audits/t97A04.md, then formalise node by node.",
+   :id :program-2026-10-11-close-t97a04,
+   :kind :final-adapter,
+   :campaign-priority 43,
+   :depends-on [],
+   :program true,
+   :other-consumers []}
+  {:consumer :t96A07,
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["problems/t96A07/lean/Main.lean"
+    "problems/t96A07/status.json"
+    "ConstructionTargets/t96A07Closure.lean"
+    "ConstructionTargets/t96A07Closure.blueprint.md"],
+   :dag-node "~/notes/closer/audits/t96A07.md",
+   :acceptance
+   {:implementation
+    "CLOSURE PROGRAM (Joe 2026-10-11: prioritise what closes quicker). Close t96A07: remove every sorry from problems/t96A07/lean/Main.lean without changing what problems/STATEMENTS.json pins (unregistered bridges may be corrected). Remaining: consumer-specific derivative calculations: descended map smoothness, z-axis nontransversality, horizontal-level transversality (220-400 lines, 4-8 days). Reusable results go in ConstructionTargets/t96A07Closure.lean (add further files to :scope only via the receipt if needed).",
+    :blueprint "ConstructionTargets/t96A07Closure.blueprint.md",
+    :axioms :standard-only,
+    :commands
+    ["lake env lean problems/t96A07/lean/Main.lean"
+     "python3 scripts/statement-registry.py check"]},
+   :continue-from
+   "NEXT JOB: write the blueprint ConstructionTargets/t96A07Closure.blueprint.md (BLUEPRINTS.md) for the remaining chain in ~/notes/closer/audits/t96A07.md, then formalise node by node.",
+   :id :program-2026-10-11-close-t96a07,
+   :kind :final-adapter,
+   :campaign-priority 45,
+   :depends-on [],
+   :program true,
+   :other-consumers []}
+  {:consumer :t94A10,
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["problems/t94A10/lean/Main.lean"
+    "problems/t94A10/status.json"
+    "ConstructionTargets/t94A10Closure.lean"
+    "ConstructionTargets/t94A10Closure.blueprint.md"],
+   :dag-node "~/notes/closer/t94a10-report.md",
+   :acceptance
+   {:implementation
+    "CLOSURE PROGRAM (Joe 2026-10-11: prioritise what closes quicker). Close t94A10: remove every sorry from problems/t94A10/lean/Main.lean without changing what problems/STATEMENTS.json pins (unregistered bridges may be corrected). Remaining: closedness (140-240 lines) and periodic-square Green non-exactness (250-450 lines). Reusable results go in ConstructionTargets/t94A10Closure.lean (add further files to :scope only via the receipt if needed).",
+    :blueprint "ConstructionTargets/t94A10Closure.blueprint.md",
+    :axioms :standard-only,
+    :commands
+    ["lake env lean problems/t94A10/lean/Main.lean"
+     "python3 scripts/statement-registry.py check"]},
+   :continue-from
+   "NEXT JOB: write the blueprint ConstructionTargets/t94A10Closure.blueprint.md (BLUEPRINTS.md) for the remaining chain in ~/notes/closer/t94a10-report.md, then formalise node by node.",
+   :id :program-2026-10-11-close-t94a10,
+   :kind :final-adapter,
+   :campaign-priority 46,
+   :depends-on [],
+   :program true,
    :other-consumers []}]}

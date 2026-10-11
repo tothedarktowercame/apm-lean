@@ -113997,7 +113997,7 @@
    "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Blueprint repaired. New B10 specifies the punctured-circle neighborhood and pointed contraction; new B11 constructs the restricted-open neighborhood of the TwoCircles wedge point and its quotient-descended pointed contraction. The final specialization is now B12 and explicitly uses both nodes.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
-   :campaign-priority 50,
+   :campaign-priority 43,
    :fail-count 3,
    :depends-on [],
    :program true,
@@ -116035,6 +116035,131 @@
    :id :lemma-t97a07-criticalvalues-zero,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t95J02,
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["problems/t95J02/lean/Main.lean"
+    "problems/t95J02/status.json"
+    "ConstructionTargets/t95J02Closure.lean"
+    "ConstructionTargets/t95J02Closure.blueprint.md"],
+   :dag-node "~/notes/closer/audits/t95J02.md",
+   :acceptance
+   {:implementation
+    "CLOSURE PROGRAM (Joe 2026-10-11: prioritise what closes quicker). Close t95J02: remove every sorry from problems/t95J02/lean/Main.lean without changing what problems/STATEMENTS.json pins (unregistered bridges may be corrected). Remaining: quotient-circle homeomorphism (180-320 lines, 2-5 days). Reusable results go in ConstructionTargets/t95J02Closure.lean (add further files to :scope only via the receipt if needed).",
+    :blueprint "ConstructionTargets/t95J02Closure.blueprint.md",
+    :axioms :standard-only,
+    :commands
+    ["lake env lean problems/t95J02/lean/Main.lean"
+     "python3 scripts/statement-registry.py check"]},
+   :continue-from
+   "NEXT JOB: write the blueprint ConstructionTargets/t95J02Closure.blueprint.md (BLUEPRINTS.md) for the remaining chain in ~/notes/closer/audits/t95J02.md, then formalise node by node.",
+   :id :program-2026-10-11-close-t95j02,
+   :kind :final-adapter,
+   :campaign-priority 41,
+   :depends-on [],
+   :program true,
+   :other-consumers []}
+  {:consumer :t92J08,
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["problems/t92J08/lean/Main.lean"
+    "problems/t92J08/status.json"
+    "ConstructionTargets/t92J08Closure.lean"
+    "ConstructionTargets/t92J08Closure.blueprint.md"],
+   :dag-node "~/notes/closer/t92j08-report.md",
+   :acceptance
+   {:implementation
+    "CLOSURE PROGRAM (Joe 2026-10-11: prioritise what closes quicker). Close t92J08: remove every sorry from problems/t92J08/lean/Main.lean without changing what problems/STATEMENTS.json pins (unregistered bridges may be corrected). Remaining: bridge_1: parameter-uniform manifold Picard-Lindelof + finite subcover (220-430 lines). Reusable results go in ConstructionTargets/t92J08Closure.lean (add further files to :scope only via the receipt if needed).",
+    :blueprint "ConstructionTargets/t92J08Closure.blueprint.md",
+    :axioms :standard-only,
+    :commands
+    ["lake env lean problems/t92J08/lean/Main.lean"
+     "python3 scripts/statement-registry.py check"]},
+   :continue-from
+   "NEXT JOB: write the blueprint ConstructionTargets/t92J08Closure.blueprint.md (BLUEPRINTS.md) for the remaining chain in ~/notes/closer/t92j08-report.md, then formalise node by node.",
+   :id :program-2026-10-11-close-t92j08,
+   :kind :final-adapter,
+   :campaign-priority 42,
+   :depends-on [],
+   :program true,
+   :other-consumers []}
+  {:consumer :t97A07,
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["problems/t97A07/lean/Main.lean"
+    "problems/t97A07/status.json"
+    "ConstructionTargets/t97A07Closure.lean"
+    "ConstructionTargets/t97A07Closure.blueprint.md"],
+   :dag-node "~/notes/closer/audits/t97A07.md",
+   :acceptance
+   {:implementation
+    "CLOSURE PROGRAM (Joe 2026-10-11: prioritise what closes quicker). Close t97A07: remove every sorry from problems/t97A07/lean/Main.lean without changing what problems/STATEMENTS.json pins (unregistered bridges may be corrected). Remaining: openness of regular points + submersion argument (180-350 lines, 3-7 days). Reusable results go in ConstructionTargets/t97A07Closure.lean (add further files to :scope only via the receipt if needed).",
+    :blueprint "ConstructionTargets/t97A07Closure.blueprint.md",
+    :axioms :standard-only,
+    :commands
+    ["lake env lean problems/t97A07/lean/Main.lean"
+     "python3 scripts/statement-registry.py check"]},
+   :continue-from
+   "NEXT JOB: write the blueprint ConstructionTargets/t97A07Closure.blueprint.md (BLUEPRINTS.md) for the remaining chain in ~/notes/closer/audits/t97A07.md, then formalise node by node.",
+   :id :program-2026-10-11-close-t97a07,
+   :kind :final-adapter,
+   :campaign-priority 44,
+   :depends-on [],
+   :program true,
+   :other-consumers []}
+  {:consumer :t91J06,
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["problems/t91J06/lean/Main.lean"
+    "problems/t91J06/status.json"
+    "ConstructionTargets/t91J06Closure.lean"
+    "ConstructionTargets/t91J06Closure.blueprint.md"],
+   :dag-node "~/notes/closer/t91j06-report.md",
+   :acceptance
+   {:implementation
+    "CLOSURE PROGRAM (Joe 2026-10-11: prioritise what closes quicker). Close t91J06: remove every sorry from problems/t91J06/lean/Main.lean without changing what problems/STATEMENTS.json pins (unregistered bridges may be corrected). Remaining: interval-coordinate extension, recursive stage coordinates, corrected glue with hf (about a week). Reusable results go in ConstructionTargets/t91J06Closure.lean (add further files to :scope only via the receipt if needed).",
+    :blueprint "ConstructionTargets/t91J06Closure.blueprint.md",
+    :axioms :standard-only,
+    :commands
+    ["lake env lean problems/t91J06/lean/Main.lean"
+     "python3 scripts/statement-registry.py check"]},
+   :continue-from
+   "NEXT JOB: write the blueprint ConstructionTargets/t91J06Closure.blueprint.md (BLUEPRINTS.md) for the remaining chain in ~/notes/closer/t91j06-report.md, then formalise node by node.",
+   :id :program-2026-10-11-close-t91j06,
+   :kind :final-adapter,
+   :campaign-priority 47,
+   :depends-on [],
+   :program true,
+   :other-consumers []}
+  {:consumer :t94A07,
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["problems/t94A07/lean/Main.lean"
+    "problems/t94A07/status.json"
+    "ConstructionTargets/t94A07Closure.lean"
+    "ConstructionTargets/t94A07Closure.blueprint.md"],
+   :dag-node "~/notes/closer/t94a07-report.md",
+   :acceptance
+   {:implementation
+    "CLOSURE PROGRAM (Joe 2026-10-11: prioritise what closes quicker). Close t94A07: remove every sorry from problems/t94A07/lean/Main.lean without changing what problems/STATEMENTS.json pins (unregistered bridges may be corrected). Remaining: torus constraint derivative, kernel, local index, longitude-projection obstruction (about a week). Reusable results go in ConstructionTargets/t94A07Closure.lean (add further files to :scope only via the receipt if needed).",
+    :blueprint "ConstructionTargets/t94A07Closure.blueprint.md",
+    :axioms :standard-only,
+    :commands
+    ["lake env lean problems/t94A07/lean/Main.lean"
+     "python3 scripts/statement-registry.py check"]},
+   :continue-from
+   "NEXT JOB: write the blueprint ConstructionTargets/t94A07Closure.blueprint.md (BLUEPRINTS.md) for the remaining chain in ~/notes/closer/t94a07-report.md, then formalise node by node.",
+   :id :program-2026-10-11-close-t94a07,
+   :kind :final-adapter,
+   :campaign-priority 48,
+   :depends-on [],
+   :program true,
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
