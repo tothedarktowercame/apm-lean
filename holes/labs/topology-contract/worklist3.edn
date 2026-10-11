@@ -3475,6 +3475,23 @@
       "The first promoted fixture referred to CoefficientRelativeSmall outside the ConstructionTargets namespace without qualification.",
       :correction
       "Qualified both coefficient-relative declarations with ConstructionTargets and reran the fixture successfully."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791680262811-3557-3b429f13",
+     :commands
+     ["git diff-tree recorded commit scope"
+      "sha256sum promoted fixture"
+      "source blob comparison"
+      "lake env lean promoted fixture"
+      "lake env lean target module"
+      "lake build target module"
+      "placeholder and axiom scan"
+      "statement registry check"
+      "consumer placeholder census"
+      "git diff --check recorded commit"],
+     :finding
+     "PASS: implementation commit f5ca3a8f changes exactly ConstructionTargets/ManifoldFundamentalClass.lean and its blob matches the reviewed source; promoted fixture hash 10b53377e8a331fb350dcc41debfb0951003059a0ca99f95a363d55d1d9c7d16 matches recorded evidence and preserves the frozen theorem type from the original fixture; forgetIntegralRelativeCokernelComparison installs the existing forgetIntModules equivalence at the homological-complex level and applies PreservesCokernel.iso to the actual coefficient-relative subspace map, yielding the canonical isomorphism from the forgotten ModuleCat relative cokernel to the cokernel formed after forgetting in the required direction; it does not identify these objects definitionally, compose later comparisons, pass to homology, transport generators, or assert localization normalization; fixture, module, and target build pass with zero source/fixture placeholders and only propext, Classical.choice, and Quot.sound; 131 statements match and consumer placeholders remain t00J02=1 and t98A02=1."},
     :commit "f5ca3a8fa0ce610a6b1e1602e42f525f00427c23",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -3499,7 +3516,7 @@
       "Canonical preservation-of-cokernel isomorphism from the forgotten coefficient-relative chain complex to the cokernel formed after forgetting, induced by the integer-module/additive-group equivalence on homological complexes"}},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/forget-relative-cokernel-preservation",
@@ -3646,7 +3663,7 @@
      "The coefficient relative chains are formed by taking a cokernel in ModuleCat Int, whereas the reviewed direct-cokernel comparison starts after forgetting to AddCommGrpCat. The fixture fills exactly that gap with PreservesCokernel.iso. The required preservation instance follows from the existing equivalence ModuleCat Int to AddCommGrpCat lifted to homological complexes. The remaining construction is now a composition of three canonical chain isomorphisms, followed by homology and the concrete generator computation.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -5796,7 +5813,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -5813,7 +5830,10 @@
     "forall {X : Type} [TopologicalSpace X] (A : Set X), (forgetIntModules.mapHomologicalComplex (ComplexShape.down Nat)).obj (CoefficientRelativeSmall.relativeChains Int A) ≅ cokernel ((forgetIntModules.mapHomologicalComplex (ComplexShape.down Nat)).map (CoefficientRelativeSmall.subspaceMap Int A))",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-forget-relative-cokernel-topo3-r1},
+    :routes-2026-10-11-manifold-forget-relative-cokernel-topo3-r1,
+    :banked-by
+    :routes-2026-10-11-manifold-forget-relative-cokernel-topo3-r1,
+    :banked-commit "f5ca3a8fa0ce610a6b1e1602e42f525f00427c23"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-forgetintegralrelativecokernelcomparison,
    :kind :lemma,
