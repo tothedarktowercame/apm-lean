@@ -79328,13 +79328,24 @@
       :exit 1,
       :finding "Fixed categorical association; rerun passed."}],
     :continue-from "Prove both overlap component equations.",
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791727307729-5455-c38e1744",
+     :commands
+     ["git show/check/diff-tree c618c3100"
+      "lake env lean ConstructionTargets/t97A04Closure.lean"
+      "lake env lean problems/t97A04/lean/Main.lean"
+      "statement-registry check/fingerprint and placeholder counts"],
+     :finding
+     "PASS: this retry contains new compiled progress beyond history job 5. Commit changes only the scoped closure and conjugates H1(circleZPow a) by circleH1GroupIsoInt in the correct inv-map-hom direction, yielding a times the identity in the overlap integral coordinate. Blob matches 1791d484. Closure is sorry-free with standard axioms; Main compiles with unchanged 2 placeholders. Registry is 131/0 and frozen statement SHA-256 remains ca1b2cb3c6594276811618321d5c0604c2f38fc4594a6b21ae161a711a923a34. Both overlap component equations and B6-B11 remain listed."},
     :commit "c618c310021b3e265bd9e4c5261cb1d08cc29cf6",
     :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
     :finding
     "Circle-power H1 is now in the overlap's integral coordinate.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79400,6 +79411,9 @@
      :reason :program-progress-committed}
     {:job 5,
      :commit "bb0f0f77d8953dc78dd564e000f3d4a5b29d0894",
+     :reason :program-progress-committed}
+    {:job 7,
+     :commit "c618c310021b3e265bd9e4c5261cb1d08cc29cf6",
      :reason :program-progress-committed}]}
   {:consumer :t96A07,
    :stop-count 1,
@@ -79832,7 +79846,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -79843,7 +79857,9 @@
     :reported-by [:program-2026-10-11-close-t97a04],
     :type "coordinate conjugate of H1(zpow a) is a times identity",
     :area "mv-connecting-naturality",
-    :proved-in :program-2026-10-11-close-t97a04},
+    :proved-in :program-2026-10-11-close-t97a04,
+    :banked-by :program-2026-10-11-close-t97a04,
+    :banked-commit "c618c310021b3e265bd9e4c5261cb1d08cc29cf6"},
    :id
    :lemma-constructiontargets-t97a04closure-circlezpow-h1-coordinate,
    :kind :lemma,
