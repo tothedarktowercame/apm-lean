@@ -103226,6 +103226,21 @@
       :exit 0}
      {:cmd "git status --short", :exit 0, :finding "clean"}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791685839297-3813-22d8f34c",
+     :commands
+     ["git show and git diff-tree on recorded commit 2afd98fc5638b80cceb04421aafdde4256e1c468"
+      "git diff --exit-code between recorded blob and checkout"
+      "sha256sum and comment-stripped placeholder recount on source and frozen fixture"
+      "lake build ConstructionTargets.PolygonBoundaryThreeCirclesLiteralFormulas"
+      "lake env lean /tmp/polygon-boundary-three-circles-literal-formulas.lean"
+      "fresh axiom checks for the two composite identities and six literal formulas"
+      "python3 scripts/statement-registry.py check"
+      "git diff-tree --check on recorded commit"],
+     :finding
+     "Recorded one-file commit is authored by topo-2; source equals the recorded blob and is byte-identical to the frozen fixture. The two quotient-homeomorphism composites cancel in the correct inverse-forward direction, and the six formulas use N3 edges 0, 2, 4 and torus-crosscap edges 0, 1, 4 with literal nested first, second, and third circle injections. All eight exported theorem types compile with only standard axioms; source and fixture placeholder counts are zero; the registry reports 131 matched and 0 mismatched; radial package construction remains outside scope."},
     :commit "2afd98fc5638b80cceb04421aafdde4256e1c468",
     :changed-paths
     ["ConstructionTargets/PolygonBoundaryThreeCirclesLiteralFormulas.lean"],
@@ -103248,7 +103263,7 @@
       "torusCrosscapBoundary_third"]},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/PolygonBoundaryThreeCirclesLiteralFormulas.lean"],
    :dag-node
@@ -103377,7 +103392,7 @@
       "The two quotient-to-ThreeCircles homeomorphisms satisfy conjugacy with the three-loop maps and six literal canonical-edge formulas."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
