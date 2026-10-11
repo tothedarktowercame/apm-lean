@@ -72561,6 +72561,19 @@
       :exit 0,
       :output "19ac0b6dc Add t02A03 rotated departure time support"}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791714360448-5052-c73b0bec",
+     :commands
+     ["git show/diff-tree/show --check 19ac0b6dccf7243b5e3b636ec9c8684968ef32e6"
+      "git rev-parse scoped blob; sha256sum frozen fixture"
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean"
+      "lake env lean /tmp/t02a03_rotated_waypoint_departure_zero_time_pos_probe.lean"
+      "python3 scripts/statement-registry.py check"
+      "statement fingerprints at commit and parent; scoped placeholder scans"],
+     :finding
+     "PASS: independent author topo-6; the recorded commit changes exactly the declared file, is clean, and matches the recorded scoped blob and fixture hash. The module and exact frozen probe compile. The committed theorem faithfully replaces the fixture-local identical waypoint with canonical rotatedEndpointWaypoint, then uses the unit-interval lower bound to show that nonpositive time would force t = 0, where the assumed departure zero reduces to the contradiction 1 = 0. The implication orientation is exact and remains in the unnormalized complex departure representation; it does not construct a transverse correction, prove arrival nonvanishing, normalize to Circle, or assemble the ambient deformation. Axioms are exactly propext, Classical.choice, Quot.sound; registry is 131/0, the t02A03 fingerprint is unchanged at commit and parent, and the scoped file and fixture have no placeholders."},
     :commit "19ac0b6dccf7243b5e3b636ec9c8684968ef32e6",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
@@ -72575,7 +72588,7 @@
    :phase :implementation,
    :type
    "forall (t : unitInterval) (p : RightTubeMinusLeftCore), (((1-2*(t:ℝ):ℝ):ℂ) + ((2*(t:ℝ):ℝ):ℂ)*rotatedEndpointWaypoint p) = 0 -> 0 < (t : ℝ)",
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/rotated-waypoint-departure-zero-time-positive",
@@ -72678,7 +72691,7 @@
      "Every zero of the rotated waypoint departure occurs at strictly positive time. Thus an endpoint-fixed transverse correction may use a factor vanishing at time zero while remaining active on the entire exact zero locus; a further bounded theorem must construct that correction and prove it creates no new zeros.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
