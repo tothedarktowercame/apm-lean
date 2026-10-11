@@ -353,6 +353,23 @@ theorem circleZPow_H1 (a : ℤ) :
   ext x
   exact circleZPow_H1_apply a x
 
+/-- The pure power calculation in the exact integral circle coordinate used
+by the overlap biproduct. -/
+theorem circleZPow_H1_coordinate (a : ℤ) :
+    circleH1GroupIsoInt.inv ≫
+        HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularSubdivision.singularPostcomposition
+            (circleZPow a)) 1 ≫
+        circleH1GroupIsoInt.hom =
+      a • 𝟙 (AddCommGrpCat.of ℤ) := by
+  rw [circleZPow_H1]
+  change
+    (circleH1GroupIsoInt.inv ≫
+        (a • 𝟙 (SingularHomology 1 (TopCat.of Circle)))) ≫
+      circleH1GroupIsoInt.hom = _
+  rw [Preadditive.comp_zsmul, Preadditive.zsmul_comp,
+    Category.comp_id, Iso.inv_hom_id]
+
 private noncomputable def shearYIntersectionMap (a b : ℤ) :=
   (ambientIntersectionRangeChainsIso frozenYCover.U frozenYCover.V).inv ≫
     closureChains.map
@@ -759,6 +776,7 @@ theorem shearY_overlap_coordinate_of_degree_components (a b : ℤ)
 #print axioms fundamentalGroupH1Hom_circleZPowPi1Map
 #print axioms circleZPow_H1_apply
 #print axioms circleZPow_H1
+#print axioms circleZPow_H1_coordinate
 #print axioms shearYOverlapCoordinateMap
 #print axioms shearY_overlap_coordinate_of_injections
 #print axioms inl_comp_overlapScalar
