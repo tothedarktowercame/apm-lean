@@ -680,6 +680,22 @@ noncomputable def integralRelativeHomologyComparisonWithTransport
       (ComplexShape.down ℕ) n).mapIso
         (integralRelativeChainsComparisonWithTransport A)
 
+/-- Applying homology to the corrected relative-chain projection square gives
+the corresponding equality of homology morphisms. -/
+theorem integralRelativeChainsComparisonWithTransport_homology_projection
+    {X : Type} [TopologicalSpace X] (A : Set X) (n : ℕ) :
+    HomologicalComplex.homologyMap
+        ((forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ)).map
+          (cokernel.π (CoefficientRelativeSmall.subspaceMap ℤ A))) n ≫
+      HomologicalComplex.homologyMap
+        (integralRelativeChainsComparisonWithTransport A).hom n =
+    HomologicalComplex.homologyMap
+        (singularChainsComparison (TopCat.of X)).hom n ≫
+      HomologicalComplex.homologyMap (relativeSingularProjection A) n := by
+  simpa only [HomologicalComplex.homologyMap_comp] using congrArg
+    (fun f => HomologicalComplex.homologyMap f n)
+    (integralRelativeChainsComparisonWithTransport_projection A)
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -724,3 +740,4 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport
+#print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport_homology_projection
