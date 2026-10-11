@@ -105019,7 +105019,7 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma
@@ -105028,17 +105028,20 @@
    {:placeholder-delta
     {:source-before 0, :source-after 0, :fixture-sorry 0},
     :residual
-    "Replace choice-generated connector equivalences with explicitly normalized equivalence data, or add the stated counit-component normalization hypothesis; then the five-factor composite can reduce to identity.",
+    "Prove an actual identity normalization for the choice-generated objObjPreimageIso (or change the construction to explicit normalized equivalence data), repair the canonical .lake/packages authority link, then normalize the remaining constituent counits and the five-factor composite.",
     :outcome :stop,
     :warnings
-    [{:kind :dirty-worktree,
+    [{:kind :lean-workspace-invalid,
+      :message
+      ".lake/packages is a real directory; workspace policy requires a symlink to /home/joe/code/apm-lean/.lake/packages authority before any Lake command."}
+     {:kind :dirty-worktree,
       :message
       "Unrelated modification ConstructionTargets/ManifoldFundamentalClass.lean was not touched."}],
     :missing-theorems
     [{:name
       "ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence_counit_base_identity",
       :type
-      "For every connector system used by TwoOpenPointSpanComparison, the counit of connectorSingleObjEquivalence at the identity target functor has identity component at SingleObj.star.",
+      "For every connector system used by TwoOpenPointSpanComparison, (connectorSingleObjEquivalence S).counitIso.hom.app (SingleObj.star (End S.base)) = 𝟙 _",
       :status :not-started,
       :consumers [:t99J01 :t01A03 :t92J06 :t97A01 :t97A03],
       :depends-on [],
@@ -105051,35 +105054,34 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "The frozen identity statement needs a normalization hypothesis not present in the construction. TwoOpenPointSpanComparison uses connectorSingleObjEquivalence, defined with Functor.asEquivalence. Its inverse, unit, and counit are choice-generated; the Equivalence API guarantees only inverse laws and natural isomorphisms, not that the counit automorphism at SingleObj.star is the identity. At a one-object group category that component is an arbitrary invertible central morphism, so naturality yields conjugacy, not equality to 1. The exact missing hypothesis is that every connector asEquivalence counit component used by comparison is identity (together with the descent counit base normalization). Without it the requested literal composite identity does not follow.",
+    "The owner-reopen premise is false: the banked connector result does not prove the connector counit component is identity. It proves only that the desired identity is equivalent to the choice-generated objObjPreimageIso component being identity. The scoped composite still has no hypothesis or theorem establishing that normalization, so the frozen literal identity cannot be derived; naturality supplies only conjugacy. In addition, Lean verification is prohibited in this checkout because .lake/packages is a real directory rather than the required symlink to the canonical package authority.",
     :commands
-    [{:cmd
-      "lake env lean ConstructionTargets/TwoOpenFreeProductMappingCompositeCounitIdentity.lean",
-      :exit 0,
-      :finding "The scoped reduction compiles with standard axioms."}
-     {:cmd
-      "lake env lean /tmp/composite-counit-component-identity.lean",
+    [{:cmd "sha256sum /tmp/composite-counit-component-identity.lean",
       :exit 0,
       :finding
-      "The fixture still requires its custom compositeCounit_component_identity axiom."}
+      "Fixture hash matches acdc06369d70b171b3c2c1f70a56ad199e7b7f72be274a4ce3930f77b5d84c0f."}
+     {:cmd
+      "sed -n '1,180p' ConstructionTargets/ConnectorSingleObjectCounitBaseIdentity.lean",
+      :exit 0,
+      :finding
+      "The banked file exports connectorSingleObjEquivalence_counit_base_identity_iff, reducing identity to the unproved choice-generated objObjPreimageIso identity; it does not export the identity theorem."}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
-     {:cmd "git status --short",
+     {:cmd "ls -ld .lake/packages",
       :exit 0,
       :finding
-      "Only an unrelated existing worktree modification is present."}],
+      ".lake/packages is a real directory, so Lake gates were not run."}],
     :diagnostic-history [],
-    :commit "25b960ede466005c3d62bb6eedc8b367ba39886f",
-    :changed-paths
-    ["ConstructionTargets/TwoOpenFreeProductMappingCompositeCounitIdentity.lean"],
+    :changed-paths [],
     :fixture
     {:path "/tmp/composite-counit-component-identity.lean",
      :sha256
-     "acdc06369d70b171b3c2c1f70a56ad199e7b7f72be274a4ce3930f77b5d84c0f"},
+     "acdc06369d70b171b3c2c1f70a56ad199e7b7f72be274a4ce3930f77b5d84c0f",
+     :status :self-axiomatized},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/TwoOpenFreeProductMappingCompositeCounitIdentity.lean"],
    :dag-node
