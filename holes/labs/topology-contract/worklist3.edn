@@ -17813,7 +17813,7 @@
   {:consumer :t00A02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Blueprint B9 claims every final hypothesis is used, but LocPathConnectedSpace X is unused: B1 does not assume it, B7 derives PathConnectedSpace from SimplyConnectedSpace, B8 uses simple-connected path homotopy, and no other node cites or uses local path-connectedness. Repair the blueprint and frozen Lean interface by either removing LocPathConnectedSpace X or adding a concrete node whose statement and proof genuinely require it, with the dependency recorded in uses:.",
    :implements-lemma
@@ -17824,7 +17824,7 @@
      "ConstructionTargets/DeckGroupQuotientFundamentalGroup.blueprint.md",
      :sha256
      "f1d74207903f683985266f7ebbb50b2280d87ec873331c3889dfdc12fbe66aa6",
-     :implemented-node :B7},
+     :implemented-node :B8},
     :placeholder-delta
     {:t00A02 {:before 2, :after 2, :delta 0},
      :t92J05 {:before 3, :after 3, :delta 0},
@@ -17832,7 +17832,7 @@
      :t99J01 {:before 1, :after 1, :delta 0},
      :t00J07 {:before 3, :after 3, :delta 0}},
     :residual
-    "Implement reviewed blueprint B8 orbitEndpointMonodromy_surjective: for g choose a path from x to g inverse acting on x, project it to a quotient loop, use monodromy_map to identify its raw endpoint coordinate with g inverse, and conclude the inverted coordinate maps to g. Then implement B9-B11.",
+    "Implement reviewed blueprint B9 orbitEndpointMonodromy_injective: reduce equality to the kernel, use raw coordinate one to show the lifted loop closes at x, apply SimplyConnectedSpace.paths_homotopic and IsCoveringMap.injective_path_homotopic_map, then implement B10 the final MulEquiv and B11 consumer adapters.",
     :gates
     {:module-compile :pass,
      :target-build :pass,
@@ -17844,19 +17844,10 @@
     :warnings [],
     :missing-theorems
     [{:name
-      "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromy",
-      :type
-      "forall repaired orbit coverings and x, FundamentalGroup (X/G) [x] ->* G, sending a to the inverse of its raw lifted-endpoint coordinate",
-      :status :proved,
-      :consumers [:t00A02 :t92J05 :t93J03 :t99J01 :t00J07],
-      :depends-on
-      ["ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromyRaw_mul"],
-      :area "deck-group-quotient-pi1"}
-     {:name
       "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromy_surjective",
       :type
-      "Blueprint B8: endpoint monodromy is surjective when the total space is simply connected",
-      :status :not-started,
+      "forall repaired orbit coverings and x, Function.Surjective (orbitEndpointMonodromy free x)",
+      :status :proved,
       :consumers [:t00A02 :t92J05 :t93J03 :t99J01 :t00J07],
       :depends-on
       ["ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromy"],
@@ -17881,16 +17872,16 @@
       :area "deck-group-quotient-pi1"}],
     :statement-hashes
     {:module
-     "b92dd8dc634578572e8e76a4e8f776db218bbf0f362e4a55b1113d250675f375",
+     "05c1c79b1f67f9b86fce3144c3bd183d4fc92910604d28bbffb988dee0cca524",
      :milestones
-     "9d297eaa5365ab8349c88566266b081420b72dc2bfb82896a3c9b56c39820520",
+     "377a647c16d0fe722a67c7aa6a9671631f3ab3b1c50b160758ea37368f41bb84",
      :blueprint
      "f1d74207903f683985266f7ebbb50b2280d87ec873331c3889dfdc12fbe66aa6"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Implemented and committed reviewed blueprint B7. orbitEndpointMonodromy is the group homomorphism sending a loop a to the inverse of orbitEndpointMonodromyRaw free x a. map_one follows from the raw identity law, and map_mul follows directly from B6 followed by mul_inv_rev, preserving the reviewed orientation. The final theorem remains incomplete; B8 surjectivity is next.",
+    "Implemented and committed reviewed blueprint B8. orbitEndpointMonodromy_surjective chooses a path from x to g inverse acting on x, projects it to a quotient loop, uses monodromy_map to identify the lifted endpoint and raw orbit-fiber coordinate with g inverse, and concludes that B7 inversion maps the loop to g. The repaired final theorem remains incomplete; B9 injectivity is next.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean",
@@ -17899,21 +17890,17 @@
       "lake build ConstructionTargets.DeckGroupQuotientFundamentalGroup",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "git diff --check HEAD^ HEAD -- scoped files", :exit 0}
      {:cmd
-      "git diff --check 1646dfed8^ 1646dfed8 -- ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean ConstructionTargets/DeckGroupQuotientFundamentalGroup.md",
-      :exit 0}
-     {:cmd
-      "rg -n '\\bsorry\\b|\\badmit\\b|^\\s*axiom\\b' ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean",
+      "forbidden placeholder scan in DeckGroupQuotientFundamentalGroup.lean",
       :exit 1,
       :expected-exit 1}
      {:cmd
       "comment-stripped placeholder counts for t00A02 t92J05 t93J03 t99J01 t00J07",
       :exit 0}
-     {:cmd
-      "git status --short -- ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean ConstructionTargets/DeckGroupQuotientFundamentalGroup.md ConstructionTargets/DeckGroupQuotientFundamentalGroup.blueprint.md",
-      :exit 0}],
+     {:cmd "git status --short -- scoped files", :exit 0}],
     :diagnostic-history [],
-    :commit "1646dfed8b40cdbe7ffec964d9c0f4382da3e7fb",
+    :commit "9ae7f2f9bea87a61777f77ce04463513bc000940",
     :changed-paths
     ["ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean"
      "ConstructionTargets/DeckGroupQuotientFundamentalGroup.md"],
@@ -17924,13 +17911,13 @@
      ["ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean"
       "ConstructionTargets/DeckGroupQuotientFundamentalGroup.md"],
      :declaration
-     "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromy"},
+     "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromy_surjective"},
     :row :program-2026-10-11-deck-group-quotient-pi1,
     :seat :topo-10},
    :phase :implementation,
    :owner-repair
    "2026-10-11 claude-14: final type gains [T2Space X] [LocallyCompactSpace X] (Mathlib quotient-covering needs them; every consumer, the plane and spheres, has them). Do not prove covering under weaker hypotheses.",
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean"
     "ConstructionTargets/DeckGroupQuotientFundamentalGroup.md"
