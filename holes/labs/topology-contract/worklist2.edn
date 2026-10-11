@@ -68714,7 +68714,52 @@
   {:bounded-exception
    "single-consumer safe angular corridor for nonpositive real normal coordinate",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:residual
+     "Implement the compiled nonpositive-normal safe-corridor inequality; then construct continuous entry and exit stages without crossing the collision zero set.",
+     :outcome :go,
+     :warnings [],
+     :acceptance
+     {:declaration
+      "ConstructionTargets.T02A03GeometricTubeDeformation.nonpositiveNormalSafeCorridor_collisionPolynomial_pos",
+      :type
+      "forall (u : Circle) (n : Complex), norm n <= (1 / 4 : Real) -> n.re <= 0 -> (u : Complex).re <= (9 / 10 : Real) -> 0 < (1 - n.re)^2 - 4*(1-n.re)*(u : Complex).re + 3",
+      :proof-obligations
+      ["derive -1/4 <= n.re from abs_re_le_norm"
+       "bound 1-n.re in [1,5/4]"
+       "use angular real-part bound to control the mixed term"
+       "prove strict positivity by nonlinear arithmetic"],
+      :forbidden-claims
+      ["safety outside angular real coordinate <= 9/10"
+       "angular homotopy construction"]},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd
+       "lake env lean /tmp/t02a03_collision_poly_nonpos_re_corridor_probe.lean",
+       :exit 0,
+       :output
+       "nonpositiveNormalSafeCorridor_collisionPolynomial_pos compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "sha256sum /tmp/t02a03_collision_poly_nonpos_re_corridor_probe.lean",
+       :exit 0,
+       :output
+       "a0962d48c4bfae6f64ec37ea3dbeca974ea8433b65b1c0651be4c24b0d97c444  /tmp/t02a03_collision_poly_nonpos_re_corridor_probe.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_collision_poly_nonpos_re_corridor_probe.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :fixture
+     {:path "/tmp/t02a03_collision_poly_nonpos_re_corridor_probe.lean",
+      :sha256
+      "a0962d48c4bfae6f64ec37ea3dbeca974ea8433b65b1c0651be4c24b0d97c444"},
+     :implementation
+     {:scope
+      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
+     :seat "topo-8"}},
+   :phase :implementation,
    :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
