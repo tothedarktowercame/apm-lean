@@ -72649,6 +72649,19 @@
       :exit 0,
       :output "5ce588d47 Add t02A03 rotated departure upper support"}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791715342791-5113-08fb7c9f",
+     :commands
+     ["git show/diff-tree/show --check 5ce588d47deffad4b3cf8bfb72aa049ec6b070a2"
+      "git rev-parse scoped blob; sha256sum frozen fixture"
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean"
+      "lake env lean /tmp/t02a03_rotated_waypoint_departure_zero_time_lt_half_probe.lean"
+      "python3 scripts/statement-registry.py check"
+      "statement fingerprints at commit and parent; scoped placeholder scans"],
+     :finding
+     "PASS: independent author topo-6; the recorded commit changes exactly the declared file, is clean, and matches the recorded scoped blob and fixture hash. The module and exact frozen probe compile. The committed theorem faithfully uses canonical rotatedEndpointWaypoint. Under t <= 1/2, negating t < 1/2 forces t = 1/2; substitution reduces the assumed departure zero to vanishing of the quarter-turn endpoint, contradicted by rightTubeCorePlanarComplex_ne_zero. The implication orientation is exact and remains in the unnormalized complex departure representation; it does not construct the transverse correction, prove arrival nonvanishing, normalize to Circle, or assemble the ambient deformation. Axioms are exactly propext, Classical.choice, Quot.sound; registry is 131/0, the t02A03 fingerprint is unchanged at commit and parent, and the scoped file and fixture have no placeholders."},
     :commit "5ce588d47deffad4b3cf8bfb72aa049ec6b070a2",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
@@ -72663,7 +72676,7 @@
    :phase :implementation,
    :type
    "forall (t : unitInterval) (p : RightTubeMinusLeftCore), (t : ℝ) <= 1/2 -> (((1-2*(t:ℝ):ℝ):ℂ) + ((2*(t:ℝ):ℝ):ℂ)*rotatedEndpointWaypoint p) = 0 -> (t : ℝ) < 1/2",
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/rotated-waypoint-departure-zero-time-before-half",
@@ -72766,7 +72779,7 @@
      "Under the departure-half bound, a zero cannot occur at time one-half because the expression there is the quarter-turn waypoint, whose endpoint factor is nonzero. Together with the banked positive-time theorem, every zero lies in the open interval (0,1/2), exactly where the endpoint-vanishing support factor t*(1-2t) is strictly positive.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
