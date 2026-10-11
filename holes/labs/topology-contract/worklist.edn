@@ -113903,6 +113903,19 @@
       :exit 1,
       :finding
       "Right rfl fails due to overlap glue; left cancellation made explicit."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791750535729-5859-226e3b60",
+     :commands
+     ["git show/diff-tree 3a658417"
+      "hash/diff/placeholder checks"
+      "statement-registry.py check"
+      "lake env lean PointWedgeVanKampen.lean"
+      "lake build PointWedgeVanKampen"
+      "lake build ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "PASS: new compiled, sorry-free B6 progress proves the left restriction counit component is identity at every object and uses naturality to identify every restricted left map literally. The non-definitional right overlap glue remains exposed, not bypassed. Exact two-file scope/frozen hashes match; zero placeholders; registry 131/131; standard axioms. Right restriction/literal lifts and B12 remain listed; absent final target is valid STOP."},
     :commit "3a658417a19cd7a5eba7031cc68936be06b7f4a8",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113913,7 +113926,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113934,7 +113947,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Both restriction counits and naturality equations proved.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Left restriction counit is identity, hence all left restricted maps agree literally.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114037,7 +114050,11 @@
     {:job 2,
      :commit "0d03f8aec060b46679b1eb1ed7d393200aed1c46",
      :reason
-     "Both restriction counits and naturality equations proved."}]}
+     "Both restriction counits and naturality equations proved."}
+    {:job 3,
+     :commit "3a658417a19cd7a5eba7031cc68936be06b7f4a8",
+     :reason
+     "Left restriction counit is identity, hence all left restricted maps agree literally."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
