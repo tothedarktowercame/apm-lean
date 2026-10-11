@@ -1505,6 +1505,20 @@ theorem integralOpenDiskRelativeHomologyComparison_hom (k : ℕ) :
         (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2))
         (k + 2)).hom := rfl
 
+/-- The canonical integral comparison on the punctured unit disk in the
+degree targeted by the pair connecting morphism. -/
+noncomputable def integralOpenDiskPunctureHomologyComparison (k : ℕ) :=
+  singularHomologyComparison
+    (TopCat.of
+      (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2))) (k + 1)
+
+theorem integralOpenDiskPunctureHomologyComparison_hom (k : ℕ) :
+    (integralOpenDiskPunctureHomologyComparison k).hom =
+      (singularHomologyComparison
+        (TopCat.of
+          (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2)))
+        (k + 1)).hom := rfl
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -1596,5 +1610,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientIntegralBall_forget_hom_eq_model_factors
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralOpenDiskRelativeHomologyComparison
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralOpenDiskRelativeHomologyComparison_hom
+#print axioms ConstructionTargets.ManifoldFundamentalClass.integralOpenDiskPunctureHomologyComparison
+#print axioms ConstructionTargets.ManifoldFundamentalClass.integralOpenDiskPunctureHomologyComparison_hom
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport_homologyMap_eq_composite
 #print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_transport_homology_factors
