@@ -105864,75 +105864,115 @@
    "Prove SameOrbit is closed; combine it with quotient-map openness to obtain T2Space PlaneOrbitQuotient, then discharge inverse continuity.",
    :other-consumers []}
   {:bounded-exception
+   "This single-consumer theorem is the remaining ready direct dependency of the plane-orbit quotient Hausdorff lemma.",
+   :consumer :t93J03,
+   :implements-lemma :lemma-kleinplaneorbitquotient-sameorbit-isclosed,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/KleinPlaneOrbitQuotientTopology.lean"],
+   :dag-node "TOPOLOGY-ROUTES.md/t93J03/klein-plane-same-orbit-closed",
+   :acceptance
+   {:implementation
+    "Prove that the graph of SameOrbit for the explicit PresentedKleinGroup affine action on ℝ × ℝ is closed in (ℝ × ℝ) × (ℝ × ℝ). Use the integer coordinate normal form and bounded-region finiteness to show a convergent sequence or net of related pairs has eventually bounded group coordinates and a related limit. Export KleinPlaneOrbitQuotient.sameOrbit_isClosed with the fixture's exact type. Do not reprove quotient-map openness, derive the T2Space instance, prove inverse continuity, compare polygon quotients, or close t93J03.",
+    :placeholder "the single sorry in apm_t93j03",
+    :route-step
+    "prove the full explicit affine orbit relation is closed",
+    :fixture "/tmp/klein-plane-same-orbit-closed-probe.lean",
+    :fixture-sha256
+    "8e4299059594f2ffa506913e99f99b148e9c139e5a5120bf713f07e2439d3ec9",
+    :gates
+    ["lake build ConstructionTargets.KleinPlaneOrbitQuotientTopology"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-11-klein-plane-same-orbit-closed-110,
+   :kind :reusable-theorem,
+   :area "deck-group-fundamental-group",
+   :depends-on [],
+   :current-residual
+   "Combine closedness with the banked open quotient projection to prove T2Space PlaneOrbitQuotient, then discharge inverse continuity and construct the polygon quotient comparison.",
+   :other-consumers []}
+  {:bounded-exception
    "This single-consumer quotient identification is the nearest ready t93J03 route step after the explicit disk-to-square carrier route was blocked.",
    :consumer :t93J03,
    :implements-lemma :lemma-kleinorbitquotient-homeomorph,
    :evidence
    {:probe
     {:residual
-     "Bank quotient-map openness, then prove closedness of the full affine orbit relation and derive the Hausdorff orbit quotient.",
+     "Prove the affine orbit graph closed, then derive Hausdorffness and finish the quotient homeomorphism chain.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
-     [{:name "KleinPlaneOrbitQuotient.quotientMap_isOpen",
-       :type "IsOpenMap (fun p : ℝ × ℝ => Quotient.mk orbitSetoid p).",
+     [{:name "KleinPlaneOrbitQuotient.sameOrbit_isClosed",
+       :type
+       "IsClosed {pq : (ℝ × ℝ) × (ℝ × ℝ) | SameOrbit pq.1 pq.2}.",
        :status :not-started,
        :consumers [:t93J03],
        :depends-on [],
        :area "deck-group-fundamental-group"}],
      :prerequisite
      {:bounded-exception
-      "This single-consumer theorem is a ready direct dependency of the plane-orbit quotient Hausdorff lemma.",
+      "This single-consumer theorem is the remaining ready direct dependency of the plane-orbit quotient Hausdorff lemma.",
       :consumer :t93J03,
       :implements-lemma
-      :lemma-kleinplaneorbitquotient-quotientmap-isopen,
+      :lemma-kleinplaneorbitquotient-sameorbit-isclosed,
       :phase :implementation,
       :state :open,
       :scope
       ["ConstructionTargets/KleinPlaneOrbitQuotientTopology.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t93J03/klein-plane-orbit-quotient-map-open",
+      "TOPOLOGY-ROUTES.md/t93J03/klein-plane-same-orbit-closed",
       :acceptance
       {:implementation
-       "Prove that the quotient projection from ℝ × ℝ to the explicit PresentedKleinGroup orbit quotient is an open map. Show that the saturation of every open set is the union of its translates under the affine action, hence open, and use the coinduced quotient topology. Export KleinPlaneOrbitQuotient.quotientMap_isOpen with the fixture's exact type. Do not prove closedness of SameOrbit, the T2Space instance, inverse continuity, the polygon comparison, or close t93J03.",
+       "Prove that the graph of SameOrbit for the explicit PresentedKleinGroup affine action on ℝ × ℝ is closed in (ℝ × ℝ) × (ℝ × ℝ). Use the integer coordinate normal form and bounded-region finiteness to show a convergent sequence or net of related pairs has eventually bounded group coordinates and a related limit. Export KleinPlaneOrbitQuotient.sameOrbit_isClosed with the fixture's exact type. Do not reprove quotient-map openness, derive the T2Space instance, prove inverse continuity, compare polygon quotients, or close t93J03.",
        :placeholder "the single sorry in apm_t93j03",
        :route-step
-       "prove the explicit affine orbit quotient projection is open",
-       :fixture "/tmp/klein-plane-orbit-quotient-map-open-probe.lean",
+       "prove the full explicit affine orbit relation is closed",
+       :fixture "/tmp/klein-plane-same-orbit-closed-probe.lean",
        :fixture-sha256
-       "b80a11fa24c83886b50a4527aad8273eb76df245c2e951857143ccaaa0ad2b7c",
+       "8e4299059594f2ffa506913e99f99b148e9c139e5a5120bf713f07e2439d3ec9",
        :gates
        ["lake build ConstructionTargets.KleinPlaneOrbitQuotientTopology"
         "fixture compiles"
         "zero source and fixture sorry"
         "standard-only axioms"
         "registry check"]},
-      :id :routes-2026-10-11-klein-plane-orbit-quotient-map-open-109,
+      :id :routes-2026-10-11-klein-plane-same-orbit-closed-110,
       :kind :reusable-theorem,
       :area "deck-group-fundamental-group",
       :depends-on [],
       :current-residual
-      "Prove SameOrbit is closed; combine it with quotient-map openness to obtain T2Space PlaneOrbitQuotient, then discharge inverse continuity.",
+      "Combine closedness with the banked open quotient projection to prove T2Space PlaneOrbitQuotient, then discharge inverse continuity and construct the polygon quotient comparison.",
       :other-consumers []},
      :axioms
      ["propext"
       "Classical.choice"
       "Quot.sound"
-      "KleinPlaneOrbitQuotientMapOpenProbe.quotientMap_isOpen"],
+      "KleinPlaneSameOrbitClosedProbe.sameOrbit_isClosed"],
      :commands
      [{:cmd
-       "lake env lean /tmp/klein-plane-orbit-quotient-map-open-probe.lean",
+       "lake build ConstructionTargets.KleinPlaneOrbitQuotientTopology",
        :exit 0,
        :finding
-       "The ready quotient-map openness interface compiles with one isolated nonstandard axiom."}
+       "The scoped module now exports quotientMap_isOpen with standard axioms."}
       {:cmd
-       "sha256sum /tmp/klein-plane-orbit-quotient-map-open-probe.lean",
+       "lake env lean /tmp/klein-plane-same-orbit-closed-probe.lean",
        :exit 0,
        :finding
-       "Fixture hash is b80a11fa24c83886b50a4527aad8273eb76df245c2e951857143ccaaa0ad2b7c."}
+       "The remaining ready SameOrbit-closedness interface compiles with one isolated nonstandard axiom."}
+      {:cmd "sha256sum /tmp/klein-plane-same-orbit-closed-probe.lean",
+       :exit 0,
+       :finding
+       "Fixture hash is 8e4299059594f2ffa506913e99f99b148e9c139e5a5120bf713f07e2439d3ec9."}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :finding "131 registered statements match, 0 do not."}
+      {:cmd
+       "git hash-object ConstructionTargets/KleinPlaneOrbitQuotientTopology.lean",
+       :exit 0,
+       :finding
+       "Scoped source object is 2f071c2b750ed7ca3b518abc7d28c75512a20c8f."}
       {:cmd "sed route guides and build-loop design",
        :exit 0,
        :finding
@@ -105941,14 +105981,21 @@
        :exit 0,
        :finding
        "Clean worktree; this probe changed no repository file."}],
-     :diagnostic-history [],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/klein-plane-same-orbit-closed-probe.lean",
+       :exit 1,
+       :finding
+       "The initial fixture opened the square-orbit classification namespace rather than the namespace defining SameOrbit.",
+       :correction
+       "Opened KleinSquareEqvGenToCases; the successful compile is recorded in commands."}],
      :fixture
-     {:path "/tmp/klein-plane-orbit-quotient-map-open-probe.lean",
+     {:path "/tmp/klein-plane-same-orbit-closed-probe.lean",
       :sha256
-      "b80a11fa24c83886b50a4527aad8273eb76df245c2e951857143ccaaa0ad2b7c"},
+      "8e4299059594f2ffa506913e99f99b148e9c139e5a5120bf713f07e2439d3ec9"},
      :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-orbit-quotient-homeomorph",
@@ -105979,7 +106026,8 @@
     :routes-2026-10-11-checkpoint-topo1-after-klein-and-wedge-coordinates-86
     :routes-2026-10-11-klein-orbit-quotient-homeomorph-102
     :routes-2026-10-11-klein-closed-square-orbit-inverse-continuity-104
-    :routes-2026-10-11-klein-plane-orbit-quotient-map-open-109],
+    :routes-2026-10-11-klein-plane-orbit-quotient-map-open-109
+    :routes-2026-10-11-klein-plane-same-orbit-closed-110],
    :current-residual
    "Use the quotient homeomorphism in the deck-group fundamental-group computation and finish the t93J03 route.",
    :other-consumers []}
@@ -112960,14 +113008,19 @@
    [:lemma-kleinplaneorbitquotient-sameorbit-isclosed
     :lemma-kleinplaneorbitquotient-quotientmap-isopen],
    :other-consumers []}
-  {:consumer :portfolio,
+  {:consumer :t93J03,
    :phase :lemma,
    :state :backlog,
    :scope [],
-   :acceptance {:lemma "KleinPlaneOrbitQuotient.sameOrbit_isClosed"},
+   :acceptance
+   {:lemma "KleinPlaneOrbitQuotient.sameOrbit_isClosed",
+    :type "IsClosed {pq : (ℝ × ℝ) × (ℝ × ℝ) | SameOrbit pq.1 pq.2}."},
    :lemma
    {:name "KleinPlaneOrbitQuotient.sameOrbit_isClosed",
-    :reported-by []},
+    :reported-by
+    [:routes-2026-10-11-klein-orbit-quotient-homeomorph-96],
+    :type "IsClosed {pq : (ℝ × ℝ) × (ℝ × ℝ) | SameOrbit pq.1 pq.2}.",
+    :area "deck-group-fundamental-group"},
    :id :lemma-kleinplaneorbitquotient-sameorbit-isclosed,
    :kind :lemma,
    :depends-on [],
