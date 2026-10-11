@@ -70865,53 +70865,81 @@
    "Transfer the specialized radius and nonzero-imaginary properties to the two open halves of the continuous detour, handle t=0 and t=1 with the banked collision certificates, and reconstruct the zero-height ambient radial stage.",
    :other-consumers []}
   {:bounded-exception
+   "single-consumer global quarter-radius invariant for the zero-height core-normal detour",
+   :consumer :t02A03,
+   :phase :probe,
+   :state :open,
+   :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t02A03/zero-height-core-normal-detour-radius",
+   :acceptance
+   {:probe
+    "Compile zeroHeightCoreNormalDetour_radius_le. Split at the midpoint and prove each affine half remains in the closed core-normal disk of radius 1/4 using the exact waypoint and meridian radii and the recovered-input radius bound. Do not prove left-core avoidance or reconstruct an ambient path.",
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCoreNormalDetour_radius_le",
+    :type
+    "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> forall (t : unitInterval), ‖zeroHeightCoreNormalDetour t p‖ ≤ (1 / 4 : ℝ)",
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "certify the right-tube radius invariant along the entire zero-height detour"},
+   :id
+   :routes-2026-10-11-t02a03-zero-height-core-normal-detour-radius-topo2-r1,
+   :kind :reusable-theorem,
+   :area "explicit-r3-tube-deformation-retraction",
+   :depends-on
+   [:routes-2026-10-11-t02a03-zero-height-core-normal-detour-continuous-topo2-r1],
+   :current-residual
+   "Prove nonzero imaginary part at every interior detour time, combine that with the banked endpoint collision certificates to obtain left-core avoidance for all times, then reconstruct the ambient zero-height radial stage.",
+   :other-consumers []}
+  {:bounded-exception
    "single-consumer explicit ambient deformation with frozen tube and deletion invariants",
    :consumer :t02A03,
    :evidence
    {:probe
     {:residual
-     "Bank joint continuity of the detour; then prove its pointwise radius and left-core-avoidance invariants.",
+     "Bank the detour radius bound; then certify interior nonzero height and endpoint collision avoidance for the full zero-height radial stage.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
      [{:name
-       "ConstructionTargets.T02A03GeometricTubeDeformation.continuous_zeroHeightCoreNormalDetour",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCoreNormalDetour_radius_le",
        :type
-       "Continuous (fun tp : unitInterval × RightTubeMinusLeftCore => zeroHeightCoreNormalDetour tp.1 tp.2)",
+       "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> forall (t : unitInterval), ‖zeroHeightCoreNormalDetour t p‖ ≤ (1 / 4 : ℝ)",
        :status :proved,
        :consumers [:t02A03],
        :depends-on
-       ["ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCoreNormalDetour_endpoints_midpoint"
-        "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreTubularCoordinates_continuous"],
+       ["ConstructionTargets.T02A03GeometricTubeDeformation.continuous_zeroHeightCoreNormalDetour"
+        "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeight_signedImaginaryWaypoint_properties"
+        "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreInputNormalRadiusBound"],
        :area "explicit-r3-tube-deformation-retraction"}],
      :prerequisite
      {:bounded-exception
-      "single-consumer joint continuity of the pasted zero-height core-normal detour",
+      "single-consumer global quarter-radius invariant for the zero-height core-normal detour",
       :consumer :t02A03,
       :phase :probe,
       :state :open,
       :scope
       ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t02A03/zero-height-core-normal-detour-continuous",
+      "TOPOLOGY-ROUTES.md/t02A03/zero-height-core-normal-detour-radius",
       :acceptance
       {:probe
-       "Compile continuous_zeroHeightCoreNormalDetour. Prove joint continuity in the interval parameter and deleted-tube input by applying continuous_if_le to the two affine formulas and using their exact agreement at t=1/2. Do not prove radius bounds, left-core avoidance, or reconstruct an ambient path.",
+       "Compile zeroHeightCoreNormalDetour_radius_le. Split at the midpoint and prove each affine half remains in the closed core-normal disk of radius 1/4 using the exact waypoint and meridian radii and the recovered-input radius bound. Do not prove left-core avoidance or reconstruct an ambient path.",
        :declaration
-       "ConstructionTargets.T02A03GeometricTubeDeformation.continuous_zeroHeightCoreNormalDetour",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCoreNormalDetour_radius_le",
        :type
-       "Continuous (fun tp : unitInterval × RightTubeMinusLeftCore => zeroHeightCoreNormalDetour tp.1 tp.2)",
+       "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> forall (t : unitInterval), ‖zeroHeightCoreNormalDetour t p‖ ≤ (1 / 4 : ℝ)",
        :placeholder "the sole sorry in apm_t02a03",
        :route-step
-       "paste the two affine legs continuously across their signed-waypoint seam"},
+       "certify the right-tube radius invariant along the entire zero-height detour"},
       :id
-      :routes-2026-10-11-t02a03-zero-height-core-normal-detour-continuous-topo2-r1,
+      :routes-2026-10-11-t02a03-zero-height-core-normal-detour-radius-topo2-r1,
       :kind :reusable-theorem,
       :area "explicit-r3-tube-deformation-retraction",
       :depends-on
-      [:routes-2026-10-11-t02a03-zero-height-core-normal-detour-endpoints-topo2-r1],
+      [:routes-2026-10-11-t02a03-zero-height-core-normal-detour-continuous-topo2-r1],
       :current-residual
-      "Transfer the specialized radius and nonzero-imaginary properties to the two open halves of the continuous detour, handle t=0 and t=1 with the banked collision certificates, and reconstruct the zero-height ambient radial stage.",
+      "Prove nonzero imaginary part at every interior detour time, combine that with the banked endpoint collision certificates to obtain left-core avoidance for all times, then reconstruct the ambient zero-height radial stage.",
       :other-consumers []},
      :commands
      [{:cmd
@@ -70919,46 +70947,41 @@
        :exit 0,
        :output "Build completed successfully (8249 jobs)."}
       {:cmd
-       "lake env lean /tmp/t02a03_core_normal_detour_continuous_probe.lean",
+       "lake env lean /tmp/t02a03_core_normal_detour_radius_probe.lean",
        :exit 0,
        :output
-       "continuous_zeroHeightCoreNormalDetour compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "zeroHeightCoreNormalDetour_radius_le compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/t02a03_core_normal_detour_continuous_probe.lean",
+       "sha256sum /tmp/t02a03_core_normal_detour_radius_probe.lean",
        :exit 0,
        :output
-       "4e7394cc436482de8425d6ca023e922409f4c29586f36fb856c04548ea5b0681  /tmp/t02a03_core_normal_detour_continuous_probe.lean"}
+       "1dd416108a90f6811902d51fbad245c0bd6044c7e7d52ef10b7df391d1984635  /tmp/t02a03_core_normal_detour_radius_probe.lean"}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_core_normal_detour_continuous_probe.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_core_normal_detour_radius_probe.lean || true)\"",
        :exit 0}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}
       {:cmd
-       "rg -n 'continuous_zeroHeightCoreNormalDetour' /tmp/t02a03_core_normal_detour_continuous_probe.lean",
+       "rg -n 'zeroHeightCoreNormalDetour_radius_le' /tmp/t02a03_core_normal_detour_radius_probe.lean",
        :exit 0,
        :output
-       "5:theorem continuous_zeroHeightCoreNormalDetour\n42:#print axioms continuous_zeroHeightCoreNormalDetour"}],
+       "5:theorem zeroHeightCoreNormalDetour_radius_le\n53:#print axioms zeroHeightCoreNormalDetour_radius_le"}],
      :diagnostic-history
      [{:cmd
-       "lake env lean /tmp/t02a03_core_normal_detour_continuous_probe.lean",
+       "lake env lean /tmp/t02a03_core_normal_detour_radius_probe.lean",
        :exit 1,
        :finding
-       "An unassisted fun_prop call could not discover continuity of the frozen core-normal coordinates and timed out on the second branch. Supplying the existing tubular-coordinate continuity theorem and circle-meridian continuity exposed both affine branches."}
-      {:cmd
-       "lake env lean /tmp/t02a03_core_normal_detour_continuous_probe.lean",
-       :exit 1,
-       :finding
-       "The waypoint continuity proof needed the already continuous Circle-valued meridian map composed explicitly with subtype coercion and Complex.re. Numeric normalization, rather than ring, then discharged the midpoint seam."}],
+       "The first normalization used absolute-value lemmas after Complex.norm_real had produced real norm expressions. Rewriting those expressions with Real.norm_of_nonneg and the branch coefficient inequalities closed both affine estimates."}],
      :fixture
-     {:path "/tmp/t02a03_core_normal_detour_continuous_probe.lean",
+     {:path "/tmp/t02a03_core_normal_detour_radius_probe.lean",
       :sha256
-      "4e7394cc436482de8425d6ca023e922409f4c29586f36fb856c04548ea5b0681"},
+      "1dd416108a90f6811902d51fbad245c0bd6044c7e7d52ef10b7df391d1984635"},
      :finding
-     "The two-leg detour is jointly continuous in time and the deleted-tube input. Each affine branch is continuous from the banked tubular coordinates, meridian coordinate, and signed waypoint; continuous_if_le pastes them because both branch formulas evaluate to the same waypoint when t=1/2.",
+     "For every zero-height input and every detour time, the piecewise core normal has norm at most 1/4. The first half is a convex combination of two radius-1/8 points; the second is a convex combination of the radius-1/8 waypoint and the recovered input normal, whose norm is at most 1/4.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
@@ -71026,7 +71049,8 @@
     :routes-2026-10-11-t02a03-core-normal-affine-leg-radius-im-topo2-r1
     :routes-2026-10-11-t02a03-specialized-zero-height-affine-legs-topo2-r1
     :routes-2026-10-11-t02a03-zero-height-core-normal-detour-endpoints-topo2-r1
-    :routes-2026-10-11-t02a03-zero-height-core-normal-detour-continuous-topo2-r1],
+    :routes-2026-10-11-t02a03-zero-height-core-normal-detour-continuous-topo2-r1
+    :routes-2026-10-11-t02a03-zero-height-core-normal-detour-radius-topo2-r1],
    :current-residual
    "Lift H to RightTubeMinusLeftCore, package rightTubeMeridianRetractionHomotopy, then use the coordinate equation for the Circle-side constant homotopy.",
    :other-consumers []}
@@ -75709,4 +75733,31 @@
    :depends-on
    [:lemma-constructiontargets-t02a03geometrictubedeformation-zeroheightcorenormaldetour-en
     :lemma-constructiontargets-t02a03geometrictubedeformation-righttubecoretubularcoordinat],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCoreNormalDetour_radius_le",
+    :type
+    "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> forall (t : unitInterval), ‖zeroHeightCoreNormalDetour t p‖ ≤ (1 / 4 : ℝ)"},
+   :lemma
+   {:name
+    "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCoreNormalDetour_radius_le",
+    :reported-by
+    [:routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1],
+    :type
+    "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> forall (t : unitInterval), ‖zeroHeightCoreNormalDetour t p‖ ≤ (1 / 4 : ℝ)",
+    :area "explicit-r3-tube-deformation-retraction",
+    :proved-in
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+   :id
+   :lemma-constructiontargets-t02a03geometrictubedeformation-zeroheightcorenormaldetour-ra,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t02a03geometrictubedeformation-continuous-zeroheightcorenorm
+    :lemma-constructiontargets-t02a03geometrictubedeformation-zeroheight-signedimaginaryway
+    :lemma-constructiontargets-t02a03geometrictubedeformation-righttubecoreinputnormalradiu],
    :other-consumers []}]}
