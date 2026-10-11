@@ -3017,6 +3017,23 @@
       "The first promoted fixture split a fully qualified declaration name immediately after a dot, which Lean rejected as invalid syntax.",
       :correction
       "Moved the line break before the fully qualified name and reran the identical fixture command successfully."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791679102989-3502-35891bb6",
+     :commands
+     ["git diff-tree recorded commit scope"
+      "sha256sum promoted fixture"
+      "source blob comparison"
+      "lake env lean promoted fixture"
+      "lake env lean target module"
+      "lake build target module"
+      "placeholder and axiom scan"
+      "statement registry check"
+      "consumer placeholder census"
+      "git diff --check recorded commit"],
+     :finding
+     "PASS: implementation commit 1845a411 changes exactly ConstructionTargets/ManifoldFundamentalClass.lean and its blob matches the reviewed source; promoted fixture hash 9aaf7162a3d85cccce274177f7bc00d141b109c6a90a71fa5853d9018092b91f matches recorded evidence and preserves the frozen theorem type from the original fixture; distinguishedChartGenerator_eq_coefficientGenerator unfolds the actual chartGenerator, chartNormalization, and CoefficientChartLocal.generator definitions and applies the reviewed CoefficientDistinguishedNormalization.distinguished equality to identify the transition-unit generator with the coefficient-local pointed-chart generator in the required direction; it does not conflate coefficient-relative homology with HigherChartLocalGenerator ambient homology, introduce orientation data, or claim localization normalization; fixture, module, and target build pass with zero source/fixture placeholders and only propext, Classical.choice, and Quot.sound; 131 statements match and consumer placeholders remain t00J02=1 and t98A02=1."},
     :commit "1845a411f650dbadda43a6aff0ce4fafc3fed310",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -3041,7 +3058,7 @@
       "Exact equality from the distinguished transition-unit chart generator to the coefficient-local pointed-chart generator through CoefficientDistinguishedNormalization.distinguished"}},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/distinguished-chart-generator-recovery",
@@ -3186,7 +3203,7 @@
      "The orientation-coherence results act on CoefficientChartTransitionUnit.chartGenerator, while localizationMap lands in the production AddCommGrp relative singular-homology object containing HigherChartLocalGenerator.ambientLocalGenerator. No theorem currently identifies those representations. The compiled fixture completes the first exact comparison already justified by reviewed geometry: at the distinguished chart indexed by x, the transition-unit generator is exactly CoefficientChartLocal.generator. It does not pretend that the coefficient-relative and production-relative categories are definitionally equal. The next required comparison must be a natural integral relative-chain/homology equivalence and must prove the direction in which the coefficient generator maps to the production ambient generator.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -5214,7 +5231,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -5231,7 +5248,10 @@
     "forall (R : Type) [CommRing R] (m : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (EuclideanSpace Real (Fin (m+2))) M] (x : M), CoefficientChartTransitionUnit.chartGenerator R m x x (mem_chart_source _ x) = CoefficientChartLocal.generator R m x",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-distinguished-chart-generator-topo3-r1},
+    :routes-2026-10-11-manifold-distinguished-chart-generator-topo3-r1,
+    :banked-by
+    :routes-2026-10-11-manifold-distinguished-chart-generator-topo3-r1,
+    :banked-commit "1845a411f650dbadda43a6aff0ce4fafc3fed310"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-distinguishedchartgenerator-eq-coefficientgenerator,
    :kind :lemma,
