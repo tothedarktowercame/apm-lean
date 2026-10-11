@@ -113852,38 +113852,47 @@
    :depends-on [],
    :other-consumers [:t98A02]}
   {:consumer :t99J01,
-   :stop-count 7,
+   :stop-count 8,
    :review-finding
    "B10 cannot apply B6: its uses list supplies no open neighborhoods and pointed contractions for the circle basepoint and the TwoCircles basepoint; B9 provides only path-connectedness. Add nodes constructing those concrete neighborhoods and contractions, and list them in B10 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
-   {:blueprint
-    {:path "ConstructionTargets/PointWedgeVanKampen.blueprint.md",
-     :sha256
-     "b56003194b5599a5fe7ae38add5ea4a756931ceb09c7519ac42a0d742027683c",
-     :nodes
-     [{:id :B1, :status :proved}
-      {:id :B2, :status :proved}
-      {:id :B3, :status :planned}
-      {:id :B4, :status :planned}
-      {:id :B5, :status :proved}
-      {:id :B6, :status :planned}
-      {:id :B7, :status :proved}
-      {:id :B8, :status :planned}
-      {:id :B9, :status :proved}
-      {:id :B10, :status :planned}
-      {:id :B11, :status :planned}
-      {:id :B12, :status :planned}]},
-    :placeholder-delta {:source-before 0, :source-after 0},
-    :residual
-    "Blueprint re-review, then formalize B3, B4, B6, B8, B10, B11, and B12.",
+   {:placeholder-delta {:source-before 0, :source-after 0},
+    :residual "B8 is banked; B3, B4, B6, B10, B11, and B12 remain.",
     :outcome :stop,
     :warnings
-    [{:kind :concurrent-worktree-change,
+    [{:kind :upstream-lint,
       :message
-      "ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean remained modified by another process and was preserved unmodified and uncommitted."}],
+      "The full build replayed warnings from imported modules; the changed module introduced none."}
+     {:kind :concurrent-worktree-change,
+      :message
+      "ConstructionTargets/T02A03GeometricTubeDeformation.lean was modified by another process and was preserved unmodified and uncommitted."}],
     :missing-theorems
-    [{:name "PointWedgeVanKampen.circleBaseNeighborhood_contraction",
+    [{:name
+      "PointWedgeVanKampen.multiplicativeIntEquivFreeGroupFinOne",
+      :type "Multiplicative Int ≃* FreeGroup (Fin 1)",
+      :status :proved,
+      :consumers [:t99J01],
+      :depends-on [],
+      :area "fundamental-group-wedge-of-circles"}
+     {:name
+      "PointWedgeVanKampen.genericPointWedgeSingleObjMappingEquivalence",
+      :type
+      "The postcomposition-natural point-wedge mapping equivalence under the blueprint B3 hypotheses",
+      :status :not-started,
+      :consumers [:t99J01 :t01A03 :t92J06 :t97A01 :t97A03],
+      :depends-on [],
+      :area "fundamental-group-wedge-of-circles"}
+     {:name
+      "PointWedgeVanKampen.genericPointWedgeLegCoordinates_vanKampen",
+      :type
+      "The point-wedge fundamental-group equivalence with literal leg coordinates",
+      :status :not-started,
+      :consumers [:t99J01 :t01A03 :t92J06 :t97A01 :t97A03],
+      :depends-on
+      ["PointWedgeVanKampen.genericPointWedgeSingleObjMappingEquivalence"],
+      :area "fundamental-group-wedge-of-circles"}
+     {:name "PointWedgeVanKampen.circleBaseNeighborhood_contraction",
       :type
       "A pointed contraction of the open punctured-circle neighborhood of 1",
       :status :not-started,
@@ -113899,15 +113908,6 @@
       :depends-on
       ["PointWedgeVanKampen.circleBaseNeighborhood_contraction"],
       :area "fundamental-group-wedge-of-circles"}
-     {:name
-      "PointWedgeVanKampen.genericPointWedgeLegCoordinates_vanKampen",
-      :type
-      "The point-wedge fundamental-group equivalence with literal leg coordinates",
-      :status :not-started,
-      :consumers [:t99J01 :t01A03 :t92J06 :t97A01 :t97A03],
-      :depends-on
-      ["PointWedgeVanKampen.genericPointWedgeSingleObjMappingEquivalence"],
-      :area "fundamental-group-wedge-of-circles"}
      {:name "PointWedgeVanKampen.threeCirclesFundamentalGroupEquiv",
       :type
       "FundamentalGroup ThreeCircles threeBase ≃* FreeGroup (Fin 3)",
@@ -113920,60 +113920,60 @@
        "PointWedgeVanKampen.multiplicativeIntEquivFreeGroupFinOne"],
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
-    {:blueprint-sha256
-     "b56003194b5599a5fe7ae38add5ea4a756931ceb09c7519ac42a0d742027683c",
+    {:source-sha256
+     "64deb38394faced3cd50415548a74c60298f6d9abb995ff25721452e3500b677",
+     :documentation-sha256
+     "eadc49002883e856f636a4289552b1c28d50a989a0cc9ba83ffe6697e14782bb",
+     :blueprint-sha256
+     "568a9157278b8872567ba631d117623c6bcba53deb4af98d00d42494f5e0a8cd",
      :registry "131 registered statements match, 0 do not"},
     :disposition :stop,
-    :axioms [],
+    :axioms ["propext" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Blueprint repaired. New B10 specifies the punctured-circle neighborhood and pointed contraction; new B11 constructs the restricted-open neighborhood of the TwoCircles wedge point and its quotient-descended pointed contraction. The final specialization is now B12 and explicitly uses both nodes.",
+    "Program job completed blueprint node B8: multiplicativeIntEquivFreeGroupFinOne is the symmetric Mathlib rank-one free-group integer equivalence, in the orientation required after the circle winding coordinate. The compiled declaration is recorded as proved in the reviewed blueprint; B3, B4, B6, B10, B11, and B12 remain.",
     :commands
-    [{:cmd "rg concrete-neighborhood dependency declarations",
+    [{:cmd
+      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
       :exit 0,
       :finding
-      "restrictedOpen, restrictedOpen_isOpen, restrictedOpenHomeomorphWedge, and puncturedCirclePointedContraction all exist"}
-     {:cmd "python3 blueprint node and dependency validation",
+      "All declarations compile; the new B8 declaration uses propext and Quot.sound only"}
+     {:cmd "python3 comment-stripped placeholder scan",
       :exit 0,
-      :finding "12 nodes complete; B12 explicitly uses B10 and B11"}
-     {:cmd
-      "git diff --check -- ConstructionTargets/PointWedgeVanKampen.blueprint.md",
-      :exit 0}
+      :finding
+      "Zero sorry, admit, or axiom tokens in changed source and documentation"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git commit -m Prove-rank-one-free-group-coordinate",
+      :exit 0,
+      :finding
+      "Implementation commit 94d19bb61b8e0629afa2c1070246515757d5f0b1"}
+     {:cmd "git commit -m Record-proved-rank-one-blueprint-node",
+      :exit 0,
+      :finding
+      "Blueprint receipt commit 66ccbdbaf3d033149dc50b69a165546b41439189"}
+     {:cmd "lake build ConstructionTargets.PointWedgeVanKampen",
+      :exit 0,
+      :finding "Build completed successfully (8347 jobs)"}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
-     {:cmd
-      "git commit -m Add-concrete-wedge-neighborhood-blueprint-nodes",
-      :exit 0}
-     {:cmd
-      "sha256sum ConstructionTargets/PointWedgeVanKampen.blueprint.md",
-      :exit 0,
-      :finding
-      "b56003194b5599a5fe7ae38add5ea4a756931ceb09c7519ac42a0d742027683c"}],
+     {:cmd "sha256sum scoped files", :exit 0}],
     :diagnostic-history [],
     :continue-from
-    {:commit "e8cbe896fe154e6fa9b5796b1e0581b0726f3886",
+    {:commit "66ccbdbaf3d033149dc50b69a165546b41439189",
      :next
-     "Obtain independent review of B10-B12; after blueprint approval implement the next ready planned node."},
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791715670216-5135-8baf4385",
-     :commands
-     ["git show e8cbe896fe154e6fa9b5796b1e0581b0726f3886 --stat and diff"
-      "git show recorded blueprint | sha256sum"
-      "git diff --check recorded commit"
-      "python3 scripts/statement-registry.py check"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "git show recorded Lean source | placeholder scan"],
-     :finding
-     "PASS: recorded commit changes only the blueprint and matches hash b56003194b5599a5fe7ae38add5ea4a756931ceb09c7519ac42a0d742027683c. B10 constructs the punctured-circle pointed contraction, B11 constructs the restricted-open TwoCircles pointed contraction, and B12 explicitly uses both for the two B6 applications. The dependency chain, basepoint orientations, and representation transports are mathematically coherent; the existing module builds and its recorded source has no placeholders."},
-    :commit "e8cbe896fe154e6fa9b5796b1e0581b0726f3886",
+     "Implement the next ready reviewed-blueprint node, preferably B10 circleBaseNeighborhood and its contraction, before B11."},
+    :commit "66ccbdbaf3d033149dc50b69a165546b41439189",
+    :commits
+    ["94d19bb61b8e0629afa2c1070246515757d5f0b1"
+     "66ccbdbaf3d033149dc50b69a165546b41439189"],
     :changed-paths
-    ["ConstructionTargets/PointWedgeVanKampen.blueprint.md"],
+    ["ConstructionTargets/PointWedgeVanKampen.lean"
+     "ConstructionTargets/PointWedgeVanKampen.md"
+     "ConstructionTargets/PointWedgeVanKampen.blueprint.md"],
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
