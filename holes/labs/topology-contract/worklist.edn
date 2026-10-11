@@ -105019,7 +105019,7 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 0,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma
@@ -105089,7 +105089,7 @@
      :status :self-axiomatized},
     :seat "topo-2"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/TwoOpenFreeProductMappingCompositeCounitIdentity.lean"],
    :dag-node
@@ -105113,7 +105113,7 @@
    :id :routes-2026-10-11-composite-counit-component-identity-91,
    :kind :reusable-theorem,
    :area "fundamental-group-wedge-of-circles",
-   :fail-count 1,
+   :fail-count 0,
    :depends-on
    [:routes-2026-10-11-inverse-identity-counit-component-identity-90],
    :current-residual
@@ -105717,6 +105717,19 @@
       :exit 1,
       :finding
       "Initial compact-square proof did not unfold the product order and used the compact-subtype equivalence with incorrect projection syntax; corrected with an explicit four-inequality equivalence and isCompact_iff_compactSpace.mp."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791703405829-4605-12dca911",
+     :commands
+     ["git show, git diff-tree, and git diff-tree --check 42b89318593e3a0bdf71e1afc023dd13bac1f9de"
+      "sha256sum recorded source and /tmp/klein-closed-square-orbit-inverse-continuity-probe.lean"
+      "lake build ConstructionTargets.KleinClosedSquareOrbitInverseContinuity"
+      "lake env lean /tmp/klein-closed-square-orbit-inverse-continuity-probe.lean"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped placeholder census for problems/t93J03/lean/Main.lean"],
+     :finding
+     "PASS: valid STOP after committed compiled progress; the sole changed path matches the recorded blob, source hash 9063584c1295a87c9b0adb366f163c053758efef59fe5a07c85bb64dd9c3968b and fixture hash 13940d7755ac8e1c1072f48beb95f1c653185796cdaf9860955c9c12eebd5317 reproduce, compactness of ClosedSquareOrbitQuotient and inverse continuity conditional on T2Space PlaneOrbitQuotient compile with standard axioms, the fixture custom axiom is exactly continuity from PlaneOrbitQuotient to ClosedSquareOrbitQuotient and packages the correctly oriented homeomorphism, t93J03 retains one placeholder, all 131 statements match, and the Hausdorff quotient theorem plus final inverse continuity are explicitly listed"},
     :commit "42b893185",
     :changed-paths
     ["ConstructionTargets/KleinClosedSquareOrbitInverseContinuity.lean"],
@@ -105728,7 +105741,7 @@
      :status :self-axiomatized},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/KleinClosedSquareOrbitInverseContinuity.lean"],
    :dag-node
@@ -105860,7 +105873,7 @@
       "Inverse continuity upgrades the banked closed-square-to-plane orbit quotient equivalence and forward continuity theorem to a Homeomorph."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-orbit-quotient-homeomorph",
@@ -112540,7 +112553,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "closedSquareOrbitQuotientEquiv_continuous_symm",
@@ -112554,7 +112567,10 @@
      :routes-2026-10-11-klein-closed-square-orbit-inverse-continuity-104],
     :type
     "Continuous (closedSquareOrbitQuotientEquiv.symm : PlaneOrbitQuotient → ClosedSquareOrbitQuotient) for the coinduced quotient topologies",
-    :area "deck-group-fundamental-group"},
+    :area "deck-group-fundamental-group",
+    :banked-by
+    :routes-2026-10-11-klein-closed-square-orbit-inverse-continuity-104,
+    :banked-commit "42b893185"},
    :id :lemma-closedsquareorbitquotientequiv-continuous-symm,
    :kind :lemma,
    :depends-on
