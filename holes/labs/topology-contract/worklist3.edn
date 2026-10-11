@@ -15606,6 +15606,20 @@
       :expected-exit 1}
      {:cmd "git commit -m Add-forgotten-parallel-pair-zero-comparison",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791728600639-5483-f1baadc2",
+     :commands
+     ["git show/diff-tree/diff --check at 9ce580992e9a20fcc9c62a1e63eb77b21a1f51d0"
+      "sha256sum fixture and module plus recorded-blob comparison"
+      "renamed fixture: lake env lean"
+      "python3 scripts/statement-registry.py check"
+      "placeholder scans for module, t00J02, t98A02"
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"],
+     :finding
+     "Exact one-file scope and recorded blob match; frozen hashes and exact definition type reproduce. The natural isomorphism is oriented from the coefficient parallel-pair diagram after forgetting to the AddCommGrp parallel-pair diagram, uses identity object components, and discharges identity and zero-arrow naturality via map_id/map_zero; it does not transport cones or construct downstream SnakeInput data. Fixture and module compile, registry is 131/0, build completes 8326 jobs, axioms are exactly propext/Classical.choice/Quot.sound, module has no placeholders, and consumer counts remain 1/1."},
     :commit "9ce580992",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -15622,7 +15636,7 @@
     :routes-2026-10-11-manifold-forget-parallel-pair-zero-iso-topo3-r1,
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/integral-open-disk-connecting-naturality/parallel-pair-diagram-comparison",
@@ -15835,7 +15849,7 @@
      "The compiled natural isomorphism resolves the indexing-diagram mismatch that prevented direct use of IsLimit.ofIsoLimit. Its object components are identities; naturality is definitional for the nonzero arrow and follows from map_zero for the zero arrow. The next bounded comparison transports the banked preserved τ₁ kernel cone along this diagram isomorphism and then identifies the resulting cone with evaluation of the mapped ShortComplex fork.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -22804,7 +22818,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -22821,7 +22835,10 @@
     "forall {X Y : ModuleCat ℤ} (f : X ⟶ Y), parallelPair f 0 ⋙ forgetIntModules ≅ parallelPair (forgetIntModules.map f) 0",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-forget-parallel-pair-zero-iso-topo3-r1},
+    :routes-2026-10-11-manifold-forget-parallel-pair-zero-iso-topo3-r1,
+    :banked-by
+    :routes-2026-10-11-manifold-forget-parallel-pair-zero-iso-topo3-r1,
+    :banked-commit "9ce580992"},
    :id :lemma-mfclass-forget-parallel-pair-zero-iso,
    :kind :lemma,
    :depends-on [:lemma-mfclass-forget-snake-preserved-kernel-tau1],
