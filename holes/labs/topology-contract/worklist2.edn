@@ -70537,7 +70537,51 @@
   {:bounded-exception
    "single-consumer specialization of both zero-height affine legs to the frozen tube coordinates",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:residual
+     "Implement the specialization, then reverse and concatenate the two legs, proving continuity, endpoints, and deletion avoidance for the zero-height radial stage.",
+     :outcome :go,
+     :warnings [],
+     :axioms [propext Classical.choice Quot.sound],
+     :commands
+     [{:cmd
+       "lake env lean /tmp/t02a03_specialized_affine_legs_probe.lean",
+       :exit 0,
+       :output
+       "zeroHeight_specializedCoreNormalAffineLegs_radius_and_im_ne_zero compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd "sha256sum /tmp/t02a03_specialized_affine_legs_probe.lean",
+       :exit 0,
+       :output
+       "a9ed0996d3b9ac3bf84123725a3c692b04c7bd4ae91b0aa906439ce3c84777ef  /tmp/t02a03_specialized_affine_legs_probe.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_specialized_affine_legs_probe.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}
+      {:cmd
+       "rg -n 'zeroHeight_specializedCoreNormalAffineLegs_radius_and_im_ne_zero' /tmp/t02a03_specialized_affine_legs_probe.lean",
+       :exit 0,
+       :output
+       "7:theorem zeroHeight_specializedCoreNormalAffineLegs_radius_and_im_ne_zero\n35:#print axioms zeroHeight_specializedCoreNormalAffineLegs_radius_and_im_ne_zero"}],
+     :fixture
+     {:path "/tmp/t02a03_specialized_affine_legs_probe.lean",
+      :sha256
+      "a9ed0996d3b9ac3bf84123725a3c692b04c7bd4ae91b0aa906439ce3c84777ef"},
+     :finding
+     "The placeholder-free specialization compiles against the current module: both zero-height endpoint legs remain inside radius 1/4 and have nonzero imaginary coordinate at every noninitial parameter.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+      :declaration
+      "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeight_specializedCoreNormalAffineLegs_radius_and_im_ne_zero",
+      :type
+      "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> forall (t : unitInterval), (t : ℝ) ≠ 0 -> let n₀ := rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)); let n₁ := rightTubeCoreNormalComplex p.1; let w := zeroHeightSignedImaginaryWaypoint p; (‖coreNormalAffineLeg t n₀ w‖ ≤ (1 / 4 : ℝ) ∧ (coreNormalAffineLeg t n₀ w).im ≠ 0) ∧ (‖coreNormalAffineLeg t n₁ w‖ ≤ (1 / 4 : ℝ) ∧ (coreNormalAffineLeg t n₁ w).im ≠ 0)"},
+     :seat "topo-8"}},
+   :phase :implementation,
+   :type
+   "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> forall (t : unitInterval), (t : ℝ) ≠ 0 -> let n₀ := rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)); let n₁ := rightTubeCoreNormalComplex p.1; let w := zeroHeightSignedImaginaryWaypoint p; (‖coreNormalAffineLeg t n₀ w‖ ≤ (1 / 4 : ℝ) ∧ (coreNormalAffineLeg t n₀ w).im ≠ 0) ∧ (‖coreNormalAffineLeg t n₁ w‖ ≤ (1 / 4 : ℝ) ∧ (coreNormalAffineLeg t n₁ w).im ≠ 0)",
    :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
@@ -70556,6 +70600,8 @@
    :routes-2026-10-11-t02a03-specialized-zero-height-affine-legs-topo2-r1,
    :kind :reusable-theorem,
    :area "explicit-r3-tube-deformation-retraction",
+   :declaration
+   "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeight_specializedCoreNormalAffineLegs_radius_and_im_ne_zero",
    :depends-on
    [:routes-2026-10-11-t02a03-core-normal-affine-leg-radius-im-topo2-r1],
    :current-residual
