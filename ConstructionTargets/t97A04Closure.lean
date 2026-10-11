@@ -337,6 +337,155 @@ noncomputable def shearYShortComplexHom (a b : ℤ) :
         (leftRange frozenYCover.U) (rightRange frozenYCover.V)).inr_desc
           _ _ _).symm
 
+private theorem shearYUnionMap_comp_ambient (a b : ℤ) :
+    shearYUnionMap a b ≫
+        closureChains.map (smallSSet frozenYCover.U frozenYCover.V).ι =
+      closureChains.map (smallSSet frozenYCover.U frozenYCover.V).ι ≫
+        closureChains.map (TopCat.toSSet.map (TopCat.ofHom (shearY a b))) := by
+  apply (subcomplexChains_isPushout
+    (leftRange frozenYCover.U) (rightRange frozenYCover.V)).hom_ext
+  · dsimp only [shearYUnionMap]
+    slice_lhs 1 2 => erw [(subcomplexChains_isPushout
+      (leftRange frozenYCover.U) (rightRange frozenYCover.V)).inl_desc]
+    have hleft :
+        coverRangeMap frozenYCover.U frozenYCover.U (shearY a b)
+            (fun _ hp ↦ shearY_mem_U a b hp) ≫
+            subcomplexLeftToUnion
+              (leftRange frozenYCover.U) (rightRange frozenYCover.V) ≫
+            (smallSSet frozenYCover.U frozenYCover.V).ι =
+          (ambientSubspaceRange frozenYCover.U).ι ≫
+            TopCat.toSSet.map (TopCat.ofHom (shearY a b)) := by
+      simpa only [Category.assoc] using
+        coverRangeMap_comp_ι frozenYCover.U frozenYCover.U (shearY a b) _
+    change _ = closureChains.map (subcomplexLeftToUnion
+        (leftRange frozenYCover.U) (rightRange frozenYCover.V)) ≫
+      closureChains.map (smallSSet frozenYCover.U frozenYCover.V).ι ≫ _
+    have hιmap : closureChains.map (subcomplexLeftToUnion
+          (leftRange frozenYCover.U) (rightRange frozenYCover.V)) ≫
+        closureChains.map (smallSSet frozenYCover.U frozenYCover.V).ι =
+      closureChains.map (ambientSubspaceRange frozenYCover.U).ι := by
+      rw [← Functor.map_comp]
+      rfl
+    rw [← Category.assoc, hιmap]
+    simpa only [Functor.map_comp, Category.assoc, leftRange] using
+      congrArg closureChains.map hleft
+  · dsimp only [shearYUnionMap]
+    slice_lhs 1 2 => erw [(subcomplexChains_isPushout
+      (leftRange frozenYCover.U) (rightRange frozenYCover.V)).inr_desc]
+    have hright :
+        coverRangeMap frozenYCover.V frozenYCover.V (shearY a b)
+            (fun _ hp ↦ shearY_mem_V a b hp) ≫
+            subcomplexRightToUnion
+              (leftRange frozenYCover.U) (rightRange frozenYCover.V) ≫
+            (smallSSet frozenYCover.U frozenYCover.V).ι =
+          (ambientSubspaceRange frozenYCover.V).ι ≫
+            TopCat.toSSet.map (TopCat.ofHom (shearY a b)) := by
+      simpa only [Category.assoc] using
+        coverRangeMap_comp_ι frozenYCover.V frozenYCover.V (shearY a b) _
+    change _ = closureChains.map (subcomplexRightToUnion
+        (leftRange frozenYCover.U) (rightRange frozenYCover.V)) ≫
+      closureChains.map (smallSSet frozenYCover.U frozenYCover.V).ι ≫ _
+    have hιmap : closureChains.map (subcomplexRightToUnion
+          (leftRange frozenYCover.U) (rightRange frozenYCover.V)) ≫
+        closureChains.map (smallSSet frozenYCover.U frozenYCover.V).ι =
+      closureChains.map (ambientSubspaceRange frozenYCover.V).ι := by
+      rw [← Functor.map_comp]
+      rfl
+    rw [← Category.assoc, hιmap]
+    simpa only [Functor.map_comp, Category.assoc, rightRange] using
+      congrArg closureChains.map hright
+
+/-- The union endpoint of the shear short-complex morphism is the actual map
+induced by the shear on production singular homology. -/
+theorem shearY_productionUnionMap (a b : ℤ) (n : ℕ) :
+    productionUnionMap
+        frozenYCover.U frozenYCover.V frozenYCover.U frozenYCover.V
+        frozenYCover.U_isOpen frozenYCover.V_isOpen frozenYCover.union_eq_univ
+        frozenYCover.U_isOpen frozenYCover.V_isOpen frozenYCover.union_eq_univ
+        (shearYShortComplexHom a b) n =
+      HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularSubdivision.singularPostcomposition
+          (shearY a b)) n := by
+  let unionIso := booleanUnionProductionHomologyIso
+    frozenYCover.U frozenYCover.V frozenYCover.U_isOpen
+    frozenYCover.V_isOpen frozenYCover.union_eq_univ n
+  have hnat :
+      HomologicalComplex.homologyMap (shearYUnionMap a b) n ≫ unionIso.hom =
+        unionIso.hom ≫ HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularSubdivision.singularPostcomposition
+            (shearY a b)) n := by
+    let hOpen : ∀ c, IsOpen (booleanCover frozenYCover.U frozenYCover.V c) := by
+      intro c
+      cases c
+      · exact frozenYCover.V_isOpen
+      · exact frozenYCover.U_isOpen
+    let hCover : Set.univ ⊆ ⋃ c, booleanCover frozenYCover.U frozenYCover.V c := by
+      intro x _
+      have hx : x ∈ frozenYCover.U ∪ frozenYCover.V := by
+        rw [frozenYCover.union_eq_univ]
+        trivial
+      rcases hx with hx | hx
+      · exact Set.mem_iUnion.2 ⟨true, hx⟩
+      · exact Set.mem_iUnion.2 ⟨false, hx⟩
+    have hsmall :
+        (coverSmallHomologyIso (booleanCover frozenYCover.U frozenYCover.V)
+          hOpen hCover n).hom =
+          HomologicalComplex.homologyMap
+            (ConstructionTargets.SingularSubdivision.coverSmallChains.ι
+              (booleanCover frozenYCover.U frozenYCover.V)) n := by
+      letI := coverSmall_homologyMap_isIso
+        (booleanCover frozenYCover.U frozenYCover.V) hOpen hCover n
+      exact asIso_hom _
+    have hchain :
+        shearYUnionMap a b ≫
+            ((booleanSmallChainsIso frozenYCover.U frozenYCover.V).hom ≫
+              ConstructionTargets.SingularSubdivision.coverSmallChains.ι
+                (booleanCover frozenYCover.U frozenYCover.V)) =
+          ((booleanSmallChainsIso frozenYCover.U frozenYCover.V).hom ≫
+              ConstructionTargets.SingularSubdivision.coverSmallChains.ι
+              (booleanCover frozenYCover.U frozenYCover.V)) ≫
+            ConstructionTargets.SingularSubdivision.singularPostcomposition
+              (shearY a b) := by
+      have hamb :
+          (booleanSmallChainsIso frozenYCover.U frozenYCover.V).hom ≫
+              ConstructionTargets.SingularSubdivision.coverSmallChains.ι
+                (booleanCover frozenYCover.U frozenYCover.V) =
+            closureChains.map (smallSSet frozenYCover.U frozenYCover.V).ι := by
+        exact booleanSmallChainsIso_hom_comp_ambient
+          frozenYCover.U frozenYCover.V
+      calc
+        _ = shearYUnionMap a b ≫
+            closureChains.map (smallSSet frozenYCover.U frozenYCover.V).ι := by
+              exact congrArg (fun k ↦ shearYUnionMap a b ≫ k) hamb
+        _ = closureChains.map (smallSSet frozenYCover.U frozenYCover.V).ι ≫
+            closureChains.map (TopCat.toSSet.map (TopCat.ofHom (shearY a b))) :=
+              shearYUnionMap_comp_ambient a b
+        _ = _ := by
+          rw [ConstructionTargets.SingularSubdivision.ssetChainMap_eq_singularPostcomposition]
+          exact congrArg (fun k ↦ k ≫
+            ConstructionTargets.SingularSubdivision.singularPostcomposition
+              (shearY a b)) hamb.symm
+    dsimp [unionIso]
+    simp only [booleanUnionProductionHomologyIso, Iso.trans_hom,
+      booleanSmallHomologyIso_hom]
+    rw [hsmall]
+    have hh := congrArg (fun k ↦ HomologicalComplex.homologyMap k n) hchain
+    slice_lhs 2 3 => erw [← HomologicalComplex.homologyMap_comp]
+    erw [← HomologicalComplex.homologyMap_comp]
+    slice_rhs 1 2 => erw [← HomologicalComplex.homologyMap_comp]
+    erw [← HomologicalComplex.homologyMap_comp]
+    exact hh
+  dsimp [productionUnionMap, shearYShortComplexHom]
+  calc
+    _ = unionIso.inv ≫
+        (HomologicalComplex.homologyMap (shearYUnionMap a b) n ≫
+          unionIso.hom) := rfl
+    _ = unionIso.inv ≫
+        (unionIso.hom ≫ HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularSubdivision.singularPostcomposition
+            (shearY a b)) n) := congrArg (fun k ↦ unionIso.inv ≫ k) hnat
+    _ = _ := unionIso.inv_hom_id_assoc _
+
 #print axioms frozenTorusH2GroupIsoInt
 #print axioms frozenYCover
 #print axioms frozenYCoverUHomeomorph
@@ -347,5 +496,6 @@ noncomputable def shearYShortComplexHom (a b : ℤ) :
 #print axioms shearY_mem_V
 #print axioms shearY_comp
 #print axioms shearYShortComplexHom
+#print axioms shearY_productionUnionMap
 
 end ConstructionTargets.T97A04Closure
