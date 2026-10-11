@@ -9195,6 +9195,24 @@
      "The same equation with inverse ambient chart homology followed by HigherModelLocalHomology.localIsoInt on the left and the functor image of CoefficientChartLocal.localIso.hom on the right",
      :direction
      "Logical equivalence from the packaged endpoint equation to its explicit ambient-chart and model-normalization endpoint factorization"},
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791698062864-4408-9c096a2b",
+     :commands
+     ["git show and git diff-tree recorded commit scope"
+      "git blob identity check"
+      "sha256sum frozen fixture"
+      "recompute frozen statement sha256"
+      "git diff --check recorded commit"
+      "lake env lean renamed frozen-fixture replay"
+      "lake env lean target module"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"
+      "placeholder and axiom scan"
+      "python3 scripts/statement-registry.py check"
+      "consumer placeholder census"],
+     :finding
+     "PASS: recorded commit 7e59a173 changes only the target module and its blob matches the reviewed checkout; frozen fixture hash 36a4715a41cd045626d8b55cdb598be79ba36f842718c947638b7f6b2144866c and frozen statement hash c61317016840f3cc20364590ec12fd6d9d8ce9184ad8a9f4beccef9efc44e664 both match. The theorem proves the exact registered equivalence in the intended direction by rewriting the coefficient-cancelled equation through ambientLocalNormalization_hom and Functor.mapIso_hom, exposing inverse ambient-chart homology, higher-model normalization, and the forward coefficient local isomorphism. It does not expand the forward coefficient composite or corrected comparison, exclude the equation, choose a sign, or construct a fundamental class. Renamed fixture replay, target elaboration, and Lake build pass; axioms are exactly propext, Classical.choice, Quot.sound; registry is 131/0; target placeholders are 0 and consumer baselines t00J02/t98A02 remain 1/1."},
     :commit "7e59a173f8a98d709965074d918e2213a20c4638",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -9213,7 +9231,7 @@
     :routes-2026-10-11-manifold-negative-equation-endpoint-factors-topo3-r1,
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/negative-equation-endpoint-factorization",
@@ -9407,7 +9425,7 @@
      "The forbidden negative sign now has a compiled endpoint-factor equation: corrected comparison followed by inverse ambient chart homology and the production model normalization equals the forgotten coefficient local normalization followed by negation. The next prerequisite can rewrite CoefficientChartLocal.forward_composite on the right and expose the corrected comparison on the left, after which the connecting, radial, and sphere factors can be compared directly.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -12886,7 +12904,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -12903,7 +12921,10 @@
     "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), (correctedLocalNormalizationAutomorphism k x).hom = -𝟙 _ <-> (integralRelativeHomologyComparisonWithTransport (deletedPoint x) (k + 2)).hom ≫ (ambientChartHomologyIso k x).inv ≫ (HigherModelLocalHomology.localIsoInt k).hom = forgetIntModules.map (CoefficientChartLocal.localIso Int k x).hom ≫ (-𝟙 _)",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-negative-equation-endpoint-factors-topo3-r1},
+    :routes-2026-10-11-manifold-negative-equation-endpoint-factors-topo3-r1,
+    :banked-by
+    :routes-2026-10-11-manifold-negative-equation-endpoint-factors-topo3-r1,
+    :banked-commit "7e59a173f8a98d709965074d918e2213a20c4638"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-correctedlocalnormalizationautomorphism-hom-eq-neg-iff-endpoint-factors,
    :kind :lemma,
