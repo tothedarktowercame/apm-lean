@@ -11546,8 +11546,91 @@
   {:consumer :t00J02,
    :implements-lemma
    :lemma-mfclass-coefficient-integral-ball-forget-hom,
+   :evidence
+   {:placeholder-delta
+    {:t00J02 {:before 1, :after 1, :delta 0},
+     :t98A02 {:before 1, :after 1, :delta 0}},
+    :residual
+    "Construct the integral production-to-coefficient relative-homology comparison on the unit open disk, prove its naturality with the connecting and radial-normalization maps, and identify the terminal sphere normalizations to exclude negation.",
+    :gates
+    {:fixture-hash :pass,
+     :lean :pass,
+     :lake-build :pass,
+     :statement-registry :pass,
+     :placeholder-scan :pass,
+     :diff-check :pass,
+     :worktree-clean :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["lake build replayed pre-existing linter warnings in dependencies; the changed declaration emitted no warning"],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.ManifoldFundamentalClass.coefficientIntegralBall_forget_hom",
+      :type
+      "forall (k : Nat), forgetIntModules.map (CoefficientNeighborhoodLocal.integral_ball k).hom = forgetIntModules.map (HomologicalComplex.homologyMap (CoefficientNeighborhoodLocal.inclusionMap Int (Metric.ball (0 : CoefficientModelLocal.E (k + 2)) 1) 0) (k + 2)) ≫ forgetIntModules.map (CoefficientModelLocal.localIso Int k).hom",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on [],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes
+    {"ConstructionTargets.ManifoldFundamentalClass.coefficientIntegralBall_forget_hom"
+     "db815ea05b80d4b2a1caf57b329db4157adc90be8528f8ff208b8c23fe2b87b5"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/manifold_fundamental_class_coefficient_open_disk_normalization.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/manifold_fundamental_class_coefficient_open_disk_normalization.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "rg placeholder and axiom scan on scoped source and fixture",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "comment-stripped placeholder count for problems/t00J02/lean/Main.lean and problems/t98A02/lean/Main.lean",
+      :exit 0,
+      :output
+      {"problems/t00J02/lean/Main.lean" 1,
+       "problems/t98A02/lean/Main.lean" 1}}
+     {:cmd
+      "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "git status --porcelain", :exit 0, :output ""}],
+    :diagnostic-history [],
+    :representation
+    {:source
+     "The forgotten coefficient integral_ball local normalization packaged as a composite isomorphism",
+     :target
+     "The forgotten coefficient open-disk inclusion homology map followed by the full Euclidean coefficient model normalization",
+     :direction
+     "Exact morphism equality from the packaged unit-open-disk coefficient normalization to its neighborhood-inclusion-and-model-normalization factorization"},
+    :commit "97d2e7a01d0b28e6494624a154d9ae1656b5121d",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path
+     "/tmp/manifold_fundamental_class_coefficient_open_disk_normalization.lean",
+     :sha256
+     "3102739d0323a2aa58d8ce5bfb64e45a75d5c74e5c5c563fe641b515ad09feaa"},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :declaration
+     "ConstructionTargets.ManifoldFundamentalClass.coefficientIntegralBall_forget_hom"},
+    :row
+    :routes-2026-10-11-manifold-coefficient-open-disk-normalization-topo3-r1,
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/coefficient-open-disk-normalization",
@@ -15707,11 +15790,13 @@
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.coefficientIntegralBall_forget_hom",
     :reported-by
-    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+     :routes-2026-10-11-manifold-coefficient-open-disk-normalization-topo3-r1],
     :type
     "forall (k : ℕ), forgetIntModules.map (CoefficientNeighborhoodLocal.integral_ball k).hom = forgetIntModules.map (HomologicalComplex.homologyMap (CoefficientNeighborhoodLocal.inclusionMap ℤ (Metric.ball (0 : CoefficientModelLocal.E (k + 2)) 1) 0) (k + 2)) ≫ forgetIntModules.map (CoefficientModelLocal.localIso ℤ k).hom",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in
+    :routes-2026-10-11-manifold-coefficient-open-disk-normalization-topo3-r1},
    :id :lemma-mfclass-coefficient-integral-ball-forget-hom,
    :kind :lemma,
    :depends-on
