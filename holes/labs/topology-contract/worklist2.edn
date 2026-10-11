@@ -79525,6 +79525,18 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "Main placeholder count", :exit 0, :output "1"}
      {:cmd "git show --check 2b9189afd", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791760254830-5961-a4d2c6e6",
+     :commands
+     ["git show/diff/check 2b9189afd"
+      "verify committed fixture SHA-256 and blobs"
+      "lake build ConstructionTargets.t96A07Closure"
+      "lake env lean closure and Main"
+      "registry fingerprint, placeholders, ancestry, blueprint checks"],
+     :finding
+     "PASS: 2b9189afd is new after history d3bf91c3; its sole changed path is scoped, closure/blueprint blobs match, and fixture SHA-256 is 7bbf26f48172919c20af30a1b9036332d0720a3b84f7eef6ccdc6deff132ca21. The polarized continuous-linear map and product-rule proof give exactly B4 coordinates in the correct E 3 representation. Build/Lean pass with only propext, Classical.choice, Quot.sound; registry 131/0; frozen hash 2ba67b040c1c1e31b8529d758a90765d8251ba3798983f6956674918a77fd520 unchanged; closure/Main placeholders 0/1. B4 is complete; B5 sphere derivative range then B6-B13 remain listed."},
     :commit "2b9189afd",
     :changed-paths ["ConstructionTargets/t96A07Closure.lean"],
     :fixture
@@ -79533,7 +79545,7 @@
      "7bbf26f48172919c20af30a1b9036332d0720a3b84f7eef6ccdc6deff132ca21"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t96A07/lean/Main.lean"
     "problems/t96A07/status.json"
@@ -79568,6 +79580,9 @@
      :reason :program-milestone-complete}
     {:job 4,
      :commit "d3bf91c37871b1955e959ef64a641b7f4b214c4b",
+     :reason :program-milestone-complete}
+    {:job 5,
+     :commit "2b9189afd",
      :reason :program-milestone-complete}]}
   {:consumer :t94A10,
    :phase :implementation,
@@ -80782,7 +80797,7 @@
    :other-consumers []}
   {:consumer :t96A07,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "ConstructionTargets.T96A07Closure.sphereMapAmbient_fderiv",
@@ -80792,7 +80807,9 @@
     :reported-by [:program-2026-10-11-close-t96a07],
     :type "explicit ambient quadratic derivative",
     :area "projective-smooth-descent",
-    :proved-in :program-2026-10-11-close-t96a07},
+    :proved-in :program-2026-10-11-close-t96a07,
+    :banked-by :program-2026-10-11-close-t96a07,
+    :banked-commit "2b9189afd"},
    :id
    :lemma-constructiontargets-t96a07closure-spheremapambient-fderiv,
    :kind :lemma,
