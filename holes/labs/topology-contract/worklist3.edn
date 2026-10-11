@@ -2608,6 +2608,23 @@
       :exit 1,
       :finding
       "Opening HigherChartLocalGenerator made E ambiguous with CoefficientOverlapPair.E and disrupted earlier declarations; removing that broad open and fully qualifying HigherChartLocalGenerator.E and its generator declarations corrected the source, and the final rerun exits zero."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791677859117-3435-547b3e8d",
+     :commands
+     ["git diff-tree recorded commit scope"
+      "sha256sum promoted fixture"
+      "source blob comparison"
+      "lake env lean promoted fixture"
+      "lake env lean target module"
+      "lake build target module"
+      "placeholder and axiom scan"
+      "statement registry check"
+      "consumer placeholder census"
+      "git diff --check recorded commit"],
+     :finding
+     "PASS: implementation commit ca6ef152 changes exactly ConstructionTargets/ManifoldFundamentalClass.lean and its blob matches the reviewed source; promoted fixture hash 0c9daf41c756e7ac28a29ec93a40fb5a2643fd4a702785cea9a352db420d534b matches recorded evidence and preserves the frozen theorem type from the original fixture; localizationMap_groupGlobalGenerator_eq_zsmul_ambientLocalGenerator applies the genuine ambientLocalGenerator_generates theorem to the actual localizationMap image and obtains the required equality in the exact direction r times the concrete ambient chart generator equals the localized group global generator; it does not claim r equals one, localization is an isomorphism, or an orientation predicate; fixture, module, and target build pass with zero source/fixture placeholders and only propext, Classical.choice, and Quot.sound; 131 statements match and consumer placeholders remain t00J02=1 and t98A02=1."},
     :commit "ca6ef15250c7e5ca930633522ebd7cdff575e2f5",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -2625,7 +2642,7 @@
      "Imported HigherChartLocalGenerator and proved that the canonical localization of groupGlobalGenerator is an explicit integer multiple of the concrete ambient chart generator in every consumer dimension k plus 2."},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/basepoint-localization-coefficient",
@@ -2754,7 +2771,7 @@
      "The reviewed global-to-local transport theorem is banked. HigherChartLocalGenerator already constructs the concrete ambient local generator in every dimension k+2 and proves that it spans the actual deleted-point relative singular homology. Applying that theorem to localizationMap of groupGlobalGenerator yields a concrete integer coefficient r with r times the chart generator equal to the localized global class. This is not an orientation facade and does not assume localization is an isomorphism. It isolates the remaining basepoint geometry as the exact arithmetic claim r = 1 for the orientation-compatible normalization; after that, the reviewed transport theorem propagates the equality.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -4551,7 +4568,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -4568,7 +4585,10 @@
     "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (e : (((AlgebraicTopology.singularHomologyFunctor (ModuleCat Int) (k+2)).obj (ModuleCat.of Int Int)).obj (TopCat.of M)) ≅ ModuleCat.of Int Int) (x : M), exists r : Int, r • HigherChartLocalGenerator.ambientLocalGenerator (k := k) x = localizationMap x (k+2) (groupGlobalGenerator (TopCat.of M) (k+2) e)",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-basepoint-localization-coefficient-topo3-r1},
+    :routes-2026-10-11-manifold-basepoint-localization-coefficient-topo3-r1,
+    :banked-by
+    :routes-2026-10-11-manifold-basepoint-localization-coefficient-topo3-r1,
+    :banked-commit "ca6ef15250c7e5ca930633522ebd7cdff575e2f5"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-localizationmap-groupglobalgenerator-eq-zsmul-ambientlocalgenerator,
    :kind :lemma,
