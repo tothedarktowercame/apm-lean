@@ -17318,6 +17318,17 @@
       :expected-exit 1}
      {:cmd "git commit -m 'Add forgotten homology row morphism'",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791750553199-5861-393bf5b4",
+     :commands
+     ["git show/diff-tree/hash df9d4c2c9203b9a37b37b5e1800ade761bb8db48"
+      "renamed fixture and module: lake env lean"
+      "statement registry and placeholder scans"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"],
+     :finding
+     "Recorded one-file scope, blob, and frozen fixture hash match. The morphism is oriented from forgotten homology to homology after forgetting, hence correctly uses mapHomologyIso.inv; both short-complex squares follow inverse naturality in the required composition order. Fixture/module compile; registry 131/0; build 8326 jobs; axioms propext, choice, Quot.sound; module placeholders 0; consumer sorries 1/1."},
     :commit "df9d4c2c9203b9a37b37b5e1800ade761bb8db48",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -17332,7 +17343,7 @@
     :row :routes-2026-10-11-mfclass-forget-homology-row-r1,
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/snake-hom-row0",
@@ -17404,7 +17415,7 @@
       :other-consumers [:t98A02]},
      :residual "Then build remaining Hom and δ."}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -24959,7 +24970,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -24974,7 +24985,9 @@
     :type
     "∀ {ι} {c : ComplexShape ι} (K : ShortComplex (HomologicalComplex (ModuleCat ℤ) c)) (i : ι), ForgottenHomologyRowHom K i",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2,
+    :banked-by :routes-2026-10-11-mfclass-forget-homology-row-r1,
+    :banked-commit "df9d4c2c9203b9a37b37b5e1800ade761bb8db48"},
    :id :lemma-mfclass-forget-homology-row,
    :kind :lemma,
    :depends-on [:lemma-mfclass-forget-snake-input],
