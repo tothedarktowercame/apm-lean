@@ -71195,7 +71195,52 @@
   {:bounded-exception
    "single-consumer angle-parametric deletion invariant for the zero-height detour",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:residual
+     "Implement angle-parametric deletion avoidance, then construct the continuous coupled angular coordinate and reconstruct the zero-height ambient stage with endpoint equations and right-tube membership.",
+     :outcome :go,
+     :warnings [],
+     :axioms [propext Classical.choice Quot.sound],
+     :commands
+     [{:cmd
+       "lake env lean /tmp/t02a03_coupled_detour_avoidance_probe.lean",
+       :exit 0,
+       :output
+       "zeroHeightCoupledDetour_avoidsLeftCore compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "sha256sum /tmp/t02a03_coupled_detour_avoidance_probe.lean",
+       :exit 0,
+       :output
+       "b97e245af3ce1583f7f78faea83fadd8e17c7989a3c6667a0b6e8b5ebc49f3ae  /tmp/t02a03_coupled_detour_avoidance_probe.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_coupled_detour_avoidance_probe.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}
+      {:cmd
+       "rg -n 'zeroHeightCoupledDetour_avoidsLeftCore' /tmp/t02a03_coupled_detour_avoidance_probe.lean",
+       :exit 0,
+       :output
+       "5:theorem zeroHeightCoupledDetour_avoidsLeftCore\n25:#print axioms zeroHeightCoupledDetour_avoidsLeftCore"}],
+     :fixture
+     {:path "/tmp/t02a03_coupled_detour_avoidance_probe.lean",
+      :sha256
+      "b97e245af3ce1583f7f78faea83fadd8e17c7989a3c6667a0b6e8b5ebc49f3ae"},
+     :finding
+     "The placeholder-free fixture proves deletion avoidance for every angular coordinate at interior detour times and reduces the two endpoint cases exactly to the supplied endpoint-angle equations.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+      :declaration
+      "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCoupledDetour_avoidsLeftCore",
+      :type
+      "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> forall (t : unitInterval) (u : Circle), ((t : ℝ) = 0 -> u = 1) -> ((t : ℝ) = 1 -> u = rightTubeCoreAngularCoordinate p) -> rightTubeCorePolarReconstruction u (zeroHeightCoreNormalDetour t p) ∉ Set.range apm_t02a03_leftCore"},
+     :seat "topo-8"}},
+   :phase :implementation,
+   :type
+   "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> forall (t : unitInterval) (u : Circle), ((t : ℝ) = 0 -> u = 1) -> ((t : ℝ) = 1 -> u = rightTubeCoreAngularCoordinate p) -> rightTubeCorePolarReconstruction u (zeroHeightCoreNormalDetour t p) ∉ Set.range apm_t02a03_leftCore",
    :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
@@ -71214,6 +71259,8 @@
    :routes-2026-10-11-t02a03-zero-height-coupled-detour-avoidance-topo2-r1,
    :kind :reusable-theorem,
    :area "explicit-r3-tube-deformation-retraction",
+   :declaration
+   "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCoupledDetour_avoidsLeftCore",
    :depends-on
    [:routes-2026-10-11-t02a03-zero-height-endpoint-deletion-certificates-topo2-r1],
    :current-residual
