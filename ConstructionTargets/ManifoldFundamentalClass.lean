@@ -735,6 +735,33 @@ theorem coefficientRelativeProjection_mapHomologyIso_naturality
         ((forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ)).map φ) n
   exact hpres
 
+/-- Inverse homology preservation is natural for the coefficient subspace
+inclusion. -/
+theorem coefficientPairInclusion_mapHomologyIso_naturality
+    {X : Type} [TopologicalSpace X] (A : Set X) (n : ℕ) :
+    forgetIntModules.map
+        (HomologicalComplex.homologyMap
+          (CoefficientRelativeSmall.subspaceMap ℤ A) n) ≫
+      (((CoefficientH0.SingularChains ℤ (TopCat.of X)).sc n).mapHomologyIso
+        forgetIntModules).inv =
+    (((CoefficientH0.SingularChains ℤ (TopCat.of A)).sc n).mapHomologyIso
+        forgetIntModules).inv ≫
+      HomologicalComplex.homologyMap
+        ((forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ)).map
+          (CoefficientRelativeSmall.subspaceMap ℤ A)) n := by
+  let φ := CoefficientRelativeSmall.subspaceMap ℤ A
+  let ψ := (HomologicalComplex.shortComplexFunctor (ModuleCat ℤ)
+    (ComplexShape.down ℕ) n).map φ
+  have hpres := ShortComplex.mapHomologyIso_inv_naturality ψ forgetIntModules
+  change forgetIntModules.map (ShortComplex.homologyMap ψ) ≫
+      (((CoefficientH0.SingularChains ℤ (TopCat.of X)).sc n).mapHomologyIso
+        forgetIntModules).inv =
+    (((CoefficientH0.SingularChains ℤ (TopCat.of A)).sc n).mapHomologyIso
+        forgetIntModules).inv ≫
+      HomologicalComplex.homologyMap
+        ((forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ)).map φ) n
+  exact hpres
+
 /-- The corrected relative-homology comparison intertwines the coefficient
 absolute-to-relative map with the production relative projection. -/
 theorem integralRelativeHomologyComparisonWithTransport_projection
@@ -1665,6 +1692,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport_homology_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_hom
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientRelativeProjection_mapHomologyIso_naturality
+#print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientPairInclusion_mapHomologyIso_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
