@@ -1503,6 +1503,24 @@ theorem shearY_overlap_coordinate (a b : ℤ) :
     (shearY_overlap_coordinate_components a b).1
     (shearY_overlap_coordinate_components a b).2
 
+/-- The degree-one production connecting square for the frozen shear, with
+the union endpoint rewritten as the actual induced map on degree two. -/
+theorem shearY_productionConnecting_naturality (a b : ℤ) :
+    productionConnecting frozenYCover.U frozenYCover.V
+        frozenYCover.U_isOpen frozenYCover.V_isOpen
+        frozenYCover.union_eq_univ 1 ≫
+      productionIntersectionMap
+        frozenYCover.U frozenYCover.V frozenYCover.U frozenYCover.V
+        (shearYShortComplexHom a b) 1 =
+    HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularSubdivision.singularPostcomposition
+          (shearY a b)) 2 ≫
+      productionConnecting frozenYCover.U frozenYCover.V
+        frozenYCover.U_isOpen frozenYCover.V_isOpen
+        frozenYCover.union_eq_univ 1 := by
+  rw [productionConnecting_naturality]
+  rw [shearY_productionUnionMap]
+
 #print axioms frozenTorusH2GroupIsoInt
 #print axioms frozenYCover
 #print axioms frozenYCoverUHomeomorph
@@ -1589,5 +1607,6 @@ theorem shearY_overlap_coordinate (a b : ℤ) :
 #print axioms inr_comp_overlapScalar
 #print axioms shearY_overlap_coordinate_of_degree_components
 #print axioms shearY_overlap_coordinate
+#print axioms shearY_productionConnecting_naturality
 
 end ConstructionTargets.T97A04Closure
