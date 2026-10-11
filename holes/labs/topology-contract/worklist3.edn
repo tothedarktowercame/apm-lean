@@ -4511,8 +4511,84 @@
   {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-forgetintegralrelativecokernelcomparison-projection,
+   :evidence
+   {:placeholder-delta {:source 0, :fixture 0},
+    :residual
+    "Join this preservation equation to integralDirectCokernelComparison_projection through an explicit transport between the definitionally equal coefficient and integral-subtype cokernel presentations; then extend through the production relative-chain presentation and normalization chain.",
+    :gates
+    {:exact-type :pass,
+     :module-build :pass,
+     :module-compile :pass,
+     :clean-worktree :pass,
+     :exact-scope :pass,
+     :statement-registry :pass,
+     :zero-placeholders :pass,
+     :coefficient-subtype-map-fixed :pass,
+     :boundary-only :pass,
+     :preserves-cokernel-pi-iso-hom :pass,
+     :fixture-compile :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["lake build replayed pre-existing dependency warnings only"],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.ManifoldFundamentalClass.forgetIntegralRelativeCokernelComparison_projection",
+      :type
+      "forall {X : Type} [TopologicalSpace X] (A : Set X), (forgetIntModules.mapHomologicalComplex (ComplexShape.down Nat)).map (cokernel.π (CoefficientRelativeSmall.subspaceMap Int A)) ≫ (forgetIntegralRelativeCokernelComparison A).hom = cokernel.π ((forgetIntModules.mapHomologicalComplex (ComplexShape.down Nat)).map (CoefficientRelativeSmall.subspaceMap Int A))",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on
+      ["ConstructionTargets.ManifoldFundamentalClass.forgetIntegralRelativeCokernelComparison"],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :topo-10,
+    :commands
+    [{:cmd
+      "sha256sum /tmp/manifold_fundamental_class_forget_cokernel_projection.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/manifold_fundamental_class_forget_cokernel_projection.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^\\s*axiom\\b' ConstructionTargets/ManifoldFundamentalClass.lean /tmp/manifold_fundamental_class_forget_cokernel_projection.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git status --porcelain", :exit 0}],
+    :diagnostic-history [],
+    :commit "3ee626fe5ced811c2960007524364f8e3137633f",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path
+     "/tmp/manifold_fundamental_class_forget_cokernel_projection.lean",
+     :original-sha256
+     "fffcf53f33dcbcbb6b61c4d04983127f2de18c065d8ef54f86693ab091b1cce1",
+     :sha256
+     "9247da6f5402b97743ca83e032948b3bdc0836b523ec85c3577854f5908c5fe4",
+     :placeholders 0},
+    :implementation
+    {:declaration
+     "ConstructionTargets.ManifoldFundamentalClass.forgetIntegralRelativeCokernelComparison_projection",
+     :representation
+     {:source
+      "The forgotten ModuleCat integral absolute-to-relative cokernel projection followed by forgetIntegralRelativeCokernelComparison",
+      :target
+      "The canonical projection to the cokernel formed in AddCommGrpCat after applying forgetIntModules to the coefficient subtype map",
+      :direction
+      "Exact chain-map equality from the forgotten coefficient-relative projection representation to the after-forgetting cokernel projection representation, supplied by PreservesCokernel.π_iso_hom"}},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/forget-cokernel-projection",
@@ -7106,11 +7182,13 @@
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.forgetIntegralRelativeCokernelComparison_projection",
     :reported-by
-    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+     :routes-2026-10-11-manifold-forget-cokernel-projection-topo3-r1],
     :type
     "forall {X : Type} [TopologicalSpace X] (A : Set X), (forgetIntModules.mapHomologicalComplex (ComplexShape.down Nat)).map (cokernel.π (CoefficientRelativeSmall.subspaceMap Int A)) ≫ (forgetIntegralRelativeCokernelComparison A).hom = cokernel.π ((forgetIntModules.mapHomologicalComplex (ComplexShape.down Nat)).map (CoefficientRelativeSmall.subspaceMap Int A))",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in
+    :routes-2026-10-11-manifold-forget-cokernel-projection-topo3-r1},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-forgetintegralrelativecokernelcomparison-projection,
    :kind :lemma,
