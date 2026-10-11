@@ -21,3 +21,7 @@ category-to-group conversion: once the generic van Kampen construction gives
 an equivalence from the wedge fundamental groupoid to a one-object groupoid,
 the fundamental group at the displayed wedge point is identified with that
 group.  It is independent of the non-normalized composite counit component.
+
+The rank-one coordinate is also implemented in the orientation needed by the
+circle specialization:
+`multiplicativeIntEquivFreeGroupFinOne : Multiplicative ℤ ≃* FreeGroup (Fin 1)`.

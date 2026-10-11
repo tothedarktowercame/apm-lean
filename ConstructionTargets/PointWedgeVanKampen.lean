@@ -108,10 +108,17 @@ def coprodFreeGroupFinTwoFinOne_equiv :
       ⟨FreeGroup.map_injective finSumFinEquiv.injective,
         FreeGroup.map_surjective finSumFinEquiv.surjective⟩)
 
+/-- The integer coordinate on the rank-one free group, oriented from integers
+to the free group for use after the circle winding-number equivalence. -/
+def multiplicativeIntEquivFreeGroupFinOne :
+    Multiplicative ℤ ≃* FreeGroup (Fin 1) :=
+  (FreeGroup.mulEquivIntOfUnique (α := Fin 1)).symm
+
 #print axioms threeCircles_locPathConnected
 #print axioms fundamentalGroupMulEquivOfSingleObjEquivalence
 #print axioms threeCircles_pathConnected
 #print axioms coprodFreeGroupEquivFreeGroupSum
 #print axioms coprodFreeGroupFinTwoFinOne_equiv
+#print axioms multiplicativeIntEquivFreeGroupFinOne
 
 end ConstructionTargets.PointWedgeVanKampen
