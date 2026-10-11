@@ -667,6 +667,19 @@ theorem integralRelativeChainsComparisonWithTransport_projection
       relativeSingularProjection A := by
   exact integralCompositeRelativeProjection_naturality A
 
+/-- Pass the transport-explicit integral relative-chain comparison canonically
+to homology after forgetting the integer module structure. -/
+noncomputable def integralRelativeHomologyComparisonWithTransport
+    {X : Type} [TopologicalSpace X] (A : Set X) (n : ℕ) :
+    forgetIntModules.obj
+        ((CoefficientRelativeSmall.relativeChains ℤ A).homology n) ≅
+      (RelativeSingularChains A).homology n := by
+  let K := CoefficientRelativeSmall.relativeChains ℤ A
+  exact ((K.sc n).mapHomologyIso forgetIntModules).symm ≪≫
+    (HomologicalComplex.homologyFunctor AddCommGrpCat
+      (ComplexShape.down ℕ) n).mapIso
+        (integralRelativeChainsComparisonWithTransport A)
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -710,3 +723,4 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralCompositeRelativeProjection_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport_projection
+#print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport
