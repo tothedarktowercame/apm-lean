@@ -69329,6 +69329,18 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git status --short", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791687741339-3910-7c489504",
+     :commands
+     ["git show/diff-tree --check ea87ed2"
+      "fixture SHA-256 and recorded blob verification"
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean"
+      "lake env lean /tmp/t02a03_collision_endpoint_sign_bridge_probe.lean"
+      "statement registry fingerprint/check and placeholder/worklist EDN checks"],
+     :finding
+     "Recorded commit has the exact one-file scope and matching fixture/blob hashes. The module and frozen probe compile with only the expected standard axioms. It constructs strictly positive factors a and b, rewrites the meridian-start and recovered-input polynomials as a*m.re and b*m.re respectively, and thus supplies the frozen common-sign certificate without asserting a sign for m.re. Equality orientations and Circle/Complex boundaries are correct; no placeholder, sign branch, or angular path is added."},
     :commit "ea87ed2ebf6afa9c6e679f5380c58a9f21c86be0",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
@@ -69344,7 +69356,7 @@
    :phase :implementation,
    :type
    "forall (p : RightTubeMinusLeftCore), let m : Complex := rightTubeMeridianCoordinate p; let n0 := rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)); exists a b : Real, 0 < a and 0 < b and ((1-n0.re)^2 - 4*(1-n0.re)*((1 : Circle) : Complex).re + 3 = a*m.re) and ((1-(rightTubeCoreNormalComplex p.1).re)^2 - 4*(1-(rightTubeCoreNormalComplex p.1).re)*(rightTubeCoreAngularCoordinate p : Complex).re + 3 = b*m.re)",
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/collision-endpoint-positive-factor-sign-bridge",
@@ -69460,7 +69472,7 @@
      "Both collision-polynomial endpoint values are strictly positive scalar multiples of the same real number, namely the real part of rightTubeMeridianCoordinate p. The start multiplier follows from the exact meridian factorization and the Circle real-part bound; the recovered endpoint multiplier is the banked positive-factor comparison. This certifies that the endpoints lie in the same positive or negative component, while the zero case is handled by nonzero height.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
