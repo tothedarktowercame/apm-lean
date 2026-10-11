@@ -96,10 +96,57 @@ noncomputable def frozenYCoverInterHomeomorph :
     (homeomorphPreimageRestrict frozenTorusHomeomorphBoundaryTorus
       (leftOpen ∩ rightOpen))
 
+/-- The upper-triangular shear of the frozen torus.  Its second coordinate is
+fixed, so it preserves the vertical cover literally. -/
+def shearY (a b : ℤ) : C(FrozenTorus, FrozenTorus) where
+  toFun p := (a • p.1 + b • p.2, p.2)
+  continuous_toFun := by fun_prop
+
+@[simp]
+theorem shearY_apply (a b : ℤ) (p : FrozenTorus) :
+    shearY a b p = (a • p.1 + b • p.2, p.2) :=
+  rfl
+
+theorem shearY_mem_U (a b : ℤ) {p : FrozenTorus}
+    (hp : p ∈ frozenYCover.U) : shearY a b p ∈ frozenYCover.U := by
+  rw [frozenYCover_U_mem_iff] at hp ⊢
+  simpa [frozenTorusHomeomorphBoundaryTorus, leftOpen] using hp
+
+theorem shearY_mem_V (a b : ℤ) {p : FrozenTorus}
+    (hp : p ∈ frozenYCover.V) : shearY a b p ∈ frozenYCover.V := by
+  rw [frozenYCover_V_mem_iff] at hp ⊢
+  simpa [frozenTorusHomeomorphBoundaryTorus, rightOpen] using hp
+
+theorem shearY_comp (a b c d : ℤ) :
+    (shearY a b).comp (shearY c d) = shearY (a * c) (a * d + b) := by
+  apply ContinuousMap.ext
+  intro p
+  apply Prod.ext
+  · simp only [ContinuousMap.comp_apply, shearY_apply, smul_add, mul_smul, add_smul]
+    abel
+  · rfl
+
+theorem shearY_three_one_apply (p : FrozenTorus) :
+    shearY 3 1 p = ((3 : ℤ) • p.1 + p.2, p.2) := by
+  simp only [shearY_apply, one_smul]
+
+theorem shearY_one_neg_one_apply (p : FrozenTorus) :
+    shearY 1 (-1) p = (p.1 - p.2, p.2) := by
+  simp only [shearY_apply, one_smul, neg_smul, sub_eq_add_neg]
+
+theorem shearY_one_zero_apply (p : FrozenTorus) :
+    shearY 1 0 p = p := by
+  rcases p with ⟨x, y⟩
+  simp
+
 #print axioms frozenTorusH2GroupIsoInt
 #print axioms frozenYCover
 #print axioms frozenYCoverUHomeomorph
 #print axioms frozenYCoverVHomeomorph
 #print axioms frozenYCoverInterHomeomorph
+#print axioms shearY
+#print axioms shearY_mem_U
+#print axioms shearY_mem_V
+#print axioms shearY_comp
 
 end ConstructionTargets.T97A04Closure
