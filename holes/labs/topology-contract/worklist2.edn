@@ -68336,7 +68336,53 @@
   {:bounded-exception
    "single-consumer height criterion for left-core avoidance by right-core polar reconstruction",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:residual
+     "Implement the height-based deletion criterion in the scoped module, then analyze the zero-height planar intersection locus needed to certify the corrected angular and radial stages.",
+     :outcome :go,
+     :warnings [],
+     :missing-theorems [],
+     :commands
+     [{:cmd
+       "lake env lean /tmp/t02a03_core_reconstruction_height_avoidance_probe.lean",
+       :exit 0,
+       :output
+       "reconstructionAvoidsLeftCore_rightTubeCorePolar_of_im_ne_zero compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "sha256sum /tmp/t02a03_core_reconstruction_height_avoidance_probe.lean",
+       :exit 0,
+       :output
+       "a229ee17509ec4112f59fc5a43ea071da9cc2216f87fc27a7627ee023113374f  /tmp/t02a03_core_reconstruction_height_avoidance_probe.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_core_reconstruction_height_avoidance_probe.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}
+      {:cmd
+       "rg -n 'reconstructionAvoidsLeftCore_rightTubeCorePolar_of_im_ne_zero' /tmp/t02a03_core_reconstruction_height_avoidance_probe.lean",
+       :exit 0,
+       :output
+       "7:theorem reconstructionAvoidsLeftCore_rightTubeCorePolar_of_im_ne_zero\n15:#print axioms reconstructionAvoidsLeftCore_rightTubeCorePolar_of_im_ne_zero"}],
+     :fixture
+     {:path
+      "/tmp/t02a03_core_reconstruction_height_avoidance_probe.lean",
+      :sha256
+      "a229ee17509ec4112f59fc5a43ea071da9cc2216f87fc27a7627ee023113374f"},
+     :finding
+     "The complete placeholder-free fixture proves the requested deletion criterion directly from the third coordinate: every frozen left-core point has height zero, whereas rightTubeCorePolarReconstruction u n has height n.im.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+      :declaration
+      "ConstructionTargets.T02A03GeometricTubeDeformation.reconstructionAvoidsLeftCore_rightTubeCorePolar_of_im_ne_zero",
+      :type
+      "forall (u : Circle) (n : Complex), n.im != 0 -> rightTubeCorePolarReconstruction u n ∉ Set.range apm_t02a03_leftCore"},
+     :seat "topo-8"}},
+   :phase :implementation,
+   :type
+   "forall (u : Circle) (n : Complex), n.im != 0 -> rightTubeCorePolarReconstruction u n ∉ Set.range apm_t02a03_leftCore",
    :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
@@ -68355,6 +68401,8 @@
    :routes-2026-10-11-t02a03-core-polar-height-left-core-avoidance-topo2-r2,
    :kind :reusable-theorem,
    :area "explicit-r3-tube-deformation-retraction",
+   :declaration
+   "ConstructionTargets.T02A03GeometricTubeDeformation.reconstructionAvoidsLeftCore_rightTubeCorePolar_of_im_ne_zero",
    :depends-on
    [:routes-2026-10-11-t02a03-right-tube-core-radial-ambient-topo2-r1],
    :current-residual
