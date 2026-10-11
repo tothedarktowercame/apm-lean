@@ -101627,8 +101627,87 @@
   {:bounded-exception
    "This single-consumer prerequisite fixes the concrete six-edge decoder tables and verifies every boundary-word generator before the tables are descended to Circle.",
    :consumer :t97A01,
+   :evidence
+   {:placeholder-delta
+    {:source-before 0,
+     :source-after 0,
+     :fixture-before 0,
+     :fixture-after 0,
+     :consumer-before 1,
+     :consumer-after 1},
+    :residual
+    "Prove decoder-table independence at the six shared vertices and use the canonical six-edge cover to define total Circle decoders.",
+    :gates
+    {:module-build :pass,
+     :fixture-compiles :pass,
+     :zero-source-and-fixture-sorry :pass,
+     :standard-only-axioms :pass,
+     :registry-check :pass,
+     :scoped-diff-check :pass,
+     :clean-worktree :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["The scoped module emitted no warnings; replayed dependencies emitted pre-existing linter warnings. Another agent advanced the shared branch after this scoped commit; the reported commit remains the one-file row commit and final verification includes it."],
+    :missing-theorems
+    [{:name "PolygonBoundaryEdgeDecoders.n3EdgeDecode_generators",
+      :type
+      "∀ t : Set.Icc (0 : ℝ) 1, n3EdgeDecode 0 t = n3EdgeDecode 1 t ∧ n3EdgeDecode 2 t = n3EdgeDecode 3 t ∧ n3EdgeDecode 4 t = n3EdgeDecode 5 t",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on [],
+      :area "polygon-surface-open-cover"}
+     {:name
+      "PolygonBoundaryEdgeDecoders.torusCrosscapEdgeDecode_generators",
+      :type
+      "∀ t : Set.Icc (0 : ℝ) 1, torusCrosscapEdgeDecode 0 t = torusCrosscapEdgeDecode 2 (reverse t) ∧ torusCrosscapEdgeDecode 1 t = torusCrosscapEdgeDecode 3 (reverse t) ∧ torusCrosscapEdgeDecode 4 t = torusCrosscapEdgeDecode 5 t",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on [],
+      :area "polygon-surface-open-cover"}],
+    :statement-hashes
+    {"fixture"
+     "b56c3634ce831540d4bfc5c5f8a67b6cd77643a5d07f194e9931e69e5f0143ec",
+     "implementation"
+     "73c70e9813f54afaaa1d4426e9f26073ba19f2d306b125036716b454949e6774"},
+    :axioms
+    {"n3EdgeDecode_generators"
+     ["propext" "Classical.choice" "Quot.sound"],
+     "torusCrosscapEdgeDecode_generators"
+     ["propext" "Classical.choice" "Quot.sound"]},
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd "sha256sum /tmp/polygon-boundary-edge-decoders.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.PolygonBoundaryEdgeDecoders",
+      :exit 0}
+     {:cmd "lake env lean /tmp/polygon-boundary-edge-decoders.lean",
+      :exit 0}
+     {:cmd
+      "rg -n \\b(sorry|admit)\\b ConstructionTargets/PolygonBoundaryEdgeDecoders.lean /tmp/polygon-boundary-edge-decoders.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "git diff --check ad18c203^ ad18c203 -- ConstructionTargets/PolygonBoundaryEdgeDecoders.lean",
+      :exit 0}
+     {:cmd "git status --porcelain", :exit 0}],
+    :diagnostic-history [],
+    :commit "ad18c20332a5d7a1c298cb79f7f62a1bf752bc29",
+    :changed-paths
+    ["ConstructionTargets/PolygonBoundaryEdgeDecoders.lean"],
+    :fixture
+    {:path "/tmp/polygon-boundary-edge-decoders.lean",
+     :sha256
+     "b56c3634ce831540d4bfc5c5f8a67b6cd77643a5d07f194e9931e69e5f0143ec"},
+    :implementation
+    {:scope ["ConstructionTargets/PolygonBoundaryEdgeDecoders.lean"],
+     :summary
+     "Defined the N3 and torus-crosscap six-edge decoder tables, proved all twelve literal edge formulas, and verified the three paired generators for each table."},
+    :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PolygonBoundaryEdgeDecoders.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/boundary-edge-decoders",
@@ -105667,12 +105746,12 @@
    :lemma
    {:name "PolygonBoundaryEdgeDecoders.n3EdgeDecode_generators",
     :reported-by
-    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40
+     :routes-2026-10-11-polygon-boundary-edge-decoders-70],
     :type
     "The N3 six-edge decoder sends each of the three same-parameter paired-edge generators to equal ThreeEndpointLoops points.",
     :area "polygon-surface-open-cover",
-    :proved-in
-    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+    :proved-in :routes-2026-10-11-polygon-boundary-edge-decoders-70},
    :id :lemma-polygonboundaryedgedecoders-n3edgedecode-generators,
    :kind :lemma,
    :depends-on
@@ -105691,12 +105770,12 @@
    {:name
     "PolygonBoundaryEdgeDecoders.torusCrosscapEdgeDecode_generators",
     :reported-by
-    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40
+     :routes-2026-10-11-polygon-boundary-edge-decoders-70],
     :type
     "The torus-crosscap six-edge decoder sends the two reversed and one same-parameter paired-edge generators to equal ThreeEndpointLoops points.",
     :area "polygon-surface-open-cover",
-    :proved-in
-    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+    :proved-in :routes-2026-10-11-polygon-boundary-edge-decoders-70},
    :id
    :lemma-polygonboundaryedgedecoders-toruscrosscapedgedecode-generators,
    :kind :lemma,
