@@ -240,6 +240,66 @@ theorem circleAffine_H1_eq_zpow (a : ℤ) (c : Circle) :
     (continuousMapHomotopyCylinder_zero H)
     (continuousMapHomotopyCylinder_one H) 1).symm
 
+open ConstructionTargets.CircleUniversalCover
+
+theorem liftBasedLoop_circleZPow (a : ℤ) (gamma : Path (1 : Circle) 1) :
+    liftBasedLoop (gamma.map (circleZPow a).continuous)
+        (by simp [circleZPow]) =
+      ⟨fun t ↦ a • liftBasedLoop gamma gamma.source t,
+        (liftBasedLoop gamma gamma.source).continuous.const_smul a⟩ := by
+  symm
+  apply (circleCover_isCoveringMap.eq_liftPath_iff' _).2
+  constructor
+  · funext t
+    change Circle.exp (a • liftBasedLoop gamma gamma.source t) = (gamma t) ^ a
+    rw [Circle.exp_zsmul]
+    exact congrArg (fun z : Circle ↦ z ^ a)
+      (congrFun (circleCover_comp_liftBasedLoop gamma gamma.source) t)
+  · simp
+
+theorem liftBasedLoopEndpointInteger_circleZPow (a : ℤ)
+    (gamma : Path (1 : Circle) 1) :
+    liftBasedLoopEndpointInteger (gamma.map (circleZPow a).continuous)
+        (by simp [circleZPow]) (by simp [circleZPow]) =
+      a * liftBasedLoopEndpointInteger gamma gamma.source gamma.target := by
+  apply period_integer_unique
+    (liftBasedLoopEndpointInteger_spec
+      (gamma.map (circleZPow a).continuous)
+      (by simp [circleZPow]) (by simp [circleZPow]))
+  rw [liftBasedLoop_circleZPow]
+  simp only [ContinuousMap.coe_mk]
+  rw [← liftBasedLoopEndpointInteger_spec]
+  rw [mul_smul]
+
+def circleZPowBasedPath (a : ℤ) (gamma : Path (1 : Circle) 1) :
+    Path (1 : Circle) 1 :=
+  (gamma.map (circleZPow a).continuous).cast
+    (by simp [circleZPow]) (by simp [circleZPow])
+
+def circleZPowPi1Map (a : ℤ) :
+    FundamentalGroup Circle 1 →* FundamentalGroup Circle 1 :=
+  FundamentalGroup.mapOfEq (circleZPow a) (by simp [circleZPow])
+
+theorem circleZPowPi1Map_mk (a : ℤ) (gamma : Path (1 : Circle) 1) :
+    circleZPowPi1Map a (Path.Homotopic.Quotient.mk gamma) =
+      Path.Homotopic.Quotient.mk (circleZPowBasedPath a gamma) := by
+  rw [circleZPowPi1Map, FundamentalGroup.mapOfEq_apply]
+  rfl
+
+theorem circleZPow_fundamentalGroup_coordinate (a : ℤ)
+    (p : FundamentalGroup Circle 1) :
+    (circleFundamentalGroupMulEquivInt (circleZPowPi1Map a p)).toAdd =
+      a * (circleFundamentalGroupMulEquivInt p).toAdd := by
+  induction p using Path.Homotopic.Quotient.ind with
+  | _ gamma =>
+      rw [circleZPowPi1Map_mk]
+      change liftBasedLoopEndpointInteger (circleZPowBasedPath a gamma)
+          (circleZPowBasedPath a gamma).source
+          (circleZPowBasedPath a gamma).target =
+        a * liftBasedLoopEndpointInteger gamma gamma.source gamma.target
+      simpa [circleZPowBasedPath] using
+        liftBasedLoopEndpointInteger_circleZPow a gamma
+
 private noncomputable def shearYIntersectionMap (a b : ℤ) :=
   (ambientIntersectionRangeChainsIso frozenYCover.U frozenYCover.V).inv ≫
     closureChains.map
@@ -638,6 +698,10 @@ theorem shearY_overlap_coordinate_of_degree_components (a b : ℤ)
 #print axioms circleAffine
 #print axioms circleAffineHomotopy
 #print axioms circleAffine_H1_eq_zpow
+#print axioms liftBasedLoop_circleZPow
+#print axioms liftBasedLoopEndpointInteger_circleZPow
+#print axioms circleZPowPi1Map
+#print axioms circleZPow_fundamentalGroup_coordinate
 #print axioms shearYOverlapCoordinateMap
 #print axioms shearY_overlap_coordinate_of_injections
 #print axioms inl_comp_overlapScalar
