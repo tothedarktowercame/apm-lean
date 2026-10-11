@@ -79483,72 +79483,55 @@
      :commit "a58fb4403475f91ca2b7f45699abba30dbe50339",
      :reason :program-milestone-complete}]}
   {:consumer :t96A07,
-   :stop-count 8,
+   :stop-count 9,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Transfer the range through the local-diffeomorphism projection for B6; then B7-B13.",
+    "Differentiate the descent equation and cancel the surjective projection derivative to finish B6; then B7-B13.",
     :outcome :stop,
-    :warnings ["Lean style lint only."],
+    :warnings ["Main: 1 placeholder." "Lean style lint only."],
     :missing-theorems
     [{:name
-      "ConstructionTargets.T96A07Closure.sphereMap_mfderiv_e0_range",
+      "ConstructionTargets.T96A07Closure.sphereProjection_mfderiv_surjective",
       :type
-      "sphereMap mfderiv range at e0 equals the yz coordinate plane",
+      "frozen quotient projection mfderiv is surjective at every sphere point",
       :status :proved,
       :consumers [:t96A07],
-      :depends-on
-      ["ConstructionTargets.T96A07Closure.crossTermSphereMap_mfderiv_firstPoint"],
+      :depends-on [],
       :area "projective-smooth-descent"}
      {:name
       "ConstructionTargets.T96A07Closure.descended_mfderiv_range_at_e0",
       :type
-      "descended map derivative range at projection e0 equals yz-plane",
-      :status :not-started,
+      "descended derivative range at projection e0 equals yz-plane",
+      :status :partial,
       :consumers [:t96A07],
       :depends-on
-      ["ConstructionTargets.T96A07Closure.sphereMap_mfderiv_e0_range"
-       "ConstructionTargets.T96A07Closure.descendedSphereMap"],
+      ["ConstructionTargets.T96A07Closure.sphereProjection_mfderiv_surjective"
+       "ConstructionTargets.T96A07Closure.sphereMap_mfderiv_e0_range"],
       :area "projective-smooth-descent"}],
     :statement-hashes
     {:registry "131/0",
-     :closure "76269dc65f37288d97aa844e3fac8d02e7ba4986",
+     :closure "89c9c897ecbccac656a1b242787bb20a420ea743",
      :blueprint "69b59fb622dd62fc82a1fe100b353eaabc2c948d"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason :program-milestone-complete,
+    :reason :program-progress-committed,
     :commands
-    [{:cmd "lake build ConstructionTargets.t96A07Closure", :exit 0}
-     {:cmd "closure compile", :exit 0}
+    [{:cmd "closure compile", :exit 0}
      {:cmd "closure no-sorry scan", :exit 1, :expected-exit 1}
      {:cmd "Main compile", :exit 0}
      {:cmd "registry check", :exit 0}
-     {:cmd "Main placeholder count", :exit 0, :output "1"}
-     {:cmd "git show --check a8575f32c", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791761613022-5991-532682f8",
-     :commands
-     ["git show/diff/check a8575f32"
-      "verify committed fixture SHA-256 and blobs"
-      "lake build ConstructionTargets.t96A07Closure"
-      "lake env lean closure and Main"
-      "registry fingerprint, placeholders, ancestry, blueprint checks"],
-     :finding
-     "PASS: a8575f32 is new after history fac75be59; both changed paths are scoped, closure/blueprint blobs match, and fixture SHA-256 is 65250cfcb9c48b1a789ab1a76a6637528e764d7924da72f0c3e21ed166923b5e. The range proof establishes both inclusions: outputs have zero first coordinate, and y in the yz-plane is reached via tangent vector (0,y2,y1). The Main adapter faithfully unfolds sphereMap. Build/Lean pass with only propext, Classical.choice, Quot.sound; registry 131/0; frozen hash 2ba67b040c1c1e31b8529d758a90765d8251ba3798983f6956674918a77fd520 unchanged; closure/Main placeholders 0/1. B5 is complete; B6 range transfer then B7-B13 remain listed."},
-    :commit "a8575f32c",
-    :changed-paths
-    ["ConstructionTargets/t96A07Closure.lean"
-     "problems/t96A07/lean/Main.lean"],
+     {:cmd "git show --check 1ac8a7376", :exit 0}],
+    :commit "1ac8a7376",
+    :changed-paths ["ConstructionTargets/t96A07Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t96A07Closure.lean",
      :sha256
-     "65250cfcb9c48b1a789ab1a76a6637528e764d7924da72f0c3e21ed166923b5e"},
+     "d7862ad090bfdeee32223bc2b836cf83ba29c760ae2a732a3c702eb4a8c569c9"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A07/lean/Main.lean"
     "problems/t96A07/status.json"
@@ -81143,5 +81126,28 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-t96a07closure-spheremap-mfderiv-e0-range
-    :lemma-constructiontargets-t96a07closure-descendedspheremap],
+    :lemma-constructiontargets-t96a07closure-descendedspheremap
+    :lemma-constructiontargets-t96a07closure-sphereprojection-mfderiv-surjective],
+   :other-consumers []}
+  {:consumer :t96A07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T96A07Closure.sphereProjection_mfderiv_surjective",
+    :type
+    "frozen quotient projection mfderiv is surjective at every sphere point"},
+   :lemma
+   {:name
+    "ConstructionTargets.T96A07Closure.sphereProjection_mfderiv_surjective",
+    :reported-by [:program-2026-10-11-close-t96a07],
+    :type
+    "frozen quotient projection mfderiv is surjective at every sphere point",
+    :area "projective-smooth-descent",
+    :proved-in :program-2026-10-11-close-t96a07},
+   :id
+   :lemma-constructiontargets-t96a07closure-sphereprojection-mfderiv-surjective,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}]}
