@@ -79283,35 +79283,42 @@
   {:consumer :t97A04,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 6,
+   :stop-count 7,
    :review-finding
    "program STOP commits nothing new since the last :program-history entry: evidence commit bb0f0f77d8953dc78dd564e000f3d4a5b29d0894 exactly equals history job 5",
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Transport connecting square to frozen coordinates; prove cancellation; then B8-B11.",
+    "Prove frozenConnectingCoordinate mono and cancel it; then B8-B11.",
     :outcome :stop,
     :warnings ["Main: 2 placeholders."],
     :missing-theorems
     [{:name
-      "ConstructionTargets.T97A04Closure.shearY_productionConnecting_naturality",
-      :type "connecting≫intersectionMap=H2(shearY)≫connecting",
+      "ConstructionTargets.T97A04Closure.frozenConnectingCoordinate",
+      :type "fixed H2-to-overlap connecting coordinate",
+      :status :proved,
+      :consumers [:t97A04],
+      :depends-on [],
+      :area "mv-connecting-naturality"}
+     {:name
+      "ConstructionTargets.T97A04Closure.shearY_frozenConnectingCoordinate_naturality",
+      :type "H2-coordinate shear≫K=K≫overlapScalar",
       :status :proved,
       :consumers [:t97A04],
       :depends-on
-      ["ConstructionTargets.T97A04Closure.shearY_overlap_coordinate"],
+      ["ConstructionTargets.T97A04Closure.shearY_productionConnecting_naturality"
+       "ConstructionTargets.T97A04Closure.shearY_overlap_coordinate"],
       :area "mv-connecting-naturality"}
      {:name "ConstructionTargets.T97A04Closure.shearY_H2",
       :type "frozen H2 coordinate of shearY a b is a·id",
       :status :partial,
       :consumers [:t97A04],
       :depends-on
-      ["ConstructionTargets.T97A04Closure.shearY_productionConnecting_naturality"
-       "ConstructionTargets.T97A04Closure.shearY_overlap_coordinate"],
+      ["ConstructionTargets.T97A04Closure.shearY_frozenConnectingCoordinate_naturality"],
       :area "mv-connecting-naturality"}],
     :statement-hashes
     {:registry "131/0",
-     :closure "0be6d998a440cddfbe661f61ca7a82aaf77f9b2f",
+     :closure "65fc10e7a643ca651df30c0e72d003172d8093f3",
      :blueprint "c419a895cb4ede2acc1cb6bc5c7536344ba63df4"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
@@ -79323,24 +79330,16 @@
      {:cmd "Main compile", :exit 0}
      {:cmd "registry check", :exit 0}
      {:cmd "Main placeholder count", :exit 0, :output "2"}
-     {:cmd "git show --check 7b57d0f85", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791745063774-5782-45f82555",
-     :commands
-     ["git show/diff-tree/rev-parse 7b57d0f8"
-      "lake env lean ConstructionTargets/t97A04Closure.lean"
-      "lake env lean problems/t97A04/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "statement fingerprints; placeholder/history checks"],
-     :finding
-     "PASS: 7b57d0f8 is new after cc9c9fda; one-file scope and recorded closure/blueprint blobs match. The theorem specializes production connecting naturality and rewrites the union endpoint to H2(shearY), with correct delta-then-H1 = H2-then-delta orientation. Both Lean gates compile; new theorem uses only propext, Classical.choice, Quot.sound; registry 131/0; frozen hash unchanged ca1b2cb3c6594276811618321d5c0604c2f38fc4594a6b21ae161a711a923a34; closure/Main placeholders 0/2. It is real program progress; frozen-coordinate transport, cancellation, and B8-B11 remain listed."},
-    :commit "7b57d0f851805eb8cbd6cfe97e2ea48722b34de9",
+     {:cmd "git show --check 25062c7ba", :exit 0}],
+    :diagnostic-history
+    [{:cmd "closure compile",
+      :exit 1,
+      :finding "Corrected coordinate-iso slice indices."}],
+    :commit "25062c7ba289215ae417cb5f24fb5cc16219db97",
     :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -80575,6 +80574,49 @@
     :type "frozen H2 coordinate of shearY a b is a·id",
     :area "mv-connecting-naturality"},
    :id :lemma-constructiontargets-t97a04closure-sheary-h2,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t97a04closure-sheary-productionconnecting-naturality
+    :lemma-constructiontargets-t97a04closure-sheary-overlap-coordinate
+    :lemma-constructiontargets-t97a04closure-sheary-frozenconnectingcoordinate-naturality],
+   :other-consumers []}
+  {:consumer :t97A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T97A04Closure.frozenConnectingCoordinate",
+    :type "fixed H2-to-overlap connecting coordinate"},
+   :lemma
+   {:name
+    "ConstructionTargets.T97A04Closure.frozenConnectingCoordinate",
+    :reported-by [:program-2026-10-11-close-t97a04],
+    :type "fixed H2-to-overlap connecting coordinate",
+    :area "mv-connecting-naturality",
+    :proved-in :program-2026-10-11-close-t97a04},
+   :id
+   :lemma-constructiontargets-t97a04closure-frozenconnectingcoordinate,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T97A04Closure.shearY_frozenConnectingCoordinate_naturality",
+    :type "H2-coordinate shear≫K=K≫overlapScalar"},
+   :lemma
+   {:name
+    "ConstructionTargets.T97A04Closure.shearY_frozenConnectingCoordinate_naturality",
+    :reported-by [:program-2026-10-11-close-t97a04],
+    :type "H2-coordinate shear≫K=K≫overlapScalar",
+    :area "mv-connecting-naturality",
+    :proved-in :program-2026-10-11-close-t97a04},
+   :id
+   :lemma-constructiontargets-t97a04closure-sheary-frozenconnectingcoordinate-naturality,
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-t97a04closure-sheary-productionconnecting-naturality
