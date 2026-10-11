@@ -116062,18 +116062,18 @@
    :depends-on [],
    :other-consumers []}
   {:consumer :t95J02,
-   :stop-count 5,
+   :stop-count 6,
    :review-finding
    "B7 reverses the functorial composition. Because beta.comp reflection is beta after reflection, homotopy invariance gives H1(beta) = H1(reflection) ≫ H1(beta), not H1(beta) ≫ H1(reflection). The written composite is ill-typed: H1(beta) lands in Klein-bottle homology, while H1(reflection) is an endomorphism of sphere homology. Reverse the factors, then use integral_circle 1 to derive H1(beta)(g) = H1(beta)(-g).",
    :evidence
    {:blueprint
     {:path "ConstructionTargets/t95J02Closure.blueprint.md",
      :sha256
-     "69cb318d933856aa818ad72d3de84cd79373180f9d50ac3c2e130afb45c44904",
+     "1eb491a78d82ecd1984133a63e8169cf76570a0a6e90b11c86dc72c98ab2c90e",
      :nodes
      [{:id :B1, :status :proved}
       {:id :B2, :status :proved}
-      {:id :B3, :status :planned}
+      {:id :B3, :status :proved}
       {:id :B4, :status :planned}
       {:id :B5, :status :planned}
       {:id :B6, :status :planned}
@@ -116082,12 +116082,15 @@
       {:id :B9, :status :planned}]},
     :placeholder-delta {:source-before 3, :source-after 3},
     :residual
-    "B3-B9 remain; next prove verticalParam and verticalParam_add_int, then classify its fibers and construct t95J02CircleB_homeo.",
+    "B4-B9 remain; next classify verticalParam fibers, then use that classification to construct t95J02CircleB_homeo.",
     :outcome :stop,
     :warnings
     [{:kind :existing-placeholders,
       :message
-      "The compiler reports the three pre-existing sorries in the vertical H1 kernel, retraction injectivity, and final adapter; this bounded program job introduced none."}],
+      "The compiler reports the three pre-existing sorries in B7-B9; this bounded B3 job introduced none."}
+     {:kind :concurrent-worktree-change,
+      :message
+      "ConstructionTargets/t97A04Closure.lean was modified by another process and was preserved unmodified and uncommitted."}],
     :missing-theorems
     [{:name "t95J02Closure.separatingMap",
       :type
@@ -116096,11 +116099,20 @@
       :consumers [:t95J02],
       :depends-on [],
       :area "klein-bottle-homology"}
+     {:name "t95J02Closure.verticalParam_add_int",
+      :type
+      "For every real y and integer n, verticalParam (y + n) = verticalParam y",
+      :status :proved,
+      :consumers [:t95J02],
+      :depends-on [],
+      :area "klein-bottle-homology"}
      {:name "t95J02Closure.t95J02CircleB_homeo",
       :type "euclideanUnitSphere 2 ≃ₜ t95J02CircleB",
       :status :not-started,
       :consumers [:t95J02],
-      :depends-on ["t95J02Closure.separatingMap"],
+      :depends-on
+      ["t95J02Closure.separatingMap"
+       "t95J02Closure.verticalParam_add_int"],
       :area "klein-bottle-homology"}
      {:name "t95J02Closure.t95J02_beta_homotopic_beta_reflection",
       :type
@@ -116126,25 +116138,25 @@
       :area "klein-bottle-homology"}],
     :statement-hashes
     {:source-sha256
-     "833afb099f0c48b8a91b86c15552702a021e7bb3304cf32270350bdc8d8197c8",
+     "36e2e92959f53cbd33efdc9d638ec3b642aa8c2e33815b330aa0a6c0f6070b89",
      :blueprint-sha256
-     "69cb318d933856aa818ad72d3de84cd79373180f9d50ac3c2e130afb45c44904",
+     "1eb491a78d82ecd1984133a63e8169cf76570a0a6e90b11c86dc72c98ab2c90e",
      :registry "131 registered statements match, 0 do not"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Program milestone completed. Blueprint nodes B1 and B2 are proved: the trigonometric separating coordinate is invariant under both Klein generators, extends across Relation.EqvGen, and descends to a continuous map on the frozen quotient. Nodes B3-B9 remain for later program jobs.",
+    "Program milestone completed. Blueprint node B3 is proved: verticalParam is continuous and invariant under translation by every integer, including negative integers, using the frozen vertical quotient identity. B4-B9 remain for later jobs.",
     :commands
     [{:cmd "lake env lean problems/t95J02/lean/Main.lean",
       :exit 0,
       :finding
-      "The frozen problem module compiles; the new B1-B2 namespace is placeholder-free and the three pre-existing program placeholders remain."}
+      "The module compiles; B3 is placeholder-free and the three pre-existing program placeholders remain."}
      {:cmd
-      "python3 comment-stripped B1-B2 and source placeholder validation",
+      "python3 comment-stripped B3 and source placeholder validation",
       :exit 0,
       :finding
-      "B1-B2 contain zero sorry, admit, or axiom tokens; the whole source remains at three sorries; blueprint marks B1-B2 proved."}
+      "B3 contains zero sorry, admit, or axiom tokens; the whole source remains at three sorries; blueprint marks B3 proved."}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131 registered statements match, 0 do not."}
@@ -116152,54 +116164,35 @@
       "git diff --check -- problems/t95J02/lean/Main.lean ConstructionTargets/t95J02Closure.blueprint.md",
       :exit 0}
      {:cmd
-      "git commit -m Prove-t95J02-separating-quotient-coordinates",
+      "git commit -m Prove-t95J02-vertical-parametrization-periodicity",
       :exit 0,
       :finding
-      "Committed the two scoped files as 066b6bdc352d209e1b15ae5f53a357b520be4775."}
+      "Committed the two scoped files as e718d3d5477de7d1630ef32995973fbd8e996aa7."}
      {:cmd
       "sha256sum problems/t95J02/lean/Main.lean ConstructionTargets/t95J02Closure.blueprint.md",
       :exit 0,
       :finding
-      "Hashes are 833afb099f0c48b8a91b86c15552702a021e7bb3304cf32270350bdc8d8197c8 and 69cb318d933856aa818ad72d3de84cd79373180f9d50ac3c2e130afb45c44904."}],
+      "Hashes are 36e2e92959f53cbd33efdc9d638ec3b642aa8c2e33815b330aa0a6c0f6070b89 and 1eb491a78d82ecd1984133a63e8169cf76570a0a6e90b11c86dc72c98ab2c90e."}],
     :diagnostic-history
     [{:cmd "lake env lean problems/t95J02/lean/Main.lean",
       :exit 1,
       :finding
-      "Initial B1 draft omitted WithLp.toLp around the coordinate vector and over-specified simplification; corrected the representation and scalar coordinate proofs."}
+      "Initial B3 proof used an invalid coercion from the subtype-valued parametrization and ambiguous natural casts; corrected with explicit subtype projection and real casts."}
      {:cmd "lake env lean problems/t95J02/lean/Main.lean",
       :exit 1,
       :finding
-      "Intermediate proof referenced a nonexistent toLp application lemma and fun_prop could not infer vector continuity; corrected with explicit scalar change goals and PiLp.continuous_toLp."}
-     {:cmd "lake env lean problems/t95J02/lean/Main.lean",
-      :exit 1,
-      :finding
-      "Intermediate continuity proof tried continuous_pi_iff before exposing the WithLp wrapper; corrected by composing PiLp.continuous_toLp with the coordinatewise continuous function."}],
+      "Intermediate negative-integer rewrite normalized the cast differently from the target; corrected with an exact cast-shaped equality and a typed calculation."}],
     :continue-from
-    {:commit "066b6bdc352d209e1b15ae5f53a357b520be4775",
+    {:commit "e718d3d5477de7d1630ef32995973fbd8e996aa7",
      :next
-     "Implement blueprint B3, the continuous integer-periodic vertical parametrization, then B4 fiber classification using separatingMap."},
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791719403250-5291-b8098553",
-     :commands
-     ["git show 066b6bdc352d209e1b15ae5f53a357b520be4775 --stat and scoped diff"
-      "git diff-tree --name-status 066b6bdc352d209e1b15ae5f53a357b520be4775"
-      "git diff --quiet recorded commit against scoped working files"
-      "sha256sum recorded source and blueprint"
-      "git diff --check recorded commit"
-      "comment-stripped placeholder count"
-      "python3 scripts/statement-registry.py check"
-      "lake env lean problems/t95J02/lean/Main.lean"],
-     :finding
-     "PASS: this program STOP adds new compiled B1-B2 progress after program-history commit 6461d9295ff33499139569f43b4605c21ab88258. The changed paths are exactly the problem source and blueprint. separatingRaw is invariant under both frozen Klein generators with the stated cosine-sine orientation, EqvGen.rec extends that invariant, and separatingMap descends continuously through the frozen quotient. Recorded hashes reproduce, the registry reports 131 matches, and the source compiles with only standard axioms. The three pre-existing placeholders remain exactly the declared B7-B9 residual."},
-    :commit "066b6bdc352d209e1b15ae5f53a357b520be4775",
+     "Implement B4, classifying verticalParam fibers using separatingMap and the equality of cosine-sine coordinates."},
+    :commit "e718d3d5477de7d1630ef32995973fbd8e996aa7",
     :changed-paths
     ["problems/t95J02/lean/Main.lean"
      "ConstructionTargets/t95J02Closure.blueprint.md"],
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t95J02/lean/Main.lean"
     "problems/t95J02/status.json"
@@ -117030,7 +117023,9 @@
     :area "klein-bottle-homology"},
    :id :lemma-t95j02closure-t95j02circleb-homeo,
    :kind :lemma,
-   :depends-on [:lemma-t95j02closure-separatingmap],
+   :depends-on
+   [:lemma-t95j02closure-separatingmap
+    :lemma-t95j02closure-verticalparam-add-int],
    :other-consumers []}
   {:consumer :t95J02,
    :phase :lemma,
@@ -117084,6 +117079,25 @@
     "HasT95J02Retraction t95J02InclusionB implies injectivity of the induced integral H1 map",
     :area "klein-bottle-homology"},
    :id :lemma-t95j02closure-apm-t95j02-bridge-retraction-injective,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t95J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t95J02Closure.verticalParam_add_int",
+    :type
+    "For every real y and integer n, verticalParam (y + n) = verticalParam y"},
+   :lemma
+   {:name "t95J02Closure.verticalParam_add_int",
+    :reported-by [:program-2026-10-11-close-t95j02],
+    :type
+    "For every real y and integer n, verticalParam (y + n) = verticalParam y",
+    :area "klein-bottle-homology",
+    :proved-in :program-2026-10-11-close-t95j02},
+   :id :lemma-t95j02closure-verticalparam-add-int,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}],
