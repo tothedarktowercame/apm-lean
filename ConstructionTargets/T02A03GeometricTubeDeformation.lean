@@ -660,6 +660,25 @@ theorem rightTubeRadialNormalInterpolation_exists
     · exact_mod_cast (rightTubeRadialCoefficient_pos tp.1 (n tp.2) (hn tp.2)).ne'
     · exact Circle.coe_ne_zero (m tp.2)
 
+noncomputable def rightTubeNormalCoordinate :
+    C(RightTubeMinusLeftCore, ℂ) where
+  toFun p := rightTubeNormalComplex p.1
+  continuous_toFun :=
+    continuous_rightTubeNormalComplex.comp continuous_subtype_val
+
+theorem specializedRightTubeRadialNormalInterpolation_exists :
+    ∃ N : C(unitInterval × RightTubeMinusLeftCore, ℂ),
+      (∀ p, N (0, p) = ((1 / 8 : ℝ) : ℂ) *
+        (rightTubeMeridianCoordinate p : ℂ)) ∧
+      (∀ p, N (1, p) = rightTubeNormalComplex p.1) ∧
+      (∀ tp, N tp ≠ 0) := by
+  apply rightTubeRadialNormalInterpolation_exists
+      rightTubeNormalCoordinate rightTubeMeridianCoordinate
+  · intro p
+    rfl
+  · intro p hp
+    exact p.2.2 ((rightTubeNormalComplex_eq_zero_iff p.1).mp hp)
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -682,3 +701,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightCorePolarReconstruction_circleMeridian
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeRadialCoefficient_pos
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeRadialNormalInterpolation_exists
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.specializedRightTubeRadialNormalInterpolation_exists
