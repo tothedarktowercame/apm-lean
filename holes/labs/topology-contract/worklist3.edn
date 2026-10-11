@@ -4725,6 +4725,23 @@
       :expected-exit 1}
      {:cmd "git status --porcelain", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791683950335-3734-f985df62",
+     :commands
+     ["git diff-tree recorded commit scope"
+      "git blob identity check"
+      "sha256sum promoted fixture"
+      "git diff --check recorded commit"
+      "lake env lean promoted fixture"
+      "lake env lean target module"
+      "lake build target module"
+      "placeholder and axiom scan"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped consumer placeholder census"],
+     :finding
+     "PASS: implementation commit d659f1c6 changes exactly ConstructionTargets/ManifoldFundamentalClass.lean and its recorded blob matches the reviewed source; promoted fixture hash 8d699460952f9b66c2e0e0c38eb65dcc8af78db48ed058ea45e615cf87a3f189 matches recorded evidence and preserves the registered frozen theorem type; coefficientIntegralCokernelTransport is a canonical cokernel.mapIso from the forgotten coefficient-map presentation to the forgotten explicit integral-subtype-map presentation, using identity object isomorphisms and congrArg of the forgetful chain-complex functor map applied to coefficientSubspaceMap_eq_integralSubtypeChainMap; coefficientIntegralCokernelTransport_projection has the required source-to-target orientation and follows from cokernel.mapIso_hom and cokernel.π_desc without rewriting an indexed HasCokernel witness; it does not compose the adjacent projection equations, pass through RelativeSingularChains, apply homology, or claim normalization or generator transport; fixture, module, and 8326-job target build pass with zero source/fixture placeholders and only propext, Classical.choice, and Quot.sound; 131 statements match with zero mismatches and consumer placeholders remain t00J02=1 and t98A02=1."},
     :commit "d659f1c6e4cb5cfa3185d2399972af7dcf5ddaa6",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -4750,7 +4767,7 @@
       "Canonical cokernel isomorphism from the coefficient-map presentation to the explicit integral-subtype-map presentation, induced by their proved exact chain-map equality; its hom carries the source projection exactly to the target projection"}},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/coefficient-integral-cokernel-transport",
@@ -4908,7 +4925,7 @@
      "The representation gap is resolved by a canonical cokernel.mapIso rather than dependent rewriting. The compiled transport uses the reviewed exact equality of the coefficient and explicit integral subtype chain maps, identity isomorphisms on their source and target chain complexes, and the cokernel universal property. Its projection theorem has the precise orientation needed to concatenate the two already banked projection equations. The next prerequisite can therefore state the combined absolute-to-direct-relative projection equality without changing any selected HasCokernel witness.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -7366,7 +7383,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -7383,7 +7400,10 @@
     "forall {X : Type} [TopologicalSpace X] (A : Set X), cokernel.π ((forgetIntModules.mapHomologicalComplex (ComplexShape.down Nat)).map (CoefficientRelativeSmall.subspaceMap Int A)) ≫ (coefficientIntegralCokernelTransport A).hom = cokernel.π ((forgetIntModules.mapHomologicalComplex (ComplexShape.down Nat)).map (((AlgebraicTopology.singularChainComplexFunctor (ModuleCat Int)).obj (ModuleCat.of Int Int)).map (integralSubtypeInclusion A)))",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-coefficient-integral-cokernel-transport-topo3-r1},
+    :routes-2026-10-11-manifold-coefficient-integral-cokernel-transport-topo3-r1,
+    :banked-by
+    :routes-2026-10-11-manifold-coefficient-integral-cokernel-transport-topo3-r1,
+    :banked-commit "d659f1c6e4cb5cfa3185d2399972af7dcf5ddaa6"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-coefficientintegralcokerneltransport-projection,
    :kind :lemma,
