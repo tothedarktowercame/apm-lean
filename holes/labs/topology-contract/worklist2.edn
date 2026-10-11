@@ -79283,7 +79283,7 @@
   {:consumer :t97A04,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "program STOP commits nothing new since the last :program-history entry: evidence commit bb0f0f77d8953dc78dd564e000f3d4a5b29d0894 exactly equals history job 5",
    :evidence
@@ -79337,7 +79337,7 @@
     :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
     :seat "topo-6"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79510,13 +79510,25 @@
     [{:cmd "compile",
       :exit 1,
       :finding "Opened projective namespace; rebuilt import."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791748716378-5847-4da01399",
+     :commands
+     ["git show/diff/check d3bf91c3"
+      "lake build ConstructionTargets.t96A07Closure"
+      "lake env lean ConstructionTargets/t96A07Closure.lean"
+      "lake env lean problems/t96A07/lean/Main.lean"
+      "registry fingerprint, placeholders, ancestry, fixture checks"],
+     :finding
+     "PASS: d3bf91c3 is new after history 840d18bf; both changed paths are scoped and closure/blueprint blobs match. Smooth even descent uses exactly antipodality and smoothness, and the Main adapter preserves the frozen atlas, projection equation, and ContMDiff type. Build and Lean gates pass with only propext, Classical.choice, Quot.sound; registry 131/0; frozen hash 2ba67b040c1c1e31b8529d758a90765d8251ba3798983f6956674918a77fd520 unchanged; closure/Main placeholders 0/1. B3 is compiled progress; B4 ambient derivative then B5-B13 remain listed."},
     :commit "d3bf91c37871b1955e959ef64a641b7f4b214c4b",
     :changed-paths
     ["ConstructionTargets/t96A07Closure.lean"
      "problems/t96A07/lean/Main.lean"],
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t96A07/lean/Main.lean"
     "problems/t96A07/status.json"
@@ -79548,6 +79560,9 @@
      :reason :program-milestone-complete}
     {:job 3,
      :commit "840d18bfb8f4cd4ed1efd12d265781516cde390f",
+     :reason :program-milestone-complete}
+    {:job 4,
+     :commit "d3bf91c37871b1955e959ef64a641b7f4b214c4b",
      :reason :program-milestone-complete}]}
   {:consumer :t94A10,
    :phase :implementation,
@@ -80378,7 +80393,7 @@
    :other-consumers []}
   {:consumer :t96A07,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "ConstructionTargets.T96A07Closure.descendedSphereMap",
@@ -80388,7 +80403,9 @@
     :reported-by [:program-2026-10-11-close-t96a07],
     :type "smooth descent with projection equation",
     :area "projective-smooth-descent",
-    :proved-in :program-2026-10-11-close-t96a07},
+    :proved-in :program-2026-10-11-close-t96a07,
+    :banked-by :program-2026-10-11-close-t96a07,
+    :banked-commit "d3bf91c37871b1955e959ef64a641b7f4b214c4b"},
    :id :lemma-constructiontargets-t96a07closure-descendedspheremap,
    :kind :lemma,
    :depends-on
