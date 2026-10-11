@@ -15759,8 +15759,68 @@
   {:consumer :t00J02,
    :implements-lemma
    :lemma-mfclass-forget-snake-transported-kernel-tau1,
+   :evidence
+   {:placeholder-delta {:t00J02 [1 1], :t98A02 [1 1]},
+    :residual
+    "Construct the cone isomorphism from the transported τ₁ kernel cone to the τ₁ evaluation of the mapped ShortComplex kernel fork, then transfer its IsLimit witness and repeat for the remaining components.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["The target build replayed pre-existing linter warnings outside the scoped declaration."],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.ManifoldFundamentalClass.forgetIntModulesSnakeInput_transportedKernelτ₁",
+      :type
+      "forall (S : ShortComplex.SnakeInput (ModuleCat ℤ)), IsLimit ((Cone.postcompose (forgetIntModulesParallelPairZeroIso S.v₁₂.τ₁).hom).obj (forgetIntModules.mapCone (KernelFork.ofι S.v₀₁.τ₁ S.w₀₂_τ₁)))",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on
+      ["ConstructionTargets.ManifoldFundamentalClass.forgetIntModulesSnakeInput_preservedKernelτ₁"
+       "ConstructionTargets.ManifoldFundamentalClass.forgetIntModulesParallelPairZeroIso"],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not",
+     :module-sha256
+     "07c8b09fa1acbf4aa4ea9cf0e8dc63d10f00a9921cffc891286ab5a20ee2ecf5"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/manifold_fundamental_class_forget_snake_kernel_tau1_transport.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "comment-stripped placeholder count for t00J02 and t98A02",
+      :exit 0,
+      :output "t00J02 1; t98A02 1"}
+     {:cmd
+      "rg forbidden proof tokens in ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git commit -m Transport-forgotten-kernel-cone", :exit 0}],
+    :commit "cb058a69d2e21c2f5506e52582e69d24faf6ad62",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path
+     "/tmp/manifold_fundamental_class_forget_snake_kernel_tau1_transport.lean",
+     :sha256
+     "47afb55b253d7f699d2702ff4083622f3bce7f1bcc7168851775c91a7aeaa1f7"},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :declaration
+     "ConstructionTargets.ManifoldFundamentalClass.forgetIntModulesSnakeInput_transportedKernelτ₁"},
+    :row
+    :routes-2026-10-11-manifold-forget-snake-transported-kernel-tau1-topo3-r1,
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/integral-open-disk-connecting-naturality/snake-input-transported-kernel-tau1",
@@ -22977,14 +23037,18 @@
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.forgetIntModulesSnakeInput_transportedKernelτ₁",
     :reported-by
-    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+     :routes-2026-10-11-manifold-forget-snake-transported-kernel-tau1-topo3-r1],
     :type
     "forall (S : ShortComplex.SnakeInput (ModuleCat ℤ)), IsLimit ((Cone.postcompose (forgetIntModulesParallelPairZeroIso S.v₁₂.τ₁).hom).obj (forgetIntModules.mapCone (KernelFork.ofι S.v₀₁.τ₁ S.w₀₂_τ₁)))",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in
+    :routes-2026-10-11-manifold-forget-snake-transported-kernel-tau1-topo3-r1},
    :id :lemma-mfclass-forget-snake-transported-kernel-tau1,
    :kind :lemma,
-   :depends-on [:lemma-mfclass-forget-parallel-pair-zero-iso],
+   :depends-on
+   [:lemma-mfclass-forget-parallel-pair-zero-iso
+    :lemma-mfclass-forget-snake-preserved-kernel-tau1],
    :other-consumers [:t98A02]}],
  :consumer-baselines {},
  :statuses
