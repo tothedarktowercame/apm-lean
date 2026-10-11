@@ -1733,6 +1733,51 @@ theorem frozenLbar_factorization :
   ext p <;> simp [frozenLbar, lowerShear, shearY]
   module
 
+/-- Functoriality of the concrete degree-two singular-homology map, exposed
+without expanding the fixed integral coordinate. -/
+theorem frozenH2Map_comp (g f : C(FrozenTorus, FrozenTorus)) :
+    HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularSubdivision.singularPostcomposition
+          (g.comp f)) 2 =
+      HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularSubdivision.singularPostcomposition f) 2 ≫
+        HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularSubdivision.singularPostcomposition g) 2 := by
+  rw [← ConstructionTargets.SingularSubdivision.singularPostcomposition_comp,
+    HomologicalComplex.homologyMap_comp]
+
+/-- Degree-two homology sees the determinant-one factor as the two swap maps
+with the `(1,-1)` shear between them. -/
+theorem lowerShear_H2_map :
+    HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularSubdivision.singularPostcomposition
+          lowerShear) 2 =
+      HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularSubdivision.singularPostcomposition
+            swapTorus) 2 ≫
+        HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularSubdivision.singularPostcomposition
+            (shearY 1 (-1))) 2 ≫
+        HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularSubdivision.singularPostcomposition
+            swapTorus) 2 := by
+  rw [lowerShear_factorization, frozenH2Map_comp, frozenH2Map_comp]
+  simp only [Category.assoc]
+
+/-- The determinant-three factorization after applying degree-two singular
+homology. -/
+theorem frozenLbar_H2_map :
+    HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularSubdivision.singularPostcomposition
+          frozenLbar) 2 =
+      HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularSubdivision.singularPostcomposition
+            lowerShear) 2 ≫
+        HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularSubdivision.singularPostcomposition
+            (shearY 3 1)) 2 := by
+  rw [frozenLbar_factorization, frozenH2Map_comp]
+
 #print axioms frozenTorusH2GroupIsoInt
 #print axioms frozenYCover
 #print axioms frozenYCoverUHomeomorph
