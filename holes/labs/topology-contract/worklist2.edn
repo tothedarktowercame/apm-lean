@@ -79283,23 +79283,29 @@
   {:consumer :t97A04,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 8,
+   :stop-count 9,
    :review-finding
    "program STOP commits nothing new since the last :program-history entry: evidence commit bb0f0f77d8953dc78dd564e000f3d4a5b29d0894 exactly equals history job 5",
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Prove summand preservation; apply folded degrees; then B6-B11.",
+    "Prove two-circle shear preserves summands; apply folded degrees; then B6-B11.",
     :outcome :stop,
     :warnings ["Main: 2 placeholders."],
     :missing-theorems
     [{:name
-      "ConstructionTargets.T97A04Closure.shearYOverlapCoordinateMap_eq_twoCircle",
-      :type "production coordinate=two-circle conjugate",
+      "ConstructionTargets.T97A04Closure.circleSumInl_H1_coordinate",
+      :type "left inclusion is biprod.inl",
       :status :proved,
       :consumers [:t97A04],
-      :depends-on
-      ["ConstructionTargets.T97A04Closure.shearY_productionIntersectionMap_eq_overlap"],
+      :depends-on [],
+      :area "mv-connecting-naturality"}
+     {:name
+      "ConstructionTargets.T97A04Closure.circleSumInr_H1_coordinate",
+      :type "right inclusion is biprod.inr",
+      :status :proved,
+      :consumers [:t97A04],
+      :depends-on [],
       :area "mv-connecting-naturality"}
      {:name
       "ConstructionTargets.T97A04Closure.shearY_overlap_coordinate_components",
@@ -79307,12 +79313,12 @@
       :status :partial,
       :consumers [:t97A04],
       :depends-on
-      ["ConstructionTargets.T97A04Closure.shearYOverlapCoordinateMap_eq_twoCircle"
-       "ConstructionTargets.T97A04Closure.twoCircleOverlapShearLeftFold_H1_coordinate"],
+      ["ConstructionTargets.T97A04Closure.circleSumInl_H1_coordinate"
+       "ConstructionTargets.T97A04Closure.circleSumInr_H1_coordinate"],
       :area "mv-connecting-naturality"}],
     :statement-hashes
     {:registry "131/0",
-     :closure "2aabc6384cb3f0a30c82b8b5f487dbf468955997",
+     :closure "cf793ead75eb9a7bf7da9bef94181f9857af4251",
      :blueprint "c419a895cb4ede2acc1cb6bc5c7536344ba63df4"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
@@ -79325,28 +79331,16 @@
      {:cmd "lake env lean problems/t97A04/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "Main placeholder count", :exit 0, :output "2"}
-     {:cmd "git show --check bab182b96", :exit 0}],
+     {:cmd "git show --check 36cd0baac", :exit 0}],
     :diagnostic-history
     [{:cmd "closure compile",
       :exit 1,
-      :finding "Added import; fixed association."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791736183864-5609-456daf00",
-     :commands
-     ["git show/diff/check bab182b96"
-      "lake env lean ConstructionTargets/t97A04Closure.lean"
-      "lake env lean problems/t97A04/lean/Main.lean"
-      "statement-registry check/fingerprint"
-      "git-show hash/placeholder checks"],
-     :finding
-     "PASS: bab182b9 is new after history a649c7e8; scope/blob match. Two strict-square conjugations correctly transport the production overlap map into the disjoint-circle H1 biproduct coordinate, consistently oriented as inv-map-hom. Lean gates compile with standard axioms only; registry 131/0; frozen hash unchanged ca1b2cb3; closure 0/Main 2 placeholders. Summand preservation, folded degrees, and B6-B11 remain listed."},
-    :commit "bab182b9607d09eb3d7609f996f46090ee86fb11",
+      :finding "Used injection coordinates."}],
+    :commit "36cd0baac5cde95309a63dab0408b58e96aca93e",
     :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79845,7 +79839,9 @@
     :lemma-constructiontargets-t97a04closure-twocircleoverlapshearrightfold-h1-coordinate
     :lemma-constructiontargets-t97a04closure-sheary-productionintersectionmap-range
     :lemma-constructiontargets-t97a04closure-sheary-productionintersectionmap-eq-overlap
-    :lemma-constructiontargets-t97a04closure-shearyoverlapcoordinatemap-eq-twocircle],
+    :lemma-constructiontargets-t97a04closure-shearyoverlapcoordinatemap-eq-twocircle
+    :lemma-constructiontargets-t97a04closure-circlesuminl-h1-coordinate
+    :lemma-constructiontargets-t97a04closure-circlesuminr-h1-coordinate],
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
@@ -80260,4 +80256,44 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-t97a04closure-sheary-productionintersectionmap-eq-overlap],
+   :other-consumers []}
+  {:consumer :t97A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T97A04Closure.circleSumInl_H1_coordinate",
+    :type "left inclusion is biprod.inl"},
+   :lemma
+   {:name
+    "ConstructionTargets.T97A04Closure.circleSumInl_H1_coordinate",
+    :reported-by [:program-2026-10-11-close-t97a04],
+    :type "left inclusion is biprod.inl",
+    :area "mv-connecting-naturality",
+    :proved-in :program-2026-10-11-close-t97a04},
+   :id
+   :lemma-constructiontargets-t97a04closure-circlesuminl-h1-coordinate,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T97A04Closure.circleSumInr_H1_coordinate",
+    :type "right inclusion is biprod.inr"},
+   :lemma
+   {:name
+    "ConstructionTargets.T97A04Closure.circleSumInr_H1_coordinate",
+    :reported-by [:program-2026-10-11-close-t97a04],
+    :type "right inclusion is biprod.inr",
+    :area "mv-connecting-naturality",
+    :proved-in :program-2026-10-11-close-t97a04},
+   :id
+   :lemma-constructiontargets-t97a04closure-circlesuminr-h1-coordinate,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}]}
