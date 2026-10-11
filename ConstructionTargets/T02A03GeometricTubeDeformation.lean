@@ -1471,6 +1471,26 @@ theorem zeroHeightCoreNormalDetour_im_ne_zero_of_interior
       linarith
     · exact hwim
 
+theorem zeroHeightEndpointAvoidance_coreNormalDetour
+    (p : RightTubeMinusLeftCore) :
+    rightTubeCorePolarReconstruction (1 : Circle)
+          (zeroHeightCoreNormalDetour 0 p) ∉ Set.range
+            ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_leftCore ∧
+      rightTubeCorePolarReconstruction (rightTubeCoreAngularCoordinate p)
+          (zeroHeightCoreNormalDetour 1 p) ∉ Set.range
+            ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_leftCore := by
+  obtain ⟨hn0, hn1, hmid⟩ := zeroHeightCoreNormalDetour_endpoints_midpoint p
+  constructor
+  · rw [hn0, rightCorePolarReconstruction_circleMeridian]
+    exact (ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_circleMeridian_mem_rightTubeMinusLeftCore
+      (rightTubeMeridianCoordinate p)).2
+  · rw [hn1]
+    rw [show rightTubeCorePolarReconstruction (rightTubeCoreAngularCoordinate p)
+        (rightTubeCoreNormalComplex p.1) = p.1 by
+      simpa [rightTubeCoreAngularCoordinate] using
+        rightTubeCorePolarReconstruction_self p.1 p.2.1]
+    exact p.2.2
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -1527,3 +1547,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.continuous_zeroHeightCoreNormalDetour
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCoreNormalDetour_radius_le
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCoreNormalDetour_im_ne_zero_of_interior
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightEndpointAvoidance_coreNormalDetour
