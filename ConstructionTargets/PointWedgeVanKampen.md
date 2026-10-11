@@ -197,3 +197,11 @@ global functor restricted to the left cover maps every morphism exactly as
 the actual-span left functor.  Only the right restriction remains; unlike the
 left component it contains the overlap glue comparison and is not
 definitionally the identity.
+
+The right restriction is now solved without erasing that comparison.
+`genericPointWedgeIdentityGlobalRightRestrictionElement` names each counit
+component, and `genericPointWedgeIdentityGlobalRightRestriction_map` rewrites
+every reconstructed right-piece map as the actual-span map conjugated by its
+two endpoint components.  The order is the one induced by `SingleObj`
+composition.  The remaining calculation is to evaluate those components at
+the wedge-point representative and align the literal leg lifts.

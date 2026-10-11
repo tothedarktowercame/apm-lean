@@ -584,6 +584,43 @@ theorem genericPointWedgeIdentityGlobalLeftRestriction_map
     _ = 𝟙 _ ≫ _ := h
     _ = _ := Category.id_comp _
 
+/-- The right restriction component, retained as an explicit element because
+it contains the overlap glue comparison. -/
+def genericPointWedgeIdentityGlobalRightRestrictionElement
+    (z : FundamentalGroupoid (genericPointWedgeRightPiece x₀ y₀ N)) :
+    genericPointWedgeFreeProduct x₀ y₀ :=
+  (genericPointWedgeIdentityGlobalRightRestrictionIso
+    x₀ y₀ M N hM hN hy hx cM cN).hom.app z
+
+/-- Naturality solved for the reconstructed right-piece map.  The two
+endpoint restriction components are deliberately visible. -/
+theorem genericPointWedgeIdentityGlobalRightRestriction_map
+    {a b : FundamentalGroupoid (genericPointWedgeRightPiece x₀ y₀ N)}
+    (f : a ⟶ b) :
+    (genericPointWedgeIdentityGlobalFunctor
+        x₀ y₀ M N hM hN hy hx cM cN).map
+          ((FundamentalGroupoid.map
+            (TwoOpenDescentRestriction.coverPieceInclusion
+              (U := genericLeftOpen x₀ y₀ M)
+              (V := genericRightOpen x₀ y₀ N) false)).map f) =
+      (genericPointWedgeIdentityGlobalRightRestrictionElement
+          x₀ y₀ M N hM hN hy hx cM cN b)⁻¹ *
+        (genericPointWedgeIdentityActualSpan
+          x₀ y₀ M N hM hN hy hx cM cN).right.map f *
+        genericPointWedgeIdentityGlobalRightRestrictionElement
+          x₀ y₀ M N hM hN hy hx cM cN a := by
+  have h := genericPointWedgeIdentityGlobalRightRestriction_naturality
+    x₀ y₀ M N hM hN hy hx cM cN f
+  change genericPointWedgeIdentityGlobalRightRestrictionElement
+      x₀ y₀ M N hM hN hy hx cM cN b * _ = _ *
+    genericPointWedgeIdentityGlobalRightRestrictionElement
+        x₀ y₀ M N hM hN hy hx cM cN a at h
+  apply mul_left_cancel (a :=
+    genericPointWedgeIdentityGlobalRightRestrictionElement
+      x₀ y₀ M N hM hN hy hx cM cN b)
+  rw [h]
+  simp [mul_assoc]
+
 omit [PathConnectedSpace X] [PathConnectedSpace Y] in
 @[simp] theorem genericPointWedgeIdentityRepresentation_inl
     (g : genericPointWedgeLeftGroup x₀) :
@@ -1533,6 +1570,8 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeIdentityGlobalRightRestriction_naturality
 #print axioms genericPointWedgeIdentityGlobalLeftRestriction_hom_app
 #print axioms genericPointWedgeIdentityGlobalLeftRestriction_map
+#print axioms genericPointWedgeIdentityGlobalRightRestrictionElement
+#print axioms genericPointWedgeIdentityGlobalRightRestriction_map
 #print axioms genericPointWedgeIdentityRepresentation_inl
 #print axioms genericPointWedgeIdentityRepresentation_inr
 #print axioms genericPointWedgeIdentityPointSpan_left
