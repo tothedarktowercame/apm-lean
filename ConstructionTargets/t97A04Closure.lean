@@ -234,6 +234,16 @@ theorem overlapHomotopyEquivTwoCircles_inv_fst (q : Circle ⊕ Circle) :
     twoCirclesToOverlap, leftOpenHomotopyEquivCircle,
     leftOpenProductHomeomorph, circleTimesNorthComplementHomotopyEquiv] using h
 
+theorem twoCircleFold_boolTimesCircle (p : Bool × Circle) :
+    twoCircleFold (boolTimesCircleHomeomorphTwoCircles p) = p.2 := by
+  rcases p with ⟨b, z⟩
+  cases b <;> rfl
+
+theorem overlapHomotopyEquivTwoCircles_fold (p : Overlap) :
+    twoCircleFold (overlapHomotopyEquivTwoCircles.toFun p) = p.1.1 := by
+  change twoCircleFold (boolTimesCircleHomeomorphTwoCircles (_, p.1.1)) = p.1.1
+  exact twoCircleFold_boolTimesCircle _
+
 /-- The left overlap-circle summand followed by the transported shear. -/
 def circleSumInl : C(Circle, Circle ⊕ Circle) :=
   ⟨Sum.inl, continuous_inl⟩
@@ -892,6 +902,8 @@ theorem shearY_overlap_coordinate_of_degree_components (a b : ℤ)
 #print axioms twoCircleOverlapShearLeftFold_H1
 #print axioms twoCircleOverlapShearRightFold_H1
 #print axioms overlapHomotopyEquivTwoCircles_inv_fst
+#print axioms twoCircleFold_boolTimesCircle
+#print axioms overlapHomotopyEquivTwoCircles_fold
 #print axioms circleZPow
 #print axioms circleAffine
 #print axioms circleAffineHomotopy
