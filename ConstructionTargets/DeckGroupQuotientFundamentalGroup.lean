@@ -316,8 +316,9 @@ theorem orbitEndpointMonodromy_injective
       _ = Path.Homotopic.Quotient.refl (q x) := rfl
   · exact fun ha ↦ ha.symm ▸ map_one (orbitEndpointMonodromy free x)
 
-/-- The fundamental group of the quotient of a simply connected space by a
-free properly discontinuous action is the acting group. -/
+/-- The canonical endpoint-monodromy equivalence identifies the fundamental
+group of the quotient of a simply connected space by a free properly
+discontinuous action with the acting group. -/
 theorem freeProperlyDiscontinuousQuotient_fundamentalGroupEquiv
     {G X : Type*} [Group G] [TopologicalSpace X] [MulAction G X]
     [ContinuousConstSMul G X] [ProperlyDiscontinuousSMul G X]

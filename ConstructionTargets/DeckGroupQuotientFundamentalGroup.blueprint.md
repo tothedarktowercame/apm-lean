@@ -76,7 +76,7 @@ lean: `orbitProjection_existsUnique_lift` :
 
 uses: B1, Mathlib `IsCoveringMap.existsUnique_continuousMap_lifts`
 
-status: planned
+status: proved
 
 Apply `existsUnique_continuousMap_lifts` to the orbit projection as both the
 map being lifted and the covering map, with domain `A := X`, basepoint `x`,
@@ -96,7 +96,7 @@ lean: `orbitMonodromy_deck_equivariant` :
 
 uses: B1, B2, B4, Mathlib uniqueness of path lifts
 
-status: planned
+status: proved
 
 Represent `γ` by a path. Use B4 to identify translation by `g` as the unique
 global lift of the orbit projection with value `g • x` at `x`. Composing that
@@ -114,7 +114,7 @@ lean: `orbitEndpointMonodromyRaw_mul` :
 uses: B3, B5, Mathlib `monodromy_trans_apply`,
 `CategoryTheory.End.mul_def`
 
-status: planned
+status: proved
 
 Expand multiplication in the fundamental group using `End.mul_def`; it is
 the path `b` followed by `a`. Apply `monodromy_trans_apply`. The first lift
@@ -129,7 +129,7 @@ lean: `orbitEndpointMonodromy` :
 
 uses: B3, B6
 
-status: planned
+status: proved
 
 Define the value on `a` to be `(orbitEndpointMonodromyRaw free x a)⁻¹`.
 B3's identity law proves `map_one`; B6 and `mul_inv_rev` prove `map_mul` in
@@ -143,7 +143,7 @@ lean: `orbitEndpointMonodromy_surjective` :
 uses: B2, B7, `SimplyConnectedSpace`'s `PathConnectedSpace` instance,
 Mathlib `IsCoveringMap.monodromy_map`
 
-status: planned
+status: proved
 
 For `g : G`, choose a path in `X` from `x` to `g⁻¹ • x`. Project it to
 the orbit quotient; its endpoints become equal, so it defines a based loop.
@@ -159,7 +159,7 @@ lean: `orbitEndpointMonodromy_injective` :
 uses: B1, B2, B7, Mathlib `IsCoveringMap.injective_path_homotopic_map`,
 `SimplyConnectedSpace.paths_homotopic`
 
-status: planned
+status: proved
 
 It suffices to prove the kernel is trivial. If B7 maps a loop to `1`, its raw
 coordinate is `1`, so B2 identifies the endpoint of its lift with `x`. The
@@ -176,7 +176,7 @@ lean: `freeProperlyDiscontinuousQuotient_fundamentalGroupEquiv` :
 
 uses: B4, B7, B8, B9
 
-status: planned
+status: proved
 
 Package B7 with B8 and B9 using `MulEquiv.ofBijective`. This uses every final
 hypothesis: continuity/proper discontinuity/local compactness/Hausdorffness in

@@ -61,7 +61,7 @@ identifies the original quotient loop with the constant loop.
 `freeProperlyDiscontinuousQuotient_fundamentalGroupEquiv` implements
 blueprint B10 and the repaired final interface. It packages
 `orbitEndpointMonodromy` with B8 surjectivity and B9 injectivity using
-`MulEquiv.ofBijective`.
+`MulEquiv.ofBijective`; the blueprint now records B10 as proved.
 
 ## Refutation of the frozen final statement
 
