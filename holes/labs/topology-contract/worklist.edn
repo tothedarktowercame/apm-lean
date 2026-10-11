@@ -116186,13 +116186,28 @@
     {:commit "e718d3d5477de7d1630ef32995973fbd8e996aa7",
      :next
      "Implement B4, classifying verticalParam fibers using separatingMap and the equality of cosine-sine coordinates."},
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791720490725-5308-d84e8836",
+     :commands
+     ["git show e718d3d5477de7d1630ef32995973fbd8e996aa7 --stat and scoped diff"
+      "git diff-tree --name-status e718d3d5477de7d1630ef32995973fbd8e996aa7"
+      "git diff --quiet recorded commit against scoped working files"
+      "sha256sum recorded source and blueprint"
+      "git diff --check recorded commit"
+      "comment-stripped placeholder count"
+      "python3 scripts/statement-registry.py check"
+      "lake env lean problems/t95J02/lean/Main.lean"],
+     :finding
+     "PASS: this STOP adds compiled, placeholder-free B3 progress after program-history commit 066b6bdc352d209e1b15ae5f53a357b520be4775. verticalParam is continuous into the exact frozen CircleB subtype, and verticalParam_add_int proves invariance for positive and negative integers from the frozen vertical quotient identity with the stated orientation. Scope and recorded hashes reproduce, registry reports 131 matches, and the module compiles with standard axioms. The three pre-existing B7-B9 placeholders remain exactly the declared residual."},
     :commit "e718d3d5477de7d1630ef32995973fbd8e996aa7",
     :changed-paths
     ["problems/t95J02/lean/Main.lean"
      "ConstructionTargets/t95J02Closure.blueprint.md"],
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t95J02/lean/Main.lean"
     "problems/t95J02/status.json"
@@ -116208,7 +116223,7 @@
     ["lake env lean problems/t95J02/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Program milestone completed. Blueprint nodes B1 and B2 are proved: the trigonometric separating coordinate is invariant under both Klein generators, extends across Relation.EqvGen, and descends to a continuous map on the frozen quotient. Nodes B3-B9 remain for later program jobs.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Program milestone completed. Blueprint node B3 is proved: verticalParam is continuous and invariant under translation by every integer, including negative integers, using the frozen vertical quotient identity. B4-B9 remain for later jobs.",
    :id :program-2026-10-11-close-t95j02,
    :kind :final-adapter,
    :campaign-priority 41,
@@ -116224,7 +116239,11 @@
     {:job 5,
      :commit "066b6bdc352d209e1b15ae5f53a357b520be4775",
      :reason
-     "Program milestone completed. Blueprint nodes B1 and B2 are proved: the trigonometric separating coordinate is invariant under both Klein generators, extends across Relation.EqvGen, and descends to a continuous map on the frozen quotient. Nodes B3-B9 remain for later program jobs."}]}
+     "Program milestone completed. Blueprint nodes B1 and B2 are proved: the trigonometric separating coordinate is invariant under both Klein generators, extends across Relation.EqvGen, and descends to a continuous map on the frozen quotient. Nodes B3-B9 remain for later program jobs."}
+    {:job 6,
+     :commit "e718d3d5477de7d1630ef32995973fbd8e996aa7",
+     :reason
+     "Program milestone completed. Blueprint node B3 is proved: verticalParam is continuous and invariant under translation by every integer, including negative integers, using the frozen vertical quotient identity. B4-B9 remain for later jobs."}]}
   {:consumer :t92J08,
    :phase :implementation,
    :state :open,
@@ -117084,7 +117103,7 @@
    :other-consumers []}
   {:consumer :t95J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t95J02Closure.verticalParam_add_int",
@@ -117096,7 +117115,9 @@
     :type
     "For every real y and integer n, verticalParam (y + n) = verticalParam y",
     :area "klein-bottle-homology",
-    :proved-in :program-2026-10-11-close-t95j02},
+    :proved-in :program-2026-10-11-close-t95j02,
+    :banked-by :program-2026-10-11-close-t95j02,
+    :banked-commit "e718d3d5477de7d1630ef32995973fbd8e996aa7"},
    :id :lemma-t95j02closure-verticalparam-add-int,
    :kind :lemma,
    :depends-on [],
