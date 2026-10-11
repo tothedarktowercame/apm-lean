@@ -12958,8 +12958,88 @@
   {:consumer :t00J02,
    :implements-lemma
    :lemma-mfclass-integral-open-disk-component-homology-maps,
+   :evidence
+   {:placeholder-delta
+    {:t00J02 {:before 1, :after 1, :delta 0},
+     :t98A02 {:before 1, :after 1, :delta 0}},
+    :residual
+    "Identify the mapped coefficient connecting morphism through the relevant mapHomologyIso transports, then rewrite the raw naturality square into the named open-disk comparison square; radial and sphere compatibility remain downstream.",
+    :gates
+    {:fixture-compile :pass,
+     :module-compile :pass,
+     :target-build :pass,
+     :statement-registry "131 registered statements match, 0 do not",
+     :worktree-clean true},
+    :outcome :done-unreviewed,
+    :warnings
+    ["lake build replayed pre-existing linter warnings in dependencies"],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.ManifoldFundamentalClass.integralOpenDiskComparison_component_homology_maps",
+      :type
+      "forall (k : Nat), (integralOpenDiskPunctureHomologyComparison k).hom = (((ConstructionTargets.CoefficientH0.SingularChains Int (TopCat.of (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2)))).sc (k + 1)).mapHomologyIso forgetIntModules).inv ≫ HomologicalComplex.homologyMap (integralOpenDiskPairShortComplexComparison k).τ₁ (k + 1) ∧ (integralOpenDiskRelativeHomologyComparison k).hom = (((ConstructionTargets.CoefficientRelativeSmall.relativeChains Int (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2))).sc (k + 2)).mapHomologyIso forgetIntModules).inv ≫ HomologicalComplex.homologyMap (integralOpenDiskPairShortComplexComparison k).τ₃ (k + 2)",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on
+      ["ConstructionTargets.ManifoldFundamentalClass.integralOpenDiskPunctureHomologyComparison"
+       "ConstructionTargets.ManifoldFundamentalClass.integralOpenDiskRelativeHomologyComparison"
+       "ConstructionTargets.ManifoldFundamentalClass.integralOpenDiskPairShortComplexComparison"],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes
+    {:fixture
+     "c4bfb8a968a01ba57be0b0be395695877b17df4261fac5a024a9e5408dbab505",
+     :declaration
+     "b381717bd14e41ca0dc8d4c4afb0613044a1ee4aaff8b3d57417afad51e6a4c9"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/manifold_fundamental_class_integral_open_disk_component_homology_maps.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/manifold_fundamental_class_integral_open_disk_component_homology_maps.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "comment-stripped placeholder count for t00J02 and t98A02",
+      :exit 0}
+     {:cmd "source theorem sha256", :exit 0}
+     {:cmd "rg forbidden placeholders and axioms in scope and fixture",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git status --porcelain", :exit 0}],
+    :diagnostic-history [],
+    :representation
+    {:source
+     "The raw τ₁ and τ₃ component homology maps of the coefficient-to-production open-disk short-complex morphism",
+     :target
+     "The named puncture and relative open-disk comparison isomorphisms, including their source homology-preservation transports",
+     :direction
+     "Exact conjunction of morphism equalities from each named comparison representation to the corresponding preservation-transport followed by raw component homology map"},
+    :commit "ad95b27aa20a99a3f677c8cf63df0e2586522dc8",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path
+     "/tmp/manifold_fundamental_class_integral_open_disk_component_homology_maps.lean",
+     :sha256
+     "c4bfb8a968a01ba57be0b0be395695877b17df4261fac5a024a9e5408dbab505"},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :declaration
+     "ConstructionTargets.ManifoldFundamentalClass.integralOpenDiskComparison_component_homology_maps"},
+    :row
+    :routes-2026-10-11-manifold-integral-open-disk-component-homology-maps-topo3-r1,
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/integral-open-disk-connecting-naturality/component-homology-maps",
@@ -17467,11 +17547,13 @@
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.integralOpenDiskComparison_component_homology_maps",
     :reported-by
-    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+     :routes-2026-10-11-manifold-integral-open-disk-component-homology-maps-topo3-r1],
     :type
     "forall (k : ℕ), (integralOpenDiskPunctureHomologyComparison k).hom = (((ConstructionTargets.CoefficientH0.SingularChains ℤ (TopCat.of (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2)))).sc (k + 1)).mapHomologyIso forgetIntModules).inv ≫ HomologicalComplex.homologyMap (integralOpenDiskPairShortComplexComparison k).τ₁ (k + 1) ∧ (integralOpenDiskRelativeHomologyComparison k).hom = (((ConstructionTargets.CoefficientRelativeSmall.relativeChains ℤ (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2))).sc (k + 2)).mapHomologyIso forgetIntModules).inv ≫ HomologicalComplex.homologyMap (integralOpenDiskPairShortComplexComparison k).τ₃ (k + 2)",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in
+    :routes-2026-10-11-manifold-integral-open-disk-component-homology-maps-topo3-r1},
    :id :lemma-mfclass-integral-open-disk-component-homology-maps,
    :kind :lemma,
    :depends-on
