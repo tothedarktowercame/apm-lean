@@ -104255,6 +104255,9 @@
   {:bounded-exception
    "This single-consumer comparison is the nearer of the two remaining t93J03 lemmas.",
    :consumer :t93J03,
+   :owner-reopen
+   "reopened: a lemma this row reported missing is now banked",
+   :stop-count 0,
    :review-finding
    "REVISE repeated satisfied prerequisite :routes-2026-10-11-compatible-carrier-component-bridge-103; route must name a new prerequisite or be rewritten",
    :implements-lemma
@@ -104349,7 +104352,7 @@
       "9c7a282a44b4894670dcafbfde89dde71f914faa2a8e75a21671e46c13ef470c"},
      :seat "topo-4"}},
    :phase :probe,
-   :state :needs-owner,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-aabb-square-polygon-presentation-equivalence",
@@ -104374,6 +104377,7 @@
    :routes-2026-10-11-klein-aabb-square-polygon-presentation-equivalence-83,
    :kind :representation-comparison,
    :area "polygon-quotient-identification",
+   :fail-count 0,
    :depends-on
    [:lemma-kleinsquareeqvgencasesiff-eqvgen-iff-cases
     :routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40
@@ -104836,7 +104840,9 @@
    "Use counit naturality and the identity component to prove the literal inl/inr leg equations, fill TwoOpenGroupEquivalenceCoordinates, and specialize to the generic point wedge.",
    :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
   {:consumer :t99J01,
-   :stop-count 2,
+   :owner-reopen
+   "reopened: a lemma this row reported missing is now banked",
+   :stop-count 0,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma
@@ -104896,7 +104902,7 @@
      "acdc06369d70b171b3c2c1f70a56ad199e7b7f72be274a4ce3930f77b5d84c0f"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/TwoOpenFreeProductMappingCompositeCounitIdentity.lean"],
    :dag-node
@@ -104920,7 +104926,7 @@
    :id :routes-2026-10-11-composite-counit-component-identity-91,
    :kind :reusable-theorem,
    :area "fundamental-group-wedge-of-circles",
-   :fail-count 1,
+   :fail-count 0,
    :depends-on
    [:routes-2026-10-11-inverse-identity-counit-component-identity-90],
    :current-residual
@@ -105690,6 +105696,19 @@
       :exit 1,
       :finding
       "After proof-irrelevance rewriting, the goal reduced to explicit.getIso.hom = 𝟙, exposing that Classical.choice from Nonempty does not reduce to Iso.refl."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791701081577-4521-6f269bec",
+     :commands
+     ["git show, git diff-tree, and git diff-tree --check 0b57754390072b29734bc3c22a5cdd2489a566da"
+      "sha256sum recorded source and /tmp/connector-single-object-counit-base-identity.lean"
+      "lake build ConstructionTargets.ConnectorSingleObjectCounitBaseIdentity"
+      "lake env lean /tmp/connector-single-object-counit-base-identity.lean"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped placeholder census for the five consumers"],
+     :finding
+     "PASS: valid STOP after committed compiled progress; the sole scoped file matches the recorded blob, source hash 847425f0b616775e147ce3946d25674f3a5d2fa299dd593f8b1918b852e3dbff and fixture hash 473138e897d3663a3afd075c36a571eb01c5e271c31f142d1a29768d0d0f5b98 reproduce, the counit component is definitionally reduced to objObjPreimageIso.hom and the requested identity is equivalent to that chosen morphism being identity, both reduction theorems use standard axioms, the fixture axiom has the exact frozen hom-component equation at SingleObj.star, consumer placeholder counts remain 1 1 1 3 1, all 131 statements match, and the remaining normalized-equivalence theorem is explicitly listed"},
     :commit "0b57754390072b29734bc3c22a5cdd2489a566da",
     :changed-paths
     ["ConstructionTargets/ConnectorSingleObjectCounitBaseIdentity.lean"],
@@ -105700,7 +105719,7 @@
      :status :self-axiomatized},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/ConnectorSingleObjectCounitBaseIdentity.lean"],
    :dag-node
@@ -105841,7 +105860,7 @@
       "For every connector system, the counit of connectorSingleObjEquivalence at the unique target object has identity hom component."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/connector-single-object-counit-base-identity",
@@ -111773,7 +111792,7 @@
    :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
   {:consumer :t99J01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -111788,7 +111807,10 @@
      :routes-2026-10-11-connector-single-object-counit-base-identity-97],
     :type
     "For every connector system used by TwoOpenPointSpanComparison, the counit of connectorSingleObjEquivalence at the identity target functor has identity component at SingleObj.star.",
-    :area "fundamental-group-wedge-of-circles"},
+    :area "fundamental-group-wedge-of-circles",
+    :banked-by
+    :routes-2026-10-11-connector-single-object-counit-base-identity-105,
+    :banked-commit "0b57754390072b29734bc3c22a5cdd2489a566da"},
    :id
    :lemma-connectedgroupoidsingleobjequivalence-connectorsingleobjequivalence-counit-base-,
    :kind :lemma,
@@ -112415,7 +112437,7 @@
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -112423,7 +112445,10 @@
    :lemma
    {:name
     "ConstructionTargets.KleinCompatibleCarrierComponentBridge.image_diskClass_eq_squareClass",
-    :reported-by []},
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/KleinCompatibleCarrierComponentBridge.lean"]},
    :id
    :lemma-constructiontargets-kleincompatiblecarriercomponentbridge-image-diskclass-eq-squ,
    :kind :lemma,
@@ -112431,7 +112456,7 @@
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -112439,7 +112464,10 @@
    :lemma
    {:name
     "ConstructionTargets.KleinCompatibleCarrierComponentBridge.exists_distinct_related_iff",
-    :reported-by []},
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/KleinCompatibleCarrierComponentBridge.lean"]},
    :id
    :lemma-constructiontargets-kleincompatiblecarriercomponentbridge-exists-distinct-relate,
    :kind :lemma,
