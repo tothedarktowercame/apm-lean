@@ -1841,6 +1841,33 @@ theorem rotatedEndpointWaypoint_arrival_ne_zero_exists :
     linarith
   · exact rightTubeCorePlanarComplex_ne_zero p.1 p.2.1 hv
 
+noncomputable def rotatedEndpointWaypoint
+    (p : RightTubeMinusLeftCore) : ℂ :=
+  -Complex.I * rightTubeCorePlanarComplex p.1
+
+theorem rotatedEndpointWaypoint_departure_eq_zero_iff
+    (t : unitInterval) (p : RightTubeMinusLeftCore) :
+    (((1 - 2 * (t : ℝ) : ℝ) : ℂ) +
+        ((2 * (t : ℝ) : ℝ) : ℂ) *
+          rotatedEndpointWaypoint p) = 0 ↔
+      (rightTubeCorePlanarComplex p.1).re = 0 ∧
+        1 - 2 * (t : ℝ) +
+          2 * (t : ℝ) * (rightTubeCorePlanarComplex p.1).im = 0 := by
+  constructor
+  · intro hz
+    have hre := congrArg Complex.re hz
+    have him := congrArg Complex.im hz
+    simp [rotatedEndpointWaypoint, Complex.mul_re, Complex.mul_im] at hre him
+    rcases him with htzero | hvre
+    · subst t
+      norm_num at hre
+    · exact ⟨hvre, hre⟩
+  · rintro ⟨hvre, hre⟩
+    apply Complex.ext
+    · simpa [rotatedEndpointWaypoint, Complex.mul_re, Complex.mul_im]
+        using hre
+    · simp [rotatedEndpointWaypoint, Complex.mul_re, Complex.mul_im, hvre]
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -1910,3 +1937,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularArrivalCollision_negative_endpoint
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularArrivalLeg_ne_zero_of_negative_endpoint_cross
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_arrival_ne_zero_exists
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_departure_eq_zero_iff
