@@ -104770,7 +104770,7 @@
    :stop-condition
    "End only when every topo1 problem is closed or a row is genuinely refuted.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance

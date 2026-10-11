@@ -17,7 +17,13 @@
 (defn owner-blocked? [dependency seen]
   (when-not (seen dependency)
     (let [item (by-id dependency)]
+      ;; A :backlog lemma is never scheduled by itself; only a strategy
+      ;; checkpoint elects a row for it. So a checkpoint waiting on work that
+      ;; waits on one must run, exactly as for :needs-owner. On 2026-10-11
+      ;; topo1 paused at 04:31 with 74 backlog lemmas: its checkpoint waited
+      ;; on a row blocked on an unelected lemma.
       (or (= :needs-owner (:state item))
+          (and (= :lemma (:kind item)) (= :backlog (:state item)))
           (and (= :blocked (:state item))
                (some #(owner-blocked? % (conj seen dependency))
                      (:depends-on item)))))))
