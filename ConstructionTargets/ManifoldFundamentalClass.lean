@@ -1546,6 +1546,23 @@ noncomputable def integralOpenDiskPairShortComplexComparison (k : ℕ) :
       (integralRelativeChainsComparisonWithTransport_projection
         (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2))).symm
 
+/-- Forgetting the integer-module structure preserves the coefficient pair
+short exact sequence for the punctured unit disk. -/
+theorem integralOpenDiskCoefficientPairShortExact (k : ℕ) :
+    ((CoefficientPairSequence.sequence ℤ
+      (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2))).map
+        (forgetIntModules.mapHomologicalComplex
+          (ComplexShape.down ℕ))).ShortExact := by
+  apply HomologicalComplex.shortExact_of_degreewise_shortExact
+  intro i
+  let h := CoefficientPairSequence.shortExact ℤ
+    (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2))
+  letI := h.mono_f
+  letI := h.epi_g
+  exact (h.map
+    (HomologicalComplex.eval (ModuleCat ℤ) (ComplexShape.down ℕ) i)).map_of_exact
+      forgetIntModules
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -1640,5 +1657,6 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralOpenDiskPunctureHomologyComparison
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralOpenDiskPunctureHomologyComparison_hom
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralOpenDiskPairShortComplexComparison
+#print axioms ConstructionTargets.ManifoldFundamentalClass.integralOpenDiskCoefficientPairShortExact
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport_homologyMap_eq_composite
 #print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_transport_homology_factors
