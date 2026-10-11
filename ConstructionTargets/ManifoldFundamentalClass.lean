@@ -1404,6 +1404,52 @@ theorem correctedLocalNormalizationAutomorphism_hom_eq_neg_implies_prefix_model_
   simpa only [productionProjectedChartPrefix, coefficientProjectedChartPrefix,
     coefficientProjectedForwardComposite, Category.assoc] using h
 
+/-- The coefficient model normalization exposed as its connecting, radial,
+and sphere-normalization factors after forgetting coefficients. -/
+noncomputable def coefficientModelNormalizationComposite (k : ℕ) :=
+  forgetIntModules.map
+      (CoefficientPairSequence.connecting ℤ
+        (CoefficientModelLocal.puncture (k + 2)) (k + 1)) ≫
+  forgetIntModules.map
+      ((CoefficientRadialPair.F ℤ (k + 1)).map
+        (TopCat.ofHom
+          (PuncturedNormedSpaceRadialEquivalence.radialNormalize
+            (CoefficientModelLocal.E (k + 2))))) ≫
+  forgetIntModules.map (CoefficientSphereAntipodal.normalization ℤ k).hom
+
+theorem coefficientModelLocalIso_forget_hom
+    (k : ℕ) :
+    forgetIntModules.map (CoefficientModelLocal.localIso ℤ k).hom =
+      coefficientModelNormalizationComposite k := by
+  unfold coefficientModelNormalizationComposite CoefficientModelLocal.localIso
+    CoefficientModelLocal.radialIso
+  rfl
+
+/-- The forbidden-sign prefix equality with both model normalizations exposed
+as connecting, radial, and sphere factors. -/
+theorem correctedLocalNormalizationAutomorphism_hom_eq_neg_implies_model_factors
+    (k : ℕ) {M : Type} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M) :
+    (correctedLocalNormalizationAutomorphism k x).hom = -𝟙 _ →
+      productionProjectedChartPrefix k x ≫
+          singularPairConnecting
+            (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2)) (k + 1) ≫
+          ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat (k + 1)).obj
+            (AddCommGrpCat.of ℤ)).map
+              (TopCat.ofHom (T02A06DiskRadialComparison.radialNormalizeMap (k + 2))) ≫
+          (SphereHomology.sphereTopHomologyIsoInt (k + 1) (by omega)).hom =
+        coefficientProjectedChartPrefix k x ≫
+          coefficientModelNormalizationComposite k ≫ (-𝟙 _) := by
+  intro hneg
+  have h :=
+    correctedLocalNormalizationAutomorphism_hom_eq_neg_implies_prefix_model_equality
+      k x hneg
+  rw [HigherModelLocalHomology.comparison] at h
+  have he := coefficientModelLocalIso_forget_hom k
+  have heq := congrArg
+    (fun f => coefficientProjectedChartPrefix k x ≫ f ≫ (-𝟙 _)) he
+  exact h.trans (by simpa only [Category.assoc] using heq)
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -1488,5 +1534,8 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.productionProjectedChartPrefix
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientProjectedChartPrefix
 #print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_implies_prefix_model_equality
+#print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientModelNormalizationComposite
+#print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientModelLocalIso_forget_hom
+#print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_implies_model_factors
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport_homologyMap_eq_composite
 #print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_transport_homology_factors
