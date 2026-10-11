@@ -23,6 +23,13 @@ whose translate of the chosen lift is the lifted loop's endpoint, and
 homomorphism should invert this raw coordinate after proving that lifting
 commutes with the deck action.
 
+`orbitProjection_existsUnique_lift` implements blueprint B4. For every
+`g : G`, it identifies the unique global lift of the orbit projection taking
+`x` to `g • x`. It applies Mathlib's global covering-lift theorem with domain
+`X`, so both `SimplyConnectedSpace X` and `LocPathConnectedSpace X` are used
+directly. Blueprint B5 can now compare this lift with deck translation to
+prove monodromy equivariance.
+
 ## Refutation of the frozen final statement
 
 The fixed theorem omits every separation hypothesis. This is not merely a gap
@@ -38,7 +45,7 @@ therefore trivial and cannot be isomorphic to the two-element group.
 counterexample. `freeProperlyDiscontinuousQuotient_fundamentalGroupEquiv_refuted`
 negates the exact universal proposition of the program's frozen final type.
 
-## Work that would remain for a repaired statement
+## Remaining work for the repaired statement
 
 1. Prove that monodromy commutes with the deck action and that raw endpoint
    coordinates reverse multiplication; invert the raw coordinate to package
@@ -50,6 +57,5 @@ negates the exact universal proposition of the program's frozen final type.
 
 Mathlib's construction of local evenly covered neighborhoods from
 `ProperlyDiscontinuousSMul G X` assumes both `LocallyCompactSpace X` and
-`T2Space X`. Adding suitable separation/local compactness hypotheses would
-exclude the counterexample and make the previously listed monodromy program
-meaningful, but changing the registered final type is outside this program.
+`T2Space X`. The repaired final interface includes those hypotheses, excludes
+the counterexample, and supports the monodromy program above.

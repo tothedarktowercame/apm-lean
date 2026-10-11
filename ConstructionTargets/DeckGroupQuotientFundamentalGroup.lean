@@ -72,6 +72,27 @@ noncomputable def orbitQuotientFiberEquiv
     (free : ∀ g : G, ∀ x : X, g • x = x → g = 1) (x : X) (g : G) :
     (orbitQuotientFiberEquiv free x g : X) = g • x := rfl
 
+/-- Every deck translation is the unique global lift of the orbit projection
+that takes the chosen basepoint to the corresponding point of its orbit.  The
+global lifting theorem is where local path-connectedness enters the repaired
+program. -/
+theorem orbitProjection_existsUnique_lift
+    {G X : Type*} [Group G] [TopologicalSpace X] [MulAction G X]
+    [ContinuousConstSMul G X] [ProperlyDiscontinuousSMul G X]
+    [LocallyCompactSpace X] [T2Space X] [SimplyConnectedSpace X]
+    [LocPathConnectedSpace X]
+    (free : ∀ g : G, ∀ x : X, g • x = x → g = 1) (x : X) (g : G) :
+    ∃! F : C(X, X), F x = g • x ∧
+      Quotient.mk (MulAction.orbitRel G X) ∘ F =
+        Quotient.mk (MulAction.orbitRel G X) := by
+  let q : C(X, MulAction.orbitRel.Quotient G X) :=
+    ⟨Quotient.mk (MulAction.orbitRel G X), continuous_quotient_mk'⟩
+  exact (quotientMk_isCoveringMap free).existsUnique_continuousMap_lifts
+    q x (g • x) (by
+      change Quotient.mk (MulAction.orbitRel G X) (g • x) =
+        Quotient.mk (MulAction.orbitRel G X) x
+      exact Quotient.sound ⟨g, rfl⟩)
+
 /-- Endpoint monodromy for the repaired orbit covering, expressed as the
 unique acting-group element carrying the chosen lift `x` to the endpoint of
 the lifted loop. The inverse needed to obtain a homomorphism into `G` is left
@@ -159,6 +180,7 @@ theorem freeProperlyDiscontinuousQuotient_fundamentalGroupEquiv_refuted :
 #print axioms quotientMk_isCoveringMap
 #print axioms quotientCoveringOrbitFiberEquiv
 #print axioms orbitQuotientFiberEquiv
+#print axioms orbitProjection_existsUnique_lift
 #print axioms orbitEndpointMonodromyRaw
 #print axioms orbitEndpointMonodromyRaw_one
 #print axioms indiscreteRegularAction_no_fundamentalGroupEquiv
