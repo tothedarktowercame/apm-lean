@@ -437,6 +437,18 @@ noncomputable def forgetIntegralRelativeCokernelComparison
       (forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ))
       (CoefficientRelativeSmall.subspaceMap ℤ A)
 
+/-- The canonical chain-complex comparison from integral coefficient-relative
+chains, after forgetting module structure, to production relative singular
+chains. -/
+noncomputable def integralRelativeChainsComparison
+    {X : Type} [TopologicalSpace X] (A : Set X) :
+    (forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ)).obj
+        (CoefficientRelativeSmall.relativeChains ℤ A) ≅
+      RelativeSingularChains A :=
+  forgetIntegralRelativeCokernelComparison A ≪≫
+    integralMappedRelativeCokernelComparison A ≪≫
+    (relativeSingularChainsIsoCokernelSubspaceMap A).symm
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -465,3 +477,4 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralSingularChainsComparison_subtype_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralMappedRelativeCokernelComparison
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetIntegralRelativeCokernelComparison
+#print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparison
