@@ -104769,8 +104769,246 @@
      :review-outcomes]},
    :stop-condition
    "End only when every topo1 problem is closed or a row is genuinely refuted.",
+   :evidence
+   {:outcome :replan,
+    :seat "topo-4",
+    :commands
+    [{:cmd
+      "bb holes/labs/topology-contract/build_step.bb priorities holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :finding
+      "No topo1 route is complete. t93J03 is nearest with four backlog lemmas; the highest-impact topo1 area is fundamental-group-wedge-of-circles, serving five problems."}
+     {:cmd
+      "python3 -c 'import re\nids=[\"t01A03\",\"t92J06\",\"t93J03\",\"t97A01\",\"t97A03\",\"t99J01\"]\nfor i in ids:\n p=f\"problems/{i}/lean/Main.lean\"; t=open(p).read(); t=re.sub(r\"/-.*?-/\",\" \",t,flags=re.S); t=re.sub(r\"--[^\\n]*\",\" \",t); print(i,len(re.findall(r\"(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])\",t)))'",
+      :exit 0,
+      :finding
+      "Comment-stripped counts are t01A03 1, t92J06 1, t93J03 1, t97A01 1, t97A03 3, and t99J01 1."}
+     {:cmd
+      "clojure -M -e '(require (quote clojure.edn)) (doseq [f [\"holes/labs/topology-contract/worklist.edn\" \"holes/labs/topology-contract/worklist2.edn\" \"holes/labs/topology-contract/worklist3.edn\"] :let [x (clojure.edn/read-string (slurp f))] i (:items x) :when (and (= :lemma (:kind i)) (= :backlog (:state i)) (nil? (or (:area i) (get-in i [:lemma :area]))))] (prn (select-keys i [:id :consumer :lemma])))'",
+      :exit 0,
+      :finding
+      "Exactly five backlog nodes remain untagged; all are manifold-fundamental-class normalization nodes and are tagged below."}
+     {:cmd
+      "sed -n '1,280p' TOPOLOGY-ROUTES.md >/dev/null && sed -n '1,280p' holes/labs/topology-routes/routes-1.md >/dev/null && sed -n '1,280p' holes/labs/topology-routes/routes-2.md >/dev/null && sed -n '1,280p' holes/labs/topology-routes/routes-3.md >/dev/null && sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
+      :exit 0,
+      :finding
+      "The route guide, all per-problem routes, strategy rules, and reviewed dependency receipts were read."}],
+    :finding
+    {:placeholder-delta 0,
+     :placeholder-counts
+     {:t01A03 1,
+      :t92J06 1,
+      :t93J03 1,
+      :t97A01 1,
+      :t97A03 3,
+      :t99J01 1},
+     :routes
+     {:t01A03
+      ["generic point-wedge coordinates"
+       "finite circle-wedge fundamental group"
+       "consumer adapter"],
+      :t92J06
+      ["generic point-wedge coordinates"
+       "finite wedge pi1 and covering gluing"
+       "closure adapter"],
+      :t93J03
+      ["Klein orbit quotient homeomorphism"
+       "presented-group normal form and lifting criterion"
+       "annulus-cover embedding"
+       "consumer adapter"],
+      :t97A01
+      ["reviewed radial packages and overlap squares"
+       "generic wedge coordinates"
+       "homology and pi1 coordinate assembly"],
+      :t97A03
+      ["generic wedge coordinates"
+       "three explicit cover homotopy equivalences"
+       "consumer assembly"],
+      :t99J01
+      ["generic and ThreeCircles coordinates"
+       "finite wedge pi1"
+       "path-component restriction package"
+       "closure adapter"]},
+     :typed-residual-change
+     ["The Klein presentation-comparison route is blocked by the incompatible explicit disk-to-square boundary carrier, so the ready orbit-quotient homeomorphism is elected as the alternative concrete identification step."
+      "The generic coordinate probe reduced the obstruction from an unspecified two-open coherence law to two named constituent counit-component normalizations and their five-factor composite."
+      "The ThreeCircles coordinate row remains downstream of the generic coordinate theorem."],
+     :infrastructure-packets
+     {:topo1-banked 163,
+      :topo1-backlog 76,
+      :elected 3,
+      :placeholder-changing 0,
+      :compiled-refutations 0,
+      :cross-loop-untagged-before 5,
+      :cross-loop-untagged-after 0},
+     :review-outcomes
+     {:klein-presentation-comparison :blocked,
+      :generic-point-wedge-coordinates :revise,
+      :three-circles-coordinates :blocked,
+      :closed-problems 0},
+     :priority-top
+     ["kleinOrbitQuotient_homeomorph under rule-0 proximity for t93J03"
+      "ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence_counit_base_identity, ready, five consumers"
+      "TwoOpenFundamentalGroupoidPseudopushout.counit_base_component_identity, ready, five consumers"],
+     :areas
+     ["fundamental-group-wedge-of-circles serves five topo1 problems with 6 banked and 16 backlog lemmas"
+      "polygon-quotient-identification and deck-group-fundamental-group advance nearest t93J03"
+      "surface-classification ranks globally first but its nearest ready lemma belongs to the other loop"]},
+    :lemmas
+    [{:name
+      "ConstructionTargets.IntegralSingularHomologyComparison.moduleIsoOfUnderlyingIso",
+      :status :not-started,
+      :consumers [:t00J02 :t98A02],
+      :depends-on [],
+      :area "manifold-fundamental-class"}
+     {:name
+      "ConstructionTargets.CoefficientChartTransitionUnit.isoUnit_action",
+      :status :not-started,
+      :consumers [:t00J02 :t98A02],
+      :depends-on [],
+      :area "manifold-fundamental-class"}
+     {:name
+      "ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient",
+      :status :not-started,
+      :consumers [:t00J02 :t98A02],
+      :depends-on [],
+      :area "manifold-fundamental-class"}
+     {:name
+      "ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism",
+      :status :not-started,
+      :consumers [:t00J02 :t98A02],
+      :depends-on [],
+      :area "manifold-fundamental-class"}
+     {:name
+      "ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorUnit",
+      :status :not-started,
+      :consumers [:t00J02 :t98A02],
+      :depends-on [],
+      :area "manifold-fundamental-class"}],
+    :replacement-items
+    [{:bounded-exception
+      "This single-consumer quotient identification is the nearest ready t93J03 route step after the explicit disk-to-square carrier route was blocked.",
+      :consumer :t93J03,
+      :implements-lemma :lemma-kleinorbitquotient-homeomorph,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/t93J03/klein-orbit-quotient-homeomorph",
+      :acceptance
+      {:probe
+       "Compile the homeomorphism from the quotient of the explicit Klein plane action to StatementSurfaceModels.KleinBottle. Classify orbit intersections with a closed fundamental square, prove all edge and corner identifications agree with the disk-boundary EqvGen relation, and prove continuity of both descended quotient maps. Do not prove the deck-group fundamental-group theorem, subgroup classification, annulus-cover embedding, or close t93J03.",
+       :placeholder "the single sorry in apm_t93j03",
+       :route-step
+       "identify the explicit Klein deck-action orbit quotient with the frozen polygon Klein bottle",
+       :gates
+       ["canonical quotient comparison"
+        "fixture compiles"
+        "zero fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :representation
+      {:source
+       "The quotient of the explicit PresentedKleinGroup action on the plane",
+       :target
+       "ConstructionTargets.StatementSurfaceModels.KleinBottle, the frozen Surface false 2 polygon quotient",
+       :direction
+       "Homeomorphism from the plane-action orbit quotient to the frozen polygon quotient, induced by exact equality between orbit fibers and the polygon boundary EqvGen fibers"},
+      :id :routes-2026-10-11-klein-orbit-quotient-homeomorph-92,
+      :kind :representation-comparison,
+      :area "deck-group-fundamental-group",
+      :depends-on [:lemma-kleinsquareboundaryorbiteqvgen],
+      :current-residual
+      "Use the quotient homeomorphism in the deck-group fundamental-group computation and finish the t93J03 route.",
+      :other-consumers []}
+     {:consumer :t99J01,
+      :implements-lemma
+      :lemma-connectedgroupoidsingleobjequivalence-connectorsingleobjequivalence-counit-base-,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/shared/connector-single-object-counit-base-identity",
+      :acceptance
+      {:probe
+       "Compile the theorem that for every connector system used by TwoOpenPointSpanComparison, the counit of connectorSingleObjEquivalence at the identity target functor has identity component at SingleObj.star. Do not assemble the five-factor counit, specialize to point wedges, or close a consumer.",
+       :placeholder
+       "the remaining fundamental-group coordinate steps for five consumers",
+       :route-step
+       "normalize the connector/single-object constituent counit at its base object",
+       :gates
+       ["fixture compiles"
+        "zero fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :id
+      :routes-2026-10-11-connector-single-object-counit-base-identity-93,
+      :kind :reusable-theorem,
+      :area "fundamental-group-wedge-of-circles",
+      :depends-on [],
+      :current-residual
+      "Combine this identity with the remaining constituent counit normalizations in the five-factor composite.",
+      :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
+     {:consumer :t99J01,
+      :implements-lemma
+      :lemma-twoopenfundamentalgroupoidpseudopushout-counit-base-component-identity,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/shared/two-open-pseudopushout-counit-base-identity",
+      :acceptance
+      {:probe
+       "Compile the theorem that at the overlap basepoint for the inverse-reconstructed free-product identity cocone, the hom component of twoOpenFundamentalGroupoidPseudopushoutEquivalence.counitIso is identity, compatibly with the subsequent pseudo-span and connector transports. Do not assemble the five-factor counit, specialize to point wedges, or close a consumer.",
+       :placeholder
+       "the remaining fundamental-group coordinate steps for five consumers",
+       :route-step
+       "normalize the two-open pseudopushout constituent counit at the overlap basepoint",
+       :gates
+       ["fixture compiles"
+        "zero fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :id
+      :routes-2026-10-11-two-open-pseudopushout-counit-base-identity-94,
+      :kind :reusable-theorem,
+      :area "fundamental-group-wedge-of-circles",
+      :depends-on [],
+      :current-residual
+      "Combine this identity with the remaining constituent counit normalizations in the five-factor composite.",
+      :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only when every topo1 problem is closed or a row is genuinely refuted.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:strategy
+       "Review the Klein orbit-quotient comparison and both constituent counit normalizations, rerun priorities and AREAS, verify no backlog lemma is untagged, and elect the next nearest closure or highest-impact ready lemma."},
+      :id
+      :routes-2026-10-11-checkpoint-topo1-after-orbit-and-counit-components-95,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:routes-2026-10-11-klein-orbit-quotient-homeomorph-92
+       :routes-2026-10-11-connector-single-object-counit-base-identity-93
+       :routes-2026-10-11-two-open-pseudopushout-counit-base-identity-94],
+      :current-residual
+      "Refill after the three elected rows are reviewed.",
+      :other-consumers []}],
+    :author "topo-4",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -104785,6 +105023,130 @@
     :routes-2026-10-11-three-circles-fundamental-group-coordinates-85
     :routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
    :current-residual "Refill after the elected rows are reviewed.",
+   :other-consumers []}
+  {:bounded-exception
+   "This single-consumer quotient identification is the nearest ready t93J03 route step after the explicit disk-to-square carrier route was blocked.",
+   :consumer :t93J03,
+   :implements-lemma :lemma-kleinorbitquotient-homeomorph,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t93J03/klein-orbit-quotient-homeomorph",
+   :acceptance
+   {:probe
+    "Compile the homeomorphism from the quotient of the explicit Klein plane action to StatementSurfaceModels.KleinBottle. Classify orbit intersections with a closed fundamental square, prove all edge and corner identifications agree with the disk-boundary EqvGen relation, and prove continuity of both descended quotient maps. Do not prove the deck-group fundamental-group theorem, subgroup classification, annulus-cover embedding, or close t93J03.",
+    :placeholder "the single sorry in apm_t93j03",
+    :route-step
+    "identify the explicit Klein deck-action orbit quotient with the frozen polygon Klein bottle",
+    :gates
+    ["canonical quotient comparison"
+     "fixture compiles"
+     "zero fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :representation
+   {:source
+    "The quotient of the explicit PresentedKleinGroup action on the plane",
+    :target
+    "ConstructionTargets.StatementSurfaceModels.KleinBottle, the frozen Surface false 2 polygon quotient",
+    :direction
+    "Homeomorphism from the plane-action orbit quotient to the frozen polygon quotient, induced by exact equality between orbit fibers and the polygon boundary EqvGen fibers"},
+   :id :routes-2026-10-11-klein-orbit-quotient-homeomorph-92,
+   :kind :representation-comparison,
+   :area "deck-group-fundamental-group",
+   :depends-on
+   [:lemma-kleinsquareboundaryorbiteqvgen
+    :routes-2026-10-11-checkpoint-topo1-after-klein-and-wedge-coordinates-86],
+   :current-residual
+   "Use the quotient homeomorphism in the deck-group fundamental-group computation and finish the t93J03 route.",
+   :other-consumers []}
+  {:consumer :t99J01,
+   :implements-lemma
+   :lemma-connectedgroupoidsingleobjequivalence-connectorsingleobjequivalence-counit-base-,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/shared/connector-single-object-counit-base-identity",
+   :acceptance
+   {:probe
+    "Compile the theorem that for every connector system used by TwoOpenPointSpanComparison, the counit of connectorSingleObjEquivalence at the identity target functor has identity component at SingleObj.star. Do not assemble the five-factor counit, specialize to point wedges, or close a consumer.",
+    :placeholder
+    "the remaining fundamental-group coordinate steps for five consumers",
+    :route-step
+    "normalize the connector/single-object constituent counit at its base object",
+    :gates
+    ["fixture compiles"
+     "zero fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id
+   :routes-2026-10-11-connector-single-object-counit-base-identity-93,
+   :kind :reusable-theorem,
+   :area "fundamental-group-wedge-of-circles",
+   :depends-on
+   [:routes-2026-10-11-checkpoint-topo1-after-klein-and-wedge-coordinates-86],
+   :current-residual
+   "Combine this identity with the remaining constituent counit normalizations in the five-factor composite.",
+   :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
+  {:consumer :t99J01,
+   :implements-lemma
+   :lemma-twoopenfundamentalgroupoidpseudopushout-counit-base-component-identity,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/shared/two-open-pseudopushout-counit-base-identity",
+   :acceptance
+   {:probe
+    "Compile the theorem that at the overlap basepoint for the inverse-reconstructed free-product identity cocone, the hom component of twoOpenFundamentalGroupoidPseudopushoutEquivalence.counitIso is identity, compatibly with the subsequent pseudo-span and connector transports. Do not assemble the five-factor counit, specialize to point wedges, or close a consumer.",
+    :placeholder
+    "the remaining fundamental-group coordinate steps for five consumers",
+    :route-step
+    "normalize the two-open pseudopushout constituent counit at the overlap basepoint",
+    :gates
+    ["fixture compiles"
+     "zero fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id
+   :routes-2026-10-11-two-open-pseudopushout-counit-base-identity-94,
+   :kind :reusable-theorem,
+   :area "fundamental-group-wedge-of-circles",
+   :depends-on
+   [:routes-2026-10-11-checkpoint-topo1-after-klein-and-wedge-coordinates-86],
+   :current-residual
+   "Combine this identity with the remaining constituent counit normalizations in the five-factor composite.",
+   :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only when every topo1 problem is closed or a row is genuinely refuted.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:strategy
+    "Review the Klein orbit-quotient comparison and both constituent counit normalizations, rerun priorities and AREAS, verify no backlog lemma is untagged, and elect the next nearest closure or highest-impact ready lemma."},
+   :id
+   :routes-2026-10-11-checkpoint-topo1-after-orbit-and-counit-components-95,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:routes-2026-10-11-klein-orbit-quotient-homeomorph-92
+    :routes-2026-10-11-connector-single-object-counit-base-identity-93
+    :routes-2026-10-11-two-open-pseudopushout-counit-base-identity-94
+    :routes-2026-10-11-checkpoint-topo1-after-klein-and-wedge-coordinates-86],
+   :current-residual
+   "Refill after the three elected rows are reviewed.",
    :other-consumers []}
   {:consumer :t99J01,
    :phase :probe,
@@ -110296,7 +110658,97 @@
    :lemma-connectedgroupoidsingleobjequivalence-connectorsingleobjequivalence-counit-base-,
    :kind :lemma,
    :depends-on [],
-   :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}],
+   :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.IntegralSingularHomologyComparison.moduleIsoOfUnderlyingIso"},
+   :lemma
+   {:name
+    "ConstructionTargets.IntegralSingularHomologyComparison.moduleIsoOfUnderlyingIso",
+    :reported-by
+    [:routes-2026-10-11-checkpoint-topo1-after-klein-and-wedge-coordinates-86],
+    :area "manifold-fundamental-class"},
+   :id
+   :lemma-constructiontargets-integralsingularhomologycomparison-moduleisoofunderlyingiso,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.CoefficientChartTransitionUnit.isoUnit_action"},
+   :lemma
+   {:name
+    "ConstructionTargets.CoefficientChartTransitionUnit.isoUnit_action",
+    :reported-by
+    [:routes-2026-10-11-checkpoint-topo1-after-klein-and-wedge-coordinates-86],
+    :area "manifold-fundamental-class"},
+   :id
+   :lemma-constructiontargets-coefficientcharttransitionunit-isounit-action,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient"},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient",
+    :reported-by
+    [:routes-2026-10-11-checkpoint-topo1-after-klein-and-wedge-coordinates-86],
+    :area "manifold-fundamental-class"},
+   :id
+   :lemma-constructiontargets-manifoldfundamentalclass-correctedlocalgeneratorcoefficient,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism"},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism",
+    :reported-by
+    [:routes-2026-10-11-checkpoint-topo1-after-klein-and-wedge-coordinates-86],
+    :area "manifold-fundamental-class"},
+   :id
+   :lemma-constructiontargets-manifoldfundamentalclass-correctedlocalnormalizationautomorp,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorUnit"},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorUnit",
+    :reported-by
+    [:routes-2026-10-11-checkpoint-topo1-after-klein-and-wedge-coordinates-86],
+    :area "manifold-fundamental-class"},
+   :id
+   :lemma-constructiontargets-manifoldfundamentalclass-correctedlocalgeneratorunit,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t98A02]}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",
