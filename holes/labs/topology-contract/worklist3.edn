@@ -8812,6 +8812,24 @@
      "The inverse homology isomorphism of the actual ambient chart map followed by HigherModelLocalHomology.localIsoInt.hom",
      :direction
      "Definitional morphism equality from the packaged ambient normalization to its chart-pullback-then-model-normalization factorization"},
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791696746907-4366-e9d9b355",
+     :commands
+     ["git show and git diff-tree recorded commit scope"
+      "git blob identity check"
+      "sha256sum frozen fixture"
+      "recompute frozen statement sha256"
+      "git diff --check recorded commit"
+      "lake env lean renamed frozen-fixture replay"
+      "lake env lean target module"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"
+      "placeholder and axiom scan"
+      "python3 scripts/statement-registry.py check"
+      "consumer placeholder census"],
+     :finding
+     "PASS: recorded commit c7587150 changes only the target module and its blob matches the reviewed checkout; frozen fixture hash 48394e696534aaaef31cc0c7e34fcf75fd4c4f1efe0cf2e0b4c2bfbbe612162a and frozen statement hash 41a40b30586273dc7690f1ed70755ff586add9cb864701774822e17bc92089ef both match. The supporting definition packages the ambient chart homology map using the existing isomorphism instance, and the theorem proves the exact frozen equality in the registered direction from ambientLocalNormalization.hom to inverse chart pullback followed by model normalization. It does not expand model normalization, compare coefficient factors, select a sign, or construct a fundamental class. Renamed fixture replay, target elaboration, and Lake build pass; axioms are exactly propext, Classical.choice, Quot.sound; registry is 131/0; target placeholders are 0 and consumer baselines t00J02/t98A02 remain 1/1."},
     :commit "c7587150eb92bb7b13be670128c429e1d26829b2",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -8832,7 +8850,7 @@
     :routes-2026-10-11-manifold-ambient-local-normalization-hom-topo3-r1,
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/ambient-normalization-factorization",
@@ -9020,7 +9038,7 @@
      "The production endpoint of correctedLocalNormalizationAutomorphism now has a stable explicit factorization: inverse homology of the actual ambient chart map followed by HigherModelLocalHomology.localIsoInt. The next prerequisite should expose the coefficient chart normalization factorization, after which the two model normalizations can be compared componentwise.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -12420,7 +12438,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -12437,7 +12455,10 @@
     "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), (ambientLocalNormalization k x).hom = (ambientChartHomologyIso k x).inv ≫ (HigherModelLocalHomology.localIsoInt k).hom",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-ambient-local-normalization-hom-topo3-r1},
+    :routes-2026-10-11-manifold-ambient-local-normalization-hom-topo3-r1,
+    :banked-by
+    :routes-2026-10-11-manifold-ambient-local-normalization-hom-topo3-r1,
+    :banked-commit "c7587150eb92bb7b13be670128c429e1d26829b2"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-ambientlocalnormalization-hom,
    :kind :lemma,
@@ -12447,7 +12468,7 @@
    :other-consumers [:t98A02]}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -12455,7 +12476,9 @@
    :lemma
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization",
-    :reported-by []},
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/ManifoldFundamentalClass.lean"]},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-ambientlocalnormalization,
    :kind :lemma,
