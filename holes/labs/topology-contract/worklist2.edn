@@ -79283,40 +79283,39 @@
   {:consumer :t97A04,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "program STOP commits nothing new since the last :program-history entry: evidence commit bb0f0f77d8953dc78dd564e000f3d4a5b29d0894 exactly equals history job 5",
    :evidence
    {:placeholder-delta 0,
-    :residual "Use shearY_H2 in B8; then B9-B11.",
+    :residual "Factor Lbar and prove B9; then B10-B11.",
     :outcome :stop,
     :warnings ["Main: 2 placeholders."],
     :missing-theorems
-    [{:name "ConstructionTargets.T97A04Closure.frozenH2Pieces_isZero",
-      :type "IsZero(H2(U)⊞H2(V))",
+    [{:name "ConstructionTargets.T97A04Closure.swap_H2_square",
+      :type "H2(swap)≫H2(swap)=𝟙",
       :status :proved,
       :consumers [:t97A04],
-      :depends-on
-      ["ConstructionTargets.T97A04Closure.frozenBoundaryCoverTransport"],
+      :depends-on [],
       :area "mv-connecting-naturality"}
      {:name
-      "ConstructionTargets.T97A04Closure.frozenConnectingCoordinate_mono",
-      :type "Mono frozenConnectingCoordinate",
+      "ConstructionTargets.T97A04Closure.swapH2Coordinate_square",
+      :type "coordinate swap scalar squares to identity",
       :status :proved,
       :consumers [:t97A04],
-      :depends-on
-      ["ConstructionTargets.T97A04Closure.frozenH2Pieces_isZero"],
+      :depends-on ["ConstructionTargets.T97A04Closure.swap_H2_square"],
       :area "mv-connecting-naturality"}
-     {:name "ConstructionTargets.T97A04Closure.shearY_H2",
-      :type "H2(shearY a b)=a·id in frozen coordinates",
-      :status :proved,
+     {:name "ConstructionTargets.T97A04Closure.frozenLbar_H2",
+      :type "H2(Lbar)=3·id in frozen coordinate",
+      :status :not-started,
       :consumers [:t97A04],
       :depends-on
-      ["ConstructionTargets.T97A04Closure.frozenConnectingCoordinate_mono"],
+      ["ConstructionTargets.T97A04Closure.shearY_H2"
+       "ConstructionTargets.T97A04Closure.swapH2Coordinate_square"],
       :area "mv-connecting-naturality"}],
     :statement-hashes
     {:registry "131/0",
-     :closure "a5bf83c00193d862e595c999a5f3379ec59aceae",
+     :closure "7e7a468d0c5c760b0dc0221a0b217cdf4b2dc686",
      :blueprint "c419a895cb4ede2acc1cb6bc5c7536344ba63df4"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
@@ -79327,17 +79326,18 @@
      {:cmd "closure no-sorry scan", :exit 1, :expected-exit 1}
      {:cmd "Main compile", :exit 0}
      {:cmd "registry check", :exit 0}
-     {:cmd "Main placeholder count", :exit 0, :output "2"}
-     {:cmd "git show --check 33de646e8", :exit 0}],
+     {:cmd "placeholder count", :exit 0, :output "2"}
+     {:cmd "git show --check 6888a8a6c", :exit 0}],
     :diagnostic-history
     [{:cmd "closure compile",
       :exit 1,
-      :finding "Typeclass timeout; used explicit cancellation."}],
-    :commit "33de646e8a878b25764efed2fda0abaeb34e5cf6",
+      :finding
+      "Normalized categorical associativity and iso cancellation."}],
+    :commit "6888a8a6c97535d970505577fad7fc9ddd0d168a",
     :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -80785,4 +80785,58 @@
    :lemma-constructiontargets-t96a07closure-spheremapambient-fderiv,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "ConstructionTargets.T97A04Closure.swap_H2_square",
+    :type "H2(swap)≫H2(swap)=𝟙"},
+   :lemma
+   {:name "ConstructionTargets.T97A04Closure.swap_H2_square",
+    :reported-by [:program-2026-10-11-close-t97a04],
+    :type "H2(swap)≫H2(swap)=𝟙",
+    :area "mv-connecting-naturality",
+    :proved-in :program-2026-10-11-close-t97a04},
+   :id :lemma-constructiontargets-t97a04closure-swap-h2-square,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "ConstructionTargets.T97A04Closure.swapH2Coordinate_square",
+    :type "coordinate swap scalar squares to identity"},
+   :lemma
+   {:name "ConstructionTargets.T97A04Closure.swapH2Coordinate_square",
+    :reported-by [:program-2026-10-11-close-t97a04],
+    :type "coordinate swap scalar squares to identity",
+    :area "mv-connecting-naturality",
+    :proved-in :program-2026-10-11-close-t97a04},
+   :id
+   :lemma-constructiontargets-t97a04closure-swaph2coordinate-square,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t97a04closure-swap-h2-square],
+   :other-consumers []}
+  {:consumer :t97A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "ConstructionTargets.T97A04Closure.frozenLbar_H2",
+    :type "H2(Lbar)=3·id in frozen coordinate"},
+   :lemma
+   {:name "ConstructionTargets.T97A04Closure.frozenLbar_H2",
+    :reported-by [:program-2026-10-11-close-t97a04],
+    :type "H2(Lbar)=3·id in frozen coordinate",
+    :area "mv-connecting-naturality"},
+   :id :lemma-constructiontargets-t97a04closure-frozenlbar-h2,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t97a04closure-sheary-h2
+    :lemma-constructiontargets-t97a04closure-swaph2coordinate-square],
    :other-consumers []}]}
