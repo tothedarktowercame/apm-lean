@@ -104382,6 +104382,8 @@
    "This single-consumer classification is the next missing geometric input after the banked generic connected-component transport.",
    :consumer :t93J03,
    :stop-count 1,
+   :review-finding
+   "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-relationlocushasfourcomponents,
    :evidence
    {:placeholder-delta
@@ -104436,6 +104438,12 @@
       :exit 0,
       :finding "The scoped source is unchanged."}],
     :diagnostic-history [],
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1791706460532-4728-0da56d52",
+     :finding
+     "extend Mathlib: state and prove the missing theorem in scope"},
     :changed-paths [],
     :fixture
     {:path "/tmp/klein-relation-locus-four-components-probe.lean",
@@ -104444,7 +104452,7 @@
      :status :unverified-workspace-invalid},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["ConstructionTargets/KleinCompatibleCarrierComponentBridge.lean"],
    :dag-node
@@ -104467,6 +104475,7 @@
    :id :routes-2026-10-11-klein-relation-locus-four-components-108,
    :kind :reusable-theorem,
    :area "polygon-quotient-identification",
+   :fail-count 1,
    :depends-on [],
    :current-residual
    "Use relation compatibility to restrict the carrier homeomorphism to these loci, transport their four components, and prove cyclic incidence and pairing conjugacy.",
