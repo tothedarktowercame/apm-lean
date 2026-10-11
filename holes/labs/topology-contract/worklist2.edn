@@ -71358,6 +71358,19 @@
       :exit 1,
       :explanation
       ".lake/packages is a real directory rather than the required canonical symlink; no package state was modified and compilation succeeded on the existing substrate."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791701621692-4543-159777f7",
+     :commands
+     ["git show/diff-tree/show --check 1fe3e8fb841ce9238ea5d8c780c09e7e47d5dfe0"
+      "git rev-parse scope blob; sha256sum fixture"
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean"
+      "lake env lean /tmp/t02a03_zero_height_ambient_from_angular_probe.lean"
+      "statement registry check and commit/parent fingerprints"
+      "placeholder recount at commit/parent"],
+     :finding
+     "PASS: independent author topo-6; exact one-file scope, blob, and fixture hash match. Target and frozen probe compile. The frozen existential is discharged with the correct representation transitions: the supplied Circle coordinate and complex normal detour are paired through continuous core-polar reconstruction into ambient E3; endpoint rewrites have the stated orientation, the radius bound proves right-tube membership, and coupled-angle avoidance proves deletion. Axioms are exactly propext, Classical.choice, Quot.sound; registry is 131/0, t02A03 fingerprint is unchanged at commit and parent, fixture has no placeholders, and Main has 1 placeholder at commit and parent."},
     :commit "1fe3e8fb841ce9238ea5d8c780c09e7e47d5dfe0",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
@@ -71371,7 +71384,7 @@
    :phase :implementation,
    :type
    "forall (A : C(unitInterval × RightTubeMinusLeftCore, Circle)), (forall p, A (0,p)=1) -> (forall p, A (1,p)=rightTubeCoreAngularCoordinate p) -> exists H : C(unitInterval × RightTubeMinusLeftCore, apm_t02a03_E3), (forall p, H (0,p)=apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)) ∧ (forall p, H (1,p)=p.1) ∧ (forall tp, tp.2.1 2=0 -> H tp ∈ apm_t02a03_rightTube) ∧ (forall tp, tp.2.1 2=0 -> H tp ∉ Set.range apm_t02a03_leftCore)",
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/zero-height-ambient-detour-from-angular",
@@ -71496,7 +71509,7 @@
      "Any continuous coupled angular map with the two endpoint equations now yields a continuous ambient core-polar detour. Its endpoints are the meridian point and the input point; on zero-height inputs the banked normal radius bound gives right-tube membership and angle-parametric deletion avoidance gives left-core avoidance.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
@@ -76375,7 +76388,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -76391,7 +76404,10 @@
     "forall (A : C(unitInterval × RightTubeMinusLeftCore, Circle)), (forall p, A (0,p)=1) -> (forall p, A (1,p)=rightTubeCoreAngularCoordinate p) -> exists H : C(unitInterval × RightTubeMinusLeftCore, apm_t02a03_E3), (forall p, H (0,p)=apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)) ∧ (forall p, H (1,p)=p.1) ∧ (forall tp, tp.2.1 2=0 -> H tp ∈ apm_t02a03_rightTube) ∧ (forall tp, tp.2.1 2=0 -> H tp ∉ Set.range apm_t02a03_leftCore)",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-zeroheightambientdetour-of-co,
    :kind :lemma,
