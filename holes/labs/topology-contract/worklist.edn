@@ -101945,6 +101945,21 @@
       :exit 0}
      {:cmd "git status --porcelain", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791679631635-3528-d4b2d0c2",
+     :commands
+     ["git show and git diff-tree on recorded commit 8c4223fdf9a3bfe9889af99ef0705738fe786b92"
+      "git diff --exit-code recorded commit against source checkout"
+      "SHA-256 and comment-stripped placeholder recomputation for source and fixture"
+      "lake build ConstructionTargets.PolygonBoundaryDecoderInteriors"
+      "lake env lean /tmp/polygon-boundary-decoder-interiors.lean"
+      "lake env lean /dev/stdin with fresh axiom checks"
+      "python3 scripts/statement-registry.py check"
+      "git diff-tree --check recorded parent and commit"],
+     :finding
+     "Recorded one-file commit is authored by topo-2; source equals the recorded blob and recomputed implementation and fixture hashes match; halfOpenToClosed preserves the real parameter and upgrades only the upper-bound proof, while both frozen theorems correctly orient equal canonical half-open Circle presentations toward equal N3 or torus-crosscap decoder values by exact edge-index and parameter uniqueness; both theorem types compile with only standard axioms, placeholder counts are zero, the registry reports 131 matched and 0 mismatched, and no endpoint-one, shared-vertex, or total-decoder result was added."},
     :commit "8c4223fdf9a3bfe9889af99ef0705738fe786b92",
     :changed-paths
     ["ConstructionTargets/PolygonBoundaryDecoderInteriors.lean"],
@@ -101959,7 +101974,7 @@
      "Defined the literal half-open-to-closed unit-interval conversion and proved both decoder tables independent of equal half-open canonical edge presentations using six-edge interior uniqueness."},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/PolygonBoundaryDecoderInteriors.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/boundary-decoder-interiors",
@@ -102093,7 +102108,7 @@
       "For both specialized tables, equal Circle points represented at half-open edge parameters have equal decoder values."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -106124,7 +106139,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -106141,7 +106156,10 @@
     "Equal half-open canonical edge presentations have equal N3 decoder values.",
     :area "polygon-surface-open-cover",
     :proved-in
-    :routes-2026-10-11-polygon-boundary-decoder-interiors-72},
+    :routes-2026-10-11-polygon-boundary-decoder-interiors-72,
+    :banked-by
+    :routes-2026-10-11-polygon-boundary-decoder-interiors-72,
+    :banked-commit "8c4223fdf9a3bfe9889af99ef0705738fe786b92"},
    :id
    :lemma-polygonboundarydecoderinteriors-n3edgedecode-interior-welldefined,
    :kind :lemma,
@@ -106150,7 +106168,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -106167,7 +106185,10 @@
     "Equal half-open canonical edge presentations have equal torus-crosscap decoder values.",
     :area "polygon-surface-open-cover",
     :proved-in
-    :routes-2026-10-11-polygon-boundary-decoder-interiors-72},
+    :routes-2026-10-11-polygon-boundary-decoder-interiors-72,
+    :banked-by
+    :routes-2026-10-11-polygon-boundary-decoder-interiors-72,
+    :banked-commit "8c4223fdf9a3bfe9889af99ef0705738fe786b92"},
    :id
    :lemma-polygonboundarydecoderinteriors-toruscrosscapedgedecode-interior-welldefined,
    :kind :lemma,
