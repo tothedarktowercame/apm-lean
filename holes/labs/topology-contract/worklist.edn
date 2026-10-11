@@ -113857,21 +113857,21 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 6,
+   :stop-count 7,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "B6 generator equations and B12 remain; next unfold the B3 inverse on both leg maps.",
+    "B6 leg equations and B12 remain; cancel the explicit counit conjugation.",
     :outcome :stop,
     :warnings [{:kind :upstream-lint}],
     :missing-theorems
     [{:name
       "PointWedgeVanKampen.genericPointWedgeLegCoordinates_vanKampen",
       :type
-      "Based free-product equivalence with literal left/right leg coordinates",
+      "Based free-product equivalence with literal leg coordinates",
       :status :partial,
       :consumers [:t99J01 :t01A03 :t92J06 :t97A01 :t97A03],
       :depends-on
@@ -113879,9 +113879,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "5210290c447048960bffc633f8cd4ab5846d83faf1f71564464641bdb37684ca",
+     "829385789b86f467332412d967b6aab4d5482d7008c0a6ba56f048ae713523ea",
      :documentation
-     "f49bfbb4eeaabb2b564f48d19efa92f2b1391699e1375236b4185a9bb06bed0e",
+     "e7e27bcb0cd5b0fa9101bebb7063686c2ca610190563f3abfa16426d07267d94",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113889,7 +113889,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "B6 partial: the exact based free-product equivalence is proved at the literal left wedge representative; its two leg equations remain.",
+    "B6 partial: the B3 inverse-of-identity normalization and counit conjugacy equation are proved.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113902,21 +113902,7 @@
      {:cmd "git diff --check -- scoped files", :exit 0}
      {:cmd "python3 comment-stripped placeholder scan", :exit 0}],
     :diagnostic-history [],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791734588071-5589-01985c15",
-     :commands
-     ["git show/diff-tree 5441ee4e4"
-      "sha256sum scoped files"
-      "placeholder scan"
-      "statement-registry.py check"
-      "lake env lean PointWedgeVanKampen.lean"
-      "lake build PointWedgeVanKampen"
-      "lake build ThreeCirclesFundamentalGroup"],
-     :finding
-     "PASS: new compiled sorry-free B6 progress defines the exact based equivalence at the literal left wedge representative, oriented from FundamentalGroup of the wedge to the coproduct of the two based groups. Scope/hashes match, placeholders are zero, and axioms standard. Both leg equations and B12 remain listed; absent final target is valid STOP state."},
-    :commit "5441ee4e4022fabe8bc58b1a5653bf17545d0853",
+    :commit "f79faec6d2c70dcf702dedd299cdd0a55ead2e82",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113926,7 +113912,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
