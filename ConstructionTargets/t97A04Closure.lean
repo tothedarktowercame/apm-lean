@@ -211,18 +211,56 @@ theorem twoCircleOverlapShear_eq_transport (a b : ℤ) :
           overlapHomotopyEquivTwoCircles.invFun) := rfl
 
 /-- The left overlap-circle summand followed by the transported shear. -/
+def circleSumInl : C(Circle, Circle ⊕ Circle) :=
+  ⟨Sum.inl, continuous_inl⟩
+
+def circleSumInr : C(Circle, Circle ⊕ Circle) :=
+  ⟨Sum.inr, continuous_inr⟩
+
 def twoCircleOverlapShearLeft (a b : ℤ) : C(Circle, Circle ⊕ Circle) :=
-  (twoCircleOverlapShear a b).comp ⟨Sum.inl, continuous_inl⟩
+  (twoCircleOverlapShear a b).comp circleSumInl
 
 /-- The right overlap-circle summand followed by the transported shear. -/
 def twoCircleOverlapShearRight (a b : ℤ) : C(Circle, Circle ⊕ Circle) :=
-  (twoCircleOverlapShear a b).comp ⟨Sum.inr, continuous_inr⟩
+  (twoCircleOverlapShear a b).comp circleSumInr
 
 @[simp] theorem twoCircleOverlapShearLeft_apply (a b : ℤ) (z : Circle) :
     twoCircleOverlapShearLeft a b z = twoCircleOverlapShear a b (Sum.inl z) := rfl
 
 @[simp] theorem twoCircleOverlapShearRight_apply (a b : ℤ) (z : Circle) :
     twoCircleOverlapShearRight a b z = twoCircleOverlapShear a b (Sum.inr z) := rfl
+
+/-- Functorial factorization of the left restricted shear on homology. -/
+theorem twoCircleOverlapShearLeft_H1 (a b : ℤ) :
+    HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularSubdivision.singularPostcomposition
+          circleSumInl) 1 ≫
+      HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularSubdivision.singularPostcomposition
+          (twoCircleOverlapShear a b)) 1 =
+    HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularSubdivision.singularPostcomposition
+        (twoCircleOverlapShearLeft a b)) 1 := by
+  rw [← HomologicalComplex.homologyMap_comp]
+  dsimp only [ConstructionTargets.SingularSubdivision.singularPostcomposition]
+  rw [← Functor.map_comp]
+  rfl
+
+/-- Functorial factorization of the right restricted shear on homology. -/
+theorem twoCircleOverlapShearRight_H1 (a b : ℤ) :
+    HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularSubdivision.singularPostcomposition
+          circleSumInr) 1 ≫
+      HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularSubdivision.singularPostcomposition
+          (twoCircleOverlapShear a b)) 1 =
+    HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularSubdivision.singularPostcomposition
+        (twoCircleOverlapShearRight a b)) 1 := by
+  rw [← HomologicalComplex.homologyMap_comp]
+  dsimp only [ConstructionTargets.SingularSubdivision.singularPostcomposition]
+  rw [← Functor.map_comp]
+  rfl
 
 /-- The integer power map which remains on either overlap component after
 the constant translation in the shear is removed. -/
@@ -782,6 +820,8 @@ theorem shearY_overlap_coordinate_of_degree_components (a b : ℤ)
 #print axioms twoCircleOverlapShearRight
 #print axioms twoCircleOverlapShearLeft_apply
 #print axioms twoCircleOverlapShearRight_apply
+#print axioms twoCircleOverlapShearLeft_H1
+#print axioms twoCircleOverlapShearRight_H1
 #print axioms circleZPow
 #print axioms circleAffine
 #print axioms circleAffineHomotopy
