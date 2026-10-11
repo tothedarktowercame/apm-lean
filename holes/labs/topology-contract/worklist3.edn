@@ -15216,6 +15216,20 @@
       "git status --short -- ConstructionTargets/ManifoldFundamentalClass.lean",
       :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791726903112-5448-0ee13f63",
+     :commands
+     ["git show/diff-tree/diff --check at 3a838f0b003edfc26c9d849f74f4cb8ba61a943c"
+      "sha256sum fixture and module plus recorded-blob comparison"
+      "renamed fixture: lake env lean"
+      "python3 scripts/statement-registry.py check"
+      "placeholder scans for module, t00J02, t98A02"
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"],
+     :finding
+     "Exact one-file scope and recorded blob match; frozen fixture and module hashes reproduce; the theorem has the required colimits orientation and faithfully identifies forgetIntModules with its equivalence functor, without constructing cofork identifications or downstream SnakeInput data; fixture and module compile, registry is 131/0, build completes 8326 jobs, axioms are exactly propext/Classical.choice/Quot.sound, module has no placeholders, and consumer counts remain 1/1."},
     :commit "3a838f0b003edfc26c9d849f74f4cb8ba61a943c",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -15232,7 +15246,7 @@
     :routes-2026-10-11-manifold-forget-parallel-pair-colimits-topo3-r1,
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/integral-open-disk-connecting-naturality/snake-input-cokernel-preservation",
@@ -15423,7 +15437,7 @@
      "The exact forgetful functor now has compiled preservation declarations for both halves of the snake input: the prior theorem supplies parallel-pair limits and this prerequisite supplies parallel-pair colimits. Thus isLimitOfPreserves and isColimitOfPreserves apply componentwise to S.h₀ and S.h₃. The remaining representation step is explicit identification of those mapped cones and coforks with the evaluations of the desired ShortComplex kernel fork and cokernel cofork.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -22334,7 +22348,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -22351,7 +22365,10 @@
     "PreservesColimitsOfShape WalkingParallelPair forgetIntModules",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-forget-parallel-pair-colimits-topo3-r1},
+    :routes-2026-10-11-manifold-forget-parallel-pair-colimits-topo3-r1,
+    :banked-by
+    :routes-2026-10-11-manifold-forget-parallel-pair-colimits-topo3-r1,
+    :banked-commit "3a838f0b003edfc26c9d849f74f4cb8ba61a943c"},
    :id :lemma-mfclass-forget-parallel-pair-colimits,
    :kind :lemma,
    :depends-on [:lemma-mfclass-forget-parallel-pair-limits],
