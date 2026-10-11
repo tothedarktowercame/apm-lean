@@ -79283,27 +79283,18 @@
   {:consumer :t97A04,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 9,
+   :stop-count 10,
    :review-finding
    "program STOP commits nothing new since the last :program-history entry: evidence commit bb0f0f77d8953dc78dd564e000f3d4a5b29d0894 exactly equals history job 5",
    :evidence
    {:placeholder-delta 0,
-    :residual
-    "Build cover short-complex iso; infer K mono/cancel; then B8-B11.",
+    :residual "Use shearY_H2 in B8; then B9-B11.",
     :outcome :stop,
     :warnings ["Main: 2 placeholders."],
     :missing-theorems
-    [{:name
-      "ConstructionTargets.T97A04Closure.frozenBoundaryCoverTransport",
-      :type "ambient inverse maps transport U,V,and intersection",
+    [{:name "ConstructionTargets.T97A04Closure.frozenH2Pieces_isZero",
+      :type "IsZero(H2(U)⊞H2(V))",
       :status :proved,
-      :consumers [:t97A04],
-      :depends-on [],
-      :area "mv-connecting-naturality"}
-     {:name
-      "ConstructionTargets.T97A04Closure.frozenBoundaryCoverShortComplexIso",
-      :type "cover short-complex iso conjugating connecting arrows",
-      :status :partial,
       :consumers [:t97A04],
       :depends-on
       ["ConstructionTargets.T97A04Closure.frozenBoundaryCoverTransport"],
@@ -79311,44 +79302,42 @@
      {:name
       "ConstructionTargets.T97A04Closure.frozenConnectingCoordinate_mono",
       :type "Mono frozenConnectingCoordinate",
-      :status :not-started,
+      :status :proved,
       :consumers [:t97A04],
       :depends-on
-      ["ConstructionTargets.T97A04Closure.frozenBoundaryCoverShortComplexIso"],
+      ["ConstructionTargets.T97A04Closure.frozenH2Pieces_isZero"],
+      :area "mv-connecting-naturality"}
+     {:name "ConstructionTargets.T97A04Closure.shearY_H2",
+      :type "H2(shearY a b)=a·id in frozen coordinates",
+      :status :proved,
+      :consumers [:t97A04],
+      :depends-on
+      ["ConstructionTargets.T97A04Closure.frozenConnectingCoordinate_mono"],
       :area "mv-connecting-naturality"}],
     :statement-hashes
     {:registry "131/0",
-     :closure "7c6f8d52d0aca99054b63fd4939ff7cbdd08614b",
+     :closure "a5bf83c00193d862e595c999a5f3379ec59aceae",
      :blueprint "c419a895cb4ede2acc1cb6bc5c7536344ba63df4"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason :program-progress-committed,
+    :reason :program-milestone-complete,
     :commands
-    [{:cmd "lake env lean ConstructionTargets/t97A04Closure.lean",
-      :exit 0}
+    [{:cmd "closure compile", :exit 0}
      {:cmd "closure no-sorry scan", :exit 1, :expected-exit 1}
-     {:cmd "lake env lean problems/t97A04/lean/Main.lean", :exit 0}
-     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "Main compile", :exit 0}
+     {:cmd "registry check", :exit 0}
      {:cmd "Main placeholder count", :exit 0, :output "2"}
-     {:cmd "git show --check c9b1ad24a", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791747459779-5827-4a984448",
-     :commands
-     ["git show/diff/check c9b1ad24"
-      "lake env lean ConstructionTargets/t97A04Closure.lean"
-      "lake env lean problems/t97A04/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "fingerprint, placeholder, ancestry, fixture checks"],
-     :finding
-     "PASS: c9b1ad24 is new after history 2f947655; its sole changed path is scoped and closure/blueprint blobs match. Forward/inverse continuous maps, cover and intersection MapsTo proofs, and inverse identities faithfully expose the existing frozen-boundary homeomorphism for blueprint B7; domain and codomain representations are correct. Lean gates pass with standard axioms; registry 131/0; frozen hash ca1b2cb3c6594276811618321d5c0604c2f38fc4594a6b21ae161a711a923a34 unchanged; closure/Main placeholders 0/2. This is new compiled progress; short-complex iso, K monicity/cancellation, then B8-B11 remain listed."},
-    :commit "c9b1ad24a4a4cb149ffeaf672a728febefee879b",
+     {:cmd "git show --check 33de646e8", :exit 0}],
+    :diagnostic-history
+    [{:cmd "closure compile",
+      :exit 1,
+      :finding "Typeclass timeout; used explicit cancellation."}],
+    :commit "33de646e8a878b25764efed2fda0abaeb34e5cf6",
     :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -80590,7 +80579,8 @@
    {:name "ConstructionTargets.T97A04Closure.shearY_H2",
     :reported-by [:program-2026-10-11-close-t97a04],
     :type "frozen H2 coordinate of shearY a b is a·id",
-    :area "mv-connecting-naturality"},
+    :area "mv-connecting-naturality",
+    :proved-in :program-2026-10-11-close-t97a04},
    :id :lemma-constructiontargets-t97a04closure-sheary-h2,
    :kind :lemma,
    :depends-on
@@ -80705,12 +80695,14 @@
     "ConstructionTargets.T97A04Closure.frozenConnectingCoordinate_mono",
     :reported-by [:program-2026-10-11-close-t97a04],
     :type "Mono frozenConnectingCoordinate",
-    :area "mv-connecting-naturality"},
+    :area "mv-connecting-naturality",
+    :proved-in :program-2026-10-11-close-t97a04},
    :id
    :lemma-constructiontargets-t97a04closure-frozenconnectingcoordinate-mono,
    :kind :lemma,
    :depends-on
-   [:lemma-constructiontargets-t97a04closure-frozenboundarycovershortcomplexiso],
+   [:lemma-constructiontargets-t97a04closure-frozenboundarycovershortcomplexiso
+    :lemma-constructiontargets-t97a04closure-frozenh2pieces-iszero],
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
@@ -80750,6 +80742,24 @@
     :area "mv-connecting-naturality"},
    :id
    :lemma-constructiontargets-t97a04closure-frozenboundarycovershortcomplexiso,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t97a04closure-frozenboundarycovertransport],
+   :other-consumers []}
+  {:consumer :t97A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "ConstructionTargets.T97A04Closure.frozenH2Pieces_isZero",
+    :type "IsZero(H2(U)⊞H2(V))"},
+   :lemma
+   {:name "ConstructionTargets.T97A04Closure.frozenH2Pieces_isZero",
+    :reported-by [:program-2026-10-11-close-t97a04],
+    :type "IsZero(H2(U)⊞H2(V))",
+    :area "mv-connecting-naturality",
+    :proved-in :program-2026-10-11-close-t97a04},
+   :id :lemma-constructiontargets-t97a04closure-frozenh2pieces-iszero,
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-t97a04closure-frozenboundarycovertransport],
