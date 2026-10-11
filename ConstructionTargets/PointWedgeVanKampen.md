@@ -81,3 +81,9 @@ functor with B3's inverse image of the identity, while
 `genericPointWedgeSourceCounit_naturality` records the resulting conjugacy
 equation.  This uses counit naturality and does not assert that its component
 is an identity; B6 must cancel that conjugation by the explicit leg data.
+
+`genericPointWedgeSourceCounit_left` and
+`genericPointWedgeSourceCounit_right` specialize that equation to the two
+coproduct injections.  They fix the orientation of both remaining B6
+calculations: the mapped leg action occurs before the counit component and
+the literal injection occurs after it.

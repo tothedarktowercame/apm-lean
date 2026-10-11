@@ -591,6 +591,46 @@ theorem genericPointWedgeSourceCounit_naturality
   (genericPointWedgeSourceCounit
     x₀ y₀ M N hM hN hy hx cM cN).hom.naturality g
 
+theorem genericPointWedgeSourceCounit_left
+    (g : FundamentalGroup X x₀) :
+    ((genericPointWedgeSingleObjMappingEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+      (genericPointWedgeTarget x₀ y₀)).functor.obj
+        (genericPointWedgeSourceEquivalence
+          x₀ y₀ M N hM hN hy hx cM cN).functor).map
+          (Monoid.Coprod.inl g : End (SingleObj.star
+            (genericPointWedgeFreeProduct x₀ y₀))) ≫
+        (genericPointWedgeSourceCounit
+          x₀ y₀ M N hM hN hy hx cM cN).hom.app
+            (SingleObj.star (genericPointWedgeFreeProduct x₀ y₀)) =
+      (genericPointWedgeSourceCounit
+        x₀ y₀ M N hM hN hy hx cM cN).hom.app
+          (SingleObj.star (genericPointWedgeFreeProduct x₀ y₀)) ≫
+            (Monoid.Coprod.inl g : End (SingleObj.star
+              (genericPointWedgeFreeProduct x₀ y₀))) :=
+  genericPointWedgeSourceCounit_naturality
+    x₀ y₀ M N hM hN hy hx cM cN (Monoid.Coprod.inl g)
+
+theorem genericPointWedgeSourceCounit_right
+    (g : FundamentalGroup Y y₀) :
+    ((genericPointWedgeSingleObjMappingEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+      (genericPointWedgeTarget x₀ y₀)).functor.obj
+        (genericPointWedgeSourceEquivalence
+          x₀ y₀ M N hM hN hy hx cM cN).functor).map
+          (Monoid.Coprod.inr g : End (SingleObj.star
+            (genericPointWedgeFreeProduct x₀ y₀))) ≫
+        (genericPointWedgeSourceCounit
+          x₀ y₀ M N hM hN hy hx cM cN).hom.app
+            (SingleObj.star (genericPointWedgeFreeProduct x₀ y₀)) =
+      (genericPointWedgeSourceCounit
+        x₀ y₀ M N hM hN hy hx cM cN).hom.app
+          (SingleObj.star (genericPointWedgeFreeProduct x₀ y₀)) ≫
+            (Monoid.Coprod.inr g : End (SingleObj.star
+              (genericPointWedgeFreeProduct x₀ y₀))) :=
+  genericPointWedgeSourceCounit_naturality
+    x₀ y₀ M N hM hN hy hx cM cN (Monoid.Coprod.inr g)
+
 end GenericFundamentalGroupEquivalence
 
 /-- The three-circle model is locally path connected. -/
@@ -878,5 +918,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeSourceEquivalence
 #print axioms genericPointWedgeFundamentalGroupEquiv
 #print axioms genericPointWedgeSourceCounit_naturality
+#print axioms genericPointWedgeSourceCounit_left
+#print axioms genericPointWedgeSourceCounit_right
 
 end ConstructionTargets.PointWedgeVanKampen
