@@ -71965,95 +71965,123 @@
    "Choose a continuous complex waypoint over RightTubeMinusLeftCore and prove both affine legs avoid zero. The banked waypoint adapter constructs the nonvanishing path, normalization supplies the Circle path, and ambient reconstruction supplies the zero-height stage.",
    :other-consumers []}
   {:bounded-exception
+   "single-consumer positive-real certificate for the departure affine leg",
+   :consumer :t02A03,
+   :phase :probe,
+   :state :open,
+   :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t02A03/coupled-angular-departure-positive-real",
+   :acceptance
+   {:probe
+    "Compile coupledAngularDepartureLeg_ne_zero_of_waypoint_re_pos. Prove that any continuous waypoint with strictly positive real part makes the first affine leg from 1 to that waypoint nonzero for every time at most 1/2. Do not choose the waypoint, prove the arrival leg, normalize to Circle, or assemble the ambient deformation.",
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularDepartureLeg_ne_zero_of_waypoint_re_pos",
+    :type
+    "forall (W : C(RightTubeMinusLeftCore, ℂ)), (forall p, 0 < (W p).re) -> forall (t : unitInterval) (p : RightTubeMinusLeftCore), (t : ℝ) <= 1/2 -> (((1-2*(t:ℝ):ℝ):ℂ) + ((2*(t:ℝ):ℝ):ℂ)*W p) != 0",
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "certify the departure half of the banked two-leg waypoint construction from a positive-real waypoint invariant"},
+   :id
+   :routes-2026-10-11-t02a03-coupled-angular-departure-positive-real-topo2-r1,
+   :kind :reusable-theorem,
+   :area "explicit-r3-tube-deformation-retraction",
+   :depends-on
+   [:routes-2026-10-11-t02a03-coupled-angular-waypoint-adapter-topo2-r1],
+   :current-residual
+   "Choose a continuous waypoint with positive real part and prove its affine arrival leg to rightTubeCorePlanarComplex avoids zero; then invoke the banked waypoint, normalization, and ambient adapters.",
+   :other-consumers []}
+  {:bounded-exception
    "single-consumer explicit ambient deformation with frozen tube and deletion invariants",
    :consumer :t02A03,
    :evidence
    {:probe
     {:residual
-     "Bank the two-leg waypoint adapter; then choose the continuous waypoint and prove its departure and arrival affine legs never hit zero.",
+     "Bank the positive-real departure certificate; then choose a continuous positive-real waypoint and certify its arrival affine leg avoids zero.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
      [{:name
-       "ConstructionTargets.T02A03GeometricTubeDeformation.nonvanishingComplexPath_of_waypoint",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularDepartureLeg_ne_zero_of_waypoint_re_pos",
        :type
-       "∀ (W : C(RightTubeMinusLeftCore, ℂ)), (∀ t p, (t : ℝ) ≤ 1/2 → ((1-2*(t:ℝ):ℝ):ℂ) + ((2*(t:ℝ):ℝ):ℂ)*W p ≠ 0) → (∀ t p, ¬(t : ℝ) ≤ 1/2 → ((2-2*(t:ℝ):ℝ):ℂ)*W p + ((2*(t:ℝ)-1:ℝ):ℂ)*rightTubeCorePlanarComplex p.1 ≠ 0) → ∃ Z : C(unitInterval × RightTubeMinusLeftCore, ℂ), (∀ tp, Z tp ≠ 0) ∧ (∀ p, Z (0,p)=1) ∧ (∀ p, Z (1,p)=rightTubeCorePlanarComplex p.1)",
+       "forall (W : C(RightTubeMinusLeftCore, ℂ)), (forall p, 0 < (W p).re) -> forall (t : unitInterval) (p : RightTubeMinusLeftCore), (t : ℝ) <= 1/2 -> (((1-2*(t:ℝ):ℝ):ℂ) + ((2*(t:ℝ):ℝ):ℂ)*W p) != 0",
        :status :proved,
        :consumers [:t02A03],
        :depends-on
-       ["ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngular_of_nonvanishingComplexPath"],
+       ["ConstructionTargets.T02A03GeometricTubeDeformation.nonvanishingComplexPath_of_waypoint"],
        :area "explicit-r3-tube-deformation-retraction"}],
      :prerequisite
      {:bounded-exception
-      "single-consumer two-leg waypoint adapter for an endpoint-correct nonvanishing complex path",
+      "single-consumer positive-real certificate for the departure affine leg",
       :consumer :t02A03,
       :phase :probe,
       :state :open,
       :scope
       ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t02A03/coupled-angular-waypoint-adapter",
+      "TOPOLOGY-ROUTES.md/t02A03/coupled-angular-departure-positive-real",
       :acceptance
       {:probe
-       "Compile nonvanishingComplexPath_of_waypoint. Given a continuous complex waypoint and pointwise nonvanishing certificates for the affine leg from 1 to the waypoint and the affine leg from the waypoint to rightTubeCorePlanarComplex p.1, paste the legs continuously at time 1/2 and prove the resulting complex path is nonvanishing with the exact endpoints. Do not choose the waypoint, normalize to Circle, or assemble the ambient deformation.",
+       "Compile coupledAngularDepartureLeg_ne_zero_of_waypoint_re_pos. Prove that any continuous waypoint with strictly positive real part makes the first affine leg from 1 to that waypoint nonzero for every time at most 1/2. Do not choose the waypoint, prove the arrival leg, normalize to Circle, or assemble the ambient deformation.",
        :declaration
-       "ConstructionTargets.T02A03GeometricTubeDeformation.nonvanishingComplexPath_of_waypoint",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularDepartureLeg_ne_zero_of_waypoint_re_pos",
        :type
-       "∀ (W : C(RightTubeMinusLeftCore, ℂ)), (∀ t p, (t : ℝ) ≤ 1/2 → ((1-2*(t:ℝ):ℝ):ℂ) + ((2*(t:ℝ):ℝ):ℂ)*W p ≠ 0) → (∀ t p, ¬(t : ℝ) ≤ 1/2 → ((2-2*(t:ℝ):ℝ):ℂ)*W p + ((2*(t:ℝ)-1:ℝ):ℂ)*rightTubeCorePlanarComplex p.1 ≠ 0) → ∃ Z : C(unitInterval × RightTubeMinusLeftCore, ℂ), (∀ tp, Z tp ≠ 0) ∧ (∀ p, Z (0,p)=1) ∧ (∀ p, Z (1,p)=rightTubeCorePlanarComplex p.1)",
+       "forall (W : C(RightTubeMinusLeftCore, ℂ)), (forall p, 0 < (W p).re) -> forall (t : unitInterval) (p : RightTubeMinusLeftCore), (t : ℝ) <= 1/2 -> (((1-2*(t:ℝ):ℝ):ℂ) + ((2*(t:ℝ):ℝ):ℂ)*W p) != 0",
        :placeholder "the sole sorry in apm_t02a03",
        :route-step
-       "reduce construction of the nonvanishing endpoint-correct complex path to choosing one continuous waypoint with two affine-leg avoidance proofs"},
+       "certify the departure half of the banked two-leg waypoint construction from a positive-real waypoint invariant"},
       :id
-      :routes-2026-10-11-t02a03-coupled-angular-waypoint-adapter-topo2-r1,
+      :routes-2026-10-11-t02a03-coupled-angular-departure-positive-real-topo2-r1,
       :kind :reusable-theorem,
       :area "explicit-r3-tube-deformation-retraction",
       :depends-on
-      [:routes-2026-10-11-t02a03-coupled-angular-normalization-adapter-topo2-r1],
+      [:routes-2026-10-11-t02a03-coupled-angular-waypoint-adapter-topo2-r1],
       :current-residual
-      "Choose a continuous complex waypoint over RightTubeMinusLeftCore and prove both affine legs avoid zero. The banked waypoint adapter constructs the nonvanishing path, normalization supplies the Circle path, and ambient reconstruction supplies the zero-height stage.",
+      "Choose a continuous waypoint with positive real part and prove its affine arrival leg to rightTubeCorePlanarComplex avoids zero; then invoke the banked waypoint, normalization, and ambient adapters.",
       :other-consumers []},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake env lean /tmp/t02a03_coupled_angular_waypoint_adapter_probe.lean",
+       "lake env lean /tmp/t02a03_departure_leg_positive_real_probe.lean",
        :exit 0,
        :output
-       "nonvanishingComplexPath_of_waypoint compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "coupledAngularDepartureLeg_ne_zero_of_waypoint_re_pos compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/t02a03_coupled_angular_waypoint_adapter_probe.lean",
+       "sha256sum /tmp/t02a03_departure_leg_positive_real_probe.lean",
        :exit 0,
        :output
-       "696fc5c0faaa90d5cbeacce50c0e89f6c8bee0de0cbe2eb1167fb3a0da45e391  /tmp/t02a03_coupled_angular_waypoint_adapter_probe.lean"}
+       "275992381317c2c17de75f1b825eb591402c698e5555ffb4096a306412443d02  /tmp/t02a03_departure_leg_positive_real_probe.lean"}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_coupled_angular_waypoint_adapter_probe.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_departure_leg_positive_real_probe.lean || true)\"",
        :exit 0}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}
       {:cmd
-       "rg -n 'nonvanishingComplexPath_of_waypoint' /tmp/t02a03_coupled_angular_waypoint_adapter_probe.lean",
+       "rg -n 'coupledAngularDepartureLeg_ne_zero_of_waypoint_re_pos' /tmp/t02a03_departure_leg_positive_real_probe.lean",
        :exit 0,
        :output
-       "16:theorem nonvanishingComplexPath_of_waypoint\n62:#print axioms nonvanishingComplexPath_of_waypoint"}],
+       "9:theorem coupledAngularDepartureLeg_ne_zero_of_waypoint_re_pos\n29:#print axioms coupledAngularDepartureLeg_ne_zero_of_waypoint_re_pos"}],
      :diagnostic-history
      [{:cmd
-       "lake env lean /tmp/t02a03_coupled_angular_waypoint_adapter_probe.lean",
+       "lake env lean /tmp/t02a03_departure_leg_positive_real_probe.lean",
        :exit 1,
        :finding
-       "The initial generic continuity proof exceeded the default heartbeat limit; raising the fixture budget exposed the specific missing continuity facts."}
+       "The first fixture opened a stale namespace name and left the real-part equality unsimplified. Removing the unnecessary namespace opening and normalizing Complex.re exposed the scalar equality."}
       {:cmd
-       "lake env lean /tmp/t02a03_coupled_angular_waypoint_adapter_probe.lean",
+       "lake env lean /tmp/t02a03_departure_leg_positive_real_probe.lean",
        :exit 1,
        :finding
-       "Supplying continuity of the waypoint composition and the explicit core-planar coordinate made continuous_if_le deterministic. Changing the nonvanishing goal through the ContinuousMap coercion exposed the piecewise definition for split_ifs."}],
+       "A direct change was not definitionally equal through Complex coercions. norm_num with Complex.mul_re reduced the equality and completed the positivity contradiction."}],
      :fixture
-     {:path "/tmp/t02a03_coupled_angular_waypoint_adapter_probe.lean",
+     {:path "/tmp/t02a03_departure_leg_positive_real_probe.lean",
       :sha256
-      "696fc5c0faaa90d5cbeacce50c0e89f6c8bee0de0cbe2eb1167fb3a0da45e391"},
+      "275992381317c2c17de75f1b825eb591402c698e5555ffb4096a306412443d02"},
      :finding
-     "The path assembly is now separated from waypoint geometry. Any continuous waypoint whose two affine legs avoid zero produces a jointly continuous nonvanishing path with the exact raw angular endpoints; the two formulas agree exactly at time 1/2. The remaining task is only to choose and certify that waypoint.",
+     "For the first affine leg in the banked waypoint adapter, strict positivity of the waypoint real part is sufficient: at time zero the real part is one, and at every positive time through one half it is the sum of a nonnegative departure coefficient and a strictly positive waypoint contribution. Thus the remaining waypoint geometry can be split cleanly into constructing a continuous positive-real waypoint and proving only its arrival leg avoids zero.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
@@ -72131,7 +72159,8 @@
     :routes-2026-10-11-t02a03-coupled-angular-interpolation-zero-locus-topo2-r1
     :routes-2026-10-11-t02a03-coupled-angular-zero-interior-topo2-r1
     :routes-2026-10-11-t02a03-coupled-angular-normalization-adapter-topo2-r1
-    :routes-2026-10-11-t02a03-coupled-angular-waypoint-adapter-topo2-r1],
+    :routes-2026-10-11-t02a03-coupled-angular-waypoint-adapter-topo2-r1
+    :routes-2026-10-11-t02a03-coupled-angular-departure-positive-real-topo2-r1],
    :current-residual
    "Lift H to RightTubeMinusLeftCore, package rightTubeMeridianRetractionHomotopy, then use the coordinate equation for the Circle-side constant homotopy.",
    :other-consumers []}
@@ -77104,4 +77133,29 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-t02a03geometrictubedeformation-coupledangular-of-nonvanishin],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularDepartureLeg_ne_zero_of_waypoint_re_pos",
+    :type
+    "forall (W : C(RightTubeMinusLeftCore, ℂ)), (forall p, 0 < (W p).re) -> forall (t : unitInterval) (p : RightTubeMinusLeftCore), (t : ℝ) <= 1/2 -> (((1-2*(t:ℝ):ℝ):ℂ) + ((2*(t:ℝ):ℝ):ℂ)*W p) != 0"},
+   :lemma
+   {:name
+    "ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularDepartureLeg_ne_zero_of_waypoint_re_pos",
+    :reported-by
+    [:routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1],
+    :type
+    "forall (W : C(RightTubeMinusLeftCore, ℂ)), (forall p, 0 < (W p).re) -> forall (t : unitInterval) (p : RightTubeMinusLeftCore), (t : ℝ) <= 1/2 -> (((1-2*(t:ℝ):ℝ):ℂ) + ((2*(t:ℝ):ℝ):ℂ)*W p) != 0",
+    :area "explicit-r3-tube-deformation-retraction",
+    :proved-in
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+   :id
+   :lemma-constructiontargets-t02a03geometrictubedeformation-coupledangulardepartureleg-ne,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t02a03geometrictubedeformation-nonvanishingcomplexpath-of-wa],
    :other-consumers []}]}
