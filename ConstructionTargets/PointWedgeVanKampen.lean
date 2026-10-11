@@ -1,4 +1,5 @@
 import ConstructionTargets.ThreeCirclesPathTopology
+import ConstructionTargets.GenericTargetNaturalSourceReconstruction
 import Mathlib.GroupTheory.Coprod.Basic
 import Mathlib.GroupTheory.FreeGroup.Basic
 
@@ -17,6 +18,23 @@ open ConstructionTargets.StatementSurfaceModels
 noncomputable section
 
 namespace ConstructionTargets.PointWedgeVanKampen
+
+open CategoryTheory
+
+universe u
+
+/-- An equivalence from a connected groupoid to a one-object groupoid induces
+the expected equivalence on the automorphism group at any chosen object.  This
+is the final, representation-independent step in the point-wedge van Kampen
+construction. -/
+def fundamentalGroupMulEquivOfSingleObjEquivalence
+    {X : Type u} [TopologicalSpace X] (x : X) (G : Type u) [Group G]
+    (E : FundamentalGroupoid X ≌ SingleObj G) :
+    FundamentalGroup X x ≃* G :=
+  (E.fullyFaithfulFunctor.mulEquivEnd (FundamentalGroupoid.mk x)).trans
+    ((Iso.conj (eqToIso (Subsingleton.elim
+      (E.functor.obj (FundamentalGroupoid.mk x)) (SingleObj.star G)))).trans
+      (SingleObj.toEnd G).symm)
 
 /-- The three-circle model is locally path connected. -/
 theorem threeCircles_locPathConnected :
@@ -91,6 +109,7 @@ def coprodFreeGroupFinTwoFinOne_equiv :
         FreeGroup.map_surjective finSumFinEquiv.surjective⟩)
 
 #print axioms threeCircles_locPathConnected
+#print axioms fundamentalGroupMulEquivOfSingleObjEquivalence
 #print axioms threeCircles_pathConnected
 #print axioms coprodFreeGroupEquivFreeGroupSum
 #print axioms coprodFreeGroupFinTwoFinOne_equiv

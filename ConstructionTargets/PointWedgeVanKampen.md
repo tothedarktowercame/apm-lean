@@ -14,3 +14,10 @@ Milestones:
 3. Export the path-connected and locally path-connected structures for
    `ThreeCircles`. This milestone is implemented in `PointWedgeVanKampen.lean`.
 4. Compose the preceding results into `threeCirclesFundamentalGroupEquiv`.
+## Current categorical bridge
+
+`fundamentalGroupMulEquivOfSingleObjEquivalence` now packages the final
+category-to-group conversion: once the generic van Kampen construction gives
+an equivalence from the wedge fundamental groupoid to a one-object groupoid,
+the fundamental group at the displayed wedge point is identified with that
+group.  It is independent of the non-normalized composite counit component.
