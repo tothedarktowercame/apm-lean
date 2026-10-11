@@ -116418,163 +116418,62 @@
      :reason
      "Program milestone completed. Blueprint node B5 is proved: compactness selects finitely many B4 neighbourhoods, the minimum of their positive local times is positive, and every selected curve restricts to that common interval. Only B6 remains."}]}
   {:consumer :t97A07,
-   :stop-count 1,
+   :stop-count 2,
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Independent blueprint review, then formalize B1 through B9 and remove the sole placeholder from problems/t97A07/lean/Main.lean.",
+    "B2-B9: chart derivative continuity through the frozen adapter.",
     :outcome :stop,
     :warnings
-    [{:kind :existing-placeholder,
-      :message
-      "The consumer retains its sole pre-existing placeholder; this blueprint-only job changes no Lean source."}
-     {:kind :concurrent-worktree-change,
-      :message
-      "ConstructionTargets/t97A04Closure.lean was modified by another process and was preserved unmodified and uncommitted."}],
+    [{:kind :concurrent-worktree-change,
+      :message "Unrelated edits preserved."}],
     :missing-theorems
     [{:name "t97A07Closure.isOpen_setOf_surjective_clm",
-      :type
-      "Surjective continuous linear maps between finite-dimensional real normed spaces form an open set",
-      :status :not-started,
+      :type "Surjective finite-dimensional real CLMs form an open set",
+      :status :proved,
       :consumers [:t97A07],
       :depends-on [],
-      :area "regular-points-open"}
-     {:name "t97A07Closure.continuousAt_coordinate_mfderiv",
-      :type
-      "The fixed-chart coordinate representative of a smooth manifold map has a continuous derivative and represents mfderiv by chart transport",
-      :status :not-started,
-      :consumers [:t97A07],
-      :depends-on [],
-      :area "regular-points-open"}
-     {:name "t97A07Closure.isOpen_regularPoints",
-      :type "The points where mfderiv is surjective form an open set",
-      :status :not-started,
-      :consumers [:t97A07],
-      :depends-on
-      ["t97A07Closure.isOpen_setOf_surjective_clm"
-       "t97A07Closure.continuousAt_coordinate_mfderiv"],
-      :area "regular-points-open"}
-     {:name "t97A07Closure.isCompact_criticalValues",
-      :type "The frozen critical-value set is compact",
-      :status :not-started,
-      :consumers [:t97A07],
-      :depends-on ["t97A07Closure.isOpen_regularPoints"],
-      :area "regular-points-open"}
-     {:name
-      "t97A07Closure.not_surjective_mfderiv_of_isMaxOn_coordinate",
-      :type
-      "A maximizer of a target coordinate has nonsurjective manifold derivative",
-      :status :not-started,
-      :consumers [:t97A07],
-      :depends-on [],
-      :area "regular-points-open"}
-     {:name "t97A07Closure.criticalValues_nonempty_of_pos",
-      :type
-      "A smooth map from a nonempty compact manifold to a positive-dimensional Euclidean space has a critical value",
-      :status :not-started,
-      :consumers [:t97A07],
-      :depends-on
-      ["t97A07Closure.not_surjective_mfderiv_of_isMaxOn_coordinate"],
-      :area "regular-points-open"}
-     {:name "t97A07Closure.range_mem_nhds_of_regular",
-      :type
-      "A point with surjective mfderiv maps onto a neighborhood of its value",
-      :status :not-started,
-      :consumers [:t97A07],
-      :depends-on ["t97A07Closure.continuousAt_coordinate_mfderiv"],
-      :area "regular-points-open"}
-     {:name
-      "t97A07Closure.criticalValues_infinite_of_one_lt_of_nonconstant",
-      :type
-      "For target dimension above one, a nonconstant smooth map has infinitely many critical values",
-      :status :not-started,
-      :consumers [:t97A07],
-      :depends-on
-      ["t97A07Closure.isCompact_criticalValues"
-       "t97A07Closure.range_mem_nhds_of_regular"],
-      :area "regular-points-open"}
-     {:name "apm_t97a07",
-      :type
-      "The exact frozen theorem in problems/t97A07/lean/Main.lean",
-      :status :not-started,
-      :consumers [:t97A07],
-      :depends-on
-      ["t97A07Closure.isCompact_criticalValues"
-       "t97A07Closure.criticalValues_nonempty_of_pos"
-       "t97A07Closure.criticalValues_infinite_of_one_lt_of_nonconstant"],
       :area "regular-points-open"}],
     :statement-hashes
-    {:source-sha256
-     "f13a687334f894f060c24b9aa390e8de88a2bf5f3d36e1de717af326c84d78f2",
-     :blueprint-sha256
-     "8e98ced3beda3a1675ad6a20d09b8e90429daa16feaabbf32ea51db7a273dfda",
-     :registry "131 registered statements match, 0 do not"},
+    {:source
+     "9e512382ac39d78d8ddd5b094362372452f5edf9399bbe7497f387e0747728a5",
+     :blueprint
+     "7aa8f2532bb4320294e0983239c04e1c9792ef4df66669be503b5de86db9e258",
+     :registry "131/131"},
     :disposition :stop,
-    :axioms [],
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
-    :reason
-    "Blueprint written. Nine planned nodes separate finite-dimensional surjectivity stability, fixed-chart derivative continuity, openness of regular points, compactness of critical values, the coordinate-maximum criticality argument, positive-dimensional nonemptiness, local image openness at regular points, the connected-complement infinitude argument, and the frozen adapter. Formalization waits for independent mathematical review.",
+    :reason "B1 proved; B2-B9 remain.",
     :commands
-    [{:cmd "python3 blueprint node and dependency-field validation",
+    [{:cmd "lake env lean ConstructionTargets/t97A07Closure.lean",
       :exit 0,
-      :finding
-      "Nine sequential nodes each contain lean, uses, and planned status fields."}
-     {:cmd "lake env lean problems/t97A07/lean/Main.lean",
-      :exit 0,
-      :finding
-      "The consumer compiles with exactly its one pre-existing apm_t97a07 placeholder."}
+      :finding "B1 compiles; standard axioms."}
+     {:cmd "lake build ConstructionTargets.t97A07Closure", :exit 0}
+     {:cmd "lake env lean problems/t97A07/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
-      :finding "131 registered statements match, 0 do not."}
-     {:cmd
-      "git diff --check -- ConstructionTargets/t97A07Closure.blueprint.md",
-      :exit 0}
-     {:cmd "git commit -m Write-t97A07-critical-values-blueprint",
+      :finding "131/131"}
+     {:cmd "placeholder/diff checks",
       :exit 0,
-      :finding "Committed only the scoped blueprint as 8ffa96423."}
-     {:cmd
-      "sha256sum problems/t97A07/lean/Main.lean ConstructionTargets/t97A07Closure.blueprint.md",
-      :exit 0,
-      :finding
-      "Hashes are f13a687334f894f060c24b9aa390e8de88a2bf5f3d36e1de717af326c84d78f2 and 8e98ced3beda3a1675ad6a20d09b8e90429daa16feaabbf32ea51db7a273dfda."}],
-    :diagnostic-history [],
-    :continue-from
-    {:commit "8ffa96423",
-     :next
-     "Obtain independent review of t97A07Closure.blueprint.md; after approval implement B1, openness of surjective finite-dimensional continuous linear maps."},
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791729619010-5506-dfc73e64",
-     :commands
-     ["git show --format=fuller --stat 8ffa96423d77e11e8ed6a9b8d1900ab94e10a424"
-      "git diff-tree --no-commit-id --name-only -r 8ffa96423d77e11e8ed6a9b8d1900ab94e10a424"
-      "sha256sum problems/t97A07/lean/Main.lean ConstructionTargets/t97A07Closure.blueprint.md"
-      "python3 blueprint node and dependency-field validation"
-      "git diff --check 8ffa96423^ 8ffa96423 -- ConstructionTargets/t97A07Closure.blueprint.md"
-      "python3 scripts/statement-registry.py check"
-      "lake env lean problems/t97A07/lean/Main.lean"],
-     :finding
-     "PASS: blueprint-only STOP adds a new nine-node mathematical plan within exact scope; frozen source and blueprint hashes match, the one pre-existing source placeholder is unchanged, registry and consumer compilation pass, and each node is true with faithful representations and declared dependencies. Formalization correctly remains at B1."},
-    :commit "8ffa96423",
-    :changed-paths ["ConstructionTargets/t97A07Closure.blueprint.md"],
+      :finding "Target 0; consumer 1."}],
+    :diagnostic-history
+    [{:cmd "lake env lean ConstructionTargets/t97A07Closure.lean",
+      :exit 1,
+      :finding "Fixed range/composition API."}
+     {:cmd "lake env lean ConstructionTargets/t97A07Closure.lean",
+      :exit 1,
+      :finding "Reoriented unit equality."}],
+    :commit "9ee1208d447a1e4a90b80d6e525694cd161aced6",
+    :changed-paths
+    ["ConstructionTargets/t97A07Closure.lean"
+     "ConstructionTargets/t97A07Closure.blueprint.md"],
     :fixture
     {:path "ConstructionTargets/t97A07Closure.blueprint.md",
      :sha256
-     "8e98ced3beda3a1675ad6a20d09b8e90429daa16feaabbf32ea51db7a273dfda",
-     :nodes
-     [{:id :B1, :status :planned}
-      {:id :B2, :status :planned}
-      {:id :B3, :status :planned}
-      {:id :B4, :status :planned}
-      {:id :B5, :status :planned}
-      {:id :B6, :status :planned}
-      {:id :B7, :status :planned}
-      {:id :B8, :status :planned}
-      {:id :B9, :status :planned}]},
+     "7aa8f2532bb4320294e0983239c04e1c9792ef4df66669be503b5de86db9e258"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A07/lean/Main.lean"
     "problems/t97A07/status.json"
@@ -117639,7 +117538,8 @@
     :reported-by [:program-2026-10-11-close-t97a07],
     :type
     "Surjective continuous linear maps between finite-dimensional real normed spaces form an open set",
-    :area "regular-points-open"},
+    :area "regular-points-open",
+    :proved-in :program-2026-10-11-close-t97a07},
    :id :lemma-t97a07closure-isopen-setof-surjective-clm,
    :kind :lemma,
    :depends-on [],
