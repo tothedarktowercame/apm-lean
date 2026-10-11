@@ -62,7 +62,20 @@ for every category `C`, an equivalence
  (SingleObj (Monoid.Coprod (FundamentalGroup X x₀)
    (FundamentalGroup Y y₀)) ⥤ C)`, natural under postcomposition in `C`.
 
-uses: B1, B2, `twoOpenFundamentalGroupoidPseudopushoutEquivalence`
+uses: B1, B2,
+`twoOpenFundamentalGroupoidPseudopushoutEquivalence`,
+`pseudopushoutPostcomposeNatIso`,
+`TwoOpenFreeProductMapping.pseudoSpanEquivalence`,
+`GenericSpanPseudoCoconeTransport.pseudoCoconeEquivalenceOfSpanEquivalences`
+and `GenericSpanPseudoCoconeTransport.equivalenceFunctorPostcomposeIso`,
+`TwoOpenPointSpanComparison.comparison` and
+`TwoOpenPointSpanComparison.postcomposeIso`,
+`FreeProductPointSpanRepresentations.freeProductPointSpanEquivalence` and
+`FreeProductPointSpanRepresentations.equivalenceFunctorPostcomposeIso`, and
+`FreeProductRepresentationSingleObjEquivalence.representationSingleObjEquivalence`
+with `FreeProductRepresentationSingleObjEquivalence.representationToFunctorPostcomposeIso`.
+The pseudo-cocone/pseudo-span conversion is definitionally natural under
+`GenericSpanPseudoCoconeTransport.postcomposeFunctor`.
 
 status: planned
 
@@ -145,7 +158,21 @@ trip by coproduct homomorphism extensionality and free-generator
 extensionality, and the second by free-generator extensionality.  Specialize
 and transport generators along `finSumFinEquiv`.
 
-### B8. Three-circle topology
+### B8. Rank-one free group coordinate
+
+lean: `PointWedgeVanKampen.multiplicativeIntEquivFreeGroupFinOne` :
+`Multiplicative ℤ ≃* FreeGroup (Fin 1)`.
+
+uses: Mathlib `FreeGroup.mulEquivIntOfUnique`
+
+status: planned
+
+The type `Fin 1` has a `Unique` instance, so Mathlib gives
+`FreeGroup (Fin 1) ≃* Multiplicative ℤ`.  Take its symmetric equivalence.
+This fixes the orientation needed after applying
+`CircleUniversalCover.circleFundamentalGroupMulEquivInt` in B10.
+
+### B9. Three-circle topology
 
 lean: `PointWedgeVanKampen.threeCircles_locPathConnected` :
 `LocPathConnectedSpace ThreeCircles`; and
@@ -160,12 +187,13 @@ Transport the standard circle instances through the two nested point-wedge
 constructions.  These instances also support the later covering restriction
 route, independently of the fundamental-group calculation.
 
-### B9. Fundamental group of three circles
+### B10. Fundamental group of three circles
 
 lean: `PointWedgeVanKampen.threeCirclesFundamentalGroupEquiv` :
 `FundamentalGroup ThreeCircles threeBase ≃* FreeGroup (Fin 3)`.
 
-uses: B6, B7, B8, Mathlib's circle fundamental-group equivalence
+uses: B6, B7, B8, B9,
+`CircleUniversalCover.circleFundamentalGroupMulEquivInt`
 
 status: planned
 
@@ -176,4 +204,3 @@ standard equivalence with `Multiplicative ℤ`) and combine the first two
 generators as `FreeGroup (Fin 2)`.  Finally compose with B7.  The representative
 formulas in B6 ensure that the chosen `threeBase` is the basepoint expected by
 both applications.
-
