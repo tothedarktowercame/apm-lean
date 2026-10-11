@@ -510,6 +510,26 @@ theorem genericPointWedgeIdentityCoordinateWhiskeredGlue_app_eq_unitBase :
   dsimp only
   rw [genericPointWedgeIdentityCoordinateWhiskeredGlue_app]
 
+/-- The coordinate glue at the unit base, expanded through the inverse
+coordinate-to-point transport. -/
+theorem genericPointWedgeIdentityCoordinateSpan_glue_unitBase :
+    let l := genericPointWedgeCoordinateLeft x₀
+    let r := genericPointWedgeCoordinateRight y₀
+    let l' := pointLeg (FundamentalGroup X x₀)
+    let r' := pointLeg (FundamentalGroup Y y₀)
+    let eK := genericPointWedgeUnitSingleObjEquivalence
+    let eL := genericPointWedgeSingleObjEquivalence x₀
+    let eR := genericPointWedgeSingleObjEquivalence y₀
+    let aL := genericPointWedgeCoordinateLeftPointIso x₀
+    let aR := genericPointWedgeCoordinateRightPointIso y₀
+    let Q := genericPointWedgeIdentityPointSpan x₀ y₀
+    let z : FundamentalGroupoid Unit := FundamentalGroupoid.mk ()
+    (genericPointWedgeIdentityCoordinateSpan x₀ y₀).glue.hom.app z =
+      (reverseLeftComparison l l' eK eL aL Q.left).inv.app z ≫
+        (Functor.isoWhiskerLeft eK.functor Q.glue).hom.app z ≫
+          (reverseRightComparison r r' eK eR aR Q.right).hom.app z := by
+  rfl
+
 /-- The penultimate inverse stage of B3, now expressed as the literal
 pseudococone on the two open pieces. -/
 def genericPointWedgeIdentityPseudoCocone :
@@ -1851,6 +1871,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeIdentityCoordinateReverseSpan_glue_app
 #print axioms genericPointWedgeIdentityCoordinateWhiskeredGlue_app
 #print axioms genericPointWedgeIdentityCoordinateWhiskeredGlue_app_eq_unitBase
+#print axioms genericPointWedgeIdentityCoordinateSpan_glue_unitBase
 #print axioms genericPointWedgeIdentityGlobalRightRestriction_map
 #print axioms genericPointWedgeIdentityGlobalRightBase_map
 #print axioms genericPointWedgeIdentityRepresentation_inl

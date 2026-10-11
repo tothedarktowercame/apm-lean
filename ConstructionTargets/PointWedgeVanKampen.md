@@ -261,3 +261,9 @@ to the unique object of `FundamentalGroupoid Unit` by
 `genericPointWedgeIdentityCoordinateWhiskeredGlue_app_eq_unitBase`.  Thus the
 middle calculation has a fixed unit-base component; its connector expansion
 and the two outer comparison components remain.
+
+That fixed component is expanded in
+`genericPointWedgeIdentityCoordinateSpan_glue_unitBase`.  It is, in order,
+the inverse left connector comparison, the identity point-span glue whiskered
+through the Unit equivalence, and the right connector comparison.  Evaluating
+these connector components and the original two outer comparisons remains.
