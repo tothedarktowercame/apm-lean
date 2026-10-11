@@ -116165,6 +116165,18 @@
     {:commit "5ad0b052e235a1a01be0035c81b870751f40215a",
      :next
      "Prove the coordinate representation lemma conjugating reflectionMap 1 to additive negation, then package the transported t95J02_beta_homotopic_beta_reflection."},
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791722352251-5350-b61a6f41",
+     :commands
+     ["git show/diff-tree 5ad0b052e235a1a01be0035c81b870751f40215a"
+      "recorded-tree SHA-256, exact-scope, diff-check, and placeholder verification"
+      "python3 scripts/statement-registry.py check"
+      "lake env lean problems/t95J02/lean/Main.lean"
+      "lake env lean recorded source plus #print axioms"],
+     :finding
+     "PASS: commit 5ad0b052 adds new compiled, placeholder-free B6 progress after the B5 program-history entry. The descended vertical sweep is continuous, its zero endpoint is the vertical core map, and its one endpoint is that map after additive negation with the glide equality in the correct orientation. Scope and fixture hashes match, only standard axioms occur, and the blueprint faithfully marks B6 partial with the reflection/negation representation transport remaining."},
     :commit "5ad0b052e235a1a01be0035c81b870751f40215a",
     :changed-paths
     ["problems/t95J02/lean/Main.lean"
@@ -116185,7 +116197,7 @@
       {:id :B9, :status :planned}]},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t95J02/lean/Main.lean"
     "problems/t95J02/status.json"
@@ -116201,7 +116213,7 @@
     ["lake env lean problems/t95J02/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Program milestone completed. Blueprint node B5 is proved: the integer-periodic vertical parametrization descends to a continuous bijection from AddCircle 1; the restricted separating coordinate makes CircleB Hausdorff; compact-to-Hausdorff upgrades the bijection to a homeomorphism; and the standard circle identifications produce t95J02CircleB_homeo. B6-B9 remain for later jobs.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Program milestone advanced. B6 is partial: verticalSweep descends the continuous map (t,y) ↦ [(t,y)] through AddCircle 1, and verticalSweepHomotopy proves its endpoints are the vertical core map and that map precomposed with additive negation. The remaining B6 step is the representation transport identifying additive negation through t95J02CircleB_homeo with coordinate-1 Euclidean reflection.",
    :id :program-2026-10-11-close-t95j02,
    :kind :final-adapter,
    :campaign-priority 41,
@@ -116229,7 +116241,11 @@
     {:job 8,
      :commit "0f91a562d38e8d6dea370234c9e989247758764e",
      :reason
-     "Program milestone completed. Blueprint node B5 is proved: the integer-periodic vertical parametrization descends to a continuous bijection from AddCircle 1; the restricted separating coordinate makes CircleB Hausdorff; compact-to-Hausdorff upgrades the bijection to a homeomorphism; and the standard circle identifications produce t95J02CircleB_homeo. B6-B9 remain for later jobs."}]}
+     "Program milestone completed. Blueprint node B5 is proved: the integer-periodic vertical parametrization descends to a continuous bijection from AddCircle 1; the restricted separating coordinate makes CircleB Hausdorff; compact-to-Hausdorff upgrades the bijection to a homeomorphism; and the standard circle identifications produce t95J02CircleB_homeo. B6-B9 remain for later jobs."}
+    {:job 9,
+     :commit "5ad0b052e235a1a01be0035c81b870751f40215a",
+     :reason
+     "Program milestone advanced. B6 is partial: verticalSweep descends the continuous map (t,y) ↦ [(t,y)] through AddCircle 1, and verticalSweepHomotopy proves its endpoints are the vertical core map and that map precomposed with additive negation. The remaining B6 step is the representation transport identifying additive negation through t95J02CircleB_homeo with coordinate-1 Euclidean reflection."}]}
   {:consumer :t92J08,
    :phase :implementation,
    :state :open,
@@ -117139,7 +117155,7 @@
    :other-consumers []}
   {:consumer :t95J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t95J02Closure.verticalSweepHomotopy",
@@ -117151,7 +117167,9 @@
     :type
     "A homotopy from the AddCircle vertical core map to its precomposition with additive negation",
     :area "klein-bottle-homology",
-    :proved-in :program-2026-10-11-close-t95j02},
+    :proved-in :program-2026-10-11-close-t95j02,
+    :banked-by :program-2026-10-11-close-t95j02,
+    :banked-commit "5ad0b052e235a1a01be0035c81b870751f40215a"},
    :id :lemma-t95j02closure-verticalsweephomotopy,
    :kind :lemma,
    :depends-on [:lemma-t95j02closure-t95j02circleb-homeo],
