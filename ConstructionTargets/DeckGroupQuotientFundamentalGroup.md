@@ -52,6 +52,12 @@ to a based loop in the orbit quotient. `monodromy_map` computes the lifted
 endpoint, the orbit-fiber equivalence identifies its raw coordinate as `g⁻¹`,
 and the inversion in B7 sends the loop to `g`.
 
+`orbitEndpointMonodromy_injective` implements blueprint B9. A loop in the
+kernel has raw endpoint coordinate `1`, so its chosen lift closes at `x`.
+That lifted loop has the unique path-homotopy class supplied by simple
+connectedness. Projecting this equality and using the path-lift equation
+identifies the original quotient loop with the constant loop.
+
 ## Refutation of the frozen final statement
 
 The fixed theorem omits every separation hypothesis. This is not merely a gap
@@ -69,10 +75,8 @@ negates the exact universal proposition of the program's frozen final type.
 
 ## Remaining work for the repaired statement
 
-1. Prove injectivity of endpoint monodromy in the simply connected total
-   space.
-2. Package the resulting group equivalence.
-3. Supply the plane/Klein-group and finite-action adapters.
+1. Package endpoint monodromy as the resulting group equivalence.
+2. Supply the plane/Klein-group and finite-action adapters.
 
 Mathlib's construction of local evenly covered neighborhoods from
 `ProperlyDiscontinuousSMul G X` assumes both `LocallyCompactSpace X` and

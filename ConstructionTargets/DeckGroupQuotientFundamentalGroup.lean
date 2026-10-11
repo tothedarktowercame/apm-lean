@@ -268,6 +268,54 @@ theorem orbitEndpointMonodromy_surjective
       congrArg Subtype.val (cov.monodromy_map (Path.Homotopic.Quotient.mk δ))
   rw [hraw, inv_inv]
 
+/-- Endpoint monodromy is injective when the total space is simply connected.
+A loop in its kernel lifts to a loop upstairs, whose unique homotopy class
+projects back to the identity class downstairs. -/
+theorem orbitEndpointMonodromy_injective
+    {G X : Type*} [Group G] [TopologicalSpace X] [MulAction G X]
+    [ContinuousConstSMul G X] [ProperlyDiscontinuousSMul G X]
+    [LocallyCompactSpace X] [T2Space X] [SimplyConnectedSpace X]
+    [LocPathConnectedSpace X]
+    (free : ∀ g : G, ∀ x : X, g • x = x → g = 1) (x : X) :
+    Function.Injective (orbitEndpointMonodromy free x) := by
+  rw [← MonoidHom.ker_eq_bot_iff]
+  ext a
+  simp only [MonoidHom.mem_ker, Subgroup.mem_bot]
+  constructor
+  · intro ha
+    let q : C(X, MulAction.orbitRel.Quotient G X) :=
+      ⟨Quotient.mk (MulAction.orbitRel G X), continuous_quotient_mk'⟩
+    let cov := quotientMk_isCoveringMap free
+    let E := orbitQuotientFiberEquiv free x
+    have hraw : orbitEndpointMonodromyRaw free x a = 1 := by
+      have : (orbitEndpointMonodromyRaw free x a)⁻¹ = 1 := by
+        simpa only [orbitEndpointMonodromy_apply] using ha
+      exact inv_eq_one.mp this
+    have hmon : cov.monodromy (FundamentalGroup.toPath a) ⟨x, rfl⟩ = ⟨x, rfl⟩ := by
+      have h := congrArg E hraw
+      rw [orbitEndpointMonodromyRaw, Equiv.apply_symm_apply] at h
+      exact h.trans (Subtype.ext (one_smul G x))
+    obtain ⟨γ⟩ := a
+    let lift := cov.liftPath γ x (by simp)
+    have hend : lift 1 = x := by
+      simpa [IsCoveringMap.monodromy, lift] using congrArg Subtype.val hmon
+    let δ : Path x x := ⟨lift, cov.liftPath_zero _ _ _, hend⟩
+    have hmap : (Path.Homotopic.Quotient.mk δ).map q =
+        Path.Homotopic.Quotient.mk γ := by
+      rw [← Path.Homotopic.Quotient.mk_map]
+      congr 1
+      ext t
+      exact congrFun (cov.liftPath_lifts γ x (by simp)) t
+    have hδ : Path.Homotopic.Quotient.mk δ =
+        Path.Homotopic.Quotient.refl x := Subsingleton.elim _ _
+    change Path.Homotopic.Quotient.mk γ = Path.Homotopic.Quotient.refl (q x)
+    calc
+      Path.Homotopic.Quotient.mk γ =
+          (Path.Homotopic.Quotient.mk δ).map q := hmap.symm
+      _ = (Path.Homotopic.Quotient.refl x).map q := congrArg (·.map q) hδ
+      _ = Path.Homotopic.Quotient.refl (q x) := rfl
+  · exact fun ha ↦ ha.symm ▸ map_one (orbitEndpointMonodromy free x)
+
 private abbrev CounterexampleGroup := Multiplicative (ZMod 2)
 
 private instance : TopologicalSpace CounterexampleGroup := ⊤
@@ -334,6 +382,7 @@ theorem freeProperlyDiscontinuousQuotient_fundamentalGroupEquiv_refuted :
 #print axioms orbitEndpointMonodromyRaw_mul
 #print axioms orbitEndpointMonodromy
 #print axioms orbitEndpointMonodromy_surjective
+#print axioms orbitEndpointMonodromy_injective
 #print axioms indiscreteRegularAction_no_fundamentalGroupEquiv
 #print axioms freeProperlyDiscontinuousQuotient_fundamentalGroupEquiv_refuted
 
