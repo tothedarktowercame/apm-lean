@@ -171,3 +171,12 @@ each cover-piece morphism is first mapped by the corresponding B1 groupoid
 equivalence and then evaluated by the coordinate-span object.  The remaining
 B6 calculation is therefore the identification of the literal wedge legs
 through the open-cover pseudopushout with these two cover-piece maps.
+
+The final two open-cover inverse stages are now named explicitly.
+`genericPointWedgeIdentityPseudoCocone` has left and right components
+definitionally equal to the literal actual-span components, and
+`genericPointWedgeIdentityGlobalFunctor` glues that pseudococone back to the
+wedge.  Unfolding the complete B3 inverse proves that this global functor is
+exactly `genericPointWedgeInverseIdentityFunctor`.  The remaining B6 step is
+the restriction computation identifying its maps on the two literal wedge
+legs with the corresponding pseudococone component maps.

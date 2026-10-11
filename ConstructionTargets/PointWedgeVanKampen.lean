@@ -420,6 +420,43 @@ def genericPointWedgeIdentityActualSpan :
     (SingleObj (genericPointWedgeFreeProduct x₀ y₀))).inverse.obj
       (genericPointWedgeIdentityCoordinateSpan x₀ y₀)
 
+/-- The penultimate inverse stage of B3, now expressed as the literal
+pseudococone on the two open pieces. -/
+def genericPointWedgeIdentityPseudoCocone :
+    PseudoFunctorCocone (X := Wedge x₀ y₀)
+      (U := genericLeftOpen x₀ y₀ M)
+      (V := genericRightOpen x₀ y₀ N)
+      (C := SingleObj (genericPointWedgeFreeProduct x₀ y₀)) :=
+  (genericPointWedgePseudoSpanEquivalence x₀ y₀ M N
+    (SingleObj (genericPointWedgeFreeProduct x₀ y₀))).inverse.obj
+      (genericPointWedgeIdentityActualSpan
+        x₀ y₀ M N hM hN hy hx cM cN)
+
+/-- The final inverse stage of B3: gluing the literal open-cover
+pseudococone back to a functor on the wedge. -/
+def genericPointWedgeIdentityGlobalFunctor :
+    FundamentalGroupoid (Wedge x₀ y₀) ⥤
+      SingleObj (genericPointWedgeFreeProduct x₀ y₀) :=
+  (twoOpenFundamentalGroupoidPseudopushoutEquivalence
+    (C := SingleObj (genericPointWedgeFreeProduct x₀ y₀))
+    (genericPointWedgePackage x₀ y₀ M N hM hN hy hx cM cN).leftOpen_isOpen
+    (genericPointWedgePackage x₀ y₀ M N hM hN hy hx cM cN).rightOpen_isOpen
+    (genericPointWedgePackage x₀ y₀ M N hM hN hy hx cM cN).union_eq_univ).inverse.obj
+      (genericPointWedgeIdentityPseudoCocone
+        x₀ y₀ M N hM hN hy hx cM cN)
+
+@[simp] theorem genericPointWedgeIdentityPseudoCocone_left :
+    (genericPointWedgeIdentityPseudoCocone
+      x₀ y₀ M N hM hN hy hx cM cN).left =
+      (genericPointWedgeIdentityActualSpan
+        x₀ y₀ M N hM hN hy hx cM cN).left := rfl
+
+@[simp] theorem genericPointWedgeIdentityPseudoCocone_right :
+    (genericPointWedgeIdentityPseudoCocone
+      x₀ y₀ M N hM hN hy hx cM cN).right =
+      (genericPointWedgeIdentityActualSpan
+        x₀ y₀ M N hM hN hy hx cM cN).right := rfl
+
 omit [PathConnectedSpace X] [PathConnectedSpace Y] in
 @[simp] theorem genericPointWedgeIdentityRepresentation_inl
     (g : genericPointWedgeLeftGroup x₀) :
@@ -730,6 +767,14 @@ def genericPointWedgeInverseIdentityFunctor :
     x₀ y₀ M N hM hN hy hx cM cN
     (genericPointWedgeTarget x₀ y₀)).inverse.obj
       (𝟭 (genericPointWedgeTarget x₀ y₀))
+
+/-- Unfolding the composite B3 inverse reaches exactly the named global
+functor reconstructed from the literal open-cover pseudococone. -/
+theorem genericPointWedgeInverseIdentityFunctor_eq_global :
+    genericPointWedgeInverseIdentityFunctor
+      x₀ y₀ M N hM hN hy hx cM cN =
+      genericPointWedgeIdentityGlobalFunctor
+        x₀ y₀ M N hM hN hy hx cM cN := rfl
 
 theorem genericPointWedgeSourceFunctor_map_eq_inverseIdentity
     {a b : FundamentalGroupoid (Wedge x₀ y₀)} (g : a ⟶ b) :
@@ -1352,6 +1397,8 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeIdentityPointSpan
 #print axioms genericPointWedgeIdentityCoordinateSpan
 #print axioms genericPointWedgeIdentityActualSpan
+#print axioms genericPointWedgeIdentityPseudoCocone
+#print axioms genericPointWedgeIdentityGlobalFunctor
 #print axioms genericPointWedgeIdentityRepresentation_inl
 #print axioms genericPointWedgeIdentityRepresentation_inr
 #print axioms genericPointWedgeIdentityPointSpan_left
@@ -1363,6 +1410,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeSingleObjPostcomposeIso
 #print axioms genericPointWedgeSourceEquivalence
 #print axioms genericPointWedgeInverseIdentityFunctor
+#print axioms genericPointWedgeInverseIdentityFunctor_eq_global
 #print axioms genericPointWedgeSourceFunctor_map_eq_inverseIdentity
 #print axioms genericPointWedgeFundamentalGroupEquiv
 #print axioms fundamentalGroupMulEquivOfSingleObjEquivalence_apply
