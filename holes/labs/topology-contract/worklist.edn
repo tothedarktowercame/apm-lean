@@ -116178,13 +116178,28 @@
     {:commit "066b6bdc352d209e1b15ae5f53a357b520be4775",
      :next
      "Implement blueprint B3, the continuous integer-periodic vertical parametrization, then B4 fiber classification using separatingMap."},
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791719403250-5291-b8098553",
+     :commands
+     ["git show 066b6bdc352d209e1b15ae5f53a357b520be4775 --stat and scoped diff"
+      "git diff-tree --name-status 066b6bdc352d209e1b15ae5f53a357b520be4775"
+      "git diff --quiet recorded commit against scoped working files"
+      "sha256sum recorded source and blueprint"
+      "git diff --check recorded commit"
+      "comment-stripped placeholder count"
+      "python3 scripts/statement-registry.py check"
+      "lake env lean problems/t95J02/lean/Main.lean"],
+     :finding
+     "PASS: this program STOP adds new compiled B1-B2 progress after program-history commit 6461d9295ff33499139569f43b4605c21ab88258. The changed paths are exactly the problem source and blueprint. separatingRaw is invariant under both frozen Klein generators with the stated cosine-sine orientation, EqvGen.rec extends that invariant, and separatingMap descends continuously through the frozen quotient. Recorded hashes reproduce, the registry reports 131 matches, and the source compiles with only standard axioms. The three pre-existing placeholders remain exactly the declared B7-B9 residual."},
     :commit "066b6bdc352d209e1b15ae5f53a357b520be4775",
     :changed-paths
     ["problems/t95J02/lean/Main.lean"
      "ConstructionTargets/t95J02Closure.blueprint.md"],
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t95J02/lean/Main.lean"
     "problems/t95J02/status.json"
@@ -116200,7 +116215,7 @@
     ["lake env lean problems/t95J02/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Blueprint repaired. B7 now uses the type-correct functorial order H1(reflectionMap 1) followed by H1(beta), derives H1(beta)(g) = H1(beta)(-g), and uses additivity to kill 2 times g. A fresh Lean map_comp check confirms the source and target order. Independent blueprint re-review remains required.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Program milestone completed. Blueprint nodes B1 and B2 are proved: the trigonometric separating coordinate is invariant under both Klein generators, extends across Relation.EqvGen, and descends to a continuous map on the frozen quotient. Nodes B3-B9 remain for later program jobs.",
    :id :program-2026-10-11-close-t95j02,
    :kind :final-adapter,
    :campaign-priority 41,
@@ -116212,7 +116227,11 @@
    [{:job 4,
      :commit "6461d9295ff33499139569f43b4605c21ab88258",
      :reason
-     "Blueprint repaired. B7 now uses the type-correct functorial order H1(reflectionMap 1) followed by H1(beta), derives H1(beta)(g) = H1(beta)(-g), and uses additivity to kill 2 times g. A fresh Lean map_comp check confirms the source and target order. Independent blueprint re-review remains required."}]}
+     "Blueprint repaired. B7 now uses the type-correct functorial order H1(reflectionMap 1) followed by H1(beta), derives H1(beta)(g) = H1(beta)(-g), and uses additivity to kill 2 times g. A fresh Lean map_comp check confirms the source and target order. Independent blueprint re-review remains required."}
+    {:job 5,
+     :commit "066b6bdc352d209e1b15ae5f53a357b520be4775",
+     :reason
+     "Program milestone completed. Blueprint nodes B1 and B2 are proved: the trigonometric separating coordinate is invariant under both Klein generators, extends across Relation.EqvGen, and descends to a continuous map on the frozen quotient. Nodes B3-B9 remain for later program jobs."}]}
   {:consumer :t92J08,
    :phase :implementation,
    :state :open,
@@ -116978,7 +116997,7 @@
    :other-consumers []}
   {:consumer :t95J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t95J02Closure.separatingMap",
@@ -116990,7 +117009,9 @@
     :type
     "A continuous quotient-descended map from t95J02KleinBottleType to EuclideanSpace R (Fin 2) separating the vertical core by its cosine-sine coordinate",
     :area "klein-bottle-homology",
-    :proved-in :program-2026-10-11-close-t95j02},
+    :proved-in :program-2026-10-11-close-t95j02,
+    :banked-by :program-2026-10-11-close-t95j02,
+    :banked-commit "066b6bdc352d209e1b15ae5f53a357b520be4775"},
    :id :lemma-t95j02closure-separatingmap,
    :kind :lemma,
    :depends-on [],
