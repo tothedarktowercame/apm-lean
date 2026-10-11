@@ -11820,6 +11820,23 @@
      "The forgotten coefficient open-disk inclusion homology map followed by coefficientModelNormalizationComposite, which exposes connecting, radial, and sphere normalization",
      :direction
      "Exact morphism equality from the packaged unit-open-disk coefficient normalization to its open-disk-inclusion and explicit model-factor representation"},
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791707007269-4747-cfde3322",
+     :commands
+     ["rg ledger row and frozen contract"
+      "git show and git diff-tree recorded commit"
+      "git blob identity and git diff --check"
+      "sha256sum frozen fixture"
+      "lake env lean collision-renamed frozen-fixture replay"
+      "lake env lean target module"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"
+      "python3 scripts/statement-registry.py check"
+      "placeholder and axiom scan"
+      "consumer placeholder census"],
+     :finding
+     "PASS: independent review of commit 4b9a5cd1; scope is exactly ConstructionTargets/ManifoldFundamentalClass.lean and the recorded blob matches the checkout; fixture SHA-256 and registered statement hash match; the frozen theorem has the required packaged-open-disk-to-explicit-model-factor orientation, rewriting the banked open-disk factorization and substituting coefficientModelNormalizationComposite under the fixed inclusion prefix without constructing a production-to-coefficient comparison, proving connecting or radial naturality, comparing sphere normalizations, excluding negation, selecting a sign, or constructing a fundamental class; fixture replay, module check, and 8326-job build pass; axioms are exactly propext, Classical.choice, Quot.sound; registry is 131/0; target placeholders are 0 and consumer counts remain 1/1."},
     :commit "4b9a5cd1bd1b31fd835887c5b43fbd4b2654a633",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -11836,7 +11853,7 @@
     :routes-2026-10-11-manifold-coefficient-open-disk-model-factors-topo3-r1,
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/coefficient-open-disk-model-factors",
@@ -12037,7 +12054,7 @@
      "Both normalization chains are now exposed at the unit-open-disk boundary. The production chain begins with singularPairConnecting on the punctured open disk, while the coefficient chain begins with the forgotten coefficient open-disk inclusion followed by the coefficient connecting, radial, and sphere factors. The next prerequisite must be a genuine naturality theorem for the integral production-to-coefficient comparison on this pair; packaging or direct prefix equality cannot bridge their different homology objects.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -16047,7 +16064,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -16064,7 +16081,10 @@
     "forall (k : ℕ), forgetIntModules.map (CoefficientNeighborhoodLocal.integral_ball k).hom = forgetIntModules.map (HomologicalComplex.homologyMap (CoefficientNeighborhoodLocal.inclusionMap ℤ (Metric.ball (0 : CoefficientModelLocal.E (k + 2)) 1) 0) (k + 2)) ≫ coefficientModelNormalizationComposite k",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-coefficient-open-disk-model-factors-topo3-r1},
+    :routes-2026-10-11-manifold-coefficient-open-disk-model-factors-topo3-r1,
+    :banked-by
+    :routes-2026-10-11-manifold-coefficient-open-disk-model-factors-topo3-r1,
+    :banked-commit "4b9a5cd1bd1b31fd835887c5b43fbd4b2654a633"},
    :id :lemma-mfclass-coefficient-integral-ball-model-factors,
    :kind :lemma,
    :depends-on
@@ -16073,7 +16093,7 @@
    :other-consumers [:t98A02]}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -16081,7 +16101,9 @@
    :lemma
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.coefficientModelLocalIso_forget_hom",
-    :reported-by []},
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/ManifoldFundamentalClass.lean"]},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-coefficientmodellocaliso-forget-hom,
    :kind :lemma,
