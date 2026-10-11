@@ -2,6 +2,7 @@ import ConstructionTargets.T97A04FrozenH1Coordinate
 import ConstructionTargets.BoundaryTorusOpenCover
 import ConstructionTargets.BoundaryTorusMayerVietoris
 import ConstructionTargets.ProductionOpenCoverMayerVietoris
+import ConstructionTargets.HomotopyEquivHomologySquare
 
 open CategoryTheory CategoryTheory.Limits
 
@@ -1067,6 +1068,49 @@ theorem shearY_productionIntersectionMap_eq_overlap (a b : ℤ) :
       (frozenYCover.U ∩ frozenYCover.V)).inv_hom_id,
     HomologicalComplex.homologyMap_id, Category.id_comp]
 
+/-- Transporting the actual restricted shear through the frozen-overlap
+homeomorphism gives the boundary-overlap shear. -/
+theorem shearYOverlap_H1_boundary_transport (a b : ℤ) :
+    (singularHomologyIsoOfHomotopyEquiv
+        frozenYCoverInterHomeomorph.toHomotopyEquiv 1).inv ≫
+      HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularSubdivision.singularPostcomposition
+          (shearYOverlap a b)) 1 ≫
+      (singularHomologyIsoOfHomotopyEquiv
+        frozenYCoverInterHomeomorph.toHomotopyEquiv 1).hom =
+    HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularSubdivision.singularPostcomposition
+        (boundaryOverlapShear a b)) 1 := by
+  exact ConstructionTargets.HomotopyEquivHomologySquare.conjugated_homologyMap_of_strict_square
+    frozenYCoverInterHomeomorph.toHomotopyEquiv
+    frozenYCoverInterHomeomorph.toHomotopyEquiv
+    (shearYOverlap a b) (boundaryOverlapShear a b) rfl 1
+
+/-- Transporting once more to the disjoint-circle model gives the previously
+computed two-circle shear. -/
+theorem boundaryOverlapShear_H1_twoCircle_transport (a b : ℤ) :
+    (singularHomologyIsoOfHomotopyEquiv
+        overlapHomotopyEquivTwoCircles 1).inv ≫
+      HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularSubdivision.singularPostcomposition
+          (boundaryOverlapShear a b)) 1 ≫
+      (singularHomologyIsoOfHomotopyEquiv
+        overlapHomotopyEquivTwoCircles 1).hom =
+    HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularSubdivision.singularPostcomposition
+        (twoCircleOverlapShear a b)) 1 := by
+  exact ConstructionTargets.HomotopyEquivHomologySquare.conjugated_homologyMap_of_strict_square
+    overlapHomotopyEquivTwoCircles overlapHomotopyEquivTwoCircles
+    (boundaryOverlapShear a b) (twoCircleOverlapShear a b) rfl 1
+
+/-- The integral biproduct coordinate on the disjoint two-circle model. -/
+noncomputable def twoCircleH1IsoIntBiprod :
+    SingularHomology 1 (TopCat.of (Circle ⊕ Circle)) ≅
+      (AddCommGrpCat.of ℤ) ⊞ (AddCommGrpCat.of ℤ) :=
+  ConstructionTargets.TopologicalSumSingularHomology.sumHomologyIsoBiprod
+      Circle Circle 1 ≪≫
+    biprod.mapIso circleH1GroupIsoInt circleH1GroupIsoInt
+
 /-- The production overlap endpoint written in the fixed integral
 two-component coordinate. -/
 noncomputable def shearYOverlapCoordinateMap (a b : ℤ) :
@@ -1077,6 +1121,33 @@ noncomputable def shearYOverlapCoordinateMap (a b : ℤ) :
       frozenYCover.U frozenYCover.V frozenYCover.U frozenYCover.V
       (shearYShortComplexHom a b) 1 ≫
     frozenOverlapH1IsoIntBiprod.hom
+
+/-- The production overlap coordinate is exactly the two-circle shear in
+the standard disjoint-sum integral coordinate. -/
+theorem shearYOverlapCoordinateMap_eq_twoCircle (a b : ℤ) :
+    shearYOverlapCoordinateMap a b =
+      twoCircleH1IsoIntBiprod.inv ≫
+        HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularSubdivision.singularPostcomposition
+            (twoCircleOverlapShear a b)) 1 ≫
+        twoCircleH1IsoIntBiprod.hom := by
+  rw [shearYOverlapCoordinateMap,
+    shearY_productionIntersectionMap_eq_overlap]
+  simp only [frozenOverlapH1IsoIntBiprod, overlapH1IsoIntBiprod,
+    overlapHomologyIsoCircleBiprod, overlapHomologyIsoTwoCircles,
+    twoCircleH1IsoIntBiprod, Iso.trans_inv, Iso.trans_hom]
+  let J := biprod.mapIso circleH1GroupIsoInt circleH1GroupIsoInt
+  let S := ConstructionTargets.TopologicalSumSingularHomology.sumHomologyIsoBiprod
+    Circle Circle 1
+  let E := singularHomologyIsoOfHomotopyEquiv
+    overlapHomotopyEquivTwoCircles 1
+  have h₁ := congrArg
+    (fun k ↦ J.inv ≫ S.inv ≫ E.inv ≫ k ≫ E.hom ≫ S.hom ≫ J.hom)
+    (shearYOverlap_H1_boundary_transport a b)
+  have h₂ := congrArg
+    (fun k ↦ J.inv ≫ S.inv ≫ k ≫ S.hom ≫ J.hom)
+    (boundaryOverlapShear_H1_twoCircle_transport a b)
+  exact h₁.trans h₂
 
 /-- B6 reduces exactly to the degree calculation on the two overlap
 components. -/
@@ -1169,7 +1240,11 @@ theorem shearY_overlap_coordinate_of_degree_components (a b : ℤ)
 #print axioms twoCircleOverlapShearRightFold_H1_coordinate
 #print axioms shearY_coverRangeMap_naturality
 #print axioms shearY_productionIntersectionMap_eq_overlap
+#print axioms shearYOverlap_H1_boundary_transport
+#print axioms boundaryOverlapShear_H1_twoCircle_transport
+#print axioms twoCircleH1IsoIntBiprod
 #print axioms shearYOverlapCoordinateMap
+#print axioms shearYOverlapCoordinateMap_eq_twoCircle
 #print axioms shearY_overlap_coordinate_of_injections
 #print axioms inl_comp_overlapScalar
 #print axioms inr_comp_overlapScalar
