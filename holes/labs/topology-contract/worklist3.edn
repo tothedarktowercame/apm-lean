@@ -13023,6 +13023,23 @@
      "The named puncture and relative open-disk comparison isomorphisms, including their source homology-preservation transports",
      :direction
      "Exact conjunction of morphism equalities from each named comparison representation to the corresponding preservation-transport followed by raw component homology map"},
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791711499545-4903-5731a79b",
+     :commands
+     ["rg ledger row and frozen contract"
+      "git show and git diff-tree recorded commit"
+      "git blob identity and git diff --check"
+      "sha256sum frozen fixture"
+      "lake env lean collision-renamed frozen-fixture replay"
+      "lake env lean target module"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"
+      "python3 scripts/statement-registry.py check"
+      "placeholder and axiom scan"
+      "consumer placeholder census"],
+     :finding
+     "PASS: independent review of commit ad95b27a; scope is exactly ConstructionTargets/ManifoldFundamentalClass.lean and the recorded blob matches the checkout; fixture SHA-256 matches and the frozen conjunction type is unchanged; both equalities have the required orientation from the named puncture and relative comparison homs to the inverse mapHomologyIso transport followed by the raw tau1 and tau3 homology maps, and both are definitionally proved; the implementation does not rewrite the source connecting morphism, prove radial naturality, compare sphere normalizations, exclude negation, select a sign, or construct a fundamental class; fixture replay, module check, and 8326-job build pass; axioms are exactly propext, Classical.choice, Quot.sound; registry is 131/0; target placeholders are 0 and consumer counts remain 1/1."},
     :commit "ad95b27aa20a99a3f677c8cf63df0e2586522dc8",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -13039,7 +13056,7 @@
     :routes-2026-10-11-manifold-integral-open-disk-component-homology-maps-topo3-r1,
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/integral-open-disk-connecting-naturality/component-homology-maps",
@@ -13245,7 +13262,7 @@
      "The raw naturality theorem's τ₁ and τ₃ arrows are not definitionally the named comparisons because each named comparison includes an inverse mapHomologyIso transport at its source. The compiled conjunction records both exact factorizations. After this prerequisite, the only remaining rewrite in the connecting square is the mapped coefficient delta through homology preservation; radial and sphere compatibility remain downstream.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -17536,7 +17553,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -17553,7 +17570,10 @@
     "forall (k : ℕ), (integralOpenDiskPunctureHomologyComparison k).hom = (((ConstructionTargets.CoefficientH0.SingularChains ℤ (TopCat.of (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2)))).sc (k + 1)).mapHomologyIso forgetIntModules).inv ≫ HomologicalComplex.homologyMap (integralOpenDiskPairShortComplexComparison k).τ₁ (k + 1) ∧ (integralOpenDiskRelativeHomologyComparison k).hom = (((ConstructionTargets.CoefficientRelativeSmall.relativeChains ℤ (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2))).sc (k + 2)).mapHomologyIso forgetIntModules).inv ≫ HomologicalComplex.homologyMap (integralOpenDiskPairShortComplexComparison k).τ₃ (k + 2)",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-integral-open-disk-component-homology-maps-topo3-r1},
+    :routes-2026-10-11-manifold-integral-open-disk-component-homology-maps-topo3-r1,
+    :banked-by
+    :routes-2026-10-11-manifold-integral-open-disk-component-homology-maps-topo3-r1,
+    :banked-commit "ad95b27aa20a99a3f677c8cf63df0e2586522dc8"},
    :id :lemma-mfclass-integral-open-disk-component-homology-maps,
    :kind :lemma,
    :depends-on
