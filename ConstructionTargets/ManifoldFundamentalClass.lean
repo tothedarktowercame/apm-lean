@@ -972,6 +972,17 @@ theorem integralRelativeHomologyComparisonWithTransport_normalization_of_nonnega
   apply integralRelativeHomologyComparisonWithTransport_normalization_of_coefficient_one
   exact correctedLocalGeneratorCoefficient_eq_one_of_nonneg k x hnonneg
 
+/-- Excluding the negative unit selects coefficient one for the corrected
+local generator. -/
+theorem correctedLocalGeneratorCoefficient_eq_one_of_ne_neg_one
+    (k : ℕ) {M : Type} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M)
+    (hne : correctedLocalGeneratorCoefficient k x ≠ -1) :
+    correctedLocalGeneratorCoefficient k x = 1 := by
+  rcases correctedLocalGeneratorCoefficient_eq_one_or_neg_one k x with h | h
+  · exact h
+  · exact (hne h).elim
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -1033,3 +1044,4 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_coefficient_one
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_coefficient_one
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_nonnegative
+#print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient_eq_one_of_ne_neg_one
