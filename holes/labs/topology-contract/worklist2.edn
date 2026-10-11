@@ -69429,6 +69429,18 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git status --short", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791688277120-3933-16ac6065",
+     :commands
+     ["git show/diff-tree --check 08ad2b6"
+      "fixture SHA-256 and recorded blob verification"
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean"
+      "lake env lean /tmp/t02a03_meridian_im_height_factor_probe.lean"
+      "statement registry fingerprint/check and placeholder/worklist EDN checks"],
+     :finding
+     "Recorded commit has the exact one-file scope and matching fixture/blob hashes. The module and frozen probe compile with only the expected standard axioms. Deletion proves the normal coordinate nonzero, so its inverse norm is a strictly positive scalar; taking imaginary parts of norm-smul-normalize and unfolding the ambient height gives exactly meridian.im = c * p.1 2. Orientation and Complex/Euclidean coordinate conversion are correct; no placeholder, interpolation claim, or angular path is added."},
     :commit "08ad2b61e02e283aa1d4b21dbb2c786ff68cf461",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
@@ -69444,7 +69456,7 @@
    :phase :implementation,
    :type
    "forall (p : RightTubeMinusLeftCore), exists c : Real, 0 < c and (rightTubeMeridianCoordinate p : Complex).im = c * p.1 2",
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/meridian-im-positive-factor-height",
@@ -69555,7 +69567,7 @@
      "The imaginary part of rightTubeMeridianCoordinate is a strictly positive multiple of the ambient height coordinate. The multiplier is the inverse norm of the nonzero deleted left-core normal coordinate. Consequently the meridian-start core normal and the recovered core normal have compatible height signs, which is the scalar fact needed to prove that their radial interpolation has nonzero imaginary part whenever the input height is nonzero.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
