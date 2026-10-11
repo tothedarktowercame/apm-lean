@@ -17717,10 +17717,99 @@
    :depends-on [],
    :other-consumers [:t92J05 :t93J03 :t99J01 :t00J07]}
   {:consumer :t00A02,
+   :stop-count 1,
    :implements-lemma
    :lemma-freeproperlydiscontinuousquotient-fundamentalgroupequiv,
+   :evidence
+   {:placeholder-delta
+    {:t00A02 {:before 2, :after 2, :delta 0},
+     :t92J05 {:before 3, :after 3, :delta 0},
+     :t93J03 {:before 1, :after 1, :delta 0},
+     :t99J01 {:before 1, :after 1, :delta 0},
+     :t00J07 {:before 3, :after 3, :delta 0}},
+    :residual
+    "Resolve whether the fixed weak hypotheses suffice for an orbit covering; then prove monodromy surjectivity, identify its kernel, derive the simply connected equivalence, and add the Klein-plane and finite-action specializations.",
+    :gates
+    {:module-compile :pass,
+     :target-build :pass,
+     :statement-registry "131 registered statements match, 0 do not",
+     :worktree-clean true},
+    :outcome :stop,
+    :warnings [],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.DeckGroupQuotientFundamentalGroup.quotientMk_isCoveringMap",
+      :type
+      "forall {G X : Type*} [Group G] [TopologicalSpace X] [MulAction G X] [ContinuousConstSMul G X] [ProperlyDiscontinuousSMul G X] [LocallyCompactSpace X] [T2Space X] (free : forall g : G, forall x : X, g • x = x -> g = 1), IsCoveringMap (Quotient.mk (MulAction.orbitRel G X) : X -> MulAction.orbitRel.Quotient G X)",
+      :status :proved,
+      :consumers [:t00A02 :t92J05 :t93J03 :t99J01 :t00J07],
+      :depends-on [],
+      :area "deck-group-quotient-pi1"}
+     {:name
+      "ConstructionTargets.DeckGroupQuotientFundamentalGroup.quotientMk_isCoveringMap_without_separation",
+      :type
+      "The orbit projection is a covering map from only the hypotheses in the fixed final theorem, or this type is refuted by a compiled counterexample",
+      :status :not-started,
+      :consumers [:t00A02 :t92J05 :t93J03 :t99J01 :t00J07],
+      :depends-on [],
+      :area "deck-group-quotient-pi1"}
+     {:name
+      "ConstructionTargets.DeckGroupQuotientFundamentalGroup.freeProperlyDiscontinuousQuotient_fundamentalGroupEquiv",
+      :type
+      "forall {G X : Type*} [Group G] [TopologicalSpace X] [MulAction G X] [ContinuousConstSMul G X] [ProperlyDiscontinuousSMul G X] (free : forall g : G, forall x : X, g • x = x -> g = 1) [SimplyConnectedSpace X] [LocPathConnectedSpace X] (x : X), Nonempty (FundamentalGroup (MulAction.orbitRel.Quotient G X) (Quotient.mk _ x) ≃* G)",
+      :status :not-started,
+      :consumers [:t00A02 :t92J05 :t93J03 :t99J01 :t00J07],
+      :depends-on
+      ["ConstructionTargets.DeckGroupQuotientFundamentalGroup.quotientMk_isCoveringMap_without_separation"],
+      :area "deck-group-quotient-pi1"}],
+    :statement-hashes
+    {:module
+     "bcc346a26aab74947a69bb92c8aebc866ab3378394a8469f785d67dbbcdb0607"},
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :topo-10,
+    :reason
+    "First program milestone compiled and committed; the fixed final theorem remains open. Mathlib's properly-discontinuous quotient-covering construction requires LocallyCompactSpace X and T2Space X, which the fixed final type omits, so the next job must prove the covering result under the weaker hypotheses or compile an exact counterexample before building monodromy.",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.DeckGroupQuotientFundamentalGroup",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean ConstructionTargets/DeckGroupQuotientFundamentalGroup.md",
+      :exit 0}
+     {:cmd
+      "rg forbidden placeholders and axioms in ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "comment-stripped placeholder counts for t00A02 t92J05 t93J03 t99J01 t00J07",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :diagnostic-history [],
+    :continue-from
+    {:commit "d8ae72972f6621f135d22e9053de496cedf2e908",
+     :next
+     "Resolve the missing LocallyCompactSpace/T2Space boundary, then construct endpoint monodromy and its kernel exactness."},
+    :commit "d8ae72972f6621f135d22e9053de496cedf2e908",
+    :changed-paths
+    ["ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean"
+     "ConstructionTargets/DeckGroupQuotientFundamentalGroup.md"],
+    :fixture nil,
+    :program true,
+    :implementation
+    {:scope
+     ["ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean"
+      "ConstructionTargets/DeckGroupQuotientFundamentalGroup.md"],
+     :declaration
+     "ConstructionTargets.DeckGroupQuotientFundamentalGroup.quotientMk_isCoveringMap"},
+    :row :program-2026-10-11-deck-group-quotient-pi1,
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean"
     "ConstructionTargets/DeckGroupQuotientFundamentalGroup.md"],
@@ -17764,7 +17853,72 @@
    :kind :lemma,
    :depends-on
    [:lemma-mfclass-integral-open-disk-component-homology-maps],
-   :other-consumers [:t98A02]}],
+   :other-consumers [:t98A02]}
+  {:consumer :t00A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.DeckGroupQuotientFundamentalGroup.quotientMk_isCoveringMap",
+    :type
+    "forall {G X : Type*} [Group G] [TopologicalSpace X] [MulAction G X] [ContinuousConstSMul G X] [ProperlyDiscontinuousSMul G X] [LocallyCompactSpace X] [T2Space X] (free : forall g : G, forall x : X, g • x = x -> g = 1), IsCoveringMap (Quotient.mk (MulAction.orbitRel G X) : X -> MulAction.orbitRel.Quotient G X)"},
+   :lemma
+   {:name
+    "ConstructionTargets.DeckGroupQuotientFundamentalGroup.quotientMk_isCoveringMap",
+    :reported-by [:program-2026-10-11-deck-group-quotient-pi1],
+    :type
+    "forall {G X : Type*} [Group G] [TopologicalSpace X] [MulAction G X] [ContinuousConstSMul G X] [ProperlyDiscontinuousSMul G X] [LocallyCompactSpace X] [T2Space X] (free : forall g : G, forall x : X, g • x = x -> g = 1), IsCoveringMap (Quotient.mk (MulAction.orbitRel G X) : X -> MulAction.orbitRel.Quotient G X)",
+    :area "deck-group-quotient-pi1",
+    :proved-in :program-2026-10-11-deck-group-quotient-pi1},
+   :id
+   :lemma-constructiontargets-deckgroupquotientfundamentalgroup-quotientmk-iscoveringmap,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t92J05 :t93J03 :t99J01 :t00J07]}
+  {:consumer :t00A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.DeckGroupQuotientFundamentalGroup.quotientMk_isCoveringMap_without_separation",
+    :type
+    "The orbit projection is a covering map from only the hypotheses in the fixed final theorem, or this type is refuted by a compiled counterexample"},
+   :lemma
+   {:name
+    "ConstructionTargets.DeckGroupQuotientFundamentalGroup.quotientMk_isCoveringMap_without_separation",
+    :reported-by [:program-2026-10-11-deck-group-quotient-pi1],
+    :type
+    "The orbit projection is a covering map from only the hypotheses in the fixed final theorem, or this type is refuted by a compiled counterexample",
+    :area "deck-group-quotient-pi1"},
+   :id
+   :lemma-constructiontargets-deckgroupquotientfundamentalgroup-quotientmk-iscoveringmap-w,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t92J05 :t93J03 :t99J01 :t00J07]}
+  {:consumer :t00A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.DeckGroupQuotientFundamentalGroup.freeProperlyDiscontinuousQuotient_fundamentalGroupEquiv",
+    :type
+    "forall {G X : Type*} [Group G] [TopologicalSpace X] [MulAction G X] [ContinuousConstSMul G X] [ProperlyDiscontinuousSMul G X] (free : forall g : G, forall x : X, g • x = x -> g = 1) [SimplyConnectedSpace X] [LocPathConnectedSpace X] (x : X), Nonempty (FundamentalGroup (MulAction.orbitRel.Quotient G X) (Quotient.mk _ x) ≃* G)"},
+   :lemma
+   {:name
+    "ConstructionTargets.DeckGroupQuotientFundamentalGroup.freeProperlyDiscontinuousQuotient_fundamentalGroupEquiv",
+    :reported-by [:program-2026-10-11-deck-group-quotient-pi1],
+    :type
+    "forall {G X : Type*} [Group G] [TopologicalSpace X] [MulAction G X] [ContinuousConstSMul G X] [ProperlyDiscontinuousSMul G X] (free : forall g : G, forall x : X, g • x = x -> g = 1) [SimplyConnectedSpace X] [LocPathConnectedSpace X] (x : X), Nonempty (FundamentalGroup (MulAction.orbitRel.Quotient G X) (Quotient.mk _ x) ≃* G)",
+    :area "deck-group-quotient-pi1"},
+   :id
+   :lemma-constructiontargets-deckgroupquotientfundamentalgroup-freeproperlydiscontinuousq,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-deckgroupquotientfundamentalgroup-quotientmk-iscoveringmap-w],
+   :other-consumers [:t92J05 :t93J03 :t99J01 :t00J07]}],
  :consumer-baselines {},
  :statuses
  #{:open
