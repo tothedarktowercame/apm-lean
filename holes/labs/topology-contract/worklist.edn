@@ -113857,16 +113857,19 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 7,
+   :stop-count 8,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Evaluate overlap glue through span transports and identify literal leg lifts; then B12.",
+    "Evaluate inverse coordinate-span glue and identify literal leg lifts; then B12.",
     :outcome :stop,
-    :warnings [{:kind :upstream-lint}],
+    :warnings
+    [{:kind :upstream-lint}
+     {:kind :concurrent-worktree-change,
+      :path "ConstructionTargets/ManifoldFundamentalClass.lean"}],
     :missing-theorems
     [{:name
       "PointWedgeVanKampen.genericPointWedgeLegCoordinates_vanKampen",
@@ -113878,9 +113881,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "d82c4ef685d1cd1faed355b6abf33bd6800b577f0c5ff7482208c421ed8204a1",
+     "66c231c5b9e9b3ca8c234e4b745568a2e5bf0527aa24f6ad8ed59b54f2b5d34f",
      :documentation
-     "12921aae1bde780b94b6158e2c2554e1ae07eadd63b45df7d7e1bf1afb8deda0",
+     "ae8b019019544957e10c5d1fb4b6dc485e43eaf83e260789ea632e4fd440b6b9",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113888,7 +113891,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Descent counit factor is identity; full right-base element equals overlap glue.",
+    "Full right-base element is the actual-span glue at the explicit overlap base.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113897,26 +113900,8 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
-    :diagnostic-history
-    [{:cmd
-      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
-      :exit 1,
-      :finding
-      "Unfolded composite counit and typed SingleObj equality transport."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791756846587-5913-b394579d",
-     :commands
-     ["git show/diff-tree 4e13be79"
-      "sha256/diff/placeholder checks"
-      "statement-registry.py check"
-      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
-     :finding
-     "PASS: new compiled sorry-free B6 progress proves the explicit descent right-base factor is 1 because it unfolds to SingleObj eqToHom, without assuming the refuted general counit normalization; combining it with strictification yields the full right-base element as overlap glue in correct order. Exact two-file scope and frozen hashes match; 0 placeholders; registry 131/131; standard axioms. Glue evaluation, literal lifts, and B12 remain listed; absent final target is a valid program STOP."},
-    :commit "4e13be795d3ed6bfd970727c749a032a4f81b488",
+    :diagnostic-history [],
+    :commit "d6c39225889b6157f406fe5fa827668e401b3a09",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113926,7 +113911,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
