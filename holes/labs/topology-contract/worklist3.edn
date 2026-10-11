@@ -15016,6 +15016,20 @@
       "git status --short -- ConstructionTargets/ManifoldFundamentalClass.lean",
       :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791726116125-5430-0d961231",
+     :commands
+     ["git show/diff-tree/diff --check at beb845d0e2a2ea52ece04e1aea651e9bcecc0d11"
+      "sha256sum fixture and module plus recorded-blob comparison"
+      "renamed fixture: lake env lean"
+      "python3 scripts/statement-registry.py check"
+      "placeholder scans for module, t00J02, t98A02"
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"],
+     :finding
+     "Exact one-file scope and recorded blob match; frozen fixture and module hashes reproduce; the theorem has the required limits orientation and faithfully identifies forgetIntModules with its equivalence functor, crossing no representation boundary and claiming no colimit result; fixture and module compile, registry is 131/0, build completes 8326 jobs, axioms are exactly propext/Classical.choice/Quot.sound, module has no placeholders, and consumer counts remain 1/1."},
     :commit "beb845d0e2a2ea52ece04e1aea651e9bcecc0d11",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -15032,7 +15046,7 @@
     :routes-2026-10-11-manifold-forget-parallel-pair-limits-topo3-r1,
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/integral-open-disk-connecting-naturality/snake-input-kernel-preservation",
@@ -15222,7 +15236,7 @@
      "The mapped zero-square theorem makes the target kernel and cokernel forks well defined. The compiled prerequisite exposes the previously missing typeclass fact that forgetIntModules preserves every parallel-pair limit, using its underlying categorical equivalence. It permits isLimitOfPreserves on each of S.h₀τ₁, S.h₀τ₂, and S.h₀τ₃. The dual colimit fact and explicit cone identifications remain before the mapped SnakeInput can be assembled.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -22105,7 +22119,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -22122,7 +22136,10 @@
     "PreservesLimitsOfShape WalkingParallelPair forgetIntModules",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-forget-parallel-pair-limits-topo3-r1},
+    :routes-2026-10-11-manifold-forget-parallel-pair-limits-topo3-r1,
+    :banked-by
+    :routes-2026-10-11-manifold-forget-parallel-pair-limits-topo3-r1,
+    :banked-commit "beb845d0e2a2ea52ece04e1aea651e9bcecc0d11"},
    :id :lemma-mfclass-forget-parallel-pair-limits,
    :kind :lemma,
    :depends-on [:lemma-mfclass-forget-snake-zero-squares],
