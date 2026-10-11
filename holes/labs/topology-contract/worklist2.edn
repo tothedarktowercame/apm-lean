@@ -79324,11 +79324,23 @@
      {:cmd "registry check", :exit 0}
      {:cmd "Main placeholder count", :exit 0, :output "2"}
      {:cmd "git show --check 7b57d0f85", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791745063774-5782-45f82555",
+     :commands
+     ["git show/diff-tree/rev-parse 7b57d0f8"
+      "lake env lean ConstructionTargets/t97A04Closure.lean"
+      "lake env lean problems/t97A04/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "statement fingerprints; placeholder/history checks"],
+     :finding
+     "PASS: 7b57d0f8 is new after cc9c9fda; one-file scope and recorded closure/blueprint blobs match. The theorem specializes production connecting naturality and rewrites the union endpoint to H2(shearY), with correct delta-then-H1 = H2-then-delta orientation. Both Lean gates compile; new theorem uses only propext, Classical.choice, Quot.sound; registry 131/0; frozen hash unchanged ca1b2cb3c6594276811618321d5c0604c2f38fc4594a6b21ae161a711a923a34; closure/Main placeholders 0/2. It is real program progress; frozen-coordinate transport, cancellation, and B8-B11 remain listed."},
     :commit "7b57d0f851805eb8cbd6cfe97e2ea48722b34de9",
     :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79445,6 +79457,9 @@
      :reason :program-progress-committed}
     {:job 5,
      :commit "cc9c9fdadd0b167ea1791e56ab12859c95041a99",
+     :reason :program-progress-committed}
+    {:job 6,
+     :commit "7b57d0f851805eb8cbd6cfe97e2ea48722b34de9",
      :reason :program-progress-committed}]}
   {:consumer :t96A07,
    :stop-count 3,
@@ -80526,7 +80541,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -80538,7 +80553,9 @@
     :reported-by [:program-2026-10-11-close-t97a04],
     :type "connecting≫intersectionMap=H2(shearY)≫connecting",
     :area "mv-connecting-naturality",
-    :proved-in :program-2026-10-11-close-t97a04},
+    :proved-in :program-2026-10-11-close-t97a04,
+    :banked-by :program-2026-10-11-close-t97a04,
+    :banked-commit "7b57d0f851805eb8cbd6cfe97e2ea48722b34de9"},
    :id
    :lemma-constructiontargets-t97a04closure-sheary-productionconnecting-naturality,
    :kind :lemma,
