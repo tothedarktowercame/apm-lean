@@ -4353,8 +4353,85 @@
   {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-integraldirectcokernelcomparison-projection,
+   :evidence
+   {:placeholder-delta {:source 0, :fixture 0},
+    :residual
+    "Combine this direct-cokernel projection equation with PreservesCokernel.π_iso_hom_assoc and coefficientSubspaceMap_eq_integralSubtypeChainMap without rewriting an indexed HasCokernel witness; then extend through the inverse production cokernel presentation and propagate naturality through the normalization chain.",
+    :gates
+    {:exact-type :pass,
+     :module-build :pass,
+     :module-compile :pass,
+     :clean-worktree :pass,
+     :cokernel-mapIso-unfolded :pass,
+     :direct-cokernel-boundary-only :pass,
+     :exact-scope :pass,
+     :statement-registry :pass,
+     :zero-placeholders :pass,
+     :cokernel-pi-desc :pass,
+     :fixture-compile :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["lake build replayed pre-existing dependency warnings only"],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.ManifoldFundamentalClass.integralDirectCokernelComparison_projection",
+      :type
+      "forall {X : Type} [TopologicalSpace X] (A : Set X), cokernel.π ((forgetIntModules.mapHomologicalComplex (ComplexShape.down Nat)).map (((AlgebraicTopology.singularChainComplexFunctor (ModuleCat Int)).obj (ModuleCat.of Int Int)).map (integralSubtypeInclusion A))) ≫ (integralMappedRelativeCokernelComparison A).hom = (singularChainsComparison (TopCat.of X)).hom ≫ cokernel.π (singularSubspaceMap A)",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on
+      ["ConstructionTargets.ManifoldFundamentalClass.integralMappedRelativeCokernelComparison"
+       "ConstructionTargets.ManifoldFundamentalClass.integralSingularChainsComparison_subtype_naturality"],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :topo-10,
+    :commands
+    [{:cmd
+      "sha256sum /tmp/manifold_fundamental_class_relative_direct_cokernel_projection.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/manifold_fundamental_class_relative_direct_cokernel_projection.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^\\s*axiom\\b' ConstructionTargets/ManifoldFundamentalClass.lean /tmp/manifold_fundamental_class_relative_direct_cokernel_projection.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git status --porcelain", :exit 0}],
+    :diagnostic-history [],
+    :commit "d3d1b6ffe9fcbad1d1cc28d133279cf420fd49f4",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path
+     "/tmp/manifold_fundamental_class_relative_direct_cokernel_projection.lean",
+     :original-sha256
+     "9f513ae796ef652ad45139cd5a420e7eab912b3b0f6b5cdc273f6d51fb299c15",
+     :sha256
+     "2a09b3ec198b05b8c801b6c4b9981ca102a737d11b2a83ba12a0cfb86a1cf99d",
+     :placeholders 0},
+    :implementation
+    {:declaration
+     "ConstructionTargets.ManifoldFundamentalClass.integralDirectCokernelComparison_projection",
+     :representation
+     {:source
+      "The projection from forgotten integral absolute chains to the direct cokernel of the forgotten module-valued subtype-inclusion map, followed by integralMappedRelativeCokernelComparison",
+      :target
+      "The absolute singularChainsComparison on the ambient space followed by the projection to the AddCommGrpCat direct cokernel of singularSubspaceMap",
+      :direction
+      "Exact chain-map equality from the forgotten module-valued direct-cokernel projection representation to the additive-group-valued direct-cokernel projection representation, induced by cokernel.mapIso and its universal-property equation"}},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/integral-direct-cokernel-projection",
@@ -6922,17 +6999,20 @@
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.integralDirectCokernelComparison_projection",
     :reported-by
-    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+     :routes-2026-10-11-manifold-integral-direct-cokernel-projection-topo3-r1],
     :type
     "forall {X : Type} [TopologicalSpace X] (A : Set X), cokernel.π ((forgetIntModules.mapHomologicalComplex (ComplexShape.down Nat)).map (((AlgebraicTopology.singularChainComplexFunctor (ModuleCat Int)).obj (ModuleCat.of Int Int)).map (integralSubtypeInclusion A))) ≫ (integralMappedRelativeCokernelComparison A).hom = (singularChainsComparison (TopCat.of X)).hom ≫ cokernel.π (singularSubspaceMap A)",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in
+    :routes-2026-10-11-manifold-integral-direct-cokernel-projection-topo3-r1},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-integraldirectcokernelcomparison-projection,
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-manifoldfundamentalclass-coefficientsubspacemap-eq-integralsubtypechainmap
-    :lemma-constructiontargets-manifoldfundamentalclass-integralmappedrelativecokernelcomparison],
+    :lemma-constructiontargets-manifoldfundamentalclass-integralmappedrelativecokernelcomparison
+    :lemma-constructiontargets-manifoldfundamentalclass-integralsingularchainscomparison-subtype-naturality],
    :other-consumers [:t98A02]}],
  :consumer-baselines {},
  :statuses
