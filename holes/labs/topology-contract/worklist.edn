@@ -114982,7 +114982,9 @@
     :area "interval-homeomorph-extension"},
    :id :lemma-apm-t91j06-bridge-compatible-stage-coordinates,
    :kind :lemma,
-   :depends-on [],
+   :depends-on
+   [:lemma-extend-interval-embedding-coordinates
+    :lemma-nestedembeddingtransition-transition],
    :other-consumers []}
   {:consumer :t91J06,
    :phase :lemma,
@@ -115148,6 +115150,43 @@
    :id :lemma-apm-t02a05-flux-projection-transport,
    :kind :lemma,
    :depends-on [:lemma-unitsphere-euclideanhausdorff-mass-two],
+   :other-consumers []}
+  {:consumer :t91J06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "NestedEmbeddingTransition.transition",
+    :type "banked d6d3710ee"},
+   :lemma
+   {:name "NestedEmbeddingTransition.transition",
+    :reported-by [:owner],
+    :type "banked d6d3710ee",
+    :area "interval-exhaustion-coordinates",
+    :proved-in :owner,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/NestedEmbeddingTransition.lean"]},
+   :id :lemma-nestedembeddingtransition-transition,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t91J06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "extend_interval_embedding_coordinates",
+    :type
+    "continuous injective t : Icc 0 1 → Icc 0 1 with image in Ioo 0 1 and prescribed coordinates on its image extend to a homeomorphism of Icc 0 1 by affine pieces on the two complementary end intervals"},
+   :lemma
+   {:name "extend_interval_embedding_coordinates",
+    :reported-by [:owner],
+    :type
+    "continuous injective t : Icc 0 1 → Icc 0 1 with image in Ioo 0 1 and prescribed coordinates on its image extend to a homeomorphism of Icc 0 1 by affine pieces on the two complementary end intervals",
+    :area "interval-exhaustion-coordinates"},
+   :id :lemma-extend-interval-embedding-coordinates,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
