@@ -869,6 +869,34 @@ theorem genericPointWedgeLegCoordinates_iff_mapped :
     exact genericPointWedgeLegCoordinates_of_mapped
       x₀ y₀ M N hM hN hy hx cM cN hleft hright
 
+/-- Final functor-level form of the B6 residual: the literal coordinates hold
+exactly when the reconstructed B4 functor maps the two topological legs to
+the two actions computed by B3. -/
+theorem genericPointWedgeLegCoordinates_iff_sourceFunctor :
+    ((∀ g : FundamentalGroup X x₀,
+      genericPointWedgeNormalizedFundamentalGroupEquiv
+          x₀ y₀ M N hM hN hy hx cM cN
+          (genericPointWedgeLeftLegMap x₀ y₀ g) =
+        Monoid.Coprod.inl g) ∧
+     (∀ g : FundamentalGroup Y y₀,
+      genericPointWedgeNormalizedFundamentalGroupEquiv
+          x₀ y₀ M N hM hN hy hx cM cN
+          (genericPointWedgeRightLegMap x₀ y₀ g) =
+        Monoid.Coprod.inr g)) ↔
+    ((∀ g : FundamentalGroup X x₀,
+      (genericPointWedgeSourceEquivalence
+          x₀ y₀ M N hM hN hy hx cM cN).functor.map
+          (genericPointWedgeLeftLegMap x₀ y₀ g) =
+        genericPointWedgeMappedLeft x₀ y₀ M N hM hN hy hx cM cN g) ∧
+     (∀ g : FundamentalGroup Y y₀,
+      (genericPointWedgeSourceEquivalence
+          x₀ y₀ M N hM hN hy hx cM cN).functor.map
+          (genericPointWedgeRightLegMap x₀ y₀ g) =
+        genericPointWedgeMappedRight x₀ y₀ M N hM hN hy hx cM cN g)) := by
+  simpa only [genericPointWedgeFundamentalGroupEquiv_apply] using
+    genericPointWedgeLegCoordinates_iff_mapped
+      x₀ y₀ M N hM hN hy hx cM cN
+
 end GenericFundamentalGroupEquivalence
 
 /-- The three-circle model is locally path connected. -/
@@ -1170,5 +1198,6 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeRightLegMap
 #print axioms genericPointWedgeLegCoordinates_of_mapped
 #print axioms genericPointWedgeLegCoordinates_iff_mapped
+#print axioms genericPointWedgeLegCoordinates_iff_sourceFunctor
 
 end ConstructionTargets.PointWedgeVanKampen

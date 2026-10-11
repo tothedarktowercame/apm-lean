@@ -131,3 +131,9 @@ functor on endomorphisms; its proof explicitly reduces the two `eqToIso`
 morphisms to the unit of the one-object group.  The specialized
 `genericPointWedgeFundamentalGroupEquiv_apply` therefore rewrites both
 remaining comparisons directly to maps of the reconstructed B4 functor.
+
+`genericPointWedgeLegCoordinates_iff_sourceFunctor` packages that rewrite at
+the full B6 boundary: the literal normalized leg equations are equivalent to
+the two direct B4 functor-map equations.  The remaining proof must now expose
+the B3 comparison isomorphisms and evaluate the reconstructed functor on the
+literal left and right legs; no based-group extraction remains in the goal.
