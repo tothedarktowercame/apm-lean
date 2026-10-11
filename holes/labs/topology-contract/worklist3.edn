@@ -9387,6 +9387,24 @@
      "The same equation whose coefficient side is the forgotten six-factor coefficientLocalForwardComposite followed by negative identity",
      :direction
      "Logical equivalence from the packaged coefficient-normalization representation to its exact inclusion-chart-transport-model composite representation"},
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791698631471-4428-bf4faa3c",
+     :commands
+     ["git show and git diff-tree recorded commit scope"
+      "git blob identity check"
+      "sha256sum frozen fixture"
+      "recompute frozen statement sha256"
+      "git diff --check recorded commit"
+      "lake env lean renamed frozen-fixture replay"
+      "lake env lean target module"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"
+      "placeholder and axiom scan"
+      "python3 scripts/statement-registry.py check"
+      "consumer placeholder census"],
+     :finding
+     "PASS: recorded commit 3f9b4238 changes only the target module and its blob matches the reviewed checkout; frozen fixture hash b5a7283c8259e029175cb66f031ac15e38914aa18110b0c511fe33b74d8c4191 and frozen statement hash 325561f9b8f1894e7b210ed21611027ebe59d01684e16cd098a472e5a6a4808f both match. The support definition reproduces the six-factor coefficient forward composite, the support theorem identifies CoefficientChartLocal.localIso.hom with it using the existing forward_composite theorem, and the frozen equivalence rewrites exactly the coefficient endpoint in the registered direction. It does not expand the corrected comparison, compare coefficient and production factors, exclude the equality, select a sign, or construct a fundamental class. Renamed fixture replay, target elaboration, and Lake build pass; axioms are exactly propext, Classical.choice, Quot.sound; registry is 131/0; target placeholders are 0 and consumer baselines t00J02/t98A02 remain 1/1."},
     :commit "3f9b4238e345f244853e452114015585921fd8f8",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -9408,7 +9426,7 @@
     :routes-2026-10-11-manifold-negative-equation-coefficient-factors-topo3-r1,
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/negative-equation-coefficient-factorization",
@@ -9598,7 +9616,7 @@
      "The coefficient endpoint is now the concrete six-factor morphism already implicit in CoefficientChartLocal.forward_composite: neighborhood inclusion inverse, source transport inverse, pointed-chart homology, target transport, punctured-neighborhood inclusion homology, and the coefficient model normalization. The remaining comparison is concentrated on the corrected relative comparison and the production ambient chart/model factors; those must be exposed and aligned to exclude negation.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -13108,7 +13126,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -13125,7 +13143,10 @@
     "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), (correctedLocalNormalizationAutomorphism k x).hom = -𝟙 _ <-> (integralRelativeHomologyComparisonWithTransport (deletedPoint x) (k + 2)).hom ≫ (ambientChartHomologyIso k x).inv ≫ (HigherModelLocalHomology.localIsoInt k).hom = forgetIntModules.map (coefficientLocalForwardComposite k x) ≫ (-𝟙 _)",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-negative-equation-coefficient-factors-topo3-r1},
+    :routes-2026-10-11-manifold-negative-equation-coefficient-factors-topo3-r1,
+    :banked-by
+    :routes-2026-10-11-manifold-negative-equation-coefficient-factors-topo3-r1,
+    :banked-commit "3f9b4238e345f244853e452114015585921fd8f8"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-correctedlocalnormalizationautomorphism-hom-eq-neg-iff-coefficient-factors,
    :kind :lemma,
@@ -13136,7 +13157,7 @@
    :other-consumers [:t98A02]}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -13144,7 +13165,9 @@
    :lemma
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.coefficientLocalIso_hom_eq_forwardComposite",
-    :reported-by []},
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/ManifoldFundamentalClass.lean"]},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-coefficientlocaliso-hom-eq-forwardc,
    :kind :lemma,
@@ -13152,7 +13175,7 @@
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -13160,7 +13183,9 @@
    :lemma
    {:name
     "ConstructionTargets.CoefficientChartLocal.forward_composite",
-    :reported-by []},
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/CoefficientChartLocal.lean"]},
    :id
    :lemma-constructiontargets-coefficientchartlocal-forward-composite,
    :kind :lemma,
