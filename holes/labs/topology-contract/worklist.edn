@@ -113852,7 +113852,7 @@
    :depends-on [],
    :other-consumers [:t98A02]}
   {:consumer :t99J01,
-   :stop-count 6,
+   :stop-count 7,
    :review-finding
    "B10 cannot apply B6: its uses list supplies no open neighborhoods and pointed contractions for the circle basepoint and the TwoCircles basepoint; B9 provides only path-connectedness. Add nodes constructing those concrete neighborhoods and contractions, and list them in B10 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
@@ -113860,7 +113860,7 @@
    {:blueprint
     {:path "ConstructionTargets/PointWedgeVanKampen.blueprint.md",
      :sha256
-     "49de3034371862cc70f7248d2c31256bdb1a2204182c840f87d23a1c53ba90e8",
+     "b56003194b5599a5fe7ae38add5ea4a756931ceb09c7519ac42a0d742027683c",
      :nodes
      [{:id :B1, :status :proved}
       {:id :B2, :status :proved}
@@ -113871,40 +113871,42 @@
       {:id :B7, :status :proved}
       {:id :B8, :status :planned}
       {:id :B9, :status :proved}
-      {:id :B10, :status :planned}]},
+      {:id :B10, :status :planned}
+      {:id :B11, :status :planned}
+      {:id :B12, :status :planned}]},
     :placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Blueprint re-review, then B3 mapping equivalence, B4 source reconstruction, B6 coordinate laws, B8 rank-one coordinate, and B10 specialization.",
+    "Blueprint re-review, then formalize B3, B4, B6, B8, B10, B11, and B12.",
     :outcome :stop,
     :warnings
     [{:kind :concurrent-worktree-change,
       :message
-      "ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean was modified by another process and was preserved unmodified and uncommitted."}],
+      "ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean remained modified by another process and was preserved unmodified and uncommitted."}],
     :missing-theorems
-    [{:name
-      "PointWedgeVanKampen.genericPointWedgeSingleObjMappingEquivalence",
+    [{:name "PointWedgeVanKampen.circleBaseNeighborhood_contraction",
       :type
-      "Under explicit PathConnectedSpace X and Y, open-neighborhood membership, and pointed-contraction hypotheses, the postcomposition-natural point-wedge mapping equivalence",
+      "A pointed contraction of the open punctured-circle neighborhood of 1",
       :status :not-started,
-      :consumers [:t99J01 :t01A03 :t92J06 :t97A01 :t97A03],
+      :consumers [:t99J01],
       :depends-on [],
+      :area "fundamental-group-wedge-of-circles"}
+     {:name
+      "PointWedgeVanKampen.twoCirclesBaseNeighborhood_contraction",
+      :type
+      "A pointed contraction of an open restricted-wedge neighborhood of twoCirclesPoint",
+      :status :not-started,
+      :consumers [:t99J01],
+      :depends-on
+      ["PointWedgeVanKampen.circleBaseNeighborhood_contraction"],
       :area "fundamental-group-wedge-of-circles"}
      {:name
       "PointWedgeVanKampen.genericPointWedgeLegCoordinates_vanKampen",
       :type
-      "Under the same explicit hypotheses, the point-wedge fundamental-group equivalence with literal left and right leg equations",
+      "The point-wedge fundamental-group equivalence with literal leg coordinates",
       :status :not-started,
       :consumers [:t99J01 :t01A03 :t92J06 :t97A01 :t97A03],
       :depends-on
-      ["PointWedgeVanKampen.genericPointWedgeSingleObjMappingEquivalence"
-       "PointWedgeVanKampen.fundamentalGroupMulEquivOfSingleObjEquivalence"],
-      :area "fundamental-group-wedge-of-circles"}
-     {:name
-      "PointWedgeVanKampen.multiplicativeIntEquivFreeGroupFinOne",
-      :type "Multiplicative Int ≃* FreeGroup (Fin 1)",
-      :status :not-started,
-      :consumers [:t99J01],
-      :depends-on [],
+      ["PointWedgeVanKampen.genericPointWedgeSingleObjMappingEquivalence"],
       :area "fundamental-group-wedge-of-circles"}
      {:name "PointWedgeVanKampen.threeCirclesFundamentalGroupEquiv",
       :type
@@ -113913,57 +113915,52 @@
       :consumers [:t99J01],
       :depends-on
       ["PointWedgeVanKampen.genericPointWedgeLegCoordinates_vanKampen"
-       "PointWedgeVanKampen.coprodFreeGroupFinTwoFinOne_equiv"
+       "PointWedgeVanKampen.circleBaseNeighborhood_contraction"
+       "PointWedgeVanKampen.twoCirclesBaseNeighborhood_contraction"
        "PointWedgeVanKampen.multiplicativeIntEquivFreeGroupFinOne"],
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:blueprint-sha256
-     "49de3034371862cc70f7248d2c31256bdb1a2204182c840f87d23a1c53ba90e8",
+     "b56003194b5599a5fe7ae38add5ea4a756931ceb09c7519ac42a0d742027683c",
      :registry "131 registered statements match, 0 do not"},
     :disposition :stop,
     :axioms [],
     :author "topo-2",
     :reason
-    "Blueprint repaired again. B3, B4, and B6 now each state the complete topology, path-connectedness, basepoint, open-neighborhood, membership, and pointed-contraction context. B6 additionally spells out both induced fundamental-group maps and the right-leg basepoint equality. Independent review is still required before B3 formalization.",
+    "Blueprint repaired. New B10 specifies the punctured-circle neighborhood and pointed contraction; new B11 constructs the restricted-open neighborhood of the TwoCircles wedge point and its quotient-descended pointed contraction. The final specialization is now B12 and explicitly uses both nodes.",
     :commands
-    [{:cmd "python3 complete-context validation for B3 B4 B6",
+    [{:cmd "rg concrete-neighborhood dependency declarations",
       :exit 0,
       :finding
-      "B3, B4, and B6 each state the complete shared hypothesis context"}
+      "restrictedOpen, restrictedOpen_isOpen, restrictedOpenHomeomorphWedge, and puncturedCirclePointedContraction all exist"}
+     {:cmd "python3 blueprint node and dependency validation",
+      :exit 0,
+      :finding "12 nodes complete; B12 explicitly uses B10 and B11"}
      {:cmd
       "git diff --check -- ConstructionTargets/PointWedgeVanKampen.blueprint.md",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
-     {:cmd "git commit -m Bind-point-wedge-blueprint-hypotheses",
+     {:cmd
+      "git commit -m Add-concrete-wedge-neighborhood-blueprint-nodes",
       :exit 0}
      {:cmd
       "sha256sum ConstructionTargets/PointWedgeVanKampen.blueprint.md",
       :exit 0,
       :finding
-      "49de3034371862cc70f7248d2c31256bdb1a2204182c840f87d23a1c53ba90e8"}],
-    :diagnostic-history
-    [{:cmd "python3 initial complete-context validation for B3 B4 B6",
-      :exit 1,
-      :finding
-      "The validator correctly rejected shorthand saying both path-connected instances in B4; corrected by repeating the full binder list literally in B4 and B6."}],
+      "b56003194b5599a5fe7ae38add5ea4a756931ceb09c7519ac42a0d742027683c"}],
+    :diagnostic-history [],
     :continue-from
-    {:commit "e0845da715595e5a8dd576a8553a721acbda8092",
+    {:commit "e8cbe896fe154e6fa9b5796b1e0581b0726f3886",
      :next
-     "Obtain independent review of the hypothesis-complete blueprint; after approval implement B3 with exactly its stated binders."},
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1791715175296-5100-6f3d6192",
-     :finding
-     "B10 cannot apply B6: its uses list supplies no open neighborhoods and pointed contractions for the circle basepoint and the TwoCircles basepoint; B9 provides only path-connectedness. Add nodes constructing those concrete neighborhoods and contractions, and list them in B10 uses."},
-    :commit "e0845da715595e5a8dd576a8553a721acbda8092",
+     "Obtain independent review of B10-B12; after blueprint approval implement the next ready planned node."},
+    :commit "e8cbe896fe154e6fa9b5796b1e0581b0726f3886",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.blueprint.md"],
     :seat "topo-2"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -114089,7 +114086,9 @@
    :depends-on
    [:lemma-pointwedgevankampen-genericpointwedgelegcoordinates-vankampen
     :lemma-pointwedgevankampen-coprodfreegroupfintwofinone-equiv
-    :lemma-pointwedgevankampen-multiplicativeintequivfreegroupfinone],
+    :lemma-pointwedgevankampen-multiplicativeintequivfreegroupfinone
+    :lemma-pointwedgevankampen-circlebaseneighborhood-contraction
+    :lemma-pointwedgevankampen-twocirclesbaseneighborhood-contraction],
    :other-consumers []}
   {:consumer :t00A03,
    :phase :lemma,
@@ -115447,6 +115446,45 @@
    :id :lemma-t94a10-form-not-exact,
    :kind :lemma,
    :depends-on [:lemma-periodicsquare-green-period],
+   :other-consumers []}
+  {:consumer :t99J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "PointWedgeVanKampen.circleBaseNeighborhood_contraction",
+    :type
+    "A pointed contraction of the open punctured-circle neighborhood of 1"},
+   :lemma
+   {:name "PointWedgeVanKampen.circleBaseNeighborhood_contraction",
+    :reported-by [:program-2026-10-11-point-wedge-van-kampen],
+    :type
+    "A pointed contraction of the open punctured-circle neighborhood of 1",
+    :area "fundamental-group-wedge-of-circles"},
+   :id :lemma-pointwedgevankampen-circlebaseneighborhood-contraction,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t99J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "PointWedgeVanKampen.twoCirclesBaseNeighborhood_contraction",
+    :type
+    "A pointed contraction of an open restricted-wedge neighborhood of twoCirclesPoint"},
+   :lemma
+   {:name "PointWedgeVanKampen.twoCirclesBaseNeighborhood_contraction",
+    :reported-by [:program-2026-10-11-point-wedge-van-kampen],
+    :type
+    "A pointed contraction of an open restricted-wedge neighborhood of twoCirclesPoint",
+    :area "fundamental-group-wedge-of-circles"},
+   :id
+   :lemma-pointwedgevankampen-twocirclesbaseneighborhood-contraction,
+   :kind :lemma,
+   :depends-on
+   [:lemma-pointwedgevankampen-circlebaseneighborhood-contraction],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
