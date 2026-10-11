@@ -173,6 +173,35 @@ theorem sphereProjection_mfderiv_surjective (p : Sphere 2) :
   rw [← h.mfderivToContinuousLinearEquiv_coe (by simp) p]
   exact (h.mfderivToContinuousLinearEquiv (by simp) p).surjective
 
+/-- A smooth descent of the quadratic sphere map has the same derivative
+range at the image of the first coordinate point. -/
+theorem descendedCrossTermMap_mfderiv_range_at_e0
+    (f : Space ℝ 2 → E 3)
+    (hfac : ∀ p : Sphere 2, f (sphereProjection 2 p) = crossTermSphereMap p) :
+    letI := rpSmoothAtlas.charts
+    letI := rpSmoothAtlas.smooth
+    ContMDiff (𝓡 2) (𝓡 3) ∞ f →
+    LinearMap.range
+        (mfderiv (𝓡 2) (𝓡 3) f (sphereProjection 2 sphereFirstPoint)).toLinearMap =
+      yzCoordinatePlane := by
+  letI := rpSmoothAtlas.charts
+  letI := rpSmoothAtlas.smooth
+  intro hf
+  have hfun : f ∘ sphereProjection 2 = crossTermSphereMap := funext hfac
+  have hderiv :
+      mfderiv (𝓡 2) (𝓡 3) (f ∘ sphereProjection 2) sphereFirstPoint =
+        mfderiv (𝓡 2) (𝓡 3) crossTermSphereMap sphereFirstPoint := by
+    rw [hfun]
+  rw [mfderiv_comp sphereFirstPoint
+      (hf.mdifferentiableAt (by simp))
+      ((rpSmoothAtlas.quotient_localDiffeomorph sphereFirstPoint).mdifferentiableAt
+        (by simp))] at hderiv
+  rw [← crossTermSphereMap_mfderiv_firstPoint_range, ← hderiv]
+  symm
+  apply LinearMap.range_comp_of_range_eq_top
+  exact LinearMap.range_eq_top_of_surjective _
+    (sphereProjection_mfderiv_surjective sphereFirstPoint)
+
 /-- At the first coordinate point the ambient derivative swaps the two free
 tangent coordinates and has zero first coordinate. -/
 theorem sphereMapAmbientDerivative_firstAxis (v : E 3) :
@@ -187,5 +216,6 @@ theorem sphereMapAmbientDerivative_firstAxis (v : E 3) :
 #print axioms sphereMapAmbient_fderiv
 #print axioms sphereMapAmbientDerivative_firstAxis
 #print axioms sphereProjection_mfderiv_surjective
+#print axioms descendedCrossTermMap_mfderiv_range_at_e0
 
 end ConstructionTargets.T96A07Closure

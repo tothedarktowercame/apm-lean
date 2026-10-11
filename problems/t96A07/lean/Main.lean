@@ -62,10 +62,23 @@ theorem sphereMap_mfderiv_e0_range :
   simpa [T96A07.sphereMap, crossTermSphereMap] using
     crossTermSphereMap_mfderiv_firstPoint_range
 
+theorem descended_mfderiv_range_at_e0
+    (f : Space ℝ 2 → E 3)
+    (hfac : ∀ p : Sphere 2, f (sphereProjection 2 p) = T96A07.sphereMap p) :
+    letI := rpSmoothAtlas.charts
+    letI := rpSmoothAtlas.smooth
+    ContMDiff (𝓡 2) (𝓡 3) ∞ f →
+    LinearMap.range
+        (mfderiv (𝓡 2) (𝓡 3) f (sphereProjection 2 sphereFirstPoint)).toLinearMap =
+      yzCoordinatePlane := by
+  simpa [T96A07.sphereMap, crossTermSphereMap] using
+    descendedCrossTermMap_mfderiv_range_at_e0 f hfac
+
 #print axioms sphereMap_antipodal
 #print axioms sphereMap_contMDiff
 #print axioms descendedSphereMap
 #print axioms sphereMap_mfderiv_e0_range
+#print axioms descended_mfderiv_range_at_e0
 
 end ConstructionTargets.T96A07Closure
 
