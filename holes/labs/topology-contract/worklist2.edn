@@ -70977,52 +70977,74 @@
    "single-consumer interior nonzero-imaginary invariant for the zero-height core-normal detour",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:residual
-     "Implement the interior imaginary-coordinate theorem, then combine it with the meridian-start and recovered-input endpoint collision certificates to prove left-core avoidance for the complete zero-height detour.",
-     :outcome :go,
-     :warnings [],
-     :axioms [propext Classical.choice Quot.sound],
-     :commands
-     [{:cmd
-       "lake env lean /tmp/t02a03_core_normal_detour_interior_im_probe.lean",
-       :exit 0,
-       :output
-       "zeroHeightCoreNormalDetour_im_ne_zero_of_interior compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "sha256sum /tmp/t02a03_core_normal_detour_interior_im_probe.lean",
-       :exit 0,
-       :output
-       "26b5eef37943d833a9d9702ba05b75a25618af3b5d4e309d3ae45ef9cc52dfcd  /tmp/t02a03_core_normal_detour_interior_im_probe.lean"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_core_normal_detour_interior_im_probe.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}
-      {:cmd
-       "rg -n 'zeroHeightCoreNormalDetour_im_ne_zero_of_interior' /tmp/t02a03_core_normal_detour_interior_im_probe.lean",
-       :exit 0,
-       :output
-       "5:theorem zeroHeightCoreNormalDetour_im_ne_zero_of_interior\n26:#print axioms zeroHeightCoreNormalDetour_im_ne_zero_of_interior"}],
-     :fixture
-     {:path "/tmp/t02a03_core_normal_detour_interior_im_probe.lean",
-      :sha256
-      "26b5eef37943d833a9d9702ba05b75a25618af3b5d4e309d3ae45ef9cc52dfcd"},
-     :finding
-     "The placeholder-free fixture proves the detour normal has nonzero imaginary part at every time distinct from 0 and 1. Each branch reduces to a nonzero scalar multiple of the signed waypoint imaginary coordinate because both endpoint normals are real.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
-      :declaration
-      "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCoreNormalDetour_im_ne_zero_of_interior",
-      :type
-      "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> forall (t : unitInterval), (t : ℝ) ≠ 0 -> (t : ℝ) ≠ 1 -> (zeroHeightCoreNormalDetour t p).im ≠ 0"},
-     :seat "topo-8"}},
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Combine the interior imaginary-coordinate certificate with the banked meridian-start and input endpoint collision certificates to prove left-core avoidance for every detour time, then reconstruct the zero-height ambient radial stage.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["Pre-existing unnecessarySimpa linter warning at ConstructionTargets/T02A03GeometricTubeDeformation.lean:62:6."
+     "The canonical .lake/packages symlink invariant check failed because this checkout has a real package directory."],
+    :missing-theorems [],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not",
+     :construction-file-git-blob
+     "60676732e95baf78ba9763d24b177ad7e283c29c",
+     :fixture-sha256
+     "26b5eef37943d833a9d9702ba05b75a25618af3b5d4e309d3ae45ef9cc52dfcd"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/t02a03_core_normal_detour_interior_im_probe.lean",
+      :exit 0,
+      :output
+      "26b5eef37943d833a9d9702ba05b75a25618af3b5d4e309d3ae45ef9cc52dfcd  /tmp/t02a03_core_normal_detour_interior_im_probe.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/t02a03_core_normal_detour_interior_im_probe.lean",
+      :exit 0,
+      :output
+      "zeroHeightCoreNormalDetour_im_ne_zero_of_interior axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "git diff --check -- ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd
+      "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "git show --format= --unified=0 HEAD -- ConstructionTargets/T02A03GeometricTubeDeformation.lean | rg '^\\+.*(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' --pcre2",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git show --check --oneline HEAD",
+      :exit 0,
+      :output "a94d811cd Add t02A03 detour interior invariant"}
+     {:cmd "git status --porcelain", :exit 0}],
+    :diagnostic-history
+    [{:cmd
+      "test -L .lake/packages && test \"$(readlink -f .lake/packages)\" = /home/joe/code/apm-lean/.lake/packages",
+      :exit 1,
+      :explanation
+      ".lake/packages is a real directory rather than the required canonical symlink; no package state was modified and compilation succeeded on the existing substrate."}],
+    :commit "a94d811cd703a0af2792d3bf26c5739f6be0e431",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+    :fixture
+    {:path "/tmp/t02a03_core_normal_detour_interior_im_probe.lean",
+     :sha256
+     "26b5eef37943d833a9d9702ba05b75a25618af3b5d4e309d3ae45ef9cc52dfcd"},
+    :finding
+    "For every zero-height input and time distinct from both endpoints, each detour branch has imaginary coordinate equal to a nonzero scalar multiple of the signed waypoint imaginary coordinate because both endpoint normals are real.",
+    :seat "topo-6"},
    :phase :implementation,
    :type
    "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> forall (t : unitInterval), (t : ℝ) ≠ 0 -> (t : ℝ) ≠ 1 -> (zeroHeightCoreNormalDetour t p).im ≠ 0",
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/zero-height-core-normal-detour-interior-im",
