@@ -68054,7 +68054,62 @@
   {:bounded-exception
    "single-consumer left-core avoidance for the explicit radial ambient path",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:residual
+     "Prove every point of rightTubeRadialAmbientDeformation lies in apm_t02a03_rightTube, then package safeRightTubeMeridianDeformation.",
+     :outcome :go,
+     :warnings [],
+     :acceptance
+     {:declaration
+      "ConstructionTargets.T02A03GeometricTubeDeformation.avoidsLeftCore_rightTubeRadialAmbientDeformation",
+      :type
+      "forall tp : unitInterval × RightTubeMinusLeftCore, rightTubeRadialAmbientDeformation tp ∉ Set.range apm_t02a03_leftCore",
+      :gates
+      ["Compile the scoped module after inserting the fixture theorem"
+       "Confirm only propext, Classical.choice, and Quot.sound axioms"
+       "Confirm no new sorry in the scoped module"
+       "Run python3 scripts/statement-registry.py check"]},
+     :commands
+     [{:cmd "lake env lean /tmp/t02a03_leftcore_avoidance_probe.lean",
+       :exit 0,
+       :output
+       "avoidsLeftCore_rightTubeRadialAmbientDeformation compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd "sha256sum /tmp/t02a03_leftcore_avoidance_probe.lean",
+       :exit 0,
+       :output
+       "dfe009b25fce192c056a326ee3444bdb492d62bf048aa1716e9ed3a5feee1b7f  /tmp/t02a03_leftcore_avoidance_probe.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_leftcore_avoidance_probe.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}
+      {:cmd
+       "rg -n 'avoidsLeftCore_rightTubeRadialAmbientDeformation' /tmp/t02a03_leftcore_avoidance_probe.lean",
+       :exit 0,
+       :output
+       "9:theorem avoidsLeftCore_rightTubeRadialAmbientDeformation\n32:#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.avoidsLeftCore_rightTubeRadialAmbientDeformation"}],
+     :fixture
+     {:path "/tmp/t02a03_leftcore_avoidance_probe.lean",
+      :sha256
+      "dfe009b25fce192c056a326ee3444bdb492d62bf048aa1716e9ed3a5feee1b7f"},
+     :finding
+     "The placeholder-free fixture turns hypothetical left-core membership into a zero recovered normal coordinate, then contradicts it using the positive radial coefficient and nonzero Circle factor.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+      :declaration
+      "ConstructionTargets.T02A03GeometricTubeDeformation.avoidsLeftCore_rightTubeRadialAmbientDeformation",
+      :type
+      "forall tp : unitInterval × RightTubeMinusLeftCore, rightTubeRadialAmbientDeformation tp ∉ Set.range apm_t02a03_leftCore",
+      :proof-plan
+      "Assume left-core membership, convert it to vanishing with rightTubeNormalComplex_eq_zero_iff, rewrite by recoveredNormal_rightTubeRadialAmbientDeformation, and contradict the explicit product's nonvanishing using rightTubeRadialCoefficient_pos and Circle.coe_ne_zero.",
+      :axioms [propext Classical.choice Quot.sound]},
+     :seat "topo-8"}},
+   :phase :implementation,
+   :type
+   "forall tp : unitInterval × RightTubeMinusLeftCore, rightTubeRadialAmbientDeformation tp ∉ Set.range apm_t02a03_leftCore",
    :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
@@ -68069,15 +68124,20 @@
     :placeholder "the sole sorry in apm_t02a03",
     :route-step
     "certify the deletion invariant of the explicit ambient path"},
+   :axioms [propext Classical.choice Quot.sound],
    :id
    :routes-2026-10-11-t02a03-avoids-left-core-radial-ambient-topo2-r1,
    :kind :reusable-theorem,
    :area "explicit-r3-tube-deformation-retraction",
+   :declaration
+   "ConstructionTargets.T02A03GeometricTubeDeformation.avoidsLeftCore_rightTubeRadialAmbientDeformation",
    :depends-on
    [:routes-2026-10-11-t02a03-recovered-normal-radial-ambient-topo2-r1],
    :current-residual
    "Prove every point of rightTubeRadialAmbientDeformation lies in apm_t02a03_rightTube, then package the endpoints and both invariants as safeRightTubeMeridianDeformation.",
-   :other-consumers []}
+   :other-consumers [],
+   :proof-plan
+   "Assume left-core membership, convert it to vanishing with rightTubeNormalComplex_eq_zero_iff, rewrite by recoveredNormal_rightTubeRadialAmbientDeformation, and contradict the explicit product's nonvanishing using rightTubeRadialCoefficient_pos and Circle.coe_ne_zero."}
   {:bounded-exception
    "single-consumer explicit ambient deformation with frozen tube and deletion invariants",
    :consumer :t02A03,
