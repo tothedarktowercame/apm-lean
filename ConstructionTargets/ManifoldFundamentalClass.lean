@@ -830,6 +830,13 @@ theorem coefficientPairInclusion_mapRightHomologyIso_naturality
   dsimp only
   exact ShortComplex.mapRightHomologyIso_inv_naturality _ _
 
+/-- Forgetting the integer-module structure preserves short exact
+sequences. -/
+theorem forgetIntModules_shortExact
+    {S : ShortComplex (ModuleCat ℤ)} (hS : S.ShortExact) :
+    (S.map forgetIntModules).ShortExact := by
+  exact hS.map_of_exact forgetIntModules
+
 /-- The corrected relative-homology comparison intertwines the coefficient
 absolute-to-relative map with the production relative projection. -/
 theorem integralRelativeHomologyComparisonWithTransport_projection
@@ -1791,6 +1798,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientPairInclusion_mapOpcyclesIso_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientPairInclusion_mapLeftHomologyIso_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientPairInclusion_mapRightHomologyIso_naturality
+#print axioms ConstructionTargets.ManifoldFundamentalClass.forgetIntModules_shortExact
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
