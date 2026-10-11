@@ -69789,8 +69789,60 @@
   {:bounded-exception
    "single-consumer exhaustive zero-height meridian sign cases with collision-free ledger name",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/t02a03_zero_height_meridian_sign_cases_probe.lean",
+      :sha256
+      "d9d857309a12a14a222c523a87c649eefa553aa996d73e1ea5649ef1db19e8da"},
+     :commands
+     [{:cmd
+       "test -L .lake/packages && test \"$(readlink -f .lake/packages)\" = /home/joe/code/apm-lean/.lake/packages",
+       :exit 0}
+      {:cmd
+       "lake env lean /tmp/t02a03_zero_height_meridian_sign_cases_probe.lean",
+       :exit 0,
+       :output
+       "signCases_zeroHeight_rightTubeMeridianCoordinate_re compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "sha256sum /tmp/t02a03_zero_height_meridian_sign_cases_probe.lean",
+       :exit 0,
+       :output
+       "d9d857309a12a14a222c523a87c649eefa553aa996d73e1ea5649ef1db19e8da  /tmp/t02a03_zero_height_meridian_sign_cases_probe.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_zero_height_meridian_sign_cases_probe.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}
+      {:cmd
+       "rg -n 'signCases_zeroHeight_rightTubeMeridianCoordinate_re' /tmp/t02a03_zero_height_meridian_sign_cases_probe.lean",
+       :exit 0,
+       :output
+       "5:theorem signCases_zeroHeight_rightTubeMeridianCoordinate_re\n13:#print axioms signCases_zeroHeight_rightTubeMeridianCoordinate_re"}],
+     :warnings [],
+     :finding
+     "The renamed theorem compiles and its distinguishing signCases prefix prevents collision with the banked square-one theorem. It converts the square-one equality into the exhaustive real-coordinate alternatives 1 and -1 without defining a sign-selection function.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+      :declaration
+      "ConstructionTargets.T02A03GeometricTubeDeformation.signCases_zeroHeight_rightTubeMeridianCoordinate_re",
+      :type
+      "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> (rightTubeMeridianCoordinate p : Complex).re = 1 ∨ (rightTubeMeridianCoordinate p : Complex).re = -1",
+      :proof
+      "Obtain zeroHeight_rightTubeMeridianCoordinate_re_sq p hheight, rewrite it with sq_eq_one_iff, and return the resulting disjunction.",
+      :axioms [propext Classical.choice Quot.sound]},
+     :residual
+     "Implement and bank the distinctly named sign-case theorem; then prove zero-height radial collision nonvanishing in each branch."}},
+   :phase :implementation,
+   :type
+   "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> (rightTubeMeridianCoordinate p : Complex).re = 1 ∨ (rightTubeMeridianCoordinate p : Complex).re = -1",
    :state :open,
+   :proof
+   "Obtain zeroHeight_rightTubeMeridianCoordinate_re_sq p hheight, rewrite it with sq_eq_one_iff, and return the resulting disjunction.",
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/sign-cases-zero-height-meridian-real",
@@ -69804,10 +69856,13 @@
     :placeholder "the sole sorry in apm_t02a03",
     :route-step
     "split the zero-height radial collision proof into its exhaustive positive and negative meridian components"},
+   :axioms [propext Classical.choice Quot.sound],
    :id
    :routes-2026-10-11-t02a03-sign-cases-zero-height-meridian-real-topo2-r1,
    :kind :reusable-theorem,
    :area "explicit-r3-tube-deformation-retraction",
+   :declaration
+   "ConstructionTargets.T02A03GeometricTubeDeformation.signCases_zeroHeight_rightTubeMeridianCoordinate_re",
    :depends-on
    [:routes-2026-10-11-t02a03-zero-height-meridian-real-sq-topo2-r1],
    :current-residual
