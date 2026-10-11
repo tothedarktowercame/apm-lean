@@ -79526,6 +79526,18 @@
      {:cmd "registry check", :exit 0}
      {:cmd "Main placeholder count", :exit 0, :output "1"}
      {:cmd "git show --check a8575f32c", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791761613022-5991-532682f8",
+     :commands
+     ["git show/diff/check a8575f32"
+      "verify committed fixture SHA-256 and blobs"
+      "lake build ConstructionTargets.t96A07Closure"
+      "lake env lean closure and Main"
+      "registry fingerprint, placeholders, ancestry, blueprint checks"],
+     :finding
+     "PASS: a8575f32 is new after history fac75be59; both changed paths are scoped, closure/blueprint blobs match, and fixture SHA-256 is 65250cfcb9c48b1a789ab1a76a6637528e764d7924da72f0c3e21ed166923b5e. The range proof establishes both inclusions: outputs have zero first coordinate, and y in the yz-plane is reached via tangent vector (0,y2,y1). The Main adapter faithfully unfolds sphereMap. Build/Lean pass with only propext, Classical.choice, Quot.sound; registry 131/0; frozen hash 2ba67b040c1c1e31b8529d758a90765d8251ba3798983f6956674918a77fd520 unchanged; closure/Main placeholders 0/1. B5 is complete; B6 range transfer then B7-B13 remain listed."},
     :commit "a8575f32c",
     :changed-paths
     ["ConstructionTargets/t96A07Closure.lean"
@@ -79536,7 +79548,7 @@
      "65250cfcb9c48b1a789ab1a76a6637528e764d7924da72f0c3e21ed166923b5e"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t96A07/lean/Main.lean"
     "problems/t96A07/status.json"
@@ -79552,7 +79564,7 @@
     ["lake env lean problems/t96A07/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: :program-progress-committed",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: :program-milestone-complete",
    :id :program-2026-10-11-close-t96a07,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -79574,9 +79586,10 @@
      :reason :program-milestone-complete}
     {:job 5, :commit "2b9189afd", :reason :program-milestone-complete}
     {:job 6, :commit "47c44c303", :reason :program-progress-committed}
-    {:job 7,
-     :commit "fac75be59",
-     :reason :program-progress-committed}]}
+    {:job 7, :commit "fac75be59", :reason :program-progress-committed}
+    {:job 8,
+     :commit "a8575f32c",
+     :reason :program-milestone-complete}]}
   {:consumer :t94A10,
    :phase :implementation,
    :state :open,
@@ -81021,7 +81034,7 @@
    :other-consumers []}
   {:consumer :t96A07,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -81033,7 +81046,9 @@
     :reported-by [:program-2026-10-11-close-t96a07],
     :type "range of sphereMap mfderiv at e0 is yz-plane",
     :area "projective-smooth-descent",
-    :proved-in :program-2026-10-11-close-t96a07},
+    :proved-in :program-2026-10-11-close-t96a07,
+    :banked-by :program-2026-10-11-close-t96a07,
+    :banked-commit "a8575f32c"},
    :id
    :lemma-constructiontargets-t96a07closure-spheremap-mfderiv-e0-range,
    :kind :lemma,
