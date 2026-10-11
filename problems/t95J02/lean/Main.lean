@@ -130,6 +130,8 @@ private lemma t95J02RetractionA_comp_inclusion :
 
 namespace t95J02Closure
 
+open unitInterval
+
 /-- A quotient-invariant pair of trigonometric coordinates.  On the vertical
 core this is the usual cosine-sine parametrization of the circle. -/
 def separatingRaw (p : ℝ × ℝ) : EuclideanSpace ℝ (Fin 2) :=
@@ -342,6 +344,62 @@ noncomputable def t95J02CircleB_homeo :
   ConstructionTargets.CircleHomology.circleHomeomorphSphereOne.symm.trans
     ((AddCircle.homeomorphCircle (T := (1 : ℝ)) one_ne_zero).symm.trans
       verticalAddCircleHomeomorph)
+
+/-- The raw glide sweep before descending the vertical coordinate modulo one. -/
+def verticalSweepRaw (p : I × ℝ) : t95J02KleinBottleType :=
+  t95J02QuotientPoint ((p.1 : ℝ), p.2)
+
+theorem verticalSweepRaw_continuous : Continuous verticalSweepRaw := by
+  exact continuous_coinduced_rng.comp
+    ((continuous_subtype_val.comp (continuous_fst : Continuous (Prod.fst : I × ℝ → I))).prodMk
+      (continuous_snd : Continuous (Prod.snd : I × ℝ → ℝ)))
+
+theorem verticalSweepRaw_periodic (t : I) :
+    Function.Periodic (fun y : ℝ => verticalSweepRaw (t, y)) 1 := by
+  intro y
+  exact (t95J02QuotientPoint_vertical (t : ℝ) y).symm
+
+/-- The glide sweep on the period-one additive circle. -/
+def verticalSweep (p : I × AddCircle (1 : ℝ)) : t95J02KleinBottleType :=
+  (verticalSweepRaw_periodic p.1).lift p.2
+
+theorem verticalSweep_continuous : Continuous verticalSweep := by
+  apply isQuotientMap_quotient_mk'.continuous_lift_prod_right
+  simpa [verticalSweep] using verticalSweepRaw_continuous
+
+@[simp] theorem verticalSweep_coe (t : I) (y : ℝ) :
+    verticalSweep (t, (y : AddCircle (1 : ℝ))) =
+      t95J02QuotientPoint ((t : ℝ), y) := rfl
+
+theorem verticalSweep_zero (a : AddCircle (1 : ℝ)) :
+    verticalSweep (0, a) = t95J02InclusionB (verticalAddCircle a) := by
+  induction a using QuotientAddGroup.induction_on
+  simp only [verticalSweep_coe]
+  change t95J02QuotientPoint (0, _) = (verticalAddCircle _).1
+  rw [verticalAddCircle_coe]
+  rfl
+
+theorem verticalSweep_one (a : AddCircle (1 : ℝ)) :
+    verticalSweep (1, a) = t95J02InclusionB (verticalAddCircle (-a)) := by
+  induction a using QuotientAddGroup.induction_on
+  simp only [verticalSweep_coe]
+  change t95J02QuotientPoint (1, _) = t95J02QuotientPoint (0, _)
+  simpa using (t95J02QuotientPoint_glide 0 (-_)).symm
+
+def verticalCoreMap : C(AddCircle (1 : ℝ), t95J02KleinBottleType) :=
+  ⟨fun a => t95J02InclusionB (verticalAddCircle a),
+    t95J02InclusionB.hom.continuous.comp verticalAddCircle.continuous⟩
+
+def addCircleNeg : C(AddCircle (1 : ℝ), AddCircle (1 : ℝ)) :=
+  ⟨fun a => -a, continuous_neg⟩
+
+/-- The quotient-level glide homotopy before transporting its source from
+`AddCircle 1` to the Euclidean unit circle. -/
+def verticalSweepHomotopy : ContinuousMap.Homotopy verticalCoreMap
+    (verticalCoreMap.comp addCircleNeg) where
+  toContinuousMap := ⟨verticalSweep, verticalSweep_continuous⟩
+  map_zero_left := by simpa [verticalCoreMap] using verticalSweep_zero
+  map_one_left := by simpa [verticalCoreMap, addCircleNeg] using verticalSweep_one
 
 end t95J02Closure
 
