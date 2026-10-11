@@ -79283,84 +79283,60 @@
   {:consumer :t97A04,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 8,
+   :stop-count 9,
    :review-finding
    "program STOP commits nothing new since the last :program-history entry: evidence commit bb0f0f77d8953dc78dd564e000f3d4a5b29d0894 exactly equals history job 5",
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Identify K with transported boundary connecting arrow; infer mono and cancel; then B8-B11.",
+    "Build cover short-complex iso; infer K mono/cancel; then B8-B11.",
     :outcome :stop,
     :warnings ["Main: 2 placeholders."],
     :missing-theorems
     [{:name
-      "ConstructionTargets.T97A04Closure.frozenConnectingCoordinate_comp_overlapScalar",
-      :type "K≫overlapScalar a=(a·id)≫K",
+      "ConstructionTargets.T97A04Closure.frozenBoundaryCoverTransport",
+      :type "ambient inverse maps transport U,V,and intersection",
       :status :proved,
       :consumers [:t97A04],
-      :depends-on
-      ["ConstructionTargets.T97A04Closure.shearY_overlap_coordinate"],
+      :depends-on [],
       :area "mv-connecting-naturality"}
      {:name
-      "ConstructionTargets.T97A04Closure.shearY_frozenConnectingCoordinate_scalar",
-      :type "H2-coordinate shear≫K=(a·id)≫K",
-      :status :proved,
+      "ConstructionTargets.T97A04Closure.frozenBoundaryCoverShortComplexIso",
+      :type "cover short-complex iso conjugating connecting arrows",
+      :status :partial,
       :consumers [:t97A04],
       :depends-on
-      ["ConstructionTargets.T97A04Closure.shearY_frozenConnectingCoordinate_naturality"],
+      ["ConstructionTargets.T97A04Closure.frozenBoundaryCoverTransport"],
       :area "mv-connecting-naturality"}
      {:name
       "ConstructionTargets.T97A04Closure.frozenConnectingCoordinate_mono",
       :type "Mono frozenConnectingCoordinate",
       :status :not-started,
       :consumers [:t97A04],
-      :depends-on [],
-      :area "mv-connecting-naturality"}
-     {:name "ConstructionTargets.T97A04Closure.shearY_H2",
-      :type "frozen H2 coordinate of shearY a b is a·id",
-      :status :partial,
-      :consumers [:t97A04],
       :depends-on
-      ["ConstructionTargets.T97A04Closure.frozenConnectingCoordinate_mono"
-       "ConstructionTargets.T97A04Closure.shearY_frozenConnectingCoordinate_scalar"],
+      ["ConstructionTargets.T97A04Closure.frozenBoundaryCoverShortComplexIso"],
       :area "mv-connecting-naturality"}],
     :statement-hashes
     {:registry "131/0",
-     :closure "8c1599be6f0c799f89131c897a90b4608dec7ca4",
+     :closure "7c6f8d52d0aca99054b63fd4939ff7cbdd08614b",
      :blueprint "c419a895cb4ede2acc1cb6bc5c7536344ba63df4"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
     :reason :program-progress-committed,
     :commands
-    [{:cmd "closure compile", :exit 0}
+    [{:cmd "lake env lean ConstructionTargets/t97A04Closure.lean",
+      :exit 0}
      {:cmd "closure no-sorry scan", :exit 1, :expected-exit 1}
-     {:cmd "Main compile", :exit 0}
-     {:cmd "registry check", :exit 0}
+     {:cmd "lake env lean problems/t97A04/lean/Main.lean", :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "Main placeholder count", :exit 0, :output "2"}
-     {:cmd "git show --check 2f9476558", :exit 0}],
-    :diagnostic-history
-    [{:cmd "closure compile",
-      :exit 1,
-      :finding
-      "Proved scalar action componentwise by biproduct extensionality."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791746718199-5813-4b727b66",
-     :commands
-     ["git show/diff/check 2f947655"
-      "lake env lean ConstructionTargets/t97A04Closure.lean"
-      "lake env lean problems/t97A04/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "fingerprint, placeholder, ancestry, fixture checks"],
-     :finding
-     "PASS: 2f947655 is new after history 25062c7b; its sole changed path is scoped and closure/blueprint blobs match. Biproduct extensionality proves K then overlapScalar a = scalar a then K on both projections; rewriting the transported naturality square has the correct B7 orientation. Lean gates pass with only propext, Classical.choice, Quot.sound; registry 131/0; frozen hash ca1b2cb3c6594276811618321d5c0604c2f38fc4594a6b21ae161a711a923a34 unchanged; closure/Main placeholders 0/2. This is new compiled program progress; identifying K as monic, cancellation, then B8-B11 remain listed."},
-    :commit "2f947655861eac141828e5fb9b5eb7cca4e74de6",
+     {:cmd "git show --check c9b1ad24a", :exit 0}],
+    :commit "c9b1ad24a4a4cb149ffeaf672a728febefee879b",
     :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -80718,5 +80694,46 @@
    :id
    :lemma-constructiontargets-t97a04closure-frozenconnectingcoordinate-mono,
    :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t97a04closure-frozenboundarycovershortcomplexiso],
+   :other-consumers []}
+  {:consumer :t97A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T97A04Closure.frozenBoundaryCoverTransport",
+    :type "ambient inverse maps transport U,V,and intersection"},
+   :lemma
+   {:name
+    "ConstructionTargets.T97A04Closure.frozenBoundaryCoverTransport",
+    :reported-by [:program-2026-10-11-close-t97a04],
+    :type "ambient inverse maps transport U,V,and intersection",
+    :area "mv-connecting-naturality",
+    :proved-in :program-2026-10-11-close-t97a04},
+   :id
+   :lemma-constructiontargets-t97a04closure-frozenboundarycovertransport,
+   :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T97A04Closure.frozenBoundaryCoverShortComplexIso",
+    :type "cover short-complex iso conjugating connecting arrows"},
+   :lemma
+   {:name
+    "ConstructionTargets.T97A04Closure.frozenBoundaryCoverShortComplexIso",
+    :reported-by [:program-2026-10-11-close-t97a04],
+    :type "cover short-complex iso conjugating connecting arrows",
+    :area "mv-connecting-naturality"},
+   :id
+   :lemma-constructiontargets-t97a04closure-frozenboundarycovershortcomplexiso,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t97a04closure-frozenboundarycovertransport],
    :other-consumers []}]}
