@@ -70105,57 +70105,66 @@
    "single-consumer positive collision certificate at the recovered input endpoint",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/t02a03_positive_sign_input_poly_probe.lean",
-      :sha256
-      "d7cfa81e0653f00ea6e226b00a49adcdb9b64dfc7ea8c4bb36080285852edfba"},
-     :commands
-     [{:cmd
-       "test -L .lake/packages && test \"$(readlink -f .lake/packages)\" = /home/joe/code/apm-lean/.lake/packages",
-       :exit 0}
-      {:cmd
-       "lake env lean /tmp/t02a03_positive_sign_input_poly_probe.lean",
-       :exit 0,
-       :output
-       "positiveSign_input_collisionPolynomial_pos compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "sha256sum /tmp/t02a03_positive_sign_input_poly_probe.lean",
-       :exit 0,
-       :output
-       "d7cfa81e0653f00ea6e226b00a49adcdb9b64dfc7ea8c4bb36080285852edfba  /tmp/t02a03_positive_sign_input_poly_probe.lean"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_positive_sign_input_poly_probe.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}
-      {:cmd
-       "rg -n 'positiveSign_input_collisionPolynomial_pos' /tmp/t02a03_positive_sign_input_poly_probe.lean",
-       :exit 0,
-       :output
-       "5:theorem positiveSign_input_collisionPolynomial_pos\n16:#print axioms positiveSign_input_collisionPolynomial_pos"}],
-     :warnings [],
-     :finding
-     "The banked positive-factor identity writes the recovered input collision polynomial as c times the meridian real coordinate for a strictly positive c. In the real-equals-one branch, this reduces exactly to c and proves strict positivity.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
-      :declaration
-      "ConstructionTargets.T02A03GeometricTubeDeformation.positiveSign_input_collisionPolynomial_pos",
-      :type
-      "forall (p : RightTubeMinusLeftCore), (rightTubeMeridianCoordinate p : Complex).re = 1 -> 0 < (1 - (rightTubeCoreNormalComplex p.1).re)^2 - 4*(1-(rightTubeCoreNormalComplex p.1).re)*(rightTubeCoreAngularCoordinate p : Complex).re + 3",
-      :proof
-      "Obtain c, its positivity, and the polynomial factorization from inputCollisionPolynomial_positiveFactor_meridianReal p; rewrite the factorization and the branch hypothesis, simplify c times one, and return c's positivity.",
-      :axioms [propext Classical.choice Quot.sound]},
-     :residual
-     "Implement and bank the positive recovered-endpoint certificate; then construct a radius-bounded normal path within the positive collision component."}},
+   {:placeholder-delta {:before 0, :after 0, :change 0},
+    :residual
+    "Construct a continuous core-normal path between the two positive endpoints inside the positive collision component while preserving the tube radius bound; then treat the negative component and assemble the angular stage.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean:62:6: unnecessarySimpa (pre-existing)"
+     "The canonical checkout's .lake/packages is a real directory, so the frame-worktree symlink diagnostic does not apply cleanly here."],
+    :missing-theorems [],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms [propext Classical.choice Quot.sound],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :scope-blob "5bc2e5b119114283e5b8d56e9659d15cc0278559",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0,
+      :output
+      "compiled; declaration axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "lake env lean /tmp/t02a03_positive_sign_input_poly_probe.lean",
+      :exit 0,
+      :output
+      "positiveSign_input_collisionPolynomial_pos compiled; axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd "sha256sum /tmp/t02a03_positive_sign_input_poly_probe.lean",
+      :exit 0,
+      :output
+      "d7cfa81e0653f00ea6e226b00a49adcdb9b64dfc7ea8c4bb36080285852edfba  /tmp/t02a03_positive_sign_input_poly_probe.lean"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "git diff --check -- ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd
+      "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :diagnostic-history
+    [{:cmd
+      "test -L .lake/packages && test \"$(readlink -f .lake/packages)\" = /home/joe/code/apm-lean/.lake/packages",
+      :exit 1,
+      :finding
+      "This canonical checkout has a real .lake/packages directory; no package-authority mutation was made during the scoped theorem row."}],
+    :commit "06df937840e7917be33e170cb7162f5ef645e56e",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.positiveSign_input_collisionPolynomial_pos",
+    :fixture
+    {:path "/tmp/t02a03_positive_sign_input_poly_probe.lean",
+     :sha256
+     "d7cfa81e0653f00ea6e226b00a49adcdb9b64dfc7ea8c4bb36080285852edfba"},
+    :finding
+    "The banked positive-factor identity writes the recovered collision polynomial as a strictly positive scalar times the meridian real coordinate. Rewriting that coordinate to one proves strict positivity without asserting anything about an interpolation.",
+    :seat "topo-6"},
    :phase :implementation,
    :type
    "forall (p : RightTubeMinusLeftCore), (rightTubeMeridianCoordinate p : Complex).re = 1 -> 0 < (1 - (rightTubeCoreNormalComplex p.1).re)^2 - 4*(1-(rightTubeCoreNormalComplex p.1).re)*(rightTubeCoreAngularCoordinate p : Complex).re + 3",
-   :state :open,
+   :state :done-unreviewed,
    :proof
    "Obtain c, its positivity, and the polynomial factorization from inputCollisionPolynomial_positiveFactor_meridianReal p; rewrite the factorization and the branch hypothesis, simplify c times one, and return c's positivity.",
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
