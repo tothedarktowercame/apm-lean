@@ -69732,6 +69732,19 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git status --short", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791689915504-4020-c2d6ca8b",
+     :commands
+     ["git show/diff-tree/show --check 7ff5611212211a86f37a46df1ed5be3cf6653434"
+      "git rev-parse recorded scope blob; sha256sum frozen fixture"
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean"
+      "lake env lean /tmp/t02a03_zero_height_meridian_real_sq_probe.lean"
+      "python3 scripts/statement-registry.py check and fingerprint commit/parent"
+      "python3 placeholder recount at commit/parent"],
+     :finding
+     "PASS: topo-6 is independent from codex-7; the recorded commit changes only the scoped target, and its blob and frozen fixture hash match. Target and probe compile with exactly propext, Classical.choice, and Quot.sound. The theorem has the frozen orientation: zero input height makes the Circle coordinate imaginary part zero through the positive-factor identity, and Circle.normSq_coe then yields real-part squared equals one without selecting a sign branch or conflating the Circle subtype with Complex. Registry is 131/0, the t02A03 statement fingerprint is unchanged at commit and parent, and the sole Main.lean placeholder remains 1 at both revisions."},
     :commit "7ff5611212211a86f37a46df1ed5be3cf6653434",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
@@ -69747,7 +69760,7 @@
    :phase :implementation,
    :type
    "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> (rightTubeMeridianCoordinate p : Complex).re ^ 2 = 1",
-   :state :done-unreviewed,
+   :state :done,
    :proof
    "Obtain the positive height multiplier, rewrite the meridian imaginary coordinate to zero using the input-height hypothesis, and simplify Circle.normSq_coe with Complex.normSq_apply and pow_two.",
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
@@ -69862,7 +69875,7 @@
      "If the input height is zero, the banked positive-factor height identity makes the imaginary part of rightTubeMeridianCoordinate zero. Its Circle norm-square equation then gives meridianReal^2 = 1. This records the two zero-height sign components without making a discontinuous branch choice.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
