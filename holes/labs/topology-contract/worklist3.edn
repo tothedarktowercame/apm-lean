@@ -16155,8 +16155,50 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :implements-lemma :lemma-mfclass-forget-snake-kernel-tau1-islimit,
+   :evidence
+   {:placeholder-delta {:t00J02 [1 1], :t98A02 [1 1]},
+    :residual
+    "Repeat for τ₂/τ₃, combine via ShortComplex.isLimitOfIsLimitπ, then build dual cokernel witnesses and mapped SnakeInput.",
+    :outcome :done-unreviewed,
+    :warnings ["retry; existing commit freshly verified"],
+    :missing-theorems
+    [{:name "forgetIntModulesSnakeInput_kernelτ₁IsLimit",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on
+      ["forgetIntModulesSnakeInput_transportedKernelτ₁"
+       "forgetIntModulesSnakeInput_kernelτ₁ConeIso"],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes {:registry "131/131"},
+    :axioms [:propext :Classical.choice :Quot.sound],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd "sha256sum fixture", :exit 0}
+     {:cmd "git show --name-only f358a9afb", :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "rg forbidden tokens scoped-file",
+      :exit 1,
+      :expected-exit 1}],
+    :commit "f358a9afb7e78d37fd5db909b77fb9ac8210a48a",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path
+     "/tmp/manifold_fundamental_class_forget_snake_kernel_tau1_islimit.lean",
+     :sha256
+     "7f7c318a04eef0c23a7480b31ddaef46c24180c3c30732975263e3d36973d398"},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :declaration
+     "ConstructionTargets.ManifoldFundamentalClass.forgetIntModulesSnakeInput_kernelτ₁IsLimit"},
+    :row
+    :routes-2026-10-11-manifold-forget-snake-kernel-tau1-islimit-topo3-r1,
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/integral-open-disk-connecting-naturality/snake-input-kernel-tau1-islimit",
@@ -23413,6 +23455,49 @@
    :id :lemma-t98a02-collaredconnectedsum-mayervietoris,
    :kind :lemma,
    :depends-on [:lemma-t98a02-productionhomology-bridge],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "forgetIntModulesSnakeInput_kernelτ₁IsLimit"},
+   :lemma
+   {:name "forgetIntModulesSnakeInput_kernelτ₁IsLimit",
+    :reported-by
+    [:routes-2026-10-11-manifold-forget-snake-kernel-tau1-islimit-topo3-r1],
+    :area "manifold-fundamental-class",
+    :proved-in
+    :routes-2026-10-11-manifold-forget-snake-kernel-tau1-islimit-topo3-r1},
+   :id :lemma-forgetintmodulessnakeinput-kernel-islimit,
+   :kind :lemma,
+   :depends-on
+   [:lemma-forgetintmodulessnakeinput-transportedkernel
+    :lemma-forgetintmodulessnakeinput-kernel-coneiso],
+   :other-consumers [:t98A02]}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "forgetIntModulesSnakeInput_transportedKernelτ₁"},
+   :lemma
+   {:name "forgetIntModulesSnakeInput_transportedKernelτ₁",
+    :reported-by []},
+   :id :lemma-forgetintmodulessnakeinput-transportedkernel,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "forgetIntModulesSnakeInput_kernelτ₁ConeIso"},
+   :lemma
+   {:name "forgetIntModulesSnakeInput_kernelτ₁ConeIso",
+    :reported-by []},
+   :id :lemma-forgetintmodulessnakeinput-kernel-coneiso,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
