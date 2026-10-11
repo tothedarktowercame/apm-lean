@@ -1571,6 +1571,34 @@ theorem continuousCoupledAngularComplexInterpolation_exists :
   · intro p
     simp [Z]
 
+noncomputable def coupledAngularComplexInterpolation
+    (tp : unitInterval × RightTubeMinusLeftCore) : ℂ :=
+  ((1 - (tp.1 : ℝ) : ℝ) : ℂ) +
+    ((tp.1 : ℝ) : ℂ) * rightTubeCorePlanarComplex tp.2.1
+
+theorem coupledAngularComplexInterpolation_eq_zero_iff
+    (tp : unitInterval × RightTubeMinusLeftCore) :
+    coupledAngularComplexInterpolation tp = 0 ↔
+      (rightTubeCorePlanarComplex tp.2.1).im = 0 ∧
+      1 - (tp.1 : ℝ) + (tp.1 : ℝ) *
+        (rightTubeCorePlanarComplex tp.2.1).re = 0 := by
+  constructor
+  · intro h
+    have hre := congrArg Complex.re h
+    have him := congrArg Complex.im h
+    simp [coupledAngularComplexInterpolation] at hre him
+    constructor
+    · by_contra hw
+      have ht0 : tp.1 = 0 := him.resolve_right hw
+      have ht : (tp.1 : ℝ) = 0 := congrArg Subtype.val ht0
+      rw [ht] at hre
+      norm_num at hre
+    · exact hre
+  · rintro ⟨him, hre⟩
+    apply Complex.ext
+    · simpa [coupledAngularComplexInterpolation] using hre
+    · simp [coupledAngularComplexInterpolation, him]
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -1631,3 +1659,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCoupledDetour_avoidsLeftCore
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightAmbientDetour_of_coupledAngular
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.continuousCoupledAngularComplexInterpolation_exists
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularComplexInterpolation_eq_zero_iff
