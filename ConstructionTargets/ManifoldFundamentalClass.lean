@@ -393,6 +393,15 @@ theorem integralSingularChainsComparison_subtype_naturality
           (AddCommGrpCat.of ℤ)).map (integralSubtypeInclusion A)) := by
   exact singularChainsComparison_naturality (integralSubtypeInclusion A)
 
+/-- The coefficient-relative subtype map is exactly the module-valued
+topological singular-chain map used by the integral comparison. -/
+theorem coefficientSubspaceMap_eq_integralSubtypeChainMap
+    {X : Type} [TopologicalSpace X] (A : Set X) :
+    CoefficientRelativeSmall.subspaceMap ℤ A =
+      (((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+        (ModuleCat.of ℤ ℤ)).map (integralSubtypeInclusion A)) := by
+  rfl
+
 private abbrev moduleSubtypeChainMap {X : Type} [TopologicalSpace X]
     (A : Set X) :=
   (((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
@@ -545,6 +554,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.localizationCoefficient_eq_one_of_normalized
 #print axioms ConstructionTargets.ManifoldFundamentalClass.distinguishedChartGenerator_eq_coefficientGenerator
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralSingularChainsComparison_subtype_naturality
+#print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientSubspaceMap_eq_integralSubtypeChainMap
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralMappedRelativeCokernelComparison
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetIntegralRelativeCokernelComparison
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparison
