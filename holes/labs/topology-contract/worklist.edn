@@ -104463,6 +104463,22 @@
       :exit 1,
       :finding
       "The first conditional consequence needed explicit category comp_id/id_comp chaining after rewriting the component."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791692243450-4139-303a0fe4",
+     :commands
+     ["git show and git diff-tree on recorded commit 87173d833b30aa453665a2c6c7841603034559a4"
+      "git diff --exit-code between recorded blob and checkout"
+      "sha256sum on committed source, recorded blob, and frozen fixture"
+      "lake build ConstructionTargets.TwoOpenFreeProductMappingCounitComponentIdentity"
+      "lake env lean /tmp/inverse-identity-counit-component-identity.lean"
+      "fresh type and axiom check for inverseIdentity_map_eq_of_counit_component_identity"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped source and fixture placeholder recount"
+      "git diff-tree --check on recorded commit"],
+     :finding
+     "PASS as a compiled-progress STOP. The one-file commit is authored by topo-2 and the checkout equals its recorded blob. The frozen fixture hash is exactly c5badebac45156c1b08d838291ab02e5ca04b4385d6f143451bb8b75f64c38a5. The committed theorem has the correct representation boundary and orientation: assuming the counit component at the unique free-product object is identity, counit naturality implies that the inverse-identity functor maps every endomorphism literally to itself, eliminating conjugation. It compiles with only propext, Classical.choice, and Quot.sound; source placeholders and fixture sorry/admit counts are zero; the registry reports 131 matched and 0 mismatched. The remaining five-factor compositeCounit_component_identity theorem is explicitly listed in missing-theorems, so the STOP satisfies the permitted real-progress condition."},
     :commit "87173d833b30aa453665a2c6c7841603034559a4",
     :changed-paths
     ["ConstructionTargets/TwoOpenFreeProductMappingCounitComponentIdentity.lean"],
@@ -104472,7 +104488,7 @@
      "c5badebac45156c1b08d838291ab02e5ca04b4385d6f143451bb8b75f64c38a5"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/TwoOpenFreeProductMappingCounitComponentIdentity.lean"],
    :dag-node
@@ -104594,7 +104610,7 @@
       "The counit component at the unique free-product object is the identity morphism, eliminating the conjugation in the inverse-identity leg computation."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/generic-point-wedge-fundamental-group-coordinates",
@@ -110100,7 +110116,7 @@
    :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
   {:consumer :t99J01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -110115,7 +110131,10 @@
      :routes-2026-10-11-generic-point-wedge-fundamental-group-coordinates-84],
     :type
     "For the mapping equivalence at FreeProductTarget, the hom component at SingleObj.star of the counit isomorphism from mapping.functor.obj (mapping.inverse.obj (Functor.id FreeProductTarget)) to Functor.id FreeProductTarget is the identity morphism.",
-    :area "fundamental-group-wedge-of-circles"},
+    :area "fundamental-group-wedge-of-circles",
+    :banked-by
+    :routes-2026-10-11-inverse-identity-counit-component-identity-90,
+    :banked-commit "87173d833b30aa453665a2c6c7841603034559a4"},
    :id
    :lemma-twoopenfreeproductmapping-inverseidentitycounit-component-identity,
    :kind :lemma,
