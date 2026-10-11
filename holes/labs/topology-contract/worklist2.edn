@@ -79283,33 +79283,33 @@
   {:consumer :t97A04,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 6,
+   :stop-count 7,
    :review-finding
    "program STOP commits nothing new since the last :program-history entry: evidence commit bb0f0f77d8953dc78dd564e000f3d4a5b29d0894 exactly equals history job 5",
    :evidence
    {:placeholder-delta 0,
-    :residual
-    "Identify both transported overlap summands; then finish B6-B11.",
+    :residual "Identify both overlap summands; then B6-B11.",
     :outcome :stop,
     :warnings ["Main retains two placeholders."],
     :missing-theorems
-    [{:name "ConstructionTargets.T97A04Closure.circleZPow_H1",
-      :type "H1(zpow a)=a times identity",
+    [{:name
+      "ConstructionTargets.T97A04Closure.circleZPow_H1_coordinate",
+      :type "coordinate conjugate of H1(zpow a) is a times identity",
       :status :proved,
       :consumers [:t97A04],
-      :depends-on
-      ["ConstructionTargets.T97A04Closure.circleZPow_fundamentalGroup_coordinate"],
+      :depends-on ["ConstructionTargets.T97A04Closure.circleZPow_H1"],
       :area "mv-connecting-naturality"}
      {:name
       "ConstructionTargets.T97A04Closure.shearY_overlap_coordinate_components",
       :type "inl/inr degree-a equations",
       :status :partial,
       :consumers [:t97A04],
-      :depends-on ["ConstructionTargets.T97A04Closure.circleZPow_H1"],
+      :depends-on
+      ["ConstructionTargets.T97A04Closure.circleZPow_H1_coordinate"],
       :area "mv-connecting-naturality"}],
     :statement-hashes
     {:registry "131/0",
-     :closure "3da362518bbdac3511bdca619ab393b9f0be80b9",
+     :closure "1791d484095886eaf683b9a2ac7fad96cdfba604",
      :blueprint "c419a895cb4ede2acc1cb6bc5c7536344ba63df4"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
@@ -79318,32 +79318,23 @@
     :commands
     [{:cmd "lake env lean ConstructionTargets/t97A04Closure.lean",
       :exit 0}
-     {:cmd "closure no-sorry scan", :exit 0}
-     {:cmd
-      "git diff --check -- ConstructionTargets/t97A04Closure.lean",
-      :exit 0}
+     {:cmd "closure no-sorry scan", :exit 1, :expected-exit 1}
      {:cmd "lake env lean problems/t97A04/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "Main placeholder count", :exit 0, :output "2"}
-     {:cmd "git show --check bb0f0f77d", :exit 0}],
+     {:cmd "git show --check c618c3100", :exit 0}],
     :diagnostic-history
-    [{:cmd "lake env lean ConstructionTargets/t97A04Closure.lean",
+    [{:cmd "closure compile",
       :exit 1,
-      :finding
-      "Removed a solved tactic and supplied Circle path-connectedness."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-7",
-     :job "invoke-1791726740986-5445-a909892d",
-     :finding
-     "program STOP commits nothing new since the last :program-history entry: evidence commit bb0f0f77d8953dc78dd564e000f3d4a5b29d0894 exactly equals history job 5"},
-    :commit "bb0f0f77d8953dc78dd564e000f3d4a5b29d0894",
+      :finding "Fixed categorical association; rerun passed."}],
+    :continue-from "Prove both overlap component equations.",
+    :commit "c618c310021b3e265bd9e4c5261cb1d08cc29cf6",
     :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
     :finding
-    "Hurewicz transfer proves H1(circleZPow a)=a times identity.",
+    "Circle-power H1 is now in the overlap's integral coordinate.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79774,7 +79765,8 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-t97a04closure-twocircleoverlapshear
-    :lemma-constructiontargets-t97a04closure-circlezpow-h1],
+    :lemma-constructiontargets-t97a04closure-circlezpow-h1
+    :lemma-constructiontargets-t97a04closure-circlezpow-h1-coordinate],
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
@@ -79837,4 +79829,24 @@
    :lemma-constructiontargets-t97a04closure-circlezpow-fundamentalgroup-coordinate,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T97A04Closure.circleZPow_H1_coordinate",
+    :type "coordinate conjugate of H1(zpow a) is a times identity"},
+   :lemma
+   {:name "ConstructionTargets.T97A04Closure.circleZPow_H1_coordinate",
+    :reported-by [:program-2026-10-11-close-t97a04],
+    :type "coordinate conjugate of H1(zpow a) is a times identity",
+    :area "mv-connecting-naturality",
+    :proved-in :program-2026-10-11-close-t97a04},
+   :id
+   :lemma-constructiontargets-t97a04closure-circlezpow-h1-coordinate,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t97a04closure-circlezpow-h1],
    :other-consumers []}]}
