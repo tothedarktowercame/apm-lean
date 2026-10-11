@@ -1345,6 +1345,26 @@ theorem zeroHeight_specializedCoreNormalAffineLegs_radius_and_im_ne_zero
     · exact rightTubeCoreInputNormalRadiusBound p.1 p.2.1
     · exact hwquarter
 
+noncomputable def zeroHeightCoreNormalDetour
+    (t : unitInterval) (p : RightTubeMinusLeftCore) : ℂ :=
+  let n₀ := rightTubeCoreNormalComplex
+    (apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p))
+  let n₁ := rightTubeCoreNormalComplex p.1
+  let w := zeroHeightSignedImaginaryWaypoint p
+  if (t : ℝ) ≤ 1 / 2 then
+    ((1 - 2 * (t : ℝ) : ℝ) : ℂ) * n₀ + ((2 * (t : ℝ) : ℝ) : ℂ) * w
+  else
+    ((2 - 2 * (t : ℝ) : ℝ) : ℂ) * w + ((2 * (t : ℝ) - 1 : ℝ) : ℂ) * n₁
+
+theorem zeroHeightCoreNormalDetour_endpoints_midpoint
+    (p : RightTubeMinusLeftCore) :
+    zeroHeightCoreNormalDetour 0 p = rightTubeCoreNormalComplex
+        (apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)) ∧
+      zeroHeightCoreNormalDetour 1 p = rightTubeCoreNormalComplex p.1 ∧
+      zeroHeightCoreNormalDetour ⟨1 / 2, by constructor <;> norm_num⟩ p =
+        zeroHeightSignedImaginaryWaypoint p := by
+  norm_num [zeroHeightCoreNormalDetour]
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -1397,3 +1417,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeight_signedImaginaryWaypoint_properties
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.coreNormalAffineLeg_radius_and_im_ne_zero
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeight_specializedCoreNormalAffineLegs_radius_and_im_ne_zero
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCoreNormalDetour_endpoints_midpoint
