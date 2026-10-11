@@ -101176,8 +101176,136 @@
   {:bounded-exception
    "This single-consumer prerequisite gives the exact source equality classification needed to turn the pending target fiber classifications into injectivity.",
    :consumer :t97A01,
+   :evidence
+   {:placeholder-delta
+    {:source-before 0,
+     :source-after 0,
+     :fixture-before 0,
+     :fixture-after 0,
+     :consumer-before 1,
+     :consumer-after 1},
+    :residual
+    "Classify equality of the N3 and torus-crosscap quotient images of the three now-canonical half-open loop forms, then deduce injectivity.",
+    :gates
+    {:module-build :pass,
+     :fixture-compiles :pass,
+     :zero-source-and-fixture-sorry :pass,
+     :standard-only-axioms :pass,
+     :registry-check :pass,
+     :clean-worktree :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["The scoped module and exact fixture each emit two non-blocking unnecessarySimpa suggestions at line 30; replayed dependencies also emit pre-existing warnings."],
+    :missing-theorems
+    [{:name
+      "PolygonThreeLoopHalfOpenEquality.endpoint_halfOpen_injective",
+      :type
+      "Function.Injective (fun t : Set.Ico (0 : ℝ) 1 => intervalQuotientMap (halfOpenToInterval t))",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on [],
+      :area "polygon-surface-open-cover"}
+     {:name
+      "PolygonThreeLoopHalfOpenEquality.endpoint_halfOpen_eq_base_iff",
+      :type
+      "∀ t : Set.Ico (0 : ℝ) 1, intervalQuotientMap (halfOpenToInterval t) = endpointBase ↔ t.1 = 0",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on
+      ["PolygonThreeLoopHalfOpenEquality.endpoint_halfOpen_injective"],
+      :area "polygon-surface-open-cover"}
+     {:name "PolygonThreeLoopHalfOpenEquality.firstLoopPoint_eq_iff",
+      :type
+      "∀ t u : Set.Ico (0 : ℝ) 1, firstLoopPoint (halfOpenToInterval t) = firstLoopPoint (halfOpenToInterval u) ↔ t = u",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on
+      ["PolygonThreeLoopHalfOpenEquality.endpoint_halfOpen_injective"],
+      :area "polygon-surface-open-cover"}
+     {:name "PolygonThreeLoopHalfOpenEquality.secondLoopPoint_eq_iff",
+      :type
+      "∀ t u : Set.Ico (0 : ℝ) 1, secondLoopPoint (halfOpenToInterval t) = secondLoopPoint (halfOpenToInterval u) ↔ t = u",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on
+      ["PolygonThreeLoopHalfOpenEquality.endpoint_halfOpen_injective"],
+      :area "polygon-surface-open-cover"}
+     {:name "PolygonThreeLoopHalfOpenEquality.thirdLoopPoint_eq_iff",
+      :type
+      "∀ t u : Set.Ico (0 : ℝ) 1, thirdLoopPoint (halfOpenToInterval t) = thirdLoopPoint (halfOpenToInterval u) ↔ t = u",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on
+      ["PolygonThreeLoopHalfOpenEquality.endpoint_halfOpen_injective"],
+      :area "polygon-surface-open-cover"}
+     {:name
+      "PolygonThreeLoopHalfOpenEquality.firstLoopPoint_eq_secondLoopPoint_iff",
+      :type
+      "∀ t u : Set.Ico (0 : ℝ) 1, firstLoopPoint (halfOpenToInterval t) = secondLoopPoint (halfOpenToInterval u) ↔ t.1 = 0 ∧ u.1 = 0",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on
+      ["PolygonThreeLoopHalfOpenEquality.endpoint_halfOpen_eq_base_iff"],
+      :area "polygon-surface-open-cover"}
+     {:name
+      "PolygonThreeLoopHalfOpenEquality.firstLoopPoint_eq_thirdLoopPoint_iff",
+      :type
+      "∀ t u : Set.Ico (0 : ℝ) 1, firstLoopPoint (halfOpenToInterval t) = thirdLoopPoint (halfOpenToInterval u) ↔ t.1 = 0 ∧ u.1 = 0",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on
+      ["PolygonThreeLoopHalfOpenEquality.endpoint_halfOpen_eq_base_iff"],
+      :area "polygon-surface-open-cover"}
+     {:name
+      "PolygonThreeLoopHalfOpenEquality.secondLoopPoint_eq_thirdLoopPoint_iff",
+      :type
+      "∀ t u : Set.Ico (0 : ℝ) 1, secondLoopPoint (halfOpenToInterval t) = thirdLoopPoint (halfOpenToInterval u) ↔ t.1 = 0 ∧ u.1 = 0",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on
+      ["PolygonThreeLoopHalfOpenEquality.endpoint_halfOpen_eq_base_iff"],
+      :area "polygon-surface-open-cover"}],
+    :statement-hashes
+    {"fixture"
+     "395e53ac2cdb4bf16c34e30888369806b57ece320d38f47675ee8a94ecc26a43",
+     "implementation"
+     "5b3f38ae6732b8682f3386656fb74bee289f5a231666a279f008e29281482c3a"},
+    :axioms
+    {:public-theorems ["propext" "Classical.choice" "Quot.sound"]},
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd "sha256sum /tmp/polygon-three-loop-half-open-equality.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.PolygonThreeLoopHalfOpenEquality",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/polygon-three-loop-half-open-equality.lean",
+      :exit 0}
+     {:cmd
+      "rg -n \\b(sorry|admit)\\b ConstructionTargets/PolygonThreeLoopHalfOpenEquality.lean /tmp/polygon-three-loop-half-open-equality.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "git diff --check HEAD^ HEAD", :exit 0}
+     {:cmd "test -z \"$(git status --porcelain)\"", :exit 0}],
+    :diagnostic-history [],
+    :commit "1c38aa8f33c887039318459d2890741aa8af8164",
+    :changed-paths
+    ["ConstructionTargets/PolygonThreeLoopHalfOpenEquality.lean"],
+    :fixture
+    {:path "/tmp/polygon-three-loop-half-open-equality.lean",
+     :sha256
+     "395e53ac2cdb4bf16c34e30888369806b57ece320d38f47675ee8a94ecc26a43"},
+    :implementation
+    {:scope
+     ["ConstructionTargets/PolygonThreeLoopHalfOpenEquality.lean"],
+     :summary
+     "Proved half-open EndpointQuotient injectivity and basepoint equality, same-loop parameter uniqueness, and pairwise distinct-loop equality exactly at the common zero endpoint."},
+    :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonThreeLoopHalfOpenEquality.lean"],
    :dag-node
@@ -104792,12 +104920,13 @@
    {:name
     "PolygonThreeLoopHalfOpenEquality.endpoint_halfOpen_injective",
     :reported-by
-    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40
+     :routes-2026-10-11-polygon-three-loop-half-open-equality-67],
     :type
     "The endpoint-quotient map is injective on half-open unit-interval representatives.",
     :area "polygon-surface-open-cover",
     :proved-in
-    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+    :routes-2026-10-11-polygon-three-loop-half-open-equality-67},
    :id
    :lemma-polygonthreeloophalfopenequality-endpoint-halfopen-injective,
    :kind :lemma,
@@ -104829,6 +104958,172 @@
    :depends-on
    [:lemma-polygonthreeloophalfopenequality-endpoint-halfopen-injective
     :lemma-pointwedgeexactequality-quotientmap-inl-eq-inr-iff],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "PolygonThreeLoopHalfOpenEquality.endpoint_halfOpen_eq_base_iff",
+    :type
+    "∀ t : Set.Ico (0 : ℝ) 1, intervalQuotientMap (halfOpenToInterval t) = endpointBase ↔ t.1 = 0"},
+   :lemma
+   {:name
+    "PolygonThreeLoopHalfOpenEquality.endpoint_halfOpen_eq_base_iff",
+    :reported-by
+    [:routes-2026-10-11-polygon-three-loop-half-open-equality-67],
+    :type
+    "∀ t : Set.Ico (0 : ℝ) 1, intervalQuotientMap (halfOpenToInterval t) = endpointBase ↔ t.1 = 0",
+    :area "polygon-surface-open-cover",
+    :proved-in
+    :routes-2026-10-11-polygon-three-loop-half-open-equality-67},
+   :id
+   :lemma-polygonthreeloophalfopenequality-endpoint-halfopen-eq-base-iff,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polygonthreeloophalfopenequality-endpoint-halfopen-injective],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "PolygonThreeLoopHalfOpenEquality.firstLoopPoint_eq_iff",
+    :type
+    "∀ t u : Set.Ico (0 : ℝ) 1, firstLoopPoint (halfOpenToInterval t) = firstLoopPoint (halfOpenToInterval u) ↔ t = u"},
+   :lemma
+   {:name "PolygonThreeLoopHalfOpenEquality.firstLoopPoint_eq_iff",
+    :reported-by
+    [:routes-2026-10-11-polygon-three-loop-half-open-equality-67],
+    :type
+    "∀ t u : Set.Ico (0 : ℝ) 1, firstLoopPoint (halfOpenToInterval t) = firstLoopPoint (halfOpenToInterval u) ↔ t = u",
+    :area "polygon-surface-open-cover",
+    :proved-in
+    :routes-2026-10-11-polygon-three-loop-half-open-equality-67},
+   :id :lemma-polygonthreeloophalfopenequality-firstlooppoint-eq-iff,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polygonthreeloophalfopenequality-endpoint-halfopen-injective],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "PolygonThreeLoopHalfOpenEquality.secondLoopPoint_eq_iff",
+    :type
+    "∀ t u : Set.Ico (0 : ℝ) 1, secondLoopPoint (halfOpenToInterval t) = secondLoopPoint (halfOpenToInterval u) ↔ t = u"},
+   :lemma
+   {:name "PolygonThreeLoopHalfOpenEquality.secondLoopPoint_eq_iff",
+    :reported-by
+    [:routes-2026-10-11-polygon-three-loop-half-open-equality-67],
+    :type
+    "∀ t u : Set.Ico (0 : ℝ) 1, secondLoopPoint (halfOpenToInterval t) = secondLoopPoint (halfOpenToInterval u) ↔ t = u",
+    :area "polygon-surface-open-cover",
+    :proved-in
+    :routes-2026-10-11-polygon-three-loop-half-open-equality-67},
+   :id :lemma-polygonthreeloophalfopenequality-secondlooppoint-eq-iff,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polygonthreeloophalfopenequality-endpoint-halfopen-injective],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "PolygonThreeLoopHalfOpenEquality.thirdLoopPoint_eq_iff",
+    :type
+    "∀ t u : Set.Ico (0 : ℝ) 1, thirdLoopPoint (halfOpenToInterval t) = thirdLoopPoint (halfOpenToInterval u) ↔ t = u"},
+   :lemma
+   {:name "PolygonThreeLoopHalfOpenEquality.thirdLoopPoint_eq_iff",
+    :reported-by
+    [:routes-2026-10-11-polygon-three-loop-half-open-equality-67],
+    :type
+    "∀ t u : Set.Ico (0 : ℝ) 1, thirdLoopPoint (halfOpenToInterval t) = thirdLoopPoint (halfOpenToInterval u) ↔ t = u",
+    :area "polygon-surface-open-cover",
+    :proved-in
+    :routes-2026-10-11-polygon-three-loop-half-open-equality-67},
+   :id :lemma-polygonthreeloophalfopenequality-thirdlooppoint-eq-iff,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polygonthreeloophalfopenequality-endpoint-halfopen-injective],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "PolygonThreeLoopHalfOpenEquality.firstLoopPoint_eq_secondLoopPoint_iff",
+    :type
+    "∀ t u : Set.Ico (0 : ℝ) 1, firstLoopPoint (halfOpenToInterval t) = secondLoopPoint (halfOpenToInterval u) ↔ t.1 = 0 ∧ u.1 = 0"},
+   :lemma
+   {:name
+    "PolygonThreeLoopHalfOpenEquality.firstLoopPoint_eq_secondLoopPoint_iff",
+    :reported-by
+    [:routes-2026-10-11-polygon-three-loop-half-open-equality-67],
+    :type
+    "∀ t u : Set.Ico (0 : ℝ) 1, firstLoopPoint (halfOpenToInterval t) = secondLoopPoint (halfOpenToInterval u) ↔ t.1 = 0 ∧ u.1 = 0",
+    :area "polygon-surface-open-cover",
+    :proved-in
+    :routes-2026-10-11-polygon-three-loop-half-open-equality-67},
+   :id
+   :lemma-polygonthreeloophalfopenequality-firstlooppoint-eq-secondlooppoint-iff,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polygonthreeloophalfopenequality-endpoint-halfopen-eq-base-iff],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "PolygonThreeLoopHalfOpenEquality.firstLoopPoint_eq_thirdLoopPoint_iff",
+    :type
+    "∀ t u : Set.Ico (0 : ℝ) 1, firstLoopPoint (halfOpenToInterval t) = thirdLoopPoint (halfOpenToInterval u) ↔ t.1 = 0 ∧ u.1 = 0"},
+   :lemma
+   {:name
+    "PolygonThreeLoopHalfOpenEquality.firstLoopPoint_eq_thirdLoopPoint_iff",
+    :reported-by
+    [:routes-2026-10-11-polygon-three-loop-half-open-equality-67],
+    :type
+    "∀ t u : Set.Ico (0 : ℝ) 1, firstLoopPoint (halfOpenToInterval t) = thirdLoopPoint (halfOpenToInterval u) ↔ t.1 = 0 ∧ u.1 = 0",
+    :area "polygon-surface-open-cover",
+    :proved-in
+    :routes-2026-10-11-polygon-three-loop-half-open-equality-67},
+   :id
+   :lemma-polygonthreeloophalfopenequality-firstlooppoint-eq-thirdlooppoint-iff,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polygonthreeloophalfopenequality-endpoint-halfopen-eq-base-iff],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "PolygonThreeLoopHalfOpenEquality.secondLoopPoint_eq_thirdLoopPoint_iff",
+    :type
+    "∀ t u : Set.Ico (0 : ℝ) 1, secondLoopPoint (halfOpenToInterval t) = thirdLoopPoint (halfOpenToInterval u) ↔ t.1 = 0 ∧ u.1 = 0"},
+   :lemma
+   {:name
+    "PolygonThreeLoopHalfOpenEquality.secondLoopPoint_eq_thirdLoopPoint_iff",
+    :reported-by
+    [:routes-2026-10-11-polygon-three-loop-half-open-equality-67],
+    :type
+    "∀ t u : Set.Ico (0 : ℝ) 1, secondLoopPoint (halfOpenToInterval t) = thirdLoopPoint (halfOpenToInterval u) ↔ t.1 = 0 ∧ u.1 = 0",
+    :area "polygon-surface-open-cover",
+    :proved-in
+    :routes-2026-10-11-polygon-three-loop-half-open-equality-67},
+   :id
+   :lemma-polygonthreeloophalfopenequality-secondlooppoint-eq-thirdlooppoint-iff,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polygonthreeloophalfopenequality-endpoint-halfopen-eq-base-iff],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
