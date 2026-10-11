@@ -465,6 +465,12 @@ def genericPointWedgeIdentityGlobalFunctor :
       (genericPointWedgeIdentityActualSpan
         x₀ y₀ M N hM hN hy hx cM cN).right := rfl
 
+@[simp] theorem genericPointWedgeIdentityPseudoCocone_glue :
+    (genericPointWedgeIdentityPseudoCocone
+      x₀ y₀ M N hM hN hy hx cM cN).glue =
+      (genericPointWedgeIdentityActualSpan
+        x₀ y₀ M N hM hN hy hx cM cN).glue := rfl
+
 /-- The exact counit comparison between the restriction of the reconstructed
 global functor and the supplied left cover-piece functor. -/
 def genericPointWedgeIdentityGlobalLeftRestrictionIso :
@@ -729,6 +735,15 @@ theorem genericPointWedgeIdentityGlobalRightBaseElement_eq_glue :
     x₀ y₀ M N hM hN hy hx cM cN).trans
       (genericPointWedgeStrictificationRightBaseElement_eq_glue
         x₀ y₀ M N hM hN hy hx cM cN)
+
+theorem genericPointWedgeIdentityGlobalRightBaseElement_eq_actualGlue :
+    genericPointWedgeIdentityGlobalRightBaseElement
+        x₀ y₀ M N hM hN hy hx cM cN =
+      (genericPointWedgeIdentityActualSpan
+        x₀ y₀ M N hM hN hy hx cM cN).glue.hom.app
+          (genericPointWedgeOverlapBase x₀ y₀ M N) := by
+  rw [genericPointWedgeIdentityGlobalRightBaseElement_eq_glue]
+  rfl
 
 /-- Naturality solved for the reconstructed right-piece map.  The two
 endpoint restriction components are deliberately visible. -/
@@ -1732,6 +1747,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeStrictificationRightBaseElement_eq_glue
 #print axioms genericPointWedgeDescentRightBaseElement_eq_one
 #print axioms genericPointWedgeIdentityGlobalRightBaseElement_eq_glue
+#print axioms genericPointWedgeIdentityGlobalRightBaseElement_eq_actualGlue
 #print axioms genericPointWedgeIdentityGlobalRightRestriction_map
 #print axioms genericPointWedgeIdentityGlobalRightBase_map
 #print axioms genericPointWedgeIdentityRepresentation_inl

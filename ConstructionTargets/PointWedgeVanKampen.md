@@ -227,3 +227,10 @@ one-object target.  Consequently the full fixed right restriction element,
 not just its strictification component, is exactly the overlap glue morphism.
 B6 now only needs to evaluate that already-constructed glue through the span
 transport and align the two literal wedge-leg lifts.
+
+The identity pseudococone-to-span inverse is now evaluated on its glue field:
+it preserves that field definitionally.  Hence the full right restriction
+element is also the `genericPointWedgeIdentityActualSpan` glue component at
+the explicit overlap base.  The remaining transport is precisely the inverse
+of `genericPointWedgeCoordinateSpanEquivalence`, followed by the literal leg
+lift identifications.
