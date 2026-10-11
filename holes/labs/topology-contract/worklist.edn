@@ -104286,10 +104286,75 @@
    "Use the proved coherence theorem to fill TwoOpenGroupEquivalenceCoordinates, then transport those equations through the generic point-wedge cover equivalences and literal inclusion squares.",
    :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
   {:consumer :t99J01,
+   :stop-count 1,
    :implements-lemma
    :lemma-twoopenfreeproductmapping-mapping-inverse-identity-leg-coordinates,
+   :evidence
+   {:placeholder-delta
+    {:source-before 0, :source-after 0, :fixture-sorry 0},
+    :residual
+    "Prove the counit component is identity (or its conjugation trivial), then combine inverseIdentityCounit_naturality with the forward mapping leg formulas to obtain literal inl/inr coordinates.",
+    :outcome :stop,
+    :warnings
+    [{:kind :dirty-worktree,
+      :message
+      "Unrelated modification ConstructionTargets/T02A03GeometricTubeDeformation.lean was not touched or committed."}],
+    :missing-theorems
+    [{:name
+      "TwoOpenFreeProductMapping.inverseIdentityCounit_component_identity",
+      :type
+      "For the mapping equivalence at FreeProductTarget, the hom component at SingleObj.star of the counit isomorphism from mapping.functor.obj (mapping.inverse.obj (Functor.id FreeProductTarget)) to Functor.id FreeProductTarget is the identity morphism.",
+      :status :not-started,
+      :consumers [:t99J01 :t01A03 :t92J06 :t97A01 :t97A03],
+      :depends-on [],
+      :area "fundamental-group-wedge-of-circles"}],
+    :statement-hashes
+    {:source-sha256
+     "2e0b9addb36f33346aa0d52e31eb68f3cc0adb073f875aa09333c4cd3254580c",
+     :registry "131 registered statements match, 0 do not"},
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :reason
+    "The strongest theorem supplied by the existing mapping equivalence is now compiled: the inverse-image map is conjugate to the identity through the counit component. Literal inl/inr equations require the additional normalization that this counit component at the unique free-product object is the identity (or a proof that its conjugation acts trivially). No such normalization follows from Equivalence.apply_inverse_apply or exists in the constituent equivalences.",
+    :commands
+    [{:cmd
+      "lake build ConstructionTargets.TwoOpenFreeProductMappingInverseIdentityLegCoordinates",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/mapping-inverse-identity-leg-coordinates.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/mapping-inverse-identity-leg-coordinates.lean",
+      :exit 0}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" ConstructionTargets/TwoOpenFreeProductMappingInverseIdentityLegCoordinates.lean /tmp/mapping-inverse-identity-leg-coordinates.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}],
+    :diagnostic-history
+    [{:cmd
+      "lake env lean ConstructionTargets/TwoOpenFreeProductMappingInverseIdentityLegCoordinates.lean",
+      :exit 1,
+      :finding
+      "The initial declaration accidentally used morphism-arrow notation for a functor type."}
+     {:cmd
+      "lake env lean ConstructionTargets/TwoOpenFreeProductMappingInverseIdentityLegCoordinates.lean",
+      :exit 1,
+      :finding
+      "The first arrow correction used an invalid Unicode token; spelling the type as Functor compiled."}],
+    :commit "4a9bd0d4587469f7f13c7634c2c6d47e762520d0",
+    :changed-paths
+    ["ConstructionTargets/TwoOpenFreeProductMappingInverseIdentityLegCoordinates.lean"],
+    :fixture
+    {:path "/tmp/mapping-inverse-identity-leg-coordinates.lean",
+     :sha256
+     "13c097b29888d2db43e201ac92d14b61d74774487750973007081cadcdc27ffd"},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/TwoOpenFreeProductMappingInverseIdentityLegCoordinates.lean"],
    :dag-node
@@ -109905,6 +109970,28 @@
     :area "fundamental-group-wedge-of-circles"},
    :id
    :lemma-twoopenfreeproductmapping-mapping-inverse-identity-leg-coordinates,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
+  {:consumer :t99J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "TwoOpenFreeProductMapping.inverseIdentityCounit_component_identity",
+    :type
+    "For the mapping equivalence at FreeProductTarget, the hom component at SingleObj.star of the counit isomorphism from mapping.functor.obj (mapping.inverse.obj (Functor.id FreeProductTarget)) to Functor.id FreeProductTarget is the identity morphism."},
+   :lemma
+   {:name
+    "TwoOpenFreeProductMapping.inverseIdentityCounit_component_identity",
+    :reported-by
+    [:routes-2026-10-11-mapping-inverse-identity-leg-coordinates-89],
+    :type
+    "For the mapping equivalence at FreeProductTarget, the hom component at SingleObj.star of the counit isomorphism from mapping.functor.obj (mapping.inverse.obj (Functor.id FreeProductTarget)) to Functor.id FreeProductTarget is the identity morphism.",
+    :area "fundamental-group-wedge-of-circles"},
+   :id
+   :lemma-twoopenfreeproductmapping-inverseidentitycounit-component-identity,
    :kind :lemma,
    :depends-on [],
    :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}],
