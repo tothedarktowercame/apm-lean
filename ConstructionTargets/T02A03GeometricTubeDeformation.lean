@@ -972,6 +972,23 @@ theorem zeroHeightCollisionPolynomial_eq_zero_implies_leftCore
     simpa [rightTubeCorePolarReconstruction, apm_t02a03_leftCore, w] using hs
   · simp [rightTubeCorePolarReconstruction, apm_t02a03_leftCore, him]
 
+theorem inputZeroHeight_collisionPolynomial_ne
+    (p : RightTubeMinusLeftCore)
+    (him : (rightTubeCoreNormalComplex p.1).im = 0) :
+    (1 - (rightTubeCoreNormalComplex p.1).re) ^ 2 -
+      4 * (1 - (rightTubeCoreNormalComplex p.1).re) *
+        (rightTubeCoreAngularCoordinate p : Complex).re + 3 ≠ 0 := by
+  intro hpoly
+  have hmem := zeroHeightCollisionPolynomial_eq_zero_implies_leftCore
+    (rightTubeCoreAngularCoordinate p) (rightTubeCoreNormalComplex p.1)
+    him hpoly
+  have hself : rightTubeCorePolarReconstruction
+      (rightTubeCoreAngularCoordinate p) (rightTubeCoreNormalComplex p.1) = p.1 := by
+    simpa [rightTubeCoreAngularCoordinate] using
+      rightTubeCorePolarReconstruction_self p.1 p.2.1
+  rw [hself] at hmem
+  exact p.2.2 hmem
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -1007,3 +1024,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.collisionPolynomial_pos_of_normal_re_pos
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.nonpositiveNormalSafeCorridor_collisionPolynomial_pos
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCollisionPolynomial_eq_zero_implies_leftCore
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.inputZeroHeight_collisionPolynomial_ne
