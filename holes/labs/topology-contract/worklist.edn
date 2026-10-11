@@ -113900,6 +113900,20 @@
       :exit 0}
      {:cmd "python3 comment-stripped placeholder scan", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791732254336-5564-6a2b6c8f",
+     :commands
+     ["git show/diff-tree f083a1df5"
+      "sha256sum scoped files"
+      "placeholder scan"
+      "statement-registry.py check"
+      "lake env lean PointWedgeVanKampen.lean"
+      "lake build PointWedgeVanKampen"
+      "lake build ThreeCirclesFundamentalGroup"],
+     :finding
+     "PASS: repair adds the actual ConnectorSystem/connectorSingleObjEquivalence dependency and based Unit/x0/y0 route to B3. Scope and hashes match; source, docs and blueprint have zero placeholders; B3 elaborates with standard axioms and the milestone build passes. B4/B6/B12 remain listed, so the absent final target is valid program STOP state."},
     :commit "f083a1df57e92cd08896e521dcd9c52bca6bb10e",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.blueprint.md"],
@@ -113909,7 +113923,7 @@
      "e0044518bc017ab3c3e1ba58643f1e0c2ac39e874de929d90b9f900dde357218"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113930,7 +113944,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Program job made further compiled partial progress on blueprint B3. Connector systems based exactly at x0 and y0 now transport the fixed FundamentalGroupoid Unit-to-X/Y coordinate span to the literal point span on FundamentalGroup X x0 and FundamentalGroup Y y0. Both transported legs are compared to the point-leg functors without normalizing an arbitrary counit, and this second span equivalence is proved natural under target postcomposition. The outer pseudopushout and representation composites remain.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Repair complete: B3 now declares the connector-system dependency and exact based transport route; B4, B6 and B12 remain.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -113970,7 +113984,11 @@
     {:job 2,
      :commit "9fed3ac3c",
      :reason
-     "Program job made further compiled partial progress on blueprint B3. Connector systems based exactly at x0 and y0 now transport the fixed FundamentalGroupoid Unit-to-X/Y coordinate span to the literal point span on FundamentalGroup X x0 and FundamentalGroup Y y0. Both transported legs are compared to the point-leg functors without normalizing an arbitrary counit, and this second span equivalence is proved natural under target postcomposition. The outer pseudopushout and representation composites remain."}]}
+     "Program job made further compiled partial progress on blueprint B3. Connector systems based exactly at x0 and y0 now transport the fixed FundamentalGroupoid Unit-to-X/Y coordinate span to the literal point span on FundamentalGroup X x0 and FundamentalGroup Y y0. Both transported legs are compared to the point-leg functors without normalizing an arbitrary counit, and this second span equivalence is proved natural under target postcomposition. The outer pseudopushout and representation composites remain."}
+    {:job 4,
+     :commit "f083a1df57e92cd08896e521dcd9c52bca6bb10e",
+     :reason
+     "Repair complete: B3 now declares the connector-system dependency and exact based transport route; B4, B6 and B12 remain."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
@@ -115075,7 +115093,7 @@
    :other-consumers []}
   {:consumer :t99J01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -115089,7 +115107,9 @@
     :type
     "A postcomposition-natural equivalence from functors out of the point-wedge fundamental groupoid to functors out of the single-object coproduct groupoid",
     :area "fundamental-group-wedge-of-circles",
-    :proved-in :program-2026-10-11-point-wedge-van-kampen},
+    :proved-in :program-2026-10-11-point-wedge-van-kampen,
+    :banked-by :program-2026-10-11-point-wedge-van-kampen,
+    :banked-commit "f083a1df57e92cd08896e521dcd9c52bca6bb10e"},
    :id
    :lemma-pointwedgevankampen-genericpointwedgesingleobjmappingequivalence,
    :kind :lemma,
