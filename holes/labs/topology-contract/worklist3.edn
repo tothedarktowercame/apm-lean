@@ -18923,7 +18923,7 @@
    :other-consumers [:t92J05 :t93J03 :t99J01 :t00J07]}
   {:consumer :t00A02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -18936,7 +18936,10 @@
     :reported-by [:program-2026-10-11-deck-group-quotient-pi1],
     :type
     "Blueprint B5: raw endpoint coordinates reverse FundamentalGroup multiplication",
-    :area "deck-group-quotient-pi1"},
+    :area "deck-group-quotient-pi1",
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean"]},
    :id
    :lemma-constructiontargets-deckgroupquotientfundamentalgroup-orbite-dfb98a9a7bee,
    :kind :lemma,
@@ -19412,7 +19415,239 @@
    [:lemma-surface-recognition-genus-two
     :lemma-surface-subgroup-connected-cover
     :lemma-finite-surface-cover-genus],
-   :other-consumers []}],
+   :other-consumers []}
+  {:consumer :t95J06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t95J06_component_free_circle_action",
+    :type
+    "For each connected component C of invariant F, a free continuous Circle action on C induced by H  (size: 150-300 lines / 3-6 days)"},
+   :lemma
+   {:name "apm_t95J06_component_free_circle_action",
+    :reported-by [:owner],
+    :type
+    "For each connected component C of invariant F, a free continuous Circle action on C induced by H  (size: 150-300 lines / 3-6 days)",
+    :area "free-circle-action-slice"},
+   :id :lemma-apm-t95j06-component-free-circle-action,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t95J06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "freeCircleAction_surface_principalBundle",
+    :type
+    "A free continuous S¹-action on a compact connected topological 2-manifold has slices and orbit space a compact 1-manifold  (size: 700-1500 lines / 3-6 weeks)"},
+   :lemma
+   {:name "freeCircleAction_surface_principalBundle",
+    :reported-by [:owner],
+    :type
+    "A free continuous S¹-action on a compact connected topological 2-manifold has slices and orbit space a compact 1-manifold  (size: 700-1500 lines / 3-6 weeks)",
+    :area "free-circle-action-slice"},
+   :id :lemma-freecircleaction-surface-principalbundle,
+   :kind :lemma,
+   :depends-on [:lemma-apm-t95j06-component-free-circle-action],
+   :other-consumers []}
+  {:consumer :t95J06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "circleBundle_over_circle_classification",
+    :type
+    "A principal S¹-bundle over a compact connected 1-manifold has total space homeomorphic to the torus or Klein bottle  (size: 400-900 lines / 2-4 weeks)"},
+   :lemma
+   {:name "circleBundle_over_circle_classification",
+    :reported-by [:owner],
+    :type
+    "A principal S¹-bundle over a compact connected 1-manifold has total space homeomorphic to the torus or Klein bottle  (size: 400-900 lines / 2-4 weeks)",
+    :area "surface-classification"},
+   :id :lemma-circlebundle-over-circle-classification,
+   :kind :lemma,
+   :depends-on [:lemma-freecircleaction-surface-principalbundle],
+   :other-consumers []}
+  {:consumer :t95J06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "orientable_surface_excludes_klein",
+    :type
+    "H₂(C; ℤ) ≅ ℤ excludes C ≃ₜ KleinBottle  (size: 250-600 lines / 1-3 weeks)"},
+   :lemma
+   {:name "orientable_surface_excludes_klein",
+    :reported-by [:owner],
+    :type
+    "H₂(C; ℤ) ≅ ℤ excludes C ≃ₜ KleinBottle  (size: 250-600 lines / 1-3 weeks)",
+    :area "surface-homology-invariants"},
+   :id :lemma-orientable-surface-excludes-klein,
+   :kind :lemma,
+   :depends-on [:lemma-circlebundle-over-circle-classification],
+   :other-consumers []}
+  {:consumer :t95J06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t95j06_flow_add",
+    :type "  (found in problems/t95J06/lean/Main.lean:112)"},
+   :lemma
+   {:name "apm_t95j06_flow_add",
+    :reported-by [:owner],
+    :type "  (found in problems/t95J06/lean/Main.lean:112)",
+    :proved-in :owner},
+   :id :lemma-apm-t95j06-flow-add,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t96A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "fundamentalGroup_orientableSurface",
+    :type
+    "∀ g, FundamentalGroup (Surface true g) base ≃* OrientableSurfaceGroup g  (size: 800-1800 lines / 3-6 weeks)"},
+   :lemma
+   {:name "fundamentalGroup_orientableSurface",
+    :reported-by [:owner],
+    :type
+    "∀ g, FundamentalGroup (Surface true g) base ≃* OrientableSurfaceGroup g  (size: 800-1800 lines / 3-6 weeks)",
+    :area "van-kampen-amalgamated"},
+   :id :lemma-fundamentalgroup-orientablesurface,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t94J04 :t97J02]}
+  {:consumer :t96A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "finiteIndexSubgroup_covering",
+    :type
+    "A finite-index subgroup H ≤ FundamentalGroup S s is realized by a connected H.index-sheeted covering with fundamental group equivalent to H  (size: 800-1600 lines / 3-6 weeks)"},
+   :lemma
+   {:name "finiteIndexSubgroup_covering",
+    :reported-by [:owner],
+    :type
+    "A finite-index subgroup H ≤ FundamentalGroup S s is realized by a connected H.index-sheeted covering with fundamental group equivalent to H  (size: 800-1600 lines / 3-6 weeks)",
+    :area "covering-subgroup-correspondence"},
+   :id :lemma-finiteindexsubgroup-covering,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t94J04 :t99J01]}
+  {:consumer :t96A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "eulerCharacteristic_finite_cover_surface",
+    :type
+    "For a finite n-sheeted cover of a closed surface, χ(total) = n * χ(base), preserving orientability  (size: 500-1000 lines / 2-4 weeks)"},
+   :lemma
+   {:name "eulerCharacteristic_finite_cover_surface",
+    :reported-by [:owner],
+    :type
+    "For a finite n-sheeted cover of a closed surface, χ(total) = n * χ(base), preserving orientability  (size: 500-1000 lines / 2-4 weeks)",
+    :area "euler-characteristic-covers"},
+   :id :lemma-eulercharacteristic-finite-cover-surface,
+   :kind :lemma,
+   :depends-on [:lemma-finiteindexsubgroup-covering],
+   :other-consumers [:t91J05 :t94J04 :t97J02]}
+  {:consumer :t96A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "closedOrientableSurface_classification",
+    :type
+    "A connected closed orientable surface of Euler characteristic 2-2*g is homeomorphic to Surface true g  (size: 1500-3000 lines / 1-3 months)"},
+   :lemma
+   {:name "closedOrientableSurface_classification",
+    :reported-by [:owner],
+    :type
+    "A connected closed orientable surface of Euler characteristic 2-2*g is homeomorphic to Surface true g  (size: 1500-3000 lines / 1-3 months)",
+    :area "surface-classification"},
+   :id :lemma-closedorientablesurface-classification,
+   :kind :lemma,
+   :depends-on [:lemma-eulercharacteristic-finite-cover-surface],
+   :other-consumers [:t00A02 :t00A03 :t91J05 :t92J05 :t94J04 :t97J02]}
+  {:consumer :t96A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "projectivePlane_rationalReducedHomology_zero",
+    :type
+    "∀ k > 0, Limits.IsZero (singularHomology k (ModuleCat.of ℚ) ProjectivePlane)  (size: 400-900 lines / 2-4 weeks)"},
+   :lemma
+   {:name "projectivePlane_rationalReducedHomology_zero",
+    :reported-by [:owner],
+    :type
+    "∀ k > 0, Limits.IsZero (singularHomology k (ModuleCat.of ℚ) ProjectivePlane)  (size: 400-900 lines / 2-4 weeks)",
+    :area "rp-rational-homology"},
+   :id :lemma-projectiveplane-rationalreducedhomology-zero,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t96A06]}
+  {:consumer :t96A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "projectivePlaneWedge_rationalHomology",
+    :type
+    "The reduced rational singular homology of ProjectivePlaneWedge vanishes in every degree  (size: 600-1200 lines / 2-4 weeks)"},
+   :lemma
+   {:name "projectivePlaneWedge_rationalHomology",
+    :reported-by [:owner],
+    :type
+    "The reduced rational singular homology of ProjectivePlaneWedge vanishes in every degree  (size: 600-1200 lines / 2-4 weeks)",
+    :area "mayer-vietoris-open-cover"},
+   :id :lemma-projectiveplanewedge-rationalhomology,
+   :kind :lemma,
+   :depends-on [:lemma-projectiveplane-rationalreducedhomology-zero],
+   :other-consumers []}
+  {:consumer :t96A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "projectivePlaneWedge_lefschetz_one",
+    :type
+    "∀ f : ContinuousMap ProjectivePlaneWedge ProjectivePlaneWedge, HasLefschetzNumber f 1  (size: 80-160 lines / 2-4 days)"},
+   :lemma
+   {:name "projectivePlaneWedge_lefschetz_one",
+    :reported-by [:owner],
+    :type
+    "∀ f : ContinuousMap ProjectivePlaneWedge ProjectivePlaneWedge, HasLefschetzNumber f 1  (size: 80-160 lines / 2-4 days)",
+    :area "lefschetz-fixed-point-theorem"},
+   :id :lemma-projectiveplanewedge-lefschetz-one,
+   :kind :lemma,
+   :depends-on [:lemma-projectiveplanewedge-rationalhomology],
+   :other-consumers []}
+  {:consumer :t96A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "lefschetz_fixedPoint_compactPolyhedron",
+    :type
+    "For a compact polyhedron X, HasLefschetzNumber f L → L ≠ 0 → ∃ x, f x = x  (size: 2000-5000 lines / 2-4 months)"},
+   :lemma
+   {:name "lefschetz_fixedPoint_compactPolyhedron",
+    :reported-by [:owner],
+    :type
+    "For a compact polyhedron X, HasLefschetzNumber f L → L ≠ 0 → ∃ x, f x = x  (size: 2000-5000 lines / 2-4 months)",
+    :area "lefschetz-fixed-point-theorem"},
+   :id :lemma-lefschetz-fixedpoint-compactpolyhedron,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t00J01 :t02A04]}],
  :consumer-baselines {},
  :statuses
  #{:open

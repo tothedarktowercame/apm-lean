@@ -115485,6 +115485,255 @@
    :kind :lemma,
    :depends-on
    [:lemma-pointwedgevankampen-circlebaseneighborhood-contraction],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t94J09_polygon_normalization",
+    :type
+    "Nonempty (apm_t94J09_PolygonSurface ≃ₜ apm_t94J09_N6)  (size: 500-1000 lines / 1-3 weeks)"},
+   :lemma
+   {:name "apm_t94J09_polygon_normalization",
+    :reported-by [:owner],
+    :type
+    "Nonempty (apm_t94J09_PolygonSurface ≃ₜ apm_t94J09_N6)  (size: 500-1000 lines / 1-3 weeks)",
+    :area "polygon-cut-and-paste"},
+   :id :lemma-apm-t94j09-polygon-normalization,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t91A02 :t98A01 :t97J02]}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t94J09_polygon_homology",
+    :type
+    "Nonempty (apm_t94J09_H 0 ≅ ModuleCat.of ℤ ℤ) ∧ Nonempty (apm_t94J09_H 1 ≅ ModuleCat.of ℤ ((Fin 5 → ℤ) × ZMod 2)) ∧ (∀ k, 2 ≤ k → Limits.IsZero (apm_t94J09_H k))  (size: 800-1800 lines / 2-5 weeks)"},
+   :lemma
+   {:name "apm_t94J09_polygon_homology",
+    :reported-by [:owner],
+    :type
+    "Nonempty (apm_t94J09_H 0 ≅ ModuleCat.of ℤ ℤ) ∧ Nonempty (apm_t94J09_H 1 ≅ ModuleCat.of ℤ ((Fin 5 → ℤ) × ZMod 2)) ∧ (∀ k, 2 ≤ k → Limits.IsZero (apm_t94J09_H k))  (size: 800-1800 lines / 2-5 weeks)",
+    :area "polygon-surface-homology"},
+   :id :lemma-apm-t94j09-polygon-homology,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t95J03]}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t94J09_vertexCount_eq",
+    :type "  (found in problems/t94J09/lean/Main.lean:254)"},
+   :lemma
+   {:name "apm_t94J09_vertexCount_eq",
+    :reported-by [:owner],
+    :type "  (found in problems/t94J09/lean/Main.lean:254)",
+    :proved-in :owner},
+   :id :lemma-apm-t94j09-vertexcount-eq,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t94J09_homeomorphOfDiskMaps",
+    :type "  (found in problems/t94J09/lean/Main.lean:218)"},
+   :lemma
+   {:name "apm_t94J09_homeomorphOfDiskMaps",
+    :reported-by [:owner],
+    :type "  (found in problems/t94J09/lean/Main.lean:218)",
+    :proved-in :owner},
+   :id :lemma-apm-t94j09-homeomorphofdiskmaps,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t95J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t95J02CircleB_homeo",
+    :type
+    "euclideanUnitSphere 2 ≃ₜ t95J02CircleB  (size: 180-320 lines / 2-5 days)"},
+   :lemma
+   {:name "t95J02CircleB_homeo",
+    :reported-by [:owner],
+    :type
+    "euclideanUnitSphere 2 ≃ₜ t95J02CircleB  (size: 180-320 lines / 2-5 days)",
+    :area "none"},
+   :id :lemma-t95j02circleb-homeo,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t95J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t95J02_beta_homotopic_beta_reflection",
+    :type
+    "ContinuousMap.Homotopic (t95J02InclusionB.comp circleB_homeo.toContinuousMap) ((t95J02InclusionB.comp circleB_homeo.toContinuousMap).comp (CoefficientFirstReflection.reflectionMap 1))  (size: 100-180 lines / 1-3 days)"},
+   :lemma
+   {:name "t95J02_beta_homotopic_beta_reflection",
+    :reported-by [:owner],
+    :type
+    "ContinuousMap.Homotopic (t95J02InclusionB.comp circleB_homeo.toContinuousMap) ((t95J02InclusionB.comp circleB_homeo.toContinuousMap).comp (CoefficientFirstReflection.reflectionMap 1))  (size: 100-180 lines / 1-3 days)",
+    :area "none"},
+   :id :lemma-t95j02-beta-homotopic-beta-reflection,
+   :kind :lemma,
+   :depends-on [:lemma-t95j02circleb-homeo],
+   :other-consumers []}
+  {:consumer :t95J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t95J02_bridge_vertical_H1_kernel",
+    :type
+    "∃ gamma : apm_t95J02_H1 t95J02CircleB, gamma ≠ 0 ∧ apm_t95J02_H1Map t95J02InclusionB gamma = 0  (size: 50-100 lines / 1 day)"},
+   :lemma
+   {:name "apm_t95J02_bridge_vertical_H1_kernel",
+    :reported-by [:owner],
+    :type
+    "∃ gamma : apm_t95J02_H1 t95J02CircleB, gamma ≠ 0 ∧ apm_t95J02_H1Map t95J02InclusionB gamma = 0  (size: 50-100 lines / 1 day)",
+    :area "none"},
+   :id :lemma-apm-t95j02-bridge-vertical-h1-kernel,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t95j02circleb-homeo
+    :lemma-t95j02-beta-homotopic-beta-reflection],
+   :other-consumers []}
+  {:consumer :t95J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t95J02_bridge_retraction_injective",
+    :type
+    "HasT95J02Retraction t95J02InclusionB → Function.Injective (apm_t95J02_H1Map t95J02InclusionB)  (size: 15-35 lines / 2-4 hours)"},
+   :lemma
+   {:name "apm_t95J02_bridge_retraction_injective",
+    :reported-by [:owner],
+    :type
+    "HasT95J02Retraction t95J02InclusionB → Function.Injective (apm_t95J02_H1Map t95J02InclusionB)  (size: 15-35 lines / 2-4 hours)",
+    :area "none"},
+   :id :lemma-apm-t95j02-bridge-retraction-injective,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t95J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t95J02QuotientPoint_glide_vertical_inverse",
+    :type "  (found in problems/t95J02/lean/Main.lean:66)"},
+   :lemma
+   {:name "t95J02QuotientPoint_glide_vertical_inverse",
+    :reported-by [:owner],
+    :type "  (found in problems/t95J02/lean/Main.lean:66)",
+    :proved-in :owner},
+   :id :lemma-t95j02quotientpoint-glide-vertical-inverse,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "rp3_rationalHomology",
+    :type
+    "H_0(RP3;ℚ) ≅ ℚ ∧ H_3(RP3;ℚ) ≅ ℚ ∧ ∀ k ≠ 0, k ≠ 3, IsZero (H_k(RP3;ℚ))  (size: 500-1000 lines / 2-4 weeks)"},
+   :lemma
+   {:name "rp3_rationalHomology",
+    :reported-by [:owner],
+    :type
+    "H_0(RP3;ℚ) ≅ ℚ ∧ H_3(RP3;ℚ) ≅ ℚ ∧ ∀ k ≠ 0, k ≠ 3, IsZero (H_k(RP3;ℚ))  (size: 500-1000 lines / 2-4 weeks)",
+    :area "rp-rational-homology"},
+   :id :lemma-rp3-rationalhomology,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t96A02]}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_sphereLift_degree_four",
+    :type
+    "The normalized sphere map induced by (z,w) ↦ (z²,w²) on S³ has degree 4  (size: 700-1500 lines / 3-6 weeks)"},
+   :lemma
+   {:name "t96A06_sphereLift_degree_four",
+    :reported-by [:owner],
+    :type
+    "The normalized sphere map induced by (z,w) ↦ (z²,w²) on S³ has degree 4  (size: 700-1500 lines / 3-6 weeks)",
+    :area "sphere-map-degree"},
+   :id :lemma-t96a06-spherelift-degree-four,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_projectiveMap_degree_four",
+    :type
+    "The descended polynomial self-map of RP3 induces multiplication by 4 on H_3(RP3;ℚ)  (size: 180-350 lines / 3-7 days)"},
+   :lemma
+   {:name "t96A06_projectiveMap_degree_four",
+    :reported-by [:owner],
+    :type
+    "The descended polynomial self-map of RP3 induces multiplication by 4 on H_3(RP3;ℚ)  (size: 180-350 lines / 3-7 days)",
+    :area "projective-covering-sphere"},
+   :id :lemma-t96a06-projectivemap-degree-four,
+   :kind :lemma,
+   :depends-on
+   [:lemma-rp3-rationalhomology :lemma-t96a06-spherelift-degree-four],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_lefschetz_neg_three",
+    :type
+    "HasLefschetzNumber f (-3) ∧ ¬ ContinuousMap.Homotopic f (ContinuousMap.id T96A06.RP3)  (size: 100-220 lines / 2-5 days)"},
+   :lemma
+   {:name "t96A06_lefschetz_neg_three",
+    :reported-by [:owner],
+    :type
+    "HasLefschetzNumber f (-3) ∧ ¬ ContinuousMap.Homotopic f (ContinuousMap.id T96A06.RP3)  (size: 100-220 lines / 2-5 days)",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-lefschetz-neg-three,
+   :kind :lemma,
+   :depends-on
+   [:lemma-rp3-rationalhomology
+    :lemma-t96a06-projectivemap-degree-four],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "T96A06_polynomialMap_descends",
+    :type "  (found in problems/t96A06/lean/Main.lean:34)"},
+   :lemma
+   {:name "T96A06_polynomialMap_descends",
+    :reported-by [:owner],
+    :type "  (found in problems/t96A06/lean/Main.lean:34)",
+    :proved-in :owner},
+   :id :lemma-t96a06-polynomialmap-descends,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
