@@ -113855,19 +113855,22 @@
    :depends-on [],
    :other-consumers [:t98A02]}
   {:consumer :t99J01,
-   :stop-count 9,
+   :stop-count 10,
    :review-finding
    "B10 cannot apply B6: its uses list supplies no open neighborhoods and pointed contractions for the circle basepoint and the TwoCircles basepoint; B9 provides only path-connectedness. Add nodes constructing those concrete neighborhoods and contractions, and list them in B10 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "B3, B4, B6, B11, and B12 remain. Next implement B11 by taking the restricted open wedge of two copies of circleBaseNeighborhood and transporting the product pointed contraction through restrictedOpenHomeomorphWedge.",
+    "B3, B4, B6, and B12 remain. The concrete circle and TwoCircles neighbourhood/contraction inputs for the final specialization are now banked; next implement B3, the target-natural generic point-wedge mapping equivalence.",
     :outcome :stop,
     :warnings
     [{:kind :upstream-lint,
       :message
-      "The full build replayed warnings from imported modules; the changed module introduced none."}],
+      "The full build replayed warnings from imported modules; the changed module introduced none."}
+     {:kind :concurrent-worktree-change,
+      :message
+      "ConstructionTargets/ManifoldFundamentalClass.lean was modified by another process and was preserved unmodified and uncommitted."}],
     :missing-theorems
     [{:name
       "PointWedgeVanKampen.genericPointWedgeSingleObjMappingEquivalence",
@@ -113897,7 +113900,7 @@
       "PointWedgeVanKampen.twoCirclesBaseNeighborhood_contraction",
       :type
       "A pointed contraction of an open restricted-wedge neighborhood of twoCirclesPoint",
-      :status :not-started,
+      :status :proved,
       :consumers [:t99J01],
       :depends-on
       ["PointWedgeVanKampen.circleBaseNeighborhood_contraction"],
@@ -113915,23 +113918,23 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source-sha256
-     "331633dfc2ad170b3e2a092f68241c419289d139382149636dd32dbd60a6733b",
+     "ec64d37f48ab8669f4d9f9520e945b4a38ff827be7cad09107db96a3d4e8b803",
      :documentation-sha256
-     "1fbf97290c32c8ed402f3970e3614952af43f1d9f94f2bfcdb4f81c37276225d",
+     "c4557d40dddca674eb1f4dfe4f204305efc2e078279b67f0dff954021d930b59",
      :blueprint-sha256
-     "360307889cbd11a0155cb2103ea22a60d583417e8e4b1e618b6c0ed23296582b",
+     "c2486da5a8c6e1fa7452e7a31d494e8e2f961f5c209d37c664c7eb56acbab0d4",
      :registry "131 registered statements match, 0 do not"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Program milestone completed. Blueprint node B10 is proved: circleBaseNeighborhood is the circle with antipode -1 removed, it is open and contains 1, and circleBaseNeighborhood_contraction is the existing stereographic pointed contraction at exactly that subtype and basepoint. B3, B4, B6, B11, and B12 remain.",
+    "Program milestone completed. Blueprint node B11 is proved: twoCirclesBaseNeighborhood is the restricted open wedge of two B10 neighbourhoods; simultaneous pointed contractions descend through the wedge quotient; and the resulting contraction is transported through restrictedOpenHomeomorphWedge to the literal TwoCircles neighbourhood. B3, B4, B6, and B12 remain.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
       :exit 0,
       :finding
-      "All declarations compile; circleBaseNeighborhood_contraction uses only propext, Classical.choice, and Quot.sound."}
+      "All declarations compile; twoCirclesBaseNeighborhood_contraction uses only propext, Classical.choice, and Quot.sound."}
      {:cmd "lake build ConstructionTargets.PointWedgeVanKampen",
       :exit 0,
       :finding
@@ -113940,48 +113943,45 @@
       "python3 comment-stripped placeholder and blueprint validation",
       :exit 0,
       :finding
-      "Zero sorry, admit, or axiom tokens in changed source and documentation; blueprint B10 is proved."}
+      "Zero sorry, admit, or axiom tokens in changed source and documentation; blueprint B11 is proved."}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131 registered statements match, 0 do not."}
      {:cmd
       "git diff --check -- ConstructionTargets/PointWedgeVanKampen.lean ConstructionTargets/PointWedgeVanKampen.md ConstructionTargets/PointWedgeVanKampen.blueprint.md",
       :exit 0}
-     {:cmd "git commit -m Prove-circle-base-neighborhood-contraction",
+     {:cmd "git commit -m Contract-two-circle-base-neighborhood",
       :exit 0,
       :finding
-      "Committed the three scoped milestone files as b69997ebbc56a4762f2d38a9aa9dda1f0c580d97."}
+      "Committed the three scoped milestone files as 7a6acb9a52f260197bb6c6fa5ec693b6ee894543."}
      {:cmd
       "sha256sum ConstructionTargets/PointWedgeVanKampen.lean ConstructionTargets/PointWedgeVanKampen.md ConstructionTargets/PointWedgeVanKampen.blueprint.md",
       :exit 0,
       :finding
-      "Hashes are 331633dfc2ad170b3e2a092f68241c419289d139382149636dd32dbd60a6733b, 1fbf97290c32c8ed402f3970e3614952af43f1d9f94f2bfcdb4f81c37276225d, and 360307889cbd11a0155cb2103ea22a60d583417e8e4b1e618b6c0ed23296582b."}],
-    :diagnostic-history [],
+      "Hashes are ec64d37f48ab8669f4d9f9520e945b4a38ff827be7cad09107db96a3d4e8b803, c4557d40dddca674eb1f4dfe4f204305efc2e078279b67f0dff954021d930b59, and c2486da5a8c6e1fa7452e7a31d494e8e2f961f5c209d37c664c7eb56acbab0d4."}],
+    :diagnostic-history
+    [{:cmd
+      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
+      :exit 1,
+      :finding
+      "The first B11 draft did not unfold the transported homotopy in its fixed-point proof, used an unqualified quotient-map predicate, and left wedge endpoint goals unreduced; corrected with explicit changes, the Topology namespace, and representative-level endpoint equations."}
+     {:cmd
+      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
+      :exit 1,
+      :finding
+      "The intermediate transport call resolved PointedContraction to the upstream structure namespace rather than this module's helper namespace; corrected with the fully qualified homeomorphSymm declaration."}],
     :continue-from
-    {:commit "b69997ebbc56a4762f2d38a9aa9dda1f0c580d97",
+    {:commit "7a6acb9a52f260197bb6c6fa5ec693b6ee894543",
      :next
-     "Implement blueprint B11 twoCirclesBaseNeighborhood and its pointed contraction from B10 and PointWedgeRestrictedOpenQuotient."},
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791728848590-5488-c3f30dac",
-     :commands
-     ["git show --format=fuller --stat b69997ebbc56a4762f2d38a9aa9dda1f0c580d97"
-      "git diff-tree --no-commit-id --name-only -r b69997ebbc56a4762f2d38a9aa9dda1f0c580d97"
-      "git show b69997ebbc56a4762f2d38a9aa9dda1f0c580d97:<scoped-file> | sha256sum"
-      "python3 scripts/statement-registry.py check"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup"],
-     :finding
-     "PASS: commit adds new compiled sorry-free B10 progress since program-history; frozen hashes and three-file scope match, literal subtype/basepoint and contraction orientation are faithful, and axioms are standard-only. Registry and milestone build pass; the absent final target is an explicitly outstanding B12 program milestone."},
-    :commit "b69997ebbc56a4762f2d38a9aa9dda1f0c580d97",
+     "Implement blueprint B3 genericPointWedgeSingleObjMappingEquivalence and its postcomposition natural isomorphism."},
+    :commit "7a6acb9a52f260197bb6c6fa5ec693b6ee894543",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"
      "ConstructionTargets/PointWedgeVanKampen.blueprint.md"],
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -115522,7 +115522,8 @@
     :reported-by [:program-2026-10-11-point-wedge-van-kampen],
     :type
     "A pointed contraction of an open restricted-wedge neighborhood of twoCirclesPoint",
-    :area "fundamental-group-wedge-of-circles"},
+    :area "fundamental-group-wedge-of-circles",
+    :proved-in :program-2026-10-11-point-wedge-van-kampen},
    :id
    :lemma-pointwedgevankampen-twocirclesbaseneighborhood-contraction,
    :kind :lemma,
