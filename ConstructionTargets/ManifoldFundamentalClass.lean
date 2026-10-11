@@ -1582,6 +1582,23 @@ theorem integralOpenDiskConnecting_naturality_raw (k : ℕ) :
       (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2)))
     (k + 2) (k + 1) rfl
 
+theorem integralOpenDiskComparison_component_homology_maps (k : ℕ) :
+    (integralOpenDiskPunctureHomologyComparison k).hom =
+      (((ConstructionTargets.CoefficientH0.SingularChains ℤ
+          (TopCat.of (ConstructionTargets.T02A06HemisphereExcision.puncturedOpenDiskSet
+            (k + 2)))).sc (k + 1)).mapHomologyIso
+          forgetIntModules).inv ≫
+        HomologicalComplex.homologyMap
+          (integralOpenDiskPairShortComplexComparison k).τ₁ (k + 1) ∧
+    (integralOpenDiskRelativeHomologyComparison k).hom =
+      (((ConstructionTargets.CoefficientRelativeSmall.relativeChains ℤ
+          (ConstructionTargets.T02A06HemisphereExcision.puncturedOpenDiskSet
+            (k + 2))).sc (k + 2)).mapHomologyIso
+          forgetIntModules).inv ≫
+        HomologicalComplex.homologyMap
+          (integralOpenDiskPairShortComplexComparison k).τ₃ (k + 2) := by
+  constructor <;> rfl
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -1678,5 +1695,6 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralOpenDiskPairShortComplexComparison
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralOpenDiskCoefficientPairShortExact
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralOpenDiskConnecting_naturality_raw
+#print axioms ConstructionTargets.ManifoldFundamentalClass.integralOpenDiskComparison_component_homology_maps
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport_homologyMap_eq_composite
 #print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_transport_homology_factors
