@@ -104255,6 +104255,8 @@
   {:bounded-exception
    "This single-consumer comparison is the nearer of the two remaining t93J03 lemmas.",
    :consumer :t93J03,
+   :review-finding
+   "REVISE repeated satisfied prerequisite :routes-2026-10-11-compatible-carrier-component-bridge-103; route must name a new prerequisite or be rewritten",
    :implements-lemma
    :lemma-kleinaabbsquarepolygonpresentationequivalence,
    :evidence
@@ -104347,7 +104349,7 @@
       "9c7a282a44b4894670dcafbfde89dde71f914faa2a8e75a21671e46c13ef470c"},
      :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :needs-owner,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-aabb-square-polygon-presentation-equivalence",
