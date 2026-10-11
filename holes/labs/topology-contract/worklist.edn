@@ -113857,30 +113857,31 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 5,
+   :stop-count 6,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "B6 and B12 remain; next prove literal left/right leg coordinates.",
+    "B6 generator equations and B12 remain; next unfold the B3 inverse on both leg maps.",
     :outcome :stop,
     :warnings [{:kind :upstream-lint}],
     :missing-theorems
-    [{:name "PointWedgeVanKampen.genericPointWedgeSourceEquivalence",
+    [{:name
+      "PointWedgeVanKampen.genericPointWedgeLegCoordinates_vanKampen",
       :type
-      "FundamentalGroupoid (Wedge x0 y0) equivalent to SingleObj of the free product",
-      :status :proved,
+      "Based free-product equivalence with literal left/right leg coordinates",
+      :status :partial,
       :consumers [:t99J01 :t01A03 :t92J06 :t97A01 :t97A03],
       :depends-on
-      ["PointWedgeVanKampen.genericPointWedgeSingleObjMappingEquivalence"],
+      ["PointWedgeVanKampen.genericPointWedgeSourceEquivalence"],
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "725745d0a8b00222adc30988d92d2701b374b9eb277bef9415fbdec14da0a5ac",
+     "5210290c447048960bffc633f8cd4ab5846d83faf1f71564464641bdb37684ca",
      :documentation
-     "c9c032fd00d1d5917cabb14dcf9374b30a22c6e2456ba12a8114dfb1b1a3bc40",
+     "f49bfbb4eeaabb2b564f48d19efa92f2b1391699e1375236b4185a9bb06bed0e",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113888,7 +113889,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "B4 proved: target-natural B3 reconstructs the source groupoid equivalence. B6 and B12 remain.",
+    "B6 partial: the exact based free-product equivalence is proved at the literal left wedge representative; its two leg equations remain.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113901,32 +113902,17 @@
      {:cmd "git diff --check -- scoped files", :exit 0}
      {:cmd "python3 comment-stripped placeholder scan", :exit 0}],
     :diagnostic-history [],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791732610628-5571-f9389372",
-     :commands
-     ["git show/diff-tree 4fcef0d6c"
-      "sha256sum scoped files"
-      "placeholder scan"
-      "statement-registry.py check"
-      "lake env lean PointWedgeVanKampen.lean"
-      "lake build PointWedgeVanKampen"
-      "lake build ThreeCirclesFundamentalGroup"],
-     :finding
-     "PASS: B4 is new compiled sorry-free progress. It applies the B3 mapping family and postcomposition isomorphisms directly to sourceEquivalence, yielding the frozen wedge-groupoid to free-product SingleObj direction. Scope/hashes match, placeholders are zero, and axioms standard. B6/B12 remain listed; absent final target is valid STOP state."},
-    :commit "4fcef0d6c26d43243e5a7b53d0c97c873aa5f6ac",
+    :commit "5441ee4e4022fabe8bc58b1a5653bf17545d0853",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
-     "ConstructionTargets/PointWedgeVanKampen.md"
-     "ConstructionTargets/PointWedgeVanKampen.blueprint.md"],
+     "ConstructionTargets/PointWedgeVanKampen.md"],
     :fixture
     {:path "ConstructionTargets/PointWedgeVanKampen.blueprint.md",
      :sha256
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -114017,7 +114003,8 @@
    :kind :lemma,
    :depends-on
    [:lemma-pointwedgevankampen-fundamentalgroupmulequivofsingleobjequivalence
-    :lemma-pointwedgevankampen-genericpointwedgesingleobjmappingequivalence],
+    :lemma-pointwedgevankampen-genericpointwedgesingleobjmappingequivalence
+    :lemma-pointwedgevankampen-genericpointwedgesourceequivalence],
    :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
   {:consumer :t99J01,
    :phase :lemma,
