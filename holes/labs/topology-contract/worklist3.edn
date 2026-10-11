@@ -3415,8 +3415,91 @@
   {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-forgetintegralrelativecokernelcomparison,
+   :evidence
+   {:placeholder-delta {:source 0, :fixture 0},
+    :residual
+    "Compose this preservation isomorphism with integralMappedRelativeCokernelComparison and SingularExcision.relativeSingularChainsIsoCokernelSubspaceMap.symm to obtain the complete relative chain comparison; then derive the homology isomorphism and prove generator transport.",
+    :gates
+    {:module-build :pass,
+     :exact-declaration-type :pass,
+     :standard-axioms-only :pass,
+     :exact-scope :pass,
+     :statement-registry :pass,
+     :preserves-cokernel-iso :pass,
+     :zero-placeholders :pass,
+     :no-composition-with-later-comparisons :pass,
+     :homological-complex-equivalence-installed :pass,
+     :clean-tree :pass,
+     :fixture-compiles :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["lake build replayed pre-existing warnings from dependency modules; the target module emitted informational axiom reports and no warnings"],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.ManifoldFundamentalClass.forgetIntegralRelativeCokernelComparison",
+      :type
+      "Canonical preservation-of-cokernel isomorphism from the forgotten integral coefficient-relative chain complex to the cokernel of the forgotten subtype map.",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on ["forgetIntModules.asEquivalence"],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-10",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/manifold_fundamental_class_forget_relative_cokernel.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/manifold_fundamental_class_forget_relative_cokernel.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^\\s*axiom\\b' ConstructionTargets/ManifoldFundamentalClass.lean /tmp/manifold_fundamental_class_forget_relative_cokernel.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git status --porcelain", :exit 0, :stdout ""}],
+    :diagnostic-history
+    [{:cmd
+      "lake env lean /tmp/manifold_fundamental_class_forget_relative_cokernel.lean",
+      :exit 1,
+      :diagnostic
+      "The first promoted fixture referred to CoefficientRelativeSmall outside the ConstructionTargets namespace without qualification.",
+      :correction
+      "Qualified both coefficient-relative declarations with ConstructionTargets and reran the fixture successfully."}],
+    :commit "f5ca3a8fa0ce610a6b1e1602e42f525f00427c23",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path
+     "/tmp/manifold_fundamental_class_forget_relative_cokernel.lean",
+     :sha256
+     "10b53377e8a331fb350dcc41debfb0951003059a0ca99f95a363d55d1d9c7d16",
+     :original-sha256
+     "936191cfff7efffe5c9a32d1aa5bdfc8153b31692df7ed7253997c6d5b1c5af4",
+     :sorry-count 0},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :declaration
+     "ConstructionTargets.ManifoldFundamentalClass.forgetIntegralRelativeCokernelComparison",
+     :representation
+     {:source
+      "The AddCommGrpCat chain complex obtained by forgetting the ModuleCat Int coefficient-relative cokernel",
+      :target
+      "The AddCommGrpCat cokernel of the forgotten ModuleCat Int subtype-inclusion chain map",
+      :direction
+      "Canonical preservation-of-cokernel isomorphism from the forgotten coefficient-relative chain complex to the cokernel formed after forgetting, induced by the integer-module/additive-group equivalence on homological complexes"}},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/forget-relative-cokernel-preservation",
@@ -5724,17 +5807,30 @@
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.forgetIntegralRelativeCokernelComparison",
     :reported-by
-    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+     :routes-2026-10-11-manifold-forget-relative-cokernel-topo3-r1],
     :type
     "forall {X : Type} [TopologicalSpace X] (A : Set X), (forgetIntModules.mapHomologicalComplex (ComplexShape.down Nat)).obj (CoefficientRelativeSmall.relativeChains Int A) ≅ cokernel ((forgetIntModules.mapHomologicalComplex (ComplexShape.down Nat)).map (CoefficientRelativeSmall.subspaceMap Int A))",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in
+    :routes-2026-10-11-manifold-forget-relative-cokernel-topo3-r1},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-forgetintegralrelativecokernelcomparison,
    :kind :lemma,
    :depends-on
-   [:lemma-constructiontargets-manifoldfundamentalclass-integralmappedrelativecokernelcomparison],
-   :other-consumers [:t98A02]}],
+   [:lemma-constructiontargets-manifoldfundamentalclass-integralmappedrelativecokernelcomparison
+    :lemma-forgetintmodules-asequivalence],
+   :other-consumers [:t98A02]}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "forgetIntModules.asEquivalence"},
+   :lemma {:name "forgetIntModules.asEquivalence", :reported-by []},
+   :id :lemma-forgetintmodules-asequivalence,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}],
  :consumer-baselines {},
  :statuses
  #{:open
