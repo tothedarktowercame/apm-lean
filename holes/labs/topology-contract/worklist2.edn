@@ -79331,12 +79331,23 @@
       "Affine expansion exposed branch transport; proved circle formula."}],
     :continue-from
     "Show branch transport preserves first circle coordinate.",
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791729720813-5510-e7c73fd1",
+     :commands
+     ["git show/check/diff-tree 2183b2339"
+      "lake env lean ConstructionTargets/t97A04Closure.lean"
+      "lake env lean problems/t97A04/lean/Main.lean"
+      "statement-registry check/fingerprint and placeholder counts"],
+     :finding
+     "PASS: new compiled progress after history job 9. Commit changes only the scoped closure and proves the frozen additive-torus shear becomes (x^a*y^b,y) under the product circle homeomorphism; coordinate order, integer-power signs, and conjugation direction are correct. Blob matches 6e3d0955. Closure is sorry-free with standard axioms; Main compiles with unchanged 2 placeholders. Registry is 131/0 and frozen statement SHA-256 remains ca1b2cb3c6594276811618321d5c0604c2f38fc4594a6b21ae161a711a923a34. Branch transport and B6-B11 remain listed."},
     :commit "2183b2339d8032982ee991ca2d92e8f58494d853",
     :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
     :finding "In circle coordinates, shearY is (x^a*y^b,y).",
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79411,6 +79422,9 @@
      :reason :program-progress-committed}
     {:job 9,
      :commit "6150a402c247424c1891c64a4d92e5b505009668",
+     :reason :program-progress-committed}
+    {:job 1,
+     :commit "2183b2339d8032982ee991ca2d92e8f58494d853",
      :reason :program-progress-committed}]}
   {:consumer :t96A07,
    :stop-count 2,
@@ -79935,7 +79949,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -79947,7 +79961,9 @@
     :reported-by [:program-2026-10-11-close-t97a04],
     :type "folded circle maps and H1 factorizations",
     :area "mv-connecting-naturality",
-    :proved-in :program-2026-10-11-close-t97a04},
+    :proved-in :program-2026-10-11-close-t97a04,
+    :banked-by :program-2026-10-11-close-t97a04,
+    :banked-commit "2183b2339d8032982ee991ca2d92e8f58494d853"},
    :id
    :lemma-constructiontargets-t97a04closure-twocircleoverlapshearfold-h1,
    :kind :lemma,
@@ -79992,7 +80008,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -80004,7 +80020,9 @@
     :reported-by [:program-2026-10-11-close-t97a04],
     :type "circle coordinate of shearY is (x^a*y^b,y)",
     :area "mv-connecting-naturality",
-    :proved-in :program-2026-10-11-close-t97a04},
+    :proved-in :program-2026-10-11-close-t97a04,
+    :banked-by :program-2026-10-11-close-t97a04,
+    :banked-commit "2183b2339d8032982ee991ca2d92e8f58494d853"},
    :id
    :lemma-constructiontargets-t97a04closure-frozentoruscircleprod-sheary,
    :kind :lemma,
