@@ -113904,6 +113904,19 @@
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
       :exit 1,
       :finding "Fixed endpoints and cancellation."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791737226485-5631-5eac32a8",
+     :commands
+     ["git show/diff-tree 2bd917a8"
+      "hash/diff/placeholder checks"
+      "statement-registry.py check"
+      "lake env lean PointWedgeVanKampen.lean"
+      "lake build PointWedgeVanKampen"
+      "lake build ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "PASS: new compiled, sorry-free B6 progress solves both mapped leg actions as counit conjugates. Orientation is correct under SingleObj composition: c*mapped=injection*c implies mapped=c^-1*injection*c. Exact two-file scope/frozen hashes match; zero placeholders; 131/131 registry; standard axioms. Conjugator elimination and B12 remain listed, so absent final target is a valid program STOP."},
     :commit "2bd917a844c45130bd8316148c73276400484c3b",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113914,7 +113927,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113935,7 +113948,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B6 partial: compiled counit equations now specialize to both coproduct injections.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B6 partial: both leg actions are explicit counit conjugates of the coproduct injections.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -113995,7 +114008,11 @@
     {:job 8,
      :commit "99fc00449452e598228b29c3f2bc7380fb03c403",
      :reason
-     "B6 partial: compiled counit equations now specialize to both coproduct injections."}]}
+     "B6 partial: compiled counit equations now specialize to both coproduct injections."}
+    {:job 9,
+     :commit "2bd917a844c45130bd8316148c73276400484c3b",
+     :reason
+     "B6 partial: both leg actions are explicit counit conjugates of the coproduct injections."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
