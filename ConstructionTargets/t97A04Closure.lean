@@ -226,6 +226,14 @@ theorem twoCircleOverlapShear_eq_transport (a b : ℤ) :
         ((boundaryOverlapShear a b).comp
           overlapHomotopyEquivTwoCircles.invFun) := rfl
 
+theorem overlapHomotopyEquivTwoCircles_inv_fst (q : Circle ⊕ Circle) :
+    (overlapHomotopyEquivTwoCircles.invFun q).1.1 = twoCircleFold q := by
+  have h := congrArg (fun f : C(Circle ⊕ Circle, Circle) ↦ f q)
+    leftOverlapComposite_eq_fold
+  simpa [leftOverlapComposite, leftPieceRetraction, overlapToLeft,
+    twoCirclesToOverlap, leftOpenHomotopyEquivCircle,
+    leftOpenProductHomeomorph, circleTimesNorthComplementHomotopyEquiv] using h
+
 /-- The left overlap-circle summand followed by the transported shear. -/
 def circleSumInl : C(Circle, Circle ⊕ Circle) :=
   ⟨Sum.inl, continuous_inl⟩
@@ -883,6 +891,7 @@ theorem shearY_overlap_coordinate_of_degree_components (a b : ℤ)
 #print axioms twoCircleOverlapShearRightFold
 #print axioms twoCircleOverlapShearLeftFold_H1
 #print axioms twoCircleOverlapShearRightFold_H1
+#print axioms overlapHomotopyEquivTwoCircles_inv_fst
 #print axioms circleZPow
 #print axioms circleAffine
 #print axioms circleAffineHomotopy
