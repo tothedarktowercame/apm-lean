@@ -17730,8 +17730,47 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :implements-lemma :lemma-mfclass-pop-square,
+   :evidence
+   {:placeholder-delta
+    {:t00J02 0, :t98A02 0, :remaining {:t00J02 1, :t98A02 1}},
+    :residual "Finish row squares 12/23; assemble SnakeInput.Hom.",
+    :outcome :done-unreviewed,
+    :warnings ["pre-existing unnecessarySimpa lints"],
+    :missing-theorems [],
+    :statement-hashes {:status :match, :count 131},
+    :axioms [propext Classical.choice Quot.sound],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd "sha256sum /tmp/pop.lean", :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "rg -n '\\b(sorry|admit|axiom)\\b' ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "git commit -m 'Prove forgotten opcycles projection naturality'",
+      :exit 0}],
+    :commit "5b247b557ff63d12f14b1b5aa68ffd705c851366",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path "/tmp/pop.lean",
+     :sha256
+     "e1f6ffd3a172050a4598b90252542aca05e9a66bdb35f83c1088a7f0a948bbdf"},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :declaration
+     "ConstructionTargets.ManifoldFundamentalClass.forgetPOpcycles_naturality"},
+    :row :routes-2026-10-11-mfclass-pop-square-r1,
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class/pop",
    :acceptance
