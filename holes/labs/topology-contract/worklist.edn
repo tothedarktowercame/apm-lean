@@ -113852,7 +113852,7 @@
    :depends-on [],
    :other-consumers [:t98A02]}
   {:consumer :t99J01,
-   :stop-count 5,
+   :stop-count 6,
    :review-finding
    "Blueprint missing hypotheses: B3 invokes twoOpenFundamentalGroupoidPseudopushoutEquivalence but its intended Lean type omits PathConnectedSpace X, PathConnectedSpace Y, and the open-neighborhood membership and pointed-contraction data needed to instantiate B1; B4 and B6 inherit this unbound context, so their Lean types are not faithful statements.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
@@ -113860,7 +113860,7 @@
    {:blueprint
     {:path "ConstructionTargets/PointWedgeVanKampen.blueprint.md",
      :sha256
-     "0d620a01dda99d9c034883969889c81103f63a0711227cb4177239bdcb45e4e1",
+     "49de3034371862cc70f7248d2c31256bdb1a2204182c840f87d23a1c53ba90e8",
      :nodes
      [{:id :B1, :status :proved}
       {:id :B2, :status :proved}
@@ -113874,20 +113874,30 @@
       {:id :B10, :status :planned}]},
     :placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Blueprint re-review, then B3 target-natural mapping equivalence, B4 source reconstruction, B6 leg laws, B8 rank-one coordinate, and B10 ThreeCircles specialization.",
+    "Blueprint re-review, then B3 mapping equivalence, B4 source reconstruction, B6 coordinate laws, B8 rank-one coordinate, and B10 specialization.",
     :outcome :stop,
     :warnings
     [{:kind :concurrent-worktree-change,
       :message
-      "holes/labs/topology-contract/worklist.edn remained modified by another process and was preserved unmodified and uncommitted."}],
+      "ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean was modified by another process and was preserved unmodified and uncommitted."}],
     :missing-theorems
     [{:name
       "PointWedgeVanKampen.genericPointWedgeSingleObjMappingEquivalence",
       :type
-      "A postcomposition-natural equivalence from functors out of the point-wedge fundamental groupoid to functors out of the single-object coproduct groupoid",
+      "Under explicit PathConnectedSpace X and Y, open-neighborhood membership, and pointed-contraction hypotheses, the postcomposition-natural point-wedge mapping equivalence",
       :status :not-started,
       :consumers [:t99J01 :t01A03 :t92J06 :t97A01 :t97A03],
       :depends-on [],
+      :area "fundamental-group-wedge-of-circles"}
+     {:name
+      "PointWedgeVanKampen.genericPointWedgeLegCoordinates_vanKampen",
+      :type
+      "Under the same explicit hypotheses, the point-wedge fundamental-group equivalence with literal left and right leg equations",
+      :status :not-started,
+      :consumers [:t99J01 :t01A03 :t92J06 :t97A01 :t97A03],
+      :depends-on
+      ["PointWedgeVanKampen.genericPointWedgeSingleObjMappingEquivalence"
+       "PointWedgeVanKampen.fundamentalGroupMulEquivOfSingleObjEquivalence"],
       :area "fundamental-group-wedge-of-circles"}
      {:name
       "PointWedgeVanKampen.multiplicativeIntEquivFreeGroupFinOne",
@@ -113895,16 +113905,6 @@
       :status :not-started,
       :consumers [:t99J01],
       :depends-on [],
-      :area "fundamental-group-wedge-of-circles"}
-     {:name
-      "PointWedgeVanKampen.genericPointWedgeLegCoordinates_vanKampen",
-      :type
-      "The point-wedge fundamental group is the coproduct of the piece fundamental groups, with literal left and right leg coordinates",
-      :status :not-started,
-      :consumers [:t99J01 :t01A03 :t92J06 :t97A01 :t97A03],
-      :depends-on
-      ["PointWedgeVanKampen.genericPointWedgeSingleObjMappingEquivalence"
-       "PointWedgeVanKampen.fundamentalGroupMulEquivOfSingleObjEquivalence"],
       :area "fundamental-group-wedge-of-circles"}
      {:name "PointWedgeVanKampen.threeCirclesFundamentalGroupEquiv",
       :type
@@ -113918,51 +113918,46 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:blueprint-sha256
-     "0d620a01dda99d9c034883969889c81103f63a0711227cb4177239bdcb45e4e1",
+     "49de3034371862cc70f7248d2c31256bdb1a2204182c840f87d23a1c53ba90e8",
      :registry "131 registered statements match, 0 do not"},
     :disposition :stop,
     :axioms [],
     :author "topo-2",
     :reason
-    "Blueprint repaired. B3 now names every equivalence and postcomposition-naturality result used by its five-stage composite, and new node B8 supplies the missing Multiplicative Int to FreeGroup (Fin 1) equivalence required by the final specialization. Independent blueprint review is required before formalization resumes.",
+    "Blueprint repaired again. B3, B4, and B6 now each state the complete topology, path-connectedness, basepoint, open-neighborhood, membership, and pointed-contraction context. B6 additionally spells out both induced fundamental-group maps and the right-leg basepoint equality. Independent review is still required before B3 formalization.",
     :commands
-    [{:cmd
-      "rg exact blueprint dependency APIs in ConstructionTargets and Mathlib",
+    [{:cmd "python3 complete-context validation for B3 B4 B6",
       :exit 0,
-      :finding "All named B3 and B8 APIs exist"}
-     {:cmd "python3 blueprint node-field validation",
-      :exit 0,
-      :finding "10 blueprint nodes; each has lean, uses, and status"}
+      :finding
+      "B3, B4, and B6 each state the complete shared hypothesis context"}
      {:cmd
       "git diff --check -- ConstructionTargets/PointWedgeVanKampen.blueprint.md",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
-     {:cmd "git commit -m Repair-point-wedge-blueprint-dependencies",
+     {:cmd "git commit -m Bind-point-wedge-blueprint-hypotheses",
       :exit 0}
      {:cmd
       "sha256sum ConstructionTargets/PointWedgeVanKampen.blueprint.md",
       :exit 0,
       :finding
-      "0d620a01dda99d9c034883969889c81103f63a0711227cb4177239bdcb45e4e1"}],
-    :diagnostic-history [],
+      "49de3034371862cc70f7248d2c31256bdb1a2204182c840f87d23a1c53ba90e8"}],
+    :diagnostic-history
+    [{:cmd "python3 initial complete-context validation for B3 B4 B6",
+      :exit 1,
+      :finding
+      "The validator correctly rejected shorthand saying both path-connected instances in B4; corrected by repeating the full binder list literally in B4 and B6."}],
     :continue-from
-    {:commit "317829fadd7e9ad4f1d6b6d32135e53cd51d5853",
+    {:commit "e0845da715595e5a8dd576a8553a721acbda8092",
      :next
-     "Obtain independent review of the repaired blueprint; after approval implement B3, using exactly the named five-stage equivalences and naturality isomorphisms."},
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1791714610220-5067-b3262c74",
-     :finding
-     "Blueprint missing hypotheses: B3 invokes twoOpenFundamentalGroupoidPseudopushoutEquivalence but its intended Lean type omits PathConnectedSpace X, PathConnectedSpace Y, and the open-neighborhood membership and pointed-contraction data needed to instantiate B1; B4 and B6 inherit this unbound context, so their Lean types are not faithful statements."},
-    :commit "317829fadd7e9ad4f1d6b6d32135e53cd51d5853",
+     "Obtain independent review of the hypothesis-complete blueprint; after approval implement B3 with exactly its stated binders."},
+    :commit "e0845da715595e5a8dd576a8553a721acbda8092",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.blueprint.md"],
     :seat "topo-2"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
