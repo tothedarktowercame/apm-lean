@@ -1450,6 +1450,27 @@ theorem zeroHeightCoreNormalDetour_radius_le
         rw [Real.norm_of_nonneg ha, Real.norm_of_nonneg hb]
       _ ≤ (1 / 4 : ℝ) := by nlinarith
 
+theorem zeroHeightCoreNormalDetour_im_ne_zero_of_interior
+    (p : RightTubeMinusLeftCore) (hheight : p.1 2 = 0)
+    (t : unitInterval) (ht0 : (t : ℝ) ≠ 0) (ht1 : (t : ℝ) ≠ 1) :
+    (zeroHeightCoreNormalDetour t p).im ≠ 0 := by
+  obtain ⟨hn0im, hn1im⟩ :=
+    realEndpoints_zeroHeight_rightTubeCoreNormals p hheight
+  obtain ⟨hwnorm, hwim⟩ :=
+    zeroHeight_signedImaginaryWaypoint_properties p hheight
+  unfold zeroHeightCoreNormalDetour
+  split_ifs with hhalf
+  · simp only [Complex.add_im, Complex.mul_im, Complex.ofReal_re,
+      Complex.ofReal_im, zero_mul, add_zero, hn0im, mul_zero, zero_add]
+    exact mul_ne_zero (mul_ne_zero (by norm_num) ht0) hwim
+  · simp only [Complex.add_im, Complex.mul_im, Complex.ofReal_re,
+      Complex.ofReal_im, zero_mul, add_zero, hn1im, mul_zero, add_zero]
+    apply mul_ne_zero
+    · intro h
+      apply ht1
+      linarith
+    · exact hwim
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -1505,3 +1526,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCoreNormalDetour_endpoints_midpoint
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.continuous_zeroHeightCoreNormalDetour
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCoreNormalDetour_radius_le
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCoreNormalDetour_im_ne_zero_of_interior
