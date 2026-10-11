@@ -88064,6 +88064,8 @@
    "This single-consumer theorem supplies the exact sheet-counted covering conjunct of the t99J01 component restriction adapter.",
    :consumer :t99J01,
    :stop-count 1,
+   :review-finding
+   "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma :lemma-t99j01componentcover-isksheeted,
    :evidence
    {:placeholder-delta
@@ -88127,6 +88129,12 @@
       :exit 0,
       :finding "Worktree is clean."}],
     :diagnostic-history [],
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1791708681991-4833-f7d7781d",
+     :finding
+     "extend Mathlib: state and prove the missing theorem in scope"},
     :changed-paths [],
     :fixture
     {:path "/tmp/t99j01-component-cover-isksheeted-probe.lean",
@@ -88135,7 +88143,7 @@
      :status :self-axiomatized},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["ConstructionTargets/T99J01PathComponentCoverRestriction.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t99J01/component-cover-isksheeted",
@@ -88157,6 +88165,7 @@
    :id :routes-2026-10-11-t99j01-component-cover-isksheeted-111,
    :kind :reusable-theorem,
    :area "covering-subgroup-correspondence",
+   :fail-count 1,
    :depends-on [:lemma-threecircles-locpathconnectedspace],
    :current-residual
    "After the exact restricted sheet count, prove t99j01ComponentInclusion_pi1_bijective and assemble the frozen-facing restriction package.",
