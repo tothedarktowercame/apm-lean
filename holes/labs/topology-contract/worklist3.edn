@@ -17812,6 +17812,22 @@
       :exit 1,
       :finding
       "Lean inferred the counterexample basepoint from the target, leaving an extra tactic bullet; removed it and reran successfully."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791712818916-4951-762efb8b",
+     :commands
+     ["rg current program row and program-history"
+      "git show and git diff-tree recorded commit"
+      "git blob identity and git diff --check"
+      "sha256sum program module"
+      "lake env lean ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean"
+      "lake build ConstructionTargets.DeckGroupQuotientFundamentalGroup"
+      "python3 scripts/statement-registry.py check"
+      "forbidden placeholder and axiom scan"
+      "consumer placeholder census"],
+     :finding
+     "PASS: program STOP commits new progress in 5bc7414c after program-history commit d8ae7297; scope is exactly the DeckGroupQuotientFundamentalGroup Lean module and milestone document, and both blobs match the recorded commit; module SHA-256 matches c0c5f913a1c12fd328e2691bfe607b35a330911a2be7be338afd0258e3f4b691; the new indiscrete regular-action construction compiles and proves both that its quotient fundamental group cannot be isomorphic to the two-element acting group and that the former separation-free universal theorem is false; this justifies the owner repair adding T2Space and LocallyCompactSpace without weakening or bypassing it; module replay and 1743-job build pass with no forbidden placeholders and exactly propext, Classical.choice, Quot.sound; registry is 131/0 and consumer counts are 2/3/1/1/3; the repaired program still lists monodromy surjectivity, kernel identification, simply-connected equivalence, and Klein-plane and finite-action adapters as remaining milestones."},
     :commit "5bc7414c9dc1af69e0ceeb3bf02bad80a1587f60",
     :changed-paths
     ["ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean"
@@ -17829,7 +17845,7 @@
    :phase :implementation,
    :owner-repair
    "2026-10-11 claude-14: final type gains [T2Space X] [LocallyCompactSpace X] (Mathlib quotient-covering needs them; every consumer, the plane and spheres, has them). Do not prove covering under weaker hypotheses.",
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean"
     "ConstructionTargets/DeckGroupQuotientFundamentalGroup.md"],
@@ -17846,7 +17862,7 @@
     ["lake build ConstructionTargets.DeckGroupQuotientFundamentalGroup"
      "python3 scripts/statement-registry.py check"]},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: First program milestone compiled and committed; the fixed final theorem remains open. Mathlib's properly-discontinuous quotient-covering construction requires LocallyCompactSpace X and T2Space X, which the fixed final type omits, so the next job must prove the covering result under the weaker hypotheses or compile an exact counterexample before building monodromy.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The frozen final theorem is false. Let Multiplicative (ZMod 2) act on itself by left multiplication and give the underlying set the indiscrete topology. The action is free, finite and therefore properly discontinuous, and continuous; the total space is contractible (hence simply connected) and locally path-connected. The action is transitive, so the orbit quotient is a singleton and its fundamental group is subsingleton, which cannot be isomorphic to the two-element group. The compiled theorem freeProperlyDiscontinuousQuotient_fundamentalGroupEquiv_refuted negates the universe-zero instance of the exact frozen universal proposition.",
    :id :program-2026-10-11-deck-group-quotient-pi1,
    :kind :reusable-theorem,
    :campaign-priority 50,
@@ -17857,7 +17873,11 @@
    [{:job 1,
      :commit "d8ae72972f6621f135d22e9053de496cedf2e908",
      :reason
-     "First program milestone compiled and committed; the fixed final theorem remains open. Mathlib's properly-discontinuous quotient-covering construction requires LocallyCompactSpace X and T2Space X, which the fixed final type omits, so the next job must prove the covering result under the weaker hypotheses or compile an exact counterexample before building monodromy."}]}
+     "First program milestone compiled and committed; the fixed final theorem remains open. Mathlib's properly-discontinuous quotient-covering construction requires LocallyCompactSpace X and T2Space X, which the fixed final type omits, so the next job must prove the covering result under the weaker hypotheses or compile an exact counterexample before building monodromy."}
+    {:job 2,
+     :commit "5bc7414c9dc1af69e0ceeb3bf02bad80a1587f60",
+     :reason
+     "The frozen final theorem is false. Let Multiplicative (ZMod 2) act on itself by left multiplication and give the underlying set the indiscrete topology. The action is free, finite and therefore properly discontinuous, and continuous; the total space is contractible (hence simply connected) and locally path-connected. The action is transitive, so the orbit quotient is a singleton and its fundamental group is subsingleton, which cannot be isomorphic to the two-element group. The compiled theorem freeProperlyDiscontinuousQuotient_fundamentalGroupEquiv_refuted negates the universe-zero instance of the exact frozen universal proposition."}]}
   {:consumer :t00J02,
    :phase :lemma,
    :state :backlog,
@@ -18331,7 +18351,7 @@
    :other-consumers []}
   {:consumer :t00A02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -18345,7 +18365,9 @@
     :type
     "not Nonempty (FundamentalGroup (MulAction.orbitRel.Quotient (Multiplicative (ZMod 2)) (Multiplicative (ZMod 2))) (Quotient.mk _ 1) ≃* Multiplicative (ZMod 2))",
     :area "deck-group-quotient-pi1",
-    :proved-in :program-2026-10-11-deck-group-quotient-pi1},
+    :proved-in :program-2026-10-11-deck-group-quotient-pi1,
+    :banked-by :program-2026-10-11-deck-group-quotient-pi1,
+    :banked-commit "5bc7414c9dc1af69e0ceeb3bf02bad80a1587f60"},
    :id
    :lemma-constructiontargets-deckgroupquotientfundamentalgroup-indiscreteregularaction-no,
    :kind :lemma,
@@ -18353,7 +18375,7 @@
    :other-consumers [:t92J05 :t93J03 :t99J01 :t00J07]}
   {:consumer :t00A02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -18367,7 +18389,9 @@
     :type
     "The negation of the frozen universal theorem specialized to Type 0",
     :area "deck-group-quotient-pi1",
-    :proved-in :program-2026-10-11-deck-group-quotient-pi1},
+    :proved-in :program-2026-10-11-deck-group-quotient-pi1,
+    :banked-by :program-2026-10-11-deck-group-quotient-pi1,
+    :banked-commit "5bc7414c9dc1af69e0ceeb3bf02bad80a1587f60"},
    :id
    :lemma-constructiontargets-deckgroupquotientfundamentalgroup-freepr-e53c1cfa8ae8,
    :kind :lemma,
