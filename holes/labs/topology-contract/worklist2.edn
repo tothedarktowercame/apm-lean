@@ -79523,6 +79523,18 @@
      {:cmd "Main compile", :exit 0}
      {:cmd "registry check", :exit 0}
      {:cmd "git show --check fac75be59", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791761244997-5982-3bd0327b",
+     :commands
+     ["git show/diff/check fac75be59"
+      "verify committed fixture SHA-256 and blobs"
+      "lake build ConstructionTargets.t96A07Closure"
+      "lake env lean closure and Main"
+      "registry fingerprint, placeholders, ancestry, blueprint checks"],
+     :finding
+     "PASS: fac75be59 is new after history 47c44c303; its sole changed path is scoped, closure/blueprint blobs match, and fixture SHA-256 is aee7450d617e5420bfea589e9c09a80148789dc11127baa1744342a1a37558bc. It correctly constructs e0 on Sphere 2, identifies the tangent inclusion range, and applies the manifold chain rule so the sphere derivative is ambient derivative after inclusion; representations and order match B5. Build/Lean pass with standard axioms; registry 131/0; frozen hash 2ba67b040c1c1e31b8529d758a90765d8251ba3798983f6956674918a77fd520 unchanged; closure/Main placeholders 0/1. The yz-plane range equality then B6-B13 remain listed."},
     :commit "fac75be59",
     :changed-paths ["ConstructionTargets/t96A07Closure.lean"],
     :fixture
@@ -79531,7 +79543,7 @@
      "aee7450d617e5420bfea589e9c09a80148789dc11127baa1744342a1a37558bc"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t96A07/lean/Main.lean"
     "problems/t96A07/status.json"
@@ -79568,8 +79580,9 @@
      :commit "d3bf91c37871b1955e959ef64a641b7f4b214c4b",
      :reason :program-milestone-complete}
     {:job 5, :commit "2b9189afd", :reason :program-milestone-complete}
-    {:job 6,
-     :commit "47c44c303",
+    {:job 6, :commit "47c44c303", :reason :program-progress-committed}
+    {:job 7,
+     :commit "fac75be59",
      :reason :program-progress-committed}]}
   {:consumer :t94A10,
    :phase :implementation,
@@ -81060,7 +81073,7 @@
    :other-consumers []}
   {:consumer :t96A07,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -81074,7 +81087,9 @@
     :type
     "sphere mfderiv at e0 = ambient derivative after tangent inclusion",
     :area "projective-smooth-descent",
-    :proved-in :program-2026-10-11-close-t96a07},
+    :proved-in :program-2026-10-11-close-t96a07,
+    :banked-by :program-2026-10-11-close-t96a07,
+    :banked-commit "fac75be59"},
    :id
    :lemma-constructiontargets-t96a07closure-crosstermspheremap-mfderiv-firstpoint,
    :kind :lemma,
