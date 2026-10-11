@@ -67489,62 +67489,54 @@
    "single-consumer strict positivity for the deletion-preserving radial normal interpolation",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:residual
-     "Implement the positivity lemma; then define the continuous radial normal interpolation, prove its endpoints and nonvanishing, and combine it with rightTubePlanarRotation.",
-     :outcome :go,
-     :warnings [],
-     :acceptance
-     {:declaration
-      "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeRadialCoefficient_pos",
-      :type
-      "forall (t : unitInterval) (n : Complex), n ≠ 0 -> 0 < (1 - (t : Real)) * (1 / 8 : Real) + (t : Real) * norm n",
-      :gates
-      ["Compile the scoped module after inserting the fixture declaration"
-       "Confirm only propext, Classical.choice, and Quot.sound axioms"
-       "Confirm no new sorry in the scoped module"
-       "Run python3 scripts/statement-registry.py check"]},
-     :commands
-     [{:cmd "lake env lean /tmp/t02a03_right_core_compact_probe.lean",
-       :exit 0,
-       :output
-       "rightTubeRadialCoefficient_pos compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd "sha256sum /tmp/t02a03_right_core_compact_probe.lean",
-       :exit 0,
-       :output
-       "e340ccee1087ed01a4d5177ae82783b79cb80dea82bdde35d3429e8e86bc791a  /tmp/t02a03_right_core_compact_probe.lean"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_right_core_compact_probe.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}
-      {:cmd
-       "rg -n 'rightTubeRadialCoefficient_pos' /tmp/t02a03_right_core_compact_probe.lean",
-       :exit 0,
-       :output
-       "510:theorem rightTubeRadialCoefficient_pos\n532:#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeRadialCoefficient_pos"}],
-     :fixture
-     {:path "/tmp/t02a03_right_core_compact_probe.lean",
-      :sha256
-      "e340ccee1087ed01a4d5177ae82783b79cb80dea82bdde35d3429e8e86bc791a"},
-     :finding
-     "The convex radial coefficient is strictly positive at every unit-interval time for nonzero n. This supplies the nonvanishing estimate needed to interpolate the left-core normal coordinate along its fixed meridian direction.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
-      :declaration
-      "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeRadialCoefficient_pos",
-      :type
-      "forall (t : unitInterval) (n : Complex), n ≠ 0 -> 0 < (1 - (t : Real)) * (1 / 8 : Real) + (t : Real) * norm n",
-      :proof-plan
-      "Split on t=1. At t=1 use norm_pos_iff for n; otherwise 1-t is strictly positive, the 1/8 term is positive, and the t*norm(n) term is nonnegative.",
-      :axioms [propext Classical.choice Quot.sound]},
-     :seat "topo-8"}},
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Define the continuous radial normal interpolation along rightTubeMeridianCoordinate, prove its endpoints and nonvanishing, combine it with rightTubePlanarRotation in rightTubePolarReconstruction, and certify right-tube membership.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["Existing linter warning at line 62: unnecessarySimpa; no new warnings"],
+    :missing-theorems [],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms [propext Classical.choice Quot.sound],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :scope-blob "987eb4f46b22d17d3b927a664923feb1ef13db57",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd "lake env lean /tmp/t02a03_right_core_compact_probe.lean",
+      :exit 0}
+     {:cmd "sha256sum /tmp/t02a03_right_core_compact_probe.lean",
+      :exit 0,
+      :output
+      "e340ccee1087ed01a4d5177ae82783b79cb80dea82bdde35d3429e8e86bc791a  /tmp/t02a03_right_core_compact_probe.lean"}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeDeformation.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "280078630d59945313fbf5a4207286d49a24da28",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeRadialCoefficient_pos",
+    :fixture
+    {:path "/tmp/t02a03_right_core_compact_probe.lean",
+     :sha256
+     "e340ccee1087ed01a4d5177ae82783b79cb80dea82bdde35d3429e8e86bc791a"},
+    :finding
+    "For t=1 the coefficient is norm n, which is positive because n is nonzero. For t<1, the (1-t)/8 summand is strictly positive and t*norm(n) is nonnegative.",
+    :seat "topo-6"},
    :phase :implementation,
    :type
    "forall (t : unitInterval) (n : Complex), n ≠ 0 -> 0 < (1 - (t : Real)) * (1 / 8 : Real) + (t : Real) * norm n",
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/right-tube-radial-coefficient-positive",
