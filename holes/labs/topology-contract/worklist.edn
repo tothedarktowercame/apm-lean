@@ -103801,67 +103801,82 @@
   {:bounded-exception
    "This single-consumer prerequisite supplies the exact carrier compatibility missing between the frozen aabb disk polygon and the banked square classification.",
    :consumer :t93J03,
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "The STOP supplies neither committed compiled progress nor a compiled refutation. ConstructionTargets/KleinDiskClosedSquareCompatibleCarrier.lean is absent, lake build ConstructionTargets.KleinDiskClosedSquareCompatibleCarrier fails with no such file, and the frozen fixture compiles only by declaring compatibleCarrierPackage as an axiom. The prose cyclic-adjacency argument is not the compiled refutation required for a correct STOP. State and prove the obstruction theorem in scope, compile it with standard axioms, and record that compiled refutation.",
    :implements-lemma
    :lemma-kleindiskclosedsquarecompatiblecarrierpackage,
    :evidence
-   {:residual
-    "Replace the false carrier-descent route with a quotient-level cut-and-reglue polygon comparison between the aabb and square presentations.",
+   {:placeholder-delta
+    {:source-before 0,
+     :source-after 0,
+     :fixture-before 0,
+     :fixture-after 0,
+     :consumer-before 1,
+     :consumer-after 1},
+    :residual
+    "Replace the inconsistent corresponding-edge carrier formulas with a coherent quotient-level cut-and-reglue polygon comparison, or correct the frozen representation interface.",
     :outcome :stop,
-    :warnings [],
+    :warnings
+    ["Lake replayed pre-existing warnings from imported Klein modules; the scoped obstruction module emitted no warnings."],
     :missing-theorems
-    [{:name "kleinDiskClosedSquareCompatibleCarrierPackage",
+    [{:name
+      "KleinDiskClosedSquareCompatibleCarrier.no_carrier_with_required_boundary_formulas",
       :type
-      "Exists a homeomorphism from Disk to ClosedSquare preserving and reflecting the two generated relations",
-      :status :not-started,
+      "No function Disk -> ClosedSquare satisfies all four corresponding edgePoint-to-squareEdge coordinate formulas",
+      :status :proved,
       :consumers [:t93J03],
-      :depends-on ["KleinSquareEqvGenCasesIff.eqvGen_iff_cases"],
-      :area "polygon-quotient-identification",
-      :finding "refuted by the cyclic adjacency invariant"}],
+      :depends-on [],
+      :area "polygon-quotient-identification"}],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not"},
     :disposition :stop,
-    :axioms
-    ["propext"
-     "Classical.choice"
-     "KleinAabbSquarePolygonPresentationEquivalenceProbe.compatibleCarrierPackage"
-     "Quot.sound"],
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "The frozen compatibleCarrierPackage type is false. EqvGen (SurfaceRel false 2) has one four-point boundary class (the four quarter-circle vertices); away from it, its two-point classes pair the interiors of adjacent cyclic arcs 0 with 1 and 2 with 3. EqvGen ClosedSquareRel likewise has one four-corner class, but away from it SquareRel pairs left with right and bottom with top. In the cyclic side order bottom, right, top, left, both paired side pairs are nonadjacent. Any disk-to-square homeomorphism preserving and reflecting EqvGen must carry the unique four-point class to the unique four-point class and therefore induce a cyclic-order-preserving or cyclic-order-reversing permutation of the four complementary boundary arcs. Such a permutation preserves adjacency, so it cannot send the disk's adjacent arc pairing to the square's opposite-side pairing. The aabb and square quotient presentations may still be homeomorphic, but not by descent of a relation-compatible carrier homeomorphism of the frozen type; a quotient-level polygon transformation is required.",
+    "The acceptance-required four boundary-coordinate formulas are inconsistent. The compiled theorem disk_edge_zero_one_endpoint proves edgePoint 4 0 oneIcc = edgePoint 4 1 zeroIcc, but square_edge_zero_one_endpoint_ne proves squareEdge 0 oneIcc != squareEdge 1 zeroIcc. Hence no function Disk -> ClosedSquare can satisfy even the first two requested formulas, and no homeomorphism can satisfy all four. The frozen fixture masks this contradiction by postulating compatibleCarrierPackage without boundary formulas. A valid comparison must change the carrier coordinate specification or use a quotient-level cut-and-reglue map.",
     :commands
     [{:cmd
       "sha256sum /tmp/klein-aabb-square-polygon-presentation-equivalence.lean",
       :exit 0}
      {:cmd
+      "lake build ConstructionTargets.KleinDiskClosedSquareCompatibleCarrier",
+      :exit 0,
+      :finding
+      "Compiled the endpoint contradiction and no-carrier theorem."}
+     {:cmd
       "lake env lean /tmp/klein-aabb-square-polygon-presentation-equivalence.lean",
       :exit 0,
       :finding
-      "The fixture compiles only by assuming compatibleCarrierPackage; presentationHomeomorph reports that custom axiom."}
+      "The fixture still compiles only through its custom compatibleCarrierPackage axiom."}
      {:cmd
-      "rg -n \"axiom compatibleCarrierPackage|surfaceRel_false_two_iff|def squareEdge|def SquareRel\" /tmp/klein-aabb-square-polygon-presentation-equivalence.lean ConstructionTargets/KleinSurfaceRelNormalForm.lean ConstructionTargets/KleinSquareEdgeOrientation.lean ConstructionTargets/KleinSquareBoundaryRelation.lean",
+      "rg -n \"\\b(sorry|admit|axiom)\\b\" ConstructionTargets/KleinDiskClosedSquareCompatibleCarrier.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "lake env lean /tmp/klein-carrier-obstruction-axioms.lean",
       :exit 0,
       :finding
-      "The frozen disk relation pairs adjacent quarter-circle arcs, while SquareRel pairs opposite sides in the square boundary's cyclic order."}
+      "All three obstruction declarations use only propext, Classical.choice, and Quot.sound."}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131 registered statements match, 0 do not"}
      {:cmd
-      "sed -n '1,180p' TOPOLOGY-ROUTES.md >/dev/null && sed -n '1,180p' holes/labs/topology-routes/routes-1.md >/dev/null && sed -n '1,180p' holes/labs/topology-routes/routes-2.md >/dev/null && sed -n '1,180p' holes/labs/topology-routes/routes-3.md >/dev/null",
+      "git diff --check -- ConstructionTargets/KleinDiskClosedSquareCompatibleCarrier.lean",
       :exit 0}],
+    :diagnostic-history
+    [{:cmd "lake env lean /tmp/klein-carrier-obstruction-axioms.lean",
+      :exit 1,
+      :finding
+      "The audit was initially launched concurrently with the first target build before its olean existed; the sequential rerun passed."}],
     :representation
     {:source
      "The frozen unit-disk aabb presentation with SurfaceRel false 2",
      :target "The closed unit square presentation with SquareRel",
      :direction
-     "The requested carrier-level exact relation conjugacy is obstructed by adjacent versus opposite cyclic arc pairings."},
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1791689726445-4008-ad86831c",
-     :finding
-     "The STOP supplies neither committed compiled progress nor a compiled refutation. ConstructionTargets/KleinDiskClosedSquareCompatibleCarrier.lean is absent, lake build ConstructionTargets.KleinDiskClosedSquareCompatibleCarrier fails with no such file, and the frozen fixture compiles only by declaring compatibleCarrierPackage as an axiom. The prose cyclic-adjacency argument is not the compiled refutation required for a correct STOP. State and prove the obstruction theorem in scope, compile it with standard axioms, and record that compiled refutation."},
-    :changed-paths [],
+     "The requested corresponding-edge coordinate map from disk to square is refuted at the shared endpoint of disk edges zero and one."},
+    :commit "feab288ac7a87363451cda3d642de9a924e77fde",
+    :changed-paths
+    ["ConstructionTargets/KleinDiskClosedSquareCompatibleCarrier.lean"],
     :fixture
     {:path
      "/tmp/klein-aabb-square-polygon-presentation-equivalence.lean",
@@ -103870,7 +103885,7 @@
      :status :self-axiomatized},
     :seat "topo-2"},
    :phase :implementation,
-   :state :repair,
+   :state :needs-owner,
    :scope
    ["ConstructionTargets/KleinDiskClosedSquareCompatibleCarrier.lean"],
    :dag-node
@@ -109458,6 +109473,30 @@
    :depends-on
    [:lemma-kleinsquareeqvgencasesiff-eqvgen-iff-cases
     :lemma-kleinsurfacerelnormalform-surfacerel-false-two-iff],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "KleinDiskClosedSquareCompatibleCarrier.no_carrier_with_required_boundary_formulas",
+    :type
+    "No function Disk -> ClosedSquare satisfies all four corresponding edgePoint-to-squareEdge coordinate formulas"},
+   :lemma
+   {:name
+    "KleinDiskClosedSquareCompatibleCarrier.no_carrier_with_required_boundary_formulas",
+    :reported-by
+    [:routes-2026-10-11-klein-disk-closed-square-compatible-carrier-87],
+    :type
+    "No function Disk -> ClosedSquare satisfies all four corresponding edgePoint-to-squareEdge coordinate formulas",
+    :area "polygon-quotient-identification",
+    :proved-in
+    :routes-2026-10-11-klein-disk-closed-square-compatible-carrier-87},
+   :id
+   :lemma-kleindiskclosedsquarecompatiblecarrier-no-carrier-with-required-boundary-formula,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
