@@ -79281,67 +79281,50 @@
    :depends-on [],
    :other-consumers []}
   {:consumer :t97A04,
-   :stop-count 7,
+   :stop-count 8,
    :evidence
    {:placeholder-delta 0,
-    :residual "B6-B11 remain; next prove B6 intersection endpoint.",
+    :residual "Finish B6 degree equality; then B7-B11.",
     :outcome :stop,
-    :warnings ["Main retains two existing placeholders and warnings."],
+    :warnings
+    ["Main retains two placeholders; unrelated dirty file preserved."],
     :missing-theorems
     [{:name
-      "ConstructionTargets.T97A04Closure.shearY_productionUnionMap",
+      "ConstructionTargets.T97A04Closure.shearY_overlap_coordinate",
       :type
-      "forall a b : Int, forall n : Nat, productionUnionMap for shearYShortComplexHom equals homologyMap of singularPostcomposition (shearY a b)",
-      :status :proved,
+      "overlap-coordinate conjugate of productionIntersectionMap (shearYShortComplexHom a b) 1 equals overlapScalar a",
+      :status :partial,
       :consumers [:t97A04],
       :depends-on
-      ["ConstructionTargets.T97A04Closure.shearYShortComplexHom"],
+      ["ConstructionTargets.T97A04Closure.frozenOverlapH1IsoIntBiprod"
+       "ConstructionTargets.T97A04Closure.shearYShortComplexHom"],
       :area "mv-connecting-naturality"}],
     :statement-hashes
     {:registry "131/0",
-     :closure "0557a9712bcf4873741c132226f63ea7a28c0caa",
+     :closure "11614885a95d71ff4f072b689d7406f26625f039",
      :blueprint "c419a895cb4ede2acc1cb6bc5c7536344ba63df4"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason :program-milestone-complete,
+    :reason :program-progress-committed,
     :commands
     [{:cmd "lake env lean ConstructionTargets/t97A04Closure.lean",
       :exit 0}
+     {:cmd "closure no-sorry scan", :exit 0}
      {:cmd "lake env lean problems/t97A04/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "closure no-sorry scan", :exit 0}
-     {:cmd "comment-stripped Main placeholder count",
-      :exit 0,
-      :output "2"}
-     {:cmd "git show --check 8ac5066de 8e4ffac03", :exit 0}],
-    :diagnostic-history
-    [{:cmd "lake env lean ConstructionTargets/t97A04Closure.lean",
-      :exit 1,
-      :finding
-      "Exploration corrected association and private-functor elaboration; final rerun passed."}],
-    :continue-from "Prove blueprint B6 only.",
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791721854025-5338-c953ed3b",
-     :commands
-     ["git show/check/diff-tree 8ac5066de,8e4ffac03"
-      "lake env lean ConstructionTargets/t97A04Closure.lean"
-      "lake env lean problems/t97A04/lean/Main.lean"
-      "statement-registry check/fingerprint and placeholder counts"],
-     :finding
-     "PASS: topo-6 committed new B5 progress after history job 6. Scope is exactly closure+blueprint; blobs match 0557a971/c419a895. shearY_productionUnionMap correctly transports the union endpoint through the Boolean-small/production isomorphism and identifies it with singular postcomposition. Closure compiles sorry-free with standard axioms; Main compiles with unchanged 2 placeholders. Registry is 131/0 and frozen statement SHA-256 remains ca1b2cb3c6594276811618321d5c0604c2f38fc4594a6b21ae161a711a923a34. B6-B11 are listed."},
-    :commit "8e4ffac03b94225a189962c90fa969e8e1fff8fe",
-    :changed-paths
-    ["ConstructionTargets/t97A04Closure.lean"
-     "ConstructionTargets/t97A04Closure.blueprint.md"],
+     {:cmd "Main placeholder count", :exit 0, :output "2"}
+     {:cmd "git show --check 67c54b45f", :exit 0}],
+    :diagnostic-history [],
+    :continue-from
+    "Prove circle H1 degree a on both overlap components.",
+    :commit "67c54b45fa96fe6870a461cdc6b9d35ecc6f9547",
+    :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
     :finding
-    "B5 proved: the union endpoint equals shear postcomposition on production homology.",
-    :milestone-commit "8ac5066deb2d78e47ac00e5a13fa8a7b3b932d86",
+    "Compiled the overlap H1 coordinate, restricted shear, and scalar normal form.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79549,4 +79532,43 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-t97a04closure-shearyshortcomplexhom],
+   :other-consumers []}
+  {:consumer :t97A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T97A04Closure.shearY_overlap_coordinate",
+    :type
+    "overlap-coordinate conjugate of productionIntersectionMap (shearYShortComplexHom a b) 1 equals overlapScalar a"},
+   :lemma
+   {:name
+    "ConstructionTargets.T97A04Closure.shearY_overlap_coordinate",
+    :reported-by [:program-2026-10-11-close-t97a04],
+    :type
+    "overlap-coordinate conjugate of productionIntersectionMap (shearYShortComplexHom a b) 1 equals overlapScalar a",
+    :area "mv-connecting-naturality"},
+   :id
+   :lemma-constructiontargets-t97a04closure-sheary-overlap-coordinate,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t97a04closure-frozenoverlaph1isointbiprod
+    :lemma-constructiontargets-t97a04closure-shearyshortcomplexhom],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T97A04Closure.frozenOverlapH1IsoIntBiprod"},
+   :lemma
+   {:name
+    "ConstructionTargets.T97A04Closure.frozenOverlapH1IsoIntBiprod",
+    :reported-by []},
+   :id
+   :lemma-constructiontargets-t97a04closure-frozenoverlaph1isointbiprod,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}]}
