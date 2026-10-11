@@ -4043,8 +4043,85 @@
   {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-integralrelativehomologycomparison-generator-of-normalization,
+   :evidence
+   {:placeholder-delta {:source 0, :fixture 0},
+    :residual
+    "Prove the displayed coefficient-to-production normalization square itself by naturality of the integral relative comparison through the chart, translation, neighborhood-inclusion, connecting, radial-normalization, and sphere-normalization maps.",
+    :gates
+    {:module-build :pass,
+     :exact-declaration-type :pass,
+     :standard-axioms-only :pass,
+     :ambient-normalization-injective :pass,
+     :both-normalizations-reused :pass,
+     :exact-scope :pass,
+     :statement-registry :pass,
+     :zero-placeholders :pass,
+     :clean-tree :pass,
+     :fixture-compiles :pass,
+     :compatibility-square-explicit :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["lake build replayed pre-existing warnings from dependency modules; the target module emitted informational axiom reports and no warnings"],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparison_generator_of_normalization",
+      :type
+      "The integral relative homology comparison transports the coefficient chart generator to the production ambient generator when the displayed concrete normalization square commutes.",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on
+      ["ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization_generator"
+       "ConstructionTargets.CoefficientChartLocal.generator_normalization"],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-10",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/manifold_fundamental_class_generator_transport_of_normalization.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/manifold_fundamental_class_generator_transport_of_normalization.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^\\s*axiom\\b' ConstructionTargets/ManifoldFundamentalClass.lean /tmp/manifold_fundamental_class_generator_transport_of_normalization.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git status --porcelain", :exit 0, :stdout ""}],
+    :commit "442371d7fdaea5f68f83fdd7b65443b966ea2b4a",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path
+     "/tmp/manifold_fundamental_class_generator_transport_of_normalization.lean",
+     :sha256
+     "e350d6dc2438ba5460924ad50e2ab4c193d6aff1eb3c95377227b002f07d304a",
+     :original-sha256
+     "d5359c9744299bc3a39c9abe1b21ef1a49642bfa8af2173c318b83208dd20480",
+     :sorry-count 0},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :declaration
+     "ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparison_generator_of_normalization",
+     :representation
+     {:source
+      "The coefficient chart generator in forgotten ModuleCat Int relative homology, together with the explicit coefficient local normalization",
+      :target
+      "The production ambientLocalGenerator in AddCommGrpCat relative homology, together with ambientLocalNormalization",
+      :direction
+      "Exact generator equality from the coefficient-relative representation to the production ambient representation, conditional only on the displayed equality of their two concrete normalization composites"}},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/generator-transport-from-normalization-square",
@@ -6521,18 +6598,37 @@
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparison_generator_of_normalization",
     :reported-by
-    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+     :routes-2026-10-11-manifold-generator-transport-of-normalization-topo3-r1],
     :type
     "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), ((integralRelativeHomologyComparison (deletedPoint x) (k+2)).hom ≫ (ambientLocalNormalization k x).hom = forgetIntModules.map (CoefficientChartLocal.localIso Int k x).hom) -> (integralRelativeHomologyComparison (deletedPoint x) (k+2)).hom.hom (CoefficientChartLocal.generator Int k x) = HigherChartLocalGenerator.ambientLocalGenerator (k := k) x",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in
+    :routes-2026-10-11-manifold-generator-transport-of-normalization-topo3-r1},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-integralrelativehomologycomparison-generator-of-normalization,
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-manifoldfundamentalclass-integralrelativehomologycomparison
-    :lemma-constructiontargets-manifoldfundamentalclass-ambientlocalnormalization-generator],
-   :other-consumers [:t98A02]}],
+    :lemma-constructiontargets-manifoldfundamentalclass-ambientlocalnormalization-generator
+    :lemma-constructiontargets-coefficientchartlocal-generator-normalization],
+   :other-consumers [:t98A02]}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.CoefficientChartLocal.generator_normalization"},
+   :lemma
+   {:name
+    "ConstructionTargets.CoefficientChartLocal.generator_normalization",
+    :reported-by []},
+   :id
+   :lemma-constructiontargets-coefficientchartlocal-generator-normalization,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}],
  :consumer-baselines {},
  :statuses
  #{:open
