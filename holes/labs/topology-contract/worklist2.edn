@@ -71527,56 +71527,74 @@
      "ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularComplexInterpolation",
      :type "unitInterval × RightTubeMinusLeftCore → ℂ"}],
    :evidence
-   {:probe
-    {:residual
-     "Construct an endpoint-fixed continuous perturbation avoiding this locus, prove it nonzero, normalize it to Circle, and invoke the banked ambient reconstruction adapter.",
-     :outcome :go,
-     :warnings [],
-     :axioms [propext Classical.choice Quot.sound],
-     :commands
-     [{:cmd
-       "lake env lean /tmp/t02a03_coupled_angular_zero_locus_probe.lean",
-       :exit 0,
-       :output
-       "coupledAngularComplexInterpolation_eq_zero_iff compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "sha256sum /tmp/t02a03_coupled_angular_zero_locus_probe.lean",
-       :exit 0,
-       :output
-       "81006fd79ef96b16f6c391b31982a66c361c77c33e1cb5995b2ec494f6cd92d7  /tmp/t02a03_coupled_angular_zero_locus_probe.lean"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_coupled_angular_zero_locus_probe.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}
-      {:cmd
-       "rg -n 'coupledAngularComplexInterpolation_eq_zero_iff' /tmp/t02a03_coupled_angular_zero_locus_probe.lean",
-       :exit 0,
-       :output
-       "10:theorem coupledAngularComplexInterpolation_eq_zero_iff\n33:#print axioms coupledAngularComplexInterpolation_eq_zero_iff"}],
-     :fixture
-     {:path "/tmp/t02a03_coupled_angular_zero_locus_probe.lean",
-      :sha256
-      "81006fd79ef96b16f6c391b31982a66c361c77c33e1cb5995b2ec494f6cd92d7"},
-     :finding
-     "The exact zero locus is the simultaneous real-slice condition: the endpoint core-planar coordinate has zero imaginary part and the affine real coordinate vanishes. The proof also rules out the spurious time-zero alternative before extracting the endpoint imaginary equation.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
-      :declaration
-      "ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularComplexInterpolation_eq_zero_iff",
-      :supporting-declarations
-      [{:name
-        "ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularComplexInterpolation",
-        :type "unitInterval × RightTubeMinusLeftCore → ℂ"}],
-      :type
-      "∀ tp : unitInterval × RightTubeMinusLeftCore, coupledAngularComplexInterpolation tp = 0 ↔ (rightTubeCorePlanarComplex tp.2.1).im = 0 ∧ 1 - (tp.1 : ℝ) + (tp.1 : ℝ) * (rightTubeCorePlanarComplex tp.2.1).re = 0"},
-     :seat "topo-8"}},
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Use the exact zero-locus equations and deleted-tube coordinates to choose a continuous perturbation supported away from both endpoints, prove the perturbed complex path nonzero, normalize it, and invoke the ambient adapter.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["Pre-existing unnecessarySimpa linter warning at ConstructionTargets/T02A03GeometricTubeDeformation.lean:62:6."
+     "The canonical .lake/packages symlink invariant check failed because this checkout has a real package directory."],
+    :missing-theorems [],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not",
+     :construction-file-git-blob
+     "616a1ab43ad4e507975b26c33d2d1dcf33652233",
+     :fixture-sha256
+     "81006fd79ef96b16f6c391b31982a66c361c77c33e1cb5995b2ec494f6cd92d7"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/t02a03_coupled_angular_zero_locus_probe.lean",
+      :exit 0,
+      :output
+      "81006fd79ef96b16f6c391b31982a66c361c77c33e1cb5995b2ec494f6cd92d7  /tmp/t02a03_coupled_angular_zero_locus_probe.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/t02a03_coupled_angular_zero_locus_probe.lean",
+      :exit 0,
+      :output
+      "coupledAngularComplexInterpolation_eq_zero_iff axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "git diff --check -- ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd
+      "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "git show --format= --unified=0 HEAD -- ConstructionTargets/T02A03GeometricTubeDeformation.lean | rg '^\\+.*(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' --pcre2",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git show --check --oneline HEAD",
+      :exit 0,
+      :output "df10481b3 Characterize t02A03 angular zero locus"}
+     {:cmd "git status --porcelain", :exit 0}],
+    :diagnostic-history
+    [{:cmd
+      "test -L .lake/packages && test \"$(readlink -f .lake/packages)\" = /home/joe/code/apm-lean/.lake/packages",
+      :exit 1,
+      :explanation
+      ".lake/packages is a real directory rather than the required canonical symlink; no package state was modified and compilation succeeded on the existing substrate."}],
+    :commit "df10481b3acac74381de22f52e9b76d5db43bf3b",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+    :fixture
+    {:path "/tmp/t02a03_coupled_angular_zero_locus_probe.lean",
+     :sha256
+     "81006fd79ef96b16f6c391b31982a66c361c77c33e1cb5995b2ec494f6cd92d7"},
+    :finding
+    "The named affine interpolation vanishes exactly when the endpoint core-planar coordinate has zero imaginary part and its affine real coordinate vanishes; the proof rules out the spurious time-zero alternative.",
+    :seat "topo-6"},
    :phase :implementation,
    :type
    "∀ tp : unitInterval × RightTubeMinusLeftCore, coupledAngularComplexInterpolation tp = 0 ↔ (rightTubeCorePlanarComplex tp.2.1).im = 0 ∧ 1 - (tp.1 : ℝ) + (tp.1 : ℝ) * (rightTubeCorePlanarComplex tp.2.1).re = 0",
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/coupled-angular-interpolation-zero-locus",
