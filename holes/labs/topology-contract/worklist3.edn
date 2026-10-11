@@ -10784,6 +10784,23 @@
      "A named seven-factor composite exposing the coefficient projection, neighborhood inclusion inverse, source transport inverse, pointed-chart homology map, target transport, punctured-neighborhood inclusion map, and coefficient model normalization",
      :direction
      "Definitional morphism equality from the projected packaged coefficient normalization to its ordered seven-factor chart-and-model representation"},
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791703447146-4608-72c48dd1",
+     :commands
+     ["rg ledger row and frozen contract"
+      "git show and git diff-tree recorded commit"
+      "git blob identity and git diff --check"
+      "sha256sum frozen fixture"
+      "lake env lean collision-renamed frozen-fixture replay"
+      "lake env lean target module"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"
+      "python3 scripts/statement-registry.py check"
+      "placeholder and axiom scan"
+      "consumer placeholder census"],
+     :finding
+     "PASS: independent review of commit a7be9a2d; scope is exactly ConstructionTargets/ManifoldFundamentalClass.lean and the recorded blob matches the checkout; fixture SHA-256 and registered statement hash match; the supporting definition exposes the ordered seven factors and the frozen theorem has the required packaged-to-expanded orientation, proved definitionally without prohibited projection cancellation, chart comparison, model-isomorphism expansion, sign reasoning, or fundamental-class construction; fixture replay, module check, and 8326-job build pass; axioms are exactly propext, Classical.choice, Quot.sound; registry is 131/0; target placeholders are 0 and consumer counts remain 1/1."},
     :commit "a7be9a2db5b66d4f7114e91680d154f6166a7cce",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -10802,7 +10819,7 @@
     :routes-2026-10-11-manifold-coefficient-projected-forward-topo3-r1,
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/coefficient-projected-forward-factorization",
@@ -10999,7 +11016,7 @@
      "The projected coefficient endpoint has a compiled definitional seven-factor representation. This exposes exactly the prefix that must be aligned with the production singular comparison, relative projection, and ambient chart inverse; after that cancellation, only the coefficient versus production connecting/radial/sphere model normalization remains before negation can be excluded.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -14777,7 +14794,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -14794,7 +14811,10 @@
     "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (CoefficientChartLocal.E k) M] (x : M), forgetIntModules.map (HomologicalComplex.homologyMap (cokernel.π (CoefficientRelativeSmall.subspaceMap Int (deletedPoint x))) (k + 2)) ≫ forgetIntModules.map (coefficientLocalForwardComposite k x) = coefficientProjectedForwardComposite k x",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-coefficient-projected-forward-topo3-r1},
+    :routes-2026-10-11-manifold-coefficient-projected-forward-topo3-r1,
+    :banked-by
+    :routes-2026-10-11-manifold-coefficient-projected-forward-topo3-r1,
+    :banked-commit "a7be9a2db5b66d4f7114e91680d154f6166a7cce"},
    :id :lemma-mfclass-coefficient-projected-forward,
    :kind :lemma,
    :depends-on
@@ -14802,7 +14822,7 @@
    :other-consumers [:t98A02]}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -14810,7 +14830,9 @@
    :lemma
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.coefficientLocalForwardComposite",
-    :reported-by []},
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/ManifoldFundamentalClass.lean"]},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-coefficientlocalforwardcomposite,
    :kind :lemma,
