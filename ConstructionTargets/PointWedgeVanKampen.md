@@ -180,3 +180,11 @@ wedge.  Unfolding the complete B3 inverse proves that this global functor is
 exactly `genericPointWedgeInverseIdentityFunctor`.  The remaining B6 step is
 the restriction computation identifying its maps on the two literal wedge
 legs with the corresponding pseudococone component maps.
+
+That restriction boundary is now explicit on both pieces.
+`genericPointWedgeIdentityGlobalLeftRestrictionIso` and its right analogue
+are the two components of the pseudopushout equivalence's counit, and the two
+`_naturality` theorems give their exact conjugacy equations on arbitrary
+cover-piece morphisms.  Thus B6 is reduced to computing these counit
+components at the chosen wedge-point representatives and then applying the
+already-proved actual-span generator formulas.

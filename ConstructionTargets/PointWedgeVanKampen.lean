@@ -432,16 +432,24 @@ def genericPointWedgeIdentityPseudoCocone :
       (genericPointWedgeIdentityActualSpan
         x₀ y₀ M N hM hN hy hx cM cN)
 
+def genericPointWedgeOpenCoverEquivalence (C : Type) [Category C] :
+    (FundamentalGroupoid (Wedge x₀ y₀) ⥤ C) ≌
+      PseudoFunctorCocone (X := Wedge x₀ y₀)
+        (U := genericLeftOpen x₀ y₀ M)
+        (V := genericRightOpen x₀ y₀ N) (C := C) :=
+  twoOpenFundamentalGroupoidPseudopushoutEquivalence
+    (genericPointWedgePackage x₀ y₀ M N hM hN hy hx cM cN).leftOpen_isOpen
+    (genericPointWedgePackage x₀ y₀ M N hM hN hy hx cM cN).rightOpen_isOpen
+    (genericPointWedgePackage x₀ y₀ M N hM hN hy hx cM cN).union_eq_univ
+
 /-- The final inverse stage of B3: gluing the literal open-cover
 pseudococone back to a functor on the wedge. -/
 def genericPointWedgeIdentityGlobalFunctor :
     FundamentalGroupoid (Wedge x₀ y₀) ⥤
       SingleObj (genericPointWedgeFreeProduct x₀ y₀) :=
-  (twoOpenFundamentalGroupoidPseudopushoutEquivalence
-    (C := SingleObj (genericPointWedgeFreeProduct x₀ y₀))
-    (genericPointWedgePackage x₀ y₀ M N hM hN hy hx cM cN).leftOpen_isOpen
-    (genericPointWedgePackage x₀ y₀ M N hM hN hy hx cM cN).rightOpen_isOpen
-    (genericPointWedgePackage x₀ y₀ M N hM hN hy hx cM cN).union_eq_univ).inverse.obj
+  (genericPointWedgeOpenCoverEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN
+    (SingleObj (genericPointWedgeFreeProduct x₀ y₀))).inverse.obj
       (genericPointWedgeIdentityPseudoCocone
         x₀ y₀ M N hM hN hy hx cM cN)
 
@@ -456,6 +464,99 @@ def genericPointWedgeIdentityGlobalFunctor :
       x₀ y₀ M N hM hN hy hx cM cN).right =
       (genericPointWedgeIdentityActualSpan
         x₀ y₀ M N hM hN hy hx cM cN).right := rfl
+
+/-- The exact counit comparison between the restriction of the reconstructed
+global functor and the supplied left cover-piece functor. -/
+def genericPointWedgeIdentityGlobalLeftRestrictionIso :
+    FundamentalGroupoid.map (TwoOpenDescentRestriction.coverPieceInclusion
+      (U := genericLeftOpen x₀ y₀ M)
+      (V := genericRightOpen x₀ y₀ N) true) ⋙
+        genericPointWedgeIdentityGlobalFunctor
+          x₀ y₀ M N hM hN hy hx cM cN ≅
+      (genericPointWedgeIdentityActualSpan
+        x₀ y₀ M N hM hN hy hx cM cN).left := by
+  let e := genericPointWedgeOpenCoverEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN
+    (SingleObj (genericPointWedgeFreeProduct x₀ y₀))
+  let P := genericPointWedgeIdentityPseudoCocone
+    x₀ y₀ M N hM hN hy hx cM cN
+  exact
+    { hom := (e.counitIso.app P).hom.left
+      inv := (e.counitIso.app P).inv.left
+      hom_inv_id := by
+        have h := congrArg (fun q => q.left) (e.counitIso.app P).hom_inv_id
+        change (e.counitIso.app P).hom.left ≫
+          (e.counitIso.app P).inv.left = 𝟙 _ at h
+        exact h
+      inv_hom_id := by
+        have h := congrArg (fun q => q.left) (e.counitIso.app P).inv_hom_id
+        change (e.counitIso.app P).inv.left ≫
+          (e.counitIso.app P).hom.left = 𝟙 _ at h
+        exact h }
+
+/-- The corresponding counit comparison on the right cover piece. -/
+def genericPointWedgeIdentityGlobalRightRestrictionIso :
+    FundamentalGroupoid.map (TwoOpenDescentRestriction.coverPieceInclusion
+      (U := genericLeftOpen x₀ y₀ M)
+      (V := genericRightOpen x₀ y₀ N) false) ⋙
+        genericPointWedgeIdentityGlobalFunctor
+          x₀ y₀ M N hM hN hy hx cM cN ≅
+      (genericPointWedgeIdentityActualSpan
+        x₀ y₀ M N hM hN hy hx cM cN).right := by
+  let e := genericPointWedgeOpenCoverEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN
+    (SingleObj (genericPointWedgeFreeProduct x₀ y₀))
+  let P := genericPointWedgeIdentityPseudoCocone
+    x₀ y₀ M N hM hN hy hx cM cN
+  exact
+    { hom := (e.counitIso.app P).hom.right
+      inv := (e.counitIso.app P).inv.right
+      hom_inv_id := by
+        have h := congrArg (fun q => q.right) (e.counitIso.app P).hom_inv_id
+        change (e.counitIso.app P).hom.right ≫
+          (e.counitIso.app P).inv.right = 𝟙 _ at h
+        exact h
+      inv_hom_id := by
+        have h := congrArg (fun q => q.right) (e.counitIso.app P).inv_hom_id
+        change (e.counitIso.app P).inv.right ≫
+          (e.counitIso.app P).hom.right = 𝟙 _ at h
+        exact h }
+
+theorem genericPointWedgeIdentityGlobalLeftRestriction_naturality
+    {a b : FundamentalGroupoid (genericPointWedgeLeftPiece x₀ y₀ M)}
+    (f : a ⟶ b) :
+    (genericPointWedgeIdentityGlobalFunctor
+        x₀ y₀ M N hM hN hy hx cM cN).map
+          ((FundamentalGroupoid.map
+            (TwoOpenDescentRestriction.coverPieceInclusion
+              (U := genericLeftOpen x₀ y₀ M)
+              (V := genericRightOpen x₀ y₀ N) true)).map f) ≫
+      (genericPointWedgeIdentityGlobalLeftRestrictionIso
+        x₀ y₀ M N hM hN hy hx cM cN).hom.app b =
+    (genericPointWedgeIdentityGlobalLeftRestrictionIso
+        x₀ y₀ M N hM hN hy hx cM cN).hom.app a ≫
+      (genericPointWedgeIdentityActualSpan
+        x₀ y₀ M N hM hN hy hx cM cN).left.map f :=
+  (genericPointWedgeIdentityGlobalLeftRestrictionIso
+    x₀ y₀ M N hM hN hy hx cM cN).hom.naturality f
+
+theorem genericPointWedgeIdentityGlobalRightRestriction_naturality
+    {a b : FundamentalGroupoid (genericPointWedgeRightPiece x₀ y₀ N)}
+    (f : a ⟶ b) :
+    (genericPointWedgeIdentityGlobalFunctor
+        x₀ y₀ M N hM hN hy hx cM cN).map
+          ((FundamentalGroupoid.map
+            (TwoOpenDescentRestriction.coverPieceInclusion
+              (U := genericLeftOpen x₀ y₀ M)
+              (V := genericRightOpen x₀ y₀ N) false)).map f) ≫
+      (genericPointWedgeIdentityGlobalRightRestrictionIso
+        x₀ y₀ M N hM hN hy hx cM cN).hom.app b =
+    (genericPointWedgeIdentityGlobalRightRestrictionIso
+        x₀ y₀ M N hM hN hy hx cM cN).hom.app a ≫
+      (genericPointWedgeIdentityActualSpan
+        x₀ y₀ M N hM hN hy hx cM cN).right.map f :=
+  (genericPointWedgeIdentityGlobalRightRestrictionIso
+    x₀ y₀ M N hM hN hy hx cM cN).hom.naturality f
 
 omit [PathConnectedSpace X] [PathConnectedSpace Y] in
 @[simp] theorem genericPointWedgeIdentityRepresentation_inl
@@ -1398,7 +1499,12 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeIdentityCoordinateSpan
 #print axioms genericPointWedgeIdentityActualSpan
 #print axioms genericPointWedgeIdentityPseudoCocone
+#print axioms genericPointWedgeOpenCoverEquivalence
 #print axioms genericPointWedgeIdentityGlobalFunctor
+#print axioms genericPointWedgeIdentityGlobalLeftRestrictionIso
+#print axioms genericPointWedgeIdentityGlobalRightRestrictionIso
+#print axioms genericPointWedgeIdentityGlobalLeftRestriction_naturality
+#print axioms genericPointWedgeIdentityGlobalRightRestriction_naturality
 #print axioms genericPointWedgeIdentityRepresentation_inl
 #print axioms genericPointWedgeIdentityRepresentation_inr
 #print axioms genericPointWedgeIdentityPointSpan_left
