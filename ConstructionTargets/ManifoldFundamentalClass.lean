@@ -851,6 +851,51 @@ theorem integralRelativeHomologyComparisonWithTransport_generator_eq_zsmul
   unfold correctedLocalGeneratorCoefficient
   rw [map_zsmul, ambientLocalNormalization_generator, smul_eq_mul, mul_one]
 
+/-- The corrected comparison conjugated by the coefficient and ambient
+normalizations, as an automorphism of the additive group of integers. -/
+noncomputable def correctedLocalNormalizationAutomorphism
+    (k : ℕ) {M : Type} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M) :
+    AddCommGrpCat.of ℤ ≅ AddCommGrpCat.of ℤ :=
+  (forgetIntModules.mapIso (CoefficientChartLocal.localIso ℤ k x)).symm ≪≫
+    integralRelativeHomologyComparisonWithTransport (deletedPoint x) (k + 2) ≪≫
+    ambientLocalNormalization k x
+
+/-- The integer unit canonically induced by the corrected local normalization
+automorphism. -/
+noncomputable def correctedLocalGeneratorUnit
+    (k : ℕ) {M : Type} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M) : ℤˣ :=
+  CoefficientChartTransitionUnit.isoUnit ℤ
+    (moduleIsoOfUnderlyingIso (correctedLocalNormalizationAutomorphism k x))
+
+/-- The corrected local-generator coefficient is the integer underlying the
+unit of its normalization-conjugated automorphism. -/
+theorem correctedLocalGeneratorCoefficient_eq_unit
+    (k : ℕ) {M : Type} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M) :
+    correctedLocalGeneratorCoefficient k x =
+      (correctedLocalGeneratorUnit k x : ℤ) := by
+  unfold correctedLocalGeneratorUnit
+  let e := correctedLocalNormalizationAutomorphism k x
+  let em : ModuleCat.of ℤ ℤ ≅ ModuleCat.of ℤ ℤ := moduleIsoOfUnderlyingIso e
+  have hmap : forgetIntModules.map em.hom = e.hom := by
+    dsimp [em, moduleIsoOfUnderlyingIso]
+    exact forgetIntModules.map_preimage
+      (X := ModuleCat.of ℤ ℤ) (Y := ModuleCat.of ℤ ℤ) e.hom
+  have happ := ConcreteCategory.congr_hom hmap (1 : ℤ)
+  calc
+    correctedLocalGeneratorCoefficient k x = e.hom.hom 1 := by
+      unfold correctedLocalGeneratorCoefficient
+        CoefficientChartLocal.generator
+      dsimp [e, correctedLocalNormalizationAutomorphism]
+      rfl
+    _ = em.hom.hom 1 := happ.symm
+    _ = (CoefficientChartTransitionUnit.isoUnit ℤ
+        em : ℤ) * 1 :=
+      CoefficientChartTransitionUnit.isoUnit_action ℤ _ 1
+    _ = _ := mul_one _
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -903,3 +948,6 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
 #print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_eq_zsmul
+#print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism
+#print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorUnit
+#print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient_eq_unit
