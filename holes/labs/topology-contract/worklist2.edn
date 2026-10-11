@@ -79336,11 +79336,23 @@
       :exit 1,
       :finding
       "Generic coordinate composition timed out; retained factors."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791752510543-5880-0e8f04ec",
+     :commands
+     ["git show/diff/check 2e3b1711"
+      "lake env lean ConstructionTargets/t97A04Closure.lean"
+      "lake env lean problems/t97A04/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "fingerprint, placeholders, ancestry, fixture, blueprint checks"],
+     :finding
+     "PASS: 2e3b1711 is new after history 6888a8a6; its sole changed path is scoped and closure/blueprint blobs match. Pointwise algebra verifies lowerShear = swap after shearY(1,-1) after swap and frozenLbar = shearY(3,1) after lowerShear, with ContinuousMap.comp oriented correctly for B9. Lean gates pass with standard axioms; registry 131/0; frozen hash ca1b2cb3c6594276811618321d5c0604c2f38fc4594a6b21ae161a711a923a34 unchanged; closure/Main placeholders 0/2. This is new compiled progress; specialize homology composition, finish B9, then B10-B11 remain listed."},
     :commit "2e3b1711b2b8c4fb424157c63690c69b18be4de9",
     :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79356,7 +79368,7 @@
     ["lake env lean problems/t97A04/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: :program-milestone-complete",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: :program-progress-committed",
    :id :program-2026-10-11-close-t97a04,
    :kind :final-adapter,
    :campaign-priority 43,
@@ -79472,7 +79484,10 @@
      :reason :program-progress-committed}
     {:job 1,
      :commit "6888a8a6c97535d970505577fad7fc9ddd0d168a",
-     :reason :program-milestone-complete}]}
+     :reason :program-milestone-complete}
+    {:job 2,
+     :commit "2e3b1711b2b8c4fb424157c63690c69b18be4de9",
+     :reason :program-progress-committed}]}
   {:consumer :t96A07,
    :stop-count 4,
    :evidence
@@ -80860,7 +80875,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -80871,7 +80886,9 @@
     :reported-by [:program-2026-10-11-close-t97a04],
     :type "lowerShear=swap∘shearY(1,-1)∘swap",
     :area "mv-connecting-naturality",
-    :proved-in :program-2026-10-11-close-t97a04},
+    :proved-in :program-2026-10-11-close-t97a04,
+    :banked-by :program-2026-10-11-close-t97a04,
+    :banked-commit "2e3b1711b2b8c4fb424157c63690c69b18be4de9"},
    :id
    :lemma-constructiontargets-t97a04closure-lowershear-factorization,
    :kind :lemma,
@@ -80880,7 +80897,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -80891,7 +80908,9 @@
     :reported-by [:program-2026-10-11-close-t97a04],
     :type "frozenLbar=shearY(3,1)∘lowerShear",
     :area "mv-connecting-naturality",
-    :proved-in :program-2026-10-11-close-t97a04},
+    :proved-in :program-2026-10-11-close-t97a04,
+    :banked-by :program-2026-10-11-close-t97a04,
+    :banked-commit "2e3b1711b2b8c4fb424157c63690c69b18be4de9"},
    :id
    :lemma-constructiontargets-t97a04closure-frozenlbar-factorization,
    :kind :lemma,
