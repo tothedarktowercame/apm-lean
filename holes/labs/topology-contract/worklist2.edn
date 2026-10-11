@@ -71522,7 +71522,60 @@
   {:bounded-exception
    "single-consumer exact zero-locus characterization for the raw coupled angular interpolation",
    :consumer :t02A03,
-   :phase :probe,
+   :supporting-declarations
+   [{:name
+     "ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularComplexInterpolation",
+     :type "unitInterval × RightTubeMinusLeftCore → ℂ"}],
+   :evidence
+   {:probe
+    {:residual
+     "Construct an endpoint-fixed continuous perturbation avoiding this locus, prove it nonzero, normalize it to Circle, and invoke the banked ambient reconstruction adapter.",
+     :outcome :go,
+     :warnings [],
+     :axioms [propext Classical.choice Quot.sound],
+     :commands
+     [{:cmd
+       "lake env lean /tmp/t02a03_coupled_angular_zero_locus_probe.lean",
+       :exit 0,
+       :output
+       "coupledAngularComplexInterpolation_eq_zero_iff compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "sha256sum /tmp/t02a03_coupled_angular_zero_locus_probe.lean",
+       :exit 0,
+       :output
+       "81006fd79ef96b16f6c391b31982a66c361c77c33e1cb5995b2ec494f6cd92d7  /tmp/t02a03_coupled_angular_zero_locus_probe.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_coupled_angular_zero_locus_probe.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}
+      {:cmd
+       "rg -n 'coupledAngularComplexInterpolation_eq_zero_iff' /tmp/t02a03_coupled_angular_zero_locus_probe.lean",
+       :exit 0,
+       :output
+       "10:theorem coupledAngularComplexInterpolation_eq_zero_iff\n33:#print axioms coupledAngularComplexInterpolation_eq_zero_iff"}],
+     :fixture
+     {:path "/tmp/t02a03_coupled_angular_zero_locus_probe.lean",
+      :sha256
+      "81006fd79ef96b16f6c391b31982a66c361c77c33e1cb5995b2ec494f6cd92d7"},
+     :finding
+     "The exact zero locus is the simultaneous real-slice condition: the endpoint core-planar coordinate has zero imaginary part and the affine real coordinate vanishes. The proof also rules out the spurious time-zero alternative before extracting the endpoint imaginary equation.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+      :declaration
+      "ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularComplexInterpolation_eq_zero_iff",
+      :supporting-declarations
+      [{:name
+        "ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularComplexInterpolation",
+        :type "unitInterval × RightTubeMinusLeftCore → ℂ"}],
+      :type
+      "∀ tp : unitInterval × RightTubeMinusLeftCore, coupledAngularComplexInterpolation tp = 0 ↔ (rightTubeCorePlanarComplex tp.2.1).im = 0 ∧ 1 - (tp.1 : ℝ) + (tp.1 : ℝ) * (rightTubeCorePlanarComplex tp.2.1).re = 0"},
+     :seat "topo-8"}},
+   :phase :implementation,
+   :type
+   "∀ tp : unitInterval × RightTubeMinusLeftCore, coupledAngularComplexInterpolation tp = 0 ↔ (rightTubeCorePlanarComplex tp.2.1).im = 0 ∧ 1 - (tp.1 : ℝ) + (tp.1 : ℝ) * (rightTubeCorePlanarComplex tp.2.1).re = 0",
    :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
@@ -71541,6 +71594,8 @@
    :routes-2026-10-11-t02a03-coupled-angular-interpolation-zero-locus-topo2-r1,
    :kind :reusable-theorem,
    :area "explicit-r3-tube-deformation-retraction",
+   :declaration
+   "ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularComplexInterpolation_eq_zero_iff",
    :depends-on
    [:routes-2026-10-11-t02a03-coupled-angular-complex-interpolation-topo2-r1],
    :current-residual
