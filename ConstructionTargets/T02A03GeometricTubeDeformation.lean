@@ -1181,6 +1181,16 @@ theorem nonzeroHeight_im_ne_zero_rightTubeCoreNormalInterpolation
   rw [him]
   exact mul_ne_zero hcoeff.ne' hheight
 
+theorem nonzeroHeight_avoidsLeftCore_rightTubeCoreRadialAmbient
+    (tp : unitInterval × RightTubeMinusLeftCore)
+    (hheight : tp.2.1 2 ≠ 0) :
+    rightTubeCorePolarReconstruction
+        (rightTubeCoreAngularCoordinate tp.2)
+        (rightTubeCoreNormalInterpolation rightTubeMeridianCoordinate tp) ∉
+      Set.range apm_t02a03_leftCore := by
+  apply reconstructionAvoidsLeftCore_rightTubeCorePolar_of_im_ne_zero
+  exact nonzeroHeight_im_ne_zero_rightTubeCoreNormalInterpolation tp hheight
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -1223,3 +1233,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.collisionEndpoint_positiveFactor_signBridge
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeMeridianCoordinate_im_positiveFactor_height
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.nonzeroHeight_im_ne_zero_rightTubeCoreNormalInterpolation
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.nonzeroHeight_avoidsLeftCore_rightTubeCoreRadialAmbient
