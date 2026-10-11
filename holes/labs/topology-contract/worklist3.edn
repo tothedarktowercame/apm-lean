@@ -4996,8 +4996,83 @@
   {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-cokernelprojection-comp-relativesingularchainsiso-inv,
+   :evidence
+   {:placeholder-delta {:source 0, :fixture 0},
+    :residual
+    "Postcompose integralCompositeCokernelComparison_projection with the inverse production presentation and rewrite with this theorem, obtaining the absolute-to-production-relative projection square; then apply homology and propagate the square through the normalization chain.",
+    :gates
+    {:exact-type :pass,
+     :module-build :pass,
+     :module-compile :pass,
+     :clean-worktree :pass,
+     :exact-scope :pass,
+     :statement-registry :pass,
+     :zero-placeholders :pass,
+     :boundary-only :pass,
+     :production-iso-cancelled :pass,
+     :fixture-compile :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["lake build replayed pre-existing dependency warnings only"],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.ManifoldFundamentalClass.cokernelProjection_comp_relativeSingularChainsIso_inv",
+      :type
+      "forall {X : Type} [TopologicalSpace X] (A : Set X), cokernel.π (singularSubspaceMap A) ≫ (relativeSingularChainsIsoCokernelSubspaceMap A).inv = relativeSingularProjection A",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on
+      ["ConstructionTargets.SingularHomologyConcrete.relativeProjection_comp_cokernelIso_hom"],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :topo-10,
+    :commands
+    [{:cmd
+      "sha256sum /tmp/manifold_fundamental_class_production_cokernel_projection.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/manifold_fundamental_class_production_cokernel_projection.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^\\s*axiom\\b' ConstructionTargets/ManifoldFundamentalClass.lean /tmp/manifold_fundamental_class_production_cokernel_projection.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git status --porcelain", :exit 0}],
+    :diagnostic-history [],
+    :commit "f7bdb704577068982232b48b6382f7838247ef30",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path
+     "/tmp/manifold_fundamental_class_production_cokernel_projection.lean",
+     :original-sha256
+     "043dee91208a85f36b3ec76b9fa9ab1f40dfef87169853905d4ba6e62463eab8",
+     :sha256
+     "60dc77470e03a29edef287e8a7b8e32384cf22f7fdd8c076f3394c506a11d9e2",
+     :placeholders 0},
+    :implementation
+    {:declaration
+     "ConstructionTargets.ManifoldFundamentalClass.cokernelProjection_comp_relativeSingularChainsIso_inv",
+     :representation
+     {:source
+      "The canonical projection to the direct cokernel of singularSubspaceMap followed by the inverse production cokernel-presentation isomorphism",
+      :target
+      "The production relativeSingularProjection from absolute SingularChains to RelativeSingularChains",
+      :direction
+      "Exact chain-map equality from the direct-cokernel projection representation to the production RelativeSingularChains projection representation, obtained by inverting relativeProjection_comp_cokernelIso_hom"}},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/production-cokernel-projection",
@@ -7683,17 +7758,20 @@
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.cokernelProjection_comp_relativeSingularChainsIso_inv",
     :reported-by
-    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+     :routes-2026-10-11-manifold-production-cokernel-projection-topo3-r1],
     :type
     "forall {X : Type} [TopologicalSpace X] (A : Set X), cokernel.π (singularSubspaceMap A) ≫ (relativeSingularChainsIsoCokernelSubspaceMap A).inv = relativeSingularProjection A",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in
+    :routes-2026-10-11-manifold-production-cokernel-projection-topo3-r1},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-cokernelprojection-comp-relativesingularchainsiso-inv,
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-manifoldfundamentalclass-integralcompositecokernelcomparison-projection
-    :lemma-constructiontargets-singularexcision-relativeprojection-comp-cokerneliso-hom],
+    :lemma-constructiontargets-singularexcision-relativeprojection-comp-cokerneliso-hom
+    :lemma-constructiontargets-singularhomologyconcrete-relativeprojection-comp-cokerneliso],
    :other-consumers [:t98A02]}
   {:consumer :portfolio,
    :phase :lemma,
@@ -7708,6 +7786,22 @@
     :reported-by []},
    :id
    :lemma-constructiontargets-singularexcision-relativeprojection-comp-cokerneliso-hom,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SingularHomologyConcrete.relativeProjection_comp_cokernelIso_hom"},
+   :lemma
+   {:name
+    "ConstructionTargets.SingularHomologyConcrete.relativeProjection_comp_cokernelIso_hom",
+    :reported-by []},
+   :id
+   :lemma-constructiontargets-singularhomologyconcrete-relativeprojection-comp-cokerneliso,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}],
