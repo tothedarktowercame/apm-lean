@@ -11246,7 +11246,8 @@
    :lemma
    {:name
     "ConstructionTargets.IntegralSingularHomologyComparison.moduleIsoOfUnderlyingIso",
-    :reported-by []},
+    :reported-by [],
+    :area "manifold-fundamental-class"},
    :id
    :lemma-constructiontargets-integralsingularhomologycomparison-moduleisoofunderlyingiso,
    :kind :lemma,
@@ -11262,7 +11263,8 @@
    :lemma
    {:name
     "ConstructionTargets.CoefficientChartTransitionUnit.isoUnit_action",
-    :reported-by []},
+    :reported-by [],
+    :area "manifold-fundamental-class"},
    :id
    :lemma-constructiontargets-coefficientcharttransitionunit-isounit-action,
    :kind :lemma,
@@ -11278,7 +11280,8 @@
    :lemma
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient",
-    :reported-by []},
+    :reported-by [],
+    :area "manifold-fundamental-class"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-correctedlocalgeneratorcoefficient,
    :kind :lemma,
@@ -11294,7 +11297,8 @@
    :lemma
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism",
-    :reported-by []},
+    :reported-by [],
+    :area "manifold-fundamental-class"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-correctedlocalnormalizationautomorp,
    :kind :lemma,
@@ -11310,7 +11314,8 @@
    :lemma
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorUnit",
-    :reported-by []},
+    :reported-by [],
+    :area "manifold-fundamental-class"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-correctedlocalgeneratorunit,
    :kind :lemma,
