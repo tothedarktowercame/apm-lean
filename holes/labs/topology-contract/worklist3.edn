@@ -5376,6 +5376,23 @@
       :expected-exit 1}
      {:cmd "git status --porcelain", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791685717275-3807-49fb9119",
+     :commands
+     ["git diff-tree recorded commit scope"
+      "git blob identity check"
+      "sha256sum promoted fixture"
+      "git diff --check recorded commit"
+      "lake env lean promoted fixture"
+      "lake env lean target module"
+      "lake build target module"
+      "placeholder and axiom scan"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped consumer placeholder census"],
+     :finding
+     "PASS: implementation commit 2fc7db4a changes exactly ConstructionTargets/ManifoldFundamentalClass.lean and its recorded blob matches the reviewed source; promoted fixture hash 8fdb5ab042c007163b7f36d3ec63ae120454936452ca1e967497313804f92010 matches recorded evidence and preserves the registered frozen theorem type; integralRelativeChainsComparisonWithTransport is the required source-to-production isomorphism, explicitly composing forgetIntegralRelativeCokernelComparison, coefficientIntegralCokernelTransport, integralMappedRelativeCokernelComparison, and the inverse production cokernel presentation; its projection theorem has the exact absolute-projection orientation and follows directly from integralCompositeRelativeProjection_naturality; the earlier integralRelativeChainsComparison is unchanged, and the implementation does not apply homology, identify the two packaged comparisons, or claim normalization, generator transport, orientation normalization, or localization equality; fixture, module, and 8326-job target build pass with zero source/fixture placeholders and only propext, Classical.choice, and Quot.sound; 131 statements match with zero mismatches and consumer placeholders remain t00J02=1 and t98A02=1."},
     :commit "2fc7db4aadbc429a617c340bd0f078ebd1f6b736",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -5401,7 +5418,7 @@
       "Canonical chain-complex isomorphism from forgotten coefficient-relative chains to production RelativeSingularChains; its hom satisfies the exact absolute-projection naturality equality from source to target"}},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/corrected-integral-relative-comparison",
@@ -5559,7 +5576,7 @@
      "The reviewed chain composite is now packaged as an isomorphism whose type names the actual coefficient-relative and production RelativeSingularChains objects. Unlike the earlier integralRelativeChainsComparison, this definition records the required coefficientIntegralCokernelTransport explicitly, so its projection naturality follows exactly from the banked chain square. The next prerequisite can pass this corrected comparison to homology without reopening any cokernel representation boundary; reconciliation with the earlier homology package remains a separate exact comparison.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -8176,7 +8193,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -8193,7 +8210,10 @@
     "forall {X : Type} [TopologicalSpace X] (A : Set X), (forgetIntModules.mapHomologicalComplex (ComplexShape.down Nat)).map (cokernel.π (CoefficientRelativeSmall.subspaceMap Int A)) ≫ (integralRelativeChainsComparisonWithTransport A).hom = (singularChainsComparison (TopCat.of X)).hom ≫ relativeSingularProjection A",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-relative-chains-comparison-with-transport-topo3-r1},
+    :routes-2026-10-11-manifold-relative-chains-comparison-with-transport-topo3-r1,
+    :banked-by
+    :routes-2026-10-11-manifold-relative-chains-comparison-with-transport-topo3-r1,
+    :banked-commit "2fc7db4aadbc429a617c340bd0f078ebd1f6b736"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-integralrelativechainscomparisonwithtransport-projection,
    :kind :lemma,
