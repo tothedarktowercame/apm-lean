@@ -79343,6 +79343,19 @@
       "The first compile parsed parenthesized set intersections in the subtype homeomorphism type as intersections of types. Adding explicit Set FrozenTorus and Set BoundaryTorus annotations corrected the notation; the successful rerun is recorded in commands."}],
     :continue-from
     "Formalise blueprint node B3 shearY in ConstructionTargets/t97A04Closure.lean, prove preservation of both frozenYCover members from the unchanged second coordinate, and prove only the composition and pointwise formulas listed by the blueprint.",
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791717900659-5253-3de36a59",
+     :commands
+     ["git show/diff-tree/show --check f02c84291c365d962ac52edce7e34b0ea744f3f1 and dcc11d7549630f758be71faa6f35beef6fc7f0d3"
+      "git rev-parse closure and blueprint blobs at recorded commit"
+      "lake env lean ConstructionTargets/t97A04Closure.lean"
+      "lake env lean problems/t97A04/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "statement fingerprints and placeholder counts at recorded commit and prior program-history commit"],
+     :finding
+     "PASS: independent author topo-6 committed new compiled progress after program-history job 2. Milestone f02c84291 defines the sorry-free B2 frozen vertical cover and dcc11d754 records B2 as proved while listing B3 through B11 and the next B3 milestone. The recorded closure and blueprint blobs match. B2 is mathematically faithful and respects the representation boundary: U and V are literal preimages of BoundaryTorusOpenCover.leftOpen and rightOpen under the same fixed frozen-torus homeomorphism used by B1; openness, union coverage, membership equations, and restricted homeomorphisms for U, V, and their intersection are proved. The closure and Main files compile; B2 uses exactly propext, Classical.choice, Quot.sound and the closure file has no placeholders. Main retains the same two acknowledged placeholders as program-history job 2; registry is 131/0 and the frozen t97A04 fingerprint is unchanged. This is a correct program STOP with substantive compiled progress and explicit remaining milestones."},
     :commit "dcc11d7549630f758be71faa6f35beef6fc7f0d3",
     :changed-paths
     ["ConstructionTargets/t97A04Closure.lean"
@@ -79352,7 +79365,7 @@
     :milestone-commit "f02c84291c365d962ac52edce7e34b0ea744f3f1",
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79381,6 +79394,9 @@
      :reason :blueprint-written}
     {:job 2,
      :commit "0922066b0b2ba0edb3ff369117fb523828fdde64",
+     :reason :program-milestone-complete}
+    {:job 3,
+     :commit "dcc11d7549630f758be71faa6f35beef6fc7f0d3",
      :reason :program-milestone-complete}]}
   {:consumer :t96A07,
    :phase :implementation,
@@ -79457,7 +79473,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "ConstructionTargets.T97A04Closure.frozenYCover",
@@ -79469,7 +79485,9 @@
     :type
     "ConstructionTargets.T97A04Closure.FrozenYCover, with exact preimage fields for BoundaryTorusOpenCover.leftOpen and rightOpen and restricted homeomorphisms for U, V, and U intersection V",
     :area "mv-connecting-naturality",
-    :proved-in :program-2026-10-11-close-t97a04},
+    :proved-in :program-2026-10-11-close-t97a04,
+    :banked-by :program-2026-10-11-close-t97a04,
+    :banked-commit "dcc11d7549630f758be71faa6f35beef6fc7f0d3"},
    :id :lemma-constructiontargets-t97a04closure-frozenycover,
    :kind :lemma,
    :depends-on
