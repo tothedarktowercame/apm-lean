@@ -335,68 +335,113 @@
    :current-residual
    "Prove critical-image nullity for the arbitrary ModelWithCorners source using within-derivatives on convex chart ranges, then instantiate it for projection ∘ f and choose a point outside the null critical image.",
    :other-consumers []}
+  {:bounded-exception
+   "Single-consumer first corners-domain prerequisite for the rule-0 t01A08 closure adapter; it verifies the exact geometry required by the forthcoming within-derivative Sard theorem.",
+   :consumer :t01A08,
+   :implements-lemma
+   :lemma-constructiontargets-sardgeneralmodel-modelrange-geometry,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/SardGeneralModel.lean"],
+   :dag-node "TOPOLOGY-ROUTES.md/t01A08/model-range-convex-domain",
+   :acceptance
+   {:implementation
+    "Promote the compiled modelRange_geometry theorem. For the frozen arbitrary ModelWithCorners source, expose in one conjunction that its concrete range in E is convex, closed, has nonempty interior, and equals the closure of that interior. Use the ModelWithCorners laws directly. Do not assert Sard nullity, derivative extension, regular-value existence, or closure of t01A08.",
+    :declaration
+    "ConstructionTargets.SardGeneralModel.modelRange_geometry",
+    :type
+    "forall {E H : Type*} [NormedAddCommGroup E] [NormedSpace Real E] [TopologicalSpace H] (I : ModelWithCorners Real E H), Convex Real (Set.range I) ∧ IsClosed (Set.range I) ∧ (interior (Set.range I)).Nonempty ∧ Set.range I = closure (interior (Set.range I))",
+    :fixture "/tmp/t01a08_model_range_geometry.lean",
+    :fixture-sha256
+    "0aee2f598e8ab90697a79ad256ab386ee7ed80e44d2519c57ac2268f9f4a6ee6",
+    :placeholder "the sole sorry in apm_t01a08",
+    :route-step
+    "fix the concrete closed convex source domain with dense nonempty interior before extending the open-domain Sard proof to within-derivatives"},
+   :id :routes-2026-10-11-t01a08-model-range-geometry-topo3-r1,
+   :kind :reusable-theorem,
+   :area "sard-convex-domain",
+   :depends-on
+   [:routes-2026-10-10-topo3-seed-checkpoint-1
+    :routes-2026-10-10-t01a08-linear-target-transport-topo3-r1],
+   :current-residual
+   "Prove critical-image nullity for smooth maps on this closed convex model range using fderivWithin, then transport it through manifold charts and choose a point outside the null critical image.",
+   :other-consumers []}
   {:consumer :t01A08,
    :evidence
    {:probe
     {:residual
-     "Bank the compiled target transport, then prove the separately named sard-convex-domain prerequisite before retrying the sole consumer placeholder.",
+     "After banking the model-range geometry, prove convex-domain Morse-Sard nullity for ContDiffOn maps with fderivWithin; then lift it through arbitrary ModelWithCorners charts and retry the sole consumer placeholder.",
      :outcome :revise,
      :warnings [],
+     :missing-theorems
+     [{:id
+       :lemma-constructiontargets-sardgeneralmodel-modelrange-geometry,
+       :name
+       "ConstructionTargets.SardGeneralModel.modelRange_geometry",
+       :type
+       "forall {E H : Type*} [NormedAddCommGroup E] [NormedSpace Real E] [TopologicalSpace H] (I : ModelWithCorners Real E H), Convex Real (Set.range I) and IsClosed (Set.range I) and (interior (Set.range I)).Nonempty and Set.range I = closure (interior (Set.range I))",
+       :status :proved,
+       :consumers [:t01A08],
+       :depends-on
+       ["ConstructionTargets.SardGeneralModel.linearTargetTransport"],
+       :area "sard-convex-domain"}],
      :prerequisite
      {:bounded-exception
-      "Single-consumer first prerequisite for the rule-0 t01A08 closure adapter; it discharges the target-norm mismatch before the independent corners-domain Sard theorem.",
+      "Single-consumer first corners-domain prerequisite for the rule-0 t01A08 closure adapter; it verifies the exact geometry required by the forthcoming within-derivative Sard theorem.",
       :consumer :t01A08,
-      :implements-lemma :lemma-sard-linear-target-transport,
+      :implements-lemma
+      :lemma-constructiontargets-sardgeneralmodel-modelrange-geometry,
       :phase :implementation,
       :state :open,
       :scope ["ConstructionTargets/SardGeneralModel.lean"],
-      :dag-node "TOPOLOGY-ROUTES.md/t01A08/target-transport",
+      :dag-node "TOPOLOGY-ROUTES.md/t01A08/model-range-convex-domain",
       :acceptance
       {:implementation
-       "Promote the compiled targetEquiv and surjective_comp_targetEquiv_iff theorem into ConstructionTargets.SardGeneralModel. State only the continuous-linear equivalence between the frozen sup-norm plane and EuclideanSpace ℝ (Fin 2), and the equivalence of surjectivity for postcomposition. Do not claim Sard for arbitrary ModelWithCorners or close t01A08.",
-       :declarations
-       ["ConstructionTargets.SardGeneralModel.targetEquiv"
-        "ConstructionTargets.SardGeneralModel.linearTargetTransport"],
+       "Promote the compiled modelRange_geometry theorem. For the frozen arbitrary ModelWithCorners source, expose in one conjunction that its concrete range in E is convex, closed, has nonempty interior, and equals the closure of that interior. Use the ModelWithCorners laws directly. Do not assert Sard nullity, derivative extension, regular-value existence, or closure of t01A08.",
+       :declaration
+       "ConstructionTargets.SardGeneralModel.modelRange_geometry",
        :type
-       "forall {E : Type*} [SeminormedAddCommGroup E] [NormedSpace ℝ E] (D : E →L[ℝ] (Fin 2 → ℝ)), Function.Surjective (targetEquiv.toContinuousLinearMap.comp D) ↔ Function.Surjective D",
-       :fixture "/tmp/t01a08_target_transport.lean",
+       "forall {E H : Type*} [NormedAddCommGroup E] [NormedSpace Real E] [TopologicalSpace H] (I : ModelWithCorners Real E H), Convex Real (Set.range I) ∧ IsClosed (Set.range I) ∧ (interior (Set.range I)).Nonempty ∧ Set.range I = closure (interior (Set.range I))",
+       :fixture "/tmp/t01a08_model_range_geometry.lean",
        :fixture-sha256
-       "b38570e62aa5611aab0a8e091d67277116c6e3a92dd7e3c35a5a4b797a543265",
+       "0aee2f598e8ab90697a79ad256ab386ee7ed80e44d2519c57ac2268f9f4a6ee6",
        :placeholder "the sole sorry in apm_t01a08",
        :route-step
-       "target transport before the convex-domain/corners Sard extension"},
-      :id :routes-2026-10-10-t01a08-linear-target-transport-topo3-r1,
+       "fix the concrete closed convex source domain with dense nonempty interior before extending the open-domain Sard proof to within-derivatives"},
+      :id :routes-2026-10-11-t01a08-model-range-geometry-topo3-r1,
       :kind :reusable-theorem,
-      :area "manifold-sard-general-model",
-      :depends-on [:routes-2026-10-10-t01a08-closure-probe-topo3-r2],
+      :area "sard-convex-domain",
+      :depends-on
+      [:routes-2026-10-10-t01a08-closure-probe-topo3-r2
+       :routes-2026-10-10-t01a08-linear-target-transport-topo3-r1],
       :current-residual
-      "Prove critical-image nullity for the arbitrary ModelWithCorners source using within-derivatives on convex chart ranges, then instantiate it for projection ∘ f and choose a point outside the null critical image.",
+      "Prove critical-image nullity for smooth maps on this closed convex model range using fderivWithin, then transport it through manifold charts and choose a point outside the null critical image.",
       :other-consumers []},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
-     [{:cmd "lake env lean /tmp/t01a08_target_transport.lean",
+     [{:cmd "lake env lean /tmp/t01a08_model_range_geometry.lean",
        :exit 0,
        :output
-       "target equivalence and surjectivity transport compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd "sha256sum /tmp/t01a08_target_transport.lean",
+       "modelRange_geometry compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd "sha256sum /tmp/t01a08_model_range_geometry.lean",
        :exit 0,
        :output
-       "b38570e62aa5611aab0a8e091d67277116c6e3a92dd7e3c35a5a4b797a543265  /tmp/t01a08_target_transport.lean"}
+       "0aee2f598e8ab90697a79ad256ab386ee7ed80e44d2519c57ac2268f9f4a6ee6  /tmp/t01a08_model_range_geometry.lean"}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t01a08_target_transport.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t01a08_model_range_geometry.lean || true)\"",
        :exit 0}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
      :fixture
-     {:path "/tmp/t01a08_target_transport.lean",
+     {:path "/tmp/t01a08_model_range_geometry.lean",
       :sha256
-      "b38570e62aa5611aab0a8e091d67277116c6e3a92dd7e3c35a5a4b797a543265"},
+      "0aee2f598e8ab90697a79ad256ab386ee7ed80e44d2519c57ac2268f9f4a6ee6"},
      :finding
-     "The banked null_critical theorem requires an inner-product target. The frozen target Fin 2 → ℝ carries the sup norm, but a finite-dimensional continuous linear equivalence to EuclideanSpace compiles, and postcomposition by it preserves derivative surjectivity. This is the first exact prerequisite. Even after it is banked, the arbitrary ModelWithCorners source still needs the separate convex-domain/corners Sard extension.",
+     "The reviewed target equivalence removes the frozen codomain norm mismatch, but the consumer still cannot use the banked boundaryless Sard theorem: at corner points mfderiv is represented by a derivative within Set.range I, whereas the banked analytic chain uses ambient derivatives on open domains. Mathlib does guarantee the exact source geometry needed for the corners route. The fixture compiles the reusable conjunction that every ModelWithCorners range is closed and convex, has nonempty interior, and is the closure of that interior. This confirms the convex-domain route without pretending that the missing within-derivative Sard theorem already exists.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["problems/t01A08/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t01A08/closure",
    :acceptance
@@ -412,7 +457,8 @@
    :area "manifold-sard-general-model",
    :depends-on
    [:routes-2026-10-10-topo3-seed-checkpoint-1
-    :routes-2026-10-10-t01a08-linear-target-transport-topo3-r1],
+    :routes-2026-10-10-t01a08-linear-target-transport-topo3-r1
+    :routes-2026-10-11-t01a08-model-range-geometry-topo3-r1],
    :current-residual
    "Expected residual is either direct closure or one exact compiled prerequisite: target-coordinate transport, then convex corners Sard.",
    :other-consumers []}
@@ -4535,6 +4581,25 @@
    :id :lemma-constructiontargets-sardgeneralmodel-targetequiv,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t01A08,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "ConstructionTargets.SardGeneralModel.modelRange_geometry",
+    :type
+    "forall {E H : Type*} [NormedAddCommGroup E] [NormedSpace Real E] [TopologicalSpace H] (I : ModelWithCorners Real E H), Convex Real (Set.range I) and IsClosed (Set.range I) and (interior (Set.range I)).Nonempty and Set.range I = closure (interior (Set.range I))"},
+   :lemma
+   {:name "ConstructionTargets.SardGeneralModel.modelRange_geometry",
+    :reported-by [:routes-2026-10-10-t01a08-closure-probe-topo3-r2],
+    :type
+    "forall {E H : Type*} [NormedAddCommGroup E] [NormedSpace Real E] [TopologicalSpace H] (I : ModelWithCorners Real E H), Convex Real (Set.range I) and IsClosed (Set.range I) and (interior (Set.range I)).Nonempty and Set.range I = closure (interior (Set.range I))",
+    :area "sard-convex-domain",
+    :proved-in :routes-2026-10-10-t01a08-closure-probe-topo3-r2},
+   :id :lemma-constructiontargets-sardgeneralmodel-modelrange-geometry,
+   :kind :lemma,
+   :depends-on [:lemma-sard-linear-target-transport],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
