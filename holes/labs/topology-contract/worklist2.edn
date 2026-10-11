@@ -79281,27 +79281,27 @@
    :depends-on [],
    :other-consumers []}
   {:consumer :t97A04,
-   :stop-count 3,
+   :stop-count 4,
    :evidence
    {:placeholder-delta 0,
-    :residual "B3 through B11 remain; the next job is B3 only.",
+    :residual "B4 through B11 remain; the next job is B4 only.",
     :outcome :stop,
     :warnings
     ["The consumer retains its two expected placeholders while the closure program advances node by node."
-     "Existing Main.lean linter and sorry warnings are unchanged."],
+     "Existing Main.lean linter and sorry warnings are unchanged."
+     "Unrelated pre-existing modification ConstructionTargets/ManifoldFundamentalClass.lean was preserved untouched."],
     :missing-theorems
-    [{:name "ConstructionTargets.T97A04Closure.frozenYCover",
+    [{:name "ConstructionTargets.T97A04Closure.shearY",
       :type
-      "ConstructionTargets.T97A04Closure.FrozenYCover, with exact preimage fields for BoundaryTorusOpenCover.leftOpen and rightOpen and restricted homeomorphisms for U, V, and U intersection V",
+      "ℤ → ℤ → C(FrozenTorus, FrozenTorus), with compiled cover-preservation, composition, and required specialized pointwise theorems",
       :status :proved,
       :consumers [:t97A04],
-      :depends-on
-      ["ConstructionTargets.T97A04Closure.frozenTorusH2GroupIsoInt"],
+      :depends-on ["ConstructionTargets.T97A04Closure.frozenYCover"],
       :area "mv-connecting-naturality"}],
     :statement-hashes
     {:registry "131 registered statements match, 0 do not",
-     :closure-lean-blob "bb7b1986257645292bf578ef3d7c6bbb2f242d5e",
-     :blueprint-blob "4d501fef08a8bbbe76b424c8098ad6ebddb75b43"},
+     :closure-lean-blob "302ccce3b79796d62cadd887dd9fe47f869d60db",
+     :blueprint-blob "f2da30d2eb9ae2373ba1e1e32f6aa7f008f67cca"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
@@ -79310,7 +79310,7 @@
     [{:cmd "lake env lean ConstructionTargets/t97A04Closure.lean",
       :exit 0,
       :output
-      "B1 and B2 compiled; B2 declarations use [propext, Classical.choice, Quot.sound]"}
+      "B1 through B3 compiled; shearY and its B3 theorems use [propext, Classical.choice, Quot.sound]"}
      {:cmd
       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/t97A04Closure.lean || true)\"",
       :exit 0}
@@ -79329,43 +79329,38 @@
       :exit 0,
       :output "2"}
      {:cmd
-      "git show --check --oneline f02c84291c365d962ac52edce7e34b0ea744f3f1",
+      "git show --check --oneline a09ba300fab26381c636b4a7aea7e2dc1687913b",
       :exit 0,
-      :output "f02c84291 Define t97A04 frozen vertical cover"}
+      :output "a09ba300f Define t97A04 upper triangular shear"}
      {:cmd
-      "git show --check --oneline dcc11d7549630f758be71faa6f35beef6fc7f0d3",
+      "git show --check --oneline 2a6df176426727c93ff5546f04fe0970a5081348",
       :exit 0,
-      :output "dcc11d754 Record t97A04 blueprint B2 milestone"}],
+      :output "2a6df1764 Record t97A04 blueprint B3 milestone"}],
     :diagnostic-history
     [{:cmd "lake env lean ConstructionTargets/t97A04Closure.lean",
       :exit 1,
       :finding
-      "The first compile parsed parenthesized set intersections in the subtype homeomorphism type as intersections of types. Adding explicit Set FrozenTorus and Set BoundaryTorus annotations corrected the notation; the successful rerun is recorded in commands."}],
+      "The first compile left the additive associativity step in shearY_comp and scalar-normalization goals in two specialized formulas. The composition proof was corrected with Prod.ext and abel, and the formulas were narrowed to explicit simplification lemmas."}
+     {:cmd "lake env lean ConstructionTargets/t97A04Closure.lean",
+      :exit 1,
+      :finding
+      "The second compile exposed a subtraction normalization mismatch and an apparently reflexive scalar-three equality whose two displayed scalars used different inferred actions. sub_eq_add_neg fixed the former."}
+     {:cmd "lake env lean ConstructionTargets/t97A04Closure.lean",
+      :exit 1,
+      :finding
+      "The third compile isolated the scalar-three mismatch: the displayed right-hand numeral had inferred the natural-number scalar action. Annotating it as (3 : ℤ) produced the successful acceptance compile."}],
     :continue-from
-    "Formalise blueprint node B3 shearY in ConstructionTargets/t97A04Closure.lean, prove preservation of both frozenYCover members from the unchanged second coordinate, and prove only the composition and pointwise formulas listed by the blueprint.",
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791717900659-5253-3de36a59",
-     :commands
-     ["git show/diff-tree/show --check f02c84291c365d962ac52edce7e34b0ea744f3f1 and dcc11d7549630f758be71faa6f35beef6fc7f0d3"
-      "git rev-parse closure and blueprint blobs at recorded commit"
-      "lake env lean ConstructionTargets/t97A04Closure.lean"
-      "lake env lean problems/t97A04/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "statement fingerprints and placeholder counts at recorded commit and prior program-history commit"],
-     :finding
-     "PASS: independent author topo-6 committed new compiled progress after program-history job 2. Milestone f02c84291 defines the sorry-free B2 frozen vertical cover and dcc11d754 records B2 as proved while listing B3 through B11 and the next B3 milestone. The recorded closure and blueprint blobs match. B2 is mathematically faithful and respects the representation boundary: U and V are literal preimages of BoundaryTorusOpenCover.leftOpen and rightOpen under the same fixed frozen-torus homeomorphism used by B1; openness, union coverage, membership equations, and restricted homeomorphisms for U, V, and their intersection are proved. The closure and Main files compile; B2 uses exactly propext, Classical.choice, Quot.sound and the closure file has no placeholders. Main retains the same two acknowledged placeholders as program-history job 2; registry is 131/0 and the frozen t97A04 fingerprint is unchanged. This is a correct program STOP with substantive compiled progress and explicit remaining milestones."},
-    :commit "dcc11d7549630f758be71faa6f35beef6fc7f0d3",
+    "Formalise blueprint node B4 shearYShortComplexHom in ConstructionTargets/t97A04Closure.lean using the B2 cover, B3 preservation theorems, and ProductionOpenCoverMayerVietoris.coverRangeMap with its intersection-left, intersection-right, and inclusion compatibility equations.",
+    :commit "2a6df176426727c93ff5546f04fe0970a5081348",
     :changed-paths
     ["ConstructionTargets/t97A04Closure.lean"
      "ConstructionTargets/t97A04Closure.blueprint.md"],
     :finding
-    "Blueprint node B2 is proved. frozenYCover is the exact preimage of BoundaryTorusOpenCover.leftOpen/rightOpen under the fixed frozen-torus homeomorphism used by B1; its fields prove openness and coverage, and restricted homeomorphisms identify both members and their intersection with the boundary-torus cover.",
-    :milestone-commit "f02c84291c365d962ac52edce7e34b0ea744f3f1",
+    "Blueprint node B3 is proved. shearY a b is the continuous map (x,y) maps to (a scalar x + b scalar y,y); the unchanged second coordinate proves literal preservation of both frozenYCover members. The compiled API also proves shearY a b composed with shearY c d equals shearY (a*c) (a*d+b), and records the pointwise formulas at (3,1), (1,-1), and (1,0).",
+    :milestone-commit "a09ba300fab26381c636b4a7aea7e2dc1687913b",
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79492,4 +79487,23 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-t97a04closure-frozentorush2groupisoint],
+   :other-consumers []}
+  {:consumer :t97A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "ConstructionTargets.T97A04Closure.shearY",
+    :type
+    "ℤ → ℤ → C(FrozenTorus, FrozenTorus), with compiled cover-preservation, composition, and required specialized pointwise theorems"},
+   :lemma
+   {:name "ConstructionTargets.T97A04Closure.shearY",
+    :reported-by [:program-2026-10-11-close-t97a04],
+    :type
+    "ℤ → ℤ → C(FrozenTorus, FrozenTorus), with compiled cover-preservation, composition, and required specialized pointwise theorems",
+    :area "mv-connecting-naturality",
+    :proved-in :program-2026-10-11-close-t97a04},
+   :id :lemma-constructiontargets-t97a04closure-sheary,
+   :kind :lemma,
+   :depends-on [:lemma-constructiontargets-t97a04closure-frozenycover],
    :other-consumers []}]}
