@@ -2738,6 +2738,23 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git status --porcelain", :exit 0, :stdout ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791678318441-3452-80c17853",
+     :commands
+     ["git diff-tree recorded commit scope"
+      "sha256sum promoted fixture"
+      "source blob comparison"
+      "lake env lean promoted fixture"
+      "lake env lean target module"
+      "lake build target module"
+      "placeholder and axiom scan"
+      "statement registry check"
+      "consumer placeholder census"
+      "git diff --check recorded commit"],
+     :finding
+     "PASS: implementation commit 0d578a28 changes exactly ConstructionTargets/ManifoldFundamentalClass.lean and its blob matches the reviewed source; promoted fixture hash a36997905d4263f428a3a4df3eddd716174d1b54e77b094c6d815d0750b96d36 matches recorded evidence and preserves the frozen theorem type from the original fixture; ambientLocalGenerator_zsmul_injective pulls an equality of integer multiples back through the actual isomorphism induced by ambientChartMap, evaluates with HigherModelLocalHomology.localIsoInt, and uses the reviewed normalization of the concrete model generator to reduce both sides to the coefficients; it assumes no localization equality, coefficient value, or orientation predicate; fixture, module, and target build pass with zero source/fixture placeholders and only propext, Classical.choice, and Quot.sound; 131 statements match and consumer placeholders remain t00J02=1 and t98A02=1."},
     :commit "0d578a28d0c0c6fef4f4e3107e5084a8b74e6a1c",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -2755,7 +2772,7 @@
      "ConstructionTargets.ManifoldFundamentalClass.ambientLocalGenerator_zsmul_injective"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/local-generator-coefficient-uniqueness",
@@ -2891,7 +2908,7 @@
      "The banked coefficient theorem gives existence of an integer r but not uniqueness. The fixture proves uniqueness for the actual ambient chart generator, rather than postulating freeness: it pulls an equality of multiples back through the isomorphism induced by ambientChartMap and evaluates the concrete HigherModelLocalHomology generator under localIsoInt, where its normalization is exactly one. Consequently any orientation calculation that identifies the localized class with the positive ambient generator determines the previously existential coefficient uniquely. The remaining step still must use genuine orientation data to establish that positive equality; no orientation facade or abstract localization map has been added.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -4825,7 +4842,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -4842,7 +4859,10 @@
     "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), Function.Injective (fun r : Int => r • HigherChartLocalGenerator.ambientLocalGenerator (k := k) x)",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-local-generator-coefficient-unique-topo3-r1},
+    :routes-2026-10-11-manifold-local-generator-coefficient-unique-topo3-r1,
+    :banked-by
+    :routes-2026-10-11-manifold-local-generator-coefficient-unique-topo3-r1,
+    :banked-commit "0d578a28d0c0c6fef4f4e3107e5084a8b74e6a1c"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-ambientlocalgenerator-zsmul-injective,
    :kind :lemma,
