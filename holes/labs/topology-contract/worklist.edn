@@ -104519,10 +104519,67 @@
    "Use counit naturality and the identity component to prove the literal inl/inr leg equations, fill TwoOpenGroupEquivalenceCoordinates, and specialize to the generic point wedge.",
    :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
   {:consumer :t99J01,
+   :stop-count 1,
    :implements-lemma
    :lemma-twoopenfreeproductmapping-compositecounit-component-identity,
+   :evidence
+   {:placeholder-delta
+    {:source-before 0, :source-after 0, :fixture-sorry 0},
+    :residual
+    "Normalize the descent/pseudopushout counit at the overlap basepoint and prove connector asEquivalence counits are identity there; then simplify compositeCounitComponent to the identity.",
+    :outcome :stop,
+    :warnings
+    [{:kind :dirty-worktree,
+      :message
+      "Unrelated modification ConstructionTargets/ManifoldFundamentalClass.lean was not touched or committed."}],
+    :missing-theorems
+    [{:name
+      "TwoOpenFundamentalGroupoidPseudopushout.counit_base_component_identity",
+      :type
+      "At the overlap basepoint and for the inverse-reconstructed free-product identity cocone, the hom component of twoOpenFundamentalGroupoidPseudopushoutEquivalence.counitIso is the identity, compatibly with subsequent pseudo-span and connector transports.",
+      :status :not-started,
+      :consumers [:t99J01 :t01A03 :t92J06 :t97A01 :t97A03],
+      :depends-on [],
+      :area "fundamental-group-wedge-of-circles"}],
+    :statement-hashes
+    {:source-sha256
+     "cdece0a8e55ecd4699721ac65c33b121c41c01c53073529e00095d10d220d523",
+     :registry "131 registered statements match, 0 do not"},
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :reason
+    "The composite component is now named and its exact standard-axiom identity with inverseIdentityCounit is compiled. The requested equality to the identity does not follow from the current APIs: the first unresolved factor is the counit of twoOpenFundamentalGroupoidPseudopushoutEquivalence at the inverse-reconstructed cocone. That equivalence is built from descent reconstruction, whose counit is an isomorphism assembled from restrictionAppIso rather than a registered identity normalization. The later connector equivalences also use Functor.asEquivalence, whose choice-generated counits have no base-component identity theorem.",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/TwoOpenFreeProductMappingCompositeCounitIdentity.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.TwoOpenFreeProductMappingCompositeCounitIdentity",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/composite-counit-component-identity.lean",
+      :exit 0}
+     {:cmd "sha256sum /tmp/composite-counit-component-identity.lean",
+      :exit 0}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" ConstructionTargets/TwoOpenFreeProductMappingCompositeCounitIdentity.lean /tmp/composite-counit-component-identity.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}],
+    :diagnostic-history [],
+    :commit "25b960ede466005c3d62bb6eedc8b367ba39886f",
+    :changed-paths
+    ["ConstructionTargets/TwoOpenFreeProductMappingCompositeCounitIdentity.lean"],
+    :fixture
+    {:path "/tmp/composite-counit-component-identity.lean",
+     :sha256
+     "acdc06369d70b171b3c2c1f70a56ad199e7b7f72be274a4ce3930f77b5d84c0f"},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/TwoOpenFreeProductMappingCompositeCounitIdentity.lean"],
    :dag-node
@@ -110192,6 +110249,28 @@
     :area "fundamental-group-wedge-of-circles"},
    :id
    :lemma-twoopenfreeproductmapping-compositecounit-component-identity,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
+  {:consumer :t99J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "TwoOpenFundamentalGroupoidPseudopushout.counit_base_component_identity",
+    :type
+    "At the overlap basepoint and for the inverse-reconstructed free-product identity cocone, the hom component of twoOpenFundamentalGroupoidPseudopushoutEquivalence.counitIso is the identity, compatibly with subsequent pseudo-span and connector transports."},
+   :lemma
+   {:name
+    "TwoOpenFundamentalGroupoidPseudopushout.counit_base_component_identity",
+    :reported-by
+    [:routes-2026-10-11-composite-counit-component-identity-91],
+    :type
+    "At the overlap basepoint and for the inverse-reconstructed free-product identity cocone, the hom component of twoOpenFundamentalGroupoidPseudopushoutEquivalence.counitIso is the identity, compatibly with subsequent pseudo-span and connector transports.",
+    :area "fundamental-group-wedge-of-circles"},
+   :id
+   :lemma-twoopenfundamentalgroupoidpseudopushout-counit-base-component-identity,
    :kind :lemma,
    :depends-on [],
    :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}],
