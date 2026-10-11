@@ -244,6 +244,56 @@ theorem overlapHomotopyEquivTwoCircles_fold (p : Overlap) :
   change twoCircleFold (boolTimesCircleHomeomorphTwoCircles (_, p.1.1)) = p.1.1
   exact twoCircleFold_boolTimesCircle _
 
+/-- The product-circle coordinate of a point in the boundary-torus overlap,
+using the same frozen-torus transport as the restricted shear. -/
+noncomputable def overlapCircleProd (p : Overlap) : Circle × Circle :=
+  frozenTorusCircleProd (frozenYCoverInterHomeomorph.symm p).1
+
+theorem overlapCircleProd_fst (p : Overlap) :
+    (overlapCircleProd p).1 = p.1.1 := by
+  have h := congrArg (fun q : Overlap ↦ q.1.1)
+    (frozenYCoverInterHomeomorph.apply_symm_apply p)
+  simpa [overlapCircleProd, frozenTorusCircleProd,
+    frozenYCoverInterHomeomorph, homeomorphPreimageRestrict,
+    frozenTorusHomeomorphBoundaryTorus] using h
+
+theorem boundaryOverlapShear_fst (a b : ℤ) (p : Overlap) :
+    (boundaryOverlapShear a b p).1.1 =
+      (overlapCircleProd p).1 ^ a * (overlapCircleProd p).2 ^ b := by
+  have h := congrArg Prod.fst
+    (frozenTorusCircleProd_shearY a b
+      (frozenYCoverInterHomeomorph.symm p).1)
+  simpa [boundaryOverlapShear, shearYOverlap, overlapCircleProd,
+    circleShearY, frozenYCoverInterHomeomorph,
+    homeomorphPreimageRestrict] using h
+
+theorem twoCircleOverlapShear_fold_apply (a b : ℤ) (q : Circle ⊕ Circle) :
+    twoCircleFold (twoCircleOverlapShear a b q) =
+      twoCircleFold q ^ a *
+        (overlapCircleProd (overlapHomotopyEquivTwoCircles.invFun q)).2 ^ b := by
+  rw [twoCircleOverlapShear, ContinuousMap.comp_apply,
+    ContinuousMap.comp_apply, overlapHomotopyEquivTwoCircles_fold,
+    boundaryOverlapShear_fst, overlapCircleProd_fst,
+    overlapHomotopyEquivTwoCircles_inv_fst]
+
+noncomputable def leftOverlapCircleConstant : Circle :=
+  (overlapCircleProd (overlapHomotopyEquivTwoCircles.invFun (Sum.inl 1))).2
+
+noncomputable def rightOverlapCircleConstant : Circle :=
+  (overlapCircleProd (overlapHomotopyEquivTwoCircles.invFun (Sum.inr 1))).2
+
+theorem overlapCircleProd_inv_inl_snd (z : Circle) :
+    (overlapCircleProd
+      (overlapHomotopyEquivTwoCircles.invFun (Sum.inl z))).2 =
+        leftOverlapCircleConstant := by
+  rfl
+
+theorem overlapCircleProd_inv_inr_snd (z : Circle) :
+    (overlapCircleProd
+      (overlapHomotopyEquivTwoCircles.invFun (Sum.inr z))).2 =
+        rightOverlapCircleConstant := by
+  rfl
+
 /-- The left overlap-circle summand followed by the transported shear. -/
 def circleSumInl : C(Circle, Circle ⊕ Circle) :=
   ⟨Sum.inl, continuous_inl⟩
@@ -313,6 +363,24 @@ def circleZPow (a : ℤ) : C(Circle, Circle) :=
 def circleAffine (a : ℤ) (c : Circle) : C(Circle, Circle) :=
   ⟨fun z ↦ c * z ^ a, by fun_prop⟩
 
+theorem twoCircleOverlapShearLeftFold_eq_affine (a b : ℤ) :
+    twoCircleOverlapShearLeftFold a b =
+      circleAffine a (leftOverlapCircleConstant ^ b) := by
+  ext z
+  rw [twoCircleOverlapShearLeftFold, ContinuousMap.comp_apply,
+    twoCircleOverlapShearLeft_apply, twoCircleOverlapShear_fold_apply,
+    twoCircleFold_inl, overlapCircleProd_inv_inl_snd]
+  simp [circleAffine, mul_comm]
+
+theorem twoCircleOverlapShearRightFold_eq_affine (a b : ℤ) :
+    twoCircleOverlapShearRightFold a b =
+      circleAffine a (rightOverlapCircleConstant ^ b) := by
+  ext z
+  rw [twoCircleOverlapShearRightFold, ContinuousMap.comp_apply,
+    twoCircleOverlapShearRight_apply, twoCircleOverlapShear_fold_apply,
+    twoCircleFold_inr, overlapCircleProd_inv_inr_snd]
+  simp [circleAffine, mul_comm]
+
 theorem twoCircleOverlapShearLeftFold_H1 (a b : ℤ) :
     HomologicalComplex.homologyMap
         (ConstructionTargets.SingularSubdivision.singularPostcomposition
@@ -363,6 +431,26 @@ theorem circleAffine_H1_eq_zpow (a : ℤ) (c : Circle) :
     (continuousMapHomotopyCylinder H)
     (continuousMapHomotopyCylinder_zero H)
     (continuousMapHomotopyCylinder_one H) 1).symm
+
+theorem twoCircleOverlapShearLeftFold_H1_eq_zpow (a b : ℤ) :
+    HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularSubdivision.singularPostcomposition
+          (twoCircleOverlapShearLeftFold a b)) 1 =
+      HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularSubdivision.singularPostcomposition
+          (circleZPow a)) 1 := by
+  rw [twoCircleOverlapShearLeftFold_eq_affine,
+    circleAffine_H1_eq_zpow]
+
+theorem twoCircleOverlapShearRightFold_H1_eq_zpow (a b : ℤ) :
+    HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularSubdivision.singularPostcomposition
+          (twoCircleOverlapShearRightFold a b)) 1 =
+      HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularSubdivision.singularPostcomposition
+          (circleZPow a)) 1 := by
+  rw [twoCircleOverlapShearRightFold_eq_affine,
+    circleAffine_H1_eq_zpow]
 
 open ConstructionTargets.CircleUniversalCover
 
@@ -904,10 +992,17 @@ theorem shearY_overlap_coordinate_of_degree_components (a b : ℤ)
 #print axioms overlapHomotopyEquivTwoCircles_inv_fst
 #print axioms twoCircleFold_boolTimesCircle
 #print axioms overlapHomotopyEquivTwoCircles_fold
+#print axioms overlapCircleProd_fst
+#print axioms boundaryOverlapShear_fst
+#print axioms twoCircleOverlapShear_fold_apply
+#print axioms twoCircleOverlapShearLeftFold_eq_affine
+#print axioms twoCircleOverlapShearRightFold_eq_affine
 #print axioms circleZPow
 #print axioms circleAffine
 #print axioms circleAffineHomotopy
 #print axioms circleAffine_H1_eq_zpow
+#print axioms twoCircleOverlapShearLeftFold_H1_eq_zpow
+#print axioms twoCircleOverlapShearRightFold_H1_eq_zpow
 #print axioms liftBasedLoop_circleZPow
 #print axioms liftBasedLoopEndpointInteger_circleZPow
 #print axioms circleZPowPi1Map
