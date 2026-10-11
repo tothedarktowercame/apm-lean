@@ -31,3 +31,10 @@ The concrete circle input is now implemented as well:
 `circleBaseNeighborhood_isOpen` and `circleBase_mem` supply the open pointed
 neighbourhood data, and `circleBaseNeighborhood_contraction` reuses the
 stereographic pointed contraction of that exact subtype.
+
+The corresponding TwoCircles input is implemented by
+`twoCirclesBaseNeighborhood`: it is the restricted open wedge of two copies
+of the circle neighbourhood. `wedgePointedContraction` descends the two
+simultaneous pointed contractions through the wedge quotient, and
+`twoCirclesBaseNeighborhood_contraction` transports the result back through
+`twoCirclesBaseNeighborhoodHomeomorph`.

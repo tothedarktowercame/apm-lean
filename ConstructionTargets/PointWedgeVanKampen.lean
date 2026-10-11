@@ -1,6 +1,7 @@
 import ConstructionTargets.ThreeCirclesPathTopology
 import ConstructionTargets.GenericTargetNaturalSourceReconstruction
 import ConstructionTargets.PointedPuncturedCircleContraction
+import ConstructionTargets.PointWedgeRestrictedOpenQuotient
 import Mathlib.GroupTheory.Coprod.Basic
 import Mathlib.GroupTheory.FreeGroup.Basic
 
@@ -22,6 +23,7 @@ namespace ConstructionTargets.PointWedgeVanKampen
 
 open CategoryTheory
 open PointedPuncturedCircleContraction
+open PointWedgeQuotient PointWedgeRestrictedOpenQuotient
 
 universe u
 
@@ -136,6 +138,176 @@ def circleBaseNeighborhood_contraction :
   simpa only [circleBaseNeighborhood, puncturedCircleBase] using
     puncturedCirclePointedContraction
 
+namespace PointedContraction
+
+/-- Transport a pointed contraction backward through a homeomorphism. -/
+def homeomorphSymm {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
+    {x₀ : X} (e : X ≃ₜ Y) (h : PointedContraction Y (e x₀)) :
+    PointedContraction X x₀ where
+  homotopy :=
+    { toFun := fun p => e.symm (h.homotopy (p.1, e p.2))
+      continuous_toFun := e.symm.continuous.comp
+        (h.homotopy.continuous.comp
+          (continuous_fst.prodMk (e.continuous.comp continuous_snd)))
+      map_zero_left := by intro x; simp
+      map_one_left := by intro x; simp }
+  fixed := by
+    intro t
+    change e.symm (h.homotopy (t, e x₀)) = x₀
+    rw [h.fixed]
+    exact e.symm_apply_apply x₀
+
+end PointedContraction
+
+section WedgeContraction
+
+universe v w
+
+variable {X : Type v} {Y : Type w}
+variable [TopologicalSpace X] [TopologicalSpace Y]
+variable {x₀ : X} {y₀ : Y}
+
+def wedgeContractSum (hX : PointedContraction X x₀)
+    (hY : PointedContraction Y y₀) (t : unitInterval) :
+    Sum X Y → Wedge x₀ y₀
+  | .inl x => quotientMap x₀ y₀ (.inl (hX.homotopy (t, x)))
+  | .inr y => quotientMap x₀ y₀ (.inr (hY.homotopy (t, y)))
+
+private theorem wedgeContractSum_respects
+    (hX : PointedContraction X x₀) (hY : PointedContraction Y y₀)
+    (t : unitInterval) (a b : Sum X Y)
+    (hab : Relation.EqvGen (Rel x₀ y₀) a b) :
+    wedgeContractSum hX hY t a = wedgeContractSum hX hY t b := by
+  induction hab with
+  | rel a b hab =>
+      cases hab
+      change quotientMap x₀ y₀ (.inl (hX.homotopy (t, x₀))) =
+        quotientMap x₀ y₀ (.inr (hY.homotopy (t, y₀)))
+      rw [hX.fixed, hY.fixed]
+      exact Quotient.sound (Relation.EqvGen.rel _ _ Rel.base)
+  | refl => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+def wedgeContract (hX : PointedContraction X x₀)
+    (hY : PointedContraction Y y₀) :
+    unitInterval × Wedge x₀ y₀ → Wedge x₀ y₀ :=
+  fun p => Quotient.lift (wedgeContractSum hX hY p.1)
+    (wedgeContractSum_respects hX hY p.1) p.2
+
+theorem wedgeContract_continuous (hX : PointedContraction X x₀)
+    (hY : PointedContraction Y y₀) : Continuous (wedgeContract hX hY) := by
+  have hq : Topology.IsQuotientMap (quotientMap x₀ y₀) :=
+    isQuotientMap_quotient_mk'
+  apply hq.continuous_lift_prod_right
+  let g : (unitInterval × X) ⊕ (unitInterval × Y) → Wedge x₀ y₀
+    | .inl p => quotientMap x₀ y₀ (.inl (hX.homotopy p))
+    | .inr p => quotientMap x₀ y₀ (.inr (hY.homotopy p))
+  have hg : Continuous g := by
+    rw [continuous_sum_dom]
+    exact ⟨(continuous_quotientMap x₀ y₀).comp
+      (continuous_inl.comp hX.homotopy.continuous),
+      (continuous_quotientMap x₀ y₀).comp
+        (continuous_inr.comp hY.homotopy.continuous)⟩
+  have heq : (fun p : unitInterval × Sum X Y =>
+      wedgeContract hX hY (p.1, quotientMap x₀ y₀ p.2)) =
+      g ∘ Homeomorph.prodSumDistrib := by
+    funext p
+    rcases p with ⟨t, s⟩
+    cases s <;> rfl
+  rw [heq]
+  exact hg.comp Homeomorph.prodSumDistrib.continuous
+
+/-- Simultaneous pointed contractions on both summands descend to a pointed
+contraction of their point wedge. -/
+def wedgePointedContraction (hX : PointedContraction X x₀)
+    (hY : PointedContraction Y y₀) :
+    PointedContraction (Wedge x₀ y₀) (quotientMap x₀ y₀ (.inl x₀)) where
+  homotopy :=
+    { toFun := wedgeContract hX hY
+      continuous_toFun := wedgeContract_continuous hX hY
+      map_zero_left := by
+        rintro ⟨a⟩
+        cases a with
+        | inl x =>
+            change quotientMap x₀ y₀ (Sum.inl (hX.homotopy (0, x))) =
+              quotientMap x₀ y₀ (Sum.inl x)
+            exact congrArg (fun z => quotientMap x₀ y₀ (Sum.inl z))
+              (hX.homotopy.map_zero_left x)
+        | inr y =>
+            change quotientMap x₀ y₀ (Sum.inr (hY.homotopy (0, y))) =
+              quotientMap x₀ y₀ (Sum.inr y)
+            exact congrArg (fun z => quotientMap x₀ y₀ (Sum.inr z))
+              (hY.homotopy.map_zero_left y)
+      map_one_left := by
+        rintro ⟨a⟩
+        cases a with
+        | inl x =>
+            change quotientMap x₀ y₀ (Sum.inl (hX.homotopy (1, x))) =
+              quotientMap x₀ y₀ (Sum.inl x₀)
+            exact congrArg (fun z => quotientMap x₀ y₀ (Sum.inl z))
+              (hX.homotopy.map_one_left x)
+        | inr y =>
+            calc
+              quotientMap x₀ y₀ (.inr (hY.homotopy (1, y))) =
+                  quotientMap x₀ y₀ (.inr y₀) := congrArg
+                    (fun z => quotientMap x₀ y₀ (.inr z))
+                    (hY.homotopy.map_one_left y)
+              _ = quotientMap x₀ y₀ (.inl x₀) := (Quotient.sound
+                    (Relation.EqvGen.rel _ _ Rel.base)).symm }
+  fixed := by
+    intro t
+    change quotientMap x₀ y₀ (.inl (hX.homotopy (t, x₀))) = _
+    rw [hX.fixed]
+
+end WedgeContraction
+
+/-- The restricted open neighbourhood of the basepoint in the two-circle
+wedge. -/
+def twoCirclesBaseNeighborhood : Set TwoCircles :=
+  restrictedOpen (1 : Circle) (1 : Circle)
+    circleBaseNeighborhood circleBaseNeighborhood
+
+theorem twoCirclesBaseNeighborhood_isOpen :
+    IsOpen twoCirclesBaseNeighborhood :=
+  restrictedOpen_isOpen circleBaseNeighborhood_isOpen
+    circleBaseNeighborhood_isOpen circleBase_mem circleBase_mem
+
+theorem twoCirclesBase_mem :
+    twoCirclesPoint ∈ twoCirclesBaseNeighborhood := by
+  exact ⟨.inl (1 : Circle), circleBase_mem, rfl⟩
+
+def twoCirclesBaseNeighborhoodHomeomorph :
+    twoCirclesBaseNeighborhood ≃ₜ
+      Wedge (⟨1, circleBase_mem⟩ : circleBaseNeighborhood)
+        (⟨1, circleBase_mem⟩ : circleBaseNeighborhood) :=
+  restrictedOpenHomeomorphWedge circleBaseNeighborhood_isOpen
+    circleBaseNeighborhood_isOpen circleBase_mem circleBase_mem
+
+theorem twoCirclesBaseNeighborhoodHomeomorph_base :
+    twoCirclesBaseNeighborhoodHomeomorph
+      ⟨twoCirclesPoint, twoCirclesBase_mem⟩ =
+        quotientMap (⟨1, circleBase_mem⟩ : circleBaseNeighborhood)
+          (⟨1, circleBase_mem⟩ : circleBaseNeighborhood)
+          (.inl ⟨1, circleBase_mem⟩) := by
+  exact restrictedOpenHomeomorphWedge_left _ _ _ _ _ _
+
+/-- The simultaneous contraction of the two punctured-circle legs,
+transported back to the literal restricted open neighbourhood. -/
+def twoCirclesBaseNeighborhood_contraction :
+    PointedContraction twoCirclesBaseNeighborhood
+      ⟨twoCirclesPoint, twoCirclesBase_mem⟩ := by
+  let e := twoCirclesBaseNeighborhoodHomeomorph
+  let h := wedgePointedContraction circleBaseNeighborhood_contraction
+    circleBaseNeighborhood_contraction
+  have he : e ⟨twoCirclesPoint, twoCirclesBase_mem⟩ =
+      quotientMap (⟨1, circleBase_mem⟩ : circleBaseNeighborhood)
+        (⟨1, circleBase_mem⟩ : circleBaseNeighborhood)
+        (.inl ⟨1, circleBase_mem⟩) :=
+    twoCirclesBaseNeighborhoodHomeomorph_base
+  rw [← he] at h
+  exact ConstructionTargets.PointWedgeVanKampen.PointedContraction.homeomorphSymm e h
+
 #print axioms threeCircles_locPathConnected
 #print axioms fundamentalGroupMulEquivOfSingleObjEquivalence
 #print axioms threeCircles_pathConnected
@@ -143,5 +315,6 @@ def circleBaseNeighborhood_contraction :
 #print axioms coprodFreeGroupFinTwoFinOne_equiv
 #print axioms multiplicativeIntEquivFreeGroupFinOne
 #print axioms circleBaseNeighborhood_contraction
+#print axioms twoCirclesBaseNeighborhood_contraction
 
 end ConstructionTargets.PointWedgeVanKampen

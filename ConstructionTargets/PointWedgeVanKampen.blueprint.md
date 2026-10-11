@@ -254,7 +254,7 @@ uses: B10,
 `PointWedgeRestrictedOpenQuotient.restrictedOpen`,
 `restrictedOpen_isOpen`, `restrictedOpenHomeomorphWedge`
 
-status: planned
+status: proved
 
 Let the neighborhood be
 `restrictedOpen 1 1 circleBaseNeighborhood circleBaseNeighborhood` in
