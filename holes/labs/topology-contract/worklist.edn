@@ -98225,6 +98225,8 @@
    :other-consumers []}
   {:consumer :t99J01,
    :stop-count 1,
+   :review-finding
+   "extend Mathlib: state and prove the missing theorem in scope",
    :evidence
    {:residual
     "Restore or implement the reviewed generic point-wedge inclusion-coordinate artifact, then recursively normalize the coproduct and export the TwoCircles and ThreeCircles equivalences.",
@@ -98268,6 +98270,12 @@
       :exit 0,
       :finding
       "The ledger records the absent coordinate theorem as this row's prerequisite."}],
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1791681485604-3624-eacbd87b",
+     :finding
+     "extend Mathlib: state and prove the missing theorem in scope"},
     :changed-paths [],
     :fixture
     {:path "/tmp/finite-circle-wedge-pi1-probe.lean",
@@ -98276,7 +98284,7 @@
      :status :self-axiomatized},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["ConstructionTargets/FiniteCircleWedgeFundamentalGroup.lean"],
    :dag-node
@@ -98298,6 +98306,7 @@
      "registry check"]},
    :id :routes-2026-10-11-finite-circle-wedge-pi1-induction-74,
    :kind :reusable-theorem,
+   :fail-count 1,
    :depends-on [],
    :current-residual
    "After the ThreeCircles equivalence is banked, build the frozen-facing component sheet and pi1 restriction package, then assemble all three conjuncts.",
