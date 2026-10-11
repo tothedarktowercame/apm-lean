@@ -959,6 +959,19 @@ theorem integralRelativeHomologyComparisonWithTransport_normalization_of_coeffic
   exact integralRelativeHomologyComparisonWithTransport_generator_of_coefficient_one
     k x hcoeff
 
+/-- Nonnegativity of the corrected local coefficient supplies the corrected
+comparison's complete normalization square. -/
+theorem integralRelativeHomologyComparisonWithTransport_normalization_of_nonnegative
+    (k : ℕ) {M : Type} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M)
+    (hnonneg : 0 ≤ correctedLocalGeneratorCoefficient k x) :
+    (integralRelativeHomologyComparisonWithTransport
+        (deletedPoint x) (k + 2)).hom ≫
+        (ambientLocalNormalization k x).hom =
+      forgetIntModules.map (CoefficientChartLocal.localIso ℤ k x).hom := by
+  apply integralRelativeHomologyComparisonWithTransport_normalization_of_coefficient_one
+  exact correctedLocalGeneratorCoefficient_eq_one_of_nonneg k x hnonneg
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -1019,3 +1032,4 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient_eq_one_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_coefficient_one
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_coefficient_one
+#print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_nonnegative
