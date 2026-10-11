@@ -3729,102 +3729,153 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :implements-lemma
+   :lemma-constructiontargets-manifoldfundamentalclass-integralrelativehomologycomparison,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+   :dag-node
+   "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/integral-relative-homology-comparison",
+   :acceptance
+   {:implementation
+    "Promote the exact fixture definition. Compose the inverse mapHomologyIso for forgetIntModules on CoefficientRelativeSmall.relativeChains with homologyFunctor.mapIso applied to integralRelativeChainsComparison. Do not identify the homology objects definitionally and do not yet assert generator transport, orientation normalization, or localization equality.",
+    :declaration
+    "ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparison",
+    :type
+    "forall {X : Type} [TopologicalSpace X] (A : Set X) (n : Nat), forgetIntModules.obj ((CoefficientRelativeSmall.relativeChains Int A).homology n) ≅ (RelativeSingularChains A).homology n",
+    :fixture
+    "/tmp/manifold_fundamental_class_integral_relative_homology_comparison.lean",
+    :fixture-sha256
+    "6fe70e61fc027080cf9ce130a8ba8da1b5d09065b1a86a3b92e6e86a9560ede3",
+    :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
+    :route-step
+    "derive the exact relative homology representation isomorphism from the reviewed relative chain comparison and canonical homology preservation"},
+   :representation
+   {:source
+    "The ModuleCat Int coefficient-relative homology object after applying forgetIntModules",
+    :target
+    "The production AddCommGrpCat homology of RelativeSingularChains for the same pair",
+    :direction
+    "Canonical homology isomorphism from forgotten coefficient-relative homology to production relative singular homology, obtained by preservation of homology followed by homology of integralRelativeChainsComparison"},
+   :id
+   :routes-2026-10-11-manifold-integral-relative-homology-comparison-topo3-r1,
+   :kind :representation-comparison,
+   :area "manifold-fundamental-class",
+   :depends-on
+   [:routes-2026-10-10-topo3-seed-checkpoint-1
+    :routes-2026-10-10-manifold-local-positive-excision-topo3-r1
+    :routes-2026-10-10-manifold-oriented-overlap-coherence-topo3-r1
+    :routes-2026-10-10-manifold-connected-overlap-unit-topo3-r1
+    :routes-2026-10-10-manifold-oriented-connected-overlap-topo3-r1
+    :routes-2026-10-10-manifold-integral-transition-sign-topo3-r1
+    :routes-2026-10-10-manifold-exclude-negative-transition-topo3-r1
+    :routes-2026-10-10-manifold-global-generator-topo3-r1
+    :routes-2026-10-10-manifold-localization-iso-generator-topo3-r1
+    :routes-2026-10-10-manifold-generator-map-isiso-topo3-r1
+    :routes-2026-10-10-manifold-localization-map-naturality-topo3-r1
+    :routes-2026-10-10-manifold-localization-apply-naturality-topo3-r1
+    :routes-2026-10-10-manifold-group-global-generator-topo3-r1
+    :routes-2026-10-10-manifold-group-generator-naturality-topo3-r1
+    :routes-2026-10-10-manifold-global-local-generator-transport-topo3-r1
+    :routes-2026-10-11-manifold-basepoint-localization-coefficient-topo3-r1
+    :routes-2026-10-11-manifold-local-generator-coefficient-unique-topo3-r1
+    :routes-2026-10-11-manifold-localization-coefficient-one-topo3-r1
+    :routes-2026-10-11-manifold-distinguished-chart-generator-topo3-r1
+    :routes-2026-10-11-manifold-integral-subtype-chain-naturality-topo3-r1
+    :routes-2026-10-11-manifold-integral-mapped-relative-cokernel-topo3-r1
+    :routes-2026-10-11-manifold-forget-relative-cokernel-topo3-r1
+    :routes-2026-10-11-manifold-integral-relative-chains-comparison-topo3-r1],
+   :current-residual
+   "Prove that integralRelativeHomologyComparison at the deleted point sends CoefficientChartLocal.generator Int to HigherChartLocalGenerator.ambientLocalGenerator, by unfolding both normalization chains and the canonical cokernel comparisons.",
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-closedorientedfundamentalclass,
    :evidence
    {:probe
     {:residual
-     "Derive the homology isomorphism from integralRelativeChainsComparison and prove exact transport of CoefficientChartLocal.generator to HigherChartLocalGenerator.ambientLocalGenerator.",
+     "Prove exact transport of CoefficientChartLocal.generator Int to HigherChartLocalGenerator.ambientLocalGenerator under integralRelativeHomologyComparison.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
      [{:id
-       :lemma-constructiontargets-manifoldfundamentalclass-integralrelativechainscomparison,
+       :lemma-constructiontargets-manifoldfundamentalclass-integralrelativehomologycomparison,
        :name
-       "ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparison",
+       "ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparison",
        :type
-       "forall {X : Type} [TopologicalSpace X] (A : Set X), (forgetIntModules.mapHomologicalComplex (ComplexShape.down Nat)).obj (CoefficientRelativeSmall.relativeChains Int A) ≅ RelativeSingularChains A",
+       "forall {X : Type} [TopologicalSpace X] (A : Set X) (n : Nat), forgetIntModules.obj ((CoefficientRelativeSmall.relativeChains Int A).homology n) ≅ (RelativeSingularChains A).homology n",
        :status :proved,
        :consumers [:t00J02 :t98A02],
        :depends-on
-       ["ConstructionTargets.ManifoldFundamentalClass.forgetIntegralRelativeCokernelComparison"
-        "ConstructionTargets.ManifoldFundamentalClass.integralMappedRelativeCokernelComparison"
-        "ConstructionTargets.SingularHomologyConcrete.relativeSingularChainsIsoCokernelSubspaceMap"],
+       ["ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparison"],
        :area "manifold-fundamental-class"}],
      :prerequisite
      {:consumer :t00J02,
       :implements-lemma
-      :lemma-constructiontargets-manifoldfundamentalclass-integralrelativechainscomparison,
+      :lemma-constructiontargets-manifoldfundamentalclass-integralrelativehomologycomparison,
       :phase :implementation,
       :state :open,
       :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
       :dag-node
-      "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/integral-relative-chain-comparison",
+      "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/integral-relative-homology-comparison",
       :acceptance
       {:implementation
-       "Promote the exact fixture definition. Compose forgetIntegralRelativeCokernelComparison, integralMappedRelativeCokernelComparison, and the inverse of relativeSingularChainsIsoCokernelSubspaceMap. Do not choose an arbitrary isomorphism, do not yet pass to homology, and do not claim generator transport, orientation normalization, or localization equality.",
+       "Promote the exact fixture definition. Compose the inverse mapHomologyIso for forgetIntModules on CoefficientRelativeSmall.relativeChains with homologyFunctor.mapIso applied to integralRelativeChainsComparison. Do not identify the homology objects definitionally and do not yet assert generator transport, orientation normalization, or localization equality.",
        :declaration
-       "ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparison",
+       "ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparison",
        :type
-       "forall {X : Type} [TopologicalSpace X] (A : Set X), (forgetIntModules.mapHomologicalComplex (ComplexShape.down Nat)).obj (CoefficientRelativeSmall.relativeChains Int A) ≅ RelativeSingularChains A",
+       "forall {X : Type} [TopologicalSpace X] (A : Set X) (n : Nat), forgetIntModules.obj ((CoefficientRelativeSmall.relativeChains Int A).homology n) ≅ (RelativeSingularChains A).homology n",
        :fixture
-       "/tmp/manifold_fundamental_class_integral_relative_chain_comparison.lean",
+       "/tmp/manifold_fundamental_class_integral_relative_homology_comparison.lean",
        :fixture-sha256
-       "9ea09a83551ebe296923890cf2bc9f08c464fd76c0f641e424c2f19216305a40",
+       "6fe70e61fc027080cf9ce130a8ba8da1b5d09065b1a86a3b92e6e86a9560ede3",
        :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
        :route-step
-       "compose the three reviewed cokernel comparisons into the exact relative singular-chain representation isomorphism"},
+       "derive the exact relative homology representation isomorphism from the reviewed relative chain comparison and canonical homology preservation"},
       :representation
       {:source
-       "The coefficient-relative singular chain complex over Int after forgetting its ModuleCat structure",
+       "The ModuleCat Int coefficient-relative homology object after applying forgetIntModules",
        :target
-       "The production AddCommGrpCat RelativeSingularChains complex for the same subspace pair",
+       "The production AddCommGrpCat homology of RelativeSingularChains for the same pair",
        :direction
-       "Canonical chain-complex isomorphism from the forgotten coefficient-relative representation to the production relative-singular-chain representation, obtained by composing cokernel preservation, the absolute-comparison-induced cokernel isomorphism, and the inverse production cokernel presentation"},
+       "Canonical homology isomorphism from forgotten coefficient-relative homology to production relative singular homology, obtained by preservation of homology followed by homology of integralRelativeChainsComparison"},
       :id
-      :routes-2026-10-11-manifold-integral-relative-chains-comparison-topo3-r1,
+      :routes-2026-10-11-manifold-integral-relative-homology-comparison-topo3-r1,
       :kind :representation-comparison,
       :area "manifold-fundamental-class",
       :depends-on
       [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
-       :routes-2026-10-11-manifold-integral-mapped-relative-cokernel-topo3-r1
-       :routes-2026-10-11-manifold-forget-relative-cokernel-topo3-r1],
+       :routes-2026-10-11-manifold-integral-relative-chains-comparison-topo3-r1],
       :current-residual
-      "Apply homologyFunctor.mapIso to integralRelativeChainsComparison, identify its source homology with the forgotten coefficient-relative homology, and prove that its hom sends CoefficientChartLocal.generator Int to HigherChartLocalGenerator.ambientLocalGenerator.",
+      "Prove that integralRelativeHomologyComparison at the deleted point sends CoefficientChartLocal.generator Int to HigherChartLocalGenerator.ambientLocalGenerator, by unfolding both normalization chains and the canonical cokernel comparisons.",
       :other-consumers [:t98A02]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake env lean /tmp/manifold_fundamental_class_integral_relative_chain_comparison.lean",
+       "lake env lean /tmp/manifold_fundamental_class_integral_relative_homology_comparison.lean",
        :exit 0,
        :output
-       "integralRelativeChainsComparison compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "integralRelativeHomologyComparison compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/manifold_fundamental_class_integral_relative_chain_comparison.lean",
+       "sha256sum /tmp/manifold_fundamental_class_integral_relative_homology_comparison.lean",
        :exit 0,
        :output
-       "9ea09a83551ebe296923890cf2bc9f08c464fd76c0f641e424c2f19216305a40  /tmp/manifold_fundamental_class_integral_relative_chain_comparison.lean"}
+       "6fe70e61fc027080cf9ce130a8ba8da1b5d09065b1a86a3b92e6e86a9560ede3  /tmp/manifold_fundamental_class_integral_relative_homology_comparison.lean"}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/manifold_fundamental_class_integral_relative_chain_comparison.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/manifold_fundamental_class_integral_relative_homology_comparison.lean || true)\"",
        :exit 0}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/manifold_fundamental_class_integral_relative_chain_comparison.lean",
-       :exit 1,
-       :finding
-       "The initial fixture contained a mistyped Unicode isomorphism-composition token, so Lean parsed only the first comparison. Replacing it with the standard transitivity notation produced the successful compile; no mathematical definition changed."}],
      :fixture
      {:path
-      "/tmp/manifold_fundamental_class_integral_relative_chain_comparison.lean",
+      "/tmp/manifold_fundamental_class_integral_relative_homology_comparison.lean",
       :sha256
-      "9ea09a83551ebe296923890cf2bc9f08c464fd76c0f641e424c2f19216305a40"},
+      "6fe70e61fc027080cf9ce130a8ba8da1b5d09065b1a86a3b92e6e86a9560ede3"},
      :finding
-     "All three categorical boundaries are now reviewed: forgetting the ModuleCat cokernel, comparing the two direct cokernels through absolute-chain naturality, and presenting production RelativeSingularChains as the direct cokernel. Their composition compiles definitionally at the shared subtype maps and yields the exact relative chain-complex isomorphism. The remaining representation work is at homology and on the two concrete normalized generators.",
+     "The reviewed relative chain comparison can be passed to homology without another geometric assumption. The fixture first uses the canonical mapHomologyIso for forgetIntModules, then applies the AddCommGrpCat homology functor to integralRelativeChainsComparison. This produces the exact homology objects inhabited by the coefficient and production chart generators. The remaining comparison is now an element-level normalization calculation rather than a category mismatch.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -3861,7 +3912,8 @@
     :routes-2026-10-11-manifold-integral-subtype-chain-naturality-topo3-r1
     :routes-2026-10-11-manifold-integral-mapped-relative-cokernel-topo3-r1
     :routes-2026-10-11-manifold-forget-relative-cokernel-topo3-r1
-    :routes-2026-10-11-manifold-integral-relative-chains-comparison-topo3-r1],
+    :routes-2026-10-11-manifold-integral-relative-chains-comparison-topo3-r1
+    :routes-2026-10-11-manifold-integral-relative-homology-comparison-topo3-r1],
    :current-residual
    "Local-degree counts and wild-ball complement homology remain.",
    :other-consumers [:t98A02]}
@@ -6076,7 +6128,31 @@
    :lemma-constructiontargets-singularexcision-relativesingularchainsisocokernelsubspacema,
    :kind :lemma,
    :depends-on [],
-   :other-consumers []}],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparison",
+    :type
+    "forall {X : Type} [TopologicalSpace X] (A : Set X) (n : Nat), forgetIntModules.obj ((CoefficientRelativeSmall.relativeChains Int A).homology n) ≅ (RelativeSingularChains A).homology n"},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparison",
+    :reported-by
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    :type
+    "forall {X : Type} [TopologicalSpace X] (A : Set X) (n : Nat), forgetIntModules.obj ((CoefficientRelativeSmall.relativeChains Int A).homology n) ≅ (RelativeSingularChains A).homology n",
+    :area "manifold-fundamental-class",
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+   :id
+   :lemma-constructiontargets-manifoldfundamentalclass-integralrelativehomologycomparison,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-manifoldfundamentalclass-integralrelativechainscomparison],
+   :other-consumers [:t98A02]}],
  :consumer-baselines {},
  :statuses
  #{:open
