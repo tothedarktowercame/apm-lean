@@ -115928,6 +115928,113 @@
    :id :lemma-apm-t97a03-fiber-equiv-fin-two,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "isOpen_setOf_surjective_clm",
+    :type
+    "IsOpen {L : E →L[ℝ] F | Function.Surjective L}  (size: 80-160 lines / 1-3 days)"},
+   :lemma
+   {:name "isOpen_setOf_surjective_clm",
+    :reported-by [:owner],
+    :type
+    "IsOpen {L : E →L[ℝ] F | Function.Surjective L}  (size: 80-160 lines / 1-3 days)",
+    :area "regular-points-open"},
+   :id :lemma-isopen-setof-surjective-clm,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t92J07 :t98A06]}
+  {:consumer :t97A07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "isOpen_regularPoints",
+    :type
+    "IsOpen {x | Function.Surjective (mfderiv 𝓘 𝓘 f x)}  (size: 180-350 lines / 3-7 days)"},
+   :lemma
+   {:name "isOpen_regularPoints",
+    :reported-by [:owner],
+    :type
+    "IsOpen {x | Function.Surjective (mfderiv 𝓘 𝓘 f x)}  (size: 180-350 lines / 3-7 days)",
+    :area "regular-points-open"},
+   :id :lemma-isopen-regularpoints,
+   :kind :lemma,
+   :depends-on [:lemma-isopen-setof-surjective-clm],
+   :other-consumers [:t92J07 :t98A06]}
+  {:consumer :t97A07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "criticalValue_nonempty_of_target_pos",
+    :type
+    "0 < n → (criticalValues f).Nonempty  (size: 100-200 lines / 2-4 days)"},
+   :lemma
+   {:name "criticalValue_nonempty_of_target_pos",
+    :reported-by [:owner],
+    :type
+    "0 < n → (criticalValues f).Nonempty  (size: 100-200 lines / 2-4 days)",
+    :area "regular-points-open"},
+   :id :lemma-criticalvalue-nonempty-of-target-pos,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "range_mem_nhds_of_regular",
+    :type
+    "Surjective (mfderiv 𝓘 𝓘 f x) → Set.range f ∈ nhds (f x)  (size: 140-280 lines / 3-6 days)"},
+   :lemma
+   {:name "range_mem_nhds_of_regular",
+    :reported-by [:owner],
+    :type
+    "Surjective (mfderiv 𝓘 𝓘 f x) → Set.range f ∈ nhds (f x)  (size: 140-280 lines / 3-6 days)",
+    :area "regular-points-open"},
+   :id :lemma-range-mem-nhds-of-regular,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "criticalValues_infinite_of_nonconstant",
+    :type
+    "1 < n → (∃ x y, f x ≠ f y) → (criticalValues f).Infinite  (size: 100-220 lines / 2-5 days)"},
+   :lemma
+   {:name "criticalValues_infinite_of_nonconstant",
+    :reported-by [:owner],
+    :type
+    "1 < n → (∃ x y, f x ≠ f y) → (criticalValues f).Infinite  (size: 100-220 lines / 2-5 days)",
+    :area "regular-points-open"},
+   :id :lemma-criticalvalues-infinite-of-nonconstant,
+   :kind :lemma,
+   :depends-on
+   [:lemma-isopen-regularpoints :lemma-range-mem-nhds-of-regular],
+   :other-consumers []}
+  {:consumer :t97A07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "T97A07.criticalValues_zero",
+    :type "  (found in problems/t97A07/lean/Main.lean:21)"},
+   :lemma
+   {:name "T97A07.criticalValues_zero",
+    :reported-by [:owner],
+    :type "  (found in problems/t97A07/lean/Main.lean:21)",
+    :proved-in :owner},
+   :id :lemma-t97a07-criticalvalues-zero,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01

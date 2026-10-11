@@ -17719,7 +17719,9 @@
    :depends-on [],
    :other-consumers [:t92J05 :t93J03 :t99J01 :t00J07]}
   {:consumer :t00A02,
-   :stop-count 10,
+   :owner-reopen
+   "reopened: a lemma this row reported missing is now banked",
+   :stop-count 0,
    :review-finding
    "Blueprint B9 claims every final hypothesis is used, but LocPathConnectedSpace X is unused: B1 does not assume it, B7 derives PathConnectedSpace from SimplyConnectedSpace, B8 uses simple-connected path homotopy, and no other node cites or uses local path-connectedness. Repair the blueprint and frozen Lean interface by either removing LocPathConnectedSpace X or adding a concrete node whose statement and proof genuinely require it, with the dependency recorded in uses:.",
    :implements-lemma
@@ -17836,7 +17838,7 @@
    :phase :implementation,
    :owner-repair
    "2026-10-11 claude-14: final type gains [T2Space X] [LocallyCompactSpace X] (Mathlib quotient-covering needs them; every consumer, the plane and spheres, has them). Do not prove covering under weaker hypotheses.",
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean"
     "ConstructionTargets/DeckGroupQuotientFundamentalGroup.md"
@@ -17860,7 +17862,7 @@
    :id :program-2026-10-11-deck-group-quotient-pi1,
    :kind :reusable-theorem,
    :campaign-priority 50,
-   :fail-count 1,
+   :fail-count 0,
    :depends-on [],
    :program true,
    :other-consumers [:t92J05 :t93J03 :t99J01 :t00J07],
@@ -17899,7 +17901,7 @@
      "Implemented and committed reviewed blueprint B6. orbitEndpointMonodromyRaw_mul proves raw(a*b)=raw(b)*raw(a): the proof exposes fundamental-group multiplication as the path for b followed by a, applies monodromy_trans_apply, rewrites the intermediate endpoint through the fiber-coordinate equivalence, and applies B5 deck-equivariance. The final theorem remains incomplete; B7 packages the inverse raw coordinate as a homomorphism."}]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -17914,7 +17916,9 @@
     :type
     "forall (k : ℕ), coefficientOpenDiskConnectingTransport k = forgetIntModules.map (CoefficientPairSequence.connecting ℤ (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2)) (k + 1)) ≫ (((CoefficientH0.SingularChains ℤ (TopCat.of (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2)))).sc (k + 1)).mapHomologyIso forgetIntModules).inv",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/ManifoldFundamentalClass.lean"]},
    :id :lemma-mfclass-coefficient-open-disk-connecting-transport,
    :kind :lemma,
    :depends-on
@@ -19611,7 +19615,406 @@
    :id :lemma-lefschetz-fixedpoint-compactpolyhedron,
    :kind :lemma,
    :depends-on [],
-   :other-consumers [:t00J01 :t02A04]}],
+   :other-consumers [:t00J01 :t02A04]}
+  {:consumer :t97A05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "compl_range_nonempty",
+    :type "Set.range iW ≠ Set.univ  (size: 150-300 lines / 3-7 days)"},
+   :lemma
+   {:name "compl_range_nonempty",
+    :reported-by [:owner],
+    :type "Set.range iW ≠ Set.univ  (size: 150-300 lines / 3-7 days)",
+    :area "hypersurface-separation-bounds"},
+   :id :lemma-compl-range-nonempty,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "orientedHypersurface_twoSidedCollar",
+    :type
+    "An oriented embedded codimension-one compact manifold has a two-sided tubular collar  (size: 800-1600 lines / 3-7 weeks)"},
+   :lemma
+   {:name "orientedHypersurface_twoSidedCollar",
+    :reported-by [:owner],
+    :type
+    "An oriented embedded codimension-one compact manifold has a two-sided tubular collar  (size: 800-1600 lines / 3-7 weeks)",
+    :area "tubular-neighbourhood"},
+   :id :lemma-orientedhypersurface-twosidedcollar,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "separatingHypersurface_bounds",
+    :type
+    "If the complement of W is disconnected, W is the oriented boundary of a compact manifold-with-boundary in Y  (size: 1000-2200 lines / 1-2 months)"},
+   :lemma
+   {:name "separatingHypersurface_bounds",
+    :reported-by [:owner],
+    :type
+    "If the complement of W is disconnected, W is the oriented boundary of a compact manifold-with-boundary in Y  (size: 1000-2200 lines / 1-2 months)",
+    :area "hypersurface-separation-bounds"},
+   :id :lemma-separatinghypersurface-bounds,
+   :kind :lemma,
+   :depends-on [:lemma-orientedhypersurface-twosidedcollar],
+   :other-consumers []}
+  {:consumer :t97A05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "relative_transversality_perturbation",
+    :type
+    "A smooth map can be homotoped rel a neighborhood of its inverse image of W to be transverse to the bounded region  (size: 1000-2500 lines / 1-2 months)"},
+   :lemma
+   {:name "relative_transversality_perturbation",
+    :reported-by [:owner],
+    :type
+    "A smooth map can be homotoped rel a neighborhood of its inverse image of W to be transverse to the bounded region  (size: 1000-2500 lines / 1-2 months)",
+    :area "transversality-perturbation"},
+   :id :lemma-relative-transversality-perturbation,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "compactOrientedOneManifold_boundarySigns",
+    :type
+    "The signed boundary count of a compact oriented one-manifold is zero  (size: 700-1500 lines / 3-6 weeks)"},
+   :lemma
+   {:name "compactOrientedOneManifold_boundarySigns",
+    :reported-by [:owner],
+    :type
+    "The signed boundary count of a compact oriented one-manifold is zero  (size: 700-1500 lines / 3-6 weeks)",
+    :area "compact-one-manifold-classification"},
+   :id :lemma-compactorientedonemanifold-boundarysigns,
+   :kind :lemma,
+   :depends-on
+   [:lemma-separatinghypersurface-bounds
+    :lemma-relative-transversality-perturbation],
+   :other-consumers []}
+  {:consumer :t97A05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "localSign_eq_boundarySign",
+    :type
+    "The frozen localSign agrees with the induced oriented boundary sign  (size: 200-450 lines / 1-2 weeks)"},
+   :lemma
+   {:name "localSign_eq_boundarySign",
+    :reported-by [:owner],
+    :type
+    "The frozen localSign agrees with the induced oriented boundary sign  (size: 200-450 lines / 1-2 weeks)",
+    :area "intersection-homotopy-invariance"},
+   :id :lemma-localsign-eq-boundarysign,
+   :kind :lemma,
+   :depends-on [:lemma-compactorientedonemanifold-boundarysigns],
+   :other-consumers []}
+  {:consumer :t97A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "manifoldForm_smooth_calculus",
+    :type
+    "Smoothness and exterior-derivative naturality for ManifoldFormTargets.Form  (size: 1200-2500 lines / 1-2 months)"},
+   :lemma
+   {:name "manifoldForm_smooth_calculus",
+    :reported-by [:owner],
+    :type
+    "Smoothness and exterior-derivative naturality for ManifoldFormTargets.Form  (size: 1200-2500 lines / 1-2 months)",
+    :area "manifold-form-calculus"},
+   :id :lemma-manifoldform-smooth-calculus,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t98J06 :t93A06]}
+  {:consumer :t97A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "smoothForm_extension_of_compactEmbedding",
+    :type
+    "∃ form, IsSmooth form ∧ pullback i form = η  (size: 500-1000 lines / 2-4 weeks)"},
+   :lemma
+   {:name "smoothForm_extension_of_compactEmbedding",
+    :reported-by [:owner],
+    :type
+    "∃ form, IsSmooth form ∧ pullback i form = η  (size: 500-1000 lines / 2-4 weeks)",
+    :area "form-extension-partition-of-unity"},
+   :id :lemma-smoothform-extension-of-compactembedding,
+   :kind :lemma,
+   :depends-on [:lemma-manifoldform-smooth-calculus],
+   :other-consumers []}
+  {:consumer :t97A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "continuousHomotopy_smooth_approximation",
+    :type
+    "A continuous homotopy between smooth manifold maps is homotopic rel endpoints to a smooth homotopy  (size: 800-1800 lines / 3-7 weeks)"},
+   :lemma
+   {:name "continuousHomotopy_smooth_approximation",
+    :reported-by [:owner],
+    :type
+    "A continuous homotopy between smooth manifold maps is homotopic rel endpoints to a smooth homotopy  (size: 800-1800 lines / 3-7 weeks)",
+    :area "smooth-homotopy-approximation"},
+   :id :lemma-continuoushomotopy-smooth-approximation,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "deRham_homotopy_formula",
+    :type
+    "For closed ω and smoothly homotopic f₀,f₁, pullback f₀ ω - pullback f₁ ω is exact  (size: 900-1800 lines / 3-7 weeks)"},
+   :lemma
+   {:name "deRham_homotopy_formula",
+    :reported-by [:owner],
+    :type
+    "For closed ω and smoothly homotopic f₀,f₁, pullback f₀ ω - pullback f₁ ω is exact  (size: 900-1800 lines / 3-7 weeks)",
+    :area "de-rham-homotopy-formula"},
+   :id :lemma-derham-homotopy-formula,
+   :kind :lemma,
+   :depends-on
+   [:lemma-manifoldform-smooth-calculus
+    :lemma-continuoushomotopy-smooth-approximation],
+   :other-consumers []}
+  {:consumer :t97A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "stokes_compact_boundaryless",
+    :type
+    "Integral of an exact top form on a compact boundaryless manifold is zero, while a volume form has positive integral  (size: 1500-3500 lines / 2-4 months)"},
+   :lemma
+   {:name "stokes_compact_boundaryless",
+    :reported-by [:owner],
+    :type
+    "Integral of an exact top form on a compact boundaryless manifold is zero, while a volume form has positive integral  (size: 1500-3500 lines / 2-4 months)",
+    :area "stokes-compact-manifold"},
+   :id :lemma-stokes-compact-boundaryless,
+   :kind :lemma,
+   :depends-on [:lemma-manifoldform-smooth-calculus],
+   :other-consumers [:t94A10 :t01J06]}
+  {:consumer :t97J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "polygon_quotient_isManifold",
+    :type
+    "Each apm_t97J02_Surface o g is compact, T2, connected, and a topological 2-manifold  (size: 1000-2200 lines / 1-2 months)"},
+   :lemma
+   {:name "polygon_quotient_isManifold",
+    :reported-by [:owner],
+    :type
+    "Each apm_t97J02_Surface o g is compact, T2, connected, and a topological 2-manifold  (size: 1000-2200 lines / 1-2 months)",
+    :area "polygon-quotient-manifold-charts"},
+   :id :lemma-polygon-quotient-ismanifold,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t97A01 :t94J09]}
+  {:consumer :t97J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "permutation_polygon_cover",
+    :type
+    "A finite permutation representation satisfying a polygon relator produces an IsCoveringMap with exact fibre cardinality  (size: 700-1400 lines / 3-6 weeks)"},
+   :lemma
+   {:name "permutation_polygon_cover",
+    :reported-by [:owner],
+    :type
+    "A finite permutation representation satisfying a polygon relator produces an IsCoveringMap with exact fibre cardinality  (size: 700-1400 lines / 3-6 weeks)",
+    :area "polygon-permutation-cover"},
+   :id :lemma-permutation-polygon-cover,
+   :kind :lemma,
+   :depends-on [:lemma-polygon-quotient-ismanifold],
+   :other-consumers []}
+  {:consumer :t97J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "cover_model_homeomorph_normal_form",
+    :type
+    "The three lifted polygon complexes are homeomorphic to Surface false 12, Surface true 7, and Surface false 14  (size: 1000-2500 lines / 1-2 months)"},
+   :lemma
+   {:name "cover_model_homeomorph_normal_form",
+    :reported-by [:owner],
+    :type
+    "The three lifted polygon complexes are homeomorphic to Surface false 12, Surface true 7, and Surface false 14  (size: 1000-2500 lines / 1-2 months)",
+    :area "polygon-permutation-cover"},
+   :id :lemma-cover-model-homeomorph-normal-form,
+   :kind :lemma,
+   :depends-on [:lemma-permutation-polygon-cover],
+   :other-consumers []}
+  {:consumer :t97J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "compact_smooth_surface_classification",
+    :type
+    "Every compact connected smooth 2-manifold is homeomorphic to a unique standard orientable or nonorientable polygon surface  (size: 2000-5000 lines / 2-4 months)"},
+   :lemma
+   {:name "compact_smooth_surface_classification",
+    :reported-by [:owner],
+    :type
+    "Every compact connected smooth 2-manifold is homeomorphic to a unique standard orientable or nonorientable polygon surface  (size: 2000-5000 lines / 2-4 months)",
+    :area "surface-classification"},
+   :id :lemma-compact-smooth-surface-classification,
+   :kind :lemma,
+   :depends-on [:lemma-polygon-quotient-ismanifold],
+   :other-consumers [:t96A01 :t95J06]}
+  {:consumer :t97J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "eulerCharacteristic_finite_cover_surface_and_orientationParity",
+    :type
+    "χ(E)=n*χ(B) for n-sheeted surface covers, and an orientable cover of a nonorientable surface has even degree  (size: 700-1500 lines / 3-6 weeks)"},
+   :lemma
+   {:name
+    "eulerCharacteristic_finite_cover_surface_and_orientationParity",
+    :reported-by [:owner],
+    :type
+    "χ(E)=n*χ(B) for n-sheeted surface covers, and an orientable cover of a nonorientable surface has even degree  (size: 700-1500 lines / 3-6 weeks)",
+    :area "euler-characteristic-finite-cover"},
+   :id
+   :lemma-eulercharacteristic-finite-cover-surface-and-orientationparity,
+   :kind :lemma,
+   :depends-on [:lemma-compact-smooth-surface-classification],
+   :other-consumers [:t96A01 :t94J04]}
+  {:consumer :t97J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t97J02_candidate_eulerCharacteristics",
+    :type "  (found in problems/t97J02/lean/Main.lean:81)"},
+   :lemma
+   {:name "apm_t97J02_candidate_eulerCharacteristics",
+    :reported-by [:owner],
+    :type "  (found in problems/t97J02/lean/Main.lean:81)",
+    :proved-in :owner},
+   :id :lemma-apm-t97j02-candidate-eulercharacteristics,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t98A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "closedManifold_homology_localToGlobal",
+    :type
+    "Closed 4-manifold homology vanishes above dimension four and carries compatible local fundamental classes  (size: 1500-3500 lines / 2-4 months)"},
+   :lemma
+   {:name "closedManifold_homology_localToGlobal",
+    :reported-by [:owner],
+    :type
+    "Closed 4-manifold homology vanishes above dimension four and carries compatible local fundamental classes  (size: 1500-3500 lines / 2-4 months)",
+    :area "manifold-homology-local-to-global"},
+   :id :lemma-closedmanifold-homology-localtoglobal,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t98A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "wildBallComplement_homology",
+    :type
+    "For every topological embedding φ : D⁴ → X, H_k(X \\ φ(int D⁴)) ≅ H_k(X) for k≤3 and H₄ of the complement vanishes  (size: 2000-5000 lines / 2-5 months)"},
+   :lemma
+   {:name "wildBallComplement_homology",
+    :reported-by [:owner],
+    :type
+    "For every topological embedding φ : D⁴ → X, H_k(X \\ φ(int D⁴)) ≅ H_k(X) for k≤3 and H₄ of the complement vanishes  (size: 2000-5000 lines / 2-5 months)",
+    :area "wild-embedding-anr"},
+   :id :lemma-wildballcomplement-homology,
+   :kind :lemma,
+   :depends-on [:lemma-closedmanifold-homology-localtoglobal],
+   :other-consumers []}
+  {:consumer :t98A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "wildConnectedSum_mayerVietoris",
+    :type
+    "An open-cover Mayer-Vietoris sequence computes the frozen quotient from its two wild ball complements and glued S³  (size: 1500-3500 lines / 2-4 months)"},
+   :lemma
+   {:name "wildConnectedSum_mayerVietoris",
+    :reported-by [:owner],
+    :type
+    "An open-cover Mayer-Vietoris sequence computes the frozen quotient from its two wild ball complements and glued S³  (size: 1500-3500 lines / 2-4 months)",
+    :area "mayer-vietoris-open-cover"},
+   :id :lemma-wildconnectedsum-mayervietoris,
+   :kind :lemma,
+   :depends-on [:lemma-wildballcomplement-homology],
+   :other-consumers []}
+  {:consumer :t98A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "connectedSum_topConnecting",
+    :type
+    "The degree-four connecting map H₄(Y) → H₃(S³) is an isomorphism and yields the frozen homology formulas  (size: 500-1200 lines / 2-5 weeks)"},
+   :lemma
+   {:name "connectedSum_topConnecting",
+    :reported-by [:owner],
+    :type
+    "The degree-four connecting map H₄(Y) → H₃(S³) is an isomorphism and yields the frozen homology formulas  (size: 500-1200 lines / 2-5 weeks)",
+    :area "manifold-fundamental-class"},
+   :id :lemma-connectedsum-topconnecting,
+   :kind :lemma,
+   :depends-on
+   [:lemma-closedmanifold-homology-localtoglobal
+    :lemma-wildconnectedsum-mayervietoris],
+   :other-consumers []}
+  {:consumer :t98A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t98A02_gluedDescEquiv",
+    :type "  (found in problems/t98A02/lean/Main.lean:206)"},
+   :lemma
+   {:name "t98A02_gluedDescEquiv",
+    :reported-by [:owner],
+    :type "  (found in problems/t98A02/lean/Main.lean:206)",
+    :proved-in :owner},
+   :id :lemma-t98a02-glueddescequiv,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}],
  :consumer-baselines {},
  :statuses
  #{:open

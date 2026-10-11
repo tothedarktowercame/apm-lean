@@ -79150,4 +79150,110 @@
    :id :lemma-apm-t97a04-bridge-3,
    :kind :lemma,
    :depends-on [:lemma-t97a04-sheary-h2],
+   :other-consumers []}
+  {:consumer :t98A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "wedge_point_not_manifold",
+    :type
+    "∀ n, ¬ apm_t98a03_IsTopologicalManifold n (apm_t98a03_X t₀ r₀)  (size: 350-700 lines / 1-3 weeks)"},
+   :lemma
+   {:name "wedge_point_not_manifold",
+    :reported-by [:owner],
+    :type
+    "∀ n, ¬ apm_t98a03_IsTopologicalManifold n (apm_t98a03_X t₀ r₀)  (size: 350-700 lines / 1-3 weeks)",
+    :area "wedge-point-not-manifold"},
+   :id :lemma-wedge-point-not-manifold,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t98A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "rp2_double_cover_and_pi1",
+    :type
+    "S² → apm_t98a03_RP2 is a two-sheeted covering and FundamentalGroup apm_t98a03_RP2 r₀ ≃* Multiplicative (ZMod 2)  (size: 600-1200 lines / 2-5 weeks)"},
+   :lemma
+   {:name "rp2_double_cover_and_pi1",
+    :reported-by [:owner],
+    :type
+    "S² → apm_t98a03_RP2 is a two-sheeted covering and FundamentalGroup apm_t98a03_RP2 r₀ ≃* Multiplicative (ZMod 2)  (size: 600-1200 lines / 2-5 weeks)",
+    :area "rp2-double-cover-and-pi1"},
+   :id :lemma-rp2-double-cover-and-pi1,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t96A02]}
+  {:consumer :t98A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "wedge_vanKampen_torus_rp2",
+    :type
+    "FundamentalGroup (apm_t98a03_X t₀ r₀) (apm_t98a03_basepoint t₀ r₀) ≃* apm_t98a03_expectedFundamentalGroup  (size: 350-700 lines / 1-3 weeks)"},
+   :lemma
+   {:name "wedge_vanKampen_torus_rp2",
+    :reported-by [:owner],
+    :type
+    "FundamentalGroup (apm_t98a03_X t₀ r₀) (apm_t98a03_basepoint t₀ r₀) ≃* apm_t98a03_expectedFundamentalGroup  (size: 350-700 lines / 1-3 weeks)",
+    :area "wedge-van-kampen-instance"},
+   :id :lemma-wedge-vankampen-torus-rp2,
+   :kind :lemma,
+   :depends-on [:lemma-rp2-double-cover-and-pi1],
+   :other-consumers []}
+  {:consumer :t98A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "wedge_regular_threeCover",
+    :type
+    "∃ Y p, apm_t98a03_IsConnectedThreeFoldCover p ∧ apm_t98a03_IsRegularCover p  (size: 700-1400 lines / 3-6 weeks)"},
+   :lemma
+   {:name "wedge_regular_threeCover",
+    :reported-by [:owner],
+    :type
+    "∃ Y p, apm_t98a03_IsConnectedThreeFoldCover p ∧ apm_t98a03_IsRegularCover p  (size: 700-1400 lines / 3-6 weeks)",
+    :area "wedge-covering-construction"},
+   :id :lemma-wedge-regular-threecover,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t98A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "wedge_irregular_threeCover",
+    :type
+    "∃ Y p, apm_t98a03_IsConnectedThreeFoldCover p ∧ ¬ apm_t98a03_IsRegularCover p  (size: 900-1800 lines / 3-7 weeks)"},
+   :lemma
+   {:name "wedge_irregular_threeCover",
+    :reported-by [:owner],
+    :type
+    "∃ Y p, apm_t98a03_IsConnectedThreeFoldCover p ∧ ¬ apm_t98a03_IsRegularCover p  (size: 900-1800 lines / 3-7 weeks)",
+    :area "wedge-covering-construction"},
+   :id :lemma-wedge-irregular-threecover,
+   :kind :lemma,
+   :depends-on [:lemma-rp2-double-cover-and-pi1],
+   :other-consumers []}
+  {:consumer :t98A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t98a03_threeFoldCover_fiber_equiv_fin_three",
+    :type "  (found in problems/t98A03/lean/Main.lean:105)"},
+   :lemma
+   {:name "apm_t98a03_threeFoldCover_fiber_equiv_fin_three",
+    :reported-by [:owner],
+    :type "  (found in problems/t98A03/lean/Main.lean:105)",
+    :proved-in :owner},
+   :id :lemma-apm-t98a03-threefoldcover-fiber-equiv-fin-three,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}]}
