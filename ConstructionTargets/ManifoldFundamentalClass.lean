@@ -1053,6 +1053,27 @@ noncomputable def scPairZeroπ₂Iso
     · simpa using ShortComplex.π₂.map_zero X Y
     · simpa using ShortComplex.π₂.map_id Y)
 
+abbrev ParallelPairZeroπ₃Comparison
+    {C : Type*} [Category C] [HasZeroMorphisms C]
+    {X Y : ShortComplex C} (f : X ⟶ Y) :
+    Type _ := parallelPair f 0 ⋙ ShortComplex.π₃ ≅ parallelPair f.τ₃ 0
+
+/-- Evaluating a parallel-pair diagram of short-complex morphisms at its
+third object agrees with forming the componentwise parallel pair. -/
+noncomputable def scPairZeroπ₃Iso
+    {C : Type*} [Category C] [HasZeroMorphisms C]
+    {X Y : ShortComplex C} (f : X ⟶ Y) :
+    ParallelPairZeroπ₃Comparison f :=
+  NatIso.ofComponents (fun j ↦ match j with
+    | WalkingParallelPair.zero => Iso.refl _
+    | WalkingParallelPair.one => Iso.refl _) (by
+    intro i j g
+    rcases i <;> rcases j <;> rcases g
+    · simpa using ShortComplex.π₃.map_id X
+    · simp
+    · simpa using ShortComplex.π₃.map_zero X Y
+    · simpa using ShortComplex.π₃.map_id Y)
+
 /-- The corrected relative-homology comparison intertwines the coefficient
 absolute-to-relative map with the production relative projection. -/
 theorem integralRelativeHomologyComparisonWithTransport_projection
@@ -2027,6 +2048,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetSnakeKernelτ₃Limit
 #print axioms ConstructionTargets.ManifoldFundamentalClass.scPairZeroπ₁Iso
 #print axioms ConstructionTargets.ManifoldFundamentalClass.scPairZeroπ₂Iso
+#print axioms ConstructionTargets.ManifoldFundamentalClass.scPairZeroπ₃Iso
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
