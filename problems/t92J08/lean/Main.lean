@@ -1,5 +1,6 @@
 import Mathlib
 import Mathlib.Geometry.Manifold.IntegralCurve.UniformTime
+import ConstructionTargets.t92J08Closure
 
 /-! # APM t92J08: complete integral curves of vector fields
 
@@ -64,7 +65,7 @@ theorem apm_t92J08_bridge_1
     ∃ ε : ℝ, 0 < ε ∧ ∀ x : M,
       ∃ γ : ℝ → M, γ 0 = x ∧
         IsMIntegralCurveOn γ v (Ioo (-ε) ε) := by
-  sorry
+  exact t92J08Closure.exists_uniform_isMIntegralCurveOn_of_compact n M v hv
 
 /-- Why this unblocks the counterexample half of `apm_t92j08`: agreement
 with `1/(1-t)` on `t < 1` contradicts continuity at `1` of any global
@@ -121,3 +122,6 @@ theorem apm_t92j08 :
   apply isMIntegralCurveOn_Ioo_eqOn_of_contMDiff_boundaryless
     (show 0 ∈ Ioo a b from ⟨ha, hb⟩) hv hγ (hδ.isMIntegralCurveOn _)
   exact hδ0.symm
+
+#print axioms apm_t92J08_bridge_1
+#print axioms apm_t92j08

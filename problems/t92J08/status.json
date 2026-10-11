@@ -15,9 +15,9 @@
     "files": [
       "lean/Main.lean"
     ],
-    "sorry_count_main": 1,
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 1
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -29,9 +29,9 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "closer_hop": 3,
-  "closer_progress": "The exact ordinary derivative identity and its transport to IsMIntegralCurveOn for the real self-model are compiled, closing the frozen middle conjunct. The endpoint continuity contradiction and compactness-to-uniform-local-time construction remain.",
+  "closer_progress": "Complete. The compactness-to-uniform-local-time bridge is proved from the chart-local Picard-Lindelof construction, and the registered theorem compiles without placeholders.",
   "imported_at": "2026-07-13T17:26:57.546783Z",
   "sorry_audit": {
     "method": "lake env lean elaboration + comment-aware token count",

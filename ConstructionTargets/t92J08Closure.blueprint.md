@@ -141,7 +141,7 @@ lean: `apm_t92J08_bridge_1` : exactly the declaration already present in
 
 uses: B5
 
-status: planned
+status: proved
 
 Apply B5 with the frozen `n`, `M`, `v`, and `hv`.  No additional conversion is
 needed: B5’s conclusion is definitionally the bridge conclusion.  The already
