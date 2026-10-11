@@ -79283,7 +79283,7 @@
   {:consumer :t97A04,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "program STOP commits nothing new since the last :program-history entry: evidence commit bb0f0f77d8953dc78dd564e000f3d4a5b29d0894 exactly equals history job 5",
    :evidence
@@ -79336,7 +79336,7 @@
     "Each restriction now folds to a circle map with proved H1 factorization.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79356,7 +79356,7 @@
    :id :program-2026-10-11-close-t97a04,
    :kind :final-adapter,
    :campaign-priority 43,
-   :fail-count 1,
+   :fail-count 0,
    :depends-on [],
    :program true,
    :other-consumers [],
@@ -79456,6 +79456,18 @@
       :finding
       "Unavailable unbuilt import replaced by direct scoped map; build and rerun passed."}],
     :continue-from "Formalize B2 smoothness coordinatewise.",
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791729299521-5498-15a53c4d",
+     :commands
+     ["git show/check/diff-tree 7d950a981"
+      "lake build ConstructionTargets.t96A07Closure"
+      "lake env lean ConstructionTargets/t96A07Closure.lean"
+      "lake env lean problems/t96A07/lean/Main.lean"
+      "statement-registry check/fingerprint and placeholder counts"],
+     :finding
+     "PASS: new B1 milestone after the blueprint commit. Exact scoped changes add a sorry-free cross-term model and a Main adapter proving the frozen sphereMap antipodal equation; coordinate order and antipodal orientation match the registered definition. Blobs match fdc8d70b/34593269. Both Lean targets compile with standard axioms; Main retains its unchanged 1 placeholder. Registry is 131/0 and frozen statement SHA-256 remains 2ba67b040c1c1e31b8529d758a90765d8251ba3798983f6956674918a77fd520. B2 is listed next."},
     :commit "7d950a98183dcfc044bd7f5c8f592f91241ea62f",
     :changed-paths
     ["ConstructionTargets/t96A07Closure.lean"
@@ -79464,7 +79476,7 @@
     "B1 proves the frozen quadratic sphere map is antipodal-invariant.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t96A07/lean/Main.lean"
     "problems/t96A07/status.json"
@@ -79480,7 +79492,7 @@
     ["lake env lean problems/t96A07/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: :blueprint-written",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: :program-milestone-complete",
    :id :program-2026-10-11-close-t96a07,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -79490,7 +79502,10 @@
    :program-history
    [{:job 1,
      :commit "6d48023b5bdac0f3da4ba7ffdd824a9e841a8e08",
-     :reason :blueprint-written}]}
+     :reason :blueprint-written}
+    {:job 2,
+     :commit "7d950a98183dcfc044bd7f5c8f592f91241ea62f",
+     :reason :program-milestone-complete}]}
   {:consumer :t94A10,
    :phase :implementation,
    :state :open,
@@ -79939,7 +79954,7 @@
    :other-consumers []}
   {:consumer :t96A07,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "ConstructionTargets.T96A07Closure.sphereMap_antipodal",
@@ -79951,7 +79966,9 @@
     :type
     "∀ p, T96A07.sphereMap (sphereAntipodalN 2 p) = T96A07.sphereMap p",
     :area "projective-smooth-descent",
-    :proved-in :program-2026-10-11-close-t96a07},
+    :proved-in :program-2026-10-11-close-t96a07,
+    :banked-by :program-2026-10-11-close-t96a07,
+    :banked-commit "7d950a98183dcfc044bd7f5c8f592f91241ea62f"},
    :id :lemma-constructiontargets-t96a07closure-spheremap-antipodal,
    :kind :lemma,
    :depends-on [],
