@@ -1398,6 +1398,71 @@ theorem shearYOverlapCoordinateMap_eq_twoCircle (a b : ℤ) :
     (boundaryOverlapShear_H1_twoCircle_transport a b)
   exact h₁.trans h₂
 
+theorem shearY_overlap_coordinate_components (a b : ℤ) :
+    (biprod.inl ≫ shearYOverlapCoordinateMap a b =
+      (a • 𝟙 (AddCommGrpCat.of ℤ)) ≫ biprod.inl) ∧
+    (biprod.inr ≫ shearYOverlapCoordinateMap a b =
+      (a • 𝟙 (AddCommGrpCat.of ℤ)) ≫ biprod.inr) := by
+  constructor
+  · rw [shearYOverlapCoordinateMap_eq_twoCircle,
+      ← circleSumInl_H1_coordinate]
+    slice_lhs 3 5 =>
+      erw [twoCircleH1IsoIntBiprod.hom_inv_id_assoc]
+    slice_lhs 2 3 => erw [twoCircleOverlapShearLeft_H1]
+    rw [twoCircleOverlapShearLeft_H1_eq_fold_inl]
+    have h := congrArg (fun k ↦ k ≫ circleH1GroupIsoInt.inv)
+      (twoCircleOverlapShearLeftFold_H1_coordinate a b)
+    simp only [Category.assoc] at h
+    erw [circleH1GroupIsoInt.hom_inv_id] at h
+    have h' : circleH1GroupIsoInt.inv ≫
+        HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularSubdivision.singularPostcomposition
+            (twoCircleOverlapShearLeftFold a b)) 1 =
+        (a • 𝟙 (AddCommGrpCat.of ℤ)) ≫ circleH1GroupIsoInt.inv := by
+      simpa only [Category.comp_id] using h
+    calc
+      _ = ((a • 𝟙 (AddCommGrpCat.of ℤ)) ≫ circleH1GroupIsoInt.inv) ≫
+          HomologicalComplex.homologyMap
+            (ConstructionTargets.SingularSubdivision.singularPostcomposition
+              circleSumInl) 1 ≫ twoCircleH1IsoIntBiprod.hom :=
+        congrArg (fun k ↦ k ≫
+          HomologicalComplex.homologyMap
+            (ConstructionTargets.SingularSubdivision.singularPostcomposition
+              circleSumInl) 1 ≫ twoCircleH1IsoIntBiprod.hom) h'
+      _ = _ := by
+        simpa only [Category.assoc] using congrArg
+          (fun k ↦ (a • 𝟙 (AddCommGrpCat.of ℤ)) ≫ k)
+          circleSumInl_H1_coordinate
+  · rw [shearYOverlapCoordinateMap_eq_twoCircle,
+      ← circleSumInr_H1_coordinate]
+    slice_lhs 3 5 =>
+      erw [twoCircleH1IsoIntBiprod.hom_inv_id_assoc]
+    slice_lhs 2 3 => erw [twoCircleOverlapShearRight_H1]
+    rw [twoCircleOverlapShearRight_H1_eq_fold_inr]
+    have h := congrArg (fun k ↦ k ≫ circleH1GroupIsoInt.inv)
+      (twoCircleOverlapShearRightFold_H1_coordinate a b)
+    simp only [Category.assoc] at h
+    erw [circleH1GroupIsoInt.hom_inv_id] at h
+    have h' : circleH1GroupIsoInt.inv ≫
+        HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularSubdivision.singularPostcomposition
+            (twoCircleOverlapShearRightFold a b)) 1 =
+        (a • 𝟙 (AddCommGrpCat.of ℤ)) ≫ circleH1GroupIsoInt.inv := by
+      simpa only [Category.comp_id] using h
+    calc
+      _ = ((a • 𝟙 (AddCommGrpCat.of ℤ)) ≫ circleH1GroupIsoInt.inv) ≫
+          HomologicalComplex.homologyMap
+            (ConstructionTargets.SingularSubdivision.singularPostcomposition
+              circleSumInr) 1 ≫ twoCircleH1IsoIntBiprod.hom :=
+        congrArg (fun k ↦ k ≫
+          HomologicalComplex.homologyMap
+            (ConstructionTargets.SingularSubdivision.singularPostcomposition
+              circleSumInr) 1 ≫ twoCircleH1IsoIntBiprod.hom) h'
+      _ = _ := by
+        simpa only [Category.assoc] using congrArg
+          (fun k ↦ (a • 𝟙 (AddCommGrpCat.of ℤ)) ≫ k)
+          circleSumInr_H1_coordinate
+
 /-- B6 reduces exactly to the degree calculation on the two overlap
 components. -/
 theorem shearY_overlap_coordinate_of_injections (a b : ℤ)
@@ -1431,6 +1496,12 @@ theorem shearY_overlap_coordinate_of_degree_components (a b : ℤ)
   apply shearY_overlap_coordinate_of_injections
   · simpa only [inl_comp_overlapScalar] using hleft
   · simpa only [inr_comp_overlapScalar] using hright
+
+theorem shearY_overlap_coordinate (a b : ℤ) :
+    shearYOverlapCoordinateMap a b = overlapScalar a := by
+  exact shearY_overlap_coordinate_of_degree_components a b
+    (shearY_overlap_coordinate_components a b).1
+    (shearY_overlap_coordinate_components a b).2
 
 #print axioms frozenTorusH2GroupIsoInt
 #print axioms frozenYCover
@@ -1512,9 +1583,11 @@ theorem shearY_overlap_coordinate_of_degree_components (a b : ℤ)
 #print axioms circleSumInr_H1_coordinate
 #print axioms shearYOverlapCoordinateMap
 #print axioms shearYOverlapCoordinateMap_eq_twoCircle
+#print axioms shearY_overlap_coordinate_components
 #print axioms shearY_overlap_coordinate_of_injections
 #print axioms inl_comp_overlapScalar
 #print axioms inr_comp_overlapScalar
 #print axioms shearY_overlap_coordinate_of_degree_components
+#print axioms shearY_overlap_coordinate
 
 end ConstructionTargets.T97A04Closure
