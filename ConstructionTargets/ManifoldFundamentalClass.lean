@@ -1486,6 +1486,25 @@ theorem coefficientIntegralBall_forget_hom_eq_model_factors (k : ℕ) :
             (k + 2)) ≫ f)
     (coefficientModelLocalIso_forget_hom k)
 
+/-- The canonical integral coefficient-to-production comparison for the
+unit open disk relative to its puncture. -/
+noncomputable def integralOpenDiskRelativeHomologyComparison (k : ℕ) :
+    IntegralSingularHomologyComparison.forgetIntModules.obj
+        ((CoefficientRelativeSmall.relativeChains ℤ
+          (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2))).homology
+            (k + 2)) ≅
+      (RelativeSingularChains
+        (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2))).homology
+          (k + 2) :=
+  integralRelativeHomologyComparisonWithTransport
+    (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2)) (k + 2)
+
+theorem integralOpenDiskRelativeHomologyComparison_hom (k : ℕ) :
+    (integralOpenDiskRelativeHomologyComparison k).hom =
+      (integralRelativeHomologyComparisonWithTransport
+        (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2))
+        (k + 2)).hom := rfl
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -1575,5 +1594,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_implies_model_factors
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientIntegralBall_forget_hom
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientIntegralBall_forget_hom_eq_model_factors
+#print axioms ConstructionTargets.ManifoldFundamentalClass.integralOpenDiskRelativeHomologyComparison
+#print axioms ConstructionTargets.ManifoldFundamentalClass.integralOpenDiskRelativeHomologyComparison_hom
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport_homologyMap_eq_composite
 #print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_transport_homology_factors
