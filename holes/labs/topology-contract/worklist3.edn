@@ -17656,6 +17656,29 @@
    :current-residual "Squares and Hom.",
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
+   :implements-lemma :lemma-mfclass-hi-square,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+   :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class/square01",
+   :acceptance
+   {:declaration
+    "ConstructionTargets.ManifoldFundamentalClass.forgetHomologyι_naturality",
+    :type
+    "∀ {ι} {c : ComplexShape ι} (K : HomologicalComplex (ModuleCat ℤ) c) (i : ι), ForgottenHomologyιNaturality K i",
+    :fixture "/tmp/hi.lean",
+    :fixture-sha256
+    "87c14133f754ba568d176e75ca901e6583ed28cc08d21dada9a0a306ebaf7687",
+    :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
+    :route-step "Hom-to-opcycles square",
+    :implementation "Promote."},
+   :id :routes-2026-10-11-mfclass-hi-square-r1,
+   :kind :reusable-theorem,
+   :area "manifold-fundamental-class",
+   :depends-on [:routes-2026-10-11-mfclass-hiso-r1],
+   :current-residual "Two squares; assemble Hom.",
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-closedorientedfundamentalclass,
    :evidence
@@ -17663,49 +17686,50 @@
     {:outcome :revise,
      :seat "topo-12",
      :fixture
-     {:path "/tmp/hiso.lean",
+     {:path "/tmp/hi.lean",
       :sha256
-      "1df792da3b231883bf06b54503680808563d6dcb75db9b1e6fa9993e6b021941"},
-     :commands [{:cmd "lake env lean /tmp/hiso.lean", :exit 0}],
+      "87c14133f754ba568d176e75ca901e6583ed28cc08d21dada9a0a306ebaf7687"},
+     :commands [{:cmd "lake env lean /tmp/hi.lean", :exit 0}],
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :missing-theorems
-     [{:id :lemma-mfclass-hiso-right,
+     [{:id :lemma-mfclass-hi-square,
        :name
-       "ConstructionTargets.ManifoldFundamentalClass.forgetMapHomologyIsoRight_eq",
+       "ConstructionTargets.ManifoldFundamentalClass.forgetHomologyι_naturality",
        :type
-       "∀ {ι} {c : ComplexShape ι} (K : HomologicalComplex (ModuleCat ℤ) c) (i : ι), (K.sc i).mapHomologyIso' forgetIntModules = (K.sc i).mapHomologyIso forgetIntModules",
+       "∀ {ι} {c : ComplexShape ι} (K : HomologicalComplex (ModuleCat ℤ) c) (i : ι), ForgottenHomologyιNaturality K i",
        :status :proved,
        :consumers [:t00J02 :t98A02],
        :depends-on
-       ["ConstructionTargets.ManifoldFundamentalClass.forgetTerminalHomologyRowHom"],
+       ["ConstructionTargets.ManifoldFundamentalClass.forgetMapHomologyIsoRight_eq"],
        :area "manifold-fundamental-class"}],
      :prerequisite
      {:consumer :t00J02,
-      :implements-lemma :lemma-mfclass-hiso-right,
+      :implements-lemma :lemma-mfclass-hi-square,
       :phase :implementation,
       :state :open,
       :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
-      :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class/hiso",
+      :dag-node
+      "TOPOLOGY-ROUTES.md/manifold-fundamental-class/square01",
       :acceptance
       {:declaration
-       "ConstructionTargets.ManifoldFundamentalClass.forgetMapHomologyIsoRight_eq",
+       "ConstructionTargets.ManifoldFundamentalClass.forgetHomologyι_naturality",
        :type
-       "∀ {ι} {c : ComplexShape ι} (K : HomologicalComplex (ModuleCat ℤ) c) (i : ι), (K.sc i).mapHomologyIso' forgetIntModules = (K.sc i).mapHomologyIso forgetIntModules",
-       :fixture "/tmp/hiso.lean",
+       "∀ {ι} {c : ComplexShape ι} (K : HomologicalComplex (ModuleCat ℤ) c) (i : ι), ForgottenHomologyιNaturality K i",
+       :fixture "/tmp/hi.lean",
        :fixture-sha256
-       "1df792da3b231883bf06b54503680808563d6dcb75db9b1e6fa9993e6b021941",
+       "87c14133f754ba568d176e75ca901e6583ed28cc08d21dada9a0a306ebaf7687",
        :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
-       :route-step "iso equality",
+       :route-step "Hom-to-opcycles square",
        :implementation "Promote."},
-      :id :routes-2026-10-11-mfclass-hiso-r1,
+      :id :routes-2026-10-11-mfclass-hi-square-r1,
       :kind :reusable-theorem,
       :area "manifold-fundamental-class",
-      :depends-on [:routes-2026-10-11-mfclass-forget-terminal-row-r1],
-      :current-residual "Squares and Hom.",
+      :depends-on [:routes-2026-10-11-mfclass-hiso-r1],
+      :current-residual "Two squares; assemble Hom.",
       :other-consumers [:t98A02]},
-     :residual "Promote; prove squares."}},
+     :residual "Promote square 01; prove two squares."}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -17827,7 +17851,8 @@
     :routes-2026-10-11-mfclass-forget-opcycles-row-r1
     :routes-2026-10-11-mfclass-forget-cycles-row-r1
     :routes-2026-10-11-mfclass-forget-terminal-row-r1
-    :routes-2026-10-11-mfclass-hiso-r1],
+    :routes-2026-10-11-mfclass-hiso-r1
+    :routes-2026-10-11-mfclass-hi-square-r1],
    :current-residual
    "Local-degree counts and wild-ball complement homology remain.",
    :other-consumers [:t98A02]}
@@ -25381,6 +25406,28 @@
    :id :lemma-mfclass-hiso-right,
    :kind :lemma,
    :depends-on [:lemma-mfclass-forget-terminal-row],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFundamentalClass.forgetHomologyι_naturality",
+    :type
+    "∀ {ι} {c : ComplexShape ι} (K : HomologicalComplex (ModuleCat ℤ) c) (i : ι), ForgottenHomologyιNaturality K i"},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFundamentalClass.forgetHomologyι_naturality",
+    :reported-by
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    :type
+    "∀ {ι} {c : ComplexShape ι} (K : HomologicalComplex (ModuleCat ℤ) c) (i : ι), ForgottenHomologyιNaturality K i",
+    :area "manifold-fundamental-class",
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+   :id :lemma-mfclass-hi-square,
+   :kind :lemma,
+   :depends-on [:lemma-mfclass-hiso-right],
    :other-consumers [:t98A02]}],
  :consumer-baselines {},
  :statuses
