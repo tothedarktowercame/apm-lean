@@ -79281,7 +79281,9 @@
    :depends-on [],
    :other-consumers []}
   {:consumer :t97A04,
-   :stop-count 10,
+   :owner-reopen
+   "reopened: a lemma this row reported missing is now banked",
+   :stop-count 0,
    :evidence
    {:placeholder-delta 0,
     :residual
@@ -79327,7 +79329,7 @@
     "Defined the exact B6 coordinate map and reduced its equality to two component-injection equations.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79347,6 +79349,7 @@
    :id :program-2026-10-11-close-t97a04,
    :kind :final-adapter,
    :campaign-priority 43,
+   :fail-count 0,
    :depends-on [],
    :program true,
    :other-consumers [],
@@ -79407,13 +79410,23 @@
     :diagnostic-history [],
     :continue-from
     "After review, formalize B1 sphereMap_antipodal only.",
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791723263043-5376-7d6872d1",
+     :commands
+     ["git show/check/diff-tree 6d48023b5"
+      "lake env lean problems/t96A07/lean/Main.lean"
+      "statement-registry check/fingerprint; placeholder/node counts"],
+     :finding
+     "PASS: topo-6 committed a new 13-node blueprint; scope and blob 69b59fb6 match the ledger. Mathematical review passes: antipodal descent, derivative transport through the local diffeomorphism, axis nontransversality, horizontal-plane transversality for 0<z<1/2, attainment, infinitude, and final assembly are true with stated dependencies; Lean representations match the frozen theorem, and its existential/conjunctive requirements all appear in B3/B7/B12/B13. Main compiles with its unchanged 1 placeholder; registry is 131/0 and frozen statement SHA-256 is 2ba67b040c1c1e31b8529d758a90765d8251ba3798983f6956674918a77fd520. B1 is the listed next milestone."},
     :commit "6d48023b5bdac0f3da4ba7ffdd824a9e841a8e08",
     :changed-paths ["ConstructionTargets/t96A07Closure.blueprint.md"],
     :finding
     "The reviewed audit expands to 13 nodes: smooth even descent; explicit sphere/descended derivatives; axis failure; horizontal-plane derivative, regularity and attainment; infinitude; final adapter.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t96A07/lean/Main.lean"
     "problems/t96A07/status.json"
@@ -79429,13 +79442,17 @@
     ["lake env lean problems/t96A07/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
    :continue-from
-   "NEXT JOB: write the blueprint ConstructionTargets/t96A07Closure.blueprint.md (BLUEPRINTS.md) for the remaining chain in ~/notes/closer/audits/t96A07.md, then formalise node by node.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: :blueprint-written",
    :id :program-2026-10-11-close-t96a07,
    :kind :final-adapter,
    :campaign-priority 45,
    :depends-on [],
    :program true,
-   :other-consumers []}
+   :other-consumers [],
+   :program-history
+   [{:job 1,
+     :commit "6d48023b5bdac0f3da4ba7ffdd824a9e841a8e08",
+     :reason :blueprint-written}]}
   {:consumer :t94A10,
    :phase :implementation,
    :state :open,
