@@ -113902,6 +113902,19 @@
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
       :exit 1,
       :finding "Qualified inclusions; projected counit identities."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791748647157-5845-4f5a0913",
+     :commands
+     ["git show/diff-tree 0d03f8ae"
+      "hash/diff/placeholder checks"
+      "statement-registry.py check"
+      "lake env lean PointWedgeVanKampen.lean"
+      "lake build PointWedgeVanKampen"
+      "lake build ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "PASS: new compiled, sorry-free B6 progress projects both restriction isomorphisms from the pseudopushout counit and proves correctly oriented naturality equations F.map(f)*eta_b=eta_a*G.map(f). No identity normalization is assumed. Exact two-file scope/frozen hashes match; zero placeholders; registry 131/131; standard axioms. Counit components at wedge representatives and B12 remain listed; absent final target is valid STOP."},
     :commit "0d03f8aec060b46679b1eb1ed7d393200aed1c46",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113912,7 +113925,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113933,7 +113946,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B3 inverse now reaches a named open-cover pseudococone and global functor.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Both restriction counits and naturality equations proved.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114032,7 +114045,11 @@
     {:job 1,
      :commit "c88ed26ef93266f0d7c19fa50cf48e361e55e732",
      :reason
-     "B3 inverse now reaches a named open-cover pseudococone and global functor."}]}
+     "B3 inverse now reaches a named open-cover pseudococone and global functor."}
+    {:job 2,
+     :commit "0d03f8aec060b46679b1eb1ed7d393200aed1c46",
+     :reason
+     "Both restriction counits and naturality equations proved."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
