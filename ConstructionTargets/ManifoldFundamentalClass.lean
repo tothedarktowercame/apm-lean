@@ -2,6 +2,7 @@ import ConstructionTargets.LocalHomologyNeighborhoodExcision
 import ConstructionTargets.CoefficientChartTransitionUnit
 import ConstructionTargets.CoefficientTransitionLocalConstancy
 import ConstructionTargets.IntegralSingularHomologyComparison
+import ConstructionTargets.HigherChartLocalGenerator
 
 open CategoryTheory
 noncomputable section
@@ -306,6 +307,17 @@ theorem localizationMap_groupGlobalGenerator_transport
   rw [localizationMap_apply_naturality f x y h n]
   rw [hx, hlocal]
 
+theorem localizationMap_groupGlobalGenerator_eq_zsmul_ambientLocalGenerator
+    (k : ℕ) {M : Type} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (HigherChartLocalGenerator.E k) M]
+    (e : (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) (k + 2)).obj
+      (ModuleCat.of ℤ ℤ)).obj (TopCat.of M)) ≅ ModuleCat.of ℤ ℤ)
+    (x : M) :
+    ∃ r : ℤ, r • HigherChartLocalGenerator.ambientLocalGenerator (k := k) x =
+      localizationMap x (k + 2) (groupGlobalGenerator (TopCat.of M) (k + 2) e) := by
+  exact HigherChartLocalGenerator.ambientLocalGenerator_generates (k := k) x
+    (localizationMap x (k + 2) (groupGlobalGenerator (TopCat.of M) (k + 2) e))
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -327,3 +339,4 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator_generates
 #print axioms ConstructionTargets.ManifoldFundamentalClass.absoluteSingularMap_groupGlobalGenerator_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.localizationMap_groupGlobalGenerator_transport
+#print axioms ConstructionTargets.ManifoldFundamentalClass.localizationMap_groupGlobalGenerator_eq_zsmul_ambientLocalGenerator
