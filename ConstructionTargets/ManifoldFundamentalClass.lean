@@ -619,6 +619,16 @@ theorem integralCompositeCokernelComparison_projection
   rw [← Category.assoc, coefficientIntegralCokernelTransport_projection]
   exact integralDirectCokernelComparison_projection A
 
+/-- The direct production cokernel projection followed by the inverse
+presentation isomorphism is the actual relative singular-chain projection. -/
+theorem cokernelProjection_comp_relativeSingularChainsIso_inv
+    {X : Type} [TopologicalSpace X] (A : Set X) :
+    cokernel.π (singularSubspaceMap A) ≫
+      (relativeSingularChainsIsoCokernelSubspaceMap A).inv =
+    relativeSingularProjection A := by
+  rw [← relativeProjection_comp_cokernelIso_hom]
+  simp
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -658,3 +668,4 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientIntegralCokernelTransport
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientIntegralCokernelTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralCompositeCokernelComparison_projection
+#print axioms ConstructionTargets.ManifoldFundamentalClass.cokernelProjection_comp_relativeSingularChainsIso_inv
