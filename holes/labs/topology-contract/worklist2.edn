@@ -70867,7 +70867,52 @@
   {:bounded-exception
    "single-consumer global quarter-radius invariant for the zero-height core-normal detour",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:residual
+     "Implement the global radius bound, then prove nonzero imaginary part at every interior time and combine it with endpoint collision certificates for full left-core avoidance.",
+     :outcome :go,
+     :warnings [],
+     :axioms [propext Classical.choice Quot.sound],
+     :commands
+     [{:cmd
+       "lake env lean /tmp/t02a03_core_normal_detour_radius_probe.lean",
+       :exit 0,
+       :output
+       "zeroHeightCoreNormalDetour_radius_le compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "sha256sum /tmp/t02a03_core_normal_detour_radius_probe.lean",
+       :exit 0,
+       :output
+       "1dd416108a90f6811902d51fbad245c0bd6044c7e7d52ef10b7df391d1984635  /tmp/t02a03_core_normal_detour_radius_probe.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_core_normal_detour_radius_probe.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}
+      {:cmd
+       "rg -n 'zeroHeightCoreNormalDetour_radius_le' /tmp/t02a03_core_normal_detour_radius_probe.lean",
+       :exit 0,
+       :output
+       "5:theorem zeroHeightCoreNormalDetour_radius_le\n53:#print axioms zeroHeightCoreNormalDetour_radius_le"}],
+     :fixture
+     {:path "/tmp/t02a03_core_normal_detour_radius_probe.lean",
+      :sha256
+      "1dd416108a90f6811902d51fbad245c0bd6044c7e7d52ef10b7df391d1984635"},
+     :finding
+     "The placeholder-free fixture proves every zero-height detour normal remains in the closed quarter-radius disk. The first half combines two radius-1/8 normals; the second combines the radius-1/8 waypoint with the recovered input normal bounded by 1/4.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+      :declaration
+      "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCoreNormalDetour_radius_le",
+      :type
+      "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> forall (t : unitInterval), ‖zeroHeightCoreNormalDetour t p‖ ≤ (1 / 4 : ℝ)"},
+     :seat "topo-8"}},
+   :phase :implementation,
+   :type
+   "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> forall (t : unitInterval), ‖zeroHeightCoreNormalDetour t p‖ ≤ (1 / 4 : ℝ)",
    :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
@@ -70886,6 +70931,8 @@
    :routes-2026-10-11-t02a03-zero-height-core-normal-detour-radius-topo2-r1,
    :kind :reusable-theorem,
    :area "explicit-r3-tube-deformation-retraction",
+   :declaration
+   "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCoreNormalDetour_radius_le",
    :depends-on
    [:routes-2026-10-11-t02a03-zero-height-core-normal-detour-continuous-topo2-r1],
    :current-residual
