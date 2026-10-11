@@ -113857,16 +113857,19 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 6,
+   :stop-count 7,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Evaluate the explicit B3 inverse composite on the literal left/right legs; then B12.",
+    "Evaluate preceding point-span/open-cover inverse transports on literal legs; then B12.",
     :outcome :stop,
-    :warnings [{:kind :upstream-lint}],
+    :warnings
+    [{:kind :upstream-lint}
+     {:kind :concurrent-worktree-change,
+      :path "ConstructionTargets/ManifoldFundamentalClass.lean"}],
     :missing-theorems
     [{:name
       "PointWedgeVanKampen.genericPointWedgeLegCoordinates_vanKampen",
@@ -113878,9 +113881,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "4721e789027dde6bad8fe7c13133c53b6f3bc50ccf07ca4a5c72087e24b9b104",
+     "e51bb7ec781326fe6d35b2471b8360b94d70f154945c720a9784ed60b1279155",
      :documentation
-     "912cc1f1977545caf603649c9df3408a13e235f4d63d47f9410f711c8526f7f9",
+     "0c2a0860c2cdf2b9cd3e8c2a2e41062f1652bee279b98d70a7e039616d798035",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113888,7 +113891,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "B6 reduced to the explicit B3 inverse-identity functor on both literal legs.",
+    "B6 final representation inverse now computes literally on both injections.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113902,20 +113905,7 @@
       :exit 0,
       :finding "zero placeholders"}],
     :diagnostic-history [],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791744598235-5772-4a9bd2f3",
-     :commands
-     ["git show/diff-tree 786d0b9a"
-      "hash/diff/placeholder checks"
-      "statement-registry.py check"
-      "lake env lean PointWedgeVanKampen.lean"
-      "lake build PointWedgeVanKampen"
-      "lake build ThreeCirclesFundamentalGroup (expected absent)"],
-     :finding
-     "PASS: new compiled, sorry-free B6 progress names B3's exact inverse-at-identity functor, proves its map equals the reconstructed source-functor map, and transports the B6 iff to that explicit representation object. Orientation is unchanged; no false definitional identity. Exact two-file scope/frozen hashes match; zero placeholders; registry 131/131; standard axioms. Explicit leg evaluation and B12 remain listed; absent final target is valid STOP."},
-    :commit "786d0b9a7ecf86c13e60382176bdf91a0b2fed05",
+    :commit "324553b3030f1c4763b0c17b6f27f16a79d1a723",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113925,7 +113915,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
