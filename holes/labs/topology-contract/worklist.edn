@@ -102667,6 +102667,21 @@
      {:cmd "git diff --check", :exit 0}
      {:cmd "git status --short", :exit 0, :finding "clean"}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791682697466-3674-605aa136",
+     :commands
+     ["git show and git diff-tree on recorded commit e6dc9e6a504ffabc0876feb9a36aa4dba64bc8e0"
+      "git diff --exit-code recorded commit against source checkout"
+      "SHA-256 and comment-stripped placeholder and axiom recomputation for source and fixture"
+      "lake build ConstructionTargets.PolygonBoundaryCircleDecoderRelationInvariant"
+      "lake env lean /tmp/polygon-boundary-circle-decoder-relation-invariant.lean"
+      "lake env lean /dev/stdin with fresh axiom checks"
+      "python3 scripts/statement-registry.py check"
+      "git diff-tree --check recorded parent and commit"],
+     :finding
+     "Recorded one-file commit is authored by topo-2; source equals the recorded blob and is byte-identical to the frozen fixture; each implication is oriented from the specialized Circle relation to equality of the corresponding total decoder, eliminates through the exact three-case generator normal form, rewrites both sides using literal edge formulas, and applies the matching decoder generator equality; both frozen theorem types compile with only standard axioms, placeholder and axiom counts are zero, the registry reports 131 matched and 0 mismatched, and EqvGen quotient descent remains outside scope."},
     :commit "e6dc9e6a504ffabc0876feb9a36aa4dba64bc8e0",
     :changed-paths
     ["ConstructionTargets/PolygonBoundaryCircleDecoderRelationInvariant.lean"],
@@ -102682,7 +102697,7 @@
      ["n3CircleDecode_respects"
       "torusCrosscapCircleDecode_respects"]}},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/PolygonBoundaryCircleDecoderRelationInvariant.lean"],
    :dag-node
@@ -102824,7 +102839,7 @@
       "The total N3 and torus-crosscap Circle decoders respect their respective generating boundary relations."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -107222,7 +107237,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -107239,7 +107254,10 @@
     "For z w : Circle, N3CircleRel z w implies n3CircleDecode z = n3CircleDecode w.",
     :area "polygon-surface-open-cover",
     :proved-in
-    :routes-2026-10-11-polygon-boundary-circle-decoder-relation-invariant-76},
+    :routes-2026-10-11-polygon-boundary-circle-decoder-relation-invariant-76,
+    :banked-by
+    :routes-2026-10-11-polygon-boundary-circle-decoder-relation-invariant-76,
+    :banked-commit "e6dc9e6a504ffabc0876feb9a36aa4dba64bc8e0"},
    :id
    :lemma-polygonboundarycircledecoderrelationinvariant-n3circledecode-respects,
    :kind :lemma,
@@ -107250,7 +107268,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -107267,7 +107285,10 @@
     "For z w : Circle, TorusCrosscapCircleRel z w implies torusCrosscapCircleDecode z = torusCrosscapCircleDecode w.",
     :area "polygon-surface-open-cover",
     :proved-in
-    :routes-2026-10-11-polygon-boundary-circle-decoder-relation-invariant-76},
+    :routes-2026-10-11-polygon-boundary-circle-decoder-relation-invariant-76,
+    :banked-by
+    :routes-2026-10-11-polygon-boundary-circle-decoder-relation-invariant-76,
+    :banked-commit "e6dc9e6a504ffabc0876feb9a36aa4dba64bc8e0"},
    :id
    :lemma-polygonboundarycircledecoderrelationinvariant-toruscrosscapcircledecode-respects,
    :kind :lemma,
