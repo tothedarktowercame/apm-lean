@@ -279,6 +279,23 @@
       "git diff --check -- ConstructionTargets/SardGeneralModel.lean",
       :exit 0}
      {:cmd "git status --short", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791677502619-3417-04bfe1f8",
+     :commands
+     ["git diff-tree recorded commit scope"
+      "sha256sum promoted fixture"
+      "source blob comparison"
+      "lake env lean promoted fixture"
+      "lake env lean target module"
+      "lake build target module"
+      "placeholder and axiom scan"
+      "statement registry check"
+      "consumer placeholder census"
+      "git diff --check recorded commit"],
+     :finding
+     "PASS: implementation commit f4ef226f creates exactly ConstructionTargets/SardGeneralModel.lean and its blob matches the reviewed source; promoted fixture hash 2c012eafeadba29df275e80da9e6b90b6b6c669734f53e882bc1a1a8284ae11b matches recorded evidence and preserves the frozen theorem type from the original fixture; targetEquiv is a continuous linear equivalence from the frozen sup-norm plane Fin 2 to Real into EuclideanSpace Real (Fin 2), and linearTargetTransport proves surjectivity of targetEquiv composed with D iff surjectivity of D, cancelling by injectivity forward and composing surjections backward; it does not claim a general corners Sard theorem or close t01A08; fixture, module, and target build pass with zero source/fixture placeholders and only propext, Classical.choice, and Quot.sound; 131 statements match and the t01A08 consumer retains exactly one placeholder."},
     :commit "f4ef226f7d24f7821c6b1463130d63a93f3e2fba",
     :changed-paths ["ConstructionTargets/SardGeneralModel.lean"],
     :fixture
@@ -294,7 +311,7 @@
      "Created SardGeneralModel with the continuous-linear equivalence from the frozen sup-norm plane to EuclideanSpace Real (Fin 2) and proved that postcomposition with it preserves and reflects surjectivity."},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/SardGeneralModel.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t01A08/target-transport",
    :acceptance
@@ -379,7 +396,7 @@
      "The banked null_critical theorem requires an inner-product target. The frozen target Fin 2 → ℝ carries the sup norm, but a finite-dimensional continuous linear equivalence to EuclideanSpace compiles, and postcomposition by it preserves derivative surjectivity. This is the first exact prerequisite. Even after it is banked, the arbitrary ModelWithCorners source still needs the separate convex-domain/corners Sard extension.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["problems/t01A08/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t01A08/closure",
    :acceptance
@@ -3005,7 +3022,7 @@
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -3021,7 +3038,10 @@
     "Transport criticality and nullity to Euclidean target coordinates.",
     :area "manifold-sard-general-model",
     :proved-in
-    :routes-2026-10-10-t01a08-linear-target-transport-topo3-r1},
+    :routes-2026-10-10-t01a08-linear-target-transport-topo3-r1,
+    :banked-by
+    :routes-2026-10-10-t01a08-linear-target-transport-topo3-r1,
+    :banked-commit "f4ef226f7d24f7821c6b1463130d63a93f3e2fba"},
    :id :lemma-sard-linear-target-transport,
    :kind :lemma,
    :depends-on
@@ -4494,7 +4514,7 @@
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "ConstructionTargets.SardGeneralModel.targetEquiv",
@@ -4508,7 +4528,10 @@
     "A continuous linear equivalence from Fin 2 to Real with the sup norm to EuclideanSpace Real (Fin 2).",
     :area "manifold-sard-general-model",
     :proved-in
-    :routes-2026-10-10-t01a08-linear-target-transport-topo3-r1},
+    :routes-2026-10-10-t01a08-linear-target-transport-topo3-r1,
+    :banked-by
+    :routes-2026-10-10-t01a08-linear-target-transport-topo3-r1,
+    :banked-commit "f4ef226f7d24f7821c6b1463130d63a93f3e2fba"},
    :id :lemma-constructiontargets-sardgeneralmodel-targetequiv,
    :kind :lemma,
    :depends-on [],
