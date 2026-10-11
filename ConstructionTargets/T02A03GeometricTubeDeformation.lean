@@ -1625,6 +1625,31 @@ theorem coupledAngularComplexInterpolation_zero_interior
   refine ⟨ht0, ht1, ?_⟩
   nlinarith
 
+theorem coupledAngular_of_nonvanishingComplexPath
+    (Z : C(unitInterval × RightTubeMinusLeftCore, ℂ))
+    (hZ : ∀ tp, Z tp ≠ 0)
+    (hZ0 : ∀ p, Z (0, p) = 1)
+    (hZ1 : ∀ p, Z (1, p) = rightTubeCorePlanarComplex p.1) :
+    ∃ A : C(unitInterval × RightTubeMinusLeftCore, Circle),
+      (∀ p, A (0, p) = 1) ∧
+      (∀ p, A (1, p) = rightTubeCoreAngularCoordinate p) := by
+  let A : C(unitInterval × RightTubeMinusLeftCore, Circle) :=
+    ⟨fun tp => ⟨NormedSpace.normalize (Z tp),
+        mem_sphere_zero_iff_norm.mpr (NormedSpace.norm_normalize (hZ tp))⟩, by
+      apply Continuous.subtype_mk
+      rw [continuous_iff_continuousAt]
+      intro tp
+      exact ((continuous_norm.comp Z.continuous).continuousAt.inv₀
+        (norm_ne_zero_iff.mpr (hZ tp))).smul Z.continuous.continuousAt⟩
+  refine ⟨A, ?_, ?_⟩
+  · intro p
+    apply Subtype.ext
+    simp only [A, ContinuousMap.coe_mk, hZ0]
+    exact NormedSpace.normalize_eq_self_of_norm_eq_one (by norm_num)
+  · intro p
+    apply Subtype.ext
+    simp [A, hZ1, rightTubeCoreAngularCoordinate]
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -1687,3 +1712,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.continuousCoupledAngularComplexInterpolation_exists
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularComplexInterpolation_eq_zero_iff
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularComplexInterpolation_zero_interior
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngular_of_nonvanishingComplexPath
