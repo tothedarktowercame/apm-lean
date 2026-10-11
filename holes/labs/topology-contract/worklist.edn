@@ -104232,6 +104232,22 @@
       :exit 1,
       :finding
       "The first normalization statement used categorical identity-morphism notation where an identity functor was required; replacing it with Functor.id produced the successful build."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791691147122-4089-75124011",
+     :commands
+     ["git show and git diff-tree on recorded commit 03d45f02ab8b12cae8a8799fce9a7d77864ca446"
+      "git diff --exit-code between recorded blob and checkout"
+      "sha256sum on committed source, recorded blob, and frozen fixture"
+      "lake build ConstructionTargets.GenericTargetNaturalSourceReconstructionLegCoordinates"
+      "lake env lean /tmp/source-equivalence-leg-coordinates.lean"
+      "fresh type and axiom check for sourceEquivalence_functor_eq_mapping_inverse_identity"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped source and fixture placeholder recount"
+      "git diff-tree --check on recorded commit"],
+     :finding
+     "PASS as a compiled-progress STOP. The one-file commit is authored by topo-2 and the checkout equals its recorded blob. The frozen fixture hash is exactly f3ee994819b11d5319fe333efe352a86f019f015f03d7c8c461e324348acfe3f. The committed theorem proves in the useful rewrite direction that the reconstructed source functor is definitionally the inverse image of the identity functor under the two-open mapping equivalence, fixing the correct representation boundary before leg computation. It compiles with only propext, Classical.choice, and Quot.sound; source placeholders and fixture sorry/admit counts are zero; the registry reports 131 matched and 0 mismatched. The remaining TwoOpenFreeProductMapping.mapping_inverse_identity_leg_coordinates theorem is explicitly listed as partial in missing-theorems, so the STOP satisfies the permitted real-progress condition."},
     :commit "03d45f02ab8b12cae8a8799fce9a7d77864ca446",
     :changed-paths
     ["ConstructionTargets/GenericTargetNaturalSourceReconstructionLegCoordinates.lean"],
@@ -104241,7 +104257,7 @@
      "f3ee994819b11d5319fe333efe352a86f019f015f03d7c8c461e324348acfe3f"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/GenericTargetNaturalSourceReconstructionLegCoordinates.lean"],
    :dag-node
@@ -104358,7 +104374,7 @@
       "The source-reconstruction coherence theorem fills the banked two-open coordinate-law structure with its left and right coproduct equations."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/generic-point-wedge-fundamental-group-coordinates",
@@ -109810,7 +109826,7 @@
    :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
   {:consumer :t99J01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -109825,7 +109841,10 @@
      :routes-2026-10-11-generic-point-wedge-fundamental-group-coordinates-84],
     :type
     "For the TwoOpenFreeProductMapping mapping family, the reconstructed source equivalence maps the left and right cover-piece inclusion morphisms at the overlap basepoint to Monoid.Coprod.inl and Monoid.Coprod.inr respectively.",
-    :area "fundamental-group-wedge-of-circles"},
+    :area "fundamental-group-wedge-of-circles",
+    :banked-by
+    :routes-2026-10-11-source-equivalence-leg-coordinates-88,
+    :banked-commit "03d45f02ab8b12cae8a8799fce9a7d77864ca446"},
    :id
    :lemma-generictargetnaturalsourcereconstruction-sourceequivalence-leg-coordinates,
    :kind :lemma,
