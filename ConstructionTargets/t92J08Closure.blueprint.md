@@ -58,7 +58,7 @@ uses: Mathlib `contMDiffAt_iff`, `range_mem_nhds_isInteriorPoint`, and the
 coordinate expression used in
 `exists_isMIntegralCurveAt_of_contMDiffAt`
 
-status: planned
+status: proved
 
 Unfold `contMDiffAt_iff` for the bundled vector field at `x₀`.  Its second
 coordinate is exactly the displayed field after rewriting the tangent-bundle

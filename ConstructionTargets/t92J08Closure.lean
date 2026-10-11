@@ -1,4 +1,5 @@
 import Mathlib.Analysis.ODE.PicardLindelof
+import Mathlib.Geometry.Manifold.IntegralCurve.ExistUnique
 
 /-! # Uniform local flow input for t92J08 -/
 
@@ -77,6 +78,41 @@ theorem exists_uniform_local_flow_in_nhds
       rw [ODE.FunSpace.compProj_of_mem ht', ODE.FunSpace.next_apply]
     exact hwithin.hasDerivAt (Icc_mem_nhds ht'.1 ht'.2)
 
+section ManifoldCoordinates
+
+open scoped Manifold
+
+variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+  {H : Type*} [TopologicalSpace H] (I : ModelWithCorners ℝ E H)
+  {M : Type*} [TopologicalSpace M] [ChartedSpace H M]
+
+/-- The vector field in the single extended chart centred at `x₀`.  The
+varying tangent-space coordinates are retained through the derivative of the
+change from the chart at the represented point to the chart at `x₀`. -/
+def localCoordinateField
+    (v : (x : M) → TangentSpace I x) (x₀ : M) (z : E) : E :=
+  let x := (extChartAt I x₀).symm z
+  fderivWithin ℝ (extChartAt I x₀ ∘ (extChartAt I x).symm)
+    (Set.range I) (extChartAt I x x) (v x)
+
+theorem localCoordinateField_contDiffAt
+    [IsManifold I 1 M] [BoundarylessManifold I M]
+    (v : (x : M) → TangentSpace I x)
+    (hv : ContMDiff I I.tangent 1
+      (fun x ↦ (⟨x, v x⟩ : TangentBundle I M))) (x₀ : M) :
+    ContDiffAt ℝ 1 (localCoordinateField I v x₀) (extChartAt I x₀ x₀) := by
+  have hv₀ : ContMDiffAt I I.tangent 1
+      (fun x ↦ (⟨x, v x⟩ : TangentBundle I M)) x₀ := hv.contMDiffAt
+  rw [contMDiffAt_iff] at hv₀
+  obtain ⟨_, hv₀⟩ := hv₀
+  have h := (hv₀.contDiffAt
+    (range_mem_nhds_isInteriorPoint
+      (BoundarylessManifold.isInteriorPoint (I := I) : I.IsInteriorPoint x₀))).snd
+  simpa [localCoordinateField, tangentCoordChange_def] using h
+
+end ManifoldCoordinates
+
 end t92J08Closure
 
 #print axioms t92J08Closure.exists_uniform_local_flow_in_nhds
+#print axioms t92J08Closure.localCoordinateField_contDiffAt
