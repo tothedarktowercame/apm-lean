@@ -105771,109 +105771,122 @@
    "Construct the quotient-level cut-and-paste homeomorphism from the closed-square relation quotient to Surface false 2, then compose the two homeomorphisms.",
    :other-consumers []}
   {:bounded-exception
+   "This single-consumer theorem is a ready direct dependency of the plane-orbit quotient Hausdorff lemma.",
+   :consumer :t93J03,
+   :implements-lemma :lemma-kleinplaneorbitquotient-quotientmap-isopen,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/KleinPlaneOrbitQuotientTopology.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t93J03/klein-plane-orbit-quotient-map-open",
+   :acceptance
+   {:implementation
+    "Prove that the quotient projection from ℝ × ℝ to the explicit PresentedKleinGroup orbit quotient is an open map. Show that the saturation of every open set is the union of its translates under the affine action, hence open, and use the coinduced quotient topology. Export KleinPlaneOrbitQuotient.quotientMap_isOpen with the fixture's exact type. Do not prove closedness of SameOrbit, the T2Space instance, inverse continuity, the polygon comparison, or close t93J03.",
+    :placeholder "the single sorry in apm_t93j03",
+    :route-step
+    "prove the explicit affine orbit quotient projection is open",
+    :fixture "/tmp/klein-plane-orbit-quotient-map-open-probe.lean",
+    :fixture-sha256
+    "b80a11fa24c83886b50a4527aad8273eb76df245c2e951857143ccaaa0ad2b7c",
+    :gates
+    ["lake build ConstructionTargets.KleinPlaneOrbitQuotientTopology"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-11-klein-plane-orbit-quotient-map-open-109,
+   :kind :reusable-theorem,
+   :area "deck-group-fundamental-group",
+   :depends-on [],
+   :current-residual
+   "Prove SameOrbit is closed; combine it with quotient-map openness to obtain T2Space PlaneOrbitQuotient, then discharge inverse continuity.",
+   :other-consumers []}
+  {:bounded-exception
    "This single-consumer quotient identification is the nearest ready t93J03 route step after the explicit disk-to-square carrier route was blocked.",
    :consumer :t93J03,
    :implements-lemma :lemma-kleinorbitquotient-homeomorph,
    :evidence
    {:probe
     {:residual
-     "After inverse continuity, prove the separate closed-square relation quotient to frozen Surface false 2 homeomorphism and compose.",
+     "Bank quotient-map openness, then prove closedness of the full affine orbit relation and derive the Hausdorff orbit quotient.",
      :outcome :revise,
-     :warnings
-     [{:kind :dirty-worktree,
-       :message
-       "ConstructionTargets/ManifoldFundamentalClass.lean was already modified by other work and was left untouched."}],
+     :warnings [],
      :missing-theorems
-     [{:name "closedSquareOrbitQuotientEquiv_continuous_symm",
-       :type
-       "Continuous (KleinClosedSquareOrbitQuotientEquiv.closedSquareOrbitQuotientEquiv.symm : KleinOrbitQuotientHomeomorph.PlaneOrbitQuotient → KleinOrbitQuotientHomeomorph.ClosedSquareOrbitQuotient)",
+     [{:name "KleinPlaneOrbitQuotient.quotientMap_isOpen",
+       :type "IsOpenMap (fun p : ℝ × ℝ => Quotient.mk orbitSetoid p).",
        :status :not-started,
        :consumers [:t93J03],
-       :depends-on ["kleinSquareBoundaryOrbitEqvGen"],
+       :depends-on [],
        :area "deck-group-fundamental-group"}],
      :prerequisite
      {:bounded-exception
-      "This single-consumer theorem supplies the one missing continuity direction needed to upgrade the fundamental-domain quotient equivalence to a homeomorphism.",
+      "This single-consumer theorem is a ready direct dependency of the plane-orbit quotient Hausdorff lemma.",
       :consumer :t93J03,
       :implements-lemma
-      :lemma-closedsquareorbitquotientequiv-continuous-symm,
+      :lemma-kleinplaneorbitquotient-quotientmap-isopen,
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/KleinClosedSquareOrbitInverseContinuity.lean"],
+      ["ConstructionTargets/KleinPlaneOrbitQuotientTopology.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t93J03/closed-square-orbit-inverse-continuity",
+      "TOPOLOGY-ROUTES.md/t93J03/klein-plane-orbit-quotient-map-open",
       :acceptance
       {:implementation
-       "For the coinduced quotient topologies already defined in KleinOrbitQuotientHomeomorph, prove continuity of closedSquareOrbitQuotientEquiv.symm. Use the closed fundamental-square representative theorem and the exact square-boundary orbit classification to prove that the inverse respects quotient-open sets; equivalently establish the quotient or closed-map property needed for inverse continuity. Export closedSquareOrbitQuotientEquiv_continuous_symm and the resulting closedSquareOrbitQuotientHomeomorph. Do not compare the closed-square quotient to Surface false 2, impose an edgewise disk carrier, prove fundamental groups, or close t93J03.",
+       "Prove that the quotient projection from ℝ × ℝ to the explicit PresentedKleinGroup orbit quotient is an open map. Show that the saturation of every open set is the union of its translates under the affine action, hence open, and use the coinduced quotient topology. Export KleinPlaneOrbitQuotient.quotientMap_isOpen with the fixture's exact type. Do not prove closedness of SameOrbit, the T2Space instance, inverse continuity, the polygon comparison, or close t93J03.",
        :placeholder "the single sorry in apm_t93j03",
        :route-step
-       "upgrade the closed-square fundamental-domain orbit equivalence to a homeomorphism",
-       :fixture
-       "/tmp/klein-closed-square-orbit-inverse-continuity-probe.lean",
+       "prove the explicit affine orbit quotient projection is open",
+       :fixture "/tmp/klein-plane-orbit-quotient-map-open-probe.lean",
        :fixture-sha256
-       "13940d7755ac8e1c1072f48beb95f1c653185796cdaf9860955c9c12eebd5317",
+       "b80a11fa24c83886b50a4527aad8273eb76df245c2e951857143ccaaa0ad2b7c",
        :gates
-       ["lake build ConstructionTargets.KleinClosedSquareOrbitInverseContinuity"
+       ["lake build ConstructionTargets.KleinPlaneOrbitQuotientTopology"
         "fixture compiles"
         "zero source and fixture sorry"
         "standard-only axioms"
         "registry check"]},
-      :id
-      :routes-2026-10-11-klein-closed-square-orbit-inverse-continuity-104,
+      :id :routes-2026-10-11-klein-plane-orbit-quotient-map-open-109,
       :kind :reusable-theorem,
       :area "deck-group-fundamental-group",
-      :depends-on [:lemma-kleinsquareboundaryorbiteqvgen],
+      :depends-on [],
       :current-residual
-      "Construct the quotient-level cut-and-paste homeomorphism from the closed-square relation quotient to Surface false 2, then compose the two homeomorphisms.",
+      "Prove SameOrbit is closed; combine it with quotient-map openness to obtain T2Space PlaneOrbitQuotient, then discharge inverse continuity.",
       :other-consumers []},
      :axioms
      ["propext"
       "Classical.choice"
       "Quot.sound"
-      "KleinClosedSquareOrbitInverseContinuityProbe.continuous_closedSquareOrbitQuotientEquiv_symm"],
+      "KleinPlaneOrbitQuotientMapOpenProbe.quotientMap_isOpen"],
      :commands
      [{:cmd
-       "lake build ConstructionTargets.KleinOrbitQuotientHomeomorph",
+       "lake env lean /tmp/klein-plane-orbit-quotient-map-open-probe.lean",
        :exit 0,
        :finding
-       "The reviewed dependency compiles the two quotient topologies and forward continuity with standard axioms."}
+       "The ready quotient-map openness interface compiles with one isolated nonstandard axiom."}
       {:cmd
-       "lake env lean /tmp/klein-closed-square-orbit-inverse-continuity-probe.lean",
+       "sha256sum /tmp/klein-plane-orbit-quotient-map-open-probe.lean",
        :exit 0,
        :finding
-       "The exact inverse-continuity interface fills a Homeomorph based on the banked quotient Equiv and forward-continuity theorem."}
-      {:cmd
-       "sha256sum /tmp/klein-closed-square-orbit-inverse-continuity-probe.lean",
-       :exit 0,
-       :finding
-       "13940d7755ac8e1c1072f48beb95f1c653185796cdaf9860955c9c12eebd5317"}
-      {:cmd
-       "python3 comment-stripped placeholder census /tmp/klein-closed-square-orbit-inverse-continuity-probe.lean",
-       :exit 0,
-       :finding "0"}
+       "Fixture hash is b80a11fa24c83886b50a4527aad8273eb76df245c2e951857143ccaaa0ad2b7c."}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :finding "131 registered statements match, 0 do not."}
       {:cmd "sed route guides and build-loop design",
        :exit 0,
        :finding
-       "TOPOLOGY-ROUTES.md, all three route files, the build-loop design, and the reviewed dependency receipt were read."}
+       "TOPOLOGY-ROUTES.md, all three route files, the build-loop design, and reviewed dependency receipts were reread."}
       {:cmd "git status --short",
        :exit 0,
        :finding
-       "The pre-existing unrelated modification ConstructionTargets/ManifoldFundamentalClass.lean remains; this read-only probe did not modify repository files."}],
+       "Clean worktree; this probe changed no repository file."}],
      :diagnostic-history [],
      :fixture
-     {:path
-      "/tmp/klein-closed-square-orbit-inverse-continuity-probe.lean",
+     {:path "/tmp/klein-plane-orbit-quotient-map-open-probe.lean",
       :sha256
-      "13940d7755ac8e1c1072f48beb95f1c653185796cdaf9860955c9c12eebd5317",
-      :interface
-      "Inverse continuity upgrades the banked closed-square-to-plane orbit quotient equivalence and forward continuity theorem to a Homeomorph."},
+      "b80a11fa24c83886b50a4527aad8273eb76df245c2e951857143ccaaa0ad2b7c"},
      :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-orbit-quotient-homeomorph",
@@ -105903,7 +105916,8 @@
    [:lemma-kleinsquareboundaryorbiteqvgen
     :routes-2026-10-11-checkpoint-topo1-after-klein-and-wedge-coordinates-86
     :routes-2026-10-11-klein-orbit-quotient-homeomorph-102
-    :routes-2026-10-11-klein-closed-square-orbit-inverse-continuity-104],
+    :routes-2026-10-11-klein-closed-square-orbit-inverse-continuity-104
+    :routes-2026-10-11-klein-plane-orbit-quotient-map-open-109],
    :current-residual
    "Use the quotient homeomorphism in the deck-group fundamental-group computation and finish the t93J03 route.",
    :other-consumers []}
@@ -112896,14 +112910,19 @@
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
-  {:consumer :portfolio,
+  {:consumer :t93J03,
    :phase :lemma,
    :state :backlog,
    :scope [],
-   :acceptance {:lemma "KleinPlaneOrbitQuotient.quotientMap_isOpen"},
+   :acceptance
+   {:lemma "KleinPlaneOrbitQuotient.quotientMap_isOpen",
+    :type "IsOpenMap (fun p : ℝ × ℝ => Quotient.mk orbitSetoid p)."},
    :lemma
    {:name "KleinPlaneOrbitQuotient.quotientMap_isOpen",
-    :reported-by []},
+    :reported-by
+    [:routes-2026-10-11-klein-orbit-quotient-homeomorph-96],
+    :type "IsOpenMap (fun p : ℝ × ℝ => Quotient.mk orbitSetoid p).",
+    :area "deck-group-fundamental-group"},
    :id :lemma-kleinplaneorbitquotient-quotientmap-isopen,
    :kind :lemma,
    :depends-on [],
