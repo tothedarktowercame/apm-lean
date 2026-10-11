@@ -849,6 +849,36 @@ theorem reconstructionMemRightTube_rightTubeCorePolar
         n.re ^ 2 + n.im ^ 2 by nlinarith]
     simpa [Complex.norm_def, Complex.normSq_apply, pow_two] using hn
 
+theorem rightTubeCoreRadialAmbientDeformation_exists :
+    ∃ H : C(unitInterval × RightTubeMinusLeftCore, apm_t02a03_E3),
+      (∀ p, H (0, p) = rightTubeCorePolarReconstruction
+        (rightTubeCoreAngularCoordinate p)
+        (rightTubeCoreNormalComplex
+          (apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)))) ∧
+      (∀ p, H (1, p) = p.1) ∧
+      (∀ tp, H tp ∈ apm_t02a03_rightTube) := by
+  let H : C(unitInterval × RightTubeMinusLeftCore, apm_t02a03_E3) :=
+    ⟨fun tp => rightTubeCorePolarReconstruction
+        (rightTubeCoreAngularCoordinate tp.2)
+        (rightTubeCoreNormalInterpolation rightTubeMeridianCoordinate tp), by
+      have hu : Continuous (fun tp : unitInterval × RightTubeMinusLeftCore =>
+          rightTubeCoreAngularCoordinate tp.2) :=
+        (ContinuousMap.continuous rightTubeCoreAngularCoordinate).comp continuous_snd
+      have hn : Continuous (fun tp : unitInterval × RightTubeMinusLeftCore =>
+          rightTubeCoreNormalInterpolation rightTubeMeridianCoordinate tp) :=
+        ContinuousMap.continuous _
+      exact rightTubeCoreTubularCoordinates_continuous.2.comp (hu.prodMk hn)⟩
+  refine ⟨H, ?_, ?_, ?_⟩
+  · intro p
+    simp [H, rightTubeCoreNormalInterpolation_zero]
+  · intro p
+    simp only [H, ContinuousMap.coe_mk, rightTubeCoreNormalInterpolation_one]
+    apply rightTubeCorePolarReconstruction_self
+    exact p.2.1
+  · intro tp
+    apply reconstructionMemRightTube_rightTubeCorePolar
+    exact rightTubeCoreInterpolatedNormalRadiusBound rightTubeMeridianCoordinate tp
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -877,3 +907,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.recoveredNormal_rightTubeRadialAmbientDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.avoidsLeftCore_rightTubeRadialAmbientDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.reconstructionMemRightTube_rightTubeCorePolar
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCoreRadialAmbientDeformation_exists
