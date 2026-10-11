@@ -79329,12 +79329,23 @@
       :exit 1,
       :finding "Endpoint rfl was false; exposed summand maps."}],
     :continue-from "Identify left/right maps as circle-affine.",
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791728081938-5471-28ad6ca7",
+     :commands
+     ["git show/check/diff-tree 3bff735cc"
+      "lake env lean ConstructionTargets/t97A04Closure.lean"
+      "lake env lean problems/t97A04/lean/Main.lean"
+      "statement-registry check/fingerprint and placeholder counts"],
+     :finding
+     "PASS: new compiled progress after history job 7. Commit changes only the scoped closure and exposes the left/right Circle-to-Circle⊕Circle restrictions of the transported overlap shear with faithful application formulas and correct composition direction. Blob matches 23609ca3. Closure is sorry-free with standard axioms; Main compiles with unchanged 2 placeholders. Registry is 131/0 and frozen statement SHA-256 remains ca1b2cb3c6594276811618321d5c0604c2f38fc4594a6b21ae161a711a923a34. Identifying both restrictions as affine maps and B6-B11 remain listed."},
     :commit "3bff735cc6b4b6da238c4dbdd605c169c8bdaf0d",
     :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
     :finding "Both transported overlap-summand maps now compile.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79403,6 +79414,9 @@
      :reason :program-progress-committed}
     {:job 7,
      :commit "c618c310021b3e265bd9e4c5261cb1d08cc29cf6",
+     :reason :program-progress-committed}
+    {:job 8,
+     :commit "3bff735cc6b4b6da238c4dbdd605c169c8bdaf0d",
      :reason :program-progress-committed}]}
   {:consumer :t96A07,
    :stop-count 1,
@@ -79858,7 +79872,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -79870,7 +79884,9 @@
     :reported-by [:program-2026-10-11-close-t97a04],
     :type "left/right restrictions with application formulas",
     :area "mv-connecting-naturality",
-    :proved-in :program-2026-10-11-close-t97a04},
+    :proved-in :program-2026-10-11-close-t97a04,
+    :banked-by :program-2026-10-11-close-t97a04,
+    :banked-commit "3bff735cc6b4b6da238c4dbdd605c169c8bdaf0d"},
    :id
    :lemma-constructiontargets-t97a04closure-twocircleoverlapshearleftright,
    :kind :lemma,
