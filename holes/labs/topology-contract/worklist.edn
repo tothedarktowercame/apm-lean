@@ -116059,14 +116059,14 @@
    :depends-on [],
    :other-consumers []}
   {:consumer :t95J02,
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "B6 has the wrong reflection orientation: H(t,y) = [(t,y)] ends at [(0,-y)], which under B5 sends (cos(2*pi*y), sin(2*pi*y)) to (cos(2*pi*y), -sin(2*pi*y)) = reflectionMap (1 : Fin 2), not reflectionMap 0. At y = 0 the endpoint is (1,0) while reflectionMap 0 gives (-1,0). Change B6 and the B7 reflection invocation to coordinate 1, or consistently swap the B5 coordinates.",
    :evidence
    {:blueprint
     {:path "ConstructionTargets/t95J02Closure.blueprint.md",
      :sha256
-     "101733676719b56190ac91645b7aef205b4d2d81e8b64b8abe1ed8cc1f51ad9e",
+     "a08e515eb7d1ea663c20c731e35663f9b94cb22b52e544782628435c7f17feb1",
      :nodes
      [{:id :B1, :status :planned}
       {:id :B2, :status :planned}
@@ -116079,12 +116079,9 @@
       {:id :B9, :status :planned}]},
     :placeholder-delta {:source-before 3, :source-after 3},
     :residual
-    "Independent blueprint review, then formalize B1-B8 and use B7-B8 to remove all three placeholders from problems/t95J02/lean/Main.lean.",
+    "Independent blueprint re-review, then formalize B1-B8 and use B7-B8 to remove all three placeholders from problems/t95J02/lean/Main.lean.",
     :outcome :stop,
-    :warnings
-    [{:kind :concurrent-worktree-change,
-      :message
-      "ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean and .md were modified by another process and were preserved unmodified and uncommitted."}],
+    :warnings [],
     :missing-theorems
     [{:name "t95J02Closure.separatingMap",
       :type
@@ -116101,7 +116098,7 @@
       :area "klein-bottle-homology"}
      {:name "t95J02Closure.t95J02_beta_homotopic_beta_reflection",
       :type
-      "For beta defined by t95J02CircleB_homeo followed by t95J02InclusionB, ContinuousMap.Homotopic beta (beta.comp (CoefficientFirstReflection.reflectionMap 0))",
+      "For beta defined by t95J02CircleB_homeo followed by t95J02InclusionB, ContinuousMap.Homotopic beta (beta.comp (CoefficientFirstReflection.reflectionMap (1 : Fin 2)))",
       :status :not-started,
       :consumers [:t95J02],
       :depends-on ["t95J02Closure.t95J02CircleB_homeo"],
@@ -116123,53 +116120,47 @@
       :area "klein-bottle-homology"}],
     :statement-hashes
     {:blueprint-sha256
-     "101733676719b56190ac91645b7aef205b4d2d81e8b64b8abe1ed8cc1f51ad9e",
+     "a08e515eb7d1ea663c20c731e35663f9b94cb22b52e544782628435c7f17feb1",
      :registry "131 registered statements match, 0 do not"},
     :disposition :stop,
     :axioms [],
     :author "topo-2",
     :reason
-    "Blueprint written. The nine-node route separates the quotient invariant, descended coordinate, vertical fiber classification, circle homeomorphism, reflection homotopy, homology kernel, retraction injectivity, and frozen adapter. Per the blueprint gate, Lean formalization waits for independent mathematical review.",
+    "Blueprint repaired. B6 now uses reflectionMap (1 : Fin 2), matching the endpoint [(1,y)] = [(0,-y)] under the cosine/sine coordinates, and B7 explicitly invokes integral_circle at coordinate 1. Independent blueprint re-review is required before Lean formalization begins.",
     :commands
-    [{:cmd "python3 blueprint node and dependency validation",
+    [{:cmd "python3 B6-B7 reflection-coordinate validation",
       :exit 0,
       :finding
-      "Nine nodes each have lean, uses, and status fields; B9 depends on B7 and B8."}
+      "B6 and B7 consistently use coordinate 1, and B6 states that the endpoint fixes cosine and negates sine."}
      {:cmd
-      "rg exact supporting declarations in Mathlib and ConstructionTargets",
+      "rg -n reflection-coordinate declarations ConstructionTargets/t95J02Closure.blueprint.md ConstructionTargets/CoefficientFirstReflection.lean",
       :exit 0,
       :finding
-      "The AddCircle period-one homeomorphism, quotient-map API, reflection homology, and homotopy invariance declarations exist."}
+      "The blueprint uses reflectionMap (1 : Fin 2), while integral_circle is the all-coordinate theorem and accepts coordinate 1."}
      {:cmd
       "git diff --check -- ConstructionTargets/t95J02Closure.blueprint.md",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131 registered statements match, 0 do not."}
-     {:cmd "git commit -m Write-t95J02-closure-blueprint",
+     {:cmd "git commit -m Correct-t95J02-reflection-coordinate",
       :exit 0,
       :finding
-      "Committed only the scoped blueprint as 9f69aa2dad83e6675a624c3151fd5d4b61ccb16b."}
+      "Committed only the scoped blueprint repair as 60b856adb68fe7885a96b5f90b620292b991c336."}
      {:cmd "sha256sum ConstructionTargets/t95J02Closure.blueprint.md",
       :exit 0,
       :finding
-      "101733676719b56190ac91645b7aef205b4d2d81e8b64b8abe1ed8cc1f51ad9e"}],
+      "a08e515eb7d1ea663c20c731e35663f9b94cb22b52e544782628435c7f17feb1"}],
     :diagnostic-history [],
     :continue-from
-    {:commit "9f69aa2dad83e6675a624c3151fd5d4b61ccb16b",
+    {:commit "60b856adb68fe7885a96b5f90b620292b991c336",
      :next
-     "Obtain independent review of t95J02Closure.blueprint.md; after approval formalize B1 and B2 in ConstructionTargets/t95J02Closure.lean."},
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1791717274431-5219-d8d561d7",
-     :finding
-     "B6 has the wrong reflection orientation: H(t,y) = [(t,y)] ends at [(0,-y)], which under B5 sends (cos(2*pi*y), sin(2*pi*y)) to (cos(2*pi*y), -sin(2*pi*y)) = reflectionMap (1 : Fin 2), not reflectionMap 0. At y = 0 the endpoint is (1,0) while reflectionMap 0 gives (-1,0). Change B6 and the B7 reflection invocation to coordinate 1, or consistently swap the B5 coordinates."},
-    :commit "9f69aa2dad83e6675a624c3151fd5d4b61ccb16b",
+     "Obtain independent review of the corrected reflection orientation; after approval formalize B1 and B2 in ConstructionTargets/t95J02Closure.lean."},
+    :commit "60b856adb68fe7885a96b5f90b620292b991c336",
     :changed-paths ["ConstructionTargets/t95J02Closure.blueprint.md"],
     :seat "topo-2"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t95J02/lean/Main.lean"
     "problems/t95J02/status.json"
