@@ -122,6 +122,44 @@ theorem crossTermSphereMap_mfderiv_firstPoint :
     (sphereMapAmbient_hasFDerivAt sphereFirstAxis).fderiv]
   rfl
 
+/-- The coordinate plane with vanishing first coordinate. -/
+def yzCoordinatePlane : Submodule ℝ (E 3) :=
+  LinearMap.ker (PiLp.proj 2 (fun _ : Fin 3 => ℝ) 0).toLinearMap
+
+/-- The derivative of the quadratic sphere map at the first coordinate point
+has precisely the `yz` coordinate plane as its range. -/
+theorem crossTermSphereMap_mfderiv_firstPoint_range :
+    LinearMap.range
+        (mfderiv (𝓡 2) (𝓡 3) crossTermSphereMap sphereFirstPoint).toLinearMap =
+      yzCoordinatePlane := by
+  ext y
+  change E 3 at y
+  constructor
+  · rintro ⟨x, rfl⟩
+    rw [crossTermSphereMap_mfderiv_firstPoint]
+    change (sphereMapAmbientDerivative sphereFirstAxis
+      ((mfderiv (𝓡 2) 𝓘(ℝ, E 3) ((↑) : Sphere 2 → E 3) sphereFirstPoint) x)) 0 = 0
+    simp [sphereMapAmbientDerivative, sphereFirstAxis]
+  · intro hy
+    have hy0 : y 0 = 0 := hy
+    let v : E 3 := WithLp.toLp 2 ![0, y 2, y 1]
+    have hvorth : v ∈ (ℝ ∙ sphereFirstAxis)ᗮ := by
+      rw [Submodule.mem_orthogonal_singleton_iff_inner_right]
+      simp [v, sphereFirstAxis, PiLp.inner_apply, Fin.sum_univ_succ]
+    have hvrange : v ∈ LinearMap.range
+        (mfderiv (𝓡 2) 𝓘(ℝ, E 3) ((↑) : Sphere 2 → E 3) sphereFirstPoint).toLinearMap := by
+      rw [sphereFirstPoint_tangent_range]
+      exact hvorth
+    rcases hvrange with ⟨x, hx⟩
+    refine ⟨x, ?_⟩
+    rw [crossTermSphereMap_mfderiv_firstPoint]
+    change sphereMapAmbientDerivative sphereFirstAxis
+        ((mfderiv (𝓡 2) 𝓘(ℝ, E 3) ((↑) : Sphere 2 → E 3) sphereFirstPoint) x) = y
+    rw [show (mfderiv (𝓡 2) 𝓘(ℝ, E 3) ((↑) : Sphere 2 → E 3)
+      sphereFirstPoint) x = v from hx]
+    ext i
+    fin_cases i <;> simp [v, sphereMapAmbientDerivative, sphereFirstAxis, hy0]
+
 /-- At the first coordinate point the ambient derivative swaps the two free
 tangent coordinates and has zero first coordinate. -/
 theorem sphereMapAmbientDerivative_firstAxis (v : E 3) :

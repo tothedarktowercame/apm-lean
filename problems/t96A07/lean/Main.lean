@@ -55,9 +55,17 @@ theorem descendedSphereMap :
   simpa [T96A07.sphereMap, crossTermSphereMap] using
     crossTermSphereMap_descends
 
+theorem sphereMap_mfderiv_e0_range :
+    LinearMap.range
+        (mfderiv (𝓡 2) (𝓡 3) T96A07.sphereMap sphereFirstPoint).toLinearMap =
+      yzCoordinatePlane := by
+  simpa [T96A07.sphereMap, crossTermSphereMap] using
+    crossTermSphereMap_mfderiv_firstPoint_range
+
 #print axioms sphereMap_antipodal
 #print axioms sphereMap_contMDiff
 #print axioms descendedSphereMap
+#print axioms sphereMap_mfderiv_e0_range
 
 end ConstructionTargets.T96A07Closure
 
