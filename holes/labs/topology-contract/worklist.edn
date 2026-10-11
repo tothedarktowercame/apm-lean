@@ -87930,107 +87930,152 @@
    :current-residual
    "Prove the one coherent restriction package for the chosen path component: covering charts, positive bounded sheet count, and the inclusion-induced pi1 equivalence.",
    :other-consumers []}
+  {:bounded-exception
+   "This topology package is required only by the t99J01 component-cover restriction route.",
+   :consumer :t99J01,
+   :implements-lemma :lemma-threecircles-locpathconnectedspace,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/ThreeCirclesPathTopology.lean"],
+   :dag-node "TOPOLOGY-ROUTES.md/t99J01/three-circles-path-topology",
+   :acceptance
+   {:implementation
+    "Prove LocPathConnectedSpace ThreeCircles and PathConnectedSpace ThreeCircles from the point-wedge quotient presentation. Export both instances in one module, then verify that IsCoveringMap.restrictPathComponent applies to an arbitrary finite-sheeted cover p : E → ThreeCircles at a chosen e. Do not prove constant component-fiber cardinality, the inclusion-induced fundamental-group bijection, or close t99J01.",
+    :placeholder "the single sorry in apm_t99j01",
+    :route-step
+    "t99J01 step 4: supply the base-space topology instances needed by path-component cover restriction",
+    :fixture "/tmp/t99j01-threecircles-locpathconnected-probe.lean",
+    :fixture-sha256
+    "15fd4c049222f82d61d134054a0f8d6252c3133d49a081cbd3ea4f04b3b6eacb",
+    :gates
+    ["lake build ConstructionTargets.ThreeCirclesPathTopology"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-11-three-circles-path-topology-100,
+   :kind :reusable-theorem,
+   :area "covering-subgroup-correspondence",
+   :depends-on [],
+   :current-residual
+   "Use the two topology instances with RestrictPathComponent, then prove constant component sheet count and the inclusion-induced pi1 bijection.",
+   :other-consumers []}
   {:consumer :t99J01,
    :evidence
    {:probe
     {:residual
-     "Exactly one compiled prerequisite remains: the chosen path component of an n-sheeted ThreeCircles cover must itself be packaged as an m-sheeted cover with 0 < m <= n and with inclusion inducing a fundamental-group equivalence.",
+     "After this topology package, prove the restricted cover has the component-fiber sheet count and prove the component inclusion induces a fundamental-group equivalence.",
      :outcome :revise,
      :warnings
      [{:kind :interface-axiom,
        :message
-       "The placeholder-free fixture uses exactly one nonstandard axiom for the coherent component-restriction package. Mathlib's restrictPreimage theorem restricts over a subset of the base and does not supply restriction of the total space to one path component."}],
+       "The placeholder-free fixture uses exactly one nonstandard axiom for the paired ThreeCircles topology instances."}],
+     :missing-theorems
+     [{:name "threeCircles_pathTopology",
+       :type
+       "LocPathConnectedSpace ThreeCircles ∧ PathConnectedSpace ThreeCircles",
+       :status :not-started,
+       :consumers [:t99J01],
+       :depends-on [],
+       :area "covering-subgroup-correspondence"}],
      :prerequisite
-     {:consumer :t99J01,
+     {:bounded-exception
+      "This topology package is required only by the t99J01 component-cover restriction route.",
+      :consumer :t99J01,
+      :implements-lemma :lemma-threecircles-locpathconnectedspace,
       :phase :implementation,
       :state :open,
-      :scope
-      ["ConstructionTargets/T99J01PathComponentCoverRestriction.lean"],
+      :scope ["ConstructionTargets/ThreeCirclesPathTopology.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t99J01/path-component-sheet-restriction/component-cover",
+      "TOPOLOGY-ROUTES.md/t99J01/three-circles-path-topology",
       :acceptance
-      {:placeholder "the single sorry in apm_t99j01",
-       :route-step "t99J01 step 4, pathComponent_isKSheetedCover",
-       :declarations
-       ["t99j01ComponentAt"
-        "t99j01ComponentCoverMap"
-        "threeCircles_locPathConnectedSpace"
-        "threeCircles_pathConnectedSpace"
-        "t99j01ComponentCover_isKSheeted"
-        "t99j01ComponentSheets_pos"
-        "t99j01ComponentSheets_le"
-        "t99j01ComponentInclusion_pi1_bijective"
-        "t99j01ComponentFundamentalGroupEquiv"],
-       :implementation
-       "Define the chosen path component as the subtype {x // Joined e x}, its inclusion into E, and the restricted map to ThreeCircles. First prove LocPathConnectedSpace for each point wedge from PointWedgeRestrictedOpenQuotient.quotientMap_isQuotientMap and the Sum/quotient local-path-connectedness theorem, and prove PathConnectedSpace for TwoCircles and ThreeCircles by joining representatives through the glued basepoint. For a finite covering p and e, use path lifting over the path-connected base to show the chosen component maps onto ThreeCircles. Restrict each evenly covered chart to the sheets meeting this component; joinedness is locally constant on a sheet, so the restricted sheets are open and give an IsCoveringMap. Identify the restricted fiber over p e with {x // p x = p e and Joined e x}; transport the selected sheets along lifted base paths to prove the same finite cardinality over every basepoint. The chosen point supplies positivity, and subtype inclusion into the original fiber supplies m <= n. Finally prove the inclusion-induced FundamentalGroup map bijective: surjectivity because every loop based at e lies in the path component, and injectivity because a null-homotopy in E has connected image joined to e and therefore factors through the component. Package the resulting MulEquiv in the direction used by the frozen third conjunct.",
-       :axioms :standard-only,
-       :fixture
-       "/tmp/t99j01-path-component-sheet-restriction-probe.lean",
+      {:implementation
+       "Prove LocPathConnectedSpace ThreeCircles and PathConnectedSpace ThreeCircles from the point-wedge quotient presentation. Export both instances in one module, then verify that IsCoveringMap.restrictPathComponent applies to an arbitrary finite-sheeted cover p : E → ThreeCircles at a chosen e. Do not prove constant component-fiber cardinality, the inclusion-induced fundamental-group bijection, or close t99J01.",
+       :placeholder "the single sorry in apm_t99j01",
+       :route-step
+       "t99J01 step 4: supply the base-space topology instances needed by path-component cover restriction",
+       :fixture "/tmp/t99j01-threecircles-locpathconnected-probe.lean",
        :fixture-sha256
-       "3931266497ef83433fbbf4d01f17aa1c9a301ab3a69c52ca38aea6f20bcd3b63",
-       :commands
-       ["lake env lean ConstructionTargets/T99J01PathComponentCoverRestriction.lean"
-        "lake env lean /tmp/t99j01-path-component-sheet-restriction-probe.lean"
-        "python3 scripts/statement-registry.py check"]},
-      :id :routes-2026-10-10-t99j01-path-component-cover-package-1,
-      :kind :final-adapter,
+       "15fd4c049222f82d61d134054a0f8d6252c3133d49a081cbd3ea4f04b3b6eacb",
+       :gates
+       ["lake build ConstructionTargets.ThreeCirclesPathTopology"
+        "fixture compiles"
+        "zero source and fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :id :routes-2026-10-11-three-circles-path-topology-100,
+      :kind :reusable-theorem,
+      :area "covering-subgroup-correspondence",
       :depends-on [],
       :current-residual
-      "Prove the one coherent restriction package for the chosen path component: covering charts, positive bounded sheet count, and the inclusion-induced pi1 equivalence.",
+      "Use the two topology instances with RestrictPathComponent, then prove constant component sheet count and the inclusion-induced pi1 bijection.",
       :other-consumers []},
      :axioms
      ["propext"
       "Classical.choice"
       "Quot.sound"
-      "T99J01PathComponentRestrictionProbe.pathComponentRestrictionPackage"],
+      "T99J01ThreeCirclesLocPathConnectedProbe.threeCircles_pathTopology"],
      :commands
-     [{:cmd "stat -c '%F %n' .lake/packages",
+     [{:cmd
+       "lake build ConstructionTargets.T99J01PathComponentCoverRestriction",
        :exit 0,
        :finding
-       "directory .lake/packages; canonical package authority is present"}
+       "The reviewed dependency compiles, but exports only the component definitions, positive sheet count, and upper bound."}
       {:cmd
-       "lake env lean ConstructionTargets/PointWedgeRestrictedOpenQuotient.lean",
+       "lake env lean /tmp/t99j01-threecircles-locpathconnected-probe.lean",
        :exit 0,
        :finding
-       "the quotient-map and restricted-open topology for point wedges compile with standard axioms"}
+       "One isolated ThreeCircles path-topology package supplies both required instances and unlocks the banked path-component covering restriction."}
       {:cmd
-       "lake env lean ConstructionTargets/CoveringMonodromyCosets.lean",
+       "sha256sum /tmp/t99j01-threecircles-locpathconnected-probe.lean",
        :exit 0,
        :finding
-       "the banked induced-pi1 injectivity and fiber-coset interface compiles with standard axioms"}
+       "15fd4c049222f82d61d134054a0f8d6252c3133d49a081cbd3ea4f04b3b6eacb"}
       {:cmd
-       "lake env lean /tmp/t99j01-path-component-sheet-restriction-probe.lean",
-       :exit 0,
-       :finding
-       "the component-cover, sheet-bound, and inclusion-induced pi1 equivalence interface elaborates from one isolated package axiom"}
-      {:cmd
-       "sha256sum /tmp/t99j01-path-component-sheet-restriction-probe.lean",
-       :exit 0,
-       :finding
-       "3931266497ef83433fbbf4d01f17aa1c9a301ab3a69c52ca38aea6f20bcd3b63"}
-      {:cmd
-       "Python comment-stripped placeholder census of /tmp/t99j01-path-component-sheet-restriction-probe.lean",
+       "python3 comment-stripped placeholder census /tmp/t99j01-threecircles-locpathconnected-probe.lean",
        :exit 0,
        :finding "0"}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
-       :finding "131 registered statements match, 0 do not"}
-      {:cmd "git status --short", :exit 0, :finding "clean"}],
+       :finding "131 registered statements match, 0 do not."}
+      {:cmd "sed route guides and build-loop design",
+       :exit 0,
+       :finding
+       "TOPOLOGY-ROUTES.md, routes-1.md, routes-2.md, routes-3.md, the build-loop design, and the reviewed dependency receipt were read."}
+      {:cmd "git status --short",
+       :exit 0,
+       :finding "Clean worktree; this probe was read-only."}],
      :diagnostic-history
      [{:cmd
-       "lake env lean /tmp/t99j01-path-component-sheet-restriction-probe.lean",
+       "lake env lean /tmp/t99j01-threecircles-locpathconnected-probe.lean",
        :exit 1,
        :finding
-       "The first draft made componentAt an opaque def, so subtype topology synthesis and the inclusion continuous map did not elaborate.",
+       "The first fixture draft used an invalid lambda token and ran before the dependency olean existed.",
        :correction
-       "Changed componentAt to an abbrev and constructed the inclusion as a ContinuousMap from Subtype.val and continuous_subtype_val; the successful compile is in commands."}],
+       "Built the reviewed dependency and used Lean's lambda arrow; the successful compile is recorded in commands."}
+      {:cmd
+       "lake env lean /tmp/t99j01-threecircles-locpathconnected-probe.lean",
+       :exit 1,
+       :finding
+       "The second draft exposed that restrictPathComponent requires PathConnectedSpace ThreeCircles in addition to LocPathConnectedSpace ThreeCircles.",
+       :correction
+       "Packaged both exact topology instances into the single prerequisite and recompiled successfully."}
+      {:cmd
+       "lake env lean /tmp/t99j01-threecircles-locpathconnected-probe.lean",
+       :exit 1,
+       :finding
+       "The third draft used Prod for two Prop-valued typeclasses, causing elaboration errors.",
+       :correction
+       "Used conjunction for the two Prop-valued instances; the successful compile is recorded in commands."}],
      :fixture
-     {:path "/tmp/t99j01-path-component-sheet-restriction-probe.lean",
+     {:path "/tmp/t99j01-threecircles-locpathconnected-probe.lean",
       :sha256
-      "3931266497ef83433fbbf4d01f17aa1c9a301ab3a69c52ca38aea6f20bcd3b63"},
+      "15fd4c049222f82d61d134054a0f8d6252c3133d49a081cbd3ea4f04b3b6eacb",
+      :interface
+      "The locally path-connected and path-connected instances for ThreeCircles make IsCoveringMap.restrictPathComponent apply to the selected component."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/path-component-sheet-restriction",
@@ -88049,7 +88094,8 @@
    :kind :final-adapter,
    :depends-on
    [:routes-2026-10-10-checkpoint-topo1-covering-uptake-mv-repair-3
-    :routes-2026-10-10-t99j01-path-component-cover-package-1],
+    :routes-2026-10-10-t99j01-path-component-cover-package-1
+    :routes-2026-10-11-three-circles-path-topology-100],
    :current-residual
    "Restrict an arbitrary finite-sheet cover to the chosen path component, bound its sheet count, and identify its based fundamental group.",
    :other-consumers []}
@@ -111330,6 +111376,25 @@
    :id :lemma-liftofinclusion-isembedding,
    :kind :lemma,
    :depends-on [:lemma-kleincycliccylindercover],
+   :other-consumers []}
+  {:consumer :t99J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "threeCircles_pathTopology",
+    :type
+    "LocPathConnectedSpace ThreeCircles ∧ PathConnectedSpace ThreeCircles"},
+   :lemma
+   {:name "threeCircles_pathTopology",
+    :reported-by
+    [:routes-2026-10-10-t99j01-path-component-sheet-restriction-4],
+    :type
+    "LocPathConnectedSpace ThreeCircles ∧ PathConnectedSpace ThreeCircles",
+    :area "covering-subgroup-correspondence"},
+   :id :lemma-threecircles-pathtopology,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
