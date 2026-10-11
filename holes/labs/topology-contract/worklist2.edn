@@ -67773,7 +67773,62 @@
   {:bounded-exception
    "single-consumer continuous ambient reconstruction with both endpoint equations",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:residual
+     "Prove right-tube membership and left-core avoidance for the reconstructed ambient path, then package safeRightTubeMeridianDeformation.",
+     :outcome :go,
+     :warnings [],
+     :acceptance
+     {:declaration
+      "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeRadialAmbientDeformation_endpoints",
+      :type
+      "(forall p, rightTubeRadialAmbientDeformation (0,p) = apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)) and (forall p, rightTubeRadialAmbientDeformation (1,p) = p.1)",
+      :gates
+      ["Compile the scoped module after inserting the fixture declarations"
+       "Confirm only propext, Classical.choice, and Quot.sound axioms"
+       "Confirm no new sorry in the scoped module"
+       "Run python3 scripts/statement-registry.py check"]},
+     :commands
+     [{:cmd "lake env lean /tmp/t02a03_ambient_endpoints_probe.lean",
+       :exit 0,
+       :output
+       "rightTubeRadialAmbientDeformation_endpoints compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd "sha256sum /tmp/t02a03_ambient_endpoints_probe.lean",
+       :exit 0,
+       :output
+       "e20fd016bf24c80780266f1eb42f173f05a247ce71d46cf3b4e103ec253e72fa  /tmp/t02a03_ambient_endpoints_probe.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_ambient_endpoints_probe.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}
+      {:cmd
+       "rg -n 'rightTubeRadialAmbientDeformation_endpoints' /tmp/t02a03_ambient_endpoints_probe.lean",
+       :exit 0,
+       :output
+       "34:theorem rightTubeRadialAmbientDeformation_endpoints :\n69:#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeRadialAmbientDeformation_endpoints"}],
+     :fixture
+     {:path "/tmp/t02a03_ambient_endpoints_probe.lean",
+      :sha256
+      "e20fd016bf24c80780266f1eb42f173f05a247ce71d46cf3b4e103ec253e72fa"},
+     :finding
+     "The placeholder-free fixture combines rightTubePlanarRotation and the specialized radial normal interpolation through rightTubePolarReconstruction. It proves continuity and identifies the zero endpoint with circleMeridian(rightTubeMeridianCoordinate p) and the one endpoint with p.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+      :declaration
+      "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeRadialAmbientDeformation_endpoints",
+      :type
+      "(forall p, rightTubeRadialAmbientDeformation (0,p) = apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)) and (forall p, rightTubeRadialAmbientDeformation (1,p) = p.1)",
+      :proof-plan
+      "Define rightTubeRadialAmbientDeformation by feeding rightTubePlanarRotation and rightTubeRadialNormalInterpolation into rightTubePolarReconstruction. Prove continuity coordinatewise. At zero simplify coordinates; at one use norm_smul_normalize, Subtype.ext with rightTubePlanarRotation_one, and rightTubePolarReconstruction_self.",
+      :axioms [propext Classical.choice Quot.sound]},
+     :seat "topo-8"}},
+   :phase :implementation,
+   :type
+   "(forall p, rightTubeRadialAmbientDeformation (0,p) = apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)) and (forall p, rightTubeRadialAmbientDeformation (1,p) = p.1)",
    :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
@@ -67788,15 +67843,20 @@
     :placeholder "the sole sorry in apm_t02a03",
     :route-step
     "construct the continuous ambient path and prove its endpoint equations before certifying its invariants"},
+   :axioms [propext Classical.choice Quot.sound],
    :id
    :routes-2026-10-11-t02a03-right-tube-radial-ambient-endpoints-topo2-r1,
    :kind :reusable-theorem,
    :area "explicit-r3-tube-deformation-retraction",
+   :declaration
+   "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeRadialAmbientDeformation_endpoints",
    :depends-on
    [:routes-2026-10-11-t02a03-right-tube-radial-normal-interpolation-specialized-topo2-r1],
    :current-residual
    "Prove the reconstructed path lies in apm_t02a03_rightTube and that its nonzero radial normal coordinate excludes Set.range apm_t02a03_leftCore, then package safeRightTubeMeridianDeformation.",
-   :other-consumers []}
+   :other-consumers [],
+   :proof-plan
+   "Define rightTubeRadialAmbientDeformation by feeding rightTubePlanarRotation and rightTubeRadialNormalInterpolation into rightTubePolarReconstruction. Prove continuity coordinatewise. At zero simplify coordinates; at one use norm_smul_normalize, Subtype.ext with rightTubePlanarRotation_one, and rightTubePolarReconstruction_self."}
   {:bounded-exception
    "single-consumer explicit ambient deformation with frozen tube and deletion invariants",
    :consumer :t02A03,
