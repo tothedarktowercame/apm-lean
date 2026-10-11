@@ -16582,6 +16582,34 @@
    :current-residual "Transport π₁; compare π₂/π₃.",
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
+   :implements-lemma :lemma-mfclass-sc-pair-pi2-iso,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/manifold-fundamental-class/kernel-pi2",
+   :acceptance
+   {:declaration
+    "ConstructionTargets.ManifoldFundamentalClass.scPairZeroπ₂Iso",
+    :type "∀ f : X ⟶ Y, ParallelPairZeroπ₂Comparison f",
+    :fixture "/tmp/p2.lean",
+    :fixture-sha256
+    "b3cd0f585b86a2b12ed4ccee4503a2b074876c288a2c6825bc1943733ad96979",
+    :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
+    :route-step "compare π₂ diagrams",
+    :implementation
+    "Promote only; exclude transport, π₃ and cokernels."},
+   :representation
+   {:source "parallelPair f 0 ⋙ π₂",
+    :target "parallelPair f.τ₂ 0",
+    :direction "Natural isomorphism source-to-target."},
+   :id :routes-2026-10-11-mfclass-sc-pair-pi2-r1,
+   :kind :representation-comparison,
+   :area "manifold-fundamental-class",
+   :depends-on [:routes-2026-10-11-mfclass-sc-pair-pi1-r1],
+   :current-residual "Compare π₃; transport all kernels.",
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-closedorientedfundamentalclass,
    :evidence
@@ -16589,54 +16617,53 @@
     {:outcome :revise,
      :seat "topo-12",
      :fixture
-     {:path "/tmp/p1.lean",
+     {:path "/tmp/p2.lean",
       :sha256
-      "5a042f5b3cff13b6012319eb5ba566fcf7ba61094a0671db349f72ec95b7c44c"},
-     :commands [{:cmd "lake env lean /tmp/p1.lean", :exit 0}],
+      "b3cd0f585b86a2b12ed4ccee4503a2b074876c288a2c6825bc1943733ad96979"},
+     :commands [{:cmd "lake env lean /tmp/p2.lean", :exit 0}],
      :missing-theorems
-     [{:id :lemma-mfclass-sc-pair-pi1-iso,
+     [{:id :lemma-mfclass-sc-pair-pi2-iso,
        :name
-       "ConstructionTargets.ManifoldFundamentalClass.scPairZeroπ₁Iso",
-       :type "∀ f : X ⟶ Y, ParallelPairZeroπ₁Comparison f",
+       "ConstructionTargets.ManifoldFundamentalClass.scPairZeroπ₂Iso",
+       :type "∀ f : X ⟶ Y, ParallelPairZeroπ₂Comparison f",
        :status :proved,
        :consumers [:t00J02 :t98A02],
        :depends-on
-       ["ConstructionTargets.ManifoldFundamentalClass.forgetSnakeKernelτ₃Limit"],
+       ["ConstructionTargets.ManifoldFundamentalClass.scPairZeroπ₁Iso"],
        :area "manifold-fundamental-class"}],
      :prerequisite
      {:consumer :t00J02,
-      :implements-lemma :lemma-mfclass-sc-pair-pi1-iso,
+      :implements-lemma :lemma-mfclass-sc-pair-pi2-iso,
       :phase :implementation,
       :state :open,
       :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/manifold-fundamental-class/kernel-pi1",
+      "TOPOLOGY-ROUTES.md/manifold-fundamental-class/kernel-pi2",
       :acceptance
       {:declaration
-       "ConstructionTargets.ManifoldFundamentalClass.scPairZeroπ₁Iso",
-       :type "∀ f : X ⟶ Y, ParallelPairZeroπ₁Comparison f",
-       :fixture "/tmp/p1.lean",
+       "ConstructionTargets.ManifoldFundamentalClass.scPairZeroπ₂Iso",
+       :type "∀ f : X ⟶ Y, ParallelPairZeroπ₂Comparison f",
+       :fixture "/tmp/p2.lean",
        :fixture-sha256
-       "5a042f5b3cff13b6012319eb5ba566fcf7ba61094a0671db349f72ec95b7c44c",
+       "b3cd0f585b86a2b12ed4ccee4503a2b074876c288a2c6825bc1943733ad96979",
        :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
-       :route-step "compare π₁ diagrams",
+       :route-step "compare π₂ diagrams",
        :implementation
-       "Promote only; exclude transport and other components."},
+       "Promote only; exclude transport, π₃ and cokernels."},
       :representation
-      {:source "parallelPair f 0 ⋙ π₁",
-       :target "parallelPair f.τ₁ 0",
+      {:source "parallelPair f 0 ⋙ π₂",
+       :target "parallelPair f.τ₂ 0",
        :direction "Natural isomorphism source-to-target."},
-      :id :routes-2026-10-11-mfclass-sc-pair-pi1-r1,
+      :id :routes-2026-10-11-mfclass-sc-pair-pi2-r1,
       :kind :representation-comparison,
       :area "manifold-fundamental-class",
-      :depends-on
-      [:routes-2026-10-11-manifold-forget-snake-kernel-tau3-islimit-topo3-r1],
-      :current-residual "Transport π₁; compare π₂/π₃.",
+      :depends-on [:routes-2026-10-11-mfclass-sc-pair-pi1-r1],
+      :current-residual "Compare π₃; transport all kernels.",
       :other-consumers [:t98A02]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :residual "Promote π₁ iso; transport limits."}},
+     :residual "Promote π₂ iso; compare π₃."}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -16744,7 +16771,8 @@
     :routes-2026-10-11-manifold-forget-snake-kernel-tau1-islimit-topo3-r1
     :routes-2026-10-11-manifold-forget-snake-kernel-tau2-islimit-topo3-r1
     :routes-2026-10-11-manifold-forget-snake-kernel-tau3-islimit-topo3-r1
-    :routes-2026-10-11-mfclass-sc-pair-pi1-r1],
+    :routes-2026-10-11-mfclass-sc-pair-pi1-r1
+    :routes-2026-10-11-mfclass-sc-pair-pi2-r1],
    :current-residual
    "Local-degree counts and wild-ball complement homology remain.",
    :other-consumers [:t98A02]}
@@ -23884,6 +23912,26 @@
    :id :lemma-scpairzero-iso,
    :kind :lemma,
    :depends-on [:lemma-forgetsnakekernel-limit-fb6e8698b082],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFundamentalClass.scPairZeroπ₂Iso",
+    :type "∀ f : X ⟶ Y, ParallelPairZeroπ₂Comparison f"},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFundamentalClass.scPairZeroπ₂Iso",
+    :reported-by
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    :type "∀ f : X ⟶ Y, ParallelPairZeroπ₂Comparison f",
+    :area "manifold-fundamental-class",
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+   :id :lemma-mfclass-sc-pair-pi2-iso,
+   :kind :lemma,
+   :depends-on [:lemma-mfclass-sc-pair-pi1-iso],
    :other-consumers [:t98A02]}],
  :consumer-baselines {},
  :statuses
