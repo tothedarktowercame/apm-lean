@@ -11120,100 +11120,197 @@
    "Prove the production prefix through ambientChartHomologyIso.inv equals the first six factors of coefficientProjectedForwardComposite, cancel that common isomorphism, and compare HigherModelLocalHomology.localIsoInt with the coefficient connecting/radial/sphere normalization to exclude negation.",
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
+   :implements-lemma :lemma-mfclass-negative-prefix-model,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+   :dag-node
+   "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/negative-prefix-model-boundary",
+   :acceptance
+   {:implementation
+    "Promote productionProjectedChartPrefix, coefficientProjectedChartPrefix, and the exact fixture theorem. Package the production factors through ambientChartHomologyIso.inv and the first six coefficient factors before CoefficientModelLocal.localIso, then refactor the banked concrete-endpoint consequence. Do not prove the two prefixes equal, cancel either prefix, expand the model normalizations, exclude negation, select a sign, or construct a fundamental class.",
+    :declaration
+    "ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_implies_prefix_model_equality",
+    :supporting-declarations
+    ["ConstructionTargets.ManifoldFundamentalClass.productionProjectedChartPrefix"
+     "ConstructionTargets.ManifoldFundamentalClass.coefficientProjectedChartPrefix"],
+    :type
+    "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), (correctedLocalNormalizationAutomorphism k x).hom = -𝟙 _ -> productionProjectedChartPrefix k x ≫ (HigherModelLocalHomology.localIsoInt k).hom = coefficientProjectedChartPrefix k x ≫ forgetIntModules.map (CoefficientModelLocal.localIso Int k).hom ≫ (-𝟙 _)",
+    :fixture
+    "/tmp/manifold_fundamental_class_negative_equation_prefix_model.lean",
+    :fixture-sha256
+    "fde9416c80257ba3d2c9f4f2f729f33408599aab7bb65e07f0a9307372f9b3cc",
+    :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
+    :route-step
+    "separate the exposed forbidden-sign equality into its production and coefficient chart prefixes and their respective model normalizations"},
+   :representation
+   {:source
+    "The fully expanded forbidden-sign endpoint equality with all production and coefficient chart factors written inline",
+    :target
+    "The same equality factored into productionProjectedChartPrefix followed by higher-model normalization and coefficientProjectedChartPrefix followed by coefficient-model normalization and negation",
+    :direction
+    "Forward implication from the forbidden negative automorphism equation to an exact prefix-versus-model factor equality, separating the geometric chart comparison from the final model-normalization sign comparison"},
+   :id :routes-2026-10-11-manifold-negative-prefix-model-topo3-r1,
+   :kind :representation-comparison,
+   :area "manifold-fundamental-class",
+   :depends-on
+   [:routes-2026-10-10-topo3-seed-checkpoint-1
+    :routes-2026-10-10-manifold-local-positive-excision-topo3-r1
+    :routes-2026-10-10-manifold-oriented-overlap-coherence-topo3-r1
+    :routes-2026-10-10-manifold-connected-overlap-unit-topo3-r1
+    :routes-2026-10-10-manifold-oriented-connected-overlap-topo3-r1
+    :routes-2026-10-10-manifold-integral-transition-sign-topo3-r1
+    :routes-2026-10-10-manifold-exclude-negative-transition-topo3-r1
+    :routes-2026-10-10-manifold-global-generator-topo3-r1
+    :routes-2026-10-10-manifold-localization-iso-generator-topo3-r1
+    :routes-2026-10-10-manifold-generator-map-isiso-topo3-r1
+    :routes-2026-10-10-manifold-localization-map-naturality-topo3-r1
+    :routes-2026-10-10-manifold-localization-apply-naturality-topo3-r1
+    :routes-2026-10-10-manifold-group-global-generator-topo3-r1
+    :routes-2026-10-10-manifold-group-generator-naturality-topo3-r1
+    :routes-2026-10-10-manifold-global-local-generator-transport-topo3-r1
+    :routes-2026-10-11-manifold-basepoint-localization-coefficient-topo3-r1
+    :routes-2026-10-11-manifold-local-generator-coefficient-unique-topo3-r1
+    :routes-2026-10-11-manifold-localization-coefficient-one-topo3-r1
+    :routes-2026-10-11-manifold-distinguished-chart-generator-topo3-r1
+    :routes-2026-10-11-manifold-integral-subtype-chain-naturality-topo3-r1
+    :routes-2026-10-11-manifold-integral-mapped-relative-cokernel-topo3-r1
+    :routes-2026-10-11-manifold-forget-relative-cokernel-topo3-r1
+    :routes-2026-10-11-manifold-integral-relative-chains-comparison-topo3-r1
+    :routes-2026-10-11-manifold-integral-relative-homology-comparison-topo3-r1
+    :routes-2026-10-11-manifold-ambient-local-normalization-topo3-r1
+    :routes-2026-10-11-manifold-generator-transport-of-normalization-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-subspace-map-equality-topo3-r1
+    :routes-2026-10-11-manifold-integral-direct-cokernel-projection-topo3-r1
+    :routes-2026-10-11-manifold-forget-cokernel-projection-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-integral-cokernel-transport-topo3-r1
+    :routes-2026-10-11-manifold-integral-composite-cokernel-projection-topo3-r1
+    :routes-2026-10-11-manifold-production-cokernel-projection-topo3-r1
+    :routes-2026-10-11-manifold-integral-composite-relative-projection-topo3-r1
+    :routes-2026-10-11-manifold-relative-chains-comparison-with-transport-topo3-r1
+    :routes-2026-10-11-manifold-relative-homology-comparison-with-transport-topo3-r1
+    :routes-2026-10-11-manifold-corrected-homology-projection-topo3-r1
+    :routes-2026-10-11-manifold-corrected-homology-comparison-hom-topo3-r1
+    :routes-2026-10-11-manifold-relative-projection-homology-preservation-topo3-r1
+    :routes-2026-10-11-manifold-packaged-homology-projection-topo3-r1
+    :routes-2026-10-11-manifold-corrected-generator-normalization-topo3-r1
+    :routes-2026-10-11-manifold-normalization-from-corrected-generator-topo3-r1
+    :routes-2026-10-11-manifold-corrected-local-generator-coefficient-topo3-r1
+    :routes-2026-10-11-manifold-corrected-local-generator-unit-topo3-r1
+    :routes-2026-10-11-manifold-corrected-local-generator-sign-topo3-r1
+    :routes-2026-10-11-manifold-corrected-local-generator-nonnegative-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-one-from-corrected-normalization-topo3-r1
+    :routes-2026-10-11-manifold-corrected-generator-of-coefficient-one-topo3-r1
+    :routes-2026-10-11-manifold-corrected-normalization-of-coefficient-one-topo3-r1
+    :routes-2026-10-11-manifold-corrected-normalization-of-nonnegative-topo3-r1
+    :routes-2026-10-11-manifold-corrected-coefficient-one-of-ne-neg-one-topo3-r1
+    :routes-2026-10-11-manifold-corrected-coefficient-automorphism-one-topo3-r1
+    :routes-2026-10-11-manifold-corrected-automorphism-neg-iff-topo3-r1
+    :routes-2026-10-11-manifold-corrected-automorphism-hom-topo3-r1
+    :routes-2026-10-11-manifold-ambient-local-normalization-hom-topo3-r1
+    :routes-2026-10-11-manifold-corrected-automorphism-neg-cancel-coefficient-topo3-r1
+    :routes-2026-10-11-manifold-negative-equation-endpoint-factors-topo3-r1
+    :routes-2026-10-11-manifold-negative-equation-coefficient-factors-topo3-r1
+    :routes-2026-10-11-manifold-negative-equation-corrected-comparison-topo3-r1
+    :routes-2026-10-11-manifold-integral-relative-chains-transport-hom-topo3-r1
+    :routes-2026-10-11-manifold-integral-relative-chains-transport-homology-topo3-r1
+    :routes-2026-10-11-manifold-negative-equation-transport-homology-factors-topo3-r1
+    :routes-2026-10-11-manifold-transport-projection-alignment-topo3-r3
+    :routes-2026-10-11-manifold-negative-equation-projected-factors-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-projected-forward-topo3-r1
+    :routes-2026-10-11-manifold-negative-equation-concrete-endpoints-topo3-r1],
+   :current-residual
+   "Prove productionProjectedChartPrefix k x = coefficientProjectedChartPrefix k x using the chart restriction, translation, neighborhood inclusion, and coefficient-forgetting naturality; cancel that common isomorphism and compare the higher and coefficient model normalizations through connecting, radial, and sphere maps.",
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-closedorientedfundamentalclass,
    :evidence
    {:probe
     {:residual
-     "Identify and cancel the common projection/chart prefix, then compare the coefficient and higher-model connecting/radial/sphere normalizations to rule out negation.",
+     "Prove equality of the production and coefficient chart prefixes, cancel it, and compare the two model normalizations to rule out negation.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
-     [{:id :lemma-mfclass-negative-concrete-endpoints,
+     [{:id :lemma-mfclass-negative-prefix-model,
        :name
-       "ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_implies_concrete_endpoints",
+       "ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_implies_prefix_model_equality",
        :type
-       "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), (correctedLocalNormalizationAutomorphism k x).hom = -𝟙 _ -> (((CoefficientH0.SingularChains Int (TopCat.of M)).sc (k + 2)).mapHomologyIso forgetIntModules).inv ≫ HomologicalComplex.homologyMap (singularChainsComparison (TopCat.of M)).hom (k + 2) ≫ HomologicalComplex.homologyMap (relativeSingularProjection (deletedPoint x)) (k + 2) ≫ (ambientChartHomologyIso k x).inv ≫ (HigherModelLocalHomology.localIsoInt k).hom = coefficientProjectedForwardComposite k x ≫ (-𝟙 _)",
+       "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), (correctedLocalNormalizationAutomorphism k x).hom = -𝟙 _ -> productionProjectedChartPrefix k x ≫ (HigherModelLocalHomology.localIsoInt k).hom = coefficientProjectedChartPrefix k x ≫ forgetIntModules.map (CoefficientModelLocal.localIso Int k).hom ≫ (-𝟙 _)",
        :status :proved,
        :consumers [:t00J02 :t98A02],
        :depends-on
-       ["ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_implies_projected_factors"
-        "ConstructionTargets.ManifoldFundamentalClass.coefficientProjection_comp_coefficientLocalForwardComposite"],
+       ["ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_implies_concrete_endpoints"],
        :area "manifold-fundamental-class"}],
      :prerequisite
      {:consumer :t00J02,
-      :implements-lemma :lemma-mfclass-negative-concrete-endpoints,
+      :implements-lemma :lemma-mfclass-negative-prefix-model,
       :phase :implementation,
       :state :open,
       :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
       :dag-node
-      "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/negative-equation-concrete-endpoints",
+      "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/negative-prefix-model-boundary",
       :acceptance
       {:implementation
-       "Promote the exact fixture theorem. Apply correctedLocalNormalizationAutomorphism_hom_eq_neg_implies_projected_factors, postcompose coefficientProjection_comp_coefficientLocalForwardComposite by negative identity, and reassociate to replace the complete coefficient side. Do not align or cancel the exposed factors, expand either model normalization, prove the equality impossible, select a sign, or construct a fundamental class.",
+       "Promote productionProjectedChartPrefix, coefficientProjectedChartPrefix, and the exact fixture theorem. Package the production factors through ambientChartHomologyIso.inv and the first six coefficient factors before CoefficientModelLocal.localIso, then refactor the banked concrete-endpoint consequence. Do not prove the two prefixes equal, cancel either prefix, expand the model normalizations, exclude negation, select a sign, or construct a fundamental class.",
        :declaration
-       "ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_implies_concrete_endpoints",
+       "ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_implies_prefix_model_equality",
+       :supporting-declarations
+       ["ConstructionTargets.ManifoldFundamentalClass.productionProjectedChartPrefix"
+        "ConstructionTargets.ManifoldFundamentalClass.coefficientProjectedChartPrefix"],
        :type
-       "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), (correctedLocalNormalizationAutomorphism k x).hom = -𝟙 _ -> (((CoefficientH0.SingularChains Int (TopCat.of M)).sc (k + 2)).mapHomologyIso forgetIntModules).inv ≫ HomologicalComplex.homologyMap (singularChainsComparison (TopCat.of M)).hom (k + 2) ≫ HomologicalComplex.homologyMap (relativeSingularProjection (deletedPoint x)) (k + 2) ≫ (ambientChartHomologyIso k x).inv ≫ (HigherModelLocalHomology.localIsoInt k).hom = coefficientProjectedForwardComposite k x ≫ (-𝟙 _)",
+       "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), (correctedLocalNormalizationAutomorphism k x).hom = -𝟙 _ -> productionProjectedChartPrefix k x ≫ (HigherModelLocalHomology.localIsoInt k).hom = coefficientProjectedChartPrefix k x ≫ forgetIntModules.map (CoefficientModelLocal.localIso Int k).hom ≫ (-𝟙 _)",
        :fixture
-       "/tmp/manifold_fundamental_class_negative_equation_concrete_endpoints.lean",
+       "/tmp/manifold_fundamental_class_negative_equation_prefix_model.lean",
        :fixture-sha256
-       "252ac7990ec078d162ba2628b814431bb43a2d83e336de08794609a8844e1582",
+       "fde9416c80257ba3d2c9f4f2f729f33408599aab7bb65e07f0a9307372f9b3cc",
        :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
        :route-step
-       "substitute the concrete seven-factor coefficient endpoint into the projected forbidden negative-sign equation"},
+       "separate the exposed forbidden-sign equality into its production and coefficient chart prefixes and their respective model normalizations"},
       :representation
       {:source
-       "The projected forbidden-sign consequence whose coefficient side is the projection followed by packaged coefficientLocalForwardComposite and negation",
+       "The fully expanded forbidden-sign endpoint equality with all production and coefficient chart factors written inline",
        :target
-       "The same consequence whose coefficient side is the explicit seven-factor coefficientProjectedForwardComposite followed by negation",
+       "The same equality factored into productionProjectedChartPrefix followed by higher-model normalization and coefficientProjectedChartPrefix followed by coefficient-model normalization and negation",
        :direction
-       "Forward implication from the forbidden negative automorphism equation to an exact equality between the fully exposed production endpoint and the concrete projected coefficient endpoint followed by negation"},
-      :id
-      :routes-2026-10-11-manifold-negative-equation-concrete-endpoints-topo3-r1,
+       "Forward implication from the forbidden negative automorphism equation to an exact prefix-versus-model factor equality, separating the geometric chart comparison from the final model-normalization sign comparison"},
+      :id :routes-2026-10-11-manifold-negative-prefix-model-topo3-r1,
       :kind :representation-comparison,
       :area "manifold-fundamental-class",
       :depends-on
       [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
-       :routes-2026-10-11-manifold-negative-equation-projected-factors-topo3-r1
-       :routes-2026-10-11-manifold-coefficient-projected-forward-topo3-r1],
+       :routes-2026-10-11-manifold-negative-equation-concrete-endpoints-topo3-r1],
       :current-residual
-      "Prove the production prefix through ambientChartHomologyIso.inv equals the first six factors of coefficientProjectedForwardComposite, cancel that common isomorphism, and compare HigherModelLocalHomology.localIsoInt with the coefficient connecting/radial/sphere normalization to exclude negation.",
+      "Prove productionProjectedChartPrefix k x = coefficientProjectedChartPrefix k x using the chart restriction, translation, neighborhood inclusion, and coefficient-forgetting naturality; cancel that common isomorphism and compare the higher and coefficient model normalizations through connecting, radial, and sphere maps.",
       :other-consumers [:t98A02]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake env lean /tmp/manifold_fundamental_class_negative_equation_concrete_endpoints.lean",
+       "lake env lean /tmp/manifold_fundamental_class_negative_equation_prefix_model.lean",
        :exit 0,
        :output
-       "correctedLocalNormalizationAutomorphism_hom_eq_neg_implies_concrete_endpoints compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "correctedLocalNormalizationAutomorphism_hom_eq_neg_implies_prefix_model_equality compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/manifold_fundamental_class_negative_equation_concrete_endpoints.lean",
+       "sha256sum /tmp/manifold_fundamental_class_negative_equation_prefix_model.lean",
        :exit 0,
        :output
-       "252ac7990ec078d162ba2628b814431bb43a2d83e336de08794609a8844e1582  /tmp/manifold_fundamental_class_negative_equation_concrete_endpoints.lean"}
+       "fde9416c80257ba3d2c9f4f2f729f33408599aab7bb65e07f0a9307372f9b3cc  /tmp/manifold_fundamental_class_negative_equation_prefix_model.lean"}
       {:cmd
-       "! rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/manifold_fundamental_class_negative_equation_concrete_endpoints.lean",
+       "! rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/manifold_fundamental_class_negative_equation_prefix_model.lean",
        :exit 0}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/manifold_fundamental_class_negative_equation_concrete_endpoints.lean",
-       :exit 1,
-       :finding
-       "The direct rewrite did not match because the coefficient projection and forward composite were associated with the following negation. Postcomposing their banked equality by negation and reassociating completed the substitution."}],
      :fixture
      {:path
-      "/tmp/manifold_fundamental_class_negative_equation_concrete_endpoints.lean",
+      "/tmp/manifold_fundamental_class_negative_equation_prefix_model.lean",
       :sha256
-      "252ac7990ec078d162ba2628b814431bb43a2d83e336de08794609a8844e1582"},
+      "fde9416c80257ba3d2c9f4f2f729f33408599aab7bb65e07f0a9307372f9b3cc"},
      :finding
-     "The forbidden negative-sign hypothesis now yields one compiled equality with both sides fully exposed at the intended comparison boundary: the production singular comparison, relative projection, ambient chart inverse, and higher-model normalization equal the seven-factor coefficient projection/chart/model composite followed by negation. The next prerequisite is the geometric prefix equality that identifies the production endpoint with the first six coefficient factors.",
+     "The compiled factorization isolates two precise remaining obligations. First, identify productionProjectedChartPrefix with coefficientProjectedChartPrefix; these encode the two constructions from the manifold chart to local relative homology. Second, after cancellation, identify the higher-model normalization with the forgotten coefficient-model connecting/radial/sphere normalization strongly enough to contradict postcomposition by negative identity.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -11292,7 +11389,8 @@
     :routes-2026-10-11-manifold-transport-projection-alignment-topo3-r3
     :routes-2026-10-11-manifold-negative-equation-projected-factors-topo3-r1
     :routes-2026-10-11-manifold-coefficient-projected-forward-topo3-r1
-    :routes-2026-10-11-manifold-negative-equation-concrete-endpoints-topo3-r1],
+    :routes-2026-10-11-manifold-negative-equation-concrete-endpoints-topo3-r1
+    :routes-2026-10-11-manifold-negative-prefix-model-topo3-r1],
    :current-residual
    "Local-degree counts and wild-ball complement homology remain.",
    :other-consumers [:t98A02]}
@@ -15064,6 +15162,28 @@
    :depends-on
    [:lemma-mfclass-negative-projected-factors
     :lemma-mfclass-coefficient-projected-forward],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_implies_prefix_model_equality",
+    :type
+    "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), (correctedLocalNormalizationAutomorphism k x).hom = -𝟙 _ -> productionProjectedChartPrefix k x ≫ (HigherModelLocalHomology.localIsoInt k).hom = coefficientProjectedChartPrefix k x ≫ forgetIntModules.map (CoefficientModelLocal.localIso Int k).hom ≫ (-𝟙 _)"},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_implies_prefix_model_equality",
+    :reported-by
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    :type
+    "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), (correctedLocalNormalizationAutomorphism k x).hom = -𝟙 _ -> productionProjectedChartPrefix k x ≫ (HigherModelLocalHomology.localIsoInt k).hom = coefficientProjectedChartPrefix k x ≫ forgetIntModules.map (CoefficientModelLocal.localIso Int k).hom ≫ (-𝟙 _)",
+    :area "manifold-fundamental-class",
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+   :id :lemma-mfclass-negative-prefix-model,
+   :kind :lemma,
+   :depends-on [:lemma-mfclass-negative-concrete-endpoints],
    :other-consumers [:t98A02]}],
  :consumer-baselines {},
  :statuses
