@@ -18,6 +18,7 @@ open ConstructionTargets.BoundaryTorusMayerVietoris
 open ConstructionTargets.BooleanTwoCoverScaffold
 open ConstructionTargets.ProductionOpenCoverMayerVietoris
 open ConstructionTargets.SingularExcision
+open ConstructionTargets.IntegralSingularHomologyComparison
 
 abbrev FrozenTorus :=
   ConstructionTargets.T97A04FrozenH1Coordinate.FrozenTorus
@@ -1880,6 +1881,53 @@ theorem frozenLbar_H2 :
       rfl
     _ = 3 • 𝟙 _ := by simp
 
+theorem frozenLbar_H2_map_commutes :
+    HomologicalComplex.homologyMap
+        (ConstructionTargets.SingularSubdivision.singularPostcomposition
+          frozenLbar) 2 ≫ frozenTorusH2GroupIsoInt.hom =
+      frozenTorusH2GroupIsoInt.hom ≫ (3 • 𝟙 _) := by
+  apply (cancel_epi frozenTorusH2GroupIsoInt.inv).1
+  calc
+    _ = 3 • 𝟙 _ := frozenLbar_H2
+    _ = (frozenTorusH2GroupIsoInt.inv ≫
+          frozenTorusH2GroupIsoInt.hom) ≫ (3 • 𝟙 _) := by
+      rw [frozenTorusH2GroupIsoInt.inv_hom_id, Category.id_comp]
+    _ = _ := Category.assoc _ _ _
+
+noncomputable def frozenTorusH2ModuleIsoInt :
+    (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 2).obj
+      (ModuleCat.of ℤ ℤ)).obj (TopCat.of FrozenTorus)) ≅ ModuleCat.of ℤ ℤ :=
+  singularHomologyModuleIsoOfGroupIso (TopCat.of FrozenTorus) 2 _
+    frozenTorusH2GroupIsoInt
+
+theorem frozenLbarModuleH2_map_commutes :
+    (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 2).obj
+        (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom frozenLbar)) ≫
+        frozenTorusH2ModuleIsoInt.hom =
+      frozenTorusH2ModuleIsoInt.hom ≫ (3 • 𝟙 _) := by
+  apply forgetIntModules.map_injective
+  rw [Functor.map_comp, Functor.map_comp]
+  have hIso : forgetIntModules.map frozenTorusH2ModuleIsoInt.hom =
+      (singularHomologyComparison (TopCat.of FrozenTorus) 2).hom ≫
+        frozenTorusH2GroupIsoInt.hom := by
+    unfold frozenTorusH2ModuleIsoInt singularHomologyModuleIsoOfGroupIso
+      moduleIsoOfUnderlyingIso
+    exact forgetIntModules.map_preimage _
+  rw [hIso]
+  change
+    forgetIntModules.map
+          (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 2).obj
+            (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom frozenLbar)) ≫
+        ((singularHomologyComparison (TopCat.of FrozenTorus) 2).hom ≫
+          frozenTorusH2GroupIsoInt.hom) =
+      ((singularHomologyComparison (TopCat.of FrozenTorus) 2).hom ≫
+        frozenTorusH2GroupIsoInt.hom) ≫ (3 • 𝟙 _)
+  rw [← Category.assoc, singularHomologyComparison_naturality]
+  simp only [Category.assoc]
+  apply congrArg (fun z ↦
+    (singularHomologyComparison (TopCat.of FrozenTorus) 2).hom ≫ z)
+  exact frozenLbar_H2_map_commutes
+
 #print axioms frozenTorusH2GroupIsoInt
 #print axioms frozenYCover
 #print axioms frozenYCoverUHomeomorph
@@ -1973,5 +2021,6 @@ theorem frozenLbar_H2 :
 #print axioms shearY_frozenConnectingCoordinate_scalar
 #print axioms lowerShear_H2
 #print axioms frozenLbar_H2
+#print axioms frozenLbarModuleH2_map_commutes
 
 end ConstructionTargets.T97A04Closure

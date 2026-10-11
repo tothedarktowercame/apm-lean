@@ -4,6 +4,7 @@ import Mathlib.Algebra.Category.ModuleCat.Colimits
 import Mathlib.Algebra.Category.ModuleCat.Abelian
 import ConstructionTargets.T97A04FrozenH1Coordinate
 import ConstructionTargets.CoefficientH0
+import ConstructionTargets.t97A04Closure
 
 /-!
 # APM t97A04 — homological data of an integral linear torus map
@@ -190,7 +191,15 @@ theorem apm_t97A04_bridge_3 :
       ∀ a : T97A04Homology 2,
         h2.hom (t97A04HomologyMap 2 apm_t97a04_Lbar a) =
           3 * h2.hom a := by
-  sorry
+  refine ⟨ConstructionTargets.T97A04Closure.frozenTorusH2ModuleIsoInt, ?_⟩
+  intro a
+  have h := congrArg (fun f => f a)
+    ConstructionTargets.T97A04Closure.frozenLbarModuleH2_map_commutes
+  change ConstructionTargets.T97A04Closure.frozenTorusH2ModuleIsoInt.hom
+      (t97A04HomologyMap 2 apm_t97a04_Lbar a) =
+    (3 • 𝟙 (ModuleCat.of ℤ ℤ))
+      (ConstructionTargets.T97A04Closure.frozenTorusH2ModuleIsoInt.hom a) at h
+  simpa using h
 
 theorem apm_t97a04 :
     t97A04HasHomologicalData apm_t97a04_Lbar apm_t97a04_matrix 3 1 := by
@@ -241,6 +250,12 @@ theorem apm_t97a04 :
     generator-level actions; no categorical composition obligations remain.
     The frozen statement is unchanged.
     -/
-    sorry
+    rcases apm_t97A04_bridge_1 with ⟨h0, H0⟩
+    rcases apm_t97A04_bridge_2 with ⟨h1, H1⟩
+    rcases apm_t97A04_bridge_3 with ⟨h2, H2⟩
+    exact ⟨h0, h1, h2, H0, H1, H2⟩
   rcases hcore with ⟨h0, h1, h2, H0, H1, H2⟩
   exact t97A04HasHomologicalData.of_maps h0 h1 h2 H0 H1 H2
+
+#print axioms apm_t97A04_bridge_3
+#print axioms apm_t97a04
