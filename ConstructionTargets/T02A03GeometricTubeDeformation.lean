@@ -779,6 +779,33 @@ theorem positiveReconstructionRadius_rightTubeRadialNormalInterpolation
     exact add_pos_of_pos_of_nonneg (mul_pos hleft hfirst)
       (mul_nonneg ht0 hplanar.le)
 
+theorem recoveredNormal_rightTubeRadialAmbientDeformation
+    (tp : unitInterval × RightTubeMinusLeftCore) :
+    rightTubeNormalComplex (rightTubeRadialAmbientDeformation tp) =
+      rightTubeRadialNormalInterpolation rightTubeNormalCoordinate
+        rightTubeMeridianCoordinate tp := by
+  let n : ℂ := rightTubeRadialNormalInterpolation rightTubeNormalCoordinate
+    rightTubeMeridianCoordinate tp
+  let u : Circle := rightTubePlanarRotation tp
+  have hpos : 0 < 1 + n.re := by
+    simpa [n] using
+      positiveReconstructionRadius_rightTubeRadialNormalInterpolation tp
+  have hunorm : ‖(u : ℂ)‖ = 1 := Circle.norm_coe u
+  have hplanar : ‖(((1 + n.re : ℝ) : ℂ) * (u : ℂ))‖ = 1 + n.re := by
+    rw [norm_mul, Complex.norm_real, Real.norm_eq_abs, abs_of_pos hpos, hunorm,
+      mul_one]
+  change rightTubeNormalComplex (rightTubePolarReconstruction u n) = n
+  have hpcomplex :
+      ((((rightTubePolarReconstruction u n) 0 + 1 : ℝ) : ℂ) +
+        (((rightTubePolarReconstruction u n) 1 : ℝ) : ℂ) * Complex.I) =
+      (((1 + n.re : ℝ) : ℂ) * (u : ℂ)) := by
+    apply Complex.ext <;> simp [rightTubePolarReconstruction]
+  unfold rightTubeNormalComplex
+  rw [hpcomplex, hplanar]
+  apply Complex.ext
+  · simp
+  · simp [rightTubePolarReconstruction]
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -804,3 +831,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.specializedRightTubeRadialNormalInterpolation_exists
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeRadialAmbientDeformation_endpoints
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.positiveReconstructionRadius_rightTubeRadialNormalInterpolation
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.recoveredNormal_rightTubeRadialAmbientDeformation
