@@ -6821,8 +6821,96 @@
   {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-correctedlocalgeneratorcoefficient-eq-unit,
+   :evidence
+   {:placeholder-delta {:t00J02 0, :t98A02 0, :construction-target 0},
+    :residual
+    "Prove correctedLocalGeneratorUnit k x = 1 by comparing the coefficient and production connecting, radial, and sphere normalizations; abstract isomorphism arguments only restrict it to the two integer units.",
+    :gates
+    {:exact-type :pass,
+     :supporting-unit :pass,
+     :sign-undecided :pass,
+     :module-compile :pass,
+     :map-preimage :pass,
+     :fixture-hash :pass,
+     :scope :pass,
+     :statement-registry :pass,
+     :supporting-automorphism :pass,
+     :placeholder-scan :pass,
+     :target-build :pass,
+     :iso-unit-action :pass,
+     :module-lift :pass,
+     :worktree :clean},
+    :outcome :done-unreviewed,
+    :warnings
+    ["lake build replayed pre-existing dependency warnings; no warning was emitted for the promoted declarations"],
+    :missing-theorems
+    [{:id
+      :lemma-constructiontargets-manifoldfundamentalclass-correctedlocalgeneratorcoefficient-eq-unit,
+      :name
+      "ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient_eq_unit",
+      :type
+      "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), correctedLocalGeneratorCoefficient k x = (correctedLocalGeneratorUnit k x : Int)",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on
+      ["ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient"
+       "ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism"
+       "ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorUnit"],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :topo-10,
+    :commands
+    [{:cmd
+      "sha256sum /tmp/manifold_fundamental_class_corrected_generator_unit.lean",
+      :exit 0,
+      :result
+      "f244630acb236efdf5a7e74b6f2a777024e7b392cfa24e609eec4092552ff6c8"}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0,
+      :result "Build completed successfully (8326 jobs)"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :result "131 registered statements match, 0 do not"}
+     {:cmd
+      "rg -n \"\\bsorry\\b|\\badmit\\b|^\\s*axiom\\b\" ConstructionTargets/ManifoldFundamentalClass.lean /tmp/manifold_fundamental_class_corrected_generator_unit.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "git status --short",
+      :exit 0,
+      :result "clean after commit"}],
+    :diagnostic-history [],
+    :representation
+    {:source
+     "The integer coordinate correctedLocalGeneratorCoefficient of the corrected comparison's image of the coefficient chart generator",
+     :target
+     "The underlying integer of the unit induced by the normalization-conjugated automorphism of AddCommGrpCat.of Int",
+     :direction
+     "Exact integer equality from the normalization coordinate representation to the canonical automorphism-unit representation, obtained by evaluating the lifted automorphism at one"},
+    :commit "cfe56bee365630a6c1931a5c0d4eb0aa08369040",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path
+     "/tmp/manifold_fundamental_class_corrected_generator_unit.lean",
+     :sha256
+     "f244630acb236efdf5a7e74b6f2a777024e7b392cfa24e609eec4092552ff6c8"},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :declaration
+     "ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient_eq_unit",
+     :supporting-declarations
+     ["ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism"
+      "ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorUnit"]},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/corrected-local-generator-unit",
@@ -9951,18 +10039,23 @@
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient_eq_unit",
     :reported-by
-    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+     :routes-2026-10-11-manifold-corrected-local-generator-unit-topo3-r1],
     :type
     "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), correctedLocalGeneratorCoefficient k x = (correctedLocalGeneratorUnit k x : Int)",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in
+    :routes-2026-10-11-manifold-corrected-local-generator-unit-topo3-r1},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-correctedlocalgeneratorcoefficient-eq-unit,
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-manifoldfundamentalclass-integralrelativehomologycomparisonwithtransport-generator-eq-zsmul
     :lemma-constructiontargets-integralsingularhomologycomparison-moduleisoofunderlyingiso
-    :lemma-constructiontargets-coefficientcharttransitionunit-isounit-action],
+    :lemma-constructiontargets-coefficientcharttransitionunit-isounit-action
+    :lemma-constructiontargets-manifoldfundamentalclass-correctedlocalgeneratorcoefficient
+    :lemma-constructiontargets-manifoldfundamentalclass-correctedlocalnormalizationautomorp
+    :lemma-constructiontargets-manifoldfundamentalclass-correctedlocalgeneratorunit],
    :other-consumers [:t98A02]}
   {:consumer :portfolio,
    :phase :lemma,
@@ -9993,6 +10086,54 @@
     :reported-by []},
    :id
    :lemma-constructiontargets-coefficientcharttransitionunit-isounit-action,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient"},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient",
+    :reported-by []},
+   :id
+   :lemma-constructiontargets-manifoldfundamentalclass-correctedlocalgeneratorcoefficient,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism"},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism",
+    :reported-by []},
+   :id
+   :lemma-constructiontargets-manifoldfundamentalclass-correctedlocalnormalizationautomorp,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorUnit"},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorUnit",
+    :reported-by []},
+   :id
+   :lemma-constructiontargets-manifoldfundamentalclass-correctedlocalgeneratorunit,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}],
