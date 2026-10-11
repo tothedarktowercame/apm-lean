@@ -12224,6 +12224,23 @@
      "Production integral singular homology of the identical punctured unit disk in degree k+1",
      :direction
      "Canonical isomorphism from the coefficient absolute-homology representation to the production absolute-homology representation, by specialization of singularHomologyComparison"},
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791708411502-4817-63848a25",
+     :commands
+     ["rg ledger row and frozen contract"
+      "git show and git diff-tree recorded commit"
+      "git blob identity and git diff --check"
+      "sha256sum frozen fixture"
+      "lake env lean collision-renamed frozen-fixture replay"
+      "lake env lean target module"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"
+      "python3 scripts/statement-registry.py check"
+      "placeholder and axiom scan"
+      "consumer placeholder census"],
+     :finding
+     "PASS: independent review of commit d4bcf049; scope is exactly ConstructionTargets/ManifoldFundamentalClass.lean and the recorded blob matches the checkout; fixture SHA-256 and frozen declaration hash match; the supporting isomorphism has the required forgotten coefficient absolute-homology to production absolute-homology direction and exactly specializes singularHomologyComparison to the punctured unit disk in degree k+1, while the frozen hom equality is definitional; no connecting or radial naturality, sphere comparison, sign exclusion, sign selection, or fundamental-class construction is attempted; fixture replay, module check, and 8326-job build pass; axioms are exactly propext, Classical.choice, Quot.sound; registry is 131/0; target placeholders are 0 and consumer counts remain 1/1."},
     :commit "d4bcf049a0ddedbf914cb3697598e4a0ab3b82ec",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -12242,7 +12259,7 @@
     :routes-2026-10-11-manifold-integral-open-disk-puncture-homology-comparison-topo3-r1,
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/integral-open-disk-connecting-naturality/subspace-comparison",
@@ -12437,7 +12454,7 @@
      "The connecting naturality square needs two comparison isomorphisms: the relative comparison at degree k+2 and the puncture absolute comparison at degree k+1. The former is banked; this compiled prerequisite supplies the latter by specializing singularHomologyComparison. All four objects and both horizontal comparison maps are now named, so the next row can state and prove the actual connecting square without inventing another ambient-space transport.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -16550,7 +16567,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -16565,7 +16582,10 @@
     :type
     "forall (k : ℕ), forgetIntModules.obj ((((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) (k + 1)).obj (ModuleCat.of ℤ ℤ)).obj (TopCat.of (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2)))) ≅ (((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat (k + 1)).obj (AddCommGrpCat.of ℤ)).obj (TopCat.of (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2))))",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2,
+    :banked-by
+    :routes-2026-10-11-manifold-integral-open-disk-puncture-homology-comparison-topo3-r1,
+    :banked-commit "d4bcf049a0ddedbf914cb3697598e4a0ab3b82ec"},
    :id :lemma-mfclass-integral-open-disk-puncture-homology-comparison,
    :kind :lemma,
    :depends-on
@@ -16573,7 +16593,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -16589,7 +16609,10 @@
     "forall (k : Nat), (integralOpenDiskPunctureHomologyComparison k).hom = (singularHomologyComparison (TopCat.of (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2))) (k + 1)).hom",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-integral-open-disk-puncture-homology-comparison-topo3-r1},
+    :routes-2026-10-11-manifold-integral-open-disk-puncture-homology-comparison-topo3-r1,
+    :banked-by
+    :routes-2026-10-11-manifold-integral-open-disk-puncture-homology-comparison-topo3-r1,
+    :banked-commit "d4bcf049a0ddedbf914cb3697598e4a0ab3b82ec"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-integralopendiskpuncturehomologycom,
    :kind :lemma,
