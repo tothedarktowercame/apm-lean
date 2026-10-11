@@ -104066,10 +104066,128 @@
    "Use the presentation comparison in the Klein orbit quotient homeomorphism, then close t93J03.",
    :other-consumers []}
   {:consumer :t99J01,
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/TwoOpenFreeProductGroupEquivalenceCoordinates.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/shared/two-open-free-product-group-equivalence-coordinates",
+   :acceptance
+   {:implementation
+    "Prove that TwoOpenFreeProductMapping.groupEquivalence sends the fundamental-group map induced by the left subtype inclusion to Monoid.Coprod.inl and the map induced by the right subtype inclusion to Monoid.Coprod.inr, at the common overlap basepoint, using the existing pseudopushout and connector-system construction. Export both equations as one coordinate-law package. Do not specialize to point wedges or finite circle wedges and do not close a consumer.",
+    :placeholder
+    "the remaining fundamental-group coordinate steps for t01A03, t92J06, t97A01, t97A03, and t99J01",
+    :route-step
+    "expose the two leg-coordinate equations of the reconstructed two-open free-product equivalence",
+    :fixture
+    "/tmp/generic-point-wedge-fundamental-group-coordinates.lean",
+    :fixture-sha256
+    "20f5ed4324eaf3882bbdafb16140c7a5b35d8fdd7b9250bc92669b9ce93bd256",
+    :gates
+    ["lake build ConstructionTargets.TwoOpenFreeProductGroupEquivalenceCoordinates"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id
+   :routes-2026-10-11-two-open-free-product-group-equivalence-coordinates-87,
+   :kind :reusable-theorem,
+   :area "fundamental-group-wedge-of-circles",
+   :depends-on [],
+   :current-residual
+   "Specialize the two-open coordinate laws through the banked generic point-wedge cover comparison and its literal inclusion squares.",
+   :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
+  {:consumer :t99J01,
    :implements-lemma
    :lemma-genericpointwedgefundamentalgroupcoordinates-genericpointwedgegroupequivalence-c,
+   :evidence
+   {:probe
+    {:residual
+     "Prove the two-open free-product coordinate law, then transport it through the generic point-wedge cover equivalences and literal inclusion squares.",
+     :outcome :revise,
+     :warnings [],
+     :missing-theorems
+     [{:name "TwoOpenFreeProductMapping.groupEquivalence_coordinates",
+       :type
+       "For a path-connected two-open cover with simply connected overlap, groupEquivalence maps FundamentalGroup.map of the left and right subtype inclusions at the common overlap basepoint to Monoid.Coprod.inl and Monoid.Coprod.inr respectively.",
+       :status :not-started,
+       :consumers [:t99J01 :t01A03 :t92J06 :t97A01 :t97A03],
+       :depends-on [],
+       :area "fundamental-group-wedge-of-circles"}],
+     :prerequisite
+     {:consumer :t99J01,
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/TwoOpenFreeProductGroupEquivalenceCoordinates.lean"],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/shared/two-open-free-product-group-equivalence-coordinates",
+      :acceptance
+      {:implementation
+       "Prove that TwoOpenFreeProductMapping.groupEquivalence sends the fundamental-group map induced by the left subtype inclusion to Monoid.Coprod.inl and the map induced by the right subtype inclusion to Monoid.Coprod.inr, at the common overlap basepoint, using the existing pseudopushout and connector-system construction. Export both equations as one coordinate-law package. Do not specialize to point wedges or finite circle wedges and do not close a consumer.",
+       :placeholder
+       "the remaining fundamental-group coordinate steps for t01A03, t92J06, t97A01, t97A03, and t99J01",
+       :route-step
+       "expose the two leg-coordinate equations of the reconstructed two-open free-product equivalence",
+       :fixture
+       "/tmp/generic-point-wedge-fundamental-group-coordinates.lean",
+       :fixture-sha256
+       "20f5ed4324eaf3882bbdafb16140c7a5b35d8fdd7b9250bc92669b9ce93bd256",
+       :gates
+       ["lake build ConstructionTargets.TwoOpenFreeProductGroupEquivalenceCoordinates"
+        "fixture compiles"
+        "zero source and fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :id
+      :routes-2026-10-11-two-open-free-product-group-equivalence-coordinates-87,
+      :kind :reusable-theorem,
+      :area "fundamental-group-wedge-of-circles",
+      :depends-on [],
+      :current-residual
+      "Specialize the two-open coordinate laws through the banked generic point-wedge cover comparison and its literal inclusion squares.",
+      :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]},
+     :axioms
+     ["propext"
+      "Classical.choice"
+      "Quot.sound"
+      "GenericPointWedgeFundamentalGroupCoordinatesProbe.twoOpenGroupEquivalence_coordinates"],
+     :commands
+     [{:cmd
+       "lake env lean /tmp/generic-point-wedge-fundamental-group-coordinates.lean",
+       :exit 0,
+       :finding
+       "The exact two-leg coordinate-law interface typechecks against the existing two-open equivalence; its only nonstandard axiom is the named missing theorem."}
+      {:cmd
+       "sha256sum /tmp/generic-point-wedge-fundamental-group-coordinates.lean",
+       :exit 0,
+       :finding
+       "20f5ed4324eaf3882bbdafb16140c7a5b35d8fdd7b9250bc92669b9ce93bd256"}
+      {:cmd
+       "rg -n \"\\b(sorry|admit)\\b\" /tmp/generic-point-wedge-fundamental-group-coordinates.lean",
+       :exit 1,
+       :expected-exit 1,
+       :finding "No fixture placeholders."}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :finding "131 registered statements match, 0 do not."}
+      {:cmd "git status --short", :exit 0, :finding "Clean worktree."}
+      {:cmd
+       "sed -n '1,240p' TOPOLOGY-ROUTES.md >/dev/null && sed -n '1,240p' holes/labs/topology-routes/routes-1.md >/dev/null && sed -n '1,240p' holes/labs/topology-routes/routes-2.md >/dev/null && sed -n '1,240p' holes/labs/topology-routes/routes-3.md >/dev/null && sed -n '1,220p' docs/TN-topology-build-loop-design.md >/dev/null",
+       :exit 0,
+       :finding
+       "The route guide, per-problem routes, and probe definitions were read."}],
+     :diagnostic-history [],
+     :fixture
+     {:path
+      "/tmp/generic-point-wedge-fundamental-group-coordinates.lean",
+      :sha256
+      "20f5ed4324eaf3882bbdafb16140c7a5b35d8fdd7b9250bc92669b9ce93bd256",
+      :interface
+      "The general two-open free-product equivalence carries the two inclusion-induced fundamental-group maps to Monoid.Coprod.inl and Monoid.Coprod.inr."},
+     :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/generic-point-wedge-fundamental-group-coordinates",
@@ -104090,7 +104208,8 @@
    :kind :reusable-theorem,
    :area "fundamental-group-wedge-of-circles",
    :depends-on
-   [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
+   [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40
+    :routes-2026-10-11-two-open-free-product-group-equivalence-coordinates-87],
    :current-residual
    "Induct over finite circle wedges and specialize to ThreeCircles.",
    :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
@@ -109497,7 +109616,26 @@
    :lemma-kleindiskclosedsquarecompatiblecarrier-no-carrier-with-required-boundary-formula,
    :kind :lemma,
    :depends-on [],
-   :other-consumers []}],
+   :other-consumers []}
+  {:consumer :t99J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "TwoOpenFreeProductMapping.groupEquivalence_coordinates",
+    :type
+    "For a path-connected two-open cover with simply connected overlap, groupEquivalence maps FundamentalGroup.map of the left and right subtype inclusions at the common overlap basepoint to Monoid.Coprod.inl and Monoid.Coprod.inr respectively."},
+   :lemma
+   {:name "TwoOpenFreeProductMapping.groupEquivalence_coordinates",
+    :reported-by
+    [:routes-2026-10-11-generic-point-wedge-fundamental-group-coordinates-84],
+    :type
+    "For a path-connected two-open cover with simply connected overlap, groupEquivalence maps FundamentalGroup.map of the left and right subtype inclusions at the common overlap basepoint to Monoid.Coprod.inl and Monoid.Coprod.inr respectively.",
+    :area "fundamental-group-wedge-of-circles"},
+   :id :lemma-twoopenfreeproductmapping-groupequivalence-coordinates,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",
