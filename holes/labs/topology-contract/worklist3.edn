@@ -2957,8 +2957,91 @@
   {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-distinguishedchartgenerator-eq-coefficientgenerator,
+   :evidence
+   {:placeholder-delta {:source 0, :fixture 0},
+    :residual
+    "Construct the natural integral relative-homology comparison from the coefficient ModuleCat model to production AddCommGrp relative singular homology and prove it sends the coefficient-local generator to HigherChartLocalGenerator.ambientLocalGenerator.",
+    :gates
+    {:module-build :pass,
+     :exact-declaration-type :pass,
+     :standard-axioms-only :pass,
+     :definition-unfolding-only :pass,
+     :exact-scope :pass,
+     :statement-registry :pass,
+     :zero-placeholders :pass,
+     :distinguished-normalization-reused :pass,
+     :clean-tree :pass,
+     :fixture-compiles :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["lake build replayed pre-existing warnings from dependency modules; the target module emitted informational axiom reports and no warnings"],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.ManifoldFundamentalClass.distinguishedChartGenerator_eq_coefficientGenerator",
+      :type
+      "The distinguished transition-unit chart generator equals the concrete coefficient-local pointed-chart generator.",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on
+      ["ConstructionTargets.CoefficientDistinguishedNormalization.distinguished"],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-10",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/manifold_fundamental_class_distinguished_chart_generator.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/manifold_fundamental_class_distinguished_chart_generator.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^\\s*axiom\\b' ConstructionTargets/ManifoldFundamentalClass.lean /tmp/manifold_fundamental_class_distinguished_chart_generator.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git status --porcelain", :exit 0, :stdout ""}],
+    :diagnostic-history
+    [{:cmd
+      "lake env lean /tmp/manifold_fundamental_class_distinguished_chart_generator.lean",
+      :exit 1,
+      :diagnostic
+      "The first promoted fixture split a fully qualified declaration name immediately after a dot, which Lean rejected as invalid syntax.",
+      :correction
+      "Moved the line break before the fully qualified name and reran the identical fixture command successfully."}],
+    :commit "1845a411f650dbadda43a6aff0ce4fafc3fed310",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path
+     "/tmp/manifold_fundamental_class_distinguished_chart_generator.lean",
+     :sha256
+     "9aaf7162a3d85cccce274177f7bc00d141b109c6a90a71fa5853d9018092b91f",
+     :original-sha256
+     "afb2936b828507a7d44a282cbd9ec55542643170e7da201e90437433def35bb6",
+     :sorry-count 0},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :declaration
+     "ConstructionTargets.ManifoldFundamentalClass.distinguishedChartGenerator_eq_coefficientGenerator",
+     :representation
+     {:source
+      "The transition-unit chartGenerator for the distinguished chart indexed by the basepoint itself",
+      :target
+      "The concrete CoefficientChartLocal.generator defined by the full pointed-chart normalization",
+      :direction
+      "Exact equality from the distinguished transition-unit chart generator to the coefficient-local pointed-chart generator through CoefficientDistinguishedNormalization.distinguished"}},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/distinguished-chart-generator-recovery",
@@ -5142,11 +5225,13 @@
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.distinguishedChartGenerator_eq_coefficientGenerator",
     :reported-by
-    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+     :routes-2026-10-11-manifold-distinguished-chart-generator-topo3-r1],
     :type
     "forall (R : Type) [CommRing R] (m : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (EuclideanSpace Real (Fin (m+2))) M] (x : M), CoefficientChartTransitionUnit.chartGenerator R m x x (mem_chart_source _ x) = CoefficientChartLocal.generator R m x",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in
+    :routes-2026-10-11-manifold-distinguished-chart-generator-topo3-r1},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-distinguishedchartgenerator-eq-coefficientgenerator,
    :kind :lemma,
