@@ -5988,8 +5988,86 @@
   {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-coefficientrelativeprojection-maphomologyiso-naturality,
+   :evidence
+   {:placeholder-delta {:t00J02 0, :t98A02 0, :construction-target 0},
+    :residual
+    "Compose this preservation equation with integralRelativeHomologyComparisonWithTransport_hom and the raw homology projection square to obtain packaged projection naturality; then compare with integralRelativeHomologyComparison and prove the normalization square.",
+    :gates
+    {:scoped-worktree :clean,
+     :exact-type :pass,
+     :module-compile :pass,
+     :fixture-hash :pass,
+     :downstream-composition-excluded :pass,
+     :scope :pass,
+     :specialized-preservation-naturality :pass,
+     :statement-registry :pass,
+     :placeholder-scan :pass,
+     :local-projection-maps :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["An unrelated concurrent writer has ConstructionTargets/T02A03GeometricTubeDeformation.lean modified; this row did not touch it."],
+    :missing-theorems
+    [{:id
+      :lemma-constructiontargets-manifoldfundamentalclass-coefficientrelativeprojection-maphomologyiso-naturality,
+      :name
+      "ConstructionTargets.ManifoldFundamentalClass.coefficientRelativeProjection_mapHomologyIso_naturality",
+      :type
+      "forall {X : Type} [TopologicalSpace X] (A : Set X) (n : Nat), forgetIntModules.map (HomologicalComplex.homologyMap (cokernel.π (CoefficientRelativeSmall.subspaceMap Int A)) n) ≫ (((CoefficientRelativeSmall.relativeChains Int A).sc n).mapHomologyIso forgetIntModules).inv = (((CoefficientH0.SingularChains Int (TopCat.of X)).sc n).mapHomologyIso forgetIntModules).inv ≫ HomologicalComplex.homologyMap ((forgetIntModules.mapHomologicalComplex (ComplexShape.down Nat)).map (cokernel.π (CoefficientRelativeSmall.subspaceMap Int A))) n",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on
+      ["ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_hom"
+       "ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport_homology_projection"],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :topo-10,
+    :commands
+    [{:cmd
+      "sha256sum /tmp/manifold_fundamental_class_relative_projection_preservation.lean",
+      :exit 0,
+      :result
+      "bff770f8d40d961ef4c2dd3d7c8d98b4bcd5aa8dbb7810b2bbb79d0584848c90"}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :result "131 registered statements match, 0 do not"}
+     {:cmd
+      "rg -n \"\\bsorry\\b|\\badmit\\b|^\\s*axiom\\b\" ConstructionTargets/ManifoldFundamentalClass.lean /tmp/manifold_fundamental_class_relative_projection_preservation.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "git status --short",
+      :exit 0,
+      :result
+      "unrelated writer modified ConstructionTargets/T02A03GeometricTubeDeformation.lean; scoped file clean"}],
+    :diagnostic-history [],
+    :representation
+    {:source
+     "The forgetIntModules image of the coefficient absolute-to-relative homology map followed by inverse homology preservation on the coefficient-relative complex",
+     :target
+     "Inverse homology preservation on the coefficient absolute complex followed by homology of the forgotten absolute-to-relative chain map",
+     :direction
+     "Exact homology-morphism equality from the forget-after-homology representation to the homology-after-forgetting representation, specialized from ShortComplex.mapHomologyIso_inv_naturality"},
+    :commit "996721a8d962803ede038a4f5d237430303b612d",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path
+     "/tmp/manifold_fundamental_class_relative_projection_preservation.lean",
+     :sha256
+     "bff770f8d40d961ef4c2dd3d7c8d98b4bcd5aa8dbb7810b2bbb79d0584848c90"},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :declaration
+     "ConstructionTargets.ManifoldFundamentalClass.coefficientRelativeProjection_mapHomologyIso_naturality"},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/relative-projection-homology-preservation",
@@ -8921,11 +8999,13 @@
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.coefficientRelativeProjection_mapHomologyIso_naturality",
     :reported-by
-    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+     :routes-2026-10-11-manifold-relative-projection-homology-preservation-topo3-r1],
     :type
     "forall {X : Type} [TopologicalSpace X] (A : Set X) (n : Nat), forgetIntModules.map (HomologicalComplex.homologyMap (cokernel.π (CoefficientRelativeSmall.subspaceMap Int A)) n) ≫ (((CoefficientRelativeSmall.relativeChains Int A).sc n).mapHomologyIso forgetIntModules).inv = (((CoefficientH0.SingularChains Int (TopCat.of X)).sc n).mapHomologyIso forgetIntModules).inv ≫ HomologicalComplex.homologyMap ((forgetIntModules.mapHomologicalComplex (ComplexShape.down Nat)).map (cokernel.π (CoefficientRelativeSmall.subspaceMap Int A))) n",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in
+    :routes-2026-10-11-manifold-relative-projection-homology-preservation-topo3-r1},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-coefficientrelativeprojection-maphomologyiso-naturality,
    :kind :lemma,
