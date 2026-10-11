@@ -79444,29 +79444,31 @@
      :commit "36cd0baac5cde95309a63dab0408b58e96aca93e",
      :reason :program-progress-committed}]}
   {:consumer :t96A07,
-   :stop-count 2,
+   :stop-count 3,
    :evidence
    {:placeholder-delta 0,
-    :residual "Formalize B2 sphereMap_contMDiff.",
+    :residual "Formalize B3 descendedSphereMap.",
     :outcome :stop,
-    :warnings ["Main retains one placeholder."],
+    :warnings
+    ["Main: 1 placeholder." "Unrelated dirty file preserved."],
     :missing-theorems
-    [{:name "ConstructionTargets.T96A07Closure.sphereMap_antipodal",
-      :type
-      "∀ p, T96A07.sphereMap (sphereAntipodalN 2 p) = T96A07.sphereMap p",
+    [{:name "ConstructionTargets.T96A07Closure.sphereMap_contMDiff",
+      :type "ContMDiff (𝓡 2) (𝓡 3) ∞ T96A07.sphereMap",
       :status :proved,
       :consumers [:t96A07],
       :depends-on [],
       :area "projective-smooth-descent"}
-     {:name "ConstructionTargets.T96A07Closure.sphereMap_contMDiff",
-      :type "ContMDiff (𝓡 2) (𝓡 3) ∞ T96A07.sphereMap",
+     {:name "ConstructionTargets.T96A07Closure.descendedSphereMap",
+      :type "smooth descent with projection equation",
       :status :not-started,
       :consumers [:t96A07],
-      :depends-on [],
+      :depends-on
+      ["ConstructionTargets.T96A07Closure.sphereMap_antipodal"
+       "ConstructionTargets.T96A07Closure.sphereMap_contMDiff"],
       :area "projective-smooth-descent"}],
     :statement-hashes
     {:registry "131/0",
-     :closure "fdc8d70b6ea5ae490dcdc3c8df7b45fd06c7ab5e",
+     :closure "cc75ae6e078d547cb622327a1ca55e68e1e9a957",
      :blueprint "69b59fb622dd62fc82a1fe100b353eaabc2c948d"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
@@ -79480,34 +79482,18 @@
      {:cmd "lake env lean problems/t96A07/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "Main placeholder count", :exit 0, :output "1"}
-     {:cmd "git show --check 7d950a981", :exit 0}],
+     {:cmd "git show --check 840d18bfb", :exit 0}],
     :diagnostic-history
     [{:cmd "closure/Main compile",
       :exit 1,
-      :finding
-      "Unavailable unbuilt import replaced by direct scoped map; build and rerun passed."}],
-    :continue-from "Formalize B2 smoothness coordinatewise.",
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791729299521-5498-15a53c4d",
-     :commands
-     ["git show/check/diff-tree 7d950a981"
-      "lake build ConstructionTargets.t96A07Closure"
-      "lake env lean ConstructionTargets/t96A07Closure.lean"
-      "lake env lean problems/t96A07/lean/Main.lean"
-      "statement-registry check/fingerprint and placeholder counts"],
-     :finding
-     "PASS: new B1 milestone after the blueprint commit. Exact scoped changes add a sorry-free cross-term model and a Main adapter proving the frozen sphereMap antipodal equation; coordinate order and antipodal orientation match the registered definition. Blobs match fdc8d70b/34593269. Both Lean targets compile with standard axioms; Main retains its unchanged 1 placeholder. Registry is 131/0 and frozen statement SHA-256 remains 2ba67b040c1c1e31b8529d758a90765d8251ba3798983f6956674918a77fd520. B2 is listed next."},
-    :commit "7d950a98183dcfc044bd7f5c8f592f91241ea62f",
+      :finding "Fixed notation and rebuilt stale import."}],
+    :commit "840d18bfb8f4cd4ed1efd12d265781516cde390f",
     :changed-paths
     ["ConstructionTargets/t96A07Closure.lean"
      "problems/t96A07/lean/Main.lean"],
-    :finding
-    "B1 proves the frozen quadratic sphere map is antipodal-invariant.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A07/lean/Main.lean"
     "problems/t96A07/status.json"
@@ -80029,7 +80015,8 @@
    {:name "ConstructionTargets.T96A07Closure.sphereMap_contMDiff",
     :reported-by [:program-2026-10-11-close-t96a07],
     :type "ContMDiff (𝓡 2) (𝓡 3) ∞ T96A07.sphereMap",
-    :area "projective-smooth-descent"},
+    :area "projective-smooth-descent",
+    :proved-in :program-2026-10-11-close-t96a07},
    :id :lemma-constructiontargets-t96a07closure-spheremap-contmdiff,
    :kind :lemma,
    :depends-on [],
@@ -80344,4 +80331,22 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-t97a04closure-boundaryoverlapshear-snd],
+   :other-consumers []}
+  {:consumer :t96A07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "ConstructionTargets.T96A07Closure.descendedSphereMap",
+    :type "smooth descent with projection equation"},
+   :lemma
+   {:name "ConstructionTargets.T96A07Closure.descendedSphereMap",
+    :reported-by [:program-2026-10-11-close-t96a07],
+    :type "smooth descent with projection equation",
+    :area "projective-smooth-descent"},
+   :id :lemma-constructiontargets-t96a07closure-descendedspheremap,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t96a07closure-spheremap-antipodal
+    :lemma-constructiontargets-t96a07closure-spheremap-contmdiff],
    :other-consumers []}]}
