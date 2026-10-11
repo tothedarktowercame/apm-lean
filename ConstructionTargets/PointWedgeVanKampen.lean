@@ -618,12 +618,48 @@ def genericPointWedgeRightBase :
     ⟨quotientMap x₀ y₀ (.inl x₀), ⟨.inr y₀, by trivial,
       (Quotient.sound (Relation.EqvGen.rel _ _ Rel.base)).symm⟩⟩
 
+def genericPointWedgeOverlapBase : FundamentalGroupoid
+    (genericPointWedgeOverlapPiece x₀ y₀ M N) :=
+  FundamentalGroupoid.mk
+    ⟨quotientMap x₀ y₀ (.inl x₀),
+      ⟨⟨.inl x₀, by trivial, rfl⟩,
+        ⟨.inr y₀, by trivial,
+          (Quotient.sound (Relation.EqvGen.rel _ _ Rel.base)).symm⟩⟩⟩
+
 /-- The single right restriction element relevant to based loops. -/
 def genericPointWedgeIdentityGlobalRightBaseElement :
     genericPointWedgeFreeProduct x₀ y₀ :=
   genericPointWedgeIdentityGlobalRightRestrictionElement
     x₀ y₀ M N hM hN hy hx cM cN
       (genericPointWedgeRightBase x₀ y₀ N)
+
+/-- The part of the based right counit contributed by pseudococone
+strictification, before the descent equivalence counit is composed with it. -/
+def genericPointWedgeStrictificationRightBaseElement :
+    genericPointWedgeFreeProduct x₀ y₀ :=
+  (TwoOpenPseudoCoconeStrictification.pseudoCoconeStrictificationIso
+    (genericPointWedgePackage x₀ y₀ M N hM hN hy hx cM cN).union_eq_univ
+    (genericPointWedgeIdentityPseudoCocone
+      x₀ y₀ M N hM hN hy hx cM cN)).inv.right.app
+        (genericPointWedgeRightBase x₀ y₀ N)
+
+theorem genericPointWedgeStrictificationRightBaseElement_eq_glue :
+    genericPointWedgeStrictificationRightBaseElement
+        x₀ y₀ M N hM hN hy hx cM cN =
+      (genericPointWedgeIdentityPseudoCocone
+        x₀ y₀ M N hM hN hy hx cM cN).glue.hom.app
+          (genericPointWedgeOverlapBase x₀ y₀ M N) := by
+  have hleft : quotientMap x₀ y₀ (.inl x₀) ∈
+      genericLeftOpen x₀ y₀ M := ⟨.inl x₀, by trivial, rfl⟩
+  simp [genericPointWedgeStrictificationRightBaseElement,
+    TwoOpenPseudoCoconeStrictification.pseudoCoconeStrictificationIso,
+    TwoOpenPseudoCoconeStrictification.pseudoCoconeStrictificationInv,
+    pieceStrictificationIso, strictifiedObjectIso,
+    genericPointWedgeRightBase, genericPointWedgeOverlapBase,
+    genericLeftOpen, genericRightOpen, hleft]
+  change 1 * _ * 1 = _
+  simp
+  congr 2
 
 /-- Naturality solved for the reconstructed right-piece map.  The two
 endpoint restriction components are deliberately visible. -/
@@ -1624,6 +1660,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeIdentityGlobalLeftRestriction_map
 #print axioms genericPointWedgeIdentityGlobalLeftBase_map
 #print axioms genericPointWedgeIdentityGlobalRightRestrictionElement
+#print axioms genericPointWedgeStrictificationRightBaseElement_eq_glue
 #print axioms genericPointWedgeIdentityGlobalRightRestriction_map
 #print axioms genericPointWedgeIdentityGlobalRightBase_map
 #print axioms genericPointWedgeIdentityRepresentation_inl

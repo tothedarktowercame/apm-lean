@@ -213,3 +213,10 @@ conjugation by the single named
 `genericPointWedgeIdentityGlobalRightBaseElement`.  The remaining B6 work is
 to compute that element from the overlap glue and identify the lifted
 left/right fundamental-group morphisms with the literal wedge-leg maps.
+
+The pseudococone contribution to that fixed conjugator is now isolated as
+`genericPointWedgeStrictificationRightBaseElement`.  At the explicit overlap
+wedge-point object, it is exactly the original pseudococone glue morphism;
+the theorem keeps the direction from the strictified right restriction back
+to the supplied right functor.  The residual computation is the preceding
+descent-counit factor and then the two literal wedge-leg lifts.
