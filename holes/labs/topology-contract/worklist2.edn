@@ -68902,6 +68902,33 @@
    "Use the exact zero-height collision characterization to construct continuous entry and exit paths within the appropriate nonzero-sign components, combine them with the safe corridor and nonzero-height criterion, then assemble and concatenate the ambient stages.",
    :other-consumers []}
   {:bounded-exception
+   "single-consumer collision-polynomial nonvanishing at deleted zero-height inputs",
+   :consumer :t02A03,
+   :phase :probe,
+   :state :open,
+   :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t02A03/input-zero-height-collision-nonzero",
+   :acceptance
+   {:probe
+    "Compile inputZeroHeight_collisionPolynomial_ne. For a RightTubeMinusLeftCore input whose right-core normal imaginary part is zero, use zero-height collision sufficiency, reconstruction-self, and the deletion hypothesis to prove its recovered collision polynomial is nonzero. Do not choose its sign and do not construct a path.",
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.inputZeroHeight_collisionPolynomial_ne",
+    :type
+    "forall (p : RightTubeMinusLeftCore), (rightTubeCoreNormalComplex p.1).im = 0 -> (1 - (rightTubeCoreNormalComplex p.1).re)^2 - 4*(1-(rightTubeCoreNormalComplex p.1).re)*(rightTubeCoreAngularCoordinate p : Complex).re + 3 != 0",
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "certify the nonzero endpoint collision value for the zero-height exit path"},
+   :id
+   :routes-2026-10-11-t02a03-input-zero-height-collision-nonzero-topo2-r1,
+   :kind :reusable-theorem,
+   :area "explicit-r3-tube-deformation-retraction",
+   :depends-on
+   [:routes-2026-10-11-t02a03-zero-height-collision-sufficiency-topo2-r1],
+   :current-residual
+   "Classify the endpoint polynomial sign and construct continuous entry and exit paths that stay in the matching nonzero component, then combine them with the safe corridor, nonzero-height criterion, and radial stage.",
+   :other-consumers []}
+  {:bounded-exception
    "single-consumer explicit ambient deformation with frozen tube and deletion invariants",
    :consumer :t02A03,
    :evidence
@@ -68910,79 +68937,86 @@
      :warnings [],
      :missing-theorems
      [{:name
-       "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCollisionPolynomial_eq_zero_implies_leftCore",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.inputZeroHeight_collisionPolynomial_ne",
        :type
-       "forall (u : Circle) (n : Complex), n.im = 0 -> (1 - n.re)^2 - 4*(1-n.re)*(u : Complex).re + 3 = 0 -> rightTubeCorePolarReconstruction u n ∈ Set.range apm_t02a03_leftCore",
+       "forall (p : RightTubeMinusLeftCore), (rightTubeCoreNormalComplex p.1).im = 0 -> (1 - (rightTubeCoreNormalComplex p.1).re)^2 - 4*(1-(rightTubeCoreNormalComplex p.1).re)*(rightTubeCoreAngularCoordinate p : Complex).re + 3 != 0",
        :status :proved,
        :consumers [:t02A03],
-       :depends-on [],
+       :depends-on
+       ["ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCollisionPolynomial_eq_zero_implies_leftCore"
+        "ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeCorePolarReconstruction_self"],
        :area "explicit-r3-tube-deformation-retraction"}],
      :prerequisite
      {:bounded-exception
-      "single-consumer sufficiency of the collision equation on the zero-height slice",
+      "single-consumer collision-polynomial nonvanishing at deleted zero-height inputs",
       :consumer :t02A03,
       :phase :probe,
       :state :open,
       :scope
       ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t02A03/zero-height-collision-sufficiency",
+      "TOPOLOGY-ROUTES.md/t02A03/input-zero-height-collision-nonzero",
       :acceptance
       {:probe
-       "Compile zeroHeightCollisionPolynomial_eq_zero_implies_leftCore. When n.im = 0 and the collision polynomial vanishes, construct a left-core range witness for rightTubeCorePolarReconstruction u n using the argument of its planar displacement from the left-core center. Do not construct an angular path or claim anything at nonzero height.",
+       "Compile inputZeroHeight_collisionPolynomial_ne. For a RightTubeMinusLeftCore input whose right-core normal imaginary part is zero, use zero-height collision sufficiency, reconstruction-self, and the deletion hypothesis to prove its recovered collision polynomial is nonzero. Do not choose its sign and do not construct a path.",
        :declaration
-       "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCollisionPolynomial_eq_zero_implies_leftCore",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.inputZeroHeight_collisionPolynomial_ne",
        :type
-       "forall (u : Circle) (n : Complex), n.im = 0 -> (1 - n.re)^2 - 4*(1-n.re)*(u : Complex).re + 3 = 0 -> rightTubeCorePolarReconstruction u n ∈ Set.range apm_t02a03_leftCore",
+       "forall (p : RightTubeMinusLeftCore), (rightTubeCoreNormalComplex p.1).im = 0 -> (1 - (rightTubeCoreNormalComplex p.1).re)^2 - 4*(1-(rightTubeCoreNormalComplex p.1).re)*(rightTubeCoreAngularCoordinate p : Complex).re + 3 != 0",
        :placeholder "the sole sorry in apm_t02a03",
        :route-step
-       "complete the exact scalar characterization of the forbidden zero-height locus"},
+       "certify the nonzero endpoint collision value for the zero-height exit path"},
       :id
-      :routes-2026-10-11-t02a03-zero-height-collision-sufficiency-topo2-r1,
+      :routes-2026-10-11-t02a03-input-zero-height-collision-nonzero-topo2-r1,
       :kind :reusable-theorem,
       :area "explicit-r3-tube-deformation-retraction",
       :depends-on
-      [:routes-2026-10-11-t02a03-nonpositive-normal-safe-angular-corridor-topo2-r1],
+      [:routes-2026-10-11-t02a03-zero-height-collision-sufficiency-topo2-r1],
       :current-residual
-      "Use the exact zero-height collision characterization to construct continuous entry and exit paths within the appropriate nonzero-sign components, combine them with the safe corridor and nonzero-height criterion, then assemble and concatenate the ambient stages.",
+      "Classify the endpoint polynomial sign and construct continuous entry and exit paths that stay in the matching nonzero component, then combine them with the safe corridor, nonzero-height criterion, and radial stage.",
       :other-consumers []},
      :commands
      [{:cmd
-       "lake env lean /tmp/t02a03_zero_height_collision_sufficiency_probe.lean",
+       "lake env lean /tmp/t02a03_input_zero_height_poly_ne_probe.lean",
        :exit 0,
        :output
-       "zeroHeightCollisionPolynomial_eq_zero_implies_leftCore compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "inputZeroHeight_collisionPolynomial_ne compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/t02a03_zero_height_collision_sufficiency_probe.lean",
+       "sha256sum /tmp/t02a03_input_zero_height_poly_ne_probe.lean",
        :exit 0,
        :output
-       "3ae282d0c686845da38a4e954b05479ee34ff75c8d4d1ac1836ec507c9b3a8dd  /tmp/t02a03_zero_height_collision_sufficiency_probe.lean"}
+       "2d90596595a349838c6a82123c3406ef3bca34b8794427586fbb8b204a7d6084  /tmp/t02a03_input_zero_height_poly_ne_probe.lean"}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_zero_height_collision_sufficiency_probe.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_input_zero_height_poly_ne_probe.lean || true)\"",
        :exit 0}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}
       {:cmd
-       "rg -n 'zeroHeightCollisionPolynomial_eq_zero_implies_leftCore' /tmp/t02a03_zero_height_collision_sufficiency_probe.lean",
+       "rg -n 'inputZeroHeight_collisionPolynomial_ne' /tmp/t02a03_input_zero_height_poly_ne_probe.lean",
        :exit 0,
        :output
-       "7:theorem zeroHeightCollisionPolynomial_eq_zero_implies_leftCore\n41:#print axioms zeroHeightCollisionPolynomial_eq_zero_implies_leftCore"}],
+       "41:theorem inputZeroHeight_collisionPolynomial_ne\n58:#print axioms inputZeroHeight_collisionPolynomial_ne"}],
      :diagnostic-history
      [{:cmd
-       "lake env lean /tmp/t02a03_zero_height_collision_sufficiency_probe.lean",
+       "lake env lean /tmp/t02a03_input_zero_height_poly_ne_probe.lean",
        :exit 1,
        :finding
-       "Initial elaboration used an inapplicable squared-norm rewrite and left coordinate orientations unresolved. Rewriting Complex.norm_def from the computed normSq and using the arg coordinate identities in their actual orientations produced the compiled proof."}],
+       "The installed olean predates the reviewed zero-height sufficiency source declaration. Restating that reviewed prerequisite inside the read-only fixture exposed the new theorem to the probe without changing repository source."}
+      {:cmd
+       "lake env lean /tmp/t02a03_input_zero_height_poly_ne_probe.lean",
+       :exit 1,
+       :finding
+       "The first reconstruction-self rewrite did not unfold rightTubeCoreAngularCoordinate. An explicit equality proved by simpa with that definition supplied the endpoint rewrite, and the corrected fixture compiled."}],
      :fixture
-     {:path "/tmp/t02a03_zero_height_collision_sufficiency_probe.lean",
+     {:path "/tmp/t02a03_input_zero_height_poly_ne_probe.lean",
       :sha256
-      "3ae282d0c686845da38a4e954b05479ee34ff75c8d4d1ac1836ec507c9b3a8dd"},
+      "2d90596595a349838c6a82123c3406ef3bca34b8794427586fbb8b204a7d6084"},
      :finding
-     "On the zero-height slice, the scalar collision equation is also sufficient: it says that the planar vector from the left-core center has norm one, so its complex argument supplies an explicit left-core parameter. Together with the banked necessity theorem this characterizes deletion exactly by polynomial nonvanishing when n.im = 0, allowing later path arguments to track connected sign regions rather than rely only on one-way estimates.",
+     "For a deleted right-tube input at zero core-normal height, the collision polynomial at its recovered angular and normal coordinates cannot vanish. Otherwise the banked zero-height sufficiency theorem places its polar reconstruction on the left core, while reconstruction-self identifies that point with the input, contradicting the subtype deletion hypothesis. This provides the exact nonzero endpoint value needed to choose and preserve its sign component during the exit path.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
@@ -69031,7 +69065,8 @@
     :routes-2026-10-11-t02a03-collision-polynomial-implies-left-core-avoidance-topo2-r2
     :routes-2026-10-11-t02a03-collision-polynomial-positive-normal-real-topo2-r1
     :routes-2026-10-11-t02a03-nonpositive-normal-safe-angular-corridor-topo2-r1
-    :routes-2026-10-11-t02a03-zero-height-collision-sufficiency-topo2-r1],
+    :routes-2026-10-11-t02a03-zero-height-collision-sufficiency-topo2-r1
+    :routes-2026-10-11-t02a03-input-zero-height-collision-nonzero-topo2-r1],
    :current-residual
    "Lift H to RightTubeMinusLeftCore, package rightTubeMeridianRetractionHomotopy, then use the coordinate equation for the Circle-side constant homotopy.",
    :other-consumers []}
@@ -72880,4 +72915,30 @@
    :lemma-constructiontargets-t02a03geometrictubedeformation-zeroheightcollisionpolynomial,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T02A03GeometricTubeDeformation.inputZeroHeight_collisionPolynomial_ne",
+    :type
+    "forall (p : RightTubeMinusLeftCore), (rightTubeCoreNormalComplex p.1).im = 0 -> (1 - (rightTubeCoreNormalComplex p.1).re)^2 - 4*(1-(rightTubeCoreNormalComplex p.1).re)*(rightTubeCoreAngularCoordinate p : Complex).re + 3 != 0"},
+   :lemma
+   {:name
+    "ConstructionTargets.T02A03GeometricTubeDeformation.inputZeroHeight_collisionPolynomial_ne",
+    :reported-by
+    [:routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1],
+    :type
+    "forall (p : RightTubeMinusLeftCore), (rightTubeCoreNormalComplex p.1).im = 0 -> (1 - (rightTubeCoreNormalComplex p.1).re)^2 - 4*(1-(rightTubeCoreNormalComplex p.1).re)*(rightTubeCoreAngularCoordinate p : Complex).re + 3 != 0",
+    :area "explicit-r3-tube-deformation-retraction",
+    :proved-in
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+   :id
+   :lemma-constructiontargets-t02a03geometrictubedeformation-inputzeroheight-collisionpoly,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t02a03geometrictubedeformation-zeroheightcollisionpolynomial
+    :lemma-constructiontargets-t02a03geometrictubedeformation-righttubecorepolarreconstruct],
    :other-consumers []}]}
