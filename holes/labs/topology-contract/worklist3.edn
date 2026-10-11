@@ -9779,6 +9779,24 @@
      "The composite of forgotten relative cokernel comparison, coefficient cokernel transport, mapped relative cokernel comparison, and inverse production relative-chain cokernel presentation",
      :direction
      "Definitional morphism equality from the packaged transported integral chain comparison to its explicit four-isomorphism composite"},
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791699915324-4478-bcb0a69b",
+     :commands
+     ["git show and git diff-tree recorded commit scope"
+      "git blob identity check"
+      "sha256sum frozen fixture"
+      "recompute frozen statement sha256"
+      "git diff --check recorded commit"
+      "lake env lean renamed frozen-fixture replay"
+      "lake env lean target module"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"
+      "placeholder and axiom scan"
+      "python3 scripts/statement-registry.py check"
+      "consumer placeholder census"],
+     :finding
+     "PASS: recorded commit 82a77fb2 changes only the target module and its blob matches the reviewed checkout; frozen fixture hash 48712baf0085d99765a6a56e7ba7051ebb5ae02954f818c15c1526214ce03d00 and frozen statement hash 2ba2eb606e382edb2065c3020c1bb987db18fc265a21148ffbea646800969cab both match. The theorem proves the exact registered definitional equality in the intended order: forgotten relative cokernel comparison, coefficient cokernel transport, mapped relative cokernel comparison, then inverse production relative-chain cokernel presentation. It does not apply homologyMap, expand any factor, compare with coefficientLocalForwardComposite, exclude negation, or construct a fundamental class. Renamed fixture replay, target elaboration, and Lake build pass; axioms are exactly propext, Classical.choice, Quot.sound; registry is 131/0; target placeholders are 0 and consumer baselines t00J02/t98A02 remain 1/1."},
     :commit "82a77fb2f26eb200700599086a0d89518933e312",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -9797,7 +9815,7 @@
     :routes-2026-10-11-manifold-integral-relative-chains-transport-hom-topo3-r1,
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/transported-chain-comparison-factorization",
@@ -9982,7 +10000,7 @@
      "The transported integral chain comparison is definitionally the four expected presentation isomorphisms. This compiled factorization identifies exactly what must next be mapped to homology. After that, the existing projection-naturalities can align the cokernel factors with the coefficient chart composite and the production relative projection, leaving the connecting, radial, and sphere normalization comparison that determines the sign.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -13591,7 +13609,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -13608,7 +13626,10 @@
     "forall {X : Type} [TopologicalSpace X] (A : Set X), (integralRelativeChainsComparisonWithTransport A).hom = (forgetIntegralRelativeCokernelComparison A).hom ≫ (coefficientIntegralCokernelTransport A).hom ≫ (integralMappedRelativeCokernelComparison A).hom ≫ (relativeSingularChainsIsoCokernelSubspaceMap A).inv",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-integral-relative-chains-transport-hom-topo3-r1},
+    :routes-2026-10-11-manifold-integral-relative-chains-transport-hom-topo3-r1,
+    :banked-by
+    :routes-2026-10-11-manifold-integral-relative-chains-transport-hom-topo3-r1,
+    :banked-commit "82a77fb2f26eb200700599086a0d89518933e312"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-integralrelativechainscomparisonwithtransport-hom,
    :kind :lemma,
