@@ -68373,6 +68373,18 @@
       "git diff --check -- ConstructionTargets/T02A03GeometricTubeDeformation.lean",
       :exit 0}
      {:cmd "git status --short", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791682298193-3660-ec408a29",
+     :commands
+     ["git show/diff-tree --check 5666f5f"
+      "fixture SHA-256 and recorded blob verification"
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean"
+      "lake env lean /tmp/t02a03_core_reconstruction_height_avoidance_probe.lean"
+      "statement registry fingerprint/check and placeholder/worklist EDN checks"],
+     :finding
+     "Recorded commit has the exact one-file scope and matching fixture/blob hashes. The module and frozen probe compile with only the expected standard axioms. The theorem preserves the frozen conditional direction: n.im != 0 excludes membership in the left-core range by comparing coordinate 2 of the Euclidean reconstruction with the left core, whose third coordinate is zero. It adds no placeholder and does not claim the zero-height case or construct an angular homotopy."},
     :commit "5666f5f842e5b1633055333318c58fd3e46d473f",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
@@ -68389,7 +68401,7 @@
    :phase :implementation,
    :type
    "forall (u : Circle) (n : Complex), n.im != 0 -> rightTubeCorePolarReconstruction u n ∉ Set.range apm_t02a03_leftCore",
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/core-polar-height-left-core-avoidance",
@@ -68498,7 +68510,7 @@
      "Every frozen left-core point has third coordinate zero, while rightTubeCorePolarReconstruction u n has third coordinate n.im. Therefore a nonzero imaginary normal component is a sufficient, angle-independent deletion invariant. This isolates the remaining planar zero-height case for the angular and radial stages.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
