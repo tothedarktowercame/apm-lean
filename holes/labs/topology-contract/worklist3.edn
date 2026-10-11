@@ -16496,8 +16496,55 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :implements-lemma :lemma-mfclass-sc-pair-pi1-iso,
+   :evidence
+   {:placeholder-delta {:t00J02 [1 1], :t98A02 [1 1]},
+    :residual "Transport π₁; compare π₂/π₃.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["one simpa lint in new proof"
+     "unrelated dirty ConstructionTargets/t97A04Closure.lean preserved"],
+    :missing-theorems
+    [{:name "scPairZeroπ₁Iso",
+      :type "∀ f : X ⟶ Y, ParallelPairZeroπ₁Comparison f",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on ["forgetSnakeKernelτ₃Limit"],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes
+    {:registry "131/131",
+     :module
+     "e0c2422093213913d5f09e002fd29ef4c945748bd226f8819fb155c545cde835"},
+    :axioms [:propext :Classical.choice :Quot.sound],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd "sha256sum /tmp/p1.lean", :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "placeholder counts t00J02,t98A02", :exit 0}
+     {:cmd "rg forbidden tokens scoped-file",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git commit", :exit 0}],
+    :commit "632df970b316c93268e0c35e13f33ea0b283d5f1",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path "/tmp/p1.lean",
+     :sha256
+     "5a042f5b3cff13b6012319eb5ba566fcf7ba61094a0671db349f72ec95b7c44c"},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :declaration
+     "ConstructionTargets.ManifoldFundamentalClass.scPairZeroπ₁Iso"},
+    :row :routes-2026-10-11-mfclass-sc-pair-pi1-r1,
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/kernel-pi1",
@@ -23805,6 +23852,23 @@
    :id :lemma-mfclass-sc-pair-pi1-iso,
    :kind :lemma,
    :depends-on [:lemma-mfclass-forget-snake-kernel-tau3-islimit],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "scPairZeroπ₁Iso",
+    :type "∀ f : X ⟶ Y, ParallelPairZeroπ₁Comparison f"},
+   :lemma
+   {:name "scPairZeroπ₁Iso",
+    :reported-by [:routes-2026-10-11-mfclass-sc-pair-pi1-r1],
+    :type "∀ f : X ⟶ Y, ParallelPairZeroπ₁Comparison f",
+    :area "manifold-fundamental-class",
+    :proved-in :routes-2026-10-11-mfclass-sc-pair-pi1-r1},
+   :id :lemma-scpairzero-iso,
+   :kind :lemma,
+   :depends-on [:lemma-forgetsnakekernel-limit-fb6e8698b082],
    :other-consumers [:t98A02]}],
  :consumer-baselines {},
  :statuses
