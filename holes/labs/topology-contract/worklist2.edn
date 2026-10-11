@@ -70000,57 +70000,67 @@
    "single-consumer positive collision certificate at the radial stage meridian-normal endpoint",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/t02a03_positive_sign_radial_start_poly_probe.lean",
-      :sha256
-      "09d0fd0a871c6ec624f297b72f04e47dfca62b2bab1965e93a4bbeab7524d4d8"},
-     :commands
-     [{:cmd
-       "test -L .lake/packages && test \"$(readlink -f .lake/packages)\" = /home/joe/code/apm-lean/.lake/packages",
-       :exit 0}
-      {:cmd
-       "lake env lean /tmp/t02a03_positive_sign_radial_start_poly_probe.lean",
-       :exit 0,
-       :output
-       "positiveSign_radialStart_collisionPolynomial_pos compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "sha256sum /tmp/t02a03_positive_sign_radial_start_poly_probe.lean",
-       :exit 0,
-       :output
-       "09d0fd0a871c6ec624f297b72f04e47dfca62b2bab1965e93a4bbeab7524d4d8  /tmp/t02a03_positive_sign_radial_start_poly_probe.lean"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_positive_sign_radial_start_poly_probe.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}
-      {:cmd
-       "rg -n 'positiveSign_radialStart_collisionPolynomial_pos' /tmp/t02a03_positive_sign_radial_start_poly_probe.lean",
-       :exit 0,
-       :output
-       "7:theorem positiveSign_radialStart_collisionPolynomial_pos\n22:#print axioms positiveSign_radialStart_collisionPolynomial_pos"}],
-     :warnings [],
-     :finding
-     "In the positive meridian component, the meridian-point core normal has norm and real part 1/8. The existing positive-normal collision estimate therefore makes its collision polynomial strictly positive at the recovered input angle. The theorem is deliberately endpoint-only and does not assert safety of the straight interpolation.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
-      :declaration
-      "ConstructionTargets.T02A03GeometricTubeDeformation.positiveSign_radialStart_collisionPolynomial_pos",
-      :type
-      "forall (p : RightTubeMinusLeftCore), (rightTubeMeridianCoordinate p : Complex).re = 1 -> let n := rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)); 0 < (1 - n.re)^2 - 4*(1-n.re)*(rightTubeCoreAngularCoordinate p : Complex).re + 3",
-      :proof
-      "Apply collisionPolynomial_pos_of_normal_re_pos at the recovered input angle; discharge the radius bound with norm_rightTubeCoreNormalComplex_circleMeridian and unfold the meridian core normal to show its real part is 1/8.",
-      :axioms [propext Classical.choice Quot.sound]},
-     :residual
-     "Implement and bank the positive radial-start endpoint certificate; then construct a radial normal path that remains in the positive collision component."}},
+   {:placeholder-delta {:before 0, :after 0, :change 0},
+    :residual
+    "Certify the recovered-normal endpoint has the same positive sign, replace or refine the unsafe straight radial interpolation by a path staying in that positive component, treat the negative component, then construct the angular stage.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean:62:6: unnecessarySimpa (pre-existing)"
+     "The canonical checkout's .lake/packages is a real directory, so the frame-worktree symlink diagnostic does not apply cleanly here."],
+    :missing-theorems [],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms [propext Classical.choice Quot.sound],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :scope-blob "7bea097e7889959e4780f74c4ee1f943fb4b0aed",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0,
+      :output
+      "compiled; declaration axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "lake env lean /tmp/t02a03_positive_sign_radial_start_poly_probe.lean",
+      :exit 0,
+      :output
+      "positiveSign_radialStart_collisionPolynomial_pos compiled; axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "sha256sum /tmp/t02a03_positive_sign_radial_start_poly_probe.lean",
+      :exit 0,
+      :output
+      "09d0fd0a871c6ec624f297b72f04e47dfca62b2bab1965e93a4bbeab7524d4d8  /tmp/t02a03_positive_sign_radial_start_poly_probe.lean"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "git diff --check -- ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd
+      "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :diagnostic-history
+    [{:cmd
+      "test -L .lake/packages && test \"$(readlink -f .lake/packages)\" = /home/joe/code/apm-lean/.lake/packages",
+      :exit 1,
+      :finding
+      "This canonical checkout has a real .lake/packages directory; no package-authority mutation was made during the scoped theorem row."}],
+    :commit "ee6f5faea71d64f1a3938ebde4793e88ed6f9889",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.positiveSign_radialStart_collisionPolynomial_pos",
+    :fixture
+    {:path "/tmp/t02a03_positive_sign_radial_start_poly_probe.lean",
+     :sha256
+     "09d0fd0a871c6ec624f297b72f04e47dfca62b2bab1965e93a4bbeab7524d4d8"},
+    :finding
+    "In the positive meridian component, the meridian-point core normal has norm and real part 1/8. The positive-normal collision estimate therefore proves the endpoint collision polynomial strictly positive at the recovered input angle.",
+    :seat "topo-6"},
    :phase :implementation,
    :type
    "forall (p : RightTubeMinusLeftCore), (rightTubeMeridianCoordinate p : Complex).re = 1 -> let n := rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)); 0 < (1 - n.re)^2 - 4*(1-n.re)*(rightTubeCoreAngularCoordinate p : Complex).re + 3",
-   :state :open,
+   :state :done-unreviewed,
    :proof
    "Apply collisionPolynomial_pos_of_normal_re_pos at the recovered input angle; discharge the radius bound with norm_rightTubeCoreNormalComplex_circleMeridian and unfold the meridian core normal to show its real part is 1/8.",
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
