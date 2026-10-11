@@ -1793,6 +1793,93 @@ theorem frozenH2Coordinate_comp
   slice_lhs 3 4 => exact frozenTorusH2GroupIsoInt.hom_inv_id
   slice_lhs 3 4 => exact Category.id_comp _
 
+/-- The determinant-one factor acts trivially in the fixed top-class
+coordinate. -/
+theorem lowerShear_H2 :
+    frozenTorusH2GroupIsoInt.inv ≫
+        HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularSubdivision.singularPostcomposition
+            lowerShear) 2 ≫
+        frozenTorusH2GroupIsoInt.hom = 𝟙 _ := by
+  rw [lowerShear_H2_map]
+  let s := HomologicalComplex.homologyMap
+    (ConstructionTargets.SingularSubdivision.singularPostcomposition
+      swapTorus) 2
+  let h := HomologicalComplex.homologyMap
+    (ConstructionTargets.SingularSubdivision.singularPostcomposition
+      (shearY 1 (-1))) 2
+  change frozenTorusH2GroupIsoInt.inv ≫ (s ≫ h ≫ s) ≫
+    frozenTorusH2GroupIsoInt.hom = 𝟙 _
+  calc
+    _ = (frozenTorusH2GroupIsoInt.inv ≫ s ≫
+          frozenTorusH2GroupIsoInt.hom) ≫
+        (frozenTorusH2GroupIsoInt.inv ≫ (h ≫ s) ≫
+          frozenTorusH2GroupIsoInt.hom) :=
+      (frozenH2Coordinate_comp s (h ≫ s)).symm
+    _ = swapH2Coordinate ≫
+        ((frozenTorusH2GroupIsoInt.inv ≫ h ≫
+            frozenTorusH2GroupIsoInt.hom) ≫ swapH2Coordinate) := by
+      change (frozenTorusH2GroupIsoInt.inv ≫ s ≫
+          frozenTorusH2GroupIsoInt.hom) ≫
+        (frozenTorusH2GroupIsoInt.inv ≫ (h ≫ s) ≫
+          frozenTorusH2GroupIsoInt.hom) =
+        (frozenTorusH2GroupIsoInt.inv ≫ s ≫
+          frozenTorusH2GroupIsoInt.hom) ≫
+        ((frozenTorusH2GroupIsoInt.inv ≫ h ≫
+          frozenTorusH2GroupIsoInt.hom) ≫
+        (frozenTorusH2GroupIsoInt.inv ≫ s ≫
+          frozenTorusH2GroupIsoInt.hom))
+      apply congrArg (fun k ↦
+        (frozenTorusH2GroupIsoInt.inv ≫ s ≫
+          frozenTorusH2GroupIsoInt.hom) ≫ k)
+      exact (frozenH2Coordinate_comp h s).symm
+    _ = swapH2Coordinate ≫ swapH2Coordinate := by
+      change swapH2Coordinate ≫
+        ((frozenTorusH2GroupIsoInt.inv ≫
+          HomologicalComplex.homologyMap
+            (ConstructionTargets.SingularSubdivision.singularPostcomposition
+              (shearY 1 (-1))) 2 ≫
+          frozenTorusH2GroupIsoInt.hom) ≫ swapH2Coordinate) = _
+      rw [shearY_H2]
+      simp
+    _ = 𝟙 _ := swapH2Coordinate_square
+
+/-- The determinant-three factor acts by multiplication by three in the
+fixed top-class coordinate. -/
+theorem frozenLbar_H2 :
+    frozenTorusH2GroupIsoInt.inv ≫
+        HomologicalComplex.homologyMap
+          (ConstructionTargets.SingularSubdivision.singularPostcomposition
+            frozenLbar) 2 ≫
+        frozenTorusH2GroupIsoInt.hom = 3 • 𝟙 _ := by
+  rw [frozenLbar_H2_map]
+  let l := HomologicalComplex.homologyMap
+    (ConstructionTargets.SingularSubdivision.singularPostcomposition
+      lowerShear) 2
+  let h := HomologicalComplex.homologyMap
+    (ConstructionTargets.SingularSubdivision.singularPostcomposition
+      (shearY 3 1)) 2
+  change frozenTorusH2GroupIsoInt.inv ≫ (l ≫ h) ≫
+    frozenTorusH2GroupIsoInt.hom = 3 • 𝟙 _
+  calc
+    _ = (frozenTorusH2GroupIsoInt.inv ≫ l ≫
+          frozenTorusH2GroupIsoInt.hom) ≫
+        (frozenTorusH2GroupIsoInt.inv ≫ h ≫
+          frozenTorusH2GroupIsoInt.hom) :=
+      (frozenH2Coordinate_comp l h).symm
+    _ = (𝟙 _) ≫ (3 • 𝟙 _) := by
+      change (frozenTorusH2GroupIsoInt.inv ≫
+          HomologicalComplex.homologyMap
+            (ConstructionTargets.SingularSubdivision.singularPostcomposition
+              lowerShear) 2 ≫ frozenTorusH2GroupIsoInt.hom) ≫
+        (frozenTorusH2GroupIsoInt.inv ≫
+          HomologicalComplex.homologyMap
+            (ConstructionTargets.SingularSubdivision.singularPostcomposition
+              (shearY 3 1)) 2 ≫ frozenTorusH2GroupIsoInt.hom) = _
+      rw [lowerShear_H2, shearY_H2]
+      rfl
+    _ = 3 • 𝟙 _ := by simp
+
 #print axioms frozenTorusH2GroupIsoInt
 #print axioms frozenYCover
 #print axioms frozenYCoverUHomeomorph
@@ -1884,5 +1971,7 @@ theorem frozenH2Coordinate_comp
 #print axioms shearY_frozenConnectingCoordinate_naturality
 #print axioms frozenConnectingCoordinate_comp_overlapScalar
 #print axioms shearY_frozenConnectingCoordinate_scalar
+#print axioms lowerShear_H2
+#print axioms frozenLbar_H2
 
 end ConstructionTargets.T97A04Closure
