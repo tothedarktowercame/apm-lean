@@ -11327,8 +11327,105 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :implements-lemma :lemma-mfclass-negative-model-factors,
+   :evidence
+   {:placeholder-delta
+    {:t00J02 {:before 1, :after 1, :delta 0},
+     :t98A02 {:before 1, :after 1, :delta 0}},
+    :residual
+    "Construct the comparison from the coefficient Euclidean punctured model to the production punctured open disk, prove naturality for both chart prefixes and connecting/radial maps, and identify the terminal sphere normalizations to exclude the negative identity.",
+    :gates
+    {:fixture-hash :pass,
+     :lean :pass,
+     :lake-build :pass,
+     :statement-registry :pass,
+     :placeholder-scan :pass,
+     :diff-check :pass,
+     :worktree-clean :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["lake build replayed pre-existing linter warnings in dependencies; the changed declarations emitted no warning"],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_implies_model_factors",
+      :type
+      "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), (correctedLocalNormalizationAutomorphism k x).hom = -𝟙 _ -> productionProjectedChartPrefix k x ≫ singularPairConnecting (puncturedOpenDiskSet (k + 2)) (k + 1) ≫ ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat (k + 1)).obj (AddCommGrpCat.of Int)).map (TopCat.ofHom (radialNormalizeMap (k + 2))) ≫ (SphereHomology.sphereTopHomologyIsoInt (k + 1) (by omega)).hom = coefficientProjectedChartPrefix k x ≫ coefficientModelNormalizationComposite k ≫ (-𝟙 _)",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on
+      ["ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_implies_prefix_model_equality"
+       "HigherModelLocalHomology.comparison"],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes
+    {"ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_implies_model_factors"
+     "6a726e253abecbb6bad8c4cfb76e5d33ec1fa870921dd57bcd74ed749f23cb38"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/manifold_fundamental_class_negative_equation_model_factors.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/manifold_fundamental_class_negative_equation_model_factors.lean before rebuilding the promoted module",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "rg placeholder and axiom scan on scoped source and fixture",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "comment-stripped placeholder count for problems/t00J02/lean/Main.lean and problems/t98A02/lean/Main.lean",
+      :exit 0,
+      :output
+      {"problems/t00J02/lean/Main.lean" 1,
+       "problems/t98A02/lean/Main.lean" 1}}
+     {:cmd
+      "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "git status --porcelain", :exit 0, :output ""}],
+    :diagnostic-history
+    [{:cmd
+      "lake env lean /tmp/manifold_fundamental_class_negative_equation_model_factors.lean && lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 1,
+      :correction
+      "The fixture compiled first, but global namespace opens made an earlier E ambiguous in the promoted module; removed the opens, qualified only the new punctured-disk and radial names, and reran the module successfully."}
+     {:cmd
+      "lake env lean /tmp/manifold_fundamental_class_negative_equation_model_factors.lean after rebuilding the promoted module",
+      :exit 1,
+      :correction
+      "The unchanged fixture now reports the three promoted declarations as already declared; its proof was compiled successfully before the module olean was rebuilt, and the promoted module and Lake target both compile."}],
+    :representation
+    {:source
+     "The forbidden-sign prefix/model equality with HigherModelLocalHomology.localIsoInt and the forgotten CoefficientModelLocal.localIso still packaged",
+     :target
+     "The same equality with the production and coefficient connecting maps, radial-normalization homology maps, and sphere normalizations exposed in order",
+     :direction
+     "Forward implication from the packaged prefix/model forbidden-sign equality to its exact connecting-radial-sphere factor representation"},
+    :commit "4f40378625b7024b7b247c23e78a013660853bca",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path
+     "/tmp/manifold_fundamental_class_negative_equation_model_factors.lean",
+     :sha256
+     "38421e39509924fbd51a8bed0eb51ed0847b62e079f0ec32740ed2244e2da80e"},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :declaration
+     "ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_implies_model_factors",
+     :supporting-declarations
+     ["ConstructionTargets.ManifoldFundamentalClass.coefficientModelNormalizationComposite"
+      "ConstructionTargets.ManifoldFundamentalClass.coefficientModelLocalIso_forget_hom"]},
+    :row :routes-2026-10-11-manifold-negative-model-factors-topo3-r1,
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/negative-model-factorization",
@@ -15424,17 +15521,20 @@
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_implies_model_factors",
     :reported-by
-    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+     :routes-2026-10-11-manifold-negative-model-factors-topo3-r1],
     :type
     "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), (correctedLocalNormalizationAutomorphism k x).hom = -𝟙 _ -> productionProjectedChartPrefix k x ≫ singularPairConnecting (puncturedOpenDiskSet (k + 2)) (k + 1) ≫ ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat (k + 1)).obj (AddCommGrpCat.of Int)).map (TopCat.ofHom (radialNormalizeMap (k + 2))) ≫ (SphereHomology.sphereTopHomologyIsoInt (k + 1) (by omega)).hom = coefficientProjectedChartPrefix k x ≫ coefficientModelNormalizationComposite k ≫ (-𝟙 _)",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in
+    :routes-2026-10-11-manifold-negative-model-factors-topo3-r1},
    :id :lemma-mfclass-negative-model-factors,
    :kind :lemma,
    :depends-on
    [:lemma-mfclass-negative-prefix-model
     :lemma-constructiontargets-highermodellocalhomology-comparison
-    :lemma-constructiontargets-coefficientmodellocal-forward-composite],
+    :lemma-constructiontargets-coefficientmodellocal-forward-composite
+    :lemma-highermodellocalhomology-comparison],
    :other-consumers [:t98A02]}
   {:consumer :portfolio,
    :phase :lemma,
@@ -15462,6 +15562,17 @@
     :reported-by []},
    :id
    :lemma-constructiontargets-coefficientmodellocal-forward-composite,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "HigherModelLocalHomology.comparison"},
+   :lemma
+   {:name "HigherModelLocalHomology.comparison", :reported-by []},
+   :id :lemma-highermodellocalhomology-comparison,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}],
