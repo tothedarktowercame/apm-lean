@@ -17211,6 +17211,32 @@
    :current-residual "Package the mapped SnakeInput.",
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
+   :implements-lemma :lemma-mfclass-forget-snake-input,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/manifold-fundamental-class/mapped-snake-input",
+   :acceptance
+   {:declaration
+    "ConstructionTargets.ManifoldFundamentalClass.forgetSnakeInput",
+    :type
+    "∀ S : ShortComplex.SnakeInput (ModuleCat ℤ), ShortComplex.SnakeInput AddCommGrpCat",
+    :fixture "/tmp/snake.lean",
+    :fixture-sha256
+    "a255786c959b151568180d355345d2f460f360b3f01ff24d65e8d793eccdb235",
+    :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
+    :route-step "package mapped SnakeInput",
+    :implementation
+    "Promote only; exclude SnakeInput.Hom and δ naturality."},
+   :id :routes-2026-10-11-mfclass-forget-snake-input-r1,
+   :kind :reusable-theorem,
+   :area "manifold-fundamental-class",
+   :depends-on
+   [:routes-2026-10-11-mfclass-forget-snake-cokernel-limit-r1],
+   :current-residual "Build SnakeInput.Hom and preserve δ.",
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-closedorientedfundamentalclass,
    :evidence
@@ -17218,51 +17244,53 @@
     {:outcome :revise,
      :seat "topo-12",
      :fixture
-     {:path "/tmp/h3.lean",
+     {:path "/tmp/snake.lean",
       :sha256
-      "a0f9dbeb380c1a3f32cb9373bab6ed65eaafbc3fcf5d19891f5d05800e4f81ef"},
-     :commands [{:cmd "lake env lean /tmp/h3.lean", :exit 0}],
+      "a255786c959b151568180d355345d2f460f360b3f01ff24d65e8d793eccdb235"},
+     :commands [{:cmd "lake env lean /tmp/snake.lean", :exit 0}],
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :missing-theorems
-     [{:id :lemma-mfclass-forget-snake-cokernel-limit,
+     [{:id :lemma-mfclass-forget-snake-input,
        :name
-       "ConstructionTargets.ManifoldFundamentalClass.forgetSnakeCokernelLimit",
+       "ConstructionTargets.ManifoldFundamentalClass.forgetSnakeInput",
        :type
-       "∀ S : ShortComplex.SnakeInput (ModuleCat ℤ), ForgottenSnakeCokernelLimit S",
+       "∀ S : ShortComplex.SnakeInput (ModuleCat ℤ), ShortComplex.SnakeInput AddCommGrpCat",
        :status :proved,
        :consumers [:t00J02 :t98A02],
        :depends-on
-       ["ConstructionTargets.ManifoldFundamentalClass.forgetSnakeCokernelτ₃Limit"],
+       ["ConstructionTargets.ManifoldFundamentalClass.forgetSnakeCokernelLimit"],
        :area "manifold-fundamental-class"}],
      :prerequisite
      {:consumer :t00J02,
-      :implements-lemma :lemma-mfclass-forget-snake-cokernel-limit,
+      :implements-lemma :lemma-mfclass-forget-snake-input,
       :phase :implementation,
       :state :open,
       :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/manifold-fundamental-class/mapped-snake-cokernel",
+      "TOPOLOGY-ROUTES.md/manifold-fundamental-class/mapped-snake-input",
       :acceptance
       {:declaration
-       "ConstructionTargets.ManifoldFundamentalClass.forgetSnakeCokernelLimit",
+       "ConstructionTargets.ManifoldFundamentalClass.forgetSnakeInput",
        :type
-       "∀ S : ShortComplex.SnakeInput (ModuleCat ℤ), ForgottenSnakeCokernelLimit S",
-       :fixture "/tmp/h3.lean",
+       "∀ S : ShortComplex.SnakeInput (ModuleCat ℤ), ShortComplex.SnakeInput AddCommGrpCat",
+       :fixture "/tmp/snake.lean",
        :fixture-sha256
-       "a0f9dbeb380c1a3f32cb9373bab6ed65eaafbc3fcf5d19891f5d05800e4f81ef",
+       "a255786c959b151568180d355345d2f460f360b3f01ff24d65e8d793eccdb235",
        :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
-       :route-step "assemble mapped cokernel colimit",
-       :implementation "Promote only; exclude mapped SnakeInput."},
-      :id :routes-2026-10-11-mfclass-forget-snake-cokernel-limit-r1,
+       :route-step "package mapped SnakeInput",
+       :implementation
+       "Promote only; exclude SnakeInput.Hom and δ naturality."},
+      :id :routes-2026-10-11-mfclass-forget-snake-input-r1,
       :kind :reusable-theorem,
       :area "manifold-fundamental-class",
       :depends-on
-      [:routes-2026-10-11-mfclass-forget-cokernel-pi3-limit-r1],
-      :current-residual "Package the mapped SnakeInput.",
+      [:routes-2026-10-11-mfclass-forget-snake-cokernel-limit-r1],
+      :current-residual "Build SnakeInput.Hom and preserve δ.",
       :other-consumers [:t98A02]},
-     :residual "Promote h₃; then package mapped SnakeInput."}},
+     :residual
+     "Promote mapped SnakeInput; then build Hom and δ naturality."}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -17378,7 +17406,8 @@
     :routes-2026-10-11-mfclass-forget-cokernel-pi1-limit-r1
     :routes-2026-10-11-mfclass-forget-cokernel-pi2-limit-r1
     :routes-2026-10-11-mfclass-forget-cokernel-pi3-limit-r1
-    :routes-2026-10-11-mfclass-forget-snake-cokernel-limit-r1],
+    :routes-2026-10-11-mfclass-forget-snake-cokernel-limit-r1
+    :routes-2026-10-11-mfclass-forget-snake-input-r1],
    :current-residual
    "Local-degree counts and wild-ball complement homology remain.",
    :other-consumers [:t98A02]}
@@ -24788,6 +24817,28 @@
    :id :lemma-mfclass-forget-snake-cokernel-limit,
    :kind :lemma,
    :depends-on [:lemma-mfclass-forget-cokernel-pi3-limit],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFundamentalClass.forgetSnakeInput",
+    :type
+    "∀ S : ShortComplex.SnakeInput (ModuleCat ℤ), ShortComplex.SnakeInput AddCommGrpCat"},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFundamentalClass.forgetSnakeInput",
+    :reported-by
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    :type
+    "∀ S : ShortComplex.SnakeInput (ModuleCat ℤ), ShortComplex.SnakeInput AddCommGrpCat",
+    :area "manifold-fundamental-class",
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+   :id :lemma-mfclass-forget-snake-input,
+   :kind :lemma,
+   :depends-on [:lemma-mfclass-forget-snake-cokernel-limit],
    :other-consumers [:t98A02]}],
  :consumer-baselines {},
  :statuses
