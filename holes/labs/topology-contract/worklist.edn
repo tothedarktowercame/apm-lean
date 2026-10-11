@@ -104287,18 +104287,50 @@
    :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
   {:consumer :t99J01,
    :implements-lemma
+   :lemma-twoopenfreeproductmapping-mapping-inverse-identity-leg-coordinates,
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/TwoOpenFreeProductMappingInverseIdentityLegCoordinates.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/shared/mapping-inverse-identity-leg-coordinates",
+   :acceptance
+   {:implementation
+    "For F equal to the inverse image of the identity functor under TwoOpenFreeProductMapping.mapping at the free-product target, prove the two explicit F.map computations on morphisms induced by the left and right cover-piece inclusions at the overlap basepoint. The results must be Monoid.Coprod.inl and Monoid.Coprod.inr and must fill TwoOpenGroupEquivalenceCoordinates after rewriting by sourceEquivalence_functor_eq_mapping_inverse_identity. Do not specialize to point wedges or finite circle wedges and do not close a consumer.",
+    :placeholder
+    "the remaining fundamental-group coordinate steps for t01A03, t92J06, t97A01, t97A03, and t99J01",
+    :route-step
+    "compute both cover legs of mapping.inverse.obj applied to the identity functor",
+    :fixture "/tmp/mapping-inverse-identity-leg-coordinates.lean",
+    :fixture-sha256
+    "13c097b29888d2db43e201ac92d14b61d74774487750973007081cadcdc27ffd",
+    :gates
+    ["lake build ConstructionTargets.TwoOpenFreeProductMappingInverseIdentityLegCoordinates"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-11-mapping-inverse-identity-leg-coordinates-89,
+   :kind :reusable-theorem,
+   :area "fundamental-group-wedge-of-circles",
+   :depends-on [],
+   :current-residual
+   "Rewrite sourceEquivalence by the banked normalization, fill the coordinate-law structure from these two computations, then specialize through the generic point-wedge cover equivalences.",
+   :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
+  {:consumer :t99J01,
+   :implements-lemma
    :lemma-genericpointwedgefundamentalgroupcoordinates-genericpointwedgegroupequivalence-c,
    :evidence
    {:probe
     {:residual
-     "The dependency supplied only the coordinate-law structure; prove source-equivalence leg coherence before the generic point-wedge specialization can compile.",
+     "The dependency normalized sourceEquivalence to mapping.inverse.obj identity but did not compute either inclusion leg; prove those two computations next.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
      [{:name
-       "GenericTargetNaturalSourceReconstruction.sourceEquivalence_leg_coordinates",
+       "TwoOpenFreeProductMapping.mapping_inverse_identity_leg_coordinates",
        :type
-       "For the TwoOpenFreeProductMapping mapping family, the reconstructed source equivalence maps the left and right cover-piece inclusion morphisms at the overlap basepoint to Monoid.Coprod.inl and Monoid.Coprod.inr respectively.",
+       "For F := (mapping FreeProductTarget hU hV hcover w).inverse.obj (Functor.id FreeProductTarget), F.map sends the morphisms induced by the left and right cover inclusions at w to Monoid.Coprod.inl and Monoid.Coprod.inr respectively.",
        :status :not-started,
        :consumers [:t99J01 :t01A03 :t92J06 :t97A01 :t97A03],
        :depends-on [],
@@ -104306,53 +104338,55 @@
      :prerequisite
      {:consumer :t99J01,
       :implements-lemma
-      :lemma-generictargetnaturalsourcereconstruction-sourceequivalence-leg-coordinates,
+      :lemma-twoopenfreeproductmapping-mapping-inverse-identity-leg-coordinates,
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/GenericTargetNaturalSourceReconstructionLegCoordinates.lean"],
+      ["ConstructionTargets/TwoOpenFreeProductMappingInverseIdentityLegCoordinates.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/shared/source-equivalence-leg-coordinates",
+      "TOPOLOGY-ROUTES.md/shared/mapping-inverse-identity-leg-coordinates",
       :acceptance
       {:implementation
-       "Prove the coherence theorem for GenericTargetNaturalSourceReconstruction.sourceEquivalence specialized to the TwoOpenFreeProductMapping mapping family: its action on the left and right cover-piece inclusion morphisms at the common overlap basepoint agrees with the forward mapping-equivalence restriction legs, hence fills both fields of TwoOpenGroupEquivalenceCoordinates. Do not specialize to point wedges or finite circle wedges and do not close a consumer.",
+       "For F equal to the inverse image of the identity functor under TwoOpenFreeProductMapping.mapping at the free-product target, prove the two explicit F.map computations on morphisms induced by the left and right cover-piece inclusions at the overlap basepoint. The results must be Monoid.Coprod.inl and Monoid.Coprod.inr and must fill TwoOpenGroupEquivalenceCoordinates after rewriting by sourceEquivalence_functor_eq_mapping_inverse_identity. Do not specialize to point wedges or finite circle wedges and do not close a consumer.",
        :placeholder
        "the remaining fundamental-group coordinate steps for t01A03, t92J06, t97A01, t97A03, and t99J01",
        :route-step
-       "prove source-reconstruction coherence on both two-open cover legs",
-       :fixture "/tmp/source-equivalence-leg-coordinates.lean",
+       "compute both cover legs of mapping.inverse.obj applied to the identity functor",
+       :fixture "/tmp/mapping-inverse-identity-leg-coordinates.lean",
        :fixture-sha256
-       "f3ee994819b11d5319fe333efe352a86f019f015f03d7c8c461e324348acfe3f",
+       "13c097b29888d2db43e201ac92d14b61d74774487750973007081cadcdc27ffd",
        :gates
-       ["lake build ConstructionTargets.GenericTargetNaturalSourceReconstructionLegCoordinates"
+       ["lake build ConstructionTargets.TwoOpenFreeProductMappingInverseIdentityLegCoordinates"
         "fixture compiles"
         "zero source and fixture sorry"
         "standard-only axioms"
         "registry check"]},
-      :id :routes-2026-10-11-source-equivalence-leg-coordinates-88,
+      :id
+      :routes-2026-10-11-mapping-inverse-identity-leg-coordinates-89,
       :kind :reusable-theorem,
       :area "fundamental-group-wedge-of-circles",
       :depends-on [],
       :current-residual
-      "Use the proved coherence theorem to fill TwoOpenGroupEquivalenceCoordinates, then transport those equations through the generic point-wedge cover equivalences and literal inclusion squares.",
+      "Rewrite sourceEquivalence by the banked normalization, fill the coordinate-law structure from these two computations, then specialize through the generic point-wedge cover equivalences.",
       :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]},
      :axioms
      ["propext"
       "Classical.choice"
       "Quot.sound"
-      "GenericTargetNaturalSourceReconstructionLegCoordinatesProbe.sourceEquivalence_leg_coordinates"],
+      "TwoOpenFreeProductMappingInverseIdentityLegCoordinatesProbe.mapping_inverse_identity_leg_coordinates"],
      :commands
      [{:cmd
-       "lake env lean /tmp/source-equivalence-leg-coordinates.lean",
+       "lake env lean /tmp/mapping-inverse-identity-leg-coordinates.lean",
        :exit 0,
        :finding
-       "The exact source-reconstruction coherence interface fills the committed TwoOpenGroupEquivalenceCoordinates structure and compiles."}
-      {:cmd "sha256sum /tmp/source-equivalence-leg-coordinates.lean",
-       :exit 0,
-       :finding
-       "f3ee994819b11d5319fe333efe352a86f019f015f03d7c8c461e324348acfe3f"}
+       "The exact inverse-identity leg-coordinate interface compiles and supplies the reviewed source-equivalence reduction."}
       {:cmd
-       "rg -n \"\\b(sorry|admit)\\b\" /tmp/source-equivalence-leg-coordinates.lean",
+       "sha256sum /tmp/mapping-inverse-identity-leg-coordinates.lean",
+       :exit 0,
+       :finding
+       "13c097b29888d2db43e201ac92d14b61d74774487750973007081cadcdc27ffd"}
+      {:cmd
+       "rg -n \"\\b(sorry|admit)\\b\" /tmp/mapping-inverse-identity-leg-coordinates.lean",
        :exit 1,
        :expected-exit 1,
        :finding "No fixture placeholders."}
@@ -104364,17 +104398,17 @@
        "sed -n '1,240p' TOPOLOGY-ROUTES.md >/dev/null && sed -n '1,240p' holes/labs/topology-routes/routes-1.md >/dev/null && sed -n '1,240p' holes/labs/topology-routes/routes-2.md >/dev/null && sed -n '1,240p' holes/labs/topology-routes/routes-3.md >/dev/null && sed -n '1,220p' docs/TN-topology-build-loop-design.md >/dev/null",
        :exit 0,
        :finding
-       "The route guide, per-problem routes, probe definitions, and reviewed dependency evidence were read."}],
+       "The route guide, per-problem routes, probe definitions, and reviewed dependency receipts were read."}],
      :diagnostic-history [],
      :fixture
-     {:path "/tmp/source-equivalence-leg-coordinates.lean",
+     {:path "/tmp/mapping-inverse-identity-leg-coordinates.lean",
       :sha256
-      "f3ee994819b11d5319fe333efe352a86f019f015f03d7c8c461e324348acfe3f",
+      "13c097b29888d2db43e201ac92d14b61d74774487750973007081cadcdc27ffd",
       :interface
-      "The source-reconstruction coherence theorem fills the banked two-open coordinate-law structure with its left and right coproduct equations."},
+      "The inverse image of the identity functor under the two-open mapping equivalence computes both inclusion legs as the corresponding free-product injections."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/generic-point-wedge-fundamental-group-coordinates",
@@ -104397,7 +104431,8 @@
    :depends-on
    [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40
     :routes-2026-10-11-two-open-free-product-group-equivalence-coordinates-87
-    :routes-2026-10-11-source-equivalence-leg-coordinates-88],
+    :routes-2026-10-11-source-equivalence-leg-coordinates-88
+    :routes-2026-10-11-mapping-inverse-identity-leg-coordinates-89],
    :current-residual
    "Induct over finite circle wedges and specialize to ThreeCircles.",
    :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
@@ -109863,7 +109898,8 @@
    {:name
     "TwoOpenFreeProductMapping.mapping_inverse_identity_leg_coordinates",
     :reported-by
-    [:routes-2026-10-11-source-equivalence-leg-coordinates-88],
+    [:routes-2026-10-11-source-equivalence-leg-coordinates-88
+     :routes-2026-10-11-generic-point-wedge-fundamental-group-coordinates-84],
     :type
     "For F := (mapping FreeProductTarget hU hV hcover w).inverse.obj (Functor.id FreeProductTarget), F.map sends the morphisms induced by the left and right cover inclusions at w to Monoid.Coprod.inl and Monoid.Coprod.inr respectively.",
     :area "fundamental-group-wedge-of-circles"},
