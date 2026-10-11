@@ -15418,6 +15418,20 @@
       "git status --short -- ConstructionTargets/ManifoldFundamentalClass.lean",
       :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791727704093-5465-c81aae88",
+     :commands
+     ["git show/diff-tree/diff --check at b2e34c7cac197ba0be0603c631d7c6d53b454a8e"
+      "sha256sum fixture and module plus recorded-blob comparison"
+      "renamed fixture: lake env lean"
+      "python3 scripts/statement-registry.py check"
+      "placeholder scans for module, t00J02, t98A02"
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"],
+     :finding
+     "Exact one-file scope and recorded blob match; frozen hashes and exact definition type reproduce. The implementation correctly uses preserved parallel-pair limits and S.h₀τ₁ to prove IsLimit of forgetIntModules.mapCone on the τ₁ KernelFork, without crossing into the deferred mapped-fork identification or other components. Fixture and module compile, registry is 131/0, build completes 8326 jobs, axioms are exactly propext/Classical.choice/Quot.sound, module has no placeholders, and consumer counts remain 1/1."},
     :commit "b2e34c7cac197ba0be0603c631d7c6d53b454a8e",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -15434,7 +15448,7 @@
     :routes-2026-10-11-manifold-forget-snake-preserved-kernel-tau1-topo3-r1,
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/integral-open-disk-connecting-naturality/snake-input-preserved-kernel-tau1",
@@ -15633,7 +15647,7 @@
      "Parallel-pair limit and colimit preservation is now banked. The compiled definition packages the preserved τ₁ kernel cone without conflating its indexing diagram with the definitionally different diagram of the evaluated mapped short-complex fork. The failed direct transfer identifies the next exact representation boundary: an explicit natural isomorphism induced by forgetIntModules.map_comp and map_zero is required before IsLimit.ofIsoLimit can move the witness to the target fork.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -22572,7 +22586,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -22589,7 +22603,10 @@
     "forall (S : ShortComplex.SnakeInput (ModuleCat ℤ)), IsLimit (forgetIntModules.mapCone (KernelFork.ofι S.v₀₁.τ₁ S.w₀₂_τ₁))",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-forget-snake-preserved-kernel-tau1-topo3-r1},
+    :routes-2026-10-11-manifold-forget-snake-preserved-kernel-tau1-topo3-r1,
+    :banked-by
+    :routes-2026-10-11-manifold-forget-snake-preserved-kernel-tau1-topo3-r1,
+    :banked-commit "b2e34c7cac197ba0be0603c631d7c6d53b454a8e"},
    :id :lemma-mfclass-forget-snake-preserved-kernel-tau1,
    :kind :lemma,
    :depends-on
