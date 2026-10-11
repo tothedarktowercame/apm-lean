@@ -116680,6 +116680,101 @@
    :depends-on
    [:lemma-t99j06-extderiv-alpha
     :lemma-t99j06-parametrization-geometry],
+   :other-consumers []}
+  {:consumer :tunk01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_tunk01_polygonEqvGen_iff_finiteClasses",
+    :type
+    "∀ x y : apm_tunk01_Disk, Relation.EqvGen apm_tunk01_PolygonRel x y ↔ x = y ∨ PairedOpenEdgeClass x y ∨ SameComputedEndpointClass x y  (size: 350-700 lines / 1-3 weeks)"},
+   :lemma
+   {:name "apm_tunk01_polygonEqvGen_iff_finiteClasses",
+    :reported-by [:owner],
+    :type
+    "∀ x y : apm_tunk01_Disk, Relation.EqvGen apm_tunk01_PolygonRel x y ↔ x = y ∨ PairedOpenEdgeClass x y ∨ SameComputedEndpointClass x y  (size: 350-700 lines / 1-3 weeks)",
+    :area "polygon-quotient-hausdorff"},
+   :id :lemma-apm-tunk01-polygoneqvgen-iff-finiteclasses,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t94J09 :t91A02]}
+  {:consumer :tunk01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_tunk01_polygonQuotient_t2",
+    :type
+    "T2Space apm_tunk01_PolygonSurface  (size: 100-220 lines / 2-5 days)"},
+   :lemma
+   {:name "apm_tunk01_polygonQuotient_t2",
+    :reported-by [:owner],
+    :type
+    "T2Space apm_tunk01_PolygonSurface  (size: 100-220 lines / 2-5 days)",
+    :area "polygon-quotient-hausdorff"},
+   :id :lemma-apm-tunk01-polygonquotient-t2,
+   :kind :lemma,
+   :depends-on [:lemma-apm-tunk01-polygoneqvgen-iff-finiteclasses],
+   :other-consumers [:t94J09]}
+  {:consumer :tunk01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "polygonQuotient_cut_paste_homeomorph",
+    :type
+    "Boundary reparameterization, subdivision, diagonal cutting, and regluing induce Homeomorphs between the associated disk quotients  (size: 1200-2800 lines / 1-3 months)"},
+   :lemma
+   {:name "polygonQuotient_cut_paste_homeomorph",
+    :reported-by [:owner],
+    :type
+    "Boundary reparameterization, subdivision, diagonal cutting, and regluing induce Homeomorphs between the associated disk quotients  (size: 1200-2800 lines / 1-3 months)",
+    :area "polygon-cut-and-paste-homeomorphism"},
+   :id :lemma-polygonquotient-cut-paste-homeomorph,
+   :kind :lemma,
+   :depends-on [:lemma-apm-tunk01-polygonquotient-t2],
+   :other-consumers [:t94J09 :t98A01 :t97J02]}
+  {:consumer :tunk01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_tunk01_polygon_homeomorph_N6",
+    :type
+    "Nonempty (apm_tunk01_PolygonSurface ≃ₜ apm_tunk01_N6)  (size: 300-700 lines / 1-3 weeks)"},
+   :lemma
+   {:name "apm_tunk01_polygon_homeomorph_N6",
+    :reported-by [:owner],
+    :type
+    "Nonempty (apm_tunk01_PolygonSurface ≃ₜ apm_tunk01_N6)  (size: 300-700 lines / 1-3 weeks)",
+    :area "polygon-cut-and-paste-homeomorphism"},
+   :id :lemma-apm-tunk01-polygon-homeomorph-n6,
+   :kind :lemma,
+   :depends-on [:lemma-polygonquotient-cut-paste-homeomorph],
+   :other-consumers []}
+  {:consumer :tunk01,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.compact_closed_equivalence_quotient_t2",
+    :type
+    "  (found in ConstructionTargets/CompactClosedEquivalenceQuotient.lean:65)"},
+   :lemma
+   {:name "ConstructionTargets.compact_closed_equivalence_quotient_t2",
+    :reported-by [:owner],
+    :type
+    "  (found in ConstructionTargets/CompactClosedEquivalenceQuotient.lean:65)",
+    :proved-in :owner,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/CompactClosedEquivalenceQuotient.lean"]},
+   :id
+   :lemma-constructiontargets-compact-closed-equivalence-quotient-t2,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
