@@ -102854,8 +102854,75 @@
   {:bounded-exception
    "This single-consumer prerequisite closes the set-theoretic part of both boundary comparisons before the topological promotion.",
    :consumer :t97A01,
+   :evidence
+   {:placeholder-delta
+    {:source-before :absent,
+     :source-after 0,
+     :fixture-before 0,
+     :fixture-after 0},
+    :residual
+    "Promote the two continuous bijections to homeomorphisms, then prove their literal ThreeCircles boundary formulas and finish the radial packages.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :missing-theorems
+    [{:name
+      "PolygonBoundaryThreeLoopBijections.bijective_n3ThreeLoops",
+      :type "Function.Bijective n3ThreeLoops",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on
+      ["PolygonBoundaryThreeLoopDecoderLeftInverse.n3QuotientDecode_leftInverse"
+       "PolygonSixEdgeCircleCover.surjective_n3ThreeLoops"],
+      :area "polygon-surface-open-cover"}
+     {:name
+      "PolygonBoundaryThreeLoopBijections.bijective_torusCrosscapThreeLoops",
+      :type "Function.Bijective torusCrosscapThreeLoops",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on
+      ["PolygonBoundaryThreeLoopDecoderLeftInverse.torusCrosscapQuotientDecode_leftInverse"
+       "PolygonSixEdgeCircleCover.surjective_torusCrosscapThreeLoops"],
+      :area "polygon-surface-open-cover"}],
+    :statement-hashes {:registry "131/131 match"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/polygon-boundary-three-loop-bijections.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.PolygonBoundaryThreeLoopBijections",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/polygon-boundary-three-loop-bijections.lean",
+      :exit 0}
+     {:cmd
+      "python3 comment-stripped source and fixture placeholder/axiom census",
+      :exit 0,
+      :finding "source 0; fixture 0"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :diagnostic-history [],
+    :commit "fd66b527243961010c396ddc40cff3f42d57da42",
+    :changed-paths
+    ["ConstructionTargets/PolygonBoundaryThreeLoopBijections.lean"],
+    :fixture
+    {:path "/tmp/polygon-boundary-three-loop-bijections.lean",
+     :sha256
+     "f02ffae406026eb690350dbcc239101d72b35c8b89c5882e342897a3391e69ef"},
+    :implementation
+    {:scope
+     ["ConstructionTargets/PolygonBoundaryThreeLoopBijections.lean"],
+     :declarations
+     ["injective_n3ThreeLoops"
+      "injective_torusCrosscapThreeLoops"
+      "bijective_n3ThreeLoops"
+      "bijective_torusCrosscapThreeLoops"]}},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonBoundaryThreeLoopBijections.lean"],
    :dag-node
@@ -107654,6 +107721,52 @@
     :lemma-polygonboundarythreeloopbijections-injective-toruscrosscapthreeloops
     :lemma-polygonboundarythreeloopcontinuity-continuous-n3threeloops
     :lemma-polygonboundarythreeloopcontinuity-continuous-toruscrosscapthreeloops],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "PolygonBoundaryThreeLoopBijections.bijective_n3ThreeLoops",
+    :type "Function.Bijective n3ThreeLoops"},
+   :lemma
+   {:name "PolygonBoundaryThreeLoopBijections.bijective_n3ThreeLoops",
+    :reported-by
+    [:routes-2026-10-11-polygon-boundary-three-loop-bijections-78],
+    :type "Function.Bijective n3ThreeLoops",
+    :area "polygon-surface-open-cover",
+    :proved-in
+    :routes-2026-10-11-polygon-boundary-three-loop-bijections-78},
+   :id
+   :lemma-polygonboundarythreeloopbijections-bijective-n3threeloops,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polygonboundarythreeloopdecoderleftinverse-n3quotientdecode-leftinverse
+    :lemma-polygonsixedgecirclecover-surjective-n3threeloops],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "PolygonBoundaryThreeLoopBijections.bijective_torusCrosscapThreeLoops",
+    :type "Function.Bijective torusCrosscapThreeLoops"},
+   :lemma
+   {:name
+    "PolygonBoundaryThreeLoopBijections.bijective_torusCrosscapThreeLoops",
+    :reported-by
+    [:routes-2026-10-11-polygon-boundary-three-loop-bijections-78],
+    :type "Function.Bijective torusCrosscapThreeLoops",
+    :area "polygon-surface-open-cover",
+    :proved-in
+    :routes-2026-10-11-polygon-boundary-three-loop-bijections-78},
+   :id
+   :lemma-polygonboundarythreeloopbijections-bijective-toruscrosscapthreeloops,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polygonboundarythreeloopdecoderleftinverse-toruscrosscapquotientdecode-leftinver
+    :lemma-polygonsixedgecirclecover-surjective-toruscrosscapthreeloops],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
