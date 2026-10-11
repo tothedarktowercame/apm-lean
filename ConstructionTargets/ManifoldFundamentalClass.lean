@@ -1450,6 +1450,21 @@ theorem correctedLocalNormalizationAutomorphism_hom_eq_neg_implies_model_factors
     (fun f => coefficientProjectedChartPrefix k x ≫ f ≫ (-𝟙 _)) he
   exact h.trans (by simpa only [Category.assoc] using heq)
 
+/-- The coefficient normalization based in the unit open disk, exposed as
+the disk-to-Euclidean local-homology map followed by the model normalization. -/
+theorem coefficientIntegralBall_forget_hom (k : ℕ) :
+    forgetIntModules.map
+        (CoefficientNeighborhoodLocal.integral_ball k).hom =
+      forgetIntModules.map
+          (HomologicalComplex.homologyMap
+            (CoefficientNeighborhoodLocal.inclusionMap ℤ
+              (Metric.ball (0 : CoefficientModelLocal.E (k + 2)) 1) 0)
+            (k + 2)) ≫
+        forgetIntModules.map (CoefficientModelLocal.localIso ℤ k).hom := by
+  unfold CoefficientNeighborhoodLocal.integral_ball
+    CoefficientNeighborhoodLocal.modelNormalization
+  exact forgetIntModules.map_comp _ _
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -1537,5 +1552,6 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientModelNormalizationComposite
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientModelLocalIso_forget_hom
 #print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_implies_model_factors
+#print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientIntegralBall_forget_hom
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport_homologyMap_eq_composite
 #print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_transport_homology_factors
