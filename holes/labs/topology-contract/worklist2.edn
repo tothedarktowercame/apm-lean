@@ -79283,73 +79283,64 @@
   {:consumer :t97A04,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "program STOP commits nothing new since the last :program-history entry: evidence commit bb0f0f77d8953dc78dd564e000f3d4a5b29d0894 exactly equals history job 5",
    :evidence
    {:placeholder-delta 0,
-    :residual "Factor Lbar and prove B9; then B10-B11.",
+    :residual "Specialize composition; finish B9-B11.",
     :outcome :stop,
     :warnings ["Main: 2 placeholders."],
     :missing-theorems
-    [{:name "ConstructionTargets.T97A04Closure.swap_H2_square",
-      :type "H2(swap)≫H2(swap)=𝟙",
+    [{:name
+      "ConstructionTargets.T97A04Closure.lowerShear_factorization",
+      :type "lowerShear=swap∘shearY(1,-1)∘swap",
+      :status :proved,
+      :consumers [:t97A04],
+      :depends-on
+      ["ConstructionTargets.T97A04Closure.swapH2Coordinate_square"],
+      :area "mv-connecting-naturality"}
+     {:name
+      "ConstructionTargets.T97A04Closure.frozenLbar_factorization",
+      :type "frozenLbar=shearY(3,1)∘lowerShear",
       :status :proved,
       :consumers [:t97A04],
       :depends-on [],
       :area "mv-connecting-naturality"}
-     {:name
-      "ConstructionTargets.T97A04Closure.swapH2Coordinate_square",
-      :type "coordinate swap scalar squares to identity",
-      :status :proved,
-      :consumers [:t97A04],
-      :depends-on ["ConstructionTargets.T97A04Closure.swap_H2_square"],
-      :area "mv-connecting-naturality"}
      {:name "ConstructionTargets.T97A04Closure.frozenLbar_H2",
-      :type "H2(Lbar)=3·id in frozen coordinate",
-      :status :not-started,
+      :type "H2(frozenLbar)=3·id in frozen coordinate",
+      :status :partial,
       :consumers [:t97A04],
       :depends-on
-      ["ConstructionTargets.T97A04Closure.shearY_H2"
-       "ConstructionTargets.T97A04Closure.swapH2Coordinate_square"],
+      ["ConstructionTargets.T97A04Closure.lowerShear_factorization"
+       "ConstructionTargets.T97A04Closure.frozenLbar_factorization"
+       "ConstructionTargets.T97A04Closure.shearY_H2"],
       :area "mv-connecting-naturality"}],
     :statement-hashes
     {:registry "131/0",
-     :closure "7e7a468d0c5c760b0dc0221a0b217cdf4b2dc686",
+     :closure "fa9a5e69e76be8d929b5087977ddbd614b36a18a",
      :blueprint "c419a895cb4ede2acc1cb6bc5c7536344ba63df4"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason :program-milestone-complete,
+    :reason :program-progress-committed,
     :commands
     [{:cmd "closure compile", :exit 0}
      {:cmd "closure no-sorry scan", :exit 1, :expected-exit 1}
      {:cmd "Main compile", :exit 0}
      {:cmd "registry check", :exit 0}
      {:cmd "placeholder count", :exit 0, :output "2"}
-     {:cmd "git show --check 6888a8a6c", :exit 0}],
+     {:cmd "git show --check 2e3b1711b", :exit 0}],
     :diagnostic-history
-    [{:cmd "closure compile",
+    [{:cmd "compile",
       :exit 1,
       :finding
-      "Normalized categorical associativity and iso cancellation."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791750579344-5863-c3e13816",
-     :commands
-     ["git show/diff/check 6888a8a6"
-      "lake env lean ConstructionTargets/t97A04Closure.lean"
-      "lake env lean problems/t97A04/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "fingerprint, placeholders, ancestry, fixture, blueprint checks"],
-     :finding
-     "PASS: 6888a8a6 is new after history c9b1ad24; its sole changed path is scoped and closure/blueprint blobs match. Functoriality proves H2(swap) squared is identity, and conjugation yields the coordinate square with correct composition order. This exactly matches B8, which deliberately does not choose the swap sign. Lean gates pass with standard axioms; registry 131/0; frozen hash ca1b2cb3c6594276811618321d5c0604c2f38fc4594a6b21ae161a711a923a34 unchanged; closure/Main placeholders 0/2. B8 is compiled progress; Lbar factorization/B9 then B10-B11 remain listed."},
-    :commit "6888a8a6c97535d970505577fad7fc9ddd0d168a",
+      "Generic coordinate composition timed out; retained factors."}],
+    :commit "2e3b1711b2b8c4fb424157c63690c69b18be4de9",
     :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -80863,5 +80854,46 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-t97a04closure-sheary-h2
-    :lemma-constructiontargets-t97a04closure-swaph2coordinate-square],
+    :lemma-constructiontargets-t97a04closure-swaph2coordinate-square
+    :lemma-constructiontargets-t97a04closure-lowershear-factorization
+    :lemma-constructiontargets-t97a04closure-frozenlbar-factorization],
+   :other-consumers []}
+  {:consumer :t97A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T97A04Closure.lowerShear_factorization",
+    :type "lowerShear=swap∘shearY(1,-1)∘swap"},
+   :lemma
+   {:name "ConstructionTargets.T97A04Closure.lowerShear_factorization",
+    :reported-by [:program-2026-10-11-close-t97a04],
+    :type "lowerShear=swap∘shearY(1,-1)∘swap",
+    :area "mv-connecting-naturality",
+    :proved-in :program-2026-10-11-close-t97a04},
+   :id
+   :lemma-constructiontargets-t97a04closure-lowershear-factorization,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t97a04closure-swaph2coordinate-square],
+   :other-consumers []}
+  {:consumer :t97A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T97A04Closure.frozenLbar_factorization",
+    :type "frozenLbar=shearY(3,1)∘lowerShear"},
+   :lemma
+   {:name "ConstructionTargets.T97A04Closure.frozenLbar_factorization",
+    :reported-by [:program-2026-10-11-close-t97a04],
+    :type "frozenLbar=shearY(3,1)∘lowerShear",
+    :area "mv-connecting-naturality",
+    :proved-in :program-2026-10-11-close-t97a04},
+   :id
+   :lemma-constructiontargets-t97a04closure-frozenlbar-factorization,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}]}
