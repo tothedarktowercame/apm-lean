@@ -72023,6 +72023,19 @@
       :exit 1,
       :explanation
       ".lake/packages is a real directory rather than the required canonical symlink; no package state was modified and compilation succeeded on the existing substrate."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791706314743-4720-36bef8b5",
+     :commands
+     ["git show/diff-tree/show --check df73e73bc3f97f6075bb1ac5dddfb4d4c53fb368"
+      "git rev-parse scope blob; sha256sum fixture"
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean"
+      "lake env lean /tmp/t02a03_departure_leg_positive_real_probe.lean"
+      "statement registry check and commit/parent fingerprints"
+      "placeholder recount at commit/parent"],
+     :finding
+     "PASS: independent author topo-6; exact one-file scope, blob, and fixture hash match. Target and frozen probe compile. The frozen departure-leg theorem has the correct orientation and range: at t=0 its real part is 1; for 0<t<=1/2 the first coefficient is nonnegative and the positive-real waypoint contribution is strictly positive, so the complex value is nonzero. It neither chooses the waypoint nor proves the arrival leg. Axioms are exactly propext, Classical.choice, Quot.sound; registry is 131/0, t02A03 fingerprint is unchanged at commit and parent, fixture has no placeholders, and Main has 1 placeholder at commit and parent."},
     :commit "df73e73bc3f97f6075bb1ac5dddfb4d4c53fb368",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
@@ -72036,7 +72049,7 @@
    :phase :implementation,
    :type
    "forall (W : C(RightTubeMinusLeftCore, ℂ)), (forall p, 0 < (W p).re) -> forall (t : unitInterval) (p : RightTubeMinusLeftCore), (t : ℝ) <= 1/2 -> (((1-2*(t:ℝ):ℝ):ℂ) + ((2*(t:ℝ):ℝ):ℂ)*W p) != 0",
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/coupled-angular-departure-positive-real",
@@ -72143,7 +72156,7 @@
      "For the first affine leg in the banked waypoint adapter, strict positivity of the waypoint real part is sufficient: at time zero the real part is one, and at every positive time through one half it is the sum of a nonnegative departure coefficient and a strictly positive waypoint contribution. Thus the remaining waypoint geometry can be split cleanly into constructing a continuous positive-real waypoint and proving only its arrival leg avoids zero.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
@@ -77198,7 +77211,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -77214,7 +77227,10 @@
     "forall (W : C(RightTubeMinusLeftCore, ℂ)), (forall p, 0 < (W p).re) -> forall (t : unitInterval) (p : RightTubeMinusLeftCore), (t : ℝ) <= 1/2 -> (((1-2*(t:ℝ):ℝ):ℂ) + ((2*(t:ℝ):ℝ):ℂ)*W p) != 0",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-coupledangulardepartureleg-ne,
    :kind :lemma,
