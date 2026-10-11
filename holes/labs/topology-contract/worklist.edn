@@ -104182,10 +104182,66 @@
    "Specialize the two-open coordinate laws through the banked generic point-wedge cover comparison and its literal inclusion squares.",
    :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
   {:consumer :t99J01,
+   :stop-count 1,
    :implements-lemma
    :lemma-generictargetnaturalsourcereconstruction-sourceequivalence-leg-coordinates,
+   :evidence
+   {:placeholder-delta
+    {:source-before 0, :source-after 0, :fixture-sorry 0},
+    :residual
+    "Prove the two inverse-object leg computations, use sourceEquivalence_functor_eq_mapping_inverse_identity to rewrite the reconstructed functor, and fill TwoOpenGroupEquivalenceCoordinates.",
+    :outcome :stop,
+    :warnings [],
+    :missing-theorems
+    [{:name
+      "TwoOpenFreeProductMapping.mapping_inverse_identity_leg_coordinates",
+      :type
+      "For F := (mapping FreeProductTarget hU hV hcover w).inverse.obj (Functor.id FreeProductTarget), F.map sends the morphisms induced by the left and right cover inclusions at w to Monoid.Coprod.inl and Monoid.Coprod.inr respectively.",
+      :status :partial,
+      :consumers [:t99J01 :t01A03 :t92J06 :t97A01 :t97A03],
+      :depends-on [],
+      :area "fundamental-group-wedge-of-circles"}],
+    :statement-hashes
+    {:source-sha256
+     "39fe3b1a6f99e478008ad0ea722e841fffc42ee6a35a9d453232eb2e2bbec53d",
+     :registry "131 registered statements match, 0 do not"},
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :reason
+    "The compiled reduction proves that the reconstructed source functor is exactly mapping.inverse.obj (Functor.id FreeProductTarget). The remaining two coordinate equalities require a new theorem computing that inverse object's maps on the two cover inclusions. Existing forward-leg simp theorems compute mapping.functor, while Equivalence.apply_inverse_apply supplies only a natural isomorphism to the identity; it does not give the literal equality required by the frozen coordinate package.",
+    :commands
+    [{:cmd
+      "lake build ConstructionTargets.GenericTargetNaturalSourceReconstructionLegCoordinates",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/source-equivalence-leg-coordinates.lean",
+      :exit 0}
+     {:cmd "sha256sum /tmp/source-equivalence-leg-coordinates.lean",
+      :exit 0}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" ConstructionTargets/GenericTargetNaturalSourceReconstructionLegCoordinates.lean /tmp/source-equivalence-leg-coordinates.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}],
+    :diagnostic-history
+    [{:cmd
+      "lake env lean ConstructionTargets/GenericTargetNaturalSourceReconstructionLegCoordinates.lean",
+      :exit 1,
+      :finding
+      "The first normalization statement used categorical identity-morphism notation where an identity functor was required; replacing it with Functor.id produced the successful build."}],
+    :commit "03d45f02ab8b12cae8a8799fce9a7d77864ca446",
+    :changed-paths
+    ["ConstructionTargets/GenericTargetNaturalSourceReconstructionLegCoordinates.lean"],
+    :fixture
+    {:path "/tmp/source-equivalence-leg-coordinates.lean",
+     :sha256
+     "f3ee994819b11d5319fe333efe352a86f019f015f03d7c8c461e324348acfe3f"},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/GenericTargetNaturalSourceReconstructionLegCoordinates.lean"],
    :dag-node
@@ -109772,6 +109828,28 @@
     :area "fundamental-group-wedge-of-circles"},
    :id
    :lemma-generictargetnaturalsourcereconstruction-sourceequivalence-leg-coordinates,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
+  {:consumer :t99J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "TwoOpenFreeProductMapping.mapping_inverse_identity_leg_coordinates",
+    :type
+    "For F := (mapping FreeProductTarget hU hV hcover w).inverse.obj (Functor.id FreeProductTarget), F.map sends the morphisms induced by the left and right cover inclusions at w to Monoid.Coprod.inl and Monoid.Coprod.inr respectively."},
+   :lemma
+   {:name
+    "TwoOpenFreeProductMapping.mapping_inverse_identity_leg_coordinates",
+    :reported-by
+    [:routes-2026-10-11-source-equivalence-leg-coordinates-88],
+    :type
+    "For F := (mapping FreeProductTarget hU hV hcover w).inverse.obj (Functor.id FreeProductTarget), F.map sends the morphisms induced by the left and right cover inclusions at w to Monoid.Coprod.inl and Monoid.Coprod.inr respectively.",
+    :area "fundamental-group-wedge-of-circles"},
+   :id
+   :lemma-twoopenfreeproductmapping-mapping-inverse-identity-leg-coordinates,
    :kind :lemma,
    :depends-on [],
    :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}],
