@@ -102380,112 +102380,145 @@
    "Use the now-complete six endpoint normalizations and half-open interior uniqueness to prove closed-edge decoder independence and define the total decoders.",
    :other-consumers []}
   {:bounded-exception
+   "This single-consumer prerequisite completes decoder descent from six closed edge presentations to Circle before relation invariance and left-inverse proofs.",
+   :consumer :t97A01,
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/PolygonBoundaryCircleDecoderWellDefined.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/boundary-circle-decoder-well-defined",
+   :acceptance
+   {:implementation
+    "Promote the exact fixture. Split each closed parameter into a half-open parameter or parameter one. Normalize all parameter-one cases using the five successor endpoint theorems and the final period wrap. Apply half-open interior presentation independence in the remaining case to prove both decoder tables agree on every pair of presentations. Use the six-edge Circle cover to define total N3 and torus-crosscap Circle decoders and prove their literal formulas on all six edges. Do not prove relation invariance, quotient descent, boundary-map injectivity or homeomorphism, ThreeCircles formulas, outer-piece formulas, invariants, or t97A01.",
+    :placeholder "the single sorry in apm_t97a01",
+    :route-step
+    "polygon radial open-cover step 35: descend both closed-edge decoder tables to total Circle decoders",
+    :fixture "/tmp/polygon-boundary-circle-decoder-well-defined.lean",
+    :fixture-sha256
+    "982179e5b1179237ae93c4c1a89a3022533eeb169f1ed5a3a1ea76c9eb42bfbc",
+    :gates
+    ["lake build ConstructionTargets.PolygonBoundaryCircleDecoderWellDefined"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id
+   :routes-2026-10-11-polygon-boundary-circle-decoder-well-defined-75,
+   :kind :reusable-theorem,
+   :area "polygon-surface-open-cover",
+   :depends-on
+   [:routes-2026-10-11-polygon-six-edge-final-endpoint-wrap-74],
+   :current-residual
+   "Use the two total Circle decoders to prove specialized relation invariance and left-inverse formulas, then derive injectivity.",
+   :other-consumers []}
+  {:bounded-exception
    "This single-consumer concrete quotient package is the other final backlog lemma on t97A01 and supplies the actual two polygon models required by its frozen statement.",
    :consumer :t97A01,
    :implements-lemma :lemma-polygonradialopencoverpackages,
    :evidence
    {:probe
     {:residual
-     "Combine all six endpoint half-open normalizations with interior decoder independence to prove full closed-edge presentation independence, then define both total Circle decoders.",
+     "Prove full closed-edge decoder presentation independence and descend both tables to total Circle decoders; then establish relation invariance and left-inverse formulas for the two quotient maps.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
-     [{:name
-       "PolygonSixEdgeFinalEndpointWrap.circleEdgePoint_five_one_eq_zero_zero",
+     [{:name "polygonBoundaryCircleDecoderWellDefined",
        :type
-       "The parameter-one endpoint of canonical edge five equals the parameter-zero endpoint of canonical edge zero.",
-       :status :proved,
-       :consumers [:t97A01],
-       :depends-on
-       ["PolygonSixEdgeCircleCover.circleEdgePoint_eq_toCircle"],
-       :area "polygon-surface-open-cover"}
-      {:name
-       "PolygonSixEdgeFinalEndpointWrap.final_endpoint_has_halfOpen_presentation",
-       :type
-       "The final edge endpoint has the edge-zero parameter-zero half-open presentation.",
-       :status :proved,
-       :consumers [:t97A01],
-       :depends-on
-       ["PolygonSixEdgeFinalEndpointWrap.circleEdgePoint_five_one_eq_zero_zero"],
-       :area "polygon-surface-open-cover"}
-      {:name "polygonBoundaryCircleDecoderWellDefined",
-       :type
-       "Combine the interior theorem with all six endpoint normalizations to prove both decoder tables agree on every closed-edge presentation and define total Circle decoders.",
-       :status :partial,
+       "For j k : Fin 6 and t u : Set.Icc (0 : Real) 1, equality circleEdgePoint j t = circleEdgePoint k u implies equality of both n3EdgeDecode values and both torusCrosscapEdgeDecode values; consequently both tables descend to total functions Circle → ThreeEndpointLoops satisfying their literal edge formulas.",
+       :status :not-started,
        :consumers [:t97A01],
        :depends-on
        ["PolygonSixEdgeFinalEndpointWrap.final_endpoint_has_halfOpen_presentation"
         "PolygonSixEdgeEndpointNormalization.nonfinal_endpoint_has_halfOpen_presentation"
         "PolygonBoundaryDecoderInteriors.n3EdgeDecode_interior_wellDefined"
-        "PolygonBoundaryDecoderVertices.n3EdgeDecode_endpoints"],
+        "PolygonBoundaryDecoderInteriors.torusCrosscapEdgeDecode_interior_wellDefined"
+        "PolygonBoundaryDecoderVertices.n3EdgeDecode_endpoints"
+        "PolygonBoundaryDecoderVertices.torusCrosscapEdgeDecode_endpoints"
+        "PolygonSixEdgeCircleCover.sixEdgeCircleCover"],
        :area "polygon-surface-open-cover"}],
      :prerequisite
      {:bounded-exception
-      "This single-consumer prerequisite supplies the period-six wrap omitted from the five nonfinal endpoint normalizations.",
+      "This single-consumer prerequisite completes decoder descent from six closed edge presentations to Circle before relation invariance and left-inverse proofs.",
       :consumer :t97A01,
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/PolygonSixEdgeFinalEndpointWrap.lean"],
+      ["ConstructionTargets/PolygonBoundaryCircleDecoderWellDefined.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/six-edge-final-endpoint-wrap",
+      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/boundary-circle-decoder-well-defined",
       :acceptance
       {:implementation
-       "Promote the exact fixture. Prove that real coordinate six is zero in AddCircle 6. Use the literal circleEdgePoint AddCircle formula to prove edge five at parameter one equals edge zero at parameter zero, and package this as the remaining half-open endpoint presentation. Do not prove full decoder presentation independence, define total Circle decoders, establish relation invariance, prove boundary-map injectivity or homeomorphism, derive final formulas, compute invariants, or close t97A01.",
+       "Promote the exact fixture. Split each closed parameter into a half-open parameter or parameter one. Normalize all parameter-one cases using the five successor endpoint theorems and the final period wrap. Apply half-open interior presentation independence in the remaining case to prove both decoder tables agree on every pair of presentations. Use the six-edge Circle cover to define total N3 and torus-crosscap Circle decoders and prove their literal formulas on all six edges. Do not prove relation invariance, quotient descent, boundary-map injectivity or homeomorphism, ThreeCircles formulas, outer-piece formulas, invariants, or t97A01.",
        :placeholder "the single sorry in apm_t97a01",
        :route-step
-       "polygon radial open-cover step 34: normalize the final edge endpoint across the period-six wrap",
-       :fixture "/tmp/polygon-six-edge-final-endpoint-wrap.lean",
+       "polygon radial open-cover step 35: descend both closed-edge decoder tables to total Circle decoders",
+       :fixture
+       "/tmp/polygon-boundary-circle-decoder-well-defined.lean",
        :fixture-sha256
-       "e7a8de7ac79df2e017e3890232134c886a21f991e8d515cb1215af4457a9dffe",
+       "982179e5b1179237ae93c4c1a89a3022533eeb169f1ed5a3a1ea76c9eb42bfbc",
        :gates
-       ["lake build ConstructionTargets.PolygonSixEdgeFinalEndpointWrap"
+       ["lake build ConstructionTargets.PolygonBoundaryCircleDecoderWellDefined"
         "fixture compiles"
         "zero source and fixture sorry"
         "standard-only axioms"
         "registry check"]},
-      :id :routes-2026-10-11-polygon-six-edge-final-endpoint-wrap-74,
+      :id
+      :routes-2026-10-11-polygon-boundary-circle-decoder-well-defined-75,
       :kind :reusable-theorem,
       :area "polygon-surface-open-cover",
       :depends-on
-      [:routes-2026-10-11-polygon-six-edge-nonfinal-endpoint-normalization-73],
+      [:routes-2026-10-11-polygon-six-edge-final-endpoint-wrap-74],
       :current-residual
-      "Use the now-complete six endpoint normalizations and half-open interior uniqueness to prove closed-edge decoder independence and define the total decoders.",
+      "Use the two total Circle decoders to prove specialized relation invariance and left-inverse formulas, then derive injectivity.",
       :other-consumers []},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :axioms
+     ["propext"
+      "Classical.choice"
+      "Quot.sound"
+      "PolygonBoundaryCircleDecoderWellDefinedProbe.edgeDecoderPresentationIndependent"],
      :commands
      [{:cmd
-       "lake env lean /tmp/polygon-six-edge-final-endpoint-wrap.lean",
+       "lake env lean /tmp/polygon-boundary-circle-decoder-well-defined.lean",
        :exit 0,
        :finding
-       "The AddCircle period-six equality, final Circle edge wrap, and half-open final-endpoint presentation compile."}
-      {:cmd "sha256sum /tmp/polygon-six-edge-final-endpoint-wrap.lean",
-       :exit 0,
-       :finding
-       "e7a8de7ac79df2e017e3890232134c886a21f991e8d515cb1215af4457a9dffe"}
+       "The full presentation-independence interface, chosen total decoders, and both literal edge formulas compile from one isolated interface axiom."}
       {:cmd
-       "rg -n \"\\b(sorry|admit)\\b\" /tmp/polygon-six-edge-final-endpoint-wrap.lean",
+       "sha256sum /tmp/polygon-boundary-circle-decoder-well-defined.lean",
+       :exit 0,
+       :finding
+       "982179e5b1179237ae93c4c1a89a3022533eeb169f1ed5a3a1ea76c9eb42bfbc"}
+      {:cmd
+       "rg -n \"\\b(sorry|admit)\\b\" /tmp/polygon-boundary-circle-decoder-well-defined.lean",
        :exit 1,
        :expected-exit 1,
        :finding "No fixture placeholders."}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :finding "131 registered statements match, 0 do not."}
+      {:cmd "git status --short", :exit 0, :finding "Clean worktree."}
       {:cmd
        "sed -n '1,240p' TOPOLOGY-ROUTES.md >/dev/null && sed -n '1,240p' holes/labs/topology-routes/routes-1.md >/dev/null && sed -n '1,240p' holes/labs/topology-routes/routes-2.md >/dev/null && sed -n '1,240p' holes/labs/topology-routes/routes-3.md >/dev/null && sed -n '1,220p' docs/TN-topology-build-loop-design.md >/dev/null",
        :exit 0,
        :finding
        "The route guide, per-problem routes, and probe definitions were read."}],
-     :diagnostic-history [],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/polygon-boundary-circle-decoder-well-defined.lean",
+       :exit 1,
+       :finding
+       "The first fixture draft selected an unrelated unqualified ThreeEndpointLoops alias and did not unfold the decoder definitions before applying presentation independence.",
+       :correction
+       "Opened ThreeEndpointLoopsHomeomorph and unfolded each total decoder; the successful rerun is recorded in commands."}],
      :fixture
-     {:path "/tmp/polygon-six-edge-final-endpoint-wrap.lean",
+     {:path "/tmp/polygon-boundary-circle-decoder-well-defined.lean",
       :sha256
-      "e7a8de7ac79df2e017e3890232134c886a21f991e8d515cb1215af4457a9dffe",
+      "982179e5b1179237ae93c4c1a89a3022533eeb169f1ed5a3a1ea76c9eb42bfbc",
       :interface
-      "Edge five at parameter one wraps to edge zero at parameter zero in Circle, yielding the sixth half-open endpoint normalization."},
+      "Both six-edge decoder tables are presentation-independent on closed canonical edges and therefore descend to total Circle decoders with literal edge formulas."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -102539,7 +102572,8 @@
     :routes-2026-10-11-polygon-boundary-decoder-vertices-71
     :routes-2026-10-11-polygon-boundary-decoder-interiors-72
     :routes-2026-10-11-polygon-six-edge-nonfinal-endpoint-normalization-73
-    :routes-2026-10-11-polygon-six-edge-final-endpoint-wrap-74],
+    :routes-2026-10-11-polygon-six-edge-final-endpoint-wrap-74
+    :routes-2026-10-11-polygon-boundary-circle-decoder-well-defined-75],
    :current-residual
    "Combine the concrete cover packages with the strict overlap squares, banked Smith normalization, and final t97A01 assembly.",
    :other-consumers []}
