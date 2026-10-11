@@ -72339,25 +72339,66 @@
   {:bounded-exception
    "single-consumer explicit quarter-turn waypoint with globally nonvanishing arrival leg",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:residual
+     "Construct a nonvanishing departure from 1 to the quarter-turn waypoint, then invoke the banked waypoint, normalization, and ambient adapters.",
+     :outcome :go,
+     :warnings [],
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd
+       "lake env lean /tmp/t02a03_rotated_endpoint_waypoint_probe.lean",
+       :exit 0,
+       :output
+       "rotatedEndpointWaypoint_arrival_ne_zero_exists compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "sha256sum /tmp/t02a03_rotated_endpoint_waypoint_probe.lean",
+       :exit 0,
+       :output
+       "279382e86c17ce355f7d8e758954b88985194adb3796a95c3a1d3cf82d34568e  /tmp/t02a03_rotated_endpoint_waypoint_probe.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_rotated_endpoint_waypoint_probe.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}
+      {:cmd
+       "rg -n 'rotatedEndpointWaypoint_arrival_ne_zero_exists' /tmp/t02a03_rotated_endpoint_waypoint_probe.lean",
+       :exit 0,
+       :output
+       "9:theorem rotatedEndpointWaypoint_arrival_ne_zero_exists :\n39:#print axioms rotatedEndpointWaypoint_arrival_ne_zero_exists"}],
+     :fixture
+     {:path "/tmp/t02a03_rotated_endpoint_waypoint_probe.lean",
+      :sha256
+      "279382e86c17ce355f7d8e758954b88985194adb3796a95c3a1d3cf82d34568e"},
+     :finding
+     "The placeholder-free fixture constructs the continuous quarter-turn waypoint W(p) = -i * rightTubeCorePlanarComplex(p.1). Its arrival leg factors as ((2t-1) - (2-2t)i) times the nonzero endpoint; after time 1/2 the coefficient has positive real part and cannot vanish.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+      :declaration
+      "ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_arrival_ne_zero_exists",
+      :type
+      "exists W : C(RightTubeMinusLeftCore, ℂ), forall (t : unitInterval) (p : RightTubeMinusLeftCore), not ((t : ℝ) <= 1/2) -> (((2-2*(t:ℝ):ℝ):ℂ)*W p + ((2*(t:ℝ)-1:ℝ):ℂ)*rightTubeCorePlanarComplex p.1) != 0",
+      :acceptance
+      "Add the compiled theorem from the fixture unchanged in mathematical content; preserve registered statements and introduce no placeholders or nonstandard axioms."},
+     :seat "topo-8"}},
+   :phase :implementation,
+   :type
+   "exists W : C(RightTubeMinusLeftCore, ℂ), forall (t : unitInterval) (p : RightTubeMinusLeftCore), not ((t : ℝ) <= 1/2) -> (((2-2*(t:ℝ):ℝ):ℂ)*W p + ((2*(t:ℝ)-1:ℝ):ℂ)*rightTubeCorePlanarComplex p.1) != 0",
    :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/rotated-endpoint-waypoint-arrival",
    :acceptance
-   {:probe
-    "Compile rotatedEndpointWaypoint_arrival_ne_zero_exists. Define the continuous waypoint W(p) = -i * rightTubeCorePlanarComplex(p.1) and prove its affine arrival leg is nonzero for every time after 1/2 by factoring out the nonzero endpoint and showing the complex coefficient has positive real part. Do not prove the departure leg, normalize to Circle, or assemble the ambient deformation.",
-    :declaration
-    "ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_arrival_ne_zero_exists",
-    :type
-    "exists W : C(RightTubeMinusLeftCore, ℂ), forall (t : unitInterval) (p : RightTubeMinusLeftCore), not ((t : ℝ) <= 1/2) -> (((2-2*(t:ℝ):ℝ):ℂ)*W p + ((2*(t:ℝ)-1:ℝ):ℂ)*rightTubeCorePlanarComplex p.1) != 0",
-    :placeholder "the sole sorry in apm_t02a03",
-    :route-step
-    "supply an explicit continuous waypoint and completely discharge the arrival-leg hypothesis of the banked two-leg adapter"},
+   "Add the compiled theorem from the fixture unchanged in mathematical content; preserve registered statements and introduce no placeholders or nonstandard axioms.",
    :id
    :routes-2026-10-11-t02a03-rotated-endpoint-waypoint-arrival-topo2-r1,
    :kind :reusable-theorem,
    :area "explicit-r3-tube-deformation-retraction",
+   :declaration
+   "ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_arrival_ne_zero_exists",
    :depends-on
    [:routes-2026-10-11-t02a03-coupled-angular-arrival-localized-cross-topo2-r1],
    :current-residual
