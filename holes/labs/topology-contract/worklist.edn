@@ -113908,6 +113908,19 @@
      {:cmd "lean",
       :exit 1,
       :finding "Reused point-span equations explicitly."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791746261903-5807-4c0afb85",
+     :commands
+     ["git show/diff-tree fc3c70a3"
+      "hash/diff/placeholder checks"
+      "statement-registry.py check"
+      "lake env lean PointWedgeVanKampen.lean"
+      "lake build PointWedgeVanKampen"
+      "lake build ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "PASS: new compiled, sorry-free B6 progress exposes the coordinate-to-point inverse span and proves both generator actions are literal injections after explicit connector normal-form reduction at the chosen bases. Boundary orientation is correct. Exact two-file scope/frozen hashes match; zero placeholders; registry 131/131; standard axioms. Homotopy/open-cover transports and B12 remain listed; absent final target is valid STOP."},
     :commit "fc3c70a320bb645b9e0eb2b55bf87446847ee7ad",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113918,7 +113931,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113939,7 +113952,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B6 point-span inverse now computes literally on both generators.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B6 coordinate-to-point inverse now preserves both generators.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114030,7 +114043,11 @@
     {:job 8,
      :commit "3aff57e7eeab25beb873a6560fa4c4afe800fa43",
      :reason
-     "B6 point-span inverse now computes literally on both generators."}]}
+     "B6 point-span inverse now computes literally on both generators."}
+    {:job 9,
+     :commit "fc3c70a320bb645b9e0eb2b55bf87446847ee7ad",
+     :reason
+     "B6 coordinate-to-point inverse now preserves both generators."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
