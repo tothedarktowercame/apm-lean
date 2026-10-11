@@ -103454,6 +103454,23 @@
       :exit 1,
       :finding
       "The audit was launched concurrently with the first Lake build and ran before the target olean existed; the sequential acceptance rerun passed."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791687865512-3916-399e3d3d",
+     :commands
+     ["git show and git diff-tree on recorded commit 34f6eef97b5cf19a22dc852c92529778004ac513"
+      "git diff --exit-code between recorded blob and checkout"
+      "sha256sum on committed source, recorded blob, and frozen fixture"
+      "diff -u frozen fixture against committed source"
+      "lake build ConstructionTargets.PolygonRadialOpenCoverPackages"
+      "lake env lean /tmp/polygon-radial-open-cover-packages.lean"
+      "fresh axiom checks for n3Package, torusCrosscapPackage, polygonRadialOpenCoverPackages, and package_vertex_classes"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped placeholder recount on source and fixture"
+      "git diff-tree --check on recorded commit"],
+     :finding
+     "Recorded one-file commit is authored by topo-2; its blob, checkout, and frozen fixture are byte-identical at SHA-256 97e3d082e35ae3ef8fddb5f10f505a1b90e7e81635574379cf36999f57391e28. ConcretePackage keeps the quotient cover, pointed inner contraction, correctly oriented outer homotopy laws, overlap homotopy equivalence, and CircleQuotient-to-ThreeCircles boundary model at the consumer-used relation-specific boundary. The N3 and torus-crosscap instances remain distinct until their final pair, and the paired vertex theorem has the required orientation toward vertex zero; the imported literal-formula results remain available without duplicating them as fields. All reviewed exports compile with only propext, Classical.choice, and Quot.sound; both placeholder counts are zero; the registry reports 131 matched and 0 mismatched; homology, fundamental groups, and final t97A01 assembly remain outside scope."},
     :commit "34f6eef97b5cf19a22dc852c92529778004ac513",
     :changed-paths
     ["ConstructionTargets/PolygonRadialOpenCoverPackages.lean"],
@@ -103463,7 +103480,7 @@
      "97e3d082e35ae3ef8fddb5f10f505a1b90e7e81635574379cf36999f57391e28"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/PolygonRadialOpenCoverPackages.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -103531,7 +103548,7 @@
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -103995,7 +104012,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "polygonRadialOpenCoverPackages",
@@ -104011,7 +104028,10 @@
     :type
     "Concrete saturated radial open-cover packages for SurfaceRel false 3 and the torus-crosscap six-edge relation, including contractions, ThreeCircles boundary models, punctured-disk overlaps, literal inclusions, and vertex identifications.",
     :proved-in
-    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40,
+    :banked-by
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40,
+    :banked-commit "34f6eef97b5cf19a22dc852c92529778004ac513"},
    :id :lemma-polygonradialopencoverpackages,
    :kind :lemma,
    :depends-on
@@ -105554,7 +105574,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "RadialQuotientOpenSets.surfaceRel_norm_eq",
@@ -105568,7 +105588,10 @@
     "For every orientable flag and genus, SurfaceRel-related disk points have equal complex norm.",
     :area "polygon-surface-open-cover",
     :proved-in
-    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40,
+    :banked-by
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40,
+    :banked-commit "34f6eef97b5cf19a22dc852c92529778004ac513"},
    :id :lemma-radialquotientopensets-surfacerel-norm-eq,
    :kind :lemma,
    :depends-on [],
@@ -105630,7 +105653,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "PolygonRadialOpenCover.package",
@@ -105644,7 +105667,10 @@
     "For every norm-preserving disk relation, the quotient images of radius < 3/4 and radius > 1/4 are open, cover the quotient, and intersect in the image of 1/4 < radius < 3/4.",
     :area "polygon-surface-open-cover",
     :proved-in
-    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40,
+    :banked-by
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40,
+    :banked-commit "34f6eef97b5cf19a22dc852c92529778004ac513"},
    :id :lemma-polygonradialopencover-package,
    :kind :lemma,
    :depends-on [:lemma-radialquotientopensets-isopen-radial-image],
@@ -105767,7 +105793,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "PolygonOuterRadialRelation.radialHomotopy_eqvGen",
@@ -105781,14 +105807,17 @@
     "For a boundary-supported disk relation, every radial time slice preserves the EqvGen closure of its restriction to the outer radial source.",
     :area "polygon-surface-open-cover",
     :proved-in
-    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40,
+    :banked-by
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40,
+    :banked-commit "34f6eef97b5cf19a22dc852c92529778004ac513"},
    :id :lemma-polygonouterradialrelation-radialhomotopy-eqvgen,
    :kind :lemma,
    :depends-on [:lemma-polygonouterradialdeformation-radialhomotopy],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "PolygonOuterRadialRelation.surfaceRel_boundary",
@@ -105802,7 +105831,10 @@
     "Every generating pair of SurfaceRel orientable genus consists of radius-one disk points.",
     :area "polygon-surface-open-cover",
     :proved-in
-    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40,
+    :banked-by
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40,
+    :banked-commit "34f6eef97b5cf19a22dc852c92529778004ac513"},
    :id :lemma-polygonouterradialrelation-surfacerel-boundary,
    :kind :lemma,
    :depends-on [:lemma-radialquotientopensets-norm-edgepoint],
@@ -106005,7 +106037,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "PolygonOuterOpenDeformation.outerOpenHomotopy",
@@ -106019,7 +106051,10 @@
     "For a radius-preserving boundary-supported disk relation, outerOpen strongly deforms onto its radius-one boundary classes.",
     :area "polygon-surface-open-cover",
     :proved-in
-    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40,
+    :banked-by
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40,
+    :banked-commit "34f6eef97b5cf19a22dc852c92529778004ac513"},
    :id :lemma-polygonouteropendeformation-outeropenhomotopy,
    :kind :lemma,
    :depends-on
@@ -106067,7 +106102,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "PolygonAnnulusRadialMaps.radialNormalizeMap",
@@ -106081,7 +106116,10 @@
     "The literal polygon annulus admits a continuous radial normalization to Circle with radius-one-half inclusion as an exact left inverse.",
     :area "polygon-surface-open-cover",
     :proved-in
-    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40,
+    :banked-by
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40,
+    :banked-commit "34f6eef97b5cf19a22dc852c92529778004ac513"},
    :id :lemma-polygonannulusradialmaps-radialnormalizemap,
    :kind :lemma,
    :depends-on
@@ -106281,7 +106319,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "PolygonBoundaryCircleRelations.N3CircleRel",
@@ -106295,7 +106333,10 @@
     "The pullback of SurfaceRel false 3 to Circle, with the three literal aa, bb, and cc edge-pair generators and their quotient-identification equations.",
     :area "polygon-surface-open-cover",
     :proved-in
-    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40,
+    :banked-by
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40,
+    :banked-commit "34f6eef97b5cf19a22dc852c92529778004ac513"},
    :id :lemma-polygonboundarycirclerelations-n3circlerel,
    :kind :lemma,
    :depends-on
@@ -106303,7 +106344,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "PolygonBoundaryCircleRelations.TorusCrosscapCircleRel",
@@ -106317,7 +106358,10 @@
     "The pullback of TorusCrosscapRel to Circle, with the literal a, b reversed and c same-direction edge-pair generators and their quotient-identification equations.",
     :area "polygon-surface-open-cover",
     :proved-in
-    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40,
+    :banked-by
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40,
+    :banked-commit "34f6eef97b5cf19a22dc852c92529778004ac513"},
    :id :lemma-polygonboundarycirclerelations-toruscrosscapcirclerel,
    :kind :lemma,
    :depends-on
@@ -106960,7 +107004,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -106976,7 +107020,10 @@
     "Same-loop half-open representatives are equal exactly at equal parameters, and representatives on distinct loops are equal exactly when both parameters are zero.",
     :area "polygon-surface-open-cover",
     :proved-in
-    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40,
+    :banked-by
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40,
+    :banked-commit "34f6eef97b5cf19a22dc852c92529778004ac513"},
    :id
    :lemma-polygonthreeloophalfopenequality-three-loop-half-open-equalities,
    :kind :lemma,
@@ -108056,7 +108103,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "PolygonBoundaryThreeLoopBijections.injective_n3ThreeLoops",
@@ -108068,7 +108115,10 @@
     :type "Function.Injective n3ThreeLoops.",
     :area "polygon-surface-open-cover",
     :proved-in
-    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40,
+    :banked-by
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40,
+    :banked-commit "34f6eef97b5cf19a22dc852c92529778004ac513"},
    :id
    :lemma-polygonboundarythreeloopbijections-injective-n3threeloops,
    :kind :lemma,
@@ -108077,7 +108127,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -108091,7 +108141,10 @@
     :type "Function.Injective torusCrosscapThreeLoops.",
     :area "polygon-surface-open-cover",
     :proved-in
-    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40,
+    :banked-by
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40,
+    :banked-commit "34f6eef97b5cf19a22dc852c92529778004ac513"},
    :id
    :lemma-polygonboundarythreeloopbijections-injective-toruscrosscapthreeloops,
    :kind :lemma,
@@ -108100,7 +108153,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "polygonBoundaryThreeLoopHomeomorphisms",
@@ -108114,7 +108167,10 @@
     "Promote the continuous bijections n3ThreeLoops and torusCrosscapThreeLoops to homeomorphisms from ThreeEndpointLoops onto their boundary relation quotients.",
     :area "polygon-surface-open-cover",
     :proved-in
-    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40,
+    :banked-by
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40,
+    :banked-commit "34f6eef97b5cf19a22dc852c92529778004ac513"},
    :id :lemma-polygonboundarythreeloophomeomorphisms,
    :kind :lemma,
    :depends-on
@@ -108203,7 +108259,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "polygonBoundaryThreeCirclesLiteralFormulas",
@@ -108217,7 +108273,10 @@
     "The quotient-to-ThreeCircles homeomorphisms have the literal first-, second-, and third-circle formulas induced by canonical edges 0,2,4 for N3 and 0,1,4 for the torus-crosscap relation.",
     :area "polygon-surface-open-cover",
     :proved-in
-    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40,
+    :banked-by
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40,
+    :banked-commit "34f6eef97b5cf19a22dc852c92529778004ac513"},
    :id :lemma-polygonboundarythreecirclesliteralformulas,
    :kind :lemma,
    :depends-on
