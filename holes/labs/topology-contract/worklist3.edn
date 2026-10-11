@@ -15359,8 +15359,82 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :implements-lemma :lemma-mfclass-forget-snake-preserved-kernel-tau1,
+   :evidence
+   {:placeholder-delta
+    {:t00J02 {:before 1, :after 1, :delta 0},
+     :t98A02 {:before 1, :after 1, :delta 0}},
+    :residual
+    "Construct the natural isomorphism between parallelPair S.v₁₂.τ₁ 0 ⋙ forgetIntModules and parallelPair (forgetIntModules.map S.v₁₂.τ₁) 0, transport this preserved limit across it, then repeat for the remaining kernel and cokernel components.",
+    :gates
+    {:module-compile :pass,
+     :target-build :pass,
+     :statement-registry "131 registered statements match, 0 do not",
+     :scoped-diff :pass,
+     :forbidden-placeholder-scan :pass,
+     :scoped-worktree-clean true},
+    :outcome :done-unreviewed,
+    :warnings
+    ["The target build replayed pre-existing linter warnings outside this scoped change."],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.ManifoldFundamentalClass.forgetIntModulesSnakeInput_preservedKernelτ₁",
+      :type
+      "forall (S : ShortComplex.SnakeInput (ModuleCat ℤ)), IsLimit (forgetIntModules.mapCone (KernelFork.ofι S.v₀₁.τ₁ S.w₀₂_τ₁))",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on
+      ["ConstructionTargets.ManifoldFundamentalClass.forgetIntModules_preservesParallelPairLimits"],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes
+    {:module
+     "27ed7a2e70665a83e1fc0d16c289f280f07a385b4b0ec44b474d8eabb99111a6",
+     :fixture
+     "1feca3b145365c7f8c2007e43959ef32dc34ef987d54820d6060f51bf06f067c"},
+    :disposition :done-unreviewed,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :topo-10,
+    :reason
+    "Packaged the limit cone obtained by applying forgetIntModules to the first component kernel fork of an integral-module SnakeInput, using the banked parallel-pair limit preservation result.",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/manifold_fundamental_class_forget_snake_kernel_tau1.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "git diff --check HEAD^ HEAD -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "comment-stripped placeholder counts for t00J02 t98A02",
+      :exit 0}
+     {:cmd
+      "forbidden placeholder scan in ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "git status --short -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}],
+    :diagnostic-history [],
+    :commit "b2e34c7cac197ba0be0603c631d7c6d53b454a8e",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path
+     "/tmp/manifold_fundamental_class_forget_snake_kernel_tau1.lean",
+     :sha256
+     "1feca3b145365c7f8c2007e43959ef32dc34ef987d54820d6060f51bf06f067c"},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :declaration
+     "ConstructionTargets.ManifoldFundamentalClass.forgetIntModulesSnakeInput_preservedKernelτ₁"},
+    :row
+    :routes-2026-10-11-manifold-forget-snake-preserved-kernel-tau1-topo3-r1,
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/integral-open-disk-connecting-naturality/snake-input-preserved-kernel-tau1",
@@ -22509,14 +22583,18 @@
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.forgetIntModulesSnakeInput_preservedKernelτ₁",
     :reported-by
-    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+     :routes-2026-10-11-manifold-forget-snake-preserved-kernel-tau1-topo3-r1],
     :type
     "forall (S : ShortComplex.SnakeInput (ModuleCat ℤ)), IsLimit (forgetIntModules.mapCone (KernelFork.ofι S.v₀₁.τ₁ S.w₀₂_τ₁))",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in
+    :routes-2026-10-11-manifold-forget-snake-preserved-kernel-tau1-topo3-r1},
    :id :lemma-mfclass-forget-snake-preserved-kernel-tau1,
    :kind :lemma,
-   :depends-on [:lemma-mfclass-forget-parallel-pair-colimits],
+   :depends-on
+   [:lemma-mfclass-forget-parallel-pair-colimits
+    :lemma-mfclass-forget-parallel-pair-limits],
    :other-consumers [:t98A02]}],
  :consumer-baselines {},
  :statuses
