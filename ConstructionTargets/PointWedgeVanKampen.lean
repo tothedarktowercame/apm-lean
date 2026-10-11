@@ -531,6 +531,27 @@ def fundamentalGroupMulEquivOfSingleObjEquivalence
       (E.functor.obj (FundamentalGroupoid.mk x)) (SingleObj.star G)))).trans
       (SingleObj.toEnd G).symm)
 
+section GenericFundamentalGroupEquivalence
+
+variable {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+variable [PathConnectedSpace X] [PathConnectedSpace Y]
+variable (x₀ : X) (y₀ : Y) (M : Set Y) (N : Set X)
+variable (hM : IsOpen M) (hN : IsOpen N) (hy : y₀ ∈ M) (hx : x₀ ∈ N)
+variable (cM : PointedContraction M ⟨y₀, hy⟩)
+variable (cN : PointedContraction N ⟨x₀, hx⟩)
+
+/-- The based fundamental-group equivalence underlying the literal B6 leg
+coordinate calculation. -/
+def genericPointWedgeFundamentalGroupEquiv :
+    FundamentalGroup (Wedge x₀ y₀) (quotientMap x₀ y₀ (.inl x₀)) ≃*
+      genericPointWedgeFreeProduct x₀ y₀ :=
+  fundamentalGroupMulEquivOfSingleObjEquivalence
+    (quotientMap x₀ y₀ (.inl x₀))
+    (genericPointWedgeFreeProduct x₀ y₀)
+    (genericPointWedgeSourceEquivalence x₀ y₀ M N hM hN hy hx cM cN)
+
+end GenericFundamentalGroupEquivalence
+
 /-- The three-circle model is locally path connected. -/
 theorem threeCircles_locPathConnected :
     LocPathConnectedSpace ThreeCircles := inferInstance
@@ -814,5 +835,6 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeSingleObjMappingEquivalence
 #print axioms genericPointWedgeSingleObjPostcomposeIso
 #print axioms genericPointWedgeSourceEquivalence
+#print axioms genericPointWedgeFundamentalGroupEquiv
 
 end ConstructionTargets.PointWedgeVanKampen

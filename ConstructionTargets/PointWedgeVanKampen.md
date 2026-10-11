@@ -69,3 +69,8 @@ B4 is implemented by `genericPointWedgeSourceEquivalence`.  It applies
 `GenericTargetNaturalSourceReconstruction.sourceEquivalence` directly to the
 B3 mapping equivalences and their postcomposition isomorphisms, producing the
 fundamental-groupoid equivalence with the free-product one-object groupoid.
+
+The B6 calculation now has its exact based equivalence:
+`genericPointWedgeFundamentalGroupEquiv` applies B5 to B4 at the literal left
+representative of the wedge point.  What remains is proving that its two leg
+maps are the coproduct inclusions.
