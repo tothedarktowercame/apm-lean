@@ -4198,95 +4198,156 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :implements-lemma
+   :lemma-constructiontargets-manifoldfundamentalclass-coefficientsubspacemap-eq-integralsubtypechainmap,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+   :dag-node
+   "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/coefficient-subspace-map-representation",
+   :acceptance
+   {:implementation
+    "Promote the exact fixture theorem. State and prove that CoefficientRelativeSmall.subspaceMap Int A is the same chain map as the ModuleCat Int singularChainComplexFunctor map of integralSubtypeInclusion A. Use definitional reduction only. Do not alter the existing private abbreviations, do not assert cokernel projection naturality yet, and do not claim the normalization square, generator transport, or localization equality.",
+    :declaration
+    "ConstructionTargets.ManifoldFundamentalClass.coefficientSubspaceMap_eq_integralSubtypeChainMap",
+    :type
+    "forall {X : Type} [TopologicalSpace X] (A : Set X), CoefficientRelativeSmall.subspaceMap Int A = (((AlgebraicTopology.singularChainComplexFunctor (ModuleCat Int)).obj (ModuleCat.of Int Int)).map (integralSubtypeInclusion A))",
+    :fixture
+    "/tmp/manifold_fundamental_class_coefficient_subspace_map_eq.lean",
+    :fixture-sha256
+    "b8fdcb85f72ee24f0664dae5a3d94972051cc9fb681d69485ee79a139381f9af",
+    :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
+    :route-step
+    "make the coefficient-relative subtype map rewrite to the exact module-valued subtype map used by the integral cokernel comparison"},
+   :representation
+   {:source
+    "CoefficientRelativeSmall.subspaceMap Int A expressed through the simplicial singular-chain functor",
+    :target
+    "The ModuleCat Int topological singular-chain map induced by integralSubtypeInclusion A and used by the integral comparison",
+    :direction
+    "Exact chain-map equality from the coefficient-relative simplicial-functor representation to the module-valued topological singular-chain representation"},
+   :id
+   :routes-2026-10-11-manifold-coefficient-subspace-map-equality-topo3-r1,
+   :kind :representation-comparison,
+   :area "manifold-fundamental-class",
+   :depends-on
+   [:routes-2026-10-10-topo3-seed-checkpoint-1
+    :routes-2026-10-10-manifold-local-positive-excision-topo3-r1
+    :routes-2026-10-10-manifold-oriented-overlap-coherence-topo3-r1
+    :routes-2026-10-10-manifold-connected-overlap-unit-topo3-r1
+    :routes-2026-10-10-manifold-oriented-connected-overlap-topo3-r1
+    :routes-2026-10-10-manifold-integral-transition-sign-topo3-r1
+    :routes-2026-10-10-manifold-exclude-negative-transition-topo3-r1
+    :routes-2026-10-10-manifold-global-generator-topo3-r1
+    :routes-2026-10-10-manifold-localization-iso-generator-topo3-r1
+    :routes-2026-10-10-manifold-generator-map-isiso-topo3-r1
+    :routes-2026-10-10-manifold-localization-map-naturality-topo3-r1
+    :routes-2026-10-10-manifold-localization-apply-naturality-topo3-r1
+    :routes-2026-10-10-manifold-group-global-generator-topo3-r1
+    :routes-2026-10-10-manifold-group-generator-naturality-topo3-r1
+    :routes-2026-10-10-manifold-global-local-generator-transport-topo3-r1
+    :routes-2026-10-11-manifold-basepoint-localization-coefficient-topo3-r1
+    :routes-2026-10-11-manifold-local-generator-coefficient-unique-topo3-r1
+    :routes-2026-10-11-manifold-localization-coefficient-one-topo3-r1
+    :routes-2026-10-11-manifold-distinguished-chart-generator-topo3-r1
+    :routes-2026-10-11-manifold-integral-subtype-chain-naturality-topo3-r1
+    :routes-2026-10-11-manifold-integral-mapped-relative-cokernel-topo3-r1
+    :routes-2026-10-11-manifold-forget-relative-cokernel-topo3-r1
+    :routes-2026-10-11-manifold-integral-relative-chains-comparison-topo3-r1
+    :routes-2026-10-11-manifold-integral-relative-homology-comparison-topo3-r1
+    :routes-2026-10-11-manifold-ambient-local-normalization-topo3-r1
+    :routes-2026-10-11-manifold-generator-transport-of-normalization-topo3-r1],
+   :current-residual
+   "Use this equality to prove that the composed preservation and direct-cokernel comparisons intertwine the absolute-to-relative projections; then derive naturality of integralRelativeHomologyComparison through the chart and model normalization maps.",
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-closedorientedfundamentalclass,
    :evidence
    {:probe
     {:residual
-     "Prove the concrete coefficient-to-production normalization square across the chart and model normalization chains.",
+     "Prove absolute-to-relative projection compatibility for the integral direct-cokernel comparison, then propagate naturality through the normalization chain.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
      [{:id
-       :lemma-constructiontargets-manifoldfundamentalclass-integralrelativehomologycomparison-generator-of-normalization,
+       :lemma-constructiontargets-manifoldfundamentalclass-coefficientsubspacemap-eq-integralsubtypechainmap,
        :name
-       "ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparison_generator_of_normalization",
+       "ConstructionTargets.ManifoldFundamentalClass.coefficientSubspaceMap_eq_integralSubtypeChainMap",
        :type
-       "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), ((integralRelativeHomologyComparison (deletedPoint x) (k+2)).hom ≫ (ambientLocalNormalization k x).hom = forgetIntModules.map (CoefficientChartLocal.localIso Int k x).hom) -> (integralRelativeHomologyComparison (deletedPoint x) (k+2)).hom.hom (CoefficientChartLocal.generator Int k x) = HigherChartLocalGenerator.ambientLocalGenerator (k := k) x",
+       "forall {X : Type} [TopologicalSpace X] (A : Set X), CoefficientRelativeSmall.subspaceMap Int A = (((AlgebraicTopology.singularChainComplexFunctor (ModuleCat Int)).obj (ModuleCat.of Int Int)).map (integralSubtypeInclusion A))",
        :status :proved,
        :consumers [:t00J02 :t98A02],
        :depends-on
-       ["ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparison"
-        "ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization_generator"],
+       ["ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparison_generator_of_normalization"],
        :area "manifold-fundamental-class"}],
      :prerequisite
      {:consumer :t00J02,
       :implements-lemma
-      :lemma-constructiontargets-manifoldfundamentalclass-integralrelativehomologycomparison-generator-of-normalization,
+      :lemma-constructiontargets-manifoldfundamentalclass-coefficientsubspacemap-eq-integralsubtypechainmap,
       :phase :implementation,
       :state :open,
       :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
       :dag-node
-      "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/generator-transport-from-normalization-square",
+      "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/coefficient-subspace-map-representation",
       :acceptance
       {:implementation
-       "Promote the exact fixture theorem. Keep as an explicit hypothesis the equality between integralRelativeHomologyComparison followed by ambientLocalNormalization and forgetIntModules.map of CoefficientChartLocal.localIso. Evaluate that equality on CoefficientChartLocal.generator, use both reviewed normalization equations, and conclude generator transport by injectivity of ambientLocalNormalization. Do not assume or define the compatibility square, do not introduce an orientation predicate, and do not claim localization equality.",
+       "Promote the exact fixture theorem. State and prove that CoefficientRelativeSmall.subspaceMap Int A is the same chain map as the ModuleCat Int singularChainComplexFunctor map of integralSubtypeInclusion A. Use definitional reduction only. Do not alter the existing private abbreviations, do not assert cokernel projection naturality yet, and do not claim the normalization square, generator transport, or localization equality.",
        :declaration
-       "ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparison_generator_of_normalization",
+       "ConstructionTargets.ManifoldFundamentalClass.coefficientSubspaceMap_eq_integralSubtypeChainMap",
        :type
-       "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), ((integralRelativeHomologyComparison (deletedPoint x) (k+2)).hom ≫ (ambientLocalNormalization k x).hom = forgetIntModules.map (CoefficientChartLocal.localIso Int k x).hom) -> (integralRelativeHomologyComparison (deletedPoint x) (k+2)).hom.hom (CoefficientChartLocal.generator Int k x) = HigherChartLocalGenerator.ambientLocalGenerator (k := k) x",
+       "forall {X : Type} [TopologicalSpace X] (A : Set X), CoefficientRelativeSmall.subspaceMap Int A = (((AlgebraicTopology.singularChainComplexFunctor (ModuleCat Int)).obj (ModuleCat.of Int Int)).map (integralSubtypeInclusion A))",
        :fixture
-       "/tmp/manifold_fundamental_class_generator_transport_of_normalization.lean",
+       "/tmp/manifold_fundamental_class_coefficient_subspace_map_eq.lean",
        :fixture-sha256
-       "d5359c9744299bc3a39c9abe1b21ef1a49642bfa8af2173c318b83208dd20480",
+       "b8fdcb85f72ee24f0664dae5a3d94972051cc9fb681d69485ee79a139381f9af",
        :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
        :route-step
-       "derive exact coefficient-to-production generator transport from the concrete normalization-square equality"},
+       "make the coefficient-relative subtype map rewrite to the exact module-valued subtype map used by the integral cokernel comparison"},
       :representation
       {:source
-       "The coefficient chart generator in forgotten ModuleCat Int relative homology, together with the explicit coefficient local normalization",
+       "CoefficientRelativeSmall.subspaceMap Int A expressed through the simplicial singular-chain functor",
        :target
-       "The production ambientLocalGenerator in AddCommGrpCat relative homology, together with ambientLocalNormalization",
+       "The ModuleCat Int topological singular-chain map induced by integralSubtypeInclusion A and used by the integral comparison",
        :direction
-       "Exact generator equality from the coefficient-relative representation to the production ambient representation, conditional only on the displayed equality of their two concrete normalization composites"},
+       "Exact chain-map equality from the coefficient-relative simplicial-functor representation to the module-valued topological singular-chain representation"},
       :id
-      :routes-2026-10-11-manifold-generator-transport-of-normalization-topo3-r1,
+      :routes-2026-10-11-manifold-coefficient-subspace-map-equality-topo3-r1,
       :kind :representation-comparison,
       :area "manifold-fundamental-class",
       :depends-on
       [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
-       :routes-2026-10-11-manifold-integral-relative-homology-comparison-topo3-r1
-       :routes-2026-10-11-manifold-ambient-local-normalization-topo3-r1],
+       :routes-2026-10-11-manifold-generator-transport-of-normalization-topo3-r1],
       :current-residual
-      "Prove the displayed coefficient-to-production normalization square itself by naturality of the integral relative comparison through the chart, translation, neighborhood-inclusion, connecting, radial-normalization, and sphere-normalization maps.",
+      "Use this equality to prove that the composed preservation and direct-cokernel comparisons intertwine the absolute-to-relative projections; then derive naturality of integralRelativeHomologyComparison through the chart and model normalization maps.",
       :other-consumers [:t98A02]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake env lean /tmp/manifold_fundamental_class_generator_transport_of_normalization.lean",
+       "lake env lean /tmp/manifold_fundamental_class_coefficient_subspace_map_eq.lean",
        :exit 0,
        :output
-       "integralRelativeHomologyComparison_generator_of_normalization compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "coefficientSubspaceMap_eq_integralSubtypeChainMap compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/manifold_fundamental_class_generator_transport_of_normalization.lean",
+       "sha256sum /tmp/manifold_fundamental_class_coefficient_subspace_map_eq.lean",
        :exit 0,
        :output
-       "d5359c9744299bc3a39c9abe1b21ef1a49642bfa8af2173c318b83208dd20480  /tmp/manifold_fundamental_class_generator_transport_of_normalization.lean"}
+       "b8fdcb85f72ee24f0664dae5a3d94972051cc9fb681d69485ee79a139381f9af  /tmp/manifold_fundamental_class_coefficient_subspace_map_eq.lean"}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/manifold_fundamental_class_generator_transport_of_normalization.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/manifold_fundamental_class_coefficient_subspace_map_eq.lean || true)\"",
        :exit 0}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
      :fixture
      {:path
-      "/tmp/manifold_fundamental_class_generator_transport_of_normalization.lean",
+      "/tmp/manifold_fundamental_class_coefficient_subspace_map_eq.lean",
       :sha256
-      "d5359c9744299bc3a39c9abe1b21ef1a49642bfa8af2173c318b83208dd20480"},
+      "b8fdcb85f72ee24f0664dae5a3d94972051cc9fb681d69485ee79a139381f9af"},
      :finding
-     "The exact compatibility square has now been checked as the sufficient and correctly oriented geometric obligation. The fixture leaves that square explicit, evaluates it on CoefficientChartLocal.generator, rewrites both concrete normalizations to one, and uses injectivity of ambientLocalNormalization to obtain equality with ambientLocalGenerator. Thus no cyclic-generator or sign argument is being assumed. What remains is the actual naturality calculation identifying the two long normalization composites.",
+     "Expanding the normalization square reaches a prior unrecorded representation boundary. CoefficientRelativeSmall.subspaceMap is presented via the simplicial-chain functor, while integralMappedRelativeCokernelComparison is presented via singularChainComplexFunctor and hides its helper abbreviation privately. Lean does not rewrite the cokernel projection equation through that boundary automatically. The compiled theorem records their exact definitional equality, enabling the next projection-naturality proof without replacing either map or exposing private implementation names.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -4326,7 +4387,8 @@
     :routes-2026-10-11-manifold-integral-relative-chains-comparison-topo3-r1
     :routes-2026-10-11-manifold-integral-relative-homology-comparison-topo3-r1
     :routes-2026-10-11-manifold-ambient-local-normalization-topo3-r1
-    :routes-2026-10-11-manifold-generator-transport-of-normalization-topo3-r1],
+    :routes-2026-10-11-manifold-generator-transport-of-normalization-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-subspace-map-equality-topo3-r1],
    :current-residual
    "Local-degree counts and wild-ball complement homology remain.",
    :other-consumers [:t98A02]}
@@ -6648,7 +6710,31 @@
    :lemma-constructiontargets-coefficientchartlocal-generator-normalization,
    :kind :lemma,
    :depends-on [],
-   :other-consumers []}],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFundamentalClass.coefficientSubspaceMap_eq_integralSubtypeChainMap",
+    :type
+    "forall {X : Type} [TopologicalSpace X] (A : Set X), CoefficientRelativeSmall.subspaceMap Int A = (((AlgebraicTopology.singularChainComplexFunctor (ModuleCat Int)).obj (ModuleCat.of Int Int)).map (integralSubtypeInclusion A))"},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFundamentalClass.coefficientSubspaceMap_eq_integralSubtypeChainMap",
+    :reported-by
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    :type
+    "forall {X : Type} [TopologicalSpace X] (A : Set X), CoefficientRelativeSmall.subspaceMap Int A = (((AlgebraicTopology.singularChainComplexFunctor (ModuleCat Int)).obj (ModuleCat.of Int Int)).map (integralSubtypeInclusion A))",
+    :area "manifold-fundamental-class",
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+   :id
+   :lemma-constructiontargets-manifoldfundamentalclass-coefficientsubspacemap-eq-integralsubtypechainmap,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-manifoldfundamentalclass-integralrelativehomologycomparison-generator-of-normalization],
+   :other-consumers [:t98A02]}],
  :consumer-baselines {},
  :statuses
  #{:open
