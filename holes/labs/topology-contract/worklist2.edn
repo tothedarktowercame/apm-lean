@@ -79330,12 +79330,24 @@
      {:cmd "lake env lean problems/t97A04/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "Main placeholder count", :exit 0, :output "2"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791732522638-5568-679adea9",
+     :commands
+     ["git show/diff/check 564a31373"
+      "lake env lean ConstructionTargets/t97A04Closure.lean"
+      "lake env lean problems/t97A04/lean/Main.lean"
+      "statement-registry check/fingerprint"
+      "git-show hash/placeholder checks"],
+     :finding
+     "PASS: 564a3137 is new after history a7b83c02; scope/blob match. It correctly conjugates both folded branch H1 maps by the fixed circle coordinate to a*id, with source/target orientation matching the pending production injections. Lean gates compile with standard axioms only; registry 131/0; frozen hash unchanged ca1b2cb3; closure 0/Main 2 placeholders. Production injections and B6-B11 remain listed."},
     :commit "564a3137373a34d05224585bac262b756df2cf3c",
     :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
     :finding "Both folded H1 coordinates are a*id.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79422,6 +79434,9 @@
      :reason :program-progress-committed}
     {:job 4,
      :commit "a7b83c02e286a7aed3b64e0020e7cc191add4388",
+     :reason :program-progress-committed}
+    {:job 5,
+     :commit "564a3137373a34d05224585bac262b756df2cf3c",
      :reason :program-progress-committed}]}
   {:consumer :t96A07,
    :stop-count 2,
@@ -80101,7 +80116,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -80113,7 +80128,9 @@
     :reported-by [:program-2026-10-11-close-t97a04],
     :type "left folded H1=a*id",
     :area "mv-connecting-naturality",
-    :proved-in :program-2026-10-11-close-t97a04},
+    :proved-in :program-2026-10-11-close-t97a04,
+    :banked-by :program-2026-10-11-close-t97a04,
+    :banked-commit "564a3137373a34d05224585bac262b756df2cf3c"},
    :id
    :lemma-constructiontargets-t97a04closure-twocircleoverlapshearleftfold-h1-coordinate,
    :kind :lemma,
@@ -80121,7 +80138,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -80133,7 +80150,9 @@
     :reported-by [:program-2026-10-11-close-t97a04],
     :type "right folded H1=a*id",
     :area "mv-connecting-naturality",
-    :proved-in :program-2026-10-11-close-t97a04},
+    :proved-in :program-2026-10-11-close-t97a04,
+    :banked-by :program-2026-10-11-close-t97a04,
+    :banked-commit "564a3137373a34d05224585bac262b756df2cf3c"},
    :id
    :lemma-constructiontargets-t97a04closure-twocircleoverlapshearrightfold-h1-coordinate,
    :kind :lemma,
