@@ -2037,8 +2037,79 @@
   {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-localizationmap-groupglobalgenerator-transport,
+   :evidence
+   {:placeholder-delta {:source 0, :fixture 0},
+    :residual
+    "Prove the normalized basepoint localization equality and prove that actual orientation-compatible chart transports preserve the selected module global generator and carry the concrete relative chart generator as required.",
+    :gates
+    {:module-build :pass,
+     :fixture-compiles-against-promoted-module :pass,
+     :exact-declaration-type :pass,
+     :explicit-concrete-hypotheses :pass,
+     :zero-source-and-fixture-sorry :pass,
+     :standard-only-axioms :pass,
+     :registry-check :pass,
+     :exact-scope :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["lake build replayed pre-existing linter warnings in dependencies; the target module emitted no warnings"],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.ManifoldFundamentalClass.localizationMap_groupGlobalGenerator_transport",
+      :type
+      "Concrete module-generator preservation, a verified source localization equality, and the concrete relative map equation transport the groupGlobalGenerator localization equality to the target.",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on
+      ["ConstructionTargets.ManifoldFundamentalClass.absoluteSingularMap_groupGlobalGenerator_naturality"
+       "ConstructionTargets.ManifoldFundamentalClass.localizationMap_apply_naturality"],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-10",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/manifold_fundamental_class_localization_transport.lean",
+      :exit 0,
+      :output
+      "6a4c52da48c656d8cb42ca4a5bbed57af4096490406291628dea8219d4a6d9ac"}
+     {:cmd
+      "lake env lean /tmp/manifold_fundamental_class_localization_transport.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^\\s*axiom\\b' ConstructionTargets/ManifoldFundamentalClass.lean /tmp/manifold_fundamental_class_localization_transport.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "73bc58bba946d5c58bcb744796b6ff3784e119a9",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path
+     "/tmp/manifold_fundamental_class_localization_transport.lean",
+     :sha256
+     "6a4c52da48c656d8cb42ca4a5bbed57af4096490406291628dea8219d4a6d9ac",
+     :original-sha256
+     "8b890f2aa07c8db42d813b8172a8855e48c49c971002ed33d3fecd9d6c1362d1",
+     :sorry-count 0},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :summary
+     "Composed transported group-global-generator naturality with elementwise localization naturality while retaining explicit hypotheses for the module generator equation, source localization equality, and relative local-generator equation."},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/global-local-generator-transport",
@@ -3941,11 +4012,13 @@
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.localizationMap_groupGlobalGenerator_transport",
     :reported-by
-    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+     :routes-2026-10-10-manifold-global-local-generator-transport-topo3-r1],
     :type
     "forall {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y] (f : C(X,Y)) (x : X) (y : Y) (h : Set.MapsTo f (deletedPoint x) (deletedPoint y)) (n : Nat) (eX : (((AlgebraicTopology.singularHomologyFunctor (ModuleCat Int) n).obj (ModuleCat.of Int Int)).obj (TopCat.of X)) ≅ ModuleCat.of Int Int) (eY : (((AlgebraicTopology.singularHomologyFunctor (ModuleCat Int) n).obj (ModuleCat.of Int Int)).obj (TopCat.of Y)) ≅ ModuleCat.of Int Int) (gx : (RelativeSingularChains (deletedPoint x)).homology n) (gy : (RelativeSingularChains (deletedPoint y)).homology n), ((((AlgebraicTopology.singularHomologyFunctor (ModuleCat Int) n).obj (ModuleCat.of Int Int)).map (TopCat.ofHom f)).hom (globalGenerator Int _ eX) = globalGenerator Int _ eY) -> localizationMap x n (groupGlobalGenerator (TopCat.of X) n eX) = gx -> HomologicalComplex.homologyMap (relativeSingularMap (deletedPoint x) (deletedPoint y) f h) n gx = gy -> localizationMap y n (groupGlobalGenerator (TopCat.of Y) n eY) = gy",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in
+    :routes-2026-10-10-manifold-global-local-generator-transport-topo3-r1},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-localizationmap-groupglobalgenerator-transport,
    :kind :lemma,
