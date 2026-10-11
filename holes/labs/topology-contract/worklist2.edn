@@ -79340,6 +79340,19 @@
     :diagnostic-history [],
     :continue-from
     "Formalise blueprint node B2 frozenYCover in ConstructionTargets/t97A04Closure.lean, recording the transported vertical cover, its openness and union proof, and its exact identification with BoundaryTorusOpenCover.",
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791717503458-5232-3d462382",
+     :commands
+     ["git show/diff-tree/show --check 964e5f8dcba178009d7e61c5c61f018300079733 and 0922066b0b2ba0edb3ff369117fb523828fdde64"
+      "git rev-parse closure and blueprint blobs at recorded commit"
+      "lake env lean ConstructionTargets/t97A04Closure.lean"
+      "lake env lean problems/t97A04/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "statement fingerprints and placeholder counts at recorded commit and prior program-history commit"],
+     :finding
+     "PASS: independent author topo-6 committed new compiled progress after program-history commit 461f5ca7e. Milestone 964e5f8dc adds the sorry-free declaration frozenTorusH2GroupIsoInt, and 0922066b0 records B1 as proved while listing B2 through B11 and the next B2 milestone. The recorded closure and blueprint blobs match. B1 has the faithful blueprint type and correct representation orientation: it transports the banked boundary-torus H2 coordinate through frozenTorusHomeomorphBoundaryTorus.toHomotopyEquiv, the same fixed homeomorphism used for the aligned frozen-torus coordinates. The closure file compiles with exactly propext, Classical.choice, Quot.sound and no placeholders. Main compiles with its two acknowledged placeholders unchanged from the prior program-history commit; registry is 131/0 and the frozen t97A04 fingerprint is unchanged. This is a correct program STOP with substantive compiled progress and explicit remaining milestones."},
     :commit "0922066b0b2ba0edb3ff369117fb523828fdde64",
     :changed-paths
     ["ConstructionTargets/t97A04Closure.lean"
@@ -79349,7 +79362,7 @@
     :milestone-commit "964e5f8dcba178009d7e61c5c61f018300079733",
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79365,7 +79378,7 @@
     ["lake env lean problems/t97A04/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: :blueprint-written",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: :program-milestone-complete",
    :id :program-2026-10-11-close-t97a04,
    :kind :final-adapter,
    :campaign-priority 43,
@@ -79375,7 +79388,10 @@
    :program-history
    [{:job 1,
      :commit "461f5ca7e37a5b2967853dbea957756974500d59",
-     :reason :blueprint-written}]}
+     :reason :blueprint-written}
+    {:job 2,
+     :commit "0922066b0b2ba0edb3ff369117fb523828fdde64",
+     :reason :program-milestone-complete}]}
   {:consumer :t96A07,
    :phase :implementation,
    :state :open,
@@ -79428,7 +79444,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -79441,7 +79457,9 @@
     :type
     "SingularHomology 2 (TopCat.of (AddCircle (1 : Real) × AddCircle (1 : Real))) ≅ AddCommGrpCat.of Int",
     :area "mv-connecting-naturality",
-    :proved-in :program-2026-10-11-close-t97a04},
+    :proved-in :program-2026-10-11-close-t97a04,
+    :banked-by :program-2026-10-11-close-t97a04,
+    :banked-commit "0922066b0b2ba0edb3ff369117fb523828fdde64"},
    :id
    :lemma-constructiontargets-t97a04closure-frozentorush2groupisoint,
    :kind :lemma,
