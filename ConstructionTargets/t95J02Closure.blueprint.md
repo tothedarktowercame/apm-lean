@@ -121,7 +121,7 @@ uses: B3, B4, B5, `t95J02QuotientPoint_glide`,
 `AddCircle.homeomorphCircle (T := 1) one_ne_zero`,
 `isQuotientMap_quotient_mk'`, `IsQuotientMap.lift`
 
-status: partial
+status: proved
 
 Choose a real lift `y` of a point on the source circle only inside the
 periodic quotient construction used in B5.  Define the homotopy by
@@ -132,10 +132,10 @@ continuously.  At `t=0` it is `β`.  At `t=1`, the glide equality identifies
 Euclidean circle under B5's cosine/sine coordinate: it fixes `cos (2πy)` and
 negates `sin (2πy)`, hence is `reflectionMap (1 : Fin 2)`.
 
-Implemented progress: `verticalSweepHomotopy` performs this descent and proves
-the two endpoints on `AddCircle 1`; the remaining part of B6 transports the
-source through B5 and identifies additive negation with coordinate-1
-reflection on the Euclidean circle.
+Implemented: `verticalSweepHomotopy` performs this descent and proves the two
+endpoints on `AddCircle 1`; `sphereToAddCircle_reflection` identifies additive
+negation with coordinate-1 reflection, and the final theorem transports the
+homotopy through B5.
 
 ### B7. Nonzero vertical class killed in the Klein bottle
 

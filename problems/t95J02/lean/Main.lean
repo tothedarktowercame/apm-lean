@@ -1,5 +1,6 @@
 import Mathlib
 import ConstructionTargets.CircleHomology
+import ConstructionTargets.CoefficientCoordinateReflections
 
 /-! # APM t95J02: retractions of the Klein bottle onto its core circles
 
@@ -345,6 +346,36 @@ noncomputable def t95J02CircleB_homeo :
     ((AddCircle.homeomorphCircle (T := (1 : ℝ)) one_ne_zero).symm.trans
       verticalAddCircleHomeomorph)
 
+noncomputable def sphereToAddCircle :
+    T02A06.euclideanUnitSphere 2 ≃ₜ AddCircle (1 : ℝ) :=
+  ConstructionTargets.CircleHomology.circleHomeomorphSphereOne.symm.trans
+    (AddCircle.homeomorphCircle (T := (1 : ℝ)) one_ne_zero).symm
+
+noncomputable def sphereToAddCircleMap :
+    C(T02A06.euclideanUnitSphere 2, AddCircle (1 : ℝ)) :=
+  ⟨sphereToAddCircle, sphereToAddCircle.continuous⟩
+
+theorem sphereToAddCircle_reflection (x : T02A06.euclideanUnitSphere 2) :
+    sphereToAddCircle
+        (ConstructionTargets.CoefficientCoordinateReflections.reflectionMap
+          (1 : Fin 2) x) =
+      -sphereToAddCircle x := by
+  apply (AddCircle.homeomorphCircle (T := (1 : ℝ)) one_ne_zero).injective
+  simp only [sphereToAddCircle, Homeomorph.trans_apply,
+    Homeomorph.apply_symm_apply]
+  rw [AddCircle.homeomorphCircle_apply,
+    AddCircle.toCircle_neg,
+    ← AddCircle.homeomorphCircle_apply one_ne_zero,
+    Homeomorph.apply_symm_apply]
+  apply Subtype.ext
+  rw [Circle.coe_inv_eq_conj]
+  simp [
+    ConstructionTargets.CircleHomology.circleHomeomorphSphereOne,
+    ConstructionTargets.CoefficientCoordinateReflections.reflectionMap,
+    ConstructionTargets.CoefficientCoordinateReflections.sphereHomeo,
+    ConstructionTargets.CoefficientCoordinateReflections.reflection_apply,
+    Complex.orthonormalBasisOneI_repr_symm_apply]
+
 /-- The raw glide sweep before descending the vertical coordinate modulo one. -/
 def verticalSweepRaw (p : I × ℝ) : t95J02KleinBottleType :=
   t95J02QuotientPoint ((p.1 : ℝ), p.2)
@@ -400,6 +431,37 @@ def verticalSweepHomotopy : ContinuousMap.Homotopy verticalCoreMap
   toContinuousMap := ⟨verticalSweep, verticalSweep_continuous⟩
   map_zero_left := by simpa [verticalCoreMap] using verticalSweep_zero
   map_one_left := by simpa [verticalCoreMap, addCircleNeg] using verticalSweep_one
+
+noncomputable def beta :
+    C(T02A06.euclideanUnitSphere 2, t95J02KleinBottleType) :=
+  ⟨fun x => t95J02InclusionB (t95J02CircleB_homeo x),
+    t95J02InclusionB.hom.continuous.comp t95J02CircleB_homeo.continuous⟩
+
+theorem beta_eq_verticalCoreMap :
+    beta = verticalCoreMap.comp sphereToAddCircleMap := by
+  ext x
+  rfl
+
+theorem beta_reflection_eq :
+    beta.comp
+        (ConstructionTargets.CoefficientCoordinateReflections.reflectionMap
+          (1 : Fin 2)) =
+      (verticalCoreMap.comp addCircleNeg).comp sphereToAddCircleMap := by
+  ext x
+  change t95J02InclusionB (verticalAddCircle (sphereToAddCircle _)) =
+    t95J02InclusionB (verticalAddCircle (-sphereToAddCircle x))
+  rw [sphereToAddCircle_reflection]
+
+theorem t95J02_beta_homotopic_beta_reflection :
+    ContinuousMap.Homotopic beta
+      (beta.comp
+        (ConstructionTargets.CoefficientCoordinateReflections.reflectionMap
+          (1 : Fin 2))) := by
+  rw [beta_eq_verticalCoreMap]
+  have href := beta_reflection_eq
+  rw [beta_eq_verticalCoreMap] at href
+  rw [href]
+  exact ⟨verticalSweepHomotopy.compContinuousMap sphereToAddCircleMap⟩
 
 end t95J02Closure
 
