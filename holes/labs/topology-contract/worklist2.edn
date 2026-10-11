@@ -79283,27 +79283,23 @@
   {:consumer :t97A04,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "program STOP commits nothing new since the last :program-history entry: evidence commit bb0f0f77d8953dc78dd564e000f3d4a5b29d0894 exactly equals history job 5",
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Prove branch preservation; then folded degrees and B6-B11.",
+    "Combine preserved branch with folded degrees; then B6-B11.",
     :outcome :stop,
-    :warnings ["Main: 2 placeholders."],
+    :warnings
+    ["Main: 2 placeholders."
+     "Unrelated dirty PointWedgeVanKampen.lean preserved."],
     :missing-theorems
     [{:name
-      "ConstructionTargets.T97A04Closure.overlapOrthogonalRetraction",
-      :type "orthogonal toFun(invFun s)=s",
-      :status :proved,
-      :consumers [:t97A04],
-      :depends-on [],
-      :area "mv-connecting-naturality"}
-     {:name
       "ConstructionTargets.T97A04Closure.twoCircleOverlapShear_branch",
-      :type "shear preserves summand",
-      :status :partial,
+      :type
+      "∀ a b q, twoCircleBranch (twoCircleOverlapShear a b q)=twoCircleBranch q",
+      :status :proved,
       :consumers [:t97A04],
       :depends-on
       ["ConstructionTargets.T97A04Closure.overlapOrthogonalRetraction"
@@ -79311,49 +79307,35 @@
       :area "mv-connecting-naturality"}
      {:name
       "ConstructionTargets.T97A04Closure.shearY_overlap_coordinate_components",
-      :type "inl/inr equations",
+      :type "production inl/inr equations",
       :status :partial,
       :consumers [:t97A04],
       :depends-on
-      ["ConstructionTargets.T97A04Closure.twoCircleOverlapShear_branch"],
+      ["ConstructionTargets.T97A04Closure.twoCircleOverlapShear_branch"
+       "ConstructionTargets.T97A04Closure.twoCircleOverlapShearLeftFold_H1_coordinate"
+       "ConstructionTargets.T97A04Closure.twoCircleOverlapShearRightFold_H1_coordinate"],
       :area "mv-connecting-naturality"}],
     :statement-hashes
     {:registry "131/0",
-     :closure "b95bfd78f5b97ab305cfbe4fcecf8ec5e09c1ed6",
+     :closure "5bfde4bd1ed5777fa1caea5d25f8b5b84c70be4c",
      :blueprint "c419a895cb4ede2acc1cb6bc5c7536344ba63df4"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
     :reason :program-progress-committed,
     :commands
-    [{:cmd "closure compile", :exit 0}
+    [{:cmd "lake env lean ConstructionTargets/t97A04Closure.lean",
+      :exit 0}
      {:cmd "closure no-sorry scan", :exit 1, :expected-exit 1}
-     {:cmd "Main compile", :exit 0}
-     {:cmd "registry check", :exit 0}
+     {:cmd "lake env lean problems/t97A04/lean/Main.lean", :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "Main placeholder count", :exit 0, :output "2"}
-     {:cmd "git show --check f73089d53", :exit 0}],
-    :diagnostic-history
-    [{:cmd "closure compile",
-      :exit 134,
-      :finding
-      "Deep transport unfolding overflowed; exact retraction retained."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791739988983-5688-1e4304e4",
-     :commands
-     ["git show/diff/check f73089d53"
-      "git diff 36cd0baa..f73089d53"
-      "lake env lean ConstructionTargets/t97A04Closure.lean"
-      "lake env lean problems/t97A04/lean/Main.lean"
-      "registry fingerprint/hash/placeholder checks"],
-     :finding
-     "PASS: f73089d5 is new after history 36cd0baa; scope/blob match. Cumulative scoped progress also includes 76582a0a: the shear fixes the second overlap coordinate and hence its orthogonal component; f73089d5 proves the exact toFun(invFun s)=s retraction needed for branch preservation. Lean gates compile with standard axioms only; registry 131/0; frozen hash unchanged ca1b2cb3; closure 0/Main 2 placeholders. Branch preservation, folded degrees, and B6-B11 remain listed."},
-    :commit "f73089d531b006667bcd3cf40089c7d20b8028c0",
+     {:cmd "git show --check be98ab333", :exit 0}],
+    :commit "be98ab333b5d35e1c03a1af470a52d5a705f14d8",
     :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -80423,7 +80405,8 @@
     "ConstructionTargets.T97A04Closure.twoCircleOverlapShear_branch",
     :reported-by [:program-2026-10-11-close-t97a04],
     :type "shear preserves summand",
-    :area "mv-connecting-naturality"},
+    :area "mv-connecting-naturality",
+    :proved-in :program-2026-10-11-close-t97a04},
    :id
    :lemma-constructiontargets-t97a04closure-twocircleoverlapshear-branch,
    :kind :lemma,
