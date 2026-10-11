@@ -983,6 +983,17 @@ theorem correctedLocalGeneratorCoefficient_eq_one_of_ne_neg_one
   · exact h
   · exact (hne h).elim
 
+/-- The corrected local-generator coefficient is definitionally the value at
+one of the normalization-conjugated automorphism. -/
+theorem correctedLocalGeneratorCoefficient_eq_automorphism_one
+    (k : ℕ) {M : Type} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M) :
+    correctedLocalGeneratorCoefficient k x =
+      (correctedLocalNormalizationAutomorphism k x).hom.hom 1 := by
+  unfold correctedLocalGeneratorCoefficient
+    correctedLocalNormalizationAutomorphism CoefficientChartLocal.generator
+  rfl
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -1045,3 +1056,4 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_coefficient_one
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_nonnegative
 #print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient_eq_one_of_ne_neg_one
+#print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient_eq_automorphism_one
