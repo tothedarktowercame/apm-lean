@@ -558,6 +558,32 @@ theorem genericPointWedgeIdentityGlobalRightRestriction_naturality
   (genericPointWedgeIdentityGlobalRightRestrictionIso
     x₀ y₀ M N hM hN hy hx cM cN).hom.naturality f
 
+theorem genericPointWedgeIdentityGlobalLeftRestriction_hom_app
+    (z : FundamentalGroupoid (genericPointWedgeLeftPiece x₀ y₀ M)) :
+    (genericPointWedgeIdentityGlobalLeftRestrictionIso
+      x₀ y₀ M N hM hN hy hx cM cN).hom.app z = 𝟙 _ := by
+  rfl
+
+theorem genericPointWedgeIdentityGlobalLeftRestriction_map
+    {a b : FundamentalGroupoid (genericPointWedgeLeftPiece x₀ y₀ M)}
+    (f : a ⟶ b) :
+    (genericPointWedgeIdentityGlobalFunctor
+        x₀ y₀ M N hM hN hy hx cM cN).map
+          ((FundamentalGroupoid.map
+            (TwoOpenDescentRestriction.coverPieceInclusion
+              (U := genericLeftOpen x₀ y₀ M)
+              (V := genericRightOpen x₀ y₀ N) true)).map f) =
+      (genericPointWedgeIdentityActualSpan
+        x₀ y₀ M N hM hN hy hx cM cN).left.map f := by
+  have h := genericPointWedgeIdentityGlobalLeftRestriction_naturality
+    x₀ y₀ M N hM hN hy hx cM cN f
+  rw [genericPointWedgeIdentityGlobalLeftRestriction_hom_app,
+    genericPointWedgeIdentityGlobalLeftRestriction_hom_app] at h
+  calc
+    _ = _ ≫ 𝟙 _ := (Category.comp_id _).symm
+    _ = 𝟙 _ ≫ _ := h
+    _ = _ := Category.id_comp _
+
 omit [PathConnectedSpace X] [PathConnectedSpace Y] in
 @[simp] theorem genericPointWedgeIdentityRepresentation_inl
     (g : genericPointWedgeLeftGroup x₀) :
@@ -1505,6 +1531,8 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeIdentityGlobalRightRestrictionIso
 #print axioms genericPointWedgeIdentityGlobalLeftRestriction_naturality
 #print axioms genericPointWedgeIdentityGlobalRightRestriction_naturality
+#print axioms genericPointWedgeIdentityGlobalLeftRestriction_hom_app
+#print axioms genericPointWedgeIdentityGlobalLeftRestriction_map
 #print axioms genericPointWedgeIdentityRepresentation_inl
 #print axioms genericPointWedgeIdentityRepresentation_inr
 #print axioms genericPointWedgeIdentityPointSpan_left

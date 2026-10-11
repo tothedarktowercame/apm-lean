@@ -188,3 +188,12 @@ are the two components of the pseudopushout equivalence's counit, and the two
 cover-piece morphisms.  Thus B6 is reduced to computing these counit
 components at the chosen wedge-point representatives and then applying the
 already-proved actual-span generator formulas.
+
+The left restriction counit component is now proved definitionally equal to
+the identity at every object, not merely at the basepoint.  Combining this
+with counit naturality gives
+`genericPointWedgeIdentityGlobalLeftRestriction_map`: the reconstructed
+global functor restricted to the left cover maps every morphism exactly as
+the actual-span left functor.  Only the right restriction remains; unlike the
+left component it contains the overlap glue comparison and is not
+definitionally the identity.
