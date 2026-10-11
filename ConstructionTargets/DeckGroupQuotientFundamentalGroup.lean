@@ -217,6 +217,29 @@ theorem orbitEndpointMonodromyRaw_mul
     _ = (E (orbitEndpointMonodromyRaw free x b *
         orbitEndpointMonodromyRaw free x a) : X) := rfl
 
+/-- Endpoint monodromy as a homomorphism into the acting group.  Inversion
+corrects the order reversal in the raw endpoint coordinate. -/
+noncomputable def orbitEndpointMonodromy
+    {G X : Type*} [Group G] [TopologicalSpace X] [MulAction G X]
+    [ContinuousConstSMul G X] [ProperlyDiscontinuousSMul G X]
+    [LocallyCompactSpace X] [T2Space X] [SimplyConnectedSpace X]
+    [LocPathConnectedSpace X]
+    (free : ∀ g : G, ∀ x : X, g • x = x → g = 1) (x : X) :
+    FundamentalGroup (MulAction.orbitRel.Quotient G X) (Quotient.mk _ x) →* G where
+  toFun a := (orbitEndpointMonodromyRaw free x a)⁻¹
+  map_one' := by rw [orbitEndpointMonodromyRaw_one, inv_one]
+  map_mul' a b := by
+    rw [orbitEndpointMonodromyRaw_mul, mul_inv_rev]
+
+@[simp] theorem orbitEndpointMonodromy_apply
+    {G X : Type*} [Group G] [TopologicalSpace X] [MulAction G X]
+    [ContinuousConstSMul G X] [ProperlyDiscontinuousSMul G X]
+    [LocallyCompactSpace X] [T2Space X] [SimplyConnectedSpace X]
+    [LocPathConnectedSpace X]
+    (free : ∀ g : G, ∀ x : X, g • x = x → g = 1) (x : X)
+    (a : FundamentalGroup (MulAction.orbitRel.Quotient G X) (Quotient.mk _ x)) :
+    orbitEndpointMonodromy free x a = (orbitEndpointMonodromyRaw free x a)⁻¹ := rfl
+
 private abbrev CounterexampleGroup := Multiplicative (ZMod 2)
 
 private instance : TopologicalSpace CounterexampleGroup := ⊤
@@ -281,6 +304,7 @@ theorem freeProperlyDiscontinuousQuotient_fundamentalGroupEquiv_refuted :
 #print axioms orbitEndpointMonodromyRaw
 #print axioms orbitEndpointMonodromyRaw_one
 #print axioms orbitEndpointMonodromyRaw_mul
+#print axioms orbitEndpointMonodromy
 #print axioms indiscreteRegularAction_no_fundamentalGroupEquiv
 #print axioms freeProperlyDiscontinuousQuotient_fundamentalGroupEquiv_refuted
 

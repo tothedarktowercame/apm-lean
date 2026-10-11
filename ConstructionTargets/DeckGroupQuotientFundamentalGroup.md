@@ -41,6 +41,11 @@ multiplication represents the path for the second factor followed by the
 first. `monodromy_trans_apply` and B5 therefore identify the composite lifted
 endpoint with the product of raw coordinates in the reversed order.
 
+`orbitEndpointMonodromy` implements blueprint B7. It sends a loop to the
+inverse of its raw endpoint coordinate. The raw identity law proves `map_one`,
+and B6 together with `mul_inv_rev` restores the ordinary multiplication order
+for `map_mul`.
+
 ## Refutation of the frozen final statement
 
 The fixed theorem omits every separation hypothesis. This is not merely a gap
@@ -58,12 +63,10 @@ negates the exact universal proposition of the program's frozen final type.
 
 ## Remaining work for the repaired statement
 
-1. Invert the raw coordinate to package
-   `orbitEndpointMonodromy : FundamentalGroup _ _ →* G`.
-2. Prove surjectivity and identify its kernel with the image of the total
+1. Prove surjectivity and identify its kernel with the image of the total
    space's fundamental group.
-3. Specialize to a simply connected total space.
-4. Supply the plane/Klein-group and finite-action adapters.
+2. Specialize to a simply connected total space.
+3. Supply the plane/Klein-group and finite-action adapters.
 
 Mathlib's construction of local evenly covered neighborhoods from
 `ProperlyDiscontinuousSMul G X` assumes both `LocallyCompactSpace X` and
