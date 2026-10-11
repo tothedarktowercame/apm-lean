@@ -1,5 +1,6 @@
 import ConstructionTargets.KleinDiskClosedSquareRelationCompatibleCarrier
 import ConstructionTargets.KleinSquareBoundaryRelation
+import Mathlib.Topology.Connected.TotallyDisconnected
 
 noncomputable section
 
@@ -20,6 +21,31 @@ def diskClass (x : Disk) : Set Disk :=
 
 def squareClass (p : ClosedSquare) : Set ClosedSquare :=
   {q | EqvGen ClosedSquareRel p q}
+
+/-- A homeomorphism transports connected components.  This is the general
+topological mechanism used after restricting a compatible carrier to the
+intrinsically characterized punctured boundaries. -/
+def connectedComponentsEquivOfHomeomorph
+    {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
+    (e : X ≃ₜ Y) : ConnectedComponents X ≃ ConnectedComponents Y where
+  toFun := e.continuous.connectedComponentsMap
+  invFun := e.symm.continuous.connectedComponentsMap
+  left_inv := by
+    rintro ⟨x⟩
+    change ((e.symm (e x) : X) : ConnectedComponents X) =
+      (x : ConnectedComponents X)
+    simp
+  right_inv := by
+    rintro ⟨y⟩
+    change ((e (e.symm y) : Y) : ConnectedComponents Y) =
+      (y : ConnectedComponents Y)
+    simp
+
+@[simp] theorem connectedComponentsEquivOfHomeomorph_apply
+    {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
+    (e : X ≃ₜ Y) (x : X) :
+    connectedComponentsEquivOfHomeomorph e (x : ConnectedComponents X) =
+      (e x : ConnectedComponents Y) := rfl
 
 /-- Relation compatibility identifies each complete generated-relation class,
 not merely generator pairs.  This is the relation-theoretic part of the
@@ -62,5 +88,6 @@ theorem exists_distinct_related_iff
 
 #print axioms image_diskClass_eq_squareClass
 #print axioms exists_distinct_related_iff
+#print axioms connectedComponentsEquivOfHomeomorph
 
 end ConstructionTargets.KleinCompatibleCarrierComponentBridge
