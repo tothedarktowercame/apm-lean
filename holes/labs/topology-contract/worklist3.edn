@@ -8630,6 +8630,23 @@
      "The composite of inverse forgotten coefficient chart normalization, integralRelativeHomologyComparisonWithTransport.hom, and ambientLocalNormalization.hom",
      :direction
      "Definitional morphism equality from the packaged normalization-conjugated automorphism to its explicit three-factor composite"},
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791696085275-4337-beba1842",
+     :commands
+     ["git show and git diff-tree recorded commit scope"
+      "git blob identity check"
+      "sha256sum frozen fixture"
+      "git diff --check recorded commit"
+      "lake env lean renamed frozen-fixture replay"
+      "lake env lean target module"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"
+      "placeholder and axiom scan"
+      "python3 scripts/statement-registry.py check"
+      "consumer placeholder census"],
+     :finding
+     "PASS: recorded commit 8943335b changes only the target module and its blob matches the reviewed checkout; frozen fixture hash 146776640446969566289306bcd8ad156c93033ca58acce02769945e995a444a matches. The theorem proves the exact frozen definitional equality in the registered direction, from correctedLocalNormalizationAutomorphism.hom to the inverse forgotten coefficient-chart normalization followed by the corrected relative comparison and ambient normalization. It leaves those three factors opaque and makes no sign or fundamental-class claim. Renamed fixture replay, target elaboration, and Lake build pass; axioms are exactly propext, Classical.choice, Quot.sound; registry is 131/0; target placeholders are 0 and consumer baselines t00J02/t98A02 remain 1/1."},
     :commit "8943335be271094e2f52b101bbc2c062761afbb3",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -8644,7 +8661,7 @@
      "ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/corrected-normalization-automorphism-factorization",
@@ -8816,7 +8833,7 @@
      "The packaged corrected normalization automorphism unfolds definitionally to the inverse coefficient chart normalization, corrected relative comparison, and ambient normalization. The compiled theorem exposes precisely this three-factor composite. The next prerequisite must expand these factors far enough to align their connecting, radial, and sphere maps and then exclude the negative identity.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -12186,7 +12203,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -12203,7 +12220,10 @@
     "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), (correctedLocalNormalizationAutomorphism k x).hom = (forgetIntModules.mapIso (CoefficientChartLocal.localIso Int k x)).inv ≫ (integralRelativeHomologyComparisonWithTransport (deletedPoint x) (k + 2)).hom ≫ (ambientLocalNormalization k x).hom",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-corrected-automorphism-hom-topo3-r1},
+    :routes-2026-10-11-manifold-corrected-automorphism-hom-topo3-r1,
+    :banked-by
+    :routes-2026-10-11-manifold-corrected-automorphism-hom-topo3-r1,
+    :banked-commit "8943335be271094e2f52b101bbc2c062761afbb3"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-correctedlocalnormalizationautomorphism-hom,
    :kind :lemma,
