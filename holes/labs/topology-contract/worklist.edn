@@ -104019,10 +104019,72 @@
   {:bounded-exception
    "This corrected single-consumer comparison proves only the frozen relation-compatible carrier type and does not impose the refuted edge numbering.",
    :consumer :t93J03,
+   :stop-count 1,
    :implements-lemma
    :lemma-kleindiskclosedsquarecompatiblecarrierpackage,
+   :evidence
+   {:placeholder-delta
+    {:source-before 0, :source-after 0, :fixture-sorry 0},
+    :residual
+    "Replace the impossible carrier-descent route with a quotient-level cut-and-reglue comparison between the aabb disk presentation and the square presentation.",
+    :outcome :stop,
+    :warnings [],
+    :missing-theorems
+    [{:name "compatibleCarrierHomeomorphInducesCyclicComponentEquiv",
+      :type
+      "Any Disk-to-ClosedSquare homeomorphism preserving and reflecting the two EqvGen relations induces a cyclic-order preserving or reversing equivalence of the four boundary components that conjugates diskPaired to squarePaired",
+      :status :not-started,
+      :consumers [:t93J03],
+      :depends-on ["no_cyclic_relation_compatible_component_equiv"],
+      :area "polygon-quotient-identification"}],
+    :statement-hashes
+    {:source-sha256
+     "494654d50cbe269d588c0511d1907adc08290767708f3bd9c8f4d8c035644359",
+     :registry "131 registered statements match, 0 do not"},
+    :disposition :stop,
+    :axioms ["propext" "Quot.sound"],
+    :author "topo-2",
+    :reason
+    "The frozen carrier type is false: the disk relation pairs adjacent boundary arcs 0-1 and 2-3, whereas ClosedSquareRel pairs opposite square sides. A carrier homeomorphism preserving and reflecting EqvGen must carry the unique four-point boundary class to the four corners and induce a cyclic-order preserving or reversing bijection of the four complementary boundary components. The compiled theorem no_cyclic_relation_compatible_component_equiv proves that no such component bijection conjugates these pairings.",
+    :commands
+    [{:cmd
+      "lake build ConstructionTargets.KleinDiskClosedSquareRelationCompatibleCarrier",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/klein-aabb-square-polygon-presentation-equivalence.lean",
+      :exit 0,
+      :finding
+      "Fixture compiles only with compatibleCarrierPackage as a custom axiom."}
+     {:cmd
+      "sha256sum /tmp/klein-aabb-square-polygon-presentation-equivalence.lean",
+      :exit 0,
+      :finding
+      "5559b09de6fc844fbd239e297e4b3ea5710533a9267a4aae9d46cc30424b520a"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit|axiom)\\b\" ConstructionTargets/KleinDiskClosedSquareRelationCompatibleCarrier.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}],
+    :diagnostic-history
+    [{:cmd
+      "lake env lean ConstructionTargets/KleinDiskClosedSquareRelationCompatibleCarrier.lean",
+      :exit 1,
+      :finding
+      "Initial proof attempted to substitute Fin values; corrected by eliminating the finite disjunctions with omega."}],
+    :commit "a16770b4024f719fc3feee3dfae01bb79e50a395",
+    :changed-paths
+    ["ConstructionTargets/KleinDiskClosedSquareRelationCompatibleCarrier.lean"],
+    :fixture
+    {:path
+     "/tmp/klein-aabb-square-polygon-presentation-equivalence.lean",
+     :sha256
+     "5559b09de6fc844fbd239e297e4b3ea5710533a9267a4aae9d46cc30424b520a",
+     :status :self-axiomatized},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/KleinDiskClosedSquareRelationCompatibleCarrier.lean"],
    :dag-node
@@ -111602,6 +111664,38 @@
    :depends-on
    [:lemma-kleinsquareeqvgencasesiff-eqvgen-iff-cases
     :lemma-kleinsurfacerelnormalform-surfacerel-false-two-iff],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "compatibleCarrierHomeomorphInducesCyclicComponentEquiv",
+    :type
+    "Any Disk-to-ClosedSquare homeomorphism preserving and reflecting the two EqvGen relations induces a cyclic-order preserving or reversing equivalence of the four boundary components that conjugates diskPaired to squarePaired"},
+   :lemma
+   {:name "compatibleCarrierHomeomorphInducesCyclicComponentEquiv",
+    :reported-by
+    [:routes-2026-10-11-klein-disk-closed-square-relation-compatible-carrier-101],
+    :type
+    "Any Disk-to-ClosedSquare homeomorphism preserving and reflecting the two EqvGen relations induces a cyclic-order preserving or reversing equivalence of the four boundary components that conjugates diskPaired to squarePaired",
+    :area "polygon-quotient-identification"},
+   :id :lemma-compatiblecarrierhomeomorphinducescycliccomponentequiv,
+   :kind :lemma,
+   :depends-on [:lemma-no-cyclic-relation-compatible-component-equiv],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "no_cyclic_relation_compatible_component_equiv"},
+   :lemma
+   {:name "no_cyclic_relation_compatible_component_equiv",
+    :reported-by []},
+   :id :lemma-no-cyclic-relation-compatible-component-equiv,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
