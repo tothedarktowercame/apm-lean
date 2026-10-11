@@ -101750,88 +101750,120 @@
    "Prove decoder-table independence at the six shared vertices and use the canonical six-edge cover to define total Circle decoders.",
    :other-consumers []}
   {:bounded-exception
+   "This single-consumer prerequisite proves the endpoint compatibility needed to descend both six-edge decoder tables through overlapping Circle edge presentations.",
+   :consumer :t97A01,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/PolygonBoundaryDecoderVertices.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/boundary-decoder-vertices",
+   :acceptance
+   {:implementation
+    "Promote the exact fixture. Define the common decoder vertex. Prove the zero and one endpoints on each of the three source loops equal it, using endpointQuotient zero-equals-one and the nested wedge generators. Prove that both endpoints of every N3 and torus-crosscap decoder edge map to this common vertex, including the reversed torus partner edges. Do not prove full edge-presentation independence, define total Circle decoders, classify EqvGen fibers, prove boundary-map injectivity or homeomorphism, derive final formulas, compute invariants, or close t97A01.",
+    :placeholder "the single sorry in apm_t97a01",
+    :route-step
+    "polygon radial open-cover step 31: prove common decoder values at every shared edge vertex",
+    :fixture "/tmp/polygon-boundary-decoder-vertices.lean",
+    :fixture-sha256
+    "6f898dae3c9a952ef25ecc17f0db5f3a04ca3454966fb4b748b77ffc97c938ce",
+    :gates
+    ["lake build ConstructionTargets.PolygonBoundaryDecoderVertices"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-11-polygon-boundary-decoder-vertices-71,
+   :kind :reusable-theorem,
+   :area "polygon-surface-open-cover",
+   :depends-on [:routes-2026-10-11-polygon-boundary-edge-decoders-70],
+   :current-residual
+   "Combine common endpoint values with half-open interior uniqueness to prove presentation independence and construct the total Circle decoders.",
+   :other-consumers []}
+  {:bounded-exception
    "This single-consumer concrete quotient package is the other final backlog lemma on t97A01 and supplies the actual two polygon models required by its frozen statement.",
    :consumer :t97A01,
    :implements-lemma :lemma-polygonradialopencoverpackages,
    :evidence
    {:probe
     {:residual
-     "Prove the six-edge decoder tables are independent of canonical edge presentation at shared vertices, descend them to total Circle decoders using the six-edge cover, then prove relation invariance and left-inverse formulas.",
+     "Use endpoint agreement plus half-open interior uniqueness to prove both decoder tables are independent of every Circle edge presentation, then define the total Circle decoders and prove their relation invariance and left-inverse formulas.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
-     [{:name "PolygonBoundaryEdgeDecoders.n3EdgeDecode_generators",
+     [{:name "PolygonBoundaryDecoderVertices.n3EdgeDecode_endpoints",
        :type
-       "The N3 six-edge decoder sends each of the three same-parameter paired-edge generators to equal ThreeEndpointLoops points.",
+       "For every one of the six edges, both endpoint parameters map under n3EdgeDecode to the common ThreeEndpointLoops wedge vertex.",
        :status :proved,
        :consumers [:t97A01],
        :depends-on
-       ["PolygonBoundaryGeneratorNormalForms.n3CircleRel_iff"],
+       ["PolygonBoundaryEdgeDecoders.n3EdgeDecode_generators"],
        :area "polygon-surface-open-cover"}
       {:name
-       "PolygonBoundaryEdgeDecoders.torusCrosscapEdgeDecode_generators",
+       "PolygonBoundaryDecoderVertices.torusCrosscapEdgeDecode_endpoints",
        :type
-       "The torus-crosscap six-edge decoder sends the two reversed and one same-parameter paired-edge generators to equal ThreeEndpointLoops points.",
+       "For every one of the six edges, both endpoint parameters map under torusCrosscapEdgeDecode to the common ThreeEndpointLoops wedge vertex.",
        :status :proved,
        :consumers [:t97A01],
        :depends-on
-       ["PolygonBoundaryGeneratorNormalForms.torusCrosscapCircleRel_iff"],
+       ["PolygonBoundaryEdgeDecoders.torusCrosscapEdgeDecode_generators"],
        :area "polygon-surface-open-cover"}
       {:name "polygonBoundaryCircleDecoderWellDefined",
        :type
-       "The N3 and torus-crosscap edge decoder tables agree on all presentations of a Circle point, including shared vertices, and therefore define total Circle decoders.",
+       "The two edge decoder tables agree on every pair of presentations of one Circle point and therefore define total Circle decoders with literal edge formulas.",
        :status :not-started,
        :consumers [:t97A01],
        :depends-on
-       ["PolygonBoundaryEdgeDecoders.n3EdgeDecode_generators"
-        "PolygonBoundaryEdgeDecoders.torusCrosscapEdgeDecode_generators"
+       ["PolygonBoundaryDecoderVertices.n3EdgeDecode_endpoints"
+        "PolygonBoundaryDecoderVertices.torusCrosscapEdgeDecode_endpoints"
         "PolygonSixEdgeCircleCover.sixEdgeCircleCover"
         "PolygonSixEdgeInteriorUniqueness.circleEdgePoint_interior_injective"],
        :area "polygon-surface-open-cover"}],
      :prerequisite
      {:bounded-exception
-      "This single-consumer prerequisite fixes the concrete six-edge decoder tables and verifies every boundary-word generator before the tables are descended to Circle.",
+      "This single-consumer prerequisite proves the endpoint compatibility needed to descend both six-edge decoder tables through overlapping Circle edge presentations.",
       :consumer :t97A01,
       :phase :implementation,
       :state :open,
-      :scope ["ConstructionTargets/PolygonBoundaryEdgeDecoders.lean"],
+      :scope
+      ["ConstructionTargets/PolygonBoundaryDecoderVertices.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/boundary-edge-decoders",
+      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/boundary-decoder-vertices",
       :acceptance
       {:implementation
-       "Promote the exact fixture. Define the N3 edge decoder by sending edges 0 and 1 to loop one, 2 and 3 to loop two, and 4 and 5 to loop three at the same parameter. Define the torus-crosscap decoder using edges 0 and 2 for loop one and edges 1 and 3 for loop two with reversed partner parameters, and edges 4 and 5 for loop three. Prove all twelve literal edge formulas and equality on all six generator pairs. Do not prove shared-vertex presentation independence, define a total Circle decoder, classify EqvGen fibers, prove boundary-map injectivity or homeomorphism, derive final formulas, compute invariants, or close t97A01.",
+       "Promote the exact fixture. Define the common decoder vertex. Prove the zero and one endpoints on each of the three source loops equal it, using endpointQuotient zero-equals-one and the nested wedge generators. Prove that both endpoints of every N3 and torus-crosscap decoder edge map to this common vertex, including the reversed torus partner edges. Do not prove full edge-presentation independence, define total Circle decoders, classify EqvGen fibers, prove boundary-map injectivity or homeomorphism, derive final formulas, compute invariants, or close t97A01.",
        :placeholder "the single sorry in apm_t97a01",
        :route-step
-       "polygon radial open-cover step 30: define the two six-edge decoder tables and verify their paired generators",
-       :fixture "/tmp/polygon-boundary-edge-decoders.lean",
+       "polygon radial open-cover step 31: prove common decoder values at every shared edge vertex",
+       :fixture "/tmp/polygon-boundary-decoder-vertices.lean",
        :fixture-sha256
-       "b56c3634ce831540d4bfc5c5f8a67b6cd77643a5d07f194e9931e69e5f0143ec",
+       "6f898dae3c9a952ef25ecc17f0db5f3a04ca3454966fb4b748b77ffc97c938ce",
        :gates
-       ["lake build ConstructionTargets.PolygonBoundaryEdgeDecoders"
+       ["lake build ConstructionTargets.PolygonBoundaryDecoderVertices"
         "fixture compiles"
         "zero source and fixture sorry"
         "standard-only axioms"
         "registry check"]},
-      :id :routes-2026-10-11-polygon-boundary-edge-decoders-70,
+      :id :routes-2026-10-11-polygon-boundary-decoder-vertices-71,
       :kind :reusable-theorem,
       :area "polygon-surface-open-cover",
       :depends-on
-      [:routes-2026-10-11-polygon-boundary-generator-normal-forms-69],
+      [:routes-2026-10-11-polygon-boundary-edge-decoders-70],
       :current-residual
-      "Prove decoder-table independence at the six shared vertices and use the canonical six-edge cover to define total Circle decoders.",
+      "Combine common endpoint values with half-open interior uniqueness to prove presentation independence and construct the total Circle decoders.",
       :other-consumers []},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
-     [{:cmd "lake env lean /tmp/polygon-boundary-edge-decoders.lean",
+     [{:cmd
+       "lake env lean /tmp/polygon-boundary-decoder-vertices.lean",
        :exit 0,
        :finding
-       "Both six-edge decoder tables, all twelve edge formulas, and equality on the six paired generators compile."}
-      {:cmd "sha256sum /tmp/polygon-boundary-edge-decoders.lean",
+       "The common decoder vertex, all six loop-endpoint equalities, and both twelve-case decoder endpoint theorems compile."}
+      {:cmd "sha256sum /tmp/polygon-boundary-decoder-vertices.lean",
        :exit 0,
        :finding
-       "b56c3634ce831540d4bfc5c5f8a67b6cd77643a5d07f194e9931e69e5f0143ec"}
+       "6f898dae3c9a952ef25ecc17f0db5f3a04ca3454966fb4b748b77ffc97c938ce"}
       {:cmd
-       "rg -n \"\\b(sorry|admit)\\b\" /tmp/polygon-boundary-edge-decoders.lean",
+       "rg -n \"\\b(sorry|admit)\\b\" /tmp/polygon-boundary-decoder-vertices.lean",
        :exit 1,
        :expected-exit 1,
        :finding "No fixture placeholders."}
@@ -101843,16 +101875,26 @@
        :exit 0,
        :finding
        "The route guide, per-problem routes, and probe definitions were read."}],
-     :diagnostic-history [],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/polygon-boundary-decoder-vertices.lean",
+       :exit 1,
+       :finding
+       "The first draft omitted the namespace containing zeroIcc and oneIcc, applied the inner wedge generator at the outer level, and used recursive simp sets; opening the namespace, transporting the inner equality through the outer left injection, and stating the finite cases explicitly corrected the proofs."}
+      {:cmd
+       "lake env lean /tmp/polygon-boundary-decoder-vertices.lean",
+       :exit 1,
+       :finding
+       "The reversed edge-two endpoint at parameter one was not definitionally reduced by rfl; explicitly simplifying the decoder and reverse definitions proved it is the zero endpoint."}],
      :fixture
-     {:path "/tmp/polygon-boundary-edge-decoders.lean",
+     {:path "/tmp/polygon-boundary-decoder-vertices.lean",
       :sha256
-      "b56c3634ce831540d4bfc5c5f8a67b6cd77643a5d07f194e9931e69e5f0143ec",
+      "6f898dae3c9a952ef25ecc17f0db5f3a04ca3454966fb4b748b77ffc97c938ce",
       :interface
-      "Concrete N3 and torus-crosscap six-edge decoder tables have literal formulas on every edge and send every specialized paired-edge generator to equal three-loop points."},
+      "All zero and one endpoints of all six edges map under both specialized decoder tables to one common ThreeEndpointLoops wedge vertex."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -101902,7 +101944,8 @@
     :routes-2026-10-11-polygon-three-loop-half-open-equality-67
     :routes-2026-10-11-relation-quotient-left-inverse-68
     :routes-2026-10-11-polygon-boundary-generator-normal-forms-69
-    :routes-2026-10-11-polygon-boundary-edge-decoders-70],
+    :routes-2026-10-11-polygon-boundary-edge-decoders-70
+    :routes-2026-10-11-polygon-boundary-decoder-vertices-71],
    :current-residual
    "Combine the concrete cover packages with the strict overlap squares, banked Smith normalization, and final t97A01 assembly.",
    :other-consumers []}
@@ -105822,7 +105865,56 @@
    [:lemma-polygonboundaryedgedecoders-n3edgedecode-generators
     :lemma-polygonboundaryedgedecoders-toruscrosscapedgedecode-generators
     :lemma-polygonsixedgecirclecover-sixedgecirclecover
-    :lemma-polygonsixedgeinterioruniqueness-circleedgepoint-interior-injective],
+    :lemma-polygonsixedgeinterioruniqueness-circleedgepoint-interior-injective
+    :lemma-polygonboundarydecodervertices-n3edgedecode-endpoints
+    :lemma-polygonboundarydecodervertices-toruscrosscapedgedecode-endpoints],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "PolygonBoundaryDecoderVertices.n3EdgeDecode_endpoints",
+    :type
+    "For every one of the six edges, both endpoint parameters map under n3EdgeDecode to the common ThreeEndpointLoops wedge vertex."},
+   :lemma
+   {:name "PolygonBoundaryDecoderVertices.n3EdgeDecode_endpoints",
+    :reported-by
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    :type
+    "For every one of the six edges, both endpoint parameters map under n3EdgeDecode to the common ThreeEndpointLoops wedge vertex.",
+    :area "polygon-surface-open-cover",
+    :proved-in
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+   :id :lemma-polygonboundarydecodervertices-n3edgedecode-endpoints,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polygonboundaryedgedecoders-n3edgedecode-generators],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "PolygonBoundaryDecoderVertices.torusCrosscapEdgeDecode_endpoints",
+    :type
+    "For every one of the six edges, both endpoint parameters map under torusCrosscapEdgeDecode to the common ThreeEndpointLoops wedge vertex."},
+   :lemma
+   {:name
+    "PolygonBoundaryDecoderVertices.torusCrosscapEdgeDecode_endpoints",
+    :reported-by
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    :type
+    "For every one of the six edges, both endpoint parameters map under torusCrosscapEdgeDecode to the common ThreeEndpointLoops wedge vertex.",
+    :area "polygon-surface-open-cover",
+    :proved-in
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+   :id
+   :lemma-polygonboundarydecodervertices-toruscrosscapedgedecode-endpoints,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polygonboundaryedgedecoders-toruscrosscapedgedecode-generators],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
