@@ -1778,6 +1778,21 @@ theorem frozenLbar_H2_map :
             (shearY 3 1)) 2 := by
   rw [frozenLbar_factorization, frozenH2Map_comp]
 
+/-- Conjugating a composite by the fixed top-class coordinate is the
+composite of the conjugated maps. -/
+theorem frozenH2Coordinate_comp
+    (f g : SingularHomology 2 (TopCat.of FrozenTorus) ⟶
+      SingularHomology 2 (TopCat.of FrozenTorus)) :
+    (frozenTorusH2GroupIsoInt.inv ≫ f ≫
+        frozenTorusH2GroupIsoInt.hom) ≫
+      (frozenTorusH2GroupIsoInt.inv ≫ g ≫
+        frozenTorusH2GroupIsoInt.hom) =
+      frozenTorusH2GroupIsoInt.inv ≫ (f ≫ g) ≫
+        frozenTorusH2GroupIsoInt.hom := by
+  simp only [Category.assoc]
+  slice_lhs 3 4 => exact frozenTorusH2GroupIsoInt.hom_inv_id
+  slice_lhs 3 4 => exact Category.id_comp _
+
 #print axioms frozenTorusH2GroupIsoInt
 #print axioms frozenYCover
 #print axioms frozenYCoverUHomeomorph
