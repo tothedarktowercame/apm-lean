@@ -1232,6 +1232,21 @@ theorem positiveSign_rightTubeNormalComplex_re_pos
   rw [← hre]
   exact hnorm
 
+theorem positiveSign_radialStart_collisionPolynomial_pos
+    (p : RightTubeMinusLeftCore)
+    (hm : (rightTubeMeridianCoordinate p : Complex).re = 1) :
+    let n := rightTubeCoreNormalComplex
+      (apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p))
+    0 < (1 - n.re) ^ 2 - 4 * (1 - n.re) *
+      (rightTubeCoreAngularCoordinate p : Complex).re + 3 := by
+  dsimp only
+  apply collisionPolynomial_pos_of_normal_re_pos
+  · rw [norm_rightTubeCoreNormalComplex_circleMeridian]
+    norm_num
+  · simp [rightTubeCoreNormalComplex, rightTubeCorePlanarComplex,
+      apm_t02a03_circleMeridian, hm]
+    norm_num [Real.norm_eq_abs]
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -1278,3 +1293,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeight_rightTubeMeridianCoordinate_re_sq
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.signCases_zeroHeight_rightTubeMeridianCoordinate_re
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.positiveSign_rightTubeNormalComplex_re_pos
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.positiveSign_radialStart_collisionPolynomial_pos
