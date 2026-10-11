@@ -103014,6 +103014,21 @@
       :exit 1,
       :finding
       "A warning-cleanup simplification failed to rewrite the six decoder edge cases in Lake elaboration; restored the explicit six formula rewrites and rebuilt successfully."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791684579599-3757-c99df798",
+     :commands
+     ["git show and git diff-tree on recorded commit 72fc711898ef69f52cacc26370f68700631c2381"
+      "git diff --exit-code recorded commit against source checkout"
+      "SHA-256 and comment-stripped placeholder and axiom recomputation for source and fixture"
+      "lake build ConstructionTargets.PolygonBoundaryCompactHausdorffInstances"
+      "lake env lean /tmp/polygon-boundary-compact-hausdorff-instances.lean"
+      "lake env lean /dev/stdin with fresh axiom checks"
+      "python3 scripts/statement-registry.py check"
+      "git diff-tree --check recorded parent and commit"],
+     :finding
+     "Recorded one-file commit is authored by topo-2; source equals the recorded blob and the fixture hash matches; compactness is proved through successive quotient wedges, while both quotient T2 instances are obtained from explicit closed generated equivalence relations characterized by continuous decoder equality and do not assume the desired boundary homeomorphisms; the implementation discharges the fixture interface axiom, all exported frozen facts use only standard axioms, source placeholders and axiom declarations are zero, fixture placeholders are zero, the registry reports 131 matched and 0 mismatched, and the reproduced unused-simp warnings do not alter the frozen types."},
     :commit "72fc711898ef69f52cacc26370f68700631c2381",
     :changed-paths
     ["ConstructionTargets/PolygonBoundaryCompactHausdorffInstances.lean"],
@@ -103032,7 +103047,7 @@
       "polygonBoundaryCompactHausdorffInstances"]},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/PolygonBoundaryCompactHausdorffInstances.lean"],
    :dag-node
@@ -103169,7 +103184,7 @@
       "One packaged compact/Hausdorff interface suffices to promote both compiled continuous bijections to homeomorphisms."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
