@@ -13560,94 +13560,210 @@
    "Use the now-banked projection and inclusion mapHomologyIso naturality squares to prove that the exact forgetful functor preserves the snake-lemma connecting morphism; specialize it to coefficientOpenDiskConnectingTransport, then rewrite the raw square.",
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
+   :implements-lemma :lemma-mfclass-open-disk-snake-inputs-delta,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/manifold-fundamental-class/integral-open-disk-connecting-naturality/snake-inputs",
+   :acceptance
+   {:implementation
+    "Promote coefficientOpenDiskSnakeInput, forgottenCoefficientOpenDiskSnakeInput, and the exact fixture theorem. Name the HomologySequence.snakeInput objects producing the original coefficient delta and the reconstructed delta after forgetting, and identify both delta fields definitionally. Do not construct preservation of SnakeInput under forgetIntModules, prove the connecting square, rewrite the raw production square, prove radial or sphere compatibility, exclude negation, select a sign, or construct a fundamental class.",
+    :declaration
+    "ConstructionTargets.ManifoldFundamentalClass.openDiskSnakeInputs_delta",
+    :supporting-declarations
+    ["ConstructionTargets.ManifoldFundamentalClass.coefficientOpenDiskSnakeInput"
+     "ConstructionTargets.ManifoldFundamentalClass.forgottenCoefficientOpenDiskSnakeInput"],
+    :type
+    "forall (k : ℕ), (coefficientOpenDiskSnakeInput k).δ = CoefficientPairSequence.connecting ℤ (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2)) (k + 1) ∧ (forgottenCoefficientOpenDiskSnakeInput k).δ = (integralOpenDiskCoefficientPairShortExact k).δ (k + 2) (k + 1) rfl",
+    :fixture
+    "/tmp/manifold_fundamental_class_open_disk_snake_inputs.lean",
+    :fixture-sha256
+    "5f895af1917916b1867b0edd3419763a552febd39d6aa4dc0bc0cc8c808ad82f",
+    :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
+    :route-step
+    "expose the two snake inputs whose connecting morphisms must be compared under the exact forgetful functor"},
+   :representation
+   {:source
+    "The coefficient pair HomologySequence snake input in ModuleCat ℤ and its delta",
+    :target
+    "The reconstructed snake input for the forgotten coefficient pair sequence in AddCommGrpCat and its delta",
+    :direction
+    "Exact definitional identifications from each named snake-input delta to the corresponding original or forgotten-sequence connecting morphism"},
+   :id :routes-2026-10-11-manifold-open-disk-snake-inputs-topo3-r1,
+   :kind :representation-comparison,
+   :area "manifold-fundamental-class",
+   :depends-on
+   [:routes-2026-10-10-topo3-seed-checkpoint-1
+    :routes-2026-10-10-manifold-local-positive-excision-topo3-r1
+    :routes-2026-10-10-manifold-oriented-overlap-coherence-topo3-r1
+    :routes-2026-10-10-manifold-connected-overlap-unit-topo3-r1
+    :routes-2026-10-10-manifold-oriented-connected-overlap-topo3-r1
+    :routes-2026-10-10-manifold-integral-transition-sign-topo3-r1
+    :routes-2026-10-10-manifold-exclude-negative-transition-topo3-r1
+    :routes-2026-10-10-manifold-global-generator-topo3-r1
+    :routes-2026-10-10-manifold-localization-iso-generator-topo3-r1
+    :routes-2026-10-10-manifold-generator-map-isiso-topo3-r1
+    :routes-2026-10-10-manifold-localization-map-naturality-topo3-r1
+    :routes-2026-10-10-manifold-localization-apply-naturality-topo3-r1
+    :routes-2026-10-10-manifold-group-global-generator-topo3-r1
+    :routes-2026-10-10-manifold-group-generator-naturality-topo3-r1
+    :routes-2026-10-10-manifold-global-local-generator-transport-topo3-r1
+    :routes-2026-10-11-manifold-basepoint-localization-coefficient-topo3-r1
+    :routes-2026-10-11-manifold-local-generator-coefficient-unique-topo3-r1
+    :routes-2026-10-11-manifold-localization-coefficient-one-topo3-r1
+    :routes-2026-10-11-manifold-distinguished-chart-generator-topo3-r1
+    :routes-2026-10-11-manifold-integral-subtype-chain-naturality-topo3-r1
+    :routes-2026-10-11-manifold-integral-mapped-relative-cokernel-topo3-r1
+    :routes-2026-10-11-manifold-forget-relative-cokernel-topo3-r1
+    :routes-2026-10-11-manifold-integral-relative-chains-comparison-topo3-r1
+    :routes-2026-10-11-manifold-integral-relative-homology-comparison-topo3-r1
+    :routes-2026-10-11-manifold-ambient-local-normalization-topo3-r1
+    :routes-2026-10-11-manifold-generator-transport-of-normalization-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-subspace-map-equality-topo3-r1
+    :routes-2026-10-11-manifold-integral-direct-cokernel-projection-topo3-r1
+    :routes-2026-10-11-manifold-forget-cokernel-projection-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-integral-cokernel-transport-topo3-r1
+    :routes-2026-10-11-manifold-integral-composite-cokernel-projection-topo3-r1
+    :routes-2026-10-11-manifold-production-cokernel-projection-topo3-r1
+    :routes-2026-10-11-manifold-integral-composite-relative-projection-topo3-r1
+    :routes-2026-10-11-manifold-relative-chains-comparison-with-transport-topo3-r1
+    :routes-2026-10-11-manifold-relative-homology-comparison-with-transport-topo3-r1
+    :routes-2026-10-11-manifold-corrected-homology-projection-topo3-r1
+    :routes-2026-10-11-manifold-corrected-homology-comparison-hom-topo3-r1
+    :routes-2026-10-11-manifold-relative-projection-homology-preservation-topo3-r1
+    :routes-2026-10-11-manifold-packaged-homology-projection-topo3-r1
+    :routes-2026-10-11-manifold-corrected-generator-normalization-topo3-r1
+    :routes-2026-10-11-manifold-normalization-from-corrected-generator-topo3-r1
+    :routes-2026-10-11-manifold-corrected-local-generator-coefficient-topo3-r1
+    :routes-2026-10-11-manifold-corrected-local-generator-unit-topo3-r1
+    :routes-2026-10-11-manifold-corrected-local-generator-sign-topo3-r1
+    :routes-2026-10-11-manifold-corrected-local-generator-nonnegative-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-one-from-corrected-normalization-topo3-r1
+    :routes-2026-10-11-manifold-corrected-generator-of-coefficient-one-topo3-r1
+    :routes-2026-10-11-manifold-corrected-normalization-of-coefficient-one-topo3-r1
+    :routes-2026-10-11-manifold-corrected-normalization-of-nonnegative-topo3-r1
+    :routes-2026-10-11-manifold-corrected-coefficient-one-of-ne-neg-one-topo3-r1
+    :routes-2026-10-11-manifold-corrected-coefficient-automorphism-one-topo3-r1
+    :routes-2026-10-11-manifold-corrected-automorphism-neg-iff-topo3-r1
+    :routes-2026-10-11-manifold-corrected-automorphism-hom-topo3-r1
+    :routes-2026-10-11-manifold-ambient-local-normalization-hom-topo3-r1
+    :routes-2026-10-11-manifold-corrected-automorphism-neg-cancel-coefficient-topo3-r1
+    :routes-2026-10-11-manifold-negative-equation-endpoint-factors-topo3-r1
+    :routes-2026-10-11-manifold-negative-equation-coefficient-factors-topo3-r1
+    :routes-2026-10-11-manifold-negative-equation-corrected-comparison-topo3-r1
+    :routes-2026-10-11-manifold-integral-relative-chains-transport-hom-topo3-r1
+    :routes-2026-10-11-manifold-integral-relative-chains-transport-homology-topo3-r1
+    :routes-2026-10-11-manifold-negative-equation-transport-homology-factors-topo3-r1
+    :routes-2026-10-11-manifold-transport-projection-alignment-topo3-r3
+    :routes-2026-10-11-manifold-negative-equation-projected-factors-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-projected-forward-topo3-r1
+    :routes-2026-10-11-manifold-negative-equation-concrete-endpoints-topo3-r1
+    :routes-2026-10-11-manifold-negative-prefix-model-topo3-r1
+    :routes-2026-10-11-manifold-negative-model-factors-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-open-disk-normalization-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-open-disk-model-factors-topo3-r1
+    :routes-2026-10-11-manifold-integral-open-disk-relative-homology-comparison-topo3-r1
+    :routes-2026-10-11-manifold-integral-open-disk-puncture-homology-comparison-topo3-r1
+    :routes-2026-10-11-manifold-integral-open-disk-pair-short-complex-comparison-topo3-r1
+    :routes-2026-10-11-manifold-integral-open-disk-coefficient-pair-short-exact-topo3-r1
+    :routes-2026-10-11-manifold-integral-open-disk-connecting-naturality-raw-topo3-r1
+    :routes-2026-10-11-manifold-integral-open-disk-component-homology-maps-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-open-disk-connecting-transport-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-pair-inclusion-homology-preservation-topo3-r1],
+   :current-residual
+   "Construct preservation of coefficientOpenDiskSnakeInput by forgetIntModules and identify it with forgottenCoefficientOpenDiskSnakeInput through the mapHomologyIso, mapCyclesIso, and mapOpcyclesIso comparisons; naturality_δ will then prove the connecting square.",
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-closedorientedfundamentalclass,
    :evidence
    {:probe
     {:residual
-     "Prove exact-functor preservation of the snake-lemma connecting morphism using the projection and inclusion preservation squares; specialize it to the open disk, then continue with radial and sphere compatibility.",
+     "Construct and compare the forgotten coefficient snake input with the reconstructed AddCommGrp snake input, then apply naturality_δ and continue to radial and sphere compatibility.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
-     [{:id
-       :lemma-mfclass-coefficient-pair-inclusion-homology-preservation,
+     [{:id :lemma-mfclass-open-disk-snake-inputs-delta,
        :name
-       "ConstructionTargets.ManifoldFundamentalClass.coefficientPairInclusion_mapHomologyIso_naturality",
+       "ConstructionTargets.ManifoldFundamentalClass.openDiskSnakeInputs_delta",
        :type
-       "forall {X : Type} [TopologicalSpace X] (A : Set X) (n : ℕ), forgetIntModules.map (HomologicalComplex.homologyMap (CoefficientRelativeSmall.subspaceMap ℤ A) n) ≫ (((CoefficientH0.SingularChains ℤ (TopCat.of X)).sc n).mapHomologyIso forgetIntModules).inv = (((CoefficientH0.SingularChains ℤ (TopCat.of A)).sc n).mapHomologyIso forgetIntModules).inv ≫ HomologicalComplex.homologyMap ((forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ)).map (CoefficientRelativeSmall.subspaceMap ℤ A)) n",
+       "forall (k : ℕ), (coefficientOpenDiskSnakeInput k).δ = CoefficientPairSequence.connecting ℤ (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2)) (k + 1) ∧ (forgottenCoefficientOpenDiskSnakeInput k).δ = (integralOpenDiskCoefficientPairShortExact k).δ (k + 2) (k + 1) rfl",
        :status :proved,
        :consumers [:t00J02 :t98A02],
        :depends-on
-       ["ConstructionTargets.ManifoldFundamentalClass.coefficientOpenDiskConnectingTransport_eq"],
+       ["ConstructionTargets.ManifoldFundamentalClass.coefficientPairInclusion_mapHomologyIso_naturality"],
        :area "manifold-fundamental-class"}],
      :prerequisite
      {:consumer :t00J02,
-      :implements-lemma
-      :lemma-mfclass-coefficient-pair-inclusion-homology-preservation,
+      :implements-lemma :lemma-mfclass-open-disk-snake-inputs-delta,
       :phase :implementation,
       :state :open,
       :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/manifold-fundamental-class/integral-open-disk-connecting-naturality/inclusion-homology-preservation",
+      "TOPOLOGY-ROUTES.md/manifold-fundamental-class/integral-open-disk-connecting-naturality/snake-inputs",
       :acceptance
       {:implementation
-       "Promote the exact fixture theorem. Prove inverse mapHomologyIso naturality for the integral coefficient subspace inclusion, from forgotten coefficient homology to homology of the forgotten chain complexes. Use ShortComplex.mapHomologyIso_inv_naturality. Do not prove preservation of the connecting morphism, rewrite the raw connecting square, prove radial or sphere compatibility, exclude negation, select a sign, or construct a fundamental class.",
+       "Promote coefficientOpenDiskSnakeInput, forgottenCoefficientOpenDiskSnakeInput, and the exact fixture theorem. Name the HomologySequence.snakeInput objects producing the original coefficient delta and the reconstructed delta after forgetting, and identify both delta fields definitionally. Do not construct preservation of SnakeInput under forgetIntModules, prove the connecting square, rewrite the raw production square, prove radial or sphere compatibility, exclude negation, select a sign, or construct a fundamental class.",
        :declaration
-       "ConstructionTargets.ManifoldFundamentalClass.coefficientPairInclusion_mapHomologyIso_naturality",
+       "ConstructionTargets.ManifoldFundamentalClass.openDiskSnakeInputs_delta",
+       :supporting-declarations
+       ["ConstructionTargets.ManifoldFundamentalClass.coefficientOpenDiskSnakeInput"
+        "ConstructionTargets.ManifoldFundamentalClass.forgottenCoefficientOpenDiskSnakeInput"],
        :type
-       "forall {X : Type} [TopologicalSpace X] (A : Set X) (n : ℕ), forgetIntModules.map (HomologicalComplex.homologyMap (CoefficientRelativeSmall.subspaceMap ℤ A) n) ≫ (((CoefficientH0.SingularChains ℤ (TopCat.of X)).sc n).mapHomologyIso forgetIntModules).inv = (((CoefficientH0.SingularChains ℤ (TopCat.of A)).sc n).mapHomologyIso forgetIntModules).inv ≫ HomologicalComplex.homologyMap ((forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ)).map (CoefficientRelativeSmall.subspaceMap ℤ A)) n",
+       "forall (k : ℕ), (coefficientOpenDiskSnakeInput k).δ = CoefficientPairSequence.connecting ℤ (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2)) (k + 1) ∧ (forgottenCoefficientOpenDiskSnakeInput k).δ = (integralOpenDiskCoefficientPairShortExact k).δ (k + 2) (k + 1) rfl",
        :fixture
-       "/tmp/manifold_fundamental_class_coefficient_inclusion_homology_preservation.lean",
+       "/tmp/manifold_fundamental_class_open_disk_snake_inputs.lean",
        :fixture-sha256
-       "b9a2d5b4fcec85c7a5bc9ad779fa98ab5cd326b066515d990f87a43a69928644",
+       "5f895af1917916b1867b0edd3419763a552febd39d6aa4dc0bc0cc8c808ad82f",
        :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
        :route-step
-       "supply the inclusion-side homology-preservation square adjacent to the coefficient connecting morphism"},
-      :id
-      :routes-2026-10-11-manifold-coefficient-pair-inclusion-homology-preservation-topo3-r1,
-      :kind :reusable-theorem,
+       "expose the two snake inputs whose connecting morphisms must be compared under the exact forgetful functor"},
+      :representation
+      {:source
+       "The coefficient pair HomologySequence snake input in ModuleCat ℤ and its delta",
+       :target
+       "The reconstructed snake input for the forgotten coefficient pair sequence in AddCommGrpCat and its delta",
+       :direction
+       "Exact definitional identifications from each named snake-input delta to the corresponding original or forgotten-sequence connecting morphism"},
+      :id :routes-2026-10-11-manifold-open-disk-snake-inputs-topo3-r1,
+      :kind :representation-comparison,
       :area "manifold-fundamental-class",
       :depends-on
       [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
-       :routes-2026-10-11-manifold-coefficient-open-disk-connecting-transport-topo3-r1],
+       :routes-2026-10-11-manifold-coefficient-pair-inclusion-homology-preservation-topo3-r1],
       :current-residual
-      "Use the now-banked projection and inclusion mapHomologyIso naturality squares to prove that the exact forgetful functor preserves the snake-lemma connecting morphism; specialize it to coefficientOpenDiskConnectingTransport, then rewrite the raw square.",
+      "Construct preservation of coefficientOpenDiskSnakeInput by forgetIntModules and identify it with forgottenCoefficientOpenDiskSnakeInput through the mapHomologyIso, mapCyclesIso, and mapOpcyclesIso comparisons; naturality_δ will then prove the connecting square.",
       :other-consumers [:t98A02]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake env lean /tmp/manifold_fundamental_class_coefficient_inclusion_homology_preservation.lean",
+       "lake env lean /tmp/manifold_fundamental_class_open_disk_snake_inputs.lean",
        :exit 0,
        :output
-       "coefficientPairInclusion_mapHomologyIso_naturality compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "openDiskSnakeInputs_delta compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/manifold_fundamental_class_coefficient_inclusion_homology_preservation.lean",
+       "sha256sum /tmp/manifold_fundamental_class_open_disk_snake_inputs.lean",
        :exit 0,
        :output
-       "b9a2d5b4fcec85c7a5bc9ad779fa98ab5cd326b066515d990f87a43a69928644  /tmp/manifold_fundamental_class_coefficient_inclusion_homology_preservation.lean"}
+       "5f895af1917916b1867b0edd3419763a552febd39d6aa4dc0bc0cc8c808ad82f  /tmp/manifold_fundamental_class_open_disk_snake_inputs.lean"}
       {:cmd
-       "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/manifold_fundamental_class_coefficient_inclusion_homology_preservation.lean",
+       "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/manifold_fundamental_class_open_disk_snake_inputs.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/manifold_fundamental_class_coefficient_open_disk_connecting_preservation.lean",
-       :exit 1,
-       :finding
-       "Unfolding coefficientOpenDiskConnectingTransport and CoefficientPairSequence.connecting leaves exactly the non-definitional preservation square between the original and forgotten delta maps; simp does not prove snake-lemma preservation."}],
      :fixture
      {:path
-      "/tmp/manifold_fundamental_class_coefficient_inclusion_homology_preservation.lean",
+      "/tmp/manifold_fundamental_class_open_disk_snake_inputs.lean",
       :sha256
-      "b9a2d5b4fcec85c7a5bc9ad779fa98ab5cd326b066515d990f87a43a69928644"},
+      "5f895af1917916b1867b0edd3419763a552febd39d6aa4dc0bc0cc8c808ad82f"},
      :finding
-     "The direct connecting equation normalizes to a genuine preservation-of-delta obligation. The compiled prerequisite supplies its previously unnamed adjacent inclusion square by applying ShortComplex.mapHomologyIso_inv_naturality to the coefficient subspace map. Together with the banked projection square, the next prerequisite can address the snake-lemma delta itself rather than another endpoint representation.",
+     "The unresolved equation compares delta maps generated by two explicit snake inputs in different abelian categories. The compiled prerequisite names both inputs and identifies their delta fields with the exact arrows already present. The next construction must transport the coefficient snake input through the exact forgetful functor and compare it to the reconstructed AddCommGrp snake input; only after that comparison can SnakeInput.naturality_δ prove preservation of delta.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -13738,7 +13854,8 @@
     :routes-2026-10-11-manifold-integral-open-disk-connecting-naturality-raw-topo3-r1
     :routes-2026-10-11-manifold-integral-open-disk-component-homology-maps-topo3-r1
     :routes-2026-10-11-manifold-coefficient-open-disk-connecting-transport-topo3-r1
-    :routes-2026-10-11-manifold-coefficient-pair-inclusion-homology-preservation-topo3-r1],
+    :routes-2026-10-11-manifold-coefficient-pair-inclusion-homology-preservation-topo3-r1
+    :routes-2026-10-11-manifold-open-disk-snake-inputs-topo3-r1],
    :current-residual
    "Local-degree counts and wild-ball complement homology remain.",
    :other-consumers [:t98A02]}
@@ -20325,6 +20442,29 @@
    :kind :lemma,
    :depends-on
    [:lemma-mfclass-coefficient-open-disk-connecting-transport],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFundamentalClass.openDiskSnakeInputs_delta",
+    :type
+    "forall (k : ℕ), (coefficientOpenDiskSnakeInput k).δ = CoefficientPairSequence.connecting ℤ (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2)) (k + 1) ∧ (forgottenCoefficientOpenDiskSnakeInput k).δ = (integralOpenDiskCoefficientPairShortExact k).δ (k + 2) (k + 1) rfl"},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFundamentalClass.openDiskSnakeInputs_delta",
+    :reported-by
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    :type
+    "forall (k : ℕ), (coefficientOpenDiskSnakeInput k).δ = CoefficientPairSequence.connecting ℤ (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2)) (k + 1) ∧ (forgottenCoefficientOpenDiskSnakeInput k).δ = (integralOpenDiskCoefficientPairShortExact k).δ (k + 2) (k + 1) rfl",
+    :area "manifold-fundamental-class",
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+   :id :lemma-mfclass-open-disk-snake-inputs-delta,
+   :kind :lemma,
+   :depends-on
+   [:lemma-mfclass-coefficient-pair-inclusion-homology-preservation],
    :other-consumers [:t98A02]}],
  :consumer-baselines {},
  :statuses
