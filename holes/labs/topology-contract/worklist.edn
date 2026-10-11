@@ -104345,6 +104345,22 @@
       :exit 1,
       :finding
       "The first arrow correction used an invalid Unicode token; spelling the type as Functor compiled."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791691709512-4115-928a2bea",
+     :commands
+     ["git show and git diff-tree on recorded commit 4a9bd0d4587469f7f13c7634c2c6d47e762520d0"
+      "git diff --exit-code between recorded blob and checkout"
+      "sha256sum on committed source, recorded blob, and frozen fixture"
+      "lake build ConstructionTargets.TwoOpenFreeProductMappingInverseIdentityLegCoordinates"
+      "lake env lean /tmp/mapping-inverse-identity-leg-coordinates.lean"
+      "fresh type and axiom check for inverseIdentityCounit_naturality"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped source and fixture placeholder recount"
+      "git diff-tree --check on recorded commit"],
+     :finding
+     "PASS as a compiled-progress STOP. The one-file commit is authored by topo-2 and the checkout equals its recorded blob. The frozen fixture hash is exactly 13c097b29888d2db43e201ac92d14b61d74774487750973007081cadcdc27ffd. The committed definitions expose the inverse image of the identity functor and its counit, while inverseIdentityCounit_naturality proves in the correct orientation that the reconstructed map is conjugate to the target morphism through the counit component. The theorem compiles with only propext, Classical.choice, and Quot.sound; source placeholders and fixture sorry/admit counts are zero; the registry reports 131 matched and 0 mismatched. The stronger inverseIdentityCounit_component_identity or trivial-conjugation normalization needed for literal inl and inr equations is explicitly listed in missing-theorems, so the STOP satisfies the permitted real-progress condition."},
     :commit "4a9bd0d4587469f7f13c7634c2c6d47e762520d0",
     :changed-paths
     ["ConstructionTargets/TwoOpenFreeProductMappingInverseIdentityLegCoordinates.lean"],
@@ -104354,7 +104370,7 @@
      "13c097b29888d2db43e201ac92d14b61d74774487750973007081cadcdc27ffd"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/TwoOpenFreeProductMappingInverseIdentityLegCoordinates.lean"],
    :dag-node
@@ -104473,7 +104489,7 @@
       "The inverse image of the identity functor under the two-open mapping equivalence computes both inclusion legs as the corresponding free-product injections."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/generic-point-wedge-fundamental-group-coordinates",
@@ -109952,7 +109968,7 @@
    :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
   {:consumer :t99J01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -109967,7 +109983,10 @@
      :routes-2026-10-11-generic-point-wedge-fundamental-group-coordinates-84],
     :type
     "For F := (mapping FreeProductTarget hU hV hcover w).inverse.obj (Functor.id FreeProductTarget), F.map sends the morphisms induced by the left and right cover inclusions at w to Monoid.Coprod.inl and Monoid.Coprod.inr respectively.",
-    :area "fundamental-group-wedge-of-circles"},
+    :area "fundamental-group-wedge-of-circles",
+    :banked-by
+    :routes-2026-10-11-mapping-inverse-identity-leg-coordinates-89,
+    :banked-commit "4a9bd0d4587469f7f13c7634c2c6d47e762520d0"},
    :id
    :lemma-twoopenfreeproductmapping-mapping-inverse-identity-leg-coordinates,
    :kind :lemma,
