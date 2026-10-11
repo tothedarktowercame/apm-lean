@@ -1715,6 +1715,24 @@ theorem swapH2Coordinate_square :
         frozenTorusH2GroupIsoInt.hom) swap_H2_square
     _ = 𝟙 _ := frozenTorusH2GroupIsoInt.inv_hom_id
 
+/-- The determinant-one factor in the frozen linear torus map. -/
+def lowerShear : C(FrozenTorus, FrozenTorus) :=
+  ⟨fun p ↦ (p.1, p.2 - p.1), by fun_prop⟩
+
+/-- The concrete determinant-three torus map, before adapting to the frozen
+consumer declaration. -/
+def frozenLbar : C(FrozenTorus, FrozenTorus) :=
+  ⟨fun p ↦ (2 • p.1 + p.2, p.2 - p.1), by fun_prop⟩
+
+theorem lowerShear_factorization :
+    lowerShear = swapTorus.comp ((shearY 1 (-1)).comp swapTorus) := by
+  ext p <;> simp [lowerShear, swapTorus, shearY, sub_eq_add_neg]
+
+theorem frozenLbar_factorization :
+    frozenLbar = (shearY 3 1).comp lowerShear := by
+  ext p <;> simp [frozenLbar, lowerShear, shearY]
+  module
+
 #print axioms frozenTorusH2GroupIsoInt
 #print axioms frozenYCover
 #print axioms frozenYCoverUHomeomorph
