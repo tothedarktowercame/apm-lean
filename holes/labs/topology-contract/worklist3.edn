@@ -5155,94 +5155,175 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :implements-lemma
+   :lemma-constructiontargets-manifoldfundamentalclass-integralcompositerelativeprojection-naturality,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+   :dag-node
+   "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/integral-relative-projection-square",
+   :acceptance
+   {:implementation
+    "Promote the exact fixture theorem. Rewrite the first four factors with integralCompositeCokernelComparison_projection, then postcompose cokernelProjection_comp_relativeSingularChainsIso_inv by singularChainsComparison and normalize associativity. Do not alter integralRelativeChainsComparison, apply homology, or claim the normalization square, generator transport, orientation normalization, or localization equality.",
+    :declaration
+    "ConstructionTargets.ManifoldFundamentalClass.integralCompositeRelativeProjection_naturality",
+    :type
+    "forall {X : Type} [TopologicalSpace X] (A : Set X), (forgetIntModules.mapHomologicalComplex (ComplexShape.down Nat)).map (cokernel.π (CoefficientRelativeSmall.subspaceMap Int A)) ≫ (forgetIntegralRelativeCokernelComparison A).hom ≫ (coefficientIntegralCokernelTransport A).hom ≫ (integralMappedRelativeCokernelComparison A).hom ≫ (relativeSingularChainsIsoCokernelSubspaceMap A).inv = (singularChainsComparison (TopCat.of X)).hom ≫ relativeSingularProjection A",
+    :fixture
+    "/tmp/manifold_fundamental_class_integral_relative_projection.lean",
+    :fixture-sha256
+    "42f4dcd250e7dfa7a4c6f6596bd989b7681280eb31143e8515893aded3a6fd93",
+    :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
+    :route-step
+    "establish the complete chain-level naturality square from coefficient absolute chains to production RelativeSingularChains"},
+   :representation
+   {:source
+    "The forgotten coefficient absolute projection followed by cokernel preservation, coefficient-map transport, the integral direct-cokernel comparison, and the inverse production cokernel presentation",
+    :target
+    "The production absolute integral singular-chain comparison followed by relativeSingularProjection into RelativeSingularChains",
+    :direction
+    "Exact chain-map equality from the full forgotten coefficient-relative composite to the production RelativeSingularChains projection composite"},
+   :id
+   :routes-2026-10-11-manifold-integral-composite-relative-projection-topo3-r1,
+   :kind :representation-comparison,
+   :area "manifold-fundamental-class",
+   :depends-on
+   [:routes-2026-10-10-topo3-seed-checkpoint-1
+    :routes-2026-10-10-manifold-local-positive-excision-topo3-r1
+    :routes-2026-10-10-manifold-oriented-overlap-coherence-topo3-r1
+    :routes-2026-10-10-manifold-connected-overlap-unit-topo3-r1
+    :routes-2026-10-10-manifold-oriented-connected-overlap-topo3-r1
+    :routes-2026-10-10-manifold-integral-transition-sign-topo3-r1
+    :routes-2026-10-10-manifold-exclude-negative-transition-topo3-r1
+    :routes-2026-10-10-manifold-global-generator-topo3-r1
+    :routes-2026-10-10-manifold-localization-iso-generator-topo3-r1
+    :routes-2026-10-10-manifold-generator-map-isiso-topo3-r1
+    :routes-2026-10-10-manifold-localization-map-naturality-topo3-r1
+    :routes-2026-10-10-manifold-localization-apply-naturality-topo3-r1
+    :routes-2026-10-10-manifold-group-global-generator-topo3-r1
+    :routes-2026-10-10-manifold-group-generator-naturality-topo3-r1
+    :routes-2026-10-10-manifold-global-local-generator-transport-topo3-r1
+    :routes-2026-10-11-manifold-basepoint-localization-coefficient-topo3-r1
+    :routes-2026-10-11-manifold-local-generator-coefficient-unique-topo3-r1
+    :routes-2026-10-11-manifold-localization-coefficient-one-topo3-r1
+    :routes-2026-10-11-manifold-distinguished-chart-generator-topo3-r1
+    :routes-2026-10-11-manifold-integral-subtype-chain-naturality-topo3-r1
+    :routes-2026-10-11-manifold-integral-mapped-relative-cokernel-topo3-r1
+    :routes-2026-10-11-manifold-forget-relative-cokernel-topo3-r1
+    :routes-2026-10-11-manifold-integral-relative-chains-comparison-topo3-r1
+    :routes-2026-10-11-manifold-integral-relative-homology-comparison-topo3-r1
+    :routes-2026-10-11-manifold-ambient-local-normalization-topo3-r1
+    :routes-2026-10-11-manifold-generator-transport-of-normalization-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-subspace-map-equality-topo3-r1
+    :routes-2026-10-11-manifold-integral-direct-cokernel-projection-topo3-r1
+    :routes-2026-10-11-manifold-forget-cokernel-projection-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-integral-cokernel-transport-topo3-r1
+    :routes-2026-10-11-manifold-integral-composite-cokernel-projection-topo3-r1
+    :routes-2026-10-11-manifold-production-cokernel-projection-topo3-r1],
+   :current-residual
+   "Apply homologyMap to this chain equality and reconcile the corrected composite containing coefficientIntegralCokernelTransport with integralRelativeHomologyComparison; then propagate the homology square through the chart and model normalization maps.",
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-closedorientedfundamentalclass,
    :evidence
    {:probe
     {:residual
-     "Compose the banked direct-cokernel square with the inverse production presentation, derive the absolute-to-RelativeSingularChains projection equation, and propagate it through homology and the coefficient-to-production normalization chain.",
+     "Pass the complete chain-level projection square to homology, compare its corrected composite with integralRelativeHomologyComparison, and propagate the resulting equality through the coefficient and production normalization maps.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
      [{:id
-       :lemma-constructiontargets-manifoldfundamentalclass-cokernelprojection-comp-relativesingularchainsiso-inv,
+       :lemma-constructiontargets-manifoldfundamentalclass-integralcompositerelativeprojection-naturality,
        :name
-       "ConstructionTargets.ManifoldFundamentalClass.cokernelProjection_comp_relativeSingularChainsIso_inv",
+       "ConstructionTargets.ManifoldFundamentalClass.integralCompositeRelativeProjection_naturality",
        :type
-       "forall {X : Type} [TopologicalSpace X] (A : Set X), cokernel.π (singularSubspaceMap A) ≫ (relativeSingularChainsIsoCokernelSubspaceMap A).inv = relativeSingularProjection A",
+       "forall {X : Type} [TopologicalSpace X] (A : Set X), (forgetIntModules.mapHomologicalComplex (ComplexShape.down Nat)).map (cokernel.π (CoefficientRelativeSmall.subspaceMap Int A)) ≫ (forgetIntegralRelativeCokernelComparison A).hom ≫ (coefficientIntegralCokernelTransport A).hom ≫ (integralMappedRelativeCokernelComparison A).hom ≫ (relativeSingularChainsIsoCokernelSubspaceMap A).inv = (singularChainsComparison (TopCat.of X)).hom ≫ relativeSingularProjection A",
        :status :proved,
        :consumers [:t00J02 :t98A02],
        :depends-on
        ["ConstructionTargets.ManifoldFundamentalClass.integralCompositeCokernelComparison_projection"
-        "ConstructionTargets.SingularExcision.relativeProjection_comp_cokernelIso_hom"],
+        "ConstructionTargets.ManifoldFundamentalClass.cokernelProjection_comp_relativeSingularChainsIso_inv"],
        :area "manifold-fundamental-class"}],
      :prerequisite
      {:consumer :t00J02,
       :implements-lemma
-      :lemma-constructiontargets-manifoldfundamentalclass-cokernelprojection-comp-relativesingularchainsiso-inv,
+      :lemma-constructiontargets-manifoldfundamentalclass-integralcompositerelativeprojection-naturality,
       :phase :implementation,
       :state :open,
       :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
       :dag-node
-      "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/production-cokernel-projection",
+      "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/integral-relative-projection-square",
       :acceptance
       {:implementation
-       "Promote the exact fixture theorem. Rewrite the direct-cokernel projection using relativeProjection_comp_cokernelIso_hom and cancel the production cokernel-presentation isomorphism with its inverse. Do not yet compose with integralCompositeCokernelComparison_projection, define a new relative-chain comparison, apply homology, or claim normalization, generator transport, or localization equality.",
+       "Promote the exact fixture theorem. Rewrite the first four factors with integralCompositeCokernelComparison_projection, then postcompose cokernelProjection_comp_relativeSingularChainsIso_inv by singularChainsComparison and normalize associativity. Do not alter integralRelativeChainsComparison, apply homology, or claim the normalization square, generator transport, orientation normalization, or localization equality.",
        :declaration
-       "ConstructionTargets.ManifoldFundamentalClass.cokernelProjection_comp_relativeSingularChainsIso_inv",
+       "ConstructionTargets.ManifoldFundamentalClass.integralCompositeRelativeProjection_naturality",
        :type
-       "forall {X : Type} [TopologicalSpace X] (A : Set X), cokernel.π (singularSubspaceMap A) ≫ (relativeSingularChainsIsoCokernelSubspaceMap A).inv = relativeSingularProjection A",
+       "forall {X : Type} [TopologicalSpace X] (A : Set X), (forgetIntModules.mapHomologicalComplex (ComplexShape.down Nat)).map (cokernel.π (CoefficientRelativeSmall.subspaceMap Int A)) ≫ (forgetIntegralRelativeCokernelComparison A).hom ≫ (coefficientIntegralCokernelTransport A).hom ≫ (integralMappedRelativeCokernelComparison A).hom ≫ (relativeSingularChainsIsoCokernelSubspaceMap A).inv = (singularChainsComparison (TopCat.of X)).hom ≫ relativeSingularProjection A",
        :fixture
-       "/tmp/manifold_fundamental_class_production_cokernel_projection.lean",
+       "/tmp/manifold_fundamental_class_integral_relative_projection.lean",
        :fixture-sha256
-       "043dee91208a85f36b3ec76b9fa9ab1f40dfef87169853905d4ba6e62463eab8",
+       "42f4dcd250e7dfa7a4c6f6596bd989b7681280eb31143e8515893aded3a6fd93",
        :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
        :route-step
-       "identify the direct-cokernel projection followed by the inverse production presentation with the actual RelativeSingularChains projection"},
+       "establish the complete chain-level naturality square from coefficient absolute chains to production RelativeSingularChains"},
       :representation
       {:source
-       "The canonical projection to the direct cokernel of singularSubspaceMap followed by the inverse production cokernel-presentation isomorphism",
+       "The forgotten coefficient absolute projection followed by cokernel preservation, coefficient-map transport, the integral direct-cokernel comparison, and the inverse production cokernel presentation",
        :target
-       "The production relativeSingularProjection from absolute SingularChains to RelativeSingularChains",
+       "The production absolute integral singular-chain comparison followed by relativeSingularProjection into RelativeSingularChains",
        :direction
-       "Exact chain-map equality from the direct-cokernel projection representation to the production RelativeSingularChains projection representation, obtained by inverting relativeProjection_comp_cokernelIso_hom"},
+       "Exact chain-map equality from the full forgotten coefficient-relative composite to the production RelativeSingularChains projection composite"},
       :id
-      :routes-2026-10-11-manifold-production-cokernel-projection-topo3-r1,
+      :routes-2026-10-11-manifold-integral-composite-relative-projection-topo3-r1,
       :kind :representation-comparison,
       :area "manifold-fundamental-class",
       :depends-on
       [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
-       :routes-2026-10-11-manifold-integral-composite-cokernel-projection-topo3-r1],
+       :routes-2026-10-11-manifold-integral-composite-cokernel-projection-topo3-r1
+       :routes-2026-10-11-manifold-production-cokernel-projection-topo3-r1],
       :current-residual
-      "Postcompose integralCompositeCokernelComparison_projection with the inverse production presentation and rewrite with this theorem, obtaining the absolute-to-production-relative projection square; then apply homology and propagate the square through the normalization chain.",
+      "Apply homologyMap to this chain equality and reconcile the corrected composite containing coefficientIntegralCokernelTransport with integralRelativeHomologyComparison; then propagate the homology square through the chart and model normalization maps.",
       :other-consumers [:t98A02]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake env lean /tmp/manifold_fundamental_class_production_cokernel_projection.lean",
+       "lake env lean /tmp/manifold_fundamental_class_integral_relative_projection.lean",
        :exit 0,
        :output
-       "cokernelProjection_comp_relativeSingularChainsIso_inv compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "integralCompositeRelativeProjection_naturality compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/manifold_fundamental_class_production_cokernel_projection.lean",
+       "sha256sum /tmp/manifold_fundamental_class_integral_relative_projection.lean",
        :exit 0,
        :output
-       "043dee91208a85f36b3ec76b9fa9ab1f40dfef87169853905d4ba6e62463eab8  /tmp/manifold_fundamental_class_production_cokernel_projection.lean"}
+       "42f4dcd250e7dfa7a4c6f6596bd989b7681280eb31143e8515893aded3a6fd93  /tmp/manifold_fundamental_class_integral_relative_projection.lean"}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/manifold_fundamental_class_production_cokernel_projection.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/manifold_fundamental_class_integral_relative_projection.lean || true)\"",
        :exit 0}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/manifold_fundamental_class_integral_relative_projection.lean",
+       :exit 1,
+       :finding
+       "A single associativity rewrite did not expose the four-factor prefix. Using slice_lhs on exactly the first four morphisms allowed integralCompositeCokernelComparison_projection to rewrite it."}
+      {:cmd
+       "lake env lean /tmp/manifold_fundamental_class_integral_relative_projection.lean",
+       :exit 1,
+       :finding
+       "A second slice selected only the final inverse rather than the projection-inverse pair. Applying congrArg for postcomposition by singularChainsComparison to the reviewed production projection equality, then normalizing associativity, closed the corrected proof."}],
      :fixture
      {:path
-      "/tmp/manifold_fundamental_class_production_cokernel_projection.lean",
+      "/tmp/manifold_fundamental_class_integral_relative_projection.lean",
       :sha256
-      "043dee91208a85f36b3ec76b9fa9ab1f40dfef87169853905d4ba6e62463eab8"},
+      "42f4dcd250e7dfa7a4c6f6596bd989b7681280eb31143e8515893aded3a6fd93"},
      :finding
-     "The production boundary already has the forward projection equation relativeProjection_comp_cokernelIso_hom. The compiled fixture derives the precisely oriented inverse equation by postcomposing with the inverse isomorphism and cancelling. This supplies the final categorical edge needed to turn the banked direct-cokernel square into a square landing in the actual RelativeSingularChains object. No new relative-chain model or arbitrary isomorphism is introduced.",
+     "The compiled theorem now lands in the actual production RelativeSingularChains complex. It composes the reviewed direct-cokernel square with the inverse production presentation and rewrites the resulting projection using the reviewed inverse projection equation. Thus the remaining work is no longer at chain-cokernel representation level: it is to apply homology and compare the corrected composite, which explicitly contains coefficientIntegralCokernelTransport, with the previously defined integralRelativeHomologyComparison before evaluating the normalization chains.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -5288,7 +5369,8 @@
     :routes-2026-10-11-manifold-forget-cokernel-projection-topo3-r1
     :routes-2026-10-11-manifold-coefficient-integral-cokernel-transport-topo3-r1
     :routes-2026-10-11-manifold-integral-composite-cokernel-projection-topo3-r1
-    :routes-2026-10-11-manifold-production-cokernel-projection-topo3-r1],
+    :routes-2026-10-11-manifold-production-cokernel-projection-topo3-r1
+    :routes-2026-10-11-manifold-integral-composite-relative-projection-topo3-r1],
    :current-residual
    "Local-degree counts and wild-ball complement homology remain.",
    :other-consumers [:t98A02]}
@@ -7824,7 +7906,32 @@
    :lemma-constructiontargets-singularhomologyconcrete-relativeprojection-comp-cokerneliso,
    :kind :lemma,
    :depends-on [],
-   :other-consumers []}],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFundamentalClass.integralCompositeRelativeProjection_naturality",
+    :type
+    "forall {X : Type} [TopologicalSpace X] (A : Set X), (forgetIntModules.mapHomologicalComplex (ComplexShape.down Nat)).map (cokernel.π (CoefficientRelativeSmall.subspaceMap Int A)) ≫ (forgetIntegralRelativeCokernelComparison A).hom ≫ (coefficientIntegralCokernelTransport A).hom ≫ (integralMappedRelativeCokernelComparison A).hom ≫ (relativeSingularChainsIsoCokernelSubspaceMap A).inv = (singularChainsComparison (TopCat.of X)).hom ≫ relativeSingularProjection A"},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFundamentalClass.integralCompositeRelativeProjection_naturality",
+    :reported-by
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    :type
+    "forall {X : Type} [TopologicalSpace X] (A : Set X), (forgetIntModules.mapHomologicalComplex (ComplexShape.down Nat)).map (cokernel.π (CoefficientRelativeSmall.subspaceMap Int A)) ≫ (forgetIntegralRelativeCokernelComparison A).hom ≫ (coefficientIntegralCokernelTransport A).hom ≫ (integralMappedRelativeCokernelComparison A).hom ≫ (relativeSingularChainsIsoCokernelSubspaceMap A).inv = (singularChainsComparison (TopCat.of X)).hom ≫ relativeSingularProjection A",
+    :area "manifold-fundamental-class",
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+   :id
+   :lemma-constructiontargets-manifoldfundamentalclass-integralcompositerelativeprojection-naturality,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-manifoldfundamentalclass-integralcompositecokernelcomparison-projection
+    :lemma-constructiontargets-manifoldfundamentalclass-cokernelprojection-comp-relativesingularchainsiso-inv],
+   :other-consumers [:t98A02]}],
  :consumer-baselines {},
  :statuses
  #{:open
