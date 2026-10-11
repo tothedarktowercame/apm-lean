@@ -12752,8 +12752,87 @@
   {:consumer :t00J02,
    :implements-lemma
    :lemma-mfclass-integral-open-disk-connecting-naturality-raw,
+   :evidence
+   {:placeholder-delta
+    {:t00J02 {:before 1, :after 1, :delta 0},
+     :t98A02 {:before 1, :after 1, :delta 0}},
+    :residual
+    "Identify the raw source connecting morphism with the forgotten coefficient connecting map through mapHomologyIso, and identify the τ₁ and τ₃ homology maps with integralOpenDiskPunctureHomologyComparison and integralOpenDiskRelativeHomologyComparison.",
+    :gates
+    {:fixture-compile :pass,
+     :module-compile :pass,
+     :target-build :pass,
+     :statement-registry "131 registered statements match, 0 do not",
+     :worktree-clean true},
+    :outcome :done-unreviewed,
+    :warnings
+    ["lake build replayed pre-existing linter warnings in dependencies"],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.ManifoldFundamentalClass.integralOpenDiskConnecting_naturality_raw",
+      :type
+      "forall (k : Nat), (integralOpenDiskCoefficientPairShortExact k).δ (k + 2) (k + 1) rfl ≫ HomologicalComplex.homologyMap (integralOpenDiskPairShortComplexComparison k).τ₁ (k + 1) = HomologicalComplex.homologyMap (integralOpenDiskPairShortComplexComparison k).τ₃ (k + 2) ≫ singularPairConnecting (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2)) (k + 1)",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on
+      ["ConstructionTargets.ManifoldFundamentalClass.integralOpenDiskPairShortComplexComparison"
+       "ConstructionTargets.ManifoldFundamentalClass.integralOpenDiskCoefficientPairShortExact"],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes
+    {:fixture
+     "56ad9a79d6d79583d986d6d44cc1693d280741a45314d6b92a223eddf576f361",
+     :declaration
+     "0b6bb23bfedfc3c860e0d3748a08b5490b1f4ec6cd5c656f2acea78ea9939086"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/manifold_fundamental_class_integral_open_disk_connecting_naturality_raw.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/manifold_fundamental_class_integral_open_disk_connecting_naturality_raw.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "comment-stripped placeholder count for t00J02 and t98A02",
+      :exit 0}
+     {:cmd "source theorem sha256", :exit 0}
+     {:cmd "rg forbidden placeholders and axioms in scope and fixture",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git status --porcelain", :exit 0}],
+    :diagnostic-history [],
+    :representation
+    {:source
+     "The connecting morphism of the forgotten coefficient pair sequence followed by homology of the puncture chain-comparison component",
+     :target
+     "Homology of the relative chain-comparison component followed by the production singular pair connecting morphism",
+     :direction
+     "Exact commutative-square equality from the forgotten coefficient connecting representation to the production connecting representation, supplied by HomologySequence.δ_naturality"},
+    :commit "7829a8d4d903c378e87dd3bba82104c080078bf8",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path
+     "/tmp/manifold_fundamental_class_integral_open_disk_connecting_naturality_raw.lean",
+     :sha256
+     "56ad9a79d6d79583d986d6d44cc1693d280741a45314d6b92a223eddf576f361"},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :declaration
+     "ConstructionTargets.ManifoldFundamentalClass.integralOpenDiskConnecting_naturality_raw"},
+    :row
+    :routes-2026-10-11-manifold-integral-open-disk-connecting-naturality-raw-topo3-r1,
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/integral-open-disk-connecting-naturality/raw-square",
@@ -17202,11 +17281,13 @@
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.integralOpenDiskConnecting_naturality_raw",
     :reported-by
-    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+     :routes-2026-10-11-manifold-integral-open-disk-connecting-naturality-raw-topo3-r1],
     :type
     "forall (k : ℕ), (integralOpenDiskCoefficientPairShortExact k).δ (k + 2) (k + 1) rfl ≫ HomologicalComplex.homologyMap (integralOpenDiskPairShortComplexComparison k).τ₁ (k + 1) = HomologicalComplex.homologyMap (integralOpenDiskPairShortComplexComparison k).τ₃ (k + 2) ≫ singularPairConnecting (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2)) (k + 1)",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in
+    :routes-2026-10-11-manifold-integral-open-disk-connecting-naturality-raw-topo3-r1},
    :id :lemma-mfclass-integral-open-disk-connecting-naturality-raw,
    :kind :lemma,
    :depends-on
