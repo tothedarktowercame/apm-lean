@@ -280,6 +280,32 @@ theorem absoluteSingularMap_groupGlobalGenerator_naturality
   rw [ConcreteCategory.comp_apply, ConcreteCategory.comp_apply, hmodule'] at hn
   simpa only [groupGlobalGenerator, absoluteSingularMap] using hn.symm
 
+theorem localizationMap_groupGlobalGenerator_transport
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (f : C(X, Y)) (x : X) (y : Y)
+    (h : Set.MapsTo f (deletedPoint x) (deletedPoint y)) (n : ℕ)
+    (eX : (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) n).obj
+      (ModuleCat.of ℤ ℤ)).obj (TopCat.of X)) ≅ ModuleCat.of ℤ ℤ)
+    (eY : (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) n).obj
+      (ModuleCat.of ℤ ℤ)).obj (TopCat.of Y)) ≅ ModuleCat.of ℤ ℤ)
+    (gx : (RelativeSingularChains (deletedPoint x)).homology n)
+    (gy : (RelativeSingularChains (deletedPoint y)).homology n)
+    (hmodule : ((((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) n).obj
+        (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom f))).hom
+        (globalGenerator ℤ
+          (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) n).obj
+            (ModuleCat.of ℤ ℤ)).obj (TopCat.of X)) eX) =
+      globalGenerator ℤ
+        (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) n).obj
+          (ModuleCat.of ℤ ℤ)).obj (TopCat.of Y)) eY)
+    (hx : localizationMap x n (groupGlobalGenerator (TopCat.of X) n eX) = gx)
+    (hlocal : HomologicalComplex.homologyMap
+        (relativeSingularMap (deletedPoint x) (deletedPoint y) f h) n gx = gy) :
+    localizationMap y n (groupGlobalGenerator (TopCat.of Y) n eY) = gy := by
+  rw [← absoluteSingularMap_groupGlobalGenerator_naturality f n eX eY hmodule]
+  rw [localizationMap_apply_naturality f x y h n]
+  rw [hx, hlocal]
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -300,3 +326,4 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.localizationMap_apply_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator_generates
 #print axioms ConstructionTargets.ManifoldFundamentalClass.absoluteSingularMap_groupGlobalGenerator_naturality
+#print axioms ConstructionTargets.ManifoldFundamentalClass.localizationMap_groupGlobalGenerator_transport
