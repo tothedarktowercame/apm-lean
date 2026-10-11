@@ -16833,8 +16833,55 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :implements-lemma :lemma-mfclass-forget-cokernel-pi1,
+   :evidence
+   {:placeholder-delta {:t00J02 [1 1], :t98A02 [1 1]},
+    :residual "Transport τ₁; build remaining cokernels.",
+    :outcome :done-unreviewed,
+    :warnings ["simpa style lints in π comparisons"],
+    :missing-theorems
+    [{:name "forgetSnakeCokernelτ₁Preserved",
+      :type
+      "∀ S : ShortComplex.SnakeInput (ModuleCat ℤ), ForgottenSnakeCokernelτ₁Preserved S",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on ["forgetSnakeKernelLimit"],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes
+    {:registry "131/131",
+     :module
+     "652bd7d3e2b17deaf33afe9dbc695964052ecf7aa56e474baf5817471fb50e42"},
+    :axioms [:propext :Classical.choice :Quot.sound],
+    :author "Joe Corneli",
+    :commands
+    [{:cmd "sha256sum /tmp/q1.lean", :exit 0}
+     {:cmd "lake env lean scoped-file", :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd "statement-registry check", :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "placeholder counts", :exit 0}
+     {:cmd "rg forbidden tokens", :exit 1, :expected-exit 1}
+     {:cmd "git commit", :exit 0}],
+    :diagnostic-history
+    [{:cmd "lake env lean scoped-file",
+      :exit 1,
+      :reason
+      "declaration inserted between kernel proof bullets; moved after proof"}],
+    :commit "58fa1968b4af97b4f5699887fae29055621bae9c",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path "/tmp/q1.lean",
+     :sha256
+     "83f3e4f6d50156adcc27d494c8f65749c409fe7934ec31f246490b3df0ebd959"},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :declaration
+     "ConstructionTargets.ManifoldFundamentalClass.forgetSnakeCokernelτ₁Preserved"},
+    :row :routes-2026-10-11-mfclass-forget-cokernel-pi1-r1,
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/cokernel-pi1",
@@ -24313,6 +24360,25 @@
    :id :lemma-mfclass-forget-cokernel-pi1,
    :kind :lemma,
    :depends-on [:lemma-mfclass-forget-snake-kernel-limit],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "forgetSnakeCokernelτ₁Preserved",
+    :type
+    "∀ S : ShortComplex.SnakeInput (ModuleCat ℤ), ForgottenSnakeCokernelτ₁Preserved S"},
+   :lemma
+   {:name "forgetSnakeCokernelτ₁Preserved",
+    :reported-by [:routes-2026-10-11-mfclass-forget-cokernel-pi1-r1],
+    :type
+    "∀ S : ShortComplex.SnakeInput (ModuleCat ℤ), ForgottenSnakeCokernelτ₁Preserved S",
+    :area "manifold-fundamental-class",
+    :proved-in :routes-2026-10-11-mfclass-forget-cokernel-pi1-r1},
+   :id :lemma-forgetsnakecokernel-preserved,
+   :kind :lemma,
+   :depends-on [:lemma-forgetsnakekernellimit],
    :other-consumers [:t98A02]}],
  :consumer-baselines {},
  :statuses
