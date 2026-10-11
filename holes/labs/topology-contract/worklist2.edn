@@ -68430,52 +68430,58 @@
    "single-consumer scalar characterization necessary for planar left-core collision",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:residual
-     "Implement corePolar_leftCore_collision_equation in the scoped module, then prove the selected angular trajectory keeps this polynomial nonzero on the zero-height slice and combine that with the height criterion.",
-     :outcome :go,
-     :warnings [],
-     :missing-theorems [],
-     :commands
-     [{:cmd
-       "lake env lean /tmp/t02a03_core_polar_planar_collision_probe.lean",
-       :exit 0,
-       :output
-       "corePolar_leftCore_collision_equation compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "sha256sum /tmp/t02a03_core_polar_planar_collision_probe.lean",
-       :exit 0,
-       :output
-       "4702922afd55aa3473b9ff64b85101dbf20b0e74f813207d372c4dd9620abcbf  /tmp/t02a03_core_polar_planar_collision_probe.lean"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_core_polar_planar_collision_probe.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}
-      {:cmd
-       "rg -n 'corePolar_leftCore_collision_equation' /tmp/t02a03_core_polar_planar_collision_probe.lean",
-       :exit 0,
-       :output
-       "7:theorem corePolar_leftCore_collision_equation\n23:#print axioms corePolar_leftCore_collision_equation"}],
-     :fixture
-     {:path "/tmp/t02a03_core_polar_planar_collision_probe.lean",
-      :sha256
-      "4702922afd55aa3473b9ff64b85101dbf20b0e74f813207d372c4dd9620abcbf"},
-     :finding
-     "The complete placeholder-free fixture proves the requested necessary collision equation by equating the first two reconstructed coordinates with a frozen left-core point and applying the two unit-circle identities.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
-      :declaration
-      "ConstructionTargets.T02A03GeometricTubeDeformation.corePolar_leftCore_collision_equation",
-      :type
-      "forall (u : Circle) (n : Complex), rightTubeCorePolarReconstruction u n ∈ Set.range apm_t02a03_leftCore -> (1 - n.re)^2 - 4*(1 - n.re)*(u : Complex).re + 3 = 0"},
-     :seat "topo-8"}},
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Prove the chosen right-core angular trajectory keeps this collision polynomial nonzero whenever the normal height vanishes; combine with the nonzero-height criterion to certify deletion avoidance, then concatenate the angular and radial stages.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["Existing linter warning at line 62: unnecessarySimpa; no new warnings"],
+    :missing-theorems [],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms [propext Classical.choice Quot.sound],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :scope-blob "146e004a4e238a446b2dbe24372dcf74e4b86730",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/t02a03_core_polar_planar_collision_probe.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/t02a03_core_polar_planar_collision_probe.lean",
+      :exit 0,
+      :output
+      "4702922afd55aa3473b9ff64b85101dbf20b0e74f813207d372c4dd9620abcbf  /tmp/t02a03_core_polar_planar_collision_probe.lean"}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeDeformation.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "git diff --check -- ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "6986c4898e818ae3223edf0a6a4538e4a0cbbb4e",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.corePolar_leftCore_collision_equation",
+    :fixture
+    {:path "/tmp/t02a03_core_polar_planar_collision_probe.lean",
+     :sha256
+     "4702922afd55aa3473b9ff64b85101dbf20b0e74f813207d372c4dd9620abcbf"},
+    :finding
+    "Hypothetical left-core membership equates the two planar reconstruction coordinates with a left-core point. Combining those equations with the Circle and trigonometric unit identities yields the necessary scalar equation (1-n.re)^2-4(1-n.re)u.re+3=0.",
+    :seat "topo-6"},
    :phase :implementation,
    :type
    "forall (u : Circle) (n : Complex), rightTubeCorePolarReconstruction u n ∈ Set.range apm_t02a03_leftCore -> (1 - n.re)^2 - 4*(1 - n.re)*(u : Complex).re + 3 = 0",
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/core-polar-left-core-collision-equation",
