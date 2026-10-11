@@ -69588,57 +69588,63 @@
    "single-consumer nonzero-height left-core avoidance certificate for the core-polar radial ambient stage",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/t02a03_nonzero_height_radial_avoidance_probe.lean",
-      :sha256
-      "1f349f8de44f95f4910d9ea19895de41ba160dd4fce17ca6f122bd74b791fb00"},
-     :commands
-     [{:cmd
-       "test -L .lake/packages && test \"$(readlink -f .lake/packages)\" = /home/joe/code/apm-lean/.lake/packages",
-       :exit 0}
-      {:cmd
-       "lake env lean /tmp/t02a03_nonzero_height_radial_avoidance_probe.lean",
-       :exit 0,
-       :output
-       "nonzeroHeight_avoidsLeftCore_rightTubeCoreRadialAmbient compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "sha256sum /tmp/t02a03_nonzero_height_radial_avoidance_probe.lean",
-       :exit 0,
-       :output
-       "1f349f8de44f95f4910d9ea19895de41ba160dd4fce17ca6f122bd74b791fb00  /tmp/t02a03_nonzero_height_radial_avoidance_probe.lean"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_nonzero_height_radial_avoidance_probe.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}
-      {:cmd
-       "rg -n 'nonzeroHeight_avoidsLeftCore_rightTubeCoreRadialAmbient' /tmp/t02a03_nonzero_height_radial_avoidance_probe.lean",
-       :exit 0,
-       :output
-       "7:theorem nonzeroHeight_avoidsLeftCore_rightTubeCoreRadialAmbient\n17:#print axioms nonzeroHeight_avoidsLeftCore_rightTubeCoreRadialAmbient"}],
-     :warnings [],
-     :finding
-     "The requested theorem is a direct, placeholder-free composition: nonzeroHeight_im_ne_zero_rightTubeCoreNormalInterpolation supplies nonzero imaginary part for every specialized radial interpolation value, and reconstructionAvoidsLeftCore_rightTubeCorePolar_of_im_ne_zero converts that certificate into exclusion from the left-core range.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
-      :declaration
-      "ConstructionTargets.T02A03GeometricTubeDeformation.nonzeroHeight_avoidsLeftCore_rightTubeCoreRadialAmbient",
-      :type
-      "forall (tp : unitInterval × RightTubeMinusLeftCore), tp.2.1 2 != 0 -> rightTubeCorePolarReconstruction (rightTubeCoreAngularCoordinate tp.2) (rightTubeCoreNormalInterpolation rightTubeMeridianCoordinate tp) ∉ Set.range apm_t02a03_leftCore",
-      :proof
-      "Apply reconstructionAvoidsLeftCore_rightTubeCorePolar_of_im_ne_zero, then discharge its premise with nonzeroHeight_im_ne_zero_rightTubeCoreNormalInterpolation tp hheight.",
-      :axioms [propext Classical.choice Quot.sound]},
-     :residual
-     "Implement and bank this nonzero-height radial-stage avoidance theorem; zero-height radial avoidance and the collision-safe angular stage remain for the parent deformation."}},
+   {:placeholder-delta {:before 0, :after 0, :change 0},
+    :residual
+    "Handle zero-height radial-stage avoidance using collision-sign control, construct the safe angular stage, and concatenate the certified stages.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean:62:6: unnecessarySimpa (pre-existing)"],
+    :missing-theorems [],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms [propext Classical.choice Quot.sound],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :scope-blob "c0bbb119015dc0a89c73794d09176493013e9f7a",
+    :commands
+    [{:cmd
+      "test -L .lake/packages && test \"$(readlink -f .lake/packages)\" = /home/joe/code/apm-lean/.lake/packages",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0,
+      :output
+      "compiled; declaration axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "lake env lean /tmp/t02a03_nonzero_height_radial_avoidance_probe.lean",
+      :exit 0,
+      :output
+      "nonzeroHeight_avoidsLeftCore_rightTubeCoreRadialAmbient compiled; axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "sha256sum /tmp/t02a03_nonzero_height_radial_avoidance_probe.lean",
+      :exit 0,
+      :output
+      "1f349f8de44f95f4910d9ea19895de41ba160dd4fce17ca6f122bd74b791fb00  /tmp/t02a03_nonzero_height_radial_avoidance_probe.lean"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "git diff --check -- ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd
+      "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "e1f75d4dc3acd8397a05ecf23dc6055f28da2916",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.nonzeroHeight_avoidsLeftCore_rightTubeCoreRadialAmbient",
+    :fixture
+    {:path "/tmp/t02a03_nonzero_height_radial_avoidance_probe.lean",
+     :sha256
+     "1f349f8de44f95f4910d9ea19895de41ba160dd4fce17ca6f122bd74b791fb00"},
+    :finding
+    "The specialized core-normal interpolation has nonzero imaginary part for every nonzero-height input, and the core-polar height criterion immediately converts that certificate into left-core avoidance throughout the radial ambient stage.",
+    :seat "topo-6"},
    :phase :implementation,
    :type
    "forall (tp : unitInterval × RightTubeMinusLeftCore), tp.2.1 2 != 0 -> rightTubeCorePolarReconstruction (rightTubeCoreAngularCoordinate tp.2) (rightTubeCoreNormalInterpolation rightTubeMeridianCoordinate tp) ∉ Set.range apm_t02a03_leftCore",
-   :state :open,
+   :state :done-unreviewed,
    :proof
    "Apply reconstructionAvoidsLeftCore_rightTubeCorePolar_of_im_ne_zero, then discharge its premise with nonzeroHeight_im_ne_zero_rightTubeCoreNormalInterpolation tp hheight.",
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
