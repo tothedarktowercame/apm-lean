@@ -70759,52 +70759,74 @@
    "single-consumer joint continuity of the pasted zero-height core-normal detour",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:residual
-     "Implement joint continuity, then prove the detour's pointwise radius and left-core-avoidance invariants before reconstructing the zero-height ambient radial stage.",
-     :outcome :go,
-     :warnings [],
-     :axioms [propext Classical.choice Quot.sound],
-     :commands
-     [{:cmd
-       "lake env lean /tmp/t02a03_core_normal_detour_continuous_probe.lean",
-       :exit 0,
-       :output
-       "continuous_zeroHeightCoreNormalDetour compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "sha256sum /tmp/t02a03_core_normal_detour_continuous_probe.lean",
-       :exit 0,
-       :output
-       "4e7394cc436482de8425d6ca023e922409f4c29586f36fb856c04548ea5b0681  /tmp/t02a03_core_normal_detour_continuous_probe.lean"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_core_normal_detour_continuous_probe.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}
-      {:cmd
-       "rg -n 'continuous_zeroHeightCoreNormalDetour' /tmp/t02a03_core_normal_detour_continuous_probe.lean",
-       :exit 0,
-       :output
-       "5:theorem continuous_zeroHeightCoreNormalDetour\n42:#print axioms continuous_zeroHeightCoreNormalDetour"}],
-     :fixture
-     {:path "/tmp/t02a03_core_normal_detour_continuous_probe.lean",
-      :sha256
-      "4e7394cc436482de8425d6ca023e922409f4c29586f36fb856c04548ea5b0681"},
-     :finding
-     "The placeholder-free fixture proves joint continuity of the detour. Both affine branches are continuous in time and input, and continuous_if_le pastes them using their exact signed-waypoint agreement at the midpoint.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
-      :declaration
-      "ConstructionTargets.T02A03GeometricTubeDeformation.continuous_zeroHeightCoreNormalDetour",
-      :type
-      "Continuous (fun tp : unitInterval × RightTubeMinusLeftCore => zeroHeightCoreNormalDetour tp.1 tp.2)"},
-     :seat "topo-8"}},
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Transfer the specialized radius and nonzero-imaginary properties to the two open halves of the continuous detour, handle t=0 and t=1 with the banked collision certificates, and reconstruct the zero-height ambient radial stage.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["Pre-existing unnecessarySimpa linter warning at ConstructionTargets/T02A03GeometricTubeDeformation.lean:62:6."
+     "The canonical .lake/packages symlink invariant check failed because this checkout has a real package directory; no package state was modified."],
+    :missing-theorems [],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not",
+     :construction-file-git-blob
+     "f7fe936f9cf66d73c941e3c3f129dfb59d7097a4",
+     :fixture-sha256
+     "4e7394cc436482de8425d6ca023e922409f4c29586f36fb856c04548ea5b0681"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/t02a03_core_normal_detour_continuous_probe.lean",
+      :exit 0,
+      :output
+      "4e7394cc436482de8425d6ca023e922409f4c29586f36fb856c04548ea5b0681  /tmp/t02a03_core_normal_detour_continuous_probe.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/t02a03_core_normal_detour_continuous_probe.lean",
+      :exit 0,
+      :output
+      "continuous_zeroHeightCoreNormalDetour axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "git diff --check -- ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd
+      "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "git show --format= --unified=0 HEAD -- ConstructionTargets/T02A03GeometricTubeDeformation.lean | rg '^\\+.*(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' --pcre2",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git show --check --oneline HEAD",
+      :exit 0,
+      :output "1163053b5 Add t02A03 core-normal detour continuity"}
+     {:cmd "git status --porcelain", :exit 0}],
+    :diagnostic-history
+    [{:cmd
+      "test -L .lake/packages && test \"$(readlink -f .lake/packages)\" = /home/joe/code/apm-lean/.lake/packages",
+      :exit 1,
+      :explanation
+      ".lake/packages is the canonical workspace package directory rather than a symlink; compilation used the existing reviewed workspace substrate."}],
+    :commit "1163053b578ab37e046e882d7f2e6393081e1a6a",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+    :fixture
+    {:path "/tmp/t02a03_core_normal_detour_continuous_probe.lean",
+     :sha256
+     "4e7394cc436482de8425d6ca023e922409f4c29586f36fb856c04548ea5b0681"},
+    :finding
+    "Both affine branches are jointly continuous in time and deleted-tube input; continuous_if_le pastes them at t = 1/2, where the formulas reduce to the same signed imaginary waypoint.",
+    :seat "topo-6"},
    :phase :implementation,
    :type
    "Continuous (fun tp : unitInterval × RightTubeMinusLeftCore => zeroHeightCoreNormalDetour tp.1 tp.2)",
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/zero-height-core-normal-detour-continuous",
