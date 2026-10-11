@@ -48,3 +48,14 @@ isomorphisms use the strict overlap formulas from the reviewed blueprint, and
 commutes with postcomposition in the target category.  The remaining B3 work
 composes this stage with the two-open pseudopushout and the point-span
 free-product representation stages.
+
+The second target-natural transport stage is also compiled.
+`genericPointWedgeCoordinatePointSpanEquivalence` uses connector normal forms
+based exactly at `x₀` and `y₀` to replace the coordinate fundamental
+groupoids by `SingleObj (FundamentalGroup X x₀)` and
+`SingleObj (FundamentalGroup Y y₀)`.  Because the overlap group is trivial,
+its two transported legs are naturally isomorphic to the literal point legs.
+`genericPointWedgeCoordinatePointSpanPostcomposeIso` records target
+postcomposition naturality for this stage.  B3 now only needs the outer
+pseudopushout conversion and the already banked point-span representation and
+representation-to-single-object stages composed around these two transports.

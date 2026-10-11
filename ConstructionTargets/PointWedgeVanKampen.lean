@@ -5,6 +5,8 @@ import ConstructionTargets.PointWedgeRestrictedOpenQuotient
 import ConstructionTargets.GenericPointWedgeOverlapInclusionSquares
 import ConstructionTargets.GenericSpanPseudoCoconeTransport
 import ConstructionTargets.TwoOpenFundamentalGroupoidSpan
+import ConstructionTargets.ConnectedGroupoidSingleObjEquivalence
+import ConstructionTargets.FreeProductPointSpanRepresentations
 import Mathlib.GroupTheory.Coprod.Basic
 import Mathlib.GroupTheory.FreeGroup.Basic
 
@@ -31,6 +33,9 @@ open GenericPointWedgeOpenCoverComparison
 open GenericPointWedgeOverlapInclusionSquares
 open GenericSpanPseudoCoconeTransport
 open TwoOpenFundamentalGroupoidSpan
+open ConnectedGroupoidVertexReconstruction
+open ConnectedGroupoidSingleObjEquivalence
+open FreeProductPointSpanRepresentations
 
 universe u
 
@@ -178,6 +183,137 @@ def genericPointWedgeCoordinateSpanPostcomposeIso
     (genericPointWedgeRightSpanIso x₀ y₀ M N hM hN hy hx cM cN) K
 
 end GenericMappingCoordinates
+
+section GenericPointSpanCoordinates
+
+variable {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+variable [PathConnectedSpace X] [PathConnectedSpace Y]
+
+def genericPointWedgeBasedConnector
+    {Z : Type} [TopologicalSpace Z] [PathConnectedSpace Z]
+    (z₀ : Z) (A : FundamentalGroupoid Z) : FundamentalGroupoid.mk z₀ ≅ A := by
+  classical
+  if h : A = FundamentalGroupoid.mk z₀ then
+    exact eqToIso h.symm
+  else
+    exact asIso (Path.Homotopic.Quotient.mk
+      (PathConnectedSpace.somePath z₀ A.as))
+
+@[simp] theorem genericPointWedgeBasedConnector_base
+    {Z : Type} [TopologicalSpace Z] [PathConnectedSpace Z] (z₀ : Z) :
+    genericPointWedgeBasedConnector z₀ (FundamentalGroupoid.mk z₀) =
+      Iso.refl _ := by
+  classical
+  simp [genericPointWedgeBasedConnector]
+
+def genericPointWedgeUnitConnectors :
+    ConnectorSystem (FundamentalGroupoid Unit) where
+  base := FundamentalGroupoid.mk ()
+  connector := genericPointWedgeBasedConnector ()
+
+def genericPointWedgeConnectors
+    {Z : Type} [TopologicalSpace Z] [PathConnectedSpace Z] (z₀ : Z) :
+    ConnectorSystem (FundamentalGroupoid Z) where
+  base := FundamentalGroupoid.mk z₀
+  connector := genericPointWedgeBasedConnector z₀
+
+def genericPointWedgeUnitEndMulEquiv :
+    End genericPointWedgeUnitConnectors.base ≃* PUnit :=
+  { toFun := fun _ => ()
+    invFun := fun _ => Path.Homotopic.Quotient.mk (Path.refl ())
+    left_inv := fun x => by
+      change Path.Homotopic.Quotient.mk (Path.refl ()) = x
+      exact @Subsingleton.elim (Path.Homotopic.Quotient () ()) inferInstance _ _
+    right_inv := fun x => by cases x; rfl
+    map_mul' := fun _ _ => rfl }
+
+def genericPointWedgeUnitSingleObjEquivalence :
+    FundamentalGroupoid Unit ≌ SingleObj PUnit :=
+  (connectorSingleObjEquivalence genericPointWedgeUnitConnectors).trans
+    genericPointWedgeUnitEndMulEquiv.toSingleObjEquiv
+
+def genericPointWedgeSingleObjEquivalence
+    {Z : Type} [TopologicalSpace Z] [PathConnectedSpace Z] (z₀ : Z) :
+    FundamentalGroupoid Z ≌ SingleObj (FundamentalGroup Z z₀) :=
+  connectorSingleObjEquivalence (genericPointWedgeConnectors z₀)
+
+/-- Every functor out of the trivial one-object group is naturally isomorphic
+to the point leg.  This comparison avoids choosing a normalization for an
+arbitrary equivalence's counit. -/
+def genericPointWedgeTrivialSourceFunctorIso
+    (G : Type) [Monoid G] (F : SingleObj PUnit ⥤ SingleObj G) :
+    F ≅ pointLeg G :=
+  NatIso.ofComponents
+    (fun A => eqToIso (Subsingleton.elim (F.obj A) ((pointLeg G).obj A))) (by
+      intro A B f
+      cases A
+      cases B
+      rw [show f = (𝟙 (SingleObj.star PUnit) :
+          (SingleObj.star PUnit) ⟶ (SingleObj.star PUnit)) by
+        change (f : PUnit) = PUnit.unit
+        let p : PUnit := f
+        change p = PUnit.unit
+        cases p
+        rfl]
+      have hF : F.map (𝟙 (SingleObj.star PUnit)) = 𝟙 _ := F.map_id _
+      have hP : (pointLeg G).map (𝟙 (SingleObj.star PUnit)) = 𝟙 _ :=
+        (pointLeg G).map_id _
+      erw [hF, hP]
+      exact (Category.id_comp _).trans (Category.comp_id _).symm)
+
+variable (x₀ : X) (y₀ : Y)
+
+def genericPointWedgeCoordinateLeftPointIso :
+    genericPointWedgeUnitSingleObjEquivalence.inverse ⋙
+        genericPointWedgeCoordinateLeft x₀ ⋙
+        (genericPointWedgeSingleObjEquivalence x₀).functor ≅
+      pointLeg (FundamentalGroup X x₀) :=
+  genericPointWedgeTrivialSourceFunctorIso _ _
+
+def genericPointWedgeCoordinateRightPointIso :
+    genericPointWedgeUnitSingleObjEquivalence.inverse ⋙
+        genericPointWedgeCoordinateRight y₀ ⋙
+        (genericPointWedgeSingleObjEquivalence y₀).functor ≅
+      pointLeg (FundamentalGroup Y y₀) :=
+  genericPointWedgeTrivialSourceFunctorIso _ _
+
+def genericPointWedgeCoordinatePointSpanEquivalence
+    (C : Type u) [Category C] :
+    SpanPseudoCocone
+        (genericPointWedgeCoordinateLeft x₀)
+        (genericPointWedgeCoordinateRight y₀) C ≌
+      SpanPseudoCocone
+        (pointLeg (FundamentalGroup X x₀))
+        (pointLeg (FundamentalGroup Y y₀)) C :=
+  pseudoCoconeEquivalenceOfSpanEquivalences
+    (genericPointWedgeCoordinateLeft x₀)
+    (genericPointWedgeCoordinateRight y₀)
+    (pointLeg (FundamentalGroup X x₀))
+    (pointLeg (FundamentalGroup Y y₀))
+    genericPointWedgeUnitSingleObjEquivalence
+    (genericPointWedgeSingleObjEquivalence x₀)
+    (genericPointWedgeSingleObjEquivalence y₀)
+    (genericPointWedgeCoordinateLeftPointIso x₀)
+    (genericPointWedgeCoordinateRightPointIso y₀)
+
+def genericPointWedgeCoordinatePointSpanPostcomposeIso
+    {C D : Type u} [Category C] [Category D] (K : C ⥤ D) :
+    postcomposeFunctor K ⋙
+        (genericPointWedgeCoordinatePointSpanEquivalence x₀ y₀ D).functor ≅
+      (genericPointWedgeCoordinatePointSpanEquivalence x₀ y₀ C).functor ⋙
+        postcomposeFunctor K :=
+  equivalenceFunctorPostcomposeIso
+    (genericPointWedgeCoordinateLeft x₀)
+    (genericPointWedgeCoordinateRight y₀)
+    (pointLeg (FundamentalGroup X x₀))
+    (pointLeg (FundamentalGroup Y y₀))
+    genericPointWedgeUnitSingleObjEquivalence
+    (genericPointWedgeSingleObjEquivalence x₀)
+    (genericPointWedgeSingleObjEquivalence y₀)
+    (genericPointWedgeCoordinateLeftPointIso x₀)
+    (genericPointWedgeCoordinateRightPointIso y₀) K
+
+end GenericPointSpanCoordinates
 
 /-- An equivalence from a connected groupoid to a one-object groupoid induces
 the expected equivalence on the automorphism group at any chosen object.  This
@@ -470,5 +606,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms twoCirclesBaseNeighborhood_contraction
 #print axioms genericPointWedgeCoordinateSpanEquivalence
 #print axioms genericPointWedgeCoordinateSpanPostcomposeIso
+#print axioms genericPointWedgeCoordinatePointSpanEquivalence
+#print axioms genericPointWedgeCoordinatePointSpanPostcomposeIso
 
 end ConstructionTargets.PointWedgeVanKampen
