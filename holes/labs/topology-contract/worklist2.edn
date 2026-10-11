@@ -67868,63 +67868,57 @@
    "single-consumer positivity of the planar radius in the radial polar reconstruction",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:residual
-     "Use positivity to prove exact normal-coordinate recovery and left-core avoidance; then establish right-tube membership for the ambient path.",
-     :outcome :go,
-     :warnings [],
-     :acceptance
-     {:declaration
-      "ConstructionTargets.T02A03GeometricTubeDeformation.positiveReconstructionRadius_rightTubeRadialNormalInterpolation",
-      :type
-      "forall tp : unitInterval × RightTubeMinusLeftCore, 0 < 1 + (rightTubeRadialNormalInterpolation rightTubeNormalCoordinate rightTubeMeridianCoordinate tp).re",
-      :gates
-      ["Compile the scoped module after inserting the fixture theorem"
-       "Confirm only propext, Classical.choice, and Quot.sound axioms"
-       "Confirm no new sorry in the scoped module"
-       "Run python3 scripts/statement-registry.py check"]},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/t02a03_reconstruction_radius_probe.lean",
-       :exit 0,
-       :output
-       "positiveReconstructionRadius_rightTubeRadialNormalInterpolation compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd "sha256sum /tmp/t02a03_reconstruction_radius_probe.lean",
-       :exit 0,
-       :output
-       "c7de498582024226996603726fe1aa9381493f15fcc3a50a967d9e77c0bce639  /tmp/t02a03_reconstruction_radius_probe.lean"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_reconstruction_radius_probe.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}
-      {:cmd
-       "rg -n 'positiveReconstructionRadius_rightTubeRadialNormalInterpolation' /tmp/t02a03_reconstruction_radius_probe.lean",
-       :exit 0,
-       :output
-       "9:theorem positiveReconstructionRadius_rightTubeRadialNormalInterpolation\n53:#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.positiveReconstructionRadius_rightTubeRadialNormalInterpolation"}],
-     :fixture
-     {:path "/tmp/t02a03_reconstruction_radius_probe.lean",
-      :sha256
-      "c7de498582024226996603726fe1aa9381493f15fcc3a50a967d9e77c0bce639"},
-     :finding
-     "The placeholder-free fixture proves strict positivity of 1 plus the interpolated normal real part by rewriting it as a convex combination of the positive meridian radius and the positive input planar norm.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
-      :declaration
-      "ConstructionTargets.T02A03GeometricTubeDeformation.positiveReconstructionRadius_rightTubeRadialNormalInterpolation",
-      :type
-      "forall tp : unitInterval × RightTubeMinusLeftCore, 0 < 1 + (rightTubeRadialNormalInterpolation rightTubeNormalCoordinate rightTubeMeridianCoordinate tp).re",
-      :proof-plan
-      "Bound the Circle direction real part below by -1, identify norm(n)*direction.re with n.re using norm_smul_normalize, identify 1+n.re with the positive planar norm, rewrite the interpolated radius as a convex combination, and handle t=1 separately.",
-      :axioms [propext Classical.choice Quot.sound]},
-     :seat "topo-8"}},
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Use positivity to prove the ambient reconstruction has exactly the interpolated normal coordinate; nonvanishing then gives left-core avoidance, and the remaining geometric estimate gives right-tube membership.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["Existing linter warning at line 62: unnecessarySimpa; no new warnings"],
+    :missing-theorems [],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms [propext Classical.choice Quot.sound],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :scope-blob "7fa8cb45295b7e9ae9bbca0a70edce8d206f7575",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/t02a03_reconstruction_radius_probe.lean",
+      :exit 0}
+     {:cmd "sha256sum /tmp/t02a03_reconstruction_radius_probe.lean",
+      :exit 0,
+      :output
+      "c7de498582024226996603726fe1aa9381493f15fcc3a50a967d9e77c0bce639  /tmp/t02a03_reconstruction_radius_probe.lean"}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeDeformation.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "git diff --check -- ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "dd2e7ab33c4e0013c5c4149772dd3e1504b93399",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.positiveReconstructionRadius_rightTubeRadialNormalInterpolation",
+    :fixture
+    {:path "/tmp/t02a03_reconstruction_radius_probe.lean",
+     :sha256
+     "c7de498582024226996603726fe1aa9381493f15fcc3a50a967d9e77c0bce639"},
+    :finding
+    "The reconstructed planar radius is a convex combination of two positive endpoint radii: the radius-1/8 meridian term and the positive input planar norm. The t=1 endpoint is handled directly; otherwise the first weighted term is strictly positive.",
+    :seat "topo-6"},
    :phase :implementation,
    :type
    "forall tp : unitInterval × RightTubeMinusLeftCore, 0 < 1 + (rightTubeRadialNormalInterpolation rightTubeNormalCoordinate rightTubeMeridianCoordinate tp).re",
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/positive-reconstruction-radius",
