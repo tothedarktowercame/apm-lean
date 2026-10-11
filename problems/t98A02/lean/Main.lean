@@ -16,6 +16,31 @@ The construction and the supplied top-homology fact require `X₁` and `X₂` to
 be closed.  The source initially says only “connected oriented 4-manifolds,”
 but its intended solution uses closedness.  We therefore include compactness,
 along with the supplied integral top-homology hypotheses.
+
+## The source's simplex assumption
+
+The source adds: “You may assume that `φᵢ(D⁴)` is a 4-simplex in the
+triangulation of `Xᵢ`.”  Mathlib has no triangulated manifolds, so the
+sentence is not encoded literally.  Instead the statement takes, as
+hypotheses, the two consequences of it that the intended solution uses
+(Joe, 2026-10-11: restore the dropped sentence in the Lean framing):
+
+* *Collar.*  Each `φᵢ` extends to a topological embedding `ψᵢ` of the closed
+  ball of radius `2`, so the boundary sphere `φᵢ(∂D⁴)` has an exterior collar
+  in `Xᵢ`.  This is what makes the open-cover Mayer–Vietoris computation of
+  the connected sum available.  It follows from the source's assumption:
+  triangulations of 4-manifolds are combinatorial (vertex links are simply
+  connected 3-manifolds, hence `S³`), and a top simplex of a combinatorial
+  triangulation is bicollared by its PL regular neighbourhood.  Every
+  parametrisation `φᵢ` of the simplex then extends radially along the outer
+  collar.
+* *Dimension.*  `Hₖ(Xᵢ) = 0` for `k ≥ 5`.  For a compact triangulated
+  4-manifold this is immediate: the simplicial chain complex vanishes above
+  degree four, and simplicial homology agrees with singular homology.
+
+Both hypotheses hold whenever the source's assumption does, so the theorem
+remains at least as strong as the source asks.  It no longer covers wild
+(uncollared) balls, which the source never asked about.
 -/
 
 open CategoryTheory Set
@@ -30,6 +55,12 @@ abbrev T98A02Sphere := Metric.sphere (0 : T98A02E4) 1
 
 def t98A02SphereInDisk (x : T98A02Sphere) : T98A02Disk :=
   ⟨x, by simpa [Metric.mem_closedBall, Metric.mem_sphere] using x.property.le⟩
+
+/-- The closed ball of radius `2`, into which a collared ball extends. -/
+abbrev T98A02CollarBall := Metric.closedBall (0 : T98A02E4) 2
+
+def t98A02DiskInCollarBall (u : T98A02Disk) : T98A02CollarBall :=
+  ⟨u, Metric.closedBall_subset_closedBall (by norm_num) u.property⟩
 
 abbrev T98A02Punctured (X : Type) (φ : T98A02Disk → X) :=
   {x : X // x ∉ φ '' {u : T98A02Disk | ‖(u : T98A02E4)‖ < 1}}
@@ -241,8 +272,14 @@ theorem apm_t98a02 :
       [IsManifold T98A02I4 (⊤ : ℕ∞) X₂]
       (φ₁ : T98A02Disk → X₁) (φ₂ : T98A02Disk → X₂),
       Topology.IsEmbedding φ₁ → Topology.IsEmbedding φ₂ →
+      (∃ ψ₁ : T98A02CollarBall → X₁, Topology.IsEmbedding ψ₁ ∧
+        ∀ u, ψ₁ (t98A02DiskInCollarBall u) = φ₁ u) →
+      (∃ ψ₂ : T98A02CollarBall → X₂, Topology.IsEmbedding ψ₂ ∧
+        ∀ u, ψ₂ (t98A02DiskInCollarBall u) = φ₂ u) →
       Nonempty (t98A02H 4 X₁ ≅ ModuleCat.of ℤ ℤ) →
       Nonempty (t98A02H 4 X₂ ≅ ModuleCat.of ℤ ℤ) →
+      (∀ k : ℕ, 5 ≤ k → Limits.IsZero (t98A02H k X₁)) →
+      (∀ k : ℕ, 5 ≤ k → Limits.IsZero (t98A02H k X₂)) →
       let Y := T98A02ConnectedSum φ₁ φ₂
       Nonempty (t98A02H 0 Y ≅ ModuleCat.of ℤ ℤ) ∧
       (∀ k : ℕ, 1 ≤ k → k ≤ 3 →
