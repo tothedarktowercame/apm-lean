@@ -114748,7 +114748,352 @@
    :lemma-pointwedgevankampen-fundamentalgroupmulequivofsingleobjequivalence,
    :kind :lemma,
    :depends-on [],
-   :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}],
+   :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
+  {:consumer :t91A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "covering_trivial_over_disk",
+    :type
+    "Every finite-sheet covering of Disk is equivalent over Disk to Disk × Fin n  (size: 150-250 lines / 2-4 days)"},
+   :lemma
+   {:name "covering_trivial_over_disk",
+    :reported-by [:owner],
+    :type
+    "Every finite-sheet covering of Disk is equivalent over Disk to Disk × Fin n  (size: 150-250 lines / 2-4 days)",
+    :area "covering-trivial-over-disk"},
+   :id :lemma-covering-trivial-over-disk,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t03J03]}
+  {:consumer :t91A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "polygon_cover_descent",
+    :type
+    "A finite cover of a polygon quotient is a permutation-labelled quotient of polygon copies  (size: 250-450 lines / 1-2 weeks)"},
+   :lemma
+   {:name "polygon_cover_descent",
+    :reported-by [:owner],
+    :type
+    "A finite cover of a polygon quotient is a permutation-labelled quotient of polygon copies  (size: 250-450 lines / 1-2 weeks)",
+    :area "polygon-cover-descent"},
+   :id :lemma-polygon-cover-descent,
+   :kind :lemma,
+   :depends-on [:lemma-covering-trivial-over-disk],
+   :other-consumers [:t03J03]}
+  {:consumer :t91A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "polygon_complex_euler_characteristic",
+    :type
+    "Alternating rational singular Betti rank of a finite polygon complex equals V-E+F  (size: 600+ lines / 3-8 weeks)"},
+   :lemma
+   {:name "polygon_complex_euler_characteristic",
+    :reported-by [:owner],
+    :type
+    "Alternating rational singular Betti rank of a finite polygon complex equals V-E+F  (size: 600+ lines / 3-8 weeks)",
+    :area "polygon-complex-euler-characteristic"},
+   :id :lemma-polygon-complex-euler-characteristic,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t91J05 :t97J02]}
+  {:consumer :t91A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "eulerCharacteristic_finite_cover_surface",
+    :type
+    "For the frozen surface cover, chi(total)=sheets*chi(base)  (size: 120-220 lines / 2-4 days)"},
+   :lemma
+   {:name "eulerCharacteristic_finite_cover_surface",
+    :reported-by [:owner],
+    :type
+    "For the frozen surface cover, chi(total)=sheets*chi(base)  (size: 120-220 lines / 2-4 days)",
+    :area "covering-euler-characteristic"},
+   :id :lemma-eulercharacteristic-finite-cover-surface,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polygon-cover-descent
+    :lemma-polygon-complex-euler-characteristic],
+   :other-consumers [:t91J05 :t94J04 :t96A01 :t97J02]}
+  {:consumer :t91A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t91a02",
+    :type
+    "The exact nonexistence theorem in problems/t91A02/lean/Main.lean  (size: 10-20 lines / 1-2 hours)"},
+   :lemma
+   {:name "apm_t91a02",
+    :reported-by [:owner],
+    :type
+    "The exact nonexistence theorem in problems/t91A02/lean/Main.lean  (size: 10-20 lines / 1-2 hours)",
+    :area "covering-euler-characteristic"},
+   :id :lemma-apm-t91a02,
+   :kind :lemma,
+   :depends-on [:lemma-eulercharacteristic-finite-cover-surface],
+   :other-consumers []}
+  {:consumer :t91J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "polygonQuotient_isCoveringMap_of_edge_pairing",
+    :type
+    "Compatible polygon edge-pairing maps induce covering maps of quotient surfaces  (size: 250-450 lines / 1-2 weeks)"},
+   :lemma
+   {:name "polygonQuotient_isCoveringMap_of_edge_pairing",
+    :reported-by [:owner],
+    :type
+    "Compatible polygon edge-pairing maps induce covering maps of quotient surfaces  (size: 250-450 lines / 1-2 weeks)",
+    :area "polygon-quotient-covering"},
+   :id :lemma-polygonquotient-iscoveringmap-of-edge-pairing,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t03J03]}
+  {:consumer :t91J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "cyclicCover_polygon_model",
+    :type
+    "Explicit n-sheet cyclic polygon cover of Surface true 3  (size: 150-300 lines / 3-7 days)"},
+   :lemma
+   {:name "cyclicCover_polygon_model",
+    :reported-by [:owner],
+    :type
+    "Explicit n-sheet cyclic polygon cover of Surface true 3  (size: 150-300 lines / 3-7 days)",
+    :area "polygon-quotient-covering"},
+   :id :lemma-cycliccover-polygon-model,
+   :kind :lemma,
+   :depends-on [:lemma-polygonquotient-iscoveringmap-of-edge-pairing],
+   :other-consumers []}
+  {:consumer :t91J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "cyclicCover_homeomorph_standardSurface",
+    :type
+    "Its total space is homeomorphic to Surface true (2*n+1)  (size: 400+ lines / 2-5 weeks)"},
+   :lemma
+   {:name "cyclicCover_homeomorph_standardSurface",
+    :reported-by [:owner],
+    :type
+    "Its total space is homeomorphic to Surface true (2*n+1)  (size: 400+ lines / 2-5 weeks)",
+    :area "polygon-cut-and-paste-homeomorphism"},
+   :id :lemma-cycliccover-homeomorph-standardsurface,
+   :kind :lemma,
+   :depends-on [:lemma-cycliccover-polygon-model],
+   :other-consumers []}
+  {:consumer :t91J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "finiteCover_surface_polygon_model",
+    :type
+    "Every finite cover of Surface true 3 is a finite polygon quotient  (size: 300-500 lines / 1-3 weeks)"},
+   :lemma
+   {:name "finiteCover_surface_polygon_model",
+    :reported-by [:owner],
+    :type
+    "Every finite cover of Surface true 3 is a finite polygon quotient  (size: 300-500 lines / 1-3 weeks)",
+    :area "covering-euler-characteristic"},
+   :id :lemma-finitecover-surface-polygon-model,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t91A02]}
+  {:consumer :t91J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "compact_orientable_polygon_surface_classification",
+    :type
+    "Every connected orientable finite polygon surface is Surface true g  (size: 800+ lines / 1-3 months)"},
+   :lemma
+   {:name "compact_orientable_polygon_surface_classification",
+    :reported-by [:owner],
+    :type
+    "Every connected orientable finite polygon surface is Surface true g  (size: 800+ lines / 1-3 months)",
+    :area "surface-classification"},
+   :id :lemma-compact-orientable-polygon-surface-classification,
+   :kind :lemma,
+   :depends-on [:lemma-finitecover-surface-polygon-model],
+   :other-consumers [:t92J05 :t97J02]}
+  {:consumer :t91J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t91J05_bridge_1",
+    :type
+    "IsFiniteCover X → ∃ n>0, Nonempty (X ≃ₜ Surface true (2*n+1))  (size: 80-140 lines / 1-2 days)"},
+   :lemma
+   {:name "apm_t91J05_bridge_1",
+    :reported-by [:owner],
+    :type
+    "IsFiniteCover X → ∃ n>0, Nonempty (X ≃ₜ Surface true (2*n+1))  (size: 80-140 lines / 1-2 days)",
+    :area "surface-classification"},
+   :id :lemma-apm-t91j05-bridge-1,
+   :kind :lemma,
+   :depends-on
+   [:lemma-compact-orientable-polygon-surface-classification],
+   :other-consumers []}
+  {:consumer :t91J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t91J05_bridge_2",
+    :type
+    "∀ n>0, IsFiniteCover (Surface true (2*n+1))  (size: 30-60 lines / 4-8 hours)"},
+   :lemma
+   {:name "apm_t91J05_bridge_2",
+    :reported-by [:owner],
+    :type
+    "∀ n>0, IsFiniteCover (Surface true (2*n+1))  (size: 30-60 lines / 4-8 hours)",
+    :area "polygon-quotient-covering"},
+   :id :lemma-apm-t91j05-bridge-2,
+   :kind :lemma,
+   :depends-on [:lemma-cycliccover-homeomorph-standardsurface],
+   :other-consumers []}
+  {:consumer :t91J06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t91J06_bridge_compatible_stage_coordinates",
+    :type
+    "Compatible homeomorphisms stage f n ≃ₜ Icc (-(n+1)) (n+1)  (size: 120-220 lines / 1-2 days)"},
+   :lemma
+   {:name "apm_t91J06_bridge_compatible_stage_coordinates",
+    :reported-by [:owner],
+    :type
+    "Compatible homeomorphisms stage f n ≃ₜ Icc (-(n+1)) (n+1)  (size: 120-220 lines / 1-2 days)",
+    :area "interval-homeomorph-extension"},
+   :id :lemma-apm-t91j06-bridge-compatible-stage-coordinates,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t91J06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t91J06_glue_with_embeddings",
+    :type
+    "hf → hnested → hcover → hweak → compatible coordinates → Nonempty (X ≃ₜ ℝ)  (size: 100-180 lines / 1-2 days)"},
+   :lemma
+   {:name "apm_t91J06_glue_with_embeddings",
+    :reported-by [:owner],
+    :type
+    "hf → hnested → hcover → hweak → compatible coordinates → Nonempty (X ≃ₜ ℝ)  (size: 100-180 lines / 1-2 days)",
+    :area "interval-homeomorph-extension"},
+   :id :lemma-apm-t91j06-glue-with-embeddings,
+   :kind :lemma,
+   :depends-on [:lemma-apm-t91j06-bridge-compatible-stage-coordinates],
+   :other-consumers []}
+  {:consumer :t92J06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "wedge_cover_of_circle_covers",
+    :type
+    "Fibrewise-glued circle covers induce an IsCoveringMap to the point wedge  (size: 250-450 lines / 1-2 weeks)"},
+   :lemma
+   {:name "wedge_cover_of_circle_covers",
+    :reported-by [:owner],
+    :type
+    "Fibrewise-glued circle covers induce an IsCoveringMap to the point wedge  (size: 250-450 lines / 1-2 weeks)",
+    :area "wedge-quotient-covering-gluing"},
+   :id :lemma-wedge-cover-of-circle-covers,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t01A04 :t98A03 :t97A03]}
+  {:consumer :t92J06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "permutation_cover",
+    :type
+    "For σ τ : Equiv.Perm (Fin 3), construct apm_t92J06_Covering 3  (size: 150-300 lines / 3-7 days)"},
+   :lemma
+   {:name "permutation_cover",
+    :reported-by [:owner],
+    :type
+    "For σ τ : Equiv.Perm (Fin 3), construct apm_t92J06_Covering 3  (size: 150-300 lines / 3-7 days)",
+    :area "wedge-quotient-covering-gluing"},
+   :id :lemma-permutation-cover,
+   :kind :lemma,
+   :depends-on [:lemma-wedge-cover-of-circle-covers],
+   :other-consumers []}
+  {:consumer :t92J06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "four_threeSheeted_covers",
+    :type
+    "Fin 4 three-sheet covers with pairwise nonhomeomorphic total spaces  (size: 250-450 lines / 1-2 weeks)"},
+   :lemma
+   {:name "four_threeSheeted_covers",
+    :reported-by [:owner],
+    :type
+    "Fin 4 three-sheet covers with pairwise nonhomeomorphic total spaces  (size: 250-450 lines / 1-2 weeks)",
+    :area "graph-cut-point-invariant"},
+   :id :lemma-four-threesheeted-covers,
+   :kind :lemma,
+   :depends-on [:lemma-permutation-cover],
+   :other-consumers []}
+  {:consumer :t92J06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "cayleyTree_cover",
+    :type
+    "A covering from the topological Cayley tree of FreeGroup (Fin 2) to apm_t92J06_X  (size: 200-400 lines / 1-2 weeks)"},
+   :lemma
+   {:name "cayleyTree_cover",
+    :reported-by [:owner],
+    :type
+    "A covering from the topological Cayley tree of FreeGroup (Fin 2) to apm_t92J06_X  (size: 200-400 lines / 1-2 weeks)",
+    :area "infinite-tree-simply-connected"},
+   :id :lemma-cayleytree-cover,
+   :kind :lemma,
+   :depends-on [:lemma-wedge-cover-of-circle-covers],
+   :other-consumers []}
+  {:consumer :t92J06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "cayleyTree_simplyConnected",
+    :type
+    "SimplyConnectedSpace of the Cayley-tree total space  (size: 400+ lines / 2-5 weeks)"},
+   :lemma
+   {:name "cayleyTree_simplyConnected",
+    :reported-by [:owner],
+    :type
+    "SimplyConnectedSpace of the Cayley-tree total space  (size: 400+ lines / 2-5 weeks)",
+    :area "infinite-tree-simply-connected"},
+   :id :lemma-cayleytree-simplyconnected,
+   :kind :lemma,
+   :depends-on [:lemma-cayleytree-cover],
+   :other-consumers []}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",

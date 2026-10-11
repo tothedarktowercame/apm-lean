@@ -78395,4 +78395,58 @@
    :id :lemma-apm-t02a05-true-flux-formula,
    :kind :lemma,
    :depends-on [:lemma-euclidean-hausdorff-two-normalization],
+   :other-consumers []}
+  {:consumer :t02A05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "EuclideanSpace.euclideanHausdorffMeasure_eq_volume",
+    :type
+    "  (found in .lake/packages/mathlib/Mathlib/Geometry/Euclidean/Volume/Measure.lean:190)"},
+   :lemma
+   {:name "EuclideanSpace.euclideanHausdorffMeasure_eq_volume",
+    :reported-by [:owner],
+    :type
+    "  (found in .lake/packages/mathlib/Mathlib/Geometry/Euclidean/Volume/Measure.lean:190)",
+    :proved-in :owner},
+   :id :lemma-euclideanspace-euclideanhausdorffmeasure-eq-volume,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t02A05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "intrinsicSphere_integral_euclideanHausdorff",
+    :type
+    "Transport the unit-sphere subtype integral from μHE[2] to the banked μH[2] moments and prove normalized sphere mass is 4*pi  (size: 60-120 lines / 4-8 hours)"},
+   :lemma
+   {:name "intrinsicSphere_integral_euclideanHausdorff",
+    :reported-by [:owner],
+    :type
+    "Transport the unit-sphere subtype integral from μHE[2] to the banked μH[2] moments and prove normalized sphere mass is 4*pi  (size: 60-120 lines / 4-8 hours)",
+    :area "euclidean-hausdorff-normalisation"},
+   :id :lemma-intrinsicsphere-integral-euclideanhausdorff,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t01J06]}
+  {:consumer :t02A05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t02A05_bridge_1",
+    :type
+    "outwardSphereIntegral omega c = 44*pi/15 + 4*pi*((c 0-1)^2+(c 1-2)^2)  (size: 100-180 lines / 1-2 days)"},
+   :lemma
+   {:name "apm_t02A05_bridge_1",
+    :reported-by [:owner],
+    :type
+    "outwardSphereIntegral omega c = 44*pi/15 + 4*pi*((c 0-1)^2+(c 1-2)^2)  (size: 100-180 lines / 1-2 days)",
+    :area "euclidean-hausdorff-normalisation"},
+   :id :lemma-apm-t02a05-bridge-1,
+   :kind :lemma,
+   :depends-on [:lemma-intrinsicsphere-integral-euclideanhausdorff],
    :other-consumers []}]}

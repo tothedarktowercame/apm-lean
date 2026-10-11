@@ -18402,7 +18402,7 @@
    :lemma
    {:name
     "ConstructionTargets.DeckGroupQuotientFundamentalGroup.freeProperlyDiscontinuousQuotient_fundamentalGroupEquiv_refuted",
-    :reported-by [:program-2026-10-11-deck-group-quotient-pi1],
+    :reported-by [:program-2026-10-11-deck-group-quotient-pi1 :owner],
     :type
     "The negation of the frozen universal theorem specialized to Type 0",
     :area "deck-group-quotient-pi1",
@@ -18937,7 +18937,227 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-deckgroupquotientfundamentalgroup-orbitendpointmonodromy],
-   :other-consumers [:t92J05 :t93J03 :t99J01 :t00J07]}],
+   :other-consumers [:t92J05 :t93J03 :t99J01 :t00J07]}
+  {:consumer :t91J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t91J03_no_two_of_forced_fiber_collision",
+    :type "  (found in problems/t91J03/lean/Main.lean:82)"},
+   :lemma
+   {:name "apm_t91J03_no_two_of_forced_fiber_collision",
+    :reported-by [:owner],
+    :type "  (found in problems/t91J03/lean/Main.lean:82)",
+    :proved-in :owner},
+   :id :lemma-apm-t91j03-no-two-of-forced-fiber-collision,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t91J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "circle_h1_degree_eq_lift_displacement",
+    :type
+    "The induced H1 multiplier equals endpoint displacement of a real lift  (size: 80-140 lines / 1-2 days)"},
+   :lemma
+   {:name "circle_h1_degree_eq_lift_displacement",
+    :reported-by [:owner],
+    :type
+    "The induced H1 multiplier equals endpoint displacement of a real lift  (size: 80-140 lines / 1-2 days)",
+    :area "circle-h1-degree"},
+   :id :lemma-circle-h1-degree-eq-lift-displacement,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t91J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "periodic_lift_of_circle_map",
+    :type
+    "A continuous real lift theta with theta(t+1)=theta(t)+2*pi*n  (size: 60-120 lines / 1 day)"},
+   :lemma
+   {:name "periodic_lift_of_circle_map",
+    :reported-by [:owner],
+    :type
+    "A continuous real lift theta with theta(t+1)=theta(t)+2*pi*n  (size: 60-120 lines / 1 day)",
+    :area "circle-h1-degree"},
+   :id :lemma-periodic-lift-of-circle-map,
+   :kind :lemma,
+   :depends-on [:lemma-circle-h1-degree-eq-lift-displacement],
+   :other-consumers []}
+  {:consumer :t91J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "planar_crossing_lemma",
+    :type
+    "Every left-right rectangle arc meets every bottom-top arc  (size: 250-450 lines / 1-2 weeks)"},
+   :lemma
+   {:name "planar_crossing_lemma",
+    :reported-by [:owner],
+    :type
+    "Every left-right rectangle arc meets every bottom-top arc  (size: 250-450 lines / 1-2 weeks)",
+    :area "planar-crossing-lemma"},
+   :id :lemma-planar-crossing-lemma,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t91J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "winding_two_forces_annulus_collision",
+    :type
+    "HasWindingNumber gamma n → n.natAbs=2 → an equal-coordinate collision  (size: 120-220 lines / 2-4 days)"},
+   :lemma
+   {:name "winding_two_forces_annulus_collision",
+    :reported-by [:owner],
+    :type
+    "HasWindingNumber gamma n → n.natAbs=2 → an equal-coordinate collision  (size: 120-220 lines / 2-4 days)",
+    :area "planar-crossing-lemma"},
+   :id :lemma-winding-two-forces-annulus-collision,
+   :kind :lemma,
+   :depends-on
+   [:lemma-periodic-lift-of-circle-map :lemma-planar-crossing-lemma],
+   :other-consumers []}
+  {:consumer :t92J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "sphereToRP2_isCoveringMap",
+    :type
+    "IsCoveringMap sphereToRP2 and every fibre has cardinality two  (size: 100-180 lines / 1-3 days)"},
+   :lemma
+   {:name "sphereToRP2_isCoveringMap",
+    :reported-by [:owner],
+    :type
+    "IsCoveringMap sphereToRP2 and every fibre has cardinality two  (size: 100-180 lines / 1-3 days)",
+    :area "antipodal-sphere-cover"},
+   :id :lemma-spheretorp2-iscoveringmap,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t00A02]}
+  {:consumer :t92J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "simplyConnectedCover_fundamentalGroup_equiv_fiber",
+    :type
+    "For a separated simply connected cover, FundamentalGroup base ≃ fibre  (size: 80-140 lines / 1-2 days)"},
+   :lemma
+   {:name "simplyConnectedCover_fundamentalGroup_equiv_fiber",
+    :reported-by [:owner],
+    :type
+    "For a separated simply connected cover, FundamentalGroup base ≃ fibre  (size: 80-140 lines / 1-2 days)",
+    :area "simply-connected-cover-fiber-bijection"},
+   :id :lemma-simplyconnectedcover-fundamentalgroup-equiv-fiber,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t00A02 :t97A03 :t98A03]}
+  {:consumer :t92J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t92J05_bridge_projectivePlane_fundamentalGroup",
+    :type
+    "∀ x, Nonempty (FundamentalGroup RP2 x ≃* Multiplicative (ZMod 2))  (size: 30-60 lines / 4-8 hours)"},
+   :lemma
+   {:name "apm_t92J05_bridge_projectivePlane_fundamentalGroup",
+    :reported-by [:owner],
+    :type
+    "∀ x, Nonempty (FundamentalGroup RP2 x ≃* Multiplicative (ZMod 2))  (size: 30-60 lines / 4-8 hours)",
+    :area "antipodal-sphere-cover"},
+   :id :lemma-apm-t92j05-bridge-projectiveplane-fundamentalgroup,
+   :kind :lemma,
+   :depends-on
+   [:lemma-spheretorp2-iscoveringmap
+    :lemma-simplyconnectedcover-fundamentalgroup-equiv-fiber],
+   :other-consumers []}
+  {:consumer :t92J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "smooth_compact_surface_classification",
+    :type
+    "Every compact connected smooth 2-manifold is homeomorphic to Surface o g  (size: 800+ lines / 1-3 months)"},
+   :lemma
+   {:name "smooth_compact_surface_classification",
+    :reported-by [:owner],
+    :type
+    "Every compact connected smooth 2-manifold is homeomorphic to Surface o g  (size: 800+ lines / 1-3 months)",
+    :area "surface-classification"},
+   :id :lemma-smooth-compact-surface-classification,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t91J05 :t00A03 :t97J02]}
+  {:consumer :t92J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "surface_homology_determines_type",
+    :type
+    "H0=ℤ, H1=ℤ⁴, H2=ℤ identifies Surface true 2  (size: 300-500 lines / 1-3 weeks)"},
+   :lemma
+   {:name "surface_homology_determines_type",
+    :reported-by [:owner],
+    :type
+    "H0=ℤ, H1=ℤ⁴, H2=ℤ identifies Surface true 2  (size: 300-500 lines / 1-3 weeks)",
+    :area "surface-singular-homology"},
+   :id :lemma-surface-homology-determines-type,
+   :kind :lemma,
+   :depends-on [:lemma-smooth-compact-surface-classification],
+   :other-consumers []}
+  {:consumer :t92J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "fundamentalGroup_polygon_surface_genusTwo",
+    :type
+    "FundamentalGroup (Surface true 2) x ≃* apm_t92J05_genusTwoGroup  (size: 300-600 lines / 2-5 weeks)"},
+   :lemma
+   {:name "fundamentalGroup_polygon_surface_genusTwo",
+    :reported-by [:owner],
+    :type
+    "FundamentalGroup (Surface true 2) x ≃* apm_t92J05_genusTwoGroup  (size: 300-600 lines / 2-5 weeks)",
+    :area "seifert-van-kampen-cell-attachment"},
+   :id :lemma-fundamentalgroup-polygon-surface-genustwo,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t92J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t92J05_bridge_genusTwo_fundamentalGroup",
+    :type
+    "The exact arbitrary genus-two manifold bridge  (size: 50-100 lines / 1 day)"},
+   :lemma
+   {:name "apm_t92J05_bridge_genusTwo_fundamentalGroup",
+    :reported-by [:owner],
+    :type
+    "The exact arbitrary genus-two manifold bridge  (size: 50-100 lines / 1 day)",
+    :area "surface-classification"},
+   :id :lemma-apm-t92j05-bridge-genustwo-fundamentalgroup,
+   :kind :lemma,
+   :depends-on
+   [:lemma-smooth-compact-surface-classification
+    :lemma-surface-homology-determines-type
+    :lemma-fundamentalgroup-polygon-surface-genustwo],
+   :other-consumers []}],
  :consumer-baselines {},
  :statuses
  #{:open
