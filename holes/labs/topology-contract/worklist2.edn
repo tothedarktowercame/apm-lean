@@ -79337,11 +79337,23 @@
       :exit 134,
       :finding
       "Deep transport unfolding overflowed; exact retraction retained."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791739988983-5688-1e4304e4",
+     :commands
+     ["git show/diff/check f73089d53"
+      "git diff 36cd0baa..f73089d53"
+      "lake env lean ConstructionTargets/t97A04Closure.lean"
+      "lake env lean problems/t97A04/lean/Main.lean"
+      "registry fingerprint/hash/placeholder checks"],
+     :finding
+     "PASS: f73089d5 is new after history 36cd0baa; scope/blob match. Cumulative scoped progress also includes 76582a0a: the shear fixes the second overlap coordinate and hence its orthogonal component; f73089d5 proves the exact toFun(invFun s)=s retraction needed for branch preservation. Lean gates compile with standard axioms only; registry 131/0; frozen hash unchanged ca1b2cb3; closure 0/Main 2 placeholders. Branch preservation, folded degrees, and B6-B11 remain listed."},
     :commit "f73089d531b006667bcd3cf40089c7d20b8028c0",
     :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79443,6 +79455,9 @@
      :reason :program-progress-committed}
     {:job 9,
      :commit "36cd0baac5cde95309a63dab0408b58e96aca93e",
+     :reason :program-progress-committed}
+    {:job 1,
+     :commit "f73089d531b006667bcd3cf40089c7d20b8028c0",
      :reason :program-progress-committed}]}
   {:consumer :t96A07,
    :stop-count 3,
@@ -80313,7 +80328,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -80324,7 +80339,9 @@
     :reported-by [:program-2026-10-11-close-t97a04],
     :type "shear fixes overlap second coordinate",
     :area "mv-connecting-naturality",
-    :proved-in :program-2026-10-11-close-t97a04},
+    :proved-in :program-2026-10-11-close-t97a04,
+    :banked-by :program-2026-10-11-close-t97a04,
+    :banked-commit "f73089d531b006667bcd3cf40089c7d20b8028c0"},
    :id
    :lemma-constructiontargets-t97a04closure-boundaryoverlapshear-snd,
    :kind :lemma,
@@ -80332,7 +80349,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -80344,7 +80361,9 @@
     :reported-by [:program-2026-10-11-close-t97a04],
     :type "shear fixes overlap component coordinate",
     :area "mv-connecting-naturality",
-    :proved-in :program-2026-10-11-close-t97a04},
+    :proved-in :program-2026-10-11-close-t97a04,
+    :banked-by :program-2026-10-11-close-t97a04,
+    :banked-commit "f73089d531b006667bcd3cf40089c7d20b8028c0"},
    :id
    :lemma-constructiontargets-t97a04closure-overlaporthogonalcoordinate-shear,
    :kind :lemma,
@@ -80371,7 +80390,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -80383,7 +80402,9 @@
     :reported-by [:program-2026-10-11-close-t97a04],
     :type "orthogonal toFun(invFun s)=s",
     :area "mv-connecting-naturality",
-    :proved-in :program-2026-10-11-close-t97a04},
+    :proved-in :program-2026-10-11-close-t97a04,
+    :banked-by :program-2026-10-11-close-t97a04,
+    :banked-commit "f73089d531b006667bcd3cf40089c7d20b8028c0"},
    :id
    :lemma-constructiontargets-t97a04closure-overlaporthogonalretraction,
    :kind :lemma,
