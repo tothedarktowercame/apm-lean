@@ -69287,7 +69287,47 @@
   {:bounded-exception
    "single-consumer common-sign certificate for both angular-stage collision endpoints",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/t02a03_collision_endpoint_sign_bridge_probe.lean",
+      :sha256
+      "ec8a9877c6025a3f562a749b4ebf7587273f91b3a03b1ec96ea9eb4120739f18"},
+     :implementation
+     {:scope
+      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+      :declaration
+      "ConstructionTargets.T02A03GeometricTubeDeformation.collisionEndpoint_positiveFactor_signBridge",
+      :type
+      "forall (p : RightTubeMinusLeftCore), let m : Complex := rightTubeMeridianCoordinate p; let n0 := rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)); exists a b : Real, 0 < a and 0 < b and ((1-n0.re)^2 - 4*(1-n0.re)*((1 : Circle) : Complex).re + 3 = a*m.re) and ((1-(rightTubeCoreNormalComplex p.1).re)^2 - 4*(1-(rightTubeCoreNormalComplex p.1).re)*(rightTubeCoreAngularCoordinate p : Complex).re + 3 = b*m.re)",
+      :proof-plan
+      "Use the banked endpoint positive-factor theorem for b. Define a as one eighth times (2 plus the meridian real part divided by eight), prove it positive from the Circle real-part lower bound, and rewrite the banked meridian-start factorization by ring normalization."},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/t02a03_collision_endpoint_sign_bridge_probe.lean",
+       :exit 0,
+       :output
+       "collisionEndpoint_positiveFactor_signBridge compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "sha256sum /tmp/t02a03_collision_endpoint_sign_bridge_probe.lean",
+       :exit 0,
+       :output
+       "ec8a9877c6025a3f562a749b4ebf7587273f91b3a03b1ec96ea9eb4120739f18  /tmp/t02a03_collision_endpoint_sign_bridge_probe.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_collision_endpoint_sign_bridge_probe.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :warnings [],
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :residual
+     "Implement the compiled common-sign certificate; then construct a continuous angular path in that sign component and certify it using the safe corridor and nonzero-height criterion before concatenating the radial stage."}},
+   :phase :implementation,
+   :type
+   "forall (p : RightTubeMinusLeftCore), let m : Complex := rightTubeMeridianCoordinate p; let n0 := rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)); exists a b : Real, 0 < a and 0 < b and ((1-n0.re)^2 - 4*(1-n0.re)*((1 : Circle) : Complex).re + 3 = a*m.re) and ((1-(rightTubeCoreNormalComplex p.1).re)^2 - 4*(1-(rightTubeCoreNormalComplex p.1).re)*(rightTubeCoreAngularCoordinate p : Complex).re + 3 = b*m.re)",
    :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
@@ -69306,11 +69346,15 @@
    :routes-2026-10-11-t02a03-collision-endpoint-positive-factor-sign-bridge-topo2-r1,
    :kind :reusable-theorem,
    :area "explicit-r3-tube-deformation-retraction",
+   :declaration
+   "ConstructionTargets.T02A03GeometricTubeDeformation.collisionEndpoint_positiveFactor_signBridge",
    :depends-on
    [:routes-2026-10-11-t02a03-input-collision-positive-factor-meridian-real-topo2-r1],
    :current-residual
    "Construct a continuous angular path within that common sign component, prove its collision polynomial remains nonzero using the safe corridor and nonzero-height criterion, then concatenate it with the radial stage.",
-   :other-consumers []}
+   :other-consumers [],
+   :proof-plan
+   "Use the banked endpoint positive-factor theorem for b. Define a as one eighth times (2 plus the meridian real part divided by eight), prove it positive from the Circle real-part lower bound, and rewrite the banked meridian-start factorization by ring normalization."}
   {:bounded-exception
    "single-consumer explicit ambient deformation with frozen tube and deletion invariants",
    :consumer :t02A03,
