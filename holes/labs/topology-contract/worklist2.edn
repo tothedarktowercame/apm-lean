@@ -72473,6 +72473,19 @@
       :exit 0,
       :output "dd72eb1e9 Add t02A03 rotated departure zero locus"}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791713561281-5000-30c44870",
+     :commands
+     ["git show/diff-tree/show --check dd72eb1e95ab7747e2c0c67fd3a2fbe5f239c8fa"
+      "git rev-parse scoped blob; sha256sum frozen fixture"
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean"
+      "lake env lean /tmp/t02a03_rotated_waypoint_departure_zero_locus_probe.lean"
+      "python3 scripts/statement-registry.py check"
+      "statement fingerprints at commit and parent; scoped placeholder scans"],
+     :finding
+     "PASS: independent author topo-6; the recorded commit changes exactly the declared file, is clean, and matches the recorded scoped blob and fixture hash. The module and exact frozen probe compile. For W(p) = -i * rightTubeCorePlanarComplex(p.1), the theorem correctly characterizes departure zero by endpoint real part zero and the affine real-coordinate equation: the forward proof handles the t = 0 product branch by contradiction, and the reverse proof reconstructs both complex components. It stays in the unnormalized complex departure representation and does not claim detour nonvanishing, Circle normalization, or ambient assembly. Axioms are exactly propext, Classical.choice, Quot.sound; registry is 131/0, the t02A03 fingerprint is unchanged at commit and parent, and the scoped file and fixture have no placeholders."},
     :commit "dd72eb1e95ab7747e2c0c67fd3a2fbe5f239c8fa",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
@@ -72487,7 +72500,7 @@
    :phase :implementation,
    :type
    "forall (t : unitInterval) (p : RightTubeMinusLeftCore), (((1-2*(t:ℝ):ℝ):ℂ) + ((2*(t:ℝ):ℝ):ℂ)*rotatedEndpointWaypoint p) = 0 iff (rightTubeCorePlanarComplex p.1).re = 0 and 1-2*(t:ℝ)+2*(t:ℝ)*(rightTubeCorePlanarComplex p.1).im = 0",
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/rotated-waypoint-departure-zero-locus",
@@ -72590,7 +72603,7 @@
      "The rotated waypoint departure can vanish precisely on an explicitly described locus: rightTubeCorePlanarComplex has zero real part and 1 - 2t + 2t times its imaginary part is zero. This is broader than the single endpoint -i, but it remains confined to the imaginary-axis endpoint slice and supplies the exact equations needed for a supported transverse detour while preserving the already safe arrival leg.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
