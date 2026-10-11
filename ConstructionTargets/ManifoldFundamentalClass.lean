@@ -785,6 +785,47 @@ theorem integralRelativeHomologyComparisonWithTransport_generator_of_normalizati
   rw [h, CoefficientChartLocal.generator_normalization,
     ambientLocalNormalization_generator]
 
+/-- The image of the normalized coefficient generator determines the full
+normalization square for the corrected relative-homology comparison. -/
+theorem integralRelativeHomologyComparisonWithTransport_normalization_of_generator
+    (k : ℕ) {M : Type} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M)
+    (hgen :
+      (integralRelativeHomologyComparisonWithTransport
+          (deletedPoint x) (k + 2)).hom.hom
+          (CoefficientChartLocal.generator ℤ k x) =
+        HigherChartLocalGenerator.ambientLocalGenerator (k := k) x) :
+    (integralRelativeHomologyComparisonWithTransport
+        (deletedPoint x) (k + 2)).hom ≫
+        (ambientLocalNormalization k x).hom =
+      forgetIntModules.map (CoefficientChartLocal.localIso ℤ k x).hom := by
+  ext z
+  let r : ℤ := (CoefficientChartLocal.localIso ℤ k x).hom.hom z
+  have hz : z = r • CoefficientChartLocal.generator ℤ k x := by
+    apply (ConcreteCategory.bijective_of_isIso
+      (CoefficientChartLocal.localIso ℤ k x).hom).1
+    simp [r, CoefficientChartLocal.generator]
+  rw [hz]
+  change (ambientLocalNormalization k x).hom.hom
+      ((integralRelativeHomologyComparisonWithTransport
+        (deletedPoint x) (k + 2)).hom.hom
+          (r • CoefficientChartLocal.generator ℤ k x)) =
+    (CoefficientChartLocal.localIso ℤ k x).hom.hom
+      (r • CoefficientChartLocal.generator ℤ k x)
+  have hc := map_zsmul
+    (integralRelativeHomologyComparisonWithTransport
+    (deletedPoint x) (k + 2)).hom.hom
+    r (CoefficientChartLocal.generator ℤ k x)
+  calc
+    _ = (ambientLocalNormalization k x).hom.hom
+        (r • (integralRelativeHomologyComparisonWithTransport
+          (deletedPoint x) (k + 2)).hom.hom
+            (CoefficientChartLocal.generator ℤ k x)) :=
+      congrArg (ambientLocalNormalization k x).hom.hom hc
+    _ = _ := by
+      rw [hgen, map_zsmul, ambientLocalNormalization_generator,
+        map_zsmul, CoefficientChartLocal.generator_normalization]
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -834,3 +875,4 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientRelativeProjection_mapHomologyIso_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
+#print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
