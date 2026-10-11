@@ -69090,7 +69090,47 @@
   {:bounded-exception
    "single-consumer endpoint collision factorization through the left-core radial defect",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/t02a03_input_poly_factor_normal_probe.lean",
+      :sha256
+      "0eed65148e1fd5ae5c04abcfa76eeabeb46b62b5d85a7e12ddad122dc932d5e5"},
+     :implementation
+     {:scope
+      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+      :declaration
+      "ConstructionTargets.T02A03GeometricTubeDeformation.inputCollisionPolynomial_factor_rightTubeNormalReal",
+      :type
+      "forall (p : RightTubeMinusLeftCore), (1 - (rightTubeCoreNormalComplex p.1).re)^2 - 4*(1-(rightTubeCoreNormalComplex p.1).re)*(rightTubeCoreAngularCoordinate p : Complex).re + 3 = (rightTubeNormalComplex p.1).re * ((rightTubeNormalComplex p.1).re + 2)",
+      :proof-plan
+      "Expand the right-core angular and normal coordinates through the nonzero normalized core-planar vector, rewrite its squared norm and the left-core planar squared norm in coordinates, and close the resulting polynomial identity by ring normalization."},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/t02a03_input_poly_factor_normal_probe.lean",
+       :exit 0,
+       :output
+       "inputCollisionPolynomial_factor_rightTubeNormalReal compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "sha256sum /tmp/t02a03_input_poly_factor_normal_probe.lean",
+       :exit 0,
+       :output
+       "0eed65148e1fd5ae5c04abcfa76eeabeb46b62b5d85a7e12ddad122dc932d5e5  /tmp/t02a03_input_poly_factor_normal_probe.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_input_poly_factor_normal_probe.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :warnings [],
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :residual
+     "Implement this compiled factorization in the scoped module; afterward prove positive-factor sign agreement with rightTubeMeridianCoordinate and construct the matching-component angular entry and exit stages."}},
+   :phase :implementation,
+   :type
+   "forall (p : RightTubeMinusLeftCore), (1 - (rightTubeCoreNormalComplex p.1).re)^2 - 4*(1-(rightTubeCoreNormalComplex p.1).re)*(rightTubeCoreAngularCoordinate p : Complex).re + 3 = (rightTubeNormalComplex p.1).re * ((rightTubeNormalComplex p.1).re + 2)",
    :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
@@ -69109,11 +69149,15 @@
    :routes-2026-10-11-t02a03-input-collision-factor-normal-real-topo2-r1,
    :kind :reusable-theorem,
    :area "explicit-r3-tube-deformation-retraction",
+   :declaration
+   "ConstructionTargets.T02A03GeometricTubeDeformation.inputCollisionPolynomial_factor_rightTubeNormalReal",
    :depends-on
    [:routes-2026-10-11-t02a03-meridian-start-collision-factor-topo2-r1],
    :current-residual
    "Prove the second endpoint factor is positive and relate rightTubeNormalComplex.re to rightTubeMeridianCoordinate.re; then construct entry and exit paths in matching nonzero-sign components and assemble the safe angular and radial stages.",
-   :other-consumers []}
+   :other-consumers [],
+   :proof-plan
+   "Expand the right-core angular and normal coordinates through the nonzero normalized core-planar vector, rewrite its squared norm and the left-core planar squared norm in coordinates, and close the resulting polynomial identity by ring normalization."}
   {:bounded-exception
    "single-consumer explicit ambient deformation with frozen tube and deletion invariants",
    :consumer :t02A03,
