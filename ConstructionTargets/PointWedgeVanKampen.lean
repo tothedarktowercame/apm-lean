@@ -715,6 +715,27 @@ theorem genericPointWedgeCounitNormalization_right
   rw [genericPointWedgeMappedRight_eq_conj]
   simp [genericPointWedgeCounitNormalization, MulAut.conj_apply, mul_assoc]
 
+/-- The B4 source equivalence with its target coordinate normalized by the
+counit element.  This changes only the chosen free-product coordinate; the
+source groupoid and its topological maps are unchanged. -/
+def genericPointWedgeNormalizedSourceEquivalence :
+    FundamentalGroupoid (Wedge x₀ y₀) ≌
+      SingleObj (genericPointWedgeFreeProduct x₀ y₀) :=
+  (genericPointWedgeSourceEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN).trans
+      (genericPointWedgeCounitNormalization
+        x₀ y₀ M N hM hN hy hx cM cN).toSingleObjEquiv
+
+/-- The corresponding based equivalence is the old B5 coordinate followed
+by the same normalization. -/
+def genericPointWedgeNormalizedFundamentalGroupEquiv :
+    FundamentalGroup (Wedge x₀ y₀) (quotientMap x₀ y₀ (.inl x₀)) ≃*
+      genericPointWedgeFreeProduct x₀ y₀ :=
+  (genericPointWedgeFundamentalGroupEquiv
+    x₀ y₀ M N hM hN hy hx cM cN).trans
+      (genericPointWedgeCounitNormalization
+        x₀ y₀ M N hM hN hy hx cM cN)
+
 end GenericFundamentalGroupEquivalence
 
 /-- The three-circle model is locally path connected. -/
@@ -1008,5 +1029,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeMappedRight_eq_conj
 #print axioms genericPointWedgeCounitNormalization_left
 #print axioms genericPointWedgeCounitNormalization_right
+#print axioms genericPointWedgeNormalizedSourceEquivalence
+#print axioms genericPointWedgeNormalizedFundamentalGroupEquiv
 
 end ConstructionTargets.PointWedgeVanKampen

@@ -100,3 +100,11 @@ counit element.  The left and right normalization theorems prove that it
 sends both computed actions to the literal coproduct injections.  The
 remaining B6 step is to install this normalization in the source equivalence
 and connect those actions to the two topological inclusion maps.
+
+The normalization is now installed.  The groupoid-level
+`genericPointWedgeNormalizedSourceEquivalence` postcomposes B4 with the
+induced `SingleObj` equivalence, while
+`genericPointWedgeNormalizedFundamentalGroupEquiv` postcomposes the based B5
+coordinate with the same inner automorphism.  The remaining B6 step is the
+comparison between B3's two mapped actions and the fundamental-group maps of
+the literal left and right wedge inclusions.
