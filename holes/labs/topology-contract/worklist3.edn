@@ -17729,6 +17729,29 @@
    :current-residual "Two squares; assemble Hom.",
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
+   :implements-lemma :lemma-mfclass-pop-square,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+   :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class/pop",
+   :acceptance
+   {:declaration
+    "ConstructionTargets.ManifoldFundamentalClass.forgetPOpcycles_naturality",
+    :type
+    "∀ {ι} {c : ComplexShape ι} (K : HomologicalComplex (ModuleCat ℤ) c) (i : ι), ForgottenPOpcyclesNaturality K i",
+    :fixture "/tmp/pop.lean",
+    :fixture-sha256
+    "e1f6ffd3a172050a4598b90252542aca05e9a66bdb35f83c1088a7f0a948bbdf",
+    :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
+    :route-step "opcycles projection square",
+    :implementation "Promote."},
+   :id :routes-2026-10-11-mfclass-pop-square-r1,
+   :kind :reusable-theorem,
+   :area "manifold-fundamental-class",
+   :depends-on [:routes-2026-10-11-mfclass-hi-square-r1],
+   :current-residual "Finish squares 12/23; assemble Hom.",
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-closedorientedfundamentalclass,
    :evidence
@@ -17736,50 +17759,49 @@
     {:outcome :revise,
      :seat "topo-12",
      :fixture
-     {:path "/tmp/hi.lean",
+     {:path "/tmp/pop.lean",
       :sha256
-      "87c14133f754ba568d176e75ca901e6583ed28cc08d21dada9a0a306ebaf7687"},
-     :commands [{:cmd "lake env lean /tmp/hi.lean", :exit 0}],
+      "e1f6ffd3a172050a4598b90252542aca05e9a66bdb35f83c1088a7f0a948bbdf"},
+     :commands [{:cmd "lake env lean /tmp/pop.lean", :exit 0}],
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :missing-theorems
-     [{:id :lemma-mfclass-hi-square,
+     [{:id :lemma-mfclass-pop-square,
        :name
-       "ConstructionTargets.ManifoldFundamentalClass.forgetHomologyι_naturality",
+       "ConstructionTargets.ManifoldFundamentalClass.forgetPOpcycles_naturality",
        :type
-       "∀ {ι} {c : ComplexShape ι} (K : HomologicalComplex (ModuleCat ℤ) c) (i : ι), ForgottenHomologyιNaturality K i",
+       "∀ {ι} {c : ComplexShape ι} (K : HomologicalComplex (ModuleCat ℤ) c) (i : ι), ForgottenPOpcyclesNaturality K i",
        :status :proved,
        :consumers [:t00J02 :t98A02],
        :depends-on
-       ["ConstructionTargets.ManifoldFundamentalClass.forgetMapHomologyIsoRight_eq"],
+       ["ConstructionTargets.ManifoldFundamentalClass.forgetHomologyι_naturality"],
        :area "manifold-fundamental-class"}],
      :prerequisite
      {:consumer :t00J02,
-      :implements-lemma :lemma-mfclass-hi-square,
+      :implements-lemma :lemma-mfclass-pop-square,
       :phase :implementation,
       :state :open,
       :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
-      :dag-node
-      "TOPOLOGY-ROUTES.md/manifold-fundamental-class/square01",
+      :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class/pop",
       :acceptance
       {:declaration
-       "ConstructionTargets.ManifoldFundamentalClass.forgetHomologyι_naturality",
+       "ConstructionTargets.ManifoldFundamentalClass.forgetPOpcycles_naturality",
        :type
-       "∀ {ι} {c : ComplexShape ι} (K : HomologicalComplex (ModuleCat ℤ) c) (i : ι), ForgottenHomologyιNaturality K i",
-       :fixture "/tmp/hi.lean",
+       "∀ {ι} {c : ComplexShape ι} (K : HomologicalComplex (ModuleCat ℤ) c) (i : ι), ForgottenPOpcyclesNaturality K i",
+       :fixture "/tmp/pop.lean",
        :fixture-sha256
-       "87c14133f754ba568d176e75ca901e6583ed28cc08d21dada9a0a306ebaf7687",
+       "e1f6ffd3a172050a4598b90252542aca05e9a66bdb35f83c1088a7f0a948bbdf",
        :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
-       :route-step "Hom-to-opcycles square",
+       :route-step "opcycles projection square",
        :implementation "Promote."},
-      :id :routes-2026-10-11-mfclass-hi-square-r1,
+      :id :routes-2026-10-11-mfclass-pop-square-r1,
       :kind :reusable-theorem,
       :area "manifold-fundamental-class",
-      :depends-on [:routes-2026-10-11-mfclass-hiso-r1],
-      :current-residual "Two squares; assemble Hom.",
+      :depends-on [:routes-2026-10-11-mfclass-hi-square-r1],
+      :current-residual "Finish squares 12/23; assemble Hom.",
       :other-consumers [:t98A02]},
-     :residual "Promote square 01; prove two squares."}},
+     :residual "Promote projection; finish squares."}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -17902,7 +17924,8 @@
     :routes-2026-10-11-mfclass-forget-cycles-row-r1
     :routes-2026-10-11-mfclass-forget-terminal-row-r1
     :routes-2026-10-11-mfclass-hiso-r1
-    :routes-2026-10-11-mfclass-hi-square-r1],
+    :routes-2026-10-11-mfclass-hi-square-r1
+    :routes-2026-10-11-mfclass-pop-square-r1],
    :current-residual
    "Local-degree counts and wild-ball complement homology remain.",
    :other-consumers [:t98A02]}
@@ -25480,6 +25503,28 @@
    :id :lemma-mfclass-hi-square,
    :kind :lemma,
    :depends-on [:lemma-mfclass-hiso-right],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFundamentalClass.forgetPOpcycles_naturality",
+    :type
+    "∀ {ι} {c : ComplexShape ι} (K : HomologicalComplex (ModuleCat ℤ) c) (i : ι), ForgottenPOpcyclesNaturality K i"},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFundamentalClass.forgetPOpcycles_naturality",
+    :reported-by
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    :type
+    "∀ {ι} {c : ComplexShape ι} (K : HomologicalComplex (ModuleCat ℤ) c) (i : ι), ForgottenPOpcyclesNaturality K i",
+    :area "manifold-fundamental-class",
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+   :id :lemma-mfclass-pop-square,
+   :kind :lemma,
+   :depends-on [:lemma-mfclass-hi-square],
    :other-consumers [:t98A02]}],
  :consumer-baselines {},
  :statuses
