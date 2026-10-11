@@ -530,6 +530,17 @@ theorem genericPointWedgeIdentityCoordinateSpan_glue_unitBase :
           (reverseRightComparison r r' eK eR aR Q.right).hom.app z := by
   rfl
 
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- The central point-span glue factor is the identity element of the free
+product at the unit base. -/
+theorem genericPointWedgeIdentityPointSpan_whiskeredGlue_eq_one :
+    let eK := genericPointWedgeUnitSingleObjEquivalence
+    let Q := genericPointWedgeIdentityPointSpan x₀ y₀
+    let z : FundamentalGroupoid Unit := FundamentalGroupoid.mk ()
+    (Functor.isoWhiskerLeft eK.functor Q.glue).hom.app z =
+      (1 : genericPointWedgeFreeProduct x₀ y₀) := by
+  rfl
+
 /-- The penultimate inverse stage of B3, now expressed as the literal
 pseudococone on the two open pieces. -/
 def genericPointWedgeIdentityPseudoCocone :
@@ -1872,6 +1883,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeIdentityCoordinateWhiskeredGlue_app
 #print axioms genericPointWedgeIdentityCoordinateWhiskeredGlue_app_eq_unitBase
 #print axioms genericPointWedgeIdentityCoordinateSpan_glue_unitBase
+#print axioms genericPointWedgeIdentityPointSpan_whiskeredGlue_eq_one
 #print axioms genericPointWedgeIdentityGlobalRightRestriction_map
 #print axioms genericPointWedgeIdentityGlobalRightBase_map
 #print axioms genericPointWedgeIdentityRepresentation_inl

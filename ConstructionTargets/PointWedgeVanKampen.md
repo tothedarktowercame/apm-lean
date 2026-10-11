@@ -267,3 +267,9 @@ That fixed component is expanded in
 the inverse left connector comparison, the identity point-span glue whiskered
 through the Unit equivalence, and the right connector comparison.  Evaluating
 these connector components and the original two outer comparisons remains.
+
+The central factor is now computed by
+`genericPointWedgeIdentityPointSpan_whiskeredGlue_eq_one`: the identity
+representation's point-span glue remains the free-product unit after
+whiskering through the Unit equivalence.  Only the two connector comparisons
+inside this coordinate stage and the two original outer comparisons remain.
