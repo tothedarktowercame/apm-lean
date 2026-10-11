@@ -72250,91 +72250,116 @@
    "Construct a continuous positive-real waypoint whose oriented cross product is nonzero whenever the endpoint core-planar real part is negative; the localized collision theorem then proves the arrival leg nonvanishing and the banked adapters complete the angular and ambient stages.",
    :other-consumers []}
   {:bounded-exception
+   "single-consumer arrival certificate from a cross-product invariant localized to negative endpoints",
+   :consumer :t02A03,
+   :phase :probe,
+   :state :open,
+   :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t02A03/coupled-angular-arrival-localized-cross",
+   :acceptance
+   {:probe
+    "Compile coupledAngularArrivalLeg_ne_zero_of_negative_endpoint_cross. Given a continuous waypoint with positive real part and nonzero oriented cross product whenever rightTubeCorePlanarComplex has negative real part, prove its entire affine arrival leg after time 1/2 is nonzero by applying the banked collision localization. Do not choose the waypoint, prove the departure leg, normalize to Circle, or assemble the ambient deformation.",
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularArrivalLeg_ne_zero_of_negative_endpoint_cross",
+    :type
+    "forall (W : C(RightTubeMinusLeftCore, ℂ)), (forall p, 0 < (W p).re) -> (forall p, (rightTubeCorePlanarComplex p.1).re < 0 -> (conj (W p) * rightTubeCorePlanarComplex p.1).im != 0) -> forall (t : unitInterval) (p : RightTubeMinusLeftCore), not ((t : ℝ) <= 1/2) -> (((2-2*(t:ℝ):ℝ):ℂ)*W p + ((2*(t:ℝ)-1:ℝ):ℂ)*rightTubeCorePlanarComplex p.1) != 0",
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "convert the localized waypoint invariants into the second nonvanishing hypothesis of the banked two-leg waypoint adapter"},
+   :id
+   :routes-2026-10-11-t02a03-coupled-angular-arrival-localized-cross-topo2-r1,
+   :kind :reusable-theorem,
+   :area "explicit-r3-tube-deformation-retraction",
+   :depends-on
+   [:routes-2026-10-11-t02a03-coupled-angular-arrival-collision-negative-slice-topo2-r1],
+   :current-residual
+   "Construct a continuous waypoint with positive real part and nonzero oriented cross product on the negative-real endpoint region; its departure and arrival legs then follow from banked certificates.",
+   :other-consumers []}
+  {:bounded-exception
    "single-consumer explicit ambient deformation with frozen tube and deletion invariants",
    :consumer :t02A03,
    :evidence
    {:probe
     {:residual
-     "Bank the negative-slice collision localization; then construct and certify a continuous positive-real waypoint with a transverse component on that localized region.",
+     "Bank the localized arrival adapter; then construct the single continuous waypoint satisfying its positive-real and negative-slice transverse invariants.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
      [{:name
-       "ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularArrivalCollision_negative_endpoint",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularArrivalLeg_ne_zero_of_negative_endpoint_cross",
        :type
-       "forall (W : C(RightTubeMinusLeftCore, ℂ)), (forall p, 0 < (W p).re) -> forall (t : unitInterval) (p : RightTubeMinusLeftCore), not ((t : ℝ) <= 1/2) -> (((2-2*(t:ℝ):ℝ):ℂ)*W p + ((2*(t:ℝ)-1:ℝ):ℂ)*rightTubeCorePlanarComplex p.1) = 0 -> (rightTubeCorePlanarComplex p.1).re < 0 and (conj (W p) * rightTubeCorePlanarComplex p.1).im = 0",
+       "forall (W : C(RightTubeMinusLeftCore, ℂ)), (forall p, 0 < (W p).re) -> (forall p, (rightTubeCorePlanarComplex p.1).re < 0 -> (conj (W p) * rightTubeCorePlanarComplex p.1).im != 0) -> forall (t : unitInterval) (p : RightTubeMinusLeftCore), not ((t : ℝ) <= 1/2) -> (((2-2*(t:ℝ):ℝ):ℂ)*W p + ((2*(t:ℝ)-1:ℝ):ℂ)*rightTubeCorePlanarComplex p.1) != 0",
        :status :proved,
        :consumers [:t02A03],
        :depends-on
-       ["ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularArrivalLeg_ne_zero_of_cross_im_ne_zero"],
+       ["ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularArrivalCollision_negative_endpoint"],
        :area "explicit-r3-tube-deformation-retraction"}],
      :prerequisite
      {:bounded-exception
-      "single-consumer localization of positive-real waypoint arrival collisions",
+      "single-consumer arrival certificate from a cross-product invariant localized to negative endpoints",
       :consumer :t02A03,
       :phase :probe,
       :state :open,
       :scope
       ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t02A03/coupled-angular-arrival-collision-negative-slice",
+      "TOPOLOGY-ROUTES.md/t02A03/coupled-angular-arrival-localized-cross",
       :acceptance
       {:probe
-       "Compile coupledAngularArrivalCollision_negative_endpoint. For any waypoint with positive real part, prove that a zero on its affine arrival leg after time 1/2 forces the endpoint rightTubeCorePlanarComplex real part to be strictly negative and the waypoint-endpoint oriented cross product to vanish. Use endpoint nonvanishing to exclude time one. Do not choose the waypoint, normalize to Circle, or assemble the ambient deformation.",
+       "Compile coupledAngularArrivalLeg_ne_zero_of_negative_endpoint_cross. Given a continuous waypoint with positive real part and nonzero oriented cross product whenever rightTubeCorePlanarComplex has negative real part, prove its entire affine arrival leg after time 1/2 is nonzero by applying the banked collision localization. Do not choose the waypoint, prove the departure leg, normalize to Circle, or assemble the ambient deformation.",
        :declaration
-       "ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularArrivalCollision_negative_endpoint",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularArrivalLeg_ne_zero_of_negative_endpoint_cross",
        :type
-       "forall (W : C(RightTubeMinusLeftCore, ℂ)), (forall p, 0 < (W p).re) -> forall (t : unitInterval) (p : RightTubeMinusLeftCore), not ((t : ℝ) <= 1/2) -> (((2-2*(t:ℝ):ℝ):ℂ)*W p + ((2*(t:ℝ)-1:ℝ):ℂ)*rightTubeCorePlanarComplex p.1) = 0 -> (rightTubeCorePlanarComplex p.1).re < 0 and (conj (W p) * rightTubeCorePlanarComplex p.1).im = 0",
+       "forall (W : C(RightTubeMinusLeftCore, ℂ)), (forall p, 0 < (W p).re) -> (forall p, (rightTubeCorePlanarComplex p.1).re < 0 -> (conj (W p) * rightTubeCorePlanarComplex p.1).im != 0) -> forall (t : unitInterval) (p : RightTubeMinusLeftCore), not ((t : ℝ) <= 1/2) -> (((2-2*(t:ℝ):ℝ):ℂ)*W p + ((2*(t:ℝ)-1:ℝ):ℂ)*rightTubeCorePlanarComplex p.1) != 0",
        :placeholder "the sole sorry in apm_t02a03",
        :route-step
-       "localize any remaining arrival collision to the negative-real endpoint region where the waypoint must supply a signed transverse component"},
+       "convert the localized waypoint invariants into the second nonvanishing hypothesis of the banked two-leg waypoint adapter"},
       :id
-      :routes-2026-10-11-t02a03-coupled-angular-arrival-collision-negative-slice-topo2-r1,
+      :routes-2026-10-11-t02a03-coupled-angular-arrival-localized-cross-topo2-r1,
       :kind :reusable-theorem,
       :area "explicit-r3-tube-deformation-retraction",
       :depends-on
-      [:routes-2026-10-11-t02a03-coupled-angular-arrival-cross-im-topo2-r1],
+      [:routes-2026-10-11-t02a03-coupled-angular-arrival-collision-negative-slice-topo2-r1],
       :current-residual
-      "Construct a continuous positive-real waypoint whose oriented cross product is nonzero whenever the endpoint core-planar real part is negative; the localized collision theorem then proves the arrival leg nonvanishing and the banked adapters complete the angular and ambient stages.",
+      "Construct a continuous waypoint with positive real part and nonzero oriented cross product on the negative-real endpoint region; its departure and arrival legs then follow from banked certificates.",
       :other-consumers []},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake env lean /tmp/t02a03_arrival_collision_negative_slice_probe.lean",
+       "lake build ConstructionTargets.T02A03GeometricTubeDeformation",
+       :exit 0,
+       :output "Build completed successfully (8249 jobs)."}
+      {:cmd
+       "lake env lean /tmp/t02a03_arrival_leg_localized_cross_probe.lean",
        :exit 0,
        :output
-       "coupledAngularArrivalCollision_negative_endpoint compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "coupledAngularArrivalLeg_ne_zero_of_negative_endpoint_cross compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/t02a03_arrival_collision_negative_slice_probe.lean",
+       "sha256sum /tmp/t02a03_arrival_leg_localized_cross_probe.lean",
        :exit 0,
        :output
-       "96c2dc30d404a609a791ac136dcdae17543e425b435d95c516642b93e47f79aa  /tmp/t02a03_arrival_collision_negative_slice_probe.lean"}
+       "bdaab2d6b2c9e41f24eba94ba9590b2a3b4a97ef5ef2a95b0680b0b00f176c8a  /tmp/t02a03_arrival_leg_localized_cross_probe.lean"}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_arrival_collision_negative_slice_probe.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_arrival_leg_localized_cross_probe.lean || true)\"",
        :exit 0}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}
       {:cmd
-       "rg -n 'coupledAngularArrivalCollision_negative_endpoint' /tmp/t02a03_arrival_collision_negative_slice_probe.lean",
+       "rg -n 'coupledAngularArrivalLeg_ne_zero_of_negative_endpoint_cross' /tmp/t02a03_arrival_leg_localized_cross_probe.lean",
        :exit 0,
        :output
-       "9:theorem coupledAngularArrivalCollision_negative_endpoint\n48:#print axioms coupledAngularArrivalCollision_negative_endpoint"}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/t02a03_arrival_collision_negative_slice_probe.lean",
-       :exit 1,
-       :finding
-       "The first proof treated the equality supplied by lt_of_le_of_ne as a negated inequality. Using that endpoint equality directly reduces the time-one affine expression to the nonzero core-planar endpoint."}],
+       "9:theorem coupledAngularArrivalLeg_ne_zero_of_negative_endpoint_cross\n25:#print axioms coupledAngularArrivalLeg_ne_zero_of_negative_endpoint_cross"}],
      :fixture
-     {:path "/tmp/t02a03_arrival_collision_negative_slice_probe.lean",
+     {:path "/tmp/t02a03_arrival_leg_localized_cross_probe.lean",
       :sha256
-      "96c2dc30d404a609a791ac136dcdae17543e425b435d95c516642b93e47f79aa"},
+      "bdaab2d6b2c9e41f24eba94ba9590b2a3b4a97ef5ef2a95b0680b0b00f176c8a"},
      :finding
-     "A global nonzero cross-product invariant is stronger than the waypoint construction needs. The compiled collision theorem localizes every possible arrival failure from a positive-real waypoint: the time is strictly before one, the endpoint core-planar real part is strictly negative, and the waypoint-endpoint oriented cross product is zero. Thus the next waypoint only needs a cross-product detour on the negative-real endpoint region.",
+     "The collision-localization theorem packages into the exact arrival certificate needed by the waypoint adapter: positivity of the waypoint real part plus nonzero oriented cross product only when the endpoint real part is negative excludes every possible arrival zero. This avoids imposing the unnecessarily global cross-product condition and leaves one geometric construction obligation.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
@@ -72415,7 +72440,8 @@
     :routes-2026-10-11-t02a03-coupled-angular-waypoint-adapter-topo2-r1
     :routes-2026-10-11-t02a03-coupled-angular-departure-positive-real-topo2-r1
     :routes-2026-10-11-t02a03-coupled-angular-arrival-cross-im-topo2-r1
-    :routes-2026-10-11-t02a03-coupled-angular-arrival-collision-negative-slice-topo2-r1],
+    :routes-2026-10-11-t02a03-coupled-angular-arrival-collision-negative-slice-topo2-r1
+    :routes-2026-10-11-t02a03-coupled-angular-arrival-localized-cross-topo2-r1],
    :current-residual
    "Lift H to RightTubeMinusLeftCore, package rightTubeMeridianRetractionHomotopy, then use the coordinate equation for the Circle-side constant homotopy.",
    :other-consumers []}
@@ -77472,4 +77498,29 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-t02a03geometrictubedeformation-coupledangulararrivalleg-ne-z],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularArrivalLeg_ne_zero_of_negative_endpoint_cross",
+    :type
+    "forall (W : C(RightTubeMinusLeftCore, ℂ)), (forall p, 0 < (W p).re) -> (forall p, (rightTubeCorePlanarComplex p.1).re < 0 -> (conj (W p) * rightTubeCorePlanarComplex p.1).im != 0) -> forall (t : unitInterval) (p : RightTubeMinusLeftCore), not ((t : ℝ) <= 1/2) -> (((2-2*(t:ℝ):ℝ):ℂ)*W p + ((2*(t:ℝ)-1:ℝ):ℂ)*rightTubeCorePlanarComplex p.1) != 0"},
+   :lemma
+   {:name
+    "ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularArrivalLeg_ne_zero_of_negative_endpoint_cross",
+    :reported-by
+    [:routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1],
+    :type
+    "forall (W : C(RightTubeMinusLeftCore, ℂ)), (forall p, 0 < (W p).re) -> (forall p, (rightTubeCorePlanarComplex p.1).re < 0 -> (conj (W p) * rightTubeCorePlanarComplex p.1).im != 0) -> forall (t : unitInterval) (p : RightTubeMinusLeftCore), not ((t : ℝ) <= 1/2) -> (((2-2*(t:ℝ):ℝ):ℂ)*W p + ((2*(t:ℝ)-1:ℝ):ℂ)*rightTubeCorePlanarComplex p.1) != 0",
+    :area "explicit-r3-tube-deformation-retraction",
+    :proved-in
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+   :id
+   :lemma-constructiontargets-t02a03geometrictubedeformation-coupledan-235e9676926c,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t02a03geometrictubedeformation-coupledangulararrivalcollisio],
    :other-consumers []}]}
