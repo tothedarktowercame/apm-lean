@@ -113904,6 +113904,19 @@
      {:cmd "placeholder/diff validation",
       :exit 0,
       :finding "Zero placeholders."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791739802127-5679-a696c618",
+     :commands
+     ["git show/diff-tree 71f8161b"
+      "hash/diff/placeholder checks"
+      "statement-registry.py check"
+      "lake env lean PointWedgeVanKampen.lean"
+      "lake build PointWedgeVanKampen"
+      "lake build ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "PASS: new compiled, sorry-free B6 progress installs the proved counit inner-automorphism normalization consistently in the groupoid equivalence and based group coordinate. It changes only the target free-product coordinate; literal wedge-leg comparison and B12 remain listed. Exact two-file scope/frozen hashes match; zero placeholders; registry 131/131; standard axioms. Absent final target is a valid program STOP."},
     :commit "71f8161b3d363e92c05b8831a5b63fd4dabc8ed5",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113914,7 +113927,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113935,7 +113948,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B6 partial: both leg actions are explicit counit conjugates of the coproduct injections.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B6 partial: normalization installed in B4/B5.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -113999,7 +114012,10 @@
     {:job 9,
      :commit "2bd917a844c45130bd8316148c73276400484c3b",
      :reason
-     "B6 partial: both leg actions are explicit counit conjugates of the coproduct injections."}]}
+     "B6 partial: both leg actions are explicit counit conjugates of the coproduct injections."}
+    {:job 1,
+     :commit "71f8161b3d363e92c05b8831a5b63fd4dabc8ed5",
+     :reason "B6 partial: normalization installed in B4/B5."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
