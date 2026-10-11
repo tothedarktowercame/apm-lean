@@ -113,6 +113,22 @@ theorem shearY_apply (a b : ℤ) (p : FrozenTorus) :
     shearY a b p = (a • p.1 + b • p.2, p.2) :=
   rfl
 
+/-- Circle-product coordinate used to calculate the restricted shear. -/
+def frozenTorusCircleProd : FrozenTorus ≃ₜ Circle × Circle :=
+  Homeomorph.prodCongr (AddCircle.homeomorphCircle one_ne_zero)
+    (AddCircle.homeomorphCircle one_ne_zero)
+
+def circleShearY (a b : ℤ) : C(Circle × Circle, Circle × Circle) :=
+  ⟨fun z ↦ (z.1 ^ a * z.2 ^ b, z.2), by fun_prop⟩
+
+theorem frozenTorusCircleProd_shearY (a b : ℤ) (p : FrozenTorus) :
+    frozenTorusCircleProd (shearY a b p) =
+      circleShearY a b (frozenTorusCircleProd p) := by
+  ext <;>
+    simp [frozenTorusCircleProd, circleShearY, shearY,
+      AddCircle.homeomorphCircle_apply, AddCircle.toCircle_add,
+      AddCircle.toCircle_zsmul]
+
 theorem shearY_mem_U (a b : ℤ) {p : FrozenTorus}
     (hp : p ∈ frozenYCover.U) : shearY a b p ∈ frozenYCover.U := by
   rw [frozenYCover_U_mem_iff] at hp ⊢
@@ -844,6 +860,9 @@ theorem shearY_overlap_coordinate_of_degree_components (a b : ℤ)
 #print axioms frozenYCoverVHomeomorph
 #print axioms frozenYCoverInterHomeomorph
 #print axioms shearY
+#print axioms frozenTorusCircleProd
+#print axioms circleShearY
+#print axioms frozenTorusCircleProd_shearY
 #print axioms shearY_mem_U
 #print axioms shearY_mem_V
 #print axioms shearY_comp
