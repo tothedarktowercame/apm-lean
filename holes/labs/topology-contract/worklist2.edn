@@ -71774,6 +71774,20 @@
       :exit 0,
       :output "131 registered statements match, 0 do not"}
      {:cmd "git status --short", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791696012406-4333-a97d41ba",
+     :commands
+     ["git show/diff-tree/show --check e2a2a31686803c4f371f0d8502ed9a1d50528922"
+      "sha256sum /tmp/production_cover_short_complex_map_contract.lean"
+      "lake env lean ConstructionTargets/ProductionOpenCoverMayerVietoris.lean"
+      "lake env lean /tmp/production_cover_short_complex_map_contract.lean"
+      "python3 scripts/statement-registry.py check and fingerprint t97A04/t96J06 at commit/parent"
+      "python3 placeholder recount for t97A04/t96J06 at commit/parent"
+      "bb worklist_check.bb worklist2.edn"],
+     :finding
+     "PASS: correct STOP after real progress. Topo-6 is independent from codex-7; the banked productionConnecting_naturality commit changes only the scoped module and compiles with exactly propext, Classical.choice, and Quot.sound. Its square is correctly oriented for an arbitrary short-complex morphism. Fresh compilation of the hash-matching fixture confirms that the frozen Nonempty cover-preserving-map interface is vacuous: it admits the zero morphism while leaving f, hU, and hV unused, so it cannot supply the intersection/member and pushout-leg equations needed to specialize naturality. The row attempted the stronger induced morphism, lists it as partial, and states the four remaining component equations rather than claiming completion. Registry is 131/0; both consumer fingerprints and their two placeholders are unchanged at commit and parent; the worklist validates."},
     :changed-paths [],
     :fixture
     {:path "/tmp/production_cover_short_complex_map_contract.lean",
@@ -71783,7 +71797,7 @@
     "Fresh compilation confirms the scoped production naturality theorem and frozen fixture remain valid. Constructing the actual induced morphism requires τ₁ = ambientIntersectionRangeChainsIso.inv ≫ chains.map(coverRangeMap on U∩V) ≫ ambientIntersectionRangeChainsIso.hom, τ₂ = biprod.map of the two member range maps, and τ₃ = the source subcomplexChains_isPushout desc into the target union. The remaining proof obligations are precisely the two intersection/member squares and the two pushout leg equations.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/ProductionOpenCoverMayerVietoris.lean"],
    :dag-node
