@@ -4,6 +4,8 @@ import ConstructionTargets.TorusCircleWedgeOpenCover
 
 noncomputable section
 
+open scoped ComplexConjugate
+
 namespace ConstructionTargets.T02A03GeometricTubeDeformation
 
 open ConstructionTargets.T02A03GeometricTubeCover
@@ -1726,6 +1728,34 @@ theorem coupledAngularDepartureLeg_ne_zero_of_waypoint_re_pos
       mul_pos (mul_pos (by norm_num) htpos) (hW p)
     linarith
 
+theorem coupledAngularArrivalLeg_ne_zero_of_cross_im_ne_zero
+    (W : C(RightTubeMinusLeftCore, ℂ))
+    (hcross : ∀ p,
+      (conj (W p) * rightTubeCorePlanarComplex p.1).im ≠ 0)
+    (t : unitInterval) (p : RightTubeMinusLeftCore)
+    (ht : ¬ (t : ℝ) ≤ 1 / 2) :
+    (((2 - 2 * (t : ℝ) : ℝ) : ℂ) * W p +
+        ((2 * (t : ℝ) - 1 : ℝ) : ℂ) *
+          rightTubeCorePlanarComplex p.1) ≠ 0 := by
+  intro hz
+  have hcoeff : 0 < 2 * (t : ℝ) - 1 := by linarith
+  have hre := congrArg Complex.re hz
+  have him := congrArg Complex.im hz
+  norm_num [Complex.mul_re, Complex.mul_im] at hre him
+  have hre' := congrArg (fun x : ℝ => x * (W p).im) hre
+  have him' := congrArg (fun x : ℝ => x * (W p).re) him
+  have hb : (2 * (t : ℝ) - 1) *
+      ((W p).re * (rightTubeCorePlanarComplex p.1).im -
+        (W p).im * (rightTubeCorePlanarComplex p.1).re) = 0 := by
+    nlinarith [hre', him']
+  have hdet : (W p).re * (rightTubeCorePlanarComplex p.1).im -
+      (W p).im * (rightTubeCorePlanarComplex p.1).re = 0 :=
+    (mul_eq_zero.mp hb).resolve_left hcoeff.ne'
+  have hzero : (conj (W p) * rightTubeCorePlanarComplex p.1).im = 0 := by
+    simpa only [Complex.mul_im, Complex.conj_re, Complex.conj_im,
+      neg_mul, add_comm] using hdet
+  exact (hcross p) hzero
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -1791,3 +1821,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngular_of_nonvanishingComplexPath
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.nonvanishingComplexPath_of_waypoint
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularDepartureLeg_ne_zero_of_waypoint_re_pos
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularArrivalLeg_ne_zero_of_cross_im_ne_zero
