@@ -17719,7 +17719,7 @@
    :depends-on [],
    :other-consumers [:t92J05 :t93J03 :t99J01 :t00J07]}
   {:consumer :t00A02,
-   :stop-count 8,
+   :stop-count 9,
    :review-finding
    "Blueprint B9 claims every final hypothesis is used, but LocPathConnectedSpace X is unused: B1 does not assume it, B7 derives PathConnectedSpace from SimplyConnectedSpace, B8 uses simple-connected path homotopy, and no other node cites or uses local path-connectedness. Repair the blueprint and frozen Lean interface by either removing LocPathConnectedSpace X or adding a concrete node whose statement and proof genuinely require it, with the dependency recorded in uses:.",
    :implements-lemma
@@ -17730,7 +17730,7 @@
      "ConstructionTargets/DeckGroupQuotientFundamentalGroup.blueprint.md",
      :sha256
      "f1d74207903f683985266f7ebbb50b2280d87ec873331c3889dfdc12fbe66aa6",
-     :implemented-node :B5},
+     :implemented-node :B6},
     :placeholder-delta
     {:t00A02 {:before 2, :after 2, :delta 0},
      :t92J05 {:before 3, :after 3, :delta 0},
@@ -17738,7 +17738,7 @@
      :t99J01 {:before 1, :after 1, :delta 0},
      :t00J07 {:before 3, :after 3, :delta 0}},
     :residual
-    "Implement reviewed blueprint B6 orbitEndpointMonodromyRaw_mul from monodromy_trans_apply, FundamentalGroup multiplication's reversed categorical composition, B5 deck-equivariance, and injectivity of orbitQuotientFiberEquiv; then implement B7-B11.",
+    "Implement reviewed blueprint B7 orbitEndpointMonodromy by sending a to (orbitEndpointMonodromyRaw free x a) inverse; prove map_one from raw_one and map_mul from B6 plus mul_inv_rev. Then implement B8-B11.",
     :gates
     {:module-compile :pass,
      :target-build :pass,
@@ -17750,21 +17750,10 @@
     :warnings [],
     :missing-theorems
     [{:name
-      "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitMonodromy_deck_equivariant",
-      :type
-      "For every repaired orbit covering, based quotient loop γ, and g : G, the endpoint of the lift of γ from g • x equals g acting on the endpoint of the lift from x",
-      :status :proved,
-      :consumers [:t00A02 :t92J05 :t93J03 :t99J01 :t00J07],
-      :depends-on
-      ["ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitProjection_existsUnique_lift"
-       "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromyRaw"
-       "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitQuotientFiberEquiv"],
-      :area "deck-group-quotient-pi1"}
-     {:name
       "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromyRaw_mul",
       :type
-      "Blueprint B6: raw endpoint coordinates reverse FundamentalGroup multiplication",
-      :status :not-started,
+      "forall repaired orbit coverings, x and a b in the quotient fundamental group, orbitEndpointMonodromyRaw free x (a*b) = orbitEndpointMonodromyRaw free x b * orbitEndpointMonodromyRaw free x a",
+      :status :proved,
       :consumers [:t00A02 :t92J05 :t93J03 :t99J01 :t00J07],
       :depends-on
       ["ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitMonodromy_deck_equivariant"],
@@ -17807,16 +17796,16 @@
       :area "deck-group-quotient-pi1"}],
     :statement-hashes
     {:module
-     "b470be3d16b72cd2bd51cc9e7d30a57ae2a2f24c7c51280f378dcb79d80ddc45",
+     "ec12d9f5812eb8e2e442e6cdd4169e390b0ab960f10a6c0429c3810f4d79bb1f",
      :milestones
-     "5b99a46a04f6dcb736a00ee5e0d2af4110fe78c1e218ef9c2e1e9cebefc07696",
+     "cb2a3cefd411e91f71d7167bf2433a672f2de886b23f3267294b6c14b51142f4",
      :blueprint
      "f1d74207903f683985266f7ebbb50b2280d87ec873331c3889dfdc12fbe66aa6"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Implemented and committed reviewed blueprint B5. orbitMonodromy_deck_equivariant uses B4's uniqueness clause to identify its global lift with the continuous deck translation y ↦ g • y, composes that lift with the path lifted from x, applies uniqueness of path lifts, and evaluates at 1. The theorem proves exact equality of the underlying points in the orbit fiber. The final theorem remains incomplete; B6 raw anti-multiplicativity is next.",
+    "Implemented and committed reviewed blueprint B6. orbitEndpointMonodromyRaw_mul proves raw(a*b)=raw(b)*raw(a): the proof exposes fundamental-group multiplication as the path for b followed by a, applies monodromy_trans_apply, rewrites the intermediate endpoint through the fiber-coordinate equivalence, and applies B5 deck-equivariance. The final theorem remains incomplete; B7 packages the inverse raw coordinate as a homomorphism.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean",
@@ -17826,7 +17815,7 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd
-      "git diff --check 2b65123e4^ 2b65123e4 -- ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean ConstructionTargets/DeckGroupQuotientFundamentalGroup.md",
+      "git diff --check dce631bb0^ dce631bb0 -- ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean ConstructionTargets/DeckGroupQuotientFundamentalGroup.md",
       :exit 0}
      {:cmd
       "rg -n '\\bsorry\\b|\\badmit\\b|^\\s*axiom\\b' ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean",
@@ -17843,26 +17832,8 @@
       "lake env lean ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean",
       :exit 1,
       :finding
-      "The first B5 draft had the ExistsUnique uniqueness equality reversed and did not normalize the lifted path's source equality; reversing the uniqueness result, recording the orbit quotient equality explicitly, and composing it with Path.source corrected the proof."}
-     {:cmd
-      "lake env lean ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean",
-      :exit 1,
-      :finding
-      "The path-lift comparison initially omitted liftPath_lifts and did not expose ContinuousMap.comp at zero; an explicit equality chain through liftPath_lifts and a change followed by liftPath_zero corrected both goals."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791715189181-5102-2246ada6",
-     :commands
-     ["git diff-tree --no-commit-id --name-status -r 2b65123e4ac796b51a40121a9ea4717dfda4866f"
-      "git diff --check 2b65123e4ac796b51a40121a9ea4717dfda4866f^ 2b65123e4ac796b51a40121a9ea4717dfda4866f"
-      "sha256sum ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean ConstructionTargets/DeckGroupQuotientFundamentalGroup.blueprint.md"
-      "lake env lean ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean"
-      "python3 scripts/statement-registry.py check"
-      "lake build ConstructionTargets.DeckGroupQuotientFundamentalGroup"],
-     :finding
-     "PASS: commit 2b65123e4ac796b51a40121a9ea4717dfda4866f adds new compiled, sorry-free B5 progress after program-history commit 86bc907290495c45a2f498308e49b407b3e9f239; exact scope and blobs match, hashes reproduce, deck-equivariance has the reviewed orientation and representation boundary, its proof uses only B1/B2/B4 plus path-lift uniqueness, all final hypotheses remain accounted for in the blueprint, only standard axioms occur, and the milestone note lists B6-B11 work remaining."},
-    :commit "2b65123e4ac796b51a40121a9ea4717dfda4866f",
+      "Rewriting CategoryTheory.End.mul_def did not unfold through the FundamentalGroup.toPath abbreviation. Changing the monodromy argument explicitly to toPath(b).trans(toPath(a)) exposed the reviewed composition order; the successful rerun is recorded in commands."}],
+    :commit "dce631bb064fcdb2668997b82b6dbd096f9f2831",
     :changed-paths
     ["ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean"
      "ConstructionTargets/DeckGroupQuotientFundamentalGroup.md"],
@@ -17873,13 +17844,13 @@
      ["ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean"
       "ConstructionTargets/DeckGroupQuotientFundamentalGroup.md"],
      :declaration
-     "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitMonodromy_deck_equivariant"},
+     "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromyRaw_mul"},
     :row :program-2026-10-11-deck-group-quotient-pi1,
     :seat :topo-10},
    :phase :implementation,
    :owner-repair
    "2026-10-11 claude-14: final type gains [T2Space X] [LocallyCompactSpace X] (Mathlib quotient-covering needs them; every consumer, the plane and spheres, has them). Do not prove covering under weaker hypotheses.",
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean"
     "ConstructionTargets/DeckGroupQuotientFundamentalGroup.md"
