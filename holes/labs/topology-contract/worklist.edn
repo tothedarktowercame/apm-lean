@@ -113905,6 +113905,19 @@
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
       :exit 1,
       :finding "Made SingleObj endpoints explicit."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791736270965-5611-e3f0cbd2",
+     :commands
+     ["git show/diff-tree 99fc0044"
+      "hash/diff/placeholder checks"
+      "statement-registry.py check"
+      "lake env lean PointWedgeVanKampen.lean"
+      "lake build PointWedgeVanKampen"
+      "lake build ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "PASS: new compiled, sorry-free B6 progress specializes counit naturality to both coproduct legs with correct composition orientation and no counit-identity assumption. Exact two-file scope and all frozen hashes match; zero placeholders; 131/131 registry; standard axioms. B6 cancellation/B12 remain listed, so absent final target is a valid program STOP."},
     :commit "99fc00449452e598228b29c3f2bc7380fb03c403",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113915,7 +113928,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113936,7 +113949,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B6 partial: the B3 inverse-of-identity normalization and counit conjugacy equation are proved.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B6 partial: compiled counit equations now specialize to both coproduct injections.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -113992,7 +114005,11 @@
     {:job 7,
      :commit "f79faec6d2c70dcf702dedd299cdd0a55ead2e82",
      :reason
-     "B6 partial: the B3 inverse-of-identity normalization and counit conjugacy equation are proved."}]}
+     "B6 partial: the B3 inverse-of-identity normalization and counit conjugacy equation are proved."}
+    {:job 8,
+     :commit "99fc00449452e598228b29c3f2bc7380fb03c403",
+     :reason
+     "B6 partial: compiled counit equations now specialize to both coproduct injections."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
