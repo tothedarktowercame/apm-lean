@@ -104767,11 +104767,14 @@
      :typed-residual-change
      :infrastructure-packets
      :review-outcomes]},
+   :review-finding
+   "recorded commit 1dd5b7464be3460194e37bc1b09159e463f2d1eb falsely reports cross-loop-untagged-after 0: a fresh clojure.edn/read-string audit of all three ledgers finds five canonical :lemma :backlog rows still lacking :area; the tagged copies exist only inside checkpoint evidence and do not update the canonical lemma records",
    :stop-condition
    "End only when every topo1 problem is closed or a row is genuinely refuted.",
    :evidence
    {:outcome :replan,
-    :seat "topo-4",
+    :disposition :replan,
+    :author "topo-4",
     :commands
     [{:cmd
       "bb holes/labs/topology-contract/build_step.bb priorities holes/labs/topology-contract/worklist.edn",
@@ -104793,98 +104796,12 @@
       :exit 0,
       :finding
       "The route guide, all per-problem routes, strategy rules, and reviewed dependency receipts were read."}],
-    :finding
-    {:placeholder-delta 0,
-     :placeholder-counts
-     {:t01A03 1,
-      :t92J06 1,
-      :t93J03 1,
-      :t97A01 1,
-      :t97A03 3,
-      :t99J01 1},
-     :routes
-     {:t01A03
-      ["generic point-wedge coordinates"
-       "finite circle-wedge fundamental group"
-       "consumer adapter"],
-      :t92J06
-      ["generic point-wedge coordinates"
-       "finite wedge pi1 and covering gluing"
-       "closure adapter"],
-      :t93J03
-      ["Klein orbit quotient homeomorphism"
-       "presented-group normal form and lifting criterion"
-       "annulus-cover embedding"
-       "consumer adapter"],
-      :t97A01
-      ["reviewed radial packages and overlap squares"
-       "generic wedge coordinates"
-       "homology and pi1 coordinate assembly"],
-      :t97A03
-      ["generic wedge coordinates"
-       "three explicit cover homotopy equivalences"
-       "consumer assembly"],
-      :t99J01
-      ["generic and ThreeCircles coordinates"
-       "finite wedge pi1"
-       "path-component restriction package"
-       "closure adapter"]},
-     :typed-residual-change
-     ["The Klein presentation-comparison route is blocked by the incompatible explicit disk-to-square boundary carrier, so the ready orbit-quotient homeomorphism is elected as the alternative concrete identification step."
-      "The generic coordinate probe reduced the obstruction from an unspecified two-open coherence law to two named constituent counit-component normalizations and their five-factor composite."
-      "The ThreeCircles coordinate row remains downstream of the generic coordinate theorem."],
-     :infrastructure-packets
-     {:topo1-banked 163,
-      :topo1-backlog 76,
-      :elected 3,
-      :placeholder-changing 0,
-      :compiled-refutations 0,
-      :cross-loop-untagged-before 5,
-      :cross-loop-untagged-after 0},
-     :review-outcomes
-     {:klein-presentation-comparison :blocked,
-      :generic-point-wedge-coordinates :revise,
-      :three-circles-coordinates :blocked,
-      :closed-problems 0},
-     :priority-top
-     ["kleinOrbitQuotient_homeomorph under rule-0 proximity for t93J03"
-      "ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence_counit_base_identity, ready, five consumers"
-      "TwoOpenFundamentalGroupoidPseudopushout.counit_base_component_identity, ready, five consumers"],
-     :areas
-     ["fundamental-group-wedge-of-circles serves five topo1 problems with 6 banked and 16 backlog lemmas"
-      "polygon-quotient-identification and deck-group-fundamental-group advance nearest t93J03"
-      "surface-classification ranks globally first but its nearest ready lemma belongs to the other loop"]},
-    :lemmas
-    [{:name
-      "ConstructionTargets.IntegralSingularHomologyComparison.moduleIsoOfUnderlyingIso",
-      :status :not-started,
-      :consumers [:t00J02 :t98A02],
-      :depends-on [],
-      :area "manifold-fundamental-class"}
-     {:name
-      "ConstructionTargets.CoefficientChartTransitionUnit.isoUnit_action",
-      :status :not-started,
-      :consumers [:t00J02 :t98A02],
-      :depends-on [],
-      :area "manifold-fundamental-class"}
-     {:name
-      "ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient",
-      :status :not-started,
-      :consumers [:t00J02 :t98A02],
-      :depends-on [],
-      :area "manifold-fundamental-class"}
-     {:name
-      "ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism",
-      :status :not-started,
-      :consumers [:t00J02 :t98A02],
-      :depends-on [],
-      :area "manifold-fundamental-class"}
-     {:name
-      "ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorUnit",
-      :status :not-started,
-      :consumers [:t00J02 :t98A02],
-      :depends-on [],
-      :area "manifold-fundamental-class"}],
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1791693690771-4222-a46ad774",
+     :finding
+     "recorded commit 1dd5b7464be3460194e37bc1b09159e463f2d1eb falsely reports cross-loop-untagged-after 0: a fresh clojure.edn/read-string audit of all three ledgers finds five canonical :lemma :backlog rows still lacking :area; the tagged copies exist only inside checkpoint evidence and do not update the canonical lemma records"},
     :replacement-items
     [{:bounded-exception
       "This single-consumer quotient identification is the nearest ready t93J03 route step after the explicit disk-to-square carrier route was blocked.",
@@ -105005,10 +104922,101 @@
       :current-residual
       "Refill after the three elected rows are reviewed.",
       :other-consumers []}],
-    :author "topo-4",
-    :disposition :replan},
+    :finding
+    {:placeholder-delta 0,
+     :placeholder-counts
+     {:t01A03 1,
+      :t92J06 1,
+      :t93J03 1,
+      :t97A01 1,
+      :t97A03 3,
+      :t99J01 1},
+     :routes
+     {:t01A03
+      ["generic point-wedge coordinates"
+       "finite circle-wedge fundamental group"
+       "consumer adapter"],
+      :t92J06
+      ["generic point-wedge coordinates"
+       "finite wedge pi1 and covering gluing"
+       "closure adapter"],
+      :t93J03
+      ["Klein orbit quotient homeomorphism"
+       "presented-group normal form and lifting criterion"
+       "annulus-cover embedding"
+       "consumer adapter"],
+      :t97A01
+      ["reviewed radial packages and overlap squares"
+       "generic wedge coordinates"
+       "homology and pi1 coordinate assembly"],
+      :t97A03
+      ["generic wedge coordinates"
+       "three explicit cover homotopy equivalences"
+       "consumer assembly"],
+      :t99J01
+      ["generic and ThreeCircles coordinates"
+       "finite wedge pi1"
+       "path-component restriction package"
+       "closure adapter"]},
+     :typed-residual-change
+     ["The Klein presentation-comparison route is blocked by the incompatible explicit disk-to-square boundary carrier, so the ready orbit-quotient homeomorphism is elected as the alternative concrete identification step."
+      "The generic coordinate probe reduced the obstruction from an unspecified two-open coherence law to two named constituent counit-component normalizations and their five-factor composite."
+      "The ThreeCircles coordinate row remains downstream of the generic coordinate theorem."],
+     :infrastructure-packets
+     {:topo1-banked 163,
+      :topo1-backlog 76,
+      :elected 3,
+      :placeholder-changing 0,
+      :compiled-refutations 0,
+      :cross-loop-untagged-before 5,
+      :cross-loop-untagged-after 0},
+     :review-outcomes
+     {:klein-presentation-comparison :blocked,
+      :generic-point-wedge-coordinates :revise,
+      :three-circles-coordinates :blocked,
+      :closed-problems 0},
+     :priority-top
+     ["kleinOrbitQuotient_homeomorph under rule-0 proximity for t93J03"
+      "ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence_counit_base_identity, ready, five consumers"
+      "TwoOpenFundamentalGroupoidPseudopushout.counit_base_component_identity, ready, five consumers"],
+     :areas
+     ["fundamental-group-wedge-of-circles serves five topo1 problems with 6 banked and 16 backlog lemmas"
+      "polygon-quotient-identification and deck-group-fundamental-group advance nearest t93J03"
+      "surface-classification ranks globally first but its nearest ready lemma belongs to the other loop"]},
+    :lemmas
+    [{:name
+      "ConstructionTargets.IntegralSingularHomologyComparison.moduleIsoOfUnderlyingIso",
+      :status :not-started,
+      :consumers [:t00J02 :t98A02],
+      :depends-on [],
+      :area "manifold-fundamental-class"}
+     {:name
+      "ConstructionTargets.CoefficientChartTransitionUnit.isoUnit_action",
+      :status :not-started,
+      :consumers [:t00J02 :t98A02],
+      :depends-on [],
+      :area "manifold-fundamental-class"}
+     {:name
+      "ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient",
+      :status :not-started,
+      :consumers [:t00J02 :t98A02],
+      :depends-on [],
+      :area "manifold-fundamental-class"}
+     {:name
+      "ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism",
+      :status :not-started,
+      :consumers [:t00J02 :t98A02],
+      :depends-on [],
+      :area "manifold-fundamental-class"}
+     {:name
+      "ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorUnit",
+      :status :not-started,
+      :consumers [:t00J02 :t98A02],
+      :depends-on [],
+      :area "manifold-fundamental-class"}],
+    :seat "topo-4"},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :repair,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -105029,7 +105037,7 @@
    :consumer :t93J03,
    :implements-lemma :lemma-kleinorbitquotient-homeomorph,
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-orbit-quotient-homeomorph",
@@ -105065,7 +105073,7 @@
    :implements-lemma
    :lemma-connectedgroupoidsingleobjequivalence-connectorsingleobjequivalence-counit-base-,
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/connector-single-object-counit-base-identity",
@@ -105094,7 +105102,7 @@
    :implements-lemma
    :lemma-twoopenfundamentalgroupoidpseudopushout-counit-base-component-identity,
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/two-open-pseudopushout-counit-base-identity",
@@ -105131,7 +105139,7 @@
    :stop-condition
    "End only when every topo1 problem is closed or a row is genuinely refuted.",
    :phase :strategy,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
