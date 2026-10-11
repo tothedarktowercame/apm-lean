@@ -31,6 +31,37 @@ theorem isOpen_setOf_surjective_clm [FiniteDimensional ℝ E] [FiniteDimensional
   simpa only [← ContinuousLinearMap.comp_apply, ← Units.val_mul] using
     congrArg (fun A : F →L[ℝ] F ↦ A y) (u.mul_inv)
 
+open scoped Manifold ContDiff
+
+abbrev EuclideanModel (n : ℕ) := EuclideanSpace ℝ (Fin n)
+
+/-- The fixed-chart representative supplied by manifold smoothness has a
+continuous derivative within the model-with-corners range at the chart
+centre.  This is the analytic continuity component of blueprint B2. -/
+theorem continuousWithinAt_coordinate_fderivWithin
+    {m n : ℕ} {X : Type*} [TopologicalSpace X]
+    [ChartedSpace (EuclideanModel m) X]
+    [IsManifold 𝓘(ℝ, EuclideanModel m) ∞ X]
+    (f : X → EuclideanModel n)
+    (hf : ContMDiff 𝓘(ℝ, EuclideanModel m) 𝓘(ℝ, EuclideanModel n) ∞ f)
+    (x : X) :
+    ContinuousWithinAt
+      (fderivWithin ℝ
+        (extChartAt 𝓘(ℝ, EuclideanModel n) (f x) ∘ f ∘
+          (extChartAt 𝓘(ℝ, EuclideanModel m) x).symm)
+        (Set.range 𝓘(ℝ, EuclideanModel m)))
+      (Set.range 𝓘(ℝ, EuclideanModel m))
+      (extChartAt 𝓘(ℝ, EuclideanModel m) x x) := by
+  have hcoord := (contMDiffAt_iff.mp (hf x)).2
+  exact hcoord.continuousWithinAt_fderivWithin
+    (ModelWithCorners.uniqueDiffOn 𝓘(ℝ, EuclideanModel m))
+    (by simp) (by
+      change 𝓘(ℝ, EuclideanModel m)
+          ((extChartAt 𝓘(ℝ, EuclideanModel m) x) x) ∈
+        Set.range 𝓘(ℝ, EuclideanModel m)
+      exact Set.mem_range_self _)
+
 end t97A07Closure
 
 #print axioms t97A07Closure.isOpen_setOf_surjective_clm
+#print axioms t97A07Closure.continuousWithinAt_coordinate_fderivWithin

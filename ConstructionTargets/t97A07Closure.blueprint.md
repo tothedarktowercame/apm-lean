@@ -52,7 +52,7 @@ the coordinate transport of `mfderiv I I' f`.
 uses: Mathlib `contMDiffAt_iff`, `ContDiff.continuous_fderiv`,
 `mfderiv_comp`, and the derivative equivalences of `extChartAt`
 
-status: planned
+status: partial
 
 Use `hf.contMDiffAt` and unfold `contMDiffAt_iff` in the fixed source and
 target charts at `x`.  The resulting representative is smooth and therefore
@@ -62,6 +62,11 @@ pre- and post-composed with the continuous linear equivalences supplied by
 the source and target chart transitions.  Record both the continuity and this
 equality explicitly; B3 uses the equality to preserve surjectivity rather than
 comparing tangent maps whose fibers vary with `y`.
+
+Compiled progress: `continuousWithinAt_coordinate_fderivWithin` extracts from
+`hf.contMDiffAt` the continuity, within the model-with-corners range, of the
+fixed-chart representative's `fderivWithin` at the chart centre.  Remaining
+in B2 is the nearby chart-transport equality with `mfderiv`.
 
 ### B3. Regular points are open
 
