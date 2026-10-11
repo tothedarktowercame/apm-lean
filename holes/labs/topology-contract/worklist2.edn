@@ -79283,26 +79283,32 @@
   {:consumer :t97A04,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :evidence
    {:placeholder-delta 0,
-    :residual
-    "Prove the two component degree-a equations; then B7-B11.",
+    :residual "Prove two degree equations, then B6-B11.",
     :outcome :stop,
-    :warnings
-    ["Main retains two placeholders; unrelated dirty file preserved."],
+    :warnings ["Main retains two placeholders."],
     :missing-theorems
     [{:name
-      "ConstructionTargets.T97A04Closure.shearY_overlap_coordinate",
-      :type "shearYOverlapCoordinateMap a b = overlapScalar a",
-      :status :partial,
+      "ConstructionTargets.T97A04Closure.shearY_overlap_coordinate_inl",
+      :type "inl then coordinate map equals a times inl",
+      :status :not-started,
       :consumers [:t97A04],
       :depends-on
-      ["ConstructionTargets.T97A04Closure.shearY_overlap_coordinate_of_injections"],
+      ["ConstructionTargets.T97A04Closure.twoCircleOverlapShear"],
+      :area "mv-connecting-naturality"}
+     {:name
+      "ConstructionTargets.T97A04Closure.shearY_overlap_coordinate_inr",
+      :type "inr then coordinate map equals a times inr",
+      :status :not-started,
+      :consumers [:t97A04],
+      :depends-on
+      ["ConstructionTargets.T97A04Closure.twoCircleOverlapShear"],
       :area "mv-connecting-naturality"}],
     :statement-hashes
     {:registry "131/0",
-     :closure "f9db773ce0fcc3dcc57e793be3c150947eeff56f",
+     :closure "10ef39e6724c8ec9afed6df60aeb232559c0f3c7",
      :blueprint "c419a895cb4ede2acc1cb6bc5c7536344ba63df4"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
@@ -79315,21 +79321,16 @@
      {:cmd "lake env lean problems/t97A04/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "Main placeholder count", :exit 0, :output "2"}
-     {:cmd "git show --check 933496286", :exit 0}],
-    :diagnostic-history
-    [{:cmd "lake env lean ConstructionTargets/t97A04Closure.lean",
-      :exit 1,
-      :finding
-      "Moved the coordinate definition after its B4 dependency; rerun passed."}],
-    :continue-from
-    "Prove biprod.inl/inr composites of shearYOverlapCoordinateMap equal those of overlapScalar.",
-    :commit "9334962864e77dd1ed73a59d6c8b549c6590cafb",
+     {:cmd "git show --check ca53a3ddd", :exit 0}],
+    :diagnostic-history [],
+    :continue-from "Prove shearY_overlap_coordinate_inl and _inr.",
+    :commit "ca53a3ddd90dc833a58ac5a32e2db12b9add8764",
     :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
     :finding
-    "Defined the exact B6 coordinate map and reduced its equality to two component-injection equations.",
+    "B6 scalar targets normalize on both biproduct injections.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79661,4 +79662,44 @@
    :lemma-constructiontargets-t97a04closure-sheary-overlap-coordinate-of-injections,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T97A04Closure.shearY_overlap_coordinate_inl",
+    :type "inl then coordinate map equals a times inl"},
+   :lemma
+   {:name
+    "ConstructionTargets.T97A04Closure.shearY_overlap_coordinate_inl",
+    :reported-by [:program-2026-10-11-close-t97a04],
+    :type "inl then coordinate map equals a times inl",
+    :area "mv-connecting-naturality"},
+   :id
+   :lemma-constructiontargets-t97a04closure-sheary-overlap-coordinate-inl,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t97a04closure-twocircleoverlapshear],
+   :other-consumers []}
+  {:consumer :t97A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T97A04Closure.shearY_overlap_coordinate_inr",
+    :type "inr then coordinate map equals a times inr"},
+   :lemma
+   {:name
+    "ConstructionTargets.T97A04Closure.shearY_overlap_coordinate_inr",
+    :reported-by [:program-2026-10-11-close-t97a04],
+    :type "inr then coordinate map equals a times inr",
+    :area "mv-connecting-naturality"},
+   :id
+   :lemma-constructiontargets-t97a04closure-sheary-overlap-coordinate-inr,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t97a04closure-twocircleoverlapshear],
    :other-consumers []}]}
