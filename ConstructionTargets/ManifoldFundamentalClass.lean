@@ -932,6 +932,19 @@ theorem correctedLocalGeneratorCoefficient_eq_one_of_normalization
   rw [integralRelativeHomologyComparisonWithTransport_generator_of_normalization
     k x hcompat, ambientLocalNormalization_generator]
 
+/-- Coefficient one turns the corrected comparison's scalar generator formula
+into exact generator transport. -/
+theorem integralRelativeHomologyComparisonWithTransport_generator_of_coefficient_one
+    (k : ℕ) {M : Type} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M)
+    (hcoeff : correctedLocalGeneratorCoefficient k x = 1) :
+    (integralRelativeHomologyComparisonWithTransport
+        (deletedPoint x) (k + 2)).hom.hom
+        (CoefficientChartLocal.generator ℤ k x) =
+      HigherChartLocalGenerator.ambientLocalGenerator (k := k) x := by
+  rw [integralRelativeHomologyComparisonWithTransport_generator_eq_zsmul,
+    hcoeff, one_zsmul]
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -990,3 +1003,4 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient_eq_one_or_neg_one
 #print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient_eq_one_of_nonneg
 #print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient_eq_one_of_normalization
+#print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_coefficient_one
