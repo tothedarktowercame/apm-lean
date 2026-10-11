@@ -1050,6 +1050,35 @@ theorem inputCollisionPolynomial_factor_rightTubeNormalReal
   rw [hvre, hvnorm, hleft, hlre, hlim]
   ring
 
+theorem inputCollisionPolynomial_positiveFactor_meridianReal
+    (p : RightTubeMinusLeftCore) :
+    ∃ c : ℝ, 0 < c ∧
+      (1 - (rightTubeCoreNormalComplex p.1).re) ^ 2 -
+          4 * (1 - (rightTubeCoreNormalComplex p.1).re) *
+            (rightTubeCoreAngularCoordinate p : Complex).re + 3 =
+        c * (rightTubeMeridianCoordinate p : Complex).re := by
+  let n : ℂ := rightTubeNormalComplex p.1
+  let m : ℂ := rightTubeMeridianCoordinate p
+  have hn0 : n ≠ 0 := by
+    intro hn
+    exact p.2.2 ((rightTubeNormalComplex_eq_zero_iff p.1).mp hn)
+  have hnorm : 0 < ‖n‖ := norm_pos_iff.mpr hn0
+  have hsecond : 0 < n.re + 2 := by
+    simp [n, rightTubeNormalComplex]
+    linarith [norm_nonneg
+      (((p.1 0 : ℂ) + 1) + (p.1 1 : ℂ) * Complex.I)]
+  have hscale := NormedSpace.norm_smul_normalize n
+  have hmn : ‖n‖ * m.re = n.re := by
+    have h := congrArg Complex.re hscale
+    have h' : ‖n‖ * (NormedSpace.normalize n).re = n.re :=
+      (RCLike.smul_re ‖n‖ (NormedSpace.normalize n)).symm.trans h
+    simpa [m, n, rightTubeMeridianCoordinate] using h'
+  refine ⟨‖n‖ * (n.re + 2), mul_pos hnorm hsecond, ?_⟩
+  rw [inputCollisionPolynomial_factor_rightTubeNormalReal]
+  change n.re * (n.re + 2) = (‖n‖ * (n.re + 2)) * m.re
+  rw [← hmn]
+  ring
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -1088,3 +1117,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.inputZeroHeight_collisionPolynomial_ne
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.meridianStart_collisionPolynomial_factor
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.inputCollisionPolynomial_factor_rightTubeNormalReal
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.inputCollisionPolynomial_positiveFactor_meridianReal
