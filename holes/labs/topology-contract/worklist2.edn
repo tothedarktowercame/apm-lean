@@ -68998,49 +68998,61 @@
    "single-consumer exact collision-polynomial factorization at the meridian start",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:residual
-     "Implement the compiled meridian-start factorization; then relate the recovered input polynomial sign to rightTubeMeridianCoordinate.re and build matching-component paths.",
-     :outcome :go,
-     :warnings [],
-     :acceptance
-     {:declaration
-      "ConstructionTargets.T02A03GeometricTubeDeformation.meridianStart_collisionPolynomial_factor",
-      :type
-      "forall (z : Circle), let n := rightTubeCoreNormalComplex (apm_t02a03_circleMeridian z); (1-n.re)^2 - 4*(1-n.re)*((1 : Circle) : Complex).re + 3 = ((z : Complex).re/8)*(2+(z : Complex).re/8)",
-      :proof-obligations
-      ["expand the right-core normal coordinate of circleMeridian"
-       "use the Circle real-coordinate bound to resolve the square root"
-       "normalize the polynomial to the stated factorization"],
-      :forbidden-claims ["a sign-branch choice" "path construction"]},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd
-       "lake env lean /tmp/t02a03_meridian_start_poly_factor_probe.lean",
-       :exit 0,
-       :output
-       "meridianStart_collisionPolynomial_factor compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "sha256sum /tmp/t02a03_meridian_start_poly_factor_probe.lean",
-       :exit 0,
-       :output
-       "df4916dc1696e927e46d9e671c0e968d417974a26618b593e5602715cef683f4  /tmp/t02a03_meridian_start_poly_factor_probe.lean"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_meridian_start_poly_factor_probe.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :fixture
-     {:path "/tmp/t02a03_meridian_start_poly_factor_probe.lean",
-      :sha256
-      "df4916dc1696e927e46d9e671c0e968d417974a26618b593e5602715cef683f4"},
-     :implementation
-     {:scope
-      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
-     :seat "topo-8"}},
+   {:placeholder-delta {:before 0, :after 0, :change 0},
+    :residual
+    "Relate the recovered input collision-polynomial sign to rightTubeMeridianCoordinate.re, then construct entry and exit paths within their matching nonzero-sign component and assemble the safe angular and radial stages.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean:62:6: unnecessarySimpa (pre-existing)"],
+    :missing-theorems [],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms [propext Classical.choice Quot.sound],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :scope-blob "e0f741a72b546ef1dd7808748709dc6cd75c97d4",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0,
+      :output
+      "compiled; declaration axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "lake env lean /tmp/t02a03_meridian_start_poly_factor_probe.lean",
+      :exit 0,
+      :output
+      "meridianStart_collisionPolynomial_factor compiled; axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "sha256sum /tmp/t02a03_meridian_start_poly_factor_probe.lean",
+      :exit 0,
+      :output
+      "df4916dc1696e927e46d9e671c0e968d417974a26618b593e5602715cef683f4  /tmp/t02a03_meridian_start_poly_factor_probe.lean"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "git diff --check -- ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd
+      "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "9d38452759380cd951a423c42725e321475bd355",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.meridianStart_collisionPolynomial_factor",
+    :fixture
+    {:path "/tmp/t02a03_meridian_start_poly_factor_probe.lean",
+     :sha256
+     "df4916dc1696e927e46d9e671c0e968d417974a26618b593e5602715cef683f4"},
+    :finding
+    "Expanding the right-core normal coordinate of circleMeridian and resolving its nonnegative square root reduces the start collision polynomial exactly to z.re/8 times 2+z.re/8.",
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/meridian-start-collision-factor",
