@@ -5820,8 +5820,86 @@
   {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-integralrelativehomologycomparisonwithtransport-hom,
+   :evidence
+   {:placeholder-delta {:source 0, :fixture 0},
+    :residual
+    "Use this expansion with mapHomologyIso_hom_naturality and the raw homology projection square to obtain packaged projection naturality; then compare the transport-explicit and earlier homology comparisons and prove normalization compatibility.",
+    :gates
+    {:exact-type :pass,
+     :module-build :pass,
+     :no-comparison :pass,
+     :module-compile :pass,
+     :preservation-inverse-explicit :pass,
+     :definition-unfolded :pass,
+     :exact-scope :pass,
+     :statement-registry :pass,
+     :zero-placeholders :pass,
+     :scoped-tree-clean :pass,
+     :no-cancellation :pass,
+     :fixture-compile :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["lake build replayed pre-existing dependency warnings only"
+     "unrelated untracked ConstructionTargets/PolygonInnerOpenPointedContraction.lean remains untouched"],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_hom",
+      :type
+      "forall {X : Type} [TopologicalSpace X] (A : Set X) (n : Nat), (integralRelativeHomologyComparisonWithTransport A n).hom = (((CoefficientRelativeSmall.relativeChains Int A).sc n).mapHomologyIso forgetIntModules).inv ≫ HomologicalComplex.homologyMap (integralRelativeChainsComparisonWithTransport A).hom n",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on
+      ["ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport"],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :topo-10,
+    :commands
+    [{:cmd
+      "sha256sum /tmp/manifold_fundamental_class_homology_preservation_bridge.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/manifold_fundamental_class_homology_preservation_bridge.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^\\s*axiom\\b' ConstructionTargets/ManifoldFundamentalClass.lean /tmp/manifold_fundamental_class_homology_preservation_bridge.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git status --porcelain", :exit 0}],
+    :diagnostic-history [],
+    :commit "12ef79662ac42acf4d12d2a5eda17c8d1d55dfad",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path
+     "/tmp/manifold_fundamental_class_homology_preservation_bridge.lean",
+     :original-sha256
+     "f2ebb13678a10179103f85f7f155042c4d1f763509a3926a370a15b6d8c93fb9",
+     :sha256
+     "bc40cad2a9618c7e88d3766ed659aea404d12a22bab89be7c6d5ea8c89993cd6",
+     :placeholders 0},
+    :implementation
+    {:declaration
+     "ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_hom",
+     :representation
+     {:source
+      "The hom morphism of integralRelativeHomologyComparisonWithTransport between forgotten coefficient-relative homology and production relative homology",
+      :target
+      "The explicit composite of inverse homology preservation for forgetIntModules followed by homologyMap of integralRelativeChainsComparisonWithTransport",
+      :direction
+      "Exact morphism equality expanding the packaged transport-explicit homology comparison from its source representation to its canonical preservation-and-chain-homology composite"}},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/corrected-homology-preservation-bridge",
@@ -8721,11 +8799,13 @@
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_hom",
     :reported-by
-    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+     :routes-2026-10-11-manifold-corrected-homology-comparison-hom-topo3-r1],
     :type
     "forall {X : Type} [TopologicalSpace X] (A : Set X) (n : Nat), (integralRelativeHomologyComparisonWithTransport A n).hom = (((CoefficientRelativeSmall.relativeChains Int A).sc n).mapHomologyIso forgetIntModules).inv ≫ HomologicalComplex.homologyMap (integralRelativeChainsComparisonWithTransport A).hom n",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in
+    :routes-2026-10-11-manifold-corrected-homology-comparison-hom-topo3-r1},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-integralrelativehomologycomparisonwithtransport-hom,
    :kind :lemma,
