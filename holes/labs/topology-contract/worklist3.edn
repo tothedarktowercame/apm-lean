@@ -9004,6 +9004,24 @@
      "Equality of the corrected relative comparison followed by ambient normalization with the forward coefficient chart normalization followed by negative identity",
      :direction
      "Logical equivalence from the packaged negative-automorphism equation to the coefficient-normalization-cancelled composite equation, with the reverse direction recovered by the inverse isomorphism"},
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791697372936-4388-07aa8269",
+     :commands
+     ["git show and git diff-tree recorded commit scope"
+      "git blob identity check"
+      "sha256sum frozen fixture"
+      "recompute frozen statement sha256"
+      "git diff --check recorded commit"
+      "lake env lean renamed frozen-fixture replay"
+      "lake env lean target module"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"
+      "placeholder and axiom scan"
+      "python3 scripts/statement-registry.py check"
+      "consumer placeholder census"],
+     :finding
+     "PASS: recorded commit 5913191f changes only the target module and its blob matches the reviewed checkout; frozen fixture hash 179576c3e09cade46208e63e00320ccc41533cdf151300bba796d7419254a96c and frozen statement hash 6ef5b364c09bd15fc2dfe8e7961c14491ef1977fd5ac6fd3c7c8d028a629669b both match. The theorem proves the exact registered equivalence in both directions by composing with the coefficient isomorphism hom and inverse respectively, correctly translating negative corrected-normalization automorphism into the coefficient-normalization-cancelled composite equation. It leaves coefficient normalization, corrected comparison, and ambient normalization opaque and makes no sign-selection or fundamental-class claim. Renamed fixture replay, target elaboration, and Lake build pass; axioms are exactly propext, Classical.choice, Quot.sound; registry is 131/0; target placeholders are 0 and consumer baselines t00J02/t98A02 remain 1/1."},
     :commit "5913191fc8276bd79971c0bfb17fcebb20eb7688",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -9022,7 +9040,7 @@
     :routes-2026-10-11-manifold-corrected-automorphism-neg-cancel-coefficient-topo3-r1,
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/cancel-coefficient-normalization-from-negative-automorphism",
@@ -9209,7 +9227,7 @@
      "Cancelling the inverse coefficient normalization converts the forbidden negative corrected automorphism into an equality whose right side contains the forward coefficient chart normalization. This compiled comparison makes CoefficientChartLocal.forward_composite applicable without unfolding the packaged automorphism. The remaining work is to expose the corrected comparison factorization and compare it, together with the banked ambient factorization, against the coefficient connecting, radial, and sphere normalization chain.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -12658,7 +12676,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -12675,7 +12693,10 @@
     "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), (correctedLocalNormalizationAutomorphism k x).hom = -𝟙 _ <-> (integralRelativeHomologyComparisonWithTransport (deletedPoint x) (k + 2)).hom ≫ (ambientLocalNormalization k x).hom = (forgetIntModules.mapIso (CoefficientChartLocal.localIso Int k x)).hom ≫ (-𝟙 _)",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-corrected-automorphism-neg-cancel-coefficient-topo3-r1},
+    :routes-2026-10-11-manifold-corrected-automorphism-neg-cancel-coefficient-topo3-r1,
+    :banked-by
+    :routes-2026-10-11-manifold-corrected-automorphism-neg-cancel-coefficient-topo3-r1,
+    :banked-commit "5913191fc8276bd79971c0bfb17fcebb20eb7688"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-correctedlocalnormalizationautomorphism-hom-eq-neg-iff-after-coefficient,
    :kind :lemma,
