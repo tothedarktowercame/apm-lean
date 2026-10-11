@@ -13968,8 +13968,82 @@
   {:consumer :t00J02,
    :implements-lemma
    :lemma-mfclass-coefficient-pair-inclusion-opcycles-preservation,
+   :evidence
+   {:placeholder-delta
+    {:t00J02 {:before 1, :after 1, :delta 0},
+     :t98A02 {:before 1, :after 1, :delta 0}},
+    :residual
+    "Assemble the exact-functor comparison between coefficientOpenDiskSnakeInput after forgetting and forgottenCoefficientOpenDiskSnakeInput using the homology, cycles, and opcycles preservation squares, then apply naturality_δ.",
+    :gates
+    {:module-compile :pass,
+     :target-build :pass,
+     :statement-registry "131 registered statements match, 0 do not",
+     :scoped-diff :pass,
+     :forbidden-placeholder-scan :pass,
+     :scoped-worktree-clean true},
+    :outcome :done-unreviewed,
+    :warnings
+    ["The target build replayed pre-existing linter warnings outside this scoped change."
+     "An unrelated pre-existing modification to ConstructionTargets/t97A04Closure.lean remains untouched."],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.ManifoldFundamentalClass.coefficientPairInclusion_mapOpcyclesIso_naturality",
+      :type
+      "forall {X : Type} [TopologicalSpace X] (A : Set X) (n : ℕ), let φ := CoefficientRelativeSmall.subspaceMap ℤ A; let ψ := (HomologicalComplex.shortComplexFunctor (ModuleCat ℤ) (ComplexShape.down ℕ) n).map φ; forgetIntModules.map (ShortComplex.opcyclesMap ψ) ≫ (((CoefficientH0.SingularChains ℤ (TopCat.of X)).sc n).mapOpcyclesIso forgetIntModules).inv = (((CoefficientH0.SingularChains ℤ (TopCat.of A)).sc n).mapOpcyclesIso forgetIntModules).inv ≫ ShortComplex.opcyclesMap (forgetIntModules.mapShortComplex.map ψ)",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on [],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes
+    {:module
+     "c0c29e3d4d7cba02f667f68ac7cae991330815e1917c990af7965478bd14f595",
+     :fixture
+     "3cc4498ad3e10b1bf063c6f0b5fc8f0c1e82df57fc20eb0cee1f4f405d0a087a"},
+    :disposition :done-unreviewed,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :topo-10,
+    :reason
+    "Specialized ShortComplex.mapOpcyclesIso_inv_naturality to the integral coefficient subspace inclusion, proving the required opcycles comparison after forgetting coefficients.",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/manifold_fundamental_class_coefficient_inclusion_opcycles_preservation.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "git diff --check HEAD^ HEAD -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "comment-stripped placeholder counts for t00J02 t98A02",
+      :exit 0}
+     {:cmd
+      "forbidden placeholder scan in ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "git status --short -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}],
+    :diagnostic-history [],
+    :commit "adeb599e5959856ec3b55ff881f4118467a52f39",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path
+     "/tmp/manifold_fundamental_class_coefficient_inclusion_opcycles_preservation.lean",
+     :sha256
+     "3cc4498ad3e10b1bf063c6f0b5fc8f0c1e82df57fc20eb0cee1f4f405d0a087a"},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :declaration
+     "ConstructionTargets.ManifoldFundamentalClass.coefficientPairInclusion_mapOpcyclesIso_naturality"},
+    :row
+    :routes-2026-10-11-manifold-coefficient-pair-inclusion-opcycles-preservation-topo3-r1,
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/integral-open-disk-connecting-naturality/snake-input-opcycles",
@@ -20906,11 +20980,13 @@
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.coefficientPairInclusion_mapOpcyclesIso_naturality",
     :reported-by
-    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+     :routes-2026-10-11-manifold-coefficient-pair-inclusion-opcycles-preservation-topo3-r1],
     :type
     "forall {X : Type} [TopologicalSpace X] (A : Set X) (n : ℕ), let φ := CoefficientRelativeSmall.subspaceMap ℤ A; let ψ := (HomologicalComplex.shortComplexFunctor (ModuleCat ℤ) (ComplexShape.down ℕ) n).map φ; forgetIntModules.map (ShortComplex.opcyclesMap ψ) ≫ (((CoefficientH0.SingularChains ℤ (TopCat.of X)).sc n).mapOpcyclesIso forgetIntModules).inv = (((CoefficientH0.SingularChains ℤ (TopCat.of A)).sc n).mapOpcyclesIso forgetIntModules).inv ≫ ShortComplex.opcyclesMap (forgetIntModules.mapShortComplex.map ψ)",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in
+    :routes-2026-10-11-manifold-coefficient-pair-inclusion-opcycles-preservation-topo3-r1},
    :id :lemma-mfclass-coefficient-pair-inclusion-opcycles-preservation,
    :kind :lemma,
    :depends-on
