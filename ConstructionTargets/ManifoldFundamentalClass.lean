@@ -762,6 +762,23 @@ theorem coefficientPairInclusion_mapHomologyIso_naturality
         ((forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ)).map φ) n
   exact hpres
 
+/-- Inverse cycles preservation is natural for the coefficient subspace
+inclusion. -/
+theorem coefficientPairInclusion_mapCyclesIso_naturality
+    {X : Type} [TopologicalSpace X] (A : Set X) (n : ℕ) :
+    let φ := CoefficientRelativeSmall.subspaceMap ℤ A
+    let ψ := (HomologicalComplex.shortComplexFunctor (ModuleCat ℤ)
+      (ComplexShape.down ℕ) n).map φ
+    forgetIntModules.map (ShortComplex.cyclesMap ψ) ≫
+        (((CoefficientH0.SingularChains ℤ (TopCat.of X)).sc n).mapCyclesIso
+          forgetIntModules).inv =
+      (((CoefficientH0.SingularChains ℤ (TopCat.of A)).sc n).mapCyclesIso
+          forgetIntModules).inv ≫
+        ShortComplex.cyclesMap
+          (forgetIntModules.mapShortComplex.map ψ) := by
+  dsimp only
+  exact ShortComplex.mapCyclesIso_inv_naturality _ _
+
 /-- The corrected relative-homology comparison intertwines the coefficient
 absolute-to-relative map with the production relative projection. -/
 theorem integralRelativeHomologyComparisonWithTransport_projection
@@ -1719,6 +1736,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_hom
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientRelativeProjection_mapHomologyIso_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientPairInclusion_mapHomologyIso_naturality
+#print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientPairInclusion_mapCyclesIso_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
