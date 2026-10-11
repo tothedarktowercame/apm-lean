@@ -79283,7 +79283,7 @@
   {:consumer :t97A04,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 5,
+   :stop-count 6,
    :evidence
    {:placeholder-delta 0,
     :residual
@@ -79329,24 +79329,13 @@
       :exit 1,
       :finding
       "Removed a solved tactic and supplied Circle path-connectedness."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791726245142-5433-17fdf1f3",
-     :commands
-     ["git show/check/diff-tree bb0f0f77d"
-      "lake env lean ConstructionTargets/t97A04Closure.lean"
-      "lake env lean problems/t97A04/lean/Main.lean"
-      "statement-registry check/fingerprint and placeholder counts"],
-     :finding
-     "PASS: new compiled progress after the latest history entry. Commit changes only the scoped closure and correctly transfers the π1 power formula through degree-one Hurewicz naturality and surjectivity, yielding H1(circleZPow a)=a times identity with the claimed orientation. Blob matches 3da36251. Closure is sorry-free with standard axioms; Main compiles with unchanged 2 placeholders. Registry is 131/0 and frozen statement SHA-256 remains ca1b2cb3c6594276811618321d5c0604c2f38fc4594a6b21ae161a711a923a34. Transported overlap summands and B6-B11 remain listed."},
     :commit "bb0f0f77d8953dc78dd564e000f3d4a5b29d0894",
     :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
     :finding
     "Hurewicz transfer proves H1(circleZPow a)=a times identity.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
