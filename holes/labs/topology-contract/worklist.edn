@@ -116062,19 +116062,19 @@
    :depends-on [],
    :other-consumers []}
   {:consumer :t95J02,
-   :stop-count 6,
+   :stop-count 7,
    :review-finding
    "B7 reverses the functorial composition. Because beta.comp reflection is beta after reflection, homotopy invariance gives H1(beta) = H1(reflection) ≫ H1(beta), not H1(beta) ≫ H1(reflection). The written composite is ill-typed: H1(beta) lands in Klein-bottle homology, while H1(reflection) is an endomorphism of sphere homology. Reverse the factors, then use integral_circle 1 to derive H1(beta)(g) = H1(beta)(-g).",
    :evidence
    {:blueprint
     {:path "ConstructionTargets/t95J02Closure.blueprint.md",
      :sha256
-     "1eb491a78d82ecd1984133a63e8169cf76570a0a6e90b11c86dc72c98ab2c90e",
+     "cfe2fad21523dea7ee50c348c0591228bfb5e1c5ba20c26e1bc1d05e49b554d7",
      :nodes
      [{:id :B1, :status :proved}
       {:id :B2, :status :proved}
       {:id :B3, :status :proved}
-      {:id :B4, :status :planned}
+      {:id :B4, :status :proved}
       {:id :B5, :status :planned}
       {:id :B6, :status :planned}
       {:id :B7, :status :planned}
@@ -116082,15 +116082,15 @@
       {:id :B9, :status :planned}]},
     :placeholder-delta {:source-before 3, :source-after 3},
     :residual
-    "B4-B9 remain; next classify verticalParam fibers, then use that classification to construct t95J02CircleB_homeo.",
+    "B5-B9 remain; next construct t95J02CircleB_homeo, then the coordinate-1 reflection homotopy.",
     :outcome :stop,
     :warnings
     [{:kind :existing-placeholders,
       :message
-      "The compiler reports the three pre-existing sorries in B7-B9; this bounded B3 job introduced none."}
+      "The compiler reports the three pre-existing sorries in B7-B9; this bounded B4 job introduced none."}
      {:kind :concurrent-worktree-change,
       :message
-      "ConstructionTargets/t97A04Closure.lean was modified by another process and was preserved unmodified and uncommitted."}],
+      "ConstructionTargets/ManifoldFundamentalClass.lean and holes/labs/topology-contract/topology-build-loop.sh were modified by another process and were preserved unmodified and uncommitted."}],
     :missing-theorems
     [{:name "t95J02Closure.separatingMap",
       :type
@@ -116106,13 +116106,20 @@
       :consumers [:t95J02],
       :depends-on [],
       :area "klein-bottle-homology"}
-     {:name "t95J02Closure.t95J02CircleB_homeo",
-      :type "euclideanUnitSphere 2 ≃ₜ t95J02CircleB",
-      :status :not-started,
+     {:name "t95J02Closure.verticalParam_eq_iff",
+      :type
+      "verticalParam y = verticalParam y' iff there is an integer n with y' = y + n",
+      :status :proved,
       :consumers [:t95J02],
       :depends-on
       ["t95J02Closure.separatingMap"
        "t95J02Closure.verticalParam_add_int"],
+      :area "klein-bottle-homology"}
+     {:name "t95J02Closure.t95J02CircleB_homeo",
+      :type "euclideanUnitSphere 2 ≃ₜ t95J02CircleB",
+      :status :not-started,
+      :consumers [:t95J02],
+      :depends-on ["t95J02Closure.verticalParam_eq_iff"],
       :area "klein-bottle-homology"}
      {:name "t95J02Closure.t95J02_beta_homotopic_beta_reflection",
       :type
@@ -116138,25 +116145,25 @@
       :area "klein-bottle-homology"}],
     :statement-hashes
     {:source-sha256
-     "36e2e92959f53cbd33efdc9d638ec3b642aa8c2e33815b330aa0a6c0f6070b89",
+     "2bccd73a93c7ae3a356b794f92b926cc2c6a789e759172c664b97fb285bc8ba6",
      :blueprint-sha256
-     "1eb491a78d82ecd1984133a63e8169cf76570a0a6e90b11c86dc72c98ab2c90e",
+     "cfe2fad21523dea7ee50c348c0591228bfb5e1c5ba20c26e1bc1d05e49b554d7",
      :registry "131 registered statements match, 0 do not"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Program milestone completed. Blueprint node B3 is proved: verticalParam is continuous and invariant under translation by every integer, including negative integers, using the frozen vertical quotient identity. B4-B9 remain for later jobs.",
+    "Program milestone completed. Blueprint node B4 is proved: two vertical parameters represent the same CircleB point exactly when they differ by an integer. The forward proof uses the descended separating coordinate and Circle.exp_eq_exp; the reverse proof uses B3 periodicity. B5-B9 remain.",
     :commands
     [{:cmd "lake env lean problems/t95J02/lean/Main.lean",
       :exit 0,
       :finding
-      "The module compiles; B3 is placeholder-free and the three pre-existing program placeholders remain."}
+      "The module compiles; B4 is placeholder-free and the three pre-existing program placeholders remain."}
      {:cmd
-      "python3 comment-stripped B3 and source placeholder validation",
+      "python3 comment-stripped B4 and source placeholder validation",
       :exit 0,
       :finding
-      "B3 contains zero sorry, admit, or axiom tokens; the whole source remains at three sorries; blueprint marks B3 proved."}
+      "B4 contains zero sorry, admit, or axiom tokens; the whole source remains at three sorries; blueprint marks B4 proved."}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131 registered statements match, 0 do not."}
@@ -116164,50 +116171,35 @@
       "git diff --check -- problems/t95J02/lean/Main.lean ConstructionTargets/t95J02Closure.blueprint.md",
       :exit 0}
      {:cmd
-      "git commit -m Prove-t95J02-vertical-parametrization-periodicity",
+      "git commit -m Classify-t95J02-vertical-parametrization-fibers",
       :exit 0,
       :finding
-      "Committed the two scoped files as e718d3d5477de7d1630ef32995973fbd8e996aa7."}
+      "Committed the two scoped files as a60f6f09130debe9f8f2ef78b705c27b251ce4a4."}
      {:cmd
       "sha256sum problems/t95J02/lean/Main.lean ConstructionTargets/t95J02Closure.blueprint.md",
       :exit 0,
       :finding
-      "Hashes are 36e2e92959f53cbd33efdc9d638ec3b642aa8c2e33815b330aa0a6c0f6070b89 and 1eb491a78d82ecd1984133a63e8169cf76570a0a6e90b11c86dc72c98ab2c90e."}],
+      "Hashes are 2bccd73a93c7ae3a356b794f92b926cc2c6a789e759172c664b97fb285bc8ba6 and cfe2fad21523dea7ee50c348c0591228bfb5e1c5ba20c26e1bc1d05e49b554d7."}],
     :diagnostic-history
     [{:cmd "lake env lean problems/t95J02/lean/Main.lean",
       :exit 1,
       :finding
-      "Initial B3 proof used an invalid coercion from the subtype-valued parametrization and ambiguous natural casts; corrected with explicit subtype projection and real casts."}
+      "Initial B4 proof tried to rewrite real sine and cosine equalities directly inside complex trigonometric expressions and used B3 in the wrong equality orientation; corrected with explicit ofReal rewrites and symmetry."}
      {:cmd "lake env lean problems/t95J02/lean/Main.lean",
       :exit 1,
       :finding
-      "Intermediate negative-integer rewrite normalized the cast differently from the target; corrected with an exact cast-shaped equality and a typed calculation."}],
+      "Intermediate Complex.ext proof did not normalize complex sine and cosine on real arguments; corrected by rewriting through Complex.ofReal_cos and Complex.ofReal_sin before applying the coordinate equalities."}],
     :continue-from
-    {:commit "e718d3d5477de7d1630ef32995973fbd8e996aa7",
+    {:commit "a60f6f09130debe9f8f2ef78b705c27b251ce4a4",
      :next
-     "Implement B4, classifying verticalParam fibers using separatingMap and the equality of cosine-sine coordinates."},
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791720490725-5308-d84e8836",
-     :commands
-     ["git show e718d3d5477de7d1630ef32995973fbd8e996aa7 --stat and scoped diff"
-      "git diff-tree --name-status e718d3d5477de7d1630ef32995973fbd8e996aa7"
-      "git diff --quiet recorded commit against scoped working files"
-      "sha256sum recorded source and blueprint"
-      "git diff --check recorded commit"
-      "comment-stripped placeholder count"
-      "python3 scripts/statement-registry.py check"
-      "lake env lean problems/t95J02/lean/Main.lean"],
-     :finding
-     "PASS: this STOP adds compiled, placeholder-free B3 progress after program-history commit 066b6bdc352d209e1b15ae5f53a357b520be4775. verticalParam is continuous into the exact frozen CircleB subtype, and verticalParam_add_int proves invariance for positive and negative integers from the frozen vertical quotient identity with the stated orientation. Scope and recorded hashes reproduce, registry reports 131 matches, and the module compiles with standard axioms. The three pre-existing B7-B9 placeholders remain exactly the declared residual."},
-    :commit "e718d3d5477de7d1630ef32995973fbd8e996aa7",
+     "Implement B5 by descending verticalParam to AddCircle 1, transporting through AddCircle.homeomorphCircle and CircleHomology.circleHomeomorphSphereOne, and using B4 for injectivity."},
+    :commit "a60f6f09130debe9f8f2ef78b705c27b251ce4a4",
     :changed-paths
     ["problems/t95J02/lean/Main.lean"
      "ConstructionTargets/t95J02Closure.blueprint.md"],
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t95J02/lean/Main.lean"
     "problems/t95J02/status.json"
@@ -117044,7 +117036,8 @@
    :kind :lemma,
    :depends-on
    [:lemma-t95j02closure-separatingmap
-    :lemma-t95j02closure-verticalparam-add-int],
+    :lemma-t95j02closure-verticalparam-add-int
+    :lemma-t95j02closure-verticalparam-eq-iff],
    :other-consumers []}
   {:consumer :t95J02,
    :phase :lemma,
@@ -117121,6 +117114,27 @@
    :id :lemma-t95j02closure-verticalparam-add-int,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t95J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t95J02Closure.verticalParam_eq_iff",
+    :type
+    "verticalParam y = verticalParam y' iff there is an integer n with y' = y + n"},
+   :lemma
+   {:name "t95J02Closure.verticalParam_eq_iff",
+    :reported-by [:program-2026-10-11-close-t95j02],
+    :type
+    "verticalParam y = verticalParam y' iff there is an integer n with y' = y + n",
+    :area "klein-bottle-homology",
+    :proved-in :program-2026-10-11-close-t95j02},
+   :id :lemma-t95j02closure-verticalparam-eq-iff,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t95j02closure-separatingmap
+    :lemma-t95j02closure-verticalparam-add-int],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
