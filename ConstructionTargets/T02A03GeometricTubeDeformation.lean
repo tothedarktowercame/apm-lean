@@ -827,6 +827,28 @@ theorem avoidsLeftCore_rightTubeRadialAmbientDeformation
       (Circle.coe_ne_zero (rightTubeMeridianCoordinate tp.2))
   exact hne hz
 
+theorem reconstructionMemRightTube_rightTubeCorePolar
+    (u : Circle) (n : Complex) (hn : ‖n‖ ≤ (1 / 4 : Real)) :
+    rightTubeCorePolarReconstruction u n ∈ apm_t02a03_rightTube := by
+  rw [apm_t02a03_rightTube,
+    isCompact_range_rightCore.cthickening_eq_biUnion_closedBall (by norm_num)]
+  simp only [Set.mem_iUnion, Metric.mem_closedBall]
+  refine ⟨rightCoreCircle u, ?_, ?_⟩
+  · rw [← range_rightCoreCircle]
+    exact ⟨u, rfl⟩
+  · rw [dist_eq_norm, EuclideanSpace.norm_eq]
+    have hu : (u : Complex).re * (u : Complex).re +
+        (u : Complex).im * (u : Complex).im = 1 := by
+      have h := Complex.sq_norm (u : Complex)
+      rw [Circle.norm_coe] at h
+      simpa [Complex.normSq_apply, pow_two] using h.symm
+    simp [rightTubeCorePolarReconstruction, rightCoreCircle, Fin.sum_univ_succ]
+    rw [show
+        ((u : Complex).re - (1 - n.re) * (u : Complex).re) ^ 2 +
+          (((1 - n.re) * (u : Complex).im - (u : Complex).im) ^ 2 + n.im ^ 2) =
+        n.re ^ 2 + n.im ^ 2 by nlinarith]
+    simpa [Complex.norm_def, Complex.normSq_apply, pow_two] using hn
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -854,3 +876,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.positiveReconstructionRadius_rightTubeRadialNormalInterpolation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.recoveredNormal_rightTubeRadialAmbientDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.avoidsLeftCore_rightTubeRadialAmbientDeformation
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.reconstructionMemRightTube_rightTubeCorePolar
