@@ -103932,7 +103932,9 @@
      :status :self-axiomatized},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :owner-repair
+   "codex-71 2026-10-11: the four-formula carrier acceptance is refuted (KleinDiskClosedSquareCompatibleCarrier.lean:31); the bridge is redesigned as lemma kleinOrbitQuotient_homeomorph via polygon cut-and-paste.",
+   :state :superseded,
    :scope
    ["ConstructionTargets/KleinDiskClosedSquareCompatibleCarrier.lean"],
    :dag-node
@@ -104080,7 +104082,7 @@
       "A compatible disk-to-closed-square carrier preserving and reflecting generated boundary fibers yields the required quotient homeomorphism."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-aabb-square-polygon-presentation-equivalence",
@@ -104107,8 +104109,7 @@
    :area "polygon-quotient-identification",
    :depends-on
    [:lemma-kleinsquareeqvgencasesiff-eqvgen-iff-cases
-    :routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40
-    :routes-2026-10-11-klein-disk-closed-square-compatible-carrier-87],
+    :routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
    :current-residual
    "Use the presentation comparison in the Klein orbit quotient homeomorphism, then close t93J03.",
    :other-consumers []}
@@ -105940,8 +105941,10 @@
     :area "deck-group-fundamental-group"},
    :id :lemma-kleinorbitquotient-homeomorph,
    :kind :lemma,
-   :depends-on [:lemma-kleinsquareboundaryorbiteqvgen],
-   :other-consumers []}
+   :depends-on
+   [:lemma-kleinsquareboundaryorbiteqvgen
+    :lemma-kleinclosedsquareorbitquotientequiv-closedsquareorbitquotientequiv],
+   :other-consumers [:t96A02]}
   {:consumer :t97A03,
    :phase :lemma,
    :state :backlog,
@@ -111229,6 +111232,104 @@
    :id :lemma-t99j01componentinclusion-pi1-bijective,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "KleinClosedSquareOrbitQuotientEquiv.closedSquareOrbitQuotientEquiv",
+    :type
+    "noncomputable def closedSquareOrbitQuotientEquiv : Quotient closedSquareOrbitSetoid ≃ Quotient orbitSetoid  (codex-71 e58750725)"},
+   :lemma
+   {:name
+    "KleinClosedSquareOrbitQuotientEquiv.closedSquareOrbitQuotientEquiv",
+    :reported-by [:owner],
+    :type
+    "noncomputable def closedSquareOrbitQuotientEquiv : Quotient closedSquareOrbitSetoid ≃ Quotient orbitSetoid  (codex-71 e58750725)",
+    :area "polygon-quotient-identification",
+    :proved-in :owner,
+    :banked-by :owner,
+    :banked-commit "e58750725"},
+   :id
+   :lemma-kleinclosedsquareorbitquotientequiv-closedsquareorbitquotientequiv,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "freeProperlyDiscontinuousQuotient_fundamentalGroupEquiv",
+    :type
+    "for a simply connected, locally path-connected space with a free properly discontinuous action of G, π₁ of the quotient ≃* G (deck-group theorem; reusable; 250-500 lines with the Klein specialisation)"},
+   :lemma
+   {:name "freeProperlyDiscontinuousQuotient_fundamentalGroupEquiv",
+    :reported-by [:owner],
+    :type
+    "for a simply connected, locally path-connected space with a free properly discontinuous action of G, π₁ of the quotient ≃* G (deck-group theorem; reusable; 250-500 lines with the Klein specialisation)",
+    :area "deck-group-fundamental-group"},
+   :id :lemma-freeproperlydiscontinuousquotient-fundamentalgroupequiv,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t99J01 :t00A02 :t00J07 :t92J05]}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "kleinFundamentalGroupEquiv",
+    :type
+    "theorem kleinFundamentalGroupEquiv (k : KleinBottle) : Nonempty (FundamentalGroup KleinBottle k ≃* T93J03.PresentedKleinGroup)"},
+   :lemma
+   {:name "kleinFundamentalGroupEquiv",
+    :reported-by [:owner],
+    :type
+    "theorem kleinFundamentalGroupEquiv (k : KleinBottle) : Nonempty (FundamentalGroup KleinBottle k ≃* T93J03.PresentedKleinGroup)",
+    :area "deck-group-fundamental-group"},
+   :id :lemma-kleinfundamentalgroupequiv,
+   :kind :lemma,
+   :depends-on
+   [:lemma-freeproperlydiscontinuousquotient-fundamentalgroupequiv
+    :lemma-kleinorbitquotient-homeomorph],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "kleinCyclicCylinderCover",
+    :type
+    "∃ (C : Type) (_ : TopologicalSpace C) (p : C → KleinBottle) (jC : C(C, ℝ × ℝ)), IsCoveringMap p ∧ Topology.IsEmbedding jC ∧ ∀ c, e ((coveringInducedFundamentalGroupMap _ c).range) = Subgroup.zpowers generatorA  (cylinder = plane / horizontal translations; 200-400 lines)"},
+   :lemma
+   {:name "kleinCyclicCylinderCover",
+    :reported-by [:owner],
+    :type
+    "∃ (C : Type) (_ : TopologicalSpace C) (p : C → KleinBottle) (jC : C(C, ℝ × ℝ)), IsCoveringMap p ∧ Topology.IsEmbedding jC ∧ ∀ c, e ((coveringInducedFundamentalGroupMap _ c).range) = Subgroup.zpowers generatorA  (cylinder = plane / horizontal translations; 200-400 lines)",
+    :area "covering-subgroup-correspondence"},
+   :id :lemma-kleincycliccylindercover,
+   :kind :lemma,
+   :depends-on [:lemma-kleinfundamentalgroupequiv],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "liftOfInclusion_isEmbedding",
+    :type
+    "theorem liftOfInclusion_isEmbedding (hF : p ∘ F = T93J03.inclusion X) : Topology.IsEmbedding F  (50-100 lines; lift via the banked subgroup-containment lifting criterion, 30-70 lines)"},
+   :lemma
+   {:name "liftOfInclusion_isEmbedding",
+    :reported-by [:owner],
+    :type
+    "theorem liftOfInclusion_isEmbedding (hF : p ∘ F = T93J03.inclusion X) : Topology.IsEmbedding F  (50-100 lines; lift via the banked subgroup-containment lifting criterion, 30-70 lines)",
+    :area "covering-subgroup-correspondence"},
+   :id :lemma-liftofinclusion-isembedding,
+   :kind :lemma,
+   :depends-on [:lemma-kleincycliccylindercover],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
