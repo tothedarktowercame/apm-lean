@@ -71196,52 +71196,73 @@
    "single-consumer angle-parametric deletion invariant for the zero-height detour",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:residual
-     "Implement angle-parametric deletion avoidance, then construct the continuous coupled angular coordinate and reconstruct the zero-height ambient stage with endpoint equations and right-tube membership.",
-     :outcome :go,
-     :warnings [],
-     :axioms [propext Classical.choice Quot.sound],
-     :commands
-     [{:cmd
-       "lake env lean /tmp/t02a03_coupled_detour_avoidance_probe.lean",
-       :exit 0,
-       :output
-       "zeroHeightCoupledDetour_avoidsLeftCore compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "sha256sum /tmp/t02a03_coupled_detour_avoidance_probe.lean",
-       :exit 0,
-       :output
-       "b97e245af3ce1583f7f78faea83fadd8e17c7989a3c6667a0b6e8b5ebc49f3ae  /tmp/t02a03_coupled_detour_avoidance_probe.lean"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_coupled_detour_avoidance_probe.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}
-      {:cmd
-       "rg -n 'zeroHeightCoupledDetour_avoidsLeftCore' /tmp/t02a03_coupled_detour_avoidance_probe.lean",
-       :exit 0,
-       :output
-       "5:theorem zeroHeightCoupledDetour_avoidsLeftCore\n25:#print axioms zeroHeightCoupledDetour_avoidsLeftCore"}],
-     :fixture
-     {:path "/tmp/t02a03_coupled_detour_avoidance_probe.lean",
-      :sha256
-      "b97e245af3ce1583f7f78faea83fadd8e17c7989a3c6667a0b6e8b5ebc49f3ae"},
-     :finding
-     "The placeholder-free fixture proves deletion avoidance for every angular coordinate at interior detour times and reduces the two endpoint cases exactly to the supplied endpoint-angle equations.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
-      :declaration
-      "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCoupledDetour_avoidsLeftCore",
-      :type
-      "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> forall (t : unitInterval) (u : Circle), ((t : ℝ) = 0 -> u = 1) -> ((t : ℝ) = 1 -> u = rightTubeCoreAngularCoordinate p) -> rightTubeCorePolarReconstruction u (zeroHeightCoreNormalDetour t p) ∉ Set.range apm_t02a03_leftCore"},
-     :seat "topo-8"}},
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Construct the continuous coupled angular coordinate with values 1 at time zero and rightTubeCoreAngularCoordinate p at time one, then reconstruct the zero-height ambient stage; its deletion invariant follows immediately from this theorem and its tube membership from the banked radius bound.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["Pre-existing unnecessarySimpa linter warning at ConstructionTargets/T02A03GeometricTubeDeformation.lean:62:6."
+     "The canonical .lake/packages symlink invariant check failed because this checkout has a real package directory."],
+    :missing-theorems [],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not",
+     :construction-file-git-blob
+     "2fbebb95264e65494ad5c12dc60ce6c45f49608f",
+     :fixture-sha256
+     "b97e245af3ce1583f7f78faea83fadd8e17c7989a3c6667a0b6e8b5ebc49f3ae"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd "sha256sum /tmp/t02a03_coupled_detour_avoidance_probe.lean",
+      :exit 0,
+      :output
+      "b97e245af3ce1583f7f78faea83fadd8e17c7989a3c6667a0b6e8b5ebc49f3ae  /tmp/t02a03_coupled_detour_avoidance_probe.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/t02a03_coupled_detour_avoidance_probe.lean",
+      :exit 0,
+      :output
+      "zeroHeightCoupledDetour_avoidsLeftCore axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "git diff --check -- ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd
+      "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "git show --format= --unified=0 HEAD -- ConstructionTargets/T02A03GeometricTubeDeformation.lean | rg '^\\+.*(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' --pcre2",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git show --check --oneline HEAD",
+      :exit 0,
+      :output "68408bd48 Add t02A03 coupled detour avoidance"}
+     {:cmd "git status --porcelain", :exit 0}],
+    :diagnostic-history
+    [{:cmd
+      "test -L .lake/packages && test \"$(readlink -f .lake/packages)\" = /home/joe/code/apm-lean/.lake/packages",
+      :exit 1,
+      :explanation
+      ".lake/packages is a real directory rather than the required canonical symlink; no package state was modified and compilation succeeded on the existing substrate."}],
+    :commit "68408bd488d80057fc2b9ac2e06fd98a2d97dd42",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+    :fixture
+    {:path "/tmp/t02a03_coupled_detour_avoidance_probe.lean",
+     :sha256
+     "b97e245af3ce1583f7f78faea83fadd8e17c7989a3c6667a0b6e8b5ebc49f3ae"},
+    :finding
+    "For arbitrary angular coordinate, deletion avoidance follows by splitting time zero and time one to the banked endpoint certificates; every strict interior time is safe for every angle because the detour normal has nonzero imaginary coordinate.",
+    :seat "topo-6"},
    :phase :implementation,
    :type
    "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> forall (t : unitInterval) (u : Circle), ((t : ℝ) = 0 -> u = 1) -> ((t : ℝ) = 1 -> u = rightTubeCoreAngularCoordinate p) -> rightTubeCorePolarReconstruction u (zeroHeightCoreNormalDetour t p) ∉ Set.range apm_t02a03_leftCore",
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/zero-height-coupled-detour-avoidance",
