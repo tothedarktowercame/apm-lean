@@ -1011,6 +1011,27 @@ noncomputable def forgetSnakeKernelτ₃Limit
     Cone.ext (Iso.refl _) (by intro j; rcases j with (_ | _) <;> rfl)
   exact (IsLimit.equivIsoLimit e).toFun ht
 
+abbrev ParallelPairZeroπ₁Comparison
+    {C : Type*} [Category C] [HasZeroMorphisms C]
+    {X Y : ShortComplex C} (f : X ⟶ Y) :
+    Type _ := parallelPair f 0 ⋙ ShortComplex.π₁ ≅ parallelPair f.τ₁ 0
+
+/-- Evaluating a parallel-pair diagram of short-complex morphisms at its
+first object agrees with forming the componentwise parallel pair. -/
+noncomputable def scPairZeroπ₁Iso
+    {C : Type*} [Category C] [HasZeroMorphisms C]
+    {X Y : ShortComplex C} (f : X ⟶ Y) :
+    ParallelPairZeroπ₁Comparison f :=
+  NatIso.ofComponents (fun j ↦ match j with
+    | WalkingParallelPair.zero => Iso.refl _
+    | WalkingParallelPair.one => Iso.refl _) (by
+    intro i j g
+    rcases i <;> rcases j <;> rcases g
+    · simpa using ShortComplex.π₁.map_id X
+    · simp
+    · simpa using ShortComplex.π₁.map_zero X Y
+    · simpa using ShortComplex.π₁.map_id Y)
+
 /-- The corrected relative-homology comparison intertwines the coefficient
 absolute-to-relative map with the production relative projection. -/
 theorem integralRelativeHomologyComparisonWithTransport_projection
@@ -1983,6 +2004,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetIntModulesSnakeInput_kernelτ₁IsLimit
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetSnakeKernelτ₂Limit
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetSnakeKernelτ₃Limit
+#print axioms ConstructionTargets.ManifoldFundamentalClass.scPairZeroπ₁Iso
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
