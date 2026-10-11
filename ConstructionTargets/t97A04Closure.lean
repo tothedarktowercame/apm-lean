@@ -210,6 +210,20 @@ theorem twoCircleOverlapShear_eq_transport (a b : ℤ) :
         ((boundaryOverlapShear a b).comp
           overlapHomotopyEquivTwoCircles.invFun) := rfl
 
+/-- The left overlap-circle summand followed by the transported shear. -/
+def twoCircleOverlapShearLeft (a b : ℤ) : C(Circle, Circle ⊕ Circle) :=
+  (twoCircleOverlapShear a b).comp ⟨Sum.inl, continuous_inl⟩
+
+/-- The right overlap-circle summand followed by the transported shear. -/
+def twoCircleOverlapShearRight (a b : ℤ) : C(Circle, Circle ⊕ Circle) :=
+  (twoCircleOverlapShear a b).comp ⟨Sum.inr, continuous_inr⟩
+
+@[simp] theorem twoCircleOverlapShearLeft_apply (a b : ℤ) (z : Circle) :
+    twoCircleOverlapShearLeft a b z = twoCircleOverlapShear a b (Sum.inl z) := rfl
+
+@[simp] theorem twoCircleOverlapShearRight_apply (a b : ℤ) (z : Circle) :
+    twoCircleOverlapShearRight a b z = twoCircleOverlapShear a b (Sum.inr z) := rfl
+
 /-- The integer power map which remains on either overlap component after
 the constant translation in the shear is removed. -/
 def circleZPow (a : ℤ) : C(Circle, Circle) :=
@@ -764,6 +778,10 @@ theorem shearY_overlap_coordinate_of_degree_components (a b : ℤ)
 #print axioms overlapScalar
 #print axioms boundaryOverlapShear
 #print axioms twoCircleOverlapShear
+#print axioms twoCircleOverlapShearLeft
+#print axioms twoCircleOverlapShearRight
+#print axioms twoCircleOverlapShearLeft_apply
+#print axioms twoCircleOverlapShearRight_apply
 #print axioms circleZPow
 #print axioms circleAffine
 #print axioms circleAffineHomotopy
