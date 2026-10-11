@@ -3263,8 +3263,86 @@
   {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-integralmappedrelativecokernelcomparison,
+   :evidence
+   {:placeholder-delta {:source 0, :fixture 0},
+    :residual
+    "Construct the preservation-of-cokernel isomorphism from the forgotten ModuleCat relative cokernel to the cokernel of the forgotten subtype map, compose it with this direct-cokernel comparison and the production RelativeSingularChains cokernel isomorphism, then pass to homology and prove generator transport.",
+    :gates
+    {:module-build :pass,
+     :exact-declaration-type :pass,
+     :standard-axioms-only :pass,
+     :no-forgetful-cokernel-identification :pass,
+     :exact-scope :pass,
+     :statement-registry :pass,
+     :reviewed-square-reused :pass,
+     :zero-placeholders :pass,
+     :clean-tree :pass,
+     :cokernel-map-iso :pass,
+     :fixture-compiles :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["lake build replayed pre-existing warnings from dependency modules; the target module emitted informational axiom reports and no warnings"],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.ManifoldFundamentalClass.integralMappedRelativeCokernelComparison",
+      :type
+      "Canonical comparison between the direct cokernels of the forgotten integral-module and additive-group subtype-inclusion chain maps.",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on
+      ["ConstructionTargets.ManifoldFundamentalClass.integralSingularChainsComparison_subtype_naturality"],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-10",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/manifold_fundamental_class_integral_mapped_relative_cokernel.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/manifold_fundamental_class_integral_mapped_relative_cokernel.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^\\s*axiom\\b' ConstructionTargets/ManifoldFundamentalClass.lean /tmp/manifold_fundamental_class_integral_mapped_relative_cokernel.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git status --porcelain", :exit 0, :stdout ""}],
+    :commit "f75c053915335ac3b30c4c3a8fd9fa9941dd4a2b",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path
+     "/tmp/manifold_fundamental_class_integral_mapped_relative_cokernel.lean",
+     :sha256
+     "2481f55758b8a6e9dc23b6103620878758b0947c4a16f6e4e9e4c790942ede83",
+     :original-sha256
+     "7e1e0da507f8f18f7eca73c3a2fb90c9560d151b4b83894043b3132850a40500",
+     :sorry-count 0},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :declaration
+     "ConstructionTargets.ManifoldFundamentalClass.integralMappedRelativeCokernelComparison",
+     :supporting-declarations
+     ["moduleSubtypeChainMap" "groupSubtypeChainMap"],
+     :representation
+     {:source
+      "The direct cokernel of the forgotten ModuleCat Int subtype-inclusion chain map",
+      :target
+      "The direct cokernel of the AddCommGrpCat subtype-inclusion chain map",
+      :direction
+      "Canonical cokernel isomorphism from the forgotten module-valued direct-cokernel presentation to the additive-group-valued direct-cokernel presentation, induced by the absolute integral chain comparisons and their subtype naturality equality"}},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/integral-relative-direct-cokernel-comparison",
@@ -5533,11 +5611,13 @@
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.integralMappedRelativeCokernelComparison",
     :reported-by
-    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+     :routes-2026-10-11-manifold-integral-mapped-relative-cokernel-topo3-r1],
     :type
     "forall {X : Type} [TopologicalSpace X] (A : Set X), cokernel ((forgetIntModules.mapHomologicalComplex (ComplexShape.down Nat)).map ((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat Int)).obj (ModuleCat.of Int Int)).map (integralSubtypeInclusion A)))) ≅ cokernel ((((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj (AddCommGrpCat.of Int)).map (integralSubtypeInclusion A)))",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in
+    :routes-2026-10-11-manifold-integral-mapped-relative-cokernel-topo3-r1},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-integralmappedrelativecokernelcomparison,
    :kind :lemma,
