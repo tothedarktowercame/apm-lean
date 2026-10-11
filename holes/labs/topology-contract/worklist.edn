@@ -87801,56 +87801,88 @@
   {:consumer :t99J01,
    :owner-reopen
    "codex-71 2026-10-11: IsCoveringMap.restrictPathComponent is banked (ConstructionTargets/RestrictPathComponent.lean:57); remaining: componentCover_isKSheeted, componentInclusion_pi1_bijective",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "design the supporting signatures and discharge the frozen axiom type",
    :evidence
-   {:residual
-    "Implement and review IsCoveringMap.restrictPathComponent with selected-sheet trivializations; then specialize it to ThreeCircles, count fibers, and prove the inclusion-induced pi1 bijection.",
+   {:placeholder-delta
+    {:source-before 0, :source-after 0, :fixture-sorry 0},
+    :residual
+    "Prove local path connectivity and path connectivity for ThreeCircles, apply restrictPathComponent, transport finite fiber cardinality along lifted paths, and prove the component inclusion induces a bijection on fundamental groups.",
     :outcome :stop,
-    :warnings
-    [{:kind :missing-mathematical-prerequisite,
-      :message
-      "Restriction of a covering map to a chosen domain path component, with selected-sheet trivializations, is not banked."}],
+    :warnings [],
+    :missing-theorems
+    [{:name "threeCircles_locPathConnectedSpace",
+      :type "LocPathConnectedSpace ThreeCircles",
+      :status :not-started,
+      :consumers [:t99J01],
+      :depends-on [],
+      :area "covering-subgroup-correspondence"}
+     {:name "t99j01ComponentCover_isKSheeted",
+      :type
+      "For hp : IsKSheetedCover p n and e : E, IsKSheetedCover (t99j01ComponentCoverMap p e) (t99j01ComponentSheets p e).",
+      :status :partial,
+      :consumers [:t99J01],
+      :depends-on ["threeCircles_locPathConnectedSpace"],
+      :area "covering-subgroup-correspondence"}
+     {:name "t99j01ComponentInclusion_pi1_bijective",
+      :type
+      "Function.Bijective (FundamentalGroup.map (t99j01ComponentInclusion e) (t99j01ComponentBase e)).",
+      :status :not-started,
+      :consumers [:t99J01],
+      :depends-on [],
+      :area "covering-subgroup-correspondence"}],
+    :statement-hashes
+    {:source-sha256
+     "2aab6cec0410a9eaab93ca03c721c50520f9ab0a5fe4dc4ae746bb17eafd5e74",
+     :registry "131 registered statements match, 0 do not"},
     :disposition :stop,
-    :axioms
-    ["propext"
-     "Classical.choice"
-     "Quot.sound"
-     "T99J01PathComponentRestrictionProbe.pathComponentRestrictionPackage"],
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Fresh verification shows the same mathematical prerequisite remains absent after the first reviewed repair. The frozen theorem is true in ordinary covering-space theory, but its proof needs a component-restriction theorem not present in Mathlib or ConstructionTargets: theorem IsCoveringMap.restrictPathComponent {E B : Type*} [TopologicalSpace E] [TopologicalSpace B] [LocPathConnectedSpace B] [PathConnectedSpace B] {p : E → B} (hp : IsCoveringMap p) (e : E) : IsCoveringMap (fun x : {x : E // Joined e x} => p x.1). This cannot be obtained merely from openness of path components: each covering trivialization must be refined to a path-connected base neighborhood, its sheets classified by whether they meet the chosen component, the selected-sheet index type transported across the connected base, and surjectivity proved by path lifting. The frozen package then additionally requires constant finite fiber cardinality and factoring loops and null-homotopies through the component subtype to prove the FundamentalGroup map bijective. Those combined covering-space constructions are the row's missing mathematical content and remain too large to replace by an unproved local helper; no standard-only implementation file exists to commit.",
+    "The scoped module now compiles the exact component type, basepoint, inclusion, restricted cover map, component sheet count, positivity, and bound by the original sheet count. Applying the banked IsCoveringMap.restrictPathComponent next fails at the concrete missing instance LocPathConnectedSpace ThreeCircles. After that instance, constant finite fiber cardinality for the restricted cover and bijectivity of the component inclusion on FundamentalGroup remain unproved.",
     :commands
     [{:cmd
-      "sha256sum /tmp/t99j01-path-component-sheet-restriction-probe.lean",
-      :exit 0,
-      :finding "The frozen fixture hash still matches."}
-     {:cmd
-      "rg -n \"restrictPathComponent|pathComponentRestrictionPackage|ComponentCover_isKSheeted|ComponentInclusion_pi1\" ConstructionTargets .lake/packages/mathlib/Mathlib -g '*.lean'",
-      :exit 1,
-      :expected-exit 1,
-      :finding
-      "No component-cover restriction implementation or equivalent banked theorem has appeared."}
+      "lake env lean ConstructionTargets/T99J01PathComponentCoverRestriction.lean",
+      :exit 0}
      {:cmd
       "lake env lean /tmp/t99j01-path-component-sheet-restriction-probe.lean",
       :exit 0,
       :finding
-      "The fixture compiles and still reports pathComponentRestrictionPackage as its only nonstandard axiom."}
+      "The fixture compiles with pathComponentRestrictionPackage as its custom axiom."}
+     {:cmd
+      "rg -n \"\\b(sorry|admit|axiom)\\b\" ConstructionTargets/T99J01PathComponentCoverRestriction.lean",
+      :exit 1,
+      :expected-exit 1}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
-      :finding "131 registered statements match, 0 do not"}
-     {:cmd "git status --short", :exit 0, :finding "clean"}],
+      :finding "131 registered statements match, 0 do not"}],
+    :diagnostic-history
+    [{:cmd
+      "lake env lean ConstructionTargets/T99J01PathComponentCoverRestriction.lean",
+      :exit 1,
+      :finding
+      "The dependency olean was initially absent; building ConstructionTargets.T99J01ComponentSheetBounds corrected the environment."}
+     {:cmd
+      "lake build ConstructionTargets.T99J01ComponentSheetBounds ConstructionTargets.T99J01PathComponentCoverRestriction",
+      :exit 1,
+      :finding
+      "The first draft used an unopened Component abbreviation; replacing it by the literal Joined subtype compiled."}
+     {:cmd
+      "lake env lean ConstructionTargets/T99J01PathComponentCoverRestriction.lean",
+      :exit 1,
+      :finding
+      "The attempted restricted-cover theorem exposed the missing LocPathConnectedSpace ThreeCircles instance."}],
+    :commit "2a752463fd587558869aa84de179336c39d78144",
+    :changed-paths
+    ["ConstructionTargets/T99J01PathComponentCoverRestriction.lean"],
     :fixture
     {:path "/tmp/t99j01-path-component-sheet-restriction-probe.lean",
      :sha256
-     "3931266497ef83433fbbf4d01f17aa1c9a301ab3a69c52ca38aea6f20bcd3b63",
-     :sorry-count 0,
-     :axiom-count 1,
-     :proof-placeholder-count 1},
+     "3931266497ef83433fbbf4d01f17aa1c9a301ab3a69c52ca38aea6f20bcd3b63"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/T99J01PathComponentCoverRestriction.lean"],
    :dag-node
@@ -111022,6 +111054,61 @@
     :banked-by :owner,
     :banked-commit "319ac5ced"},
    :id :lemma-t99j01componentsheetbounds-componentfibercard-pos-le,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t99J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "threeCircles_locPathConnectedSpace",
+    :type "LocPathConnectedSpace ThreeCircles"},
+   :lemma
+   {:name "threeCircles_locPathConnectedSpace",
+    :reported-by
+    [:routes-2026-10-10-t99j01-path-component-cover-package-1],
+    :type "LocPathConnectedSpace ThreeCircles",
+    :area "covering-subgroup-correspondence"},
+   :id :lemma-threecircles-locpathconnectedspace,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t99J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99j01ComponentCover_isKSheeted",
+    :type
+    "For hp : IsKSheetedCover p n and e : E, IsKSheetedCover (t99j01ComponentCoverMap p e) (t99j01ComponentSheets p e)."},
+   :lemma
+   {:name "t99j01ComponentCover_isKSheeted",
+    :reported-by
+    [:routes-2026-10-10-t99j01-path-component-cover-package-1],
+    :type
+    "For hp : IsKSheetedCover p n and e : E, IsKSheetedCover (t99j01ComponentCoverMap p e) (t99j01ComponentSheets p e).",
+    :area "covering-subgroup-correspondence"},
+   :id :lemma-t99j01componentcover-isksheeted,
+   :kind :lemma,
+   :depends-on [:lemma-threecircles-locpathconnectedspace],
+   :other-consumers []}
+  {:consumer :t99J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99j01ComponentInclusion_pi1_bijective",
+    :type
+    "Function.Bijective (FundamentalGroup.map (t99j01ComponentInclusion e) (t99j01ComponentBase e))."},
+   :lemma
+   {:name "t99j01ComponentInclusion_pi1_bijective",
+    :reported-by
+    [:routes-2026-10-10-t99j01-path-component-cover-package-1],
+    :type
+    "Function.Bijective (FundamentalGroup.map (t99j01ComponentInclusion e) (t99j01ComponentBase e)).",
+    :area "covering-subgroup-correspondence"},
+   :id :lemma-t99j01componentinclusion-pi1-bijective,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}],
