@@ -1650,6 +1650,62 @@ theorem coupledAngular_of_nonvanishingComplexPath
     apply Subtype.ext
     simp [A, hZ1, rightTubeCoreAngularCoordinate]
 
+noncomputable def coupledAngularWaypointPath
+    (W : C(RightTubeMinusLeftCore, ℂ))
+    (t : unitInterval) (p : RightTubeMinusLeftCore) : ℂ :=
+  if (t : ℝ) ≤ 1 / 2 then
+    ((1 - 2 * (t : ℝ) : ℝ) : ℂ) + ((2 * (t : ℝ) : ℝ) : ℂ) * W p
+  else
+    ((2 - 2 * (t : ℝ) : ℝ) : ℂ) * W p +
+      ((2 * (t : ℝ) - 1 : ℝ) : ℂ) * rightTubeCorePlanarComplex p.1
+
+set_option maxHeartbeats 800000 in
+theorem nonvanishingComplexPath_of_waypoint
+    (W : C(RightTubeMinusLeftCore, ℂ))
+    (hleft : ∀ (t : unitInterval) (p : RightTubeMinusLeftCore),
+      (t : ℝ) ≤ 1 / 2 →
+      ((1 - 2 * (t : ℝ) : ℝ) : ℂ) +
+        ((2 * (t : ℝ) : ℝ) : ℂ) * W p ≠ 0)
+    (hright : ∀ (t : unitInterval) (p : RightTubeMinusLeftCore),
+      ¬ (t : ℝ) ≤ 1 / 2 →
+      ((2 - 2 * (t : ℝ) : ℝ) : ℂ) * W p +
+        ((2 * (t : ℝ) - 1 : ℝ) : ℂ) *
+          rightTubeCorePlanarComplex p.1 ≠ 0) :
+    ∃ Z : C(unitInterval × RightTubeMinusLeftCore, ℂ),
+      (∀ tp, Z tp ≠ 0) ∧ (∀ p, Z (0, p) = 1) ∧
+      (∀ p, Z (1, p) = rightTubeCorePlanarComplex p.1) := by
+  have hcont : Continuous (fun tp : unitInterval × RightTubeMinusLeftCore =>
+      coupledAngularWaypointPath W tp.1 tp.2) := by
+    have hW : Continuous (fun tp : unitInterval × RightTubeMinusLeftCore =>
+        W tp.2) := W.continuous.comp continuous_snd
+    have hp : Continuous (fun tp : unitInterval × RightTubeMinusLeftCore =>
+        rightTubeCorePlanarComplex tp.2.1) := by
+      unfold rightTubeCorePlanarComplex
+      fun_prop
+    unfold coupledAngularWaypointPath
+    apply continuous_if_le
+    · fun_prop
+    · fun_prop
+    · fun_prop
+    · fun_prop
+    · intro tp h
+      simp only at h
+      rw [h]
+      norm_num
+  let Z : C(unitInterval × RightTubeMinusLeftCore, ℂ) :=
+    ⟨fun tp => coupledAngularWaypointPath W tp.1 tp.2, hcont⟩
+  refine ⟨Z, ?_, ?_, ?_⟩
+  · intro tp
+    change coupledAngularWaypointPath W tp.1 tp.2 ≠ 0
+    unfold coupledAngularWaypointPath
+    split_ifs with h
+    · exact hleft tp.1 tp.2 h
+    · exact hright tp.1 tp.2 h
+  · intro p
+    norm_num [Z, coupledAngularWaypointPath]
+  · intro p
+    norm_num [Z, coupledAngularWaypointPath]
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -1713,3 +1769,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularComplexInterpolation_eq_zero_iff
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularComplexInterpolation_zero_interior
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngular_of_nonvanishingComplexPath
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.nonvanishingComplexPath_of_waypoint
