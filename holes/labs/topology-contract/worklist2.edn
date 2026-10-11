@@ -79281,27 +79281,26 @@
    :depends-on [],
    :other-consumers []}
   {:consumer :t97A04,
-   :stop-count 9,
+   :stop-count 10,
    :evidence
    {:placeholder-delta 0,
-    :residual "B6 degree equality remains; then B7-B11.",
+    :residual
+    "Prove the two component degree-a equations; then B7-B11.",
     :outcome :stop,
     :warnings
     ["Main retains two placeholders; unrelated dirty file preserved."],
     :missing-theorems
     [{:name
       "ConstructionTargets.T97A04Closure.shearY_overlap_coordinate",
-      :type
-      "overlap-coordinate conjugate of productionIntersectionMap (shearYShortComplexHom a b) 1 equals overlapScalar a",
+      :type "shearYOverlapCoordinateMap a b = overlapScalar a",
       :status :partial,
       :consumers [:t97A04],
       :depends-on
-      ["ConstructionTargets.T97A04Closure.twoCircleOverlapShear"
-       "ConstructionTargets.T97A04Closure.shearYShortComplexHom"],
+      ["ConstructionTargets.T97A04Closure.shearY_overlap_coordinate_of_injections"],
       :area "mv-connecting-naturality"}],
     :statement-hashes
     {:registry "131/0",
-     :closure "06d9533d54729851159e4b51e481d96c23c1ad97",
+     :closure "f9db773ce0fcc3dcc57e793be3c150947eeff56f",
      :blueprint "c419a895cb4ede2acc1cb6bc5c7536344ba63df4"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
@@ -79314,32 +79313,21 @@
      {:cmd "lake env lean problems/t97A04/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "Main placeholder count", :exit 0, :output "2"}
-     {:cmd "git show --check 10ee26c5c", :exit 0}],
+     {:cmd "git show --check 933496286", :exit 0}],
     :diagnostic-history
     [{:cmd "lake env lean ConstructionTargets/t97A04Closure.lean",
       :exit 1,
       :finding
-      "Replaced unavailable Homeomorph projection with explicit continuous maps; rerun passed."}],
+      "Moved the coordinate definition after its B4 dependency; rerun passed."}],
     :continue-from
-    "Homotope twoCircleOverlapShear to degree-a maps on both summands and apply circle H1 degree.",
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791722677627-5360-3b3424a8",
-     :commands
-     ["git show/check/diff-tree 10ee26c5c"
-      "lake env lean ConstructionTargets/t97A04Closure.lean"
-      "lake env lean problems/t97A04/lean/Main.lean"
-      "statement-registry check/fingerprint and placeholder counts"],
-     :finding
-     "PASS: new compiled progress after history job 8. Commit changes only the scoped closure and transports the restricted shear in the correct conjugation direction, first to Overlap and then to Circle⊕Circle, advancing B6. Blob matches 06d9533d. Closure is sorry-free with standard axioms; Main compiles with unchanged 2 placeholders. Registry is 131/0 and frozen statement SHA-256 remains ca1b2cb3c6594276811618321d5c0604c2f38fc4594a6b21ae161a711a923a34. Remaining B6 degree equality and B7-B11 are listed."},
-    :commit "10ee26c5c34ab7a0b17a5f64aace67853578d4c4",
+    "Prove biprod.inl/inr composites of shearYOverlapCoordinateMap equal those of overlapScalar.",
+    :commit "9334962864e77dd1ed73a59d6c8b549c6590cafb",
     :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
     :finding
-    "B6 now has the restricted shear transported through the fixed overlap and two-circle models.",
+    "Defined the exact B6 coordinate map and reduced its equality to two component-injection equations.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79576,7 +79564,8 @@
    :depends-on
    [:lemma-constructiontargets-t97a04closure-frozenoverlaph1isointbiprod
     :lemma-constructiontargets-t97a04closure-shearyshortcomplexhom
-    :lemma-constructiontargets-t97a04closure-twocircleoverlapshear],
+    :lemma-constructiontargets-t97a04closure-twocircleoverlapshear
+    :lemma-constructiontargets-t97a04closure-sheary-overlap-coordinate-of-injections],
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
@@ -79604,6 +79593,22 @@
    {:name "ConstructionTargets.T97A04Closure.twoCircleOverlapShear",
     :reported-by []},
    :id :lemma-constructiontargets-t97a04closure-twocircleoverlapshear,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T97A04Closure.shearY_overlap_coordinate_of_injections"},
+   :lemma
+   {:name
+    "ConstructionTargets.T97A04Closure.shearY_overlap_coordinate_of_injections",
+    :reported-by []},
+   :id
+   :lemma-constructiontargets-t97a04closure-sheary-overlap-coordinate-of-injections,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}]}
