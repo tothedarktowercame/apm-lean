@@ -822,9 +822,30 @@
                                        (assoc-in [:evidence :probe] receipt)))]
                         (if existing
                           (vec (mapv #(if (= id (:id %))
-                                        (cond-> (note %)
-                                          (not= :done (:state existing))
-                                          (assoc :state :blocked))
+                                        (let [already-depends?
+                                              (some #{(:id p)} (:depends-on %))]
+                                          (cond-> (note %)
+                                            (not= :done (:state existing))
+                                            (assoc :state :blocked)
+                                            ;; A second REVISE naming the same
+                                            ;; already-reviewed prerequisite is
+                                            ;; contradictory: that dependency
+                                            ;; is satisfied and cannot make a
+                                            ;; fresh run produce a different
+                                            ;; result.  Leaving the requester
+                                            ;; :open made the supervisor run
+                                            ;; the same probe forever (row 83,
+                                            ;; 2026-10-11) until its unchanged-
+                                            ;; ledger guard stopped the loop.
+                                            ;; Park the stale route for a
+                                            ;; strategy/owner rewrite instead.
+                                            (and (= :done (:state existing))
+                                                 already-depends?)
+                                            (assoc :state :needs-owner
+                                                   :review-finding
+                                                   (str "REVISE repeated satisfied prerequisite "
+                                                        (:id p)
+                                                        "; route must name a new prerequisite or be rewritten"))))
                                         %)
                                      items))
                           (vec (mapcat #(if (= id (:id %))
