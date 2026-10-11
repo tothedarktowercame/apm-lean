@@ -71413,53 +71413,75 @@
    "single-consumer continuous raw complex interpolation underlying the coupled angular path",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:residual
-     "Modify the raw interpolation continuously near its possible zero locus, prove the modified path never vanishes, normalize it to Circle, and supply that coupled angular map to the banked ambient adapter.",
-     :outcome :go,
-     :warnings [],
-     :axioms [propext Classical.choice Quot.sound],
-     :commands
-     [{:cmd
-       "lake env lean /tmp/t02a03_coupled_angular_complex_interpolation_probe.lean",
-       :exit 0,
-       :output
-       "continuousCoupledAngularComplexInterpolation_exists compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "sha256sum /tmp/t02a03_coupled_angular_complex_interpolation_probe.lean",
-       :exit 0,
-       :output
-       "a1e63cbbbf29714e2361c7679e049c0e8e55b76832f43eed47773d8fdd1402e6  /tmp/t02a03_coupled_angular_complex_interpolation_probe.lean"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_coupled_angular_complex_interpolation_probe.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}
-      {:cmd
-       "rg -n 'continuousCoupledAngularComplexInterpolation_exists' /tmp/t02a03_coupled_angular_complex_interpolation_probe.lean",
-       :exit 0,
-       :output
-       "5:theorem continuousCoupledAngularComplexInterpolation_exists :\n20:#print axioms continuousCoupledAngularComplexInterpolation_exists"}],
-     :fixture
-     {:path
-      "/tmp/t02a03_coupled_angular_complex_interpolation_probe.lean",
-      :sha256
-      "a1e63cbbbf29714e2361c7679e049c0e8e55b76832f43eed47773d8fdd1402e6"},
-     :finding
-     "The placeholder-free fixture constructs the affine complex interpolation jointly in time and deleted-tube input. Its time-zero value is 1 and its time-one value is rightTubeCorePlanarComplex p.1 exactly.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
-      :declaration
-      "ConstructionTargets.T02A03GeometricTubeDeformation.continuousCoupledAngularComplexInterpolation_exists",
-      :type
-      "∃ Z : C(unitInterval × RightTubeMinusLeftCore, ℂ), (∀ p, Z (0, p) = 1) ∧ (∀ p, Z (1, p) = rightTubeCorePlanarComplex p.1)"},
-     :seat "topo-8"}},
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Modify the raw interpolation continuously near its possible zero locus, prove the modified complex path never vanishes, normalize it to Circle, and feed that coupled angular map to the banked ambient adapter.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["Pre-existing unnecessarySimpa linter warning at ConstructionTargets/T02A03GeometricTubeDeformation.lean:62:6."
+     "The canonical .lake/packages symlink invariant check failed because this checkout has a real package directory."],
+    :missing-theorems [],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not",
+     :construction-file-git-blob
+     "031374da0612e67d8e85f1f3935a96dce645c90a",
+     :fixture-sha256
+     "a1e63cbbbf29714e2361c7679e049c0e8e55b76832f43eed47773d8fdd1402e6"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/t02a03_coupled_angular_complex_interpolation_probe.lean",
+      :exit 0,
+      :output
+      "a1e63cbbbf29714e2361c7679e049c0e8e55b76832f43eed47773d8fdd1402e6  /tmp/t02a03_coupled_angular_complex_interpolation_probe.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/t02a03_coupled_angular_complex_interpolation_probe.lean",
+      :exit 0,
+      :output
+      "continuousCoupledAngularComplexInterpolation_exists axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "git diff --check -- ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd
+      "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "git show --format= --unified=0 HEAD -- ConstructionTargets/T02A03GeometricTubeDeformation.lean | rg '^\\+.*(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' --pcre2",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git show --check --oneline HEAD",
+      :exit 0,
+      :output "0040c659d Add t02A03 angular complex interpolation"}
+     {:cmd "git status --porcelain", :exit 0}],
+    :diagnostic-history
+    [{:cmd
+      "test -L .lake/packages && test \"$(readlink -f .lake/packages)\" = /home/joe/code/apm-lean/.lake/packages",
+      :exit 1,
+      :explanation
+      ".lake/packages is a real directory rather than the required canonical symlink; no package state was modified and compilation succeeded on the existing substrate."}],
+    :commit "0040c659d9f0ba75d317c41a9f05dc1611759ab5",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+    :fixture
+    {:path
+     "/tmp/t02a03_coupled_angular_complex_interpolation_probe.lean",
+     :sha256
+     "a1e63cbbbf29714e2361c7679e049c0e8e55b76832f43eed47773d8fdd1402e6"},
+    :finding
+    "The jointly continuous affine complex interpolation starts exactly at 1 and ends exactly at rightTubeCorePlanarComplex p.1; this row deliberately makes no nonvanishing or Circle-normalization claim.",
+    :seat "topo-6"},
    :phase :implementation,
    :type
    "∃ Z : C(unitInterval × RightTubeMinusLeftCore, ℂ), (∀ p, Z (0, p) = 1) ∧ (∀ p, Z (1, p) = rightTubeCorePlanarComplex p.1)",
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/coupled-angular-complex-interpolation",
