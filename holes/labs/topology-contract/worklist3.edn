@@ -12422,6 +12422,23 @@
      "The production singular-chain short exact sequence for the same punctured unit-disk pair",
      :direction
      "Morphism of short complexes from the forgotten coefficient sequence to the production sequence, commuting by exact equality with both the subtype inclusion and relative projection maps"},
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791709325202-4852-20dac9b6",
+     :commands
+     ["rg ledger row and frozen contract"
+      "git show and git diff-tree recorded commit"
+      "git blob identity and git diff --check"
+      "sha256sum frozen fixture"
+      "lake env lean collision-renamed frozen-fixture replay"
+      "lake env lean target module"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"
+      "python3 scripts/statement-registry.py check"
+      "placeholder and axiom scan"
+      "consumer placeholder census"],
+     :finding
+     "PASS: independent review of commit 4002cce6; scope is exactly ConstructionTargets/ManifoldFundamentalClass.lean and the recorded blob matches the checkout; fixture SHA-256 and frozen declaration hash match; the implementation constructs the required short-complex morphism from the forgotten coefficient pair sequence to the production sequence, with puncture, ambient, and relative comparison components in the correct direction and both commutativity fields using the required symmetric banked equalities; it does not apply connecting naturality or perform radial, sphere, sign, or fundamental-class work; fixture replay, module check, and 8326-job build pass; axioms are exactly propext, Classical.choice, Quot.sound; registry is 131/0; target placeholders are 0 and consumer counts remain 1/1."},
     :commit "4002cce6fb3be8f2098298f8f37a893fdbc0dfd8",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -12438,7 +12455,7 @@
     :routes-2026-10-11-manifold-integral-open-disk-pair-short-complex-comparison-topo3-r1,
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/integral-open-disk-connecting-naturality/short-complex-comparison",
@@ -12638,7 +12655,7 @@
      "The compiled short-complex morphism supplies the structure previously missing from the two named homology isomorphisms. Its first component is the puncture singular-chain comparison, its second is the ambient open-disk comparison, and its third is the transport-corrected relative-chain comparison. Both chain squares compile from banked naturality theorems. The next prerequisite is now a direct application of connecting-map naturality after identifying the homology maps of these three components with the named comparison isomorphisms.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -16806,7 +16823,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -16823,7 +16840,10 @@
     "forall (k : ℕ), (CoefficientPairSequence.sequence ℤ (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2))).map (forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ)) ⟶ SingularHomologyConcrete.singularPairShortComplex (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2))",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-integral-open-disk-pair-short-complex-comparison-topo3-r1},
+    :routes-2026-10-11-manifold-integral-open-disk-pair-short-complex-comparison-topo3-r1,
+    :banked-by
+    :routes-2026-10-11-manifold-integral-open-disk-pair-short-complex-comparison-topo3-r1,
+    :banked-commit "4002cce6fb3be8f2098298f8f37a893fdbc0dfd8"},
    :id :lemma-mfclass-integral-open-disk-pair-short-complex-comparison,
    :kind :lemma,
    :depends-on
