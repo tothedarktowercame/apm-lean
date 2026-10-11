@@ -72696,25 +72696,67 @@
   {:bounded-exception
    "single-consumer endpoint-vanishing support positivity certificate for the rotated waypoint departure detour",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:residual
+     "Construct a continuous transverse correction using the positive support factor and prove the corrected departure creates no new zeros; then combine it with the banked safe arrival leg and downstream adapters.",
+     :outcome :go,
+     :warnings [],
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd
+       "lake env lean /tmp/t02a03_rotated_waypoint_departure_zero_support_pos_probe.lean",
+       :exit 0,
+       :output
+       "rotatedEndpointWaypoint_departure_zero_support_pos compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "sha256sum /tmp/t02a03_rotated_waypoint_departure_zero_support_pos_probe.lean",
+       :exit 0,
+       :output
+       "9befe9616628116ccf3315ae5d46fcfb4aacffc26c2da368414d4d8a59d519e9  /tmp/t02a03_rotated_waypoint_departure_zero_support_pos_probe.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_rotated_waypoint_departure_zero_support_pos_probe.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}
+      {:cmd
+       "rg -n 'rotatedEndpointWaypoint_departure_zero_support_pos' /tmp/t02a03_rotated_waypoint_departure_zero_support_pos_probe.lean",
+       :exit 0,
+       :output
+       "11:theorem rotatedEndpointWaypoint_departure_zero_support_pos\n31:#print axioms rotatedEndpointWaypoint_departure_zero_support_pos"}],
+     :fixture
+     {:path
+      "/tmp/t02a03_rotated_waypoint_departure_zero_support_pos_probe.lean",
+      :sha256
+      "9befe9616628116ccf3315ae5d46fcfb4aacffc26c2da368414d4d8a59d519e9"},
+     :finding
+     "The compiled theorem excludes both support endpoints directly: a zero at time zero would make one equal zero, while a zero at time one-half would force the nonzero right-core planar coordinate to vanish. Their strict inequalities make t*(1-2t) positive at every departure zero.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+      :declaration
+      "ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_departure_zero_support_pos",
+      :type
+      "forall (t : unitInterval) (p : RightTubeMinusLeftCore), (t : ℝ) <= 1/2 -> (((1-2*(t:ℝ):ℝ):ℂ) + ((2*(t:ℝ):ℝ):ℂ)*rotatedEndpointWaypoint p) = 0 -> 0 < (t : ℝ)*(1-2*(t:ℝ))",
+      :acceptance
+      "Use the canonical rotatedEndpointWaypoint already in scope in place of the fixture-local identical definition; retain the two endpoint contradictions and final product-positivity proof, with no placeholders or nonstandard axioms."},
+     :seat "topo-8"}},
+   :phase :implementation,
+   :type
+   "forall (t : unitInterval) (p : RightTubeMinusLeftCore), (t : ℝ) <= 1/2 -> (((1-2*(t:ℝ):ℝ):ℂ) + ((2*(t:ℝ):ℝ):ℂ)*rotatedEndpointWaypoint p) = 0 -> 0 < (t : ℝ)*(1-2*(t:ℝ))",
    :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/rotated-waypoint-departure-zero-support-positive",
    :acceptance
-   {:probe
-    "Compile rotatedEndpointWaypoint_departure_zero_support_pos. Under the departure-half bound, prove t*(1-2t) is strictly positive at every zero of the affine departure from 1 to rotatedEndpointWaypoint. Do not construct the transverse correction, change the waypoint, prove arrival nonvanishing, normalize to Circle, or assemble the ambient deformation.",
-    :declaration
-    "ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_departure_zero_support_pos",
-    :type
-    "forall (t : unitInterval) (p : RightTubeMinusLeftCore), (t : ℝ) <= 1/2 -> (((1-2*(t:ℝ):ℂ) + ((2*(t:ℝ):ℝ):ℂ)*rotatedEndpointWaypoint p) = 0 -> 0 < (t : ℝ)*(1-2*(t:ℝ))",
-    :placeholder "the sole sorry in apm_t02a03",
-    :route-step
-    "combine the strict endpoint exclusions into positivity of the scalar support used by the endpoint-fixed transverse correction"},
+   "Use the canonical rotatedEndpointWaypoint already in scope in place of the fixture-local identical definition; retain the two endpoint contradictions and final product-positivity proof, with no placeholders or nonstandard axioms.",
    :id
    :routes-2026-10-11-t02a03-rotated-waypoint-departure-zero-support-positive-topo2-r1,
    :kind :reusable-theorem,
    :area "explicit-r3-tube-deformation-retraction",
+   :declaration
+   "ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_departure_zero_support_pos",
    :depends-on
    [:routes-2026-10-11-t02a03-rotated-waypoint-departure-zero-time-positive-topo2-r1
     :routes-2026-10-11-t02a03-rotated-waypoint-departure-zero-time-before-half-topo2-r1],
