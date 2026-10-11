@@ -1399,6 +1399,15 @@ noncomputable def forgetTerminalHomologyRowHom
     ForgottenHomologyRowHom K j :=
   forgetHomologyRowHom K j
 
+/-- The right-derived homology comparison agrees with the standard mapped
+homology comparison for the coefficient-forgetting functor. -/
+theorem forgetMapHomologyIsoRight_eq
+    {ι : Type} {c : ComplexShape ι}
+    (K : HomologicalComplex (ModuleCat ℤ) c) (i : ι) :
+    (K.sc i).mapHomologyIso' forgetIntModules =
+      (K.sc i).mapHomologyIso forgetIntModules :=
+  (K.sc i).mapHomologyIso'_eq_mapHomologyIso forgetIntModules
+
 /-- The corrected relative-homology comparison intertwines the coefficient
 absolute-to-relative map with the production relative projection. -/
 theorem integralRelativeHomologyComparisonWithTransport_projection
@@ -2385,6 +2394,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetOpcyclesRowHom
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetCyclesRowHom
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetTerminalHomologyRowHom
+#print axioms ConstructionTargets.ManifoldFundamentalClass.forgetMapHomologyIsoRight_eq
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
