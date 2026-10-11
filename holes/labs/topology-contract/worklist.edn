@@ -116061,7 +116061,7 @@
   {:consumer :t95J02,
    :stop-count 2,
    :review-finding
-   "B6 has the wrong reflection orientation: H(t,y) = [(t,y)] ends at [(0,-y)], which under B5 sends (cos(2*pi*y), sin(2*pi*y)) to (cos(2*pi*y), -sin(2*pi*y)) = reflectionMap (1 : Fin 2), not reflectionMap 0. At y = 0 the endpoint is (1,0) while reflectionMap 0 gives (-1,0). Change B6 and the B7 reflection invocation to coordinate 1, or consistently swap the B5 coordinates.",
+   "B6 names a nonexistent Lean declaration: reflectionMap is ConstructionTargets.CoefficientCoordinateReflections.reflectionMap, not ConstructionTargets.CoefficientFirstReflection.reflectionMap. A fresh Lean check reports the latter as an unknown identifier. Correct the B6 type and B7 prose/dependencies to use CoefficientCoordinateReflections.reflectionMap (1 : Fin 2), while retaining CoefficientFirstReflection.integral_circle for its homology action.",
    :evidence
    {:blueprint
     {:path "ConstructionTargets/t95J02Closure.blueprint.md",
@@ -116156,11 +116156,17 @@
     {:commit "60b856adb68fe7885a96b5f90b620292b991c336",
      :next
      "Obtain independent review of the corrected reflection orientation; after approval formalize B1 and B2 in ConstructionTargets/t95J02Closure.lean."},
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1791717589636-5237-15844959",
+     :finding
+     "B6 names a nonexistent Lean declaration: reflectionMap is ConstructionTargets.CoefficientCoordinateReflections.reflectionMap, not ConstructionTargets.CoefficientFirstReflection.reflectionMap. A fresh Lean check reports the latter as an unknown identifier. Correct the B6 type and B7 prose/dependencies to use CoefficientCoordinateReflections.reflectionMap (1 : Fin 2), while retaining CoefficientFirstReflection.integral_circle for its homology action."},
     :commit "60b856adb68fe7885a96b5f90b620292b991c336",
     :changed-paths ["ConstructionTargets/t95J02Closure.blueprint.md"],
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["problems/t95J02/lean/Main.lean"
     "problems/t95J02/status.json"
@@ -116180,7 +116186,7 @@
    :id :program-2026-10-11-close-t95j02,
    :kind :final-adapter,
    :campaign-priority 41,
-   :fail-count 1,
+   :fail-count 2,
    :depends-on [],
    :program true,
    :other-consumers []}
