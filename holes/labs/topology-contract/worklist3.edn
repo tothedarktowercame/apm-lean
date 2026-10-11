@@ -13830,6 +13830,21 @@
       "git status --short -- ConstructionTargets/ManifoldFundamentalClass.lean",
       :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791720981175-5322-0de5b182",
+     :commands
+     ["git diff-tree --no-commit-id --name-status -r 20ae03c93508e3ecb335b4226c6e305f88d2e276"
+      "git diff --check 20ae03c93508e3ecb335b4226c6e305f88d2e276^ 20ae03c93508e3ecb335b4226c6e305f88d2e276"
+      "sha256sum /tmp/manifold_fundamental_class_coefficient_inclusion_cycles_preservation.lean ConstructionTargets/ManifoldFundamentalClass.lean"
+      "lake env lean fixture-body-with-promoted-name-renamed"
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped placeholder counts for t00J02 t98A02"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"],
+     :finding
+     "PASS: commit 20ae03c93508e3ecb335b4226c6e305f88d2e276 has exact one-file scope and matching recorded blob; fixture and module hashes reproduce exactly; the theorem faithfully states inverse mapCyclesIso naturality for the coefficient subspace inclusion in the frozen orientation, directly using ShortComplex.mapCyclesIso_inv_naturality without asserting the opcycles face, a snake-input comparison, connecting preservation, or later sign claims; fixture body, module, registry, and 8326-job build pass; axioms are exactly propext, Classical.choice, and Quot.sound; target placeholders are zero and consumer counts remain 1/1."},
     :commit "20ae03c93508e3ecb335b4226c6e305f88d2e276",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -13846,7 +13861,7 @@
     :routes-2026-10-11-manifold-coefficient-pair-inclusion-cycles-preservation-topo3-r1,
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/integral-open-disk-connecting-naturality/snake-input-cycles",
@@ -14032,7 +14047,7 @@
      "The snake-input comparison requires internal cycles and opcycles squares, not only endpoint homology isomorphisms. The compiled theorem supplies the cycles face for the coefficient inclusion directly from mapCyclesIso_inv_naturality. The opcycles face and assembled snake-input comparison remain before naturality_δ can establish preservation of the connecting morphism.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -20743,7 +20758,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -20760,7 +20775,10 @@
     "forall {X : Type} [TopologicalSpace X] (A : Set X) (n : ℕ), let φ := CoefficientRelativeSmall.subspaceMap ℤ A; let ψ := (HomologicalComplex.shortComplexFunctor (ModuleCat ℤ) (ComplexShape.down ℕ) n).map φ; forgetIntModules.map (ShortComplex.cyclesMap ψ) ≫ (((CoefficientH0.SingularChains ℤ (TopCat.of X)).sc n).mapCyclesIso forgetIntModules).inv = (((CoefficientH0.SingularChains ℤ (TopCat.of A)).sc n).mapCyclesIso forgetIntModules).inv ≫ ShortComplex.cyclesMap (forgetIntModules.mapShortComplex.map ψ)",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-coefficient-pair-inclusion-cycles-preservation-topo3-r1},
+    :routes-2026-10-11-manifold-coefficient-pair-inclusion-cycles-preservation-topo3-r1,
+    :banked-by
+    :routes-2026-10-11-manifold-coefficient-pair-inclusion-cycles-preservation-topo3-r1,
+    :banked-commit "20ae03c93508e3ecb335b4226c6e305f88d2e276"},
    :id :lemma-mfclass-coefficient-pair-inclusion-cycles-preservation,
    :kind :lemma,
    :depends-on [:lemma-mfclass-open-disk-snake-inputs-delta],
