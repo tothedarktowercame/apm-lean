@@ -68812,51 +68812,61 @@
    "single-consumer sufficiency of the collision equation on the zero-height slice",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:residual
-     "Implement the compiled zero-height sufficiency theorem; then use the resulting exact collision characterization to build sign-preserving entry and exit paths.",
-     :outcome :go,
-     :warnings [],
-     :acceptance
-     {:declaration
-      "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCollisionPolynomial_eq_zero_implies_leftCore",
-      :type
-      "forall (u : Circle) (n : Complex), n.im = 0 -> (1 - n.re)^2 - 4*(1-n.re)*(u : Complex).re + 3 = 0 -> rightTubeCorePolarReconstruction u n ∈ Set.range apm_t02a03_leftCore",
-      :proof-obligations
-      ["form the planar displacement from the left-core center"
-       "derive its norm-square equals one from the collision equation and Circle identity"
-       "use Complex.arg to construct the left-core range witness"
-       "match all three frozen coordinates"],
-      :forbidden-claims
-      ["nonzero-height sufficiency" "angular path construction"]},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd
-       "lake env lean /tmp/t02a03_zero_height_collision_sufficiency_probe.lean",
-       :exit 0,
-       :output
-       "zeroHeightCollisionPolynomial_eq_zero_implies_leftCore compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "sha256sum /tmp/t02a03_zero_height_collision_sufficiency_probe.lean",
-       :exit 0,
-       :output
-       "3ae282d0c686845da38a4e954b05479ee34ff75c8d4d1ac1836ec507c9b3a8dd  /tmp/t02a03_zero_height_collision_sufficiency_probe.lean"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_zero_height_collision_sufficiency_probe.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :fixture
-     {:path "/tmp/t02a03_zero_height_collision_sufficiency_probe.lean",
-      :sha256
-      "3ae282d0c686845da38a4e954b05479ee34ff75c8d4d1ac1836ec507c9b3a8dd"},
-     :implementation
-     {:scope
-      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
-     :seat "topo-8"}},
+   {:placeholder-delta {:before 0, :after 0, :change 0},
+    :residual
+    "Use the exact zero-height collision characterization to construct continuous entry and exit paths within the appropriate nonzero-sign components, combine them with the safe corridor and nonzero-height criterion, then assemble and concatenate the ambient stages.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean:62:6: unnecessarySimpa (pre-existing)"],
+    :missing-theorems [],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms [propext Classical.choice Quot.sound],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :scope-blob "67f42cd21131852e9814fd7052206f72a2ca7658",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0,
+      :output
+      "compiled; declaration axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "lake env lean /tmp/t02a03_zero_height_collision_sufficiency_probe.lean",
+      :exit 0,
+      :output
+      "zeroHeightCollisionPolynomial_eq_zero_implies_leftCore compiled; axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "sha256sum /tmp/t02a03_zero_height_collision_sufficiency_probe.lean",
+      :exit 0,
+      :output
+      "3ae282d0c686845da38a4e954b05479ee34ff75c8d4d1ac1836ec507c9b3a8dd  /tmp/t02a03_zero_height_collision_sufficiency_probe.lean"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "git diff --check -- ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd
+      "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "7a6adf72a1e153667e245cfb4abf841b9c5b1280",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCollisionPolynomial_eq_zero_implies_leftCore",
+    :fixture
+    {:path "/tmp/t02a03_zero_height_collision_sufficiency_probe.lean",
+     :sha256
+     "3ae282d0c686845da38a4e954b05479ee34ff75c8d4d1ac1836ec507c9b3a8dd"},
+    :finding
+    "On the zero-height slice, the collision equation makes the planar displacement from the left-core center have norm one; Complex.arg supplies a parameter whose cosine and sine recover that displacement, yielding exact equality with a frozen left-core point.",
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/zero-height-collision-sufficiency",
