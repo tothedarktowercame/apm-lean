@@ -74,3 +74,10 @@ The B6 calculation now has its exact based equivalence:
 `genericPointWedgeFundamentalGroupEquiv` applies B5 to B4 at the literal left
 representative of the wedge point.  What remains is proving that its two leg
 maps are the coproduct inclusions.
+
+The reconstruction normalization is now explicit as well.
+`genericPointWedgeSourceFunctor_eq_inverse_identity` identifies B4's forward
+functor with B3's inverse image of the identity, while
+`genericPointWedgeSourceCounit_naturality` records the resulting conjugacy
+equation.  This uses counit naturality and does not assert that its component
+is an identity; B6 must cancel that conjugation by the explicit leg data.

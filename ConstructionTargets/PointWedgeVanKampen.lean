@@ -550,6 +550,47 @@ def genericPointWedgeFundamentalGroupEquiv :
     (genericPointWedgeFreeProduct x₀ y₀)
     (genericPointWedgeSourceEquivalence x₀ y₀ M N hM hN hy hx cM cN)
 
+private abbrev genericPointWedgeTarget :=
+  SingleObj (genericPointWedgeFreeProduct x₀ y₀)
+
+/-- The reconstructed forward functor is definitionally the inverse image of
+the identity under the B3 mapping equivalence. -/
+theorem genericPointWedgeSourceFunctor_eq_inverse_identity :
+    (genericPointWedgeSourceEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN).functor =
+      (genericPointWedgeSingleObjMappingEquivalence
+        x₀ y₀ M N hM hN hy hx cM cN
+        (genericPointWedgeTarget x₀ y₀)).inverse.obj
+          (𝟭 (genericPointWedgeTarget x₀ y₀)) :=
+  rfl
+
+/-- The counit available for the B6 coordinate calculation.  Its naturality,
+rather than an invalid identity normalization, controls the generator maps. -/
+def genericPointWedgeSourceCounit :
+    (genericPointWedgeSingleObjMappingEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+      (genericPointWedgeTarget x₀ y₀)).functor.obj
+        (genericPointWedgeSourceEquivalence
+          x₀ y₀ M N hM hN hy hx cM cN).functor ≅
+      𝟭 (genericPointWedgeTarget x₀ y₀) :=
+  (genericPointWedgeSingleObjMappingEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN
+    (genericPointWedgeTarget x₀ y₀)).counitIso.app _
+
+theorem genericPointWedgeSourceCounit_naturality
+    (g : End (SingleObj.star (genericPointWedgeFreeProduct x₀ y₀))) :
+    ((genericPointWedgeSingleObjMappingEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+      (genericPointWedgeTarget x₀ y₀)).functor.obj
+        (genericPointWedgeSourceEquivalence
+          x₀ y₀ M N hM hN hy hx cM cN).functor).map g ≫
+        (genericPointWedgeSourceCounit
+          x₀ y₀ M N hM hN hy hx cM cN).hom.app _ =
+      (genericPointWedgeSourceCounit
+        x₀ y₀ M N hM hN hy hx cM cN).hom.app _ ≫ g :=
+  (genericPointWedgeSourceCounit
+    x₀ y₀ M N hM hN hy hx cM cN).hom.naturality g
+
 end GenericFundamentalGroupEquivalence
 
 /-- The three-circle model is locally path connected. -/
@@ -836,5 +877,6 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeSingleObjPostcomposeIso
 #print axioms genericPointWedgeSourceEquivalence
 #print axioms genericPointWedgeFundamentalGroupEquiv
+#print axioms genericPointWedgeSourceCounit_naturality
 
 end ConstructionTargets.PointWedgeVanKampen
