@@ -18477,7 +18477,319 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-deckgroupquotientfundamentalgroup-orbitquotientfiberequiv],
-   :other-consumers [:t92J05 :t93J03 :t99J01 :t00J07]}],
+   :other-consumers [:t92J05 :t93J03 :t99J01 :t00J07]}
+  {:consumer :t02A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t02a04_cellAttachment_openCover",
+    :type
+    "An open cover U,V of apm_t02a04_X with U ≃ₕ solid torus, V contractible, and U∩V ≃ₕ Circle  (size: 180-300 lines / 3-7 days)"},
+   :lemma
+   {:name "t02a04_cellAttachment_openCover",
+    :reported-by [:owner],
+    :type
+    "An open cover U,V of apm_t02a04_X with U ≃ₕ solid torus, V contractible, and U∩V ≃ₕ Circle  (size: 180-300 lines / 3-7 days)",
+    :area "cell-attachment-open-cover-mv"},
+   :id :lemma-t02a04-cellattachment-opencover,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t02A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t02a04_H1_attaching_map_eq_two",
+    :type
+    "Under the cover coordinates, the H₁ overlap-to-solid-torus morphism over ℚ is multiplication by 2  (size: 100-180 lines / 1-3 days)"},
+   :lemma
+   {:name "t02a04_H1_attaching_map_eq_two",
+    :reported-by [:owner],
+    :type
+    "Under the cover coordinates, the H₁ overlap-to-solid-torus morphism over ℚ is multiplication by 2  (size: 100-180 lines / 1-3 days)",
+    :area "coefficient-q-mayer-vietoris"},
+   :id :lemma-t02a04-h1-attaching-map-eq-two,
+   :kind :lemma,
+   :depends-on [:lemma-t02a04-cellattachment-opencover],
+   :other-consumers []}
+  {:consumer :t02A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t02A04_bridge_1",
+    :type
+    "Nonempty (apm_t02A04_HQ 0 ≅ ModuleCat.of ℚ ℚ) ∧ ∀ k, 0 < k → Limits.IsZero (apm_t02A04_HQ k)  (size: 120-220 lines / 2-4 days)"},
+   :lemma
+   {:name "apm_t02A04_bridge_1",
+    :reported-by [:owner],
+    :type
+    "Nonempty (apm_t02A04_HQ 0 ≅ ModuleCat.of ℚ ℚ) ∧ ∀ k, 0 < k → Limits.IsZero (apm_t02A04_HQ k)  (size: 120-220 lines / 2-4 days)",
+    :area "coefficient-q-mayer-vietoris"},
+   :id :lemma-apm-t02a04-bridge-1,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t02a04-cellattachment-opencover
+    :lemma-t02a04-h1-attaching-map-eq-two],
+   :other-consumers []}
+  {:consumer :t02A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "lefschetz_fixed_point_compact_polyhedron",
+    :type
+    "For a continuous self-map of a compact polyhedron, nonzero rational Lefschetz number implies a fixed point  (size: 800+ lines / 1-3 months)"},
+   :lemma
+   {:name "lefschetz_fixed_point_compact_polyhedron",
+    :reported-by [:owner],
+    :type
+    "For a continuous self-map of a compact polyhedron, nonzero rational Lefschetz number implies a fixed point  (size: 800+ lines / 1-3 months)",
+    :area "lefschetz-fixed-point-compact-polyhedron"},
+   :id :lemma-lefschetz-fixed-point-compact-polyhedron,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t00J01 :t96A02]}
+  {:consumer :t02A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t02A04_bridge_2",
+    :type
+    "Rational acyclicity of apm_t02a04_X → ∀ f, Continuous f → ∃ x, f x = x  (size: 30-60 lines / 4-8 hours)"},
+   :lemma
+   {:name "apm_t02A04_bridge_2",
+    :reported-by [:owner],
+    :type
+    "Rational acyclicity of apm_t02a04_X → ∀ f, Continuous f → ∃ x, f x = x  (size: 30-60 lines / 4-8 hours)",
+    :area "lefschetz-fixed-point-compact-polyhedron"},
+   :id :lemma-apm-t02a04-bridge-2,
+   :kind :lemma,
+   :depends-on
+   [:lemma-apm-t02a04-bridge-1
+    :lemma-lefschetz-fixed-point-compact-polyhedron],
+   :other-consumers []}
+  {:consumer :t03J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "embeddedCircle_annulusNeighborhood",
+    :type
+    "Topology.IsEmbedding j → ∃ N, IsOpen N ∧ Set.range j ⊆ N ∧ Nonempty (N ≃ₜ Circle × Set.Ioo (-1:ℝ) 1)  (size: 500+ lines / 2-6 weeks)"},
+   :lemma
+   {:name "embeddedCircle_annulusNeighborhood",
+    :reported-by [:owner],
+    :type
+    "Topology.IsEmbedding j → ∃ N, IsOpen N ∧ Set.range j ⊆ N ∧ Nonempty (N ≃ₜ Circle × Set.Ioo (-1:ℝ) 1)  (size: 500+ lines / 2-6 weeks)",
+    :area "embedded-circle-collar-surface"},
+   :id :lemma-embeddedcircle-annulusneighborhood,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t01J01 :t00A03]}
+  {:consumer :t03J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t03J02_pushout_openCover",
+    :type
+    "An open cover of apm_t03J02_space j₁ j₂ with pieces ≃ₕ T² and overlap ≃ₕ Circle  (size: 180-300 lines / 3-7 days)"},
+   :lemma
+   {:name "t03J02_pushout_openCover",
+    :reported-by [:owner],
+    :type
+    "An open cover of apm_t03J02_space j₁ j₂ with pieces ≃ₕ T² and overlap ≃ₕ Circle  (size: 180-300 lines / 3-7 days)",
+    :area "mayer-vietoris-open-cover"},
+   :id :lemma-t03j02-pushout-opencover,
+   :kind :lemma,
+   :depends-on [:lemma-embeddedcircle-annulusneighborhood],
+   :other-consumers []}
+  {:consumer :t03J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t03J02_trivial_leg_group_pushout",
+    :type
+    "The van Kampen pushout of ℤ² ← ℤ → ℤ² with trivial legs is apm_t03J02_freeProductZ2Z2  (size: 180-320 lines / 3-7 days)"},
+   :lemma
+   {:name "t03J02_trivial_leg_group_pushout",
+    :reported-by [:owner],
+    :type
+    "The van Kampen pushout of ℤ² ← ℤ → ℤ² with trivial legs is apm_t03J02_freeProductZ2Z2  (size: 180-320 lines / 3-7 days)",
+    :area "van-kampen-open-cover"},
+   :id :lemma-t03j02-trivial-leg-group-pushout,
+   :kind :lemma,
+   :depends-on [:lemma-t03j02-pushout-opencover],
+   :other-consumers []}
+  {:consumer :t03J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t03J02_bridge_1",
+    :type
+    "The exact FundamentalGroup equivalence in problems/t03J02/lean/Main.lean  (size: 30-60 lines / 4-8 hours)"},
+   :lemma
+   {:name "apm_t03J02_bridge_1",
+    :reported-by [:owner],
+    :type
+    "The exact FundamentalGroup equivalence in problems/t03J02/lean/Main.lean  (size: 30-60 lines / 4-8 hours)",
+    :area "van-kampen-open-cover"},
+   :id :lemma-apm-t03j02-bridge-1,
+   :kind :lemma,
+   :depends-on [:lemma-t03j02-trivial-leg-group-pushout],
+   :other-consumers []}
+  {:consumer :t03J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t03J02_bridge_2",
+    :type
+    "The exact H₀/H₁/H₂/higher singular-homology conjunction in problems/t03J02/lean/Main.lean  (size: 180-320 lines / 3-7 days)"},
+   :lemma
+   {:name "apm_t03J02_bridge_2",
+    :reported-by [:owner],
+    :type
+    "The exact H₀/H₁/H₂/higher singular-homology conjunction in problems/t03J02/lean/Main.lean  (size: 180-320 lines / 3-7 days)",
+    :area "mayer-vietoris-open-cover"},
+   :id :lemma-apm-t03j02-bridge-2,
+   :kind :lemma,
+   :depends-on [:lemma-t03j02-pushout-opencover],
+   :other-consumers []}
+  {:consumer :t03J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "covering_trivial_over_disk",
+    :type
+    "Every finite-sheet covering of Disk is equivalent over Disk to Disk × Fin n  (size: 150-250 lines / 2-4 days)"},
+   :lemma
+   {:name "covering_trivial_over_disk",
+    :reported-by [:owner],
+    :type
+    "Every finite-sheet covering of Disk is equivalent over Disk to Disk × Fin n  (size: 150-250 lines / 2-4 days)",
+    :area "covering-trivial-over-disk"},
+   :id :lemma-covering-trivial-over-disk,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t91A02]}
+  {:consumer :t03J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "polygon_double_cover_descent",
+    :type
+    "Double covers of Surface false 3 pulled back to Disk descend from edge swap labels Fin 3 → ZMod 2  (size: 250-450 lines / 1-2 weeks)"},
+   :lemma
+   {:name "polygon_double_cover_descent",
+    :reported-by [:owner],
+    :type
+    "Double covers of Surface false 3 pulled back to Disk descend from edge swap labels Fin 3 → ZMod 2  (size: 250-450 lines / 1-2 weeks)",
+    :area "polygon-cover-descent"},
+   :id :lemma-polygon-double-cover-descent,
+   :kind :lemma,
+   :depends-on [:lemma-covering-trivial-over-disk],
+   :other-consumers []}
+  {:consumer :t03J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t03J03_representative_covering_maps",
+    :type
+    "Seven representative connected two-fold covers indexed uniquely by nonzero Fin 3 → ZMod 2 characters  (size: 250-450 lines / 1-2 weeks)"},
+   :lemma
+   {:name "t03J03_representative_covering_maps",
+    :reported-by [:owner],
+    :type
+    "Seven representative connected two-fold covers indexed uniquely by nonzero Fin 3 → ZMod 2 characters  (size: 250-450 lines / 1-2 weeks)",
+    :area "polygon-cover-descent"},
+   :id :lemma-t03j03-representative-covering-maps,
+   :kind :lemma,
+   :depends-on [:lemma-polygon-double-cover-descent],
+   :other-consumers []}
+  {:consumer :t03J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t03J03_total_space_homeomorphisms",
+    :type
+    "The orientation-character representative has total space Surface true 2 and every other representative has Surface false 4  (size: 500+ lines / 2-6 weeks)"},
+   :lemma
+   {:name "t03J03_total_space_homeomorphisms",
+    :reported-by [:owner],
+    :type
+    "The orientation-character representative has total space Surface true 2 and every other representative has Surface false 4  (size: 500+ lines / 2-6 weeks)",
+    :area "polygon-cut-and-paste-homeomorph"},
+   :id :lemma-t03j03-total-space-homeomorphisms,
+   :kind :lemma,
+   :depends-on [:lemma-t03j03-representative-covering-maps],
+   :other-consumers []}
+  {:consumer :t03J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t03J03_bridge_1",
+    :type
+    "The exact connected double-cover classification existential in problems/t03J03/lean/Main.lean  (size: 50-100 lines / 1 day)"},
+   :lemma
+   {:name "apm_t03J03_bridge_1",
+    :reported-by [:owner],
+    :type
+    "The exact connected double-cover classification existential in problems/t03J03/lean/Main.lean  (size: 50-100 lines / 1 day)",
+    :area "covering-monodromy-character"},
+   :id :lemma-apm-t03j03-bridge-1,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t03j03-representative-covering-maps
+    :lemma-t03j03-total-space-homeomorphisms],
+   :other-consumers []}
+  {:consumer :t03J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t03J03_bridge_2",
+    :type
+    "Every disconnected two-sheet covering of N3 is equivalent over N3 to Sum.elim id id  (size: 120-220 lines / 2-4 days)"},
+   :lemma
+   {:name "apm_t03J03_bridge_2",
+    :reported-by [:owner],
+    :type
+    "Every disconnected two-sheet covering of N3 is equivalent over N3 to Sum.elim id id  (size: 120-220 lines / 2-4 days)",
+    :area "covering-trivial-over-disk"},
+   :id :lemma-apm-t03j03-bridge-2,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t03J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t03J03_bridge_3",
+    :type
+    "Every embedded closed cylinder lifts to every orientable two-sheet covering of N3  (size: 300+ lines / 2-4 weeks)"},
+   :lemma
+   {:name "apm_t03J03_bridge_3",
+    :reported-by [:owner],
+    :type
+    "Every embedded closed cylinder lifts to every orientable two-sheet covering of N3  (size: 300+ lines / 2-4 weeks)",
+    :area "surface-local-homology-orientation"},
+   :id :lemma-apm-t03j03-bridge-3,
+   :kind :lemma,
+   :depends-on [:lemma-apm-t03j03-bridge-1],
+   :other-consumers []}],
  :consumer-baselines {},
  :statuses
  #{:open

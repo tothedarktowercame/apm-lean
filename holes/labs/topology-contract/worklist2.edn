@@ -75286,7 +75286,8 @@
    {:name
     "ConstructionTargets.T02A03GeometricTubeCover.rightTubeMinusLeftCoreMeridianHomotopyEquiv",
     :reported-by
-    [:routes-2026-10-10-t02a03-right-tube-circle-equivalence-topo2-r1],
+    [:routes-2026-10-10-t02a03-right-tube-circle-equivalence-topo2-r1
+     :owner],
     :type
     "ContinuousMap.HomotopyEquiv ConstructionTargets.T02A03GeometricTubeDeformation.RightTubeMinusLeftCore Circle",
     :area "explicit-r3-tube-deformation-retraction"},
@@ -75294,7 +75295,8 @@
    :lemma-constructiontargets-t02a03geometrictubecover-righttubeminusleftcoremeridianhomot,
    :kind :lemma,
    :depends-on
-   [:lemma-constructiontargets-t02a03geometrictubecover-apm-t02a03-rightcorebasedattachment],
+   [:lemma-constructiontargets-t02a03geometrictubecover-apm-t02a03-rightcorebasedattachment
+    :lemma-constructiontargets-t02a03geometrictubedeformation-saferighttubemeridiandeformat],
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
@@ -75704,7 +75706,8 @@
    {:name
     "ConstructionTargets.T02A03GeometricTubeDeformation.safeRightTubeMeridianDeformation",
     :reported-by
-    [:routes-2026-10-10-t02a03-right-tube-meridian-retraction-homotopy-topo2-r1],
+    [:routes-2026-10-10-t02a03-right-tube-meridian-retraction-homotopy-topo2-r1
+     :owner],
     :type
     "exists (forward : C(RightTubeMinusLeftCore, Circle)) (H : C(unitInterval × RightTubeMinusLeftCore, apm_t02a03_E3)), (forall p, H (0,p) = apm_t02a03_circleMeridian (forward p)) and (forall p, H (1,p) = p.1) and (forall tp, H tp ∈ apm_t02a03_rightTube) and (forall tp, H tp ∉ Set.range apm_t02a03_leftCore)",
     :area "explicit-r3-tube-deformation-retraction"},
@@ -77985,7 +77988,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -78001,7 +78004,10 @@
     "forall (t : unitInterval) (p : RightTubeMinusLeftCore), (((1-2*(t:ℝ):ℝ):ℂ) + ((2*(t:ℝ):ℝ):ℂ)*rotatedEndpointWaypoint p) = 0 iff (rightTubeCorePlanarComplex p.1).re = 0 and 1-2*(t:ℝ)+2*(t:ℝ)*(rightTubeCorePlanarComplex p.1).im = 0",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-rotatedendpointwaypoint-depar,
    :kind :lemma,
@@ -78123,4 +78129,246 @@
    :depends-on
    [:lemma-torus-map-integer-lift
     :lemma-planar-bounded-perturbation-surjective],
+   :other-consumers []}
+  {:consumer :t02A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "polygon_quotient_t2",
+    :type
+    "T2Space (Quotient (Relation.EqvGen.setoid R)) for a finite closed polygon edge-pairing relation R  (size: 120-220 lines / 2-4 days)"},
+   :lemma
+   {:name "polygon_quotient_t2",
+    :reported-by [:owner],
+    :type
+    "T2Space (Quotient (Relation.EqvGen.setoid R)) for a finite closed polygon edge-pairing relation R  (size: 120-220 lines / 2-4 days)",
+    :area "polygon-quotient-t2"},
+   :id :lemma-polygon-quotient-t2,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t03J03 :t98A01 :tunk01]}
+  {:consumer :t02A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "polygon_word_quotient_classes",
+    :type
+    "Classification of EqvGen classes of polygon interior, edge-interior, and vertex points  (size: 200-350 lines / 4-8 days)"},
+   :lemma
+   {:name "polygon_word_quotient_classes",
+    :reported-by [:owner],
+    :type
+    "Classification of EqvGen classes of polygon interior, edge-interior, and vertex points  (size: 200-350 lines / 4-8 days)",
+    :area "polygon-word-quotient-classes"},
+   :id :lemma-polygon-word-quotient-classes,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t03J03 :t98A01 :tunk01]}
+  {:consumer :t02A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t02a02_cutPasteMap",
+    :type
+    "A continuous Disk → Surface false 2 map constant on apm_t02a02_gluingRel  (size: 250-450 lines / 1-2 weeks)"},
+   :lemma
+   {:name "apm_t02a02_cutPasteMap",
+    :reported-by [:owner],
+    :type
+    "A continuous Disk → Surface false 2 map constant on apm_t02a02_gluingRel  (size: 250-450 lines / 1-2 weeks)",
+    :area "polygon-cut-paste-homeomorph"},
+   :id :lemma-apm-t02a02-cutpastemap,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t02A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t02a02_cutPaste_bijective",
+    :type
+    "Function.Bijective of the descended apm_t02a02_F → Surface false 2 map  (size: 150-300 lines / 3-7 days)"},
+   :lemma
+   {:name "apm_t02a02_cutPaste_bijective",
+    :reported-by [:owner],
+    :type
+    "Function.Bijective of the descended apm_t02a02_F → Surface false 2 map  (size: 150-300 lines / 3-7 days)",
+    :area "polygon-cut-paste-homeomorph"},
+   :id :lemma-apm-t02a02-cutpaste-bijective,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polygon-word-quotient-classes
+    :lemma-apm-t02a02-cutpastemap],
+   :other-consumers []}
+  {:consumer :t02A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t02a02",
+    :type
+    "Nonempty (apm_t02a02_F ≃ₜ Surface false 2)  (size: 10-20 lines / 1-2 hours)"},
+   :lemma
+   {:name "apm_t02a02",
+    :reported-by [:owner],
+    :type
+    "Nonempty (apm_t02a02_F ≃ₜ Surface false 2)  (size: 10-20 lines / 1-2 hours)",
+    :area "polygon-cut-paste-homeomorph"},
+   :id :lemma-apm-t02a02,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polygon-quotient-t2 :lemma-apm-t02a02-cutpaste-bijective],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T02A03ClosedPuncturedDiskTorus.t02a03_closed_punctured_disk_torus",
+    :type
+    "  (found in ConstructionTargets/T02A03ClosedPuncturedDiskTorus.lean:126)"},
+   :lemma
+   {:name
+    "ConstructionTargets.T02A03ClosedPuncturedDiskTorus.t02a03_closed_punctured_disk_torus",
+    :reported-by [:owner],
+    :type
+    "  (found in ConstructionTargets/T02A03ClosedPuncturedDiskTorus.lean:126)",
+    :proved-in :owner,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03ClosedPuncturedDiskTorus.lean"]},
+   :id
+   :lemma-constructiontargets-t02a03closedpunctureddisktorus-t02a03-closed-punctured-disk-,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T02A03LeftTubePuncturedModel.leftTubeMinusCoreHomotopyEquivTorus",
+    :type
+    "  (found in ConstructionTargets/T02A03LeftTubePuncturedModel.lean:373)"},
+   :lemma
+   {:name
+    "ConstructionTargets.T02A03LeftTubePuncturedModel.leftTubeMinusCoreHomotopyEquivTorus",
+    :reported-by [:owner],
+    :type
+    "  (found in ConstructionTargets/T02A03LeftTubePuncturedModel.lean:373)",
+    :proved-in :owner,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03LeftTubePuncturedModel.lean"]},
+   :id
+   :lemma-constructiontargets-t02a03lefttubepuncturedmodel-lefttubeminuscorehomotopyequivt,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T02A03GeometricTubeDeformation.geometricYHomotopyEquivGenericWedge",
+    :type
+    "Nonempty (ContinuousMap.HomotopyEquiv apm_t02a03_geometricY_probe TorusCircleWedgeOpenCover.GenericWedge)  (size: 200-400 lines / 1-2 weeks)"},
+   :lemma
+   {:name
+    "ConstructionTargets.T02A03GeometricTubeDeformation.geometricYHomotopyEquivGenericWedge",
+    :reported-by [:owner],
+    :type
+    "Nonempty (ContinuousMap.HomotopyEquiv apm_t02a03_geometricY_probe TorusCircleWedgeOpenCover.GenericWedge)  (size: 200-400 lines / 1-2 weeks)",
+    :area "homotopy-equiv-gluing-lemma"},
+   :id
+   :lemma-constructiontargets-t02a03geometrictubedeformation-geometricyhomotopyequivgeneri,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t02a03geometrictubecover-righttubeminusleftcoremeridianhomot],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t02a03_geometric_adapter",
+    :type
+    "Nonempty (ContinuousMap.HomotopyEquiv apm_t02a03_geometricY apm_t02a03_Y), followed by the frozen conjunction  (size: 30-60 lines / 4-8 hours)"},
+   :lemma
+   {:name "apm_t02a03_geometric_adapter",
+    :reported-by [:owner],
+    :type
+    "Nonempty (ContinuousMap.HomotopyEquiv apm_t02a03_geometricY apm_t02a03_Y), followed by the frozen conjunction  (size: 30-60 lines / 4-8 hours)",
+    :area "homotopy-equiv-gluing-lemma"},
+   :id :lemma-apm-t02a03-geometric-adapter,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t02a03geometrictubedeformation-geometricyhomotopyequivgeneri],
+   :other-consumers []}
+  {:consumer :t02A05,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.IntrinsicSphereFourthMoments.unitFlux_moment",
+    :type
+    "  (found in ConstructionTargets/IntrinsicSphereFourthMoments.lean:148)"},
+   :lemma
+   {:name
+    "ConstructionTargets.IntrinsicSphereFourthMoments.unitFlux_moment",
+    :reported-by [:owner],
+    :type
+    "  (found in ConstructionTargets/IntrinsicSphereFourthMoments.lean:148)",
+    :proved-in :owner,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/IntrinsicSphereFourthMoments.lean"]},
+   :id
+   :lemma-constructiontargets-intrinsicspherefourthmoments-unitflux-moment,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t02A05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "euclidean_hausdorff_two_normalization",
+    :type
+    "(μH[2] : Measure (EuclideanSpace ℝ (Fin 2))) = (4 / Real.pi) • volume  (size: 200-400 lines / 1-2 weeks)"},
+   :lemma
+   {:name "euclidean_hausdorff_two_normalization",
+    :reported-by [:owner],
+    :type
+    "(μH[2] : Measure (EuclideanSpace ℝ (Fin 2))) = (4 / Real.pi) • volume  (size: 200-400 lines / 1-2 weeks)",
+    :area "euclidean-hausdorff-normalisation"},
+   :id :lemma-euclidean-hausdorff-two-normalization,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t01J06]}
+  {:consumer :t02A05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t02A05_true_flux_formula",
+    :type
+    "apm_t02a05_outwardSphereIntegral omega c = 176/15 + 16 * ((c 0 - 1)^2 + (c 1 - 2)^2)  (size: 80-160 lines / 1-3 days)"},
+   :lemma
+   {:name "apm_t02A05_true_flux_formula",
+    :reported-by [:owner],
+    :type
+    "apm_t02a05_outwardSphereIntegral omega c = 176/15 + 16 * ((c 0 - 1)^2 + (c 1 - 2)^2)  (size: 80-160 lines / 1-3 days)",
+    :area "euclidean-hausdorff-normalisation"},
+   :id :lemma-apm-t02a05-true-flux-formula,
+   :kind :lemma,
+   :depends-on [:lemma-euclidean-hausdorff-two-normalization],
    :other-consumers []}]}
