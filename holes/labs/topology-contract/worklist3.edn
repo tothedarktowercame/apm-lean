@@ -12019,6 +12019,23 @@
      "Production relative singular homology of the identical unit-open-disk pair in degree k+2",
      :direction
      "Canonical isomorphism from the coefficient relative-homology representation to the production relative-homology representation, obtained by exact specialization of the transport-corrected integral comparison"},
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791707721744-4782-4b07d4a0",
+     :commands
+     ["rg ledger row and frozen contract"
+      "git show and git diff-tree recorded commit"
+      "git blob identity and git diff --check"
+      "sha256sum frozen fixture"
+      "lake env lean collision-renamed frozen-fixture replay"
+      "lake env lean target module"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"
+      "python3 scripts/statement-registry.py check"
+      "placeholder and axiom scan"
+      "consumer placeholder census"],
+     :finding
+     "PASS: independent review of commit 2f126a59; scope is exactly ConstructionTargets/ManifoldFundamentalClass.lean and the recorded blob matches the checkout; fixture SHA-256 and frozen declaration hash match; the supporting isomorphism has the required coefficient-relative-to-production-relative direction and is the exact unit-open-disk specialization of the banked transport-corrected comparison, while the frozen hom equality is definitional; no connecting-map or radial-map naturality, sphere comparison, sign exclusion, sign selection, or fundamental-class construction is attempted; fixture replay, module check, and 8326-job build pass; axioms are exactly propext, Classical.choice, Quot.sound; registry is 131/0; target placeholders are 0 and consumer counts remain 1/1."},
     :commit "2f126a59be7e33c1a64b0772c93f4541c3c7fb78",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -12037,7 +12054,7 @@
     :routes-2026-10-11-manifold-integral-open-disk-relative-homology-comparison-topo3-r1,
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/integral-open-disk-relative-homology-comparison",
@@ -12237,7 +12254,7 @@
      "The banked general integral relative-homology comparison specializes definitionally to the punctured unit open disk, so no Euclidean-to-disk homeomorphism is needed at this stage. The resulting named isomorphism has exactly the coefficient relative group as source and production relative group as target. The remaining substantive boundary is naturality with the two connecting morphisms, followed by radial and sphere normalization compatibility.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -16295,7 +16312,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -16310,7 +16327,10 @@
     :type
     "forall (k : ℕ), forgetIntModules.obj ((CoefficientRelativeSmall.relativeChains ℤ (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2))).homology (k + 2)) ≅ (RelativeSingularChains (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2))).homology (k + 2)",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2,
+    :banked-by
+    :routes-2026-10-11-manifold-integral-open-disk-relative-homology-comparison-topo3-r1,
+    :banked-commit "2f126a59be7e33c1a64b0772c93f4541c3c7fb78"},
    :id :lemma-mfclass-integral-open-disk-relative-homology-comparison,
    :kind :lemma,
    :depends-on
@@ -16318,7 +16338,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -16334,7 +16354,10 @@
     "forall (k : Nat), (integralOpenDiskRelativeHomologyComparison k).hom = (integralRelativeHomologyComparisonWithTransport (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2)) (k + 2)).hom",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-integral-open-disk-relative-homology-comparison-topo3-r1},
+    :routes-2026-10-11-manifold-integral-open-disk-relative-homology-comparison-topo3-r1,
+    :banked-by
+    :routes-2026-10-11-manifold-integral-open-disk-relative-homology-comparison-topo3-r1,
+    :banked-commit "2f126a59be7e33c1a64b0772c93f4541c3c7fb78"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-integralopendiskrelativehomologycom,
    :kind :lemma,
