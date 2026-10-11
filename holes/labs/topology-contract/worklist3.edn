@@ -5876,6 +5876,23 @@
       :expected-exit 1}
      {:cmd "git status --porcelain", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791686895289-3867-05c173b4",
+     :commands
+     ["git diff-tree recorded commit scope"
+      "git blob identity check"
+      "sha256sum promoted fixture"
+      "git diff --check recorded commit"
+      "lake env lean promoted fixture"
+      "lake env lean target module"
+      "lake build target module"
+      "placeholder and axiom scan"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped consumer placeholder census"],
+     :finding
+     "PASS: implementation commit 12ef7966 changes exactly ConstructionTargets/ManifoldFundamentalClass.lean and its recorded blob matches the reviewed source; promoted fixture hash bc40cad2a9618c7e88d3766ed659aea404d12a22bab89be7c6d5ea8c89993cd6 matches recorded evidence and preserves the registered frozen theorem type; integralRelativeHomologyComparisonWithTransport_hom expands the packaged hom in the required direction to mapHomologyIso.inv followed by homologyMap of integralRelativeChainsComparisonWithTransport.hom, with every source, target, and degree fixed; the proof is definitional after unfolding and does not cancel the preservation isomorphism, compare with integralRelativeHomologyComparison, or claim packaged projection naturality, normalization compatibility, or generator transport; fixture, module, and 8326-job target build pass with zero source/fixture placeholders and only propext, Classical.choice, and Quot.sound; 131 statements match with zero mismatches and consumer placeholders remain t00J02=1 and t98A02=1."},
     :commit "12ef79662ac42acf4d12d2a5eda17c8d1d55dfad",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -5899,7 +5916,7 @@
       "Exact morphism equality expanding the packaged transport-explicit homology comparison from its source representation to its canonical preservation-and-chain-homology composite"}},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/corrected-homology-preservation-bridge",
@@ -6064,7 +6081,7 @@
      "The compiled theorem exposes the precise preservation morphism hidden by the packaged homology isomorphism. A direct cancellation theorem was not elaboration-stable because the mapped short-complex homology degree remained implicit, but the explicit hom equation fixes every source and target and introduces no workaround or arbitrary isomorphism. The next prerequisite can combine it with the naturality theorem for mapHomologyIso and the banked raw homology projection equality.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -8788,7 +8805,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -8805,7 +8822,10 @@
     "forall {X : Type} [TopologicalSpace X] (A : Set X) (n : Nat), (integralRelativeHomologyComparisonWithTransport A n).hom = (((CoefficientRelativeSmall.relativeChains Int A).sc n).mapHomologyIso forgetIntModules).inv ≫ HomologicalComplex.homologyMap (integralRelativeChainsComparisonWithTransport A).hom n",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-corrected-homology-comparison-hom-topo3-r1},
+    :routes-2026-10-11-manifold-corrected-homology-comparison-hom-topo3-r1,
+    :banked-by
+    :routes-2026-10-11-manifold-corrected-homology-comparison-hom-topo3-r1,
+    :banked-commit "12ef79662ac42acf4d12d2a5eda17c8d1d55dfad"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-integralrelativehomologycomparisonwithtransport-hom,
    :kind :lemma,
