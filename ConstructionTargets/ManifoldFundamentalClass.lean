@@ -826,6 +826,31 @@ theorem integralRelativeHomologyComparisonWithTransport_normalization_of_generat
       rw [hgen, map_zsmul, ambientLocalNormalization_generator,
         map_zsmul, CoefficientChartLocal.generator_normalization]
 
+/-- The ambient normalization coordinate of the corrected comparison's image
+of the coefficient local generator. -/
+noncomputable def correctedLocalGeneratorCoefficient
+    (k : ℕ) {M : Type} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M) : ℤ :=
+  (ambientLocalNormalization k x).hom.hom
+    ((integralRelativeHomologyComparisonWithTransport
+      (deletedPoint x) (k + 2)).hom.hom
+        (CoefficientChartLocal.generator ℤ k x))
+
+/-- The corrected image of the coefficient generator is its normalization
+coordinate times the ambient local generator. -/
+theorem integralRelativeHomologyComparisonWithTransport_generator_eq_zsmul
+    (k : ℕ) {M : Type} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M) :
+    (integralRelativeHomologyComparisonWithTransport
+        (deletedPoint x) (k + 2)).hom.hom
+        (CoefficientChartLocal.generator ℤ k x) =
+      correctedLocalGeneratorCoefficient k x •
+        HigherChartLocalGenerator.ambientLocalGenerator (k := k) x := by
+  apply (ConcreteCategory.bijective_of_isIso
+    (ambientLocalNormalization k x).hom).1
+  unfold correctedLocalGeneratorCoefficient
+  rw [map_zsmul, ambientLocalNormalization_generator, smul_eq_mul, mul_one]
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -876,3 +901,5 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
+#print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient
+#print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_eq_zsmul
