@@ -477,6 +477,22 @@ theorem genericPointWedgeIdentityCoordinateReverseSpan_glue_app :
           (reverseRightComparison r r' eK eR aR Q.right).hom.app z := by
   rfl
 
+/-- The middle factor in the reverse coordinate glue evaluates at the image
+of the chosen overlap representative under the overlap equivalence. -/
+theorem genericPointWedgeIdentityCoordinateWhiskeredGlue_app :
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let Q := genericPointWedgeIdentityCoordinateSpan x₀ y₀
+    let z : FundamentalGroupoid (genericPointWedgeOverlapPiece x₀ y₀ M N) :=
+      FundamentalGroupoid.mk
+        ⟨quotientMap x₀ y₀ (.inl x₀),
+          ⟨⟨.inl x₀, by trivial, rfl⟩,
+            ⟨.inr y₀, by trivial,
+              (Quotient.sound (Relation.EqvGen.rel _ _ Rel.base)).symm⟩⟩⟩
+    (Functor.isoWhiskerLeft eK.functor Q.glue).hom.app z =
+      Q.glue.hom.app (eK.functor.obj z) := by
+  rfl
+
 /-- The penultimate inverse stage of B3, now expressed as the literal
 pseudococone on the two open pieces. -/
 def genericPointWedgeIdentityPseudoCocone :
@@ -1816,6 +1832,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeIdentityGlobalRightBaseElement_eq_actualGlue
 #print axioms genericPointWedgeIdentityGlobalRightBaseElement_eq_coordinateReverseGlue
 #print axioms genericPointWedgeIdentityCoordinateReverseSpan_glue_app
+#print axioms genericPointWedgeIdentityCoordinateWhiskeredGlue_app
 #print axioms genericPointWedgeIdentityGlobalRightRestriction_map
 #print axioms genericPointWedgeIdentityGlobalRightBase_map
 #print axioms genericPointWedgeIdentityRepresentation_inl

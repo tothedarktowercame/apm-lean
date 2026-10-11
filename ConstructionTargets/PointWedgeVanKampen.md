@@ -249,3 +249,9 @@ order it is the inverse left comparison, then the coordinate glue whiskered
 along the overlap equivalence, then the right comparison.  The remaining B6
 calculation is to evaluate these three components in the one-object target
 and match the resulting cover morphisms with the literal wedge-leg lifts.
+
+The middle component is now evaluated at the object level by
+`genericPointWedgeIdentityCoordinateWhiskeredGlue_app`: it is exactly the
+coordinate-span glue component at the image of the explicit overlap base
+under the overlap equivalence.  The remaining calculation is that coordinate
+glue and the two outer comparison components, followed by the literal lifts.
