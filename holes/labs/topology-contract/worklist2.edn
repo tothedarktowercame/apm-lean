@@ -70315,56 +70315,71 @@
      "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightSignedImaginaryWaypoint",
      :type "RightTubeMinusLeftCore -> ℂ"}],
    :evidence
-   {:probe
-    {:residual
-     "Implement the signed waypoint and its properties in scope, then construct the two radius-bounded affine legs and certify their nonzero-imaginary interiors.",
-     :outcome :go,
-     :warnings [],
-     :axioms [propext Classical.choice Quot.sound],
-     :commands
-     [{:cmd
-       "lake env lean /tmp/t02a03_signed_imaginary_waypoint_probe.lean",
-       :exit 0,
-       :output
-       "zeroHeight_signedImaginaryWaypoint_properties compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "sha256sum /tmp/t02a03_signed_imaginary_waypoint_probe.lean",
-       :exit 0,
-       :output
-       "72ad9b0394c560265a88553254dcead6892aa46d25b92de68db7989fced31991  /tmp/t02a03_signed_imaginary_waypoint_probe.lean"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_signed_imaginary_waypoint_probe.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}
-      {:cmd
-       "rg -n 'zeroHeightSignedImaginaryWaypoint|zeroHeight_signedImaginaryWaypoint_properties' /tmp/t02a03_signed_imaginary_waypoint_probe.lean",
-       :exit 0,
-       :output
-       "5:noncomputable def zeroHeightSignedImaginaryWaypoint\n9:theorem zeroHeight_signedImaginaryWaypoint_properties\n26:#print axioms zeroHeight_signedImaginaryWaypoint_properties"}],
-     :fixture
-     {:path "/tmp/t02a03_signed_imaginary_waypoint_probe.lean",
-      :sha256
-      "72ad9b0394c560265a88553254dcead6892aa46d25b92de68db7989fced31991"},
-     :finding
-     "The placeholder-free fixture defines the waypoint continuously from meridian.re and proves that every zero-height input sends it to one of the two points ±i/8. Hence its norm is exactly 1/8 and its imaginary coordinate is nonzero, with no discontinuous sign selector.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
-      :declaration
-      "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeight_signedImaginaryWaypoint_properties",
-      :type
-      "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> ‖zeroHeightSignedImaginaryWaypoint p‖ = (1 / 8 : ℝ) ∧ (zeroHeightSignedImaginaryWaypoint p).im ≠ 0",
-      :supporting-declarations
-      [{:name
-        "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightSignedImaginaryWaypoint",
-        :type "RightTubeMinusLeftCore -> ℂ"}]},
-     :seat "topo-8"}},
+   {:placeholder-delta {:before 0, :after 0, :change 0},
+    :residual
+    "Construct radius-bounded affine legs from each real endpoint to the signed imaginary waypoint, prove their interiors have nonzero imaginary part and their endpoints retain the banked collision certificates, then concatenate.",
+    :supporting-declarations
+    [{:name
+      "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightSignedImaginaryWaypoint",
+      :type "RightTubeMinusLeftCore -> ℂ"}],
+    :outcome :done-unreviewed,
+    :warnings
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean:62:6: unnecessarySimpa (pre-existing)"
+     "The canonical checkout's .lake/packages is a real directory, so the frame-worktree symlink diagnostic does not apply cleanly here."],
+    :missing-theorems [],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms [propext Classical.choice Quot.sound],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :scope-blob "2eab70c7942e370bd6eaa3c4915b9da04aea5dd5",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0,
+      :output
+      "compiled; declaration axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "lake env lean /tmp/t02a03_signed_imaginary_waypoint_probe.lean",
+      :exit 0,
+      :output
+      "zeroHeight_signedImaginaryWaypoint_properties compiled; axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "sha256sum /tmp/t02a03_signed_imaginary_waypoint_probe.lean",
+      :exit 0,
+      :output
+      "72ad9b0394c560265a88553254dcead6892aa46d25b92de68db7989fced31991  /tmp/t02a03_signed_imaginary_waypoint_probe.lean"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "git diff --check -- ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd
+      "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :diagnostic-history
+    [{:cmd
+      "test -L .lake/packages && test \"$(readlink -f .lake/packages)\" = /home/joe/code/apm-lean/.lake/packages",
+      :exit 1,
+      :finding
+      "This canonical checkout has a real .lake/packages directory; no package-authority mutation was made during the scoped theorem row."}],
+    :commit "f95ab3227201eda0de41bfbd1e52341924497070",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeight_signedImaginaryWaypoint_properties",
+    :fixture
+    {:path "/tmp/t02a03_signed_imaginary_waypoint_probe.lean",
+     :sha256
+     "72ad9b0394c560265a88553254dcead6892aa46d25b92de68db7989fced31991"},
+    :finding
+    "The waypoint is the meridian real coordinate times i/8, so it varies continuously without selecting a sign discontinuously. At zero height the meridian real coordinate is ±1; consequently the waypoint is ±i/8, has norm 1/8, and has nonzero imaginary part.",
+    :seat "topo-6"},
    :phase :implementation,
    :type
    "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> ‖zeroHeightSignedImaginaryWaypoint p‖ = (1 / 8 : ℝ) ∧ (zeroHeightSignedImaginaryWaypoint p).im ≠ 0",
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/zero-height-signed-imaginary-waypoint-properties",
