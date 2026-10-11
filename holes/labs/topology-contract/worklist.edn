@@ -116059,14 +116059,14 @@
    :depends-on [],
    :other-consumers []}
   {:consumer :t95J02,
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "B7 reverses the functorial composition. Because beta.comp reflection is beta after reflection, homotopy invariance gives H1(beta) = H1(reflection) ≫ H1(beta), not H1(beta) ≫ H1(reflection). The written composite is ill-typed: H1(beta) lands in Klein-bottle homology, while H1(reflection) is an endomorphism of sphere homology. Reverse the factors, then use integral_circle 1 to derive H1(beta)(g) = H1(beta)(-g).",
    :evidence
    {:blueprint
     {:path "ConstructionTargets/t95J02Closure.blueprint.md",
      :sha256
-     "3f917aac1b2315ca3a47972b2bcfced3b188a7e20e498241a955fc5cf2f39fdc",
+     "26284f315609ccfbaef18b9a1db46411f318de9462a6ab8cd30bdec6a7f1d906",
      :nodes
      [{:id :B1, :status :planned}
       {:id :B2, :status :planned}
@@ -116120,53 +116120,47 @@
       :area "klein-bottle-homology"}],
     :statement-hashes
     {:blueprint-sha256
-     "3f917aac1b2315ca3a47972b2bcfced3b188a7e20e498241a955fc5cf2f39fdc",
+     "26284f315609ccfbaef18b9a1db46411f318de9462a6ab8cd30bdec6a7f1d906",
      :registry "131 registered statements match, 0 do not"},
     :disposition :stop,
     :axioms [],
     :author "topo-2",
     :reason
-    "Blueprint repaired. B6 and B7 now name CoefficientCoordinateReflections.reflectionMap (1 : Fin 2), while CoefficientFirstReflection.integral_circle remains the theorem proving its integral H1 action is negative. Fresh Lean checks validate both declarations. Independent blueprint re-review remains required before formalization.",
+    "Blueprint repaired. B7 now uses the type-correct functorial order H1(reflectionMap 1) followed by H1(beta), derives H1(beta)(g) = H1(beta)(-g), and uses additivity to kill 2 times g. A fresh Lean map_comp check confirms the source and target order. Independent blueprint re-review remains required.",
     :commands
     [{:cmd
-      "lake env lean /dev/stdin with checks for CoefficientCoordinateReflections.reflectionMap 1 and CoefficientFirstReflection.integral_circle 1",
+      "lake env lean /dev/stdin with H1 map_comp and integral_circle checks",
       :exit 0,
       :finding
-      "Lean confirms the map is a continuous sphere self-map and integral_circle 1 identifies its induced H1 map with negative identity."}
-     {:cmd "python3 blueprint namespace validation",
+      "Lean reports map(reflectionMap 1 followed by beta) equals map(reflectionMap 1) followed by map(beta), and integral_circle 1 identifies the first factor with negative identity."}
+     {:cmd "python3 B7 composition-order validation",
       :exit 0,
       :finding
-      "No invalid CoefficientFirstReflection.reflectionMap reference remains; B6 and B7 use the correct map namespace and retain the correct homology theorem namespace."}
+      "The ill-typed reversed composite is absent; B7 records the type-correct composite and elementwise equality."}
      {:cmd
       "git diff --check -- ConstructionTargets/t95J02Closure.blueprint.md",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131 registered statements match, 0 do not."}
-     {:cmd "git commit -m Qualify-t95J02-reflection-map-correctly",
+     {:cmd "git commit -m Correct-t95J02-homology-composition-order",
       :exit 0,
       :finding
-      "Committed only the scoped blueprint repair as 01528924a68a337ed7718cd30daa4cd0e88299c3."}
+      "Committed only the scoped blueprint repair as 6461d9295ff33499139569f43b4605c21ab88258."}
      {:cmd "sha256sum ConstructionTargets/t95J02Closure.blueprint.md",
       :exit 0,
       :finding
-      "3f917aac1b2315ca3a47972b2bcfced3b188a7e20e498241a955fc5cf2f39fdc"}],
+      "26284f315609ccfbaef18b9a1db46411f318de9462a6ab8cd30bdec6a7f1d906"}],
     :diagnostic-history [],
     :continue-from
-    {:commit "01528924a68a337ed7718cd30daa4cd0e88299c3",
+    {:commit "6461d9295ff33499139569f43b4605c21ab88258",
      :next
-     "Obtain independent review of the corrected declaration qualification; after approval formalize B1 and B2 in ConstructionTargets/t95J02Closure.lean."},
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1791717939367-5255-6d6e29ec",
-     :finding
-     "B7 reverses the functorial composition. Because beta.comp reflection is beta after reflection, homotopy invariance gives H1(beta) = H1(reflection) ≫ H1(beta), not H1(beta) ≫ H1(reflection). The written composite is ill-typed: H1(beta) lands in Klein-bottle homology, while H1(reflection) is an endomorphism of sphere homology. Reverse the factors, then use integral_circle 1 to derive H1(beta)(g) = H1(beta)(-g)."},
-    :commit "01528924a68a337ed7718cd30daa4cd0e88299c3",
+     "Obtain independent review of the corrected functorial composition; after approval formalize B1 and B2 in ConstructionTargets/t95J02Closure.lean."},
+    :commit "6461d9295ff33499139569f43b4605c21ab88258",
     :changed-paths ["ConstructionTargets/t95J02Closure.blueprint.md"],
     :seat "topo-2"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t95J02/lean/Main.lean"
     "problems/t95J02/status.json"
