@@ -72521,55 +72521,61 @@
    "single-consumer time-support certificate for the rotated waypoint departure detour",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:residual
-     "Construct a continuous transverse correction, vanishing at both leg endpoints and active on the characterized zero locus, and prove the corrected departure creates no new zeros; then combine it with the banked safe arrival leg and downstream adapters.",
-     :outcome :go,
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd
-       "lake env lean /tmp/t02a03_rotated_waypoint_departure_zero_time_pos_probe.lean",
-       :exit 0,
-       :output
-       "rotatedEndpointWaypoint_departure_zero_time_pos compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "sha256sum /tmp/t02a03_rotated_waypoint_departure_zero_time_pos_probe.lean",
-       :exit 0,
-       :output
-       "f3cf24e30be79eedb11c2e54133749356fee9630698a269a73d0ee3a9aa19753  /tmp/t02a03_rotated_waypoint_departure_zero_time_pos_probe.lean"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_rotated_waypoint_departure_zero_time_pos_probe.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}
-      {:cmd
-       "rg -n 'rotatedEndpointWaypoint_departure_zero_time_pos' /tmp/t02a03_rotated_waypoint_departure_zero_time_pos_probe.lean",
-       :exit 0,
-       :output
-       "11:theorem rotatedEndpointWaypoint_departure_zero_time_pos\n24:#print axioms rotatedEndpointWaypoint_departure_zero_time_pos"}],
-     :fixture
-     {:path
-      "/tmp/t02a03_rotated_waypoint_departure_zero_time_pos_probe.lean",
-      :sha256
-      "f3cf24e30be79eedb11c2e54133749356fee9630698a269a73d0ee3a9aa19753"},
-     :finding
-     "The compiled proof uses only the unit-interval lower bound: if departure time were not positive, it would equal zero, where the affine departure expression simplifies to one and cannot vanish.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
-      :declaration
-      "ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_departure_zero_time_pos",
-      :type
-      "forall (t : unitInterval) (p : RightTubeMinusLeftCore), (((1-2*(t:ℝ):ℝ):ℂ) + ((2*(t:ℝ):ℝ):ℂ)*rotatedEndpointWaypoint p) = 0 -> 0 < (t : ℝ)",
-      :acceptance
-      "Use the canonical rotatedEndpointWaypoint already in scope in place of the fixture-local identical definition; preserve the proof that a zero time contradicts the value one, with no placeholders or nonstandard axioms."},
-     :seat "topo-8"}},
+   {:placeholder-delta 0,
+    :residual
+    "Construct a continuous transverse correction, vanishing at both leg endpoints and active on the characterized zero locus, and prove the corrected departure creates no new zeros; then combine it with the banked safe arrival leg and downstream adapters.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["Existing linter warning at ConstructionTargets/T02A03GeometricTubeDeformation.lean:64:6 recommends simp instead of simpa."],
+    :missing-theorems [],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not",
+     :scoped-file-blob "c42d168625936733a9165b71962b50c4be610cc6"},
+    :axioms [propext Classical.choice Quot.sound],
+    :author "topo-6",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/t02a03_rotated_waypoint_departure_zero_time_pos_probe.lean",
+      :exit 0,
+      :output
+      "f3cf24e30be79eedb11c2e54133749356fee9630698a269a73d0ee3a9aa19753  /tmp/t02a03_rotated_waypoint_departure_zero_time_pos_probe.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/t02a03_rotated_waypoint_departure_zero_time_pos_probe.lean",
+      :exit 0,
+      :output
+      "rotatedEndpointWaypoint_departure_zero_time_pos compiled; axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "git diff --check -- ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd
+      "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git show --check --oneline 19ac0b6dc",
+      :exit 0,
+      :output "19ac0b6dc Add t02A03 rotated departure time support"}],
+    :diagnostic-history [],
+    :commit "19ac0b6dccf7243b5e3b636ec9c8684968ef32e6",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+    :fixture
+    {:path
+     "/tmp/t02a03_rotated_waypoint_departure_zero_time_pos_probe.lean",
+     :sha256
+     "f3cf24e30be79eedb11c2e54133749356fee9630698a269a73d0ee3a9aa19753"},
+    :finding
+    "A departure zero must occur at positive time: nonpositivity together with the unit-interval lower bound forces time zero, where the affine departure expression simplifies to one.",
+    :seat "topo-6"},
    :phase :implementation,
    :type
    "forall (t : unitInterval) (p : RightTubeMinusLeftCore), (((1-2*(t:ℝ):ℝ):ℂ) + ((2*(t:ℝ):ℝ):ℂ)*rotatedEndpointWaypoint p) = 0 -> 0 < (t : ℝ)",
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/rotated-waypoint-departure-zero-time-positive",
