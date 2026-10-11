@@ -806,6 +806,27 @@ theorem recoveredNormal_rightTubeRadialAmbientDeformation
   · simp
   · simp [rightTubePolarReconstruction]
 
+theorem avoidsLeftCore_rightTubeRadialAmbientDeformation
+    (tp : unitInterval × RightTubeMinusLeftCore) :
+    rightTubeRadialAmbientDeformation tp ∉ Set.range apm_t02a03_leftCore := by
+  intro hmem
+  have hz : rightTubeNormalComplex (rightTubeRadialAmbientDeformation tp) = 0 :=
+    (rightTubeNormalComplex_eq_zero_iff _).mpr hmem
+  rw [recoveredNormal_rightTubeRadialAmbientDeformation] at hz
+  have hn : rightTubeNormalCoordinate tp.2 ≠ 0 := by
+    intro h
+    exact tp.2.2.2 ((rightTubeNormalComplex_eq_zero_iff tp.2.1).mp h)
+  have hne : rightTubeRadialNormalInterpolation rightTubeNormalCoordinate
+      rightTubeMeridianCoordinate tp ≠ 0 := by
+    change (((1 - (tp.1 : ℝ)) * (1 / 8 : ℝ) +
+      (tp.1 : ℝ) * ‖rightTubeNormalCoordinate tp.2‖ : ℝ) : ℂ) *
+        (rightTubeMeridianCoordinate tp.2 : ℂ) ≠ 0
+    exact mul_ne_zero
+      (by exact_mod_cast (rightTubeRadialCoefficient_pos tp.1
+        (rightTubeNormalCoordinate tp.2) hn).ne')
+      (Circle.coe_ne_zero (rightTubeMeridianCoordinate tp.2))
+  exact hne hz
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -832,3 +853,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeRadialAmbientDeformation_endpoints
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.positiveReconstructionRadius_rightTubeRadialNormalInterpolation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.recoveredNormal_rightTubeRadialAmbientDeformation
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.avoidsLeftCore_rightTubeRadialAmbientDeformation
