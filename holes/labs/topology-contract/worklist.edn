@@ -115275,7 +115275,7 @@
    :other-consumers []}
   {:consumer :t92J08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "apm_t92J08_bridge_1",
@@ -115287,7 +115287,9 @@
     :type
     "∃ ε>0, ∀ x, ∃ γ, γ 0=x ∧ IsMIntegralCurveOn γ v (Ioo (-ε) ε)  (size: 100-180 lines / 1-2 days)",
     :area "manifold-uniform-local-flow",
-    :proved-in :program-2026-10-11-close-t92j08},
+    :proved-in :program-2026-10-11-close-t92j08,
+    :banked-by :program-2026-10-11-close-t92j08,
+    :banked-commit "d22c0576c7fe6d6157710f36136f94c1dc5cc053"},
    :id :lemma-apm-t92j08-bridge-1,
    :kind :lemma,
    :depends-on
@@ -116369,6 +116371,18 @@
       :exit 1,
       :finding
       "The first consumer compile found that the newly imported closure module had no built object file; corrected by building ConstructionTargets.t92J08Closure through Lake, then rerunning the consumer successfully."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791728183536-5473-7bbf18c4",
+     :commands
+     ["git show/diff-tree 97d745a418688ccc59159874929fdccd519c0b9a and d22c0576c7fe6d6157710f36136f94c1dc5cc053"
+      "recorded-tree four-file SHA-256, exact scope-union, diff-check, JSON, and zero-placeholder verification"
+      "python3 scripts/statement-registry.py check"
+      "lake env lean ConstructionTargets/t92J08Closure.lean"
+      "lake env lean problems/t92J08/lean/Main.lean"],
+     :finding
+     "PASS: t92J08 is fully closed. The two recorded commits cover exactly the four scoped paths; all hashes match; source and closure contain zero placeholders; B1-B6 and status are complete. The final adapter is definitionally faithful between the consumer's apm_t92J08_Model and the closure's euclideanModel, and B5 supplies exactly the frozen positive uniform-time bridge used by the registered globalization theorem. Compilation, registry, JSON, theorem orientation, representation boundaries, and standard-axiom checks all pass."},
     :commit "d22c0576c7fe6d6157710f36136f94c1dc5cc053",
     :commits ["97d745a41" "d22c0576c7fe6d6157710f36136f94c1dc5cc053"],
     :changed-paths
@@ -116387,7 +116401,7 @@
       {:id :B5, :status :proved}
       {:id :B6, :status :proved}]}},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["problems/t92J08/lean/Main.lean"
     "problems/t92J08/status.json"
