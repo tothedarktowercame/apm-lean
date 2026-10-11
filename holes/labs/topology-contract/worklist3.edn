@@ -5489,8 +5489,85 @@
   {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-integralrelativehomologycomparisonwithtransport,
+   :evidence
+   {:placeholder-delta {:source 0, :fixture 0},
+    :residual
+    "Prove homology-level naturality from integralRelativeChainsComparisonWithTransport_projection, then compare integralRelativeHomologyComparisonWithTransport with the earlier integralRelativeHomologyComparison and propagate the exact normalization square.",
+    :gates
+    {:exact-type :pass,
+     :module-build :pass,
+     :module-compile :pass,
+     :clean-worktree :pass,
+     :exact-scope :pass,
+     :statement-registry :pass,
+     :zero-placeholders :pass,
+     :corrected-chain-comparison-mapped :pass,
+     :inverse-homology-preservation :pass,
+     :homology-definition-only :pass,
+     :no-earlier-comparison-identification :pass,
+     :fixture-compile :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["lake build replayed pre-existing dependency warnings only"],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport",
+      :type
+      "forall {X : Type} [TopologicalSpace X] (A : Set X) (n : Nat), forgetIntModules.obj ((CoefficientRelativeSmall.relativeChains Int A).homology n) ≅ (RelativeSingularChains A).homology n",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on
+      ["ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport"],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :topo-10,
+    :commands
+    [{:cmd
+      "sha256sum /tmp/manifold_fundamental_class_corrected_relative_homology.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/manifold_fundamental_class_corrected_relative_homology.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^\\s*axiom\\b' ConstructionTargets/ManifoldFundamentalClass.lean /tmp/manifold_fundamental_class_corrected_relative_homology.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git status --porcelain", :exit 0}],
+    :diagnostic-history [],
+    :commit "f1598cfa6c4b7d00b2a875214e99b3de8c966bc8",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path
+     "/tmp/manifold_fundamental_class_corrected_relative_homology.lean",
+     :original-sha256
+     "dbb010a8cfea6b7f26ae016f33fef05b9011742a422d3e5664073d598514202a",
+     :sha256
+     "27475fb2ba4f88a83463701d906eb0b5813efb754021963a8710e945724ba849",
+     :placeholders 0},
+    :implementation
+    {:declaration
+     "ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport",
+     :representation
+     {:source
+      "The ModuleCat Int coefficient-relative homology object after applying forgetIntModules",
+      :target
+      "The production AddCommGrpCat homology of RelativeSingularChains for the same pair",
+      :direction
+      "Canonical homology isomorphism from forgotten coefficient-relative homology to production relative singular homology, obtained by homology preservation followed by homology of integralRelativeChainsComparisonWithTransport"}},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/corrected-integral-relative-homology",
@@ -8303,11 +8380,13 @@
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport",
     :reported-by
-    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+     :routes-2026-10-11-manifold-relative-homology-comparison-with-transport-topo3-r1],
     :type
     "forall {X : Type} [TopologicalSpace X] (A : Set X) (n : Nat), forgetIntModules.obj ((CoefficientRelativeSmall.relativeChains Int A).homology n) ≅ (RelativeSingularChains A).homology n",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in
+    :routes-2026-10-11-manifold-relative-homology-comparison-with-transport-topo3-r1},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-integralrelativehomologycomparisonwithtransport,
    :kind :lemma,
