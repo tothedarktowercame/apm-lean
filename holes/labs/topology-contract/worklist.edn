@@ -113901,6 +113901,19 @@
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
       :exit 1,
       :finding "Separated descent and strictification factors."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791754025564-5899-798272da",
+     :commands
+     ["git show/diff-tree c0d5ad58"
+      "sha256/diff/placeholder checks"
+      "statement-registry.py check"
+      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "PASS: new compiled sorry-free B6 progress defines the overlap base with both literal witnesses and proves the strictification right-base element equals pseudococone glue in the correct direction, while retaining the separate descent-counit factor. Exact two-file scope and frozen hashes match; 0 placeholders; registry 131/131; standard axioms. Descent factor, literal lifts, and B12 remain listed; absent final target is a valid program STOP."},
     :commit "c0d5ad5848458d9bbb8529bfaa9f841d045239da",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113911,7 +113924,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113932,7 +113945,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Both cover base objects are explicit; right based maps use one fixed conjugator.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Strictification right-base element equals overlap glue.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114047,7 +114060,11 @@
     {:job 5,
      :commit "e467932dac2b3cf97f6c3b91352c65238d8150a9",
      :reason
-     "Both cover base objects are explicit; right based maps use one fixed conjugator."}]}
+     "Both cover base objects are explicit; right based maps use one fixed conjugator."}
+    {:job 6,
+     :commit "c0d5ad5848458d9bbb8529bfaa9f841d045239da",
+     :reason
+     "Strictification right-base element equals overlap glue."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
