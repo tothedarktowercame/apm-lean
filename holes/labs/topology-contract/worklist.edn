@@ -105019,7 +105019,7 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma
@@ -105028,14 +105028,17 @@
    {:placeholder-delta
     {:source-before 0, :source-after 0, :fixture-sorry 0},
     :residual
-    "Re-elect the normalization work with scope covering ConnectedGroupoidSingleObjEquivalence, TwoOpenPointSpanComparison, and TwoOpenFreeProductMapping; define explicit normalized equivalences and prove coherence with the frozen mapping before returning to this composite adapter.",
+    "Correct the DAG reopen edge and elect the two normalization/coherence theorems in scopes that can modify the upstream equivalence construction; do not redispatch this downstream adapter until they are genuinely banked.",
     :outcome :stop,
-    :warnings [],
+    :warnings
+    [{:kind :ledger-reopen-mismatch,
+      :message
+      "owner-reopen says a missing lemma is banked, but fresh source search finds neither missing identity/coherence declaration."}],
     :missing-theorems
     [{:name
       "ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence_counit_base_identity",
       :type
-      "For every relevant ConnectorSystem S, (connectorSingleObjEquivalence S).counitIso.hom.app (SingleObj.star (End S.base)) = 𝟙 _; requires replacing Functor.asEquivalence by explicitly normalized equivalence data or supplying this equality as a hypothesis",
+      "For each relevant S, (connectorSingleObjEquivalence S).counitIso.hom.app (SingleObj.star (End S.base)) = 𝟙 _",
       :status :not-started,
       :consumers [:t99J01 :t01A03 :t92J06 :t97A01 :t97A03],
       :depends-on [],
@@ -105043,7 +105046,7 @@
      {:name
       "TwoOpenFreeProductMapping.mapping_normalized_counit_coherence",
       :type
-      "The explicitly normalized five-factor mapping has the same frozen mapping functor and inverse-identity counit component as TwoOpenFreeProductMapping.mapping",
+      "Coherence identifying the inverse-identity counit of the frozen mapping with that of a five-factor mapping built from explicitly normalized equivalences",
       :status :not-started,
       :consumers [:t99J01 :t01A03 :t92J06 :t97A01 :t97A03],
       :depends-on
@@ -105051,31 +105054,28 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source-sha256
-     "cdece0a8e55ecd4699721ac65c33b121c41c01c53073529e00095d10d220d523",
-     :registry "131 registered statements match, 0 do not"},
+     "cdece0a8e55ecd4699721ac65c33b121c41c01c53073529e00095d10d220d523"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "The same exact hypothesis is absent on the second reviewed repair. After proof irrelevance rewrites the EssSurj witness to the explicit base object and Iso.refl witness, Lean still leaves explicit.getIso.hom = 𝟙 _: Classical.choice from Nonempty does not compute to the exhibited element. Thus connectorSingleObjEquivalence_counit_base_identity is not derivable from the frozen Functor.asEquivalence construction. Since this row may modify only the downstream composite file, it cannot replace that construction or prove the required upstream coherence. The frozen composite identity therefore needs the missing hypothesis that the selected objObjPreimageIso components are identity.",
+    "The row was reopened without the claimed missing lemma being banked. A fresh exact-name scan finds neither connectorSingleObjEquivalence_counit_base_identity nor mapping_normalized_counit_coherence. The only existing connector result is the weaker _identity_iff reduction. The frozen upstream mapping still embeds Functor.asEquivalence and its unconstrained Classical.choice of objObjPreimageIso; the scoped downstream file cannot prove that chosen isomorphism is identity. Exact required hypothesis: every connector objObjPreimageIso hom used in the five-factor mapping at SingleObj.star equals identity, plus coherence identifying those normalized constituents with the frozen mapping.",
     :commands
     [{:cmd
+      "rg -n \"theorem connectorSingleObjEquivalence_counit_base_identity([^_]|$)|mapping_normalized_counit_coherence\" ConstructionTargets -g '*.lean'",
+      :exit 1,
+      :expected-exit 1,
+      :finding "Neither theorem claimed by the reopen is present."}
+     {:cmd
       "lake env lean ConstructionTargets/TwoOpenFreeProductMappingCompositeCounitIdentity.lean",
       :exit 0,
       :finding
-      "The existing scoped reduction compiles with standard axioms."}
+      "The existing scoped name/reduction theorem compiles with standard axioms."}
      {:cmd "sha256sum /tmp/composite-counit-component-identity.lean",
       :exit 0,
       :finding
-      "acdc06369d70b171b3c2c1f70a56ad199e7b7f72be274a4ce3930f77b5d84c0f"}
-     {:cmd "python3 scripts/statement-registry.py check",
-      :exit 0,
-      :finding "131 registered statements match, 0 do not"}],
-    :diagnostic-history
-    [{:cmd "lake env lean /tmp/test_connector.lean",
-      :exit 1,
-      :finding
-      "The minimal proof again stops after proof-irrelevance rewriting at explicit.getIso.hom = 𝟙 _; rfl fails because Classical.choice of the Nonempty isomorphism is not definitionally the exhibited Iso.refl."}],
+      "acdc06369d70b171b3c2c1f70a56ad199e7b7f72be274a4ce3930f77b5d84c0f"}],
+    :diagnostic-history [],
     :changed-paths [],
     :fixture
     {:path "/tmp/composite-counit-component-identity.lean",
@@ -105084,7 +105084,7 @@
      :status :self-axiomatized},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/TwoOpenFreeProductMappingCompositeCounitIdentity.lean"],
    :dag-node
