@@ -9909,8 +9909,89 @@
   {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-integralrelativechainscomparisonwithtransport-homologymap,
+   :evidence
+   {:placeholder-delta
+    {:t00J02 {:before 1, :after 1, :delta 0},
+     :t98A02 {:before 1, :after 1, :delta 0}},
+    :residual
+    "Rewrite the negative-sign equation with this homology factorization, then align the four cokernel/presentation homology maps with coefficientLocalForwardComposite and the ambient chart/model normalization to exclude negation.",
+    :gates
+    {:fixture-hash :pass,
+     :lean :pass,
+     :lake-build :pass,
+     :statement-registry :pass,
+     :placeholder-scan :pass,
+     :diff-check :pass,
+     :worktree-clean :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["lake build replayed pre-existing linter warnings in dependencies; the changed theorem emitted no warnings"],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport_homologyMap",
+      :type
+      "forall {X : Type} [TopologicalSpace X] (A : Set X) (n : Nat), HomologicalComplex.homologyMap (integralRelativeChainsComparisonWithTransport A).hom n = HomologicalComplex.homologyMap (forgetIntegralRelativeCokernelComparison A).hom n ≫ HomologicalComplex.homologyMap (coefficientIntegralCokernelTransport A).hom n ≫ HomologicalComplex.homologyMap (integralMappedRelativeCokernelComparison A).hom n ≫ HomologicalComplex.homologyMap (relativeSingularChainsIsoCokernelSubspaceMap A).inv n",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on
+      ["ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport_hom"],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes
+    {"ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport_homologyMap"
+     "a6b2880973aed8c4f68a375afc16d5d806110763c5ef8c18dc7bcc02b4b2c8e0"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/manifold_fundamental_class_integral_relative_chains_transport_homology.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^\\s*axiom\\b' ConstructionTargets/ManifoldFundamentalClass.lean /tmp/manifold_fundamental_class_integral_relative_chains_transport_homology.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd
+      "comment-stripped placeholder count for problems/t00J02/lean/Main.lean and problems/t98A02/lean/Main.lean",
+      :exit 0,
+      :output
+      {"problems/t00J02/lean/Main.lean" 1,
+       "problems/t98A02/lean/Main.lean" 1}}],
+    :representation
+    {:source
+     "Homology of the hom morphism of integralRelativeChainsComparisonWithTransport",
+     :target
+     "The composite of the homology maps of the forgotten relative cokernel comparison, coefficient cokernel transport, mapped relative cokernel comparison, and inverse production presentation",
+     :direction
+     "Exact morphism equality from homology of the packaged chain comparison to the ordered composite of homology maps of its four concrete factors"},
+    :commit "d6a1630220e70b304b0e845d5d3dc08e0af9a9b0",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path
+     "/tmp/manifold_fundamental_class_integral_relative_chains_transport_homology.lean",
+     :sha256
+     "07c1e7fcaae57213d5103c415e64b9ad3365f72623d4b48f32df63116e826c6e"},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :declaration
+     "ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport_homologyMap",
+     :type
+     "forall {X : Type} [TopologicalSpace X] (A : Set X) (n : Nat), HomologicalComplex.homologyMap (integralRelativeChainsComparisonWithTransport A).hom n = HomologicalComplex.homologyMap (forgetIntegralRelativeCokernelComparison A).hom n ≫ HomologicalComplex.homologyMap (coefficientIntegralCokernelTransport A).hom n ≫ HomologicalComplex.homologyMap (integralMappedRelativeCokernelComparison A).hom n ≫ HomologicalComplex.homologyMap (relativeSingularChainsIsoCokernelSubspaceMap A).inv n"},
+    :row
+    :routes-2026-10-11-manifold-integral-relative-chains-transport-homology-topo3-r1,
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/transported-chain-comparison-homology-factorization",
@@ -13746,11 +13827,13 @@
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport_homologyMap",
     :reported-by
-    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+     :routes-2026-10-11-manifold-integral-relative-chains-transport-homology-topo3-r1],
     :type
     "forall {X : Type} [TopologicalSpace X] (A : Set X) (n : Nat), HomologicalComplex.homologyMap (integralRelativeChainsComparisonWithTransport A).hom n = HomologicalComplex.homologyMap (forgetIntegralRelativeCokernelComparison A).hom n ≫ HomologicalComplex.homologyMap (coefficientIntegralCokernelTransport A).hom n ≫ HomologicalComplex.homologyMap (integralMappedRelativeCokernelComparison A).hom n ≫ HomologicalComplex.homologyMap (relativeSingularChainsIsoCokernelSubspaceMap A).inv n",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in
+    :routes-2026-10-11-manifold-integral-relative-chains-transport-homology-topo3-r1},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-integralrelativechainscomparisonwithtransport-homologymap,
    :kind :lemma,
