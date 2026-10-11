@@ -113853,6 +113853,8 @@
    :other-consumers [:t98A02]}
   {:consumer :t99J01,
    :stop-count 4,
+   :review-finding
+   "Blueprint dependency gap: B3 omits the pseudo-span, point-span comparison, free-product representation, and representation-to-SingleObj equivalences and their postcomposition naturality from uses; B9 also lacks an equivalence Multiplicative Int ≃* FreeGroup (Fin 1), so the stated proofs do not follow from their uses nodes.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:blueprint
@@ -113940,12 +113942,18 @@
     {:commit "33033fb07c2f454ffc2bb91d7183af156d0cd531",
      :next
      "Obtain independent mathematical review of PointWedgeVanKampen.blueprint.md; after review, implement B3, the target-natural point-wedge mapping equivalence."},
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1791713957414-5020-f32bc4c2",
+     :finding
+     "Blueprint dependency gap: B3 omits the pseudo-span, point-span comparison, free-product representation, and representation-to-SingleObj equivalences and their postcomposition naturality from uses; B9 also lacks an equivalence Multiplicative Int ≃* FreeGroup (Fin 1), so the stated proofs do not follow from their uses nodes."},
     :commit "33033fb07c2f454ffc2bb91d7183af156d0cd531",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.blueprint.md"],
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113970,6 +113978,7 @@
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 50,
+   :fail-count 1,
    :depends-on [],
    :program true,
    :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03],
