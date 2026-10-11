@@ -1511,6 +1511,51 @@ theorem zeroHeightCoupledDetour_avoidsLeftCore
   · apply reconstructionAvoidsLeftCore_rightTubeCorePolar_of_im_ne_zero
     exact zeroHeightCoreNormalDetour_im_ne_zero_of_interior p hheight t ht0 ht1
 
+theorem zeroHeightAmbientDetour_of_coupledAngular
+    (A : C(unitInterval × RightTubeMinusLeftCore, Circle))
+    (hA0 : ∀ p, A (0, p) = 1)
+    (hA1 : ∀ p, A (1, p) = rightTubeCoreAngularCoordinate p) :
+    ∃ H : C(unitInterval × RightTubeMinusLeftCore, apm_t02a03_E3),
+      (∀ p, H (0, p) = apm_t02a03_circleMeridian
+        (rightTubeMeridianCoordinate p)) ∧
+      (∀ p, H (1, p) = p.1) ∧
+      (∀ tp, tp.2.1 2 = 0 → H tp ∈ apm_t02a03_rightTube) ∧
+      (∀ tp, tp.2.1 2 = 0 → H tp ∉ Set.range apm_t02a03_leftCore) := by
+  let H : C(unitInterval × RightTubeMinusLeftCore, apm_t02a03_E3) :=
+    ⟨fun tp => rightTubeCorePolarReconstruction (A tp)
+        (zeroHeightCoreNormalDetour tp.1 tp.2),
+      rightTubeCoreTubularCoordinates_continuous.2.comp
+        (A.continuous.prodMk continuous_zeroHeightCoreNormalDetour)⟩
+  refine ⟨H, ?_, ?_, ?_, ?_⟩
+  · intro p
+    simp only [H, ContinuousMap.coe_mk]
+    rw [hA0, (zeroHeightCoreNormalDetour_endpoints_midpoint p).1,
+      rightCorePolarReconstruction_circleMeridian]
+  · intro p
+    simp only [H, ContinuousMap.coe_mk]
+    rw [hA1, (zeroHeightCoreNormalDetour_endpoints_midpoint p).2.1]
+    simpa [rightTubeCoreAngularCoordinate] using
+      rightTubeCorePolarReconstruction_self p.1 p.2.1
+  · intro tp hheight
+    apply reconstructionMemRightTube_rightTubeCorePolar
+    exact zeroHeightCoreNormalDetour_radius_le tp.2 hheight tp.1
+  · intro tp hheight
+    apply zeroHeightCoupledDetour_avoidsLeftCore tp.2 hheight tp.1 (A tp)
+    · intro ht
+      have htp : tp = (0, tp.2) := by
+        apply Prod.ext
+        · exact Subtype.ext ht
+        · rfl
+      rw [htp]
+      exact hA0 tp.2
+    · intro ht
+      have htp : tp = (1, tp.2) := by
+        apply Prod.ext
+        · exact Subtype.ext ht
+        · rfl
+      rw [htp]
+      exact hA1 tp.2
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -1569,3 +1614,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCoreNormalDetour_im_ne_zero_of_interior
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightEndpointAvoidance_coreNormalDetour
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightCoupledDetour_avoidsLeftCore
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightAmbientDetour_of_coupledAngular
