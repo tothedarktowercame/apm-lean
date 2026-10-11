@@ -152,3 +152,9 @@ and its action on both coproduct injections is definitionally the respective
 injection.  Thus no coordinate defect occurs at B3's final representation
 stage; the remaining calculation lies in the preceding point-span and open
 cover inverse transports.
+
+The inverse free-product/point-span stage is now explicit as
+`genericPointWedgeIdentityPointSpan`.  Its left and right functors map their
+group elements definitionally to the corresponding coproduct injections.
+Thus the final two B3 inverse stages preserve both generators literally; the
+remaining comparison begins with the coordinate-to-point span inverse.

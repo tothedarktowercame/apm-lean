@@ -385,6 +385,19 @@ def genericPointWedgeIdentityRepresentation :
     (genericPointWedgeRightGroup y₀)).inverse.obj
       (𝟭 (SingleObj (genericPointWedgeFreeProduct x₀ y₀)))
 
+/-- The next inverse stage of B3, obtained by restricting the identity
+representation to the two point-span legs. -/
+def genericPointWedgeIdentityPointSpan :
+    SpanPseudoCocone
+      (pointLeg (genericPointWedgeLeftGroup x₀))
+      (pointLeg (genericPointWedgeRightGroup y₀))
+      (SingleObj (genericPointWedgeFreeProduct x₀ y₀)) :=
+  (freeProductPointSpanEquivalence
+    (genericPointWedgeLeftGroup x₀)
+    (genericPointWedgeRightGroup y₀)
+    (SingleObj (genericPointWedgeFreeProduct x₀ y₀))).inverse.obj
+      (genericPointWedgeIdentityRepresentation x₀ y₀)
+
 omit [PathConnectedSpace X] [PathConnectedSpace Y] in
 @[simp] theorem genericPointWedgeIdentityRepresentation_inl
     (g : genericPointWedgeLeftGroup x₀) :
@@ -397,6 +410,24 @@ omit [PathConnectedSpace X] [PathConnectedSpace Y] in
     (g : genericPointWedgeRightGroup y₀) :
     (genericPointWedgeIdentityRepresentation x₀ y₀).action
         (Monoid.Coprod.inr g) = Monoid.Coprod.inr g := by
+  rfl
+
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+@[simp] theorem genericPointWedgeIdentityPointSpan_left
+    (g : genericPointWedgeLeftGroup x₀) :
+    (genericPointWedgeIdentityPointSpan x₀ y₀).left.map
+        (X := SingleObj.star (genericPointWedgeLeftGroup x₀))
+        (Y := SingleObj.star (genericPointWedgeLeftGroup x₀)) g =
+      Monoid.Coprod.inl g := by
+  rfl
+
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+@[simp] theorem genericPointWedgeIdentityPointSpan_right
+    (g : genericPointWedgeRightGroup y₀) :
+    (genericPointWedgeIdentityPointSpan x₀ y₀).right.map
+        (X := SingleObj.star (genericPointWedgeRightGroup y₀))
+        (Y := SingleObj.star (genericPointWedgeRightGroup y₀)) g =
+      Monoid.Coprod.inr g := by
   rfl
 
 variable {C D : Type} [Category C] [Category D]
@@ -1252,8 +1283,11 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeCoordinatePointSpanPostcomposeIso
 #print axioms genericPointWedgeSingleObjMappingEquivalence
 #print axioms genericPointWedgeIdentityRepresentation
+#print axioms genericPointWedgeIdentityPointSpan
 #print axioms genericPointWedgeIdentityRepresentation_inl
 #print axioms genericPointWedgeIdentityRepresentation_inr
+#print axioms genericPointWedgeIdentityPointSpan_left
+#print axioms genericPointWedgeIdentityPointSpan_right
 #print axioms genericPointWedgeSingleObjPostcomposeIso
 #print axioms genericPointWedgeSourceEquivalence
 #print axioms genericPointWedgeInverseIdentityFunctor
