@@ -70813,6 +70813,19 @@
       :exit 1,
       :explanation
       ".lake/packages is the canonical workspace package directory rather than a symlink; compilation used the existing reviewed workspace substrate."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791697540026-4390-482705cc",
+     :commands
+     ["git show/diff-tree/show --check 1163053b578ab37e046e882d7f2e6393081e1a6a"
+      "git rev-parse scope blob; sha256sum fixture"
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean"
+      "lake env lean /tmp/t02a03_core_normal_detour_continuous_probe.lean"
+      "statement registry check and commit/parent fingerprints"
+      "placeholder recount at commit/parent"],
+     :finding
+     "PASS: independent author topo-6; exact one-file scope, blob, and fixture hash match. Target and frozen probe compile. The theorem proves the frozen joint-continuity type; each branch remains in the complex normal representation, and continuous_if_le checks their equality at exactly t = 1/2. Axioms are exactly propext, Classical.choice, Quot.sound; registry is 131/0, t02A03 fingerprint is unchanged at commit and parent, fixture has no placeholders, and Main has 1 placeholder at commit and parent."},
     :commit "1163053b578ab37e046e882d7f2e6393081e1a6a",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
@@ -70826,7 +70839,7 @@
    :phase :implementation,
    :type
    "Continuous (fun tp : unitInterval × RightTubeMinusLeftCore => zeroHeightCoreNormalDetour tp.1 tp.2)",
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/zero-height-core-normal-detour-continuous",
@@ -70945,7 +70958,7 @@
      "The two-leg detour is jointly continuous in time and the deleted-tube input. Each affine branch is continuous from the banked tubular coordinates, meridian coordinate, and signed waypoint; continuous_if_le pastes them because both branch formulas evaluate to the same waypoint when t=1/2.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
@@ -75670,7 +75683,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -75686,7 +75699,10 @@
     "Continuous (fun tp : unitInterval × RightTubeMinusLeftCore => zeroHeightCoreNormalDetour tp.1 tp.2)",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-continuous-zeroheightcorenorm,
    :kind :lemma,
