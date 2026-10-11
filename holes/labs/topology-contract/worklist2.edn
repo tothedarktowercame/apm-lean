@@ -72069,25 +72069,65 @@
   {:bounded-exception
    "single-consumer oriented-cross-product certificate for the arrival affine leg",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:residual
+     "Construct a continuous waypoint W whose real part is positive and whose oriented cross product with rightTubeCorePlanarComplex is everywhere nonzero; then invoke the banked departure, arrival, waypoint, normalization, and ambient adapters.",
+     :outcome :go,
+     :warnings [],
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd
+       "lake env lean /tmp/t02a03_arrival_leg_cross_im_probe.lean",
+       :exit 0,
+       :output
+       "coupledAngularArrivalLeg_ne_zero_of_cross_im_ne_zero compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd "sha256sum /tmp/t02a03_arrival_leg_cross_im_probe.lean",
+       :exit 0,
+       :output
+       "8918437e344c070b4e10f7ea1434fc95ede0a9036fa434831306439cd92add9f  /tmp/t02a03_arrival_leg_cross_im_probe.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_arrival_leg_cross_im_probe.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}
+      {:cmd
+       "rg -n 'coupledAngularArrivalLeg_ne_zero_of_cross_im_ne_zero' /tmp/t02a03_arrival_leg_cross_im_probe.lean",
+       :exit 0,
+       :output
+       "9:theorem coupledAngularArrivalLeg_ne_zero_of_cross_im_ne_zero\n37:#print axioms coupledAngularArrivalLeg_ne_zero_of_cross_im_ne_zero"}],
+     :fixture
+     {:path "/tmp/t02a03_arrival_leg_cross_im_probe.lean",
+      :sha256
+      "8918437e344c070b4e10f7ea1434fc95ede0a9036fa434831306439cd92add9f"},
+     :finding
+     "The placeholder-free fixture proves the frozen arrival-leg certificate. A hypothetical affine zero yields real and imaginary coordinate equations; eliminating the waypoint coefficient forces the positive arrival coefficient times the oriented cross product to vanish, contradicting the supplied nonzero-cross-product invariant.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+      :declaration
+      "ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularArrivalLeg_ne_zero_of_cross_im_ne_zero",
+      :type
+      "forall (W : C(RightTubeMinusLeftCore, ℂ)), (forall p, (conj (W p) * rightTubeCorePlanarComplex p.1).im != 0) -> forall (t : unitInterval) (p : RightTubeMinusLeftCore), not ((t : ℝ) <= 1/2) -> (((2-2*(t:ℝ):ℝ):ℂ)*W p + ((2*(t:ℝ)-1:ℝ):ℂ)*rightTubeCorePlanarComplex p.1) != 0",
+      :acceptance
+      "Add the compiled theorem from the fixture unchanged in mathematical content; preserve registered statements and introduce no placeholders or nonstandard axioms."},
+     :seat "topo-8"}},
+   :phase :implementation,
+   :type
+   "forall (W : C(RightTubeMinusLeftCore, ℂ)), (forall p, (conj (W p) * rightTubeCorePlanarComplex p.1).im != 0) -> forall (t : unitInterval) (p : RightTubeMinusLeftCore), not ((t : ℝ) <= 1/2) -> (((2-2*(t:ℝ):ℝ):ℂ)*W p + ((2*(t:ℝ)-1:ℝ):ℂ)*rightTubeCorePlanarComplex p.1) != 0",
    :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/coupled-angular-arrival-cross-im",
    :acceptance
-   {:probe
-    "Compile coupledAngularArrivalLeg_ne_zero_of_cross_im_ne_zero. Prove that if the imaginary part of conj(W p) times rightTubeCorePlanarComplex p.1 is nonzero, then the second affine leg from W p to that endpoint is nonzero for every time strictly after 1/2. Do not choose the waypoint, prove its positive real part, normalize to Circle, or assemble the ambient deformation.",
-    :declaration
-    "ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularArrivalLeg_ne_zero_of_cross_im_ne_zero",
-    :type
-    "forall (W : C(RightTubeMinusLeftCore, ℂ)), (forall p, (conj (W p) * rightTubeCorePlanarComplex p.1).im != 0) -> forall (t : unitInterval) (p : RightTubeMinusLeftCore), not ((t : ℝ) <= 1/2) -> (((2-2*(t:ℝ):ℝ):ℂ)*W p + ((2*(t:ℝ)-1:ℝ):ℂ)*rightTubeCorePlanarComplex p.1) != 0",
-    :placeholder "the sole sorry in apm_t02a03",
-    :route-step
-    "certify the arrival half of the banked two-leg waypoint construction from an oriented-cross-product invariant"},
+   "Add the compiled theorem from the fixture unchanged in mathematical content; preserve registered statements and introduce no placeholders or nonstandard axioms.",
    :id
    :routes-2026-10-11-t02a03-coupled-angular-arrival-cross-im-topo2-r1,
    :kind :reusable-theorem,
    :area "explicit-r3-tube-deformation-retraction",
+   :declaration
+   "ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularArrivalLeg_ne_zero_of_cross_im_ne_zero",
    :depends-on
    [:routes-2026-10-11-t02a03-coupled-angular-departure-positive-real-topo2-r1],
    :current-residual
