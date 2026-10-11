@@ -935,6 +935,70 @@ theorem shearY_productionUnionMap (a b : ℤ) (n : ℕ) :
             (shearY a b)) n) := congrArg (fun k ↦ unionIso.inv ≫ k) hnat
     _ = _ := unionIso.inv_hom_id_assoc _
 
+private theorem shearYIntersectionHomology_conjugation (a b : ℤ) :
+    (ambientIntersectionRangeHomologyIso frozenYCover.U frozenYCover.V 1).hom ≫
+        HomologicalComplex.homologyMap (shearYIntersectionMap a b) 1 ≫
+        (ambientIntersectionRangeHomologyIso frozenYCover.U frozenYCover.V 1).inv =
+      HomologicalComplex.homologyMap
+        (closureChains.map
+          (coverRangeMap
+            (frozenYCover.U ∩ frozenYCover.V)
+            (frozenYCover.U ∩ frozenYCover.V)
+            (shearY a b) (shearY_mapsTo_inter a b))) 1 := by
+  change HomologicalComplex.homologyMap
+      (ambientIntersectionRangeChainsIso
+        frozenYCover.U frozenYCover.V).hom 1 ≫
+    HomologicalComplex.homologyMap
+      ((ambientIntersectionRangeChainsIso
+          frozenYCover.U frozenYCover.V).inv ≫ _ ≫
+        (ambientIntersectionRangeChainsIso
+          frozenYCover.U frozenYCover.V).hom) 1 ≫
+    HomologicalComplex.homologyMap
+      (ambientIntersectionRangeChainsIso
+        frozenYCover.U frozenYCover.V).inv 1 = _
+  rw [HomologicalComplex.homologyMap_comp
+      (ambientIntersectionRangeChainsIso
+        frozenYCover.U frozenYCover.V).inv,
+    HomologicalComplex.homologyMap_comp]
+  slice_lhs 4 5 =>
+    rw [← HomologicalComplex.homologyMap_comp,
+      (ambientIntersectionRangeChainsIso
+        frozenYCover.U frozenYCover.V).hom_inv_id,
+      HomologicalComplex.homologyMap_id]
+  simp only [Category.comp_id]
+  slice_lhs 1 2 =>
+    rw [← HomologicalComplex.homologyMap_comp,
+      (ambientIntersectionRangeChainsIso
+        frozenYCover.U frozenYCover.V).hom_inv_id,
+      HomologicalComplex.homologyMap_id]
+  simp
+
+/-- The production intersection endpoint reduces to the range presentation
+of the actual restricted shear. -/
+theorem shearY_productionIntersectionMap_range (a b : ℤ) :
+    productionIntersectionMap
+        frozenYCover.U frozenYCover.V frozenYCover.U frozenYCover.V
+        (shearYShortComplexHom a b) 1 =
+      (ambientRangeProductionHomologyIso
+          (frozenYCover.U ∩ frozenYCover.V) 1).inv ≫
+        HomologicalComplex.homologyMap
+          (closureChains.map
+            (coverRangeMap
+              (frozenYCover.U ∩ frozenYCover.V)
+              (frozenYCover.U ∩ frozenYCover.V)
+              (shearY a b) (shearY_mapsTo_inter a b))) 1 ≫
+        (ambientRangeProductionHomologyIso
+          (frozenYCover.U ∩ frozenYCover.V) 1).hom := by
+  simp only [productionIntersectionMap, shearYShortComplexHom,
+    booleanIntersectionProductionHomologyIso_inv,
+    booleanIntersectionProductionHomologyIso_hom]
+  simpa only [Category.assoc] using congrArg
+    (fun k ↦ (ambientRangeProductionHomologyIso
+        (frozenYCover.U ∩ frozenYCover.V) 1).inv ≫ k ≫
+      (ambientRangeProductionHomologyIso
+        (frozenYCover.U ∩ frozenYCover.V) 1).hom)
+    (shearYIntersectionHomology_conjugation a b)
+
 /-- The production overlap endpoint written in the fixed integral
 two-component coordinate. -/
 noncomputable def shearYOverlapCoordinateMap (a b : ℤ) :
@@ -994,6 +1058,7 @@ theorem shearY_overlap_coordinate_of_degree_components (a b : ℤ)
 #print axioms shearY_comp
 #print axioms shearYShortComplexHom
 #print axioms shearY_productionUnionMap
+#print axioms shearY_productionIntersectionMap_range
 #print axioms frozenOverlapH1IsoIntBiprod
 #print axioms shearYOverlap
 #print axioms overlapScalar
