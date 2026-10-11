@@ -17537,6 +17537,17 @@
       :expected-exit 1}
      {:cmd "git commit -m 'Add terminal forgotten homology row'",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791757918281-5925-823af655",
+     :commands
+     ["git scope/diff/hash checks at 63ffea584aed13547adf34578d93f94086129a3d"
+      "renamed fixture and module: lake env lean"
+      "statement registry and placeholder scans"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"],
+     :finding
+     "Recorded one-file scope, blob, and frozen fixture hash match. The frozen terminal-row type is precisely ForgottenHomologyRowHom K j, and the definition specializes the established row morphism without changing representation or map direction; it does not claim residual snake squares/Hom. Fixture/module compile; registry 131/0; build 8326 jobs; axioms propext, choice, Quot.sound; module placeholders 0; consumer sorries 1/1."},
     :commit "63ffea584aed13547adf34578d93f94086129a3d",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -17551,7 +17562,7 @@
     :row :routes-2026-10-11-mfclass-forget-terminal-row-r1,
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/snake-hom-row3",
@@ -17624,7 +17635,7 @@
       "a466839cf5d077bb58af7b277bd9a9e5b7fadb16c3877385a83acc4141dc2d15"},
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -25254,7 +25265,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -25269,7 +25280,9 @@
     :type
     "∀ {ι} {c : ComplexShape ι} (K : ShortComplex (HomologicalComplex (ModuleCat ℤ) c)) (j : ι), ForgottenHomologyRowHom K j",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2,
+    :banked-by :routes-2026-10-11-mfclass-forget-terminal-row-r1,
+    :banked-commit "63ffea584aed13547adf34578d93f94086129a3d"},
    :id :lemma-mfclass-forget-terminal-row,
    :kind :lemma,
    :depends-on [:lemma-mfclass-forget-cycles-row],
