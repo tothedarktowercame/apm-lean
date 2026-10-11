@@ -69487,47 +69487,63 @@
    "single-consumer nonzero-height certificate throughout the core-normal interpolation",
    :consumer :t02A03,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/t02a03_core_normal_interpolation_im_ne_probe.lean",
-      :sha256
-      "925785faecd1742541c0b8b25de927a573d8abb49da9a345a8730bc2f36b8644"},
-     :implementation
-     {:scope
-      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
-      :declaration
-      "ConstructionTargets.T02A03GeometricTubeDeformation.nonzeroHeight_im_ne_zero_rightTubeCoreNormalInterpolation",
-      :type
-      "forall (tp : unitInterval × RightTubeMinusLeftCore), tp.2.1 2 != 0 -> (rightTubeCoreNormalInterpolation rightTubeMeridianCoordinate tp).im != 0",
-      :proof-plan
-      "Use the banked positive-factor identity for the meridian imaginary part, compute the interpolation imaginary part as the input height times ((1-t)*(c/8)+t), prove that coefficient positive on the unit interval, and cancel the nonzero input height."},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/t02a03_core_normal_interpolation_im_ne_probe.lean",
-       :exit 0,
-       :output
-       "nonzeroHeight_im_ne_zero_rightTubeCoreNormalInterpolation compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "sha256sum /tmp/t02a03_core_normal_interpolation_im_ne_probe.lean",
-       :exit 0,
-       :output
-       "925785faecd1742541c0b8b25de927a573d8abb49da9a345a8730bc2f36b8644  /tmp/t02a03_core_normal_interpolation_im_ne_probe.lean"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_core_normal_interpolation_im_ne_probe.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}],
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :residual
-     "Implement the compiled nonzero-height interpolation theorem; then apply the core-polar height criterion to certify radial-stage left-core avoidance."}},
+   {:placeholder-delta {:before 0, :after 0, :change 0},
+    :residual
+    "Apply the nonzero-height avoidance theorem to certify the radial stage for nonzero-height inputs; handle zero height with collision-sign control and construct the safe angular stage, then concatenate.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean:62:6: unnecessarySimpa (pre-existing)"],
+    :missing-theorems [],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms [propext Classical.choice Quot.sound],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :scope-blob "e213b1977131b71d0dc54ed5d16ce94e41b22679",
+    :commands
+    [{:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0,
+      :output
+      "compiled; declaration axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "lake env lean /tmp/t02a03_core_normal_interpolation_im_ne_probe.lean",
+      :exit 0,
+      :output
+      "nonzeroHeight_im_ne_zero_rightTubeCoreNormalInterpolation compiled; axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "sha256sum /tmp/t02a03_core_normal_interpolation_im_ne_probe.lean",
+      :exit 0,
+      :output
+      "925785faecd1742541c0b8b25de927a573d8abb49da9a345a8730bc2f36b8644  /tmp/t02a03_core_normal_interpolation_im_ne_probe.lean"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "git diff --check -- ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd
+      "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git status --short", :exit 0, :output ""}],
+    :commit "f9c51e526b48d6991fd4ad247508ce57859bbd60",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.nonzeroHeight_im_ne_zero_rightTubeCoreNormalInterpolation",
+    :fixture
+    {:path "/tmp/t02a03_core_normal_interpolation_im_ne_probe.lean",
+     :sha256
+     "925785faecd1742541c0b8b25de927a573d8abb49da9a345a8730bc2f36b8644"},
+    :finding
+    "The meridian imaginary-part factor rewrites the interpolation imaginary part as ambient height times ((1-t)*(c/8)+t); this coefficient is strictly positive throughout the unit interval, so nonzero input height cannot vanish along the interpolation.",
+    :seat "topo-6"},
    :phase :implementation,
    :type
    "forall (tp : unitInterval × RightTubeMinusLeftCore), tp.2.1 2 != 0 -> (rightTubeCoreNormalInterpolation rightTubeMeridianCoordinate tp).im != 0",
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/nonzero-height-core-normal-interpolation-im",
