@@ -101436,6 +101436,21 @@
      {:cmd "git diff --check HEAD^ HEAD", :exit 0}
      {:cmd "test -z \"$(git status --porcelain)\"", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791677561265-3421-1f9b41c9",
+     :commands
+     ["git show and diff-tree 57f9c4f59edb70e5344e1ca7602680f7bf0f5453"
+      "sha256sum /tmp/relation-quotient-left-inverse.lean"
+      "lake build ConstructionTargets.RelationQuotientLeftInverse"
+      "lake env lean /tmp/relation-quotient-left-inverse.lean"
+      "lake env lean /dev/stdin with fresh axiom checks"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped placeholder and SHA-256 recomputation"
+      "git diff-tree --check 57f9c4f59edb70e5344e1ca7602680f7bf0f5453^ 57f9c4f59edb70e5344e1ca7602680f7bf0f5453"],
+     :finding
+     "Recorded one-file commit is authored by topo-2; recomputed implementation and fixture hashes match their recorded values; generator preservation is correctly extended through EqvGen, quotient descent is well-defined, applying the descended decoder uses the left inverse in the correct direction, and the separate quotient-formula equality chain is correctly oriented; all public declarations are axiom-free, placeholder counts are zero, and the registry reports 131 matched and 0 mismatched."},
     :commit "57f9c4f59edb70e5344e1ca7602680f7bf0f5453",
     :changed-paths
     ["ConstructionTargets/RelationQuotientLeftInverse.lean"],
@@ -101449,7 +101464,7 @@
      "Proved generator-respecting maps respect EqvGen, defined their quotient descent and representative formula, and derived two left-inverse criteria for injectivity into a relation quotient."},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/RelationQuotientLeftInverse.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/relation-quotient-left-inverse",
@@ -101584,7 +101599,7 @@
       "A relation-respecting decoder descends through EqvGen; if it is a left inverse of representatives, the induced map into the relation quotient is injective."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -105284,7 +105299,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "RelationQuotientLeftInverse.eqvGen_respects",
@@ -105298,14 +105313,16 @@
     :type
     "A function respecting a generating relation also respects its generated equivalence relation.",
     :area "polygon-surface-open-cover",
-    :proved-in :routes-2026-10-11-relation-quotient-left-inverse-68},
+    :proved-in :routes-2026-10-11-relation-quotient-left-inverse-68,
+    :banked-by :routes-2026-10-11-relation-quotient-left-inverse-68,
+    :banked-commit "57f9c4f59edb70e5344e1ca7602680f7bf0f5453"},
    :id :lemma-relationquotientleftinverse-eqvgen-respects,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "RelationQuotientLeftInverse.injective_of_quotient_formula",
@@ -105319,7 +105336,9 @@
     :type
     "A map into an EqvGen quotient is injective when its representative formula admits a relation-invariant left-inverse decoder.",
     :area "polygon-surface-open-cover",
-    :proved-in :routes-2026-10-11-relation-quotient-left-inverse-68},
+    :proved-in :routes-2026-10-11-relation-quotient-left-inverse-68,
+    :banked-by :routes-2026-10-11-relation-quotient-left-inverse-68,
+    :banked-commit "57f9c4f59edb70e5344e1ca7602680f7bf0f5453"},
    :id
    :lemma-relationquotientleftinverse-injective-of-quotient-formula,
    :kind :lemma,
@@ -105329,7 +105348,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "RelationQuotientLeftInverse.descend",
@@ -105342,14 +105361,16 @@
     :type
     "(g : A → X) → (∀ ⦃a b⦄, R a b → g a = g b) → Quotient (Relation.EqvGen.setoid R) → X",
     :area "polygon-surface-open-cover",
-    :proved-in :routes-2026-10-11-relation-quotient-left-inverse-68},
+    :proved-in :routes-2026-10-11-relation-quotient-left-inverse-68,
+    :banked-by :routes-2026-10-11-relation-quotient-left-inverse-68,
+    :banked-commit "57f9c4f59edb70e5344e1ca7602680f7bf0f5453"},
    :id :lemma-relationquotientleftinverse-descend,
    :kind :lemma,
    :depends-on [:lemma-relationquotientleftinverse-eqvgen-respects],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "RelationQuotientLeftInverse.descend_mk",
@@ -105362,14 +105383,16 @@
     :type
     "∀ (g : A → X) (hg : ∀ ⦃a b⦄, R a b → g a = g b) (a : A), descend R g hg (Quotient.mk _ a) = g a",
     :area "polygon-surface-open-cover",
-    :proved-in :routes-2026-10-11-relation-quotient-left-inverse-68},
+    :proved-in :routes-2026-10-11-relation-quotient-left-inverse-68,
+    :banked-by :routes-2026-10-11-relation-quotient-left-inverse-68,
+    :banked-commit "57f9c4f59edb70e5344e1ca7602680f7bf0f5453"},
    :id :lemma-relationquotientleftinverse-descend-mk,
    :kind :lemma,
    :depends-on [:lemma-relationquotientleftinverse-descend],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -105384,7 +105407,9 @@
     :type
     "∀ (f : X → A) (g : A → X), (∀ ⦃a b⦄, R a b → g a = g b) → Function.LeftInverse g f → Function.Injective (fun x : X => Quotient.mk (Relation.EqvGen.setoid R) (f x))",
     :area "polygon-surface-open-cover",
-    :proved-in :routes-2026-10-11-relation-quotient-left-inverse-68},
+    :proved-in :routes-2026-10-11-relation-quotient-left-inverse-68,
+    :banked-by :routes-2026-10-11-relation-quotient-left-inverse-68,
+    :banked-commit "57f9c4f59edb70e5344e1ca7602680f7bf0f5453"},
    :id
    :lemma-relationquotientleftinverse-quotient-mk-comp-injective-of-decoder,
    :kind :lemma,
