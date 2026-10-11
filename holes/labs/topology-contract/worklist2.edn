@@ -69188,7 +69188,47 @@
   {:bounded-exception
    "single-consumer positive-factor comparison of endpoint collision and meridian signs",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/t02a03_input_poly_positive_factor_probe.lean",
+      :sha256
+      "36b04dc309e4d21eee46d1e4aa395fd083c5ce2cc5e6f40e58be2b8c4af8bae4"},
+     :implementation
+     {:scope
+      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+      :declaration
+      "ConstructionTargets.T02A03GeometricTubeDeformation.inputCollisionPolynomial_positiveFactor_meridianReal",
+      :type
+      "forall (p : RightTubeMinusLeftCore), exists c : Real, 0 < c and ((1 - (rightTubeCoreNormalComplex p.1).re)^2 - 4*(1-(rightTubeCoreNormalComplex p.1).re)*(rightTubeCoreAngularCoordinate p : Complex).re + 3 = c * (rightTubeMeridianCoordinate p : Complex).re)",
+      :proof-plan
+      "Choose c as norm(rightTubeNormalComplex p) times ((rightTubeNormalComplex p).re + 2). Deletion makes the norm positive, the radial definition makes the second factor positive, normalization recovers the original real coordinate, and the banked endpoint factorization closes the equality."},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/t02a03_input_poly_positive_factor_probe.lean",
+       :exit 0,
+       :output
+       "inputCollisionPolynomial_positiveFactor_meridianReal compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "sha256sum /tmp/t02a03_input_poly_positive_factor_probe.lean",
+       :exit 0,
+       :output
+       "36b04dc309e4d21eee46d1e4aa395fd083c5ce2cc5e6f40e58be2b8c4af8bae4  /tmp/t02a03_input_poly_positive_factor_probe.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_input_poly_positive_factor_probe.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}],
+     :warnings [],
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :residual
+     "Implement the compiled positive-factor comparison; then construct matching-component angular entry and exit stages and assemble them with the safe corridor, nonzero-height criterion, and radial stage."}},
+   :phase :implementation,
+   :type
+   "forall (p : RightTubeMinusLeftCore), exists c : Real, 0 < c and ((1 - (rightTubeCoreNormalComplex p.1).re)^2 - 4*(1-(rightTubeCoreNormalComplex p.1).re)*(rightTubeCoreAngularCoordinate p : Complex).re + 3 = c * (rightTubeMeridianCoordinate p : Complex).re)",
    :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
@@ -69207,11 +69247,15 @@
    :routes-2026-10-11-t02a03-input-collision-positive-factor-meridian-real-topo2-r1,
    :kind :reusable-theorem,
    :area "explicit-r3-tube-deformation-retraction",
+   :declaration
+   "ConstructionTargets.T02A03GeometricTubeDeformation.inputCollisionPolynomial_positiveFactor_meridianReal",
    :depends-on
    [:routes-2026-10-11-t02a03-input-collision-factor-normal-real-topo2-r1],
    :current-residual
    "Construct the angular entry and exit stages in the matching nonzero-sign components, combine them with the safe corridor and nonzero-height criterion, and concatenate with the radial stage.",
-   :other-consumers []}
+   :other-consumers [],
+   :proof-plan
+   "Choose c as norm(rightTubeNormalComplex p) times ((rightTubeNormalComplex p).re + 2). Deletion makes the norm positive, the radial definition makes the second factor positive, normalization recovers the original real coordinate, and the banked endpoint factorization closes the equality."}
   {:bounded-exception
    "single-consumer explicit ambient deformation with frozen tube and deletion invariants",
    :consumer :t02A03,
