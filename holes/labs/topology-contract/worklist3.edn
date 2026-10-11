@@ -3883,8 +3883,87 @@
   {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-ambientlocalnormalization-generator,
+   :evidence
+   {:placeholder-delta {:source 0, :fixture 0},
+    :residual
+    "Prove the explicit normalization square: integralRelativeHomologyComparison at deletedPoint x followed by ambientLocalNormalization k x equals forgetIntModules.map of CoefficientChartLocal.localIso Int k x. This square and the two normalization equations imply exact generator transport by injectivity.",
+    :gates
+    {:module-build :pass,
+     :standard-axioms-only :pass,
+     :categorical-inverse-law :pass,
+     :exact-declaration-types :pass,
+     :exact-scope :pass,
+     :statement-registry :pass,
+     :zero-placeholders :pass,
+     :no-relative-comparison-dependency :pass,
+     :model-normalization :pass,
+     :clean-tree :pass,
+     :actual-ambient-chart-map :pass,
+     :fixture-compiles :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["lake build replayed pre-existing warnings from dependency modules; the target module emitted informational axiom reports and no warnings"],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization_generator",
+      :type
+      "The concrete production ambient local generator maps to one under the actual ambient local normalization.",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on
+      ["ConstructionTargets.HigherChartLocalGenerator.ambientChartMap_Hn_isIso"
+       "ConstructionTargets.HigherModelLocalHomology.normalization"],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-10",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/manifold_fundamental_class_ambient_local_normalization.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/manifold_fundamental_class_ambient_local_normalization.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^\\s*axiom\\b' ConstructionTargets/ManifoldFundamentalClass.lean /tmp/manifold_fundamental_class_ambient_local_normalization.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git status --porcelain", :exit 0, :stdout ""}],
+    :commit "967e6cb2e2f974d5af7f81a266e92423985980ed",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path
+     "/tmp/manifold_fundamental_class_ambient_local_normalization.lean",
+     :sha256
+     "c7be4a0c7f6423517565487943fde4ca37d8f09294463afa1b5be0bdd7c432a2",
+     :original-sha256
+     "b9cc061a6963a76fd168d76215eb68bcc27c60525a782a1010c6128ee5ff985f",
+     :sorry-count 0},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :declarations
+     ["ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization"
+      "ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization_generator"],
+     :representation
+     {:source
+      "Production ambient local homology with HigherChartLocalGenerator.ambientLocalGenerator",
+      :target
+      "The concrete AddCommGrpCat integer normalization supplied by HigherModelLocalHomology.localIsoInt",
+      :direction
+      "Canonical normalization isomorphism from ambient local homology to the integer model, obtained by pulling back through the actual ambientChartMap homology isomorphism and then applying localIsoInt; the ambient generator maps exactly to one"}},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/production-ambient-normalization",
@@ -6348,11 +6427,13 @@
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization_generator",
     :reported-by
-    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+     :routes-2026-10-11-manifold-ambient-local-normalization-topo3-r1],
     :type
     "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), (ambientLocalNormalization k x).hom.hom (HigherChartLocalGenerator.ambientLocalGenerator (k := k) x) = 1",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in
+    :routes-2026-10-11-manifold-ambient-local-normalization-topo3-r1},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-ambientlocalnormalization-generator,
    :kind :lemma,
