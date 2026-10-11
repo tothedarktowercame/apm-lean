@@ -44,8 +44,53 @@ theorem crossTermSphereMap_descends :
   sphereProjectionEvenMapSmoothDescent 3 crossTermSphereMap
     crossTermSphereMap_antipodal crossTermSphereMap_contMDiff
 
+/-- The ambient quadratic map whose restriction to the unit sphere is
+`crossTermSphereMap`. -/
+def sphereMapAmbient (p : E 3) : E 3 :=
+  WithLp.toLp 2 ![p 1 * p 2, p 0 * p 2, p 0 * p 1]
+
+/-- The linear map obtained by polarizing `sphereMapAmbient` at `p`. -/
+def sphereMapAmbientDerivative (p : E 3) : E 3 →L[ℝ] E 3 :=
+  (PiLp.continuousLinearEquiv 2 ℝ (fun _ : Fin 3 => ℝ)).symm.toContinuousLinearMap.comp
+    (ContinuousLinearMap.pi fun i =>
+      match i with
+      | 0 => p 2 • PiLp.proj 2 (fun _ : Fin 3 => ℝ) 1 +
+          p 1 • PiLp.proj 2 (fun _ : Fin 3 => ℝ) 2
+      | 1 => p 2 • PiLp.proj 2 (fun _ : Fin 3 => ℝ) 0 +
+          p 0 • PiLp.proj 2 (fun _ : Fin 3 => ℝ) 2
+      | 2 => p 1 • PiLp.proj 2 (fun _ : Fin 3 => ℝ) 0 +
+          p 0 • PiLp.proj 2 (fun _ : Fin 3 => ℝ) 1)
+
+/-- The polarized map is the Fréchet derivative of the ambient quadratic map. -/
+theorem sphereMapAmbient_hasFDerivAt (p : E 3) :
+    HasFDerivAt sphereMapAmbient (sphereMapAmbientDerivative p) p := by
+  unfold sphereMapAmbient sphereMapAmbientDerivative
+  apply (PiLp.hasFDerivAt_toLp 2 _).comp p
+  apply hasFDerivAt_pi.mpr
+  intro i
+  fin_cases i
+  · convert (PiLp.hasFDerivAt_apply (𝕜 := ℝ) 2 p 1).mul'
+      (PiLp.hasFDerivAt_apply (𝕜 := ℝ) 2 p 2) using 1 <;>
+      ext <;> simp [add_comm]
+  · convert (PiLp.hasFDerivAt_apply (𝕜 := ℝ) 2 p 0).mul'
+      (PiLp.hasFDerivAt_apply (𝕜 := ℝ) 2 p 2) using 1 <;>
+      ext <;> simp [add_comm]
+  · convert (PiLp.hasFDerivAt_apply (𝕜 := ℝ) 2 p 0).mul'
+      (PiLp.hasFDerivAt_apply (𝕜 := ℝ) 2 p 1) using 1 <;>
+      ext <;> simp [add_comm]
+
+/-- Coordinate formula for the derivative of the ambient quadratic map. -/
+theorem sphereMapAmbient_fderiv (p v : E 3) :
+    fderiv ℝ sphereMapAmbient p v =
+      WithLp.toLp 2 ![v 1 * p 2 + p 1 * v 2,
+        v 0 * p 2 + p 0 * v 2, v 0 * p 1 + p 0 * v 1] := by
+  rw [(sphereMapAmbient_hasFDerivAt p).fderiv]
+  ext i
+  fin_cases i <;> simp [sphereMapAmbientDerivative, mul_comm]
+
 #print axioms crossTermSphereMap_antipodal
 #print axioms crossTermSphereMap_contMDiff
 #print axioms crossTermSphereMap_descends
+#print axioms sphereMapAmbient_fderiv
 
 end ConstructionTargets.T96A07Closure
