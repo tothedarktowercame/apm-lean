@@ -71741,95 +71741,118 @@
    "Use the strict interior and negative-real certificates to define an endpoint-fixed continuous imaginary perturbation, prove the perturbed complex path nonzero, normalize it to Circle, and invoke the ambient adapter.",
    :other-consumers []}
   {:bounded-exception
+   "single-consumer normalization adapter from a nonvanishing endpoint-correct complex path",
+   :consumer :t02A03,
+   :phase :probe,
+   :state :open,
+   :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t02A03/coupled-angular-normalization-adapter",
+   :acceptance
+   {:probe
+    "Compile coupledAngular_of_nonvanishingComplexPath. Given a jointly continuous complex path that is pointwise nonzero and has endpoints 1 and rightTubeCorePlanarComplex p.1, normalize it to a jointly continuous Circle-valued map and prove the endpoint values 1 and rightTubeCoreAngularCoordinate p. Do not construct the nonvanishing complex path or assemble the ambient deformation.",
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngular_of_nonvanishingComplexPath",
+    :type
+    "∀ (Z : C(unitInterval × RightTubeMinusLeftCore, ℂ)), (∀ tp, Z tp ≠ 0) → (∀ p, Z (0,p)=1) → (∀ p, Z (1,p)=rightTubeCorePlanarComplex p.1) → ∃ A : C(unitInterval × RightTubeMinusLeftCore, Circle), (∀ p, A (0,p)=1) ∧ (∀ p, A (1,p)=rightTubeCoreAngularCoordinate p)",
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "separate normalization and Circle endpoint certification from the construction of the nonvanishing perturbed complex path"},
+   :id
+   :routes-2026-10-11-t02a03-coupled-angular-normalization-adapter-topo2-r1,
+   :kind :reusable-theorem,
+   :area "explicit-r3-tube-deformation-retraction",
+   :depends-on
+   [:routes-2026-10-11-t02a03-coupled-angular-zero-interior-topo2-r1],
+   :current-residual
+   "Construct the endpoint-fixed jointly continuous nonvanishing complex perturbation. The banked normalization adapter then yields the coupled angular map, and the banked ambient adapter yields the zero-height stage.",
+   :other-consumers []}
+  {:bounded-exception
    "single-consumer explicit ambient deformation with frozen tube and deletion invariants",
    :consumer :t02A03,
    :evidence
    {:probe
     {:residual
-     "Bank the strict-interior zero certificate; then construct an endpoint-fixed imaginary perturbation avoiding the isolated zero conditions and normalize it to Circle.",
+     "Bank the normalization adapter; then construct the endpoint-correct nonvanishing complex perturbation and feed its normalized map to the ambient reconstruction adapter.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
      [{:name
-       "ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularComplexInterpolation_zero_interior",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngular_of_nonvanishingComplexPath",
        :type
-       "∀ tp : unitInterval × RightTubeMinusLeftCore, coupledAngularComplexInterpolation tp = 0 → 0 < (tp.1 : ℝ) ∧ (tp.1 : ℝ) < 1 ∧ (rightTubeCorePlanarComplex tp.2.1).re < 0",
+       "∀ (Z : C(unitInterval × RightTubeMinusLeftCore, ℂ)), (∀ tp, Z tp ≠ 0) → (∀ p, Z (0,p)=1) → (∀ p, Z (1,p)=rightTubeCorePlanarComplex p.1) → ∃ A : C(unitInterval × RightTubeMinusLeftCore, Circle), (∀ p, A (0,p)=1) ∧ (∀ p, A (1,p)=rightTubeCoreAngularCoordinate p)",
        :status :proved,
        :consumers [:t02A03],
        :depends-on
-       ["ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularComplexInterpolation_eq_zero_iff"],
+       ["ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularComplexInterpolation_zero_interior"],
        :area "explicit-r3-tube-deformation-retraction"}],
      :prerequisite
      {:bounded-exception
-      "single-consumer strict interior and negative-real consequences of angular interpolation zeros",
+      "single-consumer normalization adapter from a nonvanishing endpoint-correct complex path",
       :consumer :t02A03,
       :phase :probe,
       :state :open,
       :scope
       ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t02A03/coupled-angular-zero-interior",
+      "TOPOLOGY-ROUTES.md/t02A03/coupled-angular-normalization-adapter",
       :acceptance
       {:probe
-       "Compile coupledAngularComplexInterpolation_zero_interior. From the exact zero-locus characterization, prove every zero occurs at a time strictly between 0 and 1 and has endpoint core-planar real coordinate strictly negative. Use rightTubeCorePlanarComplex_ne_zero to exclude time one. Do not construct a perturbation, normalize to Circle, or assemble the ambient deformation.",
+       "Compile coupledAngular_of_nonvanishingComplexPath. Given a jointly continuous complex path that is pointwise nonzero and has endpoints 1 and rightTubeCorePlanarComplex p.1, normalize it to a jointly continuous Circle-valued map and prove the endpoint values 1 and rightTubeCoreAngularCoordinate p. Do not construct the nonvanishing complex path or assemble the ambient deformation.",
        :declaration
-       "ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularComplexInterpolation_zero_interior",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngular_of_nonvanishingComplexPath",
        :type
-       "∀ tp : unitInterval × RightTubeMinusLeftCore, coupledAngularComplexInterpolation tp = 0 → 0 < (tp.1 : ℝ) ∧ (tp.1 : ℝ) < 1 ∧ (rightTubeCorePlanarComplex tp.2.1).re < 0",
+       "∀ (Z : C(unitInterval × RightTubeMinusLeftCore, ℂ)), (∀ tp, Z tp ≠ 0) → (∀ p, Z (0,p)=1) → (∀ p, Z (1,p)=rightTubeCorePlanarComplex p.1) → ∃ A : C(unitInterval × RightTubeMinusLeftCore, Circle), (∀ p, A (0,p)=1) ∧ (∀ p, A (1,p)=rightTubeCoreAngularCoordinate p)",
        :placeholder "the sole sorry in apm_t02a03",
        :route-step
-       "show the entire raw zero locus is separated from both endpoints and lies over the negative real endpoint slice"},
+       "separate normalization and Circle endpoint certification from the construction of the nonvanishing perturbed complex path"},
       :id
-      :routes-2026-10-11-t02a03-coupled-angular-zero-interior-topo2-r1,
+      :routes-2026-10-11-t02a03-coupled-angular-normalization-adapter-topo2-r1,
       :kind :reusable-theorem,
       :area "explicit-r3-tube-deformation-retraction",
       :depends-on
-      [:routes-2026-10-11-t02a03-coupled-angular-interpolation-zero-locus-topo2-r1],
+      [:routes-2026-10-11-t02a03-coupled-angular-zero-interior-topo2-r1],
       :current-residual
-      "Use the strict interior and negative-real certificates to define an endpoint-fixed continuous imaginary perturbation, prove the perturbed complex path nonzero, normalize it to Circle, and invoke the ambient adapter.",
+      "Construct the endpoint-fixed jointly continuous nonvanishing complex perturbation. The banked normalization adapter then yields the coupled angular map, and the banked ambient adapter yields the zero-height stage.",
       :other-consumers []},
      :commands
      [{:cmd
-       "lake env lean /tmp/t02a03_coupled_angular_zero_interior_probe.lean",
+       "lake env lean /tmp/t02a03_coupled_angular_normalization_adapter_probe.lean",
        :exit 0,
        :output
-       "coupledAngularComplexInterpolation_zero_interior compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "coupledAngular_of_nonvanishingComplexPath compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/t02a03_coupled_angular_zero_interior_probe.lean",
+       "sha256sum /tmp/t02a03_coupled_angular_normalization_adapter_probe.lean",
        :exit 0,
        :output
-       "3051591865da4efa939140fa4391511846f283b31cb2ec7ef8160898df89270c  /tmp/t02a03_coupled_angular_zero_interior_probe.lean"}
+       "639dabd24d5950b57fcdb2fde6676a7712e2616e13db98c1fcca3a396fe6cb62  /tmp/t02a03_coupled_angular_normalization_adapter_probe.lean"}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_coupled_angular_zero_interior_probe.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_coupled_angular_normalization_adapter_probe.lean || true)\"",
        :exit 0}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}
       {:cmd
-       "rg -n 'coupledAngularComplexInterpolation_zero_interior' /tmp/t02a03_coupled_angular_zero_interior_probe.lean",
+       "rg -n 'coupledAngular_of_nonvanishingComplexPath' /tmp/t02a03_coupled_angular_normalization_adapter_probe.lean",
        :exit 0,
        :output
-       "5:theorem coupledAngularComplexInterpolation_zero_interior\n31:#print axioms coupledAngularComplexInterpolation_zero_interior"}],
+       "5:theorem coupledAngular_of_nonvanishingComplexPath\n30:#print axioms coupledAngular_of_nonvanishingComplexPath"}],
      :diagnostic-history
      [{:cmd
-       "lake env lean /tmp/t02a03_coupled_angular_zero_interior_probe.lean",
+       "lake env lean /tmp/t02a03_coupled_angular_normalization_adapter_probe.lean",
        :exit 1,
        :finding
-       "The first compile preceded rebuilding the module olean containing the newly banked zero-locus theorem. A scoped module rebuild exposed the declarations."}
-      {:cmd
-       "lake build ConstructionTargets.T02A03GeometricTubeDeformation && lake env lean /tmp/t02a03_coupled_angular_zero_interior_probe.lean",
-       :exit 1,
-       :finding
-       "The module rebuilt successfully. In the fixture proof, lt_of_le_of_ne supplied endpoint equalities with orientations different from the first rewrite assumptions; orienting the time-zero equality toward zero and using the time-one equality directly closed both endpoint contradictions."}],
+       "Simplification did not automatically reduce normalize 1. Applying normalize_eq_self_of_norm_eq_one with the explicit unit norm closed the time-zero endpoint."}],
      :fixture
-     {:path "/tmp/t02a03_coupled_angular_zero_interior_probe.lean",
+     {:path
+      "/tmp/t02a03_coupled_angular_normalization_adapter_probe.lean",
       :sha256
-      "3051591865da4efa939140fa4391511846f283b31cb2ec7ef8160898df89270c"},
+      "639dabd24d5950b57fcdb2fde6676a7712e2616e13db98c1fcca3a396fe6cb62"},
      :finding
-     "Every zero of the raw affine angular interpolation is strictly separated from times 0 and 1, and its endpoint core-planar coordinate lies on the negative real axis. Time zero contradicts the affine real equation; time one would force the nonzero core-planar coordinate to have both components zero. The remaining perturbation may therefore be endpoint-fixed and targeted at this interior negative-real locus.",
+     "Normalization is no longer part of the geometric residual. Any jointly continuous nonvanishing complex path with endpoints 1 and rightTubeCorePlanarComplex normalizes continuously to Circle and has exactly the required angular endpoint values. The sole remaining angular task is the endpoint-fixed nonvanishing complex perturbation itself.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
@@ -71905,7 +71928,8 @@
     :routes-2026-10-11-t02a03-zero-height-ambient-detour-from-angular-topo2-r1
     :routes-2026-10-11-t02a03-coupled-angular-complex-interpolation-topo2-r1
     :routes-2026-10-11-t02a03-coupled-angular-interpolation-zero-locus-topo2-r1
-    :routes-2026-10-11-t02a03-coupled-angular-zero-interior-topo2-r1],
+    :routes-2026-10-11-t02a03-coupled-angular-zero-interior-topo2-r1
+    :routes-2026-10-11-t02a03-coupled-angular-normalization-adapter-topo2-r1],
    :current-residual
    "Lift H to RightTubeMinusLeftCore, package rightTubeMeridianRetractionHomotopy, then use the coordinate equation for the Circle-side constant homotopy.",
    :other-consumers []}
@@ -76822,4 +76846,29 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-t02a03geometrictubedeformation-coupledangularcomplexinterpol],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngular_of_nonvanishingComplexPath",
+    :type
+    "∀ (Z : C(unitInterval × RightTubeMinusLeftCore, ℂ)), (∀ tp, Z tp ≠ 0) → (∀ p, Z (0,p)=1) → (∀ p, Z (1,p)=rightTubeCorePlanarComplex p.1) → ∃ A : C(unitInterval × RightTubeMinusLeftCore, Circle), (∀ p, A (0,p)=1) ∧ (∀ p, A (1,p)=rightTubeCoreAngularCoordinate p)"},
+   :lemma
+   {:name
+    "ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngular_of_nonvanishingComplexPath",
+    :reported-by
+    [:routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1],
+    :type
+    "∀ (Z : C(unitInterval × RightTubeMinusLeftCore, ℂ)), (∀ tp, Z tp ≠ 0) → (∀ p, Z (0,p)=1) → (∀ p, Z (1,p)=rightTubeCorePlanarComplex p.1) → ∃ A : C(unitInterval × RightTubeMinusLeftCore, Circle), (∀ p, A (0,p)=1) ∧ (∀ p, A (1,p)=rightTubeCoreAngularCoordinate p)",
+    :area "explicit-r3-tube-deformation-retraction",
+    :proved-in
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+   :id
+   :lemma-constructiontargets-t02a03geometrictubedeformation-coupledangular-of-nonvanishin,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t02a03geometrictubedeformation-coupledan-8641ce833df6],
    :other-consumers []}]}
