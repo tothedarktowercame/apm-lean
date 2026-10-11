@@ -1391,6 +1391,14 @@ noncomputable def forgetCyclesRowHom
     comm₁₂ := forgetCyclesMap_naturality K.f i
     comm₂₃ := forgetCyclesMap_naturality K.g i }
 
+/-- The terminal homology-row comparison is the previously constructed
+homology-row morphism at the terminal degree. -/
+noncomputable def forgetTerminalHomologyRowHom
+    {ι : Type} {c : ComplexShape ι}
+    (K : ShortComplex (HomologicalComplex (ModuleCat ℤ) c)) (j : ι) :
+    ForgottenHomologyRowHom K j :=
+  forgetHomologyRowHom K j
+
 /-- The corrected relative-homology comparison intertwines the coefficient
 absolute-to-relative map with the production relative projection. -/
 theorem integralRelativeHomologyComparisonWithTransport_projection
@@ -2376,6 +2384,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetHomologyRowHom
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetOpcyclesRowHom
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetCyclesRowHom
+#print axioms ConstructionTargets.ManifoldFundamentalClass.forgetTerminalHomologyRowHom
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
