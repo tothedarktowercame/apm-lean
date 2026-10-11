@@ -105870,9 +105870,67 @@
   {:bounded-exception
    "This single-consumer theorem is the remaining ready direct dependency of the plane-orbit quotient Hausdorff lemma.",
    :consumer :t93J03,
+   :stop-count 1,
    :implements-lemma :lemma-kleinplaneorbitquotient-sameorbit-isclosed,
+   :evidence
+   {:placeholder-delta
+    {:source-before 0, :source-after 0, :fixture-sorry 0},
+    :residual
+    "Repair the canonical .lake/packages authority link through the workspace lifecycle, then prove SameOrbit closed from the even/odd integer-coordinate normal form and run every acceptance gate.",
+    :outcome :stop,
+    :warnings
+    [{:kind :lean-workspace-invalid,
+      :message
+      ".lake/packages is a real directory, so no Lake command was run."}],
+    :missing-theorems
+    [{:name "KleinPlaneOrbitQuotient.sameOrbit_isClosed",
+      :type "IsClosed {pq : (ℝ × ℝ) × (ℝ × ℝ) | SameOrbit pq.1 pq.2}",
+      :status :not-started,
+      :consumers [:t93J03],
+      :depends-on [],
+      :area "deck-group-fundamental-group"}],
+    :statement-hashes
+    {:source-sha256
+     "eb1d7d83e14e385b096ed52d9481ab7c4826b1b62e494a72a3ae2a325f2cdfc7",
+     :registry "131 registered statements match, 0 do not"},
+    :disposition :stop,
+    :axioms [],
+    :author "topo-2",
+    :reason
+    "Lean verification is prohibited in this checkout: .lake/packages is a real directory, while workspace policy requires it to be a symlink to /home/joe/code/apm-lean/.lake/packages canonical authority before any Lake command. The sameOrbit closedness proof cannot be safely implemented or checked until the canonical workspace lifecycle repairs that link.",
+    :commands
+    [{:cmd "sha256sum /tmp/klein-plane-same-orbit-closed-probe.lean",
+      :exit 0,
+      :finding "Fixture hash matches the frozen hash."}
+     {:cmd "ls -ld .lake/packages",
+      :exit 0,
+      :finding ".lake/packages is drwxrwxr-x, not a symbolic link."}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "git status --short",
+      :exit 0,
+      :finding
+      "Worktree is clean after removing the unverified exploratory edit."}
+     {:cmd "python3 comment-stripped placeholder scan",
+      :exit 0,
+      :finding
+      "The scoped source contains zero sorry, admit, or axiom tokens."}],
+    :diagnostic-history
+    [{:cmd
+      "test -L .lake/packages && readlink -f .lake/packages && lake env lean ConstructionTargets/KleinPlaneOrbitQuotientTopology.lean",
+      :exit 1,
+      :finding
+      "The mandatory symlink precheck failed before Lake was invoked."}],
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/klein-plane-same-orbit-closed-probe.lean",
+     :sha256
+     "8e4299059594f2ffa506913e99f99b148e9c139e5a5120bf713f07e2439d3ec9",
+     :status :unverified-workspace-invalid},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/KleinPlaneOrbitQuotientTopology.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t93J03/klein-plane-same-orbit-closed",
    :acceptance
@@ -113022,7 +113080,8 @@
    :lemma
    {:name "KleinPlaneOrbitQuotient.sameOrbit_isClosed",
     :reported-by
-    [:routes-2026-10-11-klein-orbit-quotient-homeomorph-96],
+    [:routes-2026-10-11-klein-orbit-quotient-homeomorph-96
+     :routes-2026-10-11-klein-plane-same-orbit-closed-110],
     :type "IsClosed {pq : (ℝ × ℝ) × (ℝ × ℝ) | SameOrbit pq.1 pq.2}.",
     :area "deck-group-fundamental-group"},
    :id :lemma-kleinplaneorbitquotient-sameorbit-isclosed,
