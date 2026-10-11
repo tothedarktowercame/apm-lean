@@ -79324,13 +79324,25 @@
     :diagnostic-history [],
     :continue-from
     "After independent mathematical review of ConstructionTargets/t97A04Closure.blueprint.md, formalise B1 frozenTorusH2GroupIsoInt in ConstructionTargets/t97A04Closure.lean, then proceed node by node in dependency order.",
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791717180611-5214-932ec57b",
+     :commands
+     ["git show/diff-tree/show --check 461f5ca7e37a5b2967853dbea957756974500d59"
+      "git rev-parse blueprint blob and inspect recorded blueprint"
+      "lake env lean problems/t97A04/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "statement fingerprints at commit and parent; placeholder recount"],
+     :finding
+     "PASS: independent author topo-6 committed a new 11-node closure blueprint within the declared scope, matching recorded blob 09f1cd6883bed85bb99d248138889bbe053850a4. The mathematics is coherent: the frozen H2 coordinate and transported vertical cover align; the upper-triangular shear preserves the cover; Mayer-Vietoris naturality plus the monic connecting map gives scalar a; swap squares to the identity and cancels in the pair; and shearY 3 1 composed with g(x,y)=(x,y-x) is exactly Lbar(x,y)=(2x+y,y-x), yielding scalar 3. Each node uses only listed predecessors and compiled API, B10 faithfully transports the AddCommGrp computation to the frozen ModuleCat type, and B11 consumes the three bridge witnesses. Main compiles; its two pre-existing placeholders remain 2 at commit and parent, as expected for a blueprint STOP. Registry is 131/0 and the frozen t97A04 fingerprint is unchanged at commit and parent. No counterexample, missing hypothesis, representation mismatch, or unlisted dependency was found."},
     :commit "461f5ca7e37a5b2967853dbea957756974500d59",
     :changed-paths ["ConstructionTargets/t97A04Closure.blueprint.md"],
     :finding
     "The audit's proposed production connecting-map naturality prerequisite is already compiled. The blueprint fixes eleven remaining nodes: transport the Mayer-Vietoris top-class coordinate to AddCircle squared; define the transported vertical cover and upper-triangular shear; build and identify its short-complex endpoint maps; compute the overlap H1 scalar; cancel the monic connecting map to obtain shearY_H2; handle swap pairs and the explicit factorization of Lbar; transfer to ModuleCat; then fill bridge 3 and hcore.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79346,13 +79358,17 @@
     ["lake env lean problems/t97A04/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
    :continue-from
-   "NEXT JOB: write the blueprint ConstructionTargets/t97A04Closure.blueprint.md (BLUEPRINTS.md) for the remaining chain in ~/notes/closer/audits/t97A04.md, then formalise node by node.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: :blueprint-written",
    :id :program-2026-10-11-close-t97a04,
    :kind :final-adapter,
    :campaign-priority 43,
    :depends-on [],
    :program true,
-   :other-consumers []}
+   :other-consumers [],
+   :program-history
+   [{:job 1,
+     :commit "461f5ca7e37a5b2967853dbea957756974500d59",
+     :reason :blueprint-written}]}
   {:consumer :t96A07,
    :phase :implementation,
    :state :open,
