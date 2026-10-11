@@ -116261,16 +116261,16 @@
      :reason
      "Program milestone completed. Blueprint node B8 is proved: a retraction identity maps under integral H1 to a left inverse for the inclusion map, so the inclusion-induced H1 map is injective. B7 and B9 remain."}]}
   {:consumer :t92J08,
-   :stop-count 3,
+   :stop-count 4,
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "B3-B6 remain; next combine B1 and B2 to construct one chart neighbourhood and common positive time whose points admit manifold integral curves.",
+    "B4-B6 remain; next specialize B3 to the Euclidean model used by t92J08, then extract one global time from compactness and discharge the frozen bridge.",
     :outcome :stop,
     :warnings
     [{:kind :existing-placeholder,
       :message
-      "The consumer still reports its sole pre-existing bridge_1 placeholder; this bounded B2 milestone introduced none."}],
+      "The consumer still reports its sole pre-existing bridge_1 placeholder; this bounded B3 milestone introduced none."}],
     :missing-theorems
     [{:name "t92J08Closure.exists_uniform_local_flow_in_nhds",
       :type
@@ -116290,7 +116290,7 @@
       "t92J08Closure.exists_chart_nhds_uniform_isMIntegralCurveOn",
       :type
       "At every point of a boundaryless manifold there is a neighbourhood and one positive time on which all its initial points admit integral curves",
-      :status :not-started,
+      :status :proved,
       :consumers [:t92J08],
       :depends-on
       ["t92J08Closure.exists_uniform_local_flow_in_nhds"
@@ -116313,15 +116313,6 @@
       :depends-on
       ["t92J08Closure.exists_nhds_uniform_isMIntegralCurveOn"],
       :area "manifold-uniform-local-flow"}
-     {:name
-      "t92J08Closure.exists_uniform_isMIntegralCurveOn_of_compact",
-      :type
-      "Compactness turns neighbourhood-uniform positive existence times into one positive existence time for all initial points",
-      :status :not-started,
-      :consumers [:t92J08],
-      :depends-on
-      ["t92J08Closure.exists_nhds_uniform_isMIntegralCurveOn"],
-      :area "manifold-uniform-local-flow"}
      {:name "apm_t92J08_bridge_1",
       :type
       "The exact frozen uniform local-existence bridge in problems/t92J08/lean/Main.lean",
@@ -116334,92 +116325,75 @@
     {:source-sha256
      "192da922aa40f0e39a64e154a23a20d9db436cb9aad9f958a76f19ca50ffc21c",
      :closure-sha256
-     "2f1658227bd1869536a0466b2b21d42cd8c10a7a820090b78e0d0cd65789df79",
+     "02f1e95cfe6a9432d5040c8458423e0c844d3db5f8f0c296f727056c74a85635",
      :blueprint-sha256
-     "5a84b295d27a895d4f31960d384ec863d426537f8d8c6704da10af978e7321d2",
+     "aab3cf12bc84060c6d480971c7a3d3614ad8172d764d0e7b4decc645f59f6293",
      :registry "131 registered statements match, 0 do not"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Program milestone completed. Blueprint node B2 is proved: localCoordinateField is the exact fixed-extChartAt representative with varying tangent-space transport, and global C1 manifold regularity implies ordinary C1 regularity at the chart centre. B3-B6 remain.",
+    "Program milestone completed. Blueprint node B3 is proved: B1's uniform Euclidean solution family is transported through one fixed extended chart, with target containment keeping every time-point inside the chart and the tangent-coordinate derivative calculation proving the manifold integral-curve property. B4-B6 remain.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t92J08Closure.lean",
       :exit 0,
       :finding
-      "B1-B2 compile placeholder-free; #print axioms for both reports only propext, Classical.choice, and Quot.sound."}
+      "B1-B3 compile placeholder-free; #print axioms for all three reports only propext, Classical.choice, and Quot.sound."}
      {:cmd "lake env lean problems/t92J08/lean/Main.lean",
       :exit 0,
       :finding
       "The consumer compiles with exactly its one pre-existing bridge_1 placeholder."}
      {:cmd
-      "python3 comment-stripped B2, source-placeholder, and blueprint validation",
+      "python3 comment-stripped B3, source-placeholder, and blueprint validation",
       :exit 0,
       :finding
-      "The closure module contains no sorry, admit, or axiom tokens; the consumer remains at one sorry; the blueprint marks B2 proved."}
+      "The closure module contains no sorry, admit, or axiom tokens; the consumer remains at one sorry; the blueprint marks B3 proved."}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131 registered statements match, 0 do not."}
      {:cmd
       "git diff --check -- ConstructionTargets/t92J08Closure.lean ConstructionTargets/t92J08Closure.blueprint.md",
       :exit 0}
-     {:cmd
-      "git commit -m Prove-t92J08-chart-coordinate-field-regularity",
+     {:cmd "git commit -m Prove-t92J08-uniform-chart-local-flow",
       :exit 0,
       :finding
-      "Committed the two scoped milestone files as 3675d325b5e3207a26eee3601ca0810b874bfbe1."}
+      "Committed the two scoped milestone files as 2ed42033c."}
      {:cmd
       "sha256sum ConstructionTargets/t92J08Closure.lean ConstructionTargets/t92J08Closure.blueprint.md problems/t92J08/lean/Main.lean",
       :exit 0,
       :finding
-      "Hashes are 2f1658227bd1869536a0466b2b21d42cd8c10a7a820090b78e0d0cd65789df79, 5a84b295d27a895d4f31960d384ec863d426537f8d8c6704da10af978e7321d2, and 192da922aa40f0e39a64e154a23a20d9db436cb9aad9f958a76f19ca50ffc21c."}],
+      "Hashes are 02f1e95cfe6a9432d5040c8458423e0c844d3db5f8f0c296f727056c74a85635, aab3cf12bc84060c6d480971c7a3d3614ad8172d764d0e7b4decc645f59f6293, and 192da922aa40f0e39a64e154a23a20d9db436cb9aad9f958a76f19ca50ffc21c."}],
     :diagnostic-history
     [{:cmd "lake env lean ConstructionTargets/t92J08Closure.lean",
       :exit 1,
       :finding
-      "The first B2 draft left the point implicit when extracting ContMDiffAt from the global hypothesis; corrected with the exact tangent-bundle-valued type at x0."}
+      "The first B3 compile applied mem_extChartAt_source positionally and attempted to obtain the final coordinate-change derivative from boundarylessness at the wrong base point; corrected with the named model argument and Mathlib's chart-target interior neighbourhood calculation."}
      {:cmd "lake env lean ConstructionTargets/t92J08Closure.lean",
       :exit 1,
       :finding
-      "The boundaryless interior-point instance was initially applied as an explicit function; corrected by ascribing its implicit point to I.IsInteriorPoint x0."}
-     {:cmd "lake env lean ConstructionTargets/t92J08Closure.lean",
-      :exit 1,
-      :finding
-      "The intermediate proof projected .2 from ContDiffAt, which is not a conjunction; corrected with ContDiffAt.snd on the product-valued tangent-chart expression."}],
+      "The intermediate target-range proof supplied explicit arguments in the wrong order; corrected with inferred extChartAt_target_subset_range arguments, after which B3 compiled."}],
     :continue-from
-    {:commit "3675d325b5e3207a26eee3601ca0810b874bfbe1",
+    {:commit "2ed42033c",
      :next
-     "Implement B3 exists_chart_nhds_uniform_isMIntegralCurveOn using B1 target control and the chart-transport calculation from Mathlib's local integral-curve proof."},
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791725662278-5425-2c1ddc06",
-     :commands
-     ["git show/diff-tree 3675d325b5e3207a26eee3601ca0810b874bfbe1"
-      "recorded-tree SHA-256, exact-scope, diff-check, and placeholder-delta verification"
-      "python3 scripts/statement-registry.py check"
-      "lake env lean ConstructionTargets/t92J08Closure.lean"
-      "lake env lean problems/t92J08/lean/Main.lean"],
-     :finding
-     "PASS: commit 3675d325 adds new compiled, placeholder-free B2 progress. localCoordinateField faithfully retains the varying tangent-space transport in one fixed extChartAt; contMDiffAt_iff supplies that exact product-valued chart expression, its second component gives the field, and boundarylessness justifies converting within-C1 regularity on range I to ordinary C1 regularity at the chart centre. Scope and hashes match, only standard axioms occur, the consumer's one old placeholder is unchanged, and B3-B6 remain explicit."},
-    :commit "3675d325b5e3207a26eee3601ca0810b874bfbe1",
+     "Implement B4 exists_nhds_uniform_isMIntegralCurveOn by specializing B3 to the consumer's Euclidean manifold model."},
+    :commit "2ed42033c",
     :changed-paths
     ["ConstructionTargets/t92J08Closure.lean"
      "ConstructionTargets/t92J08Closure.blueprint.md"],
     :fixture
     {:path "ConstructionTargets/t92J08Closure.blueprint.md",
      :sha256
-     "5a84b295d27a895d4f31960d384ec863d426537f8d8c6704da10af978e7321d2",
+     "aab3cf12bc84060c6d480971c7a3d3614ad8172d764d0e7b4decc645f59f6293",
      :nodes
      [{:id :B1, :status :proved}
       {:id :B2, :status :proved}
-      {:id :B3, :status :planned}
+      {:id :B3, :status :proved}
       {:id :B4, :status :planned}
       {:id :B5, :status :planned}
       {:id :B6, :status :planned}]},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t92J08/lean/Main.lean"
     "problems/t92J08/status.json"
@@ -117423,7 +117397,8 @@
     :reported-by [:program-2026-10-11-close-t92j08],
     :type
     "At every point of a boundaryless manifold there is a neighbourhood and one positive time on which all its initial points admit integral curves",
-    :area "manifold-uniform-local-flow"},
+    :area "manifold-uniform-local-flow",
+    :proved-in :program-2026-10-11-close-t92j08},
    :id
    :lemma-t92j08closure-exists-chart-nhds-uniform-ismintegralcurveon,
    :kind :lemma,
