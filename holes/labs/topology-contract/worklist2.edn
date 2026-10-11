@@ -79283,18 +79283,19 @@
   {:consumer :t97A04,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 8,
+   :stop-count 9,
    :review-finding
    "program STOP commits nothing new since the last :program-history entry: evidence commit bb0f0f77d8953dc78dd564e000f3d4a5b29d0894 exactly equals history job 5",
    :evidence
    {:placeholder-delta 0,
-    :residual "Identify each summand; then B6-B11.",
+    :residual "Identify restrictions as circle-affine; then B6-B11.",
     :outcome :stop,
-    :warnings ["Main retains two placeholders."],
+    :warnings
+    ["Main has 2 placeholders; unrelated dirty file preserved."],
     :missing-theorems
     [{:name
-      "ConstructionTargets.T97A04Closure.twoCircleOverlapShearLeftRight",
-      :type "left/right restrictions with application formulas",
+      "ConstructionTargets.T97A04Closure.twoCircleOverlapShear_component_H1",
+      :type "restriction H1 equals injection H1 then shear H1",
       :status :proved,
       :consumers [:t97A04],
       :depends-on [],
@@ -79305,12 +79306,12 @@
       :status :partial,
       :consumers [:t97A04],
       :depends-on
-      ["ConstructionTargets.T97A04Closure.twoCircleOverlapShearLeftRight"
+      ["ConstructionTargets.T97A04Closure.twoCircleOverlapShear_component_H1"
        "ConstructionTargets.T97A04Closure.circleZPow_H1_coordinate"],
       :area "mv-connecting-naturality"}],
     :statement-hashes
     {:registry "131/0",
-     :closure "23609ca3f2ebffa919bc04fe93d2aaef9afe2a54",
+     :closure "779e8c25984dce84d27ab7a37769b734ea78abd2",
      :blueprint "c419a895cb4ede2acc1cb6bc5c7536344ba63df4"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
@@ -79323,29 +79324,19 @@
      {:cmd "lake env lean problems/t97A04/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "Main placeholder count", :exit 0, :output "2"}
-     {:cmd "git show --check 3bff735cc", :exit 0}],
+     {:cmd "git show --check 6150a402c", :exit 0}],
     :diagnostic-history
     [{:cmd "closure compile",
       :exit 1,
-      :finding "Endpoint rfl was false; exposed summand maps."}],
-    :continue-from "Identify left/right maps as circle-affine.",
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791728081938-5471-28ad6ca7",
-     :commands
-     ["git show/check/diff-tree 3bff735cc"
-      "lake env lean ConstructionTargets/t97A04Closure.lean"
-      "lake env lean problems/t97A04/lean/Main.lean"
-      "statement-registry check/fingerprint and placeholder counts"],
-     :finding
-     "PASS: new compiled progress after history job 7. Commit changes only the scoped closure and exposes the left/right Circle-to-Circle⊕Circle restrictions of the transported overlap shear with faithful application formulas and correct composition direction. Blob matches 23609ca3. Closure is sorry-free with standard axioms; Main compiles with unchanged 2 placeholders. Registry is 131/0 and frozen statement SHA-256 remains ca1b2cb3c6594276811618321d5c0604c2f38fc4594a6b21ae161a711a923a34. Identifying both restrictions as affine maps and B6-B11 remain listed."},
-    :commit "3bff735cc6b4b6da238c4dbdd605c169c8bdaf0d",
+      :finding "Expanded postcomposition; rerun passed."}],
+    :continue-from "Identify restrictions as circle-affine.",
+    :commit "6150a402c247424c1891c64a4d92e5b505009668",
     :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
-    :finding "Both transported overlap-summand maps now compile.",
+    :finding
+    "Restricted overlap shears now factor through circle injections on H1.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79784,7 +79775,8 @@
    [:lemma-constructiontargets-t97a04closure-twocircleoverlapshear
     :lemma-constructiontargets-t97a04closure-circlezpow-h1
     :lemma-constructiontargets-t97a04closure-circlezpow-h1-coordinate
-    :lemma-constructiontargets-t97a04closure-twocircleoverlapshearleftright],
+    :lemma-constructiontargets-t97a04closure-twocircleoverlapshearleftright
+    :lemma-constructiontargets-t97a04closure-twocircleoverlapshear-component-h1],
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
@@ -79889,6 +79881,26 @@
     :banked-commit "3bff735cc6b4b6da238c4dbdd605c169c8bdaf0d"},
    :id
    :lemma-constructiontargets-t97a04closure-twocircleoverlapshearleftright,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T97A04Closure.twoCircleOverlapShear_component_H1",
+    :type "restriction H1 equals injection H1 then shear H1"},
+   :lemma
+   {:name
+    "ConstructionTargets.T97A04Closure.twoCircleOverlapShear_component_H1",
+    :reported-by [:program-2026-10-11-close-t97a04],
+    :type "restriction H1 equals injection H1 then shear H1",
+    :area "mv-connecting-naturality",
+    :proved-in :program-2026-10-11-close-t97a04},
+   :id
+   :lemma-constructiontargets-t97a04closure-twocircleoverlapshear-component-h1,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}]}
