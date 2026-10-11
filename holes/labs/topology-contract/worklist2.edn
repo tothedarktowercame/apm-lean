@@ -71031,6 +71031,19 @@
       :exit 1,
       :explanation
       ".lake/packages is a real directory rather than the required canonical symlink; no package state was modified and compilation succeeded on the existing substrate."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791698954571-4444-aaf766ba",
+     :commands
+     ["git show/diff-tree/show --check a94d811cd703a0af2792d3bf26c5739f6be0e431"
+      "git rev-parse scope blob; sha256sum fixture"
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean"
+      "lake env lean /tmp/t02a03_core_normal_detour_interior_im_probe.lean"
+      "statement registry check and commit/parent fingerprints"
+      "placeholder recount at commit/parent"],
+     :finding
+     "PASS: independent author topo-6; exact one-file scope, blob, and fixture hash match. Target and frozen probe compile. The frozen interior nonzero-imaginary theorem has the correct branch orientation and remains in complex normal coordinates: the first branch reduces to (2*t)*waypoint.im and uses t != 0, while the second reduces to (2-2*t)*waypoint.im and uses t != 1; both endpoint normals are proved real. Axioms are exactly propext, Classical.choice, Quot.sound; registry is 131/0, t02A03 fingerprint is unchanged at commit and parent, fixture has no placeholders, and Main has 1 placeholder at commit and parent."},
     :commit "a94d811cd703a0af2792d3bf26c5739f6be0e431",
     :changed-paths
     ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
@@ -71044,7 +71057,7 @@
    :phase :implementation,
    :type
    "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> forall (t : unitInterval), (t : ℝ) ≠ 0 -> (t : ℝ) ≠ 1 -> (zeroHeightCoreNormalDetour t p).im ≠ 0",
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/zero-height-core-normal-detour-interior-im",
@@ -71149,7 +71162,7 @@
      "For zero-height input, every strict interior detour time has nonzero imaginary core-normal coordinate. On the departure half it is (2*t)*w.im, and on the arrival half it is (2-2*t)*w.im; the real endpoint normals contribute zero imaginary part, while t != 0 and t != 1 keep the respective coefficients nonzero.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
@@ -75935,7 +75948,7 @@
    :other-consumers []}
   {:consumer :t02A03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -75951,7 +75964,10 @@
     "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> forall (t : unitInterval), (t : ℝ) ≠ 0 -> (t : ℝ) ≠ 1 -> (zeroHeightCoreNormalDetour t p).im ≠ 0",
     :area "explicit-r3-tube-deformation-retraction",
     :proved-in
-    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1,
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"]},
    :id
    :lemma-constructiontargets-t02a03geometrictubedeformation-zeroheightcorenormaldetour-im,
    :kind :lemma,
