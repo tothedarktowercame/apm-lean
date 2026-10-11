@@ -113994,13 +113994,26 @@
     {:commit "9fed3ac3c",
      :next
      "Finish B3 by composing the pseudopushout and pseudo-span stages before the two banked span transports, then the free-product representation and SingleObj stages after them; paste the corresponding postcomposition squares."},
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791731183409-5546-4fb72f0c",
+     :commands
+     ["git show/diff-tree 9fed3ac3c"
+      "sha256sum three scoped files"
+      "statement-registry.py check"
+      "lake env lean PointWedgeVanKampen.lean"
+      "lake build PointWedgeVanKampen"
+      "lake build ThreeCirclesFundamentalGroup"],
+     :finding
+     "PASS: fresh retry confirms compiled sorry-free B3 progress. Based connectors land in literal FundamentalGroup representations; PUnit comparison avoids counit normalization; span and postcomposition directions match the blueprint. Scope/hashes match, placeholders are zero, axioms standard. Final target is absent because B12 remains listed."},
     :commit "9fed3ac3c",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -114021,7 +114034,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Program job made compiled partial progress on blueprint B3. The literal point-wedge cover span is now transported through the B1 homotopy equivalences to the fixed Unit-to-X/Y coordinate span, B2 supplies the strict comparison isomorphisms, and the resulting equivalence is proved natural under target postcomposition. The remaining B3 composite from the two-open pseudopushout through point-span free-product representations is not yet implemented.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Program job made further compiled partial progress on blueprint B3. Connector systems based exactly at x0 and y0 now transport the fixed FundamentalGroupoid Unit-to-X/Y coordinate span to the literal point span on FundamentalGroup X x0 and FundamentalGroup Y y0. Both transported legs are compared to the point-leg functors without normalizing an arbitrary counit, and this second span equivalence is proved natural under target postcomposition. The outer pseudopushout and representation composites remain.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114057,7 +114070,11 @@
     {:job 1,
      :commit "6124de960",
      :reason
-     "Program job made compiled partial progress on blueprint B3. The literal point-wedge cover span is now transported through the B1 homotopy equivalences to the fixed Unit-to-X/Y coordinate span, B2 supplies the strict comparison isomorphisms, and the resulting equivalence is proved natural under target postcomposition. The remaining B3 composite from the two-open pseudopushout through point-span free-product representations is not yet implemented."}]}
+     "Program job made compiled partial progress on blueprint B3. The literal point-wedge cover span is now transported through the B1 homotopy equivalences to the fixed Unit-to-X/Y coordinate span, B2 supplies the strict comparison isomorphisms, and the resulting equivalence is proved natural under target postcomposition. The remaining B3 composite from the two-open pseudopushout through point-span free-product representations is not yet implemented."}
+    {:job 2,
+     :commit "9fed3ac3c",
+     :reason
+     "Program job made further compiled partial progress on blueprint B3. Connector systems based exactly at x0 and y0 now transport the fixed FundamentalGroupoid Unit-to-X/Y coordinate span to the literal point span on FundamentalGroup X x0 and FundamentalGroup Y y0. Both transported legs are compared to the point-leg functors without normalizing an arbitrary counit, and this second span equivalence is proved natural under target postcomposition. The outer pseudopushout and representation composites remain."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
@@ -117905,7 +117922,7 @@
    :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
   {:consumer :t99J01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -117919,7 +117936,9 @@
     :type
     "Equivalence from the fixed Unit-to-X/Y coordinate span to the literal point span on FundamentalGroup X x0 and FundamentalGroup Y y0",
     :area "fundamental-group-wedge-of-circles",
-    :proved-in :program-2026-10-11-point-wedge-van-kampen},
+    :proved-in :program-2026-10-11-point-wedge-van-kampen,
+    :banked-by :program-2026-10-11-point-wedge-van-kampen,
+    :banked-commit "9fed3ac3c"},
    :id
    :lemma-pointwedgevankampen-genericpointwedgecoordinatepointspanequivalence,
    :kind :lemma,
@@ -117928,7 +117947,7 @@
    :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
   {:consumer :t99J01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -117942,7 +117961,9 @@
     :type
     "The coordinate-to-point-span equivalence commutes with target postcomposition",
     :area "fundamental-group-wedge-of-circles",
-    :proved-in :program-2026-10-11-point-wedge-van-kampen},
+    :proved-in :program-2026-10-11-point-wedge-van-kampen,
+    :banked-by :program-2026-10-11-point-wedge-van-kampen,
+    :banked-commit "9fed3ac3c"},
    :id
    :lemma-pointwedgevankampen-genericpointwedgecoordinatepointspanpostcomposeiso,
    :kind :lemma,
