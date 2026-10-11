@@ -79328,13 +79328,24 @@
     :diagnostic-history [],
     :continue-from
     "Prove the inl/inr equations using twoCircleOverlapShear.",
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791724176077-5398-07d24d66",
+     :commands
+     ["git show/check/diff-tree 2412fe180"
+      "lake env lean ConstructionTargets/t97A04Closure.lean"
+      "lake env lean problems/t97A04/lean/Main.lean"
+      "statement-registry check/fingerprint and placeholder counts"],
+     :finding
+     "PASS: new compiled progress beyond the latest history entry. Commit changes only the scoped closure and correctly derives the full overlap-coordinate equality from the two normalized inl/inr equations via biproduct hom-extensionality; orientation matches overlapScalar. Blob matches 3a32d8fd. Closure is sorry-free with standard axioms; Main compiles with unchanged 2 placeholders. Registry is 131/0 and frozen statement SHA-256 remains ca1b2cb3c6594276811618321d5c0604c2f38fc4594a6b21ae161a711a923a34. The two circle-degree equations and B6-B11 remain listed."},
     :commit "2412fe180baf98133a8bcdb748eaa009ff1d6734",
     :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
     :finding
     "B6 assembly from its two normalized degree equations now compiles.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79388,6 +79399,9 @@
      :reason :program-progress-committed}
     {:job 1,
      :commit "ca53a3ddd90dc833a58ac5a32e2db12b9add8764",
+     :reason :program-progress-committed}
+    {:job 2,
+     :commit "2412fe180baf98133a8bcdb748eaa009ff1d6734",
      :reason :program-progress-committed}]}
   {:consumer :t96A07,
    :stop-count 1,
@@ -79712,7 +79726,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -79726,7 +79740,9 @@
     :type
     "the two normalized component equations imply shearYOverlapCoordinateMap a b = overlapScalar a",
     :area "mv-connecting-naturality",
-    :proved-in :program-2026-10-11-close-t97a04},
+    :proved-in :program-2026-10-11-close-t97a04,
+    :banked-by :program-2026-10-11-close-t97a04,
+    :banked-commit "2412fe180baf98133a8bcdb748eaa009ff1d6734"},
    :id
    :lemma-constructiontargets-t97a04closure-sheary-overlap-coordinate-of-degree-components,
    :kind :lemma,
