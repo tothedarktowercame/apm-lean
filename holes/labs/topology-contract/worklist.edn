@@ -103551,33 +103551,241 @@
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :evidence
    {:outcome :replan,
-    :disposition :replan,
-    :author "topo-4",
+    :seat "topo-4",
     :commands
     [{:cmd
       "bb holes/labs/topology-contract/build_step.bb priorities holes/labs/topology-contract/worklist.edn",
       :exit 0,
       :finding
-      "No route is complete; the top two ready lemmas each unblock five problems, while t93J03 is nearest with two backlog lemmas."}
+      "Fresh audit: topo1 routes have backlog counts 3, 3, 2, 35, 6, and 5; the cross-loop AREAS report has 26 untagged backlog lemmas and polygon-surface-open-cover has 166 banked and 60 backlog."}
      {:cmd
-      "python3 -c 'import re\nids=[\"t01A03\",\"t92J06\",\"t93J03\",\"t97A01\",\"t97A03\",\"t99J01\"]\nfor i in ids:\n p=f\"problems/{i}/lean/Main.lean\"; t=open(p).read(); t=re.sub(r\"/-.*?-/\",\" \",t,flags=re.S); t=re.sub(r\"--[^\n]*\",\" \",t); print(i,len(re.findall(r\"(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])\",t)))'",
+      "clojure -M -e '(require (quote clojure.edn)) (doseq [f [\"holes/labs/topology-contract/worklist2.edn\" \"holes/labs/topology-contract/worklist3.edn\"] :let [x (clojure.edn/read-string (slurp f))] i (:items x) :when (and (= :lemma (:kind i)) (= :backlog (:state i)) (nil? (or (:area i) (get-in i [:lemma :area]))))] (prn (select-keys i [:id :consumer :other-consumers :depends-on :lemma])))'",
       :exit 0,
       :finding
-      "Comment-stripped counts: t01A03 1, t92J06 1, t93J03 1, t97A01 1, t97A03 3, t99J01 1."}],
-    :diagnostic-history
-    [{:cmd
-      "python3 -c placeholder-count-script-with-literal-backslash-n",
-      :exit 1,
+      "Enumerated exactly 26 untagged backlog lemma nodes: 13 in worklist2 and 13 in worklist3."}
+     {:cmd
+      "python3 -c 'import re\nids=[\"t01A03\",\"t92J06\",\"t93J03\",\"t97A01\",\"t97A03\",\"t99J01\"]\nfor i in ids:\n p=f\"problems/{i}/lean/Main.lean\"; t=open(p).read(); t=re.sub(r\"/-.*?-/\",\" \",t,flags=re.S); t=re.sub(r\"--[^\\n]*\",\" \",t); print(i,len(re.findall(r\"(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])\",t)))'",
+      :exit 0,
       :finding
-      "The first shell spelling passed literal backslash-n tokens to Python.",
-      :correction
-      "Used actual newlines in the successful command recorded above."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1791688205788-3929-5a7d5397",
-     :finding
-     "The recorded checkpoint fails its explicit requirement to tag every remaining untagged lemma: rerunning build_step.bb priorities against commit d8955ca38c3b0167ccd7be30b3a82f1252b0ae68 reports area untagged with 26 backlog lemmas. Its stored polygon-surface-open-cover measure is also stale after the inserted rows, recording 166 banked and 26 backlog while the recorded-commit audit reports 166 banked and 60 backlog. Tag the remaining 26 lemmas and recompute all checkpoint measures after inserting replacement and lemma rows."},
+      "Comment-stripped counts remain t01A03 1, t92J06 1, t93J03 1, t97A01 1, t97A03 3, and t99J01 1."}],
+    :finding
+    {:placeholder-delta 0,
+     :placeholder-counts
+     {:t01A03 1,
+      :t92J06 1,
+      :t93J03 1,
+      :t97A01 1,
+      :t97A03 3,
+      :t99J01 1},
+     :routes
+     {:t01A03
+      ["generic wedge coordinates"
+       "finite circle-wedge fundamental group"
+       "adapter"],
+      :t92J06
+      ["generic wedge coordinates"
+       "finite wedge pi1 and covering gluing"
+       "adapter"],
+      :t93J03
+      ["aabb-square presentation equivalence"
+       "Klein orbit quotient homeomorphism"
+       "adapter"],
+      :t97A01
+      ["radial packages and overlap squares"
+       "generic wedge coordinates"
+       "invariant-coordinate assembly"],
+      :t97A03
+      ["generic wedge coordinates"
+       "three cover homotopy equivalences"
+       "assembly"],
+      :t99J01
+      ["generic and ThreeCircles coordinates"
+       "finite wedge pi1"
+       "path-component restriction"
+       "adapter"]},
+     :typed-residual-change
+     ["The rejected checkpoint understated t97A01 at 16 backlog; the current ledger has 35."
+      "The cross-loop polygon-surface-open-cover total is 166 banked and 60 backlog."
+      "All 26 untagged backlog nodes are assigned existing route-area spellings below."],
+     :infrastructure-packets
+     {:topo1-banked 148,
+      :topo1-backlog 54,
+      :cross-loop-untagged-before 26,
+      :cross-loop-untagged-after 0,
+      :elected 3,
+      :placeholder-changing 0,
+      :compiled-refutations 0},
+     :review-outcomes
+     {:prior-checkpoint :fail,
+      :t99J01 :revise,
+      :generic-overlap-squares :pass,
+      :polygon-radial-packages :go,
+      :closed-problems 0},
+     :priority-top
+     ["kleinAabbSquarePolygonPresentationEquivalence under rule 0 proximity"
+      "GenericPointWedgeFundamentalGroupCoordinates.genericPointWedgeGroupEquivalence_coordinates, five consumers"
+      "GenericPointWedgeFundamentalGroupCoordinates.threeCirclesGroupEquivalence_coordinates, five consumers"],
+     :areas
+     ["fundamental-group-wedge-of-circles: 0 banked, 8 backlog, five open problems"
+      "polygon-surface-open-cover: 166 banked, 60 backlog, two open problems"
+      "untagged: 9 banked, 0 backlog after the 26 tag updates"]},
+    :lemmas
+    [{:name "frozenTorusHomeomorphBoundaryTorus",
+      :status :not-started,
+      :consumers [:t97A04],
+      :depends-on [],
+      :area "mv-connecting-naturality"}
+     {:name
+      "ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusH1GroupIsoFinTwo",
+      :status :not-started,
+      :consumers [:t97A04],
+      :depends-on [],
+      :area "mv-connecting-naturality"}
+     {:name
+      "ConstructionTargets.TorusPiOneWindingCoordinates.frozenLbarPi1Map_naturality",
+      :status :not-started,
+      :consumers [:t97A04],
+      :depends-on [],
+      :area "mv-connecting-naturality"}
+     {:name
+      "ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusAlignedH1MulEquivFinTwo",
+      :status :not-started,
+      :consumers [:t97A04],
+      :depends-on [],
+      :area "mv-connecting-naturality"}
+     {:name
+      "ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison_naturality",
+      :status :not-started,
+      :consumers [:t97A04],
+      :depends-on [],
+      :area "mv-connecting-naturality"}
+     {:name
+      "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_circleMeridian_mem_geometricY",
+      :status :not-started,
+      :consumers [:t02A03],
+      :depends-on [],
+      :area "geometric-tube-deformation"}
+     {:name
+      "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_origin_mem_both_cores",
+      :status :not-started,
+      :consumers [:t02A03],
+      :depends-on [],
+      :area "geometric-tube-deformation"}
+     {:name
+      "ConstructionTargets.RealProjectiveSmoothTarget.sphereProjectionQuotientAuthority",
+      :status :not-started,
+      :consumers [:t95A04 :t96A07],
+      :depends-on [],
+      :area "rp-smooth-atlas"}
+     {:name
+      "ConstructionTargets.RealProjectiveSmoothTarget.sphereProjection_eq_iff",
+      :status :not-started,
+      :consumers [:t95A04 :t96A07],
+      :depends-on [],
+      :area "rp-smooth-atlas"}
+     {:name
+      "ConstructionTargets.RealProjectiveSmoothTarget.rpSmoothAtlas",
+      :status :not-started,
+      :consumers [:t95A04 :t96A07],
+      :depends-on [],
+      :area "rp-smooth-atlas"}
+     {:name
+      "ConstructionTargets.SingularExcision.subspaceMap_inclusion",
+      :status :not-started,
+      :consumers [:t97A04],
+      :depends-on [],
+      :area "mv-connecting-naturality"}
+     {:name
+      "ConstructionTargets.T02A03GeometricTubeDeformation.rightTube_exists_near_rightCore",
+      :status :not-started,
+      :consumers [:t02A03],
+      :depends-on [],
+      :area "geometric-tube-deformation"}
+     {:name
+      "ConstructionTargets.T02A03GeometricTubeDeformation.range_rightCoreCircle",
+      :status :not-started,
+      :consumers [:t02A03],
+      :depends-on [],
+      :area "geometric-tube-deformation"}
+     {:id
+      :lemma-constructiontargets-integralsingularhomologycomparison-singularhomologycomparison-full,
+      :name
+      "ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison",
+      :status :not-started,
+      :consumers [:t00J02 :t98A02],
+      :depends-on [],
+      :area "manifold-fundamental-class"}
+     {:name
+      "ConstructionTargets.SurfaceNestedTriangleCover.finite_nested",
+      :status :not-started,
+      :consumers [:t97J02],
+      :depends-on [],
+      :area "surface-classification"}
+     {:name
+      "ConstructionTargets.HigherChartLocalGenerator.ambientChartMap_Hn_isIso",
+      :status :not-started,
+      :consumers [:t00J02 :t98A02],
+      :depends-on [],
+      :area "manifold-fundamental-class"}
+     {:name
+      "ConstructionTargets.HigherModelLocalHomology.normalization",
+      :status :not-started,
+      :consumers [:t00J02 :t98A02],
+      :depends-on [],
+      :area "manifold-fundamental-class"}
+     {:name
+      "ConstructionTargets.CoefficientDistinguishedNormalization.distinguished",
+      :status :not-started,
+      :consumers [:t00J02 :t98A02],
+      :depends-on [],
+      :area "manifold-fundamental-class"}
+     {:name
+      "ConstructionTargets.IntegralSingularHomologyComparison.singularChainsComparison_naturality",
+      :status :not-started,
+      :consumers [:t00J02 :t98A02],
+      :depends-on [],
+      :area "manifold-fundamental-class"}
+     {:name "forgetIntModules.asEquivalence",
+      :status :not-started,
+      :consumers [:t00J02 :t98A02],
+      :depends-on [],
+      :area "manifold-fundamental-class"}
+     {:name
+      "ConstructionTargets.SingularHomologyConcrete.relativeSingularChainsIsoCokernelSubspaceMap",
+      :status :not-started,
+      :consumers [:t00J02 :t98A02],
+      :depends-on [],
+      :area "manifold-fundamental-class"}
+     {:name
+      "ConstructionTargets.SingularExcision.relativeSingularChainsIsoCokernelSubspaceMap",
+      :status :not-started,
+      :consumers [:t00J02 :t98A02],
+      :depends-on [],
+      :area "manifold-fundamental-class"}
+     {:name
+      "ConstructionTargets.CoefficientChartLocal.generator_normalization",
+      :status :not-started,
+      :consumers [:t00J02 :t98A02],
+      :depends-on [],
+      :area "manifold-fundamental-class"}
+     {:name
+      "ConstructionTargets.SingularExcision.relativeProjection_comp_cokernelIso_hom",
+      :status :not-started,
+      :consumers [:t00J02 :t98A02],
+      :depends-on [],
+      :area "manifold-fundamental-class"}
+     {:name
+      "ConstructionTargets.SingularHomologyConcrete.relativeProjection_comp_cokernelIso_hom",
+      :status :not-started,
+      :consumers [:t00J02 :t98A02],
+      :depends-on [],
+      :area "manifold-fundamental-class"}
+     {:name
+      "ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport",
+      :status :not-started,
+      :consumers [:t00J02 :t98A02],
+      :depends-on [],
+      :area "manifold-fundamental-class"}],
     :replacement-items
     [{:bounded-exception
       "This single-consumer comparison is the nearer of the two remaining t93J03 lemmas.",
@@ -103591,7 +103799,7 @@
       "TOPOLOGY-ROUTES.md/t93J03/klein-aabb-square-polygon-presentation-equivalence",
       :acceptance
       {:probe
-       "Compile the exact quotient-fiber comparison and resulting homeomorphism from Surface false 2 to the standard square Klein quotient using the banked square EqvGen case classification. Do not require an edgewise edgePoint-to-squareEdge carrier, prove the orbit quotient comparison, or close t93J03.",
+       "Compile the quotient-fiber comparison and resulting homeomorphism from Surface false 2 to the standard square Klein quotient using the banked square EqvGen classification. Do not prove the orbit quotient comparison or close t93J03.",
        :placeholder "the single sorry in apm_t93j03",
        :route-step
        "identify the two concrete Klein polygon presentations",
@@ -103625,9 +103833,9 @@
       "TOPOLOGY-ROUTES.md/shared/generic-point-wedge-fundamental-group-coordinates",
       :acceptance
       {:probe
-       "Compile the generic point-wedge fundamental-group equivalence with the actual left and right representative maps sent to Monoid.Coprod.inl and Monoid.Coprod.inr using the same connector paths. Do not specialize to a finite circle wedge or close a consumer.",
+       "Compile the generic point-wedge fundamental-group equivalence with the representative maps sent to the two coproduct injections. Do not specialize to a finite circle wedge or close a consumer.",
        :placeholder
-       "the remaining fundamental-group coordinate steps for t01A03, t92J06, t97A01, t97A03, and t99J01",
+       "the remaining fundamental-group coordinate steps for five consumers",
        :route-step
        "generic coordinate normalization for point-wedge fundamental groups",
        :gates
@@ -103653,9 +103861,9 @@
       "TOPOLOGY-ROUTES.md/shared/three-circles-fundamental-group-coordinates",
       :acceptance
       {:probe
-       "Compile the recursive specialization of the generic point-wedge equivalence to ThreeCircles, normalized to FreeGroup (Fin 3), with all three representative circle inclusions sent to their indexed generators. Do not build covering restriction packages or close a consumer.",
+       "Compile the specialization to ThreeCircles, normalized to FreeGroup (Fin 3), with each circle inclusion sent to its indexed generator. Do not build covering restriction packages or close a consumer.",
        :placeholder
-       "the remaining ThreeCircles coordinate steps for t01A03, t92J06, t97A01, t97A03, and t99J01",
+       "the remaining ThreeCircles coordinate steps for five consumers",
        :route-step "ThreeCircles free-group coordinate normalization",
        :gates
        ["fixture compiles"
@@ -103669,7 +103877,7 @@
       :depends-on
       [:lemma-genericpointwedgefundamentalgroupcoordinates-genericpointwedgegroupequivalence-c],
       :current-residual
-      "Feed the normalized ThreeCircles equivalence into finite-wedge and covering adapters.",
+      "Feed the normalized equivalence into finite-wedge and covering adapters.",
       :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
      {:consumer :portfolio,
       :checkpoint
@@ -103688,7 +103896,7 @@
       :dag-node "TOPOLOGY-ROUTES.md",
       :acceptance
       {:strategy
-       "Review the Klein presentation comparison and both shared wedge-coordinate rows, rerun priorities and AREAS, and elect the next nearest closure or highest-impact ready lemma."},
+       "Review the Klein comparison and both shared coordinate rows, rerun priorities and AREAS, and elect the next nearest closure or highest-impact ready lemma."},
       :id
       :routes-2026-10-11-checkpoint-topo1-after-klein-and-wedge-coordinates-86,
       :kind :strategy-checkpoint,
@@ -103696,180 +103904,12 @@
       [:routes-2026-10-11-klein-aabb-square-polygon-presentation-equivalence-83
        :routes-2026-10-11-generic-point-wedge-fundamental-group-coordinates-84
        :routes-2026-10-11-three-circles-fundamental-group-coordinates-85],
-      :current-residual
-      "Refill after the three elected rows are reviewed.",
+      :current-residual "Refill after the elected rows are reviewed.",
       :other-consumers []}],
-    :finding
-    {:placeholder-delta 0,
-     :placeholder-counts
-     {:t01A03 1,
-      :t92J06 1,
-      :t93J03 1,
-      :t97A01 1,
-      :t97A03 3,
-      :t99J01 1},
-     :routes
-     {:t01A03
-      ["single placeholder"
-       "generic wedge coordinates"
-       "finite circle-wedge fundamental group"
-       "consumer adapter"],
-      :t92J06
-      ["single placeholder"
-       "generic wedge coordinates"
-       "finite wedge pi1 and covering gluing"
-       "closure adapter"],
-      :t93J03
-      ["single placeholder"
-       "square-to-aabb polygon presentation equivalence"
-       "Klein orbit quotient homeomorphism"
-       "consumer adapter"],
-      :t97A01
-      ["single placeholder"
-       "reviewed radial packages and overlap squares"
-       "generic wedge coordinates"
-       "homology and pi1 coordinate assembly"],
-      :t97A03
-      ["three placeholders"
-       "generic wedge coordinates"
-       "three explicit cover homotopy equivalences"
-       "consumer assembly"],
-      :t99J01
-      ["single placeholder"
-       "generic and ThreeCircles coordinates"
-       "finite wedge pi1"
-       "path-component restriction package"
-       "closure adapter"]},
-     :typed-residual-change
-     ["t99J01 closure probe reopened five exact lemmas; it is not closure-ready."
-      "t97A01 foundations compiled, but its ledger still contains stale unbanked descendants and final invariant-coordinate work."
-      "t93J03 has the fewest backlog lemmas, two, so one closure-directed comparison is elected first."],
-     :infrastructure-packets
-     {:banked 148,
-      :backlog 35,
-      :elected 3,
-      :placeholder-changing 0,
-      :compiled-refutations 0},
-     :review-outcomes
-     {:t99J01 :revise,
-      :generic-overlap-squares :pass,
-      :polygon-radial-packages :go,
-      :closed-problems 0},
-     :priority-top
-     ["kleinAabbSquarePolygonPresentationEquivalence under rule 0 proximity"
-      "GenericPointWedgeFundamentalGroupCoordinates.genericPointWedgeGroupEquivalence_coordinates, ready, five consumers"
-      "GenericPointWedgeFundamentalGroupCoordinates.threeCirclesGroupEquivalence_coordinates, ready, five consumers"],
-     :areas
-     ["fundamental-group-wedge-of-circles serves five loop problems and has the two highest-impact ready lemmas"
-      "polygon-quotient-identification advances nearest t93J03"
-      "polygon-surface-open-cover has 166 banked and 26 backlog nodes, many stale reviewed nodes"]},
-    :lemmas
-    [{:name
-      "GenericPointWedgeOpenCoverComparison.genericPointWedgeCoverPackage",
-      :status :not-started,
-      :consumers [:t97A01],
-      :depends-on [],
-      :area "van-kampen-two-open-group"}
-     {:name
-      "IntervalEndpointQuotientCircle.intervalQuotientMap_zero_eq_one",
-      :status :not-started,
-      :consumers [:t97A01],
-      :depends-on [],
-      :area "polygon-surface-open-cover"}
-     {:name
-      "PolygonBoundaryCircleDecoderWellDefined.n3CircleDecode_edge",
-      :status :not-started,
-      :consumers [:t97A01],
-      :depends-on [],
-      :area "polygon-surface-open-cover"}
-     {:name
-      "PolygonBoundaryCircleDecoderWellDefined.torusCrosscapCircleDecode_edge",
-      :status :not-started,
-      :consumers [:t97A01],
-      :depends-on [],
-      :area "polygon-surface-open-cover"}
-     {:name
-      "PolygonBoundaryVertexClasses.circleEdgePoint_one_eq_succ_zero",
-      :status :not-started,
-      :consumers [:t97A01],
-      :depends-on [],
-      :area "polygon-surface-open-cover"}
-     {:name "PolygonOuterRadialDeformation.continuous_radialHomotopy",
-      :status :not-started,
-      :consumers [:t97A01],
-      :depends-on [],
-      :area "polygon-surface-open-cover"}
-     {:name "PolygonRadialOpenCover.outerOpen_isOpen",
-      :status :not-started,
-      :consumers [:t97A01],
-      :depends-on [],
-      :area "polygon-surface-open-cover"}
-     {:name "PolygonRadialOpenCover.outerSource",
-      :status :not-started,
-      :consumers [:t97A01],
-      :depends-on [],
-      :area "polygon-surface-open-cover"}
-     {:name "PolygonRadialOpenCover.overlapOpen_eq_inter",
-      :status :not-started,
-      :consumers [:t97A01],
-      :depends-on [],
-      :area "polygon-surface-open-cover"}
-     {:name "PolygonSixEdgeCircleCover.circleEdgePoint_eq_toCircle",
-      :status :not-started,
-      :consumers [:t97A01],
-      :depends-on [],
-      :area "polygon-surface-open-cover"}
-     {:name "RadialQuotientOpenSets.eqvGen_preserves_of_rel_preserves",
-      :status :not-started,
-      :consumers [:t97A01],
-      :depends-on [],
-      :area "polygon-surface-open-cover"}
-     {:name "RadialQuotientOpenSets.norm_edgePoint",
-      :status :not-started,
-      :consumers [:t97A01],
-      :depends-on [],
-      :area "polygon-surface-open-cover"}
-     {:name
-      "RadialQuotientOpenSets.preimage_image_eq_of_eqvGen_invariant",
-      :status :not-started,
-      :consumers [:t97A01],
-      :depends-on [],
-      :area "polygon-surface-open-cover"}
-     {:name
-      "ThreeEndpointLoopsHomeomorph.threeEndpointLoopsHomeomorphThreeCircles_first",
-      :status :not-started,
-      :consumers [:t97A01],
-      :depends-on [],
-      :area "polygon-surface-open-cover"}
-     {:name
-      "ThreeEndpointLoopsHomeomorph.threeEndpointLoopsHomeomorphThreeCircles_second",
-      :status :not-started,
-      :consumers [:t97A01],
-      :depends-on [],
-      :area "polygon-surface-open-cover"}
-     {:name "TorusCircleWedgeOpenCover.pointedWedgeHomeomorph",
-      :status :not-started,
-      :consumers [:t97A01],
-      :depends-on [],
-      :area "van-kampen-two-open-group"}
-     {:name "polygonRadialOuterDeformation",
-      :status :not-started,
-      :consumers [:t97A01],
-      :depends-on [],
-      :area "polygon-surface-open-cover"}
-     {:name "polygonRadialOuterOpenComparison",
-      :status :not-started,
-      :consumers [:t97A01],
-      :depends-on [],
-      :area "polygon-surface-open-cover"}
-     {:name "polygonRadialOuterQuotientDeformation",
-      :status :not-started,
-      :consumers [:t97A01],
-      :depends-on [],
-      :area "polygon-surface-open-cover"}],
-    :seat "topo-4"},
+    :author "topo-4",
+    :disposition :replan},
    :phase :strategy,
-   :state :repair,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -103892,13 +103932,13 @@
    :implements-lemma
    :lemma-kleinaabbsquarepolygonpresentationequivalence,
    :phase :probe,
-   :state :superseded,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-aabb-square-polygon-presentation-equivalence",
    :acceptance
    {:probe
-    "Compile the exact quotient-fiber comparison and resulting homeomorphism from Surface false 2 to the standard square Klein quotient using the banked square EqvGen case classification. Do not require an edgewise edgePoint-to-squareEdge carrier, prove the orbit quotient comparison, or close t93J03.",
+    "Compile the quotient-fiber comparison and resulting homeomorphism from Surface false 2 to the standard square Klein quotient using the banked square EqvGen classification. Do not prove the orbit quotient comparison or close t93J03.",
     :placeholder "the single sorry in apm_t93j03",
     :route-step
     "identify the two concrete Klein polygon presentations",
@@ -103927,15 +103967,15 @@
    :implements-lemma
    :lemma-genericpointwedgefundamentalgroupcoordinates-genericpointwedgegroupequivalence-c,
    :phase :probe,
-   :state :superseded,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/generic-point-wedge-fundamental-group-coordinates",
    :acceptance
    {:probe
-    "Compile the generic point-wedge fundamental-group equivalence with the actual left and right representative maps sent to Monoid.Coprod.inl and Monoid.Coprod.inr using the same connector paths. Do not specialize to a finite circle wedge or close a consumer.",
+    "Compile the generic point-wedge fundamental-group equivalence with the representative maps sent to the two coproduct injections. Do not specialize to a finite circle wedge or close a consumer.",
     :placeholder
-    "the remaining fundamental-group coordinate steps for t01A03, t92J06, t97A01, t97A03, and t99J01",
+    "the remaining fundamental-group coordinate steps for five consumers",
     :route-step
     "generic coordinate normalization for point-wedge fundamental groups",
     :gates
@@ -103956,15 +103996,15 @@
    :implements-lemma
    :lemma-genericpointwedgefundamentalgroupcoordinates-threecirclesgroupequivalence-coordi,
    :phase :probe,
-   :state :superseded,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/three-circles-fundamental-group-coordinates",
    :acceptance
    {:probe
-    "Compile the recursive specialization of the generic point-wedge equivalence to ThreeCircles, normalized to FreeGroup (Fin 3), with all three representative circle inclusions sent to their indexed generators. Do not build covering restriction packages or close a consumer.",
+    "Compile the specialization to ThreeCircles, normalized to FreeGroup (Fin 3), with each circle inclusion sent to its indexed generator. Do not build covering restriction packages or close a consumer.",
     :placeholder
-    "the remaining ThreeCircles coordinate steps for t01A03, t92J06, t97A01, t97A03, and t99J01",
+    "the remaining ThreeCircles coordinate steps for five consumers",
     :route-step "ThreeCircles free-group coordinate normalization",
     :gates
     ["fixture compiles"
@@ -103979,7 +104019,7 @@
    [:lemma-genericpointwedgefundamentalgroupcoordinates-genericpointwedgegroupequivalence-c
     :routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
    :current-residual
-   "Feed the normalized ThreeCircles equivalence into finite-wedge and covering adapters.",
+   "Feed the normalized equivalence into finite-wedge and covering adapters.",
    :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
   {:consumer :portfolio,
    :checkpoint
@@ -103993,12 +104033,12 @@
    :stop-condition
    "End only when every topo1 problem is closed or a row is genuinely refuted.",
    :phase :strategy,
-   :state :superseded,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
    {:strategy
-    "Review the Klein presentation comparison and both shared wedge-coordinate rows, rerun priorities and AREAS, and elect the next nearest closure or highest-impact ready lemma."},
+    "Review the Klein comparison and both shared coordinate rows, rerun priorities and AREAS, and elect the next nearest closure or highest-impact ready lemma."},
    :id
    :routes-2026-10-11-checkpoint-topo1-after-klein-and-wedge-coordinates-86,
    :kind :strategy-checkpoint,
@@ -104007,8 +104047,7 @@
     :routes-2026-10-11-generic-point-wedge-fundamental-group-coordinates-84
     :routes-2026-10-11-three-circles-fundamental-group-coordinates-85
     :routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
-   :current-residual
-   "Refill after the three elected rows are reviewed.",
+   :current-residual "Refill after the elected rows are reviewed.",
    :other-consumers []}
   {:consumer :t99J01,
    :phase :probe,
@@ -108852,7 +108891,465 @@
    :lemma-polygoninneropenpointedcontraction-inneropenpointedcontraction,
    :kind :lemma,
    :depends-on [],
-   :other-consumers []}],
+   :other-consumers []}
+  {:consumer :t97A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "frozenTorusHomeomorphBoundaryTorus"},
+   :lemma
+   {:name "frozenTorusHomeomorphBoundaryTorus",
+    :reported-by
+    [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
+    :area "mv-connecting-naturality"},
+   :id :lemma-frozentorushomeomorphboundarytorus,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusH1GroupIsoFinTwo"},
+   :lemma
+   {:name
+    "ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusH1GroupIsoFinTwo",
+    :reported-by
+    [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
+    :area "mv-connecting-naturality"},
+   :id
+   :lemma-constructiontargets-t97a04frozenh1coordinate-frozentorush1groupisofintwo,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.TorusPiOneWindingCoordinates.frozenLbarPi1Map_naturality"},
+   :lemma
+   {:name
+    "ConstructionTargets.TorusPiOneWindingCoordinates.frozenLbarPi1Map_naturality",
+    :reported-by
+    [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
+    :area "mv-connecting-naturality"},
+   :id
+   :lemma-constructiontargets-toruspionewindingcoordinates-frozenlbarpi1map-naturality,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusAlignedH1MulEquivFinTwo"},
+   :lemma
+   {:name
+    "ConstructionTargets.T97A04FrozenH1Coordinate.frozenTorusAlignedH1MulEquivFinTwo",
+    :reported-by
+    [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
+    :area "mv-connecting-naturality"},
+   :id
+   :lemma-constructiontargets-t97a04frozenh1coordinate-frozentorusalignedh1mulequivfintwo,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison_naturality"},
+   :lemma
+   {:name
+    "ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison_naturality",
+    :reported-by
+    [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
+    :area "mv-connecting-naturality"},
+   :id
+   :lemma-constructiontargets-integralsingularhomologycomparison-singularhomologycompariso,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_circleMeridian_mem_geometricY"},
+   :lemma
+   {:name
+    "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_circleMeridian_mem_geometricY",
+    :reported-by
+    [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
+    :area "geometric-tube-deformation"},
+   :id
+   :lemma-constructiontargets-t02a03geometrictubecover-apm-t02a03-circlemeridian-mem-geome,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_origin_mem_both_cores"},
+   :lemma
+   {:name
+    "ConstructionTargets.T02A03GeometricTubeCover.apm_t02a03_origin_mem_both_cores",
+    :reported-by
+    [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
+    :area "geometric-tube-deformation"},
+   :id
+   :lemma-constructiontargets-t02a03geometrictubecover-apm-t02a03-origin-mem-both-cores,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t95A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.RealProjectiveSmoothTarget.sphereProjectionQuotientAuthority"},
+   :lemma
+   {:name
+    "ConstructionTargets.RealProjectiveSmoothTarget.sphereProjectionQuotientAuthority",
+    :reported-by
+    [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
+    :area "rp-smooth-atlas"},
+   :id
+   :lemma-constructiontargets-realprojectivesmoothtarget-sphereprojectionquotientauthority,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t96A07]}
+  {:consumer :t95A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.RealProjectiveSmoothTarget.sphereProjection_eq_iff"},
+   :lemma
+   {:name
+    "ConstructionTargets.RealProjectiveSmoothTarget.sphereProjection_eq_iff",
+    :reported-by
+    [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
+    :area "rp-smooth-atlas"},
+   :id
+   :lemma-constructiontargets-realprojectivesmoothtarget-sphereprojection-eq-iff,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t96A07]}
+  {:consumer :t95A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.RealProjectiveSmoothTarget.rpSmoothAtlas"},
+   :lemma
+   {:name
+    "ConstructionTargets.RealProjectiveSmoothTarget.rpSmoothAtlas",
+    :reported-by
+    [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
+    :area "rp-smooth-atlas"},
+   :id
+   :lemma-constructiontargets-realprojectivesmoothtarget-rpsmoothatlas,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t96A07]}
+  {:consumer :t97A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SingularExcision.subspaceMap_inclusion"},
+   :lemma
+   {:name "ConstructionTargets.SingularExcision.subspaceMap_inclusion",
+    :reported-by
+    [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
+    :area "mv-connecting-naturality"},
+   :id
+   :lemma-constructiontargets-singularexcision-subspacemap-inclusion,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T02A03GeometricTubeDeformation.rightTube_exists_near_rightCore"},
+   :lemma
+   {:name
+    "ConstructionTargets.T02A03GeometricTubeDeformation.rightTube_exists_near_rightCore",
+    :reported-by
+    [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
+    :area "geometric-tube-deformation"},
+   :id
+   :lemma-constructiontargets-t02a03geometrictubedeformation-righttube-exists-near-rightco,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T02A03GeometricTubeDeformation.range_rightCoreCircle"},
+   :lemma
+   {:name
+    "ConstructionTargets.T02A03GeometricTubeDeformation.range_rightCoreCircle",
+    :reported-by
+    [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
+    :area "geometric-tube-deformation"},
+   :id
+   :lemma-constructiontargets-t02a03geometrictubedeformation-range-rightcorecircle,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison"},
+   :lemma
+   {:name
+    "ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison",
+    :reported-by
+    [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
+    :area "manifold-fundamental-class"},
+   :id
+   :lemma-constructiontargets-integralsingularhomologycomparison-singularhomologycomparison-full,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t98A02]}
+  {:consumer :t97J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SurfaceNestedTriangleCover.finite_nested"},
+   :lemma
+   {:name
+    "ConstructionTargets.SurfaceNestedTriangleCover.finite_nested",
+    :reported-by
+    [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
+    :area "surface-classification"},
+   :id
+   :lemma-constructiontargets-surfacenestedtrianglecover-finite-nested,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.HigherChartLocalGenerator.ambientChartMap_Hn_isIso"},
+   :lemma
+   {:name
+    "ConstructionTargets.HigherChartLocalGenerator.ambientChartMap_Hn_isIso",
+    :reported-by
+    [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
+    :area "manifold-fundamental-class"},
+   :id
+   :lemma-constructiontargets-higherchartlocalgenerator-ambientchartmap-hn-isiso,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.HigherModelLocalHomology.normalization"},
+   :lemma
+   {:name "ConstructionTargets.HigherModelLocalHomology.normalization",
+    :reported-by
+    [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
+    :area "manifold-fundamental-class"},
+   :id
+   :lemma-constructiontargets-highermodellocalhomology-normalization,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.CoefficientDistinguishedNormalization.distinguished"},
+   :lemma
+   {:name
+    "ConstructionTargets.CoefficientDistinguishedNormalization.distinguished",
+    :reported-by
+    [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
+    :area "manifold-fundamental-class"},
+   :id
+   :lemma-constructiontargets-coefficientdistinguishednormalization-distinguished,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.IntegralSingularHomologyComparison.singularChainsComparison_naturality"},
+   :lemma
+   {:name
+    "ConstructionTargets.IntegralSingularHomologyComparison.singularChainsComparison_naturality",
+    :reported-by
+    [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
+    :area "manifold-fundamental-class"},
+   :id
+   :lemma-constructiontargets-integralsingularhomologycomparison-singularchainscomparison-,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "forgetIntModules.asEquivalence"},
+   :lemma
+   {:name "forgetIntModules.asEquivalence",
+    :reported-by
+    [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
+    :area "manifold-fundamental-class"},
+   :id :lemma-forgetintmodules-asequivalence,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SingularHomologyConcrete.relativeSingularChainsIsoCokernelSubspaceMap"},
+   :lemma
+   {:name
+    "ConstructionTargets.SingularHomologyConcrete.relativeSingularChainsIsoCokernelSubspaceMap",
+    :reported-by
+    [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
+    :area "manifold-fundamental-class"},
+   :id
+   :lemma-constructiontargets-singularhomologyconcrete-relativesingularchainsisocokernelsu,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SingularExcision.relativeSingularChainsIsoCokernelSubspaceMap"},
+   :lemma
+   {:name
+    "ConstructionTargets.SingularExcision.relativeSingularChainsIsoCokernelSubspaceMap",
+    :reported-by
+    [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
+    :area "manifold-fundamental-class"},
+   :id
+   :lemma-constructiontargets-singularexcision-relativesingularchainsisocokernelsubspacema,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.CoefficientChartLocal.generator_normalization"},
+   :lemma
+   {:name
+    "ConstructionTargets.CoefficientChartLocal.generator_normalization",
+    :reported-by
+    [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
+    :area "manifold-fundamental-class"},
+   :id
+   :lemma-constructiontargets-coefficientchartlocal-generator-normalization,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SingularExcision.relativeProjection_comp_cokernelIso_hom"},
+   :lemma
+   {:name
+    "ConstructionTargets.SingularExcision.relativeProjection_comp_cokernelIso_hom",
+    :reported-by
+    [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
+    :area "manifold-fundamental-class"},
+   :id
+   :lemma-constructiontargets-singularexcision-relativeprojection-comp-cokerneliso-hom,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SingularHomologyConcrete.relativeProjection_comp_cokernelIso_hom"},
+   :lemma
+   {:name
+    "ConstructionTargets.SingularHomologyConcrete.relativeProjection_comp_cokernelIso_hom",
+    :reported-by
+    [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
+    :area "manifold-fundamental-class"},
+   :id
+   :lemma-constructiontargets-singularhomologyconcrete-relativeprojection-comp-cokerneliso,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport"},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport",
+    :reported-by
+    [:routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
+    :area "manifold-fundamental-class"},
+   :id
+   :lemma-constructiontargets-manifoldfundamentalclass-integralrelativechainscomparisonwit,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t98A02]}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",
