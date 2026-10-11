@@ -17719,7 +17719,7 @@
    :depends-on [],
    :other-consumers [:t92J05 :t93J03 :t99J01 :t00J07]}
   {:consumer :t00A02,
-   :stop-count 3,
+   :stop-count 4,
    :implements-lemma
    :lemma-freeproperlydiscontinuousquotient-fundamentalgroupequiv,
    :evidence
@@ -17730,7 +17730,7 @@
      :t99J01 {:before 1, :after 1, :delta 0},
      :t00J07 {:before 3, :after 3, :delta 0}},
     :residual
-    "Define endpoint monodromy as a homomorphism in orbitQuotientFiberEquiv coordinates; prove surjectivity and that its kernel is the image of the total-space fundamental group, then use simple connectedness and add the Klein-plane and finite-action adapters.",
+    "Prove deck-equivariance of monodromy and raw anti-multiplicativity; package the inverted endpoint coordinate as a homomorphism, prove its bijectivity under simple connectedness, then add consumer adapters.",
     :gates
     {:module-compile :pass,
      :target-build :pass,
@@ -17739,40 +17739,47 @@
      :forbidden-placeholder-scan :pass,
      :scoped-worktree-clean true},
     :outcome :stop,
-    :warnings
-    ["The two scoped files are clean after commit. The ambient supervisor ledger holes/labs/topology-contract/worklist.edn was modified concurrently and was not touched by this row."],
+    :warnings [],
     :missing-theorems
     [{:name
-      "ConstructionTargets.DeckGroupQuotientFundamentalGroup.quotientCoveringOrbitFiberEquiv",
+      "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromyRaw",
       :type
-      "forall {G E X : Type*} [Group G] [TopologicalSpace E] [TopologicalSpace X] [MulAction G E] {f : E -> X} (h : IsQuotientCoveringMap f G) (e : E), G ≃ f ⁻¹' {f e}",
+      "forall repaired orbit coverings and x, FundamentalGroup (X/G) [x] -> G, sending a loop to the unique group coordinate of its lifted endpoint",
       :status :proved,
-      :consumers [:t00A02 :t92J05 :t93J03 :t99J01 :t00J07],
-      :depends-on
-      ["ConstructionTargets.DeckGroupQuotientFundamentalGroup.quotientMk_isCoveringMap"],
-      :area "deck-group-quotient-pi1"}
-     {:name
-      "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitQuotientFiberEquiv",
-      :type
-      "forall {G X : Type*} [Group G] [TopologicalSpace X] [MulAction G X] [ContinuousConstSMul G X] [ProperlyDiscontinuousSMul G X] [LocallyCompactSpace X] [T2Space X] (free : forall g x, g • x = x -> g = 1) (x : X), G ≃ (Quotient.mk (MulAction.orbitRel G X)) ⁻¹' {Quotient.mk _ x}",
-      :status :proved,
-      :consumers [:t00A02 :t92J05 :t93J03 :t99J01 :t00J07],
-      :depends-on
-      ["ConstructionTargets.DeckGroupQuotientFundamentalGroup.quotientCoveringOrbitFiberEquiv"],
-      :area "deck-group-quotient-pi1"}
-     {:name
-      "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromy",
-      :type
-      "A group homomorphism from the quotient fundamental group to G obtained from IsCoveringMap.monodromy and orbitQuotientFiberEquiv, with orientation fixed by the fundamental-group multiplication convention",
-      :status :not-started,
       :consumers [:t00A02 :t92J05 :t93J03 :t99J01 :t00J07],
       :depends-on
       ["ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitQuotientFiberEquiv"],
       :area "deck-group-quotient-pi1"}
      {:name
+      "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromyRaw_one",
+      :type "orbitEndpointMonodromyRaw free x 1 = 1",
+      :status :proved,
+      :consumers [:t00A02 :t92J05 :t93J03 :t99J01 :t00J07],
+      :depends-on
+      ["ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromyRaw"],
+      :area "deck-group-quotient-pi1"}
+     {:name
+      "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitMonodromy_deck_equivariant",
+      :type
+      "Lifting a quotient loop from g • x ends at g acting on the endpoint of its lift from x",
+      :status :not-started,
+      :consumers [:t00A02 :t92J05 :t93J03 :t99J01 :t00J07],
+      :depends-on
+      ["ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromyRaw"],
+      :area "deck-group-quotient-pi1"}
+     {:name
+      "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromy",
+      :type
+      "FundamentalGroup (X/G) [x] ->* G obtained by inversion of raw endpoint coordinates",
+      :status :not-started,
+      :consumers [:t00A02 :t92J05 :t93J03 :t99J01 :t00J07],
+      :depends-on
+      ["ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitMonodromy_deck_equivariant"],
+      :area "deck-group-quotient-pi1"}
+     {:name
       "ConstructionTargets.DeckGroupQuotientFundamentalGroup.freeProperlyDiscontinuousQuotient_fundamentalGroupEquiv",
       :type
-      "forall {G X : Type*} [Group G] [TopologicalSpace X] [MulAction G X] [ContinuousConstSMul G X] [ProperlyDiscontinuousSMul G X] (free : forall g x, g • x = x -> g = 1) [T2Space X] [LocallyCompactSpace X] [SimplyConnectedSpace X] [LocPathConnectedSpace X] (x : X), Nonempty (FundamentalGroup (MulAction.orbitRel.Quotient G X) (Quotient.mk _ x) ≃* G)",
+      "The repaired fixed final theorem with T2Space and LocallyCompactSpace hypotheses",
       :status :not-started,
       :consumers [:t00A02 :t92J05 :t93J03 :t99J01 :t00J07],
       :depends-on
@@ -17780,12 +17787,12 @@
       :area "deck-group-quotient-pi1"}],
     :statement-hashes
     {:module
-     "aa92896cdc5cee808a0cff01aa3c9a302d8ff1c5695d5af98f6c0578a87a8de5"},
+     "be526d6f3dcfe64f50a5aec8506f69dd499586c9b8a137db149db209e932872c"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "The repaired program remains incomplete, but this job compiled and committed the next monodromy prerequisite: a canonical equivalence between the acting group and each quotient-covering fiber, plus its specialization to the repaired properly-discontinuous orbit projection. The next job must turn Mathlib's monodromy functor into an endpoint group homomorphism in these coordinates, prove bijectivity when the total space is simply connected, and then provide the consumer specializations.",
+    "Compiled and committed raw endpoint monodromy in the acting-group fiber coordinates, including the identity-loop law. The final theorem remains incomplete: because FundamentalGroup multiplication reverses categorical composition, the next milestone must prove deck-equivariance of lifted paths and raw anti-multiplicativity, then invert the raw coordinate to obtain a homomorphism into G.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean",
@@ -17808,27 +17815,12 @@
       "git status --short -- ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean ConstructionTargets/DeckGroupQuotientFundamentalGroup.md",
       :exit 0}],
     :diagnostic-history
-    [{:cmd "lake env lean /tmp/orbit_fiber.lean",
+    [{:cmd
+      "lake env lean ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean",
       :exit 1,
       :finding
-      "The first prototype left fiber endpoints implicit in apply_eq_iff_mem_orbit and used field notation across the ConstructionTargets namespace; explicit endpoints and an unambiguous declaration name corrected both issues before the scoped implementation."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791713159400-4970-63afa265",
-     :commands
-     ["rg current program row and program-history"
-      "git show and git diff-tree recorded commit"
-      "git blob identity and git diff --check"
-      "sha256sum program module"
-      "lake env lean ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean"
-      "lake build ConstructionTargets.DeckGroupQuotientFundamentalGroup"
-      "python3 scripts/statement-registry.py check"
-      "forbidden placeholder and axiom scan"
-      "consumer placeholder census"],
-     :finding
-     "PASS: program STOP commits new progress in 52fd959c after program-history commits d8ae7297 and 5bc7414c; scope is exactly the DeckGroupQuotientFundamentalGroup Lean module and milestone document, both blobs match the recorded commit, and module SHA-256 matches aa92896cdc5cee808a0cff01aa3c9a302d8ff1c5695d5af98f6c0578a87a8de5; quotientCoveringOrbitFiberEquiv gives the required forward equivalence from G to the fiber by g maps to g acting on e, and orbitQuotientFiberEquiv specializes it under exactly the repaired locally compact Hausdorff hypotheses; module replay and 1743-job build pass with no forbidden placeholders and exactly propext, Classical.choice, Quot.sound; registry is 131/0 and consumer counts are 2/3/1/1/3; endpoint monodromy, surjectivity, kernel identification, the simply-connected equivalence, and consumer adapters remain explicitly listed."},
-    :commit "52fd959c5549a4f6fc41cef6b9416b2ae2b3e119",
+      "The initial identity proof needed Equiv.apply_symm_apply before exposing monodromy_refl; the corrected proof compiles."}],
+    :commit "3f64958a92525bd9c45cf1efd531c539e61e1713",
     :changed-paths
     ["ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean"
      "ConstructionTargets/DeckGroupQuotientFundamentalGroup.md"],
@@ -17839,13 +17831,13 @@
      ["ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean"
       "ConstructionTargets/DeckGroupQuotientFundamentalGroup.md"],
      :declaration
-     "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitQuotientFiberEquiv"},
+     "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromyRaw"},
     :row :program-2026-10-11-deck-group-quotient-pi1,
     :seat :topo-10},
    :phase :implementation,
    :owner-repair
    "2026-10-11 claude-14: final type gains [T2Space X] [LocallyCompactSpace X] (Mathlib quotient-covering needs them; every consumer, the plane and spheres, has them). Do not prove covering under weaker hypotheses.",
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean"
     "ConstructionTargets/DeckGroupQuotientFundamentalGroup.md"
@@ -18476,7 +18468,8 @@
    :lemma-constructiontargets-deckgroupquotientfundamentalgroup-orbitendpointmonodromy,
    :kind :lemma,
    :depends-on
-   [:lemma-constructiontargets-deckgroupquotientfundamentalgroup-orbitquotientfiberequiv],
+   [:lemma-constructiontargets-deckgroupquotientfundamentalgroup-orbitquotientfiberequiv
+    :lemma-constructiontargets-deckgroupquotientfundamentalgroup-orbitmonodromy-deck-equiva],
    :other-consumers [:t92J05 :t93J03 :t99J01 :t00J07]}
   {:consumer :t02A04,
    :phase :lemma,
@@ -18789,7 +18782,73 @@
    :id :lemma-apm-t03j03-bridge-3,
    :kind :lemma,
    :depends-on [:lemma-apm-t03j03-bridge-1],
-   :other-consumers []}],
+   :other-consumers []}
+  {:consumer :t00A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromyRaw",
+    :type
+    "forall repaired orbit coverings and x, FundamentalGroup (X/G) [x] -> G, sending a loop to the unique group coordinate of its lifted endpoint"},
+   :lemma
+   {:name
+    "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromyRaw",
+    :reported-by [:program-2026-10-11-deck-group-quotient-pi1],
+    :type
+    "forall repaired orbit coverings and x, FundamentalGroup (X/G) [x] -> G, sending a loop to the unique group coordinate of its lifted endpoint",
+    :area "deck-group-quotient-pi1",
+    :proved-in :program-2026-10-11-deck-group-quotient-pi1},
+   :id
+   :lemma-constructiontargets-deckgroupquotientfundamentalgroup-orbitendpointmonodromyraw,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-deckgroupquotientfundamentalgroup-orbitquotientfiberequiv],
+   :other-consumers [:t92J05 :t93J03 :t99J01 :t00J07]}
+  {:consumer :t00A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromyRaw_one",
+    :type "orbitEndpointMonodromyRaw free x 1 = 1"},
+   :lemma
+   {:name
+    "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromyRaw_one",
+    :reported-by [:program-2026-10-11-deck-group-quotient-pi1],
+    :type "orbitEndpointMonodromyRaw free x 1 = 1",
+    :area "deck-group-quotient-pi1",
+    :proved-in :program-2026-10-11-deck-group-quotient-pi1},
+   :id
+   :lemma-constructiontargets-deckgroupquotientfundamentalgroup-orbitendpointmonodromyraw-,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-deckgroupquotientfundamentalgroup-orbitendpointmonodromyraw],
+   :other-consumers [:t92J05 :t93J03 :t99J01 :t00J07]}
+  {:consumer :t00A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitMonodromy_deck_equivariant",
+    :type
+    "Lifting a quotient loop from g • x ends at g acting on the endpoint of its lift from x"},
+   :lemma
+   {:name
+    "ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitMonodromy_deck_equivariant",
+    :reported-by [:program-2026-10-11-deck-group-quotient-pi1],
+    :type
+    "Lifting a quotient loop from g • x ends at g acting on the endpoint of its lift from x",
+    :area "deck-group-quotient-pi1"},
+   :id
+   :lemma-constructiontargets-deckgroupquotientfundamentalgroup-orbitmonodromy-deck-equiva,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-deckgroupquotientfundamentalgroup-orbitendpointmonodromyraw],
+   :other-consumers [:t92J05 :t93J03 :t99J01 :t00J07]}],
  :consumer-baselines {},
  :statuses
  #{:open
