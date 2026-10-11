@@ -112858,7 +112858,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t99J01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "threeCirclesFundamentalGroupEquiv",
@@ -112869,7 +112869,9 @@
     :reported-by [:owner],
     :type
     "noncomputable def threeCirclesFundamentalGroupEquiv : FundamentalGroup ThreeCircles threeBase ≃* FreeGroup (Fin 3)  -- codex-71 2026-10-11: 300-600 lines, the dominant foundation",
-    :area "fundamental-group-wedge-of-circles"},
+    :area "fundamental-group-wedge-of-circles",
+    :banked-by :program-2026-10-11-point-wedge-van-kampen,
+    :banked-commit "a542e9e21442ca62b32c7858468526423d70e5a9"},
    :id :lemma-threecirclesfundamentalgroupequiv,
    :kind :lemma,
    :depends-on
@@ -113927,13 +113929,25 @@
     {:commit "a542e9e21442ca62b32c7858468526423d70e5a9",
      :next
      "Implement coprodFreeGroupFinTwoFinOne_equiv or the generic point-wedge van Kampen equivalence in PointWedgeVanKampen.lean; then create ThreeCirclesFundamentalGroup.lean for the final composition."},
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791712197320-4928-f17464b9",
+     :commands
+     ["git show and diff-tree a542e9e21442ca62b32c7858468526423d70e5a9"
+      "sha256sum committed PointWedgeVanKampen sources"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped sorry admit axiom census"],
+     :finding
+     "The first program milestone is new, committed, compiled, placeholder-free, and standard-axiom-only; it banks both ThreeCircles topology instances and lists the three remaining milestones."},
     :commit "a542e9e21442ca62b32c7858468526423d70e5a9",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113951,12 +113965,19 @@
     ["lake build ConstructionTargets.PointWedgeVanKampen"
      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup"
      "python3 scripts/statement-registry.py check"]},
+   :continue-from
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: This program job banked the ThreeCircles topology milestone and committed a stable foundation entry point. The remaining generic van Kampen equivalence, free-group coproduct equivalence, and final ThreeCircles equivalence require subsequent program jobs.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 50,
    :depends-on [],
    :program true,
-   :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
+   :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03],
+   :program-history
+   [{:job 1,
+     :commit "a542e9e21442ca62b32c7858468526423d70e5a9",
+     :reason
+     "This program job banked the ThreeCircles topology milestone and committed a stable foundation entry point. The remaining generic van Kampen equivalence, free-group coproduct equivalence, and final ThreeCircles equivalence require subsequent program jobs."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
