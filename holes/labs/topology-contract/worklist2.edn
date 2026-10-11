@@ -79483,69 +79483,55 @@
      :commit "a58fb4403475f91ca2b7f45699abba30dbe50339",
      :reason :program-milestone-complete}]}
   {:consumer :t96A07,
-   :stop-count 5,
+   :stop-count 6,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Formalize B5 sphere derivative range at e0; then B6-B13.",
+    "Construct e0 on Sphere and combine range_mfderiv_coe_sphere with the specialized ambient derivative; then B6-B13.",
     :outcome :stop,
-    :warnings
-    ["Lean style lint only." "Unrelated dirty files preserved."],
+    :warnings ["Lean style lint only."],
     :missing-theorems
     [{:name
-      "ConstructionTargets.T96A07Closure.sphereMapAmbient_fderiv",
-      :type
-      "fderiv of ambient cross-term quadratic has explicit polarized coordinates",
+      "ConstructionTargets.T96A07Closure.sphereMapAmbientDerivative_firstAxis",
+      :type "ambient derivative at (1,0,0) sends v to (0,v2,v1)",
       :status :proved,
       :consumers [:t96A07],
-      :depends-on [],
+      :depends-on
+      ["ConstructionTargets.T96A07Closure.sphereMapAmbient_fderiv"],
       :area "projective-smooth-descent"}
      {:name
       "ConstructionTargets.T96A07Closure.sphereMap_mfderiv_e0_range",
       :type "range of sphereMap mfderiv at e0 is yz-plane",
-      :status :not-started,
+      :status :partial,
       :consumers [:t96A07],
       :depends-on
-      ["ConstructionTargets.T96A07Closure.sphereMapAmbient_fderiv"],
+      ["ConstructionTargets.T96A07Closure.sphereMapAmbientDerivative_firstAxis"],
       :area "projective-smooth-descent"}],
     :statement-hashes
     {:registry "131/0",
-     :closure "1b5e8af90055d1c8ec20629fe2e107c76a1c4288",
+     :closure "0bfd8d5fef970f925e87538e4c24d605cf821110",
      :blueprint "69b59fb622dd62fc82a1fe100b353eaabc2c948d"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason :program-milestone-complete,
+    :reason :program-progress-committed,
     :commands
-    [{:cmd "lake build ConstructionTargets.t96A07Closure", :exit 0}
-     {:cmd "lake env lean ConstructionTargets/t96A07Closure.lean",
+    [{:cmd "lake env lean ConstructionTargets/t96A07Closure.lean",
       :exit 0}
      {:cmd "closure no-sorry scan", :exit 1, :expected-exit 1}
      {:cmd "lake env lean problems/t96A07/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "Main placeholder count", :exit 0, :output "1"}
-     {:cmd "git show --check 2b9189afd", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791760254830-5961-a4d2c6e6",
-     :commands
-     ["git show/diff/check 2b9189afd"
-      "verify committed fixture SHA-256 and blobs"
-      "lake build ConstructionTargets.t96A07Closure"
-      "lake env lean closure and Main"
-      "registry fingerprint, placeholders, ancestry, blueprint checks"],
-     :finding
-     "PASS: 2b9189afd is new after history d3bf91c3; its sole changed path is scoped, closure/blueprint blobs match, and fixture SHA-256 is 7bbf26f48172919c20af30a1b9036332d0720a3b84f7eef6ccdc6deff132ca21. The polarized continuous-linear map and product-rule proof give exactly B4 coordinates in the correct E 3 representation. Build/Lean pass with only propext, Classical.choice, Quot.sound; registry 131/0; frozen hash 2ba67b040c1c1e31b8529d758a90765d8251ba3798983f6956674918a77fd520 unchanged; closure/Main placeholders 0/1. B4 is complete; B5 sphere derivative range then B6-B13 remain listed."},
-    :commit "2b9189afd",
+     {:cmd "git show --check 47c44c303", :exit 0}],
+    :commit "47c44c303",
     :changed-paths ["ConstructionTargets/t96A07Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t96A07Closure.lean",
      :sha256
-     "7bbf26f48172919c20af30a1b9036332d0720a3b84f7eef6ccdc6deff132ca21"},
+     "3694f2f30164445e613468585adde1278fcac64917daa08e94adfdbb9cf986d4"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A07/lean/Main.lean"
     "problems/t96A07/status.json"
@@ -81042,6 +81028,28 @@
     :area "projective-smooth-descent"},
    :id
    :lemma-constructiontargets-t96a07closure-spheremap-mfderiv-e0-range,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t96a07closure-spheremapambient-fderiv
+    :lemma-constructiontargets-t96a07closure-spheremapambientderivative-firstaxis],
+   :other-consumers []}
+  {:consumer :t96A07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T96A07Closure.sphereMapAmbientDerivative_firstAxis",
+    :type "ambient derivative at (1,0,0) sends v to (0,v2,v1)"},
+   :lemma
+   {:name
+    "ConstructionTargets.T96A07Closure.sphereMapAmbientDerivative_firstAxis",
+    :reported-by [:program-2026-10-11-close-t96a07],
+    :type "ambient derivative at (1,0,0) sends v to (0,v2,v1)",
+    :area "projective-smooth-descent",
+    :proved-in :program-2026-10-11-close-t96a07},
+   :id
+   :lemma-constructiontargets-t96a07closure-spheremapambientderivative-firstaxis,
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-t96a07closure-spheremapambient-fderiv],
