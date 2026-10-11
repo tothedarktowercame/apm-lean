@@ -104399,10 +104399,80 @@
    "Rewrite sourceEquivalence by the banked normalization, fill the coordinate-law structure from these two computations, then specialize through the generic point-wedge cover equivalences.",
    :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
   {:consumer :t99J01,
+   :stop-count 1,
    :implements-lemma
    :lemma-twoopenfreeproductmapping-inverseidentitycounit-component-identity,
+   :evidence
+   {:placeholder-delta
+    {:source-before 0, :source-after 0, :fixture-sorry 0},
+    :residual
+    "Prove the five-factor composite counit component is identity, apply inverseIdentity_map_eq_of_counit_component_identity, and derive the literal coproduct leg equations.",
+    :outcome :stop,
+    :warnings
+    [{:kind :dirty-worktree,
+      :message
+      "Unrelated modification ConstructionTargets/ManifoldFundamentalClass.lean was not touched or committed."}],
+    :missing-theorems
+    [{:name
+      "TwoOpenFreeProductMapping.compositeCounit_component_identity",
+      :type
+      "At SingleObj.star of the free-product target, the composite of the transported counit components of the two-open pseudopushout equivalence, pseudo-span equivalence, point-span comparison, free-product point-span equivalence, and representation/single-object equivalence is the identity morphism.",
+      :status :not-started,
+      :consumers [:t99J01 :t01A03 :t92J06 :t97A01 :t97A03],
+      :depends-on [],
+      :area "fundamental-group-wedge-of-circles"}],
+    :statement-hashes
+    {:source-sha256
+     "e9b3b9f9a17593fea3c903d9474d2032d288861270afae141f00351ef1b2e82a",
+     :registry "131 registered statements match, 0 do not"},
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :reason
+    "The requested component is not definitionally the identity. Unfolding reduces it to the composite of five transported counit components, including the two-open pseudopushout/descent counit and the point-span comparison counit. The scoped theorem now proves that an identity normalization of this component removes conjugation for every endomorphism. Completion requires proving that composite counit normalization from the constituent equivalences; no existing simp theorem supplies it.",
+    :commands
+    [{:cmd
+      "lake build ConstructionTargets.TwoOpenFreeProductMappingCounitComponentIdentity",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/inverse-identity-counit-component-identity.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/inverse-identity-counit-component-identity.lean",
+      :exit 0}
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" ConstructionTargets/TwoOpenFreeProductMappingCounitComponentIdentity.lean /tmp/inverse-identity-counit-component-identity.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}],
+    :diagnostic-history
+    [{:cmd
+      "lake env lean ConstructionTargets/TwoOpenFreeProductMappingCounitComponentIdentity.lean",
+      :exit 1,
+      :finding
+      "rfl failed because the composite-equivalence counit component is not definitionally identity."}
+     {:cmd
+      "lake env lean ConstructionTargets/TwoOpenFreeProductMappingCounitComponentIdentity.lean",
+      :exit 1,
+      :finding
+      "Unfolding and simp exposed five transported counit components rather than closing the identity goal."}
+     {:cmd
+      "lake env lean ConstructionTargets/TwoOpenFreeProductMappingCounitComponentIdentity.lean",
+      :exit 1,
+      :finding
+      "The first conditional consequence needed explicit category comp_id/id_comp chaining after rewriting the component."}],
+    :commit "87173d833b30aa453665a2c6c7841603034559a4",
+    :changed-paths
+    ["ConstructionTargets/TwoOpenFreeProductMappingCounitComponentIdentity.lean"],
+    :fixture
+    {:path "/tmp/inverse-identity-counit-component-identity.lean",
+     :sha256
+     "c5badebac45156c1b08d838291ab02e5ca04b4385d6f143451bb8b75f64c38a5"},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/TwoOpenFreeProductMappingCounitComponentIdentity.lean"],
    :dag-node
@@ -110048,6 +110118,28 @@
     :area "fundamental-group-wedge-of-circles"},
    :id
    :lemma-twoopenfreeproductmapping-inverseidentitycounit-component-identity,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
+  {:consumer :t99J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "TwoOpenFreeProductMapping.compositeCounit_component_identity",
+    :type
+    "At SingleObj.star of the free-product target, the composite of the transported counit components of the two-open pseudopushout equivalence, pseudo-span equivalence, point-span comparison, free-product point-span equivalence, and representation/single-object equivalence is the identity morphism."},
+   :lemma
+   {:name
+    "TwoOpenFreeProductMapping.compositeCounit_component_identity",
+    :reported-by
+    [:routes-2026-10-11-inverse-identity-counit-component-identity-90],
+    :type
+    "At SingleObj.star of the free-product target, the composite of the transported counit components of the two-open pseudopushout equivalence, pseudo-span equivalence, point-span comparison, free-product point-span equivalence, and representation/single-object equivalence is the identity morphism.",
+    :area "fundamental-group-wedge-of-circles"},
+   :id
+   :lemma-twoopenfreeproductmapping-compositecounit-component-identity,
    :kind :lemma,
    :depends-on [],
    :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}],
