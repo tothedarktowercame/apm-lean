@@ -113857,14 +113857,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Evaluate coordinate glue and outer comparisons; identify literal lifts; then B12.",
+    "Expand unit-base coordinate glue and outer comparisons; identify literal lifts; then B12.",
     :outcome :stop,
     :warnings [{:kind :upstream-lint}],
     :missing-theorems
@@ -113878,9 +113878,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "2a24fc0c9fd612e15f7b9d5c56ead4456e60963905185d2fbcc2de5cb6538ab3",
+     "9d45edb9c3cd38ca939e37233d7e133792c89b2e18c809782656eab48e577258",
      :documentation
-     "a0112ae9f8bf56a3f34003809df884483849830528372e538c76642d8502d245",
+     "b748b91a3b82a12560c6358bb3ac57fa67d445ee25de11e2e1d62eda40bf8308",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113888,7 +113888,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Whiskered middle factor is evaluated at the overlap-equivalence image.",
+    "Middle reverse-transport factor is fixed at the unique Unit-groupoid base object.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113901,22 +113901,8 @@
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
       :exit 1,
-      :finding
-      "Rejected false identity normalization; exposed transported object instead."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791760341120-5964-cceb0ed9",
-     :commands
-     ["git show/diff-tree f57bca18"
-      "sha256/diff/placeholder checks"
-      "statement-registry.py check"
-      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
-     :finding
-     "PASS: new compiled sorry-free B6 progress evaluates the whiskered middle reverse-transport factor as coordinate glue at the overlap-equivalence image. This is the correct isoWhiskerLeft direction and leaves both outer comparisons explicit; no false identity normalization is used. Exact two-file scope and frozen hashes match; 0 placeholders; registry 131/131; standard axioms. Coordinate glue, outer factors, literal lifts, and B12 remain listed; absent final target is a valid program STOP."},
-    :commit "f57bca18accb73a805062db2ec5985d44070f618",
+      :finding "Unfolded let-bound overlap object before rewrite."}],
+    :commit "8486a76dd8de3b8e021036ad2734311f18b7c18e",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113926,7 +113912,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
