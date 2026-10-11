@@ -17610,6 +17610,17 @@
       :expected-exit 1}
      {:cmd "git commit -m 'Identify forgotten homology iso'",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791759348755-5943-55c0fc6b",
+     :commands
+     ["git scope/diff/hash checks at a231d7bafca939715268dd2cedc8f057ec7098a4"
+      "renamed fixture and module: lake env lean"
+      "statement registry and placeholder scans"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"],
+     :finding
+     "Recorded one-file scope, blob, and frozen fixture hash match. The theorem identifies mapHomologyIso prime with mapHomologyIso for the same short complex and forgetting functor, using Mathlib’s equality in exactly the frozen orientation. Fixture/module compile; registry 131/0; build 8326 jobs; axioms propext, choice, Quot.sound; module placeholders 0; consumer sorries 1/1."},
     :commit "a231d7bafca939715268dd2cedc8f057ec7098a4",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -17624,7 +17635,7 @@
     :row :routes-2026-10-11-mfclass-hiso-r1,
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class/hiso",
    :acceptance
@@ -17694,7 +17705,7 @@
       :other-consumers [:t98A02]},
      :residual "Promote; prove squares."}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -25349,7 +25360,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -25364,7 +25375,9 @@
     :type
     "∀ {ι} {c : ComplexShape ι} (K : HomologicalComplex (ModuleCat ℤ) c) (i : ι), (K.sc i).mapHomologyIso' forgetIntModules = (K.sc i).mapHomologyIso forgetIntModules",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2,
+    :banked-by :routes-2026-10-11-mfclass-hiso-r1,
+    :banked-commit "a231d7bafca939715268dd2cedc8f057ec7098a4"},
    :id :lemma-mfclass-hiso-right,
    :kind :lemma,
    :depends-on [:lemma-mfclass-forget-terminal-row],
