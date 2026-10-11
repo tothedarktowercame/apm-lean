@@ -71303,7 +71303,52 @@
   {:bounded-exception
    "single-consumer ambient reconstruction adapter from a coupled angular path",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:residual
+     "Implement the ambient reconstruction adapter; then construct the continuous coupled angular coordinate itself and assemble it with the nonzero-height stage.",
+     :outcome :go,
+     :warnings [],
+     :axioms [propext Classical.choice Quot.sound],
+     :commands
+     [{:cmd
+       "lake env lean /tmp/t02a03_zero_height_ambient_from_angular_probe.lean",
+       :exit 0,
+       :output
+       "zeroHeightAmbientDetour_of_coupledAngular compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "sha256sum /tmp/t02a03_zero_height_ambient_from_angular_probe.lean",
+       :exit 0,
+       :output
+       "97f31e12c8e778bd2327e4bbd304dab74fa5ea9184f264d81d2d6476c12c2325  /tmp/t02a03_zero_height_ambient_from_angular_probe.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_zero_height_ambient_from_angular_probe.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}
+      {:cmd
+       "rg -n 'zeroHeightAmbientDetour_of_coupledAngular' /tmp/t02a03_zero_height_ambient_from_angular_probe.lean",
+       :exit 0,
+       :output
+       "7:theorem zeroHeightAmbientDetour_of_coupledAngular\n52:#print axioms zeroHeightAmbientDetour_of_coupledAngular"}],
+     :fixture
+     {:path "/tmp/t02a03_zero_height_ambient_from_angular_probe.lean",
+      :sha256
+      "97f31e12c8e778bd2327e4bbd304dab74fa5ea9184f264d81d2d6476c12c2325"},
+     :finding
+     "The placeholder-free fixture packages any continuous coupled angular map with the required endpoint values into a continuous ambient core-polar detour. It proves both ambient endpoints and, on zero-height inputs, right-tube membership and left-core avoidance.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+      :declaration
+      "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightAmbientDetour_of_coupledAngular",
+      :type
+      "forall (A : C(unitInterval × RightTubeMinusLeftCore, Circle)), (forall p, A (0,p)=1) -> (forall p, A (1,p)=rightTubeCoreAngularCoordinate p) -> exists H : C(unitInterval × RightTubeMinusLeftCore, apm_t02a03_E3), (forall p, H (0,p)=apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)) ∧ (forall p, H (1,p)=p.1) ∧ (forall tp, tp.2.1 2=0 -> H tp ∈ apm_t02a03_rightTube) ∧ (forall tp, tp.2.1 2=0 -> H tp ∉ Set.range apm_t02a03_leftCore)"},
+     :seat "topo-8"}},
+   :phase :implementation,
+   :type
+   "forall (A : C(unitInterval × RightTubeMinusLeftCore, Circle)), (forall p, A (0,p)=1) -> (forall p, A (1,p)=rightTubeCoreAngularCoordinate p) -> exists H : C(unitInterval × RightTubeMinusLeftCore, apm_t02a03_E3), (forall p, H (0,p)=apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p)) ∧ (forall p, H (1,p)=p.1) ∧ (forall tp, tp.2.1 2=0 -> H tp ∈ apm_t02a03_rightTube) ∧ (forall tp, tp.2.1 2=0 -> H tp ∉ Set.range apm_t02a03_leftCore)",
    :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
@@ -71322,6 +71367,8 @@
    :routes-2026-10-11-t02a03-zero-height-ambient-detour-from-angular-topo2-r1,
    :kind :reusable-theorem,
    :area "explicit-r3-tube-deformation-retraction",
+   :declaration
+   "ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeightAmbientDetour_of_coupledAngular",
    :depends-on
    [:routes-2026-10-11-t02a03-zero-height-coupled-detour-avoidance-topo2-r1],
    :current-residual
