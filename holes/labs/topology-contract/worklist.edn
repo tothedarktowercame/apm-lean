@@ -116385,6 +116385,18 @@
     {:commit "f6c54ca0a",
      :next
      "Implement B5 exists_uniform_isMIntegralCurveOn_of_compact using B4, CompactSpace.elim_nhds_subcover, and a positive finite minimum."},
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791727208911-5452-693f4eb6",
+     :commands
+     ["git show/diff-tree f6c54ca0a3ecbbb626cdd873976211d983316a69"
+      "recorded-tree SHA-256, exact-scope, diff-check, and placeholder-delta verification"
+      "python3 scripts/statement-registry.py check"
+      "lake env lean ConstructionTargets/t92J08Closure.lean"
+      "lake env lean problems/t92J08/lean/Main.lean"],
+     :finding
+     "PASS: commit f6c54ca0a adds new compiled, placeholder-free B4 progress. It faithfully specializes B3 to the consumer's Euclidean model: completeness and the C1 manifold instance are available, while the vector-field, ContMDiff, neighbourhood, common positive time, and IsMIntegralCurveOn orientations remain unchanged. Scope and hashes match, only standard axioms occur, the consumer's old placeholder is unchanged, and B5-B6 are explicitly listed as remaining."},
     :commit "f6c54ca0a",
     :changed-paths
     ["ConstructionTargets/t92J08Closure.lean"
@@ -116402,7 +116414,7 @@
       {:id :B6, :status :planned}]},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t92J08/lean/Main.lean"
     "problems/t92J08/status.json"
@@ -116418,7 +116430,7 @@
     ["lake env lean problems/t92J08/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Program milestone completed. Blueprint node B3 is proved: B1's uniform Euclidean solution family is transported through one fixed extended chart, with target containment keeping every time-point inside the chart and the tangent-coordinate derivative calculation proving the manifold integral-curve property. B4-B6 remain.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Program milestone completed. Blueprint node B4 is proved: the chart-neighbourhood theorem is specialized to the consumer's Euclidean model and exact manifold hypotheses, yielding a neighbourhood and common positive existence time around every centre. B5-B6 remain.",
    :id :program-2026-10-11-close-t92j08,
    :kind :final-adapter,
    :campaign-priority 42,
@@ -116441,7 +116453,11 @@
     {:job 4,
      :commit "2ed42033c",
      :reason
-     "Program milestone completed. Blueprint node B3 is proved: B1's uniform Euclidean solution family is transported through one fixed extended chart, with target containment keeping every time-point inside the chart and the tangent-coordinate derivative calculation proving the manifold integral-curve property. B4-B6 remain."}]}
+     "Program milestone completed. Blueprint node B3 is proved: B1's uniform Euclidean solution family is transported through one fixed extended chart, with target containment keeping every time-point inside the chart and the tangent-coordinate derivative calculation proving the manifold integral-curve property. B4-B6 remain."}
+    {:job 5,
+     :commit "f6c54ca0a",
+     :reason
+     "Program milestone completed. Blueprint node B4 is proved: the chart-neighbourhood theorem is specialized to the consumer's Euclidean model and exact manifold hypotheses, yielding a neighbourhood and common positive existence time around every centre. B5-B6 remain."}]}
   {:consumer :t97A07,
    :phase :implementation,
    :state :open,
@@ -117423,7 +117439,7 @@
    :other-consumers []}
   {:consumer :t92J08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t92J08Closure.exists_nhds_uniform_isMIntegralCurveOn",
@@ -117435,7 +117451,9 @@
     :type
     "The neighbourhood-uniform manifold integral-curve theorem specialized to the Euclidean model used by t92J08",
     :area "manifold-uniform-local-flow",
-    :proved-in :program-2026-10-11-close-t92j08},
+    :proved-in :program-2026-10-11-close-t92j08,
+    :banked-by :program-2026-10-11-close-t92j08,
+    :banked-commit "f6c54ca0a"},
    :id :lemma-t92j08closure-exists-nhds-uniform-ismintegralcurveon,
    :kind :lemma,
    :depends-on
