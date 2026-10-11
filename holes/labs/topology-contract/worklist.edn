@@ -116375,6 +116375,18 @@
     {:commit "97d745a41",
      :next
      "Implement B6 by replacing apm_t92J08_bridge_1's placeholder with exists_uniform_isMIntegralCurveOn_of_compact and importing ConstructionTargets.t92J08Closure."},
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791727673055-5463-33be19fb",
+     :commands
+     ["git show/diff-tree 97d745a418688ccc59159874929fdccd519c0b9a"
+      "recorded-tree SHA-256, exact-scope, diff-check, and placeholder-delta verification"
+      "python3 scripts/statement-registry.py check"
+      "lake env lean ConstructionTargets/t92J08Closure.lean"
+      "lake env lean problems/t92J08/lean/Main.lean"],
+     :finding
+     "PASS: commit 97d745a41 adds new compiled, placeholder-free B5 progress. In the nonempty case the compact subcover is proved nonempty, the finite minimum of its positive local times is positive, and delta <= epsilon_x gives the correctly oriented restriction Ioo(-delta,delta) subset Ioo(-epsilon_x,epsilon_x); the empty case is handled vacuously with delta=1. Scope and hashes match, standard axioms only are used, the consumer's old placeholder is unchanged, and only B6 remains."},
     :commit "97d745a41",
     :changed-paths
     ["ConstructionTargets/t92J08Closure.lean"
@@ -116392,7 +116404,7 @@
       {:id :B6, :status :planned}]},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t92J08/lean/Main.lean"
     "problems/t92J08/status.json"
@@ -116408,7 +116420,7 @@
     ["lake env lean problems/t92J08/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Program milestone completed. Blueprint node B4 is proved: the chart-neighbourhood theorem is specialized to the consumer's Euclidean model and exact manifold hypotheses, yielding a neighbourhood and common positive existence time around every centre. B5-B6 remain.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Program milestone completed. Blueprint node B5 is proved: compactness selects finitely many B4 neighbourhoods, the minimum of their positive local times is positive, and every selected curve restricts to that common interval. Only B6 remains.",
    :id :program-2026-10-11-close-t92j08,
    :kind :final-adapter,
    :campaign-priority 42,
@@ -116435,7 +116447,11 @@
     {:job 5,
      :commit "f6c54ca0a",
      :reason
-     "Program milestone completed. Blueprint node B4 is proved: the chart-neighbourhood theorem is specialized to the consumer's Euclidean model and exact manifold hypotheses, yielding a neighbourhood and common positive existence time around every centre. B5-B6 remain."}]}
+     "Program milestone completed. Blueprint node B4 is proved: the chart-neighbourhood theorem is specialized to the consumer's Euclidean model and exact manifold hypotheses, yielding a neighbourhood and common positive existence time around every centre. B5-B6 remain."}
+    {:job 6,
+     :commit "97d745a41",
+     :reason
+     "Program milestone completed. Blueprint node B5 is proved: compactness selects finitely many B4 neighbourhoods, the minimum of their positive local times is positive, and every selected curve restricts to that common interval. Only B6 remains."}]}
   {:consumer :t97A07,
    :phase :implementation,
    :state :open,
@@ -117439,7 +117455,7 @@
    :other-consumers []}
   {:consumer :t92J08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -117452,7 +117468,9 @@
     :type
     "Compactness turns neighbourhood-uniform positive existence times into one positive existence time for all initial points",
     :area "manifold-uniform-local-flow",
-    :proved-in :program-2026-10-11-close-t92j08},
+    :proved-in :program-2026-10-11-close-t92j08,
+    :banked-by :program-2026-10-11-close-t92j08,
+    :banked-commit "97d745a41"},
    :id
    :lemma-t92j08closure-exists-uniform-ismintegralcurveon-of-compact,
    :kind :lemma,
