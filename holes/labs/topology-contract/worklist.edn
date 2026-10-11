@@ -103546,12 +103546,13 @@
      :infrastructure-packets
      :review-outcomes]},
    :review-finding
-   "The recorded checkpoint fails its explicit requirement to tag every remaining untagged lemma: rerunning build_step.bb priorities against commit d8955ca38c3b0167ccd7be30b3a82f1252b0ae68 reports area untagged with 26 backlog lemmas. Its stored polygon-surface-open-cover measure is also stale after the inserted rows, recording 166 banked and 26 backlog while the recorded-commit audit reports 166 banked and 60 backlog. Tag the remaining 26 lemmas and recompute all checkpoint measures after inserting replacement and lemma rows.",
+   "The retry records proposed area assignments only inside checkpoint evidence and does not tag the 26 canonical lemma nodes in worklist2.edn and worklist3.edn; commit 5d25acd945ec1a5d72297d263c903836676b0829 changes only worklist.edn. Fresh build_step.bb priorities output at that exact commit still reports area untagged with 26 backlog nodes, contradicting the recorded cross-loop-untagged-after count of 0. Apply the area fields to the canonical lemma rows in worklist2.edn and worklist3.edn, then rerun and record the checkpoint audit.",
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :evidence
    {:outcome :replan,
-    :seat "topo-4",
+    :disposition :replan,
+    :author "topo-4",
     :commands
     [{:cmd
       "bb holes/labs/topology-contract/build_step.bb priorities holes/labs/topology-contract/worklist.edn",
@@ -103568,6 +103569,132 @@
       :exit 0,
       :finding
       "Comment-stripped counts remain t01A03 1, t92J06 1, t93J03 1, t97A01 1, t97A03 3, and t99J01 1."}],
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1791688755404-3959-6fa4f9b9",
+     :finding
+     "The retry records proposed area assignments only inside checkpoint evidence and does not tag the 26 canonical lemma nodes in worklist2.edn and worklist3.edn; commit 5d25acd945ec1a5d72297d263c903836676b0829 changes only worklist.edn. Fresh build_step.bb priorities output at that exact commit still reports area untagged with 26 backlog nodes, contradicting the recorded cross-loop-untagged-after count of 0. Apply the area fields to the canonical lemma rows in worklist2.edn and worklist3.edn, then rerun and record the checkpoint audit."},
+    :replacement-items
+    [{:bounded-exception
+      "This single-consumer comparison is the nearer of the two remaining t93J03 lemmas.",
+      :consumer :t93J03,
+      :implements-lemma
+      :lemma-kleinaabbsquarepolygonpresentationequivalence,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/t93J03/klein-aabb-square-polygon-presentation-equivalence",
+      :acceptance
+      {:probe
+       "Compile the quotient-fiber comparison and resulting homeomorphism from Surface false 2 to the standard square Klein quotient using the banked square EqvGen classification. Do not prove the orbit quotient comparison or close t93J03.",
+       :placeholder "the single sorry in apm_t93j03",
+       :route-step
+       "identify the two concrete Klein polygon presentations",
+       :gates
+       ["canonical comparison"
+        "fixture compiles"
+        "zero fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :representation
+      {:source "The frozen aabb disk polygon quotient Surface false 2",
+       :target
+       "The standard opposite-side closed-square Klein quotient",
+       :direction
+       "Homeomorphism from the frozen aabb disk polygon quotient to the standard square quotient, induced by exact quotient-fiber equivalence rather than an edgewise carrier map"},
+      :id
+      :routes-2026-10-11-klein-aabb-square-polygon-presentation-equivalence-83,
+      :kind :representation-comparison,
+      :area "polygon-quotient-identification",
+      :depends-on [:lemma-kleinsquareeqvgencasesiff-eqvgen-iff-cases],
+      :current-residual
+      "Use the presentation comparison in the Klein orbit quotient homeomorphism, then close t93J03.",
+      :other-consumers []}
+     {:consumer :t99J01,
+      :implements-lemma
+      :lemma-genericpointwedgefundamentalgroupcoordinates-genericpointwedgegroupequivalence-c,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/shared/generic-point-wedge-fundamental-group-coordinates",
+      :acceptance
+      {:probe
+       "Compile the generic point-wedge fundamental-group equivalence with the representative maps sent to the two coproduct injections. Do not specialize to a finite circle wedge or close a consumer.",
+       :placeholder
+       "the remaining fundamental-group coordinate steps for five consumers",
+       :route-step
+       "generic coordinate normalization for point-wedge fundamental groups",
+       :gates
+       ["fixture compiles"
+        "zero fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :id
+      :routes-2026-10-11-generic-point-wedge-fundamental-group-coordinates-84,
+      :kind :reusable-theorem,
+      :area "fundamental-group-wedge-of-circles",
+      :depends-on [],
+      :current-residual
+      "Induct over finite circle wedges and specialize to ThreeCircles.",
+      :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
+     {:consumer :t99J01,
+      :implements-lemma
+      :lemma-genericpointwedgefundamentalgroupcoordinates-threecirclesgroupequivalence-coordi,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/shared/three-circles-fundamental-group-coordinates",
+      :acceptance
+      {:probe
+       "Compile the specialization to ThreeCircles, normalized to FreeGroup (Fin 3), with each circle inclusion sent to its indexed generator. Do not build covering restriction packages or close a consumer.",
+       :placeholder
+       "the remaining ThreeCircles coordinate steps for five consumers",
+       :route-step "ThreeCircles free-group coordinate normalization",
+       :gates
+       ["fixture compiles"
+        "zero fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :id
+      :routes-2026-10-11-three-circles-fundamental-group-coordinates-85,
+      :kind :reusable-theorem,
+      :area "fundamental-group-wedge-of-circles",
+      :depends-on
+      [:lemma-genericpointwedgefundamentalgroupcoordinates-genericpointwedgegroupequivalence-c],
+      :current-residual
+      "Feed the normalized equivalence into finite-wedge and covering adapters.",
+      :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only when every topo1 problem is closed or a row is genuinely refuted.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:strategy
+       "Review the Klein comparison and both shared coordinate rows, rerun priorities and AREAS, and elect the next nearest closure or highest-impact ready lemma."},
+      :id
+      :routes-2026-10-11-checkpoint-topo1-after-klein-and-wedge-coordinates-86,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:routes-2026-10-11-klein-aabb-square-polygon-presentation-equivalence-83
+       :routes-2026-10-11-generic-point-wedge-fundamental-group-coordinates-84
+       :routes-2026-10-11-three-circles-fundamental-group-coordinates-85],
+      :current-residual "Refill after the elected rows are reviewed.",
+      :other-consumers []}],
     :finding
     {:placeholder-delta 0,
      :placeholder-counts
@@ -103786,130 +103913,9 @@
       :consumers [:t00J02 :t98A02],
       :depends-on [],
       :area "manifold-fundamental-class"}],
-    :replacement-items
-    [{:bounded-exception
-      "This single-consumer comparison is the nearer of the two remaining t93J03 lemmas.",
-      :consumer :t93J03,
-      :implements-lemma
-      :lemma-kleinaabbsquarepolygonpresentationequivalence,
-      :phase :probe,
-      :state :open,
-      :scope [],
-      :dag-node
-      "TOPOLOGY-ROUTES.md/t93J03/klein-aabb-square-polygon-presentation-equivalence",
-      :acceptance
-      {:probe
-       "Compile the quotient-fiber comparison and resulting homeomorphism from Surface false 2 to the standard square Klein quotient using the banked square EqvGen classification. Do not prove the orbit quotient comparison or close t93J03.",
-       :placeholder "the single sorry in apm_t93j03",
-       :route-step
-       "identify the two concrete Klein polygon presentations",
-       :gates
-       ["canonical comparison"
-        "fixture compiles"
-        "zero fixture sorry"
-        "standard-only axioms"
-        "registry check"]},
-      :representation
-      {:source "The frozen aabb disk polygon quotient Surface false 2",
-       :target
-       "The standard opposite-side closed-square Klein quotient",
-       :direction
-       "Homeomorphism from the frozen aabb disk polygon quotient to the standard square quotient, induced by exact quotient-fiber equivalence rather than an edgewise carrier map"},
-      :id
-      :routes-2026-10-11-klein-aabb-square-polygon-presentation-equivalence-83,
-      :kind :representation-comparison,
-      :area "polygon-quotient-identification",
-      :depends-on [:lemma-kleinsquareeqvgencasesiff-eqvgen-iff-cases],
-      :current-residual
-      "Use the presentation comparison in the Klein orbit quotient homeomorphism, then close t93J03.",
-      :other-consumers []}
-     {:consumer :t99J01,
-      :implements-lemma
-      :lemma-genericpointwedgefundamentalgroupcoordinates-genericpointwedgegroupequivalence-c,
-      :phase :probe,
-      :state :open,
-      :scope [],
-      :dag-node
-      "TOPOLOGY-ROUTES.md/shared/generic-point-wedge-fundamental-group-coordinates",
-      :acceptance
-      {:probe
-       "Compile the generic point-wedge fundamental-group equivalence with the representative maps sent to the two coproduct injections. Do not specialize to a finite circle wedge or close a consumer.",
-       :placeholder
-       "the remaining fundamental-group coordinate steps for five consumers",
-       :route-step
-       "generic coordinate normalization for point-wedge fundamental groups",
-       :gates
-       ["fixture compiles"
-        "zero fixture sorry"
-        "standard-only axioms"
-        "registry check"]},
-      :id
-      :routes-2026-10-11-generic-point-wedge-fundamental-group-coordinates-84,
-      :kind :reusable-theorem,
-      :area "fundamental-group-wedge-of-circles",
-      :depends-on [],
-      :current-residual
-      "Induct over finite circle wedges and specialize to ThreeCircles.",
-      :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
-     {:consumer :t99J01,
-      :implements-lemma
-      :lemma-genericpointwedgefundamentalgroupcoordinates-threecirclesgroupequivalence-coordi,
-      :phase :probe,
-      :state :open,
-      :scope [],
-      :dag-node
-      "TOPOLOGY-ROUTES.md/shared/three-circles-fundamental-group-coordinates",
-      :acceptance
-      {:probe
-       "Compile the specialization to ThreeCircles, normalized to FreeGroup (Fin 3), with each circle inclusion sent to its indexed generator. Do not build covering restriction packages or close a consumer.",
-       :placeholder
-       "the remaining ThreeCircles coordinate steps for five consumers",
-       :route-step "ThreeCircles free-group coordinate normalization",
-       :gates
-       ["fixture compiles"
-        "zero fixture sorry"
-        "standard-only axioms"
-        "registry check"]},
-      :id
-      :routes-2026-10-11-three-circles-fundamental-group-coordinates-85,
-      :kind :reusable-theorem,
-      :area "fundamental-group-wedge-of-circles",
-      :depends-on
-      [:lemma-genericpointwedgefundamentalgroupcoordinates-genericpointwedgegroupequivalence-c],
-      :current-residual
-      "Feed the normalized equivalence into finite-wedge and covering adapters.",
-      :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
-     {:consumer :portfolio,
-      :checkpoint
-      {:after-problems 1,
-       :may-supersede-future true,
-       :required-measures
-       [:placeholder-delta
-        :typed-residual-change
-        :infrastructure-packets
-        :review-outcomes]},
-      :stop-condition
-      "End only when every topo1 problem is closed or a row is genuinely refuted.",
-      :phase :strategy,
-      :state :open,
-      :scope [],
-      :dag-node "TOPOLOGY-ROUTES.md",
-      :acceptance
-      {:strategy
-       "Review the Klein comparison and both shared coordinate rows, rerun priorities and AREAS, and elect the next nearest closure or highest-impact ready lemma."},
-      :id
-      :routes-2026-10-11-checkpoint-topo1-after-klein-and-wedge-coordinates-86,
-      :kind :strategy-checkpoint,
-      :depends-on
-      [:routes-2026-10-11-klein-aabb-square-polygon-presentation-equivalence-83
-       :routes-2026-10-11-generic-point-wedge-fundamental-group-coordinates-84
-       :routes-2026-10-11-three-circles-fundamental-group-coordinates-85],
-      :current-residual "Refill after the elected rows are reviewed.",
-      :other-consumers []}],
-    :author "topo-4",
-    :disposition :replan},
+    :seat "topo-4"},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :repair,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -103932,7 +103938,7 @@
    :implements-lemma
    :lemma-kleinaabbsquarepolygonpresentationequivalence,
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-aabb-square-polygon-presentation-equivalence",
@@ -103967,7 +103973,7 @@
    :implements-lemma
    :lemma-genericpointwedgefundamentalgroupcoordinates-genericpointwedgegroupequivalence-c,
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/generic-point-wedge-fundamental-group-coordinates",
@@ -103996,7 +104002,7 @@
    :implements-lemma
    :lemma-genericpointwedgefundamentalgroupcoordinates-threecirclesgroupequivalence-coordi,
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/three-circles-fundamental-group-coordinates",
@@ -104033,7 +104039,7 @@
    :stop-condition
    "End only when every topo1 problem is closed or a row is genuinely refuted.",
    :phase :strategy,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
