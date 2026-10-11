@@ -1,7 +1,8 @@
 import ConstructionTargets.T97A04FrozenH1Coordinate
 import ConstructionTargets.BoundaryTorusOpenCover
+import ConstructionTargets.ProductionOpenCoverMayerVietoris
 
-open CategoryTheory
+open CategoryTheory CategoryTheory.Limits
 
 noncomputable section
 
@@ -11,6 +12,9 @@ open ConstructionTargets.SingularHomologyConcrete
 open ConstructionTargets.BoundaryTorusH2ConnectingIso
 open ConstructionTargets.T97A04FrozenH1Coordinate
 open ConstructionTargets.BoundaryTorusOpenCover
+open ConstructionTargets.BooleanTwoCoverScaffold
+open ConstructionTargets.ProductionOpenCoverMayerVietoris
+open ConstructionTargets.SingularExcision
 
 abbrev FrozenTorus :=
   ConstructionTargets.T97A04FrozenH1Coordinate.FrozenTorus
@@ -138,6 +142,128 @@ theorem shearY_one_zero_apply (p : FrozenTorus) :
     shearY 1 0 p = p := by
   rcases p with ⟨x, y⟩
   simp
+
+private abbrev closureChains :=
+  (AlgebraicTopology.SSet.singularChainComplexFunctor AddCommGrpCat).obj
+    (AddCommGrpCat.of ℤ)
+
+private theorem shearY_mapsTo_inter (a b : ℤ) :
+    Set.MapsTo (shearY a b)
+      (frozenYCover.U ∩ frozenYCover.V)
+      (frozenYCover.U ∩ frozenYCover.V) :=
+  fun _ hp ↦ ⟨shearY_mem_U a b hp.1, shearY_mem_V a b hp.2⟩
+
+private noncomputable def shearYIntersectionMap (a b : ℤ) :=
+  (ambientIntersectionRangeChainsIso frozenYCover.U frozenYCover.V).inv ≫
+    closureChains.map
+      (coverRangeMap
+        (frozenYCover.U ∩ frozenYCover.V)
+        (frozenYCover.U ∩ frozenYCover.V)
+        (shearY a b) (shearY_mapsTo_inter a b)) ≫
+    (ambientIntersectionRangeChainsIso frozenYCover.U frozenYCover.V).hom
+
+private theorem intersectionChainsIso_hom_comp_left :
+    (ambientIntersectionRangeChainsIso frozenYCover.U frozenYCover.V).hom ≫
+        closureChains.map (subcomplexIntersectionToLeft
+          (ambientSubspaceRange frozenYCover.U)
+          (ambientSubspaceRange frozenYCover.V)) =
+      closureChains.map (ambientSubspaceRangeInclusion Set.inter_subset_left) :=
+  ambientIntersectionRangeChainsIso_hom_comp_left _ _
+
+private theorem intersectionChainsIso_hom_comp_right :
+    (ambientIntersectionRangeChainsIso frozenYCover.U frozenYCover.V).hom ≫
+        closureChains.map (subcomplexIntersectionToRight
+          (ambientSubspaceRange frozenYCover.U)
+          (ambientSubspaceRange frozenYCover.V)) =
+      closureChains.map (ambientSubspaceRangeInclusion Set.inter_subset_right) :=
+  ambientIntersectionRangeChainsIso_hom_comp_right _ _
+
+private theorem intersectionChainsIso_inv_comp_left :
+    (ambientIntersectionRangeChainsIso frozenYCover.U frozenYCover.V).inv ≫
+        closureChains.map (ambientSubspaceRangeInclusion Set.inter_subset_left) =
+      closureChains.map (subcomplexIntersectionToLeft
+        (ambientSubspaceRange frozenYCover.U)
+        (ambientSubspaceRange frozenYCover.V)) := by
+  rw [← intersectionChainsIso_hom_comp_left, Iso.inv_hom_id_assoc]
+
+private theorem intersectionChainsIso_inv_comp_right :
+    (ambientIntersectionRangeChainsIso frozenYCover.U frozenYCover.V).inv ≫
+        closureChains.map (ambientSubspaceRangeInclusion Set.inter_subset_right) =
+      closureChains.map (subcomplexIntersectionToRight
+        (ambientSubspaceRange frozenYCover.U)
+        (ambientSubspaceRange frozenYCover.V)) := by
+  rw [← intersectionChainsIso_hom_comp_right, Iso.inv_hom_id_assoc]
+
+private theorem shearY_inter_left_chain (a b : ℤ) :
+    closureChains.map
+        (coverRangeMap
+          (frozenYCover.U ∩ frozenYCover.V)
+          (frozenYCover.U ∩ frozenYCover.V)
+          (shearY a b) (shearY_mapsTo_inter a b)) ≫
+      closureChains.map (ambientSubspaceRangeInclusion Set.inter_subset_left) =
+    closureChains.map (ambientSubspaceRangeInclusion Set.inter_subset_left) ≫
+      closureChains.map
+        (coverRangeMap frozenYCover.U frozenYCover.U (shearY a b)
+          (fun _ hp ↦ shearY_mem_U a b hp)) := by
+  rw [← Functor.map_comp, ← Functor.map_comp,
+    coverRangeMap_inter_left frozenYCover.U frozenYCover.V
+      frozenYCover.U frozenYCover.V (shearY a b)
+      (fun _ hp ↦ shearY_mem_U a b hp)
+      (fun _ hp ↦ shearY_mem_V a b hp)]
+
+private theorem shearY_inter_right_chain (a b : ℤ) :
+    closureChains.map
+        (coverRangeMap
+          (frozenYCover.U ∩ frozenYCover.V)
+          (frozenYCover.U ∩ frozenYCover.V)
+          (shearY a b) (shearY_mapsTo_inter a b)) ≫
+      closureChains.map (ambientSubspaceRangeInclusion Set.inter_subset_right) =
+    closureChains.map (ambientSubspaceRangeInclusion Set.inter_subset_right) ≫
+      closureChains.map
+        (coverRangeMap frozenYCover.V frozenYCover.V (shearY a b)
+          (fun _ hp ↦ shearY_mem_V a b hp)) := by
+  rw [← Functor.map_comp, ← Functor.map_comp,
+    coverRangeMap_inter_right frozenYCover.U frozenYCover.V
+      frozenYCover.U frozenYCover.V (shearY a b)
+      (fun _ hp ↦ shearY_mem_U a b hp)
+      (fun _ hp ↦ shearY_mem_V a b hp)]
+
+private noncomputable def shearYPiecesMap (a b : ℤ) :=
+  biprod.map
+    (closureChains.map
+      (coverRangeMap frozenYCover.U frozenYCover.U (shearY a b)
+        (fun _ hp ↦ shearY_mem_U a b hp)))
+    (closureChains.map
+      (coverRangeMap frozenYCover.V frozenYCover.V (shearY a b)
+        (fun _ hp ↦ shearY_mem_V a b hp)))
+
+private noncomputable def shearYUnionMap (a b : ℤ) :=
+  (subcomplexChains_isPushout
+    (leftRange frozenYCover.U) (rightRange frozenYCover.V)).desc
+    (closureChains.map
+        (coverRangeMap frozenYCover.U frozenYCover.U (shearY a b)
+          (fun _ hp ↦ shearY_mem_U a b hp)) ≫
+      closureChains.map
+        (subcomplexLeftToUnion
+          (leftRange frozenYCover.U) (rightRange frozenYCover.V)))
+    (closureChains.map
+        (coverRangeMap frozenYCover.V frozenYCover.V (shearY a b)
+          (fun _ hp ↦ shearY_mem_V a b hp)) ≫
+      closureChains.map
+        (subcomplexRightToUnion
+          (leftRange frozenYCover.U) (rightRange frozenYCover.V)))
+    (by
+      apply (cancel_epi
+        (ambientIntersectionRangeChainsIso
+          frozenYCover.U frozenYCover.V).hom).1
+      simp only [leftRange, rightRange, ← Category.assoc]
+      rw [intersectionChainsIso_hom_comp_left,
+        intersectionChainsIso_hom_comp_right]
+      rw [← shearY_inter_left_chain, ← shearY_inter_right_chain]
+      simp only [Category.assoc]
+      congr 1
+      rw [← Functor.map_comp, ← Functor.map_comp]
+      rfl)
 
 #print axioms frozenTorusH2GroupIsoInt
 #print axioms frozenYCover
