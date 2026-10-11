@@ -348,6 +348,23 @@ theorem ambientLocalGenerator_zsmul_injective
     smul_eq_mul, mul_one, smul_eq_mul, mul_one] at hrs'
   exact hrs'
 
+theorem localizationCoefficient_eq_one_of_normalized
+    (k : ℕ) {M : Type} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (HigherChartLocalGenerator.E k) M]
+    (e : (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) (k + 2)).obj
+      (ModuleCat.of ℤ ℤ)).obj (TopCat.of M)) ≅ ModuleCat.of ℤ ℤ)
+    (x : M) (r : ℤ)
+    (hr : r • HigherChartLocalGenerator.ambientLocalGenerator (k := k) x =
+      localizationMap x (k + 2) (groupGlobalGenerator (TopCat.of M) (k + 2) e))
+    (hnormalized : localizationMap x (k + 2)
+        (groupGlobalGenerator (TopCat.of M) (k + 2) e) =
+      HigherChartLocalGenerator.ambientLocalGenerator (k := k) x) :
+    r = 1 := by
+  apply ambientLocalGenerator_zsmul_injective k x
+  change r • HigherChartLocalGenerator.ambientLocalGenerator (k := k) x =
+    1 • HigherChartLocalGenerator.ambientLocalGenerator (k := k) x
+  simpa only [one_zsmul] using hr.trans hnormalized
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -371,3 +388,4 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.localizationMap_groupGlobalGenerator_transport
 #print axioms ConstructionTargets.ManifoldFundamentalClass.localizationMap_groupGlobalGenerator_eq_zsmul_ambientLocalGenerator
 #print axioms ConstructionTargets.ManifoldFundamentalClass.ambientLocalGenerator_zsmul_injective
+#print axioms ConstructionTargets.ManifoldFundamentalClass.localizationCoefficient_eq_one_of_normalized
