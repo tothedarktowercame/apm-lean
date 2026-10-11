@@ -15956,79 +15956,204 @@
    "Construct the cone isomorphism from the transported τ₁ kernel cone to the τ₁ evaluation of the mapped ShortComplex kernel fork, then transfer its IsLimit witness and repeat for the remaining components.",
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
+   :implements-lemma :lemma-mfclass-forget-snake-kernel-tau1-cone-iso,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/manifold-fundamental-class/integral-open-disk-connecting-naturality/snake-input-kernel-tau1-cone-iso",
+   :acceptance
+   {:implementation
+    "Promote the exact fixture definition. Construct the identity-point cone isomorphism from the transported τ₁ coefficient kernel cone to the τ₁ evaluation of the mapped short-complex kernel fork. Do not transfer the IsLimit witness across this cone isomorphism, package the τ₂ or τ₃ kernel components, construct the cokernel components or mapped SnakeInput, assemble SnakeInput.Hom, prove connecting preservation, rewrite the raw production square, prove radial or sphere compatibility, exclude negation, select a sign, or construct a fundamental class.",
+    :declaration
+    "ConstructionTargets.ManifoldFundamentalClass.forgetIntModulesSnakeInput_kernelτ₁ConeIso",
+    :type
+    "forall (S : ShortComplex.SnakeInput (ModuleCat ℤ)), (Cone.postcompose (forgetIntModulesParallelPairZeroIso S.v₁₂.τ₁).hom).obj (forgetIntModules.mapCone (KernelFork.ofι S.v₀₁.τ₁ S.w₀₂_τ₁)) ≅ (KernelFork.ofι (forgetIntModules.mapShortComplex.map S.v₀₁) (forgetIntModulesSnakeInput_zero_squares S).1).map ShortComplex.π₁",
+    :fixture
+    "/tmp/manifold_fundamental_class_forget_snake_kernel_tau1_cone_iso.lean",
+    :fixture-sha256
+    "32c31e3bfb98b3351594406cae7192f2381165ee8c39509db0c8e3e4910f1d57",
+    :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
+    :route-step
+    "identify the transported first component kernel cone with evaluation of the mapped short-complex kernel fork"},
+   :representation
+   {:source
+    "The forgotten τ₁ coefficient kernel cone after transport onto the AddCommGrp parallel-pair diagram",
+    :target
+    "The τ₁ evaluation of the kernel fork built from the mapped short-complex morphisms",
+    :direction
+    "Exact cone isomorphism from the transported forgotten cone to the evaluated mapped kernel fork, with identity isomorphism on the shared cone point"},
+   :id
+   :routes-2026-10-11-manifold-forget-snake-kernel-tau1-cone-iso-topo3-r1,
+   :kind :representation-comparison,
+   :area "manifold-fundamental-class",
+   :depends-on
+   [:routes-2026-10-10-topo3-seed-checkpoint-1
+    :routes-2026-10-10-manifold-local-positive-excision-topo3-r1
+    :routes-2026-10-10-manifold-oriented-overlap-coherence-topo3-r1
+    :routes-2026-10-10-manifold-connected-overlap-unit-topo3-r1
+    :routes-2026-10-10-manifold-oriented-connected-overlap-topo3-r1
+    :routes-2026-10-10-manifold-integral-transition-sign-topo3-r1
+    :routes-2026-10-10-manifold-exclude-negative-transition-topo3-r1
+    :routes-2026-10-10-manifold-global-generator-topo3-r1
+    :routes-2026-10-10-manifold-localization-iso-generator-topo3-r1
+    :routes-2026-10-10-manifold-generator-map-isiso-topo3-r1
+    :routes-2026-10-10-manifold-localization-map-naturality-topo3-r1
+    :routes-2026-10-10-manifold-localization-apply-naturality-topo3-r1
+    :routes-2026-10-10-manifold-group-global-generator-topo3-r1
+    :routes-2026-10-10-manifold-group-generator-naturality-topo3-r1
+    :routes-2026-10-10-manifold-global-local-generator-transport-topo3-r1
+    :routes-2026-10-11-manifold-basepoint-localization-coefficient-topo3-r1
+    :routes-2026-10-11-manifold-local-generator-coefficient-unique-topo3-r1
+    :routes-2026-10-11-manifold-localization-coefficient-one-topo3-r1
+    :routes-2026-10-11-manifold-distinguished-chart-generator-topo3-r1
+    :routes-2026-10-11-manifold-integral-subtype-chain-naturality-topo3-r1
+    :routes-2026-10-11-manifold-integral-mapped-relative-cokernel-topo3-r1
+    :routes-2026-10-11-manifold-forget-relative-cokernel-topo3-r1
+    :routes-2026-10-11-manifold-integral-relative-chains-comparison-topo3-r1
+    :routes-2026-10-11-manifold-integral-relative-homology-comparison-topo3-r1
+    :routes-2026-10-11-manifold-ambient-local-normalization-topo3-r1
+    :routes-2026-10-11-manifold-generator-transport-of-normalization-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-subspace-map-equality-topo3-r1
+    :routes-2026-10-11-manifold-integral-direct-cokernel-projection-topo3-r1
+    :routes-2026-10-11-manifold-forget-cokernel-projection-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-integral-cokernel-transport-topo3-r1
+    :routes-2026-10-11-manifold-integral-composite-cokernel-projection-topo3-r1
+    :routes-2026-10-11-manifold-production-cokernel-projection-topo3-r1
+    :routes-2026-10-11-manifold-integral-composite-relative-projection-topo3-r1
+    :routes-2026-10-11-manifold-relative-chains-comparison-with-transport-topo3-r1
+    :routes-2026-10-11-manifold-relative-homology-comparison-with-transport-topo3-r1
+    :routes-2026-10-11-manifold-corrected-homology-projection-topo3-r1
+    :routes-2026-10-11-manifold-corrected-homology-comparison-hom-topo3-r1
+    :routes-2026-10-11-manifold-relative-projection-homology-preservation-topo3-r1
+    :routes-2026-10-11-manifold-packaged-homology-projection-topo3-r1
+    :routes-2026-10-11-manifold-corrected-generator-normalization-topo3-r1
+    :routes-2026-10-11-manifold-normalization-from-corrected-generator-topo3-r1
+    :routes-2026-10-11-manifold-corrected-local-generator-coefficient-topo3-r1
+    :routes-2026-10-11-manifold-corrected-local-generator-unit-topo3-r1
+    :routes-2026-10-11-manifold-corrected-local-generator-sign-topo3-r1
+    :routes-2026-10-11-manifold-corrected-local-generator-nonnegative-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-one-from-corrected-normalization-topo3-r1
+    :routes-2026-10-11-manifold-corrected-generator-of-coefficient-one-topo3-r1
+    :routes-2026-10-11-manifold-corrected-normalization-of-coefficient-one-topo3-r1
+    :routes-2026-10-11-manifold-corrected-normalization-of-nonnegative-topo3-r1
+    :routes-2026-10-11-manifold-corrected-coefficient-one-of-ne-neg-one-topo3-r1
+    :routes-2026-10-11-manifold-corrected-coefficient-automorphism-one-topo3-r1
+    :routes-2026-10-11-manifold-corrected-automorphism-neg-iff-topo3-r1
+    :routes-2026-10-11-manifold-corrected-automorphism-hom-topo3-r1
+    :routes-2026-10-11-manifold-ambient-local-normalization-hom-topo3-r1
+    :routes-2026-10-11-manifold-corrected-automorphism-neg-cancel-coefficient-topo3-r1
+    :routes-2026-10-11-manifold-negative-equation-endpoint-factors-topo3-r1
+    :routes-2026-10-11-manifold-negative-equation-coefficient-factors-topo3-r1
+    :routes-2026-10-11-manifold-negative-equation-corrected-comparison-topo3-r1
+    :routes-2026-10-11-manifold-integral-relative-chains-transport-hom-topo3-r1
+    :routes-2026-10-11-manifold-integral-relative-chains-transport-homology-topo3-r1
+    :routes-2026-10-11-manifold-negative-equation-transport-homology-factors-topo3-r1
+    :routes-2026-10-11-manifold-transport-projection-alignment-topo3-r3
+    :routes-2026-10-11-manifold-negative-equation-projected-factors-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-projected-forward-topo3-r1
+    :routes-2026-10-11-manifold-negative-equation-concrete-endpoints-topo3-r1
+    :routes-2026-10-11-manifold-negative-prefix-model-topo3-r1
+    :routes-2026-10-11-manifold-negative-model-factors-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-open-disk-normalization-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-open-disk-model-factors-topo3-r1
+    :routes-2026-10-11-manifold-integral-open-disk-relative-homology-comparison-topo3-r1
+    :routes-2026-10-11-manifold-integral-open-disk-puncture-homology-comparison-topo3-r1
+    :routes-2026-10-11-manifold-integral-open-disk-pair-short-complex-comparison-topo3-r1
+    :routes-2026-10-11-manifold-integral-open-disk-coefficient-pair-short-exact-topo3-r1
+    :routes-2026-10-11-manifold-integral-open-disk-connecting-naturality-raw-topo3-r1
+    :routes-2026-10-11-manifold-integral-open-disk-component-homology-maps-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-open-disk-connecting-transport-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-pair-inclusion-homology-preservation-topo3-r1
+    :routes-2026-10-11-manifold-open-disk-snake-inputs-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-pair-inclusion-cycles-preservation-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-pair-inclusion-opcycles-preservation-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-pair-inclusion-left-homology-preservation-topo3-r1
+    :routes-2026-10-11-manifold-coefficient-pair-inclusion-right-homology-preservation-topo3-r1
+    :routes-2026-10-11-manifold-forget-short-exact-topo3-r1
+    :routes-2026-10-11-manifold-forget-snake-zero-squares-topo3-r1
+    :routes-2026-10-11-manifold-forget-parallel-pair-limits-topo3-r1
+    :routes-2026-10-11-manifold-forget-parallel-pair-colimits-topo3-r1
+    :routes-2026-10-11-manifold-forget-snake-preserved-kernel-tau1-topo3-r1
+    :routes-2026-10-11-manifold-forget-parallel-pair-zero-iso-topo3-r1
+    :routes-2026-10-11-manifold-forget-snake-transported-kernel-tau1-topo3-r1],
+   :current-residual
+   "Transfer forgetIntModulesSnakeInput_transportedKernelτ₁ across forgetIntModulesSnakeInput_kernelτ₁ConeIso to obtain the target IsLimit witness, then repeat this uniform construction for τ₂ and τ₃.",
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-closedorientedfundamentalclass,
    :evidence
    {:probe
     {:residual
-     "Promote the transported τ₁ kernel witness, identify its cone with the evaluated mapped kernel fork, then repeat for τ₂, τ₃ and the cokernel side before packaging the mapped SnakeInput.",
+     "Promote the τ₁ cone isomorphism and transfer the transported IsLimit witness across it; then repeat for the remaining kernel and cokernel components before packaging the mapped SnakeInput.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
-     [{:id :lemma-mfclass-forget-snake-transported-kernel-tau1,
+     [{:id :lemma-mfclass-forget-snake-kernel-tau1-cone-iso,
        :name
-       "ConstructionTargets.ManifoldFundamentalClass.forgetIntModulesSnakeInput_transportedKernelτ₁",
+       "ConstructionTargets.ManifoldFundamentalClass.forgetIntModulesSnakeInput_kernelτ₁ConeIso",
        :type
-       "forall (S : ShortComplex.SnakeInput (ModuleCat ℤ)), IsLimit ((Cone.postcompose (forgetIntModulesParallelPairZeroIso S.v₁₂.τ₁).hom).obj (forgetIntModules.mapCone (KernelFork.ofι S.v₀₁.τ₁ S.w₀₂_τ₁)))",
+       "forall (S : ShortComplex.SnakeInput (ModuleCat ℤ)), (Cone.postcompose (forgetIntModulesParallelPairZeroIso S.v₁₂.τ₁).hom).obj (forgetIntModules.mapCone (KernelFork.ofι S.v₀₁.τ₁ S.w₀₂_τ₁)) ≅ (KernelFork.ofι (forgetIntModules.mapShortComplex.map S.v₀₁) (forgetIntModulesSnakeInput_zero_squares S).1).map ShortComplex.π₁",
        :status :proved,
        :consumers [:t00J02 :t98A02],
        :depends-on
-       ["ConstructionTargets.ManifoldFundamentalClass.forgetIntModulesParallelPairZeroIso"],
+       ["ConstructionTargets.ManifoldFundamentalClass.forgetIntModulesSnakeInput_transportedKernelτ₁"],
        :area "manifold-fundamental-class"}],
      :prerequisite
      {:consumer :t00J02,
       :implements-lemma
-      :lemma-mfclass-forget-snake-transported-kernel-tau1,
+      :lemma-mfclass-forget-snake-kernel-tau1-cone-iso,
       :phase :implementation,
       :state :open,
       :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/manifold-fundamental-class/integral-open-disk-connecting-naturality/snake-input-transported-kernel-tau1",
+      "TOPOLOGY-ROUTES.md/manifold-fundamental-class/integral-open-disk-connecting-naturality/snake-input-kernel-tau1-cone-iso",
       :acceptance
       {:implementation
-       "Promote the exact fixture definition. Transport forgetIntModulesSnakeInput_preservedKernelτ₁ across forgetIntModulesParallelPairZeroIso using IsLimit.postcomposeHomEquiv. Do not yet identify the transported cone with evaluation of the mapped short-complex kernel fork, package the other kernel or cokernel components or mapped SnakeInput, assemble SnakeInput.Hom, prove connecting preservation, rewrite the raw production square, prove radial or sphere compatibility, exclude negation, select a sign, or construct a fundamental class.",
+       "Promote the exact fixture definition. Construct the identity-point cone isomorphism from the transported τ₁ coefficient kernel cone to the τ₁ evaluation of the mapped short-complex kernel fork. Do not transfer the IsLimit witness across this cone isomorphism, package the τ₂ or τ₃ kernel components, construct the cokernel components or mapped SnakeInput, assemble SnakeInput.Hom, prove connecting preservation, rewrite the raw production square, prove radial or sphere compatibility, exclude negation, select a sign, or construct a fundamental class.",
        :declaration
-       "ConstructionTargets.ManifoldFundamentalClass.forgetIntModulesSnakeInput_transportedKernelτ₁",
+       "ConstructionTargets.ManifoldFundamentalClass.forgetIntModulesSnakeInput_kernelτ₁ConeIso",
        :type
-       "forall (S : ShortComplex.SnakeInput (ModuleCat ℤ)), IsLimit ((Cone.postcompose (forgetIntModulesParallelPairZeroIso S.v₁₂.τ₁).hom).obj (forgetIntModules.mapCone (KernelFork.ofι S.v₀₁.τ₁ S.w₀₂_τ₁)))",
+       "forall (S : ShortComplex.SnakeInput (ModuleCat ℤ)), (Cone.postcompose (forgetIntModulesParallelPairZeroIso S.v₁₂.τ₁).hom).obj (forgetIntModules.mapCone (KernelFork.ofι S.v₀₁.τ₁ S.w₀₂_τ₁)) ≅ (KernelFork.ofι (forgetIntModules.mapShortComplex.map S.v₀₁) (forgetIntModulesSnakeInput_zero_squares S).1).map ShortComplex.π₁",
        :fixture
-       "/tmp/manifold_fundamental_class_forget_snake_kernel_tau1_transport.lean",
+       "/tmp/manifold_fundamental_class_forget_snake_kernel_tau1_cone_iso.lean",
        :fixture-sha256
-       "47afb55b253d7f699d2702ff4083622f3bce7f1bcc7168851775c91a7aeaa1f7",
+       "32c31e3bfb98b3351594406cae7192f2381165ee8c39509db0c8e3e4910f1d57",
        :placeholders ["t00J02 bridge_1" "t98A02 sole sorry"],
        :route-step
-       "transport the preserved first component kernel cone onto the parallel-pair diagram formed after forgetting coefficients"},
+       "identify the transported first component kernel cone with evaluation of the mapped short-complex kernel fork"},
       :representation
       {:source
-       "The limit cone obtained by applying forgetIntModules to the τ₁ kernel fork of the coefficient SnakeInput",
+       "The forgotten τ₁ coefficient kernel cone after transport onto the AddCommGrp parallel-pair diagram",
        :target
-       "That cone postcomposed onto the AddCommGrp parallel-pair diagram through forgetIntModulesParallelPairZeroIso",
+       "The τ₁ evaluation of the kernel fork built from the mapped short-complex morphisms",
        :direction
-       "Exact transport of the source IsLimit witness to the target diagram via the inverse direction of IsLimit.postcomposeHomEquiv"},
+       "Exact cone isomorphism from the transported forgotten cone to the evaluated mapped kernel fork, with identity isomorphism on the shared cone point"},
       :id
-      :routes-2026-10-11-manifold-forget-snake-transported-kernel-tau1-topo3-r1,
+      :routes-2026-10-11-manifold-forget-snake-kernel-tau1-cone-iso-topo3-r1,
       :kind :representation-comparison,
       :area "manifold-fundamental-class",
       :depends-on
       [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
-       :routes-2026-10-11-manifold-forget-parallel-pair-zero-iso-topo3-r1],
+       :routes-2026-10-11-manifold-forget-snake-transported-kernel-tau1-topo3-r1],
       :current-residual
-      "Construct the cone isomorphism from the transported τ₁ kernel cone to the τ₁ evaluation of the mapped ShortComplex kernel fork, then transfer its IsLimit witness and repeat for the remaining components.",
+      "Transfer forgetIntModulesSnakeInput_transportedKernelτ₁ across forgetIntModulesSnakeInput_kernelτ₁ConeIso to obtain the target IsLimit witness, then repeat this uniform construction for τ₂ and τ₃.",
       :other-consumers [:t98A02]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake env lean /tmp/manifold_fundamental_class_forget_snake_kernel_tau1_transport.lean",
+       "lake env lean /tmp/manifold_fundamental_class_forget_snake_kernel_tau1_cone_iso.lean",
        :exit 0,
        :output
-       "forgetIntModulesSnakeInput_transportedKernelτ₁ compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "forgetIntModulesSnakeInput_kernelτ₁ConeIso compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/manifold_fundamental_class_forget_snake_kernel_tau1_transport.lean",
+       "sha256sum /tmp/manifold_fundamental_class_forget_snake_kernel_tau1_cone_iso.lean",
        :exit 0,
        :output
-       "47afb55b253d7f699d2702ff4083622f3bce7f1bcc7168851775c91a7aeaa1f7  /tmp/manifold_fundamental_class_forget_snake_kernel_tau1_transport.lean"}
+       "32c31e3bfb98b3351594406cae7192f2381165ee8c39509db0c8e3e4910f1d57  /tmp/manifold_fundamental_class_forget_snake_kernel_tau1_cone_iso.lean"}
       {:cmd
-       "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/manifold_fundamental_class_forget_snake_kernel_tau1_transport.lean",
+       "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/manifold_fundamental_class_forget_snake_kernel_tau1_cone_iso.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd "python3 scripts/statement-registry.py check",
@@ -16036,14 +16161,14 @@
        :output "131 registered statements match, 0 do not"}],
      :fixture
      {:path
-      "/tmp/manifold_fundamental_class_forget_snake_kernel_tau1_transport.lean",
+      "/tmp/manifold_fundamental_class_forget_snake_kernel_tau1_cone_iso.lean",
       :sha256
-      "47afb55b253d7f699d2702ff4083622f3bce7f1bcc7168851775c91a7aeaa1f7"},
+      "32c31e3bfb98b3351594406cae7192f2381165ee8c39509db0c8e3e4910f1d57"},
      :finding
-     "The compiled definition moves the preserved τ₁ kernel limit across the banked diagram isomorphism with the standard postcomposeHomEquiv, so both cones now lie over the same AddCommGrp parallel-pair diagram. The remaining τ₁ step is a cone isomorphism with identity cone-point component; after that IsLimit.equivIsoLimit supplies exactly the component witness required by ShortComplex.isLimitOfIsLimitπ.",
+     "After transport, the forgotten cone and evaluated mapped fork share both their parallel-pair diagram and cone point. The compiled comparison is therefore an identity-point Cone.ext isomorphism, with both legs definitionally equal. The next bounded theorem applies IsLimit.equivIsoLimit to obtain the exact τ₁ component witness consumed by ShortComplex.isLimitOfIsLimitπ.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -16146,7 +16271,8 @@
     :routes-2026-10-11-manifold-forget-parallel-pair-colimits-topo3-r1
     :routes-2026-10-11-manifold-forget-snake-preserved-kernel-tau1-topo3-r1
     :routes-2026-10-11-manifold-forget-parallel-pair-zero-iso-topo3-r1
-    :routes-2026-10-11-manifold-forget-snake-transported-kernel-tau1-topo3-r1],
+    :routes-2026-10-11-manifold-forget-snake-transported-kernel-tau1-topo3-r1
+    :routes-2026-10-11-manifold-forget-snake-kernel-tau1-cone-iso-topo3-r1],
    :current-residual
    "Local-degree counts and wild-ball complement homology remain.",
    :other-consumers [:t98A02]}
@@ -23066,6 +23192,28 @@
    :depends-on
    [:lemma-mfclass-forget-parallel-pair-zero-iso
     :lemma-mfclass-forget-snake-preserved-kernel-tau1],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFundamentalClass.forgetIntModulesSnakeInput_kernelτ₁ConeIso",
+    :type
+    "forall (S : ShortComplex.SnakeInput (ModuleCat ℤ)), (Cone.postcompose (forgetIntModulesParallelPairZeroIso S.v₁₂.τ₁).hom).obj (forgetIntModules.mapCone (KernelFork.ofι S.v₀₁.τ₁ S.w₀₂_τ₁)) ≅ (KernelFork.ofι (forgetIntModules.mapShortComplex.map S.v₀₁) (forgetIntModulesSnakeInput_zero_squares S).1).map ShortComplex.π₁"},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFundamentalClass.forgetIntModulesSnakeInput_kernelτ₁ConeIso",
+    :reported-by
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    :type
+    "forall (S : ShortComplex.SnakeInput (ModuleCat ℤ)), (Cone.postcompose (forgetIntModulesParallelPairZeroIso S.v₁₂.τ₁).hom).obj (forgetIntModules.mapCone (KernelFork.ofι S.v₀₁.τ₁ S.w₀₂_τ₁)) ≅ (KernelFork.ofι (forgetIntModules.mapShortComplex.map S.v₀₁) (forgetIntModulesSnakeInput_zero_squares S).1).map ShortComplex.π₁",
+    :area "manifold-fundamental-class",
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+   :id :lemma-mfclass-forget-snake-kernel-tau1-cone-iso,
+   :kind :lemma,
+   :depends-on [:lemma-mfclass-forget-snake-transported-kernel-tau1],
    :other-consumers [:t98A02]}],
  :consumer-baselines {},
  :statuses
