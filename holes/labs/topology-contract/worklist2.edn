@@ -70205,84 +70205,118 @@
    "Construct a continuous core-normal path between the two positive endpoints inside the positive collision component while preserving the tube radius bound; then treat the negative component and assemble the angular stage.",
    :other-consumers []}
   {:bounded-exception
+   "single-consumer zero-height real-diameter endpoint certificate for the signed imaginary detour",
+   :consumer :t02A03,
+   :phase :probe,
+   :state :open,
+   :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t02A03/real-endpoints-zero-height-core-normals",
+   :acceptance
+   {:probe
+    "Compile realEndpoints_zeroHeight_rightTubeCoreNormals. For a zero-height input, prove that both the meridian core normal and recovered input core normal have zero imaginary part. Do not define the detour path, choose a discontinuous sign, or claim straight radial interpolation avoidance.",
+    :declaration
+    "ConstructionTargets.T02A03GeometricTubeDeformation.realEndpoints_zeroHeight_rightTubeCoreNormals",
+    :type
+    "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> (rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p))).im = 0 ∧ (rightTubeCoreNormalComplex p.1).im = 0",
+    :placeholder "the sole sorry in apm_t02a03",
+    :route-step
+    "identify both zero-height radial endpoints on the real diameter before constructing a norm-preserving signed imaginary detour"},
+   :id
+   :routes-2026-10-11-t02a03-real-endpoints-zero-height-core-normals-topo2-r1,
+   :kind :reusable-theorem,
+   :area "explicit-r3-tube-deformation-retraction",
+   :depends-on
+   [:routes-2026-10-11-t02a03-positive-sign-input-collision-topo2-r1],
+   :current-residual
+   "Construct norm-preserving departure and arrival arcs whose imaginary sign varies continuously with the meridian coordinate, join them through a nonzero-imaginary radius-bounded corridor, then treat the angular stage.",
+   :other-consumers []}
+  {:bounded-exception
    "single-consumer explicit ambient deformation with frozen tube and deletion invariants",
    :consumer :t02A03,
    :evidence
    {:probe
     {:residual
-     "Bank the positive recovered-endpoint certificate; then construct a radius-bounded normal path within the positive collision component.",
+     "Bank the zero-height real-diameter endpoint certificate; then construct the radius-bounded signed imaginary detour and certify its left-core avoidance.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
      [{:name
-       "ConstructionTargets.T02A03GeometricTubeDeformation.positiveSign_input_collisionPolynomial_pos",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.realEndpoints_zeroHeight_rightTubeCoreNormals",
        :type
-       "forall (p : RightTubeMinusLeftCore), (rightTubeMeridianCoordinate p : Complex).re = 1 -> 0 < (1 - (rightTubeCoreNormalComplex p.1).re)^2 - 4*(1-(rightTubeCoreNormalComplex p.1).re)*(rightTubeCoreAngularCoordinate p : Complex).re + 3",
+       "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> (rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p))).im = 0 ∧ (rightTubeCoreNormalComplex p.1).im = 0",
        :status :proved,
        :consumers [:t02A03],
        :depends-on
-       ["ConstructionTargets.T02A03GeometricTubeDeformation.inputCollisionPolynomial_positiveFactor_meridianReal"],
+       ["ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeMeridianCoordinate_im_positiveFactor_height"],
        :area "explicit-r3-tube-deformation-retraction"}],
      :prerequisite
      {:bounded-exception
-      "single-consumer positive collision certificate at the recovered input endpoint",
+      "single-consumer zero-height real-diameter endpoint certificate for the signed imaginary detour",
       :consumer :t02A03,
       :phase :probe,
       :state :open,
       :scope
       ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t02A03/positive-sign-input-collision",
+      "TOPOLOGY-ROUTES.md/t02A03/real-endpoints-zero-height-core-normals",
       :acceptance
       {:probe
-       "Compile positiveSign_input_collisionPolynomial_pos. In the meridian-real-equals-one branch, use the banked positive-factor identity to prove the recovered input collision polynomial is strictly positive. Do not construct a connecting normal path, analyze the negative branch, or claim the straight interpolation is safe.",
+       "Compile realEndpoints_zeroHeight_rightTubeCoreNormals. For a zero-height input, prove that both the meridian core normal and recovered input core normal have zero imaginary part. Do not define the detour path, choose a discontinuous sign, or claim straight radial interpolation avoidance.",
        :declaration
-       "ConstructionTargets.T02A03GeometricTubeDeformation.positiveSign_input_collisionPolynomial_pos",
+       "ConstructionTargets.T02A03GeometricTubeDeformation.realEndpoints_zeroHeight_rightTubeCoreNormals",
        :type
-       "forall (p : RightTubeMinusLeftCore), (rightTubeMeridianCoordinate p : Complex).re = 1 -> 0 < (1 - (rightTubeCoreNormalComplex p.1).re)^2 - 4*(1-(rightTubeCoreNormalComplex p.1).re)*(rightTubeCoreAngularCoordinate p : Complex).re + 3",
+       "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> (rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p))).im = 0 ∧ (rightTubeCoreNormalComplex p.1).im = 0",
        :placeholder "the sole sorry in apm_t02a03",
        :route-step
-       "certify the positive collision sign at the recovered input endpoint"},
+       "identify both zero-height radial endpoints on the real diameter before constructing a norm-preserving signed imaginary detour"},
       :id
-      :routes-2026-10-11-t02a03-positive-sign-input-collision-topo2-r1,
+      :routes-2026-10-11-t02a03-real-endpoints-zero-height-core-normals-topo2-r1,
       :kind :reusable-theorem,
       :area "explicit-r3-tube-deformation-retraction",
       :depends-on
-      [:routes-2026-10-11-t02a03-positive-sign-radial-start-collision-topo2-r1],
+      [:routes-2026-10-11-t02a03-positive-sign-input-collision-topo2-r1],
       :current-residual
-      "Construct a continuous core-normal path between the two positive endpoints inside the positive collision component while preserving the tube radius bound; then treat the negative component and assemble the angular stage.",
+      "Construct norm-preserving departure and arrival arcs whose imaginary sign varies continuously with the meridian coordinate, join them through a nonzero-imaginary radius-bounded corridor, then treat the angular stage.",
       :other-consumers []},
      :commands
      [{:cmd
-       "lake env lean /tmp/t02a03_positive_sign_input_poly_probe.lean",
+       "lake env lean /tmp/t02a03_zero_height_core_normal_real_endpoints_probe.lean",
        :exit 0,
        :output
-       "positiveSign_input_collisionPolynomial_pos compiled; axioms [propext, Classical.choice, Quot.sound]"}
+       "realEndpoints_zeroHeight_rightTubeCoreNormals compiled; axioms [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/t02a03_positive_sign_input_poly_probe.lean",
+       "sha256sum /tmp/t02a03_zero_height_core_normal_real_endpoints_probe.lean",
        :exit 0,
        :output
-       "d7cfa81e0653f00ea6e226b00a49adcdb9b64dfc7ea8c4bb36080285852edfba  /tmp/t02a03_positive_sign_input_poly_probe.lean"}
+       "eb5d82b7511a862112a5efaa346c36c5d8b1abb61f24d9add5604af26c04174f  /tmp/t02a03_zero_height_core_normal_real_endpoints_probe.lean"}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_positive_sign_input_poly_probe.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_zero_height_core_normal_real_endpoints_probe.lean || true)\"",
        :exit 0}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "131 registered statements match, 0 do not"}
       {:cmd
-       "rg -n 'positiveSign_input_collisionPolynomial_pos' /tmp/t02a03_positive_sign_input_poly_probe.lean",
+       "rg -n 'realEndpoints_zeroHeight_rightTubeCoreNormals' /tmp/t02a03_zero_height_core_normal_real_endpoints_probe.lean",
        :exit 0,
        :output
-       "5:theorem positiveSign_input_collisionPolynomial_pos\n16:#print axioms positiveSign_input_collisionPolynomial_pos"}],
+       "7:theorem realEndpoints_zeroHeight_rightTubeCoreNormals\n18:#print axioms realEndpoints_zeroHeight_rightTubeCoreNormals"}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/t02a03_zero_height_core_normal_real_endpoints_probe.lean",
+       :exit 1,
+       :finding
+       "The first fixture omitted the namespace opening that exports apm_t02a03_circleMeridian. Opening ConstructionTargets.T02A03GeometricTubeCover resolved the intended frozen definition."}],
      :fixture
-     {:path "/tmp/t02a03_positive_sign_input_poly_probe.lean",
+     {:path
+      "/tmp/t02a03_zero_height_core_normal_real_endpoints_probe.lean",
       :sha256
-      "d7cfa81e0653f00ea6e226b00a49adcdb9b64dfc7ea8c4bb36080285852edfba"},
+      "eb5d82b7511a862112a5efaa346c36c5d8b1abb61f24d9add5604af26c04174f"},
      :finding
-     "The recovered input collision polynomial is strictly positive in the meridian-real-equals-one branch. The banked positive-factor theorem writes it as c times the meridian real coordinate with c positive, so rewriting the branch value to one closes the inequality exactly.",
+     "At zero height, both the meridian core normal and the recovered input core normal have imaginary part zero. This identifies the endpoints as points of the real diameter; a subsequent construction can rotate them into a consistently signed nonzero-imaginary corridor while preserving their norms, instead of assuming the unsafe straight radial interpolation remains collision-free.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/safe-right-tube-meridian-deformation",
@@ -70344,7 +70378,8 @@
     :routes-2026-10-11-t02a03-sign-cases-zero-height-meridian-real-topo2-r1
     :routes-2026-10-11-t02a03-positive-sign-left-normal-real-topo2-r1
     :routes-2026-10-11-t02a03-positive-sign-radial-start-collision-topo2-r1
-    :routes-2026-10-11-t02a03-positive-sign-input-collision-topo2-r1],
+    :routes-2026-10-11-t02a03-positive-sign-input-collision-topo2-r1
+    :routes-2026-10-11-t02a03-real-endpoints-zero-height-core-normals-topo2-r1],
    :current-residual
    "Lift H to RightTubeMinusLeftCore, package rightTubeMeridianRetractionHomotopy, then use the coordinate equation for the Circle-side constant homotopy.",
    :other-consumers []}
@@ -74548,4 +74583,29 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-t02a03geometrictubedeformation-inputcollisionpolynomial-posi],
+   :other-consumers []}
+  {:consumer :t02A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T02A03GeometricTubeDeformation.realEndpoints_zeroHeight_rightTubeCoreNormals",
+    :type
+    "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> (rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p))).im = 0 ∧ (rightTubeCoreNormalComplex p.1).im = 0"},
+   :lemma
+   {:name
+    "ConstructionTargets.T02A03GeometricTubeDeformation.realEndpoints_zeroHeight_rightTubeCoreNormals",
+    :reported-by
+    [:routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1],
+    :type
+    "forall (p : RightTubeMinusLeftCore), p.1 2 = 0 -> (rightTubeCoreNormalComplex (apm_t02a03_circleMeridian (rightTubeMeridianCoordinate p))).im = 0 ∧ (rightTubeCoreNormalComplex p.1).im = 0",
+    :area "explicit-r3-tube-deformation-retraction",
+    :proved-in
+    :routes-2026-10-10-t02a03-safe-right-tube-meridian-deformation-topo2-r1},
+   :id
+   :lemma-constructiontargets-t02a03geometrictubedeformation-realendpoints-zeroheight-righ,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t02a03geometrictubedeformation-righttubemeridiancoordinate-i],
    :other-consumers []}]}
