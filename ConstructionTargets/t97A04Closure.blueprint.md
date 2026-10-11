@@ -47,7 +47,7 @@ uses: Mathlib `AddCircle.homeomorphCircle`,
 `SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv`,
 `BoundaryTorusH2ConnectingIso.boundaryTorusH2IsoInt`
 
-status: planned
+status: proved 964e5f8dcba178009d7e61c5c61f018300079733
 
 Transport the compiled boundary-torus H2 coordinate along
 `Homeomorph.prodCongr (AddCircle.homeomorphCircle one_ne_zero)
