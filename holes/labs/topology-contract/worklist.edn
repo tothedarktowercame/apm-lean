@@ -87873,6 +87873,19 @@
       :exit 1,
       :finding
       "The attempted restricted-cover theorem exposed the missing LocPathConnectedSpace ThreeCircles instance."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791694825509-4282-5429804c",
+     :commands
+     ["git show, git diff-tree, and git diff-tree --check 2a752463fd587558869aa84de179336c39d78144"
+      "sha256sum recorded source and /tmp/t99j01-path-component-sheet-restriction-probe.lean"
+      "lake env lean ConstructionTargets/T99J01PathComponentCoverRestriction.lean"
+      "lake env lean /tmp/t99j01-path-component-sheet-restriction-probe.lean"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped placeholder census for problems/t99J01/lean/Main.lean"],
+     :finding
+     "PASS: valid STOP after committed compiled progress; the sole scoped file matches the recorded blob, source hash 2aab6cec0410a9eaab93ca03c721c50520f9ab0a5fe4dc4ae746bb17eafd5e74 and fixture hash 3931266497ef83433fbbf4d01f17aa1c9a301ab3a69c52ca38aea6f20bcd3b63 reproduce, support declarations compile with only standard axioms, the fixture custom axiom is exactly the frozen restriction-package type, the component-to-ambient pi1 orientation is correct, the consumer still has one placeholder, all 131 registry statements match, and the remaining theorems are explicitly listed"},
     :commit "2a752463fd587558869aa84de179336c39d78144",
     :changed-paths
     ["ConstructionTargets/T99J01PathComponentCoverRestriction.lean"],
@@ -87882,7 +87895,7 @@
      "3931266497ef83433fbbf4d01f17aa1c9a301ab3a69c52ca38aea6f20bcd3b63"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/T99J01PathComponentCoverRestriction.lean"],
    :dag-node
@@ -88017,7 +88030,7 @@
       "3931266497ef83433fbbf4d01f17aa1c9a301ab3a69c52ca38aea6f20bcd3b63"},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/path-component-sheet-restriction",
