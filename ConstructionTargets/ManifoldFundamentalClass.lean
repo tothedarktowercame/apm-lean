@@ -696,6 +696,18 @@ theorem integralRelativeChainsComparisonWithTransport_homology_projection
     (fun f => HomologicalComplex.homologyMap f n)
     (integralRelativeChainsComparisonWithTransport_projection A)
 
+/-- Expand the hom of the corrected relative-homology comparison into the
+inverse preservation morphism followed by homology of the chain comparison. -/
+theorem integralRelativeHomologyComparisonWithTransport_hom
+    {X : Type} [TopologicalSpace X] (A : Set X) (n : ℕ) :
+    (integralRelativeHomologyComparisonWithTransport A n).hom =
+      (((CoefficientRelativeSmall.relativeChains ℤ A).sc n).mapHomologyIso
+        forgetIntModules).inv ≫
+      HomologicalComplex.homologyMap
+        (integralRelativeChainsComparisonWithTransport A).hom n := by
+  unfold integralRelativeHomologyComparisonWithTransport
+  rfl
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -741,3 +753,4 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport_homology_projection
+#print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_hom
