@@ -113854,7 +113854,7 @@
   {:consumer :t99J01,
    :stop-count 5,
    :review-finding
-   "Blueprint dependency gap: B3 omits the pseudo-span, point-span comparison, free-product representation, and representation-to-SingleObj equivalences and their postcomposition naturality from uses; B9 also lacks an equivalence Multiplicative Int ≃* FreeGroup (Fin 1), so the stated proofs do not follow from their uses nodes.",
+   "Blueprint missing hypotheses: B3 invokes twoOpenFundamentalGroupoidPseudopushoutEquivalence but its intended Lean type omits PathConnectedSpace X, PathConnectedSpace Y, and the open-neighborhood membership and pointed-contraction data needed to instantiate B1; B4 and B6 inherit this unbound context, so their Lean types are not faithful statements.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:blueprint
@@ -113951,12 +113951,18 @@
     {:commit "317829fadd7e9ad4f1d6b6d32135e53cd51d5853",
      :next
      "Obtain independent review of the repaired blueprint; after approval implement B3, using exactly the named five-stage equivalences and naturality isomorphisms."},
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1791714610220-5067-b3262c74",
+     :finding
+     "Blueprint missing hypotheses: B3 invokes twoOpenFundamentalGroupoidPseudopushoutEquivalence but its intended Lean type omits PathConnectedSpace X, PathConnectedSpace Y, and the open-neighborhood membership and pointed-contraction data needed to instantiate B1; B4 and B6 inherit this unbound context, so their Lean types are not faithful statements."},
     :commit "317829fadd7e9ad4f1d6b6d32135e53cd51d5853",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.blueprint.md"],
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113981,7 +113987,7 @@
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 50,
-   :fail-count 1,
+   :fail-count 2,
    :depends-on [],
    :program true,
    :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03],
