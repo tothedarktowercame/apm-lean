@@ -71859,57 +71859,74 @@
      :type
      "C(RightTubeMinusLeftCore, ℂ) → unitInterval → RightTubeMinusLeftCore → ℂ"}],
    :evidence
-   {:probe
-    {:residual
-     "Choose a continuous complex waypoint over RightTubeMinusLeftCore and prove both affine legs avoid zero; then normalize the constructed path and invoke the ambient reconstruction adapter.",
-     :outcome :go,
-     :warnings [],
-     :axioms [propext Classical.choice Quot.sound],
-     :commands
-     [{:cmd
-       "lake env lean /tmp/t02a03_coupled_angular_waypoint_adapter_probe.lean",
-       :exit 0,
-       :output
-       "nonvanishingComplexPath_of_waypoint compiled; axioms [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "sha256sum /tmp/t02a03_coupled_angular_waypoint_adapter_probe.lean",
-       :exit 0,
-       :output
-       "696fc5c0faaa90d5cbeacce50c0e89f6c8bee0de0cbe2eb1167fb3a0da45e391  /tmp/t02a03_coupled_angular_waypoint_adapter_probe.lean"}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_coupled_angular_waypoint_adapter_probe.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "131 registered statements match, 0 do not"}
-      {:cmd
-       "rg -n 'nonvanishingComplexPath_of_waypoint' /tmp/t02a03_coupled_angular_waypoint_adapter_probe.lean",
-       :exit 0,
-       :output
-       "16:theorem nonvanishingComplexPath_of_waypoint\n62:#print axioms nonvanishingComplexPath_of_waypoint"}],
-     :fixture
-     {:path "/tmp/t02a03_coupled_angular_waypoint_adapter_probe.lean",
-      :sha256
-      "696fc5c0faaa90d5cbeacce50c0e89f6c8bee0de0cbe2eb1167fb3a0da45e391"},
-     :finding
-     "The fixture continuously pastes the affine leg from 1 to a supplied waypoint with the leg from that waypoint to the core-planar endpoint. Exact agreement at time 1/2 gives joint continuity; the supplied leg certificates give global nonvanishing and the formulas give both required endpoints.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
-      :declaration
-      "ConstructionTargets.T02A03GeometricTubeDeformation.nonvanishingComplexPath_of_waypoint",
-      :supporting-declarations
-      [{:name
-        "ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularWaypointPath",
-        :type
-        "C(RightTubeMinusLeftCore, ℂ) → unitInterval → RightTubeMinusLeftCore → ℂ"}],
-      :type
-      "∀ (W : C(RightTubeMinusLeftCore, ℂ)), (∀ t p, (t : ℝ) ≤ 1/2 → ((1-2*(t:ℝ):ℝ):ℂ) + ((2*(t:ℝ):ℝ):ℂ)*W p ≠ 0) → (∀ t p, ¬(t : ℝ) ≤ 1/2 → ((2-2*(t:ℝ):ℝ):ℂ)*W p + ((2*(t:ℝ)-1:ℝ):ℂ)*rightTubeCorePlanarComplex p.1 ≠ 0) → ∃ Z : C(unitInterval × RightTubeMinusLeftCore, ℂ), (∀ tp, Z tp ≠ 0) ∧ (∀ p, Z (0,p)=1) ∧ (∀ p, Z (1,p)=rightTubeCorePlanarComplex p.1)"},
-     :seat "topo-8"}},
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Choose a continuous complex waypoint over RightTubeMinusLeftCore and prove both affine legs avoid zero. The banked waypoint adapter constructs the nonvanishing path, normalization supplies the Circle path, and ambient reconstruction supplies the zero-height stage.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["Pre-existing unnecessarySimpa linter warning at ConstructionTargets/T02A03GeometricTubeDeformation.lean:62:6."
+     "The canonical .lake/packages symlink invariant check failed because this checkout has a real package directory."],
+    :missing-theorems [],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not",
+     :construction-file-git-blob
+     "d539774e3d2559c310d46bf19db18285de01c8eb",
+     :fixture-sha256
+     "696fc5c0faaa90d5cbeacce50c0e89f6c8bee0de0cbe2eb1167fb3a0da45e391"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/t02a03_coupled_angular_waypoint_adapter_probe.lean",
+      :exit 0,
+      :output
+      "696fc5c0faaa90d5cbeacce50c0e89f6c8bee0de0cbe2eb1167fb3a0da45e391  /tmp/t02a03_coupled_angular_waypoint_adapter_probe.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/t02a03_coupled_angular_waypoint_adapter_probe.lean",
+      :exit 0,
+      :output
+      "nonvanishingComplexPath_of_waypoint axioms [propext, Classical.choice, Quot.sound]"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "git diff --check -- ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 0}
+     {:cmd
+      "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T02A03GeometricTubeDeformation.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "git show --format= --unified=0 HEAD -- ConstructionTargets/T02A03GeometricTubeDeformation.lean | rg '^\\+.*(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' --pcre2",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git show --check --oneline HEAD",
+      :exit 0,
+      :output "960c4fcf7 Add t02A03 angular waypoint adapter"}
+     {:cmd "git status --porcelain", :exit 0}],
+    :diagnostic-history
+    [{:cmd
+      "test -L .lake/packages && test \"$(readlink -f .lake/packages)\" = /home/joe/code/apm-lean/.lake/packages",
+      :exit 1,
+      :explanation
+      ".lake/packages is a real directory rather than the required canonical symlink; no package state was modified and compilation succeeded on the existing substrate."}],
+    :commit "960c4fcf763c916e9077c48e2a2b309125d3c256",
+    :changed-paths
+    ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+    :fixture
+    {:path "/tmp/t02a03_coupled_angular_waypoint_adapter_probe.lean",
+     :sha256
+     "696fc5c0faaa90d5cbeacce50c0e89f6c8bee0de0cbe2eb1167fb3a0da45e391"},
+    :finding
+    "Given a continuous complex waypoint and nonvanishing certificates for both affine legs, the two formulas paste continuously at time 1/2 and yield a globally nonvanishing complex path with exact endpoints 1 and rightTubeCorePlanarComplex p.1.",
+    :seat "topo-6"},
    :phase :implementation,
    :type
    "∀ (W : C(RightTubeMinusLeftCore, ℂ)), (∀ t p, (t : ℝ) ≤ 1/2 → ((1-2*(t:ℝ):ℝ):ℂ) + ((2*(t:ℝ):ℝ):ℂ)*W p ≠ 0) → (∀ t p, ¬(t : ℝ) ≤ 1/2 → ((2-2*(t:ℝ):ℝ):ℂ)*W p + ((2*(t:ℝ)-1:ℝ):ℂ)*rightTubeCorePlanarComplex p.1 ≠ 0) → ∃ Z : C(unitInterval × RightTubeMinusLeftCore, ℂ), (∀ tp, Z tp ≠ 0) ∧ (∀ p, Z (0,p)=1) ∧ (∀ p, Z (1,p)=rightTubeCorePlanarComplex p.1)",
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/coupled-angular-waypoint-adapter",
