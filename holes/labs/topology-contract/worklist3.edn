@@ -3630,6 +3630,24 @@
       "git merge-base --is-ancestor 940ab40999b118362271d38b4ec767ad018ee54c HEAD",
       :exit 0}
      {:cmd "git status --porcelain", :exit 0, :stdout ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791680727111-3583-53458a06",
+     :commands
+     ["git diff-tree recorded commit scope"
+      "git merge-base recorded commit ancestry"
+      "sha256sum promoted fixture"
+      "source blob comparison"
+      "lake env lean promoted fixture"
+      "lake env lean target module"
+      "lake build target module"
+      "placeholder and axiom scan"
+      "statement registry check"
+      "consumer placeholder census"
+      "git diff --check recorded commit"],
+     :finding
+     "PASS: implementation commit 940ab409 changes exactly ConstructionTargets/ManifoldFundamentalClass.lean, is an ancestor of HEAD, and its blob matches the reviewed source; promoted fixture hash 8501eea36b3b3664f6ef93195ab613e9e36e53b919e29eb670a2c85e5f0fbf4c matches recorded evidence and preserves the frozen theorem type from the original fixture; integralRelativeChainsComparison canonically composes forgetIntegralRelativeCokernelComparison, integralMappedRelativeCokernelComparison, and the inverse of relativeSingularChainsIsoCokernelSubspaceMap, producing an isomorphism from forgotten integral coefficient-relative chains to production RelativeSingularChains in the required direction; it chooses no arbitrary isomorphism and does not pass to homology, transport generators, or assert orientation or localization normalization; fixture, module, and target build pass with zero source/fixture placeholders and only propext, Classical.choice, and Quot.sound; 131 statements match and consumer placeholders remain t00J02=1 and t98A02=1."},
     :commit "940ab40999b118362271d38b4ec767ad018ee54c",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -3654,7 +3672,7 @@
       "Canonical chain-complex isomorphism from the forgotten coefficient-relative representation to the production relative-singular-chain representation, obtained by composing cokernel preservation, the absolute-comparison-induced cokernel isomorphism, and the inverse production cokernel presentation"}},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/integral-relative-chain-comparison",
@@ -3806,7 +3824,7 @@
      "All three categorical boundaries are now reviewed: forgetting the ModuleCat cokernel, comparing the two direct cokernels through absolute-chain naturality, and presenting production RelativeSingularChains as the direct cokernel. Their composition compiles definitionally at the shared subtype maps and yields the exact relative chain-complex isomorphism. The remaining representation work is at homology and on the two concrete normalized generators.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -5997,7 +6015,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -6014,7 +6032,10 @@
     "forall {X : Type} [TopologicalSpace X] (A : Set X), (forgetIntModules.mapHomologicalComplex (ComplexShape.down Nat)).obj (CoefficientRelativeSmall.relativeChains Int A) ≅ RelativeSingularChains A",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-integral-relative-chains-comparison-topo3-r1},
+    :routes-2026-10-11-manifold-integral-relative-chains-comparison-topo3-r1,
+    :banked-by
+    :routes-2026-10-11-manifold-integral-relative-chains-comparison-topo3-r1,
+    :banked-commit "940ab40999b118362271d38b4ec767ad018ee54c"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-integralrelativechainscomparison,
    :kind :lemma,
