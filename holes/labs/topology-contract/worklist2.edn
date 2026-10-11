@@ -69587,8 +69587,60 @@
   {:bounded-exception
    "single-consumer nonzero-height left-core avoidance certificate for the core-polar radial ambient stage",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/t02a03_nonzero_height_radial_avoidance_probe.lean",
+      :sha256
+      "1f349f8de44f95f4910d9ea19895de41ba160dd4fce17ca6f122bd74b791fb00"},
+     :commands
+     [{:cmd
+       "test -L .lake/packages && test \"$(readlink -f .lake/packages)\" = /home/joe/code/apm-lean/.lake/packages",
+       :exit 0}
+      {:cmd
+       "lake env lean /tmp/t02a03_nonzero_height_radial_avoidance_probe.lean",
+       :exit 0,
+       :output
+       "nonzeroHeight_avoidsLeftCore_rightTubeCoreRadialAmbient compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "sha256sum /tmp/t02a03_nonzero_height_radial_avoidance_probe.lean",
+       :exit 0,
+       :output
+       "1f349f8de44f95f4910d9ea19895de41ba160dd4fce17ca6f122bd74b791fb00  /tmp/t02a03_nonzero_height_radial_avoidance_probe.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_nonzero_height_radial_avoidance_probe.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}
+      {:cmd
+       "rg -n 'nonzeroHeight_avoidsLeftCore_rightTubeCoreRadialAmbient' /tmp/t02a03_nonzero_height_radial_avoidance_probe.lean",
+       :exit 0,
+       :output
+       "7:theorem nonzeroHeight_avoidsLeftCore_rightTubeCoreRadialAmbient\n17:#print axioms nonzeroHeight_avoidsLeftCore_rightTubeCoreRadialAmbient"}],
+     :warnings [],
+     :finding
+     "The requested theorem is a direct, placeholder-free composition: nonzeroHeight_im_ne_zero_rightTubeCoreNormalInterpolation supplies nonzero imaginary part for every specialized radial interpolation value, and reconstructionAvoidsLeftCore_rightTubeCorePolar_of_im_ne_zero converts that certificate into exclusion from the left-core range.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+      :declaration
+      "ConstructionTargets.T02A03GeometricTubeDeformation.nonzeroHeight_avoidsLeftCore_rightTubeCoreRadialAmbient",
+      :type
+      "forall (tp : unitInterval × RightTubeMinusLeftCore), tp.2.1 2 != 0 -> rightTubeCorePolarReconstruction (rightTubeCoreAngularCoordinate tp.2) (rightTubeCoreNormalInterpolation rightTubeMeridianCoordinate tp) ∉ Set.range apm_t02a03_leftCore",
+      :proof
+      "Apply reconstructionAvoidsLeftCore_rightTubeCorePolar_of_im_ne_zero, then discharge its premise with nonzeroHeight_im_ne_zero_rightTubeCoreNormalInterpolation tp hheight.",
+      :axioms [propext Classical.choice Quot.sound]},
+     :residual
+     "Implement and bank this nonzero-height radial-stage avoidance theorem; zero-height radial avoidance and the collision-safe angular stage remain for the parent deformation."}},
+   :phase :implementation,
+   :type
+   "forall (tp : unitInterval × RightTubeMinusLeftCore), tp.2.1 2 != 0 -> rightTubeCorePolarReconstruction (rightTubeCoreAngularCoordinate tp.2) (rightTubeCoreNormalInterpolation rightTubeMeridianCoordinate tp) ∉ Set.range apm_t02a03_leftCore",
    :state :open,
+   :proof
+   "Apply reconstructionAvoidsLeftCore_rightTubeCorePolar_of_im_ne_zero, then discharge its premise with nonzeroHeight_im_ne_zero_rightTubeCoreNormalInterpolation tp hheight.",
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t02A03/nonzero-height-avoids-left-core-radial-ambient",
@@ -69602,10 +69654,13 @@
     :placeholder "the sole sorry in apm_t02a03",
     :route-step
     "certify the core-polar radial ambient stage outside the left core on the nonzero-height branch"},
+   :axioms [propext Classical.choice Quot.sound],
    :id
    :routes-2026-10-11-t02a03-nonzero-height-avoids-left-core-radial-ambient-topo2-r1,
    :kind :reusable-theorem,
    :area "explicit-r3-tube-deformation-retraction",
+   :declaration
+   "ConstructionTargets.T02A03GeometricTubeDeformation.nonzeroHeight_avoidsLeftCore_rightTubeCoreRadialAmbient",
    :depends-on
    [:routes-2026-10-11-t02a03-nonzero-height-core-normal-interpolation-im-topo2-r1],
    :current-residual
