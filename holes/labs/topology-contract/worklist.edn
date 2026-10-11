@@ -105191,7 +105191,7 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma
@@ -105200,17 +105200,20 @@
    {:placeholder-delta
     {:source-before 0, :source-after 0, :fixture-sorry 0},
     :residual
-    "Apply stop-after-two and reroute through rows scoped to the upstream connector equivalence and mapping definitions; redispatch this adapter only after both prerequisites compile and are banked.",
+    "Reroute through rows whose scope includes the upstream connector equivalence and mapping definitions; redispatch this adapter only after both normalization and coherence theorems compile and are genuinely banked.",
     :outcome :stop,
     :warnings
     [{:kind :ledger-reopen-mismatch,
       :message
-      "The same row was reopened twice although neither missing prerequisite exists in ConstructionTargets."}],
+      "The row says its missing lemma is banked, but an exact declaration search still finds neither required prerequisite."}
+     {:kind :upstream-lint,
+      :message
+      "The successful build replayed existing warnings from imported modules; the unchanged scoped module introduced none."}],
     :missing-theorems
     [{:name
       "ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence_counit_base_identity",
       :type
-      "For each relevant S, (connectorSingleObjEquivalence S).counitIso.hom.app (SingleObj.star (End S.base)) = 𝟙 _",
+      "For each relevant ConnectorSystem S, (connectorSingleObjEquivalence S).counitIso.hom.app (SingleObj.star (End S.base)) = 𝟙 _",
       :status :not-started,
       :consumers [:t99J01 :t01A03 :t92J06 :t97A01 :t97A03],
       :depends-on [],
@@ -105232,13 +105235,18 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Second consecutive repair verification confirms the claimed banked prerequisite is absent. Exact-name search returns no connector counit identity and no normalized-mapping coherence theorem. The frozen mapping still uses Functor.asEquivalence, whose objObjPreimageIso is selected by Classical.choice and is not forced to be identity at SingleObj.star. The downstream scoped module cannot alter that construction. The frozen component identity therefore requires exactly those normalization and coherence hypotheses.",
+    "The owner-reopen premise remains false: neither connectorSingleObjEquivalence_counit_base_identity nor mapping_normalized_counit_coherence exists. The only connector result is connectorSingleObjEquivalence_counit_base_identity_iff, which reduces the desired equality to the still-unproved statement that Functor.asEquivalence's Classical.choice-selected objObjPreimageIso hom is identity. That is not implied by proof irrelevance because the chosen isomorphism type need not be subsingleton. This downstream-only scope cannot replace the upstream equivalence construction or establish coherence with a normalized replacement. The exact missing hypotheses are identity of every selected connector objObjPreimageIso component at SingleObj.star and coherence transporting that normalization to the frozen five-factor mapping.",
     :commands
     [{:cmd
-      "rg -n \"theorem connectorSingleObjEquivalence_counit_base_identity([^_]|$)|mapping_normalized_counit_coherence\" ConstructionTargets -g '*.lean'",
+      "rg -n theorem-connector-identity-or-mapping-coherence ConstructionTargets",
       :exit 1,
       :expected-exit 1,
-      :finding "Neither prerequisite exists."}
+      :finding "Exact-name search finds neither prerequisite."}
+     {:cmd
+      "sha256sum /tmp/composite-counit-component-identity.lean ConstructionTargets/TwoOpenFreeProductMappingCompositeCounitIdentity.lean",
+      :exit 0,
+      :finding
+      "Fixture and source hashes match acdc06369d70b171b3c2c1f70a56ad199e7b7f72be274a4ce3930f77b5d84c0f and cdece0a8e55ecd4699721ac65c33b121c41c01c53073529e00095d10d220d523."}
      {:cmd
       "lake build ConstructionTargets.TwoOpenFreeProductMappingCompositeCounitIdentity",
       :exit 0,
@@ -105247,10 +105255,16 @@
       "lake env lean /tmp/composite-counit-component-identity.lean",
       :exit 0,
       :finding
-      "Fixture still compiles only with compositeCounit_component_identity as a custom axiom."}
+      "Fixture compiles only with compositeCounit_component_identity as its custom axiom."}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
-      :finding "131 registered statements match, 0 do not"}],
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd "python3 comment-stripped sorry scan",
+      :exit 0,
+      :finding "Source and fixture each contain zero sorry tokens."}
+     {:cmd "git status --short",
+      :exit 0,
+      :finding "Worktree was clean at invocation start."}],
     :diagnostic-history [],
     :changed-paths [],
     :fixture
@@ -105260,7 +105274,7 @@
      :status :self-axiomatized},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/TwoOpenFreeProductMappingCompositeCounitIdentity.lean"],
    :dag-node
