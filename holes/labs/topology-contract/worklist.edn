@@ -102968,8 +102968,71 @@
   {:bounded-exception
    "This single-consumer prerequisite supplies exactly the compact-source and Hausdorff-target facts needed to promote the two already compiled continuous bijections.",
    :consumer :t97A01,
+   :evidence
+   {:placeholder-delta
+    {:source-before 0, :source-after 0, :fixture-after 0},
+    :residual
+    "Use the compact/Hausdorff instances to promote both continuous bijections to homeomorphisms, then derive literal ThreeCircles formulas and finish the radial packages.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["Local linter warnings report unused simp arguments in the shared six-case rewrite blocks."
+     "Lake replayed unrelated pre-existing linter warnings from imported modules."],
+    :missing-theorems [],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/polygon-boundary-compact-hausdorff-instances.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.PolygonBoundaryCompactHausdorffInstances",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/polygon-boundary-compact-hausdorff-instances.lean",
+      :exit 0}
+     {:cmd "python3 placeholder scan of source and fixture",
+      :exit 0,
+      :finding "source 0, fixture 0"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd
+      "lake env lean ConstructionTargets/PolygonBoundaryCompactHausdorffInstances.lean",
+      :exit 0,
+      :finding "axioms propext, Classical.choice, Quot.sound"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :diagnostic-history
+    [{:cmd
+      "lake env lean ConstructionTargets/PolygonBoundaryCompactHausdorffInstances.lean",
+      :exit 1,
+      :finding
+      "Initial draft exposed missing point-wedge separation and continuity proof details; corrected with a closed generated point relation and explicit quotient-map continuity."}
+     {:cmd
+      "lake build ConstructionTargets.PolygonBoundaryCompactHausdorffInstances",
+      :exit 1,
+      :finding
+      "A warning-cleanup simplification failed to rewrite the six decoder edge cases in Lake elaboration; restored the explicit six formula rewrites and rebuilt successfully."}],
+    :commit "72fc711898ef69f52cacc26370f68700631c2381",
+    :changed-paths
+    ["ConstructionTargets/PolygonBoundaryCompactHausdorffInstances.lean"],
+    :fixture
+    {:path "/tmp/polygon-boundary-compact-hausdorff-instances.lean",
+     :sha256
+     "18063cd3f1a0e8aa55258b6985ccf6cf0ad4a397233e6ec6c1f8005d62515e62",
+     :status :compiled},
+    :implementation
+    {:scope
+     ["ConstructionTargets/PolygonBoundaryCompactHausdorffInstances.lean"],
+     :exports
+     ["compactSpace_threeEndpointLoops"
+      "t2Space_n3CircleQuotient"
+      "t2Space_torusCrosscapCircleQuotient"
+      "polygonBoundaryCompactHausdorffInstances"]},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonBoundaryCompactHausdorffInstances.lean"],
    :dag-node
