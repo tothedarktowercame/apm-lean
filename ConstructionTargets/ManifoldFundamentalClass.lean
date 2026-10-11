@@ -1077,6 +1077,22 @@ theorem correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_after_coefficient
     have hh := congrArg (fun f => e.inv ≫ f) h
     simpa only [Category.assoc, e.inv_hom_id_assoc] using hh
 
+/-- The negative-automorphism equation with both endpoint normalizations
+exposed as their chart and model factors. -/
+theorem correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_endpoint_factors
+    (k : ℕ) {M : Type} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M) :
+    (correctedLocalNormalizationAutomorphism k x).hom = -𝟙 _ ↔
+      (integralRelativeHomologyComparisonWithTransport
+          (deletedPoint x) (k + 2)).hom ≫
+          (ambientChartHomologyIso k x).inv ≫
+          (HigherModelLocalHomology.localIsoInt k).hom =
+        forgetIntModules.map
+            (CoefficientChartLocal.localIso ℤ k x).hom ≫ (-𝟙 _) := by
+  rw [correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_after_coefficient]
+  rw [ambientLocalNormalization_hom]
+  simp only [Functor.mapIso_hom]
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -1145,3 +1161,4 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.ambientChartHomologyIso
 #print axioms ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization_hom
 #print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_after_coefficient
+#print axioms ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_iff_endpoint_factors
