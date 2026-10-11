@@ -103402,67 +103402,68 @@
    :consumer :t97A01,
    :implements-lemma :lemma-polygonradialopencoverpackages,
    :evidence
-   {:probe
-    {:residual
-     "Implement the compiled fixture, then combine these concrete packages with the banked strict overlap squares and Smith normalization in the final t97A01 assembly.",
-     :outcome :go,
-     :warnings
-     [{:kind :dirty-worktree,
-       :message
-       "The unrelated T02A03GeometricTubeDeformation.lean modification was not touched."}],
-     :missing-theorems
-     [{:name "polygonRadialOpenCoverPackages",
-       :type
-       "ConcretePackage (SurfaceRel false 3) n3Radius n3Boundary × ConcretePackage TorusCrosscapRel torusCrosscapRadius torusCrosscapBoundary",
-       :status :proved,
-       :consumers [:t97A01],
-       :depends-on
-       ["polygonInnerOpenPointedContraction"
-        "polygonBoundaryThreeCirclesLiteralFormulas"],
-       :area "polygon-surface-open-cover"}],
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd
-       "lake env lean /tmp/polygon-radial-open-cover-packages.lean",
-       :exit 0,
-       :finding
-       "The complete two-package fixture and paired vertex classification compile without a custom axiom."}
-      {:cmd "sha256sum /tmp/polygon-radial-open-cover-packages.lean",
-       :exit 0,
-       :finding
-       "97e3d082e35ae3ef8fddb5f10f505a1b90e7e81635574379cf36999f57391e28"}
-      {:cmd
-       "rg -n \"\\b(sorry|admit|axiom)\\b\" /tmp/polygon-radial-open-cover-packages.lean",
-       :exit 1,
-       :expected-exit 1,
-       :finding "No fixture placeholders or custom axioms."}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :finding "131 registered statements match, 0 do not."}
-      {:cmd "git status --short",
-       :exit 0,
-       :finding
-       "The unrelated modification to ConstructionTargets/T02A03GeometricTubeDeformation.lean was left untouched."}
-      {:cmd
-       "sed -n '1,240p' TOPOLOGY-ROUTES.md >/dev/null && sed -n '1,240p' holes/labs/topology-routes/routes-1.md >/dev/null && sed -n '1,240p' holes/labs/topology-routes/routes-2.md >/dev/null && sed -n '1,240p' holes/labs/topology-routes/routes-3.md >/dev/null && sed -n '1,220p' docs/TN-topology-build-loop-design.md >/dev/null",
-       :exit 0,
-       :finding
-       "The route guide, per-problem routes, and probe definitions were read."}],
-     :diagnostic-history [],
-     :fixture
-     {:path "/tmp/polygon-radial-open-cover-packages.lean",
-      :sha256
-      "97e3d082e35ae3ef8fddb5f10f505a1b90e7e81635574379cf36999f57391e28",
-      :interface
-      "Concrete N3 and torus-crosscap radial packages bundle the cover, inner contraction, outer deformation laws, overlap Circle model, boundary ThreeCircles model, and vertex classifications."},
-     :implementation
-     {:scope
-      ["ConstructionTargets/PolygonRadialOpenCoverPackages.lean"],
-      :acceptance
-      "Promote the exact fixture. Keep ConcretePackage at the consumer-used generality: Package cover data, pointed inner contraction, outerOpenHomotopy with continuity/zero/time-one-boundary/fixed-boundary laws, overlapHomotopyEquivCircle, and the CircleQuotient-to-ThreeCircles boundary model. Define n3Package, torusCrosscapPackage, their pair polygonRadialOpenCoverPackages, and the paired six-vertex theorem. Reuse PolygonBoundaryThreeCirclesLiteralFormulas for the six literal boundary equations. Do not compute homology or fundamental groups or close t97A01."},
-     :seat "topo-4"}},
+   {:placeholder-delta
+    {:source-before 0,
+     :source-after 0,
+     :fixture-before 0,
+     :fixture-after 0,
+     :consumer-before 1,
+     :consumer-after 1},
+    :residual
+    "Combine the concrete cover packages with the strict overlap squares, banked Smith normalization, and final t97A01 assembly.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["Lake replayed pre-existing warnings in imported modules; the scoped module emitted no warnings."],
+    :missing-theorems
+    [{:name "polygonRadialOpenCoverPackages",
+      :type
+      "ConcretePackage (SurfaceRel false 3) n3Radius n3Boundary × ConcretePackage TorusCrosscapRel torusCrosscapRadius torusCrosscapBoundary",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on
+      ["polygonInnerOpenPointedContraction"
+       "polygonBoundaryThreeCirclesLiteralFormulas"],
+      :area "polygon-surface-open-cover"}],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd "sha256sum /tmp/polygon-radial-open-cover-packages.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.PolygonRadialOpenCoverPackages",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/polygon-radial-open-cover-packages.lean",
+      :exit 0}
+     {:cmd
+      "rg -n \"\\b(sorry|admit|axiom)\\b\" ConstructionTargets/PolygonRadialOpenCoverPackages.lean /tmp/polygon-radial-open-cover-packages.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "lake env lean /tmp/polygon-radial-packages-axioms.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd
+      "git diff --check -- ConstructionTargets/PolygonRadialOpenCoverPackages.lean",
+      :exit 0}],
+    :diagnostic-history
+    [{:cmd "lake env lean /tmp/polygon-radial-packages-axioms.lean",
+      :exit 1,
+      :finding
+      "The audit was launched concurrently with the first Lake build and ran before the target olean existed; the sequential acceptance rerun passed."}],
+    :commit "34f6eef97b5cf19a22dc852c92529778004ac513",
+    :changed-paths
+    ["ConstructionTargets/PolygonRadialOpenCoverPackages.lean"],
+    :fixture
+    {:path "/tmp/polygon-radial-open-cover-packages.lean",
+     :sha256
+     "97e3d082e35ae3ef8fddb5f10f505a1b90e7e81635574379cf36999f57391e28"},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PolygonRadialOpenCoverPackages.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
