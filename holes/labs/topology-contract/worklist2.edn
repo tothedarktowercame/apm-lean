@@ -70104,8 +70104,60 @@
   {:bounded-exception
    "single-consumer positive collision certificate at the recovered input endpoint",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/t02a03_positive_sign_input_poly_probe.lean",
+      :sha256
+      "d7cfa81e0653f00ea6e226b00a49adcdb9b64dfc7ea8c4bb36080285852edfba"},
+     :commands
+     [{:cmd
+       "test -L .lake/packages && test \"$(readlink -f .lake/packages)\" = /home/joe/code/apm-lean/.lake/packages",
+       :exit 0}
+      {:cmd
+       "lake env lean /tmp/t02a03_positive_sign_input_poly_probe.lean",
+       :exit 0,
+       :output
+       "positiveSign_input_collisionPolynomial_pos compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "sha256sum /tmp/t02a03_positive_sign_input_poly_probe.lean",
+       :exit 0,
+       :output
+       "d7cfa81e0653f00ea6e226b00a49adcdb9b64dfc7ea8c4bb36080285852edfba  /tmp/t02a03_positive_sign_input_poly_probe.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_positive_sign_input_poly_probe.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}
+      {:cmd
+       "rg -n 'positiveSign_input_collisionPolynomial_pos' /tmp/t02a03_positive_sign_input_poly_probe.lean",
+       :exit 0,
+       :output
+       "5:theorem positiveSign_input_collisionPolynomial_pos\n16:#print axioms positiveSign_input_collisionPolynomial_pos"}],
+     :warnings [],
+     :finding
+     "The banked positive-factor identity writes the recovered input collision polynomial as c times the meridian real coordinate for a strictly positive c. In the real-equals-one branch, this reduces exactly to c and proves strict positivity.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+      :declaration
+      "ConstructionTargets.T02A03GeometricTubeDeformation.positiveSign_input_collisionPolynomial_pos",
+      :type
+      "forall (p : RightTubeMinusLeftCore), (rightTubeMeridianCoordinate p : Complex).re = 1 -> 0 < (1 - (rightTubeCoreNormalComplex p.1).re)^2 - 4*(1-(rightTubeCoreNormalComplex p.1).re)*(rightTubeCoreAngularCoordinate p : Complex).re + 3",
+      :proof
+      "Obtain c, its positivity, and the polynomial factorization from inputCollisionPolynomial_positiveFactor_meridianReal p; rewrite the factorization and the branch hypothesis, simplify c times one, and return c's positivity.",
+      :axioms [propext Classical.choice Quot.sound]},
+     :residual
+     "Implement and bank the positive recovered-endpoint certificate; then construct a radius-bounded normal path within the positive collision component."}},
+   :phase :implementation,
+   :type
+   "forall (p : RightTubeMinusLeftCore), (rightTubeMeridianCoordinate p : Complex).re = 1 -> 0 < (1 - (rightTubeCoreNormalComplex p.1).re)^2 - 4*(1-(rightTubeCoreNormalComplex p.1).re)*(rightTubeCoreAngularCoordinate p : Complex).re + 3",
    :state :open,
+   :proof
+   "Obtain c, its positivity, and the polynomial factorization from inputCollisionPolynomial_positiveFactor_meridianReal p; rewrite the factorization and the branch hypothesis, simplify c times one, and return c's positivity.",
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A03/positive-sign-input-collision",
    :acceptance
@@ -70118,10 +70170,13 @@
     :placeholder "the sole sorry in apm_t02a03",
     :route-step
     "certify the positive collision sign at the recovered input endpoint"},
+   :axioms [propext Classical.choice Quot.sound],
    :id
    :routes-2026-10-11-t02a03-positive-sign-input-collision-topo2-r1,
    :kind :reusable-theorem,
    :area "explicit-r3-tube-deformation-retraction",
+   :declaration
+   "ConstructionTargets.T02A03GeometricTubeDeformation.positiveSign_input_collisionPolynomial_pos",
    :depends-on
    [:routes-2026-10-11-t02a03-positive-sign-radial-start-collision-topo2-r1],
    :current-residual
