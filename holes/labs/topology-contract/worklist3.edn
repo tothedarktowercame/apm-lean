@@ -17089,6 +17089,17 @@
       :expected-exit 1}
      {:cmd "git commit -m 'Add forgotten snake tau3 cokernel limit'",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791746194391-5803-36a56228",
+     :commands
+     ["git scope/diff/hash checks at 1335580fd2eabf74a5edef2696762921e0afc0fc"
+      "renamed fixture and module: lake env lean"
+      "registry and placeholder scans"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"],
+     :finding
+     "One-file scope, recorded blob, and frozen fixture hash match. S.h₃τ₃ is preserved, transported via precomposeInvEquiv.symm, identified with the mapped π₃ cofork by an identity-apex cocone iso, and transferred by equivIsoColimit.toFun. Fixture/module compile; registry 131/0; build 8326 jobs; standard axioms only; placeholders 0; consumers 1/1. No h₃ assembly."},
     :commit "1335580fd2eabf74a5edef2696762921e0afc0fc",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -17103,7 +17114,7 @@
     :row :routes-2026-10-11-mfclass-forget-cokernel-pi3-limit-r1,
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/cokernel-pi3-limit",
@@ -17177,7 +17188,7 @@
       :other-consumers [:t98A02]},
      :residual "Promote τ₃ limit; then assemble h₃."}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -24656,7 +24667,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -24671,7 +24682,9 @@
     :type
     "∀ S : ShortComplex.SnakeInput (ModuleCat ℤ), ForgottenSnakeCokernelτ₃Limit S",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2,
+    :banked-by :routes-2026-10-11-mfclass-forget-cokernel-pi3-limit-r1,
+    :banked-commit "1335580fd2eabf74a5edef2696762921e0afc0fc"},
    :id :lemma-mfclass-forget-cokernel-pi3-limit,
    :kind :lemma,
    :depends-on [:lemma-mfclass-forget-cokernel-pi2-limit],
