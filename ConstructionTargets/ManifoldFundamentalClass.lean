@@ -1590,6 +1590,32 @@ theorem integralOpenDiskCoefficientPairShortExact (k : ℕ) :
     (HomologicalComplex.eval (ModuleCat ℤ) (ComplexShape.down ℕ) i)).map_of_exact
       forgetIntModules
 
+/-- The snake-lemma input defining the coefficient connecting morphism for
+the punctured open disk. -/
+noncomputable def coefficientOpenDiskSnakeInput (k : ℕ) :=
+  HomologicalComplex.HomologySequence.snakeInput
+    (CoefficientPairSequence.shortExact ℤ
+      (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2)))
+    (k + 2) (k + 1) rfl
+
+/-- The snake-lemma input defining the connecting morphism after forgetting
+the integer-module structure. -/
+noncomputable def forgottenCoefficientOpenDiskSnakeInput (k : ℕ) :=
+  HomologicalComplex.HomologySequence.snakeInput
+    (integralOpenDiskCoefficientPairShortExact k)
+    (k + 2) (k + 1) rfl
+
+/-- The two named snake inputs expose exactly the original and forgotten
+coefficient connecting morphisms. -/
+theorem openDiskSnakeInputs_delta (k : ℕ) :
+    (coefficientOpenDiskSnakeInput k).δ =
+      CoefficientPairSequence.connecting ℤ
+        (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2)) (k + 1) ∧
+    (forgottenCoefficientOpenDiskSnakeInput k).δ =
+      (integralOpenDiskCoefficientPairShortExact k).δ
+        (k + 2) (k + 1) rfl := by
+  constructor <;> rfl
+
 /-- Connecting-map naturality for the chain-level integral comparison of the
 punctured unit-disk pair, before rewriting the source connecting map through
 homology preservation. -/
@@ -1741,6 +1767,9 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralOpenDiskPunctureHomologyComparison_hom
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralOpenDiskPairShortComplexComparison
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralOpenDiskCoefficientPairShortExact
+#print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientOpenDiskSnakeInput
+#print axioms ConstructionTargets.ManifoldFundamentalClass.forgottenCoefficientOpenDiskSnakeInput
+#print axioms ConstructionTargets.ManifoldFundamentalClass.openDiskSnakeInputs_delta
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralOpenDiskConnecting_naturality_raw
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralOpenDiskComparison_component_homology_maps
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientOpenDiskConnectingTransport_eq
