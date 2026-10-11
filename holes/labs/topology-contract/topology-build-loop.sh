@@ -245,6 +245,15 @@ wait_job() {
           log "$label job=$job lost its result to transient activity-decision failure"
           return 75
         fi
+        # Codex can also lose the response stream after a turn has started.
+        # Agency records that transport failure as the broad `invoke-error`
+        # code, so classify only the explicit stream-disconnect message as
+        # transient; other invoke errors still stop for diagnosis below.
+        if [ "$fail_code" = "invoke-error" ] &&
+           [[ "$term_reason" == *"stream disconnected before completion"* ]]; then
+          log "$label job=$job lost its result to a transient response-stream disconnect"
+          return 75
+        fi
         die "$label terminal state=$state job=$job${fail_code:+ code=$fail_code}${term_reason:+ :: $term_reason}" ;;
       queued|delivering|running|accepted|"") ;;
       *) die "$label unknown state=$state job=$job" ;;
