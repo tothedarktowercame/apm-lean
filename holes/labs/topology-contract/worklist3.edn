@@ -10715,8 +10715,94 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :implements-lemma :lemma-mfclass-coefficient-projected-forward,
+   :evidence
+   {:placeholder-delta
+    {:t00J02 {:before 1, :after 1, :delta 0},
+     :t98A02 {:before 1, :after 1, :delta 0}},
+    :residual
+    "Rewrite the projected forbidden-sign equation with coefficientProjectedForwardComposite, align its first six projection/chart factors with the production relative projection and ambient chart inverse, then compare CoefficientModelLocal.localIso with HigherModelLocalHomology.localIsoInt through connecting, radial, and sphere normalization.",
+    :gates
+    {:fixture-hash :pass,
+     :lean :pass,
+     :lake-build :pass,
+     :statement-registry :pass,
+     :placeholder-scan :pass,
+     :diff-check :pass,
+     :worktree-clean :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["lake build replayed pre-existing linter warnings in dependencies; the changed declarations emitted no warning"],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.ManifoldFundamentalClass.coefficientProjection_comp_coefficientLocalForwardComposite",
+      :type
+      "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (CoefficientChartLocal.E k) M] (x : M), forgetIntModules.map (HomologicalComplex.homologyMap (cokernel.π (CoefficientRelativeSmall.subspaceMap Int (deletedPoint x))) (k + 2)) ≫ forgetIntModules.map (coefficientLocalForwardComposite k x) = coefficientProjectedForwardComposite k x",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on
+      ["ConstructionTargets.ManifoldFundamentalClass.coefficientLocalForwardComposite"],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes
+    {"ConstructionTargets.ManifoldFundamentalClass.coefficientProjection_comp_coefficientLocalForwardComposite"
+     "a24e197635e2a8b98009d2c142f75d2f0995374596fd508c96c70a1636b0296e"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/manifold_fundamental_class_coefficient_projected_forward.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/manifold_fundamental_class_coefficient_projected_forward.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "rg placeholder and axiom scan on scoped source and fixture",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "comment-stripped placeholder count for problems/t00J02/lean/Main.lean and problems/t98A02/lean/Main.lean",
+      :exit 0,
+      :output
+      {"problems/t00J02/lean/Main.lean" 1,
+       "problems/t98A02/lean/Main.lean" 1}}
+     {:cmd
+      "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "git status --porcelain", :exit 0, :output ""}],
+    :diagnostic-history [],
+    :representation
+    {:source
+     "The forgotten coefficient absolute-to-relative projection followed by the packaged six-factor coefficientLocalForwardComposite",
+     :target
+     "A named seven-factor composite exposing the coefficient projection, neighborhood inclusion inverse, source transport inverse, pointed-chart homology map, target transport, punctured-neighborhood inclusion map, and coefficient model normalization",
+     :direction
+     "Definitional morphism equality from the projected packaged coefficient normalization to its ordered seven-factor chart-and-model representation"},
+    :commit "a7be9a2db5b66d4f7114e91680d154f6166a7cce",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path
+     "/tmp/manifold_fundamental_class_coefficient_projected_forward.lean",
+     :sha256
+     "c6fa237a4c711429d8165fada1c996eb490655fa62f56a7a121aa1cbf39d3784"},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :declaration
+     "ConstructionTargets.ManifoldFundamentalClass.coefficientProjection_comp_coefficientLocalForwardComposite",
+     :supporting-declarations
+     ["ConstructionTargets.ManifoldFundamentalClass.coefficientProjectedForwardComposite"]},
+    :row
+    :routes-2026-10-11-manifold-coefficient-projected-forward-topo3-r1,
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/coefficient-projected-forward-factorization",
@@ -14702,11 +14788,13 @@
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.coefficientProjection_comp_coefficientLocalForwardComposite",
     :reported-by
-    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+     :routes-2026-10-11-manifold-coefficient-projected-forward-topo3-r1],
     :type
     "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (CoefficientChartLocal.E k) M] (x : M), forgetIntModules.map (HomologicalComplex.homologyMap (cokernel.π (CoefficientRelativeSmall.subspaceMap Int (deletedPoint x))) (k + 2)) ≫ forgetIntModules.map (coefficientLocalForwardComposite k x) = coefficientProjectedForwardComposite k x",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in
+    :routes-2026-10-11-manifold-coefficient-projected-forward-topo3-r1},
    :id :lemma-mfclass-coefficient-projected-forward,
    :kind :lemma,
    :depends-on
