@@ -70758,7 +70758,52 @@
   {:bounded-exception
    "single-consumer joint continuity of the pasted zero-height core-normal detour",
    :consumer :t02A03,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:residual
+     "Implement joint continuity, then prove the detour's pointwise radius and left-core-avoidance invariants before reconstructing the zero-height ambient radial stage.",
+     :outcome :go,
+     :warnings [],
+     :axioms [propext Classical.choice Quot.sound],
+     :commands
+     [{:cmd
+       "lake env lean /tmp/t02a03_core_normal_detour_continuous_probe.lean",
+       :exit 0,
+       :output
+       "continuous_zeroHeightCoreNormalDetour compiled; axioms [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "sha256sum /tmp/t02a03_core_normal_detour_continuous_probe.lean",
+       :exit 0,
+       :output
+       "4e7394cc436482de8425d6ca023e922409f4c29586f36fb856c04548ea5b0681  /tmp/t02a03_core_normal_detour_continuous_probe.lean"}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t02a03_core_normal_detour_continuous_probe.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "131 registered statements match, 0 do not"}
+      {:cmd
+       "rg -n 'continuous_zeroHeightCoreNormalDetour' /tmp/t02a03_core_normal_detour_continuous_probe.lean",
+       :exit 0,
+       :output
+       "5:theorem continuous_zeroHeightCoreNormalDetour\n42:#print axioms continuous_zeroHeightCoreNormalDetour"}],
+     :fixture
+     {:path "/tmp/t02a03_core_normal_detour_continuous_probe.lean",
+      :sha256
+      "4e7394cc436482de8425d6ca023e922409f4c29586f36fb856c04548ea5b0681"},
+     :finding
+     "The placeholder-free fixture proves joint continuity of the detour. Both affine branches are continuous in time and input, and continuous_if_le pastes them using their exact signed-waypoint agreement at the midpoint.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
+      :declaration
+      "ConstructionTargets.T02A03GeometricTubeDeformation.continuous_zeroHeightCoreNormalDetour",
+      :type
+      "Continuous (fun tp : unitInterval × RightTubeMinusLeftCore => zeroHeightCoreNormalDetour tp.1 tp.2)"},
+     :seat "topo-8"}},
+   :phase :implementation,
+   :type
+   "Continuous (fun tp : unitInterval × RightTubeMinusLeftCore => zeroHeightCoreNormalDetour tp.1 tp.2)",
    :state :open,
    :scope ["ConstructionTargets/T02A03GeometricTubeDeformation.lean"],
    :dag-node
@@ -70777,6 +70822,8 @@
    :routes-2026-10-11-t02a03-zero-height-core-normal-detour-continuous-topo2-r1,
    :kind :reusable-theorem,
    :area "explicit-r3-tube-deformation-retraction",
+   :declaration
+   "ConstructionTargets.T02A03GeometricTubeDeformation.continuous_zeroHeightCoreNormalDetour",
    :depends-on
    [:routes-2026-10-11-t02a03-zero-height-core-normal-detour-endpoints-topo2-r1],
    :current-residual
