@@ -1203,6 +1203,14 @@ theorem zeroHeight_rightTubeMeridianCoordinate_re_sq
   simpa only [Complex.normSq_apply, him0, zero_mul, add_zero, pow_two]
     using hnorm
 
+theorem signCases_zeroHeight_rightTubeMeridianCoordinate_re
+    (p : RightTubeMinusLeftCore) (hheight : p.1 2 = 0) :
+    (rightTubeMeridianCoordinate p : Complex).re = 1 ∨
+      (rightTubeMeridianCoordinate p : Complex).re = -1 := by
+  have hs := zeroHeight_rightTubeMeridianCoordinate_re_sq p hheight
+  rw [sq_eq_one_iff] at hs
+  exact hs
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -1247,3 +1255,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.nonzeroHeight_im_ne_zero_rightTubeCoreNormalInterpolation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.nonzeroHeight_avoidsLeftCore_rightTubeCoreRadialAmbient
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeight_rightTubeMeridianCoordinate_re_sq
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.signCases_zeroHeight_rightTubeMeridianCoordinate_re
