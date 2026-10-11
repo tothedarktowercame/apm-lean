@@ -79284,6 +79284,8 @@
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
    :stop-count 6,
+   :review-finding
+   "program STOP commits nothing new since the last :program-history entry: evidence commit bb0f0f77d8953dc78dd564e000f3d4a5b29d0894 exactly equals history job 5",
    :evidence
    {:placeholder-delta 0,
     :residual
@@ -79329,13 +79331,19 @@
       :exit 1,
       :finding
       "Removed a solved tactic and supplied Circle path-connectedness."}],
+    :review
+    {:outcome :fail,
+     :seat "codex-7",
+     :job "invoke-1791726740986-5445-a909892d",
+     :finding
+     "program STOP commits nothing new since the last :program-history entry: evidence commit bb0f0f77d8953dc78dd564e000f3d4a5b29d0894 exactly equals history job 5"},
     :commit "bb0f0f77d8953dc78dd564e000f3d4a5b29d0894",
     :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
     :finding
     "Hurewicz transfer proves H1(circleZPow a)=a times identity.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79355,7 +79363,7 @@
    :id :program-2026-10-11-close-t97a04,
    :kind :final-adapter,
    :campaign-priority 43,
-   :fail-count 0,
+   :fail-count 1,
    :depends-on [],
    :program true,
    :other-consumers [],
