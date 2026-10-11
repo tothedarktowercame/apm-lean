@@ -837,6 +837,30 @@ theorem forgetIntModules_shortExact
     (S.map forgetIntModules).ShortExact := by
   exact hS.map_of_exact forgetIntModules
 
+/-- Forgetting coefficients preserves the two zero composites in a snake
+input, component by component. -/
+theorem forgetIntModulesSnakeInput_zero_squares
+    (S : ShortComplex.SnakeInput (ModuleCat ℤ)) :
+    forgetIntModules.mapShortComplex.map S.v₀₁ ≫
+        forgetIntModules.mapShortComplex.map S.v₁₂ = 0 ∧
+      forgetIntModules.mapShortComplex.map S.v₁₂ ≫
+        forgetIntModules.mapShortComplex.map S.v₂₃ = 0 := by
+  constructor
+  · apply ShortComplex.Hom.ext
+    · change forgetIntModules.map S.v₀₁.τ₁ ≫ forgetIntModules.map S.v₁₂.τ₁ = 0
+      rw [← forgetIntModules.map_comp, S.w₀₂_τ₁, forgetIntModules.map_zero]
+    · change forgetIntModules.map S.v₀₁.τ₂ ≫ forgetIntModules.map S.v₁₂.τ₂ = 0
+      rw [← forgetIntModules.map_comp, S.w₀₂_τ₂, forgetIntModules.map_zero]
+    · change forgetIntModules.map S.v₀₁.τ₃ ≫ forgetIntModules.map S.v₁₂.τ₃ = 0
+      rw [← forgetIntModules.map_comp, S.w₀₂_τ₃, forgetIntModules.map_zero]
+  · apply ShortComplex.Hom.ext
+    · change forgetIntModules.map S.v₁₂.τ₁ ≫ forgetIntModules.map S.v₂₃.τ₁ = 0
+      rw [← forgetIntModules.map_comp, S.w₁₃_τ₁, forgetIntModules.map_zero]
+    · change forgetIntModules.map S.v₁₂.τ₂ ≫ forgetIntModules.map S.v₂₃.τ₂ = 0
+      rw [← forgetIntModules.map_comp, S.w₁₃_τ₂, forgetIntModules.map_zero]
+    · change forgetIntModules.map S.v₁₂.τ₃ ≫ forgetIntModules.map S.v₂₃.τ₃ = 0
+      rw [← forgetIntModules.map_comp, S.w₁₃_τ₃, forgetIntModules.map_zero]
+
 /-- The corrected relative-homology comparison intertwines the coefficient
 absolute-to-relative map with the production relative projection. -/
 theorem integralRelativeHomologyComparisonWithTransport_projection
@@ -1799,6 +1823,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientPairInclusion_mapLeftHomologyIso_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientPairInclusion_mapRightHomologyIso_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetIntModules_shortExact
+#print axioms ConstructionTargets.ManifoldFundamentalClass.forgetIntModulesSnakeInput_zero_squares
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
