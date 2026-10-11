@@ -79283,40 +79283,42 @@
   {:consumer :t97A04,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "program STOP commits nothing new since the last :program-history entry: evidence commit bb0f0f77d8953dc78dd564e000f3d4a5b29d0894 exactly equals history job 5",
    :evidence
    {:placeholder-delta 0,
-    :residual "Cancel coordinate factors; finish B9-B11.",
+    :residual "Instantiate composition lemma; finish B9-B11.",
     :outcome :stop,
     :warnings ["Main: 2 placeholders."],
     :missing-theorems
-    [{:name "ConstructionTargets.T97A04Closure.lowerShear_H2_map",
-      :type "H2(lower)=H2(swap)≫H2(shear)≫H2(swap)",
+    [{:name
+      "ConstructionTargets.T97A04Closure.frozenH2Coordinate_comp",
+      :type "coordinate composite law",
       :status :proved,
       :consumers [:t97A04],
-      :depends-on
-      ["ConstructionTargets.T97A04Closure.lowerShear_factorization"],
+      :depends-on [],
       :area "mv-connecting-naturality"}
-     {:name "ConstructionTargets.T97A04Closure.frozenLbar_H2_map",
-      :type "H2(Lbar)=H2(lower)≫H2(shearY 3 1)",
-      :status :proved,
-      :consumers [:t97A04],
-      :depends-on
-      ["ConstructionTargets.T97A04Closure.frozenLbar_factorization"],
-      :area "mv-connecting-naturality"}
-     {:name "ConstructionTargets.T97A04Closure.frozenLbar_H2",
-      :type "H2(frozenLbar)=3·id in coordinate",
+     {:name "ConstructionTargets.T97A04Closure.lowerShear_H2",
+      :type "lowerShear coordinate=id",
       :status :partial,
       :consumers [:t97A04],
       :depends-on
-      ["ConstructionTargets.T97A04Closure.lowerShear_H2_map"
+      ["ConstructionTargets.T97A04Closure.frozenH2Coordinate_comp"
+       "ConstructionTargets.T97A04Closure.shearY_H2"
+       "ConstructionTargets.T97A04Closure.swapH2Coordinate_square"],
+      :area "mv-connecting-naturality"}
+     {:name "ConstructionTargets.T97A04Closure.frozenLbar_H2",
+      :type "frozenLbar coordinate=3*id",
+      :status :partial,
+      :consumers [:t97A04],
+      :depends-on
+      ["ConstructionTargets.T97A04Closure.lowerShear_H2"
        "ConstructionTargets.T97A04Closure.frozenLbar_H2_map"],
       :area "mv-connecting-naturality"}],
     :statement-hashes
     {:registry "131/0",
-     :closure "10609b90ce12d403e5f72562e2f11107c8eaa00b",
+     :closure "9b1990c5878817eec52d0d501834d97d2c9de7e0",
      :blueprint "c419a895cb4ede2acc1cb6bc5c7536344ba63df4"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
@@ -79328,28 +79330,16 @@
      {:cmd "Main compile", :exit 0}
      {:cmd "registry check", :exit 0}
      {:cmd "placeholder count", :exit 0, :output "2"}
-     {:cmd "git show --check 8b97cb1ad", :exit 0}],
+     {:cmd "git show --check bb86cd3b3", :exit 0}],
     :diagnostic-history
-    [{:cmd "compile",
+    [{:cmd "expanded coordinate compile",
       :exit 1,
-      :finding "Normalized three-factor associativity."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791753694615-5894-f0ecf9dc",
-     :commands
-     ["git show/diff/check 8b97cb1a"
-      "lake env lean ConstructionTargets/t97A04Closure.lean"
-      "lake env lean problems/t97A04/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "fingerprint, placeholders, ancestry, fixture, blueprint checks"],
-     :finding
-     "PASS: 8b97cb1a is new after history 2e3b1711; its sole changed path is scoped and closure/blueprint blobs match. frozenH2Map_comp correctly states H2(g after f)=H2(f) then H2(g); both lowerShear and frozenLbar specializations preserve that order and faithfully advance B9. Lean gates pass with standard axioms; registry 131/0; frozen hash ca1b2cb3c6594276811618321d5c0604c2f38fc4594a6b21ae161a711a923a34 unchanged; closure/Main placeholders 0/2. This is new compiled progress; coordinate cancellation and B9-B11 remain listed."},
-    :commit "8b97cb1ad0ea2a5f6b44dcce02c38e9457e88df8",
+      :finding "kernel timeout; extracted compact lemma"}],
+    :commit "bb86cd3b3e30153d1794295706985afd4710fd65",
     :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -80873,7 +80863,8 @@
     :lemma-constructiontargets-t97a04closure-lowershear-factorization
     :lemma-constructiontargets-t97a04closure-frozenlbar-factorization
     :lemma-constructiontargets-t97a04closure-lowershear-h2-map
-    :lemma-constructiontargets-t97a04closure-frozenlbar-h2-map],
+    :lemma-constructiontargets-t97a04closure-frozenlbar-h2-map
+    :lemma-constructiontargets-t97a04closure-lowershear-h2],
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
@@ -80957,4 +80948,41 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-t97a04closure-frozenlbar-factorization],
+   :other-consumers []}
+  {:consumer :t97A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "ConstructionTargets.T97A04Closure.frozenH2Coordinate_comp",
+    :type "coordinate composite law"},
+   :lemma
+   {:name "ConstructionTargets.T97A04Closure.frozenH2Coordinate_comp",
+    :reported-by [:program-2026-10-11-close-t97a04],
+    :type "coordinate composite law",
+    :area "mv-connecting-naturality",
+    :proved-in :program-2026-10-11-close-t97a04},
+   :id
+   :lemma-constructiontargets-t97a04closure-frozenh2coordinate-comp,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "ConstructionTargets.T97A04Closure.lowerShear_H2",
+    :type "lowerShear coordinate=id"},
+   :lemma
+   {:name "ConstructionTargets.T97A04Closure.lowerShear_H2",
+    :reported-by [:program-2026-10-11-close-t97a04],
+    :type "lowerShear coordinate=id",
+    :area "mv-connecting-naturality"},
+   :id :lemma-constructiontargets-t97a04closure-lowershear-h2,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t97a04closure-frozenh2coordinate-comp
+    :lemma-constructiontargets-t97a04closure-sheary-h2
+    :lemma-constructiontargets-t97a04closure-swaph2coordinate-square],
    :other-consumers []}]}
