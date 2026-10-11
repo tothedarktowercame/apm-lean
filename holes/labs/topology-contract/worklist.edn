@@ -103799,12 +103799,159 @@
    "Close t99J01 if its adapter passes, then reassess t97A01 and the remaining topo1 routes.",
    :other-consumers []}
   {:bounded-exception
+   "This single-consumer prerequisite supplies the exact carrier compatibility missing between the frozen aabb disk polygon and the banked square classification.",
+   :consumer :t93J03,
+   :implements-lemma
+   :lemma-kleindiskclosedsquarecompatiblecarrierpackage,
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/KleinDiskClosedSquareCompatibleCarrier.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t93J03/klein-disk-closed-square-compatible-carrier",
+   :acceptance
+   {:implementation
+    "Promote the exact fixture interface. Construct an explicit homeomorphism from the closed unit disk to the closed unit square, prove its four boundary-coordinate formulas, and use KleinSurfaceRelNormalForm.surfaceRel_false_two_iff together with KleinSquareEqvGenCasesIff.eqvGen_iff_cases to prove that it preserves and reflects the generated relations. Export kleinDiskClosedSquareCompatibleCarrierPackage with the exact fixture type. Do not descend to quotient homeomorphisms, prove the orbit quotient comparison, or close t93J03.",
+    :placeholder "the single sorry in apm_t93j03",
+    :route-step
+    "construct the relation-compatible disk-to-square carrier needed by the polygon presentation comparison",
+    :fixture
+    "/tmp/klein-aabb-square-polygon-presentation-equivalence.lean",
+    :fixture-sha256
+    "5559b09de6fc844fbd239e297e4b3ea5710533a9267a4aae9d46cc30424b520a",
+    :gates
+    ["lake build ConstructionTargets.KleinDiskClosedSquareCompatibleCarrier"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :representation
+   {:source
+    "The frozen unit-disk aabb presentation with SurfaceRel false 2",
+    :target "The closed unit square presentation with SquareRel",
+    :direction
+    "Homeomorphism from the disk carrier to the closed-square carrier that preserves and reflects the generated boundary relation exactly"},
+   :id
+   :routes-2026-10-11-klein-disk-closed-square-compatible-carrier-87,
+   :kind :representation-comparison,
+   :area "polygon-quotient-identification",
+   :depends-on [:lemma-kleinsquareeqvgencasesiff-eqvgen-iff-cases],
+   :current-residual
+   "Use the compatible carrier package to descend the compiled quotient homeomorphism, then prove the Klein orbit quotient comparison.",
+   :other-consumers []}
+  {:bounded-exception
    "This single-consumer comparison is the nearer of the two remaining t93J03 lemmas.",
    :consumer :t93J03,
    :implements-lemma
    :lemma-kleinaabbsquarepolygonpresentationequivalence,
+   :evidence
+   {:probe
+    {:residual
+     "Construct the explicit relation-compatible disk-to-square carrier; quotient descent is compiled once that package is available.",
+     :outcome :revise,
+     :warnings [],
+     :missing-theorems
+     [{:name "kleinDiskClosedSquareCompatibleCarrierPackage",
+       :type
+       "There exists a homeomorphism h from ConstructionTargets.Surfaces.Disk to the subtype of points p : Real × Real satisfying InSquare p such that, for every disk points x y, Relation.EqvGen (SurfaceRel false 2) x y if and only if Relation.EqvGen ClosedSquareRel (h x) (h y).",
+       :status :not-started,
+       :consumers [:t93J03],
+       :depends-on
+       ["KleinSquareEqvGenCasesIff.eqvGen_iff_cases"
+        "KleinSurfaceRelNormalForm.surfaceRel_false_two_iff"],
+       :area "polygon-quotient-identification"}],
+     :prerequisite
+     {:bounded-exception
+      "This single-consumer prerequisite supplies the exact carrier compatibility missing between the frozen aabb disk polygon and the banked square classification.",
+      :consumer :t93J03,
+      :implements-lemma
+      :lemma-kleindiskclosedsquarecompatiblecarrierpackage,
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/KleinDiskClosedSquareCompatibleCarrier.lean"],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/t93J03/klein-disk-closed-square-compatible-carrier",
+      :acceptance
+      {:implementation
+       "Promote the exact fixture interface. Construct an explicit homeomorphism from the closed unit disk to the closed unit square, prove its four boundary-coordinate formulas, and use KleinSurfaceRelNormalForm.surfaceRel_false_two_iff together with KleinSquareEqvGenCasesIff.eqvGen_iff_cases to prove that it preserves and reflects the generated relations. Export kleinDiskClosedSquareCompatibleCarrierPackage with the exact fixture type. Do not descend to quotient homeomorphisms, prove the orbit quotient comparison, or close t93J03.",
+       :placeholder "the single sorry in apm_t93j03",
+       :route-step
+       "construct the relation-compatible disk-to-square carrier needed by the polygon presentation comparison",
+       :fixture
+       "/tmp/klein-aabb-square-polygon-presentation-equivalence.lean",
+       :fixture-sha256
+       "5559b09de6fc844fbd239e297e4b3ea5710533a9267a4aae9d46cc30424b520a",
+       :gates
+       ["lake build ConstructionTargets.KleinDiskClosedSquareCompatibleCarrier"
+        "fixture compiles"
+        "zero source and fixture sorry"
+        "standard-only axioms"
+        "registry check"]},
+      :representation
+      {:source
+       "The frozen unit-disk aabb presentation with SurfaceRel false 2",
+       :target "The closed unit square presentation with SquareRel",
+       :direction
+       "Homeomorphism from the disk carrier to the closed-square carrier that preserves and reflects the generated boundary relation exactly"},
+      :id
+      :routes-2026-10-11-klein-disk-closed-square-compatible-carrier-87,
+      :kind :representation-comparison,
+      :area "polygon-quotient-identification",
+      :depends-on [:lemma-kleinsquareeqvgencasesiff-eqvgen-iff-cases],
+      :current-residual
+      "Use the compatible carrier package to descend the compiled quotient homeomorphism, then prove the Klein orbit quotient comparison.",
+      :other-consumers []},
+     :axioms
+     ["propext"
+      "Classical.choice"
+      "Quot.sound"
+      "KleinDiskClosedSquareCompatibleCarrierProbe.compatibleCarrierPackage"],
+     :commands
+     [{:cmd
+       "sed -n '1,220p' TOPOLOGY-ROUTES.md >/dev/null && sed -n '1,240p' holes/labs/topology-routes/routes-1.md >/dev/null && sed -n '1,240p' holes/labs/topology-routes/routes-2.md >/dev/null && sed -n '1,240p' holes/labs/topology-routes/routes-3.md >/dev/null && sed -n '1,220p' docs/TN-topology-build-loop-design.md >/dev/null",
+       :exit 0,
+       :finding
+       "Read the route guide, problem routes, and probe rules."}
+      {:cmd
+       "lake env lean /tmp/klein-aabb-square-polygon-presentation-equivalence.lean",
+       :exit 0,
+       :finding
+       "The quotient-fiber comparison and homeomorphism compile from one compatible-carrier package."}
+      {:cmd
+       "sha256sum /tmp/klein-aabb-square-polygon-presentation-equivalence.lean",
+       :exit 0,
+       :finding
+       "5559b09de6fc844fbd239e297e4b3ea5710533a9267a4aae9d46cc30424b520a"}
+      {:cmd
+       "rg -n '\\b(sorry|admit)\\b' /tmp/klein-aabb-square-polygon-presentation-equivalence.lean",
+       :exit 1,
+       :expected-exit 1,
+       :finding "No fixture placeholders."}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :finding "131 registered statements match, 0 do not."}
+      {:cmd "git status --short",
+       :exit 0,
+       :finding "Clean worktree."}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/klein-aabb-square-polygon-presentation-equivalence.lean",
+       :exit 1,
+       :finding
+       "The first fixture attempted to derive transported EqvGen directly by dependent induction and misapplied the transitivity and quotient inverse goals.",
+       :correction
+       "Isolated the exact generated-fiber equivalence in one compatible-carrier package; the successful quotient descent rerun is recorded in commands."}],
+     :fixture
+     {:path
+      "/tmp/klein-aabb-square-polygon-presentation-equivalence.lean",
+      :sha256
+      "5559b09de6fc844fbd239e297e4b3ea5710533a9267a4aae9d46cc30424b520a",
+      :interface
+      "A compatible disk-to-closed-square carrier preserving and reflecting generated boundary fibers yields the required quotient homeomorphism."},
+     :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-aabb-square-polygon-presentation-equivalence",
@@ -103831,7 +103978,8 @@
    :area "polygon-quotient-identification",
    :depends-on
    [:lemma-kleinsquareeqvgencasesiff-eqvgen-iff-cases
-    :routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40],
+    :routes-2026-10-10-checkpoint-topo1-after-t99j01-closure-and-t97a01-foundations-40
+    :routes-2026-10-11-klein-disk-closed-square-compatible-carrier-87],
    :current-residual
    "Use the presentation comparison in the Klein orbit quotient homeomorphism, then close t93J03.",
    :other-consumers []}
@@ -109221,7 +109369,28 @@
    :lemma-constructiontargets-manifoldfundamentalclass-integralrelativechainscomparisonwit,
    :kind :lemma,
    :depends-on [],
-   :other-consumers [:t98A02]}],
+   :other-consumers [:t98A02]}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "kleinDiskClosedSquareCompatibleCarrierPackage",
+    :type
+    "There exists a homeomorphism h from ConstructionTargets.Surfaces.Disk to the subtype of points p : Real × Real satisfying InSquare p such that, for every disk points x y, Relation.EqvGen (SurfaceRel false 2) x y if and only if Relation.EqvGen ClosedSquareRel (h x) (h y)."},
+   :lemma
+   {:name "kleinDiskClosedSquareCompatibleCarrierPackage",
+    :reported-by
+    [:routes-2026-10-11-klein-aabb-square-polygon-presentation-equivalence-83],
+    :type
+    "There exists a homeomorphism h from ConstructionTargets.Surfaces.Disk to the subtype of points p : Real × Real satisfying InSquare p such that, for every disk points x y, Relation.EqvGen (SurfaceRel false 2) x y if and only if Relation.EqvGen ClosedSquareRel (h x) (h y).",
+    :area "polygon-quotient-identification"},
+   :id :lemma-kleindiskclosedsquarecompatiblecarrierpackage,
+   :kind :lemma,
+   :depends-on
+   [:lemma-kleinsquareeqvgencasesiff-eqvgen-iff-cases
+    :lemma-kleinsurfacerelnormalform-surfacerel-false-two-iff],
+   :other-consumers []}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",
