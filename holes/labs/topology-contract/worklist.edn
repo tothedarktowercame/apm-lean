@@ -101494,8 +101494,95 @@
   {:bounded-exception
    "This single-consumer prerequisite exposes the exact three generator cases each specialized decoder must respect.",
    :consumer :t97A01,
+   :evidence
+   {:placeholder-delta
+    {:source-before 0,
+     :source-after 0,
+     :fixture-before 0,
+     :fixture-after 0,
+     :consumer-before 1,
+     :consumer-after 1},
+    :residual
+    "Define each decoder on canonical half-open edge coordinates, use the three generator cases to prove relation invariance, and prove its left-inverse formulas.",
+    :gates
+    {:module-build :pass,
+     :fixture-compiles :pass,
+     :zero-source-and-fixture-sorry :pass,
+     :standard-only-axioms :pass,
+     :registry-check :pass,
+     :clean-worktree :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["The scoped module emitted no warnings; replayed dependencies emitted pre-existing linter warnings."],
+    :missing-theorems
+    [{:name "PolygonBoundaryGeneratorNormalForms.torusCrosscapRel_iff",
+      :type
+      "∀ {x y : Disk}, TorusCrosscapRel x y ↔ (∃ t, x = edgePoint 6 0 t ∧ y = edgePoint 6 2 (reverse t)) ∨ (∃ t, x = edgePoint 6 1 t ∧ y = edgePoint 6 3 (reverse t)) ∨ (∃ t, x = edgePoint 6 4 t ∧ y = edgePoint 6 5 t)",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on [],
+      :area "polygon-surface-open-cover"}
+     {:name "PolygonBoundaryGeneratorNormalForms.n3CircleRel_iff",
+      :type
+      "∀ z w : Circle, N3CircleRel z w ↔ (∃ t : Set.Icc (0 : ℝ) 1, z = circleEdgePoint 0 t ∧ w = circleEdgePoint 1 t) ∨ (∃ t : Set.Icc (0 : ℝ) 1, z = circleEdgePoint 2 t ∧ w = circleEdgePoint 3 t) ∨ (∃ t : Set.Icc (0 : ℝ) 1, z = circleEdgePoint 4 t ∧ w = circleEdgePoint 5 t)",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on [],
+      :area "polygon-surface-open-cover"}
+     {:name
+      "PolygonBoundaryGeneratorNormalForms.torusCrosscapCircleRel_iff",
+      :type
+      "∀ z w : Circle, TorusCrosscapCircleRel z w ↔ (∃ t : Set.Icc (0 : ℝ) 1, z = circleEdgePoint 0 t ∧ w = circleEdgePoint 2 (reverse t)) ∨ (∃ t : Set.Icc (0 : ℝ) 1, z = circleEdgePoint 1 t ∧ w = circleEdgePoint 3 (reverse t)) ∨ (∃ t : Set.Icc (0 : ℝ) 1, z = circleEdgePoint 4 t ∧ w = circleEdgePoint 5 t)",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on
+      ["PolygonBoundaryGeneratorNormalForms.torusCrosscapRel_iff"],
+      :area "polygon-surface-open-cover"}],
+    :statement-hashes
+    {"fixture"
+     "2ed83a033b900b2a6b435a65c5de810ef73b4c3617df9524083e93278ecd7863",
+     "implementation"
+     "83fd57eda5d18270daaa675f07d276e925cdbe59928ffeeb9240466947b85285"},
+    :axioms
+    {"torusCrosscapRel_iff" [],
+     "n3CircleRel_iff" ["propext" "Classical.choice" "Quot.sound"],
+     "torusCrosscapCircleRel_iff"
+     ["propext" "Classical.choice" "Quot.sound"]},
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd
+      "sha256sum /tmp/polygon-boundary-generator-normal-forms.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.PolygonBoundaryGeneratorNormalForms",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/polygon-boundary-generator-normal-forms.lean",
+      :exit 0}
+     {:cmd
+      "rg -n \\b(sorry|admit)\\b ConstructionTargets/PolygonBoundaryGeneratorNormalForms.lean /tmp/polygon-boundary-generator-normal-forms.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "git diff --check HEAD^ HEAD", :exit 0}
+     {:cmd "test -z \"$(git status --porcelain)\"", :exit 0}],
+    :diagnostic-history [],
+    :commit "c3d261701514f94e9f0dc9039f46263d33da5c9f",
+    :changed-paths
+    ["ConstructionTargets/PolygonBoundaryGeneratorNormalForms.lean"],
+    :fixture
+    {:path "/tmp/polygon-boundary-generator-normal-forms.lean",
+     :sha256
+     "2ed83a033b900b2a6b435a65c5de810ef73b4c3617df9524083e93278ecd7863"},
+    :implementation
+    {:scope
+     ["ConstructionTargets/PolygonBoundaryGeneratorNormalForms.lean"],
+     :summary
+     "Proved the three-case disk normal form for TorusCrosscapRel and the exact three-case Circle generator normal forms for N3CircleRel and TorusCrosscapCircleRel."},
+    :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonBoundaryGeneratorNormalForms.lean"],
    :dag-node
@@ -105467,12 +105554,13 @@
    :lemma
    {:name "PolygonBoundaryGeneratorNormalForms.n3CircleRel_iff",
     :reported-by
-    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40
+     :routes-2026-10-11-polygon-boundary-generator-normal-forms-69],
     :type
     "N3CircleRel holds exactly in one of the three same-parameter paired-edge cases 0-1, 2-3, or 4-5.",
     :area "polygon-surface-open-cover",
     :proved-in
-    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+    :routes-2026-10-11-polygon-boundary-generator-normal-forms-69},
    :id :lemma-polygonboundarygeneratornormalforms-n3circlerel-iff,
    :kind :lemma,
    :depends-on [],
@@ -105490,14 +105578,37 @@
    {:name
     "PolygonBoundaryGeneratorNormalForms.torusCrosscapCircleRel_iff",
     :reported-by
-    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40
+     :routes-2026-10-11-polygon-boundary-generator-normal-forms-69],
     :type
     "TorusCrosscapCircleRel holds exactly in paired-edge cases 0-2 reversed, 1-3 reversed, or 4-5 same-parameter.",
     :area "polygon-surface-open-cover",
     :proved-in
-    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+    :routes-2026-10-11-polygon-boundary-generator-normal-forms-69},
    :id
    :lemma-polygonboundarygeneratornormalforms-toruscrosscapcirclerel-iff,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polygonboundarygeneratornormalforms-toruscrosscaprel-iff],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "PolygonBoundaryGeneratorNormalForms.torusCrosscapRel_iff",
+    :type
+    "∀ {x y : Disk}, TorusCrosscapRel x y ↔ (∃ t, x = edgePoint 6 0 t ∧ y = edgePoint 6 2 (reverse t)) ∨ (∃ t, x = edgePoint 6 1 t ∧ y = edgePoint 6 3 (reverse t)) ∨ (∃ t, x = edgePoint 6 4 t ∧ y = edgePoint 6 5 t)"},
+   :lemma
+   {:name "PolygonBoundaryGeneratorNormalForms.torusCrosscapRel_iff",
+    :reported-by
+    [:routes-2026-10-11-polygon-boundary-generator-normal-forms-69],
+    :type
+    "∀ {x y : Disk}, TorusCrosscapRel x y ↔ (∃ t, x = edgePoint 6 0 t ∧ y = edgePoint 6 2 (reverse t)) ∨ (∃ t, x = edgePoint 6 1 t ∧ y = edgePoint 6 3 (reverse t)) ∨ (∃ t, x = edgePoint 6 4 t ∧ y = edgePoint 6 5 t)",
+    :area "polygon-surface-open-cover",
+    :proved-in
+    :routes-2026-10-11-polygon-boundary-generator-normal-forms-69},
+   :id :lemma-polygonboundarygeneratornormalforms-toruscrosscaprel-iff,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}],
