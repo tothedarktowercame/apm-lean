@@ -79283,25 +79283,19 @@
   {:consumer :t97A04,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 5,
+   :stop-count 6,
    :review-finding
    "program STOP commits nothing new since the last :program-history entry: evidence commit bb0f0f77d8953dc78dd564e000f3d4a5b29d0894 exactly equals history job 5",
    :evidence
    {:placeholder-delta 0,
-    :residual "Identify production injections; then B6-B11.",
+    :residual "Prove range naturality; then components and B6-B11.",
     :outcome :stop,
     :warnings ["Main: 2 placeholders."],
     :missing-theorems
     [{:name
-      "ConstructionTargets.T97A04Closure.twoCircleOverlapShearLeftFold_H1_coordinate",
-      :type "left folded H1=a*id",
-      :status :proved,
-      :consumers [:t97A04],
-      :depends-on [],
-      :area "mv-connecting-naturality"}
-     {:name
-      "ConstructionTargets.T97A04Closure.twoCircleOverlapShearRightFold_H1_coordinate",
-      :type "right folded H1=a*id",
+      "ConstructionTargets.T97A04Closure.shearY_productionIntersectionMap_range",
+      :type
+      "production intersection endpoint equals range-coordinate shear",
       :status :proved,
       :consumers [:t97A04],
       :depends-on [],
@@ -79312,12 +79306,13 @@
       :status :partial,
       :consumers [:t97A04],
       :depends-on
-      ["ConstructionTargets.T97A04Closure.twoCircleOverlapShearLeftFold_H1_coordinate"
+      ["ConstructionTargets.T97A04Closure.shearY_productionIntersectionMap_range"
+       "ConstructionTargets.T97A04Closure.twoCircleOverlapShearLeftFold_H1_coordinate"
        "ConstructionTargets.T97A04Closure.twoCircleOverlapShearRightFold_H1_coordinate"],
       :area "mv-connecting-naturality"}],
     :statement-hashes
     {:registry "131/0",
-     :closure "e822f6ecc407b92cd9c8129d64cddc8abf06a5d3",
+     :closure "e6a4322fafe1873aaf498c15d0a2fb7d9a3045b5",
      :blueprint "c419a895cb4ede2acc1cb6bc5c7536344ba63df4"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
@@ -79330,24 +79325,17 @@
      {:cmd "lake env lean problems/t97A04/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "Main placeholder count", :exit 0, :output "2"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791732522638-5568-679adea9",
-     :commands
-     ["git show/diff/check 564a31373"
-      "lake env lean ConstructionTargets/t97A04Closure.lean"
-      "lake env lean problems/t97A04/lean/Main.lean"
-      "statement-registry check/fingerprint"
-      "git-show hash/placeholder checks"],
-     :finding
-     "PASS: 564a3137 is new after history a7b83c02; scope/blob match. It correctly conjugates both folded branch H1 maps by the fixed circle coordinate to a*id, with source/target orientation matching the pending production injections. Lean gates compile with standard axioms only; registry 131/0; frozen hash unchanged ca1b2cb3; closure 0/Main 2 placeholders. Production injections and B6-B11 remain listed."},
-    :commit "564a3137373a34d05224585bac262b756df2cf3c",
+    :diagnostic-history
+    [{:cmd "closure compile",
+      :exit 1,
+      :finding
+      "Reassociated homology conjugation and canceled iso pairs."}],
+    :commit "1acae3d6b96d54bb2675c5be7648264386e31c24",
     :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
-    :finding "Both folded H1 coordinates are a*id.",
+    :finding "Production intersection reduced to the range shear map.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79834,7 +79822,8 @@
     :lemma-constructiontargets-t97a04closure-overlaphomotopyequivtwocircles-fold
     :lemma-constructiontargets-t97a04closure-twocircleoverlapshear-fold-apply
     :lemma-constructiontargets-t97a04closure-twocircleoverlapshearleftfold-h1-coordinate
-    :lemma-constructiontargets-t97a04closure-twocircleoverlapshearrightfold-h1-coordinate],
+    :lemma-constructiontargets-t97a04closure-twocircleoverlapshearrightfold-h1-coordinate
+    :lemma-constructiontargets-t97a04closure-sheary-productionintersectionmap-range],
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
@@ -80155,6 +80144,28 @@
     :banked-commit "564a3137373a34d05224585bac262b756df2cf3c"},
    :id
    :lemma-constructiontargets-t97a04closure-twocircleoverlapshearrightfold-h1-coordinate,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T97A04Closure.shearY_productionIntersectionMap_range",
+    :type
+    "production intersection endpoint equals range-coordinate shear"},
+   :lemma
+   {:name
+    "ConstructionTargets.T97A04Closure.shearY_productionIntersectionMap_range",
+    :reported-by [:program-2026-10-11-close-t97a04],
+    :type
+    "production intersection endpoint equals range-coordinate shear",
+    :area "mv-connecting-naturality",
+    :proved-in :program-2026-10-11-close-t97a04},
+   :id
+   :lemma-constructiontargets-t97a04closure-sheary-productionintersectionmap-range,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}]}
