@@ -1868,6 +1868,18 @@ theorem rotatedEndpointWaypoint_departure_eq_zero_iff
         using hre
     · simp [rotatedEndpointWaypoint, Complex.mul_re, Complex.mul_im, hvre]
 
+theorem rotatedEndpointWaypoint_departure_zero_time_pos
+    (t : unitInterval) (p : RightTubeMinusLeftCore)
+    (hz : (((1 - 2 * (t : ℝ) : ℝ) : ℂ) +
+      ((2 * (t : ℝ) : ℝ) : ℂ) * rotatedEndpointWaypoint p) = 0) :
+    0 < (t : ℝ) := by
+  have ht0 : 0 ≤ (t : ℝ) := t.2.1
+  by_contra ht
+  have ht' : (t : ℝ) = 0 := le_antisymm (le_of_not_gt ht) ht0
+  have := hz
+  rw [ht'] at this
+  norm_num at this
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -1938,3 +1950,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.coupledAngularArrivalLeg_ne_zero_of_negative_endpoint_cross
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_arrival_ne_zero_exists
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_departure_eq_zero_iff
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_departure_zero_time_pos
