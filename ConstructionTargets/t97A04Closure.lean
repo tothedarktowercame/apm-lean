@@ -576,6 +576,18 @@ theorem inr_comp_overlapScalar (a : ℤ) :
       (a • 𝟙 (AddCommGrpCat.of ℤ)) ≫ biprod.inr := by
   simp [overlapScalar]
 
+/-- Once the two component degree calculations are available in their
+normalized scalar form, they assemble to the overlap-coordinate formula. -/
+theorem shearY_overlap_coordinate_of_degree_components (a b : ℤ)
+    (hleft : biprod.inl ≫ shearYOverlapCoordinateMap a b =
+      (a • 𝟙 (AddCommGrpCat.of ℤ)) ≫ biprod.inl)
+    (hright : biprod.inr ≫ shearYOverlapCoordinateMap a b =
+      (a • 𝟙 (AddCommGrpCat.of ℤ)) ≫ biprod.inr) :
+    shearYOverlapCoordinateMap a b = overlapScalar a := by
+  apply shearY_overlap_coordinate_of_injections
+  · simpa only [inl_comp_overlapScalar] using hleft
+  · simpa only [inr_comp_overlapScalar] using hright
+
 #print axioms frozenTorusH2GroupIsoInt
 #print axioms frozenYCover
 #print axioms frozenYCoverUHomeomorph
@@ -596,5 +608,6 @@ theorem inr_comp_overlapScalar (a : ℤ) :
 #print axioms shearY_overlap_coordinate_of_injections
 #print axioms inl_comp_overlapScalar
 #print axioms inr_comp_overlapScalar
+#print axioms shearY_overlap_coordinate_of_degree_components
 
 end ConstructionTargets.T97A04Closure
