@@ -56,6 +56,11 @@ groupoids by `SingleObj (FundamentalGroup X x₀)` and
 `SingleObj (FundamentalGroup Y y₀)`.  Because the overlap group is trivial,
 its two transported legs are naturally isomorphic to the literal point legs.
 `genericPointWedgeCoordinatePointSpanPostcomposeIso` records target
-postcomposition naturality for this stage.  B3 now only needs the outer
-pseudopushout conversion and the already banked point-span representation and
-representation-to-single-object stages composed around these two transports.
+postcomposition naturality for this stage.
+
+B3 is complete. `genericPointWedgeSingleObjMappingEquivalence` composes the
+two-open pseudopushout, pseudo-span conversion, both coordinate transports,
+the point-span free-product representation, and the representation-to-single-
+object equivalence. `genericPointWedgeSingleObjPostcomposeIso` composes their
+comparison squares, proving naturality under target postcomposition without
+using a counit-identity normalization.

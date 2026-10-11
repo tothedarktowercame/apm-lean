@@ -7,6 +7,8 @@ import ConstructionTargets.GenericSpanPseudoCoconeTransport
 import ConstructionTargets.TwoOpenFundamentalGroupoidSpan
 import ConstructionTargets.ConnectedGroupoidSingleObjEquivalence
 import ConstructionTargets.FreeProductPointSpanRepresentations
+import ConstructionTargets.TwoOpenFreeProductMapping
+import ConstructionTargets.FreeProductRepresentationSingleObjEquivalence
 import Mathlib.GroupTheory.Coprod.Basic
 import Mathlib.GroupTheory.FreeGroup.Basic
 
@@ -36,6 +38,8 @@ open TwoOpenFundamentalGroupoidSpan
 open ConnectedGroupoidVertexReconstruction
 open ConnectedGroupoidSingleObjEquivalence
 open FreeProductPointSpanRepresentations
+open TwoOpenFundamentalGroupoidPseudopushout
+open FreeProductRepresentationSingleObjEquivalence
 
 universe u
 
@@ -314,6 +318,183 @@ def genericPointWedgeCoordinatePointSpanPostcomposeIso
     (genericPointWedgeCoordinateRightPointIso y₀) K
 
 end GenericPointSpanCoordinates
+
+section GenericSingleObjMapping
+
+variable {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+variable [PathConnectedSpace X] [PathConnectedSpace Y]
+variable (x₀ : X) (y₀ : Y) (M : Set Y) (N : Set X)
+variable (hM : IsOpen M) (hN : IsOpen N) (hy : y₀ ∈ M) (hx : x₀ ∈ N)
+variable (cM : PointedContraction M ⟨y₀, hy⟩)
+variable (cN : PointedContraction N ⟨x₀, hx⟩)
+
+private abbrev genericLeftOpen := leftOpen x₀ y₀ M
+private abbrev genericRightOpen := rightOpen x₀ y₀ N
+
+def genericPointWedgePseudoSpanEquivalence (C : Type) [Category C] :
+    PseudoFunctorCocone (X := Wedge x₀ y₀)
+        (U := genericLeftOpen x₀ y₀ M)
+        (V := genericRightOpen x₀ y₀ N) (C := C) ≌
+      SpanPseudoCocone
+        (genericPointWedgeActualLeft x₀ y₀ M N)
+        (genericPointWedgeActualRight x₀ y₀ M N) C :=
+  ConstructionTargets.TwoOpenFreeProductMapping.pseudoSpanEquivalence C
+
+abbrev genericPointWedgeLeftGroup := FundamentalGroup X x₀
+abbrev genericPointWedgeRightGroup := FundamentalGroup Y y₀
+abbrev genericPointWedgeFreeProduct :=
+  Monoid.Coprod (genericPointWedgeLeftGroup x₀)
+    (genericPointWedgeRightGroup y₀)
+
+def genericPointWedgeFreeProductMappingEquivalence
+    (C : Type) [Category C] :
+    (FundamentalGroupoid (Wedge x₀ y₀) ⥤ C) ≌
+      FreeProductRepresentation (C := C)
+        (genericPointWedgeLeftGroup x₀) (genericPointWedgeRightGroup y₀) :=
+  ((((twoOpenFundamentalGroupoidPseudopushoutEquivalence
+      (C := C)
+      (genericPointWedgePackage x₀ y₀ M N hM hN hy hx cM cN).leftOpen_isOpen
+      (genericPointWedgePackage x₀ y₀ M N hM hN hy hx cM cN).rightOpen_isOpen
+      (genericPointWedgePackage x₀ y₀ M N hM hN hy hx cM cN).union_eq_univ).trans
+    (genericPointWedgePseudoSpanEquivalence x₀ y₀ M N C)).trans
+    (genericPointWedgeCoordinateSpanEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN C)).trans
+    (genericPointWedgeCoordinatePointSpanEquivalence x₀ y₀ C)).trans
+    (freeProductPointSpanEquivalence
+      (genericPointWedgeLeftGroup x₀) (genericPointWedgeRightGroup y₀) C)
+
+def genericPointWedgeSingleObjMappingEquivalence
+    (C : Type) [Category C] :
+    (FundamentalGroupoid (Wedge x₀ y₀) ⥤ C) ≌
+      (SingleObj (genericPointWedgeFreeProduct x₀ y₀) ⥤ C) :=
+  (genericPointWedgeFreeProductMappingEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN C).trans
+      (representationSingleObjEquivalence
+        (C := C) (genericPointWedgeLeftGroup x₀) (genericPointWedgeRightGroup y₀))
+
+variable {C D : Type} [Category C] [Category D]
+
+private abbrev genericSpanPostcompose (K : C ⥤ D) :=
+  FreeProductPointSpanRepresentations.postcomposeRepresentationFunctor
+    (genericPointWedgeLeftGroup x₀) (genericPointWedgeRightGroup y₀) K
+
+private abbrev genericSingleObjPostcompose (K : C ⥤ D) :=
+  FreeProductRepresentationSingleObjEquivalence.postcomposeRepresentationFunctor
+    (genericPointWedgeLeftGroup x₀) (genericPointWedgeRightGroup y₀) K
+
+def genericPointWedgeRepresentationAlignmentApp (K : C ⥤ D)
+    (R : FreeProductRepresentation (C := C)
+      (genericPointWedgeLeftGroup x₀) (genericPointWedgeRightGroup y₀)) :
+    (genericSpanPostcompose x₀ y₀ K).obj R ≅
+      (genericSingleObjPostcompose x₀ y₀ K).obj R where
+  hom := ⟨𝟙 _, by
+    intro g
+    change mappedAction _ _ K R g ≫ 𝟙 _ = 𝟙 _ ≫ mappedAction _ _ K R g
+    simp⟩
+  inv := ⟨𝟙 _, by
+    intro g
+    change mappedAction _ _ K R g ≫ 𝟙 _ = 𝟙 _ ≫ mappedAction _ _ K R g
+    simp⟩
+  hom_inv_id := by apply FreeProductRepresentationHom.ext; exact Category.id_comp _
+  inv_hom_id := by apply FreeProductRepresentationHom.ext; exact Category.id_comp _
+
+def genericPointWedgeRepresentationAlignment (K : C ⥤ D) :
+    genericSpanPostcompose x₀ y₀ K ≅
+      genericSingleObjPostcompose x₀ y₀ K :=
+  NatIso.ofComponents (genericPointWedgeRepresentationAlignmentApp x₀ y₀ K) (by
+    intro R S f
+    apply FreeProductRepresentationHom.ext
+    change K.map f.hom ≫ 𝟙 _ = 𝟙 _ ≫ K.map f.hom
+    simp)
+
+def genericPointWedgePseudoSpanPostcomposeIso (K : C ⥤ D) :
+    postcomposePseudoFunctorCoconeFunctor K ⋙
+        (genericPointWedgePseudoSpanEquivalence x₀ y₀ M N D).functor ≅
+      (genericPointWedgePseudoSpanEquivalence x₀ y₀ M N C).functor ⋙
+        postcomposeFunctor K :=
+  eqToIso (by rfl)
+
+@[reducible] def genericPointWedgeOpenCoverSquare (K : C ⥤ D) : CatCommSq
+    ((Functor.whiskeringRight (FundamentalGroupoid (Wedge x₀ y₀)) C D).obj K)
+    (twoOpenFundamentalGroupoidPseudopushoutEquivalence
+      (C := C)
+      (genericPointWedgePackage x₀ y₀ M N hM hN hy hx cM cN).leftOpen_isOpen
+      (genericPointWedgePackage x₀ y₀ M N hM hN hy hx cM cN).rightOpen_isOpen
+      (genericPointWedgePackage x₀ y₀ M N hM hN hy hx cM cN).union_eq_univ).functor
+    (twoOpenFundamentalGroupoidPseudopushoutEquivalence
+      (C := D)
+      (genericPointWedgePackage x₀ y₀ M N hM hN hy hx cM cN).leftOpen_isOpen
+      (genericPointWedgePackage x₀ y₀ M N hM hN hy hx cM cN).rightOpen_isOpen
+      (genericPointWedgePackage x₀ y₀ M N hM hN hy hx cM cN).union_eq_univ).functor
+    (postcomposePseudoFunctorCoconeFunctor K) where
+  iso := pseudopushoutPostcomposeNatIso
+    (genericPointWedgePackage x₀ y₀ M N hM hN hy hx cM cN).leftOpen_isOpen
+    (genericPointWedgePackage x₀ y₀ M N hM hN hy hx cM cN).rightOpen_isOpen
+    (genericPointWedgePackage x₀ y₀ M N hM hN hy hx cM cN).union_eq_univ K
+
+@[reducible] def genericPointWedgeAlignmentSquare (K : C ⥤ D) : CatCommSq
+    (genericSpanPostcompose x₀ y₀ K)
+    (𝟭 (FreeProductRepresentation (C := C)
+      (genericPointWedgeLeftGroup x₀) (genericPointWedgeRightGroup y₀)))
+    (𝟭 (FreeProductRepresentation (C := D)
+      (genericPointWedgeLeftGroup x₀) (genericPointWedgeRightGroup y₀)))
+    (genericSingleObjPostcompose x₀ y₀ K) where
+  iso := (Functor.rightUnitor _).trans
+    ((genericPointWedgeRepresentationAlignment x₀ y₀ K).trans
+      (Functor.leftUnitor _).symm)
+
+@[reducible] def genericPointWedgeSingleObjSquare (K : C ⥤ D) : CatCommSq
+    ((Functor.whiskeringRight (FundamentalGroupoid (Wedge x₀ y₀)) C D).obj K)
+    (genericPointWedgeSingleObjMappingEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN C).functor
+    (genericPointWedgeSingleObjMappingEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN D).functor
+    ((Functor.whiskeringRight
+      (SingleObj (genericPointWedgeFreeProduct x₀ y₀)) C D).obj K) := by
+  let s0 := genericPointWedgeOpenCoverSquare x₀ y₀ M N hM hN hy hx cM cN K
+  let s1 : CatCommSq _
+      (genericPointWedgePseudoSpanEquivalence x₀ y₀ M N C).functor
+      (genericPointWedgePseudoSpanEquivalence x₀ y₀ M N D).functor
+      (postcomposeFunctor K) :=
+    ⟨genericPointWedgePseudoSpanPostcomposeIso x₀ y₀ M N K⟩
+  let s2 : CatCommSq (postcomposeFunctor K)
+      (genericPointWedgeCoordinateSpanEquivalence
+        x₀ y₀ M N hM hN hy hx cM cN C).functor
+      (genericPointWedgeCoordinateSpanEquivalence
+        x₀ y₀ M N hM hN hy hx cM cN D).functor
+      (postcomposeFunctor K) :=
+    ⟨genericPointWedgeCoordinateSpanPostcomposeIso
+      x₀ y₀ M N hM hN hy hx cM cN K⟩
+  let s3 : CatCommSq (postcomposeFunctor K)
+      (genericPointWedgeCoordinatePointSpanEquivalence x₀ y₀ C).functor
+      (genericPointWedgeCoordinatePointSpanEquivalence x₀ y₀ D).functor
+      (postcomposeFunctor K) :=
+    ⟨genericPointWedgeCoordinatePointSpanPostcomposeIso x₀ y₀ K⟩
+  let s4 : CatCommSq (postcomposeFunctor K)
+      (freeProductPointSpanEquivalence
+        (genericPointWedgeLeftGroup x₀) (genericPointWedgeRightGroup y₀) C).functor
+      (freeProductPointSpanEquivalence
+        (genericPointWedgeLeftGroup x₀) (genericPointWedgeRightGroup y₀) D).functor
+      (genericSpanPostcompose x₀ y₀ K) :=
+    ⟨FreeProductPointSpanRepresentations.equivalenceFunctorPostcomposeIso
+      (genericPointWedgeLeftGroup x₀) (genericPointWedgeRightGroup y₀) K⟩
+  let s5 := genericPointWedgeAlignmentSquare x₀ y₀ K
+  let s6 : CatCommSq (genericSingleObjPostcompose x₀ y₀ K)
+      (representationSingleObjEquivalence (C := C)
+        (genericPointWedgeLeftGroup x₀) (genericPointWedgeRightGroup y₀)).functor
+      (representationSingleObjEquivalence (C := D)
+        (genericPointWedgeLeftGroup x₀) (genericPointWedgeRightGroup y₀)).functor _ :=
+    ⟨representationToFunctorPostcomposeIso
+      (genericPointWedgeLeftGroup x₀) (genericPointWedgeRightGroup y₀) K⟩
+  exact CatCommSq.vComp' (CatCommSq.vComp'
+    (CatCommSq.vComp' (CatCommSq.vComp' (CatCommSq.vComp' s0 s1) s2) s3) s4)
+    (CatCommSq.vComp' s5 s6)
+
+def genericPointWedgeSingleObjPostcomposeIso (K : C ⥤ D) :=
+  (genericPointWedgeSingleObjSquare
+    x₀ y₀ M N hM hN hy hx cM cN K).iso
+
+end GenericSingleObjMapping
 
 /-- An equivalence from a connected groupoid to a one-object groupoid induces
 the expected equivalence on the automorphism group at any chosen object.  This
@@ -608,5 +789,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeCoordinateSpanPostcomposeIso
 #print axioms genericPointWedgeCoordinatePointSpanEquivalence
 #print axioms genericPointWedgeCoordinatePointSpanPostcomposeIso
+#print axioms genericPointWedgeSingleObjMappingEquivalence
+#print axioms genericPointWedgeSingleObjPostcomposeIso
 
 end ConstructionTargets.PointWedgeVanKampen

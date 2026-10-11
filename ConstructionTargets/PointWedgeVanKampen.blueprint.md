@@ -89,7 +89,7 @@ with `FreeProductRepresentationSingleObjEquivalence.representationToFunctorPostc
 The pseudo-cocone/pseudo-span conversion is definitionally natural under
 `GenericSpanPseudoCoconeTransport.postcomposeFunctor`.
 
-status: planned
+status: proved
 
 Apply two-open groupoid van Kampen to the B1 cover.  Transport its left,
 right, and overlap functor categories along the fundamental-groupoid
