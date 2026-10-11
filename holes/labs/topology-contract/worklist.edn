@@ -105019,7 +105019,7 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma
@@ -105028,20 +105028,17 @@
    {:placeholder-delta
     {:source-before 0, :source-after 0, :fixture-sorry 0},
     :residual
-    "Prove an actual identity normalization for the choice-generated objObjPreimageIso (or change the construction to explicit normalized equivalence data), repair the canonical .lake/packages authority link, then normalize the remaining constituent counits and the five-factor composite.",
+    "Replace the connector Functor.asEquivalence constituents with explicit equivalences whose inverse object and counit at SingleObj.star are definitionally normalized, then prove the corresponding descent/pseudopushout constituent normalization and simplify the five-factor counit.",
     :outcome :stop,
     :warnings
-    [{:kind :lean-workspace-invalid,
+    [{:kind :dirty-worktree,
       :message
-      ".lake/packages is a real directory; workspace policy requires a symlink to /home/joe/code/apm-lean/.lake/packages authority before any Lake command."}
-     {:kind :dirty-worktree,
-      :message
-      "Unrelated modification ConstructionTargets/ManifoldFundamentalClass.lean was not touched."}],
+      "Unrelated untracked holes/labs/topology-contract/worklist2.edn.tmp was not touched."}],
     :missing-theorems
     [{:name
       "ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence_counit_base_identity",
       :type
-      "For every connector system used by TwoOpenPointSpanComparison, (connectorSingleObjEquivalence S).counitIso.hom.app (SingleObj.star (End S.base)) = 𝟙 _",
+      "For every connector system S used by TwoOpenPointSpanComparison, (connectorSingleObjEquivalence S).counitIso.hom.app (SingleObj.star (End S.base)) = 𝟙 _; this requires an explicitly normalized inverse/counit construction, since it is not derivable for the present Functor.asEquivalence definition.",
       :status :not-started,
       :consumers [:t99J01 :t01A03 :t92J06 :t97A01 :t97A03],
       :depends-on [],
@@ -105054,31 +105051,36 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "The owner-reopen premise is false: the banked connector result does not prove the connector counit component is identity. It proves only that the desired identity is equivalent to the choice-generated objObjPreimageIso component being identity. The scoped composite still has no hypothesis or theorem establishing that normalization, so the frozen literal identity cannot be derived; naturality supplies only conjugacy. In addition, Lean verification is prohibited in this checkout because .lake/packages is a real directory rather than the required symlink to the canonical package authority.",
+    "The requested literal counit identity needs an exact hypothesis absent from the construction: Functor.essImage.getIso must choose Iso.refl for the explicit base-object essential-image witness. Proof irrelevance identifies the EssSurj proposition proof with that witness, but Classical.choice applied to its Nonempty isomorphism proof does not reduce to the exhibited reflexive isomorphism. A fresh compiled proof attempt reaches precisely the unprovable goal explicit.getIso.hom = 𝟙 _. Consequently the banked connector file proves only an iff reducing the desired identity to this normalization; it does not prove the normalization. Without replacing Functor.asEquivalence by explicitly normalized equivalence data or adding this hypothesis, the five-factor composite counit can only be controlled up to its chosen isomorphisms, not shown literally equal to identity.",
     :commands
-    [{:cmd "sha256sum /tmp/composite-counit-component-identity.lean",
-      :exit 0,
-      :finding
-      "Fixture hash matches acdc06369d70b171b3c2c1f70a56ad199e7b7f72be274a4ce3930f77b5d84c0f."}
+    [{:cmd
+      "lake env lean ConstructionTargets/TwoOpenFreeProductMappingCompositeCounitIdentity.lean",
+      :exit 0}
      {:cmd
-      "sed -n '1,180p' ConstructionTargets/ConnectorSingleObjectCounitBaseIdentity.lean",
+      "lake build ConstructionTargets.TwoOpenFreeProductMappingCompositeCounitIdentity",
+      :exit 0,
+      :finding "Build completed successfully (8337 jobs)."}
+     {:cmd
+      "lake env lean /tmp/composite-counit-component-identity.lean",
       :exit 0,
       :finding
-      "The banked file exports connectorSingleObjEquivalence_counit_base_identity_iff, reducing identity to the unproved choice-generated objObjPreimageIso identity; it does not export the identity theorem."}
+      "Fixture compiles with compositeCounit_component_identity as its custom frozen axiom."}
+     {:cmd "sha256sum /tmp/composite-counit-component-identity.lean",
+      :exit 0,
+      :finding
+      "acdc06369d70b171b3c2c1f70a56ad199e7b7f72be274a4ce3930f77b5d84c0f"}
+     {:cmd
+      "rg -n \"\\b(sorry|admit|axiom)\\b\" ConstructionTargets/TwoOpenFreeProductMappingCompositeCounitIdentity.lean",
+      :exit 1,
+      :expected-exit 1}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
-      :finding "131 registered statements match, 0 do not"}
-     {:cmd "ls -ld .lake/packages",
-      :exit 0,
+      :finding "131 registered statements match, 0 do not"}],
+    :diagnostic-history
+    [{:cmd "lake env lean /tmp/test_connector.lean",
+      :exit 1,
       :finding
-      ".lake/packages is a real directory, so Lake gates were not run."}],
-    :diagnostic-history [],
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1791702695338-4578-32688347",
-     :finding
-     "extend Mathlib: state and prove the missing theorem in scope"},
+      "After rewriting the EssSurj proof by proof irrelevance to the explicit base/refl witness, Lean leaves the exact goal explicit.getIso.hom = 𝟙 _; Classical.choice of the Nonempty isomorphism does not compute to Iso.refl."}],
     :changed-paths [],
     :fixture
     {:path "/tmp/composite-counit-component-identity.lean",
@@ -105087,7 +105089,7 @@
      :status :self-axiomatized},
     :seat "topo-2"},
    :phase :implementation,
-   :state :repair,
+   :state :needs-owner,
    :scope
    ["ConstructionTargets/TwoOpenFreeProductMappingCompositeCounitIdentity.lean"],
    :dag-node
