@@ -200,7 +200,7 @@ lean: `PointWedgeVanKampen.multiplicativeIntEquivFreeGroupFinOne` :
 
 uses: Mathlib `FreeGroup.mulEquivIntOfUnique`
 
-status: planned
+status: proved 94d19bb61b8e0629afa2c1070246515757d5f0b1
 
 The type `Fin 1` has a `Unique` instance, so Mathlib gives
 `FreeGroup (Fin 1) ≃* Multiplicative ℤ`.  Take its symmetric equivalence.
