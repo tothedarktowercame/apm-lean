@@ -79281,99 +79281,73 @@
    :depends-on [],
    :other-consumers []}
   {:consumer :t97A04,
-   :stop-count 4,
+   :stop-count 5,
    :evidence
    {:placeholder-delta 0,
-    :residual "B4 through B11 remain; the next job is B4 only.",
+    :residual
+    "B4 through B11 remain. Complete the comm12 and comm23 fields of shearYShortComplexHom from the compiled private maps and compatibility lemmas.",
     :outcome :stop,
     :warnings
-    ["The consumer retains its two expected placeholders while the closure program advances node by node."
-     "Existing Main.lean linter and sorry warnings are unchanged."
-     "Unrelated pre-existing modification ConstructionTargets/ManifoldFundamentalClass.lean was preserved untouched."],
+    ["Main retains its two expected placeholders."
+     "Existing Main linter warnings are unchanged."
+     "B4 remains planned because its final declaration is not compiled."],
     :missing-theorems
-    [{:name "ConstructionTargets.T97A04Closure.shearY",
+    [{:name "ConstructionTargets.T97A04Closure.shearYShortComplexHom",
       :type
-      "ℤ → ℤ → C(FrozenTorus, FrozenTorus), with compiled cover-preservation, composition, and required specialized pointwise theorems",
-      :status :proved,
+      "forall a b : Int, shortComplex frozenYCover.U frozenYCover.V maps to itself",
+      :status :partial,
       :consumers [:t97A04],
-      :depends-on ["ConstructionTargets.T97A04Closure.frozenYCover"],
+      :depends-on
+      ["ConstructionTargets.T97A04Closure.frozenYCover"
+       "ConstructionTargets.T97A04Closure.shearY"],
       :area "mv-connecting-naturality"}],
     :statement-hashes
     {:registry "131 registered statements match, 0 do not",
-     :closure-lean-blob "302ccce3b79796d62cadd887dd9fe47f869d60db",
+     :closure-lean-blob "7a8e9b1b5022de76c865c41612d3121b51301427",
      :blueprint-blob "f2da30d2eb9ae2373ba1e1e32f6aa7f008f67cca"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason :program-milestone-complete,
+    :reason :program-progress-committed,
     :commands
     [{:cmd "lake env lean ConstructionTargets/t97A04Closure.lean",
       :exit 0,
       :output
-      "B1 through B3 compiled; shearY and its B3 theorems use [propext, Classical.choice, Quot.sound]"}
-     {:cmd
-      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/t97A04Closure.lean || true)\"",
-      :exit 0}
+      "Compiled B4 supporting maps and compatibility lemmas with standard axioms"}
      {:cmd
       "git diff --check -- ConstructionTargets/t97A04Closure.lean ConstructionTargets/t97A04Closure.blueprint.md",
       :exit 0}
      {:cmd "lake env lean problems/t97A04/lean/Main.lean",
       :exit 0,
-      :output
-      "Main.lean compiled with its two existing sorry declarations"}
+      :output "Compiled with two existing sorry declarations"}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :output "131 registered statements match, 0 do not"}
-     {:cmd
-      "python3 -c 'comment-stripped placeholder count for problems/t97A04/lean/Main.lean'",
+     {:cmd "python3 -c 'comment-stripped placeholder count'",
       :exit 0,
       :output "2"}
      {:cmd
-      "git show --check --oneline a09ba300fab26381c636b4a7aea7e2dc1687913b",
+      "git show --check --oneline 3aed25dcb4a853e886922111f17b9ec6f5ea2d14",
       :exit 0,
-      :output "a09ba300f Define t97A04 upper triangular shear"}
-     {:cmd
-      "git show --check --oneline 2a6df176426727c93ff5546f04fe0970a5081348",
-      :exit 0,
-      :output "2a6df1764 Record t97A04 blueprint B3 milestone"}],
+      :output "3aed25dcb Build t97A04 shear cover chain maps"}],
     :diagnostic-history
     [{:cmd "lake env lean ConstructionTargets/t97A04Closure.lean",
       :exit 1,
       :finding
-      "The first compile left the additive associativity step in shearY_comp and scalar-normalization goals in two specialized formulas. The composition proof was corrected with Prod.ext and abel, and the formulas were narrowed to explicit simplification lemmas."}
+      "Several exploratory compiles corrected namespace qualification, MapsTo eta expansion, association, and implicit preservation-map inference."}
      {:cmd "lake env lean ConstructionTargets/t97A04Closure.lean",
       :exit 1,
       :finding
-      "The second compile exposed a subtraction normalization mismatch and an apparently reflexive scalar-three equality whose two displayed scalars used different inferred actions. sub_eq_add_neg fixed the former."}
-     {:cmd "lake env lean ConstructionTargets/t97A04Closure.lean",
-      :exit 1,
-      :finding
-      "The third compile isolated the scalar-three mismatch: the displayed right-hand numeral had inferred the natural-number scalar action. Annotating it as (3 : ℤ) produced the successful acceptance compile."}],
+      "Final wrapper attempts showed the remaining categorical elaboration boundary across imported private chain-functor abbreviations. The incomplete wrapper was removed and the successful supporting declarations were committed."}],
     :continue-from
-    "Formalise blueprint node B4 shearYShortComplexHom in ConstructionTargets/t97A04Closure.lean using the B2 cover, B3 preservation theorems, and ProductionOpenCoverMayerVietoris.coverRangeMap with its intersection-left, intersection-right, and inclusion compatibility equations.",
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791718345818-5265-50d66aaa",
-     :commands
-     ["git show/diff-tree/show --check a09ba300fab26381c636b4a7aea7e2dc1687913b and 2a6df176426727c93ff5546f04fe0970a5081348"
-      "git rev-parse closure and blueprint blobs at recorded commit"
-      "lake env lean ConstructionTargets/t97A04Closure.lean"
-      "lake env lean problems/t97A04/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "statement fingerprints and placeholder counts at recorded commit and prior program-history commit"],
-     :finding
-     "PASS: independent author topo-6 committed new compiled progress after program-history job 3. Milestone a09ba300f defines the sorry-free B3 upper-triangular shear and 2a6df1764 records B3 as proved while listing B4 through B11 and the next B4 milestone. The recorded closure and blueprint blobs match. B3 is mathematically faithful and stays within the frozen torus representation: shearY a b is exactly (x,y) maps to (a*x+b*y,y); its unchanged second coordinate proves literal preservation of both transported cover members; composition has parameters (a*c,a*d+b); and the required (3,1), (1,-1), and (1,0) formulas are compiled. The closure and Main files compile; B3 uses exactly propext, Classical.choice, Quot.sound and the closure file has no placeholders. Main retains the same two acknowledged placeholders as program-history job 3; registry is 131/0 and the frozen t97A04 fingerprint is unchanged. This is a correct program STOP with substantive compiled progress and explicit remaining milestones."},
-    :commit "2a6df176426727c93ff5546f04fe0970a5081348",
-    :changed-paths
-    ["ConstructionTargets/t97A04Closure.lean"
-     "ConstructionTargets/t97A04Closure.blueprint.md"],
+    "Package shearYIntersectionMap, shearYPiecesMap, and shearYUnionMap into shearYShortComplexHom. Add typed local equalities exposing the imported SingularExcision chain functor before applying the biproduct projection and injection lemmas. Do not rebuild the compiled maps.",
+    :commit "3aed25dcb4a853e886922111f17b9ec6f5ea2d14",
+    :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
     :finding
-    "Blueprint node B3 is proved. shearY a b is the continuous map (x,y) maps to (a scalar x + b scalar y,y); the unchanged second coordinate proves literal preservation of both frozenYCover members. The compiled API also proves shearY a b composed with shearY c d equals shearY (a*c) (a*d+b), and records the pointwise formulas at (3,1), (1,-1), and (1,0).",
-    :milestone-commit "a09ba300fab26381c636b4a7aea7e2dc1687913b",
+    "B4 has substantive compiled progress but is not complete. The exact intersection, two-piece, and pushout-defined union chain maps induced by shearY compile. Their intersection/member naturality equations and the pushout compatibility are proved without placeholders. Only packaging the maps into ShortComplex.Hom remains.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79524,4 +79498,24 @@
    :id :lemma-constructiontargets-t97a04closure-sheary,
    :kind :lemma,
    :depends-on [:lemma-constructiontargets-t97a04closure-frozenycover],
+   :other-consumers []}
+  {:consumer :t97A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "ConstructionTargets.T97A04Closure.shearYShortComplexHom",
+    :type
+    "forall a b : Int, shortComplex frozenYCover.U frozenYCover.V maps to itself"},
+   :lemma
+   {:name "ConstructionTargets.T97A04Closure.shearYShortComplexHom",
+    :reported-by [:program-2026-10-11-close-t97a04],
+    :type
+    "forall a b : Int, shortComplex frozenYCover.U frozenYCover.V maps to itself",
+    :area "mv-connecting-naturality"},
+   :id :lemma-constructiontargets-t97a04closure-shearyshortcomplexhom,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t97a04closure-frozenycover
+    :lemma-constructiontargets-t97a04closure-sheary],
    :other-consumers []}]}
