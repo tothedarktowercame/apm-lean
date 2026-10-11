@@ -10386,6 +10386,23 @@
      "Inverse absolute-chain homology preservation followed by the integral singular-chain comparison and the production relative singular projection",
      :direction
      "Exact morphism equality from the coefficient cokernel-and-transport representation to the production absolute-comparison-and-relative-projection representation"},
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791701992990-4554-4cf5c9fe",
+     :commands
+     ["git show and git diff-tree recorded commit scope"
+      "git blob identity check"
+      "sha256sum frozen fixture"
+      "recompute registered statement hash and registry check"
+      "git diff --check recorded commit"
+      "lake env lean renamed frozen-fixture replay"
+      "lake env lean target module"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"
+      "placeholder and axiom scan"
+      "consumer placeholder census"],
+     :finding
+     "PASS: commit e1858b917 changes only ConstructionTargets/ManifoldFundamentalClass.lean and its blob matches the checkout; fixture hash and registered statement hash match; the theorem has the exact frozen equality orientation, rewrites only the packaged transport composite, and applies the projection theorem without crossing excluded representation boundaries; fixture replay, module check, and 8326-job build pass; axioms are exactly propext, Classical.choice, Quot.sound; registry is 131/0; target placeholders are 0 and consumer counts remain 1/1."},
     :commit "e1858b9171f80f5a4cca4d297a8964987284af5b",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -10402,7 +10419,7 @@
     :routes-2026-10-11-manifold-transport-projection-alignment-topo3-r3,
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/transport-projection-alignment",
@@ -10583,7 +10600,7 @@
      "The compiled prerequisite cancels the first presentation layer of the explicit transported comparison against the coefficient projection. The previous admission failure was an identifier collision caused by a truncated generated ID for a supporting theorem; this receipt uses the short unique lemma ID lemma-mfclass-transport-projection-align-v2 and records only the already-banked projection theorem as its DAG dependency.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -14283,7 +14300,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -14300,7 +14317,10 @@
     "forall {X : Type} [TopologicalSpace X] (A : Set X) (n : Nat), forgetIntModules.map (HomologicalComplex.homologyMap (cokernel.π (CoefficientRelativeSmall.subspaceMap Int A)) n) ≫ (((CoefficientRelativeSmall.relativeChains Int A).sc n).mapHomologyIso forgetIntModules).inv ≫ integralTransportHomologyComposite A n = (((CoefficientH0.SingularChains Int (TopCat.of X)).sc n).mapHomologyIso forgetIntModules).inv ≫ HomologicalComplex.homologyMap (singularChainsComparison (TopCat.of X)).hom n ≫ HomologicalComplex.homologyMap (relativeSingularProjection A) n",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-transport-projection-alignment-topo3-r3},
+    :routes-2026-10-11-manifold-transport-projection-alignment-topo3-r3,
+    :banked-by
+    :routes-2026-10-11-manifold-transport-projection-alignment-topo3-r3,
+    :banked-commit "e1858b9171f80f5a4cca4d297a8964987284af5b"},
    :id :lemma-mfclass-transport-projection-align-v2,
    :kind :lemma,
    :depends-on
@@ -14309,7 +14329,7 @@
    :other-consumers [:t98A02]}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -14317,7 +14337,9 @@
    :lemma
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport_homologyMap_eq_composite",
-    :reported-by []},
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/ManifoldFundamentalClass.lean"]},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-integralrelativ-f032bcd2e7e9,
    :kind :lemma,
