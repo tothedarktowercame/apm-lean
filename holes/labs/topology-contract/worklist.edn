@@ -101492,85 +101492,121 @@
    "Build the two specialized decoders from canonical half-open six-edge coordinates, prove relation invariance and left-inverse formulas, and derive injectivity.",
    :other-consumers []}
   {:bounded-exception
+   "This single-consumer prerequisite exposes the exact three generator cases each specialized decoder must respect.",
+   :consumer :t97A01,
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/PolygonBoundaryGeneratorNormalForms.lean"],
+   :dag-node
+   "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/boundary-generator-normal-forms",
+   :acceptance
+   {:implementation
+    "Promote the exact fixture. Prove that N3CircleRel is equivalent to the disjunction of its 0-1, 2-3, and 4-5 same-parameter edge pairs. Prove that TorusCrosscapCircleRel is equivalent to its 0-2 reversed, 1-3 reversed, and 4-5 same-parameter edge pairs. Include the underlying TorusCrosscapRel disk normal form. Do not construct decoders, classify EqvGen fibers, prove boundary-map injectivity or homeomorphism, derive ThreeCircles or outer-piece formulas, compute invariants, or close t97A01.",
+    :placeholder "the single sorry in apm_t97a01",
+    :route-step
+    "polygon radial open-cover step 29: expose exact generator normal forms for both specialized boundary relations",
+    :fixture "/tmp/polygon-boundary-generator-normal-forms.lean",
+    :fixture-sha256
+    "2ed83a033b900b2a6b435a65c5de810ef73b4c3617df9524083e93278ecd7863",
+    :gates
+    ["lake build ConstructionTargets.PolygonBoundaryGeneratorNormalForms"
+     "fixture compiles"
+     "zero source and fixture sorry"
+     "standard-only axioms"
+     "registry check"]},
+   :id :routes-2026-10-11-polygon-boundary-generator-normal-forms-69,
+   :kind :reusable-theorem,
+   :area "polygon-surface-open-cover",
+   :depends-on [:routes-2026-10-11-relation-quotient-left-inverse-68],
+   :current-residual
+   "Define each decoder on canonical half-open edge coordinates, use the three generator cases to prove relation invariance, and prove its left-inverse formulas.",
+   :other-consumers []}
+  {:bounded-exception
    "This single-consumer concrete quotient package is the other final backlog lemma on t97A01 and supplies the actual two polygon models required by its frozen statement.",
    :consumer :t97A01,
    :implements-lemma :lemma-polygonradialopencoverpackages,
    :evidence
    {:probe
     {:residual
-     "Construct relation-invariant decoders for N3CircleRel and TorusCrosscapCircleRel on the six canonical half-open edge coordinates, prove their left-inverse formulas on the three selected loops, and apply the compiled quotient reduction to obtain injectivity.",
+     "Use the exact generator normal forms to define the N3 and torus-crosscap decoders on the six half-open edge coordinates, prove relation invariance and left-inverse formulas, and derive injectivity.",
      :outcome :revise,
      :warnings [],
      :missing-theorems
-     [{:name "RelationQuotientLeftInverse.eqvGen_respects",
+     [{:name "PolygonBoundaryGeneratorNormalForms.n3CircleRel_iff",
        :type
-       "A function respecting a generating relation also respects its generated equivalence relation.",
+       "N3CircleRel holds exactly in one of the three same-parameter paired-edge cases 0-1, 2-3, or 4-5.",
        :status :proved,
        :consumers [:t97A01],
        :depends-on [],
        :area "polygon-surface-open-cover"}
       {:name
-       "RelationQuotientLeftInverse.injective_of_quotient_formula",
+       "PolygonBoundaryGeneratorNormalForms.torusCrosscapCircleRel_iff",
        :type
-       "A map into an EqvGen quotient is injective when its representative formula admits a relation-invariant left-inverse decoder.",
+       "TorusCrosscapCircleRel holds exactly in paired-edge cases 0-2 reversed, 1-3 reversed, or 4-5 same-parameter.",
        :status :proved,
        :consumers [:t97A01],
-       :depends-on ["RelationQuotientLeftInverse.eqvGen_respects"],
+       :depends-on [],
        :area "polygon-surface-open-cover"}
       {:name "polygonBoundaryThreeLoopFiberClassification",
        :type
-       "Construct relation-invariant decoders for the N3 and torus-crosscap boundary relations on canonical half-open edge coordinates and prove their left-inverse formulas on ThreeEndpointLoops.",
+       "Construct relation-invariant decoders for the N3 and torus-crosscap boundary relations and prove their left-inverse formulas on ThreeEndpointLoops.",
        :status :not-started,
        :consumers [:t97A01],
        :depends-on
-       ["RelationQuotientLeftInverse.injective_of_quotient_formula"
-        "PolygonThreeLoopHalfOpenEquality.three_loop_half_open_equalities"
-        "PolygonSixEdgeInteriorUniqueness.circleEdgePoint_interior_injective"],
+       ["PolygonBoundaryGeneratorNormalForms.n3CircleRel_iff"
+        "PolygonBoundaryGeneratorNormalForms.torusCrosscapCircleRel_iff"
+        "RelationQuotientLeftInverse.injective_of_quotient_formula"
+        "PolygonThreeLoopHalfOpenEquality.three_loop_half_open_equalities"],
        :area "polygon-surface-open-cover"}],
      :prerequisite
      {:bounded-exception
-      "This single-consumer prerequisite reduces both pending boundary-map injectivity proofs to constructing relation-invariant decoders with explicit left-inverse formulas.",
+      "This single-consumer prerequisite exposes the exact three generator cases each specialized decoder must respect.",
       :consumer :t97A01,
       :phase :implementation,
       :state :open,
-      :scope ["ConstructionTargets/RelationQuotientLeftInverse.lean"],
+      :scope
+      ["ConstructionTargets/PolygonBoundaryGeneratorNormalForms.lean"],
       :dag-node
-      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/relation-quotient-left-inverse",
+      "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages/boundary-generator-normal-forms",
       :acceptance
       {:implementation
-       "Promote the exact fixture. Prove that a function respecting a generating relation respects EqvGen and therefore descends to its quotient. Prove that a representative map into this quotient is injective whenever a relation-invariant decoder is a left inverse of its representative function, including the variant with a separately stated quotient formula. Do not construct polygon decoders, classify specialized boundary fibers, prove the two boundary maps injective or homeomorphic, derive ThreeCircles or outer-piece formulas, compute invariants, or close t97A01.",
+       "Promote the exact fixture. Prove that N3CircleRel is equivalent to the disjunction of its 0-1, 2-3, and 4-5 same-parameter edge pairs. Prove that TorusCrosscapCircleRel is equivalent to its 0-2 reversed, 1-3 reversed, and 4-5 same-parameter edge pairs. Include the underlying TorusCrosscapRel disk normal form. Do not construct decoders, classify EqvGen fibers, prove boundary-map injectivity or homeomorphism, derive ThreeCircles or outer-piece formulas, compute invariants, or close t97A01.",
        :placeholder "the single sorry in apm_t97a01",
        :route-step
-       "polygon radial open-cover step 28: reduce boundary quotient injectivity to a relation-invariant decoder",
-       :fixture "/tmp/relation-quotient-left-inverse.lean",
+       "polygon radial open-cover step 29: expose exact generator normal forms for both specialized boundary relations",
+       :fixture "/tmp/polygon-boundary-generator-normal-forms.lean",
        :fixture-sha256
-       "a39392e3a36d8362f9b7303e5d3dcdd1253af6d04c5d3684493fe387aff6aaab",
+       "2ed83a033b900b2a6b435a65c5de810ef73b4c3617df9524083e93278ecd7863",
        :gates
-       ["lake build ConstructionTargets.RelationQuotientLeftInverse"
+       ["lake build ConstructionTargets.PolygonBoundaryGeneratorNormalForms"
         "fixture compiles"
         "zero source and fixture sorry"
         "standard-only axioms"
         "registry check"]},
-      :id :routes-2026-10-11-relation-quotient-left-inverse-68,
+      :id
+      :routes-2026-10-11-polygon-boundary-generator-normal-forms-69,
       :kind :reusable-theorem,
       :area "polygon-surface-open-cover",
       :depends-on
-      [:routes-2026-10-11-polygon-three-loop-half-open-equality-67],
+      [:routes-2026-10-11-relation-quotient-left-inverse-68],
       :current-residual
-      "Build the two specialized decoders from canonical half-open six-edge coordinates, prove relation invariance and left-inverse formulas, and derive injectivity.",
+      "Define each decoder on canonical half-open edge coordinates, use the three generator cases to prove relation invariance, and prove its left-inverse formulas.",
       :other-consumers []},
-     :axioms [],
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
-     [{:cmd "lake env lean /tmp/relation-quotient-left-inverse.lean",
+     [{:cmd
+       "lake env lean /tmp/polygon-boundary-generator-normal-forms.lean",
        :exit 0,
        :finding
-       "EqvGen relation preservation, quotient descent, and both left-inverse injectivity reductions compile without axioms."}
-      {:cmd "sha256sum /tmp/relation-quotient-left-inverse.lean",
-       :exit 0,
-       :finding
-       "a39392e3a36d8362f9b7303e5d3dcdd1253af6d04c5d3684493fe387aff6aaab"}
+       "The N3 and torus-crosscap Circle generator normal forms compile with all three paired-edge cases and the required reversed parameters."}
       {:cmd
-       "rg -n \"\\b(sorry|admit)\\b\" /tmp/relation-quotient-left-inverse.lean",
+       "sha256sum /tmp/polygon-boundary-generator-normal-forms.lean",
+       :exit 0,
+       :finding
+       "2ed83a033b900b2a6b435a65c5de810ef73b4c3617df9524083e93278ecd7863"}
+      {:cmd
+       "rg -n \"\\b(sorry|admit)\\b\" /tmp/polygon-boundary-generator-normal-forms.lean",
        :exit 1,
        :expected-exit 1,
        :finding "No fixture placeholders."}
@@ -101583,23 +101619,25 @@
        :finding
        "The route guide, per-problem routes, and probe definitions were read."}],
      :diagnostic-history
-     [{:cmd "lake env lean /tmp/relation-quotient-left-inverse.lean",
+     [{:cmd
+       "lake env lean /tmp/polygon-boundary-generator-normal-forms.lean",
        :exit 1,
        :finding
-       "The first draft used invalid implicit-binder brackets; replacing them with Lean implicit binders corrected parsing."}
-      {:cmd "lake env lean /tmp/relation-quotient-left-inverse.lean",
+       "The first draft omitted the boundary-circle source namespace, leaving circleToBoundary unresolved."}
+      {:cmd
+       "lake env lean /tmp/polygon-boundary-generator-normal-forms.lean",
        :exit 1,
        :finding
-       "The first quotient-formula proof tried to rewrite beneath an unreduced lambda; composing the two formula equalities with the assumed map equality produced the required representative equality directly."}],
+       "Direct simplification could not transport equality of boundary values back to Circle points and dependent elimination on the specialized torus relation failed; an explicit boundary-homeomorphism transport lemma plus a disk-level relation normal form corrected both proofs."}],
      :fixture
-     {:path "/tmp/relation-quotient-left-inverse.lean",
+     {:path "/tmp/polygon-boundary-generator-normal-forms.lean",
       :sha256
-      "a39392e3a36d8362f9b7303e5d3dcdd1253af6d04c5d3684493fe387aff6aaab",
+      "2ed83a033b900b2a6b435a65c5de810ef73b4c3617df9524083e93278ecd7863",
       :interface
-      "A relation-respecting decoder descends through EqvGen; if it is a left inverse of representatives, the induced map into the relation quotient is injective."},
+      "Each specialized Circle generator relation is equivalent to the explicit disjunction of its three paired-edge cases, including both reversed torus-crosscap pairs."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t97A01/polygon-radial-open-cover-packages",
@@ -101647,7 +101685,8 @@
     :routes-2026-10-10-polygon-three-loop-half-open-normal-form-65
     :routes-2026-10-10-point-wedge-exact-equality-66
     :routes-2026-10-11-polygon-three-loop-half-open-equality-67
-    :routes-2026-10-11-relation-quotient-left-inverse-68],
+    :routes-2026-10-11-relation-quotient-left-inverse-68
+    :routes-2026-10-11-polygon-boundary-generator-normal-forms-69],
    :current-residual
    "Combine the concrete cover packages with the strict overlap squares, banked Smith normalization, and final t97A01 assembly.",
    :other-consumers []}
@@ -104907,7 +104946,9 @@
     :lemma-pointwedgeexactequality-quotientmap-inr-injective
     :lemma-pointwedgeexactequality-quotientmap-inl-eq-inr-iff
     :lemma-polygonthreeloophalfopenequality-three-loop-half-open-equalities
-    :lemma-relationquotientleftinverse-injective-of-quotient-formula],
+    :lemma-relationquotientleftinverse-injective-of-quotient-formula
+    :lemma-polygonboundarygeneratornormalforms-n3circlerel-iff
+    :lemma-polygonboundarygeneratornormalforms-toruscrosscapcirclerel-iff],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -105414,6 +105455,51 @@
    :lemma-relationquotientleftinverse-quotient-mk-comp-injective-of-decoder,
    :kind :lemma,
    :depends-on [:lemma-relationquotientleftinverse-descend-mk],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "PolygonBoundaryGeneratorNormalForms.n3CircleRel_iff",
+    :type
+    "N3CircleRel holds exactly in one of the three same-parameter paired-edge cases 0-1, 2-3, or 4-5."},
+   :lemma
+   {:name "PolygonBoundaryGeneratorNormalForms.n3CircleRel_iff",
+    :reported-by
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    :type
+    "N3CircleRel holds exactly in one of the three same-parameter paired-edge cases 0-1, 2-3, or 4-5.",
+    :area "polygon-surface-open-cover",
+    :proved-in
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+   :id :lemma-polygonboundarygeneratornormalforms-n3circlerel-iff,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "PolygonBoundaryGeneratorNormalForms.torusCrosscapCircleRel_iff",
+    :type
+    "TorusCrosscapCircleRel holds exactly in paired-edge cases 0-2 reversed, 1-3 reversed, or 4-5 same-parameter."},
+   :lemma
+   {:name
+    "PolygonBoundaryGeneratorNormalForms.torusCrosscapCircleRel_iff",
+    :reported-by
+    [:routes-2026-10-10-polygon-radial-open-cover-packages-40],
+    :type
+    "TorusCrosscapCircleRel holds exactly in paired-edge cases 0-2 reversed, 1-3 reversed, or 4-5 same-parameter.",
+    :area "polygon-surface-open-cover",
+    :proved-in
+    :routes-2026-10-10-polygon-radial-open-cover-packages-40},
+   :id
+   :lemma-polygonboundarygeneratornormalforms-toruscrosscapcirclerel-iff,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
