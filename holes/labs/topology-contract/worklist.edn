@@ -116193,13 +116193,28 @@
     {:commit "a60f6f09130debe9f8f2ef78b705c27b251ce4a4",
      :next
      "Implement B5 by descending verticalParam to AddCircle 1, transporting through AddCircle.homeomorphCircle and CircleHomology.circleHomeomorphSphereOne, and using B4 for injectivity."},
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791720925634-5318-7a41f136",
+     :commands
+     ["git show a60f6f09130debe9f8f2ef78b705c27b251ce4a4 --stat and scoped diff"
+      "git diff-tree --name-status a60f6f09130debe9f8f2ef78b705c27b251ce4a4"
+      "git diff --quiet recorded commit against scoped working files"
+      "sha256sum recorded source and blueprint"
+      "git diff --check recorded commit"
+      "comment-stripped placeholder count"
+      "python3 scripts/statement-registry.py check"
+      "lake env lean problems/t95J02/lean/Main.lean"],
+     :finding
+     "PASS: this STOP adds compiled, placeholder-free B4 progress after program-history commit e718d3d5477de7d1630ef32995973fbd8e996aa7. verticalParam_eq_iff projects subtype equality through the frozen quotient and separatingMap, uses both cosine-sine coordinates to invoke Circle.exp_eq_exp, and derives the correctly oriented y-prime = y + n classification; its reverse uses B3 periodicity in the correct symmetric direction. Scope and hashes reproduce, registry reports 131 matches, and the module compiles with standard axioms. The three existing B7-B9 placeholders remain exactly the declared residual."},
     :commit "a60f6f09130debe9f8f2ef78b705c27b251ce4a4",
     :changed-paths
     ["problems/t95J02/lean/Main.lean"
      "ConstructionTargets/t95J02Closure.blueprint.md"],
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t95J02/lean/Main.lean"
     "problems/t95J02/status.json"
@@ -116215,7 +116230,7 @@
     ["lake env lean problems/t95J02/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Program milestone completed. Blueprint node B3 is proved: verticalParam is continuous and invariant under translation by every integer, including negative integers, using the frozen vertical quotient identity. B4-B9 remain for later jobs.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Program milestone completed. Blueprint node B4 is proved: two vertical parameters represent the same CircleB point exactly when they differ by an integer. The forward proof uses the descended separating coordinate and Circle.exp_eq_exp; the reverse proof uses B3 periodicity. B5-B9 remain.",
    :id :program-2026-10-11-close-t95j02,
    :kind :final-adapter,
    :campaign-priority 41,
@@ -116235,7 +116250,11 @@
     {:job 6,
      :commit "e718d3d5477de7d1630ef32995973fbd8e996aa7",
      :reason
-     "Program milestone completed. Blueprint node B3 is proved: verticalParam is continuous and invariant under translation by every integer, including negative integers, using the frozen vertical quotient identity. B4-B9 remain for later jobs."}]}
+     "Program milestone completed. Blueprint node B3 is proved: verticalParam is continuous and invariant under translation by every integer, including negative integers, using the frozen vertical quotient identity. B4-B9 remain for later jobs."}
+    {:job 7,
+     :commit "a60f6f09130debe9f8f2ef78b705c27b251ce4a4",
+     :reason
+     "Program milestone completed. Blueprint node B4 is proved: two vertical parameters represent the same CircleB point exactly when they differ by an integer. The forward proof uses the descended separating coordinate and Circle.exp_eq_exp; the reverse proof uses B3 periodicity. B5-B9 remain."}]}
   {:consumer :t92J08,
    :phase :implementation,
    :state :open,
@@ -117117,7 +117136,7 @@
    :other-consumers []}
   {:consumer :t95J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t95J02Closure.verticalParam_eq_iff",
@@ -117129,7 +117148,9 @@
     :type
     "verticalParam y = verticalParam y' iff there is an integer n with y' = y + n",
     :area "klein-bottle-homology",
-    :proved-in :program-2026-10-11-close-t95j02},
+    :proved-in :program-2026-10-11-close-t95j02,
+    :banked-by :program-2026-10-11-close-t95j02,
+    :banked-commit "a60f6f09130debe9f8f2ef78b705c27b251ce4a4"},
    :id :lemma-t95j02closure-verticalparam-eq-iff,
    :kind :lemma,
    :depends-on
