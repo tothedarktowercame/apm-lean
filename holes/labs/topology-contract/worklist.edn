@@ -88063,9 +88063,79 @@
   {:bounded-exception
    "This single-consumer theorem supplies the exact sheet-counted covering conjunct of the t99J01 component restriction adapter.",
    :consumer :t99J01,
+   :stop-count 1,
    :implements-lemma :lemma-t99j01componentcover-isksheeted,
+   :evidence
+   {:placeholder-delta
+    {:source-before 0, :source-after 0, :fixture-sorry 0},
+    :residual
+    "Split the topology instances into an upstream non-cyclic module, retain the restriction sanity theorem downstream, then implement the restricted-fiber equivalence and cardinal transport in this adapter.",
+    :outcome :stop,
+    :warnings
+    [{:kind :module-dependency-cycle,
+      :message
+      "ThreeCirclesPathTopology already imports the only scoped module, so the scoped module cannot import the banked topology instances."}],
+    :missing-theorems
+    [{:name "ThreeCirclesPathTopologyCore.instances",
+      :type
+      "An upstream module exporting LocPathConnectedSpace ThreeCircles and PathConnectedSpace ThreeCircles without importing T99J01PathComponentCoverRestriction",
+      :status :not-started,
+      :consumers [:t99J01],
+      :depends-on [],
+      :area "covering-subgroup-correspondence"}
+     {:name
+      "T99J01PathComponentCoverRestriction.t99j01ComponentCover_isKSheeted",
+      :type
+      "For hp : IsKSheetedCover p n and e : E, IsKSheetedCover (t99j01ComponentCoverMap p e) (t99j01ComponentSheets p e)",
+      :status :not-started,
+      :consumers [:t99J01],
+      :depends-on ["ThreeCirclesPathTopologyCore.instances"],
+      :area "covering-subgroup-correspondence"}],
+    :statement-hashes
+    {:source-sha256
+     "2aab6cec0410a9eaab93ca03c721c50520f9ab0a5fe4dc4ae746bb17eafd5e74",
+     :registry "131 registered statements match, 0 do not"},
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :reason
+    "The required banked topology instances cannot be imported into this row's sole scoped module because the module dependency is cyclic. ConstructionTargets.ThreeCirclesPathTopology currently imports ConstructionTargets.T99J01PathComponentCoverRestriction in order to state restrictPathComponent_threeCircles. This row requires the reverse import so T99J01PathComponentCoverRestriction can use threeCirclesLocPathConnectedSpace and threeCirclesPathConnectedSpace. Lean rejects cyclic module imports, and duplicating the instances downstream would violate the build-once invariant. The exact representation repair is to move the two ThreeCircles topology instances into an upstream module that does not import the T99 adapter, then import that core module from both current modules.",
+    :commands
+    [{:cmd "head -5 ConstructionTargets/ThreeCirclesPathTopology.lean",
+      :exit 0,
+      :finding
+      "The second import is ConstructionTargets.T99J01PathComponentCoverRestriction, establishing the reverse dependency."}
+     {:cmd
+      "lake env lean ConstructionTargets/T99J01PathComponentCoverRestriction.lean",
+      :exit 0,
+      :finding
+      "The unchanged scoped module compiles but has no ThreeCircles topology import or exact restricted-sheet theorem."}
+     {:cmd
+      "lake env lean /tmp/t99j01-component-cover-isksheeted-probe.lean",
+      :exit 0,
+      :finding
+      "The fixture compiles only with t99j01ComponentCover_isKSheeted as its custom axiom."}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd
+      "sha256sum /tmp/t99j01-component-cover-isksheeted-probe.lean ConstructionTargets/T99J01PathComponentCoverRestriction.lean",
+      :exit 0,
+      :finding
+      "Fixture hash matches; source hash is 2aab6cec0410a9eaab93ca03c721c50520f9ab0a5fe4dc4ae746bb17eafd5e74."}
+     {:cmd "git status --short",
+      :exit 0,
+      :finding "Worktree is clean."}],
+    :diagnostic-history [],
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/t99j01-component-cover-isksheeted-probe.lean",
+     :sha256
+     "6b09629d7b3805a73e9d3b146a92dbdff525d643d668534c56f8fba11a44cd2a",
+     :status :self-axiomatized},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/T99J01PathComponentCoverRestriction.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t99J01/component-cover-isksheeted",
@@ -113430,6 +113500,47 @@
    :depends-on
    [:lemma-constructiontargets-threecirclespathtopology-threecircleslocpathconnectedspace
     :lemma-constructiontargets-threecirclespathtopology-threecirclespathconnectedspace],
+   :other-consumers []}
+  {:consumer :t99J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "ThreeCirclesPathTopologyCore.instances",
+    :type
+    "An upstream module exporting LocPathConnectedSpace ThreeCircles and PathConnectedSpace ThreeCircles without importing T99J01PathComponentCoverRestriction"},
+   :lemma
+   {:name "ThreeCirclesPathTopologyCore.instances",
+    :reported-by
+    [:routes-2026-10-11-t99j01-component-cover-isksheeted-111],
+    :type
+    "An upstream module exporting LocPathConnectedSpace ThreeCircles and PathConnectedSpace ThreeCircles without importing T99J01PathComponentCoverRestriction",
+    :area "covering-subgroup-correspondence"},
+   :id :lemma-threecirclespathtopologycore-instances,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t99J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "T99J01PathComponentCoverRestriction.t99j01ComponentCover_isKSheeted",
+    :type
+    "For hp : IsKSheetedCover p n and e : E, IsKSheetedCover (t99j01ComponentCoverMap p e) (t99j01ComponentSheets p e)"},
+   :lemma
+   {:name
+    "T99J01PathComponentCoverRestriction.t99j01ComponentCover_isKSheeted",
+    :reported-by
+    [:routes-2026-10-11-t99j01-component-cover-isksheeted-111],
+    :type
+    "For hp : IsKSheetedCover p n and e : E, IsKSheetedCover (t99j01ComponentCoverMap p e) (t99j01ComponentSheets p e)",
+    :area "covering-subgroup-correspondence"},
+   :id
+   :lemma-t99j01pathcomponentcoverrestriction-t99j01componentcover-isksheeted,
+   :kind :lemma,
+   :depends-on [:lemma-threecirclespathtopologycore-instances],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
