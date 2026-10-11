@@ -79281,8 +79281,56 @@
    :depends-on [],
    :other-consumers []}
   {:consumer :t97A04,
+   :stop-count 1,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Blueprint review is required before its nodes may enter the lemma DAG or formalisation may begin.",
+    :outcome :stop,
+    :warnings
+    ["The consumer retains its two expected placeholders at apm_t97A04_bridge_3 and hcore; this job was limited by BLUEPRINTS.md to writing the blueprint."
+     "Existing Main.lean linter warnings are unchanged."
+     "Unrelated untracked ConstructionTargets/t95J02Closure.blueprint.md was preserved untouched."],
+    :missing-theorems [],
+    :statement-hashes
+    {:registry "131 registered statements match, 0 do not",
+     :blueprint-blob "09f1cd6883bed85bb99d248138889bbe053850a4"},
+    :disposition :stop,
+    :axioms [],
+    :author "topo-6",
+    :reason :blueprint-written,
+    :commands
+    [{:cmd
+      "git diff --check -- ConstructionTargets/t97A04Closure.blueprint.md",
+      :exit 0}
+     {:cmd "lake env lean problems/t97A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "Main.lean compiled with its two existing sorry declarations"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131 registered statements match, 0 do not"}
+     {:cmd
+      "python3 -c 'import re; p=\"problems/t97A04/lean/Main.lean\"; t=open(p).read(); t=re.sub(r\"/-.*?-/\",\" \",t,flags=re.S); t=re.sub(r\"--[^\\n]*\",\" \",t); print(len(re.findall(r\"(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])\",t)))'",
+      :exit 0,
+      :output "2"}
+     {:cmd
+      "rg -n '^### B[0-9]+\\.' ConstructionTargets/t97A04Closure.blueprint.md",
+      :exit 0,
+      :output "11 numbered blueprint nodes"}
+     {:cmd "git show --check --oneline 461f5ca7e",
+      :exit 0,
+      :output "461f5ca7e Blueprint t97A04 H2 closure"}],
+    :diagnostic-history [],
+    :continue-from
+    "After independent mathematical review of ConstructionTargets/t97A04Closure.blueprint.md, formalise B1 frozenTorusH2GroupIsoInt in ConstructionTargets/t97A04Closure.lean, then proceed node by node in dependency order.",
+    :commit "461f5ca7e37a5b2967853dbea957756974500d59",
+    :changed-paths ["ConstructionTargets/t97A04Closure.blueprint.md"],
+    :finding
+    "The audit's proposed production connecting-map naturality prerequisite is already compiled. The blueprint fixes eleven remaining nodes: transport the Mayer-Vietoris top-class coordinate to AddCircle squared; define the transported vertical cover and upper-triangular shear; build and identify its short-complex endpoint maps; compute the overlap H1 scalar; cancel the monic connecting map to obtain shearY_H2; handle swap pairs and the explicit factorization of Lbar; transfer to ModuleCat; then fill bridge 3 and hcore.",
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
