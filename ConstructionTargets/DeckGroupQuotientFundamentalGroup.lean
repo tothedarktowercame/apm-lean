@@ -26,6 +26,52 @@ theorem quotientMk_isCoveringMap
     (isQuotientCoveringMap_quotientMk_of_properlyDiscontinuousSMul
       (G := G) (E := X)).isCoveringMap
 
+/-- A quotient covering's fiber over `f e` is canonically coordinated by the
+acting group: `g` corresponds to the point `g • e`. -/
+noncomputable def quotientCoveringOrbitFiberEquiv
+    {G E X : Type*} [Group G] [TopologicalSpace E] [TopologicalSpace X]
+    [MulAction G E] {f : E → X} (h : IsQuotientCoveringMap f G) (e : E) :
+    G ≃ f ⁻¹' {f e} :=
+  Equiv.ofBijective
+    (fun g ↦ ⟨g • e, by
+      change f (g • e) = f e
+      exact h.apply_eq_iff_mem_orbit.mpr ⟨g, rfl⟩⟩)
+    ⟨fun g g' eq ↦ by
+        apply h.isCancelSMul.right_cancel g g' e
+        exact congrArg Subtype.val eq,
+      fun y ↦ by
+        have hy : f y.1 = f e := by
+          simpa only [Set.mem_preimage, Set.mem_singleton_iff] using y.property
+        obtain ⟨g, hg⟩ := (@h.apply_eq_iff_mem_orbit y.1 e).mp hy
+        exact ⟨g, Subtype.ext hg⟩⟩
+
+@[simp] theorem quotientCoveringOrbitFiberEquiv_apply
+    {G E X : Type*} [Group G] [TopologicalSpace E] [TopologicalSpace X]
+    [MulAction G E] {f : E → X} (h : IsQuotientCoveringMap f G) (e : E) (g : G) :
+    (quotientCoveringOrbitFiberEquiv h e g : E) = g • e := rfl
+
+/-- The fiber of the repaired program's orbit projection, expressed in the
+acting group's coordinates. -/
+noncomputable def orbitQuotientFiberEquiv
+    {G X : Type*} [Group G] [TopologicalSpace X] [MulAction G X]
+    [ContinuousConstSMul G X] [ProperlyDiscontinuousSMul G X]
+    [LocallyCompactSpace X] [T2Space X]
+    (free : ∀ g : G, ∀ x : X, g • x = x → g = 1) (x : X) :
+    G ≃ (Quotient.mk (MulAction.orbitRel G X) :
+      X → MulAction.orbitRel.Quotient G X) ⁻¹' {Quotient.mk _ x} := by
+  letI : IsCancelSMul G X :=
+    isCancelSMul_iff_eq_one_of_smul_eq.mpr free
+  exact quotientCoveringOrbitFiberEquiv
+    (isQuotientCoveringMap_quotientMk_of_properlyDiscontinuousSMul
+      (G := G) (E := X)) x
+
+@[simp] theorem orbitQuotientFiberEquiv_apply
+    {G X : Type*} [Group G] [TopologicalSpace X] [MulAction G X]
+    [ContinuousConstSMul G X] [ProperlyDiscontinuousSMul G X]
+    [LocallyCompactSpace X] [T2Space X]
+    (free : ∀ g : G, ∀ x : X, g • x = x → g = 1) (x : X) (g : G) :
+    (orbitQuotientFiberEquiv free x g : X) = g • x := rfl
+
 private abbrev CounterexampleGroup := Multiplicative (ZMod 2)
 
 private instance : TopologicalSpace CounterexampleGroup := ⊤
@@ -83,6 +129,8 @@ theorem freeProperlyDiscontinuousQuotient_fundamentalGroupEquiv_refuted :
     simpa [smul_eq_mul] using this
 
 #print axioms quotientMk_isCoveringMap
+#print axioms quotientCoveringOrbitFiberEquiv
+#print axioms orbitQuotientFiberEquiv
 #print axioms indiscreteRegularAction_no_fundamentalGroupEquiv
 #print axioms freeProperlyDiscontinuousQuotient_fundamentalGroupEquiv_refuted
 

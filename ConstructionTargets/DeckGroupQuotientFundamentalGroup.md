@@ -10,6 +10,12 @@ action supplies IsCancelSMul; proper discontinuity then makes the orbit
 projection a covering map when the total space is locally compact and
 Hausdorff.
 
+`quotientCoveringOrbitFiberEquiv` identifies the fiber of any quotient
+covering over `f e` with its acting group by `g ↦ g • e`. Its specialization
+`orbitQuotientFiberEquiv` supplies this coordinate system for the repaired
+program's orbit projection. This is the target coordinate system for endpoint
+monodromy in the next milestone.
+
 ## Refutation of the frozen final statement
 
 The fixed theorem omits every separation hypothesis. This is not merely a gap
@@ -28,7 +34,7 @@ negates the exact universal proposition of the program's frozen final type.
 ## Work that would remain for a repaired statement
 
 1. Build monodromy from loops in the quotient to the endpoint deck
-   transformation of their lifts.
+   transformation of their lifts, expressed through `orbitQuotientFiberEquiv`.
 2. Prove surjectivity and identify its kernel with the image of the total
    space's fundamental group.
 3. Specialize to a simply connected total space.
