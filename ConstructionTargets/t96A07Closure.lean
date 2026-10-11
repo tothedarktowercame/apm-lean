@@ -91,6 +91,37 @@ theorem sphereMapAmbient_fderiv (p v : E 3) :
 /-- The ambient representative of the first coordinate point of the sphere. -/
 def sphereFirstAxis : E 3 := WithLp.toLp 2 ![1, 0, 0]
 
+/-- The first coordinate point, as a point of the unit two-sphere. -/
+def sphereFirstPoint : Sphere 2 :=
+  ⟨sphereFirstAxis, by
+    rw [mem_sphere_zero_iff_norm]
+    simp [sphereFirstAxis, EuclideanSpace.norm_eq, Fin.sum_univ_succ]⟩
+
+@[simp] theorem sphereFirstPoint_val : (sphereFirstPoint : E 3) = sphereFirstAxis := rfl
+
+/-- The tangent inclusion at the first coordinate point has the expected
+orthogonal-complement range. -/
+theorem sphereFirstPoint_tangent_range :
+    (mfderiv (𝓡 2) 𝓘(ℝ, E 3) ((↑) : Sphere 2 → E 3) sphereFirstPoint).range =
+      (ℝ ∙ sphereFirstAxis)ᗮ := by
+  simpa using (range_mfderiv_coe_sphere sphereFirstPoint)
+
+theorem crossTermSphereMap_eq_ambient_comp :
+    crossTermSphereMap = sphereMapAmbient ∘ ((↑) : Sphere 2 → E 3) := rfl
+
+/-- Chain-rule form of the sphere derivative at the first coordinate point. -/
+theorem crossTermSphereMap_mfderiv_firstPoint :
+    mfderiv (𝓡 2) (𝓡 3) crossTermSphereMap sphereFirstPoint =
+      (sphereMapAmbientDerivative sphereFirstAxis).comp
+        (mfderiv (𝓡 2) 𝓘(ℝ, E 3) ((↑) : Sphere 2 → E 3) sphereFirstPoint) := by
+  rw [crossTermSphereMap_eq_ambient_comp,
+    mfderiv_comp sphereFirstPoint
+      (sphereMapAmbient_hasFDerivAt sphereFirstAxis).differentiableAt.mdifferentiableAt
+      ((contMDiff_coe_sphere sphereFirstPoint).mdifferentiableAt one_ne_zero),
+    mfderiv_eq_fderiv, sphereFirstPoint_val,
+    (sphereMapAmbient_hasFDerivAt sphereFirstAxis).fderiv]
+  rfl
+
 /-- At the first coordinate point the ambient derivative swaps the two free
 tangent coordinates and has zero first coordinate. -/
 theorem sphereMapAmbientDerivative_firstAxis (v : E 3) :
