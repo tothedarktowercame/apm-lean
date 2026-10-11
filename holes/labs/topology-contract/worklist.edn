@@ -115103,7 +115103,43 @@
    :lemma-pointwedgevankampen-genericpointwedgesingleobjmappingequivalence,
    :kind :lemma,
    :depends-on [],
-   :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}],
+   :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
+  {:consumer :t02A05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "unitSphere_euclideanHausdorff_mass_two",
+    :type
+    "(addHaarScalarFactor volume μH[2]).toReal * IntrinsicSphereSecondMoments.mass 2 = 4 * Real.pi, i.e. the normalised Euclidean Hausdorff area of the unit 2-sphere is 4π (Mathlib's explicit Hausdorff normalisation factor is proof_wanted; codex-71 2026-10-11)"},
+   :lemma
+   {:name "unitSphere_euclideanHausdorff_mass_two",
+    :reported-by [:owner],
+    :type
+    "(addHaarScalarFactor volume μH[2]).toReal * IntrinsicSphereSecondMoments.mass 2 = 4 * Real.pi, i.e. the normalised Euclidean Hausdorff area of the unit 2-sphere is 4π (Mathlib's explicit Hausdorff normalisation factor is proof_wanted; codex-71 2026-10-11)",
+    :area "euclidean-hausdorff-normalisation"},
+   :id :lemma-unitsphere-euclideanhausdorff-mass-two,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t01J06]}
+  {:consumer :t02A05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t02a05_flux_projection_transport",
+    :type
+    "projection/flux identity for the oriented coefficient over μHE[2] on Metric.sphere c 1, plus translation transport to the centred sphere, reducing apm_t02a05 to the banked fourth moments"},
+   :lemma
+   {:name "apm_t02a05_flux_projection_transport",
+    :reported-by [:owner],
+    :type
+    "projection/flux identity for the oriented coefficient over μHE[2] on Metric.sphere c 1, plus translation transport to the centred sphere, reducing apm_t02a05 to the banked fourth moments",
+    :area "euclidean-hausdorff-normalisation"},
+   :id :lemma-apm-t02a05-flux-projection-transport,
+   :kind :lemma,
+   :depends-on [:lemma-unitsphere-euclideanhausdorff-mass-two],
+   :other-consumers []}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",
