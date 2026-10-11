@@ -113857,7 +113857,7 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
@@ -113866,10 +113866,7 @@
     :residual
     "B4, B6, B12 remain; next derive literal leg coordinates from B3.",
     :outcome :stop,
-    :warnings
-    [{:kind :upstream-lint}
-     {:kind :concurrent-worktree-change,
-      :path "ConstructionTargets/t97A04Closure.lean"}],
+    :warnings [],
     :missing-theorems
     [{:name
       "PointWedgeVanKampen.genericPointWedgeSingleObjMappingEquivalence",
@@ -113884,41 +113881,35 @@
      :documentation
      "e9364598a0739932617814c49683e85d8680df613650f9bc095b652947b6fda3",
      :blueprint
-     "2c2c9575ae84b3cb991568145fd767f4a35fe5e2e7e65be38828bcaaa11a8765",
+     "e0044518bc017ab3c3e1ba58643f1e0c2ac39e874de929d90b9f900dde357218",
      :registry "131/131"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
-    :reason "B3 proved; B4, B6 and B12 remain.",
+    :reason
+    "Repair complete: B3 now declares the connector-system dependency and exact based transport route; B4, B6 and B12 remain.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
       :exit 0}
-     {:cmd "lake build ConstructionTargets.PointWedgeVanKampen",
-      :exit 0}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131/131"}
-     {:cmd "git diff --check -- scoped files", :exit 0}],
-    :diagnostic-history
-    [{:cmd
-      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
-      :exit 1,
-      :finding "Corrected arrow and identity-functor elaboration."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1791731968228-5553-37a8c65b",
-     :finding
-     "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses."},
-    :commit "709c9e1d1e66e2495965122640b8a792c108f177",
+     {:cmd
+      "git diff --check -- ConstructionTargets/PointWedgeVanKampen.blueprint.md",
+      :exit 0}
+     {:cmd "python3 comment-stripped placeholder scan", :exit 0}],
+    :diagnostic-history [],
+    :commit "f083a1df57e92cd08896e521dcd9c52bca6bb10e",
     :changed-paths
-    ["ConstructionTargets/PointWedgeVanKampen.lean"
-     "ConstructionTargets/PointWedgeVanKampen.md"
-     "ConstructionTargets/PointWedgeVanKampen.blueprint.md"],
+    ["ConstructionTargets/PointWedgeVanKampen.blueprint.md"],
+    :fixture
+    {:path "ConstructionTargets/PointWedgeVanKampen.blueprint.md",
+     :sha256
+     "e0044518bc017ab3c3e1ba58643f1e0c2ac39e874de929d90b9f900dde357218"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
