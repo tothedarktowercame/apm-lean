@@ -104255,10 +104255,89 @@
   {:bounded-exception
    "This single-consumer theorem isolates the first geometric implication absent from the scoped source despite the stronger ledger lemma being marked banked.",
    :consumer :t93J03,
+   :stop-count 1,
    :implements-lemma
    :lemma-compatiblecarrierhomeomorphinducesboundarycycleequiv,
+   :evidence
+   {:placeholder-delta
+    {:source-before 0, :source-after 0, :fixture-sorry 0},
+    :residual
+    "Classify the four punctured-boundary components and their closure incidence, then compose those classifications with connectedComponentsEquivOfHomeomorph.",
+    :outcome :stop,
+    :warnings [],
+    :missing-theorems
+    [{:name "kleinPuncturedBoundaryComponentsEquivFinFour",
+      :type
+      "Explicit equivalences from ConnectedComponents of the disk and square non-singleton EqvGen loci with their unique four-point classes removed to Fin 4, sending edgePoint/squareEdge interiors to their edge indices",
+      :status :not-started,
+      :consumers [:t93J03],
+      :depends-on
+      ["image_diskClass_eq_squareClass"
+       "exists_distinct_related_iff"
+       "connectedComponentsEquivOfHomeomorph"],
+      :area "polygon-quotient-identification"}
+     {:name "kleinBoundaryComponentClosureIncidence",
+      :type
+      "Under the Fin 4 classifications of the punctured boundaries, two component closures meet iff diskAdjacent respectively squareAdjacent",
+      :status :not-started,
+      :consumers [:t93J03],
+      :depends-on ["kleinPuncturedBoundaryComponentsEquivFinFour"],
+      :area "polygon-quotient-identification"}
+     {:name "compatibleCarrierHomeomorphInducesBoundaryCycleEquiv",
+      :type
+      "For every relation-compatible h : Disk ≃ₜ ClosedSquare, there exists e : Fin 4 ≃ Fin 4 with diskAdjacent i j ↔ squareAdjacent (e i) (e j)",
+      :status :partial,
+      :consumers [:t93J03],
+      :depends-on ["kleinBoundaryComponentClosureIncidence"],
+      :area "polygon-quotient-identification"}],
+    :statement-hashes
+    {:source-sha256
+     "be9a7acee9d3e0ee55de0dc5e07795635fad956a8344d6c8babc06acda4ba3b5",
+     :registry "131 registered statements match, 0 do not"},
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :reason
+    "The general connected-component transport mechanism is now compiled: every homeomorphism induces an equivalence of ConnectedComponents, with the literal point formula. The exact fixture still requires presentation-specific theorems absent from the current scope: characterize the unique four-point EqvGen class, identify the complement of those vertices in the non-singleton locus with four open arcs on each boundary, and prove that closure intersection of those components is exactly diskAdjacent/squareAdjacent.",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/klein-compatible-carrier-boundary-cycle-equiv-probe.lean",
+      :exit 0,
+      :finding
+      "27e9795c2084cf79d25410bcf238ad301a7bb361c84626e9c5aa805ce5a5b9a4"}
+     {:cmd
+      "lake build ConstructionTargets.KleinCompatibleCarrierComponentBridge",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/klein-compatible-carrier-boundary-cycle-equiv-probe.lean",
+      :exit 0,
+      :finding
+      "Fixture compiles only with compatibleCarrierHomeomorphInducesBoundaryCycleEquiv as a custom axiom."}
+     {:cmd
+      "rg -n \"\\b(sorry|admit|axiom)\\b\" ConstructionTargets/KleinCompatibleCarrierComponentBridge.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}],
+    :diagnostic-history
+    [{:cmd
+      "lake env lean ConstructionTargets/KleinCompatibleCarrierComponentBridge.lean",
+      :exit 1,
+      :finding
+      "The initial connected-components inverse laws used rfl; corrected by exposing the point representatives and simplifying the homeomorphism inverse laws."}],
+    :commit "48f1ba0e73cd8833c7390ac5feaf9fc500e2c925",
+    :changed-paths
+    ["ConstructionTargets/KleinCompatibleCarrierComponentBridge.lean"],
+    :fixture
+    {:path
+     "/tmp/klein-compatible-carrier-boundary-cycle-equiv-probe.lean",
+     :sha256
+     "27e9795c2084cf79d25410bcf238ad301a7bb361c84626e9c5aa805ce5a5b9a4",
+     :status :self-axiomatized},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/KleinCompatibleCarrierComponentBridge.lean"],
    :dag-node
@@ -112539,7 +112618,8 @@
    :lemma
    {:name "compatibleCarrierHomeomorphInducesBoundaryCycleEquiv",
     :reported-by
-    [:routes-2026-10-11-klein-aabb-square-polygon-presentation-equivalence-83],
+    [:routes-2026-10-11-klein-aabb-square-polygon-presentation-equivalence-83
+     :routes-2026-10-11-compatible-carrier-boundary-cycle-equiv-107],
     :type
     "Every homeomorphism h : Disk ≃ₜ ClosedSquare that preserves and reflects EqvGen (SurfaceRel false 2) and EqvGen ClosedSquareRel induces e : Fin 4 ≃ Fin 4 preserving diskAdjacent and squareAdjacent.",
     :area "polygon-quotient-identification"},
@@ -112547,7 +112627,60 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-kleincompatiblecarriercomponentbridge-image-diskclass-eq-squ
-    :lemma-constructiontargets-kleincompatiblecarriercomponentbridge-exists-distinct-relate],
+    :lemma-constructiontargets-kleincompatiblecarriercomponentbridge-exists-distinct-relate
+    :lemma-kleinboundarycomponentclosureincidence],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "kleinPuncturedBoundaryComponentsEquivFinFour",
+    :type
+    "Explicit equivalences from ConnectedComponents of the disk and square non-singleton EqvGen loci with their unique four-point classes removed to Fin 4, sending edgePoint/squareEdge interiors to their edge indices"},
+   :lemma
+   {:name "kleinPuncturedBoundaryComponentsEquivFinFour",
+    :reported-by
+    [:routes-2026-10-11-compatible-carrier-boundary-cycle-equiv-107],
+    :type
+    "Explicit equivalences from ConnectedComponents of the disk and square non-singleton EqvGen loci with their unique four-point classes removed to Fin 4, sending edgePoint/squareEdge interiors to their edge indices",
+    :area "polygon-quotient-identification"},
+   :id :lemma-kleinpuncturedboundarycomponentsequivfinfour,
+   :kind :lemma,
+   :depends-on
+   [:lemma-image-diskclass-eq-squareclass
+    :lemma-exists-distinct-related-iff
+    :lemma-connectedcomponentsequivofhomeomorph],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "connectedComponentsEquivOfHomeomorph"},
+   :lemma
+   {:name "connectedComponentsEquivOfHomeomorph", :reported-by []},
+   :id :lemma-connectedcomponentsequivofhomeomorph,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "kleinBoundaryComponentClosureIncidence",
+    :type
+    "Under the Fin 4 classifications of the punctured boundaries, two component closures meet iff diskAdjacent respectively squareAdjacent"},
+   :lemma
+   {:name "kleinBoundaryComponentClosureIncidence",
+    :reported-by
+    [:routes-2026-10-11-compatible-carrier-boundary-cycle-equiv-107],
+    :type
+    "Under the Fin 4 classifications of the punctured boundaries, two component closures meet iff diskAdjacent respectively squareAdjacent",
+    :area "polygon-quotient-identification"},
+   :id :lemma-kleinboundarycomponentclosureincidence,
+   :kind :lemma,
+   :depends-on [:lemma-kleinpuncturedboundarycomponentsequivfinfour],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
