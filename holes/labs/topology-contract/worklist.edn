@@ -106581,7 +106581,7 @@
    "Combine this identity with the remaining constituent counit normalizations in the five-factor composite.",
    :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
   {:consumer :t99J01,
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :implements-lemma
@@ -106590,14 +106590,14 @@
    {:placeholder-delta
     {:source-before 0, :source-after 0, :fixture-sorry 0},
     :residual
-    "First normalize the connector equivalences or prove their selected counit components are identity; then prove the induced inverse pseudococone glue identity and replay the right pseudopushout counit component.",
+    "Apply stop-after-two and reroute through an upstream scope that can define normalized connector equivalences and prove coherence with TwoOpenPointSpanComparison.comparison; redispatch this row only after those results are banked.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
     [{:name
       "ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence_counit_base_identity",
       :type
-      "For each connector system used by TwoOpenPointSpanComparison, the counit hom component of connectorSingleObjEquivalence at SingleObj.star (End S.base) is identity.",
+      "For each connector system used by TwoOpenPointSpanComparison, (connectorSingleObjEquivalence S).counitIso.hom.app (SingleObj.star (End S.base)) = 𝟙 _.",
       :status :not-started,
       :consumers [:t99J01 :t01A03 :t92J06 :t97A01 :t97A03],
       :depends-on [],
@@ -106605,7 +106605,7 @@
      {:name
       "TwoOpenPseudopushoutCounitBaseIdentity.inverseIdentityPseudoCocone_glue_base_identity",
       :type
-      "(inverseIdentityPseudoCocone hU hV hcover w).glue.hom.app (FundamentalGroupoid.mk w) = 𝟙 _",
+      "(inverseIdentityPseudoCocone hU hV hcover w).glue.hom.app (FundamentalGroupoid.mk w) = 𝟙 _.",
       :status :not-started,
       :consumers [:t99J01 :t01A03 :t92J06 :t97A01 :t97A03],
       :depends-on
@@ -106617,41 +106617,29 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "The left counit component is definitionally identity, but the right component reduces to the glue component of inverseIdentityPseudoCocone at the overlap basepoint. That glue passes through TwoOpenPointSpanComparison.comparison, whose leftEquivalence and rightEquivalence are connectorSingleObjEquivalence values built with Functor.asEquivalence. Their counit components contain Classical.choice-selected objObjPreimageIso values and are not constrained to be identity. The exact missing hypothesis is identity of the selected connector counit components at both connector base objects, together with the induced proof that inverseIdentityPseudoCocone.glue.hom.app (FundamentalGroupoid.mk w) is identity.",
+    "Second consecutive implementation attempt reaches the same exact boundary. The frozen inverseIdentityPseudoCocone uses TwoOpenPointSpanComparison.comparison, whose connector equivalences are Functor.asEquivalence values. ConnectorSingleObjectCounitBaseIdentity proves only that the desired connector counit identity is equivalent to the Classical.choice-selected objObjPreimageIso hom being identity; the construction supplies no such equality. The left frozen conjunct is definitional, while the right requires inverseIdentityPseudoCocone_glue_base_identity and hence those connector identity hypotheses. This downstream-only scope cannot normalize or replace the upstream equivalences.",
     :commands
     [{:cmd
       "sha256sum /tmp/two-open-pseudopushout-counit-base-identity.lean",
       :exit 0,
-      :finding "Fixture hash matches the frozen hash."}
+      :finding "Fixture hash matches."}
      {:cmd
-      "lake env lean ConstructionTargets/TwoOpenFundamentalGroupoidPseudopushout.lean",
+      "rg -n theorem-connector-identity-or-inverse-glue-identity ConstructionTargets",
+      :exit 1,
+      :expected-exit 1,
+      :finding "Neither required normalization theorem exists."}
+     {:cmd
+      "lake env lean ConstructionTargets/ConnectorSingleObjectCounitBaseIdentity.lean",
       :exit 0,
       :finding
-      "The banked pseudopushout equivalence compiles with standard axioms."}
+      "The compiled upstream reduction exposes the selected objObjPreimageIso equality and uses only standard axioms."}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "131 registered statements match, 0 do not."}
-     {:cmd
-      "rg -n connectorSingleObjEquivalence_counit_base_identity ConstructionTargets -g *.lean",
-      :exit 0,
-      :finding
-      "Only connectorSingleObjEquivalence_counit_base_identity_iff exists; no identity theorem is banked."}
      {:cmd "git status --short",
       :exit 0,
-      :finding
-      "Worktree is clean after removing the unsuccessful exploratory source."}],
-    :diagnostic-history
-    [{:cmd
-      "lake env lean ConstructionTargets/TwoOpenPseudopushoutCounitBaseIdentity.lean",
-      :exit 1,
-      :finding
-      "The attempted exact theorem proved the left conjunct by rfl; the right conjunct remained. Isolating inverseIdentityPseudoCocone.glue.hom.app at the overlap basepoint showed that even this glue-is-identity equation is not definitional after unfolding the four downstream inverse equivalences."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1791709474230-4858-6695334c",
-     :finding
-     "extend Mathlib: state and prove the missing theorem in scope"},
+      :finding "Worktree is clean."}],
+    :diagnostic-history [],
     :commit nil,
     :changed-paths [],
     :fixture
@@ -106661,7 +106649,7 @@
      :status :self-axiomatized},
     :seat "topo-2"},
    :phase :implementation,
-   :state :repair,
+   :state :needs-owner,
    :scope
    ["ConstructionTargets/TwoOpenPseudopushoutCounitBaseIdentity.lean"],
    :dag-node
@@ -106833,7 +106821,7 @@
    :stop-condition
    "End only when every topo1 problem is closed or a row is genuinely refuted.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
