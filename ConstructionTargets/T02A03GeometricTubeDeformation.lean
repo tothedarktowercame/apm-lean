@@ -1191,6 +1191,18 @@ theorem nonzeroHeight_avoidsLeftCore_rightTubeCoreRadialAmbient
   apply reconstructionAvoidsLeftCore_rightTubeCorePolar_of_im_ne_zero
   exact nonzeroHeight_im_ne_zero_rightTubeCoreNormalInterpolation tp hheight
 
+theorem zeroHeight_rightTubeMeridianCoordinate_re_sq
+    (p : RightTubeMinusLeftCore) (hheight : p.1 2 = 0) :
+    (rightTubeMeridianCoordinate p : Complex).re ^ 2 = 1 := by
+  obtain ⟨c, hc, him⟩ :=
+    rightTubeMeridianCoordinate_im_positiveFactor_height p
+  have him0 : (rightTubeMeridianCoordinate p : Complex).im = 0 := by
+    rw [him, hheight]
+    ring
+  have hnorm := Circle.normSq_coe (rightTubeMeridianCoordinate p)
+  simpa only [Complex.normSq_apply, him0, zero_mul, add_zero, pow_two]
+    using hnorm
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -1234,3 +1246,4 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeMeridianCoordinate_im_positiveFactor_height
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.nonzeroHeight_im_ne_zero_rightTubeCoreNormalInterpolation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.nonzeroHeight_avoidsLeftCore_rightTubeCoreRadialAmbient
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.zeroHeight_rightTubeMeridianCoordinate_re_sq
