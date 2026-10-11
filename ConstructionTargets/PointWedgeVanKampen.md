@@ -234,3 +234,11 @@ element is also the `genericPointWedgeIdentityActualSpan` glue component at
 the explicit overlap base.  The remaining transport is precisely the inverse
 of `genericPointWedgeCoordinateSpanEquivalence`, followed by the literal leg
 lift identifications.
+
+That inverse is now exposed as
+`genericPointWedgeIdentityCoordinateReverseSpan`, the literal
+`reverseTransportObj` built from the overlap, left, and right groupoid
+equivalences and the two span comparison isomorphisms.  The actual-span object
+is definitionally this reverse transport, so the full right restriction
+element is its glue component at the overlap base.  Expanding that component
+into its three comparison factors is the remaining coordinate calculation.

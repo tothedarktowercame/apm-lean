@@ -420,6 +420,34 @@ def genericPointWedgeIdentityActualSpan :
     (SingleObj (genericPointWedgeFreeProduct x₀ y₀))).inverse.obj
       (genericPointWedgeIdentityCoordinateSpan x₀ y₀)
 
+/-- The inverse coordinate transport underlying the actual-span object,
+exposed before packaging it as the inverse of an equivalence. -/
+def genericPointWedgeIdentityCoordinateReverseSpan :
+    SpanPseudoCocone
+      (genericPointWedgeActualLeft x₀ y₀ M N)
+      (genericPointWedgeActualRight x₀ y₀ M N)
+      (SingleObj (genericPointWedgeFreeProduct x₀ y₀)) :=
+  reverseTransportObj
+    (genericPointWedgeActualLeft x₀ y₀ M N)
+    (genericPointWedgeActualRight x₀ y₀ M N)
+    (genericPointWedgeCoordinateLeft x₀)
+    (genericPointWedgeCoordinateRight y₀)
+    (genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN)
+    (genericPointWedgeLeftGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN)
+    (genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN)
+    (genericPointWedgeLeftSpanIso x₀ y₀ M N hM hN hy hx cM cN)
+    (genericPointWedgeRightSpanIso x₀ y₀ M N hM hN hy hx cM cN)
+    (genericPointWedgeIdentityCoordinateSpan x₀ y₀)
+
+theorem genericPointWedgeIdentityActualSpan_eq_coordinateReverseSpan :
+    genericPointWedgeIdentityActualSpan
+        x₀ y₀ M N hM hN hy hx cM cN =
+      genericPointWedgeIdentityCoordinateReverseSpan
+        x₀ y₀ M N hM hN hy hx cM cN := rfl
+
 /-- The penultimate inverse stage of B3, now expressed as the literal
 pseudococone on the two open pieces. -/
 def genericPointWedgeIdentityPseudoCocone :
@@ -743,6 +771,15 @@ theorem genericPointWedgeIdentityGlobalRightBaseElement_eq_actualGlue :
         x₀ y₀ M N hM hN hy hx cM cN).glue.hom.app
           (genericPointWedgeOverlapBase x₀ y₀ M N) := by
   rw [genericPointWedgeIdentityGlobalRightBaseElement_eq_glue]
+  rfl
+
+theorem genericPointWedgeIdentityGlobalRightBaseElement_eq_coordinateReverseGlue :
+    genericPointWedgeIdentityGlobalRightBaseElement
+        x₀ y₀ M N hM hN hy hx cM cN =
+      (genericPointWedgeIdentityCoordinateReverseSpan
+        x₀ y₀ M N hM hN hy hx cM cN).glue.hom.app
+          (genericPointWedgeOverlapBase x₀ y₀ M N) := by
+  rw [genericPointWedgeIdentityGlobalRightBaseElement_eq_actualGlue]
   rfl
 
 /-- Naturality solved for the reconstructed right-piece map.  The two
@@ -1748,6 +1785,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeDescentRightBaseElement_eq_one
 #print axioms genericPointWedgeIdentityGlobalRightBaseElement_eq_glue
 #print axioms genericPointWedgeIdentityGlobalRightBaseElement_eq_actualGlue
+#print axioms genericPointWedgeIdentityGlobalRightBaseElement_eq_coordinateReverseGlue
 #print axioms genericPointWedgeIdentityGlobalRightRestriction_map
 #print axioms genericPointWedgeIdentityGlobalRightBase_map
 #print axioms genericPointWedgeIdentityRepresentation_inl
