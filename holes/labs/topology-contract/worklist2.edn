@@ -79330,12 +79330,24 @@
     [{:cmd "closure compile",
       :exit 1,
       :finding "Fixed coordinate transport and product order."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791732059555-5556-58f9ce04",
+     :commands
+     ["git show/diff/check a7b83c02e"
+      "lake env lean ConstructionTargets/t97A04Closure.lean"
+      "lake env lean problems/t97A04/lean/Main.lean"
+      "statement-registry check/fingerprint"
+      "git-show hash/placeholder checks"],
+     :finding
+     "PASS: a7b83c02 is new after history 47163d27; scope and blobs match. It correctly transports the overlap shear, proves both folded branches affine, and derives their H1 maps as zpow(a), respecting product/branch orientations. Both Lean gates compile with standard axioms only; registry 131/0; frozen hash unchanged ca1b2cb3; closure 0/Main 2 placeholders. Coordinate assembly and B6-B11 remain listed."},
     :commit "a7b83c02e286a7aed3b64e0020e7cc191add4388",
     :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
     :finding "Both folded branches are affine with H1(zpow a).",
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79419,6 +79431,9 @@
      :reason :program-progress-committed}
     {:job 3,
      :commit "47163d27c55ee2a64fbd7666b9e662f7e3f76476",
+     :reason :program-progress-committed}
+    {:job 4,
+     :commit "a7b83c02e286a7aed3b64e0020e7cc191add4388",
      :reason :program-progress-committed}]}
   {:consumer :t96A07,
    :stop-count 2,
@@ -80073,7 +80088,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -80085,7 +80100,9 @@
     :reported-by [:program-2026-10-11-close-t97a04],
     :type "folded overlap shear equals power times branch constant",
     :area "mv-connecting-naturality",
-    :proved-in :program-2026-10-11-close-t97a04},
+    :proved-in :program-2026-10-11-close-t97a04,
+    :banked-by :program-2026-10-11-close-t97a04,
+    :banked-commit "a7b83c02e286a7aed3b64e0020e7cc191add4388"},
    :id
    :lemma-constructiontargets-t97a04closure-twocircleoverlapshear-fold-apply,
    :kind :lemma,
