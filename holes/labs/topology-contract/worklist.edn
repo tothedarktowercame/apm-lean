@@ -104073,6 +104073,19 @@
       :exit 1,
       :finding
       "Initial proof attempted to substitute Fin values; corrected by eliminating the finite disjunctions with omega."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791696442574-4350-f767d9be",
+     :commands
+     ["git show, git diff-tree, and git diff-tree --check a16770b4024f719fc3feee3dfae01bb79e50a395"
+      "sha256sum recorded source and /tmp/klein-aabb-square-polygon-presentation-equivalence.lean"
+      "lake build ConstructionTargets.KleinDiskClosedSquareRelationCompatibleCarrier"
+      "lake env lean /tmp/klein-aabb-square-polygon-presentation-equivalence.lean"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped placeholder census for problems/t93J03/lean/Main.lean"],
+     :finding
+     "PASS: valid STOP after committed compiled progress; the only changed path is the scoped module, source hash 494654d50cbe269d588c0511d1907adc08290767708f3bd9c8f4d8c035644359 and fixture hash 5559b09de6fc844fbd239e297e4b3ea5710533a9267a4aae9d46cc30424b520a reproduce, the cyclic relation-compatible component obstruction compiles with only propext and Quot.sound, the fixture custom axiom is exactly the frozen disk-to-closed-square homeomorphism preserving and reflecting EqvGen, the source-to-target direction is correct, t93J03 retains one placeholder, all 131 statements match, and the remaining carrier-to-component bridge theorem is explicitly listed"},
     :commit "a16770b4024f719fc3feee3dfae01bb79e50a395",
     :changed-paths
     ["ConstructionTargets/KleinDiskClosedSquareRelationCompatibleCarrier.lean"],
@@ -104084,7 +104097,7 @@
      :status :self-axiomatized},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/KleinDiskClosedSquareRelationCompatibleCarrier.lean"],
    :dag-node
@@ -104234,7 +104247,7 @@
       "A disk-to-closed-square homeomorphism preserving and reflecting the two generated relations descends to the required quotient homeomorphism."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-aabb-square-polygon-presentation-equivalence",
@@ -111010,7 +111023,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "kleinDiskClosedSquareCompatibleCarrierPackage",
@@ -111023,7 +111036,10 @@
      :routes-2026-10-11-klein-disk-closed-square-compatible-carrier-87],
     :type
     "There exists a homeomorphism h from ConstructionTargets.Surfaces.Disk to the subtype of points p : Real × Real satisfying InSquare p such that, for every disk points x y, Relation.EqvGen (SurfaceRel false 2) x y if and only if Relation.EqvGen ClosedSquareRel (h x) (h y).",
-    :area "polygon-quotient-identification"},
+    :area "polygon-quotient-identification",
+    :banked-by
+    :routes-2026-10-11-klein-disk-closed-square-relation-compatible-carrier-101,
+    :banked-commit "a16770b4024f719fc3feee3dfae01bb79e50a395"},
    :id :lemma-kleindiskclosedsquarecompatiblecarrierpackage,
    :kind :lemma,
    :depends-on
@@ -111686,13 +111702,16 @@
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "no_cyclic_relation_compatible_component_equiv"},
    :lemma
    {:name "no_cyclic_relation_compatible_component_equiv",
-    :reported-by []},
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/KleinDiskClosedSquareRelationCompatibleCarrier.lean"]},
    :id :lemma-no-cyclic-relation-compatible-component-equiv,
    :kind :lemma,
    :depends-on [],
