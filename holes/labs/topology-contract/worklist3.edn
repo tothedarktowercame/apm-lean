@@ -6893,6 +6893,23 @@
      "The underlying integer of the unit induced by the normalization-conjugated automorphism of AddCommGrpCat.of Int",
      :direction
      "Exact integer equality from the normalization coordinate representation to the canonical automorphism-unit representation, obtained by evaluating the lifted automorphism at one"},
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791690150277-4035-ee7d96f0",
+     :commands
+     ["git show and git diff-tree recorded commit scope"
+      "git blob identity check"
+      "sha256sum frozen fixture"
+      "git diff --check recorded commit"
+      "lake env lean renamed frozen-fixture replay"
+      "lake env lean target module"
+      "lake build target module"
+      "placeholder and axiom scan"
+      "python3 scripts/statement-registry.py check"
+      "comment-stripped consumer placeholder census"],
+     :finding
+     "PASS: commit cfe56bee changes only ConstructionTargets/ManifoldFundamentalClass.lean and its recorded blob matches the reviewed tree; frozen fixture hash f244630acb236efdf5a7e74b6f2a777024e7b392cfa24e609eec4092552ff6c8 matches. correctedLocalNormalizationAutomorphism conjugates the corrected comparison by the coefficient and ambient normalizations; correctedLocalGeneratorUnit canonically lifts this additive automorphism to ModuleCat Int and applies isoUnit; the theorem has the frozen direction identifying correctedLocalGeneratorCoefficient with the underlying integer unit by evaluating at one via map_preimage and isoUnit_action. It does not choose the unit sign or assert orientation compatibility. Fixture replay and target compile/build pass with only propext, Classical.choice, Quot.sound; registry is 131/0; source and fixture have no placeholders; consumer counts remain t00J02=1 and t98A02=1."},
     :commit "cfe56bee365630a6c1931a5c0d4eb0aa08369040",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -6910,7 +6927,7 @@
       "ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorUnit"]},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/corrected-local-generator-unit",
@@ -7087,7 +7104,7 @@
      "Conjugating the corrected relative-homology comparison by the coefficient and production normalizations gives an automorphism of AddCommGrpCat.of Int. Full faithfulness of forgetIntModules lifts it to a ModuleCat Int automorphism, and isoUnit identifies its value at one as an integer unit. The compiled theorem proves correctedLocalGeneratorCoefficient is exactly that unit. Thus the remaining issue is not cyclicity or invertibility but the sign convention across the coefficient and production connecting/radial/sphere normalization chains.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -10028,7 +10045,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -10045,7 +10062,10 @@
     "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), correctedLocalGeneratorCoefficient k x = (correctedLocalGeneratorUnit k x : Int)",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-corrected-local-generator-unit-topo3-r1},
+    :routes-2026-10-11-manifold-corrected-local-generator-unit-topo3-r1,
+    :banked-by
+    :routes-2026-10-11-manifold-corrected-local-generator-unit-topo3-r1,
+    :banked-commit "cfe56bee365630a6c1931a5c0d4eb0aa08369040"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-correctedlocalgeneratorcoefficient-eq-unit,
    :kind :lemma,
