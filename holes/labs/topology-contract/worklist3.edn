@@ -16182,6 +16182,17 @@
      {:cmd "rg forbidden tokens scoped-file",
       :exit 1,
       :expected-exit 1}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791731971722-5554-1a60caf0",
+     :commands
+     ["git scope/diff/hash checks at f358a9afb7e78d37fd5db909b77fb9ac8210a48a"
+      "renamed fixture and module: lake env lean"
+      "statement registry and placeholder scans"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"],
+     :finding
+     "One-file scope, blob, and frozen fixture hash match. equivIsoLimit.toFun transfers the transported τ₁ limit across the cone iso in the required source-to-target direction. Fixture/module compile; registry 131/0; build 8326 jobs; standard axioms only; module placeholders 0; consumers 1/1."},
     :commit "f358a9afb7e78d37fd5db909b77fb9ac8210a48a",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -16198,7 +16209,7 @@
     :routes-2026-10-11-manifold-forget-snake-kernel-tau1-islimit-topo3-r1,
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/integral-open-disk-connecting-naturality/snake-input-kernel-tau1-islimit",
@@ -16398,7 +16409,7 @@
      "The compiled definition transfers the transported τ₁ limit across the banked cone isomorphism with IsLimit.equivIsoLimit. It has exactly the evaluated mapped-fork type required as one input to ShortComplex.isLimitOfIsLimitπ; τ₂ and τ₃ and the dual cokernel components remain.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -23380,7 +23391,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -23395,7 +23406,10 @@
     :type
     "forall (S : ShortComplex.SnakeInput (ModuleCat ℤ)), IsLimit ((KernelFork.ofι (forgetIntModules.mapShortComplex.map S.v₀₁) (forgetIntModulesSnakeInput_zero_squares S).1).map ShortComplex.π₁)",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2,
+    :banked-by
+    :routes-2026-10-11-manifold-forget-snake-kernel-tau1-islimit-topo3-r1,
+    :banked-commit "f358a9afb7e78d37fd5db909b77fb9ac8210a48a"},
    :id :lemma-mfclass-forget-snake-kernel-tau1-islimit,
    :kind :lemma,
    :depends-on [:lemma-mfclass-forget-snake-kernel-tau1-cone-iso],
@@ -23458,7 +23472,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance {:lemma "forgetIntModulesSnakeInput_kernelτ₁IsLimit"},
    :lemma
@@ -23467,7 +23481,10 @@
     [:routes-2026-10-11-manifold-forget-snake-kernel-tau1-islimit-topo3-r1],
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-forget-snake-kernel-tau1-islimit-topo3-r1},
+    :routes-2026-10-11-manifold-forget-snake-kernel-tau1-islimit-topo3-r1,
+    :banked-by
+    :routes-2026-10-11-manifold-forget-snake-kernel-tau1-islimit-topo3-r1,
+    :banked-commit "f358a9afb7e78d37fd5db909b77fb9ac8210a48a"},
    :id :lemma-forgetintmodulessnakeinput-kernel-islimit,
    :kind :lemma,
    :depends-on
