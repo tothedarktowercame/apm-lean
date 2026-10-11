@@ -79283,36 +79283,36 @@
   {:consumer :t97A04,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "program STOP commits nothing new since the last :program-history entry: evidence commit bb0f0f77d8953dc78dd564e000f3d4a5b29d0894 exactly equals history job 5",
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Combine overlap coordinates with circle shear; then B6-B11.",
+    "Convert folded H1 formulas to biproduct components; then B6-B11.",
     :outcome :stop,
     :warnings ["Main has two placeholders."],
     :missing-theorems
     [{:name
-      "ConstructionTargets.T97A04Closure.overlapHomotopyEquivTwoCircles_fold",
-      :type "forward overlap preserves folded circle coordinate",
+      "ConstructionTargets.T97A04Closure.twoCircleOverlapShear_fold_apply",
+      :type "folded overlap shear equals power times branch constant",
       :status :proved,
       :consumers [:t97A04],
-      :depends-on [],
+      :depends-on
+      ["ConstructionTargets.T97A04Closure.overlapHomotopyEquivTwoCircles_fold"],
       :area "mv-connecting-naturality"}
      {:name
       "ConstructionTargets.T97A04Closure.shearY_overlap_coordinate_components",
-      :type "affine degree-a branch components",
+      :type "biproduct inl/inr degree-a equations",
       :status :partial,
       :consumers [:t97A04],
       :depends-on
-      ["ConstructionTargets.T97A04Closure.overlapHomotopyEquivTwoCircles_fold"
-       "ConstructionTargets.T97A04Closure.overlapHomotopyEquivTwoCircles_inv_fst"
-       "ConstructionTargets.T97A04Closure.frozenTorusCircleProd_shearY"],
+      ["ConstructionTargets.T97A04Closure.twoCircleOverlapShear_fold_apply"
+       "ConstructionTargets.T97A04Closure.circleZPow_H1_coordinate"],
       :area "mv-connecting-naturality"}],
     :statement-hashes
     {:registry "131/0",
-     :closure "b57e00eb5f764adc7833f92d856b2c7ae0362897",
+     :closure "f3fe52cb0224108c185ee34bac456b4f7faa4aa0",
      :blueprint "c419a895cb4ede2acc1cb6bc5c7536344ba63df4"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
@@ -79325,29 +79325,17 @@
      {:cmd "lake env lean problems/t97A04/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "Main placeholder count", :exit 0, :output "2"}
-     {:cmd "git show --check 47163d27c", :exit 0}],
+     {:cmd "git show --check a7b83c02e", :exit 0}],
     :diagnostic-history
     [{:cmd "closure compile",
       :exit 1,
-      :finding "Direct simp stalled; factored Bool-times-circle."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791731164728-5544-62608db2",
-     :commands
-     ["git show/diff/check 47163d27"
-      "lake env lean ConstructionTargets/t97A04Closure.lean"
-      "lake env lean problems/t97A04/lean/Main.lean"
-      "python3 scripts/statement-registry.py check/fingerprint"
-      "git-show placeholder counts"],
-     :finding
-     "PASS: commit 47163d27 is new since program-history 677eac44; scope/blob match. Forward overlap fold-coordinate theorem has correct orientation and Bool×Circle boundary. Both Lean gates compile; new axioms standard only. Registry 131/0; fingerprint unchanged ca1b2cb3; closure 0 and Main 2 placeholders. Remaining coordinate combination and B6-B11 are listed."},
-    :commit "47163d27c55ee2a64fbd7666b9e662f7e3f76476",
+      :finding "Fixed coordinate transport and product order."}],
+    :commit "a7b83c02e286a7aed3b64e0020e7cc191add4388",
     :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
-    :finding "Forward overlap fold coordinate proved.",
+    :finding "Both folded branches are affine with H1(zpow a).",
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79825,7 +79813,8 @@
     :lemma-constructiontargets-t97a04closure-twocircleoverlapshearfold-h1
     :lemma-constructiontargets-t97a04closure-frozentoruscircleprod-sheary
     :lemma-constructiontargets-t97a04closure-overlaphomotopyequivtwocircles-inv-fst
-    :lemma-constructiontargets-t97a04closure-overlaphomotopyequivtwocircles-fold],
+    :lemma-constructiontargets-t97a04closure-overlaphomotopyequivtwocircles-fold
+    :lemma-constructiontargets-t97a04closure-twocircleoverlapshear-fold-apply],
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
@@ -80081,4 +80070,25 @@
    :lemma-constructiontargets-t97a04closure-overlaphomotopyequivtwocircles-fold,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T97A04Closure.twoCircleOverlapShear_fold_apply",
+    :type "folded overlap shear equals power times branch constant"},
+   :lemma
+   {:name
+    "ConstructionTargets.T97A04Closure.twoCircleOverlapShear_fold_apply",
+    :reported-by [:program-2026-10-11-close-t97a04],
+    :type "folded overlap shear equals power times branch constant",
+    :area "mv-connecting-naturality",
+    :proved-in :program-2026-10-11-close-t97a04},
+   :id
+   :lemma-constructiontargets-t97a04closure-twocircleoverlapshear-fold-apply,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t97a04closure-overlaphomotopyequivtwocircles-fold],
    :other-consumers []}]}
