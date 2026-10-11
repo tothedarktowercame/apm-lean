@@ -113855,7 +113855,9 @@
    :depends-on [],
    :other-consumers [:t98A02]}
   {:consumer :t99J01,
-   :stop-count 10,
+   :owner-reopen
+   "reopened: a lemma this row reported missing is now banked",
+   :stop-count 0,
    :review-finding
    "B10 cannot apply B6: its uses list supplies no open neighborhoods and pointed contractions for the circle basepoint and the TwoCircles basepoint; B9 provides only path-connectedness. Add nodes constructing those concrete neighborhoods and contractions, and list them in B10 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
@@ -113981,7 +113983,7 @@
      "ConstructionTargets/PointWedgeVanKampen.blueprint.md"],
     :seat "topo-2"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -114006,7 +114008,7 @@
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
-   :fail-count 3,
+   :fail-count 0,
    :depends-on [],
    :program true,
    :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03],
@@ -115510,7 +115512,7 @@
    :other-consumers []}
   {:consumer :t99J01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -115523,7 +115525,9 @@
     :type
     "A pointed contraction of an open restricted-wedge neighborhood of twoCirclesPoint",
     :area "fundamental-group-wedge-of-circles",
-    :proved-in :program-2026-10-11-point-wedge-van-kampen},
+    :proved-in :program-2026-10-11-point-wedge-van-kampen,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/PointWedgeVanKampen.lean"]},
    :id
    :lemma-pointwedgevankampen-twocirclesbaseneighborhood-contraction,
    :kind :lemma,
@@ -116571,6 +116575,20 @@
     {:commit "8ffa96423",
      :next
      "Obtain independent review of t97A07Closure.blueprint.md; after approval implement B1, openness of surjective finite-dimensional continuous linear maps."},
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791729619010-5506-dfc73e64",
+     :commands
+     ["git show --format=fuller --stat 8ffa96423d77e11e8ed6a9b8d1900ab94e10a424"
+      "git diff-tree --no-commit-id --name-only -r 8ffa96423d77e11e8ed6a9b8d1900ab94e10a424"
+      "sha256sum problems/t97A07/lean/Main.lean ConstructionTargets/t97A07Closure.blueprint.md"
+      "python3 blueprint node and dependency-field validation"
+      "git diff --check 8ffa96423^ 8ffa96423 -- ConstructionTargets/t97A07Closure.blueprint.md"
+      "python3 scripts/statement-registry.py check"
+      "lake env lean problems/t97A07/lean/Main.lean"],
+     :finding
+     "PASS: blueprint-only STOP adds a new nine-node mathematical plan within exact scope; frozen source and blueprint hashes match, the one pre-existing source placeholder is unchanged, registry and consumer compilation pass, and each node is true with faithful representations and declared dependencies. Formalization correctly remains at B1."},
     :commit "8ffa96423",
     :changed-paths ["ConstructionTargets/t97A07Closure.blueprint.md"],
     :fixture
@@ -116589,7 +116607,7 @@
       {:id :B9, :status :planned}]},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A07/lean/Main.lean"
     "problems/t97A07/status.json"
@@ -116605,13 +116623,18 @@
     ["lake env lean problems/t97A07/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
    :continue-from
-   "NEXT JOB: write the blueprint ConstructionTargets/t97A07Closure.blueprint.md (BLUEPRINTS.md) for the remaining chain in ~/notes/closer/audits/t97A07.md, then formalise node by node.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Blueprint written. Nine planned nodes separate finite-dimensional surjectivity stability, fixed-chart derivative continuity, openness of regular points, compactness of critical values, the coordinate-maximum criticality argument, positive-dimensional nonemptiness, local image openness at regular points, the connected-complement infinitude argument, and the frozen adapter. Formalization waits for independent mathematical review.",
    :id :program-2026-10-11-close-t97a07,
    :kind :final-adapter,
    :campaign-priority 44,
    :depends-on [],
    :program true,
-   :other-consumers []}
+   :other-consumers [],
+   :program-history
+   [{:job 1,
+     :commit "8ffa96423",
+     :reason
+     "Blueprint written. Nine planned nodes separate finite-dimensional surjectivity stability, fixed-chart derivative continuity, openness of regular points, compactness of critical values, the coordinate-maximum criticality argument, positive-dimensional nonemptiness, local image openness at regular points, the connected-complement infinitude argument, and the frozen adapter. Formalization waits for independent mathematical review."}]}
   {:consumer :t91J06,
    :phase :implementation,
    :state :open,
