@@ -418,6 +418,25 @@ noncomputable def integralMappedRelativeCokernelComparison
     (singularChainsComparison (TopCat.of X))
     (integralSingularChainsComparison_subtype_naturality A)
 
+/-- Forgetting the integer-module structure commutes canonically with the
+relative-chain cokernel of a subtype inclusion. -/
+noncomputable def forgetIntegralRelativeCokernelComparison
+    {X : Type} [TopologicalSpace X] (A : Set X) :
+    (forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ)).obj
+        (CoefficientRelativeSmall.relativeChains ℤ A) ≅
+      cokernel ((forgetIntModules.mapHomologicalComplex
+        (ComplexShape.down ℕ)).map
+          (CoefficientRelativeSmall.subspaceMap ℤ A)) := by
+  letI : (forgetIntModules.mapHomologicalComplex
+      (ComplexShape.down ℕ)).IsEquivalence := by
+    change ((forgetIntModules.asEquivalence.mapHomologicalComplex
+      (ComplexShape.down ℕ)).functor).IsEquivalence
+    infer_instance
+  exact
+    PreservesCokernel.iso
+      (forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ))
+      (CoefficientRelativeSmall.subspaceMap ℤ A)
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -445,3 +464,4 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.distinguishedChartGenerator_eq_coefficientGenerator
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralSingularChainsComparison_subtype_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralMappedRelativeCokernelComparison
+#print axioms ConstructionTargets.ManifoldFundamentalClass.forgetIntegralRelativeCokernelComparison
