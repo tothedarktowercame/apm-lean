@@ -116059,8 +116059,109 @@
    :depends-on [],
    :other-consumers []}
   {:consumer :t95J02,
+   :stop-count 1,
+   :evidence
+   {:blueprint
+    {:path "ConstructionTargets/t95J02Closure.blueprint.md",
+     :sha256
+     "101733676719b56190ac91645b7aef205b4d2d81e8b64b8abe1ed8cc1f51ad9e",
+     :nodes
+     [{:id :B1, :status :planned}
+      {:id :B2, :status :planned}
+      {:id :B3, :status :planned}
+      {:id :B4, :status :planned}
+      {:id :B5, :status :planned}
+      {:id :B6, :status :planned}
+      {:id :B7, :status :planned}
+      {:id :B8, :status :planned}
+      {:id :B9, :status :planned}]},
+    :placeholder-delta {:source-before 3, :source-after 3},
+    :residual
+    "Independent blueprint review, then formalize B1-B8 and use B7-B8 to remove all three placeholders from problems/t95J02/lean/Main.lean.",
+    :outcome :stop,
+    :warnings
+    [{:kind :concurrent-worktree-change,
+      :message
+      "ConstructionTargets/DeckGroupQuotientFundamentalGroup.lean and .md were modified by another process and were preserved unmodified and uncommitted."}],
+    :missing-theorems
+    [{:name "t95J02Closure.separatingMap",
+      :type
+      "A continuous quotient-descended map from t95J02KleinBottleType to EuclideanSpace R (Fin 2) separating the vertical core by its cosine-sine coordinate",
+      :status :not-started,
+      :consumers [:t95J02],
+      :depends-on [],
+      :area "klein-bottle-homology"}
+     {:name "t95J02Closure.t95J02CircleB_homeo",
+      :type "euclideanUnitSphere 2 ≃ₜ t95J02CircleB",
+      :status :not-started,
+      :consumers [:t95J02],
+      :depends-on ["t95J02Closure.separatingMap"],
+      :area "klein-bottle-homology"}
+     {:name "t95J02Closure.t95J02_beta_homotopic_beta_reflection",
+      :type
+      "For beta defined by t95J02CircleB_homeo followed by t95J02InclusionB, ContinuousMap.Homotopic beta (beta.comp (CoefficientFirstReflection.reflectionMap 0))",
+      :status :not-started,
+      :consumers [:t95J02],
+      :depends-on ["t95J02Closure.t95J02CircleB_homeo"],
+      :area "klein-bottle-homology"}
+     {:name "t95J02Closure.apm_t95J02_bridge_vertical_H1_kernel",
+      :type
+      "There is a nonzero integral H1 class of t95J02CircleB killed by t95J02InclusionB",
+      :status :not-started,
+      :consumers [:t95J02],
+      :depends-on
+      ["t95J02Closure.t95J02_beta_homotopic_beta_reflection"],
+      :area "klein-bottle-homology"}
+     {:name "t95J02Closure.apm_t95J02_bridge_retraction_injective",
+      :type
+      "HasT95J02Retraction t95J02InclusionB implies injectivity of the induced integral H1 map",
+      :status :not-started,
+      :consumers [:t95J02],
+      :depends-on [],
+      :area "klein-bottle-homology"}],
+    :statement-hashes
+    {:blueprint-sha256
+     "101733676719b56190ac91645b7aef205b4d2d81e8b64b8abe1ed8cc1f51ad9e",
+     :registry "131 registered statements match, 0 do not"},
+    :disposition :stop,
+    :axioms [],
+    :author "topo-2",
+    :reason
+    "Blueprint written. The nine-node route separates the quotient invariant, descended coordinate, vertical fiber classification, circle homeomorphism, reflection homotopy, homology kernel, retraction injectivity, and frozen adapter. Per the blueprint gate, Lean formalization waits for independent mathematical review.",
+    :commands
+    [{:cmd "python3 blueprint node and dependency validation",
+      :exit 0,
+      :finding
+      "Nine nodes each have lean, uses, and status fields; B9 depends on B7 and B8."}
+     {:cmd
+      "rg exact supporting declarations in Mathlib and ConstructionTargets",
+      :exit 0,
+      :finding
+      "The AddCircle period-one homeomorphism, quotient-map API, reflection homology, and homotopy invariance declarations exist."}
+     {:cmd
+      "git diff --check -- ConstructionTargets/t95J02Closure.blueprint.md",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not."}
+     {:cmd "git commit -m Write-t95J02-closure-blueprint",
+      :exit 0,
+      :finding
+      "Committed only the scoped blueprint as 9f69aa2dad83e6675a624c3151fd5d4b61ccb16b."}
+     {:cmd "sha256sum ConstructionTargets/t95J02Closure.blueprint.md",
+      :exit 0,
+      :finding
+      "101733676719b56190ac91645b7aef205b4d2d81e8b64b8abe1ed8cc1f51ad9e"}],
+    :diagnostic-history [],
+    :continue-from
+    {:commit "9f69aa2dad83e6675a624c3151fd5d4b61ccb16b",
+     :next
+     "Obtain independent review of t95J02Closure.blueprint.md; after approval formalize B1 and B2 in ConstructionTargets/t95J02Closure.lean."},
+    :commit "9f69aa2dad83e6675a624c3151fd5d4b61ccb16b",
+    :changed-paths ["ConstructionTargets/t95J02Closure.blueprint.md"],
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t95J02/lean/Main.lean"
     "problems/t95J02/status.json"
@@ -116845,6 +116946,95 @@
    :campaign-priority 51,
    :depends-on [],
    :program true,
+   :other-consumers []}
+  {:consumer :t95J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t95J02Closure.separatingMap",
+    :type
+    "A continuous quotient-descended map from t95J02KleinBottleType to EuclideanSpace R (Fin 2) separating the vertical core by its cosine-sine coordinate"},
+   :lemma
+   {:name "t95J02Closure.separatingMap",
+    :reported-by [:program-2026-10-11-close-t95j02],
+    :type
+    "A continuous quotient-descended map from t95J02KleinBottleType to EuclideanSpace R (Fin 2) separating the vertical core by its cosine-sine coordinate",
+    :area "klein-bottle-homology"},
+   :id :lemma-t95j02closure-separatingmap,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t95J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t95J02Closure.t95J02CircleB_homeo",
+    :type "euclideanUnitSphere 2 ≃ₜ t95J02CircleB"},
+   :lemma
+   {:name "t95J02Closure.t95J02CircleB_homeo",
+    :reported-by [:program-2026-10-11-close-t95j02],
+    :type "euclideanUnitSphere 2 ≃ₜ t95J02CircleB",
+    :area "klein-bottle-homology"},
+   :id :lemma-t95j02closure-t95j02circleb-homeo,
+   :kind :lemma,
+   :depends-on [:lemma-t95j02closure-separatingmap],
+   :other-consumers []}
+  {:consumer :t95J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t95J02Closure.t95J02_beta_homotopic_beta_reflection",
+    :type
+    "For beta defined by t95J02CircleB_homeo followed by t95J02InclusionB, ContinuousMap.Homotopic beta (beta.comp (CoefficientFirstReflection.reflectionMap 0))"},
+   :lemma
+   {:name "t95J02Closure.t95J02_beta_homotopic_beta_reflection",
+    :reported-by [:program-2026-10-11-close-t95j02],
+    :type
+    "For beta defined by t95J02CircleB_homeo followed by t95J02InclusionB, ContinuousMap.Homotopic beta (beta.comp (CoefficientFirstReflection.reflectionMap 0))",
+    :area "klein-bottle-homology"},
+   :id :lemma-t95j02closure-t95j02-beta-homotopic-beta-reflection,
+   :kind :lemma,
+   :depends-on [:lemma-t95j02closure-t95j02circleb-homeo],
+   :other-consumers []}
+  {:consumer :t95J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t95J02Closure.apm_t95J02_bridge_vertical_H1_kernel",
+    :type
+    "There is a nonzero integral H1 class of t95J02CircleB killed by t95J02InclusionB"},
+   :lemma
+   {:name "t95J02Closure.apm_t95J02_bridge_vertical_H1_kernel",
+    :reported-by [:program-2026-10-11-close-t95j02],
+    :type
+    "There is a nonzero integral H1 class of t95J02CircleB killed by t95J02InclusionB",
+    :area "klein-bottle-homology"},
+   :id :lemma-t95j02closure-apm-t95j02-bridge-vertical-h1-kernel,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t95j02closure-t95j02-beta-homotopic-beta-reflection],
+   :other-consumers []}
+  {:consumer :t95J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t95J02Closure.apm_t95J02_bridge_retraction_injective",
+    :type
+    "HasT95J02Retraction t95J02InclusionB implies injectivity of the induced integral H1 map"},
+   :lemma
+   {:name "t95J02Closure.apm_t95J02_bridge_retraction_injective",
+    :reported-by [:program-2026-10-11-close-t95j02],
+    :type
+    "HasT95J02Retraction t95J02InclusionB implies injectivity of the induced integral H1 map",
+    :area "klein-bottle-homology"},
+   :id :lemma-t95j02closure-apm-t95j02-bridge-retraction-injective,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
