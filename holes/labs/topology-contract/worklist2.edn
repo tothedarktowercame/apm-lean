@@ -79283,22 +79283,29 @@
   {:consumer :t97A04,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 6,
+   :stop-count 7,
    :review-finding
    "program STOP commits nothing new since the last :program-history entry: evidence commit bb0f0f77d8953dc78dd564e000f3d4a5b29d0894 exactly equals history job 5",
    :evidence
    {:placeholder-delta 0,
-    :residual "Prove range naturality; then components and B6-B11.",
+    :residual "Combine overlap H1 with folded branches; then B6-B11.",
     :outcome :stop,
     :warnings ["Main: 2 placeholders."],
     :missing-theorems
     [{:name
-      "ConstructionTargets.T97A04Closure.shearY_productionIntersectionMap_range",
-      :type
-      "production intersection endpoint equals range-coordinate shear",
+      "ConstructionTargets.T97A04Closure.shearY_coverRangeMap_naturality",
+      :type "range/overlap chain square",
       :status :proved,
       :consumers [:t97A04],
       :depends-on [],
+      :area "mv-connecting-naturality"}
+     {:name
+      "ConstructionTargets.T97A04Closure.shearY_productionIntersectionMap_eq_overlap",
+      :type "production endpoint=overlap H1",
+      :status :proved,
+      :consumers [:t97A04],
+      :depends-on
+      ["ConstructionTargets.T97A04Closure.shearY_coverRangeMap_naturality"],
       :area "mv-connecting-naturality"}
      {:name
       "ConstructionTargets.T97A04Closure.shearY_overlap_coordinate_components",
@@ -79306,13 +79313,11 @@
       :status :partial,
       :consumers [:t97A04],
       :depends-on
-      ["ConstructionTargets.T97A04Closure.shearY_productionIntersectionMap_range"
-       "ConstructionTargets.T97A04Closure.twoCircleOverlapShearLeftFold_H1_coordinate"
-       "ConstructionTargets.T97A04Closure.twoCircleOverlapShearRightFold_H1_coordinate"],
+      ["ConstructionTargets.T97A04Closure.shearY_productionIntersectionMap_eq_overlap"],
       :area "mv-connecting-naturality"}],
     :statement-hashes
     {:registry "131/0",
-     :closure "e6a4322fafe1873aaf498c15d0a2fb7d9a3045b5",
+     :closure "b99b301722f5709ddef87fb92ecaaae3f5b1734a",
      :blueprint "c419a895cb4ede2acc1cb6bc5c7536344ba63df4"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
@@ -79324,30 +79329,15 @@
      {:cmd "closure no-sorry scan", :exit 1, :expected-exit 1}
      {:cmd "lake env lean problems/t97A04/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "Main placeholder count", :exit 0, :output "2"}],
+     {:cmd "Main placeholder count", :exit 0, :output "2"}
+     {:cmd "git show --check a649c7e8d", :exit 0}],
     :diagnostic-history
-    [{:cmd "closure compile",
-      :exit 1,
-      :finding
-      "Reassociated homology conjugation and canceled iso pairs."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791734365489-5581-3806014b",
-     :commands
-     ["git show/diff/check 1acae3d6"
-      "lake env lean ConstructionTargets/t97A04Closure.lean"
-      "lake env lean problems/t97A04/lean/Main.lean"
-      "statement-registry check/fingerprint"
-      "git-show hash/placeholder checks"],
-     :finding
-     "PASS: 1acae3d6 is new after history 564a3137; scope/blob match. It correctly cancels the intersection range-chain isomorphism and expresses the production endpoint as inv-map-hom in range coordinates, with compatible source/target orientation. Lean gates compile with standard axioms only; registry 131/0; frozen hash unchanged ca1b2cb3; closure 0/Main 2 placeholders. Range naturality, components, and B6-B11 remain listed."},
-    :commit "1acae3d6b96d54bb2675c5be7648264386e31c24",
+    [{:cmd "closure compile", :exit 1, :finding "Fixed association."}],
+    :commit "a649c7e8d6e17ba105e016297daf5c824b9c777a",
     :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
-    :finding "Production intersection reduced to the range shear map.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79838,7 +79828,8 @@
     :lemma-constructiontargets-t97a04closure-twocircleoverlapshear-fold-apply
     :lemma-constructiontargets-t97a04closure-twocircleoverlapshearleftfold-h1-coordinate
     :lemma-constructiontargets-t97a04closure-twocircleoverlapshearrightfold-h1-coordinate
-    :lemma-constructiontargets-t97a04closure-sheary-productionintersectionmap-range],
+    :lemma-constructiontargets-t97a04closure-sheary-productionintersectionmap-range
+    :lemma-constructiontargets-t97a04closure-sheary-productionintersectionmap-eq-overlap],
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
@@ -80185,4 +80176,45 @@
    :lemma-constructiontargets-t97a04closure-sheary-productionintersectionmap-range,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T97A04Closure.shearY_coverRangeMap_naturality",
+    :type "range/overlap chain square"},
+   :lemma
+   {:name
+    "ConstructionTargets.T97A04Closure.shearY_coverRangeMap_naturality",
+    :reported-by [:program-2026-10-11-close-t97a04],
+    :type "range/overlap chain square",
+    :area "mv-connecting-naturality",
+    :proved-in :program-2026-10-11-close-t97a04},
+   :id
+   :lemma-constructiontargets-t97a04closure-sheary-coverrangemap-naturality,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A04,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.T97A04Closure.shearY_productionIntersectionMap_eq_overlap",
+    :type "production endpoint=overlap H1"},
+   :lemma
+   {:name
+    "ConstructionTargets.T97A04Closure.shearY_productionIntersectionMap_eq_overlap",
+    :reported-by [:program-2026-10-11-close-t97a04],
+    :type "production endpoint=overlap H1",
+    :area "mv-connecting-naturality",
+    :proved-in :program-2026-10-11-close-t97a04},
+   :id
+   :lemma-constructiontargets-t97a04closure-sheary-productionintersectionmap-eq-overlap,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-t97a04closure-sheary-coverrangemap-naturality],
    :other-consumers []}]}
