@@ -16784,6 +16784,17 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git commit", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791740644284-5701-a202b843",
+     :commands
+     ["git scope/diff/hash checks at ecb7cbc5420b5f51f2b2c656c6d5ce497bad6795"
+      "renamed fixture and module: lake env lean"
+      "registry and placeholder scans"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"],
+     :finding
+     "One-file scope, recorded blob, and frozen hashes match. ShortComplex.isLimitOfIsLimitπ receives all three component limits; each is transported through the inverse π comparison and an identity-point cone iso in the correct direction. Fixture/module compile; registry 131/0; build 8326 jobs; standard axioms only; placeholders 0; consumers 1/1. No cokernel or mapped SnakeInput."},
     :commit "ecb7cbc5420b5f51f2b2c656c6d5ce497bad6795",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -16798,7 +16809,7 @@
     :row :routes-2026-10-11-mfclass-forget-snake-kernel-limit-r1,
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/manifold-fundamental-class/mapped-snake-kernel",
@@ -16873,7 +16884,7 @@
       "4ca15d6da01cc59239ac6d9b551387e6e5f537b2473fdff2a7d1de22c0247007"},
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -24209,7 +24220,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -24224,14 +24235,16 @@
     :type
     "∀ S : ShortComplex.SnakeInput (ModuleCat ℤ), ForgottenSnakeKernelLimit S",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2,
+    :banked-by :routes-2026-10-11-mfclass-forget-snake-kernel-limit-r1,
+    :banked-commit "ecb7cbc5420b5f51f2b2c656c6d5ce497bad6795"},
    :id :lemma-mfclass-forget-snake-kernel-limit,
    :kind :lemma,
    :depends-on [:lemma-mfclass-sc-pair-pi3-iso],
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "forgetSnakeKernelLimit",
@@ -24244,8 +24257,9 @@
     :type
     "∀ S : ShortComplex.SnakeInput (ModuleCat ℤ), ForgottenSnakeKernelLimit S",
     :area "manifold-fundamental-class",
-    :proved-in
-    :routes-2026-10-11-mfclass-forget-snake-kernel-limit-r1},
+    :proved-in :routes-2026-10-11-mfclass-forget-snake-kernel-limit-r1,
+    :banked-by :routes-2026-10-11-mfclass-forget-snake-kernel-limit-r1,
+    :banked-commit "ecb7cbc5420b5f51f2b2c656c6d5ce497bad6795"},
    :id :lemma-forgetsnakekernellimit,
    :kind :lemma,
    :depends-on [:lemma-scpairzero-iso-30f0f76e10cb],
