@@ -708,6 +708,33 @@ theorem integralRelativeHomologyComparisonWithTransport_hom
   unfold integralRelativeHomologyComparisonWithTransport
   rfl
 
+/-- Inverse homology preservation is natural for the coefficient
+absolute-to-relative projection. -/
+theorem coefficientRelativeProjection_mapHomologyIso_naturality
+    {X : Type} [TopologicalSpace X] (A : Set X) (n : ℕ) :
+    forgetIntModules.map
+        (HomologicalComplex.homologyMap
+          (cokernel.π (CoefficientRelativeSmall.subspaceMap ℤ A)) n) ≫
+      (((CoefficientRelativeSmall.relativeChains ℤ A).sc n).mapHomologyIso
+        forgetIntModules).inv =
+    (((CoefficientH0.SingularChains ℤ (TopCat.of X)).sc n).mapHomologyIso
+        forgetIntModules).inv ≫
+      HomologicalComplex.homologyMap
+        ((forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ)).map
+          (cokernel.π (CoefficientRelativeSmall.subspaceMap ℤ A))) n := by
+  let φ := cokernel.π (CoefficientRelativeSmall.subspaceMap ℤ A)
+  let ψ := (HomologicalComplex.shortComplexFunctor (ModuleCat ℤ)
+    (ComplexShape.down ℕ) n).map φ
+  have hpres := ShortComplex.mapHomologyIso_inv_naturality ψ forgetIntModules
+  change forgetIntModules.map (ShortComplex.homologyMap ψ) ≫
+      (((CoefficientRelativeSmall.relativeChains ℤ A).sc n).mapHomologyIso
+        forgetIntModules).inv =
+    (((CoefficientH0.SingularChains ℤ (TopCat.of X)).sc n).mapHomologyIso
+        forgetIntModules).inv ≫
+      HomologicalComplex.homologyMap
+        ((forgetIntModules.mapHomologicalComplex (ComplexShape.down ℕ)).map φ) n
+  exact hpres
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -754,3 +781,4 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport_homology_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_hom
+#print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientRelativeProjection_mapHomologyIso_naturality
