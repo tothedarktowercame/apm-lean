@@ -1,6 +1,7 @@
 import ConstructionTargets.LocalHomologyNeighborhoodExcision
 import ConstructionTargets.CoefficientChartTransitionUnit
 import ConstructionTargets.CoefficientTransitionLocalConstancy
+import ConstructionTargets.CoefficientDistinguishedNormalization
 import ConstructionTargets.IntegralSingularHomologyComparison
 import ConstructionTargets.HigherChartLocalGenerator
 
@@ -365,6 +366,18 @@ theorem localizationCoefficient_eq_one_of_normalized
     1 • HigherChartLocalGenerator.ambientLocalGenerator (k := k) x
   simpa only [one_zsmul] using hr.trans hnormalized
 
+theorem distinguishedChartGenerator_eq_coefficientGenerator
+    (R : Type) [CommRing R] (m : ℕ)
+    {M : Type} [TopologicalSpace M] [T2Space M]
+    [ChartedSpace (EuclideanSpace ℝ (Fin (m + 2))) M] (x : M) :
+    CoefficientChartTransitionUnit.chartGenerator R m x x (mem_chart_source _ x) =
+      CoefficientChartLocal.generator R m x := by
+  unfold CoefficientChartTransitionUnit.chartGenerator
+    CoefficientChartTransitionUnit.chartNormalization
+    CoefficientChartLocal.generator
+  rw [CoefficientDistinguishedNormalization.distinguished R m x]
+  rfl
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -389,3 +402,4 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.localizationMap_groupGlobalGenerator_eq_zsmul_ambientLocalGenerator
 #print axioms ConstructionTargets.ManifoldFundamentalClass.ambientLocalGenerator_zsmul_injective
 #print axioms ConstructionTargets.ManifoldFundamentalClass.localizationCoefficient_eq_one_of_normalized
+#print axioms ConstructionTargets.ManifoldFundamentalClass.distinguishedChartGenerator_eq_coefficientGenerator
