@@ -1,4 +1,5 @@
 import Mathlib
+import ConstructionTargets.CircleHomology
 
 /-! # APM t95J02: retractions of the Klein bottle onto its core circles
 
@@ -261,6 +262,86 @@ theorem verticalParam_eq_iff (y y' : ℝ) :
       _ = (2 * Real.pi) * (y + (n : ℝ)) := by ring
   · rintro ⟨n, rfl⟩
     exact (verticalParam_add_int y n).symm
+
+theorem verticalParam_periodic : Function.Periodic verticalParam 1 := by
+  intro y
+  simpa using verticalParam_add_int y 1
+
+/-- The vertical parametrization descended to the period-one additive circle. -/
+def verticalAddCircle : C(AddCircle (1 : ℝ), t95J02CircleB) where
+  toFun := verticalParam_periodic.lift
+  continuous_toFun := by
+    apply isQuotientMap_quotient_mk'.continuous_iff.mpr
+    exact verticalParam.continuous
+
+@[simp] theorem verticalAddCircle_coe (y : ℝ) :
+    verticalAddCircle (y : AddCircle (1 : ℝ)) = verticalParam y := rfl
+
+theorem verticalAddCircle_surjective : Function.Surjective verticalAddCircle := by
+  rintro ⟨z, y, rfl⟩
+  exact ⟨(y : AddCircle (1 : ℝ)), rfl⟩
+
+theorem verticalAddCircle_injective : Function.Injective verticalAddCircle := by
+  intro a b h
+  induction a using QuotientAddGroup.induction_on
+  induction b using QuotientAddGroup.induction_on
+  rw [verticalAddCircle_coe, verticalAddCircle_coe] at h
+  obtain ⟨n, hn⟩ := (verticalParam_eq_iff _ _).mp h
+  rw [QuotientAddGroup.eq, AddSubgroup.mem_zmultiples_iff]
+  refine ⟨n, ?_⟩
+  simp [hn]
+
+theorem verticalAddCircle_bijective : Function.Bijective verticalAddCircle :=
+  ⟨verticalAddCircle_injective, verticalAddCircle_surjective⟩
+
+/-- The separating coordinate restricted to the vertical core. -/
+def circleBSeparating : C(t95J02CircleB, EuclideanSpace ℝ (Fin 2)) :=
+  separatingMap.comp ⟨Subtype.val, continuous_subtype_val⟩
+
+theorem circleBSeparating_injective : Function.Injective circleBSeparating := by
+  rintro ⟨z, y, rfl⟩ ⟨z', y', rfl⟩ h
+  apply Subtype.ext
+  apply congrArg Subtype.val
+  apply (verticalParam_eq_iff y y').mpr
+  have hs : separatingRaw (0, y) = separatingRaw (0, y') := by
+    simpa [circleBSeparating] using h
+  have hcos : Real.cos (2 * Real.pi * y) = Real.cos (2 * Real.pi * y') := by
+    have h0 := congrArg (fun v : EuclideanSpace ℝ (Fin 2) => v 0) hs
+    simpa [separatingRaw] using h0
+  have hsin : Real.sin (2 * Real.pi * y) = Real.sin (2 * Real.pi * y') := by
+    have h1 := congrArg (fun v : EuclideanSpace ℝ (Fin 2) => v 1) hs
+    simpa [separatingRaw] using h1
+  have hexp : Circle.exp (2 * Real.pi * y') = Circle.exp (2 * Real.pi * y) := by
+    apply Subtype.ext
+    simp only [Circle.coe_exp, Complex.exp_mul_I]
+    rw [← Complex.ofReal_cos, ← Complex.ofReal_sin,
+      ← Complex.ofReal_cos, ← Complex.ofReal_sin, hcos, hsin]
+  obtain ⟨n, hn⟩ := Circle.exp_eq_exp.mp hexp
+  refine ⟨n, ?_⟩
+  have hpi : (2 * Real.pi : ℝ) ≠ 0 := by positivity
+  apply mul_left_cancel₀ hpi
+  calc
+    (2 * Real.pi) * y' = 2 * Real.pi * y' := rfl
+    _ = 2 * Real.pi * y + (n : ℝ) * (2 * Real.pi) := hn
+    _ = (2 * Real.pi) * (y + (n : ℝ)) := by ring
+
+noncomputable instance circleB_t2 : T2Space t95J02CircleB :=
+  T2Space.of_injective_continuous circleBSeparating_injective
+    circleBSeparating.continuous
+
+noncomputable def verticalAddCircleHomeomorph :
+    AddCircle (1 : ℝ) ≃ₜ t95J02CircleB :=
+  Continuous.homeoOfEquivCompactToT2
+    (f := Equiv.ofBijective verticalAddCircle verticalAddCircle_bijective)
+    verticalAddCircle.continuous
+
+/-- The frozen vertical core, in the Euclidean circle presentation used by
+the homology calculation. -/
+noncomputable def t95J02CircleB_homeo :
+    T02A06.euclideanUnitSphere 2 ≃ₜ t95J02CircleB :=
+  ConstructionTargets.CircleHomology.circleHomeomorphSphereOne.symm.trans
+    ((AddCircle.homeomorphCircle (T := (1 : ℝ)) one_ne_zero).symm.trans
+      verticalAddCircleHomeomorph)
 
 end t95J02Closure
 

@@ -94,7 +94,7 @@ uses: B2, B3, B4,
 `AddCircle.homeomorphCircle (T := 1) one_ne_zero`,
 `isQuotientMap_quotient_mk'`, and `Continuous.homeoOfEquivCompactToT2`
 
-status: planned
+status: proved
 
 Use B3's integer-periodic map to descend from `ℝ` to `AddCircle 1` by
 `Function.Periodic.lift`, with continuity obtained from
