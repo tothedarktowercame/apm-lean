@@ -3572,8 +3572,89 @@
   {:consumer :t00J02,
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-integralrelativechainscomparison,
+   :evidence
+   {:placeholder-delta {:source 0, :fixture 0},
+    :residual
+    "Apply homologyFunctor.mapIso to integralRelativeChainsComparison, identify its source homology with the forgotten coefficient-relative homology, and prove that its hom sends CoefficientChartLocal.generator Int to HigherChartLocalGenerator.ambientLocalGenerator.",
+    :gates
+    {:module-build :pass,
+     :exact-declaration-type :pass,
+     :standard-axioms-only :pass,
+     :canonical-three-iso-composition :pass,
+     :exact-scope :pass,
+     :statement-registry :pass,
+     :zero-placeholders :pass,
+     :no-homology-map :pass,
+     :clean-tree :pass,
+     :fixture-compiles :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["lake build replayed pre-existing warnings from dependency modules; the target module emitted informational axiom reports and no warnings"
+     "A concurrent supervisor commit advanced HEAD after the scoped commit; the scoped commit remains an ancestor and the worktree is clean."],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparison",
+      :type
+      "Canonical chain-complex isomorphism from forgotten integral coefficient-relative chains to production relative singular chains.",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on
+      ["ConstructionTargets.ManifoldFundamentalClass.forgetIntegralRelativeCokernelComparison"
+       "ConstructionTargets.ManifoldFundamentalClass.integralMappedRelativeCokernelComparison"
+       "ConstructionTargets.SingularExcision.relativeSingularChainsIsoCokernelSubspaceMap"],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-10",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/manifold_fundamental_class_integral_relative_chain_comparison.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ManifoldFundamentalClass",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/manifold_fundamental_class_integral_relative_chain_comparison.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/ManifoldFundamentalClass.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^\\s*axiom\\b' ConstructionTargets/ManifoldFundamentalClass.lean /tmp/manifold_fundamental_class_integral_relative_chain_comparison.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "git merge-base --is-ancestor 940ab40999b118362271d38b4ec767ad018ee54c HEAD",
+      :exit 0}
+     {:cmd "git status --porcelain", :exit 0, :stdout ""}],
+    :commit "940ab40999b118362271d38b4ec767ad018ee54c",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+    :fixture
+    {:path
+     "/tmp/manifold_fundamental_class_integral_relative_chain_comparison.lean",
+     :sha256
+     "8501eea36b3b3664f6ef93195ab613e9e36e53b919e29eb670a2c85e5f0fbf4c",
+     :original-sha256
+     "9ea09a83551ebe296923890cf2bc9f08c464fd76c0f641e424c2f19216305a40",
+     :sorry-count 0},
+    :implementation
+    {:scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+     :declaration
+     "ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparison",
+     :representation
+     {:source
+      "The coefficient-relative singular chain complex over Int after forgetting its ModuleCat structure",
+      :target
+      "The production AddCommGrpCat RelativeSingularChains complex for the same subspace pair",
+      :direction
+      "Canonical chain-complex isomorphism from the forgotten coefficient-relative representation to the production relative-singular-chain representation, obtained by composing cokernel preservation, the absolute-comparison-induced cokernel isomorphism, and the inverse production cokernel presentation"}},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/integral-relative-chain-comparison",
@@ -5927,18 +6008,21 @@
    {:name
     "ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparison",
     :reported-by
-    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2
+     :routes-2026-10-11-manifold-integral-relative-chains-comparison-topo3-r1],
     :type
     "forall {X : Type} [TopologicalSpace X] (A : Set X), (forgetIntModules.mapHomologicalComplex (ComplexShape.down Nat)).obj (CoefficientRelativeSmall.relativeChains Int A) ≅ RelativeSingularChains A",
     :area "manifold-fundamental-class",
-    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+    :proved-in
+    :routes-2026-10-11-manifold-integral-relative-chains-comparison-topo3-r1},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-integralrelativechainscomparison,
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-manifoldfundamentalclass-forgetintegralrelativecokernelcomparison
     :lemma-constructiontargets-manifoldfundamentalclass-integralmappedrelativecokernelcomparison
-    :lemma-constructiontargets-singularhomologyconcrete-relativesingularchainsisocokernelsu],
+    :lemma-constructiontargets-singularhomologyconcrete-relativesingularchainsisocokernelsu
+    :lemma-constructiontargets-singularexcision-relativesingularchainsisocokernelsubspacema],
    :other-consumers [:t98A02]}
   {:consumer :portfolio,
    :phase :lemma,
@@ -5953,6 +6037,22 @@
     :reported-by []},
    :id
    :lemma-constructiontargets-singularhomologyconcrete-relativesingularchainsisocokernelsu,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SingularExcision.relativeSingularChainsIsoCokernelSubspaceMap"},
+   :lemma
+   {:name
+    "ConstructionTargets.SingularExcision.relativeSingularChainsIsoCokernelSubspaceMap",
+    :reported-by []},
+   :id
+   :lemma-constructiontargets-singularexcision-relativesingularchainsisocokernelsubspacema,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}],
