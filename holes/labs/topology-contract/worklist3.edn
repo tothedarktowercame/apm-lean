@@ -8267,6 +8267,23 @@
      "The value at one of correctedLocalNormalizationAutomorphism, the coefficient normalization inverse followed by the corrected comparison and ambient normalization",
      :direction
      "Exact integer equality from the extracted corrected-generator coordinate representation to evaluation at one of the normalization-conjugated automorphism"},
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791694586951-4275-3ebb34ba",
+     :commands
+     ["git show and git diff-tree recorded commit scope"
+      "git blob identity check"
+      "sha256sum frozen fixture"
+      "git diff --check recorded commit"
+      "lake env lean renamed frozen-fixture replay"
+      "lake env lean target module"
+      "lake build ConstructionTargets.ManifoldFundamentalClass"
+      "placeholder and axiom scan"
+      "python3 scripts/statement-registry.py check"
+      "consumer placeholder census"],
+     :finding
+     "PASS: recorded commit c0e69e90 changes only the target module and its blob matches the reviewed checkout; frozen fixture hash d0cc76053cbceebfe3c6c0dfc8b3a27a9bdceeee65e02b1bc7dab886dc2fa5f9 matches. The theorem discharges the exact frozen equality in the registered direction by unfolding the corrected integer coordinate, normalization-conjugated automorphism, and coefficient-chart generator; it does not cross into sign or positivity claims. Renamed fixture replay, target elaboration, and Lake build pass; axioms are exactly propext, Classical.choice, Quot.sound; registry is 131/0; target placeholders are 0 and consumer baselines t00J02/t98A02 remain 1/1."},
     :commit "c0e69e90c1a1633f5b3e0583e21df325e359cdee",
     :commits ["c0e69e90c1a1633f5b3e0583e21df325e359cdee"],
     :changed-paths
@@ -8284,7 +8301,7 @@
      "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), correctedLocalGeneratorCoefficient k x = (correctedLocalNormalizationAutomorphism k x).hom.hom 1"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization/corrected-coefficient-as-normalization-automorphism-coordinate",
@@ -8457,7 +8474,7 @@
      "The corrected scalar is definitionally the value at one of the normalization-conjugated automorphism. This compiled representation comparison moves the remaining sign question onto the actual composite of coefficient normalization inverse, corrected comparison, and ambient normalization. The next prerequisite must expand and compare that composite's connecting, radial, and sphere factors to rule out value negative one.",
      :seat "topo-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -11731,7 +11748,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -11748,7 +11765,10 @@
     "forall (k : Nat) {M : Type} [TopologicalSpace M] [T2Space M] [ChartedSpace (HigherChartLocalGenerator.E k) M] (x : M), correctedLocalGeneratorCoefficient k x = (correctedLocalNormalizationAutomorphism k x).hom.hom 1",
     :area "manifold-fundamental-class",
     :proved-in
-    :routes-2026-10-11-manifold-corrected-coefficient-automorphism-one-topo3-r1},
+    :routes-2026-10-11-manifold-corrected-coefficient-automorphism-one-topo3-r1,
+    :banked-by
+    :routes-2026-10-11-manifold-corrected-coefficient-automorphism-one-topo3-r1,
+    :banked-commit "c0e69e90c1a1633f5b3e0583e21df325e359cdee"},
    :id
    :lemma-constructiontargets-manifoldfundamentalclass-correctedlocalgeneratorcoefficient-eq-automorphism-one,
    :kind :lemma,
