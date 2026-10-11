@@ -103186,8 +103186,69 @@
   {:bounded-exception
    "This single-consumer prerequisite supplies the exact six boundary-coordinate equations needed by the two concrete radial packages.",
    :consumer :t97A01,
+   :evidence
+   {:placeholder-delta
+    {:source-before 0, :source-after 0, :fixture-after 0},
+    :residual
+    "Assemble the N3 and torus-crosscap radial open-cover packages using the banked outer deformation and overlap equivalence declarations with their exact registered theorem names.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["Lake replayed unrelated pre-existing linter warnings from imported modules, including unused simp arguments in PolygonBoundaryCompactHausdorffInstances."],
+    :missing-theorems [],
+    :statement-hashes {:matched 131, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/polygon-boundary-three-circles-literal-formulas.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.PolygonBoundaryThreeCirclesLiteralFormulas",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/polygon-boundary-three-circles-literal-formulas.lean",
+      :exit 0}
+     {:cmd "lake env lean /tmp/check-literal-axioms.lean",
+      :exit 0,
+      :finding
+      "All eight exported theorems use only propext, Classical.choice, Quot.sound"}
+     {:cmd "python3 placeholder scan of source and fixture",
+      :exit 0,
+      :finding "source 0, fixture 0"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "131 registered statements match, 0 do not"}
+     {:cmd
+      "git diff --check -- ConstructionTargets/PolygonBoundaryThreeCirclesLiteralFormulas.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/PolygonBoundaryThreeCirclesLiteralFormulas.lean",
+      :exit 0}
+     {:cmd "git status --short", :exit 0, :finding "clean"}],
+    :diagnostic-history [],
+    :commit "2afd98fc5638b80cceb04421aafdde4256e1c468",
+    :changed-paths
+    ["ConstructionTargets/PolygonBoundaryThreeCirclesLiteralFormulas.lean"],
+    :fixture
+    {:path "/tmp/polygon-boundary-three-circles-literal-formulas.lean",
+     :sha256
+     "bb2862aa670f0e00c4bd279eff5be0439da496c6592b057caaf112225df64577",
+     :status :compiled},
+    :implementation
+    {:scope
+     ["ConstructionTargets/PolygonBoundaryThreeCirclesLiteralFormulas.lean"],
+     :exports
+     ["n3BoundaryHomeomorphThreeCircles_threeLoops"
+      "torusCrosscapBoundaryHomeomorphThreeCircles_threeLoops"
+      "n3Boundary_first"
+      "n3Boundary_second"
+      "n3Boundary_third"
+      "torusCrosscapBoundary_first"
+      "torusCrosscapBoundary_second"
+      "torusCrosscapBoundary_third"]},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonBoundaryThreeCirclesLiteralFormulas.lean"],
    :dag-node
