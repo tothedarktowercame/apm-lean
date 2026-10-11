@@ -79336,11 +79336,23 @@
     [{:cmd "closure",
       :exit 1,
       :finding "Moved lemmas after folded-map definitions."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791741737587-5723-fbfb81a1",
+     :commands
+     ["git show/diff/check e5f0644a2"
+      "lake env lean ConstructionTargets/t97A04Closure.lean"
+      "lake env lean problems/t97A04/lean/Main.lean"
+      "statement-registry check/fingerprint"
+      "git-show hash/placeholder checks"],
+     :finding
+     "PASS: e5f0644a is new after history be98ab33; scope/blob match. Branch+fold reconstruction and preserved branch labels correctly factor the left shear as inl after its fold and the right shear as inr after its fold, with no summand reversal. Lean gates compile with standard axioms only; registry 131/0; frozen hash unchanged ca1b2cb3; closure 0/Main 2 placeholders. H1/folded-degree application and B6-B11 remain listed."},
     :commit "e5f0644a20bae781df986057365dfd1cc942835d",
     :changed-paths ["ConstructionTargets/t97A04Closure.lean"],
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A04/lean/Main.lean"
     "problems/t97A04/status.json"
@@ -79448,6 +79460,9 @@
      :reason :program-progress-committed}
     {:job 2,
      :commit "be98ab333b5d35e1c03a1af470a52d5a705f14d8",
+     :reason :program-progress-committed}
+    {:job 3,
+     :commit "e5f0644a20bae781df986057365dfd1cc942835d",
      :reason :program-progress-committed}]}
   {:consumer :t96A07,
    :stop-count 3,
@@ -80428,7 +80443,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -80440,7 +80455,9 @@
     :reported-by [:program-2026-10-11-close-t97a04],
     :type "left shear=inl∘fold",
     :area "mv-connecting-naturality",
-    :proved-in :program-2026-10-11-close-t97a04},
+    :proved-in :program-2026-10-11-close-t97a04,
+    :banked-by :program-2026-10-11-close-t97a04,
+    :banked-commit "e5f0644a20bae781df986057365dfd1cc942835d"},
    :id
    :lemma-constructiontargets-t97a04closure-twocircleoverlapshearleft-eq-inl-fold,
    :kind :lemma,
@@ -80449,7 +80466,7 @@
    :other-consumers []}
   {:consumer :t97A04,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -80461,7 +80478,9 @@
     :reported-by [:program-2026-10-11-close-t97a04],
     :type "right shear=inr∘fold",
     :area "mv-connecting-naturality",
-    :proved-in :program-2026-10-11-close-t97a04},
+    :proved-in :program-2026-10-11-close-t97a04,
+    :banked-by :program-2026-10-11-close-t97a04,
+    :banked-commit "e5f0644a20bae781df986057365dfd1cc942835d"},
    :id
    :lemma-constructiontargets-t97a04closure-twocircleoverlapshearright-eq-inr-fold,
    :kind :lemma,
