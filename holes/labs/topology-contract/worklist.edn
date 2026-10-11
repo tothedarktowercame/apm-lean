@@ -113857,14 +113857,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 5,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Evaluate the right counit element at the wedge point and identify both literal leg lifts; then B12.",
+    "Compute the fixed right conjugator from overlap glue and identify literal leg lifts; then B12.",
     :outcome :stop,
     :warnings [{:kind :upstream-lint}],
     :missing-theorems
@@ -113878,9 +113878,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "4e8abf927bbdf7a2c4cedaa5b975a60a586037e723e094bb4ef2a5092b165308",
+     "7cf3b498198868fddacbd9480634cb5700e60f927efdfbd57690128212c7a6db",
      :documentation
-     "9225c8f0f53499c0f6bfbb55f351c3d8c5449b83a0bec477d9f95362aefbe4fc",
+     "483870a8e33ac616341f350c50754542da0dc9d56b6af428e27e9ec15f1ea3d0",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113888,7 +113888,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Right restricted maps are explicit endpoint-counit conjugates of actual-span maps.",
+    "Both cover base objects are explicit; right based maps use one fixed conjugator.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113897,26 +113897,8 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
-    :diagnostic-history
-    [{:cmd
-      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
-      :exit 1,
-      :finding
-      "Corrected multiplication order induced by SingleObj composition."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791752214326-5877-09adbbe2",
-     :commands
-     ["git show/diff-tree 8957baaaa"
-      "sha256/diff/placeholder checks"
-      "statement-registry.py check"
-      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
-     :finding
-     "PASS: compiled sorry-free B6 progress proves the right restriction map by naturality with correct SingleObj order Fmap=eta_b^-1*actualMap*eta_a; endpoint components stay explicit. Exact two-file scope and frozen hashes match; 0 placeholders; registry 131/131; standard axioms. Wedge-point component/literal lifts and B12 remain listed; absent final target is a valid program STOP."},
-    :commit "8957baaaa1d93e57ecdab2c2c977fa40e55e05b7",
+    :diagnostic-history [],
+    :commit "e467932dac2b3cf97f6c3b91352c65238d8150a9",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113926,7 +113908,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
