@@ -950,3 +950,8 @@ changes implicitly.
 then cancels the shared inner restriction counit between those two factors.
 The comparison is reduced to two literal actual-span maps bracketed by only
 the two outer endpoint counits; both representation changes remain explicit.
+
+The companion `targetObj` and `sourceObj` lemmas identify those remaining
+endpoints without normalizing their counits: the target is the fixed right
+cover representative, while the source is the inverse right-equivalence image
+of the literal basepoint `y₀`.

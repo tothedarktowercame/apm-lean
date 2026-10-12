@@ -3638,6 +3638,28 @@ theorem genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison_eq_actua
     genericPointWedgeCoordinateSpanGlobalRestrictionRightUnitFactor_eq_actual]
   simp only [mul_assoc, mul_inv_cancel_left]
 
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- The target outer counit of the right comparison is evaluated at the fixed
+right-cover representative. -/
+theorem genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison_targetObj :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let u : FundamentalGroupoid Unit := FundamentalGroupoid.mk ()
+    (eK.inverse ⋙ r).obj u = genericPointWedgeRightBase x₀ y₀ N := by
+  rfl
+
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- The source outer counit of the right comparison is the inverse
+right-equivalence image of the literal right basepoint. -/
+theorem genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison_sourceObj :
+    let r' := genericPointWedgeCoordinateRight y₀
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let u : FundamentalGroupoid Unit := FundamentalGroupoid.mk ()
+    (r' ⋙ eR.inverse).obj u = eR.inverse.obj (FundamentalGroupoid.mk y₀) := by
+  rfl
+
 /-- The mapped coordinate-span counit's glue square, specialized at the
 unique point-span overlap object.  This is the equation in which its two
 named leg factors are related by the mapped reconstructed glue. -/
@@ -5246,6 +5268,8 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightStrictFactor_eq_actual
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison_eq_factors
 #print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison_eq_actual
+#print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison_targetObj
+#print axioms genericPointWedgeCoordinateSpanGlobalRestrictionRightComparison_sourceObj
 #print axioms genericPointWedgeMappedOpenCoverCounit_namedGlueSquare
 #print axioms genericPointWedgeMappedCoordinateSpanCounit_glueSquare
 #print axioms genericPointWedgeMappedCoordinateSpanSourceGlue
