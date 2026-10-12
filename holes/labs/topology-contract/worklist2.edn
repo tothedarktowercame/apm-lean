@@ -75350,9 +75350,20 @@
       :current-residual "Elect B4.",
       :other-consumers []}],
     :author "topo-8",
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791842350055-7958-9b6deb98",
+     :commands
+     ["bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "bb holes/labs/topology-contract/build_step.bb priorities holes/labs/topology-contract/worklist2.edn"
+      "python3 scripts/statement-registry.py check"
+      "EDN dependency/measure/replacement audit"],
+     :finding
+     "PASS: strategy row has empty scope and no commit/fixture. Dependencies are done and independently passed; B2 is banked, so routing the five consumers to B3 is coherent. The zero placeholder delta, one infrastructure packet, and one PASS describe the six-edge checkpoint interval. Worklist validates 996 items; registry is 131/0; priorities reproduce SLSC ready/6 and polygon ready/5. B3 waits on this checkpoint and completed uniform B2; r16 correctly waits on B3."}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Rerun after six-edge B2."},
@@ -75366,7 +75377,7 @@
    :other-consumers []}
   {:consumer :t96J02,
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B3",
    :acceptance
