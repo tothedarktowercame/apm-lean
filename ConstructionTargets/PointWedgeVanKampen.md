@@ -675,3 +675,13 @@ factor by the coproduct injection of the actual left based connector counit.
 `genericPointWedgePreFreeProductCounit_right_app_eq_preCoordinate_injection`
 does the symmetric evaluation on the right, retaining the actual right based
 connector counit under `Monoid.Coprod.inr`.
+
+`genericPointWedgeMappedPreCoordinateLeftCounit` and
+`genericPointWedgeMappedPreCoordinateRightCounit` name the two remaining
+first factors.  The paired theorem
+`genericPointWedgePreFreeProductCounit_apps_eq_mappedPreCoordinate_injections`
+packages both evaluated legs, so the remaining comparison is precisely from
+these named elements to the already-expanded outer span factors.  In the
+underlying group multiplication, categorical composition reverses the written
+morphism order: each injected based counit multiplies its named mapped
+pre-coordinate factor on the left.

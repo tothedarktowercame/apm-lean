@@ -2424,6 +2424,77 @@ theorem genericPointWedgePreFreeProductCounit_right_app_eq_preCoordinate_injecti
   simp only [NatTrans.comp_app]
   congr 1
 
+/-- The left mapped pre-coordinate counit element, isolated before comparison
+with the outer span-transport factors. -/
+def genericPointWedgeMappedPreCoordinateLeftCounit :
+    genericPointWedgeFreeProduct x₀ y₀ :=
+  let C := genericPointWedgeTarget x₀ y₀
+  let P := genericPointWedgePreCoordinatePointSpanMappingEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN C
+  let Q := genericPointWedgeCoordinatePointSpanEquivalence x₀ y₀ C
+  let S := freeProductPointSpanEquivalence
+    (genericPointWedgeLeftGroup x₀) (genericPointWedgeRightGroup y₀) C
+  let R := representationSingleObjEquivalence
+    (C := C) (genericPointWedgeLeftGroup x₀)
+      (genericPointWedgeRightGroup y₀)
+  let F := Functor.id (SingleObj (genericPointWedgeFreeProduct x₀ y₀))
+  let Z := S.inverse.obj (R.inverse.obj F)
+  ((Q.functor.map (P.counitIso.hom.app (Q.inverse.obj Z))).left).app
+    (SingleObj.star (genericPointWedgeLeftGroup x₀))
+
+/-- The right mapped pre-coordinate counit element, isolated before comparison
+with the outer span-transport factors. -/
+def genericPointWedgeMappedPreCoordinateRightCounit :
+    genericPointWedgeFreeProduct x₀ y₀ :=
+  let C := genericPointWedgeTarget x₀ y₀
+  let P := genericPointWedgePreCoordinatePointSpanMappingEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN C
+  let Q := genericPointWedgeCoordinatePointSpanEquivalence x₀ y₀ C
+  let S := freeProductPointSpanEquivalence
+    (genericPointWedgeLeftGroup x₀) (genericPointWedgeRightGroup y₀) C
+  let R := representationSingleObjEquivalence
+    (C := C) (genericPointWedgeLeftGroup x₀)
+      (genericPointWedgeRightGroup y₀)
+  let F := Functor.id (SingleObj (genericPointWedgeFreeProduct x₀ y₀))
+  let Z := S.inverse.obj (R.inverse.obj F)
+  ((Q.functor.map (P.counitIso.hom.app (Q.inverse.obj Z))).right).app
+    (SingleObj.star (genericPointWedgeRightGroup y₀))
+
+/-- Both evaluated pre-free-product counit legs now have a named first factor;
+the remaining comparison is exactly between these elements and the earlier
+outer span-transport factors. -/
+theorem genericPointWedgePreFreeProductCounit_apps_eq_mappedPreCoordinate_injections :
+    let C := genericPointWedgeTarget x₀ y₀
+    let P := genericPointWedgePreCoordinatePointSpanMappingEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN C
+    let Q := genericPointWedgeCoordinatePointSpanEquivalence x₀ y₀ C
+    let S := freeProductPointSpanEquivalence
+      (genericPointWedgeLeftGroup x₀) (genericPointWedgeRightGroup y₀) C
+    let R := representationSingleObjEquivalence
+      (C := C) (genericPointWedgeLeftGroup x₀)
+        (genericPointWedgeRightGroup y₀)
+    let F := Functor.id (SingleObj (genericPointWedgeFreeProduct x₀ y₀))
+    let Z := S.inverse.obj (R.inverse.obj F)
+    (((P.trans Q).counitIso.hom.app Z).left).app
+          (SingleObj.star (genericPointWedgeLeftGroup x₀)) =
+        Monoid.Coprod.inl (genericPointWedgeLeftBasedCounit x₀) *
+          genericPointWedgeMappedPreCoordinateLeftCounit
+            x₀ y₀ M N hM hN hy hx cM cN ∧
+      (((P.trans Q).counitIso.hom.app Z).right).app
+          (SingleObj.star (genericPointWedgeRightGroup y₀)) =
+        Monoid.Coprod.inr (genericPointWedgeRightBasedCounit y₀) *
+          genericPointWedgeMappedPreCoordinateRightCounit
+            x₀ y₀ M N hM hN hy hx cM cN := by
+  constructor
+  · simpa [genericPointWedgeMappedPreCoordinateLeftCounit,
+      SingleObj.comp_as_mul] using
+      (genericPointWedgePreFreeProductCounit_left_app_eq_preCoordinate_injection
+        x₀ y₀ M N hM hN hy hx cM cN)
+  · simpa [genericPointWedgeMappedPreCoordinateRightCounit,
+      SingleObj.comp_as_mul] using
+      (genericPointWedgePreFreeProductCounit_right_app_eq_preCoordinate_injection
+        x₀ y₀ M N hM hN hy hx cM cN)
+
 /-- Consequently the full B3 counit element is just the mapped counit of the
 preceding free-product-representation equivalence. -/
 theorem genericPointWedgeCounitElement_eq_mappedRepresentationCounit :
@@ -3723,6 +3794,9 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgePreFreeProductCounit_right_eq_preCoordinate_coordinatePoint
 #print axioms genericPointWedgePreFreeProductCounit_left_app_eq_preCoordinate_injection
 #print axioms genericPointWedgePreFreeProductCounit_right_app_eq_preCoordinate_injection
+#print axioms genericPointWedgeMappedPreCoordinateLeftCounit
+#print axioms genericPointWedgeMappedPreCoordinateRightCounit
+#print axioms genericPointWedgePreFreeProductCounit_apps_eq_mappedPreCoordinate_injections
 #print axioms genericPointWedgeCounitElement_eq_mappedRepresentationCounit
 #print axioms genericPointWedgeMappedLeft_eq_conj
 #print axioms genericPointWedgeMappedRight_eq_conj
