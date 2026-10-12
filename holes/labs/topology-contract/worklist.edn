@@ -113857,7 +113857,7 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
@@ -113911,7 +113911,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -114682,7 +114682,7 @@
    :other-consumers []}
   {:consumer :t01A08,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "ConstructionTargets.SardGeneralModel.modelRange_geometry",
@@ -114693,7 +114693,9 @@
     :reported-by [:owner],
     :type
     "Geometry and fderivWithin/mfderiv facts for the range of an arbitrary finite-dimensional ModelWithCorners  (size: 40-100 lines / 1 day)",
-    :area "manifold-sard-general-model"},
+    :area "manifold-sard-general-model",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/SardGeneralModel.lean"]},
    :id :lemma-constructiontargets-sardgeneralmodel-modelrange-geometry,
    :kind :lemma,
    :depends-on [],
@@ -116565,6 +116567,19 @@
      {:cmd "lean",
       :exit 1,
       :finding "Made model parameters explicit."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791766222128-6086-6da03873",
+     :commands
+     ["git show/diff-tree 736c2566"
+      "sha256/diff/placeholder checks"
+      "statement-registry.py check"
+      "lake env lean ConstructionTargets/t97A07Closure.lean"
+      "lake build ConstructionTargets.t97A07Closure"
+      "lake env lean problems/t97A07/lean/Main.lean"],
+     :finding
+     "PASS: new compiled sorry-free B2 progress faithfully specializes inTangentCoordinates_eq_mfderiv_comp: both chart hypotheses are used and target, middle, and inverse-source derivatives have compatible model fibers; no distinct tangent fibers are identified. Exact two-file scope and frozen hashes match; reusable source has 0 placeholders; target retains its listed 1 existing sorry; registry 131/131; standard axioms. Fixed-representative equality and B3-B9 remain listed, so this is a valid program STOP."},
     :commit "736c25666597f19ccd3540096d4a392c05e41410",
     :changed-paths
     ["ConstructionTargets/t97A07Closure.lean"
@@ -116575,7 +116590,7 @@
      "eaeed21919599335d4a33b437815c4a9cbb5b72110213b29440d6944cc982182"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A07/lean/Main.lean"
     "problems/t97A07/status.json"
@@ -116591,7 +116606,7 @@
     ["lake env lean problems/t97A07/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B2 centre coordinate derivative now equals mfderiv definitionally after smoothness supplies differentiability.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B2 nearby mfderiv is expressed through fixed chart-transition factors.",
    :id :program-2026-10-11-close-t97a07,
    :kind :final-adapter,
    :campaign-priority 44,
@@ -116612,7 +116627,11 @@
     {:job 4,
      :commit "563c5cf0a2d89c943ca8bf2dedff96864f5096bc",
      :reason
-     "B2 centre coordinate derivative now equals mfderiv definitionally after smoothness supplies differentiability."}]}
+     "B2 centre coordinate derivative now equals mfderiv definitionally after smoothness supplies differentiability."}
+    {:job 5,
+     :commit "736c25666597f19ccd3540096d4a392c05e41410",
+     :reason
+     "B2 nearby mfderiv is expressed through fixed chart-transition factors."}]}
   {:consumer :t91J06,
    :phase :implementation,
    :state :open,
