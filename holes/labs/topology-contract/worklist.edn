@@ -113857,18 +113857,16 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Evaluate four outer factors and literal lifts; then B12.",
+    "Evaluate mapped left comparison, three outer factors, and literal lifts; then B12.",
     :outcome :stop,
-    :warnings
-    [{:kind :concurrent-worktree-change,
-      :path "ConstructionTargets/ManifoldFundamentalClass.lean"}],
+    :warnings [],
     :missing-theorems
     [{:name
       "PointWedgeVanKampen.genericPointWedgeLegCoordinates_vanKampen",
@@ -113880,9 +113878,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "28426da739271f53ab2f700b5d4824d1cb1270c80b24d769d06ea8e3733f422e",
+     "f218c415a9a7cdbd680e6e34979f354bd6b14fb84a80a04d91bf3267a42d56bb",
      :documentation
-     "6732c034214b127e6e9a4b77c5098633e7fc1d5438ed42ecc960b296d84dd935",
+     "d9280d50aa58c3dbb4014949e58fd2e97dbc2321ec69c10456611882d1f82ab7",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113890,7 +113888,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Outer right comparison expands into its two ordered factors.",
+    "Outer left-span factor is the mapped strict span comparison.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113899,20 +113897,12 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791767788583-6119-f1f574f4",
-     :commands
-     ["git show/diff-tree 73e94c5c"
-      "sha256/diff/placeholder checks"
-      "statement-registry.py check"
-      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
-     :finding
-     "PASS: new compiled sorry-free B6 progress definitionally expands the outer-right hom comparison into the right-span factor followed by the overlap round-trip. Order and hom orientations correctly complement the inverse outer-left expansion; all factors remain explicit. Exact two-file scope and frozen hashes match; 0 placeholders; registry 131/131; standard axioms. Four-factor evaluation, literal lifts, and B12 remain listed; absent final target is a valid program STOP."},
-    :commit "73e94c5cb38e66ff2170a8cbe2da0d0a32bb689e",
+    :diagnostic-history
+    [{:cmd "lean (5 attempts)",
+      :exit 1,
+      :finding
+      "Identity rewrites exposed a mapped cast; retained exact map."}],
+    :commit "a0801917809ac5e5a34c89a1d73c6e2fe7eb675d",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113922,7 +113912,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
