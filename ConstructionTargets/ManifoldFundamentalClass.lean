@@ -3208,6 +3208,17 @@ theorem coefficientSphereNormalizationComparisonUnit_eq_degree (k : ℕ) :
     coefficientSphereNormalizationComparisonAutomorphism
   rfl
 
+theorem coefficientSphereNormalizationComparisonAutomorphism_hom_eq_id_of_degree_eq_one
+    (k : ℕ)
+    (hdegree : coefficientSphereNormalizationComparisonDegree k = 1) :
+    (coefficientSphereNormalizationComparisonAutomorphism k).hom = 𝟙 _ := by
+  have hu : (coefficientSphereNormalizationComparisonUnit k : ℤ) = 1 := by
+    rw [coefficientSphereNormalizationComparisonUnit_eq_degree, hdegree]
+  apply AddCommGrpCat.hom_ext
+  apply AddMonoidHom.ext_int
+  change (coefficientSphereNormalizationComparisonAutomorphism k).hom.hom 1 = 1
+  rw [coefficientSphereNormalizationComparisonAutomorphism_apply_one, hu]
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -3319,6 +3330,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparison_hom_eq_neg_implies_unit_eq_neg_one
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonUnit_eq_one_of_nonneg
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonUnit_eq_degree
+#print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonAutomorphism_hom_eq_id_of_degree_eq_one
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
