@@ -1277,6 +1277,30 @@
    :current-residual
    "Construct planar ambient homeomorphism sending an embedded arc to the zero section.",
    :other-consumers [:t01J01 :t03J02]}
+  {:consumer :t00A03,
+   :implements-lemma
+   :lemma-constructiontargets-surfaceschoenflies-embeddedcirclelocallyflat-of-zerosection-,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/SurfaceSchoenflies.lean"],
+   :dag-node "TOPOLOGY-ROUTES.md/schoenflies/local-flatness",
+   :acceptance
+   {:declaration
+    "ConstructionTargets.SurfaceSchoenflies.embeddedCircleLocallyFlat_of_zeroSection_normalForm",
+    :type "exact type in fixture",
+    :fixture "/tmp/surface_schoenflies_normal_form.lean",
+    :fixture-sha256
+    "b68ce540c635b5528f02bc933fdd6b2be28265a0f1b4e372acc7a59a6d943a84",
+    :placeholders
+    ["t00A03 bridge_1" "t01J01 bridges" "t03J02 bridge_1"],
+    :route-step "derive local flatness from zero-section normal form"},
+   :id :routes-2026-10-12-surface-normal-form-r1,
+   :kind :reusable-theorem,
+   :area "embedded-circle-collar-surface",
+   :depends-on [:routes-2026-10-12-surface-zero-section-r1],
+   :current-residual
+   "Construct the planar Schoenflies ambient normal form.",
+   :other-consumers [:t01J01 :t03J02]}
   {:owner-park
    "2026-10-12 claude-14: paused for the surface route redesign, ~/notes/closer/routes/surfaces.md",
    :consumer :t00A03,
@@ -1290,52 +1314,52 @@
     {:outcome :revise,
      :seat "topo-12",
      :fixture
-     {:path "/tmp/surface_schoenflies_zero_section.lean",
+     {:path "/tmp/surface_schoenflies_normal_form.lean",
       :sha256
-      "e3f03cf701a1004ff4e23f8b764b63cefad84cc130c808d6c91c54ada0843105"},
+      "b68ce540c635b5528f02bc933fdd6b2be28265a0f1b4e372acc7a59a6d943a84"},
      :commands
      [{:cmd
-       "lake env lean /tmp/surface_schoenflies_zero_section.lean && sha256sum /tmp/surface_schoenflies_zero_section.lean && python3 scripts/statement-registry.py check",
+       "lake env lean /tmp/surface_schoenflies_normal_form.lean && sha256sum /tmp/surface_schoenflies_normal_form.lean && python3 scripts/statement-registry.py check",
        :exit 0}],
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :missing-theorems
      [{:name
-       "ConstructionTargets.SurfaceSchoenflies.circleZeroSection_locallyFlat",
+       "ConstructionTargets.SurfaceSchoenflies.embeddedCircleLocallyFlat_of_zeroSection_normalForm",
        :type "exact type in fixture",
        :status :proved,
        :consumers [:t00A03 :t01J01 :t03J02],
        :depends-on
-       ["ConstructionTargets.SurfaceSchoenflies.embeddedCircleLocallyFlat_reparam_iff"],
+       ["ConstructionTargets.SurfaceSchoenflies.circleZeroSection_locallyFlat"],
        :area "embedded-circle-collar-surface"}],
      :prerequisite
      {:consumer :t00A03,
-      :implements-lemma :lemma-schoenflies-zero-section,
+      :implements-lemma :lemma-schoenflies-normal-form,
       :phase :implementation,
       :state :open,
       :scope ["ConstructionTargets/SurfaceSchoenflies.lean"],
       :dag-node "TOPOLOGY-ROUTES.md/schoenflies/local-flatness",
       :acceptance
       {:declaration
-       "ConstructionTargets.SurfaceSchoenflies.circleZeroSection_locallyFlat",
+       "ConstructionTargets.SurfaceSchoenflies.embeddedCircleLocallyFlat_of_zeroSection_normalForm",
        :type "exact type in fixture",
-       :fixture "/tmp/surface_schoenflies_zero_section.lean",
+       :fixture "/tmp/surface_schoenflies_normal_form.lean",
        :fixture-sha256
-       "e3f03cf701a1004ff4e23f8b764b63cefad84cc130c808d6c91c54ada0843105",
+       "b68ce540c635b5528f02bc933fdd6b2be28265a0f1b4e372acc7a59a6d943a84",
        :placeholders
        ["t00A03 bridge_1" "t01J01 bridges" "t03J02 bridge_1"],
        :route-step
-       "explicit local-flatness of the standard zero section"},
-      :id :routes-2026-10-12-surface-zero-section-r1,
+       "derive local flatness from zero-section normal form"},
+      :id :routes-2026-10-12-surface-normal-form-r1,
       :kind :reusable-theorem,
       :area "embedded-circle-collar-surface",
-      :depends-on [:routes-2026-10-12-surface-flat-reparam-r1],
+      :depends-on [:routes-2026-10-12-surface-zero-section-r1],
       :current-residual
-      "Construct planar ambient homeomorphism sending an embedded arc to the zero section.",
+      "Construct the planar Schoenflies ambient normal form.",
       :other-consumers [:t01J01 :t03J02]},
      :residual
-     "Promote standard model; planar Schoenflies equivalence remains."}},
+     "Promote normal-form adapter; construct Schoenflies equivalence."}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/SurfaceSchoenflies.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/topo3/schoenflies-2d/embedded-circle-collar",
@@ -1358,7 +1382,8 @@
     :routes-2026-10-12-surface-finite-flat-r1
     :routes-2026-10-12-surface-flat-transport-r1
     :routes-2026-10-12-surface-flat-reparam-r1
-    :routes-2026-10-12-surface-zero-section-r1],
+    :routes-2026-10-12-surface-zero-section-r1
+    :routes-2026-10-12-surface-normal-form-r1],
    :current-residual
    "Surface cutting, intersection separation, van Kampen and classification remain.",
    :other-consumers [:t01J01 :t03J02]}
@@ -31215,7 +31240,29 @@
    :id :lemma-embeddedcirclelocallyflat-reparam-iff,
    :kind :lemma,
    :depends-on [],
-   :other-consumers []}],
+   :other-consumers []}
+  {:consumer :t00A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.SurfaceSchoenflies.embeddedCircleLocallyFlat_of_zeroSection_normalForm",
+    :type "exact type in fixture"},
+   :lemma
+   {:name
+    "ConstructionTargets.SurfaceSchoenflies.embeddedCircleLocallyFlat_of_zeroSection_normalForm",
+    :reported-by
+    [:routes-2026-10-10-surface-schoenflies-collar-topo3-r2],
+    :type "exact type in fixture",
+    :area "embedded-circle-collar-surface",
+    :proved-in :routes-2026-10-10-surface-schoenflies-collar-topo3-r2},
+   :id
+   :lemma-constructiontargets-surfaceschoenflies-embeddedcirclelocallyflat-of-zerosection-,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-surfaceschoenflies-circlezerosection-locallyflat],
+   :other-consumers [:t01J01 :t03J02]}],
  :consumer-baselines {},
  :statuses
  #{:open
