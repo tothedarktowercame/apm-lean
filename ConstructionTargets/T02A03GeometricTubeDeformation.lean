@@ -3422,6 +3422,28 @@ theorem positiveRealPlanarArrival_corrected_actual_zero :
   · norm_num [arrivalSevenEighths, positiveRealPlanarArrivalBump]
     linarith [h1]
 
+/-- At the diagnostic time `7/8`, every small scalar imaginary correction
+still selects a planar coordinate strictly inside the right-tube annulus. -/
+theorem scalarArrivalCorrection_sevenEighths_mem_planarAnnulus
+    (b : ℝ) (hb : |b| < 3 / 4) :
+    (9 / 16 : ℝ) <
+        Complex.normSq (((-1 : ℝ) : ℂ) + ((-b : ℝ) : ℂ) * Complex.I) ∧
+      Complex.normSq (((-1 : ℝ) : ℂ) + ((-b : ℝ) : ℂ) * Complex.I) <
+        (25 / 16 : ℝ) := by
+  obtain ⟨hlo, hhi⟩ := abs_lt.mp hb
+  norm_num [Complex.normSq_apply, Complex.mul_re, Complex.mul_im]
+  constructor
+  · nlinarith [sq_nonneg b]
+  · nlinarith
+
+/-- The same diagnostic slice solves the scalar zero equations by setting
+the ambient coordinates to `p₀ = 2` and `p₁ = -b`. -/
+theorem scalarArrivalCorrection_sevenEighths_scalar_equations (b : ℝ) :
+    (2 - 2 * (arrivalSevenEighths : ℝ)) * ((2 : ℝ) + 1) +
+          (2 * (arrivalSevenEighths : ℝ) - 1) * (1 - (2 : ℝ)) = 0 ∧
+      (-b : ℝ) + b = 0 := by
+  norm_num [arrivalSevenEighths]
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -3530,6 +3552,7 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.positiveRealPlanarArrivalBump_ne_zero_at_arrival_collision
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.positiveRealPlanarArrival_corrected_eq_zero_iff
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.positiveRealPlanarArrival_corrected_actual_zero
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.scalarArrivalCorrection_sevenEighths_mem_planarAnnulus
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_coordinates
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_normSq
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_scalar_bounds
