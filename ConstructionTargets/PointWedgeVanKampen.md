@@ -482,3 +482,7 @@ inclusion-image equality through the B3 global-functor restriction formula.
 
 `genericPointWedgeInverseIdentity_rightLeg_eq_actualLifted` supplies the
 symmetric bridge and retains conjugation by the fixed right restriction element.
+
+`genericPointWedgeLeftEquiv_comp_leftLegLift` proves that the left cover
+equivalence followed by the lifted leg is the identity continuous map.  The
+next morphism comparison must retain transport across its base-object equality.
