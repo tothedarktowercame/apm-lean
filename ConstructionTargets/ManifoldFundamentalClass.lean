@@ -3125,6 +3125,54 @@ theorem coefficientOpenDiskRelativeHomologyComparison_naturality
       (coefficientOpenDiskAmbientInclusion (k + 2))
       (coefficientOpenDiskAmbientInclusion_mapsTo (k + 2)) (k + 2)
 
+noncomputable def productionModelNormalizationComposite (k : ℕ) :=
+  (integralRelativeHomologyComparisonWithTransport
+    (CoefficientModelLocal.puncture (k + 2)) (k + 2)).inv ≫
+  coefficientModelNormalizationComposite k
+
+theorem coefficientSphereNormalizationComparisonAutomorphism_hom_eq_neg_implies_openDisk_production_factors
+    (k : ℕ)
+    (hneg : (coefficientSphereNormalizationComparisonAutomorphism k).hom = -𝟙 _) :
+    (integralOpenDiskRelativeHomologyComparison k).hom ≫
+        (HigherModelLocalHomology.localIsoInt k).hom =
+      (integralOpenDiskRelativeHomologyComparison k).hom ≫
+        HomologicalComplex.homologyMap
+          (relativeSingularMap
+            (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2))
+            (CoefficientModelLocal.puncture (k + 2))
+            (coefficientOpenDiskAmbientInclusion (k + 2))
+            (coefficientOpenDiskAmbientInclusion_mapsTo (k + 2))) (k + 2) ≫
+        productionModelNormalizationComposite k ≫ (-𝟙 _) := by
+  have h :=
+    coefficientSphereNormalizationComparisonAutomorphism_hom_eq_neg_implies_openDisk_model_factors
+      k hneg
+  have hn :=
+    integralRelativeHomologyComparisonWithTransport_pairMap_naturality
+      (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2))
+      (CoefficientModelLocal.puncture (k + 2))
+      (coefficientOpenDiskAmbientInclusion (k + 2))
+      (coefficientOpenDiskAmbientInclusion_mapsTo (k + 2)) (k + 2)
+  have hn' :
+      forgetIntModules.map (HomologicalComplex.homologyMap
+          (CoefficientRadialPair.pairMap ℤ
+            (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2))
+            (CoefficientModelLocal.puncture (k + 2))
+            (coefficientOpenDiskAmbientInclusion (k + 2))
+            (coefficientOpenDiskAmbientInclusion_mapsTo (k + 2))) (k + 2)) ≫
+        (integralRelativeHomologyComparisonWithTransport
+          (CoefficientModelLocal.puncture (k + 2)) (k + 2)).hom =
+      (integralOpenDiskRelativeHomologyComparison k).hom ≫
+        HomologicalComplex.homologyMap
+          (relativeSingularMap
+            (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2))
+            (CoefficientModelLocal.puncture (k + 2))
+            (coefficientOpenDiskAmbientInclusion (k + 2))
+            (coefficientOpenDiskAmbientInclusion_mapsTo (k + 2))) (k + 2) := by
+    simpa only [integralOpenDiskRelativeHomologyComparison_hom] using hn
+  unfold productionModelNormalizationComposite
+  rw [← Category.assoc, ← Category.assoc, ← hn']
+  simpa only [Category.assoc, Iso.hom_inv_id_assoc] using h
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -3232,6 +3280,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeChainsComparisonWithTransport_pairMap_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_pairMap_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientOpenDiskRelativeHomologyComparison_naturality
+#print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonAutomorphism_hom_eq_neg_implies_openDisk_production_factors
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
