@@ -50,6 +50,87 @@ theorem subcomplex_sup_image_le
   · rw [← SSet.Subcomplex.image_le_iff]
     exact hQ.trans le_sup_right
 
+/-- Restrict a simplicial map to subcomplexes once its image is bounded by
+the target subcomplex. -/
+noncomputable def subcomplexMap {S T : SSet}
+    (A : S.Subcomplex) (B : T.Subcomplex) (F : S ⟶ T)
+    (h : A.image F ≤ B) : (A : SSet) ⟶ (B : SSet) :=
+  A.toImage F ≫ SSet.Subcomplex.homOfLE h
+
+@[reassoc]
+theorem subcomplexMap_comp_ι {S T : SSet}
+    (A : S.Subcomplex) (B : T.Subcomplex) (F : S ⟶ T)
+    (h : A.image F ≤ B) :
+    subcomplexMap A B F h ≫ B.ι = A.ι ≫ F := by
+  rfl
+
+/-- Restrictions of an ambient simplicial map commute with subcomplex
+inclusions. -/
+theorem subcomplexMap_naturality {S T : SSet}
+    (A C : S.Subcomplex) (B D : T.Subcomplex) (F : S ⟶ T)
+    (hAC : A ≤ C) (hBD : B ≤ D)
+    (hA : A.image F ≤ B) (hC : C.image F ≤ D) :
+    SSet.Subcomplex.homOfLE hAC ≫ subcomplexMap C D F hC =
+      subcomplexMap A B F hA ≫ SSet.Subcomplex.homOfLE hBD := by
+  apply (cancel_mono D.ι).1
+  simp only [Category.assoc, subcomplexMap_comp_ι]
+  rfl
+
+/-- The morphism of Mayer--Vietoris short complexes induced by an ambient
+simplicial map preserving both subcomplexes. -/
+noncomputable def inducedShortComplexMap {S T : SSet}
+    (P Q : S.Subcomplex) (P' Q' : T.Subcomplex) (F : S ⟶ T)
+    (hP : P.image F ≤ P') (hQ : Q.image F ≤ Q') :
+    subcomplexMayerVietorisShortComplex P Q ⟶
+      subcomplexMayerVietorisShortComplex P' Q' :=
+  ShortComplex.Hom.mk
+    (ssetChains.map (subcomplexMap (P ⊓ Q) (P' ⊓ Q') F
+      (subcomplex_inf_image_le P Q P' Q' F hP hQ)))
+    (biprod.map (ssetChains.map (subcomplexMap P P' F hP))
+      (ssetChains.map (subcomplexMap Q Q' F hQ)))
+    (ssetChains.map (subcomplexMap (P ⊔ Q) (P' ⊔ Q') F
+      (subcomplex_sup_image_le P Q P' Q' F hP hQ)))
+    (by
+      apply biprod.hom_ext
+      · simp [subcomplexMayerVietorisShortComplex, ← Functor.map_comp]
+        congr 1
+      · simp [subcomplexMayerVietorisShortComplex, ← Functor.map_comp]
+        congr 1)
+    (by
+      apply biprod.hom_ext'
+      · simp [subcomplexMayerVietorisShortComplex, ← Functor.map_comp]
+        congr 1
+      · simp [subcomplexMayerVietorisShortComplex, ← Functor.map_comp]
+        congr 1)
+
+/-- A cover-preserving continuous map induces the specified morphism of the
+stored Mayer--Vietoris short complexes. -/
+theorem coverPreservingShortComplexMap
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (U V : Set X) (U' V' : Set Y) (f : C(X, Y))
+    (hU : Set.MapsTo f U U') (hV : Set.MapsTo f V V') :
+    Nonempty (shortComplex U V ⟶ shortComplex U' V') := by
+  let F := TopCat.toSSet.map (TopCat.ofHom f)
+  have hleft : (leftRange U).image F ≤ leftRange U' := by
+    change (SSet.Subcomplex.range (TopCat.toSSet.map
+      (ConstructionTargets.SingularHomologyConcrete.subspaceInclusion U))).image F ≤
+      SSet.Subcomplex.range (TopCat.toSSet.map
+        (ConstructionTargets.SingularHomologyConcrete.subspaceInclusion U'))
+    rw [← SSet.Subcomplex.range_comp, ← TopCat.toSSet.map_comp,
+      ← subspaceMap_inclusion U U' f hU, TopCat.toSSet.map_comp,
+      SSet.Subcomplex.range_comp]
+    exact SSet.Subcomplex.image_le_range _ _
+  have hright : (rightRange V).image F ≤ rightRange V' := by
+    change (SSet.Subcomplex.range (TopCat.toSSet.map
+      (ConstructionTargets.SingularHomologyConcrete.subspaceInclusion V))).image F ≤
+      SSet.Subcomplex.range (TopCat.toSSet.map
+        (ConstructionTargets.SingularHomologyConcrete.subspaceInclusion V'))
+    rw [← SSet.Subcomplex.range_comp, ← TopCat.toSSet.map_comp,
+      ← subspaceMap_inclusion V V' f hV, TopCat.toSSet.map_comp,
+      SSet.Subcomplex.range_comp]
+    exact SSet.Subcomplex.image_le_range _ _
+  exact ⟨inducedShortComplexMap _ _ _ _ F hleft hright⟩
+
 /-- Naturality of the canonical subcomplex Mayer--Vietoris connecting map
 under a morphism of the underlying short complexes. -/
 theorem subcomplexMayerVietorisConnecting_naturality
@@ -961,6 +1042,7 @@ end ConstructionTargets.ProductionOpenCoverMayerVietoris
 
 #print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.subcomplex_inf_image_le
 #print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.subcomplex_sup_image_le
+#print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.coverPreservingShortComplexMap
 #print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.transportShortComplex_exact
 #print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.coverSmall_homologyMap_isIso
 #print axioms ConstructionTargets.ProductionOpenCoverMayerVietoris.subcomplexMayerVietoris_exact_transport
