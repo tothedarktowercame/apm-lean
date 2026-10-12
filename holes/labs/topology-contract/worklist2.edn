@@ -79485,34 +79485,30 @@
   {:consumer :t96A07,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :evidence
    {:placeholder-delta 0,
-    :residual "Prove B7; then B8-B13.",
+    :residual "Formalize B8 plane derivative range; then B9-B13.",
     :outcome :stop,
     :warnings ["Main: 1 placeholder." "Style lint only."],
     :missing-theorems
     [{:name
-      "ConstructionTargets.T96A07Closure.descended_mfderiv_range_at_e0",
-      :type
-      "descended derivative range at projection e0 equals yz-plane",
+      "ConstructionTargets.T96A07Closure.descended_not_transverse_axis",
+      :type "B7 descended map is not transverse to z-axis",
       :status :proved,
       :consumers [:t96A07],
       :depends-on
-      ["ConstructionTargets.T96A07Closure.sphereProjection_mfderiv_surjective"
-       "ConstructionTargets.T96A07Closure.sphereMap_mfderiv_e0_range"],
+      ["ConstructionTargets.T96A07Closure.descended_mfderiv_range_at_e0"],
       :area "projective-smooth-descent"}
-     {:name
-      "ConstructionTargets.T96A07Closure.descended_not_transverse_axis",
-      :type "B7 nontransversality to z-axis",
+     {:name "ConstructionTargets.T96A07Closure.plane_fderiv_range",
+      :type "B8 horizontal-plane derivative range",
       :status :not-started,
       :consumers [:t96A07],
-      :depends-on
-      ["ConstructionTargets.T96A07Closure.descended_mfderiv_range_at_e0"],
+      :depends-on [],
       :area "projective-smooth-descent"}],
     :statement-hashes
     {:registry "131/0",
-     :closure "f6a40ba28b194b467bde135a0ff9e770b66b561c",
+     :closure "46b6c6e1cec41cddc2ba5c93f38044fca24ee25f",
      :blueprint "69b59fb622dd62fc82a1fe100b353eaabc2c948d"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
@@ -79525,22 +79521,18 @@
      {:cmd "Main compile", :exit 0}
      {:cmd "registry check", :exit 0}
      {:cmd "placeholder count", :exit 0, :output "1"}
-     {:cmd "git show --check 331996b95", :exit 0}],
-    :diagnostic-history
-    [{:cmd "compile",
-      :exit 1,
-      :finding "Fixed binder, equality, orientation; rebuilt olean."}],
-    :commit "331996b95f673630e9781af065e3d811d751ed13",
+     {:cmd "git show --check a532a6ecc", :exit 0}],
+    :commit "a532a6ecc7bc66ca70db91731d4affedb40f423f",
     :changed-paths
     ["ConstructionTargets/t96A07Closure.lean"
      "problems/t96A07/lean/Main.lean"],
     :fixture
     {:path "ConstructionTargets/t96A07Closure.lean",
      :sha256
-     "9024211f8575c9d7d6c387c287750ffcbea84dc339e06c3c87ddbc04fb5d6395"},
+     "6a654df32ea74f1fd44493efc2950c2d69a176ce151558efe7a9acdb569ccaa2"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A07/lean/Main.lean"
     "problems/t96A07/status.json"
@@ -81248,7 +81240,8 @@
     "ConstructionTargets.T96A07Closure.descended_not_transverse_axis",
     :reported-by [:program-2026-10-11-close-t96a07],
     :type "B7 nontransversality to z-axis",
-    :area "projective-smooth-descent"},
+    :area "projective-smooth-descent",
+    :proved-in :program-2026-10-11-close-t96a07},
    :id
    :lemma-constructiontargets-t96a07closure-descended-not-transverse-axis,
    :kind :lemma,
@@ -81309,4 +81302,20 @@
    :depends-on
    [:lemma-constructiontargets-t94a10closure-solidangleambient
     :lemma-constructiontargets-t94a10closure-hasfderivat-radialinvcube],
+   :other-consumers []}
+  {:consumer :t96A07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "ConstructionTargets.T96A07Closure.plane_fderiv_range",
+    :type "B8 horizontal-plane derivative range"},
+   :lemma
+   {:name "ConstructionTargets.T96A07Closure.plane_fderiv_range",
+    :reported-by [:program-2026-10-11-close-t96a07],
+    :type "B8 horizontal-plane derivative range",
+    :area "projective-smooth-descent"},
+   :id :lemma-constructiontargets-t96a07closure-plane-fderiv-range,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}]}
