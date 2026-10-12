@@ -116949,35 +116949,35 @@
   {:consumer :t97A07,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 7,
+   :stop-count 8,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is eaeed21919599335d4a33b437815c4a9cbb5b72110213b29440d6944cc982182 (the blueprint at older commit 736c2566), but commit 8432f937 changes ConstructionTargets/t97A07Closure.blueprint.md and its exact SHA-256 is 5bb02c342b988406e8bd26aeda1b9e67335a8c1f626d97ec96701cb039ae708f. Re-record the fixture hash for the reviewed commit.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Package eventual equality and the B2 interface; then B3-B9.",
+    "B2 proved; B3 regular-points openness next, then B4-B9.",
     :outcome :stop,
     :warnings [{:kind :existing-placeholder}],
     :missing-theorems
     [{:name "t97A07Closure.continuousAt_coordinate_mfderiv",
       :type "Chart derivative continuity and mfderiv equality",
-      :status :partial,
+      :status :proved,
       :consumers [:t97A07],
       :depends-on [],
       :area "regular-points-open"}],
     :statement-hashes
     {:source
-     "95a788ba0660bfcd6216df5f7bd30cd6f8b885fb93dd2630645d1d6e0b84c920",
+     "d15ad7a3d13288ea6afa64744caac0e95308e522d69b1cf50eabeb5b6d3cb5db",
      :target
      "f13a687334f894f060c24b9aa390e8de88a2bf5f3d36e1de717af326c84d78f2",
      :blueprint
-     "8339887881c1cad79eb545f459f2189b5e3be1bb2993a1781be6bc63661c177a",
+     "858b28f951dba2dc109f8bf6b8d88934b79b5b0d4cf84f80dced6b5e6849f720",
      :registry "131/131"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "The fixed-chart derivative equals the transported mfderiv pointwise on the common chart neighbourhood.",
+    "B2 interface proved: both coordinate families are continuous, eventually equal, and anchored at mfderiv.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t97A07Closure.lean",
       :exit 0}
@@ -116985,34 +116985,17 @@
      {:cmd "lake env lean problems/t97A07/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
-    :diagnostic-history
-    [{:cmd "lean chain-rule elaboration",
-      :exit 1,
-      :finding
-      "Supplied extended-chart endpoints and model unique differential explicitly."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791842420620-7960-1578c7dc",
-     :commands
-     ["git show/diff-tree 387bfd4a"
-      "lake env lean ConstructionTargets/t97A07Closure.lean"
-      "lake env lean problems/t97A07/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "commit hash and placeholder checks"],
-     :finding
-     "PASS program STOP: 387bfd4a by topo-2 adds the pointwise fixed/transported derivative equality and its B2 blueprint record, exactly within scope and new since history. Source 95a788ba..., fixture 83398878..., frozen Main f13a6873..., registry 131/131, and scoped placeholders 1->1 reproduce. Under explicit source/target chart membership, two manifold chain-rule applications and the extended-chart inverse law give target-chart derivative * mfderiv f y * inverse-source derivative in the same orientation as inTangentCoordinates; no varying fibers are identified. Fresh closure and Main elaboration pass with standard axioms. Packaging eventual equality/B2 and B3-B9 remain listed."},
-    :commit "387bfd4a0aa97c0e9e2e5aaceeac729569ee4811",
+    :commit "5125176c03b6cd10e63f6124bda1d607e83cf3e1",
     :changed-paths
     ["ConstructionTargets/t97A07Closure.lean"
      "ConstructionTargets/t97A07Closure.blueprint.md"],
     :fixture
     {:path "ConstructionTargets/t97A07Closure.blueprint.md",
      :sha256
-     "8339887881c1cad79eb545f459f2189b5e3be1bb2993a1781be6bc63661c177a"},
+     "858b28f951dba2dc109f8bf6b8d88934b79b5b0d4cf84f80dced6b5e6849f720"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A07/lean/Main.lean"
     "problems/t97A07/status.json"
@@ -118221,7 +118204,8 @@
     :reported-by [:program-2026-10-11-close-t97a07],
     :type
     "The fixed-chart coordinate representative of a smooth manifold map has a continuous derivative and represents mfderiv by chart transport",
-    :area "regular-points-open"},
+    :area "regular-points-open",
+    :proved-in :program-2026-10-11-close-t97a07},
    :id :lemma-t97a07closure-continuousat-coordinate-mfderiv,
    :kind :lemma,
    :depends-on [],
