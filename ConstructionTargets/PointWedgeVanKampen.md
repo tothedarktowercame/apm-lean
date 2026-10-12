@@ -733,3 +733,8 @@ reduced to the outer comparisons.
 inverse-whiskered middle factor definitionally at the fixed overlap
 representative.  Its right-hand side is now exactly the reverse-span glue to
 which the existing outer-comparison normal form applies.
+
+`genericPointWedgeCoordinateSpanReconstructedGlue_eq_outerComparisons`
+substitutes that normal form at the exact middle-factor boundary of the
+reconstructed coordinate glue.  It identifies the inverse-whiskered factor
+with the two normalized reverse-span outer comparisons in their exact order.

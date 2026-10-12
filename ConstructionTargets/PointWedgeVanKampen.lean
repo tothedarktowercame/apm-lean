@@ -2501,6 +2501,39 @@ theorem genericPointWedgeCoordinateSpanWhiskeredReverseGlue_app :
         x₀ y₀ M N hM hN hy hx cM cN).glue.hom.app z := by
   rfl
 
+/-- The middle reverse-span factor of the reconstructed coordinate glue is
+the already-normalized pair of outer comparisons. -/
+theorem genericPointWedgeCoordinateSpanReconstructedGlue_eq_outerComparisons :
+    let l := genericPointWedgeActualLeft x₀ y₀ M N
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let l' := genericPointWedgeCoordinateLeft x₀
+    let r' := genericPointWedgeCoordinateRight y₀
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eL := genericPointWedgeLeftGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aL := genericPointWedgeLeftSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aR := genericPointWedgeRightSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let Q := genericPointWedgeIdentityCoordinateSpan x₀ y₀
+    let u : FundamentalGroupoid Unit := FundamentalGroupoid.mk ()
+    let z : FundamentalGroupoid (genericPointWedgeOverlapPiece x₀ y₀ M N) :=
+      FundamentalGroupoid.mk
+        ⟨quotientMap x₀ y₀ (.inl x₀),
+          ⟨⟨.inl x₀, by trivial, rfl⟩,
+            ⟨.inr y₀, by trivial,
+              (Quotient.sound (Relation.EqvGen.rel _ _ Rel.base)).symm⟩⟩⟩
+    (Functor.isoWhiskerLeft eK.inverse
+        (reverseTransportObj l r l' r' eK eL eR aL aR Q).glue).hom.app u =
+      (reverseLeftComparison l l' eK eL aL Q.left).inv.app z ≫
+        (reverseRightComparison r r' eK eR aR Q.right).hom.app z := by
+  dsimp only
+  rw [genericPointWedgeCoordinateSpanWhiskeredReverseGlue_app,
+    genericPointWedgeIdentityCoordinateReverseSpan_glue_eq_outerComparisons]
+
 /-- At the identity point-span object, the remaining coordinate-to-point
 counit is exactly the generic span-transport counit. -/
 theorem genericPointWedgeCoordinatePointCounit_eq_transportCounit :
@@ -4037,6 +4070,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeCoordinateSpanCounit_left_eq_glue_right
 #print axioms genericPointWedgeCoordinateSpanReconstructedGlue_app
 #print axioms genericPointWedgeCoordinateSpanWhiskeredReverseGlue_app
+#print axioms genericPointWedgeCoordinateSpanReconstructedGlue_eq_outerComparisons
 #print axioms genericPointWedgeCoordinatePointCounit_eq_transportCounit
 #print axioms genericPointWedgeCoordinatePointCounit_legs
 #print axioms genericPointWedgeCoordinatePointCounit_uniqueObjects
