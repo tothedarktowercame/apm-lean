@@ -336,6 +336,27 @@ theorem boundaryCrossingSet_finite_of_pairwise {M : Type*}
     Set.Finite C.boundaryCrossingSet := by
   exact Set.finite_iUnion hfinite
 
+theorem boundaryArcIntersection_subset_boundaryCrossingSet {M : Type*}
+    [TopologicalSpace M] [T2Space M] [ChartedSpace EuclideanPlane M]
+    (C : FiniteClosedDiskCover M) (p : C.BoundaryArcPairIndex) :
+    C.boundaryArcIntersection p ⊆ C.boundaryCrossingSet := by
+  exact Set.subset_iUnion (fun q : C.BoundaryArcPairIndex =>
+    C.boundaryArcIntersection q) p
+
+/-- Finiteness of all crossings is equivalent to the pairwise condition.
+The forward implication lets later refinements recover every scheduled
+pair's finite crossing set from a single global invariant. -/
+theorem boundaryCrossingSet_finite_iff_pairwise {M : Type*}
+    [TopologicalSpace M] [T2Space M] [ChartedSpace EuclideanPlane M]
+    (C : FiniteClosedDiskCover M) :
+    Set.Finite C.boundaryCrossingSet ↔
+      ∀ p : C.BoundaryArcPairIndex,
+        Set.Finite (C.boundaryArcIntersection p) := by
+  constructor
+  · intro h p
+    exact h.subset (C.boundaryArcIntersection_subset_boundaryCrossingSet p)
+  · exact C.boundaryCrossingSet_finite_of_pairwise
+
 end FiniteClosedDiskCover
 
 /-- Compact surfaces admit the finite nested closed-disk cover used by the
