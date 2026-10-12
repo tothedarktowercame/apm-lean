@@ -58,6 +58,15 @@ def twoSegmentPath (start bend finish : EuclideanPlane) (t : ℝ) : EuclideanPla
     twoSegmentPath start bend finish 1 = finish := by
   norm_num [twoSegmentPath]
 
+/-- A two-segment polygonal path is continuous, including at its bend. -/
+theorem continuous_twoSegmentPath (start bend finish : EuclideanPlane) :
+    Continuous (twoSegmentPath start bend finish) := by
+  unfold twoSegmentPath
+  apply continuous_if_le (by fun_prop) (by fun_prop) (by fun_prop) (by fun_prop)
+  intro t ht
+  rw [ht]
+  norm_num
+
 /-- There is an endpoint-fixed two-segment perturbation whose bend lies on a
 chosen nonconstant affine line and avoids a prescribed finite planar set. -/
 theorem exists_twoSegmentPath_bend_avoiding_finite
