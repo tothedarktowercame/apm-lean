@@ -2907,6 +2907,40 @@ theorem coefficientSphereNormalizationComparisonAutomorphism_hom_eq_neg_implies_
   simp only [Category.assoc] at h1 h2 h3 ⊢
   simpa only [Functor.mapIso_hom] using h1.trans (h2.trans h3)
 
+theorem coefficientOpenDiskNormalizationComposite_eq_model (k : ℕ) :
+    coefficientOpenDiskNormalizationComposite k =
+      forgetIntModules.map
+          (HomologicalComplex.homologyMap
+            (CoefficientRadialPair.pairMap ℤ
+              (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2))
+              (CoefficientModelLocal.puncture (k + 2))
+              (coefficientOpenDiskAmbientInclusion (k + 2))
+              (coefficientOpenDiskAmbientInclusion_mapsTo (k + 2))) (k + 2)) ≫
+        coefficientModelNormalizationComposite k := by
+  have hc := congrArg forgetIntModules.map
+    (coefficientOpenDiskConnecting_model_naturality k)
+  have hr := congrArg forgetIntModules.map
+    (coefficientOpenDiskRadial_homology_factorization (k + 2) (k + 1))
+  simp only [Functor.map_comp] at hc hr
+  unfold coefficientOpenDiskNormalizationComposite
+    coefficientModelNormalizationComposite
+  have h1 := congrArg (fun q =>
+      forgetIntModules.map
+          (CoefficientPairSequence.connecting ℤ
+            (T02A06HemisphereExcision.puncturedOpenDiskSet (k + 2)) (k + 1)) ≫
+        q ≫
+        forgetIntModules.map
+          (CoefficientSphereAntipodal.normalization ℤ k).hom) hr.symm
+  have h2 := congrArg (fun q => q ≫
+      forgetIntModules.map
+        ((CoefficientRadialPair.F ℤ (k + 1)).map
+          (TopCat.ofHom
+            (PuncturedNormedSpaceRadialEquivalence.radialNormalize
+              (CoefficientModelLocal.E (k + 2))))) ≫
+      forgetIntModules.map
+        (CoefficientSphereAntipodal.normalization ℤ k).hom) hc
+  exact h1.trans h2
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -3004,6 +3038,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonAutomorphism_hom_eq_neg_implies_endpoints
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientOpenDiskRadial_forgotten_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonAutomorphism_hom_eq_neg_implies_openDisk
+#print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientOpenDiskNormalizationComposite_eq_model
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
