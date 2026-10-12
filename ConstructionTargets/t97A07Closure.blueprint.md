@@ -120,6 +120,13 @@ The remaining B2 step is the pointwise identification of the fixed
 representative derivative with that transported family throughout this
 neighbourhood.
 
+`continuousAt_inTangentCoordinates_mfderiv_and_self` packages the
+coordinate-safe formulation needed for that comparison: the transported
+family is continuous at `x` and its value at `x` is literally `mfderiv f x`.
+The fixed representative has chart-coordinate domain, so the remaining
+pointwise statement must precompose it with the fixed source chart rather
+than identify functions with different domains.
+
 ### B3. Regular points are open
 
 lean: `t97A07Closure.isOpen_regularPoints` : under the t97A07 manifold
