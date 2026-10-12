@@ -116628,6 +116628,19 @@
     [{:cmd "lean direct-centre attempt",
       :exit 1,
       :finding "Inverse source-chart derivative remains."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791781683198-6387-af209ece",
+     :commands
+     ["git show/diff-tree 0519a5827"
+      "fixture/commit sha256 and placeholder checks"
+      "statement-registry.py check"
+      "lake env lean ConstructionTargets/t97A07Closure.lean"
+      "lake build ConstructionTargets.t97A07Closure"
+      "lake env lean problems/t97A07/lean/Main.lean"],
+     :finding
+     "Exact scope and recorded fixture eaeed2...82182 verified; blueprint edit is a faithful B2 progress note and changes no node statement/uses. New theorem correctly simplifies the Euclidean target-chart factor at x, leaving mfderiv f x composed with the inverse source-chart derivative; it does not over-normalize the source factor. Reusable source has 0 placeholders; target retains 1 existing sorry; hashes and 131/131 registry reproduce; all gates pass; only standard axioms. Valid program STOP with compiled progress and residual naming source-factor normalization, smaller-neighborhood equality, then B3-B9."},
     :commit "0519a5827e016d0892e4dd9c01814b8e46cdef4c",
     :changed-paths
     ["ConstructionTargets/t97A07Closure.lean"
@@ -116638,7 +116651,7 @@
      "eaeed21919599335d4a33b437815c4a9cbb5b72110213b29440d6944cc982182"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A07/lean/Main.lean"
     "problems/t97A07/status.json"
@@ -116654,7 +116667,7 @@
     ["lake env lean problems/t97A07/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B2 transported mfderiv is continuous at the fixed base point.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B2 centre transport is mfderiv followed by the inverse source-chart derivative.",
    :id :program-2026-10-11-close-t97a07,
    :kind :final-adapter,
    :campaign-priority 44,
@@ -116683,7 +116696,11 @@
     {:job 6,
      :commit "45e8ce1a29afb4bab56cf35be59df84ca5b27d32",
      :reason
-     "B2 transported mfderiv is continuous at the fixed base point."}]}
+     "B2 transported mfderiv is continuous at the fixed base point."}
+    {:job 7,
+     :commit "0519a5827e016d0892e4dd9c01814b8e46cdef4c",
+     :reason
+     "B2 centre transport is mfderiv followed by the inverse source-chart derivative."}]}
   {:consumer :t91J06,
    :phase :implementation,
    :state :open,
