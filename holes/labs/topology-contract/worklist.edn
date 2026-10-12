@@ -113894,6 +113894,19 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791793319727-6643-92b3a578",
+     :commands
+     ["git show/diff-tree 014f591c"
+      "sha256/diff/placeholder checks"
+      "statement-registry.py check"
+      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "PASS program STOP: exact 2-file commit adds the compiled sorry-free right B3 bridge. It correctly preserves quotient/basepoint transport and conjugates the actual right-span action by the fixed restriction element as e^-1*a*e. Fixture/source/doc hashes match; placeholders 0->0; registry 131/131; standard axioms only. Final module remains absent; residual identifies both actual-span lifted actions with mapped legs, then B12."},
     :commit "014f591cef490b4cd23855d38b77b801ccc45d0a",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113904,7 +113917,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113925,7 +113938,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B3 inverse-identity action on the left literal leg is the actual-span action on its lifted cover loop.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: B3 inverse-identity action on the right literal leg is the conjugated actual-span action on its lifted cover loop.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114217,7 +114230,11 @@
     {:job 5,
      :commit "5adad4e55edb9a246e189db24d2f205b6290113d",
      :reason
-     "B3 inverse-identity action on the left literal leg is the actual-span action on its lifted cover loop."}]}
+     "B3 inverse-identity action on the left literal leg is the actual-span action on its lifted cover loop."}
+    {:job 6,
+     :commit "014f591cef490b4cd23855d38b77b801ccc45d0a",
+     :reason
+     "B3 inverse-identity action on the right literal leg is the conjugated actual-span action on its lifted cover loop."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
