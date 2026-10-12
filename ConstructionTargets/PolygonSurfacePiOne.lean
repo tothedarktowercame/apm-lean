@@ -835,4 +835,125 @@ def nonorientableStandardPairingData (g : ℕ) (hg : 0 < g) : PairingData :=
     (g : ℕ) (hg : 0 < g) :
     (nonorientableStandardPairingData g hg).edgeCount = 2 * g := rfl
 
+open PolygonBoundaryVertexClasses in
+theorem orientable_vertex_zero_to_three (g j : ℕ) (hj : j < g) :
+    Relation.EqvGen (SurfaceRel true g)
+      (polygonVertex (4 * g) ⟨4 * j, by omega⟩)
+      (polygonVertex (4 * g) ⟨4 * j + 3, by omega⟩) := by
+  have h := Relation.EqvGen.rel _ _
+    (show SurfaceRel true g
+      (edgePoint (4 * g) (4 * j) zeroIcc)
+      (edgePoint (4 * g) (4 * j + 2) oneIcc) from
+      ⟨j, hj, zeroIcc, Or.inl ⟨rfl, by simp [zeroIcc, oneIcc]⟩⟩)
+  rw [edgePoint_one_eq_succ_zero] at h
+  convert h using 1
+
+open PolygonBoundaryVertexClasses in
+theorem orientable_vertex_one_to_two (g j : ℕ) (hj : j < g) :
+    Relation.EqvGen (SurfaceRel true g)
+      (polygonVertex (4 * g) ⟨4 * j + 1, by omega⟩)
+      (polygonVertex (4 * g) ⟨4 * j + 2, by omega⟩) := by
+  have h := Relation.EqvGen.rel _ _
+    (show SurfaceRel true g
+      (edgePoint (4 * g) (4 * j) oneIcc)
+      (edgePoint (4 * g) (4 * j + 2) zeroIcc) from
+      ⟨j, hj, oneIcc, Or.inl ⟨rfl, by simp [zeroIcc, oneIcc]⟩⟩)
+  rw [edgePoint_one_eq_succ_zero] at h
+  convert h using 1
+
+open PolygonBoundaryVertexClasses in
+theorem orientable_vertex_two_to_three (g j : ℕ) (hj : j < g) :
+    Relation.EqvGen (SurfaceRel true g)
+      (polygonVertex (4 * g) ⟨4 * j + 2, by omega⟩)
+      (polygonVertex (4 * g) ⟨4 * j + 3, by omega⟩) := by
+  have h := Relation.EqvGen.rel _ _
+    (show SurfaceRel true g
+      (edgePoint (4 * g) (4 * j + 1) oneIcc)
+      (edgePoint (4 * g) (4 * j + 3) zeroIcc) from
+      ⟨j, hj, oneIcc, Or.inr ⟨rfl, by simp [zeroIcc, oneIcc]⟩⟩)
+  rw [edgePoint_one_eq_succ_zero] at h
+  convert h using 1
+
+open PolygonBoundaryVertexClasses in
+theorem orientable_vertex_one_to_next (g j : ℕ) (hj : j + 1 < g) :
+    Relation.EqvGen (SurfaceRel true g)
+      (polygonVertex (4 * g) ⟨4 * j + 1, by omega⟩)
+      (polygonVertex (4 * g) ⟨4 * (j + 1), by omega⟩) := by
+  have h := Relation.EqvGen.rel _ _
+    (show SurfaceRel true g
+      (edgePoint (4 * g) (4 * j + 1) zeroIcc)
+      (edgePoint (4 * g) (4 * j + 3) oneIcc) from
+      ⟨j, by omega, zeroIcc, Or.inr ⟨rfl, by simp [zeroIcc, oneIcc]⟩⟩)
+  rw [edgePoint_one_eq_succ_zero] at h
+  convert h using 1
+
+theorem orientable_standard_oneVertex (g : ℕ) :
+    ∀ i j : Fin (4 * g),
+      Relation.EqvGen (boundaryRel (4 * g) (standardPair true g)
+        (standardSign true g)) (polygonVertex (4 * g) i)
+        (polygonVertex (4 * g) j) := by
+  intro i j
+  have hi_lt := i.isLt
+  have hg : 0 < g := by omega
+  have hzero : ∀ k (hk : k < g),
+      Relation.EqvGen (SurfaceRel true g)
+        (polygonVertex (4 * g) ⟨4 * k, by omega⟩)
+        (polygonVertex (4 * g) ⟨0, by omega⟩) := by
+    intro k hk
+    induction k with
+    | zero => exact .refl _
+    | succ k ih =>
+        exact .trans _ _ _
+          (orientable_vertex_one_to_next g k (by omega)).symm
+          (.trans _ _ _ (orientable_vertex_one_to_two g k (by omega))
+            (.trans _ _ _ (orientable_vertex_two_to_three g k (by omega))
+              (.trans _ _ _ (orientable_vertex_zero_to_three g k (by omega)).symm
+                (ih (by omega)))))
+  have hall : ∀ i : Fin (4 * g),
+      Relation.EqvGen (SurfaceRel true g)
+        (polygonVertex (4 * g) i) (polygonVertex (4 * g) ⟨0, by omega⟩) := by
+    intro i
+    generalize hc : orientableCoord g i = c
+    rcases c with ⟨a, b⟩
+    have hi : i = (orientableCoord g).symm (a, b) := by
+      apply (orientableCoord g).injective
+      simpa using hc
+    subst i
+    fin_cases b
+    · convert hzero a a.isLt using 1 <;> congr 1 <;> apply Fin.ext <;>
+        simp [orientableCoord]
+    · have hh := Relation.EqvGen.trans _ _ _
+          (orientable_vertex_one_to_two g a a.isLt)
+          (.trans _ _ _ (orientable_vertex_two_to_three g a a.isLt)
+            (.trans _ _ _ (orientable_vertex_zero_to_three g a a.isLt).symm
+              (hzero a a.isLt)))
+      convert hh using 1 <;> congr 1 <;> apply Fin.ext <;>
+        simp [orientableCoord, Nat.add_comm]
+    · have hh := Relation.EqvGen.trans _ _ _
+          (orientable_vertex_two_to_three g a a.isLt)
+          (.trans _ _ _ (orientable_vertex_zero_to_three g a a.isLt).symm
+            (hzero a a.isLt))
+      convert hh using 1 <;> congr 1 <;> apply Fin.ext <;>
+        simp [orientableCoord, Nat.add_comm]
+    · have hh := Relation.EqvGen.trans _ _ _
+          (orientable_vertex_zero_to_three g a a.isLt).symm (hzero a a.isLt)
+      convert hh using 1 <;> congr 1 <;> apply Fin.ext <;>
+        simp [orientableCoord, Nat.add_comm]
+  apply (orientable_eqvGen_iff g _ _).mpr
+  exact .trans _ _ _ (hall i) (hall j).symm
+
+def orientableStandardPairingData (g : ℕ) (hg : 0 < g) : PairingData :=
+  standardPairingDataOfOneVertex true g hg (orientable_standard_oneVertex g)
+
+def standardPairingData (o : Bool) (g : ℕ) (hg : 0 < g) : PairingData :=
+  match o with
+  | false => nonorientableStandardPairingData g hg
+  | true => orientableStandardPairingData g hg
+
+def standardPairingData_space_homeomorph (o : Bool) (g : ℕ) (hg : 0 < g) :
+    (standardPairingData o g hg).Space ≃ₜ Surface o g :=
+  match o with
+  | false => nonorientableStandardSpaceHomeomorph g
+  | true => orientableStandardSpaceHomeomorph g
+
 end ConstructionTargets.PolygonSurfacePiOne
