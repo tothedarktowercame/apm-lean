@@ -3617,6 +3617,24 @@ theorem complexArrivalCorrection_zero_equations
     rightTubeCorePlanarComplex, Complex.mul_re, Complex.mul_im] at hre him
   constructor <;> linarith
 
+/-- A point-dependent correction cannot create an arrival zero when its
+imaginary component has the same weak sign as the ambient second coordinate
+and the two are not simultaneously zero.  This is the algebraic certificate
+for the nonzero-height branch of the eventual multi-leg detour. -/
+theorem pointDependentArrivalCorrection_ne_zero_of_im_sign
+    (t : unitInterval) (c : ℂ) (p : RightTubeMinusLeftCore)
+    (hsign : 0 ≤ p.1 1 * c.im)
+    (hne : p.1 1 ≠ 0 ∨ c.im ≠ 0) :
+    (((2 - 2 * (t : ℝ) : ℝ) : ℂ) * positiveRealPlanarWaypointMap p +
+        ((2 * (t : ℝ) - 1 : ℝ) : ℂ) *
+          rightTubeCorePlanarComplex p.1 + c) ≠ 0 := by
+  intro hz
+  have h1 := (complexArrivalCorrection_zero_equations t c p hz).2
+  have hp : p.1 1 = 0 := by
+    nlinarith [sq_nonneg (p.1 1)]
+  have hc : c.im = 0 := by linarith
+  exact hne.elim (fun h => h hp) (fun h => h hc)
+
 /-- Polynomial forced-norm identity for the whole corrected arrival leg;
 it avoids division at the exceptional time `t = 3/4`. -/
 theorem complexArrivalCorrection_zero_scaled_normSq
@@ -3992,6 +4010,7 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.complexArrivalCorrection_sevenEighths_zero_normSq
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.complexArrivalCorrection_sevenEighths_ne_zero_of_normSq_outside
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.complexArrivalCorrection_zero_scaled_normSq
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.pointDependentArrivalCorrection_ne_zero_of_im_sign
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.complexArrivalCorrection_ne_zero_of_scaled_normSq_outside
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.complexArrivalCorrection_threeQuarters_ne_zero
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.continuous_arrivalTransverseCorrection
