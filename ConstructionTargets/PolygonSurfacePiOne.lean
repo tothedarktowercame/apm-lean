@@ -315,4 +315,68 @@ theorem standardEdgeCount_ne_zero (o : Bool) (g : ℕ) (hg : 0 < g) :
     standardEdgeCount o g ≠ 0 :=
   Nat.ne_of_gt (standardEdgeCount_pos o g hg)
 
+def handlePair : Equiv.Perm (Fin 4) where
+  toFun i := ![2, 3, 0, 1] i
+  invFun i := ![2, 3, 0, 1] i
+  left_inv i := by fin_cases i <;> rfl
+  right_inv i := by fin_cases i <;> rfl
+
+def crosscapPair : Equiv.Perm (Fin 2) := Equiv.swap 0 1
+
+def orientablePair (g : ℕ) : Equiv.Perm (Fin (4 * g)) :=
+  let e : Fin (4 * g) ≃ Fin g × Fin 4 :=
+    (finCongr (Nat.mul_comm 4 g)).trans finProdFinEquiv.symm
+  e.trans ((Equiv.refl (Fin g)).prodCongr handlePair) |>.trans e.symm
+
+def nonorientablePair (g : ℕ) : Equiv.Perm (Fin (2 * g)) :=
+  let e : Fin (2 * g) ≃ Fin g × Fin 2 :=
+    (finCongr (Nat.mul_comm 2 g)).trans finProdFinEquiv.symm
+  e.trans ((Equiv.refl (Fin g)).prodCongr crosscapPair) |>.trans e.symm
+
+/-- The standard fixed-point-free arc pairing, blockwise on each handle or
+crosscap. -/
+def standardPair (o : Bool) (g : ℕ) :
+    Equiv.Perm (Fin (standardEdgeCount o g)) :=
+  match o with
+  | false => nonorientablePair g
+  | true => orientablePair g
+
+theorem handlePair_involutive : Function.Involutive handlePair := by
+  intro i
+  fin_cases i <;> rfl
+
+theorem crosscapPair_involutive : Function.Involutive crosscapPair := by
+  intro i
+  fin_cases i <;> rfl
+
+theorem standardPair_involutive (o : Bool) (g : ℕ) :
+    Function.Involutive (standardPair o g) := by
+  cases o <;> intro i
+  · change nonorientablePair g (nonorientablePair g i) = i
+    exact (nonorientablePair g).symm_apply_apply i
+  · change orientablePair g (orientablePair g i) = i
+    exact (orientablePair g).symm_apply_apply i
+
+theorem handlePair_ne (i : Fin 4) : handlePair i ≠ i := by
+  fin_cases i <;> decide
+
+theorem crosscapPair_ne (i : Fin 2) : crosscapPair i ≠ i := by
+  fin_cases i <;> decide
+
+theorem standardPair_ne (o : Bool) (g : ℕ)
+    (i : Fin (standardEdgeCount o g)) : standardPair o g i ≠ i := by
+  cases o
+  · change nonorientablePair g i ≠ i
+    intro h
+    let e : Fin (2 * g) ≃ Fin g × Fin 2 :=
+      (finCongr (Nat.mul_comm 2 g)).trans finProdFinEquiv.symm
+    have := congrArg (fun x => (e x).2) h
+    exact crosscapPair_ne (e i).2 (by simpa [nonorientablePair, e] using this)
+  · change orientablePair g i ≠ i
+    intro h
+    let e : Fin (4 * g) ≃ Fin g × Fin 4 :=
+      (finCongr (Nat.mul_comm 4 g)).trans finProdFinEquiv.symm
+    have := congrArg (fun x => (e x).2) h
+    exact handlePair_ne (e i).2 (by simpa [orientablePair, e] using this)
+
 end ConstructionTargets.PolygonSurfacePiOne
