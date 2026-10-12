@@ -79529,6 +79529,19 @@
     [{:cmd "closure compile",
       :exit 1,
       :finding "Closed normalized square-sum with ring."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791767792269-6120-3b5e58e6",
+     :commands
+     ["git show/check/diff 81f5ee4e1..68d614508"
+      "verify scoped blobs, fixture SHA, ancestry"
+      "lake build ConstructionTargets.t96A07Closure"
+      "lake env lean closure and t96A07 Main"
+      "statement-registry check/fingerprint"
+      "placeholder and axiom checks"],
+     :finding
+     "PASS: 68d614508afd5d9504ca53bf5a5829b3d8f28831 adds compiled, sorry-free B11 completion after 81f5ee4e1; both changed paths are scoped. Closure/blueprint blobs dd81b62e/69b59fb6 and fixture 121ebddc match. For 0<z<1/2, (sqrt z,sqrt z,sqrt(1-2z)) has unit norm and its quadratic image has third coordinate z; the Main adapter faithfully uses frozen sphereMap. Lean gates pass with standard axioms only; registry 131/0, frozen hash 2ba67b04 unchanged, closure/Main placeholders 0/1. STOP lists B12 then B13."},
     :commit "68d614508",
     :changed-paths
     ["ConstructionTargets/t96A07Closure.lean"
@@ -79539,7 +79552,7 @@
      "121ebddc4f5bca5d8761a04403f6fdb0e763febd9dbdf558434d5879c2f836d5"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t96A07/lean/Main.lean"
     "problems/t96A07/status.json"
@@ -79597,8 +79610,9 @@
      :commit "b5adc850b073d3ef0a5bfd745d6b19d7afeeb5ff",
      :reason :program-progress-committed}
     {:job 6, :commit "f8d51a9d6", :reason :program-milestone-complete}
-    {:job 7,
-     :commit "81f5ee4e1",
+    {:job 7, :commit "81f5ee4e1", :reason :program-milestone-complete}
+    {:job 8,
+     :commit "68d614508",
      :reason :program-milestone-complete}]}
   {:consumer :t94A10,
    :stop-count 2,
@@ -81522,7 +81536,7 @@
    :other-consumers []}
   {:consumer :t96A07,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -81533,7 +81547,9 @@
     :reported-by [:program-2026-10-11-close-t96a07],
     :type "B11 every 0<z<1/2 is attained",
     :area "projective-smooth-descent",
-    :proved-in :program-2026-10-11-close-t96a07},
+    :proved-in :program-2026-10-11-close-t96a07,
+    :banked-by :program-2026-10-11-close-t96a07,
+    :banked-commit "68d614508"},
    :id
    :lemma-constructiontargets-t96a07closure-spheremap-level-attained,
    :kind :lemma,
