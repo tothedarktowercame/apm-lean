@@ -715,3 +715,9 @@ base counit to the left base counit and coordinate glue.  Since the reverse
 glue and coordinate glue were already reduced to the outer comparisons and
 the unit respectively, this is the exact equation needed for their final
 identification.
+
+`genericPointWedgeCoordinateSpanCounit_left_eq_glue_right` applies the proved
+unit value of the identity coordinate glue to that square.  The left
+cover-to-summand counit is therefore exactly the reconstructed transport glue
+followed by the right counit; the remaining step is to rewrite that
+reconstructed glue by its expanded outer-comparison normal form.
