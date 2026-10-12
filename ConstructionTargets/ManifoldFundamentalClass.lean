@@ -3291,6 +3291,23 @@ theorem coefficientCircleComparisonIso_hom_eq_of_coordinates
   rw [Category.assoc, hcoordinates]
   exact T02A06SphereOne.sphereOneH1IsoInt.inv_hom_id.symm
 
+theorem coefficientCircleCoordinates_eq_id_of_apply_one
+    (hone :
+      ((forgetIntModules.mapIso
+        (CoefficientSphereEndpoints.circleH1 ℤ)).inv ≫
+        (singularHomologyComparison
+          (TopCat.of (T02A06.euclideanUnitSphere 2)) 1).hom ≫
+        T02A06SphereOne.sphereOneH1IsoInt.hom).hom (1 : ℤ) = 1) :
+    (forgetIntModules.mapIso
+      (CoefficientSphereEndpoints.circleH1 ℤ)).inv ≫
+      (singularHomologyComparison
+        (TopCat.of (T02A06.euclideanUnitSphere 2)) 1).hom ≫
+      T02A06SphereOne.sphereOneH1IsoInt.hom =
+      𝟙 (AddCommGrpCat.of ℤ) := by
+  apply AddCommGrpCat.hom_ext
+  apply AddMonoidHom.ext_int
+  exact hone
+
 end ConstructionTargets.ManifoldFundamentalClass
 
 #print axioms ConstructionTargets.ManifoldFundamentalClass.neighborhoodInclusion_Hsucc_isIso
@@ -3408,6 +3425,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientCircleEndpoint_eq_one_of_generator_comparison
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientCircleGeneratorComparison_of_iso_hom
 #print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientCircleComparisonIso_hom_eq_of_coordinates
+#print axioms ConstructionTargets.ManifoldFundamentalClass.coefficientCircleCoordinates_eq_id_of_apply_one
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
