@@ -83345,9 +83345,62 @@
    :depends-on [],
    :other-consumers []}
   {:consumer :t99J01,
-   :stop-count 0,
+   :stop-count 1,
+   :evidence
+   {:placeholder-delta 0,
+    :residual "Blueprint written; review it, then formalize B1.",
+    :outcome :stop,
+    :warnings
+    ["Unrelated PointWedgeVanKampen.lean modification preserved."],
+    :missing-theorems
+    [{:name "coveringFundamentalGroupEquivRange",
+      :type "pi1 total equiv induced range",
+      :status :not-started,
+      :consumers [:t99J01 :t97A03],
+      :depends-on [],
+      :area "covering-subgroup-correspondence"}
+     {:name "isEmbedding_of_comp_eq",
+      :type "embedding from embedded composite",
+      :status :not-started,
+      :consumers [:t93J03],
+      :depends-on [],
+      :area "covering-subgroup-correspondence"}
+     {:name "coveringFundamentalGroupEquivFreeSubgroup",
+      :type "pi1 total equiv mapped free subgroup with index",
+      :status :not-started,
+      :consumers [:t99J01 :t97A03],
+      :depends-on ["coveringFundamentalGroupEquivRange"],
+      :area "covering-subgroup-correspondence"}
+     {:name "isCoveringMap_homeomorph_comp_quotientMk",
+      :type "orbit quotient covering transported by homeomorphism",
+      :status :not-started,
+      :consumers [:t93J03 :t00A02],
+      :depends-on [],
+      :area "covering-subgroup-correspondence"}],
+    :statement-hashes
+    {:registry "131/0",
+     :module "f874c504426d281d2d6caf1aaf1c318e5b3f13ac",
+     :main "21d5ee491d63501c124f113474ddedee9223d81b"},
+    :disposition :stop,
+    :axioms [],
+    :author "topo-6",
+    :reason :blueprint-written,
+    :commands
+    [{:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131/0"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "blueprint node/schema scan", :exit 0}
+     {:cmd "git show --check HEAD", :exit 0}],
+    :commit "9a443d45a",
+    :changed-paths ["ConstructionTargets/SuppliedCoverAlgebra.md"],
+    :fixture
+    {:path "ConstructionTargets/SuppliedCoverAlgebra.md",
+     :sha256
+     "bac24aabaea2654725e18a05c51bdbab93e92df4d578dc913c56c5eae32f3595"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SuppliedCoverAlgebra.lean"
     "ConstructionTargets/SuppliedCoverAlgebra.md"],
@@ -83369,4 +83422,68 @@
    :fail-count 0,
    :depends-on [],
    :program true,
-   :other-consumers [:t97A03 :t93J03 :t00A02]}]}
+   :other-consumers [:t97A03 :t93J03 :t00A02]}
+  {:consumer :t99J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "coveringFundamentalGroupEquivRange",
+    :type "pi1 total equiv induced range"},
+   :lemma
+   {:name "coveringFundamentalGroupEquivRange",
+    :reported-by [:program-2026-10-12-supplied-cover-algebra],
+    :type "pi1 total equiv induced range",
+    :area "covering-subgroup-correspondence"},
+   :id :lemma-coveringfundamentalgroupequivrange,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t97A03]}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "isEmbedding_of_comp_eq",
+    :type "embedding from embedded composite"},
+   :lemma
+   {:name "isEmbedding_of_comp_eq",
+    :reported-by [:program-2026-10-12-supplied-cover-algebra],
+    :type "embedding from embedded composite",
+    :area "covering-subgroup-correspondence"},
+   :id :lemma-isembedding-of-comp-eq,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t99J01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "coveringFundamentalGroupEquivFreeSubgroup",
+    :type "pi1 total equiv mapped free subgroup with index"},
+   :lemma
+   {:name "coveringFundamentalGroupEquivFreeSubgroup",
+    :reported-by [:program-2026-10-12-supplied-cover-algebra],
+    :type "pi1 total equiv mapped free subgroup with index",
+    :area "covering-subgroup-correspondence"},
+   :id :lemma-coveringfundamentalgroupequivfreesubgroup,
+   :kind :lemma,
+   :depends-on [:lemma-coveringfundamentalgroupequivrange],
+   :other-consumers [:t97A03]}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "isCoveringMap_homeomorph_comp_quotientMk",
+    :type "orbit quotient covering transported by homeomorphism"},
+   :lemma
+   {:name "isCoveringMap_homeomorph_comp_quotientMk",
+    :reported-by [:program-2026-10-12-supplied-cover-algebra],
+    :type "orbit quotient covering transported by homeomorphism",
+    :area "covering-subgroup-correspondence"},
+   :id :lemma-iscoveringmap-homeomorph-comp-quotientmk,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t00A02]}]}
