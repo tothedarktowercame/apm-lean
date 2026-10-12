@@ -76102,6 +76102,18 @@
      {:cmd "placeholder scan", :exit 0, :output "0"}
      {:cmd "#print axioms product/descent", :exit 0}
      {:cmd "git show --check 3736591d1", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791848686094-8058-7736b081",
+     :commands
+     ["git show/diff/hash 3736591d1"
+      "lake env lean ConstructionTargets/PolygonSurfacePiOne.lean"
+      "lake build ConstructionTargets.PolygonSurfacePiOne"
+      "python3 scripts/statement-registry.py check"
+      "#print axioms + placeholder scan"],
+     :finding
+     "PASS: recorded commit changes only the scoped module; fixture SHA-256 c826393b...7aa8 and blob 4a2b9452...d9b match. Fresh Lean/build gates pass, registry is 131/0, and sorry/admit/axiom counts are 0. quotientMap_prod_unitInterval proves the correctly oriented IsQuotientMap from I×Disk to I×P.Space. descendHomotopy requires invariance under EqvGen P.Rel, descends by Quotient.lift, and proves continuity via the product quotient universal property rather than representative choice; its quotient-map equation is rfl. Both declarations use only propext, Classical.choice, Quot.sound."},
     :commit "3736591d1",
     :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
     :fixture
@@ -76110,7 +76122,7 @@
      "c826393b3a5045aa5efbb0822d333dc8275ccf71cbdc55ef2bb5b87a797f7aa8"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B5",
    :acceptance
@@ -76139,7 +76151,7 @@
      :infrastructure-packets
      :review-outcomes]},
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Rerun after B5."},
@@ -86227,7 +86239,7 @@
    :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
   {:consumer :t96J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -86239,7 +86251,9 @@
     :reported-by [:routes-2026-10-12-polygon-b5-topo2-r1],
     :type "IsQuotientMap (Prod.map id P.quotientMap)",
     :area "polygon-surface-pi1",
-    :proved-in :routes-2026-10-12-polygon-b5-topo2-r1},
+    :proved-in :routes-2026-10-12-polygon-b5-topo2-r1,
+    :banked-by :routes-2026-10-12-polygon-b5-topo2-r1,
+    :banked-commit "3736591d1"},
    :id
    :lemma-constructiontargets-polygonsurfacepione-quotientmap-prod-unitinterval,
    :kind :lemma,
@@ -86247,7 +86261,7 @@
    :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}
   {:consumer :t96J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "PairingData.descendHomotopy",
@@ -86259,7 +86273,9 @@
     :type
     "continuous relation-preserving homotopy descent through P.Space",
     :area "polygon-surface-pi1",
-    :proved-in :routes-2026-10-12-polygon-b5-topo2-r1},
+    :proved-in :routes-2026-10-12-polygon-b5-topo2-r1,
+    :banked-by :routes-2026-10-12-polygon-b5-topo2-r1,
+    :banked-commit "3736591d1"},
    :id :lemma-pairingdata-descendhomotopy,
    :kind :lemma,
    :depends-on
