@@ -1624,6 +1624,28 @@ noncomputable def forgetHomologySequenceSnakeInputHom
     · exact forgetHomologyπ_naturality K.X₂ j
     · exact forgetHomologyπ_naturality K.X₃ j
 
+abbrev ForgottenHomologySequenceDeltaNaturality
+    {ι : Type} {c : ComplexShape ι}
+    (K : ShortComplex (HomologicalComplex (ModuleCat ℤ) c))
+    (hK : K.ShortExact)
+    (hKF : (K.map (forgetIntModules.mapHomologicalComplex c)).ShortExact)
+    (i j : ι) (hij : c.Rel i j) : Prop :=
+  (forgetSnakeInput
+      (HomologicalComplex.HomologySequence.snakeInput hK i j hij)).δ ≫
+      ((K.X₁.sc j).mapHomologyIso forgetIntModules).inv =
+    ((K.X₃.sc i).mapHomologyIso forgetIntModules).inv ≫
+      (HomologicalComplex.HomologySequence.snakeInput hKF i j hij).δ
+
+theorem forgetHomologySequence_delta_naturality
+    {ι : Type} {c : ComplexShape ι}
+    (K : ShortComplex (HomologicalComplex (ModuleCat ℤ) c))
+    (hK : K.ShortExact)
+    (hKF : (K.map (forgetIntModules.mapHomologicalComplex c)).ShortExact)
+    (i j : ι) (hij : c.Rel i j) :
+    ForgottenHomologySequenceDeltaNaturality K hK hKF i j hij := by
+  exact ShortComplex.SnakeInput.naturality_δ
+    (forgetHomologySequenceSnakeInputHom K hK hKF i j hij)
+
 /-- The corrected relative-homology comparison intertwines the coefficient
 absolute-to-relative map with the production relative projection. -/
 theorem integralRelativeHomologyComparisonWithTransport_projection
@@ -2618,6 +2640,7 @@ end ConstructionTargets.ManifoldFundamentalClass
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetOpcyclesToCycles_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetHomologyπ_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.forgetHomologySequenceSnakeInputHom
+#print axioms ConstructionTargets.ManifoldFundamentalClass.forgetHomologySequence_delta_naturality
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_normalization
 #print axioms ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_normalization_of_generator
