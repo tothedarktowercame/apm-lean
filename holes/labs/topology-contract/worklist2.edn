@@ -79655,6 +79655,19 @@
       :exit 1,
       :finding
       "Normalized nested scalar actions using nonzero norm."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791769304892-6149-603f06f3",
+     :commands
+     ["git show/check/diff 9950771b4..da84484c8"
+      "verify scoped blobs, fixture SHA, ancestry"
+      "lake build ConstructionTargets.t94A10Closure"
+      "lake env lean closure and t94A10 Main"
+      "statement-registry check/fingerprint"
+      "placeholder and axiom checks"],
+     :finding
+     "PASS: da84484c81ca09fca690abd6ee87a1b2beb44644 adds compiled, sorry-free B2 progress after 9950771b4; its sole changed path is scoped. Closure/blueprint blobs 96c1b05e/808e174f and fixture 0776e72d match. Differentiating norm-square, square root, cube, and inverse under x!=0 normalizes to the correctly oriented derivative -3*norm(x)^-5*inner(x,u). Lean gates pass with standard axioms only; registry 131/0, frozen hash d1822221 unchanged, closure/Main placeholders 0/2. STOP lists B3 then B4-B11."},
     :commit "da84484c8",
     :changed-paths ["ConstructionTargets/t94A10Closure.lean"],
     :fixture
@@ -79663,7 +79676,7 @@
      "0776e72dddde7a91f0b1cba48d8c0d9b7dd5054295b2111df46974d3182ba330"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94A10/lean/Main.lean"
     "problems/t94A10/status.json"
@@ -79691,8 +79704,9 @@
    [{:job 2,
      :commit "2e890e314aa6f3a9d846fc01cb336afd0664f039",
      :reason :blueprint-revised}
-    {:job 3,
-     :commit "9950771b4",
+    {:job 3, :commit "9950771b4", :reason :program-milestone-complete}
+    {:job 4,
+     :commit "da84484c8",
      :reason :program-milestone-complete}]}
   {:consumer :t97A04,
    :phase :lemma,
@@ -81296,7 +81310,7 @@
    :other-consumers []}
   {:consumer :t94A10,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -81308,7 +81322,9 @@
     :reported-by [:program-2026-10-11-close-t94a10],
     :type "derivative of norm inverse cube off zero",
     :area "periodic-stokes-square",
-    :proved-in :program-2026-10-11-close-t94a10},
+    :proved-in :program-2026-10-11-close-t94a10,
+    :banked-by :program-2026-10-11-close-t94a10,
+    :banked-commit "da84484c8"},
    :id
    :lemma-constructiontargets-t94a10closure-hasfderivat-radialinvcube,
    :kind :lemma,
@@ -81642,20 +81658,28 @@
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance {:lemma "solidAngleAmbient"},
-   :lemma {:name "solidAngleAmbient", :reported-by []},
+   :lemma
+   {:name "solidAngleAmbient",
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t94A10Closure.lean"]},
    :id :lemma-solidangleambient,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance {:lemma "hasFDerivAt_radialInvCube"},
-   :lemma {:name "hasFDerivAt_radialInvCube", :reported-by []},
+   :lemma
+   {:name "hasFDerivAt_radialInvCube",
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t94A10Closure.lean"]},
    :id :lemma-hasfderivat-radialinvcube,
    :kind :lemma,
    :depends-on [],
