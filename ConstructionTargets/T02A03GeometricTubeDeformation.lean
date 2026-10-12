@@ -2678,6 +2678,107 @@ theorem doubledCorrectedDepartureQuarterCandidate_scalarEquations :
           (1 / 4 : ℝ) * (1 - 2 * (1 / 4 : ℝ)) = 0 := by
   norm_num
 
+noncomputable def doubledCorrectedDepartureQuarterCandidate : ℂ :=
+  ((1 / 4 : ℝ) : ℂ) + ((-17 / 16 : ℝ) : ℂ) * Complex.I
+
+theorem doubledCorrectedDepartureQuarterCandidate_ne_zero :
+    doubledCorrectedDepartureQuarterCandidate ≠ 0 := by
+  intro h
+  have hre := congrArg Complex.re h
+  norm_num [doubledCorrectedDepartureQuarterCandidate, Complex.mul_re,
+    Complex.mul_im] at hre
+
+noncomputable def doubledCorrectedDepartureQuarterCandidateCircle : Circle :=
+  ⟨NormedSpace.normalize doubledCorrectedDepartureQuarterCandidate,
+    mem_sphere_zero_iff_norm.mpr
+      (NormedSpace.norm_normalize
+        doubledCorrectedDepartureQuarterCandidate_ne_zero)⟩
+
+noncomputable def doubledCorrectedDepartureQuarterCandidateNormal : ℂ :=
+  ((1 - ‖doubledCorrectedDepartureQuarterCandidate‖ : ℝ) : ℂ)
+
+noncomputable def doubledCorrectedDepartureQuarterCandidatePoint :
+    apm_t02a03_E3 :=
+  rightTubeCorePolarReconstruction
+    doubledCorrectedDepartureQuarterCandidateCircle
+    doubledCorrectedDepartureQuarterCandidateNormal
+
+theorem doubledCorrectedDepartureQuarterCandidate_norm_bounds :
+    (3 / 4 : ℝ) < ‖doubledCorrectedDepartureQuarterCandidate‖ ∧
+      ‖doubledCorrectedDepartureQuarterCandidate‖ < (5 / 4 : ℝ) := by
+  have hb := doubledCorrectedDepartureQuarterCandidate_mem_planarAnnulus
+  have hs : ‖doubledCorrectedDepartureQuarterCandidate‖ ^ 2 =
+      Complex.normSq doubledCorrectedDepartureQuarterCandidate :=
+    Complex.sq_norm _
+  have hn : 0 ≤ ‖doubledCorrectedDepartureQuarterCandidate‖ := norm_nonneg _
+  change (9 / 16 : ℝ) < Complex.normSq
+      doubledCorrectedDepartureQuarterCandidate ∧
+    Complex.normSq doubledCorrectedDepartureQuarterCandidate < 25 / 16 at hb
+  constructor <;> nlinarith
+
+theorem doubledCorrectedDepartureQuarterCandidatePoint_mem_rightTube :
+    doubledCorrectedDepartureQuarterCandidatePoint ∈ apm_t02a03_rightTube := by
+  apply reconstructionMemRightTube_rightTubeCorePolar
+  unfold doubledCorrectedDepartureQuarterCandidateNormal
+  rw [Complex.norm_real, Real.norm_eq_abs, abs_le]
+  have hb := doubledCorrectedDepartureQuarterCandidate_norm_bounds
+  constructor <;> linarith
+
+theorem rightTubeCorePlanarComplex_doubledQuarterCandidatePoint :
+    rightTubeCorePlanarComplex doubledCorrectedDepartureQuarterCandidatePoint =
+      doubledCorrectedDepartureQuarterCandidate := by
+  have hs := NormedSpace.norm_smul_normalize
+    doubledCorrectedDepartureQuarterCandidate
+  rw [show rightTubeCorePlanarComplex
+      doubledCorrectedDepartureQuarterCandidatePoint =
+      (‖doubledCorrectedDepartureQuarterCandidate‖ : ℝ) •
+        NormedSpace.normalize doubledCorrectedDepartureQuarterCandidate by
+    apply Complex.ext <;>
+      simp [doubledCorrectedDepartureQuarterCandidatePoint,
+        doubledCorrectedDepartureQuarterCandidateNormal,
+        doubledCorrectedDepartureQuarterCandidateCircle,
+        rightTubeCorePlanarComplex, rightTubeCorePolarReconstruction]]
+  exact hs
+
+theorem doubledCorrectedDepartureQuarterCandidatePoint_not_mem_leftCore :
+    doubledCorrectedDepartureQuarterCandidatePoint ∉
+      Set.range apm_t02a03_leftCore := by
+  intro hmem
+  obtain ⟨s, hs⟩ := hmem
+  have hp := congrArg Complex.re
+    rightTubeCorePlanarComplex_doubledQuarterCandidatePoint
+  have hx := congrArg (fun q : apm_t02a03_E3 => q 0) hs
+  have hcos := Real.cos_le_one s
+  norm_num [rightTubeCorePlanarComplex,
+    doubledCorrectedDepartureQuarterCandidate, Complex.mul_re,
+    Complex.mul_im] at hp
+  simp [apm_t02a03_leftCore] at hx
+  linarith
+
+noncomputable def doubledCorrectedDepartureQuarterCandidateSubtype :
+    RightTubeMinusLeftCore :=
+  ⟨doubledCorrectedDepartureQuarterCandidatePoint,
+    doubledCorrectedDepartureQuarterCandidatePoint_mem_rightTube,
+    doubledCorrectedDepartureQuarterCandidatePoint_not_mem_leftCore⟩
+
+theorem doubledCorrection_quarterCandidate_actual_zero :
+    (((1 - 2 * (departureQuarter : ℝ) : ℝ) : ℂ) +
+        ((2 * (departureQuarter : ℝ) : ℝ) : ℂ) *
+          rotatedEndpointWaypoint
+            doubledCorrectedDepartureQuarterCandidateSubtype +
+        (((departureQuarter : ℝ) * (1 - 2 * (departureQuarter : ℝ)) : ℝ) : ℂ) *
+          Complex.I +
+        (doubledCorrectedDepartureBump departureQuarter : ℂ)) = 0 := by
+  apply (rotatedEndpointWaypoint_doubledCorrected_departure_eq_zero_iff
+    departureQuarter doubledCorrectedDepartureQuarterCandidateSubtype).2
+  rw [show rightTubeCorePlanarComplex
+      doubledCorrectedDepartureQuarterCandidateSubtype.1 =
+      doubledCorrectedDepartureQuarterCandidate by
+    exact rightTubeCorePlanarComplex_doubledQuarterCandidatePoint]
+  norm_num [departureQuarter, doubledCorrectedDepartureBump,
+    correctedDepartureBump, doubledCorrectedDepartureQuarterCandidate,
+    Complex.mul_re, Complex.mul_im]
+
 end ConstructionTargets.T02A03GeometricTubeDeformation
 
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rightTubeNormalComplex_eq_zero_iff
@@ -2773,6 +2874,7 @@ end ConstructionTargets.T02A03GeometricTubeDeformation
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_doubledCorrected_departure_eq_zero_iff
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_doubledCorrected_departure_zero_coordinates
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.doubledCorrectedDepartureQuarterCandidate_mem_planarAnnulus
+#print axioms ConstructionTargets.T02A03GeometricTubeDeformation.doubledCorrection_quarterCandidate_actual_zero
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_coordinates
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_normSq
 #print axioms ConstructionTargets.T02A03GeometricTubeDeformation.rotatedEndpointWaypoint_twiceCorrected_departure_zero_scalar_bounds
