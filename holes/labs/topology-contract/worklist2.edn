@@ -79483,7 +79483,9 @@
      :commit "a58fb4403475f91ca2b7f45699abba30dbe50339",
      :reason :program-milestone-complete}]}
   {:consumer :t96A07,
-   :stop-count 10,
+   :owner-reopen
+   "reopened: a lemma this row reported missing is now banked",
+   :stop-count 0,
    :evidence
    {:placeholder-delta 0,
     :residual "Prove B7; then B8-B13.",
@@ -79538,7 +79540,7 @@
      "9024211f8575c9d7d6c387c287750ffcbea84dc339e06c3c87ddbc04fb5d6395"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t96A07/lean/Main.lean"
     "problems/t96A07/status.json"
@@ -79558,6 +79560,7 @@
    :id :program-2026-10-11-close-t96a07,
    :kind :final-adapter,
    :campaign-priority 45,
+   :fail-count 0,
    :depends-on [],
    :program true,
    :other-consumers [],
@@ -79627,6 +79630,19 @@
      {:cmd "blueprint node check", :exit 0}
      {:cmd "git diff --check", :exit 0}
      {:cmd "git show --check 2e890e314", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791763848216-6030-ac6a2ad6",
+     :commands
+     ["git show/check/diff-tree 2e890e314"
+      "verify blueprint blob/SHA and prior ancestry"
+      "check pinned Mathlib Green theorem API"
+      "lake env lean problems/t94A10/lean/Main.lean"
+      "statement-registry check/fingerprint"
+      "count placeholders and blueprint nodes"],
+     :finding
+     "PASS: repair commit 2e890e314aa6f3a9d846fc01cb336afd0664f039 changes only the blueprint; blob 808e174f and fixture f1cea218 match. B1-B11 are mathematically coherent and respect the frozen ambient-form and latitude-longitude representations. B8 now uses the existing HasFDerivAt Green theorem and supplies ContinuousOn, pointwise HasFDerivAt, IntegrableOn, and countability premises; edge orientations yield the stated zero boundary integral. Registry 131/0; frozen hash d1822221 unchanged; Main compiles with its recorded 2 placeholders. Revised STOP lists B1-B11 milestones."},
     :commit "2e890e314aa6f3a9d846fc01cb336afd0664f039",
     :changed-paths ["ConstructionTargets/t94A10Closure.blueprint.md"],
     :fixture
@@ -79635,7 +79651,7 @@
      "f1cea2186cd7f79d42b118e44e9cc56db23f668545c19d9d50a62317db3353cd"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94A10/lean/Main.lean"
     "problems/t94A10/status.json"
@@ -79651,14 +79667,18 @@
     ["lake env lean problems/t94A10/lean/Main.lean"
      "python3 scripts/statement-registry.py check"]},
    :continue-from
-   "NEXT JOB: write the blueprint ConstructionTargets/t94A10Closure.blueprint.md (BLUEPRINTS.md) for the remaining chain in ~/notes/closer/t94a10-report.md, then formalise node by node.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: :blueprint-revised",
    :id :program-2026-10-11-close-t94a10,
    :kind :final-adapter,
    :campaign-priority 46,
    :fail-count 1,
    :depends-on [],
    :program true,
-   :other-consumers []}
+   :other-consumers [],
+   :program-history
+   [{:job 2,
+     :commit "2e890e314aa6f3a9d846fc01cb336afd0664f039",
+     :reason :blueprint-revised}]}
   {:consumer :t97A04,
    :phase :lemma,
    :state :banked,
