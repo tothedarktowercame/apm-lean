@@ -884,3 +884,9 @@ object definitionally to the chosen overlap base, so its `_eq_pseudoSpan`
 theorem identifies this factor with the previously named pseudo-span glue.
 The `_eq_one` corollary therefore transports the proved raw unit through the
 middle factor while leaving both coordinate comparison components untouched.
+
+`genericPointWedgeCoordinateSpanGlobalRestrictionLeftComparison` now isolates
+the forward left comparison.  Its `_app` theorem expands it, in the actual
+composition order, into the inverse strict-span comparison followed by the
+left-equivalence unit factor.  These two components remain explicit for the
+next normalization step.
