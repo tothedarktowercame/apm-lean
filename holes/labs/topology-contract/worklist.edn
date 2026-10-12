@@ -113891,6 +113891,19 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791790387733-6580-0ced8164",
+     :commands
+     ["git show/diff-tree f4bce4af"
+      "sha256/diff/placeholder checks"
+      "statement-registry.py check"
+      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "PASS program STOP: exact 2-file commit adds a continuous literal right-leg lift and proves its base equals the fixed right-cover representative via the wedge quotient relation, with correct orientation and representation boundary. Fixture/source/doc hashes match; placeholders 0->0; registry 131/131; standard axioms only. Final module remains absent; residual lists morphism lifts, inclusion-image comparisons, then B12."},
     :commit "f4bce4af700250b10b321cee1207f306191e0ac2",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113901,7 +113914,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113922,7 +113935,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Right overlap inclusion sends the chosen overlap base to the literal right cover base.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The literal right wedge leg lifts continuously to the right cover and its base equals the fixed right representative via the quotient relation.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114194,7 +114207,11 @@
     {:job 9,
      :commit "dd6214bffac4daad37b505cd85c3d697643383f4",
      :reason
-     "Right overlap inclusion sends the chosen overlap base to the literal right cover base."}]}
+     "Right overlap inclusion sends the chosen overlap base to the literal right cover base."}
+    {:job 1,
+     :commit "f4bce4af700250b10b321cee1207f306191e0ac2",
+     :reason
+     "The literal right wedge leg lifts continuously to the right cover and its base equals the fixed right representative via the quotient relation."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
