@@ -476,3 +476,6 @@ lifted left loop back into the wedge recovers the frozen literal left-leg map.
 
 `genericPointWedgeRightLiftedLoop_coverInclusion` gives the symmetric right
 comparison while retaining the quotient equality that changes representatives.
+
+`genericPointWedgeInverseIdentity_leftLeg_eq_actualLifted` now feeds the left
+inclusion-image equality through the B3 global-functor restriction formula.
