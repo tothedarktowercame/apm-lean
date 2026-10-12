@@ -75376,8 +75376,54 @@
    :current-residual "Elect uniform B2.",
    :other-consumers []}
   {:consumer :t96J02,
+   :evidence
+   {:placeholder-delta 0,
+    :residual "B4.",
+    :outcome :done-unreviewed,
+    :warnings ["2 imported; 12 preexisting linter warnings"],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.PolygonSurfacePiOne.interiorOpenEmbedding",
+      :type
+      "Topology.IsOpenEmbedding P.interiorMap; IsOpen P.interior",
+      :status :proved,
+      :consumers [:t96J02 :t92J05 :t94J04 :t97A01 :t97A03],
+      :depends-on ["PairingData"],
+      :area "polygon-surface-pi1"}],
+    :statement-hashes
+    {:registry "131/0",
+     :module "978e59c55b83981b17f1935ae1af0c6f9be738b1"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/PolygonSurfacePiOne.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.PolygonSurfacePiOne",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "131/0"}
+     {:cmd "placeholder scan", :exit 0, :output "0"}
+     {:cmd "#print axioms interiorOpenEmbedding/interior_isOpen",
+      :exit 0}
+     {:cmd "git show --check 366851883", :exit 0}],
+    :diagnostic-history
+    [{:cmd "initial compile",
+      :exit 1,
+      :correction "reduced subtype/exposed quotient map"}
+     {:cmd "second compile",
+      :exit 1,
+      :correction "fixed image orientation"}],
+    :commit "366851883",
+    :changed-paths ["ConstructionTargets/PolygonSurfacePiOne.lean"],
+    :fixture
+    {:path "ConstructionTargets/PolygonSurfacePiOne.lean",
+     :sha256
+     "e7b3e4146df3a272304ed32bd665fb30acdf095099c95a0d3234fec1d5424f0b"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B3",
    :acceptance
@@ -85231,4 +85277,24 @@
    :lemma-constructiontargets-polygonsurfacepione-standardpairingdata-space-homeomorph,
    :kind :lemma,
    :depends-on [:lemma-standardpairingdata],
-   :other-consumers [:t92J05 :t94J04 :t97A03]}]}
+   :other-consumers [:t92J05 :t94J04 :t97A03]}
+  {:consumer :t96J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.PolygonSurfacePiOne.interiorOpenEmbedding",
+    :type "Topology.IsOpenEmbedding P.interiorMap; IsOpen P.interior"},
+   :lemma
+   {:name
+    "ConstructionTargets.PolygonSurfacePiOne.interiorOpenEmbedding",
+    :reported-by [:routes-2026-10-12-polygon-b3-topo2-r1],
+    :type "Topology.IsOpenEmbedding P.interiorMap; IsOpen P.interior",
+    :area "polygon-surface-pi1",
+    :proved-in :routes-2026-10-12-polygon-b3-topo2-r1},
+   :id
+   :lemma-constructiontargets-polygonsurfacepione-interioropenembedding,
+   :kind :lemma,
+   :depends-on [:lemma-pairingdata],
+   :other-consumers [:t92J05 :t94J04 :t97A01 :t97A03]}]}
