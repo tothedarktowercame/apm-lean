@@ -113894,6 +113894,18 @@
     [{:cmd "lean direct mapOfEq composition",
       :exit 1,
       :finding "Used path representative and both mapOfEq formulas."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791803517526-6836-c62878f1",
+     :commands
+     ["git show/diff-tree aae02a4e"
+      "sha256/placeholder/registry checks"
+      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "lake build ConstructionTargets.ThreeCirclesFundamentalGroup (expected absent)"],
+     :finding
+     "PASS: exact two-file scope and frozen hashes match; 0 placeholders, registry 131/131. Left mapped-lift connector normal form is proved in the required orientation across dependent endpoint transports; both new theorems use only standard axioms. Valid program STOP: compiled progress; right normal form, B6 legs, and B12 remain."},
     :commit "aae02a4ef17e939a372ef65061ab752f2c196a67",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113904,7 +113916,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113925,7 +113937,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The lifted-left HEq now transports through both endpoint conjugations to an equality of endomorphisms.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: The full connector normal form of the mapped lifted left loop now equals the original loop.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114257,7 +114269,11 @@
     {:job 6,
      :commit "af25e368329bd03c59534ee335b5529f637fe776",
      :reason
-     "The lifted-left HEq now transports through both endpoint conjugations to an equality of endomorphisms."}]}
+     "The lifted-left HEq now transports through both endpoint conjugations to an equality of endomorphisms."}
+    {:job 7,
+     :commit "aae02a4ef17e939a372ef65061ab752f2c196a67",
+     :reason
+     "The full connector normal form of the mapped lifted left loop now equals the original loop."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
