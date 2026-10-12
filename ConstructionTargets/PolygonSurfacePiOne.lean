@@ -1490,4 +1490,56 @@ def PairingData.descendHomotopy {Y : Type*} [TopologicalSpace Y]
       F (t, x) = F (t, y)) (t : unitInterval) (x : Disk) :
     P.descendHomotopy F hF (t, P.quotientMap x) = F (t, x) := rfl
 
+open ConstructionTargets.PolygonOuterOpenDeformation
+
+def PairingData.skeleton (P : PairingData) : Set P.Space :=
+  P.quotientMap '' {x : Disk | ‖(x : ℂ)‖ = 1}
+
+def PairingData.outerBoundarySkeleton (P : PairingData) :
+    Set (outerOpen P.Rel) :=
+  {z | IsBoundaryClass P.Rel (fun {_ _} h => pairingRel_radius P h) z}
+
+theorem mem_outerBoundarySkeleton_iff (P : PairingData) (z : outerOpen P.Rel) :
+    z ∈ P.outerBoundarySkeleton ↔ z.1 ∈ P.skeleton := by
+  constructor
+  · rintro ⟨x, hx, rfl⟩
+    refine ⟨x.1, ?_, ?_⟩
+    · simpa [radius] using hx
+    · rw [ConstructionTargets.PolygonOuterRestrictedEqvGen.outerQuotientHomeomorph_mk]
+      rfl
+  · rintro ⟨x, hx, hxz⟩
+    have hxo : x ∈ outerSource := by
+      change 1 / 4 < radius x
+      change ‖(x : ℂ)‖ = 1 at hx
+      norm_num [radius, hx]
+    refine ⟨⟨x, hxo⟩, ?_, ?_⟩
+    · simpa [radius] using hx
+    · apply Subtype.ext
+      rw [ConstructionTargets.PolygonOuterRestrictedEqvGen.outerQuotientHomeomorph_mk]
+      exact hxz.symm
+
+structure PunctureDeformationRetract (P : PairingData) where
+  homotopy : C(unitInterval × outerOpen P.Rel, outerOpen P.Rel)
+  zero : ∀ z, homotopy (0, z) = z
+  one_mem : ∀ z, homotopy (1, z) ∈ P.outerBoundarySkeleton
+  fixed : ∀ t z, z ∈ P.outerBoundarySkeleton → homotopy (t, z) = z
+
+def punctureDeformationRetract (P : PairingData) :
+    PunctureDeformationRetract P where
+  homotopy :=
+    ⟨outerOpenHomotopy P.Rel (fun {_ _} h => pairingRel_radius P h)
+      (fun {_ _} h => pairingRel_boundary P h),
+      continuous_outerOpenHomotopy P.Rel
+        (fun {_ _} h => pairingRel_radius P h)
+        (fun {_ _} h => pairingRel_boundary P h)⟩
+  zero := outerOpenHomotopy_zero P.Rel
+    (fun {_ _} h => pairingRel_radius P h)
+    (fun {_ _} h => pairingRel_boundary P h)
+  one_mem := outerOpenHomotopy_one_boundary P.Rel
+    (fun {_ _} h => pairingRel_radius P h)
+    (fun {_ _} h => pairingRel_boundary P h)
+  fixed := outerOpenHomotopy_fixed P.Rel
+    (fun {_ _} h => pairingRel_radius P h)
+    (fun {_ _} h => pairingRel_boundary P h)
+
 end ConstructionTargets.PolygonSurfacePiOne
