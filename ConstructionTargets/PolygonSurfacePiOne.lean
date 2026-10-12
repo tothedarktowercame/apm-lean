@@ -1164,4 +1164,36 @@ def innerHomeomorph (P : PairingData) :
   exact (innerOpenEmbedding P).isEmbedding.toHomeomorph.trans
     (Homeomorph.setCongr (innerMap_range P))
 
+def innerDiskHomeomorphBall : InnerDisk ≃ₜ Metric.ball (0 : ℂ) ((2 : ℝ) / 3) where
+  toFun z := ⟨z.1.1, by
+    have hz := z.2
+    change ‖(z.1.1 : ℂ)‖ < (2 : ℝ) / 3 at hz
+    simpa [Metric.mem_ball, dist_zero_right] using hz⟩
+  invFun z :=
+    ⟨⟨z.1, by
+      rw [Metric.mem_closedBall, dist_zero_right]
+      have hz : ‖z.1‖ < (2 : ℝ) / 3 := by
+        have h := z.2
+        change dist z.1 0 < (2 : ℝ) / 3 at h
+        simpa [dist_zero_right] using h
+      linarith⟩,
+      by
+        have h := z.2
+        change dist z.1 0 < (2 : ℝ) / 3 at h
+        simpa [dist_zero_right] using h⟩
+  left_inv z := by ext; rfl
+  right_inv z := by ext; rfl
+  continuous_toFun := by fun_prop
+  continuous_invFun := by fun_prop
+
+theorem innerDisk_contractible : ContractibleSpace InnerDisk := by
+  rw [innerDiskHomeomorphBall.contractibleSpace_iff]
+  exact (convex_ball (0 : ℂ) ((2 : ℝ) / 3)).contractibleSpace
+    ⟨0, by simp [Metric.mem_ball]⟩
+
+theorem polygonCenterContraction (P : PairingData) :
+    ContractibleSpace {q // q ∈ (polygonRadialOpenSets P).inner} := by
+  rw [← (innerHomeomorph P).contractibleSpace_iff]
+  exact innerDisk_contractible
+
 end ConstructionTargets.PolygonSurfacePiOne
