@@ -1112,8 +1112,57 @@
   {:consumer :t00A03,
    :implements-lemma
    :lemma-constructiontargets-surfaceschoenflies-embeddedcirclelocallyflat-reparam-iff,
+   :evidence
+   {:placeholder-delta {:t00A03 [2 2], :t01J01 [3 3], :t03J02 [2 2]},
+    :residual
+    "Apply reparam/transport; planar embedded-arc local flatness remains.",
+    :outcome :done-unreviewed,
+    :warnings ["pre-existing unused hj"],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.SurfaceSchoenflies.embeddedCircleLocallyFlat_reparam_iff",
+      :type
+      "reparameterized embedded-circle local flatness iff original",
+      :status :proved,
+      :consumers [:t00A03 :t01J01 :t03J02],
+      :depends-on ["embeddedCircleLocallyFlat_homeomorph_iff"],
+      :area "embedded-circle-collar-surface"}],
+    :statement-hashes {:registry "131/131"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :topo-10,
+    :commands
+    [{:cmd "sha256sum /tmp/surface_schoenflies_flat_reparam.lean",
+      :exit 0}
+     {:cmd "lake env lean ConstructionTargets/SurfaceSchoenflies.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.SurfaceSchoenflies",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/surface_schoenflies_flat_reparam_export.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/SurfaceSchoenflies.lean",
+      :exit 0}
+     {:cmd
+      "rg source-placeholders ConstructionTargets/SurfaceSchoenflies.lean",
+      :exit 1,
+      :expected-exit 1}],
+    :diagnostic-history
+    [{:cmd "lake env lean /tmp/surface_schoenflies_flat_reparam.lean",
+      :exit 1,
+      :correction
+      "expected duplicate declarations after promotion; export check passed"}],
+    :commit "9aac6f9108b1e0e06809dd58fa2b91c8c465535e",
+    :changed-paths ["ConstructionTargets/SurfaceSchoenflies.lean"],
+    :fixture
+    {:path "/tmp/surface_schoenflies_flat_reparam.lean",
+     :sha256
+     "94b4e865baf2b5cf071050171dd61e2e6c02dd584d806653ebad229f82892f28",
+     :mode :post-build-export-check},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SurfaceSchoenflies.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/schoenflies/local-flatness",
    :acceptance
@@ -31002,16 +31051,29 @@
    {:name
     "ConstructionTargets.SurfaceSchoenflies.embeddedCircleLocallyFlat_reparam_iff",
     :reported-by
-    [:routes-2026-10-10-surface-schoenflies-collar-topo3-r2],
+    [:routes-2026-10-10-surface-schoenflies-collar-topo3-r2
+     :routes-2026-10-12-surface-flat-reparam-r1],
     :type "exact type in fixture",
     :area "embedded-circle-collar-surface",
-    :proved-in :routes-2026-10-10-surface-schoenflies-collar-topo3-r2},
+    :proved-in :routes-2026-10-12-surface-flat-reparam-r1},
    :id
    :lemma-constructiontargets-surfaceschoenflies-embeddedcirclelocallyflat-reparam-iff,
    :kind :lemma,
    :depends-on
-   [:lemma-constructiontargets-surfaceschoenflies-embeddedcirclelocallyflat-homeomorph-iff],
-   :other-consumers [:t01J01 :t03J02]}],
+   [:lemma-constructiontargets-surfaceschoenflies-embeddedcirclelocallyflat-homeomorph-iff
+    :lemma-embeddedcirclelocallyflat-homeomorph-iff],
+   :other-consumers [:t01J01 :t03J02]}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "embeddedCircleLocallyFlat_homeomorph_iff"},
+   :lemma
+   {:name "embeddedCircleLocallyFlat_homeomorph_iff", :reported-by []},
+   :id :lemma-embeddedcirclelocallyflat-homeomorph-iff,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}],
  :consumer-baselines {},
  :statuses
  #{:open
