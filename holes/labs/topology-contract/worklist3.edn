@@ -20931,7 +20931,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :review-finding
-   "Frozen fixture hash mismatch: /tmp/closedboundarycoords.lean now hashes to 7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1, matching :evidence, but the row authoritative :acceptance :fixture-sha256 remains aad5a9cda739c1cbcceb1eca8ab8b33395db8a08c9d68941a87c644f4d13586e. Exact frozen-scope review cannot PASS two conflicting hashes. Supervisor repair: update the row acceptance hash to the post-build export-check fixture hash (and preserve mode :post-build-export-check), then resubmit. The repaired fixture does compile after module build, checks the exact theorem type, and reports only propext, Classical.choice, Quot.sound; source commit/blob, build, registry 131/131, and placeholders otherwise pass.",
+   "Frozen fixture hash mismatch remains. The supervisor added a nested :evidence :acceptance with hash 7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1, but the row top-level authoritative :acceptance :fixture-sha256 still equals aad5a9cda739c1cbcceb1eca8ab8b33395db8a08c9d68941a87c644f4d13586e. Two conflicting acceptance maps do not repair the frozen interface. Exact repair: replace the top-level row :acceptance hash with 7e72195e... and add :mode :post-build-export-check there; do not add another evidence-local acceptance map. The current fixture itself compiles, registry is 131/131, source blob matches f0afa7bd, and axioms are standard-only.",
    :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-coefficientclosedboundary-coordinat,
    :evidence
@@ -20969,6 +20969,12 @@
      {:cmd
       "git diff --exit-code f0afa7bd -- ConstructionTargets/ManifoldFundamentalClass.lean",
       :exit 0}],
+    :review
+    {:outcome :fail,
+     :seat "codex-11",
+     :job "invoke-1791816657339-7149-bd4bef0e",
+     :finding
+     "Frozen fixture hash mismatch remains. The supervisor added a nested :evidence :acceptance with hash 7e72195e1214d7580994264481ae57d0ecf87755d31825ab85cbda5f1220c4b1, but the row top-level authoritative :acceptance :fixture-sha256 still equals aad5a9cda739c1cbcceb1eca8ab8b33395db8a08c9d68941a87c644f4d13586e. Two conflicting acceptance maps do not repair the frozen interface. Exact repair: replace the top-level row :acceptance hash with 7e72195e... and add :mode :post-build-export-check there; do not add another evidence-local acceptance map. The current fixture itself compiles, registry is 131/131, source blob matches f0afa7bd, and axioms are standard-only."},
     :commit "f0afa7bdc4c95a8c87143342ceb8c9ce51cd5612",
     :changed-paths
     ["ConstructionTargets/ManifoldFundamentalClass.lean"],
@@ -20979,7 +20985,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class",
    :acceptance
@@ -20994,7 +21000,7 @@
    :id :routes-2026-10-12-mfclass-boundary-coordinates-r1,
    :kind :reusable-theorem,
    :area "manifold-fundamental-class",
-   :fail-count 2,
+   :fail-count 3,
    :depends-on [:routes-2026-10-12-mfclass-closed-generator-bridge-r1],
    :current-residual "Prove Bool H0 comparison.",
    :other-consumers [:t98A02]}
