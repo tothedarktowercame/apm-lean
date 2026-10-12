@@ -20590,55 +20590,82 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :implements-lemma
+   :lemma-constructiontargets-manifoldfundamentalclass-boolintdifference-to-signedfunction,
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
+   :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class",
+   :acceptance
+   {:declaration
+    "ConstructionTargets.ManifoldFundamentalClass.boolIntDifference_to_signedFunction",
+    :type "exact type in fixture",
+    :fixture "/tmp/circleboolbridge.lean",
+    :fixture-sha256
+    "155792eb3a39e9037161cd998a95bbb137dccd48b04febfe3b24baf61a7271cb",
+    :placeholders ["t00J02 bridge_1" "t98A02 sorry"],
+    :route-step "Bool coproduct/function bridge"},
+   :id :routes-2026-10-12-mfclass-bool-bridge-r1,
+   :kind :reusable-theorem,
+   :area "manifold-fundamental-class",
+   :depends-on [:routes-2026-10-12-mfclass-circle-vector-r1],
+   :current-residual
+   "Align circle connecting maps through coefficient comparison.",
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :implements-lemma
    :lemma-constructiontargets-manifoldfundamentalclass-closedorientedfundamentalclass,
    :evidence
    {:probe
-    {:outcome :revise,
-     :seat "topo-12",
-     :fixture
-     {:path "/tmp/circlecoeffvector.lean",
-      :sha256
-      "c3f70e08267a1a6ecc83a53759e4330d9a94db28439ad12d735068061f599cac"},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/circlecoeffvector.lean && sha256sum /tmp/circlecoeffvector.lean && python3 scripts/statement-registry.py check",
-       :exit 0}],
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
+    {:residual "Promote; align circle connecting maps.",
+     :outcome :revise,
      :missing-theorems
      [{:name
-       "ConstructionTargets.ManifoldFundamentalClass.coefficientCircleBoundaryGenerator_eq_signedFunction",
+       "ConstructionTargets.ManifoldFundamentalClass.boolIntDifference_to_signedFunction",
        :type "exact type in fixture",
        :status :proved,
        :consumers [:t00J02 :t98A02],
        :depends-on
-       ["ConstructionTargets.ManifoldFundamentalClass.coefficientCircleBoundaryGenerator_signed_coordinates"],
+       ["ConstructionTargets.ManifoldFundamentalClass.coefficientCircleBoundaryGenerator_eq_signedFunction"],
        :area "manifold-fundamental-class"}],
      :prerequisite
      {:consumer :t00J02,
-      :implements-lemma :lemma-mfclass-circle-vector,
+      :implements-lemma :lemma-mfclass-bool-bridge,
       :phase :implementation,
       :state :open,
       :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
       :dag-node "TOPOLOGY-ROUTES.md/manifold-fundamental-class",
       :acceptance
       {:declaration
-       "ConstructionTargets.ManifoldFundamentalClass.coefficientCircleBoundaryGenerator_eq_signedFunction",
+       "ConstructionTargets.ManifoldFundamentalClass.boolIntDifference_to_signedFunction",
        :type "exact type in fixture",
-       :fixture "/tmp/circlecoeffvector.lean",
+       :fixture "/tmp/circleboolbridge.lean",
        :fixture-sha256
-       "c3f70e08267a1a6ecc83a53759e4330d9a94db28439ad12d735068061f599cac",
+       "155792eb3a39e9037161cd998a95bbb137dccd48b04febfe3b24baf61a7271cb",
        :placeholders ["t00J02 bridge_1" "t98A02 sorry"],
-       :route-step "explicit coefficient signed boundary vector"},
-      :id :routes-2026-10-12-mfclass-circle-vector-r1,
+       :route-step "Bool coproduct/function bridge"},
+      :id :routes-2026-10-12-mfclass-bool-bridge-r1,
       :kind :reusable-theorem,
       :area "manifold-fundamental-class",
-      :depends-on [:routes-2026-10-12-mfclass-circle-sign-r1],
+      :depends-on [:routes-2026-10-12-mfclass-circle-vector-r1],
       :current-residual
-      "Compare signed Bool function with native coproduct difference.",
+      "Align circle connecting maps through coefficient comparison.",
       :other-consumers [:t98A02]},
-     :residual "Promote; align Bool function and coproduct models."}},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd
+       "lake env lean /tmp/circleboolbridge.lean && sha256sum /tmp/circleboolbridge.lean && python3 scripts/statement-registry.py check",
+       :exit 0}],
+     :diagnostic-history
+     [{:exit 1,
+       :count 6,
+       :correction "direction; sigma; assoc; application; syntax"}],
+     :fixture
+     {:path "/tmp/circleboolbridge.lean",
+      :sha256
+      "155792eb3a39e9037161cd998a95bbb137dccd48b04febfe3b24baf61a7271cb"},
+     :seat "topo-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope ["ConstructionTargets/ManifoldFundamentalClass.lean"],
    :dag-node
    "TOPOLOGY-DEPENDENCY-DAG.md/fundamental-classes-localization",
@@ -20802,7 +20829,8 @@
     :routes-2026-10-12-mfclass-circle-coords-r1
     :routes-2026-10-12-mfclass-circle-one-r1
     :routes-2026-10-12-mfclass-circle-sign-r1
-    :routes-2026-10-12-mfclass-circle-vector-r1],
+    :routes-2026-10-12-mfclass-circle-vector-r1
+    :routes-2026-10-12-mfclass-bool-bridge-r1],
    :current-residual
    "Local-degree counts and wild-ball complement homology remain.",
    :other-consumers [:t98A02]}
@@ -29445,6 +29473,28 @@
    :kind :lemma,
    :depends-on
    [:lemma-constructiontargets-manifoldfundamentalclass-coefficientcircleboundarygenerator-],
+   :other-consumers [:t98A02]}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "ConstructionTargets.ManifoldFundamentalClass.boolIntDifference_to_signedFunction",
+    :type "exact type in fixture"},
+   :lemma
+   {:name
+    "ConstructionTargets.ManifoldFundamentalClass.boolIntDifference_to_signedFunction",
+    :reported-by
+    [:routes-2026-10-10-manifold-fundamental-class-topo3-r2],
+    :type "exact type in fixture",
+    :area "manifold-fundamental-class",
+    :proved-in :routes-2026-10-10-manifold-fundamental-class-topo3-r2},
+   :id
+   :lemma-constructiontargets-manifoldfundamentalclass-boolintdifference-to-signedfunction,
+   :kind :lemma,
+   :depends-on
+   [:lemma-constructiontargets-manifoldfundamentalclass-coefficientcirc-bef8833f7083],
    :other-consumers [:t98A02]}],
  :consumer-baselines {},
  :statuses
