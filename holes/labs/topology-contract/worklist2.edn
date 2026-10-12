@@ -83694,6 +83694,17 @@
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :output "131/0"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791832104122-7753-3f6ab47e",
+     :commands
+     ["lake build ConstructionTargets.SuppliedCoverAlgebra"
+      "lake env lean ConstructionTargets/SuppliedCoverAlgebra.lean"
+      "python3 scripts/statement-registry.py check"
+      "git show/diff-tree/hash and comment-stripped placeholder scan; worklist_check.bb"],
+     :finding
+     "PASS: recorded topo-6 commits touch only the two scoped files; fixture SHA-256 matches. Fresh build/Lean pass, placeholders 0, registry 131/0, axioms standard. Since failed blueprint-only history, compiled milestones A1 range equivalence, A2 embedding cancellation, A3 free-subgroup transport/index, and C7 orbit-cover transport are new and complete."},
     :commit "575f9ce4a",
     :commits ["1ecb73d0a" "994accb6c" "575f9ce4a" "df216abcc"],
     :changed-paths
@@ -83705,7 +83716,7 @@
      "8e2b05fc2da21acb000c622b502360f2835a454e138dbfeb505f29eedb0c7769"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SuppliedCoverAlgebra.lean"
     "ConstructionTargets/SuppliedCoverAlgebra.md"],
