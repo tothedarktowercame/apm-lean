@@ -113850,14 +113850,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Blueprint B3 is marked proved but its proof uses the unlisted ConnectedGroupoidSingleObjEquivalence.connectorSingleObjEquivalence (and connector-system representation) instead of only the declared uses; add the actual connector dependency and proof route to B3 uses.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Lift left morphisms through the cover; add symmetric right lift; then B12.",
+    "Lift fundamental-group morphisms and compare their cover-inclusion images; then B12.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
@@ -113871,9 +113871,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "71ea2e8b6b1d6c36fc8463383f759eccf62bbb95d40864d688282688d96146e0",
+     "87c25456851605c5e5e93fc743a1d92e772a96adb011aa682a26cf75b4a8af2f",
      :documentation
-     "15dba2402f342bba4762119f874e12c898ce01d32dedbeb066b1bf3f35b49945",
+     "1aa02edf355eb3efbe0fa331ecd0040db22511262046775168f431f303146094",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "131/131"},
@@ -113881,7 +113881,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "The literal left wedge leg now lifts continuously to the left cover and is based at its fixed representative.",
+    "The literal right wedge leg lifts continuously to the right cover and its base equals the fixed right representative via the quotient relation.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113890,11 +113890,8 @@
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder/diff validation", :exit 0}],
-    :diagnostic-history
-    [{:cmd "lean initial",
-      :exit 1,
-      :finding "Corrected Continuous.subtype_mk API."}],
-    :commit "3b6b07efe8003c9eae07e0615c0d3c1235d4488c",
+    :diagnostic-history [],
+    :commit "f4bce4af700250b10b321cee1207f306191e0ac2",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113904,7 +113901,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
