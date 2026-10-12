@@ -1031,8 +1031,51 @@
   {:consumer :t00A03,
    :implements-lemma
    :lemma-constructiontargets-surfaceschoenflies-embeddedcirclelocallyflat-homeomorph-iff,
+   :evidence
+   {:placeholder-delta {:t00A03 [2 2], :t01J01 [3 3], :t03J02 [2 2]},
+    :residual
+    "Prove planar arc local flatness; apply chart transport.",
+    :outcome :done-unreviewed,
+    :warnings ["pre-existing unused-variable lint"],
+    :missing-theorems
+    [{:name
+      "ConstructionTargets.SurfaceSchoenflies.embeddedCircleLocallyFlat_homeomorph_iff",
+      :type
+      "{M N : Type} [TopologicalSpace M] [TopologicalSpace N] (e : M ≃ₜ N) (j : C(Circle, M)) : EmbeddedCircleLocallyFlat ((⟨e, e.continuous⟩ : C(M, N)).comp j) ↔ EmbeddedCircleLocallyFlat j",
+      :status :proved,
+      :consumers [:t00A03 :t01J01 :t03J02],
+      :depends-on ["embeddedCircle_finite_flat_subcover"],
+      :area "embedded-circle-collar-surface"}],
+    :statement-hashes {:registry "131/131"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :topo-10,
+    :commands
+    [{:cmd "lake env lean ConstructionTargets/SurfaceSchoenflies.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.SurfaceSchoenflies",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/surface_schoenflies_flat_transport_export.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/SurfaceSchoenflies.lean",
+      :exit 0}
+     {:cmd "rg source placeholders", :exit 1, :expected-exit 1}],
+    :diagnostic-history
+    [{:cmd
+      "lake env lean /tmp/surface_schoenflies_flat_transport.lean",
+      :exit 1,
+      :stage "post-promotion duplicates; export check passed"}],
+    :commit "4ce95157a805da10fd6748ef95e8fabd907569f3",
+    :changed-paths ["ConstructionTargets/SurfaceSchoenflies.lean"],
+    :fixture
+    {:path "/tmp/surface_schoenflies_flat_transport.lean",
+     :sha256
+     "b586bc82dd559d42cb4b5d7c3f3c6db9b6158e680d5754aa769966d790c76e5a"},
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/SurfaceSchoenflies.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/schoenflies/local-flatness",
    :acceptance
@@ -30880,16 +30923,29 @@
    {:name
     "ConstructionTargets.SurfaceSchoenflies.embeddedCircleLocallyFlat_homeomorph_iff",
     :reported-by
-    [:routes-2026-10-10-surface-schoenflies-collar-topo3-r2],
+    [:routes-2026-10-10-surface-schoenflies-collar-topo3-r2
+     :routes-2026-10-12-surface-flat-transport-r1],
     :type "exact type in fixture",
     :area "embedded-circle-collar-surface",
-    :proved-in :routes-2026-10-10-surface-schoenflies-collar-topo3-r2},
+    :proved-in :routes-2026-10-12-surface-flat-transport-r1},
    :id
    :lemma-constructiontargets-surfaceschoenflies-embeddedcirclelocallyflat-homeomorph-iff,
    :kind :lemma,
    :depends-on
-   [:lemma-constructiontargets-surfaceschoenflies-embeddedcircle-finite-flat-subcover],
-   :other-consumers [:t01J01 :t03J02]}],
+   [:lemma-constructiontargets-surfaceschoenflies-embeddedcircle-finite-flat-subcover
+    :lemma-embeddedcircle-finite-flat-subcover],
+   :other-consumers [:t01J01 :t03J02]}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "embeddedCircle_finite_flat_subcover"},
+   :lemma
+   {:name "embeddedCircle_finite_flat_subcover", :reported-by []},
+   :id :lemma-embeddedcircle-finite-flat-subcover,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}],
  :consumer-baselines {},
  :statuses
  #{:open
